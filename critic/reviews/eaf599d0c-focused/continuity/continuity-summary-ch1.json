@@ -1,0 +1,235 @@
+{
+ "schema": "continuity-summary/1",
+ "chapters": [
+  {
+   "chapter": "seymour-flux",
+   "game": "ffx",
+   "checks": {
+    "CHK-026": "FAIL",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 386.7,
+   "swaps": 333,
+   "snapsPerMinute": 0,
+   "maxHeadJumpPct": 12.1,
+   "maxFeetShiftPx": 4.9,
+   "worstJerkPx": 113.8,
+   "minStature": 0.765,
+   "heightOverBand": 0,
+   "feetSilOver": 0,
+   "swapJerksWorstPx": 46.3,
+   "dashesWorstPx": 113.8,
+   "frameP99Ms": 23.9,
+   "jerksCovered": 0,
+   "fps": 59.4,
+   "dedicated": true,
+   "strips": 18,
+   "worstSwapStrips": [
+    "seymour-flux-win-eaf599d0c/continuity/strips/swap-010-kimahri-ko-idle.jpg",
+    "seymour-flux-win-eaf599d0c/continuity/strips/swap-006-kimahri-idle-ko.jpg",
+    "seymour-flux-win-eaf599d0c/continuity/strips/swap-002-kimahri-idle-hurt.jpg",
+    "seymour-flux-win-eaf599d0c/continuity/strips/swap-003-kimahri-hurt-idle.jpg",
+    "seymour-flux-win-eaf599d0c/continuity/strips/swap-334-yuna-critical-hurt.jpg",
+    "seymour-flux-win-eaf599d0c/continuity/strips/swap-338-yuna-hurt-critical.jpg",
+    "seymour-flux-win-eaf599d0c/continuity/strips/swap-042-kimahri-idle-ready.jpg",
+    "seymour-flux-win-eaf599d0c/continuity/strips/swap-067-kimahri-ready-idle.jpg",
+    "seymour-flux-win-eaf599d0c/continuity/strips/swap-369-auron-follow-idle.jpg",
+    "seymour-flux-win-eaf599d0c/continuity/strips/swap-192-yuna-ready-item.jpg"
+   ],
+   "unverified": null
+  }
+ ],
+ "battleSeconds": 386.7,
+ "counted": 333,
+ "swaps": 374,
+ "size": {
+  "judged": 324,
+  "costumeSwaps": 0,
+  "sameArtSwaps": 9,
+  "costumeWorstHeadPct": 0,
+  "costumeWorstFeetPx": 0,
+  "maxHeadJumpPct": 12.1,
+  "maxHeadJumpPctRegistration": 9.5,
+  "headOverTolerance": 3,
+  "maxFeetShiftPx": 4.9,
+  "feetOverTolerance": 0,
+  "headMeasured": 324,
+  "headRegistration": 169,
+  "headRig": 121,
+  "rigSwaps": 121,
+  "headSilhouette": 34,
+  "headUnmeasured": 0,
+  "heightMeasured": 324,
+  "heightOverBand": 0,
+  "heightWaived": 0,
+  "minStature": 0.765,
+  "maxStature": 1.058,
+  "koLengthMeasured": 2,
+  "minKoLength": 0.558,
+  "koLengthReported": 2,
+  "feetSilMeasured": 171,
+  "feetSilOver": 0,
+  "feetSilWaived": 0,
+  "maxFeetSilPx": 7.4,
+  "holdSwaps": 167,
+  "worstRealHeadPct": 29.7,
+  "realHeadOutsideBand": 0,
+  "realHeadWaived": 0,
+  "variantHeadSwaps": 0,
+  "worstVariantHeadPct": 0,
+  "variantHeadOutsideBand": 0,
+  "unregisteredSwaps": 0
+ },
+ "motion": {
+  "snaps": 0,
+  "snapsPerMinute": 0,
+  "hardCuts": 32,
+  "hardCutsPerMinute": 4.97,
+  "ghostSwaps": 168,
+  "ghostFrames": 655,
+  "worstGhostSeverity": 0.332,
+  "ghostOverFail": 0,
+  "jerks": 10,
+  "worstJerkPx": 113.8,
+  "jerksOverFail": 3,
+  "jerksCovered": 0,
+  "worstCoveredJerkPx": 0,
+  "lowestIou": 0.004,
+  "maxCentroidShiftPx": 215.8,
+  "heldSwaps": 0,
+  "longestHeldFrames": 0,
+  "stagedChanges": 0,
+  "stagedSteps": 0,
+  "stagedSnapsExcused": 0,
+  "jerksAtStaged": 0,
+  "smearsPlanned": 160,
+  "smearSwaps": 156,
+  "smearSnapsExcused": 31,
+  "jerksSmeared": 30,
+  "worstSmearedJerkPx": 245.9,
+  "swapJerks": 4,
+  "swapJerksWorstPx": 46.3,
+  "swapJerksOverFail": 2,
+  "teleports": 0,
+  "teleportsWorstPx": 0,
+  "dashes": 6,
+  "dashesWorstPx": 113.8,
+  "dashesOverFail": 1,
+  "jerksLongFrame": 1,
+  "swapJerksLongFrame": 1,
+  "swapJerksSteadyOverFail": 1
+ },
+ "frameTime": {
+  "frames": 22955,
+  "longFrames": 110,
+  "longFramePct": 0.5,
+  "worstP99Ms": 23.9,
+  "maxMs": 386.5,
+  "longMs": 34
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "FAIL",
+   "reasons": [
+    "3 swap(s) change a head by more than the tolerance (worst 12.1 percent; 9.5 percent where the head is registered)"
+   ],
+   "note": "169 of 324 measured swaps had a registered head (tolerance 3 percent); 121 were read from a rig's own head mesh (tolerance 3 percent; 121 swap(s) were changes of a rig's key); 34 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 324 swap(s) (stature 0.765 to 1.058, 0 out of band but waived), the silhouette's own feet 171 swap(s) (worst 7.4 px, 0 waived), 167 swap(s) across a recorded hold (real head worst 29.7 percent from the idle's), 0 on a painting with no fresh registration record"
+  },
+  "CHK-027": {
+   "result": "FAIL",
+   "reasons": [
+    "2 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 46.3 px)"
+   ],
+   "note": "1 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 113.8 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 1 of 10 jerk(s) fell on a frame of more than 34 ms (1 of the 4 at a swap; 1 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them; 156 of 160 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 31 snap(s) not counted, 30 swap jerk(s) (worst 245.9 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+  }
+ },
+ "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 386.7 s of battle, 59.4 to 59.4 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (3 swap(s) change a head by more than the tolerance (worst 12.1 percent; 9.5 percent where the head is registered)); CHK-027 FAIL (2 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 46.3 px)) Read by harness 5f9ecb91b07c (33 files; tree D:/pyrefly-release55 at eaf599d0c; policy 5504866a; probe v2 d1a3f074; pose table 9f168c0f (114 subjects); waivers bf0731fb (79 rows)).",
+ "base": "http://127.0.0.1:5871/",
+ "date": "2026-10-27T23:50:29.067Z",
+ "poseMeasure": {
+  "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+  "source": "harness-tree",
+  "subjects": 114,
+  "sha256": "9f168c0f1dc4c49e73435c3919077826b6288b37efc9f20b0696924f2bb4a9f4",
+  "staleChapters": []
+ },
+ "harness": {
+  "schema": "continuity-harness/1",
+  "id": "5f9ecb91b07cc17f5d0af2b34bad42093c353501952bb28ee5f621b1ff5dbe6e",
+  "tree": {
+   "root": "D:/pyrefly-release55",
+   "head": "eaf599d0c21f471bba4b34ae748bffda73d8c022",
+   "dirty": []
+  },
+  "files": {
+   "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+   "critic/runner/lib/continuity-analyze.mjs": "4920b07f1784a369ee30e4425eea1150b8926e84",
+   "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+   "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+   "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+   "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+   "critic/runner/lib/continuity-probe.mjs": "d1a3f0746ed159d91c2f45edc5724929b88b9da9",
+   "critic/runner/lib/continuity-pure.mjs": "8c3ec1d79db169a6a4c8169a693247ca6c83bfc0",
+   "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+   "critic/runner/lib/continuity-rig-probe.mjs": "35bf097b7bbfa81abeb4daf8e78f0d9515ff3ab1",
+   "critic/runner/lib/continuity-rig.mjs": "6e1b891a9d237b4b9db52593303df5e1ffc812e4",
+   "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+   "critic/runner/lib/continuity-smear.mjs": "7b0508c2ac2eb3da8ca3939013c16dfd22a6f26b",
+   "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+   "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+   "critic/runner/lib/continuity-summary.mjs": "780688766c0cac87499a4dce10124c25af15df9a",
+   "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+   "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+   "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+   "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+   "critic/runner/lib/continuity.mjs": "bedfc9bbab2690b32bf2a072984b6cef1d5ed9e8",
+   "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+   "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+   "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+   "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+   "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+   "critic/runner/lib/route-pure.mjs": "4d484cc9c873d60c66b48e418bb688dd6248b647",
+   "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+   "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+   "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+   "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+   "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+   "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+  },
+  "policy": {
+   "continuitySha256": "5504866ae7b0711c3255e68e8fba0fbbbc3d41280a3d61f6f14f14a362e63cc7",
+   "fileSha256": "db6e8fa4f9fb0852ad227e3bcf71ec3a160165559e52a7c298e28efc3e723b7e",
+   "override": false,
+   "overrideSha256": null
+  },
+  "probe": {
+   "version": 2,
+   "blob": "d1a3f0746ed159d91c2f45edc5724929b88b9da9"
+  },
+  "poseTable": {
+   "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+   "sha256": "9f168c0f1dc4c49e73435c3919077826b6288b37efc9f20b0696924f2bb4a9f4",
+   "subjects": 114,
+   "source": "harness-tree",
+   "buildSha": "eaf599d0",
+   "isCandidate": true
+  },
+  "waivers": {
+   "path": "D:\\pyrefly-release55\\docs\\target\\pose-waivers.json",
+   "sha256": "bf0731fb7771a9da0391bd6e7d422675b7e177c46b60138476b8a6fb4eb4df25",
+   "rows": 79
+  },
+  "run": {
+   "query": null,
+   "setArt": null,
+   "browser": "gpu"
+  },
+  "changedDuringRun": false,
+  "chapterIds": [
+   "5f9ecb91b07cc17f5d0af2b34bad42093c353501952bb28ee5f621b1ff5dbe6e"
+  ],
+  "unstamped": [],
+  "chaptersByOtherHarness": [],
+  "aggregateSha256": "2f66c57050917208c0f64b38c0fc5143f1173617d916edb595e7ba3ec78988b6"
+ }
+}

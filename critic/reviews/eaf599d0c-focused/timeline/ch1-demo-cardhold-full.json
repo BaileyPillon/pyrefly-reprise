@@ -1,0 +1,3654 @@
+{
+ "label": "ch1 demo cardhold=full",
+ "base": "http://127.0.0.1:5871/",
+ "route": "demo",
+ "chapter": "seymour-flux",
+ "cache": "cold",
+ "dwell": "fast",
+ "sceneMode": "taps",
+ "size": "2560x1440",
+ "mode": "gpu",
+ "seed": 7,
+ "at": "2026-10-28T00:39:14.499Z",
+ "runs": [
+  {
+   "which": "cold",
+   "titleReadyMs": 365,
+   "dwell": "fast",
+   "split": {
+    "totalMs": 21344,
+    "parts": [
+     {
+      "name": "press-wait",
+      "startMs": 0,
+      "endMs": 9,
+      "ms": 9
+     },
+     {
+      "name": "scene",
+      "startMs": 9,
+      "endMs": 10019,
+      "ms": 10011
+     },
+     {
+      "name": "after-scene",
+      "startMs": 10019,
+      "endMs": 10022,
+      "ms": 2
+     },
+     {
+      "name": "entry-load",
+      "startMs": 10022,
+      "endMs": 11546,
+      "ms": 1525
+     },
+     {
+      "name": "first-draw",
+      "startMs": 11546,
+      "endMs": 12406,
+      "ms": 860
+     },
+     {
+      "name": "card",
+      "startMs": 12406,
+      "endMs": 14574,
+      "ms": 2168
+     },
+     {
+      "name": "card-to-sweep",
+      "startMs": 14574,
+      "endMs": 14591,
+      "ms": 18
+     },
+     {
+      "name": "sweep",
+      "startMs": 14591,
+      "endMs": 21237,
+      "ms": 6646
+     },
+     {
+      "name": "sweep-to-menu",
+      "startMs": 21237,
+      "endMs": 21344,
+      "ms": 107
+     }
+    ],
+    "deadMs": 29,
+    "loadMs": 2385,
+    "authoredMs": 18932,
+    "facts": {
+     "screenBattleMs": 10022,
+     "entryOnMs": 10022,
+     "entryMs": 3319,
+     "loadCardOnMs": 11044,
+     "loadCardMs": 1746,
+     "presenterUpMs": 11546,
+     "cardOnMs": 12406,
+     "cardMs": 2168,
+     "loadCardUpAtCardMs": 1362,
+     "sweepMs": 6646,
+     "frozenMs": 902
+    },
+    "warm": {
+     "before": [],
+     "after": []
+    },
+    "worstGapMs": 900,
+    "gapsOver100": 7,
+    "gapsOver250": 3,
+    "lostMs": 2400,
+    "lostFirst9sMs": 50
+   },
+   "cpuBusyPct": 24.6,
+   "marks": [
+    {
+     "t": 140.9,
+     "k": "screen",
+     "v": null
+    },
+    {
+     "t": 337.5,
+     "k": "screen",
+     "v": "title"
+    },
+    {
+     "t": 870.9,
+     "k": "title-press",
+     "v": null
+    },
+    {
+     "t": 1236.5,
+     "k": "pop",
+     "v": "title"
+    },
+    {
+     "t": 1236.9,
+     "k": "push",
+     "v": "chapter-select"
+    },
+    {
+     "t": 1238.9,
+     "k": "enter-done",
+     "v": "chapter-select"
+    },
+    {
+     "t": 1250.2,
+     "k": "screen",
+     "v": "chapter-select"
+    },
+    {
+     "t": 1264.3,
+     "k": "board-up",
+     "v": null
+    },
+    {
+     "t": 1577.8,
+     "k": "press",
+     "v": null
+    },
+    {
+     "t": 1586,
+     "k": "pop",
+     "v": "chapter-select"
+    },
+    {
+     "t": 1586.6,
+     "k": "push",
+     "v": "cutscene"
+    },
+    {
+     "t": 1590.7,
+     "k": "enter-done",
+     "v": "cutscene"
+    },
+    {
+     "t": 1598.4,
+     "k": "screen",
+     "v": "cutscene"
+    },
+    {
+     "t": 1598.4,
+     "k": "line",
+     "v": "AUTO"
+    },
+    {
+     "t": 2699,
+     "k": "line",
+     "v": "TidusGuardian\n          \n        \n        \n     "
+    },
+    {
+     "t": 2745.7,
+     "k": "line",
+     "v": "TidusGuardian\n          T\n        \n        \n    "
+    },
+    {
+     "t": 2747.8,
+     "k": "line",
+     "v": "TidusGuardian\n          Th\n        \n        \n   "
+    },
+    {
+     "t": 2790.6,
+     "k": "line",
+     "v": "TidusGuardian\n          Tha\n        \n        \n  "
+    },
+    {
+     "t": 2797.5,
+     "k": "line",
+     "v": "TidusGuardian\n          That\n        \n        \n "
+    },
+    {
+     "t": 2831,
+     "k": "line",
+     "v": "TidusGuardian\n          That'\n        \n        \n"
+    },
+    {
+     "t": 2859.9,
+     "k": "line",
+     "v": "TidusGuardian\n          That's\n        \n        "
+    },
+    {
+     "t": 2865.2,
+     "k": "line",
+     "v": "TidusGuardian\n          That's \n        \n       "
+    },
+    {
+     "t": 2913.9,
+     "k": "line",
+     "v": "TidusGuardian\n          That's n\n        \n      "
+    },
+    {
+     "t": 2914.8,
+     "k": "line",
+     "v": "TidusGuardian\n          That's no\n        \n     "
+    },
+    {
+     "t": 2951.4,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not\n        \n    "
+    },
+    {
+     "t": 2973.3,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not \n        \n   "
+    },
+    {
+     "t": 2997.9,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not c\n        \n  "
+    },
+    {
+     "t": 3022.4,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not co\n        \n "
+    },
+    {
+     "t": 3031,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not com\n        \n"
+    },
+    {
+     "t": 3075.8,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not comf\n        "
+    },
+    {
+     "t": 3080.8,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not comfo\n       "
+    },
+    {
+     "t": 3114,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not comfor\n      "
+    },
+    {
+     "t": 3131,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not comfort\n     "
+    },
+    {
+     "t": 3164.7,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not comfort.\n    "
+    },
+    {
+     "t": 3181,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not comfort. \n   "
+    },
+    {
+     "t": 3197.4,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not comfort. T\n  "
+    },
+    {
+     "t": 3231.2,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not comfort. Th\n "
+    },
+    {
+     "t": 3247.8,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not comfort. Tha\n"
+    },
+    {
+     "t": 3281.3,
+     "k": "line",
+     "v": "TidusGuardian\n          That's not comfort. That"
+    },
+    {
+     "t": 6481.3,
+     "k": "line",
+     "v": "YunaSummoner\n          \n        \n        \n      "
+    },
+    {
+     "t": 6514.1,
+     "k": "line",
+     "v": "YunaSummoner\n          Y\n        \n        \n     "
+    },
+    {
+     "t": 6531.2,
+     "k": "line",
+     "v": "YunaSummoner\n          Yo\n        \n        \n    "
+    },
+    {
+     "t": 6564.8,
+     "k": "line",
+     "v": "YunaSummoner\n          You\n        \n        \n   "
+    },
+    {
+     "t": 6581.3,
+     "k": "line",
+     "v": "YunaSummoner\n          You \n        \n        \n  "
+    },
+    {
+     "t": 6614,
+     "k": "line",
+     "v": "YunaSummoner\n          You d\n        \n        \n "
+    },
+    {
+     "t": 6630.8,
+     "k": "line",
+     "v": "YunaSummoner\n          You do\n        \n        \n"
+    },
+    {
+     "t": 6648.3,
+     "k": "line",
+     "v": "YunaSummoner\n          You don\n        \n        "
+    },
+    {
+     "t": 6681.2,
+     "k": "line",
+     "v": "YunaSummoner\n          You don'\n        \n       "
+    },
+    {
+     "t": 6697,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't\n        \n      "
+    },
+    {
+     "t": 6731,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't \n        \n     "
+    },
+    {
+     "t": 6747.5,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't g\n        \n    "
+    },
+    {
+     "t": 6781.8,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't ge\n        \n   "
+    },
+    {
+     "t": 6797.1,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't get\n        \n  "
+    },
+    {
+     "t": 6831.1,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't get \n        \n "
+    },
+    {
+     "t": 6848,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't get t\n        \n"
+    },
+    {
+     "t": 6865.6,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't get to\n        "
+    },
+    {
+     "t": 6897.1,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't get to \n       "
+    },
+    {
+     "t": 6913.6,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't get to h\n      "
+    },
+    {
+     "t": 6947.3,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't get to ha\n     "
+    },
+    {
+     "t": 6964.3,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't get to han\n    "
+    },
+    {
+     "t": 6980.8,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't get to hand\n   "
+    },
+    {
+     "t": 7013.9,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't get to hand \n  "
+    },
+    {
+     "t": 7031.3,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't get to hand m\n "
+    },
+    {
+     "t": 7064.3,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't get to hand me\n"
+    },
+    {
+     "t": 7080.7,
+     "k": "line",
+     "v": "YunaSummoner\n          You don't get to hand me "
+    },
+    {
+     "t": 9497.4,
+     "k": "line",
+     "v": "AuronGuardian\n          \n        \n        \n     "
+    },
+    {
+     "t": 9531.4,
+     "k": "line",
+     "v": "AuronGuardian\n          E\n        \n        \n    "
+    },
+    {
+     "t": 9547.2,
+     "k": "line",
+     "v": "AuronGuardian\n          En\n        \n        \n   "
+    },
+    {
+     "t": 9581.2,
+     "k": "line",
+     "v": "AuronGuardian\n          Eno\n        \n        \n  "
+    },
+    {
+     "t": 9597.6,
+     "k": "line",
+     "v": "AuronGuardian\n          Enou\n        \n        \n "
+    },
+    {
+     "t": 9630.9,
+     "k": "line",
+     "v": "AuronGuardian\n          Enoug\n        \n        \n"
+    },
+    {
+     "t": 9647.1,
+     "k": "line",
+     "v": "AuronGuardian\n          Enough\n        \n        "
+    },
+    {
+     "t": 9664,
+     "k": "line",
+     "v": "AuronGuardian\n          Enough \n        \n       "
+    },
+    {
+     "t": 9698.4,
+     "k": "line",
+     "v": "AuronGuardian\n          Enough t\n        \n      "
+    },
+    {
+     "t": 9714.3,
+     "k": "line",
+     "v": "AuronGuardian\n          Enough ta\n        \n     "
+    },
+    {
+     "t": 9750.8,
+     "k": "line",
+     "v": "AuronGuardian\n          Enough tal\n        \n    "
+    },
+    {
+     "t": 9763.7,
+     "k": "line",
+     "v": "AuronGuardian\n          Enough talk\n        \n   "
+    },
+    {
+     "t": 9797.5,
+     "k": "line",
+     "v": "AuronGuardian\n          Enough talk.\n        \n  "
+    },
+    {
+     "t": 9814.4,
+     "k": "line",
+     "v": "AuronGuardian\n          Enough talk. \n        \n "
+    },
+    {
+     "t": 9831,
+     "k": "line",
+     "v": "AuronGuardian\n          Enough talk. M\n        \n"
+    },
+    {
+     "t": 9864.6,
+     "k": "line",
+     "v": "AuronGuardian\n          Enough talk. Mo\n        "
+    },
+    {
+     "t": 9880.9,
+     "k": "line",
+     "v": "AuronGuardian\n          Enough talk. Mov\n       "
+    },
+    {
+     "t": 9915.2,
+     "k": "line",
+     "v": "AuronGuardian\n          Enough talk. Move\n      "
+    },
+    {
+     "t": 9930.5,
+     "k": "line",
+     "v": "AuronGuardian\n          Enough talk. Move.\n     "
+    },
+    {
+     "t": 11597.1,
+     "k": "scene-finished",
+     "v": true
+    },
+    {
+     "t": 11599.3,
+     "k": "entry-add",
+     "v": "pf-entry pf-entry--shatter pf-entry--ffx"
+    },
+    {
+     "t": 11599.4,
+     "k": "pop",
+     "v": "cutscene"
+    },
+    {
+     "t": 11599.6,
+     "k": "push",
+     "v": "battle"
+    },
+    {
+     "t": 12610.2,
+     "k": "screen",
+     "v": "battle"
+    },
+    {
+     "t": 12621.3,
+     "k": "loadcard-add",
+     "v": null
+    },
+    {
+     "t": 13123.8,
+     "k": "line",
+     "v": "AUTO"
+    },
+    {
+     "t": 13123.8,
+     "k": "phase",
+     "v": "idle"
+    },
+    {
+     "t": 13123.8,
+     "k": "menu",
+     "v": ""
+    },
+    {
+     "t": 13123.8,
+     "k": "rig",
+     "v": "idle"
+    },
+    {
+     "t": 13983.5,
+     "k": "bosscard-add",
+     "v": null
+    },
+    {
+     "t": 14064.1,
+     "k": "enter-done",
+     "v": "battle"
+    },
+    {
+     "t": 14367,
+     "k": "loadcard-remove",
+     "v": null
+    },
+    {
+     "t": 14917.8,
+     "k": "entry-remove",
+     "v": "pf-entry pf-entry--shatter pf-entry--ffx"
+    },
+    {
+     "t": 16151.4,
+     "k": "bosscard-remove",
+     "v": null
+    },
+    {
+     "t": 16168.9,
+     "k": "phase",
+     "v": "moment:battle-start"
+    },
+    {
+     "t": 16168.9,
+     "k": "rig",
+     "v": "intro"
+    },
+    {
+     "t": 17097.8,
+     "k": "rig",
+     "v": "idle"
+    },
+    {
+     "t": 17813.6,
+     "k": "rig",
+     "v": "enemy~calm"
+    },
+    {
+     "t": 21446.5,
+     "k": "rig",
+     "v": "idle"
+    },
+    {
+     "t": 22814.5,
+     "k": "phase",
+     "v": "play:turn-start"
+    },
+    {
+     "t": 22921.5,
+     "k": "menu",
+     "v": "tidus"
+    },
+    {
+     "t": 22941.3,
+     "k": "phase",
+     "v": "command:tidus"
+    }
+   ],
+   "gaps": [
+    [
+     130.4,
+     121.7
+    ],
+    [
+     330.4,
+     166.6
+    ],
+    [
+     363.7,
+     33.3
+    ],
+    [
+     430.4,
+     66.7
+    ],
+    [
+     547.1,
+     116.7
+    ],
+    [
+     980.4,
+     100
+    ],
+    [
+     1430.4,
+     133.4
+    ],
+    [
+     1780.3,
+     66.7
+    ],
+    [
+     12496.6,
+     900
+    ],
+    [
+     12613.3,
+     116.7
+    ],
+    [
+     12946.6,
+     333.3
+    ],
+    [
+     13129.9,
+     183.3
+    ],
+    [
+     13696.6,
+     566.7
+    ],
+    [
+     13763.2,
+     33.4
+    ],
+    [
+     14063.2,
+     150
+    ],
+    [
+     14196.5,
+     133.3
+    ],
+    [
+     14546.5,
+     50
+    ],
+    [
+     14696.5,
+     33.3
+    ],
+    [
+     22846.2,
+     33.4
+    ],
+    [
+     23012.9,
+     66.7
+    ],
+    [
+     23162.9,
+     33.4
+    ]
+   ],
+   "frames": 1281,
+   "long": [
+    [
+     154.9,
+     182
+    ],
+    [
+     880.7,
+     111
+    ],
+    [
+     1712,
+     77
+    ],
+    [
+     11597,
+     902
+    ],
+    [
+     12499.6,
+     91
+    ],
+    [
+     12927.1,
+     196
+    ],
+    [
+     13134.9,
+     534
+    ],
+    [
+     13913.6,
+     152
+    ],
+    [
+     14066.6,
+     137
+    ],
+    [
+     14496.8,
+     54
+    ]
+   ],
+   "loaf": [
+    {
+     "t": 9,
+     "d": 140,
+     "block": 0,
+     "scripts": []
+    },
+    {
+     "t": 154,
+     "d": 192,
+     "block": 141,
+     "scripts": [
+      {
+       "d": 182,
+       "fn": "http://127.0.0.1:5871/assets/index-8rsIfOcP.js",
+       "t": "module-script"
+      }
+     ]
+    },
+    {
+     "t": 365,
+     "d": 72,
+     "block": 0,
+     "scripts": []
+    },
+    {
+     "t": 437,
+     "d": 121,
+     "block": 0,
+     "scripts": []
+    },
+    {
+     "t": 865,
+     "d": 127,
+     "block": 62,
+     "scripts": [
+      {
+       "d": 107,
+       "fn": "i",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 1298,
+     "d": 138,
+     "block": 0,
+     "scripts": []
+    },
+    {
+     "t": 1699,
+     "d": 91,
+     "block": 0,
+     "scripts": []
+    },
+    {
+     "t": 11581,
+     "d": 918,
+     "block": 852,
+     "scripts": [
+      {
+       "d": 902,
+       "fn": "tick",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 12500,
+     "d": 119,
+     "block": 50,
+     "scripts": [
+      {
+       "d": 8,
+       "fn": "tick",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 12661,
+     "d": 473,
+     "block": 157,
+     "scripts": [
+      {
+       "d": 197,
+       "fn": "Worker.onmessage",
+       "t": "event-listener"
+      },
+      {
+       "d": 36,
+       "fn": "s",
+       "t": "event-listener"
+      },
+      {
+       "d": 9,
+       "fn": "tick",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 13134,
+     "d": 573,
+     "block": 522,
+     "scripts": [
+      {
+       "d": 535,
+       "fn": "n",
+       "t": "user-callback"
+      },
+      {
+       "d": 34,
+       "fn": "n",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 13722,
+     "d": 52,
+     "block": 0,
+     "scripts": [
+      {
+       "d": 40,
+       "fn": "n",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 13899,
+     "d": 166,
+     "block": 102,
+     "scripts": [
+      {
+       "d": 150,
+       "fn": "n",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 14066,
+     "d": 138,
+     "block": 88,
+     "scripts": [
+      {
+       "d": 137,
+       "fn": "tick",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 14483,
+     "d": 69,
+     "block": 5,
+     "scripts": [
+      {
+       "d": 54,
+       "fn": "tick",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 14652,
+     "d": 52,
+     "block": 0,
+     "scripts": [
+      {
+       "d": 39,
+       "fn": "tick",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 22949,
+     "d": 68,
+     "block": 0,
+     "scripts": []
+    }
+   ],
+   "res": [
+    [
+     8,
+     8,
+     "/art/title/echo.2x.webp",
+     "net"
+    ],
+    [
+     8,
+     8,
+     "/assets/game-meVSjYDH.js",
+     "net"
+    ],
+    [
+     8,
+     9,
+     "/assets/PaintedActor-l4qztJr3.js",
+     "net"
+    ],
+    [
+     8,
+     14,
+     "/assets/index-dtJ3k33z.css",
+     "net"
+    ],
+    [
+     8,
+     14,
+     "/assets/DemoGate-BcNPu42G.js",
+     "net"
+    ],
+    [
+     8,
+     95,
+     "/assets/index-8rsIfOcP.js",
+     "net"
+    ],
+    [
+     143,
+     8,
+     "/fonts/chakra-petch/ChakraPetch-Regular-400.woff2",
+     "net"
+    ],
+    [
+     315,
+     24,
+     "/fonts/chakra-petch/ChakraPetch-Bold-700.woff2",
+     "net"
+    ],
+    [
+     316,
+     24,
+     "/fonts/rajdhani/Rajdhani-SemiBold-600.woff2",
+     "net"
+    ],
+    [
+     162,
+     2,
+     "/art/manifest.json",
+     "net"
+    ],
+    [
+     316,
+     23,
+     "/fonts/exo2/Exo2-Variable-wght.woff2",
+     "net"
+    ],
+    [
+     362,
+     9,
+     "/art/characters/mortiorchis/idle.png",
+     "net"
+    ],
+    [
+     362,
+     9,
+     "/art/characters/seymour-flux-body/idle.png",
+     "net"
+    ],
+    [
+     362,
+     9,
+     "/art/portraits/tidus.webp",
+     "net"
+    ],
+    [
+     362,
+     14,
+     "/art/backdrops/gagazet.webp",
+     "net"
+    ],
+    [
+     394,
+     2,
+     "/art/portraits/yuna.webp",
+     "net"
+    ],
+    [
+     400,
+     3,
+     "/art/portraits/kimahri.png",
+     "net"
+    ],
+    [
+     495,
+     3,
+     "/art/backdrops/gagazet.thumb.webp",
+     "net"
+    ],
+    [
+     495,
+     3,
+     "/art/characters/seymour-flux-body/idle.thumb.png",
+     "net"
+    ],
+    [
+     505,
+     2,
+     "/art/backdrops/zanarkand-dome.thumb.webp",
+     "net"
+    ],
+    [
+     507,
+     1,
+     "/art/characters/yunalesca-1/idle.thumb.png",
+     "net"
+    ],
+    [
+     513,
+     2,
+     "/art/backdrops/bevelle-underground.thumb.webp",
+     "net"
+    ],
+    [
+     515,
+     3,
+     "/art/characters/ffx2-bahamut/idle.thumb.png",
+     "net"
+    ],
+    [
+     521,
+     1,
+     "/art/backdrops/djose-chamber-provisional.thumb.webp",
+     "net"
+    ],
+    [
+     524,
+     1,
+     "/art/characters/x2-ixion/idle.thumb.png",
+     "net"
+    ],
+    [
+     528,
+     1,
+     "/art/backdrops/dreams-end.thumb.webp",
+     "net"
+    ],
+    [
+     531,
+     2,
+     "/art/characters/braskas-final-aeon-1/idle.thumb.png",
+     "net"
+    ],
+    [
+     537,
+     1,
+     "/art/backdrops/den-of-woe.thumb.webp",
+     "net"
+    ],
+    [
+     540,
+     1,
+     "/art/characters/baralai-shade/idle.thumb.png",
+     "net"
+    ],
+    [
+     544,
+     2,
+     "/art/backdrops/macalania-temple.thumb.webp",
+     "net"
+    ],
+    [
+     545,
+     1,
+     "/art/characters/anima/idle.thumb.png",
+     "net"
+    ],
+    [
+     552,
+     2,
+     "/art/backdrops/via-infinito.thumb.webp",
+     "net"
+    ],
+    [
+     553,
+     1,
+     "/art/characters/trema/idle.thumb.png",
+     "net"
+    ],
+    [
+     559,
+     1,
+     "/art/backdrops/evrae-airship-deck.thumb.webp",
+     "net"
+    ],
+    [
+     561,
+     2,
+     "/art/characters/evrae/idle.thumb.png",
+     "net"
+    ],
+    [
+     567,
+     1,
+     "/art/backdrops/road-to-the-farplane.thumb.webp",
+     "net"
+    ],
+    [
+     570,
+     1,
+     "/art/characters/x2-shiva/idle.thumb.png",
+     "net"
+    ],
+    [
+     576,
+     1,
+     "/art/backdrops/cavern-stolen-fayth.thumb.webp",
+     "net"
+    ],
+    [
+     577,
+     1,
+     "/art/characters/yojimbo-cavern/idle.thumb.png",
+     "net"
+    ],
+    [
+     582,
+     2,
+     "/art/backdrops/leblanc-last-room.thumb.webp",
+     "net"
+    ],
+    [
+     583,
+     1,
+     "/art/characters/leblanc/idle.thumb.png",
+     "net"
+    ],
+    [
+     589,
+     1,
+     "/art/backdrops/bevelle-highbridge.thumb.webp",
+     "net"
+    ],
+    [
+     590,
+     1,
+     "/art/characters/seymour-natus/idle.thumb.png",
+     "net"
+    ],
+    [
+     596,
+     2,
+     "/art/backdrops/farplane.thumb.webp",
+     "net"
+    ],
+    [
+     598,
+     2,
+     "/art/characters/vegnagun-body/idle.thumb.png",
+     "net"
+    ],
+    [
+     604,
+     1,
+     "/art/backdrops/garden-of-pain.thumb.webp",
+     "net"
+    ],
+    [
+     609,
+     1,
+     "/art/characters/seymour-omnis/idle.thumb.png",
+     "net"
+    ],
+    [
+     614,
+     1,
+     "/art/backdrops/via-purifico.thumb.webp",
+     "net"
+    ],
+    [
+     615,
+     1,
+     "/art/characters/isaaru/idle.thumb.png",
+     "net"
+    ],
+    [
+     620,
+     1,
+     "/art/backdrops/mushroom-rock-road.thumb.webp",
+     "net"
+    ],
+    [
+     621,
+     1,
+     "/art/characters/dark-mindy/idle.thumb.png",
+     "net"
+    ],
+    [
+     626,
+     2,
+     "/art/backdrops/sin-fahrenheit-flight.thumb.webp",
+     "net"
+    ],
+    [
+     627,
+     2,
+     "/art/characters/sin-left-fin/idle.thumb.png",
+     "net"
+    ],
+    [
+     633,
+     1,
+     "/art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+     "net"
+    ],
+    [
+     636,
+     2,
+     "/art/characters/overdrive-sin/idle.thumb.png",
+     "net"
+    ],
+    [
+     642,
+     2,
+     "/art/portraits/auron.webp",
+     "net"
+    ],
+    [
+     646,
+     6,
+     "/art/backdrops/zanarkand-dome.webp",
+     "net"
+    ],
+    [
+     660,
+     2,
+     "/art/characters/yunalesca-1/idle.png",
+     "net"
+    ],
+    [
+     724,
+     3,
+     "/art/portraits/yuna-x2.webp",
+     "net"
+    ],
+    [
+     731,
+     4,
+     "/art/portraits/rikku-x2.webp",
+     "net"
+    ],
+    [
+     746,
+     4,
+     "/art/portraits/paine.webp",
+     "net"
+    ],
+    [
+     762,
+     8,
+     "/art/backdrops/bevelle-underground.webp",
+     "net"
+    ],
+    [
+     777,
+     3,
+     "/art/characters/ffx2-bahamut/idle.png",
+     "net"
+    ],
+    [
+     842,
+     6,
+     "/art/backdrops/djose-chamber-provisional.webp",
+     "net"
+    ],
+    [
+     850,
+     2,
+     "/art/characters/x2-ixion/idle.png",
+     "net"
+    ],
+    [
+     988,
+     2,
+     "/audio/manifest.json",
+     "net"
+    ],
+    [
+     996,
+     -1,
+     "/assets/worker-DBv-StIe.js",
+     "net"
+    ],
+    [
+     992,
+     23,
+     "/art/backdrops/dreams-end.webp",
+     "net"
+    ],
+    [
+     993,
+     11,
+     "/art/characters/braskas-final-aeon-1/idle.png",
+     "net"
+    ],
+    [
+     996,
+     18,
+     "/audio/music/title.mp3",
+     "net"
+    ],
+    [
+     996,
+     20,
+     "/audio/sfx/sprite.mp3",
+     "net"
+    ],
+    [
+     996,
+     29,
+     "/audio/sfx/sprite-v2.mp3",
+     "net"
+    ],
+    [
+     1034,
+     6,
+     "/art/backdrops/den-of-woe.webp",
+     "net"
+    ],
+    [
+     1094,
+     2,
+     "/art/characters/nooj-shade/idle.png",
+     "net"
+    ],
+    [
+     1153,
+     3,
+     "/art/characters/gippal-shade/idle.png",
+     "net"
+    ],
+    [
+     1158,
+     2,
+     "/art/characters/baralai-shade/idle.png",
+     "net"
+    ],
+    [
+     1164,
+     2,
+     "/art/portraits/rikku.webp",
+     "net"
+    ],
+    [
+     1171,
+     3,
+     "/art/portraits/wakka.webp",
+     "net"
+    ],
+    [
+     1186,
+     2,
+     "/art/portraits/lulu.webp",
+     "net"
+    ],
+    [
+     1201,
+     2,
+     "/art/characters/yuna-white-mage/idle.png",
+     "net"
+    ],
+    [
+     1216,
+     3,
+     "/art/characters/rikku-dark-knight/idle.png",
+     "net"
+    ],
+    [
+     1220,
+     2,
+     "/art/characters/paine-warrior/idle.png",
+     "net"
+    ],
+    [
+     1228,
+     3,
+     "/art/characters/paine-dark-knight/idle.png",
+     "net"
+    ],
+    [
+     1233,
+     6,
+     "/art/characters/yuna-dark-knight/idle.png",
+     "net"
+    ],
+    [
+     1235,
+     10,
+     "/audio/music/chapter-select.mp3",
+     "net"
+    ],
+    [
+     1242,
+     4,
+     "/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2",
+     "net"
+    ],
+    [
+     1245,
+     3,
+     "/art/characters/rikku-alchemist/idle.png",
+     "net"
+    ],
+    [
+     1243,
+     3,
+     "/art/portraits/tidus.json",
+     "net"
+    ],
+    [
+     1243,
+     3,
+     "/art/portraits/yuna.json",
+     "net"
+    ],
+    [
+     1243,
+     3,
+     "/art/portraits/kimahri.json",
+     "net"
+    ],
+    [
+     1262,
+     5,
+     "/art/characters/yuna-gunner/idle.png",
+     "net"
+    ],
+    [
+     1262,
+     5,
+     "/art/characters/rikku-thief/idle.png",
+     "net"
+    ],
+    [
+     1591,
+     3,
+     "/art/portraits/seymour.webp",
+     "net"
+    ],
+    [
+     1582,
+     2,
+     "/audio/voice/index.json",
+     "net"
+    ],
+    [
+     1586,
+     2,
+     "/audio/sfx/parity-ffx-flux.mp3",
+     "net"
+    ],
+    [
+     1586,
+     4,
+     "/audio/sfx/parity-ffx-core.mp3",
+     "net"
+    ],
+    [
+     1587,
+     5,
+     "/audio/music/scene-gagazet.mp3",
+     "net"
+    ],
+    [
+     1592,
+     6,
+     "/fonts/chakra-petch/ChakraPetch-Medium-500.woff2",
+     "net"
+    ],
+    [
+     1605,
+     1,
+     "/audio/voice/seymour-flux.json",
+     "net"
+    ],
+    [
+     1618,
+     1,
+     "/art/backdrops/gagazet.json",
+     "net"
+    ],
+    [
+     1620,
+     2,
+     "/audio/voice-pass/seymour-flux.json",
+     "net"
+    ],
+    [
+     1623,
+     4,
+     "/audio/voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.mp3",
+     "net"
+    ],
+    [
+     1623,
+     4,
+     "/audio/voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.fb2.mp3",
+     "net"
+    ],
+    [
+     1623,
+     4,
+     "/audio/voice/seymour-flux/seymour-flux.mid-first-zombie.001.fb2.mp3",
+     "net"
+    ],
+    [
+     1623,
+     5,
+     "/audio/voice/seymour-flux/seymour-flux.mid-first-zombie.002.fb1.mp3",
+     "net"
+    ],
+    [
+     1623,
+     4,
+     "/audio/voice/seymour-flux/seymour-flux.quip-tidus.001.mp3",
+     "net"
+    ],
+    [
+     1623,
+     6,
+     "/audio/voice/seymour-flux/seymour-flux.quip-yuna.001.mp3",
+     "net"
+    ],
+    [
+     1623,
+     7,
+     "/audio/voice/seymour-flux/seymour-flux.quip-auron.001.mp3",
+     "net"
+    ],
+    [
+     1623,
+     7,
+     "/audio/voice-pass/seymour-flux/seymour-flux.mid-seymour-half.001.mp3",
+     "net"
+    ],
+    [
+     1623,
+     7,
+     "/audio/voice-pass/seymour-flux/seymour-flux.mid-seymour-half.002.mp3",
+     "net"
+    ],
+    [
+     1624,
+     7,
+     "/audio/voice-pass/seymour-flux/seymour-flux.mid-seymour-lance.001.mp3",
+     "net"
+    ],
+    [
+     1624,
+     8,
+     "/audio/voice-pass/seymour-flux/seymour-flux.mid-seymour-lance.002.mp3",
+     "net"
+    ],
+    [
+     1624,
+     12,
+     "/audio/voice-pass/seymour-flux/seymour-flux.mid-talk-yuna.001.mp3",
+     "net"
+    ],
+    [
+     1624,
+     12,
+     "/audio/voice-pass/seymour-flux/seymour-flux.mid-talk-yuna.002.mp3",
+     "net"
+    ],
+    [
+     1624,
+     12,
+     "/audio/voice-pass/seymour-flux/seymour-flux.mid-talk-yuna.003.mp3",
+     "net"
+    ],
+    [
+     1624,
+     12,
+     "/audio/voice-pass/seymour-flux/seymour-flux.mid-talk-kimahri.001.mp3",
+     "net"
+    ],
+    [
+     1624,
+     13,
+     "/audio/voice-pass/seymour-flux/seymour-flux.mid-talk-kimahri.002.mp3",
+     "net"
+    ],
+    [
+     1619,
+     21,
+     "/art/backdrops/gagazet.webp",
+     "net"
+    ],
+    [
+     1624,
+     16,
+     "/audio/voice/seymour-flux/seymour-flux.pre.008.mp3",
+     "net"
+    ],
+    [
+     1624,
+     17,
+     "/audio/voice/seymour-flux/seymour-flux.pre.018.mp3",
+     "net"
+    ],
+    [
+     1624,
+     17,
+     "/audio/voice/seymour-flux/seymour-flux.pre.026.mp3",
+     "net"
+    ],
+    [
+     1790,
+     3,
+     "/art/characters/seymour-flux-body/idle.png",
+     "net"
+    ],
+    [
+     1790,
+     2,
+     "/art/characters/seymour-flux-body/idle.json",
+     "net"
+    ],
+    [
+     1835,
+     2,
+     "/art/characters/mortiorchis/idle.json",
+     "net"
+    ],
+    [
+     1835,
+     3,
+     "/art/characters/mortiorchis/idle.png",
+     "net"
+    ],
+    [
+     1869,
+     2,
+     "/art/characters/tidus/idle.json",
+     "net"
+    ],
+    [
+     1869,
+     4,
+     "/art/characters/tidus/idle.png",
+     "net"
+    ],
+    [
+     1868,
+     19,
+     "/audio/music/boss-seymour.mp3",
+     "net"
+    ],
+    [
+     1901,
+     2,
+     "/art/characters/yuna/idle.json",
+     "net"
+    ],
+    [
+     1901,
+     3,
+     "/art/characters/yuna/idle.png",
+     "net"
+    ],
+    [
+     1929,
+     3,
+     "/art/characters/kimahri/idle.png",
+     "net"
+    ],
+    [
+     1929,
+     2,
+     "/art/characters/kimahri/idle.json",
+     "net"
+    ],
+    [
+     1957,
+     3,
+     "/art/characters/seymour-flux-body/attack.json",
+     "net"
+    ],
+    [
+     1957,
+     7,
+     "/art/characters/seymour-flux-body/attack.png",
+     "net"
+    ],
+    [
+     1957,
+     7,
+     "/art/characters/seymour-flux-body/hurt.png",
+     "net"
+    ],
+    [
+     1957,
+     7,
+     "/art/characters/seymour-flux-body/cast.png",
+     "net"
+    ],
+    [
+     1957,
+     7,
+     "/art/characters/seymour-flux-body/attack.png",
+     "net"
+    ],
+    [
+     2001,
+     4,
+     "/art/characters/seymour-flux-body/cast.png",
+     "net"
+    ],
+    [
+     2001,
+     3,
+     "/art/characters/seymour-flux-body/cast.json",
+     "net"
+    ],
+    [
+     2001,
+     4,
+     "/art/characters/seymour-flux-body/ko.png",
+     "net"
+    ],
+    [
+     2046,
+     4,
+     "/art/characters/seymour-flux-body/hurt.png",
+     "net"
+    ],
+    [
+     2046,
+     3,
+     "/art/characters/seymour-flux-body/hurt.json",
+     "net"
+    ],
+    [
+     2046,
+     6,
+     "/art/characters/seymour-flux-body/telegraph.png",
+     "net"
+    ],
+    [
+     2095,
+     3,
+     "/art/characters/seymour-flux-body/ko.json",
+     "net"
+    ],
+    [
+     2095,
+     4,
+     "/art/characters/seymour-flux-body/ko.png",
+     "net"
+    ],
+    [
+     2095,
+     5,
+     "/art/characters/mortiorchis/attack.png",
+     "net"
+    ],
+    [
+     2120,
+     2,
+     "/art/characters/seymour-flux-body/telegraph.json",
+     "net"
+    ],
+    [
+     2120,
+     4,
+     "/art/characters/mortiorchis/cast.png",
+     "net"
+    ],
+    [
+     2120,
+     3,
+     "/art/characters/seymour-flux-body/telegraph.png",
+     "net"
+    ],
+    [
+     2147,
+     3,
+     "/art/characters/mortiorchis/attack.json",
+     "net"
+    ],
+    [
+     2147,
+     3,
+     "/art/characters/mortiorchis/attack.png",
+     "net"
+    ],
+    [
+     2147,
+     4,
+     "/art/characters/mortiorchis/hurt.png",
+     "net"
+    ],
+    [
+     2178,
+     5,
+     "/audio/music/victory-ffx.mp3",
+     "net"
+    ],
+    [
+     2179,
+     3,
+     "/art/characters/mortiorchis/cast.png",
+     "net"
+    ],
+    [
+     2179,
+     4,
+     "/art/characters/mortiorchis/ko.png",
+     "net"
+    ],
+    [
+     2179,
+     3,
+     "/art/characters/mortiorchis/cast.json",
+     "net"
+    ],
+    [
+     2200,
+     2,
+     "/art/characters/mortiorchis/hurt.json",
+     "net"
+    ],
+    [
+     2200,
+     3,
+     "/art/characters/mortiorchis/hurt.png",
+     "net"
+    ],
+    [
+     2200,
+     3,
+     "/art/characters/tidus/ready.png",
+     "net"
+    ],
+    [
+     2218,
+     2,
+     "/art/characters/mortiorchis/ko.json",
+     "net"
+    ],
+    [
+     2218,
+     3,
+     "/art/characters/tidus/attack.png",
+     "net"
+    ],
+    [
+     2218,
+     3,
+     "/art/characters/mortiorchis/ko.png",
+     "net"
+    ],
+    [
+     2237,
+     2,
+     "/art/characters/tidus/ready.json",
+     "net"
+    ],
+    [
+     2237,
+     3,
+     "/art/characters/tidus/cast.png",
+     "net"
+    ],
+    [
+     2237,
+     2,
+     "/art/characters/tidus/ready.png",
+     "net"
+    ],
+    [
+     2257,
+     2,
+     "/art/characters/tidus/attack.json",
+     "net"
+    ],
+    [
+     2257,
+     3,
+     "/art/characters/tidus/item.png",
+     "net"
+    ],
+    [
+     2258,
+     3,
+     "/art/characters/tidus/attack.png",
+     "net"
+    ],
+    [
+     2284,
+     2,
+     "/art/characters/tidus/cast.json",
+     "net"
+    ],
+    [
+     2284,
+     4,
+     "/art/characters/tidus/hurt.png",
+     "net"
+    ],
+    [
+     2284,
+     4,
+     "/art/characters/tidus/cast.png",
+     "net"
+    ],
+    [
+     2291,
+     1,
+     "/audio/music/defeat-ffx.mp3",
+     "net"
+    ],
+    [
+     2313,
+     2,
+     "/art/characters/tidus/item.json",
+     "net"
+    ],
+    [
+     2313,
+     4,
+     "/art/characters/tidus/ko.png",
+     "net"
+    ],
+    [
+     2313,
+     4,
+     "/art/characters/tidus/item.png",
+     "net"
+    ],
+    [
+     2339,
+     2,
+     "/art/characters/tidus/hurt.json",
+     "net"
+    ],
+    [
+     2339,
+     3,
+     "/art/characters/tidus/victory.png",
+     "net"
+    ],
+    [
+     2339,
+     3,
+     "/art/characters/tidus/hurt.png",
+     "net"
+    ],
+    [
+     2360,
+     2,
+     "/art/characters/tidus/ko.json",
+     "net"
+    ],
+    [
+     2361,
+     3,
+     "/art/characters/tidus/defend.webp",
+     "net"
+    ],
+    [
+     2361,
+     3,
+     "/art/characters/tidus/ko.png",
+     "net"
+    ],
+    [
+     2376,
+     2,
+     "/art/characters/tidus/victory.json",
+     "net"
+    ],
+    [
+     2376,
+     3,
+     "/art/characters/tidus/sleep.png",
+     "net"
+    ],
+    [
+     2376,
+     2,
+     "/art/characters/tidus/victory.png",
+     "net"
+    ],
+    [
+     2391,
+     2,
+     "/art/characters/tidus/defend.json",
+     "net"
+    ],
+    [
+     2391,
+     3,
+     "/art/characters/tidus/critical.png",
+     "net"
+    ],
+    [
+     2392,
+     2,
+     "/art/characters/tidus/defend.webp",
+     "net"
+    ],
+    [
+     2417,
+     3,
+     "/art/characters/tidus/sleep.json",
+     "net"
+    ],
+    [
+     2417,
+     3,
+     "/art/characters/tidus/follow.png",
+     "net"
+    ],
+    [
+     2417,
+     3,
+     "/art/characters/tidus/sleep.png",
+     "net"
+    ],
+    [
+     2443,
+     2,
+     "/art/characters/tidus/critical.json",
+     "net"
+    ],
+    [
+     2443,
+     3,
+     "/art/characters/tidus/od-energy-rain.png",
+     "net"
+    ],
+    [
+     2443,
+     3,
+     "/art/characters/tidus/critical.png",
+     "net"
+    ],
+    [
+     2466,
+     2,
+     "/art/characters/tidus/follow.json",
+     "net"
+    ],
+    [
+     2466,
+     3,
+     "/art/characters/tidus/follow.png",
+     "net"
+    ],
+    [
+     2466,
+     3,
+     "/art/characters/tidus/od-slice-and-dice.png",
+     "net"
+    ],
+    [
+     2483,
+     2,
+     "/art/characters/tidus/od-energy-rain.json",
+     "net"
+    ],
+    [
+     2483,
+     2,
+     "/art/characters/tidus/od-energy-rain.png",
+     "net"
+    ],
+    [
+     2483,
+     2,
+     "/art/characters/yuna/ready.png",
+     "net"
+    ],
+    [
+     2507,
+     2,
+     "/art/characters/tidus/od-slice-and-dice.json",
+     "net"
+    ],
+    [
+     2507,
+     4,
+     "/art/characters/yuna/attack.png",
+     "net"
+    ],
+    [
+     2507,
+     3,
+     "/art/characters/tidus/od-slice-and-dice.png",
+     "net"
+    ],
+    [
+     2525,
+     2,
+     "/art/characters/yuna/ready.json",
+     "net"
+    ],
+    [
+     2526,
+     3,
+     "/art/characters/yuna/cast.png",
+     "net"
+    ],
+    [
+     2526,
+     2,
+     "/art/characters/yuna/ready.png",
+     "net"
+    ],
+    [
+     2544,
+     2,
+     "/art/characters/yuna/attack.json",
+     "net"
+    ],
+    [
+     2544,
+     4,
+     "/art/characters/yuna/item.png",
+     "net"
+    ],
+    [
+     2544,
+     3,
+     "/art/characters/yuna/attack.png",
+     "net"
+    ],
+    [
+     2569,
+     2,
+     "/art/characters/yuna/cast.json",
+     "net"
+    ],
+    [
+     2569,
+     3,
+     "/art/characters/yuna/hurt.png",
+     "net"
+    ],
+    [
+     2569,
+     3,
+     "/art/characters/yuna/cast.png",
+     "net"
+    ],
+    [
+     2596,
+     4,
+     "/art/characters/yuna/ko.png",
+     "net"
+    ],
+    [
+     2596,
+     2,
+     "/art/characters/yuna/item.json",
+     "net"
+    ],
+    [
+     2596,
+     3,
+     "/art/characters/yuna/item.png",
+     "net"
+    ],
+    [
+     2622,
+     3,
+     "/art/characters/yuna/hurt.png",
+     "net"
+    ],
+    [
+     2622,
+     2,
+     "/art/characters/yuna/hurt.json",
+     "net"
+    ],
+    [
+     2622,
+     3,
+     "/art/characters/yuna/victory.png",
+     "net"
+    ],
+    [
+     2647,
+     4,
+     "/art/characters/yuna/ko.png",
+     "net"
+    ],
+    [
+     2647,
+     3,
+     "/art/characters/yuna/ko.json",
+     "net"
+    ],
+    [
+     2647,
+     4,
+     "/art/characters/yuna/sleep.png",
+     "net"
+    ],
+    [
+     2676,
+     2,
+     "/art/characters/yuna/victory.json",
+     "net"
+    ],
+    [
+     2676,
+     3,
+     "/art/characters/yuna/victory.png",
+     "net"
+    ],
+    [
+     2676,
+     3,
+     "/art/characters/yuna/critical.png",
+     "net"
+    ],
+    [
+     2697,
+     3,
+     "/art/characters/yuna/sleep.png",
+     "net"
+    ],
+    [
+     2697,
+     2,
+     "/art/characters/yuna/sleep.json",
+     "net"
+    ],
+    [
+     2697,
+     3,
+     "/art/characters/yuna/follow.png",
+     "net"
+    ],
+    [
+     2721,
+     3,
+     "/art/characters/yuna/critical.json",
+     "net"
+    ],
+    [
+     2722,
+     3,
+     "/art/characters/kimahri/ready.png",
+     "net"
+    ],
+    [
+     2722,
+     3,
+     "/art/characters/yuna/critical.png",
+     "net"
+    ],
+    [
+     2746,
+     2,
+     "/art/characters/yuna/follow.json",
+     "net"
+    ],
+    [
+     2746,
+     3,
+     "/art/characters/yuna/follow.png",
+     "net"
+    ],
+    [
+     2746,
+     21,
+     "/art/characters/kimahri/attack.png",
+     "net"
+    ],
+    [
+     2766,
+     2,
+     "/art/characters/kimahri/ready.json",
+     "net"
+    ],
+    [
+     2766,
+     3,
+     "/art/characters/kimahri/ready.png",
+     "net"
+    ],
+    [
+     2766,
+     3,
+     "/art/characters/kimahri/cast.png",
+     "net"
+    ],
+    [
+     2791,
+     2,
+     "/art/characters/kimahri/attack.json",
+     "net"
+    ],
+    [
+     2791,
+     3,
+     "/art/characters/kimahri/item.png",
+     "net"
+    ],
+    [
+     2792,
+     3,
+     "/art/characters/kimahri/attack.png",
+     "net"
+    ],
+    [
+     2822,
+     2,
+     "/art/characters/kimahri/cast.png",
+     "net"
+    ],
+    [
+     2822,
+     3,
+     "/art/characters/kimahri/cast.json",
+     "net"
+    ],
+    [
+     2822,
+     4,
+     "/art/characters/kimahri/hurt.png",
+     "net"
+    ],
+    [
+     2860,
+     3,
+     "/art/characters/kimahri/item.json",
+     "net"
+    ],
+    [
+     2861,
+     4,
+     "/art/characters/kimahri/ko.png",
+     "net"
+    ],
+    [
+     2861,
+     4,
+     "/art/characters/kimahri/item.png",
+     "net"
+    ],
+    [
+     2888,
+     2,
+     "/art/characters/kimahri/hurt.json",
+     "net"
+    ],
+    [
+     2888,
+     3,
+     "/art/characters/kimahri/hurt.png",
+     "net"
+    ],
+    [
+     2888,
+     3,
+     "/art/characters/kimahri/victory.png",
+     "net"
+    ],
+    [
+     2915,
+     2,
+     "/art/characters/kimahri/ko.json",
+     "net"
+    ],
+    [
+     2915,
+     3,
+     "/art/characters/kimahri/ko.png",
+     "net"
+    ],
+    [
+     2915,
+     3,
+     "/art/characters/kimahri/defend.png",
+     "net"
+    ],
+    [
+     2941,
+     2,
+     "/art/characters/kimahri/victory.json",
+     "net"
+    ],
+    [
+     2942,
+     4,
+     "/art/characters/kimahri/sleep.png",
+     "net"
+    ],
+    [
+     2942,
+     3,
+     "/art/characters/kimahri/victory.png",
+     "net"
+    ],
+    [
+     2974,
+     3,
+     "/art/characters/kimahri/defend.json",
+     "net"
+    ],
+    [
+     2974,
+     4,
+     "/art/characters/kimahri/critical.png",
+     "net"
+    ],
+    [
+     2974,
+     3,
+     "/art/characters/kimahri/defend.png",
+     "net"
+    ],
+    [
+     2997,
+     2,
+     "/art/characters/kimahri/sleep.json",
+     "net"
+    ],
+    [
+     2997,
+     3,
+     "/art/characters/kimahri/follow.png",
+     "net"
+    ],
+    [
+     2997,
+     3,
+     "/art/characters/kimahri/sleep.png",
+     "net"
+    ],
+    [
+     3023,
+     2,
+     "/art/characters/kimahri/critical.json",
+     "net"
+    ],
+    [
+     3023,
+     2,
+     "/art/characters/kimahri/critical.png",
+     "net"
+    ],
+    [
+     3053,
+     2,
+     "/art/characters/kimahri/follow.json",
+     "net"
+    ],
+    [
+     3053,
+     2,
+     "/art/characters/kimahri/follow.png",
+     "net"
+    ],
+    [
+     3077,
+     3,
+     "/art/pause/tidus.2x.webp",
+     "net"
+    ],
+    [
+     3077,
+     3,
+     "/art/pause/yuna.2x.webp",
+     "net"
+    ],
+    [
+     3077,
+     3,
+     "/art/pause/kimahri.2x.webp",
+     "net"
+    ],
+    [
+     11599,
+     1008,
+     "/art/backdrops/gagazet.webp",
+     "net"
+    ],
+    [
+     12480,
+     2,
+     "/fx/gagazet/depth.png",
+     "net"
+    ],
+    [
+     12496,
+     7,
+     "/art/characters/tidus/idle.normal.png",
+     "net"
+    ],
+    [
+     12496,
+     7,
+     "/art/characters/tidus/ready.normal.png",
+     "net"
+    ],
+    [
+     12496,
+     10,
+     "/art/characters/tidus/attack.normal.png",
+     "net"
+    ],
+    [
+     12496,
+     10,
+     "/art/characters/tidus/cast.normal.png",
+     "net"
+    ],
+    [
+     12496,
+     14,
+     "/art/characters/tidus/item.normal.png",
+     "net"
+    ],
+    [
+     12496,
+     15,
+     "/art/characters/tidus/hurt.normal.png",
+     "net"
+    ],
+    [
+     12496,
+     14,
+     "/art/characters/tidus/ko.normal.png",
+     "net"
+    ],
+    [
+     12496,
+     14,
+     "/art/characters/tidus/victory.normal.png",
+     "net"
+    ],
+    [
+     12496,
+     19,
+     "/art/characters/tidus/defend.normal.png",
+     "net"
+    ],
+    [
+     12496,
+     19,
+     "/art/characters/tidus/sleep.normal.png",
+     "net"
+    ],
+    [
+     12496,
+     20,
+     "/art/characters/tidus/critical.normal.png",
+     "net"
+    ],
+    [
+     12497,
+     19,
+     "/art/characters/tidus/follow.normal.png",
+     "net"
+    ],
+    [
+     12497,
+     20,
+     "/art/characters/tidus/od-energy-rain.normal.png",
+     "net"
+    ],
+    [
+     12497,
+     23,
+     "/art/characters/tidus/od-slice-and-dice.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     24,
+     "/art/characters/yuna/idle.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     23,
+     "/art/characters/yuna/ready.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     25,
+     "/art/characters/yuna/attack.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     25,
+     "/art/characters/yuna/cast.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     28,
+     "/art/characters/yuna/item.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     29,
+     "/art/characters/yuna/hurt.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     30,
+     "/art/characters/yuna/ko.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     29,
+     "/art/characters/yuna/victory.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     31,
+     "/art/characters/yuna/sleep.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     33,
+     "/art/characters/yuna/critical.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     33,
+     "/art/characters/yuna/follow.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     34,
+     "/art/characters/kimahri/idle.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     34,
+     "/art/characters/kimahri/ready.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     39,
+     "/art/characters/kimahri/attack.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     37,
+     "/art/characters/kimahri/cast.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     38,
+     "/art/characters/kimahri/item.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     39,
+     "/art/characters/kimahri/hurt.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     39,
+     "/art/characters/kimahri/ko.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     42,
+     "/art/characters/kimahri/victory.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     42,
+     "/art/characters/kimahri/defend.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     43,
+     "/art/characters/kimahri/sleep.normal.png",
+     "net"
+    ],
+    [
+     12498,
+     44,
+     "/art/characters/kimahri/critical.normal.png",
+     "net"
+    ],
+    [
+     12499,
+     44,
+     "/art/characters/kimahri/follow.normal.png",
+     "net"
+    ],
+    [
+     12499,
+     47,
+     "/art/characters/mortiorchis/idle.normal.png",
+     "net"
+    ],
+    [
+     12499,
+     47,
+     "/art/characters/mortiorchis/attack.normal.png",
+     "net"
+    ],
+    [
+     12499,
+     47,
+     "/art/characters/mortiorchis/cast.normal.png",
+     "net"
+    ],
+    [
+     12499,
+     48,
+     "/art/characters/mortiorchis/hurt.normal.png",
+     "net"
+    ],
+    [
+     12491,
+     17,
+     "/art/rigs/seymour-flux-body/rig.json",
+     "net"
+    ],
+    [
+     12652,
+     3,
+     "/art/characters/seymour-flux-body/idle.png",
+     "net"
+    ],
+    [
+     12669,
+     -20,
+     "/assets/plateWorker-y9caEp7Z.js",
+     "net"
+    ],
+    [
+     12667,
+     2,
+     "/assets/RigActor-B4NFjYV5.js",
+     "net"
+    ],
+    [
+     12673,
+     5,
+     "/art/rigs/seymour-flux-body/1x/body.attack.png",
+     "net"
+    ],
+    [
+     12672,
+     8,
+     "/art/characters/seymour-flux-body/idle.normal.png",
+     "net"
+    ],
+    [
+     12673,
+     11,
+     "/art/rigs/seymour-flux-body/1x/body.png",
+     "net"
+    ],
+    [
+     12673,
+     7,
+     "/art/rigs/seymour-flux-body/1x/body.hurt.png",
+     "net"
+    ],
+    [
+     12673,
+     8,
+     "/art/rigs/seymour-flux-body/1x/body.telegraph.png",
+     "net"
+    ],
+    [
+     12673,
+     10,
+     "/art/rigs/seymour-flux-body/1x/body.ko.png",
+     "net"
+    ],
+    [
+     12673,
+     7,
+     "/art/rigs/seymour-flux-body/1x/body.cast.png",
+     "net"
+    ],
+    [
+     12673,
+     10,
+     "/art/rigs/seymour-flux-body/1x/leg.attack.png",
+     "net"
+    ],
+    [
+     12673,
+     11,
+     "/art/rigs/seymour-flux-body/1x/leg.png",
+     "net"
+    ],
+    [
+     12673,
+     12,
+     "/art/rigs/seymour-flux-body/1x/leg.cast.png",
+     "net"
+    ],
+    [
+     12673,
+     12,
+     "/art/rigs/seymour-flux-body/1x/leg.hurt.png",
+     "net"
+    ],
+    [
+     12673,
+     12,
+     "/art/rigs/seymour-flux-body/1x/leg.telegraph.png",
+     "net"
+    ],
+    [
+     12673,
+     12,
+     "/art/rigs/seymour-flux-body/1x/leg.ko.png",
+     "net"
+    ],
+    [
+     12673,
+     14,
+     "/art/rigs/seymour-flux-body/1x/arm.png",
+     "net"
+    ],
+    [
+     12673,
+     15,
+     "/art/rigs/seymour-flux-body/1x/arm.attack.png",
+     "net"
+    ],
+    [
+     12673,
+     15,
+     "/art/rigs/seymour-flux-body/1x/arm.hurt.png",
+     "net"
+    ],
+    [
+     12673,
+     15,
+     "/art/rigs/seymour-flux-body/1x/arm.cast.png",
+     "net"
+    ],
+    [
+     12673,
+     16,
+     "/art/rigs/seymour-flux-body/1x/arm.telegraph.png",
+     "net"
+    ],
+    [
+     12673,
+     17,
+     "/art/rigs/seymour-flux-body/1x/arm.ko.png",
+     "net"
+    ],
+    [
+     12673,
+     17,
+     "/art/rigs/seymour-flux-body/1x/hairU.png",
+     "net"
+    ],
+    [
+     12673,
+     20,
+     "/art/rigs/seymour-flux-body/1x/hairU.attack.png",
+     "net"
+    ],
+    [
+     12673,
+     20,
+     "/art/rigs/seymour-flux-body/1x/hairU.cast.png",
+     "net"
+    ],
+    [
+     12673,
+     20,
+     "/art/rigs/seymour-flux-body/1x/hairU.telegraph.png",
+     "net"
+    ],
+    [
+     12673,
+     20,
+     "/art/rigs/seymour-flux-body/1x/hairU.ko.png",
+     "net"
+    ],
+    [
+     12673,
+     20,
+     "/art/rigs/seymour-flux-body/1x/hairU.hurt.png",
+     "net"
+    ],
+    [
+     12673,
+     21,
+     "/art/rigs/seymour-flux-body/1x/hairM.png",
+     "net"
+    ],
+    [
+     12673,
+     24,
+     "/art/rigs/seymour-flux-body/1x/hairM.attack.png",
+     "net"
+    ],
+    [
+     12673,
+     24,
+     "/art/rigs/seymour-flux-body/1x/hairM.cast.png",
+     "net"
+    ],
+    [
+     12673,
+     25,
+     "/art/rigs/seymour-flux-body/1x/hairM.ko.png",
+     "net"
+    ],
+    [
+     12673,
+     26,
+     "/art/rigs/seymour-flux-body/1x/head.png",
+     "net"
+    ],
+    [
+     12673,
+     25,
+     "/art/rigs/seymour-flux-body/1x/hairM.telegraph.png",
+     "net"
+    ],
+    [
+     12673,
+     25,
+     "/art/rigs/seymour-flux-body/1x/hairM.hurt.png",
+     "net"
+    ],
+    [
+     12674,
+     28,
+     "/art/rigs/seymour-flux-body/1x/head.attack.png",
+     "net"
+    ],
+    [
+     12674,
+     28,
+     "/art/rigs/seymour-flux-body/1x/head.cast.png",
+     "net"
+    ],
+    [
+     12674,
+     29,
+     "/art/rigs/seymour-flux-body/1x/head.hurt.png",
+     "net"
+    ],
+    [
+     12674,
+     29,
+     "/art/rigs/seymour-flux-body/1x/head.telegraph.png",
+     "net"
+    ],
+    [
+     12674,
+     30,
+     "/art/rigs/seymour-flux-body/1x/head.ko.png",
+     "net"
+    ],
+    [
+     12685,
+     20,
+     "/art/rigs/seymour-flux-body/1x/body.attack.rim.webp",
+     "net"
+    ],
+    [
+     12689,
+     17,
+     "/art/rigs/seymour-flux-body/1x/body.rim.webp",
+     "net"
+    ],
+    [
+     12689,
+     17,
+     "/art/rigs/seymour-flux-body/1x/body.hurt.rim.webp",
+     "net"
+    ],
+    [
+     12689,
+     17,
+     "/art/rigs/seymour-flux-body/1x/body.telegraph.rim.webp",
+     "net"
+    ],
+    [
+     12690,
+     17,
+     "/art/rigs/seymour-flux-body/1x/body.ko.rim.webp",
+     "net"
+    ],
+    [
+     12690,
+     17,
+     "/art/rigs/seymour-flux-body/1x/body.cast.rim.webp",
+     "net"
+    ],
+    [
+     12690,
+     17,
+     "/art/rigs/seymour-flux-body/1x/leg.attack.rim.webp",
+     "net"
+    ],
+    [
+     12690,
+     20,
+     "/art/rigs/seymour-flux-body/1x/leg.rim.webp",
+     "net"
+    ],
+    [
+     12690,
+     19,
+     "/art/rigs/seymour-flux-body/1x/leg.cast.rim.webp",
+     "net"
+    ],
+    [
+     12690,
+     19,
+     "/art/rigs/seymour-flux-body/1x/leg.hurt.rim.webp",
+     "net"
+    ],
+    [
+     12690,
+     19,
+     "/art/rigs/seymour-flux-body/1x/leg.telegraph.rim.webp",
+     "net"
+    ],
+    [
+     12690,
+     19,
+     "/art/rigs/seymour-flux-body/1x/leg.ko.rim.webp",
+     "net"
+    ],
+    [
+     12691,
+     19,
+     "/art/rigs/seymour-flux-body/1x/arm.rim.webp",
+     "net"
+    ],
+    [
+     12691,
+     22,
+     "/art/rigs/seymour-flux-body/1x/arm.attack.rim.webp",
+     "net"
+    ],
+    [
+     12691,
+     22,
+     "/art/rigs/seymour-flux-body/1x/arm.hurt.rim.webp",
+     "net"
+    ],
+    [
+     12692,
+     22,
+     "/art/rigs/seymour-flux-body/1x/arm.cast.rim.webp",
+     "net"
+    ],
+    [
+     12692,
+     22,
+     "/art/rigs/seymour-flux-body/1x/arm.telegraph.rim.webp",
+     "net"
+    ],
+    [
+     12692,
+     21,
+     "/art/rigs/seymour-flux-body/1x/arm.ko.rim.webp",
+     "net"
+    ],
+    [
+     12692,
+     22,
+     "/art/rigs/seymour-flux-body/1x/hairU.rim.webp",
+     "net"
+    ],
+    [
+     12696,
+     21,
+     "/art/rigs/seymour-flux-body/1x/hairU.attack.rim.webp",
+     "net"
+    ],
+    [
+     12696,
+     21,
+     "/art/rigs/seymour-flux-body/1x/hairU.cast.rim.webp",
+     "net"
+    ],
+    [
+     12696,
+     21,
+     "/art/rigs/seymour-flux-body/1x/hairU.telegraph.rim.webp",
+     "net"
+    ],
+    [
+     12696,
+     21,
+     "/art/rigs/seymour-flux-body/1x/hairU.ko.rim.webp",
+     "net"
+    ],
+    [
+     12696,
+     21,
+     "/art/rigs/seymour-flux-body/1x/hairU.hurt.rim.webp",
+     "net"
+    ],
+    [
+     12696,
+     21,
+     "/art/rigs/seymour-flux-body/1x/hairM.rim.webp",
+     "net"
+    ],
+    [
+     12699,
+     21,
+     "/art/rigs/seymour-flux-body/1x/hairM.attack.rim.webp",
+     "net"
+    ],
+    [
+     12701,
+     20,
+     "/art/rigs/seymour-flux-body/1x/hairM.cast.rim.webp",
+     "net"
+    ],
+    [
+     12701,
+     20,
+     "/art/rigs/seymour-flux-body/1x/hairM.ko.rim.webp",
+     "net"
+    ],
+    [
+     12701,
+     20,
+     "/art/rigs/seymour-flux-body/1x/head.rim.webp",
+     "net"
+    ],
+    [
+     12701,
+     20,
+     "/art/rigs/seymour-flux-body/1x/hairM.telegraph.rim.webp",
+     "net"
+    ],
+    [
+     12701,
+     20,
+     "/art/rigs/seymour-flux-body/1x/hairM.hurt.rim.webp",
+     "net"
+    ],
+    [
+     12703,
+     21,
+     "/art/rigs/seymour-flux-body/1x/head.cast.rim.webp",
+     "net"
+    ],
+    [
+     12703,
+     21,
+     "/art/rigs/seymour-flux-body/1x/head.attack.rim.webp",
+     "net"
+    ],
+    [
+     12704,
+     21,
+     "/art/rigs/seymour-flux-body/1x/head.hurt.rim.webp",
+     "net"
+    ],
+    [
+     12704,
+     21,
+     "/art/rigs/seymour-flux-body/1x/head.telegraph.rim.webp",
+     "net"
+    ],
+    [
+     12704,
+     21,
+     "/art/rigs/seymour-flux-body/1x/head.ko.rim.webp",
+     "net"
+    ],
+    [
+     12705,
+     20,
+     "/art/rigs/seymour-flux-body/body.attack.normal.webp",
+     "net"
+    ],
+    [
+     12707,
+     22,
+     "/art/rigs/seymour-flux-body/body.normal.webp",
+     "net"
+    ],
+    [
+     12708,
+     21,
+     "/art/rigs/seymour-flux-body/body.hurt.normal.webp",
+     "net"
+    ],
+    [
+     12708,
+     21,
+     "/art/rigs/seymour-flux-body/body.telegraph.normal.webp",
+     "net"
+    ],
+    [
+     12708,
+     21,
+     "/art/rigs/seymour-flux-body/leg.attack.normal.webp",
+     "net"
+    ],
+    [
+     12708,
+     21,
+     "/art/rigs/seymour-flux-body/body.ko.normal.webp",
+     "net"
+    ],
+    [
+     12708,
+     21,
+     "/art/rigs/seymour-flux-body/body.cast.normal.webp",
+     "net"
+    ],
+    [
+     12711,
+     21,
+     "/art/rigs/seymour-flux-body/leg.cast.normal.webp",
+     "net"
+    ],
+    [
+     12711,
+     22,
+     "/art/rigs/seymour-flux-body/leg.normal.webp",
+     "net"
+    ],
+    [
+     12711,
+     22,
+     "/art/rigs/seymour-flux-body/leg.hurt.normal.webp",
+     "net"
+    ],
+    [
+     12711,
+     22,
+     "/art/rigs/seymour-flux-body/leg.ko.normal.webp",
+     "net"
+    ],
+    [
+     12711,
+     22,
+     "/art/rigs/seymour-flux-body/leg.telegraph.normal.webp",
+     "net"
+    ],
+    [
+     12711,
+     22,
+     "/art/rigs/seymour-flux-body/arm.normal.webp",
+     "net"
+    ],
+    [
+     12715,
+     19,
+     "/art/rigs/seymour-flux-body/arm.attack.normal.webp",
+     "net"
+    ],
+    [
+     12715,
+     21,
+     "/art/rigs/seymour-flux-body/arm.ko.normal.webp",
+     "net"
+    ],
+    [
+     12715,
+     22,
+     "/art/rigs/seymour-flux-body/hairU.normal.webp",
+     "net"
+    ],
+    [
+     12715,
+     22,
+     "/art/rigs/seymour-flux-body/arm.cast.normal.webp",
+     "net"
+    ],
+    [
+     12715,
+     22,
+     "/art/rigs/seymour-flux-body/arm.telegraph.normal.webp",
+     "net"
+    ],
+    [
+     12715,
+     22,
+     "/art/rigs/seymour-flux-body/arm.hurt.normal.webp",
+     "net"
+    ],
+    [
+     12718,
+     20,
+     "/art/rigs/seymour-flux-body/hairU.attack.normal.webp",
+     "net"
+    ],
+    [
+     12718,
+     22,
+     "/art/rigs/seymour-flux-body/hairM.normal.webp",
+     "net"
+    ],
+    [
+     12718,
+     22,
+     "/art/rigs/seymour-flux-body/hairU.ko.normal.webp",
+     "net"
+    ],
+    [
+     12718,
+     22,
+     "/art/rigs/seymour-flux-body/hairU.cast.normal.webp",
+     "net"
+    ],
+    [
+     12719,
+     22,
+     "/art/rigs/seymour-flux-body/hairU.hurt.normal.webp",
+     "net"
+    ],
+    [
+     12719,
+     22,
+     "/art/rigs/seymour-flux-body/hairU.telegraph.normal.webp",
+     "net"
+    ],
+    [
+     12721,
+     19,
+     "/art/rigs/seymour-flux-body/hairM.attack.normal.webp",
+     "net"
+    ],
+    [
+     12722,
+     22,
+     "/art/rigs/seymour-flux-body/hairM.cast.normal.webp",
+     "net"
+    ],
+    [
+     12722,
+     22,
+     "/art/rigs/seymour-flux-body/hairM.ko.normal.webp",
+     "net"
+    ],
+    [
+     12722,
+     22,
+     "/art/rigs/seymour-flux-body/hairM.hurt.normal.webp",
+     "net"
+    ],
+    [
+     12722,
+     22,
+     "/art/rigs/seymour-flux-body/head.normal.webp",
+     "net"
+    ],
+    [
+     12722,
+     22,
+     "/art/rigs/seymour-flux-body/hairM.telegraph.normal.webp",
+     "net"
+    ],
+    [
+     12726,
+     19,
+     "/art/rigs/seymour-flux-body/head.cast.normal.webp",
+     "net"
+    ],
+    [
+     12726,
+     22,
+     "/art/rigs/seymour-flux-body/head.attack.normal.webp",
+     "net"
+    ],
+    [
+     12726,
+     22,
+     "/art/rigs/seymour-flux-body/head.hurt.normal.webp",
+     "net"
+    ],
+    [
+     12726,
+     22,
+     "/art/rigs/seymour-flux-body/head.telegraph.normal.webp",
+     "net"
+    ],
+    [
+     12726,
+     22,
+     "/art/rigs/seymour-flux-body/head.ko.normal.webp",
+     "net"
+    ],
+    [
+     12776,
+     2,
+     "/assets/ink-light-DNLnRxnq.webp",
+     "net"
+    ],
+    [
+     12784,
+     3,
+     "/art/characters/tidus/attack.png",
+     "net"
+    ],
+    [
+     12784,
+     4,
+     "/art/characters/yuna/attack.png",
+     "net"
+    ],
+    [
+     12784,
+     6,
+     "/art/characters/kimahri/attack.png",
+     "net"
+    ],
+    [
+     12784,
+     10,
+     "/art/characters/seymour-flux-body/attack.png",
+     "net"
+    ],
+    [
+     12784,
+     13,
+     "/art/characters/mortiorchis/attack.png",
+     "net"
+    ],
+    [
+     12788,
+     19,
+     "/assets/worker-BHx8KBwl.js",
+     "net"
+    ],
+    [
+     13125,
+     11,
+     "/fonts/cormorant-garamond/CormorantGaramond-Variable-wght.woff2",
+     "net"
+    ],
+    [
+     13670,
+     51,
+     "/art/backdrops/gagazet.depth.png",
+     "net"
+    ],
+    [
+     14065,
+     0,
+     "/art/backdrops/gagazet.webp",
+     "cache"
+    ],
+    [
+     14567,
+     7,
+     "/art/characters/yuna/idle%402x.png",
+     "net"
+    ],
+    [
+     14585,
+     4,
+     "/art/characters/yuna/ready%402x.png",
+     "net"
+    ],
+    [
+     14704,
+     8,
+     "/art/characters/yuna/attack%402x.png",
+     "net"
+    ],
+    [
+     14707,
+     11,
+     "/art/characters/yuna/cast%402x.png",
+     "net"
+    ],
+    [
+     14818,
+     8,
+     "/art/characters/yuna/item%402x.png",
+     "net"
+    ],
+    [
+     14850,
+     6,
+     "/art/characters/yuna/hurt%402x.png",
+     "net"
+    ],
+    [
+     14918,
+     5,
+     "/art/characters/yuna/ko%402x.png",
+     "net"
+    ],
+    [
+     14968,
+     5,
+     "/art/characters/yuna/victory%402x.png",
+     "net"
+    ],
+    [
+     15001,
+     4,
+     "/art/characters/yuna/sleep%402x.png",
+     "net"
+    ],
+    [
+     15069,
+     5,
+     "/art/characters/yuna/critical%402x.png",
+     "net"
+    ],
+    [
+     15085,
+     4,
+     "/art/characters/yuna/follow%402x.png",
+     "net"
+    ],
+    [
+     16153,
+     2,
+     "/art/characters/seymour-flux-body/idle.json",
+     "net"
+    ],
+    [
+     16153,
+     2,
+     "/art/characters/mortiorchis/idle.json",
+     "net"
+    ],
+    [
+     16154,
+     3,
+     "/art/characters/seymour-flux-body/idle.json",
+     "net"
+    ],
+    [
+     16168,
+     3,
+     "/art/characters/mortiorchis/idle.png",
+     "net"
+    ],
+    [
+     16168,
+     1,
+     "/art/portraits/seymour.json",
+     "net"
+    ],
+    [
+     22921,
+     3,
+     "/assets/paper-dark-CkmdjUsb.webp",
+     "net"
+    ]
+   ],
+   "warm": []
+  }
+ ],
+ "errors": []
+}

@@ -1,0 +1,40 @@
+[
+ {
+  "base": "http://127.0.0.1:5871/",
+  "path": "demo",
+  "chapter": "ffx2-bahamut",
+  "dwell": "fast",
+  "cache": "cold",
+  "out": "D:/pyrefly-release55/critic/reviews/eaf599d0c-focused/timeline/ch4-demo-default.json",
+  "label": "ch4 demo default"
+ },
+ {
+  "base": "http://127.0.0.1:5871/",
+  "path": "demo",
+  "chapter": "ffx2-bahamut",
+  "dwell": "fast",
+  "cache": "cold",
+  "out": "D:/pyrefly-release55/critic/reviews/eaf599d0c-focused/timeline/ch4-demo-cardhold-full.json",
+  "label": "ch4 demo cardhold=full",
+  "query": "cardhold=full"
+ },
+ {
+  "base": "http://127.0.0.1:5871/",
+  "path": "demo",
+  "chapter": "seymour-flux",
+  "dwell": "fast",
+  "cache": "cold",
+  "out": "D:/pyrefly-release55/critic/reviews/eaf599d0c-focused/timeline/ch1-demo-default.json",
+  "label": "ch1 demo default"
+ },
+ {
+  "base": "http://127.0.0.1:5871/",
+  "path": "demo",
+  "chapter": "seymour-flux",
+  "dwell": "fast",
+  "cache": "cold",
+  "out": "D:/pyrefly-release55/critic/reviews/eaf599d0c-focused/timeline/ch1-demo-cardhold-full.json",
+  "label": "ch1 demo cardhold=full",
+  "query": "cardhold=full"
+ }
+]

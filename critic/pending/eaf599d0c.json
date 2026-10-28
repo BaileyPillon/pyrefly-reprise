@@ -1,21 +1,28 @@
 {
-  "mainSha": "e9907cad8",
-  "bundle": "BygGxbJE",
-  "deployedAt": "2026-10-25T13:16:33.389Z",
+  "mainSha": "eaf599d0c",
+  "bundle": "8rsIfOcP",
+  "deployedAt": "2026-10-28T01:00:54.005Z",
   "liveUrl": "https://echoesofspira.com/",
   "artFiles": 4830,
   "policyVersion": 2,
-  "artifactHash": "d764fe0ed0580d31a9e272db3824d205e11aba276132517dca8b27371c9d9966",
+  "artifactHash": "b3afdb47240a7078c0c678c7da9cdd702aa57455638981f968e6a7d0499d8035",
   "review": "deep",
   "reasons": [
     "src/app/changelog/releaseNotes.ts: unclassified product path is a shared system",
-    "src/app/demo/demoHud.ts: unclassified product path is a shared system",
-    "src/ui/coach/coachState.ts: unclassified product path is a shared system",
-    "src/ui/hudf1/hudf1-act.css: unclassified product path is a shared system",
-    "src/ui/hudf1/hudf1-ffx2.css: unclassified product path is a shared system"
+    "src/app/demo/demoBoard.ts: unclassified product path is a shared system",
+    "src/app/demo/demoWarm.ts: unclassified product path is a shared system",
+    "src/engine/BattleMoments.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/BattlePresenterBeats.ts: battle presenter and lifecycle is a shared system",
+    "src/ui/common/BattleStartBanner.ts: global layout, input and boot is a shared system",
+    "src/ui/common/transitions/cardHold.ts: global layout, input and boot is a shared system",
+    "src/ui/common/transitions/loadingCard.ts: global layout, input and boot is a shared system"
   ],
   "systems": [
+    "battle presenter and lifecycle",
+    "debug API used by the evidence harness",
     "effects, lighting and sprites",
+    "global layout, input and boot",
+    "title, chapter select, prep, pause and results screens, and the Pilgrimage run's own screens (a hidden prototype: src/app/pilgrim/)",
     "unclassified product path"
   ],
   "chapters": [
@@ -40,20 +47,26 @@
     "mirror-aeons"
   ],
   "checks": [
+    "CHK-002",
+    "CHK-003",
+    "CHK-006",
     "CHK-008",
+    "CHK-009",
     "CHK-013",
+    "CHK-015",
     "CHK-016",
     "CHK-017",
     "CHK-020",
     "CHK-021",
     "CHK-022",
+    "CHK-023",
     "CHK-026",
     "CHK-027"
   ],
   "liveArtifact": {
     "result": "PASS",
     "checked": 56,
-    "at": "2026-10-25T13:16:33.389Z"
+    "at": "2026-10-28T01:00:54.005Z"
   },
   "obligations": [
     {
@@ -61,16 +74,16 @@
       "status": "done",
       "requires": "exact-artifact verification and real-input smoke on the live URL",
       "result": "PASS",
-      "settledBy": "critic/reviews/e9907cad8-live.json",
-      "settledAt": "2026-10-25T15:05:00Z"
+      "settledBy": "critic/reviews/eaf599d0c-live.json",
+      "settledAt": "2026-10-28T01:11:42.378Z"
     },
     {
       "kind": "focused",
       "status": "done",
       "requires": "acceptance of the changed area",
-      "result": "PASS",
-      "settledBy": "critic/reviews/e9907cad8-focused.json",
-      "settledAt": "2026-10-25T12:54:16.000Z"
+      "result": "FAIL",
+      "settledBy": "critic/reviews/eaf599d0c-focused.json",
+      "settledAt": "2026-10-28T00:41:09.000Z"
     },
     {
       "kind": "deep",
@@ -150,14 +163,15 @@
         "1cea6e937",
         "660c19bbd",
         "c8ecbcb31",
-        "fa56fd4e3"
+        "fa56fd4e3",
+        "e9907cad8"
       ]
     }
   ],
   "ownerOverride": {
     "words": "Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.",
-    "date": "2026-10-25T13:16:33.389Z",
-    "report": "critic/reviews/e9907cad8-focused.json",
+    "date": "2026-10-28T01:00:54.005Z",
+    "report": "critic/reviews/eaf599d0c-focused.json",
     "changedArea": null
   }
 }

@@ -1,0 +1,3494 @@
+{
+ "label": "ch4 demo cardhold=full",
+ "base": "http://127.0.0.1:5871/",
+ "route": "demo",
+ "chapter": "ffx2-bahamut",
+ "cache": "cold",
+ "dwell": "fast",
+ "sceneMode": "taps",
+ "size": "2560x1440",
+ "mode": "gpu",
+ "seed": 56,
+ "at": "2026-10-28T00:38:34.292Z",
+ "runs": [
+  {
+   "which": "cold",
+   "titleReadyMs": 375,
+   "dwell": "fast",
+   "split": {
+    "totalMs": 11681,
+    "parts": [
+     {
+      "name": "press-wait",
+      "startMs": 0,
+      "endMs": 156,
+      "ms": 156
+     },
+     {
+      "name": "entry-load",
+      "startMs": 156,
+      "endMs": 1350,
+      "ms": 1194
+     },
+     {
+      "name": "first-draw",
+      "startMs": 1350,
+      "endMs": 2393,
+      "ms": 1042
+     },
+     {
+      "name": "card",
+      "startMs": 2393,
+      "endMs": 4555,
+      "ms": 2162
+     },
+     {
+      "name": "card-to-sweep",
+      "startMs": 4555,
+      "endMs": 4569,
+      "ms": 14
+     },
+     {
+      "name": "sweep",
+      "startMs": 4569,
+      "endMs": 10702,
+      "ms": 6133
+     },
+     {
+      "name": "sweep-to-menu",
+      "startMs": 10702,
+      "endMs": 11681,
+      "ms": 978
+     }
+    ],
+    "deadMs": 170,
+    "loadMs": 2236,
+    "authoredMs": 9273,
+    "facts": {
+     "screenBattleMs": 157,
+     "entryOnMs": 156,
+     "entryMs": 2968,
+     "loadCardOnMs": 566,
+     "loadCardMs": 2237,
+     "presenterUpMs": 1350,
+     "cardOnMs": 2393,
+     "cardMs": 2162,
+     "loadCardUpAtCardMs": 1827,
+     "sweepMs": 6133,
+     "frozenMs": 242
+    },
+    "warm": {
+     "before": [],
+     "after": [
+      {
+       "atMs": 2732,
+       "what": "ffx2-bahamut: paintings"
+      }
+     ]
+    },
+    "worstGapMs": 400,
+    "gapsOver100": 11,
+    "gapsOver250": 2,
+    "lostMs": 2333,
+    "lostFirst9sMs": 2216
+   },
+   "cpuBusyPct": 29.4,
+   "marks": [
+    {
+     "t": 344.6,
+     "k": "screen",
+     "v": "title"
+    },
+    {
+     "t": 886.4,
+     "k": "title-press",
+     "v": null
+    },
+    {
+     "t": 1255.9,
+     "k": "pop",
+     "v": "title"
+    },
+    {
+     "t": 1256.3,
+     "k": "push",
+     "v": "chapter-select"
+    },
+    {
+     "t": 1258.6,
+     "k": "enter-done",
+     "v": "chapter-select"
+    },
+    {
+     "t": 1259.7,
+     "k": "screen",
+     "v": "chapter-select"
+    },
+    {
+     "t": 1282.4,
+     "k": "board-up",
+     "v": null
+    },
+    {
+     "t": 1903.6,
+     "k": "press",
+     "v": null
+    },
+    {
+     "t": 2059.7,
+     "k": "entry-add",
+     "v": "pf-entry pf-entry--shatter pf-entry--ffx2"
+    },
+    {
+     "t": 2060,
+     "k": "pop",
+     "v": "chapter-select"
+    },
+    {
+     "t": 2060.3,
+     "k": "push",
+     "v": "battle"
+    },
+    {
+     "t": 2220.4,
+     "k": "screen",
+     "v": "battle"
+    },
+    {
+     "t": 2469.5,
+     "k": "loadcard-add",
+     "v": null
+    },
+    {
+     "t": 3253.9,
+     "k": "line",
+     "v": "AUTO"
+    },
+    {
+     "t": 3253.9,
+     "k": "phase",
+     "v": "idle"
+    },
+    {
+     "t": 3253.9,
+     "k": "menu",
+     "v": ""
+    },
+    {
+     "t": 3253.9,
+     "k": "rig",
+     "v": "idle"
+    },
+    {
+     "t": 4296.3,
+     "k": "bosscard-add",
+     "v": null
+    },
+    {
+     "t": 4404.7,
+     "k": "enter-done",
+     "v": "battle"
+    },
+    {
+     "t": 4706.2,
+     "k": "loadcard-remove",
+     "v": null
+    },
+    {
+     "t": 5027.6,
+     "k": "entry-remove",
+     "v": "pf-entry pf-entry--shatter pf-entry--ffx2"
+    },
+    {
+     "t": 6458.6,
+     "k": "bosscard-remove",
+     "v": null
+    },
+    {
+     "t": 6472.6,
+     "k": "phase",
+     "v": "moment:battle-start"
+    },
+    {
+     "t": 6472.6,
+     "k": "rig",
+     "v": "intro"
+    },
+    {
+     "t": 7291,
+     "k": "rig",
+     "v": "idle"
+    },
+    {
+     "t": 8006.6,
+     "k": "rig",
+     "v": "idle>enemy~100"
+    },
+    {
+     "t": 11339.8,
+     "k": "rig",
+     "v": "idle"
+    },
+    {
+     "t": 12606,
+     "k": "phase",
+     "v": "play:turn-start"
+    },
+    {
+     "t": 12672.2,
+     "k": "phase",
+     "v": "play:action-start"
+    },
+    {
+     "t": 13584.2,
+     "k": "menu",
+     "v": "yuna"
+    },
+    {
+     "t": 13619.1,
+     "k": "phase",
+     "v": "command:yuna"
+    },
+    {
+     "t": 13889.7,
+     "k": "phase",
+     "v": "idle"
+    }
+   ],
+   "gaps": [
+    [
+     206,
+     197
+    ],
+    [
+     339.3,
+     133.3
+    ],
+    [
+     372.6,
+     33.3
+    ],
+    [
+     439.2,
+     66.6
+    ],
+    [
+     555.9,
+     116.7
+    ],
+    [
+     1005.9,
+     116.7
+    ],
+    [
+     1322.5,
+     33.3
+    ],
+    [
+     1439.2,
+     116.7
+    ],
+    [
+     2055.9,
+     150
+    ],
+    [
+     2205.8,
+     149.9
+    ],
+    [
+     2455.8,
+     250
+    ],
+    [
+     2789.2,
+     333.4
+    ],
+    [
+     2922.5,
+     116.7
+    ],
+    [
+     3039.2,
+     116.7
+    ],
+    [
+     3089.1,
+     49.9
+    ],
+    [
+     3239.1,
+     100
+    ],
+    [
+     3272.5,
+     33.4
+    ],
+    [
+     3355.8,
+     83.3
+    ],
+    [
+     3772.5,
+     400.1
+    ],
+    [
+     3905.8,
+     133.3
+    ],
+    [
+     4105.8,
+     200
+    ],
+    [
+     4139.1,
+     33.3
+    ],
+    [
+     4222.5,
+     33.4
+    ],
+    [
+     4405.8,
+     116.7
+    ],
+    [
+     4522.4,
+     116.6
+    ],
+    [
+     4989.1,
+     33.4
+    ],
+    [
+     5339,
+     50
+    ],
+    [
+     6639,
+     50.1
+    ],
+    [
+     12638.7,
+     33.3
+    ],
+    [
+     12772,
+     33.2
+    ],
+    [
+     13305.4,
+     100
+    ],
+    [
+     13605.4,
+     50
+    ],
+    [
+     13638.7,
+     33.3
+    ],
+    [
+     13705.4,
+     66.7
+    ],
+    [
+     13755.4,
+     33.4
+    ]
+   ],
+   "frames": 720,
+   "long": [
+    [
+     150.6,
+     193
+    ],
+    [
+     890.3,
+     119
+    ],
+    [
+     1906.1,
+     156
+    ],
+    [
+     2066.3,
+     77
+    ],
+    [
+     2235.7,
+     223
+    ],
+    [
+     3371.6,
+     242
+    ],
+    [
+     3615.2,
+     164
+    ],
+    [
+     3797.8,
+     119
+    ],
+    [
+     4290.4,
+     116
+    ],
+    [
+     4407.3,
+     119
+    ],
+    [
+     5290.6,
+     58
+    ],
+    [
+     6589.9,
+     54
+    ],
+    [
+     13205.8,
+     103
+    ]
+   ],
+   "loaf": [
+    {
+     "t": 9,
+     "d": 344,
+     "block": 153,
+     "scripts": [
+      {
+       "d": 193,
+       "fn": "http://127.0.0.1:5871/assets/index-8rsIfOcP.js",
+       "t": "module-script"
+      }
+     ]
+    },
+    {
+     "t": 373,
+     "d": 73,
+     "block": 0,
+     "scripts": []
+    },
+    {
+     "t": 447,
+     "d": 118,
+     "block": 0,
+     "scripts": []
+    },
+    {
+     "t": 874,
+     "d": 136,
+     "block": 69,
+     "scripts": [
+      {
+       "d": 116,
+       "fn": "i",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 1324,
+     "d": 118,
+     "block": 0,
+     "scripts": []
+    },
+    {
+     "t": 1894,
+     "d": 168,
+     "block": 108,
+     "scripts": [
+      {
+       "d": 156,
+       "fn": "tick",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 2062,
+     "d": 159,
+     "block": 0,
+     "scripts": []
+    },
+    {
+     "t": 2221,
+     "d": 244,
+     "block": 178,
+     "scripts": [
+      {
+       "d": 223,
+       "fn": "s",
+       "t": "event-listener"
+      },
+      {
+       "d": 10,
+       "fn": "TimerHandler:setTimeout",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 2499,
+     "d": 314,
+     "block": 0,
+     "scripts": [
+      {
+       "d": 29,
+       "fn": "Response.json.then",
+       "t": "resolve-promise"
+      },
+      {
+       "d": 19,
+       "fn": "Response.json.then",
+       "t": "resolve-promise"
+      },
+      {
+       "d": 18,
+       "fn": "Response.json.then",
+       "t": "resolve-promise"
+      }
+     ]
+    },
+    {
+     "t": 2813,
+     "d": 117,
+     "block": 0,
+     "scripts": [
+      {
+       "d": 16,
+       "fn": "Response.json.then",
+       "t": "resolve-promise"
+      },
+      {
+       "d": 16,
+       "fn": "Response.json.then",
+       "t": "resolve-promise"
+      },
+      {
+       "d": 14,
+       "fn": "Response.json.then",
+       "t": "resolve-promise"
+      }
+     ]
+    },
+    {
+     "t": 2930,
+     "d": 113,
+     "block": 0,
+     "scripts": [
+      {
+       "d": 17,
+       "fn": "Response.json.then",
+       "t": "resolve-promise"
+      },
+      {
+       "d": 15,
+       "fn": "Response.json.then",
+       "t": "resolve-promise"
+      },
+      {
+       "d": 15,
+       "fn": "Response.json.then",
+       "t": "resolve-promise"
+      }
+     ]
+    },
+    {
+     "t": 3043,
+     "d": 61,
+     "block": 0,
+     "scripts": [
+      {
+       "d": 12,
+       "fn": "Response.json.then",
+       "t": "resolve-promise"
+      },
+      {
+       "d": 12,
+       "fn": "Response.json.then",
+       "t": "resolve-promise"
+      },
+      {
+       "d": 11,
+       "fn": "Response.json.then",
+       "t": "resolve-promise"
+      }
+     ]
+    },
+    {
+     "t": 3167,
+     "d": 121,
+     "block": 11,
+     "scripts": [
+      {
+       "d": 32,
+       "fn": "tick",
+       "t": "user-callback"
+      },
+      {
+       "d": 28,
+       "fn": "s",
+       "t": "event-listener"
+      }
+     ]
+    },
+    {
+     "t": 3296,
+     "d": 75,
+     "block": 0,
+     "scripts": []
+    },
+    {
+     "t": 3371,
+     "d": 408,
+     "block": 357,
+     "scripts": [
+      {
+       "d": 243,
+       "fn": "n",
+       "t": "user-callback"
+      },
+      {
+       "d": 163,
+       "fn": "n",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 3780,
+     "d": 136,
+     "block": 75,
+     "scripts": [
+      {
+       "d": 111,
+       "fn": "n",
+       "t": "user-callback"
+      },
+      {
+       "d": 8,
+       "fn": "Worker.onmessage",
+       "t": "event-listener"
+      },
+      {
+       "d": 6,
+       "fn": "tick",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 3957,
+     "d": 189,
+     "block": 14,
+     "scripts": [
+      {
+       "d": 41,
+       "fn": "n",
+       "t": "user-callback"
+      },
+      {
+       "d": 22,
+       "fn": "n",
+       "t": "user-callback"
+      },
+      {
+       "d": 17,
+       "fn": "Response.json.then",
+       "t": "resolve-promise"
+      }
+     ]
+    },
+    {
+     "t": 4275,
+     "d": 132,
+     "block": 66,
+     "scripts": [
+      {
+       "d": 114,
+       "fn": "n",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 4407,
+     "d": 120,
+     "block": 70,
+     "scripts": [
+      {
+       "d": 119,
+       "fn": "tick",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 5278,
+     "d": 71,
+     "block": 9,
+     "scripts": [
+      {
+       "d": 58,
+       "fn": "tick",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 6576,
+     "d": 69,
+     "block": 5,
+     "scripts": [
+      {
+       "d": 55,
+       "fn": "tick",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 13192,
+     "d": 117,
+     "block": 53,
+     "scripts": [
+      {
+       "d": 103,
+       "fn": "tick",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 13542,
+     "d": 75,
+     "block": 14,
+     "scripts": [
+      {
+       "d": 33,
+       "fn": "tick",
+       "t": "user-callback"
+      },
+      {
+       "d": 31,
+       "fn": "TimerHandler:setTimeout",
+       "t": "user-callback"
+      }
+     ]
+    },
+    {
+     "t": 13651,
+     "d": 77,
+     "block": 0,
+     "scripts": []
+    }
+   ],
+   "res": [
+    [
+     8,
+     7,
+     "/assets/game-meVSjYDH.js",
+     "net"
+    ],
+    [
+     8,
+     8,
+     "/art/title/echo.2x.webp",
+     "net"
+    ],
+    [
+     8,
+     10,
+     "/assets/PaintedActor-l4qztJr3.js",
+     "net"
+    ],
+    [
+     8,
+     15,
+     "/assets/index-dtJ3k33z.css",
+     "net"
+    ],
+    [
+     8,
+     15,
+     "/assets/DemoGate-BcNPu42G.js",
+     "net"
+    ],
+    [
+     8,
+     97,
+     "/assets/index-8rsIfOcP.js",
+     "net"
+    ],
+    [
+     160,
+     187,
+     "/fonts/chakra-petch/ChakraPetch-Regular-400.woff2",
+     "net"
+    ],
+    [
+     319,
+     28,
+     "/fonts/chakra-petch/ChakraPetch-Bold-700.woff2",
+     "net"
+    ],
+    [
+     319,
+     28,
+     "/fonts/rajdhani/Rajdhani-SemiBold-600.woff2",
+     "net"
+    ],
+    [
+     157,
+     2,
+     "/art/manifest.json",
+     "net"
+    ],
+    [
+     320,
+     27,
+     "/fonts/exo2/Exo2-Variable-wght.woff2",
+     "net"
+    ],
+    [
+     372,
+     10,
+     "/art/characters/mortiorchis/idle.png",
+     "net"
+    ],
+    [
+     372,
+     9,
+     "/art/characters/seymour-flux-body/idle.png",
+     "net"
+    ],
+    [
+     372,
+     10,
+     "/art/portraits/tidus.webp",
+     "net"
+    ],
+    [
+     372,
+     22,
+     "/art/backdrops/gagazet.webp",
+     "net"
+    ],
+    [
+     396,
+     2,
+     "/art/portraits/yuna.webp",
+     "net"
+    ],
+    [
+     402,
+     3,
+     "/art/portraits/kimahri.png",
+     "net"
+    ],
+    [
+     503,
+     3,
+     "/art/backdrops/gagazet.thumb.webp",
+     "net"
+    ],
+    [
+     503,
+     3,
+     "/art/characters/seymour-flux-body/idle.thumb.png",
+     "net"
+    ],
+    [
+     512,
+     1,
+     "/art/backdrops/zanarkand-dome.thumb.webp",
+     "net"
+    ],
+    [
+     513,
+     3,
+     "/art/characters/yunalesca-1/idle.thumb.png",
+     "net"
+    ],
+    [
+     520,
+     2,
+     "/art/backdrops/bevelle-underground.thumb.webp",
+     "net"
+    ],
+    [
+     522,
+     1,
+     "/art/characters/ffx2-bahamut/idle.thumb.png",
+     "net"
+    ],
+    [
+     528,
+     1,
+     "/art/backdrops/djose-chamber-provisional.thumb.webp",
+     "net"
+    ],
+    [
+     530,
+     2,
+     "/art/characters/x2-ixion/idle.thumb.png",
+     "net"
+    ],
+    [
+     534,
+     1,
+     "/art/backdrops/dreams-end.thumb.webp",
+     "net"
+    ],
+    [
+     537,
+     2,
+     "/art/characters/braskas-final-aeon-1/idle.thumb.png",
+     "net"
+    ],
+    [
+     543,
+     1,
+     "/art/backdrops/den-of-woe.thumb.webp",
+     "net"
+    ],
+    [
+     546,
+     1,
+     "/art/characters/baralai-shade/idle.thumb.png",
+     "net"
+    ],
+    [
+     550,
+     2,
+     "/art/backdrops/macalania-temple.thumb.webp",
+     "net"
+    ],
+    [
+     552,
+     1,
+     "/art/characters/anima/idle.thumb.png",
+     "net"
+    ],
+    [
+     558,
+     1,
+     "/art/backdrops/via-infinito.thumb.webp",
+     "net"
+    ],
+    [
+     559,
+     1,
+     "/art/characters/trema/idle.thumb.png",
+     "net"
+    ],
+    [
+     566,
+     1,
+     "/art/backdrops/evrae-airship-deck.thumb.webp",
+     "net"
+    ],
+    [
+     567,
+     2,
+     "/art/characters/evrae/idle.thumb.png",
+     "net"
+    ],
+    [
+     573,
+     2,
+     "/art/backdrops/road-to-the-farplane.thumb.webp",
+     "net"
+    ],
+    [
+     576,
+     1,
+     "/art/characters/x2-shiva/idle.thumb.png",
+     "net"
+    ],
+    [
+     582,
+     1,
+     "/art/backdrops/cavern-stolen-fayth.thumb.webp",
+     "net"
+    ],
+    [
+     583,
+     1,
+     "/art/characters/yojimbo-cavern/idle.thumb.png",
+     "net"
+    ],
+    [
+     587,
+     1,
+     "/art/backdrops/leblanc-last-room.thumb.webp",
+     "net"
+    ],
+    [
+     589,
+     1,
+     "/art/characters/leblanc/idle.thumb.png",
+     "net"
+    ],
+    [
+     594,
+     1,
+     "/art/backdrops/bevelle-highbridge.thumb.webp",
+     "net"
+    ],
+    [
+     596,
+     1,
+     "/art/characters/seymour-natus/idle.thumb.png",
+     "net"
+    ],
+    [
+     602,
+     1,
+     "/art/backdrops/farplane.thumb.webp",
+     "net"
+    ],
+    [
+     603,
+     2,
+     "/art/characters/vegnagun-body/idle.thumb.png",
+     "net"
+    ],
+    [
+     610,
+     1,
+     "/art/backdrops/garden-of-pain.thumb.webp",
+     "net"
+    ],
+    [
+     614,
+     2,
+     "/art/characters/seymour-omnis/idle.thumb.png",
+     "net"
+    ],
+    [
+     619,
+     1,
+     "/art/backdrops/via-purifico.thumb.webp",
+     "net"
+    ],
+    [
+     621,
+     1,
+     "/art/characters/isaaru/idle.thumb.png",
+     "net"
+    ],
+    [
+     626,
+     1,
+     "/art/backdrops/mushroom-rock-road.thumb.webp",
+     "net"
+    ],
+    [
+     627,
+     1,
+     "/art/characters/dark-mindy/idle.thumb.png",
+     "net"
+    ],
+    [
+     632,
+     1,
+     "/art/backdrops/sin-fahrenheit-flight.thumb.webp",
+     "net"
+    ],
+    [
+     633,
+     2,
+     "/art/characters/sin-left-fin/idle.thumb.png",
+     "net"
+    ],
+    [
+     638,
+     2,
+     "/art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+     "net"
+    ],
+    [
+     641,
+     2,
+     "/art/characters/overdrive-sin/idle.thumb.png",
+     "net"
+    ],
+    [
+     647,
+     2,
+     "/art/portraits/auron.webp",
+     "net"
+    ],
+    [
+     651,
+     8,
+     "/art/backdrops/zanarkand-dome.webp",
+     "net"
+    ],
+    [
+     664,
+     3,
+     "/art/characters/yunalesca-1/idle.png",
+     "net"
+    ],
+    [
+     727,
+     4,
+     "/art/portraits/yuna-x2.webp",
+     "net"
+    ],
+    [
+     734,
+     2,
+     "/art/portraits/rikku-x2.webp",
+     "net"
+    ],
+    [
+     748,
+     2,
+     "/art/portraits/paine.webp",
+     "net"
+    ],
+    [
+     763,
+     7,
+     "/art/backdrops/bevelle-underground.webp",
+     "net"
+    ],
+    [
+     776,
+     5,
+     "/art/characters/ffx2-bahamut/idle.png",
+     "net"
+    ],
+    [
+     840,
+     6,
+     "/art/backdrops/djose-chamber-provisional.webp",
+     "net"
+    ],
+    [
+     847,
+     2,
+     "/art/characters/x2-ixion/idle.png",
+     "net"
+    ],
+    [
+     1006,
+     3,
+     "/audio/manifest.json",
+     "net"
+    ],
+    [
+     1014,
+     1,
+     "/assets/worker-DBv-StIe.js",
+     "net"
+    ],
+    [
+     1010,
+     9,
+     "/art/characters/braskas-final-aeon-1/idle.png",
+     "net"
+    ],
+    [
+     1010,
+     21,
+     "/art/backdrops/dreams-end.webp",
+     "net"
+    ],
+    [
+     1013,
+     16,
+     "/audio/music/title.mp3",
+     "net"
+    ],
+    [
+     1013,
+     19,
+     "/audio/sfx/sprite.mp3",
+     "net"
+    ],
+    [
+     1013,
+     28,
+     "/audio/sfx/sprite-v2.mp3",
+     "net"
+    ],
+    [
+     1051,
+     6,
+     "/art/backdrops/den-of-woe.webp",
+     "net"
+    ],
+    [
+     1112,
+     2,
+     "/art/characters/nooj-shade/idle.png",
+     "net"
+    ],
+    [
+     1172,
+     3,
+     "/art/characters/gippal-shade/idle.png",
+     "net"
+    ],
+    [
+     1176,
+     2,
+     "/art/characters/baralai-shade/idle.png",
+     "net"
+    ],
+    [
+     1182,
+     3,
+     "/art/portraits/rikku.webp",
+     "net"
+    ],
+    [
+     1188,
+     2,
+     "/art/portraits/wakka.webp",
+     "net"
+    ],
+    [
+     1203,
+     2,
+     "/art/portraits/lulu.webp",
+     "net"
+    ],
+    [
+     1217,
+     2,
+     "/art/characters/yuna-white-mage/idle.png",
+     "net"
+    ],
+    [
+     1230,
+     3,
+     "/art/characters/rikku-dark-knight/idle.png",
+     "net"
+    ],
+    [
+     1235,
+     2,
+     "/art/characters/paine-warrior/idle.png",
+     "net"
+    ],
+    [
+     1243,
+     3,
+     "/art/characters/paine-dark-knight/idle.png",
+     "net"
+    ],
+    [
+     1247,
+     2,
+     "/art/characters/yuna-dark-knight/idle.png",
+     "net"
+    ],
+    [
+     1252,
+     2,
+     "/art/characters/rikku-alchemist/idle.png",
+     "net"
+    ],
+    [
+     1260,
+     3,
+     "/art/portraits/tidus.json",
+     "net"
+    ],
+    [
+     1260,
+     3,
+     "/art/portraits/yuna.json",
+     "net"
+    ],
+    [
+     1261,
+     3,
+     "/art/portraits/kimahri.json",
+     "net"
+    ],
+    [
+     1254,
+     27,
+     "/audio/music/chapter-select.mp3",
+     "net"
+    ],
+    [
+     1263,
+     18,
+     "/fonts/cormorant-garamond/CormorantGaramond-Italic-Variable-wght.woff2",
+     "net"
+    ],
+    [
+     1279,
+     4,
+     "/art/characters/yuna-gunner/idle.png",
+     "net"
+    ],
+    [
+     1282,
+     3,
+     "/art/characters/rikku-thief/idle.png",
+     "net"
+    ],
+    [
+     1612,
+     3,
+     "/art/portraits/yuna-x2.json",
+     "net"
+    ],
+    [
+     1612,
+     3,
+     "/art/portraits/rikku-x2.json",
+     "net"
+    ],
+    [
+     1613,
+     3,
+     "/art/portraits/paine.json",
+     "net"
+    ],
+    [
+     1868,
+     5,
+     "/art/portraits/ormi.webp",
+     "net"
+    ],
+    [
+     1868,
+     4,
+     "/art/portraits/leblanc.webp",
+     "net"
+    ],
+    [
+     1899,
+     2,
+     "/art/backdrops/bevelle-underground.json",
+     "net"
+    ],
+    [
+     1899,
+     3,
+     "/art/backdrops/bevelle-underground.webp",
+     "net"
+    ],
+    [
+     2060,
+     4,
+     "/art/backdrops/bevelle-underground.webp",
+     "net"
+    ],
+    [
+     2144,
+     7,
+     "/art/backdrops/wings/bevelle-underground-left.png",
+     "net"
+    ],
+    [
+     2144,
+     7,
+     "/art/backdrops/wings/bevelle-underground-right.png",
+     "net"
+    ],
+    [
+     2144,
+     6,
+     "/art/characters/ffx2-bahamut/idle.png",
+     "net"
+    ],
+    [
+     1908,
+     2,
+     "/audio/sfx/parity-ffx2-bahamut.mp3",
+     "net"
+    ],
+    [
+     1908,
+     3,
+     "/audio/sfx/parity-ffx2-core.mp3",
+     "net"
+    ],
+    [
+     1908,
+     5,
+     "/audio/music/scene-bevelle-underground.mp3",
+     "net"
+    ],
+    [
+     2444,
+     2,
+     "/fx/bevelle-underground/depth.png",
+     "net"
+    ],
+    [
+     2144,
+     3,
+     "/art/characters/ffx2-bahamut/idle.json",
+     "net"
+    ],
+    [
+     2458,
+     32,
+     "/art/characters/rikku-dark-knight/idle.png",
+     "net"
+    ],
+    [
+     2453,
+     24,
+     "/art/rigs/ffx2-bahamut/rig.json",
+     "net"
+    ],
+    [
+     2453,
+     4,
+     "/art/characters/rikku-dark-knight/idle.json",
+     "net"
+    ],
+    [
+     2453,
+     5,
+     "/art/characters/rikku-dark-knight/ready.json",
+     "net"
+    ],
+    [
+     2453,
+     5,
+     "/art/characters/rikku-dark-knight/attack.json",
+     "net"
+    ],
+    [
+     2453,
+     5,
+     "/art/characters/rikku-dark-knight/cast.json",
+     "net"
+    ],
+    [
+     2453,
+     6,
+     "/art/characters/rikku-dark-knight/item.json",
+     "net"
+    ],
+    [
+     2454,
+     11,
+     "/art/characters/rikku-dark-knight/ko.json",
+     "net"
+    ],
+    [
+     2458,
+     38,
+     "/art/characters/rikku-dark-knight/ready.png",
+     "net"
+    ],
+    [
+     2458,
+     41,
+     "/art/characters/rikku-dark-knight/attack.png",
+     "net"
+    ],
+    [
+     2458,
+     41,
+     "/art/characters/rikku-dark-knight/hurt.png",
+     "net"
+    ],
+    [
+     2458,
+     37,
+     "/art/characters/rikku-dark-knight/cast.png",
+     "net"
+    ],
+    [
+     2458,
+     38,
+     "/art/characters/rikku-dark-knight/item.png",
+     "net"
+    ],
+    [
+     2458,
+     43,
+     "/art/characters/rikku-dark-knight/ko.png",
+     "net"
+    ],
+    [
+     2458,
+     45,
+     "/art/characters/rikku-dark-knight/victory.png",
+     "net"
+    ],
+    [
+     2458,
+     46,
+     "/art/characters/rikku-dark-knight/sleep.webp",
+     "net"
+    ],
+    [
+     2458,
+     47,
+     "/art/characters/rikku-dark-knight/critical.png",
+     "net"
+    ],
+    [
+     2458,
+     49,
+     "/art/characters/rikku-dark-knight/follow.png",
+     "net"
+    ],
+    [
+     2458,
+     50,
+     "/art/characters/yuna-white-mage/idle.png",
+     "net"
+    ],
+    [
+     2458,
+     50,
+     "/art/characters/paine-warrior/idle.png",
+     "net"
+    ],
+    [
+     2458,
+     51,
+     "/art/characters/yuna-white-mage/ready.webp",
+     "net"
+    ],
+    [
+     2458,
+     51,
+     "/art/characters/yuna-white-mage/attack.webp",
+     "net"
+    ],
+    [
+     2458,
+     52,
+     "/art/characters/yuna-white-mage/cast.webp",
+     "net"
+    ],
+    [
+     2458,
+     54,
+     "/art/characters/yuna-white-mage/item.webp",
+     "net"
+    ],
+    [
+     2458,
+     55,
+     "/art/characters/yuna-white-mage/hurt.png",
+     "net"
+    ],
+    [
+     2458,
+     57,
+     "/art/characters/yuna-white-mage/ko.png",
+     "net"
+    ],
+    [
+     2458,
+     59,
+     "/art/characters/yuna-white-mage/victory.png",
+     "net"
+    ],
+    [
+     2459,
+     58,
+     "/art/characters/yuna-white-mage/defend.webp",
+     "net"
+    ],
+    [
+     2459,
+     58,
+     "/art/characters/yuna-white-mage/sleep.webp",
+     "net"
+    ],
+    [
+     2459,
+     60,
+     "/art/characters/yuna-white-mage/critical.webp",
+     "net"
+    ],
+    [
+     2459,
+     60,
+     "/art/characters/yuna-white-mage/follow.webp",
+     "net"
+    ],
+    [
+     2459,
+     62,
+     "/art/characters/paine-warrior/ready.png",
+     "net"
+    ],
+    [
+     2459,
+     65,
+     "/art/characters/paine-warrior/attack.png",
+     "net"
+    ],
+    [
+     2459,
+     65,
+     "/art/characters/paine-warrior/cast.png",
+     "net"
+    ],
+    [
+     2459,
+     66,
+     "/art/characters/paine-warrior/item.png",
+     "net"
+    ],
+    [
+     2459,
+     66,
+     "/art/characters/paine-warrior/hurt.webp",
+     "net"
+    ],
+    [
+     2459,
+     67,
+     "/art/characters/paine-warrior/ko.webp",
+     "net"
+    ],
+    [
+     2459,
+     67,
+     "/art/characters/paine-warrior/victory.png",
+     "net"
+    ],
+    [
+     2459,
+     72,
+     "/art/characters/paine-warrior/defend.webp",
+     "net"
+    ],
+    [
+     2459,
+     73,
+     "/art/characters/paine-warrior/sleep.png",
+     "net"
+    ],
+    [
+     2459,
+     73,
+     "/art/characters/paine-warrior/critical.png",
+     "net"
+    ],
+    [
+     2459,
+     74,
+     "/art/characters/paine-warrior/follow.png",
+     "net"
+    ],
+    [
+     2459,
+     74,
+     "/art/characters/paine-warrior/od-x2-warrior-armor-break.png",
+     "net"
+    ],
+    [
+     2459,
+     74,
+     "/art/characters/paine-warrior/od-x2-warrior-power-break.png",
+     "net"
+    ],
+    [
+     2470,
+     65,
+     "/art/characters/yuna-white-mage/idle.png",
+     "net"
+    ],
+    [
+     2470,
+     65,
+     "/art/characters/paine-warrior/idle.png",
+     "net"
+    ],
+    [
+     2470,
+     65,
+     "/art/characters/rikku-dark-knight/idle.png",
+     "net"
+    ],
+    [
+     2493,
+     0,
+     "/art/backdrops/bevelle-underground.webp",
+     "cache"
+    ],
+    [
+     2494,
+     16,
+     "/art/characters/ffx2-bahamut/idle.png",
+     "net"
+    ],
+    [
+     2454,
+     12,
+     "/art/characters/rikku-dark-knight/hurt.json",
+     "net"
+    ],
+    [
+     2454,
+     12,
+     "/art/characters/rikku-dark-knight/victory.json",
+     "net"
+    ],
+    [
+     2454,
+     12,
+     "/art/characters/rikku-dark-knight/sleep.json",
+     "net"
+    ],
+    [
+     2454,
+     12,
+     "/art/characters/rikku-dark-knight/critical.json",
+     "net"
+    ],
+    [
+     2454,
+     18,
+     "/art/characters/rikku-dark-knight/follow.json",
+     "net"
+    ],
+    [
+     2456,
+     15,
+     "/art/characters/yuna-white-mage/ready.json",
+     "net"
+    ],
+    [
+     2456,
+     15,
+     "/art/characters/yuna-white-mage/idle.json",
+     "net"
+    ],
+    [
+     2456,
+     15,
+     "/art/characters/yuna-white-mage/attack.json",
+     "net"
+    ],
+    [
+     2456,
+     15,
+     "/art/characters/yuna-white-mage/cast.json",
+     "net"
+    ],
+    [
+     2456,
+     18,
+     "/art/characters/yuna-white-mage/item.json",
+     "net"
+    ],
+    [
+     2456,
+     18,
+     "/art/characters/yuna-white-mage/hurt.json",
+     "net"
+    ],
+    [
+     2456,
+     19,
+     "/art/characters/yuna-white-mage/ko.json",
+     "net"
+    ],
+    [
+     2456,
+     19,
+     "/art/characters/yuna-white-mage/victory.json",
+     "net"
+    ],
+    [
+     2456,
+     19,
+     "/art/characters/yuna-white-mage/defend.json",
+     "net"
+    ],
+    [
+     2456,
+     22,
+     "/art/characters/yuna-white-mage/sleep.json",
+     "net"
+    ],
+    [
+     2457,
+     22,
+     "/art/characters/yuna-white-mage/critical.json",
+     "net"
+    ],
+    [
+     2457,
+     22,
+     "/art/characters/yuna-white-mage/follow.json",
+     "net"
+    ],
+    [
+     2457,
+     22,
+     "/art/characters/paine-warrior/idle.json",
+     "net"
+    ],
+    [
+     2457,
+     22,
+     "/art/characters/paine-warrior/ready.json",
+     "net"
+    ],
+    [
+     2457,
+     26,
+     "/art/characters/paine-warrior/attack.json",
+     "net"
+    ],
+    [
+     2457,
+     26,
+     "/art/characters/paine-warrior/cast.json",
+     "net"
+    ],
+    [
+     2457,
+     25,
+     "/art/characters/paine-warrior/item.json",
+     "net"
+    ],
+    [
+     2457,
+     25,
+     "/art/characters/paine-warrior/hurt.json",
+     "net"
+    ],
+    [
+     2457,
+     25,
+     "/art/characters/paine-warrior/ko.json",
+     "net"
+    ],
+    [
+     2457,
+     26,
+     "/art/characters/paine-warrior/victory.json",
+     "net"
+    ],
+    [
+     2457,
+     29,
+     "/art/characters/paine-warrior/defend.json",
+     "net"
+    ],
+    [
+     2457,
+     30,
+     "/art/characters/paine-warrior/sleep.json",
+     "net"
+    ],
+    [
+     2457,
+     30,
+     "/art/characters/paine-warrior/follow.json",
+     "net"
+    ],
+    [
+     2457,
+     30,
+     "/art/characters/paine-warrior/critical.json",
+     "net"
+    ],
+    [
+     2458,
+     29,
+     "/art/characters/paine-warrior/od-x2-warrior-armor-break.json",
+     "net"
+    ],
+    [
+     2458,
+     29,
+     "/art/characters/paine-warrior/od-x2-warrior-power-break.json",
+     "net"
+    ],
+    [
+     2499,
+     4,
+     "/art/portraits/rikku.json",
+     "net"
+    ],
+    [
+     2558,
+     2,
+     "/assets/RigActor-B4NFjYV5.js",
+     "net"
+    ],
+    [
+     2561,
+     -71,
+     "/assets/plateWorker-y9caEp7Z.js",
+     "net"
+    ],
+    [
+     2790,
+     8,
+     "/art/characters/rikku-dark-knight/idle.normal.png",
+     "net"
+    ],
+    [
+     2790,
+     7,
+     "/art/characters/rikku-dark-knight/attack.normal.png",
+     "net"
+    ],
+    [
+     2790,
+     6,
+     "/art/characters/rikku-dark-knight/ready.normal.png",
+     "net"
+    ],
+    [
+     2790,
+     5,
+     "/art/characters/rikku-dark-knight/cast.normal.png",
+     "net"
+    ],
+    [
+     2790,
+     6,
+     "/art/characters/rikku-dark-knight/hurt.normal.png",
+     "net"
+    ],
+    [
+     2790,
+     5,
+     "/art/characters/rikku-dark-knight/item.normal.png",
+     "net"
+    ],
+    [
+     2790,
+     10,
+     "/art/characters/rikku-dark-knight/ko.normal.png",
+     "net"
+    ],
+    [
+     2790,
+     9,
+     "/art/characters/rikku-dark-knight/victory.normal.png",
+     "net"
+    ],
+    [
+     2790,
+     10,
+     "/art/characters/rikku-dark-knight/sleep.normal.png",
+     "net"
+    ],
+    [
+     2790,
+     10,
+     "/art/characters/rikku-dark-knight/critical.normal.png",
+     "net"
+    ],
+    [
+     2790,
+     10,
+     "/art/characters/rikku-dark-knight/follow.normal.png",
+     "net"
+    ],
+    [
+     2897,
+     5,
+     "/art/characters/yuna-white-mage/idle.normal.png",
+     "net"
+    ],
+    [
+     2898,
+     6,
+     "/art/characters/yuna-white-mage/ready.normal.png",
+     "net"
+    ],
+    [
+     2898,
+     6,
+     "/art/characters/yuna-white-mage/attack.normal.png",
+     "net"
+    ],
+    [
+     2898,
+     6,
+     "/art/characters/yuna-white-mage/cast.normal.png",
+     "net"
+    ],
+    [
+     2898,
+     6,
+     "/art/characters/yuna-white-mage/item.normal.png",
+     "net"
+    ],
+    [
+     2898,
+     7,
+     "/art/characters/yuna-white-mage/hurt.normal.png",
+     "net"
+    ],
+    [
+     2898,
+     11,
+     "/art/characters/yuna-white-mage/ko.normal.png",
+     "net"
+    ],
+    [
+     2898,
+     13,
+     "/art/characters/yuna-white-mage/victory.normal.png",
+     "net"
+    ],
+    [
+     2898,
+     13,
+     "/art/characters/yuna-white-mage/defend.normal.png",
+     "net"
+    ],
+    [
+     2898,
+     13,
+     "/art/characters/yuna-white-mage/critical.normal.png",
+     "net"
+    ],
+    [
+     2898,
+     12,
+     "/art/characters/yuna-white-mage/sleep.normal.png",
+     "net"
+    ],
+    [
+     2898,
+     13,
+     "/art/characters/yuna-white-mage/follow.normal.png",
+     "net"
+    ],
+    [
+     3087,
+     6,
+     "/art/characters/paine-warrior/idle.normal.png",
+     "net"
+    ],
+    [
+     3087,
+     6,
+     "/art/characters/paine-warrior/ready.normal.png",
+     "net"
+    ],
+    [
+     3087,
+     6,
+     "/art/characters/paine-warrior/attack.normal.png",
+     "net"
+    ],
+    [
+     3087,
+     6,
+     "/art/characters/paine-warrior/cast.normal.png",
+     "net"
+    ],
+    [
+     3087,
+     6,
+     "/art/characters/paine-warrior/item.normal.png",
+     "net"
+    ],
+    [
+     3087,
+     7,
+     "/art/characters/paine-warrior/hurt.normal.png",
+     "net"
+    ],
+    [
+     3087,
+     9,
+     "/art/characters/paine-warrior/ko.normal.png",
+     "net"
+    ],
+    [
+     3087,
+     11,
+     "/art/characters/paine-warrior/victory.normal.png",
+     "net"
+    ],
+    [
+     3087,
+     12,
+     "/art/characters/paine-warrior/follow.normal.png",
+     "net"
+    ],
+    [
+     3087,
+     12,
+     "/art/characters/paine-warrior/defend.normal.png",
+     "net"
+    ],
+    [
+     3087,
+     11,
+     "/art/characters/paine-warrior/sleep.normal.png",
+     "net"
+    ],
+    [
+     3087,
+     12,
+     "/art/characters/paine-warrior/critical.normal.png",
+     "net"
+    ],
+    [
+     3087,
+     15,
+     "/art/characters/paine-warrior/od-x2-warrior-armor-break.normal.png",
+     "net"
+    ],
+    [
+     3087,
+     15,
+     "/art/characters/paine-warrior/od-x2-warrior-power-break.normal.png",
+     "net"
+    ],
+    [
+     3095,
+     8,
+     "/audio/music/boss-bahamut.mp3",
+     "net"
+    ],
+    [
+     3107,
+     2,
+     "/art/characters/ffx2-bahamut/attack.json",
+     "net"
+    ],
+    [
+     3107,
+     12,
+     "/art/characters/ffx2-bahamut/attack.png",
+     "net"
+    ],
+    [
+     3107,
+     13,
+     "/art/characters/ffx2-bahamut/hurt.png",
+     "net"
+    ],
+    [
+     3107,
+     15,
+     "/art/characters/ffx2-bahamut/cast.png",
+     "net"
+    ],
+    [
+     3107,
+     15,
+     "/art/characters/ffx2-bahamut/attack.png",
+     "net"
+    ],
+    [
+     3113,
+     11,
+     "/art/characters/ffx2-bahamut/idle.normal.png",
+     "net"
+    ],
+    [
+     3114,
+     8,
+     "/art/rigs/ffx2-bahamut/1x/tail.png",
+     "net"
+    ],
+    [
+     3114,
+     9,
+     "/art/rigs/ffx2-bahamut/1x/tail.attack.png",
+     "net"
+    ],
+    [
+     3114,
+     12,
+     "/art/rigs/ffx2-bahamut/1x/tail.cast.png",
+     "net"
+    ],
+    [
+     3119,
+     6,
+     "/art/characters/rikku-gunner/idle.json",
+     "net"
+    ],
+    [
+     3119,
+     7,
+     "/art/characters/rikku-dark-knight/idle.json",
+     "net"
+    ],
+    [
+     3119,
+     8,
+     "/art/characters/yuna-white-mage/idle.json",
+     "net"
+    ],
+    [
+     3119,
+     8,
+     "/art/characters/yuna-gunner/idle.json",
+     "net"
+    ],
+    [
+     3120,
+     8,
+     "/art/characters/paine-warrior/idle.json",
+     "net"
+    ],
+    [
+     3120,
+     9,
+     "/art/characters/paine-gunner/idle.json",
+     "net"
+    ],
+    [
+     3114,
+     18,
+     "/art/rigs/ffx2-bahamut/1x/tail.hurt.png",
+     "net"
+    ],
+    [
+     3114,
+     19,
+     "/art/rigs/ffx2-bahamut/1x/tail.telegraph.png",
+     "net"
+    ],
+    [
+     3114,
+     19,
+     "/art/rigs/ffx2-bahamut/1x/tail.ko.png",
+     "net"
+    ],
+    [
+     3114,
+     20,
+     "/art/rigs/ffx2-bahamut/1x/wingL.attack.png",
+     "net"
+    ],
+    [
+     3114,
+     21,
+     "/art/rigs/ffx2-bahamut/1x/wingL.cast.png",
+     "net"
+    ],
+    [
+     3114,
+     22,
+     "/art/rigs/ffx2-bahamut/1x/wingL.hurt.png",
+     "net"
+    ],
+    [
+     3114,
+     23,
+     "/art/rigs/ffx2-bahamut/1x/wingL.telegraph.png",
+     "net"
+    ],
+    [
+     3114,
+     22,
+     "/art/rigs/ffx2-bahamut/1x/wingL.ko.png",
+     "net"
+    ],
+    [
+     3114,
+     26,
+     "/art/rigs/ffx2-bahamut/1x/wingL.png",
+     "net"
+    ],
+    [
+     3114,
+     25,
+     "/art/rigs/ffx2-bahamut/1x/wingR.attack.png",
+     "net"
+    ],
+    [
+     3114,
+     26,
+     "/art/rigs/ffx2-bahamut/1x/wingR.cast.png",
+     "net"
+    ],
+    [
+     3114,
+     27,
+     "/art/rigs/ffx2-bahamut/1x/wingR.png",
+     "net"
+    ],
+    [
+     3114,
+     27,
+     "/art/rigs/ffx2-bahamut/1x/wingR.hurt.png",
+     "net"
+    ],
+    [
+     3114,
+     27,
+     "/art/rigs/ffx2-bahamut/1x/wingR.telegraph.png",
+     "net"
+    ],
+    [
+     3114,
+     27,
+     "/art/rigs/ffx2-bahamut/1x/wingR.ko.png",
+     "net"
+    ],
+    [
+     3114,
+     32,
+     "/art/rigs/ffx2-bahamut/1x/body.png",
+     "net"
+    ],
+    [
+     3114,
+     31,
+     "/art/rigs/ffx2-bahamut/1x/body.attack.png",
+     "net"
+    ],
+    [
+     3114,
+     31,
+     "/art/rigs/ffx2-bahamut/1x/body.cast.png",
+     "net"
+    ],
+    [
+     3114,
+     32,
+     "/art/rigs/ffx2-bahamut/1x/body.hurt.png",
+     "net"
+    ],
+    [
+     3114,
+     32,
+     "/art/rigs/ffx2-bahamut/1x/body.telegraph.png",
+     "net"
+    ],
+    [
+     3114,
+     32,
+     "/art/rigs/ffx2-bahamut/1x/body.ko.png",
+     "net"
+    ],
+    [
+     3114,
+     35,
+     "/art/rigs/ffx2-bahamut/1x/head.png",
+     "net"
+    ],
+    [
+     3114,
+     35,
+     "/art/rigs/ffx2-bahamut/1x/head.attack.png",
+     "net"
+    ],
+    [
+     3114,
+     36,
+     "/art/rigs/ffx2-bahamut/1x/head.cast.png",
+     "net"
+    ],
+    [
+     3114,
+     36,
+     "/art/rigs/ffx2-bahamut/1x/head.hurt.png",
+     "net"
+    ],
+    [
+     3114,
+     36,
+     "/art/rigs/ffx2-bahamut/1x/head.telegraph.png",
+     "net"
+    ],
+    [
+     3114,
+     36,
+     "/art/rigs/ffx2-bahamut/1x/head.ko.png",
+     "net"
+    ],
+    [
+     3127,
+     24,
+     "/art/rigs/ffx2-bahamut/1x/tail.rim.webp",
+     "net"
+    ],
+    [
+     3127,
+     26,
+     "/art/rigs/ffx2-bahamut/1x/tail.attack.rim.webp",
+     "net"
+    ],
+    [
+     3128,
+     26,
+     "/art/rigs/ffx2-bahamut/1x/tail.cast.rim.webp",
+     "net"
+    ],
+    [
+     3132,
+     22,
+     "/art/rigs/ffx2-bahamut/1x/tail.hurt.rim.webp",
+     "net"
+    ],
+    [
+     3134,
+     20,
+     "/art/rigs/ffx2-bahamut/1x/tail.telegraph.rim.webp",
+     "net"
+    ],
+    [
+     3135,
+     19,
+     "/art/rigs/ffx2-bahamut/1x/wingL.attack.rim.webp",
+     "net"
+    ],
+    [
+     3135,
+     20,
+     "/art/rigs/ffx2-bahamut/1x/tail.ko.rim.webp",
+     "net"
+    ],
+    [
+     3136,
+     20,
+     "/art/rigs/ffx2-bahamut/1x/wingL.cast.rim.webp",
+     "net"
+    ],
+    [
+     3138,
+     19,
+     "/art/rigs/ffx2-bahamut/1x/wingL.hurt.rim.webp",
+     "net"
+    ],
+    [
+     3138,
+     19,
+     "/art/rigs/ffx2-bahamut/1x/wingL.telegraph.rim.webp",
+     "net"
+    ],
+    [
+     3139,
+     19,
+     "/art/rigs/ffx2-bahamut/1x/wingL.ko.rim.webp",
+     "net"
+    ],
+    [
+     3167,
+     4,
+     "/art/characters/ffx2-bahamut/cast.json",
+     "net"
+    ],
+    [
+     3168,
+     5,
+     "/art/rigs/ffx2-bahamut/1x/wingR.attack.rim.webp",
+     "net"
+    ],
+    [
+     3167,
+     8,
+     "/art/characters/ffx2-bahamut/ko.png",
+     "net"
+    ],
+    [
+     3167,
+     7,
+     "/art/characters/ffx2-bahamut/cast.png",
+     "net"
+    ],
+    [
+     3168,
+     5,
+     "/art/rigs/ffx2-bahamut/1x/wingR.cast.rim.webp",
+     "net"
+    ],
+    [
+     3168,
+     5,
+     "/art/rigs/ffx2-bahamut/1x/wingR.rim.webp",
+     "net"
+    ],
+    [
+     3168,
+     6,
+     "/art/rigs/ffx2-bahamut/1x/wingL.rim.webp",
+     "net"
+    ],
+    [
+     3168,
+     8,
+     "/art/rigs/ffx2-bahamut/1x/wingR.hurt.rim.webp",
+     "net"
+    ],
+    [
+     3168,
+     8,
+     "/art/rigs/ffx2-bahamut/1x/wingR.telegraph.rim.webp",
+     "net"
+    ],
+    [
+     3168,
+     8,
+     "/art/rigs/ffx2-bahamut/1x/wingR.ko.rim.webp",
+     "net"
+    ],
+    [
+     3168,
+     8,
+     "/art/rigs/ffx2-bahamut/1x/body.rim.webp",
+     "net"
+    ],
+    [
+     3168,
+     9,
+     "/art/rigs/ffx2-bahamut/1x/body.attack.rim.webp",
+     "net"
+    ],
+    [
+     3168,
+     12,
+     "/art/rigs/ffx2-bahamut/1x/body.cast.rim.webp",
+     "net"
+    ],
+    [
+     3168,
+     12,
+     "/art/rigs/ffx2-bahamut/1x/body.hurt.rim.webp",
+     "net"
+    ],
+    [
+     3168,
+     12,
+     "/art/rigs/ffx2-bahamut/1x/body.telegraph.rim.webp",
+     "net"
+    ],
+    [
+     3168,
+     12,
+     "/art/rigs/ffx2-bahamut/1x/body.ko.rim.webp",
+     "net"
+    ],
+    [
+     3169,
+     12,
+     "/art/rigs/ffx2-bahamut/1x/head.rim.webp",
+     "net"
+    ],
+    [
+     3169,
+     12,
+     "/art/rigs/ffx2-bahamut/1x/head.attack.rim.webp",
+     "net"
+    ],
+    [
+     3169,
+     15,
+     "/art/rigs/ffx2-bahamut/1x/head.cast.rim.webp",
+     "net"
+    ],
+    [
+     3169,
+     15,
+     "/art/rigs/ffx2-bahamut/1x/head.hurt.rim.webp",
+     "net"
+    ],
+    [
+     3169,
+     16,
+     "/art/rigs/ffx2-bahamut/1x/head.telegraph.rim.webp",
+     "net"
+    ],
+    [
+     3169,
+     16,
+     "/art/rigs/ffx2-bahamut/1x/head.ko.rim.webp",
+     "net"
+    ],
+    [
+     3169,
+     16,
+     "/art/rigs/ffx2-bahamut/tail.normal.webp",
+     "net"
+    ],
+    [
+     3169,
+     16,
+     "/art/rigs/ffx2-bahamut/tail.attack.normal.webp",
+     "net"
+    ],
+    [
+     3169,
+     18,
+     "/art/rigs/ffx2-bahamut/tail.cast.normal.webp",
+     "net"
+    ],
+    [
+     3169,
+     19,
+     "/art/rigs/ffx2-bahamut/tail.hurt.normal.webp",
+     "net"
+    ],
+    [
+     3169,
+     19,
+     "/art/rigs/ffx2-bahamut/tail.telegraph.normal.webp",
+     "net"
+    ],
+    [
+     3169,
+     20,
+     "/art/rigs/ffx2-bahamut/wingL.attack.normal.webp",
+     "net"
+    ],
+    [
+     3169,
+     20,
+     "/art/rigs/ffx2-bahamut/tail.ko.normal.webp",
+     "net"
+    ],
+    [
+     3169,
+     20,
+     "/art/rigs/ffx2-bahamut/wingL.cast.normal.webp",
+     "net"
+    ],
+    [
+     3170,
+     21,
+     "/art/rigs/ffx2-bahamut/wingL.hurt.normal.webp",
+     "net"
+    ],
+    [
+     3170,
+     21,
+     "/art/rigs/ffx2-bahamut/wingL.telegraph.normal.webp",
+     "net"
+    ],
+    [
+     3170,
+     23,
+     "/art/rigs/ffx2-bahamut/wingL.ko.normal.webp",
+     "net"
+    ],
+    [
+     3177,
+     16,
+     "/art/rigs/ffx2-bahamut/wingR.attack.normal.webp",
+     "net"
+    ],
+    [
+     3179,
+     15,
+     "/art/rigs/ffx2-bahamut/wingR.cast.normal.webp",
+     "net"
+    ],
+    [
+     3179,
+     15,
+     "/art/rigs/ffx2-bahamut/wingR.normal.webp",
+     "net"
+    ],
+    [
+     3179,
+     15,
+     "/art/rigs/ffx2-bahamut/wingR.hurt.normal.webp",
+     "net"
+    ],
+    [
+     3179,
+     15,
+     "/art/rigs/ffx2-bahamut/wingR.telegraph.normal.webp",
+     "net"
+    ],
+    [
+     3180,
+     16,
+     "/art/rigs/ffx2-bahamut/wingR.ko.normal.webp",
+     "net"
+    ],
+    [
+     3180,
+     17,
+     "/art/rigs/ffx2-bahamut/body.normal.webp",
+     "net"
+    ],
+    [
+     3180,
+     19,
+     "/art/rigs/ffx2-bahamut/wingL.normal.webp",
+     "net"
+    ],
+    [
+     3180,
+     18,
+     "/art/rigs/ffx2-bahamut/body.attack.normal.webp",
+     "net"
+    ],
+    [
+     3181,
+     17,
+     "/art/rigs/ffx2-bahamut/body.cast.normal.webp",
+     "net"
+    ],
+    [
+     3182,
+     16,
+     "/art/rigs/ffx2-bahamut/body.hurt.normal.webp",
+     "net"
+    ],
+    [
+     3182,
+     17,
+     "/art/rigs/ffx2-bahamut/body.ko.normal.webp",
+     "net"
+    ],
+    [
+     3183,
+     17,
+     "/art/rigs/ffx2-bahamut/body.telegraph.normal.webp",
+     "net"
+    ],
+    [
+     3183,
+     18,
+     "/art/rigs/ffx2-bahamut/head.attack.normal.webp",
+     "net"
+    ],
+    [
+     3183,
+     19,
+     "/art/rigs/ffx2-bahamut/head.normal.webp",
+     "net"
+    ],
+    [
+     3185,
+     17,
+     "/art/rigs/ffx2-bahamut/head.cast.normal.webp",
+     "net"
+    ],
+    [
+     3186,
+     16,
+     "/art/rigs/ffx2-bahamut/head.hurt.normal.webp",
+     "net"
+    ],
+    [
+     3187,
+     16,
+     "/art/rigs/ffx2-bahamut/head.telegraph.normal.webp",
+     "net"
+    ],
+    [
+     3187,
+     16,
+     "/art/rigs/ffx2-bahamut/head.ko.normal.webp",
+     "net"
+    ],
+    [
+     3223,
+     4,
+     "/art/characters/ffx2-bahamut/hurt.png",
+     "net"
+    ],
+    [
+     3243,
+     2,
+     "/assets/ink-light-DNLnRxnq.webp",
+     "net"
+    ],
+    [
+     3251,
+     9,
+     "/art/characters/rikku-dark-knight/attack.png",
+     "net"
+    ],
+    [
+     3251,
+     22,
+     "/art/characters/paine-warrior/attack.png",
+     "net"
+    ],
+    [
+     3251,
+     22,
+     "/art/characters/yuna-white-mage/attack.webp",
+     "net"
+    ],
+    [
+     3251,
+     40,
+     "/art/characters/ffx2-bahamut/splash.png",
+     "net"
+    ],
+    [
+     3223,
+     2,
+     "/art/characters/ffx2-bahamut/hurt.json",
+     "net"
+    ],
+    [
+     3223,
+     4,
+     "/art/characters/ffx2-bahamut/telegraph.png",
+     "net"
+    ],
+    [
+     3255,
+     35,
+     "/fonts/cormorant-garamond/CormorantGaramond-Variable-wght.woff2",
+     "net"
+    ],
+    [
+     3255,
+     36,
+     "/fonts/chakra-petch/ChakraPetch-Medium-500.woff2",
+     "net"
+    ],
+    [
+     3372,
+     3,
+     "/art/characters/ffx2-bahamut/ko.png",
+     "net"
+    ],
+    [
+     3614,
+     170,
+     "/art/backdrops/bevelle-underground.depth.png",
+     "net"
+    ],
+    [
+     3781,
+     3,
+     "/art/characters/rikku-dark-knight/twirl-start.png",
+     "net"
+    ],
+    [
+     3371,
+     3,
+     "/art/characters/ffx2-bahamut/ko.json",
+     "net"
+    ],
+    [
+     3371,
+     2,
+     "/art/characters/yuna-white-mage/ready.webp",
+     "net"
+    ],
+    [
+     3781,
+     3,
+     "/art/characters/rikku-dark-knight/twirl-start.json",
+     "net"
+    ],
+    [
+     3796,
+     1,
+     "/audio/music/defeat-ffx2.mp3",
+     "net"
+    ],
+    [
+     3977,
+     3,
+     "/art/characters/ffx2-bahamut/telegraph.png",
+     "net"
+    ],
+    [
+     3977,
+     2,
+     "/art/characters/ffx2-bahamut/telegraph.json",
+     "net"
+    ],
+    [
+     3977,
+     2,
+     "/art/characters/yuna-white-mage/attack.webp",
+     "net"
+    ],
+    [
+     4014,
+     2,
+     "/art/characters/yuna-white-mage/cast.webp",
+     "net"
+    ],
+    [
+     4015,
+     2,
+     "/art/characters/yuna-white-mage/item.webp",
+     "net"
+    ],
+    [
+     4015,
+     2,
+     "/art/characters/yuna-white-mage/hurt.png",
+     "net"
+    ],
+    [
+     4015,
+     2,
+     "/art/characters/yuna-white-mage/ko.png",
+     "net"
+    ],
+    [
+     4015,
+     3,
+     "/art/characters/yuna-white-mage/victory.png",
+     "net"
+    ],
+    [
+     4015,
+     3,
+     "/art/characters/yuna-white-mage/defend.webp",
+     "net"
+    ],
+    [
+     4020,
+     1,
+     "/art/characters/yuna-white-mage/sleep.webp",
+     "net"
+    ],
+    [
+     4025,
+     1,
+     "/art/characters/yuna-white-mage/critical.webp",
+     "net"
+    ],
+    [
+     4030,
+     1,
+     "/art/characters/yuna-white-mage/follow.webp",
+     "net"
+    ],
+    [
+     4034,
+     1,
+     "/art/characters/rikku-dark-knight/ready.png",
+     "net"
+    ],
+    [
+     4040,
+     1,
+     "/art/characters/rikku-dark-knight/attack.png",
+     "net"
+    ],
+    [
+     4046,
+     1,
+     "/art/characters/rikku-dark-knight/cast.png",
+     "net"
+    ],
+    [
+     4050,
+     1,
+     "/art/characters/rikku-dark-knight/item.png",
+     "net"
+    ],
+    [
+     4054,
+     1,
+     "/art/characters/rikku-dark-knight/hurt.png",
+     "net"
+    ],
+    [
+     4060,
+     1,
+     "/art/characters/rikku-dark-knight/ko.png",
+     "net"
+    ],
+    [
+     4065,
+     1,
+     "/art/characters/rikku-dark-knight/victory.png",
+     "net"
+    ],
+    [
+     4071,
+     1,
+     "/art/characters/rikku-dark-knight/sleep.webp",
+     "net"
+    ],
+    [
+     4076,
+     1,
+     "/art/characters/rikku-dark-knight/critical.png",
+     "net"
+    ],
+    [
+     4081,
+     1,
+     "/art/characters/rikku-dark-knight/follow.png",
+     "net"
+    ],
+    [
+     4146,
+     2,
+     "/art/characters/paine-warrior/ready.png",
+     "net"
+    ],
+    [
+     4160,
+     1,
+     "/art/characters/paine-warrior/attack.png",
+     "net"
+    ],
+    [
+     4166,
+     1,
+     "/art/characters/paine-warrior/cast.png",
+     "net"
+    ],
+    [
+     4170,
+     1,
+     "/art/characters/paine-warrior/item.png",
+     "net"
+    ],
+    [
+     4196,
+     1,
+     "/art/characters/paine-warrior/hurt.webp",
+     "net"
+    ],
+    [
+     4225,
+     2,
+     "/art/characters/paine-warrior/ko.webp",
+     "net"
+    ],
+    [
+     4258,
+     2,
+     "/art/characters/rikku-dark-knight/twirl-going.png",
+     "net"
+    ],
+    [
+     4254,
+     2,
+     "/art/characters/paine-warrior/victory.png",
+     "net"
+    ],
+    [
+     4258,
+     2,
+     "/art/characters/rikku-dark-knight/twirl-going.json",
+     "net"
+    ],
+    [
+     4261,
+     1,
+     "/art/characters/paine-warrior/defend.webp",
+     "net"
+    ],
+    [
+     4270,
+     1,
+     "/art/characters/paine-warrior/sleep.png",
+     "net"
+    ],
+    [
+     4275,
+     1,
+     "/art/characters/paine-warrior/critical.png",
+     "net"
+    ],
+    [
+     4279,
+     1,
+     "/art/characters/paine-warrior/follow.png",
+     "net"
+    ],
+    [
+     4284,
+     1,
+     "/art/characters/paine-warrior/od-x2-warrior-armor-break.png",
+     "net"
+    ],
+    [
+     4289,
+     1,
+     "/art/characters/paine-warrior/od-x2-warrior-power-break.png",
+     "net"
+    ],
+    [
+     4533,
+     5,
+     "/art/characters/rikku-gunner/twirl-mid.png",
+     "net"
+    ],
+    [
+     4533,
+     3,
+     "/art/characters/rikku-gunner/twirl-mid.json",
+     "net"
+    ],
+    [
+     4541,
+     3,
+     "/art/pause/yuna-ffx2.2x.webp",
+     "net"
+    ],
+    [
+     4541,
+     4,
+     "/art/pause/rikku-ffx2.2x.webp",
+     "net"
+    ],
+    [
+     4541,
+     3,
+     "/art/pause/paine.2x.webp",
+     "net"
+    ],
+    [
+     4814,
+     2,
+     "/art/characters/yuna-white-mage/twirl-start.json",
+     "net"
+    ],
+    [
+     4814,
+     3,
+     "/art/characters/yuna-white-mage/twirl-start.png",
+     "net"
+    ],
+    [
+     4875,
+     6,
+     "/art/characters/yuna-white-mage/idle%402x.png",
+     "net"
+    ],
+    [
+     4894,
+     4,
+     "/art/characters/yuna-white-mage/ready%402x.png",
+     "net"
+    ],
+    [
+     4995,
+     4,
+     "/art/characters/yuna-white-mage/attack%402x.png",
+     "net"
+    ],
+    [
+     5027,
+     4,
+     "/art/characters/yuna-white-mage/cast%402x.png",
+     "net"
+    ],
+    [
+     5061,
+     3,
+     "/art/characters/yuna-white-mage/item%402x.png",
+     "net"
+    ],
+    [
+     5081,
+     2,
+     "/art/characters/yuna-white-mage/twirl-going.json",
+     "net"
+    ],
+    [
+     5081,
+     3,
+     "/art/characters/yuna-white-mage/twirl-going.png",
+     "net"
+    ],
+    [
+     5110,
+     6,
+     "/art/characters/yuna-white-mage/hurt%402x.png",
+     "net"
+    ],
+    [
+     5144,
+     3,
+     "/art/characters/yuna-white-mage/ko%402x.png",
+     "net"
+    ],
+    [
+     5179,
+     4,
+     "/art/characters/yuna-white-mage/victory%402x.png",
+     "net"
+    ],
+    [
+     5193,
+     4,
+     "/art/characters/yuna-white-mage/defend%402x.png",
+     "net"
+    ],
+    [
+     5245,
+     5,
+     "/art/rigs/ffx2-bahamut/tail.attack.png",
+     "net"
+    ],
+    [
+     5245,
+     9,
+     "/art/rigs/ffx2-bahamut/tail.png",
+     "net"
+    ],
+    [
+     5245,
+     7,
+     "/art/rigs/ffx2-bahamut/tail.cast.png",
+     "net"
+    ],
+    [
+     5245,
+     6,
+     "/art/rigs/ffx2-bahamut/tail.hurt.png",
+     "net"
+    ],
+    [
+     5245,
+     6,
+     "/art/rigs/ffx2-bahamut/tail.ko.png",
+     "net"
+    ],
+    [
+     5245,
+     6,
+     "/art/rigs/ffx2-bahamut/tail.telegraph.png",
+     "net"
+    ],
+    [
+     5245,
+     13,
+     "/art/rigs/ffx2-bahamut/wingL.attack.png",
+     "net"
+    ],
+    [
+     5245,
+     13,
+     "/art/rigs/ffx2-bahamut/wingL.cast.png",
+     "net"
+    ],
+    [
+     5245,
+     13,
+     "/art/rigs/ffx2-bahamut/wingL.hurt.png",
+     "net"
+    ],
+    [
+     5245,
+     13,
+     "/art/rigs/ffx2-bahamut/wingL.telegraph.png",
+     "net"
+    ],
+    [
+     5245,
+     14,
+     "/art/rigs/ffx2-bahamut/wingL.ko.png",
+     "net"
+    ],
+    [
+     5245,
+     22,
+     "/art/rigs/ffx2-bahamut/wingL.png",
+     "net"
+    ],
+    [
+     5245,
+     18,
+     "/art/rigs/ffx2-bahamut/wingR.hurt.png",
+     "net"
+    ],
+    [
+     5245,
+     27,
+     "/art/rigs/ffx2-bahamut/wingR.png",
+     "net"
+    ],
+    [
+     5245,
+     17,
+     "/art/rigs/ffx2-bahamut/wingR.attack.png",
+     "net"
+    ],
+    [
+     5245,
+     18,
+     "/art/rigs/ffx2-bahamut/wingR.cast.png",
+     "net"
+    ],
+    [
+     5245,
+     18,
+     "/art/rigs/ffx2-bahamut/wingR.telegraph.png",
+     "net"
+    ],
+    [
+     5245,
+     21,
+     "/art/rigs/ffx2-bahamut/wingR.ko.png",
+     "net"
+    ],
+    [
+     5245,
+     22,
+     "/art/rigs/ffx2-bahamut/body.attack.png",
+     "net"
+    ],
+    [
+     5245,
+     23,
+     "/art/rigs/ffx2-bahamut/body.cast.png",
+     "net"
+    ],
+    [
+     5245,
+     30,
+     "/art/rigs/ffx2-bahamut/body.png",
+     "net"
+    ],
+    [
+     5245,
+     26,
+     "/art/rigs/ffx2-bahamut/body.hurt.png",
+     "net"
+    ],
+    [
+     5245,
+     27,
+     "/art/rigs/ffx2-bahamut/body.telegraph.png",
+     "net"
+    ],
+    [
+     5246,
+     28,
+     "/art/rigs/ffx2-bahamut/body.ko.png",
+     "net"
+    ],
+    [
+     5246,
+     29,
+     "/art/rigs/ffx2-bahamut/head.png",
+     "net"
+    ],
+    [
+     5246,
+     28,
+     "/art/rigs/ffx2-bahamut/head.attack.png",
+     "net"
+    ],
+    [
+     5246,
+     30,
+     "/art/rigs/ffx2-bahamut/head.cast.png",
+     "net"
+    ],
+    [
+     5246,
+     31,
+     "/art/rigs/ffx2-bahamut/head.hurt.png",
+     "net"
+    ],
+    [
+     5246,
+     31,
+     "/art/rigs/ffx2-bahamut/head.telegraph.png",
+     "net"
+    ],
+    [
+     5246,
+     31,
+     "/art/rigs/ffx2-bahamut/head.ko.png",
+     "net"
+    ],
+    [
+     5246,
+     33,
+     "/art/characters/yuna-white-mage/sleep%402x.png",
+     "net"
+    ],
+    [
+     5278,
+     4,
+     "/art/characters/yuna-white-mage/critical%402x.png",
+     "net"
+    ],
+    [
+     5361,
+     2,
+     "/art/characters/yuna-gunner/twirl-mid.json",
+     "net"
+    ],
+    [
+     5361,
+     5,
+     "/art/characters/yuna-gunner/twirl-mid.png",
+     "net"
+    ],
+    [
+     5411,
+     3,
+     "/art/characters/yuna-white-mage/follow%402x.png",
+     "net"
+    ],
+    [
+     5658,
+     2,
+     "/art/characters/paine-warrior/twirl-start.png",
+     "net"
+    ],
+    [
+     5657,
+     2,
+     "/art/characters/paine-warrior/twirl-start.json",
+     "net"
+    ],
+    [
+     5923,
+     3,
+     "/art/characters/paine-warrior/twirl-going.png",
+     "net"
+    ],
+    [
+     5923,
+     2,
+     "/art/characters/paine-warrior/twirl-going.json",
+     "net"
+    ],
+    [
+     6187,
+     2,
+     "/art/characters/paine-gunner/twirl-mid.json",
+     "net"
+    ],
+    [
+     6187,
+     6,
+     "/art/characters/paine-gunner/twirl-mid.png",
+     "net"
+    ],
+    [
+     12563,
+     3,
+     "/assets/ink-light-DNLnRxnq.webp",
+     "net"
+    ],
+    [
+     13576,
+     2,
+     "/assets/paper-dark-CkmdjUsb.webp",
+     "net"
+    ]
+   ],
+   "warm": [
+    {
+     "ms": 4636,
+     "what": "ffx2-bahamut: paintings"
+    }
+   ]
+  }
+ ],
+ "errors": []
+}

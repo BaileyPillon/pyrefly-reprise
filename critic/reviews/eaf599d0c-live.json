@@ -1,0 +1,97 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-28T01:11:42.378Z",
+  "build": {
+    "mainSha": "eaf599d0c",
+    "bundle": "8rsIfOcP",
+    "artifactHash": "b3afdb47240a7078c0c678c7da9cdd702aa57455638981f968e6a7d0499d8035"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "critic/reviews/eaf599d0c-live-verify.json: full mode, 7168 files checked, 0 mismatched, 0 missing, 0 wrong type, live manifest match",
+      "game": "both",
+      "environment": "node fetch, live URL",
+      "automated": true
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "critic/reviews/eaf599d0c-live-smoke.json and critic/reviews/eaf599d0c-live/shots: real key presses, screens asserted (title, chapter-select, party-prep, battle), attack and cancel paths, Escape/P pause, H hide, prerendered music, 0 console errors, 0 404s; FFX Seymour Flux, FFX-2 Fallen Aeons, Ixion, hidden limit",
+      "game": "FFX and FFX-2",
+      "environment": "headless Playwright PYREFLY_BROWSER=gpu 1600x900",
+      "automated": true
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "masterVolume 0.42 written, reloaded, 0.42 and save keys survived (lightweight; upgrade matrix not run)",
+      "game": "both",
+      "environment": "headless Playwright",
+      "automated": true
+    }
+  ],
+  "staticChecks": {
+    "pose-census": {
+      "subjects": 146,
+      "paintings": 1106,
+      "pass": 829,
+      "waived": 79,
+      "rigged": 0,
+      "fail": 0,
+      "exempt": 198,
+      "byClass": {
+        "idle": 146,
+        "standing": 565,
+        "ko": 90,
+        "low": 71,
+        "wide": 4,
+        "staged": 176,
+        "part": 54
+      },
+      "byGame": {
+        "FFX-2": 777,
+        "FFX": 307,
+        "FF7": 22
+      },
+      "byRowStatus": {
+        "ok": 745,
+        "held": 84,
+        "waived": 79,
+        "none": 198
+      }
+    }
+  },
+  "coverage": {
+    "tested": [
+      "exact artifact full mode 7168 files",
+      "FFX Seymour Flux attack/cancel/KO/revive/pause/H/P",
+      "FFX-2 Fallen Aeons menu/cancel/attack",
+      "FFX-2 Ixion start and music",
+      "hidden limit chapter",
+      "music prerendered",
+      "reload smoke"
+    ],
+    "reused": [],
+    "notTested": [
+      "camera shake and impact frame judged by eye",
+      "fight-opening card hold timing measured",
+      "?timing=frames ?cardhold=full ?opencover=off ?motion=classic switches",
+      "FFX-2 ready hold timing",
+      "full upgrade matrix (CHK-024)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 15
+}

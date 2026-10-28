@@ -1,0 +1,401 @@
+{
+ "build": {
+  "sha": "eaf599d0",
+  "bundle": "index-8rsIfOcP.js"
+ },
+ "ffxEnemies": [
+  "seymour-flux",
+  "mortiorchis"
+ ],
+ "ffxAudio": {
+  "playing": "boss-seymour",
+  "muted": false,
+  "music": {
+   "current": {
+    "name": "boss-seymour",
+    "gain": 1
+   },
+   "fading": [],
+   "held": [
+    "victory-ffx",
+    "defeat-ffx"
+   ]
+  },
+  "prerendered": {
+   "manifest": true,
+   "cues": 43,
+   "sprite": true,
+   "spriteDecoded": true,
+   "v2": {
+    "cues": 92,
+    "decoded": true,
+    "game": "ffx",
+    "retired": 8
+   },
+   "parity": {
+    "packs": [
+     "ffx-core",
+     "ffx2-core",
+     "ffx-lady",
+     "ffx2-bahamut",
+     "ffx2-machina",
+     "ffx2-shuyin",
+     "ffx-flux",
+     "ffx-final-aeon",
+     "ffx2-aeons"
+    ],
+    "active": [
+     "ffx-flux",
+     "ffx-core"
+    ],
+    "decoded": [
+     "ffx-flux",
+     "ffx-core"
+    ]
+   }
+  },
+  "cachedTracks": [
+   [
+    "boss-seymour",
+    "prerendered"
+   ],
+   [
+    "victory-ffx",
+    "prerendered"
+   ]
+  ]
+ },
+ "ffxNetAudio": [
+  "https://echoesofspira.com/audio/music/title.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+  "https://echoesofspira.com/audio/music/chapter-select.mp3",
+  "https://echoesofspira.com/audio/sfx/parity-ffx-flux.mp3",
+  "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+  "https://echoesofspira.com/audio/music/scene-gagazet.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.fb2.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-first-zombie.001.fb2.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-first-zombie.002.fb1.mp3",
+  "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-tidus.001.mp3"
+ ],
+ "ffxAction": {
+  "b": {
+   "l": 16
+  },
+  "a": {
+   "l": 21
+  }
+ },
+ "ffxCancel": "battle",
+ "koTurns": 1,
+ "koEvents": 1,
+ "koVictim": "yuna",
+ "revive": {
+  "events": [
+   "action-start",
+   "status-remove",
+   "revive",
+   "action-end"
+  ],
+  "hp": 750,
+  "alive": true
+ },
+ "pauseEsc": "pause",
+ "hide": {
+  "len0": 881,
+  "lenH": 526,
+  "lenR": 881,
+  "scr": "pause"
+ },
+ "afterEsc": "battle",
+ "pauseP": "pause",
+ "afterP": "battle",
+ "ffxAudioLater": {
+  "playing": "boss-seymour",
+  "muted": false,
+  "music": {
+   "current": {
+    "name": "boss-seymour",
+    "gain": 0.029407111927866936
+   },
+   "fading": [
+    {
+     "name": "pause",
+     "gain": 0.003400537883862853
+    }
+   ],
+   "held": [
+    "victory-ffx",
+    "defeat-ffx"
+   ]
+  },
+  "prerendered": {
+   "manifest": true,
+   "cues": 43,
+   "sprite": true,
+   "spriteDecoded": true,
+   "v2": {
+    "cues": 92,
+    "decoded": true,
+    "game": "ffx",
+    "retired": 8
+   },
+   "parity": {
+    "packs": [
+     "ffx-core",
+     "ffx2-core",
+     "ffx-lady",
+     "ffx2-bahamut",
+     "ffx2-machina",
+     "ffx2-shuyin",
+     "ffx-flux",
+     "ffx-final-aeon",
+     "ffx2-aeons"
+    ],
+    "active": [
+     "ffx-flux",
+     "ffx-core"
+    ],
+    "decoded": [
+     "ffx-flux",
+     "ffx-core"
+    ]
+   }
+  },
+  "cachedTracks": [
+   [
+    "boss-seymour",
+    "prerendered"
+   ],
+   [
+    "victory-ffx",
+    "prerendered"
+   ]
+  ]
+ },
+ "lsKeys": [
+  "pyrefly-reprise:save:v1"
+ ],
+ "reloadBefore": {
+  "vol": 0.42,
+  "keys": [
+   "version",
+   "updatedAt",
+   "chapters",
+   "unlocked",
+   "settings",
+   "seenCoach",
+   "flags"
+  ]
+ },
+ "reloadAfter": {
+  "vol": 0.42,
+  "keys": [
+   "version",
+   "updatedAt",
+   "chapters",
+   "unlocked",
+   "settings",
+   "seenCoach",
+   "flags"
+  ]
+ },
+ "faEnemies": [
+  "x2-shiva"
+ ],
+ "faAudio": {
+  "playing": "boss-ffx2-fallen-aeons",
+  "muted": false,
+  "music": {
+   "current": {
+    "name": "boss-ffx2-fallen-aeons",
+    "gain": 1
+   },
+   "fading": [],
+   "held": [
+    "victory-ffx2",
+    "defeat-ffx2"
+   ]
+  },
+  "prerendered": {
+   "manifest": true,
+   "cues": 43,
+   "sprite": true,
+   "spriteDecoded": true,
+   "v2": {
+    "cues": 92,
+    "decoded": true,
+    "game": "ffx2",
+    "retired": 8
+   },
+   "parity": {
+    "packs": [
+     "ffx-core",
+     "ffx2-core",
+     "ffx-lady",
+     "ffx2-bahamut",
+     "ffx2-machina",
+     "ffx2-shuyin",
+     "ffx-flux",
+     "ffx-final-aeon",
+     "ffx2-aeons"
+    ],
+    "active": [
+     "ffx2-aeons",
+     "ffx2-core"
+    ],
+    "decoded": [
+     "ffx2-aeons",
+     "ffx2-core"
+    ]
+   }
+  },
+  "cachedTracks": [
+   [
+    "victory-ffx2",
+    "prerendered"
+   ]
+  ]
+ },
+ "faNet": [
+  "https://echoesofspira.com/audio/music/title.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+  "https://echoesofspira.com/audio/music/chapter-select.mp3",
+  "https://echoesofspira.com/audio/sfx/parity-ffx2-aeons.mp3",
+  "https://echoesofspira.com/audio/sfx/parity-ffx2-core.mp3",
+  "https://echoesofspira.com/audio/music/scene-farplane.mp3",
+  "https://echoesofspira.com/audio/music/boss-ffx2-fallen-aeons.mp3",
+  "https://echoesofspira.com/audio/music/victory-ffx2.mp3",
+  "https://echoesofspira.com/audio/music/defeat-ffx2.mp3"
+ ],
+ "faCancel": "pause",
+ "faAttack": {
+  "l0": 12,
+  "l1": 14
+ },
+ "ixEnemies": [
+  "x2-ixion"
+ ],
+ "ixAudio": {
+  "playing": "boss-ffx2-fallen-aeons",
+  "muted": false,
+  "music": {
+   "current": {
+    "name": "boss-ffx2-fallen-aeons",
+    "gain": 1
+   },
+   "fading": [],
+   "held": [
+    "victory-ffx2",
+    "defeat-ffx2"
+   ]
+  },
+  "prerendered": {
+   "manifest": true,
+   "cues": 43,
+   "sprite": true,
+   "spriteDecoded": true,
+   "v2": {
+    "cues": 92,
+    "decoded": true,
+    "game": "ffx2",
+    "retired": 8
+   },
+   "parity": {
+    "packs": [
+     "ffx-core",
+     "ffx2-core",
+     "ffx-lady",
+     "ffx2-bahamut",
+     "ffx2-machina",
+     "ffx2-shuyin",
+     "ffx-flux",
+     "ffx-final-aeon",
+     "ffx2-aeons"
+    ],
+    "active": [
+     "ffx2-aeons",
+     "ffx2-core"
+    ],
+    "decoded": [
+     "ffx2-aeons",
+     "ffx2-core"
+    ]
+   }
+  },
+  "cachedTracks": [
+   [
+    "victory-ffx2",
+    "prerendered"
+   ]
+  ]
+ },
+ "ixNet": [
+  "https://echoesofspira.com/audio/music/title.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+  "https://echoesofspira.com/audio/music/chapter-select.mp3",
+  "https://echoesofspira.com/audio/sfx/parity-ffx2-aeons.mp3",
+  "https://echoesofspira.com/audio/sfx/parity-ffx2-core.mp3",
+  "https://echoesofspira.com/audio/music/scene-bevelle-underground.mp3",
+  "https://echoesofspira.com/audio/music/boss-ffx2-fallen-aeons.mp3",
+  "https://echoesofspira.com/audio/music/victory-ffx2.mp3",
+  "https://echoesofspira.com/audio/music/defeat-ffx2.mp3"
+ ],
+ "limitAfterWord": "chapter-select",
+ "limitScreen": {
+  "s": "battle",
+  "g": 4
+ },
+ "limitAudio": {
+  "playing": "boss-ff7-guard",
+  "muted": false,
+  "music": {
+   "current": {
+    "name": "boss-ff7-guard",
+    "gain": 1
+   },
+   "fading": [],
+   "held": []
+  },
+  "prerendered": {
+   "manifest": true,
+   "cues": 43,
+   "sprite": true,
+   "spriteDecoded": true,
+   "v2": {
+    "cues": 92,
+    "decoded": true,
+    "game": null,
+    "retired": 8
+   },
+   "parity": {
+    "packs": [
+     "ffx-core",
+     "ffx2-core",
+     "ffx-lady",
+     "ffx2-bahamut",
+     "ffx2-machina",
+     "ffx2-shuyin",
+     "ffx-flux",
+     "ffx-final-aeon",
+     "ffx2-aeons"
+    ],
+    "active": [],
+    "decoded": []
+   }
+  },
+  "cachedTracks": []
+ },
+ "limitNet": [
+  "https://echoesofspira.com/audio/music/title.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+  "https://echoesofspira.com/audio/music/chapter-select.mp3",
+  "https://echoesofspira.com/audio/music/boss-ff7-guard.mp3"
+ ],
+ "consoleErrors": [],
+ "notFound": []
+}

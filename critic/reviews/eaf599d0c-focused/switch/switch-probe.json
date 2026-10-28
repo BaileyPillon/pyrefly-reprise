@@ -1,0 +1,32 @@
+[
+ {
+  "q": "",
+  "timing": true,
+  "feel": "{\"chapter\":null,\"inDemoChapter\":false,\"pack\":true,\"punch\":\"today\",\"hitstop\":\"today\",\"rumble\":false,\"shadow\":false,\"motionsfx\":false,\"timing\":true}",
+  "errors": 0
+ },
+ {
+  "q": "?timing=frames",
+  "timing": false,
+  "feel": "{\"chapter\":null,\"inDemoChapter\":false,\"pack\":true,\"punch\":\"today\",\"hitstop\":\"today\",\"rumble\":false,\"shadow\":false,\"motionsfx\":false,\"timing\":false}",
+  "errors": 0
+ },
+ {
+  "q": "?timing=today",
+  "timing": false,
+  "feel": "{\"chapter\":null,\"inDemoChapter\":false,\"pack\":true,\"punch\":\"today\",\"hitstop\":\"today\",\"rumble\":false,\"shadow\":false,\"motionsfx\":false,\"timing\":false}",
+  "errors": 0
+ },
+ {
+  "q": "?motion=classic",
+  "timing": true,
+  "feel": "{\"chapter\":null,\"inDemoChapter\":false,\"pack\":true,\"punch\":\"today\",\"hitstop\":\"today\",\"rumble\":false,\"shadow\":false,\"motionsfx\":false,\"timing\":true}",
+  "errors": 0
+ },
+ {
+  "q": "?timing=frames&motion=classic",
+  "timing": false,
+  "feel": "{\"chapter\":null,\"inDemoChapter\":false,\"pack\":true,\"punch\":\"today\",\"hitstop\":\"today\",\"rumble\":false,\"shadow\":false,\"motionsfx\":false,\"timing\":false}",
+  "errors": 0
+ }
+]
