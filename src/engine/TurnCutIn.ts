@@ -52,8 +52,10 @@ export const CUT_IN_HOLD_MS = 450;
  * reading (iter2-b2 check CHK-B2-1: 2 to 2.8 s into Paine's menu at 5 s).
  */
 export const CUT_IN_WAIT_CAP_MS = 800;
-/** One 60 Hz frame (MF-08): the wait polls once a frame, so the slab starts on the frame after the charge clears, not up to 60 ms later. */
-const CUT_IN_WAIT_STEP_MS = 16;
+/** The poll of the wait on the wall clock (the screen hands no beat clock: tests, `?beats=wall`): 60 ms, as it was. */
+const CUT_IN_WAIT_STEP_MS = 60;
+/** One 60 Hz frame (MF-08): on the beat clock the wait polls once a frame, so the slab starts on the frame after the charge clears, not up to 60 ms later. */
+const CUT_IN_WAIT_FRAME_MS = 16;
 /**
  * After the charge clears, the beat its effect gets before the slab covers
  * it (inside the cap): the status numerals and the row tags land in this
@@ -70,7 +72,10 @@ export interface TurnCutInDeps {
    * menu is up. Without them the cut-in plays at once, as before.
    */
   sleep?(ms: number): Promise<void>;
-  /** Real milliseconds, so the wait's cap is counted in time and not in polls (a poll is a whole frame or more). Absent: the polls' own lengths are summed. */
+  /**
+   * The beat clock's milliseconds (the clock `sleep` counts in, which a pause stops), so the wait's cap is counted in time and not in polls (a poll is a whole frame or more). Absent: the polls' own
+   * lengths are summed and the poll is 60 ms. Never real time: a pause inside the wait would spend the cap (review of 2026-10-27, m1) and move the next girl's cut-in to her next turn.
+   */
   now?(): number;
   acting?(): boolean;
   menuFor?(): CombatantId | null;
@@ -172,7 +177,7 @@ export class TurnCutInBeat {
     const t0 = now?.() ?? 0;
     let waited = 0;
     while (busy() && waited < CUT_IN_WAIT_CAP_MS) {
-      const step = Math.min(CUT_IN_WAIT_STEP_MS, CUT_IN_WAIT_CAP_MS - waited);
+      const step = Math.min(now ? CUT_IN_WAIT_FRAME_MS : CUT_IN_WAIT_STEP_MS, CUT_IN_WAIT_CAP_MS - waited);
       await sleep(step);
       waited = now ? Math.max(waited + 1, now() - t0) : waited + step;
     }

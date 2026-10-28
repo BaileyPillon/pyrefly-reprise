@@ -32,7 +32,7 @@ import {
 import { PaintedStage } from '../../engine/BattlePresenterStage.ts';
 import { backdropFileOf, inArtNamespace } from '../../data/art/artNamespace.ts';
 import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
-import { BeatClock, claimLead, releaseLead } from '../../engine/BeatClock.ts'; // MF-08: the presenter's beats are counted in this screen's frame clock
+import { BeatClock, beatsWall, claimLead, releaseLead } from '../../engine/BeatClock.ts'; // MF-08: the presenter's beats are counted in this screen's frame clock
 import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../engine/HudPort.ts';
 import { type LoadedScene } from '../../scenes/index.ts';
@@ -400,13 +400,10 @@ export class BattleScreen extends Screen {
     this.presenter = new BattlePresenter({
       stage: this.stage,
       hud: this.hud,
-      // The one clock `App` cannot freeze for the pause overlay. Everything
-      // else in a battle is ticked from `update()`, which the loop stops
-      // calling the moment another screen is on top; the presenter instead
-      // paces itself with its own awaits, so it is frozen here, at the single
-      // choke point every one of those awaits goes through. See `pauseGate`.
+      // The one clock `App` cannot freeze for the pause overlay. Everything else in a battle is ticked from `update()`, which the loop stops calling the moment
+      // another screen is on top; the presenter paces itself with its own awaits, so it is frozen at the single choke point they go through. See `pauseGate`.
       sleep: this.pauseGate,
-      beatSleep: this.beatSleep, // MF-08: the scaled beats ride the frame clock; the ATB pump above keeps the wall sleep
+      beatSleep: this.beatSleep, ...(beatsWall() ? {} : { beatNow: () => this.beats.now * 1000 }), // MF-08: the scaled beats ride the frame clock (the ATB pump above keeps the wall sleep)
       damageNumbers: ownsOverlays ? createDamageNumbers(this.root) : null,
       messageBar: ownsBanner ? createMessageBar(this.root) : null,
       cutscenes: this.cutscenes,
@@ -593,13 +590,15 @@ export class BattleScreen extends Screen {
 
   // ------------------------------------------------------------- the pause
 
-  /** The presenter's wall clock, with a gate on its end: the ATB pump's wait (the engine reads real time) and its own timeouts. The pause overlay stops the loop that ticks everything else, so the presenter is frozen here, at the one choke point of those awaits, and carries on from exactly there. A field: it is handed over as a bare function. */
+  /** The presenter's wall clock behind the pause gate: the ATB pump's wait (the engine reads real time) and its own timeouts. The pause overlay stops `update`, so the presenter
+   *  is frozen here, at the one choke point of those awaits, and carries on from exactly there. A field: it is handed over as a bare function. */
   private readonly pauseGate = async (ms: number): Promise<void> => {
     await defaultSleep(ms);
     while (this.presenterPaused) await new Promise<void>((resolve) => this.pauseWaiters.push(resolve));
   };
 
-  /** MF-08: the presenter's beats (every `ctx.sleep`) counted in the frame clock `update` ticks (`engine/BeatClock.ts`): a pause keeps what was left of a sleep, a hidden window stops the fight, a long frame delays beat and picture together. */
+  /** MF-08: the presenter's beats (every `ctx.sleep`) counted in the frame clock `update` ticks (`engine/BeatClock.ts`): a pause keeps what was left of a sleep,
+   *  a hidden window stops the fight, a long frame delays beat and picture together. */
   private readonly beatSleep = async (ms: number): Promise<void> => {
     await this.beats.sleep(ms);
     while (this.presenterPaused) await new Promise<void>((resolve) => this.pauseWaiters.push(resolve));
@@ -1047,12 +1046,12 @@ export class BattleScreen extends Screen {
     // looking like the command menu's back button in the next battle, and the
     // pause would refuse it for good.
     setMenuOwnsCancel(false);
-    // Release anything parked on the pause gate before aborting, so a torn-down
-    // presenter cannot leave a `sleep` awaited forever.
+    // Release anything parked on the pause gate before aborting, so a torn-down presenter cannot leave a `sleep` awaited forever.
     this.setPresenterPaused(false);
     this.app.save.flushPlayTime();
     this.presenter?.abort();
-    this.beats.releaseAll(); releaseLead(this); // MF-08: nothing stays parked on a beat; the lead goes back
+    this.beats.releaseAll(); // MF-08: nothing stays parked on a beat
+    releaseLead(this); // MF-08: the lead goes back
     this.finish({ kind: 'aborted' });
     this.releaseParts();
     audio.stopMusic(0.6);

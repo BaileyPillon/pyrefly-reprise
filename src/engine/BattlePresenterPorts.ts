@@ -506,9 +506,10 @@ export interface PresenterDeps {
   sleep?: (ms: number) => Promise<void>;
   /** MF-08: the sleep of the presenter's beats (`ctx.sleep`, scaled), counted in the frame clock; absent = `sleep`. */
   beatSleep?: (ms: number) => Promise<void>;
+  /** MF-08: the milliseconds of the clock `beatSleep` counts in (a pause stops it); the cut-in's wait for a charge counts its cap in it and polls once a frame. Absent: it sums its polls (60 ms each). */
+  beatNow?: () => number;
   /**
-   * Real elapsed time, in milliseconds. Defaults to `Date.now`. Only FFX-2's **Active** ATB pump
-   * (`BattlePresenterActive.ts`) reads it, so a test can drive it without real timers. `BattleScreen` passes nothing.
+   * Real elapsed time, in milliseconds. Defaults to `Date.now`. Only FFX-2's **Active** ATB pump (`BattlePresenterActive.ts`) reads it; `BattleScreen` passes nothing.
    */
   now?: () => number;
   /** Overall pacing multiplier applied to every wait. 1 = authored timing. */
