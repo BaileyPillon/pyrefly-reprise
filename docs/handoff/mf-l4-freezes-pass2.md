@@ -1,6 +1,6 @@
 # mf-l4-freezes, second pass (2026-10-27): the garbage (MF-28), the worker where it cannot run (MF-02), the picture budget's clip (MF-10, CP-09)
 
-Branch `mf-l4-freezes` (tree `D:/pyrefly-rig-valefor`), on top of the first pass (`docs/handoff/mf-l4-freezes.md`, pushed at `ae02bf6bd`); `origin/post-fight-start` (`3cf78ed2f`) and `origin/post-tool-pin` (`adb44d675`) were re-read and had not moved. Authority and plan as in the first pass: Bailey, 2026-10-26 ~13:45 EDT, "I need an additional pass for motion, motion fluidity, animations etc please", every decision delegated to the driver; `D:/Tools/pyrefly-scratch/2026-10-26/fluidity/plan.json`. Nothing deploys from this branch.
+**Pass 3 (the adversarial review's eight findings, final numbers, the CP-09 clips) is at the top of `docs/handoff/mf-l4-freezes.md`.** Branch `mf-l4-freezes` (tree `D:/pyrefly-rig-valefor`), on top of the first pass (`docs/handoff/mf-l4-freezes.md`, pushed at `ae02bf6bd`); `origin/post-fight-start` (`3cf78ed2f`) and `origin/post-tool-pin` (`adb44d675`) were re-read and had not moved. Authority and plan as in the first pass: Bailey, 2026-10-26 ~13:45 EDT, "I need an additional pass for motion, motion fluidity, animations etc please", every decision delegated to the driver; `D:/Tools/pyrefly-scratch/2026-10-26/fluidity/plan.json`. Nothing deploys from this branch.
 
 ## The short answer
 

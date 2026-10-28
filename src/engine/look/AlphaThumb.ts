@@ -1,4 +1,6 @@
-import { baseExtents } from './LookBoldConfig.ts';
+import { AGREE_CELLS, extentsAgree } from './alphaAgree.ts';
+
+export { AGREE_CELLS, extentsAgree };
 
 /**
  * A PAINTING'S SMALL ALPHA FIELDS, READ OFF THE MAIN THREAD (post-conference motion-fluidity pass, lane "mf-l4-freezes", MF-02; both games: shared look plumbing, felt in FFX Chapter I, small in FFX-2
@@ -15,14 +17,12 @@ import { baseExtents } from './LookBoldConfig.ts';
  * the previous extents of the texture, or those of another master of the same painting, stand in (a painting is the same painting at every tier), so an upgrade never makes the page read the 4x master itself.
  *
  * HOW CLOSE (the lane's `e1b` and `e2` browser jobs, 263 paintings of Chapters I and IV at 1x and 3x).
- *   - The BREATHING RIG's field is byte for byte the page's own (`createImageBitmap(blob, resize 'medium')` equals `createImageBitmap(img, ...)`: 263 of 263). No difference at all.
- *   - The EXTENTS field is not: Chromium draws an `<img>` through its own mip-filtered path (the same bytes at every `imageSmoothingQuality`), which no `ImageBitmap` draw in a worker reproduces (17 variants,
- *     0 identical); about 1,400 of 16,384 texels differ by a few levels at the edges. The field is the AREA AVERAGE of the alpha plane (`alphaArea.ts`), the closest of the candidates tried: its extents (six numbers on a
- *     128 grid) are the page's in 167 paintings, within one cell in 95 more and 7 cells off in one (Rikku Dark Knight's KO: a thin element near the 90 of 255 threshold in the foot band). The canvas draw of the
- *     same bytes is a second opinion: where the two disagree by more than a cell (3 of 263) the AGREEMENT GUARD refuses the field and the page reads the painting itself, as it always did.
- *   - What the extents drive is the contact ellipse, the reflection and the figure's box; one cell is 0.8 percent of the painting's width (about 3.5 px of a 450 px wide figure at 1440p), and a base bound that moves one cell
- *     moves the ellipse's half width by about 0.6 cell, 2 px.
- * `?alphathumb=off` is release 64's reading, for a comparison.
+ *   - The BREATHING RIG's field is byte for byte the page's own (`createImageBitmap(blob, resize 'medium')` equals `createImageBitmap(img, ...)`: 263 of 263).
+ *   - The EXTENTS field is not: Chromium draws an `<img>` through its own mip-filtered path, which no `ImageBitmap` draw in a worker reproduces (17 variants, 0 identical). The field is the AREA AVERAGE of the alpha
+ *     plane (`alphaArea.ts`), the closest tried: its extents (six numbers on a 128 grid) are the page's in 167 paintings, within one cell in 95 more and 7 cells off in one. The canvas draw of the same bytes is a
+ *     second opinion: where the two disagree by more than a cell (3 of 263) the AGREEMENT GUARD refuses the field and the page reads the painting itself, as it always did.
+ *   - What the extents drive is the contact ellipse, the reflection and the figure's box; one cell is 0.8 percent of the painting's width (about 3.5 px of a 450 px figure at 1440p, about 2 px on the ellipse).
+ * `?alphathumb=off` is release 64's reading, for a comparison; `?alphathumb=exact` keeps only the exact breathing field (the extents stay on the page).
  *
  * No Worker (the unit tests, an old browser) or a worker that fails: every reader reads for itself, as before.
  */
@@ -46,9 +46,6 @@ export const BREATH_THUMB: ThumbSpec = { w: 32, h: 48, mode: 'bitmap-medium' };
 /** What a loaded painting is asked for. */
 export const PAINTING_THUMBS: readonly ThumbSpec[] = [EXTENTS_THUMB, EXTENTS_CHECK, BREATH_THUMB];
 
-/** The most the two fields' extents may differ on any of the six bounds, in cells of 128, for the field to be trusted. */
-export const AGREE_CELLS = 1;
-
 const specKey = (s: ThumbSpec): string => `${s.mode}:${s.w}x${s.h}`;
 const KEY_EXTENTS = specKey(EXTENTS_THUMB);
 const KEY_CHECK = specKey(EXTENTS_CHECK);
@@ -64,21 +61,23 @@ const newestOf = new Map<string, Uint8Array>();
 /** The fields asked for and not given up on, so a second load of the same image asks nothing and a reader can tell "on its way" from "never". */
 const asked = new WeakMap<object, Set<string>>();
 
-/** `?alphathumb=off`: every reader reads its own field, as it did before this lane. */
-export function alphaThumbOn(search: string = typeof window !== 'undefined' ? window.location.search : ''): boolean {
+/** `?alphathumb=off`: every reader reads its own field, as it did before this lane. `?alphathumb=exact`: only the breathing rig's field (byte for byte the page's own) is made in the worker; the extents stay on the page, with no one-cell tolerance and the freezes of their first read. */
+export function alphaThumbWord(search: string = typeof window !== 'undefined' ? window.location.search : ''): 'on' | 'exact' | 'off' {
   try {
-    return new URLSearchParams(search).get('alphathumb') !== 'off';
+    const w = new URLSearchParams(search).get('alphathumb');
+    return w === 'off' || w === 'exact' ? w : 'on';
   } catch {
-    return true;
+    return 'on';
   }
 }
+export const alphaThumbOn = (search?: string): boolean => alphaThumbWord(search) !== 'off';
 
-let enabled: boolean | undefined;
-const on = (): boolean => (enabled ??= alphaThumbOn());
+let word: 'on' | 'exact' | 'off' | undefined;
+const on = (): boolean => (word ??= alphaThumbWord()) !== 'off';
 
 /** For the tests and the lane's browser job: re-read the switch from an address. */
 export function setAlphaThumbSearch(search: string): void {
-  enabled = alphaThumbOn(search);
+  word = alphaThumbWord(search);
 }
 
 /** The field of `image` for `spec`, top row first, one alpha byte a texel; null while it has not landed (or never will). */
@@ -107,15 +106,6 @@ export function paintingName(url: string): string {
   return m ? m[1]!.toLowerCase() : '';
 }
 
-/** Do two extents fields (the area average and the canvas draw of one painting) agree, within {@link AGREE_CELLS} cell on every bound? */
-export function extentsAgree(a: ArrayLike<number>, b: ArrayLike<number>, cells = AGREE_CELLS): boolean {
-  const ea = baseExtents(a, 128, 128);
-  const eb = baseExtents(b, 128, 128);
-  if (!ea || !eb) return !ea && !eb;
-  const keys = ['top', 'bottom', 'left', 'right', 'baseLeft', 'baseRight'] as const;
-  return keys.every((k) => Math.abs(ea[k] - eb[k]) * 128 <= cells + 1e-9);
-}
-
 /** Images whose extents field the guard refused (the page reads those itself). */
 const refusedImages = new WeakSet<object>();
 
@@ -127,7 +117,7 @@ export function thumbWhy(image: unknown): 'refused' | 'pending' | 'none' {
 }
 
 /** Fields the guard has refused, for the books. */
-const counters = { asked: 0, landed: 0, failed: 0, refused: 0, reused: 0 };
+const counters = { asked: 0, landed: 0, failed: 0, refused: 0, reused: 0, timedOut: 0 };
 
 function publish(image: object, key: string, alpha: Uint8Array): void {
   let m = held.get(image);
@@ -192,6 +182,10 @@ interface Job {
   specs: readonly ThumbSpec[];
   /** The address the bytes came from, so what comes back is kept for the next image made from the same file. */
   name: string;
+  /** What the worker is sent (the encoded bytes or an absolute address); `sent`: posted to a worker, else it waits in the queue. */
+  source: Blob | string;
+  sent: boolean;
+  timer?: ReturnType<typeof setTimeout>;
 }
 
 /**
@@ -211,16 +205,66 @@ export function seedAddress(name: string, spec: ThumbSpec, alpha: Uint8Array): v
 }
 
 const POOL = 2;
+/** Jobs on the workers at once (decoding a 4x master holds 60 MB or more; the review's memory run saw +328 MB at the opening's peak with every painting sent at once): the rest wait here, oldest first. */
+export const MAX_IN_FLIGHT = 4;
+/** A job that has not answered this long after it was sent is given up on and its readers read for themselves (a hung decode, a lost reply); past 4 timeouts in a row with nothing landed the workers are ended. */
+export const JOB_TIMEOUT_MS = 20000;
+const TIMEOUTS_TO_END = 4;
 const workers: Worker[] = [];
-let broken = false;
-let seq = 0;
-let rr = 0;
-const waiting = new Map<number, Job>();
+let broken = false, seq = 0, rr = 0, inFlight = 0, timeoutsInARow = 0;
+const waiting = new Map<number, Job>(); // every job asked for and not yet over, queued or sent
+const queue: number[] = []; // the ids not yet sent
 
 function giveUp(job: Job): void {
   counters.failed++;
   const did = asked.get(job.image);
   for (const s of job.specs) if (!(held.get(job.image)?.has(specKey(s)) ?? false)) did?.delete(specKey(s)); // not on its way any more: the readers read for themselves
+}
+
+/** A job is over (answered, failed, timed out or dropped): it leaves the books. Undefined when it was already over. */
+function settle(id: number): Job | undefined {
+  const job = waiting.get(id);
+  if (job) {
+    waiting.delete(id);
+    clearTimeout(job.timer);
+    if (job.sent) inFlight--;
+  }
+  return job;
+}
+
+/** The workers are no use (a script error, or silent): every waiting job is given up on, the workers are ended, and every reader reads for itself as before. */
+function endWorkers(): void {
+  broken = true;
+  for (const id of [...waiting.keys()]) giveUp(settle(id)!);
+  queue.length = inFlight = 0;
+  for (const w of workers.splice(0)) try { w.terminate(); } catch { /* already gone */ }
+}
+
+/** Send queued jobs while fewer than MAX_IN_FLIGHT are out. */
+function pump(): void {
+  while (inFlight < MAX_IN_FLIGHT && queue.length > 0) {
+    const id = queue.shift()!;
+    const job = waiting.get(id);
+    if (!job) continue;
+    const w = pick();
+    if (w) {
+      job.sent = true;
+      inFlight++;
+      job.timer = setTimeout(() => onTimeout(id), JOB_TIMEOUT_MS);
+      try { w.postMessage({ id, source: job.source, specs: job.specs }); continue; } catch { /* given up below */ }
+    }
+    settle(id);
+    giveUp(job);
+  }
+}
+
+function onTimeout(id: number): void {
+  const job = settle(id);
+  if (!job) return;
+  giveUp(job);
+  counters.timedOut++;
+  if (++timeoutsInARow >= TIMEOUTS_TO_END) endWorkers();
+  pump();
 }
 
 /** A worker can make the fields only where it can decode a Blob and draw into an OffscreenCanvas (not Safari before 16.4, nor the WebKit that Playwright ships for Windows: found by the lane's WebKit smoke, where every request came back failed). */
@@ -229,8 +273,7 @@ function workerCanDraw(): boolean {
 }
 
 /** Failures in a row with nothing landed in between: past this many the worker is given up on (a browser that cannot do the work answers every request `ok: false`). */
-const GIVE_UP_AFTER = 6;
-let failuresInARow = 0;
+const GIVE_UP_AFTER = 6; let failuresInARow = 0;
 
 function make(): Worker | null {
   if (broken) return null;
@@ -244,13 +287,15 @@ function make(): Worker | null {
       const job = waiting.get(e.data.id);
       if (!job) return;
       if (!e.data.ok) {
-        waiting.delete(e.data.id);
+        settle(e.data.id);
         giveUp(job);
         if (++failuresInARow >= GIVE_UP_AFTER && counters.landed === 0) broken = true; // nothing has ever landed: stop asking, every reader reads for itself as before
+        pump();
         return;
       }
       if (e.data.done) {
-        waiting.delete(e.data.id);
+        settle(e.data.id);
+        pump();
         return;
       }
       const s = e.data.i !== undefined ? job.specs[e.data.i] : undefined;
@@ -259,6 +304,7 @@ function make(): Worker | null {
         storeThumb(job.image, s, a);
         counters.landed++;
         failuresInARow = 0;
+        timeoutsInARow = 0;
         if (job.name) {
           let m = byAddress.get(job.name);
           if (!m) {
@@ -269,11 +315,7 @@ function make(): Worker | null {
         }
       }
     };
-    w.onerror = (): void => {
-      broken = true; // a worker that cannot run: every reader reads for itself, as before
-      for (const job of waiting.values()) giveUp(job);
-      waiting.clear();
-    };
+    w.onerror = endWorkers; // a worker that cannot run: every reader reads for itself, as before
     return w;
   } catch {
     broken = true;
@@ -316,7 +358,7 @@ export function requestThumbs(image: unknown, source: Blob | string, specs: read
   if (name) notePainting(image, name);
   let did = asked.get(image);
   if (!did) asked.set(image, (did = new Set()));
-  const fresh = specs.filter((s) => !did!.has(specKey(s)));
+  const fresh = specs.filter((s) => !did!.has(specKey(s)) && (word === 'on' || s.mode === 'bitmap-medium'));
   if (fresh.length === 0) return;
   const known = name ? byAddress.get(addressOf(name)) : undefined;
   if (known && fresh.every((s) => known.has(specKey(s)))) {
@@ -328,19 +370,13 @@ export function requestThumbs(image: unknown, source: Blob | string, specs: read
     counters.reused += fresh.length;
     return;
   }
-  const w = pick();
-  if (!w) return;
+  if (!pick()) return;
   for (const s of fresh) did.add(specKey(s));
   const id = ++seq;
-  const job: Job = { image, specs: fresh, name: name ? addressOf(name) : '' };
-  waiting.set(id, job);
+  waiting.set(id, { image, specs: fresh, name: name ? addressOf(name) : '', source: typeof source === 'string' ? absolute(source) : source, sent: false });
+  queue.push(id);
   counters.asked += fresh.length;
-  try {
-    w.postMessage({ id, source: typeof source === 'string' ? absolute(source) : source, specs: fresh });
-  } catch {
-    waiting.delete(id);
-    giveUp(job);
-  }
+  pump();
 }
 
 /** `requestThumbs` that hands the image back, so a loader keeps its return line (`PaintedArt.tryLoadImage`). */
@@ -350,6 +386,6 @@ export function withThumbs<T>(image: T, source: Blob | string, specs?: readonly 
 }
 
 /** The worker's side of the books, for the debug API and the lane's jobs (`__pyrefly.art.stats().alpha`). */
-export function thumbStats(): { on: boolean; workers: number; broken: boolean; waiting: number; asked: number; landed: number; failed: number; refused: number; reused: number } {
-  return { on: on(), workers: workers.length, broken, waiting: waiting.size, asked: counters.asked, landed: counters.landed, failed: counters.failed, refused: counters.refused, reused: counters.reused };
+export function thumbStats(): { on: boolean; workers: number; broken: boolean; waiting: number; queued: number; asked: number; landed: number; failed: number; refused: number; reused: number; timedOut: number } {
+  return { on: on(), workers: workers.length, broken, waiting: waiting.size, queued: queue.length, asked: counters.asked, landed: counters.landed, failed: counters.failed, refused: counters.refused, reused: counters.reused, timedOut: counters.timedOut };
 }
