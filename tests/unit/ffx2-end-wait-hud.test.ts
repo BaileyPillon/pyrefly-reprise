@@ -34,6 +34,7 @@ import { Ffx2AtbState } from '../../src/battle/ffx2/kernel/atb-gauge.ts';
 import * as data from '../../src/data/ffx2/index.ts';
 import { makeFakeBattleState } from '../../src/ui/ffx/testFixtures.ts';
 import { EndHold } from '../../src/ui/ffx2/endHold.ts';
+import { setAtbBarsSmooth } from '../../src/ui/ffx2/AtbLive.ts';
 import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
 import { fightDecidedBy } from '../../src/ui/ffx2/fightDecided.ts';
 
@@ -276,6 +277,7 @@ describe('3 and 4, on the real HUD: the command window closes at the last blow a
     root?.remove();
     root = null;
     vi.useRealTimers();
+    setAtbBarsSmooth(null);
   });
 
   function mounted(state: BattleState, snapshot: AtbSnapshot): FFX2BattleHud {
@@ -288,9 +290,15 @@ describe('3 and 4, on the real HUD: the command window closes at the last blow a
   }
   const commandWindow = (): HTMLElement => root!.querySelector<HTMLElement>('.ffx2hud__command')!;
   const rows = (): HTMLElement[] => [...root!.querySelectorAll<HTMLElement>('.ig-stat')];
-  const fillOf = (who: string): string | null => rows().find((r) => /rikku|paine|yuna/i.test(r.textContent ?? '') && new RegExp(who, 'i').test(r.textContent ?? ''))?.querySelector<HTMLElement>('.ffx2atb__fill')?.style.width ?? null;
+  /** What a bar shows, as a percent: the width (release 67's bars, and REDUCE MOTION's) or the scale of the full-width bar the running bars draw (the default since release 68). */
+  const shown = (el: HTMLElement | null | undefined): string | null => {
+    if (!el) return null;
+    const scale = /scaleX\(([\d.]+)\)/.exec(el.style.transform);
+    return scale ? `${Math.round(parseFloat(scale[1]!) * 100)}%` : el.style.width;
+  };
+  const fillOf = (who: string): string | null => shown(rows().find((r) => /rikku|paine|yuna/i.test(r.textContent ?? '') && new RegExp(who, 'i').test(r.textContent ?? ''))?.querySelector<HTMLElement>('.ffx2atb__fill'));
   const readyOf = (who: string): boolean => !!rows().find((r) => new RegExp(who, 'i').test(r.textContent ?? ''))?.querySelector('.ffx2atb--ready');
-  const chargeOf = (who: string): string | null => rows().find((r) => new RegExp(who, 'i').test(r.textContent ?? ''))?.querySelector<HTMLElement>('.ffx2atb__charge')?.style.width ?? null;
+  const chargeOf = (who: string): string | null => shown(rows().find((r) => new RegExp(who, 'i').test(r.textContent ?? ''))?.querySelector<HTMLElement>('.ffx2atb__charge'));
 
   it('closes the command window on the last blow\'s KO, the advisor and the help line with it; the same KO with the fight going on leaves it up (control)', async () => {
     vi.useFakeTimers();
@@ -331,7 +339,9 @@ describe('3 and 4, on the real HUD: the command window closes at the last blow a
     hud.unmount();
   });
 
-  it('draws the idle bars frozen and not ready while the fight ends, the casting bar live, and every bar live again without the mark', () => {
+  // both bar drawings: the running bars (the default since release 68) and release 67's ratcheting ones (`?atbbars=today`, and what REDUCE MOTION reads)
+  it.each([true, false])('draws the idle bars frozen and not ready while the fight ends, the casting bar live, and every bar live again without the mark (running bars: %s)', (running) => {
+    setAtbBarsSmooth(running);
     const b = battle();
     const girls = b.state.activeIds;
     expect(girls).toHaveLength(3);
@@ -344,6 +354,7 @@ describe('3 and 4, on the real HUD: the command window closes at the last blow a
     hud.sync(b.state, one);
     const two: AtbSnapshot = { elapsedMs: 900, bars: [bar(yuna, 0.5, 0.9), bar(rikku, 1, null, true), bar(paine, 0.95, null, true)] };
     hud.syncGauges(two); // the clock ran on: Rikku and Paine would be full and READY
+    if (running) hud.update(1 / 60); // the running bars are drawn by the frame loop, not by the sync
     expect(fillOf('rikku'), 'Rikku\'s bar stayed where it stood').toBe('20%');
     expect(fillOf('paine')).toBe('70%');
     expect(readyOf('rikku'), 'no READY shimmer for a turn that cannot come').toBe(false);
@@ -352,6 +363,7 @@ describe('3 and 4, on the real HUD: the command window closes at the last blow a
 
     delete b.state.flags[END_WINDOW_FLAG]; // the end lapsed: the fight goes on
     hud.syncGauges(two);
+    if (running) hud.update(1 / 60);
     expect(fillOf('rikku')).toBe('100%');
     expect(readyOf('rikku')).toBe(true);
     hud.unmount();

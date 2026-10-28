@@ -6,7 +6,8 @@
  * the presenter's wait and the menu behind it are exactly what they were. Read through the continuity harness's own maths like the fall
  * (`ko-fall-fixture.ts`). The clock is `ko-fall.test.ts`, the geometry `ko-tip.test.ts`.
  */
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { setMoveWord } from '../../../src/engine/motion/MoveSwitch.ts';
 import { reset } from './head-lock-fixture.ts';
 import { CFG, FRAME, analyzeSwap, anchors, fall, index, lying, revive, rig, slots } from './ko-fall-fixture.ts';
 import { detectJerks, figureTrack } from '../../../critic/runner/lib/continuity-pure.mjs';
@@ -15,7 +16,13 @@ import { TIMING } from '../../../src/engine/BattlePresenterEvents.ts';
 import { REVIVE_MS } from '../../../src/engine/KoFall.ts';
 import { TOPPLE_RAD } from '../../../src/engine/KoTip.ts';
 
-afterEach(reset);
+// This file's timeline is release 67's (the topple's 14-frame hold, the revive's 395 ms): release 68 made `?kotopple=eased` the default, so every test here names `today`.
+// The eased arm under the same harness maths is `m3-ko-eased-harness.test.ts`; its own timeline is `mf17-ko-eased.test.ts`.
+beforeEach(() => setMoveWord('kotopple', 'today'));
+afterEach(() => {
+  reset();
+  setMoveWord('kotopple', null);
+});
 
 /** A figure that has fallen and lies there (the fall played through), ready to be revived. */
 function downed(subject: string, over: Parameters<typeof rig>[1] = {}): ReturnType<typeof rig> {

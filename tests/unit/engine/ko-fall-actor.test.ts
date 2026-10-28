@@ -8,7 +8,8 @@
  * paintings are not in a worktree), at an overlap far below the worst real one, so a pass here is not easier than a pass on the paintings. The pure
  * geometry is `ko-tip.test.ts`, the clock `ko-fall.test.ts`.
  */
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { setMoveWord } from '../../../src/engine/motion/MoveSwitch.ts';
 import { reset } from './head-lock-fixture.ts';
 import { CFG, FRAME, analyzeSwap, anchors, fall, headX, index, lying, middleX, rig, slots, standing, corners, type Rig } from './ko-fall-fixture.ts';
 import { detectJerks, feetPoint, figureTrack, headSizePx, unitSquareToQuad } from '../../../critic/runner/lib/continuity-pure.mjs';
@@ -16,7 +17,13 @@ import { KO_CROSS_PEAK } from '../../../src/engine/PoseBlend.ts';
 import { TOPPLE_RAD } from '../../../src/engine/KoTip.ts';
 import type { Actor } from './head-lock-fixture.ts';
 
-afterEach(reset);
+// This file's timeline is release 67's (the topple's 14-frame hold, the revive's 395 ms): release 68 made `?kotopple=eased` the default, so every test here names `today`.
+// The eased arm under the same harness maths is `m3-ko-eased-harness.test.ts`; its own timeline is `mf17-ko-eased.test.ts`.
+beforeEach(() => setMoveWord('kotopple', 'today'));
+afterEach(() => {
+  reset();
+  setMoveWord('kotopple', null);
+});
 
 describe('the topple: Tidus falls to the right and Yuna to the left, the side their KO paintings\' heads lie on', () => {
   for (const [subject, side] of [['tidus', 1], ['yuna', -1]] as const) {
