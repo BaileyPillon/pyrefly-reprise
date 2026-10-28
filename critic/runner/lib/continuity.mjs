@@ -281,7 +281,7 @@ export function aggregate(results, cfg) {
   const size = {
     judged: sum((s) => s.size.judged ?? s.counted), costumeSwaps: sum((s) => s.size.costumeSwaps ?? 0), sameArtSwaps: sum((s) => s.size.sameArtSwaps ?? 0), costumeWorstHeadPct: max((s) => s.size.costumeWorstHeadPct ?? 0), costumeWorstFeetPx: max((s) => s.size.costumeWorstFeetPx ?? 0),
     maxHeadJumpPct: max((s) => s.size.maxHeadJumpPct), maxHeadJumpPctRegistration: max((s) => s.size.maxHeadJumpPctRegistration), headOverTolerance: sum((s) => s.size.headOverTolerance),
-    maxFeetShiftPx: max((s) => s.size.maxFeetShiftPx), feetOverTolerance: sum((s) => s.size.feetOverTolerance), headMeasured: sum((s) => s.size.headMeasured), headRegistration: sum((s) => s.size.headRegistration), headRig: sum((s) => s.size.headRig ?? 0), rigSwaps: sum((s) => s.size.rigSwaps ?? 0), headSilhouette: sum((s) => s.size.headSilhouette), headUnmeasured: sum((s) => s.size.headUnmeasured),
+    maxFeetShiftPx: max((s) => s.size.maxFeetShiftPx), feetOverTolerance: sum((s) => s.size.feetOverTolerance), feetDesigned: sum((s) => s.size.feetDesigned ?? 0), feetDesignedWorstPx: max((s) => s.size.feetDesignedWorstPx ?? 0), headMeasured: sum((s) => s.size.headMeasured), headRegistration: sum((s) => s.size.headRegistration), headRig: sum((s) => s.size.headRig ?? 0), rigSwaps: sum((s) => s.size.rigSwaps ?? 0), headSilhouette: sum((s) => s.size.headSilhouette), headUnmeasured: sum((s) => s.size.headUnmeasured),
   };
   const motion = {
     snaps: sum((s) => s.motion.snaps), snapsPerMinute: per(sum((s) => s.motion.snaps)), hardCuts: sum((s) => s.motion.hardCuts), hardCutsPerMinute: per(sum((s) => s.motion.hardCuts)),

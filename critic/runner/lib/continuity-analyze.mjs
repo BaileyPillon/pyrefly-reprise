@@ -9,7 +9,7 @@ import { anchorsFor, decodeMask } from './continuity-silhouette.mjs';
 import { waiverFor } from './continuity-waivers.mjs';
 import { STAGED_GAP_FRAMES, groupStaged, stagedStepOf } from './continuity-staged.mjs';
 import { tagWash, washPolicy, washReport } from './continuity-wash.mjs';
-import { figureHeightPx, smearPolicy, smearReport, smearedJerk, tagSmears } from './continuity-smear.mjs'; // motion pass (lane "core", step 2): a PLANNED smear is not a snap or a swap jerk (CHK-027)
+import { excuseGlideFeet, figureHeightPx, smearPolicy, smearReport, smearedJerk, tagSmears } from './continuity-smear.mjs'; // motion pass (lane "core", step 2): a PLANNED smear is not a snap or a swap jerk (CHK-027)
 import { unseenIn, unseenPolicy } from './continuity-unseen.mjs'; // R63-M1: a figure off the view cannot be seen to jerk or to snap (CHK-027)
 import { analyzeRigSwap, idleBoxOf, rigConfig, rigCoverage } from './continuity-rig.mjs';
 import { flickerPairs, flickerSummary, flickerWindowMs, tagFlickers } from './continuity-flicker.mjs'; // post-conference plan, step 2: the ready-idle-ready flicker, a named class (reported, not gated)
@@ -156,6 +156,8 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   // motion pass, step 2: a swap that matches a cut the engine logged as a planned smear on a big change is not a snap (continuity-smear.mjs); every other fast swap is judged as before
   const smearP = smearPolicy(cfg);
   const smearTally = tagSmears(swaps, meta.smears, smearP, FRAME_MS);
+  // MF-18 (lane pc-scope): a cut the engine anchored (the log entry carries a `glide`) drew the incoming plane back on purpose; the sideways part of its feet reading is excused up to the logged share (continuity-smear.mjs)
+  const glideTally = excuseGlideFeet(swaps, smearP, cfg.size);
   // post-conference plan, step 2: a figure that shows A, then B, then A again within a tenth of a second (ready, idle, ready: Chapter IV's 22 in 6.3 minutes) is a FLICKER; both swaps are tagged and the summary counts them
   const flickerMs = flickerWindowMs(cfg), flickerWords = flickerPairs(cfg);
   const flickers = tagFlickers(swaps, flickerMs, flickerWords);
@@ -194,7 +196,7 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   const visibleJerks = jerks.filter((j) => !j.covered && !j.smeared), coveredJerks = jerks.filter((j) => j.covered), smearedJerks = jerks.filter((j) => j.smeared && !j.covered);
 
   const battleSeconds = meta.stats?.battleSeconds ?? 0;
-  const smear = smearReport({ tally: smearTally, jerks, policy: smearP, smears: meta.smears });
+  const smear = smearReport({ tally: smearTally, jerks, policy: smearP, smears: meta.smears, glide: glideTally });
   const summary = summarize({ swaps, jerks: visibleJerks, coveredJerks, smearedJerks, smear, battleSeconds, cfg, frameTime });
   summary.flickers = flickerSummary(flickers, { battleSeconds, totalGhostFrames: summary.motion.ghostFrames, windowMs: flickerMs, pairs: flickerWords });
   summary.classes = classReport(swaps, { battleSeconds, totalGhostFrames: summary.motion.ghostFrames, prepared: classPrep, swapLog: meta.swapLog });

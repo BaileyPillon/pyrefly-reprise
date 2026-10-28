@@ -298,15 +298,14 @@ export abstract class PaintedActorPoses extends PaintedActorLife {
     return new SmearDirector({
       name: () => this.name,
       worldHeight: () => this.worldHeight,
-      planes: this.slots,
-      cells: this.u,
-      blend: this.blend,
+      planes: this.slots, cells: this.u, blend: this.blend,
       showing: () => this.active,
       poseOf: (i) => this.slots[i]!.pose,
       footprintOf: (i) => this.footprintOf(this.slots[i]!),
       canCut: () => this.smearsPlanes() && this.crossfadeMs > 0 && this.crossfadeMs <= BLEND_MS_MAX && !this.poseShiftPx,
       flash: (c, ms, peak) => this.flash(c, ms, peak),
       flashBlocked: () => this.softFlash?.() === true || this.flashTween !== null,
+      shiftPlane: (i, dx) => { const s = this.slots[i]!; s.align = dx; this.placeSlot(s); }, // MF-18 (`motion/CutAnchor.ts`): a big cut's incoming plane eases home from the old head
     });
   }
 
