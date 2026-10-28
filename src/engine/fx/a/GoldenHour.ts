@@ -36,6 +36,7 @@ import { isBigSpell, LensFlare } from './LensFlare.ts';
 import { buildLookLut, FFX2_RECIPE, FFX_RECIPE, LUT_SIZE } from './LookLut.ts';
 import { OverlayGlow } from './OverlayGlow.ts';
 import { hex3, sceneLookA, type SceneLookA } from './sceneLooks.ts';
+import { frameSeconds, frameStep } from '../../FrameClock.ts';
 import { bloomUnderCombat, fxShared } from '../fxShared.ts';
 
 /** What the battle screen hands over when a chapter's diorama is up. */
@@ -104,8 +105,8 @@ export class GoldenHour {
 
   /** Every frame, before the composer runs. */
   update(scene: Scene, camera: Camera): void {
-    const now = performance.now() / 1000;
-    const dt = this.lastNow ? Math.min(0.1, now - this.lastNow) : 0;
+    const now = frameSeconds(); // MF-20: the frame's own timestamp and the animation clock's clamp (`FrameClock.ts`)
+    const dt = frameStep(this.lastNow, now);
     this.lastNow = now;
     const info = bound;
     const game = info?.game === 'ffx' || info?.game === 'ffx2' ? info.game : null;

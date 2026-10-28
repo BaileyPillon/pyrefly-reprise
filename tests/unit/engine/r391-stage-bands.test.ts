@@ -16,7 +16,7 @@ import {
   nextBand,
   rowsForBudget,
 } from '../../../src/engine/StageBands.ts';
-import { evictions, roomFor, committedMB, warmCap, warmMB, warmRoom, WARM_MAX_MB, WARM_SHARE } from '../../../src/engine/ArtMemory.ts';
+import { coolOff, coolingFor, evictions, roomFor, committedMB, warmCap, warmMB, warmRoom, poseHeat, setWidePool, WARM_MAX_MB, WARM_MAX_MB_HIGH, WARM_SHARE, WARM_SHARE_HIGH } from '../../../src/engine/ArtMemory.ts';
 import type { Entry } from '../../../src/engine/ArtEntry.ts';
 import { textureMB } from '../../../src/engine/ArtBudget.ts';
 
@@ -94,11 +94,34 @@ function entry(over: Partial<Entry> & { w?: number; h?: number } = {}): Entry {
 }
 
 describe('the warm pool', () => {
-  it('is a share of the class budget and never more than 640 MB', () => {
-    expect(warmCap(2600)).toBe(WARM_MAX_MB); // high class: 780 would be 30 percent, the cap is 640
+  it('is a share of the class budget: 30 percent and never more than 640 MB below the high class, 42 percent and never more than 1,100 MB on it (MF-02)', () => {
+    expect(warmCap(2600)).toBeCloseTo(2600 * WARM_SHARE_HIGH, 6); // high class: 1,092 (release 64: 640)
+    expect(warmCap(2600)).toBeLessThanOrEqual(WARM_MAX_MB_HIGH);
     expect(warmCap(900)).toBeCloseTo(900 * WARM_SHARE, 6); // mid: 270
     expect(warmCap(220)).toBeCloseTo(66, 6); // phone: 66
     expect(warmCap(0)).toBe(0);
+    expect(warmCap(8000)).toBe(WARM_MAX_MB_HIGH); // a budget bigger than any class: the ceiling
+  });
+
+  it('is the old 640 MB of release 64 with the old pool asked for (?warmpool=old)', () => {
+    setWidePool(false);
+    try {
+      expect(warmCap(2600)).toBe(WARM_MAX_MB);
+      expect(warmCap(900)).toBeCloseTo(270, 6);
+    } finally {
+      setWidePool(undefined);
+    }
+  });
+
+  it('knows which poses are likely next: the strike, the spell and the flinch before the sleep, the victory and the overdrive paintings; a name it does not know keeps its order', () => {
+    const h = (u: string): number => poseHeat(u);
+    expect(h('/art/characters/tidus/attack.png')).toBeGreaterThan(h('/art/characters/tidus/victory.png'));
+    expect(h('/art/characters/tidus/idle%402x.png')).toBe(h('/art/characters/tidus/idle.webp'));
+    expect(h('/art/characters/valefor/cast@4x.png')).toBe(0.9);
+    expect(h('/art/characters/tidus/od-energy-rain%404x.png')).toBe(0.2);
+    expect(h('/art/characters/tidus/sleep.png')).toBeLessThan(h('/art/characters/tidus/ko.png'));
+    expect(h('/art/characters/x/p0.png')).toBe(h('/art/characters/x/p1.png')); // unknown: equal, so a stable sort keeps the registered order
+    expect(h('')).toBe(0.4);
   });
 
   it('counts only the paintings uploaded ahead and not drawn since, and the speculative loads on their way', () => {
@@ -108,17 +131,19 @@ describe('the warm pool', () => {
   });
 
   it("does not count a load's own pending megabytes twice when it asks whether it fits", () => {
+    const cap = warmCap(2600);
     const own = entry({ pendingMB: 30 });
-    const entries = [entry({ warm: true, mb: 600 }), own];
-    expect(warmRoom(entries, 30, 2600)).toBe(false); // 600 + 30 + 30 > 640
-    expect(warmRoom(entries, 30, 2600, own)).toBe(true); // 600 + 30 <= 640
+    const entries = [entry({ warm: true, mb: cap - 40 }), own];
+    expect(warmRoom(entries, 30, 2600)).toBe(false); // (cap - 40) + 30 + 30 > cap
+    expect(warmRoom(entries, 30, 2600, own)).toBe(true); // (cap - 40) + 30 <= cap
   });
 
   it('has room for a master while the pool plus it fits the cap', () => {
-    const entries = [entry({ warm: true, mb: 600 })];
-    expect(warmRoom(entries, 30, 2600)).toBe(true); // 630 <= 640
-    expect(warmRoom(entries, 41, 2600)).toBe(false); // 641 > 640
-    expect(warmRoom([], 640, 2600)).toBe(true);
+    const cap = warmCap(2600);
+    const entries = [entry({ warm: true, mb: cap - 40 })];
+    expect(warmRoom(entries, 30, 2600)).toBe(true); // cap - 10 <= cap
+    expect(warmRoom(entries, 41, 2600)).toBe(false); // cap + 1 > cap
+    expect(warmRoom([], cap, 2600)).toBe(true);
   });
 });
 
@@ -147,5 +172,62 @@ describe('the memory ledger', () => {
     const out = evictions([a, b, c, base], 10_000, 250);
     expect(out).toEqual([a, b]);
     expect(evictions([a, b, c, base], 10_000, 1000)).toEqual([]);
+  });
+});
+
+describe('giving cold warm uploads back for a hot pose (MF-02)', () => {
+  /** An entry of a named pose, resident and warm (staged before it was drawn), with a texture that counts its disposals. */
+  function warmPose(pose: string, mb: number, seen = -1e9): Entry & { freed: () => number } {
+    let freed = 0;
+    const e = entry({ warm: true, mb, lastSeen: seen, url: `/art/characters/tidus/${pose}.png` });
+    (e.texture as unknown as { dispose: () => void; needsUpdate: boolean }).dispose = () => void freed++;
+    return Object.assign(e, { freed: () => freed });
+  }
+
+  it('does nothing while the pool has room', () => {
+    const own = entry({ url: '/art/characters/ixion/attack.png' });
+    expect(coolingFor([warmPose('sleep', 100)], 50, 2600, own, 0.9)).toEqual([]);
+  });
+
+  it('gives the coldest back first, only as many as make room, and only poses 0.3 colder than the hot one', () => {
+    const cap = warmCap(2600);
+    const sleep = warmPose('sleep', cap / 2);
+    const victory = warmPose('victory', cap / 4);
+    const ko = warmPose('ko', cap / 4 - 1); // 0.5: only 0.4 colder than an attack: a candidate
+    const hurt = warmPose('hurt', 10); // as hot as the incoming pose: never a candidate
+    const own = entry({ url: '/art/characters/ixion/attack.png' });
+    const give = coolingFor([ko, hurt, victory, sleep], cap / 4, 2600, own, 0.9);
+    expect(give).toEqual([sleep]); // 0.2 first; its half of the pool is enough
+    const more = coolingFor([ko, hurt, victory, sleep], (3 * cap) / 4, 2600, own, 0.9);
+    expect(more).toEqual([sleep, victory, ko]); // the coldest, then the next, then the next
+    expect(more).not.toContain(hurt);
+  });
+
+  it('gives nothing back when giving back every candidate still would not make room', () => {
+    const cap = warmCap(2600);
+    const hot = warmPose('attack', cap - 1); // as hot as the incoming one: cannot be given back
+    const sleep = warmPose('sleep', 1);
+    const own = entry({ url: '/art/characters/ixion/cast.png' });
+    expect(coolingFor([hot, sleep], cap / 2, 2600, own, 0.9)).toEqual([]);
+  });
+
+  it('does not take a pose that is still being uploaded, or the entry itself', () => {
+    const cap = warmCap(2600);
+    const midway = warmPose('sleep', cap);
+    midway.staged = {} as unknown as Entry['staged'];
+    const own = warmPose('cast', 0);
+    expect(coolingFor([midway, own], 10, 2600, own, 0.9)).toEqual([]);
+  });
+
+  it('coolOff frees the GL copy, keeps the master, and makes the entry neither warm nor resident', () => {
+    const a = warmPose('sleep', 40);
+    const b = warmPose('victory', 30);
+    expect(coolOff([a, b])).toBe(2);
+    expect(a.freed()).toBe(1);
+    expect(b.freed()).toBe(1);
+    expect(a.warm).toBe(false);
+    expect(a.mb).toBe(0);
+    expect(a.scale).toBe(2); // the master is still on the texture
+    expect(warmMB([a, b])).toBe(0);
   });
 });

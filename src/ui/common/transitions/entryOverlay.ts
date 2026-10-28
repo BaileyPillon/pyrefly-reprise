@@ -16,6 +16,7 @@
  */
 
 import './transitions.css';
+import { coverClock } from './coverClock.ts';
 
 export interface EntryHooks {
   /** Swap screens under the held frame. May return a promise; the leaving waits for it. */
@@ -167,10 +168,11 @@ export async function playEntry(root: HTMLElement, player: EntryPlayer, hooks: E
   const loading = (hooks.whileCovered ? hooks.whileCovered(settled) : settled).catch(() => undefined);
 
   // The intro beat plays on the held frame while the battle loads.
-  const t0 = performance.now();
-  while (player.intro && performance.now() - t0 < player.introMs) {
+  // MF-21: the cover moves at most two frames' worth in a frame (`coverClock.ts`): a stall of the load behind it is a pause that goes on from where it stopped, not a jump
+  const introClock = coverClock();
+  while (player.intro && introClock.elapsed < player.introMs) {
     await frameWait(win);
-    paint(player.intro, Math.min(1, (performance.now() - t0) / player.introMs));
+    paint(player.intro, Math.min(1, introClock.tick() / player.introMs));
   }
   if (player.intro) paint(player.intro, 1);
   await loading;
@@ -178,10 +180,10 @@ export async function playEntry(root: HTMLElement, player: EntryPlayer, hooks: E
   const confirm = freshConfirm(win);
   let skipped = false;
   void confirm.pressed.then(() => (skipped = true));
-  const t1 = performance.now();
+  const outroClock = coverClock();
   try {
     for (;;) {
-      const t = skipped ? 1 : Math.min(1, (performance.now() - t1) / Math.max(1, player.outMs));
+      const t = skipped ? 1 : Math.min(1, outroClock.tick() / Math.max(1, player.outMs));
       paint(player.outro, t);
       if (t >= 1) break;
       await frameWait(win);

@@ -29,6 +29,18 @@ export function governMode(search: string | undefined): GovernMode {
   return w === 'on' ? 'on' : w === 'off' || w === 'today' ? 'off' : 'auto';
 }
 
+/**
+ * MF-10 (motion-fluidity pass, lane "mf-l4-freezes"; both games; `?govern=fixed`, DEFAULT OFF = release 64's reading): the governor reads the display's own frame timestamps (the one `App.step` has, `FrameClock.ts`) and not
+ * `performance.now()` at the look's update (whose callback-to-callback jitter alone sat on the old 18.0 ms recovery bar at 60 Hz), an interval over 100 ms is a load event and the 2 s round it are held out of the window
+ * (the opening's links and uploads used to take the first levels), and a level is given back after 4 s of calm, the wait doubling to 16 s on a failed probe (8 s to 96 s before). The levels and what they do are unchanged.
+ */
+export function governFixed(search: string | undefined): boolean {
+  return queryWord(search, 'govern') === 'fixed';
+}
+
+/** The options of the fixed reading (everything else is the governor's default). */
+export const FIXED_READING = { stallMs: 100, loadHoldMs: 2000, recoverAfterMs: 4000, maxRecoverMs: 16000 } as const;
+
 /** `?govbudget=<ms>`: the budget by hand (a capture, a test), or null. */
 export function governBudget(search: string | undefined): number | null {
   const n = Number(queryWord(search, 'govbudget'));
@@ -40,6 +52,7 @@ export class DemoGovernor {
   private lastScene: unknown = null;
   private mode: GovernMode = 'auto';
   private byHand: number | null = null;
+  private fixed = false;
   private isActive = false;
   private readonly search: string | undefined = typeof location === 'undefined' ? undefined : location.search;
   /** The last plan, for the debug API. */
@@ -48,6 +61,13 @@ export class DemoGovernor {
   constructor() {
     this.mode = governMode(this.search);
     this.byHand = governBudget(this.search);
+    this.fixed = governFixed(this.search);
+  }
+
+  /** MF-10: take the fixed reading (or not) from the next battle on: the governor is built when it first runs, so a capture sets this before the fight (`?govern=fixed` does the same from the address). */
+  useFixedReading(on: boolean): void {
+    this.fixed = on;
+    this.gov = null;
   }
 
   /** Switched off by hand (`__pyrefly.govern.enable(false)`, the cost harness): the levers rest as if `?govern=off`. */
@@ -61,7 +81,8 @@ export class DemoGovernor {
   }
 
   /** One frame of a battle. `scene` names the scene being drawn (a new one is a hold); `lanesOn` is whether the pro look or the pro camera is on. */
-  tick(now: number, scene: unknown, lanesOn: boolean): void {
+  tick(wall: number, scene: unknown, lanesOn: boolean, frameNow?: number): void {
+    const now = this.fixed && frameNow !== undefined && Number.isFinite(frameNow) && frameNow > 0 ? frameNow : wall; // MF-10: the display's own frame time with `?govern=fixed`, else the page clock at the look's update
     const on = this.gate(lanesOn);
     if (!on) {
       if (this.isActive) this.stop(now);
@@ -69,7 +90,7 @@ export class DemoGovernor {
     }
     if (!this.gov) {
       const budget = this.byHand ?? snapBudget(eyeCandy.probe.count >= 200 ? eyeCandy.probe.percentile(25) : 0);
-      this.gov = new FrameBudgetGovernor({ budgetMs: budget });
+      this.gov = new FrameBudgetGovernor({ budgetMs: budget, ...(this.fixed ? FIXED_READING : {}) });
     }
     if (!this.isActive) {
       this.isActive = true;
@@ -117,7 +138,7 @@ export class DemoGovernor {
 
   /** For `__pyrefly.govern()`. */
   report(): Record<string, unknown> {
-    return { mode: this.mode, active: this.isActive, live: { ...govLive }, governor: this.gov?.report() ?? null, plan: this.last };
+    return { mode: this.mode, fixed: this.fixed, active: this.isActive, live: { ...govLive }, governor: this.gov?.report() ?? null, plan: this.last };
   }
 }
 

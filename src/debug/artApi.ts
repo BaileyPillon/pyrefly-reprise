@@ -16,11 +16,19 @@ import { artBudget, bufferWidth, deviceClass, forcedArtScale, setArtTier, setFor
 import type { DeviceClass } from '../engine/ArtBudget.ts';
 import type { AaMode } from '../engine/PostAa.ts';
 import type { StageArt } from '../engine/StageArt.ts';
+import { thumbStats } from '../engine/look/AlphaThumb.ts';
+import { extentsReads } from '../engine/look/AlphaPrime.ts';
+
+/** The names of the GL programs the renderer has linked (three's `info.programs`), in link order: which program a long frame's `getProgramInfoLog` was waiting for. */
+function programNames(app: App): string[] {
+  const r = (app.renderer.renderer as unknown as { info?: { programs?: Array<{ name?: string; id?: number }> | null } }).info;
+  return (r?.programs ?? []).map((p) => `${p.id ?? '?'}:${p.name ?? '?'}`);
+}
 
 export function installArtDebug(api: Record<string, unknown>, app: App): void {
   const stageArt = (): StageArt | null => (app.current as unknown as { stage?: { art?: StageArt } } | null)?.stage?.art ?? null;
   api['art'] = {
-    stats: () => ({ device: deviceClass(), budget: artBudget(), bufferWidth: bufferWidth(), pinned: forcedArtScale(), aa: app.renderer.aaMode, governor: stageArt()?.stats() ?? null }),
+    stats: () => ({ device: deviceClass(), budget: artBudget(), bufferWidth: bufferWidth(), pinned: forcedArtScale(), aa: app.renderer.aaMode, governor: stageArt()?.stats() ?? null, alpha: { ...thumbStats(), extents: { ...extentsReads } }, programs: programNames(app) }),
     tier: (cls: DeviceClass | null) => setArtTier(cls),
     force: (scale: number | null) => setForcedArtScale(scale),
     stage: (on: boolean | null) => setStagedUploads(on), // release 39.1: the staged uploads on or off for the next stage, as `?stage=off` does

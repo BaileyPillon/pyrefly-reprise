@@ -12,7 +12,7 @@
  * Nothing is drawn while the switch is off or no boss is on screen (`on` false; the shaders' `bossMaskOn` is 0 and they draw today's rim). The mask is a normal texture uniform (null until the first draw), so the
  * main look pass without the bold pass (`?look=cinematic`, subtle strength) never sees an array to flatten (review major 3). Both games (shared plumbing); only the two bosses of `BossClean.ts` are ever flagged.
  */
-import { Color, DoubleSide, LinearFilter, Mesh, MeshBasicMaterial, NoBlending, NoColorSpace, PerspectiveCamera, PlaneGeometry, RGBAFormat, Scene, ShaderMaterial, UnsignedByteType, Vector3, Vector4, WebGLRenderTarget, type Camera, type Object3D, type Texture, type WebGLRenderer } from 'three';
+import { Color, DoubleSide, LinearFilter, Mesh, MeshBasicMaterial, NoBlending, NoColorSpace, PerspectiveCamera, PlaneGeometry, RGBAFormat, Scene, ShaderMaterial, UnsignedByteType, Vector3, Vector4, WebGLRenderTarget, type Camera, type Light, type Object3D, type Texture, type WebGLRenderer } from 'three';
 import { lin } from '../LookRoom.ts';
 import { BossClean, bossCleanOn, footFit, isCleanBossArt, type FootActor } from './BossClean.ts';
 import { rimSkipOf } from './RimFigures.ts'; // r63-play: a boss's companion and, when the party rim is off, the party are flagged like the boss
@@ -20,6 +20,24 @@ import { partyRimOff } from './PartyRimSwitch.ts';
 
 /** The camera layer the mask pass draws (no other code in the game uses layers). */
 export const MASK_LAYER = 6;
+
+/**
+ * MF-28 (lane "mf-l4-freezes", both games: FFX Chapter I Seymour Flux and FFX-2 Chapter IV Bahamut, the two re-cut bosses): put every light under `root` on `layer` as well as the default one. Three keeps ONE render state
+ * (and so one light list and one light hash) for every render of a scene at the same depth, and lists only the lights the camera's layers can see. The mask pass sees one layer with no lights in it, so the hash flipped
+ * from "five lights" to "none" and back twice a frame, every flip bumped the lights' version, and every lit material (13 a frame in Chapter I) went through three's program lookup (its parameters
+ * object and its cache key string, about 3 KB each) again: 13.65 lookups a frame, 0.59 with the lights on the layer. The mask draws flat (an override material no light touches) and with the shadow map off, so lights in its list change nothing it draws.
+ * Returns how many it touched.
+ */
+export function lightsOnLayer(root: Object3D, layer: number): number {
+  let n = 0;
+  root.traverse((o) => {
+    if ((o as Light).isLight === true) {
+      o.layers.enable(layer);
+      n++;
+    }
+  });
+  return n;
+}
 /** Alpha the flat figure needs to count as drawn (the frame's own cut is about 0.02; the fringe is read by the shaders' taps). */
 const ALPHA_CUT = 0.35;
 /** The mask's size against the frame (a half-size target: the shaders' taps read 2.5 frame px round a rim pixel). */
@@ -177,8 +195,15 @@ export class BossMask {
     }
   }
 
+  /** Frames until the scene is scanned for lights again (they are added when a stage is built, not in a fight; a scan every half second picks up a late one). */
+  private lightScan = 0;
+
   /** One flat draw of the figures (the layer) into `target`, every renderer and scene setting put back. */
   private draw(renderer: WebGLRenderer, scene: Scene, camera: Camera, target: WebGLRenderTarget): void {
+    if (this.lightScan-- <= 0) {
+      this.lightScan = 30;
+      lightsOnLayer(scene, MASK_LAYER);
+    }
     const prev = {
       target: renderer.getRenderTarget(),
       auto: renderer.autoClear,

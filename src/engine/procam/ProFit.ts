@@ -43,20 +43,22 @@ export function ndcRect(box: Box, pose: Pose, aspect: number): Ndc | null {
   let x1 = -Infinity;
   let y0 = Infinity;
   let y1 = -Infinity;
-  for (const x of [box.x0, box.x1]) {
-    for (const y of [box.y0, box.y1]) {
-      for (const z of [box.z0, box.z1]) {
-        const d = sub3([x, y, z], pose.pos);
-        const zc = dot3(d, f);
-        if (zc <= NEAR) return null;
-        const nx = dot3(d, r) / (zc * th * aspect);
-        const ny = dot3(d, u) / (zc * th);
-        x0 = Math.min(x0, nx);
-        x1 = Math.max(x1, nx);
-        y0 = Math.min(y0, ny);
-        y1 = Math.max(y1, ny);
-      }
-    }
+  // MF-28: the eight corners by index and scalars, no array a corner (the same sums in the same order as `sub3` and `dot3`: the numbers are the same bits); the camera fits call this a dozen times a frame
+  const px = pose.pos[0];
+  const py = pose.pos[1];
+  const pz = pose.pos[2];
+  for (let i = 0; i < 8; i++) {
+    const dx = ((i & 4) === 0 ? box.x0 : box.x1) - px;
+    const dy = ((i & 2) === 0 ? box.y0 : box.y1) - py;
+    const dz = ((i & 1) === 0 ? box.z0 : box.z1) - pz;
+    const zc = dx * f[0] + dy * f[1] + dz * f[2];
+    if (zc <= NEAR) return null;
+    const nx = (dx * r[0] + dy * r[1] + dz * r[2]) / (zc * th * aspect);
+    const ny = (dx * u[0] + dy * u[1] + dz * u[2]) / (zc * th);
+    x0 = Math.min(x0, nx);
+    x1 = Math.max(x1, nx);
+    y0 = Math.min(y0, ny);
+    y1 = Math.max(y1, ny);
   }
   return { x0, x1, y0, y1 };
 }

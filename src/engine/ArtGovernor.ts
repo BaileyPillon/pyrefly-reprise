@@ -1,7 +1,7 @@
 import type { PerspectiveCamera, Texture } from 'three';
 import { pickScale, requiredScale, textureMB } from './ArtBudget.ts';
 import { EVICT_EVERY_MS, MAX_LOADS, PERSIST_MS, SAFETY, SEEN_WINDOW_MS, URGENT_EXTRA, type Entry, type Need } from './ArtEntry.ts';
-import { evictions, roomFor, WARM_MIN_PIXELS, warmMB, warmRoom } from './ArtMemory.ts';
+import { coolOff, coolingFor, evictions, HOT_HEAT, poseHeat, roomFor, WARM_MIN_PIXELS, warmMB, warmRoom } from './ArtMemory.ts';
 import { imageHeight, imageWidth, pixelsPer1xTexel, type GovernedActor, type GovernedPainting, type GovernedStage, type GovernorDeps, type GovernorStats, type LoadedPixels } from './ArtMeasure.ts';
 
 export { PERSIST_MS, SEEN_WINDOW_MS } from './ArtEntry.ts';
@@ -46,6 +46,7 @@ export class ArtGovernor {
   private stagedLanded = 0;
   private warmed = 0;
   private lastSwapMs = 0;
+  private cooled = 0;
   private updateMs = 0;
   private readonly trace: GovernorStats['trace'] = [];
   private readonly swaps: GovernorStats['swaps'] = [];
@@ -137,7 +138,7 @@ export class ArtGovernor {
     }
     return {
       frame: this.frame, upgrades: this.upgrades, downgrades: this.downgrades, loadFailures: this.loadFailures, inflight: this.inflight, queued: this.ready.length,
-      staging: this.staging, stagedLanded: this.stagedLanded, warmed: this.warmed, warmMB: Math.round(warmMB(this.entries.values()) * 10) / 10,
+      staging: this.staging, stagedLanded: this.stagedLanded, warmed: this.warmed, cooled: this.cooled, warmMB: Math.round(warmMB(this.entries.values()) * 10) / 10,
       residentMB: Math.round(resident * 10) / 10, budgetMB: this.deps.budget().textureMB, lastSwapMs: this.lastSwapMs, updateMs: Math.round(this.updateMs * 1000) / 1000,
       entries, trace: [...this.trace], swaps: [...this.swaps],
     };
@@ -225,12 +226,12 @@ export class ArtGovernor {
           if (lead > s.baseScale && lead > s.scale && lead > s.loading) {
             const want = pickScale(lead, this.scalesOf(s), this.capOf(s));
             if (want > s.scale && want > s.loading) {
-              needs.push({ entry: s, want, rank: 1, px1x: 0 });
+              needs.push({ entry: s, want, rank: 1, px1x: poseHeat(s.url) }); // MF-02: the poses likely to be drawn next take the warm pool first (`ArtMemory.poseHeat`); with the same heat the order is the old one
               continue;
             }
           }
           if (warming && s.mb === 0 && !s.warm && !s.warmTried && s.loading === 0 && imageWidth(s.texture) * imageHeight(s.texture) >= WARM_MIN_PIXELS) {
-            if (warmRoom(this.entries.values(), textureMB(imageWidth(s.texture), imageHeight(s.texture)), this.deps.budget().textureMB)) needs.push({ entry: s, want: s.scale, rank: 1, px1x: 1, warm: true });
+            if (warmRoom(this.entries.values(), textureMB(imageWidth(s.texture), imageHeight(s.texture)), this.deps.budget().textureMB)) needs.push({ entry: s, want: s.scale, rank: 1, px1x: 1 + poseHeat(s.url), warm: true });
           }
         }
       }
@@ -299,7 +300,8 @@ export class ArtGovernor {
       return;
     }
     // Memory the painting is not using yet is speculative: it is staged only while the warm pool has room (a drawn painting is always staged).
-    const room = !this.unseen(e) || warmRoom(this.entries.values(), textureMB(got.image.width, got.image.height), this.deps.budget().textureMB, e);
+    let room = !this.unseen(e) || warmRoom(this.entries.values(), textureMB(got.image.width, got.image.height), this.deps.budget().textureMB, e);
+    if (!room && n.rank === 1 && !warm && poseHeat(e.url) >= HOT_HEAT) room = this.cool(textureMB(got.image.width, got.image.height), e); // MF-02: a hot pose takes the room of cold ones that were staged early
     const staged = got.bitmap && room ? (this.deps.stage?.(e.texture, got, n.rank === 0) ?? null) : null;
     if (!staged) {
       this.inflight--;
@@ -318,6 +320,13 @@ export class ArtGovernor {
       if (!ok) return this.clearLoading(e, n.want); // cancelled (a lost context, the painting left): not the master's fault, so it is not marked failed
       this.ready.push(() => this.apply(e, got, staged));
     });
+  }
+
+  /** MF-02: give back the early upload of the coldest warm entries (`ArtMemory.coolingFor`) so a hot pose of `e` can be staged; their masters stay on their textures and upload at their own first draw. True when room was made. */
+  private cool(sizeMB: number, e: Entry): boolean {
+    const give = coolingFor(this.entries.values(), sizeMB, this.deps.budget().textureMB, e, poseHeat(e.url));
+    this.cooled += coolOff(give);
+    return give.length > 0;
   }
 
   /** Cancel a painting's upload in progress (it left the field, or the stage ended). */

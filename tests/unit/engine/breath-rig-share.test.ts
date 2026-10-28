@@ -6,7 +6,8 @@
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Texture } from 'three';
-import { breathRigFor, prewarmBreathRig, releaseBreathRigs } from '../../../src/engine/fx/mix/breathRig.ts';
+import { breathRigFor, flatBreathRig, hasBreathRig, prewarmBreathRig, releaseBreathRigs } from '../../../src/engine/fx/mix/breathRig.ts';
+import { BREATH_THUMB, notePending, storeThumb } from '../../../src/engine/look/AlphaThumb.ts';
 
 const picture = (): { width: number; height: number } => ({ width: 64, height: 96 });
 const texOf = (img: object): Texture => {
@@ -58,5 +59,32 @@ describe('a rig is found by the picture', () => {
     const spy = vi.spyOn(document, 'createElement');
     breathRigFor(texOf(img));
     expect(spy.mock.calls.filter((c) => c[0] === 'canvas').length).toBe(0); // "not decoded yet: ask again next frame"
+  });
+});
+
+describe('the field of the worker (MF-02)', () => {
+  it('while the worker is making the field of a picture the flat rig stands in and the page starts no read of its own', () => {
+    const img = picture();
+    notePending(img, BREATH_THUMB);
+    const spy = vi.spyOn(document, 'createElement');
+    const cib = vi.fn();
+    vi.stubGlobal('createImageBitmap', cib);
+    expect(breathRigFor(texOf(img))).toBe(flatBreathRig());
+    expect(cib).not.toHaveBeenCalled();
+    expect(spy.mock.calls.filter((c) => c[0] === 'canvas').length).toBe(0);
+    vi.unstubAllGlobals();
+  });
+
+  it('once the field has landed the rig is made from it and kept for the picture: no read at all, and the next texture of the picture finds it', () => {
+    const img = picture();
+    const field = new Uint8Array(32 * 48);
+    for (let y = 10; y < 40; y++) for (let x = 8; x < 24; x++) field[y * 32 + x] = 255; // a body
+    storeThumb(img, BREATH_THUMB, field);
+    const spy = vi.spyOn(document, 'createElement');
+    const rig = breathRigFor(texOf(img));
+    expect(rig.source).toBe('runtime');
+    expect(hasBreathRig(img)).toBe(true);
+    expect(breathRigFor(texOf(img))).toBe(rig);
+    expect(spy.mock.calls.filter((c) => c[0] === 'canvas').length).toBe(0);
   });
 });

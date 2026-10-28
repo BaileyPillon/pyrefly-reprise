@@ -17,6 +17,7 @@
  */
 
 import { prefersReducedMotion } from '../common/transitions/reduceMotion.ts';
+import { coverClock } from '../common/transitions/coverClock.ts';
 
 /** The twist, the cut to black and the fade up, ms. Our estimate (the sheet: 0.4 s twisting, 1.0 s full twist and cut). */
 export const FF7_SWIRL_MS = { twist: 1000, black: 120, fadeUp: 360 } as const;
@@ -102,9 +103,9 @@ export async function playFf7Swirl(root: HTMLElement, opts: Ff7SwirlOptions): Pr
   const prior = { filter: target.style.filter, transform: target.style.transform, origin: target.style.transformOrigin };
   target.style.transformOrigin = '50% 50%';
   document.documentElement.dataset['ff7Swirl'] = 'twist';
-  const t0 = performance.now();
+  const twistClock = coverClock(); // MF-21: at most two frames' worth of twist in a frame (`coverClock.ts`)
   for (;;) {
-    const u = Math.min(1, (performance.now() - t0) / FF7_SWIRL_MS.twist);
+    const u = Math.min(1, twistClock.tick() / FF7_SWIRL_MS.twist);
     const e = ease(u);
     disp?.setAttribute('scale', String(2 * K * e));
     target.style.filter = `${disp ? `url(#${FILTER_ID}) ` : ''}brightness(${(1 + 1.6 * e * e).toFixed(3)}) saturate(${(1 - 0.5 * e).toFixed(3)})`;

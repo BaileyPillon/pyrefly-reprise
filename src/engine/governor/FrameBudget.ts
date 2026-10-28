@@ -44,6 +44,9 @@ export interface GovernorOptions {
   probeMs?: number;
   /** The wait before a recovery probe never grows past this, ms. */
   maxRecoverMs?: number;
+  /** MF-10 (`?govern=fixed`): an interval above this is a load event, not a reading, and the window around it is held out for `loadHoldMs`. The default is {@link STALL_MS} and no hold: release 64's reading. */
+  stallMs?: number;
+  loadHoldMs?: number;
 }
 
 export const DEFAULTS: Required<GovernorOptions> = {
@@ -56,6 +59,8 @@ export const DEFAULTS: Required<GovernorOptions> = {
   recoverAfterMs: 8000,
   probeMs: 6000,
   maxRecoverMs: 96000,
+  stallMs: 250,
+  loadHoldMs: 0,
 };
 
 /** An interval above this is a stall (a tab coming back, a shader compile), not a reading. */
@@ -190,7 +195,8 @@ export class FrameBudgetGovernor {
     const prev = this.lastNow;
     this.lastNow = now;
     const dt = prev < 0 ? 0 : now - prev;
-    if (prev >= 0 && dt > 0 && dt <= STALL_MS && now >= this.holdUntil) {
+    if (this.o.loadHoldMs > 0 && dt > this.o.stallMs) this.hold(now, this.o.loadHoldMs); // MF-10: a load event (a program link, a staged upload) empties the window: it says nothing about the display
+    else if (prev >= 0 && dt > 0 && dt <= this.o.stallMs && now >= this.holdUntil) {
       const cap = this.ts.length;
       this.ts[this.head] = now;
       this.iv[this.head] = dt;

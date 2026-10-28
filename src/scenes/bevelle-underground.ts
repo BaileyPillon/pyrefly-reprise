@@ -1488,7 +1488,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
         opacity,
         depthWrite: false,
         blending: AdditiveBlending,
-        side: DoubleSide,
+        side: DoubleSide, forceSinglePass: true, // MF-28: additive adds in any order: one pass draws what three's back-then-front split drew, for two program lookups fewer a draw
         fog: false,
       });
       beamMats.push(mat);
@@ -1703,7 +1703,7 @@ export const buildBevelleUndergroundScene: SceneFactory = async (
       opacity: 0.3,
       depthWrite: false,
       blending: AdditiveBlending,
-      side: DoubleSide,
+      side: DoubleSide, forceSinglePass: true, // MF-28: as the light shafts above (additive: one pass draws what two did)
       fog: false,
     });
     holeShaftMats.push(mat);

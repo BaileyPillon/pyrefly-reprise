@@ -88,6 +88,8 @@ export interface GovernorStats {
   staging: number;
   stagedLanded: number;
   warmed: number;
+  /** Warm entries given back so a hot pose could be staged (MF-02, `ArtMemory.coolingFor`). */
+  cooled: number;
   warmMB: number;
   residentMB: number;
   budgetMB: number;
