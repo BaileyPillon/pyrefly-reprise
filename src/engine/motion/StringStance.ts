@@ -6,7 +6,7 @@
  * Pure bookkeeping, no DOM, no `three`. With the default word nothing is ever held, so {@link back} returns the actor's own answer and the default is today's line for line.
  */
 export class StringStance {
-  private held: { token: number; pose: string } | null = null;
+  private held: { token: number; pose: string; paint: string | undefined } | null = null;
 
   /** The stance the flinch now starting hands back to: `requested`, unless the held flinch (`token` is still the actor's live one) is up, then the stance it began from. */
   back(requested: string, token: number): string {
@@ -14,8 +14,17 @@ export class StringStance {
     return h !== null && h.token === token && requested === 'hurt' ? h.pose : requested;
   }
 
-  /** The flinch `token` begins and will hand `pose` back; `hold` is true when more blows are expected, so the next flinch reads it. */
-  begin(token: number, pose: string, hold: boolean): void {
-    this.held = hold ? { token, pose } : null;
+  /**
+   * The painting the stance is drawn with (MF-05, `?stance=v1a|v1b`: `ready` on the idle painting): `requestedPaint` unless the held flinch is up, then the painting the string began from. Release 66 merge of
+   * mf-l1-swaps (the paint) and mf-l2-moves (the held string): a second blow of a string must not hand `ready` back on its own painting. With the default words nothing is held and this returns `requestedPaint`.
+   */
+  paint(requested: string, requestedPaint: string | undefined, token: number): string | undefined {
+    const h = this.held;
+    return h !== null && h.token === token && requested === 'hurt' ? h.paint : requestedPaint;
+  }
+
+  /** The flinch `token` begins and will hand `pose` (drawn with `paint`, when it is not its own painting) back; `hold` is true when more blows are expected, so the next flinch reads it. */
+  begin(token: number, pose: string, hold: boolean, paint?: string): void {
+    this.held = hold ? { token, pose, paint } : null;
   }
 }

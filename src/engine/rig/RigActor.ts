@@ -189,7 +189,7 @@ export class RigActor extends PaintedActor {
     return this.ready ? false : super.isPlaceholder;
   }
 
-  override setPose(name: string, opts?: { immediate?: boolean; force?: boolean }): void {
+  override setPose(name: string, opts?: { immediate?: boolean; force?: boolean; paint?: string }): void {
     const refused = this.refuses(name, opts);
     super.setPose(name, opts); // the life layer, the ring, the flinch tokens; the carrier itself stays on its idle
     if (!this.ready || refused) return;

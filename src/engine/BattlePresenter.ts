@@ -36,7 +36,7 @@ import { createEventCtx, playEvent, type EventCtx } from './BattlePresenterEvent
 import { clockEngine, followMenuLevel, MenuWaker, runMenuClock } from './BattlePresenterActive.ts';
 import { flushArrivals } from './BattlePresenterArrivals.ts';
 import { TurnCutInBeat } from './TurnCutIn.ts';
-import { settleForMenu, settleOpening } from './BattlePresenterSettle.ts';
+import { menuStance, settleForMenu, settleOpening } from './BattlePresenterSettle.ts'; // `menuStance` (fluidity pass, MF-05) is re-exported there: the menu's ready stance, with or without the ready painting
 import { aeonMenuRows } from './PayRows.ts';
 import { playOpening } from './OpeningSkip.ts';
 import { playUnheld } from './TargetFrameHold.ts';
@@ -582,7 +582,7 @@ export class BattlePresenter {
     const hud = this.deps.hud;
     if (!hud) return firstEnabled(commands);
 
-    this.ctx.stage.actor(actorId)?.setPose('ready');
+    menuStance(this.ctx, actorId); // setPose('ready'): the stance and its painting (or the idle's under ?stance=v1a|v1b)
     // PR-0005/PR-0061: the cut-in plays over the settle and the open menu, never in front of it.
     void this.cutIns.play(engine.state(), actorId);
     await settleForMenu(this.ctx); // PR-0094: the whole field in frame

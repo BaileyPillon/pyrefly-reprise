@@ -32,12 +32,14 @@ export interface PlannedSmear {
   flash: boolean;
   /** The engine KNOWS this pair is a big change though it could not read an outline for it (a standing body and the lying one of a knock-out: a plane laid on the floor has no footprint): the harness's `loggedAsBig` reads it. */
   big?: boolean;
+  /** MF-06: the class of swap that asked for this cut on its cause (`SwapSwitch.SwapClass`); absent for a cut the speed gate planned. */
+  cause?: string;
   kind: 'plane' | 'rig';
   /** When the cut itself falls (`at` plus the window's cut point, or half the move of a rig), ms. */
   cutAt: number;
 }
 
-const CAP = 400;
+const CAP = 4000; // a ten-minute fight plans about 400 cuts (Yunalesca): the harness reads the whole log at the end, so a short one drops the first cuts and reads them as snaps
 const log: PlannedSmear[] = [];
 
 /** Write one planned smear (the cut's own time is filled in). */

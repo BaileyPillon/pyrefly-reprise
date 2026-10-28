@@ -23,6 +23,9 @@ import { poseForAction } from './EnemyActionPose.ts';
 import { isFfx2, odApex, odKeyHolds } from './KeySlots.ts';
 import { motionMode } from './PoseSwap.ts';
 import { curvesOn } from './motion/CurvesSwitch.ts'; // motion pass (lane "core")
+import { stanceDone, stanceOnIdle } from './motion/StanceSwap.ts'; // fluidity pass (MF-05): a figure on the ready STANCE with the idle painting (?stance=v1a|v1b)
+import { noteReason } from './motion/SwapLog.ts';
+import { interludeMode } from './motion/SwapSwitch.ts'; // fluidity pass (MF-01): ?interlude=attack is post-flicker's hold alone
 
 /** How long the follow-through holds at full reach before the strike goes home, ms at timeScale 1. */
 export const FOLLOW_BEAT_MS = 180;
@@ -59,14 +62,43 @@ export function windUpOpens(ctx: EventCtx, event: Extract<BattleEvent, { type: '
  * (`odOpensAction`) never opens an action (it is FFX's), so it is not asked here.
  */
 export function readyCarriesIntoWindUp(ctx: EventCtx, actorId: CombatantId): boolean {
-  if (motionMode() === 'classic' || !isFfx2(ctx) || ctx.stage.sideOf(actorId) !== 'party') return false;
-  const shows = (ctx.stage.actor(actorId) as { pose?: string } | undefined)?.pose;
-  if (shows !== 'ready') return false;
-  const burst = ctx.burst;
-  const next = burst?.events[burst.at + 1];
-  if (!next || next.type !== 'action-start' || next.actorId !== actorId) return false;
+  const next = ownNextAction(ctx, actorId);
+  if (!next) return false;
   const pose = poseForAction(next, ctx.stage.sideOf(actorId), ctx.deps.abilityFacts, (p) => ctx.stage.paints?.(actorId, p) === true);
   return windUpOpens(ctx, next, pose);
+}
+
+/** The very next event of the burst when it is the figure's own `action-start` and she is a party girl on the ready stance in an ATB battle (FFX-2); else undefined. */
+function ownNextAction(ctx: EventCtx, actorId: CombatantId): Extract<BattleEvent, { type: 'action-start' }> | undefined {
+  if (motionMode() === 'classic' || !isFfx2(ctx) || ctx.stage.sideOf(actorId) !== 'party') return undefined; // `?motion=classic` brings back the old turn start (post-flicker's comparison word), casts and items included
+  const shows = (ctx.stage.actor(actorId) as { pose?: string } | undefined)?.pose;
+  if (shows !== 'ready' && !(shows === 'idle' && stanceOnIdle(ctx, actorId))) return undefined; // `?stance=v1a|v1b` (MF-05): on the ready stance with the idle painting
+  const burst = ctx.burst;
+  const next = burst?.events[burst.at + 1];
+  return next && next.type === 'action-start' && next.actorId === actorId ? next : undefined;
+}
+
+/**
+ * **MF-01, FFX-2 only, no look change** (the 37 other interludes of Chapter IV: 31 `ready, idle, cast`, 5 `ready, idle, item`, 1 other; 111 net see-through frames of the 931). The same turn-start drop as
+ * {@link readyCarriesIntoWindUp}, for the figure's own spell or item: the menu has put her on `ready`, her answer is one burst (`turn-start, action-start, ...`), and the turn start used to drop her to `idle`
+ * for 90 ms before the action put `cast` or `item` up: two dissolves in 0.2 s before every FFX-2 spell. True means the turn start leaves her pose alone: the pose she opens on replaces `ready` with ONE blend.
+ * Only when she has her own painting of that pose (else the pose resolves to the idle and nothing was gained by waiting), and not under REDUCE MOTION. A defend, a summon, a dressphere change and an
+ * Overdrive keep today's idle. `?interlude=attack` is post-flicker's attack-only hold (the "before" of the measure).
+ */
+export function readyCarriesIntoCastOrItem(ctx: EventCtx, actorId: CombatantId): boolean {
+  if (interludeMode() !== 'all' || !keysOn(ctx)) return false;
+  const next = ownNextAction(ctx, actorId);
+  if (!next || (next.command.kind !== 'ability' && next.command.kind !== 'item')) return false;
+  const pose = poseForAction(next, ctx.stage.sideOf(actorId), ctx.deps.abilityFacts, (p) => ctx.stage.paints?.(actorId, p) === true);
+  return (pose === 'cast' || pose === 'item') && ctx.stage.paints?.(actorId, pose) === true;
+}
+
+/** The turn starts: the figure goes to the idle, unless her own action is next and takes over from the ready she is on (the two holds above). */
+export function turnStartPose(ctx: EventCtx, actorId: CombatantId): void {
+  if (readyCarriesIntoWindUp(ctx, actorId) || readyCarriesIntoCastOrItem(ctx, actorId)) return;
+  stanceDone(ctx, actorId);
+  ctx.stage.actor(actorId)?.setPose('idle');
+  noteReason(actorId, 'idle', 'turn-start');
 }
 
 /**
@@ -178,11 +210,13 @@ export function idleAtEnd(ctx: EventCtx, actor: { setPose(n: string): void } | u
   const owed = id ? marksSwaps(ctx).get(id) : undefined;
   if (!id || !owed) {
     actor?.setPose('idle');
+    if (id) noteReason(id, 'idle', 'after-action');
     return;
   }
   void ctx.sleep(MARKS_NET_MS).then(() => {
     if (marksSwaps(ctx).get(id) !== owed) return; // the marks did it, or a later attack took over
     marksSwaps(ctx).delete(id);
     actor?.setPose('idle');
+    noteReason(id, 'idle', 'after-action');
   });
 }

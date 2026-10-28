@@ -630,8 +630,8 @@ export class PaintedActor extends Group {
   // --- life ----------------------------------------------------------------
   /** Posture + state machine. Null when `life: false`. */
   private readonly life: ActorLife | null;
-  /** The pose name that was *asked* for, before any fallback. */
-  private requested = '';
+  /** The pose name that was *asked* for, before any fallback, and the painting it was drawn with when that differs (MF-05: `setPose('ready', { paint: 'idle' })`, the ready stance on the idle painting). */
+  private requested = ''; private requestedPaint: string | undefined;
   /** Extra tilt and drop the KO fall (and the revive rise) contribute. */
   private fallTilt = 0;
   private fallDrop = 0;
@@ -1121,7 +1121,7 @@ export class PaintedActor extends Group {
    * nearest one there is, which is how a subject loaded with `states: ['idle']`
    * can still be asked to celebrate.
    */
-  setPose(name: string, opts?: { immediate?: boolean; force?: boolean }): void {
+  setPose(name: string, opts?: { immediate?: boolean; force?: boolean; paint?: string }): void {
     // A body on the ground is allowed to ignore the pose it was handed. The
     // one case is a hit landing on someone who is already KO'd: the presenter
     // still names `hurt` for it, and wincing (never mind the sit-up the rise
@@ -1138,7 +1138,7 @@ export class PaintedActor extends Group {
     }
     // A forced pose is the caller's word: a pending flinch may not hand it back.
     if (opts?.force) this.flinchToken++;
-    const resolved = this.resolveDrawable(name);
+    const resolved = this.resolveDrawable(opts?.paint ?? name);
     this.enterLife(name, opts?.immediate === true);
     if (this.cheerDue && this.beginCheer(name, opts, resolved)) return; // the victory painting waits for the spring's fastest frame
     if (!resolved) return;
@@ -1146,6 +1146,7 @@ export class PaintedActor extends Group {
     if (!next) return;
     const already = this.requested === name && this.pose === resolved;
     this.requested = name;
+    this.requestedPaint = opts?.paint;
     if (already && !opts?.force) return;
 
     const from = this.active;
@@ -1682,8 +1683,9 @@ export class PaintedActor extends Group {
     const life = this.life;
     if (!life || life.state === 'down' || this.flinching) return;
     const back = this.stance.back(this.requested || 'idle', this.flinchToken); // MF-12: a blow inside a held string hands back the stance the string began from, not the previous blow's hurt
+    const backPaint = this.stance.paint(this.requested || 'idle', this.requestedPaint, this.flinchToken); // MF-05: a girl struck with her menu open (?stance=v1a|v1b) comes back on the idle painting, not the ready one; inside a held string, on the painting the string began from
     const token = ++this.flinchToken;
-    this.stance.begin(token, back, hold > ms);
+    this.stance.begin(token, back, hold > ms, backPaint);
     this.flinching = true;
     try {
       this.setPose('hurt');
@@ -1691,8 +1693,7 @@ export class PaintedActor extends Group {
       this.flinching = false;
     }
     this.tintHurt(Math.max(160, ms * 0.7));
-    // A plain timer: hold the flinch, then hand the pose back — unless someone
-    // (a KO, the next action) has taken it in the meantime.
+    // A plain timer: hold the flinch, then hand the pose back (and its painting) — unless someone (a KO, the next action) has taken it in the meantime.
     this.tweens.to(0, 1, {
       durationMs: Math.max(1, hold), // MF-12 (`?hurtstring=hold`): the painting stays up through a string of blows; the next flinch takes the token and the last one lets go
       easing: 'linear',
@@ -1700,7 +1701,7 @@ export class PaintedActor extends Group {
       onComplete: () => {
         if (this.flinchToken !== token) return;
         if (this.life?.state !== 'hurt') return;
-        this.setPose(back === 'hurt' ? 'idle' : back);
+        this.setPose(back === 'hurt' ? 'idle' : back, back !== 'hurt' && backPaint ? { paint: backPaint } : undefined);
       },
     });
   }
