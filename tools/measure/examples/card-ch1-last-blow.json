@@ -1,0 +1,66 @@
+{
+  "id": "CP-06-proof-ch1-last-blow",
+  "title": "Chapter I: the boss at a sliver of hit points, the first blow is its last (the factory's proof of setup + until)",
+  "move": "last-blow",
+  "queryBase": "?coach=off",
+  "viewport": {
+    "w": 2560,
+    "h": 1440
+  },
+  "chapter": "seymour-flux",
+  "rates": [
+    60
+  ],
+  "keys": [
+    "Enter",
+    "Enter"
+  ],
+  "focus": [
+    "tidus",
+    "seymour-flux"
+  ],
+  "crop": {
+    "x": 480,
+    "y": 240,
+    "w": 1600,
+    "h": 900
+  },
+  "holdMenuMs": 1500,
+  "setup": [
+    {
+      "hp": {
+        "who": "boss",
+        "set": 1
+      }
+    },
+    {
+      "quiet": "boss"
+    }
+  ],
+  "until": {
+    "beat": {
+      "actor": "seymour-flux",
+      "kind": "life",
+      "life": "down"
+    },
+    "afterMs": 1500
+  },
+  "seconds": 25,
+  "variants": [
+    {
+      "id": "V0",
+      "name": "today (the live default)",
+      "query": ""
+    },
+    {
+      "id": "V1",
+      "name": "the booth pack (?pack=demo)",
+      "query": "&pack=demo"
+    }
+  ],
+  "questions": [
+    "Which reads as one knock-out?",
+    "Which would you keep?"
+  ],
+  "note": "Review round 2, R2-M3: the widened spec the first real run could not film. `hp` names the BOSS (the enemy with most hit points) at 1 hit point, `quiet` marks the chapter's own hp-below scripts as played (lowering a boss otherwise runs seymour-half at the next action), `until` waits for the PICTURE (the boss's life state going down: the log says KO in the instant of the key press), `holdMenuMs` leaves the first menu open 1.5 s. A card whose moment never happens exits 3 with FAILED.txt."
+}

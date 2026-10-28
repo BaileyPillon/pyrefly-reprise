@@ -13,6 +13,7 @@ import { figureHeightPx, smearPolicy, smearReport, smearedJerk, tagSmears } from
 import { unseenIn, unseenPolicy } from './continuity-unseen.mjs'; // R63-M1: a figure off the view cannot be seen to jerk or to snap (CHK-027)
 import { analyzeRigSwap, idleBoxOf, rigConfig, rigCoverage } from './continuity-rig.mjs';
 import { flickerPairs, flickerSummary, flickerWindowMs, tagFlickers } from './continuity-flicker.mjs'; // post-conference plan, step 2: the ready-idle-ready flicker, a named class (reported, not gated)
+import { classReport, prepareClasses } from './continuity-why.mjs'; // fluidity pass, T-02 (lane L5): the named classes, why a painting was asked for, the designed blend (reported; one switchable rule)
 
 /**
  * The anchors of every pose in the probe's pose table (`poses[k] = { url, ... }`), by pose key; null for a pose with no painting. `waivers` (continuity-waivers.mjs) is the ledger of poses
@@ -158,6 +159,7 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   // post-conference plan, step 2: a figure that shows A, then B, then A again within a tenth of a second (ready, idle, ready: Chapter IV's 22 in 6.3 minutes) is a FLICKER; both swaps are tagged and the summary counts them
   const flickerMs = flickerWindowMs(cfg), flickerWords = flickerPairs(cfg);
   const flickers = tagFlickers(swaps, flickerMs, flickerWords);
+  const classPrep = prepareClasses(swaps, meta.swapLog, cfg); // before the summary: an excused designed blend leaves ghostOverFail (off by default)
 
   // ---- jerks: every figure's feet and head (or centroid) on every frame
   const jerks = [];
@@ -195,6 +197,7 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   const smear = smearReport({ tally: smearTally, jerks, policy: smearP, smears: meta.smears });
   const summary = summarize({ swaps, jerks: visibleJerks, coveredJerks, smearedJerks, smear, battleSeconds, cfg, frameTime });
   summary.flickers = flickerSummary(flickers, { battleSeconds, totalGhostFrames: summary.motion.ghostFrames, windowMs: flickerMs, pairs: flickerWords });
+  summary.classes = classReport(swaps, { battleSeconds, totalGhostFrames: summary.motion.ghostFrames, prepared: classPrep, swapLog: meta.swapLog });
   const run = { fps: meta.stats?.fps ?? null, error: meta.errors?.length ? meta.errors[0] : null };
   summary.checks = verdicts(summary, cfg, run);
   summary.run = { fps: run.fps, maxDtMs: meta.stats?.maxDtMs ?? null, slowFrames: meta.stats?.slowFrames ?? null, frames: meta.stats?.battleFrames ?? null, probeErrors: meta.errors?.length ?? 0 };

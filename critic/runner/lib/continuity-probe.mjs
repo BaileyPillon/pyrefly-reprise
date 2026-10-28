@@ -382,13 +382,12 @@ export function createProbe(cfg, env) {
   S.drain = (max) => { const out = S.records.splice(0, max); return { records: out, left: S.records.length }; };
   // Motion pass (lane "core", step 2): the cuts the engine planned as a smear (window.__pyrefly.smearLog(), engine/motion/SmearLog.ts), in this probe's clock; a build without the log has none. A failure here never voids the probe's verdicts (it is not in `errors`): the harness then excuses nothing.
   const readSmears = () => {
-    try {
-      if (!win.__pyrefly || typeof win.__pyrefly.smearLog !== 'function') return [];
-      return win.__pyrefly.smearLog().map((e) => ({ actor: e.actor, from: e.from, to: e.to, style: e.style, kind: e.kind, cutMs: e.cutMs, moveMs: e.moveMs, strength: e.strength, flash: e.flash, overlap: e.overlap, anchorDistance: e.anchorDistance, speed: e.speed, big: e.big === true ? true : undefined, at: R1(e.at - S.t0), cutAt: R1(e.cutAt - S.t0) }));
-    } catch (e) { return []; }
+    try { if (!win.__pyrefly || typeof win.__pyrefly.smearLog !== 'function') return []; return win.__pyrefly.smearLog().map((e) => ({ actor: e.actor, from: e.from, to: e.to, style: e.style, kind: e.kind, cutMs: e.cutMs, moveMs: e.moveMs, strength: e.strength, flash: e.flash, overlap: e.overlap, anchorDistance: e.anchorDistance, speed: e.speed, big: e.big === true ? true : undefined, at: R1(e.at - S.t0), cutAt: R1(e.cutAt - S.t0) })); } catch (e) { return []; }
   };
+  // Fluidity pass, T-02 (lane L5): why the presenter asked for each painting and every blend it designed on purpose (window.__pyrefly.swapLog(), engine/motion/SwapLog.ts), in this probe's clock; a build without it has none, and a failure here never voids the probe's verdicts.
+  const readSwapLog = () => { const none = { reasons: [], designed: [] }; try { const l = win.__pyrefly && typeof win.__pyrefly.swapLog === 'function' ? win.__pyrefly.swapLog() : null; const m = (a) => (a || []).map((e) => ({ ...e, at: R1(e.at - S.t0) })); return l ? { reasons: m(l.reasons), designed: m(l.designed) } : none; } catch (e) { return none; } };
   S.meta = () => ({
-    version: S.version, figs: S.figs, poses: S.poses, swaps: S.swaps, logEvents: S.logEvents, view: S.view, errors: S.errors, smears: readSmears(),
+    version: S.version, figs: S.figs, poses: S.poses, swaps: S.swaps, logEvents: S.logEvents, view: S.view, errors: S.errors, smears: readSmears(), swapLog: readSwapLog(),
     wash: S.wash ? { selector: S.wash.selector, alpha: S.wash.alpha, frames: S.wash.frames, maxOpacity: R3(S.wash.maxOpacity), error: S.wash.error } : null,
     stats: { frames: S.frames, battleFrames: S.battleFrames, battleSeconds: R3(S.battleMs / 1000), maxDtMs: R1(S.maxDt), slowFrames: S.slowFrames, fps: S.battleMs > 0 ? R1((S.battleFrames * 1000) / S.battleMs) : null, copyMsMean: S.copies ? R3(S.copyMs / S.copies) : null },
     strips: S.strips.map((s) => ({ id: s.id, kind: s.kind, fi: s.fi, n: s.n, first: s.first, crop: s.crop, ring: s.ring, cell: s.cell, view: s.view, meta: s.meta, todo: s.todo, have: s.frames.filter(Boolean).length, length: s.frames.length })),

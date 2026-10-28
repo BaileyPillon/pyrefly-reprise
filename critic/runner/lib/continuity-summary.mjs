@@ -6,6 +6,7 @@
 // Game case: both (shared critic plumbing).
 
 import { HELD_MIN_FRAMES } from './continuity-held.mjs';
+import { ghostMsBlock, ghostRateText } from './continuity-ghostms.mjs';
 
 const round = (v, d) => { const k = 10 ** d; return Math.round(v * k) / k; };
 
@@ -21,7 +22,9 @@ export function frameTimeOf(dts, longMs = 34) {
   const s = [...dts].sort((a, b) => a - b);
   const q = (p) => s[Math.min(s.length - 1, Math.floor(p * s.length))];
   const longFrames = s.filter((v) => v > longMs).length;
-  return { frames: s.length, p50Ms: round(q(0.5), 1), p90Ms: round(q(0.9), 1), p99Ms: round(q(0.99), 1), maxMs: round(s[s.length - 1], 1), longFrames, longFramePct: round((longFrames / s.length) * 100, 1), longMs };
+  // T-01 (lane L5, PACE-08): the probe's own per-frame work and its strip encoding are in these times (it read Chapter IV as 409 frames over 34 ms where the same fight with only the in-page recorder has 4), so this is the
+  // harness's load, NOT the game's pacing: `pacingNumber: false` says so in the file; the game's pacing is read by tools/pace.mjs (critic/runner/lib/pace-init.page.js, pace-pure.mjs).
+  return { frames: s.length, p50Ms: round(q(0.5), 1), p90Ms: round(q(0.9), 1), p99Ms: round(q(0.99), 1), maxMs: round(s[s.length - 1], 1), longFrames, longFramePct: round((longFrames / s.length) * 100, 1), longMs, source: 'continuity-probe', pacingNumber: false };
 }
 
 /**
@@ -52,7 +55,8 @@ export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], 
   const ghostSwaps = counted.filter((s) => s.ghost.frames > 0);
   const failHead = judged.filter((s) => s.failHead);
   const failFeet = judged.filter((s) => s.failFeet);
-  const ghostFail = counted.filter((s) => s.ghost.severity >= cfg.motion.ghostSeverityFail);
+  // T-02 (lane L5): a DESIGNED blend the planner declared (continuity-why.mjs; the policy's classes.designedBlend.excuse, off by default) of at most its maxSeverity is reported apart and is not a double image to fail
+  const ghostFail = counted.filter((s) => s.ghost.severity >= cfg.motion.ghostSeverityFail && !s.designedExcused);
   const perMin = (n) => (minutes > 0 ? round(n / minutes, 2) : null);
   const bySnapPose = {};
   for (const s of snaps) bySnapPose[s.toPose] = (bySnapPose[s.toPose] ?? 0) + 1;
@@ -111,6 +115,10 @@ export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], 
       lowestIou: round(counted.reduce((m, s) => (s.outline ? Math.min(m, s.outline.iou) : m), 1), 3),
       maxCentroidShiftPx: round(counted.reduce((m, s) => (s.outline ? Math.max(m, s.outline.centroidShiftPx) : m), 0), 1),
       ghostSwaps: ghostSwaps.length, ghostFrames: counted.reduce((n, s) => n + s.ghost.frames, 0), worstGhostSeverity: round(counted.reduce((m, s) => Math.max(m, s.ghost.severity), 0), 3), ghostOverFail: ghostFail.length,
+      // fluidity pass, T-01 (lane L5): the see-through time in MILLISECONDS is the primary number, the frame counts are its 60 Hz convenience. A 120 ms blend is 7 frames at 60 Hz and 17 at 144 Hz, so a frame count reads
+      // 2.4 times higher on a 144 Hz capture for the same double image; the ms are each swap's own (`ghost.ms`, the time between the drawn frames that showed it) and do not depend on the display (continuity-ghostms.mjs).
+      ...ghostMsBlock(counted, minutes),
+      ghostDesignedExcused: counted.filter((s) => s.designedExcused).length,
       jerks: jerks.length, jerksMidMove: jerkMid.length, worstJerkPx: round(jerks.reduce((m, j) => Math.max(m, j.px), 0), 1), jerksOverFail: jerks.filter((j) => j.px >= failPx).length,
       swapJerks: swapJerks.length, swapJerksWorstPx: round(swapJerks.reduce((m, j) => Math.max(m, j.px), 0), 1), swapJerksOverFail: swapJerks.filter((j) => j.px >= failPx).length,
       teleports: teleports.length, teleportsWorstPx: round(teleports.reduce((m, j) => Math.max(m, j.px), 0), 1),
@@ -168,6 +176,7 @@ export function verdicts(s, cfg, run = {}) {
   const motionNotes = why([
     hasSplit && !dashesFail && dashOver && `${dashOver} mid-move dash(es) of ${cfg.motion.jerkFailPx} px or more are REPORTED, not gated (worst ${s.motion.dashesWorstPx} px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them)`,
     hasSplit && (s.motion.swapJerksLongFrame || s.motion.jerksLongFrame) && `${s.motion.jerksLongFrame} of ${s.motion.jerks} jerk(s) fell on a frame of more than ${cfg.motion.longFrameMs ?? 34} ms (${s.motion.swapJerksLongFrame} of the ${s.motion.swapJerks} at a swap; ${s.motion.swapJerksSteadyOverFail} of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them`,
+    s.motion.ghostDesignedExcused && `${s.motion.ghostDesignedExcused} designed blend(s) the planner declared (the swap log's designed list, at most the policy's classes.designedBlend.maxSeverity) are not counted as double images over the line; they stay in summary.classes.designedBlend and in the swaps' designed tag`,
     s.motion.smearSwaps && `${s.motion.smearSwaps} of ${s.motion.smearsPlanned} cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: ${s.motion.smearSnapsExcused} snap(s) not counted, ${s.motion.jerksSmeared} swap jerk(s) (worst ${s.motion.worstSmearedJerkPx} px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before`,
     s.motion.jerksCovered && `${s.motion.jerksCovered} jerk(s) (worst ${s.motion.worstCoveredJerkPx} px) happened under the Save Sphere's wash and are not counted (continuity.wash in the policy; they are listed in the report)`,
   ]);
@@ -198,7 +207,8 @@ export function continuityReportLine(s) {
   const verdict = (c) => (c ? `${c.result}${c.reasons && c.reasons.length ? ` (${c.reasons.join('; ')})` : ''}` : 'not read');
   const covered = s.motion && s.motion.jerksCovered ? `; ${s.motion.jerksCovered} jerk(s) (worst ${s.motion.worstCoveredJerkPx} px) under the Save Sphere's wash are not counted` : '';
   const unscored = dedicated < rows.length ? `; ${rows.length - dedicated} chapter(s) were not run by the dedicated harness (no marker: an older file or a failed run), so their numbers are not scored` : '';
-  return `continuity harness (CHK-026/CHK-027): ${rows.length} chapter(s), ${s.battleSeconds} s of battle, ${fpsText}, ${dedicated} of ${rows.length} run by the dedicated harness; CHK-026 ${verdict(s.checks['CHK-026'])}; CHK-027 ${verdict(s.checks['CHK-027'])}${covered}${unscored}`;
+  const ghostText = ghostRateText(s.motion); // T-01 (lane L5): the see-through time in milliseconds, the display-independent unit, beside the frame count
+  return `continuity harness (CHK-026/CHK-027): ${rows.length} chapter(s), ${s.battleSeconds} s of battle, ${fpsText}, ${dedicated} of ${rows.length} run by the dedicated harness; CHK-026 ${verdict(s.checks['CHK-026'])}; CHK-027 ${verdict(s.checks['CHK-027'])}${ghostText ? `; ${ghostText}` : ''}${covered}${unscored}`;
 }
 
 /**

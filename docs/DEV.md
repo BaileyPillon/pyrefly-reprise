@@ -358,6 +358,19 @@ compares the frames of two builds. A production build does not fit twice on D: (
 environment reproduces the live `index-BygGxbJE.js`) and `tools/overlay-static.mjs` serves it over the art of any full build (for example the live artifact, `dist-release`), answering as Cloudflare does
 (`/assets/*` immutable, everything else revalidated). Details and the numbers: `docs/handoff/post-fight-start.md`.
 
+### Measuring motion fluidity (the motion-fluidity pass, lane L5; tooling, both games)
+
+All of these serve a built candidate read-only (`--dist <folder>`, e.g. a review's `dist-gate`), take the `RIG-RECORD` lock for their own browser job, and stamp their output with the tool's identity. Details: `critic/runner/lib/README.md`, `docs/handoff/mf-l5-tools.md`.
+
+| What | Command |
+|---|---|
+| Frame pacing of a fight (animation time lost a minute; never from the continuity probe or a trace) | `node tools/pace.mjs --dist <dir> --chapter ffx2-bahamut --size 2560x1440 --label ch4-1440-cap` (`--analyze <run dir>` re-reads one) |
+| 60 / 120 / 144 Hz equality of one scripted moment | `node tools/hz-matrix.mjs --dist <dir> --chapter seymour-flux` (`--judge <dir>` judges captures again) |
+| Velocity jolts per fight, against a baseline | `node tools/jolts.mjs --dist <dir> --chapter ffx2-bahamut --hz 60 --label a [--out <dir>]`, at least 3 captures a side; the verdict is `node tools/jolts.mjs --set a.json,b.json,c.json --baseline-set d.json,e.json,f.json` (a lone capture cannot size the spread of the fight itself, so one capture against one is NOT A VERDICT); `--rec <recording.json>` counts a saved recording; judged on an exactly 1/60 s grid (`--raw`: the curves lane's every-frame method, never across rates); a comparison across unlike runs is refused (exit 2) |
+| A blind phone clip card of look variants (address words on one build) | `node tools/ab-clip.mjs --spec <card.json> --dist <built folder>` (exit 3 and FAILED.txt when the moment the spec names never happened); examples in `tools/measure/examples/`; from an existing side-by-side clip: `node tools/ab-video.mjs --src <clip.mp4> --id ... --chapter ch1 --move ...` |
+| Does the FFX-2 ready shimmer restart with each HUD rebuild | `node tools/atb-shimmer.mjs --dist <dir>` |
+| Who allocates per frame | `node tools/alloc-profile.mjs --dist <dir> --chapter ffx2-bahamut --seconds 60` |
+
 ## The conference demo build's switches (release 60)
 
 Bailey's picks of 2026-10-20 (decision 157; "I demo my game in a week at a huge gaming conference"). Presentation and seed choice only: no engine, no rule, no game number changes, and the three goldens
