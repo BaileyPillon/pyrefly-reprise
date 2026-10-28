@@ -10,6 +10,7 @@ import { waiverFor } from './continuity-waivers.mjs';
 import { STAGED_GAP_FRAMES, groupStaged, stagedStepOf } from './continuity-staged.mjs';
 import { tagWash, washPolicy, washReport } from './continuity-wash.mjs';
 import { excuseGlideFeet, figureHeightPx, smearPolicy, smearReport, smearedJerk, tagSmears } from './continuity-smear.mjs'; // motion pass (lane "core", step 2): a PLANNED smear is not a snap or a swap jerk (CHK-027)
+import { dissolvePolicy, dissolveTravel } from './continuity-dissolve.mjs'; // pc-residues: the weighted head's travel inside a dissolve is not a swap jerk (CHK-027)
 import { unseenIn, unseenPolicy } from './continuity-unseen.mjs'; // R63-M1: a figure off the view cannot be seen to jerk or to snap (CHK-027)
 import { analyzeRigSwap, idleBoxOf, rigConfig, rigCoverage } from './continuity-rig.mjs';
 import { flickerPairs, flickerSummary, flickerWindowMs, tagFlickers } from './continuity-flicker.mjs'; // post-conference plan, step 2: the ready-idle-ready flicker, a named class (reported, not gated)
@@ -165,6 +166,7 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
 
   // ---- jerks: every figure's feet and head (or centroid) on every frame
   const jerks = [];
+  const dissolveP = dissolvePolicy(cfg);
   for (const [i, list] of byFig) {
     const byC = centroidFigs.has(i);
     const track = list.map((e) => { const tr = figureTrack(e.fig, anchors, byC); return tr ? { n: e.n, t: e.t, feet: tr.feet, head: tr.head, centroid: tr.centroid, cam: e.fig.g, cams: perPoint ? tr.cams : null, unseen: unseenP.excuse && unseenIn(e.fig, meta.view, unseenP) } : null; });
@@ -185,7 +187,8 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
       const commonMode = atSwap && cfg.jerks?.commonMode === true && typeof e.relPx === 'number' && e.relPx < cfg.motion.jerkFailPx && e.relPx <= 0.5 * e.px && !mine.some((s) => near(s) && s.hardCut);
       const kind = atSwap && !commonMode ? 'swap' : cfg.jerks?.teleportPx && e.px >= cfg.jerks.teleportPx ? 'teleport' : 'dash';
       const smeared = kind === 'swap' ? smearedJerk(e, mine.find((s) => s.smear && near(s)), smearP) : null; // a jerk AT a planned smear's cut, no bigger than the policy's cap (maxJerkPx, or maxJerkShare of the drawn height)
-      jerks.push({ ...e, figure: figs[i]?.id ?? String(i), fi: i, atSwap, ...(commonMode ? { commonMode: true } : {}), kind, frameMs, longFrame: frameMs !== null && frameMs > longMs, ...(stagedAt ? { staged: { kind: stagedAt.staged.kind, seq: stagedAt.staged.seq } } : {}), ...(smeared ? { smeared } : {}), cause: causeOf(meta.logEvents, e.n, 60) });
+      const dissolve = kind === 'swap' && !smeared && !stagedAt ? dissolveTravel({ jerk: e, swap: mine.find((s) => near(s) && !s.hardCut && s.counted), frames: list, policy: dissolveP }) : null; // pc-residues: Kimahri follow to idle, Tidus hurt to critical
+      jerks.push({ ...e, figure: figs[i]?.id ?? String(i), fi: i, atSwap, ...(dissolve ? { dissolveTravel: dissolve } : {}), ...(commonMode ? { commonMode: true } : {}), kind, frameMs, longFrame: frameMs !== null && frameMs > longMs, ...(stagedAt ? { staged: { kind: stagedAt.staged.kind, seq: stagedAt.staged.seq } } : {}), ...(smeared ? { smeared } : {}), cause: causeOf(meta.logEvents, e.n, 60) });
     }
   }
   jerks.sort((a, b) => b.px - a.px).forEach((j, id) => { j.id = id; });
@@ -193,11 +196,19 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   // report shows it) and is left out of the summary, the verdict and the worst-jerk strips, as a jerk under a camera cut never gets that far (continuity-wash.mjs).
   const wash = washPolicy(cfg);
   tagWash(jerks, { records, alpha: meta.wash?.alpha ?? null, policy: wash });
-  const visibleJerks = jerks.filter((j) => !j.covered && !j.smeared), coveredJerks = jerks.filter((j) => j.covered), smearedJerks = jerks.filter((j) => j.smeared && !j.covered);
+  // pc-residues (method check step 2, Rikku's twirl): the keys of the spherechange's twirl are CUT to each other by design (Bailey's D-322 and P4, kept stepped on 2026-10-10), the harness already
+  // reads such a cut as a costume change and not as a snap or a swap, and its jerk was still gated as a pose swap's. A jerk AT a staged step that is no bigger than `staged.jerkExcusePx`
+  // (the policy's, 0 turns it off) is the twirl working as designed: reported (`stagedExcused`, motion.jerksStagedExcused) and not gated; a bigger one (a key painting placed far from its
+  // neighbour) stays a swap jerk.
+  const stagedExcusePx = Number.isFinite(cfg.staged?.jerkExcusePx) ? cfg.staged.jerkExcusePx : 0;
+  for (const j of jerks) if (j.staged && j.kind === 'swap' && !j.smeared && j.px <= stagedExcusePx) j.stagedExcused = true;
+  const visibleJerks = jerks.filter((j) => !j.covered && !j.smeared && !j.stagedExcused && !j.dissolveTravel), coveredJerks = jerks.filter((j) => j.covered), smearedJerks = jerks.filter((j) => j.smeared && !j.covered);
+  const stagedExcusedJerks = jerks.filter((j) => j.stagedExcused && !j.covered);
+  const dissolveJerks = jerks.filter((j) => j.dissolveTravel && !j.covered);
 
   const battleSeconds = meta.stats?.battleSeconds ?? 0;
   const smear = smearReport({ tally: smearTally, jerks, policy: smearP, smears: meta.smears, glide: glideTally });
-  const summary = summarize({ swaps, jerks: visibleJerks, coveredJerks, smearedJerks, smear, battleSeconds, cfg, frameTime });
+  const summary = summarize({ swaps, jerks: visibleJerks, coveredJerks, smearedJerks, stagedExcusedJerks, dissolveJerks, smear, battleSeconds, cfg, frameTime });
   summary.flickers = flickerSummary(flickers, { battleSeconds, totalGhostFrames: summary.motion.ghostFrames, windowMs: flickerMs, pairs: flickerWords });
   summary.classes = classReport(swaps, { battleSeconds, totalGhostFrames: summary.motion.ghostFrames, prepared: classPrep, swapLog: meta.swapLog });
   const run = { fps: meta.stats?.fps ?? null, error: meta.errors?.length ? meta.errors[0] : null };

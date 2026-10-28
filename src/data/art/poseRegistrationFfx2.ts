@@ -231,7 +231,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     critical: { scale: 1.282, stanceX: 376.5, head: [0.5822, 0.2364, 0.6942, 0.298], status: 'held', class: 'low', stature: 0.819, headReal: 1.222, iou: 0.231, sha: 'a9c420d96b0a5634' },
     defend: { scale: 1.121, stanceX: 323.5, head: [0.3945, 0.2631, 0.5556, 0.3121], status: 'ok', class: 'standing', stature: 1.043, headReal: 0.987, iou: 0.403, sha: '9640836a90fe89c3' },
     follow: { scale: 1.406, stanceX: 327.0, head: [0.4727, 0.1255, 0.5761, 0.1818], status: 'held', class: 'standing', stature: 0.901, headReal: 1.265, iou: 0.287, sha: '770c670463d09f79' },
-    hurt: { scale: 1.323, stanceX: 315.5, head: [0.1954, 0.1467, 0.3494, 0.2026], status: 'held', class: 'standing', stature: 0.903, headReal: 1.153, iou: 0.302, sha: 'b0f97721cc051ede' },
+    hurt: { scale: 1.367, stanceX: 315.5, head: [0.1979, 0.1475, 0.3469, 0.2018], status: 'held', class: 'standing', stature: 0.931, headReal: 1.19, iou: 0.302, sha: 'b0f97721cc051ede' },
     idle: { stanceX: 286.5, head: [0.448, 0.2417, 0.6559, 0.2929], status: 'ok', class: 'idle', stature: 1, iou: 1, sha: 'dfc175bed545b358' },
     item: { scale: 1.307, stanceX: 176.5, head: [0.3202, 0.1811, 0.5128, 0.234], status: 'ok', class: 'standing', stature: 0.957, headReal: 1.047, iou: 0.532, sha: 'b06f2dfcc50d260c' },
     ko: { scale: 1.339, head: [0.7985, 0.3949, 0.8781, 0.4851], status: 'ok', class: 'ko', stature: 0.539, headReal: 1, lengthRatio: 1.197, iou: 0.083, sha: 'f6a72a18923101ed' },
@@ -367,7 +367,7 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
   },
   'yuna-white-mage': {
     attack: { scale: 1.41, stanceX: 286.0, head: [0.456, 0.2523, 0.5213, 0.3036], status: 'ok', class: 'standing', stature: 0.991, headReal: 1.009, iou: 0.325, sha: '78c4ea4439024d06' },
-    cast: { scale: 1.116, stanceX: 279.0, head: [0.3716, 0.3517, 0.4731, 0.3985], status: 'held', class: 'standing', stature: 1.102, headReal: 0.895, iou: 0.487, sha: 'e7c35b3e2dba63cd' },
+    cast: { scale: 1.086, stanceX: 279.0, head: [0.3702, 0.351, 0.4745, 0.3992], status: 'held', class: 'standing', stature: 1.071, headReal: 0.87, iou: 0.471, sha: 'e7c35b3e2dba63cd' },
     critical: { scale: 1.109, stanceX: 395.0, head: [0.596, 0.2365, 0.6758, 0.2995], status: 'held', class: 'low', stature: 0.806, headReal: 1.243, iou: 0.367, sha: '847d0abf923cb1d9' },
     defend: { scale: 1.169, stanceX: 346.5, head: [0.4956, 0.115, 0.5984, 0.1701], status: 'ok', class: 'standing', stature: 0.935, headReal: 1.085, iou: 0.412, sha: '27ab21d36c8d0d3d' },
     follow: { scale: 1.288, stanceX: 237.0, head: [0.3639, 0.256, 0.4422, 0.3069], status: 'ok', class: 'standing', stature: 1.023, headReal: 0.98, iou: 0.453, sha: '7534220ace360f90' },

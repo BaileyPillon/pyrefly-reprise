@@ -14,7 +14,7 @@
  * | `?strikeshape=` (MF-14 V3, both games) | `travel` | `today` (with `?curves=new` it reads nothing; with `?curves=real-snappy` it is the clip's own dash) | exactly where `real-snappy` plays: the two pack chapters, the pack on, a desktop-class screen (`houseTravel` answers only for the 1.1 s pick) |
  *
  * Pinned here: the six defaults; that `?stance=today&swapcause=today&hit=today&run=today&curves=new&rigko=today` reads release 66's defaults and, through the real readers, release 66's LOOK (the stance, the cause and the hit
- * decisions the presenter asks the modules); that each flip reaches exactly the scope it had (pack chapters only for the two swap words, `?pack=off`, a phone and no page leave release 66's look; `?swapscope`
+ * decisions the presenter asks the modules, and the ready hold of three FFX-2 dresses, `ReadyIdentity.ts`, which rides on the stance look: off wherever it is `today`); that each flip reaches exactly the scope it had (pack chapters only for the two swap words, `?pack=off`, a phone and no page leave release 66's look; `?swapscope`
  * still widens); and that the other swap words did not move (`?swapclass`, `?swapscope`, `?interlude`). Each lane's own tests pin the looks in depth. The one place to change a pick is named in
  * `docs/handoff/r67-picks.md`.
  *
@@ -24,6 +24,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { houseTravel } from '../../src/engine/motion/RealMotion.ts';
 import { CURVES_DEFAULT, curvesModeFromSearch, curvesMode, curvesOn, realKind, setCurvesMode } from '../../src/engine/motion/CurvesSwitch.ts';
 import { setDemoChapter, setPackScreen } from '../../src/engine/motion/DemoGate.ts';
+import { readyHeldOnIdle, setReadyIdOff } from '../../src/engine/motion/ReadyIdentity.ts';
 import { runMode } from '../../src/engine/motion/RunEase.ts';
 import { rigKoWhole } from '../../src/engine/rig/RigHandoff.ts';
 import { MOVE_DEFAULTS, MOVE_WORDS, moveDefault, moveWord, moveWordFromSearch, setMoveWord, type MoveKey } from '../../src/engine/motion/MoveSwitch.ts';
@@ -54,6 +55,7 @@ import {
 function visit(search: string): void {
   window.history.pushState({}, '', `/${search}`);
   setStanceMode(null);
+  setReadyIdOff(null); // the ready hold (pc-residues, review M5) reads the address once, like the other switches
   setCauseMode(null, null);
   setSwapScope(null);
   setInterludeMode(null);
@@ -74,9 +76,10 @@ const CH5 = 'ffx2-vegnagun-shuyin'; // FFX-2 Chapter V: the run-in plays, the ne
 const UNCOVERED = SWAP_CLASSES.filter((c) => !COVERED.has(c));
 
 /** What the presenter asks the modules in the running chapter: the whole of the three looks, as data. */
-function lookNow(): { stance: string; menuKeepsIdle: boolean; windUpOnIdle: boolean; cause: Record<string, string>; hit: string } {
+function lookNow(): { stance: string; menuKeepsIdle: boolean; windUpOnIdle: boolean; readyHold: boolean; cause: Record<string, string>; hit: string } {
   return {
     stance: stanceNow(),
+    readyHold: readyHeldOnIdle('paine-warrior'), // PR-0517 (pc-residues): a dress whose ready painting is another figure keeps the idle painting wherever the stance look plays
     menuKeepsIdle: menuKeepsIdle(),
     windUpOnIdle: windUpOnIdle(),
     cause: Object.fromEntries(SWAP_CLASSES.map((c) => [c, swapHow(c)])),
@@ -101,6 +104,7 @@ const RELEASE_66 = {
   stance: 'today',
   menuKeepsIdle: false,
   windUpOnIdle: false,
+  readyHold: false,
   cause: Object.fromEntries(SWAP_CLASSES.map((c) => [c, 'today'])),
   hit: 'today',
 };
@@ -109,6 +113,7 @@ const PICKS = {
   stance: 'v1a',
   menuKeepsIdle: true,
   windUpOnIdle: false,
+  readyHold: true,
   cause: Object.fromEntries(SWAP_CLASSES.map((c) => [c, COVERED.has(c) ? 'cut' : 'blend3'])),
   hit: 'knock',
 };

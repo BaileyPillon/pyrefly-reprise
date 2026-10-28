@@ -12,6 +12,7 @@
 import type { CombatantId } from '../../battle/common/types.ts';
 import type { EventCtx } from '../BattlePresenterEvents.ts';
 import { noteReason } from './SwapLog.ts';
+import { readyHeldOnIdle } from './ReadyIdentity.ts';
 import { menuKeepsIdle, windUpOnIdle } from './SwapSwitch.ts';
 
 /** Who stands on the ready stance with the idle painting, per playback. */
@@ -33,11 +34,16 @@ export function stanceDone(ctx: EventCtx, id: CombatantId): void {
   onIdle.get(ctx)?.delete(id);
 }
 
-/** The command menu opens on `id`: `ready`, with the ready painting (today, `v3`) or the idle painting (`v1a`, `v1b`). */
+/** PR-0517: this figure's ready painting fails the identity measure (`ReadyIdentity.ts`): where the stance look plays (`stanceNow()` is not `today`) and `?readyid` is not `today`, her ready stance is on the idle painting. */
+function readyIsNotHer(ctx: EventCtx, id: CombatantId): boolean {
+  return readyHeldOnIdle(ctx.stage.artOf?.(id));
+}
+
+/** The command menu opens on `id`: `ready`, with the ready painting (today, `v3`) or the idle painting (`v1a`, `v1b`, or a ready painting that is not the figure). */
 export function menuStance(ctx: EventCtx, id: CombatantId): void {
   const actor = ctx.stage.actor(id);
   if (!actor) return;
-  if (menuKeepsIdle()) {
+  if (menuKeepsIdle() || readyIsNotHer(ctx, id)) {
     stanceSet(ctx).add(id);
     actor.setPose('ready', { paint: 'idle' });
     noteReason(id, 'ready', 'menu', 'idle');
@@ -61,7 +67,7 @@ export function openingPose(ctx: EventCtx, id: CombatantId, pose: string, windUp
   const actor = ctx.stage.actor(id);
   stanceDone(ctx, id);
   if (!actor) return;
-  if (windUp && windUpOnIdle()) {
+  if (windUp && (windUpOnIdle() || readyIsNotHer(ctx, id))) {
     actor.setPose('ready', { paint: 'idle' });
     noteReason(id, 'ready', 'wind-up', 'idle');
     return;
