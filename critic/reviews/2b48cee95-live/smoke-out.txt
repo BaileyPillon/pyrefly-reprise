@@ -1,0 +1,137 @@
+[OK] boot: __pyreflyReady
+[OK] boot: initial screen is title - got title
+[OK] title -> chapter-select - screen=chapter-select
+[OK] board snapshot present - {"selectedIndex":0,"selectedId":"seymour-flux","tiles":19,"coming":[],"cleared":[],"order":["seymour-flux","yunalesca","braskas-final-aeon","seymour-anima-macalania","evrae-airship","yojimbo-cavern","seymour-natus","seymour-omnis","isaaru-via-purifico","sin-fins-core","sin-face","mirror-aeons","ffx2-bahamut","ffx2-vegnagun-shuyin","ffx2-leblanc","ffx2-fallen-aeons","ffx2-trema","ffx2-den-of-woe","ffx2-ixion-djose"],"beaten":0,"total":19}
+[OK] board lists Chapter IV (ffx2-bahamut) - order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose
+[OK] board cursor reached Chapter IV via selectedId - selectedId=ffx2-bahamut steps=12
+[OK] chapter confirm -> party-prep - screen=party-prep
+[OK] prep + cutscene skip -> battle - screen=battle
+[OK] battle reached a player command menu
+[OK] advisor card before action - {"actor":"Paine","labels":["Magic Break"]}
+[FAIL] opened Item submenu and took Mega-Potion (real keys)
+[FAIL] a few real-key turns played with ticks advancing - turnsPlayed=0
+[FAIL] cancel path: could not open Item to test cancel
+[OK] Escape or P opens the pause screen - screen=pause
+[OK] H toggles pause panels (round-trip attempted) - panelsVisibleBefore=true
+[OK] P resumes back to battle - screen=battle
+[OK] prerendered audio requested over the network - count=11 sample=https://echoesofspira.com/audio/music/title.mp3
+[OK] reload: app re-boots
+[OK] reload: save/settings storage keys survive reload - before=["pyrefly-reprise:save:v1"] after=["pyrefly-reprise:save:v1"]
+[FAIL] one FFX chapter (seymour-flux) reaches a player turn
+[FAIL] typing LIMIT on chapter select changes board/screen state (secret door) - before={"selectedIndex":0,"selectedId":"seymour-flux","tiles":19,"coming":[],"cleared":[],"order":["seymour-flux","yunalesca","braskas-final-aeon","seymour-anima-macalania","evrae-airship","yojimbo-cavern","seymour-natus","seymour-omnis","isaaru-via-purifico","sin-fins-core","sin-face","mirror-aeons","ffx2-bahamut","ffx2-vegnagun-shuyin","ffx2-leblanc","ffx2-fallen-aeons","ffx2-trema","ffx2-den-of-woe","ffx2-ixion-djose"],"beaten":0,"total":19} afterScreen=chapter-select
+
+=== REPORT ===
+{
+  "mode": "gpu",
+  "url": "https://echoesofspira.com/?livesmoke=1793170835889",
+  "consoleErrors": [],
+  "notFound": [],
+  "steps": [
+    {
+      "step": "boot: __pyreflyReady",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "boot: initial screen is title",
+      "ok": true,
+      "detail": "got title"
+    },
+    {
+      "step": "title -> chapter-select",
+      "ok": true,
+      "detail": "screen=chapter-select"
+    },
+    {
+      "step": "board snapshot present",
+      "ok": true,
+      "detail": "{\"selectedIndex\":0,\"selectedId\":\"seymour-flux\",\"tiles\":19,\"coming\":[],\"cleared\":[],\"order\":[\"seymour-flux\",\"yunalesca\",\"braskas-final-aeon\",\"seymour-anima-macalania\",\"evrae-airship\",\"yojimbo-cavern\",\"seymour-natus\",\"seymour-omnis\",\"isaaru-via-purifico\",\"sin-fins-core\",\"sin-face\",\"mirror-aeons\",\"ffx2-bahamut\",\"ffx2-vegnagun-shuyin\",\"ffx2-leblanc\",\"ffx2-fallen-aeons\",\"ffx2-trema\",\"ffx2-den-of-woe\",\"ffx2-ixion-djose\"],\"beaten\":0,\"total\":19}"
+    },
+    {
+      "step": "board lists Chapter IV (ffx2-bahamut)",
+      "ok": true,
+      "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+    },
+    {
+      "step": "board cursor reached Chapter IV via selectedId",
+      "ok": true,
+      "detail": "selectedId=ffx2-bahamut steps=12"
+    },
+    {
+      "step": "chapter confirm -> party-prep",
+      "ok": true,
+      "detail": "screen=party-prep"
+    },
+    {
+      "step": "prep + cutscene skip -> battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "battle reached a player command menu",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "advisor card before action",
+      "ok": true,
+      "detail": "{\"actor\":\"Paine\",\"labels\":[\"Magic Break\"]}"
+    },
+    {
+      "step": "opened Item submenu and took Mega-Potion (real keys)",
+      "ok": false,
+      "detail": null
+    },
+    {
+      "step": "a few real-key turns played with ticks advancing",
+      "ok": false,
+      "detail": "turnsPlayed=0"
+    },
+    {
+      "step": "cancel path: could not open Item to test cancel",
+      "ok": false,
+      "detail": null
+    },
+    {
+      "step": "Escape or P opens the pause screen",
+      "ok": true,
+      "detail": "screen=pause"
+    },
+    {
+      "step": "H toggles pause panels (round-trip attempted)",
+      "ok": true,
+      "detail": "panelsVisibleBefore=true"
+    },
+    {
+      "step": "P resumes back to battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "prerendered audio requested over the network",
+      "ok": true,
+      "detail": "count=11 sample=https://echoesofspira.com/audio/music/title.mp3"
+    },
+    {
+      "step": "reload: app re-boots",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "reload: save/settings storage keys survive reload",
+      "ok": true,
+      "detail": "before=[\"pyrefly-reprise:save:v1\"] after=[\"pyrefly-reprise:save:v1\"]"
+    },
+    {
+      "step": "one FFX chapter (seymour-flux) reaches a player turn",
+      "ok": false,
+      "detail": null
+    },
+    {
+      "step": "typing LIMIT on chapter select changes board/screen state (secret door)",
+      "ok": false,
+      "detail": "before={\"selectedIndex\":0,\"selectedId\":\"seymour-flux\",\"tiles\":19,\"coming\":[],\"cleared\":[],\"order\":[\"seymour-flux\",\"yunalesca\",\"braskas-final-aeon\",\"seymour-anima-macalania\",\"evrae-airship\",\"yojimbo-cavern\",\"seymour-natus\",\"seymour-omnis\",\"isaaru-via-purifico\",\"sin-fins-core\",\"sin-face\",\"mirror-aeons\",\"ffx2-bahamut\",\"ffx2-vegnagun-shuyin\",\"ffx2-leblanc\",\"ffx2-fallen-aeons\",\"ffx2-trema\",\"ffx2-den-of-woe\",\"ffx2-ixion-djose\"],\"beaten\":0,\"total\":19} afterScreen=chapter-select"
+    }
+  ],
+  "errors": []
+}

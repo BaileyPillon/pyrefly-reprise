@@ -1,0 +1,146 @@
+[
+ {
+  "q": "",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "stance=v1a",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "stance=v1b",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "stance=v3",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "swapcause=cut",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "swapcause=blend3",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "swapcause=pick",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "swapcause=cut&swapclass=hit,contact",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "swapcause=cut&swapscope=all",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "hit=ramp",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "hit=knock",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "run=smooth",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ }
+]

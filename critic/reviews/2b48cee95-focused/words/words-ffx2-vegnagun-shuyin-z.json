@@ -1,0 +1,26 @@
+[
+ {
+  "q": "",
+  "ch": "ffx2-vegnagun-shuyin",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "stance=v3&swapcause=pick&swapscope=all&hit=knock&run=pace&rigko=whole&kotopple=eased&hurtstring=hold&summon=leap&ramps=smooth&shakeband=band&fluidui=on",
+  "ch": "ffx2-vegnagun-shuyin",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ }
+]

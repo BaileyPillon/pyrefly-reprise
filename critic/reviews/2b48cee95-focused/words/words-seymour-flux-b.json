@@ -1,0 +1,134 @@
+[
+ {
+  "q": "run=flow",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "run=pace",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "rigko=whole",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "kotopple=eased",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "hurtstring=hold",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "summon=leap",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "ramps=smooth",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "shakeband=band",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "strikeshape=travel",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "fluidui=on",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "stance=v3&swapcause=pick&swapscope=all&hit=knock&run=pace&rigko=whole&kotopple=eased&hurtstring=hold&summon=leap&ramps=smooth&shakeband=band&fluidui=on",
+  "ch": "seymour-flux",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ }
+]

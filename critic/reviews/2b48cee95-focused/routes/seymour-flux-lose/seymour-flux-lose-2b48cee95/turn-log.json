@@ -1,0 +1,140 @@
+[
+ {
+  "turn": 0,
+  "ms": 6,
+  "actor": "command:tidus",
+  "want": null,
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:0/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "seymour-flux:70000/70000",
+   "mortiorchis:4000/4000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 14,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "seymour-flux"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 9300,
+  "actor": "command:yuna",
+  "want": null,
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:0/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "seymour-flux:69222/70000",
+   "mortiorchis:4000/4000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 19,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "seymour-flux"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 2,
+  "ms": 27426,
+  "actor": "command:tidus",
+  "want": null,
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1624/2420",
+   "yuna:1500/1500",
+   "kimahri:0/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "seymour-flux:69124/70000",
+   "mortiorchis:4000/4000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 29,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "seymour-flux"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 38831,
+  "actor": "command:yuna",
+  "want": null,
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:0/2420",
+   "yuna:1500/1500",
+   "kimahri:0/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "seymour-flux:68318/70000",
+   "mortiorchis:4000/4000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

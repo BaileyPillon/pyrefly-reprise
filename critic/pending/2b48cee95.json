@@ -1,27 +1,44 @@
 {
-  "mainSha": "eaf599d0c",
-  "bundle": "8rsIfOcP",
-  "deployedAt": "2026-10-28T01:00:54.005Z",
+  "mainSha": "2b48cee95",
+  "bundle": "BwPs1UaV",
+  "deployedAt": "2026-10-28T06:50:44.901Z",
   "liveUrl": "https://echoesofspira.com/",
   "artFiles": 4830,
   "policyVersion": 2,
-  "artifactHash": "b3afdb47240a7078c0c678c7da9cdd702aa57455638981f968e6a7d0499d8035",
+  "artifactHash": "c4bb4251f0a4e73606e26e0cb5757df0f4eabe2a5daa94a7f4fd6f4ce89e21a3",
   "review": "deep",
   "reasons": [
+    "src/app/App.ts: global layout, input and boot is a shared system",
     "src/app/changelog/releaseNotes.ts: unclassified product path is a shared system",
-    "src/app/demo/demoBoard.ts: unclassified product path is a shared system",
-    "src/app/demo/demoWarm.ts: unclassified product path is a shared system",
-    "src/engine/BattleMoments.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/BattlePresenter.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/BattlePresenterArrivals.ts: battle presenter and lifecycle is a shared system",
     "src/engine/BattlePresenterBeats.ts: battle presenter and lifecycle is a shared system",
-    "src/ui/common/BattleStartBanner.ts: global layout, input and boot is a shared system",
-    "src/ui/common/transitions/cardHold.ts: global layout, input and boot is a shared system",
-    "src/ui/common/transitions/loadingCard.ts: global layout, input and boot is a shared system"
+    "src/engine/BattlePresenterDepartures.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/BattlePresenterEvents.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/BattlePresenterMotion.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/BattlePresenterPorts.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/BattlePresenterRecall.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/BattlePresenterSettle.ts: battle presenter and lifecycle is a shared system",
+    "src/engine/PaintedArt.ts: asset loader and manifests is a shared system",
+    "src/engine/Renderer.ts: global layout, input and boot is a shared system",
+    "src/engine/Tween.ts: battle presenter and lifecycle is a shared system",
+    "src/main.ts: global layout, input and boot is a shared system",
+    "src/ui/common/fluidUi.ts: global layout, input and boot is a shared system",
+    "src/ui/common/transitions/coverClock.ts: global layout, input and boot is a shared system",
+    "src/ui/common/transitions/entryOverlay.ts: global layout, input and boot is a shared system",
+    "src/ui/inkgold/cutin.ts: global layout, input and boot is a shared system"
   ],
   "systems": [
+    "Bevelle Underground scene",
+    "FF7 experiment: data, flow, its own store, the secret door, its HUD and scene",
+    "FFX HUD",
+    "FFX-2 HUD",
+    "asset loader and manifests",
     "battle presenter and lifecycle",
     "debug API used by the evidence harness",
     "effects, lighting and sprites",
     "global layout, input and boot",
+    "targeting, formation and camera",
     "title, chapter select, prep, pause and results screens, and the Pilgrimage run's own screens (a hidden prototype: src/app/pilgrim/)",
     "unclassified product path"
   ],
@@ -49,24 +66,33 @@
   "checks": [
     "CHK-002",
     "CHK-003",
+    "CHK-004",
     "CHK-006",
+    "CHK-007",
     "CHK-008",
     "CHK-009",
+    "CHK-010",
+    "CHK-011",
+    "CHK-012",
     "CHK-013",
+    "CHK-014",
     "CHK-015",
     "CHK-016",
     "CHK-017",
+    "CHK-018",
+    "CHK-019",
     "CHK-020",
     "CHK-021",
     "CHK-022",
     "CHK-023",
+    "CHK-025",
     "CHK-026",
     "CHK-027"
   ],
   "liveArtifact": {
     "result": "PASS",
-    "checked": 56,
-    "at": "2026-10-28T01:00:54.005Z"
+    "checked": 57,
+    "at": "2026-10-28T06:50:44.901Z"
   },
   "obligations": [
     {
@@ -74,16 +100,13 @@
       "status": "done",
       "requires": "exact-artifact verification and real-input smoke on the live URL",
       "result": "PASS",
-      "settledBy": "critic/reviews/eaf599d0c-live.json",
-      "settledAt": "2026-10-28T01:11:42.378Z"
+      "settledBy": "critic/reviews/2b48cee95-live.json",
+      "settledAt": "2026-10-28T08:35:00.000Z"
     },
     {
       "kind": "focused",
-      "status": "done",
-      "requires": "acceptance of the changed area",
-      "result": "FAIL",
-      "settledBy": "critic/reviews/eaf599d0c-focused.json",
-      "settledAt": "2026-10-28T00:41:09.000Z"
+      "status": "pending",
+      "requires": "acceptance of the changed area"
     },
     {
       "kind": "deep",
@@ -164,14 +187,15 @@
         "660c19bbd",
         "c8ecbcb31",
         "fa56fd4e3",
-        "e9907cad8"
+        "e9907cad8",
+        "eaf599d0c"
       ]
     }
   ],
   "ownerOverride": {
     "words": "Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.",
-    "date": "2026-10-28T01:00:54.005Z",
-    "report": "critic/reviews/eaf599d0c-focused.json",
+    "date": "2026-10-28T06:50:44.901Z",
+    "report": "critic/reviews/2b48cee95-focused.json",
     "changedArea": null
   }
 }

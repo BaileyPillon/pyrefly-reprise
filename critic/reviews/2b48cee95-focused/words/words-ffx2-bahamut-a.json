@@ -1,0 +1,146 @@
+[
+ {
+  "q": "",
+  "ch": "ffx2-bahamut",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "stance=v1a",
+  "ch": "ffx2-bahamut",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "stance=v1b",
+  "ch": "ffx2-bahamut",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "stance=v3",
+  "ch": "ffx2-bahamut",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "swapcause=cut",
+  "ch": "ffx2-bahamut",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "swapcause=blend3",
+  "ch": "ffx2-bahamut",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "swapcause=pick",
+  "ch": "ffx2-bahamut",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "swapcause=cut&swapclass=hit,contact",
+  "ch": "ffx2-bahamut",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "swapcause=cut&swapscope=all",
+  "ch": "ffx2-bahamut",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "hit=ramp",
+  "ch": "ffx2-bahamut",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "hit=knock",
+  "ch": "ffx2-bahamut",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ },
+ {
+  "q": "run=smooth",
+  "ch": "ffx2-bahamut",
+  "firstMenu": true,
+  "screen": "battle",
+  "afterAction": {
+   "scr": "battle",
+   "aw": true
+  },
+  "errors": 0,
+  "errs": []
+ }
+]

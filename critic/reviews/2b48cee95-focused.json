@@ -1,0 +1,693 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-28T06:12:03.988Z",
+ "build": {
+  "mainSha": "2b48cee95",
+  "bundle": "index-BwPs1UaV.js"
+ },
+ "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "UNVERIFIED",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical or major defect found and no regression against release 65: 46 switch loads (every B word, and the all-on combination) and the default reach the first menu and the first action with 0 console errors, plus Chapter V and Yunalesca default and all-on.",
+  "The A items read as written in the stamped harness: Chapter IV ghost frames 637 to 534 and ghost swaps 210 to 177, Chapter I swap jerks 46 to 32 px (CHK-027 PASS there), 0 steady-frame swap jerks; the opening card and HUD timing match release 65 in 6 set-up and 2 demo runs.",
+  "The only FAILs are CHK-026 and CHK-027 in Chapter IV and CHK-026 in Chapter I, polish, at the live build own class and size. Changed area stays UNVERIFIED because a lost fight, a Chapter V win by real keys, a second FFX win and the default frame strip were not played; the defaults are pinned by 29 plus 100 passing tests."
+ ],
+ "checks": [
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "boss card up and leaving",
+   "evidence": [
+    "critic/reviews/2b48cee95-focused/opening/opening.ndjson",
+    "critic/reviews/2b48cee95-focused/opening/ch1-leave1.jpg",
+    "critic/reviews/2b48cee95-focused/opening/ch4-leave1.jpg",
+    "critic/reviews/2b48cee95-focused/opening/demo1d-leave1.jpg",
+    "critic/reviews/2b48cee95-focused/opening/demo4d-leave1.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 8,
+   "reason": "Boss card owns the window at 1600x900 and 2000x1012 in both chapters, set-up and demo paths; the card leaves and the HUD returns, 0 console errors."
+  },
+  {
+   "id": "CHK-003",
+   "result": "NOT APPLICABLE",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "No text or type size changed; the HUD copy is untouched by the motion lanes."
+  },
+  {
+   "id": "CHK-004",
+   "result": "NOT APPLICABLE",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "No panel that names an action changed."
+  },
+  {
+   "id": "CHK-006",
+   "result": "PASS",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "card leaving, first menu",
+   "evidence": [
+    "critic/reviews/2b48cee95-focused/opening/opening.ndjson"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3,
+   "reason": "The boss card and HUD sampled per frame: the HUD goes down in the same sample the card starts to leave (offset 0 ms in all 6 set-up and demo runs) and is back at the first menu; no overlay is left over."
+  },
+  {
+   "id": "CHK-007",
+   "result": "NOT APPLICABLE",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "No player-facing copy changed except the release note; the new words are URL switches, not shown."
+  },
+  {
+   "id": "CHK-008",
+   "result": "UNVERIFIED",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [
+    "critic/reviews/2b48cee95-focused/phone2/ch4-390-phone.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "Panels against painted actors were not re-measured; the FFX-2 ATB bars and the FFX turn-order slide (A items) were seen only in the first-menu shots, not measured against the actors."
+  },
+  {
+   "id": "CHK-009",
+   "result": "NOT APPLICABLE",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "No names or labels changed."
+  },
+  {
+   "id": "CHK-010",
+   "result": "NOT APPLICABLE",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "No selection treatment changed."
+  },
+  {
+   "id": "CHK-011",
+   "result": "NOT APPLICABLE",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "No targeting change in this release."
+  },
+  {
+   "id": "CHK-012",
+   "result": "NOT APPLICABLE",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "No art file changed; the candidate ships only art derived from the existing masters."
+  },
+  {
+   "id": "CHK-013",
+   "result": "NOT APPLICABLE",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "No art changed (approvedArtCheck false); the change is timing and swaps."
+  },
+  {
+   "id": "CHK-014",
+   "result": "NOT APPLICABLE",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "No pose or facing authored; the swap lane changes the timing of pose changes behind switches that default to release 65."
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "won fight, picker, first action",
+   "evidence": [
+    "critic/reviews/2b48cee95-focused/continuity/ffx2-bahamut-win-2b48cee95/run.json",
+    "critic/reviews/2b48cee95-focused/continuity/seymour-flux-win-2b48cee95/run.json",
+    "critic/reviews/2b48cee95-focused/words/words-seymour-flux-a.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 25,
+   "reason": "Wins in Chapter IV and Chapter I were played to the results by real keys (the continuity harness); the demo picker and card were driven by Enter and ArrowRight; the first menu and first Attack were pressed with real keys in 4 chapters and 46 switch loads."
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [
+    "critic/reviews/2b48cee95-focused/phone/first-menu-2.json",
+    "critic/reviews/2b48cee95-focused/phone2/first-menu-2.json",
+    "critic/reviews/2b48cee95-focused/words/words-seymour-flux-a.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "Every probe asserted screen=battle and the menu flag (snapshotState().screenState.playback.awaitingMenu, as the brief asks) before capture; a failed wait is recorded as firstMenu false, none in the final runs. The first phone run read awaitingMenu false because its wait (7 s) was shorter than the opening; rerun with 30 s read true on all cases."
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "Candidate review, not a live check; the live build is checked after the deploy."
+  },
+  {
+   "id": "CHK-018",
+   "result": "NOT APPLICABLE",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "No shipped path written by hand in this change."
+  },
+  {
+   "id": "CHK-019",
+   "result": "NOT APPLICABLE",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "No generated asset added."
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [
+    "critic/reviews/2b48cee95-focused/words/words-seymour-flux-a.json",
+    "critic/reviews/2b48cee95-focused/words/words-ffx2-bahamut-a.json",
+    "critic/reviews/2b48cee95-focused/opening/opening.ndjson"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 10,
+   "reason": "Shared plumbing (hit, swaps, timebase, first-sight freezes) loads and plays the same in both games: every shared word loaded to the first menu with 0 console errors in Chapter I (FFX) and Chapter IV (FFX-2) and the opening hold matches release 65 in both."
+  },
+  {
+   "id": "CHK-021",
+   "result": "UNVERIFIED",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [
+    "critic/reviews/2b48cee95-focused/words/words-seymour-flux-b.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "Case per item from the lane notes: ?run= FFX-2 only; ?stance=, ?swap*, ?hit=, ?rigko= both games; A items per release notes. Presence checked by 29 default pins and 46 clean loads in both games; the FFX-2-only run switch was loaded in Chapter I (0 errors) but its absence there was not compared on a frame strip."
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "win to results",
+   "evidence": [
+    "critic/reviews/2b48cee95-focused/continuity/ffx2-bahamut-win-2b48cee95/31-results.png",
+    "critic/reviews/2b48cee95-focused/continuity/seymour-flux-win-2b48cee95/31-results.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "A won fight in Chapter I and in Chapter IV reached the results and the board by real keys. A lost fight was not played (see coverage)."
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [
+    "critic/reviews/2b48cee95-focused/words/words-ffx2-bahamut-b.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "The switches were exercised through the real presentation path (the address word, then a real fight to the first menu and first action), not by calling the API."
+  },
+  {
+   "id": "CHK-025",
+   "result": "NOT APPLICABLE",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "not exercised",
+   "evidence": [],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0,
+   "reason": "No hidden experiment touched; no save write path changed (the plan sets deepBeforeDeploy false)."
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "won fight, harness",
+   "evidence": [
+    "critic/reviews/2b48cee95-focused/continuity/continuity-summary-ch1.json",
+    "critic/reviews/2b48cee95-focused/continuity/ffx2-bahamut-win-2b48cee95",
+    "critic/reviews/2b48cee95-focused/continuity/seymour-flux-win-2b48cee95"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 15,
+   "reason": "Chapter IV: 3 swaps outside the height band (stature 0.899 to 1.117; release 65: 4). Chapter I: 2 swaps over the head tolerance (worst 12.1 percent, unchanged from release 65). Same class and size as the live build, not worse."
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "won fight, harness",
+   "evidence": [
+    "critic/reviews/2b48cee95-focused/continuity/continuity-summary-ch1.json",
+    "critic/reviews/2b48cee95-focused/continuity/ffx2-bahamut-win-2b48cee95",
+    "critic/reviews/2b48cee95-focused/continuity/seymour-flux-win-2b48cee95"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 15,
+   "reason": "Chapter IV FAIL: one swap jerk 45 px (same as release 65), ghost frames 637 to 534, ghost swaps 210 to 177. Chapter I PASS (release 65 FAIL): swap jerks 4 to 2, worst 46.3 to 32.1 px, 0 steady-frame swap jerks over the line; dashes over the fail line 1 to 2 (worst 113.8 to 111.8 px, one run each, noise-level)."
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 370.3,
+    "swaps": 337,
+    "snapsPerMinute": 0,
+    "ghostMsPerMinute": 1445,
+    "maxHeadJumpPct": 0.6,
+    "maxFeetShiftPx": 0.3,
+    "worstJerkPx": 45,
+    "minStature": 0.899,
+    "heightOverBand": 3,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 45,
+    "dashesWorstPx": 32.2,
+    "frameP99Ms": 36.5,
+    "jerksCovered": 0,
+    "fps": 59.7,
+    "dedicated": true,
+    "strips": 19,
+    "worstSwapStrips": [],
+    "unverified": null
+   },
+   {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "PASS"
+    },
+    "battleSeconds": 381.9,
+    "swaps": 333,
+    "snapsPerMinute": 0,
+    "ghostMsPerMinute": 1709,
+    "maxHeadJumpPct": 12.1,
+    "maxFeetShiftPx": 4.9,
+    "worstJerkPx": 111.8,
+    "minStature": 0.765,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 32.1,
+    "dashesWorstPx": 111.8,
+    "frameP99Ms": 21.5,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.8,
+    "dedicated": true,
+    "strips": 18,
+    "worstSwapStrips": [
+     "seymour-flux-win-2b48cee95/continuity/strips/swap-010-kimahri-ko-idle.jpg",
+     "seymour-flux-win-2b48cee95/continuity/strips/swap-006-kimahri-idle-ko.jpg",
+     "seymour-flux-win-2b48cee95/continuity/strips/swap-003-kimahri-hurt-idle.jpg",
+     "seymour-flux-win-2b48cee95/continuity/strips/swap-002-kimahri-idle-hurt.jpg",
+     "seymour-flux-win-2b48cee95/continuity/strips/swap-124-yuna-hurt-critical.jpg",
+     "seymour-flux-win-2b48cee95/continuity/strips/swap-334-yuna-critical-hurt.jpg",
+     "seymour-flux-win-2b48cee95/continuity/strips/swap-026-kimahri-idle-ready.jpg",
+     "seymour-flux-win-2b48cee95/continuity/strips/swap-067-kimahri-ready-idle.jpg",
+     "seymour-flux-win-2b48cee95/continuity/strips/swap-192-yuna-ready-item.jpg",
+     "seymour-flux-win-2b48cee95/continuity/strips/swap-369-auron-follow-idle.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 381.9,
+  "counted": 333,
+  "swaps": 374,
+  "size": {
+   "judged": 324,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 9,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 12.1,
+   "maxHeadJumpPctRegistration": 9.4,
+   "headOverTolerance": 2,
+   "maxFeetShiftPx": 4.9,
+   "feetOverTolerance": 0,
+   "headMeasured": 324,
+   "headRegistration": 169,
+   "headRig": 121,
+   "rigSwaps": 121,
+   "headSilhouette": 34,
+   "headUnmeasured": 0,
+   "heightMeasured": 324,
+   "heightOverBand": 0,
+   "heightWaived": 0,
+   "minStature": 0.765,
+   "maxStature": 1.058,
+   "koLengthMeasured": 2,
+   "minKoLength": 0.56,
+   "koLengthReported": 2,
+   "feetSilMeasured": 171,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 7.4,
+   "holdSwaps": 167,
+   "worstRealHeadPct": 29.8,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "variantHeadSwaps": 0,
+   "worstVariantHeadPct": 0,
+   "variantHeadOutsideBand": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 32,
+   "hardCutsPerMinute": 5.03,
+   "ghostSwaps": 168,
+   "ghostFrames": 656,
+   "worstGhostSeverity": 0.332,
+   "ghostOverFail": 0,
+   "jerks": 8,
+   "worstJerkPx": 111.8,
+   "jerksOverFail": 2,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0.004,
+   "maxCentroidShiftPx": 211.4,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 0,
+   "smearsPlanned": 160,
+   "smearSwaps": 156,
+   "smearSnapsExcused": 31,
+   "jerksSmeared": 30,
+   "worstSmearedJerkPx": 218.6,
+   "swapJerks": 2,
+   "swapJerksWorstPx": 32.1,
+   "swapJerksOverFail": 0,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 6,
+   "dashesWorstPx": 111.8,
+   "dashesOverFail": 2,
+   "jerksLongFrame": 0,
+   "swapJerksLongFrame": 0,
+   "swapJerksSteadyOverFail": 0,
+   "ghostMs": 10877,
+   "ghostMsPerMinute": 1709,
+   "ghostFramesPerMinute": 103.1,
+   "ghostFrames60PerMinute": 102.5
+  },
+  "frameTime": {
+   "frames": 22818,
+   "longFrames": 62,
+   "longFramePct": 0.3,
+   "worstP99Ms": 21.5,
+   "maxMs": 300.8,
+   "longMs": 34,
+   "source": "continuity-probe",
+   "pacingNumber": false
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "2 swap(s) change a head by more than the tolerance (worst 12.1 percent; 9.4 percent where the head is registered)"
+    ],
+    "note": "169 of 324 measured swaps had a registered head (tolerance 3 percent); 121 were read from a rig's own head mesh (tolerance 3 percent; 121 swap(s) were changes of a rig's key); 34 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 324 swap(s) (stature 0.765 to 1.058, 0 out of band but waived), the silhouette's own feet 171 swap(s) (worst 7.4 px, 0 waived), 167 swap(s) across a recorded hold (real head worst 29.8 percent from the idle's), 0 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "PASS",
+    "reasons": [],
+    "note": "2 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 111.8 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 156 of 160 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 31 snap(s) not counted, 30 swap jerk(s) (worst 218.6 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 381.9 s of battle, 59.8 to 59.8 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (2 swap(s) change a head by more than the tolerance (worst 12.1 percent; 9.4 percent where the head is registered)); CHK-027 PASS; 1,709 ms of see-through a minute (102.5 frames a minute at 60 Hz) Read by harness 9cc8f27cd66e (35 files; tree D:/pyrefly-release55 at 2b48cee95; policy 70ab3c4d; probe v2 fb288c17; pose table 9f168c0f (114 subjects); waivers bf0731fb (79 rows)).",
+  "base": "http://127.0.0.1:5511/",
+  "date": "2026-10-28T06:06:37.436Z",
+  "poseMeasure": {
+   "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+   "source": "harness-tree",
+   "subjects": 114,
+   "sha256": "9f168c0f1dc4c49e73435c3919077826b6288b37efc9f20b0696924f2bb4a9f4",
+   "staleChapters": []
+  },
+  "harness": {
+   "schema": "continuity-harness/1",
+   "id": "9cc8f27cd66e02cd1bde74c87ce70d8fca0a83dca085f25177fd71ab2e9132df",
+   "tree": {
+    "root": "D:/pyrefly-release55",
+    "head": "2b48cee95ea737a2968c871fa2d59065dd0197a2",
+    "dirty": []
+   },
+   "files": {
+    "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+    "critic/runner/lib/continuity-analyze.mjs": "a416b86a012426411000d03b5e13ca4abe82bbee",
+    "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+    "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+    "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+    "critic/runner/lib/continuity-ghostms.mjs": "d74a048e0c44be69d22b050973ec240fbec3db66",
+    "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+    "critic/runner/lib/continuity-probe.mjs": "fb288c179cbf2df71bd9139f9c87657790238308",
+    "critic/runner/lib/continuity-pure.mjs": "8c3ec1d79db169a6a4c8169a693247ca6c83bfc0",
+    "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+    "critic/runner/lib/continuity-rig-probe.mjs": "35bf097b7bbfa81abeb4daf8e78f0d9515ff3ab1",
+    "critic/runner/lib/continuity-rig.mjs": "6e1b891a9d237b4b9db52593303df5e1ffc812e4",
+    "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+    "critic/runner/lib/continuity-smear.mjs": "7b0508c2ac2eb3da8ca3939013c16dfd22a6f26b",
+    "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+    "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+    "critic/runner/lib/continuity-summary.mjs": "ec7a4f915c80d618c2dbf3f219dd72757a927fbd",
+    "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+    "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+    "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+    "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+    "critic/runner/lib/continuity-why.mjs": "e2f0063820045e9c5eb5bb2ece203c00bed1fe3d",
+    "critic/runner/lib/continuity.mjs": "91e3888f71711d9d1f891338bd90904d688b63fa",
+    "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+    "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+    "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+    "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+    "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+    "critic/runner/lib/route-pure.mjs": "4d484cc9c873d60c66b48e418bb688dd6248b647",
+    "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+    "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+    "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+    "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+    "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+    "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+   },
+   "policy": {
+    "continuitySha256": "70ab3c4d28898a0b76ff0862fc44fb316d07a136244345440bdff1bd145f236a",
+    "fileSha256": "e067a28c2a90d5d68ba0d8a2a04e894b94768797ceb1c29cde9c6ec6054ec1c9",
+    "override": false,
+    "overrideSha256": null
+   },
+   "probe": {
+    "version": 2,
+    "blob": "fb288c179cbf2df71bd9139f9c87657790238308"
+   },
+   "poseTable": {
+    "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+    "sha256": "9f168c0f1dc4c49e73435c3919077826b6288b37efc9f20b0696924f2bb4a9f4",
+    "subjects": 114,
+    "source": "harness-tree",
+    "buildSha": "2b48cee9",
+    "isCandidate": true
+   },
+   "waivers": {
+    "path": "D:\\pyrefly-release55\\docs\\target\\pose-waivers.json",
+    "sha256": "bf0731fb7771a9da0391bd6e7d422675b7e177c46b60138476b8a6fb4eb4df25",
+    "rows": 79
+   },
+   "run": {
+    "query": null,
+    "setArt": null,
+    "browser": "gpu"
+   },
+   "changedDuringRun": false,
+   "chapterIds": [
+    "9cc8f27cd66e02cd1bde74c87ce70d8fca0a83dca085f25177fd71ab2e9132df"
+   ],
+   "unstamped": [],
+   "chaptersByOtherHarness": [],
+   "aggregateSha256": "534b27ec9316fa65113bdc95399c176532193e1d8d218c10a6ac0c034b4c83c8"
+  },
+  "note": "Chapter IV summary recorded from the first harness run (the second run overwrote continuity-summary.json; Chapter I is continuity-summary-ch1.json); per-run data under continuity/<chapter>-win-2b48cee95/"
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "R66-P1",
+   "severity": "polish",
+   "title": "Pose-swap and motion continuity FAIL carried from the live build (Chapter IV swap jerk 45 px and 3 stature swaps, Chapter I head 12.1 percent)",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "expected": "Every swap inside the height band and head tolerance, swap jerks under 40 px, dashes under the fail line.",
+   "observed": "Chapter IV: 3 stature swaps outside the band (release 65: 4), one swap jerk 45 px (same), ghost frames 637 to 534. Chapter I: head 12.1 percent (same), swap jerks 46 to 32 px (CHK-027 PASS), 2 dashes over the fail line (release 65: 1; one run each).",
+   "repro": "PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<dist-gate served> --chapters=ffx2-bahamut,seymour-flux --evidence=<dir> --tag=x",
+   "evidence": [
+    "critic/reviews/2b48cee95-focused/continuity/continuity-summary-ch1.json"
+   ],
+   "confidence": "medium (one run per chapter, GPU shared with other lanes)",
+   "requirement": "CHK-026, CHK-027",
+   "where": "pose-change paths in src/engine/PaintedActor.ts (suspected)",
+   "fix": "The new ?swapcause= words are the answer (cut, blend3, pick) once Bailey picks one; no code change for this release.",
+   "acceptanceCheck": "harness reads CHK-026 and CHK-027 PASS in both chapters with the picked swap word on",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R66-S1",
+   "severity": "suggestion",
+   "title": "Default-equals-release-65 is proved by tests and loads, not by a frame strip",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "expected": "A frame strip of each B switch default against the live build.",
+   "observed": "Not captured: 29 release66-defaults pins and 100 lane tests pass, 46 switch loads and 4 chapters play clean, the stamped harness on the default build is at or better than release 65; no pixel strip against release 65 was taken.",
+   "repro": "Same seed, same moment, candidate default against the live build at the first menu and after the first action",
+   "evidence": [
+    "critic/reviews/2b48cee95-focused/words/words-seymour-flux-a.json"
+   ],
+   "confidence": "high",
+   "requirement": "review focus 1",
+   "where": "critic coverage",
+   "fix": "Take the strip in the deep review of the live build.",
+   "acceptanceCheck": "strip identical within noise"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "46 switch loads (Chapters I and IV, 23 queries each: every B word and the all-on word) plus Chapter V and Yunalesca default and all-on, each to the first menu and the first Attack by real keys, 1600x900, 0 console errors",
+   "Opening card and HUD timeline per frame, Chapters I and IV, set-up and demo picker paths, 1600x900 and 2000x1012",
+   "Phone gate 390x844 Chapters I and IV first menu, 0 console errors, no horizontal scroll",
+   "Stamped continuity harness, a won fight in Chapter IV and Chapter I by real keys",
+   "Unit pins: release66-defaults (29) and six lane test files (100), tsc clean; integrator suite log exit 0"
+  ],
+  "reused": [
+   {
+    "what": "release 65 continuity and opening numbers as the live baseline",
+    "from": "critic/reviews/eaf599d0c-focused",
+    "why": "same harness and method; release 65 is the live build"
+   }
+  ],
+  "notTested": [
+   "A lost fight in each demo chapter",
+   "Chapter V and a second FFX chapter played to the end by real keys (loaded to first menu and first action only)",
+   "Default-versus-live frame strip for each B switch",
+   "Shake at 60/144 Hz",
+   "Frame timings are not called regressions: GPU shared with other lanes (Chapter IV frame p99 36.5 ms against 45.7 ms for release 65)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Deep review of the live build (shared presenter, global layout and boot), with the default-vs-live frame strip and a lost fight per demo chapter.",
+ "elapsedMinutes": 100
+}

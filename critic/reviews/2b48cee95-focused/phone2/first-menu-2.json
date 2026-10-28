@@ -1,0 +1,97 @@
+[
+ {
+  "name": "ch1-390-phone",
+  "ch": "seymour-flux",
+  "size": "390x844",
+  "q": "",
+  "awaitingMenu": true,
+  "screen": "battle",
+  "f1": false,
+  "ribbons": 0,
+  "bossBars": 0,
+  "ffx2Strip": 0,
+  "guide": 1,
+  "intent": 1,
+  "coachCards": [
+   "coach-layer | Auron“He strikes first. Weather it, then hit back.",
+   "coach-mark coach-mark--in | Auron“He strikes first. Weather it, then hit back.",
+   "coach-mark__who | Auron",
+   "coach-mark__body | “He strikes first. Weather it, then hit back.”",
+   "coach-mark__foot | EnterTap continueFirst time only",
+   "coach-mark__tap | Tap"
+  ],
+  "hscroll": false,
+  "consoleErrors": 0,
+  "errs": []
+ },
+ {
+  "name": "ch4-390-phone",
+  "ch": "ffx2-bahamut",
+  "size": "390x844",
+  "q": "",
+  "awaitingMenu": true,
+  "screen": "battle",
+  "f1": false,
+  "ribbons": 0,
+  "bossBars": 2,
+  "ffx2Strip": 1,
+  "guide": 1,
+  "intent": 1,
+  "coachCards": [
+   "coach-layer | Gauges running · a command holds themRikku“Bar's f",
+   "coach-mark coach-mark--in | Gauges running · a command holds themRikku“Bar's f",
+   "coach-mark__running | Gauges running · a command holds them",
+   "coach-mark__who | Rikku",
+   "coach-mark__body | “Bar's full, she's up! Pick a command and take you",
+   "coach-mark__foot | Fades on its ownFirst time only"
+  ],
+  "hscroll": false,
+  "consoleErrors": 0,
+  "errs": []
+ },
+ {
+  "name": "ch1-1600",
+  "ch": "seymour-flux",
+  "size": "1600x900",
+  "q": "",
+  "awaitingMenu": true,
+  "screen": "battle",
+  "f1": true,
+  "ribbons": 1,
+  "bossBars": 0,
+  "ffx2Strip": 0,
+  "guide": 0,
+  "intent": 0,
+  "coachCards": [
+   "coach-layer | "
+  ],
+  "hscroll": false,
+  "consoleErrors": 0,
+  "errs": []
+ },
+ {
+  "name": "ch1-390-wide",
+  "ch": "seymour-flux",
+  "size": "390x844",
+  "q": "",
+  "awaitingMenu": true,
+  "screen": "battle",
+  "f1": false,
+  "ribbons": 0,
+  "bossBars": 0,
+  "ffx2Strip": 0,
+  "guide": 1,
+  "intent": 1,
+  "coachCards": [
+   "coach-layer | Auron“He strikes first. Weather it, then hit back.",
+   "coach-mark coach-mark--in | Auron“He strikes first. Weather it, then hit back.",
+   "coach-mark__who | Auron",
+   "coach-mark__body | “He strikes first. Weather it, then hit back.”",
+   "coach-mark__foot | EnterTap continueFirst time only",
+   "coach-mark__key | Enter"
+  ],
+  "hscroll": false,
+  "consoleErrors": 0,
+  "errs": []
+ }
+]

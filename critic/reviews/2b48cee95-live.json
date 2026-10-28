@@ -1,0 +1,24 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-28T08:35:00.000Z",
+  "build": { "mainSha": "2b48cee95", "bundle": "BwPs1UaV", "artifactHash": "c4bb4251f0a4e73606e26e0cb5757df0f4eabe2a5daa94a7f4fd6f4ce89e21a3" },
+  "verdicts": { "deployment": "PASS", "changedArea": "NOT APPLICABLE", "milestone": "not assessed" },
+  "checks": [
+    { "id": "CHK-017", "result": "PASS", "mandatory": true,
+      "evidence": "verify-live --full against critic/artifacts/2b48cee95.json (changed-from eaf599d0c.json): live manifest matches, 7169 files compared, 0 mismatched, 0 missing, 0 wrong type, 0 errors; index.html and press/index.html identical once the Cloudflare analytics beacon is removed; _headers is host-read and not downloaded." },
+    { "id": "CHK-016", "result": "PASS", "mandatory": true,
+      "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu), fresh context 1600x900, real key presses, cache-busting query. Title -> chapter-select (selectedId verified) -> ffx2-bahamut (Chapter IV, snapshot chapter=ffx2-bahamut, scene bevelle-underground) -> party-prep -> battle -> real player menu (Attack/Skill/Change/Item and White Magic/Change/Item). Positive path: White Magic > Cure > self target, the cast interlude drew the Cure banner and caster pose, control returned to the next actor's menu, battle stayed running. Item > Potion > target, battle continued. Cancel path: Escape in the White Magic submenu returned to the top menu, still in battle. Escape and P open the pause screen and P resumes; H toggled panelsHidden true then false. Also seymour-flux (FFX Chapter 1) reached battle with the FFX command DOM, Escape paused and P resumed. Prerendered music fetched: 11 audio requests, first https://echoesofspira.com/audio/music/title.mp3. Screenshots in critic/reviews/2b48cee95-live/static/." },
+    { "id": "CHK-024", "result": "PASS", "mandatory": false,
+      "evidence": "Lightweight only: the save key pyrefly-reprise:save:v1 changed during the run (progress/preference write) and was byte-identical after page.reload(); app re-booted ready. A specific setting toggle was not confirmed to be the changed write." }
+  ],
+  "staticChecks": { "pose-census": { "subjects": 146, "paintings": 1106, "pass": 829, "waived": 79, "rigged": 0, "fail": 0, "exempt": 198, "byClass": { "idle": 146, "standing": 565, "ko": 90, "low": 71, "wide": 4, "staged": 176, "part": 54 }, "byGame": { "FFX-2": 777, "FFX": 307, "FF7": 22 }, "byRowStatus": { "ok": 745, "held": 84, "waived": 79, "none": 198 } } },
+  "coverage": {
+    "tested": ["exact artifact (full)", "title to chapter select", "FFX-2 Chapter IV battle: spell and item interlude, cancel path, pause/resume/H", "FFX Chapter 1 reaches battle, pause/resume", "prerendered music fetch", "reload smoke", "pose census"],
+    "reused": [],
+    "notTested": ["lost fights and Chapter V (changed area UNVERIFIED in the focused report)", "full second FFX chapter played through a turn", "the B items behind switches (default to release 65, not exercised)", "MF-02/MF-28 first-sight freezes, MF-08 beat clock, MF-16 cut-in and MF-09 KO landing were not individually measured live", "full CHK-024 upgrade matrix", "an explicit settings toggle surviving reload", "audio heard (agents cannot hear): only the network fetch was checked"]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 40
+}
