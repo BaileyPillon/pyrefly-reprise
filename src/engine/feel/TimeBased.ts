@@ -14,12 +14,26 @@
  * Game case: both games (shared presentation plumbing; the sources give no frame counts for either). Pure: no `three`, no DOM.
  */
 import { timingByTime } from './FeelSwitch.ts';
+import { moveWord } from '../motion/MoveSwitch.ts';
 
 /** Radians per second the shake phase advances in time mode: today's 0.9 per frame at 60 Hz. */
 export const SHAKE_RAD_PER_S = 54;
 
 /** Today's step, radians per drawn frame. */
 export const SHAKE_RAD_PER_FRAME = 0.9;
+
+/**
+ * MF-27 (motion-fluidity pass, lane L2 "moves"; timebase audit TB-11; both games; `?shakeband=` `today` default, `band`). The shake's two axes run at `54 * mult` rad/s: today 2.7 and 3.9, that is 23.2 Hz sideways and
+ * 33.5 Hz up and down. 33.5 Hz is above a 60 Hz screen's Nyquist (30 Hz), so a 60 Hz screen shows an aliased 26.5 Hz and a 120 or 144 Hz screen the true 33.5: not one picture. `band` takes both under 21 Hz
+ * (17.2 Hz and 20.6 Hz, the same pair of unrelated rates) so every display shows the same shake. A look change behind a switch; the default is the shake as `post-shake-time` made it.
+ */
+export const SHAKE_MULT = { today: { x: 2.7, y: 3.9 }, band: { x: 2.0, y: 2.4 } } as const;
+export function shakeMultX(): number {
+  return SHAKE_MULT[moveWord('shakeband')].x;
+}
+export function shakeMultY(): number {
+  return SHAKE_MULT[moveWord('shakeband')].y;
+}
 
 /** The shake phase's step for one `update(dt)`: `dt * 54` in time mode, nothing otherwise (today's step is {@link shakeStepPerFrame}, taken in `apply`). */
 export function shakeStepByTime(dt: number): number {

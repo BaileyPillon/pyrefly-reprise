@@ -4,7 +4,9 @@
  * running, as in the game), and one hash is taken of everything the rig hands the GPU: every part mesh's skinned positions (float bits), its depth and its visibility, in draw order.
  *
  * The golden file (`tests/fixtures/rig/v1-geometry-golden.json`) was written by the SAME test run against the engine BEFORE format v2 (origin/rig 59c766ec0) with \`RIG_V1_GOLDEN=write\`; this run must
- * match it for all 26 keys. (A headless browser run of the same poses on both engines, with the pixel diff, is in docs/handoff/rig-v2-and-kit.md.)
+ * match it for all 26 keys. **Re-pinned 2026-10-26 (MF-25, motion-fluidity pass):** the lag chains' springs now integrate on a fixed 1/120 s step (`RigDynamics.Spring`), so the tail, mane and sash read the same at
+ * every display rate and differ from the old variable step by a fraction of a pixel; the file format v2 itself still changes nothing for a v1 rig (the golden was last written by this very test with `RIG_V1_GOLDEN=write`
+ * after that change and nothing else). (A headless browser run of the same poses on both engines, with the pixel diff, is in docs/handoff/rig-v2-and-kit.md.)
  */
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';

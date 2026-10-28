@@ -59,6 +59,7 @@ import type { CombatantId } from '../battle/common/types.ts';
 import type { ActorHandle, Point3 } from './BattlePresenterPorts.ts';
 import { ACTOR_ANIM_GRACE_MS, type EventCtx } from './BattlePresenterEvents.ts';
 import { RECALL_MS, recall } from './BattlePresenterRecall.ts';
+import { dimTo, rampAll } from './motion/RampBeat.ts'; // MF-23 (`?ramps=smooth`): the stepped fades as one tween
 import { RETURN_MS, sendToReturn } from './BattlePresenterReturns.ts';
 
 export type DepartureKind = 'dissolve' | 'falls-away' | 'yields' | 'body' | 'dismissed' | 'held' | 'returns';
@@ -254,6 +255,8 @@ function scaleOf(actor: ActorHandle): { x: number; setScalar(v: number): void } 
 async function shrinkFall(actor: ActorHandle, ms: number, b: Budget): Promise<void> {
   const scale = scaleOf(actor);
   if (!scale) return;
+  const smooth = rampAll([actor], 'scale', FALL_SHRINK_TO, ms); // MF-23 (`?ramps=smooth`): one tween, not twelve jumps
+  if (smooth) return b.guard(smooth);
   const start = scale.x || 1;
   for (let i = 1; i <= FALL_SHRINK_STEPS; i++) {
     const t = i / FALL_SHRINK_STEPS;
@@ -299,11 +302,7 @@ function partyCentre(ctx: EventCtx): Point3 | null {
 async function yields(ctx: EventCtx, actor: ActorHandle, b: Budget): Promise<void> {
   const from = at(actor.position);
   actor.setPose('idle', { force: true });
-  const steps = 6;
-  for (let i = 1; i <= steps; i++) {
-    actor.setBrightness(1 - (1 - YIELD_DIM) * (i / steps));
-    await b.sleep(YIELD_MS.dim / steps);
-  }
+  await dimTo([actor], YIELD_DIM, YIELD_MS.dim, 6, b); // six steps, or (MF-23, `?ramps=smooth`) one tween
   const party = partyCentre(ctx);
   const sx = party && from.x < party.x ? -1 : 1;
   const to = { x: from.x + sx * YIELD_STEP.x, y: from.y, z: from.z + YIELD_STEP.z };
@@ -323,11 +322,7 @@ async function held(actor: ActorHandle, b: Budget): Promise<void> {
   if (data) data[HELD_MARK] = true;
   actor.setPose('hurt', { force: true });
   actor.flash(0xdfe8ff, 260, 0.5);
-  const steps = 6;
-  for (let i = 1; i <= steps; i++) {
-    actor.setBrightness(1 - (1 - HELD_DIM) * (i / steps));
-    await b.sleep(HELD_MS / steps);
-  }
+  await dimTo([actor], HELD_DIM, HELD_MS, 6, b);
 }
 
 /**

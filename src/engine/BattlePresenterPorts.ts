@@ -53,14 +53,20 @@ export interface ActorHandle {
   flash(colour?: number | string, ms?: number, peak?: number, floorCut?: number): void; // floorCut 0..1: less dark-texel lift (FF7)
   shake(amount?: number, ms?: number): void;
   lunge(distance?: number, ms?: number, contact?: { hold: Promise<unknown>; reached: () => void }, house?: number): Promise<void>; // contact: VP-1001-06; house: the part of `distance` that is the house lunge (r391-reach), the rest rides an eased step
-  recoil(ms?: number, distance?: number): Promise<void>;
+  recoil(ms?: number, distance?: number, knock?: { reach: number; ms: number }, hold?: number): Promise<void>; // knock (MF-03, `?hit=knock`, additive): the push is `hitReact`'s; `reach` (world units) and `ms` are only the smear's hint; hold (MF-12, additive): ms the hurt painting stays up (a string of blows), default `ms`
+  /** Optional (MF-03, `?hit=ramp|knock`, additive): a blow's reaction in place of `shake`; false when REDUCE MOTION holds the jitter off (the caller plays today's shake and recoil). */
+  hitReact?(spec: import('./motion/HitReaction.ts').HitSpec): boolean;
   squash(ms?: number, amount?: number): Promise<void>;
   hop(height?: number, ms?: number): Promise<void>;
   fadeTo(alpha: number, ms?: number): Promise<void>;
   setAlpha(alpha: number): void;
   dissolveTo(value: number, ms?: number, colour?: number | string): Promise<void>;
   setDissolve(value: number): void;
-  moveTo(pos: Point3, ms?: number): Promise<void>;
+  moveTo(pos: Point3, ms?: number, easing?: (t: number) => number): Promise<void>; // easing (MF-04, additive): the run's trapezoid; absent = the actor's own quadInOut
+  /** Optional (MF-04, additive): a promise that settles after `ms` of the actor's own tween clock (the same paced, hit-stop-frozen clock `moveTo` runs on). */
+  waitMs?(ms: number): Promise<void>;
+  /** Optional (MF-23, additive): one linear tween of `brightness`, `stone` or `scale` to `to` over `ms` of the actor's own clock, in place of a loop of stepped sleeps. */
+  ramp?(prop: 'brightness' | 'stone' | 'scale', to: number, ms: number): Promise<void>;
   setFacing(dir: 1 | -1): void;
   setBrightness(mult: number): void;
   /** Optional: fall onto its back and stay down (`PaintedActor.lieDown`; the `'body'` departure). */

@@ -16,8 +16,9 @@
  *
  * Game cases (AGENTS.md rule 14): `ffx` is FFX only (Chapter I), `ffx2` FFX-2 only (Chapter IV); a figure the table has no row for answers undefined and the house curves (`?curves=new`) play it.
  */
-import { REAL_MOTION, type RealAttackRow, type RealCastRow, type RealGame, type RealKoRow, type RealRow, type RealVictoryRow } from '../../data/motion/realMotion.ts';
+import { REAL_MOTION, type RealAttackRow, type RealPhases, type RealCastRow, type RealGame, type RealKoRow, type RealRow, type RealVictoryRow } from '../../data/motion/realMotion.ts';
 import type { CurveGame, RealKind } from './CurvesSwitch.ts';
+import { moveWord } from './MoveSwitch.ts'; // MF-14 V3 (`?strikeshape=travel`): the dash keeps the house travel at the 1.1 s pick
 import { PROFILES, REAL_MIN_MS, defaultPaceFactor, heftFactors, type StrikeProfile } from './StrikeCurve.ts';
 
 /** An attack whose real approach lifts the hip this much of the figure's height or more leaps (Tidus .21, Wakka .26, Seymour .24, Bahamut .14); below it the figure crouches into the lunge. */
@@ -67,9 +68,39 @@ export function setRealArcGain(v: number | null): void {
   gain = v;
 }
 
+/** MF-14 V3: the wind-up and the hold of a house-travel strike are at least this long, ms (the plan's "300 ms or more"); the return and the settle pay for them. */
+export const TRAVEL_MIN_MS = 300;
+/** MF-14 V3: the return and the settle keep at least this share of the move's total when the wind-up, the travel and the hold are paid. */
+export const TRAVEL_REST_SHARE = 0.2;
+/** MF-14 V3: of that rest, the settle (a quiet phase) pays first: it keeps at most this share of the move's total, and the return keeps its 1.1 s length when the rest allows. */
+export const TRAVEL_SETTLE_FLOOR = 0.06;
+
+/** MF-14 V3 is on: the 1.1 s pick with the house dash (`?strikeshape=travel`). */
+export const houseTravel = (kind: RealKind): boolean => kind === 'snappy' && moveWord('strikeshape') === 'travel';
+
+/**
+ * The phases of a real attack in a mode. `real`: the clips'. `snappy`: the same proportions at 1.1 s, which gives a quick swing (Paine's travel is 34 ms: 228 px in one frame at 2,560 wide). With
+ * `?strikeshape=travel` (MF-14 V3, only at the 1.1 s pick, both games): the same total, the dash kept at the game's house travel and ease (FFX 250 ms, FFX-2 200), the wind-up at least 300 ms, the hold 300, and the
+ * return and the settle paying for it, never under a fifth of the total, the settle first (the way home keeps the length it has at the 1.1 s pick when it can, so V3 does not trade a slow dash for a
+ * faster flight home: Paine's return at 118 ms was a 47 px frame in the first capture). Pure; `today` and the real speed return the row's phases untouched.
+ */
+export function phasesOf(game: CurveGame, row: RealAttackRow, kind: RealKind): RealPhases {
+  if (kind !== 'snappy') return row.real;
+  const ph = row.snappy;
+  if (!houseTravel(kind)) return ph;
+  const total = ph.windupMs + ph.travelMs + ph.holdMs + ph.returnMs + ph.settleMs;
+  const windupMs = Math.max(ph.windupMs, TRAVEL_MIN_MS);
+  const travelMs = PROFILES[game].travelMs;
+  const rest = Math.max(TRAVEL_REST_SHARE * total, total - windupMs - travelMs - TRAVEL_MIN_MS);
+  const holdMs = Math.max(0, Math.round(total - windupMs - travelMs - rest));
+  const settleFloor = Math.min(ph.settleMs, TRAVEL_SETTLE_FLOOR * total);
+  const returnMs = Math.max(0, Math.round(Math.min(ph.returnMs, rest - settleFloor)));
+  return { windupMs, travelMs, holdMs, returnMs, settleMs: Math.round(rest) - returnMs };
+}
+
 /** The strike profile of a real attack: the game's own house profile with the table's durations, arcs and shapes over it. `kind` picks the real speed or the 1.1 s scale. */
 export function profileOfRow(game: CurveGame, row: RealAttackRow, kind: RealKind): StrikeProfile {
-  const ph = kind === 'snappy' ? row.snappy : row.real;
+  const ph = phasesOf(game, row, kind);
   const approach = row.arc >= APPROACH_LEAP_MIN;
   const leapBack = row.returnArc >= RETURN_LEAP_MIN && row.returnProfile !== undefined;
   return {
@@ -82,7 +113,7 @@ export function profileOfRow(game: CurveGame, row: RealAttackRow, kind: RealKind
     arc: row.arc,
     arcApex: row.arcApex,
     returnArc: row.returnArc,
-    bias: row.bias,
+    bias: houseTravel(kind) ? PROFILES[game].bias : row.bias, // V3: the house dash's ease too (the real clips' bias is 4 for most rows, a burst at the end of the travel)
     real: {
       approach,
       ...(approach && row.approachProfile ? { approachProfile: row.approachProfile } : {}),

@@ -10,7 +10,7 @@
 import type { CombatantId } from '../../battle/common/types.ts';
 import type { BattleStage } from '../BattlePresenterPorts.ts';
 import { curvesGame, realKind } from './CurvesSwitch.ts';
-import { contactMsOf, holdMsOf, realArcGain, realCastOf, realHitMs, realRowOf, realStrikeProfile } from './RealMotion.ts';
+import { contactMsOf, holdMsOf, phasesOf, realArcGain, realCastOf, realHitMs, realRowOf, realStrikeProfile } from './RealMotion.ts';
 import { defaultPaceFactor, type StrikeProfile } from './StrikeCurve.ts';
 
 /** The slice of a presenter context these answers read: the stage (the event context and the motion context both have it). */
@@ -75,5 +75,5 @@ export function realLeapBack(ctx: EventCtx, id: CombatantId): { ms: number; heig
   const row = realRowOf(curvesGame(), artIdOf(ctx, id))?.attack;
   const h = heightOf(ctx, id);
   if (!row || h === undefined || row.returnArc < 0.1) return undefined;
-  return { ms: (kind === 'snappy' ? row.snappy : row.real).returnMs, height: h * row.returnArc * realArcGain() };
+  return { ms: phasesOf(curvesGame(), row, kind).returnMs, height: h * row.returnArc * realArcGain() };
 }

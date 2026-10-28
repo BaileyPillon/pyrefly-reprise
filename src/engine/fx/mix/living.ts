@@ -1,6 +1,7 @@
 import { PlaneGeometry, Vector2, Vector4, type BufferGeometry, type Mesh, type Object3D, type ShaderMaterial, type Texture } from 'three';
 import { departureKindOf } from '../../BattlePresenterDepartures.ts';
 import { KO_GIANTS, KO_MACHINES, canTopple, fallRun, koCrossMs, koFallOff, koMode, reviveRun, type KoMode, type KoRun } from '../../KoFall.ts';
+import { moveWord } from '../../motion/MoveSwitch.ts'; // MF-17 (`?kotopple=eased`): the party figure's topple and revive ease in from rest and out to rest
 import { realBuckleMs } from '../../motion/RealMoments.ts'; // `?curves=real` / `real-snappy`: the buckle lasts until the real clip's floor impact
 import { KoPuff } from '../../KoPuff.ts';
 import { TOPPLE_RAD, contentCentreX, headCentreX, headMiddleU, tipSide, type SlotTip } from '../../KoTip.ts';
@@ -57,6 +58,8 @@ interface Playing {
   side: 0 | 1 | -1;
   /** Motion pass, step 3: the cross is a cut inside the smear's window, and the window is open (`PaintedActor.koCutBegin`). */
   cutting?: boolean;
+  /** MF-09: the run has no landing left to play: it played it on the cut (the lying painting reached half), or the run is a buckle and the fall tween's end lands it. */
+  landed?: boolean;
 }
 export interface Guts {
   name: string;
@@ -79,6 +82,10 @@ export interface Guts {
   koCutBegin?: (info: { from: string; to: string; toPlane: 0 | 1; cutMs: number; dirX: number }) => void;
   koCutStep?: (u: number) => void;
   koCutEnd?: () => void;
+  /** MF-09 (`PaintedActor.landFall`): the KO's landing, played on the frame the body arrives. */
+  landFall?: () => void;
+  /** MF-17 (`PaintedActor.holdLanding`): the run plays the landing itself, so the fall tween's end must not. */
+  holdLanding?: () => void;
 }
 
 interface SlotState {
@@ -173,7 +180,7 @@ export class LivingFigure {
     }
     const to = a.slots[a.active]!;
     const mode = koMode({ rm: ctx.rm, samePlane: from === to, samePainting: from.pose === to.pose, fromProne: from.scale.prone === true, toProne: to.scale.prone === true, name: a.name, partySide, legacy: koFallOff() });
-    const run = fallRun(mode, ctx.game, a.koCutWindow?.(), realBuckleMs(a.name, koCrossMs())); // the smear's window when the moments and the smear are on: the cross is a cut inside it; a real mode buckles until the real clip's floor impact
+    const run = fallRun(mode, ctx.game, a.koCutWindow?.(), realBuckleMs(a.name, koCrossMs()), moveWord('kotopple') === 'eased'); // the smear's window when the moments and the smear are on: the cross is a cut inside it; a real mode buckles until the real clip's floor impact
     if (!run) {
       this.last.cuts++;
       return;
@@ -208,7 +215,7 @@ export class LivingFigure {
     if (from === to || a.life?.state === 'down' || from.pose === to.pose) return;
     const travel = from.scale.prone === true && to.scale.prone !== true && canTopple(a.name, partySide);
     const side = travel ? tipSide(headMiddleU(from.meta.head), from.mesh.scale.x < 0 ? -1 : 1, partySide ? 1 : -1) : 0;
-    this.begin({ run: reviveRun(travel), mode: travel ? 'topple' : 'cross', from, to, stand: to, lying: from, side });
+    this.begin({ run: reviveRun(travel, moveWord('kotopple') === 'eased'), mode: travel ? 'topple' : 'cross', from, to, stand: to, lying: from, side });
     if (travel) this.last.rises++;
   }
 
@@ -219,7 +226,13 @@ export class LivingFigure {
     p.to.fade = pose.inn;
     this.a.syncOpacity();
     this.playing = p;
-    if (p.run.opts.travel || !p.run.opts.buckle) this.a.fallGain = 0;
+    const whole = p.run.opts.travel || !p.run.opts.buckle; // the run IS the whole fall (a topple, a plain cross): the generic sink is off
+    if (whole) this.a.fallGain = 0;
+    // MF-09: the landing is played on the cut, whenever the run's cut falls (an eased topple is longer than the fall tween), by the runs that are the whole fall; a buckle keeps the generic sink going (fallGain 1), so its thud stays on the fall tween's end, where that sink is done (review F-3)
+    if (p.run.opts.kind === 'fall') {
+      if (whole) this.a.holdLanding?.();
+      else p.landed = true;
+    }
     if (p.run.opts.buckle) this.last.collapses++;
     if (p.run.opts.crossMs > 0) this.last.crosses++;
   }
@@ -229,6 +242,7 @@ export class LivingFigure {
     const p = this.playing;
     this.playing = null;
     if (!p) return;
+    if (p.run.opts.kind === 'fall' && !p.landed) this.a.landFall?.(); // a run cut short still lands the body
     if (p.cutting) this.a.koCutEnd?.();
     if (p.side !== 0) this.a.tipSlot(p.stand, null);
     if (p.run.opts.kind === 'revive') this.a.fallGain = 1; // the figure is up again
@@ -298,6 +312,10 @@ export class LivingFigure {
     if (play) {
       play.run.step(ctx.dt * 1000, realMs);
       const pose = play.run.pose;
+      if (!play.landed && play.run.opts.kind === 'fall' && pose.inn >= 0.5) {
+        play.landed = true;
+        a.landFall?.(); // MF-09: the thud on the frame the body arrives (the cut), not on the fall tween's own end 58 to 92 ms later
+      }
       buckle = pose.buckle;
       lean = pose.lean;
       play.from.fade = pose.out;

@@ -44,6 +44,8 @@ import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { ActorHandle } from './BattlePresenterPorts.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import { cue, settled, TIMING } from './BattlePresenterEvents.ts';
+import { moveScale } from './motion/CurveBeats.ts'; // MF-23: the ramp's length follows the playback speed as the sleeps it replaces did
+import { rampAll } from './motion/RampBeat.ts'; // MF-23 (`?ramps=smooth`)
 
 /**
  * The longest an arrival may hold playback before the guard lets the battle
@@ -128,6 +130,11 @@ async function turnToStone(ctx: EventCtx, a: ActorHandle | undefined): Promise<v
     a?.setStone?.(1);
     a?.setBrightness(0.8);
     return ctx.sleep(TIMING.status);
+  }
+  const smooth = rampAll([a], 'stone', 1, STONE_MS.in * moveScale(ctx)); // MF-23 (`?ramps=smooth`): one tween, not four jumps
+  if (smooth) {
+    await Promise.all([smooth, rampAll([a], 'brightness', 0.8, STONE_MS.in * moveScale(ctx))]);
+    return ctx.sleep(STONE_MS.hold);
   }
   for (let i = 1; i <= STONE_STEPS; i++) {
     a.setStone(i / STONE_STEPS);

@@ -33,7 +33,9 @@ import type { ActionMotionPort, ActionStartEvent, MotionCtx } from '../../engine
 import { motionMs } from '../../engine/BattlePresenterMotion.ts';
 import type { Point3 } from '../../engine/BattlePresenterPorts.ts';
 import { realLeapBack } from '../../engine/motion/RealBeats.ts'; // `?curves=real` / `real-snappy`: the run home is the real back-jump (its length and its height)
-import { arcFor, strikeHoldOver } from '../../engine/motion/CurveBeats.ts'; // motion pass (lane "core"): the run's arc is a leap with the new curves on, today's hop otherwise
+import { arcFor, strikeHoldOver } from '../../engine/motion/CurveBeats.ts';
+import { flowLeadMs, paceRunMs, runEase, runMode } from '../../engine/motion/RunEase.ts'; // MF-04 (`?run=`): a trapezoid run, a leap at rest on both ends, the strike as she brakes, the real pace
+import { defaultPaceFactor } from '../../engine/motion/StrikeCurve.ts'; // motion pass (lane "core"): the run's arc is a leap with the new curves on, today's hop otherwise
 import { ownPlace } from '../../engine/motion/PlaceOwner.ts';
 import { planRun, type RunWorld } from '../../engine/motion/StandOff.ts';
 import type { StageMotionPort } from '../../engine/motion/StageMotionPort.ts';
@@ -59,6 +61,8 @@ export function runMs(distance: number): { in: number; home: number } {
 const SMEAR = { in: 0.9, home: 0.6 } as const;
 
 interface Run {
+  /** MF-04: where she stops (the stand-off's spot), for {@link RunInMotion.reachGap}. */
+  spot: Point3;
   home: Point3;
   /** The figure whose place this run owns, handed back from this very object whatever the stage hands out later. */
   figure: object;
@@ -134,6 +138,14 @@ export class RunInMotion implements ActionMotionPort {
     return this.state()?.combatants[id]?.side === 'enemy' || this.runs.has(id);
   }
 
+  /** MF-04: how far along her facing she still has to run to her spot, world units (0 once she is there): the lunge of a strike asked for as she brakes is solved from the spot. */
+  reachGap(id: CombatantId): number {
+    const run = this.runs.get(id);
+    const a = run?.figure as { position?: Point3; facing?: number } | undefined;
+    if (!run || !a?.position) return 0;
+    return Math.max(0, (run.spot.x - a.position.x) * ((a.facing ?? 1) < 0 ? -1 : 1));
+  }
+
   /** The strike's lunge while she is out: shorter, since she has run in. */
   lungeFor(id: CombatantId): number | undefined {
     return this.runs.has(id) ? STRIKE_LUNGE : undefined;
@@ -153,9 +165,10 @@ export class RunInMotion implements ActionMotionPort {
     const w = worldOf(world, ctx, id, targetId, home);
     const plan = w ? planRun(w) : null;
     if (!plan) return; // nothing to plan against (a figure off the field): the strike plays as it does today
-    const ms = motionMs(runMs(plan.distance).in, ctx.speed);
+    const mode = runMode(); // MF-04: `?run=today` (the default) is all false and every line below plays as it did
+    const ms = motionMs(mode.pace ? paceRunMs(plan.distance) : runMs(plan.distance).in, ctx.speed);
     ownPlace(actor, true); // from here to the end of `close`, the MAX mix's staging leaves her x alone (see the header)
-    this.runs.set(id, { home, figure: actor });
+    this.runs.set(id, { home, figure: actor, spot: plan.spot });
     const box = (r: { x: number; y: number; w: number; h: number } | null): number[] | null => (r ? [r.x, r.y, r.w, r.h].map(Math.round) : null);
     this.notes.push({ actor: id, target: targetId, home, spot: plan.spot, distance: plan.distance, why: plan.why, girlRect: box(world.rect(id, { at: plan.spot, truck: plan.truck })), targetRect: box(world.rect(targetId, { truck: plan.truck })), at: typeof performance === 'undefined' ? 0 : performance.now() });
     if (this.notes.length > NOTES_KEPT) this.notes.shift();
@@ -166,7 +179,10 @@ export class RunInMotion implements ActionMotionPort {
     void world.truck(plan.truck.x, plan.truck.y, plan.truck.z, ms);
     world.smear(id, ms * 0.95, SMEAR.in);
     motionBeat({ kind: 'dash', strength: SMEAR.in, heft: actorHeft(actor), ms, atMs: ms * 0.3 }); // the run in: the afterimage's streak has its whoosh
-    await Promise.all([actor.moveTo(plan.spot, ms), arcFor(actor, 0.42, ms)]);
+    const arrive = Promise.all([actor.moveTo(plan.spot, ms, runEase(mode)), arcFor(actor, 0.42, ms, mode.smooth)]);
+    const lead = mode.flow && actor.waitMs ? Math.min(ms * 0.6, flowLeadMs(ctx.speed === 'fast' ? 0.32 : 1, defaultPaceFactor('ffx2'))) : 0; // MF-04: the wind-up is the end of the stop, not a stand after it
+    if (lead > 1) await Promise.race([arrive, actor.waitMs!(ms - lead)]);
+    else await arrive;
     if (!readyKey) actor.setPose('attack');
   }
 
@@ -181,14 +197,16 @@ export class RunInMotion implements ActionMotionPort {
       // Over a menu, under REDUCE MOTION, or if she was knocked out out there, she is simply home again: nothing plays.
       const down = (actor as { pose?: string }).pose === 'ko';
       const back = ctx.still === true || down ? undefined : realLeapBack(ctx, actorId); // the real back-jump: its length and height, else the house run home
-      const ms = ctx.still === true || down ? 1 : motionMs(back?.ms ?? runMs(Math.hypot(actor.position.x - run.home.x, actor.position.z - run.home.z)).home, ctx.speed);
+      const mode = runMode();
+      const away = Math.hypot(actor.position.x - run.home.x, actor.position.z - run.home.z);
+      const ms = ctx.still === true || down ? 1 : motionMs(back?.ms ?? (mode.pace ? Math.round(paceRunMs(away) * 0.75) : runMs(away).home), ctx.speed);
       const held = ctx.still === true || down ? undefined : strikeHoldOver(actor); // `?curves=real`: she finishes the real clip's hold at the foe (the strike's `holdEnd`) before she leaps back; capped, a strike that was replaced never ends it
       if (held) await Promise.race([held, ctx.sleep(HOLD_WAIT_MAX_MS)]);
       actor.setPose('idle');
       if (ms > 1) world?.smear(actorId, ms * 0.9, SMEAR.home);
       if (ms > 1) motionBeat({ kind: 'dash', strength: SMEAR.home, heft: actorHeft(actor), ms, atMs: ms * 0.3 }); // and the run home, lighter
       void world?.truck(0, 0, 0, ms);
-      await Promise.all([actor.moveTo(run.home, ms), ...(ms > 1 ? [arcFor(actor, back?.height ?? 0.2, ms)] : [])]);
+      await Promise.all([actor.moveTo(run.home, ms, runEase(mode)), ...(ms > 1 ? [arcFor(actor, back?.height ?? 0.2, ms, mode.smooth)] : [])]);
       void world?.truck(0, 0, 0, 1); // never leave the frame off true
     } finally {
       ownPlace(run.figure, false); // home (or gone): the mix's staging has her again, at the place it left her

@@ -14,6 +14,7 @@
  */
 import { SQUASH_CAP, clamp01, pulse, skewBell, smooth, type StrikeShape } from './StrikeCurve.ts';
 import { StrikeRun, type StrikePose } from './StrikeRun.ts';
+import { smoothBell } from './RunEase.ts'; // MF-04: a lift that leaves and meets the floor at rest
 
 /** The summed channels (world units where it matters). */
 export type CurveChannels = StrikePose;
@@ -93,6 +94,8 @@ export interface LeapOptions {
   /** Length of the landing squash after the flight ends, paced ms. */
   landMs?: number;
   apex?: number;
+  /** MF-04 (`?run=smooth`): the lift leaves and meets the floor at rest (`RunEase.smoothBell`) instead of at its steepest (`skewBell`). Default false: today's arc. */
+  smooth?: boolean;
   /** Things to do on the frame the leap's time (the crouch and the flight, 0 to 1 of the whole `ms`) first reaches `u`: the victory cheer swaps its painting on the take-off (motion pass, step 3). */
   marks?: ReadonlyArray<{ u: number; fn: () => void }>;
   /** Called once, on the frame the flight ends and the landing squash begins (the lane "feel" landing thud, `?motionsfx=`). Never called when the leap is settled early (the actor was disposed). */
@@ -113,7 +116,7 @@ export class LeapRun {
     const { marks, onLand, ...shape } = options;
     this.onLand = onLand;
     this.pending = marks ? marks.map((m) => ({ u: m.u, fn: m.fn })).sort((a, b) => a.u - b.u) : [];
-    this.o = { anticipation: 0.12, crouch: 0.03, stretch: 0.04, land: 0.04, landMs: 140, apex: 0.45, ...shape };
+    this.o = { anticipation: 0.12, crouch: 0.03, stretch: 0.04, land: 0.04, landMs: 140, apex: 0.45, smooth: false, ...shape };
     this.o.crouch = Math.min(SQUASH_CAP, this.o.crouch);
     this.o.stretch = Math.min(SQUASH_CAP, this.o.stretch);
     this.o.land = Math.min(SQUASH_CAP, this.o.land);
@@ -135,7 +138,7 @@ export class LeapRun {
       this.sy = 1 - o.crouch * smooth(u / o.anticipation);
     } else if (u < 1) {
       const f = (u - o.anticipation) / (1 - o.anticipation);
-      this.lift = this.height * skewBell(f, o.apex);
+      this.lift = this.height * (o.smooth ? smoothBell(f, o.apex) : skewBell(f, o.apex));
       this.sy = f < 0.3 ? 1 - o.crouch + (o.stretch + o.crouch) * smooth(f / 0.3) : 1 + o.stretch * (1 - smooth((f - 0.3) / 0.6));
     } else {
       this.lift = 0;

@@ -1,7 +1,7 @@
 import { PerspectiveCamera, Vector3 } from 'three';
 import { TweenGroup, damp, type EasingFn, type EasingName } from './Tween.ts';
 import { LinkFits, frameFit, type FitRig, type FitSubject, type FrameVerdict } from './FrameFit.ts';
-import { shakeStepByTime, shakeStepPerFrame } from './feel/TimeBased.ts'; // `?timing=time` (demo chapters): the shake runs on real time, today's is per drawn frame
+import { shakeMultX, shakeMultY, shakeStepByTime, shakeStepPerFrame } from './feel/TimeBased.ts'; // `?timing=time` (demo chapters): the shake runs on real time, today's is per drawn frame
 import { BattleCameraPro } from './BattleCameraPro.ts'; // `?camera=pro` (demo chapters): the directed camera's seat (`proRig`); its layer is built on first use, so with the switch off nothing runs
 
 export interface CameraRig {
@@ -385,8 +385,8 @@ export class BattleCamera {
       const k = Math.max(0, this.shakeLeftMs / this.shakeTotalMs);
       const damp2 = k * k;
       this.shakePhase += shakeStepPerFrame();
-      ox += Math.sin(this.shakePhase * 2.7) * this.shakeAmp * damp2;
-      oy += Math.sin(this.shakePhase * 3.9 + 1.7) * this.shakeAmp * damp2 * 0.8;
+      ox += Math.sin(this.shakePhase * shakeMultX()) * this.shakeAmp * damp2; // 2.7 (23.2 Hz); `?shakeband=band`: 2.0 (17.2 Hz)
+      oy += Math.sin(this.shakePhase * shakeMultY() + 1.7) * this.shakeAmp * damp2 * 0.8; // 3.9 (33.5 Hz); `?shakeband=band`: 2.4 (20.6 Hz)
     }
 
     const t = this.truck; // RUN-IN's truck, on top of the rig: the whole camera and its look-at slid together

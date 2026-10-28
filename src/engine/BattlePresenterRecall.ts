@@ -38,6 +38,7 @@
 import type { CombatantId } from '../battle/common/types.ts';
 import type { ActorHandle, Point3 } from './BattlePresenterPorts.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
+import { dimTo } from './motion/RampBeat.ts'; // MF-23 (`?ramps=smooth`)
 
 /**
  * Who leaves with a recalled figure. Keyed by the recalled figure's combatant
@@ -97,11 +98,7 @@ export async function recall(
 ): Promise<void> {
   const group = recallGroup(ctx, id, actor);
   for (const [, a] of group) a.setPose('idle', { force: true });
-  for (let i = 1; i <= DIM_STEPS; i++) {
-    const v = 1 - (1 - RECALL_DIM) * (i / DIM_STEPS);
-    for (const [, a] of group) a.setBrightness(v);
-    await b.sleep(RECALL_MS.dim / DIM_STEPS);
-  }
+  await dimTo(group.map(([, a]) => a), RECALL_DIM, RECALL_MS.dim, DIM_STEPS, b); // six steps, or (MF-23, `?ramps=smooth`) one tween
   await Promise.all(
     group.map(([, a]) => {
       const from = at(a.position);

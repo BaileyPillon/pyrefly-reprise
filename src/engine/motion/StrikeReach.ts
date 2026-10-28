@@ -34,7 +34,7 @@ import { LANE, reachAlong, type ReachWorld } from './StandReach.ts';
  * Presentation only: no engine state, no RNG, no timing (the lunge keeps its 440 ms and its apex at 0.58). The distance beyond the house lunge rides an eased step
  * (`BattlePresenterActors.reachOffset`), so a long lunge does not jump its first frame; the house part is the old curve to the frame.
  */
-export function strikeReach(ctx: { readonly stage: BattleStage }, event: Pick<ActionStartEvent, 'actorId' | 'targets'>, base: number, pose?: string, burst?: Burst): number {
+export function strikeReach(ctx: { readonly stage: BattleStage }, event: Pick<ActionStartEvent, 'actorId' | 'targets'>, base: number, pose?: string, burst?: Burst, gap = 0): number {
   const stage = ctx.stage;
   const world = stage.motion;
   const from = stage.actor(event.actorId);
@@ -69,7 +69,7 @@ export function strikeReach(ctx: { readonly stage: BattleStage }, event: Pick<Ac
       const p = stage.actor(o)?.position;
       return o !== id && o !== t && !away.has(o) && p !== undefined && Math.abs(p.z - from.position.z) < LANE;
     });
-    const w: ReachWorld = { dir, scale, attacker: (along) => shapeOf(id, along, rig), target: () => shapeOf(t, 0, rig), lane: lane.map((o) => () => shapeOf(o, 0, rig)) };
+    const w: ReachWorld = { dir, scale, attacker: (along) => shapeOf(id, along + gap, rig), target: () => shapeOf(t, 0, rig), lane: lane.map((o) => () => shapeOf(o, 0, rig)) };
     reach = Math.min(reach, reachAlong(base, w));
   }
   return Number.isFinite(reach) ? reach : base;
@@ -148,6 +148,6 @@ export interface LungeCtx {
 export function lungePlan(ctx: LungeCtx, event: Pick<ActionStartEvent, 'actorId' | 'targets'>, motion: ActionMotionPort | null | undefined, pose?: string, burst?: Burst, base = HOUSE_LUNGE): { distance: number; house: number } {
   const house = motion?.lungeFor?.(event.actorId) ?? base; // after a run-in only the blow is left: the port's shorter lunge
   const reaches = motion ? motion.reachFor?.(event.actorId) === true : true;
-  const solved = reaches ? strikeReach(ctx, event, house, pose, burst) : house;
+  const solved = reaches ? strikeReach(ctx, event, house, pose, burst, motion?.reachGap?.(event.actorId) ?? 0) : house; // MF-04: a strike asked for as the run brakes is solved from where she will stand
   return { distance: ctx.moments?.reducedMotion === true ? calmLunge(house, solved) : solved, house };
 }
