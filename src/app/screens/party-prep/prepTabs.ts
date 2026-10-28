@@ -27,7 +27,7 @@ export interface PrepTabLike {
  */
 export function prepTabsHtml(tabs: readonly PrepTabLike[], index: number): string {
   if (tabs.length === 0) {
-    return `<div class="prep__tab" id="${tabId('stats')}" role="tab" aria-selected="true" aria-controls="${PREP_PANEL_ID}" tabindex="0">STATS</div>`;
+    return `<div class="prep__tab" id="${tabId('stats')}" role="tab" aria-selected="true" aria-controls="${PREP_PANEL_ID}" tabindex="0" data-cursor>STATS</div>`;
   }
   return tabs
     .map((t, i) => {
@@ -42,5 +42,8 @@ export function prepTabsHtml(tabs: readonly PrepTabLike[], index: number): strin
 
 /** Point the sheet at the tab that is open (its accessible name is the tab's). */
 export function labelPrepPanel(body: HTMLElement | null, tabs: readonly PrepTabLike[], index: number): void {
-  body?.setAttribute('aria-labelledby', tabId(tabs[index]?.id ?? 'stats'));
+  // With no panel registered the one tab is STATS; with panels and an index outside them no tab is open, so there is nothing to name the sheet by.
+  const id = tabs.length === 0 ? 'stats' : tabs[index]?.id;
+  if (id === undefined) body?.removeAttribute('aria-labelledby');
+  else body?.setAttribute('aria-labelledby', tabId(id));
 }

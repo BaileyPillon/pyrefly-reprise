@@ -241,7 +241,8 @@ export class TitleScreen extends Screen {
     ghost.className = this.root.className.replace(/(^|\s)screen(?=\s|$)/, '$1fe-title__ghost');
     ghost.style.cssText = this.root.style.cssText;
     ghost.style.pointerEvents = 'none';
-    ghost.setAttribute('aria-hidden', 'true'); ghost.setAttribute('inert', ''); // the leaving picture's chips are not stops for Tab (release 68, `app/focusContract.ts`)
+    ghost.setAttribute('aria-hidden', 'true');
+    ghost.setAttribute('inert', ''); // the leaving picture's chips are not stops for Tab (release 68, `app/focusContract.ts`)
     while (this.root.firstChild) ghost.appendChild(this.root.firstChild);
     parent.appendChild(ghost);
     this.ghost = ghost;

@@ -175,7 +175,7 @@ describe('Tab on the screens that give it to the browser', () => {
     expect(press('Tab').prevented).toBe(false);
   });
 
-  it('Shift alone is still the game\'s triangle (the press every screen already ignores or answers), Shift+Tab walks backwards', () => {
+  it('Shift+Tab walks backwards (a Shift alone is still the game\'s triangle, on its release here: input-shift-tap.test.ts)', () => {
     const a = el('div', { role: 'button', tabindex: '0', 'data-action': 'a' });
     const b = el('div', { role: 'button', tabindex: '0', 'data-action': 'b' });
     tabTo(b);

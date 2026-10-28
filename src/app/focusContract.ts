@@ -9,10 +9,17 @@
  *
  * 1. **A chord** (Ctrl, Meta, Alt) is the browser's, always (unchanged).
  * 2. **An exclusive claim** (the briefing, a first-use card, the title's info panel) is the claimant's (unchanged; it never reaches here).
- * 3. **Text entry** (an input, a textarea, a select, a contenteditable) owns EVERY key: the game latches nothing and prevents nothing.
+ * 3. **Text entry** (an input, a textarea, a select, a contenteditable) owns EVERY key, Escape too: `Input` latches nothing and prevents
+ *    nothing (review m1: so Escape cannot leave a field through the game; the one field in the game, the board's door field, holds an
+ *    exclusive claim and ends itself on Escape). A window listener of a widget outside `Input` (`RawInputWatcher`, the door matcher,
+ *    the strategy guide) is not under this contract and still hears the key (review m2); none sits beside a field today.
  * 4. **Tab and Shift+Tab** belong to the browser on the screens that say so ({@link BROWSER_TAB_SCREENS}: title, chapter select,
  *    party prep) so focus walks the controls; everywhere else (the battle, the pause menu, whose Tab is the approved
- *    "next tab") Tab stays the game's, exactly as before.
+ *    "next tab") Tab stays the game's, exactly as before. On those same screens **Shift is deferred** (review of 62ff4feca, major M2):
+ *    Shift is the game's `triangle`, and the first half of Shift+Tab is a Shift going down, so the press is held back
+ *    ({@link KeyOwner} `'deferred'`) and the triangle is latched only when that Shift is LET GO and no other key went down while
+ *    it was held ({@link FocusLedger.shiftTap}). Shift+Tab, Shift+arrow and the rest of a chord latch nothing; a lone tap of Shift is
+ *    still the triangle (the Sphere Grid's SHIFT WALKS), one release later than before. Elsewhere Shift is the triangle on key-down, as it was.
  * 5. **Enter and Space on a focused control** activate THAT control, once, and the game's Confirm is not also pressed, when
  *    the control is an activator (a native button or link, or `role` button, tab, switch, checkbox, radio, menuitem, option, link),
  *    the focus got there by Tab (or from assistive technology: a focus nobody explains), and it is not the screen's cursor.
@@ -31,12 +38,13 @@
  * ten seconds ago, and a screen reader hears the cursor move. A cursor is drawn by the game's own highlight, so its focus ring is off
  * and every other control gets the Ink & Gold ring (both in `ui/inkgold/focus.css`).
  *
- * Escape is always Cancel. Pointer clicks never move focus into the contract: a clicked control keeps the game's keys.
+ * Escape is Cancel everywhere except inside a text field (rule 3). Pointer clicks never move focus into the contract: a clicked control keeps the game's keys.
  *
  * Game case: both (shared UI; the board, prep and title serve FFX and FFX-2 alike).
  */
 
-export type KeyOwner = 'game' | 'browser' | 'field' | 'control';
+/** `deferred`: the key is the game's, but only if it is let go alone (a Shift on a screen whose Tab is the browser's); `Input` latches nothing on the key-down. */
+export type KeyOwner = 'game' | 'browser' | 'field' | 'control' | 'deferred';
 
 /** How focus reached an element: `tab` (the browser walked there), `pointer` (a click or tap), `game` (the game moved it), `other` (nobody explains it: assistive technology). */
 export type FocusSource = 'tab' | 'pointer' | 'game' | 'other';
@@ -77,6 +85,9 @@ const QUIET_CODES: ReadonlySet<string> = new Set([
   'NumLock',
   'ContextMenu',
 ]);
+
+/** The keys that start Shift+Tab. */
+const SHIFT_CODES: ReadonlySet<string> = new Set(['ShiftLeft', 'ShiftRight']);
 
 /** True for an element the keys are typed into. */
 export function isTextEntry(el: Element | null): boolean {
@@ -138,6 +149,8 @@ export class FocusLedger {
   private releaseFrom: Element | null = null;
   private bridging = false;
   private attached = false;
+  /** A Shift held back on a browser-Tab screen: `used` once any other key went down while it was held (it is the start of a chord, not a tap). */
+  private shift: { code: string; used: boolean } | null = null;
 
   constructor(
     private readonly doc: Document | null = typeof document !== 'undefined' ? document : null,
@@ -214,10 +227,16 @@ export class FocusLedger {
 
     if (isTextEntry(active)) return 'field';
 
+    const browserTab = tabOwnerOf(topScreenRoot(doc)) === 'browser';
     if (code === 'Tab') {
-      if (tabOwnerOf(topScreenRoot(doc)) !== 'browser') return 'game';
+      if (!browserTab) return 'game';
       this.setCause('tab');
       return 'browser';
+    }
+    if (browserTab && SHIFT_CODES.has(code)) {
+      // The same Shift again (auto-repeat) keeps its record; a second Shift while one is held is already a chord.
+      if (this.shift?.code !== code) this.shift = { code, used: this.shift !== null };
+      return 'deferred';
     }
 
     const activation = ACTIVATION_CODES.has(code);
@@ -239,6 +258,27 @@ export class FocusLedger {
       else this.releaseFrom = el;
     }
     return 'game';
+  }
+
+  /** Any key went down, mapped or not (`Input` tells the ledger before it looks the key up): a Shift held while it did is no longer a lone tap. */
+  noteKey(code: string): void {
+    if (this.shift !== null && this.shift.code !== code) this.shift.used = true;
+  }
+
+  /**
+   * A key came up. True when it is the Shift that {@link keyDown} held back and nothing else went down meanwhile: the player
+   * tapped Shift, so the game's `triangle` is pressed now. Always forgets the held Shift.
+   */
+  shiftTap(code: string): boolean {
+    const held = this.shift;
+    if (held === null || held.code !== code) return false;
+    this.shift = null;
+    return !held.used;
+  }
+
+  /** The window lost focus: a Shift held across it will never report its release here. */
+  reset(): void {
+    this.shift = null;
   }
 
   /** The bridge: what a mouse click on `el` would do, from the keyboard. */

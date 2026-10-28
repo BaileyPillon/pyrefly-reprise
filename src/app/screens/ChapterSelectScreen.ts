@@ -8,7 +8,7 @@ import { ControlsHint, isCoarsePointer, type ControlHintItem } from '../../ui/co
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import { buildChapterTiles, groupChapterTiles, stepGroup, stepSelection, type ChapterTile, type ClearedLookup } from './frontend/chapterGrid.ts';
-import { asideHtml, heroHtml, proseHtml, railHtml } from './frontend/chapterCards.ts';
+import { asideHtml, heroHtml, markCardCursor, proseHtml, railHtml } from './frontend/chapterCards.ts';
 import { boardProgress, progressStripHtml } from './frontend/chapterProgress.ts';
 import { initialBoardIndex, rememberBoardChapter } from './frontend/boardFocus.ts';
 import { BoardWarmer } from './frontend/boardWarm.ts';
@@ -370,11 +370,9 @@ export class ChapterSelectScreen extends Screen {
     }
 
     // The fixed list: only the selected mark moves (D-183).
-    for (const card of this.root.querySelectorAll('.fe-card[data-card]')) {
-      const on = card.getAttribute('data-action') === `fe-card-${this.selected}`;
-      card.classList.toggle('fe-card--sel', on); card.toggleAttribute('data-cursor', on); card.setAttribute('tabindex', on ? '0' : '-1'); // the cursor is the list's one tab stop (`app/focusContract.ts`)
-      if (on) card.setAttribute('aria-current', 'true');
-      else card.removeAttribute('aria-current');
+    // Playable cards only: a COMING card is not a control and is left as it was drawn. The cursor is the list's one tab stop (`app/focusContract.ts`).
+    for (const card of this.root.querySelectorAll('.fe-card[data-card][data-action]')) {
+      markCardCursor(card, card.getAttribute('data-action') === `fe-card-${this.selected}`);
     }
 
     const aside = this.root.querySelector('.fe-aside');

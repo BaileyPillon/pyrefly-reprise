@@ -9,17 +9,27 @@
  * `:focus-visible` only: a click or a tap on a control does not draw it (the browser decides, as it does for any page).
  * The screen's CURSOR (`[data-cursor]`: the selected chapter card, the open prep tab or pause tab, the selected row) already has
  * the game's own highlight and takes no ring, so an arrow key that moves focus with the cursor changes nothing a player sees.
- * Controls with a focus style of their own (the chapter card, the hint entries, the toggles) keep it: they set `outline: none`
- * on a more specific selector, or name the ring they want after this file.
+ * Controls with a focus style of their own (the chapter card, the hint entries, the toggles) keep it.
+ *
+ * ## Why the ring is written with `:where()` (the review of 62ff4feca, major M1)
+ *
+ * `:is()` and `:not()` take the specificity of their most specific argument, so a type list that includes `a[href]` made the ring
+ * [0,3,1] and the "cursor has no ring" rule [0,3,0]: the ring won, and every arrow press that moved focus to the new cursor drew
+ * a gold ring on the cursor card, the open prep tab, the open pause tab and the pause EYE CANDY and PRESENTATION rows (which
+ * `focus()` their selected row after every key). `:where()` counts for nothing, so the ring below is [0,1,0] (the
+ * `:focus-visible` alone): any rule written with a class (`.fe-card:focus-visible` [0,2,0], `.pause__ec-col .pause__ec-row:focus`
+ * [0,3,0], the cursor rule below [0,3,0]) beats it, with no tie to break by source order. `tests/unit/focus-ring-specificity.test.ts`
+ * computes both numbers from this file and fails if the ring ever out-ranks the cursor rule again.
  */
 
 /* The four front-end screens whose Tab is the browser's or whose controls have just become real (the battle HUD keeps the rings it has). */
-:is([data-screen='title'], [data-screen='chapter-select'], [data-screen='party-prep'], [data-screen='pause']) :is(button, a[href], summary, [role='button'], [role='tab'], [role='switch'], [role='checkbox'], [role='radio'], [role='menuitem'], [role='option'], [role='link']):focus-visible {
+:where([data-screen='title'], [data-screen='chapter-select'], [data-screen='party-prep'], [data-screen='pause'])
+  :where(button, a[href], summary, [role='button'], [role='tab'], [role='switch'], [role='checkbox'], [role='radio'], [role='menuitem'], [role='option'], [role='link']):focus-visible:where(:not([data-cursor])) {
   outline: 2px solid var(--ig-accent, #e3b94a);
   outline-offset: 2px;
 }
 
-/* The cursor is drawn by the game. */
+/* The cursor is drawn by the game (also stated by the ring's own `:not([data-cursor])`; this rule is the belt for a cursor whose own stylesheet sets an outline). */
 :is([data-screen='title'], [data-screen='chapter-select'], [data-screen='party-prep'], [data-screen='pause']) [data-cursor]:focus-visible {
   outline: none;
 }

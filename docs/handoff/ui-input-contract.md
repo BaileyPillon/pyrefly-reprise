@@ -22,8 +22,8 @@ finding), so the contract comes first and the semantics are built on it.
 |---|---|---|---|
 | 1 | Ctrl, Meta or Alt chord | the browser | untouched (as before) |
 | 2 | an **exclusive** keyboard claim (the briefing, a first-use card, the title's info panel) | the claimant | untouched (as before; never asks the ledger) |
-| 3 | focus is in **text entry** (input, textarea, select, contenteditable) | the field | the game latches nothing, prevents nothing |
-| 4 | **Tab / Shift+Tab** on a screen that gives it up (`title`, `chapter-select`, `party-prep`, or `data-tab-owner="browser"`) | the browser | focus walks the controls; no triangle |
+| 3 | focus is in **text entry** (input, textarea, select, contenteditable) | the field | the game latches nothing, prevents nothing; Escape is the field's too (the door field holds an exclusive claim and ends itself on Escape) |
+| 4 | **Tab / Shift+Tab** on a screen that gives it up (`title`, `chapter-select`, `party-prep`, or `data-tab-owner="browser"`) | the browser | focus walks the controls; Tab is no triangle, and a **Shift is deferred**: no triangle on its key-down, one on its release if it was let go alone (Shift+Tab, Shift+arrow, any key under Shift latch nothing) |
 | 4b | Tab anywhere else (the battle, the pause menu) | the game | triangle / the pause's next tab, kept from moving focus (as before) |
 | 5 | **Enter / Space on a focused control**: an activator (native button or link, or `role` button, tab, switch, checkbox, radio, menuitem, option, link; not disabled), focus got there by Tab or from assistive technology, and it is **not the screen's cursor** | that control | it is pressed **once** (a native one by the browser; a `div role="button"` by the bridge `click()`, which `Input.onClick` turns into the same `data-action` a mouse click makes) and the game's Confirm is **not** also pressed |
 | 6 | everything else | the game | as before: Enter / Space on the cursor (`data-cursor`: its activation IS the screen's Confirm), on a control the mouse focused, or on nothing; the arrows, WASD, Z, X, Q, E, F, R, Escape, the pad |
@@ -37,7 +37,7 @@ Two consequences worth stating:
   `[data-cursor]` in the top screen: a strip over rows marks both, and the one nearest the content is in play), or is let go if there is none. So "Tab to BACK, press an arrow, press Enter" is the cursor's
   Confirm, never BACK. Shift alone (the start of Shift+Tab) and other modifiers never trigger it. If the screen put focus somewhere itself while it answered
   the key (the pause pages focus their selected row), that focus is the cursor's and is left alone.
-* **Escape is always Cancel.**
+* **Escape is Cancel everywhere except inside a text field** (rule 3). A window listener outside `Input` (`RawInputWatcher`, the door matcher, the strategy guide) is not under this contract; none sits beside a field today.
 
 The ledger knows how focus arrived (`tab`, `pointer`, `game`, `other`) by listening to `focusin` and to the pointer events; a focus
 move with no input behind it (assistive technology, or the game restoring focus after a panel) keeps what the element was before,
@@ -67,7 +67,7 @@ or a tap draws nothing; scoped to the title, board, prep and pause).
 
 | Where | Change |
 |---|---|
-| `src/app/focusContract.ts` (new, 265 lines) | the contract: predicates, `tabOwnerOf`, `FocusLedger` |
+| `src/app/focusContract.ts` (new, about 310 lines) | the contract: predicates, `tabOwnerOf`, `FocusLedger` (including the deferred Shift) |
 | `src/app/inputKeyMap.ts` (new) | `KEY_MAP`, `PAD_MAP`, `MODIFIER_CODES` moved out of `Input.ts` unchanged, so `Input.ts` could take the contract and shrink (613 to 553 lines) |
 | `src/app/Input.ts` | owns a `FocusLedger`; `onKeyDown` asks it; `endFrame` calls `afterFrame`; the bridge's click does not set `lastDevice` to pointer |
 | `ChapterSelectScreen.ts`, `frontend/chapterCards.ts` | the rail is one tab stop; the selected card is `data-cursor`; stays 399 lines |
@@ -122,8 +122,8 @@ Job specs in `D:/Tools/pyrefly-scratch/2026-10-28/ui-input/jobs/` (README has th
 2. Tab on the **pause menu** stays the approved "next tab", so a keyboard-only user cannot Tab into its Back and Hide chips (they
    are reachable by the game keys and by assistive technology). Making Tab the browser's there means retiring the Until Dawn Tab
    binding (Q, E, L1, R1 and the arrows stay); `pause-remake.test.ts` pins Tab today.
-3. Tab is **no longer the game's triangle on prep**. Nothing advertised it (the Sphere Grid's hint says SHIFT WALKS), Q and Shift
-   still are triangle.
+3. Tab is **no longer the game's triangle on prep**. Nothing advertised it (the Sphere Grid's hint says SHIFT WALKS), Q is still
+   triangle, and so is a lone Shift, now on its release (review M2; `docs/handoff/ui-input.md`).
 
 ## Block for NOW.md (not edited here: other lanes edit it; paste at the merge)
 

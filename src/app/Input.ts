@@ -215,19 +215,17 @@ export class Input implements InputSnapshot {
       noteInputDevice('keyboard');
     }
     const button = KEY_MAP[e.code];
+    this.focus.noteKey(e.code); // any key while a Shift is held back: that Shift starts a chord, it is no tap
     if (!button) return;
     const exclusive = claimed && claim?.exclusive === true;
     // Who owns the key (`focusContract.ts`): a text field, the browser's Tab on a screen that gives it up, or a Tab-focused control (Enter and Space) takes it whole;
-    // the game latches nothing and prevents nothing. An exclusive claimant has already taken the key and never asks.
+    // the game latches nothing and prevents nothing (a Shift there waits for `onKeyUp`). An exclusive claimant has already taken the key and never asks.
     if (!exclusive && this.focus.keyDown(e) !== 'game') return;
     // Tab (where it is the game's) and the arrows would otherwise scroll or move focus out of the game.
     if (e.code === 'Tab' || e.code === 'Space' || e.code.startsWith('Arrow')) e.preventDefault();
-    // An exclusive claimant consumed this key outright. Stopping the DOM event
-    // is not enough: latching the abstract button here is what used to let the
-    // screen behind an overlay act on the very press that dismissed it, one
-    // frame later.
-    if (exclusive) return;
-    if (e.repeat) return;
+    // An exclusive claimant consumed this key outright. Stopping the DOM event is not enough: latching the
+    // abstract button here is what used to let the screen behind an overlay act on the very press that dismissed it.
+    if (exclusive || e.repeat) return;
     this.heldKeys.add(e.code);
     this._lastDevice = 'keyboard';
     this.press(button);
@@ -237,6 +235,7 @@ export class Input implements InputSnapshot {
     if (this.keyboardClaim && !e.ctrlKey && !e.metaKey && !e.altKey) e.stopImmediatePropagation();
     const button = KEY_MAP[e.code];
     if (!button) return;
+    if (this.focus.shiftTap(e.code) && !this.keyboardClaim) { this._lastDevice = 'keyboard'; this.press(button); } // a lone Shift let go: the triangle its key-down held back
     this.heldKeys.delete(e.code);
     // Another key bound to the same button may still be held.
     const stillHeld = Object.entries(KEY_MAP).some(
@@ -246,6 +245,7 @@ export class Input implements InputSnapshot {
   };
 
   private readonly onBlur = (): void => {
+    this.focus.reset();
     this.heldKeys.clear();
     this.padDown.clear();
     for (const b of BUTTONS) this.release(b);

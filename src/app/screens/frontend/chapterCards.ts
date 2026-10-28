@@ -108,6 +108,18 @@ const LONG_TITLE = 22;
 /** A title longer than this (only the Leblanc preview's, 31) takes one more step down, on its card and on the hero. */
 const XLONG_TITLE = 28;
 
+/**
+ * Move the cursor mark in place (the fixed list lights one card without re-rendering it): `on` is the one tab stop, the screen's cursor and the
+ * current card; every other playable card is `tabindex` -1 and unmarked. Same attributes `cardHtml` writes for a selected card.
+ */
+export function markCardCursor(card: Element, on: boolean): void {
+  card.classList.toggle('fe-card--sel', on);
+  card.toggleAttribute('data-cursor', on);
+  card.setAttribute('tabindex', on ? '0' : '-1');
+  if (on) card.setAttribute('aria-current', 'true');
+  else card.removeAttribute('aria-current');
+}
+
 export function cardHtml(tile: ChapterTile, index: number, selected: boolean, bestTimeMs: number | null = null): string {
   const num = `<span class="fe-card__num">${escapeHtml(tile.numeral ?? '')}</span>`;
   // PR-0275 (both games): a long title ("Sin: the Fins and the Core") steps down a size instead of ending in an ellipsis.
