@@ -8,7 +8,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { AGE_CAP_MS, AtbLive, HOLD_BACK, LEAD_MAX, Running, atbBarsSmooth, ease, scaleStyle, setAtbBarsSmooth, shimmerDelay, structure } from '../../src/ui/ffx2/AtbLive.ts';
+import { AGE_CAP_MS, AtbLive, HOLD_BACK, LEAD_MAX, Running, SLEW_GAP, SLEW_RATE, atbBarsSmooth, ease, scaleStyle, setAtbBarsSmooth, shimmerDelay, structure } from '../../src/ui/ffx2/AtbLive.ts';
 import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
 import { partyRowHtml } from '../../src/ui/ffx2/PartyRows.ts';
 import type { AtbSnapshot, BattleState, FFX2Combatant } from '../../src/battle/common/types.ts';
@@ -108,6 +108,28 @@ describe('ease(): the bar that is drawn between the extrapolated values', () => 
       expect(at(2200)).toBeCloseTo(at(2990), 9); // standing still well before the end of the hold
       expect(at(2990)).toBeLessThanOrEqual((1500 + AGE_CAP_MS) / 8800 + LEAD_MAX); // and no further past the model than its cap plus the lead
     }
+  });
+
+  it('m5 of the review: the first step off a held 0 (the engine gauge jumps 2.6 px when its recovery ends) and the first frame after a hold are 1 px or less, at 60, 120 and 144 Hz', () => {
+    const bar = 188; // Paine's track in the review's run
+    for (const hz of [60, 120, 144]) {
+      const dt = 1000 / hz;
+      let prev = 0; // held at 0 through the recovery
+      let t = 0;
+      const steps: number[] = [];
+      const target = 0.0138 + 0.0036; // the first nonzero snapshot and a part of the age the model runs on
+      for (let i = 0; i < 12 * (hz / 60); i++, t += dt) {
+        const next = ease(prev, target, dt, 0.0002);
+        steps.push((next - prev) * bar);
+        prev = next;
+      }
+      expect(Math.max(...steps)).toBeLessThanOrEqual(1);
+      expect(prev).toBeGreaterThanOrEqual(target - 5e-4); // it still arrives, inside 12 frames of 60 Hz (after that it only creeps, never more than LEAD_MAX past the model)
+      expect(prev).toBeLessThanOrEqual(target + LEAD_MAX + 1e-9);
+    }
+    // the slew only trims small gaps: a bar that is far behind (a gap of SLEW_GAP or more) is the plain ease, and the cap is above any natural fill speed
+    expect(ease(0.2, 0.2 + SLEW_GAP, 16.7)).toBeGreaterThan(0.2 + SLEW_RATE * 16.7);
+    expect(SLEW_RATE).toBeGreaterThan(1 / 4000); // above a bar that fills in 4 s, twice the natural 8.8 s
   });
 
   it('a spent bar and a full bar are drawn at once; a drawn bar is never taken back for a snapshot a hair behind', () => {

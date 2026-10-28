@@ -72,7 +72,8 @@ export class SphereGridView {
   /** Pan in authoring px, zoom in authoring px per grid unit. */
   private pan = { x: 0, y: 0 };
   private zoom = DEFAULT_ZOOM;
-  private readonly glide = new GridGlide(); private readonly glideOn = gridEaseOn(); // MF-13
+  private readonly glide = new GridGlide(); // MF-13
+  private readonly glideOn = gridEaseOn();
   /** Authoring px per... see the file header. Recomputed on every resize. */
   private viewScale = 1;
   private w = 1;
@@ -181,7 +182,8 @@ export class SphereGridView {
     const cssW = (this.el.clientWidth || 334) / unit;
     const cssH = (this.el.clientHeight || 90) / unit;
     const dpr = typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1;
-    // Under a hidden tab or a canvas-less test DOM the rect collapses to 0: fall back to 1:1 rather than dividing by zero.
+    // Under a hidden tab or a canvas-less test DOM the rect collapses to 0;
+    // fall back to 1:1 rather than dividing by zero.
     this.viewScale = rect.width > 0 ? (rect.width / cssW) * dpr : dpr;
     this.w = cssW;
     this.h = cssH;
@@ -281,7 +283,11 @@ export class SphereGridView {
 
   // ----------------------------------------------------------- navigation
 
-  /** Walk the cursor to the linked node that lies most nearly in `(dx, dy)`. Links, not screen proximity: the grid is a graph, and hopping to a node you cannot reach would make the keyboard lie about what Enter will do. */
+  /**
+   * Walk the cursor to the linked node that lies most nearly in `(dx, dy)`.
+   * Links, not screen proximity: the grid is a graph, and hopping to a node
+   * you cannot reach would make the keyboard lie about what Enter will do.
+   */
   moveCursor(dx: number, dy: number): boolean {
     const from = this.cursorNode;
     if (!from) return false;

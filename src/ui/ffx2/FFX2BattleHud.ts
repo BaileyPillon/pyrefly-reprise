@@ -66,7 +66,7 @@ import { BattleMessageBanner } from './battleMessage.ts';
 import { fightDecidedBy } from './fightDecided.ts';
 import { fightEnding } from '../../battle/ffx2/end-flag.ts';
 import { EndHold } from './endHold.ts'; // the party's bars while the fight is ending: nothing counts toward a turn that cannot come
-import { AtbLive, atbBarsSmooth } from './AtbLive.ts'; // MF-07: `?atbbars=smooth`, the bars that run (FFX-2 only)
+import { AtbLive } from './AtbLive.ts'; // MF-07: `?atbbars=smooth`, the bars that run (FFX-2 only)
 import { displayNameOf } from './displayName.ts';
 import { IntentOpeningHold } from './intentOpeningHold.ts';
 import { demoAdvisorOneLine, demoPanelStart } from '../../app/demo/demoHud.ts'; // R61: the conference demo's cleaner HUD (`?demo=1` only)
@@ -160,7 +160,7 @@ export class FFX2BattleHud implements HudPort {
   private overlay!: HTMLElement;
   private partyEl!: HTMLElement;
   private enemyEl!: HTMLElement;
-  private readonly atb = new AtbLive(); private readonly atbSmooth = atbBarsSmooth(); // MF-07: the bars run per frame (`update`), the columns are rebuilt only when their structure changes
+  private readonly atb = new AtbLive(); // MF-07: the bars run per frame (`update`), the columns are rebuilt only when their structure changes
   private telegraphEl!: HTMLElement;
   private commandEl!: HTMLElement;
   /** PR-0012: the highlighted row's help sentence, a top-of-screen band (D-040), `battleHelpOn()`-gated. */
@@ -506,7 +506,7 @@ export class FFX2BattleHud implements HudPort {
 
   /** Per-frame tick from `BattleScreen`, so numerals freeze with the game loop. */
   update(dt: number): void {
-    if (this.atbSmooth) this.atb.tick(dt); // MF-07
+    if (this.atb.smooth) this.atb.tick(dt); // MF-07
     this.layoutFences();
     this.layoutPlates();
     this.nodeMarks.update();
@@ -1302,14 +1302,15 @@ export class FFX2BattleHud implements HudPort {
   }
 
   private renderParty(state: BattleState, snapshot: AtbSnapshot): void {
-    const smooth = this.atbSmooth;
+    const smooth = this.atb.smooth;
     const rows = state.activeIds
       .map((id, i) => {
         const c = state.combatants[id];
         if (!isFfx2(c)) return '';
         const bar = this.endHold.bar(state, id, snapshot.bars.find((b) => b.actorId === id) ?? null); // frozen while the fight is ending, spells in flight excepted
         if (smooth) this.atb.feed(id, bar, snapshot.elapsedMs);
-        return partyRowHtml(c, bar, { actingId: this.actingId, index: i, ...(this.artNamespace ? { artNamespace: this.artNamespace } : {}), ...(smooth ? { live: { fill: this.atb.fillNow(id, bar?.fill ?? 0) } } : {}) });
+        const live = smooth ? { live: { fill: this.atb.fillNow(id, bar?.fill ?? 0) } } : {}; // MF-07: the fill the frame loop is drawing now
+        return partyRowHtml(c, bar, { actingId: this.actingId, index: i, ...(this.artNamespace ? { artNamespace: this.artNamespace } : {}), ...live });
       })
       .join('');
     if (smooth && this.atb.keep('party', rows) && this.partyEl.firstChild) return; // MF-07: only a bar moved; the frame loop draws it
@@ -1320,7 +1321,7 @@ export class FFX2BattleHud implements HudPort {
 
   private renderEnemies(state: BattleState, snapshot: AtbSnapshot): void {
     const html = enemyGaugesHtml(state, snapshot, { revealed: this.revealed, charging: this.chargeStages });
-    if (this.atbSmooth && this.atb.keep('enemy', html) && this.enemyEl.firstChild) return; // MF-07: nothing in the column changed
+    if (this.atb.smooth && this.atb.keep('enemy', html) && this.enemyEl.firstChild) return; // MF-07: nothing in the column changed
     this.enemyEl.innerHTML = html;
     if (this.lit.ids.size) this.paintLit();
   }

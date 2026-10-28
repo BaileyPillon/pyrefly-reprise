@@ -47,6 +47,13 @@ export const SNAP_JUMP = 0.3;
 const CREEP = 0.4;
 /** The most the drawn bar may lead the model while it creeps: about one logic step of the engine's gauge (1.5 px of a 188 px bar). */
 export const LEAD_MAX = 0.008;
+/**
+ * A small gap is closed no faster than this fraction a ms (0.005 of the bar a 60 Hz frame, 1 px of a 200 px bar): the bar's first step off a held 0 (the engine's gauge jumps 2.6 px
+ * when the recovery ends: the first frame closed 1.40 px of it, review of 2026-10-27 m5) and the first frame after a hold come out under 1 px. About 2.7 times the natural speed of the
+ * slowest bar, so a rising bar is never held back by it; a gap of {@link SLEW_GAP} or more (a new bar, a jump) is the plain ease.
+ */
+export const SLEW_RATE = 0.0003;
+export const SLEW_GAP = 0.04;
 /** How much of the last rate the next snapshot pair changes: the engine's gauge moves in logic steps of 33 ms but the snapshots come every 50 ms, so a pair alone says 1 or 2 steps. */
 const RATE_MIX = 0.35;
 
@@ -75,7 +82,8 @@ export function ease(prev: number, target: number, dtMs: number, rate = 0): numb
     const ceiling = target + LEAD_MAX;
     return prev >= ceiling ? prev : Math.min(1, ceiling, prev + Math.max(0, rate) * CREEP * Math.max(0, dtMs));
   }
-  const next = prev + (target - prev) * (1 - Math.exp(-Math.max(0, dtMs) / EASE_TAU_MS));
+  const eased = prev + (target - prev) * (1 - Math.exp(-Math.max(0, dtMs) / EASE_TAU_MS));
+  const next = target - prev < SLEW_GAP ? Math.min(eased, prev + SLEW_RATE * Math.max(0, dtMs)) : eased;
   return target - next < 5e-4 ? target : next;
 }
 
@@ -139,6 +147,8 @@ interface Entry {
 
 /** The party column's bars: the models fed by the snapshots, the elements they are drawn on, and the per-frame write. */
 export class AtbLive {
+  /** `?atbbars=smooth` as the page was opened: read once, when the HUD is built. */
+  readonly smooth = atbBarsSmooth();
   private readonly entries = new Map<CombatantId, Entry>();
   private nowMs = 0;
   private partySig = '';
