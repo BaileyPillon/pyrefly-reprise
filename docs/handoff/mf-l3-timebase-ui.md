@@ -1,5 +1,7 @@
 # Motion-fluidity pass, lane L3: the presenter's timebase and the motion of the interface (branch `mf-l3-timebase-ui`, 2026-10-27)
 
+> **Release 68 note (2026-10-28):** this note describes release 66. `?atbbars`, `?ctbslide` and `?triggerhappy` are ON by default since release 68 (`?fluidui=today` is release 67's interface; `?gridease` stays held off); **REDUCE MOTION beats every word** for all four pieces; the turn-order list's fading row now waits 70 ms (CP-11's name touch). See `docs/handoff/m3-flips.md`.
+
 Bailey, 2026-10-26 ~13:45 EDT: "I need an additional pass for motion, motion fluidity, animations etc please"; he delegated every decision to the driver. Plan: `D:/Tools/pyrefly-scratch/2026-10-26/fluidity/plan.json` (lane L3: MF-08, MF-16, MF-07, MF-13, MF-24).
 Branch `mf-l3-timebase-ui` from `origin/main` acbd815d3 merged with `origin/post-tool-pin` (adb44d675; every number below is read by the release tree's pinned harness `critic/runner/lib/continuity.mjs`, stamped by `tools/continuity-id.mjs`). Nothing deploys. Work tree `D:/pyrefly-rig-rikkudk`; evidence `D:/Tools/pyrefly-scratch/2026-10-26/fluidity/build/mf-l3-timebase-ui/`; clip cards `D:/Tools/pyrefly-scratch/2026-10-26/fluidity/cards/CP-08`, `CP-11`, `CP-14`.
 

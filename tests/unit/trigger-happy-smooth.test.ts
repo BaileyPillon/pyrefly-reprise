@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 /**
- * Trigger Happy's bar and ring move every drawn frame (MF-24 / TB-06, motion-fluidity pass lane L3; game case: FFX-2 only; a look, so behind `?triggerhappy=smooth` / `?fluidui=on`, default today's).
+ * Trigger Happy's bar and ring move every drawn frame (MF-24 / TB-06, motion-fluidity pass lane L3; game case: FFX-2 only; a look: ON by default since release 68 (the driver's call under Bailey's delegation), `?triggerhappy=today` / `?fluidui=today` is release 67's steps, and REDUCE MOTION reads today: `m3-flips.test.ts`).
  *
  * Today `render()` rewrites the overlay with `innerHTML` every 33 ms and on every press: the ring and the bar step in 2- and 3-frame holds at 60 Hz. With the word on the markup is built once and a
  * `requestAnimationFrame` loop writes the ring's `stroke-dashoffset` and the bar's `transform: scaleX` from `performance.now()`; the 33 ms timer keeps only the window's end.
@@ -63,17 +63,20 @@ async function trace(hz: number, frames: number, windowMs: number, search: strin
 }
 
 describe('Trigger Happy: the switch word', () => {
-  it('is off unless ?triggerhappy=smooth or ?fluidui=on', () => {
-    expect(triggerHappySmooth('')).toBe(false);
+  it('is on by default (release 68) and off with ?triggerhappy=today or ?fluidui=today; the own word beats ?fluidui= both ways', () => {
+    expect(triggerHappySmooth('')).toBe(true);
     expect(triggerHappySmooth('?triggerhappy=smooth')).toBe(true);
+    expect(triggerHappySmooth('?triggerhappy=today')).toBe(false);
+    expect(triggerHappySmooth('?fluidui=today')).toBe(false);
+    expect(triggerHappySmooth('?fluidui=today&triggerhappy=smooth')).toBe(true);
     expect(triggerHappySmooth('?fluidui=on')).toBe(true);
     expect(triggerHappySmooth('?fluidui=on&triggerhappy=today')).toBe(false);
   });
 });
 
 describe('Trigger Happy: today steps, the smooth word moves every frame', () => {
-  it('today: the bar holds for 2 or 3 frames at 60 Hz (a 33 ms timer)', async () => {
-    const { scale } = await trace(60, 60, 1800, '');
+  it('today (`?triggerhappy=today`, release 67\'s look): the bar holds for 2 or 3 frames at 60 Hz (a 33 ms timer)', async () => {
+    const { scale } = await trace(60, 60, 1800, '?triggerhappy=today');
     const distinct = new Set(scale.map((v) => v.toFixed(4))).size;
     expect(distinct).toBeLessThanOrEqual(31); // a new value about every 33 ms: 60 frames, 30 values
     expect(distinct).toBeGreaterThanOrEqual(28);

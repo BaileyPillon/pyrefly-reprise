@@ -134,7 +134,7 @@ function tidus(): Actor {
 }
 function koLanding(game: 'ffx' | 'ffx2', eased: boolean): { cutMs: number; landMs: number; landings: number } {
   setPaceGame(game);
-  if (eased) setMoveWord('kotopple', 'eased');
+  setMoveWord('kotopple', eased ? 'eased' : 'today'); // both arms name their word, so the baseline stays release 67's whichever way the default is set (today since the review of release 68's flips)
   const a = tidus();
   const living = new LivingFigure(a);
   const ctx = (d: number): LifeCtx => ({ dt: d / 1000, realDt: d / 1000, game, breath: false, collapse: true, rm: false, grid: [4, 6] });

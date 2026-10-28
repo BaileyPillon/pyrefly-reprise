@@ -123,9 +123,10 @@ describe('the three picks are the defaults', () => {
     expect(STANCE_DEFAULT).toBe('v1a');
     expect(CAUSE_DEFAULT).toBe('pick');
     expect(CURVES_DEFAULT).toBe('real-snappy');
-    expect(MOVE_DEFAULTS).toEqual({ hit: 'knock', run: 'flow', rigko: 'whole', strikeshape: 'travel' });
+    // release 67's four, then release 68's three (hurtstring, summon, ramps: `m3-flips.test.ts` pins those; kotopple is held at today)
+    expect(MOVE_DEFAULTS).toEqual({ hit: 'knock', run: 'flow', rigko: 'whole', strikeshape: 'travel', hurtstring: 'hold', summon: 'leap', ramps: 'smooth' });
     expect([moveDefault('hit'), moveDefault('run'), moveDefault('rigko'), moveDefault('strikeshape')]).toEqual(['knock', 'flow', 'whole', 'travel']);
-    for (const k of Object.keys(MOVE_WORDS) as MoveKey[]) if (k !== 'hit' && k !== 'run' && k !== 'rigko' && k !== 'strikeshape') expect(moveDefault(k)).toBe('today');
+    for (const k of Object.keys(MOVE_WORDS) as MoveKey[]) if (!(k in MOVE_DEFAULTS)) expect(moveDefault(k)).toBe('today'); // shakeband
   });
 
   it('a pick is one of its word\'s listed values, and today is always another', () => {
@@ -381,10 +382,14 @@ describe('nothing else moved', () => {
     expect(interludeMode()).toBe('all');
   });
 
-  it('the other five lane L2 words and the interlude read today / on as in release 66', () => {
+  it('the other five lane L2 words read release 68\'s picks (shakeband and kotopple still today), `today` on each is release 67\'s, and the interlude reads on as in release 66', () => {
     const OTHER = (Object.keys(MOVE_WORDS) as MoveKey[]).filter((k) => k !== 'hit' && k !== 'run' && k !== 'rigko' && k !== 'strikeshape');
     expect(OTHER.slice().sort()).toEqual(['hurtstring', 'kotopple', 'ramps', 'shakeband', 'summon']);
-    for (const k of OTHER) expect(moveWordFromSearch('', k)).toBe('today');
+    const R68: Record<string, string> = { hurtstring: 'hold', kotopple: 'today', ramps: 'smooth', shakeband: 'today', summon: 'leap' };
+    for (const k of OTHER) {
+      expect(moveWordFromSearch('', k)).toBe(R68[k]);
+      expect(moveWordFromSearch(`?${k}=today`, k)).toBe('today');
+    }
     visit('');
     expect(interludeMode()).toBe('all');
   });

@@ -8,7 +8,7 @@ import { rollTriggerHappy } from '../../battle/ffx2/minigames.ts';
 import { isCoarsePointer } from '../common/ControlsHint.ts';
 import { padLabel } from '../common/padGlyphs.ts';
 import { RawInputWatcher, rawInputSuspended } from '../ffx/rawInput.ts';
-import { fluidWord } from '../common/fluidUi.ts';
+import { fluidWord, reduceMotionNow } from '../common/fluidUi.ts';
 
 /**
  * Gunner — Trigger Happy [`ffx2-combat-core.md` §3.1, `visual-bible.md` §4.10.1]:
@@ -44,7 +44,7 @@ import { fluidWord } from '../common/fluidUi.ts';
  * release-36 roll (`rollTriggerHappy`, 6 to 16), the answer every human got
  * before the count was honoured.
  *
- * ## The bar and the ring that move every frame (MF-24 / TB-06, motion-fluidity pass lane L3; FFX-2 only; a look, so behind `?triggerhappy=smooth` or `?fluidui=on`, default today's)
+ * ## The bar and the ring that move every frame (MF-24 / TB-06, motion-fluidity pass lane L3; FFX-2 only; a look: ON by default since release 68, `?triggerhappy=today` or `?fluidui=today` is release 67's; off while REDUCE MOTION is on)
  *
  * Today `render()` rewrites the whole overlay with `innerHTML` on a 33 ms timer (and on every press), so the ring and the bar step in 2- and 3-frame holds at 60 Hz (4 and 5 at 144 Hz) over a 1.8 s mash.
  * With the word on the markup is built once, a `requestAnimationFrame` loop paints from `performance.now()` (the ring's `stroke-dashoffset`, the bar's `transform: scaleX`, as `LadyLuckReels` moves
@@ -68,9 +68,12 @@ export interface TriggerHappyHandle {
 const TICK_MS = 33;
 const MAX_HITS = 16;
 
-/** `?triggerhappy=smooth` (or `?fluidui=on`): the bar and the ring paint every drawn frame. */
+/**
+ * The bar and the ring paint every drawn frame: the default since release 68 (`FLUID_DEFAULTS.triggerhappy`; `?triggerhappy=today` or `?fluidui=today` is release 67's 33 ms steps), and never while the player's REDUCE MOTION is on
+ * (it beats the word: the bar then steps as it did). Read once per mini-game, when it opens.
+ */
 export function triggerHappySmooth(search: string | undefined = globalThis.location?.search): boolean {
-  return fluidWord('triggerhappy', 'smooth', search);
+  return !reduceMotionNow() && fluidWord('triggerhappy', 'smooth', search);
 }
 
 /** The input a press came from, named as `Input.lastDevice` names them. */

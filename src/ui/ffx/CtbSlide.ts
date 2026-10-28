@@ -1,6 +1,7 @@
 /**
- * THE TURN-ORDER LIST THAT SLIDES (MF-13 / TB-13, motion-fluidity pass lane L3; game case: FFX only: the CTB list is the FFX HUD, FFX-2 has the ATB bars instead; look change, so behind
- * `?ctbslide=flip` or `?fluidui=on`, default today's).
+ * THE TURN-ORDER LIST THAT SLIDES (MF-13 / TB-13, motion-fluidity pass lane L3; game case: FFX only: the CTB list is the FFX HUD, FFX-2 has the ATB bars instead; a look change: ON by default since release 68,
+ * `?ctbslide=today` or `?fluidui=today` is release 67's jump; and never while the player's REDUCE MOTION is on, because a Web Animation is not stopped by a CSS rule: the gate is in {@link ctbSlideOn} and in
+ * {@link slideRows}).
  *
  * `CtbList.render` replaces the whole list with `innerHTML` on every sync, so the order of the portraits jumps to its new arrangement and the unit that acted, going to the back, vanishes
  * and reappears. FLIP: before the replacement note where each row IS (First), after it note where each row now is (Last), and let each row that exists in both play from the old place to the new
@@ -15,10 +16,13 @@
  * declaration beats every animation, so a `transform` slide never showed in the real Chapter I HUD (found by the stepped capture, 2026-10-27; the lab list had no such rule). `translate` composes with
  * whatever `transform` the row has and nothing overrides it.
  *
+ * **The name touch of release 67's card (CP-11, +33 ms; fixed in release 68):** the row that fades in (the unit that acted, at the back) lands where a sliding neighbour still is, so for about two frames "Seymour Flux" was
+ * drawn over the new "Tidus". A fade that has a slide beside it now waits {@link FADE_AFTER_MS}, drawn at opacity 0 meanwhile, until the sliding rows have covered about 80 percent of their way by the curve.
+ *
  * Pure DOM helpers: no `three`, no timers; jsdom (no `animate`, no boxes) does nothing.
  */
 
-import { fluidWord } from '../common/fluidUi.ts';
+import { fluidWord, reduceMotionNow } from '../common/fluidUi.ts';
 
 /** How long a row takes to reach its new place, ms: inside the 150 to 250 ms the plan asks for, the same at any display rate (a Web Animation counts wall time). */
 export const SLIDE_MS = 200;
@@ -33,10 +37,16 @@ export function setCtbSlide(on: boolean | null): void {
   forced = on;
 }
 
-/** Is the sliding list asked for (`?ctbslide=flip` or `?fluidui=on`)? */
+/** Does the list slide now? The default since release 68 (`FLUID_DEFAULTS.ctbslide`; `?ctbslide=today` / `?fluidui=today` put the jump back), a forced test switch, and never under REDUCE MOTION (it beats all of them). */
 export function ctbSlideOn(search: string | undefined = globalThis.location?.search): boolean {
-  return forced ?? fluidWord('ctbslide', 'flip', search);
+  return !reduceMotionNow() && (forced ?? fluidWord('ctbslide', 'flip', search));
 }
+
+/**
+ * How long a row that fades in waits when rows slide beside it, ms: the slide's curve has covered 80 percent of its way at about 63 ms ({@link SLIDE_EASING}, the same at any display rate), and a name 55 to 140 px wide
+ * on a 170 px pitch is clear of the place it left by then, so the new name is not drawn under a sliding one (CP-11, +33 ms). Counted on the page clock like the slide itself.
+ */
+export const FADE_AFTER_MS = 70;
 
 export interface RowPlace {
   left: number;
@@ -78,6 +88,7 @@ export function measureRows(list: HTMLElement): Map<string, RowPlace> {
  * others with its name over theirs. Returns how many animations it started.
  */
 export function slideRows(list: HTMLElement, before: ReadonlyMap<string, RowPlace>): number {
+  if (reduceMotionNow()) return 0; // REDUCE MOTION: the list jumps as it did (the caller asks `ctbSlideOn` first; this is the animation's own gate)
   const moves: Array<{ row: HTMLElement; dx: number; dy: number; far: number }> = [];
   const fades: HTMLElement[] = [];
   for (const [key, row] of keyed(list)) {
@@ -106,6 +117,10 @@ export function slideRows(list: HTMLElement, before: ReadonlyMap<string, RowPlac
       slid++;
     }
   }
-  for (const row of fades) row.animate([{ opacity: 0 }, { opacity: 1 }], { duration: SLIDE_MS * 0.75, easing: 'ease-out' });
+  // A fade beside a slide waits for the sliding names to clear its place (backwards fill: opacity 0 until it starts) and ends with the slides; a fade on its own plays at once.
+  const beside = slid > 0;
+  for (const row of fades) {
+    row.animate([{ opacity: 0 }, { opacity: 1 }], beside ? { duration: SLIDE_MS - FADE_AFTER_MS, delay: FADE_AFTER_MS, easing: 'ease-out', fill: 'backwards' } : { duration: SLIDE_MS * 0.75, easing: 'ease-out' });
+  }
   return slid + fades.length;
 }

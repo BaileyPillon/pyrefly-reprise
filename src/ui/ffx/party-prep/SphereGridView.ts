@@ -73,7 +73,6 @@ export class SphereGridView {
   private pan = { x: 0, y: 0 };
   private zoom = DEFAULT_ZOOM;
   private readonly glide = new GridGlide(); // MF-13
-  private readonly glideOn = gridEaseOn();
   /** Authoring px per... see the file header. Recomputed on every resize. */
   private viewScale = 1;
   private w = 1;
@@ -242,9 +241,9 @@ export class SphereGridView {
     this.render();
   }
 
-  /** MF-13: a snap with the word off; with it on, `move` (which sets pan and zoom where they should end) becomes a glide from what is drawn now. */
+  /** MF-13b: a snap with the word off or REDUCE MOTION on (asked at each move); with it on, `move` (which sets pan and zoom where they should end) becomes a glide from what is drawn now. */
   private gliding(move: () => void): void {
-    if (!this.glideOn) return move();
+    if (!gridEaseOn()) { this.glide.cancel(); return move(); } // a glide still running when REDUCE MOTION came on ends where it is
     this.glide.run(() => ({ x: this.pan.x, y: this.pan.y, z: this.zoom }), (v) => this.setView(v), move, performance.now());
   }
 

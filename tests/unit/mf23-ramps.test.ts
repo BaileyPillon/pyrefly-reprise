@@ -42,7 +42,8 @@ class RampRec extends Rec {
 const budget = (log: string[]) => ({ guard: async (p: void | Promise<void>): Promise<void> => (log.push('guard'), void (await p)), sleep: async (ms: number): Promise<void> => void log.push(`sleep:${Math.round(ms)}`) });
 
 describe('dimTo: six steps today, one tween with the word', () => {
-  it('today: six brightness jumps from 1 to the target, one sleep of a sixth between, and no tween', async () => {
+  it('today (release 67 look; the default since release 68 is smooth): six brightness jumps from 1 to the target, one sleep of a sixth between, and no tween', async () => {
+    setMoveWord('ramps', 'today');
     const a = new RampRec('yielder', []);
     const log: string[] = [];
     await dimTo([a as never], 0.4, 360, 6, budget(log));
@@ -79,7 +80,8 @@ describe('petrify through the presenter', () => {
     s.actors.set('sin', actor);
     return s;
   }
-  it('today: four stone jumps a quarter each and a brightness step with each', async () => {
+  it('today (release 67 look): four stone jumps a quarter each and a brightness step with each', async () => {
+    setMoveWord('ramps', 'today');
     const a = new Rec('sin', []);
     const ctx = createEventCtx({ stage: stage(a) }, async () => undefined, () => 'normal');
     await playEvent(ctx, petrify);

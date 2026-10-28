@@ -29,7 +29,8 @@ function ctxAt(events: unknown[], at: number): never {
 
 describe('stringHold: when the string goes on', () => {
   const events = [start, dmg(0), dmg(1), dmg(2), end];
-  it('today (the default) holds nothing', () => {
+  it('today (release 67 look; the default since release 68 is hold) holds nothing', () => {
+    setMoveWord('hurtstring', 'today');
     for (let i = 1; i <= 3; i++) expect(stringHold(ctxAt(events, i), events[i] as never)).toBeUndefined();
   });
   it('hold: the first two blows of three hold, the last lets go', () => {

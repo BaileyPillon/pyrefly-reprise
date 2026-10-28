@@ -17,13 +17,21 @@
  */
 
 import type { AtbSnapshot, CombatantId } from '../../battle/common/types.ts';
-import { fluidWord } from '../common/fluidUi.ts';
+import { fluidWord, reduceMotionNow } from '../common/fluidUi.ts';
 
 type Bar = AtbSnapshot['bars'][number];
 
-/** `?atbbars=smooth` (or `?fluidui=on`) puts the running bars on; anything else, and no word, is today's ratcheting bars. */
-export function atbBarsSmooth(search: string | undefined = globalThis.location?.search): boolean {
+/**
+ * Are the running bars asked for? The default since release 68 (`FLUID_DEFAULTS.atbbars`): `?atbbars=today` (or `?fluidui=today`) is release 67's ratcheting bars, `?atbbars=smooth` / `?fluidui=on` the running ones.
+ * The word and the default only; {@link atbBarsSmooth} adds REDUCE MOTION.
+ */
+export function atbBarsWanted(search: string | undefined = globalThis.location?.search): boolean {
   return forced ?? fluidWord('atbbars', 'smooth', search);
+}
+
+/** The running bars play now: asked for ({@link atbBarsWanted}) and the player's REDUCE MOTION is off (it beats the word, the default and a forced switch: the bars then ratchet as release 67's did). */
+export function atbBarsSmooth(search: string | undefined = globalThis.location?.search): boolean {
+  return !reduceMotionNow() && atbBarsWanted(search);
 }
 
 let forced: boolean | null = null;
@@ -147,8 +155,28 @@ interface Entry {
 
 /** The party column's bars: the models fed by the snapshots, the elements they are drawn on, and the per-frame write. */
 export class AtbLive {
-  /** `?atbbars=smooth` as the page was opened: read once, when the HUD is built. */
-  readonly smooth = atbBarsSmooth();
+  /** The word and the default ({@link atbBarsWanted}) as the page was opened: read once, when the HUD is built. */
+  private readonly wanted = atbBarsWanted();
+  private was = false;
+  /**
+   * The running bars play this frame: asked for, and REDUCE MOTION off. REDUCE MOTION is read live (the pause can change it mid-fight); a frame that finds it on drops what the running bars bound (the column
+   * signatures and the fill elements), so the bars that come back when it goes off again rebuild the columns instead of leaving the plain rows the ratcheting path drew.
+   */
+  get smooth(): boolean {
+    const on = this.wanted && !reduceMotionNow();
+    if (!on && this.was) this.release();
+    this.was = on;
+    return on;
+  }
+
+  private release(): void {
+    this.partySig = this.enemySig = '';
+    for (const e of this.entries.values()) {
+      e.fillEl = e.chargeEl = null;
+      e.lastFill = e.lastCharge = -1;
+      e.drawnFill = e.drawnCharge = -1;
+    }
+  }
   private readonly entries = new Map<CombatantId, Entry>();
   private nowMs = 0;
   private partySig = '';
