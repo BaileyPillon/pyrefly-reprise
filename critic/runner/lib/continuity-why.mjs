@@ -6,7 +6,7 @@
 //
 // WHAT IT READS
 //   - the swaps the analysis already made (figure, from, to, tMs, ghost frames and ms, counted, smear);
-//   - `meta.swapLog` when the build has it (`window.__pyrefly.swapLog()`, engine/motion/SwapLog.ts, lane L1; the probe reads it in the probe's clock): `reasons` (why the presenter asked for each painting: menu,
+//   - `meta.swapLog` when the build has it (`window.__pyrefly.swapReasons()`, engine/motion/SwapLog.ts, lane L1; the probe reads it in the probe's clock): `reasons` (why the presenter asked for each painting: menu,
 //     turn-start, wind-up, cast, item, attack, after-action) and `designed` (every blend the planner chose on purpose, with its class and length in ms). A build without the log gets the neighbours' reading
 //     (the figure's next swap and the gap to it), tagged `source: 'neighbours'` so a reader knows which it was.
 // THE DESIGNED BLEND (switchable, `continuity.classes.designedBlend` in the policy)

@@ -1,5 +1,5 @@
 /**
- * T-02 of the motion-fluidity pass (lane L5): the probe reads the swap log (`window.__pyrefly.swapLog()`, engine/motion/SwapLog.ts, lane L1) into `meta.swapLog` in the PROBE'S clock, a build without
+ * T-02 of the motion-fluidity pass (lane L5): the probe reads the swap log (`window.__pyrefly.swapReasons()`, engine/motion/SwapLog.ts, lane L1) into `meta.swapLog` in the PROBE'S clock, a build without
  * it gives an empty log, and a log that throws never voids the probe. The probe runs in node against a minimal page; the rest of what it reads is pinned in critic-continuity-probe.test.ts.
  */
 import { describe, expect, it } from 'vitest';
@@ -10,7 +10,7 @@ const CFG = { ringScale: 0.6, ringFrames: 16, maxStrips: 50, cellHeight: 120, en
 
 function probeWith(swapLog: unknown) {
   const pyrefly: Record<string, unknown> = { app: { screens: [], nextFrame: () => Promise.resolve() }, battleState: () => ({ log: [] }) };
-  if (swapLog !== undefined) pyrefly['swapLog'] = swapLog;
+  if (swapLog !== undefined) pyrefly['swapReasons'] = swapLog;
   return createProbe(CFG, { window: { __pyrefly: pyrefly }, document: {}, performance: { now: () => 1000 } } as never);
 }
 

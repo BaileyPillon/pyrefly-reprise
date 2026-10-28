@@ -69,11 +69,22 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 65 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 66 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '66',
+    date: '2026-10-28',
+    lines: [
+      { tag: 'Both', text: 'The first time a figure shows a pose, such as an aeon arriving, an item throw or a party swap, the picture no longer stops for a moment while its painting is read.' },
+      { tag: 'Both', text: 'Every wait in a fight now counts in the screen’s own frames, so a fight keeps the same time at 60, 120 and 144 Hz and stops cleanly when you pause or hide the window.' },
+      { tag: 'Both', text: 'A knocked-out figure’s thud, squash and ground shake now land on the very frame its body reaches the ground, not a beat later.' },
+      { tag: 'Both', text: 'The tails, manes and sashes on Seymour Flux and Bahamut now move the same on a 60, 120 or 144 Hz screen.' },
+      { tag: 'FFX-2', text: 'A girl who casts a spell or uses an item from her menu now goes straight from ready to the spell, without a see-through blink to idle in between.' },
+    ],
+  },
   {
     release: '65',
     date: '2026-10-27',
