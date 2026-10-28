@@ -1,5 +1,7 @@
 # Motion-fluidity pass, lane L2 "moves" (branch `mf-l2-moves`, 2026-10-26; review pass 2026-10-27)
 
+> **Release 67 note (2026-10-28):** the defaults this note calls "today" for ?stance, ?swapcause and ?hit were changed to Bailey's picks (v1a, pick, knock) in release 67; ?stance=today&swapcause=today&hit=today is release 66's look. See docs/handoff/r67-picks.md.
+
 Authority: Bailey, 2026-10-26 ~13:45 EDT, "I need an additional pass for motion, motion fluidity, animations etc please" (his bar: "The motion and animations need to be top notch, even above visuals"); every decision delegated to the driver. Nothing here deploys.
 
 **Build:** `origin/main` `acbd815d3` merged with `origin/post-flicker` (`8d005bfb9`, the MF-04 clips are made on a build that has it), `origin/post-shake-time` (`c64ea0de6`, the field-clock shake MF-03 and MF-27 build on) and `origin/post-tool-pin` (`adb44d675`, the pinned harness); all three were re-checked on 2026-10-27 and have not moved. The plan: `D:/Tools/pyrefly-scratch/2026-10-26/fluidity/plan.json`, lane L2.

@@ -1,5 +1,7 @@
 # mf-l1-swaps: the swap lane of the motion-fluidity pass (MF-01, MF-05, MF-06, and the MF-22 capability)
 
+> **Release 67 note (2026-10-28):** the defaults this note calls "today" for ?stance, ?swapcause and ?hit were changed to Bailey's picks (v1a, pick, knock) in release 67; ?stance=today&swapcause=today&hit=today is release 66's look. See docs/handoff/r67-picks.md.
+
 Branch `mf-l1-swaps` (from `origin/main` `acbd815d3` merged with `origin/post-flicker` `8d005bfb9` and `origin/post-tool-pin` `adb44d675`), 2026-10-26 and 27, lane L1 "poses and swaps" of
 `D:/Tools/pyrefly-scratch/2026-10-26/fluidity/plan.json`. Authority: Bailey, 2026-10-26 ~13:45 EDT, "I need an additional pass for motion, motion fluidity, animations etc please", with every decision
 delegated to the driver. Nothing deployed; nothing on the live site or the booth copy. Game case (AGENTS.md rule 14): MF-01 FFX-2 only (FFX's turn start is a burst of its own, before the menu); MF-05, MF-06 and
