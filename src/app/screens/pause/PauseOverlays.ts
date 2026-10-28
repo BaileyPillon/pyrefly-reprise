@@ -24,6 +24,8 @@ import { prefersReducedMotion } from '../../../ui/common/transitions/reduceMotio
 import { EYE_CANDY_CLOSE_ACTION, EyeCandyPage } from './eyeCandyPage.ts';
 import { PRESENTATION_CLOSE_ACTION, PresentationPage } from './presentationPage.ts';
 import type { PauseRowPage } from './actions.ts';
+import { SAVE_PORT_CLOSE_ACTION, SavePortPage } from './savePortPage.ts';
+import { savePortOn } from '../../savePortSwitch.ts';
 
 export interface PauseOverlayHost {
   app: App;
@@ -48,6 +50,8 @@ export class PauseOverlays {
   private credits: CreditsPanel | null = null;
   private eyeCandy: EyeCandyPage | null = null;
   private presentation: PresentationPage | null = null;
+  /** The portable-save page (`?saveport=on` only; `savePortPage.ts`). */
+  private saveFile: SavePortPage | null = null;
   /** Screen roots hidden for the duration of photo mode. */
   private hiddenUnder: HTMLElement[] = [];
 
@@ -168,12 +172,13 @@ export class PauseOverlays {
   openPage(page: PauseRowPage, game: GameId): void {
     if (page === 'credits') this.openCredits();
     else if (page === 'eyeCandy') this.openEyeCandy(game);
+    else if (page === 'saveFile') this.openSaveFile();
     else this.openPresentation();
   }
 
   openCredits(): void {
     const root = this.host.root();
-    if (this.credits || this.eyeCandy || this.presentation || !root) return;
+    if (this.credits || this.eyeCandy || this.presentation || this.saveFile || !root) return;
     this.credits = new CreditsPanel(root, () => this.host.app.save.settings.reduceMotion);
   }
 
@@ -220,7 +225,7 @@ export class PauseOverlays {
    */
   openEyeCandy(game: GameId): void {
     const root = this.host.root();
-    if (this.eyeCandy || this.credits || this.presentation || !root || game === 'ff7') return;
+    if (this.eyeCandy || this.credits || this.presentation || this.saveFile || !root || game === 'ff7') return;
     this.eyeCandy = new EyeCandyPage(root, { save: this.host.app.save, game, reduceMotion: () => prefersReducedMotion() });
   }
 
@@ -240,7 +245,7 @@ export class PauseOverlays {
   /** The PRESENTATION page (Bailey, 2026-10-08, "go with C"): TITLE SCREEN and CHAPTER MUSIC, both games. */
   openPresentation(): void {
     const root = this.host.root();
-    if (this.presentation || this.eyeCandy || this.credits || !root) return;
+    if (this.presentation || this.eyeCandy || this.credits || this.saveFile || !root) return;
     this.presentation = new PresentationPage(root, this.host.app.save);
   }
 
@@ -255,11 +260,47 @@ export class PauseOverlays {
     this.host.root()?.querySelector<HTMLElement>('[data-row="presentation"]')?.focus({ preventScroll: true });
   }
 
+  // ------------------------------------------------------------- save file
+
+  /** The portable-save page (the saves lane of 2026-10-28; both games), up from OPTIONS -> PROGRESS -> SAVE FILE. Only with `?saveport=on`. */
+  openSaveFile(): void {
+    const root = this.host.root();
+    if (!savePortOn() || this.saveFile || this.eyeCandy || this.credits || this.presentation || !root) return;
+    this.saveFile = new SavePortPage(root, this.host.app.save, { changed: () => this.host.refresh() });
+  }
+
+  /** As {@link closeEyeCandy}: a back puts the cursor and the DOM focus on the SAVE FILE row. A file chosen but not confirmed is dropped. */
+  closeSaveFile(back = true): void {
+    if (!this.saveFile) return;
+    this.saveFile.dispose();
+    this.saveFile = null;
+    if (!back) return;
+    audio.playSfx('cancel');
+    this.host.pageClosed?.('saveFile');
+    this.host.root()?.querySelector<HTMLElement>('[data-row="saveFile"]')?.focus({ preventScroll: true });
+  }
+
+  /** One frame of input while the SAVE FILE page is up: the page owns the frame, Esc / X / Backspace / Start / `Esc BACK` close it, L1 / R1 close it and pass on to the tab change. */
+  saveFileInput(input: InputSnapshot, took: (b: Button) => boolean): boolean {
+    if (!this.saveFile) return false;
+    if (took('l1') || took('r1')) {
+      this.closeSaveFile(false);
+      return false;
+    }
+    if (input.actions.includes(SAVE_PORT_CLOSE_ACTION) || input.justPressed('cancel') || took('start')) {
+      this.closeSaveFile();
+      return true;
+    }
+    this.saveFile.input(input);
+    return true;
+  }
+
   /** A tab change: close whichever page is up, leaving the cursor where the new tab puts it. */
   closePages(): void {
     this.closeCredits(false);
     this.closeEyeCandy(false);
     this.closePresentation(false);
+    this.closeSaveFile(false);
   }
 
   /**
@@ -269,6 +310,7 @@ export class PauseOverlays {
    */
   pageInput(input: InputSnapshot, took: (b: Button) => boolean): boolean {
     if (this.credits) return this.creditsInput(input, took);
+    if (this.saveFile) return this.saveFileInput(input, took);
     const page = this.eyeCandy ?? this.presentation;
     if (!page) return false;
     const close = this.eyeCandy ? EYE_CANDY_CLOSE_ACTION : PRESENTATION_CLOSE_ACTION;
@@ -286,8 +328,10 @@ export class PauseOverlays {
   }
 
   /** What each page shows (`null` while it is not up), for the pause's debug snapshot. */
-  pagesSnapshot(): { credits: Record<string, unknown> | null; eyeCandy: Record<string, unknown> | null; presentation: Record<string, unknown> | null } {
-    return { credits: this.credits?.snapshot() ?? null, eyeCandy: this.eyeCandy?.snapshot() ?? null, presentation: this.presentation?.snapshot() ?? null };
+  pagesSnapshot(): { credits: Record<string, unknown> | null; eyeCandy: Record<string, unknown> | null; presentation: Record<string, unknown> | null; saveFile?: Record<string, unknown> | null } {
+    const pages = { credits: this.credits?.snapshot() ?? null, eyeCandy: this.eyeCandy?.snapshot() ?? null, presentation: this.presentation?.snapshot() ?? null };
+    // The portable-save page names itself only with its address word on, so the debug view is today's with the word off.
+    return savePortOn() ? { ...pages, saveFile: this.saveFile?.snapshot() ?? null } : pages;
   }
 
   dispose(): void {
@@ -297,6 +341,8 @@ export class PauseOverlays {
     this.eyeCandy = null;
     this.presentation?.dispose();
     this.presentation = null;
+    this.saveFile?.dispose();
+    this.saveFile = null;
     this.photo?.dispose();
     this.photo = null;
     // A briefing left up would outlive the screen that owns its input.

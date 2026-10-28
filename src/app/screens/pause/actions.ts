@@ -15,8 +15,8 @@ import type { SaveStore } from '../../SaveData.ts';
 import { battleHelpOn, setBattleHelp } from '../../../ui/coach/coachState.ts';
 import { adjustSetting } from './settings.ts';
 
-/** The pages an OPTIONS row opens: the row's own id. */
-export type PauseRowPage = 'credits' | 'eyeCandy' | 'presentation';
+/** The pages an OPTIONS row opens: the row's own id. `saveFile` is the portable-save page, behind `?saveport=on` (`savePortSwitch.ts`). */
+export type PauseRowPage = 'credits' | 'eyeCandy' | 'presentation' | 'saveFile';
 
 export interface PauseActionHost {
   save: SaveStore;
@@ -60,6 +60,7 @@ export function activateRow(host: PauseActionHost, id: string | null, dir: 1 | -
     case 'credits':
     case 'eyeCandy':
     case 'presentation':
+    case 'saveFile':
       host.openPage?.(id);
       return;
     default:

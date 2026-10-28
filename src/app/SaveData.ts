@@ -429,6 +429,31 @@ export class SaveStore {
     }
   }
 
+  /**
+   * Portable saves (`savePort.ts`, `savePortFlow.ts`; the address word `?saveport=on`): put `next` in place of the whole
+   * save. Nothing calls this unless a player imports a save file or undoes an import.
+   *
+   * Written straight to the slot, not through {@link writeMerged}: an import REPLACES, so another tab's older copy must not
+   * be folded back in. The slot is written first and the in-memory save swapped only after that write held, so a
+   * refusal (no storage, quota, a locked-down profile) leaves everything as it was, and `false` says so. The mixer and
+   * the comfort flags are told, as a constructor load does. `next` must already be migrated (`readSaveFile` does that).
+   */
+  replaceWith(next: SaveData): boolean {
+    if (!this.storage) return false;
+    const json = JSON.stringify(next);
+    try {
+      this.storage.setItem(this.key, json);
+    } catch {
+      return false;
+    }
+    this.data = next;
+    this.unflushedPlayTimeMs = 0;
+    this.lastRaw = json;
+    audio.applySettings(next.settings);
+    applyComfort(next.settings);
+    return true;
+  }
+
   // ------------------------------------------------------------- accessors
 
   chapter(id: string): ChapterRecord {

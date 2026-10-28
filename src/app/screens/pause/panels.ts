@@ -23,6 +23,7 @@ import { formatPlayTime } from '../../../ui/common/chapterObjectives.ts';
 import { gameHasVoice } from '../../../story/voice/voiceManifest.ts';
 import { accessRows, optionRows } from '../PauseScreenPanels.ts';
 import { padLabel } from '../../../ui/common/padGlyphs.ts';
+import { savePortOn } from '../../savePortSwitch.ts';
 
 /** One row in a tab body. */
 export interface PanelRow {
@@ -88,6 +89,8 @@ export interface OptionsContext {
   extraRows: readonly { id: string; label: string }[];
   /** Whose chapter this is. FFX-2 alone gets the X-2 BATTLE and ATB SPEED rows (rule 14). */
   game?: GameId;
+  /** The SAVE FILE row (portable saves). Absent = the address word `?saveport=on` decides, default off (`savePortSwitch.ts`). */
+  savePort?: boolean;
 }
 
 /**
@@ -151,6 +154,8 @@ export function optionsColumns(ctx: OptionsContext): PanelColumn[] {
   // D-305 (Bailey, 2026-09-30, option O1): ABOUT, then CREDITS, which opens the
   // credits panel (`creditsPanel.ts`). A button, not a setting. Both games.
   encounter.push(row('about', 'About', '', { sub: true }), command('credits', 'Credits'));
+  // Portable saves (the saves lane of 2026-10-28; both games): EXPORT / IMPORT a save file. Behind `?saveport=on`, default off: with the word off this row is not printed.
+  if (ctx.savePort ?? savePortOn()) encounter.push(row('data', 'Progress', '', { sub: true }), command('saveFile', 'Save file'));
 
   return [
     { id: 'settings', heading: 'Settings', rows: settings, wide: true },

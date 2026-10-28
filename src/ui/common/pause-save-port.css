@@ -1,0 +1,39 @@
+/*
+ * The SAVE FILE page (portable saves; `src/app/screens/pause/savePortPage.ts`; behind the address word `?saveport=on`).
+ *
+ * It is the PRESENTATION page's sibling: the rows, the heading, the help line, the `Esc BACK` prompt and the phone
+ * layout all come from `pause-eye-candy.css`. This file adds only what that page does not have: the status line under
+ * the rows, the comparison in the help line (one line per row of text, so the newlines in it are kept), the warning
+ * colour of REPLACE MY SAVE, and the file chooser's input, which is never drawn (the rows are the buttons).
+ *
+ * Game case: both. The colours are the pause's own tokens (`--pu-accent`: gold under FFX, pyre pink under FFX-2).
+ */
+
+.pause__sp-file { display: none; }
+
+.pause__sp-status {
+  margin: clamp(10px, 1.8vh, 18px) 0 0;
+  min-height: 2.8em;
+  max-width: clamp(300px, 28vw, 520px);
+  font-family: var(--ig-font-numeral, 'Rajdhani', sans-serif);
+  font-size: var(--pu-fs);
+  line-height: 1.38;
+  letter-spacing: 0.02em;
+  color: rgba(var(--pu-paper), 0.6);
+}
+.pause__sp-status[data-tone='ok'] { color: rgba(var(--pu-paper), 0.94); }
+.pause__sp-status[data-tone='bad'] { color: var(--pu-accent); }
+
+/* The comparison needs room: two lines of numbers per save. */
+.pause__sp-help { max-width: clamp(320px, 28vw, 520px); }
+.pause__sp-help .pause__ec-help-b { white-space: pre-line; }
+
+/* The row that swaps the save is the one in the accent; the one that keeps it is plain. */
+.pause__ec-col .pause__ec-row.pause__sp-row--warn .pause__k { color: var(--pu-accent); opacity: 0.92; }
+.pause__ec-col .pause__ec-row.pause__sp-row--warn.pause__row--sel .pause__k { opacity: 1; }
+
+@media (max-width: 620px) {
+  .pause__sp-help { max-width: none; }
+  .pause__sp-status { max-width: none; min-height: 0; }
+}
+
