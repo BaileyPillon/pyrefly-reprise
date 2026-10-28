@@ -1,6 +1,7 @@
 /**
- * MF-15 (motion-fluidity pass, lane L2 "moves"; curves audit C-04; FFX only as played, the code is shared): an aeon's arrival and dismissal, behind `?summon=` (`today` default, `leap`).
+ * MF-15 (motion-fluidity pass, lane L2 "moves"; curves audit C-04; FFX only as played, the code is shared): an aeon's arrival and dismissal, behind `?summon=` (`leap` the default since release 68; `today` before).
  *
+ * **Release 68 made `leap` the default (the driver's call under Bailey's delegation of 2026-10-28; REDUCE MOTION reads today: `m3-flips.test.ts`); the "today" cases below name the word.**
  * Today the aeon fades in on its spot and only then hops (a sine arc: 10 px in its first frame, no crouch, no squash); on the way out it fades, THEN the party starts to fade back, leaving the player's
  * side empty for 130 ms. `leap`: the arrival is the leap (a crouch, a lift that leaves and meets the floor at rest, a landing squash) started when the fade passes 60 percent, and the party fades back in
  * while the aeon fades out. The presenter's own `summon` and `dismiss` beats on a stage of recorders, and the lift read through the real curve driver.
@@ -87,7 +88,8 @@ async function summoned(): Promise<{ stage: Stage; done: Promise<void> }> {
 }
 
 describe('the aeon arrives', () => {
-  it('today: it fades in with the party fading out; when the fade is done the sine hop starts; no leap', async () => {
+  it('today (release 67 look; the default since release 68 is leap): it fades in with the party fading out; when the fade is done the sine hop starts; no leap', async () => {
+    setMoveWord('summon', 'today');
     const { stage, done } = await summoned();
     const ixion = rec(stage, 'ixion');
     expect(ixion.fades).toHaveLength(1);
@@ -153,7 +155,8 @@ describe('the aeon leaves', () => {
     return { stage, done };
   }
 
-  it('today: the aeon fades out and is removed; only then does the party fade back in', async () => {
+  it('today (release 67 look): the aeon fades out and is removed; only then does the party fade back in', async () => {
+    setMoveWord('summon', 'today');
     const { stage, done } = await dismissed();
     const ixion = rec(stage, 'ixion');
     expect(rec(stage, 'tidus').fades).toHaveLength(0);

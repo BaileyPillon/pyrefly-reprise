@@ -274,7 +274,7 @@ export async function summon(ctx: EventCtx, combatantId: CombatantId, aeonId: st
     slot: SISTER_SLOT[combatantId] ?? 1,
   });
   actor?.setAlpha(0);
-  const land = arrival(actor); // MF-15 (`?summon=leap`, `motion/SummonBeat.ts`): today the hop after the fade, else the leap started as the fade passes 60 percent
+  const land = arrival(actor, ctx.moments.reducedMotion); // MF-15 (`?summon=leap`, the default since release 68, `motion/SummonBeat.ts`): the leap started as the fade passes 60 percent; today's hop after the fade with `?summon=today` or REDUCE MOTION
   // PR-0181: the party leaves the field as the aeon arrives (`SummonStaging.ts`).
   await settled(ctx, Promise.all([actor?.fadeTo(1, 620), partyOffStage(ctx.stage, combatantId)]).then(() => undefined), 620);
   land();

@@ -296,7 +296,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return summon(ctx, event.combatantId, event.aeonId);
 
     case 'dismiss': {
-      const a = ctx.stage.actor(event.combatantId); const across = crossBack(ctx.stage, a, TIMING.dismiss); // MF-15 (`?summon=leap`): the party fades back in while the aeon fades out
+      const a = ctx.stage.actor(event.combatantId); const across = crossBack(ctx.stage, a, TIMING.dismiss, ctx.moments.reducedMotion); // MF-15 (`?summon=leap`, REDUCE MOTION reads today): the party fades back in while the aeon fades out
       await settled(ctx, a?.fadeTo(0, TIMING.dismiss), TIMING.dismiss);
       ctx.stage.removeCombatant(event.combatantId);
       return settled(ctx, across ?? partyBack(ctx.stage), PARTY_SWAP_MS); // PR-0181: the party returns
