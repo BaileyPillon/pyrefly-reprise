@@ -35,6 +35,31 @@ export function demoQuickRetry(chapterId: string, attempt: number): boolean {
   return attempt > 0 && demoDefeatPanel(chapterId);
 }
 
+/**
+ * The chapters whose retry on the PUBLIC address opens hurried (release 67; round 30's PR-0481, "retry from the fight itself"; the driver's call under Bailey's delegation, his to overturn). **FFX only, Chapter I
+ * (`seymour-flux`)**: its opening is the voiced one (the boss's recorded roar and name plate in a long sweep, the part a lost-and-retried player has just watched: 16.5 s from TRY AGAIN to the first menu against
+ * 9.9 s in Chapter IV and 1.7 s on the demo path, round 30). Chapter IV (FFX-2) has no recorded opening and every other chapter keeps its authored one.
+ */
+export const PUBLIC_QUICK_RETRY_CHAPTERS: ReadonlySet<string> = new Set(['seymour-flux']);
+
+/** `?retryopening=full`: the public address's retry plays the whole authored opening, as release 66 did (for a comparison, or if the hurried one ever misbehaves). Nothing else turns it off. */
+export function retryOpeningFull(search: string = typeof window !== 'undefined' ? window.location.search : ''): boolean {
+  try {
+    return new URLSearchParams(search).get('retryopening') === 'full';
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * The PUBLIC address's quick retry (release 67): from the second attempt of a fight on, Chapter I's opening runs hurried (`ui/common/transitions/openingHurry.ts`: the card for 0.7 s, the sweep cut, the reveal and its roar
+ * skipped; nothing of the fight itself changes: the same engine, the retry's own seed). The first attempt keeps the authored opening, and so does every other chapter. Not for demo mode, where {@link demoQuickRetry}
+ * already hurries a retry (both demo chapters). `?retryopening=full` is release 66.
+ */
+export function publicQuickRetry(chapterId: string, attempt: number, search?: string): boolean {
+  return attempt > 0 && !demoDefeatPanel(chapterId) && PUBLIC_QUICK_RETRY_CHAPTERS.has(chapterId) && !retryOpeningFull(search);
+}
+
 /** `?retrytheme=off`: the retried fight's theme is left to the chain, as in r63-play (a comparison, or if it ever misbehaves at the booth). */
 export function retryThemeSwitchedOff(search: string = typeof window !== 'undefined' ? window.location.search : ''): boolean {
   try {
