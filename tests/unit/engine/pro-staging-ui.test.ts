@@ -288,9 +288,9 @@ describe('the boss card', () => {
 });
 
 describe('the defeat card', () => {
-  const boot = async (): Promise<{ screen: ProDefeatScreen; choices: string[]; press: (name: string) => void }> => {
+  const boot = async (otherFight = true): Promise<{ screen: ProDefeatScreen; choices: string[]; press: (name: string) => void }> => {
     const choices: string[] = [];
-    const screen = new ProDefeatScreen({ game: 'ffx', turns: 12, elapsedMs: 51000, attempt: 1, onChoice: (c) => choices.push(c) });
+    const screen = new ProDefeatScreen({ game: 'ffx', turns: 12, elapsedMs: 51000, attempt: 1, otherFight, onChoice: (c) => choices.push(c) }); // the demo path by default here; backlog 58's public wording is pinned in tests/unit/pro-defeat-label.test.ts
     screen.root = document.createElement('div');
     document.body.appendChild(screen.root);
     screen.enter();

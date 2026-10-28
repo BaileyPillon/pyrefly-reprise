@@ -500,7 +500,7 @@ export class GameFlow {
     const keepForRetry = retryTheme(chapter); // r64-fixes: a lost demo fight's own theme stays decoded under the defeat theme (a TRY AGAIN asks for it at once)
     const music: ResultsMusicHandle | null = cue?.kind === 'defeat' ? startResultsMusic(audio, cue, keepForRetry ? [keepForRetry] : undefined) : null; // the battle screen is still up: nothing stops this cue before the player chooses
     let choice: ResultsChoice = 'continue';
-    const screen = new ProDefeatScreen({ game: chapter.game, turns: outcome.result?.turns, elapsedMs: outcome.elapsedMs, attempt, onChoice: (picked) => (choice = picked) });
+    const screen = new ProDefeatScreen({ game: chapter.game, turns: outcome.result?.turns, elapsedMs: outcome.elapsedMs, attempt, otherFight: demoDefeatPanel(chapter.id), onChoice: (picked) => (choice = picked) }); // backlog 58: OTHER FIGHT only where it starts the other fight (the demo path); the public address reads CHAPTER SELECT
     await this.app.pushOverlay(screen);
     if (demoDefeatPanel(chapter.id) && !retryWarmSwitchedOff()) void warmDemoFights(this.app, [chapter.id], { light: true }); // r63-play (quick retry): the fight's stage is built while the card is up, so a TRY AGAIN finds it ready
     await screen.done;
