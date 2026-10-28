@@ -142,7 +142,9 @@ html[data-phone-battle] [data-phone-step='target'] .mad {
   display: none !important;
 }
 
-/* ------------------------------------------------- the enemy-move line */
+/* ------------------------------------------------- the enemy-move line
+   Two lines at most (docs/handoff/phone-battle-hud.md; backlog 57, release 67): in Chapter I at 390x844 the line wrapped to three. The body is clamped to two lines with an
+   ellipsis, and its height to the two line boxes (14px at 1.3). The one exception is below: a line moved off a guarded feature is narrower and keeps its five. */
 html[data-phone-battle] .eint__panel,
 html[data-phone-battle] .eint__toggle {
   --eint-scale: 1 !important;
@@ -158,7 +160,7 @@ html[data-phone-battle] .eint__panel {
   min-width: 0 !important;
   max-width: var(--phud-line-maxw, calc(100% - 20px)) !important;
   height: auto !important;
-  max-height: 84px !important;
+  max-height: 56px !important;
   transform: none !important;
   padding: 6px 10px !important;
   overflow: hidden;
@@ -175,9 +177,11 @@ html[data-phone-battle] .eint__panel::before {
 html[data-phone-battle] .eint__body {
   display: -webkit-box !important;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  max-height: 72px !important;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  max-height: 2.6em !important;
   overflow: hidden !important;
+  text-overflow: ellipsis;
   padding: 0 !important;
   font-size: 14px !important;
   line-height: 1.3 !important;
@@ -189,6 +193,7 @@ html[data-phone-battle][data-phud-line-moved] .eint__panel {
 }
 html[data-phone-battle][data-phud-line-moved] .eint__body {
   -webkit-line-clamp: 5;
+  line-clamp: 5;
   max-height: 92px !important;
 }
 html[data-phone-battle] .eint__body > * {
