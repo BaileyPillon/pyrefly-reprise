@@ -23,13 +23,15 @@ const PX = 146; // px per world unit at the party's depth, 1600 wide
 const FRAME: Record<number, number> = { 60: 1000 / 60, 120: 1000 / 120, 144: 1000 / 144 };
 
 describe('the switch word', () => {
-  it('reads today unless ?hit= names ramp or knock', () => {
-    expect(moveWordFromSearch(undefined, 'hit')).toBe('today');
-    expect(moveWordFromSearch('', 'hit')).toBe('today');
+  it('reads knock (the release 67 pick) unless ?hit= names today or ramp; today is the release 66 look', () => {
+    expect(moveWordFromSearch(undefined, 'hit')).toBe('knock');
+    expect(moveWordFromSearch('', 'hit')).toBe('knock');
+    expect(moveWordFromSearch('?hit=today', 'hit')).toBe('today');
+    expect(moveWordFromSearch('?hit=TODAY', 'hit')).toBe('today');
     expect(moveWordFromSearch('?hit=ramp', 'hit')).toBe('ramp');
     expect(moveWordFromSearch('?hit=KNOCK', 'hit')).toBe('knock');
-    expect(moveWordFromSearch('?hit=wobble', 'hit')).toBe('today');
-    expect(moveWord('hit')).toBe('today');
+    expect(moveWordFromSearch('?hit=wobble', 'hit')).toBe('knock');
+    expect(moveWord('hit')).toBe('knock');
   });
   it('refuses a word the table does not list', () => {
     // @ts-expect-error a word outside the table
@@ -207,7 +209,8 @@ function ctxOf(target: Stub, source?: Stub | undefined, side: 'party' | 'enemy' 
 }
 
 describe('the presenter glue', () => {
-  it('?hit=today (the default): the shake and the recoil exactly as before, nothing else', () => {
+  it('?hit=today (the release 66 look, no longer the default): the shake and the recoil exactly as before, nothing else', () => {
+    setMoveWord('hit', 'today');
     const t = stub(-2);
     hitReact(ctxOf(t, stub(2)), event(), t as never, 360);
     expect(t.calls).toEqual(['shake', 'recoil']);
