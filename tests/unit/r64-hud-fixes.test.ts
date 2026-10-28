@@ -204,7 +204,7 @@ describe('startRetryTheme: the retried fight\'s theme at the press', () => {
 
   it('the flow hands the retried fight a screen word to ask for its theme as it opens (review F3: an ask at the press was dropped by the exit of the lost screen), after the hurried-opening line the r63 test reads, and the warm builds the figures behind the defeat card too', () => {
     const flow = src('src/app/screens/BattleScreenFlow.ts');
-    expect(flow).toContain('if (demoQuickRetry(id, attempt)) openingHurry = true;');
+    expect(flow).toContain('if (demoQuickRetry(id, attempt) || publicQuickRetry(id, attempt)) openingHurry = true;'); // release 67: the public address's Chapter I retry shares the line (the theme line below is still the demo's alone)
     expect(flow).toContain('...(demoQuickRetry(id, attempt) && !retryThemeSwitchedOff() ? { retryTheme: true } : {})');
     expect(flow).not.toContain('startRetryTheme(chapter, audio)'); // no ask at the press: the lost screen's exit stops the music right after it and drops the request
     expect(src('src/app/screens/BattleScreen.ts')).toContain('if (this.opts.retryTheme) startRetryTheme(chapter, audio);');

@@ -1,6 +1,6 @@
 # Motion-fluidity pass, lane L2 "moves" (branch `mf-l2-moves`, 2026-10-26; review pass 2026-10-27)
 
-> **Release 67 note (2026-10-28):** the defaults this note calls "today" for ?stance, ?swapcause and ?hit were changed to Bailey's picks (v1a, pick, knock) in release 67; ?stance=today&swapcause=today&hit=today is release 66's look. See docs/handoff/r67-picks.md.
+> **Release 67 note (2026-10-28):** the defaults this note calls "today" for ?stance, ?swapcause and ?hit were changed to Bailey's picks (v1a, pick, knock) in release 67; ?stance=today&swapcause=today&hit=today is release 66's look. **Message 2 of the picks also moved this lane's ?run to flow and ?rigko to whole (and the older ?curves to real-snappy in the pack; release 66's is ?curves=new): the "default is today" and "default flips are the driver's" lines below describe release 66; ?run=today&rigko=today&curves=new put it back.** See docs/handoff/r67-picks.md.
 
 Authority: Bailey, 2026-10-26 ~13:45 EDT, "I need an additional pass for motion, motion fluidity, animations etc please" (his bar: "The motion and animations need to be top notch, even above visuals"); every decision delegated to the driver. Nothing here deploys.
 
