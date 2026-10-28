@@ -14,7 +14,7 @@
  * | `?rigko=` | `today`, `whole` (**default `whole`** since release 67) | MF-11: a rig boss's knock-out is the whole fall, and its idle key waits for a strike to be over | both (Seymour Flux, Bahamut) |
  * | `?strikeshape=` | `today`, `travel` | MF-14 V3: with `?curves=real-snappy`, the dash keeps the house travel at the 1.1 s pick | both |
  *
- * (Later items of the lane add their words to this table: `kotopple`, `hurtstring`, `summon`, `ramps`, `shakeband`; none of them defaults to anything but today.) A word the table does not list reads as the word's default (today, but for `hit`). The words apply in every
+ * (Later items of the lane add their words to this table: `kotopple`, `hurtstring`, `summon`, `ramps`, `shakeband`; none of them defaults to anything but today.) A word the table does not list reads as the word's default (today, but for `hit`, `run` and `rigko`). The words apply in every
  * chapter of the game they belong to; the film is made in Chapter I (FFX) and Chapter IV (FFX-2).
  */
 import { queryWord } from './DemoGate.ts';
