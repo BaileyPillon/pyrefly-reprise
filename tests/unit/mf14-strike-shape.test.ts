@@ -2,7 +2,7 @@
  * MF-14 V3 (motion-fluidity pass, lane L2; review F-6, 2026-10-27; both games): `?strikeshape=travel`, the strike of `?curves=real-snappy` with the dash kept at the house travel.
  * V1 (`real-snappy`) squeezes the real clips to 1.1 s, which makes Paine's 66 ms swing 34 ms (a teleport: 228 px in one 60 Hz frame at 2,560 wide, the plan's guard is about 60 at 1,600).
  * The plan's V3: the travel stays the house's (FFX 250 ms, FFX-2 200), the wind-up and the hold at least 300 ms, the return and the settle pay for it, the total stays the pick.
- * Default words are today: the row's own phases, the same object.
+ * **Release 67 made `travel` the default** (the driver's call, 2026-10-28; `release67-strikeshape.test.ts` pins the default and its scope); `today` is the clip's own phases, the same object, and every case here names its word.
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { REAL_MOTION } from '../../src/data/motion/realMotion.ts';
@@ -24,10 +24,11 @@ const GAMES = [
 const total = (p: { windupMs: number; travelMs: number; holdMs: number; returnMs: number; settleMs: number }): number => p.windupMs + p.travelMs + p.holdMs + p.returnMs + p.settleMs;
 
 describe('MF-14 V3: the phases of the 1.1 s pick with the house travel', () => {
-  it('today (the default) is the row\'s own object, and the real speed never reads the word', () => {
+  it('today (the old shape) is the row\'s own object, and the real speed never reads the word', () => {
     for (const [game, keys] of GAMES) {
       for (const k of keys) {
         const row = REAL_MOTION[game][k]!.attack!;
+        setMoveWord('strikeshape', 'today');
         expect(phasesOf(game, row, 'snappy')).toBe(row.snappy);
         setMoveWord('strikeshape', 'travel');
         expect(phasesOf(game, row, 'real')).toBe(row.real);
