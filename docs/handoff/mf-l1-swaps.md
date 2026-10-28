@@ -17,7 +17,7 @@ Paper preflight (written beside the build): `docs/plans/mf-l1-swaps-review.md`. 
 | MF-06 swap on the cause | both | `?swapcause=today` (default) / `cut` / `blend3` / `pick`, and `?swapclass=contact,home,hit,recover,glow,castEnd,toss,itemEnd,critical,criticalOut` | `cut`: a cut inside the smear on the contact, the hit, the glow, the toss, the critical flash and the settle. `blend3`: the same moments as a 50 ms blend, every pair (the plan's V2 arm, unguarded, for the clip). `pick`: the cut where the moment has a cover; the 50 ms blend where it has none and the two drawings are close; today's blend where two drawings are far apart (the pick guard below) | B |
 | MF-22 the other chapters | both | `?swapscope=all` (default `pack`) | the stance and cause looks play in ANY chapter, so one chapter can be measured with the rules on (PR-0522). Nothing flips by default | capability |
 
-`window.__pyrefly.swapSwitch({ interlude, stance, cause, classes, scope })` flips one live. `window.__pyrefly.swapLog()` is why the presenter asked for each painting (`reasons`: menu, turn-start, wind-up, cast,
+`window.__pyrefly.swapSwitch({ interlude, stance, cause, classes, scope })` flips one live. `window.__pyrefly.swapReasons()` (NOT `swapLog()`, which stays the older `?swap=aligned` record; review F-2) is why the presenter asked for each painting (`reasons`: menu, turn-start, wind-up, cast,
 item, attack, after-action) and every blend it designed on purpose (`designed`, with its class and 50 ms): lane L5's harness (`mf-l5-tools`, T-02) reads exactly this. `tools/swap-classes.mjs` reads a continuity
 run into the audit's swap classes, splits the stance swaps into menu-open, wind-up and after-action (the plan's "harness split"), finds the interludes, and prices V1a against V1b from the run's own swaps
 (`--price`). Every default is today's look; nothing in this lane flips a default.
@@ -103,6 +103,36 @@ planned cut over 120 px), and 48 planned cuts have a whole step over 120 px agai
 Trema (FFX-2): 302.2 to 140.5 ghost frames a minute (-54 percent), 5,245 to 2,435 ms, no snap, the severity 0.32 as today, the planned cuts' whole step median 33 px, worst 98, none over 120; the 11 swap jerks are the foe's own
 `idle>attack` feet reading, 11 today too. The FFX-2 chapter is clean.
 
+## Review round (2026-10-27): the adversarial review of `02fd5c250`, and what was done (fix commit `411b8d174`, then the records)
+
+The review (`D:/Tools/pyrefly-scratch/2026-10-26/fluidity/build/mf-l1-swaps/review/REVIEW.md`) found no critical finding, one major (a B variant only) and six minor. Every default reproduced as today's look; MF-01's numbers and
+every row of the tables above recomputed from the raw runs. What each finding was and what changed:
+
+| id | finding | what was done |
+|---|---|---|
+| F-1 (major, B variants only) | A girl struck while her FFX-2 command menu is open (Active ATB: ordinary play in Chapter IV) came back from the flinch on the READY painting under `?stance=v1a\|v1b`: `PaintedActor.flinch()` handed back the requested pose `ready` without the `paint: 'idle'` the menu had asked for | `PaintedActor` now remembers the painting with the request (`requestedPaint`) and `flinch()` hands it back with the pose. Proved red then green on the real actor (`fluidity-swaps-actor.test.ts`, "review F-1": today `ready, hurt, ready`; v1b was `idle, hurt, ready`, now `idle, hurt, idle`, life state `ready` throughout) and **in the game** (Chapter IV, Paine struck with her menu open 1 s in, 70 frames later: today `ready`, `v1a` and `v1b` now `idle` (were `ready`), `v3` `ready`; `probe-flinch.log`). A flinch during the `v1b` wind-up is the same path. With no `paint` option the hand-back is the old call, so the defaults are unchanged: the reviewer's differential of 1,152 swaps against post-flicker's source still passes |
+| F-2 | the new `__pyrefly.swapLog()` silently replaced the older `?swap=aligned` `swapLog()` (installed after it in `main.ts`) | the new reader is `__pyrefly.swapReasons()` (`{ reasons, designed }`); `swapLog()` stays the older record (a test installs both in `main.ts`'s order). Lane L5 must read `swapReasons` after the merge (see "Not done") |
+| F-3 | cards that could not show what they were for | `mf01-ch4` and `cp02-ch4/yuna-spell` re-filmed on Yuna's SECOND turn (answer 4, frame 577; the cut-in covers a first turn); `cp01-ch1`'s Tidus is now two moments, `tidus-turn-stance` (the clip runs the whole turn from 92 frames before the menu; the still shows the stance change itself, which FFX makes 80 frames BEFORE the menu opens) and `tidus-turn-windup`; the Chapter IV hit moments say in the key that a hit on a girl is already a 3-frame cut today (the recoil makes her a moving figure), so the cut, the guarded pick and today read the same there; `cp02-ch1`'s V2 line quotes Chapter I's numbers |
+| F-4 | `SwapSwitch.ts` said every look is pack-only (`?interlude` is not: it plays in all seven FFX-2 chapters and under `?pack=off`); no `docs/DEV.md` rows; `SwapLog.ts` cited a file that does not exist on this branch | header corrected, four rows in the DEV.md switch registry, the citation says L5's `continuity-why.mjs` on `mf-l5-tools` will read it |
+| F-5 | `BattlePresenter.ts` (811 lines, over 400) grew by one import line | the import is folded into the existing `BattlePresenterSettle.ts` one (`menuStance` is re-exported there): 810 lines, as on `main` |
+| F-6 | under `?swapcause=cut` an open FFX-2 menu turned a cut into the UNGUARDED 50 ms blend (the big-pair guard applied only to `pick`); `?swapclass=<unknown>` turned every class on | the guard now covers any blend that came from a cut; a `?swapclass=` word naming no class that exists turns none on (empty or absent word: every class). Two tests, each shown red without the change |
+| F-7 (accepted) | `blend3` and `v3` break the lane's own stop rule (40 and 11 swap jerks of 40 px or more in Chapter I) | unchanged and disclosed: they are in the cards on purpose, neither is a pick; the cards' V2 lines carry the harness numbers |
+
+**The arms re-run on the fixed build** (`411b8d174`; same harness, seed 1, 1600 x 900, one run each; the tags are `ch4-fp`, `ch4-fr1`, `ch1-fp`, `ch1-fr1` in `evidence/`). The fixes touch only the stance words under a flinch (F-1) and a cut turned into a blend by an open menu (F-6), so the B arms are the ones to repeat; the default look is proved identical by the differential instead (below).
+
+| run | seconds | swaps | ghost frames a minute | ghost ms a minute | worst severity | snaps | swap jerks (40 px or more, worst px) | planned cuts | whole step of a planned cut: median, worst, over 120 px |
+|---|---|---|---|---|---|---|---|---|---|
+| Chapter IV `?stance=v1b&swapcause=pick`, before the fixes | 378.7 | 298 | 34.1 | 569 | 0.328 | 0 | 4 (1, 45) | 215 | 50.2, 89.8, 0 |
+| Chapter IV `?stance=v1b&swapcause=pick`, after the fixes | 350.2 | 278 | 37.5 | 634 | 0.329 | 0 | 6 (1, 44.7) | 195 | 48.2, 92.3, 0 |
+| Chapter IV `?stance=v1a&swapcause=cut`, before | 367.2 | 306 | 11.4 | 188 | 0.306 | 0 | 5 (1, 44.7) | 277 | 48.8, 85, 0 |
+| Chapter IV `?stance=v1a&swapcause=cut`, after | 349.7 | 300 | 11.8 | 197 | 0.306 | 0 | 4 (1, 45) | 273 | 48.5, 85.6, 0 |
+| Chapter I `?stance=v1b&swapcause=pick`, before | 386.5 | 256 | 36.2 | 613 | 0.332 | 0 | 3 (0, 31.5) | 173 | 63.5, 227.1, 11 |
+| Chapter I `?stance=v1b&swapcause=pick`, after | 387.5 | 256 | 32.7 | 552 | 0.333 | 0 | 3 (0, 31.6) | 175 | 63.7, 226.7, 13 |
+| Chapter I `?stance=v1a&swapcause=cut`, before | 386.8 | 248 | 14.3 | 237 | 0.333 | 0 | 0 (0, 0) | 207 | 53.4, 230.1, 20 |
+| Chapter I `?stance=v1a&swapcause=cut`, after | 387.9 | 248 | 14.4 | 233 | 0.331 | 0 | 0 (0, 0) | 207 | 52.7, 231.6, 18 |
+
+Read these as unchanged. The counts that do not depend on a fight's length agree: **ghost swaps 78 and 78, 24 and 23, 66 and 68, 26 and 26** (Chapter IV pick, Chapter IV cut, Chapter I pick, Chapter I cut: after against before), 0 snaps, the swap jerks of 40 px or more the same (1, 1, 0, 0), the worst severity within 0.002. The per-minute rates move with the fight: Chapter IV's Active ATB fight is not bit-reproducible (the two pick runs were 378.7 and 350.2 s and had a different mix of hits, 32 and 27 foe `idle>hurt` swaps), and in Chapter I the frame timing of the run moved the ghost frames (68 ghost swaps drew 233 frames before, 66 drew 211 after: 3.4 and 3.2 frames a swap). The numbers in the tables above stand.
+
 ## Clip cards (blind letters; the key is in `KEY.json` and `README.txt`, never in the picture)
 
 `D:/Tools/pyrefly-scratch/2026-10-26/fluidity/cards/<card>/`. Frame-stepped at an exact 60 Hz on a virtual clock (never real time), same moment, same seed, every variant plays the same turns (the answers land on the same frames). Per moment: a 720p MP4
@@ -111,29 +141,32 @@ with the variants one after the other and a big letter on each (all under 4 MB),
 | card | decision | moments | variants (blind order in `KEY.json`) |
 |---|---|---|---|
 | `cp01-ch4` | CP-01 turn-start stance, Chapter IV (FFX-2), second turns | Paine to her attack, Yuna to a spell | V0 today, V1a, V1b, V3 (the plan's pick: V1b) |
-| `cp01-ch1` | CP-01, Chapter I (FFX), second turns | Tidus to his attack, Yuna to a spell | V0, V1a, V1b, V3 |
-| `cp02-ch4` | CP-02 swap on the cause, Chapter IV | Paine's and Rikku's strike chain, Yuna's spell, Yuna's and Paine's hit | V0, V1 cut, V2 50 ms blend, V1+V2 (the guarded pick) |
+| `cp01-ch1` | CP-01, Chapter I (FFX), second turns | Tidus: the stance change itself (the clip is the whole turn; the change comes 80 frames before the menu), Tidus's wind-up at the command, Yuna to a spell | V0, V1a, V1b, V3 |
+| `cp02-ch4` | CP-02 swap on the cause, Chapter IV | Paine's and Rikku's strike chain, Yuna's spell (second turn), Yuna's and Paine's hit (the key says a hit is already a 3-frame cut there, so only the plain 50 ms blend differs) | V0, V1 cut, V2 50 ms blend, V1+V2 (the guarded pick) |
 | `cp02-ch1` | CP-02, Chapter I | Tidus's strike, Yuna's spell, Tidus's and Yuna's hit | V0, V1, V2, V1+V2 |
 | `cp12-yunalesca` | CP-12 another chapter, FFX | Tidus's strike, Yuna's spell, Auron's and Yuna's hit | V0 today, V1 rules on |
 | `cp12-trema` | CP-12, FFX-2 | Paine's and Rikku's strike, Yuna's spell and hit | V0, V1 |
-| `mf01-ch4` | MF-01 (information, no look change) | Yuna's spell from her menu | before, after |
+| `mf01-ch4` | MF-01 (information, no look change) | Yuna's spell from her menu, on her second turn (A shows ready, idle for three flagged frames, then cast; B ready, then cast) | before, after |
 
 The plan's picks, for the driver's reading (they are not Bailey's picks): CP-01 V1b (the sourced behaviour: the real game has no ready clip; falls back to V1a, then V3, if the wind-up on the idle painting reads badly), CP-02 V1 where the moment
 has a cover and V2 where it has none (built as `pick`, with the guard), CP-12 V1. The stills of the strike moments show where each pick differs; V2 (the plain 50 ms blend) is in the cards on purpose, so the head pop can be seen.
 
 ## Not done, and why
 
+- **Lane L5's reader** reads `__pyrefly.swapLog()` on its branch; this lane's reader is now `swapReasons()` (F-2). After merging `mf-l5-tools`, one word changes (see the merge line below). The cards' captures, `capture.mjs`, read `swapReasons`.
+- Not re-run on the fixed build: the `blend3` arms (`ch4-r2`, `ch1-r2`), the `v3` arms, the default controls beyond the two listed in the table above, Yunalesca and Trema with the rules on. The fixes cannot move `v3` (no painting option) or the default; the `blend3` arms differ only by F-1's flinch hand-back, which a harness run answers menus too fast to meet.
+- The Chapter I cut, blend and pick films of `cp02-ch1` were not re-filmed (its frames are the first build's; only its V2 text was fixed).
+
 - **MF-18** (anticipation before the cut, and the big cuts) is not built here. It depends on MF-04 (lane L2's `?run=flow`, the readable pull as she brakes: `mf-l2-moves`) and edits L2's run-in file, and it needs MF-05's pick. Under `?stance=v1b` the wind-up on the idle painting
   already carries the ready stance's lean and scale into the strike. Measured for it: the planned cuts' whole step in Chapter IV has median 48 to 54 px, worst 80 to 90, none over 120 px; in Chapter I, 10 to 11 are over 120 px, worst 227 to 233 px, all named: Tidus `critical>hurt`
   (233 px), Auron `follow>idle` (173) and `idle>victory` (159, a camera cut), Tidus and Kimahri `idle>hurt` (128 to 158), Kimahri `ready>attack` and `attack>follow` (125 to 127). `pick` leaves them as they are. Yunalesca shows the class widens with the gate (48 over 120 px).
 - Every B word stays at today until a clip is picked, and the default flips are the driver's (wave 2). A CHANGELOG line per build is the driver's (below); `CHANGELOG.md` is not edited here.
 - The merge with `mf-l2-moves` has one conflict, an import line in `BattlePresenterBeats.ts` (keep L2's `hitReact` import and this lane's `openingPose` import, and one `KeyPoses` import line with `turnStartPose` and `windUpOpens` and whatever else the merged file uses);
-  `mf-l5-tools`, `mf-l3-timebase-ui` and `mf-l4-freezes` merge clean (checked with `git merge-tree`). Lane L5's `designedBlend` class reads this lane's `swapLog().designed` and needs no change here.
+  `mf-l5-tools`, `mf-l3-timebase-ui` and `mf-l4-freezes` merge clean (checked with `git merge-tree`). Lane L5's `designedBlend` class reads this lane's designed-blend log through the debug reader, which is now **`swapReasons()`** (review F-2): after merging `mf-l5-tools`, change the one word in `critic/runner/lib/continuity-probe.mjs` (the `readSwapLog` line, `win.__pyrefly.swapLog` to `win.__pyrefly.swapReasons`, twice) and the same word in `critic/runner/lib/README.md` and `continuity-why.mjs`'s comments; until then L5's reader gets the older array, finds no `reasons` and reports none (silent, not wrong).
 
 ## Checks run
 
-`npx tsc --noEmit` exit 0; the lane's five test files pass (`fluidity-swaps-actor`, `ffx2-interlude`, `ffx2-stance`, `swap-classes`, `swap-guards`); the 190 test files that import any source file this lane changed or merged (2,520 tests) pass; the continuity harness runs above.
-The full suite was not run.
+`npx tsc --noEmit` exit 0; the lane's test files pass (`fluidity-swaps-actor` 26 tests, `ffx2-interlude`, `ffx2-stance`, `swap-classes`, `swap-guards` 7 tests, `pose-swap`); the 190 test files that import any source file this lane changed or merged (2,525 tests) pass after the review fixes; `node tools/orphans.mjs` lists no lane module; the reviewer's differential (the real `PaintedActor`, this lane against post-flicker's source: 1,152 swaps, every default frame identical) and his flinch test pass on `411b8d174`. The full suite was run by the reviewer at `02fd5c250` (1,637 files, 26,014 tests, 0 failures), not again after the fixes.
 
 ## Lines for the driver's CHANGELOG (not written into `CHANGELOG.md`)
 
