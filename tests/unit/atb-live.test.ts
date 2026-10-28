@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 /**
- * The FFX-2 ATB bars that run (MF-07 / TB-03, motion-fluidity pass lane L3; game case: FFX-2 only: the ATB HUD; look change, so behind `?atbbars=smooth`, default today's bars).
+ * The FFX-2 ATB bars that run (MF-07 / TB-03, motion-fluidity pass lane L3; game case: FFX-2 only: the ATB HUD; a look: ON by default since release 68 (the driver's call under Bailey's delegation), `?atbbars=today` / `?fluidui=today` is release 67's ratcheting bars, and REDUCE MOTION reads today: `m3-flips.test.ts`).
  *
  * Today the Active pump hands the HUD a snapshot 20 times a second and the HUD rewrites both columns with `innerHTML`: the bar ratchets about 4 px every 62 ms and a CSS animation inside a
  * rebuilt row starts again with every rebuild. With the word on, a column is rebuilt only when its structure changed, the fill is a full-width bar scaled by `transform` on its existing
@@ -170,13 +170,16 @@ describe('structure(): the markup without what moves', () => {
 });
 
 describe('the switch word', () => {
-  it('is off unless ?atbbars=smooth, and a test can force it', () => {
-    expect(atbBarsSmooth('')).toBe(false);
-    expect(atbBarsSmooth('?atbbars=today')).toBe(false);
-    expect(atbBarsSmooth('?atbbars=smooth')).toBe(true);
-    expect(atbBarsSmooth('?pack=demo')).toBe(false);
-    setAtbBarsSmooth(true);
+  it('is on by default (release 68), off with ?atbbars=today or ?fluidui=today, and a test can force it either way', () => {
     expect(atbBarsSmooth('')).toBe(true);
+    expect(atbBarsSmooth('?atbbars=today')).toBe(false);
+    expect(atbBarsSmooth('?fluidui=today')).toBe(false);
+    expect(atbBarsSmooth('?atbbars=smooth')).toBe(true);
+    expect(atbBarsSmooth('?pack=demo')).toBe(true);
+    setAtbBarsSmooth(false);
+    expect(atbBarsSmooth('')).toBe(false);
+    setAtbBarsSmooth(true);
+    expect(atbBarsSmooth('?atbbars=today')).toBe(true);
   });
 });
 

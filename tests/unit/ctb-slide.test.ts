@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 /**
- * The FFX turn-order list that slides, and the Sphere Grid that glides (MF-13 / TB-13, motion-fluidity pass lane L3; game case: FFX only; look change, so behind `?ctbslide=flip` /
- * `?gridease=on` / `?fluidui=on`, default today's).
+ * The FFX turn-order list that slides, and the Sphere Grid that glides (MF-13 / TB-13, motion-fluidity pass lane L3; game case: FFX only; a look: `?ctbslide=flip` is ON by default since release 68 (the driver's call under Bailey's delegation; `?ctbslide=today` / `?fluidui=today` is release 67's jump), `?gridease=on` is still HELD
+ * off, and REDUCE MOTION reads today for both: `m3-flips.test.ts`).
  *
  * jsdom has no boxes and no `Element.animate`, so this gives rows the boxes the test wants and records the animations; the real browser measure (row position against time across a reorder at
  * 60, 120 and 144 Hz) is in the lane folder.
@@ -176,8 +176,10 @@ describe('FLIP of the turn-order list', () => {
 });
 
 describe('the switch words', () => {
-  it('a piece\'s own word beats the shared one in both directions; no word is off', () => {
-    expect(fluidWord('ctbslide', 'flip', '')).toBe(false);
+  it('a piece\'s own word beats the shared one in both directions; no word is the piece\'s default (the list slides, the held grid glide does not)', () => {
+    expect(fluidWord('ctbslide', 'flip', '')).toBe(true);
+    expect(fluidWord('ctbslide', 'flip', '?ctbslide=today')).toBe(false);
+    expect(fluidWord('ctbslide', 'flip', '?fluidui=today')).toBe(false);
     expect(fluidWord('ctbslide', 'flip', '?ctbslide=flip')).toBe(true);
     expect(fluidWord('ctbslide', 'flip', '?fluidui=on')).toBe(true);
     expect(fluidWord('ctbslide', 'flip', '?fluidui=on&ctbslide=today')).toBe(false);
