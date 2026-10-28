@@ -15,72 +15,52 @@
  */
 
 import { passScriptsFor } from '../../story/scripts/seymour-flux-pass.ts';
-import type { Camera, Scene, Vector3 } from 'three';
-import type { BattleEngine, BattleResult, BattleSetup, CombatantId, EnemyGroupDef } from '../../battle/common/types.ts';
-import { ff7Standing } from './ff7Standing.ts';
+import type { Camera, Scene } from 'three';
 import { addExperimentPlayTime } from '../experiments/experimentRecords.ts';
-import type { Chapter } from '../../data/encounters.ts';
 import { audio } from '../../audio/index.ts';
 import { startRetryTheme } from '../demo/demoDefeat.ts';
-import { NO_FLOW, startFlow, type FlowHandle } from '../../audio/sfxV2/flowSlots.ts';
-import { BattlePresenter, type AutoStrategy, type BattleOutcome } from '../../engine/BattlePresenter.ts';
-import {
-  createDamageNumbers,
-  createMessageBar,
-  uiPortsRegistered,
-} from '../../engine/BattlePresenterFallbacks.ts';
+import { NO_FLOW, startFlow } from '../../audio/sfxV2/flowSlots.ts';
+import { BattlePresenter } from '../../engine/BattlePresenter.ts';
+import { createDamageNumbers, createMessageBar, uiPortsRegistered } from '../../engine/BattlePresenterFallbacks.ts';
 import { PaintedStage } from '../../engine/BattlePresenterStage.ts';
 import { backdropFileOf, inArtNamespace } from '../../data/art/artNamespace.ts';
 import { defaultSleep } from '../../engine/BattlePresenterUtil.ts';
-import { BeatClock, beatsWall, claimLead, releaseLead } from '../../engine/BeatClock.ts'; // MF-08: the presenter's beats are counted in this screen's frame clock
-import type { PlaybackSpeed } from '../../engine/BattlePresenterPorts.ts';
-import type { HudPort } from '../../engine/HudPort.ts';
-import { type LoadedScene } from '../../scenes/index.ts';
+import { beatsWall, claimLead, releaseLead } from '../../engine/BeatClock.ts'; // MF-08: the presenter's beats are counted in this screen's frame clock
 import { dropParked } from '../../engine/FigureCache.ts';
 import { takeScene } from '../../scenes/prebuilt.ts'; // release 62 (PR-0481): the demo's stage, built behind the picker, or a fresh `loadScene`
 import { markOpeningBegun, markOpeningHurried } from '../../scenes/openingMark.ts';
-import { Screen } from '../Screen.ts';
-import type { InputSnapshot } from '../Input.ts';
 import { demoReel, demoState } from './BattleScreenDemoReel.ts';
 import { findEnemyGroup, setupForChapter } from './BattleScreenSetup.ts';
 import { chainLengthOf, runEncounterChain } from './BattleEncounterChain.ts';
-import { resumeSetup, type ChainCheckpoint } from './BattleChainCheckpoint.ts';
+import { resumeSetup } from './BattleChainCheckpoint.ts';
 import { playSaveSphereCard } from './SaveSphereCard.ts';
 import { offeringChooser } from './BattleScreenOffering.ts'; // the hidden Last Summoning's offering seam (FFX only; never asked by any other chapter)
-import type { OfferingOverlay } from '../../ui/ffx/offering/OfferingScreen.ts';
 import { BattleStartBanner } from '../../ui/common/BattleStartBanner.ts';
-import { setPauseMusic } from '../../ui/common/pauseMusic.ts';
 import { voice } from '../../audio/voice/index.ts';
-import { applyAtbConfig, createEngine, createHud } from './BattleScreenWiring.ts';
-import { createMidBattleCutscenes, type MidBattleCutscenes } from './BattleScreenCutscenes.ts';
-import { createMomentOverlay, type MomentOverlay } from '../../ui/common/transitions/index.ts';
+import { createEngine, createHud } from './BattleScreenWiring.ts';
+import { createMidBattleCutscenes } from './BattleScreenCutscenes.ts';
+import { createMomentOverlay } from '../../ui/common/transitions/index.ts';
 import { stagingPieceOn } from '../../engine/pro/staging/StagingSwitch.ts';
 import { attachProStage } from './battleProStage.ts'; // lane "pro-staging": the held breath, the freeze and the openings' layer (Chapters I and IV, `?staging=pro` / `?pack=demo`)
-import type { ProStageLayer } from '../../ui/common/proStage/ProStageLayer.ts';
 import { cardHoldOption, coverOption } from '../../ui/common/transitions/cardHold.ts'; // the card's hold (the hurried one, or the full one less the time the card over the entry has been up); the opening's first frame under it
 import { setRawInputSuspended } from '../../ui/ffx/rawInput.ts';
 import { markDemoHud } from '../demo/demoHud.ts';
 import { menuOwnsCancel, setMenuOwnsCancel } from '../../ui/common/menuCancel.ts';
 import { holdGpuSync, releaseGpuSync } from '../../engine/GpuSettle.ts';
-import { coachCardUp } from '../../ui/coach/cardPress.ts'; // R61: a first-use card is up: Esc closes it, the next Esc pauses
-import { attachEnemyIntent, consumeIntentKeyPress, setIntentSuspended } from '../../ui/common/EnemyIntent.ts';
+import { attachEnemyIntent } from '../../ui/common/EnemyIntent.ts';
 import { attachAdvisorV4 } from '../advisorV4/wiring.ts';
-import { PauseScreen } from './PauseScreen.ts';
-import { previewTurnOrder } from './pause/turnOrder.ts';
-import { flowOwnsRun } from './pause/restartCarry.ts';
-import { attachStageHook, type StageHook as AirshipBattleHook } from './BattleScreenStageHook.ts';
+import { attachStageHook } from './BattleScreenStageHook.ts';
 import { battleDebugTrigger, battleStateSnapshot } from './BattleScreenDebug.ts';
 import { battleSpellFx, spellFxTrigger } from './battleSpellFx.ts';
-import { StallWatch } from './BattleScreenStall.ts';
 import { bindEyeCandyScene, sceneBackdropPalette } from '../../engine/fx/a/GoldenHour.ts';
 import { applyChapterLook } from '../../engine/look/LookState.ts'; // release 60: the conference demo's default look
 import { bindLivingScene, releaseLivingScene, updateLivingScene } from '../../engine/fx/b/LivingPaintings.ts';
 import { framingArrivalOwed, framingPlanOwed, framingPlanSettled } from '../../engine/fx/mix/MaxMix.ts'; // FOC44A-05: the boss entrance waits for CHAPTER FRAMING's plan; the opening waits for it too (`openingGate.ts`)
 import { patchSideFogIn, setSideFogGame } from '../../engine/PlateSideFog.ts';
-import { startMarkRecorder, type MarkRecorder } from '../markRecorder.ts';
+import { startMarkRecorder } from '../markRecorder.ts';
 import { defaultSettings, readSetting } from '../SaveData.ts';
 import { visualStyleOf } from '../saveVisualStyle.ts'; // release 61: OPTIONS > VISUAL STYLE
-import { attachSpectacle, type SpectacleHandle } from './battleSpectacle.ts'; // eye-candy option C, `?fx=c` only
+import { attachSpectacle } from './battleSpectacle.ts'; // eye-candy option C, `?fx=c` only
 import { setFeelChapter } from '../../engine/feel/FeelSwitch.ts';
 import { setMotionSfxSpeed } from '../../engine/feel/MotionBeats.ts';
 import { stopRumble } from '../gamepadRumble.ts'; // a pause or leaving the battle ends a pulse still running (`?rumble=on`; a no-op without a pad)
@@ -89,159 +69,28 @@ import { readReduceFlashes, readRigFigures } from '../accessFlags.ts';
 import { battleCameraPreset, battleLayoutProjector } from './battleCameraComfort.ts';
 import { bracketAnimations } from '../../engine/BattlePresenterAnimating.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
-import { padEndsOpening } from './padOpeningSkip.ts'; // release 62 (PR-0481): a pad's A or Start ends the opening sweep as Enter does
 import { presenterGameDeps } from './BattleScreenGameDeps.ts';
 import { getChapterMeta } from '../../data/chapter-meta.ts';
-import { withdrawLineFrom } from './withdrawal.ts';
 import { headlineEnemy } from '../../battle/common/headlineEnemy.ts';
 import { setPaceGame } from '../../engine/pace.ts';
 import { setMenuHold } from '../../engine/motion/MenuHold.ts';
 import { setNumberFacts } from '../../ui/common/proNumbers.ts'; // lane pro-look: the glass numbers read a target's max HP for their tiers
 import { setCurvesChapter } from '../../engine/motion/CurvesSwitch.ts'; // motion pass (lane "core"): the new curves play only in Chapters I and IV
 import { battleFrameClocks } from '../../engine/PoseSwap.ts';
-import { onSceneScale, sceneScale } from '../../engine/crisp/sceneScale.ts';
+import { onSceneScale } from '../../engine/crisp/sceneScale.ts';
+import { SETTLE_WINDOW_MS, SETTLE_CAM_EPSILON } from './BattleScreenTypes.ts';
+import { BattleScreenPause } from './BattleScreenPause.ts';
 
-/**
- * How long after a formation is staged the field may still settle its own
- * spacing. See {@link BattleScreen.formationSettleMs}.
- *
- * Long enough to cover the establishing camera move and the battle-start card,
- * short enough that it is always over before the first command menu opens.
- */
-const SETTLE_WINDOW_MS = 5000;
+// Split out by a pure move (2026-10-28): the options and the result still come from here.
+export type { BattleScreenOptions, BattleScreenResult } from './BattleScreenTypes.ts';
 
-/** Camera movement, in world units, that makes the framing worth re-checking. */
-const SETTLE_CAM_EPSILON = 0.02;
-
-export interface BattleScreenOptions {
-  chapter: Chapter;
-  /** Fixed in tests and the e2e gallery. */
-  seed?: number;
-  /** Answer player turns from a strategy instead of the HUD. */
-  auto?: AutoStrategy | null;
-  /** Playback speed to start at. */
-  speed?: PlaybackSpeed;
-  /** Open on this Save Sphere link instead of the first formation (FA3 = b). */
-  resumeAt?: ChainCheckpoint;
-  /** The player skipped the pre-scene: the first opening runs hurried (PR-0061, `openingHurry.ts`). */
-  openingHurry?: boolean;
-  /** r64-fixes (conference demo, a retried demo fight, both games): ask for the fight's own theme as this screen opens (`demoDefeat.startRetryTheme`). */
-  retryTheme?: boolean;
-  /** R61 (conference demo, `demo/demoAttract.ts`, demo mode only): this fight is the attract loop's highlight reel, played on no one's behalf. It writes nothing to the save (no play time). */
-  attract?: boolean;
-}
-
-/** How the encounter ended, for the flow in `App.ts`. */
-export interface BattleScreenResult {
-  chapterId: string;
-  outcome: BattleOutcome['kind'];
-  result: BattleResult | null;
-  /** Wall-clock length of the whole encounter, chained links included. */
-  elapsedMs: number;
-  /** How many formations were fought. 1 unless the encounter chains. */
-  links: number;
-  /** True when no engine existed and the screen played the demo reel instead. */
-  preview: boolean;
-  /** The last Save Sphere link entered: where a defeat retries (FA3 = b). */
-  checkpoint?: ChainCheckpoint;
-  /** PR-0215: the engine's stalemate line when the fight ended in a withdrawal (`withdrawal.ts`). */
-  withdrawLine?: string;
-  /** FF7: the party on their feet at the end; C1's EXP goes only to them (research/ff7-battle-core.md §11). */
-  standing?: CombatantId[];
-  restartRequested?: true; // PR-0283 RESTART ENCOUNTER: the owning run plays it again (`runWithRestarts`)
-  quitToTitle?: true; // r34fix-quit QUIT TO TITLE: the owning run goes to the title once (`GameFlow.runChapter`)
-}
-
-export class BattleScreen extends Screen {
+export class BattleScreen extends BattleScreenPause {
   readonly name = 'battle';
 
-  private readonly opts: BattleScreenOptions;
-  private scene: LoadedScene | null = null;
   private stage: PaintedStage | null = null;
-  private airship: AirshipBattleHook | null = null;
-  private spectacle: SpectacleHandle | null = null;
-  private presenter: BattlePresenter | null = null;
-  private engine: BattleEngine | null = null;
-  private hud: HudPort | null = null;
-  private cutscenes: MidBattleCutscenes | null = null;
-  /** Letterbox bars, name slab and heartbeat vignette (`BattleMoments`). */
-  private momentOverlay: MomentOverlay | null = null;
-  private proStage: ProStageLayer | null = null;
-  private setup: BattleSetup | null = null;
-  private group: EnemyGroupDef | null = null;
-  /** The hidden Last Summoning's offering screen while it is up (FFX only); the frame's input goes to it first (`handleInput`). */
-  private offering: OfferingOverlay | null = null;
-  private checkpoint: ChainCheckpoint | null = null;
 
-  private startedAt = 0;
-  /** N1 (release 39.1, both games): the hidden mark key and the inputs since the battle began (`markRecorder.ts`); shows nothing. */
-  private markRecorder: MarkRecorder | null = null;
-  private startParty: string[] = [];
-  private links = 0;
-  private preview = false;
-  private finishedResolve: ((r: BattleScreenResult) => void) | null = null;
-
-  // --------------------------------------------------------------- pausing
-
-  /** The pause overlay while it is up. See {@link openPause}. */
-  private pauseScreen: PauseScreen | null = null;
-  /** True while the presenter's clock is held. */
-  private presenterPaused = false;
-  /** Sleeps parked on the pause gate, released when it opens. */
-  private pauseWaiters: Array<() => void> = [];
-  private readonly beats = new BeatClock(); // MF-08: ticked by `update` with the animation dt, released when the presenter is aborted
-  /**
-   * How much longer the field may still settle itself, in milliseconds.
-   *
-   * The lane has to be clear **in the frame**, and the frame is not fixed when
-   * the field is staged: the camera eases from the establishing shot into the
-   * idle rig over the opening seconds, and a lane relaxed against frame one is
-   * relaxed against the wrong framing. Measured live, that is exactly what
-   * happened — Chapter 1 and Chapter 5 settled and Chapter 3 did not, because
-   * its camera was still moving when the budget ran out.
-   *
-   * So the window is a real one, it re-arms on camera movement inside it, and
-   * it is **over before the player's first decision**: moving enemies when a
-   * command goes live was option D's idea and Bailey did not pick it.
-   */
-  private formationSettleMs = SETTLE_WINDOW_MS;
-  /** Where the camera was at the last relaxation, to notice it has moved. */
-  private lastSettleCam: Vector3 | null = null;
-  /** True once a relaxation pass has come back with nothing left to move. */
-  private formationSettled = false;
-
-  /** How many formations this chapter chains through. Measured in `enter`. */
-  private chainLength = 1;
-  /** Where the player asked to go from the pause menu. See {@link requestExit}. */
-  private exitIntent: 'restart' | 'chapter-select' | 'title' | null = null;
-  /** Set by the raw `P` listener; consumed by the next `handleInput`. */
-  private pauseKeyPressed = false;
-  /** The small PAUSE chip in the HUD corner — the mouse's way in. */
-  private pauseChip: HTMLElement | null = null;
-  /** The approved battle-start boss card while it is up. See {@link showBattleStart}. */
-  private battleStartBanner: BattleStartBanner | null = null;
-  /** SFX parity: the encounter's opening sounds, ended with the screen (`audio/sfxV2/flowSlots.ts`). */
-  private encounterSfx: FlowHandle = NO_FLOW;
-
-  /**
-   * Set by {@link exit}. `App.replace` can tear this screen down while `enter()`
-   * is still awaiting its loads or the battle-start card is up, and both carry
-   * on afterwards: every await below checks this before touching anything.
-   */
-  private exited = false;
   /** False until the field's shaders are compiled: nothing draws it before (PR-0061). */
   private fieldShown = false;
-
-  /** Resolves when the encounter ends (victory, defeat, escape or exit). */
-  readonly finished: Promise<BattleScreenResult>;
-
-  constructor(opts: BattleScreenOptions) {
-    super();
-    this.opts = opts;
-    this.finished = new Promise((resolve) => {
-      this.finishedResolve = resolve;
-    });
-  }
 
   // ------------------------------------------------------------------- enter
 
@@ -588,232 +437,6 @@ export class BattleScreen extends Screen {
     this.finish(outcome);
   }
 
-  // ------------------------------------------------------------- the pause
-
-  /** The presenter's wall clock behind the pause gate: the ATB pump's wait (the engine reads real time) and its own timeouts. The pause overlay stops `update`, so the presenter
-   *  is frozen here, at the one choke point of those awaits, and carries on from exactly there. A field: it is handed over as a bare function. */
-  private readonly pauseGate = async (ms: number): Promise<void> => {
-    await defaultSleep(ms);
-    while (this.presenterPaused) await new Promise<void>((resolve) => this.pauseWaiters.push(resolve));
-  };
-
-  /** MF-08: the presenter's beats (every `ctx.sleep`) counted in the frame clock `update` ticks (`engine/BeatClock.ts`): a pause keeps what was left of a sleep,
-   *  a hidden window stops the fight, a long frame delays beat and picture together. */
-  private readonly beatSleep = async (ms: number): Promise<void> => {
-    await this.beats.sleep(ms);
-    while (this.presenterPaused) await new Promise<void>((resolve) => this.pauseWaiters.push(resolve));
-  };
-
-  private setPresenterPaused(paused: boolean): void {
-    this.presenterPaused = paused;
-    if (paused) {
-      stopRumble();
-      return;
-    }
-    const waiters = this.pauseWaiters;
-    this.pauseWaiters = [];
-    for (const resolve of waiters) resolve();
-  }
-
-  private readonly onPauseKey = (e: KeyboardEvent): void => {
-    if (e.code === 'KeyP' && !e.repeat) this.pauseKeyPressed = true;
-  };
-
-  /**
-   * Whether the pause menu may open right now.
-   *
-   * It used to answer `false` for the whole time the HUD was waiting for a
-   * command — which is, for a human, nearly all of a battle. That is the bug
-   * the player reported on the live site as "Esc and P do nothing": they were
-   * pressing them at the command menu, the only place a battle ever waits for
-   * them. **A command menu no longer blocks the pause.**
-   *
-   * What made it a genuine conflict is now handled at the source. Both command
-   * menus take the keyboard straight off `window` (`ui/ffx/rawInput.ts`,
-   * `ui/ffx2/CommandMenu.ts`), so a pause stacked on one had two screens on the
-   * same arrow keys and a Confirm that would resolve a real command from behind
-   * the menu. {@link openPause} now claims the keyboard exclusively
-   * (`Input.claimKeyboard`, capture phase) and mutes the pad watchers
-   * (`setRawInputSuspended`) for as long as the overlay is up, so exactly one
-   * screen reads the player at a time.
-   *
-   * A minigame still blocks it: those are timed inputs, and freezing one
-   * mid-swing is a fairness question rather than an input-ownership one.
-   *
-   * The debug beat `pause:open` ignores even that: a capture tool has no
-   * keyboard to lose and wants the menu on a predictable frame.
-   */
-  private get canPause(): boolean {
-    if (this.pauseScreen || this.app.overlayActive || !this.presenterBound) return false;
-    const snap = this.presenter!.snapshot();
-    // A minigame overlay owns the keyboard for the same reason a command menu
-    // does (`ui/ffx/minigames/**` each attach a `RawInputWatcher`).
-    return !String(snap['phase'] ?? '').includes('minigame');
-  }
-
-  /**
-   * Whether **Esc** in particular may open the pause.
-   *
-   * Esc is the command menu's own back button — out of targeting, out of a
-   * submenu, back to the top row — and that is the FFX behaviour the brief
-   * asks to keep. A key cannot mean "out of targeting" and "open the pause" on
-   * the same press.
-   *
-   * But it is only the back button when there is something to go back to.
-   * Neither menu binds Esc at its **top row** (`ui/common/menuCancel.ts` has
-   * the two call sites), and the top row is exactly where a player sits when
-   * they decide to pause — which is why the original report said Esc did
-   * nothing. So Esc opens the pause everywhere except in a submenu or while
-   * targeting, where it still backs out and `P` / Start / the PAUSE chip are
-   * the way in.
-   */
-  private get canPauseOnCancel(): boolean {
-    if (!this.canPause) return false;
-    // R61 (booth, both games): a first-use card is up, so Back belongs to the card (it takes itself down on the same press and absorbs it, `cardPress.ts`).
-    // This is the one-frame case the card's own absorb cannot reach: the pad's edge read here before the card's poll has run.
-    if (coachCardUp()) return false;
-    if (this.presenter?.snapshot()['awaitingMenu'] !== true) return true;
-    return !menuOwnsCancel();
-  }
-
-  /** PR-0158: a live presenter on a screen still up; nothing pauses a battle loading or torn down. */
-  private get presenterBound(): boolean {
-    return !this.exited && this.presenter !== null && !this.presenter.isAborted;
-  }
-
-  /** Put the pause menu up over the frozen battle. */
-  private async openPause(): Promise<void> {
-    if (this.pauseScreen || this.app.overlayActive || !this.presenterBound) return;
-    const chapter = this.opts.chapter;
-    const screen = new PauseScreen({
-      chapter,
-      state: () => this.engine?.state() ?? null,
-      // The pause screen's TURN ORDER row, FFX only: `predictTurnOrder` is on
-      // the engine's runtime and not on `BattleState`, so the row can only
-      // exist if it is handed over here. An FFX-2 engine has no such method
-      // and the row is simply not printed (AGENTS.md rule 14; CTB has a queue
-      // to be Nth in, ATB has a clock).
-      turnOrder: () => previewTurnOrder(this.engine),
-      links: () => Math.max(1, this.links),
-      chainLength: this.chainLength,
-      onPause: (paused) => {
-        // FFX-2's X-2 BATTLE (Active/Wait) and ATB SPEED rows, before the
-        // clock is released (no-op for FFX).
-        if (!paused) applyAtbConfig(this.engine);
-        this.setPresenterPaused(paused);
-        // ...and wake a menu that was open under the pause, so a flip to
-        // ACTIVE runs the clock under that same menu (FFX-2; no-op for FFX).
-        if (!paused) this.presenter?.atbModeChanged();
-        // The other half of "exactly one screen reads the player": the HUD's
-        // pad watchers and the mouse on its DOM. The keyboard is claimed below.
-        setRawInputSuspended(paused, this.root);
-        // PR-0122: the intent slab mounts in the HUD's unscaled overlay with
-        // its own `z-index` (`enemy-intent.css`), which stacks above the
-        // pause screen's root regardless of DOM order — so it painted over
-        // the pause's close-up, OPTIONS and THIS ENCOUNTER, and survived H.
-        // Hidden here, from the same place everything else about the HUD is
-        // suspended for the pause, and restored on resume in whatever state
-        // the player's own `E` setting left it.
-        setIntentSuspended(this.hud, paused);
-        // "The game holding its breath" [docs/audio/THEMES.md cue map row 3].
-        // The `pause` cue was composed, rendered and shipped, and nothing had
-        // ever asked for it (critic round 02 #02). It is wired from here rather
-        // than from `PauseScreen.ts` because the fight is what has to be
-        // returned to: this screen is the one that knows which boss theme was
-        // playing when the menu went up.
-        setPauseMusic(audio, paused);
-        voice.setPaused(paused); // a mid-battle line freezes with the fight and carries on when the menu closes
-      },
-      onResume: () => void this.closePause(),
-      onRestart: () => this.requestExit('restart'),
-      onChapterSelect: () => this.requestExit('chapter-select'),
-      onQuitToTitle: () => this.requestExit('title'),
-    });
-    this.pauseScreen = screen;
-    // Write the running total out before the menu reads it, so PLAY TIME is
-    // the number on disk and not one flush behind.
-    this.app.save.flushPlayTime();
-    await this.app.pushOverlay(screen);
-  }
-
-  private async closePause(): Promise<void> {
-    if (!this.pauseScreen) return;
-    this.pauseScreen = null;
-    await this.app.popOverlay();
-  }
-
-  /**
-   * Leave the encounter for somewhere else.
-   *
-   * The flow in `BattleScreenFlow.runChapter` is parked on `battle.finished`,
-   * and whoever called it navigates *after* it resolves (`main.ts` sends an
-   * ended chapter back to chapter select), so this screen cannot simply call
-   * `goto()`: the flow's navigation would land a tick later over its own. It
-   * aborts, which makes the flow unwind, and waits for the unwind to finish
-   * before taking over. CHAPTER SELECT needs nothing more: that is the flow's
-   * own follow-up. RESTART and QUIT TO TITLE inside a run are the run's job
-   * (PR-0283, r34fix-quit, both games): the result says so; a fight no run owns acts here.
-   */
-  private requestExit(intent: 'restart' | 'chapter-select' | 'title'): void {
-    if (this.exitIntent) return;
-    this.exitIntent = intent;
-    const app = this.app;
-    const chapterId = this.opts.chapter.id;
-    const [runRestarts, runQuits] = [intent === 'restart' && flowOwnsRun(app.flow), intent === 'title' && flowOwnsRun(app.flow)];
-
-    void (async () => {
-      await this.closePause();
-      this.presenter?.abort();
-      this.beats.releaseAll();
-      this.setPresenterPaused(false);
-      this.finish({ kind: 'aborted' }, runRestarts, runQuits);
-      if (runRestarts || runQuits) return;
-      // Bounded, so a flow that never settles costs one dropped menu action rather than a screen that never returns.
-      for (let i = 0; i < 240 && app.current === this; i++) await app.nextFrame();
-      if (intent === 'restart') void app.runChapter(chapterId, { skipPrep: true, skipCutscenes: true, restart: true });
-      else if (intent === 'title') void app.goto('title');
-    })();
-  }
-
-  private finish(outcome: BattleOutcome, restartRequested = false, quitToTitle = false): void {
-    const resolve = this.finishedResolve;
-    if (!resolve) return;
-    this.finishedResolve = null;
-    const withdrawLine = outcome.kind === 'escape' ? withdrawLineFrom(this.engine?.state().log) : null;
-    resolve({
-      chapterId: this.opts.chapter.id,
-      outcome: outcome.kind,
-      result: 'result' in outcome ? outcome.result : null,
-      elapsedMs: Math.round(performance.now() - this.startedAt),
-      links: Math.max(1, this.links),
-      preview: this.preview,
-      ...(this.checkpoint ? { checkpoint: this.checkpoint } : {}),
-      ...(withdrawLine ? { withdrawLine } : {}),
-      ...ff7Standing(this.engine?.state()),
-      ...(restartRequested ? { restartRequested: true as const } : {}), ...(quitToTitle ? { quitToTitle: true as const } : {}),
-    });
-  }
-
-  // ------------------------------------------------------------------ frame
-
-  /** The watchdog for "won, and then never ends" (`BattleScreenStall.ts`): a decided battle whose playback stalled is resolved from the engine's own result. */
-  private readonly stall = new StallWatch();
-
-  private checkForStall(dt: number): void {
-    const outcome = this.stall.check(dt, {
-      preview: this.preview,
-      presenter: this.presenter,
-      engine: this.engine,
-      running: this.finishedResolve !== null,
-      chapterId: this.opts.chapter.id,
-    });
-    if (!outcome) return;
-    this.presenter?.abort();
-    this.beats.releaseAll(); // nothing stays parked on a beat of an aborted presenter
-    this.setPresenterPaused(false);
-    this.finish(outcome);
-  }
-
   override update(frameDt: number): void {
     // Two clocks (W5, `battleFrameClocks`): `dt` counts the battle's timers (the stall watchdog, the play time, the settle window) at App's 1/20 s clamp; `animDt` is the same frame clamped
     // at 1/40 s (1/20 under `?motion=classic`) for everything that is only drawn. The engines are on neither: the ATB pump and the CTB steps read the wall clock.
@@ -883,67 +506,6 @@ export class BattleScreen extends Screen {
     this.lastSettleCam = cam.clone();
   }
 
-  override handleInput(input: InputSnapshot): void {
-    // The battle-start card is the first thing on screen and the first thing
-    // any press takes down — it must never hold a player longer than they want
-    // it to. It consumes that press so the same tap does not also open the
-    // pause or answer a command menu behind it.
-    if (this.battleStartBanner?.visible) {
-      const pressed =
-        input.consume('confirm') || input.consume('cancel') || input.consume('start') || this.pauseKeyPressed;
-      this.pauseKeyPressed = false;
-      if (pressed) this.battleStartBanner.dismiss();
-      return;
-    }
-
-    // Release 62 (PR-0481, the conference booth; both games): the opening sweep ends on the player's first Confirm, and its watch is the keyboard's (`ui/common/transitions/confirmPress.ts`).
-    // The pad is polled here, so a pad's A or Start ends the beat the same way, and the press is taken (Start must not also open the pause: the card above treats it the same). Keys are unchanged.
-    padEndsOpening(input, this.momentOverlay);
-
-    // The offering screen (the hidden Last Summoning) takes the arrows and the confirm; the pause keys below still work, and Esc does not (a choice has no back).
-    const offering = this.offering?.visible === true;
-    if (offering) this.offering!.handleInput(input);
-
-    // A mid-battle beat owns the input while it is on screen.
-    this.cutscenes?.handleInput(input);
-
-    // The four ways into the pause menu: `P`, the pad's Start/Options button
-    // (`start`, which `app/Input.ts` also maps to E and C), a click on the
-    // PAUSE chip, and Esc/Circle.
-    //
-    // The first three work at any point in a battle, the command menu included
-    // — that is the reported bug's fix. Esc is the one that has to wait: it is
-    // also the command menu's back button, and a key cannot mean "out of
-    // targeting" and "open the pause" on the same press. See `canPauseOnCancel`.
-    //
-    // `consume` takes the edge so nothing below sees the same press.
-    // `E` is one of the three keys `Input.ts` maps to `start`, and it is also
-    // the enemy-intent slab's hide/show key. The slab's own `keydown` listener
-    // records the press; taking the `start` edge for it here is what stops one
-    // tap of E both hiding the slab and opening the pause. `P`, `C`, Esc, the
-    // pad's Start button and the PAUSE chip are all untouched.
-    if (consumeIntentKeyPress()) input.consume('start');
-    const chipClicked = input.actions.includes('pause:open');
-    const wantsPause = this.pauseKeyPressed || chipClicked || input.justPressed('start');
-    this.pauseKeyPressed = false;
-    if (wantsPause && this.canPause) {
-      input.consume('start');
-      audio.playSfx('menu-open');
-      void this.openPause();
-      return;
-    }
-    if (input.justPressed('cancel') && this.canPauseOnCancel && !offering) {
-      input.consume('cancel');
-      audio.playSfx('menu-open');
-      void this.openPause();
-      return;
-    }
-
-    // Fast-forward is held, not toggled: the FFX convention.
-    if (input.justPressed('r1')) this.presenter?.fastForward();
-    if (input.justReleased('r1')) this.presenter?.setSpeed('normal');
-  }
-
   override render(): { scene: Scene; camera: Camera } | null {
     if (!this.scene || !this.fieldShown) return null;
     return { scene: this.scene.scene, camera: this.app.renderer.camera };
@@ -970,20 +532,6 @@ export class BattleScreen extends Screen {
     return battleDebugTrigger(name, this.presenter, this.hud, this.scene);
   }
 
-  /** The live engine, for the debug API's `forceCommand` / `snapshotState`. */
-  get battleEngine(): BattleEngine | null {
-    return this.engine;
-  }
-
-  get battlePresenter(): BattlePresenter | null {
-    return this.presenter;
-  }
-
-  /** The pro staging's layer (Chapters I and IV with the switch on), for the debug API and the captures. */
-  get stagingLayer(): ProStageLayer | null {
-    return this.proStage;
-  }
-
   override snapshot(): Record<string, unknown> {
     const state = this.engine?.state();
     return {
@@ -1008,13 +556,6 @@ export class BattleScreen extends Screen {
       /** The full ordered event log, which the e2e specs snapshot. */
       log: state?.log ?? [],
     };
-  }
-
-  private offSceneScale: (() => void) | null = null;
-
-  private syncPixelScale(): void {
-    const h = (this.app.renderer.domElement.height || 900) * sceneScale(); // a supersampled scene pass draws point sprites on a finer grid (`crisp/sceneScale.ts`)
-    this.scene?.setPixelScale(Math.max(0.5, h / 900));
   }
 
   // -------------------------------------------------------------------- exit
