@@ -118,7 +118,7 @@ every row of the tables above recomputed from the raw runs. What each finding wa
 | F-6 | under `?swapcause=cut` an open FFX-2 menu turned a cut into the UNGUARDED 50 ms blend (the big-pair guard applied only to `pick`); `?swapclass=<unknown>` turned every class on | the guard now covers any blend that came from a cut; a `?swapclass=` word naming no class that exists turns none on (empty or absent word: every class). Two tests, each shown red without the change |
 | F-7 (accepted) | `blend3` and `v3` break the lane's own stop rule (40 and 11 swap jerks of 40 px or more in Chapter I) | unchanged and disclosed: they are in the cards on purpose, neither is a pick; the cards' V2 lines carry the harness numbers |
 
-**The arms re-run on the fixed build** (`411b8d174`; same harness, seed 1, 1600 x 900, one run each; the tags are `ch4-fp`, `ch4-fr1`, `ch1-fp`, `ch1-fr1` in `evidence/`). The fixes touch only the stance words under a flinch (F-1) and a cut turned into a blend by an open menu (F-6), so the B arms are the ones to repeat; the default look is proved identical by the differential instead (below).
+**The arms re-run on the fixed build** (`411b8d174`; same harness, seed 1, 1600 x 900, one run each; the tags are `ch4-fp`, `ch4-fr1`, `ch1-fp`, `ch1-fr1`, and the default control `ch4-fa1`, in `evidence/`). The fixes touch only the stance words under a flinch (F-1) and a cut turned into a blend by an open menu (F-6), so the B arms are the ones to repeat; the default look is proved identical by the differential instead (below).
 
 | run | seconds | swaps | ghost frames a minute | ghost ms a minute | worst severity | snaps | swap jerks (40 px or more, worst px) | planned cuts | whole step of a planned cut: median, worst, over 120 px |
 |---|---|---|---|---|---|---|---|---|---|
@@ -130,8 +130,10 @@ every row of the tables above recomputed from the raw runs. What each finding wa
 | Chapter I `?stance=v1b&swapcause=pick`, after | 387.5 | 256 | 32.7 | 552 | 0.333 | 0 | 3 (0, 31.6) | 175 | 63.7, 226.7, 13 |
 | Chapter I `?stance=v1a&swapcause=cut`, before | 386.8 | 248 | 14.3 | 237 | 0.333 | 0 | 0 (0, 0) | 207 | 53.4, 230.1, 20 |
 | Chapter I `?stance=v1a&swapcause=cut`, after | 387.9 | 248 | 14.4 | 233 | 0.331 | 0 | 0 (0, 0) | 207 | 52.7, 231.6, 18 |
+| Chapter IV today (every word at its default, MF-01 on), first run | 376.6 | 334 | 86.7 | 1,406 | 0.342 | 0 | 4 (1, 45.1) | 150 | 54.2, 79.9, 0 |
+| Chapter IV today, fixed build (the control) | 377.1 | 337 | 88 | 1,454 | 0.342 | 0 | 4 (1, 44.8) | 149 | 50.8, 84.6, 0 |
 
-Read these as unchanged. The counts that do not depend on a fight's length agree: **ghost swaps 78 and 78, 24 and 23, 66 and 68, 26 and 26** (Chapter IV pick, Chapter IV cut, Chapter I pick, Chapter I cut: after against before), 0 snaps, the swap jerks of 40 px or more the same (1, 1, 0, 0), the worst severity within 0.002. The per-minute rates move with the fight: Chapter IV's Active ATB fight is not bit-reproducible (the two pick runs were 378.7 and 350.2 s and had a different mix of hits, 32 and 27 foe `idle>hurt` swaps), and in Chapter I the frame timing of the run moved the ghost frames (68 ghost swaps drew 233 frames before, 66 drew 211 after: 3.4 and 3.2 frames a swap). The numbers in the tables above stand.
+Read these as unchanged. The counts that do not depend on a fight's length agree: **ghost swaps 78 and 78, 24 and 23, 66 and 68, 26 and 26** (Chapter IV pick, Chapter IV cut, Chapter I pick, Chapter I cut: after against before), 0 snaps, the swap jerks of 40 px or more the same (1, 1, 0, 0), the worst severity within 0.002. The per-minute rates move with the fight: Chapter IV's Active ATB fight is not bit-reproducible (the two pick runs were 378.7 and 350.2 s and had a different mix of hits, 32 and 27 foe `idle>hurt` swaps), and in Chapter I the frame timing of the run moved the ghost frames (68 ghost swaps drew 233 frames before, 66 drew 211 after: 3.4 and 3.2 frames a swap). The numbers in the tables above stand. **MF-01 repeats on the fixed build:** the default Chapter IV control reads 88.0 ghost frames a minute and 1,454 ms (the first run 86.7 and 1,406, the reviewer's 86.0 and 1,430): within 1.5 percent, the interludes still 1.
 
 ## Clip cards (blind letters; the key is in `KEY.json` and `README.txt`, never in the picture)
 
@@ -154,7 +156,7 @@ has a cover and V2 where it has none (built as `pick`, with the guard), CP-12 V1
 ## Not done, and why
 
 - **Lane L5's reader** reads `__pyrefly.swapLog()` on its branch; this lane's reader is now `swapReasons()` (F-2). After merging `mf-l5-tools`, one word changes (see the merge line below). The cards' captures, `capture.mjs`, read `swapReasons`.
-- Not re-run on the fixed build: the `blend3` arms (`ch4-r2`, `ch1-r2`), the `v3` arms, the default controls beyond the two listed in the table above, Yunalesca and Trema with the rules on. The fixes cannot move `v3` (no painting option) or the default; the `blend3` arms differ only by F-1's flinch hand-back, which a harness run answers menus too fast to meet.
+- Not re-run on the fixed build: the `blend3` arms (`ch4-r2`, `ch1-r2`, queued as `ch4-fr2` and `ch1-fr2` and stopped: the rig was saturated, about 45 minutes of waiting a job), the Chapter I default control (`ch1-fc0`, same reason), the `v3` arms, Yunalesca and Trema with the rules on. The fixes cannot move `v3` (no painting option) or the default; the `blend3` arms differ only by F-1's flinch hand-back, which a harness run answers menus too fast to meet.
 - The Chapter I cut, blend and pick films of `cp02-ch1` were not re-filmed (its frames are the first build's; only its V2 text was fixed).
 
 - **MF-18** (anticipation before the cut, and the big cuts) is not built here. It depends on MF-04 (lane L2's `?run=flow`, the readable pull as she brakes: `mf-l2-moves`) and edits L2's run-in file, and it needs MF-05's pick. Under `?stance=v1b` the wind-up on the idle painting
