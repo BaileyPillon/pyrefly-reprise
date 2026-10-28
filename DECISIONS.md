@@ -16,22 +16,22 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1875 decisions in all: 1362 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1228 of the written decisions record a blanket yes.
+1876 decisions in all: 1363 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1229 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1751 |
+| adopted | 1752 |
 | proposed | 8 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 93 |
-| **All** | **1875** |
+| **All** | **1876** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 156 |
 | art | 393 |
-| visuals | 135 |
+| visuals | 136 |
 | camera | 75 |
 | audio | 159 |
 | ui | 219 |
@@ -45,15 +45,15 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | data | 17 |
 | tech | 30 |
 | site | 21 |
-| **All** | **1875** |
+| **All** | **1876** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 970 |
+| both games | 971 |
 | FFX only | 500 |
 | FFX-2 only | 387 |
 | FF7 hidden experiment | 18 |
-| **All** | **1875** |
+| **All** | **1876** |
 
 ## Standing rules in force
 
@@ -140,7 +140,7 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27) · [2026-10-28](#2026-10-28)
 
 ## Ledger
 
@@ -8890,3 +8890,13 @@ Tuesday · 5 decisions
   - What changed: Item 210c, under the standing order of 2026-10-16 as he fixed it on 2026-10-20 (D-1128). Part A, about 02:25 to 02:45 EDT in account #4: the history imported add-only (16 written, the records 148 to 164, from #4, #2 and #3), 170 pages listed, 114 staged, 3 pages with no source left on #4 only. Part B in account #1 from 14:24 EDT: the idle old copy of the driver chat stopped by its process id, the two workflows resumed, 100 of the 114 pages published by 15:05 EDT, the other 14 at 20:45 EDT after the cap reset (114 of 114, relinked, read back clean). The 100 a day cap is now in the skill.
   - area process · both games · adopted · delivery implemented · see [D-1358](#d-1358) · refines [D-1128](#d-1128)
   - Source: The driver’s call of 2026-10-27 (the DRIVER-STATE lines of 02:25, 14:24 to 15:05 and 20:45 EDT), made under the standing order (D-1128: “Switch this …
+
+### 2026-10-28
+
+Wednesday · 1 decision
+
+- <a id="d-1363"></a>**D-1363** — DRIVER CALL under his delegation, his to overturn: the look choices of the motion pass go to him as clip cards in three messages; message 1 (CP-01 turn-start stance, CP-02 swap on the cause, CP-03 hits) is sent from the live release 66, and unless he answers, the driver applies stance v1a, swap pick and hits knock as the defaults of release 67 at 20:00 EDT on 2026-10-28 (both games)
+  - Bailey: “im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!” (blanket yes)
+  - What changed: Item 210d, about 04:05 EDT on 2026-10-28. The cards of message 1 were filmed from the live release 66 build (six 1080x1920 clips at 60 fps: CP-01, CP-02 and CP-03, each in Chapter I for FFX and Chapter IV for FFX-2, with a key to which letter is which variant); the driver checked the stills and that every clip decodes, and sent him three clips and one still. Driver picks, all three for both games because the code is shared: CP-01 turn-start stance = v1a (changed from the plan's v1b after the driver saw the frames: v1b runs Paine in on her standing painting like a sliding statue, while v1a keeps the idle painting at the menu, as the real games do, and shows the ready drawing as the wind-up once she acts); CP-02 swap on the cause = pick (a cut where the moment has a cover, today's dissolve where the two drawings are far apart); CP-03 hits = knock (one push and one swing back; the real clips show a push-back and no rattle). Not picks: blend3 and v3, which pop far-apart drawings. Nothing flips yet: every one of these is an address word whose default is today's look; the driver flips the three defaults in release 67 at 20:00 EDT on 2026-10-28 only if he has not answered by then (messages 2 and 3 of the plan, MF-04 run and strike shape and MF-06 boss KO, and MF-18 which needs the stance and run picks, are still ahead).
+  - area visuals · both games · adopted · delivery in progress · see [D-1356](#d-1356), [D-1361](#d-1361) · refines [D-1361](#d-1361)
+  - Source: The driver's call of 2026-10-28 about 04:05 EDT (the DRIVER-STATE line), made under his delegation (D-1347), recorded as a driver call and his to …
