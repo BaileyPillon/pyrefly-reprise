@@ -14,6 +14,7 @@ import { resetSmearLog, smearLog } from '../../../src/engine/motion/SmearLog.ts'
 import { resetSwapLog } from '../../../src/engine/motion/SwapLog.ts';
 import { setCauseMode, setStanceMode, setSwapScope } from '../../../src/engine/motion/SwapSwitch.ts';
 import { setCutAnchorMode, type CutAnchorMode } from '../../../src/engine/motion/CutAnchor.ts';
+import { paceRate } from '../../../src/engine/pace.ts';
 import type { CoarseMask } from '../../../src/engine/PoseAlign.ts';
 
 beforeEach(() => {
@@ -178,5 +179,75 @@ describe('the real actor: a hit on a figure at rest, a cut on its cause', () => 
     expect(f.hurt.align).toBe(0);
     expect(f.idle.align).toBe(0);
     expect(smearLog().filter((e) => e.glide).length).toBeGreaterThanOrEqual(2);
+  });
+});
+
+/** The share of the figure's height the plane is drawn back by on the first frame of the window and on the frame the new painting is first seen, stepping the game at `hz`. */
+function atFlip(hz: number): { first: number; flip: number; frame: number } {
+  setCutAnchorMode('on');
+  setCauseMode('cut');
+  const a = yuna();
+  a.recoil(340, 0.28);
+  let first = Number.NaN;
+  for (let i = 0; i < 90; i++) {
+    a.update(1 / hz);
+    const f = read(a);
+    if (i === 0) first = Math.abs(f.hurt.align) / 1.82;
+    if (f.hurt.fade > f.idle.fade) return { first, flip: Math.abs(f.hurt.align) / 1.82, frame: i + 1 };
+  }
+  return { first, flip: Number.NaN, frame: -1 };
+}
+
+describe('the real actor: the cut frame carries the whole shift at any display rate and any pace (review m-6, i-9)', () => {
+  it('the frame the hurt painting is first seen is drawn with the same share of the height as the first frame, at 30, 60, 120, 144 and 240 Hz', () => {
+    for (const hz of [30, 60, 120, 144, 240]) {
+      const r = atFlip(hz);
+      expect(r.frame, `${hz} Hz`).toBeGreaterThanOrEqual(1);
+      expect(r.first, `${hz} Hz`).toBeGreaterThan(0.1);
+      expect(r.flip, `${hz} Hz`).toBeCloseTo(r.first, 9);
+      setCutAnchorMode(null);
+      resetSmearLog();
+      resetSwapLog();
+    }
+  });
+
+  it('at every pace the glide runs on the blend clock itself: the cut frame is the flip frame (pace "current" is the unscaled one; "steady" and "relaxed" stretch the blend, which they do while the curves are on: the pack default since release 67)', () => {
+    setCurvesMode('real-snappy'); // the pack's default in Chapter I and IV: the blend then runs on the paced clock
+    for (const name of ['current', 'steady', 'relaxed'] as const) {
+      setPace(name);
+      for (const hz of [60, 144, 240]) {
+        const r = atFlip(hz);
+        expect(r.flip, `${name} ${hz} Hz`).toBeCloseTo(r.first, 9);
+        setCutAnchorMode(null);
+        resetSmearLog();
+        resetSwapLog();
+      }
+    }
+    setPace('steady');
+    expect(paceRate('action')).not.toBe(1); // the default pace is not the unscaled one, so the clock the glide runs on matters
+  });
+
+  it('a hit-stop (the field held, dt 0; the real clock running) does not freeze the glide: it is where it is with no hold at all', () => {
+    const run = (held: boolean): number[] => {
+      setCutAnchorMode('on');
+      setCauseMode('cut');
+      resetSmearLog();
+      const a = yuna();
+      a.recoil(340, 0.28);
+      const out: number[] = [];
+      for (let i = 0; i < 24; i++) {
+        if (held) a.update(0, 1 / 60);
+        else a.update(1 / 60);
+        out.push(read(a).hurt.align);
+      }
+      setCutAnchorMode(null);
+      return out;
+    };
+    const free = run(false);
+    resetSwapLog();
+    const stopped = run(true);
+    expect(stopped.some((v) => v !== 0)).toBe(true);
+    expect(stopped.at(-1)).toBe(0); // the glide has ended in 24 real frames, held or not
+    for (let k = 0; k < free.length; k++) expect(stopped[k], `frame ${k}`).toBeCloseTo(free[k]!, 9);
   });
 });

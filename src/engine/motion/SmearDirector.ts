@@ -182,7 +182,7 @@ export class SmearDirector {
     this.written = false;
   }
 
-  /** Every frame, after the blend has advanced: the window's amount onto the planes (and off again when it is over). `ms` is the frame's real time (MF-18's glide runs on it, like the blend). */
+  /** Every frame, after the blend has advanced: the window's amount onto the planes (and off again when it is over). `ms` is the same ms the blend was just advanced by (the frame's real time, paced when the curves are on): MF-18's glide runs on the blend's own clock, so the cut frame and the glide stay together at any pace and display rate. */
   step(ms = 0): void {
     if (this.glide.active) this.glide.advance(ms, (i) => this.host.poseOf(i), (i, dx) => this.host.shiftPlane?.(i, dx));
     if (this.manual) return; // the caller runs this window

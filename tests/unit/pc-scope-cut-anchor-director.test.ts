@@ -264,3 +264,58 @@ describe('the director: a plane given another painting loses its glide', () => {
     expect(r.dir['glide'].active).toBe(false);
   });
 });
+
+describe('the director: what the review found unpinned (m-5)', () => {
+  it('a swap onto a plane that still carries an earlier glide of the SAME painting, with a step under the cap, writes nothing: the glide of the old swap is forgotten at the new one', () => {
+    setUp('on');
+    const r = rig();
+    r.ask('hurt', 0.33 * H); // plane 1, anchored: its record is the painting `hurt`
+    for (let i = 0; i < 4; i++) r.frame(); // the glide is under way
+    r.blend.advance(200); // the first blend is over
+    r.ask('idle', 0); // plane 0 (a cut; the idle's head is where the hurt's was, as drawn: under the cap of what it must be drawn back by)
+    r.blend.advance(200);
+    r.shifts.length = 0;
+    r.ask('hurt', 0.05 * H); // plane 1 again, the SAME painting, under the cap: no anchor of its own
+    expect(r.align[1]).toBe(0); // the actor reset its drift
+    for (let i = 0; i < 12; i++) r.frame();
+    expect(r.shifts.filter(([p]) => p === 1)).toEqual([]); // the old record (same painting name) would have written its offset back
+  });
+
+  it('a 50 ms three-frame blend (?swapcause=blend3) is never anchored: it is not a cut, it logs no smear and moves no plane', () => {
+    setUp('on', 'blend3');
+    const r = rig();
+    r.ask('hurt', 0.33 * H);
+    expect(smearLog()).toHaveLength(0);
+    expect(r.shifts).toEqual([]);
+    for (let i = 0; i < 20; i++) r.frame();
+    expect(r.shifts).toEqual([]);
+    expect(r.dir['glide'].active).toBe(false);
+  });
+
+  it('the cut frame is drawn with the whole shift at 30, 60, 120 and 144 Hz, and the glide ends within two frames of the cut frame plus its length', () => {
+    for (const hz of [30, 60, 120, 144]) {
+      setUp('on');
+      resetSmearLog();
+      const r = rig();
+      r.ask('hurt', 0.33 * H);
+      const e = smearLog()[0]!;
+      const whole = r.shifts[0]![1];
+      const ms = 1000 / hz;
+      let t = 0;
+      let cutFrame = -1;
+      let seenHome = -1;
+      for (let i = 0; i < 400 && r.dir['glide'].active; i++) {
+        r.frame(ms);
+        t += ms;
+        if (cutFrame < 0 && t > e.cutMs * CUT_AT) {
+          cutFrame = t;
+          expect(r.align[1], `${hz} Hz at the cut frame`).toBe(whole);
+        }
+        if (seenHome < 0 && r.align[1] === 0) seenHome = t;
+      }
+      expect(cutFrame, `${hz} Hz`).toBeGreaterThan(0);
+      expect(seenHome - cutFrame, `${hz} Hz`).toBeGreaterThanOrEqual(e.glide!.ms - 1e-6);
+      expect(seenHome - cutFrame, `${hz} Hz`).toBeLessThanOrEqual(e.glide!.ms + 2 * ms + 1e-6);
+    }
+  });
+});

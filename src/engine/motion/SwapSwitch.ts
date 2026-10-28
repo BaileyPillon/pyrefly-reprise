@@ -67,7 +67,7 @@ export const WIDE_CHAPTERS: readonly string[] = [
  */
 export const SCOPE_EXCEPTIONS: Readonly<Record<string, string>> = {
   yunalesca:
-    'FFX, the big foe: the rules-on run of 2026-10-27 (mf-l1-swaps handoff, MF-22) took ghost frames a minute from 287 to 98 but swap jerks of 40 px or more from 9 to 25 (worst 62 to 155 px): the moving-figure cuts the planner makes across heads 0.41 to 0.44 of the height apart (Yunalesca attack to cast, Auron follow to idle). Lifts when `?cutanchor=on` (MF-18) has been run there (jobs/wide-yunalesca.json) and no swap jerk of 40 px or more is left outside a named cut.',
+    'FFX, the big foe: the rules-on run of 2026-10-27 (mf-l1-swaps handoff, MF-22) took ghost frames a minute from 287 to 98 but swap jerks of 40 px or more from 9 to 25 (worst 62 to 155 px): the moving-figure cuts the planner makes across heads 0.41 to 0.44 of the height apart (Yunalesca attack to cast, Auron follow to idle). Lifts when `?cutanchor=on` (MF-18) has been run there (job `yunalesca-all-anchor` of docs/handoff/pc-scope.md) and no swap jerk of 40 px or more is left outside a named cut.',
 };
 
 /** The swaps MF-06 names, each by what is happening on screen (`SwapClass.ts` reads them off the pair of paintings). */

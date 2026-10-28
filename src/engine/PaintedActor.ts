@@ -2508,7 +2508,7 @@ export class PaintedActor extends Group {
     const held = this.blend.takeStart(); // PoseBlend rule 2: a request that waited for the weaker plane to be nearly gone starts now
     if (held) this.beginBlend(held.key, this.poses.get(held.key), held.plan);
     if (alignedSwapOn()) this.alignPlanes(); // W5: the aligned dissolve's drift follows the fades just written
-    this.smear.step(realDt * 1000); // the smear window's amount, from the blend's progress; the cut-side anchor's glide runs on the same real time (MF-18)
+    this.smear.step(realDt * 1000 * (curvesOn() ? paceRate('action') : 1)); // the smear window's amount, from the blend's progress; the cut-side anchor's glide runs on the blend's own clock, so it is cut and glide together at any pace (MF-18)
     for (const s of this.slots) syncPaintedBloom(s.material, this.u.dissolve.value > 0, this.bloomMasked);
     this.clock += dt;
 

@@ -3,7 +3,8 @@
  * head, so the step at the cut is 0.12 of the height, and lets it glide home on an ease-out. The pure parts here: the word, the plan, the glide's curve and its per-plane bookkeeping. The director that uses
  * them is in `pc-scope-cut-anchor-director.test.ts`, the real actor in `engine/pc-scope-cut-anchor-actor.test.ts`. `?cutanchor=today` (the default) is release 67's cut exactly.
  */
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { CHAPTER_IDS, getChapter } from '../../src/data/encounters.ts';
 import {
   ANCHOR_CAP,
   CUT_ANCHOR_DEFAULT,
@@ -15,17 +16,65 @@ import {
   anchorPlan,
   cutAnchorFor,
   cutAnchorFromSearch,
+  cutAnchorGame,
+  cutAnchorMode,
+  cutAnchorWord,
   glideOffset,
+  setCutAnchorMode,
 } from '../../src/engine/motion/CutAnchor.ts';
+import { setDemoChapter } from '../../src/engine/motion/DemoGate.ts';
 import { BIG_ANCHOR, MIN_SPEED } from '../../src/engine/motion/SmearPlan.ts';
 
+afterEach(() => {
+  vi.unstubAllGlobals();
+  setCutAnchorMode(null);
+  setDemoChapter(undefined);
+});
+
 describe('the word', () => {
-  it('is today with no word since the default is today (release 67\'s cut), and with the pack off whatever the word', () => {
-    expect(CUT_ANCHOR_DEFAULT).toBe('today');
+  it('is today with no word since the default is today in BOTH games (release 67\'s cut), and with the pack off whatever the word', () => {
+    expect(CUT_ANCHOR_DEFAULT).toEqual({ ffx: 'today', ffx2: 'today' });
     expect(cutAnchorFromSearch('')).toBe('today');
+    expect(cutAnchorFromSearch('', 'ffx2')).toBe('today');
     expect(cutAnchorFromSearch('?cutanchor=banana')).toBe('today');
     expect(cutAnchorFromSearch('?pack=off&cutanchor=on')).toBe('today');
+    expect(cutAnchorFromSearch('?pack=off&cutanchor=on', 'ffx2')).toBe('today');
     expect(cutAnchorFromSearch(undefined)).toBe('today');
+    expect(cutAnchorWord('')).toBeNull(); // no word named: the game's default applies
+    expect(cutAnchorWord('?pack=off&cutanchor=on')).toBe('today');
+  });
+
+  it('the default is one word PER GAME (rule 14: the evidence is FFX\'s), a word in the address names both, and the running chapter picks the game', () => {
+    expect(Object.isFrozen(CUT_ANCHOR_DEFAULT)).toBe(true);
+    expect(Object.keys(CUT_ANCHOR_DEFAULT).sort()).toEqual(['ffx', 'ffx2']);
+    expect(cutAnchorGame('seymour-flux')).toBe('ffx');
+    expect(cutAnchorGame('ffx2-bahamut')).toBe('ffx2');
+    expect(cutAnchorGame(undefined)).toBe('ffx');
+    // every listed chapter: the id rule agrees with the chapter's own game (src/data/encounters.ts)
+    for (const id of CHAPTER_IDS) expect(cutAnchorGame(id), id).toBe(getChapter(id)!.game);
+    // a page with the pack on (the default on a desktop) and no word: the mode in force is the table's word for the running chapter's game
+    vi.stubGlobal('location', { search: '' });
+    setCutAnchorMode(null);
+    setDemoChapter('ffx2-trema');
+    expect(cutAnchorMode()).toBe(CUT_ANCHOR_DEFAULT.ffx2);
+    setDemoChapter('yunalesca');
+    expect(cutAnchorMode()).toBe(CUT_ANCHOR_DEFAULT.ffx);
+    // a forced mode names both games, and null reads the address again
+    setCutAnchorMode('on');
+    expect(cutAnchorMode()).toBe('on');
+    setDemoChapter('ffx2-trema');
+    expect(cutAnchorMode()).toBe('on');
+    setCutAnchorMode(null);
+    expect(cutAnchorMode()).toBe(CUT_ANCHOR_DEFAULT.ffx2);
+    // the address names a word: it applies in both games, and a pack-off page is today whatever it says
+    vi.stubGlobal('location', { search: '?cutanchor=moving' });
+    setCutAnchorMode(null);
+    expect(cutAnchorMode()).toBe('moving');
+    setDemoChapter('seymour-flux');
+    expect(cutAnchorMode()).toBe('moving');
+    vi.stubGlobal('location', { search: '?pack=off&cutanchor=moving' });
+    setCutAnchorMode(null);
+    expect(cutAnchorMode()).toBe('today');
   });
 
   it('?cutanchor=on and =moving name their modes (the key is lower case, the value is not case sensitive)', () => {
@@ -121,16 +170,46 @@ describe('the glide runs on real time, so it is the same at 60, 120 and 144 Hz',
     return { endMs: t, at100 };
   };
 
-  it('ends within one frame of hold + glide whatever the display, and is at the same place 100 ms in (within a frame of motion)', () => {
+  it('ends within two frames of hold + glide whatever the display (the glide runs from the cut FRAME, the first frame past the hold), and is at the same place 100 ms in (within a frame of motion)', () => {
     const end = 17 + 120;
-    for (const hz of [60, 120, 144]) {
+    for (const hz of [30, 60, 120, 144]) {
       const r = timeline(hz);
       expect(r.endMs, `${hz} Hz`).toBeGreaterThanOrEqual(end);
-      expect(r.endMs, `${hz} Hz`).toBeLessThanOrEqual(end + 1000 / hz + 1e-6);
+      expect(r.endMs, `${hz} Hz`).toBeLessThanOrEqual(end + 2 * (1000 / hz) + 1e-6);
     }
     const a = timeline(60).at100;
     const b = timeline(144).at100;
     expect(Math.abs(a - b)).toBeLessThan(0.4 * 0.16); // a 60 Hz frame at the end of the curve moves the plane well under 0.16 of its shift
+  });
+});
+
+describe('the cut frame carries the whole shift at any frame rate (review m-6)', () => {
+  const plan = { shift: -0.4, ms: 120, share: 0.25 };
+
+  it('the first frame past the hold is drawn with the whole shift (nothing is written), and the glide runs from the frame after', () => {
+    for (const hz of [30, 60, 120, 144, 240]) {
+      const step = 1000 / hz;
+      const hold = 17; // the cut sits 17 ms into the window
+      const g = new CutGlide();
+      g.begin(1, 'cast', plan, hold);
+      const writes: number[] = [];
+      let t = 0;
+      let cutFrame = -1;
+      for (let i = 0; i < 400 && g.active; i++) {
+        g.advance(step, () => 'cast', (_p, o) => writes.push(o));
+        t += step;
+        if (cutFrame < 0 && t > hold) {
+          cutFrame = i;
+          // the cut frame: whole shift on the plane, no write yet (it is already there)
+          expect(g.offsetOf(1), `${hz} Hz`).toBe(plan.shift);
+          expect(writes, `${hz} Hz`).toEqual([]);
+        }
+      }
+      expect(cutFrame, `${hz} Hz`).toBeGreaterThanOrEqual(0);
+      expect(writes.length, `${hz} Hz`).toBeGreaterThan(0);
+      expect(Math.abs(writes[0]!), `${hz} Hz`).toBeLessThan(Math.abs(plan.shift));
+      expect(writes.at(-1)).toBe(0);
+    }
   });
 });
 
@@ -173,6 +252,7 @@ describe('CutGlide: one record per plane', () => {
     expect(g.offsetOf(0)).toBe(0);
     expect(g.offsetOf(1)).toBe(0.4);
     const writes: Array<[number, number]> = [];
+    g.advance(30, (i) => (i === 0 ? 'a' : 'b'), (i, o) => writes.push([i, o])); // the cut frame: the whole shift, nothing to write yet
     g.advance(30, (i) => (i === 0 ? 'a' : 'b'), (i, o) => writes.push([i, o]));
     expect(writes).toHaveLength(1);
     expect(writes[0]![0]).toBe(1);
