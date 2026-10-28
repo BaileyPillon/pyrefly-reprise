@@ -250,7 +250,7 @@ describe('the playtest switchboard', () => {
   it('the key map: unique codes, none that the game uses', () => {
     const codes = [...SWITCHES.map((s) => s.code), MASTER_CODE, 'Equal'];
     expect(new Set(codes).size).toBe(codes.length);
-    const input = readFileSync('src/app/Input.ts', 'utf8');
+    const input = readFileSync('src/app/Input.ts', 'utf8') + readFileSync('src/app/inputKeyMap.ts', 'utf8'); // the key map lives in inputKeyMap.ts since release 68
     for (const c of codes) expect(input).not.toContain(`${c}:`); // not in Input's KEY_MAP
     expect(SWITCHES.map((s) => s.key).join('')).toBe('1234567' + ',.' + '89' + '/' + '-' + ';' + '\\' + "'"); // r63-play added the apostrophe (the party rim, last); integration 2 added `,` (the real clips) and `.` (the party rigs) after the curves; lane pro-look added `/` (the pro look) before the shadow key; the pro-camera lane added `;` (the directed camera); the pro staging added the backslash key (lane "pro-staging"), last
     expect(normaliseCode('Numpad3')).toBe('Digit3');

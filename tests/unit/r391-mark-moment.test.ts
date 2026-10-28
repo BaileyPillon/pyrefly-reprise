@@ -335,7 +335,8 @@ describe('the wiring', () => {
     const input = readFileSync(join(ROOT, 'src/app/Input.ts'), 'utf8');
     expect(input).not.toContain('Backquote');
     // no other raw key handler in src names it, and the abstract key map has no entry for it
-    const keyMap = /const KEY_MAP[^{]*\{([\s\S]*?)\n\};/.exec(input)?.[1] ?? '';
+    // (the map moved to inputKeyMap.ts in release 68, lane ui-input)
+    const keyMap = /const KEY_MAP[^{]*\{([\s\S]*?)\n\};/.exec(readFileSync(join(ROOT, 'src/app/inputKeyMap.ts'), 'utf8'))?.[1] ?? '';
     expect(keyMap.length).toBeGreaterThan(100);
     expect(keyMap).not.toMatch(/Backquote|Backslash/);
   });
