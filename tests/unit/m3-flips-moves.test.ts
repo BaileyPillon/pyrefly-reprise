@@ -1,6 +1,8 @@
 /**
- * Release 68's flips (message 3's picks; the driver's call under Bailey's delegation, 2026-10-28, his to overturn), the presenter half: `?kotopple=eased` (MF-17, both games), `?hurtstring=hold` (MF-12, both),
- * `?summon=leap` (MF-15, FFX as played: the code is shared, FFX-2 has no summons) and `?ramps=smooth` (MF-23, both) are the defaults, and `?kotopple=today&hurtstring=today&summon=today&ramps=today` is release 67's look.
+ * Release 68's flips (message 3's picks; the driver's call under Bailey's delegation, 2026-10-28, his to overturn), the presenter half: `?hurtstring=hold` (MF-12, both games),
+ * `?summon=leap` (MF-15, FFX as played: the code is shared, FFX-2 has no summons) and `?ramps=smooth` (MF-23, both) are the defaults, and `?hurtstring=today&summon=today&ramps=today` is release 67's look.
+ * **`?kotopple=eased` (MF-17) is NOT a default** (the adversarial review's F1 and F2: the eased fall fails CHK-027 for Kimahri in the continuity harness's maths and the sheet's own J8 stop rule): it reads `today`
+ * until J8 and J11 read the real paintings, and the word still plays the eased fall and revive (pinned here and in `mf17-ko-eased.test.ts`).
  * **REDUCE MOTION beats `?summon=leap`**: with it on the aeon arrives by today's sine hop and the party returns after the aeon has gone, exactly as release 67 played them (the hop reads no REDUCE MOTION itself, so a
  * leap with a crouch and a squash must not play where it does not). The interface half is `m3-flips.test.ts`; each word's own file (mf12, mf15, mf17, mf23) pins it in depth.
  *
@@ -8,28 +10,29 @@
  * Pure: no DOM, no `three` (the presenter's own beats on stages of recorders).
  */
 import { afterEach, describe, expect, it } from 'vitest';
-import { createEventCtx, playEvent } from '../../src/engine/BattlePresenterEvents.ts';
+import { TIMING, createEventCtx, playEvent } from '../../src/engine/BattlePresenterEvents.ts';
 import { STRING_HOLD_MS, stringHold } from '../../src/engine/motion/HitBeat.ts';
 import { MOVE_DEFAULTS, moveDefault, moveWord, moveWordFromSearch, setMoveWord } from '../../src/engine/motion/MoveSwitch.ts';
 import { rampAll, rampsOn } from '../../src/engine/motion/RampBeat.ts';
 import { ARRIVE_FADE_MS, ARRIVE_HEIGHT, ARRIVE_HOP_MS, CROSS_AT, LEAP_AT, arrival, summonLeapOn } from '../../src/engine/motion/SummonBeat.ts';
-import { crossBack } from '../../src/engine/SummonStaging.ts';
+import { PARTY_SWAP_MS, crossBack } from '../../src/engine/SummonStaging.ts';
 import { fallRun, reviveRun } from '../../src/engine/KoFall.ts';
 import type { BattleEvent } from '../../src/battle/common/types.ts';
 import type { ActorHandle, PresenterDeps } from '../../src/engine/BattlePresenterPorts.ts';
 import { FakeActor, FakeStage } from './helpers/FakeStage.ts';
 
-const WORDS = ['kotopple', 'hurtstring', 'summon', 'ramps'] as const;
-const R68 = { kotopple: 'eased', hurtstring: 'hold', summon: 'leap', ramps: 'smooth' } as const;
-const ADDRESS_67 = '?kotopple=today&hurtstring=today&summon=today&ramps=today';
+const WORDS = ['hurtstring', 'summon', 'ramps'] as const;
+const R68 = { hurtstring: 'hold', summon: 'leap', ramps: 'smooth' } as const;
+const ADDRESS_67 = '?hurtstring=today&summon=today&ramps=today';
 
 afterEach(() => {
   for (const k of WORDS) setMoveWord(k, null);
+  setMoveWord('kotopple', null);
   for (const s of sleeps.splice(0)) s.go();
 });
 
-describe('the four words are the defaults, and `today` is release 67', () => {
-  it('the constants: eased, hold, leap, smooth; each is one of its word\'s listed values and `today` stays the first', () => {
+describe('the three words are the defaults, `kotopple` is held at `today`, and `today` is release 67', () => {
+  it('the constants: hold, leap, smooth; each is one of its word\'s listed values and `today` stays the first', () => {
     for (const k of WORDS) {
       expect(MOVE_DEFAULTS[k]).toBe(R68[k]);
       expect(moveDefault(k)).toBe(R68[k]);
@@ -39,6 +42,14 @@ describe('the four words are the defaults, and `today` is release 67', () => {
     expect(moveWordFromSearch('?shakeband=band', 'shakeband')).toBe('band');
     expect(moveDefault('shakeband')).toBe('today'); // the band is KEPT today (the driver's pick)
   });
+  it('MF-17 is held back (review F1 and F2): `kotopple` has no default line, reads `today` with no word, and `eased` is still a listed value the address and `setMoveWord` reach', () => {
+    expect(MOVE_DEFAULTS).not.toHaveProperty('kotopple');
+    expect(moveDefault('kotopple')).toBe('today');
+    expect(moveWordFromSearch('', 'kotopple')).toBe('today');
+    expect(moveWordFromSearch('?kotopple=nonsense', 'kotopple')).toBe('today');
+    expect(moveWordFromSearch('?kotopple=eased', 'kotopple')).toBe('eased');
+    expect(moveWordFromSearch('?kotopple=today', 'kotopple')).toBe('today');
+  });
   it('release 67\'s address reads today for each, word by word, and the old look is also what a forced `today` reads', () => {
     for (const k of WORDS) {
       expect(moveWordFromSearch(ADDRESS_67, k)).toBe('today');
@@ -47,12 +58,14 @@ describe('the four words are the defaults, and `today` is release 67', () => {
       setMoveWord(k, null);
     }
   });
-  it('MF-17 (both games): the readers see eased, and today is the old run (a topple fallRun with the word off carries no eased option)', () => {
+  it('MF-17 (both games, opt-in): the readers see today with no word, so the topple and the revive are release 67\'s, and `?kotopple=eased` (forced here) is the eased run', () => {
+    expect(moveWord('kotopple')).toBe('today');
+    expect(fallRun('topple', 'ffx2', undefined, undefined, moveWord('kotopple') === 'eased')!.opts.eased).toBeUndefined();
+    expect(reviveRun(true, moveWord('kotopple') === 'eased').opts.eased).toBeUndefined();
+    setMoveWord('kotopple', 'eased');
     expect(moveWord('kotopple')).toBe('eased');
     expect(fallRun('topple', 'ffx', undefined, undefined, moveWord('kotopple') === 'eased')!.opts.eased).toBe(true);
     expect(reviveRun(true, moveWord('kotopple') === 'eased').opts.eased).toBe(true);
-    setMoveWord('kotopple', 'today');
-    expect(fallRun('topple', 'ffx2', undefined, undefined, moveWord('kotopple') === 'eased')!.opts.eased).toBeUndefined();
     // scope, already pinned in mf17: a real-clip mode (a buckle given) keeps the real fall, so in Chapter I and IV under the real-snappy default only the REVIVE is eased
     expect(fallRun('topple', 'ffx', undefined, 600, true)!.opts.eased).toBeUndefined();
   });
@@ -171,6 +184,18 @@ describe('MF-15 the aeon\'s arrival and exit (FFX as played): the leap by defaul
     const leaving = await dismissed(false);
     expect(rec(leaving, 'ixion').waits).toHaveLength(1);
     expect(rec(leaving, 'ixion').waits[0]!.ms).toBeCloseTo(520 * CROSS_AT, 9);
+  });
+
+  it('MF-15\'s numbers are pinned by VALUE (review F5; they are the house\'s own, rule 6): the fade 620 and the hop 0.5 x 520 are today\'s staging, the leap starts at 0.6 of the fade (372 ms), the party at 0.25 of the fade-out (130 ms), a dismissal 390 ms shorter', () => {
+    expect([ARRIVE_FADE_MS, ARRIVE_HOP_MS, ARRIVE_HEIGHT]).toEqual([620, 520, 0.5]);
+    expect([LEAP_AT, CROSS_AT]).toEqual([0.6, 0.25]);
+    expect(ARRIVE_FADE_MS * LEAP_AT).toBeCloseTo(372, 9);
+    expect(TIMING.dismiss * CROSS_AT).toBeCloseTo(130, 9);
+    expect(PARTY_SWAP_MS).toBe(620);
+    expect(TIMING.dismiss).toBe(520);
+    const todaysDismissal = TIMING.dismiss + PARTY_SWAP_MS; // the aeon's fade-out, then the party's fade-in
+    const leapDismissal = TIMING.dismiss * CROSS_AT + PARTY_SWAP_MS; // the party's fade-in starts 130 ms into the aeon's fade-out
+    expect(todaysDismissal - leapDismissal).toBeCloseTo(390, 9);
   });
 
   it('REDUCE MOTION on: the arrival is today\'s sine hop after the fade (no leap, no wait on the aeon\'s clock) and the party returns only after the aeon is gone', async () => {

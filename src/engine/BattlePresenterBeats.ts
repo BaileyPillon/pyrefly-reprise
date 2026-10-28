@@ -31,7 +31,7 @@ import { landFlight, launchShot, planSkill, revealBlow, settleFlight } from './m
 import { MEGA_FLARE_SHAKE, megaFlareBlow } from './MegaFlareImpact.ts'; // release 62 (FFX-2 only): Mega Flare's heavier camera shake
 import { lungePlan } from './motion/StrikeReach.ts'; // r391-reach: the house lunge, solved against its target where the game's rules let it
 import { partyOffStage } from './SummonStaging.ts';
-import { arrival } from './motion/SummonBeat.ts'; // MF-15: the aeon's arrival (`?summon=`; the default is today's fade then hop)
+import { arrival } from './motion/SummonBeat.ts'; // MF-15: the aeon's arrival (`?summon=`; `leap` is the default since release 68, `today` is the fade then hop)
 import { blowFlashes } from './flashRules.ts'; // PR-0032: REDUCE FLASHES, one flash per action
 import { actionKills } from './procam/ProBurst.ts'; // `?camera=pro`: whether the action's own events KO a foe (the killing-blow shot)
 import { blowFlash, holdBlow } from './motion/DemoHitBeat.ts'; // `?motion=demo` (conference demo): the hit feel; unchanged without it

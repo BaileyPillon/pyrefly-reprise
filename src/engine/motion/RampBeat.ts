@@ -1,6 +1,6 @@
 /**
  * THE STEPPED FADES BECOME RAMPS (motion-fluidity pass, lane L2 "moves", item MF-23; timebase audit TB-02; FFX: the petrify, Evrae falling away (Chapter VIII), Yojimbo's recall (Chapter IX), the held
- * Seymour Omnis; FFX-2: Leblanc, Logos and Ormi yielding, Paragon and Trema held (Chapter XIII). None is reachable in Chapter I or IV; filmed with the debug API). Behind `?ramps=` (`today` default, `smooth`,
+ * Seymour Omnis; FFX-2: Leblanc, Logos and Ormi yielding, Paragon and Trema held (Chapter XIII). None is reachable in Chapter I or IV; filmed with the debug API). Behind `?ramps=` (`smooth` the default since release 68, `today` the loops of release 67,
  * `MoveSwitch.ts`). Ports only: no `three`, no DOM, no engine state (hard rule 1).
  *
  * **What was wrong:** five presenter animations are loops of `await sleep(ms / steps)` that set a value a step at a time: the petrify greys in four jumps of a quarter 70 ms apart, Evrae's fall shrinks in 12

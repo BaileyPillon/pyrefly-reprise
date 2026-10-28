@@ -16,7 +16,8 @@ import { TIMING } from '../../../src/engine/BattlePresenterEvents.ts';
 import { REVIVE_MS } from '../../../src/engine/KoFall.ts';
 import { TOPPLE_RAD } from '../../../src/engine/KoTip.ts';
 
-// This file's timeline is release 67's (the topple's 14-frame hold, the revive's 395 ms): release 68 made `?kotopple=eased` the default, so every test here names `today`.
+// This file's timeline is release 67's (the topple's 14-frame hold, the revive's 395 ms): every test here names `today`, so it keeps guarding that look whichever way `?kotopple`'s default is set
+// (release 68 held MF-17 at `today`: the adversarial review's F1, Kimahri's eased fall fails CHK-027 in the harness's maths).
 // The eased arm under the same harness maths is `m3-ko-eased-harness.test.ts`; its own timeline is `mf17-ko-eased.test.ts`.
 beforeEach(() => setMoveWord('kotopple', 'today'));
 afterEach(() => {
