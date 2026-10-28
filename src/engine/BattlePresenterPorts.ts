@@ -502,15 +502,14 @@ export interface PresenterDeps {
   staging?: import('./pro/staging/StagingPort.ts').StagingPort | null;
   /** Mid-battle scripts by `MidBattleTrigger.script`, from `ChapterScripts`. */
   midScripts?: Record<string, StoryScript>;
-  /** Sleep hook. Tests pass a no-op so the loop runs instantly. */
+  /** Sleep hook (the wall clock, behind the pause gate: the ATB pump and the presenter's own timeouts). Tests pass a no-op so the loop runs instantly. */
   sleep?: (ms: number) => Promise<void>;
+  /** MF-08: the sleep of the presenter's beats (`ctx.sleep`, scaled), counted in the frame clock; absent = `sleep`. */
+  beatSleep?: (ms: number) => Promise<void>;
+  /** MF-08: the milliseconds of the clock `beatSleep` counts in (a pause stops it); the cut-in's wait for a charge counts its cap in it and polls once a frame. Absent: it sums its polls (60 ms each). */
+  beatNow?: () => number;
   /**
-   * Real elapsed time, in milliseconds. Defaults to `Date.now`.
-   *
-   * The only reason it exists is FFX-2's **Active** ATB: the pump in
-   * `BattlePresenterActive.ts` hands the engine the time that genuinely passed
-   * while a command menu was open, so a test needs a fake clock to drive it
-   * without real timers. `BattleScreen` passes nothing.
+   * Real elapsed time, in milliseconds. Defaults to `Date.now`. Only FFX-2's **Active** ATB pump (`BattlePresenterActive.ts`) reads it; `BattleScreen` passes nothing.
    */
   now?: () => number;
   /** Overall pacing multiplier applied to every wait. 1 = authored timing. */

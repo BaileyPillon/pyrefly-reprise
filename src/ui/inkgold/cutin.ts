@@ -182,23 +182,55 @@ function mirrorSkew(el: HTMLElement, side: CutInSide, deg: number): void {
   el.style.transform = `skewX(${mirroredDeg(side, deg)}deg)`;
 }
 
-/** Slide-in-and-overshoot, per spec: 180ms total, settle skew in the last 60ms. */
+/**
+ * Slide-in-and-overshoot, per spec: 180ms total, settle skew in the last 60ms.
+ *
+ * MF-16 / TB-05 (motion-fluidity pass, lane L3; both games; no look change): ONE Web Animation with the two phases as keyframes, each with its own easing, where the entrance used to be a CSS
+ * transition plus a `setTimeout` at 120 ms that started the settle: a busy main thread (a frame that ran long at the turn start) made the settle start as late as the stall. The compositor now
+ * runs both phases on its own clock. A page without `Element.animate` (jsdom) keeps the timed path.
+ */
 function animateEntrance(slab: HTMLElement, side: CutInSide): void {
   const offscreen = side === 'right' ? '100%' : '-100%';
   const overshootDeg = mirroredDeg(side, OVERSHOOT_SKEW_DEG);
   const restDeg = mirroredDeg(side, REST_SKEW_DEG);
+  const from = `translateX(${offscreen}) skewX(${overshootDeg}deg)`;
+  const slam = `translateX(0%) skewX(${overshootDeg}deg)`;
+  const rest = `translateX(0%) skewX(${restDeg}deg)`;
+
+  if (typeof slab.animate === 'function' && cutInWaapiOn()) {
+    slab.style.transition = 'none';
+    slab.style.transform = rest; // what stays when it ends
+    slab.animate(
+      [
+        { transform: from, offset: 0, easing: 'cubic-bezier(0.2, 0.9, 0.3, 1)' }, // the slam: 120 ms
+        { transform: slam, offset: SLAM_OVERSHOOT_MS / SLAM_MS, easing: 'ease-out' }, // the settle: 60 ms
+        { transform: rest, offset: 1 },
+      ],
+      { duration: SLAM_MS, fill: 'both' },
+    );
+    return;
+  }
 
   slab.style.transition = 'none';
-  slab.style.transform = `translateX(${offscreen}) skewX(${overshootDeg}deg)`;
+  slab.style.transform = from;
   void slab.getBoundingClientRect(); // force layout before animating away from the line above
 
   slab.style.transition = `transform ${SLAM_OVERSHOOT_MS}ms cubic-bezier(0.2, 0.9, 0.3, 1)`;
-  slab.style.transform = `translateX(0%) skewX(${overshootDeg}deg)`;
+  slab.style.transform = slam;
 
   window.setTimeout(() => {
     slab.style.transition = `transform ${SLAM_SETTLE_MS}ms ease-out`;
-    slab.style.transform = `translateX(0%) skewX(${restDeg}deg)`;
+    slab.style.transform = rest;
   }, SLAM_OVERSHOOT_MS);
+}
+
+/** `?cutin=timed` puts the old timer-chained entrance back (the A/B for the stall measure); anything else is the Web Animation. */
+function cutInWaapiOn(): boolean {
+  try {
+    return new URLSearchParams(globalThis.location?.search ?? '').get('cutin') !== 'timed';
+  } catch {
+    return true;
+  }
 }
 
 function dismiss(el: HTMLElement, slab: HTMLElement, side: CutInSide, reduced: boolean): Promise<void> {
@@ -208,9 +240,25 @@ function dismiss(el: HTMLElement, slab: HTMLElement, side: CutInSide, reduced: b
   }
   const offscreen = side === 'right' ? '100%' : '-100%';
   const restDeg = mirroredDeg(side, REST_SKEW_DEG);
+  const away = `translateX(${offscreen}) skewX(${restDeg}deg)`;
+  if (typeof slab.animate === 'function' && cutInWaapiOn()) {
+    // The way out starts from wherever the entrance is (the implicit first keyframe is the value underneath), and the slab leaves the page when its slide has ended, not on a timer that can fire first.
+    const out = slab.animate([{ transform: away }], { duration: DISMISS_MS, easing: 'ease-in', fill: 'forwards' });
+    return new Promise<void>((resolve) => {
+      let gone = false;
+      const done = (): void => {
+        if (gone) return;
+        gone = true;
+        el.remove();
+        resolve();
+      };
+      out.finished.then(done, done);
+      window.setTimeout(done, DISMISS_MS + 600); // a document whose animations are not running (a hidden tab) must still settle the promise
+    });
+  }
   return new Promise<void>((resolve) => {
     slab.style.transition = `transform ${DISMISS_MS}ms ease-in`;
-    slab.style.transform = `translateX(${offscreen}) skewX(${restDeg}deg)`;
+    slab.style.transform = away;
     window.setTimeout(() => {
       el.remove();
       resolve();

@@ -144,3 +144,53 @@ describe('the next cut-in waits for the charging action (PR-0104)', () => {
     }
   });
 });
+
+describe('the wait counts in the beat clock, not in real time (MF-08; review of 2026-10-27, m1)', () => {
+  /** A charge that clears 300 ms into the wait; a pause overlay (5 s of real time, none of beat time) lands between two polls. */
+  async function run(withBeatClock: boolean, pauseMs: number): Promise<{ plays: number; polls: number[] }> {
+    const calls: Req[] = [];
+    let beatTime = 0;
+    let realTime = 0;
+    let acting = true;
+    const polls: number[] = [];
+    const s = state('ffx2', ['yuna']);
+    const beat = new TurnCutInBeat({
+      moments: port(calls),
+      speed: () => 'normal',
+      acting: () => acting,
+      menuFor: () => 'rikku',
+      ...(withBeatClock ? { now: () => beatTime } : {}),
+      sleep: async (ms) => {
+        polls.push(ms);
+        beatTime += ms;
+        realTime += ms + (polls.length === 2 ? pauseMs : 0); // the pause stops the beat clock and not the wall one
+        if (beatTime >= 300) {
+          acting = false;
+          (s.combatants['yuna'] as unknown as { atb: { charging: unknown } }).atb.charging = null;
+        }
+      },
+    });
+    await beat.play(s, 'rikku');
+    expect(realTime).toBeGreaterThanOrEqual(beatTime);
+    return { plays: calls.length, polls };
+  }
+
+  it('a pause inside the wait does not spend the cap: the slab still plays this turn', async () => {
+    expect((await run(true, 5000)).plays).toBe(1);
+    expect((await run(false, 5000)).plays).toBe(1);
+  });
+
+  it('on the beat clock it polls once a frame (16 ms); on the wall clock, as it was, every 60 ms', async () => {
+    expect(Math.max(...(await run(true, 0)).polls.slice(0, 10))).toBe(16);
+    expect((await run(false, 0)).polls[0]).toBe(60);
+  });
+
+  it('a charge still running at the cap, counted in the beat clock, moves the cut-in to her next turn as before', async () => {
+    const calls: Req[] = [];
+    let beatTime = 0;
+    const beat = new TurnCutInBeat({ moments: port(calls), speed: () => 'normal', acting: () => true, menuFor: () => 'rikku', now: () => beatTime, sleep: async (ms) => void (beatTime += ms) });
+    await beat.play(state('ffx2', ['yuna']), 'rikku');
+    expect(calls).toHaveLength(0);
+    expect(beatTime).toBeLessThanOrEqual(CUT_IN_WAIT_CAP_MS + 16);
+  });
+});

@@ -19,6 +19,7 @@ import { captionHtml, ffx2RowTagsHtml } from '../common/statusRows.ts';
 import { faceLadder } from '../common/partyFace.ts';
 import { faceLayersHtml } from '../common/portrait.ts';
 import '../common/pro-markers.css';
+import { scaleStyle, shimmerDelay } from './AtbLive.ts'; // MF-07 (`?atbbars=smooth`): the bars are scaled in place and the shimmer keeps its phase
 import { proMarkersOn, rowMark, rowMarkClass, rowMarkHtml, rowMarkStyle, type RowMark } from '../common/proMarkers.ts'; // lane pro-look: the low-HP pulse, the KO pill
 
 /** `AtbState.ticks`'s own reference: one drawn bar at default speed [types.ts §7]. */
@@ -60,6 +61,8 @@ export interface PartyRowOptions {
   index: number;
   /** The scene's art namespace (the experimental Leblanc chapter, `data/art/artNamespace.ts`): the head is cropped from the namespaced painting. Absent: the base art. */
   artNamespace?: string;
+  /** MF-07 (`?atbbars=smooth`): the fill and the charge are full-width bars scaled by `transform` (the HUD rewrites that every frame), and a ready track keeps the shimmer's phase. Absent: today's `width:%`. */
+  live?: { fill: number } | undefined;
 }
 
 /**
@@ -131,11 +134,12 @@ export function partyRowHtml(
   const monogram = dressphereAbbr(dressphere);
   const trackW = barTrackWidth(bar?.required ?? TICKS_PER_BAR);
   const fillPct = clamp(0, 100, (bar?.fill ?? 0) * 100);
+  const live = opts.live;
   const stateClass = bar ? `ffx2atb--${bar.state}` : '';
   const readyClass = bar?.ready ? 'ffx2atb--ready' : '';
   const charge =
     bar?.charge != null
-      ? `<div class="ffx2atb__charge" style="width:${clamp(0, 100, bar.charge * 100)}%"></div>`
+      ? `<div class="ffx2atb__charge" style="${live ? scaleStyle(clamp(0, 1, bar.charge)) : `width:${clamp(0, 100, bar.charge * 100)}%`}"></div>`
       : '';
   const proMark = proMarkersOn() ? rowMark('ffx2', c.hp, c.stats.maxHp, c.hp > 0) : null; // lane pro-look: null (nothing) with the piece off, the default
   const acting = (c.id === opts.actingId ? ' ig-stat--acting' : '') + rowMarkClass(proMark);
@@ -151,8 +155,8 @@ export function partyRowHtml(
         <div class="ig-stat__value ig-stat__value--mp">${c.mp}<small>/${c.stats.maxMp}</small></div>
         <div class="ffx2party__status">${statuses}</div>
       </div>
-      <div class="ig-stat__od ffx2atb__track ${stateClass} ${readyClass}" style="width:${trackW}px">
-        <i class="ffx2atb__fill" style="width:${fillPct}%"></i>
+      <div class="ig-stat__od ffx2atb__track ${stateClass} ${readyClass}" style="width:${trackW}px${live && bar?.ready ? shimmerDelay() : ''}">
+        <i class="ffx2atb__fill" style="${live ? scaleStyle(live.fill) : `width:${fillPct}%`}"></i>
         ${charge}
       </div>
     </div>

@@ -8,6 +8,7 @@ import { rollTriggerHappy } from '../../battle/ffx2/minigames.ts';
 import { isCoarsePointer } from '../common/ControlsHint.ts';
 import { padLabel } from '../common/padGlyphs.ts';
 import { RawInputWatcher, rawInputSuspended } from '../ffx/rawInput.ts';
+import { fluidWord } from '../common/fluidUi.ts';
 
 /**
  * Gunner — Trigger Happy [`ffx2-combat-core.md` §3.1, `visual-bible.md` §4.10.1]:
@@ -43,6 +44,12 @@ import { RawInputWatcher, rawInputSuspended } from '../ffx/rawInput.ts';
  * release-36 roll (`rollTriggerHappy`, 6 to 16), the answer every human got
  * before the count was honoured.
  *
+ * ## The bar and the ring that move every frame (MF-24 / TB-06, motion-fluidity pass lane L3; FFX-2 only; a look, so behind `?triggerhappy=smooth` or `?fluidui=on`, default today's)
+ *
+ * Today `render()` rewrites the whole overlay with `innerHTML` on a 33 ms timer (and on every press), so the ring and the bar step in 2- and 3-frame holds at 60 Hz (4 and 5 at 144 Hz) over a 1.8 s mash.
+ * With the word on the markup is built once, a `requestAnimationFrame` loop paints from `performance.now()` (the ring's `stroke-dashoffset`, the bar's `transform: scaleX`, as `LadyLuckReels` moves
+ * its strips), a press paints at once, and the 33 ms timer keeps only the window's end (a hidden tab draws no frames and the window must still close).
+ *
  * `createTriggerHappy` is the fake-input-friendly core: `press()` registers a
  * hit synchronously with no DOM event round-trip, which is what a unit test
  * wants. `mountTriggerHappy` is the thin real-play wrapper `FFX2BattleHud`
@@ -60,6 +67,11 @@ export interface TriggerHappyHandle {
 
 const TICK_MS = 33;
 const MAX_HITS = 16;
+
+/** `?triggerhappy=smooth` (or `?fluidui=on`): the bar and the ring paint every drawn frame. */
+export function triggerHappySmooth(search: string | undefined = globalThis.location?.search): boolean {
+  return fluidWord('triggerhappy', 'smooth', search);
+}
 
 /** The input a press came from, named as `Input.lastDevice` names them. */
 type Device = InputSnapshot['lastDevice'];
@@ -94,7 +106,11 @@ export function createTriggerHappy(container: HTMLElement, params: Record<string
   let hits = 0;
   let done = false;
   let timer = 0;
+  let raf = 0;
+  const smooth = triggerHappySmooth() && typeof requestAnimationFrame === 'function'; // MF-24
+  const t0 = performance.now();
   const start = Date.now();
+  const elapsedMs = (): number => (smooth ? performance.now() - t0 : Date.now() - start);
   let resolveResult!: (r: TriggerHappyResult) => void;
   const result = new Promise<TriggerHappyResult>((res) => {
     resolveResult = res;
@@ -121,6 +137,7 @@ export function createTriggerHappy(container: HTMLElement, params: Record<string
 
   const render = (remainingFrac: number): void => {
     const hot = hits >= paceHits;
+    if (smooth && live) return paint(remainingFrac, hot);
     el.innerHTML = `
       <div class="ig-minigame__head">
         <span class="ig-minigame__title">Trigger Happy</span>
@@ -132,11 +149,36 @@ export function createTriggerHappy(container: HTMLElement, params: Record<string
       </div>
       <div class="ig-minigame__bar ffx2-trigger__bar">
         <div class="ffx2-trigger__pace" style="left:${Math.min(100, (paceHits / MAX_HITS) * 100)}%"></div>
-        <div class="ffx2-trigger__fill${hot ? ' ffx2-trigger__fill--hot' : ''}" style="width:${Math.max(0, remainingFrac * 100).toFixed(1)}%"></div>
+        <div class="ffx2-trigger__fill${hot ? ' ffx2-trigger__fill--hot' : ''}" style="${smooth ? `width:100%;transform:scaleX(${Math.max(0, remainingFrac).toFixed(4)});transform-origin:0 50%` : `width:${Math.max(0, remainingFrac * 100).toFixed(1)}%`}"></div>
       </div>
     `;
+    if (smooth) {
+      live = { ring: el.querySelectorAll('circle')[1] ?? null, fill: el.querySelector('.ffx2-trigger__fill')!, bonus: el.querySelector('.ig-minigame__bonus')!, sub: el.querySelector('.ig-minigame__subtitle')! };
+    }
+  };
+
+  /** MF-24: the persistent elements the frame loop writes. */
+  let live: { ring: Element | null; fill: Element; bonus: Element; sub: Element } | null = null;
+  const paint = (remainingFrac: number, hot: boolean): void => {
+    const p = live!;
+    p.ring?.setAttribute('stroke-dashoffset', (CIRC * (1 - remainingFrac)).toFixed(1));
+    (p.fill as HTMLElement).style.transform = `scaleX(${Math.max(0, remainingFrac).toFixed(4)})`;
+    p.fill.classList.toggle('ffx2-trigger__fill--hot', hot);
+    p.bonus.classList.toggle('ffx2-trigger__bonus--hot', hot);
+    const hitsText = `${hits} HIT${hits === 1 ? '' : 'S'}`;
+    if (p.bonus.textContent !== hitsText) p.bonus.textContent = hitsText;
+    const word = `MASH ${keyWord(device, pointerKind)}`;
+    if (p.sub.textContent !== word) p.sub.textContent = word;
   };
   render(1);
+  if (smooth) {
+    const frame = (): void => {
+      if (done) return;
+      render(Math.max(0, 1 - elapsedMs() / windowMs));
+      raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+  }
 
   const release = (): void => {
     window.removeEventListener('keydown', onKey);
@@ -148,6 +190,7 @@ export function createTriggerHappy(container: HTMLElement, params: Record<string
     if (done) return;
     done = true;
     window.clearTimeout(timer);
+    if (raf) cancelAnimationFrame(raf);
     release();
     el.style.pointerEvents = 'none'; // the slab lingers 300 ms: a late tap belongs to what is under it
     window.setTimeout(() => el.remove(), 300);
@@ -158,9 +201,9 @@ export function createTriggerHappy(container: HTMLElement, params: Record<string
 
   const tick = (): void => {
     if (done) return;
-    const elapsed = Date.now() - start;
+    const elapsed = elapsedMs();
     const remaining = Math.max(0, 1 - elapsed / windowMs);
-    render(remaining);
+    if (!smooth) render(remaining); // the frame loop paints the smooth one
     if (elapsed >= windowMs) {
       finish();
       return;
@@ -175,8 +218,7 @@ export function createTriggerHappy(container: HTMLElement, params: Record<string
     if (from) device = from;
     el.dataset['input'] = device;
     hits = Math.min(MAX_HITS, hits + 1);
-    const elapsed = Date.now() - start;
-    render(Math.max(0, 1 - elapsed / windowMs));
+    render(Math.max(0, 1 - elapsedMs() / windowMs));
     el.classList.remove('ffx2-trigger--pop');
     void el.offsetWidth;
     el.classList.add('ffx2-trigger--pop');
@@ -209,6 +251,7 @@ export function createTriggerHappy(container: HTMLElement, params: Record<string
       if (done) return;
       done = true;
       window.clearTimeout(timer);
+      if (raf) cancelAnimationFrame(raf);
       release();
       el.remove();
     },

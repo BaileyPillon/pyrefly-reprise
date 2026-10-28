@@ -157,7 +157,7 @@ export class BattlePresenter {
       moments: deps.moments ?? null,
       speed: () => this.speed,
       // PR-0104 (FFX-2 only): the next girl's cut-in waits for a charging action to play.
-      sleep: (ms) => this.baseSleep(ms),
+      sleep: (ms) => (deps.beatSleep ?? this.baseSleep)(ms), ...(deps.beatNow ? { now: deps.beatNow } : {}), // MF-08: the beat clock (cut-in wait: a frame poll, the cap in beat time)
       acting: () => this.actingState.acting !== null,
       menuFor: () => this.pendingMenu?.actorId ?? null,
     });
@@ -239,7 +239,7 @@ export class BattlePresenter {
   private sleep(ms: number): Promise<void> {
     if (this.aborted) return Promise.resolve();
     // The pacing switch (`pace.ts`, an option, 1 unless picked) stretches presentation waits only.
-    return this.baseSleep(Math.max(0, ms * SPEED_SCALE[this.speed] * this.timeScale * paceFactor('action')));
+    return (this.deps.beatSleep ?? this.baseSleep)(Math.max(0, ms * SPEED_SCALE[this.speed] * this.timeScale * paceFactor('action'))); // MF-08: on the frame clock when the screen hands one
   }
 
   // -------------------------------------------------------------------- play
