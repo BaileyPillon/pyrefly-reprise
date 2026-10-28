@@ -8,7 +8,8 @@
  * unit's rows it is (a unit can stand in the queue more than once). A row with no old place fades in; a row that left the list is simply gone, as today.
  *
  * Two cases the first build got wrong (review of 2026-10-27, M1): a row with no box (`display: none`; the F1 strip hides every row from the 4th on) has no old place, so it fades in and never slides in
- * from the page's corner; and the unit that acted, going from first to last, would cross the whole queue with its name over the others', so a row that travels far more than the typical one fades in where it lands.
+ * from the page's corner; and the unit that acted, going to the back across two or more others, would cross them with its name over theirs (the first capture of the real strip showed "Tidus" over "Seymour Flux"), so a row that
+ * travels more than one and a half times the typical one fades in where it lands.
  *
  * The slide is the row's own `translate` property, not `transform`: the F1 turn strip (`hudf1-ffx.css`) and the phone rail (`phone-hud.css`) both set `transform: none !important` on a row, and an important
  * declaration beats every animation, so a `transform` slide never showed in the real Chapter I HUD (found by the stepped capture, 2026-10-27; the lab list had no such rule). `translate` composes with
@@ -55,8 +56,8 @@ function keyed(list: HTMLElement): Array<[string, HTMLElement]> {
   return out;
 }
 
-/** A row that has to travel more than this many times what a typical row of the render travels is not dragged across the others: it fades in where it lands (the unit that acted, first to last). */
-export const WRAP_RATIO = 2.5;
+/** A row that has to travel more than this many times what a typical row of the render travels (a neighbour's one place) is not dragged across the others: it fades in where it lands (the unit that acted, going to the back over two or more others). */
+export const WRAP_RATIO = 1.5;
 
 /**
  * First: where every row is drawn right now (viewport px, transforms and a running slide included). A row with no box (`display: none`: the F1 strip hides every row from the 4th on) has no place
@@ -73,7 +74,7 @@ export function measureRows(list: HTMLElement): Map<string, RowPlace> {
 
 /**
  * Last, Invert, Play: every row of the new list that was drawn in the old one slides from there; one that was not (new, or hidden before) fades in where it is, when the old list had rows; one that is
- * hidden now is left alone. A row that has to travel far more than the typical one (the unit that acted goes from first to last, across the whole queue) fades in at its new place instead of crossing the
+ * hidden now is left alone. A row that has to travel more than one and a half times the typical one (the unit that acted going to the back, across two or more others) fades in at its new place instead of crossing the
  * others with its name over theirs. Returns how many animations it started.
  */
 export function slideRows(list: HTMLElement, before: ReadonlyMap<string, RowPlace>): number {

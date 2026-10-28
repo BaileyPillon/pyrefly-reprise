@@ -118,7 +118,7 @@ describe('FLIP of the turn-order list', () => {
     for (const p of played) expect(JSON.stringify(p.keyframes)).not.toMatch(/-?[1-9]\d{2,}\.\d\dpx/); // no slide of hundreds of px
   });
 
-  it('the unit that acted, going from first to last, fades in at its new place instead of crossing the queue; a two-place move still slides', () => {
+  it('the unit that acted, going to the back across two or more others, fades in at its new place instead of crossing them; a swap of neighbours still slides both', () => {
     const six = ['a', 'b', 'c', 'd', 'e', 'f'];
     const el = list(six.map((id) => [id, 'none'] as [string, string]));
     six.forEach((id, i) => rects.set(id, { left: 100, top: i * 20, width: 100 }));
@@ -131,7 +131,7 @@ describe('FLIP of the turn-order list', () => {
     const by = new Map(played.map((p) => [p.el.dataset['actor'], p]));
     expect(by.get('a')!.keyframes).toEqual([{ opacity: 0 }, { opacity: 1 }]); // 5 places: no crossing
     for (const id of ['b', 'c', 'd', 'e', 'f']) expect(by.get(id)!.keyframes[0]!['translate']).toBe('0.00px 20.00px');
-    // a unit that waits two places: the others move one, it moves two, and that still slides (ratio 2 of 2.5)
+    // the unit that acted going to the back of three (the real Chapter I strip: "Tidus" crossed over "Seymour Flux" in the first capture): the others move one place, it moves two, so it fades in and the others slide
     const el3 = list([['a', 'none'], ['b', 'none'], ['c', 'none']]);
     ['a', 'b', 'c'].forEach((id, i) => rects.set(id, { left: 100, top: i * 20, width: 100 }));
     const before3 = measureRows(el3);
@@ -139,6 +139,18 @@ describe('FLIP of the turn-order list', () => {
     ['b', 'c', 'a'].forEach((id, i) => rects.set(id, { left: 100, top: i * 20, width: 100 }));
     played = [];
     expect(slideRows(next3, before3)).toBe(3);
+    const by3 = new Map(played.map((p) => [p.el.dataset['actor'], p]));
+    expect(by3.get('a')!.keyframes).toEqual([{ opacity: 0 }, { opacity: 1 }]);
+    expect(by3.get('b')!.keyframes[0]!['translate']).toBe('0.00px 20.00px');
+    expect(by3.get('c')!.keyframes[0]!['translate']).toBe('0.00px 20.00px');
+    // two neighbours that swap: both move one place, both slide
+    const el2 = list([['a', 'none'], ['b', 'none']]);
+    ['a', 'b'].forEach((id, i) => rects.set(id, { left: 100, top: i * 20, width: 100 }));
+    const before2 = measureRows(el2);
+    const next2 = list([['b', 'none'], ['a', 'none']]);
+    ['b', 'a'].forEach((id, i) => rects.set(id, { left: 100, top: i * 20, width: 100 }));
+    played = [];
+    expect(slideRows(next2, before2)).toBe(2);
     expect(played.every((p) => p.keyframes[0]!['translate'] !== undefined)).toBe(true);
   });
 
