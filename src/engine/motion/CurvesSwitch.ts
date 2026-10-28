@@ -3,10 +3,13 @@
  * "Pose continuity needs to be tight. It needs to be impressive."). The pure switch of the new CURVES: the sampled strike (`StrikeCurve.ts`), the cast lift, the FFX-2 leap, the
  * recoil-and-recover, the subtle volume-preserving squash and the paced pose-blend clock.
  *
- * **Default: OFF.** Merging this must not change the live game: with no address key (and in every unit test) `curvesOn()` answers false and every hook falls straight through to
+ * **Default: OFF with no page at all (and in every node unit test), on in the pack.** With no page, `curvesOn()` answers false and every hook falls straight through to
  * today's code. It turns on when ALL of these hold:
  *
- * 1. the address carries `?curves=new` or the shared key `?pack=demo` (the Thursday test build runs with `?pack=demo`; `?curves=today` wins over the pack, for A/B captures);
+ * 1. the address carries `?curves=new` (or `real`, `real-snappy`), or the pack is on (`?pack=demo`, or r64's default on a desktop-class screen), and the mode is then {@link CURVES_DEFAULT}
+ *    (`?curves=today` wins over the pack, for A/B captures). **Release 67 (message 2 of Bailey's look choices, the driver's call under his delegation, 2026-10-28; his to overturn): the pack's mode is
+ *    `real-snappy`** (MF-14: the real game's clips scaled to the 1.1 s pick), where release 66 played `new` (the house profile at 1.1 s). `?curves=new` is release 66's look, exactly (`today` has always meant
+ *    the curves OFF, release 62's, and keeps that meaning);
  * 2. the running chapter is one of the two DEMO CHAPTERS, Chapter I (`seymour-flux`, FFX) or Chapter IV (`ffx2-bahamut`, FFX-2), named by `BattleScreen` as the battle sets up
  *    ({@link setCurvesChapter}). Every other chapter keeps today's motion, whatever the address says.
  *
@@ -36,8 +39,14 @@ export type RealKind = 'real' | 'snappy';
 let mode: CurvesMode | null = null;
 
 /**
- * `?curves=new|today|real|real-snappy` and `?pack=demo` from a search string (pure): `today` (the default) unless `curves=new` (or `real`, or `real-snappy`, `snappy` for short), or `pack=demo` with
- * no `curves=today` (the pack alone is `new`: the real modes are asked for by name).
+ * THE PICK AS THE DEFAULT (release 67, MF-14): the mode the pack plays when the address names no `curves` word (or one this switch does not know). ONE line to change; it must be a mode other than `today` (the pack on
+ * means the curves on; `?curves=today` is the way to turn them off). `new` is release 66's. The scope is unchanged: Chapter I and Chapter IV only, with the pack on (`curvesOn()`).
+ */
+export const CURVES_DEFAULT: Exclude<CurvesMode, 'today'> = 'real-snappy';
+
+/**
+ * `?curves=new|today|real|real-snappy` and the pack from a search string (pure): `today` with no page at all or the pack off; the word itself when it names a mode (`new`, `real`, `real-snappy`, `snappy` for short,
+ * `today` to turn the curves off); with the pack on and no word this switch knows, {@link CURVES_DEFAULT} (release 67: `real-snappy`; release 66: `new`, which `?curves=new` still asks for by name).
  */
 export function curvesModeFromSearch(search: string | undefined): CurvesMode {
   if (search === undefined) return 'today';
@@ -45,7 +54,8 @@ export function curvesModeFromSearch(search: string | undefined): CurvesMode {
   if (curves === 'today') return 'today';
   if (curves === 'real') return 'real';
   if (curves === 'real-snappy' || curves === 'snappy') return 'real-snappy';
-  return curves === 'new' || packDemo(search) ? 'new' : 'today';
+  if (curves === 'new') return 'new';
+  return packDemo(search) ? CURVES_DEFAULT : 'today';
 }
 
 /** The switch as the page asked for it. Read once. */

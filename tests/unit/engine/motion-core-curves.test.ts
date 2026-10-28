@@ -37,14 +37,14 @@ describe('the switch: default OFF, the two demo chapters only', () => {
   it('reads ?curves= and ?pack=demo from a search string', () => {
     expect(curvesModeFromSearch(undefined)).toBe('today');
     expect(curvesModeFromSearch('?pack=off')).toBe('today');
-    expect(curvesModeFromSearch('')).toBe('new'); // r64 (item 200b): the conference pack is the default
-    expect(curvesModeFromSearch('?curves=new')).toBe('new');
-    expect(curvesModeFromSearch('?pack=demo')).toBe('new');
+    expect(curvesModeFromSearch('')).toBe('real-snappy'); // r64 (item 200b): the conference pack is the default; release 67 (message 2): its mode is real-snappy (release 66's was new)
+    expect(curvesModeFromSearch('?curves=new')).toBe('new'); // release 66's look, by name
+    expect(curvesModeFromSearch('?pack=demo')).toBe('real-snappy');
     expect(curvesModeFromSearch('?pack=demo&curves=today')).toBe('today');
     expect(curvesModeFromSearch('?curves=today')).toBe('today');
-    expect(curvesModeFromSearch('?curves=bogus')).toBe('new'); // an unknown word names nothing: the default decides
+    expect(curvesModeFromSearch('?curves=bogus')).toBe('real-snappy'); // an unknown word names nothing: the default decides
     expect(curvesModeFromSearch('?pack=off&curves=bogus')).toBe('today');
-    expect(curvesModeFromSearch('?pack=other')).toBe('new');
+    expect(curvesModeFromSearch('?pack=other')).toBe('real-snappy');
   });
   it('is off with no page and off in every chapter but Chapter I and Chapter IV', () => {
     expect(curvesOn()).toBe(false); // no location in this test: today

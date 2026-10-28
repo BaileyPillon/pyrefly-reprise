@@ -9,7 +9,7 @@ import { PaintedActor, painting, reset, type Actor } from './head-lock-fixture.t
 import { setMotionBeatSink, type MotionBeat } from '../../../src/engine/feel/MotionBeats.ts';
 import { paceFactor, setPace, setPaceGame } from '../../../src/engine/pace.ts';
 import { curvesModeFromSearch, curvesOn, realKind, setCurvesMode } from '../../../src/engine/motion/CurvesSwitch.ts';
-import { setDemoChapter } from '../../../src/engine/motion/DemoGate.ts';
+import { setDemoChapter } from '../../../src/engine/motion/DemoGate.ts'; import { setMoveWord } from '../../../src/engine/motion/MoveSwitch.ts';
 import { PARTY_RIG_SUBJECTS, partyRigAllowed, partyRigsModeFromSearch, setPartyRigsMode } from '../../../src/engine/motion/PartyRigsSwitch.ts';
 import { APPROACH_LEAP_MIN, contactMsOf, holdMsOf, profileOfRow, realArcGainFromSearch, realHitMs, realKeyOf, realKoHoldMs, realRowOf, realStrikeProfile, realVictoryOf, setRealArcGain } from '../../../src/engine/motion/RealMotion.ts';
 import { pchip } from '../../../src/engine/motion/RealStrike.ts';
@@ -33,7 +33,7 @@ beforeEach(() => {
   setPace('steady');
 });
 afterEach(() => {
-  setDemoChapter(undefined);
+  setDemoChapter(undefined); setMoveWord('run', null);
   setCurvesMode(null);
   setPartyRigsMode(null);
   setRealArcGain(null);
@@ -116,16 +116,16 @@ describe('the table reader', () => {
 });
 
 describe('the switch', () => {
-  it('?curves=real and ?curves=real-snappy (and snappy) are modes; the pack alone is new; today wins', () => {
+  it('?curves=real and ?curves=real-snappy (and snappy) are modes; the pack alone is real-snappy since release 67 (new is release 66\'s, by name); today wins', () => {
     expect(curvesModeFromSearch('?curves=real')).toBe('real');
     expect(curvesModeFromSearch('?curves=real-snappy')).toBe('real-snappy');
     expect(curvesModeFromSearch('?curves=snappy')).toBe('real-snappy');
-    expect(curvesModeFromSearch('?pack=demo')).toBe('new');
+    expect(curvesModeFromSearch('?pack=demo')).toBe('real-snappy'); // release 67; `?curves=new` (release 66's) is pinned in release67-picks.test.ts
     expect(curvesModeFromSearch('?pack=demo&curves=real')).toBe('real');
     expect(curvesModeFromSearch('?pack=demo&curves=today')).toBe('today');
     expect(curvesModeFromSearch(undefined)).toBe('today');
     expect(curvesModeFromSearch('?pack=off')).toBe('today');
-    expect(curvesModeFromSearch('')).toBe('new'); // r64 (item 200b): the conference pack is the default
+    expect(curvesModeFromSearch('')).toBe('real-snappy'); // r64 (item 200b): the conference pack is the default; release 67: its mode is real-snappy
   });
   it('a real mode turns the curves on in the two demo chapters only; realKind names the sub-mode', () => {
     for (const [mode, kind] of [['new', null], ['today', null], ['real', 'real'], ['real-snappy', 'snappy']] as const) {
@@ -551,7 +551,7 @@ describe('the real strike in Chapter IV: her run home waits for the hold', () =>
     expect(settled).toBe(true);
   });
   it('arms nothing without a run-in, in the house curves, or for a figure the table does not cover', () => {
-    setDemoChapter('ffx2-bahamut');
+    setDemoChapter('ffx2-bahamut'); setMoveWord('run', 'today'); // the house profile is the strike after a run that does not flow; the default word is flow since release 67 (flow has its own profile)
     const plans: StrikePlan[] = [];
     setCurvesMode('real');
     const noRun = actorOf(plans);

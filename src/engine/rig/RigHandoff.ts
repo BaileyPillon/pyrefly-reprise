@@ -1,7 +1,7 @@
 /**
  * HOW A RIG BOSS GOES DOWN AND COMES HOME (motion-fluidity pass, lane L2 "moves", item MF-11; curves audit C-09 and C-10; both games: Seymour Flux, FFX, and Bahamut, FFX-2, are rigs). Attached to a rig
  * from outside (`attachRigHandoff`, called by `RigActor.createRigged`; `RigActor.ts` is at the 400-line limit), the way `fx/mix/living.ts` hangs off a painted figure: it wraps the instance's `setPose` and
- * `update` and is inert unless `?rigko=whole` (`MoveSwitch.ts`; the default is today).
+ * `update` and is inert with `?rigko=today` (`MoveSwitch.ts`; the default is `whole` since release 67, message 2 of Bailey's look choices, the driver's call under his delegation, his to overturn).
  *
  * **What was wrong (measured, r64).** KO: the rig's `ko` key collapses the body in 150 ms, but the actor's generic fall (written for a painted body, whose prone painting multiplies the drop by zero) keeps the
  * whole body sinking for 175 ms more into a thud at 325 ms (FFX-2) or 350 ms (FFX), and its relax then lifts the collapsed body back up 22 px over 260 ms before it dissolves: a bounce a body that has fallen

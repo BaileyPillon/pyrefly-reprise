@@ -1,5 +1,6 @@
 /**
- * MF-11 (motion-fluidity pass, lane L2 "moves"; curves audit C-09, C-10; both games: Seymour Flux and Bahamut are rigs): a rig boss's KO and its return, behind `?rigko=` (`today` default, `whole`).
+ * MF-11 (motion-fluidity pass, lane L2 "moves"; curves audit C-09, C-10; both games: Seymour Flux and Bahamut are rigs): a rig boss's KO and its return, behind `?rigko=` (`today`, `whole`; **`whole` is the default since release 67**,
+ * so every `today` case below names the word).
  *
  * The REAL `RigActor` over the synthetic rig of the rig tests, stepped frame by frame. Today: the generic fall (written for a painted body) keeps the collapsed body sinking and then lifts it back; the
  * idle key is asked for while the strike is still sliding home. `whole`: the ko key is the whole fall, the landing is played on the frame it ends, and the idle key waits for the strike to be over.
@@ -78,6 +79,7 @@ function watchLanding(a: RigActorT): { at: number[] } {
 describe('MF-11: a rig boss goes down', () => {
   for (const hz of [60, 120, 144]) {
     it(`today at ${hz} Hz: the generic fall sinks the collapsed body past the key and lifts it back (the bug the word removes)`, async () => {
+      setMoveWord('rigko', 'today');
       setPaceGame('ffx2');
       const a = await boss();
       a.update(0);
@@ -111,6 +113,7 @@ describe('MF-11: a rig boss goes down', () => {
   }
 
   it('whole: today\'s landing (the tween\'s end) is 150 ms or more later than the key; the word pulls it onto the key', async () => {
+    setMoveWord('rigko', 'today');
     setPaceGame('ffx2');
     const today = await boss();
     today.update(0);
@@ -164,6 +167,7 @@ describe('MF-11: a rig boss comes home', () => {
   }
 
   it('today: the idle key is asked for at once, with the strike still sliding home', async () => {
+    setMoveWord('rigko', 'today');
     const a = await striking();
     run(a, 700, 60);
     expect(a.striking).toBe(true);
