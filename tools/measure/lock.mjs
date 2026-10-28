@@ -2,13 +2,16 @@
 //
 // One heavy browser job at a time across the machine, whichever lane or tool starts it. The protocol every lane of the pass uses:
 //   - `REVIEW-BROWSER` and `GPU-QUIET` in the scratch folder are guards: while either exists nothing starts (a release review is timing frames).
-//   - `RIG-RECORD` is the lock: JSON { who, pid, at, maxMinutes } (maxMinutes at most 10), written and read back after 150 ms (a writer that finds another's record there has lost the race and starts over;
-//     six processes taking it eight times each never overlapped). A lock is stale only when it is older than 15 minutes: the rule of the pass is that nobody removes another lane's lock before that, so a record
+//   - `RIG-RECORD` is the lock: JSON { who, pid, at, maxMinutes } (maxMinutes at most 10), created with an EXCLUSIVE open (`tools/lock-atomic.mjs`: exactly one of any number of racing takers gets the file, the rest
+//     see EEXIST and look again; backlog 60, release 67: two jobs took it in the same second on 2026-10-27 when this was a plain overwriting write) and still read back after 150 ms (a writer that finds another's
+//     record there, from an older tool that overwrites, has lost the race and starts over; six processes taking it eight times each never overlapped). A stale lock is replaced by an atomic rename of a temp file
+//     under a takeover mutex that asks again whether it is still stale, so two takers of the same stale lock cannot both win. A lock is stale only when it is older than 15 minutes: the rule of the pass is that nobody removes another lane's lock before that, so a record
 //     whose pid looks gone (the pid may be a wrapper that exited while the job it started still runs) is still honoured. A younger lock is never removed by anyone but its owner.
 //   - `RIG-RECORD.next` is the reservation of the one that is waiting: a waiter claims the empty slot, and the lock is then taken by the holder of the reservation first, so lanes that queue do not starve each other.
 // The tool that takes the lock releases it on every way out (normal end, error, signal), and a watchdog releases it and ends the process if the job runs past its `maxMinutes` (a hung browser must not hold
 // the machine). Nothing here stops a process by image name; the callers stop what they started by PID.
 import fs from 'node:fs';
+import { createExclusive, replaceIfStale, unreadableAge } from '../lock-atomic.mjs';
 
 export const SCRATCH = process.env.PYREFLY_SCRATCH ?? 'D:/Tools/pyrefly-scratch';
 export const LOCK = `${SCRATCH}/RIG-RECORD`;
@@ -34,20 +37,35 @@ export function reservedBy(rec, { pid = process.pid, now = Date.now(), isAlive =
   return isAlive(rec.pid) && age < (rec.maxMinutes ?? 10) * 60 * 1000 + STALE_MS ? rec : null;
 }
 
-/** Claim the empty reservation slot with an exclusive create (so a fresh claim of somebody else's is never overwritten); a stale one is taken over. True when the slot is ours. */
+/** Pure-ish: may this file be replaced? `rec` is its parsed record (null when unreadable). An unreadable file is a holder in the middle of writing it: free only once it is older than the stale line by its own mtime. */
+function replaceable(file, rec, isHeld) {
+  if (rec) return !isHeld(rec);
+  const age = unreadableAge(file);
+  return age === null || age > STALE_MS;
+}
+
+/** Claim the empty reservation slot with an exclusive create (so a fresh claim of somebody else's is never overwritten); a stale one is taken over atomically. True when the slot is ours. */
 function claimNext(mine) {
   try {
-    const fd = fs.openSync(NEXT, 'wx');
-    fs.writeSync(fd, mine);
-    fs.closeSync(fd);
-    return true;
-  } catch (e) {
-    if (e.code !== 'EEXIST') return false;
-    const cur = readJson(NEXT);
-    if (cur?.pid === process.pid) return true;
-    if (reservedBy(cur)) return false;
-    try { fs.writeFileSync(NEXT, mine); return true; } catch { return false; }
+    if (createExclusive(NEXT, mine)) return true;
+  } catch {
+    return false;
   }
+  const cur = readJson(NEXT);
+  if (cur?.pid === process.pid) return true;
+  if (reservedBy(cur)) return false;
+  try { return replaceIfStale(NEXT, mine, () => replaceable(NEXT, readJson(NEXT), (r) => reservedBy(r) !== null)); } catch { return false; }
+}
+
+/** The lock is free to be replaced: gone, ours (a second job of this same process), older than the stale line, or unreadable and older than it by its mtime. */
+function lockReplaceable() {
+  return replaceable(LOCK, readJson(LOCK), (r) => heldBy(r) !== null);
+}
+
+/** Take the lock file for `text`: an exclusive create, else (it exists but is replaceable) an atomic takeover. True when it is ours. */
+export function tryTakeLock(text) {
+  if (createExclusive(LOCK, text)) return true;
+  return replaceIfStale(LOCK, text, lockReplaceable);
 }
 
 /**
@@ -68,7 +86,9 @@ export async function takeBrowserLock({ who, what, maxMinutes = 10, maxWaitMs = 
     const ours = readJson(NEXT)?.pid === process.pid;
     if (!ours && !reserved && (held || guards.length)) claimNext(mine());
     if (!guards.length && !held && !reserved) {
-      try { fs.writeFileSync(LOCK, mine()); } catch { await sleep(100); continue; }
+      let took = false;
+      try { took = tryTakeLock(mine()); } catch { await sleep(100); continue; }
+      if (!took) { await sleep(30); continue; } // another taker created it first, or is mid-takeover: look again
       await sleep(150);
       if (readJson(LOCK)?.pid === process.pid) { if (readJson(NEXT)?.pid === process.pid) try { fs.rmSync(NEXT, { force: true }); } catch { /* gone */ } break; }
       continue; // lost the race

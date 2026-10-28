@@ -19,7 +19,8 @@ import fs from 'node:fs';
 import net from 'node:net';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { GUARD_DIR, MODES, expectedOutputs, guards, lockStatus, parseArgs, resolvePoses, subjectSpec, viteConfigText } from './lane-pure.mjs';
+import { GUARD_DIR, MODES, expectedOutputs, guards, parseArgs, resolvePoses, subjectSpec, viteConfigText } from './lane-pure.mjs';
+import { takeLaneLock } from './lane-lock.mjs';
 import { openGame, sleep } from './play-common.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -39,10 +40,8 @@ async function freePort(from = 5880) {
 }
 
 function takeLock() {
-  const st = lockStatus(fs.existsSync(LOCK) ? fs.readFileSync(LOCK, 'utf8') : null, alive);
-  if (st.state === 'held' && st.by.pid !== process.ppid) throw new Error(`lane: another recording holds ${LOCK} (pid ${st.by.pid}, ${st.by.what ?? '?'}): one recording at a time`); // a lock held by THIS process's parent is a queue's hand-over (a waiter that claimed the free slot, then started the recorder)
-  fs.mkdirSync(path.dirname(LOCK), { recursive: true });
-  fs.writeFileSync(LOCK, JSON.stringify({ pid: process.pid, what: `${a.subject} ${a.modes ?? 'poses'}`, at: new Date().toISOString() }));
+  // atomic since release 67 (backlog 60, lane-lock.mjs): an exclusive create, or one rename over a stale or hand-over lock; a lock held by THIS process's parent is a queue's hand-over (a waiter that claimed the free slot, then started the recorder)
+  takeLaneLock({ lock: LOCK, text: JSON.stringify({ pid: process.pid, what: `${a.subject} ${a.modes ?? 'poses'}`, at: new Date().toISOString() }), isAlive: alive });
 }
 
 async function waitHttp(url, ms) {
