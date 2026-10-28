@@ -14,10 +14,10 @@ import { chainedBeatEquality, JOLT_GRID_MS, joltTally, joltsOfRecording, wallTim
 const r1 = (x) => Math.round(x * 10) / 10;
 
 /**
- * Log events that are bookkeeping, not motion: periodic snapshots whose phase depends on where the gauge clock stood when the capture began (FFX-2's Wait split runs the ATB clock at the top-level command
+ * Log events that are bookkeeping, not motion (review round 2, R2-m3: ONLY `atb`. The first version also dropped `overdrive-gauge` and `status-tick` with no evidence; both are deterministic game events, a gauge change on damage and a status tick on a turn, and a rate-dependent timing of either is exactly what the matrix is for. The three Chapter I recordings carry one `overdrive-gauge` each, at the same time): periodic snapshots whose phase depends on where the gauge clock stood when the capture began (FFX-2's Wait split runs the ATB clock at the top-level command
  * menu, so no capture can pin it to the millisecond: the second Chapter IV matrix had two `atb` snapshots at -300 ms in one capture and at +1550 in the others while every motion beat agreed). They are not beats.
  */
-export const NOT_BEATS = Object.freeze(new Set(['atb', 'overdrive-gauge', 'status-tick']));
+export const NOT_BEATS = Object.freeze(new Set(['atb']));
 
 /**
  * The beats of a recording, relative to `t0` (virtual ms), in the order they were seen.
@@ -107,7 +107,7 @@ export function sharedTimeDeviation(refRows, rows) {
 /**
  * The whole judgement of one moment captured at several rates.
  * @param {Record<number, {frames: any[], events: any[], t0: number, seconds?: number}>} recs by Hz; `t0` is the moment's start on the capture's virtual clock
- * @param {{ wallTolerance?: number, beatFrames?: number, minIntervalMs?: number, epsilonMs?: number, gridMs?: number }} [o] `minIntervalMs` 200: shorter ones are all quantisation; an interval within one frame of the slower display passes whatever its percentage (wallTimeEquality, review m6); `gridMs` the jolt grid (hz-pure.mjs)
+ * @param {{ wallTolerance?: number, beatFrames?: number, minIntervalMs?: number, epsilonMs?: number, gridMs?: number }} [o] `minIntervalMs` 200: shorter ones are all quantisation; an interval within a frame of the slowest display plus a frame of the fastest passes whatever its percentage (wallTimeEquality, review m6 and round 2 m2: both ends are quantised); `gridMs` the jolt grid (hz-pure.mjs)
  */
 export function judgeMoment(recs, { wallTolerance = 0.05, beatFrames = 1, minIntervalMs = 200, epsilonMs = 1, gridMs = JOLT_GRID_MS } = {}) {
   const hzs = Object.keys(recs).map(Number).sort((a, b) => a - b);

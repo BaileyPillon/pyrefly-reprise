@@ -3,18 +3,59 @@
   "title": "Chapter I: Tidus attacks, today against the booth pack",
   "chapter": "seymour-flux",
   "move": "attack",
-  "build": "D:/pyrefly-release55/dist-gate",
   "queryBase": "?coach=off",
-  "viewport": { "w": 2560, "h": 1440 },
-  "rates": [60, 120],
-  "keys": ["Enter", "Enter"],
-  "variants": [
-    { "id": "V0", "name": "today (the live default)", "query": "" },
-    { "id": "V1", "name": "the booth pack (?pack=demo)", "query": "&pack=demo" }
+  "viewport": {
+    "w": 2560,
+    "h": 1440
+  },
+  "rates": [
+    60,
+    120
   ],
-  "focus": ["tidus", "seymour-flux"],
-  "align": { "kind": "beat", "beat": { "actor": "seymour-flux", "kind": "shake" } },
-  "strip": { "beat": { "actor": "seymour-flux", "kind": "shake" }, "offset": -2, "frames": 12 },
-  "questions": ["Which reads as one move?", "Which would you keep?"],
-  "note": "The factory's own check: the core lane's attack pair (D:/Tools/pyrefly-scratch/2026-10-22/motion/core/clips/AB-ch1-attack-*.mp4) made again by the shared tool, from one build, each variant in its own session."
+  "keys": [
+    "Enter",
+    "Enter"
+  ],
+  "variants": [
+    {
+      "id": "V0",
+      "name": "today (the live default)",
+      "query": ""
+    },
+    {
+      "id": "V1",
+      "name": "the booth pack (?pack=demo)",
+      "query": "&pack=demo"
+    }
+  ],
+  "focus": [
+    "tidus",
+    "seymour-flux"
+  ],
+  "align": {
+    "kind": "beat",
+    "beat": {
+      "actor": "seymour-flux",
+      "kind": "shake"
+    }
+  },
+  "strip": {
+    "beat": {
+      "actor": "seymour-flux",
+      "kind": "shake"
+    },
+    "offset": -2,
+    "frames": 12
+  },
+  "questions": [
+    "Which reads as one move?",
+    "Which would you keep?"
+  ],
+  "note": "The factory's own check: the core lane's attack pair (D:/Tools/pyrefly-scratch/2026-10-22/motion/core/clips/AB-ch1-attack-*.mp4) made again by the shared tool, from one build, each variant in its own session. A FIXED CROP (review round 2, m10: the union of the two figures is the whole stage, so the figures were about 100 px tall on a phone panel): the boss and Tidus at the scale of the stage, 1600 x 900 of the 2560 x 1440 frame. The clip ends a second after the action finished playing, not after the next actor's cut-in.",
+  "crop": {
+    "x": 480,
+    "y": 240,
+    "w": 1600,
+    "h": 900
+  }
 }

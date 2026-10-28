@@ -19,5 +19,11 @@ export declare function joltsOfRecording(frames: Array<{ t: number; hs?: number 
 export interface JoltTally { total: number; seconds: number; perMinute: number | null; maxJump: number; byClass: Record<string, number>; shareByClass: Record<string, number> }
 export declare function joltTally(jolts: Array<{ class: string; jump: number }>, seconds: number): JoltTally;
 export declare function joltGate(tally: Pick<JoltTally, "total" | "seconds" | "perMinute" | "byClass">, baseline: { total?: number; perMinute?: number; seconds?: number; byClass?: Record<string, number> } | null | undefined, o?: { maxRise?: number; declared?: string[]; sigma?: number }): { pass: boolean; reasons: string[] };
+export declare function tCritical(df: number): number;
+export interface ReplicateStats { n: number; mean: number | null; sd: number | null; min: number | null; max: number | null; spread: number | null }
+export declare function replicateStats(values: number[]): ReplicateStats;
+export interface WelchRow { cand: ReplicateStats; base: ReplicateStats; rise: number; risePct: number | null; se: number; df: number | null; t: number | null; tCrit: number }
+export interface JoltSetGate { replicates: { candidate: number; baseline: number }; total: WelchRow; byClass: Record<string, WelchRow>; reasons: string[]; pass: boolean | null; unsized: boolean; note?: string }
+export declare function joltSetGate(candidates: Array<{ total: number; seconds: number; byClass: Record<string, number> }>, baselines: Array<{ total: number; seconds: number; byClass: Record<string, number> }>, o?: { maxRise?: number; declared?: string[]; minReplicates?: number }): JoltSetGate;
 export interface JoltScenario { chapter?: string | null; query?: string | null; gridMs?: number | null; seconds?: number | null; policy?: { minJumpPx?: number; minShare?: number; windowMs?: number } | null }
 export declare function joltsIncomparable(a: JoltScenario, b: JoltScenario, o?: { maxSecondsRatio?: number }): string[];

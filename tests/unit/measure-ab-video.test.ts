@@ -29,4 +29,15 @@ describe('where the strip is anchored', () => {
     expect(pickAnchor({ curve, bright, total: 240 }).at).toBe(150);
     expect(pickAnchor({ curve, bright: flat(240, 250), total: 240 })).toEqual({ at: 120, kind: 'middle' });
   });
+
+  it('leaves out an anchor whose whole strip would be a flash (review round 2, m7: rikku-hurt had a clean anchor and nine washed-out frames after it)', () => {
+    const curve = flat(240); curve[100] = 80; curve[160] = 9; // the biggest difference is the frame just before a flash
+    const bright = flat(240, 70); for (let i = 101; i < 112; i++) bright[i] = 240;
+    expect(pickAnchor({ curve, bright, total: 240 })).toEqual({ at: 160, kind: 'largest-difference-in-the-middle' });
+    // and when every candidate's strip meets a flash, the best clean single frame still stands, saying so
+    const all = flat(240, 70); for (let i = 0; i < 240; i += 8) all[i] = 240;
+    const p = pickAnchor({ curve: flat(240).map((_, i) => (i === 100 ? 50 : 1)), bright: all, total: 240 });
+    expect(p.kind).toBe('largest-difference-in-the-middle');
+    expect(p.stripWashed).toBe(true);
+  });
 });

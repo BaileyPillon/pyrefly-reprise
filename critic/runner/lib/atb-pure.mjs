@@ -23,7 +23,7 @@ export function shimmerVerdict({ lives, mutations, windowMs }) {
   const base = { distinctElements: real.length, longestLifeMs: longest, rebuildsPerSecond, expectedRestarts: rebuildsPerSecond === null ? null : r1((rebuildsPerSecond * windowMs) / 1000) };
   if (!real.length) return { verdict: 'inconclusive', why: 'no ffx2-shimmer animation was running in the window (no gauge was ready): open a command menu on a full gauge and run again', ...base };
   if (longest >= 0.8 * windowMs) return { verdict: 'persists', why: `one element carried its shimmer for ${longest} ms of the ${windowMs} ms window: a rebuild does not restart it`, ...base };
-  if (mutations > 0 && real.length >= 0.5 * mutations) return { verdict: 'restarts-with-rebuild', why: `${real.length} different elements carried the shimmer in ${windowMs} ms, the longest for ${longest} ms, while the column was rebuilt ${mutations} times: each rebuild starts it again`, ...base };
+  if (mutations > 0 && real.length >= 0.5 * mutations) return { verdict: 'restarts-with-rebuild', why: `${real.length} different elements carried the shimmer in ${windowMs} ms, the longest for ${longest} ms, while the column was rebuilt ${mutations} times: it restarts on most rebuilds (an element that outlives several rebuilds kept it ${longest} ms; the rule is a majority, elements at least half the rebuilds)`, ...base };
   return { verdict: 'inconclusive', why: `${real.length} element(s), the longest ${longest} ms of ${windowMs} ms, ${mutations} rebuilds: neither a persistent animation nor one restarted by every rebuild`, ...base };
 }
 

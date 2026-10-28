@@ -70,10 +70,11 @@ if (compareDirs()) {
   const why = incomparable(x.r.meta.stamp, y.r.meta.stamp);
   if (x.busy != null && y.busy != null && Math.abs(x.busy - y.busy) > 20) why.push(`the machine was busy differently (total CPU ${x.busy} percent and ${y.busy} percent on average)`);
   console.log(why.length ? `NOT COMPARABLE: ${why.join('; ')}` : 'comparable: the same tool and the same continuity harness read both');
+  if (why.length) process.exit(2); // no change line: a difference between runs that may not be compared is not a number to skim (review round 2, m12)
   const d = (k) => Math.round(((y.a.headline[k] ?? 0) - (x.a.headline[k] ?? 0)) * 100) / 100;
   // two definitions of the same quantity: the plan's baselines (Chapter I 674, Chapter IV 90) count every steady frame, the route's own frames included; the game's own number leaves them out (review m4)
   console.log(`change: animation time lost ${d('steadyAnimLostMsPerMin')} ms a minute with the route's own frames (the plan's unit), ${d('animLostMsPerMin')} without them (the game's own); frames over 33 ms ${d('over33PerMin')} a minute`);
-  process.exit(why.length ? 2 : 0);
+  process.exit(0);
 }
 
 const dist = path.resolve(String(val('dist', path.join(ROOT, 'dist-gate'))));

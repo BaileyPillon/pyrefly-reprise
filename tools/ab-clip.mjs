@@ -24,12 +24,18 @@
  *                 log is not the picture: in FFX the engine logs `damage` in the same instant as `action-start`, so only a beat anchors on the contact.
  *   strip         { event: "damage", ordinal: 1, offset: -2, frames: 12 } or { beat: { actor, kind, pose?, ordinal? }, offset: -2 }: where the 12 consecutive 60 Hz frames begin       leadMs 500, settleMs 1000, maxMs 8000
  * THE MOMENT BEYOND "ONE ATTACK" (review M5; every field optional, a card without them films exactly the first version's moment):
- *   setup[]       once the first command menu is open, before the play: { "hp": { "who": "enemy" | "party" | "<figure id>", "set": 1 } } or { "hp": { "who": "enemy", "fraction": 0.04 } } (a boss at a sliver so the first
- *                 blow is its last; a girl at 1 HP under the next strike), or { "eval": "<debug-API expression>" } (stage a beat the routes do not reach). Recorded in rec.json; the same for every variant.
+ *   setup[]       once the first command menu is open, before the play: { "hp": { "who": W, "set": 1 } } or { "hp": { "who": W, "fraction": 0.04 } } (a boss at a sliver so the first blow is its last; a girl at
+ *                 1 HP under the next strike), { "quiet": W } (the chapter's own hit-point-threshold scripts about W count as played: lowering a boss otherwise runs them at the next action and they hold the menu
+ *                 for seconds), or { "eval": "<debug-API expression>" } (stage a beat the routes do not reach). W is "party", "enemy" (the ENEMY side only: the boss and its guardians, never the party's aeons),
+ *                 "boss" (the enemy with most hit points), "aeon" or a figure id. A sliver is `"set": 1`: a `fraction` of a 70,000-hit-point boss is 1,400 and the first blow (778) is not the last, and the
+ *                 setup says so (a warning in the log, in KEY.json). Recorded in rec.json; the same for every variant. See tools/measure/setup.mjs.
  *   holdMenuMs    leave the first command menu OPEN this long before the first key (the ATB bars filling for 5 s: CP-08; the stance held for 2 s: CP-01)
  *   turns         press the keys again at each of the next command menus, up to 12 turns in all (two consecutive turns of the turn-order list: CP-11)
- *   until         { "event": "ko", "who": "<figure id>", "ordinal": 1, "afterMs": 1000 }: play on, turn after turn (the party is kept up), until that battle-log event, then afterMs more (the boss going down: CP-06)
- *   window        { "event": "ko", "who": ..., "ordinal": 1, "beforeMs": 2000, "afterMs": 1500 }: cut the clip around that event, whatever the turns before it took (default for an "until" card)
+ *   until         { "event": "ko", "who": "<figure id>", "ordinal": 1, "afterMs": 1000 } or, for what the PICTURE does, { "beat": { "actor": "<figure id>", "kind": "life", "life": "down" }, "afterMs": 1500 }: play on,
+ *                 turn after turn (the party is kept up), until that battle-log event or visual beat, then afterMs more (the boss going down: CP-06). THE LOG IS NOT THE PICTURE: FFX logs a blow and a knock-out in the
+ *                 instant of the key press, a second or two before the figure falls, so a knock-out is a BEAT (life "down"). A card whose moment never happens is FAILED, not plain: exit 3, FAILED.txt, a red footer.
+ *   window        { "event": "ko", "who": ..., "ordinal": 1, "beforeMs": 2000, "afterMs": 1500 } or { "beat": {...}, "beforeMs", "afterMs" }: cut the clip around that event or beat, whatever the turns before it
+ *                 took (default for an "until" card). Without it the clip ends `settleMs` after the last of `turns` actions finished playing (the `play:action-end` phase), not after the next actor's cut-in.
  *   seconds       the longest the play may run, virtual seconds (default 14)
  * The window is cut by battle-log EVENT (the confirm key to the presenter finishing, plus settleMs), never by wall time. When a variant changes the timing, align on the contact event and each full move is shown.
  * WHAT THE FILM DOES NOT SHOW (review m20, CA-02): the virtual clock is the game at governor level 0, so a clip shows the SHAPE of a motion, not the cost of a frame; the CSS timeline (damage numerals, slabs,
@@ -90,19 +96,25 @@ if (phase === 'capture' || phase === 'all') {
         log(`== ${spec.id}: ${v.id} (${v.name ?? ''}) at ${hz} Hz, ${query || '(no address words)'}`);
         let shots = 0;
         let setupDone = [];
+        let setupWarnings = [];
         const cap = await captureSession({
           root: ROOT, base: server.base, query, chapter: spec.chapter, hz, viewport, who: 'mf-l5-abclip', what: `ab-clip ${spec.id} ${v.id} ${hz} Hz`, log,
-          afterOpen: async (g) => { setupDone = await applySetup(g.page, spec.setup); if (setupDone.length) log(`setup: ${JSON.stringify(setupDone.map((d) => d.result))}`); },
+          afterOpen: async (g) => {
+            setupDone = await applySetup(g.page, spec.setup);
+            if (setupDone.length) log(`setup: ${JSON.stringify(setupDone.map((d) => d.result))}`);
+            setupWarnings = setupDone.flatMap((d) => d.warnings ?? []);
+            for (const w of setupWarnings) log(`WARNING (setup): ${w}`);
+          },
           play: (s) => playOneAttack({
             ...s, keys: spec.keys ?? ['Enter', 'Enter'], seconds: spec.seconds ?? 14, preRollMs: spec.leadMs ?? 500, tailMs: spec.settleMs ?? 1000,
             holdMenuMs: spec.holdMenuMs ?? 0, turns: spec.turns ?? 1, until: spec.until ?? null, keepAlive: Boolean(spec.until),
             onFrame: async (st, f) => { await s.g.page.screenshot({ path: path.join(dir, 'frames', `f${String(f).padStart(5, '0')}.jpg`), type: 'jpeg', quality: 82 }); shots++; },
           }),
         });
-        const meta = { variant: v, hz, query, chapter: spec.chapter, dist, viewport, setup: setupDone, started: cap.started, ended: cap.result.ended, steps: cap.steps, virtualMs: cap.virtualMs, diag: cap.diag, consoleErrors: cap.consoleErrors, shots, stamp };
-        fs.writeFileSync(path.join(dir, 'rec.json'), JSON.stringify({ meta, t0: cap.result.t0, untilAt: cap.result.untilAt ?? null, turns: cap.result.turns ?? 1, frames: cap.frames, events: cap.events }));
+        const meta = { variant: v, hz, query, chapter: spec.chapter, dist, viewport, setup: setupDone, setupWarnings, started: cap.started, ended: cap.result.ended, steps: cap.steps, virtualMs: cap.virtualMs, diag: cap.diag, consoleErrors: cap.consoleErrors, shots, stamp };
+        fs.writeFileSync(path.join(dir, 'rec.json'), JSON.stringify({ meta, t0: cap.result.t0, untilAt: cap.result.untilAt ?? null, turns: cap.result.turns ?? 1, pressAt: cap.result.pressAt ?? [], frames: cap.frames, events: cap.events }));
         log(`${v.id} at ${hz} Hz: ${cap.frames.length} frames, ${shots} shots, ${cap.events.length} events, ${cap.result.turns ?? 1} turn(s), ended by ${cap.result.ended}`);
-        if (spec.until && cap.result.ended !== 'event') log(`WARNING: ${v.id} at ${hz} Hz never saw the event ${spec.until.event}${spec.until.who ? ` of ${spec.until.who}` : ''}: the window falls back to the plain one`);
+        if (spec.until && cap.result.ended !== 'event') log(`FAILED CARD: ${v.id} at ${hz} Hz never saw ${spec.until.beat ? `the beat ${JSON.stringify(spec.until.beat)}` : `the event ${spec.until.event}${spec.until.who ? ` of ${spec.until.who}` : ''}`} (ended by ${cap.result.ended} after ${cap.result.turns ?? 1} turn(s)): the composer will mark the card FAILED`);
       }
     }
   } catch (e) { log('FAILED', String(e && e.stack ? e.stack : e).slice(0, 600)); await server.close(); process.exit(1); }
@@ -110,8 +122,15 @@ if (phase === 'capture' || phase === 'all') {
 }
 
 if (phase === 'compose' || phase === 'all') {
-  const results = await composeCard({ spec, workDir, outDir, root: ROOT, info: { dist, toolId: stamp.toolId, harness: stamp.harness?.id ?? null, head: stamp.tree?.head ?? null, dirty: stamp.tree?.dirty?.length ?? 0, viewport } });
+  const captured = [];
+  for (const v of spec.variants) for (const hz of rates) {
+    try { const r = JSON.parse(fs.readFileSync(path.join(workDir, `${v.id}-${hz}`, 'rec.json'), 'utf8')); captured.push({ variant: v.id, hz, ended: r.meta?.ended ?? null, untilAt: r.untilAt ?? null, turns: r.turns ?? 1, virtualMs: r.meta?.virtualMs ?? null, setup: r.meta?.setup ?? [], setupWarnings: r.meta?.setupWarnings ?? [] }); } catch { /* not captured in this run */ }
+  }
+  const results = await composeCard({ spec, workDir, outDir, root: ROOT, info: { dist, toolId: stamp.toolId, harness: stamp.harness?.id ?? null, head: stamp.tree?.head ?? null, dirty: stamp.tree?.dirty?.length ?? 0, viewport, captures: captured, setup: captured[0]?.setup ?? null } });
+  const failures = results.flatMap((r) => r.failures.map((f) => `${r.hz} Hz ${f}`));
   for (const r of results) for (const f of r.files) log(`${r.hz} Hz ${f.kind}: ${path.basename(f.file)} ${(f.bytes / 1024 / 1024).toFixed(2)} MB${f.seconds ? ` ${f.seconds} s` : ''}${f.over ? '  OVER THE 8 MB BUDGET' : ''}`);
-  if (!argv.includes('--keep-raw')) { fs.rmSync(workDir, { recursive: true, force: true }); log('raw frames removed'); }
+  if (!argv.includes('--keep-raw') && !failures.length) { fs.rmSync(workDir, { recursive: true, force: true }); log('raw frames removed'); }
+  else if (failures.length) log(`the raw frames are KEPT in ${workDir} (the card failed; remove them when done)`);
   log(`card written to ${outDir}`);
+  if (failures.length) { for (const f of failures) log(`FAILED CARD: ${f}`); process.exit(3); }
 }

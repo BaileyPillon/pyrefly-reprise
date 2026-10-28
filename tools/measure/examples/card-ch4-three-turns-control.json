@@ -1,0 +1,58 @@
+{
+  "id": "CP-00b-ch4-three-turns-control",
+  "title": "Chapter IV: three turns, today against ?motion=classic (the factory's positive control: variants that really differ)",
+  "chapter": "ffx2-bahamut",
+  "move": "three-turns",
+  "queryBase": "?coach=off",
+  "viewport": {
+    "w": 2560,
+    "h": 1440
+  },
+  "rates": [
+    60
+  ],
+  "keys": [
+    "Enter",
+    "Enter"
+  ],
+  "turns": 3,
+  "seconds": 30,
+  "variants": [
+    {
+      "id": "V0",
+      "name": "today (motion smooth)",
+      "query": ""
+    },
+    {
+      "id": "V1",
+      "name": "the old turn start (?motion=classic)",
+      "query": "&motion=classic"
+    }
+  ],
+  "focus": [
+    "paine",
+    "rikku",
+    "yuna",
+    "bahamut"
+  ],
+  "align": {
+    "kind": "beat",
+    "beat": {
+      "actor": "bahamut",
+      "kind": "shake"
+    }
+  },
+  "strip": {
+    "beat": {
+      "actor": "bahamut",
+      "kind": "shake"
+    },
+    "offset": -2,
+    "frames": 12
+  },
+  "questions": [
+    "Which reads as one move?",
+    "Which would you keep?"
+  ],
+  "note": "Review round 2, m10 and m5: the one card whose variants DIFFER on purpose (`?motion=classic` brings back the old ready, idle, ready of an FFX-2 turn start, which the post-flicker branch removed), so it shows the tool tells variants apart; `turns` 3 presses the keys at three command menus and the clip ends after the third action finished playing."
+}

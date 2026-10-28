@@ -86,22 +86,23 @@ export function isActing(f) {
 }
 
 /**
- * The frame (index) of a VISUAL beat of one figure: the nth time its hit shake starts (`kind: 'shake'`: the contact of a blow on that figure) or the nth time its pose changes (`kind: 'pose'`, to `pose` when
- * given). The first real card showed why the log is not enough: in FFX the engine logs `damage` in the same instant as `action-start` (the key press), so an event anchor is the start, not the contact.
- * @param {Array<{actors?: Record<string, {shL?: number, pose?: string|null}>}>} frames
- * @param {{actor: string, kind: 'shake'|'pose', pose?: string, ordinal?: number}} want
+ * The frame (index) of a VISUAL beat of one figure: the nth time its hit shake starts (`kind: 'shake'`: the contact of a blow on that figure), the nth time its pose changes (`kind: 'pose'`, to `pose` when
+ * given) or the nth time its life state changes (`kind: 'life'`, to `life` when given: 'down' is a figure that has been knocked out; the engine's states are idle, ready, act, guard, hurt, down, victory). The first real card showed why the log is not enough: in FFX the engine logs `damage` in the same instant as `action-start` (the key press), so an event anchor is the start, not the contact.
+ * @param {Array<{actors?: Record<string, {shL?: number, pose?: string|null, life?: string|null}>}>} frames
+ * @param {{actor: string, kind: 'shake'|'pose'|'life', pose?: string, life?: string, ordinal?: number}} want
  * @param {number} [from] the frame to start looking at
  * @returns {number} -1 when there is no such beat
  */
 export function findBeatFrame(frames, want, from = 0) {
-  if (!want?.actor || !['shake', 'pose'].includes(want.kind)) return -1;
+  if (!want?.actor || !['shake', 'pose', 'life'].includes(want.kind)) return -1;
   const nth = want.ordinal ?? 1;
-  let seen = 0, prevOn = null, prevPose;
+  let seen = 0, prevOn = null, prevPose, prevLife;
   for (let i = Math.max(0, from); i < frames.length; i++) {
     const a = frames[i]?.actors?.[want.actor];
     if (!a) continue;
     let hit = false;
     if (want.kind === 'shake') { const on = (a.shL ?? 0) > 0; hit = on && prevOn === false; prevOn = on; }
+    else if (want.kind === 'life') { hit = prevLife !== undefined && a.life !== prevLife && (!want.life || a.life === want.life); prevLife = a.life; }
     else { hit = prevPose !== undefined && a.pose !== prevPose && (!want.pose || a.pose === want.pose); prevPose = a.pose; }
     if (hit && ++seen === nth) return i;
   }
@@ -123,15 +124,23 @@ export function findEvent(events, want) {
 /**
  * The window of a moment in a recording, by battle-log EVENT, never by wall time: from `lead` ms before the moment's start (the menu confirm, `t0`) to `settle` ms after the presenter finished the action
  * (the last frame it was playing, or the last log event of the action if it never reported playing), capped at `maxMs`. Frames carry `vt` (virtual ms).
- * `around` centres the window on a log event instead (`{ event, who, ordinal, beforeMs, afterMs }`: from `beforeMs` before it to `afterMs` after), for a moment that comes turns after the first key (the last blow
- * of a boss, a knock-out): the window is then the same length in every variant whatever the turns before it took. An event that never happened falls back to the plain window.
- * @param {{around?: {event: string, who?: string|null, ordinal?: number, beforeMs?: number, afterMs?: number}|null}} [o]
- * @returns {{i0: number, i1: number, startMs: number, endMs: number, lengthMs: number, truncated: boolean}|null}
+ * `around` centres the window on a log event or on a visual beat (`{ event, who, ordinal, beforeMs, afterMs }` or `{ beat: { actor, kind, ... }, beforeMs, afterMs }`: from `beforeMs` before it to `afterMs` after),
+ * for a moment that comes turns after the first key (the last blow of a boss, a knock-out): the window is then the same length in every variant whatever the turns before it took. THE LOG IS NOT THE PICTURE:
+ * in FFX the engine logs a blow and its knock-out in the instant of the key press, a second or two before the figure falls, so a clip of a knock-out is cut around the BEAT (`life: 'down'`). An event or beat that
+ * never happened FALLS BACK to the plain window, and the result says so (`fellBack: true`, `wanted`): a card never passes the first attack off as the last blow (review round 2, R2-M3, m11).
+ * The plain window ends `settleMs` after the LAST of `turns` actions has finished playing (the `play:action-end` phase), or where the next actor's turn-start cut-in begins if that is sooner: the cut-in is not
+ * part of the move (review round 2, m10); with `afterPressMs`
+ * (when the last pressed turn was confirmed) it is the first action that finished AFTER that press: in an ATB fight an enemy's action can finish first, and counting actions would stop the clip before the turn it is about.
+ * @param {{around?: {event?: string, beat?: object, who?: string|null, ordinal?: number, beforeMs?: number, afterMs?: number}|null, turns?: number}} [o]
+ * @returns {{i0: number, i1: number, startMs: number, endMs: number, lengthMs: number, truncated: boolean, fellBack?: boolean, wanted?: object}|null}
  */
-export function windowOf(frames, events, { t0, leadMs = 500, settleMs = 1000, maxMs = 8000, around = null } = {}) {
+export function windowOf(frames, events, { t0, leadMs = 500, settleMs = 1000, maxMs = 8000, around = null, turns = 1, afterPressMs = null } = {}) {
   if (!frames.length) return null;
-  const hit = around ? findEvent(events, around) : null;
-  if (hit && Number.isFinite(hit.vt)) {
+  let hitVt = null;
+  if (around?.beat) { const j = findBeatFrame(frames, around.beat, Math.max(0, frames.findIndex((f) => f.vt >= t0))); if (j >= 0) hitVt = frames[j].vt; }
+  else if (around) { const ev = findEvent(events, around); if (ev && Number.isFinite(ev.vt)) hitVt = ev.vt; }
+  if (hitVt !== null) {
+    const hit = { vt: hitVt };
     const startMs = hit.vt - (around.beforeMs ?? 1500), endMs = hit.vt + (around.afterMs ?? 1000);
     const i0 = Math.max(0, frames.findIndex((f) => f.vt >= startMs));
     let i1 = frames.length - 1;
@@ -139,17 +148,55 @@ export function windowOf(frames, events, { t0, leadMs = 500, settleMs = 1000, ma
     return { i0, i1: Math.max(i0, i1), startMs, endMs, lengthMs: endMs - startMs, truncated: false, around: true };
   }
   const start = t0 - leadMs;
-  let lastPlaying = -1;
-  for (let i = 0; i < frames.length; i++) if (frames[i].vt >= t0 && isActing(frames[i])) lastPlaying = i;
+  let lastPlaying = actionEnd(frames, t0, turns, afterPressMs);
+  if (lastPlaying < 0) for (let i = 0; i < frames.length; i++) if (frames[i].vt >= t0 && isActing(frames[i])) lastPlaying = i;
   let endMs = lastPlaying >= 0 ? frames[lastPlaying].vt : t0;
   for (const e of events ?? []) if (e.vt >= t0 && e.vt > endMs && lastPlaying < 0) endMs = e.vt;
   endMs += settleMs;
+  if (lastPlaying >= 0 && frames[lastPlaying].phase === 'play:action-end') { // the next actor's turn-start cut-in is not part of the move (the first real card: its portrait filled about 1.5 of 2.6 s, round 2 m10): the clip ends where it starts
+    const next = frames.findIndex((f, i) => i > lastPlaying && f.phase === 'play:turn-start');
+    if (next >= 0 && frames[next].vt < endMs) endMs = frames[next].vt;
+  }
   let truncated = false;
   if (endMs - start > maxMs) { endMs = start + maxMs; truncated = true; }
   const i0 = Math.max(0, frames.findIndex((f) => f.vt >= start));
   let i1 = frames.length - 1;
   for (let i = i0; i < frames.length; i++) if (frames[i].vt > endMs) { i1 = i - 1; break; }
-  return { i0, i1: Math.max(i0, i1), startMs: start, endMs, lengthMs: endMs - start, truncated };
+  return { i0, i1: Math.max(i0, i1), startMs: start, endMs, lengthMs: endMs - start, truncated, ...(around ? { fellBack: true, wanted: around } : {}) };
+}
+
+/**
+ * The frame (index) at which the nth action (`turns`, default 1) finished playing: the last frame of the nth run of the `play:action-end` phase at or after `t0`. -1 when the build reports no such phase or fewer
+ * actions finished (the caller falls back to the last acting frame). The next actor's `play:turn-start` cut-in follows the run; it is not part of the action (review round 2, m10: about 1.5 of the first real card's
+ * 2.6 s was the next girl's portrait).
+ */
+export function actionEnd(frames, t0, turns = 1, afterMs = null) {
+  let runs = 0, inRun = false, last = -1;
+  for (let i = 0; i < frames.length; i++) {
+    if (frames[i].vt < t0) continue;
+    const on = frames[i].phase === 'play:action-end';
+    if (on) last = i;
+    if (on && !inRun && (afterMs === null || frames[i].vt >= afterMs)) runs++;
+    if (!on && inRun && runs >= (afterMs === null ? turns : 1)) return last;
+    inRun = on;
+  }
+  return inRun && runs >= (afterMs === null ? turns : 1) ? last : -1;
+}
+
+/**
+ * What a card did NOT film (review round 2, R2-M3, m11): a moment that never happened is a FAILED card, not a plain one. `items` are the captures in the card's blind order
+ * (`{ letter, untilAt, ended, turns, win }`: the play's result and the window the composer cut); an `until` the play never saw, or a window that fell back to the plain first attack, is a failure.
+ * @returns {string[]} one sentence per failure, in the card's blind letters
+ */
+export function momentFailures(spec, items) {
+  const out = [];
+  const what = (m) => (m.beat ? `the beat ${JSON.stringify(m.beat)}` : `the event ${m.event}${m.who ? ` of ${m.who}` : ''}`);
+  for (const it of items) {
+    if (spec.turns > 1 && (it.turns ?? 1) < spec.turns) out.push(`${it.letter}: the play reached ${it.turns ?? 1} of the ${spec.turns} turns the card asks for (it ended by ${it.ended ?? 'unknown'}); the clip is NOT the moment the card is about`);
+    if (spec.until && (it.untilAt ?? null) === null) out.push(`${it.letter}: the play never saw ${what(spec.until)} (it ended by ${it.ended ?? 'unknown'} after ${it.turns ?? 1} turn(s)); the clip is NOT the moment the card is about`);
+    else if (it.win?.fellBack) out.push(`${it.letter}: the window's ${what(it.win.wanted)} never happened in this capture; the window fell back to the plain first attack`);
+  }
+  return out;
 }
 
 /**
@@ -200,15 +247,17 @@ export function checkSpec(spec) {
   if (spec.holdMenuMs !== undefined && !(spec.holdMenuMs >= 0 && spec.holdMenuMs <= 15000)) bad.push('"holdMenuMs" is 0 to 15000 (how long the first command menu stays open before the first key)');
   if (spec.turns !== undefined && !(Number.isInteger(spec.turns) && spec.turns >= 1 && spec.turns <= 12)) bad.push('"turns" is a whole number from 1 to 12 (how many times the keys are pressed, one per command menu)');
   if (spec.seconds !== undefined && !(spec.seconds > 0 && spec.seconds <= 90)) bad.push('"seconds" is the longest the play may run, 1 to 90 s of virtual time');
-  if (spec.until !== undefined && !(spec.until && typeof spec.until.event === 'string' && spec.until.event)) bad.push('"until" is { "event": a battle-log event type (ko, damage, summon, ...), "who"?: a figure id, "ordinal"?: 1, "afterMs"?: 1000 }: play on until it has happened');
-  if (spec.window !== undefined && !(spec.window && typeof spec.window.event === 'string' && spec.window.event)) bad.push('"window" is { "event", "who"?, "ordinal"?, "beforeMs"?, "afterMs"? }: the clip is cut around that log event');
+  const beatOk = (b) => Boolean(b && typeof b.actor === 'string' && b.actor && ['shake', 'pose', 'life'].includes(b.kind));
+  const momentOk = (m) => Boolean(m && ((typeof m.event === 'string' && m.event) || beatOk(m.beat)));
+  if (spec.until !== undefined && !momentOk(spec.until)) bad.push('"until" is { "event": a battle-log event type (ko, damage, summon, ...), "who"?: a figure id, "ordinal"?: 1, "afterMs"?: 1000 } or { "beat": { "actor", "kind": "shake" | "pose" | "life", "pose"?, "life"?, "ordinal"? }, "afterMs"? } (the PICTURE: a figure knocked out is life "down"): play on until it has happened');
+  if (spec.window !== undefined && !momentOk(spec.window)) bad.push('"window" is { "event", "who"?, "ordinal"?, "beforeMs"?, "afterMs"? } or { "beat": {...}, "beforeMs"?, "afterMs"? }: the clip is cut around that log event or visual beat');
   if (spec.setup !== undefined) {
-    const okStep = (s) => s && ((s.hp && typeof s.hp.who === 'string' && (Number.isFinite(s.hp.set) || (s.hp.fraction > 0 && s.hp.fraction <= 1))) || (typeof s.eval === 'string' && s.eval));
-    if (!(Array.isArray(spec.setup) && spec.setup.every(okStep))) bad.push('"setup" is a list of { "hp": { "who": "party" | "enemy" | a figure id, "set": n | "fraction": 0 to 1 } } or { "eval": "a debug-API expression" } steps, run once the first command menu is open');
+    const okWho = (w) => typeof w === 'string' && w.length > 0;
+    const okStep = (s) => s && ((s.hp && okWho(s.hp.who) && ((Number.isFinite(s.hp.set) && s.hp.set >= 1) || (s.hp.fraction > 0 && s.hp.fraction <= 1))) || okWho(s.quiet) || (typeof s.eval === 'string' && s.eval));
+    if (!(Array.isArray(spec.setup) && spec.setup.every(okStep))) bad.push('"setup" is a list of { "hp": { "who": W, "set": n >= 1 | "fraction": 0 to 1 } }, { "quiet": W } (the chapter\'s own hit-point-threshold scripts about W count as played) or { "eval": "a debug-API expression" } steps, run once the first command menu is open; W is "party", "enemy" (the enemy side only), "boss" (the enemy with most hit points), "aeon" or a figure id');
   }
-  const beatOk = (b) => Boolean(b && typeof b.actor === 'string' && b.actor && ['shake', 'pose'].includes(b.kind));
-  if (spec.align !== undefined && !(spec.align && (spec.align.kind === 'start' || (spec.align.kind === 'event' && spec.align.type) || (spec.align.kind === 'beat' && beatOk(spec.align.beat))))) bad.push('"align" is { "kind": "start" } | { "kind": "event", "type", "actor"?, "ordinal"? } | { "kind": "beat", "beat": { "actor", "kind": "shake"|"pose", "pose"?, "ordinal"? } }');
-  if (spec.strip !== undefined && spec.strip.beat !== undefined && !beatOk(spec.strip.beat)) bad.push('"strip.beat" is { "actor": a figure id, "kind": "shake" | "pose", "pose"?: a pose name, "ordinal"?: 1 }: the strip is built around that visual beat (the first blow on a figure: its shake starting)');
+  if (spec.align !== undefined && !(spec.align && (spec.align.kind === 'start' || (spec.align.kind === 'event' && spec.align.type) || (spec.align.kind === 'beat' && beatOk(spec.align.beat))))) bad.push('"align" is { "kind": "start" } | { "kind": "event", "type", "actor"?, "ordinal"? } | { "kind": "beat", "beat": { "actor", "kind": "shake"|"pose"|"life", "pose"?, "life"?, "ordinal"? } }');
+  if (spec.strip !== undefined && spec.strip.beat !== undefined && !beatOk(spec.strip.beat)) bad.push('"strip.beat" is { "actor": a figure id, "kind": "shake" | "pose" | "life", "pose"?: a pose name, "life"?: a life state, "ordinal"?: 1 }: the strip is built around that visual beat (the first blow on a figure: its shake starting)');
   if (spec.crop !== undefined && !(spec.crop && ['x', 'y', 'w', 'h'].every((k) => Number.isFinite(spec.crop[k])) && spec.crop.w > 0 && spec.crop.h > 0)) bad.push('"crop" is { x, y, w, h } in viewport pixels (a HUD region instead of the figures)');
   if (spec.focus !== undefined && !(Array.isArray(spec.focus) && spec.focus.length)) bad.push('"focus" is a non-empty list of actor ids');
   return bad;

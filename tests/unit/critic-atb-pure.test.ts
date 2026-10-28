@@ -21,6 +21,14 @@ describe('the ready shimmer against the rebuilds of the party column', () => {
     expect(v.longestLifeMs).toBe(62);
     expect(v.expectedRestarts).toBe(48);
   });
+  it('says "most rebuilds", not "each", and an element that outlived several rebuilds is in the sentence (review round 2, m1: windows 1 and 3 of the real run had one element that kept it 400 and 950 ms)', () => {
+    const lives = [life('1', 0, 400), ...Array.from({ length: 120 }, (_, i) => life(String(i + 2), 400 + i * 20, 400 + i * 20 + 20))];
+    const v = shimmerVerdict({ lives, mutations: 47, windowMs: 3000 });
+    expect(v.verdict).toBe('restarts-with-rebuild');
+    expect(v.why).toMatch(/restarts on most rebuilds/);
+    expect(v.why).toMatch(/kept it 400 ms/);
+    expect(v.why).not.toMatch(/each rebuild/);
+  });
   it('is inconclusive with no shimmer in the window (nothing was ready), and says what to do', () => {
     const v = shimmerVerdict({ lives: [], mutations: 40, windowMs: 3000 });
     expect(v.verdict).toBe('inconclusive');

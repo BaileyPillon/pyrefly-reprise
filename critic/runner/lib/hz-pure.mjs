@@ -9,7 +9,7 @@
 //     stalls the eye reads as a stutter even when no position is wrong. Counted per fight with baselines (Chapter I 106 in 100 s, 94 of them the hit rattle and 11 the KO landing; Chapter IV 580 in 105 s).
 // THE GRID (review M1). Speeds are in px per 60 Hz frame, but a jump judged between two CONSECUTIVE SAMPLES depends on the sample interval: the same 120 Hz motion read every other frame gave 658 jolts for
 // the 580 it gave at every frame (Chapter IV, +13 percent; Chapter I +22 to +29), and a 50 ms ramp that is one jolt at 60 Hz is none at 120 or 144. So by default the position series is resampled to a FIXED
-// 1/60 s grid (linear between the capture's frames) before it is judged: `gridMs` 16.667, the jump is the change over one 60 Hz frame whatever the capture rate. `gridMs: 0` is the curves lane's raw
+// 1/60 s grid (linear between the capture's frames) before it is judged: `gridMs` 1000/60 EXACTLY (a rounded 16.667 drifts 12 percent of a frame in 105 s and moved the Chapter IV count from 662 to 655: review round 2, R2-M1), the jump is the change over one 60 Hz frame whatever the capture rate. `gridMs: 0` is the curves lane's raw
 // method (every captured frame), kept to reproduce its 580 and 106 and never for a comparison across rates. Pure: samples in, numbers out.
 
 /** The rates of the matrix. */
@@ -117,7 +117,7 @@ export function resampleToGrid(samples, stepMs = JOLT_GRID_MS) {
 
 /**
  * The velocity jolts of one channel: samples `i` where the speed changed by `minJump` (px per 60 Hz frame, 2.5) or more AND by `minShare` (0.3) or more of the largest speed within `windowMs` (333) either side.
- * `gridMs` (default 16.667, one 60 Hz frame) resamples the series first, so the count does not depend on the capture rate; 0 judges every captured frame (the curves lane's raw method).
+ * `gridMs` (default 1000/60, one 60 Hz frame exactly) resamples the series first, so the count does not depend on the capture rate; 0 judges every captured frame (the curves lane's raw method).
  * Samples closer than `skip` to either end are not judged (the speed needs a neighbour). Adjacent flagged samples are kept as separate jolts (the curves lane counted every flagged frame); `merge` joins the
  * run of flagged samples within `mergeMs` into the largest one. Each jolt's `src` is the captured frame it falls on.
  * @param {Array<{t: number, x: number}>} samples
@@ -206,6 +206,67 @@ export function joltGate(tally, baseline, { maxRise = 0.1, declared = [], sigma 
     if (rate(n, tally.seconds) > rate(was, baseSeconds) * (1 + maxRise) + 0.5 && beyondNoise(n, was)) reasons.push(`class "${cls}" rose from ${r1(rate(was, baseSeconds))} to ${r1(rate(n, tally.seconds))} a minute`);
   }
   return { pass: reasons.length === 0, reasons };
+}
+
+/** The one-sided 95 percent critical value of Student's t at `df` degrees of freedom (a table; the nearest row at or BELOW df, so a small sample asks for more). */
+export function tCritical(df) {
+  const rows = [[1, 6.314], [2, 2.92], [3, 2.353], [4, 2.132], [5, 2.015], [6, 1.943], [7, 1.895], [8, 1.86], [9, 1.833], [10, 1.812], [15, 1.753], [20, 1.725], [30, 1.697], [60, 1.671]];
+  if (!(df >= 1)) return rows[0][1];
+  if (df >= 120) return 1.645;
+  let c = rows[0][1];
+  for (const [d, v] of rows) { if (df >= d) c = v; else break; }
+  return c;
+}
+
+/** n, mean, sample standard deviation (n - 1), min, max and the spread (max - min) as a share of the mean, of the replicate values of one number. */
+export function replicateStats(values) {
+  const v = values.filter((x) => Number.isFinite(x));
+  const n = v.length;
+  if (!n) return { n: 0, mean: null, sd: null, min: null, max: null, spread: null };
+  const mean = v.reduce((a, b) => a + b, 0) / n;
+  const sd = n > 1 ? Math.sqrt(v.reduce((a, b) => a + (b - mean) * (b - mean), 0) / (n - 1)) : null;
+  const min = Math.min(...v), max = Math.max(...v);
+  return { n, mean: r3(mean), sd: sd === null ? null : r3(sd), min: r3(min), max: r3(max), spread: mean > 0 ? r3((max - min) / mean) : null };
+}
+
+/** Welch's comparison of two sets of replicate rates: the candidate's mean over the baseline's, the standard error from the sets' OWN spread, Welch's degrees of freedom, and t. */
+function welch(cand, base) {
+  const c = replicateStats(cand), b = replicateStats(base);
+  const rise = c.mean - b.mean;
+  const vc = c.n > 1 ? (c.sd ** 2) / c.n : 0, vb = b.n > 1 ? (b.sd ** 2) / b.n : 0;
+  const se = Math.sqrt(vc + vb);
+  const df = se > 0 ? ((vc + vb) ** 2) / ((vc ** 2) / Math.max(1, c.n - 1) + (vb ** 2) / Math.max(1, b.n - 1)) : Infinity;
+  return { cand: c, base: b, rise: r3(rise), risePct: b.mean > 0 ? r3(rise / b.mean) : null, se: r3(se), df: Number.isFinite(df) ? r3(df) : null, t: se > 0 ? r3(rise / se) : null, tCrit: tCritical(df) };
+}
+
+/**
+ * The jolt gate between two SETS of captures (review round 2, R2-M2): the count-noise rule (the square root of the sum of the counts) assumes independent events, and a hit rattle arrives in clusters, so a verdict
+ * needs the spread of the captures THEMSELVES. (The reviewer's pair, 433 jolts at 60 Hz and then 398, was two tool states, before and after the ATB clock was pinned at the first menu: after the pin the same fight
+ * reproduces, 398 on two builds, 21 of 97,200 channel values different; the spread of this tool state is what the sets measure, and a tool or build change moves it.) Each side is at least `minReplicates` (3)
+ * captures of one scripted fight; the candidate's mean rate (jolts a minute) is OVER when it exceeds the baseline's mean by more than `maxRise` AND by more than Welch's one-sided 95 percent critical t of its
+ * standard error (the sets' own sample standard deviations); a class the same way on its own rate (and by more than 0.5 a minute). Fewer than `minReplicates` on either side is not a verdict
+ * (`unsized: true`, `pass: null`): the numbers are reported with the spread there is.
+ * @param {Array<{total: number, seconds: number, byClass: Record<string, number>}>} candidates
+ * @param {Array<{total: number, seconds: number, byClass: Record<string, number>}>} baselines
+ * @param {{maxRise?: number, declared?: string[], minReplicates?: number}} [o]
+ */
+export function joltSetGate(candidates, baselines, { maxRise = 0.1, declared = [], minReplicates = 3 } = {}) {
+  const rate = (t, cls) => ((cls ? (t.byClass?.[cls] ?? 0) : t.total) * 60) / (t.seconds || 1);
+  const total = welch(candidates.map((t) => rate(t)), baselines.map((t) => rate(t)));
+  const classes = [...new Set([...candidates, ...baselines].flatMap((t) => Object.keys(t.byClass ?? {})))].sort();
+  const byClass = Object.fromEntries(classes.map((cls) => [cls, welch(candidates.map((t) => rate(t, cls)), baselines.map((t) => rate(t, cls)))]));
+  const out = { replicates: { candidate: candidates.length, baseline: baselines.length }, total, byClass, reasons: [] };
+  if (candidates.length < minReplicates || baselines.length < minReplicates) {
+    return { ...out, pass: null, unsized: true, note: `NOT A VERDICT: ${candidates.length} capture(s) against ${baselines.length}; one capture cannot size the spread of the fight itself (the lane's first pair, 433 and 398 jolts, was two tool states, 8 to 11 percent apart), so a comparison needs at least ${minReplicates} a side` };
+  }
+  const over = (w, absFloor = 0) => w.rise > maxRise * w.base.mean + absFloor && (w.t === null || w.t > w.tCrit);
+  if (over(total)) out.reasons.push(`${total.cand.mean} jolts a minute (mean of ${total.cand.n}) is over the baseline's ${total.base.mean} (mean of ${total.base.n}) by more than ${Math.round(maxRise * 100)} percent and beyond the spread of the captures (t ${total.t} against ${total.tCrit})`);
+  for (const cls of classes) {
+    if (declared.includes(cls)) continue;
+    const w = byClass[cls];
+    if (over(w, 0.5)) out.reasons.push(`class "${cls}" rose from ${w.base.mean} to ${w.cand.mean} a minute (t ${w.t} against ${w.tCrit})`);
+  }
+  return { ...out, pass: out.reasons.length === 0, unsized: false };
 }
 
 /**

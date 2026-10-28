@@ -2,7 +2,8 @@
 export declare const FFMPEG: string;
 export declare function ffmpeg(args: string[], bin?: string, cwd?: string): void;
 export declare function encodeSequence(o: { dir: string; fps: number; out: string; bin?: string; budget?: { maxBytes: number; crf: number; crfStep: number; crfMax: number }; maxFrames?: number }): { file: string; bytes: number; crf: number; over: boolean };
-export interface ComposeResult { hz: number; crop: { x: number; y: number; w: number; h: number }; frames: number; window: { before: number; after: number }; clipCappedFromMs: number | null; files: Array<{ kind: string; file: string; bytes: number; seconds?: number; crf?: number; fps?: number; over?: boolean }>; key: Record<string, { id: string; name?: string }>; numbers: Record<string, unknown> }
+export declare function wrapText(text: string, max: number): string[];
+export interface ComposeResult { failures: string[]; hz: number; crop: { x: number; y: number; w: number; h: number }; frames: number; window: { before: number; after: number }; clipCappedFromMs: number | null; files: Array<{ kind: string; file: string; bytes: number; seconds?: number; crf?: number; fps?: number; over?: boolean }>; key: Record<string, { id: string; name?: string }>; numbers: Record<string, unknown> }
 export declare function composeCard(o: { spec: Record<string, any>; workDir: string; outDir: string; root: string; ffmpeg?: string; info?: Record<string, unknown> }): Promise<ComposeResult[]>;
 export declare const badge: (letter: string, w: number, h: number) => Buffer;
 export declare const stamp: (text: string, w: number, h: number, hot?: boolean) => Buffer;

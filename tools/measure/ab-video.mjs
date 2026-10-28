@@ -28,7 +28,8 @@ export function probeVideo(file, bin = FFMPEG) {
 
 /**
  * Which frame the strip is anchored on (pure). `override` (a frame of the source) wins and is clamped into the clip; otherwise the largest panel difference among the frames in the middle `middle` share of
- * the clip (default 60 percent) that are not washed out (mean luma under `washed`, 185); if none qualifies, the clip's middle frame. Returns { at, kind }.
+ * the clip (default 60 percent) that are not washed out (mean luma under `washed`, 185) AND whose whole 12-frame strip (two frames before to nine after) is not washed out either (review round 2, m7: rikku-hurt's
+ * anchor was clean and the nine frames after it were a flash, 5 of the 12 cells whiteouts); if no strip is clean, the best single frame that is; if none, the clip's middle frame. Returns { at, kind }.
  * @param {number[]} curve mean panel difference per frame   @param {number[]} bright the brighter panel's mean luma per frame
  */
 export function pickAnchor({ curve, bright = [], total, override = null, middle = 0.6, washed = 185 }) {
@@ -38,9 +39,12 @@ export function pickAnchor({ curve, bright = [], total, override = null, middle 
   const pool = [];
   for (let i = lo; i <= Math.min(hi, curve.length - 1); i++) if ((bright[i] ?? 0) < washed) pool.push(i);
   if (!pool.length) return { at: Math.floor(n / 2), kind: 'middle' };
-  let at = pool[0];
-  for (const i of pool) if (curve[i] > curve[at]) at = i;
-  return { at, kind: 'largest-difference-in-the-middle' };
+  const cleanStrip = (i) => { for (let k = Math.max(0, i - 2); k <= Math.min(n - 1, i + 9); k++) if ((bright[k] ?? 0) >= washed) return false; return true; };
+  const strips = pool.filter(cleanStrip);
+  const from = strips.length ? strips : pool;
+  let at = from[0];
+  for (const i of from) if (curve[i] > curve[at]) at = i;
+  return { at, kind: 'largest-difference-in-the-middle', ...(strips.length ? {} : { stripWashed: true }) };
 }
 
 /**

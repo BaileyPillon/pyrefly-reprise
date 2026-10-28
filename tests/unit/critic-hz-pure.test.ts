@@ -305,16 +305,24 @@ describe('a moment at 60, 120 and 144 Hz', () => {
     expect(b.indexOf('ev:action-start#1')).toBeLessThan(b.indexOf('foe:shake#1'));
   });
 
-  it('leaves the gauge clock\'s periodic snapshots out of the beats (they are bookkeeping and their phase is the capture\'s start state)', () => {
+  it('leaves ONLY the gauge clock\'s periodic snapshots out of the beats (they are bookkeeping and their phase is the capture\'s start state); a gauge change and a status tick are game events and stay (R2-m3)', () => {
     const c = capture(60);
     c.events.push({ f: 1, vt: 50, type: 'atb' }, { f: 2, vt: 900, type: 'atb' }, { f: 3, vt: 950, type: 'overdrive-gauge' }, { f: 4, vt: 960, type: 'status-tick' });
     const labels = beatsOf(c, 0).map((b) => b.label);
-    expect(labels.some((l) => /atb|overdrive-gauge|status-tick/.test(l))).toBe(false);
+    expect(labels.some((l) => /atb/.test(l))).toBe(false);
+    expect(labels).toContain('ev:overdrive-gauge#1');
+    expect(labels).toContain('ev:status-tick#1');
     expect(labels).toContain('ev:damage#1');
     // a capture with the snapshots at other times is judged the same as one without
+    const early = capture(60);
+    early.events.push({ f: 1, vt: 50, type: 'atb' });
     const withAtb = capture(144);
     withAtb.events.push({ f: 9, vt: 1550, type: 'atb' });
-    expect(judgeMoment({ 60: c, 144: withAtb }).reasons).toEqual([]);
+    expect(judgeMoment({ 60: early, 144: withAtb }).reasons).toEqual([]);
+    // but a status tick that one rate does not see IS a difference
+    const tick = capture(60);
+    tick.events.push({ f: 4, vt: 960, type: 'status-tick' });
+    expect(judgeMoment({ 60: tick, 144: capture(144) }).reasons.join(' ')).toMatch(/lacks beat/);
   });
 
   it('judges a correct move equal at every rate', () => {

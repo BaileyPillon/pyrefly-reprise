@@ -15,7 +15,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 
-import { BUDGET, CARD, PANEL, STILL_W, blindOrder, clipFps, clipName, cropRegion, findBeatFrame, findEvent, nearestFrame, nextCrf, speedTrace, trackPoints, windowOf } from '../../critic/runner/lib/ab-pure.mjs';
+import { BUDGET, CARD, PANEL, STILL_W, blindOrder, clipFps, clipName, cropRegion, findBeatFrame, findEvent, momentFailures, nearestFrame, nextCrf, speedTrace, trackPoints, windowOf } from '../../critic/runner/lib/ab-pure.mjs';
 import { joltTally, joltsOfRecording } from '../../critic/runner/lib/hz-pure.mjs';
 
 export const FFMPEG = process.env.FFMPEG ?? 'D:/Tools/FFmpeg/ffmpeg-9.0.1-full_build-shared/bin/ffmpeg.exe';
@@ -89,15 +89,28 @@ async function panel(S, cap, idx, crop, letter, hz, anchor, size = PANEL) {
  * The 1080 px wide still: a title band with the question, then each variant's frames as two rows of six cells (12 consecutive 60 Hz frames), then a footer. `rows` is [{ letter, cells: Buffer[] }] (cells already
  * at `cellW` x `cellH`, letter and stamp on them). Returns { width, height }.
  */
+/** Wrap `text` into lines of at most `max` characters, breaking at spaces (a word longer than a line stands alone). */
+export function wrapText(text, max) {
+  const lines = [];
+  let line = '';
+  for (const w of String(text).split(/\s+/)) {
+    if (line && (line + ' ' + w).length > max) { lines.push(line); line = w; } else line = line ? line + ' ' + w : w;
+  }
+  if (line) lines.push(line);
+  return lines.length ? lines : [''];
+}
+
 export async function writeStill({ S, file, title, subtitle, rows, cellW, cellH, foot = '12 consecutive 60 Hz frames per row pair; each frame stamped with its offset from the anchor in 60 Hz frames and in milliseconds. Letters only: the key is not in the picture.' }) {
-  const cardH = 70 + rows.length * 2 * (cellH + 4) + 20 + 70;
+  const footLines = wrapText(foot, Math.floor((STILL_W - 32) / (15 * 0.55))); // the footer wraps instead of running off the picture (review round 2, m8: tidus-hurt's own warning was cut off)
+  const tailH = Math.max(70, 18 + 20 * footLines.length);
+  const cardH = 70 + rows.length * 2 * (cellH + 4) + 20 + tailH;
   const comps = [];
   rows.forEach((r, ri) => r.cells.forEach((c, k) => comps.push({ input: c, left: (k % 6) * cellW, top: 70 + (ri * 2 + Math.floor(k / 6)) * (cellH + 4) })));
   const band = (h, body) => Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${STILL_W}" height="${h}"><rect width="${STILL_W}" height="${h}" fill="#101624"/>${body}</svg>`);
   const fit = (text, size) => Math.max(10, Math.min(size, Math.floor((STILL_W - 32) / (Math.max(1, text.length) * 0.56)))); // a long title shrinks to the card's width instead of running off it
   const head = band(70, `<text x="16" y="30" font-family="Arial, sans-serif" font-size="${fit(title, 22)}" font-weight="700" fill="#f5deb0">${esc(title)}</text><text x="16" y="56" font-family="Arial, sans-serif" font-size="${fit(subtitle, 16)}" fill="#cfd6e6">${esc(subtitle)}</text>`);
-  const tail = band(70, `<text x="16" y="28" font-family="Arial, sans-serif" font-size="${fit(foot, 15)}" fill="#cfd6e6">${esc(foot)}</text>`);
-  await S({ create: { width: STILL_W, height: cardH, channels: 3, background: '#0b0f1a' } }).composite([{ input: head, left: 0, top: 0 }, ...comps, { input: tail, left: 0, top: cardH - 70 }]).jpeg({ quality: 88 }).toFile(file);
+  const tail = band(tailH, footLines.map((ln, k) => `<text x="16" y="${28 + 20 * k}" font-family="Arial, sans-serif" font-size="15" fill="${foot.startsWith('FAILED') ? '#ff9a8a' : '#cfd6e6'}">${esc(ln)}</text>`).join(''));
+  await S({ create: { width: STILL_W, height: cardH, channels: 3, background: '#0b0f1a' } }).composite([{ input: head, left: 0, top: 0 }, ...comps, { input: tail, left: 0, top: cardH - tailH }]).jpeg({ quality: 88 }).toFile(file);
   return { width: STILL_W, height: cardH };
 }
 
@@ -111,9 +124,11 @@ async function composeRate({ spec, workDir, outDir, ffmpegBin, S, hz }) {
   const byId = Object.fromEntries(caps.map((c) => [c.variant.id, c]));
   const lead = spec.leadMs ?? 500, settle = spec.settleMs ?? 1000, maxMs = Math.min(spec.maxMs ?? BUDGET.maxSeconds * 1000, BUDGET.maxSeconds * 1000);
   // a card that plays on to an event is cut around that event (whatever the turns before it took), and its variants are put on the same instant by it
-  const around = spec.window ?? (spec.until ? { event: spec.until.event, who: spec.until.who, ordinal: spec.until.ordinal, beforeMs: 2000, afterMs: spec.until.afterMs ?? 1000 } : null);
-  const align = spec.align ?? (spec.until ? { kind: 'event', type: spec.until.event, actor: spec.until.who, ordinal: spec.until.ordinal } : null);
-  const wins = Object.fromEntries(caps.map((c) => [c.variant.id, windowOf(c.frames, c.events, { t0: c.t0, leadMs: lead, settleMs: settle, maxMs, around })]));
+  const around = spec.window ?? (spec.until ? (spec.until.beat ? { beat: spec.until.beat, beforeMs: 2000, afterMs: spec.until.afterMs ?? 1000 } : { event: spec.until.event, who: spec.until.who, ordinal: spec.until.ordinal, beforeMs: 2000, afterMs: spec.until.afterMs ?? 1000 }) : null);
+  const align = spec.align ?? (spec.until ? (spec.until.beat ? { kind: 'beat', beat: spec.until.beat } : { kind: 'event', type: spec.until.event, actor: spec.until.who, ordinal: spec.until.ordinal }) : null);
+  const wins = Object.fromEntries(caps.map((c) => [c.variant.id, windowOf(c.frames, c.events, { t0: c.t0, leadMs: lead, settleMs: settle, maxMs, around, turns: spec.turns ?? 1, afterPressMs: c.rec.pressAt?.length ? c.rec.pressAt[c.rec.pressAt.length - 1] : null })]));
+  // A MOMENT THAT DID NOT HAPPEN is a failed card, not a plain one (review round 2, R2-M3): the play never saw the event it was to run on to, or the window fell back to the first attack
+  const failures = momentFailures(spec, order.map((o) => ({ letter: o.letter, untilAt: byId[o.id].rec.untilAt, ended: byId[o.id].rec.meta?.ended, turns: byId[o.id].rec.turns, win: wins[o.id] })));
   const anchors = Object.fromEntries(caps.map((c) => [c.variant.id, anchorFrame(c, align)]));
   const viewport = spec.viewport ?? { w: caps[0].rec.meta?.viewport?.width ?? 2560, h: caps[0].rec.meta?.viewport?.height ?? 1440 };
   const focus = spec.focus ?? Object.keys(caps[0].frames[0]?.actors ?? {});
@@ -186,7 +201,7 @@ async function composeRate({ spec, workDir, outDir, ffmpegBin, S, hz }) {
     rows.push({ letter: a.letter, cells });
   }
   const still = path.join(outDir, outName(false, 'jpg', '-card'));
-  const sheet = await writeStill({ S, file: still, title: `${spec.title ?? spec.id}  ·  ${spec.chapter}  ·  ${hz} Hz capture`, subtitle: (spec.questions ?? []).join('   |   '), rows, cellW, cellH });
+  const sheet = await writeStill({ S, file: still, title: `${failures.length ? 'FAILED  ·  ' : ''}${spec.title ?? spec.id}  ·  ${spec.chapter}  ·  ${hz} Hz capture`, subtitle: (spec.questions ?? []).join('   |   '), rows, cellW, cellH, ...(failures.length ? { foot: `FAILED: ${failures[0]}` } : {}) });
   written.files.push({ kind: 'card', file: still, bytes: fs.statSync(still).size, width: sheet.width, height: sheet.height });
 
   // the speed trace and the numbers
@@ -197,7 +212,8 @@ async function composeRate({ spec, workDir, outDir, ffmpegBin, S, hz }) {
     const jolts = joltsOfRecording(a.cap.frames.slice(w.i0, w.i1 + 1));
     const tr = speedTrace(a.cap.frames, focus[0], w.i0, w.i1, { scale: 2560 / 1600 });
     traces.push({ letter: a.letter, tr });
-    numbers[a.letter] = { windowMs: r1(w.lengthMs), truncated: w.truncated, anchorFrame: a.anchor, frames: w.i1 - w.i0 + 1, joltsInWindow: joltTally(jolts, w.lengthMs / 1000).total, peakSpeedPxPer60: r1(tr.reduce((m, p) => Math.max(m, p.v), 0)) };
+    const poseChanges = a.cap.frames.slice(w.i0 + 1, w.i1 + 1).reduce((n, f, k) => n + focus.filter((id) => f.actors?.[id] && a.cap.frames[w.i0 + k].actors?.[id] && f.actors[id].pose !== a.cap.frames[w.i0 + k].actors[id].pose).length, 0);
+    numbers[a.letter] = { windowMs: r1(w.lengthMs), truncated: w.truncated, windowFellBack: Boolean(w.fellBack), anchorFrame: a.anchor, frames: w.i1 - w.i0 + 1, joltsInWindow: joltTally(jolts, w.lengthMs / 1000).total, poseChangesInWindow: poseChanges, peakSpeedPxPer60: r1(tr.reduce((m, p) => Math.max(m, p.v), 0)) };
   }
   if (spec.trace !== false && traces.some((t) => t.tr.length)) {
     const W = STILL_W, H = 360, L = 56, B = 30, T = 20;
@@ -212,6 +228,7 @@ async function composeRate({ spec, workDir, outDir, ffmpegBin, S, hz }) {
   }
   written.key = key;
   written.numbers = numbers;
+  written.failures = failures;
   return written;
 }
 
@@ -226,8 +243,11 @@ export async function composeCard({ spec, workDir, outDir, root, ffmpeg: bin = F
   const results = [];
   for (const hz of rates) results.push(await composeRate({ spec, workDir, outDir, ffmpegBin: bin, S, hz }));
   const { key } = blindOrder(spec.variants, spec.seed ?? spec.id);
-  fs.writeFileSync(path.join(outDir, 'KEY.json'), JSON.stringify({ card: spec.id, seed: spec.seed ?? spec.id, key, variants: spec.variants.map((v) => ({ id: v.id, name: v.name ?? null, query: v.query ?? '' })), capture: { ...info, queryBase: spec.queryBase ?? '?coach=off', rates: spec.rates ?? [60], clock: 'virtual (governor level 0): the shape of a motion, not the cost of a frame; the CSS timeline and the audio run on real time (review m20, CA-02)', setup: spec.setup ?? null, keys: spec.keys ?? ['Enter', 'Enter'], holdMenuMs: spec.holdMenuMs ?? 0, turns: spec.turns ?? 1, until: spec.until ?? null }, note: 'blind: the panels carry only a letter; this file is the only place the key is written' }, null, 1));
-  fs.writeFileSync(path.join(outDir, 'numbers.json'), JSON.stringify(Object.fromEntries(results.map((r) => [r.hz, { crop: r.crop, frames: r.frames, window: r.window, clipCappedFromMs: r.clipCappedFromMs, numbers: r.numbers, files: r.files.map((f) => ({ kind: f.kind, file: path.basename(f.file), bytes: f.bytes, seconds: f.seconds, crf: f.crf })) }])), null, 1));
+  fs.writeFileSync(path.join(outDir, 'KEY.json'), JSON.stringify({ card: spec.id, seed: spec.seed ?? spec.id, key, variants: spec.variants.map((v) => ({ id: v.id, name: v.name ?? null, query: v.query ?? '' })), capture: { ...info, queryBase: spec.queryBase ?? '?coach=off', rates: spec.rates ?? [60], clock: 'virtual (governor level 0): the shape of a motion, not the cost of a frame; the CSS timeline and the audio run on real time (review m20, CA-02)', setup: spec.setup ?? null, setupResult: info.setup ?? null, captures: info.captures ?? null, keys: spec.keys ?? ['Enter', 'Enter'], holdMenuMs: spec.holdMenuMs ?? 0, turns: spec.turns ?? 1, until: spec.until ?? null }, note: 'blind: the panels carry only a letter; this file is the only place the key is written' }, null, 1));
+  const failed = results.flatMap((r) => r.failures.map((f) => `${r.hz} Hz ${f}`));
+  if (failed.length) fs.writeFileSync(path.join(outDir, 'FAILED.txt'), `THIS CARD DID NOT FILM THE MOMENT IT NAMES\n\n${failed.join('\n')}\n\nThe clip and the still show a plain window; do not send them as the card.\n`);
+  else fs.rmSync(path.join(outDir, 'FAILED.txt'), { force: true });
+  fs.writeFileSync(path.join(outDir, 'numbers.json'), JSON.stringify(Object.fromEntries(results.map((r) => [r.hz, { failures: r.failures, crop: r.crop, frames: r.frames, window: r.window, clipCappedFromMs: r.clipCappedFromMs, numbers: r.numbers, files: r.files.map((f) => ({ kind: f.kind, file: path.basename(f.file), bytes: f.bytes, seconds: f.seconds, crf: f.crf })) }])), null, 1));
   fs.writeFileSync(path.join(outDir, 'README.txt'), `${spec.title ?? spec.id}\n\n${(spec.questions ?? []).join('\n')}\n\nLetters only in the pictures; KEY.json says which variant is which. The real-time clips play at 60 fps (a phone cannot show more); the slow4x copies show every captured frame at a quarter of the capture rate. The film is a virtual clock (the game's shape, not its cost); text or effects drawn by the page's own animations inside the picture run on real time and so play too fast against the figures. ${spec.note ?? ''}\n`);
   return results;
 }

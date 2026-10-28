@@ -88,9 +88,11 @@ describe('a window around an event', () => {
     expect(frames[w.i0]!.vt).toBeGreaterThanOrEqual(3000);
     expect(frames[w.i1]!.vt).toBeLessThanOrEqual(6000);
   });
-  it('falls back to the plain window when the event never happened', () => {
+  it('falls back to the plain window when the event never happened, and SAYS SO (review round 2, R2-M3)', () => {
     const w = windowOf(frames, events, { t0: 1000, leadMs: 500, around: { event: 'ko', who: 'nobody' } })!;
     expect(w.around).toBeUndefined();
+    expect(w.fellBack).toBe(true);
+    expect(w.wanted).toMatchObject({ event: 'ko', who: 'nobody' });
     expect(w.startMs).toBe(500);
   });
 });
@@ -247,7 +249,8 @@ describe('a card\'s setup', () => {
     const done = await applySetup(page, [{ hp: { who: 'enemy', fraction: 0.04 } }, { hp: { who: 'yuna', set: 1 } }]);
     expect(done.length).toBe(2);
     expect(combatants.map((c) => c.hp)).toEqual([1, 360, 4]);
-    expect(done[0]!.result).toEqual([{ id: 'boss', hp: 360 }, { id: 'add', hp: 4 }]);
+    expect(done[0]!.result).toEqual([{ id: 'boss', side: 'enemy', hp: 360, maxHp: 9000 }, { id: 'add', side: 'enemy', hp: 4, maxHp: 100 }]);
+    expect(done[0]!.warnings).toEqual([]); // 360 hit points is under one blow
     expect(await applySetup(page, undefined)).toEqual([]);
     delete (globalThis as any).window;
   });

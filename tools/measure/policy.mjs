@@ -8,7 +8,7 @@ import path from 'node:path';
 
 export const FLUIDITY_DEFAULTS = Object.freeze({
   hz: Object.freeze({ rates: [60, 120, 144], wallTolerance: 0.05, beatFrames: 1, minIntervalMs: 200, mode: 'report' }),
-  jolts: Object.freeze({ minJumpPx: 2.5, minShare: 0.3, windowMs: 333, gridMs: 1000 / 60, maxRise: 0.1, sigma: 2, mode: 'report', baselines: {} }),
+  jolts: Object.freeze({ minJumpPx: 2.5, minShare: 0.3, windowMs: 333, gridMs: 1000 / 60, maxRise: 0.1, sigma: 2, minReplicates: 3, mode: 'report', baselines: {} }),
 });
 
 /** The policy's `fluidity` block over the defaults (a policy without one gives the defaults: report, never gate). */
@@ -18,6 +18,8 @@ export function fluidityPolicy(root) {
   const pick = (k) => ({ ...FLUIDITY_DEFAULTS[k], ...(p[k] && typeof p[k] === 'object' ? p[k] : {}) });
   const out = { hz: pick('hz'), jolts: pick('jolts') };
   for (const k of ['hz', 'jolts']) if (out[k].mode !== 'gate') out[k].mode = 'report';
+  // The grid is ONE 60 Hz FRAME, exactly (review round 2, R2-M1): a policy that rounds it (16.667) drifts 0.0003 ms a step, 12 percent of a frame after 105 s, and moved the Chapter IV baseline from 662 to 655.
+  if (Math.abs(out.jolts.gridMs - 1000 / 60) < 0.01) out.jolts.gridMs = 1000 / 60;
   return out;
 }
 
