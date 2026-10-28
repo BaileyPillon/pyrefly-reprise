@@ -24,11 +24,13 @@ export interface Anchors {
 }
 /** `cs` (probe version 2): where the camera's change alone moved each corner since the last frame, present only while the camera moved. */
 export interface PlaneRec { k: number; fade: number; vis: boolean; q: number[]; cs: number[] | null }
-export interface FigRec { i: number; a: number; act: number; s: (number[] | 0)[]; g: [number, number]; /** R57-002: a RIGGED figure's frame (continuity-rig-probe.mjs): where its head, feet and centroid are drawn and in the idle plane's own coordinates. */ rg?: RigRecord }
+export interface FigRec { i: number; a: number; act: number; s: (number[] | 0)[]; g: [number, number]; /** Probe version 3: per plane (the order of `s`), `[wx, wy, lock]`: its size in world units and the head lock's factor; 0 for a plane not recorded. */ pl?: ([number, number, number] | 0)[]; /** R57-002: a RIGGED figure's frame (continuity-rig-probe.mjs): where its head, feet and centroid are drawn and in the idle plane's own coordinates. */ rg?: RigRecord }
 export interface FrameOfFig { n: number; t: number; fig: FigRec }
 
 export interface ContinuityConfig {
   minBattleSeconds: number; minSwaps: number; minFps: number;
+  /** PR-0459: which head reading gates CHK-026's head, `projected` (what the player sees; the default) or `card` (the card's own head; probe 3 recordings). */
+  headGate?: 'projected' | 'card';
   size: { headTolerancePct: number; feetTolerancePx: number; headTolerancePctCoarse: number; feetTolerancePxCoarse: number; feetSilhouettePct?: number };
   motion: {
     windowFrames: number; blendFadeMin: number; ghostFadeMin: number; ghostOutlineMin: number; ghostSeverityFail: number;
@@ -66,7 +68,7 @@ export interface Held { frames: number; ms: number; from: number | null }
 export interface SwapResult {
   camCut: boolean; costume?: boolean; sameArt?: boolean; range?: boolean; staged: StagedStep | null; held: Held; snapStaged: boolean;
   /** `label`: 'control' for a registered head (held to the idle's by the head lock, so it agrees with itself), 'mass' for the silhouette's. */
-  head: { fromPx: number | null; toPx: number | null; ratio: number | null; source: 'registration' | 'silhouette' | 'rig'; metric: 'head' | 'mass' | 'variant'; label?: 'control' | 'mass' | 'rig' | 'front view'; variant?: { from: string | null; to: string | null } } | null;
+  head: { fromPx: number | null; toPx: number | null; ratio: number | null; source: 'registration' | 'silhouette' | 'rig'; metric: 'head' | 'mass' | 'variant'; label?: 'control' | 'mass' | 'rig' | 'front view'; variant?: { from: string | null; to: string | null }; /** Probe version 3 (PR-0459): the head as the card carries it, and who owns a change (continuity-card.mjs). */ card?: { fromWorld: number; toWorld: number; ratio: number; lockFrom: number; lockTo: number; class: 'ok' | 'lock' | 'camera' | 'lock-band' | 'registration' } } | null;
   feet: { dx: number; dy: number; px: number; standing: boolean; source: string; /** a rig's: the part that judges, the ground line */ gate?: string; gatePx?: number; tolerancePx?: number; sidewaysPx?: number } | null;
   outline: { iou: number; centroidShiftPx: number; areaRatio: number | null } | null;
   ghost: { frames: number; ms: number; peak: number; severity: number; worstFrame: number | null };

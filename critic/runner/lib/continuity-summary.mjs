@@ -27,6 +27,14 @@ export function frameTimeOf(dts, longMs = 34) {
   return { frames: s.length, p50Ms: round(q(0.5), 1), p90Ms: round(q(0.9), 1), p99Ms: round(q(0.99), 1), maxMs: round(s[s.length - 1], 1), longFrames, longFramePct: round((longFrames / s.length) * 100, 1), longMs, source: 'continuity-probe', pacingNumber: false };
 }
 
+/** The card-space head numbers of the judged swaps that have one: how many were read, the worst change of the card's head (percent), and how many head changes each class owns. */
+function cardHeadOf(heads) {
+  const cards = heads.filter((s) => s.head.card);
+  const byClass = {};
+  for (const s of cards) byClass[s.head.card.class] = (byClass[s.head.card.class] ?? 0) + 1;
+  return { measured: cards.length, maxPct: round(cards.reduce((m, s) => Math.max(m, Math.abs(s.head.card.ratio - 1)), 0) * 100, 1), byClass };
+}
+
 /**
  * The chapter's numbers and the two checks' results.
  * @param {Array} swaps  analysed swaps (each `{ ...analyzeSwap, figure, from, to, n, t, atSwapJerk?, counted }`)
@@ -94,6 +102,8 @@ export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], 
       headMeasured: heads.length, headRegistration: regHeads.length, headRig: rigHeads.length, headSilhouette: heads.length - regHeads.length - rigHeads.length, headUnmeasured: judged.length - heads.length,
       maxHeadJumpPct: round(worstHead * 100, 1), maxHeadJumpPctRegistration: round(worstHeadReg * 100, 1), maxHeadJumpPctRig: round(worstHeadRig * 100, 1), rigSwaps: judged.filter((s) => s.rig).length,
       headOverTolerance: failHead.length,
+      // PR-0459 (probe 3): the head as the card carries it, and who owns a head change (continuity-card.mjs): reported, the gate reads the policy's `headGate`
+      cardHead: cardHeadOf(heads),
       feetMeasured: feetSwaps.length, maxFeetShiftPx: round(feetSwaps.reduce((m, s) => Math.max(m, s.feet.px), 0), 1), feetOverTolerance: failFeet.length,
       // W4: the HEIGHT reading (a pose drawn against the idle in the same frame, from the alpha masks and the planes' quads; stature, or length for a KO, which is report-only)
       heightMeasured: heights.length, heightOverBand: judged.filter((s) => s.failHeight).length, heightWaived: heightFlagged.filter((s) => !s.failHeight).length,

@@ -120,7 +120,7 @@ describe('what the probe records each frame', () => {
     const r = rig();
     r.probe.start();
     await r.step(); await r.step();
-    expect(r.probe.meta().version).toBe(2);
+    expect(r.probe.meta().version).toBe(3);
     expect((r.probe.records.at(-1)!.f[0]!.s[0] as number[]).length).toBe(11); // a still camera adds nothing to the record
     r.camera.matrixWorldInverse.elements[12] = -50;
     await r.step();
@@ -129,6 +129,27 @@ describe('what the probe records each frame', () => {
     expect(moved.slice(11)).toEqual([-50, 0, -50, 0, -50, 0, -50, 0]); // orthographic: the same for every corner
     await r.step();
     expect((r.probe.records.at(-1)!.f[0]!.s[0] as number[]).length).toBe(11); // and it stops
+  });
+
+  it('records, from probe version 3, each plane size in WORLD units and the head lock factor, beside the slots and not inside them (PR-0459)', async () => {
+    const r = rig();
+    (r.actor.slots[0] as { lock?: number }).lock = 1.1;
+    r.probe.start();
+    await r.step(); await r.step();
+    const f = r.probe.records.at(-1)!.f[0]! as unknown as { s: unknown[]; pl?: unknown[] };
+    expect((f.s[0] as number[]).length).toBe(11); // the slot record keeps its layout: version 2 readers are unaffected
+    expect(f.pl).toEqual([[200, 400, 1.1], 0]); // the plane mesh is 200 x 400 world units; the other plane is not recorded
+    (r.actor.slots[1] as { lock?: number }).lock = 0.9;
+    fades(r, 0.5, 0.5);
+    await r.step();
+    expect((r.probe.records.at(-1)!.f[0]! as unknown as { pl?: unknown[] }).pl).toEqual([[200, 400, 1.1], [200, 400, 0.9]]);
+  });
+
+  it('reads a plane with no lock field as lock 1 (an actor that has none)', async () => {
+    const r = rig();
+    r.probe.start();
+    await r.step();
+    expect((r.probe.records.at(-1)!.f[0]! as unknown as { pl?: unknown[] }).pl![0]).toEqual([200, 400, 1]);
   });
 
   it('projects the shift of each corner through its own depth: a plane in perspective is shifted more at its near edge than at its far one (W4)', async () => {

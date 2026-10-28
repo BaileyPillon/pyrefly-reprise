@@ -57,6 +57,7 @@
     "minBattleSeconds": 60,
     "minSwaps": 8,
     "minFps": 30,
+    "headGate": "projected",
     "size": { "headTolerancePct": 3, "feetTolerancePx": 2, "headTolerancePctCoarse": 30, "feetTolerancePxCoarse": 6, "feetSilhouettePct": 2 },
     "motion": {
       "windowFrames": 14, "blendFadeMin": 0.02, "ghostFadeMin": 0.15, "ghostOutlineMin": 0.1, "ghostSeverityFail": 0.4,
