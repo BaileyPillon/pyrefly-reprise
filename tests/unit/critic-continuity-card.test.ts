@@ -62,7 +62,7 @@ const CFG = (gate?: 'projected' | 'card'): ContinuityConfig => ({
   minBattleSeconds: 60, minSwaps: 8, minFps: 30,
   ...(gate ? { headGate: gate } : {}),
   size: { headTolerancePct: 3, feetTolerancePx: 2, headTolerancePctCoarse: 30, feetTolerancePxCoarse: 6 },
-  motion: { windowFrames: 14, blendFadeMin: 0.02, ghostFadeMin: 0.15, ghostOutlineMin: 0.1, ghostSeverityFail: 0.2, snapOutlineMin: 0.05, snapCentroidMinPx: 4, snapsPerMinuteMax: 2, jerkMinPx: 24, jerkRatioMin: 3, jerkFailPx: 40 } as ContinuityConfig['motion'],
+  motion: { windowFrames: 14, blendFadeMin: 0.02, ghostFadeMin: 0.15, ghostOutlineMin: 0.1, ghostSeverityFail: 0.2, snapOutlineMin: 0.05, snapCentroidMinPx: 4, snapsPerMinuteMax: 2, jerkMinPx: 24, jerkRatioMin: 3, jerkFailPx: 40 } as unknown as ContinuityConfig['motion'],
   strips: { worstSwaps: 10, worstJerks: 5, worstGhosts: 5, beforeFrames: 6, afterFrames: 6 },
 });
 const solid = (w = 16, h = 16): Mask => ({ w, h, bits: new Uint8Array(w * h).fill(1) });
