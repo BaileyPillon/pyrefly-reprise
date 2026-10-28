@@ -125,7 +125,7 @@ export function optionsTabHtml(settings: Readonly<Settings>, selected: number): 
             ).toFixed(1)}%"></span></span>`;
       return `<div class="pause__opt${i === selected ? ' pause__opt--sel' : ''}" data-action="pause:opt:${escapeHtml(
         row.id,
-      )}" role="button" tabindex="0">
+      )}" role="button" tabindex="0"${i === selected ? ' data-cursor' : ''}>
         <span class="pause__opt-k">${escapeHtml(row.label)}</span>
         ${meter}
         <span class="pause__opt-v">${escapeHtml(row.value)}</span>

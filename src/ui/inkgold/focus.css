@@ -1,0 +1,25 @@
+/**
+ * Ink & Gold — the keyboard focus ring (release 68, lane ui-input; the contract: `src/app/focusContract.ts`).
+ *
+ * Before this, a control reached by Tab drew the browser's default ring (a blue/white rounded rectangle) or nothing at all,
+ * because the game kept Tab to itself. Now Tab walks the title, the chapter board and party prep, so a control that has
+ * keyboard focus draws the accent of the screen it is on: gold, or pyre pink under `.ig--ffx2` (the same token every Ink & Gold
+ * surface reads), two px out from the control, never a fill and never a size change, so no layout moves when it appears.
+ *
+ * `:focus-visible` only: a click or a tap on a control does not draw it (the browser decides, as it does for any page).
+ * The screen's CURSOR (`[data-cursor]`: the selected chapter card, the open prep tab or pause tab, the selected row) already has
+ * the game's own highlight and takes no ring, so an arrow key that moves focus with the cursor changes nothing a player sees.
+ * Controls with a focus style of their own (the chapter card, the hint entries, the toggles) keep it: they set `outline: none`
+ * on a more specific selector, or name the ring they want after this file.
+ */
+
+/* The four front-end screens whose Tab is the browser's or whose controls have just become real (the battle HUD keeps the rings it has). */
+:is([data-screen='title'], [data-screen='chapter-select'], [data-screen='party-prep'], [data-screen='pause']) :is(button, a[href], summary, [role='button'], [role='tab'], [role='switch'], [role='checkbox'], [role='radio'], [role='menuitem'], [role='option'], [role='link']):focus-visible {
+  outline: 2px solid var(--ig-accent, #e3b94a);
+  outline-offset: 2px;
+}
+
+/* The cursor is drawn by the game. */
+:is([data-screen='title'], [data-screen='chapter-select'], [data-screen='party-prep'], [data-screen='pause']) [data-cursor]:focus-visible {
+  outline: none;
+}

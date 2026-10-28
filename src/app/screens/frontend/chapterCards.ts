@@ -99,6 +99,9 @@ export function proseHtml(tile: ChapterTile): string {
  * gold numeral block, the notch), so nothing moves when the cursor does.
  *
  * A COMING card has no `data-action`: it can never be selected or started.
+ *
+ * The list is one tab stop (release 68, `app/focusContract.ts`): the selected card is the cursor (`data-cursor`, `tabindex` 0), the others `tabindex` -1, so Tab
+ * lands on the cursor and an arrow key moves it and the focus with it. A click or a tap still reaches every card.
  */
 /** A title longer than this takes the smaller card-name size (`chapter-select-c.css`). */
 const LONG_TITLE = 22;
@@ -120,8 +123,8 @@ export function cardHtml(tile: ChapterTile, index: number, selected: boolean, be
   }
   const cls = `fe-card${tile.cleared ? ' fe-card--cleared' : ''}${selected ? ' fe-card--sel' : ''}`;
   return `
-    <div class="${cls}" data-card="${escapeHtml(tile.id)}" data-action="fe-card-${index}" role="button" tabindex="0"
-         aria-label="${escapeHtml(tile.title)}"${selected ? ' aria-current="true"' : ''}>
+    <div class="${cls}" data-card="${escapeHtml(tile.id)}" data-action="fe-card-${index}" role="button" tabindex="${selected ? 0 : -1}"
+         aria-label="${escapeHtml(tile.title)}"${selected ? ' aria-current="true" data-cursor' : ''}>
       ${art}${num}${name}${cardRibbonHtml(tile, bestTimeMs)}
     </div>
   `;

@@ -61,7 +61,7 @@ export function rosterHtml(anyBuild: AnyPartyBuild, selected: number, artNamespa
       const indent = (i * 10) / 2.25;
       return `
           <div class="prep__member${i === selected ? ' prep__member--sel' : ''}"
-               data-action="prep:member-${i}" role="button" tabindex="0"
+               data-action="prep:member-${i}" role="button" tabindex="0"${i === selected ? ' aria-current="true"' : ''}
                style="margin-left:${indent.toFixed(2)}px">
             <div class="prep__face">${faceHtml({ id: m.id, name: m.name, dressphere: dresspheres[i], ...(artNamespace ? { artNamespace } : {}) })}</div>
             <span class="prep__member-name">${escapeHtml(m.name)}</span>

@@ -963,7 +963,8 @@ html[data-input='gamepad'] .fe-hint [data-action='title:briefing'] {
     gap: calc(5 * var(--fe-k));
   }
   .fe-card {
-    flex: 0 0 calc(48 * var(--fe-k));
+    /* A touch target is 44 CSS px at the least (release 68, ChatGPT's point 6): 48 * k is 35 px at 390 wide. */
+    flex: 0 0 max(44px, calc(48 * var(--fe-k)));
   }
   .fe-card__name {
     font-size: max(var(--fe-fs-floor), calc(21 * var(--fe-k)));

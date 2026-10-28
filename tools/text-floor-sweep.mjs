@@ -17,6 +17,7 @@ import path from 'node:path';
 
 import { assertScreen, open, waitBattleMenu, waitFor } from '../critic/runner/lib/lib.mjs';
 import { textFloorProbe } from './text-floor-probe.mjs';
+import { touchTargetProbe } from './touch-target-probe.mjs';
 
 const arg = (k, d) => {
   const a = process.argv.find((x) => x.startsWith(`--${k}=`));
@@ -32,8 +33,11 @@ const QUALITY = Number(arg('quality', '82'));
 const TOUCH = arg('touch', '0') === '1';
 // `--strict=1`: exit 1 when any step has a text element under the floor or a screen could not be reached (CHK-003's pass/fail).
 const STRICT = arg('strict', '0') === '1';
+// `--targets=1` (release 68, lane ui-input): also walk every control a finger can press (tools/touch-target-probe.mjs) and record its box; 44 CSS px is the bar. Use with `--touch=1 --sizes=390x844`.
+const TARGETS = arg('targets', '0') === '1';
 
 const SCENES = {
+  title: { id: 'seymour-flux', kind: 'title' }, // the title as it stands, after its reveal (the touch sweep's first stop)
   'prep-ffx': { id: 'seymour-flux', kind: 'prep' },
   'prep-ffx2': { id: 'ffx2-bahamut', kind: 'prep' },
   'prep-ffx-first': { id: 'seymour-flux', kind: 'prep-first' }, // the tab it opens on only (a phone has no tab strip)
@@ -119,16 +123,25 @@ function makeSnap(page, rec, scene, w, h) {
     mkdirSync(OUT, { recursive: true });
     await page.screenshot({ path: path.join(OUT, file), type: 'jpeg', quality: QUALITY });
     const step = { label, file, screen: await scr(page), state: await screenState(page), ...probe };
+    if (TARGETS) step.targets = await page.evaluate(touchTargetProbe, { min: 44 });
     if (extra) step.extra = await page.evaluate(extra);
     rec.steps.push(step);
     const sm = `${scene} ${w}x${h} ${label}: nText=${probe.nText} minEff=${probe.minEff} under${FLOOR}=${probe.underCount} overlaps=${probe.overlaps?.length} cut=${probe.cut?.length}`;
     console.log(sm);
+    if (step.targets) console.log(`  targets: n=${step.targets.n} under44=${step.targets.underCount}${step.targets.under.slice(0, 8).map((u) => `
+    ${u.w}x${u.h} ${u.el}`).join('')}`);
     return step;
   };
 }
 
 async function runScene(page, scene, snap) {
   const { id, kind } = SCENES[scene];
+  if (kind === 'title') {
+    await waitFor('title', async () => (await scr(page)) === 'title', { ms: 60000 });
+    await page.waitForTimeout(2500);
+    await snap('title');
+    return;
+  }
   if (kind === 'board') {
     await toBoard(page);
     await page.waitForTimeout(1500);
@@ -230,7 +243,7 @@ for (const [w, h] of SIZES) {
       writeFileSync(path.join(OUT, `${scene}-${w}x${h}.json`), JSON.stringify(rec, null, 1));
       await browser.close();
     }
-    summary.push({ scene, w, h, error: rec.error, steps: rec.steps.map((s) => ({ label: s.label, minEff: s.minEff, under: s.underCount, overlaps: s.overlaps?.length })) });
+    summary.push({ scene, w, h, error: rec.error, steps: rec.steps.map((s) => ({ label: s.label, minEff: s.minEff, under: s.underCount, overlaps: s.overlaps?.length, targetsUnder: s.targets?.underCount })) });
   }
 }
 writeFileSync(path.join(OUT, `summary-${Date.now()}.json`), JSON.stringify(summary, null, 1));

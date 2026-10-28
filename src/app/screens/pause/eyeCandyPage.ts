@@ -202,7 +202,7 @@ export class EyeCandyPage {
     if (sel) cls.push('pause__row--sel');
     return (
       `<div class="pause__row pause__row--word pause__row--cmd pause__ec-row ${cls.join(' ')}" data-row="${escapeHtml(id)}"` +
-      ` data-action="${EYE_CANDY_ROW_ACTION}${escapeHtml(id)}" ${aria} tabindex="${sel ? 0 : -1}">` +
+      ` data-action="${EYE_CANDY_ROW_ACTION}${escapeHtml(id)}" ${aria} tabindex="${sel ? 0 : -1}"${sel ? ' data-cursor' : ''}>` +
       `<span class="pause__k">${escapeHtml(label)}</span>` +
       `<span class="pause__v">${escapeHtml(value)}${quiet ? `<em${limit ? ` data-limit="${limit}"` : ''}>&middot; ${escapeHtml(quiet)}</em>` : ''}</span></div>`
     );
