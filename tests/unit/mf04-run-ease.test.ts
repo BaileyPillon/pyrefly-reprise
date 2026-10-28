@@ -235,6 +235,7 @@ const tick = async (): Promise<void> => {
 
 describe('the run-in port under each word', () => {
   it('today: the plain quadInOut run (no easing handed on), the full run time, strike() waits for the arrival', async () => {
+    setMoveWord('run', 'today'); // the default is flow since release 67
     const { stage, paine } = field();
     const m = new RunInMotion(dress());
     let settled = false;

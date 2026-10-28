@@ -7,8 +7,8 @@
  * stop and the strike, asked for only when the run is over, stands her still for about 100 ms (its wind-up, a 3 px pull) before it lunges. Real girls run at a constant 2.6 to 2.8 body heights a
  * second and attack from the run.
  *
- * **Four variants, one switch (`?run=`, `MoveSwitch.ts`; the default is today):**
- * - `today` (V0): this file changes nothing.
+ * **Four variants, one switch (`?run=`, `MoveSwitch.ts`; the default is `flow` since release 67, message 2 of Bailey's look choices, the driver's call under his delegation, his to overturn):**
+ * - `today` (V0, release 66's look): this file changes nothing.
  * - `smooth` (V1): the same run time, a TRAPEZOID of speed ({@link trapezoid}: a quarter of the run easing in, a cruise, a quarter easing out; peak 1.33 times the mean, not 2), and a leap whose lift
  *   leaves and meets the floor at rest ({@link smoothBell}), so the landing is a brake and then the squash.
  * - `flow` (V2): V1, plus the strike is asked for as the run brakes, so its wind-up (a pull the eye can read, {@link FLOW_PROFILE}, and a deeper crouch) is the end of the stop and the lunge's travel

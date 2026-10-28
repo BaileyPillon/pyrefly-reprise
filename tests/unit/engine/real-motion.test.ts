@@ -9,7 +9,7 @@ import { PaintedActor, painting, reset, type Actor } from './head-lock-fixture.t
 import { setMotionBeatSink, type MotionBeat } from '../../../src/engine/feel/MotionBeats.ts';
 import { paceFactor, setPace, setPaceGame } from '../../../src/engine/pace.ts';
 import { curvesModeFromSearch, curvesOn, realKind, setCurvesMode } from '../../../src/engine/motion/CurvesSwitch.ts';
-import { setDemoChapter } from '../../../src/engine/motion/DemoGate.ts';
+import { setDemoChapter } from '../../../src/engine/motion/DemoGate.ts'; import { setMoveWord } from '../../../src/engine/motion/MoveSwitch.ts';
 import { PARTY_RIG_SUBJECTS, partyRigAllowed, partyRigsModeFromSearch, setPartyRigsMode } from '../../../src/engine/motion/PartyRigsSwitch.ts';
 import { APPROACH_LEAP_MIN, contactMsOf, holdMsOf, profileOfRow, realArcGainFromSearch, realHitMs, realKeyOf, realKoHoldMs, realRowOf, realStrikeProfile, realVictoryOf, setRealArcGain } from '../../../src/engine/motion/RealMotion.ts';
 import { pchip } from '../../../src/engine/motion/RealStrike.ts';
@@ -33,7 +33,7 @@ beforeEach(() => {
   setPace('steady');
 });
 afterEach(() => {
-  setDemoChapter(undefined);
+  setDemoChapter(undefined); setMoveWord('run', null); setMoveWord('strikeshape', null);
   setCurvesMode(null);
   setPartyRigsMode(null);
   setRealArcGain(null);
@@ -116,16 +116,16 @@ describe('the table reader', () => {
 });
 
 describe('the switch', () => {
-  it('?curves=real and ?curves=real-snappy (and snappy) are modes; the pack alone is new; today wins', () => {
+  it('?curves=real and ?curves=real-snappy (and snappy) are modes; the pack alone is real-snappy since release 67 (new is release 66\'s, by name); today wins', () => {
     expect(curvesModeFromSearch('?curves=real')).toBe('real');
     expect(curvesModeFromSearch('?curves=real-snappy')).toBe('real-snappy');
     expect(curvesModeFromSearch('?curves=snappy')).toBe('real-snappy');
-    expect(curvesModeFromSearch('?pack=demo')).toBe('new');
+    expect(curvesModeFromSearch('?pack=demo')).toBe('real-snappy'); // release 67; `?curves=new` (release 66's) is pinned in release67-picks.test.ts
     expect(curvesModeFromSearch('?pack=demo&curves=real')).toBe('real');
     expect(curvesModeFromSearch('?pack=demo&curves=today')).toBe('today');
     expect(curvesModeFromSearch(undefined)).toBe('today');
     expect(curvesModeFromSearch('?pack=off')).toBe('today');
-    expect(curvesModeFromSearch('')).toBe('new'); // r64 (item 200b): the conference pack is the default
+    expect(curvesModeFromSearch('')).toBe('real-snappy'); // r64 (item 200b): the conference pack is the default; release 67: its mode is real-snappy
   });
   it('a real mode turns the curves on in the two demo chapters only; realKind names the sub-mode', () => {
     for (const [mode, kind] of [['new', null], ['today', null], ['real', 'real'], ['real-snappy', 'snappy']] as const) {
@@ -148,6 +148,7 @@ describe('the strike in the two real modes', () => {
     resolveStrike(tidus(kind), { distance: 1.4, height: 1.82, timeScale: 1, ...o });
 
   it('real keeps the real phases at the real speed; snappy the same proportions at about 1.1 s', () => {
+    setMoveWord('strikeshape', 'today'); // the clip's own proportions: the default word since release 67 is travel (release67-strikeshape.test.ts)
     const k = 1 / defaultPaceFactor('ffx');
     const real = shapeOf('real');
     expect(real.windupMs).toBeCloseTo(566.7 * k, 0);
@@ -161,6 +162,7 @@ describe('the strike in the two real modes', () => {
     expect((snap.windupMs + snap.travelMs) / sum(snap)).toBeCloseTo((real.windupMs + real.travelMs) / sum(real), 1);
   });
   it('a boss: real is not stretched by its heft again, snappy keeps the house heft stretch', () => {
+    setMoveWord('strikeshape', 'today'); // the clip's own proportions (release 67's default word is travel)
     const row = REAL_MOTION.ffx['seymourFlux']!.attack!;
     const k = 1 / defaultPaceFactor('ffx');
     const real = resolveStrike(profileOfRow('ffx', row, 'real'), { distance: 2, height: 4.1, heft: 1, timeScale: 1 });
@@ -272,6 +274,7 @@ describe('the strike in the two real modes', () => {
     expect(a.lift).toBeCloseTo(b.lift, 6);
   });
   it('the sound\'s lead is the real contact frame', () => {
+    setMoveWord('strikeshape', 'today'); // the clip's own proportions (release 67's default word is travel)
     setCurvesMode('real');
     setDemoChapter('seymour-flux');
     const ctx = fakeCtx({ tidus: 'tidus', boss: 'seymour-flux' }, 0);
@@ -551,7 +554,7 @@ describe('the real strike in Chapter IV: her run home waits for the hold', () =>
     expect(settled).toBe(true);
   });
   it('arms nothing without a run-in, in the house curves, or for a figure the table does not cover', () => {
-    setDemoChapter('ffx2-bahamut');
+    setDemoChapter('ffx2-bahamut'); setMoveWord('run', 'today'); // the house profile is the strike after a run that does not flow; the default word is flow since release 67 (flow has its own profile)
     const plans: StrikePlan[] = [];
     setCurvesMode('real');
     const noRun = actorOf(plans);

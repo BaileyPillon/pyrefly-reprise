@@ -7,3 +7,5 @@ export interface LockRecord { who?: string; pid?: number; what?: string; at?: st
 export declare function heldBy(rec: LockRecord | null, o?: { pid?: number; now?: number }): LockRecord | null;
 export declare function reservedBy(rec: LockRecord | null, o?: { pid?: number; now?: number; isAlive?: (pid: number) => boolean }): LockRecord | null;
 export declare function takeBrowserLock(o: { who: string; what: string; maxMinutes?: number; maxWaitMs?: number; log?: (...a: unknown[]) => void; watchdog?: boolean; onWatchdog?: () => Promise<void> }): Promise<() => void>;
+/** Take the lock file for `text`: an exclusive create, else (it exists but is stale, ours, or gone) an atomic takeover. True when it is ours. */
+export declare function tryTakeLock(text: string): boolean;

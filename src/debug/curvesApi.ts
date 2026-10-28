@@ -1,7 +1,7 @@
 /**
  * `window.__pyrefly.curves(mode?)`, `.curvesChapter(id?)`, `.curvesOn()` and `.strikeMarks(game?, distance?)`: the motion-core switch for captures and checks (motion pass, lane "core").
  *
- * `curves()` returns `'new'`, `'today'`, `'real'` or `'real-snappy'` (from `?curves=` / `?pack=demo`, default today); `curves(mode)` sets it for what starts from now on (integration 2: `real` is the real game's
+ * `curves()` returns `'new'`, `'today'`, `'real'` or `'real-snappy'` (from `?curves=` / the pack: `real-snappy` in the pack since release 67, `new` is release 66's, `today` with the pack off); `curves(mode)` sets it for what starts from now on (integration 2: `real` is the real game's
  * clips at their own speed, `real-snappy` the same proportions at Bailey's 1.1 s; `realStrike(artId, kind)` answers a figure's real marks). The new curves play only in the demo
  * chapters (Chapter I `seymour-flux`, Chapter IV `ffx2-bahamut`): `curvesOn()` is the answer for the running chapter. `strikeMarks` returns a game's strike marks in paced ms (and the
  * on-screen ms at the default pace) for a recorder that wants to line a capture up on `contact` or `travelPeak`.

@@ -2,22 +2,24 @@
  * THE SWAP SWITCHES OF THE MOTION-FLUIDITY PASS (lane L1 "poses and swaps"; Bailey, 2026-10-26 ~13:45 EDT: "I need an additional pass for motion, motion fluidity, animations etc please", with every
  * decision delegated to the driver). Items MF-01, MF-05 and MF-06 of the fluidity plan (`D:/Tools/pyrefly-scratch/2026-10-26/fluidity/plan.json`). Pure: no `three`, no DOM but the address of the page.
  *
- * Every look is an address word on ONE build and **every default is today's look, except MF-01** (`?interlude`, no look change, ON); the clips are made by changing the word, never the build. The B words
+ * Every look is an address word on ONE build; the clips are made by changing the word, never the build. **Release 67 (the driver's call under Bailey's delegation, 2026-10-28; his to overturn) made
+ * Bailey's picks the defaults: `?stance` reads `v1a` and `?swapcause` reads `pick`** ({@link STANCE_DEFAULT}, {@link CAUSE_DEFAULT}: ONE line each to change). **`?stance=today` and `?swapcause=today` are
+ * release 66's look, exactly** (an address that names them, or a page with the pack off, a phone or a tablet, or no page at all). The B words
  * (`?stance`, `?swapcause`, `?swapclass`) play in the two pack chapters only (Chapter I `seymour-flux`, FFX; Chapter IV `ffx2-bahamut`, FFX-2: `DemoGate`), with the pack on (`?pack=off` keeps release 62's),
  * because the planner and the smear they ride on play only there (`?swapscope=all`, MF-22, widens it). `?interlude` does NOT depend on the pack: it plays in all seven FFX-2 chapters (confirmed on Trema) and
  * under `?pack=off`; it is a turn-start rule (`KeyPoses.readyCarriesIntoCastOrItem`), not a smear.
  *
  * - `?interlude=all|attack` (MF-01, FFX-2 only, **no look change, ON**): `all` (the default) holds a girl's menu `ready` through the turn start into her own attack, cast or item; `attack` is post-flicker's
  *   attack-only hold (the "before" of MF-01).
- * - `?stance=today|v1a|v1b|v3` (MF-05, both games, default `today`): the idle-to-ready change at turn start. `v1a`: the menu keeps the idle painting (the ring and the lean of the ready STANCE stay), and
+ * - `?stance=today|v1a|v1b|v3` (MF-05, both games, default `v1a` since release 67; `today` is release 66's): the idle-to-ready change at turn start. `v1a`: the menu keeps the idle painting (the ring and the lean of the ready STANCE stay), and
  *   `ready` is shown only as an attack's wind-up painting. `v1b`: no ready painting anywhere (the wind-up is played on the idle painting). `v3`: today's two paintings, the change a 50 ms three-frame blend.
- * - `?swapcause=today|cut|blend3|pick` (MF-06, both games, default `today`) and `?swapclass=a,b,...` (default every class): the swaps that have a cause on screen (the contact, the hit, the glow, the toss,
+ * - `?swapcause=today|cut|blend3|pick` (MF-06, both games, default `pick` since release 67; `today` is release 66's) and `?swapclass=a,b,...` (default every class): the swaps that have a cause on screen (the contact, the hit, the glow, the toss,
  *   the critical stance) or settle at rest (the return home, the recoveries): `cut` a cut inside the smear on the cause, `blend3` a 50 ms three-frame blend, `pick` the cut where the moment has a cover
  *   and the 50 ms blend where it has none AND the two drawings are close (not a big change: `SmearPlan.isBigChange`); two drawings that share nothing keep today's blend at rest, because a 50 ms blend of
  *   them is the head crossing 70 to 150 px in two frames (the harness reads it as a swap jerk). The pure `blend3` word is the plan's V2 arm and blends every class, big or small.
  *
  * - `?swapscope=all` (MF-22, default `pack`): the stance and cause looks play in ANY chapter, not only the two pack chapters, so another chapter can be measured with the rules on, one at a time
- *   (PR-0522). Nothing flips by default: the widening of the gate is the driver's call after the Chapter I and IV picks.
+ *   (PR-0522). Release 67 flips the two LOOKS to Bailey's picks in the two pack chapters; it does not widen the gate (the scope stays `pack`), and the pack-only reach of both words is unchanged.
  *
  * Game case (AGENTS.md rule 14): the switches are both games except `?interlude` (FFX-2 only: FFX's turn start comes before the menu). Read once, like the other URL switches (`SmearSwitch.ts`).
  */
@@ -26,6 +28,13 @@ import { demoChapter, isDemoChapter, packDemo, queryWord } from './DemoGate.ts';
 export type InterludeMode = 'all' | 'attack';
 export type StanceMode = 'today' | 'v1a' | 'v1b' | 'v3';
 export type CauseMode = 'today' | 'cut' | 'blend3' | 'pick';
+
+/**
+ * THE TWO PICKS AS DEFAULTS (release 67; Bailey's look choices of 2026-10-28, the driver's call under his delegation): what `?stance` and `?swapcause` read when the address does not name a value they know,
+ * in a page where the pack is on (a pack chapter, a desktop-class screen, no `?pack=off`). Change a pick by changing the letter on its line; `today` is release 66's look and is always a word.
+ */
+export const STANCE_DEFAULT: StanceMode = 'v1a';
+export const CAUSE_DEFAULT: CauseMode = 'pick';
 
 /** The swaps MF-06 names, each by what is happening on screen (`SwapClass.ts` reads them off the pair of paintings). */
 export type SwapClass = 'contact' | 'home' | 'hit' | 'recover' | 'glow' | 'castEnd' | 'toss' | 'itemEnd' | 'critical' | 'criticalOut';
@@ -51,16 +60,18 @@ export function interludeFromSearch(search: string | undefined): InterludeMode {
   return queryWord(search, 'interlude') === 'attack' ? 'attack' : 'all';
 }
 
-/** `?stance=` from a search string (pure): the word, only with the pack on; else `today`. */
+/** `?stance=` from a search string (pure): with the pack off, `today` (release 66's look, whatever the word); with it on, the word it names (`today`, `v1a`, `v1b`, `v3`), else {@link STANCE_DEFAULT}. */
 export function stanceFromSearch(search: string | undefined): StanceMode {
+  if (!packDemo(search)) return 'today';
   const w = queryWord(search, 'stance');
-  return (w === 'v1a' || w === 'v1b' || w === 'v3') && packDemo(search) ? w : 'today';
+  return w === 'today' || w === 'v1a' || w === 'v1b' || w === 'v3' ? w : STANCE_DEFAULT;
 }
 
-/** `?swapcause=` from a search string (pure): the word, only with the pack on; else `today`. */
+/** `?swapcause=` from a search string (pure): with the pack off, `today` (release 66's look, whatever the word); with it on, the word it names (`today`, `cut`, `blend3`, `pick`), else {@link CAUSE_DEFAULT}. */
 export function causeFromSearch(search: string | undefined): CauseMode {
+  if (!packDemo(search)) return 'today';
   const w = queryWord(search, 'swapcause');
-  return (w === 'cut' || w === 'blend3' || w === 'pick') && packDemo(search) ? w : 'today';
+  return w === 'today' || w === 'cut' || w === 'blend3' || w === 'pick' ? w : CAUSE_DEFAULT;
 }
 
 /** `?swapclass=a,b` from a search string (pure): the classes named; every class when the word is not given. A word that names none that exist (a typo) turns NONE on, never everything (review F-6). */
