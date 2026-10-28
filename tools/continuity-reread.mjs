@@ -48,14 +48,16 @@ export function folderFetcher(artDir) {
 /**
  * Read a kept recording again. Returns `{ meta, records, res, notes, cfg, measure }`.
  * @param {string} rawFile
- * @param {{table?: string, art?: string, waivers?: string|null, root?: string, cfgOverride?: object|null}} [opt]
+ * @param {{table?: string, art?: string, waivers?: string|null, root?: string, cfgOverride?: object|null, mutate?: ((rec: {meta: object, records: object[]}) => void)|null}} [opt]
+ *   `mutate` edits the parsed recording in place before it is read (what a different fade shape would have recorded: a prediction made from a run that already happened, never a measurement)
  */
-export async function reread(rawFile, { table, art, waivers = null, root = ROOT, cfgOverride = null } = {}) {
+export async function reread(rawFile, { table, art, waivers = null, root = ROOT, cfgOverride = null, mutate = null } = {}) {
   const { anchorsForPoses, analyzeRun } = await L('continuity-analyze.mjs');
   const { loadPoseMeasure } = await L('continuity-silhouette.mjs');
   const { loadPoseWaivers } = await L('continuity-waivers.mjs');
   const { continuityConfig, waiverPathFor } = await L('continuity.mjs');
   const { meta, records } = JSON.parse(zlib.gunzipSync(fs.readFileSync(rawFile)).toString('utf8'));
+  if (mutate) mutate({ meta, records });
   const cfg = continuityConfig();
   if (cfgOverride) for (const [k, v] of Object.entries(cfgOverride)) cfg[k] = v && typeof v === 'object' && !Array.isArray(v) ? { ...(cfg[k] ?? {}), ...v } : v;
   const tablePath = path.resolve(table ?? path.join(root, 'docs', 'target', 'pose-measure.json'));

@@ -323,6 +323,21 @@ describe('r40 instrument edit (b): a swap between a figure\'s twirl-* keys is on
       expect(r.summary.motion.jerksOverFail).toBe(r.jerks.length); // none excused
     });
 
+    it('pc-residues: with staged.jerkExcusePx the twirl cuts\' own jerks up to that size are reported, not gated; a bigger one stays a swap jerk (Rikku\'s step 4 of 5 read 44.7 px)', () => {
+      const wide = analyzeRun({ meta, records: c.records, anchors, cfg: { ...CFG, staged: { twirl: true, jerkExcusePx: 150 } } });
+      const tagged = wide.jerks.filter((j) => j.staged);
+      expect(tagged.length).toBeGreaterThanOrEqual(2);
+      expect(tagged.every((j) => (j as { stagedExcused?: boolean }).stagedExcused === true)).toBe(true);
+      expect(wide.summary.motion['jerksStagedExcused']).toBe(tagged.length);
+      expect(wide.summary.motion['worstStagedExcusedJerkPx']).toBeGreaterThan(100);
+      expect(wide.summary.motion.jerksAtStaged).toBe(tagged.length); // still counted at the staged steps
+      expect(wide.summary.motion.jerksOverFail).toBe(0); // and out of the verdict
+      expect(wide.summary.motion['swapJerksOverFail']).toBe(0);
+      const narrow = analyzeRun({ meta, records: c.records, anchors, cfg: { ...CFG, staged: { twirl: true, jerkExcusePx: 60 } } });
+      expect(narrow.summary.motion['jerksStagedExcused']).toBe(0); // 120 px each way is over 60: the keys are placed too far apart, a defect
+      expect(narrow.summary.motion.jerksOverFail).toBe(tagged.length);
+    });
+
     it('reads the same recording as snaps again with staged.twirl switched off', () => {
       const r = analyzeRun({ meta, records: c.records, anchors, cfg: { ...CFG, staged: { twirl: false } } });
       expect(r.swaps.every((s) => !s.staged)).toBe(true);

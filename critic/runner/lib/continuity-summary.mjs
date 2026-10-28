@@ -43,7 +43,7 @@ function cardHeadOf(heads) {
  * @param {number} battleSeconds seconds a battle was the screen being played (not paused)
  * @param {object} cfg   the policy's `continuity` block
  */
-export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], smear = null, battleSeconds, cfg, frameTime = null }) {
+export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], stagedExcusedJerks = [], dissolveJerks = [], smear = null, battleSeconds, cfg, frameTime = null }) {
   const counted = swaps.filter((s) => s.counted);
   const minutes = battleSeconds / 60;
   // CHK-026 judges a change of POSE: a swap between two dresspheres or two forms (`costume`) and a swap between two pose names that draw one painting
@@ -137,7 +137,7 @@ export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], 
       jerksLongFrame: jerks.filter(longFrame).length, swapJerksLongFrame: swapJerks.filter(longFrame).length, swapJerksSteadyOverFail: swapJerks.filter((j) => !longFrame(j) && j.px >= failPx).length,
       heldSwaps: held.length, longestHeldFrames: counted.reduce((m, s) => Math.max(m, s.held ? s.held.frames : 0), 0),
       stagedChanges: new Set(stagedSwaps.map((s) => `${s.figure}|${s.staged.seq}`)).size, stagedSteps: stagedSwaps.length,
-      stagedSnapsExcused: stagedSwaps.filter((s) => s.snapStaged).length, jerksAtStaged: jerks.filter((j) => j.staged).length,
+      stagedSnapsExcused: stagedSwaps.filter((s) => s.snapStaged).length, jerksAtStaged: jerks.filter((j) => j.staged).length + stagedExcusedJerks.length, jerksDissolveTravel: dissolveJerks.length, worstDissolveTravelPx: round(dissolveJerks.reduce((m, j) => Math.max(m, j.px), 0), 1), jerksStagedExcused: stagedExcusedJerks.length, worstStagedExcusedJerkPx: round(stagedExcusedJerks.reduce((m, j) => Math.max(m, j.px), 0), 1),
       jerksCovered: coveredJerks.length, worstCoveredJerkPx: round(coveredJerks.reduce((m, j) => Math.max(m, j.px), 0), 1),
       // motion pass (lane "core", step 2): planned smears (continuity-smear.mjs). The cuts the engine logged, the swaps that matched one, the snaps and the swap jerks they excused; a chapter summarised before has none.
       smearsPlanned: smear ? smear.planned : 0, smearSwaps: smear ? smear.matched : 0, smearSnapsExcused: smear ? smear.snapsExcused : 0,
