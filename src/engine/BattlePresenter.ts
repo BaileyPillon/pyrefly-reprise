@@ -36,7 +36,7 @@ import { createEventCtx, playEvent, type EventCtx } from './BattlePresenterEvent
 import { clockEngine, followMenuLevel, MenuWaker, runMenuClock } from './BattlePresenterActive.ts';
 import { flushArrivals } from './BattlePresenterArrivals.ts';
 import { TurnCutInBeat } from './TurnCutIn.ts';
-import { settleForMenu, settleOpening } from './BattlePresenterSettle.ts';
+import { menuStance, settleForMenu, settleOpening } from './BattlePresenterSettle.ts'; // `menuStance` (fluidity pass, MF-05) is re-exported there: the menu's ready stance, with or without the ready painting
 import { aeonMenuRows } from './PayRows.ts';
 import { playOpening } from './OpeningSkip.ts';
 import { playUnheld } from './TargetFrameHold.ts';
@@ -63,7 +63,6 @@ import { shotHoldMs } from './fx/shotHold.ts';
 import { applyEventToVitals, captureVitals, projectState, type VitalsMap } from './BattlePresenterVitals.ts';
 import { koWipedStatuses } from './BattlePresenterKoWipe.ts';
 import { menuBlocks } from './KeySlots.ts';
-import { menuStance } from './motion/StanceSwap.ts'; // fluidity pass (MF-05)
 import { setMenuHold } from './motion/MenuHold.ts'; // motion pass (lane "core"): the actor-side new looks ask whether an FFX-2 menu holds them back (D-357)
 import { blowHeld, revealBlow } from './motion/SkillTravel.ts'; // r38-motion SKILL TRAVEL: a blow whose shot is in flight shows its numeral and HP rows when it lands
 

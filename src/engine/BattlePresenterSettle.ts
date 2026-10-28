@@ -2,6 +2,8 @@
 import { MOMENT_TIMING } from './BattleMoments.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 
+export { menuStance } from './motion/StanceSwap.ts'; // fluidity pass (MF-05): the command menu's ready stance (moved here so the presenter, already over 400 lines, grows by no import line)
+
 /**
  * The opening's end, before the first decision is asked for (so before any command menu can open): CHAPTER FRAMING's first plan has landed on the figures, or been given up after a
  * bounded wait (`fx/mix/openingGate.ts`; both games). The plan is put on screen only while no menu is open, so a menu that opened first used to hold it back until the first confirm and

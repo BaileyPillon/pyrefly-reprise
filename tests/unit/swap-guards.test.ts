@@ -6,6 +6,9 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { CAUSE_MAX_ANCHOR, causeCutPlan, causeCutTooFar } from '../../src/engine/motion/SmearPlan.ts';
 import { noteSmear, resetSmearLog, smearLog } from '../../src/engine/motion/SmearLog.ts';
 import { noteDesigned, noteReason, resetSwapLog, swapLog } from '../../src/engine/motion/SwapLog.ts';
+import { SWAP_CLASSES, classesFromSearch } from '../../src/engine/motion/SwapSwitch.ts';
+import { installPoseSwapDebug } from '../../src/debug/poseSwapApi.ts';
+import { installSmearDebug } from '../../src/debug/smearApi.ts';
 
 afterEach(() => {
   resetSmearLog();
@@ -48,5 +51,32 @@ describe('the logs hold a whole long fight', () => {
     const l = swapLog();
     expect(l.reasons).toHaveLength(1500);
     expect(l.designed).toHaveLength(1500);
+  });
+});
+
+describe('review F-6: the classes word', () => {
+  it('names the classes it lists, every class when the word is not given, and NONE when it names none that exist (a typo is not "everything")', () => {
+    expect([...classesFromSearch('?swapclass=hit,glow')].sort()).toEqual(['glow', 'hit']);
+    expect([...classesFromSearch('')].sort()).toEqual([...SWAP_CLASSES].sort());
+    expect([...classesFromSearch('?swapclass=')].sort()).toEqual([...SWAP_CLASSES].sort());
+    expect([...classesFromSearch('?swapclass=hitt')]).toEqual([]);
+    expect([...classesFromSearch('?swapclass=hitt,nonsense')]).toEqual([]);
+    expect([...classesFromSearch('?swapclass=hit,nonsense')]).toEqual(['hit']);
+  });
+});
+
+describe('review F-2: the new debug reader does not replace the older swapLog()', () => {
+  it('swapLog() stays the ?swap=aligned record (an array); the fluidity record is swapReasons()', () => {
+    const api: Record<string, unknown> = {};
+    installPoseSwapDebug(api); // main.ts installs the two in this order
+    installSmearDebug(api);
+    const f = api as Record<string, (...a: unknown[]) => unknown>;
+    expect(f['swapLog']!()).toEqual([]);
+    expect(f['swapReasons']!()).toEqual({ reasons: [], designed: [] });
+    noteReason('yuna', 'ready', 'menu', 'idle');
+    expect((f['swapReasons']!() as { reasons: unknown[] }).reasons).toHaveLength(1);
+    expect(f['swapReasons']!(true)).toMatchObject({ reasons: [expect.objectContaining({ actor: 'yuna' })] });
+    expect(f['swapReasons']!()).toEqual({ reasons: [], designed: [] });
+    expect(f['swapLog']!()).toEqual([]);
   });
 });

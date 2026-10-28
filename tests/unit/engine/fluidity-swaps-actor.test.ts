@@ -270,18 +270,31 @@ describe('?swapcause: a swap with a cause on screen', () => {
     expect(lasts(cast)).toBeGreaterThan(100);
   });
 
-  it('an open FFX-2 command menu allows no cut and no flash (D-357): a cut asked for there is the 50 ms blend; today\'s stays today\'s', () => {
+  it('an open FFX-2 command menu allows no cut and no flash (D-357): a cut asked for there, between two drawings that are close, is the 50 ms blend; today\'s stays today\'s', () => {
     setMenuHold(() => true);
     setCauseMode('cut');
-    const r = playSwap(yuna(), 'hurt');
+    const r = playSwap(yuna(ALL), 'hurt');
     expect(smearLog()).toHaveLength(0);
     expect(lasts(r)).toBeLessThanOrEqual(67);
     expect(swapLog().designed[0]).toMatchObject({ cls: 'hit' });
     setCauseMode('today');
     resetSwapLog();
-    const t = playSwap(yuna(), 'hurt');
+    const t = playSwap(yuna(ALL), 'hurt');
     expect(lasts(t)).toBeGreaterThan(100);
     expect(swapLog().designed).toHaveLength(0);
+  });
+
+  it('review F-6: a cut that an open menu turned into the blend keeps the big-pair guard of pick: two drawings that share nothing stay today\'s 120 ms dissolve, never the 50 ms pop of the head', () => {
+    setMenuHold(() => true);
+    for (const word of ['cut', 'pick'] as const) {
+      setCauseMode(word);
+      resetSwapLog();
+      resetSmearLog();
+      const r = playSwap(yuna(), 'hurt'); // idle LEFT, hurt RIGHT: a big pair, the hit is a covered moment (a cut asked for)
+      expect(lasts(r), word).toBeGreaterThan(100);
+      expect(swapLog().designed, word).toHaveLength(0);
+      expect(smearLog(), word).toHaveLength(0);
+    }
   });
 
   it('a knock-out and the pack\'s other chapters are never touched', () => {
@@ -318,5 +331,64 @@ describe('?swapscope=all (MF-22): the looks in any chapter', () => {
     const up = playSwap(yuna(), 'ready');
     expect(lasts(up)).toBeLessThanOrEqual(67);
     expect(swapLog().designed.at(-1)).toMatchObject({ cls: 'stance' });
+  });
+});
+
+describe('review F-1: a flinch hands the pose back WITH its painting (a girl struck while her command menu is open, Active ATB)', () => {
+  const stepFrames = (a: Actor, n: number): void => {
+    for (let i = 0; i < n; i++) a.update(1 / 60);
+  };
+  const shown = (a: Actor): string => slotsOf(a).reduce((best, s) => (s.fade > best.fade ? s : best)).pose;
+
+  it('today: the menu is the ready painting, and the flinch comes back to it', () => {
+    const a = yuna();
+    a.setPose('ready');
+    stepFrames(a, 40);
+    expect(shown(a)).toBe('ready');
+    a.recoil(340, 0.28);
+    stepFrames(a, 12);
+    expect(shown(a)).toBe('hurt');
+    stepFrames(a, 60);
+    expect(shown(a)).toBe('ready');
+    expect(a.lifeState).toBe('ready');
+  });
+
+  it('the ready stance on the idle painting (?stance=v1a, v1b): struck with the menu open, she comes back on the IDLE painting and still on the ready stance', () => {
+    const a = yuna();
+    a.setPose('ready', { paint: 'idle' });
+    stepFrames(a, 40);
+    expect(shown(a)).toBe('idle');
+    a.recoil(340, 0.28);
+    stepFrames(a, 12);
+    expect(shown(a)).toBe('hurt');
+    stepFrames(a, 60);
+    expect(shown(a)).toBe('idle'); // was 'ready' (the real ready painting) before the fix
+    expect(a.lifeState).toBe('ready');
+  });
+
+  it('a later plain request after the flinch is not held to the old painting: the strike wind-up (v1a) still shows the ready painting', () => {
+    const a = yuna();
+    a.setPose('ready', { paint: 'idle' });
+    stepFrames(a, 40);
+    a.recoil(340, 0.28);
+    stepFrames(a, 80);
+    a.setPose('ready');
+    stepFrames(a, 40);
+    expect(shown(a)).toBe('ready');
+    a.recoil(340, 0.28);
+    stepFrames(a, 80);
+    expect(shown(a)).toBe('ready'); // the flinch hands back what was asked last, the plain ready
+  });
+
+  it('a plain pose with no painting option is handed back exactly as before (idle, cast)', () => {
+    const a = yuna();
+    a.recoil(340, 0.28);
+    stepFrames(a, 80);
+    expect(shown(a)).toBe('idle');
+    const b = yuna();
+    b.setPose('cast', { immediate: true });
+    b.recoil(340, 0.28);
+    stepFrames(b, 80);
+    expect(shown(b)).toBe('cast');
   });
 });

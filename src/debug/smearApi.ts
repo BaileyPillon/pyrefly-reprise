@@ -23,8 +23,8 @@ export function installSmearDebug(api: Record<string, unknown>): void {
     return { planned: l.length, plane: l.filter((e) => e.kind === 'plane').length, rig: l.filter((e) => e.kind === 'rig').length, relightPinned: pinnedRelightCount(), relight: { ...relightStats } };
   };
   api['smearReset'] = (): void => resetSmearLog();
-  // The fluidity pass (lane L1; `motion/SwapSwitch.ts`): `swapLog()` is why the presenter asked for a painting and every blend it designed; `swapSwitch({...})` reads or forces the switches.
-  api['swapLog'] = (reset = false) => {
+  // The fluidity pass (lane L1; `motion/SwapSwitch.ts`): `swapReasons()` is why the presenter asked for a painting and every blend it designed (`{ reasons, designed }`; NOT `swapLog()`, the older `?swap=aligned` record of `poseSwapApi.ts`, which this must not replace); `swapSwitch({...})` reads or forces the switches.
+  api['swapReasons'] = (reset = false) => {
     const out = swapLog(reset === true);
     if (reset === true) resetSwapLog();
     return out;

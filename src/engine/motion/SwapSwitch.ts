@@ -2,8 +2,10 @@
  * THE SWAP SWITCHES OF THE MOTION-FLUIDITY PASS (lane L1 "poses and swaps"; Bailey, 2026-10-26 ~13:45 EDT: "I need an additional pass for motion, motion fluidity, animations etc please", with every
  * decision delegated to the driver). Items MF-01, MF-05 and MF-06 of the fluidity plan (`D:/Tools/pyrefly-scratch/2026-10-26/fluidity/plan.json`). Pure: no `three`, no DOM but the address of the page.
  *
- * Every look is an address word on ONE build and **every default is today's look**; the clips are made by changing the word, never the build. All of them play in the two pack chapters only (Chapter I
- * `seymour-flux`, FFX; Chapter IV `ffx2-bahamut`, FFX-2: `DemoGate`), with the pack on (`?pack=off` keeps release 62's), because the planner and the smear they ride on play only there (MF-22 widens it).
+ * Every look is an address word on ONE build and **every default is today's look, except MF-01** (`?interlude`, no look change, ON); the clips are made by changing the word, never the build. The B words
+ * (`?stance`, `?swapcause`, `?swapclass`) play in the two pack chapters only (Chapter I `seymour-flux`, FFX; Chapter IV `ffx2-bahamut`, FFX-2: `DemoGate`), with the pack on (`?pack=off` keeps release 62's),
+ * because the planner and the smear they ride on play only there (`?swapscope=all`, MF-22, widens it). `?interlude` does NOT depend on the pack: it plays in all seven FFX-2 chapters (confirmed on Trema) and
+ * under `?pack=off`; it is a turn-start rule (`KeyPoses.readyCarriesIntoCastOrItem`), not a smear.
  *
  * - `?interlude=all|attack` (MF-01, FFX-2 only, **no look change, ON**): `all` (the default) holds a girl's menu `ready` through the turn start into her own attack, cast or item; `attack` is post-flicker's
  *   attack-only hold (the "before" of MF-01).
@@ -61,13 +63,11 @@ export function causeFromSearch(search: string | undefined): CauseMode {
   return (w === 'cut' || w === 'blend3' || w === 'pick') && packDemo(search) ? w : 'today';
 }
 
-/** `?swapclass=a,b` from a search string (pure): the classes named; every class when none is. */
+/** `?swapclass=a,b` from a search string (pure): the classes named; every class when the word is not given. A word that names none that exist (a typo) turns NONE on, never everything (review F-6). */
 export function classesFromSearch(search: string | undefined): ReadonlySet<SwapClass> {
-  const named = queryWord(search, 'swapclass')
-    .split(',')
-    .map((s) => s.trim())
-    .filter((s): s is SwapClass => (SWAP_CLASSES as readonly string[]).includes(s));
-  return new Set(named.length ? named : SWAP_CLASSES);
+  const word = queryWord(search, 'swapclass');
+  if (!word) return new Set(SWAP_CLASSES);
+  return new Set(word.split(',').map((s) => s.trim()).filter((s): s is SwapClass => (SWAP_CLASSES as readonly string[]).includes(s)));
 }
 
 /** `?swapscope=all` from a search string (pure): `all` only with the pack on; else `pack`. */

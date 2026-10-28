@@ -625,8 +625,8 @@ export class PaintedActor extends Group {
   // --- life ----------------------------------------------------------------
   /** Posture + state machine. Null when `life: false`. */
   private readonly life: ActorLife | null;
-  /** The pose name that was *asked* for, before any fallback. */
-  private requested = '';
+  /** The pose name that was *asked* for, before any fallback, and the painting it was drawn with when that differs (MF-05: `setPose('ready', { paint: 'idle' })`, the ready stance on the idle painting). */
+  private requested = ''; private requestedPaint: string | undefined;
   /** Extra tilt and drop the KO fall (and the revive rise) contribute. */
   private fallTilt = 0;
   private fallDrop = 0;
@@ -1140,6 +1140,7 @@ export class PaintedActor extends Group {
     if (!next) return;
     const already = this.requested === name && this.pose === resolved;
     this.requested = name;
+    this.requestedPaint = opts?.paint;
     if (already && !opts?.force) return;
 
     const from = this.active;
@@ -1675,7 +1676,7 @@ export class PaintedActor extends Group {
   flinch(ms = 340): void {
     const life = this.life;
     if (!life || life.state === 'down' || this.flinching) return;
-    const back = this.requested || 'idle';
+    const [back, backPaint] = [this.requested || 'idle', this.requestedPaint]; // MF-05: a girl struck with her menu open (?stance=v1a|v1b) comes back on the idle painting, not the ready one
     const token = ++this.flinchToken;
     this.flinching = true;
     try {
@@ -1684,8 +1685,7 @@ export class PaintedActor extends Group {
       this.flinching = false;
     }
     this.tintHurt(Math.max(160, ms * 0.7));
-    // A plain timer: hold the flinch, then hand the pose back — unless someone
-    // (a KO, the next action) has taken it in the meantime.
+    // A plain timer: hold the flinch, then hand the pose back (and its painting) — unless someone (a KO, the next action) has taken it in the meantime.
     this.tweens.to(0, 1, {
       durationMs: Math.max(1, ms),
       easing: 'linear',
@@ -1693,7 +1693,7 @@ export class PaintedActor extends Group {
       onComplete: () => {
         if (this.flinchToken !== token) return;
         if (this.life?.state !== 'hurt') return;
-        this.setPose(back === 'hurt' ? 'idle' : back);
+        this.setPose(back === 'hurt' ? 'idle' : back, back !== 'hurt' && backPaint ? { paint: backPaint } : undefined);
       },
     });
   }
