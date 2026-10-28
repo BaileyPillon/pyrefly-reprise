@@ -32,7 +32,7 @@ describe('Q: a retried demo fight opens hurried', () => {
 
   it('the flow arms it and builds the stage behind the defeat card', () => {
     const flow = src('src/app/screens/BattleScreenFlow.ts');
-    expect(flow).toContain('if (demoQuickRetry(id, attempt)) openingHurry = true;');
+    expect(flow).toContain('if (demoQuickRetry(id, attempt) || publicQuickRetry(id, attempt)) openingHurry = true;'); // release 67 added the public address's Chapter I retry beside it (r67-public-retry-opening.test.ts)
     expect(flow).toContain('warmDemoFights(this.app, [chapter.id], { light: true })');
     expect(src('src/app/demo/demoWarm.ts')).toContain("'pro-defeat'");
   });

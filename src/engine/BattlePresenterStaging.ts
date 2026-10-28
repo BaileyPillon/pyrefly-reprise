@@ -180,9 +180,12 @@ export function stageKo(ctx: EventCtx, id: CombatantId): Promise<void> | undefin
 /** The foe's latest move, per presenter: the defeat card names it ("Felled by Total Annihilation"). */
 const foeMove = new WeakMap<EventCtx, string>();
 
-/** `action-start` by a foe: remember its move's name for the defeat card. */
+/**
+ * `action-start` by a foe: remember its move's name for the defeat card, at EVERY battle speed (release 67, round 30's PR-0546; both games). It used to ask for the staging port first, and there is none at SKIP speed (the
+ * staging itself is off then), so a loss at SKIP read "The party has fallen" although the card is up and the log names the killing move. Remembering a name draws nothing and costs one map write.
+ */
 export function noteFoeMove(ctx: EventCtx, event: Extract<BattleEvent, { type: 'action-start' }>): void {
-  if (!stagingPort(ctx, 'ending') || ctx.stage.sideOf(event.actorId) !== 'enemy' || !event.abilityName) return;
+  if (ctx.stage.sideOf(event.actorId) !== 'enemy' || !event.abilityName) return;
   foeMove.set(ctx, event.abilityName);
 }
 
@@ -239,13 +242,16 @@ export function stageVictory(ctx: EventCtx, kind: 'pose' | 'hold', floor: number
   return hold;
 }
 
-/** The last party member falls: the scene stays under a light dim and a caption drops in; the card is the flow's overlay. True when the staging took the defeat's grade (the caller then skips today's black flash). */
+/**
+ * The last party member falls: the scene stays under a light dim and a caption drops in; the card is the flow's overlay. True when the staging took the defeat's grade (the caller then skips today's black flash).
+ * **The card's cause line is written whenever the ending piece is on for this chapter, at every battle speed and with or without a layer** (release 67, PR-0546; both games): the flow puts the card up wherever
+ * `stagingPieceOnFor('ending')` says so, and at SKIP speed the staging stays off (no dim, no caption, today's black flash) while the card still names what felled the party.
+ */
 export function stageFall(ctx: EventCtx): boolean {
+  if (stagingPieceOn('ending')) setDefeatNote({ ...(foeMove.has(ctx) ? { cause: foeMove.get(ctx)! } : {}) });
   const port = stagingPort(ctx, 'ending');
   if (!port) return false;
-  const facts = stageFacts(ctx);
-  setDefeatNote({ ...(foeMove.has(ctx) ? { cause: foeMove.get(ctx)! } : {}) });
-  port.ending({ ...facts, kind: 'fall', party: partyOf(ctx) });
+  port.ending({ ...stageFacts(ctx), kind: 'fall', party: partyOf(ctx) });
   return true;
 }
 

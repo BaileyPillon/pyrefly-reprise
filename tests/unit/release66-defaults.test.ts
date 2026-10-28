@@ -2,8 +2,10 @@
  * Release 66 (the motion-fluidity pass, lanes L1 to L5 merged): every address word the five lanes added read release 65's look when the address said nothing, and when it said something the word
  * did not know. One place to read the table; each lane's own test file pins the same words in depth (named beside each row).
  *
- * **Release 67 moved three of them to Bailey's picks** (the driver's call under his delegation, 2026-10-28): `?stance` reads `v1a`, `?swapcause` reads `pick` and `?hit` reads `knock`. This file pins those
- * three at the new defaults; `today` is still a word on each and is release 66's look (`release67-picks.test.ts` pins that `?stance=today&swapcause=today&hit=today` gives release 66's defaults, and where
+ * **Release 67 moved three of them to Bailey's picks** (the driver's call under his delegation, 2026-10-28): `?stance` reads `v1a`, `?swapcause` reads `pick` and `?hit` reads `knock`; **and message 2's
+ * two lane L2 picks: `?run` reads `flow` and `?rigko` reads `whole`** (plus `?curves`, an older word, which reads `real-snappy` in the pack: `motion-core-curves`, `release67-picks`), **and `?strikeshape` reads `travel`** (the driver's call, 2026-10-28:
+ * the real-snappy strike travels over the house dash instead of one frame; `release67-picks`). This file pins those
+ * six at the new defaults; `today` is still a word on each and is release 66's look (`release67-picks.test.ts` pins that `?stance=today&swapcause=today&hit=today` gives release 66's defaults, and where
  * each pick plays). Every other row below is unchanged.
  *
  * | word | default (nothing in the address) | lane test |
@@ -11,7 +13,9 @@
  * | `?interlude=` | `all` (A, on: a girl keeps `ready` into her spell or item; `attack` is release 65's hold) | ffx2-interlude |
  * | `?stance=` `?swapcause=` `?swapclass=` `?swapscope=` | **`v1a`, `pick`** (release 67; `today` on a page with the pack off), every class, `pack` | fluidity-swaps-actor, ffx2-stance, release67-picks |
  * | `?hit=` | **`knock`** (release 67; `today` is release 66's) | mf03, release67-picks |
- * | `?run=` `?kotopple=` `?rigko=` `?hurtstring=` `?summon=` `?ramps=` `?shakeband=` `?strikeshape=` | `today` | mf04 to mf27, mf11, mf12 |
+ * | `?run=` `?rigko=` | **`flow`, `whole`** (release 67; `today` is release 66's) | mf04-run-ease, mf11-rig-handoff, release67-picks |
+ * | `?strikeshape=` | **`travel`** (release 67; acts only where `?curves=real-snappy` plays; `today` is the clip's own dash) | mf14-strike-shape, release67-picks |
+ * | `?kotopple=` `?hurtstring=` `?summon=` `?ramps=` `?shakeband=` | `today` | mf09 to mf27, mf12 |
  * | `?atbbars=` `?ctbslide=` `?gridease=` `?triggerhappy=` (and `?fluidui=`) | off | atb-live, ctb-slide, trigger-happy-smooth |
  * | `?beats=` | the frame clock (A, on; `wall` is release 65's `setTimeout` waits) | beat-clock |
  * | `?alphathumb=` | `on` (A; `off` is release 64/65's reading, `exact` keeps only the exact breathing field) | alpha-thumb |
@@ -29,10 +33,10 @@ import { governFixed } from '../../src/engine/governor/DemoGovernor.ts';
 
 const NOTHING = ['', '?', '?nonsense=1', '?x=y&z=w'];
 
-/** Release 67: the one lane L2 word that is not today by default. */
-const PICKED: Partial<Record<MoveKey, string>> = { hit: 'knock' };
+/** Release 67: the four lane L2 words that are not today by default (`hit` from message 1, `run` and `rigko` from message 2, `strikeshape` the driver's follow-on to `curves=real-snappy`). */
+const PICKED: Partial<Record<MoveKey, string>> = { hit: 'knock', run: 'flow', rigko: 'whole', strikeshape: 'travel' };
 
-describe('lane L2 words: every one reads its default (today, but for the release 67 pick `hit=knock`) when the address does not name one of its values', () => {
+describe('lane L2 words: every one reads its default (today, but for the release 67 picks `hit=knock`, `run=flow`, `rigko=whole`, `strikeshape=travel`) when the address does not name one of its values', () => {
   for (const key of Object.keys(MOVE_WORDS) as MoveKey[]) {
     const want = PICKED[key] ?? 'today';
     it(`?${key}= is '${want}' with no word, an empty word, or a word it does not know`, () => {
@@ -45,9 +49,9 @@ describe('lane L2 words: every one reads its default (today, but for the release
       for (const v of MOVE_WORDS[key]) expect(moveWordFromSearch(`?${key}=${v}`, key)).toBe(v);
     });
   }
-  it('has exactly the nine words the handoff lists, and exactly one pick among them', () => {
+  it('has exactly the nine words the handoff lists, and exactly four picks among them', () => {
     expect(Object.keys(MOVE_WORDS).sort()).toEqual(['hit', 'hurtstring', 'kotopple', 'ramps', 'rigko', 'run', 'shakeband', 'strikeshape', 'summon']);
-    expect(MOVE_DEFAULTS).toEqual({ hit: 'knock' });
+    expect(MOVE_DEFAULTS).toEqual({ hit: 'knock', run: 'flow', rigko: 'whole', strikeshape: 'travel' });
   });
 });
 

@@ -84,7 +84,7 @@ describe('1. 200b: the conference pack is the default in Chapter I and Chapter I
   it('?pro=off takes only the three pro lanes back; the motion pack and the HUD stay on', () => {
     const s = '?pro=off';
     expect([proModeFromSearch(s), stagingModeFromSearch(s), parseProCamKeys(s).camera]).toEqual(['today', 'today', false]);
-    expect([curvesModeFromSearch(s), momentsModeFromSearch(s), hudF1ModeFromSearch(s)]).toEqual(['new', 'new', 'f1']);
+    expect([curvesModeFromSearch(s), momentsModeFromSearch(s), hudF1ModeFromSearch(s)]).toEqual(['real-snappy', 'new', 'f1']); // the curves' mode is real-snappy since release 67 (new is release 66's, by name)
   });
 });
 

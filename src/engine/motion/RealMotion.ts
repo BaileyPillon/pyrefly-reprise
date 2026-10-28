@@ -75,14 +75,18 @@ export const TRAVEL_REST_SHARE = 0.2;
 /** MF-14 V3: of that rest, the settle (a quiet phase) pays first: it keeps at most this share of the move's total, and the return keeps its 1.1 s length when the rest allows. */
 export const TRAVEL_SETTLE_FLOOR = 0.06;
 
-/** MF-14 V3 is on: the 1.1 s pick with the house dash (`?strikeshape=travel`). */
+/** MF-14 V3 is on: the 1.1 s pick with the house dash (`?strikeshape=travel`, the default since release 67; `?strikeshape=today` is the clip's own dash). Only the 1.1 s pick reads it, so it acts exactly where `?curves=real-snappy` plays. */
 export const houseTravel = (kind: RealKind): boolean => kind === 'snappy' && moveWord('strikeshape') === 'travel';
 
 /**
  * The phases of a real attack in a mode. `real`: the clips'. `snappy`: the same proportions at 1.1 s, which gives a quick swing (Paine's travel is 34 ms: 228 px in one frame at 2,560 wide). With
- * `?strikeshape=travel` (MF-14 V3, only at the 1.1 s pick, both games): the same total, the dash kept at the game's house travel and ease (FFX 250 ms, FFX-2 200), the wind-up at least 300 ms, the hold 300, and the
+ * `?strikeshape=travel` (MF-14 V3, the default since release 67, only at the 1.1 s pick, both games): the same total, the dash kept at the game's house travel and ease (FFX 250 ms, FFX-2 200), the wind-up at least 300 ms, the hold 300, and the
  * return and the settle paying for it, never under a fifth of the total, the settle first (the way home keeps the length it has at the 1.1 s pick when it can, so V3 does not trade a slow dash for a
  * faster flight home: Paine's return at 118 ms was a 47 px frame in the first capture). Pure; `today` and the real speed return the row's phases untouched.
+ *
+ * **What "the dash" is for a figure whose clip leaps** (`row.arc >= APPROACH_LEAP_MIN`: Tidus, Wakka, Seymour Flux, Bahamut): `travelMs` is still the house 250 or 200, but `RealStrike.realPre` plays the arc and the x path
+ * over wind-up PLUS travel as one leap (no separate stand-and-pull-back, then dash), so for them the visible approach is `windupMs + travelMs`: Tidus 558 ms (about half a second), Seymour Flux 564, Bahamut 555 (before the heft stretch), and
+ * the dash itself is the clip's recorded path over that span (the CP-05 card reads about 25 px a 60 Hz frame at 2,560 wide for Tidus). The 308 / 250 pair reads as a wind-up and a dash only for a figure that crouches into the lunge (Yuna, Auron, Kimahri, Lulu; every FFX-2 girl).
  */
 export function phasesOf(game: CurveGame, row: RealAttackRow, kind: RealKind): RealPhases {
   if (kind !== 'snappy') return row.real;
