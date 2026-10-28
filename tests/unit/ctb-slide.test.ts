@@ -92,6 +92,56 @@ describe('FLIP of the turn-order list', () => {
     expect(slideRows(el, new Map())).toBe(0);
   });
 
+  it('M1 of the review: a row with no box (display: none) has no old place, so it fades in and never slides in from the page corner; a row that ends hidden is left alone', () => {
+    // the F1 strip: the 4th row on is display:none, whose rect is all zeros
+    const el = list([['a', 'none'], ['b', 'none'], ['c', 'none'], ['d', 'none']]);
+    rects.set('a', { left: 100, top: 0, width: 100 });
+    rects.set('b', { left: 100, top: 20, width: 100 });
+    rects.set('c', { left: 100, top: 40, width: 100 });
+    rects.set('d', { left: 0, top: 0, width: 0 }); // hidden
+    const before = measureRows(el);
+    expect([...before.keys()]).toEqual(['a#0', 'b#0', 'c#0']); // the hidden row is not measured as a place at (0,0)
+    // one turn later: a is gone to the back (hidden), b and c each move up a place, d is now visible
+    const next = list([['b', 'none'], ['c', 'none'], ['d', 'none'], ['a', 'none']]);
+    rects.set('b', { left: 100, top: 0, width: 100 });
+    rects.set('c', { left: 100, top: 20, width: 100 });
+    rects.set('d', { left: 100, top: 40, width: 100 });
+    rects.set('a', { left: 0, top: 0, width: 0 }); // hidden now
+    played = [];
+    const n = slideRows(next, before);
+    expect(n).toBe(3);
+    const by = new Map(played.map((p) => [p.el.dataset['actor'], p]));
+    expect(by.get('b')!.keyframes[0]!['translate']).toBe('0.00px 20.00px');
+    expect(by.get('c')!.keyframes[0]!['translate']).toBe('0.00px 20.00px');
+    expect(by.get('d')!.keyframes).toEqual([{ opacity: 0 }, { opacity: 1 }]); // it fades in; nothing starts at (0,0)
+    expect(by.has('a')).toBe(false); // hidden now, nothing is played on it
+    for (const p of played) expect(JSON.stringify(p.keyframes)).not.toMatch(/-?[1-9]\d{2,}\.\d\dpx/); // no slide of hundreds of px
+  });
+
+  it('the unit that acted, going from first to last, fades in at its new place instead of crossing the queue; a two-place move still slides', () => {
+    const six = ['a', 'b', 'c', 'd', 'e', 'f'];
+    const el = list(six.map((id) => [id, 'none'] as [string, string]));
+    six.forEach((id, i) => rects.set(id, { left: 100, top: i * 20, width: 100 }));
+    const before = measureRows(el);
+    const order = ['b', 'c', 'd', 'e', 'f', 'a'];
+    const next = list(order.map((id) => [id, 'none'] as [string, string]));
+    order.forEach((id, i) => rects.set(id, { left: 100, top: i * 20, width: 100 }));
+    played = [];
+    expect(slideRows(next, before)).toBe(6);
+    const by = new Map(played.map((p) => [p.el.dataset['actor'], p]));
+    expect(by.get('a')!.keyframes).toEqual([{ opacity: 0 }, { opacity: 1 }]); // 5 places: no crossing
+    for (const id of ['b', 'c', 'd', 'e', 'f']) expect(by.get(id)!.keyframes[0]!['translate']).toBe('0.00px 20.00px');
+    // a unit that waits two places: the others move one, it moves two, and that still slides (ratio 2 of 2.5)
+    const el3 = list([['a', 'none'], ['b', 'none'], ['c', 'none']]);
+    ['a', 'b', 'c'].forEach((id, i) => rects.set(id, { left: 100, top: i * 20, width: 100 }));
+    const before3 = measureRows(el3);
+    const next3 = list([['b', 'none'], ['c', 'none'], ['a', 'none']]);
+    ['b', 'c', 'a'].forEach((id, i) => rects.set(id, { left: 100, top: i * 20, width: 100 }));
+    played = [];
+    expect(slideRows(next3, before3)).toBe(3);
+    expect(played.every((p) => p.keyframes[0]!['translate'] !== undefined)).toBe(true);
+  });
+
   it('CtbList.render slides only with the word on and a mounted list; the markup is the same either way', () => {
     const mk = (id: string, tick: number): TurnPreview => ({ actorId: id, isParty: true, tickValue: tick, letterTag: null, overdriveReady: false, chargeStage: 0, portraitKey: id }) as unknown as TurnPreview;
     const state: Record<string, AnyCombatant> = { a: { id: 'a', name: 'A', side: 'party', spriteKey: 'a' } as AnyCombatant, b: { id: 'b', name: 'B', side: 'party', spriteKey: 'b' } as AnyCombatant };
