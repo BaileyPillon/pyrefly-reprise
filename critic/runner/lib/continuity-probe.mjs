@@ -25,9 +25,7 @@
 //     to the plane's record while the camera moves): the camera shifts a head 1.8 units above the origin by far more than it shifts
 //     the origin, so the node side projects the shift of each tracked point of the painting (continuity-camera.mjs) and no longer
 //     subtracts the origin's;
-//   - from probe version 3 (pc-residues, PR-0459), per figure, `pl`: for each of its two planes (the order of `s`, 0 for a plane not recorded) `[wx, wy, lock]`, the plane's size in WORLD units
-//     (the length of the mesh's two axes in its world matrix) and the head lock's factor on the table's scale (`slot.lock`, 1 = none). The head box times the world size is the head as the
-//     CARD carries it, with no camera in it: the harness reads that beside the projected head (continuity-pure.mjs `head.card`);
+//   - from probe version 3 (PR-0459), per figure `pl`: per plane (the order of `s`; 0 if not recorded) `[wx, wy, lock]`: its WORLD size and the head lock's factor (1 = none); head box times world size is the head as the CARD carries it (`head.card`);
 //   - the battle log's new events, with the frame they arrived in;
 //   - a rolling buffer of rendered frames (the WebGL canvas at `ringScale`), from which, around every pose swap and
 //     every jerk candidate, `beforeFrames` before and `afterFrames` after are cropped to the figure, JPEG encoded a
@@ -316,16 +314,14 @@ export function createProbe(cfg, env) {
       if (flip) fs.lastFlip = n;
       const recent = n - fs.lastFlip <= cfg.recentFrames;
 
-      const slots = [0, 0];
-      const pl = [0, 0]; // probe 3: [wx, wy, lock] per plane, in the order of `slots`
+      const slots = [0, 0], pl = [0, 0]; // pl (probe 3): [wx, wy, lock] per plane, in the order of `slots`
       for (let i = 0; i < 2; i++) {
         const sl = a.slots[i];
         if (!sl || !sl.pose) continue;
         if (!(i === act || sl.fade > 0.001 || recent)) continue;
         const k = poseKey(fi, a, sl);
         const m = sl.mesh.matrixWorld.elements;
-        const rec = [k, R3(sl.fade), sl.mesh.visible ? 1 : 0];
-        pl[i] = [R3(Math.hypot(m[0], m[1], m[2])), R3(Math.hypot(m[4], m[5], m[6])), R3(typeof sl.lock === 'number' ? sl.lock : 1)];
+        const rec = [k, R3(sl.fade), sl.mesh.visible ? 1 : 0]; pl[i] = [R3(Math.hypot(m[0], m[1], m[2])), R3(Math.hypot(m[4], m[5], m[6])), R3(typeof sl.lock === 'number' ? sl.lock : 1)];
         const cs = []; // where the camera's change alone moved each corner (CSS px): the corner's world point under this frame's camera minus under the last frame's
         for (const [lx, ly] of CORNERS) {
           const wx = m[0] * lx + m[4] * ly + m[12], wy = m[1] * lx + m[5] * ly + m[13], wz = m[2] * lx + m[6] * ly + m[14];

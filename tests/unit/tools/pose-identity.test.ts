@@ -141,6 +141,16 @@ describe('the judgement', () => {
     expect(j.ratio!).toBeGreaterThanOrEqual(FAIL_RATIO);
   });
 
+  it('takes the attack as the ceiling (review minor 6a): the same white top fails against a figure whose attack stays near its idle, and passes against one whose attack wears it', () => {
+    const ready = read({ body: WHITE });
+    const nearAttack = judgeIdentity({ idle, pose: ready, attack });
+    const farAttack = judgeIdentity({ idle, pose: ready, attack: read({ body: WHITE }) });
+    expect(nearAttack.verdict).toBe('fail');
+    expect(farAttack.verdict).toBe('pass');
+    expect(farAttack.ceiling['body']!).toBeGreaterThan(30); // the ceiling is the attack's own distance from the idle, not the noise floor
+    expect(farAttack.ratio!).toBeLessThanOrEqual(1.01);
+  });
+
   it('fails a ready whose head is another colour (a hood down against a hood up) and names the head', () => {
     const j = judgeIdentity({ idle: read({ head: WHITE }), pose: read({ head: [90, 60, 40] }), attack: read({ head: WHITE }) });
     expect(j.verdict).toBe('fail');

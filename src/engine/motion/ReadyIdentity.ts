@@ -8,10 +8,14 @@
  * ring are the same (`setPose('ready', { paint: 'idle' })`, exactly `?stance=v1b`'s rule for that one figure), so the figure never shows the painting that is not her. A repaint that passes the
  * measure clears the row (`node tools/pose-identity.mjs --write`) and the ready painting is back.
  *
- * `?readyid=today` turns the hold off (release 67's look; the A/B word for the clips). Everything else, every other figure and every other pose, is exactly as it was.
+ * WHERE IT PLAYS (the review of this lane, M5, 2026-10-28; the driver's call under Bailey's delegation): exactly where the stance look plays ({@link stanceNow}: the pack on, a desktop-class screen, a pack chapter
+ * or `?swapscope=all`, and a stance word that is not `today`). The hold is one more rule of the stance look, so `?stance=today`, `?pack=off`, a phone, a tablet and a chapter outside the pack are release 66's
+ * ready painting for these three dresses too ("the today words give release 66" holds without a second word), and `?swapscope=all` (MF-22) widens the hold with the picks. `?readyid=today` turns the hold
+ * off alone (release 67's look with every other pick on; the A/B word for the clips). Everything else, every other figure and every other pose, is exactly as it was.
  */
 import { READY_IDENTITY_FAILS } from '../../data/art/readyIdentity.ts';
 import { queryWord } from './DemoGate.ts';
+import { stanceNow } from './SwapSwitch.ts';
 
 let off: boolean | null = null;
 
@@ -29,7 +33,7 @@ function readyIdOff(): boolean {
   return (off ??= readyIdOffFromSearch(globalThis.location === undefined ? undefined : (globalThis.location.search ?? '')));
 }
 
-/** True when this art subject's ready painting fails the identity measure: the figure holds the idle painting through the ready stance. `artId` is `BattleStage.artOf` (a dress is its own subject). */
+/** True when this art subject's ready painting fails the identity measure AND the stance look plays now: the figure holds the idle painting through the ready stance. `artId` is `BattleStage.artOf` (a dress is its own subject). */
 export function readyHeldOnIdle(artId: string | undefined): boolean {
-  return artId !== undefined && !readyIdOff() && Object.hasOwn(READY_IDENTITY_FAILS, artId);
+  return artId !== undefined && !readyIdOff() && Object.hasOwn(READY_IDENTITY_FAILS, artId) && stanceNow() !== 'today';
 }

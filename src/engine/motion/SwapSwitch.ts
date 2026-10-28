@@ -13,6 +13,8 @@
  *   attack-only hold (the "before" of MF-01).
  * - `?stance=today|v1a|v1b|v3` (MF-05, both games, default `v1a` since release 67; `today` is release 66's): the idle-to-ready change at turn start. `v1a`: the menu keeps the idle painting (the ring and the lean of the ready STANCE stay), and
  *   `ready` is shown only as an attack's wind-up painting. `v1b`: no ready painting anywhere (the wind-up is played on the idle painting). `v3`: today's two paintings, the change a 50 ms three-frame blend.
+ *   One more rule rides on this look (pc-residues, PR-0517, FFX-2's Paine Warrior, Yuna White Mage and Rikku Warrior; `ReadyIdentity.ts`): a dress whose ready painting is another figure holds the idle painting
+ *   through the menu and the wind-up under `v1a`, `v1b` and `v3`, wherever this look plays (`stanceNow()` is not `today`); `?readyid=today` turns that one rule off.
  * - `?swapcause=today|cut|blend3|pick` (MF-06, both games, default `pick` since release 67; `today` is release 66's) and `?swapclass=a,b,...` (default every class): the swaps that have a cause on screen (the contact, the hit, the glow, the toss,
  *   the critical stance) or settle at rest (the return home, the recoveries): `cut` a cut inside the smear on the cause, `blend3` a 50 ms three-frame blend, `pick` the cut where the moment has a cover
  *   and the 50 ms blend where it has none AND the two drawings are close (not a big change: `SmearPlan.isBigChange`); two drawings that share nothing keep today's blend at rest, because a 50 ms blend of

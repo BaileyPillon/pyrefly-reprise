@@ -9,7 +9,8 @@
 //   ok            both readings inside the tolerance;
 //   lock          the card's head changed and the camera's did not: the head lock doing its job (a card scaled to make up for the lens); reported, not a fault;
 //   camera        the projected head changed and the card's did not: only the lens (the lock was off, or could not reach the head); the registration is right;
-//   lock-band     both changed and a plane's lock sits at the edge of its band: the registration is right and the lens asked for more than the lock may give (the close-up's case);
+//   lock-band     both changed and a plane's lock sits at the edge of its band: the lens asked for more than the lock may give (the close-up's case) OR a mis-registered pose whose lock also saturates;
+//                 the class sees only "the lock is at the band and both readings are off", so it cannot tell those apart (Auron's was shown to be the first by hand: the same pair reads 1.001 elsewhere);
 //   registration  both changed and no lock is at the band: the table's head box or scale is off for this pair.
 // Which reading gates is the policy's `headGate` (`projected`, today; `card`): the card's number is a CONTROL for a registered pose (it holds by construction away from the band),
 // so the gate stays on what the player sees until a decision says otherwise; the class names the owner of the defect.

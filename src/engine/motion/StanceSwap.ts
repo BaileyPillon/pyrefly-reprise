@@ -34,7 +34,7 @@ export function stanceDone(ctx: EventCtx, id: CombatantId): void {
   onIdle.get(ctx)?.delete(id);
 }
 
-/** PR-0517: this figure's ready painting fails the identity measure (`ReadyIdentity.ts`): her ready stance is on the idle painting in every look and every chapter. */
+/** PR-0517: this figure's ready painting fails the identity measure (`ReadyIdentity.ts`): where the stance look plays (`stanceNow()` is not `today`) and `?readyid` is not `today`, her ready stance is on the idle painting. */
 function readyIsNotHer(ctx: EventCtx, id: CombatantId): boolean {
   return readyHeldOnIdle(ctx.stage.artOf?.(id));
 }

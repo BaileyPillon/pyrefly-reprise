@@ -49,6 +49,13 @@ describe('a swap jerk in a dissolve', () => {
     expect(dissolveTravel({ jerk: { n: 103, px: 46 } as never, swap: swap(6), frames: abrupt, policy: POLICY })).toBeNull();
   });
 
+  it('needs minBlendFrames on its own (review M4): a four-frame even dissolve has a share step of 0.25, which the share rule alone would excuse; five frames are excused', () => {
+    const fr = frames([0, 0.25, 0.5, 0.75, 1]);
+    expect(shareStepAt(fr, 102, 0, 1)).toBeCloseTo(0.25, 3);
+    expect(dissolveTravel({ jerk: { n: 102, px: 46 } as never, swap: swap(4), frames: fr, policy: POLICY })).toBeNull();
+    expect(dissolveTravel({ jerk: { n: 102, px: 46 } as never, swap: swap(5), frames: fr, policy: POLICY })).toEqual({ shareStep: 0.25, blendFrames: 5 });
+  });
+
   it('stays gated when it is a hard cut, when it is bigger than the policy cap, or when the excuse is off', () => {
     const fr = frames(cosine(8));
     expect(dissolveTravel({ jerk: { n: 104, px: 46 } as never, swap: swap(8, true), frames: fr, policy: POLICY })).toBeNull();

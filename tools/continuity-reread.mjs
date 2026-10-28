@@ -93,7 +93,8 @@ async function main(argv) {
   console.log(`verdicts ${JSON.stringify(Object.fromEntries(Object.entries(run.res.summary.checks).map(([k, v]) => [k, v.result])))}`);
   if (run.notes.length) console.log(`notes: ${run.notes.slice(0, 3).join(' | ')}`);
   if (o.list) {
-    for (const j of run.res.jerks.filter((e) => e.px >= 40)) console.log(`  J ${j.figure} n${j.n} ${j.px}px ${j.part} ${j.kind}${j.smeared ? ' smeared' : ''}${j.unseen ? ' unseen' : ''}${j.commonMode ? ' commonMode' : ''}`);
+    // the jerks the policy excuses are marked (review minor 9, 2026-10-28): a dissolve's own travel with its share step and blend length, a twirl step; a plain `swap` line is a GATED swap jerk
+    for (const j of run.res.jerks.filter((e) => e.px >= 40)) console.log(`  J ${j.figure} n${j.n} ${j.px}px ${j.part} ${j.kind}${j.smeared ? ' smeared' : ''}${j.unseen ? ' unseen' : ''}${j.commonMode ? ' commonMode' : ''}${j.dissolveTravel ? ` EXCUSED dissolveTravel share ${j.dissolveTravel.shareStep} over ${j.dissolveTravel.blendFrames} blend frames` : ''}${j.stagedExcused ? ' EXCUSED staged (twirl step)' : ''}`);
     for (const x of run.res.swaps.filter((e) => e.snap)) console.log(`  S ${x.figure} ${x.fromPose}>${x.toPose} n${x.n} snap camCut=${x.camCut}`);
     for (const x of run.res.swaps.filter((e) => e.failHead || e.failFeet || e.failHeight || e.failFeetSil)) console.log(`  F ${swapLine(x)} [${[x.failHead && 'head', x.failFeet && 'feet', x.failHeight && 'height', x.failFeetSil && 'feetSil'].filter(Boolean).join('+')}]`);
   }
