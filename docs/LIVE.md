@@ -14,7 +14,7 @@
 | Deploy log | `docs/deploys.log` line 83: cloudflare, 4830 art files, owner override |
 | Artifact (SHA-256) | `c4bb4251f0a4e73606e26e0cb5757df0f4eabe2a5daa94a7f4fd6f4ce89e21a3` |
 | The deploy's own byte check | PASS (57 files compared with the build) |
-| Marker | `critic/pending/2b48cee95.json` (pending) |
+| Marker | `critic/cleared/2b48cee95.json` (cleared) |
 | Owner override | “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.” |
 | CHANGELOG entry | 2026-10-28 · Release 66 (r66), the motion-fluidity pass: the first sight of a pose no longer freezes the picture, every wait in a fight keeps one clock, a knocked-out body lands on the frame it arrives, and an FFX-2 spell no longer blinks through idle (both games; the spell interlude and the Bevelle light shafts are FFX-2 only; sixteen more looks wait behind address words and change nothing until one is asked for) |
 | Focused review | critic/reviews/2b48cee95-focused.json: ship SHIP, changed area UNVERIFIED |
@@ -24,12 +24,9 @@ Is this commit on main? `git merge-base --is-ancestor 2b48cee95 origin/main` exi
 
 ## Review obligations still open
 
-| Build | Obligation | What it needs |
-|---|---|---|
-| `2b48cee95` | focused | acceptance of the changed area |
-| `2b48cee95` | deep (carries 76 earlier builds) | deep review of every affected chapter and system |
+None: every marker in `critic/pending` is settled.
 
-The ledger counts 76 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 0 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
