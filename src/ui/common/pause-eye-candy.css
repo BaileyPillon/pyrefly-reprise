@@ -286,8 +286,8 @@
   .pause__col .pause__row[data-row='eyeCandy'] .pause__bar,
   .pause__col .pause__row[data-row='presentation'] .pause__bar { width: 12px; margin: 0; }
 
-  /* The page has the whole height, so its rows are touch size: 40px, not the 20px of a five-row window. */
-  .pause__ec-col .pause__ec-row { height: 40px; }
+  /* The page has the whole height, so its rows are touch size: 44px (release 68; it was 40), not the 20px of a five-row window. */
+  .pause__ec-col .pause__ec-row { height: 44px; }
   .pause__ec-col .pause__ec-row--look { margin-top: 6px; }
   .pause__ec-col .pause__ec-row--part { padding-left: 18px; }
 

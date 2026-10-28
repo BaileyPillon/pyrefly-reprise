@@ -85,7 +85,7 @@ describe('one switch map', () => {
     const codes = SWITCHES.map((s) => s.code);
     expect(new Set(codes).size).toBe(codes.length);
     for (const e of EXTRA_KEYS) expect(keys).not.toContain(e.key);
-    const input = readFileSync('src/app/Input.ts', 'utf8');
+    const input = readFileSync('src/app/Input.ts', 'utf8') + readFileSync('src/app/inputKeyMap.ts', 'utf8'); // the key map lives in inputKeyMap.ts since release 68
     for (const c of codes) expect(input, c).not.toContain(`${c}:`);
     expect(switchOfCode('Slash')?.name).toBe('look');
     expect(switchOfCode('Semicolon')?.name).toBe('camera');

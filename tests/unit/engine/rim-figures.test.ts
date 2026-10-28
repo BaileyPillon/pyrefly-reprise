@@ -248,7 +248,7 @@ describe('the playtest key', () => {
     expect(new Set(keys).size).toBe(keys.length);
     expect(new Set(SWITCHES.map((s) => s.code)).size).toBe(keys.length);
     expect(EXTRA_KEYS.map((e) => e.key)).not.toContain("'");
-    const input = readFileSync('src/app/Input.ts', 'utf8');
+    const input = readFileSync('src/app/Input.ts', 'utf8') + readFileSync('src/app/inputKeyMap.ts', 'utf8'); // the key map lives in inputKeyMap.ts since release 68
     expect(input).not.toContain('Quote:');
     expect(input).not.toContain("'Quote'");
     expect(EXTRA_KEYS.find((e) => e.key === '0')!.plain).toMatch(/not the party rim/);

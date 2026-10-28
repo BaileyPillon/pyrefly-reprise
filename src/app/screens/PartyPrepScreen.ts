@@ -33,6 +33,7 @@ import { installInkGoldStyles } from '../../ui/inkgold/index.ts';
 import { rosterHtml, slotsHtml, statSheetHtml } from './PartyPrepContent.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
 import { installPhonePrep, type PhonePrep } from './party-prep/phonePrep.ts';
+import { labelPrepPanel, prepTabsHtml, PREP_PANEL_ID } from './party-prep/prepTabs.ts'; // the strip as a real tab list (release 68)
 
 /** One tab in the prep menu, supplied by a UI agent. */
 export interface PrepPanel {
@@ -171,15 +172,15 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
       )} &mdash; ${escapeHtml(this.chapter.location.toUpperCase())}</div>
 
       <div class="prep__roster" data-role="roster"></div>
-      <div class="prep__tabs" data-role="tabs"></div>
-      <div class="prep__sheet"><div class="prep__sheet-inner" data-role="body"></div></div>
+      <div class="prep__tabs" data-role="tabs" role="tablist" aria-label="Party prep"></div>
+      <div class="prep__sheet"><div class="prep__sheet-inner" data-role="body" role="tabpanel" id="${PREP_PANEL_ID}"></div></div>
       <div class="prep__hint">
         <b>${keyHint('▲ ▼', 'dpad-v')}</b> PARTY &nbsp;&middot;&nbsp; <b>${keyHint('◀ ▶', 'dpad-h')}</b> TABS
         &nbsp;&middot;&nbsp; <span class="prep__hint-act" data-action="prep:begin" role="button" tabindex="0"><b>${keyHint('ENTER', 'Cross')}</b> BEGINS THE BATTLE</span>
         &nbsp;&middot;&nbsp; <span class="prep__hint-act" data-action="prep:back" role="button" tabindex="0"><b>${keyHint('ESC', 'Circle')}</b> BACK</span><span data-role="panel-hint"></span>
       </div>
 
-      <div class="prep__start" data-action="prep:begin">
+      <div class="prep__start" data-action="prep:begin" role="button" tabindex="0" aria-label="Start battle">
         <span><span class="prep__start-tri"></span>START BATTLE</span>
       </div>
       <div class="prep__slots">${slotsHtml(this.chapter.buildRef, artNamespaceOfScene(this.chapter.sceneKey))}</div>
@@ -223,19 +224,8 @@ export class PartyPrepScreen extends Screen implements FlowScreen<boolean> {
   private renderTabs(): void {
     const strip = this.root.querySelector('[data-role="tabs"]');
     if (!strip) return;
-    if (!this.tabs.length) {
-      // No panels registered yet: the shell's own member sheet IS the tab.
-      strip.innerHTML = `<div class="prep__tab" aria-selected="true">STATS</div>`;
-      return;
-    }
-    strip.innerHTML = this.tabs
-      .map(
-        (t, i) =>
-          `<div class="prep__tab" aria-selected="${i === this.index}" data-action="prep:tab:${t.id}">${escapeHtml(
-            t.label.toUpperCase(),
-          )}</div>`,
-      )
-      .join('');
+    strip.innerHTML = prepTabsHtml(this.tabs, this.index);
+    labelPrepPanel(this.body, this.tabs, this.index);
   }
 
   /** The roster column: every member the chapter lets the player look at. */

@@ -60,6 +60,14 @@ const pct = (n: number): string => `${(Math.max(0, Math.min(1, n)) * 100).toFixe
  * draw them, because the two keys and the two shoulder buttons do the same
  * thing and a player should not have to find that out.
  */
+/** The body is the tab panel (release 68, `app/focusContract.ts`): each tab names it, and it is named by the tab that is open. */
+export const PAUSE_PANEL_ID = 'pause-panel';
+export const pauseTabId = (id: string): string => `pause-tab-${id}`;
+export function labelPausePanel(body: HTMLElement, tabId: string): void {
+  body.dataset['tab'] = tabId;
+  body.setAttribute('aria-labelledby', pauseTabId(tabId));
+}
+
 export function tabsHtml(tabs: readonly PauseTab[], activeId: string): string {
   const items = tabs
     .map((t) => {
@@ -74,8 +82,8 @@ export function tabsHtml(tabs: readonly PauseTab[], activeId: string): string {
             `<i style="width:${pct(t.hp)}"></i></span>`;
       const dot = t.dot ? '<span class="pause__dot"></span>' : '';
       return (
-        `<button type="button" class="${cls.join(' ')}" role="tab" aria-selected="${on}"` +
-        ` data-tab="${escapeHtml(t.id)}" data-action="pause:tab:${escapeHtml(t.id)}">` +
+        `<button type="button" class="${cls.join(' ')}" role="tab" aria-selected="${on}" id="${escapeHtml(pauseTabId(t.id))}" aria-controls="${PAUSE_PANEL_ID}"` +
+        ` tabindex="${on ? 0 : -1}"${on ? ' data-cursor' : ''} data-tab="${escapeHtml(t.id)}" data-action="pause:tab:${escapeHtml(t.id)}">` +
         `${escapeHtml(t.label)}${hp}${dot}</button>`
       );
     })
@@ -109,7 +117,7 @@ function rowHtml(r: RenderRow): string {
     `<span class="pause__v">${escapeHtml(r.v)}` +
     `${r.quiet ? `<em>${escapeHtml(r.quiet)}</em>` : ''}</span>`;
   const interactive = r.selectable
-    ? ` role="button" tabindex="0" data-action="pause:row:${escapeHtml(r.id)}"`
+    ? ` role="button" tabindex="0"${r.selected ? ' data-cursor' : ''} data-action="pause:row:${escapeHtml(r.id)}"`
     : '';
   return (
     `<div class="${cls.join(' ')}" data-row="${escapeHtml(r.id)}"${interactive}>` +

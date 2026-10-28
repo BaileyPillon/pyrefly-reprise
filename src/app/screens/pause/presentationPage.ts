@@ -142,7 +142,7 @@ export class PresentationPage {
       const sel = r.id === this.at;
       return (
         `<div class="pause__row pause__row--word pause__row--cmd pause__ec-row${sel ? ' pause__row--sel' : ''}" data-row="${r.id}"` +
-        ` data-action="${PRESENTATION_ROW_ACTION}${r.id}" role="button" tabindex="${sel ? 0 : -1}">` +
+        ` data-action="${PRESENTATION_ROW_ACTION}${r.id}" role="button" tabindex="${sel ? 0 : -1}"${sel ? ' data-cursor' : ''}>` +
         `<span class="pause__k">${escapeHtml(r.label)}</span>` +
         `<span class="pause__v">${escapeHtml(r.value(settings))}</span></div>`
       );
