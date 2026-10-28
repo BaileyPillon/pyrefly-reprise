@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1858 decisions in all: 1345 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1216 of the written decisions record a blanket yes.
+1875 decisions in all: 1362 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1228 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1734 |
+| adopted | 1751 |
 | proposed | 8 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 93 |
-| **All** | **1858** |
+| **All** | **1875** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 156 |
-| art | 391 |
-| visuals | 131 |
+| art | 393 |
+| visuals | 135 |
 | camera | 75 |
-| audio | 158 |
+| audio | 159 |
 | ui | 219 |
 | story | 17 |
 | chapters | 248 |
 | guide | 34 |
-| release | 96 |
+| release | 98 |
 | hosting | 18 |
-| process | 205 |
+| process | 213 |
 | critic | 42 |
 | data | 17 |
 | tech | 30 |
 | site | 21 |
-| **All** | **1858** |
+| **All** | **1875** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 955 |
+| both games | 970 |
 | FFX only | 500 |
-| FFX-2 only | 385 |
+| FFX-2 only | 387 |
 | FF7 hidden experiment | 18 |
-| **All** | **1858** |
+| **All** | **1875** |
 
 ## Standing rules in force
 
@@ -140,7 +140,7 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27)
 
 ## Ledger
 
@@ -8778,7 +8778,7 @@ Saturday · 25 decisions
 
 ### 2026-10-25
 
-Sunday · 3 decisions
+Sunday · 12 decisions
 
 - <a id="d-1343"></a>**D-1343** — DRIVER CALL under 201, his to overturn, disclosed in the release notes: the R63-M1 trace found no pose-lane defect in Chapter I, so the continuity harness gets four policy words instead of an engine change, and the driver accepts the limits stated here for the conference (both games, critic plumbing; the evidence is FFX Chapter I)
   - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
@@ -8795,3 +8795,98 @@ Sunday · 3 decisions
   - What changed: A standing word for the rest of Sunday. At 19:35 EDT the driver launched the sunday-evening-records-and-backlog workflow (wf_65ade3c0-fb2, CPU only; A-1021): this records pass (release 64's deploy records, the rows, docs/LIVE.md and NOW.md; A-1022) and the post-conference backlog (every open finding of releases 62 to 64 ranked, motion first). It widens nothing: nothing deploys without a review's SHIP and his standing deploy words (D-931); nothing he will see, hear or feel is built before he has picked it (hard rule 9); the lanes ask him nothing (D-1333); and the PC stays quiet for Monday's booth, so these lanes start no browser, GPU job, dev server or build while the deep review of the live build (round 29, A-1020) owns the browser, until about 23:00 EDT.
   - area process · both games · adopted · delivery in progress · see [D-1320](#d-1320), [D-1333](#d-1333), [D-931](#d-931)
   - Source: Bailey, 2026-10-25 about 19:30 EDT (the DRIVER-STATE line of 19:35 EDT), typed in the chat, verbatim: “Keep going please and don't stop”. It is not …
+- <a id="d-1346"></a>**D-1346** — DRIVER CALL under 201, his to overturn: the deep review (round 29) of live release 64 says SHIP with disclosed majors; the build stays frozen as released for Monday’s booth (no release past midnight before the conference), the booth’s safety switch is the kit’s --plain (the release-62 look), and the choices the majors raise wait for him until after the conference (both games)
+  - Bailey: “I'll go with all of your recommendations. You make the calls please.” (blanket yes)
+  - What changed: Item 204. The deep review of the live build (round 29, A-1020; 758 minutes, finished at about 21:50 EDT and recorded at 22:05 EDT) found: deployment PASS, ship SHIP for the live build, changed area FAIL, score provisional (visual 8.3, feel 8.0, narrative 8.7, interface 8.1; audio, onboarding, prep and delivery unverified). The majors it disclosed: PR-0380 and PR-0379, pose swaps are hard cuts with the pack (read by the M1 trace as the planned smear cuts, D-1343; a later method check found round 29’s snap counts came from a stale harness tree, D-1354); PR-0459, Auron’s head is 7 to 9.5 percent in Chapter I’s killing-blow close-up (FFX); PR-0517, Rikku Dark Knight’s and Paine Warrior’s ready poses read as another costume and size and Paine’s ready floats about 20 px (FFX-2); PR-0513, 89 approved paintings changed without the protected-art ledger; PR-0481, the demo battle start takes 18 to 28 s from the picker press; PR-0148, no listening verdict. The driver’s call: no release past midnight before the conference, so the build stays as released and frozen (the booth copy D:/pyrefly-booth-64 was re-verified 7,169 of 7,169 files at 22:06 EDT; the kit’s --plain switch, the release-62 look, is the last resort and was dry-run), and four choices wait for him after the conference: the smear cut against a two-frame blend, the ready-pose repaint, recording the 89 files as revisions with his words, and Chapter IV’s silent results. Update of the r65 records pass: at 23:45 EDT he delegated every decision (D-1347), so the driver took those four calls itself (D-1349 to D-1352). The report is critic/rounds/round-29.json and .md, committed with the r65 records.
+  - area release · both games · adopted · delivery implemented · see [D-1343](#d-1343), [D-1331](#d-1331) · refines [D-1333](#d-1333)
+  - Source: The driver’s call of 2026-10-25 about 22:05 EDT (the DRIVER-STATE line of 22:05 EDT), made under 201 (D-1333: “You make the calls please”), recorded …
+- <a id="d-1347"></a>**D-1347** — He is going to sleep and delegates all decision making to the driver “for now”, with no end date: the driver keeps working, takes its own recommendations as his yes, records each call as a driver call that is his to overturn, and keeps the PC quiet for Monday’s booth (both games)
+  - Bailey: “im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!” (blanket yes)
+  - What changed: Item 205. Extends the delegation of D-1321 and D-1333, which ran through the conference, to “for now”: no end date, and “just keep going” again. The calls the driver made under it that night are D-1348 to D-1354 (items 205a to 205g); later calls under it are D-1357 (item 208), D-1360 and D-1361 (items 210a and 210b). At 00:03 EDT the driver launched the overnight-cpu-before-booth workflow (wf_d55cb613-f04, CPU only, to stop by 05:30 to 05:45): the pose-continuity method check, the post-conference motion plan, the protected-art records for the 89 replaced paintings and a completeness check; it finished at about 01:45 EDT, and the booth-morning guard ran at 05:51 EDT. The CPU-only rule ended when he said the booth was over (D-1355).
+  - area process · both games · adopted · delivery in progress · at ~23:45 EDT · see [D-1321](#d-1321), [D-1333](#d-1333) · refines [D-1333](#d-1333)
+  - Source: Bailey, 2026-10-25 23:45 EDT (the decisions queue; the times are DRIVER-STATE.md’s date-stamped lines, because the queue’s hand-typed times can run …
+- <a id="d-1348"></a>**D-1348** — DRIVER CALL under his delegation, his to overturn: the PC stays quiet for the booth: the overnight work is CPU only (no browser, no GPU job, no build, no deploy), at most 2 test workers, and every lane stops by 06:00 EDT on the Monday (both games, process)
+  - Bailey: “im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!” (blanket yes)
+  - What changed: Item 205a. Nothing touches the frozen booth copy (D:/pyrefly-booth-64) or the live site before the conference. The one overnight workflow (wf_d55cb613-f04) ran CPU only and finished at about 01:45 EDT; the booth-morning guard at 05:51 EDT found nothing to stop, RIG-RECORD and REVIEW-BROWSER clear, no headless browser, none of our ports listening, and the booth copy re-verified 7,169 of 7,169 files. The rule ended at about 14:02 EDT on 2026-10-26, when he said the booth was over (D-1355).
+  - area process · both games · adopted · delivery implemented · refines [D-1347](#d-1347)
+  - Source: The driver’s call of 2026-10-25 about 23:50 EDT (the DRIVER-STATE line), made under his delegation (D-1347: “i delegate all decision making to you …
+- <a id="d-1349"></a>**D-1349** — DRIVER CALL under his delegation, his to overturn: the pose swaps keep the painted smear cuts at the booth (his 2026-10-22 pick, frozen); after the conference a two-frame blend variant is built and both are judged in motion clips against the “tight, impressive” bar, and the winner becomes the default (both games, Chapters I and IV)
+  - Bailey: “im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!” (blanket yes)
+  - What changed: Item 205b (the deep review’s PR-0380 and PR-0379). The booth ran the smear cuts as picked. After the conference the motion-fluidity pass (D-1356) took the question up in its swaps lane (L1, branch mf-l1-swaps; item MF-06, a B item, “swap on the cause”): the variants are built behind switches at today’s look and filmed as side-by-side phone clip cards, and the driver’s pick if he does not answer is V1 and V2 together (D-1361). Nothing of it is live: release 65 carries none of the lane’s work (D-1360). It changes how motion looks, so it is shown to him as clips before it becomes the default (hard rule 9).
+  - area visuals · both games · adopted · delivery in progress · see [D-1343](#d-1343), [D-1322](#d-1322) · refines [D-1347](#d-1347)
+  - Source: The driver’s call of 2026-10-25 about 23:50 EDT (the DRIVER-STATE line), made under his delegation (D-1347), recorded as a driver call and his to …
+- <a id="d-1350"></a>**D-1350** — DRIVER CALL under his delegation, his to overturn: Rikku Dark Knight’s and Paine Warrior’s ready poses are locked to their idle costume and the floor line after the conference (a repaint or retouch on the GPU) and shown to him before they are installed (FFX-2 only)
+  - Bailey: “im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!” (blanket yes)
+  - What changed: Item 205c (the deep review’s PR-0517: the two ready poses read as another costume and size, and Paine’s ready floats about 20 px). Nothing is installed: release 65 changes no painting, and an approved painting is never replaced on an agent’s say-so (D-1327, hard rule 9), so the repaint comes to him as a picture first. It is a step of the post-conference motion plan (D:/Tools/pyrefly-scratch/2026-10-26/motion-plan/MOTION-PLAN.md, local) that needs the GPU.
+  - area art · FFX-2 · adopted · delivery not scheduled · refines [D-1347](#d-1347)
+  - Source: The driver’s call of 2026-10-25 about 23:50 EDT (the DRIVER-STATE line), made under his delegation (D-1347), recorded as a driver call and his to …
+- <a id="d-1351"></a>**D-1351** — DRIVER CALL under his delegation, his to overturn: the 89 replaced paintings of releases 63 and 64 are recorded in the protected-art records as revisions, 19 on his boss re-cut yes and 70 as driver calls under his delegation, so the ledger matches what shipped (both games; records only)
+  - Bailey: “im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!” (blanket yes)
+  - What changed: Item 205d (the deep review’s PR-0513). Done at 00:15 EDT on 2026-10-26 by the overnight records-art-r64 lane in commit acbd815d3 on main: the 89 pins that stopped matching the shipped art are recorded as revisions, 19 on his boss re-cut yes (D-1285) and 70 as driver calls under his delegation (D-1321, D-1333); verify-approved reads 917 ok and 0 mismatched. The 70 delegated pins are recorded as driver calls, not as approved by his words, so he can still overturn them.
+  - area art · both games · adopted · delivery implemented · see [D-1285](#d-1285), [D-1327](#d-1327) · refines [D-1347](#d-1347)
+  - Source: The driver’s call of 2026-10-25 about 23:50 EDT (the DRIVER-STATE line), made under his delegation (D-1347), recorded as a driver call and his to …
+- <a id="d-1352"></a>**D-1352** — DRIVER CALL under his delegation, his to overturn: Chapter IV’s results stay silent (the source-faithful pick, 196.01) until he has listened (FFX-2 only)
+  - Bailey: “im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!” (blanket yes)
+  - What changed: Item 205e. Nothing changes: the Chapter IV win still plays no music (D-1294), and release 65 changes no sound. Agents cannot hear (hard rule 13): his ears on docs/audio/audition.html (“Delegated picks, 22 Oct”) are the verdict, and the deep review’s listening gap (PR-0148, CHK-001) stays open until then.
+  - area audio · FFX-2 · adopted · delivery in progress · see [D-1294](#d-1294) · refines [D-1347](#d-1347)
+  - Source: The driver’s call of 2026-10-25 about 23:50 EDT (the DRIVER-STATE line), made under his delegation (D-1347), recorded as a driver call and his to …
+- <a id="d-1353"></a>**D-1353** — DRIVER CALL under his delegation, his to overturn: ?livingpre (the room dressing built behind the picker) stays off until a quiet-GPU trial after the conference (both games)
+  - Bailey: “im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!” (blanket yes)
+  - What changed: Item 205f. Continues D-1342: its gain was not separable from noise on the shared GPU and its browser crashed twice when two pages shared the card. The quiet-GPU trial is owed; it needs the one browser lock to itself and has not been run by the r65 records pass.
+  - area visuals · both games · adopted · delivery not scheduled · see [D-1342](#d-1342) · refines [D-1347](#d-1347)
+  - Source: The driver’s call of 2026-10-25 about 23:50 EDT (the DRIVER-STATE line), made under his delegation (D-1347), recorded as a driver call and his to …
+- <a id="d-1354"></a>**D-1354** — DRIVER CALL under his delegation, his to overturn: the post-conference program starts with the written method check for pose continuity (T-01) before any third try at the stalled continuity issues (process rule 15)
+  - Bailey: “im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!” (blanket yes)
+  - What changed: Item 205g. Done at about 01:23 EDT on 2026-10-26 (branch plans-pose-continuity, 51b121281, by the overnight workflow): round 29’s snap counts came from a stale harness tree; ghost frames a minute becomes the target measure; idle-to-ready swaps are 36 and 55 percent of the see-through frames; and the finding M-07 was CONFIRMED in FFX-2 Chapter IV (a girl showed ready, then idle for about 100 ms, then ready again before a lunge: 22 times in 6.3 minutes, 32 percent of Chapter IV’s ghost frames), a small fix with no change of look that became the post-flicker lane (D-1355). The motion plan it produced is D:/Tools/pyrefly-scratch/2026-10-26/motion-plan/MOTION-PLAN.md (local).
+  - area process · both games · adopted · delivery implemented · refines [D-1347](#d-1347)
+  - Source: The driver’s call of 2026-10-25 about 23:50 EDT (the DRIVER-STATE line), made under his delegation (D-1347), recorded as a driver call and his to …
+
+### 2026-10-26
+
+Monday · 3 decisions
+
+- <a id="d-1355"></a>**D-1355** — The booth is over: the driver starts the post-conference motion plan under the standing delegation, batch 1 first: pin the review tool, fix the FFX-2 ready, idle, ready flicker before lunges, make the camera shake time-based outside Chapters I and IV, and measure and cut the fight start; then review and release (both games; the flicker fix is FFX-2 only)
+  - Bailey: “booth is over, start the post-conference plan, keep going please”
+  - What changed: Item 206. At 14:02 EDT the driver launched post-conf-batch-1 (wf_591b9b34-395): four lanes in four trees, each built, reviewed and fixed: post-tool-pin (the continuity harness stamps which tools read a run; both games, critic plumbing), post-flicker (FFX-2 only: a girl who attacks from her menu holds ready into the attack), post-shake-time (both games, every chapter: the camera shake and the impact frame on real time) and post-fight-start (both games: the boss card, the HUD and the party at the start of a fight). All four were done at 23:15 EDT (A-1023) and went out together as release 65 (D-1360; live from 21:00 EDT on 2026-10-27, A-1029). The rest of the plan is still ahead: gate the residues, the Auron head probe, the ready-pose lock (D-1350), the cut against blend (D-1349), the re-read of eleven chapters and the rigs. The CPU-only rule of the night before ended with his word (D-1348).
+  - area process · both games · adopted · delivery in progress · refines [D-1347](#d-1347)
+  - Source: Bailey, 2026-10-26 about 13:30 EDT (the decisions queue; the times are DRIVER-STATE.md’s date-stamped lines, because the queue’s hand-typed times can …
+- <a id="d-1356"></a>**D-1356** — He asks for an additional pass on motion, motion fluidity and animation: the driver adds a motion-fluidity program on top of batch 1: audits first, a ranked plan, then build lanes; glitch fixes that change no look go in directly, and anything that changes how motion looks is built as A/B variants and shown to him as side-by-side clips before it becomes the default (both games, Chapters I and IV first)
+  - Bailey: “I need an additional pass for motion, motion fluidity, animations etc please”
+  - What changed: Item 207. At 14:04 EDT the driver launched motion-fluidity-audit (wf_001d5d12-ca1): four auditors (pose swaps and ghost frames by class; curves and velocity continuity from the per-frame harness data; frame-counted against time-based animation in the code; frame pacing at 60, 120 and 144 Hz), then a ranked plan; it finished at 20:50 EDT with 28 items, 5 lanes and 12 clip cards. The A items (glitch fixes that change no look: MF-01, finishing the FFX-2 turn-start interlude, 59 swaps or 44 percent of Chapter IV’s ghost frames; MF-02, the first-sight freezes of 50 to 280 ms) go in directly; the B items (MF-03 the hit knock-back, a random 10 Hz rattle; MF-04 FFX-2 run, leap and lunge speed steps; MF-05 the turn-start stance, where the real game has no ready pose; MF-06 swap on the cause) are built behind switches at today’s look and filmed as A/B phone clip cards for him (end state first, hard rule 9). Five build lanes (L1 swaps, L2 moves, L3 timebase and UI motion, L4 freezes, L5 tools) were launched at 20:50 EDT on 2026-10-26 and 00:45 EDT on 2026-10-27 (A-1024); when this pass was written they were in their fix stages and nothing of them is live. Release 66 is to carry them (D-1360). The driver picks the B variants under his delegation only if he does not answer (D-1361).
+  - area visuals · both games · adopted · delivery in progress · see [D-1355](#d-1355), [D-1349](#d-1349) · refines [D-1347](#d-1347)
+  - Source: Bailey, 2026-10-26 about 13:45 EDT (the decisions queue; the times are DRIVER-STATE.md’s date-stamped lines, because the queue’s hand-typed times can …
+- <a id="d-1357"></a>**D-1357** — DRIVER CALL under 205, his to overturn: with D: at 24 GB (under the 25 GB line) and build lanes running, the driver deletes the fight-start reviewer’s two temporary source copies of 2026-10-24 (the prebuild review’s src-parent and src-pre), after unlinking their junctions (both games; maintenance)
+  - Bailey: “im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!” (blanket yes)
+  - What changed: Item 208, done at about 20:26 EDT on 2026-10-26. Each copy was a git-archive extract plus one production build, regenerable, and was on the list as “not yet approved” in D:/Tools/disk-cleanup/2026-10-24/D-SAFE-2026-10-24.md; the driver took the call under his delegation because D: was falling with the build lanes running, and it is his to overturn. First the four junctions (node_modules to D:\pyrefly-r39-color\node_modules and public\art to D:\pyrefly-art-r63, two in each copy) were unlinked with cmd /c rmdir and 0 reparse points were checked left, then the folders were removed; the targets were verified intact (main node_modules 77 entries; art-r63 characters 146, equal to art-motion). D: went from 24 to 58 GB. Records only; no game change.
+  - area process · both games · adopted · delivery implemented · refines [D-1347](#d-1347)
+  - Source: The driver’s call of 2026-10-26 about 20:35 EDT (the DRIVER-STATE line of 20:26 EDT), made under his delegation (D-1347), recorded as a driver call …
+
+### 2026-10-27
+
+Tuesday · 5 decisions
+
+- <a id="d-1358"></a>**D-1358** — The CONSERVE pace of 2026-10-26 is lifted: full speed until the weekly reading hits 97 percent, then the account-switch routine end to end, then carry on (both games)
+  - Bailey: “At 97% switch over to another account otherwise keep working full speed”
+  - What changed: Item 209. Lifts the CONSERVE pace the driver set at 16:25 EDT on 2026-10-26 (weekly 79 percent, process rule 15: agents may only tighten the mode, his word sets it). At 00:45 EDT the driver launched the second motion-fluidity build workflow (lanes L3 and L5) at full speed. The weekly reading reached 98 percent at 02:25 EDT on 2026-10-27 and the routine ran unasked (A-1026, D-1362).
+  - area process · both games · adopted · delivery implemented · see [D-1063](#d-1063), [D-1068](#d-1068) · refines [D-1128](#d-1128)
+  - Source: Bailey, 2026-10-27 about 00:35 EDT (the decisions queue; the times are DRIVER-STATE.md’s date-stamped lines, because the queue’s hand-typed times can …
+- <a id="d-1359"></a>**D-1359** — Keep going after the account switch: his first line in the new instance; the driver resumes the lanes and the release work where the old instance stopped (both games)
+  - Bailey: “keep going please”
+  - What changed: Item 210, about 14:20 EDT. In the new instance (account #1) the driver stopped the idle old copy of this chat by its process id, checked the five lane trees (no tracked edits; branches mf-l1 to mf-l5 present), resumed both motion-fluidity workflows with continuation notes for the cut-off agents only, re-created the hourly check, ran Part B of the account switch (A-1026) and made the calls of items 210a to 210c the same afternoon (D-1360 to D-1362). It widens nothing: nothing deploys without a review’s SHIP and his standing deploy words (D-931).
+  - area process · both games · adopted · delivery in progress · see [D-931](#d-931), [D-1347](#d-1347) · refines [D-1347](#d-1347)
+  - Source: Bailey, 2026-10-27 about 14:20 EDT (the decisions queue; the times are DRIVER-STATE.md’s date-stamped lines, because the queue’s hand-typed times can …
+- <a id="d-1360"></a>**D-1360** — DRIVER CALL under 205, his to overturn: release 65 is batch 1 only (post-tool-pin, post-shake-time, post-fight-start and post-flicker on top of origin/main); release 66 is the five motion-fluidity lanes when they finish (both games; the ready hold is FFX-2 only)
+  - Bailey: “im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!” (blanket yes)
+  - What changed: Item 210a, decided at about 15:15 EDT on 2026-10-27. Why: batch 1 is finished and reviewed, shipping a ready checkpoint is the standing rule (D-931), and the stamped harness has to be in the release tree before any new review report (post-tool-pin refuses an unstamped continuity report from 2026-10-27). Delivered: the candidate eaf599d0c was built at 15:17 EDT (A-1027), the focused review said SHIP with the changed area FAIL on the disclosed polish items CHK-026 and CHK-027 and no major (A-1028), and release 65 went live at 21:00:54 EDT (main eaf599d0c, bundle 8rsIfOcP; A-1029); the live check passed (A-1030) and the gap checks on the live address found no defect from the release (A-1031). Release 66, the five motion-fluidity lanes and the B-choice clip cards for him, is still ahead.
+  - area release · both games · adopted · delivery implemented · see [D-931](#d-931), [D-1355](#d-1355) · refines [D-1347](#d-1347)
+  - Source: The driver’s call of 2026-10-27 about 15:15 EDT (the DRIVER-STATE line), made under his delegation (D-1347), recorded as a driver call and his to …
+- <a id="d-1361"></a>**D-1361** — DRIVER CALL under 205, his to overturn: the B-choice clip cards are held until the lane reviews and fixes refresh them, and the evening deadline for applying the plan’s picks moves to the evening after the cards reach him (MF-03 V2, MF-04 V2, MF-05 V1b, MF-06 V1 and V2)
+  - Bailey: “im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!” (blanket yes)
+  - What changed: Item 210b. The driver’s own look at the first cards found two faults: cp02 (Chapter I) crops onto the knocked-out ally instead of the strike, and CP-03 has the figure hidden under the damage number; the lanes redraw them. The picks are unchanged: they are the plan’s recommendations, applied only if he does not answer, and anything that changes how motion looks stays behind a switch until he has seen the clips (hard rule 9). The cards are in D:/Tools/pyrefly-scratch/2026-10-26/fluidity/cards (local).
+  - area visuals · both games · adopted · delivery in progress · see [D-1349](#d-1349) · refines [D-1356](#d-1356)
+  - Source: The driver’s call of 2026-10-27 about 14:30 to 15:00 EDT (the DRIVER-STATE line), made under his delegation (D-1347), recorded as a driver call and …
+- <a id="d-1362"></a>**D-1362** — DRIVER CALL under his standing order, his to overturn: the account switch of 2026-10-27 runs end to end from account #4 (weekly 98 percent) to account #1: all conversation history imported, 100 of the 114 artifact pages republished at once and the other 14 after the cap of 100 new artifacts a day reset at 20:00 EDT (both games; process)
+  - Bailey: “Switch this whole account when it runs out”
+  - What changed: Item 210c, under the standing order of 2026-10-16 as he fixed it on 2026-10-20 (D-1128). Part A, about 02:25 to 02:45 EDT in account #4: the history imported add-only (16 written, the records 148 to 164, from #4, #2 and #3), 170 pages listed, 114 staged, 3 pages with no source left on #4 only. Part B in account #1 from 14:24 EDT: the idle old copy of the driver chat stopped by its process id, the two workflows resumed, 100 of the 114 pages published by 15:05 EDT, the other 14 at 20:45 EDT after the cap reset (114 of 114, relinked, read back clean). The 100 a day cap is now in the skill.
+  - area process · both games · adopted · delivery implemented · see [D-1358](#d-1358) · refines [D-1128](#d-1128)
+  - Source: The driver’s call of 2026-10-27 (the DRIVER-STATE lines of 02:25, 14:24 to 15:05 and 20:45 EDT), made under the standing order (D-1128: “Switch this …

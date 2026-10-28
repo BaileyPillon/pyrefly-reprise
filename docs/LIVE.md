@@ -8,33 +8,33 @@
 | | |
 |---|---|
 | Site | https://echoesofspira.com/ |
-| Commit | `e9907cad8` (Release 64 (r64)) |
-| Bundle | `BygGxbJE` |
-| Deployed | 2026-10-25T13:16:33.389Z (2026-10-25 09:16 EDT) |
-| Deploy log | `docs/deploys.log` line 81: cloudflare, 4830 art files, owner override |
-| Artifact (SHA-256) | `d764fe0ed0580d31a9e272db3824d205e11aba276132517dca8b27371c9d9966` |
+| Commit | `eaf599d0c` (Release 65 (r65)) |
+| Bundle | `8rsIfOcP` |
+| Deployed | 2026-10-28T01:00:54.005Z (2026-10-27 21:00 EDT) |
+| Deploy log | `docs/deploys.log` line 82: cloudflare, 4830 art files, owner override |
+| Artifact (SHA-256) | `b3afdb47240a7078c0c678c7da9cdd702aa57455638981f968e6a7d0499d8035` |
 | The deploy's own byte check | PASS (56 files compared with the build) |
-| Marker | `critic/pending/e9907cad8.json` (pending) |
+| Marker | `critic/pending/eaf599d0c.json` (pending) |
 | Owner override | “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.” |
-| CHANGELOG entry | 2026-10-25 · Release 64 (r64), the Chapter IV declutter and the dim-plane edge fix: the first menu opens on less and the screen steps back in an action (both games; Chapter IV's second boss bar is FFX-2 only), and the spell dark wash covers the whole view with no hard edge (both games) |
-| Focused review | critic/reviews/e9907cad8-focused.json: ship SHIP, changed area PASS |
-| Live check | critic/reviews/e9907cad8-live.json: deployment PASS |
+| CHANGELOG entry | 2026-10-27 · Release 65 (r65), the camera shake and the impact frame keep time on fast screens, the boss card stops being read twice and the field under it is ready, and a girl's attack no longer flickers: the motion fixes of the post-conference plan (both games; the ready hold is FFX-2 only) |
+| Focused review | critic/reviews/eaf599d0c-focused.json: ship SHIP, changed area FAIL |
+| Live check | critic/reviews/eaf599d0c-live.json: deployment PASS |
 
-Is this commit on main? `git merge-base --is-ancestor e9907cad8 origin/main` exits 0 when it is.
+Is this commit on main? `git merge-base --is-ancestor eaf599d0c origin/main` exits 0 when it is.
 
 ## Review obligations still open
 
 | Build | Obligation | What it needs |
 |---|---|---|
-| `e9907cad8` | deep (carries 74 earlier builds) | deep review of every affected chapter and system |
+| `eaf599d0c` | deep (carries 75 earlier builds) | deep review of every affected chapter and system |
 
-The ledger counts 74 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 75 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
-None: `critic/reviews/e9907cad8-focused.json` lists no major or critical issue.
+None: `critic/reviews/eaf599d0c-focused.json` lists no major or critical issue.
 
-## Branches in flight (as of 2026-10-25 19:50 EDT, the r64 records pass (release 64 live))
+## Branches in flight (as of 2026-10-27 23:55 EDT, the r65 records pass (release 65 live))
 
 Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.
 
@@ -49,6 +49,11 @@ Kept by hand by whoever records a pass; tools/live-record.mjs prints it into doc
 | `rig` | `db2caa6d9` | both (shared plumbing; the subjects are FFX first) | the rig lane's trunk: r55 shipped it up to 59c766ec0 (Kimahri and Lulu); this tip adds Auron's first pass, which stays off |
 | `rig-auron2` | `72528aa3b` | FFX only | Auron's rig pass 2 with format v2 variants (orb arm, flask, sword arm, katana, saya); gated OK 11 of 11 and OFF in the refine queue by his pick |
 | `re-parity-new-chapters-1018` | `5f7b6ffbc` | FFX (Spectral Keeper) and FFX-2 (Fallen Maesters) | research only: the Spectral Keeper and the Fallen Maesters data and AI extractions (the notes themselves went into r58 as plain files); no engine build, the chapter decisions SK1 to SK11 and FM1 to FM11 wait for Bailey |
+| `mf-l1-swaps` | `a85c49928` | both (MF-01 is FFX-2 only) | motion-fluidity lane L1, pose swaps (built in D:/pyrefly-rig-auron2): the plan's swap items, the A item that finishes the FFX-2 turn-start interlude and the B variants of "swap on the cause" behind switches at today's look; on the fixed build the Chapter IV default reads 88.0 ghost frames a minute and 1,454 ms (the A item holds within 1.5 percent); pushed, in its review and fix stage; not merged, release 66 is to carry it (D-1360, D-1356) |
+| `mf-l2-moves` | `cb9ba842a` | both (the run, leap and lunge item is FFX-2 only) | motion-fluidity lane L2, movement (built in D:/pyrefly-r39-color): the plan's movement items, B variants behind switches; done through its fix stage with the full suite at 1,648 of 1,674 files passing (26 skipped); not merged, release 66 is to carry it (D-1360, D-1356) |
+| `mf-l3-timebase-ui` | `79fdbd847` | both | motion-fluidity lane L3, time base and UI motion (built in D:/pyrefly-rig-rikkudk): frame-counted animation moved to real time and the UI motion items; its handoff reads the ATB bars after the fix in real time (biggest step 0.94 px against 3.91 px); pushed, in its fix stage; not merged, release 66 is to carry it (D-1360, D-1356) |
+| `mf-l4-freezes` | `af51257e5` | both | motion-fluidity lane L4, freezes and garbage (built in D:/pyrefly-rig-valefor): the first-sight freezes of 50 to 280 ms and the per-frame allocations (the light shafts' program lookup in Chapter IV falls from 38.6 to 6.8 a frame, heap 437 to 269 KB a frame); second pass pushed, review and fix stages; not merged, release 66 is to carry it (D-1360, D-1356) |
+| `mf-l5-tools` | `4c5715e1c` | both (measurement tooling; nothing a player sees) | motion-fluidity lane L5, tools (built in D:/pyrefly-pilgrim-proto on post-tool-pin): the measuring tools of the plan (the Chapter I and IV matrices, jolts at 60 and 144 Hz, the clip factory); the Chapter IV refresh-rate matrix reads equal; fix stage pushed; not merged, release 66 is to carry it (D-1360, D-1356) |
 
 Nothing on this list is live. `node tools/live-record.mjs --branches` compares the tips with git.
 
@@ -56,9 +61,9 @@ Nothing on this list is live. `node tools/live-record.mjs --branches` compares t
 
 | Deployed (UTC) | Commit | Bundle | Log line |
 |---|---|---|---|
+| 2026-10-28T01:00:54.005Z | `eaf599d0c` | `8rsIfOcP` | 82 |
 | 2026-10-25T13:16:33.389Z | `e9907cad8` | `BygGxbJE` | 81 |
 | 2026-10-25T06:52:55.070Z | `fa56fd4e3` | `Bo7iMtyZ` | 80 |
 | 2026-10-22T12:53:14.528Z | `c8ecbcb31` | `C9xPmvqR` | 79 |
 | 2026-10-21T20:04:40.996Z | `660c19bbd` | `DwMQUoVh` | 78 |
 | 2026-10-20T21:06:50.929Z | `1cea6e937` | `DwCdr0nf` | 77 |
-| 2026-10-20T04:15:33.443Z | `6db09ac86` | `C-nLFLJH` | 76 |
