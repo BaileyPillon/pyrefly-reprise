@@ -1277,15 +1277,14 @@ export class PaintedActor extends Group {
     return new SmearDirector({
       name: () => this.name,
       worldHeight: () => this.worldHeight,
-      planes: this.slots,
-      cells: this.u,
-      blend: this.blend,
+      planes: this.slots, cells: this.u, blend: this.blend,
       showing: () => this.active,
       poseOf: (i) => this.slots[i]!.pose,
       footprintOf: (i) => this.footprintOf(this.slots[i]!),
       canCut: () => this.smearsPlanes() && this.crossfadeMs > 0 && this.crossfadeMs <= BLEND_MS_MAX && !this.poseShiftPx,
       flash: (c, ms, peak) => this.flash(c, ms, peak),
       flashBlocked: () => this.softFlash?.() === true || this.flashTween !== null,
+      shiftPlane: (i, dx) => { const s = this.slots[i]!; s.align = dx; this.placeSlot(s); }, // MF-18 (`motion/CutAnchor.ts`): a big cut's incoming plane eases home from the old head
     });
   }
 
@@ -2509,7 +2508,7 @@ export class PaintedActor extends Group {
     const held = this.blend.takeStart(); // PoseBlend rule 2: a request that waited for the weaker plane to be nearly gone starts now
     if (held) this.beginBlend(held.key, this.poses.get(held.key), held.plan);
     if (alignedSwapOn()) this.alignPlanes(); // W5: the aligned dissolve's drift follows the fades just written
-    this.smear.step(); // the smear window's amount, from the blend's progress
+    this.smear.step(realDt * 1000); // the smear window's amount, from the blend's progress; the cut-side anchor's glide runs on the same real time (MF-18)
     for (const s of this.slots) syncPaintedBloom(s.material, this.u.dissolve.value > 0, this.bloomMasked);
     this.clock += dt;
 
