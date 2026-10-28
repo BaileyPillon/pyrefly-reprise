@@ -372,8 +372,7 @@ export class ChapterSelectScreen extends Screen {
     // The fixed list: only the selected mark moves (D-183).
     for (const card of this.root.querySelectorAll('.fe-card[data-card]')) {
       const on = card.getAttribute('data-action') === `fe-card-${this.selected}`;
-      card.classList.toggle('fe-card--sel', on);
-      card.toggleAttribute('data-cursor', on); card.setAttribute('tabindex', on ? '0' : '-1'); // the cursor is the list's one tab stop (`app/focusContract.ts`)
+      card.classList.toggle('fe-card--sel', on); card.toggleAttribute('data-cursor', on); card.setAttribute('tabindex', on ? '0' : '-1'); // the cursor is the list's one tab stop (`app/focusContract.ts`)
       if (on) card.setAttribute('aria-current', 'true');
       else card.removeAttribute('aria-current');
     }
