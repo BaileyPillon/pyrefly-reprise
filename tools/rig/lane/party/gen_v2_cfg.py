@@ -17,8 +17,11 @@ SUBJECTS = REPO / "tools" / "rig" / "subjects"
 
 # per subject: the pilot config the party block starts from, and what v2 changes in it. `{}` is "the first pilot's value stands".
 V2 = {
-    "tidus": {"base": "tidus-x", "party": {}},
-    "rikku-dark-knight": {"base": "rikku-dark-knight-x", "party": {}},
+    # underlap 28 (1x px; the pilot had 12): the pieces of a pose reach further under their neighbours, so a joint turning mid-move opens less. The IDLE pieces keep underlap_idle 5: at 10 the pieces enclose six joints, the gate then
+    # watches them and REFUSES the rig (experiment tidus-v2y), and at 24 nine keys carry a hole at a joint (tidus-v2u). Measured on Tidus (tidus-v2x): stray frames 22 to 15, worst stray 24 to 11 percent of the area, gate OK, 7.70 of 9 Mpx.
+    # Variant underlaps of 20 (tidus-v2w) gave 20 stray frames. The first pilots' value (12) is what `{}` here would keep.
+    "tidus": {"base": "tidus-x", "party": {"underlap": 28}},
+    "rikku-dark-knight": {"base": "rikku-dark-knight-x", "party": {"underlap": 28}},
 }
 
 

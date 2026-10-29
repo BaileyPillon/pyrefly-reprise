@@ -61,6 +61,11 @@ describe.each([
     expect(cfg.party.idle_key.fadeMs).toBe(0);
   });
 
+  it('overlaps the pieces of a pose 28 px under their neighbours and keeps the idle\'s own pieces at 5: at 10 the pieces enclose joints, the gate watches them and refuses the rig (experiment tidus-v2y)', () => {
+    expect(cfg.party.underlap).toBe(28);
+    expect(cfg.party.underlap_idle).toBeLessThanOrEqual(8);
+  });
+
   it('keeps the draw order a partition of its parts, and the effects part (a painted ring and swirl that are no body part) only for Tidus', () => {
     expect([...cfg.party.order].sort()).toEqual(Object.keys(cfg.party.parts).sort());
     const fx = Object.entries(cfg.party.parts).filter(([, p]) => p.fx).map(([n]) => n);

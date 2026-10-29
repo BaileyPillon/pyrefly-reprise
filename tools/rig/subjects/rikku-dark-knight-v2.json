@@ -25,7 +25,7 @@
    "elbowB",
    "handB"
   ],
-  "underlap": 12,
+  "underlap": 28,
   "underlap_idle": 5,
   "margin": 15,
   "pad": 600,
@@ -70,8 +70,8 @@
      }
     },
     "variant": {
-     "opaqueArea": 1.0,
-     "meshArea": 1.0,
+     "opaqueArea": 1,
+     "meshArea": 1,
      "tex": 0.6,
      "growMax": 60
     }
@@ -516,7 +516,7 @@
    ],
    "sword": [
     0.3,
-    3.0
+    3
    ]
   },
   "landmarks": {
@@ -625,7 +625,7 @@
     "bones": {
      "pelvis": {
       "rot": 0.4,
-      "dy": 3.0,
+      "dy": 3,
       "phase": 0.2
      },
      "chest": {
@@ -637,12 +637,12 @@
       "phase": -1.5
      },
      "upperarmA": {
-      "rot": 1.0,
+      "rot": 1,
       "phase": -1.4
      },
      "forearmA": {
       "rot": 0.8,
-      "phase": -2.0
+      "phase": -2
      },
      "sword": {
       "rot": 0.5,
@@ -1821,8 +1821,8 @@
       "register": "ready",
       "scale": 1.0,
       "tex": 0.6,
-      "opaqueArea": 1.0,
-      "meshArea": 1.0,
+      "opaqueArea": 1,
+      "meshArea": 1,
       "growMax": 60,
       "mesh": {
        "edge": 90,
@@ -1839,8 +1839,8 @@
       "register": "attack",
       "scale": 1.0,
       "tex": 0.6,
-      "opaqueArea": 1.0,
-      "meshArea": 1.0,
+      "opaqueArea": 1,
+      "meshArea": 1,
       "growMax": 60,
       "mesh": {
        "edge": 90,
@@ -1857,8 +1857,8 @@
       "register": "follow",
       "scale": 1.0,
       "tex": 0.6,
-      "opaqueArea": 1.0,
-      "meshArea": 1.0,
+      "opaqueArea": 1,
+      "meshArea": 1,
       "growMax": 60,
       "mesh": {
        "edge": 90,
@@ -1875,8 +1875,8 @@
       "register": "victory",
       "scale": 1.0,
       "tex": 0.6,
-      "opaqueArea": 1.0,
-      "meshArea": 1.0,
+      "opaqueArea": 1,
+      "meshArea": 1,
       "growMax": 60,
       "mesh": {
        "edge": 90,
@@ -1893,8 +1893,8 @@
       "register": "cast",
       "scale": 1.0,
       "tex": 0.6,
-      "opaqueArea": 1.0,
-      "meshArea": 1.0,
+      "opaqueArea": 1,
+      "meshArea": 1,
       "growMax": 60,
       "mesh": {
        "edge": 90,
@@ -1911,8 +1911,8 @@
       "register": "item",
       "scale": 1.0,
       "tex": 0.6,
-      "opaqueArea": 1.0,
-      "meshArea": 1.0,
+      "opaqueArea": 1,
+      "meshArea": 1,
       "growMax": 60,
       "mesh": {
        "edge": 90,
@@ -1929,8 +1929,8 @@
       "register": "hurt",
       "scale": 1.0,
       "tex": 0.6,
-      "opaqueArea": 1.0,
-      "meshArea": 1.0,
+      "opaqueArea": 1,
+      "meshArea": 1,
       "growMax": 60,
       "mesh": {
        "edge": 90,
@@ -1947,8 +1947,8 @@
       "register": "critical",
       "scale": 1.0,
       "tex": 0.6,
-      "opaqueArea": 1.0,
-      "meshArea": 1.0,
+      "opaqueArea": 1,
+      "meshArea": 1,
       "growMax": 60,
       "mesh": {
        "edge": 90,
@@ -1965,8 +1965,8 @@
       "register": "sleep",
       "scale": 1.0,
       "tex": 0.6,
-      "opaqueArea": 1.0,
-      "meshArea": 1.0,
+      "opaqueArea": 1,
+      "meshArea": 1,
       "growMax": 60,
       "mesh": {
        "edge": 90,
@@ -1983,8 +1983,8 @@
       "register": "ko",
       "scale": 1.0,
       "tex": 0.6,
-      "opaqueArea": 1.0,
-      "meshArea": 1.0,
+      "opaqueArea": 1,
+      "meshArea": 1,
       "growMax": 60,
       "mesh": {
        "edge": 90,
@@ -2379,7 +2379,7 @@
    "bones": {
     "pelvis": {
      "rot": 0.4,
-     "dy": 3.0,
+     "dy": 3,
      "phase": 0.2
     },
     "chest": {
@@ -2391,12 +2391,12 @@
      "phase": -1.5
     },
     "upperarmA": {
-     "rot": 1.0,
+     "rot": 1,
      "phase": -1.4
     },
     "forearmA": {
      "rot": 0.8,
-     "phase": -2.0
+     "phase": -2
     },
     "sword": {
      "rot": 0.5,
