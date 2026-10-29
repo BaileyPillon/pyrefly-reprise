@@ -14,6 +14,7 @@ import numpy as np  # noqa: E402
 
 import pcommon as P  # noqa: E402
 import retarget as RT  # noqa: E402
+import change_clips as CC  # noqa: E402
 
 SKEL = [["root", None, "ground"], ["pelvis", "root", "pelvis"], ["chest", "pelvis", "neck"], ["arm", "chest", "shoulder"], ["fore", "arm", "elbow"]]
 REST = {"ground": (0.0, 1000.0), "pelvis": (0.0, 600.0), "neck": (0.0, 300.0), "shoulder": (50.0, 320.0), "elbow": (50.0, 420.0), "hand": (50.0, 520.0)}
@@ -93,6 +94,33 @@ class Synth(unittest.TestCase):
         out = P.synth_missing(types.SimpleNamespace(), rest, marks)
         self.assertAlmostEqual(out["elbowB"][0], 50.0, places=3)
         self.assertAlmostEqual(out["elbowB"][1], 420.0, places=3)
+
+
+class ChangeClips(unittest.TestCase):
+    MARKS = [{"n": 5, "name": "pose", "pose": "idle"}, {"n": 120, "name": "mark-x"}, {"n": 130, "name": "pose", "pose": "ready"}, {"n": 160, "name": "pose", "pose": "attack"}, {"n": 190, "name": "pose", "pose": "follow"},
+             {"n": 220, "name": "pose", "pose": "idle"}, {"n": 400, "name": "pose", "pose": "ready"}, {"n": 410, "name": "pose", "pose": "ready"}, {"n": 430, "name": "pose", "pose": "attack"}]
+
+    def test_pose_changes_are_the_marks_where_the_pose_moves(self):
+        self.assertEqual(CC.pose_changes(self.MARKS), [(130, "idle", "ready"), (160, "ready", "attack"), (190, "attack", "follow"), (220, "follow", "idle"), (400, "idle", "ready"), (430, "ready", "attack")])
+
+    def test_the_first_occurrence_of_each_wanted_change_and_what_the_run_never_made(self):
+        got, missing = CC.first_of(CC.pose_changes(self.MARKS), ["ready>attack", "idle>ready", "idle>ko"])
+        self.assertEqual(list(got), ["ready>attack", "idle>ready"])  # the order asked, the FIRST time each happened
+        self.assertEqual(got["idle>ready"][0], 130)
+        self.assertEqual(got["ready>attack"][0], 160)
+        self.assertEqual(missing, ["idle>ko"])
+
+    def test_no_list_means_every_distinct_change_in_order_of_first_occurrence(self):
+        got, missing = CC.first_of(CC.pose_changes(self.MARKS), [])
+        self.assertEqual(list(got), ["idle>ready", "ready>attack", "attack>follow", "follow>idle"])
+        self.assertEqual(missing, [])
+
+    def test_a_smoothed_centre_follows_the_figure_and_starts_on_it(self):
+        s = CC.smoothed({0: (100.0, 100.0), 10: (200.0, 100.0)}, [0, 5, 10, 11])
+        self.assertEqual(s[0], (100.0, 100.0))
+        self.assertAlmostEqual(s[5][0], 100.0)  # nothing recorded between 0 and 10 moves the centre before 10
+        self.assertGreater(s[10][0], 100.0)
+        self.assertLess(s[11][0], 200.0)  # a quarter step toward the new centre each frame, never a jump
 
 
 if __name__ == "__main__":
