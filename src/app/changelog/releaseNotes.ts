@@ -69,11 +69,22 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 67 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 68 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '68',
+    date: '2026-10-29',
+    lines: [
+      { tag: 'Both', text: 'Figures change pose more cleanly: 13 more chapters now cut on a hit, a spell or a toss instead of blending see-through, and a revived figure no longer jumps sideways on its first frame.' },
+      { tag: 'FFX-2', text: 'Paine and Rikku in the Warrior dress keep their standing painting through a strike’s wind-up, the run-in flows into the dash, and the ATB bars and Trigger Happy move smoothly.' },
+      { tag: 'FFX', text: 'The turn-order list slides each name to its new place, and an aeon now arrives with a crouch, a leap and a landing.' },
+      { tag: 'Both', text: 'Tab, Shift+Tab and Enter work on the title, the chapter list and the party screen like on any page, battle text grows with TEXT SIZE, and the first fight’s menu waits for less to load.' },
+      { tag: 'FFX-2', text: 'Leaving a battle now frees its screen, so memory no longer climbs a little more on every visit.' },
+    ],
+  },
   {
     release: '67',
     date: '2026-10-28',
