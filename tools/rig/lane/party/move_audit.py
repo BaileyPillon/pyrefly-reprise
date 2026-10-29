@@ -2,11 +2,11 @@
 both games, shared plumbing; no browser, no GPU, no game: numpy and the kit's compiled silhouette kernels).
 
 What it replays is what the engine does with a rig on a settled figure (`engine/rig/RigKeys.ts`, `RigPartState.ts`): the bone channels (rot, dx, dy, sx, sy, and the key's `root`) move from key A to key B on the game's quadInOut
-over B's `ms` (one frame every 1/60 s), and the part state of B takes over at progress `--flip` (0.5, the engine's `STATE_FLIP`; `fadeMs` 0, a cut, as the pilots ship). Each frame is a SILHOUETTE (the kit's `grid_mask`, the same raster
-the gate reads), and the numbers are read from the silhouettes only, so the audit is fast and the same on every machine:
+over B's `ms` (one frame every 1/60 s), and the part state of B takes over at progress `--flip` (0.5, the engine's `STATE_FLIP`; `fadeMs` 0, a cut, as the pilots ship). Each frame is a SILHOUETTE (the kit's raster kernel on a canvas of 2.5 px of the 1x painting a cell, alpha at half the part texture; NOT the gate's own raster), and the numbers are read
+from the silhouettes only, so the audit is fast (a few seconds a figure) and the same on every machine. A frame is one step of 1/60 s, `ceil(ms / dt)` of them, the last one the key itself:
 
   crack_frames / crack_max frames whose interior transparent area (the background showing THROUGH the figure: a crack where two parts no longer meet) exceeds the larger of the two end poses' by 0.01 of the figure's area / the largest excess
-  tear_frames / tear_max   frames whose stray share (area not in the largest piece, over all area) exceeds the larger of the two end poses' by 0.03 / the largest excess: a figure that has come apart (a shard of a limb, a part off its joint)
+  tear_frames / tear_max   frames whose stray share (area not in the largest piece, over all area) exceeds the larger of the two end poses' by 0.01, or that has more pieces over 0.2 percent of the area than either end pose / the largest excess: a figure that has come apart (a shard of a limb, a part off its joint)
   dip                      the smallest frame's area over the smaller end pose's: a figure that shrinks mid-move (a part turned edge-on, a torso gone thin)
   pop_sil                  1 - IoU of the silhouette drawn in state A against state B at the bone pose of the flip frame: how much the figure changes AT the cut (0 = an invisible cut)
   step_max / step_med      the largest and median one-frame step of the silhouette's centroid, in figure heights (the head and feet are the continuity probe's; a rig's tracker reads the skeleton's own landmarks)
