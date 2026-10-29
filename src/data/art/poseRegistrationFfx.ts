@@ -17,9 +17,9 @@ export const POSE_REGISTRATION_FFX: PoseRegistrationTable = {
   },
   evrae: {
     attack: { scale: 1.011, stanceX: 833.5, upright: true, head: [0.0283, 0.2431, 0.1378, 0.3819], status: 'waived', class: 'standing', stature: 0.99, headReal: 1.011, iou: 0.843, sha: 'dab9623ce8a509c4' },
-    'breath-charge': { scale: 1.0, stanceX: 770.9, upright: true, head: [0.0132, 0.1084, 0.1364, 0.2487], status: 'ok', class: 'standing', stature: 1, headReal: 1, iou: 0.977, sha: 'e1b53cc87862bb6b' },
-    hurt: { scale: 0.965, stanceX: 770.3, upright: true, head: [0.0066, 0.1236, 0.1342, 0.254], status: 'ok', class: 'standing', stature: 1.037, headReal: 0.965, iou: 0.757, sha: 'd742ab942064240f' },
-    idle: { stanceX: 770.9, upright: true, head: [0.0088, 0.0702, 0.132, 0.2105], status: 'ok', class: 'idle', stature: 1, iou: 1, sha: 'f4d167f413bd2786' },
+    'breath-charge': { scale: 1.0, stanceX: 770.9, upright: true, head: [0.0088, 0.1339, 0.132, 0.2742], status: 'ok', class: 'standing', stature: 1, headReal: 1, iou: 0.977, sha: 'e1b53cc87862bb6b' },
+    hurt: { scale: 0.965, stanceX: 770.3, upright: true, head: [0.0462, 0.1064, 0.1739, 0.2368], status: 'ok', class: 'standing', stature: 1.037, headReal: 0.965, iou: 0.757, sha: 'd742ab942064240f' },
+    idle: { stanceX: 770.9, upright: true, head: [0.0088, 0.1339, 0.132, 0.2742], status: 'ok', class: 'idle', stature: 1, iou: 1, sha: 'f4d167f413bd2786' },
     'idle-far': { status: 'waived', class: 'wide', stature: 0.587, lengthRatio: 1.321, iou: 0.031, sha: '40e636c72943f8c4' },
     'idle-near': { scale: 1.0, stanceX: 770.9, upright: true, head: [0.0088, 0.1339, 0.132, 0.2742], status: 'ok', class: 'standing', stature: 1, headReal: 1, iou: 1, sha: 'f4d167f413bd2786' },
     ko: { status: 'waived', class: 'ko', stature: 1.474, iou: 0.185, sha: '5d8c8d5913dbab03' },
