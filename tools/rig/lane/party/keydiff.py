@@ -1,6 +1,8 @@
 """keydiff.py <config name> [rig dir] [--out sheet.png] : every key of a party rig drawn by the offline rasteriser and compared pixel for pixel with its painting (in the idle's frame): the mean colour difference over the
 painting's opaque pixels and the share of pixels that differ by more than 40 (a wrong draw order, a piece the partition lost, a seam), and a sheet with the painting, the key and the difference (x4) for the worst poses.
 No game, no GPU (the lane kit's numpy rasteriser: nearest texel, no lighting)."""
+import pathlib as _pl
+_REPO = _pl.Path(__file__).resolve().parents[4]  # the tree this file is in (not another lane's)
 import json
 import os
 import pathlib
@@ -10,11 +12,11 @@ a = sys.argv[1:]
 name = a[0]
 rigdir = a[1] if len(a) > 1 and not a[1].startswith("--") else f"D:/pyrefly-art-rigs/{name}"
 out = a[a.index("--out") + 1] if "--out" in a else f"D:/Tools/pyrefly-scratch/2026-10-22/motion/rigs/look/keydiff-{name}.png"
-cfg = json.load(open(f"D:/pyrefly-rig-rikkudk/tools/rig/subjects/{name}.json", encoding="utf8"))
+cfg = json.load(open(str(_REPO / "tools" / "rig" / "subjects" / f"{name}.json"), encoding="utf8"))
 os.environ["XID"] = cfg["subject"]
 os.environ["XWORK"] = name
 os.environ.setdefault("XART", os.environ.get("PYREFLY_ART_DIR", "D:/pyrefly-art-r61"))
-sys.path.insert(0, "D:/pyrefly-rig-rikkudk/tools/rig/lane/expressive")
+sys.path.insert(0, str(_REPO / "tools" / "rig" / "lane" / "expressive"))
 import numpy as np  # noqa: E402
 from xl import *  # noqa: E402,F401,F403
 

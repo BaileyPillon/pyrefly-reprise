@@ -7,6 +7,8 @@ It does NOT have the presenter's lunge, squash, recoil, hit-stop or camera: thos
 this is what can be made while the recording slot is taken.
 Sequences: idle, attack, cast, item, hurt, ko, victory, defend (steps of `(pose, hold ms)`; the move into each key takes the key's `ms`).
 """
+import pathlib as _pl
+_REPO = _pl.Path(__file__).resolve().parents[4]  # the tree this file is in (not another lane's)
 import json
 import math
 import multiprocessing as mp
@@ -18,12 +20,12 @@ import sys
 a = sys.argv[1:]
 name, rigdir, seq = a[0], a[1], a[2]
 opt = lambda n, d=None: a[a.index(n) + 1] if n in a else d  # noqa: E731
-cfg = json.load(open(f"D:/pyrefly-rig-rikkudk/tools/rig/subjects/{name}.json", encoding="utf8"))
+cfg = json.load(open(str(_REPO / "tools" / "rig" / "subjects" / f"{name}.json"), encoding="utf8"))
 os.environ["XID"] = cfg["subject"]
 os.environ["XWORK"] = name
 os.environ.setdefault("XART", os.environ.get("PYREFLY_ART_DIR", "D:/pyrefly-art-r61"))
-sys.path.insert(0, "D:/pyrefly-rig-rikkudk/tools/rig/lane/expressive")
-sys.path.insert(0, "D:/pyrefly-rig-rikkudk/tools/rig/lane")
+sys.path.insert(0, str(_REPO / "tools" / "rig" / "lane" / "expressive"))
+sys.path.insert(0, str(_REPO / "tools" / "rig" / "lane"))
 import numpy as np  # noqa: E402
 from xl import *  # noqa: E402,F401,F403
 from rig_v2 import state_of  # noqa: E402

@@ -4,6 +4,8 @@ The rig moves the way the engine moves it (`RigKeys.RigTransition`: every bone c
 cross-fades over the key's `fadeMs`), drawn by the lane kit's own numpy rasteriser (xl.py: nearest texel, no lighting), beside the painting set's cross-dissolve of the two paintings (`--painting`). One panel each, 60 fps,
 `--frames` frames (the key's `ms` at 60 Hz is the real length: 6 frames = 100 ms). Good enough to see a piece that pops, a limb that tears or a seam that opens; the real game (the recorder) is the verdict.
 """
+import pathlib as _pl
+_REPO = _pl.Path(__file__).resolve().parents[4]  # the tree this file is in (not another lane's)
 import json
 import math
 import os
@@ -14,11 +16,11 @@ import sys
 a = sys.argv[1:]
 name, rigdir, A, B = a[0], a[1], a[2], a[3]
 opt = lambda n, d=None: a[a.index(n) + 1] if n in a else d  # noqa: E731
-cfg = json.load(open(f"D:/pyrefly-rig-rikkudk/tools/rig/subjects/{name}.json", encoding="utf8"))
+cfg = json.load(open(str(_REPO / "tools" / "rig" / "subjects" / f"{name}.json"), encoding="utf8"))
 os.environ["XID"] = cfg["subject"]
 os.environ["XWORK"] = name
 os.environ.setdefault("XART", os.environ.get("PYREFLY_ART_DIR", "D:/pyrefly-art-r61"))
-sys.path.insert(0, "D:/pyrefly-rig-rikkudk/tools/rig/lane/expressive")
+sys.path.insert(0, str(_REPO / "tools" / "rig" / "lane" / "expressive"))
 from xl import *  # noqa: E402,F401,F403
 from rig_v2 import state_of  # noqa: E402
 
@@ -93,7 +95,7 @@ for i, row in enumerate(panels):
         img.paste(p, (x, 0))
         x += p.width + 6
     img.save(tmp / f"b{i:03d}.png")
-sys.path.insert(0, "D:/pyrefly-rig-rikkudk/tools/rig/lane")
+sys.path.insert(0, str(_REPO / "tools" / "rig" / "lane"))
 import lane_sheets as L  # noqa: E402
 
 fps = opt("--fps", "12")

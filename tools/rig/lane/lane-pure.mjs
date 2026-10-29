@@ -114,3 +114,12 @@ export function expectedOutputs(mode) {
 /** The virtual-clock step pattern that makes 60 Hz out of whole milliseconds: 16, 17, 17 repeating (50 ms per 3 frames). */
 export const FRAME_PATTERN = Object.freeze([16, 17, 17]);
 export const frameMs = (n) => FRAME_PATTERN[n % 3];
+
+/**
+ * The words the recorder adds to the page address after `?rig=<on|off>` (rigs-v2, 2026-10-29): the environment's `PYREFLY_LANE_QUERY` first, then the subject's own `query` from the registry (`tidus-v2` says `partyrigs=v2`).
+ * The page reads the FIRST occurrence of a word, so the environment overrides the registry: `PYREFLY_LANE_QUERY=partyrigs=off` records the same subject's painting set, the other half of a clip.
+ */
+export function laneQuery(env, query) {
+  const words = [env, query].filter((w) => typeof w === 'string' && w.trim()).map((w) => w.trim().replace(/^[?&]+/, '')).join('&');
+  return words ? `&${words}` : '';
+}

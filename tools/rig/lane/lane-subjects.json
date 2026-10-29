@@ -775,6 +775,152 @@
         "victory": "VICTORY",
         "defend": "DEFEND"
       }
+    },
+    "tidus-v2": {
+      "_note": "rigs-v2 (2026-10-29), FFX only: Chapter I, Tidus under ?partyrigs=v2 (rigs/tidus-v2/); the painting set beside it is PYREFLY_LANE_QUERY=partyrigs=off (the environment wins over `query`). Motion script as the first pilot, plus the poses mode for every key.",
+      "query": "partyrigs=v2",
+      "actor": "tidus",
+      "game": "ffx",
+      "chapter": {
+        "id": "seymour-flux"
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "critical",
+        "defend",
+        "follow",
+        "hurt",
+        "item",
+        "ko",
+        "od-energy-rain",
+        "od-slice-and-dice",
+        "ready",
+        "sleep",
+        "victory"
+      ],
+      "track": {
+        "head": "head",
+        "feet": [
+          "feet"
+        ],
+        "centroid": "pelvis",
+        "hand": "handA",
+        "tip": "tip"
+      },
+      "motion": {
+        "turns": [
+          {
+            "name": "attack",
+            "rows": [
+              "^attack"
+            ]
+          },
+          {
+            "name": "item",
+            "rows": [
+              "item|use",
+              "*"
+            ]
+          },
+          {
+            "name": "cast",
+            "rows": [
+              "skill|special|magic|ability|spell",
+              "*"
+            ]
+          }
+        ],
+        "targets": 1
+      },
+      "labels": {
+        "attack": "ATTACK",
+        "cast": "CAST",
+        "item": "ITEM",
+        "hurt": "HURT",
+        "follow": "RETURNING FROM AN ACTION",
+        "ko": "KNOCKED OUT",
+        "ready": "READY",
+        "critical": "LOW HP",
+        "sleep": "ASLEEP",
+        "victory": "VICTORY",
+        "defend": "DEFEND",
+        "od-energy-rain": "OVERDRIVE (ENERGY RAIN)",
+        "od-slice-and-dice": "OVERDRIVE (SLICE AND DICE)"
+      }
+    },
+    "rikku-dark-knight-v2": {
+      "_note": "rigs-v2 (2026-10-29), FFX-2 only: Chapter IV, Rikku Dark Knight under ?partyrigs=v2 (rigs/rikku-dark-knight-v2/); the painting set beside it is PYREFLY_LANE_QUERY=partyrigs=off.",
+      "query": "partyrigs=v2",
+      "actor": "rikku",
+      "game": "ffx2",
+      "chapter": {
+        "id": "ffx2-bahamut"
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "critical",
+        "follow",
+        "hurt",
+        "item",
+        "ko",
+        "ready",
+        "sleep",
+        "victory"
+      ],
+      "track": {
+        "head": "head",
+        "feet": [
+          "feet"
+        ],
+        "centroid": "pelvis",
+        "hand": "handA",
+        "tip": "tip"
+      },
+      "motion": {
+        "turns": [
+          {
+            "name": "attack",
+            "rows": [
+              "^attack"
+            ]
+          },
+          {
+            "name": "item",
+            "rows": [
+              "item|use",
+              "*"
+            ]
+          },
+          {
+            "name": "cast",
+            "rows": [
+              "skill|special|magic|ability|spell",
+              "*"
+            ]
+          }
+        ],
+        "targets": 1,
+        "others": [
+          "Enter",
+          "Enter"
+        ],
+        "victory": false
+      },
+      "labels": {
+        "attack": "ATTACK",
+        "cast": "CAST",
+        "item": "ITEM",
+        "hurt": "HURT",
+        "follow": "RETURNING FROM AN ACTION",
+        "ko": "KNOCKED OUT",
+        "ready": "READY",
+        "critical": "LOW HP",
+        "sleep": "ASLEEP",
+        "victory": "VICTORY",
+        "defend": "DEFEND"
+      }
     }
   }
 }

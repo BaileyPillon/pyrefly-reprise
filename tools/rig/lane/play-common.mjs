@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { frameMs, guards } from './lane-pure.mjs';
+import { frameMs, guards, laneQuery } from './lane-pure.mjs';
 
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -19,7 +19,7 @@ export async function waitForGuards(log, exists = fs.existsSync) {
 }
 
 /** Launch headless Chromium from the tree's own Playwright and open the game at `base` (rig on or off), 1600 x 900, localStorage cleared. */
-export async function openGame({ repo, base, rig = 'on', log = console.log, loadTimeout = 240000 }) {
+export async function openGame({ repo, base, rig = 'on', log = console.log, loadTimeout = 240000, query = '' }) {
   const { chromium } = await import(pathToFileURL(`${repo}/node_modules/playwright/index.mjs`).href);
   const { currentChromiumArgs } = await import(pathToFileURL(`${repo}/tools/browser-mode.mjs`).href);
   const browser = await chromium.launch({ args: [...currentChromiumArgs()] });
@@ -31,7 +31,7 @@ export async function openGame({ repo, base, rig = 'on', log = console.log, load
   page.on('pageerror', (e) => consoleErrors.push(`pageerror: ${String(e).slice(0, 400)}`));
   page.on('response', (r) => { if (r.status() >= 400) notFound.push({ url: r.url(), status: r.status() }); });
   await page.clock.install();
-  const extra = process.env.PYREFLY_LANE_QUERY ? `&${process.env.PYREFLY_LANE_QUERY}` : ''; // e.g. `wait=hold`: an FFX-2 fight's clock held by the open menu (the default Wait mode lets it run at the top-level list, so the boss acts during a `poses` recording)
+  const extra = laneQuery(process.env.PYREFLY_LANE_QUERY, query); // the environment first, then the subject's own `query` from lane-subjects.json (`laneQuery`); e.g. `wait=hold`: an FFX-2 fight's clock held by the open menu (the default Wait mode lets it run at the top-level list, so the boss acts during a `poses` recording)
   await page.goto(`${base}?rig=${rig}${extra}`, { waitUntil: 'domcontentloaded', timeout: loadTimeout });
   await page.evaluate(() => { try { localStorage.clear(); } catch { /* blocked */ } });
   await page.goto(`${base}?rig=${rig}&crisp=a2${extra}`, { waitUntil: 'domcontentloaded', timeout: loadTimeout });

@@ -33,7 +33,7 @@ async function main() {
   };
   fs.mkdirSync(o.out, { recursive: true });
   await waitForGuards(log);
-  const g = await openGame({ repo: o.repo, base: o.base, rig: o.rig, log });
+  const g = await openGame({ repo: o.repo, base: o.base, rig: o.rig, log, query: spec.query ?? '' });
   try {
     await modes[mode](g, spec, o);
   } catch (e) {

@@ -15,6 +15,8 @@ export interface SubjectSpec {
   track: { head: string; feet: string | string[]; centroid: string; hand?: string; tip?: string };
   labels?: Record<string, string>;
   sheets?: Array<[string, string[]]>;
+  /** Words the recorder adds to the page address for this subject (rigs-v2: `partyrigs=v2`). */
+  query?: string;
 }
 export function validateSubject(id: string, spec: unknown): string[];
 export function subjectSpec(registry: { subjects?: Record<string, SubjectSpec> } | undefined, id: string): SubjectSpec;
@@ -27,3 +29,4 @@ export function guards(exists: (path: string) => boolean, dir?: string): string[
 export function expectedOutputs(mode: string): string[];
 export const FRAME_PATTERN: readonly number[];
 export function frameMs(n: number): number;
+export function laneQuery(env: string | undefined, query: string | undefined): string;
