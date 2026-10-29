@@ -1,7 +1,7 @@
 /**
- * MF-22, the wide scope ready to flip (lane pc-scope, 2026-10-28; `motion/SwapSwitch.ts`; both games): `?swapscope=pack|wide|all` says in which chapters the stance (`?stance`) and cause (`?swapcause`) looks play.
- * `pack` is release 67's reach (Chapter I and Chapter IV), `wide` is all nineteen chapters but the named exceptions, `all` is all nineteen with no exception (the measuring word). Nothing is flipped: the
- * default stays `pack`, and these tests are what pin that, and what make the flip one line.
+ * MF-22, the wide scope (lane pc-scope, 2026-10-28; flipped to the default in release 68; `motion/SwapSwitch.ts`; both games, per chapter): `?swapscope=pack|wide|all` says in which chapters the stance (`?stance`) and
+ * cause (`?swapcause`) looks play. `pack` is release 67's reach (Chapter I and Chapter IV), `wide` is all nineteen chapters but the four named exceptions (Yunalesca, Evrae, Sin's face, Ixion XVI), `all` is all
+ * nineteen with no exception (the measuring word). The default is `wide` since release 68, and these tests are what pin that and the exception list; going back is one line.
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { CHAPTERS } from '../../src/data/encounters.ts';
@@ -44,12 +44,18 @@ const PACK = Object.keys(DEMO_CHAPTERS);
 const EXCEPTED = Object.keys(SCOPE_EXCEPTIONS);
 
 describe('the word', () => {
-  it('the default is pack: release 67 plays exactly where it played (this is the pin: the driver flips it to wide after the browser measurement)', () => {
-    expect(SCOPE_DEFAULT).toBe('pack');
-    expect(scopeFromSearch('')).toBe('pack');
-    expect(scopeFromSearch('?swapscope=banana')).toBe('pack');
-    expect(scopeFromSearch('?swapscope=')).toBe('pack');
-    expect(scopeFromSearch('?pack=demo')).toBe('pack');
+  it('the default is wide since release 68 (the pin: MF-22 flipped after the browser measurement of all nineteen chapters); an address that names nothing it knows reads wide', () => {
+    expect(SCOPE_DEFAULT).toBe('wide');
+    expect(scopeFromSearch('')).toBe('wide');
+    expect(scopeFromSearch('?swapscope=banana')).toBe('wide');
+    expect(scopeFromSearch('?swapscope=')).toBe('wide');
+    expect(scopeFromSearch('?pack=demo')).toBe('wide');
+  });
+
+  it('?swapscope=pack and =today bring release 67\'s reach back, per address', () => {
+    expect(scopeFromSearch('?swapscope=pack')).toBe('pack');
+    expect(scopeFromSearch('?swapscope=today')).toBe('pack');
+    expect(scopeFromSearch('?swapscope=PACK')).toBe('pack');
   });
 
   it('?swapscope=wide, =all and =pack name their scopes; =today is pack; the value is not case sensitive', () => {
@@ -94,10 +100,26 @@ describe('the exceptions are named, real and justified', () => {
     expect(scopeExcepted(undefined)).toBe(false);
   });
 
-  it('Yunalesca is the one exception today, for the reason the rules-on run gave (25 swap jerks of 40 px or more against 9)', () => {
-    expect(EXCEPTED).toEqual(['yunalesca']);
+  it('Yunalesca is an exception, for the reason the rules-on run gave (25 swap jerks of 40 px or more against 9) and the wide run of release 68 (63 planned cuts over 120 px)', () => {
+    expect(EXCEPTED).toContain('yunalesca');
     expect(SCOPE_EXCEPTIONS['yunalesca']).toMatch(/25/);
     expect(SCOPE_EXCEPTIONS['yunalesca']).toMatch(/cutanchor/);
+    expect(SCOPE_EXCEPTIONS['yunalesca']).toMatch(/63 planned cuts over 120 px/);
+  });
+
+  it('release 68 names exactly four exceptions, three FFX and one FFX-2 (Evrae, Sin\'s face, Yunalesca; Ixion XVI), each with the number that put it out and what lifts it', () => {
+    expect([...EXCEPTED].sort()).toEqual(['evrae-airship', 'ffx2-ixion-djose', 'sin-face', 'yunalesca']);
+    expect(SCOPE_EXCEPTIONS['evrae-airship']).toMatch(/FFX, Evrae/);
+    expect(SCOPE_EXCEPTIONS['evrae-airship']).toMatch(/53 to 55 px/);
+    expect(SCOPE_EXCEPTIONS['evrae-airship']).toMatch(/swap jerks from 2 to 11/);
+    expect(SCOPE_EXCEPTIONS['sin-face']).toMatch(/FFX, Sin/);
+    expect(SCOPE_EXCEPTIONS['sin-face']).toMatch(/224 px/);
+    expect(SCOPE_EXCEPTIONS['ffx2-ixion-djose']).toMatch(/FFX-2, Ixion/);
+    expect(SCOPE_EXCEPTIONS['ffx2-ixion-djose']).toMatch(/146 px/);
+    for (const id of EXCEPTED) {
+      expect(SCOPE_EXCEPTIONS[id], id).toMatch(/release 68/);
+      expect(SCOPE_EXCEPTIONS[id], id).toMatch(/Lifts when/);
+    }
   });
 });
 
@@ -106,10 +128,11 @@ describe('chapterInScope, for all nineteen chapters', () => {
     expect(IDS.filter((id) => chapterInScope(id, 'pack'))).toEqual(['seymour-flux', 'ffx2-bahamut']);
   });
 
-  it('wide: every chapter but the exceptions (eighteen today), the pack chapters always', () => {
+  it('wide: every chapter but the four exceptions (fifteen of the nineteen), the pack chapters always', () => {
     const inside = IDS.filter((id) => chapterInScope(id, 'wide'));
+    expect(inside).toHaveLength(15);
     expect(inside).toHaveLength(19 - EXCEPTED.length);
-    expect(IDS.filter((id) => !chapterInScope(id, 'wide'))).toEqual(EXCEPTED);
+    expect(IDS.filter((id) => !chapterInScope(id, 'wide')).sort()).toEqual([...EXCEPTED].sort());
     for (const p of PACK) expect(chapterInScope(p, 'wide')).toBe(true);
   });
 
@@ -192,8 +215,9 @@ describe('the debug reader', () => {
     const api: Record<string, unknown> = {};
     installSmearDebug(api);
     const swapSwitch = api['swapSwitch'] as (set?: { scope?: SwapScope; cutAnchor?: 'today' | 'on' | 'moving' }) => { scope: string; scopeExceptions: string[]; cutAnchor: string };
-    expect(swapSwitch()).toMatchObject({ scope: swapScope(), scopeExceptions: ['yunalesca'] });
-    expect(swapSwitch({ scope: 'wide', cutAnchor: 'on' })).toMatchObject({ scope: 'wide', scopeExceptions: ['yunalesca'], cutAnchor: 'on' });
+    const four = ['yunalesca', 'evrae-airship', 'sin-face', 'ffx2-ixion-djose'];
+    expect(swapSwitch()).toMatchObject({ scope: swapScope(), scopeExceptions: four });
+    expect(swapSwitch({ scope: 'wide', cutAnchor: 'on' })).toMatchObject({ scope: 'wide', scopeExceptions: four, cutAnchor: 'on' });
     expect(swapSwitch({ scope: 'all' })).toMatchObject({ scope: 'all', cutAnchor: 'on' });
   });
 });

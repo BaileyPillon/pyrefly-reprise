@@ -20,10 +20,10 @@
  *   and the 50 ms blend where it has none AND the two drawings are close (not a big change: `SmearPlan.isBigChange`); two drawings that share nothing keep today's blend at rest, because a 50 ms blend of
  *   them is the head crossing 70 to 150 px in two frames (the harness reads it as a swap jerk). The pure `blend3` word is the plan's V2 arm and blends every class, big or small.
  *
- * - `?swapscope=pack|wide|all` (MF-22, default {@link SCOPE_DEFAULT}, `pack` until the browser measurement of the wide rules has been read): where the stance and cause looks play. `pack` is the two pack chapters
- *   (release 67's reach). `wide` is EVERY chapter except the ones named in {@link SCOPE_EXCEPTIONS}, each with its written reason (the word the default flips to: ONE line, `SCOPE_DEFAULT`). `all` is every chapter,
- *   exceptions included: the measuring word, so a chapter on the exception list can still be run with the rules on (PR-0522). Release 67 flips the two LOOKS to Bailey's picks in the two pack chapters; it does
- *   not widen the gate. `today` is `pack`. All three need the pack on (`?pack=off`, a phone or a tablet read `pack`).
+ * - `?swapscope=pack|wide|all` (MF-22, default {@link SCOPE_DEFAULT}, `wide` since release 68): where the stance and cause looks play. `pack` is the two pack chapters (release 67's reach: `?swapscope=pack`
+ *   brings it back). `wide` is EVERY chapter except the ones named in {@link SCOPE_EXCEPTIONS}, each with its written reason (fifteen of the nineteen since release 68; ONE line to change, `SCOPE_DEFAULT`). `all` is
+ *   every chapter, exceptions included: the measuring word, so a chapter on the exception list can still be run with the rules on (PR-0522). Release 67 flipped the two LOOKS to Bailey's picks in the two pack
+ *   chapters and did not widen the gate; release 68 widens it. `today` is `pack`. All three need the pack on (`?pack=off`, a phone or a tablet read `pack`).
  *
  * Game case (AGENTS.md rule 14): the switches are both games except `?interlude` (FFX-2 only: FFX's turn start comes before the menu). Read once, like the other URL switches (`SmearSwitch.ts`).
  */
@@ -44,11 +44,12 @@ export const CAUSE_DEFAULT: CauseMode = 'pick';
 export type SwapScope = 'pack' | 'wide' | 'all';
 
 /**
- * THE WIDE SCOPE, READY TO FLIP (MF-22; the lane pc-scope, 2026-10-28; Bailey's delegation of 2026-10-28: "i'll go with all your recommendations and decision-making for the next couple days"): what `?swapscope`
- * reads when the address does not name a value. `pack` today, so release 67 plays exactly where release 66's words played. The driver flips it to `wide` (ONE line) after the browser measurement of
- * `docs/handoff/pc-scope.md` (all 19 chapters with `?swapscope=all`, then `wide`) is read and `SCOPE_EXCEPTIONS` is settled.
+ * THE WIDE SCOPE, FLIPPED (MF-22; release 68, the driver's call under Bailey's delegation of 2026-10-28: "i'll go with all your recommendations and decision-making for the next couple days"; his to overturn):
+ * what `?swapscope` reads when the address does not name a value. `wide` since release 68, after the browser measurement of `docs/handoff/pc-scope.md` (all 19 chapters with `?swapscope=all`, 6,158 s of battle) was
+ * read: fifteen of the nineteen chapters join (see-through time 52 to 76 percent lower in each joiner, swap jerks at or under round 30's but for Vegnagun's, which a waiver row explains) and the four in
+ * {@link SCOPE_EXCEPTIONS} stay at release 67's look. `pack` is release 67's reach, and one line to go back (`?swapscope=pack` per address).
  */
-export const SCOPE_DEFAULT: SwapScope = 'pack';
+export const SCOPE_DEFAULT: SwapScope = 'wide';
 
 /**
  * The chapters `wide` reaches: the nineteen listed ones (`src/data/encounters.ts` CHAPTER_IDS, in play order), by name. A hidden or experimental chapter (the 3D fayth chapter, the Wind Waker and Leblanc
@@ -69,7 +70,13 @@ export const WIDE_CHAPTERS: readonly string[] = [
  */
 export const SCOPE_EXCEPTIONS: Readonly<Record<string, string>> = {
   yunalesca:
-    'FFX, the big foe: the rules-on run of 2026-10-27 (mf-l1-swaps handoff, MF-22) took ghost frames a minute from 287 to 98 but swap jerks of 40 px or more from 9 to 25 (worst 62 to 155 px): the moving-figure cuts the planner makes across heads 0.41 to 0.44 of the height apart (Yunalesca attack to cast, Auron follow to idle). Lifts when `?cutanchor=on` (MF-18) has been run there (job `yunalesca-all-anchor` of docs/handoff/pc-scope.md) and no swap jerk of 40 px or more is left outside a named cut.',
+    'FFX, the big foe: the rules-on run of 2026-10-27 (mf-l1-swaps handoff, MF-22) took ghost frames a minute from 287 to 98 but swap jerks of 40 px or more from 9 to 25 (worst 62 to 155 px): the moving-figure cuts the planner makes across heads 0.41 to 0.44 of the height apart (Yunalesca attack to cast, Auron follow to idle). The wide run of release 68 (2026-10-28, seed 1, the whole 409 s fight) read it again: 13 swap jerks against 7 for round 30, worst 154 px, and 63 planned cuts over 120 px (9.2 a minute against 4.0 in Chapter I): Tidus 41 of them at 124 to 131 px, Auron 16 at 140 to 149, Yunalesca 6 at 133. Lifts when `?cutanchor=on` (MF-18) has been run there (job `yunalesca-all-anchor` of docs/handoff/pc-scope.md) and no swap jerk of 40 px or more is left outside a named cut.',
+  'evrae-airship':
+    "FFX, Evrae: the wide run of release 68 (2026-10-28, seed 1) took ghost time a minute from 3,224 ms (round 30) to 1,088 but swap jerks from 2 to 11, and 12 in the repeat. 10 of the 11 are Evrae's own swaps, every pair, with the same 53 to 55 px head step (dy -50, dx 18) on cuts with no smear: a fixed vertical offset per pose, which the sideways cut anchor cannot remove. Lifts when his pose heads are registered (so the cut lands head on head) or his blend is kept, and a repeat run reads his swap jerks at or under round 30's.",
+  'sin-face':
+    "FFX, Sin's face: the wide run of release 68 (2026-10-28, seed 1) took ghost time a minute from 2,390 ms to 1,116, with 2 swap jerks against 1, and one of them is a real pop: Auron's lunge returns to his stance in one frame (224 px, no smear), the pair Chapter I handles with a planned cut. Lifts when that return gets the same planned cut and a repeat run reads no swap jerk over 120 px outside a named cut.",
+  'ffx2-ixion-djose':
+    "FFX-2, Ixion XVI: the wide run of release 68 (2026-10-28, seed 1) took ghost time a minute from 4,873 ms to 2,144, but run 1 had a snap (Paine idle to hurt, a plain hard cut, IoU 0.44), the repeat had none, and a KO kneel cut steps 146 px; swap jerks read 1 and 2 against 1. Lifts when a third run has no snap and the KO kneel cut has been read as the knock-out's own cut or fixed.",
 };
 
 /** The swaps MF-06 names, each by what is happening on screen (`SwapClass.ts` reads them off the pair of paintings). */

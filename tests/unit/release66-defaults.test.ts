@@ -14,7 +14,7 @@
  * | word | default (nothing in the address) | lane test |
  * |---|---|---|
  * | `?interlude=` | `all` (A, on: a girl keeps `ready` into her spell or item; `attack` is release 65's hold) | ffx2-interlude |
- * | `?stance=` `?swapcause=` `?swapclass=` `?swapscope=` | **`v1a`, `pick`** (release 67; `today` on a page with the pack off), every class, `pack` | fluidity-swaps-actor, ffx2-stance, release67-picks |
+ * | `?stance=` `?swapcause=` `?swapclass=` `?swapscope=` | **`v1a`, `pick`** (release 67; `today` on a page with the pack off), every class, `wide` (release 68; `pack` was release 67's) | fluidity-swaps-actor, ffx2-stance, release67-picks, pc-scope-swap-scope |
  * | `?hit=` | **`knock`** (release 67; `today` is release 66's) | mf03, release67-picks |
  * | `?run=` `?rigko=` | **`flow`, `whole`** (release 67; `today` is release 66's) | mf04-run-ease, mf11-rig-handoff, release67-picks |
  * | `?strikeshape=` | **`travel`** (release 67; acts only where `?curves=real-snappy` plays; `today` is the clip's own dash) | mf14-strike-shape, release67-picks |
@@ -80,8 +80,9 @@ describe('lane L1 words: the interlude is on, the looks are the release 67 picks
       expect(causeFromSearch(s)).toBe('today');
     }
   });
-  it('?swapscope= is the pack chapters; ?swapclass= names every class when absent and none for a word that names none', () => {
-    for (const s of [...NOTHING, '?swapscope=nonsense', undefined]) expect(scopeFromSearch(s)).toBe('pack');
+  it('?swapscope= is wide since release 68 (pack on a page with no address); ?swapclass= names every class when absent and none for a word that names none', () => {
+    for (const s of [...NOTHING, '?swapscope=nonsense']) expect(scopeFromSearch(s)).toBe('wide');
+    for (const s of [undefined, '?pack=off', '?swapscope=pack', '?swapscope=today']) expect(scopeFromSearch(s)).toBe('pack');
     expect([...classesFromSearch('')].sort()).toEqual([...SWAP_CLASSES].sort());
     expect(classesFromSearch('?swapclass=nonsense').size).toBe(0);
   });
