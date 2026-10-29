@@ -7,6 +7,7 @@ import { keyHint } from './padGlyphs.ts';
 import { EnemyIntentOverflow } from './enemy-intent-overflow.ts';
 import { briefStatusChip } from './enemy-intent-brief-status.ts';
 import { anyLethalRow, damageHtml } from './enemy-intent-damage.ts';
+import { attachPhoneFit, phoneBodyHtml, phoneLineOn } from './enemy-intent-phone.ts';
 
 /**
  * The enemy-intent slab: **what the boss is about to do, hanging over its
@@ -326,7 +327,7 @@ export class EnemyIntentPanel {
     this.panelEl.dataset['role'] = 'enemy-intent-panel';
 
     this.bodyEl = document.createElement('div');
-    this.bodyEl.className = 'eint__body';
+    this.bodyEl.className = 'eint__body'; attachPhoneFit(this.bodyEl);
     // PR-0010: the MORE row lives below the (possibly clipped) body, in
     // normal flow, so it can report on it without ever painting over it.
     this.panelEl.append(this.bodyEl, this.overflow.el);
@@ -495,10 +496,10 @@ export class EnemyIntentPanel {
     return this.lastSignature;
   }
 
-  /** `'full'` or `'brief'` right now: the mount's option, which may be a function of the live settings. */
-  private densityNow(): 'full' | 'brief' {
+  /** `'full'` or `'brief'` right now: the mount's option, which may be a function of the live settings; `'phone'` on the upright phone (two rows, `enemy-intent-phone.ts`). */
+  private densityNow(): 'full' | 'brief' | 'phone' {
     const d = this.mountOpts?.density;
-    return (typeof d === 'function' ? d() : d) ?? 'full';
+    return phoneLineOn() ? 'phone' : (typeof d === 'function' ? d() : d) ?? 'full';
   }
 
   private pollPad(): void {
@@ -575,7 +576,6 @@ export class EnemyIntentPanel {
     const view = this.current;
     const opts = this.mountOpts;
     if (!view || !opts || this.el.hidden) return;
-
     const layer = this.el.getBoundingClientRect();
     // jsdom and a not-yet-laid-out overlay both report 0x0. Positioning into
     // that would stack everything on the origin, so leave the last placement.
@@ -918,9 +918,9 @@ function chargeHtml(view: IntentView): string {
  * one is read in the two seconds before a hit lands. That covers the three
  * inline ones round 02 #26 found in Chapter 1, the charge row's, and the footer.
  */
-function bodyHtml(view: IntentView, density: 'full' | 'brief' = 'full'): string {
-  const elements = view.elements.filter((e) => e !== 'none');
-  const full = density === 'full';
+function bodyHtml(view: IntentView, density: 'full' | 'brief' | 'phone' = 'full'): string {
+  if (density === 'phone') return phoneBodyHtml(view, confidenceHtml(view), briefStatusChip(view.statusText), plain(view.moveName));
+  const elements = view.elements.filter((e) => e !== 'none'); const full = density === 'full';
   return [
     `<p class="eint__enemy"><span>${escapeHtml(view.enemyName)}</span><i>${escapeHtml(timingText(view))}</i></p>`,
     // PR-0011 (FFX only): brief density hides the Statuses block below, so a
