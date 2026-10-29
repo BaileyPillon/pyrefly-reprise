@@ -119,6 +119,7 @@ function rig(startPose: string, startRight: number, startUp: number): Rig {
     dir,
     ask(pose, right, up) {
       const p = blend.request(pose, 120, active);
+      if (p.same) throw new Error('the fake host asked for the pose it already shows');
       planes[p.to]!.pose = pose;
       fp[p.to] = plane(right, up);
       active = p.to;

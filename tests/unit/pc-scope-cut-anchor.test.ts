@@ -57,7 +57,7 @@ describe('the word', () => {
     setCutAnchorMode(null);
     setDemoChapter('ffx2-trema');
     expect(cutAnchorMode()).toBe(CUT_ANCHOR_DEFAULT.ffx2);
-    setDemoChapter('yunalesca');
+    setDemoChapter('yojimbo-cavern'); // (Yunalesca has a word of its own since the held-chapters lane: `CUT_ANCHOR_CHAPTERS`)
     expect(cutAnchorMode()).toBe(CUT_ANCHOR_DEFAULT.ffx);
     // a forced mode names both games, and null reads the address again
     setCutAnchorMode('on');
