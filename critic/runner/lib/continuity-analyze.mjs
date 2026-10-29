@@ -12,6 +12,7 @@ import { tagWash, washPolicy, washReport } from './continuity-wash.mjs';
 import { excuseGlideFeet, figureHeightPx, smearPolicy, smearReport, smearedJerk, tagSmears } from './continuity-smear.mjs'; // motion pass (lane "core", step 2): a PLANNED smear is not a snap or a swap jerk (CHK-027)
 import { dissolvePolicy, dissolveTravel } from './continuity-dissolve.mjs'; // pc-residues: the weighted head's travel inside a dissolve is not a swap jerk (CHK-027)
 import { unseenIn, unseenPolicy } from './continuity-unseen.mjs'; // R63-M1: a figure off the view cannot be seen to jerk or to snap (CHK-027)
+import { gapPolicy, startedInGap } from './continuity-gaps.mjs'; // held-chapters lane: a swap whose blend began in a gap of the recording is not a snap
 import { analyzeRigSwap, idleBoxOf, rigConfig, rigCoverage } from './continuity-rig.mjs';
 import { flickerPairs, flickerSummary, flickerWindowMs, tagFlickers } from './continuity-flicker.mjs'; // post-conference plan, step 2: the ready-idle-ready flicker, a named class (reported, not gated)
 import { classReport, prepareClasses } from './continuity-why.mjs'; // fluidity pass, T-02 (lane L5): the named classes, why a painting was asked for, the designed blend (reported; one switchable rule)
@@ -123,6 +124,7 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   const fadeOf = (fig, k) => fig.s.reduce((m, raw) => { const p = planeOf(raw); return p && p.k === k ? Math.max(m, p.fade) : m; }, 0);
   const swaps = [];
   const unseenP = unseenPolicy(cfg);
+  const gapP = gapPolicy(cfg);
   const rigOn = rigConfig(cfg), idleBox = new Map(); // R57-002: a rigged figure's change of key is read by continuity-rig.mjs
   let seq = 0;
   for (const sw of meta.swaps) {
@@ -150,7 +152,9 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
     const res = analyzeSwap({ frames, at: at - first, swap: { from: sw.from, to: sw.to }, anchors, k1600, camCut: nearCut(sw.n), cfg, names });
     // R63-M1: a swap in a frame in which the figure is off the view is not seen, so it is not a snap (kept as `snapUnseen`); `figurePx` is how tall the figure is drawn there (the planned-smear excuse reads it)
     const unseen = unseenP.excuse && unseenIn(list[at].fig, meta.view, unseenP);
-    swaps.push({ ...base, startFrame: list[first].n, ...res, ...(unseen ? { unseen: true, snap: false, snapUnseen: res.snap } : {}), figurePx: figureHeightPx([list[at - 1], list[at]], k1600), notShowing: false, counted: !res.camCut && !res.unmeasured });
+    // held-chapters lane (Ixion XVI's one snap, 4,765 ms of recording missing across a swap): the incoming painting was already showing in the last frame before a gap, so its blend began inside the gap and this recording has no frame of how it was made
+    const gapped = gapP.excuse && startedInGap(list, at, sw.to, fadeOf, cfg.motion.blendFadeMin);
+    swaps.push({ ...base, startFrame: list[first].n, ...res, ...(unseen ? { unseen: true, snap: false, snapUnseen: res.snap } : {}), ...(gapped ? { gapped: true, snap: false, snapGap: res.snap } : {}), figurePx: figureHeightPx([list[at - 1], list[at]], k1600), notShowing: false, counted: !res.camCut && !res.unmeasured });
   }
   // r40 instrument edit (b): the steps of one twirl are one staged change (chained through every swap, counted or not, so a step under a camera cut does not split it)
   groupStaged(swaps, cfg.staged?.gapFrames ?? STAGED_GAP_FRAMES);
