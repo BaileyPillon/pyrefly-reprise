@@ -82,7 +82,7 @@ export function phoneFigures(view: Pick<IntentView, 'estimate' | 'randomTarget'>
     const heals = t.amount < 0;
     const kind = !harms ? 'candidate' : t.lethal ? 'lethal' : heals ? 'heal' : 'damage';
     const amount = kind === 'candidate' ? '' : kind === 'lethal' ? 'KO' : `${heals ? '+' : ''}${num(t.amount)}`;
-    const [lo, hi] = [Math.abs(t.min), Math.abs(t.max)].sort((x, y) => x - y); // a heal's bounds may be negative: the smaller magnitude first
+    const [lo = 0, hi = 0] = [Math.abs(t.min), Math.abs(t.max)].sort((x, y) => x - y); // a heal's bounds may be negative: the smaller magnitude first
     const band = (kind === 'damage' || kind === 'heal') && t.min !== t.max ? `${heals ? '+' : ''}${num(lo)}–${num(hi)}` : '';
     return { name: t.targetName, short: shorts[i]!, amount, band, kind };
   });
