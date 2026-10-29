@@ -29,6 +29,7 @@ import type { RigActor, RigAsset } from './RigActor.ts';
 import { validateFeet } from './RigValidate.ts';
 import { RIG_SHARE, planRigTextures, rigLedger, rigNormalMB, tierPartsOf } from './RigTier.ts';
 import { rigRelightWanted } from '../look/relight/RigRelight.ts'; // the HD-2D look: a rig's normal pieces load only while a look is armed
+import { partyRigFolder } from '../motion/PartyRigsSwitch.ts'; // `?partyrigs=v2`: a party pilot's rig is read from `rigs/<subject>-v2/` (the folder is the only thing that changes)
 
 export interface RigChoice {
   subject: string;
@@ -85,25 +86,27 @@ export function rigSwitch(setting?: () => boolean, search = globalThis.location?
 
 const reads = new Map<string, Promise<{ data: RigData } | { reason: string }>>();
 
-/** The folder a subject's rig is in, as a URL (base-aware). */
+/** The folder a subject's rig is in, as a URL (base-aware). A party pilot under `?partyrigs=v2` is in `<subject>-v2` (`PartyRigsSwitch.partyRigFolder`); every other subject is in its own name. */
 export function rigBaseUrl(subject: string): string {
-  return artUrl(`art/rigs/${subject}`);
+  return artUrl(`art/rigs/${partyRigFolder(subject)}`);
 }
 
 async function readSubject(subject: string): Promise<{ data: RigData } | { reason: string }> {
   const url = `${rigBaseUrl(subject)}/rig.json`;
+  const folder = partyRigFolder(subject);
+  const none = folder === subject ? 'no rig.json' : `no rig.json in rigs/${folder}`;
   let res: Response;
   try {
     res = await fetch(url, { cache: 'no-cache' });
   } catch {
-    return { reason: 'no rig.json' };
+    return { reason: none };
   }
-  if (!res.ok) return { reason: 'no rig.json' };
+  if (!res.ok) return { reason: none };
   let json: unknown;
   try {
     json = JSON.parse(await res.text()); // the dev server answers a missing file with index.html and a 200: that is not JSON
   } catch {
-    return { reason: 'no rig.json' };
+    return { reason: none };
   }
   const read = readRig(json);
   return read.ok ? { data: read.data } : { reason: `invalid rig.json: ${read.reason}` };
@@ -112,12 +115,12 @@ async function readSubject(subject: string): Promise<{ data: RigData } | { reaso
 /** Does the art manifest list a rig for this subject? A missing manifest, or one with no `rigs`, lists none. */
 async function manifestLists(subject: string): Promise<boolean> {
   const m = await loadArtManifest();
-  return m?.rigs?.includes(subject) === true;
+  return m?.rigs?.includes(partyRigFolder(subject)) === true;
 }
 
 /** The texture tiers the art manifest lists for a rig (`rigTiers`), undefined where it lists none or has not loaded (it has, by the time a rig is asked for: `manifestLists` loaded it; only `?rig=on` skips that). */
 function manifestTiers(subject: string): readonly number[] | undefined {
-  return artManifest()?.rigTiers?.[subject];
+  return artManifest()?.rigTiers?.[partyRigFolder(subject)];
 }
 
 /** Forget what was read (a dev reloading a rig it just changed). */
@@ -137,10 +140,11 @@ const live = new Map<string, RigActor>();
  */
 export async function chooseRig(subject: string, idleUrl: string | undefined, sw: { on: boolean; reason: string }, dressphere = false, listed: (subject: string) => Promise<boolean> = manifestLists, ctx: ChooseContext = {}): Promise<RigChoice> {
   const done = (c: RigChoice): RigChoice => note(c);
+  const folder = partyRigFolder(subject); // the read is kept per FOLDER: a switchboard flip between `on` and `v2` must not hand one pilot the other's file
   if (!sw.on) return done({ subject, on: false, reason: `switch off (${sw.reason})` });
-  if (sw.reason !== '?rig=on' && !(await listed(subject))) return done({ subject, on: false, reason: 'no rig listed in the art manifest' });
-  let got = reads.get(subject);
-  if (!got) reads.set(subject, (got = readSubject(subject)));
+  if (sw.reason !== '?rig=on' && !(await listed(subject))) return done({ subject, on: false, reason: `no rig listed in the art manifest${folder === subject ? '' : ` (rigs/${folder})`}` });
+  let got = reads.get(folder);
+  if (!got) reads.set(folder, (got = readSubject(subject)));
   const r = await got;
   if ('reason' in r) return done({ subject, on: false, reason: r.reason });
   const { data } = r;

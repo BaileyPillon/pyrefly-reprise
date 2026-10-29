@@ -193,7 +193,7 @@ export class RigActor extends PaintedActor {
     const refused = this.refuses(name, opts);
     super.setPose(name, opts); // the life layer, the ring, the flinch tokens; the carrier itself stays on its idle
     if (!this.ready || refused) return;
-    const key = resolveKeyName(name, this.rigKeys, this.dressphere);
+    const key = resolveKeyName(opts?.paint ?? name, this.rigKeys, this.dressphere); // `paint`: the stance look's "the ready STATE on the idle painting" (`StanceSwap`), as `PaintedActor.setPose` reads it
     if (key === null) return; // a name this rig and the game's chains know nothing of: the figure stays as it is, like a painting it cannot draw
     if (key === this.key && !opts?.force) return;
     const target = this.compiled.get(key)!;
