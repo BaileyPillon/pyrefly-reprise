@@ -7,7 +7,7 @@ import { keyHint } from './padGlyphs.ts';
 import { EnemyIntentOverflow } from './enemy-intent-overflow.ts';
 import { briefStatusChip } from './enemy-intent-brief-status.ts';
 import { anyLethalRow, damageHtml } from './enemy-intent-damage.ts';
-import { attachPhoneFit, phoneBodyHtml, phoneLineOn } from './enemy-intent-phone.ts';
+import { attachPhoneFit, phoneBodyHtml, phoneDensityOf, type PanelDensity } from './enemy-intent-phone.ts';
 
 /**
  * The enemy-intent slab: **what the boss is about to do, hanging over its
@@ -496,10 +496,10 @@ export class EnemyIntentPanel {
     return this.lastSignature;
   }
 
-  /** `'full'` or `'brief'` right now: the mount's option, which may be a function of the live settings; `'phone'` on the upright phone (two rows, `enemy-intent-phone.ts`). */
-  private densityNow(): 'full' | 'brief' | 'phone' {
+  /** `'full'` or `'brief'` right now: the mount's option, which may be a function of the live settings; on the upright phone that game's two-row line (`'phone'` / `'phone-brief'`, `enemy-intent-phone.ts`). */
+  private densityNow(): PanelDensity {
     const d = this.mountOpts?.density;
-    return phoneLineOn() ? 'phone' : (typeof d === 'function' ? d() : d) ?? 'full';
+    return phoneDensityOf((typeof d === 'function' ? d() : d) ?? 'full', this.opts.game);
   }
 
   private pollPad(): void {
@@ -918,8 +918,8 @@ function chargeHtml(view: IntentView): string {
  * one is read in the two seconds before a hit lands. That covers the three
  * inline ones round 02 #26 found in Chapter 1, the charge row's, and the footer.
  */
-function bodyHtml(view: IntentView, density: 'full' | 'brief' | 'phone' = 'full'): string {
-  if (density === 'phone') return phoneBodyHtml(view, confidenceHtml(view), briefStatusChip(view.statusText), plain(view.moveName));
+function bodyHtml(view: IntentView, density: PanelDensity = 'full'): string {
+  if (density === 'phone' || density === 'phone-brief') return phoneBodyHtml(view, confidenceHtml(view), density === 'phone' ? '' : briefStatusChip(view.statusText), plain(view.moveName));
   const elements = view.elements.filter((e) => e !== 'none'); const full = density === 'full';
   return [
     `<p class="eint__enemy"><span>${escapeHtml(view.enemyName)}</span><i>${escapeHtml(timingText(view))}</i></p>`,

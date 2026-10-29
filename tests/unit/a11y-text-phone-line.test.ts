@@ -138,7 +138,9 @@ describe('the fit: the least useful piece goes first, one at a time, and only wh
         return parts.join(' ').length > budget && !has('p-el');
       }
       if (has('p-sm')) return text(row.querySelector('.eint__sum')).length > budget && !has('p-el2');
-      const per = [...row.querySelectorAll('.eint__fig')].map((f) => (has('p-sh') ? text(f.querySelector('.eint__f3')) : text(f.querySelector('.eint__fn'))) + ' ' + text(f.querySelector('.eint__fa')));
+      // the band is what a ranged figure shows until the point rung (p-pt) takes it off
+      const num = (f: Element): string => text(f.querySelector(f.querySelector('.eint__fb') && !has('p-pt') ? '.eint__fb' : '.eint__fa'));
+      const per = [...row.querySelectorAll('.eint__fig')].map((f) => (has('p-sh') ? text(f.querySelector('.eint__f3')) : text(f.querySelector('.eint__fn'))) + ' ' + num(f));
       return per.join(' / ').length + 'random: '.length > budget && !has('p-el2');
     };
   }
@@ -154,7 +156,7 @@ describe('the fit: the least useful piece goes first, one at a time, and only wh
 
   it('a line that fits has no rung on it; a line that never fits goes through every rung of row 1 and ends with the ellipsis', () => {
     expect(fitPhoneLine(body(), measure(200))).toEqual([]);
-    expect(fitPhoneLine(body(), measure(5))).toEqual([...ROW1_RUNGS.slice(0, 5), 'p-sh', 'p-sm', 'p-el2']);
+    expect(fitPhoneLine(body(), measure(5))).toEqual([...ROW1_RUNGS.slice(0, 5), ...ROW2_RUNGS]); // the base line's figures carry ranges, so the point rung is spent too
   });
 
   it('row 2 shortens the names first, then becomes a count and a spread; the figures are never dropped before that', () => {

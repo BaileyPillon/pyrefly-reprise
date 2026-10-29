@@ -6,7 +6,7 @@
  *
  *   row 1  [NAME next] [Move] [SCRIPTED] [ZOMBIE 99%]            nothing wraps; `fitPhoneLine` drops, in this order: p-cf (the SCRIPTED badge), p-tm (the timing), p-nm (the enemy's name),
  *                                                                p-ch (the status chip), then p-el (the move name takes an ellipsis)
- *   row 2  [random:] [Tidus 753] / [Yuna 794] / [Kimahri 743]    p-sh (names to three letters), p-sm ("random: 6 targets . 320-540"), p-el2 (an ellipsis)
+ *   row 2  [random:] [Tidus 707-799] / [Yuna 746-842]            p-sh (names to three letters), p-pt (the band falls back to the point figure, 753), p-sm ("random: 6 targets . 320-540"), p-el2 (an ellipsis)
  *
  * Each row is ONE line box (1.3em of the 14 px type), so the two rows are the 2.6em the body is clamped to (`phone-battle-parts.css`, `.eint__body`): the figures are never the part that is cut.
  */
@@ -66,14 +66,20 @@ html[data-phone-battle] .eint__r2--random .eint__fig + .eint__fig::before {
 html[data-phone-battle] .eint__fn {
   font-weight: 600;
 }
-html[data-phone-battle] .eint__fa {
+html[data-phone-battle] .eint__fa,
+html[data-phone-battle] .eint__fb {
   font-weight: 700;
+}
+/* a figure with a range prints the range (release 67's TIDUS 707-799: a player asking whether 760 HP dies needs the band); the point figure is in the markup and drawn only by the p-pt rung. A figure with no range has only the point. */
+html[data-phone-battle] .eint__fig--ranged .eint__fa {
+  display: none;
 }
 /* not by colour alone: the lethal figure says KO and the heal carries a + */
 html[data-phone-battle] .eint__fig--lethal .eint__fa {
   color: #ff8a8a;
 }
-html[data-phone-battle] .eint__fig--heal .eint__fa {
+html[data-phone-battle] .eint__fig--heal .eint__fa,
+html[data-phone-battle] .eint__fig--heal .eint__fb {
   color: #8fe0b0;
 }
 /* the shortened names and the count-and-spread are in the markup and drawn only by their rung */
@@ -108,6 +114,12 @@ html[data-phone-battle] .eint__phone.p-sh .eint__fn {
   display: none;
 }
 html[data-phone-battle] .eint__phone.p-sh .eint__f3 {
+  display: inline;
+}
+html[data-phone-battle] .eint__phone.p-pt .eint__fig--ranged .eint__fb {
+  display: none;
+}
+html[data-phone-battle] .eint__phone.p-pt .eint__fig--ranged .eint__fa {
   display: inline;
 }
 html[data-phone-battle] .eint__phone.p-sm .eint__fig {
