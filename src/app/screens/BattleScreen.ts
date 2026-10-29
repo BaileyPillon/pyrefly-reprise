@@ -33,6 +33,9 @@ import { setMenuHold } from '../../engine/motion/MenuHold.ts';
 import { setNumberFacts } from '../../ui/common/proNumbers.ts'; // lane pro-look: the glass numbers read a target's max HP for their tiers
 import { setCurvesChapter } from '../../engine/motion/CurvesSwitch.ts'; // motion pass (lane "core"): the new curves play only in Chapters I and IV
 import { battleFrameClocks } from '../../engine/PoseSwap.ts';
+import { releaseBackground } from '../../engine/LoadHold.ts';
+import { endFight } from '../../engine/LeaveRelease.ts'; // lane "budgets-2": what the fight did not use is let go once its stage is gone
+import { demoModeOn } from '../demoMode.ts';
 import { SETTLE_CAM_EPSILON } from './BattleScreenTypes.ts';
 import { BattleScreenEncounter } from './BattleScreenEncounter.ts';
 
@@ -206,6 +209,8 @@ export class BattleScreen extends BattleScreenEncounter {
 
   /** Dispose what `enter()` built; also where an `enter()` overtaken by {@link exit} stops. */
   protected releaseParts(): void {
+    releaseBackground(); // a hold the entry never opened (the screen was torn down while it loaded) opens now
+    const staged = this.stage !== null; // an enter() overtaken before its stage was built keeps what the caches hold (nothing was used, nothing is known)
     this.hud?.unmount();
     this.hud = null;
     this.cutscenes?.dispose();
@@ -228,5 +233,6 @@ export class BattleScreen extends BattleScreenEncounter {
     this.scene = null;
     this.presenter = null;
     this.engine = null;
+    if (staged) endFight({ keep: demoModeOn() }); // the figures have let go of their pins: the paintings and lighting maps this fight did not use go (`engine/LeaveRelease.ts`)
   }
 }

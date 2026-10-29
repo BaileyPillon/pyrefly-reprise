@@ -55,6 +55,43 @@ const CAP_PINNED = 112;
 const capNow = (): number => (pinned.size > 0 ? CAP_PINNED : CAP_TODAY);
 /** Pinned maps, with how many figures hold each one: a map two live figures share is let go only when the last of them goes (review minor). */
 const pinned = new Map<string, number>();
+/**
+ * Release 68 (lane "budgets-2", both games): the fight each map was last asked for in, as `PaintedArtCache.beginPaintingEpoch` numbers them. {@link releaseRelightBefore} lets go of the maps
+ * a fight did not use once its figures are gone: the cache evicts one map per load, so two chapters' maps (68 of them for Chapters I and IV) stayed resident after every fight.
+ */
+const touched = new Map<string, number>();
+let epochNow = 0;
+
+/** A fight begins (the same number the painting cache opened): maps asked for from here on belong to it. */
+export function beginRelightEpoch(n: number): void {
+  epochNow = n;
+}
+
+/** The decoded maps the cache holds, and how many are pinned by a figure on stage (the debug probe and the tests). */
+export function relightCacheStats(): { maps: number; textures: number; pinned: number } {
+  let textures = 0;
+  for (const v of cache.values()) if (v instanceof Texture) textures++;
+  return { maps: cache.size, textures, pinned: pinned.size };
+}
+
+/**
+ * Dispose and forget every map that no figure pins and that was not asked for since fight `from` began. A map still loading is forgotten too; when it arrives it is disposed, not kept.
+ * Returns how many textures were freed.
+ */
+export function releaseRelightBefore(from: number): number {
+  let freed = 0;
+  for (const [url, entry] of [...cache]) {
+    if (pinned.has(url) || (touched.get(url) ?? 0) >= from) continue;
+    if (entry instanceof Texture) {
+      entry.dispose();
+      freed++;
+    }
+    cache.delete(url);
+    touched.delete(url);
+    waiters.delete(url);
+  }
+  return freed;
+}
 let loader: TextureLoader | null = null;
 
 /** Counters for the debug API and the captures. */
@@ -68,11 +105,16 @@ function adopt(m: ShaderMaterial, url: string, tex: Texture | null): void {
 
 function fetchMap(url: string): void {
   cache.set(url, 'loading');
+  touched.set(url, epochNow);
   relightStats.requested++;
   loader ??= new TextureLoader();
   loader.load(
     url,
     (t) => {
+      if (cache.get(url) !== 'loading') {
+        t.dispose(); // released while it was on its way (a fight ended): nobody keeps it
+        return;
+      }
       t.colorSpace = NoColorSpace; // data, not colour
       t.minFilter = LinearMipmapLinearFilter;
       t.magFilter = LinearFilter;
@@ -88,6 +130,7 @@ function fetchMap(url: string): void {
           if (v instanceof Texture && !pinned.has(k)) {
             v.dispose();
             cache.delete(k);
+            touched.delete(k);
             break;
           }
         }
@@ -95,6 +138,7 @@ function fetchMap(url: string): void {
     },
     undefined,
     () => {
+      if (cache.get(url) !== 'loading') return; // released while it was on its way
       cache.set(url, 'missing');
       relightStats.missing++;
       for (const m of waiters.get(url) ?? []) adopt(m, url, null);
@@ -126,6 +170,7 @@ export function prefetchRelight(paintingUrl: string | undefined, scale: number |
     held?.add(url);
   }
   if (!cache.has(url)) fetchMap(url);
+  else touched.set(url, epochNow);
   return url;
 }
 
@@ -165,6 +210,7 @@ export function bindRelight(material: ShaderMaterial, paintingUrl: string | unde
     return;
   }
   const hit = cache.get(url);
+  if (hit) touched.set(url, epochNow);
   if (hit instanceof Texture) {
     // refresh the entry's place in the cache (most recently used last)
     cache.delete(url);
