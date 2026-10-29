@@ -6,6 +6,16 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-10-29 — Lane load-diet: the first command no longer waits for every pose (branch `load-diet`, from `origin/r68-int` `7d80590d0`; plumbing for BOTH games; additive)
+
+No contract file changes (none of `src/sprites/format.ts`, `SpriteActor.ts`, `Input.ts`, `battle/common/types.ts`, `story/dsl.ts`, `data/encounters.ts`). Authority: Bailey 2026-10-28 ~13:00 EDT, "please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation. work on all those. i'll go with all your recommendations and decision-making for the next couple days." Evidence and numbers: `docs/handoff/load-diet.md`.
+
+- **`PaintedActorOptions.streamCeilingMs?: number` and `PoseSwapOptions.streamCeilingMs?: number`** (optional, absent = release 67): `PaintedActor.loadPoses` waits for the opening poses (`idle*`, `ready*`, and any pose that is the same file) without a limit and for the others at most that long, then builds the figure and installs each remaining pose as it lands (`PaintedActorPoses.installLate`). Only the battle stage sets it (`StageFigureRequest.figureSpec`, 3,000 ms unless `?loaddiet=off`). A blend reload never streams. `PaintedActor.create(opts)` forwards it; no other caller passes it.
+- **Not additive, with its reason:** with the option set and a line slower than the ceiling, the figure exists with its opening poses only for a while, and a request for a pose not there draws the next of its fallback chain (`POSE_FALLBACKS`) until the pose lands; before this, `create` resolved only with every pose. Release 67's behaviour is `?loaddiet=off`.
+- New modules: `src/engine/LoadDiet.ts` (the switch, `poseNeed`, the split, the ceiling race), `src/engine/PoseStream.ts` (`startWindowed`, `loadStreamed`), `src/app/screens/preloadFetch.ts` (the preload's one-request lookahead). `battlePreload.ts` phase 4 orders by need.
+
+Game case: BOTH games (shared loading and figure-build plumbing). Tests: `tests/unit/load-diet.test.ts` (12), `load-diet-pose-stream.test.ts` (6), `load-diet-stream.test.ts` (6), `load-diet-preload.test.ts` (8), `load-diet-bytes.test.ts` (7), `load-diet-request.test.ts` (3), and `r39-preload-masters.test.ts` now runs with the diet on and off.
+
 ## 2026-10-28 — Lane ui-input: one input/focus contract (`Input.ts` asks `FocusLedger`; branch `ui-input`, from `origin/main` `e50a2b22d`; plumbing for BOTH games; additive for every screen that does not opt in)
 
 Contract file changed: `src/app/Input.ts` (`src/sprites/format.ts`, `SpriteActor.ts`, `battle/common/types.ts`, `story/dsl.ts`, `data/encounters.ts` untouched). Authority: Bailey 2026-10-28 ~13:00 EDT, "please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation ... i'll go with all your recommendations and decision-making for the next couple days" (ChatGPT's point 6, Codex's audit T-0002). The full contract: `docs/handoff/ui-input-contract.md`.
