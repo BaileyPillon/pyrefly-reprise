@@ -36,8 +36,8 @@ describe('the switch', () => {
 describe('poseNeed', () => {
   it('puts the opening poses first, the everyday moves next, the rare ones last', () => {
     for (const s of ['idle', 'idle-far', 'idle-near', 'ready']) expect(poseNeed(s)).toBe(0);
-    for (const s of ['attack', 'cast', 'hurt', 'item', 'defend', 'guard', 'telegraph']) expect(poseNeed(s)).toBe(1);
-    for (const s of ['ko', 'charge', 'twirl-start', 'windup', 'summon', 'stage-2']) expect(poseNeed(s)).toBe(2);
+    for (const s of ['attack', 'cast', 'hurt', 'item', 'defend', 'guard', 'telegraph', 'ko']) expect(poseNeed(s)).toBe(1); // ko with the everyday moves: a figure that goes down before it has landed lies down in its standing painting (review m3)
+    for (const s of ['charge', 'twirl-start', 'windup', 'summon', 'stage-2']) expect(poseNeed(s)).toBe(2);
     for (const s of ['victory', 'sleep', 'critical', 'follow', 'overdrive', 'od-energy-rain', 'od-x2-lady-luck-attack-reels']) expect(poseNeed(s)).toBe(3);
   });
 

@@ -5,12 +5,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const prewarmed: string[] = [];
+const heldAt: number[] = []; // how many lookahead images were alive at each decode (review m5: the preload must let go of each one when its decode is done)
 vi.mock('../../src/engine/PaintedArt.ts', async (importOriginal) => {
   const real = await importOriginal<typeof import('../../src/engine/PaintedArt.ts')>();
   return {
     ...real,
     prewarmPainted: vi.fn(async (url: string) => {
       prewarmed.push(url);
+      heldAt.push((await import('../../src/app/screens/preloadFetch.ts')).prefetchHeld());
       return true;
     }),
   };
@@ -28,6 +30,7 @@ const fetched: string[] = [];
 
 beforeEach(() => {
   prewarmed.length = 0;
+  heldAt.length = 0;
   images.length = 0;
   fetched.length = 0;
   resetImageWarm();
@@ -109,6 +112,14 @@ describe('phase 4 of the battle preload', () => {
     expect(new Set(onRuns).size).toBeLessThan(onRuns.length);
   });
 
+  it('lets go of each lookahead image once its decode is done (never more than the window alive)', async () => {
+    setLoadDiet(true);
+    await phase4('seymour-flux');
+    expect(Math.max(...heldAt)).toBeGreaterThan(0); // lookahead images were alive during the decodes...
+    expect(Math.max(...heldAt)).toBeLessThanOrEqual(4); // ...at most FETCH_WINDOW (3) ahead, plus the one being decoded
+    expect(prefetchHeld()).toBe(0); // and none is left when the preload ends
+  });
+
   it('within a need the boss still comes before the party', async () => {
     setLoadDiet(true);
     const later = await phase4('seymour-flux');
@@ -147,6 +158,16 @@ describe('the lookahead (preloadFetch)', () => {
     ac.abort();
     await p;
     expect(images[0]!.removed).toBe(true);
+    expect(prefetchHeld()).toBe(0);
+  });
+
+  it('a preload that was already stopped starts no request and holds nothing (review m2)', async () => {
+    setLoadDiet(true);
+    const ac = new AbortController();
+    ac.abort();
+    await prefetchPose('k', '/a/stale.png', ac.signal);
+    expect(images).toHaveLength(0);
+    expect(fetched).toHaveLength(0);
     expect(prefetchHeld()).toBe(0);
   });
 

@@ -2,8 +2,8 @@
  * How the battle preload's lookahead brings a pose's file in (load diet, lane "load-diet", 2026-10-29; both games, shared loading plumbing).
  *
  * Phase 4 of `battlePreload.ts` downloads a few poses ahead of the one-at-a-time decode. It used to do that with `fetch(url).blob()` and let the decode ask for the
- * same file again through an `<img>` (`PaintedArt.tryLoadImage`): the G4 run of round 30b (`4c-reqlog-ch1.json`, cache off) saw 58 files requested twice, 46 MB
- * of the 170 MB, and with the cache on every second ask is still a conditional request and a round trip (the art is served `max-age=0, must-revalidate`).
+ * same file again through an `<img>` (`PaintedArt.tryLoadImage`): the G4 run of round 30b (`4c-reqlog-ch1.json`, cache off) saw 58 extra requests over 48 files (43 of them, 34.3 MB, this `fetch` plus
+ * `<img>` pair), and with the cache on every second ask is still a conditional request and a round trip (the art is served `max-age=0, must-revalidate`).
  * Here the lookahead is an `<img>` of its own, held until the decode of that file is done: the browser's memory cache then answers the decode's `<img>` with the
  * request already in flight or finished, no second request. Nothing is decoded or drawn from it. With the diet off (`?loaddiet=off`) it is the `fetch` it was.
  */
@@ -28,7 +28,7 @@ function viaFetch(url: string, signal: AbortSignal): Promise<void> {
  */
 export function prefetchPose(key: string, pixelUrl: string, signal: AbortSignal): Promise<void> {
   if (!loadDiet() || typeof Image === 'undefined') return viaFetch(pixelUrl, signal);
-  if (held.has(key)) return Promise.resolve();
+  if (signal.aborted || held.has(key)) return Promise.resolve(); // a preload stopped while this url was being resolved starts nothing (an aborted `fetch` starts no request either; review m2)
   const img = new Image();
   img.decoding = 'async';
   img.crossOrigin = 'anonymous'; // the decode's `<img>` is three's `ImageLoader`, which asks `crossOrigin = 'anonymous'`: a different request mode would not share this request in the memory cache

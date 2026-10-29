@@ -57,9 +57,14 @@ export abstract class PaintedActorPoses extends PaintedActorLife {
     const load = (u: string): Promise<PaintedTexture> =>
       byUrl.get(u) ?? byUrl.set(u, loadPainted(u, this.placeholderFactory, (c) => c.height * this.placeholderBaseline, this.matte, this.fitBaseline)).get(u)!;
     // Load diet (`LoadDiet.ts`, `PoseStream.ts`): the opening poses are waited for as ever; the rest for at most the ceiling, then the figure is built and they stream in (`installLate`).
-    const stream = opts?.streamCeilingMs && !opts.blend ? await loadStreamed(poses, names, opts.streamCeilingMs, load, () => this.streamDead) : null;
+    // This set is one claim (`PoseClaims`): once it has installed, a later set that takes a name stops this one's load of it and its landing (review M1).
+    const claim = this.claims.next();
+    let installed = false;
+    const stream = opts?.streamCeilingMs && !opts.blend ? await loadStreamed(poses, names, opts.streamCeilingMs, load, (n) => this.streamDead || (installed && !this.claims.holds(n, claim))) : null;
     const loaded = stream ? stream.loaded : await Promise.all(names.map((n) => load(poses[n]!)));
     if (stream) names = stream.names;
+    installed = true;
+    this.claims.stamp(Object.keys(poses), claim);
     const previous = names.map((n) => this.poses.get(n));
     names.forEach((n, i) => {
       this.poses.set(n, loaded[i]!);
@@ -74,28 +79,29 @@ export abstract class PaintedActorPoses extends PaintedActorLife {
     // `force`, because re-loading a pose set (a stand-in being swapped for the
     // real painting) keeps the same pose *name* with a different texture.
     if (first) this.showPoseSet(first, opts?.blend === true);
-    stream?.later?.names.forEach((n, i) => void stream.later!.each[i]!.then((t) => this.installLate([n], [t], poses), () => undefined)); // each pose installs as it lands
+    stream?.later?.names.forEach((n, i) => void stream.later!.each[i]!.then((t) => this.installLate(n, t, poses, claim), () => undefined)); // each pose installs as it lands
   }
 
   /**
-   * Load diet: poses that landed after the figure was built (`loadPoses` with a ceiling). They are installed as a pose set always is, but nothing is shown or restarted: the
-   * figure keeps the painting it is drawing, and the next request for one of these poses finds its own painting instead of the fallback (`resolvePoseName`). A figure disposed
-   * meanwhile frees what landed.
+   * Load diet: a pose that landed after the figure was built (`loadPoses` with a ceiling). It is installed as a pose set always is, but nothing is shown or restarted: the figure keeps the
+   * painting it is drawing, and the next request for this pose finds its own painting instead of the fallback (`resolvePoseName`). A figure disposed meanwhile frees what landed. A pose of a
+   * set that was replaced meanwhile (a spherechange or a form change: `claim` no longer holds the name) is dropped: it was never installed or drawn, so there is nothing to free (review M1).
+   * The planes are re-sized only when something they are sized against changed (the reference, or the painting a plane may be showing), not at every landing: `resize` re-places the showing plane (review m1).
    */
-  private installLate(names: string[], late: PaintedTexture[], poses: PoseMap): void {
+  private installLate(name: string, late: PaintedTexture, poses: PoseMap, claim: number): void {
     if (this.streamDead) {
-      for (const t of new Set(late.map((p) => p.texture))) t.dispose();
+      late.texture.dispose();
       return;
     }
-    names.forEach((n, i) => {
-      const previous = this.poses.get(n);
-      this.poses.set(n, late[i]!);
-      this.owned.add(late[i]!.texture);
-      this.poseUrls[n] = poses[n]!;
-      this.retire(previous);
-    });
+    if (!this.claims.holds(name, claim)) return;
+    const previous = this.poses.get(name);
+    const reference = this.reference;
+    this.poses.set(name, late);
+    this.owned.add(late.texture);
+    this.poseUrls[name] = poses[name]!;
+    this.retire(previous);
     this.pickReference();
-    this.resize();
+    if (previous || this.reference !== reference) this.resize();
     this.prefetchLights();
   }
 
@@ -133,6 +139,7 @@ export abstract class PaintedActorPoses extends PaintedActorLife {
   adoptPoses(poses: Record<string, PaintedTexture>, initial?: string, opts?: PoseSwapOptions): void {
     const names = Object.keys(poses).filter((n) => !opts?.blend || this.poses.get(n) !== poses[n]);
     if (!names.length) return;
+    this.claims.stamp(names, this.claims.next()); // a set still streaming in is not this name's owner any more (review M1)
     for (const name of names) {
       const tex = poses[name]!;
       this.retire(this.poses.get(name));
@@ -170,6 +177,7 @@ export abstract class PaintedActorPoses extends PaintedActorLife {
       { ignoreManifest: true },
     );
     const previous = this.poses.get(name);
+    this.claims.stamp([name], this.claims.next());
     this.poses.set(name, next);
     this.owned.add(next.texture);
     this.poseUrls[name] = target;

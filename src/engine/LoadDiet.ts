@@ -7,7 +7,8 @@
  * (the victory, sleep, critical and follow poses, an Overdrive's keys). This file is the pure half of the cut, with no DOM, no `three` and no clock:
  *
  *   - **The need of a pose** ({@link poseNeed}): 0 the poses the first frames draw (`idle*`, `ready*`), 1 the everyday moves (attack, cast, hurt, item, defend,
- *     telegraph), 2 everything else (ko, a boss's own keys), 3 the rare ones (victory, sleep, critical, follow, Overdrive keys). The preload orders its
+ *     telegraph, and ko: a figure that goes down before its `ko` painting has landed lies down in its standing painting, a wrong picture rather than an approximate one),
+ *     2 everything else (a boss's own keys), 3 the rare ones (victory, sleep, critical, follow, Overdrive keys). The preload orders its
  *     downloads by it ({@link orderByNeed}), so what a fight draws first is first on the wire.
  *   - **The stream** ({@link splitPoses}, {@link raceCeiling}): a figure waits for its opening poses without a limit, as it always did, and for the rest
  *     for at most {@link STREAM_CEILING_MS}. A line that brings them inside the ceiling sees exactly release 67 (every pose loaded before the figure is
@@ -46,11 +47,26 @@ export function streamCeilingMs(): number {
   return loadDiet() ? STREAM_CEILING_MS : 0;
 }
 
+/**
+ * The ceiling a figure is asked for ({@link streamCeilingMs}), or 0 (wait for every pose, release 67's build) for a figure the stream would serve wrongly (review m3 and m6):
+ * one staged already down (`startsDown`: the stage snaps it to its `ko` painting at once, and a `ko` that lands later is never shown over the standing painting laid down in its place), and one of a
+ * scene that cuts between painted keys (`filmKeys`, the hidden FF7 chapter: its windup, spin and punch keys are one sequence, which a fallback would skip).
+ */
+export function figureStreamCeilingMs(why: { startsDown: boolean; filmKeys: boolean }): number {
+  return why.startsDown || why.filmKeys ? 0 : streamCeilingMs();
+}
+
+/** `opts` for a figure that is waited for whole (the demo's prebuild parks figures that must hold every painting the picker uploads: review m7); the request's fingerprint is not changed by it. */
+export function waitedForWhole<T extends { streamCeilingMs?: number }>(opts: T): T {
+  const { streamCeilingMs: _ceiling, ...rest } = opts;
+  return rest as T;
+}
+
 /** 0 the first frames, 1 the everyday moves, 2 the rest, 3 the rare ones. Lower is needed sooner. */
 export type PoseNeed = 0 | 1 | 2 | 3;
 
 const OPENING = /^(idle|ready)/;
-const EVERYDAY = /^(attack|cast|hurt|item|defend|guard|telegraph)$/;
+const EVERYDAY = /^(attack|cast|hurt|item|defend|guard|telegraph|ko)$/;
 const RARE = /^(victory|sleep|critical|follow|overdrive|od-)/;
 
 /** How soon a pose of this name is drawn in a fight (the names are the manifest's: `idle`, `idle-far`, `ready`, `attack`, `od-slice-and-dice`...). */

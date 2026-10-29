@@ -98,11 +98,46 @@ describe('loadStreamed', () => {
     expect(calls).toHaveLength(2); // ready is still on its way: the others wait
     gates.get('ready.png')!.resolve('r');
     await flush();
-    expect(calls.slice(2)).toEqual(['attack.png', 'hurt.png', 'ko.png', 'victory.png']); // the everyday moves, then the rest, the rare ones last
-    for (const u of ['attack.png', 'hurt.png', 'ko.png', 'victory.png']) gates.get(u)!.resolve(u);
+    expect(calls.slice(2)).toEqual(['ko.png', 'attack.png', 'hurt.png', 'victory.png']); // the everyday moves (ko among them), the rare ones last
+    for (const u of ['ko.png', 'attack.png', 'hurt.png', 'victory.png']) gates.get(u)!.resolve(u);
     const out = await p;
     expect(out.later).toBeNull();
     expect(LATE_WINDOW).toBeGreaterThanOrEqual(4);
+  });
+
+  it('the late loads go LATE_WINDOW at a time, never more (review m5: the window was only pinned by a constant)', async () => {
+    const late = Array.from({ length: LATE_WINDOW * 2 + 3 }, (_, i) => `pose${i}`);
+    const poses: Record<string, string> = { idle: 'idle.png', ready: 'ready.png', ...Object.fromEntries(late.map((n) => [n, `${n}.png`])) };
+    let flying = 0;
+    let peak = 0;
+    const pending: Array<() => void> = [];
+    const load = (u: string): Promise<string> => {
+      if (u === 'idle.png' || u === 'ready.png') return Promise.resolve(u);
+      flying++;
+      peak = Math.max(peak, flying);
+      return new Promise((resolve) => pending.push(() => (flying--, resolve(u))));
+    };
+    const p = loadStreamed(poses, Object.keys(poses), 60000, load, () => false);
+    await flush();
+    expect(flying).toBe(LATE_WINDOW); // a fast line is kept full...
+    for (let guard = 0; guard < 200 && (pending.length || flying); guard++) {
+      pending.shift()?.();
+      await flush();
+    }
+    const out = await p;
+    expect(out.later).toBeNull();
+    expect(peak).toBe(LATE_WINDOW); // ...and never fuller
+    expect(out.names).toHaveLength(late.length + 2);
+  });
+
+  it('a pose that stop(name) names is never loaded; the others are', async () => {
+    const calls: string[] = [];
+    const load = (u: string): Promise<string> => (calls.push(u), Promise.resolve(u));
+    const out = await loadStreamed(POSES, names, 5000, load, (n) => n === 'hurt' || n === 'victory');
+    expect(calls).not.toContain('hurt.png');
+    expect(calls).not.toContain('victory.png');
+    expect(calls).toContain('ko.png');
+    expect(out.later?.names).toEqual(['victory', 'ko', 'attack', 'cast', 'hurt']); // the stopped ones reject: the ceiling race gives up on the whole, the rest is handed back
   });
 
   it('past the ceiling it returns the opening poses and the rest on their way', async () => {

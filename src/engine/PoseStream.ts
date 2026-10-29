@@ -12,10 +12,10 @@ import { orderByNeed, poseNeed, raceCeiling, splitPoses } from './LoadDiet.ts';
 export const LATE_WINDOW = 6;
 
 /**
- * Start `tasks` in order, at most `width` in flight; `stop()` true skips the rest (their promises reject with `StreamStopped`). The returned promises are in task order.
+ * Start `tasks` in order, at most `width` in flight; `stop(i)` true skips task `i` (its promise rejects with `StreamStopped`) and the others go on. The returned promises are in task order.
  * Pure of time: a task starts when a slot frees, not on a clock.
  */
-export function startWindowed<T>(tasks: ReadonlyArray<() => Promise<T>>, width: number, stop: () => boolean = () => false): Promise<T>[] {
+export function startWindowed<T>(tasks: ReadonlyArray<() => Promise<T>>, width: number, stop: (index: number) => boolean = () => false): Promise<T>[] {
   const out: Promise<T>[] = [];
   const resolvers: Array<{ ok: (v: T) => void; no: (e: unknown) => void }> = [];
   for (let i = 0; i < tasks.length; i++) out.push(new Promise<T>((ok, no) => resolvers.push({ ok, no })));
@@ -24,7 +24,7 @@ export function startWindowed<T>(tasks: ReadonlyArray<() => Promise<T>>, width: 
   const pump = (): void => {
     while (flying < width && next < tasks.length) {
       const i = next++;
-      if (stop()) {
+      if (stop(i)) {
         resolvers[i]!.no(new StreamStopped());
         continue;
       }
@@ -53,10 +53,36 @@ export function startWindowed<T>(tasks: ReadonlyArray<() => Promise<T>>, width: 
   return out;
 }
 
-/** What a task that was never started rejects with (the figure was disposed while its poses were still being asked for). */
+/** What a task that was never started rejects with (the figure was disposed, or its pose set replaced, while its poses were still being asked for). */
 export class StreamStopped extends Error {
   constructor() {
     super('pose stream stopped');
+  }
+}
+
+/**
+ * Who a figure's pose names belong to (review of the load diet, M1). Every pose set a figure takes (`loadPoses`, `adoptPoses`, a hot-swap) is one claim; when it installs it stamps
+ * the names of its map with its number. A pose that lands late is installed only while its own claim still holds that name: a figure whose set was replaced meanwhile (a spherechange,
+ * a form change) drops what the old outfit's stream brings in, and the old stream starts no more loads for names the new set took. Release 67 could not meet this case (it waited for
+ * the whole set before the figure existed); a name the new set does not carry stays the old outfit's, as it was.
+ */
+export class PoseClaims {
+  private last = 0;
+  private readonly by = new Map<string, number>();
+
+  /** A new claim's number (taken when a load begins, stamped when it installs). */
+  next(): number {
+    return ++this.last;
+  }
+
+  /** The claim `id` has installed these names. */
+  stamp(names: Iterable<string>, id: number): void {
+    for (const n of names) this.by.set(n, id);
+  }
+
+  /** True while no newer claim has installed `name` (the claim `id` is still its owner). */
+  holds(name: string, id: number): boolean {
+    return this.by.get(name) === id;
   }
 }
 
@@ -70,14 +96,14 @@ export interface PoseLoad<T> {
 
 /**
  * Load `names` of the `poses` map (`{ pose: url }`) through `load`, which must answer one promise per URL. `ceilingMs` bounds the wait for the poses after the opening ones;
- * `stop()` true (the figure is gone) stops starting more.
+ * `stop(name)` true (the figure is gone, or another pose set took that name) stops starting that pose's load. A set with no opening pose at all is not streamed: it is waited for whole (nothing to build the figure on).
  */
-export async function loadStreamed<T>(poses: Readonly<Record<string, string>>, names: readonly string[], ceilingMs: number, load: (url: string) => Promise<T>, stop: () => boolean): Promise<PoseLoad<T>> {
+export async function loadStreamed<T>(poses: Readonly<Record<string, string>>, names: readonly string[], ceilingMs: number, load: (url: string) => Promise<T>, stop: (name: string) => boolean): Promise<PoseLoad<T>> {
   const { early, late } = splitPoses(poses, names);
-  if (!late.length) return { names: [...names], loaded: await Promise.all(names.map((n) => load(poses[n]!))), later: null };
+  if (!late.length || !early.length) return { names: [...names], loaded: await Promise.all(names.map((n) => load(poses[n]!))), later: null };
   const earlyLoaded = await Promise.all(early.map((n) => load(poses[n]!)));
   const order = orderByNeed(late, poseNeed);
-  const started = startWindowed(order.map((n) => () => load(poses[n]!)), LATE_WINDOW, stop);
+  const started = startWindowed(order.map((n) => () => load(poses[n]!)), LATE_WINDOW, (i) => stop(order[i]!));
   const byName = new Map(order.map((n, i) => [n, started[i]!] as const));
   const each = late.map((n) => byName.get(n)!);
   for (const p of each) p.catch(() => undefined); // a pose that fails or is skipped is the caller's to handle; never an unhandled rejection

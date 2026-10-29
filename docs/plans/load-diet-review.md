@@ -13,8 +13,9 @@ Lane `load-diet`, 2026-10-29. Both games, shared loading and figure-build plumbi
 | Risk | Why it is bounded | Check |
 |---|---|---|
 | The first menu opens before a move's painting has landed and the move draws the fallback painting | The chain is the engine's own (`POSE_FALLBACKS`: cast, attack, idle); the other poses start in need order, six at a time; only past a 3 s ceiling | ld8 by eye on the phone profile; LD15 and LD16 give the tail |
-| A figure is KO'd before its `ko` painting lands | `ko` is need class 2 (after the everyday moves); the existing no-KO-painting path (`KoFallback`) lays the standing painting down | ld8; a unit test cannot see the picture |
-| `installLate` resizes or restarts a figure mid-move | It sets the pose map, then `pickReference`, `resize`, `prefetchLights`; it never calls `setPose` or `showPoseSet` (so no life state restarts); the same three calls the dev hot-swap (`reloadPose`) makes | `load-diet-stream.test.ts` (6, the real `PaintedActor`); the frame job (ld7) |
+| A figure is KO'd before its `ko` painting lands | A figure staged already down is waited for whole (`figureStreamCeilingMs`); `ko` is need class 1 (the everyday moves, review m3); what remains is a KO in the first seconds on a very slow line, where the existing no-KO-painting path (`KoFallback`) lays the standing painting down | ld8; a unit test cannot see the picture |
+| `installLate` resizes or restarts a figure mid-move | It sets the pose map and `pickReference`, and calls `resize` only when the reference changed or a painting was replaced (review m1: `resize` re-places the showing plane and zeroed its align, meet and lock); it never calls `setPose` or `showPoseSet` (so no life state restarts) | `load-diet-stream.test.ts` (6), `load-diet-review.test.ts` (the showing plane survives a landing); the frame job (ld7) |
+| A late painting of a pose set that was replaced (a spherechange, a form change) overwrites the new outfit | `PoseClaims`: a late pose installs only while its own set still holds the name; the old set's queued loads stop (review M1) | `load-diet-review.test.ts` (3 tests on the real `PaintedActor`) |
 | A figure disposed while poses are in flight leaks textures | `streamDead`: what lands afterwards is disposed, and the windowed loader stops starting new loads | `load-diet-stream.test.ts` ("disposed before the late poses land"), `load-diet-pose-stream.test.ts` ("a stop skips") |
 | The parked-figure fingerprint (demo prebuild) changes | `opts.streamCeilingMs` is in `request.opts` and so in the fingerprint, equally when parking and when taking | `prebuild-figures.test.ts` and `prebuild-warm-order.test.ts` pass |
 | The lookahead `<img>` does not share the decode's request | Then it is one extra request per file, as before (the fetch it replaces was the same); the memory cache is only the hope | LD13; round 30b's cache-off view as the fallback check |
@@ -27,4 +28,4 @@ The candidate's lean build served over the live art (`docs/handoff/load-diet.md`
 
 ## Kill switch and rollback
 
-`?loaddiet=off` on the address; in code, `LoadDiet.loadDiet()` returns false. Nothing is saved, so there is no save-data effect. Reverting the two commits (`8b7f7223d`, `85ec6b45b`) restores release 67 exactly.
+`?loaddiet=off` on the address; in code, `LoadDiet.loadDiet()` returns false. Nothing is saved, so there is no save-data effect. Reverting the load-diet commits (`8b7f7223d`, `85ec6b45b`, `96aeba53e`, and the review fix pass after them) restores release 67 exactly.

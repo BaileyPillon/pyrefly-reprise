@@ -25,6 +25,7 @@ import { figureKind, figureSpec, type FigureEnv } from '../../engine/StageFigure
 import { tryRigFigure, type BuiltFigure } from '../../engine/rig/RigStage.ts';
 import { unregisterRigUse } from '../../engine/rig/RigLoad.ts';
 import { PaintedActor } from '../../engine/PaintedActor.ts';
+import { waitedForWhole } from '../../engine/LoadDiet.ts';
 import { groundLumaOf } from '../../engine/ContactShadow.ts';
 import { dropParked, hasParked, parkFigure, parkedActors } from '../../engine/FigureCache.ts';
 import { demoChapter } from '../../engine/motion/DemoGate.ts';
@@ -129,7 +130,7 @@ export function newPrebuildPlan(app: PrebuildApp, chapter: Chapter, calm: () => 
     const art = await resolveArt(artCandidatesFor(c, ns), kind);
     const spec = figureSpec(env!, c, art);
     if (hasParked(scope, c.id, spec.fingerprint)) return;
-    const made: BuiltFigure = (await tryRigFigure(spec.request)) ?? { actor: await PaintedActor.create(spec.request.opts), rig: null };
+    const made: BuiltFigure = (await tryRigFigure(spec.request)) ?? { actor: await PaintedActor.create(waitedForWhole(spec.request.opts)), rig: null }; // a parked figure holds every painting the picker uploads (load diet, review m7)
     parkOrDispose(scope, c.id, spec.fingerprint, made, calm);
   }
 

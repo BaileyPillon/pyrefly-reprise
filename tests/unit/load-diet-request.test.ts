@@ -23,6 +23,22 @@ describe('the stage figure request', () => {
     expect(figureSpec(env, fiend('tidus', 'party'), art).request.opts.streamCeilingMs).toBe(STREAM_CEILING_MS);
   });
 
+  it('a figure staged already down is waited for whole (review m3: its `ko` painting must be there when the stage snaps it down)', () => {
+    setLoadDiet(true);
+    const down = figureSpec(env, { ...fiend('tidus', 'party'), alive: false } as Combatant, art);
+    expect('streamCeilingMs' in down.request.opts).toBe(false);
+    const up = figureSpec(env, fiend('tidus', 'party'), art);
+    expect(up.request.opts.streamCeilingMs).toBe(STREAM_CEILING_MS);
+    expect(down.fingerprint).not.toBe(up.fingerprint);
+  });
+
+  it('a scene that cuts between painted keys (the hidden FF7 chapter) waits for every pose (review m6)', () => {
+    setLoadDiet(true);
+    const film = { ...env, slots: { ...CAVERN_STOLEN_FAYTH_SLOTS, poseCut: true as const } };
+    expect('streamCeilingMs' in figureSpec(film, fiend('guard-scorpion'), art).request.opts).toBe(false);
+    expect('streamCeilingMs' in figureSpec(film, fiend('cloud', 'party'), art).request.opts).toBe(false);
+  });
+
   it('?loaddiet=off leaves the option out, and the fingerprint with it', () => {
     setLoadDiet(true);
     const on = figureSpec(env, fiend('yojimbo'), art);
