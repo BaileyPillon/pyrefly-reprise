@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { BattleState } from '../../src/battle/common/types.ts';
 import { setDemoChapter } from '../../src/engine/motion/DemoGate.ts';
 import { F1_CMD_OPEN, F1_INTEL, F1_OVER, HUD_F1_CLASS, HudF1, type HudF1Host } from '../../src/ui/hudf1/HudF1.ts';
-import { setHudF1Mode } from '../../src/ui/hudf1/HudF1Switch.ts';
+import { setHudF1Mode, setHudF1TextMode } from '../../src/ui/hudf1/HudF1Switch.ts';
 
 /**
  * The F1 HUD's layer (lane "hud-f1", `ui/hudf1/HudF1.ts`): off it adds nothing; on it draws the boss ribbon from the headline enemy, the hero over the open menu (the menu's own actor, not the party list's
@@ -47,12 +47,28 @@ beforeEach(() => {
 });
 afterEach(() => {
   setHudF1Mode(null);
+  setHudF1TextMode(null);
   setDemoChapter(undefined);
 });
 
 describe('TEXT SIZE and the end of the battle (hud-f1 review M5 and m7)', () => {
   const flush = (): Promise<void> => new Promise((r) => setTimeout(r, 0));
-  it('turns off live when TEXT SIZE goes to 115 or 130 under the battle, and back on at 100', async () => {
+  it('stays on when TEXT SIZE goes to 115 or 130 under the battle (it grows, hudf1-textsize.css), and on at 100', async () => {
+    const f1 = new HudF1('ffx');
+    f1.mount(host('ffx'));
+    expect(f1.on).toBe(true);
+    for (const v of ['115', '130', '100']) {
+      document.documentElement.dataset['textSize'] = v;
+      await flush();
+      expect(f1.on, `data-text-size ${v}`).toBe(true);
+      expect(root.classList.contains(HUD_F1_CLASS)).toBe(true);
+      expect(stage.querySelector<HTMLElement>('.f1-layer')!.hidden).toBe(false);
+    }
+    f1.unmount();
+    document.documentElement.removeAttribute('data-text-size');
+  });
+  it("with ?f1text=today it is release 67's: off live when TEXT SIZE goes to 115 or 130 under the battle, and back on at 100", async () => {
+    setHudF1TextMode('today');
     const f1 = new HudF1('ffx');
     f1.mount(host('ffx'));
     expect(f1.on).toBe(true);

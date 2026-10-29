@@ -1,0 +1,128 @@
+/*
+ * THE F1 HUD AT TEXT SIZE 115 AND 130 (lane a11y-text, 2026-10-29; round 30b PR-0559; BOTH games: Chapter I FFX, Chapter IV FFX-2).
+ *
+ * Release 67 handed the player today's HUD at 115 and 130 (hud-f1 review M5: the F1 layout is authored at one size). That made the type SMALLER than at 100, because F1's own type is already bigger than
+ * today's: the command labels are 12 grid px (today 9.8) and the party names 12.5 (today 9.3), so 115 drew 28.1 px labels where 100 drew 30.2 (Chapter I at 1600 x 900) and Chapter IV's party names went
+ * 31.3, 26.8, 30.3. The F1 HUD now STAYS UP and grows (`HudF1Switch.F1_GROWS_WITH_TEXT_SIZE`, `?f1text=today` for release 67's behaviour). Each zone of the 640 x 360 grid grows by `--pyr-ts` (1.15 or 1.3,
+ * `app/applyComfort.ts`) from the corner it is pinned to, the way `text-size.css` and `text-size-wide.css` grow today's panels, so nothing inside a zone re-wraps:
+ *
+ *   - the turn strip (FFX) and the party cards: `text-size.css` / `text-size-wide.css` already grow them from their pinned corners (right top, right bottom), and F1 only moved them (to `left`, with the right edge where the corner is), so nothing below.
+ *   - the boss ribbon and the prompt bar: from their pinned corners (the ribbon's top left, the bar's bottom left).
+ *   - the left column of Chapter I (hero, cue, verbs): ONE block about its foot, the point (28, 313.5) where the full five-row list ends, so the hero and the cue keep their distance above the first verb, which is
+ *     what the M5 review saw break (they sat on the first verb when only the list grew). At 130 the hero's top is 313.5 - 173.5 x 1.3 = 88, under the ribbon's grown foot (45).
+ *   - the right column of Chapter IV (hero, cue, verbs): one block about the point (622, 250) where the four-row window ends, lifted by the growth of the party cards under it (91 grid px of cards x (scale - 1)),
+ *     as `text-size-wide.css` lifts today's list by 15 and 30; at 130 the window's content ends at 222.7, the cards start at 223.7.
+ *
+ * Skewed slabs (`.f1-slab`: the ribbon, the cue, the prompt bar) keep the skew about their own centre, so they grow about their centre and a `translate` of (scale - 1) x (centre - pinned corner) puts the corner
+ * back; the unskewed boxes (hero, verb list) take `transform-origin` to the pinned point instead. Keyed on the same attributes as the two text-size sheets (FFX: `data-text-size`, FFX-2: `data-text-size-wide`),
+ * so nothing here matches at 100 or on the phone, where F1 never draws. The ghost of a closing block (`HudF1StepBack`) carries the same classes, so it grows with the real one and does not jump when it slides.
+ *
+ * Intel (X): the guide's chips, the advisor's one-row tip and the FFX-2 tip chip stood a fixed distance from the ribbon; they step by what the ribbon grew, and Chapter I's Sensor card keeps its place (today's step
+ * up and left is dropped). Chapter I's guide sheet meets the grown hero and cue, so while it is open they step aside (below, review M1), and its one-row tip is held clear of the turn strip. The enemy-move slab keeps the
+ * rules of the two text-size sheets (laid out for today's HUD at these sizes) and is the browser sweep's to look at (job X1).
+ *
+ * `tests/unit/a11y-text-f1.test.ts` evaluates these rules against the real stylesheets (the computed sizes at 1280 x 720 and 1600 x 900, the boxes of every zone at 1.15 and 1.30, and the specificity against the
+ * rules they override).
+ */
+
+/* ---------------------------------------------------------------- Chapter I (FFX) */
+
+/* the left column about its foot (28, 313.5): hero top 140, cue top 172.5, verbs top 196.5, so the origins are 173.5, 141 and 117 down from each top */
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1 .f1-hero {
+  scale: var(--pyr-ts);
+  transform-origin: 0 173.5px;
+}
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1 .ffx-cmd-area {
+  scale: var(--pyr-ts);
+  transform-origin: 0 117px;
+}
+/* the cue is a slab (178 x 16 at 28, 172.5): its centre is (89, -133) from the foot */
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1 .f1-cue {
+  scale: var(--pyr-ts);
+  translate: calc((var(--pyr-ts) - 1) * 89px) calc((var(--pyr-ts) - 1) * -133px);
+}
+/* the boss ribbon is a slab (160 x 25 at 28, 12.5) pinned at its top left; the bar is a slab (190 x 16.5 at 28, 336.5) pinned at its bottom left (Chapter IV's bar is 150 wide: below) */
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1 .f1-ribbon {
+  scale: var(--pyr-ts);
+  translate: calc((var(--pyr-ts) - 1) * 80px) calc((var(--pyr-ts) - 1) * 12.5px);
+}
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1 .f1-prompts {
+  scale: var(--pyr-ts);
+  translate: calc((var(--pyr-ts) - 1) * 95px) calc((var(--pyr-ts) - 1) * -8.25px);
+}
+/* the action banner steps under the grown ribbon: 18 + 25 x scale is the 43 it is at 100 */
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1 .ig-banner {
+  top: calc(18px + 25px * var(--pyr-ts));
+}
+
+/* Intel's Sensor card: today's HUD steps it up and left (15 and 26 grid px at 115, 34 and 56 at 130) to clear its grown party list and its turn column. F1's card stands at left 436, top 144 (Intel's -22), 100 x 78,
+   between the strip and the cards; grown about its foot (536, 222) it fits that band at both sizes (its top 132.3 and 120.6 under the strip's foot at 91 and 100, its foot 222 over the cards' top at 237.4 and 223.7), and
+   today's step would put it across the strip (to y 65 at 130). Not while the HUD is stepped back: the drift of `hudf1-act.css` stays. */
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1:not(.f1-acting) .ffx-sensor {
+  translate: none;
+}
+
+/* ---------------------------------------------------------------- Chapter IV (FFX-2) */
+
+/* the right column about (622, 250), lifted by what the party cards grew: hero top 96.5 and left 467 (origin 155, 153.5), the cue's centre (533.5, 137), the window's top 146 and right edge 622 (origin 177, 104) */
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud.hud-f1 .f1-hero {
+  scale: var(--pyr-ts);
+  transform-origin: 155px 153.5px;
+  translate: 0 calc(-91px * (var(--pyr-ts) - 1));
+}
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud.hud-f1 .f1-cue {
+  scale: var(--pyr-ts);
+  translate: calc((var(--pyr-ts) - 1) * -88.5px) calc((var(--pyr-ts) - 1) * -204px);
+}
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud.hud-f1 .ffx2hud__command {
+  scale: var(--pyr-ts);
+  transform-origin: 177px 104px;
+  translate: 0 calc(-91px * (var(--pyr-ts) - 1));
+  /* F1's own four-row window (114) and three-row one under a title (98); `text-size-wide.css` caps today's list at 179 / 147 and lifts it by 15 / 30, which belong to today's HUD */
+  max-height: 114px;
+}
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud.hud-f1 .ffx2hud__command:has(.ffx2cmd__title) {
+  max-height: 98px;
+}
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud.hud-f1 .f1-ribbon {
+  scale: var(--pyr-ts);
+  translate: calc((var(--pyr-ts) - 1) * 80px) calc((var(--pyr-ts) - 1) * 12.5px);
+}
+/* Chapter IV's bar is 150 wide */
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud.hud-f1 .f1-prompts {
+  scale: var(--pyr-ts);
+  translate: calc((var(--pyr-ts) - 1) * 75px) calc((var(--pyr-ts) - 1) * -8.25px);
+}
+
+/* ---------------------------------------------------------------- Intel (X) steps by what the ribbon grew */
+
+/* the guide's chips sit 22 grid px under the top (the ribbon's foot at 100 is 37.5): -3 + 25 x scale */
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1.f1-intel .sgd,
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud.hud-f1.f1-intel .sgd {
+  transform: translateY(calc(-3px + 25px * var(--pyr-ts)));
+}
+/* FFX's one-row tip stands 166 grid px right of its place (clear of a 160-wide ribbon): 6 + 160 x scale. The solver does not know the ribbon or this step, and gives the bar up to 226 grid px (`MAX_ADVISOR_WIDTH`), so
+   at 115 and 130 the shifted bar would run into the turn strip, which grows from its right edge (625.5) to the left (left 440.9 and 416.9). It is held to the room between its shifted place (36 + 6 + 160 x scale: the
+   solver's leftmost card, 36, from `advisorTip.tipZone`) and the strip's left edge less the 6 grid px clearance (`GAP`) and the bar's shear (1.9): 575.5 - 320.5 x scale (206.9 and 158.9; 100 has 254 and more, so nothing is cut there). The row gives
+   up its chips whole when it is narrower (`MoveAdvisor.fitTipRow` reads the card's own width). a11y-text review minor 1; `tests/unit/a11y-text-f1.test.ts` checks the sum against the sheets. */
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1.f1-intel .mad__card[data-zone='tip'] {
+  transform: translateX(calc(6px + 160px * var(--pyr-ts))) skewX(var(--ig-skew));
+  max-width: calc(575.5px - 320.5px * var(--pyr-ts));
+}
+
+/* Chapter I's guide (G) at 115 and 130: the sheet is drawn over the hero and the cue (a11y-text review M1, predicted from the repo's constants: `docs/handoff/a11y-text.md`). The rail's foot is a constant (115, `FFXBattleHud`'s guide
+   anchors: CMD_INFO_TOP 121 less GAP 6) and Intel steps the whole rail down by -3 + 25 x scale, while the left column grows UP about its foot (28, 313.5): the hero's top rises from 140 to 114 and 87.9, and the rail's
+   foot falls from 137 to 140.8 and 144.5. At 100 the two stand 3 grid px apart; at 115 the sheet covers 26.8 grid px of the hero and at 130 the whole hero and 14.3 of the cue. Pinning the foot lower or giving the rail an F1
+   floor cannot make room (at 130 the hero's top 87.9 is 14 under the rail's top 73.5, and the sheet needs 56), so while the guide is open the hero and the cue step aside; the verbs (top 161.4 at 130, 17 under the
+   rail's foot) and the party cards stay, and the party card of the acting hero still says whose turn it is. The ghost of a closing block carries the same classes, so it steps aside too. FFX only (rule 14): Chapter IV's guide is on
+   the left and its hero and cue are on the right, so nothing there meets. `F1_GROWS_WITH_TEXT_SIZE = false` takes all of this away with the rest. */
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1.f1-intel .f1-hero,
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1.f1-intel .f1-cue {
+  opacity: 0;
+  pointer-events: none;
+}
+/* FFX-2's tip and its chip stand at left 196 (8 right of the ribbon): 36 + 160 x scale. !important for the same reason the F1 sheet has it: the HUD writes left / bottom inline every frame */
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud.hud-f1.f1-intel .mad__card[data-zone='tip'],
+html[data-text-size-wide]:not([data-text-size-wide='100']):not([data-phone-battle]) .ffx2hud.hud-f1.f1-intel .mad:has(.mad__card[data-zone='tip']) .mad__toggle {
+  left: calc(36px + 160px * var(--pyr-ts)) !important;
+}

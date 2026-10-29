@@ -1,0 +1,139 @@
+/*
+ * The phone's enemy-move line as two rows (lane a11y-text, 2026-10-29; release 67 gap check item 5; BOTH games, the upright phone only). The markup is `enemy-intent-phone.ts`; the rest of the phone line (the panel,
+ * the 14 px type, the red name, the badges) is `phone-battle-parts.css`, and this sheet only lays the two rows out and carries the rungs `fitPhoneLine` puts on when a row is wider than the line.
+ *
+ * Every rule hangs from `html[data-phone-battle]`, so a desktop window and a phone held sideways never match one.
+ *
+ *   row 1  [NAME next] [Move] [SCRIPTED] [ZOMBIE 99%]            nothing wraps; `fitPhoneLine` drops, in this order: p-cf (the SCRIPTED badge), p-tm (the timing), p-nm (the enemy's name),
+ *                                                                p-ch (the status chip), then p-el (the move name takes an ellipsis)
+ *   row 2  [random:] [Tidus 707-799] / [Yuna 746-842]            p-sh (names to three letters), p-pt (the band falls back to the point figure, 753), p-sm ("random: 6 targets . 320-540"), p-el2 (an ellipsis)
+ *
+ * Each row is ONE line box (1.3em of the 14 px type), so the two rows are the 2.6em the body is clamped to (`phone-battle-parts.css`, `.eint__body`): the figures are never the part that is cut.
+ */
+
+/* the wrapper is the body's only child; the phone sheet makes every other direct child inline, so the rows live inside this block */
+html[data-phone-battle] .eint__body > .eint__phone {
+  display: block !important;
+}
+/* and with the two rows in it the body is a plain block: the two-line clamp (`-webkit-line-clamp: 2` on a `-webkit-box`) counts the lines of running text, and a row is a flex container that never wraps, so the clamp has nothing
+   to count; the body's own `max-height: 2.6em` and `overflow: hidden` (phone-battle-parts.css) are what hold the two rows */
+html[data-phone-battle] .eint__body:has(> .eint__phone) {
+  display: block !important;
+  -webkit-line-clamp: none;
+  line-clamp: none;
+}
+html[data-phone-battle] .eint__phone > .eint__r {
+  display: flex !important;
+  align-items: baseline;
+  gap: 0.5em;
+  min-width: 0;
+  height: 1.3em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+html[data-phone-battle] .eint__r > * {
+  flex: none;
+}
+/* the flex gap spaces the row-1 pieces; the badge and the chip lose the margin the sheet gave them for running text */
+html[data-phone-battle] .eint__r1 .eint__conf {
+  margin-left: 0;
+}
+html[data-phone-battle] .eint__r1 .eint__status-chip {
+  margin: 0 !important;
+}
+
+/* ------------------------------------------------------------------ row 2: the figures */
+html[data-phone-battle] .eint__r2 {
+  gap: 0;
+}
+html[data-phone-battle] .eint__r2--random::before {
+  content: 'random:';
+  flex: none;
+  margin-right: 0.45em;
+  color: rgba(244, 241, 232, 0.6);
+}
+html[data-phone-battle] .eint__fig {
+  display: inline;
+}
+html[data-phone-battle] .eint__fig + .eint__fig::before {
+  content: '\00b7';
+  margin: 0 0.5em;
+  color: rgba(244, 241, 232, 0.6);
+}
+html[data-phone-battle] .eint__r2--random .eint__fig + .eint__fig::before {
+  content: '/';
+}
+html[data-phone-battle] .eint__fn {
+  font-weight: 600;
+}
+html[data-phone-battle] .eint__fa,
+html[data-phone-battle] .eint__fb {
+  font-weight: 700;
+}
+/* a figure with a range prints the range (release 67's TIDUS 707-799: a player asking whether 760 HP dies needs the band); the point figure is in the markup and drawn only by the p-pt rung. A figure with no range has only the point. */
+html[data-phone-battle] .eint__fig--ranged .eint__fa {
+  display: none;
+}
+/* not by colour alone: the lethal figure says KO and the heal carries a + */
+html[data-phone-battle] .eint__fig--lethal .eint__fa {
+  color: #ff8a8a;
+}
+html[data-phone-battle] .eint__fig--heal .eint__fa,
+html[data-phone-battle] .eint__fig--heal .eint__fb {
+  color: #8fe0b0;
+}
+/* the shortened names and the count-and-spread are in the markup and drawn only by their rung */
+html[data-phone-battle] .eint__f3,
+html[data-phone-battle] .eint__sum {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ the rungs */
+html[data-phone-battle] .eint__phone.p-cf .eint__conf--scripted {
+  display: none !important;
+}
+html[data-phone-battle] .eint__phone.p-tm .eint__tm {
+  display: none;
+}
+html[data-phone-battle] .eint__phone.p-nm .eint__nm {
+  display: none;
+}
+html[data-phone-battle] .eint__phone.p-nm .eint__tm {
+  margin-left: 0;
+}
+html[data-phone-battle] .eint__phone.p-ch .eint__status-chip {
+  display: none !important;
+}
+html[data-phone-battle] .eint__phone.p-el .eint__r1 .eint__move {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+html[data-phone-battle] .eint__phone.p-sh .eint__fn {
+  display: none;
+}
+html[data-phone-battle] .eint__phone.p-sh .eint__f3 {
+  display: inline;
+}
+html[data-phone-battle] .eint__phone.p-pt .eint__fig--ranged .eint__fb {
+  display: none;
+}
+html[data-phone-battle] .eint__phone.p-pt .eint__fig--ranged .eint__fa {
+  display: inline;
+}
+html[data-phone-battle] .eint__phone.p-sm .eint__fig {
+  display: none;
+}
+html[data-phone-battle] .eint__phone.p-sm .eint__sum {
+  display: inline;
+}
+html[data-phone-battle] .eint__phone.p-sm .eint__r2--random::before {
+  display: none;
+}
+html[data-phone-battle] .eint__phone.p-el2 .eint__r2 .eint__fig {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

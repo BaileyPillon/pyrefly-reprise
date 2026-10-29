@@ -203,7 +203,8 @@ for (const vp of [
       expect(hud.clipped, 'HUD text clipped').toEqual([]);
       expect(hud.overlaps, 'HUD panels overlapping').toEqual([]);
       expect(hud.offscreen, 'HUD panels off screen').toEqual([]);
-      expect(await page.evaluate(() => document.querySelectorAll('.ig-cmd-stack .ig-cmd').length), 'four command rows').toBeLessThanOrEqual(4);
+      // Chapter I draws the F1 HUD by default, and since lane a11y-text it stays up at 130 % and grows (`hudf1-textsize.css`): its window is four verbs and the faded fifth (`F1_ROWS`), where today's HUD shows four
+      expect(await page.evaluate(() => document.querySelectorAll('.ig-cmd-stack .ig-cmd').length), 'four verbs and the faded tail').toBeLessThanOrEqual(5);
 
       await page.keyboard.press('Escape');
       await page.waitForTimeout(800);

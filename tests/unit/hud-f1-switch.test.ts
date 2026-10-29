@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vitest';
 import { setDemoChapter } from '../../src/engine/motion/DemoGate.ts';
-import { F1_DAMAGE_K, HUD_F1_TUNE, hudF1Game, hudF1ModeFromSearch, hudF1On, hudF1TextSizeOk, onHudF1Change, setHudF1Mode } from '../../src/ui/hudf1/HudF1Switch.ts';
+import { F1_DAMAGE_K, F1_GROWS_WITH_TEXT_SIZE, HUD_F1_TUNE, hudF1Game, hudF1ModeFromSearch, hudF1On, hudF1TextModeFromSearch, hudF1TextSizeOk, onHudF1Change, setHudF1Mode, setHudF1TextMode } from '../../src/ui/hudf1/HudF1Switch.ts';
 import { HEAL_SIZE, SMALL_SIZE, sizeFactor, TIER_SIZE } from '../../src/ui/common/proNumbers.ts';
 import { F1_ROWS, commandRowsCap } from '../../src/ui/common/hudTextSize.ts';
 
@@ -11,6 +11,7 @@ import { F1_ROWS, commandRowsCap } from '../../src/ui/common/hudTextSize.ts';
  */
 afterEach(() => {
   setHudF1Mode(null);
+  setHudF1TextMode(null);
   setDemoChapter(undefined);
   document.documentElement.removeAttribute('data-phone-battle');
   document.documentElement.removeAttribute('data-text-size');
@@ -72,9 +73,37 @@ describe('where it plays', () => {
   });
 });
 
-describe("TEXT SIZE other than 100 gives the player today's HUD (hud-f1 review M5: the layout is authored at one size)", () => {
-  it('is on at 100 (and with no attribute), off at 115 and 130, in both attributes', () => {
+describe("TEXT SIZE and the F1 HUD (hud-f1 review M5, then a11y-text PR-0559: the HUD grows with the setting instead of giving way to today's)", () => {
+  it('the switch is a constant with a page word: grow by default, ?f1text=today for release 67 step-down, ?f1text=grow to force it', () => {
+    expect(F1_GROWS_WITH_TEXT_SIZE).toBe(true);
+    expect(hudF1TextModeFromSearch(undefined)).toBe('grow');
+    expect(hudF1TextModeFromSearch('')).toBe('grow');
+    expect(hudF1TextModeFromSearch('?f1text=today')).toBe('today');
+    expect(hudF1TextModeFromSearch('?pack=demo&f1text=TODAY')).toBe('today');
+    expect(hudF1TextModeFromSearch('?f1text=grow')).toBe('grow');
+    expect(hudF1TextModeFromSearch('?f1text=other')).toBe('grow');
+  });
+  it('by default it stays on at 100, 115 and 130 (and with no attribute), in both attributes', () => {
     setHudF1Mode('f1');
+    setDemoChapter('seymour-flux');
+    expect(hudF1On()).toBe(true);
+    document.documentElement.dataset['textSize'] = '100';
+    document.documentElement.dataset['textSizeWide'] = '100';
+    expect(hudF1TextSizeOk()).toBe(true);
+    expect(hudF1On()).toBe(true);
+    for (const v of ['115', '130']) {
+      document.documentElement.dataset['textSize'] = v;
+      expect(hudF1On(), `data-text-size ${v}`).toBe(true);
+      document.documentElement.dataset['textSize'] = '100';
+      document.documentElement.dataset['textSizeWide'] = v;
+      expect(hudF1On(), `data-text-size-wide ${v}`).toBe(true);
+      document.documentElement.dataset['textSizeWide'] = '100';
+    }
+    expect(hudF1On()).toBe(true);
+  });
+  it("with ?f1text=today it is release 67's: on at 100 (and with no attribute), off at 115 and 130, in both attributes", () => {
+    setHudF1Mode('f1');
+    setHudF1TextMode('today');
     setDemoChapter('seymour-flux');
     expect(hudF1On()).toBe(true);
     document.documentElement.dataset['textSize'] = '100';
@@ -91,11 +120,24 @@ describe("TEXT SIZE other than 100 gives the player today's HUD (hud-f1 review M
     }
     expect(hudF1On()).toBe(true);
   });
-  it("and the command window then keeps TEXT SIZE's own rows", () => {
+  it("the command window keeps F1's five rows at 130 by default, and TEXT SIZE's own four with ?f1text=today", () => {
     setHudF1Mode('f1');
     setDemoChapter('seymour-flux');
     document.documentElement.dataset['textSize'] = '130';
+    expect(commandRowsCap(6)).toBe(F1_ROWS);
+    setHudF1TextMode('today');
     expect(commandRowsCap(6)).toBe(4);
+  });
+  it('a change of the text mode is heard like a change of the switch (the HUD re-reads it live)', () => {
+    let n = 0;
+    setHudF1Mode('f1');
+    setHudF1TextMode('grow');
+    const off = onHudF1Change(() => (n += 1));
+    setHudF1TextMode('grow');
+    expect(n).toBe(0);
+    setHudF1TextMode('today');
+    expect(n).toBe(1);
+    off();
   });
 });
 

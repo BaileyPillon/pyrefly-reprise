@@ -218,7 +218,7 @@ export function shouldShow(id: CoachMarkId | string): boolean {
 }
 
 /**
- * r64 (declutter, Bailey 2026-10-23 decisions 191 to 193 "Less on screen", 2026-10-24 "you make the calls"; both games): while the F1 HUD is the one drawing (`hudF1On()`: Chapter I or Chapter IV with the pack on, at TEXT SIZE 100)
+ * r64 (declutter, Bailey 2026-10-23 decisions 191 to 193 "Less on screen", 2026-10-24 "you make the calls"; both games): while the F1 HUD is the one drawing (`hudF1On()`: Chapter I or Chapter IV with the pack on, at any TEXT SIZE since a11y-text, 2026-10-29)
  * the in-battle teaching cards are not drawn: the first-use lines (Auron's, Rikku's, the Overdrive, Aeon and chain lines) and the guided first run's battle step. The F1 menu already says its one thing (the cue, the prompt bar), and
  * a sixth group (Rikku's "GAUGES RUNNING" card was seen on the first menu of the public Chapter IV; Auron's holds the first menu until a press in Chapter I) is what the approved "five groups at the first menu" does not have.
  * Not marked seen, so nothing is written to the save and the same lines teach in every other chapter, and in these two with `?pack=off`. The briefing, the guided first run's board and prep steps and the Sphere Grid

@@ -7,8 +7,11 @@
  * 1. the address carries `?hud=f1`, or the shared key `?pack=demo` (`?hud=today` wins over the pack, for A/B captures);
  * 2. the running chapter is one of the two DEMO CHAPTERS, Chapter I (`seymour-flux`, FFX) or Chapter IV (`ffx2-bahamut`, FFX-2), named by the battle screen as the battle sets up
  *    (`engine/motion/DemoGate.ts`). Every other chapter keeps today's HUD, whatever the address says.
- * 3. TEXT SIZE is 100 percent (OPTIONS accessibility). The F1 layout is authored at one size (every box fixed on the 640 x 360 grid); at 115 or 130 the hero and the cue sat on the first verb and the HP
- *    numerals ran past their cards (hud-f1 review M5), so a player who asked for bigger text gets today's HUD, which TEXT SIZE lays out. Read from the two attributes `app/applyComfort.ts` puts on <html>.
+ * 3. TEXT SIZE no longer ends it (a11y-text, 2026-10-29, round 30b PR-0559). Release 67 stepped down to today's HUD at 115 and 130 (hud-f1 review M5: the layout is authored at one size, and the hero and the
+ *    cue sat on the first verb at the larger sizes), and that made the type SMALLER than at 100: F1's command labels are 12 grid px and its party names 12.5, against today's 9.8 and 9.3, so 115 drew 28 px
+ *    labels where 100 drew 30 (Chapter I, 1600 x 900) and Chapter IV's party names went 31, 27, 30. Now the F1 HUD stays and GROWS with the setting (`hudf1-textsize.css`: every zone grows from the corner it is
+ *    pinned to, the left column about its foot, as `text-size.css` does for today's panels). {@link F1_GROWS_WITH_TEXT_SIZE} is the one line to put release 67's behaviour back, and `?f1text=today` does it for a
+ *    page. Read from the two attributes `app/applyComfort.ts` puts on <html>.
  *
  * Game case (AGENTS.md rule 14): BOTH games, presentation only (no number, ability, turn order or fight rule changes); WHICH layout plays is the chapter's game: FFX (CTB) has the turn strip and
  * the command block on the left, FFX-2 (ATB) has no turn strip, ATB bars on the cards and everything mirrored to the right with the slant flipped and the pink accent.
@@ -51,9 +54,39 @@ export function onHudF1Change(fn: () => void): () => void {
   return () => listeners.delete(fn);
 }
 
-/** TEXT SIZE is the default 100 percent (an absent attribute, as in a unit test, counts as 100). */
+/**
+ * Does the F1 HUD grow with TEXT SIZE (a11y-text, PR-0559; both games)? ON: it stays up at 115 and 130 and `hudf1-textsize.css` grows its zones. `false` is release 67's: today's HUD takes over at 115 and 130.
+ * The page's own word `?f1text=today` beats it (for A/B captures), `?f1text=grow` forces it on.
+ */
+export const F1_GROWS_WITH_TEXT_SIZE = true;
+
+export type HudF1TextMode = 'grow' | 'today';
+let textMode: HudF1TextMode | null = null;
+
+/** `?f1text=today|grow` from a search string (pure): the word if it is one, else the constant's answer. */
+export function hudF1TextModeFromSearch(search: string | undefined): HudF1TextMode {
+  const w = queryWord(search, 'f1text');
+  if (w === 'today' || w === 'grow') return w;
+  return F1_GROWS_WITH_TEXT_SIZE ? 'grow' : 'today';
+}
+
+/** The text-size mode as the page asked for it. Read once; tests and tools force it with {@link setHudF1TextMode}. */
+export function hudF1TextMode(): HudF1TextMode {
+  if (textMode === null) textMode = hudF1TextModeFromSearch(here());
+  return textMode;
+}
+
+/** Tests and tools: force the mode (`null` reads the address again). Listeners hear of a change, as they do for the switch itself. */
+export function setHudF1TextMode(value: HudF1TextMode | null): void {
+  const before = hudF1TextMode();
+  textMode = value;
+  if (hudF1TextMode() !== before) for (const l of listeners) l();
+}
+
+/** True when the F1 HUD may draw at the current TEXT SIZE: always while it grows with the setting; else only at 100 (an absent attribute, as in a unit test, counts as 100). */
 export function hudF1TextSizeOk(): boolean {
   if (typeof document === 'undefined') return true;
+  if (hudF1TextMode() === 'grow') return true;
   const d = document.documentElement.dataset;
   return (d['textSize'] ?? '100') === '100' && (d['textSizeWide'] ?? '100') === '100';
 }
