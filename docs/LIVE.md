@@ -8,31 +8,37 @@
 | | |
 |---|---|
 | Site | https://echoesofspira.com/ |
-| Commit | `2b48cee95` (Release 66 (r66)) |
-| Bundle | `BwPs1UaV` |
-| Deployed | 2026-10-28T06:50:44.901Z (2026-10-28 02:50 EDT) |
-| Deploy log | `docs/deploys.log` line 83: cloudflare, 4830 art files, owner override |
-| Artifact (SHA-256) | `c4bb4251f0a4e73606e26e0cb5757df0f4eabe2a5daa94a7f4fd6f4ce89e21a3` |
+| Commit | `04631aedf` (Release 67 (r67)) |
+| Bundle | `B3DkcOaU` |
+| Deployed | 2026-10-29T01:15:32.273Z (2026-10-28 21:15 EDT) |
+| Deploy log | `docs/deploys.log` line 84: cloudflare, 4830 art files |
+| Artifact (SHA-256) | `f324d89fad588ed23012692ea6928e0aec0dae01659a234925a75b8e18c85a22` |
 | The deploy's own byte check | PASS (57 files compared with the build) |
-| Marker | `critic/cleared/2b48cee95.json` (cleared) |
-| Owner override | “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.” |
-| CHANGELOG entry | 2026-10-28 · Release 66 (r66), the motion-fluidity pass: the first sight of a pose no longer freezes the picture, every wait in a fight keeps one clock, a knocked-out body lands on the frame it arrives, and an FFX-2 spell no longer blinks through idle (both games; the spell interlude and the Bevelle light shafts are FFX-2 only; sixteen more looks wait behind address words and change nothing until one is asked for) |
-| Focused review | critic/reviews/2b48cee95-focused.json: ship SHIP, changed area UNVERIFIED |
-| Live check | critic/reviews/2b48cee95-live.json: deployment PASS |
+| Marker | `critic/pending/04631aedf.json` (pending) |
+| Owner override | none |
+| CHANGELOG entry | 2026-10-28 · Release 67 (r67), Bailey's six look picks become the defaults: a turn starts on the standing painting, painting changes cut inside the smear, a struck figure is knocked back, attacks and spells follow the real game's clips with a travelling strike, the girls run in at an even speed and a boss goes down in one motion; plus a hurried retry in Chapter I, the defeat card's cause at every speed, a two-line enemy-move read-out on the phone, CHAPTER SELECT on the public defeat card and an atomic browser lock (both games; the hurried retry is FFX only; the flowing run-in is FFX-2 only) |
+| Focused review | critic/reviews/04631aedf-focused.json: ship SHIP, changed area FAIL |
+| Live check | critic/reviews/04631aedf-live.json: deployment PASS |
 
-Is this commit on main? `git merge-base --is-ancestor 2b48cee95 origin/main` exits 0 when it is.
+Is this commit on main? `git merge-base --is-ancestor 04631aedf origin/main` exits 0 when it is.
 
 ## Review obligations still open
 
-None: every marker in `critic/pending` is settled.
+| Build | Obligation | What it needs |
+|---|---|---|
+| `04631aedf` | deep | deep review of every affected chapter and system |
 
-The ledger counts 0 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 1 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
-None: `critic/reviews/2b48cee95-focused.json` lists no major or critical issue.
+From `critic/reviews/04631aedf-focused.json` (a major that is not a regression is disclosed and carried into the next batch):
 
-## Branches in flight (as of 2026-10-28 05:00 EDT, the r66 records pass (release 66 live))
+| Issue | Severity | Introduced by this build | Regression against the previous live build | What |
+|---|---|---|---|---|
+| R67-C1 | major | no | no | Pose-swap continuity checks still fail: Chapter IV (one 44.9 px swap jerk, three stature outliers) and CHK-026 in both chapters |
+
+## Branches in flight (as of 2026-10-28 23:55 EDT, the r67 records pass (release 67 live))
 
 Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.
 
@@ -47,6 +53,15 @@ Kept by hand by whoever records a pass; tools/live-record.mjs prints it into doc
 | `rig` | `db2caa6d9` | both (shared plumbing; the subjects are FFX first) | the rig lane's trunk: r55 shipped it up to 59c766ec0 (Kimahri and Lulu); this tip adds Auron's first pass, which stays off |
 | `rig-auron2` | `72528aa3b` | FFX only | Auron's rig pass 2 with format v2 variants (orb arm, flask, sword arm, katana, saya); gated OK 11 of 11 and OFF in the refine queue by his pick |
 | `re-parity-new-chapters-1018` | `5f7b6ffbc` | FFX (Spectral Keeper) and FFX-2 (Fallen Maesters) | research only: the Spectral Keeper and the Fallen Maesters data and AI extractions (the notes themselves went into r58 as plain files); no engine build, the chapter decisions SK1 to SK11 and FM1 to FM11 wait for Bailey |
+| `pc-scope` | `24eb3eca5` | both (the mechanism; the evidence is FFX) | pose continuity wave 1: the cut-side anchor for big cuts (MF-18, ?cutanchor) and the wide scope (MF-22, ?swapscope); both defaults unchanged, reviewed, merged into r68-int, not deployed; the browser jobs are owed (A-1050) |
+| `pc-residues` | `e8b0bfbcb` | both (the ready hold is FFX-2 only in effect) | pose continuity wave 1: Auron's head PR-0459, stature margins PR-0531, the ready paintings' identity PR-0517 and the step-2 residues; reviewed, merged into r68-int, not deployed; the browser jobs are owed (A-1051) |
+| `ui-input` | `498e31825` | both (the Shift effect on the Sphere Grid is FFX) | ChatGPT point 6: one input and focus contract, real tab and button semantics, 44 px touch targets, Shift deferred on Tab screens; reviewed, merged into r68-int, not deployed (A-1052) |
+| `split` | `3ae43afeb` | both (shared plumbing, no behaviour change) | ChatGPT point 8b: the five oversized presentation files cut by a pure move (PaintedActor 2,712 to 308 lines); reviewed token for token, merged into r68-int, not deployed (A-1055) |
+| `m3-flips` | `49576ea25` | per flip: FFX-2 (ATB bars, Trigger Happy), FFX (turn-order slide, aeon leap), both (hurt string, ramps) | motion message 3 as release 68 defaults with the REDUCE MOTION gates; ?kotopple=eased held back after the review; merged into r68-int, not deployed (A-1056) |
+| `saves-portable` | `c1852fa05` | both (save-data class) | ChatGPT point 9: export and import a save as a checksummed file behind ?saveport=on, off by default; NOT merged into r68-int; a browser pass and a deep review are owed before the word comes off (A-1054) |
+| `budgets` | `1353c8eec` | both | docs/BUDGETS.md: the written load, byte, frame and memory budgets with 22 predictions and the KTX2 rule; docs only, merged into r68-int; the four browser jobs have not run (A-1053) |
+| `r68-int` | `7d80590d0` | both | the release 68 integration branch (another workflow, D:/pyrefly-continuity): split, pc-scope, pc-residues, m3-flips, ui-input and budgets merged over release 67's prep; tsc clean; its full suite had 6 art-hash failures from an older art junction; not deployed; the tip moves |
+| `r68-flowlead` | `b94df3f9f` | FFX-2 only | asks for a girl's strike by the wind-up that plays so the run flows into the dash; the model gives a stand of 0 to 33 ms against release 67's live 183 to 200 ms (A-1062); on top of r68-int, not deployed; the tip moves |
 
 Nothing on this list is live. `node tools/live-record.mjs --branches` compares the tips with git.
 
@@ -54,9 +69,9 @@ Nothing on this list is live. `node tools/live-record.mjs --branches` compares t
 
 | Deployed (UTC) | Commit | Bundle | Log line |
 |---|---|---|---|
+| 2026-10-29T01:15:32.273Z | `04631aedf` | `B3DkcOaU` | 84 |
 | 2026-10-28T06:50:44.901Z | `2b48cee95` | `BwPs1UaV` | 83 |
 | 2026-10-28T01:00:54.005Z | `eaf599d0c` | `8rsIfOcP` | 82 |
 | 2026-10-25T13:16:33.389Z | `e9907cad8` | `BygGxbJE` | 81 |
 | 2026-10-25T06:52:55.070Z | `fa56fd4e3` | `Bo7iMtyZ` | 80 |
 | 2026-10-22T12:53:14.528Z | `c8ecbcb31` | `C9xPmvqR` | 79 |
-| 2026-10-21T20:04:40.996Z | `660c19bbd` | `DwMQUoVh` | 78 |

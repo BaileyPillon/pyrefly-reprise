@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1876 decisions in all: 1363 registry rows, 303 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1229 of the written decisions record a blanket yes.
+1903 decisions in all: 1384 registry rows, 309 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1255 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1752 |
-| proposed | 8 |
+| adopted | 1778 |
+| proposed | 9 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 93 |
-| **All** | **1876** |
+| **All** | **1903** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 156 |
-| art | 393 |
-| visuals | 136 |
-| camera | 75 |
-| audio | 159 |
-| ui | 219 |
+| art | 395 |
+| visuals | 151 |
+| camera | 76 |
+| audio | 160 |
+| ui | 220 |
 | story | 17 |
 | chapters | 248 |
 | guide | 34 |
-| release | 98 |
+| release | 99 |
 | hosting | 18 |
-| process | 213 |
-| critic | 42 |
+| process | 215 |
+| critic | 43 |
 | data | 17 |
-| tech | 30 |
+| tech | 33 |
 | site | 21 |
-| **All** | **1876** |
+| **All** | **1903** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 971 |
+| both games | 998 |
 | FFX only | 500 |
 | FFX-2 only | 387 |
 | FF7 hidden experiment | 18 |
-| **All** | **1876** |
+| **All** | **1903** |
 
 ## Standing rules in force
 
@@ -135,6 +135,7 @@ Proposed, asked or drafted, with no yes on record. Nothing here is built.
 - [D-1022](#d-1022) — NOT covered by his yes of 14:11 EDT because the driver gave no recommendation first and they are his own actions: running the cleanup batch and the 10-18 list (deleting is his), pausing or clearing …
 - [D-1049](#d-1049) — Still his own, not decidable by the driver (ear, eye or presence): the open music picks (D-253), the Behind the Scenes page (D-633, D-639) and the time of the Steam session (D-258)
 - [D-1293](#d-1293) — OPEN, not covered by his yes (no recommendation was stated to him first): the HUD’s open details of 193d (D-1286), Bahamut kept whole in frame during attacks (the party then fills 28 to 31 percent of …
+- [D-1371](#d-1371) — The owner listening verdict (CHK-B1) cannot be delegated because agents cannot hear: a short audition session stays on his list, asked as a plain line, with no deadline (both games)
 
 Pictures with no target yet (nothing to look at, so no decision): Move advisor card (fight); Defeat screen (fight); Enemy next-move panel (fight); Every screen except pause (phone); One finished minute of play (whole).
 
@@ -8893,10 +8894,130 @@ Tuesday · 5 decisions
 
 ### 2026-10-28
 
-Wednesday · 1 decision
+Wednesday · 28 decisions
 
 - <a id="d-1363"></a>**D-1363** — DRIVER CALL under his delegation, his to overturn: the look choices of the motion pass go to him as clip cards in three messages; message 1 (CP-01 turn-start stance, CP-02 swap on the cause, CP-03 hits) is sent from the live release 66, and unless he answers, the driver applies stance v1a, swap pick and hits knock as the defaults of release 67 at 20:00 EDT on 2026-10-28 (both games)
   - Bailey: “im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!” (blanket yes)
-  - What changed: Item 210d, about 04:05 EDT on 2026-10-28. The cards of message 1 were filmed from the live release 66 build (six 1080x1920 clips at 60 fps: CP-01, CP-02 and CP-03, each in Chapter I for FFX and Chapter IV for FFX-2, with a key to which letter is which variant); the driver checked the stills and that every clip decodes, and sent him three clips and one still. Driver picks, all three for both games because the code is shared: CP-01 turn-start stance = v1a (changed from the plan's v1b after the driver saw the frames: v1b runs Paine in on her standing painting like a sliding statue, while v1a keeps the idle painting at the menu, as the real games do, and shows the ready drawing as the wind-up once she acts); CP-02 swap on the cause = pick (a cut where the moment has a cover, today's dissolve where the two drawings are far apart); CP-03 hits = knock (one push and one swing back; the real clips show a push-back and no rattle). Not picks: blend3 and v3, which pop far-apart drawings. Nothing flips yet: every one of these is an address word whose default is today's look; the driver flips the three defaults in release 67 at 20:00 EDT on 2026-10-28 only if he has not answered by then (messages 2 and 3 of the plan, MF-04 run and strike shape and MF-06 boss KO, and MF-18 which needs the stance and run picks, are still ahead).
-  - area visuals · both games · adopted · delivery in progress · see [D-1356](#d-1356), [D-1361](#d-1361) · refines [D-1361](#d-1361)
+  - What changed: Item 210d, about 04:05 EDT on 2026-10-28. The cards of message 1 were filmed from the live release 66 build (six 1080x1920 clips at 60 fps: CP-01, CP-02 and CP-03, each in Chapter I for FFX and Chapter IV for FFX-2, with a key to which letter is which variant); the driver checked the stills and that every clip decodes, and sent him three clips and one still. Driver picks, all three for both games because the code is shared: CP-01 turn-start stance = v1a (changed from the plan's v1b after the driver saw the frames: v1b runs Paine in on her standing painting like a sliding statue, while v1a keeps the idle painting at the menu, as the real games do, and shows the ready drawing as the wind-up once she acts); CP-02 swap on the cause = pick (a cut where the moment has a cover, today's dissolve where the two drawings are far apart); CP-03 hits = knock (one push and one swing back; the real clips show a push-back and no rattle). Not picks: blend3 and v3, which pop far-apart drawings. Nothing flips yet: every one of these is an address word whose default is today's look; the driver flips the three defaults in release 67 at 20:00 EDT on 2026-10-28 only if he has not answered by then (messages 2 and 3 of the plan, MF-04 run and strike shape and MF-06 boss KO, and MF-18 which needs the stance and run picks, are still ahead). Update, 2026-10-28 late: he answered (D-1365, D-1366) so the driver flipped the three defaults without the 20:00 wait; they are live in release 67 since 21:15 EDT (A-1060).
+  - area visuals · both games · adopted · delivery implemented · see [D-1356](#d-1356), [D-1361](#d-1361) · refines [D-1361](#d-1361)
   - Source: The driver's call of 2026-10-28 about 04:05 EDT (the DRIVER-STATE line), made under his delegation (D-1347), recorded as a driver call and his to …
+- <a id="d-1364"></a>**D-1364** — DRIVER CALL under his delegation, his to overturn: look-choice message 2 (CP-04 FFX-2 run, leap and lunge; CP-05 strike shape; CP-06 the boss going down) is filmed and held until he answers message 1 or its 20:00 deadline passes; the driver picks ?run=flow (FFX-2 only), ?curves=real-snappy and ?rigko=whole (both games)
+  - Bailey: “im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!” (blanket yes)
+  - What changed: Item 210e, about 07:00 EDT on 2026-10-28. The cards of message 2 were filmed (D:/Tools/pyrefly-scratch/2026-10-28/cards-m2, keys in KEYS-ALL.json) and held, because he has a limit of three open decisions. Picks: CP-04 ?run=flow, FFX-2 only (the strike is asked for as she brakes, the stand drops from 0.22 s to 0.08 s and the move is 0.14 s shorter; the real girls attack from the run); CP-05 ?curves=real-snappy, both games (about 1.15 s, his own "Snappy, about 1.1 s" of 2026-10-22, but the lunge spreads over 0.4 s instead of three quarters in the first 0.1 s); CP-06 ?rigko=whole, both games (one slower fall that stays down, and the strike painting held until the slide home ends; the real bosses stay down and come home on the clip). Letters on the cards: Paine run card D = flow; Tidus strike card C = real-snappy; Bahamut card A = whole. He accepted them in D-1367 and they shipped as release 67 defaults (A-1060). The live gap check found the run-in stand 50 ms longer than release 66 for Paine and Rikku (A-1062); branch r68-flowlead answers it.
+  - area visuals · both games · adopted · delivery implemented · see [D-1356](#d-1356), [D-1361](#d-1361), [D-1363](#d-1363) · refines [D-1363](#d-1363)
+  - Source: The driver's call of 2026-10-28 about 07:00 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372), recorded as a driver …
+- <a id="d-1365"></a>**D-1365** — He goes with every recommendation and the driver's decision making "for the couple days" and says keep going: the driver takes his recommendations as his yes, builds release 67 from the six look picks and the round-30 proposals, and plans release 68 (both games)
+  - Bailey: “keep going please ill go with all of your recommendations and I will go with your decision making for the couple days” (blanket yes)
+  - What changed: Item 211, about 12:45 EDT. A blanket yes to the recommendations already on the table (look messages 1 and 2, the round-30 proposals, the release plan) plus a time-boxed form of the delegation of D-1347: "the couple days". The driver spelled it out as D-1366 to D-1371, did not wait for the 20:00 deadline of D-1363, integrated release 67 at 19:34 EDT and deployed it at 21:15 EDT (A-1058, A-1060). Nothing else widens: the listening verdict (D-1371) and the standing rules stay.
+  - area process · both games · adopted · delivery in progress · see [D-1363](#d-1363), [D-1347](#d-1347) · refines [D-1347](#d-1347)
+  - Source: Bailey, 2026-10-28 about 12:45 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines, because the queue's hand-typed times can …
+- <a id="d-1366"></a>**D-1366** — Look message 1's picks are accepted: the turn-start stance is ?stance=v1a, the swap on the cause is ?swapcause=pick and hits are ?hit=knock, shipped as release 67 defaults without waiting for 20:00 (both games)
+  - Bailey: “keep going please ill go with all of your recommendations and I will go with your decision making for the couple days” (blanket yes)
+  - What changed: Item 211a. CP-01 ?stance=v1a (the idle painting stays at the menu and the ready drawing shows as the wind-up), CP-02 ?swapcause=pick (a cut where the moment has a cover, today's dissolve where the drawings are far apart), CP-03 ?hit=knock (one push and one swing back). All three are release 67 defaults (A-1049, live since 21:15 EDT); the stance and cause picks act in the pack chapters (Chapter I and Chapter IV, desktop), the knock-back in every chapter. ?stance=today, ?swapcause=today and ?hit=today put release 66 back. The focused review measured the six picks together: ghost frames about 101 to 39 a minute in Chapter I and 90 to 49 in Chapter IV (A-1059).
+  - area visuals · both games · adopted · delivery implemented · see [D-1363](#d-1363), [D-1365](#d-1365) · refines [D-1363](#d-1363)
+  - Source: Bailey, 2026-10-28 about 12:45 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines, because the queue's hand-typed times can …
+- <a id="d-1367"></a>**D-1367** — Look message 2's picks are accepted: the FFX-2 run, leap and lunge is ?run=flow, the strike shape is ?curves=real-snappy and the boss going down is ?rigko=whole, shipped in release 67 too (?run FFX-2 only)
+  - Bailey: “keep going please ill go with all of your recommendations and I will go with your decision making for the couple days” (blanket yes)
+  - What changed: Item 211b (the picks were stated in chat about 07:00 EDT, D-1364). CP-04 ?run=flow is FFX-2 only (Chapter IV), CP-05 ?curves=real-snappy and CP-06 ?rigko=whole are both games (the whole fall acts on the two rig bosses, Seymour Flux and Bahamut). Live in release 67 (A-1060). The live gap check found that under ?run=flow Paine and Rikku stand about 190 ms between the run and the dash, 50 ms more than release 66 (A-1062); that is a polish finding, and r68-flowlead is the fix.
+  - area visuals · both games · adopted · delivery implemented · see [D-1364](#d-1364), [D-1365](#d-1365) · refines [D-1364](#d-1364)
+  - Source: Bailey, 2026-10-28 about 12:45 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines, because the queue's hand-typed times can …
+- <a id="d-1368"></a>**D-1368** — Release 67 is release 66 plus the six picks as defaults, backlog 57, 58 and 60 (the phone enemy-move line, CHAPTER SELECT on the public defeat card, the atomic browser lock) and two deep-review proposals: the retry from the fight itself (FFX Chapter I) and the defeat card's cause at every speed (both games)
+  - Bailey: “keep going please ill go with all of your recommendations and I will go with your decision making for the couple days” (blanket yes)
+  - What changed: Item 211c. Built as branch r67-picks (A-1049), integrated at f5781ed18 and 04631aedf, reviewed (focused SHIP, A-1059), deployed 21:15 EDT on 2026-10-28 and checked live (A-1060, A-1061, A-1062). The retry skip is FFX Chapter I only (attempt 2 reaches the first menu in 9.4 s against 16.8 s with the long opening); the defeat cause and CHAPTER SELECT are Chapters I and IV; the phone line is both games. Hard rule 10 asked his yes for each proposal; his blanket words are that yes, his to overturn.
+  - area release · both games · adopted · delivery implemented · see [D-1365](#d-1365), [D-1366](#d-1366), [D-1367](#d-1367) · refines [D-1365](#d-1365)
+  - Source: Bailey, 2026-10-28 about 12:45 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines, because the queue's hand-typed times can …
+- <a id="d-1369"></a>**D-1369** — Next is release 68: MF-18 (the cut-side anchor for big cuts, buildable now that the stance and run picks exist) and then ?swapscope=all, the picks in every chapter, measured before it flips, to answer the carried majors PR-0379 and PR-0380 outside the pack chapters (both games)
+  - Bailey: “keep going please ill go with all of your recommendations and I will go with your decision making for the couple days” (blanket yes)
+  - What changed: Item 211d. Both words are built on branch pc-scope with their defaults unchanged (A-1050) and merged into the integration branch r68-int; the browser jobs that decide the flip are not run yet. Nothing about the scope flips without those numbers (rule 15: predictions first).
+  - area visuals · both games · adopted · delivery in progress · see [D-1373](#d-1373) · refines [D-1365](#d-1365)
+  - Source: Bailey, 2026-10-28 about 12:45 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines, because the queue's hand-typed times can …
+- <a id="d-1370"></a>**D-1370** — Portrait expression on grief lines (the deep review's proposal PR-0485) gets options first, as phone cards (dim, desaturate, painted alternates), and the driver picks under the delegation; nothing is built before the options exist (both games)
+  - Bailey: “keep going please ill go with all of your recommendations and I will go with your decision making for the couple days” (blanket yes)
+  - What changed: Item 211e. No options exist yet and nothing is built (hard rules 9 and 10). A painted alternate would be new art, so its cards come to him as pictures first (an approved painting is never replaced on an agent's say-so).
+  - area art · both games · adopted · delivery not scheduled · see [D-1365](#d-1365) · refines [D-1365](#d-1365)
+  - Source: Bailey, 2026-10-28 about 12:45 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines, because the queue's hand-typed times can …
+- <a id="d-1371"></a>**D-1371** — The owner listening verdict (CHK-B1) cannot be delegated because agents cannot hear: a short audition session stays on his list, asked as a plain line, with no deadline (both games)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 211f. Stands as asked, not answered. Round 30b filed CHK-B1 non-mandatory and UNVERIFIED (A-1057), so the deep debt could settle, but the audio category, humanJudgments and the milestone stay open until he has listened (docs/audio/audition.html; PR-0148, CHK-001).
+  - area audio · both games · proposed · nothing to build · see [D-1352](#d-1352), [D-1384](#d-1384) · refines [D-1365](#d-1365)
+  - Source: The driver's note of 2026-10-28 about 12:45 EDT under item 211 (the decisions queue): hard rule 13, agents cannot hear, so this one has no …
+- <a id="d-1372"></a>**D-1372** — He asks for the pose continuity fix, ChatGPT's critique points, motion fluidity and animation, all of them, and goes with every recommendation and the driver's decision making for the next couple days (both games)
+  - Bailey: “please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation. work on all those. i'll go with all your recommendations and decision-making for the next couple days.” (blanket yes)
+  - What changed: Item 212, about 13:05 EDT. The driver's program (D:/Tools/pyrefly-scratch/2026-10-28/PROGRAM-1028.md, 10-28 to 10-30) became D-1373 to D-1380, each its own row. Wave 1 (code first, no browser while the deep-gap pass held it): the lanes pc-scope, pc-residues, ui-input and split; then budgets, saves-portable and m3-flips (A-1050 to A-1056). Release 67 went out first (A-1060); release 68 is integrated on r68-int and not deployed.
+  - area process · both games · adopted · delivery in progress · see [D-1365](#d-1365), [D-1347](#d-1347) · refines [D-1365](#d-1365)
+  - Source: Bailey, 2026-10-28 about 13:05 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines), typed in the chat, verbatim: "please …
+- <a id="d-1373"></a>**D-1373** — Pose continuity everywhere: MF-18 and the picks in all 19 chapters, method-check steps 2 and 3, PR-0531, and the PR-0517 identity measure with a per-figure idle-through-wind-up fallback (both games)
+  - Bailey: “please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation. work on all those. i'll go with all your recommendations and decision-making for the next couple days.” (blanket yes)
+  - What changed: Item 212a. Built on branches pc-scope (MF-18, MF-22) and pc-residues (Auron's head PR-0459, stature margins PR-0531, ready identity PR-0517, the step-2 residues), both reviewed (A-1050, A-1051), defaults unchanged or following the stance look, merged into r68-int, not deployed. Measuring them in the browser is the next step.
+  - area visuals · both games · adopted · delivery in progress · see [D-911](#d-911), [D-1181](#d-1181), [D-1354](#d-1354) · refines [D-1372](#d-1372)
+  - Source: Bailey, 2026-10-28 about 13:05 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines), typed in the chat, verbatim: "please …
+- <a id="d-1374"></a>**D-1374** — ChatGPT point 6: one input and focus contract, real tab and button semantics, and 44 px touch targets (both games)
+  - Bailey: “please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation. work on all those. i'll go with all your recommendations and decision-making for the next couple days.” (blanket yes)
+  - What changed: Item 212b. Branch ui-input (A-1052): the contract doc, the focus ring written at the lowest specificity, Shift deferred to its release on Tab screens so Shift+Tab no longer presses triangle (FFX Sphere Grid is the one screen that reads Shift), 44 px targets. Merged into r68-int, not deployed; the before and after picture of the targets and a real-input browser pass are owed.
+  - area ui · both games · adopted · delivery in progress · see [D-923](#d-923), [D-924](#d-924) · refines [D-1372](#d-1372)
+  - Source: Bailey, 2026-10-28 about 13:05 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines), typed in the chat, verbatim: "please …
+- <a id="d-1375"></a>**D-1375** — ChatGPT point 8b: split the oversized presentation files with no behaviour change (both games)
+  - Bailey: “please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation. work on all those. i'll go with all your recommendations and decision-making for the next couple days.” (blanket yes)
+  - What changed: Item 212c. Branch split (A-1055): PaintedActor, BattleScreen, BattlePresenter, BattleMoments and BattleScreenFlow cut by a pure move (2,712 to 308 lines for the largest), confirmed token for token by an independent review. Merged into r68-int, not deployed; two continuity jobs remain the live proof.
+  - area tech · both games · adopted · delivery in progress · see [D-921](#d-921) · refines [D-1372](#d-1372)
+  - Source: Bailey, 2026-10-28 about 13:05 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines), typed in the chat, verbatim: "please …
+- <a id="d-1376"></a>**D-1376** — ChatGPT point 5: load and memory budgets, written and then measured (both games)
+  - Bailey: “please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation. work on all those. i'll go with all your recommendations and decision-making for the next couple days.” (blanket yes)
+  - What changed: Item 212d. docs/BUDGETS.md is written (A-1053: 17 budget rows, 22 predictions, the KTX2 decision rule); the four browser jobs (about 54 minutes) are specified and have not run. The gap pass already read two numbers: the cold first chapter reaches its first menu in 41.8 s unthrottled and 76 s on Fast 4G, and does not get there on Slow 4G within 400 s.
+  - area tech · both games · adopted · delivery in progress · see [D-922](#d-922), [D-928](#d-928) · refines [D-1372](#d-1372)
+  - Source: Bailey, 2026-10-28 about 13:05 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines), typed in the chat, verbatim: "please …
+- <a id="d-1377"></a>**D-1377** — Motion message 3 is decided by the driver from the lanes' cards and numbers, each flip on only if its card and numbers hold (both games, per item)
+  - Bailey: “please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation. work on all those. i'll go with all your recommendations and decision-making for the next couple days.” (blanket yes)
+  - What changed: Item 212e. The driver's picks are item 212j (D-1382) and 212k (D-1383). Built on branch m3-flips (A-1056), merged into r68-int, not deployed.
+  - area visuals · both games · adopted · delivery in progress · see [D-1382](#d-1382), [D-1383](#d-1383) · refines [D-1372](#d-1372)
+  - Source: Bailey, 2026-10-28 about 13:05 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines), typed in the chat, verbatim: "please …
+- <a id="d-1378"></a>**D-1378** — Animation: the Tidus (FFX) and Rikku Dark Knight (FFX-2) rig pilots are judged only in motion clips, rig beside painting, and nothing installs unless it clearly beats the painting
+  - Bailey: “please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation. work on all those. i'll go with all your recommendations and decision-making for the next couple days.” (blanket yes)
+  - What changed: Item 212f, wave 3 (10-29 to 10-30), not started. Uses the expressive-keys method; the party rigs stay off (?partyrigs) and he sees the clips before any rig goes on. Rigs are judged in motion (his 2026-10-19 verdict on the Kimahri rig).
+  - area art · both games · adopted · delivery not scheduled · see [D-1322](#d-1322) · refines [D-1372](#d-1372)
+  - Source: Bailey, 2026-10-28 about 13:05 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines), typed in the chat, verbatim: "please …
+- <a id="d-1379"></a>**D-1379** — ChatGPT point 9: portable saves (export and import a save file) are built dark behind ?saveport=on, with a deep review before the word comes off (both games)
+  - Bailey: “please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation. work on all those. i'll go with all your recommendations and decision-making for the next couple days.” (blanket yes)
+  - What changed: Item 212g. Branch saves-portable (A-1054): checksummed file, strict reader, one additive SaveStore method, an undo stack, off by default with the word-off fingerprints pinned. Not merged, not in release 68; save-data class, so a deep review comes before the word comes off.
+  - area tech · both games · adopted · delivery in progress · see [D-927](#d-927) · refines [D-1372](#d-1372)
+  - Source: Bailey, 2026-10-28 about 13:05 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines), typed in the chat, verbatim: "please …
+- <a id="d-1380"></a>**D-1380** — ChatGPT point 7 (camera around complete actions) waits for the rigs and the camera lab, point 4 (KTX2) waits for point 5's numbers, and WebGPU comes later (both games)
+  - Bailey: “please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation. work on all those. i'll go with all your recommendations and decision-making for the next couple days.” (blanket yes)
+  - What changed: Item 212h. Nothing is built. docs/BUDGETS.md section 6 sets the KTX2 rule: not justified by today's numbers, with three measurable triggers.
+  - area camera · both games · adopted · delivery not scheduled · see [D-926](#d-926), [D-928](#d-928) · refines [D-1372](#d-1372)
+  - Source: Bailey, 2026-10-28 about 13:05 EDT (the decisions queue; the times are DRIVER-STATE.md's date-stamped lines), typed in the chat, verbatim: "please …
+- <a id="d-1381"></a>**D-1381** — DRIVER CALL under his delegation, his to overturn: CP-05 strike shape is refined from "real-snappy" to real-snappy curves WITH ?strikeshape=travel, because real-snappy alone gives Paine a one-frame dash (both games, Chapter I and Chapter IV)
+  - Bailey: “please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation. work on all those. i'll go with all your recommendations and decision-making for the next couple days.” (blanket yes)
+  - What changed: Item 212i, about 13:35 EDT. The prep agent found real-snappy alone gives Paine a one-frame dash of 228.5 px per 60 Hz frame at 2,560 wide (house 57.5, travel 76.3), a teleport the motion pass exists to remove; travel keeps about 1.1 s. The other open questions of the prep were decided: ?curves=today keeps meaning curves off (release 66's look is ?curves=new); ?run=flow and ?rigko=whole stay not pack-gated as built; the public retry should save about 5 to 7 s (measured live: 16.8 s to 9.4 s on the second attempt, A-1062). Live in release 67 (A-1060); the longer wind-up meets ?run=flow, which is the 50 ms stand r68-flowlead fixes.
+  - area visuals · both games · adopted · delivery implemented · see [D-1367](#d-1367) · refines [D-1367](#d-1367)
+  - Source: The driver's call of 2026-10-28 about 13:35 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372), recorded as a driver …
+- <a id="d-1382"></a>**D-1382** — DRIVER CALL under his delegation, his to overturn: motion message 3: which flips go on by default in release 68, which go on with gates, which are held and which stay as they are today; saves export waits for its own deep review and the budget jobs run overnight (both games, per item)
+  - Bailey: “please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation. work on all those. i'll go with all your recommendations and decision-making for the next couple days.” (blanket yes)
+  - What changed: Item 212j, about 15:15 EDT, from D:/Tools/pyrefly-scratch/2026-10-28/m3/SHEET.md. Six parts, one per group. Built on branch m3-flips (A-1056), merged into r68-int, not deployed.
+  - area visuals · both games · adopted · delivery in progress · see [D-1377](#d-1377), [D-1383](#d-1383), [D-1379](#d-1379) · refines [D-1377](#d-1377)
+  - Source: The driver's call of 2026-10-28 about 15:15 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372), recorded as a driver …
+  - <a id="d-1382-a"></a>**D-1382/a** — a: ON by default in release 68: MF-07 ?atbbars=smooth (FFX-2; the columns were rebuilt 15.7 times a second), MF-24 ?triggerhappy=smooth (FFX-2), MF-12 ?hurtstring=hold (both; the real hit reaction is 1.0 to 1.33 s) and MF-17 ?kotopple=eased (both; the real fall is 1.7 to 2.5 s)
+    - What changed: Three of the four stand (m3-flips); MF-17 was held back after the review, see D-1383.
+  - <a id="d-1382-b"></a>**D-1382/b** — b: ON with gates: REDUCE MOTION read by every lane-3 UI animation (accessibility, required), MF-15 ?summon=leap (FFX), MF-23 ?ramps=smooth (both) and MF-13 ?ctbslide=flip (FFX, after the two-frame name touch fix)
+    - What changed: Built with the gates; REDUCE MOTION beats every word, including explicit ones, so capture tools must run with it off.
+  - <a id="d-1382-c"></a>**D-1382/c** — c: HELD: MF-13b ?gridease (one clip first) and MF-10 ?govern (needs a throttled control, T-06)
+    - What changed: Nothing flips; the words stay as built.
+    - delivery not scheduled
+  - <a id="d-1382-d"></a>**D-1382/d** — d: KEPT as today: ?shakeband, ?partyrigs (wave 3 builds new pilots), ?alphathumb and ?warmpool
+    - What changed: No change; each stays off or at today's value.
+    - delivery not scheduled
+  - <a id="d-1382-e"></a>**D-1382/e** — e: portable saves (saves-portable c1852fa05, behind ?saveport=on) wait for their own deep review because they are the save-data class, and are not in release 68
+    - What changed: The branch is not merged into r68-int (A-1054).
+    - delivery not scheduled
+  - <a id="d-1382-f"></a>**D-1382/f** — f: the budgets document (origin/budgets 1353c8eec) is merged and its 54 minutes of budget jobs run overnight; KTX2 is not justified by today's numbers (triggers K1 to K3)
+    - What changed: The document is in r68-int (A-1053); the jobs have not run yet.
+- <a id="d-1383"></a>**D-1383** — DRIVER CALL under his delegation, his to overturn: MF-17 ?kotopple=eased is NOT a release 68 default after all: the review found the eased knock-out fall fails the 40 px CHK-027 line for FFX Kimahri, so the word stays opt-in and the other seven message-3 flips stand (both games)
+  - Bailey: “please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation. work on all those. i'll go with all your recommendations and decision-making for the next couple days.” (blanket yes)
+  - What changed: Item 212k, about 16:20 EDT (m3-flips 49576ea25, A-1056). The unit model puts FFX Kimahri's eased knock-out at a 46.8 px head lurch over three frames against the 40 px CHK-027 line (today 37.1 px with no event), and the eased revive is worse than today for Wakka and Rikku the thief. The word stays; job J8 on the real paintings decides; if they agree with the model, the eased turn needs a design change. REDUCE MOTION beats every word, including explicit ones (capture tools must run with it off).
+  - area visuals · both games · adopted · delivery implemented · see [D-1382](#d-1382) · refines [D-1382](#d-1382)
+  - Source: The driver's call of 2026-10-28 about 16:20 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372), recorded as a driver …
+- <a id="d-1384"></a>**D-1384** — DRIVER CALL under his delegation, his to overturn: the deep-gap pass's decisions D1 to D4 are ratified in round 30b: CHK-B1 and CHK-001 are filed non-mandatory and still UNVERIFIED, owner-only and hardware-only items move to notTested, PR-0516 stays minor (both games)
+  - Bailey: “please work on the pose continuity fix and and crtiques for chatgpt i mentioned awhile ago as well as motion fluidity and animation. work on all those. i'll go with all your recommendations and decision-making for the next couple days.” (blanket yes)
+  - What changed: Item 212l, about 19:00 EDT (A-1057). CHK-B1 (his listening verdict) and CHK-001 (whose pass rule needs his sign-off) are filed mandatory:false and UNVERIFIED with reasons (precedent: B1 was non-mandatory in rounds 04, 05, 06, 12, 13, 22, 23 and 28); the owner-only and hardware-only items moved to notTested with reasons; PR-0516 kept minor. This settled release 66's deep and focused obligations (changed area FAIL), the first deep settle since round 03, clearing 76 builds of deep debt. It passes nothing: audio stays UNVERIFIED, humanJudgments unrecorded, the milestone blocked until he has listened. New findings into release 68's list: CHK-003 FAIL (FFX target flag text 11.0 to 12.5 px at 1280x720, 1440x1080 and 1600x900; PR-0551) and TEXT SIZE scaling the pause but not the battle HUD.
+  - area critic · both games · adopted · delivery implemented · see [D-1371](#d-1371), [D-931](#d-931) · refines [D-1372](#d-1372)
+  - Source: The driver's call of 2026-10-28 about 19:00 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372), recorded as a driver …
