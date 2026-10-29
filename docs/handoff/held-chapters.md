@@ -45,7 +45,7 @@ So "bring Yunalesca to Chapter I's rate" reads 11.1 a minute today and 0 with th
 
 | job | query | prediction (a miss is written up before the next job; no band is widened) |
 |---|---|---|
-| `evrae-airship-all-held` and `-r2` | `?swapscope=all&cutanchor=today` | snaps 0; swap jerks of 40 px or more **0**; swap jerks of 24 px or more 0 to 4 (round 30: 2); worst under 40; ghost ms a minute 1,450 to 2,100 and at most 0.7 of round 30's 3,224; planned cuts 120 to 190; the repeat within 2 swap jerks of the first |
+| `evrae-airship-all-held` and `-r2` | `?swapscope=all&cutanchor=today` | snaps 0; swap jerks of 40 px or more **0**; swap jerks of 24 px or more 0 to 2 (round 30's 2, the written lift); worst under 40; ghost ms a minute 1,450 to 2,100 and at most 0.7 of round 30's 3,224; planned cuts 120 to 190; the repeat within 2 swap jerks of the first |
 | `sin-face-all-held-today` (anchor forced off) | `?swapscope=all&cutanchor=today` | snaps 0; gated jerks 0 to 2 (the follow>idle sits 1.2 percent over its cap and may or may not be gated; the critical>victory is gone); ghost 1,100 to 1,650 |
 | `sin-face-all-held-anchor` | `?swapscope=all&cutanchor=on` | gated jerks **0**; planned cuts of 120 px or more 0 to 1; whole-step worst 70 to 135 (model 108); anchored cuts 25 to 60 (model 39); designed feet shift worst 90 to 150; ghost 1,100 to 1,650 and within 12 percent of the control |
 | `yunalesca-all-held-anchor` | `?swapscope=all&cutanchor=on` | gated jerks **0**; planned cuts of 120 px or more 0 to 2 (76 today); median 40 to 58, worst 60 to 120; anchored cuts 130 to 260; designed feet shift worst 70 to 125; ghost 1,800 to 2,900 and at most 0.7 of round 30's 5,372; the control is release 68's `yunalesca-all-today` |
