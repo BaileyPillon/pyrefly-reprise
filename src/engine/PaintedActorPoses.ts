@@ -9,7 +9,7 @@
 
 import { lifeStateForPose, nextLifeState, resolvePoseName } from './BattlePresenterActors.ts';
 import { loadPainted, type PaintedTexture } from './PaintedArt.ts';
-import { raceCeiling, splitPoses } from './LoadDiet.ts'; // load diet: the opening poses are waited for, the rest streams
+import { loadStreamed } from './PoseStream.ts'; // load diet: the opening poses are waited for, the rest streams
 import { WITHHELD_FALLBACKS } from './PoseTrust.ts';
 import { newMotionOn } from './motion/NewMotionGate.ts';
 import { SmearDirector } from './motion/SmearDirector.ts'; // motion pass (lane "core", step 2): big pose changes cut inside a smear; idle unless `?smear=`/`?pack=demo` in a demo chapter (`motion/SmearSwitch.ts`)
@@ -56,25 +56,10 @@ export abstract class PaintedActorPoses extends PaintedActorLife {
     const byUrl = new Map<string, Promise<PaintedTexture>>();
     const load = (u: string): Promise<PaintedTexture> =>
       byUrl.get(u) ?? byUrl.set(u, loadPainted(u, this.placeholderFactory, (c) => c.height * this.placeholderBaseline, this.matte, this.fitBaseline)).get(u)!;
-    // Load diet (`LoadDiet.ts`): the opening poses are waited for as ever; the rest for at most the ceiling, then the figure is built and they stream in (`installLate`).
-    const split = opts?.streamCeilingMs && !opts.blend ? splitPoses(poses, names) : null;
-    const all = names;
-    let streamed: { names: string[]; each: Promise<PaintedTexture>[] } | null = null;
-    let loaded: PaintedTexture[];
-    if (split?.late.length) {
-      const each = split.late.map((n) => load(poses[n]!));
-      const lateP = Promise.all(each);
-      const earlyLoaded = await Promise.all(split.early.map((n) => load(poses[n]!)));
-      const lateLoaded = await raceCeiling(lateP, opts!.streamCeilingMs!).catch(() => null);
-      if (lateLoaded) {
-        const byName = new Map([...split.early.map((n, i) => [n, earlyLoaded[i]!] as const), ...split.late.map((n, i) => [n, lateLoaded[i]!] as const)]);
-        loaded = all.map((n) => byName.get(n)!); // all in time: the same set in the same order as release 67
-      } else {
-        names = split.early;
-        loaded = earlyLoaded;
-        streamed = { names: split.late, each };
-      }
-    } else loaded = await Promise.all(names.map((n) => load(poses[n]!)));
+    // Load diet (`LoadDiet.ts`, `PoseStream.ts`): the opening poses are waited for as ever; the rest for at most the ceiling, then the figure is built and they stream in (`installLate`).
+    const stream = opts?.streamCeilingMs && !opts.blend ? await loadStreamed(poses, names, opts.streamCeilingMs, load, () => this.streamDead) : null;
+    const loaded = stream ? stream.loaded : await Promise.all(names.map((n) => load(poses[n]!)));
+    if (stream) names = stream.names;
     const previous = names.map((n) => this.poses.get(n));
     names.forEach((n, i) => {
       this.poses.set(n, loaded[i]!);
@@ -89,7 +74,7 @@ export abstract class PaintedActorPoses extends PaintedActorLife {
     // `force`, because re-loading a pose set (a stand-in being swapped for the
     // real painting) keeps the same pose *name* with a different texture.
     if (first) this.showPoseSet(first, opts?.blend === true);
-    if (streamed) streamed.names.forEach((n, i) => void streamed!.each[i]!.then((t) => this.installLate([n], [t], poses), () => undefined)); // each pose installs as it lands
+    stream?.later?.names.forEach((n, i) => void stream.later!.each[i]!.then((t) => this.installLate([n], [t], poses), () => undefined)); // each pose installs as it lands
   }
 
   /**
