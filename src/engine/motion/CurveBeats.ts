@@ -8,6 +8,7 @@ import type { CombatantId } from '../../battle/common/types.ts';
 import type { EventCtx } from '../BattlePresenterEvents.ts';
 import type { ActorHandle } from '../BattlePresenterPorts.ts';
 import { SPEED_SCALE } from '../BattlePresenterUtil.ts';
+import type { StrikeProfile } from './StrikeCurve.ts';
 import type { LungeContact } from '../ContactBeat.ts';
 import { menuBlocks } from '../KeySlots.ts';
 import { LUNGE_MS } from '../StrikeBeat.ts';
@@ -37,6 +38,14 @@ export function startAttackMove(ctx: EventCtx, actor: ActorHandle | undefined, p
     return;
   }
   void Promise.all([actor?.lunge(plan.distance, LUNGE_MS, contact, plan.house), actor?.squash(260, 0.45)]);
+}
+
+/**
+ * The profile the strike after a girl's run-in plays, which `startAttackMove` hands the actor with `ranIn` true: her real profile in a real mode (`?curves=real-snappy`, Chapter IV's default), else the house flow profile
+ * under `?run=flow` or `pace`, else undefined (the game's own). The run-in port asks for the strike as the run brakes, early by this profile's wind-up (`RunEase.flowLeadMs`), so it reads the same answer (release 68, FFX-2 only).
+ */
+export function profileAfterRun(ctx: Parameters<typeof realProfileOf>[0], attackerId: CombatantId | undefined): StrikeProfile | undefined {
+  return realProfileOf(ctx, attackerId) ?? flowProfile();
 }
 
 const holdOvers = new WeakMap<object, Promise<void>>();

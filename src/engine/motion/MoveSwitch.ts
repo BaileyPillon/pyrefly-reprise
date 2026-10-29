@@ -13,9 +13,14 @@
  * | `?run=` | `today`, `smooth`, `flow`, `pace` (**default `flow`** since release 67) | MF-04: an FFX-2 girl's run, leap and lunge | FFX-2 only |
  * | `?rigko=` | `today`, `whole` (**default `whole`** since release 67) | MF-11: a rig boss's knock-out is the whole fall, and its idle key waits for a strike to be over | both (Seymour Flux, Bahamut) |
  * | `?strikeshape=` | `today`, `travel` (**default `travel`** since release 67) | MF-14 V3: with `?curves=real-snappy`, the dash keeps the house travel at the 1.1 s pick (`today`: the clip's own, a one-frame dash). It acts only where `real-snappy` plays (Chapter I and Chapter IV, the pack on, a desktop-class screen): `?curves=new`, `today`, `real` and a phone never read it | both |
+ * | `?kotopple=` | `today`, `eased` (**default `today`**: the pick was held back at release 68, see {@link MOVE_DEFAULTS}) | MF-17: a party figure's knock-out is a long eased collapse and its revive rises from rest (a fall under the real-clip modes, Chapter I and IV with the pack on, plays the real buckle: only the revive is eased there) | both |
+ * | `?hurtstring=` | `today`, `hold` (**default `hold`** since release 68) | MF-12: a string of blows is one held flinch, not hurt, stance, hurt | both |
+ * | `?summon=` | `today`, `leap` (**default `leap`** since release 68; `today` while REDUCE MOTION is on) | MF-15: an aeon's arrival is a leap and the party returns while it fades out | FFX as played (the code is shared; FFX-2 has no summons) |
+ * | `?ramps=` | `today`, `smooth` (**default `smooth`** since release 68) | MF-23: the five stepped fades (petrify, Evrae, yields, held, recall) are one linear tween each | both |
  *
- * (Later items of the lane add their words to this table: `kotopple`, `hurtstring`, `summon`, `ramps`, `shakeband`; none of them defaults to anything but today.) A word the table does not list reads as the word's default (today, but for `hit`, `run`, `rigko` and `strikeshape`). The words apply in every
- * chapter of the game they belong to; the film is made in Chapter I (FFX) and Chapter IV (FFX-2).
+ * (Later items of the lane add their words to this table: `shakeband`; it defaults to today.) A word the table does not list reads as the word's default (today, but for `hit`, `run`, `rigko`, `strikeshape` and, since release 68,
+ * `hurtstring`, `summon` and `ramps`; `kotopple` stays today until the real paintings clear it). The words apply in every chapter of the game they belong to; the film is made in Chapter I (FFX) and Chapter IV (FFX-2). **Release 68 (the driver's call under Bailey's delegation, 2026-10-28;
+ * his to overturn) made three more of the lane's words defaults** ({@link MOVE_DEFAULTS}: ONE line each); `?hurtstring=today&summon=today&ramps=today` with release 67's other words is release 67's look, exactly.
  */
 import { queryWord } from './DemoGate.ts';
 
@@ -41,12 +46,21 @@ export type MoveValue<K extends MoveKey> = (typeof MOVE_WORDS)[K][number];
  * Message 1 (04:05 EDT): `hit`. Message 2: `run` (FFX-2 only: the run-in plays only there; `flow` falls back to the smooth run where the new curves are off, `RunEase.runMode`) and `rigko` (both games, the rig bosses).
  * None of the three is gated by the pack (the words never were), so `?pack=off` and a phone read the picks too, as `?hit` does. `strikeshape` (the driver's call, 2026-10-28): `travel`, so the real-snappy strike travels over the house dash
  * (about a fifth of a second) instead of jumping in one frame; it has exactly the scope of `?curves=real-snappy` because the one reader (`RealMotion.houseTravel`) answers only for that mode (`?strikeshape=today` is the clip's own dash).
+ * Release 68 (the driver's call, 2026-10-28; sheet `m3/SHEET.md`): `hurtstring` (both games), `summon` (FFX as played; REDUCE MOTION reads it as `today`, `SummonBeat.summonLeapOn`) and `ramps` (both): none is pack-gated (the
+ * words never were), so `?pack=off` and a phone read them too, as `?hit` does.
+ * **`kotopple` (MF-17) is deliberately NOT here (the adversarial review of m3-flips, 2026-10-28, F1 and F2; the sheet's own J8 stop rule "head step over 28, worse than today: do not flip").** Read through the continuity harness's maths
+ * (`tests/unit/engine/m3-ko-eased-harness.test.ts`, the real `PaintedActor`, synthetic masks) the eased fall hands Kimahri's head a three-frame lurch of 26.7, 44.5, 46.8 and 18.1 px when the lying painting takes over (over the 40 px
+ * `jerkFailPx` of CHK-027; today's 37.1 px is a ramp with no event) and Lulu's 24.9 px (a reported event), and the eased revive's worst step is worse than today's for Wakka (26.2 to 38.2 px) and Rikku the thief (23.5 to 32.0). To put the
+ * pick back: add `kotopple: 'eased'` here AFTER J8 and J11 (`D:/Tools/pyrefly-scratch/2026-10-28/m3/jobs/`) read the real paintings, Kimahri, Lulu and Wakka first; the word itself, `?kotopple=eased`, plays the eased fall and revive today.
  */
 export const MOVE_DEFAULTS: { readonly [K in MoveKey]?: MoveValue<K> } = {
   hit: 'knock',
   run: 'flow',
   rigko: 'whole',
   strikeshape: 'travel',
+  hurtstring: 'hold',
+  summon: 'leap',
+  ramps: 'smooth',
 };
 
 /** The value `key` reads when the address does not name one: its pick if it has one, else today (the first value). */

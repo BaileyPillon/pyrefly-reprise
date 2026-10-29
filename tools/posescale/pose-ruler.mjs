@@ -84,7 +84,8 @@ export async function ruleRecords({ root = ROOT, artDir, records, rows, subjects
         if (g.anchor - topTrue > 0) { basis = 'body'; height = R.bodyH / ((g.anchor - topTrue) * u0); }
       }
       if (!(height > 0) || !Number.isFinite(height)) continue;
-      const out = ruleSize({ head, height, floor: statureFloorOf(cls, pose) });
+      const band = r.statureBand ?? {}; // pc-residues (PR-0531): a margin for one pose whose screen reading leaves the band (`overrides.json` `statureBand`, carried on the record with its reason)
+      const out = ruleSize({ head, height, floor: band.floor ?? statureFloorOf(cls, pose), ...(band.ceiling ? { ceiling: band.ceiling } : {}) });
       const patch = {
         scaleSrc: out.held ? 'held' : 'ruled',
         scale: out.scale,

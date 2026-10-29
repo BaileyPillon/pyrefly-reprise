@@ -25,6 +25,7 @@ import {
   type MarkRecord,
 } from '../../src/app/markMoment.ts';
 import { MarkRecorder, buildInfo, type MarkEnv, type MarkSource } from '../../src/app/markRecorder.ts';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 const ROOT = join(__dirname, '..', '..');
 
@@ -335,13 +336,14 @@ describe('the wiring', () => {
     const input = readFileSync(join(ROOT, 'src/app/Input.ts'), 'utf8');
     expect(input).not.toContain('Backquote');
     // no other raw key handler in src names it, and the abstract key map has no entry for it
-    const keyMap = /const KEY_MAP[^{]*\{([\s\S]*?)\n\};/.exec(input)?.[1] ?? '';
+    // (the map moved to inputKeyMap.ts in release 68, lane ui-input)
+    const keyMap = /const KEY_MAP[^{]*\{([\s\S]*?)\n\};/.exec(readFileSync(join(ROOT, 'src/app/inputKeyMap.ts'), 'utf8'))?.[1] ?? '';
     expect(keyMap.length).toBeGreaterThan(100);
     expect(keyMap).not.toMatch(/Backquote|Backslash/);
   });
 
   it('the battle screen starts the recorder when it begins and stops it when it goes; the build gives a short commit and a bundle name', () => {
-    const screen = readFileSync(join(ROOT, 'src/app/screens/BattleScreen.ts'), 'utf8');
+    const screen = battleScreenSource();
     expect(screen).toMatch(/this\.markRecorder = startMarkRecorder\(/);
     expect(screen).toMatch(/this\.markRecorder\?\.stop\(\)/);
     const b = buildInfo();

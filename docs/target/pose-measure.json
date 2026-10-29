@@ -15483,31 +15483,31 @@
      "baseline": 820.0,
      "current": 1.15,
      "head": [
-      111.2,
-      122.6,
-      198.8,
-      169.4
+      112.6,
+      123.3,
+      197.4,
+      168.7
      ],
      "held": {
       "by": "the W3 sizing rule (pick 89e, the release driver), under Bailey 2026-10-16: \"pose continuity is the strongest recurring issue we need a permanent fix for this please.\" and his standing \"I'll go with all of your recommendations\"",
-      "headRatio": 1.15,
+      "headRatio": 1.189,
       "reading": 1.15,
       "readingStature": 0.783,
-      "stature": 0.901
+      "stature": 0.931
      },
      "prone": false,
      "reading": 1.15,
      "ruled": {
       "basis": "box",
       "head": 1.15,
-      "headRatio": 1.15,
+      "headRatio": 1.189,
       "height": 1.46891,
       "lift": "floor",
       "mean": 1.3,
       "rule": "geomean/1",
-      "stature": 0.901
+      "stature": 0.931
      },
-     "scale": 1.323,
+     "scale": 1.367,
      "scaleSrc": "held",
      "sha": "b0f97721cc051ede61460727f5a4480ea1189745fb15f10a3bc29047a64992b5",
      "size": [
@@ -15522,7 +15522,11 @@
       "x1": 500.0
      },
      "standing": true,
-     "stature": 0.901
+     "stature": 0.931,
+     "statureBand": {
+      "floor": 0.93,
+      "why": "pc-residues (PR-0531, 2026-10-28; FFX-2 only: Rikku Thief, the Leblanc chapter): the hurt painting is lifted to the floor and read 0.879 to 0.885 of the idle's height on the screen in nine swaps (the head lock's factor and the lens take 2.4 percent off the card's 0.901), under the 0.90 band; lifted to 0.93 on the card it reads about 0.91 on the screen"
+     }
     },
     "idle": {
      "anchor": [
@@ -26030,31 +26034,31 @@
      "baseline": 1149.0,
      "current": 1.25,
      "head": [
-      239.3,
-      409.7,
-      304.7,
-      464.3
+      238.4,
+      408.9,
+      305.6,
+      465.1
      ],
      "held": {
       "by": "the W3 sizing rule (pick 89e, the release driver), under Bailey 2026-10-16: \"pose continuity is the strongest recurring issue we need a permanent fix for this please.\" and his standing \"I'll go with all of your recommendations\"",
-      "headRatio": 0.893,
+      "headRatio": 0.869,
       "reading": 1.25,
       "readingStature": 1.232,
-      "stature": 1.1
+      "stature": 1.07
      },
      "prone": false,
      "reading": 1.25,
      "ruled": {
       "basis": "box",
       "head": 1.25,
-      "headRatio": 0.893,
+      "headRatio": 0.869,
       "height": 1.01499,
       "lift": "ceiling",
       "mean": 1.126,
       "rule": "geomean/1",
-      "stature": 1.1
+      "stature": 1.07
      },
-     "scale": 1.116,
+     "scale": 1.086,
      "scaleSrc": "held",
      "sha": "e7c35b3e2dba63cd70b03264eb1034b51a6868a8df0df2f394dd5c304a36c6dd",
      "size": [
@@ -26069,7 +26073,11 @@
       "x1": 383.0
      },
      "standing": true,
-     "stature": 1.1
+     "stature": 1.07,
+     "statureBand": {
+      "ceiling": 1.07,
+      "why": "pc-residues (PR-0531, 2026-10-28; FFX-2 only: Yuna White Mage, Chapter IV Bahamut and the Fallen Aeons): the cast painting is held to the ceiling and read 1.1166 and 1.1155 of the idle's height on the screen in two chapters (the head lock's factor and the lens add 1.5 percent to the card's 1.099), over the 1.10 band; held to 1.07 on the card it reads about 1.09 on the screen"
+     }
     },
     "critical": {
      "anchor": [

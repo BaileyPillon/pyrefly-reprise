@@ -12,7 +12,9 @@
  * - `smooth` (V1): the same run time, a TRAPEZOID of speed ({@link trapezoid}: a quarter of the run easing in, a cruise, a quarter easing out; peak 1.33 times the mean, not 2), and a leap whose lift
  *   leaves and meets the floor at rest ({@link smoothBell}), so the landing is a brake and then the squash.
  * - `flow` (V2): V1, plus the strike is asked for as the run brakes, so its wind-up (a pull the eye can read, {@link FLOW_PROFILE}, and a deeper crouch) is the end of the stop and the lunge's travel
- *   starts as she arrives: the stand is gone and the whole attack is about 0.1 s shorter. The lunge is solved from where she WILL stand ({@link RunInMotion.reachGap}), so contact is where it was.
+ *   starts as she arrives: the stand is gone and the whole attack is about 0.1 s shorter. The lunge is solved from where she WILL stand ({@link RunInMotion.reachGap}, through the camera she will stand under,
+ *   {@link RunInMotion.reachTruck}), so contact is where it was. **Release 68:** the strike is asked for early by the wind-up it will PLAY (a real profile's 300 ms for Paine and Rikku in Chapter IV, not the house 100 that
+ *   release 67 timed it from, which left a 183 to 200 ms stand), see {@link flowLeadMs}.
  * - `pace` (V3): V2 at the real pace: the run lasts as long as it takes to cruise at about three body heights a second ({@link paceRunMs}), 0.5 to 0.7 s in and three quarters of that home.
  *
  * Game case (AGENTS.md rule 14): FFX-2 only. Every number is `[ours]` except the pace (the game's job-macro run speed, 40 FFX units a second, is 2.6 to 2.8 body heights a second).
@@ -106,9 +108,19 @@ export function flowProfile(mode: RunMode = runMode()): StrikeProfile | undefine
 export const FLOW_OVERLAP_MS = 40;
 
 /**
- * How long before the run's end the strike is asked for, tween ms (the strike's own paced clock): its wind-up plus {@link FLOW_OVERLAP_MS}, so that the wind-up is over, and the lunge's travel under way, as the
- * run brakes to its end. `timeScale` is the presenter's playback speed scale (1 normal, 0.32 fast).
+ * `flow`: the most of the run, as a share of its length, the strike may be asked for before it ends (release 68; FFX-2 only). A real wind-up is nearly as long as the shortest run (Paine and Rikku play 300 ms under
+ * `?strikeshape=travel` against a 320 ms run, 352 on screen), so the strike is asked for in the run's first stride; 0.85 leaves the run's first sixth alone (it is still easing into its cruise there: the trapezoid's first
+ * quarter), and the wind-up's own first quarter is about a tenth of its crouch, lean and pull (a smoother-step), so little shows before the run is at speed. The sim (`tests/unit/helpers/FlowLeadSim.ts`) gives, for the
+ * shortest run (the common one), the stand by cap: 0.6 about 110 ms, 0.75 about 50 to 75, 0.8 about 25 to 50, **0.85 about 0 to 33**, 0.97 none. The way back if the early lean reads wrong in motion is 0.75 (still under release 66's 133 to 150 ms).
  */
-export function flowLeadMs(timeScale: number, paceFactor: number): number {
-  return ((FLOW_PROFILE.windupMs + FLOW_OVERLAP_MS) * Math.max(0.02, timeScale)) / Math.max(0.05, paceFactor);
+export const FLOW_LEAD_MAX_SHARE = 0.85;
+
+/**
+ * How long before the run's end the strike is asked for, tween ms (the strike's own paced clock): the wind-up of the profile the strike will play plus {@link FLOW_OVERLAP_MS}, so that the wind-up is over, and the
+ * lunge's travel under way, as the run brakes to its end. `timeScale` is the presenter's playback speed scale (1 normal, 0.32 fast). `windupMs` is that profile's wind-up in its own ms
+ * (`RealMotion.windupMsOf`): the house flow profile's 100 by default; **a real profile plays its own (Paine and Rikku 300 under `?strikeshape=travel`), and asking for it 140 ms before the end, as release 67
+ * did from the house wind-up, left a 183 to 200 ms stand (measured live; the sim reproduces it) because the dash began after the run had stopped.** The caller caps it ({@link FLOW_LEAD_MAX_SHARE}).
+ */
+export function flowLeadMs(timeScale: number, paceFactor: number, windupMs: number = FLOW_PROFILE.windupMs): number {
+  return ((windupMs + FLOW_OVERLAP_MS) * Math.max(0.02, timeScale)) / Math.max(0.05, paceFactor);
 }

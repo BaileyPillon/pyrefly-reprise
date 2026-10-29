@@ -20,6 +20,7 @@
 // Game case: both (shared critic plumbing; a size jump or a snap is a defect in either game).
 
 import { cameraShiftAt } from './continuity-camera.mjs';
+import { readCardHead } from './continuity-card.mjs';
 import { applyH, invertH, polygonArea, unitSquareToQuad } from './continuity-geometry.mjs';
 import { heldPlateau } from './continuity-held.mjs';
 import { poseReadings } from './continuity-readings.mjs';
@@ -201,7 +202,8 @@ export function analyzeSwap({ frames, at = 0, swap, anchors, k1600, camCut, cfg,
   // read 4.4 px of feet where the two planes of the frame before agree to 0.2 px. Where one frame shows both planes, the size and the feet are read there. The outline (CHK-027)
   // keeps reading what the picture did across the swap, so the snap counts do not move.
   const both = (fr) => { const a = planeIn(fr, swap.from), b = planeIn(fr, swap.to); return a && b ? [a, b] : null; };
-  const same = both(f0) ?? both(frames[at - 1]) ?? both(frames[at + 1]);
+  const sameFrame = [f0, frames[at - 1], frames[at + 1]].find((fr) => fr && both(fr)) ?? null; // the frame the readings are taken in (probe 3 records each plane's world size there)
+  const same = sameFrame ? both(sameFrame) : null;
   const Hf26 = same ? unitSquareToQuad(same[0].q) : Hf, Ht26 = same ? unitSquareToQuad(same[1].q) : Ht;
 
   // --- size: the head on screen before and after (CHK-026). Registered heads where both poses have one; else the two
@@ -217,6 +219,15 @@ export function analyzeSwap({ frames, at = 0, swap, anchors, k1600, camCut, cfg,
     // (W4: the HEIGHT and FEET readings below trust nothing the table says). The mass is read from the pixels and is no control.
     out.head = { fromPx: round(pf, 1), toPx: round(pt, 1), ratio: round(ratio, 4), source: bothHeads ? 'registration' : 'silhouette', metric: bothHeads ? 'head' : 'mass', label: bothHeads ? 'control' : 'mass' };
     out.failHead = judged && Math.abs(ratio - 1) > (bothHeads ? cfg.size.headTolerancePct : cfg.size.headTolerancePctCoarse) / 100;
+    // PR-0459 (probe 3): the head as the CARD carries it beside the head as the camera draws it, and which of them owns a change (continuity-card.mjs). The gate stays on the projected
+    // reading unless the policy's `headGate` is `card`.
+    if (bothHeads && sameFrame) {
+      const card = readCardHead({ fig: sameFrame.fig, kFrom: swap.from, kTo: swap.to, aFrom, aTo, projected: ratio, tolerancePct: cfg.size.headTolerancePct });
+      if (card) {
+        out.head.card = card;
+        if (cfg.headGate === 'card') out.failHead = judged && Math.abs(card.ratio - 1) > cfg.size.headTolerancePct / 100;
+      }
+    }
   }
   // --- feet: where the standing figure stands, before and after
   if (aFrom?.stance && aTo?.stance) {

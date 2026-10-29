@@ -1,6 +1,7 @@
 /**
- * THE TURN-ORDER LIST THAT SLIDES (MF-13 / TB-13, motion-fluidity pass lane L3; game case: FFX only: the CTB list is the FFX HUD, FFX-2 has the ATB bars instead; look change, so behind
- * `?ctbslide=flip` or `?fluidui=on`, default today's).
+ * THE TURN-ORDER LIST THAT SLIDES (MF-13 / TB-13, motion-fluidity pass lane L3; game case: FFX only: the CTB list is the FFX HUD, FFX-2 has the ATB bars instead; a look change: ON by default since release 68,
+ * `?ctbslide=today` or `?fluidui=today` is release 67's jump; and never while the player's REDUCE MOTION is on, because a Web Animation is not stopped by a CSS rule: the gate is in {@link ctbSlideOn} and in
+ * {@link slideRows}).
  *
  * `CtbList.render` replaces the whole list with `innerHTML` on every sync, so the order of the portraits jumps to its new arrangement and the unit that acted, going to the back, vanishes
  * and reappears. FLIP: before the replacement note where each row IS (First), after it note where each row now is (Last), and let each row that exists in both play from the old place to the new
@@ -15,10 +16,16 @@
  * declaration beats every animation, so a `transform` slide never showed in the real Chapter I HUD (found by the stepped capture, 2026-10-27; the lab list had no such rule). `translate` composes with
  * whatever `transform` the row has and nothing overrides it.
  *
+ * **Rows that pass each other (MF-13's crossing pair; release 68):** two rows that swap places (a real re-sort, not the unit that acted going to the back) slide through each other, so their names overlap for 8 to 15
+ * frames, up to 64 px (the measuring lane's J3b on Chapter II's list). Both rows of such a pair now fade in at their new places instead of sliding ({@link crossing}); the rows that do not pass anyone still slide.
+ *
+ * **The name touch of release 67's card (CP-11, +33 ms; fixed in release 68):** the row that fades in (the unit that acted, at the back) lands where a sliding neighbour still is, so for about two frames "Seymour Flux" was
+ * drawn over the new "Tidus". A fade that has a slide beside it now waits {@link FADE_AFTER_MS}, drawn at opacity 0 meanwhile, until the sliding rows have covered about 80 percent of their way by the curve.
+ *
  * Pure DOM helpers: no `three`, no timers; jsdom (no `animate`, no boxes) does nothing.
  */
 
-import { fluidWord } from '../common/fluidUi.ts';
+import { fluidWord, reduceMotionNow } from '../common/fluidUi.ts';
 
 /** How long a row takes to reach its new place, ms: inside the 150 to 250 ms the plan asks for, the same at any display rate (a Web Animation counts wall time). */
 export const SLIDE_MS = 200;
@@ -33,10 +40,16 @@ export function setCtbSlide(on: boolean | null): void {
   forced = on;
 }
 
-/** Is the sliding list asked for (`?ctbslide=flip` or `?fluidui=on`)? */
+/** Does the list slide now? The default since release 68 (`FLUID_DEFAULTS.ctbslide`; `?ctbslide=today` / `?fluidui=today` put the jump back), a forced test switch, and never under REDUCE MOTION (it beats all of them). */
 export function ctbSlideOn(search: string | undefined = globalThis.location?.search): boolean {
-  return forced ?? fluidWord('ctbslide', 'flip', search);
+  return !reduceMotionNow() && (forced ?? fluidWord('ctbslide', 'flip', search));
 }
+
+/**
+ * How long a row that fades in waits when rows slide beside it, ms: the slide's curve has covered 80 percent of its way at about 63 ms ({@link SLIDE_EASING}, the same at any display rate), and a name 55 to 140 px wide
+ * on a 170 px pitch is clear of the place it left by then, so the new name is not drawn under a sliding one (CP-11, +33 ms). Counted on the page clock like the slide itself.
+ */
+export const FADE_AFTER_MS = 70;
 
 export interface RowPlace {
   left: number;
@@ -54,6 +67,38 @@ function keyed(list: HTMLElement): Array<[string, HTMLElement]> {
     out.push([`${actor}#${n}`, row]);
   }
   return out;
+}
+
+/** How far inside the other row's extent the crossing must be, CSS px, to count as passing through it (a row grazing a neighbour's edge is not a crossing). */
+const CROSS_MARGIN_PX = 1;
+
+/** One row that slides: the offset it plays from (`dx`, `dy`: old minus new place), its new place and its size, all in the row's own unscaled px. */
+export interface Move {
+  row: HTMLElement;
+  dx: number;
+  dy: number;
+  far: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+/**
+ * Do two sliding rows pass through each other? Both play the same curve over the same time, so their offset from one another runs in a straight line from the old one to the new one. They cross when that
+ * offset changes sign along an axis (one was on this side, now it is on that) and, at the moment it is zero on that axis, the other axis is within the two rows' extents (they are level, so one runs through the other).
+ */
+export function crossing(a: Move, b: Move): boolean {
+  const newX = a.x - b.x;
+  const newY = a.y - b.y;
+  const oldX = newX + (a.dx - b.dx);
+  const oldY = newY + (a.dy - b.dy);
+  const along = (oldP: number, newP: number, oldQ: number, newQ: number, extent: number): boolean => {
+    if (!(oldP * newP < 0)) return false; // the same side before and after: nobody passes
+    const s = oldP / (oldP - newP); // how far along the slide the two are level on this axis
+    return Math.abs(oldQ + (newQ - oldQ) * s) < extent;
+  };
+  return along(oldX, newX, oldY, newY, (a.h + b.h) / 2 - CROSS_MARGIN_PX) || along(oldY, newY, oldX, newX, (a.w + b.w) / 2 - CROSS_MARGIN_PX);
 }
 
 /** A row that has to travel more than this many times what a typical row of the render travels (a neighbour's one place) is not dragged across the others: it fades in where it lands (the unit that acted, going to the back over two or more others). */
@@ -78,7 +123,9 @@ export function measureRows(list: HTMLElement): Map<string, RowPlace> {
  * others with its name over theirs. Returns how many animations it started.
  */
 export function slideRows(list: HTMLElement, before: ReadonlyMap<string, RowPlace>): number {
-  const moves: Array<{ row: HTMLElement; dx: number; dy: number; far: number }> = [];
+  if (reduceMotionNow()) return 0; // REDUCE MOTION: the list jumps as it did (the caller asks `ctbSlideOn` first; this is the animation's own gate)
+  const moves: Move[] = [];
+  const still: Move[] = []; // rows that stay where they are: a row sliding across one of these would cross it too
   const fades: HTMLElement[] = [];
   for (const [key, row] of keyed(list)) {
     if (typeof row.animate !== 'function') return 0;
@@ -93,19 +140,27 @@ export function slideRows(list: HTMLElement, before: ReadonlyMap<string, RowPlac
     const k = row.offsetWidth > 0 ? r.width / row.offsetWidth : 1;
     const dx = (was.left - r.left) / k;
     const dy = (was.top - r.top) / k;
-    if (Math.abs(dx) < MIN_MOVE_PX && Math.abs(dy) < MIN_MOVE_PX) continue;
-    moves.push({ row, dx, dy, far: Math.hypot(dx, dy) });
+    const place: Move = { row, dx, dy, far: Math.hypot(dx, dy), x: r.left / k, y: r.top / k, w: r.width / k, h: r.height / k };
+    if (Math.abs(dx) < MIN_MOVE_PX && Math.abs(dy) < MIN_MOVE_PX) still.push(place);
+    else moves.push(place);
   }
   const sorted = moves.map((m) => m.far).sort((p, q) => p - q);
   const typical = sorted[(sorted.length - 1) >> 1] ?? 0; // the lower median: one far traveller does not move it
+  const sliding = moves.filter((m) => m.far <= typical * WRAP_RATIO);
+  // both rows of every pair of sliders that passes through each other, and a slider that would run through a row that stays
+  const passing = new Set(sliding.filter((m, i) => sliding.some((o, j) => j !== i && crossing(m, o)) || still.some((o) => crossing(m, o))));
   let slid = 0;
   for (const m of moves) {
-    if (m.far > typical * WRAP_RATIO) fades.push(m.row);
+    if (m.far > typical * WRAP_RATIO || passing.has(m)) fades.push(m.row);
     else {
       m.row.animate([{ translate: `${m.dx.toFixed(2)}px ${m.dy.toFixed(2)}px` }, { translate: '0px 0px' }], { duration: SLIDE_MS, easing: SLIDE_EASING });
       slid++;
     }
   }
-  for (const row of fades) row.animate([{ opacity: 0 }, { opacity: 1 }], { duration: SLIDE_MS * 0.75, easing: 'ease-out' });
+  // A fade beside a slide waits for the sliding names to clear its place (backwards fill: opacity 0 until it starts) and ends with the slides; a fade on its own plays at once.
+  const beside = slid > 0;
+  for (const row of fades) {
+    row.animate([{ opacity: 0 }, { opacity: 1 }], beside ? { duration: SLIDE_MS - FADE_AFTER_MS, delay: FADE_AFTER_MS, easing: 'ease-out', fill: 'backwards' } : { duration: SLIDE_MS * 0.75, easing: 'ease-out' });
+  }
   return slid + fades.length;
 }

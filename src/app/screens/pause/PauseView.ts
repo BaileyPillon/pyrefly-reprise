@@ -45,7 +45,7 @@ import {
   type PanelColumn,
   type PanelRow,
 } from './panels.ts';
-import { backHtml, baselineHtml, columnsHtml, fromMeters, fromPanels, objectiveHtml, tabsHtml } from './markup.ts';
+import { backHtml, baselineHtml, columnsHtml, fromMeters, fromPanels, labelPausePanel, objectiveHtml, PAUSE_PANEL_ID, tabsHtml } from './markup.ts';
 
 export interface PauseViewDeps {
   chapter: Chapter;
@@ -130,7 +130,7 @@ export class PauseView {
       <div class="pause__ui" data-role="ui">
         <div class="pause__brand">Echoes of Spira &middot; ${escapeHtml(game)}</div>
         <nav class="pause__tabs" data-role="tabs" role="tablist" aria-label="Paused"></nav>
-        <div class="pause__body" data-role="body"></div>
+        <div class="pause__body" data-role="body" role="tabpanel" id="${PAUSE_PANEL_ID}"></div>
         <div class="pause__obj" data-role="obj"></div>
         <div class="pause__prompts" data-role="prompts">${backHtml()}</div>
       </div>
@@ -215,7 +215,7 @@ export class PauseView {
       this.music?.dispose();
       this.music = null;
     }
-    el.dataset['tab'] = at.tabId;
+    labelPausePanel(el, at.tabId);
 
     const memberId = memberIdOf(at.tabId);
     if (memberId) {

@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 /**
- * The FFX turn-order list that slides, and the Sphere Grid that glides (MF-13 / TB-13, motion-fluidity pass lane L3; game case: FFX only; look change, so behind `?ctbslide=flip` /
- * `?gridease=on` / `?fluidui=on`, default today's).
+ * The FFX turn-order list that slides, and the Sphere Grid that glides (MF-13 / TB-13, motion-fluidity pass lane L3; game case: FFX only; a look: `?ctbslide=flip` is ON by default since release 68 (the driver's call under Bailey's delegation; `?ctbslide=today` / `?fluidui=today` is release 67's jump), `?gridease=on` is still HELD
+ * off, and REDUCE MOTION reads today for both: `m3-flips.test.ts`).
  *
  * jsdom has no boxes and no `Element.animate`, so this gives rows the boxes the test wants and records the animations; the real browser measure (row position against time across a reorder at
  * 60, 120 and 144 Hz) is in the lane folder.
@@ -69,7 +69,7 @@ describe('FLIP of the turn-order list', () => {
     rects.set('rikku', { left: 92, top: 50, width: 50 });
     const before = new Map([
       ['auron#0', { left: 96, top: 30 }], // was where tidus now is, one row down
-      ['tidus#0', { left: 100, top: 10 }], // was first
+      ['tidus#0', { left: 92, top: 50 }], // was one row further down: both move up one place, the same way (nobody passes anybody)
       // rikku is new
     ]);
     const n = slideRows(el, before);
@@ -81,7 +81,7 @@ describe('FLIP of the turn-order list', () => {
     expect(auron.keyframes[0]!['transform']).toBeUndefined(); // never the `transform`: the F1 strip and the phone rail pin it with !important, which beats an animation
     expect(auron.options['duration']).toBe(SLIDE_MS);
     expect(auron.options['easing']).toBe(SLIDE_EASING);
-    expect(byActor.get('tidus')!.keyframes[0]!['translate']).toBe('8.00px -40.00px');
+    expect(byActor.get('tidus')!.keyframes[0]!['translate']).toBe('-8.00px 40.00px');
     expect(byActor.get('rikku')!.keyframes).toEqual([{ opacity: 0 }, { opacity: 1 }]); // a new row fades in
   });
 
@@ -143,7 +143,7 @@ describe('FLIP of the turn-order list', () => {
     expect(by3.get('a')!.keyframes).toEqual([{ opacity: 0 }, { opacity: 1 }]);
     expect(by3.get('b')!.keyframes[0]!['translate']).toBe('0.00px 20.00px');
     expect(by3.get('c')!.keyframes[0]!['translate']).toBe('0.00px 20.00px');
-    // two neighbours that swap: both move one place, both slide
+    // two neighbours that swap places pass through each other (release 68, MF-13's crossing pair): both fade in at their new places, neither slides
     const el2 = list([['a', 'none'], ['b', 'none']]);
     ['a', 'b'].forEach((id, i) => rects.set(id, { left: 100, top: i * 20, width: 100 }));
     const before2 = measureRows(el2);
@@ -151,7 +151,7 @@ describe('FLIP of the turn-order list', () => {
     ['b', 'a'].forEach((id, i) => rects.set(id, { left: 100, top: i * 20, width: 100 }));
     played = [];
     expect(slideRows(next2, before2)).toBe(2);
-    expect(played.every((p) => p.keyframes[0]!['translate'] !== undefined)).toBe(true);
+    expect(played.every((p) => p.keyframes[0]!['translate'] === undefined && p.keyframes[0]!['opacity'] === 0)).toBe(true);
   });
 
   it('CtbList.render slides only with the word on and a mounted list; the markup is the same either way', () => {
@@ -176,8 +176,10 @@ describe('FLIP of the turn-order list', () => {
 });
 
 describe('the switch words', () => {
-  it('a piece\'s own word beats the shared one in both directions; no word is off', () => {
-    expect(fluidWord('ctbslide', 'flip', '')).toBe(false);
+  it('a piece\'s own word beats the shared one in both directions; no word is the piece\'s default (the list slides, the held grid glide does not)', () => {
+    expect(fluidWord('ctbslide', 'flip', '')).toBe(true);
+    expect(fluidWord('ctbslide', 'flip', '?ctbslide=today')).toBe(false);
+    expect(fluidWord('ctbslide', 'flip', '?fluidui=today')).toBe(false);
     expect(fluidWord('ctbslide', 'flip', '?ctbslide=flip')).toBe(true);
     expect(fluidWord('ctbslide', 'flip', '?fluidui=on')).toBe(true);
     expect(fluidWord('ctbslide', 'flip', '?fluidui=on&ctbslide=today')).toBe(false);

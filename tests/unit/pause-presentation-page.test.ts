@@ -375,10 +375,10 @@ describe('the stylesheets', () => {
     expect(ec).toMatch(/data-row='presentation'\]:focus \{ outline: none; \}/);
   });
 
-  it('on a phone the page\u2019s rows are touch size (40px) and the list still scrolls (one row of the reserve is desktop only)', () => {
+  it('on a phone the page\u2019s rows are touch size (44px) and the list still scrolls (one row of the reserve is desktop only)', () => {
     const ec = css('pause-eye-candy.css');
     const phone = /@media \(max-width: 620px\) \{([\s\S]*)\}\s*$/.exec(ec)![1]!;
-    expect(phone).toMatch(/\.pause__ec-col \.pause__ec-row \{ height: 40px; \}/);
+    expect(phone).toMatch(/\.pause__ec-col \.pause__ec-row \{ height: 44px; \}/);
     // the page glyph gets room of its own where a phone's word-row bar is 0 wide, so it never sits on the value's first letter
     expect(phone).toMatch(/data-row='eyeCandy'\] \.pause__bar,\s*\.pause__col \.pause__row\[data-row='presentation'\] \.pause__bar \{ width: 12px; margin: 0; \}/);
     expect(css('pause-labels.css')).toMatch(/@media \(min-width: 621px\) \{[\s\S]*max-height: calc\(var\(--pu-top-obj\) - var\(--pu-top-body\)\);/);

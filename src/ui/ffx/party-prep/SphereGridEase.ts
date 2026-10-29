@@ -9,7 +9,7 @@
  * Pure: no DOM, no timers.
  */
 
-import { fluidWord } from '../../common/fluidUi.ts';
+import { fluidWord, reduceMotionNow } from '../../common/fluidUi.ts';
 
 /** Long enough to read as a move and short enough that the next key press is not waiting for it, ms. */
 export const GLIDE_MS = 160;
@@ -26,9 +26,12 @@ export function setGridEase(on: boolean | null): void {
   forced = on;
 }
 
-/** Is the gliding grid asked for (`?gridease=on` or `?fluidui=on`)? */
+/**
+ * Does the grid glide? Only when asked for (`?gridease=on` or `?fluidui=on`: the glide is HELD in release 68, `FLUID_DEFAULTS.gridease` is off until a clip of it exists) or forced by a test, and never under the
+ * player's REDUCE MOTION (it beats the word: the grid snaps as it did). Asked at each move, so the pause can turn REDUCE MOTION on or off mid-screen.
+ */
 export function gridEaseOn(search: string | undefined = globalThis.location?.search): boolean {
-  return forced ?? fluidWord('gridease', 'on', search);
+  return !reduceMotionNow() && (forced ?? fluidWord('gridease', 'on', search));
 }
 
 const easeOut = (t: number): number => 1 - (1 - t) * (1 - t) * (1 - t);

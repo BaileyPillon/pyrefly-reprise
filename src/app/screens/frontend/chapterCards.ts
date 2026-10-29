@@ -99,11 +99,26 @@ export function proseHtml(tile: ChapterTile): string {
  * gold numeral block, the notch), so nothing moves when the cursor does.
  *
  * A COMING card has no `data-action`: it can never be selected or started.
+ *
+ * The list is one tab stop (release 68, `app/focusContract.ts`): the selected card is the cursor (`data-cursor`, `tabindex` 0), the others `tabindex` -1, so Tab
+ * lands on the cursor and an arrow key moves it and the focus with it. A click or a tap still reaches every card.
  */
 /** A title longer than this takes the smaller card-name size (`chapter-select-c.css`). */
 const LONG_TITLE = 22;
 /** A title longer than this (only the Leblanc preview's, 31) takes one more step down, on its card and on the hero. */
 const XLONG_TITLE = 28;
+
+/**
+ * Move the cursor mark in place (the fixed list lights one card without re-rendering it): `on` is the one tab stop, the screen's cursor and the
+ * current card; every other playable card is `tabindex` -1 and unmarked. Same attributes `cardHtml` writes for a selected card.
+ */
+export function markCardCursor(card: Element, on: boolean): void {
+  card.classList.toggle('fe-card--sel', on);
+  card.toggleAttribute('data-cursor', on);
+  card.setAttribute('tabindex', on ? '0' : '-1');
+  if (on) card.setAttribute('aria-current', 'true');
+  else card.removeAttribute('aria-current');
+}
 
 export function cardHtml(tile: ChapterTile, index: number, selected: boolean, bestTimeMs: number | null = null): string {
   const num = `<span class="fe-card__num">${escapeHtml(tile.numeral ?? '')}</span>`;
@@ -120,8 +135,8 @@ export function cardHtml(tile: ChapterTile, index: number, selected: boolean, be
   }
   const cls = `fe-card${tile.cleared ? ' fe-card--cleared' : ''}${selected ? ' fe-card--sel' : ''}`;
   return `
-    <div class="${cls}" data-card="${escapeHtml(tile.id)}" data-action="fe-card-${index}" role="button" tabindex="0"
-         aria-label="${escapeHtml(tile.title)}"${selected ? ' aria-current="true"' : ''}>
+    <div class="${cls}" data-card="${escapeHtml(tile.id)}" data-action="fe-card-${index}" role="button" tabindex="${selected ? 0 : -1}"
+         aria-label="${escapeHtml(tile.title)}"${selected ? ' aria-current="true" data-cursor' : ''}>
       ${art}${num}${name}${cardRibbonHtml(tile, bestTimeMs)}
     </div>
   `;

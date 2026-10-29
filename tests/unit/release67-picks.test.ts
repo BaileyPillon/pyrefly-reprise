@@ -14,8 +14,8 @@
  * | `?strikeshape=` (MF-14 V3, both games) | `travel` | `today` (with `?curves=new` it reads nothing; with `?curves=real-snappy` it is the clip's own dash) | exactly where `real-snappy` plays: the two pack chapters, the pack on, a desktop-class screen (`houseTravel` answers only for the 1.1 s pick) |
  *
  * Pinned here: the six defaults; that `?stance=today&swapcause=today&hit=today&run=today&curves=new&rigko=today` reads release 66's defaults and, through the real readers, release 66's LOOK (the stance, the cause and the hit
- * decisions the presenter asks the modules); that each flip reaches exactly the scope it had (pack chapters only for the two swap words, `?pack=off`, a phone and no page leave release 66's look; `?swapscope`
- * still widens); and that the other swap words did not move (`?swapclass`, `?swapscope`, `?interlude`). Each lane's own tests pin the looks in depth. The one place to change a pick is named in
+ * decisions the presenter asks the modules, and the ready hold of three FFX-2 dresses, `ReadyIdentity.ts`, which rides on the stance look: off wherever it is `today`); that each flip reaches exactly the scope it had (pack chapters only for the two swap words, `?pack=off`, a phone and no page leave release 66's look; release 68 made `?swapscope` read
+ * `wide`, so the same looks play in fifteen more chapters); and that the other swap words did not move (`?swapclass`, `?interlude`). Each lane's own tests pin the looks in depth. The one place to change a pick is named in
  * `docs/handoff/r67-picks.md`.
  *
  * Game case: both (shared plumbing; the stance and cause looks play in Chapter I FFX and Chapter IV FFX-2, the hit in every chapter of both games).
@@ -24,6 +24,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { houseTravel } from '../../src/engine/motion/RealMotion.ts';
 import { CURVES_DEFAULT, curvesModeFromSearch, curvesMode, curvesOn, realKind, setCurvesMode } from '../../src/engine/motion/CurvesSwitch.ts';
 import { setDemoChapter, setPackScreen } from '../../src/engine/motion/DemoGate.ts';
+import { readyHeldOnIdle, setReadyIdOff } from '../../src/engine/motion/ReadyIdentity.ts';
 import { runMode } from '../../src/engine/motion/RunEase.ts';
 import { rigKoWhole } from '../../src/engine/rig/RigHandoff.ts';
 import { MOVE_DEFAULTS, MOVE_WORDS, moveDefault, moveWord, moveWordFromSearch, setMoveWord, type MoveKey } from '../../src/engine/motion/MoveSwitch.ts';
@@ -54,6 +55,7 @@ import {
 function visit(search: string): void {
   window.history.pushState({}, '', `/${search}`);
   setStanceMode(null);
+  setReadyIdOff(null); // the ready hold (pc-residues, review M5) reads the address once, like the other switches
   setCauseMode(null, null);
   setSwapScope(null);
   setInterludeMode(null);
@@ -74,9 +76,10 @@ const CH5 = 'ffx2-vegnagun-shuyin'; // FFX-2 Chapter V: the run-in plays, the ne
 const UNCOVERED = SWAP_CLASSES.filter((c) => !COVERED.has(c));
 
 /** What the presenter asks the modules in the running chapter: the whole of the three looks, as data. */
-function lookNow(): { stance: string; menuKeepsIdle: boolean; windUpOnIdle: boolean; cause: Record<string, string>; hit: string } {
+function lookNow(): { stance: string; menuKeepsIdle: boolean; windUpOnIdle: boolean; readyHold: boolean; cause: Record<string, string>; hit: string } {
   return {
     stance: stanceNow(),
+    readyHold: readyHeldOnIdle('paine-warrior'), // PR-0517 (pc-residues): a dress whose ready painting is another figure keeps the idle painting wherever the stance look plays
     menuKeepsIdle: menuKeepsIdle(),
     windUpOnIdle: windUpOnIdle(),
     cause: Object.fromEntries(SWAP_CLASSES.map((c) => [c, swapHow(c)])),
@@ -101,6 +104,7 @@ const RELEASE_66 = {
   stance: 'today',
   menuKeepsIdle: false,
   windUpOnIdle: false,
+  readyHold: false,
   cause: Object.fromEntries(SWAP_CLASSES.map((c) => [c, 'today'])),
   hit: 'today',
 };
@@ -109,6 +113,7 @@ const PICKS = {
   stance: 'v1a',
   menuKeepsIdle: true,
   windUpOnIdle: false,
+  readyHold: true,
   cause: Object.fromEntries(SWAP_CLASSES.map((c) => [c, COVERED.has(c) ? 'cut' : 'blend3'])),
   hit: 'knock',
 };
@@ -118,9 +123,10 @@ describe('the three picks are the defaults', () => {
     expect(STANCE_DEFAULT).toBe('v1a');
     expect(CAUSE_DEFAULT).toBe('pick');
     expect(CURVES_DEFAULT).toBe('real-snappy');
-    expect(MOVE_DEFAULTS).toEqual({ hit: 'knock', run: 'flow', rigko: 'whole', strikeshape: 'travel' });
+    // release 67's four, then release 68's three (hurtstring, summon, ramps: `m3-flips.test.ts` pins those; kotopple is held at today)
+    expect(MOVE_DEFAULTS).toEqual({ hit: 'knock', run: 'flow', rigko: 'whole', strikeshape: 'travel', hurtstring: 'hold', summon: 'leap', ramps: 'smooth' });
     expect([moveDefault('hit'), moveDefault('run'), moveDefault('rigko'), moveDefault('strikeshape')]).toEqual(['knock', 'flow', 'whole', 'travel']);
-    for (const k of Object.keys(MOVE_WORDS) as MoveKey[]) if (k !== 'hit' && k !== 'run' && k !== 'rigko' && k !== 'strikeshape') expect(moveDefault(k)).toBe('today');
+    for (const k of Object.keys(MOVE_WORDS) as MoveKey[]) if (!(k in MOVE_DEFAULTS)) expect(moveDefault(k)).toBe('today'); // shakeband
   });
 
   it('a pick is one of its word\'s listed values, and today is always another', () => {
@@ -231,8 +237,9 @@ describe('the picks play exactly where the words played', () => {
     expect(PICKS.cause['home']).toBe('blend3'); // the big-pair guard (SmearDirector, isBigChange) turns this back to today's blend for two drawings that share nothing
   });
 
-  it('in any other chapter the swap looks are release 66\'s, and ?swapscope=all widens them as before', () => {
+  it('in a chapter the wide scope names an exception (Yunalesca) the swap looks are release 66\'s, and ?swapscope=all widens them as before', () => {
     visit('');
+    expect(swapScope()).toBe('wide');
     setDemoChapter(ELSEWHERE);
     expect(lookNow()).toEqual({ ...RELEASE_66, hit: 'knock' });
     visit('?swapscope=all');
@@ -369,17 +376,21 @@ describe('message 2\'s picks play exactly where the words played', () => {
 });
 
 describe('nothing else moved', () => {
-  it('?swapclass names every class when absent, ?swapscope is the pack chapters, ?interlude is on (all)', () => {
+  it('?swapclass names every class when absent, ?swapscope is wide (release 68 widened it from the pack chapters), ?interlude is on (all)', () => {
     expect([...classesFromSearch('')].sort()).toEqual([...SWAP_CLASSES].sort());
-    expect(scopeFromSearch('')).toBe('pack');
+    expect(scopeFromSearch('')).toBe('wide');
     visit('');
     expect(interludeMode()).toBe('all');
   });
 
-  it('the other five lane L2 words and the interlude read today / on as in release 66', () => {
+  it('the other five lane L2 words read release 68\'s picks (shakeband and kotopple still today), `today` on each is release 67\'s, and the interlude reads on as in release 66', () => {
     const OTHER = (Object.keys(MOVE_WORDS) as MoveKey[]).filter((k) => k !== 'hit' && k !== 'run' && k !== 'rigko' && k !== 'strikeshape');
     expect(OTHER.slice().sort()).toEqual(['hurtstring', 'kotopple', 'ramps', 'shakeband', 'summon']);
-    for (const k of OTHER) expect(moveWordFromSearch('', k)).toBe('today');
+    const R68: Record<string, string> = { hurtstring: 'hold', kotopple: 'today', ramps: 'smooth', shakeband: 'today', summon: 'leap' };
+    for (const k of OTHER) {
+      expect(moveWordFromSearch('', k)).toBe(R68[k]);
+      expect(moveWordFromSearch(`?${k}=today`, k)).toBe('today');
+    }
     visit('');
     expect(interludeMode()).toBe('all');
   });

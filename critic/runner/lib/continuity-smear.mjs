@@ -27,16 +27,22 @@
 //     height either way. The engine's own plan is a head step of 0.04 to 0.44 of the figure's height (`anchorDistance` in the log; the largest is Auron's return to his stance after the killing
 //     blow); a step over half the drawn height is not a planned cut and stays a jerk, and a mid-move step of `jerks.teleportPx` (300 px) or more is a teleport whatever this says.
 //
+// MF-18 (post-conference motion plan, lane pc-scope, 2026-10-28; shared critic plumbing, both games) added ONE narrow word, `glideFeet`, for the cut-side anchor (src/engine/motion/CutAnchor.ts, `?cutanchor=on`):
+// the anchor DRAWS the incoming plane of a big cut back toward the old head and eases it home, so on that one swap the old and the new painting stand `share` of the figure's height apart sideways BY
+// DESIGN. CHK-026 reads both paintings' feet through their planes in the same frame, so it reads that design as a feet move (92 px on the real actor for a pair 0.33 of the height apart, against a
+// tolerance of 2 px) and would FAIL every anchored cut (review M-1 of lane pc-scope). The engine logs the design with the cut (`glide: { share, ms }`, which the probe now keeps); see {@link excuseGlideFeet}.
+// It excuses the sideways part of the feet reading up to the logged share and nothing else; it is reported on its own line, never folded into the registration's numbers.
+//
 // `continuity.smear.excuse` in the policy switches it (false, or no block, gives the earlier reading back: every fast swap is judged).
 //
 // Game case: both (shared critic plumbing); FFX in Chapter I and FFX-2 in Chapter IV only because the engine plays the smear only there.
 
-export const SMEAR_DEFAULTS = Object.freeze({ excuse: false, slackMs: 12, maxJerkPx: 120, maxJerkShare: 0, elastic: false, bigOverlap: 0.5, bigAnchor: 0.12 });
+export const SMEAR_DEFAULTS = Object.freeze({ excuse: false, slackMs: 12, maxJerkPx: 120, maxJerkShare: 0, elastic: false, bigOverlap: 0.5, bigAnchor: 0.12, glideFeet: false, glideSlackShare: 0.1 });
 
 /** The policy's `continuity.smear` block over the defaults (a policy without one excuses nothing). */
 export function smearPolicy(cfg) {
   const p = cfg && cfg.smear && typeof cfg.smear === 'object' ? cfg.smear : {};
-  return { ...SMEAR_DEFAULTS, ...p, excuse: p.excuse === true };
+  return { ...SMEAR_DEFAULTS, ...p, excuse: p.excuse === true, glideFeet: p.glideFeet === true };
 }
 
 const num = (v) => typeof v === 'number' && Number.isFinite(v);
@@ -82,7 +88,7 @@ export function tagSmears(swaps, smears, policy, frameMs = 1000 / 60) {
       const m = matchSmear(s, list, policy, frameMs, used);
       if (!m) continue;
       const e = m.entry;
-      s.smear = { style: e.style ?? null, kind: e.kind ?? 'plane', cutMs: e.cutMs, strength: e.strength ?? null, flash: e.flash ?? null, overlap: e.overlap ?? null, anchorDistance: e.anchorDistance ?? null };
+      s.smear = { style: e.style ?? null, kind: e.kind ?? 'plane', cutMs: e.cutMs, strength: e.strength ?? null, flash: e.flash ?? null, overlap: e.overlap ?? null, anchorDistance: e.anchorDistance ?? null, glide: e.glide ?? null };
       s.snapSmear = Boolean(s.snap);
       if (s.snap) {
         s.snap = false;
@@ -106,6 +112,39 @@ export function smearedJerk(jerk, swap, policy) {
 }
 
 /**
+ * MF-18: the feet reading of a swap that matched a planned smear which carries a GLIDE (`glideFeet` in the policy; mutates the swaps). The incoming plane was drawn back toward the old head by
+ * `glide.share` of the figure's height on purpose, so the sideways part of its feet reading (CHK-026: `failFeet`, and `failFeetSil` where the silhouette's stance is judged in x and y) is excused up to the
+ * logged share of the figure's DRAWN height at the swap (`figurePx`, px at 1600 wide) plus `glideSlackShare` of it, plus what the reading tolerates anyway. The vertical part is not excused: |dy| must
+ * still be within the tolerance (the anchor is sideways only), so a slide that is bigger than designed, or a feet drop, stays a failure. The excused reading is kept as `swap.feetDesigned`
+ * (`feetSil.designed` for the silhouette's), and nothing else about the swap changes.
+ * @param {Array<object>} swaps analyzed swaps (after {@link tagSmears})
+ * @param {object} policy the smear policy
+ * @param {{feetTolerancePx?: number, feetTolerancePxCoarse?: number}} size the policy's `size` block (the tolerances)
+ * @returns {{cuts: number, feetExcused: number, feetSilExcused: number, worstPx: number, worstShare: number}} cuts: swaps that matched a planned smear with a glide (counted whatever the word)
+ */
+export function excuseGlideFeet(swaps, policy, size = {}) {
+  const out = { cuts: 0, feetExcused: 0, feetSilExcused: 0, worstPx: 0, worstShare: 0 };
+  for (const s of swaps) {
+    const g = s.smear?.glide;
+    if (!g) continue;
+    out.cuts++;
+    if (!policy.excuse || !policy.glideFeet || !num(g.share) || !num(s.figurePx) || !(s.figurePx > 0)) continue;
+    const designed = g.share * s.figurePx * (1 + policy.glideSlackShare);
+    const within = (r, tol) => num(r.dx) && num(r.dy) && Math.abs(r.dy) <= tol && Math.abs(r.dx) <= designed + tol;
+    const note = (r, tol) => ({ px: r.px, dx: r.dx, dy: r.dy, limitPx: Math.round((designed + tol) * 10) / 10, share: g.share });
+    const seen = (r) => { out.worstPx = Math.max(out.worstPx, r.px); out.worstShare = Math.max(out.worstShare, r.px / s.figurePx); };
+    if (s.failFeet && s.feet) {
+      const tol = s.feet.source === 'silhouette' ? (size.feetTolerancePxCoarse ?? 6) : (size.feetTolerancePx ?? 2);
+      if (within(s.feet, tol)) { s.failFeet = false; s.feetDesigned = note(s.feet, tol); out.feetExcused++; seen(s.feet); }
+    }
+    if (s.failFeetSil && s.feetSil && num(s.feetSil.tolerancePx) && within(s.feetSil, s.feetSil.tolerancePx)) {
+      s.failFeetSil = false; s.feetSil.designed = note(s.feetSil, s.feetSil.tolerancePx); out.feetSilExcused++; seen(s.feetSil);
+    }
+  }
+  return out;
+}
+
+/**
  * How tall the figure is drawn around a swap, px at 1600 wide: the tallest of its planes that show (fade over 0.3) in the frames given (the frame before the flip and the flip's own), each plane's
  * height the distance from the middle of its top edge to the middle of its bottom edge (the quad's corners are top-left, top-right, bottom-right, bottom-left). Null when none shows.
  * @param {Array<{fig: {s?: Array}}|null|undefined>} frames
@@ -126,12 +165,14 @@ export function figureHeightPx(frames, k1600) {
 }
 
 /** What the report carries about the smear: the policy in force, the tally and the jerks excused. */
-export function smearReport({ tally, jerks, policy, smears }) {
+export function smearReport({ tally, jerks, policy, smears, glide }) {
   const smeared = jerks.filter((j) => j.smeared);
   const list = Array.isArray(smears) ? smears : [];
   return {
     note: 'planned smears (continuity.smear in the policy): the engine logs every cut it plans as a smear on a big change; a swap that matches a log entry (same figure, same pair, inside its window) is not a snap and a jerk of at most maxJerkPx at it is not counted. Every other fast swap is judged as before.',
-    policy: { excuse: policy.excuse, slackMs: policy.slackMs, maxJerkPx: policy.maxJerkPx, maxJerkShare: policy.maxJerkShare, elastic: policy.elastic, bigOverlap: policy.bigOverlap, bigAnchor: policy.bigAnchor },
+    policy: { excuse: policy.excuse, slackMs: policy.slackMs, maxJerkPx: policy.maxJerkPx, maxJerkShare: policy.maxJerkShare, elastic: policy.elastic, bigOverlap: policy.bigOverlap, bigAnchor: policy.bigAnchor, glideFeet: policy.glideFeet },
+    // MF-18: the cut-side anchor, on its own line: log entries with a glide, the swaps they matched, and the feet readings excused for them (continuity-smear.mjs, excuseGlideFeet)
+    glide: { logged: list.filter((e) => e && e.glide).length, matched: glide?.cuts ?? 0, feetExcused: glide?.feetExcused ?? 0, feetSilExcused: glide?.feetSilExcused ?? 0, worstFeetPx: Math.round((glide?.worstPx ?? 0) * 10) / 10, worstFeetShare: Math.round((glide?.worstShare ?? 0) * 1000) / 1000 },
     ...tally,
     jerksExcused: smeared.length, worstJerkPx: Math.round(smeared.reduce((m, j) => Math.max(m, j.px), 0) * 10) / 10, worstJerkShare: Math.round(smeared.reduce((m, j) => Math.max(m, j.smeared?.share ?? 0), 0) * 1000) / 1000,
     byStyle: list.reduce((m, e) => ((m[e.style ?? 'unknown'] = (m[e.style ?? 'unknown'] ?? 0) + 1), m), {}),

@@ -27,6 +27,14 @@ export function frameTimeOf(dts, longMs = 34) {
   return { frames: s.length, p50Ms: round(q(0.5), 1), p90Ms: round(q(0.9), 1), p99Ms: round(q(0.99), 1), maxMs: round(s[s.length - 1], 1), longFrames, longFramePct: round((longFrames / s.length) * 100, 1), longMs, source: 'continuity-probe', pacingNumber: false };
 }
 
+/** The card-space head numbers of the judged swaps that have one: how many were read, the worst change of the card's head (percent), and how many head changes each class owns. */
+function cardHeadOf(heads) {
+  const cards = heads.filter((s) => s.head.card);
+  const byClass = {};
+  for (const s of cards) byClass[s.head.card.class] = (byClass[s.head.card.class] ?? 0) + 1;
+  return { measured: cards.length, maxPct: round(cards.reduce((m, s) => Math.max(m, Math.abs(s.head.card.ratio - 1)), 0) * 100, 1), byClass };
+}
+
 /**
  * The chapter's numbers and the two checks' results.
  * @param {Array} swaps  analysed swaps (each `{ ...analyzeSwap, figure, from, to, n, t, atSwapJerk?, counted }`)
@@ -35,7 +43,7 @@ export function frameTimeOf(dts, longMs = 34) {
  * @param {number} battleSeconds seconds a battle was the screen being played (not paused)
  * @param {object} cfg   the policy's `continuity` block
  */
-export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], smear = null, battleSeconds, cfg, frameTime = null }) {
+export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], stagedExcusedJerks = [], dissolveJerks = [], smear = null, battleSeconds, cfg, frameTime = null }) {
   const counted = swaps.filter((s) => s.counted);
   const minutes = battleSeconds / 60;
   // CHK-026 judges a change of POSE: a swap between two dresspheres or two forms (`costume`) and a swap between two pose names that draw one painting
@@ -55,6 +63,7 @@ export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], 
   const ghostSwaps = counted.filter((s) => s.ghost.frames > 0);
   const failHead = judged.filter((s) => s.failHead);
   const failFeet = judged.filter((s) => s.failFeet);
+  const feetDesigned = judged.filter((s) => s.feetDesigned || s.feetSil?.designed); // MF-18: a planned cut's designed sideways shift (continuity-smear.mjs, excuseGlideFeet): excused, kept, counted apart
   // T-02 (lane L5): a DESIGNED blend the planner declared (continuity-why.mjs; the policy's classes.designedBlend.excuse, off by default) of at most its maxSeverity is reported apart and is not a double image to fail
   const ghostFail = counted.filter((s) => s.ghost.severity >= cfg.motion.ghostSeverityFail && !s.designedExcused);
   const perMin = (n) => (minutes > 0 ? round(n / minutes, 2) : null);
@@ -73,7 +82,7 @@ export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], 
   const koLengths = heights.filter((s) => s.height.length !== null).map((s) => s.height.length);
   const heightFlagged = heights.filter((s) => s.height.flags.length);
   const feetSil = judged.filter((s) => s.feetSil && s.feetSil.standing);
-  const feetSilOver = feetSil.filter((s) => s.feetSil.gatePx > s.feetSil.tolerancePx);
+  const feetSilOver = feetSil.filter((s) => s.feetSil.gatePx > s.feetSil.tolerancePx && !s.feetSil.designed);
   // a recorded hold's head, and (R59, decision 146) the head of a rig's front-view key, which swaps the head part: both are "the head the player really sees", judged in a band, and counted apart
   const holds = judged.filter((s) => s.headReal && !s.headReal.variant);
   const holdOutside = holds.filter((s) => s.headReal.outsideBand);
@@ -94,14 +103,17 @@ export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], 
       headMeasured: heads.length, headRegistration: regHeads.length, headRig: rigHeads.length, headSilhouette: heads.length - regHeads.length - rigHeads.length, headUnmeasured: judged.length - heads.length,
       maxHeadJumpPct: round(worstHead * 100, 1), maxHeadJumpPctRegistration: round(worstHeadReg * 100, 1), maxHeadJumpPctRig: round(worstHeadRig * 100, 1), rigSwaps: judged.filter((s) => s.rig).length,
       headOverTolerance: failHead.length,
-      feetMeasured: feetSwaps.length, maxFeetShiftPx: round(feetSwaps.reduce((m, s) => Math.max(m, s.feet.px), 0), 1), feetOverTolerance: failFeet.length,
+      // PR-0459 (probe 3): the head as the card carries it, and who owns a head change (continuity-card.mjs): reported, the gate reads the policy's `headGate`
+      cardHead: cardHeadOf(heads),
+      feetMeasured: feetSwaps.length, maxFeetShiftPx: round(feetSwaps.reduce((m, s) => (s.feetDesigned ? m : Math.max(m, s.feet.px)), 0), 1), feetOverTolerance: failFeet.length,
+      feetDesigned: feetDesigned.length, feetDesignedWorstPx: round(feetDesigned.reduce((m, s) => Math.max(m, s.feetDesigned?.px ?? s.feetSil?.px ?? 0), 0), 1),
       // W4: the HEIGHT reading (a pose drawn against the idle in the same frame, from the alpha masks and the planes' quads; stature, or length for a KO, which is report-only)
       heightMeasured: heights.length, heightOverBand: judged.filter((s) => s.failHeight).length, heightWaived: heightFlagged.filter((s) => !s.failHeight).length,
       minStature: statures.length ? round(Math.min(...statures), 3) : null, maxStature: statures.length ? round(Math.max(...statures), 3) : null,
       koLengthMeasured: koLengths.length, minKoLength: koLengths.length ? round(Math.min(...koLengths), 3) : null, koLengthReported: heights.filter((s) => s.height.report.length).length,
       // W4: the FEET reading from the silhouette's own stance (the registered stance passes by construction; the pixels do not lie)
       feetSilMeasured: feetSil.length, feetSilOver: judged.filter((s) => s.failFeetSil).length, feetSilWaived: feetSilOver.filter((s) => !s.failFeetSil).length,
-      maxFeetSilPx: round(feetSil.reduce((m, s) => Math.max(m, s.feetSil.gatePx), 0), 1),
+      maxFeetSilPx: round(feetSil.reduce((m, s) => (s.feetSil.designed ? m : Math.max(m, s.feetSil.gatePx)), 0), 1),
       // W4: the head the player really sees across a recorded hold (the head reading is a CONTROL: a hold's registered box is a virtual one)
       holdSwaps: holds.length, worstRealHeadPct: round(holds.reduce((m, s) => Math.max(m, Math.abs(s.headReal.ratio - 1)), 0) * 100, 1), realHeadOutsideBand: holds.filter((s) => s.failRealHead).length,
       realHeadWaived: holdOutside.filter((s) => !s.failRealHead).length,
@@ -127,7 +139,7 @@ export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], 
       jerksLongFrame: jerks.filter(longFrame).length, swapJerksLongFrame: swapJerks.filter(longFrame).length, swapJerksSteadyOverFail: swapJerks.filter((j) => !longFrame(j) && j.px >= failPx).length,
       heldSwaps: held.length, longestHeldFrames: counted.reduce((m, s) => Math.max(m, s.held ? s.held.frames : 0), 0),
       stagedChanges: new Set(stagedSwaps.map((s) => `${s.figure}|${s.staged.seq}`)).size, stagedSteps: stagedSwaps.length,
-      stagedSnapsExcused: stagedSwaps.filter((s) => s.snapStaged).length, jerksAtStaged: jerks.filter((j) => j.staged).length,
+      stagedSnapsExcused: stagedSwaps.filter((s) => s.snapStaged).length, jerksAtStaged: jerks.filter((j) => j.staged).length + stagedExcusedJerks.length, jerksDissolveTravel: dissolveJerks.length, worstDissolveTravelPx: round(dissolveJerks.reduce((m, j) => Math.max(m, j.px), 0), 1), jerksStagedExcused: stagedExcusedJerks.length, worstStagedExcusedJerkPx: round(stagedExcusedJerks.reduce((m, j) => Math.max(m, j.px), 0), 1),
       jerksCovered: coveredJerks.length, worstCoveredJerkPx: round(coveredJerks.reduce((m, j) => Math.max(m, j.px), 0), 1),
       // motion pass (lane "core", step 2): planned smears (continuity-smear.mjs). The cuts the engine logged, the swaps that matched one, the snaps and the swap jerks they excused; a chapter summarised before has none.
       smearsPlanned: smear ? smear.planned : 0, smearSwaps: smear ? smear.matched : 0, smearSnapsExcused: smear ? smear.snapsExcused : 0,

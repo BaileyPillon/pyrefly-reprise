@@ -12,7 +12,9 @@
 
 import { inputDevice, noteInputDevice } from './inputDevice.ts';
 import { notePadActivity } from './padActivity.ts';
-import { PAD, PAD_REPEAT_DELAY_MS, PAD_REPEAT_INTERVAL_MS, stickDirection, type PadDirection } from './padMap.ts';
+import { PAD_REPEAT_DELAY_MS, PAD_REPEAT_INTERVAL_MS, stickDirection, type PadDirection } from './padMap.ts';
+import { KEY_MAP, MODIFIER_CODES, PAD_MAP } from './inputKeyMap.ts';
+import { FocusLedger } from './focusContract.ts'; // who owns a key press: the game, the browser's focus, a field (release 68, `focusContract.ts`)
 
 export type Button =
   | 'up'
@@ -42,77 +44,6 @@ export const BUTTONS: readonly Button[] = [
 ];
 
 const DIRECTIONS: readonly Button[] = ['up', 'down', 'left', 'right'];
-
-/** KeyboardEvent.code -> abstract button. */
-const KEY_MAP: Record<string, Button> = {
-  ArrowUp: 'up',
-  KeyW: 'up',
-  ArrowDown: 'down',
-  KeyS: 'down',
-  ArrowLeft: 'left',
-  KeyA: 'left',
-  ArrowRight: 'right',
-  KeyD: 'right',
-
-  Enter: 'confirm',
-  NumpadEnter: 'confirm',
-  Space: 'confirm',
-  KeyZ: 'confirm',
-
-  Escape: 'cancel',
-  KeyX: 'cancel',
-  Backspace: 'cancel',
-
-  ShiftLeft: 'triangle',
-  ShiftRight: 'triangle',
-  Tab: 'triangle',
-  KeyQ: 'triangle',
-
-  KeyE: 'start',
-  KeyC: 'start',
-
-  KeyM: 'select',
-  KeyV: 'select',
-
-  KeyR: 'r1',
-  PageDown: 'r1',
-  KeyF: 'l1',
-  PageUp: 'l1',
-};
-
-/**
- * Standard-gamepad button index -> abstract button (the layout and who uses what: `padMap.ts`).
- * X (2), the triggers (6, 7) and the stick presses are not abstract buttons: the battle's optional panels poll
- * them themselves (`ui/common/StrategyGuide.ts`, `MoveAdvisor.ts`, `EnemyIntent.ts`), exactly as their keys are not here either.
- */
-const PAD_MAP: Record<number, Button> = {
-  [PAD.A]: 'confirm', // cross / A
-  [PAD.B]: 'cancel', // circle / B
-  [PAD.Y]: 'triangle', // triangle / Y
-  [PAD.LB]: 'l1',
-  [PAD.RB]: 'r1',
-  [PAD.BACK]: 'select', // select / back / share
-  [PAD.START]: 'start',
-  [PAD.UP]: 'up',
-  [PAD.DOWN]: 'down',
-  [PAD.LEFT]: 'left',
-  [PAD.RIGHT]: 'right',
-};
-
-/** Keys that on their own say nothing about which device the player chose. */
-const MODIFIER_CODES: ReadonlySet<string> = new Set([
-  'ShiftLeft',
-  'ShiftRight',
-  'ControlLeft',
-  'ControlRight',
-  'AltLeft',
-  'AltRight',
-  'MetaLeft',
-  'MetaRight',
-  'CapsLock',
-  'NumLock',
-  'ContextMenu',
-]);
 
 /** Shared empty list, so the blind `actions` getter allocates nothing. */
 const EMPTY_ACTIONS: readonly string[] = [];
@@ -186,6 +117,8 @@ export class Input implements InputSnapshot {
   private frameActions: string[] = [];
   private readonly pointerRoot: HTMLElement;
   private readonly keyboardTarget: EventTarget;
+  /** Who owns each key press and where focus came from (`focusContract.ts`); inert without a DOM. */
+  private readonly focus = new FocusLedger();
 
   private _axis = { x: 0, y: 0 };
   private _gamepadConnected = false;
@@ -235,6 +168,7 @@ export class Input implements InputSnapshot {
   attach(): void {
     if (this.attached) return;
     this.attached = true;
+    this.focus.attach();
     // **Capture phase, deliberately.** Several HUD widgets listen for keys
     // straight off `window` themselves (`ui/ffx/rawInput.ts`'s
     // `RawInputWatcher`, `ui/ffx2/CommandMenu.ts`, the strategy guide's `G`)
@@ -252,6 +186,7 @@ export class Input implements InputSnapshot {
   detach(): void {
     if (!this.attached) return;
     this.attached = false;
+    this.focus.detach();
     this.stopSampler();
     this.keyboardTarget.removeEventListener('keydown', this.onKeyDown as EventListener, true);
     this.keyboardTarget.removeEventListener('keyup', this.onKeyUp as EventListener, true);
@@ -280,15 +215,17 @@ export class Input implements InputSnapshot {
       noteInputDevice('keyboard');
     }
     const button = KEY_MAP[e.code];
+    this.focus.noteKey(e.code); // any key while a Shift is held back: that Shift starts a chord, it is no tap
     if (!button) return;
-    // Tab and the arrows would otherwise scroll or move focus out of the game.
+    const exclusive = claimed && claim?.exclusive === true;
+    // Who owns the key (`focusContract.ts`): a text field, the browser's Tab on a screen that gives it up, or a Tab-focused control (Enter and Space) takes it whole;
+    // the game latches nothing and prevents nothing (a Shift there waits for `onKeyUp`). An exclusive claimant has already taken the key and never asks.
+    if (!exclusive && this.focus.keyDown(e) !== 'game') return;
+    // Tab (where it is the game's) and the arrows would otherwise scroll or move focus out of the game.
     if (e.code === 'Tab' || e.code === 'Space' || e.code.startsWith('Arrow')) e.preventDefault();
-    // An exclusive claimant consumed this key outright. Stopping the DOM event
-    // is not enough: latching the abstract button here is what used to let the
-    // screen behind an overlay act on the very press that dismissed it, one
-    // frame later.
-    if (claimed && claim?.exclusive) return;
-    if (e.repeat) return;
+    // An exclusive claimant consumed this key outright. Stopping the DOM event is not enough: latching the
+    // abstract button here is what used to let the screen behind an overlay act on the very press that dismissed it.
+    if (exclusive || e.repeat) return;
     this.heldKeys.add(e.code);
     this._lastDevice = 'keyboard';
     this.press(button);
@@ -298,6 +235,7 @@ export class Input implements InputSnapshot {
     if (this.keyboardClaim && !e.ctrlKey && !e.metaKey && !e.altKey) e.stopImmediatePropagation();
     const button = KEY_MAP[e.code];
     if (!button) return;
+    if (this.focus.shiftTap(e.code) && !this.keyboardClaim) { this._lastDevice = 'keyboard'; this.press(button); } // a lone Shift let go: the triangle its key-down held back
     this.heldKeys.delete(e.code);
     // Another key bound to the same button may still be held.
     const stillHeld = Object.entries(KEY_MAP).some(
@@ -307,6 +245,7 @@ export class Input implements InputSnapshot {
   };
 
   private readonly onBlur = (): void => {
+    this.focus.reset();
     this.heldKeys.clear();
     this.padDown.clear();
     for (const b of BUTTONS) this.release(b);
@@ -318,7 +257,7 @@ export class Input implements InputSnapshot {
     if (!el) return;
     const action = el.dataset['action'];
     if (!action) return;
-    this._lastDevice = 'pointer';
+    if (!this.focus.bridged) this._lastDevice = 'pointer'; // a click the key bridge made is the keyboard's
     this.pendingActions.push(action);
   };
 
@@ -482,6 +421,7 @@ export class Input implements InputSnapshot {
 
   /** Call at the very end of the frame to roll edges forward. */
   endFrame(): void {
+    this.focus.afterFrame();
     for (const b of BUTTONS) {
       const s = this.state.get(b)!;
       s.downPrev = s.down;

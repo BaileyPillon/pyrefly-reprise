@@ -1,6 +1,6 @@
 import type { CombatantId } from '../../battle/common/types.ts';
 import { anchorChipToRow, clearChipOfSlab } from './targetChipClear.ts';
-import { clamp, dockPlate, escapeHtml, FLOWER_SVG, HAND_SVG, handBox, noteHtml, px, type PlateDock } from './targetCursorParts.ts';
+import { clamp, dockPlate, escapeHtml, FLOWER_SVG, HAND_SVG, handBox, noteHtml, plateWidth, px, type PlateDock } from './targetCursorParts.ts';
 import { pickTargetAt, sameSide } from './targetHitPick.ts';
 import '../common/pro-markers.css';
 import { proHandSize, proHelpLine, proMarkersOn, proRing, proRingBox } from '../common/proMarkers.ts'; // lane pro-look: the big glove, the quarter-height ring
@@ -499,8 +499,8 @@ export class TargetCursor {
   private dockFor(entry: TargetEntry, rect: TargetRect, proHand: { w: number; h: number } | null = null, ringed = false): { side: PlateDock; x: number; y: number } {
     // A rough plate box: ~10px per glyph plus the tag chip and the padding.
     const flag = proHand !== null || ringed;
-    const glyph = flag ? clamp((typeof window === 'undefined' ? 1600 : window.innerWidth) * 0.0145, 22, 38) * 0.5 : 10; // the pro flag's name is set bigger (pro-markers.css)
-    const w = Math.max(flag ? 150 : 64, entry.name.length * glyph + (entry.tag ? 34 : 0) + 28 + (entry.note ? entry.note.length * 6 : 0));
+    // the pro flag's name is set bigger (pro-markers.css); its damage line and note are at the 14 px floor, so `plateWidth` counts them (PR-0551)
+    const w = plateWidth(entry, flag, typeof window === 'undefined' ? 1600 : window.innerWidth, flag ? proHelpLine(this.helpLine) : '');
     // FFX's hand is a thing on the field too (r37-ui-floor): the plate docks off it as off any panel.
     const hand = this.chrome === 'ffx' ? [handBox(rect, this.handGap(), proHand ?? undefined)] : [];
     const h = flag ? 78 : 34; // the pro flag is three lines tall (TARGET, the name, the damage line)

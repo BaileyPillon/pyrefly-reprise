@@ -19,6 +19,7 @@ import { edgeFeatherFor } from './ActorEdgeFeather.ts';
 import { paintBossSilhouette, paintPlaceholderFigure } from './ProceduralArt.ts';
 import { figureBloomMasked } from './BloomMask.ts';
 import { contactShadowStyle } from './ContactShadow.ts';
+import { figureStreamCeilingMs } from './LoadDiet.ts';
 import type { FigureRequest } from './rig/RigStage.ts';
 
 /** The part of the stage this reads: its scene's slots and ground, the rim and rig switches, the game of the state it last staged. */
@@ -82,6 +83,7 @@ export function figureSpec(env: FigureEnv, c: AnyCombatant, art: ResolvedArt, wo
   const size = figureHeight({ shared, own, given: worldHeight, stature: partyStature(env.game, c.side, c.id) });
   const k = size.ringScale;
   const anchor = anchorFor(env.slots.partAnchors, c.id);
+  const ceiling = figureStreamCeilingMs({ startsDown: !c.alive, filmKeys: env.slots.poseCut === true }); // load diet: 0 for a figure the stream would serve wrongly (staged down; FF7's film keys)
   const request: FigureRequest = {
     id: c.id,
     artId,
@@ -96,6 +98,7 @@ export function figureSpec(env: FigureEnv, c: AnyCombatant, art: ResolvedArt, wo
       ...bodyFacingOption(env.slots.sideFacing, c.side === 'enemy' ? 'enemy' : c.side === 'aeon' ? 'aeon' : 'party'),
       worldHeight: anchor ? SA.anchoredHeight(anchor) : size.height,
       crossfadeMs: env.slots.poseCut ? 0 : kind === 'party' ? 120 : 140, // FF7: a hard cut between its painted keys
+      ...(ceiling > 0 ? { streamCeilingMs: ceiling } : {}), // load diet: the opening poses are waited for, the others for at most the ceiling and then stream in (`LoadDiet.ts`; `?loaddiet=off` waits for all)
       ...(env.slots.poseShiftPx?.[artId] ? { poseShiftPx: env.slots.poseShiftPx[artId] } : {}), // FF7: every key on the idle's stance
       poses,
       placeholder:

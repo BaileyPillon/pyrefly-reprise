@@ -32,9 +32,10 @@ import { STANDARD_DRESSPHERES } from '../../data/ffx2/dresspheres/index.ts';
 import type { ActionMotionPort, ActionStartEvent, MotionCtx } from '../../engine/BattlePresenterMotion.ts';
 import { motionMs } from '../../engine/BattlePresenterMotion.ts';
 import type { Point3 } from '../../engine/BattlePresenterPorts.ts';
-import { realLeapBack } from '../../engine/motion/RealBeats.ts'; // `?curves=real` / `real-snappy`: the run home is the real back-jump (its length and its height)
-import { arcFor, strikeHoldOver } from '../../engine/motion/CurveBeats.ts';
-import { flowLeadMs, paceRunMs, runEase, runMode } from '../../engine/motion/RunEase.ts'; // MF-04 (`?run=`): a trapezoid run, a leap at rest on both ends, the strike as she brakes, the real pace
+import { realLeapBack } from '../../engine/motion/RealBeats.ts';
+import { windupMsOf } from '../../engine/motion/RealMotion.ts'; // release 68: the strike is asked for early by the wind-up it will play (the real one in Chapter IV), not the house one // `?curves=real` / `real-snappy`: the run home is the real back-jump (its length and its height)
+import { arcFor, profileAfterRun, strikeHoldOver } from '../../engine/motion/CurveBeats.ts';
+import { FLOW_LEAD_MAX_SHARE, flowLeadMs, paceRunMs, runEase, runMode } from '../../engine/motion/RunEase.ts'; // MF-04 (`?run=`): a trapezoid run, a leap at rest on both ends, the strike as she brakes, the real pace
 import { defaultPaceFactor } from '../../engine/motion/StrikeCurve.ts'; // motion pass (lane "core"): the run's arc is a leap with the new curves on, today's hop otherwise
 import { ownPlace } from '../../engine/motion/PlaceOwner.ts';
 import { planRun, type RunWorld } from '../../engine/motion/StandOff.ts';
@@ -63,6 +64,8 @@ const SMEAR = { in: 0.9, home: 0.6 } as const;
 interface Run {
   /** MF-04: where she stops (the stand-off's spot), for {@link RunInMotion.reachGap}. */
   spot: Point3;
+  /** Release 68: the camera truck the run ends under (the stand-off's), for {@link RunInMotion.reachTruck}. */
+  truck: Point3;
   home: Point3;
   /** The figure whose place this run owns, handed back from this very object whatever the stage hands out later. */
   figure: object;
@@ -146,6 +149,14 @@ export class RunInMotion implements ActionMotionPort {
     return Math.max(0, (run.spot.x - a.position.x) * ((a.facing ?? 1) < 0 ? -1 : 1));
   }
 
+  /**
+   * Release 68: the camera truck the run ends under, while she is out. The strike asked for as the run brakes reads the foe through the camera of the blow (the truck the run's tween is still on its way to), as the strike asked for
+   * after the run has always done; read part-way, a girl near the camera and a foe far behind it slide by different amounts and the lunge stops about the camera's remaining slide times their parallax (about 20 px) short.
+   */
+  reachTruck(id: CombatantId): Point3 | undefined {
+    return this.runs.get(id)?.truck;
+  }
+
   /** The strike's lunge while she is out: shorter, since she has run in. */
   lungeFor(id: CombatantId): number | undefined {
     return this.runs.has(id) ? STRIKE_LUNGE : undefined;
@@ -168,7 +179,7 @@ export class RunInMotion implements ActionMotionPort {
     const mode = runMode(); // MF-04: `?run=today` (the default) is all false and every line below plays as it did
     const ms = motionMs(mode.pace ? paceRunMs(plan.distance) : runMs(plan.distance).in, ctx.speed);
     ownPlace(actor, true); // from here to the end of `close`, the MAX mix's staging leaves her x alone (see the header)
-    this.runs.set(id, { home, figure: actor, spot: plan.spot });
+    this.runs.set(id, { home, figure: actor, spot: plan.spot, truck: plan.truck });
     const box = (r: { x: number; y: number; w: number; h: number } | null): number[] | null => (r ? [r.x, r.y, r.w, r.h].map(Math.round) : null);
     this.notes.push({ actor: id, target: targetId, home, spot: plan.spot, distance: plan.distance, why: plan.why, girlRect: box(world.rect(id, { at: plan.spot, truck: plan.truck })), targetRect: box(world.rect(targetId, { truck: plan.truck })), at: typeof performance === 'undefined' ? 0 : performance.now() });
     if (this.notes.length > NOTES_KEPT) this.notes.shift();
@@ -180,7 +191,8 @@ export class RunInMotion implements ActionMotionPort {
     world.smear(id, ms * 0.95, SMEAR.in);
     motionBeat({ kind: 'dash', strength: SMEAR.in, heft: actorHeft(actor), ms, atMs: ms * 0.3 }); // the run in: the afterimage's streak has its whoosh
     const arrive = Promise.all([actor.moveTo(plan.spot, ms, runEase(mode)), arcFor(actor, 0.42, ms, mode.smooth)]);
-    const lead = mode.flow && actor.waitMs ? Math.min(ms * 0.6, flowLeadMs(ctx.speed === 'fast' ? 0.32 : 1, defaultPaceFactor('ffx2'))) : 0; // MF-04: the wind-up is the end of the stop, not a stand after it
+    const after = mode.flow && actor.waitMs ? profileAfterRun(ctx, id) : undefined; // the profile the strike after this run will play: her real one (Chapter IV's default), else the house flow profile
+    const lead = after ? Math.min(ms * FLOW_LEAD_MAX_SHARE, flowLeadMs(ctx.speed === 'fast' ? 0.32 : 1, defaultPaceFactor('ffx2'), windupMsOf(after, actor.strikeHeft?.() ?? 0))) : 0; // MF-04: the wind-up is the end of the stop, not a stand after it; release 68: the wind-up that plays, not the house one
     if (lead > 1) await Promise.race([arrive, actor.waitMs!(ms - lead)]);
     else await arrive;
     if (!readyKey) actor.setPose('attack');

@@ -5,7 +5,6 @@
  * the spoils of the links won before it, and the retry hands them back to the chain.
  * **FFX-2 only** (AGENTS.md rule 14): only FFX-2 chains make checkpoints or sum spoils.
  */
-import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import type { BattleResult } from '../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
@@ -15,6 +14,7 @@ import { runEncounterChain } from '../../src/app/screens/BattleEncounterChain.ts
 import { resumeSetup, type ChainCheckpoint } from '../../src/app/screens/BattleChainCheckpoint.ts';
 import type { BattleOutcome, BattlePresenter } from '../../src/engine/BattlePresenter.ts';
 import { getChapter } from '../../src/data/encounters.ts';
+import { battleScreenSource } from './helpers/battleScreenSource.ts';
 
 const r = (exp: number, gil: number, ap: number): BattleResult =>
   ({ outcome: 'victory', exp, gil, ap, drops: [], turns: 1, elapsedTicks: 0, elapsedMs: 0, overkilled: [], sphereLevelsGained: {} }) as BattleResult;
@@ -62,7 +62,7 @@ describe('PR-0138: a checkpoint retry carries the earlier links\' spoils (FFX-2 
   });
 
   it('the battle screen passes the checkpoint\'s ledger into the chain', () => {
-    const src = readFileSync('src/app/screens/BattleScreen.ts', 'utf8');
+    const src = battleScreenSource();
     expect(src).toMatch(/priorWon: this\.opts\.resumeAt\?\.won \?\? \[\]/);
     expect(src).toMatch(/this\.checkpoint = checkpoint \?\? this\.checkpoint/);
   });

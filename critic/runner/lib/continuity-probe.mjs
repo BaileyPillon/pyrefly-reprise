@@ -25,6 +25,7 @@
 //     to the plane's record while the camera moves): the camera shifts a head 1.8 units above the origin by far more than it shifts
 //     the origin, so the node side projects the shift of each tracked point of the painting (continuity-camera.mjs) and no longer
 //     subtracts the origin's;
+//   - from probe version 3 (PR-0459), per figure `pl`: per plane (the order of `s`; 0 if not recorded) `[wx, wy, lock]`: its WORLD size and the head lock's factor (1 = none); head box times world size is the head as the CARD carries it (`head.card`);
 //   - the battle log's new events, with the frame they arrived in;
 //   - a rolling buffer of rendered frames (the WebGL canvas at `ringScale`), from which, around every pose swap and
 //     every jerk candidate, `beforeFrames` before and `afterFrames` after are cropped to the figure, JPEG encoded a
@@ -40,7 +41,7 @@ export function createProbe(cfg, env) {
   const win = env.window, doc = env.document, perf = env.performance;
   const R1 = (v) => Math.round(v * 10) / 10, R3 = (v) => Math.round(v * 1000) / 1000;
   const S = {
-    cfg, version: 2, running: false, stopping: false, frames: 0, t0: perf.now(), view: null,
+    cfg, version: 3, running: false, stopping: false, frames: 0, t0: perf.now(), view: null,
     figs: [], figIdx: new Map(), poses: [], poseIdx: new Map(), fs: new Map(),
     records: [], swaps: [], logEvents: [], logSeen: 0, errors: [],
     ring: [], ringFrame: [], ringSize: null, jobs: [], strips: [], encodeQ: [], idle: null,
@@ -313,14 +314,14 @@ export function createProbe(cfg, env) {
       if (flip) fs.lastFlip = n;
       const recent = n - fs.lastFlip <= cfg.recentFrames;
 
-      const slots = [0, 0];
+      const slots = [0, 0], pl = [0, 0]; // pl (probe 3): [wx, wy, lock] per plane, in the order of `slots`
       for (let i = 0; i < 2; i++) {
         const sl = a.slots[i];
         if (!sl || !sl.pose) continue;
         if (!(i === act || sl.fade > 0.001 || recent)) continue;
         const k = poseKey(fi, a, sl);
         const m = sl.mesh.matrixWorld.elements;
-        const rec = [k, R3(sl.fade), sl.mesh.visible ? 1 : 0];
+        const rec = [k, R3(sl.fade), sl.mesh.visible ? 1 : 0]; pl[i] = [R3(Math.hypot(m[0], m[1], m[2])), R3(Math.hypot(m[4], m[5], m[6])), R3(typeof sl.lock === 'number' ? sl.lock : 1)];
         const cs = []; // where the camera's change alone moved each corner (CSS px): the corner's world point under this frame's camera minus under the last frame's
         for (const [lx, ly] of CORNERS) {
           const wx = m[0] * lx + m[4] * ly + m[12], wy = m[1] * lx + m[5] * ly + m[13], wz = m[2] * lx + m[6] * ly + m[14];
@@ -340,7 +341,7 @@ export function createProbe(cfg, env) {
 
       const g = cameraShift(fs, a, vp, rect);
       jerkCandidate(fi, fs, n, slots[bestI >= 0 ? bestI : act], g);
-      figs.push({ i: fi, a: R3(alpha), act, s: slots, g });
+      figs.push({ i: fi, a: R3(alpha), act, s: slots, g, pl });
     }
     S.vpPrev = vp;
     const washNow = readWash();
@@ -380,9 +381,9 @@ export function createProbe(cfg, env) {
   S.start = () => { if (S.running) return false; S.running = true; S.stopping = false; S.loopStarted = true; S.loopDone = false; loop(); return true; };
   S.finish = () => new Promise((resolve) => { if (S.loopDone || !S.loopStarted) return resolve(); S.idle = resolve; S.running = false; });
   S.drain = (max) => { const out = S.records.splice(0, max); return { records: out, left: S.records.length }; };
-  // Motion pass (lane "core", step 2): the cuts the engine planned as a smear (window.__pyrefly.smearLog(), engine/motion/SmearLog.ts), in this probe's clock; a build without the log has none. A failure here never voids the probe's verdicts (it is not in `errors`): the harness then excuses nothing.
+  // Motion pass (lane "core", step 2): the cuts the engine planned as a smear (window.__pyrefly.smearLog(), engine/motion/SmearLog.ts), in this probe's clock; a build without the log has none. A failure here never voids the probe's verdicts (it is not in `errors`): the harness then excuses nothing. The fields are listed one by one (the log's other members stay in the page); `cause` (MF-06) and `glide` (MF-18, the cut-side anchor: `{ share, ms }`) are read here because the harness reads `glide` (continuity-smear.mjs, `glideFeet`) and the CONT_RAW_DIR recording must keep it.
   const readSmears = () => {
-    try { if (!win.__pyrefly || typeof win.__pyrefly.smearLog !== 'function') return []; return win.__pyrefly.smearLog().map((e) => ({ actor: e.actor, from: e.from, to: e.to, style: e.style, kind: e.kind, cutMs: e.cutMs, moveMs: e.moveMs, strength: e.strength, flash: e.flash, overlap: e.overlap, anchorDistance: e.anchorDistance, speed: e.speed, big: e.big === true ? true : undefined, at: R1(e.at - S.t0), cutAt: R1(e.cutAt - S.t0) })); } catch (e) { return []; }
+    try { if (!win.__pyrefly || typeof win.__pyrefly.smearLog !== 'function') return []; return win.__pyrefly.smearLog().map((e) => ({ actor: e.actor, from: e.from, to: e.to, style: e.style, kind: e.kind, cutMs: e.cutMs, moveMs: e.moveMs, strength: e.strength, flash: e.flash, overlap: e.overlap, anchorDistance: e.anchorDistance, speed: e.speed, big: e.big === true ? true : undefined, cause: typeof e.cause === 'string' ? e.cause : undefined, glide: e.glide && typeof e.glide.share === 'number' ? { share: e.glide.share, ms: e.glide.ms } : undefined, at: R1(e.at - S.t0), cutAt: R1(e.cutAt - S.t0) })); } catch (e) { return []; }
   };
   // Fluidity pass, T-02 (lane L5): why the presenter asked for each painting and every blend it designed on purpose (window.__pyrefly.swapReasons(), engine/motion/SwapLog.ts; NOT swapLog(), the older ?swap=aligned record), in this probe's clock; a build without it has none, and a failure here never voids the probe's verdicts.
   const readSwapLog = () => { const none = { reasons: [], designed: [] }; try { const l = win.__pyrefly && typeof win.__pyrefly.swapReasons === 'function' ? win.__pyrefly.swapReasons() : null; const m = (a) => (a || []).map((e) => ({ ...e, at: R1(e.at - S.t0) })); return l ? { reasons: m(l.reasons), designed: m(l.designed) } : none; } catch (e) { return none; } };

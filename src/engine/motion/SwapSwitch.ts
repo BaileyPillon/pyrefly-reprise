@@ -13,13 +13,17 @@
  *   attack-only hold (the "before" of MF-01).
  * - `?stance=today|v1a|v1b|v3` (MF-05, both games, default `v1a` since release 67; `today` is release 66's): the idle-to-ready change at turn start. `v1a`: the menu keeps the idle painting (the ring and the lean of the ready STANCE stay), and
  *   `ready` is shown only as an attack's wind-up painting. `v1b`: no ready painting anywhere (the wind-up is played on the idle painting). `v3`: today's two paintings, the change a 50 ms three-frame blend.
+ *   One more rule rides on this look (pc-residues, PR-0517, FFX-2's Paine Warrior, Yuna White Mage and Rikku Warrior; `ReadyIdentity.ts`): a dress whose ready painting is another figure holds the idle painting
+ *   through the menu and the wind-up under `v1a`, `v1b` and `v3`, wherever this look plays (`stanceNow()` is not `today`); `?readyid=today` turns that one rule off.
  * - `?swapcause=today|cut|blend3|pick` (MF-06, both games, default `pick` since release 67; `today` is release 66's) and `?swapclass=a,b,...` (default every class): the swaps that have a cause on screen (the contact, the hit, the glow, the toss,
  *   the critical stance) or settle at rest (the return home, the recoveries): `cut` a cut inside the smear on the cause, `blend3` a 50 ms three-frame blend, `pick` the cut where the moment has a cover
  *   and the 50 ms blend where it has none AND the two drawings are close (not a big change: `SmearPlan.isBigChange`); two drawings that share nothing keep today's blend at rest, because a 50 ms blend of
  *   them is the head crossing 70 to 150 px in two frames (the harness reads it as a swap jerk). The pure `blend3` word is the plan's V2 arm and blends every class, big or small.
  *
- * - `?swapscope=all` (MF-22, default `pack`): the stance and cause looks play in ANY chapter, not only the two pack chapters, so another chapter can be measured with the rules on, one at a time
- *   (PR-0522). Release 67 flips the two LOOKS to Bailey's picks in the two pack chapters; it does not widen the gate (the scope stays `pack`), and the pack-only reach of both words is unchanged.
+ * - `?swapscope=pack|wide|all` (MF-22, default {@link SCOPE_DEFAULT}, `wide` since release 68): where the stance and cause looks play. `pack` is the two pack chapters (release 67's reach: `?swapscope=pack`
+ *   brings it back). `wide` is EVERY chapter except the ones named in {@link SCOPE_EXCEPTIONS}, each with its written reason (fifteen of the nineteen since release 68; ONE line to change, `SCOPE_DEFAULT`). `all` is
+ *   every chapter, exceptions included: the measuring word, so a chapter on the exception list can still be run with the rules on (PR-0522). Release 67 flipped the two LOOKS to Bailey's picks in the two pack
+ *   chapters and did not widen the gate; release 68 widens it. `today` is `pack`. All three need the pack on (`?pack=off`, a phone or a tablet read `pack`).
  *
  * Game case (AGENTS.md rule 14): the switches are both games except `?interlude` (FFX-2 only: FFX's turn start comes before the menu). Read once, like the other URL switches (`SmearSwitch.ts`).
  */
@@ -36,6 +40,45 @@ export type CauseMode = 'today' | 'cut' | 'blend3' | 'pick';
 export const STANCE_DEFAULT: StanceMode = 'v1a';
 export const CAUSE_DEFAULT: CauseMode = 'pick';
 
+/** Where the stance and cause looks play (MF-22): the two pack chapters, every chapter but the named exceptions, or every chapter. */
+export type SwapScope = 'pack' | 'wide' | 'all';
+
+/**
+ * THE WIDE SCOPE, FLIPPED (MF-22; release 68, the driver's call under Bailey's delegation of 2026-10-28: "i'll go with all your recommendations and decision-making for the next couple days"; his to overturn):
+ * what `?swapscope` reads when the address does not name a value. `wide` since release 68, after the browser measurement of `docs/handoff/pc-scope.md` (all 19 chapters with `?swapscope=all`, 6,158 s of battle) was
+ * read: fifteen of the nineteen chapters join (see-through time 52 to 76 percent lower in each joiner, swap jerks at or under round 30's but for Vegnagun's, which a waiver row explains) and the four in
+ * {@link SCOPE_EXCEPTIONS} stay at release 67's look. `pack` is release 67's reach, and one line to go back (`?swapscope=pack` per address).
+ */
+export const SCOPE_DEFAULT: SwapScope = 'wide';
+
+/**
+ * The chapters `wide` reaches: the nineteen listed ones (`src/data/encounters.ts` CHAPTER_IDS, in play order), by name. A hidden or experimental chapter (the 3D fayth chapter, the Wind Waker and Leblanc
+ * experiments) is NOT here, so it keeps release 67's look until someone decides otherwise; a twentieth listed chapter fails `tests/unit/pc-scope-swap-scope.test.ts` until it is added here or named in
+ * {@link SCOPE_EXCEPTIONS}. `all` reaches every chapter id, listed or not (it is the measuring word).
+ */
+export const WIDE_CHAPTERS: readonly string[] = [
+  'seymour-flux', 'yunalesca', 'braskas-final-aeon',
+  'ffx2-bahamut', 'ffx2-vegnagun-shuyin', 'ffx2-leblanc',
+  'seymour-anima-macalania', 'evrae-airship', 'yojimbo-cavern', 'seymour-natus',
+  'ffx2-fallen-aeons', 'seymour-omnis', 'ffx2-trema', 'isaaru-via-purifico', 'ffx2-den-of-woe', 'ffx2-ixion-djose',
+  'sin-fins-core', 'sin-face', 'mirror-aeons',
+];
+
+/**
+ * Chapters the wide scope leaves at release 67's look, each with the written reason and what lifts it (chapter id from `src/data/encounters.ts`). `?swapscope=all` ignores this list. An entry goes when the job
+ * named in its reason has been run and read; an id that is not a chapter fails `tests/unit/pc-scope-swap-scope.test.ts`.
+ */
+export const SCOPE_EXCEPTIONS: Readonly<Record<string, string>> = {
+  yunalesca:
+    'FFX, the big foe: the rules-on run of 2026-10-27 (mf-l1-swaps handoff, MF-22) took ghost frames a minute from 287 to 98 but swap jerks of 40 px or more from 9 to 25 (worst 62 to 155 px): the moving-figure cuts the planner makes across heads 0.41 to 0.44 of the height apart (Yunalesca attack to cast, Auron follow to idle). The wide run of release 68 (2026-10-28, seed 1, the whole 409 s fight) read it again: 13 swap jerks against 7 for round 30, worst 154 px, and 63 planned cuts over 120 px (9.2 a minute against 4.0 in Chapter I): Tidus 41 of them at 124 to 131 px, Auron 16 at 140 to 149, Yunalesca 6 at 133. Lifts when `?cutanchor=on` (MF-18) has been run there (job `yunalesca-all-anchor` of docs/handoff/pc-scope.md) and no swap jerk of 40 px or more is left outside a named cut.',
+  'evrae-airship':
+    "FFX, Evrae: the wide run of release 68 (2026-10-28, seed 1) took ghost time a minute from 3,224 ms (round 30) to 1,088 but swap jerks from 2 to 11, and 12 in the repeat. 10 of the 11 are Evrae's own swaps, every pair, with the same 53 to 55 px head step (dy -50, dx 18) on cuts with no smear: a fixed vertical offset per pose, which the sideways cut anchor cannot remove. Lifts when his pose heads are registered (so the cut lands head on head) or his blend is kept, and a repeat run reads his swap jerks at or under round 30's.",
+  'sin-face':
+    "FFX, Sin's face: the wide run of release 68 (2026-10-28, seed 1) took ghost time a minute from 2,390 ms to 1,116, with 2 swap jerks against 1, and one of them is a real pop: Auron's lunge returns to his stance in one frame (224 px, no smear), the pair Chapter I handles with a planned cut. Lifts when that return gets the same planned cut and a repeat run reads no swap jerk over 120 px outside a named cut.",
+  'ffx2-ixion-djose':
+    "FFX-2, Ixion XVI: the wide run of release 68 (2026-10-28, seed 1) took ghost time a minute from 4,873 ms to 2,144, but run 1 had a snap (Paine idle to hurt, a plain hard cut, IoU 0.44), the repeat had none, and a KO kneel cut steps 146 px; swap jerks read 1 and 2 against 1. Lifts when a third run has no snap and the KO kneel cut has been read as the knock-out's own cut or fixed.",
+};
+
 /** The swaps MF-06 names, each by what is happening on screen (`SwapClass.ts` reads them off the pair of paintings). */
 export type SwapClass = 'contact' | 'home' | 'hit' | 'recover' | 'glow' | 'castEnd' | 'toss' | 'itemEnd' | 'critical' | 'criticalOut';
 export const SWAP_CLASSES: readonly SwapClass[] = ['contact', 'home', 'hit', 'recover', 'glow', 'castEnd', 'toss', 'itemEnd', 'critical', 'criticalOut'];
@@ -51,7 +94,7 @@ let interlude: InterludeMode | null = null;
 let stance: StanceMode | null = null;
 let cause: CauseMode | null = null;
 let classes: ReadonlySet<SwapClass> | null = null;
-let scope: 'pack' | 'all' | null = null;
+let scope: SwapScope | null = null;
 
 const searchOf = (): string | undefined => (globalThis.location === undefined ? undefined : (globalThis.location.search ?? ''));
 
@@ -81,23 +124,36 @@ export function classesFromSearch(search: string | undefined): ReadonlySet<SwapC
   return new Set(word.split(',').map((s) => s.trim()).filter((s): s is SwapClass => (SWAP_CLASSES as readonly string[]).includes(s)));
 }
 
-/** `?swapscope=all` from a search string (pure): `all` only with the pack on; else `pack`. */
-export function scopeFromSearch(search: string | undefined): 'pack' | 'all' {
-  return queryWord(search, 'swapscope') === 'all' && packDemo(search) ? 'all' : 'pack';
+/** `?swapscope=` from a search string (pure): with the pack off, `pack`; with it on, the word it names (`pack`, `wide`, `all`; `today` is `pack`), else {@link SCOPE_DEFAULT}. */
+export function scopeFromSearch(search: string | undefined): SwapScope {
+  if (!packDemo(search)) return 'pack';
+  const w = queryWord(search, 'swapscope');
+  return w === 'today' ? 'pack' : w === 'pack' || w === 'wide' || w === 'all' ? w : SCOPE_DEFAULT;
 }
 
-export function swapScope(): 'pack' | 'all' {
+export function swapScope(): SwapScope {
   return (scope ??= scopeFromSearch(searchOf()));
 }
 
 /** Tests and `window.__pyrefly.swapSwitch(...)`: force the scope (`null` reads the address again). */
-export function setSwapScope(v: 'pack' | 'all' | null): void {
+export function setSwapScope(v: SwapScope | null): void {
   scope = v;
 }
 
-/** True when the looks above play in the running chapter: a pack chapter, or any chapter under `?swapscope=all`. */
+/** True when chapter `id` is named in {@link SCOPE_EXCEPTIONS}: the wide scope leaves it at release 67's look. */
+export function scopeExcepted(id: string | undefined): boolean {
+  return id !== undefined && Object.prototype.hasOwnProperty.call(SCOPE_EXCEPTIONS, id);
+}
+
+/** Do the looks above play in chapter `id` under `scope`? A pack chapter always; every chapter id under `all`; under `wide` a listed chapter ({@link WIDE_CHAPTERS}) that is not an exception (no chapter named: no). */
+export function chapterInScope(id: string | undefined, within: SwapScope = swapScope()): boolean {
+  if (isDemoChapter(id) || within === 'all') return true;
+  return within === 'wide' && id !== undefined && WIDE_CHAPTERS.includes(id) && !scopeExcepted(id);
+}
+
+/** True when the looks above play in the running chapter (`chapterInScope` for the chapter the battle screen named). */
 export function swapsInScope(): boolean {
-  return swapScope() === 'all' || isDemoChapter(demoChapter());
+  return chapterInScope(demoChapter());
 }
 
 export function interludeMode(): InterludeMode {

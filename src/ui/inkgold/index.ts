@@ -9,6 +9,7 @@
 import './tokens.css';
 import './slabs.css';
 import './screens.css';
+import './focus.css'; // the keyboard focus ring (release 68, `app/focusContract.ts`)
 
 export type { WipeDirection, WipeOptions, MatchMediaHost } from './wipe.ts';
 export { playWipe, resolveWipeOptions, prefersReducedMotion } from './wipe.ts';

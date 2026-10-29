@@ -18,8 +18,7 @@
  */
 import type { CombatantId } from '../battle/common/types.ts';
 import type { ActorHandle, BattleStage } from './BattlePresenterPorts.ts';
-import { CROSS_AT } from './motion/SummonBeat.ts';
-import { moveWord } from './motion/MoveSwitch.ts';
+import { CROSS_AT, summonLeapOn } from './motion/SummonBeat.ts';
 
 /** The party's fade, in step with the aeon's own 620 ms arrival. */
 export const PARTY_SWAP_MS = 620;
@@ -51,12 +50,11 @@ export async function partyBack(stage: BattleStage, ms = PARTY_SWAP_MS): Promise
 }
 
 /**
- * MF-15 (`?summon=leap`, `motion/SummonBeat.ts`): the party's fade back in, started {@link CROSS_AT} of the way through the aeon's fade-out, so the player's side is never empty. The caller awaits it after the
- * aeon is removed. Today (the default) undefined: the party returns only after the aeon has gone.
+ * MF-15 (`?summon=leap`, the default since release 68, `motion/SummonBeat.ts`): the party's fade back in, started {@link CROSS_AT} of the way through the aeon's fade-out, so the player's side is never empty. The caller
+ * awaits it after the aeon is removed. `?summon=today`, or the player's REDUCE MOTION on (`reduceMotion`), or an aeon with no clock of its own to count the lead on (`waitMs`: a test double, an aeon that was never staged;
+ * the arrival asks the same of the leap): undefined, the party returns only after the aeon has gone (release 67's). Release 68 made the leap the default, so a double that has no clock must not start a real timer.
  */
-export function crossBack(stage: BattleStage, aeon: ActorHandle | undefined, fadeMs: number): Promise<void> | undefined {
-  if (moveWord('summon') !== 'leap') return undefined;
-  const lead = fadeMs * CROSS_AT;
-  const wait = aeon?.waitMs ? aeon.waitMs(lead) : new Promise<void>((r) => setTimeout(r, lead));
-  return wait.then(() => partyBack(stage));
+export function crossBack(stage: BattleStage, aeon: ActorHandle | undefined, fadeMs: number, reduceMotion = false): Promise<void> | undefined {
+  if (!summonLeapOn(reduceMotion) || !aeon?.waitMs) return undefined;
+  return aeon.waitMs(fadeMs * CROSS_AT).then(() => partyBack(stage));
 }

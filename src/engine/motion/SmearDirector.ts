@@ -20,9 +20,11 @@ import { noteSmear } from './SmearLog.ts';
 import { menuHolds } from './MenuHold.ts';
 import { KO_CUT_STRENGTH } from './MomentsPlan.ts';
 import { CUT, CUT_AT, FLASH_PEAK, LENGTH, MIN_SPEED, causeCutPlan, causeCutTooFar, isBigChange, smearPlan } from './SmearPlan.ts';
+import { CutGlide, anchorPlan, cutAnchorFor, type AnchorPlan } from './CutAnchor.ts';
+import { alignedSwapOn } from '../PoseSwap.ts';
 import { stanceKindOf, swapClassOf } from './SwapClass.ts';
 import { noteDesigned } from './SwapLog.ts';
-import { BLEND3_MS, causeMode, stanceNow, swapHow, swapScope, type SwapHow } from './SwapSwitch.ts';
+import { BLEND3_MS, causeMode, stanceNow, swapHow, swapsInScope, type SwapHow } from './SwapSwitch.ts';
 import { heftOfHeight, motionBeat } from '../feel/MotionBeats.ts';
 import { smearStyle, smearStyleNow } from './SmearSwitch.ts';
 
@@ -45,6 +47,8 @@ export interface SmearHost {
   flash(colour: number, ms: number, peak: number): void;
   /** True while the actor's flash is running or REDUCE FLASHES is on (the smear's flash then stays out). */
   flashBlocked(): boolean;
+  /** MF-18 (`CutAnchor.ts`): draw plane `i` `dx` world units sideways of its own place (its drift, `PaintedActor.placeSlot`); 0 puts it back. A host without it gets no cut-side anchor. */
+  shiftPlane?(i: 0 | 1, dx: number): void;
 }
 
 /** The smear's flash colour: warm ivory, never pure white (a white flash on a big plane is a blob). */
@@ -63,6 +67,7 @@ const BLEND3: BlendCurves = { out: (u) => Math.pow(1 - easeMap(u), 3), inn: ease
 
 export class SmearDirector {
   readonly state = new ActorSmear();
+  private readonly glide = new CutGlide(); // MF-18: the incoming plane of a big cut eases home from the old head (`CutAnchor.ts`)
   private readonly frame: SmearFrame = { amount: 0, dirX: 1, dirY: 0, style: 'paint', length: 0 };
   private readonly dir = { x: 1, y: 0 };
   private written = false;
@@ -86,8 +91,9 @@ export class SmearDirector {
    */
   swap(to: 0 | 1, resolved: string): boolean {
     this.state.end();
+    this.glide.forget(to); // the actor has just given plane `to` a new painting and reset its drift
     this.manual = false; // a window the caller was running (the KO's cut) gives way to this change
-    const style = swapScope() === 'all' ? smearStyle() : smearStyleNow(); // `?swapscope=all` (MF-22): the asked-for style in any chapter
+    const style = swapsInScope() ? smearStyle() : smearStyleNow(); // `?swapscope` (MF-22): the asked-for style in any chapter the looks reach
     if (style === 'off' || !this.host.canCut()) return false;
     const out: 0 | 1 = to === 0 ? 1 : 0;
     const h = this.host;
@@ -124,10 +130,23 @@ export class SmearDirector {
     h.blend.retune(plan.cutMs, CUT);
     const d = this.state.direction(height, this.dir);
     this.state.begin(plan, d.x, d.y);
-    noteSmear({ at: now(), actor: h.name(), from, to: resolved, style: plan.style, cutMs: plan.cutMs, overlap: pair.overlap, anchorDistance: pair.anchorDistance, speed, strength: plan.strength, flash: plan.flash, kind: 'plane', ...(how === 'cut' ? { cause: cls as string } : {}), ...(unnamed ? { big: true } : {}) });
+    const glide = this.anchor(to, out, resolved, pair.anchorDx, speed, height, plan.cutMs);
+    noteSmear({ at: now(), actor: h.name(), from, to: resolved, style: plan.style, cutMs: plan.cutMs, overlap: pair.overlap, anchorDistance: pair.anchorDistance, speed, strength: plan.strength, flash: plan.flash, kind: 'plane', ...(how === 'cut' ? { cause: cls as string } : {}), ...(unnamed ? { big: true } : {}), ...(glide ? { glide: { share: Math.round(glide.share * 1000) / 1000, ms: glide.ms } } : {}) });
     if (speed >= MIN_SPEED) motionBeat({ kind: 'smear', strength: plan.strength, heft: heftOfHeight(height), atMs: plan.cutMs * CUT_AT }); // lane "feel", `?motionsfx=`: the whoosh of the cut, on the cut (a no-op unless the sink is on); a cut on its cause at rest (MF-06) has the blow's own sound, not a whoosh
     if (plan.flash && !h.flashBlocked()) h.flash(SMEAR_FLASH_COLOUR, plan.cutMs * 1.5, FLASH_PEAK);
     return true;
+  }
+
+  /**
+   * MF-18 (`CutAnchor.ts`, `?cutanchor=`): a plane cut was just made onto plane `to`; when the two heads are more than the cap apart, draw the new plane back toward the old head so the step at the cut is the
+   * cap, and let it glide home. `dx` is the pair's signed head step as placed; the outgoing plane may still be carrying an earlier glide's drift, which the head it shows includes.
+   */
+  private anchor(to: 0 | 1, out: 0 | 1, resolved: string, dx: number | null, speed: number, height: number, cutMs: number): AnchorPlan | null {
+    const h = this.host;
+    if (!h.shiftPlane || !cutAnchorFor(speed) || alignedSwapOn()) return null; // `?swap=aligned` runs its own drift on the same field
+    const plan = anchorPlan({ dx: dx === null ? null : dx - this.glide.offsetOf(out), height, frameMs: this.state.frameMs });
+    if (plan) h.shiftPlane(to, this.glide.begin(to, resolved, plan, cutMs * CUT_AT));
+    return plan;
   }
 
   /**
@@ -163,8 +182,9 @@ export class SmearDirector {
     this.written = false;
   }
 
-  /** Every frame, after the blend has advanced: the window's amount onto the planes (and off again when it is over). */
-  step(): void {
+  /** Every frame, after the blend has advanced: the window's amount onto the planes (and off again when it is over). `ms` is the same ms the blend was just advanced by (the frame's real time, paced when the curves are on): MF-18's glide runs on the blend's own clock, so the cut frame and the glide stay together at any pace and display rate. */
+  step(ms = 0): void {
+    if (this.glide.active) this.glide.advance(ms, (i) => this.host.poseOf(i), (i, dx) => this.host.shiftPlane?.(i, dx));
     if (this.manual) return; // the caller runs this window
     if (!this.host.canCut()) return; // a rig plays its own window on this state (`rig/RigSmearWindow.ts`); a cut crossfade has none
     const s = this.state;

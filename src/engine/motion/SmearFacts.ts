@@ -12,6 +12,8 @@ export interface PairFacts {
   overlap: number | null;
   /** The distance between the two anchors along x as a share of the figure's height, or null. */
   anchorDistance: number | null;
+  /** MF-18: the same step with its sign, in world units: the incoming anchor's x minus the outgoing one's (`CutAnchor.ts` shifts the incoming plane back by part of it), or null. */
+  anchorDx: number | null;
 }
 
 /** Overlap and head distance of the pair going out (`out`) and coming in (`inn`) on a figure `worldHeight` tall. */
@@ -19,5 +21,5 @@ export function pairFacts(out: Footprint, inn: Footprint, worldHeight: number): 
   const ao = planeAnchor(out);
   const ai = planeAnchor(inn);
   const m = ao && ai ? meetingOffsets(ao, ai) : null;
-  return { overlap: footprintOverlap(out, inn), anchorDistance: m ? m.distance / Math.max(1e-6, worldHeight) : null };
+  return { overlap: footprintOverlap(out, inn), anchorDistance: m ? m.distance / Math.max(1e-6, worldHeight) : null, anchorDx: ao && ai ? ai.x - ao.x : null };
 }

@@ -263,7 +263,8 @@ describe('the flow asks for these cues at the right moments (BattleScreenFlow.sh
   });
 
   it('is the only place a victory or defeat cue is requested: the chain and the presenter never ask for one', () => {
-    for (const file of ['src/app/screens/BattleEncounterChain.ts', 'src/engine/BattlePresenterBeats.ts', 'src/engine/BattlePresenter.ts']) {
+    // The presenter is a chain of four files since the split (`docs/handoff/split.md`): the guard reads all four, not only the leaf.
+    for (const file of ['src/app/screens/BattleEncounterChain.ts', 'src/engine/BattlePresenterBeats.ts', 'src/engine/BattlePresenter.ts', 'src/engine/BattlePresenterBase.ts', 'src/engine/BattlePresenterPlayback.ts', 'src/engine/BattlePresenterCommands.ts']) {
       const text = readFileSync(join(REPO, file), 'utf8');
       expect(text, file).not.toMatch(/playMusic\(\s*['"`](victory|defeat)-/);
     }

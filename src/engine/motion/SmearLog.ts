@@ -34,6 +34,8 @@ export interface PlannedSmear {
   big?: boolean;
   /** MF-06: the class of swap that asked for this cut on its cause (`SwapSwitch.SwapClass`); absent for a cut the speed gate planned. */
   cause?: string;
+  /** MF-18 (`CutAnchor.ts`): the cut was anchored: the incoming plane was drawn back by `share` of the figure's height (so the step at the cut is the cap) and eased home over `ms`. Absent when the step was under the cap or `?cutanchor` is today. */
+  glide?: { share: number; ms: number };
   kind: 'plane' | 'rig';
   /** When the cut itself falls (`at` plus the window's cut point, or half the move of a rig), ms. */
   cutAt: number;

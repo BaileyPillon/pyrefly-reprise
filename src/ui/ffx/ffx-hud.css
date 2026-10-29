@@ -903,7 +903,7 @@
   letter-spacing: 0.06em;
 }
 .ffx-target__note {
-  font-family: var(--ig-font-text); font-size: 11px; letter-spacing: 0.1em;
+  font-family: var(--ig-font-text); font-size: 14px; letter-spacing: 0.1em;
   text-transform: uppercase; color: rgba(244, 241, 232, 0.66);
 }
 

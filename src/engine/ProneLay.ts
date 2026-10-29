@@ -140,6 +140,13 @@ export function layProne(
 const laid = new WeakMap<PaintedActor, boolean>();
 
 /**
+ * Figures that have stood up but whose slide is being held: a revive makes the standing plane the active one at once (`isProne` is false from that frame), while the lying plane is still on
+ * screen fading out. Clearing the slide that frame moved the lying body by the whole slide (0.74 units, 80 to 108 px at 1600 wide) under the figure getting up; it is let go once the lying
+ * plane has faded. Both games (the actor layer is shared).
+ */
+const held = new WeakSet<PaintedActor>();
+
+/**
  * Called every frame by the stage. Cheap: it only does work on the frame a
  * figure's shown pose turns prone (or stops being prone).
  *
@@ -157,12 +164,20 @@ export function layProneFigures(
   for (const a of actors) {
     if (pinned?.has(a)) continue;
     const prone = a.isProne;
-    if (prone === (laid.get(a) ?? false)) continue;
-    laid.set(a, prone);
-    if (!prone) {
-      a.setProneShift(0);
+    if (prone === (laid.get(a) ?? false)) {
+      if (held.has(a) && !a.proneLingers) { // the lying plane has faded out: the slide goes with it, unseen
+        held.delete(a);
+        a.setProneShift(0);
+      }
       continue;
     }
+    laid.set(a, prone);
+    if (!prone) {
+      if (a.proneLingers) held.add(a); // a revive: the body keeps lying where it lay while it fades (see `held`)
+      else a.setProneShift(0);
+      continue;
+    }
+    held.delete(a);
     layProne(a, actors, layCameras(live, rigs));
   }
 }
