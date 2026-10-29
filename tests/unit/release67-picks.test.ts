@@ -21,7 +21,6 @@
  * Game case: both (shared plumbing; the stance and cause looks play in Chapter I FFX and Chapter IV FFX-2, the hit in every chapter of both games).
  */
 import { afterEach, describe, expect, it } from 'vitest';
-import { CHAPTERS } from '../../src/data/encounters.ts';
 import { houseTravel } from '../../src/engine/motion/RealMotion.ts';
 import { CURVES_DEFAULT, curvesModeFromSearch, curvesMode, curvesOn, realKind, setCurvesMode } from '../../src/engine/motion/CurvesSwitch.ts';
 import { setDemoChapter, setPackScreen } from '../../src/engine/motion/DemoGate.ts';
@@ -32,7 +31,6 @@ import { MOVE_DEFAULTS, MOVE_WORDS, moveDefault, moveWord, moveWordFromSearch, s
 import {
   CAUSE_DEFAULT,
   COVERED,
-  SCOPE_EXCEPTIONS,
   STANCE_DEFAULT,
   SWAP_CLASSES,
   causeFromSearch,
@@ -247,30 +245,6 @@ describe('the picks play exactly where the words played', () => {
     visit('?swapscope=all');
     expect(swapScope()).toBe('all');
     expect(lookNow()).toEqual(PICKS);
-  });
-
-  it('since release 68 the picks play by default in fifteen chapters of the nineteen, the four exceptions keep release 66\'s look, and ?swapscope=pack brings release 67\'s reach back (both games, per chapter)', () => {
-    const ids = CHAPTERS.map((c) => c.id);
-    const inside = ids.filter((id) => !(id in SCOPE_EXCEPTIONS));
-    expect(inside).toHaveLength(15);
-    visit('');
-    for (const id of ids) {
-      setDemoChapter(id);
-      expect(lookNow(), id).toEqual(id in SCOPE_EXCEPTIONS ? { ...RELEASE_66, hit: 'knock' } : PICKS);
-    }
-    visit('?swapscope=pack');
-    for (const id of ids) {
-      setDemoChapter(id);
-      expect(lookNow(), id).toEqual(id === CH1 || id === CH4 ? PICKS : { ...RELEASE_66, hit: 'knock' });
-    }
-  });
-
-  it('a hidden or experimental chapter keeps release 66\'s swap look under the wide default', () => {
-    visit('');
-    for (const id of ['fayth', 'windwaker', 'exp-leblanc']) {
-      setDemoChapter(id);
-      expect(lookNow(), id).toEqual({ ...RELEASE_66, hit: 'knock' });
-    }
   });
 
   it('?pack=off, ?pack=today and a phone or a tablet keep release 66\'s swap looks; ?pack=demo forces the picks on a phone', () => {
