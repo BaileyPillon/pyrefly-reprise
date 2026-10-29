@@ -320,6 +320,14 @@ export abstract class PaintedActorReaders extends PaintedActorPoses {
     return this.slots[this.active]!.scale.prone;
   }
 
+  /**
+   * True while a prone plane is still on screen, whatever pose is asked for: a revive makes the standing plane the active one at once, and the lying body fades out under it
+   * (`ProneLay` keeps its slide until then). A figure with no lying plane showing is false.
+   */
+  get proneLingers(): boolean {
+    return this.slots.some((s) => s.scale.prone && s.fade > 0.001);
+  }
+
   /** World size of the plane currently showing — `[width, height]`. */
   get poseSize(): [number, number] {
     const s = this.slots[this.active]!.scale;
