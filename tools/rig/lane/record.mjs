@@ -41,16 +41,8 @@ async function freePort(from = 5880) {
 
 let parentLockText = null; // the hand-over lock of a queue waiter that is this process's parent: put back at the end (several recordings under one hold)
 function takeLock() {
-<<<<<<< HEAD
   // atomic since release 67 (backlog 60, lane-lock.mjs): an exclusive create, or one rename over a stale or hand-over lock; a lock held by THIS process's parent is a queue's hand-over (a waiter that claimed the free slot, then started the recorder)
   takeLaneLock({ lock: LOCK, text: JSON.stringify({ pid: process.pid, what: `${a.subject} ${a.modes ?? 'poses'}`, at: new Date().toISOString() }), isAlive: alive });
-=======
-  const st = lockStatus(fs.existsSync(LOCK) ? fs.readFileSync(LOCK, 'utf8') : null, alive);
-  if (st.state === 'held' && st.by.pid !== process.ppid) throw new Error(`lane: another recording holds ${LOCK} (pid ${st.by.pid}, ${st.by.what ?? '?'}): one recording at a time`); // a lock held by THIS process's parent is a queue's hand-over (a waiter that claimed the free slot, then started the recorder)
-  if (st.state === 'held' && st.by.pid === process.ppid) parentLockText = fs.readFileSync(LOCK, 'utf8');
-  fs.mkdirSync(path.dirname(LOCK), { recursive: true });
-  fs.writeFileSync(LOCK, JSON.stringify({ pid: process.pid, what: `${a.subject} ${a.modes ?? 'poses'}`, at: new Date().toISOString() }));
->>>>>>> origin/motion-rigs
 }
 
 async function waitHttp(url, ms) {
