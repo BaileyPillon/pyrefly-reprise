@@ -1,0 +1,589 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-29T00:53:42.109Z",
+ "build": {
+  "mainSha": "04631aedf",
+  "bundle": "index-B3DkcOaU.js"
+ },
+ "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect introduced and no regression against live release 66 in what was measured: the continuity harness (Chapters I and IV, the six picks together, never measured before) matches or beats round 30 on every number that counts: ghost frames about 101 to 39 a minute (Chapter I) and 90 to 49 (Chapter IV), swap jerks 32.8 to 24.9 px and 45 to 44.9 px.",
+  "The public retry skip works (attempt 2 first menu 4.3 s, attempt 1 44.2 s), the defeat card names its cause at SKIP speed and carries CHAPTER SELECT, the phone enemy-move line is two lines at 390x844 without overflow, and Chapters I and IV play from the title to a win and a loss with 0 console errors at 59 to 60 fps.",
+  "CHK-026 and CHK-027 still FAIL, as on live (disclosed); the run-flow stand, boss knock and the Chapter IV defeat card were not frame-judged (UNVERIFIED, owed to the deep review)."
+ ],
+ "checks": [
+  {
+   "id": "CHK-001",
+   "result": "UNVERIFIED",
+   "reason": "Agents cannot hear (AGENTS rule 13); no audio change in this release, not auditioned.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "audio",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "1600x900: first menu, mid-fight, defeat card and results of Chapters I and IV each own the stage; no layer outlived its state. 2000x1012 not run.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "menu, fight, defeat",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/shots/ch1-1600-02-menu.png",
+    "critic/reviews/04631aedf-focused/shots/ch1-1600-06-end.png",
+    "critic/reviews/04631aedf-focused/shots/ch4-1600-04-act-3.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 4
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "390x844 Chapter I: no horizontal overflow, the enemy-move line is clamped to 2 lines (line-clamp 2, 36 px at 18 px line height) with an ellipsis; footer buttons readable. Chapter IV not driven at 390.",
+   "game": "both",
+   "chapter": "seymour-flux",
+   "state": "phone battle at the target step",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/shots/phone-enemymove.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 4
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "reason": "The defeat card left with its fight (TRY AGAIN went to the next attempt); the victory freeze, Overdrive opening and booth end card were not driven to their ends.",
+   "game": "both",
+   "chapter": "seymour-flux",
+   "state": "defeat",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/shots/ch1-1600-06-end.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "At 1600x900 slabs, rails and turn order stay clear of the party in the Chapter I menu and Chapter IV mid-fight.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "menu",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/shots/ch1-1600-04-act-3.png",
+    "critic/reviews/04631aedf-focused/shots/ch4-1600-04-act-3.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Command names shown in full at 1600x900 in both chapters; the phone line is two lines with an ellipsis by design.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "menu",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/shots/ch1-1600-04-act-3.png",
+    "critic/reviews/04631aedf-focused/shots/phone-enemymove.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "reason": "Cast art is unchanged in this release (no art files in the diff; art verify and audit PASS in the prep step); not re-judged against the rubric.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "art",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real Playwright keyboard from the title through chapter select, prep, cutscene, first menu, attack by Enter, a lost fight, TRY AGAIN and a second attempt; a touch run at 390x844. The debug API only handed the fight to the engine at the end and for the film.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "title to results",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/shots/ch1-1600.json",
+    "critic/reviews/04631aedf-focused/shots/retry-default.json",
+    "critic/reviews/04631aedf-focused/shots/ch4-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 10
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture asserted window.__pyrefly.screen() and waitBattleMenu (throws on timeout); the Chapter IV real-key loss run that never reached the defeat card is recorded as not reached, not as a shot.",
+   "game": "both",
+   "chapter": "all",
+   "state": "all",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/shots/retry-default.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "reason": "Served dist-gate (index-B3DkcOaU.js, BASE_PATH=/, release 67, 04631aedf) on 5871; index.html and the page script name that bundle; 0 console errors and 0 failed responses in every run; server stopped by PID 36496, port 5871 closed.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "production candidate",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/shots/ch1-1600.json",
+    "critic/reviews/04631aedf-focused/serve.log"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 2
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Case from r67-picks: both games for stance, cause, hit, rigko, defeat cause, phone line, CHAPTER SELECT; run=flow FFX-2 only; hurried retry FFX Chapter I only. Seen: hurried retry and defeat cause in Chapter I (FFX), a won Chapter IV (FFX-2), harness in both.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "fight",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 3
+  },
+  {
+   "id": "CHK-021",
+   "result": "UNVERIFIED",
+   "reason": "Presence seen in Chapter I and IV; absence of the FFX-only retry skip in FFX-2 and of the FFX-2-only run word in FFX not tested (unit tests pin both).",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Chapter I: lost fights reached the defeat card, TRY AGAIN reached a second attempt that opened in 4.3 s against 44.2 s for attempt 1; won Chapter I and Chapter IV reached results and the next cutscene. Defeat cause at SKIP speed shown on both attempts.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "fight",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/shots/retry-default.json",
+    "critic/reviews/04631aedf-focused/shots/retry-skip.json",
+    "critic/reviews/04631aedf-focused/shots/ch1film-note.txt"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 12
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Everything ran through the real title, chapter select, prep and battle screens; the harness plays with real keys.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "full flow",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "reason": "Harness, candidate vs live release 66 (round 30): Chapter I max head jump 10.8 percent (live 12.1), stature 0.765 to 1.057 with 1 swap out of band (live 0 over band, same minimum); Chapter IV head 0.7 (0.6), stature 0.898 to 1.117, 3 out of band (3). Not worse than live apart from one Chapter I band outlier.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "continuity run",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 18
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "Chapter I PASS (0 snaps a minute, worst swap jerk 24.9 px vs live 32.8; ghost 645 ms a minute vs live 1,689). Chapter IV FAIL on 1 swap jerk of 44.9 px (live 45.0, the same one); ghost 818 ms a minute vs live 1,505. Worst dash in Chapter I 238.8 px vs 112.8 live (the travel strike).",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "state": "continuity run",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 18
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 342.7,
+    "swaps": 301,
+    "snapsPerMinute": 0,
+    "ghostMsPerMinute": 818,
+    "maxHeadJumpPct": 0.7,
+    "maxFeetShiftPx": 0.3,
+    "worstJerkPx": 44.9,
+    "minStature": 0.898,
+    "heightOverBand": 3,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 44.9,
+    "dashesWorstPx": 44.9,
+    "frameP99Ms": 35.6,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.7,
+    "dedicated": true,
+    "strips": 18,
+    "worstSwapStrips": [
+     "ffx2-bahamut-win-04631aedf/continuity/strips/swap-222-paine-attack-follow.jpg",
+     "ffx2-bahamut-win-04631aedf/continuity/strips/swap-128-rikku-ready-attack.jpg",
+     "ffx2-bahamut-win-04631aedf/continuity/strips/swap-135-paine-ready-attack.jpg",
+     "ffx2-bahamut-win-04631aedf/continuity/strips/swap-168-paine-follow-idle.jpg",
+     "ffx2-bahamut-win-04631aedf/continuity/strips/swap-192-rikku-attack-follow.jpg",
+     "ffx2-bahamut-win-04631aedf/continuity/strips/swap-114-paine-od-x2-warrior-armor-break-idle.jpg",
+     "ffx2-bahamut-win-04631aedf/continuity/strips/swap-095-paine-cast-od-x2-warrior-armor-break.jpg",
+     "ffx2-bahamut-win-04631aedf/continuity/strips/swap-038-paine-cast-hurt.jpg",
+     "ffx2-bahamut-win-04631aedf/continuity/strips/swap-024-paine-hurt-cast.jpg",
+     "ffx2-bahamut-win-04631aedf/continuity/strips/swap-262-paine-idle-hurt.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 342.7,
+  "counted": 301,
+  "swaps": 306,
+  "size": {
+   "judged": 301,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 0,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 0.7,
+   "maxHeadJumpPctRegistration": 0.2,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 0.3,
+   "feetOverTolerance": 0,
+   "headMeasured": 301,
+   "headRegistration": 196,
+   "headRig": 105,
+   "rigSwaps": 105,
+   "headSilhouette": 0,
+   "headUnmeasured": 0,
+   "heightMeasured": 301,
+   "heightOverBand": 3,
+   "heightWaived": 0,
+   "minStature": 0.898,
+   "maxStature": 1.117,
+   "koLengthMeasured": 0,
+   "minKoLength": null,
+   "koLengthReported": 0,
+   "feetSilMeasured": 196,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 2.7,
+   "holdSwaps": 196,
+   "worstRealHeadPct": 30.9,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "variantHeadSwaps": 0,
+   "worstVariantHeadPct": 0,
+   "variantHeadOutsideBand": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 98,
+   "hardCutsPerMinute": 17.16,
+   "ghostSwaps": 98,
+   "ghostFrames": 283,
+   "worstGhostSeverity": 0.329,
+   "ghostOverFail": 0,
+   "jerks": 7,
+   "worstJerkPx": 44.9,
+   "jerksOverFail": 2,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0.065,
+   "maxCentroidShiftPx": 69.8,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 4,
+   "smearsPlanned": 194,
+   "smearSwaps": 192,
+   "smearSnapsExcused": 98,
+   "jerksSmeared": 89,
+   "worstSmearedJerkPx": 72.1,
+   "swapJerks": 4,
+   "swapJerksWorstPx": 44.9,
+   "swapJerksOverFail": 1,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 3,
+   "dashesWorstPx": 44.9,
+   "dashesOverFail": 1,
+   "jerksLongFrame": 1,
+   "swapJerksLongFrame": 0,
+   "swapJerksSteadyOverFail": 1,
+   "ghostMs": 4672,
+   "ghostMsPerMinute": 818,
+   "ghostFramesPerMinute": 49.5,
+   "ghostFrames60PerMinute": 49.1
+  },
+  "frameTime": {
+   "frames": 20457,
+   "longFrames": 246,
+   "longFramePct": 1.2,
+   "worstP99Ms": 35.6,
+   "maxMs": 160.2,
+   "longMs": 34,
+   "source": "continuity-probe",
+   "pacingNumber": false
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "3 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.898 to 1.117; the bands are tools/posescale/pose-bands.mjs's)"
+    ],
+    "note": "196 of 301 measured swaps had a registered head (tolerance 3 percent); 105 were read from a rig's own head mesh (tolerance 3 percent; 105 swap(s) were changes of a rig's key); 0 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 301 swap(s) (stature 0.898 to 1.117, 0 out of band but waived), the silhouette's own feet 196 swap(s) (worst 2.7 px, 0 waived), 196 swap(s) across a recorded hold (real head worst 30.9 percent from the idle's), 0 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 44.9 px)"
+    ],
+    "note": "1 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 44.9 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 1 of 7 jerk(s) fell on a frame of more than 34 ms (0 of the 4 at a swap; 1 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them; 192 of 194 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 98 snap(s) not counted, 89 swap jerk(s) (worst 72.1 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 342.7 s of battle, 59.7 to 59.7 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (3 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.898 to 1.117; the bands are tools/posescale/pose-bands.mjs's)); CHK-027 FAIL (1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 44.9 px)); 818 ms of see-through a minute (49.1 frames a minute at 60 Hz) Read by harness 9cc8f27cd66e (35 files; tree D:/pyrefly-release55 at 04631aedf; policy 70ab3c4d; probe v2 fb288c17; pose table 9f168c0f (114 subjects); waivers bf0731fb (79 rows)).",
+  "base": "http://127.0.0.1:5871/",
+  "date": "2026-10-29T00:50:51.511Z",
+  "poseMeasure": {
+   "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+   "source": "harness-tree",
+   "subjects": 114,
+   "sha256": "9f168c0f1dc4c49e73435c3919077826b6288b37efc9f20b0696924f2bb4a9f4",
+   "staleChapters": []
+  },
+  "harness": {
+   "schema": "continuity-harness/1",
+   "id": "9cc8f27cd66e02cd1bde74c87ce70d8fca0a83dca085f25177fd71ab2e9132df",
+   "tree": {
+    "root": "D:/pyrefly-release55",
+    "head": "04631aedfd12aa711084c1dafc95a9ecf2e4bb2b",
+    "dirty": []
+   },
+   "files": {
+    "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+    "critic/runner/lib/continuity-analyze.mjs": "a416b86a012426411000d03b5e13ca4abe82bbee",
+    "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+    "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+    "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+    "critic/runner/lib/continuity-ghostms.mjs": "d74a048e0c44be69d22b050973ec240fbec3db66",
+    "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+    "critic/runner/lib/continuity-probe.mjs": "fb288c179cbf2df71bd9139f9c87657790238308",
+    "critic/runner/lib/continuity-pure.mjs": "8c3ec1d79db169a6a4c8169a693247ca6c83bfc0",
+    "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+    "critic/runner/lib/continuity-rig-probe.mjs": "35bf097b7bbfa81abeb4daf8e78f0d9515ff3ab1",
+    "critic/runner/lib/continuity-rig.mjs": "6e1b891a9d237b4b9db52593303df5e1ffc812e4",
+    "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+    "critic/runner/lib/continuity-smear.mjs": "7b0508c2ac2eb3da8ca3939013c16dfd22a6f26b",
+    "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+    "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+    "critic/runner/lib/continuity-summary.mjs": "ec7a4f915c80d618c2dbf3f219dd72757a927fbd",
+    "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+    "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+    "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+    "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+    "critic/runner/lib/continuity-why.mjs": "e2f0063820045e9c5eb5bb2ece203c00bed1fe3d",
+    "critic/runner/lib/continuity.mjs": "91e3888f71711d9d1f891338bd90904d688b63fa",
+    "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+    "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+    "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+    "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+    "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+    "critic/runner/lib/route-pure.mjs": "4d484cc9c873d60c66b48e418bb688dd6248b647",
+    "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+    "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+    "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+    "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+    "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+    "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+   },
+   "policy": {
+    "continuitySha256": "70ab3c4d28898a0b76ff0862fc44fb316d07a136244345440bdff1bd145f236a",
+    "fileSha256": "e067a28c2a90d5d68ba0d8a2a04e894b94768797ceb1c29cde9c6ec6054ec1c9",
+    "override": false,
+    "overrideSha256": null
+   },
+   "probe": {
+    "version": 2,
+    "blob": "fb288c179cbf2df71bd9139f9c87657790238308"
+   },
+   "poseTable": {
+    "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+    "sha256": "9f168c0f1dc4c49e73435c3919077826b6288b37efc9f20b0696924f2bb4a9f4",
+    "subjects": 114,
+    "source": "harness-tree",
+    "buildSha": "04631aed",
+    "isCandidate": true
+   },
+   "waivers": {
+    "path": "D:\\pyrefly-release55\\docs\\target\\pose-waivers.json",
+    "sha256": "bf0731fb7771a9da0391bd6e7d422675b7e177c46b60138476b8a6fb4eb4df25",
+    "rows": 79
+   },
+   "run": {
+    "query": null,
+    "setArt": null,
+    "browser": "gpu"
+   },
+   "changedDuringRun": false,
+   "chapterIds": [
+    "9cc8f27cd66e02cd1bde74c87ce70d8fca0a83dca085f25177fd71ab2e9132df"
+   ],
+   "unstamped": [],
+   "chaptersByOtherHarness": [],
+   "aggregateSha256": "415676f58ff25f068b65692865019b9602060e08eeec561d12538366096feee7"
+  }
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "R67-C1",
+   "severity": "major",
+   "title": "Pose-swap continuity checks still fail: Chapter IV (one 44.9 px swap jerk, three stature outliers) and CHK-026 in both chapters",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "expected": "No swap jerk of 40 px or more, every pose inside its height band",
+   "observed": "Chapter IV CHK-027 FAIL, CHK-026 FAIL in both; every figure equal to or better than live release 66; ghost frames fell from about 101 to 39 a minute (Chapter I) and 90 to 49 (Chapter IV)",
+   "repro": "node critic/runner/lib/continuity.mjs --chapters=seymour-flux,ffx2-bahamut on the candidate",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/continuity/continuity-summary.json"
+   ],
+   "confidence": "high (automated, one run per chapter)",
+   "requirement": "CHK-026, CHK-027",
+   "where": "unknown; live fails the same checks (round 30)",
+   "fix": "continue the swap-continuity batch; not part of this release",
+   "acceptanceCheck": "continuity harness PASS on both",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R67-P1",
+   "severity": "polish",
+   "title": "Chapter I: one swap outside the height band and a longer worst dash (238.8 px) than live",
+   "game": "FFX",
+   "chapter": "seymour-flux",
+   "expected": "Inside the band, dash no longer than live",
+   "observed": "1 out of band where round 30 had 0 over band (same minimum stature); worst dash 238.8 px vs 112.8 px (travel strike and leap)",
+   "repro": "continuity harness, Chapter I",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/continuity/continuity-summary.json"
+   ],
+   "confidence": "medium (one run)",
+   "requirement": "CHK-026",
+   "where": "unknown",
+   "fix": "look at the strip",
+   "acceptanceCheck": "harness rerun"
+  },
+  {
+   "id": "R67-U1",
+   "severity": "suggestion",
+   "title": "Not frame-stepped: the run-to-dash stand under ?run=flow, hit=knock on bosses, the Chapter IV defeat card",
+   "game": "FFX-2",
+   "chapter": "ffx2-bahamut",
+   "expected": "A reviewer looks at them",
+   "observed": "Harness shows no FFX-2 dash jerk above 44.9 px (live 45); Seymour Flux falls once and stays down in the normal-speed film; the Chapter IV loss was not reached by real keys",
+   "repro": "n/a",
+   "evidence": [
+    "critic/reviews/04631aedf-focused/film/ch1-ko-sheet.jpg"
+   ],
+   "confidence": "n/a",
+   "requirement": "review focus 2, 3",
+   "where": "n/a",
+   "fix": "owed to the deep review on the live build",
+   "acceptanceCheck": "film and frame-step"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Chapter I and IV from the real title at 1600x900",
+   "Chapter I attempt 1 and 2 retry timing, defeat cause at normal and SKIP speed",
+   "Chapter I phone 390x844 enemy-move line",
+   "Seymour Flux fall in a normal-speed film",
+   "Continuity harness on both chapters"
+  ],
+  "reused": [
+   {
+    "what": "live release 66 continuity numbers",
+    "from": "critic/rounds/round-30.json",
+    "why": "same harness and pose table; no live rerun, to save time"
+   }
+  ],
+  "notTested": [
+   "2000x1012 layout",
+   "Chapter V by real keys and the phone gate beyond Chapter I",
+   "each word today restoring release 66 on a frame strip",
+   "run=flow stand frame-step",
+   "Chapter IV defeat card by real keys",
+   "audio",
+   "tile composites (targets required 0)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Deep review on the live build after the deploy (shared presenter and global layout); watch R67-C1.",
+ "elapsedMinutes": 70
+}

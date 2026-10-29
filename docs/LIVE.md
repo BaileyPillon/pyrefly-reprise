@@ -8,34 +8,41 @@
 | | |
 |---|---|
 | Site | https://echoesofspira.com/ |
-| Commit | `2b48cee95` (Release 66 (r66)) |
-| Bundle | `BwPs1UaV` |
-| Deployed | 2026-10-28T06:50:44.901Z (2026-10-28 02:50 EDT) |
-| Deploy log | `docs/deploys.log` line 83: cloudflare, 4830 art files, owner override |
-| Artifact (SHA-256) | `c4bb4251f0a4e73606e26e0cb5757df0f4eabe2a5daa94a7f4fd6f4ce89e21a3` |
+| Commit | `2a9340249` (Release 68 (r68)) |
+| Bundle | `CahDxk82` |
+| Deployed | 2026-10-29T14:45:49.392Z (2026-10-29 10:45 EDT) |
+| Deploy log | `docs/deploys.log` line 85: cloudflare, 4830 art files |
+| Artifact (SHA-256) | `865efda30b6915c0ee3794b7ed1126a531a7a51f48086f303927047aedb3c17d` |
 | The deploy's own byte check | PASS (57 files compared with the build) |
-| Marker | `critic/pending/2b48cee95.json` (pending) |
-| Owner override | “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.” |
-| CHANGELOG entry | 2026-10-28 · Release 66 (r66), the motion-fluidity pass: the first sight of a pose no longer freezes the picture, every wait in a fight keeps one clock, a knocked-out body lands on the frame it arrives, and an FFX-2 spell no longer blinks through idle (both games; the spell interlude and the Bevelle light shafts are FFX-2 only; sixteen more looks wait behind address words and change nothing until one is asked for) |
-| Focused review | critic/reviews/2b48cee95-focused.json: ship SHIP, changed area UNVERIFIED |
-| Live check | critic/reviews/2b48cee95-live.json: deployment PASS |
+| Marker | `critic/pending/2a9340249.json` (pending) |
+| Owner override | none |
+| CHANGELOG entry | 2026-10-29 · Release 68 (r68), the pose-continuity and motion pass: the stance and cause picks reach 13 more chapters, Paine and Rikku in the Warrior dress keep their standing painting through a wind-up, a revived figure no longer jumps, the FFX-2 battle screen is freed when you leave it, and the run-in, the ATB bars, Trigger Happy, the turn-order list, summons and fades move more smoothly; plus bigger battle text, Tab on the menus and a lighter first menu (both games, each item says which; the ready hold, the run-in, the ATB bars, Trigger Happy and the screen release are FFX-2 only; the turn-order list and the summon leap are FFX only) |
+| Focused review | critic/reviews/2a9340249-focused.json: ship SHIP, changed area UNVERIFIED |
+| Live check | critic/reviews/2a9340249-live.json: deployment PASS |
 
-Is this commit on main? `git merge-base --is-ancestor 2b48cee95 origin/main` exits 0 when it is.
+Is this commit on main? `git merge-base --is-ancestor 2a9340249 origin/main` exits 0 when it is.
 
 ## Review obligations still open
 
 | Build | Obligation | What it needs |
 |---|---|---|
-| `2b48cee95` | focused | acceptance of the changed area |
-| `2b48cee95` | deep (carries 76 earlier builds) | deep review of every affected chapter and system |
+| `2a9340249` | focused | acceptance of the changed area |
+| `2a9340249` | deep (carries 1 earlier builds) | deep review of every affected chapter and system |
 
-The ledger counts 76 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 2 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
-None: `critic/reviews/2b48cee95-focused.json` lists no major or critical issue.
+From `critic/reviews/2a9340249-focused.json` (a major that is not a regression is disclosed and carried into the next batch):
 
-## Branches in flight (as of 2026-10-28 05:00 EDT, the r66 records pass (release 66 live))
+| Issue | Severity | Introduced by this build | Regression against the previous live build | What |
+|---|---|---|---|---|
+| R68-C1 | major | no | no | Vegnagun: the boss tail whip is a 200.5 px swap jerk, CHK-027 FAIL (4 gated jerks) |
+| R68-C2 | major | no | no | Braska: 8 gated swap jerks (worst 155.9 px) and CHK-026 head readings on rig/silhouette aeons |
+| R68-C3 | major | no | no | Chapter I and Trema still fail CHK-026 (Auron follow, Mortiorchis silhouette; Trema feet 10.5 px) |
+| R68-B1 | major | no | no | Budgets: phone first-command wait 19.8 to 42.4 s against 8 s, and memory growth +74 percent over four chapter changes against 10 percent |
+
+## Branches in flight (as of 2026-10-29 12:35 EDT, the r68 records pass (release 68 live))
 
 Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.
 
@@ -50,6 +57,11 @@ Kept by hand by whoever records a pass; tools/live-record.mjs prints it into doc
 | `rig` | `db2caa6d9` | both (shared plumbing; the subjects are FFX first) | the rig lane's trunk: r55 shipped it up to 59c766ec0 (Kimahri and Lulu); this tip adds Auron's first pass, which stays off |
 | `rig-auron2` | `72528aa3b` | FFX only | Auron's rig pass 2 with format v2 variants (orb arm, flask, sword arm, katana, saya); gated OK 11 of 11 and OFF in the refine queue by his pick |
 | `re-parity-new-chapters-1018` | `5f7b6ffbc` | FFX (Spectral Keeper) and FFX-2 (Fallen Maesters) | research only: the Spectral Keeper and the Fallen Maesters data and AI extractions (the notes themselves went into r58 as plain files); no engine build, the chapter decisions SK1 to SK11 and FM1 to FM11 wait for Bailey |
+| `saves-portable` | `c1852fa05` | both (save-data class) | ChatGPT point 9: export and import a save as a checksummed file behind ?saveport=on, off by default; NOT merged into r68-int or release 68 (D-1379); a browser pass and a deep review are owed before the word comes off (A-1054) |
+| `rigs-v2` | `9f90c3441` | both (Tidus FFX, Rikku Dark Knight FFX-2) | the party rig pilots rebuilt (tidus-v2, rikku-dark-knight-v2 in D:/pyrefly-art-rigs) behind ?partyrigs=v2 with a motion audit; pushed; OUT of release 68 (D-1398): the clips (A-1073) show 0 ghost frames but a cut from standing to lying at the knock-out and four broken frames on Rikku's return (D-1401); nothing installed |
+| `rigs-v3` | `e95744f0d` | both (Tidus FFX, Rikku Dark Knight FFX-2) | NOT PUSHED (local, D:/pyrefly-rig-valefor), a lane in progress at 12:08 EDT on 2026-10-29, the tip moves: rigs-v2 on r68-final plus the painting's knock-out topple and rise for a rig, the return fold, and the harness's stature reading for rigs (D-1401); not merged, nothing installed before Bailey has seen it move |
+| `budgets-2` | `4ee33ef9f` | both | NOT PUSHED (local, D:/pyrefly-r39-color), a lane in progress on 2026-10-29, the tip moves, from r68-final: R68-B1, the phone first-command wait and the memory growth (leaving a fight lets go of what it did not use, the phone's entry gets the line to itself, a ranked queue for the later poses and lighting maps); not merged, not deployed |
+| `held-chapters` | `4aa4c62c4` | FFX (Evrae, Yunalesca, Sin face) and FFX-2 (Ixion XVI), plus the harness for both | pushed; a lane in progress on 2026-10-29 (the local tip, 4be9364e0 in D:/pyrefly-rig-rikkudk, is ahead), from r68-final: Evrae's head re-registration, a planner guard for head travel, a harness gap rule for recording gaps, and the cut anchor for Yunalesca and Sin face, so the four chapters that release 68 holds back (D-1386) can join the wide scope; not merged, not deployed |
 
 Nothing on this list is live. `node tools/live-record.mjs --branches` compares the tips with git.
 
@@ -57,9 +69,9 @@ Nothing on this list is live. `node tools/live-record.mjs --branches` compares t
 
 | Deployed (UTC) | Commit | Bundle | Log line |
 |---|---|---|---|
+| 2026-10-29T14:45:49.392Z | `2a9340249` | `CahDxk82` | 85 |
+| 2026-10-29T01:15:32.273Z | `04631aedf` | `B3DkcOaU` | 84 |
 | 2026-10-28T06:50:44.901Z | `2b48cee95` | `BwPs1UaV` | 83 |
 | 2026-10-28T01:00:54.005Z | `eaf599d0c` | `8rsIfOcP` | 82 |
 | 2026-10-25T13:16:33.389Z | `e9907cad8` | `BygGxbJE` | 81 |
 | 2026-10-25T06:52:55.070Z | `fa56fd4e3` | `Bo7iMtyZ` | 80 |
-| 2026-10-22T12:53:14.528Z | `c8ecbcb31` | `C9xPmvqR` | 79 |
-| 2026-10-21T20:04:40.996Z | `660c19bbd` | `DwMQUoVh` | 78 |

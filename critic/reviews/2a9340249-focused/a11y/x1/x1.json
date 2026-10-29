@@ -1,0 +1,3560 @@
+{
+ "schema": "a11y-text-x1/2",
+ "base": "http://127.0.0.1:5471/",
+ "word": "",
+ "startedAt": "2026-10-29T13:56:50.003Z",
+ "injected": "TEXT SIZE written to <html> as applyComfort does; setSeed(1) by bootChapter",
+ "records": [
+  {
+   "chapter": "seymour-flux",
+   "game": "ffx",
+   "size": "1280x720",
+   "sizes": {
+    "100": {
+     "f1": true,
+     "attr": "100",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 24
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 24
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 32
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 38
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 26
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 14.1
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 50.7,
+       "top": 25,
+       "right": 381.3,
+       "bottom": 75
+      },
+      "hero": {
+       "left": 56,
+       "top": 280,
+       "right": 199.7,
+       "bottom": 332
+      },
+      "cue": {
+       "left": 52.6,
+       "top": 345,
+       "right": 415.4,
+       "bottom": 377
+      },
+      "verbs": {
+       "left": 56,
+       "top": 393,
+       "right": 413,
+       "bottom": 627
+      },
+      "prompts": {
+       "left": 52.5,
+       "top": 673,
+       "right": 439.5,
+       "bottom": 706
+      },
+      "turnStrip": {
+       "left": 930,
+       "top": 44,
+       "right": 1251,
+       "bottom": 133
+      },
+      "party": {
+       "left": 830,
+       "top": 502,
+       "right": 1230,
+       "bottom": 684
+      },
+      "guideChip": {
+       "left": 40.2,
+       "top": 66,
+       "right": 134.1,
+       "bottom": 89
+      }
+     },
+     "overlaps": [
+      {
+       "a": "ribbon",
+       "b": "guideChip",
+       "w": 83.4,
+       "h": 9
+      }
+     ],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "115": {
+     "f1": true,
+     "attr": "115",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 27.6
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 27.6
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 36.8
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 43.7
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 29.9
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 16.2
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 49.9,
+       "top": 25,
+       "right": 430.1,
+       "bottom": 82.5
+      },
+      "hero": {
+       "left": 56,
+       "top": 228,
+       "right": 221.2,
+       "bottom": 287.8
+      },
+      "cue": {
+       "left": 52.1,
+       "top": 302.7,
+       "right": 469.3,
+       "bottom": 339.5
+      },
+      "verbs": {
+       "left": 56,
+       "top": 357.9,
+       "right": 466.5,
+       "bottom": 627
+      },
+      "prompts": {
+       "left": 52,
+       "top": 668,
+       "right": 497,
+       "bottom": 706
+      },
+      "turnStrip": {
+       "left": 881.8,
+       "top": 44,
+       "right": 1251,
+       "bottom": 146.4
+      },
+      "party": {
+       "left": 770,
+       "top": 474.7,
+       "right": 1230,
+       "bottom": 684
+      },
+      "guideChip": {
+       "left": 42.7,
+       "top": 62.5,
+       "right": 150.6,
+       "bottom": 89
+      }
+     },
+     "overlaps": [
+      {
+       "a": "ribbon",
+       "b": "guideChip",
+       "w": 100.7,
+       "h": 20
+      }
+     ],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "130": {
+     "f1": true,
+     "attr": "130",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 31.2
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 31.3
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 41.6
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 49.4
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 33.8
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 18.3
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 49.1,
+       "top": 25,
+       "right": 478.9,
+       "bottom": 90
+      },
+      "hero": {
+       "left": 56,
+       "top": 175.9,
+       "right": 242.8,
+       "bottom": 243.5
+      },
+      "cue": {
+       "left": 51.6,
+       "top": 260.4,
+       "right": 523.2,
+       "bottom": 302
+      },
+      "verbs": {
+       "left": 56,
+       "top": 322.8,
+       "right": 520.1,
+       "bottom": 627
+      },
+      "prompts": {
+       "left": 51.4,
+       "top": 663.1,
+       "right": 554.6,
+       "bottom": 706
+      },
+      "turnStrip": {
+       "left": 833.7,
+       "top": 44,
+       "right": 1251,
+       "bottom": 159.7
+      },
+      "party": {
+       "left": 710,
+       "top": 447.4,
+       "right": 1230,
+       "bottom": 684
+      },
+      "guideChip": {
+       "left": 42.7,
+       "top": 59.1,
+       "right": 164.7,
+       "bottom": 89
+      }
+     },
+     "overlaps": [
+      {
+       "a": "ribbon",
+       "b": "guideChip",
+       "w": 115.6,
+       "h": 29.9
+      }
+     ],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "100-intel": {
+     "f1": true,
+     "attr": "100",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 24
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 24
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 32
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 38
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 26
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 14.1
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 50.7,
+       "top": 25,
+       "right": 381.3,
+       "bottom": 75
+      },
+      "hero": {
+       "left": 56,
+       "top": 280,
+       "right": 199.7,
+       "bottom": 332
+      },
+      "cue": {
+       "left": 52.6,
+       "top": 345,
+       "right": 415.4,
+       "bottom": 377
+      },
+      "verbs": {
+       "left": 56,
+       "top": 393,
+       "right": 413,
+       "bottom": 627
+      },
+      "prompts": {
+       "left": 52.5,
+       "top": 673,
+       "right": 439.5,
+       "bottom": 706
+      },
+      "turnStrip": {
+       "left": 930,
+       "top": 44,
+       "right": 1251,
+       "bottom": 133
+      },
+      "party": {
+       "left": 830,
+       "top": 502,
+       "right": 1230,
+       "bottom": 684
+      },
+      "sensor": {
+       "left": 869.6,
+       "top": 288,
+       "right": 1024.8,
+       "bottom": 311
+      },
+      "guide": {
+       "left": 42.7,
+       "top": 132,
+       "right": 306.7,
+       "bottom": 274
+      },
+      "guideChip": {
+       "left": 40.2,
+       "top": 110,
+       "right": 179.7,
+       "bottom": 133
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "100-intel-intent": {
+     "f1": true,
+     "attr": "100",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 24
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 24
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 32
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 38
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 26
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 14.1
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 50.7,
+       "top": 25,
+       "right": 381.3,
+       "bottom": 75
+      },
+      "hero": {
+       "left": 56,
+       "top": 280,
+       "right": 199.7,
+       "bottom": 332
+      },
+      "cue": {
+       "left": 52.6,
+       "top": 345,
+       "right": 415.4,
+       "bottom": 377
+      },
+      "verbs": {
+       "left": 56,
+       "top": 393,
+       "right": 413,
+       "bottom": 627
+      },
+      "prompts": {
+       "left": 52.5,
+       "top": 673,
+       "right": 439.5,
+       "bottom": 706
+      },
+      "turnStrip": {
+       "left": 930,
+       "top": 44,
+       "right": 1251,
+       "bottom": 133
+      },
+      "party": {
+       "left": 830,
+       "top": 502,
+       "right": 1230,
+       "bottom": 684
+      },
+      "sensor": {
+       "left": 869.6,
+       "top": 288,
+       "right": 1024.8,
+       "bottom": 311
+      },
+      "guide": {
+       "left": 42.7,
+       "top": 132,
+       "right": 306.7,
+       "bottom": 274
+      },
+      "guideChip": {
+       "left": 40.2,
+       "top": 110,
+       "right": 179.7,
+       "bottom": 133
+      },
+      "intent": {
+       "left": 688,
+       "top": 33,
+       "right": 988,
+       "bottom": 298.6
+      }
+     },
+     "overlaps": [
+      {
+       "a": "turnStrip",
+       "b": "intent",
+       "w": 58,
+       "h": 89
+      },
+      {
+       "a": "sensor",
+       "b": "intent",
+       "w": 118.4,
+       "h": 10.6
+      }
+     ],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "115-intel": {
+     "f1": true,
+     "attr": "115",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 27.6
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 27.6
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 36.8
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 43.7
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 29.9
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 16.2
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 49.9,
+       "top": 25,
+       "right": 430.1,
+       "bottom": 82.5
+      },
+      "verbs": {
+       "left": 56,
+       "top": 357.9,
+       "right": 466.5,
+       "bottom": 627
+      },
+      "prompts": {
+       "left": 52,
+       "top": 668,
+       "right": 497,
+       "bottom": 706
+      },
+      "turnStrip": {
+       "left": 881.8,
+       "top": 44,
+       "right": 1251,
+       "bottom": 146.4
+      },
+      "party": {
+       "left": 770,
+       "top": 474.7,
+       "right": 1230,
+       "bottom": 684
+      },
+      "sensor": {
+       "left": 849.5,
+       "top": 284.5,
+       "right": 1027.9,
+       "bottom": 311
+      },
+      "guide": {
+       "left": 42.7,
+       "top": 139.5,
+       "right": 346.3,
+       "bottom": 281.5
+      },
+      "guideChip": {
+       "left": 42.7,
+       "top": 114.1,
+       "right": 203.1,
+       "bottom": 140.5
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "115-intel-intent": {
+     "f1": true,
+     "attr": "115",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 27.6
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 27.6
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 36.8
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 43.7
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 29.9
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 16.2
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 49.9,
+       "top": 25,
+       "right": 430.1,
+       "bottom": 82.5
+      },
+      "verbs": {
+       "left": 56,
+       "top": 357.9,
+       "right": 466.5,
+       "bottom": 627
+      },
+      "prompts": {
+       "left": 52,
+       "top": 668,
+       "right": 497,
+       "bottom": 706
+      },
+      "turnStrip": {
+       "left": 881.8,
+       "top": 44,
+       "right": 1251,
+       "bottom": 146.4
+      },
+      "party": {
+       "left": 770,
+       "top": 474.7,
+       "right": 1230,
+       "bottom": 684
+      },
+      "sensor": {
+       "left": 849.5,
+       "top": 284.5,
+       "right": 1027.9,
+       "bottom": 311
+      },
+      "guide": {
+       "left": 42.7,
+       "top": 139.5,
+       "right": 346.3,
+       "bottom": 281.5
+      },
+      "guideChip": {
+       "left": 42.7,
+       "top": 114.1,
+       "right": 203.1,
+       "bottom": 140.5
+      },
+      "intent": {
+       "left": 700,
+       "top": 33,
+       "right": 1000,
+       "bottom": 298.6
+      }
+     },
+     "overlaps": [
+      {
+       "a": "turnStrip",
+       "b": "intent",
+       "w": 118.2,
+       "h": 102.4
+      },
+      {
+       "a": "sensor",
+       "b": "intent",
+       "w": 150.5,
+       "h": 14.1
+      }
+     ],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "130-intel": {
+     "f1": true,
+     "attr": "130",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 31.2
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 31.3
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 41.6
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 49.4
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 33.8
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 18.3
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 49.1,
+       "top": 25,
+       "right": 478.9,
+       "bottom": 90
+      },
+      "verbs": {
+       "left": 56,
+       "top": 322.8,
+       "right": 520.1,
+       "bottom": 627
+      },
+      "prompts": {
+       "left": 51.4,
+       "top": 663.1,
+       "right": 554.6,
+       "bottom": 706
+      },
+      "turnStrip": {
+       "left": 833.7,
+       "top": 44,
+       "right": 1251,
+       "bottom": 159.7
+      },
+      "party": {
+       "left": 710,
+       "top": 447.4,
+       "right": 1230,
+       "bottom": 684
+      },
+      "sensor": {
+       "left": 826.9,
+       "top": 281.1,
+       "right": 1028.7,
+       "bottom": 311
+      },
+      "guide": {
+       "left": 42.7,
+       "top": 147,
+       "right": 385.9,
+       "bottom": 292.6
+      },
+      "guideChip": {
+       "left": 42.7,
+       "top": 118.1,
+       "right": 224,
+       "bottom": 148
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "130-intel-intent": {
+     "f1": true,
+     "attr": "130",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 31.2
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 31.3
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 41.6
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 49.4
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 33.8
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 18.3
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 49.1,
+       "top": 25,
+       "right": 478.9,
+       "bottom": 90
+      },
+      "verbs": {
+       "left": 56,
+       "top": 322.8,
+       "right": 520.1,
+       "bottom": 627
+      },
+      "prompts": {
+       "left": 51.4,
+       "top": 663.1,
+       "right": 554.6,
+       "bottom": 706
+      },
+      "turnStrip": {
+       "left": 833.7,
+       "top": 44,
+       "right": 1251,
+       "bottom": 159.7
+      },
+      "party": {
+       "left": 710,
+       "top": 447.4,
+       "right": 1230,
+       "bottom": 684
+      },
+      "sensor": {
+       "left": 826.9,
+       "top": 281.1,
+       "right": 1028.7,
+       "bottom": 311
+      },
+      "guide": {
+       "left": 42.7,
+       "top": 147,
+       "right": 385.9,
+       "bottom": 292.6
+      },
+      "guideChip": {
+       "left": 42.7,
+       "top": 118.1,
+       "right": 224,
+       "bottom": 148
+      },
+      "intent": {
+       "left": 716,
+       "top": 33,
+       "right": 1016,
+       "bottom": 298.6
+      }
+     },
+     "overlaps": [
+      {
+       "a": "turnStrip",
+       "b": "intent",
+       "w": 182.3,
+       "h": 115.7
+      },
+      {
+       "a": "sensor",
+       "b": "intent",
+       "w": 189.1,
+       "h": 17.5
+      }
+     ],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    }
+   },
+   "bundle": [
+    "index-CahDxk82.js"
+   ]
+  },
+  {
+   "chapter": "seymour-flux",
+   "game": "ffx",
+   "size": "1600x900",
+   "sizes": {
+    "100": {
+     "f1": true,
+     "attr": "100",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 30
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 30
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 40
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 47.5
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 32.5
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 17.6
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 63.4,
+       "top": 31.3,
+       "right": 476.6,
+       "bottom": 93.8
+      },
+      "hero": {
+       "left": 70,
+       "top": 350,
+       "right": 249.6,
+       "bottom": 415
+      },
+      "cue": {
+       "left": 65.7,
+       "top": 431.3,
+       "right": 519.3,
+       "bottom": 471.3
+      },
+      "verbs": {
+       "left": 70,
+       "top": 491.3,
+       "right": 516.3,
+       "bottom": 783.8
+      },
+      "prompts": {
+       "left": 65.6,
+       "top": 841.3,
+       "right": 549.4,
+       "bottom": 882.5
+      },
+      "turnStrip": {
+       "left": 1162.5,
+       "top": 55,
+       "right": 1563.8,
+       "bottom": 166.3
+      },
+      "party": {
+       "left": 1037.5,
+       "top": 627.5,
+       "right": 1537.5,
+       "bottom": 855
+      },
+      "guideChip": {
+       "left": 50.5,
+       "top": 82.5,
+       "right": 152.2,
+       "bottom": 108.8
+      }
+     },
+     "overlaps": [
+      {
+       "a": "ribbon",
+       "b": "guideChip",
+       "w": 88.8,
+       "h": 11.3
+      }
+     ],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "115": {
+     "f1": true,
+     "attr": "115",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 34.5
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 34.6
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 46
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 54.7
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 37.4
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 20.2
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 62.4,
+       "top": 31.3,
+       "right": 537.6,
+       "bottom": 103.1
+      },
+      "hero": {
+       "left": 70,
+       "top": 284.9,
+       "right": 276.5,
+       "bottom": 359.7
+      },
+      "cue": {
+       "left": 65.1,
+       "top": 378.4,
+       "right": 586.6,
+       "bottom": 424.4
+      },
+      "verbs": {
+       "left": 70,
+       "top": 447.4,
+       "right": 583.2,
+       "bottom": 783.8
+      },
+      "prompts": {
+       "left": 65,
+       "top": 835.1,
+       "right": 621.3,
+       "bottom": 882.5
+      },
+      "turnStrip": {
+       "left": 1102.3,
+       "top": 55,
+       "right": 1563.8,
+       "bottom": 182.9
+      },
+      "party": {
+       "left": 962.5,
+       "top": 593.4,
+       "right": 1537.5,
+       "bottom": 855
+      },
+      "guideChip": {
+       "left": 53.3,
+       "top": 78.6,
+       "right": 170.3,
+       "bottom": 108.8
+      }
+     },
+     "overlaps": [
+      {
+       "a": "ribbon",
+       "b": "guideChip",
+       "w": 107.9,
+       "h": 24.5
+      }
+     ],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "130": {
+     "f1": true,
+     "attr": "130",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 39
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 39.1
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 52
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 61.8
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 42.3
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 22.9
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 61.4,
+       "top": 31.3,
+       "right": 598.6,
+       "bottom": 112.5
+      },
+      "hero": {
+       "left": 70,
+       "top": 219.9,
+       "right": 303.4,
+       "bottom": 304.4
+      },
+      "cue": {
+       "left": 64.5,
+       "top": 325.5,
+       "right": 654,
+       "bottom": 377.5
+      },
+      "verbs": {
+       "left": 70,
+       "top": 403.5,
+       "right": 650.1,
+       "bottom": 783.8
+      },
+      "prompts": {
+       "left": 64.3,
+       "top": 828.9,
+       "right": 693.2,
+       "bottom": 882.5
+      },
+      "turnStrip": {
+       "left": 1042.1,
+       "top": 55,
+       "right": 1563.8,
+       "bottom": 199.6
+      },
+      "party": {
+       "left": 887.5,
+       "top": 559.3,
+       "right": 1537.5,
+       "bottom": 855
+      },
+      "guideChip": {
+       "left": 53.3,
+       "top": 74.6,
+       "right": 185.5,
+       "bottom": 108.8
+      }
+     },
+     "overlaps": [
+      {
+       "a": "ribbon",
+       "b": "guideChip",
+       "w": 124.1,
+       "h": 34.2
+      }
+     ],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "100-intel": {
+     "f1": true,
+     "attr": "100",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 30
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 30
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 40
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 47.5
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 32.5
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 17.6
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 63.4,
+       "top": 31.3,
+       "right": 476.6,
+       "bottom": 93.8
+      },
+      "hero": {
+       "left": 70,
+       "top": 350,
+       "right": 249.6,
+       "bottom": 415
+      },
+      "cue": {
+       "left": 65.7,
+       "top": 431.3,
+       "right": 519.3,
+       "bottom": 471.3
+      },
+      "verbs": {
+       "left": 70,
+       "top": 491.3,
+       "right": 516.3,
+       "bottom": 783.8
+      },
+      "prompts": {
+       "left": 65.6,
+       "top": 841.3,
+       "right": 549.4,
+       "bottom": 882.5
+      },
+      "turnStrip": {
+       "left": 1162.5,
+       "top": 55,
+       "right": 1563.8,
+       "bottom": 166.3
+      },
+      "party": {
+       "left": 1037.5,
+       "top": 627.5,
+       "right": 1537.5,
+       "bottom": 855
+      },
+      "sensor": {
+       "left": 1087.2,
+       "top": 360,
+       "right": 1248.6,
+       "bottom": 386.3
+      },
+      "guide": {
+       "left": 53.3,
+       "top": 165,
+       "right": 383.3,
+       "bottom": 342.5
+      },
+      "guideChip": {
+       "left": 50.5,
+       "top": 137.5,
+       "right": 198.4,
+       "bottom": 163.8
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "100-intel-intent": {
+     "f1": true,
+     "attr": "100",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 30
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 30
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 40
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 47.5
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 32.5
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 17.6
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 63.4,
+       "top": 31.3,
+       "right": 476.6,
+       "bottom": 93.8
+      },
+      "hero": {
+       "left": 70,
+       "top": 350,
+       "right": 249.6,
+       "bottom": 415
+      },
+      "cue": {
+       "left": 65.7,
+       "top": 431.3,
+       "right": 519.3,
+       "bottom": 471.3
+      },
+      "verbs": {
+       "left": 70,
+       "top": 491.3,
+       "right": 516.3,
+       "bottom": 783.8
+      },
+      "prompts": {
+       "left": 65.6,
+       "top": 841.3,
+       "right": 549.4,
+       "bottom": 882.5
+      },
+      "turnStrip": {
+       "left": 1162.5,
+       "top": 55,
+       "right": 1563.8,
+       "bottom": 166.3
+      },
+      "party": {
+       "left": 1037.5,
+       "top": 627.5,
+       "right": 1537.5,
+       "bottom": 855
+      },
+      "sensor": {
+       "left": 1087.2,
+       "top": 360,
+       "right": 1248.6,
+       "bottom": 386.3
+      },
+      "guide": {
+       "left": 53.3,
+       "top": 165,
+       "right": 383.3,
+       "bottom": 342.5
+      },
+      "guideChip": {
+       "left": 50.5,
+       "top": 137.5,
+       "right": 198.4,
+       "bottom": 163.8
+      },
+      "intent": {
+       "left": 856,
+       "top": 38.8,
+       "right": 1231,
+       "bottom": 365.6
+      }
+     },
+     "overlaps": [
+      {
+       "a": "turnStrip",
+       "b": "intent",
+       "w": 68.5,
+       "h": 111.3
+      },
+      {
+       "a": "sensor",
+       "b": "intent",
+       "w": 143.8,
+       "h": 5.6
+      }
+     ],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "115-intel": {
+     "f1": true,
+     "attr": "115",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 34.5
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 34.6
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 46
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 54.7
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 37.4
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 20.2
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 62.4,
+       "top": 31.3,
+       "right": 537.6,
+       "bottom": 103.1
+      },
+      "verbs": {
+       "left": 70,
+       "top": 447.4,
+       "right": 583.2,
+       "bottom": 783.8
+      },
+      "prompts": {
+       "left": 65,
+       "top": 835.1,
+       "right": 621.3,
+       "bottom": 882.5
+      },
+      "turnStrip": {
+       "left": 1102.3,
+       "top": 55,
+       "right": 1563.8,
+       "bottom": 182.9
+      },
+      "party": {
+       "left": 962.5,
+       "top": 593.4,
+       "right": 1537.5,
+       "bottom": 855
+      },
+      "sensor": {
+       "left": 1066.6,
+       "top": 356.1,
+       "right": 1252.2,
+       "bottom": 386.3
+      },
+      "guide": {
+       "left": 53.3,
+       "top": 174.4,
+       "right": 432.8,
+       "bottom": 351.9
+      },
+      "guideChip": {
+       "left": 53.3,
+       "top": 142.9,
+       "right": 223.4,
+       "bottom": 173.1
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "115-intel-intent": {
+     "f1": true,
+     "attr": "115",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 34.5
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 34.6
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 46
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 54.7
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 37.4
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 20.2
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 62.4,
+       "top": 31.3,
+       "right": 537.6,
+       "bottom": 103.1
+      },
+      "verbs": {
+       "left": 70,
+       "top": 447.4,
+       "right": 583.2,
+       "bottom": 783.8
+      },
+      "prompts": {
+       "left": 65,
+       "top": 835.1,
+       "right": 621.3,
+       "bottom": 882.5
+      },
+      "turnStrip": {
+       "left": 1102.3,
+       "top": 55,
+       "right": 1563.8,
+       "bottom": 182.9
+      },
+      "party": {
+       "left": 962.5,
+       "top": 593.4,
+       "right": 1537.5,
+       "bottom": 855
+      },
+      "sensor": {
+       "left": 1066.6,
+       "top": 356.1,
+       "right": 1252.2,
+       "bottom": 386.3
+      },
+      "guide": {
+       "left": 53.3,
+       "top": 174.4,
+       "right": 432.8,
+       "bottom": 351.9
+      },
+      "guideChip": {
+       "left": 53.3,
+       "top": 142.9,
+       "right": 223.4,
+       "bottom": 173.1
+      },
+      "intent": {
+       "left": 872,
+       "top": 38.8,
+       "right": 1247,
+       "bottom": 365.6
+      }
+     },
+     "overlaps": [
+      {
+       "a": "turnStrip",
+       "b": "intent",
+       "w": 144.7,
+       "h": 127.9
+      },
+      {
+       "a": "sensor",
+       "b": "intent",
+       "w": 180.4,
+       "h": 9.5
+      }
+     ],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "130-intel": {
+     "f1": true,
+     "attr": "130",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 39
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 39.1
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 52
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 61.8
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 42.3
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 22.9
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 61.4,
+       "top": 31.3,
+       "right": 598.6,
+       "bottom": 112.5
+      },
+      "verbs": {
+       "left": 70,
+       "top": 403.5,
+       "right": 650.1,
+       "bottom": 783.8
+      },
+      "prompts": {
+       "left": 64.3,
+       "top": 828.9,
+       "right": 693.2,
+       "bottom": 882.5
+      },
+      "turnStrip": {
+       "left": 1042.1,
+       "top": 55,
+       "right": 1563.8,
+       "bottom": 199.6
+      },
+      "party": {
+       "left": 887.5,
+       "top": 559.3,
+       "right": 1537.5,
+       "bottom": 855
+      },
+      "sensor": {
+       "left": 1043.3,
+       "top": 352.1,
+       "right": 1253.1,
+       "bottom": 386.3
+      },
+      "guide": {
+       "left": 53.3,
+       "top": 183.8,
+       "right": 482.3,
+       "bottom": 365.7
+      },
+      "guideChip": {
+       "left": 53.3,
+       "top": 148.4,
+       "right": 245.6,
+       "bottom": 182.5
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "130-intel-intent": {
+     "f1": true,
+     "attr": "130",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 39
+      },
+      "partyName": {
+       "text": "Tidus",
+       "px": 39.1
+      },
+      "partyHp": {
+       "text": "2420/2420",
+       "px": 52
+      },
+      "heroName": {
+       "text": "Tidus",
+       "px": 61.8
+      },
+      "ribbonName": {
+       "text": "Seymour Flux",
+       "px": 42.3
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 22.9
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 61.4,
+       "top": 31.3,
+       "right": 598.6,
+       "bottom": 112.5
+      },
+      "verbs": {
+       "left": 70,
+       "top": 403.5,
+       "right": 650.1,
+       "bottom": 783.8
+      },
+      "prompts": {
+       "left": 64.3,
+       "top": 828.9,
+       "right": 693.2,
+       "bottom": 882.5
+      },
+      "turnStrip": {
+       "left": 1042.1,
+       "top": 55,
+       "right": 1563.8,
+       "bottom": 199.6
+      },
+      "party": {
+       "left": 887.5,
+       "top": 559.3,
+       "right": 1537.5,
+       "bottom": 855
+      },
+      "sensor": {
+       "left": 1043.3,
+       "top": 352.1,
+       "right": 1253.1,
+       "bottom": 386.3
+      },
+      "guide": {
+       "left": 53.3,
+       "top": 183.8,
+       "right": 482.3,
+       "bottom": 365.7
+      },
+      "guideChip": {
+       "left": 53.3,
+       "top": 148.4,
+       "right": 245.6,
+       "bottom": 182.5
+      },
+      "intent": {
+       "left": 892,
+       "top": 38.8,
+       "right": 1267,
+       "bottom": 365.6
+      }
+     },
+     "overlaps": [
+      {
+       "a": "turnStrip",
+       "b": "intent",
+       "w": 224.9,
+       "h": 144.6
+      },
+      {
+       "a": "sensor",
+       "b": "intent",
+       "w": 209.8,
+       "h": 13.5
+      }
+     ],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    }
+   },
+   "bundle": [
+    "index-CahDxk82.js"
+   ]
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "game": "ffx2",
+   "size": "1280x720",
+   "sizes": {
+    "100": {
+     "f1": true,
+     "attr": "100",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 24
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 24
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 32
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 38
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 26
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 14.1
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 50.7,
+       "top": 25,
+       "right": 381.3,
+       "bottom": 75
+      },
+      "hero": {
+       "left": 934,
+       "top": 193,
+       "right": 1174.1,
+       "bottom": 245
+      },
+      "cue": {
+       "left": 906.6,
+       "top": 258,
+       "right": 1227.4,
+       "bottom": 290
+      },
+      "verbs": {
+       "left": 934,
+       "top": 304,
+       "right": 1224,
+       "bottom": 501
+      },
+      "prompts": {
+       "left": 52.5,
+       "top": 673,
+       "right": 359.5,
+       "bottom": 706
+      },
+      "party": {
+       "left": 834,
+       "top": 502,
+       "right": 1222,
+       "bottom": 684
+      },
+      "guideChip": {
+       "left": 40.2,
+       "top": 148,
+       "right": 134.1,
+       "bottom": 171
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "115": {
+     "f1": true,
+     "attr": "115",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 27.6
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 27.6
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 36.8
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 43.7
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 29.9
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 16.2
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 49.9,
+       "top": 25,
+       "right": 430.1,
+       "bottom": 82.5
+      },
+      "hero": {
+       "left": 887.5,
+       "top": 119.7,
+       "right": 1163.6,
+       "bottom": 179.5
+      },
+      "cue": {
+       "left": 856,
+       "top": 194.4,
+       "right": 1224.9,
+       "bottom": 231.2
+      },
+      "verbs": {
+       "left": 887.5,
+       "top": 247.3,
+       "right": 1221,
+       "bottom": 473.8
+      },
+      "prompts": {
+       "left": 52,
+       "top": 668,
+       "right": 405,
+       "bottom": 706
+      },
+      "party": {
+       "left": 775.8,
+       "top": 474.7,
+       "right": 1222,
+       "bottom": 684
+      },
+      "guideChip": {
+       "left": 37,
+       "top": 161.4,
+       "right": 145,
+       "bottom": 187.8
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "130": {
+     "f1": true,
+     "attr": "130",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 31.2
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 31.3
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 41.6
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 49.4
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 33.8
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 18.3
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 49.1,
+       "top": 25,
+       "right": 478.9,
+       "bottom": 90
+      },
+      "hero": {
+       "left": 841,
+       "top": 46.3,
+       "right": 1153.1,
+       "bottom": 113.9
+      },
+      "cue": {
+       "left": 805.4,
+       "top": 130.8,
+       "right": 1222.4,
+       "bottom": 172.4
+      },
+      "verbs": {
+       "left": 841,
+       "top": 190.6,
+       "right": 1218,
+       "bottom": 446.7
+      },
+      "prompts": {
+       "left": 51.4,
+       "top": 663.1,
+       "right": 450.6,
+       "bottom": 706
+      },
+      "party": {
+       "left": 717.6,
+       "top": 447.4,
+       "right": 1222,
+       "bottom": 684
+      },
+      "guideChip": {
+       "left": 36.3,
+       "top": 174.7,
+       "right": 158.3,
+       "bottom": 204.6
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "100-intel": {
+     "f1": true,
+     "attr": "100",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 24
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 24
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 32
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 38
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 26
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 14.1
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 50.7,
+       "top": 25,
+       "right": 381.3,
+       "bottom": 75
+      },
+      "hero": {
+       "left": 934,
+       "top": 193,
+       "right": 1174.1,
+       "bottom": 245
+      },
+      "cue": {
+       "left": 906.6,
+       "top": 258,
+       "right": 1227.4,
+       "bottom": 290
+      },
+      "verbs": {
+       "left": 934,
+       "top": 304,
+       "right": 1224,
+       "bottom": 501
+      },
+      "prompts": {
+       "left": 52.5,
+       "top": 673,
+       "right": 359.5,
+       "bottom": 706
+      },
+      "party": {
+       "left": 834,
+       "top": 502,
+       "right": 1222,
+       "bottom": 684
+      },
+      "guide": {
+       "left": 42.7,
+       "top": 214,
+       "right": 306.7,
+       "bottom": 386
+      },
+      "guideChip": {
+       "left": 40.2,
+       "top": 192,
+       "right": 179.7,
+       "bottom": 215
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "100-intel-intent": {
+     "f1": true,
+     "attr": "100",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 24
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 24
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 32
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 38
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 26
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 14.1
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 50.7,
+       "top": 25,
+       "right": 381.3,
+       "bottom": 75
+      },
+      "hero": {
+       "left": 934,
+       "top": 193,
+       "right": 1174.1,
+       "bottom": 245
+      },
+      "cue": {
+       "left": 906.6,
+       "top": 258,
+       "right": 1227.4,
+       "bottom": 290
+      },
+      "verbs": {
+       "left": 934,
+       "top": 304,
+       "right": 1224,
+       "bottom": 501
+      },
+      "prompts": {
+       "left": 52.5,
+       "top": 673,
+       "right": 359.5,
+       "bottom": 706
+      },
+      "party": {
+       "left": 834,
+       "top": 502,
+       "right": 1222,
+       "bottom": 684
+      },
+      "guide": {
+       "left": 42.7,
+       "top": 318.7,
+       "right": 306.7,
+       "bottom": 386
+      },
+      "guideChip": {
+       "left": 40.2,
+       "top": 192,
+       "right": 179.7,
+       "bottom": 215
+      },
+      "intent": {
+       "left": 380,
+       "top": 67.7,
+       "right": 680,
+       "bottom": 333.3
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "115-intel": {
+     "f1": true,
+     "attr": "115",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 27.6
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 27.6
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 36.8
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 43.7
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 29.9
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 16.2
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 49.9,
+       "top": 25,
+       "right": 430.1,
+       "bottom": 82.5
+      },
+      "hero": {
+       "left": 887.5,
+       "top": 119.7,
+       "right": 1163.6,
+       "bottom": 179.5
+      },
+      "cue": {
+       "left": 856,
+       "top": 194.4,
+       "right": 1224.9,
+       "bottom": 231.2
+      },
+      "verbs": {
+       "left": 887.5,
+       "top": 247.3,
+       "right": 1221,
+       "bottom": 473.8
+      },
+      "prompts": {
+       "left": 52,
+       "top": 668,
+       "right": 405,
+       "bottom": 706
+      },
+      "party": {
+       "left": 775.8,
+       "top": 474.7,
+       "right": 1222,
+       "bottom": 684
+      },
+      "guide": {
+       "left": 42.7,
+       "top": 327,
+       "right": 306.7,
+       "bottom": 393.5
+      },
+      "guideChip": {
+       "left": 37,
+       "top": 212.9,
+       "right": 197.5,
+       "bottom": 239.3
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "115-intel-intent": {
+     "f1": true,
+     "attr": "115",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 27.6
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 27.6
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 36.8
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 43.7
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 29.9
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 16.2
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 49.9,
+       "top": 25,
+       "right": 430.1,
+       "bottom": 82.5
+      },
+      "hero": {
+       "left": 887.5,
+       "top": 119.7,
+       "right": 1163.6,
+       "bottom": 179.5
+      },
+      "cue": {
+       "left": 856,
+       "top": 194.4,
+       "right": 1224.9,
+       "bottom": 231.2
+      },
+      "verbs": {
+       "left": 887.5,
+       "top": 247.3,
+       "right": 1221,
+       "bottom": 473.8
+      },
+      "prompts": {
+       "left": 52,
+       "top": 668,
+       "right": 405,
+       "bottom": 706
+      },
+      "party": {
+       "left": 775.8,
+       "top": 474.7,
+       "right": 1222,
+       "bottom": 684
+      },
+      "guide": {
+       "left": 42.7,
+       "top": 327,
+       "right": 306.7,
+       "bottom": 393.5
+      },
+      "guideChip": {
+       "left": 37,
+       "top": 212.9,
+       "right": 197.5,
+       "bottom": 239.3
+      },
+      "intent": {
+       "left": 583.5,
+       "top": 61.8,
+       "right": 883.5,
+       "bottom": 187.9
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "130-intel": {
+     "f1": true,
+     "attr": "130",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 31.2
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 31.3
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 41.6
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 49.4
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 33.8
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 18.3
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 49.1,
+       "top": 25,
+       "right": 478.9,
+       "bottom": 90
+      },
+      "hero": {
+       "left": 841,
+       "top": 46.3,
+       "right": 1153.1,
+       "bottom": 113.9
+      },
+      "cue": {
+       "left": 805.4,
+       "top": 130.8,
+       "right": 1222.4,
+       "bottom": 172.4
+      },
+      "verbs": {
+       "left": 841,
+       "top": 190.6,
+       "right": 1218,
+       "bottom": 446.7
+      },
+      "prompts": {
+       "left": 51.4,
+       "top": 663.1,
+       "right": 450.6,
+       "bottom": 706
+      },
+      "party": {
+       "left": 717.6,
+       "top": 447.4,
+       "right": 1222,
+       "bottom": 684
+      },
+      "guideChip": {
+       "left": 36.3,
+       "top": 174.7,
+       "right": 158.3,
+       "bottom": 204.6
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    },
+    "130-intel-intent": {
+     "f1": true,
+     "attr": "130",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 31.2
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 31.3
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 41.6
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 49.4
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 33.8
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 18.3
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 49.1,
+       "top": 25,
+       "right": 478.9,
+       "bottom": 90
+      },
+      "hero": {
+       "left": 841,
+       "top": 46.3,
+       "right": 1153.1,
+       "bottom": 113.9
+      },
+      "cue": {
+       "left": 805.4,
+       "top": 130.8,
+       "right": 1222.4,
+       "bottom": 172.4
+      },
+      "verbs": {
+       "left": 841,
+       "top": 190.6,
+       "right": 1218,
+       "bottom": 446.7
+      },
+      "prompts": {
+       "left": 51.4,
+       "top": 663.1,
+       "right": 450.6,
+       "bottom": 706
+      },
+      "party": {
+       "left": 717.6,
+       "top": 447.4,
+       "right": 1222,
+       "bottom": 684
+      },
+      "guideChip": {
+       "left": 36.3,
+       "top": 174.7,
+       "right": 158.3,
+       "bottom": 204.6
+      },
+      "intent": {
+       "left": 210.1,
+       "top": 198.3,
+       "right": 510.1,
+       "bottom": 324.4
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1280,
+      720
+     ]
+    }
+   },
+   "bundle": [
+    "index-CahDxk82.js"
+   ]
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "game": "ffx2",
+   "size": "1600x900",
+   "sizes": {
+    "100": {
+     "f1": true,
+     "attr": "100",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 30
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 30
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 40
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 47.5
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 32.5
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 17.6
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 63.4,
+       "top": 31.3,
+       "right": 476.6,
+       "bottom": 93.8
+      },
+      "hero": {
+       "left": 1167.5,
+       "top": 241.3,
+       "right": 1467.6,
+       "bottom": 306.3
+      },
+      "cue": {
+       "left": 1133.2,
+       "top": 322.5,
+       "right": 1534.3,
+       "bottom": 362.5
+      },
+      "verbs": {
+       "left": 1167.5,
+       "top": 380,
+       "right": 1530,
+       "bottom": 626.3
+      },
+      "prompts": {
+       "left": 65.6,
+       "top": 841.3,
+       "right": 449.4,
+       "bottom": 882.5
+      },
+      "party": {
+       "left": 1042.5,
+       "top": 627.5,
+       "right": 1527.5,
+       "bottom": 855
+      },
+      "guideChip": {
+       "left": 50.5,
+       "top": 182.5,
+       "right": 152.2,
+       "bottom": 208.8
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "115": {
+     "f1": true,
+     "attr": "115",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 34.5
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 34.6
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 46
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 54.7
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 37.4
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 20.2
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 62.4,
+       "top": 31.3,
+       "right": 537.6,
+       "bottom": 103.1
+      },
+      "hero": {
+       "left": 1109.4,
+       "top": 149.6,
+       "right": 1454.5,
+       "bottom": 224.3
+      },
+      "cue": {
+       "left": 1070,
+       "top": 243,
+       "right": 1531.1,
+       "bottom": 289
+      },
+      "verbs": {
+       "left": 1109.4,
+       "top": 309.1,
+       "right": 1526.3,
+       "bottom": 592.3
+      },
+      "prompts": {
+       "left": 65,
+       "top": 835.1,
+       "right": 506.3,
+       "bottom": 882.5
+      },
+      "party": {
+       "left": 969.8,
+       "top": 593.4,
+       "right": 1527.5,
+       "bottom": 855
+      },
+      "guideChip": {
+       "left": 46.9,
+       "top": 199.2,
+       "right": 163.9,
+       "bottom": 229.4
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "130": {
+     "f1": true,
+     "attr": "130",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 39
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 39.1
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 52
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 61.8
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 42.3
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 22.9
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 61.4,
+       "top": 31.3,
+       "right": 598.6,
+       "bottom": 112.5
+      },
+      "hero": {
+       "left": 1051.3,
+       "top": 57.9,
+       "right": 1441.4,
+       "bottom": 142.4
+      },
+      "cue": {
+       "left": 1006.7,
+       "top": 163.5,
+       "right": 1528,
+       "bottom": 215.5
+      },
+      "verbs": {
+       "left": 1051.3,
+       "top": 238.3,
+       "right": 1522.5,
+       "bottom": 558.4
+      },
+      "prompts": {
+       "left": 64.3,
+       "top": 828.9,
+       "right": 563.2,
+       "bottom": 882.5
+      },
+      "party": {
+       "left": 897,
+       "top": 559.3,
+       "right": 1527.5,
+       "bottom": 855
+      },
+      "guideChip": {
+       "left": 46.1,
+       "top": 215.9,
+       "right": 178.3,
+       "bottom": 250
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "100-intel": {
+     "f1": true,
+     "attr": "100",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 30
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 30
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 40
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 47.5
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 32.5
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 17.6
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 63.4,
+       "top": 31.3,
+       "right": 476.6,
+       "bottom": 93.8
+      },
+      "hero": {
+       "left": 1167.5,
+       "top": 241.3,
+       "right": 1467.6,
+       "bottom": 306.3
+      },
+      "cue": {
+       "left": 1133.2,
+       "top": 322.5,
+       "right": 1534.3,
+       "bottom": 362.5
+      },
+      "verbs": {
+       "left": 1167.5,
+       "top": 380,
+       "right": 1530,
+       "bottom": 626.3
+      },
+      "prompts": {
+       "left": 65.6,
+       "top": 841.3,
+       "right": 449.4,
+       "bottom": 882.5
+      },
+      "party": {
+       "left": 1042.5,
+       "top": 627.5,
+       "right": 1527.5,
+       "bottom": 855
+      },
+      "guide": {
+       "left": 53.3,
+       "top": 265,
+       "right": 383.3,
+       "bottom": 482.5
+      },
+      "guideChip": {
+       "left": 50.5,
+       "top": 237.5,
+       "right": 198.4,
+       "bottom": 263.8
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "100-intel-intent": {
+     "f1": true,
+     "attr": "100",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 30
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 30
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 40
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 47.5
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 32.5
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 17.6
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 63.4,
+       "top": 31.3,
+       "right": 476.6,
+       "bottom": 93.8
+      },
+      "hero": {
+       "left": 1167.5,
+       "top": 241.3,
+       "right": 1467.6,
+       "bottom": 306.3
+      },
+      "cue": {
+       "left": 1133.2,
+       "top": 322.5,
+       "right": 1534.3,
+       "bottom": 362.5
+      },
+      "verbs": {
+       "left": 1167.5,
+       "top": 380,
+       "right": 1530,
+       "bottom": 626.3
+      },
+      "prompts": {
+       "left": 65.6,
+       "top": 841.3,
+       "right": 449.4,
+       "bottom": 882.5
+      },
+      "party": {
+       "left": 1042.5,
+       "top": 627.5,
+       "right": 1527.5,
+       "bottom": 855
+      },
+      "guide": {
+       "left": 53.3,
+       "top": 376.9,
+       "right": 383.3,
+       "bottom": 482.5
+      },
+      "guideChip": {
+       "left": 50.5,
+       "top": 237.5,
+       "right": 198.4,
+       "bottom": 263.8
+      },
+      "intent": {
+       "left": 387.3,
+       "top": 171.5,
+       "right": 762.3,
+       "bottom": 441.8
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "115-intel": {
+     "f1": true,
+     "attr": "115",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 34.5
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 34.6
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 46
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 54.7
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 37.4
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 20.2
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 62.4,
+       "top": 31.3,
+       "right": 537.6,
+       "bottom": 103.1
+      },
+      "hero": {
+       "left": 1109.4,
+       "top": 149.6,
+       "right": 1454.5,
+       "bottom": 224.3
+      },
+      "cue": {
+       "left": 1070,
+       "top": 243,
+       "right": 1531.1,
+       "bottom": 289
+      },
+      "verbs": {
+       "left": 1109.4,
+       "top": 309.1,
+       "right": 1526.3,
+       "bottom": 592.3
+      },
+      "prompts": {
+       "left": 65,
+       "top": 835.1,
+       "right": 506.3,
+       "bottom": 882.5
+      },
+      "party": {
+       "left": 969.8,
+       "top": 593.4,
+       "right": 1527.5,
+       "bottom": 855
+      },
+      "guide": {
+       "left": 53.3,
+       "top": 398.2,
+       "right": 383.3,
+       "bottom": 491.8
+      },
+      "guideChip": {
+       "left": 46.9,
+       "top": 263.6,
+       "right": 217,
+       "bottom": 293.8
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "115-intel-intent": {
+     "f1": true,
+     "attr": "115",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 34.5
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 34.6
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 46
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 54.7
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 37.4
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 20.2
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 62.4,
+       "top": 31.3,
+       "right": 537.6,
+       "bottom": 103.1
+      },
+      "hero": {
+       "left": 1109.4,
+       "top": 149.6,
+       "right": 1454.5,
+       "bottom": 224.3
+      },
+      "cue": {
+       "left": 1070,
+       "top": 243,
+       "right": 1531.1,
+       "bottom": 289
+      },
+      "verbs": {
+       "left": 1109.4,
+       "top": 309.1,
+       "right": 1526.3,
+       "bottom": 592.3
+      },
+      "prompts": {
+       "left": 65,
+       "top": 835.1,
+       "right": 506.3,
+       "bottom": 882.5
+      },
+      "party": {
+       "left": 969.8,
+       "top": 593.4,
+       "right": 1527.5,
+       "bottom": 855
+      },
+      "guide": {
+       "left": 53.3,
+       "top": 398.2,
+       "right": 383.3,
+       "bottom": 491.8
+      },
+      "guideChip": {
+       "left": 46.9,
+       "top": 263.6,
+       "right": 217,
+       "bottom": 293.8
+      },
+      "intent": {
+       "left": 387.3,
+       "top": 191.9,
+       "right": 762.3,
+       "bottom": 302.2
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "130-intel": {
+     "f1": true,
+     "attr": "130",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 39
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 39.1
+      },
+      "partyHp": {
+       "text": "690/690",
+       "px": 52
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 61.8
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 42.3
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 22.9
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 61.4,
+       "top": 31.3,
+       "right": 598.6,
+       "bottom": 112.5
+      },
+      "hero": {
+       "left": 1051.3,
+       "top": 57.9,
+       "right": 1441.4,
+       "bottom": 142.4
+      },
+      "cue": {
+       "left": 1006.7,
+       "top": 163.5,
+       "right": 1528,
+       "bottom": 215.5
+      },
+      "verbs": {
+       "left": 1051.3,
+       "top": 238.3,
+       "right": 1522.5,
+       "bottom": 558.4
+      },
+      "prompts": {
+       "left": 64.3,
+       "top": 828.9,
+       "right": 563.2,
+       "bottom": 882.5
+      },
+      "party": {
+       "left": 897,
+       "top": 559.3,
+       "right": 1527.5,
+       "bottom": 855
+      },
+      "guideChip": {
+       "left": 46.1,
+       "top": 215.9,
+       "right": 178.3,
+       "bottom": 250
+      }
+     },
+     "overlaps": [],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    },
+    "130-intel-intent": {
+     "f1": true,
+     "attr": "130",
+     "probes": {
+      "cmdLabel": {
+       "text": "Attack",
+       "px": 39
+      },
+      "partyName": {
+       "text": "Yuna",
+       "px": 39.1
+      },
+      "partyHp": {
+       "text": "518/690",
+       "px": 52
+      },
+      "heroName": {
+       "text": "Paine",
+       "px": 61.8
+      },
+      "ribbonName": {
+       "text": "Bahamut",
+       "px": 42.3
+      },
+      "promptText": {
+       "text": "Select",
+       "px": 22.9
+      }
+     },
+     "zones": {
+      "ribbon": {
+       "left": 61.4,
+       "top": 31.3,
+       "right": 598.6,
+       "bottom": 112.5
+      },
+      "hero": {
+       "left": 1051.3,
+       "top": 57.9,
+       "right": 1441.4,
+       "bottom": 142.4
+      },
+      "cue": {
+       "left": 1006.7,
+       "top": 163.5,
+       "right": 1528,
+       "bottom": 215.5
+      },
+      "verbs": {
+       "left": 1051.3,
+       "top": 238.3,
+       "right": 1522.5,
+       "bottom": 558.4
+      },
+      "prompts": {
+       "left": 64.3,
+       "top": 828.9,
+       "right": 563.2,
+       "bottom": 882.5
+      },
+      "party": {
+       "left": 897,
+       "top": 559.3,
+       "right": 1527.5,
+       "bottom": 855
+      },
+      "guideChip": {
+       "left": 46.1,
+       "top": 215.9,
+       "right": 178.3,
+       "bottom": 250
+      },
+      "intent": {
+       "left": 175.9,
+       "top": 241.1,
+       "right": 550.9,
+       "bottom": 351.4
+      }
+     },
+     "overlaps": [
+      {
+       "a": "guideChip",
+       "b": "intent",
+       "w": 2.4,
+       "h": 8.9
+      }
+     ],
+     "outside": [],
+     "tipGap": null,
+     "inner": [
+      1600,
+      900
+     ]
+    }
+   },
+   "bundle": [
+    "index-CahDxk82.js"
+   ]
+  }
+ ],
+ "misses": [
+  {
+   "chapter": "seymour-flux",
+   "size": "1280x720",
+   "read": "100",
+   "kind": "overlap",
+   "a": "ribbon",
+   "b": "guideChip",
+   "w": 83.4,
+   "h": 9
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1280x720",
+   "read": "100-intel-intent",
+   "kind": "overlap",
+   "a": "turnStrip",
+   "b": "intent",
+   "w": 58,
+   "h": 89
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1280x720",
+   "read": "100-intel-intent",
+   "kind": "overlap",
+   "a": "sensor",
+   "b": "intent",
+   "w": 118.4,
+   "h": 10.6
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1280x720",
+   "read": "115",
+   "kind": "overlap",
+   "a": "ribbon",
+   "b": "guideChip",
+   "w": 100.7,
+   "h": 20
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1280x720",
+   "read": "115-intel-intent",
+   "kind": "overlap",
+   "a": "turnStrip",
+   "b": "intent",
+   "w": 118.2,
+   "h": 102.4
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1280x720",
+   "read": "115-intel-intent",
+   "kind": "overlap",
+   "a": "sensor",
+   "b": "intent",
+   "w": 150.5,
+   "h": 14.1
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1280x720",
+   "read": "130",
+   "kind": "overlap",
+   "a": "ribbon",
+   "b": "guideChip",
+   "w": 115.6,
+   "h": 29.9
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1280x720",
+   "read": "130-intel-intent",
+   "kind": "overlap",
+   "a": "turnStrip",
+   "b": "intent",
+   "w": 182.3,
+   "h": 115.7
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1280x720",
+   "read": "130-intel-intent",
+   "kind": "overlap",
+   "a": "sensor",
+   "b": "intent",
+   "w": 189.1,
+   "h": 17.5
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1600x900",
+   "read": "100",
+   "kind": "overlap",
+   "a": "ribbon",
+   "b": "guideChip",
+   "w": 88.8,
+   "h": 11.3
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1600x900",
+   "read": "100-intel-intent",
+   "kind": "overlap",
+   "a": "turnStrip",
+   "b": "intent",
+   "w": 68.5,
+   "h": 111.3
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1600x900",
+   "read": "100-intel-intent",
+   "kind": "overlap",
+   "a": "sensor",
+   "b": "intent",
+   "w": 143.8,
+   "h": 5.6
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1600x900",
+   "read": "115",
+   "kind": "overlap",
+   "a": "ribbon",
+   "b": "guideChip",
+   "w": 107.9,
+   "h": 24.5
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1600x900",
+   "read": "115-intel-intent",
+   "kind": "overlap",
+   "a": "turnStrip",
+   "b": "intent",
+   "w": 144.7,
+   "h": 127.9
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1600x900",
+   "read": "115-intel-intent",
+   "kind": "overlap",
+   "a": "sensor",
+   "b": "intent",
+   "w": 180.4,
+   "h": 9.5
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1600x900",
+   "read": "130",
+   "kind": "overlap",
+   "a": "ribbon",
+   "b": "guideChip",
+   "w": 124.1,
+   "h": 34.2
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1600x900",
+   "read": "130-intel-intent",
+   "kind": "overlap",
+   "a": "turnStrip",
+   "b": "intent",
+   "w": 224.9,
+   "h": 144.6
+  },
+  {
+   "chapter": "seymour-flux",
+   "size": "1600x900",
+   "read": "130-intel-intent",
+   "kind": "overlap",
+   "a": "sensor",
+   "b": "intent",
+   "w": 209.8,
+   "h": 13.5
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "size": "1600x900",
+   "read": "130-intel-intent",
+   "kind": "overlap",
+   "a": "guideChip",
+   "b": "intent",
+   "w": 2.4,
+   "h": 8.9
+  }
+ ]
+}

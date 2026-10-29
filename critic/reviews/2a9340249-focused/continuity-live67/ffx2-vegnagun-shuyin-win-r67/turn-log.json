@@ -1,0 +1,2168 @@
+[
+ {
+  "turn": 0,
+  "ms": 11,
+  "actor": "idle",
+  "want": {
+   "label": "Black Sky",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Black Sky",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1238/2488",
+   "rikku:4402/5652",
+   "paine:4612/5862",
+   "vegnagun-tail:34200/34200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 27,
+    "actor": "rikku",
+    "did": "Black Sky",
+    "targets": [
+     "vegnagun-tail"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 5027,
+  "actor": "idle",
+  "want": {
+   "label": "Black Sky",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Black Sky",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1238/2488",
+   "rikku:2636/5652",
+   "paine:4612/5862",
+   "vegnagun-tail:34200/34200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 34,
+    "actor": "paine",
+    "did": "Black Sky",
+    "targets": [
+     "vegnagun-tail"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 12640,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Megalixir",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Megalixir",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2094/4208",
+   "rikku:2636/5652",
+   "paine:4612/5862",
+   "vegnagun-tail:34200/34200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 47,
+    "actor": "yuna",
+    "did": "Megalixir",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 22812,
+  "actor": "play:action-end",
+  "want": {
+   "label": "Black Sky",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Black Sky",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:4208/4208",
+   "rikku:5652/5652",
+   "paine:4031/5862",
+   "vegnagun-tail:19971/34200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 108,
+    "actor": "rikku",
+    "did": "Black Sky",
+    "targets": [
+     "vegnagun-tail"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 26238,
+  "actor": "command:paine",
+  "want": {
+   "label": "Black Sky",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Black Sky",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:4208/4208",
+   "rikku:5652/5652",
+   "paine:4031/5862",
+   "vegnagun-tail:19971/34200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 113,
+    "actor": "paine",
+    "did": "Black Sky",
+    "targets": [
+     "vegnagun-tail"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 29710,
+  "actor": "command:yuna",
+  "want": {
+   "label": "X-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:4208/4208",
+   "rikku:5652/5652",
+   "paine:4031/5862",
+   "vegnagun-tail:19971/34200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 117,
+    "actor": "yuna",
+    "did": "X-Potion",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 38818,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Black Sky",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Black Sky",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:4208/4208",
+   "rikku:5652/5652",
+   "paine:5862/5862",
+   "vegnagun-tail:5572/34200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 174,
+    "actor": "rikku",
+    "did": "Black Sky",
+    "targets": [
+     "vegnagun-tail"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 42896,
+  "actor": "command:paine",
+  "want": {
+   "label": "Black Sky",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Black Sky",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2893/4208",
+   "rikku:5652/5652",
+   "paine:5862/5862",
+   "vegnagun-tail:5572/34200"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 183,
+    "actor": "paine",
+    "did": "Black Sky",
+    "targets": [
+     "vegnagun-tail"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 46387,
+  "actor": "command:yuna",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2893/4208",
+   "rikku:5652/5652",
+   "paine:5862/5862",
+   "vegnagun-tail:5572/34200"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 10,
+  "ms": 78768,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Light Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Light Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4402/5652",
+   "paine:4612/5862",
+   "vegnagun-leg:18220/18220",
+   "node-a:300000/300000",
+   "node-b:300000/300000",
+   "node-c:300000/300000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 11,
+  "ms": 81956,
+  "actor": "play:turn-start",
+  "want": {
+   "label": "Attack",
+   "target": "Vegnagun",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4402/5652",
+   "paine:4612/5862",
+   "vegnagun-leg:18220/18220",
+   "node-a:300000/300000",
+   "node-b:300000/300000",
+   "node-c:300000/300000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "vegnagun-leg",
+   "wanted": "vegnagun-leg",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 12,
+  "ms": 84382,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Vegnagun",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4402/5652",
+   "paine:4612/5862",
+   "vegnagun-leg:14808/18220",
+   "node-a:300000/300000",
+   "node-b:300000/300000",
+   "node-c:300000/300000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "vegnagun-leg",
+   "wanted": "vegnagun-leg",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 13,
+  "ms": 98833,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Lunar Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Lunar Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1767/2488",
+   "rikku:3728/5652",
+   "paine:4137/5862",
+   "vegnagun-leg:10299/18220",
+   "node-a:300000/300000",
+   "node-b:300000/300000",
+   "node-c:300000/300000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 14,
+  "ms": 102139,
+  "actor": "idle",
+  "want": {
+   "label": "Attack",
+   "target": "Vegnagun",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1767/2488",
+   "rikku:3728/5652",
+   "paine:4137/5862",
+   "vegnagun-leg:10299/18220",
+   "node-a:300000/300000",
+   "node-b:300000/300000",
+   "node-c:300000/300000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "vegnagun-leg",
+   "wanted": "vegnagun-leg",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 15,
+  "ms": 104603,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Vegnagun",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1767/2488",
+   "rikku:3728/5652",
+   "paine:4137/5862",
+   "vegnagun-leg:8738/18220",
+   "node-a:300000/300000",
+   "node-b:300000/300000",
+   "node-c:300000/300000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "vegnagun-leg",
+   "wanted": "vegnagun-leg",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 16,
+  "ms": 129783,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Vegnagun",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1572/2488",
+   "rikku:3455/5652",
+   "paine:3797/5862",
+   "vegnagun-leg:7201/18220",
+   "node-a:300000/300000",
+   "node-b:300000/300000",
+   "node-c:300000/300000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "vegnagun-leg",
+   "wanted": "vegnagun-leg",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 317,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "vegnagun-leg"
+    ]
+   },
+   {
+    "seq": 325,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "node-b"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 132309,
+  "actor": "play:turn-start",
+  "want": {
+   "label": "Remedy",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Remedy",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1572/2488",
+   "rikku:3455/5652",
+   "paine:3797/5862",
+   "vegnagun-leg:5522/18220",
+   "node-a:300000/300000",
+   "node-b:299580/300000",
+   "node-c:300000/300000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 331,
+    "actor": "yuna",
+    "did": "Remedy",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 151286,
+  "actor": "idle",
+  "want": {
+   "label": "Attack",
+   "target": "Vegnagun",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1572/2488",
+   "rikku:3455/5652",
+   "paine:3797/5862",
+   "vegnagun-leg:6091/18220",
+   "node-a:300000/300000",
+   "node-b:299580/300000",
+   "node-c:300000/300000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "vegnagun-leg",
+   "wanted": "vegnagun-leg",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 477,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "vegnagun-leg"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 153611,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1572/2488",
+   "rikku:3455/5652",
+   "paine:3797/5862",
+   "vegnagun-leg:4309/18220",
+   "node-a:300000/300000",
+   "node-b:299580/300000",
+   "node-c:300000/300000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 487,
+    "actor": "yuna",
+    "did": "Mega-Potion",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 155862,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Vegnagun",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1572/2488",
+   "rikku:3455/5652",
+   "paine:3797/5862",
+   "vegnagun-leg:4309/18220",
+   "node-a:300000/300000",
+   "node-b:299580/300000",
+   "node-c:300000/300000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "vegnagun-leg",
+   "wanted": "vegnagun-leg",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 492,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "vegnagun-leg"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 180300,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Vegnagun",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2379/2488",
+   "rikku:5203/5652",
+   "paine:5621/5862",
+   "vegnagun-leg:2313/18220",
+   "node-a:300000/300000",
+   "node-b:299580/300000",
+   "node-c:300000/300000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "vegnagun-leg",
+   "wanted": "vegnagun-leg",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 669,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "vegnagun-leg"
+    ]
+   },
+   {
+    "seq": 676,
+    "actor": "yuna",
+    "did": "Berserk",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 184746,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Vegnagun",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2379/2488",
+   "rikku:5203/5652",
+   "paine:5621/5862",
+   "vegnagun-leg:655/18220",
+   "node-a:300000/300000",
+   "node-b:299580/300000",
+   "node-c:300000/300000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "vegnagun-leg",
+   "wanted": "vegnagun-leg",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 23,
+  "ms": 229345,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Lunar Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Lunar Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2159/2488",
+   "rikku:4723/5652",
+   "paine:5167/5862",
+   "vegnagun-body:33040/33040",
+   "bulwark-r:3000/3000",
+   "bulwark-l:3000/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 24,
+  "ms": 235018,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2159/2488",
+   "rikku:4723/5652",
+   "paine:5167/5862",
+   "vegnagun-body:33040/33040",
+   "bulwark-r:3000/3000",
+   "bulwark-l:3000/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 25,
+  "ms": 237230,
+  "actor": "command:paine",
+  "want": {
+   "label": "Black Sky",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Black Sky",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2159/2488",
+   "rikku:4723/5652",
+   "paine:5167/5862",
+   "vegnagun-body:33040/33040",
+   "bulwark-r:3000/3000",
+   "bulwark-l:3000/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 26,
+  "ms": 248316,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Light Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Light Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2159/2488",
+   "rikku:4017/5652",
+   "paine:5167/5862",
+   "vegnagun-body:30799/33040",
+   "bulwark-r:668/3000",
+   "bulwark-l:814/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 27,
+  "ms": 260014,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2159/2488",
+   "rikku:4017/5652",
+   "paine:5167/5862",
+   "vegnagun-body:29267/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 28,
+  "ms": 267701,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Remedy",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Remedy",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2159/2488",
+   "rikku:4017/5652",
+   "paine:5167/5862",
+   "vegnagun-body:29267/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 29,
+  "ms": 274532,
+  "actor": "idle",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2159/2488",
+   "rikku:4017/5652",
+   "paine:4435/5862",
+   "vegnagun-body:27274/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 30,
+  "ms": 276813,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2159/2488",
+   "rikku:4017/5652",
+   "paine:4435/5862",
+   "vegnagun-body:27274/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 31,
+  "ms": 284932,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2159/2488",
+   "rikku:3311/5652",
+   "paine:3703/5862",
+   "vegnagun-body:21911/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 32,
+  "ms": 288302,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2159/2488",
+   "rikku:3311/5652",
+   "paine:3703/5862",
+   "vegnagun-body:21911/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 33,
+  "ms": 290593,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2159/2488",
+   "rikku:3311/5652",
+   "paine:3703/5862",
+   "vegnagun-body:21911/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 34,
+  "ms": 299980,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4605/5652",
+   "paine:4971/5862",
+   "vegnagun-body:16751/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 35,
+  "ms": 302733,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4605/5652",
+   "paine:4971/5862",
+   "vegnagun-body:16751/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 36,
+  "ms": 305002,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4605/5652",
+   "paine:4971/5862",
+   "vegnagun-body:16751/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 37,
+  "ms": 318248,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4899/5652",
+   "paine:4239/5862",
+   "vegnagun-body:11303/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 38,
+  "ms": 320580,
+  "actor": "idle",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4899/5652",
+   "paine:4239/5862",
+   "vegnagun-body:11303/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 39,
+  "ms": 322880,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4899/5652",
+   "paine:4239/5862",
+   "vegnagun-body:11303/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 40,
+  "ms": 334699,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4193/5652",
+   "paine:4507/5862",
+   "vegnagun-body:6129/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 41,
+  "ms": 337045,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4193/5652",
+   "paine:4507/5862",
+   "vegnagun-body:6129/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 42,
+  "ms": 339343,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4193/5652",
+   "paine:4507/5862",
+   "vegnagun-body:6129/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 43,
+  "ms": 349193,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4946/5652",
+   "paine:5130/5862",
+   "vegnagun-body:1070/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 44,
+  "ms": 351523,
+  "actor": "command:paine",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4946/5652",
+   "paine:5130/5862",
+   "vegnagun-body:1070/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 45,
+  "ms": 354214,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Pray",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Pray",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4946/5652",
+   "paine:5130/5862",
+   "vegnagun-body:1070/33040",
+   "bulwark-r:0/3000",
+   "bulwark-l:0/3000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 46,
+  "ms": 396237,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Lunar Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Lunar Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1945/2488",
+   "rikku:4946/5652",
+   "paine:5862/5862",
+   "vegnagun-head:38420/38420",
+   "redoubt-r:2500/2500",
+   "redoubt-l:2500/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 47,
+  "ms": 399549,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1945/2488",
+   "rikku:4946/5652",
+   "paine:5862/5862",
+   "vegnagun-head:38420/38420",
+   "redoubt-r:2500/2500",
+   "redoubt-l:2500/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 48,
+  "ms": 401757,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1945/2488",
+   "rikku:4946/5652",
+   "paine:5862/5862",
+   "vegnagun-head:38420/38420",
+   "redoubt-r:2500/2500",
+   "redoubt-l:2500/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 49,
+  "ms": 412176,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1945/2488",
+   "rikku:4240/5652",
+   "paine:5130/5862",
+   "vegnagun-head:38420/38420",
+   "redoubt-r:0/2500",
+   "redoubt-l:0/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 50,
+  "ms": 414659,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1945/2488",
+   "rikku:4240/5652",
+   "paine:5130/5862",
+   "vegnagun-head:38420/38420",
+   "redoubt-r:0/2500",
+   "redoubt-l:0/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 51,
+  "ms": 419861,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Light Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Light Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1945/2488",
+   "rikku:4240/5652",
+   "paine:5130/5862",
+   "vegnagun-head:38420/38420",
+   "redoubt-r:2500/2500",
+   "redoubt-l:2500/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 52,
+  "ms": 433748,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1945/2488",
+   "rikku:3534/5652",
+   "paine:4398/5862",
+   "vegnagun-head:33903/38420",
+   "redoubt-r:0/2500",
+   "redoubt-l:0/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 53,
+  "ms": 436023,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1945/2488",
+   "rikku:3534/5652",
+   "paine:4398/5862",
+   "vegnagun-head:33903/38420",
+   "redoubt-r:0/2500",
+   "redoubt-l:0/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 54,
+  "ms": 442176,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Megalixir",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Megalixir",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1945/2488",
+   "rikku:3534/5652",
+   "paine:4398/5862",
+   "vegnagun-head:33903/38420",
+   "redoubt-r:0/2500",
+   "redoubt-l:0/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 55,
+  "ms": 454537,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Black Sky",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Black Sky",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5652/5652",
+   "paine:5130/5862",
+   "vegnagun-head:28661/38420",
+   "redoubt-r:0/2500",
+   "redoubt-l:0/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 56,
+  "ms": 458020,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Black Sky",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Black Sky",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5652/5652",
+   "paine:5130/5862",
+   "vegnagun-head:28661/38420",
+   "redoubt-r:0/2500",
+   "redoubt-l:0/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 57,
+  "ms": 466045,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Pray",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Pray",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5652/5652",
+   "paine:5130/5862",
+   "vegnagun-head:28661/38420",
+   "redoubt-r:0/2500",
+   "redoubt-l:0/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 58,
+  "ms": 474689,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Pray",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Pray",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5652/5652",
+   "paine:5180/5862",
+   "vegnagun-head:28661/38420",
+   "redoubt-r:0/2500",
+   "redoubt-l:0/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 59,
+  "ms": 491470,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Pray",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Pray",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5652/5652",
+   "paine:5231/5862",
+   "vegnagun-head:19823/38420",
+   "redoubt-r:0/2500",
+   "redoubt-l:0/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 60,
+  "ms": 495427,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Black Sky",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Black Sky",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5652/5652",
+   "paine:5276/5862",
+   "vegnagun-head:19823/38420",
+   "redoubt-r:0/2500",
+   "redoubt-l:0/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 61,
+  "ms": 498972,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Black Sky",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Black Sky",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5652/5652",
+   "paine:5276/5862",
+   "vegnagun-head:19823/38420",
+   "redoubt-r:0/2500",
+   "redoubt-l:0/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 62,
+  "ms": 505478,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Pray",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Pray",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5652/5652",
+   "paine:5276/5862",
+   "vegnagun-head:19823/38420",
+   "redoubt-r:0/2500",
+   "redoubt-l:0/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 63,
+  "ms": 513910,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Pray",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Pray",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5652/5652",
+   "paine:5323/5862",
+   "vegnagun-head:19823/38420",
+   "redoubt-r:0/2500",
+   "redoubt-l:0/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 64,
+  "ms": 527037,
+  "actor": "play:revive",
+  "want": {
+   "label": "Pray",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Pray",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5652/5652",
+   "paine:5372/5862",
+   "vegnagun-head:2114/38420",
+   "redoubt-r:2500/2500",
+   "redoubt-l:2500/2500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 740,
+    "actor": "yuna",
+    "did": "Pray",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 65,
+  "ms": 530661,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5652/5652",
+   "paine:5422/5862",
+   "vegnagun-head:2114/38420",
+   "redoubt-r:2500/2500",
+   "redoubt-l:2500/2500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 750,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "vegnagun-head",
+     "redoubt-r",
+     "redoubt-l"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 66,
+  "ms": 533032,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Right Redoubt",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5652/5652",
+   "paine:5422/5862",
+   "vegnagun-head:2114/38420",
+   "redoubt-r:2500/2500",
+   "redoubt-l:2500/2500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "redoubt-r",
+   "wanted": "redoubt-r",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 757,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "redoubt-r"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 67,
+  "ms": 539609,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Pray",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Pray",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5652/5652",
+   "paine:5422/5862",
+   "vegnagun-head:2114/38420",
+   "redoubt-r:1708/2500",
+   "redoubt-l:2500/2500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 68,
+  "ms": 596591,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Light Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Light Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4782/5652",
+   "paine:5472/5862",
+   "shuyin:23850/23850"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 69,
+  "ms": 601106,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4782/5652",
+   "paine:5472/5862",
+   "shuyin:23850/23850"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 70,
+  "ms": 604620,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4782/5652",
+   "paine:5472/5862",
+   "shuyin:23850/23850"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 71,
+  "ms": 619798,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "X-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4076/5652",
+   "paine:1773/5862",
+   "shuyin:18190/23850"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 72,
+  "ms": 623664,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4076/5652",
+   "paine:1773/5862",
+   "shuyin:18190/23850"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 73,
+  "ms": 626965,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Lunar Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Lunar Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:4076/5652",
+   "paine:1773/5862",
+   "shuyin:18190/23850"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 74,
+  "ms": 644657,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:3289/5652",
+   "paine:5862/5862",
+   "shuyin:15931/23850"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 75,
+  "ms": 648606,
+  "actor": "command:yuna",
+  "want": {
+   "label": "X-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:3289/5652",
+   "paine:5862/5862",
+   "shuyin:15931/23850"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 76,
+  "ms": 653105,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2168/2488",
+   "rikku:3127/5652",
+   "paine:5862/5862",
+   "shuyin:15931/23850"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 77,
+  "ms": 669103,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2014/2488",
+   "rikku:4946/5652",
+   "paine:5130/5862",
+   "shuyin:11579/23850"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 78,
+  "ms": 675006,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2014/2488",
+   "rikku:4946/5652",
+   "paine:5130/5862",
+   "shuyin:11579/23850"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 79,
+  "ms": 678678,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2014/2488",
+   "rikku:4946/5652",
+   "paine:5130/5862",
+   "shuyin:11579/23850"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 80,
+  "ms": 690054,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2242/2488",
+   "rikku:4240/5652",
+   "paine:4398/5862",
+   "shuyin:7286/23850"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 81,
+  "ms": 694391,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2242/2488",
+   "rikku:4240/5652",
+   "paine:4398/5862",
+   "shuyin:7286/23850"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 82,
+  "ms": 700421,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2242/2488",
+   "rikku:4240/5652",
+   "paine:4398/5862",
+   "shuyin:7286/23850"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 83,
+  "ms": 717470,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5534/5652",
+   "paine:5130/5862",
+   "shuyin:2937/23850"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 84,
+  "ms": 722466,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2488/2488",
+   "rikku:5534/5652",
+   "paine:5130/5862",
+   "shuyin:2937/23850"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 85,
+  "ms": 728075,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "X-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:2344/2488",
+   "rikku:5196/5652",
+   "paine:4791/5862",
+   "shuyin:2937/23850"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  }
+ }
+]

@@ -1,0 +1,32 @@
+{
+ "label": "retry-skip",
+ "query": "",
+ "speed": "skip",
+ "attempts": [
+  {
+   "att": 1,
+   "menuMs": 44198,
+   "prepAt": null,
+   "endScreen": "pro-defeat",
+   "cause": "FELLED BY CROSS CLEAVE",
+   "meta": "TURN 17·ATTEMPT 1·0:23",
+   "buttons": [
+    "TRY AGAIN",
+    "CHAPTER SELECT"
+   ]
+  },
+  {
+   "att": 2,
+   "menuMs": 8829,
+   "prepAt": null,
+   "endScreen": "pro-defeat",
+   "cause": "FELLED BY LANCE OF ATROPHY",
+   "meta": "TURN 16·ATTEMPT 2·0:13",
+   "buttons": [
+    "TRY AGAIN",
+    "CHAPTER SELECT"
+   ]
+  }
+ ],
+ "errors": []
+}

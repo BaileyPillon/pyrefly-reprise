@@ -1,0 +1,11 @@
+{
+ "scene": "pause-ffx",
+ "w": 390,
+ "h": 844,
+ "base": "http://127.0.0.1:5471/",
+ "seed": 1,
+ "floor": 14,
+ "steps": [],
+ "error": "ASSERT-FAIL screen expected=pause after 15221ms",
+ "consoleErrors": []
+}

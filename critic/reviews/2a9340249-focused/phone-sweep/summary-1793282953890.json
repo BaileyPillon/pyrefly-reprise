@@ -1,0 +1,54 @@
+[
+ {
+  "scene": "title",
+  "w": 390,
+  "h": 844,
+  "error": null,
+  "steps": [
+   {
+    "label": "title",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 0,
+    "targetsUnder": 1
+   }
+  ]
+ },
+ {
+  "scene": "board",
+  "w": 390,
+  "h": 844,
+  "error": null,
+  "steps": [
+   {
+    "label": "board",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 8,
+    "targetsUnder": 3
+   }
+  ]
+ },
+ {
+  "scene": "prep-ffx-first",
+  "w": 390,
+  "h": 844,
+  "error": null,
+  "steps": [
+   {
+    "label": "tab1-chapter",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 6,
+    "targetsUnder": 7
+   }
+  ]
+ },
+ {
+  "scene": "pause-ffx",
+  "w": 390,
+  "h": 844,
+  "error": "ASSERT-FAIL screen expected=pause after 15221ms",
+  "steps": []
+ }
+]

@@ -1,0 +1,32 @@
+{
+ "label": "retry-default",
+ "query": "",
+ "speed": "",
+ "attempts": [
+  {
+   "att": 1,
+   "menuMs": 44202,
+   "prepAt": null,
+   "endScreen": "pro-defeat",
+   "cause": "FELLED BY CROSS CLEAVE",
+   "meta": "TURN 15·ATTEMPT 1·0:50",
+   "buttons": [
+    "TRY AGAIN",
+    "CHAPTER SELECT"
+   ]
+  },
+  {
+   "att": 2,
+   "menuMs": 4258,
+   "prepAt": null,
+   "endScreen": "pro-defeat",
+   "cause": "FELLED BY CROSS CLEAVE",
+   "meta": "TURN 20·ATTEMPT 2·0:51",
+   "buttons": [
+    "TRY AGAIN",
+    "CHAPTER SELECT"
+   ]
+  }
+ ],
+ "errors": []
+}
