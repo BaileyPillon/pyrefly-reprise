@@ -19,6 +19,7 @@ const { PARTY_RIG_SUBJECTS, partyRigAllowed, partyRigFolder, partyRigsModeFromSe
 const { setDemoChapter } = await import('../../../src/engine/motion/DemoGate.ts');
 type Painted = import('../../../src/engine/PaintedArt.ts').PaintedTexture;
 type RigFile = import('../../../src/data/art/rigTypes.ts').RigFile;
+type RigActorT = import('../../../src/engine/rig/RigActor.ts').RigActor;
 
 const IDLE = '/art/characters/tidus/idle.png';
 const hooks = {
@@ -145,7 +146,7 @@ describe('the loader under v2', () => {
 });
 
 describe('a rig honours `paint` (the stance look: the menu is the ready STATE on the idle painting)', () => {
-  async function rigged(): Promise<InstanceType<typeof RigActor>> {
+  async function rigged(): Promise<RigActorT> {
     const r = readRig(makeRigFile());
     if (!r.ok) throw new Error(r.reason);
     return RigActor.createRigged({ name: 'testfig', worldHeight: 1.82, side: 'party', shadow: false }, { data: r.data, base: '/art/rigs/testfig', idlePainting: { ...hooks.idlePainting, url: '/art/characters/testfig/idle.png' } as Painted, loadTexture: hooks.loadTexture });
