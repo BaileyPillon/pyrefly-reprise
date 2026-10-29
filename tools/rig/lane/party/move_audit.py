@@ -162,8 +162,7 @@ def shard_parts(ch: np.ndarray, state_pose: str, min_share: float = 0.002) -> li
 
 def audit_pair(frm: str, to: str, ms: float, flip: float, paint_ms: float) -> dict:
     A, B = chan_of(frm), chan_of(to)
-    n = max(1, int(round(ms / DT)))
-    d = ms / 1000.0
+    n = max(1, math.ceil(ms / DT - 1e-9))  # the engine's `RigTransition.step`: one step a frame, progress i * dt / d, clamped to 1 on the frame that reaches it (a 70 ms move is five frames, the last one the key itself)
     mA = pose_model(A, frm)
     mB = pose_model(B, to)
     sA, cA = stray(mA, 0.002)
@@ -176,7 +175,7 @@ def audit_pair(frm: str, to: str, ms: float, flip: float, paint_ms: float) -> di
     prev_c = centroid(mA)
     flip_i = None
     for i in range(1, n + 1):
-        u = min(1.0, i / n)
+        u = min(1.0, i * DT / ms)
         cur = A + (B - A) * ease(u)
         state = to if u >= flip else frm
         if flip_i is None and u >= flip:
@@ -194,7 +193,7 @@ def audit_pair(frm: str, to: str, ms: float, flip: float, paint_ms: float) -> di
     tear = [s - base_stray for s in strays]
     # the pop at the flip: the bone pose of the flip frame drawn in state A and in state B
     fi = (flip_i or n)
-    uf = min(1.0, fi / n)
+    uf = min(1.0, fi * DT / ms)
     chf = A + (B - A) * ease(uf)
     pop = 1.0 - iou(pose_model(chf, frm), pose_model(chf, to))
     ghost_frames = sum(1 for k in range(int(paint_ms / DT) + 1) if 0.15 <= k * DT / paint_ms <= 0.85)
@@ -230,7 +229,7 @@ def strip(frm: str, to: str, ms: float, flip: float, out: pathlib.Path, down: fl
     """Row 1: the painting set's two paintings dissolved over the move; row 2: the rig frame by frame (the frames before and after the flip are both shown). One PNG a pair, for LOOKING."""
     from PIL import Image, ImageDraw
     A, B = chan_of(frm), chan_of(to)
-    n = max(1, int(round(ms / DT)))
+    n = max(1, math.ceil(ms / DT - 1e-9))
     us = sorted({0.0, 1.0, *[k / (count - 1) for k in range(1, count - 1)]} | ({max(0.0, flip - 0.5 / n), min(1.0, flip + 0.5 / n)} if n > 3 else set()))
     pa, pb = xl.painting_in_master(frm, pad=PAD), xl.painting_in_master(to, pad=PAD)
     bg = (110, 124, 148, 255)
