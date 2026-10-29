@@ -54,9 +54,9 @@ keys = rig["keys"]
 names = [b["name"] for b in rig["bones"]]
 NB = len(names)
 GAME_PAIRS = {
-    # the key changes the figure makes in its chapter under the release 67 picks (docs/handoff/rigs-v2.md has the list and the reason for each): `ready` is the wind-up (the menu stays on the idle key: `paint`)
-    "ffx": "idle>ready,ready>attack,attack>follow,follow>idle,idle>attack,idle>cast,cast>idle,idle>item,item>idle,idle>hurt,hurt>idle,idle>critical,critical>idle,critical>hurt,hurt>critical,hurt>ko,idle>ko,critical>ko,ko>idle,idle>victory,victory>idle,idle>defend,defend>idle,idle>sleep",
-    "ffx2": "idle>ready,ready>attack,attack>follow,follow>idle,idle>attack,idle>cast,cast>idle,idle>item,item>idle,idle>hurt,hurt>idle,idle>critical,critical>idle,critical>hurt,hurt>critical,hurt>ko,idle>ko,critical>ko,ko>idle,idle>victory,victory>idle,idle>sleep",
+    # the key changes the figure makes in its chapter under the release 67 picks (docs/handoff/rigs-v2.md has the list and the reason for each): `ready` is the wind-up (the menu stays on the idle key: `paint`); FFX adds Defend and the Overdrives, FFX-2 has no victory
+    "ffx": "idle>ready,ready>attack,attack>follow,follow>idle,idle>attack,idle>cast,cast>idle,idle>item,item>idle,idle>hurt,hurt>idle,idle>critical,critical>idle,critical>hurt,hurt>critical,hurt>ko,idle>ko,critical>ko,ko>idle,idle>victory,victory>idle,idle>defend,defend>idle,idle>sleep,idle>od-slice-and-dice,od-slice-and-dice>idle,idle>od-energy-rain,od-energy-rain>idle",
+    "ffx2": "idle>ready,ready>attack,attack>follow,follow>idle,idle>attack,idle>cast,cast>idle,idle>item,item>idle,idle>hurt,hurt>idle,idle>critical,critical>idle,critical>hurt,hurt>critical,hurt>ko,idle>ko,critical>ko,ko>idle,idle>sleep",  # Chapter IV has no victory pose (FFX2_BAHAMUT, writing-bible 5.4) and FFX-2 has no Defend row
 }
 
 
