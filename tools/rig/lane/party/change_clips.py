@@ -4,7 +4,7 @@
         [--changes idle>ready,ready>attack,attack>follow,follow>idle,...] [--before 24] [--after 48] [--zoom 2.2] [--still-frames 6] [--crf 26]
 
 `--on` is the recording with the rig (`PYREFLY_LANE_QUERY` empty, the subject's own `partyrigs=v2`), `--off` the same script with `PYREFLY_LANE_QUERY=partyrigs=off` (the painting set, the boss's own rig still on): both are `play-motion.mjs` runs, which write
-`frames/f<n>.jpg`, `timeline.json` (`marks`, with a `pose` mark at every change of the actor's pose, sampled every 10 frames, and `rects`, the actor's projected rectangle) and are deterministic under the seed, so frame n is the same moment
+`frames/f<n>.jpg`, `timeline.json` (`marks`, with a `pose` mark at every change of the actor's pose, sampled every 2nd frame (`MOTION_POSE_EVERY`, default 2; it was every 10th, which lost a key held under 10 frames: `ready` and `attack`), and `rects`, the actor's projected rectangle) and are deterministic under the seed, so frame n is the same moment
 in both. A change `a>b` is the first time the RIG run's pose marks go from a to b; the clip is the window [mark - before, mark + after] of both runs, each panel following its own figure.
 
 Writes, per change, `<label>-<a>-to-<b>.mp4` (60 fps, two panels side by side, 1080 px wide: it plays on a phone), `<label>-<a>-to-<b>.png` (a still: `--still-frames` frames of the window, painting row over rig row, at the clip's scale) and
@@ -136,6 +136,8 @@ def main() -> int:
         index["changes"].append({"pair": pair, "markFrame": n, "window": [n0, n1], "mp4": f"{name}.mp4", "still": f"{name}.png"})
         print("wrote", out / f"{name}.mp4", flush=True)
     (out / f"{label}-changes.json").write_text(json.dumps(index, indent=1), encoding="utf8")
+    if missing:
+        print(f"MISSING {', '.join(missing)}: the rig run never showed those pose changes at its sampling rate; a recording made before MOTION_POSE_EVERY (every 10th frame) can lose a key held under 10 frames: record again with MOTION_POSE_EVERY=1, or cut the window by hand with clips.py --win", flush=True)
     return 0
 
 

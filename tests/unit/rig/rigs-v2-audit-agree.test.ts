@@ -1,11 +1,13 @@
 /**
  * rigs-v2 (2026-10-29; both games, shared plumbing): `tools/rig/lane/party/move_audit.py` replays a key change with the engine's own numbers, so the engine and the audit must agree on them. Pinned here from the engine's side
  * (the audit's side is two lines of Python: `ease` and `n = ceil(ms / dt)`, `u = min(1, i * dt / ms)`): a settled figure moving into a key over `ms` ms takes one step a frame, its channel is `ease(u)` of the way at every frame, the frame
- * that reaches `u = 1` is the key itself, and the part state of the key it moves into takes over at progress 0.5 (`fadeMs` 0: a cut).
+ * that reaches `u = 1` is the key itself, and the part state of the key it moves into takes over at progress 0.5 (`fadeMs` 0: a cut). The page's pace (`engine/pace.ts`, default `steady`) stretches a move by the game's `action` factor
+ * (`RigActor.update` steps by `dt * paceRate('action')`), which the audit's `--pace` option applies (review finding m1, 2026-10-29).
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { DEFAULT_PACE, PACE_PRESETS } from '../../../src/engine/pace.ts';
 import { RigTransition } from '../../../src/engine/rig/RigKeys.ts';
 import { partStateAt, STATE_FLIP } from '../../../src/engine/rig/RigPartState.ts';
 import { ROOT } from '../tools/pose-gate-fixtures.ts';
@@ -38,6 +40,28 @@ describe('the audit and the engine agree on a key change', () => {
     expect(partStateAt(from, to, 0.499, STATE_FLIP)).toBe(from);
     expect(partStateAt(from, to, 0.5, STATE_FLIP)).toBe(to);
     expect(partStateAt(from, to, 1, STATE_FLIP)).toBe(to);
+  });
+
+  it('the actor plays a move for ms * the pace factor of the game (review m1): the audit\'s PACE table is the engine\'s `action` column, and a move of that length has the frames the audit counts', () => {
+    const table = /^PACE = (\{.*\})$/m.exec(audit)?.[1];
+    expect(table, 'PACE table in move_audit.py').toBeDefined();
+    const py = JSON.parse(table as string) as Record<'ffx' | 'ffx2', Record<'current' | 'steady' | 'relaxed', number>>;
+    for (const game of ['ffx', 'ffx2'] as const) {
+      for (const name of ['current', 'steady', 'relaxed'] as const) expect(py[game][name], `${game} ${name}`).toBe(PACE_PRESETS[game][name].action);
+    }
+    expect(DEFAULT_PACE).toBe('steady'); // the audit's default
+    // the actor: dt * paceRate('action') = dt / factor, so a 70 ms key at steady (FFX, 1.2) is 84 ms = 6 frames, the last one the key
+    const factor = PACE_PRESETS.ffx.steady.action;
+    const t = new RigTransition(1, Float64Array.of(0));
+    t.retarget(Float64Array.of(1), 70);
+    let frames = 0;
+    while (t.busy && frames < 200) {
+      frames++;
+      t.step((DT * 1000) / factor / 1000);
+    }
+    expect(frames).toBe(Math.ceil((70 * factor) / 1000 / DT - 1e-9));
+    expect(frames).toBe(6);
+    expect(t.current[0]).toBe(1);
   });
 
   it('the audit says it uses those numbers (a change to either side is a change to both)', () => {

@@ -1,9 +1,14 @@
-"""move_audit.py <rig folder> <config name> --art <art dir> [--pairs a>b[:ms],...] [--game ffx|ffx2] [--flip 0.5] [--out audit.json] [--strips dir] : the OFFLINE continuity audit of a party rig's key changes (rigs-v2, 2026-10-29;
+"""move_audit.py <rig folder> <config name> --art <art dir> [--pairs a>b[:ms],...] [--game ffx|ffx2] [--pace current|steady|relaxed] [--flip 0.5] [--out audit.json] [--strips dir] : the OFFLINE continuity audit of a party rig's key changes (rigs-v2, 2026-10-29;
 both games, shared plumbing; no browser, no GPU, no game: numpy and the kit's compiled silhouette kernels).
 
 What it replays is what the engine does with a rig on a settled figure (`engine/rig/RigKeys.ts`, `RigPartState.ts`): the bone channels (rot, dx, dy, sx, sy, and the key's `root`) move from key A to key B on the game's quadInOut
-over B's `ms` (one frame every 1/60 s), and the part state of B takes over at progress `--flip` (0.5, the engine's `STATE_FLIP`; `fadeMs` 0, a cut, as the pilots ship). Each frame is a SILHOUETTE (the kit's raster kernel on a canvas of 2.5 px of the 1x painting a cell, alpha at half the part texture; NOT the gate's own raster), and the numbers are read
-from the silhouettes only, so the audit is fast (a few seconds a figure) and the same on every machine. A frame is one step of 1/60 s, `ceil(ms / dt)` of them, the last one the key itself:
+over B's `ms` times the page's pace factor for the game (`--pace`, below; one frame every 1/60 s), and the part state of B takes over at progress `--flip` (0.5, the engine's `STATE_FLIP`; `fadeMs` 0, a cut, as the pilots ship). Each frame is a SILHOUETTE (the kit's raster kernel on a canvas of 2.5 px of the 1x painting a cell, alpha at half the part texture; NOT the gate's own raster), and the numbers are read
+from the silhouettes only, so the audit is fast (a few seconds a figure) and the same on every machine. A frame is one step of 1/60 s, `ceil(ms / dt)` of them, the last one the key itself.
+
+`--pace` (default `steady`, the page's default since 2026-09-29; review finding m1 of 2026-10-29): `RigActor.update` steps the move by `dt * paceRate('action')`, so a key of `ms` plays for `ms * factor` (`engine/pace.ts`: `steady` is 1.2 in
+FFX and 1.1 in FFX-2, `relaxed` 1.4 and 1.25, `current` 1). The audit plays the move for that length: a 70 ms key is 84 ms, six frames, in Chapter I. `--pace current` is the earlier unpaced count (`?pace=current`). Each pair records `ms`
+(the key's own), `playMs` (what plays) and the summary the pace and factor. `ghost_eq` stays at release 66's 110 ms dissolve of the painting set, unpaced (the painting set's swaps under the release 67 picks are cut or 50 ms, so it is an upper bound, not the control: the
+recorder's `ch1-ctl` and `ch4-ctl` are).
 
   crack_frames / crack_max frames whose interior transparent area (the background showing THROUGH the figure: a crack where two parts no longer meet) exceeds the larger of the two end poses' by 0.01 of the figure's area / the largest excess
   tear_frames / tear_max   frames whose stray share (area not in the largest piece, over all area) exceeds the larger of the two end poses' by 0.01, or that has more pieces over 0.2 percent of the area than either end pose / the largest excess: a figure that has come apart (a shard of a limb, a part off its joint)
@@ -58,6 +63,10 @@ GAME_PAIRS = {
     "ffx": "idle>ready,ready>attack,attack>follow,follow>idle,idle>attack,idle>cast,cast>idle,idle>item,item>idle,idle>hurt,hurt>idle,idle>critical,critical>idle,critical>hurt,hurt>critical,hurt>ko,idle>ko,critical>ko,ko>idle,idle>victory,victory>idle,idle>defend,defend>idle,idle>sleep,idle>od-slice-and-dice,od-slice-and-dice>idle,idle>od-energy-rain,od-energy-rain>idle",
     "ffx2": "idle>ready,ready>attack,attack>follow,follow>idle,idle>attack,idle>cast,cast>idle,idle>item,item>idle,idle>hurt,hurt>idle,idle>critical,critical>idle,critical>hurt,hurt>critical,hurt>ko,idle>ko,critical>ko,ko>idle,idle>sleep",  # Chapter IV has no victory pose (FFX2_BAHAMUT, writing-bible 5.4) and FFX-2 has no Defend row
 }
+
+
+# `engine/pace.ts` PACE_PRESETS `action` multipliers, per game ([ours], Bailey's pick of steady 2026-09-29); tests/unit/rig/rigs-v2-audit-agree.test.ts pins this table to the engine's
+PACE = {"ffx": {"current": 1.0, "steady": 1.2, "relaxed": 1.4}, "ffx2": {"current": 1.0, "steady": 1.1, "relaxed": 1.25}}
 
 
 def chan_of(pose: str) -> np.ndarray:
@@ -160,7 +169,8 @@ def shard_parts(ch: np.ndarray, state_pose: str, min_share: float = 0.002) -> li
     return out
 
 
-def audit_pair(frm: str, to: str, ms: float, flip: float, paint_ms: float) -> dict:
+def audit_pair(frm: str, to: str, ms: float, flip: float, paint_ms: float, key_ms: float | None = None) -> dict:
+    """`ms` is the length the move PLAYS (the key's own `key_ms` times the pace factor)."""
     A, B = chan_of(frm), chan_of(to)
     n = max(1, math.ceil(ms / DT - 1e-9))  # the engine's `RigTransition.step`: one step a frame, progress i * dt / d, clamped to 1 on the frame that reaches it (a 70 ms move is five frames, the last one the key itself)
     mA = pose_model(A, frm)
@@ -198,7 +208,7 @@ def audit_pair(frm: str, to: str, ms: float, flip: float, paint_ms: float) -> di
     pop = 1.0 - iou(pose_model(chf, frm), pose_model(chf, to))
     ghost_frames = sum(1 for k in range(int(paint_ms / DT) + 1) if 0.15 <= k * DT / paint_ms <= 0.85)
     return {
-        "from": frm, "to": to, "ms": ms, "frames": n, "flipFrame": fi,
+        "from": frm, "to": to, "ms": ms if key_ms is None else key_ms, "playMs": round(ms, 2), "frames": n, "flipFrame": fi,
         "endStray": [round(sA, 4), round(sB, 4)], "endPieces": [cA, cB],
         "tearFrames": int(sum(1 for k, t in enumerate(tear) if t > 0.01 or pieces[k] > max(cA, cB))), "tearMax": round(max(tear), 4), "piecesMax": max(pieces), "endPiecesMax": max(cA, cB),
         "crackFrames": int(sum(1 for h in hole_ex if h > 0.01)), "crackMax": round(max(hole_ex), 4),
@@ -273,6 +283,11 @@ def main() -> int:
     game = opt("--game") or ("ffx" if cfg["subject"] == "tidus" else "ffx2")
     flip = float(opt("--flip", 0.5))
     paint_ms = float(opt("--paint-ms", 110))
+    pace = opt("--pace", "steady")
+    if pace not in PACE[game]:
+        print(f"unknown --pace {pace}", flush=True)
+        return 2
+    factor = PACE[game][pace]
     raw = opt("--pairs") or GAME_PAIRS[game]
     out = []
     for item in raw.split(","):
@@ -282,13 +297,13 @@ def main() -> int:
             print(f"skip {item}: no key", flush=True)
             continue
         m = float(ms) if ms else float(keys[to].get("ms", 120))
-        r = audit_pair(frm, to, m, flip, paint_ms)
+        r = audit_pair(frm, to, m * factor, flip, paint_ms, key_ms=m)
         out.append(r)
         if opt("--strips"):
-            strip(frm, to, m, flip, pathlib.Path(opt("--strips")) / f"{name}-{frm}-to-{to}-{m:.0f}ms.png")
-        print(f"{frm:>9s} > {to:<9s} {m:5.0f} ms {r['frames']:2d} f  tear {r['tearFrames']:2d} ({r['tearMax']:.3f}) crack {r['crackFrames']:2d} ({r['crackMax']:.3f})  dip {r['dip']:.2f}  pop {r['popSil']:.3f}  step {r['stepMax']:.3f}/{r['stepMed']:.3f}  ghostEq {r['ghostEq']:.1f}", flush=True)
+            strip(frm, to, m * factor, flip, pathlib.Path(opt("--strips")) / f"{name}-{frm}-to-{to}-{m:.0f}ms.png")
+        print(f"{frm:>9s} > {to:<9s} {m:5.0f} ms (plays {r['playMs']:4.0f}) {r['frames']:2d} f  tear {r['tearFrames']:2d} ({r['tearMax']:.3f}) crack {r['crackFrames']:2d} ({r['crackMax']:.3f})  dip {r['dip']:.2f}  pop {r['popSil']:.3f}  step {r['stepMax']:.3f}/{r['stepMed']:.3f}  ghostEq {r['ghostEq']:.1f}", flush=True)
     summary = {
-        "rig": str(rigdir), "config": name, "flip": flip, "pairs": len(out),
+        "rig": str(rigdir), "config": name, "game": game, "pace": pace, "paceFactor": factor, "flip": flip, "pairs": len(out),
         "tearPairs": sum(1 for r in out if r["tearFrames"] > 0), "tearFrames": sum(r["tearFrames"] for r in out), "crackFrames": sum(r["crackFrames"] for r in out), "worstCrack": max((r["crackMax"] for r in out), default=0.0),
         "worstTear": max((r["tearMax"] for r in out), default=0.0), "worstPop": max((r["popSil"] for r in out), default=0.0),
         "worstDip": min((r["dip"] for r in out), default=1.0), "ghostEqTotal": round(sum(r["ghostEq"] for r in out), 1),
