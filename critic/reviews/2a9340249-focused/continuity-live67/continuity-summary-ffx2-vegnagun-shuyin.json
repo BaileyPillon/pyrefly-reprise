@@ -1,0 +1,208 @@
+{
+ "schema": "continuity-summary/1",
+ "chapters": [
+  {
+   "chapter": "ffx2-vegnagun-shuyin",
+   "game": "ffx2",
+   "checks": {
+    "CHK-026": "UNVERIFIED",
+    "CHK-027": "FAIL"
+   },
+   "battleSeconds": 756.5,
+   "swaps": 530,
+   "snapsPerMinute": 0,
+   "ghostMsPerMinute": 2394,
+   "maxHeadJumpPct": 9.1,
+   "maxFeetShiftPx": 0.7,
+   "worstJerkPx": 200.5,
+   "minStature": 0.889,
+   "heightOverBand": 0,
+   "feetSilOver": 0,
+   "swapJerksWorstPx": 200.5,
+   "dashesWorstPx": 0,
+   "frameP99Ms": 23.8,
+   "frameP99MsIsPacing": false,
+   "jerksCovered": 0,
+   "fps": 59.8,
+   "dedicated": true,
+   "strips": 20,
+   "worstSwapStrips": [
+    "ffx2-vegnagun-shuyin-win-r67/continuity/strips/swap-166-rikku-attack-follow.jpg",
+    "ffx2-vegnagun-shuyin-win-r67/continuity/strips/swap-071-rikku-ready-attack.jpg",
+    "ffx2-vegnagun-shuyin-win-r67/continuity/strips/swap-434-paine-critical-ready.jpg",
+    "ffx2-vegnagun-shuyin-win-r67/continuity/strips/swap-199-rikku-hurt-cast.jpg",
+    "ffx2-vegnagun-shuyin-win-r67/continuity/strips/swap-040-yuna-item-idle.jpg",
+    "ffx2-vegnagun-shuyin-win-r67/continuity/strips/swap-240-rikku-cast-hurt.jpg",
+    "ffx2-vegnagun-shuyin-win-r67/continuity/strips/swap-049-rikku-cast-idle.jpg",
+    "ffx2-vegnagun-shuyin-win-r67/continuity/strips/swap-026-yuna-ready-item.jpg",
+    "ffx2-vegnagun-shuyin-win-r67/continuity/strips/swap-098-paine-attack-follow.jpg",
+    "ffx2-vegnagun-shuyin-win-r67/continuity/strips/swap-060-paine-cast-hurt.jpg"
+   ],
+   "unverified": null
+  }
+ ],
+ "battleSeconds": 0,
+ "counted": 0,
+ "swaps": 0,
+ "size": {
+  "judged": 0,
+  "costumeSwaps": 0,
+  "sameArtSwaps": 0,
+  "costumeWorstHeadPct": 0,
+  "costumeWorstFeetPx": 0,
+  "maxHeadJumpPct": 0,
+  "maxHeadJumpPctRegistration": 0,
+  "headOverTolerance": 0,
+  "maxFeetShiftPx": 0,
+  "feetOverTolerance": 0,
+  "feetDesigned": 0,
+  "feetDesignedWorstPx": 0,
+  "headMeasured": 0,
+  "headRegistration": 0,
+  "headRig": 0,
+  "rigSwaps": 0,
+  "headSilhouette": 0,
+  "headUnmeasured": 0
+ },
+ "motion": {
+  "snaps": 0,
+  "snapsPerMinute": null,
+  "hardCuts": 0,
+  "hardCutsPerMinute": null,
+  "ghostSwaps": 0,
+  "ghostFrames": 0,
+  "worstGhostSeverity": 0,
+  "ghostOverFail": 0,
+  "jerks": 0,
+  "worstJerkPx": 0,
+  "jerksOverFail": 0,
+  "jerksCovered": 0,
+  "worstCoveredJerkPx": 0,
+  "lowestIou": 1,
+  "maxCentroidShiftPx": 0,
+  "heldSwaps": 0,
+  "longestHeldFrames": 0,
+  "stagedChanges": 0,
+  "stagedSteps": 0,
+  "stagedSnapsExcused": 0,
+  "jerksAtStaged": 0,
+  "smearsPlanned": 0,
+  "smearSwaps": 0,
+  "smearSnapsExcused": 0,
+  "jerksSmeared": 0,
+  "worstSmearedJerkPx": 0
+ },
+ "frameTime": null,
+ "checks": {
+  "CHK-026": {
+   "result": "UNVERIFIED",
+   "reasons": [
+    "only 0 s of battle were played (needs 60)",
+    "only 0 pose swaps were counted (needs 8)"
+   ],
+   "note": "0 of 0 measured swaps had a registered head (tolerance 3 percent); 0 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading"
+  },
+  "CHK-027": {
+   "result": "UNVERIFIED",
+   "reasons": [
+    "only 0 s of battle were played (needs 60)",
+    "only 0 pose swaps were counted (needs 8)"
+   ]
+  }
+ },
+ "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 0 s of battle, 59.8 to 59.8 fps, 1 of 1 run by the dedicated harness; CHK-026 UNVERIFIED (only 0 s of battle were played (needs 60); only 0 pose swaps were counted (needs 8)); CHK-027 UNVERIFIED (only 0 s of battle were played (needs 60); only 0 pose swaps were counted (needs 8)) Read by harness 39fa82cc3c9e (37 files; tree D:/pyrefly-release55 at 2a9340249; policy e3bacf4e; probe v3 2c2bfe73; pose table cc796c34 (114 subjects); waivers 84fc043f (80 rows)).",
+ "base": "http://127.0.0.1:5472/",
+ "date": "2026-10-29T13:27:35.630Z",
+ "poseMeasure": {
+  "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+  "source": "harness-tree",
+  "subjects": 114,
+  "sha256": "cc796c3478f09936b165d3e58807b12e2aee464c83dff08a37f39077712ab6b7",
+  "staleChapters": [
+   "ffx2-vegnagun-shuyin"
+  ]
+ },
+ "harness": {
+  "schema": "continuity-harness/1",
+  "id": "39fa82cc3c9e9f5f647285b11ab905a561b3ac901f933a0118f2d108e6f9802e",
+  "tree": {
+   "root": "D:/pyrefly-release55",
+   "head": "2a9340249b581473cabfe7382f953f88f8d9f08d",
+   "dirty": []
+  },
+  "files": {
+   "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+   "critic/runner/lib/continuity-analyze.mjs": "6076057a68df4002ba58c81a80daca8ccd13b063",
+   "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+   "critic/runner/lib/continuity-card.mjs": "2e0208df7bc9a922a27d519fc5ebb49bed3fafd9",
+   "critic/runner/lib/continuity-dissolve.mjs": "4a9a2ebc79b798dc6059312f0b885510f4cd79b3",
+   "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+   "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+   "critic/runner/lib/continuity-ghostms.mjs": "d74a048e0c44be69d22b050973ec240fbec3db66",
+   "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+   "critic/runner/lib/continuity-probe.mjs": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25",
+   "critic/runner/lib/continuity-pure.mjs": "c30cf02831efe33d9726d0bae9f9b3e098292090",
+   "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+   "critic/runner/lib/continuity-rig-probe.mjs": "35bf097b7bbfa81abeb4daf8e78f0d9515ff3ab1",
+   "critic/runner/lib/continuity-rig.mjs": "6e1b891a9d237b4b9db52593303df5e1ffc812e4",
+   "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+   "critic/runner/lib/continuity-smear.mjs": "bb6bcae7b35d4d99465f0650e58554cc785af513",
+   "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+   "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+   "critic/runner/lib/continuity-summary.mjs": "0e4765c7d059c3613ee8d3160181ee46d0526666",
+   "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+   "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+   "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+   "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+   "critic/runner/lib/continuity-why.mjs": "e2f0063820045e9c5eb5bb2ece203c00bed1fe3d",
+   "critic/runner/lib/continuity.mjs": "d3fd3269395cfa928cd1566a81486359e28210cb",
+   "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+   "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+   "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+   "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+   "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+   "critic/runner/lib/route-pure.mjs": "4d484cc9c873d60c66b48e418bb688dd6248b647",
+   "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+   "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+   "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+   "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+   "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+   "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+  },
+  "policy": {
+   "continuitySha256": "e3bacf4e4884b35d5693f971841be69e2e1a99ffb6d5ccc404891072a5aeff6e",
+   "fileSha256": "b49071107f6d6481401d4460875f59368b25b031b10853e421aca522f066685d",
+   "override": false,
+   "overrideSha256": null
+  },
+  "probe": {
+   "version": 3,
+   "blob": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25"
+  },
+  "poseTable": {
+   "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+   "sha256": "cc796c3478f09936b165d3e58807b12e2aee464c83dff08a37f39077712ab6b7",
+   "subjects": 114,
+   "source": "harness-tree",
+   "buildSha": "04631aed",
+   "isCandidate": false
+  },
+  "waivers": {
+   "path": "D:\\pyrefly-release55\\docs\\target\\pose-waivers.json",
+   "sha256": "84fc043f4169733ef228cbf965eb2b0679f3f0e38f7f609e97d99135924f532f",
+   "rows": 80
+  },
+  "run": {
+   "query": null,
+   "setArt": null,
+   "browser": "gpu"
+  },
+  "changedDuringRun": false,
+  "chapterIds": [
+   "39fa82cc3c9e9f5f647285b11ab905a561b3ac901f933a0118f2d108e6f9802e"
+  ],
+  "unstamped": [],
+  "chaptersByOtherHarness": [],
+  "aggregateSha256": "379262b1d79dc3920a3e87ec2652d06162d42caee115b592b0367cb5d97f5154"
+ }
+}

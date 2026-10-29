@@ -1,0 +1,65 @@
+{
+ "label": "ch4",
+ "query": "",
+ "W": "1600",
+ "H": "900",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "url": "http://127.0.0.1:5871/",
+   "bundle": "http://127.0.0.1:5871/assets/index-B3DkcOaU.js"
+  },
+  {
+   "s": "select",
+   "screen": "title"
+  },
+  {
+   "s": "select-shot",
+   "screen": "chapter-select"
+  },
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "ms": 23505,
+   "ok": true
+  },
+  {
+   "s": "hud",
+   "cls": "",
+   "f1": true,
+   "url": "http://127.0.0.1:5871/"
+  },
+  {
+   "s": "after-attack",
+   "screen": "battle",
+   "numbers": 0
+  },
+  {
+   "s": "turns",
+   "turns": 6,
+   "fpsAvg": 59.9
+  },
+  {
+   "s": "end",
+   "screen": "cutscene",
+   "ms": 79804
+  },
+  {
+   "s": "end-text",
+   "text": "CHAPTER IV · BEVELLE UNDERGROUND — LIMBO\nAUTO\nENTER\nADVANCE\n·\nHOLD ENTER\nSKIP\n·\nESC\nMENU"
+  },
+  {
+   "s": "after",
+   "screen": "cutscene",
+   "text": "CHAPTER IV · BEVELLE UNDERGROUND — LIMBO\nAUTO\nENTER\nADVANCE\n·\nHOLD ENTER\nSKIP\n·\nESC\nMENU"
+  }
+ ],
+ "packState": {
+  "cls": "",
+  "f1": true,
+  "url": "http://127.0.0.1:5871/"
+ },
+ "consoleErrors": [],
+ "notFound": []
+}

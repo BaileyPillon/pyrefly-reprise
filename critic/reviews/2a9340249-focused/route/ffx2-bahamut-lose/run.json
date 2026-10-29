@@ -1,0 +1,1330 @@
+{
+ "chapter": "ffx2-bahamut",
+ "game": "ffx2",
+ "goal": "lose",
+ "size": "1600x900",
+ "base": "http://127.0.0.1:5471/",
+ "mode": "gpu",
+ "hooks": [
+  "window.__pyrefly.setSeed(1) before the first key (CHK-015 labelled setup hook, PR-0202)"
+ ],
+ "seedPinned": 1,
+ "seed": 1,
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1,
+   "links": 1,
+   "firstEnemyAction": {
+    "seq": 3,
+    "actor": "bahamut",
+    "ability": "Curse",
+    "targets": [
+     "yuna"
+    ]
+   }
+  }
+ ],
+ "firstEnemyAction": {
+  "seq": 3,
+  "actor": "bahamut",
+  "ability": "Curse",
+  "targets": [
+   "yuna"
+  ]
+ },
+ "steps": [
+  {
+   "ms": 10545,
+   "k": "prepEscGoesTo",
+   "v": "party-prep"
+  },
+  {
+   "ms": 30084,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1
+   }
+  },
+  {
+   "ms": 46366,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 3,
+    "actor": "bahamut",
+    "ability": "Curse",
+    "targets": [
+     "yuna"
+    ]
+   }
+  },
+  {
+   "ms": 239860,
+   "k": "fight",
+   "v": {
+    "outcome": "defeat",
+    "turns": 0,
+    "ms": 193483,
+    "seams": 0,
+    "orders": 0
+   }
+  }
+ ],
+ "picks": [],
+ "seams": [],
+ "fails": [],
+ "contexts": {
+  "viewport": "1600x900",
+  "query": null,
+  "touch": null,
+  "gamepad": null,
+  "reduceMotion": null
+ },
+ "scriptedChange": "not applicable",
+ "budgetMs": 900000,
+ "briefingText": "AURON “Nineteen fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.” ENTER / ESC SKIP — 20 SECONDS, ONCE D NEVER SHOW THIS AGAIN",
+ "boardAtEntry": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 19
+ },
+ "boardWalk": [
+  "seymour-flux",
+  "yunalesca",
+  "braskas-final-aeon",
+  "seymour-anima-macalania",
+  "evrae-airship",
+  "yojimbo-cavern",
+  "seymour-natus",
+  "seymour-omnis",
+  "isaaru-via-purifico",
+  "sin-fins-core",
+  "sin-face",
+  "mirror-aeons",
+  "ffx2-bahamut"
+ ],
+ "dossier": "AURON · 1 OF 3 “Start with this one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER IV Bahamut 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVII XVIII XXVII X-2 IV V VI XI XIII XV XVI Something she used to call by name Under the temple, in the hangar where Vegnagun used to stand, an aeon is waiting and it is not itself. Nobody cheers when this one is over. ATB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima VIII Evrae IX Yojimbo X Seymour Natus XII Seymour Omnis XIV Isaaru XVII Sin: the Fins and the Core XVIII Sin: the Face XXVII Mirror Aeons FINAL FANTASY X-2 IV Bahamut V Vegnagun VI Leblanc XI Fallen Aeons XIII Trema XV The Den of Woe XVI Ixion LOCATION Bevelle Underground — Limbo BOSS Bahamut PARTY Y YUNA R RIKKU P PAINE BEST Not cleared LEFT/RIGHT CHOOSE · UP/DOWN GAME · ENTER BEGI",
+ "prepText": "AURON · 2 OF 3 “Your party is ready.” The tabs are for later. Start the battle. ESC SKIP THE GUIDE PARTY PREP IV · BAHAMUT — BEVELLE UNDERGROUND — LIMBO Y Yuna LV 23 R Rikku LV 24 P Paine LV 25 CHAPTER DRESSPHERES STATS ACCESSORIES ITEMS FFX-2 · IV Bahamut Something She Named Two years on, the aeon Yuna once called by name is standing in the dark with nobody home behind its eyes. She tries to talk it down anyway, because that is what she knows how to do. Limbo, a thousand years dark nobody is home you don't get another option OBJECTIVES Survive a Mega Flare Land a 5-hit Chain Attack Defeat Bahamut TIP Magic Break first, five stacks — it caps Mega Flare at a sixth of its damage and Impulse at a sixteenth, and it stacks with Shell. START BATTLE Y Yuna LV 23 · 10 DRESSPHERES WHITE MAGE R Rikku LV 24 · 10 DRESSPHERES DARK KNIGHT P Paine LV 25 · 9 DRESSPHERES WARRIOR",
+ "prepEsc": "party-prep",
+ "preScene": {
+  "lines": [
+   "CHAPTER IV · BEVELLE UNDERGROUND — LIMBO Rikku SPHERE HUNTER Creepy hole, creepy ladder, creepy hallway. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER IV · BEVELLE UNDERGROUND — LIMBO Yuna SPHERE HUNTER Um. That's a lot of creepy. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER IV · BEVELLE UNDERGROUND — LIMBO Paine SPHERE HUNTER It's Bevelle. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER IV · BEVELLE UNDERGROUND — LIMBO Ormi Boss, it's — it's big in here. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU"
+  ],
+  "escOpens": "pause",
+  "holdsToSkip": 1
+ },
+ "firstState": {
+  "chapter": "ffx2-bahamut",
+  "game": "ffx2",
+  "scene": "bevelle-underground",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 1,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": true,
+  "exitIntent": null,
+  "playTimeMs": 4849.899999999994,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "rikku",
+    "side": "party",
+    "art": "rikku-dark-knight",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "yuna",
+    "side": "party",
+    "art": "yuna-white-mage",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "paine",
+    "side": "party",
+    "art": "paine-warrior",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "bahamut",
+    "side": "enemy",
+    "art": "ffx2-bahamut",
+    "pose": "cast",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "act"
+   }
+  ],
+  "spellFx": {
+   "fx": {
+    "new": true,
+    "guard": {
+     "level": 0,
+     "scaleStep": 0,
+     "calmMs": 16.6,
+     "budgetMs": 20.75,
+     "busyMs": 0,
+     "steps": 0
+    }
+   },
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0.2,
+   "cpuMeanMs": 0.228,
+   "flights": {
+    "launched": 0,
+    "landed": 0,
+    "live": 0,
+    "lastLaunchAt": 0,
+    "lastLandAt": 0
+   }
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "idle",
+   "awaitingMenu": true,
+   "played": 7,
+   "lastEvents": [
+    {
+     "seq": 1,
+     "type": "atb",
+     "ms": 1
+    },
+    {
+     "seq": 2,
+     "type": "turn-start",
+     "ms": 97
+    },
+    {
+     "seq": 3,
+     "type": "action-start",
+     "ms": 976
+    },
+    {
+     "seq": 4,
+     "type": "atb",
+     "ms": 0
+    },
+    {
+     "seq": 5,
+     "type": "atb",
+     "ms": 0
+    },
+    {
+     "seq": 6,
+     "type": "atb",
+     "ms": 0
+    },
+    {
+     "seq": 7,
+     "type": "atb",
+     "ms": 0
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 1,
+   "ticks": 120,
+   "events": 8,
+   "result": null,
+   "combatants": [
+    {
+     "id": "yuna",
+     "hp": 690,
+     "maxHp": 690,
+     "mp": 130,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "rikku",
+     "hp": 1839,
+     "maxHp": 1839,
+     "mp": 158,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "paine",
+     "hp": 1706,
+     "maxHp": 1706,
+     "mp": 67,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "bahamut",
+     "hp": 8400,
+     "maxHp": 8400,
+     "mp": 9999,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 0,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.45309305671234956,
+       "required": 13207,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.5903164698016492,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.6445173041894353,
+       "required": 13725,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0.9165941578620261,
+       "required": 8045,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 0
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 266.93333333333334,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.5106382978723405,
+       "required": 13207,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.6326610207265433,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.6998907103825136,
+       "required": 13725,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 1,
+       "required": 8045,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 1
+   },
+   {
+    "type": "turn-start",
+    "actorId": "bahamut",
+    "turn": 1,
+    "elapsedTicks": 8,
+    "seq": 2
+   },
+   {
+    "type": "action-start",
+    "actorId": "bahamut",
+    "command": {
+     "kind": "ability",
+     "id": "bahamut-curse",
+     "targets": [
+      "yuna"
+     ]
+    },
+    "abilityId": "bahamut-curse",
+    "abilityName": "Curse",
+    "targets": [
+     "yuna"
+    ],
+    "seq": 3
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 266.93333333333334,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.5106382978723405,
+       "required": 13207,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.6326610207265433,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.6998907103825136,
+       "required": 13725,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0,
+       "required": 8045,
+       "ready": false,
+       "charge": 0,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 4
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 1735.0666666666646,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.8271371242522905,
+       "required": 13207,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.8655560508134611,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 1,
+       "required": 13725,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0,
+       "required": 8045,
+       "ready": false,
+       "charge": 0.3030522728920467,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 5
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 2569.233333333332,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 1,
+       "required": 13207,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.9978827724537553,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 1,
+       "required": 13725,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0,
+       "required": 8045,
+       "ready": false,
+       "charge": 0.4752410643079823,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 6
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 2602.599999999999,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 1,
+       "required": 13207,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 1,
+       "required": 17948,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 1,
+       "required": 13725,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0,
+       "required": 8045,
+       "ready": false,
+       "charge": 0.48212861596461976,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 7
+   }
+  ]
+ },
+ "cardFirst": {
+  "viewport": "1600x900",
+  "card": {
+   "x": 568,
+   "y": 741,
+   "w": 435,
+   "h": 94
+  },
+  "rows": 4,
+  "overlapPx2": 0,
+  "cardText": "Paine Magic Break → Bahamut IN SKILL 4 MP Physical damage"
+ },
+ "focFirst": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 568,
+    "y": 741,
+    "w": 435,
+    "h": 94
+   }
+  ],
+  "cmd": [
+   {
+    "x": 1168,
+    "y": 380,
+    "w": 363,
+    "h": 246
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Paine",
+    "eff": 17.5
+   },
+   {
+    "t": "Magic Break",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "Bahamut",
+    "eff": 21
+   },
+   {
+    "t": "in Skill",
+    "eff": 14.2
+   },
+   {
+    "t": "4 MP",
+    "eff": 14.2
+   },
+   {
+    "t": "Physical damage",
+    "eff": 14.2
+   }
+  ]
+ },
+ "focAfterCoach": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 568,
+    "y": 741,
+    "w": 435,
+    "h": 94
+   }
+  ],
+  "cmd": [
+   {
+    "x": 1168,
+    "y": 380,
+    "w": 363,
+    "h": 246
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Paine",
+    "eff": 17.5
+   },
+   {
+    "t": "Magic Break",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "Bahamut",
+    "eff": 21
+   },
+   {
+    "t": "in Skill",
+    "eff": 14.2
+   },
+   {
+    "t": "4 MP",
+    "eff": 14.2
+   },
+   {
+    "t": "Physical damage",
+    "eff": 14.2
+   }
+  ]
+ },
+ "advisorText": "Paine Magic Break → Bahamut IN SKILL 4 MP Physical damage",
+ "advisorHiddenByN": true,
+ "intentText": "BAHAMUT ACTS NEXT Curse SCRIPTED Inflicts Curse on one girl. STATUSES Curse 100% ALSO The Mega Flare countdown is a fixed wait of about 25 seconds on the game’s own clock — Slow, Haste and a fallen girl do not change it",
+ "pause": {
+  "esc": {
+   "paused": true,
+   "text": "SCAN WM WM Yuna 690 /690 130 /130 DK DK Rikku 1839 /1839 158 /158 WR WR Paine 1706 /1706 67 /67 ATTACK SKILL ◂ CHANGE ◂ ITEM ◂ G GUIDE Paine Magic Break → Bahamut IN SKILL 4 MP Physical damage N HIDE MOVES Bahamut WR Paine WARRIOR Magic Break → Bahamut · 4 MP Enter Select G Intel P Pause GUIDE CURSE Yuna is cursed and she cannot change dresspheres. Holy Water, Esuna or a Remedy cures it. VICTORY THE PARTY HAS FALLEN ECHOES OF SPIRA · FINAL FANTASY X-2 Q L1 YUNA RIKKU PAINE CHAPTER GUIDE OPTIONS ACCESSIBILITY CONTROLS MUSIC R1 E BATTLE STATS HP 690/690 MP 130/130 STRENGTH 9 MAGIC 79 DEFENCE 37 MAGIC DEF 146 AGILITY 52 IN THIS FIGHT ATB 100% MODE WAIT CHAIN ×0 DRESSPHERE WHITE MAGE GARMENT GRID PROTECTION HALO GATES 0 OF 4 PASSED CHAPTER IV · BEVELLE UNDERGROUND — SOMETHING SHE NAMED SURVIVE A MEGA FLARE ESC RESUME H PAINTING ONLY"
+  },
+  "optionsText": "SCAN WM WM Yuna 690 /690 130 /130 DK DK Rikku 1839 /1839 158 /158 WR WR Paine 1706 /1706 67 /67 ATTACK SKILL ◂ CHANGE ◂ ITEM ◂ G GUIDE Paine Magic Break → Bahamut IN SKILL 4 MP Physical damage N HIDE MOVES Bahamut WR Paine WARRIOR Magic Break → Bahamut · 4 MP Enter Select G Intel P Pause GUIDE CURSE Yuna is cursed and she cannot change dresspheres. Holy Water, Esuna or a Remedy cures it. VICTORY THE PARTY HAS FALLEN ECHOES OF SPIRA · FINAL FANTASY X-2 Q L1 YUNA RIKKU PAINE CHAPTER GUIDE OPTIONS ACCESSIBILITY CONTROLS MUSIC R1 E SETTINGS MASTER VOLUME 80 MUSIC 70 SOUND EFFECTS 70 TEXT SPEED 1x EYE CANDY ALL ON VISUAL STYLE HD-2D X-2 BATTLE WAIT ATB SPEED NORMAL STRATEGY GUIDE ON BATTLE HELP ON PRESENTATION THE ECHO · B THIS ENCOUNTER REPLAY BRIEFING ▸ RESTART ENCOUNTER ▸ CHAPTER SELECT ▸ QUIT TO TITLE ▸ ABOUT CREDITS ▸ CHAPTER IV · BEVELLE UNDERGROUND — SOMETHING SHE NAMED SURVIVE A MEGA FLARE ESC RESUME H PAINTING ONLY",
+  "tabs": [
+   "Yuna",
+   "Rikku",
+   "Paine",
+   "Chapter",
+   "Guide",
+   "Options"
+  ],
+  "resumedByEsc": true,
+  "pOpens": true,
+  "pCloses": true
+ },
+ "flippedToActive": true,
+ "settingsAfterFlip": {
+  "masterVolume": 0.8,
+  "musicVolume": 0.7,
+  "sfxVolume": 0.7,
+  "sfxBalanceMigrated": true,
+  "voiceOn": true,
+  "voiceVolume": 0.9,
+  "textSpeed": 1,
+  "skipSeenCutscenes": false,
+  "lowEffects": false,
+  "fxLight": true,
+  "fxLiving": true,
+  "fxSpectacle": true,
+  "fxDof": true,
+  "fxFog": true,
+  "fxEdges": true,
+  "fxBreath": true,
+  "fxKo": true,
+  "fxFraming": true,
+  "fxHero": true,
+  "fxSphere": true,
+  "fxSplash": true,
+  "textSize": 1,
+  "reduceFlashes": false,
+  "colourVision": "off",
+  "guideVisible": true,
+  "advisorVisible": true,
+  "intentVisible": true,
+  "ffx2Atb": "active",
+  "ffx2AtbMigrated": true,
+  "pausePanelsHidden": false,
+  "battleHelp": true,
+  "titleArt": "echo",
+  "titleArtPicked": false,
+  "chapterSelectMusic": "b",
+  "visualStyle": "hd2d",
+  "reduceMotion": false
+ },
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "defeat",
+   "seed": 1,
+   "turns": 0,
+   "firstEnemyAction": {
+    "seq": 3,
+    "actor": "bahamut",
+    "ability": "Curse",
+    "targets": [
+     "yuna"
+    ]
+   },
+   "final": true,
+   "stalledAt": null
+  }
+ ],
+ "seamCard": [],
+ "pauseRecoveries": 0,
+ "misses": [],
+ "orders": [],
+ "escapes": [],
+ "targetMismatches": [],
+ "pickerPlays": [],
+ "stallRecoveries": 0,
+ "lastChain": {
+  "links": 1,
+  "chainLength": 1,
+  "phase": "play:defeat",
+  "turn": 0,
+  "ms": 193222
+ },
+ "mgSince": null,
+ "turns": 0,
+ "fightMs": 193483,
+ "afterFight": "pro-defeat",
+ "outcome": "defeat",
+ "outcomeFrom": "engine log, screen left the battle",
+ "stalledAt": null,
+ "logKinds": {
+  "atb": 48,
+  "turn-start": 23,
+  "action-start": 13,
+  "status-add": 1,
+  "action-end": 23,
+  "miss": 1,
+  "chain": 34,
+  "damage": 17,
+  "charge": 10,
+  "script-trigger": 1,
+  "ko": 3,
+  "defeat": 1
+ },
+ "post": {
+  "screen": "pro-defeat",
+  "lines": []
+ },
+ "resultsScreen": "pro-defeat",
+ "dboxTimeline": [
+  {
+   "ms": 10981,
+   "lastMs": 16316,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Sphere Hunter",
+   "text": "Creepy hole, creepy ladder, creepy hallway.",
+   "portrait": "rikku-x2.webp",
+   "narrate": false,
+   "show": 1
+  },
+  {
+   "ms": 16348,
+   "lastMs": 17814,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "Um. That's a lot of creepy.",
+   "portrait": "yuna-x2.webp",
+   "narrate": false,
+   "show": 2
+  },
+  {
+   "ms": 17848,
+   "lastMs": 19331,
+   "screen": "cutscene",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "It's Bevelle.",
+   "portrait": "paine.webp",
+   "narrate": false,
+   "show": 3
+  },
+  {
+   "ms": 19364,
+   "lastMs": 20847,
+   "screen": "cutscene",
+   "speaker": "Ormi",
+   "role": "",
+   "text": "Boss, it's — it's big in here.",
+   "portrait": "ormi.webp",
+   "narrate": false,
+   "show": 4
+  },
+  {
+   "ms": 20881,
+   "lastMs": 22832,
+   "screen": "cutscene",
+   "speaker": "Leblanc",
+   "role": "",
+   "text": "It's empty, you lump. That's worse.",
+   "portrait": "leblanc.webp",
+   "narrate": false,
+   "show": 5
+  },
+  {
+   "ms": 22947,
+   "lastMs": 22964,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Sphere Hunter",
+   "text": "That's not machina.",
+   "portrait": "rikku-x2.webp",
+   "narrate": false,
+   "show": 6
+  },
+  {
+   "ms": 22981,
+   "lastMs": 22981,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Sphere Hunter",
+   "text": "That's an aeon.",
+   "portrait": "rikku-x2.webp",
+   "narrate": false,
+   "show": 7
+  },
+  {
+   "ms": 22997,
+   "lastMs": 22997,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "Bahamut.",
+   "portrait": "yuna-x2.webp",
+   "narrate": false,
+   "show": 8
+  },
+  {
+   "ms": 23015,
+   "lastMs": 23031,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "It's me. You know it's me.",
+   "portrait": "yuna-x2.webp",
+   "narrate": false,
+   "show": 9
+  },
+  {
+   "ms": 23048,
+   "lastMs": 23064,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Sphere Hunter",
+   "text": "Please. You have to stop.",
+   "portrait": "yuna-x2.webp",
+   "narrate": false,
+   "show": 10
+  },
+  {
+   "ms": 23081,
+   "lastMs": 23081,
+   "screen": "cutscene",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "It's not in there, Yuna.",
+   "portrait": "paine.webp",
+   "narrate": false,
+   "show": 11
+  },
+  {
+   "ms": 23097,
+   "lastMs": 23185,
+   "screen": "cutscene",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "Fight. You don't get another option.",
+   "portrait": "paine.webp",
+   "narrate": false,
+   "show": 12,
+   "endMs": 23185
+  },
+  {
+   "ms": 98731,
+   "lastMs": 100497,
+   "screen": "battle",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "It stopped. That's not mercy.",
+   "portrait": "paine.webp",
+   "narrate": false,
+   "show": 13
+  },
+  {
+   "ms": 100530,
+   "lastMs": 102697,
+   "screen": "battle",
+   "speaker": "Paine",
+   "role": "Sphere Hunter",
+   "text": "That's a timer.",
+   "portrait": "paine.webp",
+   "narrate": false,
+   "show": 14,
+   "endMs": 102697
+  }
+ ],
+ "audioDebugFile": {
+  "file": "ffx2-bahamut-lose/audio-debug.jsonl",
+  "samples": 3,
+  "note": "one whole audioDebug() per line; nothing cut"
+ },
+ "minutes": 4.34,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "media": [
+  "art/title/echo.webp",
+  "art/characters/auron/idle.png",
+  "art/backdrops/dreams-end.webp",
+  "art/backdrops/gagazet.webp",
+  "art/characters/mortiorchis/idle.png",
+  "art/characters/seymour-flux-body/idle.png",
+  "art/portraits/tidus.webp",
+  "art/portraits/yuna.webp",
+  "art/portraits/kimahri.png",
+  "art/backdrops/gagazet.thumb.webp",
+  "art/characters/seymour-flux-body/idle.thumb.png",
+  "art/backdrops/zanarkand-dome.thumb.webp",
+  "art/characters/yunalesca-1/idle.thumb.png",
+  "art/backdrops/bevelle-underground.thumb.webp",
+  "art/characters/ffx2-bahamut/idle.thumb.png",
+  "art/backdrops/djose-chamber-provisional.thumb.webp",
+  "art/characters/x2-ixion/idle.thumb.png",
+  "art/backdrops/dreams-end.thumb.webp",
+  "art/characters/braskas-final-aeon-1/idle.thumb.png",
+  "art/backdrops/den-of-woe.thumb.webp",
+  "art/characters/baralai-shade/idle.thumb.png",
+  "art/backdrops/macalania-temple.thumb.webp",
+  "art/characters/anima/idle.thumb.png",
+  "art/backdrops/via-infinito.thumb.webp",
+  "art/characters/trema/idle.thumb.png",
+  "art/backdrops/evrae-airship-deck.thumb.webp",
+  "art/characters/evrae/idle.thumb.png",
+  "art/backdrops/road-to-the-farplane.thumb.webp",
+  "art/characters/x2-shiva/idle.thumb.png",
+  "art/backdrops/cavern-stolen-fayth.thumb.webp",
+  "art/characters/yojimbo-cavern/idle.thumb.png",
+  "art/backdrops/leblanc-last-room.thumb.webp",
+  "art/characters/leblanc/idle.thumb.png",
+  "art/backdrops/bevelle-highbridge.thumb.webp",
+  "art/characters/seymour-natus/idle.thumb.png",
+  "art/backdrops/farplane.thumb.webp",
+  "art/characters/vegnagun-body/idle.thumb.png",
+  "art/backdrops/garden-of-pain.thumb.webp",
+  "art/characters/seymour-omnis/idle.thumb.png",
+  "art/backdrops/via-purifico.thumb.webp",
+  "art/characters/isaaru/idle.thumb.png",
+  "art/backdrops/mushroom-rock-road.thumb.webp",
+  "art/characters/dark-mindy/idle.thumb.png",
+  "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+  "art/characters/sin-left-fin/idle.thumb.png",
+  "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+  "art/characters/overdrive-sin/idle.thumb.png",
+  "art/portraits/auron.webp",
+  "art/backdrops/zanarkand-dome.webp",
+  "art/characters/yunalesca-1/idle.png",
+  "art/portraits/yuna-x2.webp",
+  "art/portraits/rikku-x2.webp",
+  "art/portraits/paine.webp",
+  "art/backdrops/bevelle-underground.webp",
+  "art/characters/ffx2-bahamut/idle.png",
+  "art/backdrops/djose-chamber-provisional.webp",
+  "art/characters/x2-ixion/idle.png",
+  "art/characters/braskas-final-aeon-1/idle.png",
+  "art/backdrops/den-of-woe.webp",
+  "art/characters/nooj-shade/idle.png",
+  "art/characters/gippal-shade/idle.png",
+  "art/characters/baralai-shade/idle.png",
+  "art/portraits/rikku.webp",
+  "art/portraits/wakka.webp",
+  "art/portraits/lulu.webp",
+  "art/characters/yuna-white-mage/idle.png",
+  "art/characters/rikku-dark-knight/idle.png",
+  "art/characters/paine-warrior/idle.png",
+  "art/characters/paine-dark-knight/idle.png",
+  "art/characters/yuna-dark-knight/idle.png",
+  "art/characters/rikku-alchemist/idle.png",
+  "art/characters/yuna-gunner/idle.png",
+  "art/characters/rikku-thief/idle.png",
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "audio/sfx/sprite-v2.mp3",
+  "audio/music/chapter-select.mp3",
+  "art/portraits/seymour.webp",
+  "art/backdrops/macalania-temple.webp",
+  "art/characters/anima/idle.png",
+  "art/characters/tidus/idle.png",
+  "art/characters/yuna/idle.png",
+  "art/characters/kimahri/idle.png",
+  "art/backdrops/evrae-airship-deck.webp",
+  "art/characters/evrae/idle.png",
+  "art/backdrops/cavern-stolen-fayth.webp",
+  "art/characters/yojimbo-cavern/idle.png",
+  "art/backdrops/bevelle-highbridge.webp",
+  "art/characters/seymour-natus/idle.png",
+  "art/backdrops/garden-of-pain.webp",
+  "art/characters/seymour-omnis/idle.webp",
+  "art/backdrops/via-purifico.webp",
+  "art/characters/isaaru/idle.png",
+  "art/backdrops/sin-fahrenheit-flight.webp",
+  "art/characters/sin-left-fin/idle.png",
+  "art/backdrops/sin-fahrenheit-bevelle.webp",
+  "art/characters/overdrive-sin/idle.png",
+  "art/backdrops/mushroom-rock-road.webp",
+  "art/characters/dark-mindy/idle.png",
+  "art/backdrops/farplane.webp",
+  "art/characters/vegnagun-body/idle.png",
+  "art/backdrops/leblanc-last-room.webp",
+  "art/characters/leblanc/idle.png",
+  "audio/sfx/parity-ffx2-bahamut.mp3",
+  "audio/sfx/parity-ffx2-core.mp3",
+  "audio/music/scene-bevelle-underground.mp3",
+  "art/pause/ch4-ffx2-bahamut.webp",
+  "art/portraits/ormi.webp",
+  "art/portraits/leblanc.webp",
+  "audio/music/boss-bahamut.mp3",
+  "art/characters/yuna-white-mage/ready.webp",
+  "art/characters/rikku-dark-knight/ready.png",
+  "art/characters/paine-warrior/ready.png",
+  "art/characters/ffx2-bahamut/attack.png",
+  "art/characters/ffx2-bahamut/cast.png",
+  "art/characters/ffx2-bahamut/hurt.png",
+  "art/characters/ffx2-bahamut/ko.png",
+  "art/characters/ffx2-bahamut/telegraph.png",
+  "art/characters/yuna-white-mage/attack.webp",
+  "art/characters/yuna-white-mage/cast.webp",
+  "art/characters/yuna-white-mage/item.webp",
+  "audio/music/defeat-ffx2.mp3",
+  "art/characters/yuna-white-mage/hurt.png",
+  "art/characters/yuna-white-mage/ko.png",
+  "art/characters/yuna-white-mage/defend.webp",
+  "art/characters/rikku-dark-knight/attack.png",
+  "art/characters/rikku-dark-knight/cast.png",
+  "art/characters/rikku-dark-knight/item.png",
+  "art/characters/rikku-dark-knight/hurt.png",
+  "art/characters/rikku-dark-knight/ko.png",
+  "art/characters/paine-warrior/attack.png",
+  "art/characters/paine-warrior/cast.png",
+  "art/characters/paine-warrior/item.png",
+  "art/characters/paine-warrior/hurt.webp",
+  "art/characters/paine-warrior/ko.webp",
+  "art/characters/paine-warrior/defend.webp",
+  "art/characters/yuna-white-mage/victory.png",
+  "art/characters/yuna-white-mage/sleep.webp",
+  "art/characters/yuna-white-mage/critical.webp",
+  "art/characters/yuna-white-mage/follow.webp",
+  "art/characters/rikku-dark-knight/victory.png",
+  "art/characters/rikku-dark-knight/sleep.webp",
+  "art/characters/rikku-dark-knight/critical.png",
+  "art/characters/rikku-dark-knight/follow.png",
+  "art/characters/paine-warrior/victory.png",
+  "art/characters/paine-warrior/sleep.png",
+  "art/characters/paine-warrior/critical.png",
+  "art/characters/paine-warrior/follow.png",
+  "art/characters/paine-warrior/od-x2-warrior-armor-break.png",
+  "art/characters/paine-warrior/od-x2-warrior-power-break.png",
+  "art/pause/yuna-ffx2.2x.webp",
+  "art/pause/rikku-ffx2.2x.webp",
+  "art/pause/paine.2x.webp",
+  "audio/music/pause.mp3",
+  "art/pause/ch4-ffx2-bahamut.2x.webp",
+  "art/backdrops/wings/bevelle-underground-left.png",
+  "art/backdrops/wings/bevelle-underground-right.png",
+  "fx/bevelle-underground/depth.png",
+  "art/characters/rikku-dark-knight/idle.normal.png",
+  "art/characters/rikku-dark-knight/ready.normal.png",
+  "art/characters/rikku-dark-knight/attack.normal.png",
+  "art/characters/rikku-dark-knight/cast.normal.png",
+  "art/characters/rikku-dark-knight/item.normal.png",
+  "art/characters/rikku-dark-knight/hurt.normal.png",
+  "art/characters/rikku-dark-knight/ko.normal.png",
+  "art/characters/rikku-dark-knight/victory.normal.png",
+  "art/characters/rikku-dark-knight/sleep.normal.png",
+  "art/characters/rikku-dark-knight/critical.normal.png",
+  "art/characters/rikku-dark-knight/follow.normal.png",
+  "art/characters/yuna-white-mage/idle.normal.png",
+  "art/characters/yuna-white-mage/ready.normal.png",
+  "art/characters/yuna-white-mage/attack.normal.png",
+  "art/characters/yuna-white-mage/cast.normal.png",
+  "art/characters/yuna-white-mage/item.normal.png",
+  "art/characters/yuna-white-mage/hurt.normal.png",
+  "art/characters/yuna-white-mage/ko.normal.png",
+  "art/characters/yuna-white-mage/victory.normal.png",
+  "art/characters/yuna-white-mage/defend.normal.png",
+  "art/characters/yuna-white-mage/sleep.normal.png",
+  "art/characters/yuna-white-mage/critical.normal.png",
+  "art/characters/yuna-white-mage/follow.normal.png",
+  "art/characters/paine-warrior/idle.normal.png",
+  "art/characters/paine-warrior/ready.normal.png",
+  "art/characters/paine-warrior/attack.normal.png",
+  "art/characters/paine-warrior/cast.normal.png",
+  "art/characters/paine-warrior/item.normal.png",
+  "art/characters/paine-warrior/hurt.normal.png",
+  "art/characters/paine-warrior/ko.normal.png",
+  "art/characters/paine-warrior/victory.normal.png",
+  "art/characters/paine-warrior/defend.normal.png",
+  "art/characters/paine-warrior/sleep.normal.png",
+  "art/characters/paine-warrior/critical.normal.png",
+  "art/characters/paine-warrior/follow.normal.png",
+  "art/characters/paine-warrior/od-x2-warrior-armor-break.normal.png",
+  "art/characters/paine-warrior/od-x2-warrior-power-break.normal.png",
+  "art/characters/ffx2-bahamut/idle.normal.png",
+  "art/rigs/ffx2-bahamut/1x/tail.png",
+  "art/rigs/ffx2-bahamut/1x/tail.attack.png",
+  "art/rigs/ffx2-bahamut/1x/tail.cast.png",
+  "art/rigs/ffx2-bahamut/1x/tail.hurt.png",
+  "art/rigs/ffx2-bahamut/1x/tail.telegraph.png",
+  "art/rigs/ffx2-bahamut/1x/tail.ko.png",
+  "art/rigs/ffx2-bahamut/1x/wingL.png",
+  "art/rigs/ffx2-bahamut/1x/wingL.attack.png",
+  "art/rigs/ffx2-bahamut/1x/wingL.cast.png",
+  "art/rigs/ffx2-bahamut/1x/wingL.hurt.png",
+  "art/rigs/ffx2-bahamut/1x/wingL.telegraph.png",
+  "art/rigs/ffx2-bahamut/1x/wingL.ko.png",
+  "art/rigs/ffx2-bahamut/1x/wingR.png",
+  "art/rigs/ffx2-bahamut/1x/wingR.attack.png",
+  "art/rigs/ffx2-bahamut/1x/wingR.cast.png",
+  "art/rigs/ffx2-bahamut/1x/wingR.hurt.png",
+  "art/rigs/ffx2-bahamut/1x/wingR.telegraph.png",
+  "art/rigs/ffx2-bahamut/1x/wingR.ko.png",
+  "art/rigs/ffx2-bahamut/1x/body.png",
+  "art/rigs/ffx2-bahamut/1x/body.attack.png",
+  "art/rigs/ffx2-bahamut/1x/body.cast.png",
+  "art/rigs/ffx2-bahamut/1x/body.hurt.png",
+  "art/rigs/ffx2-bahamut/1x/body.telegraph.png",
+  "art/rigs/ffx2-bahamut/1x/body.ko.png",
+  "art/rigs/ffx2-bahamut/1x/head.png",
+  "art/rigs/ffx2-bahamut/1x/head.attack.png",
+  "art/rigs/ffx2-bahamut/1x/head.cast.png",
+  "art/rigs/ffx2-bahamut/1x/head.hurt.png",
+  "art/rigs/ffx2-bahamut/1x/head.telegraph.png",
+  "art/rigs/ffx2-bahamut/1x/head.ko.png",
+  "art/rigs/ffx2-bahamut/1x/tail.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/tail.attack.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/tail.cast.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/tail.hurt.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/tail.telegraph.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/tail.ko.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/wingL.attack.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/wingL.cast.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/wingL.hurt.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/wingL.ko.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/wingL.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/wingL.telegraph.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/wingR.attack.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/wingR.cast.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/wingR.hurt.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/wingR.telegraph.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/wingR.ko.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/wingR.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/body.hurt.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/body.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/body.attack.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/body.telegraph.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/body.cast.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/body.ko.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/head.attack.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/head.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/head.telegraph.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/head.cast.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/head.hurt.rim.webp",
+  "art/rigs/ffx2-bahamut/1x/head.ko.rim.webp",
+  "art/rigs/ffx2-bahamut/tail.attack.normal.webp",
+  "art/rigs/ffx2-bahamut/tail.ko.normal.webp",
+  "art/rigs/ffx2-bahamut/tail.cast.normal.webp",
+  "art/rigs/ffx2-bahamut/tail.normal.webp",
+  "art/rigs/ffx2-bahamut/tail.hurt.normal.webp",
+  "art/rigs/ffx2-bahamut/tail.telegraph.normal.webp",
+  "art/rigs/ffx2-bahamut/wingL.attack.normal.webp",
+  "art/rigs/ffx2-bahamut/wingL.cast.normal.webp",
+  "art/rigs/ffx2-bahamut/wingL.ko.normal.webp",
+  "art/rigs/ffx2-bahamut/wingL.telegraph.normal.webp",
+  "art/rigs/ffx2-bahamut/wingL.hurt.normal.webp",
+  "art/rigs/ffx2-bahamut/wingL.normal.webp",
+  "art/rigs/ffx2-bahamut/wingR.attack.normal.webp",
+  "art/rigs/ffx2-bahamut/wingR.normal.webp",
+  "art/rigs/ffx2-bahamut/wingR.cast.normal.webp",
+  "art/rigs/ffx2-bahamut/wingR.ko.normal.webp",
+  "art/rigs/ffx2-bahamut/wingR.hurt.normal.webp",
+  "art/rigs/ffx2-bahamut/wingR.telegraph.normal.webp",
+  "art/rigs/ffx2-bahamut/body.hurt.normal.webp",
+  "art/rigs/ffx2-bahamut/body.normal.webp",
+  "art/rigs/ffx2-bahamut/body.telegraph.normal.webp",
+  "art/rigs/ffx2-bahamut/body.ko.normal.webp",
+  "art/rigs/ffx2-bahamut/body.attack.normal.webp",
+  "art/rigs/ffx2-bahamut/body.cast.normal.webp",
+  "art/rigs/ffx2-bahamut/head.attack.normal.webp",
+  "art/rigs/ffx2-bahamut/head.ko.normal.webp",
+  "art/rigs/ffx2-bahamut/head.telegraph.normal.webp",
+  "art/rigs/ffx2-bahamut/head.cast.normal.webp",
+  "art/rigs/ffx2-bahamut/head.hurt.normal.webp",
+  "art/rigs/ffx2-bahamut/head.normal.webp",
+  "assets/ink-light-DNLnRxnq.webp",
+  "art/characters/ffx2-bahamut/splash.png",
+  "art/backdrops/bevelle-underground.depth.png",
+  "art/characters/rikku-dark-knight/twirl-start.png",
+  "art/characters/rikku-dark-knight/twirl-going.png",
+  "art/characters/rikku-gunner/twirl-mid.png",
+  "art/characters/yuna-white-mage/twirl-start.png",
+  "art/characters/yuna-white-mage/twirl-going.png",
+  "art/characters/yuna-gunner/twirl-mid.png",
+  "art/characters/paine-warrior/twirl-start.png",
+  "art/characters/paine-warrior/twirl-going.png",
+  "art/characters/paine-gunner/twirl-mid.png",
+  "assets/paper-dark-CkmdjUsb.webp",
+  "art/pause/yuna-ffx2.webp",
+  "art/portrait-parts/yuna-ffx2/2x/mouth-open-smile.png",
+  "art/portrait-parts/yuna-ffx2/2x/mouth-concerned-press.png",
+  "art/portrait-parts/yuna-ffx2/2x/lidR-closed.png",
+  "art/portrait-parts/yuna-ffx2/2x/lidL-closed.png",
+  "art/portrait-parts/yuna-ffx2/2x/eyeR-socket.webp",
+  "art/portrait-parts/yuna-ffx2/2x/eyeR-iris.webp",
+  "art/portrait-parts/yuna-ffx2/2x/eyeR-catch.png",
+  "art/portrait-parts/yuna-ffx2/2x/eyeR-window.png",
+  "art/portrait-parts/yuna-ffx2/2x/eyeL-socket.webp",
+  "art/portrait-parts/yuna-ffx2/2x/eyeL-iris.webp",
+  "art/portrait-parts/yuna-ffx2/2x/eyeL-catch.png",
+  "art/portrait-parts/yuna-ffx2/2x/eyeL-window.png",
+  "art/pause/rikku-ffx2.webp",
+  "art/portrait-parts/rikku-ffx2/2x/mouth-open-smile.png",
+  "art/portrait-parts/rikku-ffx2/2x/mouth-concerned-press.png",
+  "art/portrait-parts/rikku-ffx2/2x/lidL-closed.png",
+  "art/portrait-parts/rikku-ffx2/2x/eyeL-socket.webp",
+  "art/portrait-parts/rikku-ffx2/2x/eyeL-iris.webp",
+  "art/portrait-parts/rikku-ffx2/2x/eyeL-catch.png",
+  "art/portrait-parts/rikku-ffx2/2x/eyeL-window.png",
+  "art/pause/paine.webp",
+  "art/portrait-parts/paine/2x/mouth-open-smile.png",
+  "art/portrait-parts/paine/2x/mouth-concerned-press.png",
+  "art/portrait-parts/paine/2x/lidR-closed.png",
+  "art/portrait-parts/paine/2x/lidL-closed.png",
+  "art/portrait-parts/paine/2x/eyeR-socket.webp",
+  "art/portrait-parts/paine/2x/eyeR-iris.webp",
+  "art/portrait-parts/paine/2x/eyeR-catch.png",
+  "art/portrait-parts/paine/2x/eyeR-window.png",
+  "art/portrait-parts/paine/2x/eyeL-socket.webp",
+  "art/portrait-parts/paine/2x/eyeL-iris.webp",
+  "art/portrait-parts/paine/2x/eyeL-catch.png",
+  "art/portrait-parts/paine/2x/eyeL-window.png"
+ ]
+}

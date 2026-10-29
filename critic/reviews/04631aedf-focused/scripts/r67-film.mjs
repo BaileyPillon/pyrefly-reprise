@@ -1,0 +1,30 @@
+import fs from 'node:fs';
+import { chromium } from 'playwright';
+import { currentChromiumArgs } from './tools/browser-mode.mjs';
+import { waitBattleMenu } from './critic/runner/lib/lib.mjs';
+const [,, label, navCsv, query=''] = process.argv;
+const E = 'D:/pyrefly-release55/critic/reviews/04631aedf-focused/film';
+fs.mkdirSync(E, { recursive: true });
+const browser = await chromium.launch({ args: [...currentChromiumArgs()] });
+const ctx = await browser.newContext({ viewport: { width: 1600, height: 900 }, recordVideo: { dir: E + '/' + label + '-vid', size: { width: 1600, height: 900 } } });
+const page = await ctx.newPage();
+const errs = []; page.on('pageerror', e => errs.push(String(e).slice(0,300))); page.on('console', m => m.type()==='error' && errs.push(m.text().slice(0,300)));
+await page.goto('http://127.0.0.1:5871/' + query); await page.evaluate(() => localStorage.clear()); await page.goto('http://127.0.0.1:5871/' + query);
+await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 60000 });
+const scr = () => page.evaluate(() => window.__pyrefly.screen());
+await page.keyboard.press('Enter'); await page.waitForTimeout(900); await page.keyboard.press('Escape');
+for (const k of navCsv ? navCsv.split(',') : []) { await page.keyboard.press(k); await page.waitForTimeout(450); }
+await page.keyboard.press('Enter');
+let t0 = Date.now();
+while (Date.now() - t0 < 120000 && (await scr()) !== 'battle') { await page.keyboard.press('Enter'); await page.waitForTimeout(450); }
+await waitBattleMenu(page, 100000);
+const tStart = Date.now();
+await page.evaluate(() => { window.__pyrefly.setBattleSpeed('normal'); window.__pyrefly.autoBattle('intended'); });
+const marks = [];
+t0 = Date.now();
+while (Date.now() - t0 < 300000 && (await scr()) === 'battle') await page.waitForTimeout(250);
+marks.push({ endedAfterMs: Date.now() - tStart, screen: await scr() });
+await page.waitForTimeout(3000);
+const v = page.video(); await ctx.close(); const p = await v.path();
+console.log(label, JSON.stringify(marks), p, JSON.stringify(errs));
+await browser.close();

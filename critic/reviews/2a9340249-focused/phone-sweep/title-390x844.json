@@ -1,0 +1,283 @@
+{
+ "scene": "title",
+ "w": 390,
+ "h": 844,
+ "base": "http://127.0.0.1:5471/",
+ "seed": 1,
+ "floor": 14,
+ "steps": [
+  {
+   "label": "title",
+   "file": "title-390x844-title.jpg",
+   "screen": "title",
+   "state": {
+    "advancing": false,
+    "skin": "ink-and-gold",
+    "art": "echo",
+    "reduceMotion": false,
+    "reveal": "decoded",
+    "motes": 16,
+    "parallax": {
+     "x": 0,
+     "y": 0
+    },
+    "info": {
+     "open": null,
+     "claimed": false
+    },
+    "demo": null
+   },
+   "viewport": "390x844",
+   "floor": 14,
+   "nText": 11,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [],
+   "cut": [],
+   "items": [
+    {
+     "text": "An unofficial fan tribute",
+     "at": "div.fe-title__tap > div.fe-title__slab > div.fe-title__eyebrow",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      40.3,
+      44,
+      126.9,
+      72
+     ]
+    },
+    {
+     "text": "Tap to begin",
+     "at": "div.fe-title__slab > span.fe-title__chip > span.fe-title__chip-label.fe-title__chip-label--tap",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      53.3,
+      146.1,
+      70.1,
+      36
+     ]
+    },
+    {
+     "text": "Tap",
+     "at": "div.fe-hint > span.fe-hint__tap > b",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      25.5,
+      752,
+      30,
+      18
+     ]
+    },
+    {
+     "text": "begin",
+     "at": "div.fe-title__tap > div.fe-hint > span.fe-hint__tap",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      55.5,
+      752,
+      52.7,
+      18
+     ]
+    },
+    {
+     "text": "B",
+     "at": "div.fe-hint > span > b",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      115.5,
+      752,
+      11.1,
+      18
+     ]
+    },
+    {
+     "text": "Briefing",
+     "at": "div.fe-title__tap > div.fe-hint > span",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      126.6,
+      752,
+      78,
+      18
+     ]
+    },
+    {
+     "text": "Changelog",
+     "at": "div.fe-title__tap > div.fe-hint > span.fe-hint__entry",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      65.5,
+      797.6,
+      94.7,
+      18
+     ]
+    },
+    {
+     "text": "Title Art",
+     "at": "div.fe-title__tap > div.fe-hint > span.fe-hint__entry",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      247.7,
+      797.6,
+      78.8,
+      18
+     ]
+    },
+    {
+     "text": "Release",
+     "at": "div.fe-title__tap > div.fe-title__build > span.fe-title__build-lead",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      271.5,
+      14.7,
+      75,
+      18
+     ]
+    },
+    {
+     "text": "68",
+     "at": "div.fe-title__build > span.fe-title__build-lead > b",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      346.5,
+      14.7,
+      21,
+      18
+     ]
+    },
+    {
+     "text": "2a934024",
+     "at": "div.fe-title__tap > div.fe-title__build > i.fe-title__build-sha",
+     "fs": 15.4,
+     "scale": 1,
+     "eff": 15.4,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      298.2,
+      30.8,
+      69.3,
+      19
+     ]
+    }
+   ],
+   "targets": {
+    "min": 44,
+    "viewport": [
+     390,
+     844
+    ],
+    "n": 5,
+    "underCount": 1,
+    "under": [
+     {
+      "el": "span \"B Briefing\"",
+      "x": 115.5,
+      "y": 752,
+      "w": 89.1,
+      "h": 18,
+      "under": true,
+      "inView": true,
+      "pseudo": false,
+      "nested": true,
+      "bigAlias": false
+     }
+    ],
+    "all": [
+     {
+      "el": "div.fe-title__tap \"An unofficial fan tribute Pr\"",
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "under": false,
+      "inView": true,
+      "pseudo": false,
+      "nested": true,
+      "bigAlias": true
+     },
+     {
+      "el": "span.fe-title__chip \"Press EnterTap to begin\"",
+      "x": 22.4,
+      "y": 138.7,
+      "w": 131,
+      "h": 51.4,
+      "under": false,
+      "inView": true,
+      "pseudo": false,
+      "nested": true,
+      "bigAlias": false
+     },
+     {
+      "el": "span \"B Briefing\"",
+      "x": 115.5,
+      "y": 752,
+      "w": 89.1,
+      "h": 18,
+      "under": true,
+      "inView": true,
+      "pseudo": false,
+      "nested": true,
+      "bigAlias": false
+     },
+     {
+      "el": "span.fe-hint__entry \"L Changelog\"",
+      "x": 25.5,
+      "y": 784.6,
+      "w": 174.8,
+      "h": 44,
+      "under": false,
+      "inView": true,
+      "pseudo": false,
+      "nested": true,
+      "bigAlias": false
+     },
+     {
+      "el": "span.fe-hint__entry \"T Title Art\"",
+      "x": 207.6,
+      "y": 784.6,
+      "w": 158.9,
+      "h": 44,
+      "under": false,
+      "inView": true,
+      "pseudo": false,
+      "nested": true,
+      "bigAlias": false
+     }
+    ]
+   }
+  }
+ ],
+ "error": null,
+ "consoleErrors": []
+}

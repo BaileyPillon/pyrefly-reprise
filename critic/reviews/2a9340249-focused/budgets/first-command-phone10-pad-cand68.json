@@ -1,0 +1,383 @@
+{
+ "job": "first-command",
+ "profile": "phone10",
+ "mode": "pad",
+ "label": "cand68",
+ "at": "2026-10-29T13:33:50.551Z",
+ "base": "http://127.0.0.1:5471/",
+ "machine": {
+  "unquiet": false,
+  "busyPct": 17.049999999999997
+ },
+ "metrics": {
+  "loadMs": [
+   19819,
+   42382
+  ],
+  "loadCardMs": [
+   19222,
+   42277
+  ],
+  "totalMs": [
+   69480,
+   71976
+  ],
+  "wireBytesToMenu": [
+   93.56,
+   94.04
+  ],
+  "wireBytesAfterPress": [
+   87.34,
+   87.82
+  ],
+  "retryLoadMs": []
+ },
+ "byChapter": {
+  "seymour-flux": {
+   "loadMs": 19819,
+   "loadCardMs": 19222,
+   "totalMs": 69480,
+   "authoredMs": 47842,
+   "wireMB": 93.56,
+   "retryLoadMs": null,
+   "tier": "phone"
+  },
+  "ffx2-bahamut": {
+   "loadMs": 42382,
+   "loadCardMs": 42277,
+   "totalMs": 71976,
+   "authoredMs": 27851,
+   "wireMB": 94.04,
+   "retryLoadMs": null,
+   "tier": "phone"
+  }
+ },
+ "runs": [
+  {
+   "chapter": "seymour-flux",
+   "profile": "phone10",
+   "mode": "pad",
+   "scene": "taps",
+   "cold": {
+    "totalMs": 69480,
+    "loadMs": 19819,
+    "authoredMs": 47842,
+    "deadMs": 206,
+    "parts": [
+     {
+      "name": "press-wait",
+      "startMs": 0,
+      "endMs": 30,
+      "ms": 30
+     },
+     {
+      "name": "party-prep",
+      "startMs": 30,
+      "endMs": 1644,
+      "ms": 1615
+     },
+     {
+      "name": "after-prep",
+      "startMs": 1644,
+      "endMs": 1646,
+      "ms": 1
+     },
+     {
+      "name": "scene",
+      "startMs": 1646,
+      "endMs": 41536,
+      "ms": 39890
+     },
+     {
+      "name": "after-scene",
+      "startMs": 41536,
+      "endMs": 41546,
+      "ms": 10
+     },
+     {
+      "name": "entry-load",
+      "startMs": 41546,
+      "endMs": 59882,
+      "ms": 18337
+     },
+     {
+      "name": "first-draw",
+      "startMs": 59882,
+      "endMs": 61364,
+      "ms": 1482
+     },
+     {
+      "name": "card",
+      "startMs": 61364,
+      "endMs": 62635,
+      "ms": 1271
+     },
+     {
+      "name": "card-to-sweep",
+      "startMs": 62635,
+      "endMs": 62799,
+      "ms": 165
+     },
+     {
+      "name": "sweep",
+      "startMs": 62799,
+      "endMs": 69236,
+      "ms": 6437
+     },
+     {
+      "name": "sweep-to-menu",
+      "startMs": 69236,
+      "endMs": 69480,
+      "ms": 244
+     }
+    ],
+    "facts": {
+     "screenBattleMs": 41548,
+     "entryOnMs": 41546,
+     "entryMs": 20420,
+     "loadCardOnMs": 42450,
+     "loadCardMs": 19222,
+     "presenterUpMs": 59882,
+     "cardOnMs": 61364,
+     "cardMs": 1271,
+     "loadCardUpAtCardMs": 18914,
+     "sweepMs": 6437,
+     "frozenMs": 455
+    },
+    "loadCardMs": 19222,
+    "wireBytesToMenu": 93.56,
+    "wireBytesAfterPress": 87.34,
+    "requestsAfterPress": 278,
+    "byKindAfterPressMB": {
+     "html": 0,
+     "script": 0.01,
+     "style": 0,
+     "font": 0.03,
+     "image": 69.4,
+     "json": 0.19,
+     "audio": 17.71
+    },
+    "longTasksInLoad": 77,
+    "worstGapMs": 583,
+    "gapsOver100": 17
+   },
+   "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+    "dpr": 2,
+    "inner": [
+     390,
+     844
+    ],
+    "conn": {
+     "effectiveType": "4g",
+     "downlink": 10,
+     "rtt": 50,
+     "saveData": false
+    },
+    "art": {
+     "device": "phone",
+     "textureMB": 220,
+     "bufferWidth": 1386,
+     "pinned": null,
+     "residentMB": 81.9,
+     "governorBudgetMB": 220,
+     "governorKeys": [
+      "frame",
+      "upgrades",
+      "downgrades",
+      "loadFailures",
+      "inflight",
+      "queued",
+      "staging",
+      "stagedLanded",
+      "warmed",
+      "cooled",
+      "warmMB",
+      "residentMB",
+      "budgetMB",
+      "lastSwapMs",
+      "updateMs",
+      "entries",
+      "trace",
+      "swaps",
+      "stager"
+     ],
+     "entries": 42
+    }
+   },
+   "errors": [],
+   "machine": {
+    "busyPct": 16.7,
+    "unquiet": false,
+    "gpuQuietMarker": false,
+    "seconds": 82
+   }
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "profile": "phone10",
+   "mode": "pad",
+   "scene": "taps",
+   "cold": {
+    "totalMs": 71976,
+    "loadMs": 42382,
+    "authoredMs": 27851,
+    "deadMs": 131,
+    "parts": [
+     {
+      "name": "press-wait",
+      "startMs": 0,
+      "endMs": 49,
+      "ms": 49
+     },
+     {
+      "name": "party-prep",
+      "startMs": 49,
+      "endMs": 1662,
+      "ms": 1613
+     },
+     {
+      "name": "after-prep",
+      "startMs": 1662,
+      "endMs": 1663,
+      "ms": 1
+     },
+     {
+      "name": "scene",
+      "startMs": 1663,
+      "endMs": 20676,
+      "ms": 19013
+     },
+     {
+      "name": "after-scene",
+      "startMs": 20676,
+      "endMs": 20688,
+      "ms": 12
+     },
+     {
+      "name": "entry-load",
+      "startMs": 20688,
+      "endMs": 61727,
+      "ms": 41039
+     },
+     {
+      "name": "first-draw",
+      "startMs": 61727,
+      "endMs": 63070,
+      "ms": 1343
+     },
+     {
+      "name": "card",
+      "startMs": 63070,
+      "endMs": 64347,
+      "ms": 1277
+     },
+     {
+      "name": "card-to-sweep",
+      "startMs": 64347,
+      "endMs": 64416,
+      "ms": 69
+     },
+     {
+      "name": "sweep",
+      "startMs": 64416,
+      "endMs": 70825,
+      "ms": 6410
+     },
+     {
+      "name": "sweep-to-menu",
+      "startMs": 70825,
+      "endMs": 71976,
+      "ms": 1151
+     }
+    ],
+    "facts": {
+     "screenBattleMs": 20690,
+     "entryOnMs": 20688,
+     "entryMs": 43209,
+     "loadCardOnMs": 21096,
+     "loadCardMs": 42277,
+     "presenterUpMs": 61727,
+     "cardOnMs": 63070,
+     "cardMs": 1277,
+     "loadCardUpAtCardMs": 41974,
+     "sweepMs": 6410,
+     "frozenMs": 582
+    },
+    "loadCardMs": 42277,
+    "wireBytesToMenu": 94.04,
+    "wireBytesAfterPress": 87.82,
+    "requestsAfterPress": 237,
+    "byKindAfterPressMB": {
+     "html": 0,
+     "script": 0.01,
+     "style": 0,
+     "font": 0.03,
+     "image": 71.02,
+     "json": 0.19,
+     "audio": 16.56
+    },
+    "longTasksInLoad": 64,
+    "worstGapMs": 717,
+    "gapsOver100": 13
+   },
+   "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+    "dpr": 2,
+    "inner": [
+     390,
+     844
+    ],
+    "conn": {
+     "effectiveType": "4g",
+     "downlink": 10,
+     "rtt": 50,
+     "saveData": false
+    },
+    "art": {
+     "device": "phone",
+     "textureMB": 220,
+     "bufferWidth": 1386,
+     "pinned": null,
+     "residentMB": 79.7,
+     "governorBudgetMB": 220,
+     "governorKeys": [
+      "frame",
+      "upgrades",
+      "downgrades",
+      "loadFailures",
+      "inflight",
+      "queued",
+      "staging",
+      "stagedLanded",
+      "warmed",
+      "cooled",
+      "warmMB",
+      "residentMB",
+      "budgetMB",
+      "lastSwapMs",
+      "updateMs",
+      "entries",
+      "trace",
+      "swaps",
+      "stager"
+     ],
+     "entries": 38
+    }
+   },
+   "errors": [],
+   "machine": {
+    "busyPct": 17.4,
+    "unquiet": false,
+    "gpuQuietMarker": false,
+    "seconds": 84.7
+   }
+  }
+ ],
+ "skipped": [],
+ "notes": [
+  "select path, scene=taps",
+  "bytes are wire bytes from the DevTools protocol; a cache hit counts 0",
+  "tier and link reading are in runs[].env: a 10 Mbit/s line may read as FAST (downlink 10) and an art tier of 2x may then be asked for"
+ ]
+}
