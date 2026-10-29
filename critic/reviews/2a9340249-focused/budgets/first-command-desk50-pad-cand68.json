@@ -1,0 +1,371 @@
+{
+ "job": "first-command",
+ "profile": "desk50",
+ "mode": "pad",
+ "label": "cand68",
+ "at": "2026-10-29T13:31:03.469Z",
+ "base": "http://127.0.0.1:5471/",
+ "machine": {
+  "unquiet": false,
+  "busyPct": 12.649999999999999
+ },
+ "metrics": {
+  "loadMs": [
+   5924,
+   4442
+  ],
+  "loadCardMs": [
+   5380,
+   4452
+  ],
+  "totalMs": [
+   50697,
+   32131
+  ],
+  "wireBytesToMenu": [
+   110.31,
+   112.03
+  ],
+  "wireBytesAfterPress": [
+   77.6,
+   80.16
+  ],
+  "retryLoadMs": []
+ },
+ "byChapter": {
+  "seymour-flux": {
+   "loadMs": 5924,
+   "loadCardMs": 5380,
+   "totalMs": 50697,
+   "authoredMs": 43052,
+   "wireMB": 110.31,
+   "retryLoadMs": null,
+   "tier": "high"
+  },
+  "ffx2-bahamut": {
+   "loadMs": 4442,
+   "loadCardMs": 4452,
+   "totalMs": 32131,
+   "authoredMs": 26058,
+   "wireMB": 112.03,
+   "retryLoadMs": null,
+   "tier": "high"
+  }
+ },
+ "runs": [
+  {
+   "chapter": "seymour-flux",
+   "profile": "desk50",
+   "mode": "pad",
+   "scene": "taps",
+   "cold": {
+    "totalMs": 50697,
+    "loadMs": 5924,
+    "authoredMs": 43052,
+    "deadMs": 59,
+    "parts": [
+     {
+      "name": "press-wait",
+      "startMs": 0,
+      "endMs": 9,
+      "ms": 9
+     },
+     {
+      "name": "party-prep",
+      "startMs": 9,
+      "endMs": 1670,
+      "ms": 1661
+     },
+     {
+      "name": "scene",
+      "startMs": 1670,
+      "endMs": 36717,
+      "ms": 35047
+     },
+     {
+      "name": "after-scene",
+      "startMs": 36717,
+      "endMs": 36719,
+      "ms": 2
+     },
+     {
+      "name": "entry-load",
+      "startMs": 36719,
+      "endMs": 41685,
+      "ms": 4966
+     },
+     {
+      "name": "first-draw",
+      "startMs": 41685,
+      "endMs": 42643,
+      "ms": 958
+     },
+     {
+      "name": "card",
+      "startMs": 42643,
+      "endMs": 43919,
+      "ms": 1276
+     },
+     {
+      "name": "card-to-sweep",
+      "startMs": 43919,
+      "endMs": 43967,
+      "ms": 48
+     },
+     {
+      "name": "sweep",
+      "startMs": 43967,
+      "endMs": 50517,
+      "ms": 6549
+     },
+     {
+      "name": "sweep-to-menu",
+      "startMs": 50517,
+      "endMs": 50697,
+      "ms": 180
+     }
+    ],
+    "facts": {
+     "screenBattleMs": 36720,
+     "entryOnMs": 36719,
+     "entryMs": 6650,
+     "loadCardOnMs": 37657,
+     "loadCardMs": 5380,
+     "presenterUpMs": 41685,
+     "cardOnMs": 42643,
+     "cardMs": 1276,
+     "loadCardUpAtCardMs": 4986,
+     "sweepMs": 6549,
+     "frozenMs": 831
+    },
+    "loadCardMs": 5380,
+    "wireBytesToMenu": 110.31,
+    "wireBytesAfterPress": 77.6,
+    "requestsAfterPress": 306,
+    "byKindAfterPressMB": {
+     "html": 0,
+     "script": 0.01,
+     "style": 0,
+     "font": 0.05,
+     "image": 66.61,
+     "json": 0.19,
+     "audio": 10.73
+    },
+    "longTasksInLoad": 8,
+    "worstGapMs": 817,
+    "gapsOver100": 6
+   },
+   "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+    "dpr": 1,
+    "inner": [
+     1600,
+     900
+    ],
+    "conn": {
+     "effectiveType": "4g",
+     "downlink": 10,
+     "rtt": 0,
+     "saveData": false
+    },
+    "art": {
+     "device": "high",
+     "textureMB": 2600,
+     "bufferWidth": 1600,
+     "pinned": null,
+     "residentMB": 18.3,
+     "governorBudgetMB": 2600,
+     "governorKeys": [
+      "frame",
+      "upgrades",
+      "downgrades",
+      "loadFailures",
+      "inflight",
+      "queued",
+      "staging",
+      "stagedLanded",
+      "warmed",
+      "cooled",
+      "warmMB",
+      "residentMB",
+      "budgetMB",
+      "lastSwapMs",
+      "updateMs",
+      "entries",
+      "trace",
+      "swaps",
+      "stager"
+     ],
+     "entries": 42
+    }
+   },
+   "errors": [],
+   "machine": {
+    "busyPct": 12.1,
+    "unquiet": false,
+    "gpuQuietMarker": false,
+    "seconds": 59.3
+   }
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "profile": "desk50",
+   "mode": "pad",
+   "scene": "taps",
+   "cold": {
+    "totalMs": 32131,
+    "loadMs": 4442,
+    "authoredMs": 26058,
+    "deadMs": 40,
+    "parts": [
+     {
+      "name": "press-wait",
+      "startMs": 0,
+      "endMs": 21,
+      "ms": 21
+     },
+     {
+      "name": "party-prep",
+      "startMs": 21,
+      "endMs": 1612,
+      "ms": 1591
+     },
+     {
+      "name": "scene",
+      "startMs": 1612,
+      "endMs": 19294,
+      "ms": 17682
+     },
+     {
+      "name": "after-scene",
+      "startMs": 19294,
+      "endMs": 19297,
+      "ms": 3
+     },
+     {
+      "name": "entry-load",
+      "startMs": 19297,
+      "endMs": 22915,
+      "ms": 3618
+     },
+     {
+      "name": "first-draw",
+      "startMs": 22915,
+      "endMs": 23739,
+      "ms": 824
+     },
+     {
+      "name": "card",
+      "startMs": 23739,
+      "endMs": 25011,
+      "ms": 1272
+     },
+     {
+      "name": "card-to-sweep",
+      "startMs": 25011,
+      "endMs": 25027,
+      "ms": 16
+     },
+     {
+      "name": "sweep",
+      "startMs": 25027,
+      "endMs": 31096,
+      "ms": 6069
+     },
+     {
+      "name": "sweep-to-menu",
+      "startMs": 31096,
+      "endMs": 32131,
+      "ms": 1035
+     }
+    ],
+    "facts": {
+     "screenBattleMs": 19297,
+     "entryOnMs": 19297,
+     "entryMs": 5282,
+     "loadCardOnMs": 19712,
+     "loadCardMs": 4452,
+     "presenterUpMs": 22915,
+     "cardOnMs": 23739,
+     "cardMs": 1272,
+     "loadCardUpAtCardMs": 4027,
+     "sweepMs": 6069,
+     "frozenMs": 264
+    },
+    "loadCardMs": 4452,
+    "wireBytesToMenu": 112.03,
+    "wireBytesAfterPress": 80.16,
+    "requestsAfterPress": 286,
+    "byKindAfterPressMB": {
+     "html": 0,
+     "script": 0.01,
+     "style": 0,
+     "font": 0.05,
+     "image": 71.95,
+     "json": 0.2,
+     "audio": 7.93
+    },
+    "longTasksInLoad": 10,
+    "worstGapMs": 183,
+    "gapsOver100": 5
+   },
+   "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+    "dpr": 1,
+    "inner": [
+     1600,
+     900
+    ],
+    "conn": {
+     "effectiveType": "4g",
+     "downlink": 10,
+     "rtt": 0,
+     "saveData": false
+    },
+    "art": {
+     "device": "high",
+     "textureMB": 2600,
+     "bufferWidth": 1600,
+     "pinned": null,
+     "residentMB": 10.8,
+     "governorBudgetMB": 2600,
+     "governorKeys": [
+      "frame",
+      "upgrades",
+      "downgrades",
+      "loadFailures",
+      "inflight",
+      "queued",
+      "staging",
+      "stagedLanded",
+      "warmed",
+      "cooled",
+      "warmMB",
+      "residentMB",
+      "budgetMB",
+      "lastSwapMs",
+      "updateMs",
+      "entries",
+      "trace",
+      "swaps",
+      "stager"
+     ],
+     "entries": 38
+    }
+   },
+   "errors": [],
+   "machine": {
+    "busyPct": 13.2,
+    "unquiet": false,
+    "gpuQuietMarker": false,
+    "seconds": 40.9
+   }
+  }
+ ],
+ "skipped": [],
+ "notes": [
+  "select path, scene=taps",
+  "bytes are wire bytes from the DevTools protocol; a cache hit counts 0",
+  "tier and link reading are in runs[].env: a 10 Mbit/s line may read as FAST (downlink 10) and an art tier of 2x may then be asked for"
+ ]
+}

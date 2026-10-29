@@ -1,0 +1,741 @@
+{
+ "schema": "a11y-text-t1/1",
+ "base": "http://127.0.0.1:5471/",
+ "startedAt": "2026-10-29T13:44:39.147Z",
+ "records": [
+  {
+   "chapter": "seymour-flux",
+   "game": "ffx",
+   "size": "1280x720",
+   "bundle": [
+    "index-CahDxk82.js"
+   ],
+   "pick": "Attack",
+   "flag": {
+    "inner": [
+     1280,
+     720
+    ],
+    "pro": true,
+    "label": [
+     {
+      "text": "TARGET",
+      "fontPx": 14,
+      "box": [
+       569.1,
+       296.3,
+       78.4,
+       14
+      ],
+      "scrollW": 78,
+      "clientW": 78
+     }
+    ],
+    "help": [
+     {
+      "text": "PHYSICAL DAMAGE",
+      "fontPx": 14,
+      "box": [
+       559.6,
+       340.3,
+       157.8,
+       15.4
+      ],
+      "scrollW": 158,
+      "clientW": 158
+     }
+    ],
+    "name": [
+     {
+      "text": "Seymour Flux",
+      "fontPx": 22,
+      "box": [
+       564.5,
+       312.3,
+       117.1,
+       26
+      ],
+      "scrollW": 117,
+      "clientW": 117
+     }
+    ],
+    "tag": [],
+    "note": [],
+    "plates": [
+     {
+      "box": [
+       536.7,
+       289.3,
+       217.3,
+       77.4
+      ],
+      "over": []
+     }
+    ]
+   }
+  },
+  {
+   "chapter": "seymour-flux",
+   "game": "ffx",
+   "size": "1440x1080",
+   "bundle": [
+    "index-CahDxk82.js"
+   ],
+   "pick": "Attack",
+   "flag": {
+    "inner": [
+     1440,
+     1080
+    ],
+    "pro": true,
+    "label": [
+     {
+      "text": "TARGET",
+      "fontPx": 14,
+      "box": [
+       779.6,
+       423.8,
+       78.4,
+       14
+      ],
+      "scrollW": 78,
+      "clientW": 78
+     }
+    ],
+    "help": [
+     {
+      "text": "PHYSICAL DAMAGE",
+      "fontPx": 14,
+      "box": [
+       770.1,
+       467.8,
+       157.8,
+       15.4
+      ],
+      "scrollW": 158,
+      "clientW": 158
+     }
+    ],
+    "name": [
+     {
+      "text": "Seymour Flux",
+      "fontPx": 22,
+      "box": [
+       775,
+       439.8,
+       117.1,
+       26
+      ],
+      "scrollW": 117,
+      "clientW": 117
+     }
+    ],
+    "tag": [],
+    "note": [],
+    "plates": [
+     {
+      "box": [
+       747.2,
+       416.8,
+       217.3,
+       77.4
+      ],
+      "over": []
+     }
+    ]
+   }
+  },
+  {
+   "chapter": "seymour-flux",
+   "game": "ffx",
+   "size": "1600x900",
+   "bundle": [
+    "index-CahDxk82.js"
+   ],
+   "pick": "Attack",
+   "flag": {
+    "inner": [
+     1600,
+     900
+    ],
+    "pro": true,
+    "label": [
+     {
+      "text": "TARGET",
+      "fontPx": 14,
+      "box": [
+       730.1,
+       368,
+       78.4,
+       14
+      ],
+      "scrollW": 78,
+      "clientW": 78
+     }
+    ],
+    "help": [
+     {
+      "text": "PHYSICAL DAMAGE",
+      "fontPx": 14,
+      "box": [
+       720.2,
+       414,
+       157.8,
+       15.4
+      ],
+      "scrollW": 158,
+      "clientW": 158
+     }
+    ],
+    "name": [
+     {
+      "text": "Seymour Flux",
+      "fontPx": 23.2,
+      "box": [
+       725.3,
+       384,
+       123.5,
+       28
+      ],
+      "scrollW": 124,
+      "clientW": 124
+     }
+    ],
+    "tag": [],
+    "note": [],
+    "plates": [
+     {
+      "box": [
+       697.2,
+       361,
+       217.7,
+       79.4
+      ],
+      "over": []
+     }
+    ]
+   }
+  },
+  {
+   "chapter": "seymour-flux",
+   "game": "ffx",
+   "size": "2000x1012",
+   "bundle": [
+    "index-CahDxk82.js"
+   ],
+   "pick": "Attack",
+   "flag": {
+    "inner": [
+     2000,
+     1012
+    ],
+    "pro": true,
+    "label": [
+     {
+      "text": "TARGET",
+      "fontPx": 14.4,
+      "box": [
+       901.4,
+       412,
+       80.7,
+       14.4
+      ],
+      "scrollW": 81,
+      "clientW": 81
+     }
+    ],
+    "help": [
+     {
+      "text": "PHYSICAL DAMAGE",
+      "fontPx": 15.6,
+      "box": [
+       889.7,
+       465.4,
+       175.9,
+       17.1
+      ],
+      "scrollW": 176,
+      "clientW": 176
+     }
+    ],
+    "name": [
+     {
+      "text": "Seymour Flux",
+      "fontPx": 29,
+      "box": [
+       895.7,
+       428.4,
+       154.4,
+       35
+      ],
+      "scrollW": 154,
+      "clientW": 154
+     }
+    ],
+    "tag": [],
+    "note": [],
+    "plates": [
+     {
+      "box": [
+       866.6,
+       405,
+       237.7,
+       88.5
+      ],
+      "over": []
+     }
+    ]
+   }
+  },
+  {
+   "chapter": "seymour-flux",
+   "game": "ffx",
+   "size": "2560x1440",
+   "bundle": [
+    "index-CahDxk82.js"
+   ],
+   "pick": "Attack",
+   "flag": {
+    "inner": [
+     2560,
+     1440
+    ],
+    "pro": true,
+    "label": [
+     {
+      "text": "TARGET",
+      "fontPx": 18,
+      "box": [
+       1185.1,
+       580.2,
+       100.8,
+       18
+      ],
+      "scrollW": 101,
+      "clientW": 101
+     }
+    ],
+    "help": [
+     {
+      "text": "PHYSICAL DAMAGE",
+      "fontPx": 19,
+      "box": [
+       1170.6,
+       647.2,
+       214.2,
+       20.9
+      ],
+      "scrollW": 214,
+      "clientW": 214
+     }
+    ],
+    "name": [
+     {
+      "text": "Seymour Flux",
+      "fontPx": 37.1,
+      "box": [
+       1178,
+       600.2,
+       197.6,
+       45
+      ],
+      "scrollW": 198,
+      "clientW": 198
+     }
+    ],
+    "tag": [],
+    "note": [],
+    "plates": [
+     {
+      "box": [
+       1147,
+       573.2,
+       279.7,
+       105.9
+      ],
+      "over": []
+     }
+    ]
+   }
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "game": "ffx2",
+   "size": "1280x720",
+   "bundle": [
+    "index-CahDxk82.js"
+   ],
+   "pick": "Attack",
+   "flag": {
+    "inner": [
+     1280,
+     720
+    ],
+    "pro": true,
+    "label": [
+     {
+      "text": "TARGET",
+      "fontPx": 14,
+      "box": [
+       774.8,
+       206.3,
+       78.4,
+       14
+      ],
+      "scrollW": 78,
+      "clientW": 78
+     }
+    ],
+    "help": [
+     {
+      "text": "PHYSICAL DAMAGE",
+      "fontPx": 14,
+      "box": [
+       784.3,
+       250.3,
+       157.8,
+       15.4
+      ],
+      "scrollW": 158,
+      "clientW": 158
+     }
+    ],
+    "name": [
+     {
+      "text": "Bahamut",
+      "fontPx": 22,
+      "box": [
+       779.5,
+       222.3,
+       77.1,
+       26
+      ],
+      "scrollW": 77,
+      "clientW": 77
+     }
+    ],
+    "tag": [],
+    "note": [],
+    "plates": [
+     {
+      "box": [
+       752.9,
+       199.3,
+       217.3,
+       77.4
+      ],
+      "over": [
+       {
+        "sel": ".f1-hero",
+        "px2": 1652
+       },
+       {
+        "sel": ".f1-cue",
+        "px2": 1188
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "game": "ffx2",
+   "size": "1440x1080",
+   "bundle": [
+    "index-CahDxk82.js"
+   ],
+   "pick": "Attack",
+   "flag": {
+    "inner": [
+     1440,
+     1080
+    ],
+    "pro": true,
+    "label": [
+     {
+      "text": "TARGET",
+      "fontPx": 14,
+      "box": [
+       908.3,
+       308.1,
+       78.4,
+       14
+      ],
+      "scrollW": 78,
+      "clientW": 78
+     }
+    ],
+    "help": [
+     {
+      "text": "PHYSICAL DAMAGE",
+      "fontPx": 14,
+      "box": [
+       917.8,
+       352.1,
+       157.8,
+       15.4
+      ],
+      "scrollW": 158,
+      "clientW": 158
+     }
+    ],
+    "name": [
+     {
+      "text": "Bahamut",
+      "fontPx": 22,
+      "box": [
+       912.9,
+       324.1,
+       77.1,
+       26
+      ],
+      "scrollW": 77,
+      "clientW": 77
+     }
+    ],
+    "tag": [],
+    "note": [],
+    "plates": [
+     {
+      "box": [
+       886.3,
+       301.1,
+       217.3,
+       77.4
+      ],
+      "over": [
+       {
+        "sel": ".f1-hero",
+        "px2": 1392
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "game": "ffx2",
+   "size": "1600x900",
+   "bundle": [
+    "index-CahDxk82.js"
+   ],
+   "pick": "Attack",
+   "flag": {
+    "inner": [
+     1600,
+     900
+    ],
+    "pro": true,
+    "label": [
+     {
+      "text": "TARGET",
+      "fontPx": 14,
+      "box": [
+       960,
+       250.7,
+       78.4,
+       14
+      ],
+      "scrollW": 78,
+      "clientW": 78
+     }
+    ],
+    "help": [
+     {
+      "text": "PHYSICAL DAMAGE",
+      "fontPx": 14,
+      "box": [
+       970,
+       296.7,
+       157.8,
+       15.4
+      ],
+      "scrollW": 158,
+      "clientW": 158
+     }
+    ],
+    "name": [
+     {
+      "text": "Bahamut",
+      "fontPx": 23.2,
+      "box": [
+       964.9,
+       266.7,
+       81.3,
+       28
+      ],
+      "scrollW": 81,
+      "clientW": 81
+     }
+    ],
+    "tag": [],
+    "note": [],
+    "plates": [
+     {
+      "box": [
+       938.1,
+       243.7,
+       217.7,
+       79.4
+      ],
+      "over": [
+       {
+        "sel": ".f1-cue",
+        "px2": 13
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "game": "ffx2",
+   "size": "2000x1012",
+   "bundle": [
+    "index-CahDxk82.js"
+   ],
+   "pick": "Attack",
+   "flag": {
+    "inner": [
+     2000,
+     1012
+    ],
+    "pro": true,
+    "label": [
+     {
+      "text": "TARGET",
+      "fontPx": 14.4,
+      "box": [
+       1177.1,
+       282.3,
+       80.7,
+       14.4
+      ],
+      "scrollW": 81,
+      "clientW": 81
+     }
+    ],
+    "help": [
+     {
+      "text": "PHYSICAL DAMAGE",
+      "fontPx": 15.6,
+      "box": [
+       1188.8,
+       335.7,
+       175.9,
+       17.1
+      ],
+      "scrollW": 176,
+      "clientW": 176
+     }
+    ],
+    "name": [
+     {
+      "text": "Bahamut",
+      "fontPx": 29,
+      "box": [
+       1182.8,
+       298.7,
+       101.7,
+       35
+      ],
+      "scrollW": 102,
+      "clientW": 102
+     }
+    ],
+    "tag": [],
+    "note": [],
+    "plates": [
+     {
+      "box": [
+       1155.1,
+       275.3,
+       237.7,
+       88.5
+      ],
+      "over": [
+       {
+        "sel": ".f1-cue",
+        "px2": 22
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "chapter": "ffx2-bahamut",
+   "game": "ffx2",
+   "size": "2560x1440",
+   "bundle": [
+    "index-CahDxk82.js"
+   ],
+   "pick": "Attack",
+   "flag": {
+    "inner": [
+     2560,
+     1440
+    ],
+    "pro": true,
+    "label": [
+     {
+      "text": "TARGET",
+      "fontPx": 18,
+      "box": [
+       1521.7,
+       409.4,
+       100.8,
+       18
+      ],
+      "scrollW": 101,
+      "clientW": 101
+     }
+    ],
+    "help": [
+     {
+      "text": "PHYSICAL DAMAGE",
+      "fontPx": 19,
+      "box": [
+       1536.3,
+       476.4,
+       214.2,
+       20.9
+      ],
+      "scrollW": 214,
+      "clientW": 214
+     }
+    ],
+    "name": [
+     {
+      "text": "Bahamut",
+      "fontPx": 37.1,
+      "box": [
+       1528.9,
+       429.4,
+       130.2,
+       45
+      ],
+      "scrollW": 130,
+      "clientW": 130
+     }
+    ],
+    "tag": [],
+    "note": [],
+    "plates": [
+     {
+      "box": [
+       1499.3,
+       402.4,
+       279.7,
+       105.9
+      ],
+      "over": []
+     }
+    ]
+   }
+  }
+ ]
+}

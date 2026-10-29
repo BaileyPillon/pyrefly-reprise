@@ -1,0 +1,1009 @@
+{
+ "job": "chapter-memory",
+ "profile": "desk50",
+ "label": "r67",
+ "at": "2026-10-29T13:42:51.364Z",
+ "base": "http://127.0.0.1:5472/",
+ "machine": {
+  "unquiet": false,
+  "busyPct": 11.9
+ },
+ "metrics": {
+  "memGrowthPct": [
+   85.48
+  ],
+  "heapGrowthMB": [
+   7.7
+  ],
+  "treePeakMB": [
+   3370
+  ],
+  "pageMB": [
+   744.9
+  ],
+  "residentMB": [
+   18.3
+  ],
+  "decodeCacheMB": [
+   13.7
+  ]
+ },
+ "derived": {
+  "changesBetween": 4,
+  "memGrowthPct": 85.48,
+  "treeGrowthPct": 93.99,
+  "heapGrowthMB": 7.7,
+  "treePeakMB": 3370,
+  "pageMB": 744.9,
+  "residentMB": 18.3,
+  "domNodesBoardGrowth": 1584,
+  "domNodesTitle": 198,
+  "decodeCacheMB": 13.7,
+  "decodeCacheIsEstimate": true
+ },
+ "runs": [
+  {
+   "profile": "desk50",
+   "seq": [
+    "seymour-flux",
+    "ffx2-bahamut",
+    "seymour-flux",
+    "ffx2-bahamut",
+    "seymour-flux"
+   ],
+   "errors": [],
+   "machine": {
+    "busyPct": 11.9,
+    "unquiet": false,
+    "gpuQuietMarker": false,
+    "seconds": 138.6
+   },
+   "steps": [
+    {
+     "step": "title",
+     "label": "title",
+     "at": "2026-10-29T13:40:36.573Z",
+     "jsHeapMB": 14.5,
+     "jsHeapTotalMB": 15.3,
+     "dom": {
+      "nodes": 198,
+      "documents": 2,
+      "listeners": 42
+     },
+     "proc": {
+      "byType": {
+       "tree": 355.3,
+       "browser": 20.4,
+       "renderer": 93.6,
+       "gpu": 0,
+       "utility": 0,
+       "other": 241.3,
+       "page": 93.6
+      },
+      "processes": [
+       {
+        "id": 30968,
+        "type": "renderer",
+        "privateMB": 93.6,
+        "workingSetMB": 213.9
+       },
+       {
+        "id": 36152,
+        "type": "network.mojom.NetworkService",
+        "privateMB": 35.9,
+        "workingSetMB": 56.7
+       },
+       {
+        "id": 43764,
+        "type": "browser",
+        "privateMB": 20.4,
+        "workingSetMB": 61.9
+       },
+       {
+        "id": 65080,
+        "type": "GPU",
+        "privateMB": 205.4,
+        "workingSetMB": 103.9
+       }
+      ]
+     },
+     "env": {
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+      "dpr": 1,
+      "inner": [
+       1600,
+       900
+      ],
+      "conn": {
+       "effectiveType": "4g",
+       "downlink": 10,
+       "rtt": 0,
+       "saveData": false
+      },
+      "art": {
+       "device": "high",
+       "textureMB": 2600,
+       "bufferWidth": 1600,
+       "pinned": null,
+       "residentMB": null,
+       "governorBudgetMB": null,
+       "governorKeys": null,
+       "entries": null
+      }
+     }
+    },
+    {
+     "step": "battle-1",
+     "chapter": "seymour-flux",
+     "label": "battle-1 seymour-flux",
+     "at": "2026-10-29T13:41:02.964Z",
+     "jsHeapMB": 25.7,
+     "jsHeapTotalMB": 27,
+     "dom": {
+      "nodes": 890,
+      "documents": 4,
+      "listeners": 109
+     },
+     "proc": {
+      "byType": {
+       "tree": 1680.1,
+       "browser": 34.5,
+       "renderer": 356.8,
+       "gpu": 0,
+       "utility": 0,
+       "other": 1288.8,
+       "page": 356.8
+      },
+      "processes": [
+       {
+        "id": 30968,
+        "type": "renderer",
+        "privateMB": 356.8,
+        "workingSetMB": 909.7
+       },
+       {
+        "id": 36152,
+        "type": "network.mojom.NetworkService",
+        "privateMB": 70.8,
+        "workingSetMB": 90.1
+       },
+       {
+        "id": 43764,
+        "type": "browser",
+        "privateMB": 34.5,
+        "workingSetMB": 74.8
+       },
+       {
+        "id": 65080,
+        "type": "GPU",
+        "privateMB": 1218,
+        "workingSetMB": 408.5
+       }
+      ]
+     },
+     "env": {
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+      "dpr": 1,
+      "inner": [
+       1600,
+       900
+      ],
+      "conn": {
+       "effectiveType": "4g",
+       "downlink": 10,
+       "rtt": 0,
+       "saveData": false
+      },
+      "art": {
+       "device": "high",
+       "textureMB": 2600,
+       "bufferWidth": 1600,
+       "pinned": null,
+       "residentMB": 18.3,
+       "governorBudgetMB": 2600,
+       "governorKeys": [
+        "frame",
+        "upgrades",
+        "downgrades",
+        "loadFailures",
+        "inflight",
+        "queued",
+        "staging",
+        "stagedLanded",
+        "warmed",
+        "cooled",
+        "warmMB",
+        "residentMB",
+        "budgetMB",
+        "lastSwapMs",
+        "updateMs",
+        "entries",
+        "trace",
+        "swaps",
+        "stager"
+       ],
+       "entries": 42
+      }
+     },
+     "peak": {
+      "tree": 1934.1,
+      "page": 390.6
+     }
+    },
+    {
+     "step": "board-1",
+     "after": "seymour-flux",
+     "boardUp": true,
+     "label": "board-1",
+     "at": "2026-10-29T13:41:09.276Z",
+     "jsHeapMB": 24.5,
+     "jsHeapTotalMB": 26,
+     "dom": {
+      "nodes": 1238,
+      "documents": 4,
+      "listeners": 125
+     },
+     "proc": {
+      "byType": {
+       "tree": 1546.7,
+       "browser": 24.1,
+       "renderer": 320.5,
+       "gpu": 0,
+       "utility": 0,
+       "other": 1202.1,
+       "page": 320.5
+      },
+      "processes": [
+       {
+        "id": 30968,
+        "type": "renderer",
+        "privateMB": 320.5,
+        "workingSetMB": 883.3
+       },
+       {
+        "id": 36152,
+        "type": "network.mojom.NetworkService",
+        "privateMB": 71.1,
+        "workingSetMB": 90.7
+       },
+       {
+        "id": 43764,
+        "type": "browser",
+        "privateMB": 24.1,
+        "workingSetMB": 64.9
+       },
+       {
+        "id": 65080,
+        "type": "GPU",
+        "privateMB": 1131,
+        "workingSetMB": 425.8
+       }
+      ]
+     },
+     "env": {
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+      "dpr": 1,
+      "inner": [
+       1600,
+       900
+      ],
+      "conn": {
+       "effectiveType": "4g",
+       "downlink": 10,
+       "rtt": 0,
+       "saveData": false
+      },
+      "art": {
+       "device": "high",
+       "textureMB": 2600,
+       "bufferWidth": 1600,
+       "pinned": null,
+       "residentMB": null,
+       "governorBudgetMB": null,
+       "governorKeys": null,
+       "entries": null
+      }
+     }
+    },
+    {
+     "step": "battle-2",
+     "chapter": "ffx2-bahamut",
+     "label": "battle-2 ffx2-bahamut",
+     "at": "2026-10-29T13:41:32.685Z",
+     "jsHeapMB": 29.5,
+     "jsHeapTotalMB": 31.5,
+     "dom": {
+      "nodes": 1629,
+      "documents": 4,
+      "listeners": 125
+     },
+     "proc": {
+      "byType": {
+       "tree": 2194.3,
+       "browser": 26.8,
+       "renderer": 427.6,
+       "gpu": 0,
+       "utility": 0,
+       "other": 1739.9,
+       "page": 427.6
+      },
+      "processes": [
+       {
+        "id": 30968,
+        "type": "renderer",
+        "privateMB": 427.6,
+        "workingSetMB": 986.9
+       },
+       {
+        "id": 36152,
+        "type": "network.mojom.NetworkService",
+        "privateMB": 67.5,
+        "workingSetMB": 86.7
+       },
+       {
+        "id": 43764,
+        "type": "browser",
+        "privateMB": 26.8,
+        "workingSetMB": 67.6
+       },
+       {
+        "id": 65080,
+        "type": "GPU",
+        "privateMB": 1672.4,
+        "workingSetMB": 528
+       }
+      ]
+     },
+     "env": {
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+      "dpr": 1,
+      "inner": [
+       1600,
+       900
+      ],
+      "conn": {
+       "effectiveType": "4g",
+       "downlink": 10,
+       "rtt": 0,
+       "saveData": false
+      },
+      "art": {
+       "device": "high",
+       "textureMB": 2600,
+       "bufferWidth": 1600,
+       "pinned": null,
+       "residentMB": 10.8,
+       "governorBudgetMB": 2600,
+       "governorKeys": [
+        "frame",
+        "upgrades",
+        "downgrades",
+        "loadFailures",
+        "inflight",
+        "queued",
+        "staging",
+        "stagedLanded",
+        "warmed",
+        "cooled",
+        "warmMB",
+        "residentMB",
+        "budgetMB",
+        "lastSwapMs",
+        "updateMs",
+        "entries",
+        "trace",
+        "swaps",
+        "stager"
+       ],
+       "entries": 38
+      }
+     },
+     "peak": {
+      "tree": 2489.1,
+      "page": 499.9
+     }
+    },
+    {
+     "step": "board-2",
+     "after": "ffx2-bahamut",
+     "boardUp": true,
+     "label": "board-2",
+     "at": "2026-10-29T13:41:39.010Z",
+     "jsHeapMB": 27.8,
+     "jsHeapTotalMB": 29.8,
+     "dom": {
+      "nodes": 1808,
+      "documents": 4,
+      "listeners": 143
+     },
+     "proc": {
+      "byType": {
+       "tree": 2040.1,
+       "browser": 22.6,
+       "renderer": 429.1,
+       "gpu": 0,
+       "utility": 0,
+       "other": 1588.4,
+       "page": 429.1
+      },
+      "processes": [
+       {
+        "id": 30968,
+        "type": "renderer",
+        "privateMB": 429.1,
+        "workingSetMB": 951.1
+       },
+       {
+        "id": 36152,
+        "type": "network.mojom.NetworkService",
+        "privateMB": 65.7,
+        "workingSetMB": 85.1
+       },
+       {
+        "id": 43764,
+        "type": "browser",
+        "privateMB": 22.6,
+        "workingSetMB": 63.5
+       },
+       {
+        "id": 65080,
+        "type": "GPU",
+        "privateMB": 1522.7,
+        "workingSetMB": 544.9
+       }
+      ]
+     },
+     "env": {
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+      "dpr": 1,
+      "inner": [
+       1600,
+       900
+      ],
+      "conn": {
+       "effectiveType": "4g",
+       "downlink": 10,
+       "rtt": 0,
+       "saveData": false
+      },
+      "art": {
+       "device": "high",
+       "textureMB": 2600,
+       "bufferWidth": 1600,
+       "pinned": null,
+       "residentMB": null,
+       "governorBudgetMB": null,
+       "governorKeys": null,
+       "entries": null
+      }
+     }
+    },
+    {
+     "step": "battle-3",
+     "chapter": "seymour-flux",
+     "label": "battle-3 seymour-flux",
+     "at": "2026-10-29T13:41:55.780Z",
+     "jsHeapMB": 31,
+     "jsHeapTotalMB": 32.8,
+     "dom": {
+      "nodes": 2025,
+      "documents": 4,
+      "listeners": 154
+     },
+     "proc": {
+      "byType": {
+       "tree": 2606.5,
+       "browser": 26.5,
+       "renderer": 520.8,
+       "gpu": 0,
+       "utility": 0,
+       "other": 2059.2,
+       "page": 520.8
+      },
+      "processes": [
+       {
+        "id": 30968,
+        "type": "renderer",
+        "privateMB": 520.8,
+        "workingSetMB": 1091.5
+       },
+       {
+        "id": 36152,
+        "type": "network.mojom.NetworkService",
+        "privateMB": 62,
+        "workingSetMB": 81.5
+       },
+       {
+        "id": 43764,
+        "type": "browser",
+        "privateMB": 26.5,
+        "workingSetMB": 67.2
+       },
+       {
+        "id": 65080,
+        "type": "GPU",
+        "privateMB": 1997.2,
+        "workingSetMB": 727.8
+       }
+      ]
+     },
+     "env": {
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+      "dpr": 1,
+      "inner": [
+       1600,
+       900
+      ],
+      "conn": {
+       "effectiveType": "4g",
+       "downlink": 10,
+       "rtt": 0,
+       "saveData": false
+      },
+      "art": {
+       "device": "high",
+       "textureMB": 2600,
+       "bufferWidth": 1600,
+       "pinned": null,
+       "residentMB": 18.3,
+       "governorBudgetMB": 2600,
+       "governorKeys": [
+        "frame",
+        "upgrades",
+        "downgrades",
+        "loadFailures",
+        "inflight",
+        "queued",
+        "staging",
+        "stagedLanded",
+        "warmed",
+        "cooled",
+        "warmMB",
+        "residentMB",
+        "budgetMB",
+        "lastSwapMs",
+        "updateMs",
+        "entries",
+        "trace",
+        "swaps",
+        "stager"
+       ],
+       "entries": 42
+      }
+     },
+     "peak": {
+      "tree": 2763.4,
+      "page": 602.7
+     }
+    },
+    {
+     "step": "board-3",
+     "after": "seymour-flux",
+     "boardUp": true,
+     "label": "board-3",
+     "at": "2026-10-29T13:42:02.111Z",
+     "jsHeapMB": 29.7,
+     "jsHeapTotalMB": 32,
+     "dom": {
+      "nodes": 2337,
+      "documents": 4,
+      "listeners": 170
+     },
+     "proc": {
+      "byType": {
+       "tree": 2634.3,
+       "browser": 22.8,
+       "renderer": 492.4,
+       "gpu": 0,
+       "utility": 0,
+       "other": 2119.1,
+       "page": 492.4
+      },
+      "processes": [
+       {
+        "id": 30968,
+        "type": "renderer",
+        "privateMB": 492.4,
+        "workingSetMB": 1064.8
+       },
+       {
+        "id": 36152,
+        "type": "network.mojom.NetworkService",
+        "privateMB": 62,
+        "workingSetMB": 81.5
+       },
+       {
+        "id": 43764,
+        "type": "browser",
+        "privateMB": 22.8,
+        "workingSetMB": 63.7
+       },
+       {
+        "id": 65080,
+        "type": "GPU",
+        "privateMB": 2057.1,
+        "workingSetMB": 747.5
+       }
+      ]
+     },
+     "env": {
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+      "dpr": 1,
+      "inner": [
+       1600,
+       900
+      ],
+      "conn": {
+       "effectiveType": "4g",
+       "downlink": 10,
+       "rtt": 0,
+       "saveData": false
+      },
+      "art": {
+       "device": "high",
+       "textureMB": 2600,
+       "bufferWidth": 1600,
+       "pinned": null,
+       "residentMB": null,
+       "governorBudgetMB": null,
+       "governorKeys": null,
+       "entries": null
+      }
+     }
+    },
+    {
+     "step": "battle-4",
+     "chapter": "ffx2-bahamut",
+     "label": "battle-4 ffx2-bahamut",
+     "at": "2026-10-29T13:42:20.630Z",
+     "jsHeapMB": 32.8,
+     "jsHeapTotalMB": 34.8,
+     "dom": {
+      "nodes": 2479,
+      "documents": 4,
+      "listeners": 164
+     },
+     "proc": {
+      "byType": {
+       "tree": 2914.4,
+       "browser": 26.9,
+       "renderer": 586,
+       "gpu": 0,
+       "utility": 0,
+       "other": 2301.6,
+       "page": 586
+      },
+      "processes": [
+       {
+        "id": 30968,
+        "type": "renderer",
+        "privateMB": 586,
+        "workingSetMB": 1189.9
+       },
+       {
+        "id": 36152,
+        "type": "network.mojom.NetworkService",
+        "privateMB": 64.1,
+        "workingSetMB": 83.8
+       },
+       {
+        "id": 43764,
+        "type": "browser",
+        "privateMB": 26.9,
+        "workingSetMB": 67.6
+       },
+       {
+        "id": 65080,
+        "type": "GPU",
+        "privateMB": 2237.5,
+        "workingSetMB": 834.6
+       }
+      ]
+     },
+     "env": {
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+      "dpr": 1,
+      "inner": [
+       1600,
+       900
+      ],
+      "conn": {
+       "effectiveType": "4g",
+       "downlink": 10,
+       "rtt": 0,
+       "saveData": false
+      },
+      "art": {
+       "device": "high",
+       "textureMB": 2600,
+       "bufferWidth": 1600,
+       "pinned": null,
+       "residentMB": 10.8,
+       "governorBudgetMB": 2600,
+       "governorKeys": [
+        "frame",
+        "upgrades",
+        "downgrades",
+        "loadFailures",
+        "inflight",
+        "queued",
+        "staging",
+        "stagedLanded",
+        "warmed",
+        "cooled",
+        "warmMB",
+        "residentMB",
+        "budgetMB",
+        "lastSwapMs",
+        "updateMs",
+        "entries",
+        "trace",
+        "swaps",
+        "stager"
+       ],
+       "entries": 38
+      }
+     },
+     "peak": {
+      "tree": 3029.5,
+      "page": 628.3
+     }
+    },
+    {
+     "step": "board-4",
+     "after": "ffx2-bahamut",
+     "boardUp": true,
+     "label": "board-4",
+     "at": "2026-10-29T13:42:26.944Z",
+     "jsHeapMB": 31.2,
+     "jsHeapTotalMB": 33.5,
+     "dom": {
+      "nodes": 2817,
+      "documents": 4,
+      "listeners": 188
+     },
+     "proc": {
+      "byType": {
+       "tree": 2739.1,
+       "browser": 22.8,
+       "renderer": 574,
+       "gpu": 0,
+       "utility": 0,
+       "other": 2142.2,
+       "page": 574
+      },
+      "processes": [
+       {
+        "id": 30968,
+        "type": "renderer",
+        "privateMB": 574,
+        "workingSetMB": 1172.5
+       },
+       {
+        "id": 36152,
+        "type": "network.mojom.NetworkService",
+        "privateMB": 64.1,
+        "workingSetMB": 83.8
+       },
+       {
+        "id": 43764,
+        "type": "browser",
+        "privateMB": 22.8,
+        "workingSetMB": 63.6
+       },
+       {
+        "id": 65080,
+        "type": "GPU",
+        "privateMB": 2078.1,
+        "workingSetMB": 830.7
+       }
+      ]
+     },
+     "env": {
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+      "dpr": 1,
+      "inner": [
+       1600,
+       900
+      ],
+      "conn": {
+       "effectiveType": "4g",
+       "downlink": 10,
+       "rtt": 0,
+       "saveData": false
+      },
+      "art": {
+       "device": "high",
+       "textureMB": 2600,
+       "bufferWidth": 1600,
+       "pinned": null,
+       "residentMB": null,
+       "governorBudgetMB": null,
+       "governorKeys": null,
+       "entries": null
+      }
+     }
+    },
+    {
+     "step": "battle-5",
+     "chapter": "seymour-flux",
+     "label": "battle-5 seymour-flux",
+     "at": "2026-10-29T13:42:44.459Z",
+     "jsHeapMB": 33.4,
+     "jsHeapTotalMB": 35.3,
+     "dom": {
+      "nodes": 2507,
+      "documents": 4,
+      "listeners": 172
+     },
+     "proc": {
+      "byType": {
+       "tree": 3259.2,
+       "browser": 26.2,
+       "renderer": 661.8,
+       "gpu": 0,
+       "utility": 0,
+       "other": 2571.1,
+       "page": 661.8
+      },
+      "processes": [
+       {
+        "id": 30968,
+        "type": "renderer",
+        "privateMB": 661.8,
+        "workingSetMB": 1216.4
+       },
+       {
+        "id": 36152,
+        "type": "network.mojom.NetworkService",
+        "privateMB": 62.1,
+        "workingSetMB": 81.4
+       },
+       {
+        "id": 43764,
+        "type": "browser",
+        "privateMB": 26.2,
+        "workingSetMB": 67.1
+       },
+       {
+        "id": 65080,
+        "type": "GPU",
+        "privateMB": 2509,
+        "workingSetMB": 909
+       }
+      ]
+     },
+     "env": {
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+      "dpr": 1,
+      "inner": [
+       1600,
+       900
+      ],
+      "conn": {
+       "effectiveType": "4g",
+       "downlink": 10,
+       "rtt": 0,
+       "saveData": false
+      },
+      "art": {
+       "device": "high",
+       "textureMB": 2600,
+       "bufferWidth": 1600,
+       "pinned": null,
+       "residentMB": 18.3,
+       "governorBudgetMB": 2600,
+       "governorKeys": [
+        "frame",
+        "upgrades",
+        "downgrades",
+        "loadFailures",
+        "inflight",
+        "queued",
+        "staging",
+        "stagedLanded",
+        "warmed",
+        "cooled",
+        "warmMB",
+        "residentMB",
+        "budgetMB",
+        "lastSwapMs",
+        "updateMs",
+        "entries",
+        "trace",
+        "swaps",
+        "stager"
+       ],
+       "entries": 42
+      }
+     },
+     "peak": {
+      "tree": 3370,
+      "page": 744.9
+     }
+    },
+    {
+     "step": "board-5",
+     "after": "seymour-flux",
+     "boardUp": true,
+     "label": "board-5",
+     "at": "2026-10-29T13:42:50.777Z",
+     "jsHeapMB": 32.1,
+     "jsHeapTotalMB": 34.5,
+     "dom": {
+      "nodes": 2822,
+      "documents": 4,
+      "listeners": 188
+     },
+     "proc": {
+      "byType": {
+       "tree": 2675.4,
+       "browser": 22.6,
+       "renderer": 642,
+       "gpu": 0,
+       "utility": 0,
+       "other": 2010.8,
+       "page": 642
+      },
+      "processes": [
+       {
+        "id": 30968,
+        "type": "renderer",
+        "privateMB": 642,
+        "workingSetMB": 1197
+       },
+       {
+        "id": 36152,
+        "type": "network.mojom.NetworkService",
+        "privateMB": 62.1,
+        "workingSetMB": 81.4
+       },
+       {
+        "id": 43764,
+        "type": "browser",
+        "privateMB": 22.6,
+        "workingSetMB": 63.6
+       },
+       {
+        "id": 65080,
+        "type": "GPU",
+        "privateMB": 1948.7,
+        "workingSetMB": 798.3
+       }
+      ]
+     },
+     "env": {
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+      "dpr": 1,
+      "inner": [
+       1600,
+       900
+      ],
+      "conn": {
+       "effectiveType": "4g",
+       "downlink": 10,
+       "rtt": 0,
+       "saveData": false
+      },
+      "art": {
+       "device": "high",
+       "textureMB": 2600,
+       "bufferWidth": 1600,
+       "pinned": null,
+       "residentMB": null,
+       "governorBudgetMB": null,
+       "governorKeys": null,
+       "entries": null
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "skipped": [],
+ "notes": [
+  "the exit from a battle is the API chapterSelect(), not the pause menu",
+  "memory is Windows private bytes (Get-Process PrivateMemorySize64) of the processes the browser reports; the page figure is renderer + GPU",
+  "decodeCacheMB is an estimate: no accessor exists for the painting cache"
+ ]
+}
