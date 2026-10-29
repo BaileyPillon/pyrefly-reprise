@@ -44,6 +44,20 @@ describe('the fall of a rig drawn by pose is the painting set\'s: it tips, it sl
     expect(s.key()).toBe('ko');
   });
 
+  it('the rig parts turn with the idle plane: the group they hang under has the plane roll on every frame of the fall, and none after the cut', async () => {
+    const s = stage(await rigged(poseDrawnRig(true)));
+    s.a.setPose('ko');
+    let seen = 0;
+    for (let i = 0; i < 30; i++) {
+      s.frame();
+      const group = s.a.figure.plane.rotation.z;
+      expect(group, `frame ${i}`).toBeCloseTo(s.roll(), 9);
+      if (Math.abs(group) > 0.5) seen++;
+    }
+    expect(seen, 'it was well over for a good part of the fall').toBeGreaterThanOrEqual(5);
+    expect(s.a.figure.plane.rotation.z).toBeCloseTo(0, 12);
+  });
+
   it('a head that lies on the left tips the other way', async () => {
     const s = stage(await rigged(poseDrawnRig(false)));
     s.a.setPose('ko');
