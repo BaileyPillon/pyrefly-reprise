@@ -1,0 +1,88 @@
+{
+ "schema": "coldload/1",
+ "base": "http://127.0.0.1:5471/",
+ "mode": "gpu",
+ "viewport": "1600x900",
+ "browser": "153.0.8010.12",
+ "machine": "win32 10.0.26200, AMD Ryzen 7 7800X3D 8-Core Processor x16, 64 GB RAM",
+ "profiles": [
+  "unthrottled-1",
+  "unthrottled-2"
+ ],
+ "runs": [
+  {
+   "profile": "unthrottled-1",
+   "throttled": false,
+   "browserVersion": "153.0.8010.12",
+   "host": {
+    "cpuBusyPct": 5.5,
+    "sampledMs": 1000
+   },
+   "cacheDisabled": true,
+   "bytesAtTitle": 13937058,
+   "requestsAtTitle": 20,
+   "wallMsToTitle": 395,
+   "pageMsToTitle": 391,
+   "timedOut": false,
+   "paint": {
+    "responseEnd": 6,
+    "dcl": 333,
+    "load": 375
+   },
+   "enterToNextScreen": "chapter-select",
+   "enterToNextMs": 20407,
+   "bytesAfterSettle": 79959893,
+   "requestsAfterSettle": 110,
+   "navigations": 1,
+   "servedFromCache": 2,
+   "pageErrors": 0
+  },
+  {
+   "profile": "unthrottled-2",
+   "throttled": false,
+   "browserVersion": "153.0.8010.12",
+   "host": {
+    "cpuBusyPct": 7.8,
+    "sampledMs": 1000
+   },
+   "cacheDisabled": true,
+   "bytesAtTitle": 13937058,
+   "requestsAtTitle": 20,
+   "wallMsToTitle": 391,
+   "pageMsToTitle": 390,
+   "timedOut": false,
+   "paint": {
+    "responseEnd": 5,
+    "dcl": 334,
+    "load": 368
+   },
+   "enterToNextScreen": "chapter-select",
+   "enterToNextMs": 20387,
+   "bytesAfterSettle": 79959893,
+   "requestsAfterSettle": 110,
+   "navigations": 1,
+   "servedFromCache": 2,
+   "pageErrors": 0
+  }
+ ],
+ "summary": {
+  "runs": 2,
+  "unthrottled": {
+   "runs": 2,
+   "reached": 2,
+   "timedOut": 0,
+   "medianMs": 393,
+   "minMs": 391,
+   "maxMs": 395,
+   "medianPageMs": 390.5,
+   "medianBytesAtTitle": 13937058,
+   "medianRequestsAtTitle": 20
+  },
+  "throttled": [],
+  "protocolProblems": [],
+  "busyHost": [],
+  "hostUnread": []
+ },
+ "reportLine": "cold load (delivery, one navigation, cache off, timed from navigation start): cold load to an interactive title 0.4 s median (0.4 s to 0.4 s, 2 of 2 cold run(s), 13.3 MB and 20 requests by then); host idle before every run [http://127.0.0.1:5471/, gpu rendering, 1600x900, Chromium 153.0.8010.12, win32 10.0.26200, AMD Ryzen 7 7800X3D 8-Core Processor x16, 64 GB RAM]",
+ "date": "2026-10-29T11:30:16.284Z"
+}

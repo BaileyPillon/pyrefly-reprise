@@ -1,0 +1,337 @@
+{
+  "mode": "gpu",
+  "part": "all",
+  "consoleErrors": [],
+  "notFound": [],
+  "badStatus": [],
+  "html404img": [],
+  "audio": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-flux.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-gagazet.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.fb2.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-first-zombie.001.fb2.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.mid-first-zombie.002.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-tidus.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-yuna.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-auron.001.mp3",
+    "https://echoesofspira.com/audio/voice-pass/seymour-flux/seymour-flux.mid-seymour-half.001.mp3",
+    "https://echoesofspira.com/audio/voice-pass/seymour-flux/seymour-flux.mid-seymour-half.002.mp3",
+    "https://echoesofspira.com/audio/voice-pass/seymour-flux/seymour-flux.mid-seymour-lance.001.mp3",
+    "https://echoesofspira.com/audio/voice-pass/seymour-flux/seymour-flux.mid-seymour-lance.002.mp3",
+    "https://echoesofspira.com/audio/voice-pass/seymour-flux/seymour-flux.mid-talk-yuna.001.mp3",
+    "https://echoesofspira.com/audio/voice-pass/seymour-flux/seymour-flux.mid-talk-yuna.002.mp3",
+    "https://echoesofspira.com/audio/voice-pass/seymour-flux/seymour-flux.mid-talk-yuna.003.mp3",
+    "https://echoesofspira.com/audio/voice-pass/seymour-flux/seymour-flux.mid-talk-kimahri.001.mp3",
+    "https://echoesofspira.com/audio/voice-pass/seymour-flux/seymour-flux.mid-talk-kimahri.002.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.008.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.013.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.014.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.017.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.018.mp3",
+    "https://echoesofspira.com/audio/music/boss-seymour.mp3",
+    "https://echoesofspira.com/audio/music/victory-ffx.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.019.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.024.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.026.mp3",
+    "https://echoesofspira.com/audio/music/pause.mp3",
+    "https://echoesofspira.com/audio/music/boss-seymour.mp3",
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx2-bahamut.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx2-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-bevelle-underground.mp3",
+    "https://echoesofspira.com/audio/music/boss-bahamut.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx2.mp3",
+    "https://echoesofspira.com/audio/music/pause.mp3",
+    "https://echoesofspira.com/audio/music/boss-bahamut.mp3"
+  ],
+  "steps": [
+    {
+      "step": "boot ready",
+      "ok": true,
+      "detail": " 1600x900"
+    },
+    {
+      "step": "bundle names B3DkcOaU",
+      "ok": true,
+      "detail": "https://echoesofspira.com/assets/index-B3DkcOaU.js"
+    },
+    {
+      "step": "title screen",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "title -> chapter-select (real Enter)",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "board cursor reached seymour-flux",
+      "ok": true,
+      "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+    },
+    {
+      "step": "seymour-flux: confirm -> party-prep",
+      "ok": true,
+      "detail": "screen=party-prep"
+    },
+    {
+      "step": "seymour-flux: prep + cutscene skip -> battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "seymour-flux: player turn reached",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch I pack ON by default: F1 HUD present, no PAUSE button",
+      "ok": true,
+      "detail": "{\"f1\":true,\"hero\":true,\"pauseBtn\":false,\"pauseEls\":[\"BUTTON.battle-pause-chip ig|pause:open|vis=false\"],\"look\":\"cinematic\",\"rigs\":4,\"bodyTextHasGuide\":false}"
+    },
+    {
+      "step": "Ch I on battle screen with menu",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch I: 1 boss bar, 0 Intel panels, 0 coach cards at first menu",
+      "ok": false,
+      "detail": "{\"ribbon\":1,\"igBossHp\":0,\"ffx2boss\":0,\"intel\":0,\"intelAll\":0,\"guide\":false,\"coachCards\":1,\"text\":\"Kimahri Yuna Seymour Flux TALK ATTACK SPECIAL ×1 ITEMS ×27 OVERDRIVE READY ▼ KO Tidus 0 /2420 115 /115 OD Yuna 1500 /1500 270 /270 OD Kimahri 2310 /2310 130 /130 OVERDRIVE I MORTIORCHIS G GUIDE NEXT BEST MOVE Kimahri Mega Phoenix → the party IN ITEMS +2,420 NO\"}"
+    },
+    {
+      "step": "Ch I Attack opens cursor on seymour-flux",
+      "ok": true,
+      "detail": "{\"sel\":[\"seymour-flux\"]}"
+    },
+    {
+      "step": "Ch I cancel returns to command menu",
+      "ok": true,
+      "detail": "{\"tc\":\"{\\\"sel\\\":[]}\",\"aw\":true,\"sc\":\"battle\"}"
+    },
+    {
+      "step": "Ch I attack confirmed, battle running",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch I P opens pause",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "H hides then restores pause panels",
+      "ok": true,
+      "detail": "block/bare=false none/bare=true block/bare=false"
+    },
+    {
+      "step": "MASTER VOLUME lowered by real ArrowLeft",
+      "ok": true,
+      "detail": "80->60"
+    },
+    {
+      "step": "Escape closes pause (resume)",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "P again resumes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "reload: reboots; masterVolume survives and is lowered",
+      "ok": true,
+      "detail": "0.6->0.6"
+    },
+    {
+      "step": "prerendered audio fetched",
+      "ok": true,
+      "detail": "n=36 https://echoesofspira.com/audio/music/title.mp3 | https://echoesofspira.com/audio/sfx/sprite.mp3 | https://echoesofspira.com/audio/sfx/sprite-v2.mp3 dbg="
+    },
+    {
+      "step": "boot ready",
+      "ok": true,
+      "detail": " 1600x900"
+    },
+    {
+      "step": "title -> chapter-select",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "board cursor reached ffx2-bahamut",
+      "ok": true,
+      "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+    },
+    {
+      "step": "ffx2-bahamut: confirm -> party-prep",
+      "ok": true,
+      "detail": "screen=party-prep"
+    },
+    {
+      "step": "ffx2-bahamut: prep + cutscene skip -> battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "ffx2-bahamut: player turn reached",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch IV pack ON by default: F1 HUD present, no PAUSE button",
+      "ok": true,
+      "detail": "{\"f1\":true,\"hero\":true,\"pauseBtn\":false,\"pauseEls\":[\"BUTTON.battle-pause-chip ig ig--ffx2|pause:open|vis=false\"],\"look\":\"cinematic\",\"rigs\":3,\"bodyTextHasGuide\":false}"
+    },
+    {
+      "step": "Ch IV on battle screen with menu",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch IV: 1 boss bar, 0 Intel panels at first menu",
+      "ok": true,
+      "detail": "{\"ribbon\":1,\"igBossHp\":0,\"ffx2boss\":0,\"intel\":0,\"intelAll\":0,\"guide\":false,\"coachCards\":1,\"text\":\"SCAN WM WM Yuna 690 /690 130 /130 DK DK Rikku 1839 /1839 158 /158 WR WR Paine 1706 /1706 67 /67 WHITE MAGIC ◂ CHANGE ◂ ITEM ◂ G GUIDE NEXT BEST MOVE Yuna Shell → the party IN WHITE MAGIC 10 MP N HIDE MOVES Bahamut WM Yuna WHITE MAGE Shell → the party · 10 MP E\"}"
+    },
+    {
+      "step": "Ch IV Enter opens a sub-list (menu moved on)",
+      "ok": true,
+      "detail": "{\"s0\":\"White Magic◂\",\"s1\":\"Change◂\",\"afterEnter\":\"GunnerGRANTS: Green\"}"
+    },
+    {
+      "step": "Ch IV cancel (Escape) from the sub-list returns to the command menu on the battle screen",
+      "ok": true,
+      "detail": "{\"sc\":\"battle\",\"aw\":true,\"sel\":\"Change◂\"}"
+    },
+    {
+      "step": "Ch IV action confirmed with real keys (action-start in the battle log), battle running",
+      "ok": true,
+      "detail": "{\"tg\":\"{\\\"sel\\\":[\\\"yuna\\\"]}\",\"lg\":[\"action-start\",\"atb\",\"atb\",\"atb\",\"atb\",\"status-add\",\"action-end\",\"atb\"]}"
+    },
+    {
+      "step": "Ch IV P opens pause",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch IV Escape resumes",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "errors": [],
+  "extra": {
+    "ch1hud0": {
+      "f1": true,
+      "hero": true,
+      "pauseBtn": false,
+      "pauseEls": [
+        "BUTTON.battle-pause-chip ig|pause:open|vis=false"
+      ],
+      "look": "cinematic",
+      "rigs": 4,
+      "bodyTextHasGuide": false
+    },
+    "ch1hud": {
+      "f1": true,
+      "hero": true,
+      "pauseBtn": false,
+      "pauseEls": [
+        "BUTTON.battle-pause-chip ig|pause:open|vis=false"
+      ],
+      "look": "cinematic",
+      "rigs": 4,
+      "bodyTextHasGuide": false
+    },
+    "ch1probe": {
+      "ribbon": 1,
+      "igBossHp": 0,
+      "ffx2boss": 0,
+      "intel": 0,
+      "intelAll": 0,
+      "guide": false,
+      "coachCards": 1,
+      "text": "Kimahri Yuna Seymour Flux TALK ATTACK SPECIAL ×1 ITEMS ×27 OVERDRIVE READY ▼ KO Tidus 0 /2420 115 /115 OD Yuna 1500 /1500 270 /270 OD Kimahri 2310 /2310 130 /130 OVERDRIVE I MORTIORCHIS G GUIDE NEXT BEST MOVE Kimahri Mega Phoenix → the party IN ITEMS +2,420 NO"
+    },
+    "ch1target": "{\"sel\":[\"seymour-flux\"]}",
+    "ch1cancel": {
+      "tc": "{\"sel\":[]}",
+      "aw": true,
+      "sc": "battle"
+    },
+    "preSave": {
+      "master": 0.6,
+      "keys": [
+        "version",
+        "updatedAt",
+        "chapters",
+        "unlocked",
+        "settings",
+        "seenCoach",
+        "flags"
+      ],
+      "screen": "battle"
+    },
+    "postSave": {
+      "master": 0.6,
+      "same": true
+    },
+    "audioDebug": null,
+    "ch4hud": {
+      "f1": true,
+      "hero": true,
+      "pauseBtn": false,
+      "pauseEls": [
+        "BUTTON.battle-pause-chip ig ig--ffx2|pause:open|vis=false"
+      ],
+      "look": "cinematic",
+      "rigs": 3,
+      "bodyTextHasGuide": false
+    },
+    "ch4probe": {
+      "ribbon": 1,
+      "igBossHp": 0,
+      "ffx2boss": 0,
+      "intel": 0,
+      "intelAll": 0,
+      "guide": false,
+      "coachCards": 1,
+      "text": "SCAN WM WM Yuna 690 /690 130 /130 DK DK Rikku 1839 /1839 158 /158 WR WR Paine 1706 /1706 67 /67 WHITE MAGIC ◂ CHANGE ◂ ITEM ◂ G GUIDE NEXT BEST MOVE Yuna Shell → the party IN WHITE MAGIC 10 MP N HIDE MOVES Bahamut WM Yuna WHITE MAGE Shell → the party · 10 MP E"
+    },
+    "ch4nav": {
+      "s0": "White Magic◂",
+      "s1": "Change◂",
+      "afterEnter": "GunnerGRANTS: Green"
+    },
+    "ch4cancel": {
+      "sc": "battle",
+      "aw": true,
+      "sel": "Change◂"
+    },
+    "ch4target": "{\"sel\":[\"yuna\"]}",
+    "ch4actprobe": {
+      "ribbon": 1,
+      "igBossHp": 0,
+      "ffx2boss": 0,
+      "intel": 0,
+      "intelAll": 0,
+      "guide": false,
+      "coachCards": 1,
+      "text": "SCAN WM WM Yuna 690 /690 130 /130 DK DK Rikku 1839 /1839 158 /158 WR WR Paine 1706 /1706 67 /67 WHITE MAGIC CURE 4 SHELL 10 PROTECT 12 ESUNA 10 CURA 10 VIGOR DISPEL 12 PRAY ▾ G GUIDE NEXT BEST MOVE Yuna Shell → the party IN WHITE MAGIC 10 MP N HIDE MOVES Baham"
+    },
+    "ch4log": "[\"atb\",\"atb\",\"atb\",\"status-add\",\"action-end\",\"atb\"]"
+  },
+  "elapsedMin": "2.4"
+}

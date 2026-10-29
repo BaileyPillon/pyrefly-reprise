@@ -1,0 +1,89 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-29T01:22:04.288Z",
+  "build": {
+    "mainSha": "04631aedf",
+    "bundle": "B3DkcOaU",
+    "artifactHash": "f324d89fad588ed23012692ea6928e0aec0dae01659a234925a75b8e18c85a22"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "verify-live --manifest critic/artifacts/04631aedf.json --changed-from critic/artifacts/2b48cee95.json: live manifest matches, 57 files checked, 0 mismatched, 0 missing, 0 wrong type, 0 errors; index.html identical once the Cloudflare analytics beacon is removed; _headers is host-read and not downloaded."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu), fresh contexts 1600x900, cache-busting query, real key presses. Title -> chapter-select (cursor verified) -> seymour-flux (FFX Chapter I) party-prep -> battle -> player turn; Attack opened the target cursor on seymour-flux, Escape returned to the command menu, Enter confirmed and the battle ran. ffx2-bahamut (FFX-2 Chapter IV) -> battle -> player turn; Enter opened the White Magic list, Escape returned to the command menu, a confirmed action produced action-start in the battle log. P opens pause, H hides and restores the panels, Escape and P resume. Prerendered music fetched (36 audio requests, first /audio/music/title.mp3). Bundle on the page is index-B3DkcOaU.js. Screenshots in critic/reviews/04631aedf-live/static/. Script critic-local .r67-live-smoke-tmp.mjs (from the release 64 smoke); one assertion (0 coach cards) is stale, the G GUIDE card is by design."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Lightweight: MASTER VOLUME lowered 80 -> 60 with real ArrowLeft in the pause options, page.reload(), app re-booted ready, masterVolume 0.6 survived."
+    }
+  ],
+  "staticChecks": {
+    "pose-census": {
+      "subjects": 146,
+      "paintings": 1106,
+      "pass": 829,
+      "waived": 79,
+      "rigged": 0,
+      "fail": 0,
+      "exempt": 198,
+      "byClass": {
+        "idle": 146,
+        "standing": 565,
+        "ko": 90,
+        "low": 71,
+        "wide": 4,
+        "staged": 176,
+        "part": 54
+      },
+      "byGame": {
+        "FFX-2": 777,
+        "FFX": 307,
+        "FF7": 22
+      },
+      "byRowStatus": {
+        "ok": 745,
+        "held": 84,
+        "waived": 79,
+        "none": 198
+      }
+    }
+  },
+  "coverage": {
+    "tested": [
+      "exact artifact vs live (changed files)",
+      "title to chapter select",
+      "FFX Chapter I turn with Attack and cancel",
+      "FFX-2 Chapter IV White Magic list, cancel and a confirmed action",
+      "pause/resume/H",
+      "music fetch",
+      "reload smoke with a changed setting",
+      "pose census"
+    ],
+    "reused": [],
+    "notTested": [
+      "the defeat card, the public retry skip and the defeat cause at every speed (needs a lost fight)",
+      "the six look picks judged visually (stance, swap, hit knock, run-in, curves, boss fall)",
+      "phone enemy-move line at two lines",
+      "full CHK-024 upgrade matrix",
+      "audio heard (agents cannot hear)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 10
+}

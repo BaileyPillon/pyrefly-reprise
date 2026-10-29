@@ -1,0 +1,847 @@
+{
+ "scene": "prep-ffx-first",
+ "w": 390,
+ "h": 844,
+ "base": "http://127.0.0.1:5471/",
+ "seed": 1,
+ "floor": 14,
+ "steps": [
+  {
+   "label": "tab1-chapter",
+   "file": "prep-ffx-first-390x844-tab1-chapter.jpg",
+   "screen": "party-prep",
+   "state": {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "tabs": [
+     "chapter",
+     "stats",
+     "sphere-grid",
+     "equipment",
+     "items",
+     "overdrive"
+    ],
+    "tab": "chapter",
+    "member": "tidus",
+    "outcome": null,
+    "panelsRegistered": 6
+   },
+   "viewport": "390x844",
+   "floor": 14,
+   "nText": 41,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "overlaps": [
+    {
+     "a": "Auron · 2 of 3",
+     "b": "Holy Water a Zombie before Full-Life lands",
+     "at": "div.frg__slab > div.frg__in > div.frg__eyebrow | ul.cpanel__objectives > li.cpanel__objective > span.cpanel__objective-label",
+     "share": 0.53
+    },
+    {
+     "a": "“Your party is ready.”",
+     "b": "Survive Total Annihilation",
+     "at": "div.frg__slab > div.frg__in > div.frg__quote | ul.cpanel__objectives > li.cpanel__objective > span.cpanel__objective-label",
+     "share": 0.76
+    },
+    {
+     "a": "Tabs are for later. Tap START BATTLE.",
+     "b": "Defeat Seymour Flux",
+     "at": "div.frg__in > div.frg__line > span.frg__touch | ul.cpanel__objectives > li.cpanel__objective > span.cpanel__objective-label",
+     "share": 0.71
+    },
+    {
+     "a": "Tap here",
+     "b": "TIP",
+     "at": "div.frg__in > span.frg__skip > b.frg__touch | div.prepchap__col.prepchap__col--brief > div.cpanel__tip > span.cpanel__tip-label",
+     "share": 0.93
+    },
+    {
+     "a": "Tap here",
+     "b": "Bio him turn one — it deals a straight percentag",
+     "at": "div.frg__in > span.frg__skip > b.frg__touch | div.prepchap__col.prepchap__col--brief > div.cpanel__tip > span.cpanel__tip-text",
+     "share": 0.59
+    },
+    {
+     "a": "skip the guide",
+     "b": "Bio him turn one — it deals a straight percentag",
+     "at": "div.frg__slab > div.frg__in > span.frg__skip | div.prepchap__col.prepchap__col--brief > div.cpanel__tip > span.cpanel__tip-text",
+     "share": 1
+    }
+   ],
+   "cut": [],
+   "items": [
+    {
+     "text": "Auron · 2 of 3",
+     "at": "div.frg__slab > div.frg__in > div.frg__eyebrow",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      42,
+      522,
+      163.2,
+      18
+     ]
+    },
+    {
+     "text": "“Your party is ready.”",
+     "at": "div.frg__slab > div.frg__in > div.frg__quote",
+     "fs": 21,
+     "scale": 1,
+     "eff": 21,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      42,
+      544,
+      163.2,
+      25
+     ]
+    },
+    {
+     "text": "Tabs are for later. Tap START BATTLE.",
+     "at": "div.frg__in > div.frg__line > span.frg__touch",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.86)",
+     "rect": [
+      42,
+      572.4,
+      233.5,
+      17
+     ]
+    },
+    {
+     "text": "Tap here",
+     "at": "div.frg__in > span.frg__skip > b.frg__touch",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      42,
+      619,
+      89.7,
+      18
+     ]
+    },
+    {
+     "text": "skip the guide",
+     "at": "div.frg__slab > div.frg__in > span.frg__skip",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.72)",
+     "rect": [
+      131.7,
+      619,
+      156.3,
+      18
+     ]
+    },
+    {
+     "text": "PARTY PREP",
+     "at": "div.prep__stage.lb-stage > div.prep__eyebrow > span.prep__eyebrow-label",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(227, 185, 74)",
+     "rect": [
+      42,
+      18,
+      111.2,
+      18
+     ]
+    },
+    {
+     "text": "CHAPTER",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      16,
+      58,
+      76.7,
+      18
+     ]
+    },
+    {
+     "text": "STATS",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      110.7,
+      58,
+      49.8,
+      18
+     ]
+    },
+    {
+     "text": "SPHERE GRID",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      178.5,
+      58,
+      111.9,
+      18
+     ]
+    },
+    {
+     "text": "EQUIPMENT",
+     "at": "div.prep__stage.lb-stage > div.prep__tabs > div.prep__tab",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.6)",
+     "rect": [
+      308.4,
+      58,
+      96.3,
+      18
+     ]
+    },
+    {
+     "text": "FFX",
+     "at": "div.prepchap__col > div.cpanel__eyebrow > span.cpanel__game",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      28,
+      164,
+      39.4,
+      18
+     ]
+    },
+    {
+     "text": "·",
+     "at": "div.prepchap__col > div.cpanel__eyebrow > span.cpanel__dot",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      71,
+      164,
+      3.3,
+      18
+     ]
+    },
+    {
+     "text": "I",
+     "at": "div.prepchap__col > div.cpanel__eyebrow > span.cpanel__numeral",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      77.8,
+      164,
+      8.6,
+      18
+     ]
+    },
+    {
+     "text": "Seymour Flux",
+     "at": "div.prepchap__colwrap > div.prepchap__col > h2.cpanel__title",
+     "fs": 34,
+     "scale": 1,
+     "eff": 34,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      28,
+      180,
+      168.8,
+      41
+     ]
+    },
+    {
+     "text": "The Prominence",
+     "at": "div.prepchap__colwrap > div.prepchap__col > div.cpanel__subtitle",
+     "fs": 17,
+     "scale": 1,
+     "eff": 17,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      28,
+      219,
+      97.3,
+      21
+     ]
+    },
+    {
+     "text": "Mt. Gagazet",
+     "at": "div.prepchap__colwrap > div.prepchap__col > div.cpanel__where",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(11, 10, 18, 0.42)",
+     "rect": [
+      28,
+      254.4,
+      108.1,
+      18
+     ]
+    },
+    {
+     "text": "The Ronso died holding this gate, and Seymour is",
+     "at": "div.prepchap__colwrap > div.prepchap__col > p.cpanel__blurb",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(11, 10, 18, 0.68)",
+     "rect": [
+      28,
+      282.4,
+      332.6,
+      80
+     ]
+    },
+    {
+     "text": "the Prominence, at last",
+     "at": "div.cpanel__snaps > figure.cpanel__snap > figcaption.cpanel__snap-cap",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      34.8,
+      450.4,
+      93.5,
+      36.2
+     ]
+    },
+    {
+     "text": "unhurried, always unhurried",
+     "at": "div.cpanel__snaps > figure.cpanel__snap > figcaption.cpanel__snap-cap",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      148.7,
+      451.3,
+      91.1,
+      35.6
+     ]
+    },
+    {
+     "text": "the machine beneath him",
+     "at": "div.cpanel__snaps > figure.cpanel__snap > figcaption.cpanel__snap-cap",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      279.8,
+      452,
+      61.3,
+      34.8
+     ]
+    },
+    {
+     "text": "OBJECTIVES",
+     "at": "div.prepchap__col.prepchap__col--brief > div.cpanel__head > span.cpanel__head-label",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      28,
+      502.8,
+      125.4,
+      18
+     ]
+    },
+    {
+     "text": "Holy Water a Zombie before Full-Life lands",
+     "at": "ul.cpanel__objectives > li.cpanel__objective > span.cpanel__objective-label",
+     "fs": 15,
+     "scale": 1,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      49.7,
+      529.9,
+      296.5,
+      18
+     ]
+    },
+    {
+     "text": "Survive Total Annihilation",
+     "at": "ul.cpanel__objectives > li.cpanel__objective > span.cpanel__objective-label",
+     "fs": 15,
+     "scale": 1,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      49.7,
+      553.3,
+      177.7,
+      18
+     ]
+    },
+    {
+     "text": "Defeat Seymour Flux",
+     "at": "ul.cpanel__objectives > li.cpanel__objective > span.cpanel__objective-label",
+     "fs": 15,
+     "scale": 1,
+     "eff": 15,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      49.7,
+      576.7,
+      145.1,
+      18
+     ]
+    },
+    {
+     "text": "TIP",
+     "at": "div.prepchap__col.prepchap__col--brief > div.cpanel__tip > span.cpanel__tip-label",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      41,
+      619.7,
+      33.7,
+      18
+     ]
+    },
+    {
+     "text": "Bio him turn one — it deals a straight percentag",
+     "at": "div.prepchap__col.prepchap__col--brief > div.cpanel__tip > span.cpanel__tip-text",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(11, 10, 18, 0.68)",
+     "rect": [
+      79.1,
+      617.9,
+      251.4,
+      77.9
+     ]
+    },
+    {
+     "text": "START BATTLE",
+     "at": "div.prep__stage.lb-stage > div.prep__start > span",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      136.5,
+      796,
+      135.9,
+      18
+     ]
+    },
+    {
+     "text": "T",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      30.9,
+      781.1,
+      8.2,
+      18
+     ]
+    },
+    {
+     "text": "Tidus",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 18,
+     "scale": 1,
+     "eff": 18,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      58,
+      779.1,
+      36.8,
+      22
+     ]
+    },
+    {
+     "text": "HP 2420/2420 · MP 115/115",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      18,
+      829.1,
+      88,
+      33.4
+     ]
+    },
+    {
+     "text": "WARRIOR",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      18,
+      811.1,
+      66.7,
+      18
+     ]
+    },
+    {
+     "text": "Y",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      155.2,
+      781.1,
+      8.9,
+      18
+     ]
+    },
+    {
+     "text": "Yuna",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 18,
+     "scale": 1,
+     "eff": 18,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      182.7,
+      779.1,
+      33.5,
+      22
+     ]
+    },
+    {
+     "text": "HP 1500/1500 · MP 270/270",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      142.7,
+      829.1,
+      104.5,
+      33.4
+     ]
+    },
+    {
+     "text": "SUMMONER",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      142.7,
+      811.1,
+      83.1,
+      18
+     ]
+    },
+    {
+     "text": "K",
+     "at": "div.prep__slot > div.prep__face > span",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(244, 241, 232)",
+     "rect": [
+      279.8,
+      781.1,
+      9.1,
+      18
+     ]
+    },
+    {
+     "text": "Kimahri",
+     "at": "div.prep__slot > div > div.prep__slot-name",
+     "fs": 18,
+     "scale": 1,
+     "eff": 18,
+     "color": "rgb(11, 10, 18)",
+     "rect": [
+      307.3,
+      779.1,
+      55.1,
+      22
+     ]
+    },
+    {
+     "text": "HP 2310/2310 · MP 130/130",
+     "at": "div.prep__slot > div > div.prep__slot-sub",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(42, 37, 51)",
+     "rect": [
+      267.3,
+      829.1,
+      103.4,
+      33.4
+     ]
+    },
+    {
+     "text": "STOIC",
+     "at": "div.prep__slots > div.prep__slot > div.prep__slot-role",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgb(184, 134, 42)",
+     "rect": [
+      267.3,
+      811.1,
+      42.2,
+      18
+     ]
+    },
+    {
+     "text": "FFX · I",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__phone-where",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.62)",
+     "rect": [
+      322.3,
+      18,
+      51.7,
+      18
+     ]
+    },
+    {
+     "text": "PARTY",
+     "at": "div.prep.ig > div.prep__stage.lb-stage > div.prep__phone-party",
+     "fs": 14,
+     "scale": 1,
+     "eff": 14,
+     "color": "rgba(244, 241, 232, 0.55)",
+     "rect": [
+      12,
+      741.1,
+      60.1,
+      18
+     ]
+    }
+   ],
+   "targets": {
+    "min": 44,
+    "viewport": [
+     390,
+     844
+    ],
+    "n": 8,
+    "underCount": 7,
+    "under": [
+     {
+      "el": "span.frg__skip \"EscTap here skip the guide\"",
+      "x": 42,
+      "y": 619,
+      "w": 245.9,
+      "h": 18,
+      "under": true,
+      "inView": true,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     },
+     {
+      "el": "div.prep__tab \"CHAPTER\"",
+      "x": 16,
+      "y": 50,
+      "w": 76.7,
+      "h": 37,
+      "under": true,
+      "inView": true,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     },
+     {
+      "el": "div.prep__tab \"STATS\"",
+      "x": 110.7,
+      "y": 50,
+      "w": 49.8,
+      "h": 37,
+      "under": true,
+      "inView": true,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     },
+     {
+      "el": "div.prep__tab \"SPHERE GRID\"",
+      "x": 178.5,
+      "y": 50,
+      "w": 111.9,
+      "h": 37,
+      "under": true,
+      "inView": true,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     },
+     {
+      "el": "div.prep__tab \"EQUIPMENT\"",
+      "x": 308.4,
+      "y": 50,
+      "w": 96.3,
+      "h": 37,
+      "under": true,
+      "inView": true,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     },
+     {
+      "el": "div.prep__tab \"ITEMS\"",
+      "x": 422.7,
+      "y": 50,
+      "w": 50.5,
+      "h": 37,
+      "under": true,
+      "inView": false,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     },
+     {
+      "el": "div.prep__tab \"OVERDRIVE\"",
+      "x": 491.1,
+      "y": 50,
+      "w": 94.8,
+      "h": 37,
+      "under": true,
+      "inView": false,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     }
+    ],
+    "all": [
+     {
+      "el": "span.frg__skip \"EscTap here skip the guide\"",
+      "x": 42,
+      "y": 619,
+      "w": 245.9,
+      "h": 18,
+      "under": true,
+      "inView": true,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     },
+     {
+      "el": "div.prep__tab \"CHAPTER\"",
+      "x": 16,
+      "y": 50,
+      "w": 76.7,
+      "h": 37,
+      "under": true,
+      "inView": true,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     },
+     {
+      "el": "div.prep__tab \"STATS\"",
+      "x": 110.7,
+      "y": 50,
+      "w": 49.8,
+      "h": 37,
+      "under": true,
+      "inView": true,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     },
+     {
+      "el": "div.prep__tab \"SPHERE GRID\"",
+      "x": 178.5,
+      "y": 50,
+      "w": 111.9,
+      "h": 37,
+      "under": true,
+      "inView": true,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     },
+     {
+      "el": "div.prep__tab \"EQUIPMENT\"",
+      "x": 308.4,
+      "y": 50,
+      "w": 96.3,
+      "h": 37,
+      "under": true,
+      "inView": true,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     },
+     {
+      "el": "div.prep__tab \"ITEMS\"",
+      "x": 422.7,
+      "y": 50,
+      "w": 50.5,
+      "h": 37,
+      "under": true,
+      "inView": false,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     },
+     {
+      "el": "div.prep__tab \"OVERDRIVE\"",
+      "x": 491.1,
+      "y": 50,
+      "w": 94.8,
+      "h": 37,
+      "under": true,
+      "inView": false,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     },
+     {
+      "el": "div.prep__start \"Start battle\"",
+      "x": 7.1,
+      "y": 782,
+      "w": 375.8,
+      "h": 46,
+      "under": false,
+      "inView": true,
+      "pseudo": false,
+      "nested": false,
+      "bigAlias": false
+     }
+    ]
+   }
+  }
+ ],
+ "error": null,
+ "consoleErrors": []
+}

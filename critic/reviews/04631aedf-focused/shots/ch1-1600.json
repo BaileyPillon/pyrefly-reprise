@@ -1,0 +1,65 @@
+{
+ "label": "ch1",
+ "query": "",
+ "W": "1600",
+ "H": "900",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "url": "http://127.0.0.1:5871/",
+   "bundle": "http://127.0.0.1:5871/assets/index-B3DkcOaU.js"
+  },
+  {
+   "s": "select",
+   "screen": "title"
+  },
+  {
+   "s": "select-shot",
+   "screen": "chapter-select"
+  },
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "ms": 45597,
+   "ok": true
+  },
+  {
+   "s": "hud",
+   "cls": "",
+   "f1": true,
+   "url": "http://127.0.0.1:5871/"
+  },
+  {
+   "s": "after-attack",
+   "screen": "battle",
+   "numbers": 0
+  },
+  {
+   "s": "turns",
+   "turns": 4,
+   "fpsAvg": 60
+  },
+  {
+   "s": "end",
+   "screen": "pro-defeat",
+   "ms": 1
+  },
+  {
+   "s": "end-text",
+   "text": "Seymour Flux\nMortiorchis\nSeymour Flux\nKO\nTidus\n0\n/2420\n115\n/115\nOD\nKO\nYuna\n0\n/1500\n270\n/270\nOD\nKO\nKimahri\n0\n/2310\n130\n/130\nOD\nG\nGUIDE\nSeymour Flux\nEnter\nSelect\nG\nIntel\nQ\nDefend\nP\nPause\nKO\nKO\nKO\nE\nENEMY MOVE\nSeymour Flux\nVICTORY\nTHE PARTY HAS FALLEN\nFELLED BY LANCE OF ATROPHY\nTURN 14·ATTEMPT 1·0:59\nE"
+  },
+  {
+   "s": "after",
+   "screen": "party-prep",
+   "text": "PARTY PREP\nI · SEYMOUR FLUX — MT. GAGAZET — THE PROMINENCE\nT\nTidus\nS.LV 30\nY\nYuna\nS.LV 32\nK\nKimahri\nS.LV 25\nA\nAuron\nS.LV 35\nW\nWakka\nS.LV 30\nL\nLulu\nS.LV 30\nR\nRikku\nS.LV 42\nCHAPTER\nSTATS\nSPHERE GRID\nEQU"
+  }
+ ],
+ "packState": {
+  "cls": "",
+  "f1": true,
+  "url": "http://127.0.0.1:5871/"
+ },
+ "consoleErrors": [],
+ "notFound": []
+}
