@@ -34,6 +34,9 @@ export abstract class PaintedActorState extends Group {
 
   protected readonly poses = new Map<string, PaintedTexture>();
 
+  /** Set by `dispose`: a pose that lands after it (`PaintedActorPoses.installLate`) is freed, not installed. */
+  protected streamDead = false;
+
   readonly poseUrls: PoseMap = {};
 
   /**
