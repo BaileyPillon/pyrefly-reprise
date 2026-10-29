@@ -165,8 +165,16 @@ function fetchMap(url: string, rank: number | null = null): void {
       );
     });
   };
-  if (rank === null) void go();
-  else void queued(rank, go);
+  const failed = (): void => {
+    // `loader.load` threw before it could answer: the map is missing, and a material waiting for it is left unlit
+    if (cache.get(url) !== 'loading') return;
+    cache.set(url, 'missing');
+    relightStats.missing++;
+    for (const m of waiters.get(url) ?? []) adopt(m, url, null);
+    waiters.delete(url);
+  };
+  if (rank === null) go().catch(failed);
+  else queued(rank, go).catch(failed);
 }
 
 /** The URL of the normal map a painting would be lit with, or null when the build ships none for it (the manifest names which maps exist). */

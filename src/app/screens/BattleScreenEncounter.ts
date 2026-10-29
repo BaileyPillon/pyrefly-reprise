@@ -72,7 +72,7 @@ export abstract class BattleScreenEncounter extends BattleScreenCard {
     const chapter = this.opts.chapter;
     this.startedAt = performance.now();
     beginFight();
-    holdBackground(); // phone class only; opens once every figure is built (or by itself after 20 s)
+    holdBackground(); // phone class only; opens once every figure is built (or by itself after two minutes)
     entryMark('begin');
     claimLead(this); // MF-08: a chain's leftover frame time is credited to the move that follows (`engine/BeatLead.ts`); given back in exit()
     if (this.opts.retryTheme) startRetryTheme(chapter, audio); // r64-fixes: the lost screen's exit has just stopped the music; the retried fight's theme (still decoded) comes in now

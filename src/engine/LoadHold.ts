@@ -11,7 +11,7 @@
  *
  * THE CUT. On the phone class, from the moment the battle screen begins to enter until every figure is built (`PaintedStage.stage` has resolved: what is left of the entry, the HUD, the shader warm-up and the swirl, is the CPU's and leaves the line idle), those three wait: a figure is built with its opening
  * poses at once (no ceiling to sit out), and the later poses, the lighting maps (the poses a fight draws first first: `LoadDiet.poseNeed`) and the preload's remaining poses start when the hold opens. The same bytes
- * arrive, in the other order: the shader warm-up (1.5 to 3 s), the card (1.3 s) and the opening sweep (6.1 to 6.6 s) are the time they have before the first command. Nothing changes on the desktop or the tablet class, nothing is dropped, and a
+ * arrive, in the other order: the shader warm-up (1.5 to 3 s), the card (1.3 s) and the opening sweep (6.1 to 6.6 s) are the time they have before the first command. Nothing changes on any other device class, nothing is dropped, and a
  * hold that is never opened (a screen that fails to enter) opens itself after {@link HOLD_CEILING_MS}.
  *
  * What a player can see: on a slow line the figures are drawn without their lighting for the first seconds (the maps of the poses drawn first arrive within about 2 s of the card on a 10 Mbit/s line), and a move
@@ -58,8 +58,11 @@ export function queued<T>(rank: number, task: () => Promise<T>): Promise<T> {
   return foregroundFirst() ? lateQueue.run(rank, task) : task();
 }
 
-/** The longest a hold stays shut when nobody opens it (a screen that failed to enter): 20 s, past the 12 to 15 s a phone's entry takes. */
-export const HOLD_CEILING_MS = 20_000;
+/**
+ * The longest a hold stays shut when nobody opens it (a screen that failed to enter and was never torn down): two minutes. It is a backstop and not a budget: a slow line's entry waits for its
+ * opening poses for as long as they take (19 MB at Slow 4G's 0.2 MB/s is 95 s), and a hold that opened before they were in would put every later load back on the line they are waiting on.
+ */
+export const HOLD_CEILING_MS = 120_000;
 
 let held = false;
 let timer: ReturnType<typeof setTimeout> | undefined;

@@ -161,7 +161,7 @@ export abstract class PaintedActorPoses extends PaintedActorLife {
    */
   private prefetchLights(deferred = false): void {
     if (!this.showFigure || !newMotionOn()) return; // a rig's carrier plane is never drawn: its parts bring their own pieces; with every new piece off (the default, and any chapter but I and IV) nothing is fetched early
-    if (deferWhileHeld(this, () => this.prefetchLights(true), () => !this.streamDead)) return; // phone class, entry loading: the maps wait for the field (`LoadHold.ts`)
+    if (deferWhileHeld(this, () => this.prefetchLights(true), () => !this.streamDead)) return; // phone class, entry loading: the maps wait for the figures (`LoadHold.ts`)
     const list = deferred ? orderByNeed([...this.poses], ([n]) => poseNeed(n)) : [...this.poses]; // after a hold: the poses a fight draws first first
     for (const [, p] of list) prefetchRelight(p.url, p.scale, p.placeholder, this.lightPins);
   }

@@ -213,6 +213,23 @@ describe('the lighting maps through the queue', () => {
     unpinRelight(held);
   });
 
+  it('a loader that throws leaves the map missing, the material unlit, and no unhandled rejection (queued or not)', async () => {
+    for (const phone of [true, false]) {
+      setForegroundFirst(phone);
+      vi.mocked(TextureLoader.prototype.load).mockImplementation((() => {
+        throw new Error('the loader threw');
+      }) as never);
+      const held = new Set<string>();
+      const who = phone ? 'thrown-phone' : 'thrown-desk';
+      prefetchRelight(art(who, 'attack'), 1, false, held);
+      await tick();
+      expect(relightCacheStats().maps, `phone ${phone}`).toBe(1);
+      expect(relightCacheStats().textures).toBe(0);
+      unpinRelight(held);
+      releaseRelightBefore(Number.MAX_SAFE_INTEGER);
+    }
+  });
+
   it('a map released before its turn is never asked for', async () => {
     setForegroundFirst(true);
     const held = new Set<string>();
