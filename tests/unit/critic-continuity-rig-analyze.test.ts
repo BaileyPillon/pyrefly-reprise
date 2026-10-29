@@ -9,7 +9,7 @@
 import { describe, expect, it } from 'vitest';
 import { analyzeRun } from '../../critic/runner/lib/continuity-analyze.mjs';
 import { continuityConfig } from '../../critic/runner/lib/continuity.mjs';
-import { rigConfig, rigProbeConfig, rigTrack } from '../../critic/runner/lib/continuity-rig.mjs';
+import { analyzeRigSwap, bodyOf, idleBodyOf, rigConfig, rigProbeConfig, rigTrack } from '../../critic/runner/lib/continuity-rig.mjs';
 import type { RigRecord } from '../../critic/runner/lib/continuity-rig.mjs';
 import type { ProbeFrame, ProbeMeta } from '../../critic/runner/lib/continuity-probe.mjs';
 import type { PoseMeasure } from '../../critic/runner/lib/continuity-silhouette.mjs';
@@ -18,7 +18,7 @@ const CFG = continuityConfig();
 const FRAME_MS = 1000 / 60;
 const PW = 400, PH = 600, X0 = 200, Y0 = 100; // the idle plane on the canvas
 
-interface Key { hu: [number, number]; fu: [number, number]; cu: [number, number]; ha: number; ma: number; bh: number; bw: number; hv?: string }
+interface Key { hu: [number, number]; fu: [number, number]; cu: [number, number]; ha: number; ma: number; bh: number; bw: number; hv?: string; tu?: [number, number] }
 /** The three keys of the test rig, in the plane's own coordinates. The head part is 0.01 of the plane, the box of the idle is 0.9 of the plane's height. */
 const KEYS: Record<string, Key> = {
   idle: { hu: [0.5, 0.12], fu: [0.5, 1], cu: [0.5, 0.5], ha: 0.01, ma: 0.5, bh: 0.9, bw: 0.45 },
@@ -61,7 +61,7 @@ function build(changes: Change[], opts: { total?: number; seconds?: number; keys
     const h = screen(hu), f = screen(fu), c = screen(cu);
     const bh = mix(A.bh, B.bh, t), bw = mix(A.bw, B.bw, t);
     const hv = (t >= 0.5 ? B : A).hv; // a part a key brings in shows at the half way point of the move into the key (RigPartState)
-    const rg: RigRecord = { b: moving ? 1 : 0, h, f, c, hu, fu, cu, ha: mix(A.ha, B.ha, t), ma: mix(A.ma, B.ma, t), ...(hv ? { hv } : {}), bh, bw, pw: PW, ph: PH };
+    const rg: RigRecord = { b: moving ? 1 : 0, h, f, c, hu, fu, cu, ...(A.tu && B.tu ? { tu: mix2(A.tu, B.tu, t) } : {}), ha: mix(A.ha, B.ha, t), ma: mix(A.ma, B.ma, t), ...(hv ? { hv } : {}), bh, bw, pw: PW, ph: PH };
     const top = Y0 + PH * (fu[1] - bh), left = X0 + PW * (fu[0] - bw / 2), right = left + PW * bw, bottom = Y0 + PH * fu[1];
     const sa = [NAMES.indexOf(to), 1, 1, left, top, right, top, right, bottom, left, bottom];
     records.push({ n, t: Math.round(n * FRAME_MS * 10) / 10, f: [{ i: 0, a: 1, act: 0, s: [sa, 0], g: [0, 0], rg }] });
@@ -258,5 +258,63 @@ describe('what a painted figure\'s checks would have missed in a rig', () => {
     const off = run(build(ko(), { keys: { ko: { ha: 0.0075 } } }), { ...CFG, rig: false });
     expect(off.swaps).toHaveLength(0);
     expect(off.summary.checks['CHK-026'].result).toBe('UNVERIFIED'); // nothing was measured: the earlier reading of a rig, which never showed a swap
+  });
+});
+
+// rigs-v3 (2026-10-29; both games, shared critic plumbing; the rigs it reaches are Tidus FFX and Rikku's Dark Knight FFX-2, behind `?partyrigs=`): the harness read a rig's stature from the key's WHOLE painted box over the idle's (`rg.bh`), props
+// included, and failed CHK-026 on rig runs the painting control passed (Rikku's cast, her greatsword raised above her head, read 1.19 by the box and 0.98 head to soles; ch4: 23 swaps out of band, ch1: 6, the painting controls 0 and 1). A rig that
+// has a crown landmark is now read as a painted figure is: from the crown of the head to the stamped foot, in the idle plane's own units, over the idle's the same way.
+describe('a rig with a crown landmark is read head to soles, as a painted figure is (rigs-v3)', () => {
+  const idleTu: [number, number] = [0.5, 0.1]; // the idle's body is 1 - 0.1 = 0.9 of the plane
+  const withCrown = (hurt: Partial<Key>): Parameters<typeof build>[1] => ({ keys: { idle: { tu: idleTu }, hurt: { tu: [0.46, 0.14], ...hurt } } });
+
+  it('a raised weapon makes the box 1.2 times the idle\'s and the stature 0.96: the box reading fails it (the control), the body reading passes it and says how it read', () => {
+    const control = run(build(cycles(5), { keys: { hurt: { bh: 1.08 } } }));
+    expect(control.swaps.find((x) => x.toPose === 'hurt')!.height!.flags).toEqual(['stature-high']);
+    expect(control.summary.checks['CHK-026'].result).toBe('FAIL');
+    const r = run(build(cycles(5), withCrown({ bh: 1.08 })));
+    const s = r.swaps.find((x) => x.toPose === 'hurt')!;
+    expect(s.height).toMatchObject({ vs: 'idle', pose: 'hurt', class: 'standing', basis: 'body', flags: [] });
+    expect(s.height!.stature).toBeCloseTo(0.86 / 0.9, 3);
+    expect(s.failHeight).toBe(false);
+    expect(r.summary.checks['CHK-026'].result).toBe('PASS');
+  });
+
+  it('a figure that really is short is still caught, whatever its box says: the body is the judge (stature 0.67, band 0.90 to 1.10)', () => {
+    const r = run(build(cycles(5), withCrown({ tu: [0.46, 0.4], bh: 0.9 })));
+    const s = r.swaps.find((x) => x.toPose === 'hurt')!;
+    expect(s.height!.stature).toBeCloseTo(0.6667, 3);
+    expect(s.height!.flags).toEqual(['stature-low']);
+    expect(s.failHeight).toBe(true);
+  });
+
+  it('a rig with no crown reading (a recording from before, a rig with no crown landmark) is read by its box exactly as it was', () => {
+    const r = run(build(cycles(5), { keys: { hurt: { bh: 0.6 } } }));
+    const s = r.swaps.find((x) => x.toPose === 'hurt')!;
+    expect(s.height!.stature).toBeCloseTo(0.6667, 3);
+    expect(s.height!.basis).toBeUndefined();
+  });
+
+  it('bodyOf is the foot minus the crown in the plane\'s own units and null without both; idleBodyOf is the median over the idle frames in which no move was in flight', () => {
+    expect(bodyOf({ fu: [0.5, 1], tu: [0.5, 0.1] })).toBeCloseTo(0.9, 12);
+    expect(bodyOf({ fu: [0.5, 1] })).toBeNull();
+    expect(bodyOf({ fu: [0.5, 0.1], tu: [0.5, 0.5] })).toBeNull(); // a crown below the foot is not a figure
+    const poses = [{ pose: 'idle', fig: 0 }, { pose: 'hurt', fig: 0 }];
+    const fr = (k: number, rg: object) => ({ n: 0, t: 0, fig: { s: [[k]], rg } });
+    const list = [fr(0, { b: 0, fu: [0.5, 1], tu: [0.5, 0.1] }), fr(0, { b: 0, fu: [0.5, 1], tu: [0.5, 0.12] }), fr(0, { b: 0, fu: [0.5, 1], tu: [0.5, 0.11] }), fr(0, { b: 1, fu: [0.5, 1], tu: [0.5, 0.5] }), fr(1, { b: 0, fu: [0.5, 1], tu: [0.5, 0.6] })];
+    expect(idleBodyOf(list as never, poses as never, 0)).toBeCloseTo(0.89, 12);
+    expect(idleBodyOf([fr(0, { b: 0, fu: [0.5, 1] })] as never, poses as never, 0)).toBeNull();
+  });
+
+  it('a pose with props out (defend, victory) is judged head to soles too instead of being left unread, and is read as before without a crown', () => {
+    const rgOf = (tu: number | null, bh: number) => ({ b: 0, h: [400, 170], f: [400, 700], c: [400, 400], hu: [0.5, 0.12], fu: [0.5, 1], cu: [0.5, 0.5], ...(tu === null ? {} : { tu: [0.5, tu] }), ha: 0.01, ma: 0.5, bh, bw: 0.45, pw: PW, ph: PH });
+    const frames = (tu: number | null) => [0, 1, 2, 3, 4].map((n) => ({ n, t: n * FRAME_MS, fig: { rg: n < 2 ? rgOf(tu === null ? null : 0.1, 0.9) : rgOf(tu, 1.2) } }));
+    const call = (tu: number | null, idleBody: number | null) => analyzeRigSwap({ frames: frames(tu) as never, at: 2, from: { pose: 'idle', rig: 'valefor' } as never, to: { pose: 'defend', rig: 'valefor' } as never, idleBh: 0.9, idleBody, k1600: 1, camCut: false, cfg: CFG });
+    const body = call(0.12, 0.9);
+    expect(body.height).toMatchObject({ basis: 'body', flags: [], report: [] });
+    expect(body.height!.stature).toBeCloseTo(0.88 / 0.9, 3);
+    const box = call(null, null);
+    expect(box.height!.report).toEqual(['props-out-unread']);
+    expect(box.height!.stature).toBeNull();
   });
 });

@@ -41,6 +41,8 @@ export const RIG_DEFAULTS = Object.freeze({
   centroid: ['bodyCenter', 'pelvisCenter', 'chestCenter'],
   feet: ['soleN', 'soleF', 'soleL', 'soleR', 'toeN', 'toeF', 'feet'],
   headPart: 'head',
+  /** The landmark of the top of the head (rigs-v3): with the feet it is the figure's stature head to soles, as a painted figure's is read (`tu` in the probe). A rig with none is read by its painted box, as before. */
+  crown: ['crown', 'headTop'],
   /** Parts other than the head part that carry a head when a key brings them in (Lulu's front-view upper body: `front` in format v2, `fdef` and `fod` in version 1), and the share of the idle plane's area at which one counts as drawn (a version 1 rig stores such a part as an always-visible speck). */
   headVariants: ['front', 'fdef', 'fod'],
   variantMinArea: 0.02,
@@ -58,7 +60,7 @@ export function rigConfig(cfg) {
 /** What the page-side reader needs (`createRigReader`), or null when rig reading is off. */
 export function rigProbeConfig(cfg) {
   const r = rigConfig(cfg);
-  return r ? { head: r.head, centroid: r.centroid, feet: r.feet, headPart: r.headPart, headVariants: r.headVariants, variantMinArea: r.variantMinArea } : null;
+  return r ? { head: r.head, centroid: r.centroid, feet: r.feet, crown: r.crown, headPart: r.headPart, headVariants: r.headVariants, variantMinArea: r.variantMinArea } : null;
 }
 
 const round = (v, d) => { const k = 10 ** d; return Math.round(v * k) / k; };
@@ -86,6 +88,19 @@ export function idleBoxOf(list, poses, fi) {
   return median(v);
 }
 
+/** The figure read head to soles in the idle plane's own units: the plane's `t` of its feet over the crown's (rigs-v3), or null with no crown or no feet in the frame. */
+export const bodyOf = (rg) => { const f = pair(rg?.fu), t = pair(rg?.tu); return f && t && f[1] > t[1] ? f[1] - t[1] : null; };
+
+/** The idle's stature head to soles in the plane's own units (the median of the frames in which its idle was showing and no move was in flight); null when the rig has no crown reading. */
+export function idleBodyOf(list, poses, fi) {
+  const v = [];
+  for (const e of list) {
+    const rg = e.fig.rg, k = e.fig.s?.[0]?.[0], b = rg && !rg.b ? bodyOf(rg) : null;
+    if (b !== null && poses[k]?.pose === 'idle' && poses[k]?.fig === fi) v.push(b);
+  }
+  return median(v);
+}
+
 /**
  * Everything CHK-026 and CHK-027 say about one change of rig key, from the figure's frames around it.
  * @param {object} o
@@ -93,6 +108,7 @@ export function idleBoxOf(list, poses, fi) {
  * @param {number} o.at      the index in `frames` of the frame the key changed in
  * @param {{pose:string, rig:string}} o.from the key the figure left; o.to the key it went to
  * @param {number|null} o.idleBh the idle's painted box over the plane's height (`idleBoxOf`)
+ * @param {number|null} [o.idleBody] the idle's stature head to soles in the plane's units (`idleBodyOf`); with it and a crown reading in the key, the stature is read head to soles (rigs-v3), as a painted figure's is, props out
  * @param {number} o.k1600 px scale to a 1600-wide canvas
  * @param {boolean} o.camCut a camera cut or whip near the change
  * @param {object} o.cfg the policy's `continuity` block
@@ -100,7 +116,7 @@ export function idleBoxOf(list, poses, fi) {
  *   (`realHeadOfRegistration`); read only for a change of key that swaps the head (see HEAD above). Absent or null for a key: that key's head is shown, not judged.
  * @returns {object} the swap's analysis, shaped as `analyzeSwap`'s
  */
-export function analyzeRigSwap({ frames, at, from, to, idleBh, k1600, camCut, cfg, realHead = null }) {
+export function analyzeRigSwap({ frames, at, from, to, idleBh, idleBody = null, k1600, camCut, cfg, realHead = null }) {
   const rc = rigConfig(cfg) ?? RIG_DEFAULTS;
   const rgOf = (e) => (e && e.fig ? e.fig.rg ?? null : null);
   const out = {
@@ -182,9 +198,13 @@ export function analyzeRigSwap({ frames, at, from, to, idleBh, k1600, camCut, cf
       const key = side === 'to' ? to.pose : from.pose, rg = side === 'to' ? after : before;
       Object.assign(h, { vs: 'idle', pose: key, side, class: cls(key) });
       if (h.class === 'standing' || h.class === 'low') {
-        if (isPropsOut(key)) h.report.push('props-out-unread'); // a raised weapon is counted as height by the box; the gate reads these head to soles
-        else {
-          h.stature = round(rg.bh / ref, 4);
+        // rigs-v3: with a crown reading the figure is read head to soles (the crown to the stamped foot, in the plane's own units), as the painted path reads it and as the gate does: the key's whole painted box counts a raised weapon
+        // as height (Rikku's cast reads 1.19 by the box and 0.98 head to soles) and a blade swung low as length; without one (a rig with no crown landmark, a recording from before) the box is what it was, props out unread
+        const own = bodyOf(rg);
+        if (own !== null && finite(idleBody) && idleBody > 0) { h.stature = round(own / idleBody, 4); h.basis = 'body'; }
+        else if (isPropsOut(key)) h.report.push('props-out-unread'); // a raised weapon is counted as height by the box; the gate reads these head to soles
+        else h.stature = round(rg.bh / ref, 4);
+        if (h.stature !== null) {
           h.band = statureBandOf(h.class, key);
           // the key being judged must have settled: a stature read mid-move is the move's, not the key's
           const keySettled = side === 'to' ? settled : !before.b;

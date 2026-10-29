@@ -55,6 +55,19 @@ describe('the page-side reader of a rigged figure', () => {
     expect(r.is(null)).toBe(false);
   });
 
+  it('reads the crown of the head in the idle plane\'s own coordinates (`tu`) when the rig has one, and nothing when it has none (rigs-v3)', () => {
+    const a = fakeRig().actor as unknown as { landmark: (n: string) => { x: number; y: number } | null };
+    const base = a.landmark;
+    a.landmark = (n: string) => (n === 'crown' ? { x: 390, y: 700 } : base(n));
+    type WithTu = RigSample & { rg: { tu?: number[] } };
+    const withCrown = createRigReader({ ...RIG_CFG, crown: ['headTop', 'crown'] }).sample(a as never, P, null) as WithTu;
+    expect(withCrown.rg.tu).toEqual([0.5, -0.05]); // the actor at (10, 20): world (400, 720) on a plane centred at (400, 500), 200 x 400
+    const none = createRigReader({ ...RIG_CFG, crown: ['crown'] }).sample(fakeRig().actor as never, P, null) as WithTu;
+    expect('tu' in none.rg).toBe(false);
+    const unasked = createRigReader(RIG_CFG).sample(a as never, P, null) as WithTu;
+    expect('tu' in unasked.rg).toBe(false);
+  });
+
   it('reads the head, feet and centroid on the screen and in the idle plane\'s own coordinates, the key\'s box and the mesh areas', () => {
     const s = createRigReader(RIG_CFG).sample(fakeRig().actor, P, null) as RigSample;
     expect(s.name).toBe('valefor');

@@ -12,7 +12,7 @@ import { tagWash, washPolicy, washReport } from './continuity-wash.mjs';
 import { excuseGlideFeet, figureHeightPx, smearPolicy, smearReport, smearedJerk, tagSmears } from './continuity-smear.mjs'; // motion pass (lane "core", step 2): a PLANNED smear is not a snap or a swap jerk (CHK-027)
 import { dissolvePolicy, dissolveTravel } from './continuity-dissolve.mjs'; // pc-residues: the weighted head's travel inside a dissolve is not a swap jerk (CHK-027)
 import { unseenIn, unseenPolicy } from './continuity-unseen.mjs'; // R63-M1: a figure off the view cannot be seen to jerk or to snap (CHK-027)
-import { analyzeRigSwap, idleBoxOf, rigConfig, rigCoverage } from './continuity-rig.mjs';
+import { analyzeRigSwap, idleBodyOf, idleBoxOf, rigConfig, rigCoverage } from './continuity-rig.mjs';
 import { flickerPairs, flickerSummary, flickerWindowMs, tagFlickers } from './continuity-flicker.mjs'; // post-conference plan, step 2: the ready-idle-ready flicker, a named class (reported, not gated)
 import { classReport, prepareClasses } from './continuity-why.mjs'; // fluidity pass, T-02 (lane L5): the named classes, why a painting was asked for, the designed blend (reported; one switchable rule)
 
@@ -123,7 +123,7 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
   const fadeOf = (fig, k) => fig.s.reduce((m, raw) => { const p = planeOf(raw); return p && p.k === k ? Math.max(m, p.fade) : m; }, 0);
   const swaps = [];
   const unseenP = unseenPolicy(cfg);
-  const rigOn = rigConfig(cfg), idleBox = new Map(); // R57-002: a rigged figure's change of key is read by continuity-rig.mjs
+  const rigOn = rigConfig(cfg), idleBox = new Map(), idleBody = new Map(); // R57-002: a rigged figure's change of key is read by continuity-rig.mjs
   let seq = 0;
   for (const sw of meta.swaps) {
     if (sw.from < 0) continue;
@@ -134,11 +134,11 @@ export function analyzeRun({ meta, records, anchors, cfg, measure = null }) {
     if (at === undefined || sw.a < 0.9) { swaps.push({ ...base, startFrame: sw.n, notShowing: true, counted: false, camCut: false, staged: stagedStepOf(anchors[sw.from], anchors[sw.to], cfg, names), head: null, feet: null, outline: null, ghost: { frames: 0, ms: 0, peak: 0, severity: 0, worstFrame: null }, blendFrames: 0, snap: false, hardCut: false, failHead: false, failFeet: false }); continue; }
     if (sw.rig) {
       if (!rigOn) continue; // policy continuity.rig is false: the earlier reading, in which a rig had no swaps
-      if (!idleBox.has(sw.i)) idleBox.set(sw.i, idleBoxOf(list, poses, sw.i));
+      if (!idleBox.has(sw.i)) { idleBox.set(sw.i, idleBoxOf(list, poses, sw.i)); idleBody.set(sw.i, idleBodyOf(list, poses, sw.i)); }
       const nextN = meta.swaps.reduce((m, x) => (x.i === sw.i && x.n > sw.n ? Math.min(m, x.n) : m), Infinity); // the window ends where the next change of key begins
       const start = Math.max(0, at - 1), win = [];
       for (let j = start; j < list.length && list[j].n < nextN && j - at <= rigOn.settleFrames; j++) { if (win.length && list[j].n !== win[win.length - 1].n + 1) break; win.push(list[j]); }
-      const res = analyzeRigSwap({ frames: win, at: at - start, from: poses[sw.from], to: poses[sw.to], idleBh: idleBox.get(sw.i), k1600, camCut: nearCut(sw.n), cfg, realHead: measure ? realHeadOfRegistration(measure, poses[sw.to].rig ?? poses[sw.from].rig) : null });
+      const res = analyzeRigSwap({ frames: win, at: at - start, from: poses[sw.from], to: poses[sw.to], idleBh: idleBox.get(sw.i), idleBody: idleBody.get(sw.i), k1600, camCut: nearCut(sw.n), cfg, realHead: measure ? realHeadOfRegistration(measure, poses[sw.to].rig ?? poses[sw.from].rig) : null });
       swaps.push({ ...base, startFrame: list[start].n, ...res, notShowing: false, counted: !res.camCut && !res.unmeasured });
       continue;
     }

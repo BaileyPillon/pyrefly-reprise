@@ -3,6 +3,8 @@ import type { ContinuityConfig, FrameOfFig, SwapResult } from './continuity-pure
 
 export interface RigConfig {
   head: string[]; centroid: string[]; feet: string[]; headPart: string;
+  /** the landmark of the top of the head (rigs-v3): with the feet, the figure's stature head to soles; a rig with none is read by its painted box */
+  crown: string[];
   /** parts, other than the head part, that carry a head when a key brings them in (Lulu's front-view upper body), and the share of the idle plane's area at which one counts as drawn (R59, decision 146) */
   headVariants: string[]; variantMinArea: number;
   /** a change of key that has not settled in this many frames of the change is judged on what was seen */
@@ -16,6 +18,8 @@ export interface RigRecord {
   /** how far the camera alone moved the head, the feet and the centroid since the last frame (x, y each), present only while the camera moved */
   cs?: number[];
   hu: [number, number] | null; fu: [number, number] | null; cu: [number, number] | null;
+  /** the crown of the head in the idle plane's own coordinates (rigs-v3), present only when the rig has a crown landmark */
+  tu?: [number, number];
   ha: number | null; ma: number | null; /** the head variant part drawn at a real size in this key (R59) */ hv?: string; bh: number | null; bw: number | null; pw: number; ph: number;
 }
 export interface RigSwapInfo {
@@ -24,11 +28,15 @@ export interface RigSwapInfo {
 }
 export declare const RIG_DEFAULTS: Readonly<RigConfig>;
 export declare function rigConfig(cfg: Partial<ContinuityConfig> | null | undefined): RigConfig | null;
-export declare function rigProbeConfig(cfg: Partial<ContinuityConfig> | null | undefined): { head: string[]; centroid: string[]; feet: string[]; headPart: string; headVariants: string[]; variantMinArea: number } | null;
+export declare function rigProbeConfig(cfg: Partial<ContinuityConfig> | null | undefined): { head: string[]; centroid: string[]; feet: string[]; crown: string[]; headPart: string; headVariants: string[]; variantMinArea: number } | null;
 export declare function rigTrack(rg: RigRecord | null | undefined): { feet: [number, number] | null; head: [number, number] | null; centroid: [number, number] | null; cams: { head: [number, number] | null; feet: [number, number] | null; centroid: [number, number] | null } } | null;
 export declare function idleBoxOf(list: FrameOfFig[], poses: { fig: number; pose: string }[], fi: number): number | null;
+/** the figure read head to soles in the idle plane's own units (rigs-v3): the foot's `t` minus the crown's, or null without both */
+export declare function bodyOf(rg: { fu?: [number, number] | null; tu?: [number, number] | null } | null | undefined): number | null;
+/** the idle's stature head to soles (the median over its settled frames), or null when the rig has no crown reading (rigs-v3) */
+export declare function idleBodyOf(list: FrameOfFig[], poses: { fig: number; pose: string }[], fi: number): number | null;
 export declare function analyzeRigSwap(o: {
-  frames: FrameOfFig[]; at: number; from: { pose: string; rig?: string }; to: { pose: string; rig?: string }; idleBh: number | null | undefined; k1600: number; camCut: boolean; cfg: ContinuityConfig;
+  frames: FrameOfFig[]; at: number; from: { pose: string; rig?: string }; to: { pose: string; rig?: string }; idleBh: number | null | undefined; idleBody?: number | null; k1600: number; camCut: boolean; cfg: ContinuityConfig;
   /** the head the player really sees in a key over the idle's (`realHeadOfRegistration`), read only for a change of key that swaps the head part (R59, decision 146) */
   realHead?: ((pose: string) => number | null) | null;
 }): SwapResult & { unmeasured?: string };
