@@ -7,6 +7,8 @@ import { KoPuff } from '../../KoPuff.ts';
 import { TOPPLE_RAD, contentCentreX, headCentreX, headMiddleU, tipSide, type SlotTip } from '../../KoTip.ts';
 import { breathRigFor, flatBreathRig } from './breathRig.ts';
 import { setMixPatch } from './patch.ts';
+import { rigFall, rigRevive } from './livingRig.ts'; // rigs-v3: a rig drawn by pose topples its own pieces
+import type { RigKoHost } from '../../rig/RigKoHost.ts';
 import { demoMotionOn } from '../../motion/DemoMotion.ts'; // `?motion=demo`: the chest breath keeps the figure's own slow squash beside it, on the same period and phase
 
 export { patchLiving } from './livingShader.ts';
@@ -39,7 +41,7 @@ export { patchLiving } from './livingShader.ts';
  * the RNG (rule 1). Game case: both, with the per-game tempo above.
  */
 
-type Slot = {
+export type Slot = {
   mesh: Mesh;
   material: ShaderMaterial;
   fade: number;
@@ -48,7 +50,7 @@ type Slot = {
   meta: { head?: readonly [number, number, number, number] };
 };
 /** The run that is playing (a KO), and the planes it crosses: `stand` is the one that tips (when anything does) over `lying`; `side` is the way it falls (0: nothing tips). */
-interface Playing {
+export interface Playing {
   run: KoRun;
   mode: KoMode;
   from: Slot;
@@ -60,6 +62,10 @@ interface Playing {
   cutting?: boolean;
   /** MF-09: the run has no landing left to play: it played it on the cut (the lying painting reached half), or the run is a buckle and the fall tween's end lands it. */
   landed?: boolean;
+  /** rigs-v3 (`livingRig.ts`): the run topples a rig's own pieces: the rig, the key the run ends in, and whether its cut has been made (a fall: the key becomes `ko` and the tip ends; a revive: the key becomes the standing one and the tip begins). */
+  rig?: RigKoHost;
+  rigKey?: string;
+  rigCut?: boolean;
 }
 export interface Guts {
   name: string;
@@ -86,6 +92,9 @@ export interface Guts {
   landFall?: () => void;
   /** MF-17 (`PaintedActor.holdLanding`): the run plays the landing itself, so the fall tween's end must not. */
   holdLanding?: () => void;
+  /** rigs-v3 (`RigActor`): a party rig whose `ko` key is drawn by pose, and the pose request without the key move. */
+  rigKo?: RigKoHost | null;
+  poseLife?: (name: string, opts?: { immediate?: boolean; force?: boolean }) => void;
 }
 
 interface SlotState {
@@ -170,6 +179,12 @@ export class LivingFigure {
     const kind = partySide ? 'party' : departureKindOf(a.name);
     if (kind === 'yields' || kind === 'held' || kind === 'dismissed') return orig.call(a, name, opts);
     this.endRun(); // a run still playing (a revive a moment ago) is finished before this KO reads the planes
+    const rigRun = partySide && a.rigKo ? rigFall(a, a.rigKo, name, opts, ctx) : null;
+    if (rigRun) {
+      this.begin(rigRun);
+      this.last.topples++;
+      return;
+    }
     const from = a.slots[a.active]!;
     const keep = a.crossfadeMs;
     a.crossfadeMs = 0; // the actor's own blend stands aside: the KO is played here, plane by plane
@@ -202,6 +217,14 @@ export class LivingFigure {
     const kind = partySide ? 'party' : departureKindOf(a.name);
     // REDUCE MOTION revives as it did before FA-3 (the page asked nothing about it): the actor's own blend, no run of ours.
     if (kind === 'yields' || kind === 'held' || kind === 'dismissed' || ctx.rm || koFallOff()) return orig.call(a, name, opts);
+    if (partySide && a.rigKo) {
+      const rigRun = rigRevive(a, a.rigKo, name, opts);
+      if (rigRun) {
+        this.begin(rigRun);
+        this.last.rises++;
+      }
+      return;
+    }
     const from = a.slots[a.active]!;
     const keep = a.crossfadeMs;
     a.crossfadeMs = 0;
@@ -244,6 +267,7 @@ export class LivingFigure {
     if (!p) return;
     if (p.run.opts.kind === 'fall' && !p.landed) this.a.landFall?.(); // a run cut short still lands the body
     if (p.cutting) this.a.koCutEnd?.();
+    if (p.rig && !p.rigCut) p.rig.flip(p.rigKey!); // a run cut short still ends in its key
     if (p.side !== 0) this.a.tipSlot(p.stand, null);
     if (p.run.opts.kind === 'revive') this.a.fallGain = 1; // the figure is up again
     if (p.to === this.a.slots[this.a.active]) {
@@ -251,6 +275,13 @@ export class LivingFigure {
       p.from.fade = 0;
       this.a.syncOpacity();
     }
+  }
+
+  /** rigs-v3: the cross's cut of a rig's run: its key becomes the one the run ends in, and (a fall) the lying key stands where the lying painting would, the idle plane upright again. */
+  private cutRig(p: Playing): void {
+    p.rigCut = true;
+    p.rig!.flip(p.rigKey!);
+    if (p.run.opts.kind === 'fall') this.a.tipSlot(p.stand, null);
   }
 
   /** The knock-out's cut (motion pass, step 3): the smear window opens as the cross begins, follows it, and closes with it. The streak runs the way the body falls. */
@@ -312,6 +343,7 @@ export class LivingFigure {
     if (play) {
       play.run.step(ctx.dt * 1000, realMs);
       const pose = play.run.pose;
+      if (play.rig && !play.rigCut && pose.inn >= 0.5) this.cutRig(play);
       if (!play.landed && play.run.opts.kind === 'fall' && pose.inn >= 0.5) {
         play.landed = true;
         a.landFall?.(); // MF-09: the thud on the frame the body arrives (the cut), not on the fall tween's own end 58 to 92 ms later
@@ -322,7 +354,7 @@ export class LivingFigure {
       play.to.fade = pose.inn;
       a.syncOpacity();
       if (play.run.opts.cut) this.driveCut(play, pose.phase);
-      if (play.side !== 0) a.tipSlot(play.stand, { side: play.side, full: TOPPLE_RAD, e: pose.tip, slide: pose.slide, ...this.meeting(play) });
+      if (play.side !== 0 && (!play.rig || Boolean(play.rigCut) === (play.run.opts.kind === 'revive'))) a.tipSlot(play.stand, { side: play.side, full: TOPPLE_RAD, e: pose.tip, slide: pose.slide, ...this.meeting(play) });
       const size = play.run.takePuff();
       if (size !== null) {
         this.puff ??= new KoPuff(a as unknown as Object3D, a.height);

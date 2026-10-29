@@ -1,19 +1,14 @@
 /**
  * A figure drawn as ONE painting cut into parts on a bone rig, instead of one painting per pose.
  *
- * `RigActor extends PaintedActor`, so everything the stage and the presenter ask of a figure is already answered, by the same code that answers it for a painted
- * plane: the pose names and the life layer (the ready lean, the guard brace, the KO fall, the victory hop), lunge, recoil, hop, shake and squash, flash, tint, dim and
- * dissolve, facing and mirroring, scale and placement, the contact shadow and the rings, and every projection point. The actor loads only its idle painting (the
- * rig's costume) and draws no plane ("the carrier", `RigCarrier.ts`); the rig's parts hang under the same motion group and share the same uniform cells, so a
- * stage move that carries the plane carries them.
+ * `RigActor extends PaintedActor`, so everything the stage and the presenter ask of a figure is answered by the same code that answers it for a painted plane (the pose names and the life layer, lunge,
+ * recoil, hop, shake, squash, flash, tint, dim, dissolve, facing, mirroring, scale, placement, shadow, rings, every projection point). The actor loads only its idle painting (the rig's costume) and
+ * draws no plane ("the carrier", `RigCarrier.ts`); the rig's parts hang under the same motion group and share its uniform cells, so a stage move that carries the plane carries them.
  *
- * What this class adds is the pose itself: `setPose` runs the actor's own (state, flinch tokens, ring) and then resolves the name to a key of the rig and moves
- * the bones there (`RigKeys.ts`: the game's ease, a start that keeps the speed the figure had), the idle and the lag chains play on top (`RigDynamics.ts`), and
- * every frame the parts are re-skinned (a part a v2 key hides is not: `RigPartState.ts`). `pose` reads the key being shown, `blending` is "a move between keys is in flight", `poseNames` are the rig's keys.
- *
- * Feet: a planted key keeps its lowest foot on the bind row (`RigValidate.ts` proves it for every key of a rig); the idle and the chains never move a foot.
- * Clocks: transitions run on the field clock scaled by the pacing option (`pace.ts`, like the actor's own one-shot moves), so a hit-stop freezes the rig with the
- * rest of the picture; the idle and the chains run on the field clock.
+ * This class adds the pose itself: `setPose` runs the actor's own (state, flinch tokens, ring), then `moveKey` resolves the name to a key and moves the bones there (`RigKeys.ts`: the game's ease, a
+ * start that keeps the speed the figure had); the idle and the lag chains play on top (`RigDynamics.ts`) and every frame the parts are re-skinned (a part a v2 key hides is not: `RigPartState.ts`).
+ * `pose` reads the key being shown, `blending` is "a move between keys is in flight", `poseNames` are the rig's keys. Feet: a planted key keeps its lowest foot on the bind row (`RigValidate.ts`).
+ * Clocks: transitions run on the field clock scaled by the pacing option (`pace.ts`), so a hit-stop freezes the rig with the rest of the picture; the idle and the chains run on the field clock.
  */
 import { PaintedActor, type PaintedActorOptions, type PoseShape } from '../PaintedActor.ts';
 import { pixelsPer1xTexel } from '../ArtMeasure.ts';
@@ -27,6 +22,8 @@ import type { RigData } from './RigData.ts';
 import { applyIdle, RigChains } from './RigDynamics.ts';
 import { RigFigure } from './RigFigure.ts';
 import { compileKeys, resolveKeyName, RigTransition } from './RigKeys.ts';
+import { foldMs, shortestWay } from './RigFold.ts'; // rigs-v3: a pose-drawn figure's move takes the short way round and, where a bone still turns far, is a short one
+import { makeRigKoHost, type RigKoHost } from './RigKoHost.ts'; // rigs-v3: what the KO run (`fx/mix/living.ts`) needs of a rig that draws its lying pose by pieces
 import { compileStates, partStateAt } from './RigPartState.ts';
 import { fadeMsFor, fadeStart, partAreas, swapShare } from './RigFade.ts'; // `?motion=demo`: part changes cross-fade (format v2.1 `fadeMs`; shorter the larger the share of the figure that changes)
 import { demoMotionOn } from '../motion/DemoMotion.ts';
@@ -90,6 +87,7 @@ export class RigActor extends PaintedActor {
   private fade: { ms: number; flipAt: number | undefined } = { ms: 0, flipAt: undefined };
   private readonly crossMs: number;
   private readonly smearWin = new RigSmearWindow(this);
+  private koHost: RigKoHost | null | undefined;
   private readonly rigBloomMasked: boolean;
   private rigClock: number;
   private idleAmount = 1;
@@ -169,8 +167,6 @@ export class RigActor extends PaintedActor {
     }
   }
 
-  // ------------------------------------------------------------------- pose
-
   /** The key being shown (or moved to). */
   override get pose(): string {
     return this.ready ? this.key : super.pose;
@@ -192,22 +188,36 @@ export class RigActor extends PaintedActor {
   override setPose(name: string, opts?: { immediate?: boolean; force?: boolean; paint?: string }): void {
     const refused = this.refuses(name, opts);
     super.setPose(name, opts); // the life layer, the ring, the flinch tokens; the carrier itself stays on its idle
-    if (!this.ready || refused) return;
-    const key = resolveKeyName(opts?.paint ?? name, this.rigKeys, this.dressphere); // `paint`: the stance look's "the ready STATE on the idle painting" (`StanceSwap`), as `PaintedActor.setPose` reads it
+    if (this.ready && !refused) this.moveKey(opts?.paint ?? name, opts); // `paint`: the stance look's "the ready STATE on the idle painting" (`StanceSwap`), as `PaintedActor.setPose` reads it
+  }
+
+  /** The key move a pose request asks for, without the life layer's half (`rigKo.flip`: the KO run's cut). */
+  moveKey(name: string, opts?: { immediate?: boolean; force?: boolean }): void {
+    const key = resolveKeyName(name, this.rigKeys, this.dressphere);
     if (key === null) return; // a name this rig and the game's chains know nothing of: the figure stays as it is, like a painting it cannot draw
     if (key === this.key && !opts?.force) return;
-    const target = this.compiled.get(key)!;
+    const drawn = this.poseDrawnParty; // rigs-v3 (`RigFold.ts`): a figure drawn by pose turns the short way round, and does not play a long turn of a bone slowly
+    const target = drawn ? shortestWay(this.trans.current, this.compiled.get(key)!) : this.compiled.get(key)!;
     this.track.leave(this.key, this.trans.busy, this.trans.progress);
     const leaving = this.key; this.key = key;
     this.stateFrom = this.appliedState; // what is on the parts now stays until the move is half way
     this.stateTo = this.states.get(key)!;
-    const ms = opts?.immediate ? 0 : (this.data.keys.get(key)?.ms ?? this.crossMs);
+    const own = this.data.keys.get(key)?.ms ?? this.crossMs;
+    const ms = opts?.immediate ? 0 : drawn ? foldMs(own, this.trans.current, target) : own;
     const fadeMs = demoMotionOn() && ms > 0 ? fadeMsFor(this.data, this.data.keys.get(key), this.stateFrom, this.stateTo) : 0;
     this.fade = { ms: fadeMs, flipAt: fadeMs > 0 ? fadeStart(ms, fadeMs) : undefined };
     if (this.smearWin.begin({ name: this.name, from: leaving, to: key, share: swapShare(partAreas(this.data), this.stateFrom, this.stateTo), moveMs: ms, state: this.smear.state, worldHeight: this.bodyHeight, facing: this.facingDir })) this.fade = { ms: 0, flipAt: undefined }; // a whole-figure flip is a cut and the smear covers it
     this.trans.retarget(target, ms);
     this.layersDue = true;
     if (ms <= 0) this.pose0();
+  }
+
+  /** A figure drawn by pose (a part's image per key) on the party's side: the painting set's behaviour is the model for it (no held return, a short fold, the painting's fall), not the bosses' (`RigHandoff.ts`). */
+  get poseDrawnParty(): boolean { return this.facing >= 0 && this.data.parts.some((p) => p.variants.length > 0); }
+
+  /** What the KO run needs when this rig's `ko` key is drawn by pose; null for every other rig (`RigKoHost.ts`). */
+  get rigKo(): RigKoHost | null {
+    return this.koHost !== undefined ? this.koHost : (this.koHost = this.poseDrawnParty ? makeRigKoHost(this.data, (n) => resolveKeyName(n, this.rigKeys, this.dressphere), (k) => this.moveKey(k, { immediate: true, force: true })) : null);
   }
 
   protected override smearsPlanes(): boolean { return false; } // the parts are what is drawn: the smear is `smearWin`'s, not the carrier planes' cut
@@ -224,8 +234,6 @@ export class RigActor extends PaintedActor {
   private pose0(): void {
     this.compose(0);
   }
-
-  // ----------------------------------------------------------------- update
 
   override update(dt: number, realDt: number = dt): void {
     super.update(dt, realDt);
@@ -286,8 +294,6 @@ export class RigActor extends PaintedActor {
     this.haveX = true;
   }
 
-  // ------------------------------------------------------------------- misc
-
   /** The rig's part meshes and skeleton, for tools and the tests. */
   get figure(): RigFigure {
     return this.rig;
@@ -296,20 +302,10 @@ export class RigActor extends PaintedActor {
   /** For `window.__pyrefly.rigs()` and the tests: the rig as it stands. */
   rigInfo(): { name: string; key: string; keys: string[]; parts: number; vertices: number; bones: number; chains: number; idle: boolean; textures: RigTextures; textureMB: number; relight: { lit: boolean; pieces: number } } {
     return {
-      name: this.data.name,
-      key: this.key,
-      keys: [...this.rigKeys],
-      parts: this.rig.partCount,
-      vertices: this.rig.vertexCount,
-      bones: this.data.bones.length,
-      chains: this.chains?.size ?? 0,
-      idle: this.data.motion?.idle !== undefined,
-      textures: { ...this.textures },
-      textureMB: Math.round(this.textureMB * 10) / 10, relight: this.rig.relightInfo,
+      name: this.data.name, key: this.key, keys: [...this.rigKeys], parts: this.rig.partCount, vertices: this.rig.vertexCount, bones: this.data.bones.length, chains: this.chains?.size ?? 0,
+      idle: this.data.motion?.idle !== undefined, textures: { ...this.textures }, textureMB: Math.round(this.textureMB * 10) / 10, relight: this.rig.relightInfo,
     };
   }
-
-  // -------------------------------------------------------------- textures (RigTier.ts)
 
   /** A figure on its 1x maps whose idle texel the camera shows larger than a pixel loads the 2x maps, if the rigs' share of the budget has room. Never throws; a failure leaves the 1x maps. */
   private maybeRaise(): void {
