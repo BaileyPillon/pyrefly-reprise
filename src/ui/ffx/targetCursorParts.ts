@@ -96,6 +96,23 @@ export function clamp(v: number, lo: number, hi: number): number {
 }
 
 /**
+ * A rough width for the plate the dock places, in px (`TargetCursor.dockFor`): ~10 px a glyph (the flag's bigger name, half its font size) plus the tag chip, the padding and the note.
+ * PR-0551 (round 30b, CHK-003): the flag's TARGET label and damage line are set at the 14 px floor now (`pro-markers.css`), and the damage line ("PHYSICAL DAMAGE", up to 30 glyphs) is the
+ * widest row of the flag, so the estimate counts it and the label: a plate the dock judged narrower than it draws could land across a panel it believed it cleared. The note is 14 px too (`ffx-hud.css`).
+ * Both games (shared plumbing); the flag is the pro look's.
+ */
+export function plateWidth(entry: { name: string; tag?: string | undefined; note?: string | undefined }, flag: boolean, viewW: number, help = ''): number {
+  const glyph = flag ? clamp(viewW * 0.0145, 22, 38) * 0.5 : 10;
+  const base = entry.name.length * glyph + (entry.tag ? 34 : 0) + 28 + (entry.note ? entry.note.length * 8 : 0);
+  if (!flag) return Math.max(64, base);
+  const helpPx = clamp(viewW * 0.0078, 14, 19);
+  const lblPx = clamp(viewW * 0.0072, 14, 18);
+  const helpW = help ? help.length * helpPx * 0.77 + 40 : 0; // Exo 2 600 caps at 0.62 em plus 0.15 em of tracking, and the flag's 16 + 24 px of padding
+  const lblW = 'TARGET'.length * lblPx * 0.94 + 40; // Chakra Petch 700 caps at 0.62 em plus 0.32 em of tracking
+  return Math.max(150, base, helpW, lblW);
+}
+
+/**
  * FFX's pointing hand, redrawn in Ink & Gold: a paper glove with an ink
  * outline and a gold cuff, per the approved frames. An inline SVG rather than
  * an asset so it inherits `currentColor` and needs no load.
