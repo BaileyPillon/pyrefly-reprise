@@ -71,7 +71,7 @@ three letters unless two would read the same, then the initials of the words (`Y
 ## Tests
 
 New: `a11y-text-target-flag` (10), `a11y-text-f1` (49), `a11y-text-phone-line` (25), `a11y-text-review` (12), helpers `helpers/cssEval.ts` (a CSS reader and a `calc()`/`clamp()`/`var()` evaluator, specificity) and `helpers/f1Zones.ts` (the F1 zones from the sheets).
-Updated (the F1 HUD no longer steps down; `?f1text=today` keeps the old tests' behaviour): `hud-f1-switch`, `hud-f1-layer`, `r64-declutter-defaults`. `tsc --noEmit` clean (src and tests/unit; the e2e project too). Full suite (3 workers, 2026-10-29 00:34 to 01:11 EDT, on the three code commits plus the a11y tests; the later Sensor-rule, skip-rung and ResizeObserver edits were re-run by their own files and `tsc`): 1,720 files passed, 26 skipped, 27,013 tests passed, 112 skipped, 1 todo, no failure. `node tools/orphans.mjs`: the same 24 modules as before, none mine.
+Updated (the F1 HUD no longer steps down; `?f1text=today` keeps the old tests' behaviour): `hud-f1-switch`, `hud-f1-layer`, `r64-declutter-defaults`. `tsc --noEmit` clean (src and tests/unit; the e2e project too). Full suite after the review fixes (3 workers, 2026-10-29 01:45 to 02:18 EDT, on the tree before the last two small edits, the heal-range ordering and a comment; the 169-file family of phone, intent, F1, target, pro-look, text-size, accessibility, guide and demo tests was re-run on the final tree, 2,099 passed): 1,721 files passed, 26 skipped, 27,040 tests passed, 112 skipped, 1 todo, no failure. `node tools/orphans.mjs`: the same modules as before, none mine. `tsc --noEmit` clean (src, tests/unit and the e2e project).
 
 ## Open questions (the driver's, or Bailey's after the sweep)
 
