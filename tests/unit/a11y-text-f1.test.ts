@@ -11,7 +11,9 @@
  */
 import { describe, expect, it } from 'vitest';
 import { cmpSpec, evalLength, evalPair, lastDecl, leafRules, readSource, specificity, type CssRule } from './helpers/cssEval.ts';
-import { FFX2_PFX, FFX2_ZONES, FFX_PFX, FFX_ZONES, SIZES, ctx, f1, f1ffx, f1ffx2, f1text, ffxCmdRows, num, overlap, painted, tsFfx, tsWide, boxOf, x2Party, type Box, type Zone } from './helpers/f1Zones.ts';
+import { FFX2_PFX, FFX2_ZONES, FFX_PFX, FFX_ZONES, SIZES, ctx, f1, f1ffx, f1ffx2, f1text, ffxCmdRows, ffxGuideRail, ffxTipRow, hiddenWhileGuide, num, overlap, painted, tsFfx, tsWide, boxOf, x2Party, type Box, type Zone } from './helpers/f1Zones.ts';
+import { GAP, SKEW } from '../../src/ui/ffx/hudSafeZones.ts';
+import { TIP_HEIGHT, TIP_MIN_WIDTH } from '../../src/ui/ffx/advisorTip.ts';
 
 const floorF1 = leafRules(readSource('src/ui/hudf1/hudf1-floor.css'));
 const WINDOWS = [
@@ -211,5 +213,119 @@ describe('the F1 text-size rules are scoped and outrank the rules they replace',
     expect(lastDecl(f1, '.hud-f1.f1-intel .sgd', 'transform')).toBe('translateY(22px)');
     expect(lastDecl(f1, ".ffxhud.hud-f1.f1-intel .mad__card[data-zone='tip']", 'transform')).toBe('translateX(166px) skewX(var(--ig-skew))');
     expect(lastDecl(f1ffx2, ".ffx2hud.hud-f1.f1-intel .mad__card[data-zone='tip']", 'left')).toBe('196px');
+  });
+});
+
+// ------------------------------------------------------------------------------------------ Intel (X): Chapter I's guide and tip (review M1 and minor 1)
+
+describe("Chapter I's strategy guide (G) with a menu open: the sheet never lands on the hero or the cue (review M1)", () => {
+  const rail = (ts: number): Box => ffxGuideRail(ts);
+  const zone = (name: string): Zone => FFX_ZONES.find((z) => z.name === name)!;
+  const vOverlap = (a: Box, b: Box): number => Math.max(0, Math.min(a.t + a.h, b.t + b.h) - Math.max(a.t, b.t));
+
+  it("the model reproduces the F1 design at 100: the rail's foot (137) stands 3 grid px over the hero (140), which is why the hero is where it is", () => {
+    const r = rail(1);
+    expect(r.t + r.h).toBeCloseTo(137, 3);
+    expect(painted(zone('hero'), 1).t - (r.t + r.h)).toBeCloseTo(3, 3);
+    for (const z of FFX_ZONES) expect(overlap(r, painted(z, 1)), `the rail over the ${z.name} at 100`).toBe(0);
+  });
+
+  it('at 115 the sheet would cover 26.8 grid px of the hero, at 130 the whole hero and 14.3 of the cue: the left column grows UP about its foot and the rail steps DOWN with the ribbon', () => {
+    const r115 = rail(1.15);
+    const r130 = rail(1.3);
+    expect(vOverlap(r115, painted(zone('hero'), 1.15))).toBeCloseTo(26.8, 0);
+    expect(vOverlap(r115, painted(zone('cue'), 1.15))).toBe(0);
+    const hero130 = painted(zone('hero'), 1.3);
+    expect(vOverlap(r130, hero130)).toBeCloseTo(hero130.h, 3);
+    expect(overlap(r130, hero130)).toBeCloseTo((r130.l + r130.w - hero130.l) * hero130.h, 3); // the rail is 132 x 1.3 wide and the hero 150 x 1.3: 165 of its 195 grid px
+    expect(vOverlap(r130, painted(zone('cue'), 1.3))).toBeCloseTo(14.3, 0);
+  });
+
+  it('the sheets hide exactly the hero and the cue while the guide is open at 115 and 130 (rule: opacity 0 under .f1-intel, FFX only, never at 100)', () => {
+    expect(hiddenWhileGuide().sort()).toEqual(['cue', 'hero']);
+    for (const r of f1text) if (r.sel.includes('.f1-intel') && lastDecl([r], r.sel, 'opacity') === '0') {
+      expect(r.sel.startsWith(FFX_PFX), r.sel).toBe(true);
+      expect(r.sel, r.sel).toContain('.ffxhud');
+      expect(r.sel, r.sel).not.toContain('.ffx2hud');
+    }
+  });
+
+  for (const ts of SIZES) {
+    it(`at TEXT SIZE ${Math.round(ts * 100)}: every zone the sheet meets is one the sheets hide while the guide is open, and nothing else is met`, () => {
+      const r = rail(ts);
+      const hidden = hiddenWhileGuide();
+      const met = FFX_ZONES.filter((z) => overlap(r, painted(z, ts)) > 0).map((z) => z.name);
+      for (const name of met) expect(hidden, `${name} is under the sheet at ${ts} and is not hidden`).toContain(name);
+      if (ts === 1) expect(met, 'at 100 nothing is met, so nothing needs hiding').toEqual([]);
+      // the verbs stay: they are the command list, and the rail's foot stands clear of them (and of the breadcrumb 9 grid px over them)
+      const verbs = painted(zone('verbs'), ts);
+      expect(verbs.t - 9 * ts, 'the breadcrumb over the verbs').toBeGreaterThanOrEqual(r.t + r.h);
+    });
+  }
+
+  it("Chapter IV (FFX-2) has no such rule and needs none: its hero, cue and window are on the right (100 grid px and more clear of the rail's right edge, 193 at 130), the guide's rail is the left column", () => {
+    for (const ts of SIZES) {
+      const railRight = ffxGuideRail(ts).l + 132 * ts;
+      for (const n of ['hero', 'cue', 'verbs']) expect(painted(FFX2_ZONES.find((z) => z.name === n)!, ts).l, `${n} at ${ts}`).toBeGreaterThan(railRight + 100);
+    }
+  });
+});
+
+describe("Chapter I's one-row tip stays clear of the turn strip at 115 and 130 (review minor 1)", () => {
+  const strip = (ts: number): Box => painted(FFX_ZONES.find((z) => z.name === 'turn strip')!, ts);
+  const reach = (SKEW * TIP_HEIGHT) / 2;
+
+  for (const ts of SIZES) {
+    it(`at TEXT SIZE ${Math.round(ts * 100)}: the widest bar, shifted right of the ribbon, ends a clearance short of the strip, and is still a bar that holds its words`, () => {
+      const tip = ffxTipRow(ts);
+      expect(tip.right + reach + GAP, `the bar's right edge, its shear and the clearance against the strip's left ${strip(ts).l.toFixed(1)}`).toBeLessThanOrEqual(strip(ts).l + 0.01);
+      expect(tip.right - tip.left).toBeGreaterThanOrEqual(TIP_MIN_WIDTH);
+      const ribbon = painted(FFX_ZONES.find((z) => z.name === 'boss ribbon')!, ts);
+      expect(tip.left, 'right of the ribbon').toBeGreaterThanOrEqual(ribbon.l + ribbon.w);
+    });
+  }
+
+  it('without the cap the widest bar would run into the strip at 115 and 130 (and 100 needs none), which is the reason for it', () => {
+    const wide = (ts: number): number => {
+      const t = ffxTipRow(ts);
+      return t.left + 226 + reach + GAP - strip(ts).l;
+    };
+    expect(wide(1)).toBeLessThan(0);
+    expect(wide(1.15)).toBeGreaterThan(0);
+    expect(wide(1.3)).toBeGreaterThan(40);
+    expect(ffxTipRow(1).cap).toBeUndefined();
+    expect(ffxTipRow(1.15).cap).toBeCloseTo(206.9, 1);
+    expect(ffxTipRow(1.3).cap).toBeCloseTo(158.85, 2);
+  });
+
+  it('the cap outranks nothing it should not: it is on the same rule as the shift, so it is gone with the rest when the HUD is not F1, the chapter is not Chapter I or the size is 100', () => {
+    const sel = `${FFX_PFX} .ffxhud.hud-f1.f1-intel .mad__card[data-zone='tip']`;
+    expect(lastDecl(f1text, sel, 'max-width')).toBeDefined();
+    expect(lastDecl(f1text, sel, 'transform')).toBeDefined();
+    expect(lastDecl(f1, ".ffxhud.hud-f1.f1-intel .mad__card[data-zone='tip']", 'max-width')).toBeUndefined();
+  });
+});
+
+describe("Intel's chips and tips follow the ribbon at 115 and 130, not only at 100 (review minor 5)", () => {
+  const ribbon = FFX_ZONES.find((z) => z.name === 'boss ribbon')!;
+  const foot = (ts: number): number => painted(ribbon, ts).t + painted(ribbon, ts).h;
+  const edge = (ts: number): number => painted(ribbon, ts).l + painted(ribbon, ts).w;
+  const railStep = (ts: number): number => evalLength(/^translateY\((.*)\)$/.exec(lastDecl(f1text, `${FFX_PFX} .ffxhud.hud-f1.f1-intel .sgd`, 'transform')!)![1]!, ctx(ts));
+
+  it('the guide rail steps down by exactly what the ribbon grew (25.75 and 29.5, from 22 at 100)', () => {
+    expect(railStep(1)).toBe(22);
+    expect(railStep(1.15)).toBeCloseTo(25.75, 6);
+    expect(railStep(1.3)).toBeCloseTo(29.5, 6);
+    for (const ts of [1.15, 1.3]) expect(railStep(ts) - railStep(1)).toBeCloseTo(foot(ts) - foot(1), 6);
+  });
+
+  it("Chapter I's tip and Chapter IV's tip and chip step right by exactly what the ribbon's right edge moved (166 / 190 / 214 and 196 / 220 / 244)", () => {
+    for (const ts of [1.15, 1.3]) {
+      expect(ffxTipRow(ts).left - ffxTipRow(1).left).toBeCloseTo(edge(ts) - edge(1), 6);
+      const left = (t: number): number => evalLength(lastDecl(f1text, `${FFX2_PFX} .ffx2hud.hud-f1.f1-intel .mad__card[data-zone='tip']`, 'left')!, ctx(t));
+      expect(left(ts) - 196).toBeCloseTo(edge(ts) - edge(1), 6);
+    }
+    expect(ffxTipRow(1.15).left - ffxTipRow(1).left).toBeCloseTo(24, 6);
+    expect(ffxTipRow(1.3).left - ffxTipRow(1).left).toBeCloseTo(48, 6);
   });
 });

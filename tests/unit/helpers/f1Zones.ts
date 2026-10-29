@@ -4,6 +4,8 @@
  * height depends on content (the hero's name, the turn strip's tile and names).
  */
 import { declsOf, evalLength, evalPair, lastDecl, leafRules, readSource, type CssRule } from './cssEval.ts';
+import { GAP, MAX_ADVISOR_WIDTH, SKEW } from '../../../src/ui/ffx/hudSafeZones.ts';
+import { TIP_BADGE, TIP_HEIGHT } from '../../../src/ui/ffx/advisorTip.ts';
 
 export const f1 = leafRules(readSource('src/ui/hudf1/hudf1.css'));
 export const f1ffx = leafRules(readSource('src/ui/hudf1/hudf1-ffx.css'));
@@ -157,3 +159,51 @@ export const FFX2_ZONES: Zone[] = [
   { name: 'party cards', box: x2Party, effects: [[tsWide, `${FFX2_PFX} .ffx2hud__stage > .ffx2hud__party`]] },
 ];
 
+// ------------------------------------------------------------------------------------------ Intel (X): Chapter I's guide rail and one-row tip (a11y-text review M1 and minor 1)
+
+/** `CMD_INFO_TOP` of `FFXBattleHud` (not exported): the help slab's fixed slot, whose top less `GAP` is the guide rail's floor. */
+export const CMD_INFO_TOP = Number(/const CMD_INFO_TOP = (\d+);/.exec(readSource('src/ui/ffx/FFXBattleHud.ts'))![1]);
+/** The rail's authored top (`FFXBattleHud`'s guide anchors) and its left and width (`strategy-guide.css`). */
+export const GUIDE_TOP = Number(/guide = new StrategyGuide\(\{[\s\S]*?anchors: \{[\s\S]*?\btop: (\d+),/.exec(readSource('src/ui/ffx/FFXBattleHud.ts'))![1]);
+const guideCss = leafRules(readSource('src/ui/common/strategy-guide.css'));
+const guideStack = '.sgd__stack';
+
+/**
+ * Chapter I's strategy guide rail while it is open (Intel up), at its WORST: the sheet fills the column down to its floor, as it does when the document is longer than the room (Seymour Flux's is). `text-size.css` grows
+ * the rail about its top left, so the layout room is divided by the scale and the painted height stays `floor - top`; F1 then steps the whole `.sgd` down by `-3 + 25 x scale`. The rail's top is the authored 44 (a visible
+ * action banner only pushes it lower and the sheet shorter).
+ */
+export function ffxGuideRail(ts: number): Box {
+  const c = ctx(ts);
+  const step = /^translateY\((.*)\)$/.exec(lastDecl(f1text, `${FFX_PFX} .ffxhud.hud-f1.f1-intel .sgd`, 'transform')!)![1]!;
+  const shift = evalLength(step, c);
+  const floor = CMD_INFO_TOP - 6; // `GAP`, `hudSafeZones`
+  return { l: num(guideCss, guideStack, 'left'), t: GUIDE_TOP + shift, w: num(guideCss, guideStack, 'width') * ts, h: floor - GUIDE_TOP };
+}
+
+/** The names of the F1 zones that the sheets hide while Intel is up at a text size (an `opacity: 0` rule under `.f1-intel` in `hudf1-textsize.css`): `hero` for `.f1-hero`, `cue` for `.f1-cue`. */
+export function hiddenWhileGuide(): string[] {
+  const out = new Set<string>();
+  for (const r of f1text) {
+    if (!r.sel.startsWith(FFX_PFX) || !r.sel.includes('.f1-intel') || lastDecl([r], r.sel, 'opacity') !== '0') continue;
+    const m = /\.f1-(hero|cue)$/.exec(r.sel);
+    if (m) out.add(m[1]!);
+  }
+  return [...out];
+}
+
+/**
+ * Chapter I's one-row advisor tip at its WIDEST while Intel is up: the solver puts the bar's card at `GAP` + the shear's reach + the badge (36) and gives it up to `MAX_ADVISOR_WIDTH` (226) when the top row is free, and F1
+ * then moves it right by its own step (166 at 100, `6 + 160 x scale` at 115 and 130) and, at 115 and 130, caps its width (`hudf1-textsize.css`). `left` and `right` are the card's, before the shear.
+ */
+export function ffxTipRow(ts: number): { left: number; right: number; cap: number | undefined } {
+  const c = ctx(ts);
+  const grown = ts !== 1;
+  const sel = `${FFX_PFX} .ffxhud.hud-f1.f1-intel .mad__card[data-zone='tip']`;
+  const raw = grown ? lastDecl(f1text, sel, 'transform')! : lastDecl(f1, ".ffxhud.hud-f1.f1-intel .mad__card[data-zone='tip']", 'transform')!;
+  const shift = evalLength(/translateX\((.*?)\) skewX/.exec(raw)![1]!, c);
+  const capRaw = grown ? lastDecl(f1text, sel, 'max-width') : undefined;
+  const cap = capRaw === undefined ? undefined : evalLength(capRaw, c);
+  const left = GAP + (SKEW * TIP_HEIGHT) / 2 + TIP_BADGE + shift;
+  return { left, right: left + Math.min(MAX_ADVISOR_WIDTH, cap ?? Infinity), cap };
+}

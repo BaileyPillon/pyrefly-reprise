@@ -17,7 +17,7 @@
  * everything mirrored right with the slant flipped and the pink accent (those flips are `--ig-skew` and `--ig-accent` on the HUD root, `.ig--ffx2`).
  *
  * With the switch off ({@link hudF1On}) this class puts no class on the root and shows nothing: the layer's ~25 nodes are mounted but hidden (`display: none !important`), and no `hudf1` rule matches
- * (every one hangs from `.hud-f1`). TEXT SIZE other than 100 turns it off too ({@link hudF1On}): the HUD is then today's, which TEXT SIZE lays out.
+ * (every one hangs from `.hud-f1`). TEXT SIZE no longer turns it off ({@link hudF1On}; a11y-text, 2026-10-29): at 115 and 130 the layer stays and `hudf1-textsize.css` grows its zones. Only `F1_GROWS_WITH_TEXT_SIZE = false` or `?f1text=today` hands those sizes back to today's HUD, as release 67 did.
  */
 import type { BattleEvent, BattleState } from '../../battle/common/types.ts';
 import type { ActingSignal } from '../../engine/HudPort.ts';
@@ -95,7 +95,7 @@ export class HudF1 {
   private host: HudF1Host | null = null;
   private applied = false;
   private offChange: (() => void) | null = null;
-  /** Watches TEXT SIZE on <html>: the layer turns off at 115 / 130 and back on at 100, live (the pause's OPTIONS can change it under a battle). */
+  /** Watches TEXT SIZE on <html>: the layer is re-asked when the size changes, live (the pause's OPTIONS can change it under a battle): it stays on and grows, or, with the release-67 word (`?f1text=today`), turns off at 115 / 130 and back on at 100. */
   private textWatch: MutationObserver | null = null;
   /** The bar's last value, percent; -1 before the first sync (a fight joined mid-way draws its bar at once, with no bite). */
   private lastPct = -1;
