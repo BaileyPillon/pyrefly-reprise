@@ -10,7 +10,7 @@
 import { lifeStateForPose, nextLifeState, resolvePoseName } from './BattlePresenterActors.ts';
 import { loadPainted, type PaintedTexture } from './PaintedArt.ts';
 import { loadStreamed } from './PoseStream.ts'; // load diet: the opening poses are waited for, the rest streams
-import { deferWhileHeld } from './LoadHold.ts'; // lane "budgets-2": on the phone class the lighting maps start when the field is up, not while the entry loads
+import { deferWhileHeld } from './LoadHold.ts'; // lane "budgets-2": on the phone class the lighting maps start once every figure is built, not while the entry loads, and through a ranked queue
 import { orderByNeed, poseNeed } from './LoadDiet.ts';
 import { WITHHELD_FALLBACKS } from './PoseTrust.ts';
 import { newMotionOn } from './motion/NewMotionGate.ts';

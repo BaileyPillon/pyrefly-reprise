@@ -7,7 +7,7 @@
  * is handed back to be installed as it lands. A set that is complete inside the ceiling comes back whole and in the order it was asked for, which is release 67's result.
  */
 import { orderByNeed, poseNeed, raceCeiling, splitPoses } from './LoadDiet.ts';
-import { backgroundHeld, whenBackgroundOpen } from './LoadHold.ts'; // lane "budgets-2": on the phone class the later poses start when the entry is done
+import { backgroundHeld, queued, whenBackgroundOpen } from './LoadHold.ts'; // lane "budgets-2": on the phone class the later poses start when the entry is done
 
 /** How many of the other poses are in flight at once: enough to keep a fast line full, few enough that the first-needed ones are not slowed by the last. */
 export const LATE_WINDOW = 6;
@@ -105,9 +105,9 @@ export async function loadStreamed<T>(poses: Readonly<Record<string, string>>, n
   const earlyLoaded = await Promise.all(early.map((n) => load(poses[n]!)));
   const order = orderByNeed(late, poseNeed);
   // Foreground first (`LoadHold.ts`): while the line is held for the entry (the phone class) the later poses do not start, and the figure does not sit out the ceiling for poses it has not asked for yet:
-  // it is built with its opening poses, and each later pose is asked for, in need order, when the hold opens (`stop` is asked again then: the figure may be gone).
+  // it is built with its opening poses, and each later pose is asked for when the hold opens, through the phone's ranked queue (`LoadHold.queued`: in need order, eight at a time across every figure; `stop` is asked again when its turn comes: the figure may be gone).
   const held = backgroundHeld();
-  const task = (n: string) => (held ? () => whenBackgroundOpen().then(() => (stop(n) ? Promise.reject(new StreamStopped()) : load(poses[n]!))) : () => load(poses[n]!));
+  const task = (n: string) => (held ? () => whenBackgroundOpen().then(() => queued(2 * poseNeed(n), async () => (stop(n) ? Promise.reject(new StreamStopped()) : load(poses[n]!)))) : () => load(poses[n]!));
   const started = startWindowed(order.map(task), LATE_WINDOW, (i) => stop(order[i]!));
   const byName = new Map(order.map((n, i) => [n, started[i]!] as const));
   const each = late.map((n) => byName.get(n)!);

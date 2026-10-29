@@ -9,9 +9,9 @@
  * (`FigureRelight.prefetchRelight`, 17.9 MB in Chapter I and 13.7 in Chapter IV, asked for as each figure is built), the figures' later poses (`PoseStream.loadStreamed`, six at a time per figure) and the
  * preload's own phase 4 when the pre-battle scene was too short to finish it (`battlePreload.ts`).
  *
- * THE CUT. On the phone class, from the moment the battle screen begins to enter until the field is shown (the swirl clears and the boss card is up), those three wait: a figure is built with its opening
+ * THE CUT. On the phone class, from the moment the battle screen begins to enter until every figure is built (`PaintedStage.stage` has resolved: what is left of the entry, the HUD, the shader warm-up and the swirl, is the CPU's and leaves the line idle), those three wait: a figure is built with its opening
  * poses at once (no ceiling to sit out), and the later poses, the lighting maps (the poses a fight draws first first: `LoadDiet.poseNeed`) and the preload's remaining poses start when the hold opens. The same bytes
- * arrive, in the other order: the card (1.3 s) and the opening sweep (6.1 to 6.6 s) are the time they have before the first command. Nothing changes on the desktop or the tablet class, nothing is dropped, and a
+ * arrive, in the other order: the shader warm-up (1.5 to 3 s), the card (1.3 s) and the opening sweep (6.1 to 6.6 s) are the time they have before the first command. Nothing changes on the desktop or the tablet class, nothing is dropped, and a
  * hold that is never opened (a screen that fails to enter) opens itself after {@link HOLD_CEILING_MS}.
  *
  * What a player can see: on a slow line the figures are drawn without their lighting for the first seconds (the maps of the poses drawn first arrive within about 2 s of the card on a 10 Mbit/s line), and a move
@@ -19,6 +19,7 @@
  */
 import { loadDiet } from './LoadDiet.ts';
 import { deviceClass } from './ArtDevice.ts';
+import { BackgroundQueue } from './BackgroundQueue.ts';
 
 let override: boolean | null | undefined;
 
@@ -39,6 +40,22 @@ export function foregroundFirst(): boolean {
     /* no address: the class decides */
   }
   return deviceClass() === 'phone';
+}
+
+/**
+ * How many of the loads after the hold (the later poses of every figure, the lighting maps) are in flight at once on the phone class. Started all together they share the line equally and land together,
+ * twenty seconds on; at eight the first of them land in the first five, in {@link queued}'s rank order.
+ */
+export const LATE_WIDTH = 8;
+const lateQueue = new BackgroundQueue(LATE_WIDTH);
+
+/**
+ * Start `task` through the phone's ranked queue (`BackgroundQueue`): lowest rank first, {@link LATE_WIDTH} at a time. Off the phone class it is just `task()`. The rank of a later pose is `2 * need`, of a
+ * lighting map `2 * need + 1` (`LoadDiet.poseNeed`: 0 the opening poses, 1 the everyday moves, 2 the rest, 3 the rare ones), so a pose comes before its own map and the maps of the poses drawn first before
+ * the poses drawn last.
+ */
+export function queued<T>(rank: number, task: () => Promise<T>): Promise<T> {
+  return foregroundFirst() ? lateQueue.run(rank, task) : task();
 }
 
 /** The longest a hold stays shut when nobody opens it (a screen that failed to enter): 20 s, past the 12 to 15 s a phone's entry takes. */
@@ -67,7 +84,7 @@ export function holdBackground(ceilingMs: number = HOLD_CEILING_MS): boolean {
   return true;
 }
 
-/** The field is up (or the screen is gone): everything that waited starts, in the order it asked. */
+/** Every figure is built (or the screen is gone): everything that waited starts, in the order it asked. */
 export function releaseBackground(): void {
   if (!held) return;
   held = false;
@@ -110,8 +127,8 @@ export function deferWhileHeld(owner: object, again: () => void, alive: () => bo
 }
 
 /** For the debug probe and the tests. */
-export function holdBooks(): { held: boolean; holds: number; opens: number; ceilings: number; deferredMaps: number; deferredPoses: number; heldMs: number } {
-  return { held, ...books };
+export function holdBooks(): { held: boolean; holds: number; opens: number; ceilings: number; deferredMaps: number; deferredPoses: number; heldMs: number; queue: { inFlight: number; queued: number } } {
+  return { held, ...books, queue: { inFlight: lateQueue.inFlight, queued: lateQueue.queued } };
 }
 
 /** Tests only: forget every hold and every count. */
@@ -123,6 +140,7 @@ export function resetHoldForTests(): void {
   waiters = [];
   owners.clear();
   opened = Promise.resolve();
+  lateQueue.reset();
   for (const k of Object.keys(books) as Array<keyof typeof books>) books[k] = 0;
   override = undefined;
 }

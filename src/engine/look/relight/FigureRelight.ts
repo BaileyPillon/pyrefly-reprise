@@ -12,6 +12,9 @@ import { artManifest } from '../../ArtManifest.ts';
 import { normalMapScaleFor } from '../../ArtManifestMaps.ts';
 import { lookState } from '../LookState.ts';
 import { MAX_POINT_LIGHTS, normalMapUrl } from './RelightConfig.ts';
+import { queued } from '../../LoadHold.ts'; // lane "budgets-2": on the phone class the maps start through a ranked queue, the poses a fight draws first first
+import { poseNeed } from '../../LoadDiet.ts';
+import { figureState } from '../../ArtTier.ts';
 
 type Cell<T> = { value: T };
 
@@ -103,48 +106,67 @@ function adopt(m: ShaderMaterial, url: string, tex: Texture | null): void {
   m.uniforms['relightOn']!.value = tex ? 1 : 0;
 }
 
-function fetchMap(url: string): void {
+/**
+ * Ask for a map. `rank` null: now (a pose being drawn needs its map). A rank: through the phone's ranked queue (`LoadHold.queued`; off the phone class that is "now" too), so the maps of the poses a fight
+ * draws first land first and not all forty together. A map released before its turn (a fight ended) is never asked for.
+ */
+function fetchMap(url: string, rank: number | null = null): void {
   cache.set(url, 'loading');
   touched.set(url, epochNow);
   relightStats.requested++;
-  loader ??= new TextureLoader();
-  loader.load(
-    url,
-    (t) => {
-      if (cache.get(url) !== 'loading') {
-        t.dispose(); // released while it was on its way (a fight ended): nobody keeps it
-        return;
-      }
-      t.colorSpace = NoColorSpace; // data, not colour
-      t.minFilter = LinearMipmapLinearFilter;
-      t.magFilter = LinearFilter;
-      t.generateMipmaps = true;
-      t.anisotropy = 4;
-      t.needsUpdate = true;
-      cache.set(url, t);
-      relightStats.loaded++;
-      for (const m of waiters.get(url) ?? []) adopt(m, url, t);
-      waiters.delete(url);
-      if (cache.size > capNow()) {
-        for (const [k, v] of cache) {
-          if (v instanceof Texture && !pinned.has(k)) {
-            v.dispose();
-            cache.delete(k);
-            touched.delete(k);
-            break;
+  const go = (): Promise<void> => {
+    if (cache.get(url) !== 'loading') return Promise.resolve(); // released before its turn
+    loader ??= new TextureLoader();
+    return new Promise<void>((settle) => {
+      loader!.load(
+        url,
+        (t) => {
+          try {
+            if (cache.get(url) !== 'loading') {
+              t.dispose(); // released while it was on its way (a fight ended): nobody keeps it
+              return;
+            }
+            t.colorSpace = NoColorSpace; // data, not colour
+            t.minFilter = LinearMipmapLinearFilter;
+            t.magFilter = LinearFilter;
+            t.generateMipmaps = true;
+            t.anisotropy = 4;
+            t.needsUpdate = true;
+            cache.set(url, t);
+            relightStats.loaded++;
+            for (const m of waiters.get(url) ?? []) adopt(m, url, t);
+            waiters.delete(url);
+            if (cache.size > capNow()) {
+              for (const [k, v] of cache) {
+                if (v instanceof Texture && !pinned.has(k)) {
+                  v.dispose();
+                  cache.delete(k);
+                  touched.delete(k);
+                  break;
+                }
+              }
+            }
+          } finally {
+            settle();
           }
-        }
-      }
-    },
-    undefined,
-    () => {
-      if (cache.get(url) !== 'loading') return; // released while it was on its way
-      cache.set(url, 'missing');
-      relightStats.missing++;
-      for (const m of waiters.get(url) ?? []) adopt(m, url, null);
-      waiters.delete(url);
-    },
-  );
+        },
+        undefined,
+        () => {
+          try {
+            if (cache.get(url) !== 'loading') return; // released while it was on its way
+            cache.set(url, 'missing');
+            relightStats.missing++;
+            for (const m of waiters.get(url) ?? []) adopt(m, url, null);
+            waiters.delete(url);
+          } finally {
+            settle();
+          }
+        },
+      );
+    });
+  };
+  if (rank === null) void go();
+  else void queued(rank, go);
 }
 
 /** The URL of the normal map a painting would be lit with, or null when the build ships none for it (the manifest names which maps exist). */
@@ -169,7 +191,7 @@ export function prefetchRelight(paintingUrl: string | undefined, scale: number |
     pinned.set(url, (pinned.get(url) ?? 0) + 1);
     held?.add(url);
   }
-  if (!cache.has(url)) fetchMap(url);
+  if (!cache.has(url)) fetchMap(url, 2 * poseNeed(figureState(paintingUrl ?? '') ?? 'idle') + 1);
   else touched.set(url, epochNow);
   return url;
 }

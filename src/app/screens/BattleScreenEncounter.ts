@@ -41,7 +41,7 @@ import { bindEyeCandyScene, sceneBackdropPalette } from '../../engine/fx/a/Golde
 import { applyChapterLook } from '../../engine/look/LookState.ts'; // release 60: the conference demo's default look
 import { bindLivingScene } from '../../engine/fx/b/LivingPaintings.ts';
 import { entryMark } from '../../engine/EntryMarks.ts'; // lane "budgets-2": where the entry spends its time (`performance.mark`, read by the browser job only)
-import { holdBackground, releaseBackground } from '../../engine/LoadHold.ts'; // lane "budgets-2": on the phone class the lighting maps, the later poses and the preload's rest wait until the field is shown
+import { holdBackground, releaseBackground } from '../../engine/LoadHold.ts'; // lane "budgets-2": on the phone class the lighting maps, the later poses and the preload's rest wait until every figure is built
 import { beginFight } from '../../engine/LeaveRelease.ts'; // lane "budgets-2": this fight's paintings and lighting maps are stamped, and what it did not use is let go when it ends (`BattleScreen.releaseParts`)
 import { framingArrivalOwed, framingPlanOwed, framingPlanSettled } from '../../engine/fx/mix/MaxMix.ts'; // FOC44A-05: the boss entrance waits for CHAPTER FRAMING's plan; the opening waits for it too (`openingGate.ts`)
 import { patchSideFogIn, setSideFogGame } from '../../engine/PlateSideFog.ts';
@@ -72,7 +72,7 @@ export abstract class BattleScreenEncounter extends BattleScreenCard {
     const chapter = this.opts.chapter;
     this.startedAt = performance.now();
     beginFight();
-    holdBackground(); // phone class only; opens at `fieldShown` (or by itself after 20 s)
+    holdBackground(); // phone class only; opens once every figure is built (or by itself after 20 s)
     entryMark('begin');
     claimLead(this); // MF-08: a chain's leftover frame time is credited to the move that follows (`engine/BeatLead.ts`); given back in exit()
     if (this.opts.retryTheme) startRetryTheme(chapter, audio); // r64-fixes: the lost screen's exit has just stopped the music; the retried fight's theme (still decoded) comes in now
@@ -153,6 +153,7 @@ export abstract class BattleScreenEncounter extends BattleScreenCard {
 
     await this.stage.stage(this.engine ? this.engine.state() : demoState());
     entryMark('stage');
+    releaseBackground(); // every figure is built: what is left of the entry (the HUD, the shader warm-up, the swirl) is the CPU's, so the line goes to the later poses and the lighting maps now (`LoadHold.ts`)
     dropParked(scene.key); // lane "prebuild": a figure the demo built ahead that this stage did not take (another party) is freed
     if (this.exited) return this.releaseParts();
     this.airship = await attachStageHook(chapter.game, this.scene, this.stage, this.engine?.state() ?? null); // Ch. 8; FF7's rows
@@ -262,7 +263,6 @@ export abstract class BattleScreenEncounter extends BattleScreenCard {
     if (this.exited) return this.releaseParts();
     this.fieldShown = true;
     entryMark('shown');
-    releaseBackground(); // the entry is done: what waited for the line may have it (`LoadHold.ts`)
     void this.app.fade('clear', 600);
 
     // `P` has no abstract button in `app/Input.ts` (a global binding in a

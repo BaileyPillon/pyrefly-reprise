@@ -284,7 +284,7 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
       }
     };
     for (const url of order) {
-      await whenBackgroundOpen(); // the battle is entering on a phone: its own loads have the line until the field is up (`LoadHold.ts`); a no-op everywhere else
+      await whenBackgroundOpen(); // the battle is entering on a phone: its own loads have the line until every figure is built (`LoadHold.ts`); a no-op everywhere else
       ahead();
       if (stopped()) return report();
       if (await prewarmPainted(url, STAGE_MATTE, STAGE_FIT)) paintings++;
