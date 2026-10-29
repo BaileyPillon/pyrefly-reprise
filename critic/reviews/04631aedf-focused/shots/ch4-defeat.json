@@ -1,0 +1,17 @@
+{
+ "label": "ch4-defeat",
+ "query": "",
+ "speed": "skip",
+ "attempts": [
+  {
+   "att": 1,
+   "menuMs": 23365,
+   "prepAt": null,
+   "endScreen": "battle",
+   "cause": "",
+   "meta": "",
+   "buttons": []
+  }
+ ],
+ "errors": []
+}
