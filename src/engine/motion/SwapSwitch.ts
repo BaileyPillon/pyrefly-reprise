@@ -79,6 +79,22 @@ export const SCOPE_EXCEPTIONS: Readonly<Record<string, string>> = {
     "FFX-2, Ixion XVI: the wide run of release 68 (2026-10-28, seed 1) took ghost time a minute from 4,873 ms to 2,144, but run 1 had a snap (Paine idle to hurt, a plain hard cut, IoU 0.44), the repeat had none, and a KO kneel cut steps 146 px; swap jerks read 1 and 2 against 1. Lifts when a third run has no snap and the KO kneel cut has been read as the knock-out's own cut or fixed.",
 };
 
+/**
+ * THE 50 ms BLEND'S REACH, WHERE A HEAD TRAVELS UP AND DOWN (held-chapters lane, 2026-10-29; FFX only in effect: the two chapters below are FFX's; the driver's call under Bailey's delegation of 2026-10-28, his to
+ * overturn). The planner keeps today's longer blend for a pair of drawings it calls a BIG change (`SmearPlan.isBigChange`: outlines under half shared, or heads 0.12 of the height apart SIDEWAYS), because the 50 ms
+ * three-frame blend of two heads far apart steps the weighted head about 0.6 of their distance in one frame (its capped curve: the outgoing painting is nearly gone by the second frame). Sideways is all it
+ * reads. A serpent's head dips and rears and a kneel to a victory pose is straight up, so Evrae's `cast>idle` and `hurt>idle` (heads 0.12 and 0.13 of his height apart, 0.04 and 0.09 of it sideways; coil
+ * outlines that overlap 0.7) and Auron's `critical>victory` (0.22 up, 60 px in Sin's face) were blends of 50 ms across 55 to 60 px of head travel, the swap jerks that kept both chapters out of {@link WIDE_CHAPTERS}'s
+ * reach in release 68. In the chapters named here a `pick` blend whose two heads are {@link BLEND3_HEAD_MAX} of the figure's height apart or more IN ANY DIRECTION (`SmearFacts.headDistance`) keeps
+ * today's blend too: 0.6 x 0.08 of a 500 px figure is 24 px, the harness's own jerk line (`policy.json` `jerkMinPx`). Every other chapter is untouched (their numbers were measured with the sideways reading, and
+ * victory to idle pairs in the FFX-2 joiners read the same way: `docs/handoff/held-chapters.md` has the census). The table is separate from {@link SCOPE_EXCEPTIONS} on purpose: lifting an exception must not drop it.
+ */
+export const BLEND3_HEAD_MAX = 0.08;
+export const BLEND_HEAD_CHAPTERS: Readonly<Record<string, number>> = {
+  'evrae-airship': BLEND3_HEAD_MAX,
+  'sin-face': BLEND3_HEAD_MAX,
+};
+
 /** The swaps MF-06 names, each by what is happening on screen (`SwapClass.ts` reads them off the pair of paintings). */
 export type SwapClass = 'contact' | 'home' | 'hit' | 'recover' | 'glow' | 'castEnd' | 'toss' | 'itemEnd' | 'critical' | 'criticalOut';
 export const SWAP_CLASSES: readonly SwapClass[] = ['contact', 'home', 'hit', 'recover', 'glow', 'castEnd', 'toss', 'itemEnd', 'critical', 'criticalOut'];
@@ -179,6 +195,17 @@ export function setStanceMode(v: StanceMode | null): void {
 export function setCauseMode(v: CauseMode | null, only?: readonly SwapClass[] | null): void {
   cause = v;
   if (only !== undefined) classes = only === null ? null : new Set(only);
+}
+
+/** The whole head distance (a share of the figure's height) at which a `pick` blend keeps today's blend in chapter `id`, or null when the chapter reads the sideways distance only ({@link BLEND_HEAD_CHAPTERS}). */
+export function blendHeadMax(id: string | undefined = demoChapter()): number | null {
+  return id !== undefined && Object.prototype.hasOwnProperty.call(BLEND_HEAD_CHAPTERS, id) ? BLEND_HEAD_CHAPTERS[id]! : null;
+}
+
+/** True when two heads `distance` apart (a share of the height, any direction; null: not known) are too far for the 50 ms blend in the running chapter. */
+export function blendTooFar(distance: number | null, id: string | undefined = demoChapter()): boolean {
+  const max = blendHeadMax(id);
+  return max !== null && distance !== null && Number.isFinite(distance) && distance >= max;
 }
 
 /** The stance look that plays NOW: the asked-for one in a pack chapter, `today` anywhere else. */

@@ -114,8 +114,10 @@ export function footprintOverlap(a: Footprint, b: Footprint, cells = 64): number
 export type AnchorSource = 'head' | 'centroid';
 
 export interface PlaneAnchor {
-  /** World x, in the actor's frame (the drift is sideways only, so the anchor's height is not kept). */
+  /** World x, in the actor's frame (the drift is sideways only, so the drift does not use the anchor's height). */
   readonly x: number;
+  /** World y of the same point, in the actor's frame (held-chapters lane: the head-distance guard of `motion/SmearFacts.ts` reads it; optional so an anchor made by hand without it stands). */
+  readonly y?: number;
   readonly source: AnchorSource;
 }
 
@@ -161,13 +163,14 @@ export function maskCentroid(mask: CoarseMask): { u: number; t: number } | null 
 export function planeAnchor(p: Footprint): PlaneAnchor | null {
   if (!p.mask || !(p.width > 0)) return null;
   const worldX = (u: number): number => p.cx + p.mirror * (u - 0.5) * p.width;
+  const worldY = (t: number): number => p.cy + (0.5 - t) * p.height; // t down from the top of the picture; y up in the actor's frame
   if (p.head) {
     const u = (p.head[0] + p.head[2]) / 2;
     const t = (p.head[1] + p.head[3]) / 2;
-    if (nearSolid(p.mask, u, t)) return { x: worldX(u), source: 'head' };
+    if (nearSolid(p.mask, u, t)) return { x: worldX(u), y: worldY(t), source: 'head' };
   }
   const c = maskCentroid(p.mask);
-  return c === null ? null : { x: worldX(c.u), source: 'centroid' };
+  return c === null ? null : { x: worldX(c.u), y: worldY(c.t), source: 'centroid' };
 }
 
 /** How far each plane of a pair drifts at full weight, and how far apart the anchors were. */
