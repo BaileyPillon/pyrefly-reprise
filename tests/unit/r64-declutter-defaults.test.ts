@@ -10,7 +10,7 @@ import { resetCoach, shouldShow } from '../../src/ui/coach/coachState.ts';
 import { FIRST_RUN_IDS } from '../../src/ui/coach/firstRunCopy.ts';
 import { EnemyIntentPanel } from '../../src/ui/common/EnemyIntent.ts';
 import { StrategyGuide } from '../../src/ui/common/StrategyGuide.ts';
-import { setHudF1Mode } from '../../src/ui/hudf1/HudF1Switch.ts';
+import { setHudF1Mode, setHudF1TextMode } from '../../src/ui/hudf1/HudF1Switch.ts';
 
 /**
  * r64 declutter (Bailey's approved F1 target, decisions 191 to 193 "Less on screen" and "Steps back in action"; 2026-10-24 "you make the calls"; BOTH games, presentation only: no number, ability, turn order or rule moves).
@@ -36,6 +36,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   setHudF1Mode(null);
+  setHudF1TextMode(null);
   setDemoChapter(undefined);
   setDemoMode(null);
   resetCoach();
@@ -79,7 +80,10 @@ describe('1. the guide and the enemy-move read-out start folded with the F1 HUD 
     expect(demoPanelStart('intent')).toEqual({});
     setHudF1Mode('f1');
     document.documentElement.dataset['textSize'] = '115';
+    expect(demoPanelStart('guide'), 'the F1 HUD grows with TEXT SIZE now (a11y-text), so it still starts folded at 115').not.toEqual({});
+    setHudF1TextMode('today'); // release 67 step-down: today's HUD at 115, nothing folded
     expect(demoPanelStart('guide')).toEqual({});
+    setHudF1TextMode(null);
     document.documentElement.removeAttribute('data-text-size');
     setDemoChapter('braskas-final-aeon');
     expect(demoPanelStart('guide')).toEqual({});

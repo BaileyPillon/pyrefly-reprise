@@ -33,6 +33,7 @@ import './hudf1-act.css';
 import './hudf1-finish.css';
 import './hudf1-floor.css';
 import './hudf1-numbers.css';
+import './hudf1-textsize.css';
 
 /** The root class every `hudf1*.css` rule hangs from. */
 export const HUD_F1_CLASS = 'hud-f1';
