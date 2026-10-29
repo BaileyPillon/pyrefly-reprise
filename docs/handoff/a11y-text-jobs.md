@@ -73,8 +73,21 @@ The measured boxes (`zones` in `x1.json`, viewport px) should land within 2 grid
 (five rows is 117 grid px; a shorter submenu is shorter) are the three estimates, and a measured hero or strip smaller than the estimate is not a miss. **A/B with `?f1text=today`:** the command label at 1600x900 reads about 30.2 /
 28.2 / 31.9 (the dip round 30b found) and `f1: false` at 115 and 130; without the word it reads 30 / 34.5 / 39 and `f1: true`.
 
-Intel (X) is NOT in this job's pass/fail except the Sensor card row above (Chapter I; the script presses G, which opens the guide and brings Intel back, reads once as `<size>-intel` and closes it: the card is `zones.sensor`): the guide's sheet and the enemy-move slab keep the rules of the two text-size sheets,
-and the F1 sheet moves only the guide's chips and the advisor's tip chip by what the ribbon grew, and drops today's step of the Sensor card. They need a look at 130 (FFX Chapter I: X, then G; FFX-2 Chapter IV: X): the guide's sheet and the tip chip against the grown ribbon and hero. Open question 2 in the handoff.
+**Intel (X) reads, added by the review (2026-10-29).** The script presses G (the guide opens and brings Intel back), reads as `<size>-intel`, presses E (the enemy-move slab), reads as `<size>-intel-intent`, and closes both. `ZONES` now holds the guide's sheet
+(`.sgd__panel`), its chip (`.sgd__toggle`), the advisor's one-row tip (`.mad__card[data-zone='tip']`) and the slab (`.eint__panel`); an overlap between any two visible zones, or a zone outside the viewport, in ANY read (Intel's included) is a **miss**
+(`OUT.misses`, exit code 1; the first pass logged the Intel reads and counted none of them, which is how review M1 got past it).
+
+**Prediction, Chapter I, the guide open with a menu open** (grid px; viewport = x the stage scale; the sheet is at its worst, filling the column down to its floor, which Seymour Flux's long document does):
+
+| size | guide sheet x 21.3 to ..., y | hero | cue | tip card (left, widest right) | turn strip left | `tipGap` (strip left - tip's bounding box) |
+|---|---|---|---|---|---|---|
+| 100 | 153.3, 66 to 137 | present (140 to 166) | present (172.5 to 188.5) | 35.9, 427.9 | 465 | about 35 |
+| 115 | 173.1, 69.8 to 140.8 | **absent** (opacity 0; the sheet would cover 26.8 grid px of it) | **absent** | 225.9, 432.8 | 440.9 | about 6.2 |
+| 130 | 192.9, 73.5 to 144.5 | **absent** (the sheet would cover all of it) | **absent** (14.3 grid px) | 250, 408.8 | 416.9 | about 6.2 |
+
+The tip is held to `575.5 - 320.5 x scale` grid px wide at 115 and 130 (206.9 and 158.85; `max-width` in `hudf1-textsize.css`), so a bar that the solver gave the full 226 ends a shear and a clearance short of the strip; a narrower bar leaves more. If the tip stands LEFT of 35.9
+(it cannot: that is the solver's leftmost card) or the solver gave it less than the cap, `tipGap` is larger. **A miss** is `tipGap` under 6 grid px (x the scale) at 115 or 130, a hero or cue present in a 115 / 130 `-intel` read, a hero absent at 100, or any overlap. The slab (`intent`) has no prediction:
+the solver places it from the boss's head, so its first read is the information; if it overlaps the guide sheet or the ribbon, that is a finding, not a tune. Chapter IV's guide is on the left and its hero, cue and window are on the right: no hero or cue rule, and the same sweep must show no overlap there either.
 
 **Stop rule.** One miss of 5 percent or more on a size, or an overlap over 2 grid px, or a zone outside the viewport at 130: set `F1_GROWS_WITH_TEXT_SIZE = false` in `src/ui/hudf1/HudF1Switch.ts` (one line; the default
 returns to release 67's step-down), report, and do not tune the CSS blind.
@@ -92,9 +105,14 @@ the scratch folder first). Chapter I and IV. **Prediction:** `menu-100` / `menu-
 - `maxRows` is 2 in every state that has figures and 1 in every state that has none (a Dispel, "Seymour waits"); `maxPanelH` is 48.4 (6 + 18.2 + 18.2 + 6; one row: 30.2); `notPhoneBody` is 0.
 - `rowsOverflowing` is empty and `figuresClipped` is empty in all states (the claim of the whole change): every figure drawn is inside the body's box, none is a clipped half.
 - `withFigures` is about 20 of 27 texts in Chapter I (every "Lance of Atrophy", "Cross Cleave", "Full-Life" with a target; "Seymour waits" and "Dispel" have none).
-- The longest line, "Lance of Atrophy" with SCRIPTED, "Zombie 99%" and three random candidates (Tidus 707-799 / Yuna 746-842 / Kimahri 698-788 -> 753 / 794 / 743), reads: row 1 `SEYMOUR FLUX next . Lance of Atrophy . Zombie 99%` after the badge goes (`p-cf`), and the timing too if it still
-  overflows (`p-tm`); row 2 `random: Tidus 753 / Yuna 794 / Kimahri 743`, which my estimate puts at about 330 of the 343 px: either no rung or `p-sh` (`Tid 753 / Yun 794 / Kim 743`). The enemy's name is the third rung and should NOT be needed in Chapter I.
-- `rungUse` is mostly `p-cf` (the badge is the first thing to go on any line with a chip) and rarely `p-tm`; `p-nm`, `p-ch`, `p-el`, `p-sm`, `p-el2` are 0 in Chapter I. Chapter IV (three girls, short names) is expected to use no row-2 rung at all.
+- The longest line, "Lance of Atrophy" with SCRIPTED, "Zombie 99%" and three random candidates (Tidus 707-799 / Yuna 746-842 / Kimahri 698-788), reads: row 1 `SEYMOUR FLUX next . Lance of Atrophy . Zombie 99%` after the badge goes (`p-cf`), and the timing too if it still
+  overflows (`p-tm`); row 2 now prints the RANGE (review minor 2): `random: Tidus 707-799 / Yuna 746-842 / Kimahri 698-788` is about 54 characters, my estimate 415 of the 343 px, so `p-sh` (`Tid 707-799 / Yun 746-842 / Kim 698-788`, about 362 px) is not enough and `p-pt`
+  follows (`random: Tid 753 / Yun 794 / Kim 743`, about 270 px). **So on this line the band does not survive a 390 px phone**; it does on a line with one or two targets (`Tidus 707-799` alone is about 100 px; two ranged figures with short names about 190). `rungUse` says how often: if `p-pt` is on most
+  states, the band is a rung that rarely shows and the question for Bailey is whether the figure should be the band on a smaller type or the point (open question 8). The enemy's name is the third rung of row 1 and should NOT be needed in Chapter I.
+- `rungUse` is mostly `p-cf` (the badge is the first thing to go on any line with a chip) and rarely `p-tm`; `p-nm`, `p-ch`, `p-el`, `p-el2` are 0 in Chapter I; `p-sh` and `p-pt` are on together on the three-target lines and `p-sm` is 0. Chapter IV (three girls, short names, NO status chip now) is expected to use `p-pt` on the
+  three-target lines at most; its row 1 has no chip, so `p-ch` is 0 and `p-cf` is needed less often than in Chapter I.
+
+`bandStates` (states whose figures show a range) and `pointRungStates` (states where `p-pt` took it back) quantify the band question; `chipStates` is 0 in Chapter IV (rule 14: only FFX's phone line ever carried the chip) and equals the states with a status in Chapter I.
 
 `consoleErrors` is empty: in particular no "ResizeObserver loop completed with undelivered notifications" (the fit changes the panel's width inside its own ResizeObserver callback and converges in two passes; a loop notice would mean it does not).
 
@@ -103,6 +121,8 @@ the scratch folder first). Chapter I and IV. **Prediction:** `menu-100` / `menu-
 ## What the unit tests already settle (so the jobs need not)
 
 - `a11y-text-target-flag` (10): the declared sizes at nine windows; the plate width counts the damage line.
-- `a11y-text-f1` (35): the F1 sheets' own numbers evaluated at 1280x720 and 1600x900 for 100/115/130; every zone's box at 100/115/130, none overlapping, none off the 640 x 360 stage; the foot and the right edge are the F1 sheets' numbers; the cascade (each F1 rule outranks the text-size rule it replaces).
+- `a11y-text-f1` (49): the F1 sheets' own numbers evaluated at 1280x720 and 1600x900 for 100/115/130; every zone's box at 100/115/130, none overlapping, none off the 640 x 360 stage; the foot and the right edge are the F1 sheets' numbers; the cascade (each F1 rule outranks the text-size rule it replaces);
+  Chapter I's guide rail against every zone (the sheet meets the hero and the cue at 115 and 130 and the sheets hide exactly those two), the tip against the turn strip, and the guide chips and tips following the ribbon at 115 and 130 (review M1, minors 1 and 5).
 - `a11y-text-phone-line` (25): the markup, the words, the ladder's order with a fake measure, the panel's follow of the phone attribute, the stylesheet's rungs.
+- `a11y-text-review` (12): the phone line's range and point rungs, FFX-2's phone line has no status chip, `TargetCursor.dockFor` reaches `plateWidth`, short names that start alike, the faces-arrive refit (review minors 2, 3, 4, 10, 11).
 - Updated: `hud-f1-switch`, `hud-f1-layer`, `r64-declutter-defaults` (the F1 HUD no longer steps down at 115 and 130; `?f1text=today` keeps the old tests' behaviour).

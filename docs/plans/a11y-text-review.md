@@ -44,4 +44,7 @@ It is reversible in one line (`F1_GROWS_WITH_TEXT_SIZE = false`), and by address
 - X1: the command label at 1600x900 reads 30 / 34.5 / 39 at 100 / 115 / 130 (rising, where release 67 read 30.2 / 28.2 / 31.9); the party name 31.3 / 35.9 / 40.6; no two F1 zones overlap and none leaves the stage at any size.
 - P1: the line is two rows with figures and one without; every figure drawn is inside the body; no row overflows after the fit; the longest Chapter I line needs the badge dropped (and perhaps the timing) and, if anything, the three-letter names; the enemy's name is never the rung that saves a line.
 
+**Added after the adversarial review (2026-10-29).** The first pass missed that the F1 left column grows UP while the FFX guide rail's floor is a constant and Intel steps the rail DOWN, so at 115 and 130 the open guide lay over the hero and the cue (the zone model had no guide zone, and job X1's `ZONES` list none either): the sheets now hide the hero and the cue while the guide is open, and the model and X1 carry the guide, the tip and the enemy-move slab.
+Predictions added to the list above: X1 (Chapter I, guide open): no hero and no cue at 115 and 130, present at 100; the tip's bounding box ends 6 grid px or more short of the turn strip (about 6.2 at 115 and 130, about 35 at 100); no overlap in any Intel read. P1: the longest Chapter I line ends on `p-sh p-pt` (3-letter names, point figures); FFX-2 reads `chipStates` 0.
+
 A miss on any of these stops the lane (rule 15) and is read, not tuned.
