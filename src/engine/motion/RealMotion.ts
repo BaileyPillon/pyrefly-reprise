@@ -145,6 +145,15 @@ export function contactMsOf(profile: StrikeProfile, heft = 0): number {
   return Math.round(((Math.max(floor, profile.windupMs * stretch) + Math.max(floor, profile.travelMs * stretch)) / defaultPaceFactor(profile.game)));
 }
 
+/**
+ * The strike's wind-up in the profile's own milliseconds (what `contactMsOf` counts before it divides by the pace): a heavy body's heft stretch only where the profile has not already got
+ * the real times, and a real phase is at least a frame long, exactly as `StrikeCurve.resolveStrike` resolves it. `RunEase.flowLeadMs` asks the strike early by this long (release 68).
+ */
+export function windupMsOf(profile: StrikeProfile, heft = 0): number {
+  const stretch = profile.real?.exactTime ? 1 : heftFactors(heft).time;
+  return Math.max(profile.real ? REAL_MIN_MS : 0, profile.windupMs * stretch);
+}
+
 /** How long a strike of this profile holds at the contact at least, ms at timeScale 1 and pace 1 (the contact beat's hold cap grows by it). */
 export function holdMsOf(profile: StrikeProfile, heft = 0): number {
   const stretch = profile.real?.exactTime ? 1 : heftFactors(heft).hold;

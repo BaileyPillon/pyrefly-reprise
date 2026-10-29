@@ -53,6 +53,11 @@ export interface ActionMotionPort {
    */
   reachGap?(actorId: CombatantId): number;
   /**
+   * Release 68 (`?run=flow`, additive; FFX-2 only): the camera truck the run ends under, when the strike was asked for while the run (and its truck) is still on the way: the reach is read through the camera of the blow, not
+   * through the truck as it is part-way (the camera's slide moves a near girl and a far foe by different amounts, so a part-way read puts the foe nearer than it will stand and the lunge stops short). Absent: the truck as it is now.
+   */
+  reachTruck?(actorId: CombatantId): { x: number; y: number; z: number } | undefined;
+  /**
    * Does the house strike's lunge reach for its target for `actorId` (`motion/StrikeReach.ts`, r391-reach)? A game with no port reaches (FFX); a game with a port
    * that does not answer does not (FF7 runs its own melee). FFX-2 answers yes for its fiends only: a girl in a short-range dressphere RUNS IN first (`strike`,
    * `lungeFor`) and a long-range one fires from where she stands (`longRange`), both sourced (`research/ffx2-combat-core.md` section 1).
