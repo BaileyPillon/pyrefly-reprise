@@ -16,6 +16,7 @@ import { preloadBattle } from '../../src/app/screens/battlePreload.ts';
 import { resetImageWarm } from '../../src/app/imageWarm.ts';
 import { parseArtManifest, resetArtManifest, setArtManifest } from '../../src/engine/ArtManifest.ts';
 import { setArtTier, setBufferWidth } from '../../src/engine/ArtDevice.ts';
+import { setLoadDiet } from '../../src/engine/LoadDiet.ts';
 
 const STATES = ['idle', 'attack', 'cast', 'hurt', 'ko', 'victory'];
 const SUBJECTS = ['tidus', 'yuna', 'kimahri', 'mortiorchis', 'seymour-flux', 'seymour-flux-body'];
@@ -25,17 +26,31 @@ let fetched: string[] = [];
 beforeEach(() => {
   fetched = [];
   resetImageWarm();
+  // the lookahead is an `<img>` with the load diet (`preloadFetch.ts`) and a `fetch` without it: either way, what it asks for is `fetched`
   class FakeImage {
-    src = '';
     decoding = '';
+    onload: null | (() => void) = null;
+    onerror: null | (() => void) = null;
+    private url = '';
+    get src(): string {
+      return this.url;
+    }
+    set src(v: string) {
+      this.url = v;
+      if (v) fetched.push(v);
+    }
     decode(): Promise<void> {
       return Promise.resolve();
+    }
+    removeAttribute(): void {
+      this.url = '';
     }
   }
   vi.stubGlobal('Image', FakeImage);
   vi.stubGlobal('fetch', vi.fn(async (url: string) => { fetched.push(String(url)); return new Response(null, { status: 404 }); }));
 });
 afterEach(() => {
+  setLoadDiet(null);
   vi.unstubAllGlobals();
   resetImageWarm();
   resetArtManifest();
@@ -53,7 +68,9 @@ function manifest(withMasters: boolean): void {
   );
 }
 
-describe('the battle preload prefetches what will be drawn', () => {
+describe.each([['with the load diet', true], ['with ?loaddiet=off (release 67)', false]])('the battle preload prefetches what will be drawn, %s', (_label, diet) => {
+  beforeEach(() => setLoadDiet(diet));
+
   it('at 1440p on a strong desktop every pose after the opening frame is prefetched as the approved file, not as a master', async () => {
     manifest(true);
     setArtTier('high');

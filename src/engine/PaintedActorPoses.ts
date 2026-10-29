@@ -9,6 +9,7 @@
 
 import { lifeStateForPose, nextLifeState, resolvePoseName } from './BattlePresenterActors.ts';
 import { loadPainted, type PaintedTexture } from './PaintedArt.ts';
+import { loadStreamed } from './PoseStream.ts'; // load diet: the opening poses are waited for, the rest streams
 import { WITHHELD_FALLBACKS } from './PoseTrust.ts';
 import { newMotionOn } from './motion/NewMotionGate.ts';
 import { SmearDirector } from './motion/SmearDirector.ts'; // motion pass (lane "core", step 2): big pose changes cut inside a smear; idle unless `?smear=`/`?pack=demo` in a demo chapter (`motion/SmearSwitch.ts`)
@@ -48,14 +49,22 @@ export abstract class PaintedActorPoses extends PaintedActorLife {
    */
   async loadPoses(poses: PoseMap, initial?: string, opts?: PoseSwapOptions): Promise<void> {
     // `blend`: only the paintings that change are loaded, so a plane that shows one of the others goes on showing exactly what it shows
-    const names = Object.keys(poses).filter((n) => !opts?.blend || this.poseUrls[n] !== poses[n]);
+    let names = Object.keys(poses).filter((n) => !opts?.blend || this.poseUrls[n] !== poses[n]);
     if (opts?.blend && !names.length) return; // nothing changed
     // One texture per file (r35, D-315): a pose that falls back to idle shares idle's texture
     // instead of uploading the same pixels again, which a 2x master would make four times dearer.
     const byUrl = new Map<string, Promise<PaintedTexture>>();
     const load = (u: string): Promise<PaintedTexture> =>
       byUrl.get(u) ?? byUrl.set(u, loadPainted(u, this.placeholderFactory, (c) => c.height * this.placeholderBaseline, this.matte, this.fitBaseline)).get(u)!;
-    const loaded = await Promise.all(names.map((n) => load(poses[n]!)));
+    // Load diet (`LoadDiet.ts`, `PoseStream.ts`): the opening poses are waited for as ever; the rest for at most the ceiling, then the figure is built and they stream in (`installLate`).
+    // This set is one claim (`PoseClaims`): once it has installed, a later set that takes a name stops this one's load of it and its landing (review M1).
+    const claim = this.claims.next();
+    let installed = false;
+    const stream = opts?.streamCeilingMs && !opts.blend ? await loadStreamed(poses, names, opts.streamCeilingMs, load, (n) => this.streamDead || (installed && !this.claims.holds(n, claim))) : null;
+    const loaded = stream ? stream.loaded : await Promise.all(names.map((n) => load(poses[n]!)));
+    if (stream) names = stream.names;
+    installed = true;
+    this.claims.stamp(Object.keys(poses), claim);
     const previous = names.map((n) => this.poses.get(n));
     names.forEach((n, i) => {
       this.poses.set(n, loaded[i]!);
@@ -70,6 +79,30 @@ export abstract class PaintedActorPoses extends PaintedActorLife {
     // `force`, because re-loading a pose set (a stand-in being swapped for the
     // real painting) keeps the same pose *name* with a different texture.
     if (first) this.showPoseSet(first, opts?.blend === true);
+    stream?.later?.names.forEach((n, i) => void stream.later!.each[i]!.then((t) => this.installLate(n, t, poses, claim), () => undefined)); // each pose installs as it lands
+  }
+
+  /**
+   * Load diet: a pose that landed after the figure was built (`loadPoses` with a ceiling). It is installed as a pose set always is, but nothing is shown or restarted: the figure keeps the
+   * painting it is drawing, and the next request for this pose finds its own painting instead of the fallback (`resolvePoseName`). A figure disposed meanwhile frees what landed. A pose of a
+   * set that was replaced meanwhile (a spherechange or a form change: `claim` no longer holds the name) is dropped: it was never installed or drawn, so there is nothing to free (review M1).
+   * The planes are re-sized only when something they are sized against changed (the reference, or the painting a plane may be showing), not at every landing: `resize` re-places the showing plane (review m1).
+   */
+  private installLate(name: string, late: PaintedTexture, poses: PoseMap, claim: number): void {
+    if (this.streamDead) {
+      late.texture.dispose();
+      return;
+    }
+    if (!this.claims.holds(name, claim)) return;
+    const previous = this.poses.get(name);
+    const reference = this.reference;
+    this.poses.set(name, late);
+    this.owned.add(late.texture);
+    this.poseUrls[name] = poses[name]!;
+    this.retire(previous);
+    this.pickReference();
+    if (previous || this.reference !== reference) this.resize();
+    this.prefetchLights();
   }
 
   /**
@@ -106,6 +139,7 @@ export abstract class PaintedActorPoses extends PaintedActorLife {
   adoptPoses(poses: Record<string, PaintedTexture>, initial?: string, opts?: PoseSwapOptions): void {
     const names = Object.keys(poses).filter((n) => !opts?.blend || this.poses.get(n) !== poses[n]);
     if (!names.length) return;
+    this.claims.stamp(names, this.claims.next()); // a set still streaming in is not this name's owner any more (review M1)
     for (const name of names) {
       const tex = poses[name]!;
       this.retire(this.poses.get(name));
@@ -143,6 +177,7 @@ export abstract class PaintedActorPoses extends PaintedActorLife {
       { ignoreManifest: true },
     );
     const previous = this.poses.get(name);
+    this.claims.stamp([name], this.claims.next());
     this.poses.set(name, next);
     this.owned.add(next.texture);
     this.poseUrls[name] = target;

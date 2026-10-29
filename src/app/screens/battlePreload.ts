@@ -43,7 +43,9 @@ import type { Chapter } from '../../data/encounters.ts';
 import { artCandidatesFor, backdropUrl, portraitUrl, resolveArt } from '../../engine/BattlePresenterArt.ts';
 import { manifestKnowsAsset, pause2xUrlFor } from '../../engine/ArtManifest.ts';
 import { artUrl, prewarmPainted } from '../../engine/PaintedArt.ts';
-import { pixelUrlFor } from '../../engine/ArtTier.ts';
+import { figureState, pixelUrlFor } from '../../engine/ArtTier.ts';
+import { loadDiet, orderByNeed, poseNeed } from '../../engine/LoadDiet.ts';
+import { prefetchPose, releaseAllPrefetch, releasePrefetch } from './preloadFetch.ts';
 import { artNamespaceOfScene, backdropFileOf, inArtNamespace } from '../../data/art/artNamespace.ts';
 import { pickHeroBackgroundUrl } from '../../ui/common/chapterPanel.ts';
 import { demoteWarm, warmImages, type WarmLane } from '../imageWarm.ts';
@@ -108,17 +110,6 @@ export interface PreloadReport {
 export interface PreloadOptions {
   /** A card the cursor rests on: phases 1 to 3 in the normal lane, then wait to be chosen. */
   dwell?: boolean;
-}
-
-/** Pull a file into the HTTP cache without holding on to it. */
-function prefetch(url: string, signal: AbortSignal): Promise<void> {
-  // R61 (PR-0495): these are the poses the battle draws later, and a `fetch` is high priority by default, the same as the scene's and the boss's music (`MusicLoader`): on a slow line they shared it.
-  return fetch(url, { signal, priority: 'low' } as RequestInit)
-    .then((res) => (res.ok ? res.blob() : null))
-    .then(
-      () => undefined,
-      () => undefined,
-    );
 }
 
 /** A macrotask yield, so a frame can land between two paintings. */
@@ -279,17 +270,23 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
       if (stopped()) return report();
     }
 
-    // Phase 4: every other pose, a few downloads ahead of the one-at-a-time decode.
+    // Phase 4: every other pose, a few downloads ahead of the one-at-a-time decode. Load diet: the poses a fight draws first come first (`LoadDiet.poseNeed`: ready, then the everyday moves, then the rest, the
+    // rare ones last; the boss before the party within a need), and the lookahead is one request per file (`preloadFetch.ts`). `?loaddiet=off` is release 67's order and its `fetch`.
+    const order = loadDiet() ? orderByNeed(later, (u) => poseNeed(figureState(u) ?? 'idle')) : later;
     let next = 0;
     let done = 0;
     // The file the painting will really be drawn from (release 39: the master of the device's base scale, not the approved file it is named after).
     const ahead = (): void => {
-      while (next < later.length && next < done + FETCH_WINDOW) void pixelUrlFor(later[next++]!).then((px) => prefetch(px, signal));
+      while (next < order.length && next < done + FETCH_WINDOW) {
+        const key = order[next++]!;
+        void pixelUrlFor(key).then((px) => prefetchPose(key, px, signal));
+      }
     };
-    for (const url of later) {
+    for (const url of order) {
       ahead();
       if (stopped()) return report();
       if (await prewarmPainted(url, STAGE_MATTE, STAGE_FIT)) paintings++;
+      releasePrefetch(url);
       done++;
       await yieldFrame();
     }
@@ -300,6 +297,7 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
     console.warn(`[preload] ${chapter.id}: stopped early`, e);
   } finally {
     if (running.get(chapter.id) === run) running.delete(chapter.id);
+    if (running.size === 0) releaseAllPrefetch(); // no preload is left: the lookahead's images go
   }
   return report();
 

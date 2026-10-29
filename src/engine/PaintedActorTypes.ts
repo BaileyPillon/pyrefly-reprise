@@ -24,6 +24,8 @@ export type PoseMap = Record<string, string>;
  */
 export interface PoseSwapOptions {
   blend?: boolean;
+  /** Load diet (`LoadDiet.ts`): wait for the opening poses without a limit and for the rest at most this long, then stream them in as they land. Left out: wait for every pose, as ever. */
+  streamCeilingMs?: number;
 }
 
 /** A pose seen without showing it (`PaintedActor.poseShape`): its painted box in the world, and what its alpha is read from (`motion/Silhouette.ts`). */
@@ -224,6 +226,8 @@ export interface PaintedActorOptions {
   /** Poses to load on {@link PaintedActor.create}. */
   poses?: PoseMap;
   initialPose?: string;
+  /** Load diet (`LoadDiet.ts`, set by the battle stage): see {@link PoseSwapOptions.streamCeilingMs}. */
+  streamCeilingMs?: number;
 }
 
 export interface PlaneSlot {

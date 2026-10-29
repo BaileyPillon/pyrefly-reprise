@@ -58,7 +58,7 @@ export class PaintedActor extends PaintedActorReaders {
   /** Build an actor and await its poses. Missing PNGs become placeholders. */
   static async create(opts: PaintedActorOptions = {}): Promise<PaintedActor> {
     const actor = new PaintedActor(opts);
-    if (opts.poses) await actor.loadPoses(opts.poses, opts.initialPose);
+    if (opts.poses) await actor.loadPoses(opts.poses, opts.initialPose, opts.streamCeilingMs ? { streamCeilingMs: opts.streamCeilingMs } : undefined);
     return actor;
   }
 
@@ -271,6 +271,7 @@ export class PaintedActor extends PaintedActorReaders {
   }
 
   override dispose(): void {
+    this.streamDead = true;
     this.tweens.killAll();
     unpinRelight(this.lightPins);
     this.lightPins.clear();

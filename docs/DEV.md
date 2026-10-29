@@ -481,6 +481,8 @@ The device class, the master a figure is drawn from and the anti-aliasing are au
 captures and QA. Address parameters: `?arttier=phone|low|mid|high` (the device class), `?artscale=1..4` (pin every painting to one master;
 the governor stands down), `?aa=off|smaa|msaa` (the renderer's own anti-aliasing after the grade: off on every class now, see "Sharpness" below), `?artlink=slow|fast` (the connection reading). `ArtBudget.ts` holds the numbers per class.
 
+**The load diet (lane `load-diet`, 2026-10-29; both games; `docs/handoff/load-diet.md`):** on by default; **`?loaddiet=off` is release 67 in every part**. A figure waits for its opening poses (`idle*`, `ready*`) without a limit and for the other poses at most `STREAM_CEILING_MS` (3 s, `LoadDiet.ts`), then is built and the others install as they land (`PoseStream.ts`, `PaintedActorPoses.installLate`; a move whose painting has not landed draws its fallback painting for that move); the battle preload downloads the poses in the order a fight draws them and its lookahead is one `<img>` per file (`app/screens/preloadFetch.ts`). `LOAD_DIET_REPORT=<file> npx vitest run tests/unit/load-diet-bytes.test.ts` writes the offline byte budget of every chapter on the desktop and phone profiles.
+
 | Member | Meaning |
 |--------|---------|
 | `art.stats()` | the device class, its budget, the buffer width and the live stage's governor: masters resident, upgrades, evictions, `updateMs` (its own CPU per frame), the last decisions and what asked for each |

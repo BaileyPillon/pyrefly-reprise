@@ -17,6 +17,7 @@ import { HitReaction, type HitOffset } from './motion/HitReaction.ts'; // MF-03:
 import { StringStance } from './motion/StringStance.ts';
 import type { PoseMap, HeadRef } from './PaintedActorTypes.ts';
 import { HURT_TINT, LIE_TILT } from './PaintedActorKit.ts';
+import { PoseClaims } from './PoseStream.ts'; // load diet: which pose set owns a pose name, so a late painting of a replaced set is dropped
 
 export abstract class PaintedActorState extends Group {
   readonly tweens = new TweenGroup();
@@ -33,6 +34,12 @@ export abstract class PaintedActorState extends Group {
   swapPolicyLast: 'dissolve' | 'aligned' | null = null;
 
   protected readonly poses = new Map<string, PaintedTexture>();
+
+  /** Set by `dispose`: a pose that lands after it (`PaintedActorPoses.installLate`) is freed, not installed. */
+  protected streamDead = false;
+
+  /** Load diet (review M1): the pose set that installed each name last; a late pose installs only while its own set still holds the name (`PaintedActorPoses.installLate`). */
+  protected readonly claims = new PoseClaims();
 
   readonly poseUrls: PoseMap = {};
 
