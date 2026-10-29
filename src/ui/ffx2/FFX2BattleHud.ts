@@ -475,6 +475,8 @@ export class FFX2BattleHud implements HudPort {
 
   unmount(): void {
     if (!this.mounted) return;
+    // A command menu still open (Active ATB: a girl is almost always choosing) goes first: its window keydown listener holds this HUD, its panels and every detached node under them. Nothing the cursor lit may outlive the HUD either.
+    if (this.closeMenu) this.closeCommandMenu(); else this.applySelection(null);
     window.removeEventListener('resize', this.onResize);
     this.chain.dispose();
     this.nameSlab.dispose();
@@ -489,8 +491,6 @@ export class FFX2BattleHud implements HudPort {
     this.intent.unmount();
     this.actionFade.reset();
     this.f1.unmount();
-    // Nothing the cursor lit may outlive the HUD that lit it.
-    this.applySelection(null);
     this.plates.unmount();
     this.nodeMarks.unmount();
     this.message.dispose();
