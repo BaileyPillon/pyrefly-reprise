@@ -4,162 +4,777 @@
     "kimahri": {
       "actor": "kimahri",
       "game": "ffx",
-      "chapter": { "door": "gagazet", "id": "biran-yenke" },
-      "poses": ["attack", "cast", "critical", "defend", "follow", "hurt", "item", "jump", "ko", "ready", "sleep", "victory"],
-      "track": { "head": "headCenter", "feet": ["soleN", "soleF"], "centroid": "pelvisCenter", "hand": "fist", "tip": "spearTip" }
+      "chapter": {
+        "door": "gagazet",
+        "id": "biran-yenke"
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "critical",
+        "defend",
+        "follow",
+        "hurt",
+        "item",
+        "jump",
+        "ko",
+        "ready",
+        "sleep",
+        "victory"
+      ],
+      "track": {
+        "head": "headCenter",
+        "feet": [
+          "soleN",
+          "soleF"
+        ],
+        "centroid": "pelvisCenter",
+        "hand": "fist",
+        "tip": "spearTip"
+      }
     },
     "lulu": {
       "actor": "lulu",
       "game": "ffx",
-      "chapter": { "door": "mushroom", "id": "sinspawn-gui" },
-      "poses": ["attack", "cast", "critical", "defend", "follow", "hurt", "item", "ko", "od-fury", "ready", "sleep", "victory"],
-      "castKeys": ["ArrowDown", "ArrowDown", "Enter", "Enter"],
-      "track": { "head": "headCenter", "feet": ["feet"], "centroid": "pelvisCenter", "hand": "fist", "tip": "doll" },
+      "chapter": {
+        "door": "mushroom",
+        "id": "sinspawn-gui"
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "critical",
+        "defend",
+        "follow",
+        "hurt",
+        "item",
+        "ko",
+        "od-fury",
+        "ready",
+        "sleep",
+        "victory"
+      ],
+      "castKeys": [
+        "ArrowDown",
+        "ArrowDown",
+        "Enter",
+        "Enter"
+      ],
+      "track": {
+        "head": "headCenter",
+        "feet": [
+          "feet"
+        ],
+        "centroid": "pelvisCenter",
+        "hand": "fist",
+        "tip": "doll"
+      },
       "beforeAfter": "lulu-rig-4-before-after",
-      "labels": { "defend": "DEFEND", "od-fury": "OVERDRIVE (FURY)", "ko": "KNOCKED OUT", "attack": "ATTACK", "hurt": "HURT", "follow": "RETURNING FROM AN ACTION", "ready": "READY", "critical": "LOW HP", "sleep": "ASLEEP" },
+      "labels": {
+        "defend": "DEFEND",
+        "od-fury": "OVERDRIVE (FURY)",
+        "ko": "KNOCKED OUT",
+        "attack": "ATTACK",
+        "hurt": "HURT",
+        "follow": "RETURNING FROM AN ACTION",
+        "ready": "READY",
+        "critical": "LOW HP",
+        "sleep": "ASLEEP"
+      },
       "sheets": [
-        ["lulu-rig-1-defend-overdrive-ko", ["defend", "od-fury", "ko"]],
-        ["lulu-rig-2-attack-hurt-return", ["attack", "hurt", "follow"]],
-        ["lulu-rig-3-ready-lowhp-asleep", ["ready", "critical", "sleep"]]
+        [
+          "lulu-rig-1-defend-overdrive-ko",
+          [
+            "defend",
+            "od-fury",
+            "ko"
+          ]
+        ],
+        [
+          "lulu-rig-2-attack-hurt-return",
+          [
+            "attack",
+            "hurt",
+            "follow"
+          ]
+        ],
+        [
+          "lulu-rig-3-ready-lowhp-asleep",
+          [
+            "ready",
+            "critical",
+            "sleep"
+          ]
+        ]
       ]
     },
     "valefor": {
       "actor": "x2-valefor",
       "game": "ffx2",
-      "chapter": { "door": "valefor", "id": "ffx2-valefor-besaid" },
-      "poses": ["attack", "cast", "hurt", "ko", "overdrive"],
-      "track": { "head": "head", "feet": ["toeN", "toeF"], "centroid": "bodyCenter", "tip": "wingTip" },
+      "chapter": {
+        "door": "valefor",
+        "id": "ffx2-valefor-besaid"
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "hurt",
+        "ko",
+        "overdrive"
+      ],
+      "track": {
+        "head": "head",
+        "feet": [
+          "toeN",
+          "toeF"
+        ],
+        "centroid": "bodyCenter",
+        "tip": "wingTip"
+      },
       "beforeAfter": "valefor-rig-3-before-after",
-      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "overdrive": "OVERDRIVE" },
+      "labels": {
+        "attack": "ATTACK",
+        "cast": "CAST",
+        "hurt": "HURT",
+        "ko": "KNOCKED OUT",
+        "overdrive": "OVERDRIVE"
+      },
       "sheets": [
-        ["valefor-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
-        ["valefor-rig-2-ko-overdrive", ["ko", "overdrive"]]
+        [
+          "valefor-rig-1-attack-cast-hurt",
+          [
+            "attack",
+            "cast",
+            "hurt"
+          ]
+        ],
+        [
+          "valefor-rig-2-ko-overdrive",
+          [
+            "ko",
+            "overdrive"
+          ]
+        ]
       ]
     },
     "rikku-dark-knight": {
       "actor": "rikku",
       "game": "ffx2",
-      "chapter": { "door": "valefor", "id": "ffx2-valefor-besaid" },
-      "poses": ["attack", "cast", "critical", "follow", "hurt", "item", "ko", "ready", "sleep", "victory"],
-      "track": { "head": "headCenter", "feet": ["soleL", "soleR"], "centroid": "pelvisCenter", "hand": "fist", "tip": "tip" },
+      "chapter": {
+        "door": "valefor",
+        "id": "ffx2-valefor-besaid"
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "critical",
+        "follow",
+        "hurt",
+        "item",
+        "ko",
+        "ready",
+        "sleep",
+        "victory"
+      ],
+      "track": {
+        "head": "headCenter",
+        "feet": [
+          "soleL",
+          "soleR"
+        ],
+        "centroid": "pelvisCenter",
+        "hand": "fist",
+        "tip": "tip"
+      },
       "beforeAfter": "rikku-dk-rig-4-before-after",
-      "labels": { "attack": "ATTACK", "cast": "CAST", "item": "ITEM", "hurt": "HURT", "follow": "RETURNING FROM AN ACTION", "ko": "KNOCKED OUT", "ready": "READY", "critical": "LOW HP", "sleep": "ASLEEP", "victory": "VICTORY" },
+      "labels": {
+        "attack": "ATTACK",
+        "cast": "CAST",
+        "item": "ITEM",
+        "hurt": "HURT",
+        "follow": "RETURNING FROM AN ACTION",
+        "ko": "KNOCKED OUT",
+        "ready": "READY",
+        "critical": "LOW HP",
+        "sleep": "ASLEEP",
+        "victory": "VICTORY"
+      },
       "sheets": [
-        ["rikku-dk-rig-1-attack-cast-item", ["attack", "cast", "item"]],
-        ["rikku-dk-rig-2-hurt-follow-ko", ["hurt", "follow", "ko"]],
-        ["rikku-dk-rig-3-ready-lowhp-asleep-victory", ["ready", "critical", "sleep", "victory"]]
+        [
+          "rikku-dk-rig-1-attack-cast-item",
+          [
+            "attack",
+            "cast",
+            "item"
+          ]
+        ],
+        [
+          "rikku-dk-rig-2-hurt-follow-ko",
+          [
+            "hurt",
+            "follow",
+            "ko"
+          ]
+        ],
+        [
+          "rikku-dk-rig-3-ready-lowhp-asleep-victory",
+          [
+            "ready",
+            "critical",
+            "sleep",
+            "victory"
+          ]
+        ]
       ]
     },
     "pterya": {
       "actor": "pterya",
       "game": "ffx",
-      "chapter": { "id": "isaaru-via-purifico" },
-      "reach": { "auto": true },
-      "poses": ["attack", "cast", "hurt", "ko", "overdrive"],
-      "track": { "head": "head", "feet": ["toeN", "toeF"], "centroid": "bodyCenter", "tip": "wingTip" },
+      "chapter": {
+        "id": "isaaru-via-purifico"
+      },
+      "reach": {
+        "auto": true
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "hurt",
+        "ko",
+        "overdrive"
+      ],
+      "track": {
+        "head": "head",
+        "feet": [
+          "toeN",
+          "toeF"
+        ],
+        "centroid": "bodyCenter",
+        "tip": "wingTip"
+      },
       "beforeAfter": "pterya-rig-3-before-after",
-      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "overdrive": "OVERDRIVE" },
+      "labels": {
+        "attack": "ATTACK",
+        "cast": "CAST",
+        "hurt": "HURT",
+        "ko": "KNOCKED OUT",
+        "overdrive": "OVERDRIVE"
+      },
       "sheets": [
-        ["pterya-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
-        ["pterya-rig-2-ko-overdrive", ["ko", "overdrive"]]
+        [
+          "pterya-rig-1-attack-cast-hurt",
+          [
+            "attack",
+            "cast",
+            "hurt"
+          ]
+        ],
+        [
+          "pterya-rig-2-ko-overdrive",
+          [
+            "ko",
+            "overdrive"
+          ]
+        ]
       ]
     },
     "ifrit": {
       "actor": "possessed-ifrit",
       "game": "ffx",
-      "chapter": { "id": "braskas-final-aeon" },
-      "reach": { "auto": true },
-      "poses": ["attack", "cast", "hurt", "ko", "overdrive"],
-      "track": { "head": "head", "feet": ["toeN", "toeF"], "centroid": "bodyCenter", "hand": "handF", "tip": "tailU" },
+      "chapter": {
+        "id": "braskas-final-aeon"
+      },
+      "reach": {
+        "auto": true
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "hurt",
+        "ko",
+        "overdrive"
+      ],
+      "track": {
+        "head": "head",
+        "feet": [
+          "toeN",
+          "toeF"
+        ],
+        "centroid": "bodyCenter",
+        "hand": "handF",
+        "tip": "tailU"
+      },
       "beforeAfter": "ifrit-rig-3-before-after",
-      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "overdrive": "OVERDRIVE" },
+      "labels": {
+        "attack": "ATTACK",
+        "cast": "CAST",
+        "hurt": "HURT",
+        "ko": "KNOCKED OUT",
+        "overdrive": "OVERDRIVE"
+      },
       "sheets": [
-        ["ifrit-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
-        ["ifrit-rig-2-ko-overdrive", ["ko", "overdrive"]]
+        [
+          "ifrit-rig-1-attack-cast-hurt",
+          [
+            "attack",
+            "cast",
+            "hurt"
+          ]
+        ],
+        [
+          "ifrit-rig-2-ko-overdrive",
+          [
+            "ko",
+            "overdrive"
+          ]
+        ]
       ]
     },
     "shiva": {
       "actor": "possessed-shiva",
       "game": "ffx",
-      "chapter": { "id": "braskas-final-aeon" },
-      "reach": { "auto": true },
-      "poses": ["attack", "cast", "hurt", "ko", "overdrive"],
-      "track": { "head": "head", "feet": ["toeN", "toeF"], "centroid": "bodyCenter", "hand": "handD", "tip": "hairTip" },
+      "chapter": {
+        "id": "braskas-final-aeon"
+      },
+      "reach": {
+        "auto": true
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "hurt",
+        "ko",
+        "overdrive"
+      ],
+      "track": {
+        "head": "head",
+        "feet": [
+          "toeN",
+          "toeF"
+        ],
+        "centroid": "bodyCenter",
+        "hand": "handD",
+        "tip": "hairTip"
+      },
       "beforeAfter": "shiva-rig-3-before-after",
-      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "overdrive": "OVERDRIVE" },
+      "labels": {
+        "attack": "ATTACK",
+        "cast": "CAST",
+        "hurt": "HURT",
+        "ko": "KNOCKED OUT",
+        "overdrive": "OVERDRIVE"
+      },
       "sheets": [
-        ["shiva-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
-        ["shiva-rig-2-ko-overdrive", ["ko", "overdrive"]]
+        [
+          "shiva-rig-1-attack-cast-hurt",
+          [
+            "attack",
+            "cast",
+            "hurt"
+          ]
+        ],
+        [
+          "shiva-rig-2-ko-overdrive",
+          [
+            "ko",
+            "overdrive"
+          ]
+        ]
       ]
     },
     "bahamut": {
       "actor": "possessed-bahamut",
       "game": "ffx",
-      "chapter": { "id": "braskas-final-aeon" },
-      "reach": { "auto": true },
-      "poses": ["attack", "cast", "hurt", "ko", "overdrive"],
-      "track": { "head": "head", "feet": ["toeN"], "centroid": "bodyCenter", "hand": "handL", "tip": "wingLTip" },
+      "chapter": {
+        "id": "braskas-final-aeon"
+      },
+      "reach": {
+        "auto": true
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "hurt",
+        "ko",
+        "overdrive"
+      ],
+      "track": {
+        "head": "head",
+        "feet": [
+          "toeN"
+        ],
+        "centroid": "bodyCenter",
+        "hand": "handL",
+        "tip": "wingLTip"
+      },
       "beforeAfter": "bahamut-rig-3-before-after",
-      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "overdrive": "OVERDRIVE" },
+      "labels": {
+        "attack": "ATTACK",
+        "cast": "CAST",
+        "hurt": "HURT",
+        "ko": "KNOCKED OUT",
+        "overdrive": "OVERDRIVE"
+      },
       "sheets": [
-        ["bahamut-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
-        ["bahamut-rig-2-ko-overdrive", ["ko", "overdrive"]]
+        [
+          "bahamut-rig-1-attack-cast-hurt",
+          [
+            "attack",
+            "cast",
+            "hurt"
+          ]
+        ],
+        [
+          "bahamut-rig-2-ko-overdrive",
+          [
+            "ko",
+            "overdrive"
+          ]
+        ]
       ]
     },
     "grothia": {
       "actor": "grothia",
       "game": "ffx",
-      "chapter": { "id": "isaaru-via-purifico" },
-      "poses": ["attack", "cast", "hurt", "ko", "overdrive"],
-      "track": { "head": "head", "feet": ["toeN", "toeF"], "centroid": "bodyCenter", "hand": "handF", "tip": "tailU" },
+      "chapter": {
+        "id": "isaaru-via-purifico"
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "hurt",
+        "ko",
+        "overdrive"
+      ],
+      "track": {
+        "head": "head",
+        "feet": [
+          "toeN",
+          "toeF"
+        ],
+        "centroid": "bodyCenter",
+        "hand": "handF",
+        "tip": "tailU"
+      },
       "beforeAfter": "grothia-rig-3-before-after",
-      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "overdrive": "OVERDRIVE" },
+      "labels": {
+        "attack": "ATTACK",
+        "cast": "CAST",
+        "hurt": "HURT",
+        "ko": "KNOCKED OUT",
+        "overdrive": "OVERDRIVE"
+      },
       "sheets": [
-        ["grothia-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
-        ["grothia-rig-2-ko-overdrive", ["ko", "overdrive"]]
+        [
+          "grothia-rig-1-attack-cast-hurt",
+          [
+            "attack",
+            "cast",
+            "hurt"
+          ]
+        ],
+        [
+          "grothia-rig-2-ko-overdrive",
+          [
+            "ko",
+            "overdrive"
+          ]
+        ]
       ]
     },
     "spathi": {
       "actor": "spathi",
       "game": "ffx",
-      "chapter": { "id": "isaaru-via-purifico" },
-      "reach": { "auto": true },
-      "poses": ["attack", "cast", "hurt", "ko", "overdrive"],
-      "track": { "head": "head", "feet": ["toeN"], "centroid": "bodyCenter", "hand": "handL", "tip": "wingLTip" },
+      "chapter": {
+        "id": "isaaru-via-purifico"
+      },
+      "reach": {
+        "auto": true
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "hurt",
+        "ko",
+        "overdrive"
+      ],
+      "track": {
+        "head": "head",
+        "feet": [
+          "toeN"
+        ],
+        "centroid": "bodyCenter",
+        "hand": "handL",
+        "tip": "wingLTip"
+      },
       "beforeAfter": "spathi-rig-3-before-after",
-      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "overdrive": "OVERDRIVE" },
+      "labels": {
+        "attack": "ATTACK",
+        "cast": "CAST",
+        "hurt": "HURT",
+        "ko": "KNOCKED OUT",
+        "overdrive": "OVERDRIVE"
+      },
       "sheets": [
-        ["spathi-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
-        ["spathi-rig-2-ko-overdrive", ["ko", "overdrive"]]
+        [
+          "spathi-rig-1-attack-cast-hurt",
+          [
+            "attack",
+            "cast",
+            "hurt"
+          ]
+        ],
+        [
+          "spathi-rig-2-ko-overdrive",
+          [
+            "ko",
+            "overdrive"
+          ]
+        ]
       ]
     },
     "ffx2-bahamut": {
       "actor": "bahamut",
       "game": "ffx2",
-      "chapter": { "id": "ffx2-bahamut" },
-      "reach": { "auto": true },
-      "poses": ["attack", "cast", "hurt", "ko", "telegraph"],
-      "track": { "head": "head", "feet": ["soleLoop"], "centroid": "bodyCenter", "tip": "wingLTip" },
+      "chapter": {
+        "id": "ffx2-bahamut"
+      },
+      "reach": {
+        "auto": true
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "hurt",
+        "ko",
+        "telegraph"
+      ],
+      "track": {
+        "head": "head",
+        "feet": [
+          "soleLoop"
+        ],
+        "centroid": "bodyCenter",
+        "tip": "wingLTip"
+      },
       "beforeAfter": "ffx2-bahamut-rig-3-before-after",
-      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "telegraph": "MEGA FLARE (TELEGRAPH)" },
+      "labels": {
+        "attack": "ATTACK",
+        "cast": "CAST",
+        "hurt": "HURT",
+        "ko": "KNOCKED OUT",
+        "telegraph": "MEGA FLARE (TELEGRAPH)"
+      },
       "sheets": [
-        ["ffx2-bahamut-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
-        ["ffx2-bahamut-rig-2-ko-telegraph", ["ko", "telegraph"]]
+        [
+          "ffx2-bahamut-rig-1-attack-cast-hurt",
+          [
+            "attack",
+            "cast",
+            "hurt"
+          ]
+        ],
+        [
+          "ffx2-bahamut-rig-2-ko-telegraph",
+          [
+            "ko",
+            "telegraph"
+          ]
+        ]
       ]
     },
     "seymour-flux": {
       "actor": "seymour-flux",
       "game": "ffx",
-      "chapter": { "id": "seymour-flux" },
-      "reach": { "auto": true },
-      "poses": ["attack", "cast", "hurt", "ko", "telegraph"],
-      "track": { "head": "head", "feet": ["soleBoot"], "centroid": "bodyCenter", "hand": "hand", "tip": "hairTip" },
+      "chapter": {
+        "id": "seymour-flux"
+      },
+      "reach": {
+        "auto": true
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "hurt",
+        "ko",
+        "telegraph"
+      ],
+      "track": {
+        "head": "head",
+        "feet": [
+          "soleBoot"
+        ],
+        "centroid": "bodyCenter",
+        "hand": "hand",
+        "tip": "hairTip"
+      },
       "beforeAfter": "seymour-flux-rig-3-before-after",
-      "labels": { "attack": "ATTACK", "cast": "CAST", "hurt": "HURT", "ko": "KNOCKED OUT", "telegraph": "TELEGRAPH" },
+      "labels": {
+        "attack": "ATTACK",
+        "cast": "CAST",
+        "hurt": "HURT",
+        "ko": "KNOCKED OUT",
+        "telegraph": "TELEGRAPH"
+      },
       "sheets": [
-        ["seymour-flux-rig-1-attack-cast-hurt", ["attack", "cast", "hurt"]],
-        ["seymour-flux-rig-2-ko-telegraph", ["ko", "telegraph"]]
+        [
+          "seymour-flux-rig-1-attack-cast-hurt",
+          [
+            "attack",
+            "cast",
+            "hurt"
+          ]
+        ],
+        [
+          "seymour-flux-rig-2-ko-telegraph",
+          [
+            "ko",
+            "telegraph"
+          ]
+        ]
       ]
+    },
+    "tidus-x": {
+      "actor": "tidus",
+      "game": "ffx",
+      "chapter": {
+        "id": "seymour-flux"
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "critical",
+        "defend",
+        "follow",
+        "hurt",
+        "item",
+        "ko",
+        "od-energy-rain",
+        "od-slice-and-dice",
+        "ready",
+        "sleep",
+        "victory"
+      ],
+      "track": {
+        "head": "head",
+        "feet": [
+          "feet"
+        ],
+        "centroid": "pelvis",
+        "hand": "handA",
+        "tip": "tip"
+      },
+      "motion": {
+        "turns": [
+          {
+            "name": "attack",
+            "rows": [
+              "^attack"
+            ]
+          },
+          {
+            "name": "item",
+            "rows": [
+              "item|use",
+              "*"
+            ]
+          },
+          {
+            "name": "cast",
+            "rows": [
+              "skill|special|magic|ability|spell",
+              "*"
+            ]
+          }
+        ],
+        "targets": 1
+      },
+      "labels": {
+        "attack": "ATTACK",
+        "cast": "CAST",
+        "item": "ITEM",
+        "hurt": "HURT",
+        "follow": "RETURNING FROM AN ACTION",
+        "ko": "KNOCKED OUT",
+        "ready": "READY",
+        "critical": "LOW HP",
+        "sleep": "ASLEEP",
+        "victory": "VICTORY",
+        "defend": "DEFEND",
+        "od-energy-rain": "OVERDRIVE (ENERGY RAIN)",
+        "od-slice-and-dice": "OVERDRIVE (SLICE AND DICE)"
+      }
+    },
+    "rikku-dark-knight-x": {
+      "actor": "rikku",
+      "game": "ffx2",
+      "chapter": {
+        "id": "ffx2-bahamut"
+      },
+      "poses": [
+        "attack",
+        "cast",
+        "critical",
+        "follow",
+        "hurt",
+        "item",
+        "ko",
+        "ready",
+        "sleep",
+        "victory"
+      ],
+      "track": {
+        "head": "head",
+        "feet": [
+          "feet"
+        ],
+        "centroid": "pelvis",
+        "hand": "handA",
+        "tip": "tip"
+      },
+      "motion": {
+        "turns": [
+          {
+            "name": "attack",
+            "rows": [
+              "^attack"
+            ]
+          },
+          {
+            "name": "item",
+            "rows": [
+              "item|use",
+              "*"
+            ]
+          },
+          {
+            "name": "cast",
+            "rows": [
+              "skill|special|magic|ability|spell",
+              "*"
+            ]
+          }
+        ],
+        "targets": 1,
+        "others": [
+          "Enter",
+          "Enter"
+        ],
+        "victory": false
+      },
+      "labels": {
+        "attack": "ATTACK",
+        "cast": "CAST",
+        "item": "ITEM",
+        "hurt": "HURT",
+        "follow": "RETURNING FROM AN ACTION",
+        "ko": "KNOCKED OUT",
+        "ready": "READY",
+        "critical": "LOW HP",
+        "sleep": "ASLEEP",
+        "victory": "VICTORY",
+        "defend": "DEFEND"
+      }
     }
   }
 }

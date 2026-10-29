@@ -1,0 +1,3021 @@
+{
+ "_party": "party rig (tools/rig/lane/party/README.md): the `party` block is the source; prep.py writes cut/build/landmarks/fit/motion from it. FFX only (Chapter I).",
+ "subject": "tidus",
+ "scale": 2,
+ "costume": {
+  "pose": "idle"
+ },
+ "party": {
+  "keypoints": "tools/rig/subjects/tidus-x.keypoints.json",
+  "poses": [
+   "ready",
+   "attack",
+   "follow",
+   "victory",
+   "cast",
+   "item",
+   "hurt",
+   "critical",
+   "defend",
+   "sleep",
+   "ko",
+   "od-energy-rain",
+   "od-slice-and-dice"
+  ],
+  "swordPivotD": 80,
+  "idle_hidden": [],
+  "underlap": 12,
+  "underlap_idle": 5,
+  "margin": 15,
+  "pad": 600,
+  "waistT": 0.25,
+  "order": [
+   "fx",
+   "legB",
+   "hips",
+   "legA",
+   "armB",
+   "torso",
+   "sword",
+   "armA",
+   "head"
+  ],
+  "fx": {
+   "cast": {
+    "ring": {
+     "ellipse": [
+      265,
+      1047,
+      262,
+      72
+     ],
+     "keep": [
+      [
+       "kneeA",
+       "footA",
+       60
+      ],
+      [
+       "footA",
+       [
+        400,
+        975
+       ],
+       52
+      ],
+      [
+       "kneeB",
+       "footB",
+       58
+      ],
+      [
+       "footB",
+       [
+        178,
+        1032
+       ],
+       52
+      ],
+      [
+       "pommel",
+       "tip",
+       44
+      ]
+     ]
+    },
+    "swirl": {
+     "box": [
+      360,
+      0,
+      709,
+      560
+     ],
+     "keep": [
+      [
+       "head",
+       "crown",
+       105
+      ],
+      [
+       "neck",
+       "shoulderB",
+       64
+      ],
+      [
+       "shoulderB",
+       "elbowB",
+       52
+      ],
+      [
+       "elbowB",
+       "handB",
+       46
+      ],
+      [
+       "handB",
+       [
+        588,
+        188
+       ],
+       30
+      ],
+      [
+       "handB",
+       [
+        505,
+        192
+       ],
+       22
+      ],
+      [
+       "neck",
+       "pelvis",
+       66
+      ]
+     ]
+    }
+   }
+  },
+  "parts": {
+   "fx": {
+    "fx": true,
+    "caps": [],
+    "stub": "pelvis",
+    "skin": {
+     "type": "rigid",
+     "bone": "root",
+     "mesh": {
+      "edge": 170,
+      "inner": 340,
+      "grow": 16
+     }
+    },
+    "variant": {
+     "mesh": {
+      "quad": true
+     },
+     "tex": 0.4
+    }
+   },
+   "head": {
+    "caps": [
+     [
+      "neck",
+      "head",
+      60
+     ],
+     [
+      "head",
+      "crown",
+      92
+     ]
+    ],
+    "bias": 30,
+    "skin": {
+     "type": "rigid",
+     "bone": "head",
+     "mesh": {
+      "edge": 90,
+      "inner": 180,
+      "grow": 14
+     }
+    },
+    "variant": {
+     "opaqueArea": 1.0,
+     "meshArea": 1.0,
+     "tex": 0.6,
+     "growMax": 60
+    }
+   },
+   "torso": {
+    "caps": [
+     [
+      "neck",
+      "waist",
+      88
+     ]
+    ],
+    "skin": {
+     "type": "rigid",
+     "bone": "chest",
+     "mesh": {
+      "edge": 170,
+      "inner": 340,
+      "grow": 16
+     }
+    },
+    "variant": {
+     "mesh": {
+      "quad": true
+     }
+    }
+   },
+   "hips": {
+    "caps": [
+     [
+      "waist",
+      "pelvis",
+      82
+     ],
+     [
+      "pelvis",
+      100
+     ]
+    ],
+    "bias": 8,
+    "skin": {
+     "type": "rigid",
+     "bone": "pelvis",
+     "mesh": {
+      "edge": 170,
+      "inner": 340,
+      "grow": 16
+     }
+    },
+    "variant": {
+     "mesh": {
+      "quad": true
+     }
+    }
+   },
+   "armA": {
+    "caps": [
+     [
+      "shoulderA",
+      "elbowA",
+      38
+     ],
+     [
+      "elbowA",
+      "handA",
+      36
+     ]
+    ],
+    "bias": 12,
+    "skin": {
+     "type": "chain",
+     "bones": [
+      "upperarmA",
+      "forearmA"
+     ],
+     "joints": [
+      "shoulderA",
+      "elbowA",
+      "handA"
+     ],
+     "ramps": [
+      26
+     ],
+     "mesh": {
+      "edge": 110,
+      "inner": 220,
+      "grow": 12
+     }
+    }
+   },
+   "armB": {
+    "caps": [
+     [
+      "shoulderB",
+      "elbowB",
+      36
+     ],
+     [
+      "elbowB",
+      "handB",
+      34
+     ]
+    ],
+    "bias": 6,
+    "skin": {
+     "type": "chain",
+     "bones": [
+      "upperarmB",
+      "forearmB"
+     ],
+     "joints": [
+      "shoulderB",
+      "elbowB",
+      "handB"
+     ],
+     "ramps": [
+      26
+     ],
+     "mesh": {
+      "edge": 110,
+      "inner": 220,
+      "grow": 12
+     }
+    }
+   },
+   "legA": {
+    "caps": [
+     [
+      "pelvis",
+      "kneeA",
+      58
+     ],
+     [
+      "kneeA",
+      "footA",
+      44
+     ],
+     [
+      "footA",
+      "toeA",
+      40
+     ]
+    ],
+    "skin": {
+     "type": "chain",
+     "bones": [
+      "thighA",
+      "shinA"
+     ],
+     "joints": [
+      "pelvis",
+      "kneeA",
+      "toeA"
+     ],
+     "ramps": [
+      30
+     ],
+     "mesh": {
+      "edge": 110,
+      "inner": 220,
+      "grow": 12
+     }
+    }
+   },
+   "legB": {
+    "caps": [
+     [
+      "pelvis",
+      "kneeB",
+      58
+     ],
+     [
+      "kneeB",
+      "footB",
+      44
+     ],
+     [
+      "footB",
+      "toeB",
+      40
+     ]
+    ],
+    "skin": {
+     "type": "chain",
+     "bones": [
+      "thighB",
+      "shinB"
+     ],
+     "joints": [
+      "pelvis",
+      "kneeB",
+      "toeB"
+     ],
+     "ramps": [
+      30
+     ],
+     "mesh": {
+      "edge": 110,
+      "inner": 220,
+      "grow": 12
+     }
+    }
+   },
+   "sword": {
+    "caps": [
+     [
+      "pommel",
+      "tip",
+      52
+     ]
+    ],
+    "bias": 26,
+    "base_tex": 0.25,
+    "skin": {
+     "type": "rigid",
+     "bone": "sword",
+     "mesh": {
+      "edge": 220,
+      "inner": 440,
+      "grow": 16
+     }
+    },
+    "variant": {
+     "tex": 0.25,
+     "mesh": {
+      "quad": true
+     }
+    }
+   }
+  },
+  "normals": {
+   "dir": "D:/pyrefly-art-maps",
+   "scale": 0.26
+  },
+  "variant_defaults": {
+   "tex": 0.4
+  },
+  "base_tex": 0.4,
+  "skeleton": [
+   [
+    "root",
+    null,
+    "ground"
+   ],
+   [
+    "pelvis",
+    "root",
+    "pelvis",
+    [
+     "hips",
+     "legA",
+     "legB"
+    ]
+   ],
+   [
+    "chest",
+    "pelvis",
+    "waist",
+    [
+     "torso",
+     "hips"
+    ]
+   ],
+   [
+    "head",
+    "chest",
+    "neck",
+    [
+     "head",
+     "torso"
+    ]
+   ],
+   [
+    "upperarmA",
+    "chest",
+    "shoulderA",
+    [
+     "armA",
+     "torso"
+    ]
+   ],
+   [
+    "forearmA",
+    "upperarmA",
+    "elbowA",
+    [
+     "armA"
+    ]
+   ],
+   [
+    "upperarmB",
+    "chest",
+    "shoulderB",
+    [
+     "armB",
+     "torso"
+    ]
+   ],
+   [
+    "forearmB",
+    "upperarmB",
+    "elbowB",
+    [
+     "armB"
+    ]
+   ],
+   [
+    "thighA",
+    "pelvis",
+    "pelvis",
+    [
+     "hips",
+     "legA",
+     "legB"
+    ]
+   ],
+   [
+    "shinA",
+    "thighA",
+    "kneeA",
+    [
+     "legA"
+    ]
+   ],
+   [
+    "thighB",
+    "pelvis",
+    "pelvis",
+    [
+     "hips",
+     "legA",
+     "legB"
+    ]
+   ],
+   [
+    "shinB",
+    "thighB",
+    "kneeB",
+    [
+     "legB"
+    ]
+   ],
+   [
+    "sword",
+    "root",
+    "swordPivot"
+   ]
+  ],
+  "aim": {
+   "pelvis": "neck",
+   "chest": "neck",
+   "head": "headTop",
+   "upperarmA": "elbowA",
+   "forearmA": "handA",
+   "upperarmB": "elbowB",
+   "forearmB": "handB",
+   "thighA": "kneeA",
+   "shinA": "footA",
+   "thighB": "kneeB",
+   "shinB": "footB",
+   "sword": "tip"
+  },
+  "place": {
+   "pelvis": "pelvis",
+   "chest": "waist",
+   "forearmA": "elbowA",
+   "forearmB": "elbowB",
+   "shinA": "kneeA",
+   "shinB": "kneeB",
+   "upperarmA": "shoulderA",
+   "upperarmB": "shoulderB",
+   "head": "neck",
+   "sword": "swordPivot"
+  },
+  "noscale": [
+   "head",
+   "pelvis",
+   "chest"
+  ],
+  "exact_aim": [
+   "head"
+  ],
+  "joint_points": {
+   "pelvis": "pelvis",
+   "chest": "waist",
+   "head": "neck",
+   "upperarmA": "shoulderA",
+   "forearmA": "elbowA",
+   "upperarmB": "shoulderB",
+   "forearmB": "elbowB",
+   "thighA": "pelvis",
+   "shinA": "kneeA",
+   "thighB": "pelvis",
+   "shinB": "kneeB",
+   "sword": "swordPivot"
+  },
+  "scales": {
+   "chest": [
+    0.7,
+    1.4
+   ],
+   "upperarmA": [
+    0.4,
+    2.2
+   ],
+   "forearmA": [
+    0.4,
+    2.2
+   ],
+   "upperarmB": [
+    0.4,
+    2.2
+   ],
+   "forearmB": [
+    0.4,
+    2.2
+   ],
+   "thighA": [
+    0.5,
+    1.9
+   ],
+   "shinA": [
+    0.5,
+    1.9
+   ],
+   "thighB": [
+    0.5,
+    1.9
+   ],
+   "shinB": [
+    0.5,
+    1.9
+   ],
+   "sword": [
+    0.3,
+    3.0
+   ]
+  },
+  "landmarks": {
+   "head": [
+    "head",
+    "head"
+   ],
+   "crown": [
+    "head",
+    "crown"
+   ],
+   "neck": [
+    "head",
+    "neck"
+   ],
+   "pelvis": [
+    "pelvis",
+    "pelvis"
+   ],
+   "handA": [
+    "forearmA",
+    "handA"
+   ],
+   "handB": [
+    "forearmB",
+    "handB"
+   ],
+   "pommel": [
+    "sword",
+    "pommel"
+   ],
+   "tip": [
+    "sword",
+    "tip"
+   ]
+  },
+  "key_motion": {
+   "ready": {
+    "ms": 150,
+    "fadeMs": 0
+   },
+   "attack": {
+    "ms": 70,
+    "fadeMs": 0
+   },
+   "follow": {
+    "ms": 90,
+    "fadeMs": 0
+   },
+   "hurt": {
+    "ms": 60,
+    "fadeMs": 0
+   },
+   "cast": {
+    "ms": 150,
+    "fadeMs": 0
+   },
+   "item": {
+    "ms": 140,
+    "fadeMs": 0
+   },
+   "defend": {
+    "ms": 110,
+    "fadeMs": 0
+   },
+   "victory": {
+    "ms": 220,
+    "fadeMs": 0
+   },
+   "critical": {
+    "ms": 220,
+    "fadeMs": 0
+   },
+   "sleep": {
+    "ms": 260,
+    "fadeMs": 0
+   },
+   "ko": {
+    "ms": 420,
+    "fadeMs": 0
+   },
+   "od-energy-rain": {
+    "ms": 120,
+    "fadeMs": 0
+   },
+   "od-slice-and-dice": {
+    "ms": 80,
+    "fadeMs": 0
+   }
+  },
+  "idle_key": {
+   "ms": 120,
+   "fadeMs": 0
+  },
+  "joint_discs": [],
+  "disc_margin": 14,
+  "marks": [
+   "pelvis",
+   "handA",
+   "pommel",
+   "tip"
+  ],
+  "motion": {
+   "idle": {
+    "hz": 0.5,
+    "bones": {
+     "pelvis": {
+      "rot": 0.4,
+      "dy": 3.0,
+      "phase": 0.2
+     },
+     "chest": {
+      "rot": 1.2,
+      "phase": -0.8
+     },
+     "head": {
+      "rot": 1.6,
+      "phase": -1.5
+     },
+     "upperarmA": {
+      "rot": 1.0,
+      "phase": -1.4
+     },
+     "forearmA": {
+      "rot": 0.8,
+      "phase": -2.0
+     },
+     "upperarmB": {
+      "rot": 0.8,
+      "phase": -1.0
+     },
+     "sword": {
+      "rot": 0.5,
+      "phase": -1.2
+     }
+    }
+   }
+  }
+ },
+ "cut": {
+  "order": [
+   "fx",
+   "legB",
+   "hips",
+   "legA",
+   "armB",
+   "torso",
+   "sword",
+   "armA",
+   "head"
+  ]
+ },
+ "build": {
+  "bones": [
+   [
+    "root",
+    null,
+    [
+     352.5,
+     1075.0
+    ]
+   ],
+   [
+    "pelvis",
+    "root",
+    [
+     407.5,
+     473.0
+    ]
+   ],
+   [
+    "chest",
+    "pelvis",
+    [
+     404.0,
+     451.0
+    ]
+   ],
+   [
+    "head",
+    "chest",
+    [
+     349.0,
+     206.0
+    ]
+   ],
+   [
+    "upperarmA",
+    "chest",
+    [
+     449.0,
+     273.0
+    ]
+   ],
+   [
+    "forearmA",
+    "upperarmA",
+    [
+     605.0,
+     330.0
+    ]
+   ],
+   [
+    "upperarmB",
+    "chest",
+    [
+     314.5,
+     286.0
+    ]
+   ],
+   [
+    "forearmB",
+    "upperarmB",
+    [
+     269.0,
+     419.5
+    ]
+   ],
+   [
+    "thighA",
+    "pelvis",
+    [
+     407.5,
+     473.0
+    ]
+   ],
+   [
+    "shinA",
+    "thighA",
+    [
+     458.0,
+     788.0
+    ]
+   ],
+   [
+    "thighB",
+    "pelvis",
+    [
+     407.5,
+     473.0
+    ]
+   ],
+   [
+    "shinB",
+    "thighB",
+    [
+     261.5,
+     729.5
+    ]
+   ],
+   [
+    "sword",
+    "root",
+    [
+     290.2,
+     403.2
+    ]
+   ]
+  ],
+  "skin": {
+   "fx": {
+    "type": "rigid",
+    "bone": "root",
+    "mesh": {
+     "edge": 170,
+     "inner": 340,
+     "grow": 16
+    }
+   },
+   "legB": {
+    "type": "chain",
+    "bones": [
+     "thighB",
+     "shinB"
+    ],
+    "joints": [
+     [
+      407.5,
+      473.0
+     ],
+     [
+      261.5,
+      729.5
+     ],
+     [
+      285.0,
+      985.0
+     ]
+    ],
+    "ramps": [
+     30
+    ],
+    "mesh": {
+     "edge": 110,
+     "inner": 220,
+     "grow": 12
+    }
+   },
+   "hips": {
+    "type": "rigid",
+    "bone": "pelvis",
+    "mesh": {
+     "edge": 170,
+     "inner": 340,
+     "grow": 16
+    }
+   },
+   "legA": {
+    "type": "chain",
+    "bones": [
+     "thighA",
+     "shinA"
+    ],
+    "joints": [
+     [
+      407.5,
+      473.0
+     ],
+     [
+      458.0,
+      788.0
+     ],
+     [
+      495.0,
+      1075.0
+     ]
+    ],
+    "ramps": [
+     30
+    ],
+    "mesh": {
+     "edge": 110,
+     "inner": 220,
+     "grow": 12
+    }
+   },
+   "armB": {
+    "type": "chain",
+    "bones": [
+     "upperarmB",
+     "forearmB"
+    ],
+    "joints": [
+     [
+      314.5,
+      286.0
+     ],
+     [
+      269.0,
+      419.5
+     ],
+     [
+      305.0,
+      545.0
+     ]
+    ],
+    "ramps": [
+     26
+    ],
+    "mesh": {
+     "edge": 110,
+     "inner": 220,
+     "grow": 12
+    }
+   },
+   "torso": {
+    "type": "rigid",
+    "bone": "chest",
+    "mesh": {
+     "edge": 170,
+     "inner": 340,
+     "grow": 16
+    }
+   },
+   "sword": {
+    "type": "rigid",
+    "bone": "sword",
+    "mesh": {
+     "edge": 220,
+     "inner": 440,
+     "grow": 16
+    }
+   },
+   "armA": {
+    "type": "chain",
+    "bones": [
+     "upperarmA",
+     "forearmA"
+    ],
+    "joints": [
+     [
+      449.0,
+      273.0
+     ],
+     [
+      605.0,
+      330.0
+     ],
+     [
+      572.0,
+      160.0
+     ]
+    ],
+    "ramps": [
+     26
+    ],
+    "mesh": {
+     "edge": 110,
+     "inner": 220,
+     "grow": 12
+    }
+   },
+   "head": {
+    "type": "rigid",
+    "bone": "head",
+    "mesh": {
+     "edge": 90,
+     "inner": 180,
+     "grow": 14
+    }
+   }
+  },
+  "landmarks": {
+   "head": [
+    "head",
+    [
+     417.0,
+     179.5
+    ]
+   ],
+   "crown": [
+    "head",
+    [
+     395.0,
+     110.0
+    ]
+   ],
+   "neck": [
+    "head",
+    [
+     375.0,
+     240.0
+    ]
+   ],
+   "pelvis": [
+    "pelvis",
+    [
+     440.0,
+     540.0
+    ]
+   ],
+   "handA": [
+    "forearmA",
+    [
+     572.0,
+     160.0
+    ]
+   ],
+   "handB": [
+    "forearmB",
+    [
+     305.0,
+     545.0
+    ]
+   ],
+   "pommel": [
+    "sword",
+    [
+     692.0,
+     40.0
+    ]
+   ],
+   "tip": [
+    "sword",
+    [
+     12.0,
+     868.0
+    ]
+   ],
+   "feet": [
+    "root",
+    [
+     352.5,
+     1075.0
+    ]
+   ]
+  },
+  "variants": {
+   "legB": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ready.legB.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/attack.legB.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "follow": {
+     "from_painting": {
+      "pose": "follow",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/follow.legB.png",
+      "mask_pad": 600,
+      "register": "follow",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/cast.legB.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "defend": {
+     "from_painting": {
+      "pose": "defend",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/defend.legB.png",
+      "mask_pad": 600,
+      "register": "defend",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "sleep": {
+     "from_painting": {
+      "pose": "sleep",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/sleep.legB.png",
+      "mask_pad": 600,
+      "register": "sleep",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "ko": {
+     "from_painting": {
+      "pose": "ko",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ko.legB.png",
+      "mask_pad": 600,
+      "register": "ko",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "od-energy-rain": {
+     "from_painting": {
+      "pose": "od-energy-rain",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/od-energy-rain.legB.png",
+      "mask_pad": 600,
+      "register": "od-energy-rain",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "od-slice-and-dice": {
+     "from_painting": {
+      "pose": "od-slice-and-dice",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/od-slice-and-dice.legB.png",
+      "mask_pad": 600,
+      "register": "od-slice-and-dice",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    }
+   },
+   "hips": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ready.hips.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/attack.hips.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "follow": {
+     "from_painting": {
+      "pose": "follow",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/follow.hips.png",
+      "mask_pad": 600,
+      "register": "follow",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "victory": {
+     "from_painting": {
+      "pose": "victory",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/victory.hips.png",
+      "mask_pad": 600,
+      "register": "victory",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/cast.hips.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "item": {
+     "from_painting": {
+      "pose": "item",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/item.hips.png",
+      "mask_pad": 600,
+      "register": "item",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/hurt.hips.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/critical.hips.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "defend": {
+     "from_painting": {
+      "pose": "defend",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/defend.hips.png",
+      "mask_pad": 600,
+      "register": "defend",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "sleep": {
+     "from_painting": {
+      "pose": "sleep",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/sleep.hips.png",
+      "mask_pad": 600,
+      "register": "sleep",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "ko": {
+     "from_painting": {
+      "pose": "ko",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ko.hips.png",
+      "mask_pad": 600,
+      "register": "ko",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "od-energy-rain": {
+     "from_painting": {
+      "pose": "od-energy-rain",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/od-energy-rain.hips.png",
+      "mask_pad": 600,
+      "register": "od-energy-rain",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "od-slice-and-dice": {
+     "from_painting": {
+      "pose": "od-slice-and-dice",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/od-slice-and-dice.hips.png",
+      "mask_pad": 600,
+      "register": "od-slice-and-dice",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    }
+   },
+   "legA": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ready.legA.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/attack.legA.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "follow": {
+     "from_painting": {
+      "pose": "follow",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/follow.legA.png",
+      "mask_pad": 600,
+      "register": "follow",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "victory": {
+     "from_painting": {
+      "pose": "victory",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/victory.legA.png",
+      "mask_pad": 600,
+      "register": "victory",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/cast.legA.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "item": {
+     "from_painting": {
+      "pose": "item",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/item.legA.png",
+      "mask_pad": 600,
+      "register": "item",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/hurt.legA.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/critical.legA.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "defend": {
+     "from_painting": {
+      "pose": "defend",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/defend.legA.png",
+      "mask_pad": 600,
+      "register": "defend",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "sleep": {
+     "from_painting": {
+      "pose": "sleep",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/sleep.legA.png",
+      "mask_pad": 600,
+      "register": "sleep",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "ko": {
+     "from_painting": {
+      "pose": "ko",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ko.legA.png",
+      "mask_pad": 600,
+      "register": "ko",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "od-energy-rain": {
+     "from_painting": {
+      "pose": "od-energy-rain",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/od-energy-rain.legA.png",
+      "mask_pad": 600,
+      "register": "od-energy-rain",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "od-slice-and-dice": {
+     "from_painting": {
+      "pose": "od-slice-and-dice",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/od-slice-and-dice.legA.png",
+      "mask_pad": 600,
+      "register": "od-slice-and-dice",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    }
+   },
+   "armB": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ready.armB.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/attack.armB.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/cast.armB.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/hurt.armB.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/critical.armB.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "defend": {
+     "from_painting": {
+      "pose": "defend",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/defend.armB.png",
+      "mask_pad": 600,
+      "register": "defend",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    }
+   },
+   "torso": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ready.torso.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/attack.torso.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "follow": {
+     "from_painting": {
+      "pose": "follow",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/follow.torso.png",
+      "mask_pad": 600,
+      "register": "follow",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "victory": {
+     "from_painting": {
+      "pose": "victory",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/victory.torso.png",
+      "mask_pad": 600,
+      "register": "victory",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/cast.torso.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "item": {
+     "from_painting": {
+      "pose": "item",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/item.torso.png",
+      "mask_pad": 600,
+      "register": "item",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/hurt.torso.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/critical.torso.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "defend": {
+     "from_painting": {
+      "pose": "defend",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/defend.torso.png",
+      "mask_pad": 600,
+      "register": "defend",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "sleep": {
+     "from_painting": {
+      "pose": "sleep",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/sleep.torso.png",
+      "mask_pad": 600,
+      "register": "sleep",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "ko": {
+     "from_painting": {
+      "pose": "ko",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ko.torso.png",
+      "mask_pad": 600,
+      "register": "ko",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "od-energy-rain": {
+     "from_painting": {
+      "pose": "od-energy-rain",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/od-energy-rain.torso.png",
+      "mask_pad": 600,
+      "register": "od-energy-rain",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "od-slice-and-dice": {
+     "from_painting": {
+      "pose": "od-slice-and-dice",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/od-slice-and-dice.torso.png",
+      "mask_pad": 600,
+      "register": "od-slice-and-dice",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    }
+   },
+   "sword": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ready.sword.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/attack.sword.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "follow": {
+     "from_painting": {
+      "pose": "follow",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/follow.sword.png",
+      "mask_pad": 600,
+      "register": "follow",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "victory": {
+     "from_painting": {
+      "pose": "victory",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/victory.sword.png",
+      "mask_pad": 600,
+      "register": "victory",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/cast.sword.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "item": {
+     "from_painting": {
+      "pose": "item",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/item.sword.png",
+      "mask_pad": 600,
+      "register": "item",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/hurt.sword.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/critical.sword.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "defend": {
+     "from_painting": {
+      "pose": "defend",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/defend.sword.png",
+      "mask_pad": 600,
+      "register": "defend",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "sleep": {
+     "from_painting": {
+      "pose": "sleep",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/sleep.sword.png",
+      "mask_pad": 600,
+      "register": "sleep",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "ko": {
+     "from_painting": {
+      "pose": "ko",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ko.sword.png",
+      "mask_pad": 600,
+      "register": "ko",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "od-energy-rain": {
+     "from_painting": {
+      "pose": "od-energy-rain",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/od-energy-rain.sword.png",
+      "mask_pad": 600,
+      "register": "od-energy-rain",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    },
+    "od-slice-and-dice": {
+     "from_painting": {
+      "pose": "od-slice-and-dice",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/od-slice-and-dice.sword.png",
+      "mask_pad": 600,
+      "register": "od-slice-and-dice",
+      "scale": 1.0,
+      "tex": 0.25,
+      "mesh": {
+       "quad": true
+      }
+     }
+    }
+   },
+   "armA": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ready.armA.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/attack.armA.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "follow": {
+     "from_painting": {
+      "pose": "follow",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/follow.armA.png",
+      "mask_pad": 600,
+      "register": "follow",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "victory": {
+     "from_painting": {
+      "pose": "victory",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/victory.armA.png",
+      "mask_pad": 600,
+      "register": "victory",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/cast.armA.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "item": {
+     "from_painting": {
+      "pose": "item",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/item.armA.png",
+      "mask_pad": 600,
+      "register": "item",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/hurt.armA.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/critical.armA.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "defend": {
+     "from_painting": {
+      "pose": "defend",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/defend.armA.png",
+      "mask_pad": 600,
+      "register": "defend",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "sleep": {
+     "from_painting": {
+      "pose": "sleep",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/sleep.armA.png",
+      "mask_pad": 600,
+      "register": "sleep",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "ko": {
+     "from_painting": {
+      "pose": "ko",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ko.armA.png",
+      "mask_pad": 600,
+      "register": "ko",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "od-energy-rain": {
+     "from_painting": {
+      "pose": "od-energy-rain",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/od-energy-rain.armA.png",
+      "mask_pad": 600,
+      "register": "od-energy-rain",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    },
+    "od-slice-and-dice": {
+     "from_painting": {
+      "pose": "od-slice-and-dice",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/od-slice-and-dice.armA.png",
+      "mask_pad": 600,
+      "register": "od-slice-and-dice",
+      "scale": 1.0,
+      "skin": "chain",
+      "tex": 0.4,
+      "mesh": {
+       "edge": 110,
+       "inner": 220,
+       "grow": 12
+      }
+     }
+    }
+   },
+   "head": {
+    "ready": {
+     "from_painting": {
+      "pose": "ready",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ready.head.png",
+      "mask_pad": 600,
+      "register": "ready",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "attack": {
+     "from_painting": {
+      "pose": "attack",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/attack.head.png",
+      "mask_pad": 600,
+      "register": "attack",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "follow": {
+     "from_painting": {
+      "pose": "follow",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/follow.head.png",
+      "mask_pad": 600,
+      "register": "follow",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "victory": {
+     "from_painting": {
+      "pose": "victory",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/victory.head.png",
+      "mask_pad": 600,
+      "register": "victory",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/cast.head.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "item": {
+     "from_painting": {
+      "pose": "item",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/item.head.png",
+      "mask_pad": 600,
+      "register": "item",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "hurt": {
+     "from_painting": {
+      "pose": "hurt",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/hurt.head.png",
+      "mask_pad": 600,
+      "register": "hurt",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "critical": {
+     "from_painting": {
+      "pose": "critical",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/critical.head.png",
+      "mask_pad": 600,
+      "register": "critical",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "defend": {
+     "from_painting": {
+      "pose": "defend",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/defend.head.png",
+      "mask_pad": 600,
+      "register": "defend",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "sleep": {
+     "from_painting": {
+      "pose": "sleep",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/sleep.head.png",
+      "mask_pad": 600,
+      "register": "sleep",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "ko": {
+     "from_painting": {
+      "pose": "ko",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/ko.head.png",
+      "mask_pad": 600,
+      "register": "ko",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "od-energy-rain": {
+     "from_painting": {
+      "pose": "od-energy-rain",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/od-energy-rain.head.png",
+      "mask_pad": 600,
+      "register": "od-energy-rain",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    },
+    "od-slice-and-dice": {
+     "from_painting": {
+      "pose": "od-slice-and-dice",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/od-slice-and-dice.head.png",
+      "mask_pad": 600,
+      "register": "od-slice-and-dice",
+      "scale": 1.0,
+      "tex": 0.6,
+      "opaqueArea": 1.0,
+      "meshArea": 1.0,
+      "growMax": 60,
+      "mesh": {
+       "edge": 90,
+       "inner": 180,
+       "grow": 14
+      }
+     }
+    }
+   },
+   "fx": {
+    "cast": {
+     "from_painting": {
+      "pose": "cast",
+      "mask": "D:/pyrefly-art-rigs-work/tidus-x-t2/masks/cast.fx.png",
+      "mask_pad": 600,
+      "register": "cast",
+      "scale": 1.0,
+      "tex": 0.4,
+      "mesh": {
+       "quad": true
+      }
+     }
+    }
+   }
+  },
+  "rim": true,
+  "normals": {
+   "dir": "D:/pyrefly-art-maps",
+   "scale": 0.26
+  }
+ },
+ "landmarks": {
+  "ready": {
+   "pelvis": [
+    340,
+    365
+   ],
+   "handA": [
+    185,
+    305
+   ],
+   "pommel": [
+    30,
+    232
+   ],
+   "tip": [
+    668,
+    515
+   ]
+  },
+  "attack": {
+   "pelvis": [
+    310,
+    470
+   ],
+   "handA": [
+    395,
+    360
+   ],
+   "pommel": [
+    21,
+    25
+   ],
+   "tip": [
+    801,
+    900
+   ]
+  },
+  "follow": {
+   "pelvis": [
+    350,
+    290
+   ],
+   "handA": [
+    170,
+    228
+   ],
+   "pommel": [
+    40,
+    145
+   ],
+   "tip": [
+    790,
+    635
+   ]
+  },
+  "victory": {
+   "pelvis": [
+    285,
+    670
+   ],
+   "handA": [
+    235,
+    215
+   ],
+   "pommel": [
+    258,
+    20
+   ],
+   "tip": [
+    19,
+    1095
+   ]
+  },
+  "cast": {
+   "pelvis": [
+    350,
+    520
+   ],
+   "handA": [
+    95,
+    385
+   ],
+   "pommel": [
+    45,
+    300
+   ],
+   "tip": [
+    385,
+    995
+   ]
+  },
+  "item": {
+   "pelvis": [
+    345,
+    570
+   ],
+   "handA": [
+    610,
+    410
+   ],
+   "pommel": [
+    75,
+    300
+   ],
+   "tip": [
+    180,
+    1030
+   ]
+  },
+  "hurt": {
+   "pelvis": [
+    330,
+    740
+   ],
+   "handA": [
+    500,
+    380
+   ],
+   "pommel": [
+    610,
+    440
+   ],
+   "tip": [
+    85,
+    15
+   ]
+  },
+  "critical": {
+   "pelvis": [
+    150,
+    470
+   ],
+   "handA": [
+    470,
+    345
+   ],
+   "pommel": [
+    565,
+    35
+   ],
+   "tip": [
+    360,
+    1170
+   ]
+  },
+  "defend": {
+   "pelvis": [
+    390,
+    545
+   ],
+   "handA": [
+    440,
+    445
+   ],
+   "pommel": [
+    25,
+    545
+   ],
+   "tip": [
+    770,
+    552
+   ]
+  },
+  "sleep": {
+   "pelvis": [
+    170,
+    560
+   ],
+   "handA": [
+    160,
+    465
+   ],
+   "pommel": [
+    125,
+    460
+   ],
+   "tip": [
+    603,
+    797
+   ]
+  },
+  "ko": {
+   "pelvis": [
+    590,
+    200
+   ],
+   "handA": [
+    700,
+    275
+   ],
+   "pommel": [
+    760,
+    330
+   ],
+   "tip": [
+    20,
+    465
+   ]
+  },
+  "od-energy-rain": {
+   "pelvis": [
+    350,
+    690
+   ],
+   "handA": [
+    610,
+    390
+   ],
+   "pommel": [
+    295,
+    375
+   ],
+   "tip": [
+    222,
+    5
+   ]
+  },
+  "od-slice-and-dice": {
+   "pelvis": [
+    430,
+    400
+   ],
+   "handA": [
+    650,
+    85
+   ],
+   "pommel": [
+    755,
+    125
+   ],
+   "tip": [
+    15,
+    250
+   ]
+  }
+ },
+ "fit": {
+  "mirror": [],
+  "keys": {
+   "ready": {
+    "image": {
+     "legB": "ready",
+     "hips": "ready",
+     "legA": "ready",
+     "armB": "ready",
+     "torso": "ready",
+     "sword": "ready",
+     "armA": "ready",
+     "head": "ready"
+    },
+    "hide": [
+     "fx"
+    ]
+   },
+   "attack": {
+    "image": {
+     "legB": "attack",
+     "hips": "attack",
+     "legA": "attack",
+     "armB": "attack",
+     "torso": "attack",
+     "sword": "attack",
+     "armA": "attack",
+     "head": "attack"
+    },
+    "hide": [
+     "fx"
+    ]
+   },
+   "follow": {
+    "image": {
+     "legB": "follow",
+     "hips": "follow",
+     "legA": "follow",
+     "torso": "follow",
+     "sword": "follow",
+     "armA": "follow",
+     "head": "follow"
+    },
+    "hide": [
+     "fx",
+     "armB"
+    ]
+   },
+   "victory": {
+    "image": {
+     "hips": "victory",
+     "legA": "victory",
+     "torso": "victory",
+     "sword": "victory",
+     "armA": "victory",
+     "head": "victory"
+    },
+    "hide": [
+     "fx",
+     "legB",
+     "armB"
+    ]
+   },
+   "cast": {
+    "image": {
+     "fx": "cast",
+     "legB": "cast",
+     "hips": "cast",
+     "legA": "cast",
+     "armB": "cast",
+     "torso": "cast",
+     "sword": "cast",
+     "armA": "cast",
+     "head": "cast"
+    },
+    "hide": []
+   },
+   "item": {
+    "image": {
+     "hips": "item",
+     "legA": "item",
+     "torso": "item",
+     "sword": "item",
+     "armA": "item",
+     "head": "item"
+    },
+    "hide": [
+     "fx",
+     "legB",
+     "armB"
+    ]
+   },
+   "hurt": {
+    "image": {
+     "hips": "hurt",
+     "legA": "hurt",
+     "armB": "hurt",
+     "torso": "hurt",
+     "sword": "hurt",
+     "armA": "hurt",
+     "head": "hurt"
+    },
+    "hide": [
+     "fx",
+     "legB"
+    ]
+   },
+   "critical": {
+    "image": {
+     "hips": "critical",
+     "legA": "critical",
+     "armB": "critical",
+     "torso": "critical",
+     "sword": "critical",
+     "armA": "critical",
+     "head": "critical"
+    },
+    "hide": [
+     "fx",
+     "legB"
+    ]
+   },
+   "defend": {
+    "image": {
+     "legB": "defend",
+     "hips": "defend",
+     "legA": "defend",
+     "armB": "defend",
+     "torso": "defend",
+     "sword": "defend",
+     "armA": "defend",
+     "head": "defend"
+    },
+    "hide": [
+     "fx"
+    ]
+   },
+   "sleep": {
+    "image": {
+     "legB": "sleep",
+     "hips": "sleep",
+     "legA": "sleep",
+     "torso": "sleep",
+     "sword": "sleep",
+     "armA": "sleep",
+     "head": "sleep"
+    },
+    "hide": [
+     "fx",
+     "armB"
+    ]
+   },
+   "ko": {
+    "image": {
+     "legB": "ko",
+     "hips": "ko",
+     "legA": "ko",
+     "torso": "ko",
+     "sword": "ko",
+     "armA": "ko",
+     "head": "ko"
+    },
+    "hide": [
+     "fx",
+     "armB"
+    ]
+   },
+   "od-energy-rain": {
+    "image": {
+     "legB": "od-energy-rain",
+     "hips": "od-energy-rain",
+     "legA": "od-energy-rain",
+     "torso": "od-energy-rain",
+     "sword": "od-energy-rain",
+     "armA": "od-energy-rain",
+     "head": "od-energy-rain"
+    },
+    "hide": [
+     "fx",
+     "armB"
+    ]
+   },
+   "od-slice-and-dice": {
+    "image": {
+     "legB": "od-slice-and-dice",
+     "hips": "od-slice-and-dice",
+     "legA": "od-slice-and-dice",
+     "torso": "od-slice-and-dice",
+     "sword": "od-slice-and-dice",
+     "armA": "od-slice-and-dice",
+     "head": "od-slice-and-dice"
+    },
+    "hide": [
+     "fx",
+     "armB"
+    ]
+   }
+  }
+ },
+ "authored": [],
+ "idle_key": {
+  "ms": 120,
+  "fadeMs": 0
+ },
+ "motion": {
+  "idle": {
+   "hz": 0.5,
+   "bones": {
+    "pelvis": {
+     "rot": 0.4,
+     "dy": 3.0,
+     "phase": 0.2
+    },
+    "chest": {
+     "rot": 1.2,
+     "phase": -0.8
+    },
+    "head": {
+     "rot": 1.6,
+     "phase": -1.5
+    },
+    "upperarmA": {
+     "rot": 1.0,
+     "phase": -1.4
+    },
+    "forearmA": {
+     "rot": 0.8,
+     "phase": -2.0
+    },
+    "upperarmB": {
+     "rot": 0.8,
+     "phase": -1.0
+    },
+    "sword": {
+     "rot": 0.5,
+     "phase": -1.2
+    }
+   }
+  }
+ }
+}

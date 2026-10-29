@@ -27,7 +27,7 @@ for that key are CUT from the pose's own painting and registered to the key's bo
                                          added to "fill": a limb whose joint the painting draws at the edge of the limb, or a shoulder the cut leaves open
       "fill": [[x, y, r], ...]           discs (master px of the idle frame) whose transparent pixels the cut fills with the painting's own colours around them, classically extended (`rig_geom.extend_fill`): where
                                          the painting has a gap (the sky inside a neck loop) that a joint's hole test needs solid, because the part it used to cover is now the variant
-      "mesh": {"edge": 18, "inner": 34, "grow": 10}}
+      "mesh": {"edge": 18, "inner": 34, "grow": 10}}   or {"quad": true}: the PNG's own rectangle as the mesh (4 vertices; a rigid piece, no bending)
 
   build.normals = {"dir": "D:/pyrefly-art-maps", "scale": 0.5}   (the build's, `rig_normals.py`): every variant also writes `<part>.<name>.normal.png`, the same window of the pose painting's normal map, and names it `normal`
 
@@ -226,7 +226,11 @@ def variant_record(sub: Subject, part: dict, name: str, spec: dict, T: dict, mod
         img[..., 3] = np.clip(a_pass, 0, 255).astype(np.uint8)
         crop = R.dilate_rgb(img[y0:y1, x0:x1], 8)
         rim = (R.outer_edge_mask(rgba[..., 3])[y0:y1, x0:x1] * (crop[..., 3] > 8) * 255).astype(np.uint8)
-        P, tris = R.build_mesh(crop[..., 3] > 8, edge_step=mc.get("edge", 18.0), inner_step=mc.get("inner", 34.0), domain_grow=mc.get("grow", 10), seed=1)
+        if mc.get("quad"):  # a rigid prop or block that needs no mesh of its own: the PNG's rectangle, 4 vertices (2 triangles); the transparent corners draw nothing
+            ch_, cw_ = crop.shape[:2]
+            P, tris = np.array([[0, 0], [cw_, 0], [cw_, ch_], [0, ch_]], np.float64), np.array([[0, 1, 2], [0, 2, 3]], np.int64)
+        else:
+            P, tris = R.build_mesh(crop[..., 3] > 8, edge_step=mc.get("edge", 18.0), inner_step=mc.get("inner", 34.0), domain_grow=mc.get("grow", 10), seed=1)
         M = P + np.array([x0 + ox, y0 + oy], np.float64)  # the piece in master px of the idle frame, as the painting has it
         anchor_used = anchor if anchor is not None else np.mean(M, 0)
         if part_opaque is not None:
