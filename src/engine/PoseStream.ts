@@ -1,5 +1,5 @@
 /**
- * Loading a figure's poses with the load diet (`LoadDiet.ts`; lane "load-diet", 2026-10-29; both games, shared loading plumbing; no DOM, no `three`).
+ * Loading a figure's poses with the load diet (`LoadDiet.ts`; lane "load-diet", 2026-10-29; both games, shared loading plumbing; no `three`, and no DOM of its own: since lane "budgets-2" it reads `LoadHold`, which reads the device class (`ArtDevice`, `matchMedia`) to know whether the line is held).
  *
  * `PaintedActorPoses.loadPoses` used to start every pose at once and wait for all of them. Here the opening poses (idle*, ready*) go first and are waited for without a limit; then
  * the others are started in the order a fight draws them ({@link poseNeed}), a few at a time, so that on a line that cannot bring them all quickly the poses a fight draws first are
@@ -7,6 +7,7 @@
  * is handed back to be installed as it lands. A set that is complete inside the ceiling comes back whole and in the order it was asked for, which is release 67's result.
  */
 import { orderByNeed, poseNeed, raceCeiling, splitPoses } from './LoadDiet.ts';
+import { backgroundHeld, queued, whenBackgroundOpen } from './LoadHold.ts'; // lane "budgets-2": on the phone class the later poses start when the entry is done
 
 /** How many of the other poses are in flight at once: enough to keep a fast line full, few enough that the first-needed ones are not slowed by the last. */
 export const LATE_WINDOW = 6;
@@ -103,11 +104,15 @@ export async function loadStreamed<T>(poses: Readonly<Record<string, string>>, n
   if (!late.length || !early.length) return { names: [...names], loaded: await Promise.all(names.map((n) => load(poses[n]!))), later: null };
   const earlyLoaded = await Promise.all(early.map((n) => load(poses[n]!)));
   const order = orderByNeed(late, poseNeed);
-  const started = startWindowed(order.map((n) => () => load(poses[n]!)), LATE_WINDOW, (i) => stop(order[i]!));
+  // Foreground first (`LoadHold.ts`): while the line is held for the entry (the phone class) the later poses do not start, and the figure does not sit out the ceiling for poses it has not asked for yet:
+  // it is built with its opening poses, and each later pose is asked for when the hold opens, through the phone's ranked queue (`LoadHold.queued`: in need order, eight at a time across every figure; `stop` is asked again when its turn comes: the figure may be gone).
+  const held = backgroundHeld();
+  const task = (n: string) => (held ? () => whenBackgroundOpen().then(() => queued(2 * poseNeed(n), async () => (stop(n) ? Promise.reject(new StreamStopped()) : load(poses[n]!)))) : () => load(poses[n]!));
+  const started = startWindowed(order.map(task), LATE_WINDOW, (i) => stop(order[i]!));
   const byName = new Map(order.map((n, i) => [n, started[i]!] as const));
   const each = late.map((n) => byName.get(n)!);
   for (const p of each) p.catch(() => undefined); // a pose that fails or is skipped is the caller's to handle; never an unhandled rejection
-  const all = await raceCeiling(Promise.all(each), ceilingMs).catch(() => null);
+  const all = held ? null : await raceCeiling(Promise.all(each), ceilingMs).catch(() => null);
   if (all) {
     const got = new Map<string, T>([...early.map((n, i) => [n, earlyLoaded[i]!] as const), ...late.map((n, i) => [n, all[i]!] as const)]);
     return { names: [...names], loaded: names.map((n) => got.get(n)!), later: null };

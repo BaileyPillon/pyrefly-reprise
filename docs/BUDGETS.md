@@ -12,6 +12,7 @@ Authority: Bailey, 2026-10-28 ~13:00 EDT, "please work on the pose continuity fi
 - **The jobs are written and tested without a browser** (`node --check`, 39 checks on the pure parts and on `judge.mjs`, `--dry` on each): 4 jobs, 16 queue entries, about 54 minutes of browser, on two named profiles (a 50 Mbit/s desktop and a 10 Mbit/s phone) plus two controls. 22 predictions are written below, before any measurement. Section 5.
 - **KTX2 is not justified by anything measured today, and the reason is structural, not a matter of numbers:** the look, the matte, the silhouette and the breathing rig read decoded pixels, which a compressed texture cannot give them. Three measurable triggers would change that (section 6); the earliest moment to look is after the jobs have run.
 - **Owed, not done (code, outside this lane):** an accessor for the painting cache in `__pyrefly.art.stats()`, and a decode-cache cap that follows the device class (section 7).
+- **Update 2026-10-29 (lane `budgets-2`, `docs/handoff/budgets-2.md`):** the jobs ran (section 8): seven rows FAIL on live release 67 (B2a x2, B3a x2, B5a x2, B5d). The accessor is built (`art.stats().memory`, `.hold`, `.gl`), the painting cache is let go of per fight (`?memrelease=off`), and the phone's loads are ordered foreground first (`?phonediet=off`); neither is measured yet.
 
 ## 1. The budgets
 
@@ -147,7 +148,39 @@ ChatGPT's point 4 is GPU-compressed textures (KTX2 with Basis, a WASM transcoder
 
 ## 8. Results
 
-*Not run.* After the queue: `node judge.mjs`, then a table here, one row per budget and profile, with the label of the run and the build that was live, in the shape of section 1. A MISS in section 5 is written up before any further run.
+*Run twice, on the live release 67 and on release 68's candidate; the budgets-2 build has not been measured (section 8.3).*
+
+### 8.1 The measuring lane on live release 67 (2026-10-29 ~04:00 to 05:50 EDT, `.../2026-10-28/r68/measure-ui-budgets/RESULTS.md`, the judge's own verdicts)
+
+| budget | desk50 | phone10 |
+|---|---|---|
+| B1a cold load to an answering title (5 s / 5 s) | 979 ms PASS | 3,441 ms PASS |
+| B1b wire bytes to the title (4 MB) | 3.17 MB PASS | 2.67 MB PASS |
+| B1c Enter to the board, a returning player (1.5 s / 2 s) | 1,386 ms PASS | 1,833 ms PASS |
+| B2a load wait before the boss card (5 s / 8 s) | **10,577 ms FAIL** (a range: 7.0 and 10.6 s on two runs; 17 of 19 chapters over 5 s on the API route) | **49,005 ms FAIL** |
+| B2b retry load (2 s) | 1,544 ms PASS | 1,538 ms PASS |
+| B3a bytes to the first menu (100 MB / 50 MB) | **111.2 MB FAIL** | **88.3 MB FAIL** |
+| B4a to B4e frames after the opening | 59.66 fps, p99 16.8 ms, 0.08 percent, 1.6 and 0.4 a minute PASS | report only (58.6 fps, p99 33.3 ms) |
+| B5a memory growth over four changes (10 percent) | **+86.2 percent FAIL** | **+81.5 percent FAIL** |
+| B5b JS heap growth (30 MB) | 7.6 MB PASS | 7.7 MB PASS |
+| B5c tree peak (3,500 MB) | 3,383 MB PASS | |
+| B5d phone-tier page peak (1,000 MB) | | **2,352 MB FAIL** (a desktop GPU's accounting of a phone-sized page: UNVERIFIED for a real phone) |
+| B6a / B6b governor resident, decode cache | 18.3 MB PASS | 35 MB and 26 MB (an estimate) PASS |
+
+### 8.2 Release 68's focused review on the candidate `2a9340249` (`critic/reviews/2a9340249-focused/budgets/`, finding R68-B1)
+
+| | Chapter I (FFX) | Chapter IV (FFX-2) |
+|---|---|---|
+| phone10 load wait, candidate / live r67 | 19.8 s / 20.1 s | 42.4 s / 39.2 s |
+| desk50 load wait, candidate / live r67 | 5.9 s / 6.0 s | 4.4 s / 4.5 s |
+| phone10 wire MB to the menu, candidate | 93.6 | 94.0 |
+| desk50 A B A B A (renderer, battle 1 to 5) | +74.2 percent (live r67 +85.5); tree peak 3,225 MB (3,370); JS heap +6.8 MB (+7.7); DOM at the boards 1,238 to 1,910 and flat from the third (live r67: 1,584 more nodes and rising) | |
+
+The FFX-2 HUD leak is fixed; the load diet moved the phone's wait by nothing; the memory climbs about the same (+74 against +85 percent).
+
+### 8.3 Lane `budgets-2` (this branch; not measured)
+
+`docs/handoff/budgets-2.md`: the phone's foreground-first order and the leave-a-fight release, their 49 predictions (B2a-02: Chapter I phone 4.5 to 12 s, central 8; B2a-05: Chapter IV 8 to 22 s, a subtraction and not a measurement; B3a unchanged in bytes; B5a-02: renderer growth -5 to +25 percent, about one in five after the second review, and a miss with the books hit sends the next step to the in-fight peak), and the job set (`D:/Tools/pyrefly-scratch/2026-10-29/budgets-2/jobs/`, about 59 minutes of browser; the memory entry b2-5 first, its books read before its counters). The cut also moves the missing-art window into the fight: the line stays busy about 12 s (Chapter I) and 29 s (Chapter IV) after the first menu at the central predictions (rows B2a-12, B2a-13), a look call for Bailey. After the queue: `node judge-b2.mjs`, and this table gets a third block with the label of the run and the build.
 
 ## 9. Open questions for the driver
 

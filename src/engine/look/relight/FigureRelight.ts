@@ -12,6 +12,9 @@ import { artManifest } from '../../ArtManifest.ts';
 import { normalMapScaleFor } from '../../ArtManifestMaps.ts';
 import { lookState } from '../LookState.ts';
 import { MAX_POINT_LIGHTS, normalMapUrl } from './RelightConfig.ts';
+import { queued } from '../../LoadHold.ts'; // lane "budgets-2": on the phone class the maps start through a ranked queue, the poses a fight draws first first
+import { poseNeed } from '../../LoadDiet.ts';
+import { figureState } from '../../ArtTier.ts';
 
 type Cell<T> = { value: T };
 
@@ -55,6 +58,49 @@ const CAP_PINNED = 112;
 const capNow = (): number => (pinned.size > 0 ? CAP_PINNED : CAP_TODAY);
 /** Pinned maps, with how many figures hold each one: a map two live figures share is let go only when the last of them goes (review minor). */
 const pinned = new Map<string, number>();
+/**
+ * Release 68 (lane "budgets-2", both games): the fight each map was last asked for in, as `PaintedArtCache.beginPaintingEpoch` numbers them. {@link releaseRelightBefore} lets go of the maps
+ * a fight did not use once its figures are gone: the cache evicts one map per load, so two chapters' maps (68 of them for Chapters I and IV) stayed resident after every fight.
+ */
+const touched = new Map<string, number>();
+let epochNow = 0;
+/**
+ * The maps asked for through the phone's queue and not yet started: url to the function that starts THAT request now (review P3: a pose being drawn must not wait behind the rank order for its own map).
+ * The queue's own turn runs the same request only if it is still the one in this book, so a request starts once, whoever comes first, and a request that was released (or asked for again) never starts.
+ */
+const starts = new Map<string, () => void>();
+
+/** A fight begins (the same number the painting cache opened): maps asked for from here on belong to it. */
+export function beginRelightEpoch(n: number): void {
+  epochNow = n;
+}
+
+/** The decoded maps the cache holds, and how many are pinned by a figure on stage (the debug probe and the tests). */
+export function relightCacheStats(): { maps: number; textures: number; pinned: number; stamps: number } {
+  let textures = 0;
+  for (const v of cache.values()) if (v instanceof Texture) textures++;
+  return { maps: cache.size, textures, pinned: pinned.size, stamps: touched.size };
+}
+
+/**
+ * Dispose and forget every map that no figure pins and that was not asked for since fight `from` began. A map still loading is forgotten too; when it arrives it is disposed, not kept.
+ * Returns how many textures were freed.
+ */
+export function releaseRelightBefore(from: number): number {
+  let freed = 0;
+  for (const [url, entry] of [...cache]) {
+    if (pinned.has(url) || (touched.get(url) ?? 0) >= from) continue;
+    if (entry instanceof Texture) {
+      entry.dispose();
+      freed++;
+    }
+    cache.delete(url);
+    touched.delete(url);
+    waiters.delete(url);
+    starts.delete(url);
+  }
+  return freed;
+}
 let loader: TextureLoader | null = null;
 
 /** Counters for the debug API and the captures. */
@@ -66,41 +112,84 @@ function adopt(m: ShaderMaterial, url: string, tex: Texture | null): void {
   m.uniforms['relightOn']!.value = tex ? 1 : 0;
 }
 
-function fetchMap(url: string): void {
+/**
+ * Ask for a map. `rank` null: now (a pose being drawn needs its map). A rank: through the phone's ranked queue (`LoadHold.queued`; off the phone class that is "now" too), so the maps of the poses a fight
+ * draws first land first and not all forty together. A map released before its turn (a fight ended) is never asked for.
+ */
+function fetchMap(url: string, rank: number | null = null): void {
   cache.set(url, 'loading');
+  touched.set(url, epochNow);
   relightStats.requested++;
-  loader ??= new TextureLoader();
-  loader.load(
-    url,
-    (t) => {
-      t.colorSpace = NoColorSpace; // data, not colour
-      t.minFilter = LinearMipmapLinearFilter;
-      t.magFilter = LinearFilter;
-      t.generateMipmaps = true;
-      t.anisotropy = 4;
-      t.needsUpdate = true;
-      cache.set(url, t);
-      relightStats.loaded++;
-      for (const m of waiters.get(url) ?? []) adopt(m, url, t);
-      waiters.delete(url);
-      if (cache.size > capNow()) {
-        for (const [k, v] of cache) {
-          if (v instanceof Texture && !pinned.has(k)) {
-            v.dispose();
-            cache.delete(k);
-            break;
+  const go = (): Promise<void> => {
+    if (cache.get(url) !== 'loading') return Promise.resolve(); // released before its turn
+    loader ??= new TextureLoader();
+    return new Promise<void>((settle) => {
+      loader!.load(
+        url,
+        (t) => {
+          try {
+            if (cache.get(url) !== 'loading') {
+              t.dispose(); // released while it was on its way (a fight ended): nobody keeps it
+              return;
+            }
+            t.colorSpace = NoColorSpace; // data, not colour
+            t.minFilter = LinearMipmapLinearFilter;
+            t.magFilter = LinearFilter;
+            t.generateMipmaps = true;
+            t.anisotropy = 4;
+            t.needsUpdate = true;
+            cache.set(url, t);
+            relightStats.loaded++;
+            for (const m of waiters.get(url) ?? []) adopt(m, url, t);
+            waiters.delete(url);
+            if (cache.size > capNow()) {
+              for (const [k, v] of cache) {
+                if (v instanceof Texture && !pinned.has(k)) {
+                  v.dispose();
+                  cache.delete(k);
+                  touched.delete(k);
+                  break;
+                }
+              }
+            }
+          } finally {
+            settle();
           }
-        }
-      }
-    },
-    undefined,
-    () => {
-      cache.set(url, 'missing');
-      relightStats.missing++;
-      for (const m of waiters.get(url) ?? []) adopt(m, url, null);
-      waiters.delete(url);
-    },
-  );
+        },
+        undefined,
+        () => {
+          try {
+            if (cache.get(url) !== 'loading') return; // released while it was on its way
+            cache.set(url, 'missing');
+            relightStats.missing++;
+            for (const m of waiters.get(url) ?? []) adopt(m, url, null);
+            waiters.delete(url);
+          } finally {
+            settle();
+          }
+        },
+      );
+    });
+  };
+  const failed = (): void => {
+    // `loader.load` threw before it could answer: the map is missing, and a material waiting for it is left unlit
+    if (cache.get(url) !== 'loading') return;
+    cache.set(url, 'missing');
+    relightStats.missing++;
+    for (const m of waiters.get(url) ?? []) adopt(m, url, null);
+    waiters.delete(url);
+  };
+  if (rank === null) go().catch(failed);
+  else {
+    const turn = (): Promise<void> => {
+      if (starts.get(url) !== promote) return Promise.resolve(); // a pose being drawn started it ahead of its rank, or it was released, or it was asked for again by someone else
+      starts.delete(url);
+      return go();
+    };
+    const promote = (): void => void turn().catch(failed);
+    starts.set(url, promote);
+    queued(rank, turn).catch(failed);
+  }
 }
 
 /** The URL of the normal map a painting would be lit with, or null when the build ships none for it (the manifest names which maps exist). */
@@ -125,7 +214,8 @@ export function prefetchRelight(paintingUrl: string | undefined, scale: number |
     pinned.set(url, (pinned.get(url) ?? 0) + 1);
     held?.add(url);
   }
-  if (!cache.has(url)) fetchMap(url);
+  if (!cache.has(url)) fetchMap(url, 2 * poseNeed(figureState(paintingUrl ?? '') ?? 'idle') + 1);
+  else touched.set(url, epochNow);
   return url;
 }
 
@@ -165,6 +255,7 @@ export function bindRelight(material: ShaderMaterial, paintingUrl: string | unde
     return;
   }
   const hit = cache.get(url);
+  if (hit) touched.set(url, epochNow);
   if (hit instanceof Texture) {
     // refresh the entry's place in the cache (most recently used last)
     cache.delete(url);
@@ -177,5 +268,6 @@ export function bindRelight(material: ShaderMaterial, paintingUrl: string | unde
     if (!w) waiters.set(url, (w = new Set()));
     w.add(material);
     if (!hit) fetchMap(url);
+    else starts.get(url)?.(); // queued for later and not started: this pose is being drawn now, so its map goes ahead of the rank order (a map already on its way has no entry here)
   }
 }

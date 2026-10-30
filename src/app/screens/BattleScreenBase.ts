@@ -104,6 +104,14 @@ export abstract class BattleScreenBase extends Screen {
    * on afterwards: every await below checks this before touching anything.
    */
   protected exited = false;
+  /**
+   * Lane "budgets-2" (review R1 and R2): this screen's own fight number (`LeaveRelease.beginFight`), the number of the phone hold it shut (`LoadHold.activeHold`, 0 when it held nothing) and whether
+   * every figure was built. A screen that is overtaken by `App.replace` and finishes `enter()` later must only undo what it did itself: it releases its own hold, ends its own fight, and judges the
+   * caches only when its stage was built (a fight that never asked for its whole set cannot say what it did not use).
+   */
+  protected fightId = 0;
+  protected holdId = 0;
+  protected stageBuilt = false;
   /** False until the field's shaders are compiled: nothing draws it before (PR-0061). */
   protected fieldShown = false;
 

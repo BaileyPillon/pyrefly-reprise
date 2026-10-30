@@ -49,6 +49,13 @@ export const PAINTING_CACHE_MB = 900;
 
 const cache = new Map<string, Promise<PreparedPainting | null>>();
 const decodedMB = new Map<string, number>();
+/**
+ * Release 68 (lane "budgets-2", both games, shared loading plumbing): the fight each painting was last asked for in. {@link beginPaintingEpoch} opens a fight and every
+ * {@link cachedPainting} call (a make or a hit) stamps its key with it, so {@link dropPaintingsBefore} can let go of what a fight did not use: the paintings of the chapter before it,
+ * a card the board's cursor only rested on. Without it the cache (96 paintings) held the last two chapters after every fight.
+ */
+let epoch = 0;
+const touched = new Map<string, number>();
 
 function sizeMB(p: PreparedPainting): number {
   const s = p.source as { naturalWidth?: number; width?: number; height?: number; naturalHeight?: number };
@@ -65,6 +72,7 @@ function trim(keep: string): void {
     total -= decodedMB.get(key) ?? 0;
     cache.delete(key);
     decodedMB.delete(key);
+    touched.delete(key);
   }
 }
 
@@ -88,6 +96,7 @@ export function cachedPainting(
   refresh = false,
 ): Promise<PreparedPainting | null> {
   const held = refresh ? undefined : cache.get(key);
+  touched.set(key, epoch);
   if (held) {
     // Most recently used moves to the back of the eviction queue.
     cache.delete(key);
@@ -96,7 +105,10 @@ export function cachedPainting(
   }
   const made = make().then(
     (p) => {
-      if (!p && cache.get(key) === made) cache.delete(key);
+      if (!p && cache.get(key) === made) {
+        cache.delete(key);
+        touched.delete(key);
+      }
       if (p && cache.get(key) === made) {
         decodedMB.set(key, sizeMB(p));
         trim(key);
@@ -104,13 +116,39 @@ export function cachedPainting(
       return p;
     },
     () => {
-      if (cache.get(key) === made) cache.delete(key);
+      if (cache.get(key) === made) {
+        cache.delete(key);
+        touched.delete(key);
+      }
       return null;
     },
   );
   cache.set(key, made);
   trim(key);
   return made;
+}
+
+/** A fight begins: paintings asked for from here on belong to it. Returns the fight's number. */
+export function beginPaintingEpoch(): number {
+  return ++epoch;
+}
+
+/**
+ * Let go of every painting that was not asked for since fight `from` began (its own paintings stay: a retry, or the same chapter picked again, finds them warm). A painting still being
+ * made is dropped from the book too; its answer goes to whoever asked and is not kept. Returns how many were dropped and how many decoded megabytes they held.
+ */
+export function dropPaintingsBefore(from: number): { dropped: number; mb: number } {
+  let dropped = 0;
+  let mb = 0;
+  for (const key of [...cache.keys()]) {
+    if ((touched.get(key) ?? 0) >= from) continue;
+    mb += decodedMB.get(key) ?? 0;
+    cache.delete(key);
+    decodedMB.delete(key);
+    touched.delete(key);
+    dropped++;
+  }
+  return { dropped, mb };
 }
 
 /** Every painting the cache holds, once it has loaded (a miss is skipped): for work that wants the decoded pictures ahead of the fight (`app/demo/demoWarm.ts`). */
@@ -137,6 +175,12 @@ export function paintingCacheSize(): number {
 export function clearPaintingCache(): void {
   cache.clear();
   decodedMB.clear();
+  touched.clear();
+}
+
+/** How many paintings the fight books remember (the stamps): never more than the cache holds, or a string leaks per painting (the debug probe and the tests). */
+export function paintingCacheStamps(): number {
+  return touched.size;
 }
 
 /** The decoded megabytes the cache holds (for the debug probe and the tests). */

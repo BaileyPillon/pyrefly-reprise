@@ -45,6 +45,7 @@ import { manifestKnowsAsset, pause2xUrlFor } from '../../engine/ArtManifest.ts';
 import { artUrl, prewarmPainted } from '../../engine/PaintedArt.ts';
 import { figureState, pixelUrlFor } from '../../engine/ArtTier.ts';
 import { loadDiet, orderByNeed, poseNeed } from '../../engine/LoadDiet.ts';
+import { whenBackgroundOpen } from '../../engine/LoadHold.ts'; // lane "budgets-2": on the phone class the other poses wait while the battle's entry loads
 import { prefetchPose, releaseAllPrefetch, releasePrefetch } from './preloadFetch.ts';
 import { artNamespaceOfScene, backdropFileOf, inArtNamespace } from '../../data/art/artNamespace.ts';
 import { pickHeroBackgroundUrl } from '../../ui/common/chapterPanel.ts';
@@ -283,6 +284,7 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
       }
     };
     for (const url of order) {
+      await whenBackgroundOpen(); // the battle is entering on a phone: its own loads have the line until every figure is built (`LoadHold.ts`); a no-op everywhere else
       ahead();
       if (stopped()) return report();
       if (await prewarmPainted(url, STAGE_MATTE, STAGE_FIT)) paintings++;
@@ -292,6 +294,8 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
     }
 
     // Phase 5: the party's pause close-ups (first Esc, then tab-next).
+    await whenBackgroundOpen();
+    if (stopped()) return report();
     await warm(party.map((c) => pausePlateUrl(c.id, chapter.game, ns)));
   } catch (e) {
     console.warn(`[preload] ${chapter.id}: stopped early`, e);

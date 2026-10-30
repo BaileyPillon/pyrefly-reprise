@@ -10,6 +10,8 @@
 import { lifeStateForPose, nextLifeState, resolvePoseName } from './BattlePresenterActors.ts';
 import { loadPainted, type PaintedTexture } from './PaintedArt.ts';
 import { loadStreamed } from './PoseStream.ts'; // load diet: the opening poses are waited for, the rest streams
+import { deferWhileHeld } from './LoadHold.ts'; // lane "budgets-2": on the phone class the lighting maps start once every figure is built, not while the entry loads, and through a ranked queue
+import { orderByNeed, poseNeed } from './LoadDiet.ts';
 import { WITHHELD_FALLBACKS } from './PoseTrust.ts';
 import { newMotionOn } from './motion/NewMotionGate.ts';
 import { SmearDirector } from './motion/SmearDirector.ts'; // motion pass (lane "core", step 2): big pose changes cut inside a smear; idle unless `?smear=`/`?pack=demo` in a demo chapter (`motion/SmearSwitch.ts`)
@@ -157,9 +159,11 @@ export abstract class PaintedActorPoses extends PaintedActorLife {
    * Motion pass, step 2 (MAP fact 11): fetch and PIN the normal map of every pose this figure can draw as soon as its paintings are staged, so no pose is drawn unlit at first use (a pose
    * is unlit until its map arrives, and the cache used to let a staged figure's map go). Nothing happens unless the HD-2D look is armed; the pins are let go in {@link dispose}.
    */
-  private prefetchLights(): void {
+  private prefetchLights(deferred = false): void {
     if (!this.showFigure || !newMotionOn()) return; // a rig's carrier plane is never drawn: its parts bring their own pieces; with every new piece off (the default, and any chapter but I and IV) nothing is fetched early
-    for (const p of this.poses.values()) prefetchRelight(p.url, p.scale, p.placeholder, this.lightPins);
+    if (deferWhileHeld(this, () => this.prefetchLights(true), () => !this.streamDead)) return; // phone class, entry loading: the maps wait for the figures (`LoadHold.ts`)
+    const list = deferred ? orderByNeed([...this.poses], ([n]) => poseNeed(n)) : [...this.poses]; // after a hold: the poses a fight draws first first
+    for (const [, p] of list) prefetchRelight(p.url, p.scale, p.placeholder, this.lightPins);
   }
 
   /** Re-load one pose from disk; used by the dev hot-swap watcher. */
