@@ -189,8 +189,8 @@ export interface Settings extends FxLookSettings, FxPartSettings {
    */
   chapterSelectMusic: ChapterSelectMusic;
   /**
-   * Release 61 (the conference demo; Bailey, 2026-10-21): the OPTIONS row VISUAL STYLE. `'hd2d'` (the default) is release 60's bold HD-2D look in Chapter I (FFX) and Chapter IV
-   * (FFX-2); `'classic'` is no look anywhere, like `?look=off`. A `?look=` key in the address still wins. Absent before release 61: reads `'hd2d'` (`saveVisualStyle.ts`).
+   * Release 61 (the conference demo; Bailey, 2026-10-21): the OPTIONS row VISUAL STYLE. `'hd2d'` (the default) is release 60's bold HD-2D look in Chapter I (FFX), Chapter IV
+   * (FFX-2) and, since release 69, Chapter VI (FFX-2); `'classic'` is no look anywhere, like `?look=off`. A `?look=` key in the address still wins. Absent before release 61: reads `'hd2d'` (`saveVisualStyle.ts`).
    */
   visualStyle: VisualStyle;
 }

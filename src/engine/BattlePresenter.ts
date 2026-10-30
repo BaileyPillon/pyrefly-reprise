@@ -26,6 +26,7 @@ import type { BattleOutcome } from './BattlePresenterPorts.ts';
 import { INPUT_STREAK_LIMIT, LIVELOCK_SPINS, outcomeOf } from './BattlePresenterUtil.ts';
 import { headlineEnemy } from '../battle/common/headlineEnemy.ts';
 import { BattlePresenterCommands } from './BattlePresenterCommands.ts';
+import { stageLinkBegins } from './BattlePresenterStaging.ts'; // lane "pro-staging": a later link of a chain starts with a clear layer (release 69 `booth-leblanc`)
 
 // Re-exported: the loop's public types live with the ports (`BattlePresenterPorts.ts`).
 export type { AutoStrategy, BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
@@ -39,6 +40,7 @@ export class BattlePresenter extends BattlePresenterCommands {
    */
   async run(engine: BattleEngine, link: { headline?: string; bossId?: string; moreLinks?: boolean } = {}): Promise<BattleOutcome> {
     this.ctx.moreLinks = link.moreLinks === true; // the chain says whether another formation follows (`BattleEncounterChain`)
+    stageLinkBegins(this.ctx); // pro staging: the second link on starts with a clear layer, so a seam's marks (title, HUD-out) never reach the next formation
     // Ground the mid-burst row projection before a single event is played. The
     // first burst of a fight (and of every later link of a chain, which re-runs
     // on a fresh engine) happens before any `syncHud` in the loop below.

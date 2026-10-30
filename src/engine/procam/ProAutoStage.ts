@@ -5,7 +5,7 @@
  * eye position `focus + fitM * direction(azimuth, elevation)`, the azimuth counted from the stage's home azimuth (the direction of the resting rig's eye from the group's focus) and held inside the real 35 degree
  * corridor of the plate's front. The follower (`ProFollower`) only ever uses a candidate as the OFFSET `eye - focus` from the live centroid, so a second stage needs exactly two numbers of its own: the focus the
  * group stands round and the home azimuth. {@link retargetAutoCamera} rebuilds the four candidates from the same `azDeg`, `elDeg` and `fitM` the lane decoded, about the new stage's focus and home azimuth, so each
- * candidate keeps its angle from that plate's own front (Bevelle's reproduce to the lane's three decimals: `tests/unit/booth-auto-stage.test.ts`).
+ * candidate keeps its angle from that plate's own front (Bevelle's reproduce to the lane's three decimals: `tests/unit/booth-leblanc-rows.test.ts`).
  *
  * What is OURS and not the lane's: the ranking and `fitM` were scored by the real game for the Bevelle group (three girls and a six-unit dragon); a narrower group stands nearer than 12 m in the real fit, so
  * the candidates here sit a little farther than the real score would put them. The follower blends them with the resting rig by {@link ProFollower.FOLLOW_BLEND} and never crops anyone (`ProFit`), so

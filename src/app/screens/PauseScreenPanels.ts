@@ -79,7 +79,7 @@ export function optionRows(settings: Readonly<Settings>, game: GameId = 'ffx'): 
       ratio: (settings.textSpeed - TEXT_SPEED_MIN) / (TEXT_SPEED_MAX - TEXT_SPEED_MIN),
     },
     { id: 'eyeCandy', label: 'EYE CANDY', value: fxSummary(settings, game), ratio: null },
-    // Release 61 (Bailey, 2026-10-21, the conference demo; both games): HD-2D (release 60's bold look in Chapter I and Chapter IV) or CLASSIC (no look). Read when a chapter starts.
+    // Release 61 (Bailey, 2026-10-21, the conference demo; both games): HD-2D (release 60's bold look in Chapters I, IV and VI) or CLASSIC (no look). Read when a chapter starts.
     { id: 'visualStyle', label: 'VISUAL STYLE', value: VISUAL_STYLE_LABELS[visualStyleOf(settings.visualStyle)], ratio: null },
     { id: 'ffx2Atb', label: 'X-2 BATTLE', value: settings.ffx2Atb === 'wait' ? 'WAIT' : 'ACTIVE', ratio: null },
     { id: 'guideVisible', label: 'STRATEGY GUIDE', value: settings.guideVisible ? 'ON' : 'OFF', ratio: null },

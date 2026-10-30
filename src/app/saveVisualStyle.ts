@@ -4,8 +4,8 @@
  * His pick, verbatim: "Yes, an Options toggle (Recommended)" for OPTIONS getting VISUAL STYLE: HD-2D / Classic, the default HD-2D in the
  * chapters that have it (review PR-0493).
  *
- * - `'hd2d'` (the default) is release 60's behaviour: the bold HD-2D look (`engine/look/LookConfig.ts`, `CHAPTER_LOOKS`) is on in the two chapters
- *   authored for it, Chapter I (`seymour-flux`, FFX) and Chapter IV (`ffx2-bahamut`, FFX-2), and every other chapter draws as it always did.
+ * - `'hd2d'` (the default) is release 60's behaviour: the bold HD-2D look (`engine/look/LookConfig.ts`, `CHAPTER_LOOKS`) is on in the chapters
+ *   authored for it, Chapter I (`seymour-flux`, FFX), Chapter IV (`ffx2-bahamut`, FFX-2) and, since release 69, Chapter VI (`ffx2-leblanc`, FFX-2: `CHAPTER_LOOKS`), and every other chapter draws as it always did.
  * - `'classic'` is no look anywhere: every chapter draws the frame it drew before release 60, the same as the address switch `?look=off`.
  *
  * The address wins. A `?look=...` key in the address (any value, `off` included) is the address's word for the whole page and this setting is
@@ -28,7 +28,7 @@ import type { Settings } from './SaveData.ts';
 export const VISUAL_STYLES = ['hd2d', 'classic'] as const;
 export type VisualStyle = (typeof VISUAL_STYLES)[number];
 
-/** What a save without the field, and every invalid value, reads as: release 60's look, on by default in the two chapters that have one. */
+/** What a save without the field, and every invalid value, reads as: release 60's look, on by default in the chapters that have one (Chapters I, IV and VI). */
 export const DEFAULT_VISUAL_STYLE: VisualStyle = 'hd2d';
 
 /** What the OPTIONS row reads. */

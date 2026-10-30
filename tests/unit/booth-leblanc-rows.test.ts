@@ -60,13 +60,14 @@ describe("the HD-2D look and her room's rows", () => {
     expect(fog[2]).toBeGreaterThan(fog[1]);
   });
 
-  it('the bold facts: three portholes for embers inside the frame, a modest gloss, the heart\'s rose for the rim; an unlisted room still gets none', () => {
+  it('the bold facts: no embers (the source: "no particles" in this room), a modest gloss, the rose of the heart for the rim; an unlisted room still gets none', () => {
     const b = ROOM_BOLD[ROOM]!;
-    expect(b.embers).toHaveLength(3);
-    for (const [u, v] of b.embers) {
+    expect(b.embers).toEqual([]); // `research/ffx-vs-ffx2-presentation.md` section 8.1: "indoor, pink, heart-motifed, no particles ... resist atmosphere"; the review's m1 (the booth pair's Bevelle carries embers, this room's source says none)
+    // the three porthole points the embers would use if Bailey says yes (the one-line comment in LookBoldConfig) are still on the wall lamps, inside the frame
+    for (const [u, v] of [[0.039, 0.404], [0.066, 0.423], [0.943, 0.434]] as const) {
       expect(u).toBeGreaterThanOrEqual(0);
       expect(u).toBeLessThanOrEqual(1);
-      expect(v).toBeGreaterThan(0.3); // the wall lamps, not the floor and not the ceiling
+      expect(v).toBeGreaterThan(0.3);
       expect(v).toBeLessThan(0.5);
     }
     expect(b.gloss).toBeGreaterThan(0);

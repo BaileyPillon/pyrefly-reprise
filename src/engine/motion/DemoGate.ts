@@ -83,9 +83,10 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
 export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<TreatedPiece, string>>>>> = Object.freeze({
   'ffx2-leblanc': Object.freeze({
     breath:
-      'FFX-2, Chapter VI: the held breath is the drain-and-flood built for Mega Flare (and, in FFX, Total Annihilation), a solemn beat; the only sourced move of the trio that could carry one is Logos\'s Russian Roulette ' +
-      '(research/ffx2-leblanc-syndicate.md section 5), a status gag in a farce, and no move of this chapter is named in `StagingPort.BigMove`, so nothing here would play it today. Lifts when Bailey or the driver picks a headline ' +
-      'move and a tone for it from a mockup (hard rule 9) and the breath plan is given a row for it.',
+      'FFX-2, Chapter VI: the held breath is the drain-and-flood built for Mega Flare (and, in FFX, Total Annihilation), a solemn beat. Her sourced showpiece is No Love Lost (research/ffx2-leblanc-syndicate.md section 4.5: ' +
+      'three timed stages, eight shots, the party knocked down, a finisher; "the perfect thing for a presentation layer to build around"), a three-beat comedy combo whose tone, sound and shot are a mockup decision ' +
+      '(hard rule 9), and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays the breath today. Lifts when Bailey or the driver picks a tone and a shot for No Love Lost from a mockup and the breath ' +
+      'plan (and, for the sound pass, `passRecipes.HEADLINE_BLOWS`, which hit) is given a row for its ids `x2-nll-1` to `x2-nll-3`.',
   }),
 });
 

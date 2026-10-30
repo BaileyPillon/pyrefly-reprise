@@ -97,9 +97,10 @@ describe('the holds', () => {
     }
   });
 
-  it("Leblanc holds the staged breath only: no sourced headline blow for a comic trio (the one hold of this release); every other piece plays", () => {
+  it("Leblanc holds the staged breath only: her sourced showpiece is No Love Lost, a three-beat comedy combo whose tone is a mockup decision (the one hold of this release); every other piece plays", () => {
     expect(Object.keys(PIECE_HOLDS['ffx2-leblanc']!)).toEqual(['breath']);
-    expect(treatedHold('ffx2-leblanc', 'breath')).toMatch(/Russian Roulette/);
+    expect(treatedHold('ffx2-leblanc', 'breath')).toMatch(/No Love Lost/);
+    expect(treatedHold('ffx2-leblanc', 'breath')).not.toMatch(/no sourced/i); // the review's M1: the research names the combo (section 4.5), so "nothing sourced" is false
     for (const p of TREATED_PIECES) if (p !== 'breath') expect(treatedHold('ffx2-leblanc', p), p).toBeUndefined();
     expect(treatedHold('seymour-flux', 'breath')).toBeUndefined();
     expect(treatedHold(undefined, 'hud')).toBeUndefined();
