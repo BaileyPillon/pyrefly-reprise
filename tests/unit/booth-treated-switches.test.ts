@@ -10,21 +10,21 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { Object3D } from 'three';
 import { CHAPTER_IDS } from '../../src/data/encounters.ts';
-import { setDemoChapter, setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
-import { hudF1Game, hudF1On, setHudF1Mode } from '../../src/ui/hudf1/HudF1Switch.ts';
-import { proArenaFor, proGame, proLookOn, proPieceOn, setProMode, setProPiece } from '../../src/engine/look/pro/ProSwitch.ts';
-import { partyRimOff, setPartyRim } from '../../src/engine/look/pro/PartyRimSwitch.ts';
-import { bossCleanCard, bossCleanOn, setBossClean } from '../../src/engine/look/pro/BossClean.ts';
+import { setDemoChapter, setPackScreen, setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
+import { hudF1Game, hudF1ModeFromSearch, hudF1On, setHudF1Mode } from '../../src/ui/hudf1/HudF1Switch.ts';
+import { proArenaFor, proGame, proLookOn, proModeFromSearch, proPieceOn, setProMode, setProPiece } from '../../src/engine/look/pro/ProSwitch.ts';
+import { partyRimFromSearch, partyRimOff, setPartyRim } from '../../src/engine/look/pro/PartyRimSwitch.ts';
+import { bossCleanCard, bossCleanFromSearch, bossCleanOn, setBossClean } from '../../src/engine/look/pro/BossClean.ts';
 import { rimSkipOf, tagRimFigure } from '../../src/engine/look/pro/RimFigures.ts';
-import { curvesGame, curvesOn, inDemoChapter, realKind, setCurvesMode } from '../../src/engine/motion/CurvesSwitch.ts';
-import { momentsOn, setMomentsMode } from '../../src/engine/motion/MomentsSwitch.ts';
-import { smearOn, smearStyleNow, setSmearStyle } from '../../src/engine/motion/SmearSwitch.ts';
+import { curvesGame, curvesModeFromSearch, curvesOn, inDemoChapter, realKind, setCurvesMode } from '../../src/engine/motion/CurvesSwitch.ts';
+import { momentsModeFromSearch, momentsOn, setMomentsMode } from '../../src/engine/motion/MomentsSwitch.ts';
+import { smearOn, smearStyleFromSearch, smearStyleNow, setSmearStyle } from '../../src/engine/motion/SmearSwitch.ts';
 import { newMotionOn } from '../../src/engine/motion/NewMotionGate.ts';
 import { proCamGame, proCamOn, proDofOn, resetProCamForTests, setProCam } from '../../src/engine/procam/ProCamSwitch.ts';
-import { setStagingMode, stagingGame, stagingOn, stagingPieceOn, stagingPieceOnFor, type StagingPiece } from '../../src/engine/pro/staging/StagingSwitch.ts';
-import { fxGame, fxNewOn, inFxDemoChapter, setFxMode } from '../../src/engine/spellfx/FxSwitch.ts';
+import { setStagingMode, stagingGame, stagingModeFromSearch, stagingOn, stagingPieceOn, stagingPieceOnFor, type StagingPiece } from '../../src/engine/pro/staging/StagingSwitch.ts';
+import { fxGame, fxModeFromSearch, fxNewOn, inFxDemoChapter, setFxMode } from '../../src/engine/spellfx/FxSwitch.ts';
 import { inFeelChapter, motionSfxOn, punchMode, resetFeelForTests, rumbleOn, setFeelChapter, shadowFollows, stopMode } from '../../src/engine/feel/FeelSwitch.ts';
-import { audioNewOn, passGame, setAudioNew, setPassChapter } from '../../src/audio/pass/passSwitch.ts';
+import { audioNewOn, passConfiguredBy, passGame, setAudioNew, setPassChapter } from '../../src/audio/pass/passSwitch.ts';
 import { DemoGovernor } from '../../src/engine/governor/DemoGovernor.ts';
 import { chapterLook } from '../../src/engine/look/LookConfig.ts';
 
@@ -54,6 +54,7 @@ function allOn(): void {
 
 afterEach(() => {
   setTreatedScope(null);
+  setPackScreen(null);
   setDemoChapter(undefined);
   setHudF1Mode(null);
   setProMode(null);
@@ -187,5 +188,65 @@ describe('the boss re-cut and the rim, in Leblanc', () => {
         expect(rimSkipOf(o), `${scope} ${chapter} ${id}`).toBe(false);
       }
     }
+  });
+});
+
+describe("the lane-off words, ?pack=off and a phone still give release 62's frame in Leblanc (the same readers as the booth pair; no per-chapter word)", () => {
+  /** Force every switch the way the page would read it from this address (the screen class is the page's, set by the caller). */
+  function readFrom(search: string): void {
+    setHudF1Mode(hudF1ModeFromSearch(search));
+    setProMode(proModeFromSearch(search));
+    setPartyRim(partyRimFromSearch(search));
+    setBossClean(bossCleanFromSearch(search));
+    setCurvesMode(curvesModeFromSearch(search));
+    setMomentsMode(momentsModeFromSearch(search));
+    setSmearStyle(smearStyleFromSearch(search));
+    resetProCamForTests(search);
+    setStagingMode(stagingModeFromSearch(search));
+    setFxMode(fxModeFromSearch(search));
+    resetFeelForTests(search);
+    setAudioNew(passConfiguredBy(search));
+  }
+  const readAll = (id: string): boolean[] => {
+    setDemoChapter(id);
+    setPassChapter(id);
+    setFeelChapter(id);
+    return [hudF1On(), proLookOn(), partyRimOff(), bossCleanOn(), curvesOn(), momentsOn(), smearOn(), proCamOn(), stagingOn(), fxNewOn(), audioNewOn(), inFeelChapter() && punchMode() === 'new'];
+  };
+
+  it('on a desktop with no word the whole treatment plays in Leblanc under all, as it does in the booth pair', () => {
+    setTreatedScope('all');
+    setPackScreen('desk');
+    readFrom('');
+    for (const id of [...BOOTH, 'ffx2-leblanc']) expect(readAll(id), id).toEqual(new Array(12).fill(true));
+  });
+
+  it('?pack=off puts every piece back, in Leblanc and in the booth pair alike (the HD-2D look, which no pack word ever gated, follows ?look=off and OPTIONS > VISUAL STYLE)', () => {
+    setTreatedScope('all');
+    setPackScreen('desk');
+    readFrom('?pack=off');
+    for (const id of [...BOOTH, 'ffx2-leblanc']) expect(readAll(id), id).toEqual(new Array(12).fill(false));
+  });
+
+  it('a phone or a tablet (the page opened narrow or touch-first) has no pack by default, so Leblanc plays release 62\'s frame there too', () => {
+    setTreatedScope('all');
+    setPackScreen('phone');
+    readFrom('');
+    for (const id of [...BOOTH, 'ffx2-leblanc']) expect(readAll(id), id).toEqual(new Array(12).fill(false));
+    readFrom('?pack=demo'); // the booth address forces it on anywhere
+    for (const id of [...BOOTH, 'ffx2-leblanc']) expect(readAll(id), id).toEqual(new Array(12).fill(true));
+  });
+
+  it('?pro=off takes the three pro lanes (look, camera, staging) back and leaves the HUD, the motion, the effects and the sound as they were; ?treated=pack takes Leblanc back whole', () => {
+    setTreatedScope('all');
+    setPackScreen('desk');
+    readFrom('?pro=off');
+    const [hud, look, rim, boss, curves, moments, smear, cam, staging, fx, audio] = readAll('ffx2-leblanc');
+    expect([look, cam, staging]).toEqual([false, false, false]);
+    expect([hud, rim, boss, curves, moments, smear, fx, audio]).toEqual(new Array(8).fill(true));
+    readFrom('');
+    setTreatedScope('pack');
+    expect(readAll('ffx2-leblanc')).toEqual(new Array(12).fill(false));
+    expect(readAll('ffx2-bahamut')).toEqual(new Array(12).fill(true));
   });
 });

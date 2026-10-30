@@ -25,7 +25,7 @@ import { setPassVictoryCue } from '../audio/pass/passResults.ts';
 export function sfxChapter(id: ChapterId, release: () => void): () => void {
   const game = getChapter(id)?.game ?? null;
   setSfxGame(game);
-  setPassChapter(id); // Chapter I and Chapter IV only act on it (`audio/pass/passSwitch.ts`); the master makeup follows the run
+  setPassChapter(id); // only a chapter the treatment reaches acts on it (`audio/pass/passSwitch.ts`, `DemoGate.TREATED_CHAPTERS`); the master makeup follows the run
   audio.setPassMakeup(audioNewOn() ? MAKEUP_DB : 0);
   setPassVictoryCue(game === 'ffx' ? (getChapter(id)?.music.victory ?? null) : null); // FFX: the pass starts this cue at the last blow in place of the sting (`audio/pass/passResults.ts`)
   if (game === 'ffx' || game === 'ffx2') audio.loadParityPacks(game, id);
