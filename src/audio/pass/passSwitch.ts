@@ -17,7 +17,7 @@
  * Pure: no DOM but the address, no Web Audio. Game case: both games (shared plumbing); every number in the pass tables names the game it is for (AGENTS.md rule 14).
  */
 
-import { DEMO_CHAPTERS, demoGameOf, isDemoChapter, packDemo, queryWord } from '../../engine/motion/DemoGate.ts';
+import { DEMO_CHAPTERS, demoGameOf, isTreatedChapter, packDemo, queryWord } from '../../engine/motion/DemoGate.ts';
 
 export type PassMode = 'new' | 'today';
 
@@ -69,7 +69,7 @@ export function audioNewConfigured(): boolean {
 
 /** True while a chapter run of Chapter I or Chapter IV is on and the pass is asked for: the one question every piece of the pass asks. */
 export function audioNewOn(): boolean {
-  return isDemoChapter(runChapter) && audioNewConfigured();
+  return isTreatedChapter(runChapter, 'audio') && audioNewConfigured();
 }
 
 /** The running demo chapter's game, or null when the pass is off (rule 14: the tables are read per game). */
@@ -85,5 +85,5 @@ export function audioNewBooth(demoModeOn: boolean): boolean {
   return demoModeOn && audioNewConfigured();
 }
 
-/** The two demo chapters, for the tables that need to list them. */
+/** The two BOOTH chapters, for the tables that need to list them (the chapters the pass reaches are `TREATED_CHAPTERS` in `DemoGate.ts`). */
 export const PASS_CHAPTERS: readonly string[] = Object.keys(DEMO_CHAPTERS);

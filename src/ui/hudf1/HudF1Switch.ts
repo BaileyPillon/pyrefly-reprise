@@ -18,7 +18,7 @@
  *
  * Pure: no `three`, no DOM but the address of the page (hard rule 1).
  */
-import { demoChapter, demoGameOf, isDemoChapter, packDemo, queryWord } from '../../engine/motion/DemoGate.ts';
+import { demoChapter, demoGameOf, isTreatedChapter, packDemo, queryWord } from '../../engine/motion/DemoGate.ts';
 
 export type HudF1Mode = 'f1' | 'today';
 
@@ -93,13 +93,13 @@ export function hudF1TextSizeOk(): boolean {
 
 /** True when the F1 HUD plays now: switched on, in a demo chapter, at TEXT SIZE 100. */
 export function hudF1On(): boolean {
-  return hudF1Mode() === 'f1' && isDemoChapter(demoChapter()) && hudF1TextSizeOk();
+  return hudF1Mode() === 'f1' && isTreatedChapter(demoChapter(), 'hud') && hudF1TextSizeOk();
 }
 
 /** The game of the running demo chapter, or undefined outside the demo chapters. */
 export function hudF1Game(): 'ffx' | 'ffx2' | undefined {
   const c = demoChapter();
-  return isDemoChapter(c) ? demoGameOf(c) : undefined;
+  return isTreatedChapter(c, 'hud') ? demoGameOf(c) : undefined;
 }
 
 /** The F1 damage numeral's size against the glass numeral's (`proNumbers.sizeFactor`; `hudf1-numbers.css`: Cormorant's figures are shorter than Exo 2's at one font-size, and the mockup draws it at 230 px). [ours] */

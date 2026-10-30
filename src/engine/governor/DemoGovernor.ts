@@ -10,7 +10,7 @@
  * quarter-percentile, snapped to the common refresh intervals (8.33, 11.11, 13.33, 16.67 ms), becomes the budget, so a 60 Hz screen is not trimmed for missing 120 Hz.
  */
 import { eyeCandy } from '../fx/EyeCandy.ts';
-import { demoChapter, isDemoChapter, queryWord } from '../motion/DemoGate.ts';
+import { demoChapter, isTreatedChapter, queryWord } from '../motion/DemoGate.ts';
 import { FrameBudgetGovernor, type GovernorPlan } from './FrameBudget.ts';
 import { govLive, resetGovLive } from './GovernorLive.ts';
 
@@ -77,7 +77,7 @@ export class DemoGovernor {
   gate(lanesOn: boolean): boolean {
     if (this.mode === 'off' || this.disabled) return false;
     if (this.mode === 'on') return true;
-    return lanesOn && isDemoChapter(demoChapter());
+    return lanesOn && isTreatedChapter(demoChapter(), 'governor');
   }
 
   /** One frame of a battle. `scene` names the scene being drawn (a new one is a hold); `lanesOn` is whether the pro look or the pro camera is on. */

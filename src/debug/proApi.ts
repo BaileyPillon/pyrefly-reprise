@@ -5,6 +5,7 @@
  * on). The pro look plays only in the demo chapters (Chapter I `seymour-flux`, Chapter IV `ffx2-bahamut`): `proOn()` is the answer for the running chapter. `proPiece(piece, on?)` reads or sets one
  * piece (arena, seam, hits, numbers, markers) and answers whether it plays now.
  */
+import { PIECE_HOLDS, TREATED_CHAPTERS, demoChapter, isTreatedChapter, setTreatedScope, treatedScope, type TreatedScope } from '../engine/motion/DemoGate.ts';
 import { proTune } from '../engine/look/pro/ProGrade.ts';
 import { bossCleanMode, bossCleanOn, setBossClean, type BossCleanMode } from '../engine/look/pro/BossClean.ts';
 import { partyRimMode, partyRimOff, setPartyRim, type PartyRimMode } from '../engine/look/pro/PartyRimSwitch.ts';
@@ -41,6 +42,11 @@ export function installProDebug(api: Record<string, unknown>): void {
     return partyRimMode();
   };
   api['partyRimOff'] = (): boolean => partyRimOff();
+  /** Release 69 (`booth-leblanc`): `treated()` reads which chapters the treatment reaches (`scope`: `all` = the list, `pack` = release 68's booth pair; `?treated=pack` does the same from the address), the list, each chapter's held pieces and whether the running chapter is reached; `treated('all' | 'pack' | null)` sets the scope for what starts from now on (a fight reads it as it sets up) and `null` reads the address again. */
+  api['treated'] = (scope?: TreatedScope | null) => {
+    if (scope === 'all' || scope === 'pack' || scope === null) setTreatedScope(scope);
+    return { scope: treatedScope(), chapters: Object.keys(TREATED_CHAPTERS), holds: Object.fromEntries(Object.entries(PIECE_HOLDS).map(([k, v]) => [k, Object.keys(v)])), running: demoChapter() ?? null, reaches: isTreatedChapter(demoChapter()) };
+  };
   /** Live tuning of one room's table for captures: `proTune('gagazet', { colour: { exposure: 0.8 } })`. */
   api['proTune'] = (room: string, patch: Record<string, unknown>): boolean => proTune(room, patch);
   api['proPiece'] = (piece: ProPiece, on?: boolean): boolean => {

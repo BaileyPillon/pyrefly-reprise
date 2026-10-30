@@ -6,13 +6,13 @@
  * board mounts it with the switch at today's and the presenter's cues stay no-ops until it is flipped). Everywhere else: nothing is built, nothing is drawn, no element is added.
  */
 import type { PaintedStage } from '../../engine/BattlePresenterStage.ts';
-import { isDemoChapter, demoGameOf } from '../../engine/motion/DemoGate.ts';
+import { isTreatedChapter, demoGameOf } from '../../engine/motion/DemoGate.ts';
 import { stagingMode } from '../../engine/pro/staging/StagingSwitch.ts';
 import { ProStageLayer } from '../../ui/common/proStage/ProStageLayer.ts';
 import { switchboardWanted } from '../demo/switchboard.ts';
 
 export function attachProStage(o: { root: HTMLElement; chapterId: string; stage: PaintedStage; nameOf?: (id: string) => string | undefined }): ProStageLayer | null {
-  if (!isDemoChapter(o.chapterId)) return null;
+  if (!isTreatedChapter(o.chapterId)) return null;
   const search = typeof location === 'undefined' ? '' : (location.search ?? '');
   if (stagingMode() !== 'pro' && !switchboardWanted(search)) return null;
   return new ProStageLayer({

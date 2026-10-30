@@ -16,7 +16,7 @@
  * Game case (AGENTS.md rule 14): the switch is both games (shared plumbing); WHICH look plays is read from the chapter's own game (`stagingGame`): FFX in Chapter I, FFX-2 in Chapter IV.
  * Pure: no `three`, no DOM but the address of the page (hard rule 1).
  */
-import { demoChapter, demoGameOf, isDemoChapter, packDemo, proLanes, queryWord, type DemoGame } from '../../motion/DemoGate.ts';
+import { demoChapter, demoGameOf, isTreatedChapter, packDemo, proLanes, queryWord, type DemoGame } from '../../motion/DemoGate.ts';
 
 export type StagingMode = 'pro' | 'today';
 export type StagingPiece = 'breath' | 'card' | 'ending' | 'opening';
@@ -73,17 +73,17 @@ export function setStagingPieceOff(piece: StagingPiece | null, value = true): vo
 
 /** True when the pro staging plays now: switched on, in a demo chapter (the battle screen names it before the boss card is built: `DemoGate.setDemoChapter`). */
 export function stagingOn(): boolean {
-  return stagingMode() === 'pro' && isDemoChapter(demoChapter());
+  return stagingMode() === 'pro' && isTreatedChapter(demoChapter());
 }
 
 /** True when this piece plays now: the staging is on and the piece is not one the address took back. */
 export function stagingPieceOn(piece: StagingPiece): boolean {
-  return stagingOn() && !stagingOffPieces().has(piece);
+  return stagingMode() === 'pro' && isTreatedChapter(demoChapter(), piece) && !stagingOffPieces().has(piece);
 }
 
 /** Does this piece play for this chapter id? For the flow, which asks after the battle screen has cleared the shared chapter (the results, the defeat card): the switch is on and the chapter is a demo chapter. */
 export function stagingPieceOnFor(piece: StagingPiece, chapterId: string | undefined): boolean {
-  return stagingMode() === 'pro' && isDemoChapter(chapterId) && !stagingOffPieces().has(piece);
+  return stagingMode() === 'pro' && isTreatedChapter(chapterId, piece) && !stagingOffPieces().has(piece);
 }
 
 /** The game whose staging plays: the demo chapter's own (FFX in Chapter I, FFX-2 in Chapter IV). */

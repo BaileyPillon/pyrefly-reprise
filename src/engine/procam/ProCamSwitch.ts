@@ -16,7 +16,7 @@
  * live game. Pure: no `three`, no DOM but the address of the page (the `FeelSwitch` pattern).
  */
 
-import { demoChapter, demoGameOf, isDemoChapter, packDemo, proLanes, queryWord, type DemoGame } from '../motion/DemoGate.ts';
+import { demoChapter, demoGameOf, isTreatedChapter, packDemo, proLanes, queryWord, type DemoGame } from '../motion/DemoGate.ts';
 
 export interface ProCamKeys {
   /** `?camera=pro` true, `?camera=off|today` false, else null (not named). */
@@ -61,13 +61,13 @@ export function proCamConfigured(): boolean {
 
 /** The directed camera is on right now: configured, and the running chapter is Chapter I or Chapter IV. */
 export function proCamOn(): boolean {
-  return isDemoChapter(demoChapter()) && proCamConfigured();
+  return isTreatedChapter(demoChapter(), 'cam') && proCamConfigured();
 }
 
 /** The game of the running demo chapter, or null outside them. */
 export function proCamGame(): DemoGame | null {
   const id = demoChapter();
-  return isDemoChapter(id) ? demoGameOf(id) : null;
+  return isTreatedChapter(id, 'cam') ? demoGameOf(id) : null;
 }
 
 /** The soft background is wanted: on with the camera (it costs no pass, only the tilt-shift band's uniforms), off with `?camdof=off`. */

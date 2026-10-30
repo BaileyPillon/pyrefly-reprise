@@ -29,7 +29,7 @@
  * the next Chapter I or Chapter IV fight (`engine/motion/DemoGate.ts`).
  */
 import { artUrl } from '../../engine/PaintedArt.ts';
-import { demoChapter, isDemoChapter, queryWord } from '../../engine/motion/DemoGate.ts';
+import { demoChapter, isTreatedChapter, queryWord } from '../../engine/motion/DemoGate.ts';
 import { partyRigsMode } from '../../engine/motion/PartyRigsSwitch.ts';
 import { HIDE_CODE, MASTER_CODE, TIDUS_CODE, SWITCHES, boardState, flipAll, legendRows, normaliseCode, switchOfCode } from './switchboardModel.ts';
 
@@ -106,7 +106,7 @@ export function installSwitchboard(api?: Record<string, unknown>): SwitchboardHa
   let rigsAtFight: string | null = null; // what the party rigs said when this fight's figures were built: a flip since then plays in the NEXT fight (the stage asks once per figure)
 
   const render = (): void => {
-    const live = isDemoChapter(demoChapter());
+    const live = isTreatedChapter(demoChapter());
     if (!live) rigsAtFight = null;
     else if (rigsAtFight === null) rigsAtFight = partyRigsMode();
     el.classList.toggle('sb-pause', pauseScreenUp()); // r64-fixes review F4: for the legend too, or a legend opened over the pause screen kept the class and sat over the command menu after the resume
