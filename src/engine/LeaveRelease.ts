@@ -10,7 +10,10 @@
  * let go of their pins, drops the paintings and the unpinned maps the fight did not touch, and unbinds the eye-candy scene (`GoldenHour.bindEyeCandyScene` held the last diorama's Scene object
  * until the next battle bound another). The chapter just left keeps everything it used, so a retry is as warm as before.
  *
- * Off with `?memrelease=off` (release 68's behaviour, for the A/B of the browser jobs); the caller passes `keep: true` in the conference demo, whose second fight is built behind the picker and must stay warm.
+ * OFF BY DEFAULT in release 69 (driver, 2026-10-30): the browser job (budgets-2, B5a) measured the books right (49 or 59 paintings and 42 or 38 maps at the boards, against 96 and 80) but the renderer
+ * process and page counters worse (+110.8 and +80.2 MB growth over the five fights against +67.1 old, B5a-02/-04/-05) and a revisit 3.5 s slower to enter (B5d-01), peak unchanged. So the default build
+ * behaves as release 68: `?memrelease=on` turns the release on (the A/B of the browser jobs); `?memrelease=off` and no word both leave it off. The scene is still unbound either way. The caller passes
+ * `keep: true` in the conference demo, whose second fight is built behind the picker and must stay warm.
  */
 import { beginPaintingEpoch, dropPaintingsBefore, paintingCacheMB, paintingCacheSize, paintingCacheStamps } from './PaintedArtCache.ts';
 import { beginRelightEpoch, relightCacheStats, releaseRelightBefore } from './look/relight/FigureRelight.ts';
@@ -23,13 +26,13 @@ export function setMemRelease(value: boolean | null | undefined): void {
   override = value;
 }
 
-/** True unless the address says `?memrelease=off` (or a test forced it off). */
+/** False unless the address says `?memrelease=on` (or a test forced it on): release 69 ships the leave-release off. */
 export function memRelease(): boolean {
   if (override !== undefined && override !== null) return override;
   try {
-    return new URLSearchParams(globalThis.location?.search ?? '').get('memrelease') !== 'off';
+    return new URLSearchParams(globalThis.location?.search ?? '').get('memrelease') === 'on';
   } catch {
-    return true;
+    return false;
   }
 }
 

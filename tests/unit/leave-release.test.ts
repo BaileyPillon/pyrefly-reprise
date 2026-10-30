@@ -24,6 +24,7 @@ let deferLoads = false;
 
 beforeEach(() => {
   armedBefore = lookState.armed;
+  setMemRelease(true); // release 69 ships the leave-release off by default; this file is about what it does when it is on
   loaded = [];
   pendingLoads = [];
   deferLoads = false;
@@ -273,7 +274,7 @@ describe('beginFight and endFight', () => {
     unpinRelight(newPins);
   });
 
-  it('?memrelease=off (and the demo\'s keep) let go of nothing but still unbind the scene', async () => {
+  it('off (and the demo\'s keep) let go of nothing but still unbind the scene', async () => {
     beginFight();
     await ask(art('tidus', 'idle'));
     bindEyeCandyScene({ key: 'k', game: 'ffx', scene: {} as never, palette: null });
@@ -283,7 +284,7 @@ describe('beginFight and endFight', () => {
     expect(endFight()).toBeNull();
     expect(paintingCacheSize()).toBe(1);
     expect(boundEyeCandyScene()).toBeNull();
-    setMemRelease(undefined);
+    setMemRelease(true);
     beginFight();
     await ask(art('yuna', 'idle'));
     expect(endFight({ keep: true })).toBeNull();
@@ -294,6 +295,7 @@ describe('beginFight and endFight', () => {
     vi.resetModules(); // a fresh page: the fight counter starts again
     const cache = await import('../../src/engine/PaintedArtCache.ts');
     const leave = await import('../../src/engine/LeaveRelease.ts');
+    leave.setMemRelease(true); // a fresh module has no override: the default is off (release 69)
     const key = (subject: string): string => cache.paintingKey(art(subject, 'idle'), { mode: 'auto' }, {});
     await cache.cachedPainting(key('tidus'), async () => prepared());
     expect(leave.beginFight()).toBe(1);
@@ -311,13 +313,13 @@ describe('beginFight and endFight', () => {
     expect(paintingCacheSize()).toBe(1);
   });
 
-  it('reads the word off the address', () => {
-    vi.stubGlobal('location', { search: '?memrelease=off' });
+  it('reads the word off the address: ?memrelease=on turns it on (the default is tested in leave-release-default.test.ts)', () => {
+    setMemRelease(undefined); // the address decides
+    vi.stubGlobal('location', { search: '?memrelease=on' });
     try {
-      expect(memRelease()).toBe(false);
+      expect(memRelease()).toBe(true);
     } finally {
       vi.unstubAllGlobals();
     }
-    expect(memRelease()).toBe(true);
   });
 });

@@ -209,6 +209,7 @@ beforeEach(() => {
   h.warmGates = [];
   h.backdrop = false;
   h.atDispose = [];
+  setMemRelease(true); // release 69 ships the leave-release off by default; these cycles are about what it does when it is on
   clearPaintingCache();
   releaseRelightBefore(Number.MAX_SAFE_INTEGER);
   resetHoldForTests();
@@ -275,8 +276,8 @@ describe('a fight built and torn down five times, A B A B A', () => {
     expect(memoryBooks().last).toMatchObject({ paintings: 12, maps: 12 }); // the other chapter's, let go at the last exit
   });
 
-  it('control, ?memrelease=off (release 68): both chapters\' sets stay, which is the growth the budgets job measured', async () => {
-    setMemRelease(false);
+  it('control, the default build and ?memrelease=off (release 68): both chapters\' sets stay, which is the growth the budgets job measured', async () => {
+    setMemRelease(undefined); // no word on the address: off
     const seen: Array<{ cache: number; maps: number }> = [];
     for (const index of [A, B, A, B, A]) seen.push(await visit(index));
     expect(seen.map((s) => s.cache)).toEqual([12, 24, 24, 24, 24]);
