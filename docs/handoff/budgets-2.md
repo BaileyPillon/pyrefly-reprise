@@ -150,7 +150,7 @@ About 59 minutes of browser in all (the first version said 62; its entries add t
 
 New: `src/engine/LeaveRelease.ts`, `LoadHold.ts`, `BackgroundQueue.ts`, `EntryMarks.ts`; `tests/unit/leave-release.test.ts`, `load-hold.test.ts`, `load-hold-preload.test.ts`, `background-queue.test.ts`, `battle-screen-cycles.test.ts`, `ffx-hud-release.test.ts`, `art-stats-books.test.ts`; this note.
 Changed: `src/engine/PaintedArtCache.ts`, `look/relight/FigureRelight.ts`, `PoseStream.ts`, `PaintedActorPoses.ts`, `src/app/screens/battlePreload.ts`, `BattleScreen.ts`, `BattleScreenBase.ts`, `BattleScreenEncounter.ts`, `src/debug/artApi.ts`, `docs/DEV.md`, `docs/BUDGETS.md` (section 8), `docs/CONTRACT-CHANGES.md`.
-Commits: `2f7162cd8` (the release, the hold, the probe, the tests), `2bd0252df` (the ranked queue and the release point), and the records on top.
+Commits: `2f7162cd8` (the release, the hold, the probe, the tests), `2bd0252df` (the ranked queue and the release point), `36b2082b1` (the two-minute backstop, a throwing loader), `7aa3e1f3b` (the records of the first push, reviewed by both passes), `f96856b99` (the merge of `origin/main` `67256e1ca`), `50f64311f` (the second-review fix-up: R1, R2, R3, P3 and eight new pins) and `aacc2a534` (this note and the docs after it).
 
 ## 8. Open questions for the driver (and Bailey)
 
