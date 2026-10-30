@@ -43,7 +43,7 @@ export function setMomentsMode(value: MomentsMode | null): void {
 
 /** True when the new moments play now: switched on, in a demo chapter. */
 export function momentsOn(): boolean {
-  return momentsMode() === 'new' && inDemoChapter(curvesChapter());
+  return momentsMode() === 'new' && inDemoChapter(curvesChapter(), 'moments');
 }
 
 /** The game whose moment plays: the demo chapter's own (the same answer as the curves'). */

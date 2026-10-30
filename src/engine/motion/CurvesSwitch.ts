@@ -21,9 +21,9 @@
  * Pure: no `three`, no DOM but the address of the page (hard rule 1). Read once, like the other URL switches (`PoseSwap.ts`, `HitRecoil.recoilLegacy`).
  */
 
-import { DEMO_CHAPTERS, demoChapter, demoGameOf, isDemoChapter, packDemo, queryWord, setDemoChapter, type DemoGame } from './DemoGate.ts';
+import { DEMO_CHAPTERS, demoChapter, demoGameOf, isTreatedChapter, packDemo, queryWord, setDemoChapter, type DemoGame, type TreatedPiece } from './DemoGate.ts';
 
-/** The two demo chapters and the game each one is (`src/data/encounters.ts` ids): the ONE table every lane's switch reads (`DemoGate.ts`). */
+/** The two BOOTH chapters and the game each one is (`src/data/encounters.ts` ids; a test-side alias of `DemoGate.DEMO_CHAPTERS`). The chapters the treatment reaches are `DemoGate.TREATED_CHAPTERS`, which every lane's switch reads. */
 export const DEMO_CHAPTER_GAMES: Readonly<Record<string, CurveGame>> = DEMO_CHAPTERS;
 
 export type CurveGame = DemoGame;
@@ -78,19 +78,19 @@ export function curvesChapter(): string | undefined {
   return demoChapter();
 }
 
-/** Is the running chapter Chapter I or Chapter IV? */
-export function inDemoChapter(id: string | undefined): boolean {
-  return isDemoChapter(id);
+/** Does the treatment reach this chapter for this piece (`curves` by default; the smear and the moments name theirs)? Chapter I, Chapter IV, and every chapter on `DemoGate.TREATED_CHAPTERS` that holds nothing back. */
+export function inDemoChapter(id: string | undefined, piece: TreatedPiece = 'curves'): boolean {
+  return isTreatedChapter(id, piece);
 }
 
 /** True when the new curves play now: switched on (`new`, `real` or `real-snappy`), in a demo chapter. */
 export function curvesOn(): boolean {
-  return curvesMode() !== 'today' && isDemoChapter(demoChapter());
+  return curvesMode() !== 'today' && isTreatedChapter(demoChapter(), 'curves');
 }
 
 /** The real-motion sub-mode playing now: `real` or `snappy` when the curves are on in a real mode, else null (`new`, `today`, or outside a demo chapter). */
 export function realKind(): RealKind | null {
-  if (!curvesOn()) return null;
+  if (!curvesOn() || !isTreatedChapter(demoChapter(), 'real')) return null;
   const m = curvesMode();
   return m === 'real' ? 'real' : m === 'real-snappy' ? 'snappy' : null;
 }

@@ -18,7 +18,7 @@
  * Pure but for `three` (the meshes it patches) and the address of the page.
  */
 import { CanvasTexture, Vector3, type Mesh, type MeshBasicMaterial, type Object3D, type Texture } from 'three';
-import { demoChapter, isDemoChapter, packDemo, queryWord } from '../../motion/DemoGate.ts';
+import { demoChapter, isTreatedChapter, packDemo, queryWord } from '../../motion/DemoGate.ts';
 
 export type BossCleanMode = 'clean' | 'today';
 
@@ -111,7 +111,7 @@ export function isCleanBossArt(artId: string | undefined): boolean {
 
 /** True when the re-cut plays now for this figure: switched on, in a demo chapter, one of the two bosses (no id: any of them, for the boss card). */
 export function bossCleanOn(artId?: string): boolean {
-  if (bossCleanMode() !== 'clean' || !isDemoChapter(demoChapter())) return false;
+  if (bossCleanMode() !== 'clean' || !isTreatedChapter(demoChapter(), 'boss')) return false;
   return artId === undefined ? true : isCleanBossArt(artId);
 }
 

@@ -33,7 +33,8 @@ import { punchMode } from '../feel/FeelSwitch.ts';
 import { momentPunch } from '../feel/PunchCurve.ts';
 import { specialFx } from '../spellfx/SpellFxSpecials.ts';
 import type { ActionShot, ActorShot, BattleStartShot, ImpactShot, ShotAnswer, ShotCtx, ShotDirector } from '../ShotDirector.ts';
-import { PRO_AUTO_CAMERA } from '../../data/procam/proShots.ts';
+import { demoChapter } from '../motion/DemoGate.ts';
+import { autoCameraFor } from './ProAutoStage.ts';
 import { proCamGame, proCamOn, proDofOn } from './ProCamSwitch.ts';
 import { FOLLOW_SAFE, ProFollower, lcg, type Member } from './ProFollower.ts';
 import { attackPlay, bossStartPlay, castPlay, feet, ffx2Play, heightOf, isSpecial, landingPlay, overdrivePlay, victoryPlay, type Play, type PlayEnv, type Timing } from './ProPlays.ts';
@@ -205,7 +206,7 @@ export class ProDirector implements ShotDirector, PlayEnv {
         still: () => this.stillNow,
         fitK: (pose) => port.fitK(pose, { ...fit, ids: ids() }),
       },
-      PRO_AUTO_CAMERA,
+      autoCameraFor(demoChapter()), // Chapter IV: the generated Bevelle camera; a chapter with a stage row (`ProAutoStage.AUTO_STAGES`, Leblanc) has its candidates retargeted about its own plate's front
     );
     this.followerPort = port;
     const f = this.follower;

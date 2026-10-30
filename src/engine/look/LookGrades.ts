@@ -62,12 +62,17 @@ export const ROOM_LOOKS: Readonly<Record<LookName, Readonly<Record<string, RoomL
     gagazet: { focus: 0.36 },
     // Chapter IV (FFX-2), the Bevelle underground: the great skylight is the light (the picture's own brightest part); the band covers the girls and the dragon's coils.
     'bevelle-underground': { focus: 0.4 },
+    // Chapter VI (FFX-2, release 69), the Chateau's last room: the heart-shaped door inlay is the light (the painting's own pink, found on the plate at u 0.500, v 0.264 from the top; `findLight` would take the pale floor patch, which is brighter in luminance), so the
+    // shafts and the rim follow it. The sharp band is the booth's (0.40, the girls and the far group) moved down by how much lower her idle camera puts the same party slots in the frame (0.015: `docs/handoff/booth-leblanc.md`).
+    'leblanc-last-room': { focus: 0.39, light: { u: 0.5, v: 0.264, color: [0.99, 0.5, 0.87] } },
   },
   cinematic: {
     // Chapter I: a cold moonlit night, graded toward deep teal-indigo shadows and pale silver highlights, less saturated, the fog the colour of breath.
     gagazet: { shadow: [0.02, 0.1, 0.2], highlight: [1.0, 0.86, 0.66], recipe: { sat: 0.72, contrast: 0.74, pivot: 0.34, shadowSplit: 0.62, highlightSplit: 0.46 }, fog: [0.4, 0.52, 0.68] },
     // Chapter IV: violet-black shadows, the lamps' amber in the highlights against the cyan skylight, a cooler brown fog.
     'bevelle-underground': { shadow: [0.1, 0.05, 0.24], highlight: [1.0, 0.78, 0.52], recipe: { sat: 0.8, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.28, 0.32, 0.5] },
+    // Chapter VI (release 69): violet-black shadows under a rose-cream highlight, the heart's light, a violet-rose fog over the cold machine room.
+    'leblanc-last-room': { shadow: [0.1, 0.05, 0.26], highlight: [1.0, 0.8, 0.9], recipe: { sat: 0.82, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.3, 0.2, 0.44], light: { u: 0.5, v: 0.264, color: [0.99, 0.5, 0.87] } },
   },
   anime: {},
 };

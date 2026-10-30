@@ -24,7 +24,7 @@
  *
  * Pure: no `three`, no DOM but the address of the page (hard rule 1).
  */
-import { demoChapter, demoGameOf, isDemoChapter, packDemo, proLanes, queryWord } from '../../motion/DemoGate.ts';
+import { demoChapter, demoGameOf, isTreatedChapter, packDemo, proLanes, queryWord } from '../../motion/DemoGate.ts';
 
 export type ProMode = 'pro' | 'today';
 export type ProPiece = 'arena' | 'seam' | 'hits' | 'numbers' | 'markers';
@@ -102,7 +102,7 @@ export function setProPiece(piece: ProPiece | null, on = true): void {
 
 /** True when the pro look plays now: switched on, in a demo chapter. */
 export function proLookOn(): boolean {
-  return proMode() === 'pro' && isDemoChapter(demoChapter());
+  return proMode() === 'pro' && isTreatedChapter(demoChapter(), 'look');
 }
 
 /** Does this piece play now: the pro look is on in a demo chapter and the address did not turn the piece off. */
@@ -112,11 +112,11 @@ export function proPieceOn(piece: ProPiece): boolean {
 
 /** The pro ARENA for a chapter about to start (the battle names the chapter before the figures load, and the look asks before `demoChapter` is set on the first call): on, in that demo chapter, unless the address chose a look. */
 export function proArenaFor(chapterId: string | undefined, search: string | undefined = here()): boolean {
-  return proMode() === 'pro' && isDemoChapter(chapterId) && !offSet().has('arena') && !addressChoseLook(search);
+  return proMode() === 'pro' && isTreatedChapter(chapterId, 'arena') && !offSet().has('arena') && !addressChoseLook(search);
 }
 
 /** The game of the running demo chapter, or undefined outside the demo chapters. */
 export function proGame(): 'ffx' | 'ffx2' | undefined {
   const c = demoChapter();
-  return isDemoChapter(c) ? demoGameOf(c) : undefined;
+  return isTreatedChapter(c, 'look') ? demoGameOf(c) : undefined;
 }

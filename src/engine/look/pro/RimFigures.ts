@@ -22,10 +22,28 @@ export const RIM_COMPANIONS: Readonly<Record<string, 'ffx' | 'ffx2'>> = Object.f
   mortiorchis: 'ffx', // Chapter I, Seymour Flux's companion (`SentCompanions.ts`)
 });
 
-/** The stage's one call as it builds a figure: remember whether it is the party's (or an aeon's) or a boss's companion. */
+/**
+ * The foes of a chapter the treatment has joined whose art is NOT re-cut, and which draw no screen-space rim there, so that the whole frame shares the party's clean edge (release 69, `booth-leblanc`, both games for the
+ * plumbing; each row says its game). Chapter VI (`ffx2-leblanc`, FFX-2 only): the three of the Syndicate and the goons, by combatant id (`data/ffx2/enemies/leblanc-syndicate-acts.ts`). They are flagged like a boss's companion,
+ * under the same switch, and only while a treated chapter that does not hold the boss piece is running (`bossCleanOn()`), so the hidden experimental chapter, which plays the same ids, keeps its rim. They have no
+ * `BOSS_FEET` row on purpose: the figures stand at human size with their feet at the anchor (the measured bottom-band footprint is 0.07 to 0.26 of the silhouette's width, narrower than the engine's own pool, so a row
+ * would SHRINK their shadow), so their shadow and ring stay the engine's own. `docs/handoff/booth-leblanc.md` has the measurement.
+ */
+export const TREATED_RIM_FOES: Readonly<Record<string, 'ffx' | 'ffx2'>> = Object.freeze({
+  leblanc: 'ffx2',
+  logos: 'ffx2',
+  'logos-room': 'ffx2',
+  ormi: 'ffx2',
+  'ormi-logos-room': 'ffx2',
+  'ormi-entrance': 'ffx2',
+  'dr-goon': 'ffx2',
+  'fem-goon': 'ffx2',
+});
+
+/** The stage's one call as it builds a figure: remember whether it is the party's (or an aeon's), a boss's companion, or a foe of a treated chapter that draws no rim. */
 export function tagRimFigure(actor: Object3D, combatantId: string, side: string): void {
   if (side === 'party' || side === 'aeon') actor.userData['rimClass'] = 'party' satisfies RimClass;
-  else if (Object.prototype.hasOwnProperty.call(RIM_COMPANIONS, combatantId)) actor.userData['rimClass'] = 'companion' satisfies RimClass;
+  else if (Object.prototype.hasOwnProperty.call(RIM_COMPANIONS, combatantId) || Object.prototype.hasOwnProperty.call(TREATED_RIM_FOES, combatantId)) actor.userData['rimClass'] = 'companion' satisfies RimClass;
 }
 
 /** Does this figure draw no screen-space rim now? A re-cut boss, a boss's companion with the re-cut on, or a party figure with the party rim off. */

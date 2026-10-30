@@ -12,6 +12,7 @@ import { CHAPTERS } from '../../src/data/encounters.ts';
 import { CHAPTER_LOOKS, chapterLook, parseLook } from '../../src/engine/look/LookConfig.ts';
 import { applyChapterLook, lookState, lookWanted, setLookName, setLookStrength } from '../../src/engine/look/LookState.ts';
 import { demoMotionFromSearch, demoMotionOn, setDemoMotion } from '../../src/engine/motion/DemoMotion.ts';
+import { setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
 
 function reset(): void {
   lookState.auto = true;
@@ -23,19 +24,24 @@ function reset(): void {
 afterEach(() => {
   reset();
   setDemoMotion(null);
+  setTreatedScope(null);
 });
 
 describe('the look: which chapters get it by default', () => {
   it('Chapter I (FFX) and Chapter IV (FFX-2) get hd2d at bold strength; no other chapter of the shipped list does', () => {
     expect(chapterLook('seymour-flux')).toEqual({ name: 'hd2d', strength: 'bold' });
     expect(chapterLook('ffx2-bahamut')).toEqual({ name: 'hd2d', strength: 'bold' });
-    expect(Object.keys(CHAPTER_LOOKS).sort()).toEqual(['ffx2-bahamut', 'seymour-flux']);
+    expect(Object.keys(CHAPTER_LOOKS).sort()).toEqual(['ffx2-bahamut', 'ffx2-leblanc', 'seymour-flux']); // release 69: Chapter VI has a row (the treated list, `DemoGate.TREATED_CHAPTERS`)
+    setTreatedScope('pack'); // the page's `?treated=pack` (and a unit test's default): release 68's reach, the booth pair only
     const withLook = CHAPTERS.filter((c) => chapterLook(c.id) !== null).map((c) => `${c.id}:${c.game}`);
     expect(withLook.sort()).toEqual(['ffx2-bahamut:ffx2', 'seymour-flux:ffx']);
     for (const c of CHAPTERS) if (c.id !== 'seymour-flux' && c.id !== 'ffx2-bahamut') expect(chapterLook(c.id)).toBeNull();
+    setTreatedScope('all'); // release 69: Leblanc joins, and nobody else
+    expect(CHAPTERS.filter((c) => chapterLook(c.id) !== null).map((c) => `${c.id}:${c.game}`).sort()).toEqual(['ffx2-bahamut:ffx2', 'ffx2-leblanc:ffx2', 'seymour-flux:ffx']);
   });
 
   it('the chapters that BORROW the two paintings as placeholders get nothing: the look is keyed by chapter, not by scene', () => {
+    setTreatedScope('all');
     const borrowers = CHAPTERS.filter((c) => (c.sceneKey === 'gagazet' || c.sceneKey === 'bevelle-underground') && c.id !== 'seymour-flux' && c.id !== 'ffx2-bahamut');
     for (const c of borrowers) expect(chapterLook(c.id)).toBeNull();
     expect(chapterLook(undefined)).toBeNull();

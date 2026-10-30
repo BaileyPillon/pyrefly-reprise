@@ -179,7 +179,7 @@ export interface ProRoom {
 }
 
 /**
- * The two demo arenas, "Cinematic contrast" (the B rows of `tools/dirs.py` and `base_for` of the book's `arena-light`). Keyed by the room's scene key (`LookRoom.key`).
+ * The arenas, "Cinematic contrast" (the B rows of `tools/dirs.py` and `base_for` of the book's `arena-light`; the third is Leblanc's, release 69). Keyed by the room's scene key (`LookRoom.key`).
  * Chapter I, Mt. Gagazet (FFX): one cold moon throws a cone across the snow, everything else falls to teal-black, haze between the plate and the party, a rim toward the moon.
  * Chapter IV, the Bevelle underground (FFX-2): the skylight is the only light: a cool cone falls on Bahamut and the floor, the room drops to violet-black, the lamps shrink to embers.
  */
@@ -223,6 +223,29 @@ export const PRO_ARENA: Readonly<Record<string, ProRoom>> = {
     grain: 0.018,
     // the skylight, found on the painting (plate u 0.53, v 0.036 from the top) so the cone follows the camera; (u, v) is the frame point it started from (the first menu's)
     cone: { u: 0.515, v: 0.98, follow: false, paint: { u: 0.53, v: 0.036 }, colour: [0.4, 0.72, 1.0], strength: 0.48, spread: 0.36, reach: 2.2, rays: 0.35 },
+  },
+  // Chapter VI (FFX-2, release 69; `booth-leblanc`): the heart-shaped door inlay is the only light (the painting says so: `ScenePalettes.chateauLeblanc`); it throws a rose cone down the stone, the room falls to indigo-black, the portholes shrink to embers.
+  // The grammar is the booth pair's (one strong light, the rest to deep shadow and haze); the colours are hers, so she reads pinker and warmer than the violet-black and cyan of Chapter IV. [ours]: set from the plate's own colours (the heart's core
+  // (0.99, 0.45, 0.87), hue 313; the door's cyan; the amber lamp) and graded offline through this table (`docs/handoff/booth-leblanc.md`); a still beside Chapter IV is owed before Bailey judges it (hard rule 9).
+  'leblanc-last-room': {
+    colour: {
+      exposure: 1.35,
+      gamma: 1.0,
+      contrast: 0.3,
+      pivot: 0.3,
+      sat: 1.25,
+      pulls: [[30, 14, 0, 0.8, 0.6], [228, 50, -6, 0.9, 0.9], [190, 34, 0, 1.05, 1.05], [313, 34, 0, 1.12, 1.04]],
+      gradmap: { amount: 0.06, stops: [[0, [0.02, 0.0, 0.05]], [0.3, [0.1, 0.04, 0.2]], [0.6, [0.5, 0.24, 0.5]], [0.9, [1.0, 0.82, 0.92]], [1, [1, 1, 1]]] },
+      shadow: [[0.06, 0.03, 0.2], 0.38],
+      shadowTo: 0.45,
+    },
+    lightColor: [0.99, 0.55, 0.88],
+    tweaks: { 'stage.shaft': 0.6, 'bold.stage': 1.7, 'bold.fog': 1.3, 'bold.rim': 1.4, 'relight.key': 1.5, 'shaft.gain': 2.0, 'bold.embers': 0.7 },
+    haze: { colour: [0.28, 0.16, 0.4], amounts: [0.06, 0.05, 0.025], side: 0.1 },
+    vignette: { amount: 0.52, radius: 0.42, tint: [0.008, 0.0, 0.03] },
+    grain: 0.018,
+    // the heart, found on the painting (plate u 0.500, v 0.264 from the top) so the cone follows the camera; (u, v) is the frame point it started from (v up, so 1 - 0.264 less the frame's crop)
+    cone: { u: 0.5, v: 0.74, follow: false, paint: { u: 0.5, v: 0.264 }, colour: [1.0, 0.5, 0.82], strength: 0.4, spread: 0.4, reach: 2.0, rays: 0.3 },
   },
 };
 

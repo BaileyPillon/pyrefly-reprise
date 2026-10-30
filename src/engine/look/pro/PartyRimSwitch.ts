@@ -9,7 +9,7 @@
  * Only in the two demo chapters (Chapter I `seymour-flux`, Chapter IV `ffx2-bahamut`, `motion/DemoGate.ts`), and only while the pro look draws its rims at all. The master key `0` and `?pro=off` do not touch it.
  * Console: `__pyrefly.partyRim('on' | 'off' | null)`.
  */
-import { demoChapter, isDemoChapter, packDemo, queryWord } from '../../motion/DemoGate.ts';
+import { demoChapter, isTreatedChapter, packDemo, queryWord } from '../../motion/DemoGate.ts';
 
 export type PartyRimMode = 'on' | 'off';
 
@@ -39,5 +39,5 @@ export function setPartyRim(value: PartyRimMode | null): void {
 
 /** True when the party draws no screen-space rim now: the switch says off and a demo chapter is running. */
 export function partyRimOff(): boolean {
-  return partyRimMode() === 'off' && isDemoChapter(demoChapter());
+  return partyRimMode() === 'off' && isTreatedChapter(demoChapter(), 'rim');
 }

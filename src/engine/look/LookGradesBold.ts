@@ -83,6 +83,13 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       recipe: { exposure: 0.95, gamma: 1.0, contrast: 0.5, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.42, highlightSplit: 0.3, midSat: 0.35, sat: 1.08, hues: [{ hue: 26, width: 32, sat: 1.25, lum: 1.12, toward: [1, 0.68, 0.26], shift: 0.3 }, { hue: 192, width: 36, sat: 1.2, lum: 1.08, toward: [0.2, 0.9, 1.0], shift: 0.25 }] },
       focus: 0.4,
     },
+    // Chapter VI (FFX-2, release 69), the Chateau's last room: indigo-violet shadows, a rose-cream highlight, the heart's magenta (hue 313) and the door's cyan (hue 190) each lifted and pulled toward itself, the warm floor patch left to its own amber.
+    'leblanc-last-room': {
+      shadow: [0.2, 0.12, 0.5],
+      highlight: [1.0, 0.86, 0.9],
+      recipe: { exposure: 0.95, gamma: 1.0, contrast: 0.48, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.28, midSat: 0.32, sat: 1.06, hues: [{ hue: 313, width: 36, sat: 1.15, lum: 1.08, toward: [1, 0.4, 0.82], shift: 0.25 }, { hue: 190, width: 34, sat: 1.15, lum: 1.06, toward: [0.2, 0.85, 1.0], shift: 0.25 }] },
+      focus: 0.39,
+    },
   },
   cinematic: {
     // Chapter I: deep indigo shadows and silver-cyan highlights, but with its colour (pass 1's 0.72 saturation read muddy): a cold, clear night.
@@ -98,6 +105,13 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       highlight: [1.0, 0.76, 0.48],
       recipe: { exposure: 0.84, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 26, width: 32, sat: 1.3, lum: 1.15, toward: [1, 0.66, 0.24], shift: 0.35 }, { hue: 192, width: 36, sat: 1.2, lum: 1.08, toward: [0.2, 0.9, 1.0], shift: 0.25 }] },
       fog: [0.24, 0.28, 0.56],
+    },
+    // Chapter VI (release 69): violet-black shadows, the heart's rose in the highlights, the door's cyan, a violet-rose fog.
+    'leblanc-last-room': {
+      shadow: [0.1, 0.05, 0.3],
+      highlight: [1.0, 0.78, 0.9],
+      recipe: { exposure: 0.84, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 313, width: 36, sat: 1.2, lum: 1.1, toward: [1, 0.4, 0.82], shift: 0.3 }, { hue: 190, width: 34, sat: 1.15, lum: 1.06, toward: [0.2, 0.85, 1.0], shift: 0.25 }] },
+      fog: [0.3, 0.2, 0.46],
     },
   },
 };

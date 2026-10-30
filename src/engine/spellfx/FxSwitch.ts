@@ -18,10 +18,10 @@
  *
  * Pure: no `three`, no DOM but the address of the page (hard rule 1).
  */
-import { DEMO_CHAPTERS, demoChapter, demoGameOf, isDemoChapter, packDemo, queryWord, setDemoChapter } from '../motion/DemoGate.ts';
+import { DEMO_CHAPTERS, demoChapter, demoGameOf, isTreatedChapter, packDemo, queryWord, setDemoChapter } from '../motion/DemoGate.ts';
 import { menuHolds } from '../motion/MenuHold.ts';
 
-/** The two demo chapters and the game each one is (`src/data/encounters.ts` ids): the ONE table every lane's switch reads (`motion/DemoGate.ts`). */
+/** The two BOOTH chapters and the game each one is (`src/data/encounters.ts` ids; a test-side alias of `motion/DemoGate.DEMO_CHAPTERS`). The chapters the treatment reaches are `TREATED_CHAPTERS` there. */
 export const FX_DEMO_CHAPTERS: Readonly<Record<string, 'ffx' | 'ffx2'>> = DEMO_CHAPTERS;
 
 export type FxMode = 'new' | 'today';
@@ -56,20 +56,20 @@ export function fxChapter(): string | undefined {
   return demoChapter();
 }
 
-/** Is this chapter Chapter I or Chapter IV? */
+/** Do the new effects reach this chapter (Chapter I, Chapter IV, or a chapter on `DemoGate.TREATED_CHAPTERS` that holds nothing back)? */
 export function inFxDemoChapter(id: string | undefined): boolean {
-  return isDemoChapter(id);
+  return isTreatedChapter(id, 'fx');
 }
 
 /** The game of the running demo chapter (FFX in Chapter I, FFX-2 in Chapter IV), or undefined outside the demo chapters. */
 export function fxGame(): 'ffx' | 'ffx2' | undefined {
   const c = demoChapter();
-  return isDemoChapter(c) ? demoGameOf(c) : undefined;
+  return isTreatedChapter(c, 'fx') ? demoGameOf(c) : undefined;
 }
 
 /** True when the new effects play now: switched on, in a demo chapter. */
 export function fxNewOn(): boolean {
-  return fxMode() === 'new' && isDemoChapter(demoChapter());
+  return fxMode() === 'new' && isTreatedChapter(demoChapter(), 'fx');
 }
 
 /**

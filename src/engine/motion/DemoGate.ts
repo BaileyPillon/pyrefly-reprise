@@ -9,7 +9,11 @@
  *
  * **r64 (Bailey 2026-10-24, item 200b): the pack is ON by default in those two chapters** ({@link PACK_DEFAULT_ON}); `?pack=off` and each lane's own off word keep the old behaviour reachable.
  *
- * Game case (AGENTS.md rule 14): the gate is both games (shared plumbing); the chapter's game is read from the table (FFX Chapter I, FFX-2 Chapter IV).
+ * **Release 69 (`booth-leblanc`; Bailey 2026-10-30: "the nice treatment you gave to the booth chapters you need to now apply to all live and selectable chapters (meaning ones that arent hidden) please start with leblanc"):** the
+ * treatment no longer follows the two booth ids but {@link TREATED_CHAPTERS}, which grows one line per chapter (Leblanc first), with a written hold for any single piece a chapter is not ready for ({@link PIECE_HOLDS}) and `?treated=pack`
+ * to put release 68's reach back. {@link DEMO_CHAPTERS} and {@link isDemoChapter} stay the booth pair, for the kiosk's own things (the picker, the seeds, the party rigs, the voiced lines).
+ *
+ * Game case (AGENTS.md rule 14): the gate is both games (shared plumbing); the chapter's game is read from the table (FFX Chapter I, FFX-2 Chapter IV, FFX-2 Chapter VI).
  */
 
 export type DemoGame = 'ffx' | 'ffx2';
@@ -32,14 +36,106 @@ export function demoChapter(): string | undefined {
   return chapter;
 }
 
-/** Is this chapter id Chapter I or Chapter IV? */
+/**
+ * Is this chapter id Chapter I or Chapter IV: the BOOTH PAIR? Booth-only things ask this (the kiosk's picker, its seeds, the party rigs, the voiced lines: `DEMO_CHAPTERS`); the treatment's own
+ * pieces ask {@link isTreatedChapter}, which answers true for this pair too.
+ */
 export function isDemoChapter(id: string | undefined): boolean {
   return id !== undefined && Object.prototype.hasOwnProperty.call(DEMO_CHAPTERS, id);
 }
 
-/** The game of a demo chapter, or `fallback` for any other id. */
+// ---------------------------------------------------------------------------------------------------------------- THE TREATED CHAPTERS
+//
+// Bailey 2026-10-30: "the nice treatment you gave to the booth chapters you need to now apply to all live and selectable chapters (meaning ones that arent hidden) please start with leblanc"; 2026-10-29:
+// "you make all executive decisions for the next few days. i'll go with all of your recommendations" (the driver's calls under it, his to overturn). Until release 69 the treatment (the F1 HUD, the pro look, camera
+// and staging, the curves, the moments, the feel, the new effects, the sound pass, the governor) followed `DEMO_CHAPTERS`, two ids. It now follows ONE growing list: a chapter joins by one line in
+// {@link TREATED_CHAPTERS}, and any single piece the chapter is not ready for waits behind a written hold in {@link PIECE_HOLDS}.
+
+/** The pieces of the treatment a chapter can hold back one by one: each switch module names the one it is (`isTreatedChapter(id, piece)`). */
+export type TreatedPiece =
+  | 'hud' | 'hd2d' | 'arena' | 'look' | 'rim' | 'boss' | 'cam' | 'card' | 'ending' | 'opening' | 'breath'
+  | 'curves' | 'real' | 'moments' | 'smear' | 'feel' | 'fx' | 'audio' | 'governor';
+
+export const TREATED_PIECES: readonly TreatedPiece[] = [
+  'hud', 'hd2d', 'arena', 'look', 'rim', 'boss', 'cam', 'card', 'ending', 'opening', 'breath', 'curves', 'real', 'moments', 'smear', 'feel', 'fx', 'audio', 'governor',
+];
+
+/** One treated chapter: its game (rule 14: which game's layout, profile and tables play) and when it joined. */
+export interface TreatedEntry {
+  readonly game: DemoGame;
+  readonly since: string;
+}
+
+/**
+ * THE LIST. The booth pair (release 60 and 64: the pair is on from the first release that had the pack) and Leblanc (release 69, `booth-leblanc`: Chapter VI, `ffx2-leblanc`, FFX-2; the HIDDEN experiment
+ * `exp-leblanc` is not this chapter and is never listed). A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
+ */
+export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.freeze({
+  'seymour-flux': { game: 'ffx', since: 'r60' },
+  'ffx2-bahamut': { game: 'ffx2', since: 'r60' },
+  'ffx2-leblanc': { game: 'ffx2', since: 'r69' },
+});
+
+/**
+ * Pieces a treated chapter does not play yet, each with the written reason and what lifts it (the shape of `SwapSwitch.SCOPE_EXCEPTIONS`: a reason of 80 characters or more, ending in "Lifts when ..."). A held
+ * piece answers today's in that chapter and every other piece plays. The booth pair has none: they are the approved target.
+ */
+export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<TreatedPiece, string>>>>> = Object.freeze({
+  'ffx2-leblanc': Object.freeze({
+    breath:
+      'FFX-2, Chapter VI: the held breath is the drain-and-flood built for Mega Flare (and, in FFX, Total Annihilation), a solemn beat. Her sourced showpiece is No Love Lost (research/ffx2-leblanc-syndicate.md section 4.5: ' +
+      'three timed stages, eight shots, the party knocked down, a finisher; "the perfect thing for a presentation layer to build around"), a three-beat comedy combo whose tone, sound and shot are a mockup decision ' +
+      '(hard rule 9), and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays the breath today. Lifts when Bailey or the driver picks a tone and a shot for No Love Lost from a mockup and the breath ' +
+      'plan (and, for the sound pass, `passRecipes.HEADLINE_BLOWS`, which hit) is given a row for its ids `x2-nll-1` to `x2-nll-3`.',
+  }),
+});
+
+/**
+ * WHICH CHAPTERS THE TREATMENT REACHES, by the address (`?treated=`): `all` (the default on a page) is {@link TREATED_CHAPTERS}; `pack` is release 68's, the booth pair only, whatever else the list says (one word to put
+ * Leblanc, and every chapter that joins later, back to the look it had). With no page at all (a unit test, a tool) it reads `pack`, as `packDemo` reads off with no page: a test that wants a joined chapter sets
+ * {@link setTreatedScope}.
+ */
+export type TreatedScope = 'all' | 'pack';
+
+/** `?treated=pack|all` from a search string (pure): the word if it names a scope; `pack` with no page; else `all`. `booth`, `today` and `68` are `pack`. */
+export function treatedScopeFromSearch(search: string | undefined): TreatedScope {
+  if (search === undefined) return 'pack';
+  const w = queryWord(search, 'treated');
+  return w === 'pack' || w === 'booth' || w === 'today' || w === '68' ? 'pack' : 'all';
+}
+
+let scopeNow: TreatedScope | null = null;
+
+/** The scope the page asked for. Read once. */
+export function treatedScope(): TreatedScope {
+  if (scopeNow === null) scopeNow = treatedScopeFromSearch(globalThis.location === undefined ? undefined : (globalThis.location.search ?? ''));
+  return scopeNow;
+}
+
+/** Tests and `window.__pyrefly.treated(...)`: force the scope (`null` reads the address again). */
+export function setTreatedScope(value: TreatedScope | null): void {
+  scopeNow = value;
+}
+
+/** The written reason a treated chapter holds a piece back, or undefined. */
+export function treatedHold(id: string | undefined, piece: TreatedPiece): string | undefined {
+  return id === undefined || !Object.prototype.hasOwnProperty.call(PIECE_HOLDS, id) ? undefined : PIECE_HOLDS[id]![piece];
+}
+
+/**
+ * Does the treatment reach this chapter (and, with `piece`, play that piece in it)? True for the booth pair always; for any other id only under the `all` scope, when the id is in {@link TREATED_CHAPTERS} and the
+ * piece is not held. Pure but for the address, read once.
+ */
+export function isTreatedChapter(id: string | undefined, piece?: TreatedPiece): boolean {
+  if (id === undefined) return false;
+  if (isDemoChapter(id)) return true;
+  if (treatedScope() !== 'all' || !Object.prototype.hasOwnProperty.call(TREATED_CHAPTERS, id)) return false;
+  return piece === undefined || treatedHold(id, piece) === undefined;
+}
+
+/** The game of a chapter the treatment reaches (under the current scope), or `fallback` for any other id. */
 export function demoGameOf(id: string | undefined, fallback: DemoGame = 'ffx'): DemoGame {
-  return id !== undefined && Object.prototype.hasOwnProperty.call(DEMO_CHAPTERS, id) ? DEMO_CHAPTERS[id]! : fallback;
+  return isTreatedChapter(id) ? TREATED_CHAPTERS[id!]!.game : fallback;
 }
 
 /** One key of an address, trimmed and lower-cased; '' when absent or when the address cannot be read. */

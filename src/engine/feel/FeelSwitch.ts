@@ -24,12 +24,12 @@
  * the per-game numbers live where they always did (`fx/c/SpectacleRules.SPECTACLE_TUNING`).
  */
 
-import { DEMO_CHAPTERS, demoChapter, isDemoChapter, packDemo, setDemoChapter } from '../motion/DemoGate.ts';
+import { DEMO_CHAPTERS, demoChapter, isTreatedChapter, packDemo, setDemoChapter } from '../motion/DemoGate.ts';
 
 export type PunchMode = 'today' | 'new' | 'off';
 export type StopMode = 'today' | 'short' | 'off';
 
-/** The two demo chapters, by the ids in `data/encounters.ts`: Chapter I (FFX) and Chapter IV (FFX-2). The table is the shared one (`motion/DemoGate.ts`). */
+/** The two BOOTH chapters, by the ids in `data/encounters.ts`: Chapter I (FFX) and Chapter IV (FFX-2) (a test-side alias of `motion/DemoGate.DEMO_CHAPTERS`; the chapters the feel reaches are `TREATED_CHAPTERS` there). */
 export const FEEL_CHAPTERS: ReadonlySet<string> = new Set(Object.keys(DEMO_CHAPTERS));
 
 /** What the address says (every field null = not named). */
@@ -93,9 +93,9 @@ export function feelChapter(): string | null {
   return demoChapter() ?? null;
 }
 
-/** True while the running chapter is Chapter I or Chapter IV: the only place any new piece can be on. */
+/** True while the running chapter is one the treatment reaches (Chapter I, Chapter IV, or a chapter on `DemoGate.TREATED_CHAPTERS`): the only place any new piece can be on. */
 export function inFeelChapter(): boolean {
-  return isDemoChapter(demoChapter());
+  return isTreatedChapter(demoChapter(), 'feel');
 }
 
 /** The pack (`?pack=demo`, or {@link setFeelPack}). */

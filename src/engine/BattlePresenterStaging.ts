@@ -177,6 +177,22 @@ export function stageKo(ctx: EventCtx, id: CombatantId): Promise<void> | undefin
   return stageFreeze(ctx, id);
 }
 
+/** The presenters that have already run a link: a chain re-enters `run` on the same presenter and the same layer. */
+const linked = new WeakSet<EventCtx>();
+
+/**
+ * A formation of a chain begins (`BattlePresenter.run`, every link): from the second one on, the layer is cleared, so no mark of the last link (a title, a HUD-out, a ring) can outlive its beat into the next
+ * formation's fight (release 69 `booth-leblanc`; both games, today only Chapter VI chains in a treated chapter). The first link finds a fresh layer and is left alone, byte for byte.
+ */
+export function stageLinkBegins(ctx: EventCtx): void {
+  const again = linked.has(ctx);
+  linked.add(ctx);
+  if (!again) return;
+  live.delete(ctx);
+  blown.delete(ctx);
+  ctx.deps?.staging?.clear();
+}
+
 /** The foe's latest move, per presenter: the defeat card names it ("Felled by Total Annihilation"). */
 const foeMove = new WeakMap<EventCtx, string>();
 
@@ -215,9 +231,14 @@ export function stageFreeze(ctx: EventCtx, id: CombatantId): Promise<void> | und
   return ctx.sleep(hold);
 }
 
-/** The cheer's length for FFX: the longest real clip among the party (`data/motion/realMotion.ts` `poseMs`, PROVEN: Tidus 3,666.7 ms), at least `floor`. */
+/**
+ * The cheer's length: the longest real clip among the party in the chapter's OWN game's table (`data/motion/realMotion.ts` `poseMs`, PROVEN: Tidus 3,666.7 ms in FFX; Paine Warrior 3,066.7 ms in FFX-2), at least `floor`.
+ * The game is the chapter's (rule 14, release 69 `booth-leblanc`): Leblanc is FFX-2 and its Yuna Gunner must not read FFX Yuna's row. In a chapter the treatment joined beyond the booth pair an FFX-2 girl matches by dress
+ * (`RealMotion.REAL_DRESS_ROWS`), so only Paine Warrior has a clip there and the other two give the floor.
+ */
 function cheerFloorMs(ctx: EventCtx, floor: number): number {
-  const lengths = partyOf(ctx).map((id) => realVictoryOf('ffx', ctx.stage.artOf?.(id) ?? id)?.poseMs);
+  const game = stagingGame();
+  const lengths = partyOf(ctx).map((id) => realVictoryOf(game, ctx.stage.artOf?.(id) ?? id)?.poseMs);
   return cheerHoldMs(lengths, floor);
 }
 
@@ -228,6 +249,7 @@ function cheerFloorMs(ctx: EventCtx, floor: number): number {
 export function stageVictory(ctx: EventCtx, kind: 'pose' | 'hold', floor: number): number {
   const port = stagingPort(ctx, 'ending');
   if (!port) return 0;
+  if (ctx.moreLinks === true) return 0; // a seam of a chain (Chapter VI Acts I and II): another formation follows, so no title, no HUD-out and no cheer's hold; the beat is today's 900 ms (like `stageFreeze`, which also skips a link that chains on)
   const facts = stageFacts(ctx);
   const boss = felled.get(ctx);
   port.ending({ ...facts, kind: 'title', boss: boss ?? '' });

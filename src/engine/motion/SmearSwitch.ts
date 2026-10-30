@@ -43,7 +43,7 @@ export function setSmearStyle(value: SmearStyle | null): void {
 /** The style that plays NOW: the asked-for one in a demo chapter, `off` anywhere else. */
 export function smearStyleNow(): SmearStyle {
   const s = smearStyle();
-  return s !== 'off' && inDemoChapter(curvesChapter()) ? s : 'off';
+  return s !== 'off' && inDemoChapter(curvesChapter(), 'smear') ? s : 'off';
 }
 
 /** True when the smear plays now (switched on, in a demo chapter). */
