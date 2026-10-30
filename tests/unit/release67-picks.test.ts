@@ -72,7 +72,7 @@ afterEach(() => {
 const CH1 = 'seymour-flux';
 const CH4 = 'ffx2-bahamut';
 const ELSEWHERE = 'yunalesca';
-const CH5 = 'ffx2-vegnagun-shuyin'; // FFX-2 Chapter V: the run-in plays, the new curves do not
+const CH5 = 'ffx2-valefor-besaid'; // an FFX-2 chapter outside the treated list (hidden, so it never joins): the run-in plays, the new curves do not. It was Chapter V until batch 2 (`booth-ffx2-b2`) put that chapter on the list, which the page-read scope of these tests (a real `window.location`) reaches
 const UNCOVERED = SWAP_CLASSES.filter((c) => !COVERED.has(c));
 
 /** What the presenter asks the modules in the running chapter: the whole of the three looks, as data. */
