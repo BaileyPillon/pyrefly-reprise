@@ -14,7 +14,7 @@
 | Deploy log | `docs/deploys.log` line 85: cloudflare, 4830 art files |
 | Artifact (SHA-256) | `865efda30b6915c0ee3794b7ed1126a531a7a51f48086f303927047aedb3c17d` |
 | The deploy's own byte check | PASS (57 files compared with the build) |
-| Marker | `critic/pending/2a9340249.json` (pending) |
+| Marker | `critic/cleared/2a9340249.json` (cleared) |
 | Owner override | none |
 | CHANGELOG entry | 2026-10-29 · Release 68 (r68), the pose-continuity and motion pass: the stance and cause picks reach 13 more chapters, Paine and Rikku in the Warrior dress keep their standing painting through a wind-up, a revived figure no longer jumps, the FFX-2 battle screen is freed when you leave it, and the run-in, the ATB bars, Trigger Happy, the turn-order list, summons and fades move more smoothly; plus bigger battle text, Tab on the menus and a lighter first menu (both games, each item says which; the ready hold, the run-in, the ATB bars, Trigger Happy and the screen release are FFX-2 only; the turn-order list and the summon leap are FFX only) |
 | Focused review | critic/reviews/2a9340249-focused.json: ship SHIP, changed area UNVERIFIED |
@@ -24,12 +24,9 @@ Is this commit on main? `git merge-base --is-ancestor 2a9340249 origin/main` exi
 
 ## Review obligations still open
 
-| Build | Obligation | What it needs |
-|---|---|---|
-| `2a9340249` | focused | acceptance of the changed area |
-| `2a9340249` | deep (carries 1 earlier builds) | deep review of every affected chapter and system |
+None: every marker in `critic/pending` is settled.
 
-The ledger counts 2 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 0 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
@@ -42,7 +39,7 @@ From `critic/reviews/2a9340249-focused.json` (a major that is not a regression i
 | R68-C3 | major | no | no | Chapter I and Trema still fail CHK-026 (Auron follow, Mortiorchis silhouette; Trema feet 10.5 px) |
 | R68-B1 | major | no | no | Budgets: phone first-command wait 19.8 to 42.4 s against 8 s, and memory growth +74 percent over four chapter changes against 10 percent |
 
-## Branches in flight (as of 2026-10-29 12:35 EDT, the r68 records pass (release 68 live))
+## Branches in flight (as of 2026-10-30 16:45 EDT, the round 31 records pass (release 68 live; release 69 not integrated))
 
 Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.
 
@@ -59,9 +56,11 @@ Kept by hand by whoever records a pass; tools/live-record.mjs prints it into doc
 | `re-parity-new-chapters-1018` | `5f7b6ffbc` | FFX (Spectral Keeper) and FFX-2 (Fallen Maesters) | research only: the Spectral Keeper and the Fallen Maesters data and AI extractions (the notes themselves went into r58 as plain files); no engine build, the chapter decisions SK1 to SK11 and FM1 to FM11 wait for Bailey |
 | `saves-portable` | `c1852fa05` | both (save-data class) | ChatGPT point 9: export and import a save as a checksummed file behind ?saveport=on, off by default; NOT merged into r68-int or release 68 (D-1379); a browser pass and a deep review are owed before the word comes off (A-1054) |
 | `rigs-v2` | `9f90c3441` | both (Tidus FFX, Rikku Dark Knight FFX-2) | the party rig pilots rebuilt (tidus-v2, rikku-dark-knight-v2 in D:/pyrefly-art-rigs) behind ?partyrigs=v2 with a motion audit; pushed; OUT of release 68 (D-1398): the clips (A-1073) show 0 ghost frames but a cut from standing to lying at the knock-out and four broken frames on Rikku's return (D-1401); nothing installed |
-| `rigs-v3` | `e95744f0d` | both (Tidus FFX, Rikku Dark Knight FFX-2) | NOT PUSHED (local, D:/pyrefly-rig-valefor), a lane in progress at 12:08 EDT on 2026-10-29, the tip moves: rigs-v2 on r68-final plus the painting's knock-out topple and rise for a rig, the return fold, and the harness's stature reading for rigs (D-1401); not merged, nothing installed before Bailey has seen it move |
-| `budgets-2` | `4ee33ef9f` | both | NOT PUSHED (local, D:/pyrefly-r39-color), a lane in progress on 2026-10-29, the tip moves, from r68-final: R68-B1, the phone first-command wait and the memory growth (leaving a fight lets go of what it did not use, the phone's entry gets the line to itself, a ranked queue for the later poses and lighting maps); not merged, not deployed |
-| `held-chapters` | `4aa4c62c4` | FFX (Evrae, Yunalesca, Sin face) and FFX-2 (Ixion XVI), plus the harness for both | pushed; a lane in progress on 2026-10-29 (the local tip, 4be9364e0 in D:/pyrefly-rig-rikkudk, is ahead), from r68-final: Evrae's head re-registration, a planner guard for head travel, a harness gap rule for recording gaps, and the cut anchor for Yunalesca and Sin face, so the four chapters that release 68 holds back (D-1386) can join the wide scope; not merged, not deployed |
+| `rigs-v3` | `f2dd94f79` | both (Tidus FFX, Rikku Dark Knight FFX-2) | pushed; three rounds done on 2026-10-29 and 10-30 (A-1089): rigs-v2 on r68-final plus the painting’s knock-out topple and rise for a rig, the held pose through each cut, the settle before a KO from a flinch and the harness’s stature reading for rigs (D-1401); behind ?partyrigs=, off by default; not merged, nothing installed; the clips for him come first |
+| `budgets-2` | `9705be815` | both | pushed; built and reviewed twice on 2026-10-29 and 10-30 (A-1087), from r68-final merged with r68’s records: R68-B1, the phone first-command wait and the memory growth (leaving a fight lets go of what it did not use, the phone’s entry gets the line to itself, a ranked queue for the later poses and lighting maps); not merged, not deployed; the browser jobs have not run |
+| `held-chapters` | `ab86bf2de` | FFX (Evrae, Yunalesca, Sin face) and FFX-2 (Ixion XVI), plus the harness for both | pushed; built and reviewed on 2026-10-29 and 10-30 (A-1088), from r68-final: Evrae’s head re-registration, a planner guard for head travel, a harness gap rule for recording gaps and the cut anchor words for Yunalesca and Sin face, so the four chapters that release 68 holds back (D-1386) can join the wide scope once the browser jobs read; no exception lifted; not merged, not deployed |
+| `r69-revive` | `eef99cfb7` | both (Chapter I is the case that shows it) | pushed; one commit on 2026-10-29 (A-1086): a revived figure no longer jumps sideways a second time (PR-0570; the revive reads the lying body’s place once); not merged, not deployed; the browser jobs R1 to R3 have not run |
+| `booth-leblanc` | `e816fa2aa` | FFX-2 only for Leblanc (Chapter VI); the gate and its switches are shared plumbing, both games | pushed; built, reviewed and fixed on 2026-10-30 (A-1091, D-1403 to D-1405): the booth treatment for every selectable chapter through one TREATED_CHAPTERS list with per-piece holds, Leblanc first; not merged, not deployed; the browser jobs J1 to J11 have not run and the gate change owes a deep review on the live build |
 
 Nothing on this list is live. `node tools/live-record.mjs --branches` compares the tips with git.
 

@@ -16,16 +16,16 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1920 decisions in all: 1401 registry rows, 309 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1271 of the written decisions record a blanket yes.
+1925 decisions in all: 1406 registry rows, 309 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1275 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1795 |
+| adopted | 1800 |
 | proposed | 9 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 93 |
-| **All** | **1920** |
+| **All** | **1925** |
 
 | Area | Decisions |
 | --- | ---: |
@@ -36,24 +36,24 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | audio | 160 |
 | ui | 221 |
 | story | 17 |
-| chapters | 248 |
+| chapters | 251 |
 | guide | 34 |
 | release | 99 |
 | hosting | 18 |
-| process | 217 |
+| process | 218 |
 | critic | 43 |
 | data | 17 |
-| tech | 35 |
+| tech | 36 |
 | site | 21 |
-| **All** | **1920** |
+| **All** | **1925** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 1009 |
+| both games | 1013 |
 | FFX only | 502 |
-| FFX-2 only | 391 |
+| FFX-2 only | 392 |
 | FF7 hidden experiment | 18 |
-| **All** | **1920** |
+| **All** | **1925** |
 
 ## Standing rules in force
 
@@ -141,7 +141,7 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27) · [2026-10-28](#2026-10-28) · [2026-10-29](#2026-10-29)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27) · [2026-10-28](#2026-10-28) · [2026-10-29](#2026-10-29) · [2026-10-30](#2026-10-30)
 
 ## Ledger
 
@@ -9027,7 +9027,7 @@ Wednesday · 28 decisions
 
 ### 2026-10-29
 
-Thursday · 17 decisions
+Thursday · 18 decisions
 
 - <a id="d-1385"></a>**D-1385** — He says he is going to sleep and to keep going: the delegation of items 211 and 212 stands through the night (both games)
   - Bailey: “I'm going to sleep please keep going ❤️”
@@ -9114,3 +9114,33 @@ Thursday · 17 decisions
   - What changed: Item 213b, about 07:55 EDT. In motion, over a whole fight (Chapter I Tidus, Chapter IV Rikku Dark Knight), the rig shows 0 ghost frames against 47 and 63 for the paintings and swap jerks of 40 px or more 1 and 1 against 4 and 27. But the rig cuts from standing to lying at the knock-out where the painting topples, the revive pops from lying to standing, Rikku's follow-through back to idle shows four frames of a visibly broken figure (sword flat across the body, a dark piece off the leg) that the offline audit missed because it reads silhouettes, and her ready, attack and follow paintings keep their orange-and-white armour against the black idle. Next, rigs v3: keep the painting's knock-out topple and rise, fix the return fold, reconcile the harness's stature reading for rigs (CHK-026 reads FAIL on both rig runs only because the rig's stature is the whole painted box including props), and re-film. The clips were sent to Bailey (his rule: nothing installs before he has seen it move). The lane rigs-v3 (branch, in flight, not merged) started after the deploy.
   - area visuals · both games · adopted · delivery in progress · see [D-1378](#d-1378), [D-1398](#d-1398) · refines [D-1378](#d-1378)
   - Source: The driver's call of 2026-10-29 about 07:55 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372), recorded as a driver …
+- <a id="d-1402"></a>**D-1402** — He hands the driver every executive decision for the next few days and goes with all its recommendations: the delegation of items 211 and 212 (“the couple days”) is extended to “the next few days” (both games)
+  - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
+  - What changed: Item 214, about 13:30 EDT on 2026-10-29. The delegation of D-1365 and D-1372 is extended from “the next couple days” to “the next few days”: the driver makes every executive decision, takes its own recommendations as his yes, records each call as a driver call that is his to overturn, and keeps going. His own rules stay: a rig is judged by him in motion before it goes on (D-1378, D-1401), only he can give the listening verdict (D-1371) and nothing he will see, hear or feel is built before he has picked (hard rule 9). What followed under it: release 68’s records and the deep review of the live build (round 31, A-1085), the release 69 lanes built on branches (A-1086 to A-1089) and, on 2026-10-30, the booth treatment for every selectable chapter (D-1403 to D-1406). Nothing was released under this row.
+  - area process · both games · adopted · delivery in progress · see [D-1347](#d-1347), [D-1365](#d-1365), [D-1372](#d-1372), [D-1371](#d-1371) · refines [D-1372](#d-1372)
+  - Source: Bailey, 2026-10-29 about 13:30 EDT (the decisions queue; the times are DRIVER-STATE.md’s date-stamped lines), typed in the chat, verbatim: “keep …
+
+### 2026-10-30
+
+Friday · 4 decisions
+
+- <a id="d-1403"></a>**D-1403** — The booth treatment (the F1 Ink & Gold HUD and declutter, the pro look, lighting, matte, camera and staging, the opening card and cover, the defeat card, the real-clip curves and the six look picks, the motion pack, eye candy) goes to every live, selectable chapter of both games, hidden chapters excluded, starting with Leblanc (both games, per chapter)
+  - Bailey: “the nice treatment you gave to the booth chapters you need to now apply to all live and selectable chapters (meaning ones that arent hidden) please start with leblanc”
+  - What changed: Item 215, about 13:05 EDT on 2026-10-30. The driver’s reading: everything the two booth chapters (FFX Chapter I Seymour Flux, FFX-2 Chapter IV Bahamut) have behind the pack gate goes to every selectable, non-hidden chapter, game-aware (rule 14), Leblanc (FFX-2 Chapter VI) first; the approved booth look is the target, so there is no new options round, and the hidden chapters are out. The inventory (A-1090) counted 19 selectable chapters (12 FFX, 7 FFX-2) and 30 pieces of the treatment: 12 need only the gate, 6 need a row of data, 5 have a part that needs new art or authored content, and the booth-only family (the kiosk) stays the booth’s. The first chapter is built on a branch (booth-leblanc, A-1091); the other 18 are planned in batches (D-1404 to D-1406). Nothing is released: the gate change owes a deep review on the live build.
+  - area chapters · both games · adopted · delivery in progress · see [D-1402](#d-1402), [D-1344](#d-1344), [D-1404](#d-1404), [D-1405](#d-1405), [D-1406](#d-1406) · refines [D-1402](#d-1402)
+  - Source: Bailey, 2026-10-30 about 13:05 EDT (the decisions queue), typed in the chat, verbatim: “the nice treatment you gave to the booth chapters you need to …
+- <a id="d-1404"></a>**D-1404** — DRIVER CALL under his delegation, his to overturn: the booth treatment is built as one growing list (TREATED_CHAPTERS in DemoGate.ts) with per-piece holds that each carry a reason ending “Lifts when ...”, in three batches, instead of copies per chapter (both games)
+  - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
+  - What changed: Item 215a, about 13:20 EDT on 2026-10-30. One list replaces the 17 switch modules’ copies of “is this one of the two booth chapters” (the pattern SwapSwitch already uses for its scope exceptions): a chapter joins by one line plus a row in a not-yet table, a piece can be held for one chapter with a written reason ending “Lifts when ...”, and DEMO_CHAPTERS stays the booth pair for the booth-only items (the picker, the seeds, the party rigs, the voiced lines). Three batches, because a gate change owes a deep review on the live build and a third deploy is refused while one is owed: batch 1 = the gate and Leblanc; batch 2 = Vegnagun and Shuyin, Yunalesca, Den of Woe, Fallen Aeons (D-1406); batch 3 = the other chapters as their data lands (Macalania, Natus, Yojimbo, then Braska, Omnis, Isaaru, Trema, and last Ixion XVI, Evrae, Sin and Mirror Aeons). As built on the branch (A-1091): the list holds the two booth chapters and Leblanc, 14 switch modules read it, the booth pair answers true for every piece, and ?treated=pack puts release 68’s reach back; a page-less scope reads “pack”, so the six test files that use another chapter as an “off” control kept their answers (the planned move of those controls to a hidden id was not needed and is not done). Built on a branch, not merged, not released.
+  - area tech · both games · adopted · delivery in progress · see [D-1403](#d-1403), [D-1405](#d-1405), [D-1406](#d-1406) · refines [D-1403](#d-1403)
+  - Source: docs/handoff/booth-leblanc.md
+- <a id="d-1405"></a>**D-1405** — DRIVER CALL under his delegation, his to overturn: Leblanc’s pieces of the booth treatment: her staged breath and headline blow are HELD (No Love Lost is the candidate; its tone is a mockup decision), no embers in her room, Yuna Gunner and Rikku Thief play the house curves until real-clip rows exist, only Paine is lit for now, and the cheer floor reads the chapter’s own game (FFX-2 only)
+  - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
+  - What changed: Item 215b, about 16:25 EDT on 2026-10-30. Her staged breath and headline blow are held: the sourced showpiece is No Love Lost (three timed stages, research/ffx2-leblanc-syndicate.md section 4.5), a three-beat comedy combo whose tone, sound and shot are a mockup decision (rule 9), so nothing of hers plays it today. No embers in her room (research/ffx-vs-ffx2-presentation.md section 8.1 says “no particles”; the fog and the shafts stay as light). The real-clip rows are per dress, so Yuna Gunner and Rikku Thief play the house curves until rows are decoded (a dress guard keeps the White Mage and Dark Knight rows off them); Paine Warrior plays hers. Her lighting maps are not made (they need the GPU), so only Paine is surface-lit and her room has no depth haze. The victory cheer’s floor reads the chapter’s own game table (an FFX-2 chapter had read FFX Yuna’s 3,200 ms). These came from the adversarial review of the first build (one critical, two majors, six minors), fixed in e816fa2aa. Built on the branch booth-leblanc, not merged, not released; the browser jobs J1 to J11 have not been run.
+  - area chapters · FFX-2 · adopted · delivery in progress · see [D-1403](#d-1403), [D-1404](#d-1404) · refines [D-1403](#d-1403)
+  - Source: docs/handoff/booth-leblanc.md
+- <a id="d-1406"></a>**D-1406** — DRIVER CALL under his delegation, his to overturn: batch 2 of the booth treatment is FFX-2 Chapter V Vegnagun and Shuyin, Chapter XV Den of Woe, Chapter XI Fallen Aeons and FFX Chapter II Yunalesca, under four rules for what is held and what ships (both games, per chapter)
+  - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
+  - What changed: Item 215c, about 16:25 EDT on 2026-10-30. The order is the inventory’s, cheapest and highest value first: Vegnagun and Shuyin (the same dresses as Chapter IV, all party maps shipped, a finale), Yunalesca (the first FFX widening beyond Chapter I, so it exercises every FFX-only branch), then Den of Woe and Fallen Aeons. The rules: a breath or blow that needs a tone pick is held; unshipped lighting maps ship by link only when they were made from the current painting and fit the bytes budget, otherwise the piece is held; the existing swap and camera exceptions stay (Yunalesca’s stance look, and today’s Chapter II camera, PR-0307); no new art and no GPU. Nothing of batch 2 is built yet: it waits for batch 1’s browser jobs and for release 69.
+  - area chapters · both games · adopted · delivery in progress · see [D-1403](#d-1403), [D-1404](#d-1404) · refines [D-1403](#d-1403)
+  - Source: The driver's call of 2026-10-30 about 16:25 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …
