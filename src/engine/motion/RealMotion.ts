@@ -18,6 +18,7 @@
  */
 import { REAL_MOTION, type RealAttackRow, type RealPhases, type RealCastRow, type RealGame, type RealKoRow, type RealRow, type RealVictoryRow } from '../../data/motion/realMotion.ts';
 import type { CurveGame, RealKind } from './CurvesSwitch.ts';
+import { demoChapter, isDemoChapter, isTreatedChapter } from './DemoGate.ts';
 import { moveWord } from './MoveSwitch.ts'; // MF-14 V3 (`?strikeshape=travel`): the dash keeps the house travel at the 1.1 s pick
 import { PROFILES, REAL_MIN_MS, defaultPaceFactor, heftFactors, type StrikeProfile } from './StrikeCurve.ts';
 
@@ -26,21 +27,44 @@ export const APPROACH_LEAP_MIN = 0.1;
 /** A real return that lifts the hip this much or more is a leap back (Tidus .86, Yuna .54, Kimahri .49, Bahamut .37, Rikku .35, Paine .14); below it the house return plays. */
 export const RETURN_LEAP_MIN = 0.1;
 
-/** The real-motion key of a figure by its art id (`tidus`, `yuna-white-mage`, `seymour-flux`, `ffx2-bahamut`...), per game; undefined for a figure the table does not cover. */
-export function realKeyOf(artId: string | undefined, game: RealGame): string | undefined {
+/**
+ * The FFX-2 dresses the real-motion table has a row for, by art id (`real-motion/final/README.md`: Yuna White Mage c018, Rikku Dark Knight c033, Paine Warrior c051, the Chapter IV set). A clip belongs to a DRESS, not to a girl (the
+ * dress changes the clip bank), so outside Chapter IV a girl in any other dress has no row and plays the house curves (`?curves=new`'s profile, FFX-2's own) until a row is decoded for it (release 69, `booth-leblanc`; FFX-2 only).
+ */
+export const REAL_DRESS_ROWS: Readonly<Record<string, string>> = Object.freeze({
+  'yuna-white-mage': 'yuna',
+  'rikku-dark-knight': 'rikku',
+  'paine-warrior': 'paine',
+});
+
+/**
+ * Does a figure's row follow its dress here? True in a chapter the treatment has JOINED beyond the booth pair (Leblanc: Yuna Gunner and Rikku Thief are not the dresses the rows were decoded for). In the booth pair, and with no chapter
+ * named (a unit test, a tool), the girl's name picks the row as it always has (`realKeyOf`'s prefix rule), so Chapter IV is byte for byte what release 68 played, including a girl who changes dress there.
+ */
+function dressStrict(): boolean {
+  const c = demoChapter();
+  return c !== undefined && !isDemoChapter(c) && isTreatedChapter(c);
+}
+
+/** The real-motion key of a figure by its art id (`tidus`, `yuna-white-mage`, `seymour-flux`, `ffx2-bahamut`...), per game; undefined for a figure the table does not cover. `strictDress` (FFX-2): only the dresses in {@link REAL_DRESS_ROWS} match, not every dress of the girl. */
+export function realKeyOf(artId: string | undefined, game: RealGame, strictDress = false): string | undefined {
   if (!artId) return undefined;
   const id = artId.toLowerCase();
   if (game === 'ffx') {
     for (const k of ['tidus', 'yuna', 'auron', 'kimahri', 'wakka', 'lulu']) if (id === k || id.startsWith(`${k}-`)) return k;
     return id.startsWith('seymour-flux') ? 'seymourFlux' : undefined;
   }
-  for (const k of ['yuna', 'rikku', 'paine']) if (id === k || id.startsWith(`${k}-`)) return k;
+  if (strictDress) {
+    if (Object.prototype.hasOwnProperty.call(REAL_DRESS_ROWS, id)) return REAL_DRESS_ROWS[id];
+  } else {
+    for (const k of ['yuna', 'rikku', 'paine']) if (id === k || id.startsWith(`${k}-`)) return k;
+  }
   return id === 'bahamut' || id.endsWith('-bahamut') || id.startsWith('bahamut') ? 'bahamut' : undefined;
 }
 
-/** The table's row for a figure (by art id) in a game, or undefined. */
+/** The table's row for a figure (by art id) in a game, or undefined. In a chapter the treatment joined beyond the booth pair an FFX-2 girl matches by dress ({@link REAL_DRESS_ROWS}). */
 export function realRowOf(game: RealGame, artId: string | undefined): RealRow | undefined {
-  const key = realKeyOf(artId, game);
+  const key = realKeyOf(artId, game, game === 'ffx2' && dressStrict());
   return key ? REAL_MOTION[game][key] : undefined;
 }
 
