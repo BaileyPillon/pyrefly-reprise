@@ -143,6 +143,17 @@ export const ROOM_BOLD: Readonly<Record<string, RoomBold>> = {
     fogScale: 1,
     driftPx: 3,
   },
+  // Chapter VI (FFX-2, release 69), the Chateau's last room: pale stone slabs with a little polish (the pink of the heart lies in the lower floor), three lit portholes on the side walls (two rose on the left, one amber on the right: read off the plate at
+  // u 0.039 v 0.404, u 0.066 v 0.423, u 0.943 v 0.434, from the top) throw the embers, a violet-rose fog, the heart's rose for the rim; the heart is bright, so the haze is held down.
+  'leblanc-last-room': {
+    gloss: 0.3,
+    rim: [1.0, 0.45, 0.82],
+    embers: [[0.039, 0.404], [0.066, 0.423], [0.943, 0.434]],
+    fog: [0.3, 0.2, 0.46],
+    shadow: [0.14, 0.08, 0.28],
+    fogScale: 0.9,
+    driftPx: 3,
+  },
 };
 
 export const roomBold = (key: string): RoomBold => ROOM_BOLD[key] ?? DEFAULT_ROOM_BOLD;

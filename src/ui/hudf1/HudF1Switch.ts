@@ -5,8 +5,8 @@
  * **Default: OFF.** With no address key, and in every unit test, {@link hudF1On} answers false and every hook falls through to today's HUD. It turns on when ALL of these hold:
  *
  * 1. the address carries `?hud=f1`, or the shared key `?pack=demo` (`?hud=today` wins over the pack, for A/B captures);
- * 2. the running chapter is one of the two DEMO CHAPTERS, Chapter I (`seymour-flux`, FFX) or Chapter IV (`ffx2-bahamut`, FFX-2), named by the battle screen as the battle sets up
- *    (`engine/motion/DemoGate.ts`). Every other chapter keeps today's HUD, whatever the address says.
+ * 2. the running chapter is one the treatment reaches (`DemoGate.isTreatedChapter(id, 'hud')`): Chapter I (`seymour-flux`, FFX), Chapter IV (`ffx2-bahamut`, FFX-2) and, since release 69, Chapter VI (`ffx2-leblanc`, FFX-2; `?treated=pack` takes it
+ *    back to release 68's), named by the battle screen as the battle sets up (`engine/motion/DemoGate.ts`). Every other chapter keeps today's HUD, whatever the address says.
  * 3. TEXT SIZE no longer ends it (a11y-text, 2026-10-29, round 30b PR-0559). Release 67 stepped down to today's HUD at 115 and 130 (hud-f1 review M5: the layout is authored at one size, and the hero and the
  *    cue sat on the first verb at the larger sizes), and that made the type SMALLER than at 100: F1's command labels are 12 grid px and its party names 12.5, against today's 9.8 and 9.3, so 115 drew 28 px
  *    labels where 100 drew 30 (Chapter I, 1600 x 900) and Chapter IV's party names went 31, 27, 30. Now the F1 HUD stays and GROWS with the setting (`hudf1-textsize.css`: every zone grows from the corner it is

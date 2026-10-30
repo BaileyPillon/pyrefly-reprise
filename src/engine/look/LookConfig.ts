@@ -13,6 +13,8 @@
  * - `?lookq=high|medium|low` the quality switch (also `F7` while a look flag is in the address, and `__pyrefly.look.quality()`); `F6` cycles the looks live.
  */
 
+import { isTreatedChapter } from '../motion/DemoGate.ts';
+
 export type LookName = 'hd2d' | 'cinematic' | 'anime';
 export const LOOK_NAMES: readonly LookName[] = ['hd2d', 'cinematic', 'anime'];
 export type LookQuality = 'high' | 'medium' | 'low';
@@ -32,11 +34,13 @@ export type LookStrength = 'subtle' | 'bold';
 export const CHAPTER_LOOKS: Readonly<Record<string, { name: LookName; strength: LookStrength }>> = {
   'seymour-flux': { name: 'hd2d', strength: 'bold' },
   'ffx2-bahamut': { name: 'hd2d', strength: 'bold' },
+  // Release 69 (`booth-leblanc`; Bailey 2026-10-30: the booth treatment for every listed chapter, Leblanc first; FFX-2 only): Chapter VI, the Chateau's last room. The row plays only while the treatment reaches the chapter (`?treated=pack` puts release 68's frame back).
+  'ffx2-leblanc': { name: 'hd2d', strength: 'bold' },
 };
 
-/** The look a chapter plays with no `look` key in the address, or null (today's frame). */
+/** The look a chapter plays with no `look` key in the address, or null (today's frame): a row of {@link CHAPTER_LOOKS} for a chapter the treatment reaches (`DemoGate.isTreatedChapter`, piece `hd2d`). */
 export function chapterLook(chapterId: string | undefined): { name: LookName; strength: LookStrength } | null {
-  return chapterId !== undefined && Object.prototype.hasOwnProperty.call(CHAPTER_LOOKS, chapterId) ? CHAPTER_LOOKS[chapterId]! : null;
+  return chapterId !== undefined && Object.prototype.hasOwnProperty.call(CHAPTER_LOOKS, chapterId) && isTreatedChapter(chapterId, 'hd2d') ? CHAPTER_LOOKS[chapterId]! : null;
 }
 
 export interface LookRequest {
