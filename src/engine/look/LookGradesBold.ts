@@ -91,8 +91,9 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       focus: 0.39,
     },
     // Batch 2 (`booth-ffx2-b2`, FFX-2 only). The Farplane (Chapter V) and the Road to the Farplane (Chapter XI) share one sky: indigo-violet shadows, a lilac-white highlight (the spire's burst), the blue-violet sky (hue 237), the lilac stone and flowers (hue 270) and the
-    // pink clouds (hue 320) each held and pulled toward themselves; exposure down as Chapter I's snow is (a luminous plate: the mean is 0.63 against Chapter IV's 0.18). Chapter V's source says the deeper the player goes the less organic it gets ("desaturate and cool as the
-    // player descends": `research/ffx2-vegnagun-shuyin.md` section 10.4), so the saturation is a little under 1.
+    // pink clouds (hue 320) each held and pulled toward themselves; exposure down as Chapter I's snow is (a luminous plate: the mean is 0.63 against Chapter IV's 0.18). The source orders the two rooms (`research/ffx2-vegnagun-shuyin.md` section 10.4: "desaturate and cool as the
+    // player descends", Road lavender-pink, Heart of the Farplane toward gunmetal), so the saturation is a little under 1 in both and a hair lower in Chapter V (0.96 against 0.98). That is ALL the order these rows give: the two rooms share one painted sky, a step as wide as
+    // the source's (the Heart cooler and greyer than the Road) is unseen and [ours] to pick, and it is a question for the still pair (`docs/handoff/booth-ffx2-b2.md`, open question 3, job J5).
     farplane: {
       shadow: [0.2, 0.16, 0.56],
       highlight: [1.0, 0.9, 1.0],

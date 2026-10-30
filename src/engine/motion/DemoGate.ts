@@ -97,10 +97,10 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
   // `TelegraphHold` holds Chapter I and Chapter III's moves alone, in FFX only).
   'ffx2-vegnagun-shuyin': Object.freeze({
     cam:
-      'FFX-2, Chapter V: links 1 to 4 play the approved colossus staging (D-228, `scenes/farplane-colossus.ts`: a low fov-40 master camera looking up at a part drawn 4.3 to 5.6 times a girl\'s height, "no single camera frame ever contains it"), and ' +
+      'FFX-2, Chapter V: links 1 to 4 play the approved colossus staging (D-228, `scenes/farplane-colossus.ts`: a low fov-40 master camera looking up at a part drawn 9.7 to 12.6 times a girl\'s height (the table\'s scale of 4.3 to 5.6 on the stage\'s 4.1 default boss height, D-600), "no single camera frame ever contains it"), and ' +
       'the follower\'s never-crop fit (`ProFit`, the safe rectangle 0.84 by 0.9) would dolly that camera back to fit each part whole: at the master rig a part alone is 1.24 (the Body) to 1.94 (the Leg) times over the rectangle, up to the 2.2 cap, ' +
       'so the follower would undo the frame Bailey approved (`fx/mix/masters.ts` `keepsToday` keeps today\'s rig for the same reason). Lifts when the follower stands down while the colossus rig is staged (`VegnagunColossus.active`), so link 5, Shuyin, ' +
-      'plays it on the plain Farplane frame, or a browser read shows the fit keeping the approved crop.',
+      'plays it on the plain Farplane frame, or a browser read shows the fit keeping the approved crop. Until then the chapter\'s follower row (`ProAutoStage.AUTO_STAGES`) is dormant and has never met a camera: re-read it against the scene\'s real figure heights (4.1 and 1.82) when the hold lifts.',
     breath:
       'FFX-2, Chapter V: the held breath is the drain-and-flood built for Mega Flare (and, in FFX, Total Annihilation), and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays it today. The sourced candidates are the Core\'s ' +
       'Memento Mori after three Charge Core turns (`x2-vegnagun-memento-mori`, `research/ffx2-vegnagun-shuyin.md` section 4.1) and the Head\'s Nemo Ante Mortem Beatus, each a solemn all-party blow whose tone, sound and shot are a mockup decision ' +

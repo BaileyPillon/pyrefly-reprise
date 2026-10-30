@@ -248,7 +248,7 @@ describe('the follower camera on their plates', () => {
 });
 
 describe('the foes draw no screen-space rim in their own chapter, and nowhere else', () => {
-  /** The foes of each chapter that draw no rim there. Shuyin and the three shades of the Den are NOT here: they keep their rim (the research asks for an additive rim on Shuyin; the shades are near-black paintings a rim lights). */
+  /** The foes of each chapter that draw no rim there. Shuyin and the three shades of the Den are NOT here: they keep their rim (the research asks for an additive rim on Shuyin; the shades keep release 68's rim: pale translucent paintings, measured, on which the rim is an untested second glow, job J4). */
   const FOES: Record<(typeof B2)[number], string[]> = {
     'ffx2-vegnagun-shuyin': ['vegnagun-tail', 'vegnagun-leg', 'vegnagun-body', 'vegnagun-head'],
     'ffx2-den-of-woe': [],

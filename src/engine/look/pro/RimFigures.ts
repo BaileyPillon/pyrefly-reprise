@@ -42,8 +42,9 @@ export const TREATED_RIM_FOES: Readonly<Record<string, 'ffx' | 'ffx2'>> = Object
   // the colossus parts have their own contact shadow, `scenes/farplane-colossus-shadow.ts`). Chapter V: the four Vegnagun parts (machines; the figure-less Bulwarks, Redoubts and Nodes have no actor to tag). Chapter XI: Shiva, the three Sisters and Anima (`scenes/road-to-the-farplane.ts`
   // ROAD_IDS; Shiva's and Anima's paintings are soft glows all round, so a rim on top would be a second glow).
   // NOT LISTED, on purpose, and kept with their rim: **Shuyin** (the research asks for "a 10 to 20 percent alpha with an additive rim so he reads as a projection made of pyreflies", `research/ffx2-vegnagun-shuyin.md` section 10.2) and **the three shades of the Den**
-  // (`shade-baralai`, `shade-gippal`, `shade-nooj`: pyrefly illusions whose paintings are near-black with sparse white motes, edge luminance 0 to 108 over a ring of 0 to 127, so there is no pale fringe to hide and a rim is what lights a black figure in a dark room).
-  // Lifts when a browser still (job J4 and J7 of the handoff) shows a clean edge reads better on them.
+  // (`shade-baralai`, `shade-gippal`, `shade-nooj`: pyrefly illusions. Measured on the shipped idle paintings (review of 2026-10-30, `docs/handoff/booth-ffx2-b2.md` section 2): NOT near-black but pale, glowing and translucent, mean luminance 0.64, 0.57 and 0.49
+  // over the pixels above alpha 0.5, with 46 to 59 percent of the pixels partly transparent: the Shiva and Anima case. They keep the rim only because it is release 68's and nothing has shown it reads wrong; the fault to expect is a second glow on a glowing figure.)
+  // Lifts when job J4 (the shade with the rim ON against OFF) or J7 (Shuyin) shows a clean edge reads better: the fix is their ids added to this table.
   'vegnagun-tail': 'ffx2',
   'vegnagun-leg': 'ffx2',
   'vegnagun-body': 'ffx2',

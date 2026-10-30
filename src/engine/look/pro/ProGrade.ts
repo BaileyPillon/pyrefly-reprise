@@ -250,7 +250,7 @@ export const PRO_ARENA: Readonly<Record<string, ProRoom>> = {
   // Batch 2 (FFX-2 only; `booth-ffx2-b2`, Bailey 2026-10-30). The grammar is the booth pair's (one strong light, the rest to deep shadow and haze), the rooms are three the booth never had; each row is [ours], set from the plate's own colours and graded offline through
   // this table (`docs/handoff/booth-ffx2-b2.md`, `docs/screenshots/booth-ffx2-b2-plate-grade.png`), and a still beside Chapter IV is owed before Bailey judges it (hard rule 9; the booth pair is the approved target).
   // Chapter V, the Heart of the Farplane: the spire's burst (the plate's one white-lilac star, u 0.505, v 0.285) is the only light; the luminous pastel sky falls to violet-indigo and its saturation is held under 1 ("the deeper you go, the less organic ... desaturate and cool as the player
-  // descends", `research/ffx2-vegnagun-shuyin.md` section 10.4), a lilac cone falls from it. The burst is above the top of the frame at the idle rig and nearer the top still under the colossus master, so the cone starts at the top edge.
+  // descends", `research/ffx2-vegnagun-shuyin.md` section 10.4; the source puts the Road at the lavender-pink end and this room toward gunmetal, and the two rows differ by a hair only: sat 0.90 against 0.92, exposure 1.45 against 1.50, a step the still pair J5 decides), a lilac cone falls from it. The burst is above the top of the frame at the idle rig and nearer the top still under the colossus master, so the cone starts at the top edge.
   farplane: {
     colour: {
       exposure: 1.45,
