@@ -30,8 +30,11 @@ export interface RigKoHost {
   lying(standHead: readonly [number, number, number, number] | undefined): RigKoLying;
   /** The key a request for `name` resolves to, or null for a name the rig knows nothing of (it stays as it is). */
   keyFor(name: string): string | null;
-  /** The rig's key goes to `key` NOW: no life layer, no move between two keys, the parts flip and the bones snap (the cut of the fall; the first frame of a standing key in a revive). */
-  flip(key: string): void;
+  /**
+   * The rig's key goes to `key` NOW: no life layer, no move between two keys, the parts flip and the bones snap (the cut of the fall; the first frame of a standing key in a revive). With `holdMs` over 0 the pieces
+   * as drawn this instant are held and cross out over that long, real ms, under the new key's (`RigHold.ts`: the painting set's own cross, 75 ms, so the feet and the sword do not jump on one frame).
+   */
+  flip(key: string, holdMs?: number): void;
 }
 
 /** The names a rig gives its head landmark, best first (the harness's own list: `critic/runner/lib/continuity-rig.mjs` RIG_DEFAULTS). */
@@ -47,7 +50,7 @@ export function drawsKoByPose(data: Pick<RigData, 'keys'>): boolean {
  * The host of a rig, or null when its `ko` key is not drawn by pose. `keyFor` and `flip` are the actor's (`RigActor.moveKey` with `immediate`); the lying head is a landmark of the `ko` key
  * posed on a skeleton of its own, solved once, so the run never touches the one the figure is drawn from.
  */
-export function makeRigKoHost(data: RigData, keyFor: (name: string) => string | null, flip: (key: string) => void): RigKoHost | null {
+export function makeRigKoHost(data: RigData, keyFor: (name: string) => string | null, flip: (key: string, holdMs?: number) => void): RigKoHost | null {
   if (!drawsKoByPose(data)) return null;
   const ko = data.keys.get('ko')!;
   let head: { x: number; y: number } | null | undefined;

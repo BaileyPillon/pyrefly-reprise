@@ -13,11 +13,28 @@ import type { Guts, LifeCtx, Playing, Slot } from './living.ts';
  * dust puff, and a revive plays it backwards. A rig has one plane (the idle's, the "carrier") and drew none of it: its `ko` key was a rigid turn of the standing pieces to 45 degrees and a cut to the lying
  * drawing in mid-air (the clips: "no cut from standing to lying" was the ask). The rig's parts follow the idle plane's mesh (`RigFigure.sync`), so the SAME run tips them: the standing plane is the idle
  * plane, the lying body is a plane-shaped record of the `ko` key ({@link lyingOf}: its head and span, from `RigKoHost`), and the cut of the cross changes the rig's key (`RigKoHost.flip`) instead of
- * fading a plane. Everything else is the run as it was: the clock (hold, cross, rise), the turn and the slide, the puff, the landing on the cut, `?kotopple=eased`, REDUCE MOTION (a cut, as before), a
+ * fading a plane, holding the pieces as drawn to cross out over it (`RigHold.ts`, review M1). Everything else is the run as it was: the clock (hold, cross, rise), the turn and the slide, the puff, the landing on the cut, `?kotopple=eased`, REDUCE MOTION (a cut, as before), a
  * hit-stop. Not ported: the buckle (a shader bend of the standing plane: the rig's parts do not wear it) and the smear window of the cross (a rig's `ko` is outside the rig smear, `SmearPlan.SKIP`).
  */
 
 const dummy = (pose: string): Slot => ({ fade: 0, pose } as unknown as Slot);
+
+/** A revive's cut falls on the first frame of its cross: the standing key drawn toppled where the body lay is nearest the lying head then (review M1, 2026-10-29: the head stepped 0.378 at the half way, 0.141 at the start); a fall's falls when the lying key is the stronger of the two (half). */
+const REVIVE_CUT_AT = 0.0001;
+const FALL_CUT_AT = 0.5;
+
+/** Whether the cut of a rig's run is due: `inn` is the incoming share of the run's cross now. */
+export const rigCutDue = (p: Playing, inn: number): boolean => p.rig !== undefined && p.rigCut !== true && inn >= (p.run.opts.kind === 'revive' ? REVIVE_CUT_AT : FALL_CUT_AT);
+
+/**
+ * The cross's cut of a rig's run: its key becomes the one the run ends in (the pieces as drawn this instant are held and cross out over the run's own cross, `RigHold.ts`), and (a fall) the lying key stands
+ * where the lying painting would, the idle plane upright again.
+ */
+export function cutRig(a: Guts, p: Playing): void {
+  p.rigCut = true;
+  p.rig!.flip(p.rigKey!, p.run.opts.crossMs);
+  if (p.run.opts.kind === 'fall') a.tipSlot(p.stand, null);
+}
 
 /** A plane-shaped record of the rig's `ko` key where the run reads a lying plane (its head box, its content span, its place on the idle plane's own frame, untipped). */
 export function lyingOf(host: RigKoHost, stand: Slot): Slot {

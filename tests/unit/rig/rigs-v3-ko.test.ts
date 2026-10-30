@@ -120,7 +120,7 @@ describe('the fall of a rig drawn by pose is the painting set\'s: it tips, it sl
 });
 
 describe('the revive of a rig drawn by pose is the fall backwards: the lying drawing crosses to the standing one already toppled where the body lay, which stands up', () => {
-  it('the key stays ko for the first half of the 75 ms cross, then the standing key is drawn toppled and rises to upright, the roll only shrinking', async () => {
+  it('the cut is the first frame of the cross (review M1: the half-way cut popped the head 0.38), and the standing key is drawn toppled and rises to upright, the roll only shrinking', async () => {
     const s = stage(await rigged(poseDrawnRig(true)));
     s.a.setPose('ko');
     s.frame(40);
@@ -134,9 +134,8 @@ describe('the revive of a rig drawn by pose is the fall backwards: the lying dra
       rolls.push(s.roll());
       if (cutAt < 0 && s.key() === 'idle') cutAt = i;
     }
-    expect(cutAt).toBeGreaterThanOrEqual(0);
-    expect(cutAt).toBeLessThanOrEqual(4);
-    expect(Math.abs(rolls[cutAt]!), 'toppled where it lay at the cut').toBeGreaterThan(0.6 * TOPPLE_RAD);
+    expect(cutAt, 'the first frame of the cross: the toppled standing key is nearest the lying head at the start of the rise').toBe(0);
+    expect(Math.abs(rolls[cutAt]!), 'toppled where it lay at the cut').toBeGreaterThan(0.85 * TOPPLE_RAD);
     const rise = rolls.slice(cutAt).map(Math.abs);
     for (let i = 1; i < rise.length; i++) expect(rise[i]!, `frame ${i}`).toBeLessThanOrEqual(rise[i - 1]! + 1e-12);
     expect(rolls.at(-1)).toBe(0);
@@ -158,6 +157,35 @@ describe('the revive of a rig drawn by pose is the fall backwards: the lying dra
     }
     expect(Number.isNaN(after)).toBe(false);
     expect(Math.abs(after - before)).toBeLessThan(0.12);
+  });
+
+  it('a revive to a pose other than the idle (a Phoenix Down gives the critical stance) ends in that key, upright (review m2, mutant N25)', async () => {
+    const f = poseDrawnRig(true);
+    f.keys['critical'] = { bones: { chest: { rot: 0.3 } }, source: 'characters/tidus/critical', ms: 200 };
+    const s = stage(await rigged(f));
+    s.a.setPose('ko');
+    s.frame(40);
+    expect(s.key()).toBe('ko');
+    s.a.setPose('critical');
+    s.frame(40);
+    expect(s.key()).toBe('critical');
+    expect(s.roll()).toBe(0);
+    expect(s.a.lifeState, 'the body is up (critical is a stance of the living, not a life state)').not.toBe('down');
+    expect(s.a.figure.fading).toBe(false);
+  });
+
+  it('a pose the life layer refuses on a body that is down (a hit\'s pose) starts no revive: the key stays ko, nothing is held, nothing rises (review m2, mutant N11)', async () => {
+    const s = stage(await rigged(poseDrawnRig(true)));
+    s.a.setPose('ko');
+    s.frame(40);
+    const rises = s.living.last.rises;
+    s.a.setPose('hurt');
+    s.frame(10);
+    expect(s.key()).toBe('ko');
+    expect(s.living.last.rises).toBe(rises);
+    expect(s.a.figure.fading).toBe(false);
+    expect(s.roll()).toBe(0);
+    expect(s.a.lifeState).toBe('down');
   });
 
   it('a revive that comes before the fall has ended ends it where it stands (the key is ko, the plane upright) and then plays', async () => {

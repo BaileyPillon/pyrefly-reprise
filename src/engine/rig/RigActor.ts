@@ -217,7 +217,7 @@ export class RigActor extends PaintedActor {
 
   /** What the KO run needs when this rig's `ko` key is drawn by pose; null for every other rig (`RigKoHost.ts`). */
   get rigKo(): RigKoHost | null {
-    return this.koHost !== undefined ? this.koHost : (this.koHost = this.poseDrawnParty ? makeRigKoHost(this.data, (n) => resolveKeyName(n, this.rigKeys, this.dressphere), (k) => this.moveKey(k, { immediate: true, force: true })) : null);
+    return this.koHost !== undefined ? this.koHost : (this.koHost = this.poseDrawnParty ? makeRigKoHost(this.data, (n) => resolveKeyName(n, this.rigKeys, this.dressphere), (k, ms) => { if (ms) this.rig.holdPose(ms); this.moveKey(k, { immediate: true, force: true }); }) : null);
   }
 
   protected override smearsPlanes(): boolean { return false; } // the parts are what is drawn: the smear is `smearWin`'s, not the carrier planes' cut

@@ -7,7 +7,7 @@ import { KoPuff } from '../../KoPuff.ts';
 import { TOPPLE_RAD, contentCentreX, headCentreX, headMiddleU, tipSide, type SlotTip } from '../../KoTip.ts';
 import { breathRigFor, flatBreathRig } from './breathRig.ts';
 import { setMixPatch } from './patch.ts';
-import { rigFall, rigRevive } from './livingRig.ts'; // rigs-v3: a rig drawn by pose topples its own pieces
+import { cutRig, rigCutDue, rigFall, rigRevive } from './livingRig.ts'; // rigs-v3: a rig drawn by pose topples its own pieces
 import type { RigKoHost } from '../../rig/RigKoHost.ts';
 import { demoMotionOn } from '../../motion/DemoMotion.ts'; // `?motion=demo`: the chest breath keeps the figure's own slow squash beside it, on the same period and phase
 
@@ -277,13 +277,6 @@ export class LivingFigure {
     }
   }
 
-  /** rigs-v3: the cross's cut of a rig's run: its key becomes the one the run ends in, and (a fall) the lying key stands where the lying painting would, the idle plane upright again. */
-  private cutRig(p: Playing): void {
-    p.rigCut = true;
-    p.rig!.flip(p.rigKey!);
-    if (p.run.opts.kind === 'fall') this.a.tipSlot(p.stand, null);
-  }
-
   /** The knock-out's cut (motion pass, step 3): the smear window opens as the cross begins, follows it, and closes with it. The streak runs the way the body falls. */
   private driveCut(play: Playing, phase: string): void {
     const a = this.a;
@@ -343,7 +336,7 @@ export class LivingFigure {
     if (play) {
       play.run.step(ctx.dt * 1000, realMs);
       const pose = play.run.pose;
-      if (play.rig && !play.rigCut && pose.inn >= 0.5) this.cutRig(play);
+      if (rigCutDue(play, pose.inn)) cutRig(a, play);
       if (!play.landed && play.run.opts.kind === 'fall' && pose.inn >= 0.5) {
         play.landed = true;
         a.landFall?.(); // MF-09: the thud on the frame the body arrives (the cut), not on the fall tween's own end 58 to 92 ms later

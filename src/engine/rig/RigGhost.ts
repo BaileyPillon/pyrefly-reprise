@@ -54,7 +54,7 @@ export interface GhostEnv {
 }
 
 /** The ghost: a second mesh and material with the part's own uniform cells shared by reference. */
-function makeGhost(env: GhostEnv, p: PartRt): { mesh: Mesh; material: ShaderMaterial } {
+export function makeGhost(env: GhostEnv, p: PartRt): { mesh: Mesh; material: ShaderMaterial } {
   const own = p.looks[0]!;
   const slot = idleSlot(env.carrier);
   const material = makePartMaterial({

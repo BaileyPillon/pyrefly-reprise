@@ -38,6 +38,7 @@ import { rigRelightWanted, setPartNormal } from '../look/relight/RigRelight.ts';
 import type { RigData, RigPartData, RigVariantData } from './RigData.ts';
 import { HIDDEN, OWN, restState } from './RigPartState.ts';
 import { advanceFades, applyOpacity, beginFade, endFade, pointGhost, type GhostEnv, type Look, type PartRt } from './RigGhost.ts'; // `?motion=demo`: a part's image swap cross-fades instead of flipping (format v2.1 `fadeMs`)
+import { RigHold } from './RigHold.ts'; // rigs-v3: the cut of a knock-out holds the pose drawn so far and fades it out under the next key
 import { makePartMaterial, setPartTexel } from './RigMaterial.ts';
 import { RigSkeleton } from './RigSkeleton.ts';
 import { idleSlot, type CarrierInternals } from './RigCarrier.ts';
@@ -81,6 +82,7 @@ export class RigFigure {
   /** The camera and the drawing buffer's height as of the last draw: what the magnification of the idle's texel is measured with (`view`). */
   private seen: { camera: PerspectiveCamera; height: number } | null = null;
   private readonly bufferSize = new Vector2();
+  private readonly hold = new RigHold();
 
   private constructor(readonly data: RigData, private readonly carrier: CarrierInternals) {
     this.skeleton = new RigSkeleton(data);
@@ -271,6 +273,12 @@ export class RigFigure {
   /** Move every running cross-fade on by `ms` of REAL time (a hit-stop never freezes a half-mixed pair of images). Call it before {@link setOpacity}. */
   advanceFades(ms: number): void {
     advanceFades(this.parts, ms);
+    this.hold.advance(ms);
+  }
+
+  /** rigs-v3 (`RigHold.ts`): freeze the pieces as drawn now and cross them out over `ms` of real time under what the next key draws; call it before the key changes. */
+  holdPose(ms: number): void {
+    this.hold.begin(this.ghostEnv, this.parts, (p) => this.lookOf(p), ms);
   }
 
   /** What the ghost meshes need of this figure. */
@@ -278,7 +286,7 @@ export class RigFigure {
 
   /** True while any part is cross-fading (for the tests and `rigInfo`). */
   get fading(): boolean {
-    return this.parts.some((p) => p.fade !== null);
+    return this.hold.active || this.parts.some((p) => p.fade !== null);
   }
 
   /** The state the parts are in now (a copy), for the tests and `rigInfo`. */
@@ -333,7 +341,8 @@ export class RigFigure {
   /** The actor's alpha onto every part (the shader multiplies it into the painting's own). */
   setOpacity(alpha: number, visible: boolean): void {
     const on = visible && alpha > 0.001;
-    applyOpacity(this.parts, alpha, on);
+    applyOpacity(this.parts, alpha * this.hold.kIn, on);
+    this.hold.apply(alpha, on);
     this.plane.visible = on;
   }
 
@@ -343,6 +352,7 @@ export class RigFigure {
       syncPaintedBloom(p.material, dissolving, masked);
       if (p.ghost) syncPaintedBloom(p.ghost.material, dissolving, masked);
     }
+    for (const m of this.hold.materials()) syncPaintedBloom(m, dissolving, masked);
   }
 
   /** The parts' materials in draw order (the tests read the shared cells through them). */
@@ -374,6 +384,7 @@ export class RigFigure {
         l.normal?.dispose();
       }
     }
+    this.hold.dispose();
     this.white?.dispose();
     this.parts.length = 0;
     this.plane.removeFromParent();

@@ -122,6 +122,23 @@ describe('RigActor: the fold rule is the pose-drawn party figure\'s own', () => 
     expect(long, 'a figure that is not drawn by pose keeps the raw interpolation').toBeCloseTo(5.0, 9);
   });
 
+  it('the short way is measured from where the figure IS, not from the idle: from a key that stores 3.0 radians to one that stores -3.0 the turn is 0.28 forward, never back through 0 (review m2, mutant N21: every other test starts from the idle)', async () => {
+    const f = poseDrawnRig(true);
+    f.keys['cast'] = { ...f.keys['cast']!, bones: { chest: { rot: 3.0 } }, ms: 150 };
+    f.keys['hurt'] = { bones: { chest: { rot: -3.0 } }, source: 'characters/tidus/hurt', ms: 150 };
+    const a = await rigged(f);
+    a.update(0);
+    const chest = a.figure.skeleton.data.boneIndex.get('chest')! * 5;
+    a.setPose('cast');
+    run(a, 400, 60);
+    expect(a.figure.skeleton.pose[chest]!).toBeCloseTo(3.0, 9);
+    let lowest = Infinity;
+    a.setPose('hurt');
+    run(a, 400, 60, () => { lowest = Math.min(lowest, a.figure.skeleton.pose[chest]!); });
+    expect(lowest, 'it never went back through 0 (the long way is 6 radians; from the idle\'s base -3.0 would be left as it is)').toBeGreaterThanOrEqual(3.0 - 1e-9);
+    expect(a.figure.skeleton.pose[chest]!, 'it ends on the equivalent angle, 2 pi less than 3.283').toBeCloseTo(-3.0 + 2 * Math.PI, 9);
+  });
+
   it('a rig that is not drawn by pose, or is not on the party\'s side, keeps its key times (the bosses, Lulu, the aeons: nothing a player sees today changes)', async () => {
     setPaceGame('ffx2');
     const boss = await rigged(poseDrawnRig(true), 'enemy');
@@ -173,6 +190,12 @@ describe('RigKoHost: what the KO run reads of a rig', () => {
     };
     expect(drawsKoByPose(read(poseDrawnRig(true)))).toBe(true);
     expect(drawsKoByPose(read(poseDrawnRig(true, false)))).toBe(false);
+    const two = poseDrawnRig(true);
+    two.keys['ko'] = { ...two.keys['ko']!, parts: { legs: { image: 'ko' }, body: { image: 'ko' } } };
+    expect(drawsKoByPose(read(two)), 'two pieces with an image of their own are not a lying drawing (review m2, mutant N12)').toBe(false);
+    const hidden = poseDrawnRig(true);
+    hidden.keys['ko'] = { ...hidden.keys['ko']!, parts: { legs: { image: 'ko' }, body: { image: 'ko' }, head: { image: 'ko', show: false } } };
+    expect(drawsKoByPose(read(hidden)), 'a hidden piece does not count').toBe(false);
     expect(makeRigKoHost(read(poseDrawnRig(true, false)), () => 'idle', () => {})).toBeNull();
   });
 

@@ -255,6 +255,8 @@ describe('what a painted figure\'s checks would have missed in a rig', () => {
     expect(rigConfig({ ...CFG, rig: false })).toBeNull();
     expect(rigProbeConfig({ ...CFG, rig: false })).toBeNull();
     expect(rigProbeConfig(CFG)).toMatchObject({ head: expect.arrayContaining(['head']), headPart: 'head' });
+    expect(rigProbeConfig(CFG), 'the crown landmark reaches the page-side reader: without it every swap is read by its painted box again (review m2, mutant N19)').toMatchObject({ crown: ['crown', 'headTop'] });
+    expect(rigProbeConfig({ ...CFG, rig: { crown: ['topknot'] } })).toMatchObject({ crown: ['topknot'] });
     const off = run(build(ko(), { keys: { ko: { ha: 0.0075 } } }), { ...CFG, rig: false });
     expect(off.swaps).toHaveLength(0);
     expect(off.summary.checks['CHK-026'].result).toBe('UNVERIFIED'); // nothing was measured: the earlier reading of a rig, which never showed a swap
