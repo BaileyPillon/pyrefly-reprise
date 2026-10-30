@@ -1,6 +1,6 @@
 /**
  * MF-22, the wide scope (lane pc-scope, 2026-10-28; flipped to the default in release 68; `motion/SwapSwitch.ts`; both games, per chapter): `?swapscope=pack|wide|all` says in which chapters the stance (`?stance`) and
- * cause (`?swapcause`) looks play. `pack` is release 67's reach (Chapter I and Chapter IV), `wide` is all nineteen chapters but the four named exceptions (Yunalesca, Evrae, Sin's face, Ixion XVI), `all` is all
+ * cause (`?swapcause`) looks play. `pack` is release 67's reach (Chapter I and Chapter IV), `wide` is all nineteen chapters but the three named exceptions (Yunalesca, Sin's face, Ixion XVI; Evrae left the list in release 69), `all` is all
  * nineteen with no exception (the measuring word). The default is `wide` since release 68, and these tests are what pin that and the exception list; going back is one line.
  */
 import { afterEach, describe, expect, it } from 'vitest';
@@ -107,11 +107,10 @@ describe('the exceptions are named, real and justified', () => {
     expect(SCOPE_EXCEPTIONS['yunalesca']).toMatch(/63 planned cuts over 120 px/);
   });
 
-  it('release 68 names exactly four exceptions, three FFX and one FFX-2 (Evrae, Sin\'s face, Yunalesca; Ixion XVI), each with the number that put it out and what lifts it', () => {
-    expect([...EXCEPTED].sort()).toEqual(['evrae-airship', 'ffx2-ixion-djose', 'sin-face', 'yunalesca']);
-    expect(SCOPE_EXCEPTIONS['evrae-airship']).toMatch(/FFX, Evrae/);
-    expect(SCOPE_EXCEPTIONS['evrae-airship']).toMatch(/53 to 55 px/);
-    expect(SCOPE_EXCEPTIONS['evrae-airship']).toMatch(/swap jerks from 2 to 11/);
+  it('release 69 names exactly three exceptions, two FFX and one FFX-2 (Sin\'s face, Yunalesca; Ixion XVI), each with the number that put it out and what lifts it; Evrae left the list (release 69)', () => {
+    expect([...EXCEPTED].sort()).toEqual(['ffx2-ixion-djose', 'sin-face', 'yunalesca']);
+    expect(EXCEPTED).not.toContain('evrae-airship');
+    expect(scopeExcepted('evrae-airship')).toBe(false);
     expect(SCOPE_EXCEPTIONS['sin-face']).toMatch(/FFX, Sin/);
     expect(SCOPE_EXCEPTIONS['sin-face']).toMatch(/224 px/);
     expect(SCOPE_EXCEPTIONS['ffx2-ixion-djose']).toMatch(/FFX-2, Ixion/);
@@ -128,9 +127,10 @@ describe('chapterInScope, for all nineteen chapters', () => {
     expect(IDS.filter((id) => chapterInScope(id, 'pack'))).toEqual(['seymour-flux', 'ffx2-bahamut']);
   });
 
-  it('wide: every chapter but the four exceptions (fifteen of the nineteen), the pack chapters always', () => {
+  it('wide: every chapter but the three exceptions (sixteen of the nineteen, Evrae among them since release 69), the pack chapters always', () => {
     const inside = IDS.filter((id) => chapterInScope(id, 'wide'));
-    expect(inside).toHaveLength(15);
+    expect(inside).toHaveLength(16);
+    expect(inside).toContain('evrae-airship');
     expect(inside).toHaveLength(19 - EXCEPTED.length);
     expect(IDS.filter((id) => !chapterInScope(id, 'wide')).sort()).toEqual([...EXCEPTED].sort());
     for (const p of PACK) expect(chapterInScope(p, 'wide')).toBe(true);
@@ -215,9 +215,9 @@ describe('the debug reader', () => {
     const api: Record<string, unknown> = {};
     installSmearDebug(api);
     const swapSwitch = api['swapSwitch'] as (set?: { scope?: SwapScope; cutAnchor?: 'today' | 'on' | 'moving' }) => { scope: string; scopeExceptions: string[]; cutAnchor: string };
-    const four = ['yunalesca', 'evrae-airship', 'sin-face', 'ffx2-ixion-djose'];
-    expect(swapSwitch()).toMatchObject({ scope: swapScope(), scopeExceptions: four });
-    expect(swapSwitch({ scope: 'wide', cutAnchor: 'on' })).toMatchObject({ scope: 'wide', scopeExceptions: four, cutAnchor: 'on' });
+    const three = ['yunalesca', 'sin-face', 'ffx2-ixion-djose'];
+    expect(swapSwitch()).toMatchObject({ scope: swapScope(), scopeExceptions: three });
+    expect(swapSwitch({ scope: 'wide', cutAnchor: 'on' })).toMatchObject({ scope: 'wide', scopeExceptions: three, cutAnchor: 'on' });
     expect(swapSwitch({ scope: 'all' })).toMatchObject({ scope: 'all', cutAnchor: 'on' });
   });
 });

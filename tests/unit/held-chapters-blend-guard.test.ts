@@ -86,11 +86,11 @@ describe('the table of chapters that read it', () => {
     expect(blendHeadMax('evrae-airship')).toBe(0.11);
   });
 
-  it('every chapter in it is a listed chapter the wide scope leaves out today (it travels with the chapter when its exception is lifted)', () => {
-    for (const id of Object.keys(BLEND_HEAD_CHAPTERS)) {
-      expect(WIDE_CHAPTERS, id).toContain(id);
-      expect(Object.keys(SCOPE_EXCEPTIONS), id).toContain(id);
-    }
+  it('every chapter in it is a listed chapter; Sin\'s face is still held, and Evrae keeps its guard after his exception was lifted (release 69: the guard is what his hurt>idle needs, so the table travels with the chapter)', () => {
+    for (const id of Object.keys(BLEND_HEAD_CHAPTERS)) expect(WIDE_CHAPTERS, id).toContain(id);
+    expect(Object.keys(SCOPE_EXCEPTIONS)).toContain('sin-face');
+    expect(Object.keys(SCOPE_EXCEPTIONS)).not.toContain('evrae-airship');
+    expect(blendHeadMax('evrae-airship')).toBe(BLEND3_HEAD_MAX);
   });
 
   it('blendTooFar: at or over the line in the named chapters; never elsewhere; an unknown distance is not too far', () => {

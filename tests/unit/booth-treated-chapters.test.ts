@@ -35,7 +35,7 @@ const NOT_YET: Readonly<Record<string, string>> = {
   'braskas-final-aeon': 'FFX: seven links of three foes, the heaviest chapter; maps for about 21 poses owed',
   'ffx2-vegnagun-shuyin': 'FFX-2: five parts, a camera that keeps today (Vegnagun), the HP waiver; next after Leblanc (same dresses as Chapter IV but Paine)',
   'seymour-anima-macalania': 'FFX: three foes under one declared boss; maps owed',
-  'evrae-airship': 'FFX: swap exception (a fixed head step per pose), non-standard pose names',
+  'evrae-airship': 'FFX: non-standard pose names, a fixed head step per pose (the vertical blend guard); its swap exception was lifted in release 69',
   'yojimbo-cavern': 'FFX: three foes, no KO pose; maps owed',
   'seymour-natus': 'FFX: the re-cut question (pale fringe heuristic +19), maps owed',
   'ffx2-fallen-aeons': 'FFX-2: three links, two re-cut candidates, a dress guard for Paine',

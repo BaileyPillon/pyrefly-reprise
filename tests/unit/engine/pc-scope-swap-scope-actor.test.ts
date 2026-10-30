@@ -1,6 +1,6 @@
 /**
  * MF-22 on the REAL `PaintedActor`, in each of the nineteen chapters (lane pc-scope, 2026-10-28; `motion/SwapSwitch.ts`; both games): under `?swapscope=wide` (the default since release 68) a hit is a cut on its cause in
- * every chapter but the four named exceptions, under `all` in every one of the nineteen, under `pack` (release 67's reach) in the two pack chapters only; everywhere else it is today's blend. The smear's style follows the same gate.
+ * every chapter but the three named exceptions (four until release 69), under `all` in every one of the nineteen, under `pack` (release 67's reach) in the two pack chapters only; everywhere else it is today's blend. The smear's style follows the same gate.
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { CHAPTERS } from '../../../src/data/encounters.ts';
