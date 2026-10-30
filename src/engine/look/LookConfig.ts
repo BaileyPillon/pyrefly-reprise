@@ -36,6 +36,10 @@ export const CHAPTER_LOOKS: Readonly<Record<string, { name: LookName; strength: 
   'ffx2-bahamut': { name: 'hd2d', strength: 'bold' },
   // Release 69 (`booth-leblanc`; Bailey 2026-10-30: the booth treatment for every listed chapter, Leblanc first; FFX-2 only): Chapter VI, the Chateau's last room. The row plays only while the treatment reaches the chapter (`?treated=pack` puts release 68's frame back).
   'ffx2-leblanc': { name: 'hd2d', strength: 'bold' },
+  // Batch 2 (`booth-ffx2-b2`, FFX-2 only; Bailey 2026-10-30): Chapter V (the Heart of the Farplane), Chapter XV (the Den of Woe) and Chapter XI (the Road to the Farplane). Same rule: played only while the treatment reaches the chapter.
+  'ffx2-vegnagun-shuyin': { name: 'hd2d', strength: 'bold' },
+  'ffx2-den-of-woe': { name: 'hd2d', strength: 'bold' },
+  'ffx2-fallen-aeons': { name: 'hd2d', strength: 'bold' },
 };
 
 /** The look a chapter plays with no `look` key in the address, or null (today's frame): a row of {@link CHAPTER_LOOKS} for a chapter the treatment reaches (`DemoGate.isTreatedChapter`, piece `hd2d`). */

@@ -156,6 +156,14 @@ export const ROOM_BOLD: Readonly<Record<string, RoomBold>> = {
     fogScale: 0.9,
     driftPx: 3,
   },
+  // Batch 2 (`booth-ffx2-b2`, FFX-2 only; Bailey 2026-10-30). NO EMBERS in any of the three, for the reason each source gives: the Farplane's air is the pyreflies and the petals the scene already draws live ("pyreflies are not atmosphere, they are a statement about the dead", `research/ffx-vs-ffx2-presentation.md`
+  // section 8; `research/ffx2-vegnagun-shuyin.md` section 10.4: "a single GPU particle system running at low density throughout the chapter"), and the Den's plate paints its own motes and `scenes/den-of-woe.ts` adds sparse live ones ("live ones may double up"), so sparks from a lamp would be a third layer
+  // of the same thing. The fog and the shafts are light, not particles, and stay. Chapter V, the Heart of the Farplane: a flower field and mist (matte, no reflection), a lilac fog, the spire's white-lilac for the rim, the haze held down (the plate is luminous).
+  farplane: { gloss: 0.1, rim: [0.85, 0.72, 1.0], embers: [], fog: [0.5, 0.42, 0.85], shadow: [0.2, 0.14, 0.42], fogScale: 0.7, driftPx: 3 },
+  // Chapter XI, the Road to the Farplane: the same sky, a grey-violet stone platform with glowing cracks (a little polish).
+  'road-to-the-farplane': { gloss: 0.3, rim: [0.85, 0.72, 1.0], embers: [], fog: [0.5, 0.42, 0.85], shadow: [0.18, 0.12, 0.36], fogScale: 0.7, driftPx: 3 },
+  // Chapter XV, the Den of Woe: a lit wet stone floor under black rock, the domes' cyan for the rim and the fog's blue-teal.
+  'den-of-woe': { gloss: 0.35, rim: [0.35, 0.95, 0.95], embers: [], fog: [0.1, 0.26, 0.38], shadow: [0.05, 0.12, 0.22], fogScale: 0.9, driftPx: 3 },
 };
 
 export const roomBold = (key: string): RoomBold => ROOM_BOLD[key] ?? DEFAULT_ROOM_BOLD;

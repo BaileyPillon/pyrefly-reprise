@@ -74,6 +74,11 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
   'seymour-flux': { game: 'ffx', since: 'r60' },
   'ffx2-bahamut': { game: 'ffx2', since: 'r60' },
   'ffx2-leblanc': { game: 'ffx2', since: 'r69' },
+  // Batch 2, the FFX-2 lane `booth-ffx2-b2` (all FFX-2 only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter V (Vegnagun and Shuyin, five links), Chapter XV (the Den of Woe, three shades) and Chapter XI (the Fallen Aeons,
+  // three links). Each holds the pieces named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber.
+  'ffx2-vegnagun-shuyin': { game: 'ffx2', since: 'r70' },
+  'ffx2-den-of-woe': { game: 'ffx2', since: 'r70' },
+  'ffx2-fallen-aeons': { game: 'ffx2', since: 'r70' },
 });
 
 /**
@@ -87,6 +92,31 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'three timed stages, eight shots, the party knocked down, a finisher; "the perfect thing for a presentation layer to build around"), a three-beat comedy combo whose tone, sound and shot are a mockup decision ' +
       '(hard rule 9), and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays the breath today. Lifts when Bailey or the driver picks a tone and a shot for No Love Lost from a mockup and the breath ' +
       'plan (and, for the sound pass, `passRecipes.HEADLINE_BLOWS`, which hit) is given a row for its ids `x2-nll-1` to `x2-nll-3`.',
+  }),
+  // Batch 2 (FFX-2 only; the driver's call (a): a staged breath that needs a tone or a sound pick is held with a reason, never guessed; one plays only where the research sources the move and an existing telegraph hold already stages it, and
+  // `TelegraphHold` holds Chapter I and Chapter III's moves alone, in FFX only).
+  'ffx2-vegnagun-shuyin': Object.freeze({
+    cam:
+      'FFX-2, Chapter V: links 1 to 4 play the approved colossus staging (D-228, `scenes/farplane-colossus.ts`: a low fov-40 master camera looking up at a part drawn 4.3 to 5.6 times a girl\'s height, "no single camera frame ever contains it"), and ' +
+      'the follower\'s never-crop fit (`ProFit`, the safe rectangle 0.84 by 0.9) would dolly that camera back to fit each part whole: at the master rig a part alone is 1.24 (the Body) to 1.94 (the Leg) times over the rectangle, up to the 2.2 cap, ' +
+      'so the follower would undo the frame Bailey approved (`fx/mix/masters.ts` `keepsToday` keeps today\'s rig for the same reason). Lifts when the follower stands down while the colossus rig is staged (`VegnagunColossus.active`), so link 5, Shuyin, ' +
+      'plays it on the plain Farplane frame, or a browser read shows the fit keeping the approved crop.',
+    breath:
+      'FFX-2, Chapter V: the held breath is the drain-and-flood built for Mega Flare (and, in FFX, Total Annihilation), and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays it today. The sourced candidates are the Core\'s ' +
+      'Memento Mori after three Charge Core turns (`x2-vegnagun-memento-mori`, `research/ffx2-vegnagun-shuyin.md` section 4.1) and the Head\'s Nemo Ante Mortem Beatus, each a solemn all-party blow whose tone, sound and shot are a mockup decision ' +
+      '(hard rule 9). Lifts when Bailey or the driver picks the move, a tone and a shot from a mockup, `BigMove` is given its id and `passRecipes.HEADLINE_BLOWS` its hit.',
+  }),
+  'ffx2-den-of-woe': Object.freeze({
+    breath:
+      'FFX-2, Chapter XV: the held breath is the drain-and-flood built for Mega Flare, and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays it today. None of the three shades has a move the research calls a showpiece; ' +
+      'the one candidate is Nooj\'s Lightfall (`x2-den-nooj-lightfall`, 5,000 to everyone, `research/ffx2-gippal-den-of-woe.md` section 4.3 and C-4), a spell whose tone, sound and shot are a mockup decision (hard rule 9). Lifts when Bailey or the driver ' +
+      'picks the move, a tone and a shot from a mockup, `BigMove` is given its id and `passRecipes.HEADLINE_BLOWS` its hit.',
+  }),
+  'ffx2-fallen-aeons': Object.freeze({
+    breath:
+      'FFX-2, Chapter XI: the held breath is the drain-and-flood built for Mega Flare, and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays it today. The sourced candidates are Shiva\'s Diamond Dust (`x2-shiva-diamond-dust`, ' +
+      'the action counter\'s payoff), the three Sisters\' Delta Attack (`x2-magus-delta-attack`, the party to 1 HP, gone once any sister falls) and Anima\'s Oblivion (`x2-anima-oblivion`), three different tones that are a mockup decision (hard rule 9) ' +
+      '(`research/ffx2-fallen-aeons.md` sections 4.1 to 4.3). Lifts when Bailey or the driver picks the move, a tone and a shot from a mockup, `BigMove` is given its id and `passRecipes.HEADLINE_BLOWS` its hit.',
   }),
 });
 

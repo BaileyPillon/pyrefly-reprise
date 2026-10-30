@@ -247,6 +247,72 @@ export const PRO_ARENA: Readonly<Record<string, ProRoom>> = {
     // the heart, found on the painting (plate u 0.500, v 0.264 from the top) so the cone follows the camera; (u, v) is the frame point it started from (v up, so 1 - 0.264 less the frame's crop)
     cone: { u: 0.5, v: 0.74, follow: false, paint: { u: 0.5, v: 0.264 }, colour: [1.0, 0.5, 0.82], strength: 0.4, spread: 0.4, reach: 2.0, rays: 0.3 },
   },
+  // Batch 2 (FFX-2 only; `booth-ffx2-b2`, Bailey 2026-10-30). The grammar is the booth pair's (one strong light, the rest to deep shadow and haze), the rooms are three the booth never had; each row is [ours], set from the plate's own colours and graded offline through
+  // this table (`docs/handoff/booth-ffx2-b2.md`, `docs/screenshots/booth-ffx2-b2-plate-grade.png`), and a still beside Chapter IV is owed before Bailey judges it (hard rule 9; the booth pair is the approved target).
+  // Chapter V, the Heart of the Farplane: the spire's burst (the plate's one white-lilac star, u 0.505, v 0.285) is the only light; the luminous pastel sky falls to violet-indigo and its saturation is held under 1 ("the deeper you go, the less organic ... desaturate and cool as the player
+  // descends", `research/ffx2-vegnagun-shuyin.md` section 10.4), a lilac cone falls from it. The burst is above the top of the frame at the idle rig and nearer the top still under the colossus master, so the cone starts at the top edge.
+  farplane: {
+    colour: {
+      exposure: 1.45,
+      gamma: 0.26,
+      contrast: 0.1,
+      pivot: 0.35,
+      sat: 0.9,
+      pulls: [[237, 40, -4, 0.84, 0.72], [270, 36, 0, 0.74, 0.7], [315, 46, 0, 0.62, 0.66]],
+      gradmap: { amount: 0.1, stops: [[0, [0.02, 0.0, 0.07]], [0.3, [0.1, 0.06, 0.26]], [0.6, [0.4, 0.32, 0.64]], [0.9, [0.96, 0.88, 1.0]], [1, [1, 1, 1]]] },
+      shadow: [[0.05, 0.03, 0.2], 0.4],
+      shadowTo: 0.45,
+    },
+    lightColor: [0.98, 0.88, 1.0],
+    tweaks: { 'stage.shaft': 0.6, 'bold.stage': 1.7, 'bold.fog': 1.2, 'bold.rim': 1.4, 'relight.key': 1.5, 'shaft.gain': 2.0 },
+    haze: { colour: [0.3, 0.22, 0.5], amounts: [0.06, 0.05, 0.03], side: 0.1 },
+    vignette: { amount: 0.52, radius: 0.42, tint: [0.01, 0.0, 0.04] },
+    grain: 0.018,
+    cone: { u: 0.46, v: 0.93, follow: false, paint: { u: 0.505, v: 0.285 }, colour: [0.9, 0.78, 1.0], strength: 0.42, spread: 0.4, reach: 2.0, rays: 0.3 },
+  },
+  // Chapter XI, the Road to the Farplane: the same sky and spire, so the same light and the same grammar; the platform's grey-violet stone with its glowing cracks is darker than Chapter V's flower field, so the room keeps a touch more of its exposure. The painting
+  // is laid higher here (`ROAD_BACKDROP.centreY` 8.8), so the burst sits above the frame's top edge (frame v 1.28 at the idle rig) and the cone starts at the edge.
+  'road-to-the-farplane': {
+    colour: {
+      exposure: 1.5,
+      gamma: 0.27,
+      contrast: 0.1,
+      pivot: 0.35,
+      sat: 0.92,
+      pulls: [[237, 40, -4, 0.84, 0.72], [270, 36, 0, 0.74, 0.7], [315, 46, 0, 0.62, 0.66]],
+      gradmap: { amount: 0.1, stops: [[0, [0.02, 0.0, 0.07]], [0.3, [0.1, 0.06, 0.26]], [0.6, [0.4, 0.32, 0.64]], [0.9, [0.96, 0.88, 1.0]], [1, [1, 1, 1]]] },
+      shadow: [[0.05, 0.03, 0.2], 0.4],
+      shadowTo: 0.45,
+    },
+    lightColor: [0.98, 0.88, 1.0],
+    tweaks: { 'stage.shaft': 0.6, 'bold.stage': 1.7, 'bold.fog': 1.2, 'bold.rim': 1.4, 'relight.key': 1.5, 'shaft.gain': 2.0 },
+    haze: { colour: [0.3, 0.22, 0.5], amounts: [0.06, 0.05, 0.03], side: 0.1 },
+    vignette: { amount: 0.52, radius: 0.42, tint: [0.01, 0.0, 0.04] },
+    grain: 0.018,
+    cone: { u: 0.46, v: 0.98, follow: false, paint: { u: 0.505, v: 0.285 }, colour: [0.9, 0.78, 1.0], strength: 0.42, spread: 0.4, reach: 2.0, rays: 0.3 },
+  },
+  // Chapter XV, the Den of Woe: a cold cave whose lights are floor domes: the right one (the plate's brightest, u 0.869, v 0.599) stands at the right edge of the idle frame and the left one off its left edge, so there is no light above the frame to hang a falling cone on.
+  // The cone is therefore the right dome's own glow pooled across the floor: low (strength 0.26 against the booth rooms' 0.4 to 0.48), short, no beams, anchored to the painted dome and starting at the frame's right edge; the arena's one-light rule
+  // (`pro-look-arena.test.ts`) holds and the browser job reads whether it earns its place. The room falls to blue-black with the domes' cyan and the lit floor kept, a haze and a vignette; the plate's own motes (and the scene's sparse live ones) are the only air.
+  'den-of-woe': {
+    colour: {
+      exposure: 1.3,
+      gamma: 1.0,
+      contrast: 0.3,
+      pivot: 0.3,
+      sat: 1.08,
+      pulls: [[180, 26, 0, 1.1, 1.06], [196, 36, 0, 1.05, 1.0], [228, 50, -4, 0.9, 0.8]],
+      gradmap: { amount: 0.08, stops: [[0, [0.0, 0.01, 0.04]], [0.3, [0.02, 0.1, 0.2]], [0.6, [0.2, 0.5, 0.62]], [0.9, [0.8, 0.98, 1.0]], [1, [1, 1, 1]]] },
+      shadow: [[0.02, 0.06, 0.16], 0.4],
+      shadowTo: 0.45,
+    },
+    lightColor: [0.5, 0.95, 0.95],
+    tweaks: { 'stage.shaft': 0.6, 'bold.stage': 1.7, 'bold.fog': 1.4, 'bold.rim': 1.4, 'relight.key': 1.5, 'shaft.gain': 2.0 },
+    haze: { colour: [0.1, 0.24, 0.36], amounts: [0.06, 0.05, 0.02], side: 0.1 },
+    vignette: { amount: 0.5, radius: 0.42, tint: [0.0, 0.01, 0.03] },
+    grain: 0.018,
+    cone: { u: 0.97, v: 0.45, follow: false, paint: { u: 0.869, v: 0.599 }, colour: [0.3, 0.95, 0.95], strength: 0.26, spread: 0.5, reach: 1.5, rays: 0.15 },
+  },
 };
 
 

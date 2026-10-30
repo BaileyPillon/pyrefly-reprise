@@ -65,6 +65,14 @@ export const ROOM_LOOKS: Readonly<Record<LookName, Readonly<Record<string, RoomL
     // Chapter VI (FFX-2, release 69), the Chateau's last room: the heart-shaped door inlay is the light (the painting's own pink, found on the plate at u 0.500, v 0.264 from the top; `findLight` would take the pale floor patch, which is brighter in luminance), so the
     // shafts and the rim follow it. The sharp band is the booth's (0.40, the girls and the far group) moved down by how much lower her idle camera puts the same party slots in the frame (0.015: `docs/handoff/booth-leblanc.md`).
     'leblanc-last-room': { focus: 0.39, light: { u: 0.5, v: 0.264, color: [0.99, 0.5, 0.87] } },
+    // Batch 2 (`booth-ffx2-b2`, FFX-2 only). The sharp band is Chapter IV's 0.40 moved by how much higher these rigs put the same party slots (the girls' feet-and-knee middle reads 0.252 against Bevelle's 0.241 from the Farplane family's idle rig, 0.244 from Chapter V's
+    // colossus master: `docs/handoff/booth-ffx2-b2.md`), so 0.41, and 0.405 for the Farplane, whose four colossus links outnumber its one plain one.
+    // Chapter V, the Heart of the Farplane: the spire's burst is the light (the painting's own white-lilac star on the tower's tip, found on the plate at u 0.505, v 0.285 from the top).
+    farplane: { focus: 0.405, light: { u: 0.505, v: 0.285, color: [0.98, 0.9, 1.0] } },
+    // Chapter XI, the Road to the Farplane: the same sky and spire as Chapter V's plate, so the same light.
+    'road-to-the-farplane': { focus: 0.41, light: { u: 0.505, v: 0.285, color: [0.98, 0.9, 1.0] } },
+    // Chapter XV, the Den of Woe: the right-hand cyan dome is the strongest light of the cave (u 0.869, v 0.599: at the right edge of the idle frame, so the shafts come from off screen); the left dome (u 0.169, v 0.530) is the weaker.
+    'den-of-woe': { focus: 0.41, light: { u: 0.869, v: 0.599, color: [0.45, 0.97, 0.97] } },
   },
   cinematic: {
     // Chapter I: a cold moonlit night, graded toward deep teal-indigo shadows and pale silver highlights, less saturated, the fog the colour of breath.
@@ -73,6 +81,10 @@ export const ROOM_LOOKS: Readonly<Record<LookName, Readonly<Record<string, RoomL
     'bevelle-underground': { shadow: [0.1, 0.05, 0.24], highlight: [1.0, 0.78, 0.52], recipe: { sat: 0.8, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.28, 0.32, 0.5] },
     // Chapter VI (release 69): violet-black shadows under a rose-cream highlight, the heart's light, a violet-rose fog over the cold machine room.
     'leblanc-last-room': { shadow: [0.1, 0.05, 0.26], highlight: [1.0, 0.8, 0.9], recipe: { sat: 0.82, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.3, 0.2, 0.44], light: { u: 0.5, v: 0.264, color: [0.99, 0.5, 0.87] } },
+    // Batch 2 (FFX-2 only): the Farplane's lilac, deep indigo shadows, the spire's white-lilac light and a violet haze (Chapter V and Chapter XI), the cave's teal-black with the domes' cyan (Chapter XV).
+    farplane: { shadow: [0.07, 0.05, 0.3], highlight: [1.0, 0.88, 1.0], recipe: { sat: 0.8, contrast: 0.64, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.34, 0.3, 0.6], light: { u: 0.505, v: 0.285, color: [0.98, 0.9, 1.0] } },
+    'road-to-the-farplane': { shadow: [0.07, 0.05, 0.3], highlight: [1.0, 0.88, 1.0], recipe: { sat: 0.8, contrast: 0.64, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.34, 0.3, 0.6], light: { u: 0.505, v: 0.285, color: [0.98, 0.9, 1.0] } },
+    'den-of-woe': { shadow: [0.01, 0.07, 0.16], highlight: [0.8, 1.0, 1.0], recipe: { sat: 0.86, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.14, 0.3, 0.4], light: { u: 0.869, v: 0.599, color: [0.45, 0.97, 0.97] } },
   },
   anime: {},
 };

@@ -38,6 +38,21 @@ export const TREATED_RIM_FOES: Readonly<Record<string, 'ffx' | 'ffx2'>> = Object
   'ormi-entrance': 'ffx2',
   'dr-goon': 'ffx2',
   'fem-goon': 'ffx2',
+  // Batch 2 (`booth-ffx2-b2`, FFX-2 only; the same rule, the same switch, and no `BOSS_FEET` row for any of them: `docs/handoff/booth-ffx2-b2.md` has the measured footprints, which sit under the anchor or inside the engine's own pool, so a row would shrink the shadow;
+  // the colossus parts have their own contact shadow, `scenes/farplane-colossus-shadow.ts`). Chapter V: the four Vegnagun parts (machines; the figure-less Bulwarks, Redoubts and Nodes have no actor to tag). Chapter XI: Shiva, the three Sisters and Anima (`scenes/road-to-the-farplane.ts`
+  // ROAD_IDS; Shiva's and Anima's paintings are soft glows all round, so a rim on top would be a second glow).
+  // NOT LISTED, on purpose, and kept with their rim: **Shuyin** (the research asks for "a 10 to 20 percent alpha with an additive rim so he reads as a projection made of pyreflies", `research/ffx2-vegnagun-shuyin.md` section 10.2) and **the three shades of the Den**
+  // (`shade-baralai`, `shade-gippal`, `shade-nooj`: pyrefly illusions whose paintings are near-black with sparse white motes, edge luminance 0 to 108 over a ring of 0 to 127, so there is no pale fringe to hide and a rim is what lights a black figure in a dark room).
+  // Lifts when a browser still (job J4 and J7 of the handoff) shows a clean edge reads better on them.
+  'vegnagun-tail': 'ffx2',
+  'vegnagun-leg': 'ffx2',
+  'vegnagun-body': 'ffx2',
+  'vegnagun-head': 'ffx2',
+  'x2-shiva': 'ffx2',
+  sandy: 'ffx2',
+  cindy: 'ffx2',
+  mindy: 'ffx2',
+  'x2-anima': 'ffx2',
 });
 
 /** The stage's one call as it builds a figure: remember whether it is the party's (or an aeon's), a boss's companion, or a foe of a treated chapter that draws no rim. */

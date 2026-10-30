@@ -52,6 +52,14 @@ export function retargetAutoCamera(base: ProAutoCamera, stage: AutoStage): ProAu
  */
 export const AUTO_STAGES: Readonly<Record<string, AutoStage>> = Object.freeze({
   'ffx2-leblanc': { focus: [0.295, 1.628, -2.49], homeAzimuthDeg: -1.42 },
+  // Batch 2 (`booth-ffx2-b2`, FFX-2 only). The three chapters stand on the Farplane family's rig: the party on the held slots (-2.48, 1.45), (-1.44, 0.1), (-0.33, -1.3) and the idle eye (0, 2.7, 9.8) (`scenes/farplane.ts`, `den-of-woe.ts`, `road-to-the-farplane.ts` are one frame).
+  // The focus is the centroid of the group at 0.9 of each height, the home azimuth the idle eye seen from it (the way Leblanc's was made; the follower only uses the OFFSET `eye - focus`, so the azimuth is what a row sets).
+  // Chapter V, Vegnagun and Shuyin: the group of the LAST link, Shuyin on the boss slot (0.8, -5.0) at the stage's default boss height 4.1 and the girls at its default 1.82; links 1 to 4 play the colossus rig, where the follower is held (`DemoGate.PIECE_HOLDS`, `cam`), so this is the row that waits for the hold's lift.
+  'ffx2-vegnagun-shuyin': { focus: [-0.862, 2.151, -1.187], homeAzimuthDeg: 4.49 },
+  // Chapter XV, the Den of Woe: one shade a link on the boss spot (1.12, -5.0), Baralai's and Gippal's height 1.943 (Nooj stands 0.07 deeper and 0.16 taller: the centroid moves by 0.02 in x).
+  'ffx2-den-of-woe': { focus: [-0.782, 1.639, -1.187], homeAzimuthDeg: 4.07 },
+  // Chapter XI, the Fallen Aeons: the widest link, the Sisters (Sandy (0.95, -4.9) 2.297, Cindy (1.85, -2.7) 1.480, Mindy (3.0, -4.0) hovering 0.55 over the stone, 1.260); Shiva and Anima are one figure each, the live centroid carries the difference.
+  'ffx2-fallen-aeons': { focus: [0.258, 1.648, -1.892], homeAzimuthDeg: -1.26 },
 });
 
 /** The auto camera for a chapter: its stage's retargeted candidates, else the generated Bevelle camera. */

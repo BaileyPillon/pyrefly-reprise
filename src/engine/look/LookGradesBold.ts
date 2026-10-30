@@ -90,6 +90,28 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       recipe: { exposure: 0.95, gamma: 1.0, contrast: 0.48, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.28, midSat: 0.32, sat: 1.06, hues: [{ hue: 313, width: 36, sat: 1.15, lum: 1.08, toward: [1, 0.4, 0.82], shift: 0.25 }, { hue: 190, width: 34, sat: 1.15, lum: 1.06, toward: [0.2, 0.85, 1.0], shift: 0.25 }] },
       focus: 0.39,
     },
+    // Batch 2 (`booth-ffx2-b2`, FFX-2 only). The Farplane (Chapter V) and the Road to the Farplane (Chapter XI) share one sky: indigo-violet shadows, a lilac-white highlight (the spire's burst), the blue-violet sky (hue 237), the lilac stone and flowers (hue 270) and the
+    // pink clouds (hue 320) each held and pulled toward themselves; exposure down as Chapter I's snow is (a luminous plate: the mean is 0.63 against Chapter IV's 0.18). Chapter V's source says the deeper the player goes the less organic it gets ("desaturate and cool as the
+    // player descends": `research/ffx2-vegnagun-shuyin.md` section 10.4), so the saturation is a little under 1.
+    farplane: {
+      shadow: [0.2, 0.16, 0.56],
+      highlight: [1.0, 0.9, 1.0],
+      recipe: { exposure: 0.74, gamma: 1.0, contrast: 0.42, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.36, highlightSplit: 0.26, midSat: 0.3, sat: 0.96, hues: [{ hue: 237, width: 40, sat: 1.0, lum: 1.04, toward: [0.4, 0.5, 1.0], shift: 0.25 }, { hue: 270, width: 36, sat: 1.04, lum: 1.04, toward: [0.7, 0.5, 1.0], shift: 0.2 }, { hue: 320, width: 34, sat: 1.04, lum: 1.05, toward: [1.0, 0.5, 0.9], shift: 0.2 }] },
+      focus: 0.405,
+    },
+    'road-to-the-farplane': {
+      shadow: [0.2, 0.16, 0.56],
+      highlight: [1.0, 0.9, 1.0],
+      recipe: { exposure: 0.74, gamma: 1.0, contrast: 0.42, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.36, highlightSplit: 0.26, midSat: 0.3, sat: 0.98, hues: [{ hue: 237, width: 40, sat: 1.0, lum: 1.04, toward: [0.4, 0.5, 1.0], shift: 0.25 }, { hue: 270, width: 36, sat: 1.04, lum: 1.04, toward: [0.7, 0.5, 1.0], shift: 0.2 }, { hue: 320, width: 34, sat: 1.04, lum: 1.05, toward: [1.0, 0.5, 0.9], shift: 0.2 }] },
+      focus: 0.41,
+    },
+    // Chapter XV, the Den of Woe: blue-teal shadows (the cave's own dark), a pale-cyan highlight, the domes' cyan (hue 180) and the lit floor's teal-blue (hue 196) each lifted and pulled toward itself; the plate is dark (mean 0.21), so the exposure is not pulled down.
+    'den-of-woe': {
+      shadow: [0.06, 0.2, 0.46],
+      highlight: [0.82, 1.0, 1.0],
+      recipe: { exposure: 0.88, gamma: 1.0, contrast: 0.46, pivot: 0.3, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.28, midSat: 0.2, sat: 0.92, hues: [{ hue: 180, width: 30, sat: 1.08, lum: 1.06, toward: [0.3, 1.0, 0.95], shift: 0.2 }, { hue: 196, width: 36, sat: 1.0, lum: 1.0, toward: [0.2, 0.7, 1.0], shift: 0.15 }] },
+      focus: 0.41,
+    },
   },
   cinematic: {
     // Chapter I: deep indigo shadows and silver-cyan highlights, but with its colour (pass 1's 0.72 saturation read muddy): a cold, clear night.
@@ -112,6 +134,25 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       highlight: [1.0, 0.78, 0.9],
       recipe: { exposure: 0.84, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 313, width: 36, sat: 1.2, lum: 1.1, toward: [1, 0.4, 0.82], shift: 0.3 }, { hue: 190, width: 34, sat: 1.15, lum: 1.06, toward: [0.2, 0.85, 1.0], shift: 0.25 }] },
       fog: [0.3, 0.2, 0.46],
+    },
+    // Batch 2 (FFX-2 only): the Farplane family's violet-black shadows under a lilac-white highlight, the cave's teal-black under a pale cyan one.
+    farplane: {
+      shadow: [0.08, 0.06, 0.34],
+      highlight: [1.0, 0.86, 1.0],
+      recipe: { exposure: 0.6, gamma: 1.0, contrast: 0.6, pivot: 0.34, shoulder: 0.78, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.28, sat: 0.84, hues: [{ hue: 237, width: 40, sat: 0.98, lum: 1.04, toward: [0.4, 0.5, 1.0], shift: 0.3 }, { hue: 320, width: 34, sat: 1.0, lum: 1.05, toward: [1.0, 0.5, 0.9], shift: 0.25 }] },
+      fog: [0.34, 0.3, 0.6],
+    },
+    'road-to-the-farplane': {
+      shadow: [0.08, 0.06, 0.34],
+      highlight: [1.0, 0.86, 1.0],
+      recipe: { exposure: 0.6, gamma: 1.0, contrast: 0.6, pivot: 0.34, shoulder: 0.78, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.28, sat: 0.86, hues: [{ hue: 237, width: 40, sat: 0.98, lum: 1.04, toward: [0.4, 0.5, 1.0], shift: 0.3 }, { hue: 320, width: 34, sat: 1.0, lum: 1.05, toward: [1.0, 0.5, 0.9], shift: 0.25 }] },
+      fog: [0.34, 0.3, 0.6],
+    },
+    'den-of-woe': {
+      shadow: [0.02, 0.1, 0.26],
+      highlight: [0.8, 1.0, 1.0],
+      recipe: { exposure: 0.9, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.96, hues: [{ hue: 180, width: 30, sat: 1.15, lum: 1.1, toward: [0.3, 1.0, 0.95], shift: 0.3 }, { hue: 196, width: 36, sat: 1.12, lum: 1.06, toward: [0.2, 0.7, 1.0], shift: 0.25 }] },
+      fog: [0.14, 0.3, 0.4],
     },
   },
 };

@@ -33,16 +33,13 @@ const LISTED: readonly string[] = CHAPTER_IDS;
 const NOT_YET: Readonly<Record<string, string>> = {
   yunalesca: 'FFX: the stance look is held by its swap exception, the camera keeps the colossus master (PR-0307), boss clip rows and maps owed',
   'braskas-final-aeon': 'FFX: seven links of three foes, the heaviest chapter; maps for about 21 poses owed',
-  'ffx2-vegnagun-shuyin': 'FFX-2: five parts, a camera that keeps today (Vegnagun), the HP waiver; next after Leblanc (same dresses as Chapter IV but Paine)',
   'seymour-anima-macalania': 'FFX: three foes under one declared boss; maps owed',
   'evrae-airship': 'FFX: swap exception (a fixed head step per pose), non-standard pose names',
   'yojimbo-cavern': 'FFX: three foes, no KO pose; maps owed',
   'seymour-natus': 'FFX: the re-cut question (pale fringe heuristic +19), maps owed',
-  'ffx2-fallen-aeons': 'FFX-2: three links, two re-cut candidates, a dress guard for Paine',
   'seymour-omnis': 'FFX: five foes under the F1 ribbon and card',
   'ffx2-trema': 'FFX-2: two new dresses without clip rows or maps, a giants camera row',
   'isaaru-via-purifico': 'FFX: a one-girl party under the FFX HUD, three links',
-  'ffx2-den-of-woe': 'FFX-2: translucent shades, a plate room; maps owed',
   'ffx2-ixion-djose': 'FFX-2: the plate is a stand-in until its real plate, a swap exception',
   'sin-fins-core': 'FFX: bespoke deck camera and many parts',
   'sin-face': 'FFX: bespoke Sin poses and a swap exception',
@@ -58,10 +55,11 @@ describe('the list', () => {
     expect(LISTED).toHaveLength(19);
   });
 
-  it('is Chapter I, Chapter IV and Leblanc, each with the game the registry says (rule 14)', () => {
-    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(['ffx2-bahamut', 'ffx2-leblanc', 'seymour-flux']);
+  it('is Chapter I, Chapter IV, Leblanc and batch 2 (Vegnagun and Shuyin, the Den of Woe, the Fallen Aeons), each with the game the registry says (rule 14)', () => {
+    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(['ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-fallen-aeons', 'ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'seymour-flux']);
     for (const [id, e] of Object.entries(TREATED_CHAPTERS)) expect(getChapter(id)?.game, id).toBe(e.game);
     expect(TREATED_CHAPTERS['ffx2-leblanc']).toEqual({ game: 'ffx2', since: 'r69' });
+    for (const id of ['ffx2-vegnagun-shuyin', 'ffx2-den-of-woe', 'ffx2-fallen-aeons']) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx2', since: 'r70' }); // batch 2: all FFX-2 only (rule 14)
   });
 
   it('holds the booth pair, with the games DEMO_CHAPTERS gives them; the booth list itself stays two ids', () => {
@@ -147,12 +145,13 @@ describe('who the treatment reaches', () => {
     expect(isTreatedChapter(undefined)).toBe(false);
   });
 
-  it('under all it is the booth pair and Leblanc: Leblanc plays every piece but the breath; no other listed or hidden chapter is reached', () => {
+  it('under all it is the booth pair, Leblanc and batch 2: each plays every piece but the ones PIECE_HOLDS names for it; no other listed or hidden chapter is reached', () => {
     setTreatedScope('all');
+    const listed = Object.keys(TREATED_CHAPTERS);
     for (const id of [...LISTED, ...HIDDEN]) {
-      const reached = BOOTH.includes(id) || id === 'ffx2-leblanc';
+      const reached = listed.includes(id);
       expect(isTreatedChapter(id), id).toBe(reached);
-      for (const p of TREATED_PIECES) expect(isTreatedChapter(id, p), `${id} ${p}`).toBe(reached && !(id === 'ffx2-leblanc' && p === 'breath'));
+      for (const p of TREATED_PIECES) expect(isTreatedChapter(id, p), `${id} ${p}`).toBe(reached && treatedHold(id, p) === undefined);
     }
     for (const p of TREATED_PIECES) for (const id of BOOTH) expect(isTreatedChapter(id, p), `${id} ${p}`).toBe(true); // the approved target is never held
     expect(isTreatedChapter(undefined, 'hud')).toBe(false);

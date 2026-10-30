@@ -10,7 +10,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { Object3D } from 'three';
 import { CHAPTER_IDS } from '../../src/data/encounters.ts';
-import { setDemoChapter, setPackScreen, setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
+import { TREATED_CHAPTERS, setDemoChapter, setPackScreen, setTreatedScope, treatedHold, type TreatedPiece } from '../../src/engine/motion/DemoGate.ts';
 import { hudF1Game, hudF1ModeFromSearch, hudF1On, setHudF1Mode } from '../../src/ui/hudf1/HudF1Switch.ts';
 import { proArenaFor, proGame, proLookOn, proModeFromSearch, proPieceOn, setProMode, setProPiece } from '../../src/engine/look/pro/ProSwitch.ts';
 import { partyRimFromSearch, partyRimOff, setPartyRim } from '../../src/engine/look/pro/PartyRimSwitch.ts';
@@ -32,10 +32,14 @@ const LISTED: readonly string[] = CHAPTER_IDS;
 const HIDDEN = ['exp-leblanc', 'ff7-guard-scorpion', 'ffx2-masterpiece-theatre', 'sinspawn-gui', 'exp-fayth'];
 const ALL = [...LISTED, ...HIDDEN];
 const BOOTH = ['seymour-flux', 'ffx2-bahamut'];
-const GAME: Record<string, 'ffx' | 'ffx2'> = { 'seymour-flux': 'ffx', 'ffx2-bahamut': 'ffx2', 'ffx2-leblanc': 'ffx2' };
+// Batch 2 (`booth-ffx2-b2`): the matrix reads the list itself (`TREATED_CHAPTERS`, `PIECE_HOLDS`), so a chapter that joins needs no edit here; `booth-treated-chapters.test.ts` pins WHICH chapters are on the list.
+const GAME: Record<string, 'ffx' | 'ffx2'> = Object.fromEntries(Object.entries(TREATED_CHAPTERS).map(([id, e]) => [id, e.game]));
 
 /** The chapters each scope reaches. */
-const reached = (scope: 'pack' | 'all'): readonly string[] => (scope === 'pack' ? BOOTH : [...BOOTH, 'ffx2-leblanc']);
+const reached = (scope: 'pack' | 'all'): readonly string[] => (scope === 'pack' ? BOOTH : Object.keys(TREATED_CHAPTERS));
+
+/** Is this piece played in this chapter under the scope (reached, and not held)? A held piece answers today's. */
+const plays = (scope: 'pack' | 'all', id: string, piece: TreatedPiece): boolean => reached(scope).includes(id) && (BOOTH.includes(id) || treatedHold(id, piece) === undefined);
 
 function allOn(): void {
   setHudF1Mode('f1');
@@ -96,9 +100,10 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(smearOn(), `smear ${id}`).toBe(on);
       expect(smearStyleNow(), `smear style ${id}`).toBe(on ? 'paint' : 'off');
       expect(newMotionOn(), `new motion ${id}`).toBe(on);
-      expect(proCamOn(), `camera ${id}`).toBe(on);
-      expect(proDofOn(), `camera dof ${id}`).toBe(on);
-      expect(proCamGame(), `camera game ${id}`).toBe(on ? GAME[id] : null);
+      const cam = plays(scope, id, 'cam');
+      expect(proCamOn(), `camera ${id}`).toBe(cam);
+      expect(proDofOn(), `camera dof ${id}`).toBe(cam);
+      expect(proCamGame(), `camera game ${id}`).toBe(cam ? GAME[id] : null);
       expect(stagingOn(), `staging ${id}`).toBe(on);
       for (const piece of ['card', 'ending', 'opening'] as StagingPiece[]) {
         expect(stagingPieceOn(piece), `staging ${piece} ${id}`).toBe(on);
