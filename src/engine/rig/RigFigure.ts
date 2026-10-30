@@ -352,7 +352,7 @@ export class RigFigure {
       syncPaintedBloom(p.material, dissolving, masked);
       if (p.ghost) syncPaintedBloom(p.ghost.material, dissolving, masked);
     }
-    for (const m of this.hold.materials()) syncPaintedBloom(m, dissolving, masked);
+    if (this.hold.active) for (const m of this.hold.materials()) syncPaintedBloom(m, dissolving, masked); // only while a cross runs: no array a frame on the figures that never hold (Lulu, Valefor, Ifrit, Pterya)
   }
 
   /** The parts' materials in draw order (the tests read the shared cells through them). */

@@ -79,7 +79,7 @@ export const keyChange = (t: Trace, from: string): number => t.frames.find((f) =
 
 // ---------------------------------------------------------------- what is DRAWN (the meshes), not only where the bones are
 
-type MeshLike = { name: string; visible: boolean; position: { z: number }; geometry: { getAttribute(n: string): { count: number; getX(i: number): number; getY(i: number): number; getZ(i: number): number } }; matrix: Matrix4; material: { uniforms: Record<string, { value: unknown }> }; updateMatrix(): void };
+type MeshLike = { name: string; visible: boolean; position: { z: number }; geometry: { getAttribute(n: string): { count: number; getX(i: number): number; getY(i: number): number; getZ(i: number): number } | undefined; index: { count: number } | null }; matrix: Matrix4; material: { uniforms: Record<string, { value: unknown }> }; updateMatrix(): void };
 type NodeLike = { name: string; children: Array<NodeLike & MeshLike>; parent: (NodeLike & MeshLike) | null };
 
 /** Every vertex of a mesh in the frame of the actor's `inner` group (the parent of the rig's plane and of the held group), flat xyz: the actor's own motion that frame is not in it. */
@@ -87,7 +87,7 @@ export function worldVerts(m: MeshLike & NodeLike): number[] {
   m.updateMatrix();
   m.parent!.updateMatrix();
   const e = new Matrix4().multiplyMatrices(m.parent!.matrix, m.matrix).elements;
-  const a = m.geometry.getAttribute('position');
+  const a = m.geometry.getAttribute('position')!;
   const out: number[] = [];
   for (let i = 0; i < a.count; i++) {
     const x = a.getX(i), y = a.getY(i), z = a.getZ(i);
@@ -96,15 +96,17 @@ export function worldVerts(m: MeshLike & NodeLike): number[] {
   return out;
 }
 
-export interface Drawn { verts: number[]; opacity: number; z: number }
+/** What one drawn piece is: its world vertices, its opacity uniform, its z, the image it samples (the uniform's value, by identity), and the sizes of its uv and index buffers (a piece without them draws nothing or draws it wrong). */
+export interface Drawn { verts: number[]; opacity: number; z: number; map: unknown; uvs: number; indices: number }
+const drawn = (c: MeshLike & NodeLike): Drawn => ({ verts: worldVerts(c), opacity: c.material.uniforms['opacity']!.value as number, z: c.position.z, map: c.material.uniforms['map']?.value, uvs: c.geometry.getAttribute('uv')?.count ?? 0, indices: c.geometry.index?.count ?? 0 });
 /** The live pieces now drawn (visible) by part name, and the held (frozen) ones; each with its world vertices and its opacity uniform. */
 export function drawnNow(a: RigActorT): { live: Map<string, Drawn>; held: Map<string, Drawn>; heldGroupVisible: boolean | null } {
   const plane = a.figure.plane as unknown as NodeLike;
   const live = new Map<string, Drawn>();
-  for (const c of plane.children) if (!c.name.endsWith('~ghost') && c.visible) live.set(c.name, { verts: worldVerts(c), opacity: c.material.uniforms['opacity']!.value as number, z: c.position.z });
+  for (const c of plane.children) if (!c.name.endsWith('~ghost') && c.visible) live.set(c.name, drawn(c));
   const group = (plane.parent as NodeLike).children.find((c) => c.name.endsWith('~held')) as unknown as (NodeLike & { visible: boolean }) | undefined;
   const held = new Map<string, Drawn>();
-  if (group) for (const c of group.children) if (c.visible) held.set(c.name.replace('~ghost', ''), { verts: worldVerts(c), opacity: c.material.uniforms['opacity']!.value as number, z: c.position.z });
+  if (group) for (const c of group.children) if (c.visible) held.set(c.name.replace('~ghost', ''), drawn(c));
   return { live, held, heldGroupVisible: group ? group.visible : null };
 }
 

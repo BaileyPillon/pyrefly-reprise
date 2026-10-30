@@ -13,7 +13,7 @@ import type { Guts, LifeCtx, Playing, Slot } from './living.ts';
  * dust puff, and a revive plays it backwards. A rig has one plane (the idle's, the "carrier") and drew none of it: its `ko` key was a rigid turn of the standing pieces to 45 degrees and a cut to the lying
  * drawing in mid-air (the clips: "no cut from standing to lying" was the ask). The rig's parts follow the idle plane's mesh (`RigFigure.sync`), so the SAME run tips them: the standing plane is the idle
  * plane, the lying body is a plane-shaped record of the `ko` key ({@link lyingOf}: its head and span, from `RigKoHost`), and the cut of the cross changes the rig's key (`RigKoHost.flip`) instead of
- * fading a plane, holding the pieces as drawn to cross out over it (`RigHold.ts`, review M1). Everything else is the run as it was: the clock (hold, cross, rise), the turn and the slide, the puff, the landing on the cut, `?kotopple=eased`, REDUCE MOTION (a cut, as before), a
+ * fading a plane, holding the pieces as drawn to cross out over it (`RigHold.ts`, review M1); a blow that finds the figure in another key (the `hurt` flinch) first eases the bones to the idle key during the hold (`RigKoHost.settle`, review round 2 M2: the run is fitted to the idle). Everything else is the run as it was: the clock (hold, cross, rise), the turn and the slide, the puff, the landing on the cut, `?kotopple=eased`, REDUCE MOTION (a cut, as before), a
  * hit-stop. Not ported: the buckle (a shader bend of the standing plane: the rig's parts do not wear it) and the smear window of the cross (a rig's `ko` is outside the rig smear, `SmearPlan.SKIP`).
  */
 
@@ -22,6 +22,8 @@ const dummy = (pose: string): Slot => ({ fade: 0, pose } as unknown as Slot);
 /** A revive's cut falls on the first frame of its cross: the standing key drawn toppled where the body lay is nearest the lying head then (review M1, 2026-10-29: the head stepped 0.378 at the half way, 0.141 at the start); a fall's falls when the lying key is the stronger of the two (half). */
 const REVIVE_CUT_AT = 0.0001;
 const FALL_CUT_AT = 0.5;
+/** The share of a fall's hold that the bones take to ease into the idle key when the blow found them in another (`RigKoHost.settle`): done well before the cut at the page's slowest pace (x1.2), so the cut sees the idle's pose. */
+const SETTLE_SHARE = 0.6;
 
 /** Whether the cut of a rig's run is due: `inn` is the incoming share of the run's cross now. */
 export const rigCutDue = (p: Playing, inn: number): boolean => p.rig !== undefined && p.rigCut !== true && inn >= (p.run.opts.kind === 'revive' ? REVIVE_CUT_AT : FALL_CUT_AT);
@@ -56,6 +58,7 @@ export function rigFall(a: Guts, host: RigKoHost, name: string, opts: { immediat
   const run = fallRun('topple', ctx.game, undefined, realBuckleMs(a.name, koCrossMs()), moveWord('kotopple') === 'eased');
   if (!run || !a.poseLife) return null;
   a.poseLife(name, opts);
+  host.settle(Math.round(run.opts.holdMs * SETTLE_SHARE)); // review M2: the run is fitted to the idle, so the fall starts from the idle whatever key the blow found the figure in
   const side = tipSide(headMiddleU(lying.meta.head), stand.mesh.scale.x < 0 ? -1 : 1, 1);
   return { run, mode: 'topple', from: dummy(stand.pose), to: dummy('ko'), stand, lying, side, rig: host, rigKey: host.keyFor(name) ?? 'ko' };
 }

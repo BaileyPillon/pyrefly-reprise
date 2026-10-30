@@ -5,22 +5,37 @@
  * The REAL `RigActor` (a rig of Tidus's own idle painting) under the REAL `LivingFigure`, stepped the way the game steps it (`rigs-v3-fixture.ts`). What is read: the idle plane's roll (the rig's parts copy it every
  * frame: `RigFigure.sync`), the rig's key, and the head of the rig where the viewer sees it, before and after the cut.
  */
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { reset } from '../engine/head-lock-fixture.ts';
 import { poseDrawnRig, rigged, stage } from './rigs-v3-fixture.ts';
 
 const { TOPPLE_RAD } = await import('../../../src/engine/KoTip.ts');
 const { setMoveWord } = await import('../../../src/engine/motion/MoveSwitch.ts');
 const { setPace, setPaceGame } = await import('../../../src/engine/pace.ts');
+const { setDemoMotion } = await import('../../../src/engine/motion/DemoMotion.ts');
 
 afterEach(() => {
   reset();
   setMoveWord('kotopple', null);
   setPaceGame('other');
   setPace('steady');
+  setDemoMotion(null);
 });
 
-describe('the fall of a rig drawn by pose is the painting set\'s: it tips, it slides, and the lying drawing comes in where the head already is', () => {
+/**
+ * Every test runs twice (review round 2, M1): the unit tests have no address, so the demo motion is off (a 75 ms cross), but a page runs it ON unless `?motion=off` (a 100 ms cross, the KO cuts a frame later) and
+ * the browser jobs pass no `motion=` word. `demo` tells a test which regime it is in.
+ */
+const each = (title: string, body: (demo: boolean) => void): void => {
+  for (const demo of [false, true]) {
+    describe(`${title} [${demo ? 'demo motion on: the page default' : '?motion=off'}]`, () => {
+      beforeEach(() => setDemoMotion(demo));
+      body(demo);
+    });
+  }
+};
+
+each('the fall of a rig drawn by pose is the painting set\'s: it tips, it slides, and the lying drawing comes in where the head already is', (demo) => {
   it('the pieces tip with the idle plane toward the side the lying head is on, up to the painting set\'s 80 degrees, and the key stays the standing one until the cut', async () => {
     const s = stage(await rigged(poseDrawnRig(true)));
     s.a.setPose('ko');
@@ -32,11 +47,11 @@ describe('the fall of a rig drawn by pose is the painting set\'s: it tips, it sl
       rolls.push(s.roll());
       if (cutAt < 0 && s.key() === 'ko') cutAt = i;
     }
-    expect(cutAt, 'the cut happens after the hold (220 ms: 13 frames), in the 75 ms cross where the lying drawing overtakes the standing one (frame 16), not at the end of the run').toBeGreaterThanOrEqual(14);
-    expect(cutAt).toBeLessThanOrEqual(16);
+    expect(cutAt, `the cut happens after the hold (220 ms: 13 frames), in the ${demo ? '100' : '75'} ms cross where the lying drawing overtakes the standing one (frame ${demo ? 17 : 16}), not at the end of the run`).toBeGreaterThanOrEqual(demo ? 15 : 14);
+    expect(cutAt).toBeLessThanOrEqual(demo ? 17 : 16);
     const live = rolls.slice(0, cutAt);
     for (let i = 1; i < live.length; i++) expect(live[i]! * -1, `frame ${i}`).toBeGreaterThanOrEqual(live[i - 1]! * -1 - 1e-12); // clockwise (toward the right) is negative: it only turns further
-    expect(Math.abs(live.at(-1)!)).toBeGreaterThan(0.85 * TOPPLE_RAD);
+    expect(Math.abs(live.at(-1)!), `tipped most of the way at the cut (${demo ? 'the longer cross cuts with the turn a little less far' : '68 degrees'})`).toBeGreaterThan((demo ? 0.8 : 0.85) * TOPPLE_RAD);
     expect(Math.abs(live.at(-1)!)).toBeLessThanOrEqual(TOPPLE_RAD + 1e-9);
     expect(live.at(-1)!, 'toward the right: the lying head is right of the feet').toBeLessThan(0);
     expect(rolls[cutAt], 'the plane is upright again from the cut').toBe(0);
@@ -88,6 +103,47 @@ describe('the fall of a rig drawn by pose is the painting set\'s: it tips, it sl
     expect(worst).toBeLessThan(1.82 / 15);
   });
 
+  it('a blow that finds the figure in another key (a cast, 143 degrees from the idle) eases the bones to the idle key during the hold: the key reads idle from the request, the move is over before the cut, at the slowest pace too (review round 2, M2)', async () => {
+    for (const relaxed of [false, true]) {
+      if (relaxed) { setPaceGame('ffx'); setPace('relaxed'); }
+      const s = stage(await rigged(poseDrawnRig(true)));
+      s.a.setPose('cast', { immediate: true, force: true });
+      s.frame(5);
+      expect(s.key()).toBe('cast');
+      s.a.setPose('ko');
+      expect(s.key(), 'the bones are told to go to the idle at once').toBe('idle');
+      expect(s.a.blending, 'and the move is in flight').toBe(true);
+      let cutAt = -1, busy = true;
+      for (let i = 0; i < 40 && cutAt < 0; i++) { s.frame(); if (s.key() === 'ko') cutAt = i; else busy = s.a.blending; }
+      expect(cutAt).toBeGreaterThan(8);
+      expect(busy, `the last frame before the cut has the bones at rest in the idle (${relaxed ? 'relaxed' : 'steady'} pace)`).toBe(false);
+    }
+  });
+
+  it('a figure coming home to the idle on a slow move (600 ms) when the blow lands is brought there inside the hold, not left on the slow move', async () => {
+    const f = poseDrawnRig(true);
+    f.keys['idle'] = { ...f.keys['idle']!, ms: 600 };
+    const s = stage(await rigged(f));
+    s.a.setPose('cast', { immediate: true, force: true });
+    s.frame(5);
+    s.a.setPose('idle');
+    s.frame(3);
+    expect(s.key()).toBe('idle');
+    expect(s.a.blending, 'the slow move is in flight').toBe(true);
+    s.a.setPose('ko');
+    let cutAt = -1, busy = true;
+    for (let i = 0; i < 40 && cutAt < 0; i++) { s.frame(); if (s.key() === 'ko') cutAt = i; else busy = s.a.blending; }
+    expect(cutAt).toBeGreaterThan(8);
+    expect(busy).toBe(false);
+  });
+
+  it('a figure that is at rest in the idle is not touched: no move is started (nothing changes for a KO from the idle)', async () => {
+    const s = stage(await rigged(poseDrawnRig(true)));
+    s.frame(20);
+    s.a.setPose('ko');
+    expect(s.a.blending).toBe(false);
+  });
+
   it('the generic fall is off while the run plays (the run is the whole fall) and on again after a revive', async () => {
     const s = stage(await rigged(poseDrawnRig(true)));
     s.a.setPose('ko');
@@ -119,7 +175,7 @@ describe('the fall of a rig drawn by pose is the painting set\'s: it tips, it sl
   });
 });
 
-describe('the revive of a rig drawn by pose is the fall backwards: the lying drawing crosses to the standing one already toppled where the body lay, which stands up', () => {
+each('the revive of a rig drawn by pose is the fall backwards: the lying drawing crosses to the standing one already toppled where the body lay, which stands up', () => {
   it('the cut is the first frame of the cross (review M1: the half-way cut popped the head 0.38), and the standing key is drawn toppled and rises to upright, the roll only shrinking', async () => {
     const s = stage(await rigged(poseDrawnRig(true)));
     s.a.setPose('ko');

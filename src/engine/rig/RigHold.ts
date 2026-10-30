@@ -44,7 +44,7 @@ export class RigHold {
 
   /**
    * Freeze the pieces as drawn now and start the cross, `ms` of real time. Call it BEFORE the key changes (the live pieces' positions are the last frame's skin) and before the plane moves.
-   * A hold already running is replaced (the figure drawn now, ghosts and all, is what was seen).
+   * A hold already running is replaced: the fading copy is dropped and the pieces now drawn are what is frozen (a revive asked inside the 75 to 100 ms cross loses the fading copy and the figure steps to the pieces now drawn; the game cannot ask, a revive takes an action).
    */
   begin(env: GhostEnv, parts: readonly PartRt[], lookOf: (p: PartRt) => Look, ms: number): void {
     if (!(ms > 0)) return;
@@ -100,6 +100,7 @@ export class RigHold {
 
   /** The actor's opacity onto the frozen set (the live pieces get `alpha * kIn` from the figure). */
   apply(alpha: number, on: boolean): void {
+    if (this.held.size === 0) return; // a figure that never held has nothing to show or hide
     const show = on && this.ms > 0 && this.kOut > 0.001;
     if (this.group) this.group.visible = show;
     for (const h of this.held.values()) {

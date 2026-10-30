@@ -196,7 +196,7 @@ describe('RigKoHost: what the KO run reads of a rig', () => {
     const hidden = poseDrawnRig(true);
     hidden.keys['ko'] = { ...hidden.keys['ko']!, parts: { legs: { image: 'ko' }, body: { image: 'ko' }, head: { image: 'ko', show: false } } };
     expect(drawsKoByPose(read(hidden)), 'a hidden piece does not count').toBe(false);
-    expect(makeRigKoHost(read(poseDrawnRig(true, false)), () => 'idle', () => {})).toBeNull();
+    expect(makeRigKoHost(read(poseDrawnRig(true, false)), () => 'idle', () => {}, () => {})).toBeNull();
   });
 
   it('the lying head is the ko key\'s head landmark, on the right of the plane for a body that lies to the right and on the left for one that lies to the left; the span is the gate\'s box', () => {
@@ -204,8 +204,9 @@ describe('RigKoHost: what the KO run reads of a rig', () => {
     const l = readRig(poseDrawnRig(false));
     if (!r.ok || !l.ok) throw new Error('fixture does not read');
     const flips: string[] = [];
-    const right = makeRigKoHost(r.data, (n) => n, (k) => flips.push(k))!;
-    const left = makeRigKoHost(l.data, (n) => n, () => {})!;
+    const settles: number[] = [];
+    const right = makeRigKoHost(r.data, (n) => n, (k) => flips.push(k), (ms) => settles.push(ms))!;
+    const left = makeRigKoHost(l.data, (n) => n, () => {}, () => {})!;
     const standHead: [number, number, number, number] = [0.5, 0.12, 0.62, 0.19];
     const a = right.lying(standHead);
     const b = left.lying(standHead);
@@ -216,5 +217,7 @@ describe('RigKoHost: what the KO run reads of a rig', () => {
     right.flip('ko');
     expect(flips).toEqual(['ko']);
     expect(right.keyFor('ko')).toBe('ko');
+    right.settle(132);
+    expect(settles, 'the settle closure the actor made is handed through').toEqual([132]);
   });
 });

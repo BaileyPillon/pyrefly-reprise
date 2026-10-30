@@ -192,7 +192,7 @@ export class RigActor extends PaintedActor {
   }
 
   /** The key move a pose request asks for, without the life layer's half (`rigKo.flip`: the KO run's cut). */
-  moveKey(name: string, opts?: { immediate?: boolean; force?: boolean }): void {
+  moveKey(name: string, opts?: { immediate?: boolean; force?: boolean; ms?: number }): void {
     const key = resolveKeyName(name, this.rigKeys, this.dressphere);
     if (key === null) return; // a name this rig and the game's chains know nothing of: the figure stays as it is, like a painting it cannot draw
     if (key === this.key && !opts?.force) return;
@@ -203,7 +203,7 @@ export class RigActor extends PaintedActor {
     this.stateFrom = this.appliedState; // what is on the parts now stays until the move is half way
     this.stateTo = this.states.get(key)!;
     const own = this.data.keys.get(key)?.ms ?? this.crossMs;
-    const ms = opts?.immediate ? 0 : drawn ? foldMs(own, this.trans.current, target) : own;
+    const ms = opts?.immediate ? 0 : opts?.ms !== undefined ? opts.ms : drawn ? foldMs(own, this.trans.current, target) : own; // `ms`: the caller's own length (the KO's settle to the idle)
     const fadeMs = demoMotionOn() && ms > 0 ? fadeMsFor(this.data, this.data.keys.get(key), this.stateFrom, this.stateTo) : 0;
     this.fade = { ms: fadeMs, flipAt: fadeMs > 0 ? fadeStart(ms, fadeMs) : undefined };
     if (this.smearWin.begin({ name: this.name, from: leaving, to: key, share: swapShare(partAreas(this.data), this.stateFrom, this.stateTo), moveMs: ms, state: this.smear.state, worldHeight: this.bodyHeight, facing: this.facingDir })) this.fade = { ms: 0, flipAt: undefined }; // a whole-figure flip is a cut and the smear covers it
@@ -217,7 +217,7 @@ export class RigActor extends PaintedActor {
 
   /** What the KO run needs when this rig's `ko` key is drawn by pose; null for every other rig (`RigKoHost.ts`). */
   get rigKo(): RigKoHost | null {
-    return this.koHost !== undefined ? this.koHost : (this.koHost = this.poseDrawnParty ? makeRigKoHost(this.data, (n) => resolveKeyName(n, this.rigKeys, this.dressphere), (k, ms) => { if (ms) this.rig.holdPose(ms); this.moveKey(k, { immediate: true, force: true }); }) : null);
+    return this.koHost !== undefined ? this.koHost : (this.koHost = this.poseDrawnParty ? makeRigKoHost(this.data, (n) => resolveKeyName(n, this.rigKeys, this.dressphere), (k, ms) => { if (ms) this.rig.holdPose(ms); this.moveKey(k, { immediate: true, force: true }); }, (ms) => this.moveKey('idle', { ms, force: this.blending })) : null);
   }
 
   protected override smearsPlanes(): boolean { return false; } // the parts are what is drawn: the smear is `smearWin`'s, not the carrier planes' cut

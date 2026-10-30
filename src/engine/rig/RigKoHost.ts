@@ -35,6 +35,12 @@ export interface RigKoHost {
    * as drawn this instant are held and cross out over that long, real ms, under the new key's (`RigHold.ts`: the painting set's own cross, 75 ms, so the feet and the sword do not jump on one frame).
    */
   flip(key: string, holdMs?: number): void;
+  /**
+   * The rig's bones ease to the idle key over `ms` (the game's ease, from where they are and at the speed they have): the fall's start when the figure is in another key, a flinch's `hurt` or a swing's `attack`.
+   * The run is fitted to the IDLE painting (its registered head box, the toe it tips about), so a fall that starts in a hunched, leaning key reaches the cut with the head a third of a body from the lying one
+   * (review M2: 0.56 to 0.64 of the world units against 0.17 to 0.28 from the idle); easing to the idle while it tips makes every start the idle's. Nothing to do when the rig is at rest in the idle.
+   */
+  settle(ms: number): void;
 }
 
 /** The names a rig gives its head landmark, best first (the harness's own list: `critic/runner/lib/continuity-rig.mjs` RIG_DEFAULTS). */
@@ -50,7 +56,7 @@ export function drawsKoByPose(data: Pick<RigData, 'keys'>): boolean {
  * The host of a rig, or null when its `ko` key is not drawn by pose. `keyFor` and `flip` are the actor's (`RigActor.moveKey` with `immediate`); the lying head is a landmark of the `ko` key
  * posed on a skeleton of its own, solved once, so the run never touches the one the figure is drawn from.
  */
-export function makeRigKoHost(data: RigData, keyFor: (name: string) => string | null, flip: (key: string, holdMs?: number) => void): RigKoHost | null {
+export function makeRigKoHost(data: RigData, keyFor: (name: string) => string | null, flip: (key: string, holdMs?: number) => void, settle: (ms: number) => void): RigKoHost | null {
   if (!drawsKoByPose(data)) return null;
   const ko = data.keys.get('ko')!;
   let head: { x: number; y: number } | null | undefined;
@@ -86,5 +92,6 @@ export function makeRigKoHost(data: RigData, keyFor: (name: string) => string | 
     },
     keyFor,
     flip,
+    settle,
   };
 }
