@@ -4,6 +4,8 @@
  * the MAX mix's rig, the FFX clip rows by name). Every number the rows pin was read off the plate by `docs/handoff/booth-ffx-yunalesca.md` section 3.
  */
 import { afterEach, describe, expect, it } from 'vitest';
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { Object3D } from 'three';
 import { getChapter } from '../../src/data/encounters.ts';
 import { getChapterMeta } from '../../src/data/chapter-meta.ts';
@@ -131,10 +133,20 @@ describe('the pro arena: one light, the oculus; the rest falls to indigo, the sp
     expect(luma(sphere)).toBeGreaterThan(luma(hall) * 2);
   });
 
-  it('is [ours] and says so: the row\'s comment names the still owed beside Chapter I (hard rule 9) and the handoff', () => {
-    // the plate-grade still beside Chapter I ships with the branch; the file test is the repo's own check that it was committed
+  it('grades the hall down by a real vignette and a cool (blue over red) haze, the dome\'s own violet and not Chapter I\'s teal', () => {
     expect(room.vignette.amount).toBeGreaterThan(0.4);
     expect(room.haze.colour[2]).toBeGreaterThan(room.haze.colour[0]);
+  });
+
+  it('is [ours] and says so: the row is commented as set from the plate, and the handoff that carries the still owed beside Chapter I (hard rule 9) is committed and names it', () => {
+    // review m6: this title used to promise the comment and the handoff and assert neither. The row's comment is source text, so it is read as text; the .png itself lives under docs/screenshots, which a sparse worktree may leave out, so only its name is pinned
+    const root = resolve(__dirname, '../..');
+    const grade = readFileSync(resolve(root, 'src/engine/look/pro/ProGrade.ts'), 'utf8');
+    expect(grade).toMatch(/\[ours\]: set from the plate's own colours[^]*booth-ffx-yunalesca\.md/);
+    expect(grade).toMatch(/a still beside Chapter I is owed/);
+    const handoffPath = resolve(root, 'docs/handoff/booth-ffx-yunalesca.md');
+    expect(existsSync(handoffPath)).toBe(true);
+    expect(readFileSync(handoffPath, 'utf8')).toContain('booth-ffx-yunalesca-plate-grade.png');
   });
 });
 

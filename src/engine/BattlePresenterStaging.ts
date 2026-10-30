@@ -217,7 +217,9 @@ export function stageFreeze(ctx: EventCtx, id: CombatantId): Promise<void> | und
   const b = ctx.burst;
   const victoryNext = b !== undefined && b.events.slice(b.at + 1).some((e) => e.type === 'victory');
   const lastFoe = !ctx.stage.staged().some((other) => other !== id && ctx.stage.sideOf(other) === 'enemy');
-  if (!victoryNext && !lastFoe) return undefined;
+  // a foe that falls INTO its next form is not the last blow (release 69, review of `booth-ffx-yunalesca`, m7; both games, a guard): the FFX engine emits no `ko` for a form-ending hit (`holdKo`) so nothing reaches this line today, but a lone form boss is "the last foe" by the second clause at any `ko`, and a hostile or future engine must not freeze the fight mid-form
+  const formNext = b !== undefined && b.events.slice(b.at + 1).some((e) => e.type === 'form-change' && e.enemyId === id);
+  if (formNext || (!victoryNext && !lastFoe)) return undefined;
   felled.set(ctx, id);
   if (frozen.has(ctx)) return undefined;
   const facts = stageFacts(ctx);
@@ -243,7 +245,7 @@ function cheerFloorMs(ctx: EventCtx, floor: number): number {
 }
 
 /**
- * The victory beat: the quiet title, and the hold the cheer needs. `kind` is the chapter's own: `'pose'` (FFX: the party cheers; the hold is the real clip's) or `'hold'` (FFX-2 Chapter IV: the sources withhold the pose, the
+ * The victory beat: the quiet title, and the hold the cheer needs. `kind` is the chapter's own: `'pose'` (FFX: the party cheers; the hold is the real clip's) or `'hold'` (FFX-2 Chapter IV, and since release 69 FFX Chapter II, where nobody poses in Zanarkand: the sources withhold the pose, the
  * fanfare and the quip after Bahamut, so nothing is celebrated: the party stands, the title is quiet and the silent pull-back is the transition into the results). Returns the least ms the beat must hold (0 when not staged).
  */
 export function stageVictory(ctx: EventCtx, kind: 'pose' | 'hold', floor: number): number {

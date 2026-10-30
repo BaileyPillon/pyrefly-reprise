@@ -11,6 +11,8 @@ import type { BattleEvent } from '../../src/battle/common/types.ts';
 import { getChapter } from '../../src/data/encounters.ts';
 import { BattlePresenter } from '../../src/engine/BattlePresenter.ts';
 import { intendedStrategy } from '../../src/engine/BattlePresenterStrategies.ts';
+import { stageFreeze } from '../../src/engine/BattlePresenterStaging.ts';
+import type { EventCtx } from '../../src/engine/BattlePresenterEvents.ts';
 import { FFXEngine } from '../../src/battle/ffx/engine.ts';
 import { registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
 import { setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
@@ -120,5 +122,45 @@ describe('a defeat in Chapter II', () => {
     ]);
     expect(takeDefeatNote()).toEqual({ cause: 'Mega Death' });
     expect(port.log.at(-1)).toBe('ending:fall');
+  });
+});
+
+describe('a foe that falls into its next form is never the last blow (review m7: the presenter no longer leans on the engine for it)', () => {
+  /** A bare presenter context for the pure beat `stageFreeze`: the party and the named foes on the field, and the burst the test chooses with the event in hand at `at`. */
+  function ctxOf(port: StagingPort, foes: string[], events: BattleEvent[], at: number): EventCtx {
+    return {
+      deps: { staging: port },
+      speed: () => 'normal',
+      moments: { reducedMotion: false, reducedFlashes: false },
+      stage: { staged: () => ['tidus', 'yuna', 'auron', ...foes], sideOf: (id: string) => (foes.includes(id) ? 'enemy' : 'party') },
+      menuOpen: () => false,
+      burst: { events, at },
+      sleep: () => Promise.resolve(),
+    } as unknown as EventCtx;
+  }
+  const ko = (targetId: string, seq: number): BattleEvent => ({ type: 'ko', targetId, seq }) as unknown as BattleEvent;
+  const formChange = (enemyId: string, seq: number): BattleEvent => ({ type: 'form-change', enemyId, formIndex: 1, name: 'Yunalesca', spriteKey: 'yunalesca-2', seq }) as unknown as BattleEvent;
+  const victory = (seq: number): BattleEvent => ({ type: 'victory', result: {}, seq }) as unknown as BattleEvent;
+
+  it("a `ko` followed in the same burst by the SAME foe's `form-change` cues nothing and holds nothing, although the field has no other foe", () => {
+    const port = new RecordingPort();
+    const events = [ko('yunalesca', 0), formChange('yunalesca', 1)];
+    expect(stageFreeze(ctxOf(port, ['yunalesca'], events, 0), 'yunalesca')).toBeUndefined();
+    expect(port.log).toEqual([]);
+    expect(port.hud()).toBe(1); // the HUD stays in
+  });
+
+  it('controls: the same `ko` before the `victory` is the last blow (one freeze, and the presenter waits); a `form-change` of ANOTHER foe does not stop the freeze; so the guard reads the id, not the event kind', async () => {
+    const last = new RecordingPort();
+    const wait = stageFreeze(ctxOf(last, ['yunalesca'], [ko('yunalesca', 0), victory(1)], 0), 'yunalesca');
+    expect(wait).toBeInstanceOf(Promise);
+    await wait;
+    expect(last.log).toEqual(['ending:freeze']);
+
+    const other = new RecordingPort();
+    const wait2 = stageFreeze(ctxOf(other, ['yunalesca', 'guado-guardian'], [ko('guado-guardian', 0), formChange('yunalesca', 1), victory(2)], 0), 'guado-guardian');
+    expect(wait2).toBeInstanceOf(Promise);
+    await wait2;
+    expect(other.log).toEqual(['ending:freeze']);
   });
 });
