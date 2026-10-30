@@ -13,7 +13,7 @@
  * treatment no longer follows the two booth ids but {@link TREATED_CHAPTERS}, which grows one line per chapter (Leblanc first), with a written hold for any single piece a chapter is not ready for ({@link PIECE_HOLDS}) and `?treated=pack`
  * to put release 68's reach back. {@link DEMO_CHAPTERS} and {@link isDemoChapter} stay the booth pair, for the kiosk's own things (the picker, the seeds, the party rigs, the voiced lines).
  *
- * Game case (AGENTS.md rule 14): the gate is both games (shared plumbing); the chapter's game is read from the table (FFX Chapter I, FFX-2 Chapter IV, FFX-2 Chapter VI).
+ * Game case (AGENTS.md rule 14): the gate is both games (shared plumbing); the chapter's game is read from the table (FFX Chapter I, FFX-2 Chapter IV, FFX-2 Chapter VI, FFX Chapter II).
  */
 
 export type DemoGame = 'ffx' | 'ffx2';
@@ -67,11 +67,12 @@ export interface TreatedEntry {
 }
 
 /**
- * THE LIST. The booth pair (release 60 and 64: the pair is on from the first release that had the pack) and Leblanc (release 69, `booth-leblanc`: Chapter VI, `ffx2-leblanc`, FFX-2; the HIDDEN experiment
- * `exp-leblanc` is not this chapter and is never listed). A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
+ * THE LIST. The booth pair (release 60 and 64: the pair is on from the first release that had the pack), Leblanc (release 69, `booth-leblanc`: Chapter VI, `ffx2-leblanc`, FFX-2; the HIDDEN experiment
+ * `exp-leblanc` is not this chapter and is never listed) and Lady Yunalesca (release 69, `booth-ffx-yunalesca`: Chapter II, `yunalesca`, FFX; the first FFX chapter beyond Chapter I). A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
  */
 export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.freeze({
   'seymour-flux': { game: 'ffx', since: 'r60' },
+  yunalesca: { game: 'ffx', since: 'r69' },
   'ffx2-bahamut': { game: 'ffx2', since: 'r60' },
   'ffx2-leblanc': { game: 'ffx2', since: 'r69' },
 });
@@ -81,6 +82,27 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
  * piece answers today's in that chapter and every other piece plays. The booth pair has none: they are the approved target.
  */
 export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<TreatedPiece, string>>>>> = Object.freeze({
+  // Chapter II (FFX only; release 69, `booth-ffx-yunalesca`): three pieces wait, every other plays. `smear` is the swap exception's other half: `SwapSwitch.SCOPE_EXCEPTIONS` (its own mechanism, untouched) holds her stance and cause picks, and the smear planner cuts the same swaps.
+  yunalesca: Object.freeze({
+    breath:
+      'FFX, Chapter II: the held breath is the drain-and-flood built for Total Annihilation (and, in FFX-2, Mega Flare), and a move reaches it only by id (`StagingPort.BigMove`), so nothing Yunalesca does plays it today. Her sourced showpieces are Mega Death ' +
+      '(`mega-death`: form 3\'s opener and every fifth turn, the Death status on the whole active party and no damage, research/ffx-yunalesca.md sections 3, 5.3 and 14.13) and Hellbiter (`hellbiter`: the Zombie rider that turns healing into a weapon, ' +
+      'sections 3, 5.1 and 5.2), and neither has a telegraph painting held before it (`TelegraphHold` stages only Seymour Flux\'s Lance of Atrophy and Braska\'s Ultimate Jecht Shot), so there is no existing staging of the move to extend; a breath for them needs ' +
+      'a tone, a sound and a shot, which are mockup decisions (hard rule 9; the driver call of 2026-10-30: never guessed). Lifts when Bailey or the driver picks a tone and a shot for Mega Death (and for Hellbiter) from a mockup, and `BigMove`, `NAME_OF` and ' +
+      '`passRecipes.HEADLINE_BLOWS` are given rows for those ids (which hit, `first` or `last`, measured the way Mega Flare\'s was).',
+    cam:
+      'FFX, Chapter II: the pro camera\'s real shots were laid by the real-motion lane on Chapter I\'s Gagazet stage and clamped to 35 degrees of its plate\'s front, and the dome\'s plate is the one the MAX mix\'s colossus master pulled past its edge at every ' +
+      'aspect (round 19, PR-0307, a ship-blocking regression: Chapter II keeps today\'s rig, `fx/mix/masters.ts`). The plate is flat and its slack is small: today\'s own seven rigs show none of it past the plate at 16:9 except `enemy` (4.5 percent) and `yunalesca` ' +
+      '(7.2 percent: 3.2 above, 4.0 at the sides; 18.4 percent at 21:9). The offline read of the real shots laid on the dome\'s slots (`ProTrack.registerKeys`, no browser) puts the median shot\'s worst frame at 57.6 percent past the plate against Gagazet\'s ' +
+      '50.1 under the same model (both overstate it: no pillars, no director fit), which cannot call one safe. The piece holds the directed camera, its real shots and its soft background; the HD-2D look\'s own tilt-shift band stays. Lifts when job J4 of ' +
+      'docs/handoff/booth-ffx-yunalesca.md (a cast, a landing, the killing blow and the victory at 16:9, 16:10, 21:9 and 4:3 on the real build) reads no plate edge, void or back of the plate beyond today\'s `yunalesca` rig in any frame, or the shots are clamped ' +
+      'to the dome plate\'s own width and top margin.',
+    smear:
+      'FFX, Chapter II: the smear style is the planner that cuts a pose swap inside a brush-stroke trail whenever the figure moves (`SmearDirector.swap`, also the knock-out\'s cut), and it rides on the same chapter list as the stance and cause picks, which ' +
+      '`SwapSwitch.SCOPE_EXCEPTIONS` holds back for her: the wide run of release 68 (seed 1, the whole 409 s fight) took ghost frames a minute from 287 to 98 but swap jerks of 40 px or more from 9 to 25 (worst 154 px) and made 63 planned cuts over 120 px across heads ' +
+      '0.41 to 0.44 of the height apart (Yunalesca attack to cast, Auron follow to idle). A smear that played here would plan those cuts, so Chapter II keeps release 67\'s swap look as the exception says (`?swapscope=all` still reaches her). Lifts when her entry ' +
+      'in `SwapSwitch.SCOPE_EXCEPTIONS` lifts: job `yunalesca-all-anchor` of docs/handoff/pc-scope.md (`?cutanchor=on` run in the chapter) reads no swap jerk of 40 px or more outside a named cut.',
+  }),
   'ffx2-leblanc': Object.freeze({
     breath:
       'FFX-2, Chapter VI: the held breath is the drain-and-flood built for Mega Flare (and, in FFX, Total Annihilation), a solemn beat. Her sourced showpiece is No Love Lost (research/ffx2-leblanc-syndicate.md section 4.5: ' +

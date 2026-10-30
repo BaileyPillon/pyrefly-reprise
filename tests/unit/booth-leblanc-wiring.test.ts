@@ -106,8 +106,8 @@ describe('`__pyrefly.treated()`', () => {
     const treated = api['treated'] as (scope?: 'all' | 'pack' | null) => { scope: string; chapters: string[]; holds: Record<string, string[]>; running: string | null; reaches: boolean };
     const all = treated('all');
     expect(all.scope).toBe('all');
-    expect(all.chapters).toEqual(['seymour-flux', 'ffx2-bahamut', 'ffx2-leblanc']);
-    expect(all.holds).toEqual({ 'ffx2-leblanc': ['breath'] });
+    expect(all.chapters).toEqual(['seymour-flux', 'yunalesca', 'ffx2-bahamut', 'ffx2-leblanc']);
+    expect(all.holds).toEqual({ yunalesca: ['breath', 'cam', 'smear'], 'ffx2-leblanc': ['breath'] });
     expect(all.running).toBeNull();
     expect(all.reaches).toBe(false);
     setDemoChapter('ffx2-leblanc');

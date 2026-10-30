@@ -133,6 +133,20 @@ export const DEFAULT_ROOM_BOLD: RoomBold = { gloss: 0, embers: [], driftPx: 3 };
 export const ROOM_BOLD: Readonly<Record<string, RoomBold>> = {
   // Chapter I (FFX), Gagazet at night: snow and ice, a matte floor: no reflection; a pale icy haze, never a grey one.
   gagazet: { gloss: 0, embers: [], rim: [0.55, 0.85, 1.0], fog: [0.46, 0.66, 0.98], shadow: [0.13, 0.19, 0.42], fogScale: 0.8, driftPx: 3 },
+  // Chapter II (FFX, release 69, `booth-ffx-yunalesca`), the Zanarkand Dome: the hall stands in water (the plate's floor is a still pool that mirrors the columns and the sphere; the scene calls it "the wet floor"), so a high gloss like the Bevelle cathedral's; the
+  // rim is the scene's own "cold violet" for its figures (`zanarkand-dome.ts`: a gold bounce from the sphere and a cold violet rim); the fog is the plate's violet, held down a little (the plate is bright and already hazy).
+  // EMBERS: NONE ON PURPOSE. `research/ffx-vs-ffx2-presentation.md` section 8 supports pyreflies in this room ("the Dome is described as an enormous accumulation of pyreflies"), and the scene already carries two authored pyrefly fields and its own dust in
+  // the shafts (`zanarkand-dome.ts`, `ParticlePresets.pyreflies`), so a third system at the gold sphere would double what canon asks once; whether the Dome wants more than that is a browser look (job J11 of the handoff), and the one line to add sparks at the
+  // sphere is `embers: [[0.262, 0.788]]` (the sphere's centroid on the plate, from the top-left).
+  'zanarkand-dome': {
+    gloss: 0.7,
+    rim: [0.72, 0.62, 1.0],
+    embers: [],
+    fog: [0.3, 0.26, 0.5],
+    shadow: [0.1, 0.07, 0.3],
+    fogScale: 0.85,
+    driftPx: 3,
+  },
   // Chapter IV (FFX-2), the Bevelle underground: a polished cathedral floor (the lamps and the skylight sit in it); the four lamps of the painting throw embers.
   'bevelle-underground': {
     gloss: 0.8,

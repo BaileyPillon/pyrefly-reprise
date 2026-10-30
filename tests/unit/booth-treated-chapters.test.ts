@@ -26,12 +26,28 @@ afterEach(() => setTreatedScope(null));
 const BOOTH = Object.keys(DEMO_CHAPTERS);
 const LISTED: readonly string[] = CHAPTER_IDS;
 
+/** The chapters the treatment reaches now, each with its game and the release it joined: one line per chapter. */
+const TREATED_NOW: Readonly<Record<string, { game: 'ffx' | 'ffx2'; since: string }>> = {
+  'seymour-flux': { game: 'ffx', since: 'r60' },
+  yunalesca: { game: 'ffx', since: 'r69' },
+  'ffx2-bahamut': { game: 'ffx2', since: 'r60' },
+  'ffx2-leblanc': { game: 'ffx2', since: 'r69' },
+};
+
+/** The pieces each joined chapter holds back, in the order of `TREATED_PIECES`: the booth pair holds none (the approved target). */
+const HELD_NOW: Readonly<Record<string, readonly string[]>> = {
+  yunalesca: ['cam', 'breath', 'smear'],
+  'ffx2-leblanc': ['breath'],
+};
+
+/** Does the treatment play this piece in this chapter, under the `all` scope? */
+const playsUnderAll = (id: string, piece: string): boolean => Object.prototype.hasOwnProperty.call(TREATED_NOW, id) && !(HELD_NOW[id] ?? []).includes(piece);
+
 /**
  * The listed chapters the treatment has NOT reached yet, each with the reason (the driver's rollout order, `docs/handoff/booth-leblanc.md`). A chapter leaves this table in the commit that adds it to
  * `TREATED_CHAPTERS`; one that is in neither fails the first test below.
  */
 const NOT_YET: Readonly<Record<string, string>> = {
-  yunalesca: 'FFX: the stance look is held by its swap exception, the camera keeps the colossus master (PR-0307), boss clip rows and maps owed',
   'braskas-final-aeon': 'FFX: seven links of three foes, the heaviest chapter; maps for about 21 poses owed',
   'ffx2-vegnagun-shuyin': 'FFX-2: five parts, a camera that keeps today (Vegnagun), the HP waiver; next after Leblanc (same dresses as Chapter IV but Paine)',
   'seymour-anima-macalania': 'FFX: three foes under one declared boss; maps owed',
@@ -58,10 +74,12 @@ describe('the list', () => {
     expect(LISTED).toHaveLength(19);
   });
 
-  it('is Chapter I, Chapter IV and Leblanc, each with the game the registry says (rule 14)', () => {
-    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(['ffx2-bahamut', 'ffx2-leblanc', 'seymour-flux']);
+  it('is Chapter I, Chapter IV, Leblanc and Chapter II, each with the game the registry says (rule 14)', () => {
+    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(Object.keys(TREATED_NOW).sort());
     for (const [id, e] of Object.entries(TREATED_CHAPTERS)) expect(getChapter(id)?.game, id).toBe(e.game);
+    for (const [id, e] of Object.entries(TREATED_NOW)) expect(TREATED_CHAPTERS[id], id).toEqual(e);
     expect(TREATED_CHAPTERS['ffx2-leblanc']).toEqual({ game: 'ffx2', since: 'r69' });
+    expect(TREATED_CHAPTERS['yunalesca']).toEqual({ game: 'ffx', since: 'r69' }); // the first FFX chapter beyond Chapter I: FFX's layout, profile and tables (hard rule 14)
   });
 
   it('holds the booth pair, with the games DEMO_CHAPTERS gives them; the booth list itself stays two ids', () => {
@@ -107,6 +125,23 @@ describe('the holds', () => {
     expect(treatedHold('toString', 'hud')).toBeUndefined();
   });
 
+  it("Chapter II holds the staged breath, the directed camera and the smear planner, and nothing else: Mega Death and Hellbiter have no telegraph hold or mockup to extend, the dome's plate is the one the colossus master pulled past its edge (PR-0307), and the smear cuts the swaps her swap exception holds back", () => {
+    expect(Object.keys(PIECE_HOLDS['yunalesca']!).sort()).toEqual(['breath', 'cam', 'smear']);
+    expect(treatedHold('yunalesca', 'breath')).toMatch(/Mega Death/);
+    expect(treatedHold('yunalesca', 'breath')).toMatch(/Hellbiter/);
+    expect(treatedHold('yunalesca', 'breath')).toMatch(/TelegraphHold/);
+    expect(treatedHold('yunalesca', 'cam')).toMatch(/PR-0307/);
+    expect(treatedHold('yunalesca', 'cam')).toMatch(/J4/);
+    expect(treatedHold('yunalesca', 'smear')).toMatch(/SCOPE_EXCEPTIONS/);
+    expect(treatedHold('yunalesca', 'smear')).toMatch(/yunalesca-all-anchor/);
+    for (const p of TREATED_PIECES) if (p !== 'breath' && p !== 'cam' && p !== 'smear') expect(treatedHold('yunalesca', p), p).toBeUndefined();
+  });
+
+  it('every hold in the table is the one this file expects (a new hold, or a lifted one, is a decision made in two places)', () => {
+    for (const [id, rows] of Object.entries(PIECE_HOLDS)) expect(Object.keys(rows).sort(), id).toEqual([...(HELD_NOW[id] ?? [])].sort());
+    for (const id of Object.keys(HELD_NOW)) expect(Object.keys(PIECE_HOLDS), id).toContain(id);
+  });
+
   it('the pieces are the nineteen the switch modules name, without repeats', () => {
     expect(new Set(TREATED_PIECES).size).toBe(TREATED_PIECES.length);
     expect(TREATED_PIECES).toHaveLength(19);
@@ -147,25 +182,27 @@ describe('who the treatment reaches', () => {
     expect(isTreatedChapter(undefined)).toBe(false);
   });
 
-  it('under all it is the booth pair and Leblanc: Leblanc plays every piece but the breath; no other listed or hidden chapter is reached', () => {
+  it('under all it is the booth pair, Leblanc and Chapter II: each plays every piece but the ones it holds; no other listed or hidden chapter is reached', () => {
     setTreatedScope('all');
     for (const id of [...LISTED, ...HIDDEN]) {
-      const reached = BOOTH.includes(id) || id === 'ffx2-leblanc';
+      const reached = Object.prototype.hasOwnProperty.call(TREATED_NOW, id);
       expect(isTreatedChapter(id), id).toBe(reached);
-      for (const p of TREATED_PIECES) expect(isTreatedChapter(id, p), `${id} ${p}`).toBe(reached && !(id === 'ffx2-leblanc' && p === 'breath'));
+      for (const p of TREATED_PIECES) expect(isTreatedChapter(id, p), `${id} ${p}`).toBe(playsUnderAll(id, p));
     }
     for (const p of TREATED_PIECES) for (const id of BOOTH) expect(isTreatedChapter(id, p), `${id} ${p}`).toBe(true); // the approved target is never held
     expect(isTreatedChapter(undefined, 'hud')).toBe(false);
   });
 
-  it("the game follows the chapter under all (FFX-2 for Leblanc, so FFX-2's layout, profile and tables play), and the fallback elsewhere", () => {
+  it("the game follows the chapter under all (FFX-2 for Leblanc, FFX for Chapter II), and the fallback elsewhere", () => {
     setTreatedScope('all');
     expect(demoGameOf('ffx2-leblanc')).toBe('ffx2');
     expect(demoGameOf('ffx2-leblanc', 'ffx')).toBe('ffx2');
-    expect(demoGameOf('yunalesca', 'ffx2')).toBe('ffx2');
+    expect(demoGameOf('yunalesca', 'ffx2')).toBe('ffx'); // Chapter II is FFX: the FFX layout, curve profile and tables play there, whatever the fallback says
+    expect(demoGameOf('braskas-final-aeon', 'ffx2')).toBe('ffx2'); // not treated yet: the fallback
     expect(demoGameOf('exp-leblanc', 'ffx')).toBe('ffx');
     setTreatedScope('pack');
     expect(demoGameOf('ffx2-leblanc', 'ffx')).toBe('ffx'); // release 68: not a demo chapter, the fallback
+    expect(demoGameOf('yunalesca', 'ffx2')).toBe('ffx2'); // release 68: the same
   });
 
   it('isDemoChapter stays the booth pair under every scope (the kiosk, the party rigs and the voiced lines ask it)', () => {

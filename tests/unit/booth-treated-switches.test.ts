@@ -32,10 +32,15 @@ const LISTED: readonly string[] = CHAPTER_IDS;
 const HIDDEN = ['exp-leblanc', 'ff7-guard-scorpion', 'ffx2-masterpiece-theatre', 'sinspawn-gui', 'exp-fayth'];
 const ALL = [...LISTED, ...HIDDEN];
 const BOOTH = ['seymour-flux', 'ffx2-bahamut'];
-const GAME: Record<string, 'ffx' | 'ffx2'> = { 'seymour-flux': 'ffx', 'ffx2-bahamut': 'ffx2', 'ffx2-leblanc': 'ffx2' };
+const GAME: Record<string, 'ffx' | 'ffx2'> = { 'seymour-flux': 'ffx', yunalesca: 'ffx', 'ffx2-bahamut': 'ffx2', 'ffx2-leblanc': 'ffx2' };
 
-/** The chapters each scope reaches. */
-const reached = (scope: 'pack' | 'all'): readonly string[] => (scope === 'pack' ? BOOTH : [...BOOTH, 'ffx2-leblanc']);
+/** The chapters each scope reaches (one line per chapter that joins). */
+const JOINED = ['yunalesca', 'ffx2-leblanc'];
+const reached = (scope: 'pack' | 'all'): readonly string[] => (scope === 'pack' ? BOOTH : [...BOOTH, ...JOINED]);
+
+/** The pieces a joined chapter holds back (`DemoGate.PIECE_HOLDS`; the booth pair holds none). */
+const HELD: Readonly<Record<string, readonly string[]>> = { yunalesca: ['cam', 'breath', 'smear'], 'ffx2-leblanc': ['breath'] };
+const holds = (id: string, piece: string): boolean => (HELD[id] ?? []).includes(piece);
 
 function allOn(): void {
   setHudF1Mode('f1');
@@ -93,12 +98,12 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(realKind(), `real ${id}`).toBe(on ? 'snappy' : null);
       expect(inDemoChapter(id), `curves gate ${id}`).toBe(on);
       expect(momentsOn(), `moments ${id}`).toBe(on);
-      expect(smearOn(), `smear ${id}`).toBe(on);
-      expect(smearStyleNow(), `smear style ${id}`).toBe(on ? 'paint' : 'off');
+      expect(smearOn(), `smear ${id}`).toBe(on && !holds(id, 'smear')); // Chapter II's swap exception: no smear planner there
+      expect(smearStyleNow(), `smear style ${id}`).toBe(on && !holds(id, 'smear') ? 'paint' : 'off');
       expect(newMotionOn(), `new motion ${id}`).toBe(on);
-      expect(proCamOn(), `camera ${id}`).toBe(on);
-      expect(proDofOn(), `camera dof ${id}`).toBe(on);
-      expect(proCamGame(), `camera game ${id}`).toBe(on ? GAME[id] : null);
+      expect(proCamOn(), `camera ${id}`).toBe(on && !holds(id, 'cam')); // Chapter II holds the directed camera (PR-0307): today's rig plays there, and with it the soft background that rides on the camera
+      expect(proDofOn(), `camera dof ${id}`).toBe(on && !holds(id, 'cam'));
+      expect(proCamGame(), `camera game ${id}`).toBe(on && !holds(id, 'cam') ? GAME[id] : null);
       expect(stagingOn(), `staging ${id}`).toBe(on);
       for (const piece of ['card', 'ending', 'opening'] as StagingPiece[]) {
         expect(stagingPieceOn(piece), `staging ${piece} ${id}`).toBe(on);
@@ -130,23 +135,23 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
   });
 });
 
-describe('the one piece Leblanc holds, the staged breath', () => {
-  it('stays today for her and plays in nobody else (the staging answers the piece, not only the chapter)', () => {
+describe('the one piece every joined chapter holds, the staged breath', () => {
+  it('stays today for Leblanc and Chapter II and plays in the booth pair (the staging answers the piece, not only the chapter)', () => {
     allOn();
     setTreatedScope('all');
-    for (const id of [...BOOTH, 'ffx2-leblanc']) {
+    for (const id of [...BOOTH, ...JOINED]) {
       setDemoChapter(id);
-      expect(stagingPieceOn('breath'), id).toBe(id !== 'ffx2-leblanc');
-      expect(stagingPieceOnFor('breath', id), id).toBe(id !== 'ffx2-leblanc');
-      expect(stagingOn(), id).toBe(true); // the layer is still there for her card, her ending and her Change plate
+      expect(stagingPieceOn('breath'), id).toBe(BOOTH.includes(id));
+      expect(stagingPieceOnFor('breath', id), id).toBe(BOOTH.includes(id));
+      expect(stagingOn(), id).toBe(true); // the layer is still there for the card, the ending and the opening (Leblanc's Change plate, Chapter II's Overdrive opening)
     }
   });
 });
 
 describe('the chapter-wide switches still say no without their own word', () => {
-  it('a switch left at today (no address word, no pack) answers false in Leblanc under all, as in the booth pair', () => {
+  it('a switch left at today (no address word, no pack) answers false in Leblanc and Chapter II under all, as in the booth pair', () => {
     setTreatedScope('all');
-    for (const id of [...BOOTH, 'ffx2-leblanc']) {
+    for (const id of [...BOOTH, ...JOINED]) {
       setDemoChapter(id);
       setPassChapter(id);
       expect([hudF1On(), proLookOn(), partyRimOff(), bossCleanOn(), curvesOn(), momentsOn(), smearOn(), proCamOn(), stagingOn(), fxNewOn(), audioNewOn()], id).toEqual(new Array(11).fill(false));
