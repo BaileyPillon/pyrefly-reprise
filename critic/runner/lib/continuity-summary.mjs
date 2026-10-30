@@ -123,7 +123,7 @@ export function summarize({ swaps, jerks, coveredJerks = [], smearedJerks = [], 
       unregisteredSwaps: judged.filter((s) => s.unregistered).length,
     },
     motion: {
-      snaps: snaps.length, snapsPerMinute: perMin(snaps.length), hardCuts: hard.length, hardCutsPerMinute: perMin(hard.length), snapsByToPose: bySnapPose,
+      snaps: snaps.length, snapsPerMinute: perMin(snaps.length), snapsGapExcused: counted.filter((s) => s.gapped && s.snapGap).length, hardCuts: hard.length, hardCutsPerMinute: perMin(hard.length), snapsByToPose: bySnapPose,
       lowestIou: round(counted.reduce((m, s) => (s.outline ? Math.min(m, s.outline.iou) : m), 1), 3),
       maxCentroidShiftPx: round(counted.reduce((m, s) => (s.outline ? Math.max(m, s.outline.centroidShiftPx) : m), 0), 1),
       ghostSwaps: ghostSwaps.length, ghostFrames: counted.reduce((n, s) => n + s.ghost.frames, 0), worstGhostSeverity: round(counted.reduce((m, s) => Math.max(m, s.ghost.severity), 0), 3), ghostOverFail: ghostFail.length,

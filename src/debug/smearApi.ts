@@ -9,8 +9,8 @@ import { resetSmearLog, smearLog, type PlannedSmear } from '../engine/motion/Sme
 import { setSmearStyle, smearOn, smearStyle, type SmearStyle } from '../engine/motion/SmearSwitch.ts';
 import { pinnedRelightCount, relightStats } from '../engine/look/relight/FigureRelight.ts';
 import { resetSwapLog, swapLog } from '../engine/motion/SwapLog.ts';
-import { SCOPE_EXCEPTIONS, causeClasses, causeMode, interludeMode, setCauseMode, setInterludeMode, setStanceMode, setSwapScope, stanceMode, swapScope, type CauseMode, type InterludeMode, type StanceMode, type SwapClass, type SwapScope } from '../engine/motion/SwapSwitch.ts';
-import { cutAnchorMode, setCutAnchorMode, type CutAnchorMode } from '../engine/motion/CutAnchor.ts';
+import { BLEND_HEAD_CHAPTERS, SCOPE_EXCEPTIONS, blendGuardOn, causeClasses, causeMode, interludeMode, setBlendGuard, setCauseMode, setInterludeMode, setStanceMode, setSwapScope, stanceMode, swapScope, type CauseMode, type InterludeMode, type StanceMode, type SwapClass, type SwapScope } from '../engine/motion/SwapSwitch.ts';
+import { CUT_ANCHOR_CHAPTERS, cutAnchorMode, setCutAnchorMode, type CutAnchorMode } from '../engine/motion/CutAnchor.ts';
 
 export function installSmearDebug(api: Record<string, unknown>): void {
   api['smear'] = (style?: SmearStyle): SmearStyle => {
@@ -30,12 +30,13 @@ export function installSmearDebug(api: Record<string, unknown>): void {
     if (reset === true) resetSwapLog();
     return out;
   };
-  api['swapSwitch'] = (set?: { interlude?: InterludeMode; stance?: StanceMode; cause?: CauseMode; classes?: SwapClass[]; scope?: SwapScope; cutAnchor?: CutAnchorMode }) => {
+  api['swapSwitch'] = (set?: { interlude?: InterludeMode; stance?: StanceMode; cause?: CauseMode; classes?: SwapClass[]; scope?: SwapScope; cutAnchor?: CutAnchorMode; blendGuard?: boolean }) => {
     if (set?.scope) setSwapScope(set.scope);
+    if (typeof set?.blendGuard === 'boolean') setBlendGuard(set.blendGuard); // held-chapters lane: false is `?blendguard=off`
     if (set?.cutAnchor) setCutAnchorMode(set.cutAnchor); // MF-18
     if (set?.interlude) setInterludeMode(set.interlude);
     if (set?.stance) setStanceMode(set.stance);
     if (set?.cause || set?.classes) setCauseMode(set.cause ?? causeMode(), set.classes ?? undefined);
-    return { interlude: interludeMode(), stance: stanceMode(), cause: causeMode(), classes: [...causeClasses()], scope: swapScope(), scopeExceptions: Object.keys(SCOPE_EXCEPTIONS), cutAnchor: cutAnchorMode() };
+    return { interlude: interludeMode(), stance: stanceMode(), cause: causeMode(), classes: [...causeClasses()], scope: swapScope(), scopeExceptions: Object.keys(SCOPE_EXCEPTIONS), cutAnchor: cutAnchorMode(), cutAnchorChapters: { ...CUT_ANCHOR_CHAPTERS }, blendHeadChapters: { ...BLEND_HEAD_CHAPTERS }, blendGuard: blendGuardOn() }; // held-chapters lane: the per-chapter words the two held-chapter rules read
   };
 }

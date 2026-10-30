@@ -14,6 +14,11 @@ export interface PairFacts {
   anchorDistance: number | null;
   /** MF-18: the same step with its sign, in world units: the incoming anchor's x minus the outgoing one's (`CutAnchor.ts` shifts the incoming plane back by part of it), or null. */
   anchorDx: number | null;
+  /**
+   * Held-chapters lane: the WHOLE distance between the two anchors, sideways and up or down, as a share of the figure's height, or null. {@link anchorDistance} is sideways only (the cut-side anchor's drift is);
+   * a serpent's head dips and rears (Evrae's heads are 0.12 of his height apart and 0.04 of it sideways) and a kneel to a victory pose is 0.22 of the height straight up, and the harness reads the whole step.
+   */
+  headDistance: number | null;
 }
 
 /** Overlap and head distance of the pair going out (`out`) and coming in (`inn`) on a figure `worldHeight` tall. */
@@ -21,5 +26,6 @@ export function pairFacts(out: Footprint, inn: Footprint, worldHeight: number): 
   const ao = planeAnchor(out);
   const ai = planeAnchor(inn);
   const m = ao && ai ? meetingOffsets(ao, ai) : null;
-  return { overlap: footprintOverlap(out, inn), anchorDistance: m ? m.distance / Math.max(1e-6, worldHeight) : null, anchorDx: ao && ai ? ai.x - ao.x : null };
+  const whole = ao && ai && ao.y !== undefined && ai.y !== undefined ? Math.hypot(ai.x - ao.x, ai.y - ao.y) : null;
+  return { overlap: footprintOverlap(out, inn), anchorDistance: m ? m.distance / Math.max(1e-6, worldHeight) : null, anchorDx: ao && ai ? ai.x - ao.x : null, headDistance: whole === null ? null : whole / Math.max(1e-6, worldHeight) };
 }

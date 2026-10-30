@@ -24,7 +24,7 @@ import { CutGlide, anchorPlan, cutAnchorFor, type AnchorPlan } from './CutAnchor
 import { alignedSwapOn } from '../PoseSwap.ts';
 import { stanceKindOf, swapClassOf } from './SwapClass.ts';
 import { noteDesigned } from './SwapLog.ts';
-import { BLEND3_MS, causeMode, stanceNow, swapHow, swapsInScope, type SwapHow } from './SwapSwitch.ts';
+import { BLEND3_MS, blendTooFar, causeMode, stanceNow, swapHow, swapsInScope, type SwapHow } from './SwapSwitch.ts';
 import { heftOfHeight, motionBeat } from '../feel/MotionBeats.ts';
 import { smearStyle, smearStyleNow } from './SmearSwitch.ts';
 
@@ -111,7 +111,8 @@ export class SmearDirector {
     // `?swapcause=pick` blends only where the pair is close, and so does a cut that an open menu turned into the blend (`?swapcause=cut` with an FFX-2 menu open: review F-6). A 50 ms blend of two drawings the planner calls a BIG change (heads 0.12 of the height apart, or outlines under half shared) is the head
     // crossing 70 to 150 px in two frames (the harness read 17 swap jerks of 40 px or more in Chapter I against 2 today), so there it keeps today's blend, or the smear when the figure moves. The pure
     // `blend3` word is the plan's V2 arm and stays unguarded, for the clip.
-    if (how === 'blend3' && !stanceBlend && (causeMode() === 'pick' || cutAsked) && isBigChange(facts().overlap, facts().anchorDistance)) how = 'today';
+    // Held-chapters lane: in the chapters of `BLEND_HEAD_CHAPTERS` the guard also reads the heads' WHOLE distance, up and down as well as sideways (a serpent's head dips and rears; `SwapSwitch.BLEND3_HEAD_MAX`).
+    if (how === 'blend3' && !stanceBlend && (causeMode() === 'pick' || cutAsked) && (isBigChange(facts().overlap, facts().anchorDistance) || blendTooFar(facts().headDistance))) how = 'today';
     // A cut on its cause whose two heads are 0.4 of the height apart or more is a 130 px step in one frame: it stays today's (a blend at rest, the smear when the figure moves). See `SmearPlan.CAUSE_MAX_ANCHOR`.
     if (how === 'cut' && causeCutTooFar(facts().anchorDistance)) how = 'today';
     if (how === 'blend3') {

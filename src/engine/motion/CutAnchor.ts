@@ -39,6 +39,20 @@ export type CutAnchorMode = 'today' | 'on' | 'moving';
  */
 export const CUT_ANCHOR_DEFAULT: Readonly<Record<DemoGame, CutAnchorMode>> = Object.freeze({ ffx: 'today', ffx2: 'today' });
 
+/**
+ * ONE WORD FOR A CHAPTER (held-chapters lane, 2026-10-29; FFX only: both chapters are FFX's; the driver's call under Bailey's delegation of 2026-10-28, his to overturn). A chapter named here reads this word when the address
+ * names none, instead of its game's {@link CUT_ANCHOR_DEFAULT}: the two chapters the wide swap scope holds out because their planned cuts sit across heads 0.40 to 0.44 of the figure's height apart (a step of about half the
+ * drawn height, which the harness refuses to excuse by 0.1 to 1.2 percent) get the anchor, so that lifting their `SwapSwitch.SCOPE_EXCEPTIONS` line ships the cut with its glide and no other FFX chapter is flipped with it:
+ * Yunalesca (13 unexcused planned cuts in release 68's run: her attack to cast 133 px against a cap of 131.5, Auron's follow to idle 154 against 153) and Sin's face (Auron's follow to idle, 224 px against 222). The model of
+ * `docs/handoff/held-chapters.md` reads both at 0 unexcused with the anchor (Yunalesca 76 planned cuts of 120 px or more down to 0, worst 154 down to 84; Sin's face worst 224 down to 108). **Inert today:** both chapters are
+ * `SCOPE_EXCEPTIONS`, so no cut is planned in them and no plane is shifted (`smearStyleNow` is `off` outside the two pack chapters); the word applies from the lift (or `?swapscope=all`). No browser has run it: its own job
+ * (`yunalesca-all-held-anchor`, `sin-face-all-held-anchor`; the second names no `?cutanchor`, so it proves this table is read) reads it first, and the clips (`docs/handoff/pc-scope.md`) are the look call. Emptying this table is one edit and puts the chapters back on the game's word.
+ */
+export const CUT_ANCHOR_CHAPTERS: Readonly<Record<string, CutAnchorMode>> = Object.freeze({
+  yunalesca: 'on',
+  'sin-face': 'on',
+});
+
 /** The game of a chapter id for this switch: the seven `ffx2-` chapters are FFX-2's, every other listed chapter FFX's (`tests/unit/pc-scope-cut-anchor.test.ts` checks it against `src/data/encounters.ts`); none named reads FFX. */
 export function cutAnchorGame(id: string | undefined = demoChapter()): DemoGame {
   return id !== undefined && id.startsWith('ffx2-') ? 'ffx2' : 'ffx';
@@ -64,16 +78,21 @@ export function cutAnchorWord(search: string | undefined): CutAnchorMode | null 
   return w === 'today' || w === 'on' || w === 'moving' ? w : null;
 }
 
-/** `?cutanchor=` from a search string (pure) for a figure of `game` (FFX when none is named): with the pack off `today`; else the word it names (`today`, `on`, `moving`), else that game's {@link CUT_ANCHOR_DEFAULT}. */
-export function cutAnchorFromSearch(search: string | undefined, game: DemoGame = 'ffx'): CutAnchorMode {
-  return cutAnchorWord(search) ?? CUT_ANCHOR_DEFAULT[game];
+/** `?cutanchor=` from a search string (pure) for a figure of `game` (FFX when none is named) in chapter `chapter` (none: the game's word): with the pack off `today`; else the word it names (`today`, `on`, `moving`), else the chapter's own word ({@link CUT_ANCHOR_CHAPTERS}), else that game's {@link CUT_ANCHOR_DEFAULT}. */
+export function cutAnchorFromSearch(search: string | undefined, game: DemoGame = 'ffx', chapter?: string): CutAnchorMode {
+  return cutAnchorWord(search) ?? chapterWord(chapter) ?? CUT_ANCHOR_DEFAULT[game];
 }
 
-/** The mode in force for the running chapter's game: a forced mode (tests, `swapSwitch({ cutAnchor })`), else the address's word, else the game's default. The address is read once. */
+/** The word {@link CUT_ANCHOR_CHAPTERS} gives chapter `id`, or null. */
+export function chapterWord(id: string | undefined): CutAnchorMode | null {
+  return id !== undefined && Object.prototype.hasOwnProperty.call(CUT_ANCHOR_CHAPTERS, id) ? CUT_ANCHOR_CHAPTERS[id]! : null;
+}
+
+/** The mode in force for the running chapter: a forced mode (tests, `swapSwitch({ cutAnchor })`), else the address's word, else the chapter's own word ({@link CUT_ANCHOR_CHAPTERS}), else its game's default. The address is read once. */
 export function cutAnchorMode(): CutAnchorMode {
   if (mode !== null) return mode;
   word ??= cutAnchorWord(globalThis.location === undefined ? undefined : (globalThis.location.search ?? ''));
-  return word ?? CUT_ANCHOR_DEFAULT[cutAnchorGame()];
+  return word ?? chapterWord(demoChapter()) ?? CUT_ANCHOR_DEFAULT[cutAnchorGame()];
 }
 
 /** Tests and `window.__pyrefly.swapSwitch({ cutAnchor })`: force the mode for both games (`null` reads the address again). */

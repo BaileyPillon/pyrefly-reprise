@@ -70,13 +70,35 @@ export const WIDE_CHAPTERS: readonly string[] = [
  */
 export const SCOPE_EXCEPTIONS: Readonly<Record<string, string>> = {
   yunalesca:
-    'FFX, the big foe: the rules-on run of 2026-10-27 (mf-l1-swaps handoff, MF-22) took ghost frames a minute from 287 to 98 but swap jerks of 40 px or more from 9 to 25 (worst 62 to 155 px): the moving-figure cuts the planner makes across heads 0.41 to 0.44 of the height apart (Yunalesca attack to cast, Auron follow to idle). The wide run of release 68 (2026-10-28, seed 1, the whole 409 s fight) read it again: 13 swap jerks against 7 for round 30, worst 154 px, and 63 planned cuts over 120 px (9.2 a minute against 4.0 in Chapter I): Tidus 41 of them at 124 to 131 px, Auron 16 at 140 to 149, Yunalesca 6 at 133. Lifts when `?cutanchor=on` (MF-18) has been run there (job `yunalesca-all-anchor` of docs/handoff/pc-scope.md) and no swap jerk of 40 px or more is left outside a named cut.',
+    'FFX, the big foe: the rules-on run of 2026-10-27 (mf-l1-swaps handoff, MF-22) took ghost frames a minute from 287 to 98 but swap jerks of 40 px or more from 9 to 25 (worst 62 to 155 px): the moving-figure cuts the planner makes across heads 0.41 to 0.44 of the height apart (Yunalesca attack to cast, Auron follow to idle). The wide run of release 68 (2026-10-28, seed 1, the whole 409 s fight) read it again: 13 swap jerks against 7 for round 30, worst 154 px. Held-chapters lane (2026-10-29), read offline from that run: all 13 are PLANNED cuts that the harness refuses to excuse by 0.1 to 1.9 percent (Yunalesca attack to cast 132 to 134 px against a cap of half her drawn height, 131.5; Auron follow to idle 154 against 153): a step of about 0.5 of the figure is what a cut across 0.41 to 0.44 of its height is. The 63 planned cuts over 120 px are the fight (Tidus attacks 20 times, each a ready to attack and an attack to follow at 125 to 131 px, and Auron returns 18 times), not a planner fault: Chapter I plans the cut where its figures lunge and has few lunges (7 planned-cut jerks of 120 px or more in 384 s against 76 in 409 s); the cut is the same cut only where the figure is moving when it returns (the follow to idle of Auron is a planned cut 18 times of 20 here, cause action-start, and 1 of 6 in Chapter I, the other 5 are 7-frame blends). The chapter now carries its own cut-anchor word (CutAnchor.CUT_ANCHOR_CHAPTERS: on, the ?cutanchor=on of MF-18), which the model reads at 0 unexcused and 0 cuts over 120 px. Lifts when the job yunalesca-all-held-anchor (anchor on; the chapter word is proved live by sin-face-all-held-anchor, which names none) has been run: no swap jerk of 40 px or more is left outside an excused planned cut and the anchored look has been judged in the clips (docs/handoff/pc-scope.md); the table entry travels with the chapter.',
   'evrae-airship':
-    "FFX, Evrae: the wide run of release 68 (2026-10-28, seed 1) took ghost time a minute from 3,224 ms (round 30) to 1,088 but swap jerks from 2 to 11, and 12 in the repeat. 10 of the 11 are Evrae's own swaps, every pair, with the same 53 to 55 px head step (dy -50, dx 18) on cuts with no smear: a fixed vertical offset per pose, which the sideways cut anchor cannot remove. Lifts when his pose heads are registered (so the cut lands head on head) or his blend is kept, and a repeat run reads his swap jerks at or under round 30's.",
+    "FFX, Evrae: the wide run of release 68 (2026-10-28, seed 1) took ghost time a minute from 3,224 ms (round 30) to 1,088 but swap jerks from 2 to 11, and 12 in the repeat. 10 of the 11 are Evrae's own swaps, every pair, with the same 53 to 55 px head step (dy -50, dx 18) on cuts with no smear. Held-chapters lane (2026-10-29): two causes, both read offline. (1) The registration: his idle and idle-near are one painting with two head boxes 50 painting px apart, breath-charge's box sat 20 px above the same face and hurt's 46 px left of its eye: re-registered (the swap's step reads 35 to 37 px, from 53 to 55). The data alone does not clear the chapter and makes one pair worse by the harness: with it, hurt to idle goes from 0 swap jerks of 24 px or more to 12 (37.7 to 40.2 px, one over the 40 px fail line), because his head really rears 68 px when he is hit and a 50 ms blend steps 0.6 of that; so the guard is load-bearing for that pair (?blendguard=off reads the data without it). (2) The rest: his heads travel 57 to 68 px between cast, hurt and idle (the engine reads 0.120 and 0.132 of his height) mostly UP AND DOWN, which the planner's big-change test (sideways only) cannot see, so the 50 ms blend stepped them: the chapter now keeps today's blend where two heads are 0.11 of the figure's height apart in any direction (SwapSwitch.BLEND_HEAD_CHAPTERS; Wakka's follow to idle and critical to idle, 0.101 and 0.102, step 17 to 20 px and kept the 50 ms blend; none showed a jerk). Lifts when a repeat run of the job evrae-airship-all-held (and its -r2) reads no swap jerk of 40 px or more and at most round 30's 2 swap jerks of 24 px or more, with ghost time a minute at or under 0.7 of round 30's (2,257 ms).",
   'sin-face':
-    "FFX, Sin's face: the wide run of release 68 (2026-10-28, seed 1) took ghost time a minute from 2,390 ms to 1,116, with 2 swap jerks against 1, and one of them is a real pop: Auron's lunge returns to his stance in one frame (224 px, no smear), the pair Chapter I handles with a planned cut. Lifts when that return gets the same planned cut and a repeat run reads no swap jerk over 120 px outside a named cut.",
+    "FFX, Sin's face: the wide run of release 68 (2026-10-28, seed 1) took ghost time a minute from 2,390 ms to 1,116, with 2 swap jerks against 1. Held-chapters lane (2026-10-29), read offline: Auron's lunge returns to his stance in one frame (224 px) but that return IS a planned cut (the log has its smear: style paint, 38 ms, heads 0.40 of his height apart); the harness refused to excuse it by 1.2 percent (224.4 px against a cap of half his drawn height, 221.8), because Auron is drawn 444 px tall in this frame. The second jerk is Auron's critical to victory, a 50 ms blend across heads 0.22 of his height apart straight up (60 px), which the planner's sideways-only test read as close: the chapter now keeps today's blend across 0.11 of the figure's height or more in any direction (SwapSwitch.BLEND_HEAD_CHAPTERS; Wakka's blends at 0.10 stay the 50 ms blend, none of the 12 showed a jerk), and carries its own cut-anchor word (CutAnchor.CUT_ANCHOR_CHAPTERS: on), which the model reads at 224 down to 108 px, inside the cap. Lifts when the job sin-face-all-held-anchor (anchor on by the chapter word alone: no cutanchor in its address) reads no swap jerk of 40 px or more outside an excused planned cut and the anchored look has been judged in the clips (docs/handoff/pc-scope.md).",
   'ffx2-ixion-djose':
-    "FFX-2, Ixion XVI: the wide run of release 68 (2026-10-28, seed 1) took ghost time a minute from 4,873 ms to 2,144, but run 1 had a snap (Paine idle to hurt, a plain hard cut, IoU 0.44), the repeat had none, and a KO kneel cut steps 146 px; swap jerks read 1 and 2 against 1. Lifts when a third run has no snap and the KO kneel cut has been read as the knock-out's own cut or fixed.",
+    "FFX-2, Ixion XVI: the wide run of release 68 (2026-10-28, seed 1) took ghost time a minute from 4,873 ms to 2,144, but run 1 had a snap (Paine idle to hurt, a plain hard cut, IoU 0.44), the repeat had none, and a KO kneel cut steps 146 px; swap jerks read 1 and 2 against 1. Held-chapters lane (2026-10-29), read offline: the snap is a hole in the recording, not in the game: 4,765 ms of frames (2017 to 2303) are missing across that swap and the hurt painting is already at 0.25 in the last frame before the gap, so the change was a blend whose frames were never recorded; the harness now says so (continuity-gaps.mjs, summary.motion.snapsGapExcused 1, snaps 0 over all 24 kept recordings changes nothing else). The kneel is a PLANNED cut (smear paint, 38 ms, cause critical: Rikku hurt to critical and back, heads 0.38 of her height apart sideways and 0.30 up): 146, 140 and 138 px against caps of 145.5, 132.6 and 137.6, over by 0.1 to 5.7 percent (three planned cuts in the two runs). Not touched in code: the anchor leaves a kneel's vertical part (the model reads 97 px, inside the cap) and FFX-2's sources are silent on a slide. Lifts when a third run (the job ixion-all-held) has no snap and either the job ixion-all-held-anchor (?cutanchor=on) reads the kneel cuts inside their cap and the look is judged, or a repeat reads them inside it with no change.",
+};
+
+/**
+ * THE 50 ms BLEND'S REACH, WHERE A HEAD TRAVELS UP AND DOWN (held-chapters lane, 2026-10-29; FFX only in effect: the two chapters below are FFX's; the driver's call under Bailey's delegation of 2026-10-28, his to
+ * overturn). The planner keeps today's longer blend for a pair of drawings it calls a BIG change (`SmearPlan.isBigChange`: outlines under half shared, or heads 0.12 of the height apart SIDEWAYS), because the 50 ms
+ * three-frame blend of two heads far apart steps the weighted head about 0.6 of their distance in one frame (its capped curve: the outgoing painting is nearly gone by the second frame). Sideways is all it
+ * reads. A serpent's head dips and rears and a kneel to a victory pose is straight up, so Evrae's `cast>idle` and `hurt>idle` (heads 0.12 and 0.13 of his height apart, 0.04 and 0.09 of it sideways; coil
+ * outlines that overlap 0.7) and Auron's `critical>victory` (0.22 up, 60 px in Sin's face) were blends of 50 ms across 55 to 60 px of head travel, the swap jerks that kept both chapters out of {@link WIDE_CHAPTERS}'s
+ * reach in release 68. In the chapters named here a `pick` blend whose two heads are {@link BLEND3_HEAD_MAX} of the figure's height apart or more IN ANY DIRECTION (`SmearFacts.headDistance`) keeps
+ * today's blend too. The line is 0.11 and it was 0.08 in the first build of this lane: the 50 ms blend steps the weighted head 0.6 of the distance, so a share is a step of 0.6 x share x the DRAWN height, and
+ * 0.08 was 0.6 x 0.08 x 500 px = 24 px (the harness's jerk line, `policy.json` `jerkMinPx`) for a figure drawn 500 px tall. The figures here are drawn 280 to 440 px: Wakka (281 px in Evrae's chapter, 322 to 342 in
+ * Sin's face) steps 17 to 20 px at his 0.101 to 0.102 (follow>idle, critical>idle) and none of his 20 blends in Evrae's recording and 12 in Sin's face's showed a jerk, yet 0.08 sent them back to today's blend
+ * (about 140 ms a minute of see-through in Evrae, 180 in Sin's face, the number the chapters' Lifts-when is written in). The shares are the ENGINE's own (world units over the figure's height, measured on the
+ * real `PaintedActor` with the real registration and silhouettes, `tests/unit/engine/held-chapters-evrae-actor.test.ts`): Evrae cast>idle 0.120 and hurt>idle 0.132 (steps of 35 to 40 px, jerks), Wakka
+ * 0.101 and 0.102, Auron critical>victory 0.223 (60 px). 0.11 sits between Wakka's and Evrae's with 8 percent to spare on each side. Every other chapter is untouched (their numbers were measured with the
+ * sideways reading, and victory to idle pairs in the FFX-2 joiners read the same way: `docs/handoff/held-chapters.md` has the census). The table is separate from {@link SCOPE_EXCEPTIONS} on purpose: lifting an
+ * exception must not drop it. `?blendguard=off` (or `swapSwitch({ blendGuard: false })`) turns the guard off for a measurement: the chapters read the sideways distance only, with their registration as it is.
+ */
+export const BLEND3_HEAD_MAX = 0.11;
+export const BLEND_HEAD_CHAPTERS: Readonly<Record<string, number>> = {
+  'evrae-airship': BLEND3_HEAD_MAX,
+  'sin-face': BLEND3_HEAD_MAX,
 };
 
 /** The swaps MF-06 names, each by what is happening on screen (`SwapClass.ts` reads them off the pair of paintings). */
@@ -95,6 +117,7 @@ let stance: StanceMode | null = null;
 let cause: CauseMode | null = null;
 let classes: ReadonlySet<SwapClass> | null = null;
 let scope: SwapScope | null = null;
+let blendGuardWord: boolean | null = null;
 
 const searchOf = (): string | undefined => (globalThis.location === undefined ? undefined : (globalThis.location.search ?? ''));
 
@@ -129,6 +152,21 @@ export function scopeFromSearch(search: string | undefined): SwapScope {
   if (!packDemo(search)) return 'pack';
   const w = queryWord(search, 'swapscope');
   return w === 'today' ? 'pack' : w === 'pack' || w === 'wide' || w === 'all' ? w : SCOPE_DEFAULT;
+}
+
+/** `?blendguard=` from a search string (pure): false for `off`, else true. With it off the chapters of {@link BLEND_HEAD_CHAPTERS} read the sideways distance only, as every other chapter does (a measuring word, held-chapters lane). */
+export function blendGuardFromSearch(search: string | undefined): boolean {
+  return queryWord(search, 'blendguard') !== 'off';
+}
+
+/** Is the vertical head guard on? `?blendguard=off` turns it off for a run, so one build reads a chapter with and without it. */
+export function blendGuardOn(): boolean {
+  return (blendGuardWord ??= blendGuardFromSearch(searchOf()));
+}
+
+/** Tests and `window.__pyrefly.swapSwitch({ blendGuard })`: force the guard (`null` reads the address again). */
+export function setBlendGuard(v: boolean | null): void {
+  blendGuardWord = v;
 }
 
 export function swapScope(): SwapScope {
@@ -179,6 +217,17 @@ export function setStanceMode(v: StanceMode | null): void {
 export function setCauseMode(v: CauseMode | null, only?: readonly SwapClass[] | null): void {
   cause = v;
   if (only !== undefined) classes = only === null ? null : new Set(only);
+}
+
+/** The whole head distance (a share of the figure's height) at which a `pick` blend keeps today's blend in chapter `id`, or null when the chapter reads the sideways distance only ({@link BLEND_HEAD_CHAPTERS}, or `?blendguard=off`). */
+export function blendHeadMax(id: string | undefined = demoChapter()): number | null {
+  return id !== undefined && Object.prototype.hasOwnProperty.call(BLEND_HEAD_CHAPTERS, id) && blendGuardOn() ? BLEND_HEAD_CHAPTERS[id]! : null;
+}
+
+/** True when two heads `distance` apart (a share of the height, any direction; null: not known) are too far for the 50 ms blend in the running chapter. */
+export function blendTooFar(distance: number | null, id: string | undefined = demoChapter()): boolean {
+  const max = blendHeadMax(id);
+  return max !== null && distance !== null && Number.isFinite(distance) && distance >= max;
 }
 
 /** The stance look that plays NOW: the asked-for one in a pack chapter, `today` anywhere else. */
