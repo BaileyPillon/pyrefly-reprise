@@ -60,6 +60,12 @@ interface Playing {
   cutting?: boolean;
   /** MF-09: the run has no landing left to play: it played it on the cut (the lying painting reached half), or the run is a buckle and the fall tween's end lands it. */
   landed?: boolean;
+  /**
+   * A REVIVE's slide target, read once when the run begins (release 69). The lying body's place moves when `ProneLay` lets its slide go, which it does when the lying plane has faded: 75 ms in, in the
+   * middle of the rise, and a target read from the lying plane every frame moved by the whole slide (0.74 units in Chapter I) with it: the opaque standing plane jumped 0.57 units (89 px at 1600 wide)
+   * in one frame. The lying plane is gone by then; the standing plane slides home from where the body lay.
+   */
+  meet?: { target: number; by: 'head' | 'middle' };
 }
 export interface Guts {
   name: string;
@@ -235,6 +241,7 @@ export class LivingFigure {
     }
     if (p.run.opts.buckle) this.last.collapses++;
     if (p.run.opts.crossMs > 0) this.last.crosses++;
+    if (p.run.opts.kind === 'revive' && p.side !== 0) p.meet = this.meeting(p); // the lying body as it was laid: read before `ProneLay` lets its slide go (see {@link Playing.meet})
   }
 
   /** Finish the run where it stands: the KO painting at full, the standing one upright and gone, whatever phase it was in. */
@@ -276,6 +283,7 @@ export class LivingFigure {
 
   /** What the toppled body slides to: the lying painting's head when both paintings have a registered head (the point the eye follows), else its middle. */
   private meeting(p: Playing): { target: number; by: 'head' | 'middle' } {
+    if (p.meet) return p.meet;
     const k = p.lying;
     // a CUT (motion pass, step 3) has no cross to hide the difference in length between the toppled standing body and the curled lying one: aligning the heads leaves all of it at the feet (115 to 141 px at 1600 wide in the harness), so a cut splits it, middle to middle
     if (p.run.opts.cut) return { target: this.lyingCentre(p), by: 'middle' };
