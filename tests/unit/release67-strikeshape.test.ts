@@ -37,7 +37,7 @@ afterEach(() => {
 
 const CH1 = 'seymour-flux';
 const CH4 = 'ffx2-bahamut';
-const ELSEWHERE = 'yunalesca';
+const ELSEWHERE = 'sinspawn-gui'; // a hidden chapter the treatment never reaches (Chapter II joined the treated list in release 69: a listed chapter is no longer a stable control, the inventory's 7.4)
 const GAMES = [
   ['ffx', ['tidus', 'yuna', 'auron', 'kimahri', 'wakka', 'lulu', 'seymourFlux']],
   ['ffx2', ['yuna', 'rikku', 'paine', 'bahamut']],

@@ -179,7 +179,7 @@ export interface ProRoom {
 }
 
 /**
- * The arenas, "Cinematic contrast" (the B rows of `tools/dirs.py` and `base_for` of the book's `arena-light`; the third is Leblanc's, release 69). Keyed by the room's scene key (`LookRoom.key`).
+ * The arenas, "Cinematic contrast" (the B rows of `tools/dirs.py` and `base_for` of the book's `arena-light`; release 69 adds Chapter II's, FFX, and Leblanc's, FFX-2). Keyed by the room's scene key (`LookRoom.key`).
  * Chapter I, Mt. Gagazet (FFX): one cold moon throws a cone across the snow, everything else falls to teal-black, haze between the plate and the party, a rim toward the moon.
  * Chapter IV, the Bevelle underground (FFX-2): the skylight is the only light: a cool cone falls on Bahamut and the floor, the room drops to violet-black, the lamps shrink to embers.
  */
@@ -203,6 +203,30 @@ export const PRO_ARENA: Readonly<Record<string, ProRoom>> = {
     grain: 0.018,
     // the broad cold light across the snow under the moon; the engine's own moon shafts (`stage.shaft`) carry the beams
     cone: { u: 0.065, v: 0.83, follow: true, colour: [0.5, 0.8, 1.0], strength: 0.16, spread: 0.55, reach: 1.3, rays: 0.3 },
+  },
+  // Chapter II (FFX, release 69; `booth-ffx-yunalesca`): the oculus is the only light (the painting says so: "a single shaft of cold pale light falling onto the dais"); it throws a pale lavender cone down the hall, the plate's bright violet falls to
+  // indigo-black, the gold sphere stays as the one warm thing (the booth grammar: one strong light and one accent, the rest to deep shadow and haze). The colours are the plate's (mean luminance 0.337, a violet hall, a gold sphere at hue 35, a pink dusk between
+  // the right-hand columns), so she reads brighter and bluer than Chapter I's teal-black snow. [ours]: set from the plate's own colours and graded offline through this table (`docs/handoff/booth-ffx-yunalesca.md`); a still beside Chapter I is owed before
+  // Bailey judges it (hard rule 9).
+  'zanarkand-dome': {
+    colour: {
+      exposure: 1.02,
+      gamma: 1.0,
+      contrast: 0.42,
+      pivot: 0.3,
+      sat: 1.1,
+      pulls: [[245, 50, -4, 0.9, 0.8], [320, 40, -8, 0.8, 0.72], [35, 28, 0, 1.12, 1.05]],
+      gradmap: { amount: 0.1, stops: [[0, [0.02, 0.0, 0.06]], [0.3, [0.09, 0.05, 0.24]], [0.6, [0.42, 0.34, 0.62]], [0.9, [0.97, 0.92, 1.0]], [1, [1, 1, 1]]] },
+      shadow: [[0.05, 0.03, 0.2], 0.4],
+      shadowTo: 0.45,
+    },
+    lightColor: [0.9, 0.84, 1.0],
+    tweaks: { 'stage.shaft': 0.6, 'bold.stage': 1.7, 'bold.fog': 1.3, 'bold.rim': 1.4, 'relight.key': 1.5, 'shaft.gain': 1.6 },
+    haze: { colour: [0.26, 0.22, 0.46], amounts: [0.06, 0.05, 0.03], side: 0.1 },
+    vignette: { amount: 0.55, radius: 0.42, tint: [0.005, 0.0, 0.03] },
+    grain: 0.018,
+    // the oculus, found on the painting (plate u 0.338, v 0.063 from the top) so the cone follows the camera; (u, v) is the frame point it started from (the oculus at the first menu: screen x about 0.36 and the frame's top)
+    cone: { u: 0.36, v: 0.97, follow: false, paint: { u: 0.338, v: 0.063 }, colour: [0.82, 0.74, 1.0], strength: 0.3, spread: 0.4, reach: 1.8, rays: 0.3 },
   },
   'bevelle-underground': {
     colour: {

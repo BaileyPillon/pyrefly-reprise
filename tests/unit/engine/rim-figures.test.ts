@@ -98,7 +98,7 @@ describe('the party rim switch', () => {
   it('plays only in Chapter I and Chapter IV', () => {
     setPartyRim('off');
     expect(partyRimOff()).toBe(false); // no demo chapter named
-    setDemoChapter('yunalesca');
+    setDemoChapter('sinspawn-gui'); // a hidden chapter the treatment never reaches (Chapter II is treated since release 69)
     expect(partyRimOff()).toBe(false);
     setDemoChapter('seymour-flux');
     expect(partyRimOff()).toBe(true);
@@ -136,7 +136,7 @@ describe('who is tagged, and who draws no rim', () => {
     expect([actors.party, actors.aeon, actors.companion, actors.foe].map(rimSkipOf)).toEqual([true, true, true, false]);
     setBossClean('today'); // the boss re-cut off: Mortiorchis draws its rim as today, the party still follows its own switch
     expect([actors.party, actors.aeon, actors.companion, actors.foe].map(rimSkipOf)).toEqual([true, true, false, false]);
-    setDemoChapter('yunalesca'); // outside the two demo chapters nothing is skipped
+    setDemoChapter('sinspawn-gui'); // outside the two demo chapters nothing is skipped
     expect([actors.party, actors.aeon, actors.companion, actors.foe].map(rimSkipOf)).toEqual([false, false, false, false]);
   });
 

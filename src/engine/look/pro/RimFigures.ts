@@ -30,6 +30,12 @@ export const RIM_COMPANIONS: Readonly<Record<string, 'ffx' | 'ffx2'>> = Object.f
  * would SHRINK their shadow), so their shadow and ring stay the engine's own. `docs/handoff/booth-leblanc.md` has the measurement.
  */
 export const TREATED_RIM_FOES: Readonly<Record<string, 'ffx' | 'ffx2'>> = Object.freeze({
+  // Chapter II (`yunalesca`, FFX only; release 69, `booth-ffx-yunalesca`): Lady Yunalesca, all three forms (one combatant, three paintings: `yunalesca-1/2/3`, swapped in place at each form change). NO `BOSS_CLEAN_ARTS` or `BOSS_FEET` rows,
+  // for three measured reasons (`docs/handoff/booth-ffx-yunalesca.md` section 3): (1) the bottom-band footprints of forms 1 and 2 (hw 0.12 to 0.41 of the silhouette's width) are narrower than the engine's own pool for them, so a row would SHRINK their
+  // shadow, and form 3's band is the edge of its canvas (the coils run off the painting), not a footprint; (2) `BossClean` keys its controller by the art id the figure was BUILT with, and a form change swaps the painting under it (`setArt`), so
+  // per-form rows would need that plumbing changed first; (3) no pale matte fringe is indicated (edge minus ring luminance -17.2, +6.3, -17.9 against the booth bosses' +1.5 and +7.7 after their re-cut), so no re-cut art. She is flagged here, by combatant id,
+  // like Leblanc's cast: no screen-space rim, so the frame shares the party's clean edge.
+  yunalesca: 'ffx',
   leblanc: 'ffx2',
   logos: 'ffx2',
   'logos-room': 'ffx2',

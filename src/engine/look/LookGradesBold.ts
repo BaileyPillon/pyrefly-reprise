@@ -76,6 +76,14 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       recipe: { exposure: 0.7, gamma: 1.0, contrast: 0.4, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.3, highlightSplit: 0.3, topBias: [1, 0.95, 0.82], topBiasAmount: 0.25, midSat: 0.3, sat: 1.0, hues: [{ hue: 228, width: 45, sat: 0.97, lum: 1.1, toward: [0.3, 0.78, 1.0], shift: 0.45 }, { hue: 200, width: 40, sat: 1.1, lum: 1.06 }] },
       focus: 0.36,
     },
+    // Chapter II (FFX, release 69, `booth-ffx-yunalesca`), the Zanarkand Dome: indigo-violet shadows, a warm gold-cream highlight (the sphere), the plate's own blue-violet (hue 230 to 260, most of its saturated pixels) and the sphere's gold (hue 35) each lifted
+    // and pulled toward itself; the plate is brighter than either booth room (mean luminance 0.337 against 0.181 and 0.254), so the exposure is held down to the Gagazet row's.
+    'zanarkand-dome': {
+      shadow: [0.16, 0.1, 0.5],
+      highlight: [1.0, 0.88, 0.74],
+      recipe: { exposure: 0.74, gamma: 1.0, contrast: 0.46, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.28, midSat: 0.32, sat: 1.04, hues: [{ hue: 245, width: 42, sat: 1.05, lum: 1.06, toward: [0.42, 0.38, 1.0], shift: 0.25 }, { hue: 35, width: 30, sat: 1.2, lum: 1.1, toward: [1, 0.72, 0.3], shift: 0.3 }] },
+      focus: 0.35,
+    },
     // Chapter IV: violet shadows, amber lamps against the cyan skylight (each hue lifted and pulled toward itself).
     'bevelle-underground': {
       shadow: [0.2, 0.12, 0.52],
@@ -121,6 +129,13 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       highlight: [0.84, 0.95, 1.0],
       recipe: { exposure: 0.54, gamma: 1.0, contrast: 0.6, pivot: 0.32, shoulder: 0.8, shadowSplit: 0.6, highlightSplit: 0.4, topBias: [1, 0.92, 0.8], topBiasAmount: 0.06, midSat: 0.25, sat: 0.88, hues: [{ hue: 228, width: 45, sat: 0.92, lum: 1.1, toward: [0.3, 0.78, 1.0], shift: 0.4 }, { hue: 200, width: 40, sat: 1.1, lum: 1.05 }] },
       fog: [0.46, 0.64, 0.92],
+    },
+    // Chapter II (release 69): violet-black shadows, the sphere's gold in the highlights, the blue-violet hall, a violet fog.
+    'zanarkand-dome': {
+      shadow: [0.08, 0.05, 0.3],
+      highlight: [1.0, 0.82, 0.6],
+      recipe: { exposure: 0.62, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 245, width: 42, sat: 1.05, lum: 1.06, toward: [0.42, 0.38, 1.0], shift: 0.25 }, { hue: 35, width: 30, sat: 1.25, lum: 1.12, toward: [1, 0.72, 0.3], shift: 0.3 }] },
+      fog: [0.3, 0.26, 0.5],
     },
     // Chapter IV: violet-black shadows, amber lamps, cyan skylight, a cool violet fog.
     'bevelle-underground': {
