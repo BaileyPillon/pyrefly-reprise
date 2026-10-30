@@ -180,7 +180,7 @@ The FFX-2 HUD leak is fixed; the load diet moved the phone's wait by nothing; th
 
 ### 8.3 Lane `budgets-2` (this branch; not measured)
 
-`docs/handoff/budgets-2.md`: the phone's foreground-first order and the leave-a-fight release, their 34 predictions (B2a-02: Chapter I phone 4.5 to 12 s, central 8; B2a-05: Chapter IV 8 to 22 s; B3a unchanged in bytes; B5a-02: renderer growth -5 to +25 percent, about even odds), and the job set (`D:/Tools/pyrefly-scratch/2026-10-29/budgets-2/jobs/`, about 62 minutes of browser). After the queue: `node judge-b2.mjs`, and this table gets a third block with the label of the run and the build.
+`docs/handoff/budgets-2.md`: the phone's foreground-first order and the leave-a-fight release, their 49 predictions (B2a-02: Chapter I phone 4.5 to 12 s, central 8; B2a-05: Chapter IV 8 to 22 s, a subtraction and not a measurement; B3a unchanged in bytes; B5a-02: renderer growth -5 to +25 percent, about one in five after the second review, and a miss with the books hit sends the next step to the in-fight peak), and the job set (`D:/Tools/pyrefly-scratch/2026-10-29/budgets-2/jobs/`, about 59 minutes of browser; the memory entry b2-5 first, its books read before its counters). The cut also moves the missing-art window into the fight: the line stays busy about 12 s (Chapter I) and 29 s (Chapter IV) after the first menu at the central predictions (rows B2a-12, B2a-13), a look call for Bailey. After the queue: `node judge-b2.mjs`, and this table gets a third block with the label of the run and the build.
 
 ## 9. Open questions for the driver
 
