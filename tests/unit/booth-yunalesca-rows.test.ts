@@ -21,8 +21,7 @@ import { SCOPE_EXCEPTIONS, WIDE_CHAPTERS, chapterInScope, scopeExcepted, setCaus
 import { setSmearStyle, smearOn, smearStyleNow } from '../../src/engine/motion/SmearSwitch.ts';
 import { setCurvesMode } from '../../src/engine/motion/CurvesSwitch.ts';
 import { victoryKind } from '../../src/engine/motion/MomentsPlan.ts';
-import { keepsToday } from '../../src/engine/fx/mix/masters.ts';
-import { classify } from '../../src/engine/fx/mix/masters.ts';
+import { classify, keepsToday } from '../../src/engine/fx/mix/masters.ts';
 
 afterEach(() => {
   setTreatedScope(null);
