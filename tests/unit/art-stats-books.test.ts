@@ -36,7 +36,7 @@ describe('art.stats(): the books of the memory and the load', () => {
       stamps: 0,
       relight: { maps: 0, textures: 0, pinned: 0, stamps: 0 },
       fight: 0,
-      release: true,
+      release: false, // release 69 ships the leave-release off (?memrelease=on turns it on)
       last: null,
     });
     expect(s.hold).toEqual({ held: false, holds: 0, opens: 0, ceilings: 0, deferredMaps: 0, deferredPoses: 0, heldMs: 0, queue: { inFlight: 0, queued: 0 } });
@@ -47,6 +47,6 @@ describe('art.stats(): the books of the memory and the load', () => {
   it('a renderer that does not report its memory gives gl null, not a throw', () => {
     const s = stats({ aaMode: 'off', renderer: {} });
     expect(s.gl).toBeNull();
-    expect(s.memory.release).toBe(true);
+    expect(s.memory.release).toBe(false);
   });
 });
