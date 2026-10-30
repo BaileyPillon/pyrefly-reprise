@@ -46,7 +46,7 @@ export const CUT_ANCHOR_DEFAULT: Readonly<Record<DemoGame, CutAnchorMode>> = Obj
  * Yunalesca (13 unexcused planned cuts in release 68's run: her attack to cast 133 px against a cap of 131.5, Auron's follow to idle 154 against 153) and Sin's face (Auron's follow to idle, 224 px against 222). The model of
  * `docs/handoff/held-chapters.md` reads both at 0 unexcused with the anchor (Yunalesca 76 planned cuts of 120 px or more down to 0, worst 154 down to 84; Sin's face worst 224 down to 108). **Inert today:** both chapters are
  * `SCOPE_EXCEPTIONS`, so no cut is planned in them and no plane is shifted (`smearStyleNow` is `off` outside the two pack chapters); the word applies from the lift (or `?swapscope=all`). No browser has run it: its own job
- * (`yunalesca-all-anchor`, `sin-face-all-anchor`) reads it first, and the clips (`docs/handoff/pc-scope.md`) are the look call. Emptying this table is one edit and puts the chapters back on the game's word.
+ * (`yunalesca-all-held-anchor`, `sin-face-all-held-anchor`; the second names no `?cutanchor`, so it proves this table is read) reads it first, and the clips (`docs/handoff/pc-scope.md`) are the look call. Emptying this table is one edit and puts the chapters back on the game's word.
  */
 export const CUT_ANCHOR_CHAPTERS: Readonly<Record<string, CutAnchorMode>> = Object.freeze({
   yunalesca: 'on',
