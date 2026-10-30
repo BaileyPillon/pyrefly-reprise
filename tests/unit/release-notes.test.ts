@@ -43,16 +43,16 @@ describe('the real notes', () => {
     expect(validateReleaseNotes(RELEASE_NOTES)).toEqual([]);
   });
 
-  it('list every live release from 39.4 to 68, newest first, with the day each went live (US Eastern; release 49 carried nothing a player sees outside the hidden chapters, so it has no note)', () => {
+  it('list every live release from 39.4 to 69, newest first, with the day each went live (US Eastern; release 49 carried nothing a player sees outside the hidden chapters, so it has no note)', () => {
     expect(RELEASE_NOTES.map((n) => n.release)).toEqual([
-      '68', '67', '66', '65', '64', '63', '62', '61', '60', '59', '58', '57', '56', '55', '54', '53', '52', '51', '50.1', '50', '48', '47', '46', '45', '44', '43', '42', '41', '40', '39.4.5', '39.4.4', '39.4.3', '39.4.2', '39.4.1', '39.4',
+      '69', '68', '67', '66', '65', '64', '63', '62', '61', '60', '59', '58', '57', '56', '55', '54', '53', '52', '51', '50.1', '50', '48', '47', '46', '45', '44', '43', '42', '41', '40', '39.4.5', '39.4.4', '39.4.3', '39.4.2', '39.4.1', '39.4',
     ]);
     expect(RELEASE_NOTES.slice(-3).map((n) => [n.release, n.date])).toEqual([
       ['39.4.2', '2026-10-08'],
       ['39.4.1', '2026-10-07'],
       ['39.4', '2026-10-07'],
     ]);
-    expect(newestRelease()).toBe('68');
+    expect(newestRelease()).toBe('69');
     expect(newestRelease(RELEASE_NOTES)).toBe(RELEASE_NOTES[0]?.release);
   });
 

@@ -69,11 +69,21 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 68 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 69 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '69',
+    date: '2026-10-30',
+    lines: [
+      { tag: 'FFX', text: 'A revived figure no longer pops sideways as it stands back up.' },
+      { tag: 'Both', text: 'On a phone the wait before a fight is shorter: on a slow connection about 7 seconds in Chapter I and 19 in Chapter IV.' },
+      { tag: 'FFX', text: 'Evrae’s fight changes pose more cleanly, like the other fights: hits and spells cut instead of blending see-through.' },
+      { tag: 'FFX-2', text: 'Chapter VI gets the presentation of Chapters I and IV: the lighter battle screen, the new hit look, the follow camera, the boss card and the quiet ending.' },
+    ],
+  },
   {
     release: '68',
     date: '2026-10-29',
