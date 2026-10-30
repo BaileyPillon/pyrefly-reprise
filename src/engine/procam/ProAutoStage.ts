@@ -62,6 +62,23 @@ export const AUTO_STAGES: Readonly<Record<string, AutoStage>> = Object.freeze({
   'ffx2-fallen-aeons': { focus: [0.258, 1.648, -1.892], homeAzimuthDeg: -1.26 },
 });
 
+/**
+ * The rigs a mid-battle script cuts to for a shot of its own, by CHAPTER id (booth-ffx2-b2 review M1, FFX-2 only): while the camera stands on one, the follower is the rig's own at once (`FollowerHost.scripted`), so the cut
+ * stays a cut and nothing is blended over it. Only a shot the SCENE draws by the camera's position needs a row: `ffx2-fallen-aeons`' `road-links` is the between-links shot after Shiva (D-119, "O-3 A with B as the
+ * between-links shot"): the Road swaps plate A for plate B only while the camera is within `ROAD_LINKS_RADIUS` (0.9) of that rig, and every follower candidate stands 1.5 to 2.7 away from it, so a follower running
+ * over the cut kept the seam's four lines on plate A. The name is mirrored from `scenes/road-to-the-farplane.ts` (`ROAD_LINKS_RIG`) and the story (`FALLEN_AEONS_LINKS_RIG`); `tests/unit/booth-ffx2-b2-seam.test.ts` pins the three.
+ * Chapter V holds its follower for the whole chapter (`DemoGate.PIECE_HOLDS`), Chapter XV's scripts cut to no rig of their own, and the scripts of Chapter IV and Chapter VI cut to no position-gated art.
+ */
+export const SCRIPTED_RIGS: Readonly<Record<string, readonly string[]>> = Object.freeze({
+  'ffx2-fallen-aeons': Object.freeze(['road-links']),
+});
+
+/** Is the camera on a rig this chapter's script cut to (the follower then stands down)? */
+export function scriptedShot(chapterId: string | undefined, rigName: string): boolean {
+  if (chapterId === undefined || !Object.prototype.hasOwnProperty.call(SCRIPTED_RIGS, chapterId)) return false;
+  return SCRIPTED_RIGS[chapterId]!.includes(rigName);
+}
+
 /** The auto camera for a chapter: its stage's retargeted candidates, else the generated Bevelle camera. */
 export function autoCameraFor(chapterId: string | undefined): ProAutoCamera {
   if (chapterId === undefined || !Object.prototype.hasOwnProperty.call(AUTO_STAGES, chapterId)) return PRO_AUTO_CAMERA;

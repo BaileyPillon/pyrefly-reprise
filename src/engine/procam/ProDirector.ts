@@ -34,7 +34,7 @@ import { momentPunch } from '../feel/PunchCurve.ts';
 import { specialFx } from '../spellfx/SpellFxSpecials.ts';
 import type { ActionShot, ActorShot, BattleStartShot, ImpactShot, ShotAnswer, ShotCtx, ShotDirector } from '../ShotDirector.ts';
 import { demoChapter } from '../motion/DemoGate.ts';
-import { autoCameraFor } from './ProAutoStage.ts';
+import { autoCameraFor, scriptedShot } from './ProAutoStage.ts';
 import { proCamGame, proCamOn, proDofOn } from './ProCamSwitch.ts';
 import { FOLLOW_SAFE, ProFollower, lcg, type Member } from './ProFollower.ts';
 import { attackPlay, bossStartPlay, castPlay, feet, ffx2Play, heightOf, isSpecial, landingPlay, overdrivePlay, victoryPlay, type Play, type PlayEnv, type Timing } from './ProPlays.ts';
@@ -203,6 +203,7 @@ export class ProDirector implements ShotDirector, PlayEnv {
       {
         members,
         held: () => !proCamOn() || port.aspect < 1 || (stage.camera as CameraPort).holding === true, // the switch off, an upright phone, or a command menu: home in 320 ms, then the rig's own
+        scripted: () => scriptedShot(demoChapter(), (stage.camera as CameraPort).rigName), // a mid-battle script cut to a shot of its own that the scene draws by position (Chapter XI's between-links plate): the rig's own pose, at once
         still: () => this.stillNow,
         fitK: (pose) => port.fitK(pose, { ...fit, ids: ids() }),
       },
