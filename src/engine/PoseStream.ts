@@ -1,5 +1,5 @@
 /**
- * Loading a figure's poses with the load diet (`LoadDiet.ts`; lane "load-diet", 2026-10-29; both games, shared loading plumbing; no DOM, no `three`).
+ * Loading a figure's poses with the load diet (`LoadDiet.ts`; lane "load-diet", 2026-10-29; both games, shared loading plumbing; no `three`, and no DOM of its own: since lane "budgets-2" it reads `LoadHold`, which reads the device class (`ArtDevice`, `matchMedia`) to know whether the line is held).
  *
  * `PaintedActorPoses.loadPoses` used to start every pose at once and wait for all of them. Here the opening poses (idle*, ready*) go first and are waited for without a limit; then
  * the others are started in the order a fight draws them ({@link poseNeed}), a few at a time, so that on a line that cannot bring them all quickly the poses a fight draws first are

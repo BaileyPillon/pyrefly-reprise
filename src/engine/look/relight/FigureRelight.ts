@@ -64,6 +64,11 @@ const pinned = new Map<string, number>();
  */
 const touched = new Map<string, number>();
 let epochNow = 0;
+/**
+ * The maps asked for through the phone's queue and not yet started: url to the function that starts THAT request now (review P3: a pose being drawn must not wait behind the rank order for its own map).
+ * The queue's own turn runs the same request only if it is still the one in this book, so a request starts once, whoever comes first, and a request that was released (or asked for again) never starts.
+ */
+const starts = new Map<string, () => void>();
 
 /** A fight begins (the same number the painting cache opened): maps asked for from here on belong to it. */
 export function beginRelightEpoch(n: number): void {
@@ -71,10 +76,10 @@ export function beginRelightEpoch(n: number): void {
 }
 
 /** The decoded maps the cache holds, and how many are pinned by a figure on stage (the debug probe and the tests). */
-export function relightCacheStats(): { maps: number; textures: number; pinned: number } {
+export function relightCacheStats(): { maps: number; textures: number; pinned: number; stamps: number } {
   let textures = 0;
   for (const v of cache.values()) if (v instanceof Texture) textures++;
-  return { maps: cache.size, textures, pinned: pinned.size };
+  return { maps: cache.size, textures, pinned: pinned.size, stamps: touched.size };
 }
 
 /**
@@ -92,6 +97,7 @@ export function releaseRelightBefore(from: number): number {
     cache.delete(url);
     touched.delete(url);
     waiters.delete(url);
+    starts.delete(url);
   }
   return freed;
 }
@@ -174,7 +180,16 @@ function fetchMap(url: string, rank: number | null = null): void {
     waiters.delete(url);
   };
   if (rank === null) go().catch(failed);
-  else queued(rank, go).catch(failed);
+  else {
+    const turn = (): Promise<void> => {
+      if (starts.get(url) !== promote) return Promise.resolve(); // a pose being drawn started it ahead of its rank, or it was released, or it was asked for again by someone else
+      starts.delete(url);
+      return go();
+    };
+    const promote = (): void => void turn().catch(failed);
+    starts.set(url, promote);
+    queued(rank, turn).catch(failed);
+  }
 }
 
 /** The URL of the normal map a painting would be lit with, or null when the build ships none for it (the manifest names which maps exist). */
@@ -253,5 +268,6 @@ export function bindRelight(material: ShaderMaterial, paintingUrl: string | unde
     if (!w) waiters.set(url, (w = new Set()));
     w.add(material);
     if (!hit) fetchMap(url);
+    else starts.get(url)?.(); // queued for later and not started: this pose is being drawn now, so its map goes ahead of the rank order (a map already on its way has no entry here)
   }
 }

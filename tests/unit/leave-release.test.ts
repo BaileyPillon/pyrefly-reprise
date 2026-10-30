@@ -7,7 +7,7 @@
  */
 import { Texture, TextureLoader } from 'three';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { beginPaintingEpoch, cachedPainting, clearPaintingCache, dropPaintingsBefore, paintingCacheMB, paintingCacheSize, paintingKey, type PreparedPainting } from '../../src/engine/PaintedArtCache.ts';
+import { beginPaintingEpoch, cachedPainting, clearPaintingCache, dropPaintingsBefore, paintingCacheMB, paintingCacheSize, paintingCacheStamps, paintingKey, type PreparedPainting } from '../../src/engine/PaintedArtCache.ts';
 import { beginRelightEpoch, bindRelight, prefetchRelight, relightCacheStats, releaseRelightBefore, unpinRelight } from '../../src/engine/look/relight/FigureRelight.ts';
 import { lookState } from '../../src/engine/look/LookState.ts';
 import { beginFight, endFight, memRelease, memoryBooks, setMemRelease } from '../../src/engine/LeaveRelease.ts';
@@ -170,7 +170,85 @@ describe('the lighting-map cache, by fight', () => {
   });
 });
 
+describe('what a released map leaves behind', () => {
+  const mat = (): ShaderMaterial => new ShaderMaterial({ uniforms: {} });
+
+  it('a material waiting on a map that was released is forgotten: a later fetch of the same map does not light it (review X10)', () => {
+    lookState.armed = true;
+    deferLoads = true;
+    const first = beginPaintingEpoch();
+    beginRelightEpoch(first);
+    const old = mat();
+    bindRelight(old, art('lulu', 'idle'), 1); // a waiter on a map still on its way
+    const next = beginPaintingEpoch();
+    beginRelightEpoch(next);
+    expect(releaseRelightBefore(next)).toBe(0);
+    expect(relightCacheStats().maps).toBe(0);
+    const fresh = mat();
+    bindRelight(fresh, art('lulu', 'idle'), 1); // the next fight asks for the same map again
+    expect(pendingLoads.length).toBe(2);
+    pendingLoads[1]!(); // the new request lands
+    expect(fresh.uniforms['relightOn']!.value).toBe(1);
+    expect(old.uniforms['relightOn']!.value, 'the released fight material is not a waiter any more').toBe(0);
+    expect(old.uniforms['relightNormal']!.value).not.toBe(fresh.uniforms['relightNormal']!.value);
+    pendingLoads[0]!(); // the old request lands late: nobody keeps it
+    expect(relightCacheStats().maps).toBe(1);
+  });
+
+  it('the fight books never remember more than the caches hold (review X11, X12, X20)', async () => {
+    const e = beginPaintingEpoch();
+    for (let i = 0; i < 120; i++) await ask(art(`bulk${i}`, 'idle'), 64, 64); // past the 96-entry cap: the oldest are evicted
+    expect(paintingCacheSize()).toBeLessThanOrEqual(96);
+    expect(paintingCacheStamps()).toBe(paintingCacheSize());
+    await cachedPainting(paintingKey(art('nothing', 'idle'), { mode: 'auto' }, {}), async () => null); // a painting that failed to make
+    await cachedPainting(paintingKey(art('throws', 'idle'), { mode: 'auto' }, {}), async () => {
+      throw new Error('decode');
+    });
+    expect(paintingCacheStamps()).toBe(paintingCacheSize());
+    clearPaintingCache();
+    expect(paintingCacheStamps()).toBe(0);
+    expect(e).toBeGreaterThan(0);
+    dropPaintingsBefore(e + 1); // a no-op on an empty cache
+    expect(paintingCacheStamps()).toBe(0);
+    lookState.armed = true;
+    const held = new Set<string>();
+    prefetchRelight(art('a', 'idle'), 1, false, held);
+    prefetchRelight(art('b', 'idle'), 1, false, held);
+    expect(relightCacheStats().stamps).toBe(2);
+    unpinRelight(held);
+    beginRelightEpoch(e + 5);
+    releaseRelightBefore(e + 5);
+    expect(relightCacheStats()).toMatchObject({ maps: 0, stamps: 0 });
+  });
+});
+
 describe('beginFight and endFight', () => {
+  it('a fight that was overtaken ends nothing: a newer fight owns the books (review R3)', async () => {
+    const old = beginFight();
+    await ask(art('tidus', 'idle'));
+    const newer = beginFight();
+    await ask(art('yuna', 'idle'));
+    bindEyeCandyScene({ key: 'k', game: 'ffx', scene: {} as never, palette: null });
+    expect(endFight({ fight: old })).toBeNull(); // the old screen finishing late
+    expect(paintingCacheSize()).toBe(2); // nothing judged
+    expect(boundEyeCandyScene()).not.toBeNull(); // the newer screen's diorama stays bound
+    expect(memoryBooks().fight).toBe(newer);
+    expect(endFight({ fight: newer })).toEqual({ paintings: 1, paintingMB: 4, maps: 0 });
+    expect(boundEyeCandyScene()).toBeNull();
+  });
+
+  it('judge false unbinds the scene and keeps every cache as it is (a fight whose figures were never all built, review R1)', async () => {
+    beginFight();
+    await ask(art('tidus', 'idle'));
+    const f = beginFight();
+    await ask(art('yuna', 'idle'));
+    bindEyeCandyScene({ key: 'k', game: 'ffx', scene: {} as never, palette: null });
+    expect(endFight({ fight: f, judge: false })).toBeNull();
+    expect(paintingCacheSize()).toBe(2);
+    expect(boundEyeCandyScene()).toBeNull();
+    expect(memoryBooks().fight).toBe(0);
+  });
+
   it('end to end: the chapter before goes from both caches and from the eye-candy binding, this fight\'s set stays', async () => {
     lookState.armed = true;
     beginFight();
@@ -210,6 +288,18 @@ describe('beginFight and endFight', () => {
     await ask(art('yuna', 'idle'));
     expect(endFight({ keep: true })).toBeNull();
     expect(paintingCacheSize()).toBe(2);
+  });
+
+  it('the first fight of a page is judged too: what was asked for before it began (the board, the title) goes at its end (review Z15)', async () => {
+    vi.resetModules(); // a fresh page: the fight counter starts again
+    const cache = await import('../../src/engine/PaintedArtCache.ts');
+    const leave = await import('../../src/engine/LeaveRelease.ts');
+    const key = (subject: string): string => cache.paintingKey(art(subject, 'idle'), { mode: 'auto' }, {});
+    await cache.cachedPainting(key('tidus'), async () => prepared());
+    expect(leave.beginFight()).toBe(1);
+    await cache.cachedPainting(key('yuna'), async () => prepared());
+    expect(leave.endFight()).toMatchObject({ paintings: 1 });
+    expect(cache.paintingCacheSize()).toBe(1);
   });
 
   it('is safe without a begin and when called twice', async () => {

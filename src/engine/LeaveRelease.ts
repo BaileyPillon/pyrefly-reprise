@@ -12,7 +12,7 @@
  *
  * Off with `?memrelease=off` (release 68's behaviour, for the A/B of the browser jobs); the caller passes `keep: true` in the conference demo, whose second fight is built behind the picker and must stay warm.
  */
-import { beginPaintingEpoch, dropPaintingsBefore, paintingCacheMB, paintingCacheSize } from './PaintedArtCache.ts';
+import { beginPaintingEpoch, dropPaintingsBefore, paintingCacheMB, paintingCacheSize, paintingCacheStamps } from './PaintedArtCache.ts';
 import { beginRelightEpoch, relightCacheStats, releaseRelightBefore } from './look/relight/FigureRelight.ts';
 import { bindEyeCandyScene } from './fx/a/GoldenHour.ts';
 
@@ -52,19 +52,25 @@ export function beginFight(): number {
 
 /**
  * The fight is over and its stage is disposed: let go of what it did not use. Safe to call twice and without a `beginFight` (it does nothing then). `keep` (the demo) lets go of nothing.
- * Returns what it released, or null when the release is off, `keep` is set, or no fight was begun.
+ * Returns what it released, or null when the release is off, `keep` is set, no fight was begun, or the fight was not judged.
+ *
+ * `fight` (the number {@link beginFight} returned): the screen that ends is the one that began. A screen that was overtaken and finishes late finds a NEWER fight under way and does nothing at all
+ * (it must neither unbind the new screen's scene nor judge what the new fight has not asked for yet; the new fight's own end drops whatever the old one left, since it is older than the new epoch).
+ * `judge: false`: unbind the scene but keep every cache as it is. A fight whose figures were never all built (the screen was torn down while it loaded) asked for a part of its set, so what it did not
+ * touch is not known to be unused: the chapter before keeps its warm set (review R1).
  */
-export function endFight(opts: { keep?: boolean } = {}): LeaveReport | null {
+export function endFight(opts: { keep?: boolean; fight?: number; judge?: boolean } = {}): LeaveReport | null {
   const from = fight;
+  if (opts.fight !== undefined && opts.fight !== from) return null; // overtaken: a newer fight (or none) owns the books now
   fight = 0;
   bindEyeCandyScene(null); // the next battle binds its own; the board and the menus have none
-  if (from === 0 || !memRelease() || opts.keep === true) return null;
+  if (from === 0 || opts.judge === false || !memRelease() || opts.keep === true) return null;
   const p = dropPaintingsBefore(from);
   last = { paintings: p.dropped, paintingMB: Math.round(p.mb * 10) / 10, maps: releaseRelightBefore(from) };
   return last;
 }
 
 /** The debug probe (`__pyrefly.art.stats().memory`): what the caches hold now and what the last fight's end released. */
-export function memoryBooks(): { paintings: number; paintingMB: number; relight: { maps: number; textures: number; pinned: number }; fight: number; release: boolean; last: LeaveReport | null } {
-  return { paintings: paintingCacheSize(), paintingMB: Math.round(paintingCacheMB() * 10) / 10, relight: relightCacheStats(), fight, release: memRelease(), last };
+export function memoryBooks(): { paintings: number; paintingMB: number; stamps: number; relight: { maps: number; textures: number; pinned: number; stamps: number }; fight: number; release: boolean; last: LeaveReport | null } {
+  return { paintings: paintingCacheSize(), paintingMB: Math.round(paintingCacheMB() * 10) / 10, stamps: paintingCacheStamps(), relight: relightCacheStats(), fight, release: memRelease(), last };
 }

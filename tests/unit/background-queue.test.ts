@@ -3,13 +3,13 @@
  * (`PoseStream.loadStreamed` while the line is held) and the lighting maps (`FigureRelight.prefetchRelight`). Thirty poses and forty maps asking for a 10 Mbit/s at once all land together; through
  * the queue the ones a fight draws first start first, eight at a time across every figure.
  */
-import { Texture, TextureLoader } from 'three';
+import { ShaderMaterial, Texture, TextureLoader } from 'three';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { BackgroundQueue } from '../../src/engine/BackgroundQueue.ts';
 import { LATE_WIDTH, holdBackground, holdBooks, queued, releaseBackground, resetHoldForTests, setForegroundFirst } from '../../src/engine/LoadHold.ts';
 import { loadStreamed } from '../../src/engine/PoseStream.ts';
 import { lookState } from '../../src/engine/look/LookState.ts';
-import { beginRelightEpoch, prefetchRelight, releaseRelightBefore, relightCacheStats, unpinRelight } from '../../src/engine/look/relight/FigureRelight.ts';
+import { beginRelightEpoch, bindRelight, prefetchRelight, releaseRelightBefore, relightCacheStats, relightStats, unpinRelight } from '../../src/engine/look/relight/FigureRelight.ts';
 
 const tick = async (): Promise<void> => {
   await vi.advanceTimersByTimeAsync(0);
@@ -120,6 +120,17 @@ describe('queued() and the later poses of every figure', () => {
     expect(started).toBe(20);
   });
 
+  it('the production queue gives up a hung slot after fifteen seconds and not sooner: the ninth load waits behind eight that never answer (review Z08)', async () => {
+    let started = 0;
+    for (let i = 0; i < LATE_WIDTH + 1; i++) void queued(0, () => (started++, new Promise<void>(() => undefined)));
+    await tick();
+    expect(started).toBe(LATE_WIDTH);
+    await vi.advanceTimersByTimeAsync(14_900);
+    expect(started).toBe(LATE_WIDTH);
+    await vi.advanceTimersByTimeAsync(200);
+    expect(started).toBe(LATE_WIDTH + 1);
+  });
+
   it('two figures\' later poses start together across the whole phone: the everyday moves of both before the rare ones of either, LATE_WIDTH at a time', async () => {
     holdBackground();
     const poses = { idle: 'u/idle', ready: 'u/ready', attack: 'u/attack', cast: 'u/cast', hurt: 'u/hurt', victory: 'u/victory', sleep: 'u/sleep', critical: 'u/critical', follow: 'u/follow' };
@@ -220,14 +231,90 @@ describe('the lighting maps through the queue', () => {
         throw new Error('the loader threw');
       }) as never);
       const held = new Set<string>();
+      const missingBefore = relightStats.missing;
       const who = phone ? 'thrown-phone' : 'thrown-desk';
       prefetchRelight(art(who, 'attack'), 1, false, held);
       await tick();
       expect(relightCacheStats().maps, `phone ${phone}`).toBe(1);
       expect(relightCacheStats().textures).toBe(0);
+      expect(relightStats.missing, `phone ${phone}: the throw was caught and counted, not left as an unhandled rejection`).toBe(missingBefore + 1);
       unpinRelight(held);
       releaseRelightBefore(Number.MAX_SAFE_INTEGER);
     }
+  });
+
+  it('a loader that throws under a pose being drawn (a direct ask) leaves that map missing and the material unlit, with no unhandled rejection', async () => {
+    setForegroundFirst(true);
+    vi.mocked(TextureLoader.prototype.load).mockImplementation((() => {
+      throw new Error('the loader threw');
+    }) as never);
+    const missingBefore = relightStats.missing;
+    const m = new ShaderMaterial({ uniforms: {} });
+    bindRelight(m, art('thrown-bind', 'attack'), 1, false);
+    await tick();
+    expect(relightStats.missing).toBe(missingBefore + 1);
+    expect(m.uniforms['relightOn']!.value).toBe(0);
+    releaseRelightBefore(Number.MAX_SAFE_INTEGER);
+  });
+
+  it('a pose being drawn does not wait behind the rank order for a map that is queued: bindRelight starts it at once and the material is lit when it lands (review P3)', async () => {
+    setForegroundFirst(true);
+    const held = new Set<string>();
+    for (let i = 0; i < 12; i++) prefetchRelight(art(`f${i}`, 'idle'), 1, false, held); // rank 1, twelve of them
+    for (let i = 0; i < 8; i++) prefetchRelight(art(`v${i}`, 'victory'), 1, false, held); // the rare ones: last in line
+    await tick();
+    expect(loads.length).toBe(LATE_WIDTH); // the first eight idle maps
+    const m = new ShaderMaterial({ uniforms: {} });
+    bindRelight(m, art('v7', 'victory'), 1, false); // a move of figure v7 draws its victory pose NOW
+    await tick();
+    expect(loads.filter((l) => l === 'v7/victory').length, 'started once, ahead of its rank').toBe(1);
+    expect(m.uniforms['relightOn']!.value).toBe(0); // unlit until the bytes land
+    bindRelight(new ShaderMaterial({ uniforms: {} }), art('v7', 'victory'), 1, false); // a second material on the same map, while it is on its way: the same single request
+    await tick();
+    expect(loads.filter((l) => l === 'v7/victory').length).toBe(1);
+    const at = loads.indexOf('v7/victory');
+    const v7Lands = pending[at]!;
+    pending.splice(at, 1);
+    // the whole queue drains while the v7 bytes are still on the way: it reaches v7's own entry and must not ask for it a second time
+    while (pending.length) {
+      pending.shift()!();
+      await tick();
+    }
+    expect(loads.filter((l) => l === 'v7/victory').length).toBe(1);
+    expect(loads.length).toBe(20);
+    expect(m.uniforms['relightOn']!.value).toBe(0);
+    v7Lands(); // now the v7 map lands
+    await tick();
+    expect(m.uniforms['relightOn']!.value).toBe(1);
+    unpinRelight(held);
+  });
+
+  it('a queued map that was released leaves no way to start it: a later direct ask for the same map is one load, not two', async () => {
+    setForegroundFirst(true);
+    const held = new Set<string>();
+    for (let i = 0; i < 12; i++) prefetchRelight(art(`f${i}`, 'idle'), 1, false, held);
+    prefetchRelight(art('r0', 'victory'), 1, false, held); // queued behind the twelve, not started
+    await tick();
+    expect(loads.length).toBe(LATE_WIDTH);
+    unpinRelight(held); // the figures are gone
+    beginRelightEpoch(2);
+    releaseRelightBefore(2);
+    bindRelight(new ShaderMaterial({ uniforms: {} }), art('r0', 'victory'), 1, false); // the next fight draws it at once: a direct load
+    bindRelight(new ShaderMaterial({ uniforms: {} }), art('r0', 'victory'), 1, false); // a second material on the same map
+    await tick();
+    expect(loads.filter((l) => l === 'r0/victory').length).toBe(1);
+  });
+
+  it('a map nobody queued is asked for at once even with the queue full', async () => {
+    setForegroundFirst(true);
+    const held = new Set<string>();
+    for (let i = 0; i < 12; i++) prefetchRelight(art(`f${i}`, 'idle'), 1, false, held);
+    await tick();
+    expect(loads.length).toBe(LATE_WIDTH);
+    bindRelight(new ShaderMaterial({ uniforms: {} }), art('never-queued', 'attack'), 1, false);
+    await tick();
+    expect(loads.some((l) => l === 'never-queued/attack')).toBe(true);
+    unpinRelight(held);
   });
 
   it('a map released before its turn is never asked for', async () => {

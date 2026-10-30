@@ -12,7 +12,7 @@ vi.mock('../../src/engine/motion/NewMotionGate.ts', () => ({ newMotionOn: () => 
 vi.mock('../../src/engine/look/relight/FigureRelight.ts', async (orig) => ({ ...(await orig<typeof import('../../src/engine/look/relight/FigureRelight.ts')>()), prefetchRelight: vi.fn(() => null) }));
 
 import { setArtTier } from '../../src/engine/ArtDevice.ts';
-import { HOLD_CEILING_MS, backgroundHeld, deferWhileHeld, foregroundFirst, holdBackground, holdBooks, releaseBackground, resetHoldForTests, setForegroundFirst, whenBackgroundOpen } from '../../src/engine/LoadHold.ts';
+import { HOLD_CEILING_MS, activeHold, backgroundHeld, deferWhileHeld, foregroundFirst, holdBackground, holdBooks, releaseBackground, resetHoldForTests, setForegroundFirst, whenBackgroundOpen } from '../../src/engine/LoadHold.ts';
 import { LATE_WINDOW, loadStreamed } from '../../src/engine/PoseStream.ts';
 import { setLoadDiet } from '../../src/engine/LoadDiet.ts';
 import { prefetchRelight } from '../../src/engine/look/relight/FigureRelight.ts';
@@ -113,6 +113,41 @@ describe('the hold', () => {
     await vi.advanceTimersByTimeAsync(2);
     expect(backgroundHeld()).toBe(false);
     expect(holdBooks()).toMatchObject({ ceilings: 1, opens: 1 });
+  });
+
+  it('an opened hold takes its ceiling timer with it: the ceiling of the first hold never closes a later hold (review Z03)', async () => {
+    holdBackground();
+    await vi.advanceTimersByTimeAsync(1_000);
+    releaseBackground(); // the field was shown after a second
+    await vi.advanceTimersByTimeAsync(HOLD_CEILING_MS - 2_000);
+    holdBackground(); // the next chapter, a minute and a half later: its own ceiling is a full HOLD_CEILING_MS away
+    await vi.advanceTimersByTimeAsync(2_000); // the ceiling of the first hold would be due about now
+    expect(backgroundHeld()).toBe(true);
+    expect(holdBooks()).toMatchObject({ holds: 2, opens: 1, ceilings: 0 });
+    await vi.advanceTimersByTimeAsync(HOLD_CEILING_MS);
+    expect(holdBooks()).toMatchObject({ holds: 2, opens: 2, ceilings: 1 });
+  });
+
+  it('a release carries the number of the hold it opens: a late release of an older hold leaves the newer one shut (review R2)', () => {
+    expect(activeHold()).toBe(0);
+    holdBackground();
+    const first = activeHold();
+    expect(first).toBeGreaterThan(0);
+    releaseBackground(first);
+    expect(activeHold()).toBe(0);
+    holdBackground();
+    const second = activeHold();
+    expect(second).not.toBe(first);
+    releaseBackground(first); // the overtaken screen finishing late
+    expect(backgroundHeld()).toBe(true);
+    releaseBackground(0); // a screen that never held
+    expect(backgroundHeld()).toBe(true);
+    releaseBackground(second);
+    expect(backgroundHeld()).toBe(false);
+    expect(holdBooks()).toMatchObject({ holds: 2, opens: 2 });
+    holdBackground();
+    releaseBackground(); // without a number: whatever is shut (the ceiling, a test)
+    expect(backgroundHeld()).toBe(false);
   });
 
   it('a new hold after an opening holds again (a retry, the next chapter)', () => {

@@ -178,6 +178,11 @@ export function clearPaintingCache(): void {
   touched.clear();
 }
 
+/** How many paintings the fight books remember (the stamps): never more than the cache holds, or a string leaks per painting (the debug probe and the tests). */
+export function paintingCacheStamps(): number {
+  return touched.size;
+}
+
 /** The decoded megabytes the cache holds (for the debug probe and the tests). */
 export function paintingCacheMB(): number {
   let total = 0;

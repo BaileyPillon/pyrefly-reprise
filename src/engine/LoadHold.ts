@@ -65,6 +65,7 @@ export function queued<T>(rank: number, task: () => Promise<T>): Promise<T> {
 export const HOLD_CEILING_MS = 120_000;
 
 let held = false;
+let holdSeq = 0; // the number of the hold that is shut now (review R2: an overtaken screen's late release must not open the hold of the screen that replaced it)
 let timer: ReturnType<typeof setTimeout> | undefined;
 let waiters: Array<() => void> = [];
 const owners = new Map<object, () => void>();
@@ -77,6 +78,7 @@ export function holdBackground(ceilingMs: number = HOLD_CEILING_MS): boolean {
   if (held) return true;
   if (!foregroundFirst()) return false;
   held = true;
+  holdSeq++;
   heldAt = Date.now();
   books.holds++;
   opened = new Promise<void>((resolve) => waiters.push(resolve));
@@ -87,9 +89,18 @@ export function holdBackground(ceilingMs: number = HOLD_CEILING_MS): boolean {
   return true;
 }
 
-/** Every figure is built (or the screen is gone): everything that waited starts, in the order it asked. */
-export function releaseBackground(): void {
+/** The number of the hold that is shut now, 0 when the line is open. A screen keeps the number it was given at {@link holdBackground} and hands it back to {@link releaseBackground}. */
+export function activeHold(): number {
+  return held ? holdSeq : 0;
+}
+
+/**
+ * Every figure is built (or the screen is gone): everything that waited starts, in the order it asked. `hold` (from {@link activeHold}): release only that hold; a screen that was overtaken
+ * and finishes late finds another screen's hold shut and leaves it alone (0 is "I never held": also leaves it alone). Without it: whatever is shut (the ceiling, the tests).
+ */
+export function releaseBackground(hold?: number): void {
   if (!held) return;
+  if (hold !== undefined && hold !== holdSeq) return;
   held = false;
   books.opens++;
   books.heldMs += Date.now() - heldAt;
@@ -137,6 +148,7 @@ export function holdBooks(): { held: boolean; holds: number; opens: number; ceil
 /** Tests only: forget every hold and every count. */
 export function resetHoldForTests(): void {
   held = false;
+  holdSeq = 0;
   if (timer !== undefined) clearTimeout(timer);
   timer = undefined;
   for (const w of waiters) w(); // whoever still waits goes on (a test must not leave a preload parked for good)

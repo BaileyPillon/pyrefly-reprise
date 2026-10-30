@@ -6,12 +6,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const prewarmed: string[] = [];
+/** Review X13: the call number (1-based) of `prewarmPainted` that waits for `gate.open()` before it answers; 0 = none. */
+const gate: { at: number; open: () => void; reached: Promise<void> } = { at: 0, open: () => undefined, reached: Promise.resolve() };
 vi.mock('../../src/engine/PaintedArt.ts', async (importOriginal) => {
   const real = await importOriginal<typeof import('../../src/engine/PaintedArt.ts')>();
   return {
     ...real,
     prewarmPainted: vi.fn(async (url: string) => {
       prewarmed.push(url);
+      if (gate.at !== 0 && prewarmed.length === gate.at) await new Promise<void>((r) => (gate.open = r));
       return true;
     }),
   };
@@ -30,6 +33,7 @@ const isPoseFile = (u: string): boolean => /\/characters\//.test(u) && !/\/idle\
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
 beforeEach(() => {
+  gate.at = 0;
   prewarmed.length = 0;
   lookahead.length = 0;
   resetImageWarm();
@@ -87,6 +91,36 @@ describe.each(['seymour-flux', 'ffx2-bahamut'])('the preload of %s while the bat
     expect(holdBackground()).toBe(false);
     await preloadBattle(getChapter(id)!, 1);
     expect(prewarmed.length).toBeGreaterThan(12);
+  });
+
+  it('phase 5 (the pause close-ups) waits for a hold that began while the last pose was being warmed, then runs', async () => {
+    const pausePlates = (): string[] => lookahead.filter((u) => /\/pause\//.test(u));
+    // first, how many paintings the whole preload warms (no hold anywhere)
+    setForegroundFirst(false);
+    await preloadBattle(getChapter(id)!, 1);
+    const total = prewarmed.length;
+    expect(total).toBeGreaterThan(12);
+    expect(pausePlates().length).toBeGreaterThan(0);
+    // again, with the hold shut while the LAST painting of phase 4 is being warmed: phase 4 has nothing left to wait on, so only phase 5's own wait keeps the pause plates back
+    prewarmed.length = 0;
+    lookahead.length = 0;
+    resetImageWarm();
+    releaseAllPrefetch();
+    gate.at = total;
+    setForegroundFirst(true);
+    const done = preloadBattle(getChapter(id)!, 1);
+    let finished = false;
+    void done.then(() => (finished = true));
+    for (let i = 0; i < 100 && prewarmed.length < total; i++) await sleep(10);
+    expect(prewarmed.length).toBe(total);
+    expect(holdBackground()).toBe(true);
+    gate.open(); // the last pose is warmed
+    await sleep(150);
+    expect(pausePlates()).toEqual([]);
+    expect(finished).toBe(false);
+    releaseBackground();
+    await done;
+    expect(pausePlates().length).toBeGreaterThan(0);
   });
 
   it('a newer preload still stops a held one: the older run ends at its next step', async () => {
