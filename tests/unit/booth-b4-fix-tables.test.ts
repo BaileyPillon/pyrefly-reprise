@@ -98,3 +98,17 @@ describe('m3: no resolved test counts the list as fourteen', () => {
     expect(verdicts).toMatch(/EIGHTEEN/);
   });
 });
+
+describe('the full-suite finding of the review fixes: a hold reason names no .json file', () => {
+  it('no reason in PIECE_HOLDS contains ".json" (tests/unit/art-sidecar-redact.test.ts counts any string literal in src/ that does as a reader of an art JSON, and PieceHoldsLast.ts tripped it by naming the approved-hashes file)', async () => {
+    const { PIECE_HOLDS } = await import('../../src/engine/motion/DemoGate.ts');
+    let n = 0;
+    for (const [id, holds] of Object.entries(PIECE_HOLDS)) {
+      for (const [piece, why] of Object.entries(holds)) {
+        n += 1;
+        expect(why, `${id}.${piece}`).not.toMatch(/\.json\b/);
+      }
+    }
+    expect(n, 'the walk reads the rows').toBeGreaterThan(40);
+  });
+});
