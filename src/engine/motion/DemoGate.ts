@@ -73,6 +73,11 @@ export interface TreatedEntry {
 export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.freeze({
   'seymour-flux': { game: 'ffx', since: 'r60' },
   yunalesca: { game: 'ffx', since: 'r70' },
+  // Batch 3b (`booth-ffx-b3b`, FFX only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter III (Braska's Final Aeon, seven links), Chapter XII (Seymour Omnis and the four Mortiphasm discs) and Chapter XIV (Isaaru's contest of aeons,
+  // three links, Yuna alone). `since` is the batch's release number, the driver's to renumber.
+  'braskas-final-aeon': { game: 'ffx', since: 'r71' },
+  'seymour-omnis': { game: 'ffx', since: 'r71' },
+  'isaaru-via-purifico': { game: 'ffx', since: 'r71' },
   'ffx2-bahamut': { game: 'ffx2', since: 'r60' },
   'ffx2-leblanc': { game: 'ffx2', since: 'r69' },
   // Batch 2, the FFX-2 lane `booth-ffx2-b2` (all FFX-2 only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter V (Vegnagun and Shuyin, five links), Chapter XV (the Den of Woe, three shades) and Chapter XI (the Fallen Aeons,
@@ -107,6 +112,29 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       '`SwapSwitch.SCOPE_EXCEPTIONS` holds back for her: the wide run of release 68 (seed 1, the whole 409 s fight) took ghost frames a minute from 287 to 98 but swap jerks of 40 px or more from 9 to 25 (worst 154 px) and made 63 planned cuts over 120 px across heads ' +
       '0.41 to 0.44 of the height apart (Yunalesca attack to cast, Auron follow to idle). A smear that played here would plan those cuts, so Chapter II keeps release 67\'s swap look as the exception says (`?swapscope=all` still reaches her). Lifts when her entry ' +
       'in `SwapSwitch.SCOPE_EXCEPTIONS` lifts: job `yunalesca-all-anchor` of docs/handoff/pc-scope.md (`?cutanchor=on` run in the chapter) reads no swap jerk of 40 px or more outside a named cut.',
+  }),
+  // Batch 3b (`booth-ffx-b3b`, FFX only): each of the three holds the staged breath and nothing else; every other piece plays (`docs/handoff/booth-ffx-b3b.md` has the offline reads that decide the camera, the moments and the smear). None of the three is in
+  // `SwapSwitch.SCOPE_EXCEPTIONS`, so no `smear` hold is owed (`tests/unit/booth-hold-guard.test.ts` reads both lists). The breath is held where its moves are sourced but its tone, sound and shot are a mockup decision (hard rule 9; the driver call of 2026-10-30).
+  'braskas-final-aeon': Object.freeze({
+    breath:
+      'FFX, Chapter III: the held breath is the drain-and-flood built for Total Annihilation, a mount\'s countdown, and a move reaches it only by id (`StagingPort.BigMove`: `total-annihilation` and `mega-flare`, and `bigMoveOf` stages Mega Flare for FFX-2 only; the possessed Bahamut\'s own is `possessed-bahamut-mega-flare`, in neither), ' +
+      'so nothing in the seven links plays it today. The sourced candidates (research/ffx-bfa-yu-yevon.md sections 1.3 and 1.6) are Braska\'s Final Aeon\'s Ultimate Jecht Shot (`ultimate-jecht-shot`, form 2\'s Overdrive at half HP or less, the one move of these three chapters that already ' +
+      'has a telegraph painting held before it: `TelegraphHold`), his form-1 Overdrive Triumphant Grasp and the anti-aeon Jecht Bomber. A father\'s last blow is not a mount\'s countdown, so its tone, sound and shot are a mockup decision (hard rule 9; the driver call of 2026-10-30: never guessed). ' +
+      'Lifts when Bailey or the driver picks a tone and a shot for the Ultimate Jecht Shot (and for Triumphant Grasp and Jecht Bomber, if wanted) from a mockup, and `BigMove`, `NAME_OF` and `passRecipes.HEADLINE_BLOWS` are given rows for those ids (which hit, `first` or `last`, measured the way Mega Flare\'s was).',
+  }),
+  'seymour-omnis': Object.freeze({
+    breath:
+      'FFX, Chapter XII: the held breath is the drain-and-flood built for Total Annihilation, and a move reaches it only by id (`StagingPort.BigMove`), so nothing Omnis does plays it today (research/ffx-seymour-omnis.md section 0.4: Total Annihilation is not in this fight, it is Seymour Flux\'s). ' +
+      'His one sourced showpiece is the scripted Ultima (`omnis-ultima`, row 6:240, the whole party, magic DC 64, sections 3.1 and 4.4: it comes the turn after the Dispel that follows his attack counter filling), and no telegraph painting is held before it (`TelegraphHold` stages only Seymour Flux\'s Lance of Atrophy and ' +
+      'Braska\'s Ultimate Jecht Shot); a breath for it needs a tone, a sound and a shot, which are mockup decisions (hard rule 9; the driver call of 2026-10-30: never guessed). Lifts when Bailey or the driver picks a tone and a shot for Ultima from a mockup, and `BigMove`, `NAME_OF` ' +
+      'and `passRecipes.HEADLINE_BLOWS` are given a row for its id (which hit, `first` or `last`, measured the way Mega Flare\'s was).',
+  }),
+  'isaaru-via-purifico': Object.freeze({
+    breath:
+      'FFX, Chapter XIV: the held breath is the drain-and-flood built for Total Annihilation, and a move reaches it only by id (`StagingPort.BigMove`), so nothing here plays it today: `bigMoveOf` stages `mega-flare` for FFX-2 only (FFX shares that id for the party Bahamut\'s Overdrive, which is never staged), and Spathi\'s own Mega Flare is `spathi-mega-flare`, which follows his Countdown (`spathi-countdown`: ' +
+      'research/ffx-isaaru-bevelle.md section 3) and is in neither table. The sourced candidates are that Countdown to Mega Flare (an announced countdown like Chapter IV\'s), Grothia\'s Hellfire (`grothia-hellfire`) and Pterya\'s Energy Ray (`pterya-energy-ray`), ' +
+      'each an aeon\'s blow in a duel of aeons, whose tone, sound and shot are a mockup decision (hard rule 9; the driver call of 2026-10-30: never guessed). ' +
+      'Lifts when Bailey or the driver picks the move, a tone and a shot from a mockup, `BigMove` and its id table are given the id (the announced countdown `moveOfName` reads for FFX-2 would need its FFX counterpart), and `passRecipes.HEADLINE_BLOWS` its hit.',
   }),
   'ffx2-leblanc': Object.freeze({
     breath:

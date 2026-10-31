@@ -36,6 +36,31 @@ export const TREATED_RIM_FOES: Readonly<Record<string, 'ffx' | 'ffx2'>> = Object
   // per-form rows would need that plumbing changed first; (3) no pale matte fringe is indicated (edge minus ring luminance -17.2, +6.3, -17.9 against the booth bosses' +1.5 and +7.7 after their re-cut), so no re-cut art. She is flagged here, by combatant id,
   // like Leblanc's cast: no screen-space rim, so the frame shares the party's clean edge.
   yunalesca: 'ffx',
+  // Batch 3b (`booth-ffx-b3b`, FFX only; the same rule and the same switch; the measures are in `docs/handoff/booth-ffx-b3b.md` section 3): NO `BOSS_CLEAN_ARTS` or `BOSS_FEET` row for any of them. The bottom-band footprints sit under or inside the engine's own pool for the figure
+  // (row over pool 0.4 to 1.07 for the standing aeons, Shiva's lying KO 1.18 and Valefor's 0.10, Omnis 0.66 to 0.71, the Pagodas 0.11 to 0.66, Yu Yevon 0.46 to 1.04: a row would mostly SHRINK the shadow), Braska's Final Aeon swings between 0.25 and 1.48 across poses and changes painting at his form change (`BossClean` keys the art id the figure was
+  // built with and does not follow `setArt`), and no pale matte fringe is proven (edge minus ring luminance +1.7 and -7.8 for the aeon's two forms, +7.6 the Pagoda, -7.0 Yu Yevon, -1.7 to +12.3 the aeons, -19.5 Isaaru; Omnis reads +24.8, a candidate for a re-cut that this branch does not build: no art is written; the
+  // three Isaaru aeons read +47 to +56 with 25 to 31 percent of their pixels partly transparent, the translucent glows of the Shiva and Anima case, no re-cut). Chapter III: Braska's Final Aeon, the two Yu Pagodas, Yu Yevon and every possessed aeon the chain can stage (the five of the default roster and Anima, Yojimbo and the Magus Sisters
+  // when Yuna owns them): the aeons are the party's own paintings, whose side draws no rim, so a possessed one must not draw the pale line its mirror does not. Chapter XII: Seymour Omnis (the four Mortiphasm discs are figure-less anchors, no actor to tag). Chapter XIV: Isaaru and his three aeons (Grothia, Pterya and Spathi are repaints of Ifrit,
+  // Valefor and Bahamut, the party's own side's).
+  'braskas-final-aeon': 'ffx',
+  'yu-pagoda-left': 'ffx',
+  'yu-pagoda-right': 'ffx',
+  'yu-yevon': 'ffx',
+  'possessed-valefor': 'ffx',
+  'possessed-ifrit': 'ffx',
+  'possessed-ixion': 'ffx',
+  'possessed-shiva': 'ffx',
+  'possessed-bahamut': 'ffx',
+  'possessed-anima': 'ffx',
+  'possessed-yojimbo': 'ffx',
+  'possessed-cindy': 'ffx',
+  'possessed-sandy': 'ffx',
+  'possessed-mindy': 'ffx',
+  'seymour-omnis': 'ffx',
+  isaaru: 'ffx',
+  grothia: 'ffx',
+  pterya: 'ffx',
+  spathi: 'ffx',
   leblanc: 'ffx2',
   logos: 'ffx2',
   'logos-room': 'ffx2',

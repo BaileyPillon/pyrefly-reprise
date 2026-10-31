@@ -147,6 +147,13 @@ export const ROOM_BOLD: Readonly<Record<string, RoomBold>> = {
     fogScale: 0.85,
     driftPx: 3,
   },
+  // Batch 3b (FFX, `booth-ffx-b3b`; `docs/handoff/booth-ffx-b3b.md` section 3). EMBERS: NONE ON PURPOSE in all three. Dream's End: `research/ffx-vs-ffx2-presentation.md` section 8 supports pyreflies and embers there (saturated with pyreflies, embers from the burning Abes emblem), and the scene already carries both
+  // (`dreams-end.ts`: embers rising in three depth bands, sparse red pyreflies, low ground haze), so a fourth system at the eye would double what canon asks once. The Garden of Pain and the Via Purifico: the section names neither room and their scenes draw no particles (`particles: []`), so nothing is invented (hard rule 6);
+  // a spark at the Via Purifico's lamps or the Garden's glow is one line (`embers: [[u, v]]`) and Bailey's yes (rule 10). Gloss: Dream's End a cracked dark stone floor with the flame wall's glare in it (0.4); the Garden's pale terrace tiles with a sheen (0.5); the Via Purifico's wet stone, the far door's light lying in it (0.85). Rims are each room's own
+  // key (the eye's gold, the scene's cold violet `0xc9a6ff`, the lamps' red); fogs and shadows the plates' own darks, tinted, not black.
+  'dreams-end': { gloss: 0.4, embers: [], rim: [1.0, 0.62, 0.3], fog: [0.46, 0.15, 0.14], shadow: [0.2, 0.05, 0.12], fogScale: 0.8, driftPx: 3 },
+  'garden-of-pain': { gloss: 0.5, embers: [], rim: [0.78, 0.65, 1.0], fog: [0.3, 0.26, 0.56], shadow: [0.1, 0.07, 0.34], fogScale: 0.85, driftPx: 3 },
+  'via-purifico': { gloss: 0.85, embers: [], rim: [1.0, 0.36, 0.26], fog: [0.32, 0.17, 0.22], shadow: [0.12, 0.06, 0.14], fogScale: 0.8, driftPx: 3 },
   // Chapter IV (FFX-2), the Bevelle underground: a polished cathedral floor (the lamps and the skylight sit in it); the four lamps of the painting throw embers.
   'bevelle-underground': {
     gloss: 0.8,

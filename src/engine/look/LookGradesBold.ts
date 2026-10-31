@@ -84,6 +84,27 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       recipe: { exposure: 0.74, gamma: 1.0, contrast: 0.46, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.28, midSat: 0.32, sat: 1.04, hues: [{ hue: 245, width: 42, sat: 1.05, lum: 1.06, toward: [0.42, 0.38, 1.0], shift: 0.25 }, { hue: 35, width: 30, sat: 1.2, lum: 1.1, toward: [1, 0.72, 0.3], shift: 0.3 }] },
       focus: 0.35,
     },
+    // Batch 3b (FFX, `booth-ffx-b3b`; `docs/handoff/booth-ffx-b3b.md` section 3). Dream's End: the plate's saturated pixels peak at hue 350 and 340 (the crimson sky) with the eye's yellow-orange at hue 40, a dark plate (mean luminance 0.189): wine shadows, a gold-cream highlight, the crimson lifted and
+    // pulled toward itself and the eye's gold lifted. The Garden of Pain: hue 240 (the violet-blue sky, most of its saturated pixels) and 330 (the pink terrace and glow), mean luminance 0.236: indigo shadows, a pink-cream highlight. The Via Purifico: hue 350 and 0 (the red lamps) and 210 (the cold blue
+    // sheen of the floor under the far door), the darkest plate (0.155): wine shadows, a warm highlight, the lamps' red and the floor's blue each lifted. The sharp bands are the rooms' own (0.41, 0.34, 0.34).
+    'dreams-end': {
+      shadow: [0.2, 0.05, 0.22],
+      highlight: [1.0, 0.86, 0.62],
+      recipe: { exposure: 0.72, gamma: 1.0, contrast: 0.46, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.32, highlightSplit: 0.3, midSat: 0.3, sat: 0.96, hues: [{ hue: 350, width: 40, sat: 1.0, lum: 1.04, toward: [0.95, 0.2, 0.3], shift: 0.1 }, { hue: 40, width: 30, sat: 1.15, lum: 1.12, toward: [1, 0.72, 0.28], shift: 0.3 }] },
+      focus: 0.41,
+    },
+    'garden-of-pain': {
+      shadow: [0.12, 0.08, 0.42],
+      highlight: [1.0, 0.86, 0.92],
+      recipe: { exposure: 0.66, gamma: 1.0, contrast: 0.46, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.28, midSat: 0.32, sat: 0.92, hues: [{ hue: 240, width: 42, sat: 0.92, lum: 1.0, toward: [0.45, 0.4, 0.95], shift: 0.12 }, { hue: 330, width: 30, sat: 1.15, lum: 1.1, toward: [1, 0.45, 0.8], shift: 0.3 }] },
+      focus: 0.34,
+    },
+    'via-purifico': {
+      shadow: [0.14, 0.07, 0.18],
+      highlight: [1.0, 0.82, 0.66],
+      recipe: { exposure: 0.84, gamma: 1.0, contrast: 0.46, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.32, highlightSplit: 0.3, midSat: 0.3, sat: 1.02, hues: [{ hue: 350, width: 40, sat: 1.0, lum: 1.1, toward: [1, 0.25, 0.2], shift: 0.2 }, { hue: 210, width: 35, sat: 1.1, lum: 1.15, toward: [0.5, 0.75, 1.0], shift: 0.3 }] },
+      focus: 0.34,
+    },
     // Chapter IV: violet shadows, amber lamps against the cyan skylight (each hue lifted and pulled toward itself).
     'bevelle-underground': {
       shadow: [0.2, 0.12, 0.52],
@@ -136,6 +157,25 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       highlight: [1.0, 0.82, 0.6],
       recipe: { exposure: 0.62, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 245, width: 42, sat: 1.05, lum: 1.06, toward: [0.42, 0.38, 1.0], shift: 0.25 }, { hue: 35, width: 30, sat: 1.25, lum: 1.12, toward: [1, 0.72, 0.3], shift: 0.3 }] },
       fog: [0.3, 0.26, 0.5],
+    },
+    // Batch 3b (FFX): the same hues under darker shadows and a steeper curve.
+    'dreams-end': {
+      shadow: [0.1, 0.03, 0.14],
+      highlight: [1.0, 0.8, 0.55],
+      recipe: { exposure: 0.66, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 350, width: 40, sat: 1.0, lum: 1.06, toward: [0.95, 0.2, 0.3], shift: 0.2 }, { hue: 40, width: 30, sat: 1.2, lum: 1.12, toward: [1, 0.72, 0.28], shift: 0.3 }] },
+      fog: [0.42, 0.14, 0.14],
+    },
+    'garden-of-pain': {
+      shadow: [0.07, 0.05, 0.3],
+      highlight: [1.0, 0.84, 0.92],
+      recipe: { exposure: 0.62, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 240, width: 42, sat: 1.05, lum: 1.06, toward: [0.4, 0.38, 1.0], shift: 0.25 }, { hue: 330, width: 30, sat: 1.2, lum: 1.1, toward: [1, 0.45, 0.8], shift: 0.3 }] },
+      fog: [0.3, 0.26, 0.55],
+    },
+    'via-purifico': {
+      shadow: [0.08, 0.04, 0.12],
+      highlight: [1.0, 0.76, 0.6],
+      recipe: { exposure: 0.7, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 350, width: 40, sat: 1.0, lum: 1.1, toward: [1, 0.25, 0.2], shift: 0.2 }, { hue: 210, width: 35, sat: 1.1, lum: 1.15, toward: [0.5, 0.75, 1.0], shift: 0.3 }] },
+      fog: [0.3, 0.16, 0.2],
     },
     // Chapter IV: violet-black shadows, amber lamps, cyan skylight, a cool violet fog.
     'bevelle-underground': {

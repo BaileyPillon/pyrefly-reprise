@@ -64,6 +64,13 @@ export const ROOM_LOOKS: Readonly<Record<LookName, Readonly<Record<string, RoomL
     // sphere low on the left, u 0.273, v 0.792, so the shafts would climb from the floor), so the shafts and the rim follow the oculus. The sharp band is the booth's rule (Chapter I 0.36 at its feet-and-knee middle 0.187, Chapter IV 0.40 at 0.242, the
     // line through them) read at the dome's idle rig, where the party's feet and knees stand lower in the frame (middle 0.167): 0.35 (`docs/handoff/booth-ffx-yunalesca.md`).
     'zanarkand-dome': { focus: 0.35, light: { u: 0.338, v: 0.063, color: [0.97, 0.82, 0.98] } },
+    // Batch 3b (FFX, `booth-ffx-b3b`; `docs/handoff/booth-ffx-b3b.md` section 3 has every number). The sharp band is the booth rule (focus = 0.36 + 0.727 x (the party's feet-and-knee middle at the idle rig - 0.187)). Dream's End (Chapter III): the burning eye is the light, the
+    // painting's own (core at u 0.484, v 0.286 from the top, rgb 1.0 0.74 0.27; `findLight` takes the flame wall at the base, u 0.492, v 0.819, with its default cut), idle rig middle 0.259, 0.41. The Garden of Pain (Chapter XII): the pale pink glow low in the sky behind the dais is the key
+    // (the scene's own: `garden-of-pain.ts` keys its lights "from high and behind"; u 0.505, v 0.337; `findLight` takes a terrace tile, u 0.336, v 0.681), idle middle 0.152, 0.34. The Via Purifico (Chapter XIV): the lamp-lit haze at the hall's vanishing point (u 0.508, v 0.542, the engine's own pick,
+    // kept so the row does not depend on the pick), idle middle 0.155, 0.34.
+    'dreams-end': { focus: 0.41, light: { u: 0.484, v: 0.286, color: [1.0, 0.76, 0.27] } },
+    'garden-of-pain': { focus: 0.34, light: { u: 0.505, v: 0.337, color: [0.82, 0.55, 0.82] } },
+    'via-purifico': { focus: 0.34, light: { u: 0.508, v: 0.542, color: [0.9, 0.42, 0.38] } },
     // Chapter IV (FFX-2), the Bevelle underground: the great skylight is the light (the picture's own brightest part); the band covers the girls and the dragon's coils.
     'bevelle-underground': { focus: 0.4 },
     // Chapter VI (FFX-2, release 69), the Chateau's last room: the heart-shaped door inlay is the light (the painting's own pink, found on the plate at u 0.500, v 0.264 from the top; `findLight` would take the pale floor patch, which is brighter in luminance), so the
@@ -83,6 +90,10 @@ export const ROOM_LOOKS: Readonly<Record<LookName, Readonly<Record<string, RoomL
     gagazet: { shadow: [0.02, 0.1, 0.2], highlight: [1.0, 0.86, 0.66], recipe: { sat: 0.72, contrast: 0.74, pivot: 0.34, shadowSplit: 0.62, highlightSplit: 0.46 }, fog: [0.4, 0.52, 0.68] },
     // Chapter II (release 69): violet-black shadows under the gold of the sphere in the highlights, the oculus's pale lavender light, a violet fog over the wet floor.
     'zanarkand-dome': { shadow: [0.08, 0.05, 0.26], highlight: [1.0, 0.84, 0.66], recipe: { sat: 0.84, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.3, 0.26, 0.5], light: { u: 0.338, v: 0.063, color: [0.97, 0.82, 0.98] } },
+    // Batch 3b (FFX): Dream's End, wine-black shadows under a gold-cream highlight (the eye and the flame), an ember-red fog; the Garden of Pain, indigo-violet shadows under a pink-cream highlight, a violet fog; the Via Purifico, wine-black shadows under a warm lamp highlight, a dull red haze.
+    'dreams-end': { shadow: [0.1, 0.03, 0.14], highlight: [1.0, 0.8, 0.55], recipe: { sat: 0.86, contrast: 0.68, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.42, 0.14, 0.14], light: { u: 0.484, v: 0.286, color: [1.0, 0.76, 0.27] } },
+    'garden-of-pain': { shadow: [0.07, 0.05, 0.3], highlight: [1.0, 0.84, 0.92], recipe: { sat: 0.84, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.3, 0.26, 0.55], light: { u: 0.505, v: 0.337, color: [0.82, 0.55, 0.82] } },
+    'via-purifico': { shadow: [0.08, 0.04, 0.12], highlight: [1.0, 0.76, 0.6], recipe: { sat: 0.84, contrast: 0.68, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.3, 0.16, 0.2], light: { u: 0.508, v: 0.542, color: [0.9, 0.42, 0.38] } },
     // Chapter IV: violet-black shadows, the lamps' amber in the highlights against the cyan skylight, a cooler brown fog.
     'bevelle-underground': { shadow: [0.1, 0.05, 0.24], highlight: [1.0, 0.78, 0.52], recipe: { sat: 0.8, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.28, 0.32, 0.5] },
     // Chapter VI (release 69): violet-black shadows under a rose-cream highlight, the heart's light, a violet-rose fog over the cold machine room.

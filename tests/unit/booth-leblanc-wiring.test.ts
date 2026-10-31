@@ -106,9 +106,12 @@ describe('`__pyrefly.treated()`', () => {
     const treated = api['treated'] as (scope?: 'all' | 'pack' | null) => { scope: string; chapters: string[]; holds: Record<string, string[]>; running: string | null; reaches: boolean };
     const all = treated('all');
     expect(all.scope).toBe('all');
-    expect(all.chapters).toEqual(['seymour-flux', 'yunalesca', 'ffx2-bahamut', 'ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'ffx2-den-of-woe', 'ffx2-fallen-aeons']);
+    expect(all.chapters).toEqual(['seymour-flux', 'yunalesca', 'braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico', 'ffx2-bahamut', 'ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'ffx2-den-of-woe', 'ffx2-fallen-aeons']);
     expect(all.holds).toEqual({
       yunalesca: ['breath', 'cam', 'smear'],
+      'braskas-final-aeon': ['breath'],
+      'seymour-omnis': ['breath'],
+      'isaaru-via-purifico': ['breath'],
       'ffx2-leblanc': ['breath'],
       'ffx2-vegnagun-shuyin': ['cam', 'breath'],
       'ffx2-den-of-woe': ['breath'],

@@ -85,7 +85,7 @@ describe('1. the guide and the enemy-move read-out start folded with the F1 HUD 
     expect(demoPanelStart('guide')).toEqual({});
     setHudF1TextMode(null);
     document.documentElement.removeAttribute('data-text-size');
-    setDemoChapter('braskas-final-aeon');
+    setDemoChapter('sinspawn-gui');
     expect(demoPanelStart('guide')).toEqual({});
     expect(demoPanelStart('intent')).toEqual({});
     setDemoChapter(undefined); // no battle named at all (a menu, a unit test)
@@ -123,7 +123,7 @@ describe('2. no in-battle teaching card while the F1 HUD is on', () => {
     setHudF1Mode('today');
     for (const id of [...battleIds, ...elsewhere]) expect(shouldShow(id), `off ${id}`).toBe(true);
     setHudF1Mode('f1');
-    setDemoChapter('braskas-final-aeon');
+    setDemoChapter('sinspawn-gui');
     for (const id of [...battleIds, ...elsewhere]) expect(shouldShow(id), `other chapter ${id}`).toBe(true);
     setDemoChapter(undefined);
     for (const id of [...battleIds, ...elsewhere]) expect(shouldShow(id), `no battle ${id}`).toBe(true);
