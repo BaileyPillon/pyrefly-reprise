@@ -12,12 +12,14 @@
 // the machine). Nothing here stops a process by image name; the callers stop what they started by PID.
 import fs from 'node:fs';
 import { createExclusive, replaceIfStale, unreadableAge } from '../lock-atomic.mjs';
+import { refreshOwn } from '../lock-fair.mjs';
 
 export const SCRATCH = process.env.PYREFLY_SCRATCH ?? 'D:/Tools/pyrefly-scratch';
 export const LOCK = `${SCRATCH}/RIG-RECORD`;
 export const NEXT = `${SCRATCH}/RIG-RECORD.next`;
 const GUARDS = ['REVIEW-BROWSER', 'GPU-QUIET'];
 const STALE_MS = 15 * 60 * 1000;
+const BEAT_MS = Number(process.env.PYREFLY_LOCK_BEAT_MS) || 30 * 1000; // how often a waiter that holds the reservation rewrites its `at` (fair stale rule, 2026-10-31; the env knob is for the test)
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const alive = (pid) => { try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } };
 const readJson = (p) => { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return null; } };
@@ -78,12 +80,18 @@ export async function takeBrowserLock({ who, what, maxMinutes = 10, maxWaitMs = 
   const max = Math.min(10, Math.max(1, maxMinutes));
   const t0 = Date.now();
   let lastLog = 0;
+  let lastBeat = Date.now();
   const mine = () => JSON.stringify({ who, pid: process.pid, what, at: new Date().toISOString(), maxMinutes: max });
   for (;;) {
     const guards = GUARDS.filter((g) => fs.existsSync(`${SCRATCH}/${g}`));
     const held = heldBy(readJson(LOCK));
     const reserved = reservedBy(readJson(NEXT));
     const ours = readJson(NEXT)?.pid === process.pid;
+    if (ours && Date.now() - lastBeat > BEAT_MS) { // a live waiter keeps its place however long it waits: its reservation's `at` stays young, so `reservedBy` never reads it as stale
+      lastBeat = Date.now();
+      const cur = readJson(NEXT);
+      if (cur?.pid === process.pid) { try { refreshOwn(NEXT, cur); } catch { /* the next beat tries again */ } }
+    }
     if (!ours && !reserved && (held || guards.length)) claimNext(mine());
     if (!guards.length && !held && !reserved) {
       let took = false;

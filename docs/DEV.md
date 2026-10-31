@@ -371,6 +371,30 @@ All of these serve a built candidate read-only (`--dist <folder>`, e.g. a review
 | Does the FFX-2 ready shimmer restart with each HUD rebuild | `node tools/atb-shimmer.mjs --dist <dir>` |
 | Who allocates per frame | `node tools/alloc-profile.mjs --dist <dir> --chapter ffx2-bahamut --seconds 60` |
 
+### The review-browser lock and browser crash capture (tooling, both games; 2026-10-31)
+
+**The lock** (`D:/Tools/pyrefly-scratch/RIG-RECORD` and its reservation `RIG-RECORD.next`; `tools/rig-record-lock.mjs`, `tools/measure/lock.mjs`, shared rule in `tools/lock-fair.mjs`): a lock or a reservation is stale only
+when the process in its record is not running, or when nobody has written to the file for 15 minutes (its mtime). The holder and the waiter refresh their file (every 30 s, a new `at` and a `since` that keeps
+the first one), so a live lane is never displaced however long it waits; before, the age counted from when the waiter entered the line and a live lane was replaced after 15 minutes (displaced eight times on
+2026-10-31). A record from an older copy (`{who, pid, at, maxMinutes}`, never refreshed) is read by the same two rules; the new records still carry those four fields, so an older copy leaves a live waiter alone.
+A holder stops refreshing after its own `maxMinutes` (10 at most). Details and the tests: `docs/handoff/tools-lock-fair.md`.
+
+**Crash capture** (`tools/browser-crash-capture.mjs`; `tools/measure/session.mjs` attaches it to every game it opens, `PYREFLY_CRASH_CAPTURE=0` turns it off): a "Target crashed" used to leave nothing to read. Now
+the launch gets `--enable-logging=stderr --log-level=0` (Chromium's own log, with wall-clock stamps, stays in the profile folder), `page.on('crash')` stamps the harness time and the LAST SAMPLED memory and writes
+the evidence file at once, a CDP heap sample (every 2 s) and a process-tree memory sample (every 10 s: working set, private bytes, GPU memory per process, host CPU and free memory, the card) are kept in ring
+buffers (5 and 10 minutes), and the last console errors and the game's `[ac]` and `[gl]` lines ride along. The file goes to `$PYREFLY_CRASH_DIR` (default: `pyrefly-crash-captures/` under the temp folder). To use it in another harness:
+
+```js
+import { CRASH_LAUNCH_ARGS, attachCrashCapture, defaultDumpFile, runWithCrashRetry } from './browser-crash-capture.mjs';
+const browser = await chromium.launch({ args: [...currentChromiumArgs(), ...CRASH_LAUNCH_ARGS] });
+// per page: const cap = await attachCrashCapture({ browser, context, page, dumpFile: defaultDumpFile('my-job') }); then cap.assertAlive() in the loop, cap.stop() before browser.close()
+// the whole job: const r = await runWithCrashRetry(async (n) => { /* open a fresh browser, run, close it */ }, { retries: 1, log });
+// r.status is 'OK' or 'UNVERIFIED'; a crash is never reported as a content failure, and any other error is rethrown unchanged
+```
+
+The sampling is not free (a PowerShell sample every 10 s): for a run where timing is the measurement pass `sample: false` to `attachCrashCapture` (`PYREFLY_CRASH_CAPTURE=0` leaves a measuring session with no capture at all); with `sample: false` the crash stamp and the
+retry rule stay. Nothing is added to the game's page.
+
 ## The conference demo build's switches (release 60)
 
 Bailey's picks of 2026-10-20 (decision 157; "I demo my game in a week at a huge gaming conference"). Presentation and seed choice only: no engine, no rule, no game number changes, and the three goldens

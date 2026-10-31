@@ -2,7 +2,7 @@
  * The two atomic moves every writer of the review-browser lock (`D:/Tools/pyrefly-scratch/RIG-RECORD` and its `.next` reservation) uses; tooling only, both games (backlog 60, release 67).
  *
  * Why: on 2026-10-27 two browser jobs took RIG-RECORD in the same second. The takers checked the file, found it free (or stale, or half written) and then wrote it with a plain `writeFileSync`, which
- * truncates whatever is there: the last writer won and the first never knew. The rules of the pass did not change (a lock is stale after 15 minutes, nobody removes another lane's younger lock); only the way
+ * truncates whatever is there: the last writer won and the first never knew. The rules of the pass did not change then (release 67: a lock is stale after 15 minutes; the fair rule of `tools/lock-fair.mjs` replaced the age rule on 2026-10-31, this module is unchanged by it; nobody removes another lane's younger lock); only the way
  * the file is made is atomic now:
  *
  *   1. `createExclusive` makes the file with an exclusive open (`'wx'`): exactly one of any number of racing takers gets it, the rest see `EEXIST` and look again.

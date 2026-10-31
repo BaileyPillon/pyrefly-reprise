@@ -9,9 +9,12 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { frameMsFor } from '../../critic/runner/lib/hz-pure.mjs';
+import { CRASH_LAUNCH_ARGS, attachCrashCapture, defaultDumpFile } from '../browser-crash-capture.mjs';
 
 export { frameMsFor };
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+/** Crash capture (tools/browser-crash-capture.mjs) is on for every session unless PYREFLY_CRASH_CAPTURE=0: a "Target crashed" then leaves the heap and process-memory rings and the crash stamp on disk. */
+const captureOn = () => (process.env.PYREFLY_CRASH_CAPTURE ?? '1') !== '0';
 
 const INIT = () => {
   // the idle sway's phases are Math.random() draws (DemoIdle.ts): a seeded generator makes two captures of one scripted moment draw the same ones when the number of draws before them is the same (review m7)
@@ -33,13 +36,15 @@ export async function launchBrowser(root) {
   process.env.PYREFLY_BROWSER ??= 'gpu';
   const { chromium } = await import(pathToFileURL(path.join(root, 'node_modules/playwright/index.mjs')).href);
   const { currentChromiumArgs } = await import(pathToFileURL(path.join(root, 'tools/browser-mode.mjs')).href);
-  return chromium.launch({ args: [...currentChromiumArgs()] });
+  return chromium.launch({ args: [...currentChromiumArgs(), ...(captureOn() ? CRASH_LAUNCH_ARGS : [])] });
 }
 
 /** Open the game at `base` + `query` on a fake clock with the manual rAF queue installed (not yet paused). Returns the session `g`. */
 export async function openGame(browser, base, query = '', viewport = { width: 1600, height: 900 }) {
   const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
   const page = await context.newPage();
+  // the crash listener goes on before anything else happens to the page; it never throws into the session (a CDP session that cannot be made leaves only the crash stamp)
+  const crash = captureOn() ? await attachCrashCapture({ browser, context, page, dumpFile: defaultDumpFile('measure') }).catch(() => null) : null;
   const consoleErrors = [];
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') consoleErrors.push(`${m.type()}: ${m.text().slice(0, 300)}`); });
   page.on('pageerror', (e) => consoleErrors.push(`pageerror: ${String(e).slice(0, 300)}`));
@@ -50,7 +55,7 @@ export async function openGame(browser, base, query = '', viewport = { width: 16
   await page.goto(`${base}${query}`, { waitUntil: 'domcontentloaded', timeout: 240000 });
   await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 240000 });
   const g = {
-    browser, context, page, consoleErrors,
+    browser, context, page, consoleErrors, crash,
     press: (k) => page.keyboard.press(k),
     scr: () => page.evaluate(() => window.__pyrefly.screen()),
     ss: () => page.evaluate(() => window.__pyrefly.snapshotState()?.screenState ?? null),
