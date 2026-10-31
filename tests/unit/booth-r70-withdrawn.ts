@@ -1,5 +1,5 @@
 /**
- * THE FOUR CHAPTERS THE r70 VERDICT PASS TOOK BACK OFF `TREATED_CHAPTERS` (2026-10-31, `docs/handoff/booth-b3.md` section 12; both games: IX and XII are FFX only, V and XI FFX-2 only). A helper, not a test file.
+ * THE CHAPTERS THE r70 VERDICT PASS TOOK BACK OFF `TREATED_CHAPTERS` THAT ARE STILL OFF (2026-10-31, `docs/handoff/booth-b3.md` section 12): V and XI, FFX-2 only. IX and XII (FFX only) left with them and came back in `booth-ffx-b4-hud` (`docs/handoff/booth-ffx-b4-hud.md`: the F1 HUD's layout against their panels is fixed), so they are no longer in this table. A helper, not a test file.
  *
  * Their rows stay in every table (look, arena, rim, holds, the follower's) and the lane tests that pin what the treatment does in them stay too: each such case is gated with {@link itIf} or {@link describeIf}, which run it while the chapter is on
  * `DemoGate.TREATED_CHAPTERS` and skips it while it is off. Putting one line back therefore turns the lane's own cases back on with no edit, and a regression in the built-but-unread rows shows at that moment.
@@ -7,16 +7,8 @@
 import { describe, it } from 'vitest';
 import { TREATED_CHAPTERS } from '../../src/engine/motion/DemoGate.ts';
 
-/** The withdrawn chapters, each with the game it is (rule 14) and the one-line reason the verdict gave (also the `NOT_YET` text of `booth-treated-chapters.test.ts`). */
+/** The chapters still withdrawn, each with the game it is (rule 14) and the one-line reason the verdict gave (also the `NOT_YET` text of `booth-treated-chapters.test.ts`). */
 export const WITHDRAWN_R70: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readonly why: string }>> = Object.freeze({
-  'yojimbo-cavern': {
-    game: 'ffx',
-    why: 'FFX: out of release 70 (r70 verdict): the Zanmato gauge panel ends against the F1 turn strip (a major, introduced, a regression against release 69); its rows and holds stay, unread',
-  },
-  'seymour-omnis': {
-    game: 'ffx',
-    why: "FFX: out of release 70 (r70 verdict): the Enemy Intent card clips the acting hero's HP numeral against the F1 party panel (a major, introduced, a regression against release 69); its rows and holds stay, unread",
-  },
   'ffx2-vegnagun-shuyin': {
     game: 'ffx2',
     why: "FFX-2: out of release 70 (r70 verdict): the HD-2D bold look clips the Farplane's sky to a flat white halo over the colossus frame (a major, introduced) and Shuyin's freeze cannot be read white on white; its rows and holds stay, unread",

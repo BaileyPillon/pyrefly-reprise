@@ -83,7 +83,7 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'so the cut plays often. The piece holds the knock-out cut and its rebound and the victory cheer; the plain knock-out cross and the victory of release 68 play. Lifts when a continuity run (CHK-027) of this chapter ' +
       'with the moments on, a knock-out of each of Tidus, Yuna and Kimahri, reads no unexcused swap jerk (every cut at or under 0.5 of the drawn height).',
   }),
-  // UNTREATED in the r70 verdict pass (`docs/handoff/booth-b3.md` section 12): Chapter IX is off `TREATED_CHAPTERS` (its Zanmato gauge panel ends against the F1 turn strip: a major, introduced, a regression against release 69). These rows are unread while it is off the list and are read again when one line puts it back.
+  // Chapter IX left `TREATED_CHAPTERS` in the r70 verdict pass (`docs/handoff/booth-b3.md` section 12: its Zanmato gauge panel ended against the F1 turn strip, a major) and is back on it in `booth-ffx-b4-hud` (the gauge now stands between the F1 ribbon and the F1 turn strip: `docs/handoff/booth-ffx-b4-hud.md`). The three holds below are batch 3a's own and are read again.
   'yojimbo-cavern': Object.freeze({
     breath:
       'FFX, Chapter IX: the held breath is the drain-and-flood built for Total Annihilation (and, in FFX-2, Mega Flare), and a move reaches it only by id (`StagingPort.BigMove`), so nothing in this fight plays it today. ' +
@@ -123,7 +123,7 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'a ratio of 0.64 to 0.77), so Rikku would measure about 0.69. All seven can be fielded (the same seven as Chapter I\'s), so the chapter keeps release 68\'s KO (the plain cross, no rebound) and its victory; the curves, the smear and every other piece still play. ' +
       'Lifts when job J5 of docs/handoff/booth-ffx-b3b.md (a knock-out per dress, the reserve Rikku first, on the continuity harness) reads every dress\'s hurt-to-KO swap at or under 0.5 of its drawn height and reports no unexcused swap jerk (CHK-027).',
   }),
-  // UNTREATED in the r70 verdict pass (`docs/handoff/booth-b3.md` section 12): Chapter XII is off `TREATED_CHAPTERS` (the Enemy Intent card clips the acting hero's HP numeral against the F1 party panel: a major, introduced, a regression against release 69). These rows are unread until it is back on the list.
+  // Chapter XII left `TREATED_CHAPTERS` in the r70 verdict pass (`docs/handoff/booth-b3.md` section 12: the Enemy Intent card clipped the acting hero's HP numeral against the F1 party panel, a major) and is back on it in `booth-ffx-b4-hud` (the card's foot now stands 6 grid px above the first party card: `docs/handoff/booth-ffx-b4-hud.md`). The holds below are batch 3b's own and are read again.
   'seymour-omnis': Object.freeze({
     breath:
       'FFX, Chapter XII: the held breath is the drain-and-flood built for Total Annihilation, and a move reaches it only by id (`StagingPort.BigMove`), so nothing Omnis does plays it today (research/ffx-seymour-omnis.md section 0.4: Total Annihilation is not in this fight, it is Seymour Flux\'s). ' +
