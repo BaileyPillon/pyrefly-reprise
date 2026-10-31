@@ -7,10 +7,10 @@
  *     otherwise the first visible non-part foe; a declared boss is a foe of its own formation; and the only links where the ribbon's foe and the formation's written `headline` disagree are the ones listed
  *     in `HEADLINE_DISAGREES` (a finding carried to the driver, not a defect this merge can fix without a data row).
  *  2. `ProAutoStage.SCRIPTED_RIGS` stays FFX-2's: no row names a chapter that is not FFX-2, and every row names a treated FFX-2 chapter.
- *  3. THE HOLD GUARD: a chapter on both `TREATED_CHAPTERS` and `SwapSwitch.SCOPE_EXCEPTIONS` holds `smear` (`booth-hold-guard` reads the two lists; the merged list is fourteen).
+ *  3. THE HOLD GUARD: a chapter on both `TREATED_CHAPTERS` and `SwapSwitch.SCOPE_EXCEPTIONS` holds `smear` (`booth-hold-guard` reads the two lists; the merged list was fourteen, is twelve after booth-ffx-b4-hud).
  *  4. THE KNOCK-OUT RULE'S INVARIANT over the merged list is in `tests/unit/engine/booth-b2-ko-rule.test.ts`; here, that no treated chapter's hold names a piece outside `TREATED_PIECES`.
  *
- * THE r70 VERDICT PASS (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four chapters back off the list (the list is ten). The ribbon walk is a function of the data and not of the list, so it still walks the withdrawn four (`BRANCH`):
+ * THE r70 VERDICT PASS (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four chapters back off the list (the list was ten); `booth-ffx-b4-hud` (FFX only) brought IX and XII back (the list is twelve, V and XI are still off). The ribbon walk is a function of the data and not of the list, so it walks all fourteen (`BRANCH`):
  * the ribbon of each is pinned for the day one line puts it back. The hold and the stand-down tables keep the withdrawn chapters' rows, unread.
  */
 import { afterEach, describe, expect, it } from 'vitest';
@@ -25,7 +25,7 @@ import { WITHDRAWN_R70 } from './booth-r70-withdrawn.ts';
 
 afterEach(() => setTreatedScope(null));
 
-/** Every chapter the branch built a treatment for: the ten on the list and the four the r70 verdicts took back off it (the ribbon's boss does not depend on the list). */
+/** Every chapter the branch built a treatment for: the twelve on the list and the two (V and XI) the r70 verdicts took back off it that are still off (the ribbon's boss does not depend on the list). */
 const BRANCH: readonly string[] = [...Object.keys(TREATED_CHAPTERS), ...Object.keys(WITHDRAWN_R70)];
 
 /** The state `headlineEnemy` reads, as a link begins: its formation's foes, parts and waiting forms flagged as the data flags them. */
@@ -123,8 +123,8 @@ describe('the follower\'s stand-down table and the hold guard over the merged li
     expect(Object.keys(TREATED_CHAPTERS).filter((id) => ids.includes(id))).toEqual(['ffx2-trema']); // and only Chapter XIII's stand-down is read now
   });
 
-  it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list was fourteen; the r70 verdicts left ten)', () => {
-    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(10);
+  it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list was fourteen; the r70 verdicts left ten; booth-ffx-b4-hud brought IX and XII back: twelve)', () => {
+    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(12);
     const exceptions = Object.keys(SCOPE_EXCEPTIONS);
     const both = Object.keys(TREATED_CHAPTERS).filter((id) => exceptions.includes(id));
     expect(both).toEqual(['yunalesca']); // evrae-airship, sin-face and ffx2-ixion-djose are exceptions that the treatment has not reached

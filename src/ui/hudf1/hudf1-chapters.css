@@ -1,0 +1,63 @@
+/*
+ * THE F1 HUD AND THE CHAPTERS' OWN PANELS (lane booth-ffx-b4-hud, 2026-10-31; FFX ONLY: Chapter IX `yojimbo-cavern` and Chapter XII `seymour-omnis`; rule 14: FFX-2 has no chapter panel of this kind and the F1 HUD of Chapter IV is untouched).
+ *
+ * The r70 verdict pass took both chapters off the treated list for one defect each (`docs/handoff/booth-b3.md` section 12.4): the F1 slab moved today's turn strip from the right edge (a column of rows) to the top right (a row of three slots,
+ * left 465) and the party cards up (top 251 against today's 258.25), and each chapter has one panel of its own that was laid out against today's HUD:
+ *
+ *  - IX: Yojimbo's Zanmato gauge (`zanmato-gauge.css`) hangs at left 660 of the 1440 x 810 frame (293 grid px), 430 wide: its right edge is 484, 19 grid px INTO the strip, so the "0%" read-out sat over the TURN ORDER caption and touched the NOW chip.
+ *  - XII: the Enemy Intent card (`omnis-readout.css`) stands at bottom 258 of the 1600 x 900 frame (its foot at y 256.8): 5.8 grid px into the party cards' top (251), so it clipped the acting hero's HP numeral (Tidus 6492: 17 of its 64 px at 2560 x 1440).
+ *
+ * Every rule here hangs from `.ffxhud.hud-f1` AND from the panel's own class, so it matches nothing in any other chapter (the panels are mounted hidden elsewhere), nothing with the F1 HUD off (`?hud=today`, `?treated=pack`, a phone), and nothing
+ * in Chapter I or Chapter IV: the F1 layout itself (`hudf1.css`, `hudf1-ffx.css`) is byte for byte what it was. The landscape layouts only (`:not(.ffx-zg--phone)` / `:not(.ffx-omr--phone)`: the phone has no F1).
+ *
+ * The numbers are the F1 sheets' own, read by `tests/unit/booth-ffx-b4-hud-layout.test.ts` from the real stylesheets (the anchor math, with the 12 degree shear, at 100, 115 and 130): the ribbon (left 28, 160 wide, grown about its left), the turn strip (left 465, grown
+ * about its right edge: 440.9 at 115, 416.9 at 130) and the party list (top 251, grown about its bottom right: 237.35 and 223.7). Frame px are grid px / 0.444 (IX, the 1440 frame) and / 0.4 (XII, the 1600 frame).
+ */
+
+/* ------------------------------------------------------------------------------------------------ Chapter IX: the Zanmato gauge */
+
+/*
+ * The panel stands in the top band BETWEEN the ribbon (right edge 188) and the strip (left 465): 511 of the 1440 frame is 227.1 grid px, so its sheared edges clear the ribbon by 41.4 and the strip by 40.9 grid px (164 px at 2560 x 1440) at 100.
+ * The panel is 430 frame px wide (191.1 grid) and its box ends at 418.2. Its top (10) and the banner that hangs under it (`ZanmatoGauge.placeBanner`) are untouched; the banner stays centred on the stage (x 320), which is now the panel's centre (322.7).
+ */
+.ffxhud.hud-f1 .ffx-zg:not(.ffx-zg--phone) .ffx-zg__panel {
+  left: 511px;
+}
+
+/*
+ * TEXT SIZE 115 and 130 (`text-size.css` grows the old panel by `--pyr-ts` about its top centre): in the F1 HUD the ribbon grows right and the strip grows left, so the band between them is 277 grid px at 100, 229 at 115 and 181 at 130, and a
+ * panel that grew with the setting (191 x 1.15 = 220, 191 x 1.3 = 248) would run into one or the other. The gauge keeps its size here: at 115 it clears the ribbon by 17.0 and the strip by 16.4 grid px; at 130 the band is narrower than the panel
+ * (see the layout test: the sheared corners reach 7.4 grid px into the grown ribbon's end and 8.0 into the strip's box, clear of its first caption), the one residual of this fix, carried in `docs/handoff/booth-ffx-b4-hud.md`.
+ */
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1 .ffx-zg:not(.ffx-zg--phone) .ffx-zg__panel {
+  scale: none;
+}
+
+/* ------------------------------------------------------------------------------------------------ Chapter XII: the Enemy Intent card and the disc strip */
+
+/*
+ * The card keeps its right edge (56 of the 1600 frame) and its width; its foot rises from 258 to 288 frame px (117.2 grid px above the stage's foot: y 244.8), 6.2 grid px above the first party card's top (251), the same GAP (6) the HUD's
+ * safe zones keep between panels (`hudSafeZones.GAP`). A two-line card is 39.3 grid px tall (measured at 2560 x 1440), so it spans y 205.5 to 244.8; a third line grows it upward (the foot is the anchor).
+ * 115 and 130: `text-size.css` grows the card about its bottom right and lifts it for today's party list (296 and 334); the F1 party list is 91 grid px tall and grows about its bottom right, so its top is 237.35 and 223.7, and the foot
+ * has to stand 6 above those: 231.35 and 217.7, which is 322 and 356 frame px (231.2 and 217.6). The selectors carry the `html[...]` prefix of the sheet they beat (one more class than its rule).
+ */
+.ffxhud.hud-f1 .ffx-omr:not(.ffx-omr--phone) .ffx-omr__intent {
+  bottom: 288px;
+}
+html[data-text-size='115']:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-omr:not(.ffx-omr--phone) .ffx-omr__intent {
+  bottom: 322px;
+}
+html[data-text-size='130']:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-omr:not(.ffx-omr--phone) .ffx-omr__intent {
+  bottom: 356px;
+}
+
+/*
+ * The disc strip (top, left 690 of the frame = 276 grid px, 185 wide: its right edge is 461, 4 under the turn strip's box at 100) grew about its top centre with the text size and, since the F1 strip grows LEFT from 625.5, met it at 115
+ * (the strip's box starts at 440.9, the old panel's right edge would be 471). It keeps its size and follows the turn strip's left edge: 160.5 grid px x (scale - 1) to the left, which is 401.25 frame px of the 1600 frame x (scale - 1),
+ * so the gap it has to the strip at 100 (read in the browser: about 11 grid px at 1600 x 900 between its gold rule and the TURN ORDER caption) is the gap it has at every size. At 115 it clears the grown ribbon (right edge 215) by 39 grid px;
+ * at 130 the band between the ribbon and the strip (181 grid px) is narrower than the panel (185), so the strip's left end reaches 9.2 grid px into the grown ribbon's end (carried, as the gauge's is).
+ */
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1 .ffx-omr:not(.ffx-omr--phone) .ffx-omr__strip {
+  scale: none;
+  translate: calc(-401.25px * (var(--pyr-ts) - 1)) 0;
+}

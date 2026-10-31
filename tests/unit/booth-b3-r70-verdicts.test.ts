@@ -5,6 +5,8 @@
  * (`PieceHolds.ts`, the reason and its "Lifts when"); a chapter with a major defect the treatment introduced comes off `TREATED_CHAPTERS` (its rows stay, unread); a small confirmed defect with an obvious fix is fixed with a test, otherwise the
  * piece is held. The result: TEN chapters are treated in release 70, FOUR are off the list, and two chapters gained a `cam` hold. This file pins that result as one table, so a later edit to the list or to a hold is a decision made here too.
  *
+ * **`booth-ffx-b4-hud` (2026-10-31, FFX only) brought two of the four back**: IX (`yojimbo-cavern`) and XII (`seymour-omnis`), whose defect was the F1 HUD's layout against their own panel (`src/ui/hudf1/hudf1-chapters.css`, `booth-ffx-b4-hud-layout.test.ts`, `docs/handoff/booth-ffx-b4-hud.md`). The release-70 table below stays as the ten; `B4_HUD` is the two; the list is their union. V and XI (FFX-2) are still off.
+ *
  * Cases for a withdrawn chapter that the lanes wrote are not deleted: they are gated with `itIf` / `describeIf` (`booth-r70-withdrawn.ts`) and run again, with no edit, the day one line puts the chapter back.
  */
 import { readFileSync } from 'node:fs';
@@ -27,7 +29,7 @@ import { WITHDRAWN_R70 } from './booth-r70-withdrawn.ts';
 
 afterEach(() => setTreatedScope(null));
 
-/** What release 70 treats and what each chapter holds, in the table's own order (the booth pair holds nothing: the approved target). */
+/** What release 70 treated and what each chapter held, in the table's own order (the booth pair holds nothing: the approved target). */
 const RELEASE_70: Readonly<Record<string, readonly TreatedPiece[]>> = {
   'seymour-flux': [], // Chapter I, FFX
   yunalesca: ['breath', 'cam', 'smear'], // Chapter II, FFX
@@ -41,23 +43,32 @@ const RELEASE_70: Readonly<Record<string, readonly TreatedPiece[]>> = {
   'ffx2-den-of-woe': ['cam', 'breath', 'moments'], // Chapter XV, FFX-2: `cam` added by the r70 verdict
 };
 
-describe('the result of the r70 verdicts: ten treated, four off the list, two cam holds added', () => {
-  it('release 70 treats exactly these ten chapters, each with the holds the table gives', () => {
-    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(Object.keys(RELEASE_70).sort());
-    for (const [id, held] of Object.entries(RELEASE_70)) {
+/** What `booth-ffx-b4-hud` brought back (FFX only), each with the holds its lane's table gives (`booth-ffx-b3a.md` for IX, `booth-ffx-b3b.md` for XII) and the release it is on the list from. */
+const B4_HUD: Readonly<Record<string, readonly TreatedPiece[]>> = {
+  'yojimbo-cavern': ['breath', 'cam', 'moments'], // Chapter IX, FFX: the Zanmato gauge stands between the F1 ribbon and the F1 turn strip
+  'seymour-omnis': ['breath', 'cam', 'moments'], // Chapter XII, FFX: the Enemy Intent card's foot stands 6 grid px above the first party card
+};
+
+describe('the result of the r70 verdicts: ten treated, four off the list, two cam holds added; then IX and XII back (booth-ffx-b4-hud)', () => {
+  it('release 70 treated these ten chapters and booth-ffx-b4-hud adds IX and XII (since r71): the list is the twelve, each with the holds the table gives', () => {
+    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual([...Object.keys(RELEASE_70), ...Object.keys(B4_HUD)].sort());
+    for (const [id, held] of Object.entries({ ...RELEASE_70, ...B4_HUD })) {
       expect(Object.keys(PIECE_HOLDS[id] ?? {}), id).toEqual([...held]);
       expect(getChapter(id)?.game, id).toBe(TREATED_CHAPTERS[id]!.game); // rule 14: the game the registry says
     }
+    for (const id of Object.keys(B4_HUD)) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r71' }); // FFX only (rule 14): the panels are FFX HUD panels
+    for (const id of Object.keys(RELEASE_70)) expect(TREATED_CHAPTERS[id]!.since, id).toMatch(/^r(60|69|70)$/); // release 70's ten keep the release they joined
   });
 
-  it('the games of the ten: FFX is Chapters I, II, III, VII, X and XIV; FFX-2 is Chapters IV, VI, XIII and XV', () => {
+  it('the games of the twelve: FFX is Chapters I, II, III, VII, IX, X, XII and XIV; FFX-2 is Chapters IV, VI, XIII and XV', () => {
     const ffx = Object.entries(TREATED_CHAPTERS).filter(([, e]) => e.game === 'ffx').map(([id]) => id).sort();
     const ffx2 = Object.entries(TREATED_CHAPTERS).filter(([, e]) => e.game === 'ffx2').map(([id]) => id).sort();
-    expect(ffx).toEqual(['braskas-final-aeon', 'isaaru-via-purifico', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'yunalesca']);
+    expect(ffx).toEqual(['braskas-final-aeon', 'isaaru-via-purifico', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'seymour-omnis', 'yojimbo-cavern', 'yunalesca']);
     expect(ffx2).toEqual(['ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-leblanc', 'ffx2-trema']);
   });
 
-  it('the four withdrawn chapters answer release 68 for every piece under both scopes, in the game the registry says, and keep their rows (look, holds) in the tables', () => {
+  it('the chapters still withdrawn (V and XI, FFX-2) answer release 68 for every piece under both scopes, in the game the registry says, and keep their rows (look, holds) in the tables', () => {
+    expect(Object.keys(WITHDRAWN_R70).sort()).toEqual(['ffx2-fallen-aeons', 'ffx2-vegnagun-shuyin']);
     for (const [id, w] of Object.entries(WITHDRAWN_R70)) {
       for (const scope of ['all', 'pack'] as const) {
         setTreatedScope(scope);

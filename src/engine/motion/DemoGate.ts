@@ -70,7 +70,7 @@ export interface TreatedEntry {
 
 /**
  * THE LIST. The booth pair (release 60 and 64: the pair is on from the first release that had the pack), Leblanc (release 69, `booth-leblanc`: Chapter VI, `ffx2-leblanc`, FFX-2; the HIDDEN experiment
- * `exp-leblanc` is not this chapter and is never listed) and, in batch 2 (release 70, merged as `booth-b2`), Lady Yunalesca (the FFX lane `booth-ffx-yunalesca`: Chapter II, `yunalesca`, FFX; the first FFX chapter beyond Chapter I; built on the release 69 base, hence "release 69" in that lane's comments) and the three FFX-2 chapters named below, and, in batch 3 (also release 70 at the integration, the FFX-2 lane `booth-ffx2-b3`), Trema (Chapter XIII, `ffx2-trema`, FFX-2). **The r70 verdict pass (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four of the fourteen back out (IX, XII, V and XI: a major each, below); ten are treated.** A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
+ * `exp-leblanc` is not this chapter and is never listed) and, in batch 2 (release 70, merged as `booth-b2`), Lady Yunalesca (the FFX lane `booth-ffx-yunalesca`: Chapter II, `yunalesca`, FFX; the first FFX chapter beyond Chapter I; built on the release 69 base, hence "release 69" in that lane's comments) and the three FFX-2 chapters named below, and, in batch 3 (also release 70 at the integration, the FFX-2 lane `booth-ffx2-b3`), Trema (Chapter XIII, `ffx2-trema`, FFX-2). **The r70 verdict pass (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four of the fourteen back out (IX, XII, V and XI: a major each, below); ten were treated in release 70, and Chapters IX and XII are back on `booth-ffx-b4-hud` (FFX only: the F1 HUD's layout against their own panels is fixed, `docs/handoff/booth-ffx-b4-hud.md`): twelve are treated.** A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
  */
 export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.freeze({
   'seymour-flux': { game: 'ffx', since: 'r60' },
@@ -79,12 +79,15 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
   // named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber (batch 3 shipped together with batch 2, in release 70, at the r70 integration).
   'seymour-anima-macalania': { game: 'ffx', since: 'r70' },
   'seymour-natus': { game: 'ffx', since: 'r70' },
-  // Chapter IX (Yojimbo, `yojimbo-cavern`) LEFT THIS LIST in the r70 verdict pass (2026-10-31, `docs/handoff/booth-b3.md` section 12): its Zanmato gauge panel ends against the F1 turn strip, a major the treatment introduced and release 69 does not have.
-  // Its rows (look, arena, holds, rim) stay in their tables, unread, and it answers `NOT_YET` in `tests/unit/booth-treated-chapters.test.ts` until the layout is fixed and one line puts it back.
+  // Chapter IX (Yojimbo, `yojimbo-cavern`, FFX only) LEFT THIS LIST in the r70 verdict pass (2026-10-31, `docs/handoff/booth-b3.md` section 12: its Zanmato gauge panel ended against the F1 turn strip, a major the treatment introduced) and is BACK on `booth-ffx-b4-hud`:
+  // the gauge now stands in the top band between the F1 ribbon and the F1 turn strip (`src/ui/hudf1/hudf1-chapters.css`; the anchor math is `tests/unit/booth-ffx-b4-hud-layout.test.ts`, the browser read is job HUD-1 of `docs/handoff/booth-ffx-b4-hud.md`). It holds the pieces named in {@link PIECE_HOLDS}.
+  'yojimbo-cavern': { game: 'ffx', since: 'r71' },
   // Batch 3b (`booth-ffx-b3b`, FFX only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter III (Braska's Final Aeon, seven links), Chapter XII (Seymour Omnis and the four Mortiphasm discs) and Chapter XIV (Isaaru's contest of aeons,
   // three links, Yuna alone). `since` is the batch's release number, the driver's to renumber.
   'braskas-final-aeon': { game: 'ffx', since: 'r70' },
-  // Chapter XII (Seymour Omnis, `seymour-omnis`) LEFT THIS LIST in the r70 verdict pass: the Enemy Intent card of the disc tracker clips the acting hero's HP numeral against the F1 party panel (a major, introduced; release 69 stacks the card above the panel). Rows stay, unread.
+  // Chapter XII (Seymour Omnis, `seymour-omnis`, FFX only) LEFT THIS LIST in the r70 verdict pass (the Enemy Intent card of the disc tracker clipped the acting hero's HP numeral against the F1 party panel, a major, introduced) and is BACK on `booth-ffx-b4-hud`:
+  // the card's foot now stands 6 grid px above the first party card at every text size (`hudf1-chapters.css`, `booth-ffx-b4-hud-layout.test.ts`, job HUD-1). It holds the pieces named in {@link PIECE_HOLDS}.
+  'seymour-omnis': { game: 'ffx', since: 'r71' },
   'isaaru-via-purifico': { game: 'ffx', since: 'r70' },
   'ffx2-bahamut': { game: 'ffx2', since: 'r60' },
   'ffx2-leblanc': { game: 'ffx2', since: 'r69' },
