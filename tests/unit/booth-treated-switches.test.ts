@@ -3,8 +3,8 @@
  * plumbing, Leblanc FFX-2 only). Each switch is forced ON the way its own tests force it, then the running chapter is named and the answer read:
  *
  *  - under `pack` (release 68's reach, `?treated=pack`, and a unit test with no page) a switch answers true in the booth pair and false in EVERY other chapter, Leblanc included: byte for byte what release 68 played;
- *  - under `all` it answers true in the booth pair (no piece of the approved target is ever held) and in Leblanc, and false in every other listed and hidden chapter; the pieces Leblanc holds are the staged breath and the
- *    directed camera (`DemoGate.PIECE_HOLDS`, each with its written reason), which answer false for her and true in the booth pair.
+ *  - under `all` it answers true in the booth pair (no piece of the approved target is ever held) and in Leblanc, and false in every other listed and hidden chapter; the pieces Leblanc holds are the staged breath, the
+ *    directed camera and the moments (`DemoGate.PIECE_HOLDS`, each with its written reason), which answer false for her and true in the booth pair.
  *
  * The browser has not been run for this (it is busy); the unit answers are the evidence that the gates moved and nothing else did.
  */
@@ -40,7 +40,7 @@ const reached = (scope: 'pack' | 'all'): readonly string[] => (scope === 'pack' 
 
 /** The order `readAll` answers in, and the pieces of it Leblanc holds (`DemoGate.PIECE_HOLDS`); every other piece plays for her. */
 const READ_ORDER = ['hud', 'look', 'rim', 'boss', 'curves', 'moments', 'smear', 'cam', 'staging', 'fx', 'audio', 'feel'] as const;
-const LEBLANC_HELD_READS: readonly string[] = ['cam'];
+const LEBLANC_HELD_READS: readonly string[] = ['cam', 'moments'];
 /** What a desktop with no word reads in this chapter: all twelve for the booth pair, all but her held pieces for Leblanc. */
 const wholeTreatment = (id: string): boolean[] => READ_ORDER.map((p) => !(id === 'ffx2-leblanc' && LEBLANC_HELD_READS.includes(p)));
 
@@ -99,7 +99,7 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(curvesOn(), `curves ${id}`).toBe(on);
       expect(realKind(), `real ${id}`).toBe(on ? 'snappy' : null);
       expect(inDemoChapter(id), `curves gate ${id}`).toBe(on);
-      expect(momentsOn(), `moments ${id}`).toBe(on);
+      expect(momentsOn(), `moments ${id}`).toBe(on && id !== 'ffx2-leblanc'); // one of her held pieces (the KO cut past the smear cap)
       expect(smearOn(), `smear ${id}`).toBe(on);
       expect(smearStyleNow(), `smear style ${id}`).toBe(on ? 'paint' : 'off');
       expect(newMotionOn(), `new motion ${id}`).toBe(on);
@@ -138,7 +138,7 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
   });
 });
 
-describe('the pieces Leblanc holds: the staged breath and the directed camera', () => {
+describe('the pieces Leblanc holds: the staged breath, the directed camera and the moments', () => {
   it('the breath stays today for her and plays in nobody else (the staging answers the piece, not only the chapter)', () => {
     allOn();
     setTreatedScope('all');
@@ -162,6 +162,19 @@ describe('the pieces Leblanc holds: the staged breath and the directed camera', 
     }
     setDemoChapter('exp-leblanc');
     expect(proCamOn()).toBe(false);
+  });
+
+  it('the moments (the KO cut and its rebound, the victory cheer) stay release 68 for her and play in the booth pair; the smear and the curves, which they only share a gate with, still reach her', () => {
+    allOn();
+    setTreatedScope('all');
+    for (const id of [...BOOTH, 'ffx2-leblanc']) {
+      setDemoChapter(id);
+      const held = id === 'ffx2-leblanc';
+      expect([momentsOn(), smearOn(), curvesOn(), newMotionOn()], id).toEqual([!held, true, true, true]);
+    }
+    setTreatedScope('pack');
+    setDemoChapter('ffx2-leblanc');
+    expect(momentsOn()).toBe(false);
   });
 });
 
@@ -265,7 +278,8 @@ describe("the lane-off words, ?pack=off and a phone still give release 62's fram
     readFrom('?pro=off');
     const [hud, look, rim, boss, curves, moments, smear, cam, staging, fx, audio] = readAll('ffx2-leblanc');
     expect([look, cam, staging]).toEqual([false, false, false]);
-    expect([hud, rim, boss, curves, moments, smear, fx, audio]).toEqual(new Array(8).fill(true));
+    expect([hud, rim, boss, curves, smear, fx, audio]).toEqual(new Array(7).fill(true));
+    expect(moments).toBe(false); // held for her, with or without a word
     readFrom('');
     setTreatedScope('pack');
     expect(readAll('ffx2-leblanc')).toEqual(new Array(12).fill(false));
