@@ -185,7 +185,7 @@ describe('the holds', () => {
     expect(treatedHold('yunalesca', 'cam')).toMatch(/PR-0307/);
     expect(treatedHold('yunalesca', 'cam')).toMatch(/J4/);
     expect(treatedHold('yunalesca', 'smear')).toMatch(/SCOPE_EXCEPTIONS/);
-    expect(treatedHold('yunalesca', 'smear')).toMatch(/yunalesca-all-anchor/);
+    expect(treatedHold('yunalesca', 'smear')).toMatch(/yunalesca-all-held-anchor/);
     for (const p of TREATED_PIECES) if (p !== 'breath' && p !== 'cam' && p !== 'smear') expect(treatedHold('yunalesca', p), p).toBeUndefined();
   });
 

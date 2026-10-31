@@ -259,7 +259,7 @@ describe('what must stay as it is', () => {
       expect(Object.keys(SCOPE_EXCEPTIONS), id).not.toContain(id);
       expect(WIDE_CHAPTERS, id).toContain(id);
     }
-    expect(Object.keys(SCOPE_EXCEPTIONS).sort()).toEqual(['evrae-airship', 'sin-face', 'yunalesca', 'ffx2-ixion-djose'].sort());
+    expect(Object.keys(SCOPE_EXCEPTIONS).sort()).toEqual(['sin-face', 'yunalesca', 'ffx2-ixion-djose'].sort()); // Evrae's exception was lifted in release 69 (a21829f5e), so it is no longer in the table
   });
 
   it("the MAX mix's framing is today's classification: Natus and Yojimbo are colossus masters, Seymour a hero; none keeps today's rig by name (`keepsToday`): the camera hold is the piece's, not the framing's", () => {

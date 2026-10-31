@@ -200,7 +200,7 @@ describe('what must stay as it is', () => {
   it('the swap exception that holds her stance look is still there, still names its lift job, and the treatment does not touch it (release 69\'s re-measure could not lift it)', () => {
     expect(scopeExcepted('yunalesca')).toBe(true);
     expect(SCOPE_EXCEPTIONS['yunalesca']).toMatch(/Lifts when/);
-    expect(SCOPE_EXCEPTIONS['yunalesca']).toMatch(/yunalesca-all-anchor/);
+    expect(SCOPE_EXCEPTIONS['yunalesca']).toMatch(/yunalesca-all-held-anchor/);
     expect(WIDE_CHAPTERS).toContain('yunalesca');
     setTreatedScope('all');
     expect(chapterInScope('yunalesca', 'wide')).toBe(false);
