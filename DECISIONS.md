@@ -16,16 +16,16 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1962 decisions in all: 1413 registry rows, 339 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1312 of the written decisions record a blanket yes.
+1981 decisions in all: 1419 registry rows, 352 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1330 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1837 |
+| adopted | 1856 |
 | proposed | 9 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 93 |
-| **All** | **1962** |
+| **All** | **1981** |
 
 | Area | Decisions |
 | --- | ---: |
@@ -34,26 +34,26 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | visuals | 169 |
 | camera | 76 |
 | audio | 160 |
-| ui | 221 |
+| ui | 222 |
 | story | 17 |
-| chapters | 276 |
+| chapters | 287 |
 | guide | 34 |
-| release | 99 |
+| release | 102 |
 | hosting | 18 |
-| process | 222 |
+| process | 223 |
 | critic | 43 |
 | data | 17 |
-| tech | 38 |
+| tech | 41 |
 | site | 21 |
-| **All** | **1962** |
+| **All** | **1981** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 1035 |
-| FFX only | 507 |
-| FFX-2 only | 402 |
+| both games | 1046 |
+| FFX only | 511 |
+| FFX-2 only | 406 |
 | FF7 hidden experiment | 18 |
-| **All** | **1962** |
+| **All** | **1981** |
 
 ## Standing rules in force
 
@@ -9116,7 +9116,7 @@ Thursday · 18 decisions
   - Source: The driver's call of 2026-10-29 about 07:55 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372), recorded as a driver …
 - <a id="d-1402"></a>**D-1402** — He hands the driver every executive decision for the next few days and goes with all its recommendations: the delegation of items 211 and 212 (“the couple days”) is extended to “the next few days” (both games)
   - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
-  - What changed: Item 214, about 13:30 EDT on 2026-10-29. The delegation of D-1365 and D-1372 is extended from “the next couple days” to “the next few days”: the driver makes every executive decision, takes its own recommendations as his yes, records each call as a driver call that is his to overturn, and keeps going. His own rules stay: a rig is judged by him in motion before it goes on (D-1378, D-1401), only he can give the listening verdict (D-1371) and nothing he will see, hear or feel is built before he has picked (hard rule 9). What followed under it: release 68’s records and the deep review of the live build (round 31, A-1085), the release 69 lanes built on branches (A-1086 to A-1089) and, on 2026-10-30, the booth treatment for every selectable chapter (D-1403 to D-1406). Nothing was released under this row. Update 2026-10-31: release 69 went live under it (A-1101), the driver's calls of item 216 are D-1407 to D-1413, and the booth treatment's batches 2 and 3 are built on branches (A-1104 to A-1110).
+  - What changed: Item 214, about 13:30 EDT on 2026-10-29. The delegation of D-1365 and D-1372 is extended from “the next couple days” to “the next few days”: the driver makes every executive decision, takes its own recommendations as his yes, records each call as a driver call that is his to overturn, and keeps going. His own rules stay: a rig is judged by him in motion before it goes on (D-1378, D-1401), only he can give the listening verdict (D-1371) and nothing he will see, hear or feel is built before he has picked (hard rule 9). What followed under it: release 68’s records and the deep review of the live build (round 31, A-1085), the release 69 lanes built on branches (A-1086 to A-1089) and, on 2026-10-30, the booth treatment for every selectable chapter (D-1403 to D-1406). Nothing was released under this row. Update 2026-10-31: release 69 went live under it (A-1101), the driver's calls of item 216 are D-1407 to D-1413, and the booth treatment's batches 2 and 3 are built on branches (A-1104 to A-1110). Update 2026-10-31 (evening): release 70 went live under it (A-1119); his words "ok keep going please" of the same day are D-1414; the driver's calls of items 216h to 216l are D-1415 to D-1419; booth batch 4 is built on branches (A-1123).
   - area process · both games · adopted · delivery in progress · see [D-1347](#d-1347), [D-1365](#d-1365), [D-1372](#d-1372), [D-1371](#d-1371) · refines [D-1372](#d-1372)
   - Source: Bailey, 2026-10-29 about 13:30 EDT (the decisions queue; the times are DRIVER-STATE.md’s date-stamped lines), typed in the chat, verbatim: “keep …
 
@@ -9188,7 +9188,7 @@ Friday · 33 decisions
     - delivery in progress · FFX
 - <a id="d-1411"></a>**D-1411** — DRIVER CALLs under his delegation, his to overturn: the calls on the pieces of booth batch 2 (FFX-2 Chapters V, XV and XI on origin/booth-ffx2-b2 5cc609617; FFX Chapter II on origin/booth-ffx-yunalesca adb29cdea), each its own part; batch 2 ships in release 70
   - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
-  - What changed: Item 216e, about 18:35 EDT on 2026-10-30. Batch 2 (D-1406) was built on the two lane branches and reviewed; these are the calls on what each chapter plays and what is held, each its own part below. Built, merged on origin/booth-b2 (0a43111e3, A-1106), not released.
+  - What changed: Item 216e, about 18:35 EDT on 2026-10-30. Batch 2 (D-1406) was built on the two lane branches and reviewed; these are the calls on what each chapter plays and what is held, each its own part below. Built, merged on origin/booth-b2 (0a43111e3, A-1106), not released. Update 2026-10-31: batch 2 shipped in release 70 (A-1119) with Chapters V and XI left off the list by the browser reads (D-1415/c; they come back in batch 4, D-1417/b); Chapters II and XV went live, XV with a cam hold added by the read (D-1415/b).
   - area chapters · both games · adopted · delivery in progress · see [D-1403](#d-1403), [D-1404](#d-1404), [D-1406](#d-1406) · refines [D-1406](#d-1406)
   - Source: docs/handoff/booth-ffx2-b2.md
   - <a id="d-1411-a"></a>**D-1411/a** — a: Chapter V (Vegnagun and Shuyin) keeps today's camera chapter-wide: the approved colossus camera (D-228) stays; its follower waits behind the cam hold
@@ -9237,11 +9237,11 @@ Friday · 33 decisions
 
 ### 2026-10-31
 
-Saturday · 8 decisions
+Saturday · 27 decisions
 
 - <a id="d-1413"></a>**D-1413** — DRIVER CALLs under his delegation, his to overturn: the calls on booth batch 3 (FFX Chapters VII, X and IX on origin/booth-ffx-b3a 587678940; FFX III, XII and XIV on origin/booth-ffx-b3b 919f5e72c; FFX-2 XIII on origin/booth-ffx2-b3 e2c8a494c), each its own part; batches 2 and 3 ship together as release 70
   - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
-  - What changed: Item 216g, about 00:15 EDT on 2026-10-31. Batch 3 (D-1404) was built as three lanes and reviewed; these are the calls on what each plays and holds and how it ships, each its own part below. The three lanes are merged with batch 2 on origin/booth-b3 (dfc2c5ed3, A-1110): fourteen treated chapters in all. Built, not released.
+  - What changed: Item 216g, about 00:15 EDT on 2026-10-31. Batch 3 (D-1404) was built as three lanes and reviewed; these are the calls on what each plays and holds and how it ships, each its own part below. The three lanes are merged with batch 2 on origin/booth-b3 (dfc2c5ed3, A-1110): fourteen treated chapters in all. Built, not released. Update 2026-10-31: batches 2 and 3 shipped together as release 70 (A-1119) after the two browser jobs (A-1112, A-1113): ten treated chapters in all, with IX, XII, V and XI off the list and Chapters X and XV holding the directed camera (D-1415).
   - area chapters · both games · adopted · delivery in progress · see [D-1403](#d-1403), [D-1404](#d-1404), [D-1406](#d-1406), [D-1411](#d-1411) · refines [D-1406](#d-1406)
   - Source: docs/handoff/booth-ffx-b3a.md
   - <a id="d-1413-a"></a>**D-1413/a** — a: the F1 ribbon names a formation's declared boss (Seymour in Chapter VII, not the first Guardian)
@@ -9260,3 +9260,68 @@ Saturday · 8 decisions
     - What changed: As in batch 2 (D-1411/d): the maps wait for the byte cuts; no art was edited and no art mirror was written by these lanes.
   - <a id="d-1413-g"></a>**D-1413/g** — g: batches 2 and 3 ship together as release 70 after a lean browser job set per chapter (about 20 minutes a chapter)
     - What changed: Eleven more chapters (II, III, V, VII, IX, X, XI, XII, XIII, XIV, XV) join the treated list in one release; the set is booth-b3.md section 7. The jobs run on origin/booth-b3 under the one browser lock before the release is cut. Ixion XVI, Evrae, the two Sin chapters and the Mirror Aeons (batch 4) are not in it.
+- <a id="d-1414"></a>**D-1414** — He says "ok keep going please": the delegation of D-1402 (the driver makes every executive decision for the next few days and goes with its own recommendations) stands exactly as it was; the words narrow and widen nothing (both games)
+  - Bailey: “ok keep going please”
+  - What changed: Typed in the chat on 2026-10-31; the time of day is not in the brief this records pass was given. It changes no rule: the delegation of 2026-10-29 about 13:30 EDT (D-1402) stays in force, the driver keeps making every executive decision and records each as a driver call that is his to overturn, and his own rules stay (a rig is judged by him in motion before it goes on, only he gives the listening verdict, nothing he will see, hear or feel is built before he has picked, hard rule 9). What followed under it on 2026-10-31: release 70 was integrated, reviewed, deployed and checked live (A-1116 to A-1120), the gap passes read the live build (A-1121, A-1122), booth batch 4 was built on branches (A-1123), and the driver's calls of items 216h to 216l are D-1415 to D-1419.
+  - area process · both games · adopted · delivery in progress · see [D-1402](#d-1402), [D-1347](#d-1347), [D-1365](#d-1365), [D-1372](#d-1372) · refines [D-1402](#d-1402)
+  - Source: Bailey, 2026-10-31, typed in the chat, verbatim: "ok keep going please". Relayed in the brief of the release 70 records pass (the AUTH NOTE of the …
+- <a id="d-1415"></a>**D-1415** — DRIVER CALL under his delegation, his to overturn: release 70 after its browser jobs (booth-b3 6d9534839): seven more chapters take the booth treatment (FFX II, III, VII, X, XIV; FFX-2 XIII, XV), Natus and the Den of Woe also hold the directed camera, and four chapters wait (FFX IX, XII; FFX-2 V, XI), each its own part
+  - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
+  - What changed: Item 216h, about 08:35 EDT on 2026-10-31. The two release 70 browser jobs (an FFX lane and an FFX-2 lane, A-1112 and A-1113) read the fourteen treated chapters of booth-b3 against live release 69; these are the calls on what ships, each its own part below. Parts a and b went live in release 70 (A-1119); part c is answered by the batch 4 lanes (D-1417), built on branches, not released.
+  - area chapters · both games · adopted · delivery in progress · see [D-1413](#d-1413), [D-1411](#d-1411), [D-1406](#d-1406), [D-1402](#d-1402) · refines [D-1413](#d-1413)
+  - Source: docs/handoff/booth-b3.md
+  - <a id="d-1415-a"></a>**D-1415/a** — a: seven more chapters take the booth treatment in release 70: FFX II Yunalesca, III Braska, VII Seymour and Anima, X Seymour Natus, XIV Isaaru; FFX-2 XIII Trema, XV the Den of Woe (ten treated chapters in all with I, IV and VI)
+    - What changed: Live since 13:29:45 EDT on 2026-10-31 (A-1119). Each plays the F1 HUD, the pro look, an arena grade per room, the boss card, the quiet ending, the real clips and the sound pass, with the held pieces written down in PieceHolds.ts, each with a 'Lifts when' (the staged breaths, the lighting maps, the KO moments where no cut was read, the directed camera where the plate has no slack). The room grades are the agents' own and Bailey has not judged them; the first-menu composites for him are in D:/Tools/pyrefly-scratch/2026-10-31/r70/for-bailey (local).
+    - delivery implemented
+  - <a id="d-1415-b"></a>**D-1415/b** — b: Chapter X (FFX Natus) and Chapter XV (FFX-2 Den of Woe) also hold the directed camera, because of what the browser read: Natus's victory close-up cut Kimahri at the top edge in 4 of 4 runs, and the Den's follower cropped Yuna in 5.4 percent of frames
+    - What changed: Both rows were added after the read and neither chapter was run again with its hold (disclosed in release 70's CHANGELOG entry). Chapter X: with Tidus as the last actor the close-up fills the frame height (11.8 to 19.2 percent of the width lit in the top 8 rows); Chapter XV: 107 of 1,968 frames outside at 2560 x 1440 (worst 92 px) against release 69's own 55 of 1,980. Today's rigs play in both.
+    - delivery implemented
+  - <a id="d-1415-c"></a>**D-1415/c** — c: four chapters wait off the list: FFX IX Yojimbo and XII Omnis (a HUD panel collision the live game does not have) and FFX-2 V Vegnagun and XI Fallen Aeons (the bold look clips the Farplane skies to a white halo); the next step is two HUD layout fixes and, for V and XI, the look held once a browser read shows no clipping, with lighter-look options shown to Bailey as stills before any re-grade
+    - What changed: Each is a major, introduced by the treatment and a regression against live: IX's Zanmato gauge ends against the F1 turn strip; XII's Enemy Intent card clips the acting hero's HP numeral (17 of 64 px at 2560); V's first menu has 13.5 percent of pixels above 240 luma against 2.7 on live (worse with ?pro=off, so the root is the bold look), and Shuyin's freeze cannot be read white on white; XI shows the same halo when the follower brings the burst into frame (19.1 percent above 235 against 1.5). Nothing release 69 had is lost. Answered by the batch 4 lanes (D-1417), built, not released.
+- <a id="d-1416"></a>**D-1416** — DRIVER CALL under his delegation, his to overturn: the renderer crash seen 3 times in an instrumented Leblanc run on live release 69 is carried as an unreproduced, disclosed unknown, and the browser-lock helper's staleness rule is fixed and crash capture added to the harness (tooling), each its own part
+  - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
+  - What changed: Item 216i, about 08:00 EDT on 2026-10-31. The crash probe and its skeptic pass (A-1114) ran 13 natural runs, 1 fault injection and 4 more skeptic runs on the live bundle dwcmDBjZ: 0 crashes in 21 treated-live browser runs that day (including the exact recipe, 3440 x 1440, a lost fight and a second visit), against 3 of 3 in the one local hour from 03:29 to 04:10. Part a records the call; part b is the tooling the probe found missing.
+  - area tech · FFX-2 · adopted · delivery in progress · see [D-1412](#d-1412), [D-1407](#d-1407), [D-1402](#d-1402) · refines [D-1407](#d-1407)
+  - Source: The driver's call of 2026-10-31 about 08:00 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …
+  - <a id="d-1416-a"></a>**D-1416/a** — a: the crash is carried as an unreproduced, disclosed unknown; a crash without the debug read would make it critical
+    - What changed: The debug read (__pyrefly.targeting().rects) is CPU-only projection math with no GPU resource and no pixel read; killing the audio service reproduces the console line but not the death of the renderer. The skeptic pass could not refute 'not reproduced, not critical, not confirmed debug-only': the only reading the data supports is a time-varying condition of that hour (Fisher one-sided p = 1/2024), and what it was is unknown. The deep review on the live build reads it again.
+  - <a id="d-1416-b"></a>**D-1416/b** — b: the review-browser lock's staleness rule is fixed (a live waiter is never displaced; stale means a dead pid or no write for 15 minutes) and the browser harnesses keep crash evidence (tooling)
+    - What changed: Built on origin/tools-lock-fair (a1c759ca1, A-1115): on 2026-10-31 a live lane waited from 09:18 to 11:00 UTC and was displaced eight times because the lock judged a waiter by the time it entered the line. Not merged to main. Tooling only, no game file.
+    - both games
+- <a id="d-1417"></a>**D-1417** — DRIVER CALLs under his delegation, his to overturn: booth batch 4 (origin/booth-ffx-b4-hud d874984e5, origin/booth-ffx2-b4-sky 646262ac6, origin/booth-b4-last 1a5e4c221), each its own part; release 71 is these chapters after a deep review settles releases 69 and 70
+  - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
+  - What changed: Item 216j, about 12:00 EDT on 2026-10-31. The three lanes and their merge on origin/booth-b4 (54c540808, A-1123) are built, reviewed and pushed; none is on main, none is released, and none has been read in a browser. Eighteen of the nineteen listed chapters would be treated; Chapter XVII stays out.
+  - area chapters · both games · adopted · delivery in progress · see [D-1415](#d-1415), [D-1411](#d-1411), [D-1413](#d-1413), [D-1406](#d-1406) · refines [D-1406](#d-1406)
+  - Source: The driver's call of 2026-10-31 about 12:00 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …
+  - <a id="d-1417-a"></a>**D-1417/a** — a: FFX IX Yojimbo and XII Omnis come back with their two HUD panels (the Zanmato gauge, the disc strip and the Enemy Intent card) moved clear of the F1 HUD in their own sheet; nothing moves in any other chapter
+    - What changed: origin/booth-ffx-b4-hud d874984e5; the item 216l call (D-1419) sets the text-size reach. The F1 layout of Chapters I and IV and every other treated chapter is untouched.
+    - FFX
+  - <a id="d-1417-b"></a>**D-1417/b** — b: FFX-2 V Vegnagun and XI Fallen Aeons come back with the light-adding pieces (the HD-2D look rows and the arena grade) held so their skies draw as release 69 draws them, and XI's follower camera held (it cropped Yuna in 46 of 1,969 frames)
+    - What changed: origin/booth-ffx2-b4-sky 646262ac6. The rest of the treatment plays; one line in the held-piece table lifts each hold once a browser read shows no clipping.
+    - FFX-2
+  - <a id="d-1417-c"></a>**D-1417/c** — c: three lighter sky grades for the Farplane are built behind a measuring word (?skygrade=a|b|c), off by default, to be filmed as stills for Bailey to pick from before any re-grade
+    - What changed: Nothing about the sky changes for a player. The look is his (hard rule 9): the pick waits for his stills. Another agent films them (D:/Tools/pyrefly-scratch/2026-10-31/sky-stills, local).
+    - FFX-2
+  - <a id="d-1417-d"></a>**D-1417/d** — d: FFX VIII Evrae, XVIII Sin's face, the Mirror Aeons and FFX-2 XVI Ixion join with holds: Ixion's room look waits for its own row beside Chapter IV; the Mirror Aeons' room looks wait for a 2x plate; Sin's face keeps release 68's boss card because the painting runs 8 percent behind the frame edge
+    - What changed: origin/booth-b4-last 1a5e4c221 (FFX for Evrae, Sin's face and the Mirror Aeons; FFX-2 for Ixion). Each hold carries a 'Lifts when'.
+  - <a id="d-1417-e"></a>**D-1417/e** — e: FFX XVII Sin's Fins and Core stays out (the Fin plate sits on the F1 turn strip and the flight plate is brighter than the Farplane plate that clipped)
+    - What changed: No line in the treated list; it plays release 69's frame.
+    - delivery not scheduled · FFX
+  - <a id="d-1417-f"></a>**D-1417/f** — f: release 71 is these chapters, after a deep review on the live build settles releases 69 and 70 (a third deploy is refused until then) and after their browser reads
+    - What changed: origin/booth-b4 (54c540808) merges the three lanes. The browser reads of IX, XII, V, XI, VIII, XVIII, the Mirror Aeons and XVI come before the release.
+- <a id="d-1418"></a>**D-1418** — DRIVER CALLs under his delegation, his to overturn: release 70 deploys on its focused review's SHIP, and the review's two continuity readings that were worse than live are rated polish and carried to release 71, each its own part
+  - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
+  - What changed: Item 216k, recorded in the queue as about 13:50 EDT on 2026-10-31; the deploy line reads 13:29:45 EDT (17:29:45Z). The focused review of e3f51bf18 (A-1118, about 270 minutes: all 14 chapters played from the title by real keys, 0 console errors, the booth pair and Leblanc as release 69) said SHIP with the changed area UNVERIFIED; the deploy followed (A-1119) and the live check passed (A-1120).
+  - area release · both games · adopted · delivery in progress · see [D-1415](#d-1415), [D-931](#d-931), [D-1402](#d-1402) · refines [D-1415](#d-1415)
+  - Source: critic/reviews/e3f51bf18-focused.json
+  - <a id="d-1418-a"></a>**D-1418/a** — a: release 70 deploys on the focused review's SHIP (no critical defect introduced and no major regression against live in what was measured)
+    - What changed: Live at https://echoesofspira.com since 2026-10-31T17:29:45Z (main e3f51bf18, bundle UNVtEttT). It is the second deploy while the deep review of the live build is owed (releases 69 and 70 share it), so a third deploy is refused until that review is settled.
+    - delivery implemented
+  - <a id="d-1418-b"></a>**D-1418/b** — b: R70-C1 (Braska's Final Aeon continuity) and R70-C2 (Isaaru's one 90 px Ixion foot jerk) are rated polish, not major, and carried to release 71; the deep review on the live build re-reads both
+    - What changed: Update 2026-10-31, from the gap passes on the live build (A-1121, A-1122), which correct the 'likely a camera cut' reading of R70-C1 in the call above: Braska's one-frame hops are not camera cuts; they come from the approved Chapter I Tidus clips now playing in Chapter III (46 hops of 100 px or more on the treated build against 1 on release 69's look), minor, introduced and a regression. Isaaru's jerk is the lying body's floor slide at Ixion's knock-out (ProneLay), not the smear and not a motion lane; polish. Both stay rated polish and carried.
+    - FFX
+- <a id="d-1419"></a>**D-1419** — DRIVER CALL under his delegation, his to overturn: in FFX Chapters IX Yojimbo and XII Omnis the new battle HUD is used up to TEXT SIZE 115; at 130 those two chapters draw today's HUD, and a narrower gauge and strip that fit at 130 need a mockup for Bailey before they are built (FFX only)
+  - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
+  - What changed: Item 216l, about 15:00 EDT on 2026-10-31. At TEXT SIZE 130 Chapter IX's Zanmato gauge and Chapter XII's disc strip reached about 30 px into the boss ribbon at 2560 x 1440. Built on origin/booth-b4 (c3be6a7ae: the two chapters keep today's HUD above TEXT SIZE 115; the other treated chapters are untouched), not released. A narrower design is a perceivable change: it gets a mockup and Bailey's pick first (hard rule 9).
+  - area ui · FFX · adopted · delivery in progress · see [D-1417](#d-1417), [D-1415](#d-1415) · refines [D-1417](#d-1417)
+  - Source: The driver's call of 2026-10-31 about 15:00 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …

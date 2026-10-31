@@ -8,39 +8,34 @@
 | | |
 |---|---|
 | Site | https://echoesofspira.com/ |
-| Commit | `6321b2578` (Release 69 (r69)) |
-| Bundle | `dwcmDBjZ` |
-| Deployed | 2026-10-31T06:09:39.720Z (2026-10-31 02:09 EDT) |
-| Deploy log | `docs/deploys.log` line 86: cloudflare, 4830 art files |
-| Artifact (SHA-256) | `17d0a142380cd8001e1a0a9d7b73d388731e926ba055c5d4929b4b93090b703e` |
+| Commit | `e3f51bf18` (Release 70 (r70)) |
+| Bundle | `UNVtEttT` |
+| Deployed | 2026-10-31T17:29:45.848Z (2026-10-31 13:29 EDT) |
+| Deploy log | `docs/deploys.log` line 87: cloudflare, 4830 art files |
+| Artifact (SHA-256) | `5720fa8287425ebb9f9b1575590436bf66d7a245d686bca9c6471beab55d1fe4` |
 | The deploy's own byte check | PASS (57 files compared with the build) |
-| Marker | `critic/pending/6321b2578.json` (pending) |
+| Marker | `critic/pending/e3f51bf18.json` (pending) |
 | Owner override | none |
-| CHANGELOG entry | 2026-10-30 · Release 69 (r69), a revived figure stops popping sideways, a phone waits less before a fight, Evrae's fight changes pose more cleanly, and Leblanc's chapter gets the booth treatment (each item says which game; the revive fix and Evrae are FFX only, Leblanc's chapter is FFX-2 only) |
-| Focused review | critic/reviews/6321b2578-focused.json: ship SHIP, changed area UNVERIFIED |
-| Live check | critic/reviews/6321b2578-live.json: deployment PASS |
+| CHANGELOG entry | 2026-10-31 · Release 70 (r70), the booth treatment reaches seven more chapters: five of FFX's (II Yunalesca, III Braska's Final Aeon, VII Seymour and Anima, X Seymour Natus, XIV Isaaru) and two of FFX-2's (XIII Trema, XV the Den of Woe), each with the pieces it is not ready for held back and written down; four more chapters were read in a browser and left off (each item says which game) |
+| Focused review | critic/reviews/e3f51bf18-focused.json: ship SHIP, changed area UNVERIFIED |
+| Live check | critic/reviews/e3f51bf18-live.json: deployment PASS |
 
-Is this commit on main? `git merge-base --is-ancestor 6321b2578 origin/main` exits 0 when it is.
+Is this commit on main? `git merge-base --is-ancestor e3f51bf18 origin/main` exits 0 when it is.
 
 ## Review obligations still open
 
 | Build | Obligation | What it needs |
 |---|---|---|
-| `6321b2578` | focused | acceptance of the changed area |
-| `6321b2578` | deep | deep review of every affected chapter and system |
+| `e3f51bf18` | focused | acceptance of the changed area |
+| `e3f51bf18` | deep (carries 1 earlier builds) | deep review of every affected chapter and system |
 
-The ledger counts 1 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 2 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
-From `critic/reviews/6321b2578-focused.json` (a major that is not a regression is disclosed and carried into the next batch):
+None: `critic/reviews/e3f51bf18-focused.json` lists no major or critical issue.
 
-| Issue | Severity | Introduced by this build | Regression against the previous live build | What |
-|---|---|---|---|---|
-| R69-C1 | major | no | no | Evrae: 19 swaps change an unregistered head by more than the tolerance (CHK-026) |
-| R69-C2 | major | no | no | Chapter I: 2 head swaps and 1 stature outside the band (CHK-026), as release 68 |
-
-## Branches in flight (as of 2026-10-31 04:35 EDT, the release 69 records pass (release 69 live; release 70 = booth batches 2 and 3, built on branches))
+## Branches in flight (as of 2026-10-31 18:20 EDT, the release 70 records pass (release 70 live; release 71 = booth batch 4, built on branches, not browser-read))
 
 Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.
 
@@ -58,13 +53,11 @@ Kept by hand by whoever records a pass; tools/live-record.mjs prints it into doc
 | `saves-portable` | `c1852fa05` | both (save-data class) | ChatGPT point 9: export and import a save as a checksummed file behind ?saveport=on, off by default; NOT merged into r68-int or release 68 (D-1379); a browser pass and a deep review are owed before the word comes off (A-1054) |
 | `rigs-v2` | `9f90c3441` | both (Tidus FFX, Rikku Dark Knight FFX-2) | the party rig pilots rebuilt (tidus-v2, rikku-dark-knight-v2 in D:/pyrefly-art-rigs) behind ?partyrigs=v2 with a motion audit; pushed; OUT of release 68 (D-1398): the clips (A-1073) show 0 ghost frames but a cut from standing to lying at the knock-out and four broken frames on Rikku's return (D-1401); nothing installed |
 | `rigs-v3` | `f2dd94f79` | both (Tidus FFX, Rikku Dark Knight FFX-2) | pushed; three rounds done on 2026-10-29 and 10-30 (A-1089): rigs-v2 on r68-final plus the painting’s knock-out topple and rise for a rig, the held pose through each cut, the settle before a KO from a flinch and the harness’s stature reading for rigs (D-1401); behind ?partyrigs=, off by default; not merged, nothing installed; the clips for him come first |
-| `booth-b3` | `dfc2c5ed3` | per chapter: FFX for II, III, VII, IX, X, XII, XIV; FFX-2 for V, XI, XIII, XV; the merges, tables, tests, the knock-out rule and the cross-lane checks both games | pushed; batches 1 to 3 of the booth treatment merged into one release 70 candidate on 2026-10-31 (A-1110, D-1411, D-1413): fourteen treated chapters (the booth pair, Leblanc, and eleven new), PIECE_HOLDS moved to PieceHolds.ts, the knock-out rule as a test, the review fixes; full suite green on 45bff5b61; not merged to main, not deployed; the lean browser jobs per chapter (booth-b3.md section 7) have not run |
-| `booth-b2` | `0a43111e3` | FFX for Chapter II; FFX-2 for Chapters V, XV and XI; the plumbing both games | pushed; batch 2 of the booth treatment merged with the fixed booth-leblanc and the knock-out rule applied (A-1106, D-1411); inside booth-b3; not merged to main, not deployed |
-| `booth-ffx2-b2` | `5cc609617` | FFX-2 (Chapters V, XV and XI) | pushed; the lane of batch 2 for the three FFX-2 chapters (A-1104); inside booth-b2; not merged to main |
-| `booth-ffx-yunalesca` | `adb29cdea` | FFX (Chapter II) | pushed; the lane of batch 2 for Lady Yunalesca (A-1105); inside booth-b2; not merged to main |
-| `booth-ffx-b3a` | `587678940` | FFX (Chapters VII, X and IX); the declared-boss store for the F1 ribbon is both games | pushed; batch 3a (A-1107, D-1413); inside booth-b3; not merged to main |
-| `booth-ffx-b3b` | `919f5e72c` | FFX (Chapters III, XII and XIV) | pushed; batch 3b (A-1108, D-1413); inside booth-b3; not merged to main |
-| `booth-ffx2-b3` | `e2c8a494c` | FFX-2 (Chapter XIII, Trema) | pushed; batch 3 for Trema (A-1109, D-1413); inside booth-b3; not merged to main |
+| `booth-b4` | `54c540808` | per chapter: FFX for VIII, IX, XII, XVIII and the Mirror Aeons; FFX-2 for V, XI and XVI; the merges, tables, tests and cross-lane checks both games | pushed; batch 4 of the booth treatment merged on 2026-10-31 (A-1123, D-1417, D-1419): eighteen of the nineteen listed chapters treated, Chapter XVII out, three lighter sky grades behind ?skygrade (off by default); full suite green on ed25c84b2 (1,803 files, 28,130 tests); not merged to main, not deployed, no browser read yet; release 71, after a deep review on the live build settles releases 69 and 70 |
+| `booth-ffx-b4-hud` | `d874984e5` | FFX only (Chapters IX and XII) | pushed; a lane of booth-b4 (A-1123): the F1 HUD fits the Zanmato gauge and the Enemy Intent card, the two panels keep their skew pivot on the centre at TEXT SIZE 115 and 130; merged in booth-b4, not on main |
+| `booth-ffx2-b4-sky` | `646262ac6` | FFX-2 only (Chapters V and XI) | pushed; a lane of booth-b4 (A-1123): both chapters back on the treated list with the look held so the Farplane sky draws as release 69 draws it, XI’s follower held, three lighter sky grades behind ?skygrade=a\|b\|c (off); the pick of a sky is his (stills first); merged in booth-b4, not on main |
+| `booth-b4-last` | `1a5e4c221` | FFX for Evrae, Sin’s face and the Mirror Aeons; FFX-2 for Ixion XVI | pushed; a lane of booth-b4 (A-1123): four of the last five listed chapters with written holds, Sin’s Fins and Core stays out; merged in booth-b4, not on main |
+| `tools-lock-fair` | `a1c759ca1` | both (tooling) | pushed; the review-browser lock never displaces a live waiter and the browser harnesses keep crash evidence (A-1115, D-1416/b); no game file; not merged |
 
 Nothing on this list is live. `node tools/live-record.mjs --branches` compares the tips with git.
 
@@ -72,9 +65,9 @@ Nothing on this list is live. `node tools/live-record.mjs --branches` compares t
 
 | Deployed (UTC) | Commit | Bundle | Log line |
 |---|---|---|---|
+| 2026-10-31T17:29:45.848Z | `e3f51bf18` | `UNVtEttT` | 87 |
 | 2026-10-31T06:09:39.720Z | `6321b2578` | `dwcmDBjZ` | 86 |
 | 2026-10-29T14:45:49.392Z | `2a9340249` | `CahDxk82` | 85 |
 | 2026-10-29T01:15:32.273Z | `04631aedf` | `B3DkcOaU` | 84 |
 | 2026-10-28T06:50:44.901Z | `2b48cee95` | `BwPs1UaV` | 83 |
 | 2026-10-28T01:00:54.005Z | `eaf599d0c` | `8rsIfOcP` | 82 |
-| 2026-10-25T13:16:33.389Z | `e9907cad8` | `BygGxbJE` | 81 |
