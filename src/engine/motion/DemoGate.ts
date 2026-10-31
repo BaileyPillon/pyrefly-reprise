@@ -70,7 +70,7 @@ export interface TreatedEntry {
 
 /**
  * THE LIST. The booth pair (release 60 and 64: the pair is on from the first release that had the pack), Leblanc (release 69, `booth-leblanc`: Chapter VI, `ffx2-leblanc`, FFX-2; the HIDDEN experiment
- * `exp-leblanc` is not this chapter and is never listed) and, in batch 2 (release 70, merged as `booth-b2`), Lady Yunalesca (the FFX lane `booth-ffx-yunalesca`: Chapter II, `yunalesca`, FFX; the first FFX chapter beyond Chapter I; built on the release 69 base, hence "release 69" in that lane's comments) and the three FFX-2 chapters named below, and, in batch 3 (also release 70 at the integration, the FFX-2 lane `booth-ffx2-b3`), Trema (Chapter XIII, `ffx2-trema`, FFX-2). **The r70 verdict pass (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four of the fourteen back out (IX, XII, V and XI: a major each, below); ten are treated.** A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
+ * `exp-leblanc` is not this chapter and is never listed) and, in batch 2 (release 70, merged as `booth-b2`), Lady Yunalesca (the FFX lane `booth-ffx-yunalesca`: Chapter II, `yunalesca`, FFX; the first FFX chapter beyond Chapter I; built on the release 69 base, hence "release 69" in that lane's comments) and the three FFX-2 chapters named below, and, in batch 3 (also release 70 at the integration, the FFX-2 lane `booth-ffx2-b3`), Trema (Chapter XIII, `ffx2-trema`, FFX-2). **The r70 verdict pass (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four of the fourteen back out (IX, XII, V and XI: a major each, below); ten are treated.** **The last five listed chapters (`booth-b4-last`, `docs/handoff/booth-b4-last.md`) add four with written holds (Chapters VIII, XVIII and 27 FFX, Chapter XVI FFX-2: fourteen are treated); Chapter XVII stays out.** A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
  */
 export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.freeze({
   'seymour-flux': { game: 'ffx', since: 'r60' },
@@ -86,6 +86,11 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
   'braskas-final-aeon': { game: 'ffx', since: 'r70' },
   // Chapter XII (Seymour Omnis, `seymour-omnis`) LEFT THIS LIST in the r70 verdict pass: the Enemy Intent card of the disc tracker clips the acting hero's HP numeral against the F1 party panel (a major, introduced; release 69 stacks the card above the panel). Rows stay, unread.
   'isaaru-via-purifico': { game: 'ffx', since: 'r70' },
+  // The last five listed chapters, the FFX lane `booth-b4-last` (FFX only; Bailey 2026-10-30: the booth treatment for every listed chapter; the holds are in `PieceHoldsLast.ts`): Chapter VIII (Evrae, on the Fahrenheit's deck), Chapter XVIII (Sin's face, link 4 on the same deck over the Bevelle plate) and
+  // the Mirror Aeons chapter (Chapter 27 in the list: two plates, no @2x master for the first). Chapter XVII (Sin's Fins and Core, `sin-fins-core`) does NOT join: its Fin plate meets the F1 turn strip and its flight plate is the brightest in the game (`tests/unit/booth-treated-chapters.test.ts` `NOT_YET`). `since` is the batch's release number.
+  'evrae-airship': { game: 'ffx', since: 'r71' },
+  'sin-face': { game: 'ffx', since: 'r71' },
+  'mirror-aeons': { game: 'ffx', since: 'r71' },
   'ffx2-bahamut': { game: 'ffx2', since: 'r60' },
   'ffx2-leblanc': { game: 'ffx2', since: 'r69' },
   // Batch 2, the FFX-2 lane `booth-ffx2-b2` (all FFX-2 only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter V (Vegnagun and Shuyin, five links), Chapter XV (the Den of Woe, three shades) and Chapter XI (the Fallen Aeons,
@@ -96,6 +101,9 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
   // Batch 3, the FFX-2 lane `booth-ffx2-b3` (FFX-2 only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter XIII (Trema, Cloister 100 of the Via Infinito, two links: Paragon then Trema; the party Yuna Dark Knight, Rikku Alchemist, Paine Dark Knight, two dresses the
   // treatment has not met). It holds the pieces named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber.
   'ffx2-trema': { game: 'ffx2', since: 'r70' },
+  // The last five listed chapters, the FFX-2 item of `booth-b4-last` (FFX-2 only; Bailey 2026-10-30): Chapter XVI (Ixion at Djose, one link and a story close): the plate is a provisional one and Ixion's is a swap exception, so the room looks, the follower, the breath, the knock-out's cut and the smear planner wait
+  // behind written holds (`PieceHoldsLast.ts`). `since` is the batch's release number.
+  'ffx2-ixion-djose': { game: 'ffx2', since: 'r71' },
 });
 
 // {@link PIECE_HOLDS}, the written holds, lives in `PieceHolds.ts` (moved out when batch 3 passed the 400-line house limit) and is re-exported here, so every reader imports it from this module as before.

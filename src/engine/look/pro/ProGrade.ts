@@ -18,6 +18,7 @@ import type { GradeRecipe } from '../LookGrades.ts';
 import type { Rgb } from '../LookConfig.ts';
 import { PRO_ARENA_FFX_B3A } from './ProGradeFfxB3a.ts'; // batch 3a's three FFX rooms (this file would pass 400 lines with them)
 import { FFX_B3B_ARENA } from './ProGradeFfx.ts'; // batch 3b's three FFX rows (a type-only import back: no runtime cycle)
+import { FFX_LAST_ARENA } from './ProGradeFfxLast.ts'; // the last five listed chapters' two FFX rows (the deck's)
 
 const clamp01 = (x: number): number => (x < 0 ? 0 : x > 1 ? 1 : x);
 const smooth = (a: number, b: number, x: number): number => {
@@ -343,6 +344,7 @@ export const PRO_ARENA: Readonly<Record<string, ProRoom>> = {
   },
   // Batch 3b (`booth-ffx-b3b`, FFX only): Dream's End, the Garden of Pain and the Via Purifico, in `ProGradeFfx.ts` (this file stood at 365 lines).
   ...FFX_B3B_ARENA,
+  ...FFX_LAST_ARENA, // the deck's two rooms (`booth-b4-last`)
   // Batch 3 (FFX-2 only; `booth-ffx2-b3`, Bailey 2026-10-30). Chapter XIII, Cloister 100 of the Via Infinito: the Bevelle plate repainted (the same hall, the same skylight above the frame), so the grammar is Chapter IV's, one cool cone from the skylight and the rest to deep shadow and haze,
   // in the repaint's own colours: blue-black with the skylight's cyan-white kept, the steel blue (hue 205, three quarters of the plate's saturated pixels) held under full saturation, and the gold of the banners and the medallion (hue 38) left as the one warm accent. The skylight's glyph is the
   // plate's one star at the top of the hall (found at u 0.503, v 0.064 from the top: above the frame's top edge at the idle rig, frame v 1.16, so the cone starts at the edge as Chapter IV's does, at the skylight's frame u, 0.490 by the pinhole read less the 0.011 by which Chapter IV's

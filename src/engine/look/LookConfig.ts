@@ -52,6 +52,9 @@ export const CHAPTER_LOOKS: Readonly<Record<string, { name: LookName; strength: 
   'ffx2-fallen-aeons': { name: 'hd2d', strength: 'bold' },
   // Batch 3 (`booth-ffx2-b3`, FFX-2 only; Bailey 2026-10-30): Chapter XIII (Cloister 100 of the Via Infinito, scene `via-infinito`). Same rule: played only while the treatment reaches the chapter.
   'ffx2-trema': { name: 'hd2d', strength: 'bold' },
+  // The last five listed chapters (`booth-b4-last`, FFX; Bailey 2026-10-30): Chapter VIII (Evrae) and Chapter XVIII (Sin's face), both on the Fahrenheit's deck. Played only while the treatment reaches the chapter. The Mirror Aeons chapter and Chapter XVI (Ixion, FFX-2) hold the look (`PieceHoldsLast.ts`: a two-plate room and a provisional plate), so they have no row.
+  'evrae-airship': { name: 'hd2d', strength: 'bold' },
+  'sin-face': { name: 'hd2d', strength: 'bold' },
 };
 
 /** The look a chapter plays with no `look` key in the address, or null (today's frame): a row of {@link CHAPTER_LOOKS} for a chapter the treatment reaches (`DemoGate.isTreatedChapter`, piece `hd2d`). */

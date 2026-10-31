@@ -8,6 +8,7 @@
  */
 
 import type { TreatedPiece } from './DemoGate.ts';
+import { LAST_HOLDS } from './PieceHoldsLast.ts'; // the last five listed chapters' holds (`booth-b4-last`): one data file per batch, spread in below
 
 /**
  * Pieces a treated chapter does not play yet, each with the written reason and what lifts it (the shape of `SwapSwitch.SCOPE_EXCEPTIONS`: a reason of 80 characters or more, ending in "Lifts when ..."). A held
@@ -248,4 +249,6 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'and a cut is excused up to 0.75 of the drawn height; in link 2 (Trema, today\'s rig, the girls about 0.31 of the frame height, 280 px) half the drawn height binds, about 140 px. The girls\' Garment Grids also field Gunner and Thief (all three girls: the grid\'s Gunner and Thief nodes), the two paintings the harness read in Leblanc at Rikku Thief 0.61 to 0.63 and Yuna Gunner 0.50 to 0.52, over the half-height cap that link 2 applies. With nothing to clear the three dresses, let alone those two, the piece is held: a knock-out is today\'s plain cross and the held victory keeps the stance without the stand-down\'s small settle (the quiet title and the pull-back belong to `ending` and stay). ' +
       'Lifts when a browser run of each girl\'s knock-out in BOTH links (job J7 of docs/handoff/booth-ffx2-b3.md) reads every hurt-to-ko swap jerk inside the cap that link applies (CHK-027 excused as a planned smear), or the cut is planned with a shorter step.',
   }),
+  // The last five listed chapters (`booth-b4-last`, release 71): Chapters VIII, XVIII, 27 (Mirror Aeons) and XVI, in `PieceHoldsLast.ts` (Chapter XVII does not join, so it has no rows).
+  ...LAST_HOLDS,
 });

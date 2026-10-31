@@ -327,7 +327,7 @@ describe('the boss and the rim', () => {
     setTreatedScope('pack');
     expect(rim('seymour-omnis', 'enemy')).toBe(false);
     setTreatedScope('all');
-    setDemoChapter('mirror-aeons'); // a chapter nobody has treated yet
+    setDemoChapter('sinspawn-gui'); // an untreated chapter: the hidden Gui, which the treatment can never reach (booth-b4-last: Mirror Aeons was the control here until it joined)
     expect(rim('seymour-omnis', 'enemy')).toBe(false);
   });
 

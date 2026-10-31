@@ -305,7 +305,7 @@ describe('the foes draw no screen-space rim in their own chapter, and nowhere el
 
   it('under pack (release 68) and in any other chapter the same foes keep their rim', () => {
     setBossClean('clean');
-    for (const [scope, chapter] of [['pack', 'ffx2-vegnagun-shuyin'], ['pack', 'ffx2-den-of-woe'], ['pack', 'ffx2-fallen-aeons'], ['all', 'ffx2-ixion-djose'], ['all', 'exp-leblanc']] as const) {
+    for (const [scope, chapter] of [['pack', 'ffx2-vegnagun-shuyin'], ['pack', 'ffx2-den-of-woe'], ['pack', 'ffx2-fallen-aeons'], ['all', 'ffx2-valefor-besaid'], ['all', 'exp-leblanc']] as const) {
       setTreatedScope(scope);
       setDemoChapter(chapter);
       for (const foe of ['vegnagun-tail', 'x2-shiva', 'sandy']) {

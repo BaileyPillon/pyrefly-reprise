@@ -88,7 +88,7 @@ describe('the F1 ribbon names the right foe in every link of every treated chapt
     }
   });
 
-  it('the declared bosses of the treated chapters are exactly Chapter VII\'s Seymour (the others name the first visible foe), and the ribbon of no treated link is a part or a waiting form', async () => {
+  it('the declared bosses of the treated chapters are exactly Chapter VII\'s Seymour and the Mirror Aeons chapter\'s Dark Yojimbo (the others name the first visible foe), and the ribbon of no treated link is a part or a waiting form', async () => {
     const declared: string[] = [];
     for (const id of BRANCH) {
       for (const l of await links(id)) {
@@ -99,7 +99,7 @@ describe('the F1 ribbon names the right foe in every link of every treated chapt
         expect(foe.flags.hidden ?? false, `${id} link ${l.index} ${l.ribbon}`).toBe(false);
       }
     }
-    expect(declared).toEqual(['seymour-anima-macalania:1:seymour-macalania']);
+    expect(declared).toEqual(['seymour-anima-macalania:1:seymour-macalania', 'mirror-aeons:2:dark-yojimbo']); // booth-b4-last: the Mirror Aeons chapter's second link declares Dark Yojimbo (his formation stands Daigoro beside him)
   });
 
   it('where a formation writes a headline for its reveal plate, the ribbon agrees with it except in the listed links', async () => {
@@ -123,11 +123,11 @@ describe('the follower\'s stand-down table and the hold guard over the merged li
     expect(Object.keys(TREATED_CHAPTERS).filter((id) => ids.includes(id))).toEqual(['ffx2-trema']); // and only Chapter XIII's stand-down is read now
   });
 
-  it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list was fourteen; the r70 verdicts left ten)', () => {
-    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(10);
+  it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list was fourteen; the r70 verdicts left ten; booth-b4-last made it fourteen again)', () => {
+    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(14);
     const exceptions = Object.keys(SCOPE_EXCEPTIONS);
     const both = Object.keys(TREATED_CHAPTERS).filter((id) => exceptions.includes(id));
-    expect(both).toEqual(['yunalesca']); // evrae-airship, sin-face and ffx2-ixion-djose are exceptions that the treatment has not reached
+    expect(both).toEqual(['yunalesca', 'sin-face', 'ffx2-ixion-djose']); // booth-b4-last: Sin's face and Ixion at Djose joined, each holding the smear (Evrae left the exceptions in release 69)
     for (const id of both) expect(treatedHold(id, 'smear'), id).toBeDefined();
   });
 

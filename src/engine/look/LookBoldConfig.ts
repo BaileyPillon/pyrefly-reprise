@@ -199,6 +199,10 @@ export const ROOM_BOLD: Readonly<Record<string, RoomBold>> = {
   // this room, so the canon table's pyreflies are the air and the sparks are not added; whether the hall wants more pyreflies than the lens band is a content addition that needs Bailey's yes (rule 10). The one line to give the banners sparks anyway is `embers: [[0.086, 0.565], [0.935, 0.56]]` (the
   // banners' centroids on the plate, from the top-left). The room has no depth map in the shipped manifest (`lightMaps.depth` lists Bevelle and Gagazet), so the fog is the grade's and the arena's haze, not depth.
   'via-infinito': { gloss: 0.7, rim: [0.4, 0.78, 1.0], embers: [], fog: [0.2, 0.3, 0.5], shadow: [0.1, 0.14, 0.32], fogScale: 1, driftPx: 3 },
+  // The last five listed chapters (`booth-b4-last`, FFX only; `docs/handoff/booth-b4-last.md` section 3). NO EMBERS in either room, for the source's reason: `research/ffx-vs-ffx2-presentation.md` section 8 ("The airship deck") gives the open sky no pyreflies (`pyreflyCanon.ts`: `evrae-airship-deck`, `sin-fahrenheit-flight` and `sin-fahrenheit-bevelle` are 'absent', "Open sky"), and the deck draws its own clouds and haze. Gloss: the deck is a hard-edged metal platform
+  // (`evrae-airship-sky.ts`), a moderate sheen (0.45); the rim is each room's own key (Evrae's warm cream `0xfff0e2` key, the dusk's amber); the fogs are held down (the plates are luminous) and tinted to the sky (blue at noon, lilac at dusk); the shadows the room's own dark, not black.
+  'evrae-airship-deck': { gloss: 0.45, embers: [], rim: [1.0, 0.9, 0.78], fog: [0.46, 0.58, 0.82], shadow: [0.07, 0.1, 0.26], fogScale: 0.7, driftPx: 3 },
+  'sin-fahrenheit-bevelle': { gloss: 0.45, embers: [], rim: [1.0, 0.78, 0.5], fog: [0.5, 0.38, 0.46], shadow: [0.12, 0.08, 0.2], fogScale: 0.75, driftPx: 3 },
 };
 
 export const roomBold = (key: string): RoomBold => ROOM_BOLD[key] ?? DEFAULT_ROOM_BOLD;

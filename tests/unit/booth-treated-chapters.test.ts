@@ -5,7 +5,9 @@
  * `DemoGate.TREATED_CHAPTERS` is the ONE list the treatment reads (release 60 to 68 it read the two booth ids). These tests pin the list, the holds that keep a piece back with a written reason, and the `?treated=` word that
  * puts release 68's reach back; a twentieth listed chapter fails until it is treated or named in NOT_YET.
  *
- * **The r70 verdict pass (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four chapters back off the list (IX and XII FFX only, V and XI FFX-2 only): each moved to NOT_YET with its reason, and its rows and holds stay in their tables, unread (`HELD_WITHDRAWN`). Ten are treated.**
+ * **The r70 verdict pass (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four chapters back off the list (IX and XII FFX only, V and XI FFX-2 only): each moved to NOT_YET with its reason, and its rows and holds stay in their tables, unread (`HELD_WITHDRAWN`). Ten were treated.**
+ *
+ * **The last five listed chapters (`booth-b4-last`, `docs/handoff/booth-b4-last.md`): Chapter VIII (Evrae), Chapter XVIII (Sin's face) and the Mirror Aeons chapter (FFX only) and Chapter XVI (Ixion at Djose, FFX-2 only) join with their holds (`PieceHoldsLast.ts`); Chapter XVII (Sin's Fins and Core) stays in NOT_YET with its reason. Fourteen are treated.**
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { CHAPTER_IDS, CHAPTERS, EXPERIMENT_CHAPTERS, UNLISTED_CHAPTERS, getChapter } from '../../src/data/encounters.ts';
@@ -43,6 +45,10 @@ const TREATED_NOW: Readonly<Record<string, { game: 'ffx' | 'ffx2'; since: string
   'ffx2-leblanc': { game: 'ffx2', since: 'r69' },
   'ffx2-den-of-woe': { game: 'ffx2', since: 'r70' }, // batch 2, the FFX-2 lane `booth-ffx2-b2`
   'ffx2-trema': { game: 'ffx2', since: 'r70' }, // batch 3, the FFX-2 lane `booth-ffx2-b3`
+  'evrae-airship': { game: 'ffx', since: 'r71' }, // the last five listed chapters, `booth-b4-last`
+  'sin-face': { game: 'ffx', since: 'r71' },
+  'mirror-aeons': { game: 'ffx', since: 'r71' },
+  'ffx2-ixion-djose': { game: 'ffx2', since: 'r71' },
 };
 
 /** The pieces each joined chapter holds back, in the order of `TREATED_PIECES`: the booth pair holds none (the approved target). */
@@ -55,6 +61,10 @@ const HELD_NOW: Readonly<Record<string, readonly string[]>> = {
   'braskas-final-aeon': ['breath', 'moments'], // batch 3b: each of the three holds the staged breath; the review's M1 added the moments (Rikku, 0.52) to III and XII, and its m1 and m2 the camera to XII and XIV
   'isaaru-via-purifico': ['breath', 'cam', 'moments'], // the review of booth-b3 (M1): Yuna alone has no read at a hard cut; her aeons never take it
   'ffx2-trema': ['cam', 'breath', 'moments'], // batch 3: Chapter XIII holds the giants frame's camera (the follower undoes it), the staged breath (a tone pick) and the knock-out's cut (three KO bodies the registration data cannot clear)
+  'evrae-airship': ['breath', 'cam', 'moments'], // `booth-b4-last`: the range director authors the deck's camera; the staged breath needs a tone pick; the knock-out cut is unread on this deck
+  'sin-face': ['breath', 'cam', 'moments', 'smear'], // the same deck, and a swap exception (`SwapSwitch.SCOPE_EXCEPTIONS`: Auron's lunge return is a planned cut over the cap)
+  'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments'], // two plates under one room key, the first provisional and without an @2x master; the grade is applied once at the scene's entry
+  'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'], // a provisional plate (no room rows, no follower row) and a swap exception
 };
 
 /**
@@ -85,11 +95,8 @@ const playsUnderAll = (id: string, piece: string): boolean => Object.prototype.h
  * `TREATED_CHAPTERS`; one that is in neither fails the first test below.
  */
 const NOT_YET: Readonly<Record<string, string>> = {
-  'evrae-airship': 'FFX: non-standard pose names, a fixed head step per pose (the vertical blend guard); its swap exception was lifted in release 69',
-  'ffx2-ixion-djose': 'FFX-2: the plate is a stand-in until its real plate, a swap exception',
-  'sin-fins-core': 'FFX: bespoke deck camera and many parts',
-  'sin-face': 'FFX: bespoke Sin poses and a swap exception',
-  'mirror-aeons': 'FFX: no @2x backdrop on disk',
+  // The last five listed chapters (`booth-b4-last`): four joined with holds (Evrae, Sin's face, Mirror Aeons, Ixion at Djose); Chapter XVII stays out, with two findings read offline against the F1 zones and the plates (`docs/handoff/booth-b4-last.md` section 4).
+  'sin-fins-core': "FFX: out of release 71 (booth-b4-last): the Fin plate (`.ffx-sinfin`, x 328 to 516 and y 22 to about 59 of the 640 x 360 grid at its minimum width) sits on the F1 turn strip (x 465 to 625, y 22 to 82) in links 1 and 2, a major the treatment would introduce, and the flight plate is the brightest in the game (mean luminance 0.659 against the Farplane's 0.628 that the bold look clipped); no rows are written",
   // The r70 verdict pass took these four back off the list (`booth-r70-withdrawn.ts` has the reasons): one line in `TREATED_CHAPTERS` puts one back once its defect is fixed.
   ...Object.fromEntries(Object.entries(WITHDRAWN_R70).map(([id, w]) => [id, w.why])),
 };
@@ -101,7 +108,7 @@ describe('the list', () => {
     for (const id of Object.keys(NOT_YET)) expect(LISTED, id).toContain(id);
     expect(treated.length + Object.keys(NOT_YET).length).toBe(LISTED.length);
     expect(LISTED).toHaveLength(19);
-    expect(treated).toHaveLength(10); // r70: fourteen on the branch, four withdrawn
+    expect(treated).toHaveLength(14); // r70: ten of fourteen; booth-b4-last: four more of the last five (Chapter XVII stays out)
   });
 
   it('the four chapters of the r70 verdicts are NOT_YET with their reasons, off the list, and their rows and holds stay in the tables (unread)', () => {
@@ -117,7 +124,7 @@ describe('the list', () => {
 
   it('is Chapter I, Chapter IV, Leblanc, Chapter II, batch 2 (the Den of Woe), batch 3a (Macalania, Natus), batch 3b (Braska\'s Final Aeon, Isaaru) and batch 3 FFX-2 (Trema), each with the game the registry says (rule 14); Yojimbo, Omnis, Vegnagun and Shuyin and the Fallen Aeons are the r70 verdicts\' withdrawn four', () => {
     expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(Object.keys(TREATED_NOW).sort());
-    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(['braskas-final-aeon', 'ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-leblanc', 'ffx2-trema', 'isaaru-via-purifico', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'yunalesca']);
+    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(['braskas-final-aeon', 'evrae-airship', 'ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-ixion-djose', 'ffx2-leblanc', 'ffx2-trema', 'isaaru-via-purifico', 'mirror-aeons', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'sin-face', 'yunalesca']);
     for (const [id, e] of Object.entries(TREATED_CHAPTERS)) expect(getChapter(id)?.game, id).toBe(e.game);
     for (const [id, e] of Object.entries(TREATED_NOW)) expect(TREATED_CHAPTERS[id], id).toEqual(e);
     expect(TREATED_CHAPTERS['ffx2-leblanc']).toEqual({ game: 'ffx2', since: 'r69' });
@@ -126,6 +133,8 @@ describe('the list', () => {
     for (const id of ['seymour-anima-macalania', 'seymour-natus']) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r70' }); // batch 3a: FFX only (rule 14; the research notes open with the game case)
     for (const id of ['braskas-final-aeon', 'isaaru-via-purifico']) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r70' }); // batch 3b: FFX only (rule 14): FFX's layout, profile and tables
     expect(TREATED_CHAPTERS['ffx2-trema']).toEqual({ game: 'ffx2', since: 'r70' }); // batch 3: Chapter XIII, FFX-2 only (ATB, dresspheres, Garment Grids: `research/ffx2-trema.md` section 0)
+    for (const id of ['evrae-airship', 'sin-face', 'mirror-aeons']) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r71' }); // booth-b4-last: FFX only (the airship's range game has no FFX-2 counterpart, `research/ffx-evrae-airship.md` section 0.4; the Mirror Aeons chapter is FFX's)
+    expect(TREATED_CHAPTERS['ffx2-ixion-djose']).toEqual({ game: 'ffx2', since: 'r71' }); // booth-b4-last: Chapter XVI, FFX-2 only (ATB, dresspheres, the fallen-aeon counter: `research/ffx2-ixion-djose.md` section 0)
   });
 
   it('holds the booth pair, with the games DEMO_CHAPTERS gives them; the booth list itself stays two ids', () => {
@@ -334,7 +343,9 @@ describe('who the treatment reaches', () => {
     for (const id of ['seymour-anima-macalania', 'seymour-natus']) expect(demoGameOf(id, 'ffx2'), id).toBe('ffx'); // batch 3a: FFX too
     for (const id of ['braskas-final-aeon', 'isaaru-via-purifico']) expect(demoGameOf(id, 'ffx2'), id).toBe('ffx'); // batch 3b is FFX: FFX's layout, profile and tables play there, whatever the fallback says
     for (const [id, w] of Object.entries(WITHDRAWN_R70)) expect(demoGameOf(id, w.game === 'ffx' ? 'ffx2' : 'ffx'), id).toBe(w.game === 'ffx' ? 'ffx2' : 'ffx'); // the r70 withdrawn four: not treated, so the fallback
-    expect(demoGameOf('mirror-aeons', 'ffx2')).toBe('ffx2'); // not treated yet: the fallback
+    expect(demoGameOf('sin-fins-core', 'ffx2')).toBe('ffx2'); // not treated (NOT_YET): the fallback
+    for (const id of ['evrae-airship', 'sin-face', 'mirror-aeons']) expect(demoGameOf(id, 'ffx2'), id).toBe('ffx'); // booth-b4-last: FFX's layout, profile and tables play there, whatever the fallback says
+    expect(demoGameOf('ffx2-ixion-djose', 'ffx')).toBe('ffx2'); // and Chapter XVI is FFX-2's, whatever the fallback says
     expect(demoGameOf('exp-leblanc', 'ffx')).toBe('ffx');
     setTreatedScope('pack');
     expect(demoGameOf('ffx2-leblanc', 'ffx')).toBe('ffx'); // release 68: not a demo chapter, the fallback

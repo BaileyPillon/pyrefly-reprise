@@ -75,6 +75,7 @@ const CHAINS = [
   { id: 'ffx2-vegnagun-shuyin', links: 5 },
   { id: 'ffx2-den-of-woe', links: 3 },
   { id: 'ffx2-fallen-aeons', links: 3 },
+  { id: 'ffx2-ixion-djose', links: 1, weak: true }, // booth-b4-last: Ixion at Djose, one link (the FFX-2 engine has no form change); its real fight is the fallen-aeon counter's whole length, so the chain runs with Ixion at 1 HP
   { id: 'ffx2-trema', links: 2, weak: true }, // batch 3: Paragon, then Trema (two links; the FFX-2 engine has no form change in either). Its real fight is half an hour of Dark Knights (999,999 HP), so the chain runs with every foe at 1 HP (`helpers/weakChain.ts`)
 ] as const;
 
@@ -228,9 +229,9 @@ describe('the hold guard, across every treated chapter of both lanes', () => {
     }
   });
 
-  it('is not vacuous: both games are on the list, and the exceptions on it today are Chapter II alone', () => {
+  it('is not vacuous: both games are on the list, and the exceptions on it today are Chapter II, Sin\'s face and Ixion at Djose (booth-b4-last)', () => {
     expect(FFX_TREATED.length).toBeGreaterThan(0);
     expect(FFX2_TREATED.length).toBeGreaterThan(0);
-    expect(Object.keys(TREATED_CHAPTERS).filter((id) => scopeExcepted(id))).toEqual(['yunalesca']);
+    expect(Object.keys(TREATED_CHAPTERS).filter((id) => scopeExcepted(id))).toEqual(['yunalesca', 'sin-face', 'ffx2-ixion-djose']);
   });
 });

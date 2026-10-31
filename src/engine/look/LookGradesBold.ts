@@ -173,6 +173,20 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       recipe: { exposure: 0.88, gamma: 1.0, contrast: 0.48, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.42, highlightSplit: 0.3, midSat: 0.3, sat: 1.04, hues: [{ hue: 205, width: 28, sat: 1.04, lum: 1.05, toward: [0.25, 0.62, 1.0], shift: 0.2 }, { hue: 38, width: 26, sat: 1.2, lum: 1.1, toward: [1.0, 0.72, 0.3], shift: 0.3 }] },
       focus: 0.38,
     },
+    // The last five listed chapters (`booth-b4-last`, FFX only; `docs/handoff/booth-b4-last.md` section 3). Both rooms are the Fahrenheit's deck over a luminous painting (mean luminance 0.373 for Evrae's blue sky and 0.388 for Sin's golden dusk, against Chapter I's 0.418 and the Farplane's 0.628 that the bold look clipped), so the exposure is Chapter I's 0.7.
+    // Evrae: the plate's saturated pixels are the sky's blue (hue 210 to 220: 21,000 of 28,700) and the hull's and the cloud shadows' copper (hue 10 to 20: 6,200): navy shadows, a cream highlight, the blue lifted and pulled toward itself, the copper kept warm. Sin's face: the dusk is almost all warm (hue 10 to 30: 22,000 of 25,600) with a magenta edge (hue 320 to 330): violet-brown shadows, a gold highlight, the amber lifted and the magenta held.
+    'evrae-airship-deck': {
+      shadow: [0.08, 0.14, 0.46],
+      highlight: [1.0, 0.92, 0.82],
+      recipe: { exposure: 0.7, gamma: 1.0, contrast: 0.44, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.34, highlightSplit: 0.28, midSat: 0.3, sat: 1.0, hues: [{ hue: 214, width: 34, sat: 1.04, lum: 1.06, toward: [0.35, 0.62, 1.0], shift: 0.2 }, { hue: 14, width: 24, sat: 1.12, lum: 1.08, toward: [1, 0.62, 0.38], shift: 0.2 }] },
+      focus: 0.42,
+    },
+    'sin-fahrenheit-bevelle': {
+      shadow: [0.2, 0.12, 0.38],
+      highlight: [1.0, 0.86, 0.6],
+      recipe: { exposure: 0.7, gamma: 1.0, contrast: 0.44, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.34, highlightSplit: 0.28, midSat: 0.3, sat: 1.0, hues: [{ hue: 22, width: 26, sat: 1.1, lum: 1.06, toward: [1, 0.66, 0.3], shift: 0.2 }, { hue: 325, width: 26, sat: 1.0, lum: 1.02, toward: [0.9, 0.42, 0.72], shift: 0.12 }] },
+      focus: 0.42,
+    },
   },
   cinematic: {
     // Chapter I: deep indigo shadows and silver-cyan highlights, but with its colour (pass 1's 0.72 saturation read muddy): a cold, clear night.
@@ -266,6 +280,19 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       highlight: [0.86, 1.0, 1.0],
       recipe: { exposure: 0.86, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.96, hues: [{ hue: 205, width: 28, sat: 1.05, lum: 1.06, toward: [0.25, 0.62, 1.0], shift: 0.25 }, { hue: 38, width: 26, sat: 1.2, lum: 1.1, toward: [1.0, 0.72, 0.3], shift: 0.3 }] },
       fog: [0.18, 0.28, 0.46],
+    },
+    // The last five listed chapters (FFX): the same hues under darker shadows and a steeper curve.
+    'evrae-airship-deck': {
+      shadow: [0.04, 0.08, 0.26],
+      highlight: [1.0, 0.88, 0.7],
+      recipe: { exposure: 0.64, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 214, width: 34, sat: 1.04, lum: 1.06, toward: [0.35, 0.62, 1.0], shift: 0.25 }, { hue: 14, width: 24, sat: 1.15, lum: 1.1, toward: [1, 0.62, 0.38], shift: 0.25 }] },
+      fog: [0.4, 0.5, 0.74],
+    },
+    'sin-fahrenheit-bevelle': {
+      shadow: [0.12, 0.06, 0.22],
+      highlight: [1.0, 0.8, 0.54],
+      recipe: { exposure: 0.64, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 22, width: 26, sat: 1.12, lum: 1.08, toward: [1, 0.66, 0.3], shift: 0.25 }, { hue: 325, width: 26, sat: 1.0, lum: 1.02, toward: [0.9, 0.42, 0.72], shift: 0.15 }] },
+      fog: [0.46, 0.34, 0.44],
     },
   },
 };
