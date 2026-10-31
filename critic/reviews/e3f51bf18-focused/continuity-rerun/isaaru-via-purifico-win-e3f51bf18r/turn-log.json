@@ -1,0 +1,1155 @@
+[
+ {
+  "turn": 0,
+  "ms": 7,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Grand Summon: Shiva",
+   "target": null,
+   "menu": "Overdrive"
+  },
+  "took": "Grand Summon: Shiva (picker opened: Shiva)",
+  "viaMenu": "Overdrive",
+  "target": {
+   "confirmed": true,
+   "picker": true
+  },
+  "engineDid": [
+   {
+    "seq": 6,
+    "actor": "yuna",
+    "did": "Grand Summon",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 6102,
+  "actor": "command:shiva",
+  "want": {
+   "label": "Diamond Dust",
+   "target": "Grothia",
+   "menu": "Overdrive"
+  },
+  "took": "Diamond Dust (one-item group, direct)",
+  "viaMenu": "Overdrive",
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 12,
+    "actor": "shiva",
+    "did": "Diamond Dust",
+    "targets": [
+     "grothia"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 2,
+  "ms": 15934,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Valefor",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": "Valefor",
+  "viaMenu": "Summon",
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2935/2935",
+   "isaaru:10/10",
+   "grothia:3486/8000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 32,
+    "actor": "yuna",
+    "did": "Summon",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 19926,
+  "actor": "command:valefor",
+  "want": {
+   "label": "Attack",
+   "target": "Grothia",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2935/2935",
+   "isaaru:10/10",
+   "grothia:3486/8000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 36,
+    "actor": "valefor",
+    "did": "Attack",
+    "targets": [
+     "grothia"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 23959,
+  "actor": "command:valefor",
+  "want": {
+   "label": "Energy Ray",
+   "target": "Grothia",
+   "menu": "Overdrive"
+  },
+  "took": "Energy Ray (one-item group, direct)",
+  "viaMenu": "Overdrive",
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 5,
+  "ms": 50050,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Bahamut",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": "Bahamut",
+  "viaMenu": "Summon",
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2935/2935",
+   "isaaru:10/10",
+   "pterya:12000/12000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 6,
+  "ms": 54036,
+  "actor": "command:bahamut",
+  "want": {
+   "label": "Attack",
+   "target": "Pterya",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2935/2935",
+   "isaaru:10/10",
+   "pterya:12000/12000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 7,
+  "ms": 57288,
+  "actor": "command:bahamut",
+  "want": {
+   "label": "Attack",
+   "target": "Pterya",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "pterya:3620/12000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 8,
+  "ms": 79495,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Ifrit",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": "Ifrit",
+  "viaMenu": "Summon",
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:20000/20000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 9,
+  "ms": 83319,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:20000/20000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 10,
+  "ms": 87322,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:19261/20000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 11,
+  "ms": 91320,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:18479/20000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 12,
+  "ms": 97702,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:17712/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 39,
+    "actor": "ifrit",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 101689,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Shield",
+   "target": "Ifrit",
+   "menu": "Aeon"
+  },
+  "took": "Shield",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:16942/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 48,
+    "actor": "ifrit",
+    "did": "Shield",
+    "targets": [
+     "ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 107603,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Hellfire",
+   "target": "Spathi",
+   "menu": "Overdrive"
+  },
+  "took": "Hellfire (one-item group, direct)",
+  "viaMenu": "Overdrive",
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 57,
+    "actor": "ifrit",
+    "did": "Hellfire",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 121603,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:905/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:13655/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 78,
+    "actor": "ifrit",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 125598,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Shield",
+   "target": "Ifrit",
+   "menu": "Aeon"
+  },
+  "took": "Shield",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:905/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:12919/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 87,
+    "actor": "ifrit",
+    "did": "Shield",
+    "targets": [
+     "ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 130847,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:252/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:12919/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 97,
+    "actor": "ifrit",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 137235,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:252/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:12130/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 110,
+    "actor": "ifrit",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 141262,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:252/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:11341/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 119,
+    "actor": "ifrit",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 145295,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:252/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:10522/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 128,
+    "actor": "ifrit",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 149618,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Shield",
+   "target": "Ifrit",
+   "menu": "Aeon"
+  },
+  "took": "Shield",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:252/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:9712/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 138,
+    "actor": "ifrit",
+    "did": "Shield",
+    "targets": [
+     "ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 158626,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Ixion",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": "Ixion",
+  "viaMenu": "Summon",
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:0/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:9712/20000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 155,
+    "actor": "yuna",
+    "did": "Summon",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 162525,
+  "actor": "command:ixion",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:0/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:9712/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 159,
+    "actor": "ixion",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 24,
+  "ms": 166641,
+  "actor": "command:ixion",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:0/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:8815/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 168,
+    "actor": "ixion",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 25,
+  "ms": 170693,
+  "actor": "command:ixion",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:0/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:7807/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 177,
+    "actor": "ixion",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 26,
+  "ms": 176958,
+  "actor": "command:ixion",
+  "want": {
+   "label": "Shield",
+   "target": "Ixion",
+   "menu": "Aeon"
+  },
+  "took": "Shield",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:0/1515",
+   "ixion:1513/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:6873/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 190,
+    "actor": "ixion",
+    "did": "Shield",
+    "targets": [
+     "ixion"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 27,
+  "ms": 182048,
+  "actor": "command:ixion",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:0/1515",
+   "ixion:958/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:6873/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 199,
+    "actor": "ixion",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 28,
+  "ms": 188528,
+  "actor": "command:ixion",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:0/1515",
+   "ixion:958/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:6873/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 211,
+    "actor": "ixion",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 29,
+  "ms": 192607,
+  "actor": "command:ixion",
+  "want": {
+   "label": "Thor's Hammer",
+   "target": "Spathi",
+   "menu": "Overdrive"
+  },
+  "took": "Thor's Hammer (one-item group, direct)",
+  "viaMenu": "Overdrive",
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 220,
+    "actor": "ixion",
+    "did": "Thor's Hammer",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 30,
+  "ms": 207750,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Valefor",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": "Valefor",
+  "viaMenu": "Summon",
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:2503/20000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 245,
+    "actor": "yuna",
+    "did": "Summon",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 31,
+  "ms": 211246,
+  "actor": "command:valefor",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:2503/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 249,
+    "actor": "valefor",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 32,
+  "ms": 215389,
+  "actor": "command:valefor",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:2503/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 257,
+    "actor": "valefor",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 33,
+  "ms": 219565,
+  "actor": "command:valefor",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:1841/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 266,
+    "actor": "valefor",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 34,
+  "ms": 223707,
+  "actor": "command:valefor",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:1209/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 275,
+    "actor": "valefor",
+    "did": "Attack",
+    "targets": [
+     "spathi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 35,
+  "ms": 227892,
+  "actor": "command:valefor",
+  "want": {
+   "label": "Shield",
+   "target": "Valefor",
+   "menu": "Aeon"
+  },
+  "took": "Shield",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:718/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:592/20000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 284,
+    "actor": "valefor",
+    "did": "Shield",
+    "targets": [
+     "valefor"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 36,
+  "ms": 235591,
+  "actor": "command:valefor",
+  "want": {
+   "label": "Attack",
+   "target": "Spathi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1265/1650",
+   "valefor:101/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "bahamut:2750/2935",
+   "isaaru:10/10",
+   "spathi:592/20000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

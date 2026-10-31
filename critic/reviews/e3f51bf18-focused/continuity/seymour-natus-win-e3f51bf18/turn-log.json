@@ -1,0 +1,1081 @@
+[
+ {
+  "turn": 0,
+  "ms": 7,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Talk",
+   "target": null,
+   "menu": null
+  },
+  "took": "Talk",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1650/1650",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1400/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:2935/2935",
+   "seymour-natus:36000/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 3,
+    "actor": "tidus",
+    "did": "Talk",
+    "targets": [
+     "seymour-natus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 13656,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Rikku",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Rikku",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:2139/2420",
+   "yuna:1407/1650",
+   "kimahri:2009/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1400/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:2935/2935",
+   "seymour-natus:36000/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 2,
+  "ms": 16048,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Reflect",
+   "target": "Seymour Natus",
+   "menu": "White Magic"
+  },
+  "took": "Reflect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:2139/2420",
+   "yuna:1407/1650",
+   "kimahri:2009/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1400/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:2935/2935",
+   "seymour-natus:36000/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-natus",
+   "wanted": "seymour-natus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 18,
+    "actor": "rikku",
+    "did": "Reflect",
+    "targets": [
+     "seymour-natus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 22889,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1062/2420",
+   "yuna:1407/1650",
+   "kimahri:2009/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:2935/2935",
+   "seymour-natus:36000/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 30,
+    "actor": "yuna",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 27121,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Haste",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Haste",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:2062/2420",
+   "yuna:1650/1650",
+   "kimahri:2009/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:2935/2935",
+   "seymour-natus:36000/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 41,
+    "actor": "tidus",
+    "did": "Haste",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 30554,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Auron",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Auron",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:2062/2420",
+   "yuna:1650/1650",
+   "kimahri:2009/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:2935/2935",
+   "seymour-natus:36000/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 6,
+  "ms": 32668,
+  "actor": "command:auron",
+  "want": {
+   "label": "Talk",
+   "target": null,
+   "menu": null
+  },
+  "took": "Talk",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2062/2420",
+   "yuna:1650/1650",
+   "kimahri:2009/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:2935/2935",
+   "seymour-natus:36000/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 46,
+    "actor": "auron",
+    "did": "Talk",
+    "targets": [
+     "seymour-natus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 44832,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Bahamut",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": "Bahamut",
+  "viaMenu": "Summon",
+  "engineHp": [
+   "tidus:1767/2420",
+   "yuna:1395/1650",
+   "kimahri:2009/2310",
+   "auron:3121/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:2935/2935",
+   "seymour-natus:36000/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 59,
+    "actor": "yuna",
+    "did": "Summon",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 49536,
+  "actor": "command:bahamut",
+  "want": {
+   "label": "Mega Flare",
+   "target": "Seymour Natus",
+   "menu": "Overdrive"
+  },
+  "took": "Mega Flare (one-item group, direct)",
+  "viaMenu": "Overdrive",
+  "target": {
+   "confirmed": true,
+   "target": "seymour-natus",
+   "wanted": "seymour-natus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 63,
+    "actor": "bahamut",
+    "did": "Mega Flare",
+    "targets": [
+     "seymour-natus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 56588,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Haste",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Haste",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1767/2420",
+   "yuna:1395/1650",
+   "kimahri:2009/2310",
+   "auron:3121/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:30691/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 76,
+    "actor": "tidus",
+    "did": "Haste",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 60336,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Natus",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1767/2420",
+   "yuna:1395/1650",
+   "kimahri:2009/2310",
+   "auron:3121/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:30691/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-natus",
+   "wanted": "seymour-natus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 80,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-natus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 62290,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Natus",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1767/2420",
+   "yuna:1395/1650",
+   "kimahri:2009/2310",
+   "auron:3121/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:26905/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-natus",
+   "wanted": "seymour-natus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 84,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "seymour-natus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 69377,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:348/2420",
+   "yuna:182/1650",
+   "kimahri:2009/2310",
+   "auron:2812/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:24559/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 103,
+    "actor": "tidus",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 73384,
+  "actor": "command:auron",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:348/2420",
+   "yuna:1182/1650",
+   "kimahri:2009/2310",
+   "auron:2812/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:24559/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 108,
+    "actor": "auron",
+    "did": "Hi-Potion",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 77258,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Talk",
+   "target": null,
+   "menu": null
+  },
+  "took": "Talk",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1348/2420",
+   "yuna:1182/1650",
+   "kimahri:2009/2310",
+   "auron:2812/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:24559/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 113,
+    "actor": "yuna",
+    "did": "Talk",
+    "targets": [
+     "seymour-natus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 86578,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Natus",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1348/2420",
+   "yuna:1182/1650",
+   "kimahri:2009/2310",
+   "auron:2812/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:24559/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-natus",
+   "wanted": "seymour-natus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 119,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "seymour-natus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 90618,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Natus",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1348/2420",
+   "yuna:1182/1650",
+   "kimahri:2009/2310",
+   "auron:2812/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:20292/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-natus",
+   "wanted": "seymour-natus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 128,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-natus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 93897,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Natus",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1348/2420",
+   "yuna:1008/1650",
+   "kimahri:2009/2310",
+   "auron:2812/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:16445/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-natus",
+   "wanted": "seymour-natus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 137,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "seymour-natus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 98254,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1348/2420",
+   "yuna:1008/1650",
+   "kimahri:2009/2310",
+   "auron:2812/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:14107/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 147,
+    "actor": "tidus",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 102379,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Natus",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2348/2420",
+   "yuna:1650/1650",
+   "kimahri:2009/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:14107/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-natus",
+   "wanted": "seymour-natus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 154,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-natus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 104297,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Haste",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Haste",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:2348/2420",
+   "yuna:1650/1650",
+   "kimahri:2009/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:10275/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 159,
+    "actor": "tidus",
+    "did": "Haste",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 108129,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Shell",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Shell",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:2348/2420",
+   "yuna:1650/1650",
+   "kimahri:2009/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:10275/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 164,
+    "actor": "yuna",
+    "did": "Shell",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 115204,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Natus",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1650/1650",
+   "kimahri:2009/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:10275/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-natus",
+   "wanted": "seymour-natus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 172,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "seymour-natus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 117166,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Natus",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1650/1650",
+   "kimahri:2009/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:7991/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-natus",
+   "wanted": "seymour-natus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 177,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-natus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 24,
+  "ms": 121100,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1650/1650",
+   "kimahri:2009/2310",
+   "auron:1227/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:3884/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 187,
+    "actor": "tidus",
+    "did": "Hi-Potion",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 25,
+  "ms": 127247,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Natus",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1650/1650",
+   "kimahri:2009/2310",
+   "auron:2227/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1207/1400",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "bahamut:0/2935",
+   "seymour-natus:3884/36000",
+   "mortibody:4000/4000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-natus",
+   "wanted": "seymour-natus",
+   "mismatch": false
+  }
+ }
+]

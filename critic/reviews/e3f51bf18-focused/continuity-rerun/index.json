@@ -1,0 +1,1410 @@
+[
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/00-title.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:52:21.440Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/01-briefing.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:52:22.934Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/03-card.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "isaaru-via-purifico",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:52:25.490Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/04-prep.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:52:27.808Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/05-pre-scene.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:52:33.097Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/05b-scene-esc.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:52:34.556Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/seq-transition-into-battle/",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 40
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 454
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 755
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1052
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1353
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1654
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1976
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2275
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2578
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2888
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:52:48.562Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/10-first-menu-coach.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:52:48.995Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/11-advisor.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:52:49.391Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/12-intent-E.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:52:51.426Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/13-guide-G.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:52:53.024Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/14-pause-Esc.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:52:55.037Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/14-pause-tab-next.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "pause, tab Chapter",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:52:55.923Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/14-pause-options.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:52:57.308Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/seq-action-playing/",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "timed frame sequence: an action playing out (play:status-add)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 51
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 268
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 501
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 733
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 966
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1199
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1434
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1665
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1901
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2140
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:53:14.343Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/seq-party-action/",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "timed frame sequence: a party command resolving (Valefor)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 35
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 267
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 505
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 768
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1001
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1236
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1469
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1703
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1934
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2170
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:53:21.666Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/23-midfight.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:53:22.088Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/seq-seam-2/",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "timed frame sequence: chain seam 1 -> 2 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 35
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 382
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 737
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1102
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1451
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1783
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2134
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2486
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:53:45.922Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/20-link-2.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "fight, encounter link 2 of 3",
+  "asserted": "screen=battle links=2",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:53:49.321Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/24-seam-2-first-menu.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "first command menu after chain seam into link 2",
+  "asserted": "screen=battle awaitingMenu=true links=2",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 25,
+    "y": 133,
+    "w": 598,
+    "h": 154
+   },
+   "rows": 2,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Yuna Bahamut IN SUMMON NO MP Calls Bahamut onto the field — the party steps out and its counters freeze Bahamut takes the hits while the party’s counters are frozen."
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:53:52.222Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/seq-seam-3/",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "timed frame sequence: chain seam 2 -> 3 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 48
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 398
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 749
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1097
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1447
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1797
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2148
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2497
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:54:16.574Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/20-link-3.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "fight, encounter link 3 of 3",
+  "asserted": "screen=battle links=3",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:54:20.038Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/24-seam-3-first-menu.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "first command menu after chain seam into link 3",
+  "asserted": "screen=battle awaitingMenu=true links=3",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 25,
+    "y": 133,
+    "w": 598,
+    "h": 154
+   },
+   "rows": 2,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Yuna Ifrit IN SUMMON NO MP Calls Ifrit onto the field — the party steps out and its counters freeze Ifrit takes the hits while the party’s counters are frozen."
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:54:21.664Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/30-post-scene.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "post-battle scene after a victory",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:57:21.528Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/31-results.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:57:45.385Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/34-board-after.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "chapter select after the win",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:57:48.131Z"
+ },
+ {
+  "file": "isaaru-via-purifico-win-e3f51bf18r/35-board-reload.png",
+  "game": "ffx",
+  "chapter": "isaaru-via-purifico",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "chapter select after a reload (the clear must come back from the save)",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:57:50.152Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/00-title.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:57:53.371Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/01-briefing.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:57:54.893Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/03-card.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "seymour-anima-macalania",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:57:56.438Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/04-prep.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:57:58.776Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/05-pre-scene.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:04.108Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/05b-scene-esc.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:05.624Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/seq-transition-into-battle/",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 49
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 396
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 709
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1030
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1341
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1641
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1940
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2246
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2541
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2854
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:19.740Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/10-first-menu-coach.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:23.813Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/11-advisor.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:24.168Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/12-intent-E.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:26.198Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/13-guide-G.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:27.811Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/14-pause-Esc.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:29.836Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/14-pause-tab-next.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "pause, tab Yuna",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:30.747Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/14-pause-options.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:33.197Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/16-target-single.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "target selection after choosing ATTACK",
+  "asserted": "screen=battle targeting=true",
+  "verified": true,
+  "targets": 3,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:36.880Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/16b-after-cancel.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "after Escape from target selection",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:38.317Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/seq-party-action/",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "timed frame sequence: a party command resolving (Steal)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 50
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 290
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 522
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 758
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 995
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1224
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1458
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1685
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1923
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2152
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:41.786Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/seq-action-playing/",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "timed frame sequence: an action playing out (play:message)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 55
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 289
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 539
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 785
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1021
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1251
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1486
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1722
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1950
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2239
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:45.361Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/23-midfight.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T16:58:47.122Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/28-swordplay-overlay.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "Spiral Cut: SWORDPLAY · PRESS ENTER IN THE GOLD ZONE",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T17:02:44.939Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/31-results.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T17:04:43.954Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/33-after-confirm-scene.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "the scene after CONFIRM on the victory results",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T17:04:46.810Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/34-board-after.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "chapter select after the win",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T17:05:32.447Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-e3f51bf18r/35-board-reload.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 2,
+  "state": "chapter select after a reload (the clear must come back from the save)",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T17:05:34.529Z"
+ }
+]

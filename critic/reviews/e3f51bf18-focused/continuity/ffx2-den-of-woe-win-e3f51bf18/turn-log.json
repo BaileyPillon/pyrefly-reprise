@@ -1,0 +1,652 @@
+[
+ {
+  "turn": 0,
+  "ms": 29,
+  "actor": "idle",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2251/2824",
+   "rikku:6133/6456",
+   "paine:6335/6654",
+   "shade-baralai:12220/12220"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 26,
+    "actor": "paine",
+    "did": "Darkness",
+    "targets": [
+     "shade-baralai"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 3685,
+  "actor": "idle",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:2251/2824",
+   "rikku:6133/6456",
+   "paine:6335/6654",
+   "shade-baralai:12220/12220"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 30,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "shade-baralai"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 16106,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Light Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Light Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:3649/4836",
+   "rikku:5151/6456",
+   "paine:5315/6654",
+   "shade-baralai:6123/12220"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 68,
+    "actor": "yuna",
+    "did": "Light Curtain",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 20592,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:3649/4836",
+   "rikku:5151/6456",
+   "paine:5315/6654",
+   "shade-baralai:6123/12220"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 72,
+    "actor": "paine",
+    "did": "Darkness",
+    "targets": [
+     "shade-baralai"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 23923,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:3649/4836",
+   "rikku:5151/6456",
+   "paine:5315/6654",
+   "shade-baralai:6123/12220"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 82,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "shade-baralai"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 33947,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Remedy",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Remedy",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:3649/4836",
+   "rikku:4344/6456",
+   "paine:5315/6654",
+   "shade-baralai:3125/12220"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 137,
+    "actor": "yuna",
+    "did": "Remedy",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 39097,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:3649/4836",
+   "rikku:4344/6456",
+   "paine:5315/6654",
+   "shade-baralai:3125/12220"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 146,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "shade-baralai"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 42977,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:3649/4836",
+   "rikku:4344/6456",
+   "paine:5315/6654",
+   "shade-baralai:3125/12220"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 9,
+  "ms": 73120,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Gippal",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:3649/4836",
+   "rikku:3537/6456",
+   "paine:4362/6654",
+   "shade-gippal:14800/14800"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 10,
+  "ms": 76050,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:3649/4836",
+   "rikku:3537/6456",
+   "paine:4076/6654",
+   "shade-gippal:13880/14800"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 11,
+  "ms": 79845,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:3649/4836",
+   "rikku:3537/6456",
+   "paine:4076/6654",
+   "shade-gippal:13880/14800"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 12,
+  "ms": 89805,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:3479/4836",
+   "rikku:2730/6456",
+   "paine:3245/6654",
+   "shade-gippal:6969/14800"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 13,
+  "ms": 93757,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:3479/4836",
+   "rikku:2730/6456",
+   "paine:3245/6654",
+   "shade-gippal:6969/14800"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 14,
+  "ms": 98663,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:3479/4836",
+   "rikku:2730/6456",
+   "paine:3245/6654",
+   "shade-gippal:6969/14800"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 15,
+  "ms": 111894,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:4836/4836",
+   "rikku:3923/6456",
+   "paine:4138/6654",
+   "shade-gippal:1079/14800"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 205,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "shade-gippal"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 115264,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Gippal",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4836/4836",
+   "rikku:3923/6456",
+   "paine:4138/6654",
+   "shade-gippal:1079/14800"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 208,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "shade-gippal"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 118898,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:4836/4836",
+   "rikku:3923/6456",
+   "paine:4138/6654",
+   "shade-gippal:159/14800"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 18,
+  "ms": 148605,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Remedy",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Remedy",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:4567/4836",
+   "rikku:3068/6456",
+   "paine:4086/6654",
+   "shade-nooj:23800/23800"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 19,
+  "ms": 153347,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:4567/4836",
+   "rikku:2880/6456",
+   "paine:4086/6654",
+   "shade-nooj:23800/23800"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 20,
+  "ms": 156903,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:4567/4836",
+   "rikku:2880/6456",
+   "paine:4086/6654",
+   "shade-nooj:23800/23800"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 21,
+  "ms": 166020,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:3072/4836",
+   "rikku:2073/6456",
+   "paine:3255/6654",
+   "shade-nooj:16870/23800"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 22,
+  "ms": 169596,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:3072/4836",
+   "rikku:2073/6456",
+   "paine:3255/6654",
+   "shade-nooj:16870/23800"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 23,
+  "ms": 172901,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:3072/4836",
+   "rikku:2073/6456",
+   "paine:3255/6654",
+   "shade-nooj:16870/23800"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 24,
+  "ms": 183506,
+  "actor": "command:paine",
+  "want": {
+   "label": "Hero Drink",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Hero Drink",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:4836/4836",
+   "rikku:3266/6456",
+   "paine:4424/6654",
+   "shade-nooj:9669/23800"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 25,
+  "ms": 188907,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Hero Drink",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Hero Drink",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:4836/4836",
+   "rikku:3266/6456",
+   "paine:4424/6654",
+   "shade-nooj:9669/23800"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 26,
+  "ms": 194154,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Assault",
+   "target": "the party",
+   "menu": "Skill"
+  },
+  "took": "Assault",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:4836/4836",
+   "rikku:3266/6456",
+   "paine:4424/6654",
+   "shade-nooj:9669/23800"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

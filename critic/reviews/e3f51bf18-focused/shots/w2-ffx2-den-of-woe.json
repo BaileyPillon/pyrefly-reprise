@@ -1,0 +1,183 @@
+{
+ "tag": "w2-ffx2-den-of-woe",
+ "chapter": "ffx2-den-of-woe",
+ "base": "http://127.0.0.1:5871/",
+ "W": 2000,
+ "H": 1012,
+ "phone": false,
+ "steps": [
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "awaitingMenu": true,
+   "toMenuS": 21.9
+  },
+  {
+   "s": "hud",
+   "overflowX": false,
+   "treated": {
+    "scope": "all",
+    "chapters": [
+     "seymour-flux",
+     "yunalesca",
+     "seymour-anima-macalania",
+     "seymour-natus",
+     "braskas-final-aeon",
+     "isaaru-via-purifico",
+     "ffx2-bahamut",
+     "ffx2-leblanc",
+     "ffx2-den-of-woe",
+     "ffx2-trema"
+    ],
+    "holds": {
+     "yunalesca": [
+      "breath",
+      "cam",
+      "smear"
+     ],
+     "seymour-anima-macalania": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "seymour-natus": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "braskas-final-aeon": [
+      "breath",
+      "moments"
+     ],
+     "isaaru-via-purifico": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "ffx2-leblanc": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "ffx2-den-of-woe": [
+      "cam",
+      "breath",
+      "moments"
+     ],
+     "ffx2-trema": [
+      "cam",
+      "breath",
+      "moments"
+     ]
+    },
+    "running": "ffx2-den-of-woe",
+    "reaches": true
+   },
+   "buttons": [
+    "G\nGUIDE:114x30",
+    "N\nHIDE MOVES:164x27",
+    "E\nENEMY MOVE:169x27"
+   ],
+   "f1": true,
+   "ribbon": [
+    "Baralai"
+   ],
+   "igBossHp": [
+    "SCAN"
+   ],
+   "ffx2boss": [],
+   "look": "cinematic",
+   "plates": 4
+  },
+  {
+   "s": "after-attack",
+   "screen": "battle"
+  },
+  {
+   "s": "turns",
+   "turns": 3
+  }
+ ],
+ "bundle": "http://127.0.0.1:5871/assets/index-UNVtEttT.js",
+ "toMenuMs": 21859,
+ "hud": {
+  "overflowX": false,
+  "treated": {
+   "scope": "all",
+   "chapters": [
+    "seymour-flux",
+    "yunalesca",
+    "seymour-anima-macalania",
+    "seymour-natus",
+    "braskas-final-aeon",
+    "isaaru-via-purifico",
+    "ffx2-bahamut",
+    "ffx2-leblanc",
+    "ffx2-den-of-woe",
+    "ffx2-trema"
+   ],
+   "holds": {
+    "yunalesca": [
+     "breath",
+     "cam",
+     "smear"
+    ],
+    "seymour-anima-macalania": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "seymour-natus": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "braskas-final-aeon": [
+     "breath",
+     "moments"
+    ],
+    "isaaru-via-purifico": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "ffx2-leblanc": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "ffx2-den-of-woe": [
+     "cam",
+     "breath",
+     "moments"
+    ],
+    "ffx2-trema": [
+     "cam",
+     "breath",
+     "moments"
+    ]
+   },
+   "running": "ffx2-den-of-woe",
+   "reaches": true
+  },
+  "buttons": [
+   "G\nGUIDE:114x30",
+   "N\nHIDE MOVES:164x27",
+   "E\nENEMY MOVE:169x27"
+  ],
+  "f1": true,
+  "ribbon": [
+   "Baralai"
+  ],
+  "igBossHp": [
+   "SCAN"
+  ],
+  "ffx2boss": [],
+  "look": "cinematic",
+  "plates": 4
+ },
+ "fpsAvg": 59.3,
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": []
+}

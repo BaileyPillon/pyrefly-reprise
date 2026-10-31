@@ -1,0 +1,112 @@
+{
+ "tag": "L-seymour-omnis-1600",
+ "chapter": "seymour-omnis",
+ "base": "https://echoesofspira.com/",
+ "W": 1600,
+ "H": 900,
+ "phone": false,
+ "steps": [
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "awaitingMenu": true,
+   "toMenuS": 28.9
+  },
+  {
+   "s": "hud",
+   "overflowX": false,
+   "treated": {
+    "scope": "all",
+    "chapters": [
+     "seymour-flux",
+     "ffx2-bahamut",
+     "ffx2-leblanc"
+    ],
+    "holds": {
+     "ffx2-leblanc": [
+      "breath",
+      "cam",
+      "moments"
+     ]
+    },
+    "running": "seymour-omnis",
+    "reaches": false
+   },
+   "buttons": [
+    "Q\n△\nDEFEND:157x29",
+    "G\nHIDE GUIDE:148x26",
+    "[ ]\nSCROLL:124x26",
+    "N\nHIDE MOVES:160x26",
+    "E\nENEMY MOVE:165x26",
+    "ESC SKIP THE G:192x18",
+    "PAUSE:96x24"
+   ],
+   "f1": true,
+   "ribbon": [
+    " "
+   ],
+   "igBossHp": [],
+   "ffx2boss": [],
+   "look": null,
+   "plates": 4
+  },
+  {
+   "s": "after-attack",
+   "screen": "battle"
+  },
+  {
+   "s": "turns",
+   "turns": 3
+  }
+ ],
+ "bundle": "https://echoesofspira.com/assets/index-dwcmDBjZ.js",
+ "toMenuMs": 28866,
+ "hud": {
+  "overflowX": false,
+  "treated": {
+   "scope": "all",
+   "chapters": [
+    "seymour-flux",
+    "ffx2-bahamut",
+    "ffx2-leblanc"
+   ],
+   "holds": {
+    "ffx2-leblanc": [
+     "breath",
+     "cam",
+     "moments"
+    ]
+   },
+   "running": "seymour-omnis",
+   "reaches": false
+  },
+  "buttons": [
+   "Q\n△\nDEFEND:157x29",
+   "G\nHIDE GUIDE:148x26",
+   "[ ]\nSCROLL:124x26",
+   "N\nHIDE MOVES:160x26",
+   "E\nENEMY MOVE:165x26",
+   "ESC SKIP THE G:192x18",
+   "PAUSE:96x24"
+  ],
+  "f1": true,
+  "ribbon": [
+   " "
+  ],
+  "igBossHp": [],
+  "ffx2boss": [],
+  "look": null,
+  "plates": 4
+ },
+ "fpsAvg": 59.2,
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": [
+  "https://echoesofspira.com/art/backdrops/macalania-temple.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/backdrops/evrae-airship-deck.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/characters/evrae/idle.png net::ERR_ABORTED",
+  "https://echoesofspira.com/art/backdrops/cavern-stolen-fayth.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/backdrops/bevelle-highbridge.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/characters/seymour-natus/idle.png net::ERR_ABORTED"
+ ]
+}
