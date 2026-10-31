@@ -73,6 +73,11 @@ export interface TreatedEntry {
 export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.freeze({
   'seymour-flux': { game: 'ffx', since: 'r60' },
   yunalesca: { game: 'ffx', since: 'r70' },
+  // Batch 3a, the FFX lane `booth-ffx-b3a` (all FFX only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter VII (Seymour and Anima, the Macalania antechamber), Chapter X (Seymour Natus, the Highbridge of Bevelle) and Chapter IX (Yojimbo, the Cavern of the Stolen Fayth). Each holds the pieces
+  // named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber (batch 3 ships after release 70).
+  'seymour-anima-macalania': { game: 'ffx', since: 'r71' },
+  'seymour-natus': { game: 'ffx', since: 'r71' },
+  'yojimbo-cavern': { game: 'ffx', since: 'r71' },
   'ffx2-bahamut': { game: 'ffx2', since: 'r60' },
   'ffx2-leblanc': { game: 'ffx2', since: 'r69' },
   // Batch 2, the FFX-2 lane `booth-ffx2-b2` (all FFX-2 only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter V (Vegnagun and Shuyin, five links), Chapter XV (the Den of Woe, three shades) and Chapter XI (the Fallen Aeons,
@@ -107,6 +112,74 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       '`SwapSwitch.SCOPE_EXCEPTIONS` holds back for her: the wide run of release 68 (seed 1, the whole 409 s fight) took ghost frames a minute from 287 to 98 but swap jerks of 40 px or more from 9 to 25 (worst 154 px) and made 63 planned cuts over 120 px across heads ' +
       '0.41 to 0.44 of the height apart (Yunalesca attack to cast, Auron follow to idle). A smear that played here would plan those cuts, so Chapter II keeps release 67\'s swap look as the exception says (`?swapscope=all` still reaches her). Lifts when her entry ' +
       'in `SwapSwitch.SCOPE_EXCEPTIONS` lifts: job `yunalesca-all-anchor` of docs/handoff/pc-scope.md (`?cutanchor=on` run in the chapter) reads no swap jerk of 40 px or more outside a named cut.',
+  }),
+  // Batch 3a (`booth-ffx-b3a`, FFX only; the driver call (a) of 2026-10-30 again: a staged breath that needs a tone or a sound pick is held with a reason and the candidate moves named, never guessed). Chapter VII holds `breath`, `cam` and `moments`; Chapter IX holds `breath`, `cam` and `moments`; Chapter X holds `breath` and `moments` (its camera plays).
+  'seymour-anima-macalania': Object.freeze({
+    breath:
+      'FFX, Chapter VII: the held breath is the drain-and-flood built for Total Annihilation (and, in FFX-2, Mega Flare), and a move reaches it only by id (`StagingPort.BigMove`), so nothing in this fight plays it today. ' +
+      'The sourced showpieces are the Pain of Anima (`anima-pain-boss`: Death at 100 percent on a party member and damage only on an aeon, the reason act two is an aeon duel, research/ffx-seymour-anima-macalania.md section ' +
+      '4.3), her Overdrive Oblivion (`anima-oblivion`, sixteen hits on the party) and, in act three, the Multi-spells of Seymour (section 4.1); none has a telegraph painting held before it (`TelegraphHold` stages only the ' +
+      'Lance of Atrophy of Seymour Flux and the Ultimate Jecht Shot of Braska), and a breath needs a tone, a sound and a shot, which are mockup decisions (hard rule 9; the driver call of 2026-10-30: never guessed). Lifts ' +
+      'when Bailey or the driver picks the move, a tone and a shot from a mockup, and `BigMove`, `NAME_OF` and `passRecipes.HEADLINE_BLOWS` are given rows for its id (which hit, `first` or `last`, measured the way Mega ' +
+      'Flare was).',
+    cam:
+      'FFX, Chapter VII: the scene authors camera beats the directed camera would cut across, and the plate is not the reason. Seymour dies and leaves a body (research/ffx-vs-ffx2-presentation.md section 3.2; D-046: it ' +
+      'lies down and stays through the victory) and the pyreflies of the scene rise at his death and not before (D-225), so the victory rig of the scene is laid wide enough to hold the body; the directed victory is the ' +
+      'real close-up of the last party actor, fitted to that actor and his company only (`ProPlays.victoryPlay`), and laid on this stage offline (`ProTrack.registerKeys`, docs/handoff/booth-ffx-b3a.md section 3) its 18 ' +
+      'shots of Tidus, Yuna and Kimahri keep the body in frame at their last key in 2 (Tidus 0 of 6, Yuna 0 of 6, Kimahri 2 of 6: every variant of each character laid on each of the three slots; Rikku has no row of her own and plays the Tidus close-up laid on her feet, `ProShots.characterOf`, so she is among the Tidus 0 of 6). The arrival of ' +
+      'Anima also moves the camera to two rigs of its own (`anima-low` and `anima`, `macalania-temple-arrival.ts`). The plate would not hold the piece back: under the plane model of Chapter II the real shots read a median ' +
+      'worst frame of 40.0 percent past the plate against 47.7 for Chapter I, and today rigs show none at 16:9 but the victory rig (2.7 percent at the sides). The piece holds the directed camera, its real shots and its ' +
+      'soft background; today rigs and the victory rig of the scene play. Lifts when job J1 of docs/handoff/booth-ffx-b3a.md (the victory with the body lying and the pyreflies rising, and the summon, on the real build with ' +
+      'the camera on) shows the body and the rising pyreflies in frame, or the victory shot is given the body of the foe as a companion.',
+    moments:
+      'FFX, Chapter VII: the moments cut the knock-out of a party member from the hurt painting to the lying one inside a planned smear (`PaintedActorLife.koCutWindow`: the moments and the smear both on), and CHK-027 ' +
+      'excuses that cut only up to 0.5 of the drawn height (`critic/policy.json`, `continuity.smear.maxJerkShare`). Where the body lies is set per stage (`ProneLay` slides it by up to half its length along the floor) and ' +
+      'the recorded runs of the motion pass read the same FFX paintings at 0.09 to 0.11 (Tidus, Chapter I), 0.75 (Tidus, the dome of Chapter II, a hard cut with no planned smear), 0.495 to 0.499 (Kimahri, Chapter I: 0.001 ' +
+      'under the cap) and 0.15 to 0.22 (Kimahri, Chapter II), a spread of eight to one that the registration table cannot predict (its head step reads 0.53 to 0.83 and its centroid step 0.28 to 0.45 for every member of the ' +
+      'roster, against 0.18 to 0.63 measured for the FFX-2 dresses); Rikku, the third slot here, has one read in any FFX room, 0.21 on the deck of Chapter VIII, and that swap was a blend and not a hard cut, so it does not say what the cut does on this stage. The piece holds the knock-out cut and ' +
+      'its rebound and the victory cheer; the plain knock-out cross and the victory of release 68 play. Lifts when a continuity run (CHK-027) of this chapter with the moments on, a knock-out of each of Tidus, Yuna and ' +
+      'Rikku, reads no unexcused swap jerk (every cut at or under 0.5 of the drawn height).',
+  }),
+  'seymour-natus': Object.freeze({
+    breath:
+      'FFX, Chapter X: the held breath is the drain-and-flood built for Total Annihilation (and, in FFX-2, Mega Flare), and a move reaches it only by id (`StagingPort.BigMove`), so nothing in this fight plays it today. The ' +
+      'sourced showpieces are Flare (`natus-flare`: one character, base 60, about every third turn in phase 3, research/ffx-seymour-natus-highbridge.md sections 3.1 and 4.1) and the Desperado of Mortibody ' +
+      '(`mortibody-desperado`: 468 to 529 to the whole party with every buff stripped, section 3.2); neither has a telegraph painting held before it (`TelegraphHold` stages only the Lance of Atrophy of Seymour Flux and the ' +
+      'Ultimate Jecht Shot of Braska), and a breath needs a tone, a sound and a shot, which are mockup decisions (hard rule 9; the driver call of 2026-10-30: never guessed). Lifts when Bailey or the driver picks a tone and ' +
+      'a shot for Flare (and for Desperado) from a mockup, and `BigMove`, `NAME_OF` and `passRecipes.HEADLINE_BLOWS` are given rows for those ids (which hit, `first` or `last`, measured the way Mega Flare was).',
+    moments:
+      'FFX, Chapter X: the moments cut the knock-out of a party member from the hurt painting to the lying one inside a planned smear (`PaintedActorLife.koCutWindow`: the moments and the smear both on), and CHK-027 excuses ' +
+      'that cut only up to 0.5 of the drawn height (`critic/policy.json`, `continuity.smear.maxJerkShare`). Where the body lies is set per stage (`ProneLay` slides it by up to half its length along the floor) and the ' +
+      'recorded runs of the motion pass read the same FFX paintings at 0.09 to 0.11 (Tidus, Chapter I), 0.75 (Tidus, the dome of Chapter II, a hard cut with no planned smear), 0.495 to 0.499 (Kimahri, Chapter I: 0.001 ' +
+      'under the cap, and an active slot here) and 0.15 to 0.22 (Kimahri, Chapter II), a spread of eight to one that the registration table cannot predict (its head step reads 0.53 to 0.83 and its centroid step 0.28 to ' +
+      '0.45 for every member of the roster, against 0.18 to 0.63 measured for the FFX-2 dresses). Flare alone makes 5.3 of the 5.4 knock-outs a fight (measured on the shipped party, research update of 2026-10-10), ' +
+      'so the cut plays often. The piece holds the knock-out cut and its rebound and the victory cheer; the plain knock-out cross and the victory of release 68 play. Lifts when a continuity run (CHK-027) of this chapter ' +
+      'with the moments on, a knock-out of each of Tidus, Yuna and Kimahri, reads no unexcused swap jerk (every cut at or under 0.5 of the drawn height).',
+  }),
+  'yojimbo-cavern': Object.freeze({
+    breath:
+      'FFX, Chapter IX: the held breath is the drain-and-flood built for Total Annihilation (and, in FFX-2, Mega Flare), and a move reaches it only by id (`StagingPort.BigMove`), so nothing in this fight plays it today. ' +
+      'The sourced showpiece is Zanmato (`yojimbo-zanmato`: 9,999 to the whole party once the gauge of Yojimbo is full, research/ffx-yojimbo.md section 4; the fight already warns the player with a story callout, ' +
+      '`yojimbo-zanmato-next`, which is not a telegraph painting), with Wakizashi and Kozuka as his other named blows; none has a telegraph painting held before it (`TelegraphHold` stages only the Lance of Atrophy of ' +
+      'Seymour Flux and the Ultimate Jecht Shot of Braska), and a breath needs a tone, a sound and a shot, which are mockup decisions (hard rule 9; the driver call of 2026-10-30: never guessed). Lifts when Bailey or the ' +
+      'driver picks a tone and a shot for Zanmato from a mockup, and `BigMove`, `NAME_OF` and `passRecipes.HEADLINE_BLOWS` are given rows for its id (which hit, `first` or `last`, measured the way Mega Flare was).',
+    cam:
+      'FFX, Chapter IX: the scene authors its framing and its victory by hand, and the plate is not the reason. The victory rig takes in the lit pad behind the party (the pad wakes once Yojimbo is recalled, ' +
+      '`cavern-stolen-fayth.ts` `PAD_GLOW`); the rigs were solved at 1600 by 900 against the FFX HUD and the resting place of the Sensor plate (the corridor between Yuna and the plate is where Yojimbo stands) and reopen ' +
+      'their field of view by the shape of the screen (`cavernRigsFor`); and the size of Yojimbo on screen is held by BOSS SCALE (`fx/mix/masters.ts`, `scaleHeld`: 1.15 times the party, the HUD fit moving the camera and ' +
+      'never the boss). The directed victory is the real close-up of the last party actor, fitted to that actor and his company only (`ProPlays.victoryPlay`), and laid on this stage offline (`ProTrack.registerKeys`, ' +
+      'docs/handoff/booth-ffx-b3a.md section 3) its 18 shots of Tidus, Yuna and Kimahri keep the lit pad in frame at their last key in 4 (Yuna 0 of 6, Kimahri 4 of 6, Tidus 0 of 6: every variant of each character laid on each of the three slots; Lulu has no row of her own and plays the Tidus close-up laid on her feet, `ProShots.characterOf`, so she is among the Tidus 0 of 6). The plate would not hold the piece back (a median worst frame of 39.7 percent past it against 47.7 for Chapter I under the plane model of Chapter II; today rigs show none at 16:9 but 4.8 ' +
+      'percent at the sides of the intro rig and 3.7 of the party rig). The piece holds the directed camera, its real shots and its soft background; today rigs play. Lifts when job J1 of docs/handoff/booth-ffx-b3a.md (the victory with the pad lit, ' +
+      'and the size of Yojimbo and the clearance of the HUD, on the real build with the camera on, against `?treated=pack`) shows the pad in frame and the size and the clearance unchanged, or the victory shot is given the ' +
+      'pad as a companion.',
+    moments:
+      'FFX, Chapter IX: the moments cut the knock-out of a party member from the hurt painting to the lying one inside a planned smear (`PaintedActorLife.koCutWindow`: the moments and the smear both on), and CHK-027 ' +
+      'excuses that cut only up to 0.5 of the drawn height (`critic/policy.json`, `continuity.smear.maxJerkShare`). Where the body lies is set per stage (`ProneLay` slides it by up to half its length along the floor) and ' +
+      'the recorded runs of the motion pass read the same FFX paintings at 0.09 to 0.11 (Tidus, Chapter I), 0.75 (Tidus, the dome of Chapter II, a hard cut with no planned smear), 0.495 to 0.499 (Kimahri, Chapter I: 0.001 ' +
+      'under the cap, and an active slot here) and 0.15 to 0.22 (Kimahri, Chapter II), a spread of eight to one that the registration table cannot predict (its head step reads 0.53 to 0.83 and its centroid step 0.28 to ' +
+      '0.45 for every member of the roster, against 0.18 to 0.63 measured for the FFX-2 dresses); Lulu, the first slot here, has no read under the cut at all. The piece holds the knock-out cut and its rebound and the ' +
+      'victory cheer; the plain knock-out cross and the victory of release 68 play. Lifts when a continuity run (CHK-027) of this chapter with the moments on, a knock-out of each of Lulu, Kimahri and Yuna, reads no ' +
+      'unexcused swap jerk (every cut at or under 0.5 of the drawn height).',
   }),
   'ffx2-leblanc': Object.freeze({
     breath:

@@ -107,7 +107,7 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(curvesOn(), `curves ${id}`).toBe(on);
       expect(realKind(), `real ${id}`).toBe(on ? 'snappy' : null);
       expect(inDemoChapter(id), `curves gate ${id}`).toBe(on);
-      expect(momentsOn(), `moments ${id}`).toBe(plays(scope, id, 'moments')); // Leblanc holds the KO cut past the smear cap (CHK-027)
+      expect(momentsOn(), `moments ${id}`).toBe(plays(scope, id, 'moments')); // Leblanc holds the KO cut past the smear cap (CHK-027); Chapters V, XV, XI and VII, IX, X hold it too (the unread knock-out cut: tests/unit/engine/booth-b2-ko-rule.test.ts and the holds' own reasons)
       const smear = plays(scope, id, 'smear'); // Chapter II's swap exception: no smear planner there
       expect(smearOn(), `smear ${id}`).toBe(smear);
       expect(smearStyleNow(), `smear style ${id}`).toBe(smear ? 'paint' : 'off');

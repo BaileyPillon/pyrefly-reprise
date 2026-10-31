@@ -32,6 +32,9 @@ const LEBLANC_HELD: readonly string[] = ['breath', 'cam', 'moments'];
 const TREATED_NOW: Readonly<Record<string, { game: 'ffx' | 'ffx2'; since: string }>> = {
   'seymour-flux': { game: 'ffx', since: 'r60' },
   yunalesca: { game: 'ffx', since: 'r70' },
+  'seymour-anima-macalania': { game: 'ffx', since: 'r71' }, // batch 3a, the FFX lane `booth-ffx-b3a`
+  'seymour-natus': { game: 'ffx', since: 'r71' },
+  'yojimbo-cavern': { game: 'ffx', since: 'r71' },
   'ffx2-bahamut': { game: 'ffx2', since: 'r60' },
   'ffx2-leblanc': { game: 'ffx2', since: 'r69' },
   'ffx2-vegnagun-shuyin': { game: 'ffx2', since: 'r70' }, // batch 2, the FFX-2 lane `booth-ffx2-b2`
@@ -46,6 +49,9 @@ const HELD_NOW: Readonly<Record<string, readonly string[]>> = {
   'ffx2-vegnagun-shuyin': ['cam', 'breath', 'moments'], // batch 2: Chapter V holds the colossus camera and the breath; the three FFX-2 chapters hold the moments (the knock-out rule: Gunner and Thief on the girls' grids)
   'ffx2-den-of-woe': ['breath', 'moments'],
   'ffx2-fallen-aeons': ['breath', 'moments'],
+  'seymour-anima-macalania': ['breath', 'cam', 'moments'], // batch 3a: the body and the pyreflies of the victory (cam), the unread knock-out cut (moments)
+  'seymour-natus': ['breath', 'moments'], // its camera plays
+  'yojimbo-cavern': ['breath', 'cam', 'moments'], // the lit pad of the victory (cam)
 };
 
 /** Does the treatment play this piece in this chapter, under the `all` scope? */
@@ -57,10 +63,7 @@ const playsUnderAll = (id: string, piece: string): boolean => Object.prototype.h
  */
 const NOT_YET: Readonly<Record<string, string>> = {
   'braskas-final-aeon': 'FFX: seven links of three foes, the heaviest chapter; maps for about 21 poses owed',
-  'seymour-anima-macalania': 'FFX: three foes under one declared boss; maps owed',
   'evrae-airship': 'FFX: swap exception (a fixed head step per pose), non-standard pose names',
-  'yojimbo-cavern': 'FFX: three foes, no KO pose; maps owed',
-  'seymour-natus': 'FFX: the re-cut question (pale fringe heuristic +19), maps owed',
   'seymour-omnis': 'FFX: five foes under the F1 ribbon and card',
   'ffx2-trema': 'FFX-2: two new dresses without clip rows or maps, a giants camera row',
   'isaaru-via-purifico': 'FFX: a one-girl party under the FFX HUD, three links',
@@ -79,14 +82,15 @@ describe('the list', () => {
     expect(LISTED).toHaveLength(19);
   });
 
-  it('is Chapter I, Chapter IV, Leblanc, Chapter II and batch 2 (Vegnagun and Shuyin, the Den of Woe, the Fallen Aeons), each with the game the registry says (rule 14)', () => {
+  it('is Chapter I, Chapter IV, Leblanc, Chapter II, batch 2 (Vegnagun and Shuyin, the Den of Woe, the Fallen Aeons) and batch 3a (Macalania, Natus, Yojimbo), each with the game the registry says (rule 14)', () => {
     expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(Object.keys(TREATED_NOW).sort());
-    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(['ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-fallen-aeons', 'ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'seymour-flux', 'yunalesca']);
+    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(['ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-fallen-aeons', 'ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'yojimbo-cavern', 'yunalesca']);
     for (const [id, e] of Object.entries(TREATED_CHAPTERS)) expect(getChapter(id)?.game, id).toBe(e.game);
     for (const [id, e] of Object.entries(TREATED_NOW)) expect(TREATED_CHAPTERS[id], id).toEqual(e);
     expect(TREATED_CHAPTERS['ffx2-leblanc']).toEqual({ game: 'ffx2', since: 'r69' });
     expect(TREATED_CHAPTERS['yunalesca']).toEqual({ game: 'ffx', since: 'r70' }); // the first FFX chapter beyond Chapter I: FFX's layout, profile and tables (hard rule 14)
     for (const id of ['ffx2-vegnagun-shuyin', 'ffx2-den-of-woe', 'ffx2-fallen-aeons']) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx2', since: 'r70' }); // batch 2: all FFX-2 only (rule 14)
+    for (const id of ['seymour-anima-macalania', 'seymour-natus', 'yojimbo-cavern']) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r71' }); // batch 3a: all FFX only (rule 14; the three research notes open with the game case)
   });
 
   it('holds the booth pair, with the games DEMO_CHAPTERS gives them; the booth list itself stays two ids', () => {
@@ -148,6 +152,27 @@ describe('the holds', () => {
     expect(treatedHold('yunalesca', 'smear')).toMatch(/SCOPE_EXCEPTIONS/);
     expect(treatedHold('yunalesca', 'smear')).toMatch(/yunalesca-all-anchor/);
     for (const p of TREATED_PIECES) if (p !== 'breath' && p !== 'cam' && p !== 'smear') expect(treatedHold('yunalesca', p), p).toBeUndefined();
+  });
+
+  it('Chapters VII, IX and X (batch 3a, FFX only) hold what the handoff says and nothing else: the staged breath for all three (the candidate moves named), the directed camera in the two rooms whose victory is authored by hand, the moments where the knock-out cut is unread; Natus keeps his camera', () => {
+    expect(Object.keys(PIECE_HOLDS['seymour-anima-macalania']!)).toEqual(['breath', 'cam', 'moments']);
+    expect(Object.keys(PIECE_HOLDS['yojimbo-cavern']!)).toEqual(['breath', 'cam', 'moments']);
+    expect(Object.keys(PIECE_HOLDS['seymour-natus']!)).toEqual(['breath', 'moments']);
+    expect(treatedHold('seymour-anima-macalania', 'breath')).toMatch(/anima-pain-boss/);
+    expect(treatedHold('seymour-anima-macalania', 'breath')).toMatch(/anima-oblivion/);
+    expect(treatedHold('seymour-anima-macalania', 'cam')).toMatch(/D-046/);
+    expect(treatedHold('seymour-anima-macalania', 'cam')).toMatch(/D-225/);
+    expect(treatedHold('seymour-natus', 'breath')).toMatch(/natus-flare/);
+    expect(treatedHold('seymour-natus', 'breath')).toMatch(/mortibody-desperado/);
+    expect(treatedHold('yojimbo-cavern', 'breath')).toMatch(/yojimbo-zanmato/);
+    expect(treatedHold('yojimbo-cavern', 'cam')).toMatch(/PAD_GLOW/);
+    for (const id of ['seymour-anima-macalania', 'seymour-natus', 'yojimbo-cavern']) {
+      expect(treatedHold(id, 'breath'), id).toMatch(/TelegraphHold/);
+      expect(treatedHold(id, 'moments'), id).toMatch(/CHK-027/);
+      expect(treatedHold(id, 'moments'), id).toMatch(/0\.495 to 0\.499/); // Kimahri in Chapter I, 0.001 under the cap: the number the hold stands on
+      for (const p of TREATED_PIECES) if (!Object.keys(PIECE_HOLDS[id]!).includes(p)) expect(treatedHold(id, p), `${id} ${p}`).toBeUndefined();
+    }
+    expect(treatedHold('seymour-natus', 'cam')).toBeUndefined(); // the plane model reads the Highbridge no worse than Gagazet and nothing authored by hand is lost (handoff section 3)
   });
 
   it('every hold in the table is the one this file expects (a new hold, or a lifted one, is a decision made in two places)', () => {
@@ -216,6 +241,7 @@ describe('who the treatment reaches', () => {
     expect(demoGameOf('ffx2-leblanc')).toBe('ffx2');
     expect(demoGameOf('ffx2-leblanc', 'ffx')).toBe('ffx2');
     expect(demoGameOf('yunalesca', 'ffx2')).toBe('ffx'); // Chapter II is FFX: the FFX layout, curve profile and tables play there, whatever the fallback says
+    for (const id of ['seymour-anima-macalania', 'seymour-natus', 'yojimbo-cavern']) expect(demoGameOf(id, 'ffx2'), id).toBe('ffx'); // batch 3a: FFX too
     expect(demoGameOf('braskas-final-aeon', 'ffx2')).toBe('ffx2'); // not treated yet: the fallback
     expect(demoGameOf('exp-leblanc', 'ffx')).toBe('ffx');
     setTreatedScope('pack');
