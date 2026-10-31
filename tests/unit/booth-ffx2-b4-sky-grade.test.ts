@@ -321,4 +321,60 @@ describe('`__pyrefly.skyGrade()`', () => {
     expect(sky('c').active).toBe('c');
     expect(sky(null).active).toBeNull(); // the r70 grade unpatched, the control arm on the same page
   });
+
+  // The review of `booth-ffx2-b4-sky` (M2): on a page that opened without the word, `skyGrade('b')` mid-battle reported `active: 'b'` while no rig was armed and the frame was release 69's, so a still filmed then would have been labelled b.
+  // The read now says what the screen shows (`armed`, `screen`), and a still is labelled by that.
+  type SkyRead = { word: SkyOption | null; active: SkyOption | null; armed: boolean; screen: string | null };
+  const read = (): ((w?: SkyOption | null) => SkyRead) => {
+    const api: Record<string, unknown> = {};
+    installProDebug(api);
+    return api['skyGrade'] as (w?: SkyOption | null) => SkyRead;
+  };
+
+  it('a page that opened WITHOUT the word: the battle sets up with the look held, and a word set mid-battle changes `active` but not the screen (`armed` false, `screen` release69) for either chapter', () => {
+    const sky = read();
+    setTreatedScope('all');
+    setProMode('pro');
+    for (const id of [V, XI]) {
+      setSkyOption(undefined);
+      applyChapterLook(id); // the battle starts: no word, so the hold keeps the rig and the arena down
+      expect([lookState.armed, lookState.pro], id).toEqual([false, false]);
+      const r = sky('b');
+      expect(r.word, id).toBe('b');
+      expect(r.active, id).toBe('b'); // the table the LUT would be built from
+      expect(r.armed, id).toBe(false);
+      expect(r.screen, id).toBe('release69'); // what a still shows: label it by this, not by `active`
+      for (const o of ['a', 'c'] as const) expect(sky(o).screen, `${id} ${o}`).toBe('release69');
+    }
+  });
+
+  it('a page that opened WITH the word: the rig and the arena are up and `screen` names the option; `skyGrade(null)` is the r70 control arm on the same page and `skyGrade(x)` gives the option back', () => {
+    const sky = read();
+    setTreatedScope('all');
+    setProMode('pro');
+    for (const id of [V, XI]) {
+      setSkyOption('b');
+      applyChapterLook(id);
+      expect([lookState.armed, lookState.pro], id).toEqual([true, true]);
+      expect(sky().screen, id).toBe('b');
+      expect(sky().armed, id).toBe(true);
+      expect(sky('c').screen, id).toBe('c');
+      const control = sky(null);
+      expect([control.active, control.armed, control.screen], id).toEqual([null, true, 'r70']);
+      expect(sky('a').screen, id).toBe('a');
+    }
+  });
+
+  it('outside Chapters V and XI `screen` is null, whatever the word and the rig (the Den of Woe plays the same rig and is not a sky chapter)', () => {
+    const sky = read();
+    setTreatedScope('all');
+    setProMode('pro');
+    setSkyOption('b');
+    for (const id of ['ffx2-den-of-woe', 'ffx2-bahamut', 'seymour-flux', undefined]) {
+      applyChapterLook(id);
+      const r = sky();
+      expect(r.screen, String(id)).toBeNull();
+      expect(r.active, String(id)).toBeNull();
+    }
+  });
 });

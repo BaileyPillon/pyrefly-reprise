@@ -94,6 +94,23 @@ describe('the holds: the look in both chapters, the camera in Chapter XI too, ea
     expect(treatedHold('ffx2-leblanc', 'cam')).toMatch(/Lifts when `ProAutoStage` re-scores the candidates for her group/);
   });
 
+  it("Chapter XI's burst is in frame only when its follower runs, so the holds say so: the `cam` lift also needs the burst frames under 3 percent (it is not a crop-only lift), and the look lifts name how that frame is filmed (a scratch build without the `cam` row, job S3b)", () => {
+    // The review of `booth-ffx2-b4-sky` (M1): with `cam` held there is no follower, the burst sits above the top edge at the resting rig, and "with the spire's burst in frame" could never be met in XI by any word the branch offers.
+    const cam = treatedHold(XI, 'cam')!;
+    expect(cam).toMatch(/and the Anima link's frames with the spire's burst in frame, filmed with the follower running, read under 3 percent of pixels over 240 on the Farplane plates under whatever grade the Road then plays, against release 69/);
+    expect(cam).toMatch(/not a crop-only lift/);
+    expect(cam.indexOf('put a party rectangle outside the viewport'), 'the original lift still comes first').toBeLessThan(cam.indexOf('burst in frame, filmed with the follower running'));
+    for (const piece of ['hd2d', 'arena'] as const) {
+      const why = treatedHold(XI, piece)!;
+      expect(why, piece).toMatch(/which in this chapter is the follower's frame only \(the held `cam` keeps the burst above the top edge\)/);
+      expect(why, piece).toMatch(/filmed from a scratch build without the `cam` row, job S3b of the note/);
+    }
+    for (const piece of ['hd2d', 'arena'] as const) expect(treatedHold(V, piece), `V ${piece}: the colossus frame is not the follower's`).not.toMatch(/S3b|scratch build/);
+    const note = readFileSync(resolve('docs/handoff/booth-ffx2-b4-sky.md'), 'utf8');
+    expect(note).toMatch(/\*\*S3b\*\*/);
+    expect(note).toMatch(/scratch build/);
+  });
+
   it('no hold names a bare job number or an art JSON (the two source guards of the booth tests)', () => {
     const src = readFileSync(resolve('src/engine/motion/PieceHolds.ts'), 'utf8');
     for (const m of src.matchAll(/\bJ\d{1,2}\b/g)) expect(src.slice(Math.max(0, (m.index ?? 0) - 150), (m.index ?? 0) + 150), m[0]).toMatch(/booth-[a-z0-9-]+\.md/);

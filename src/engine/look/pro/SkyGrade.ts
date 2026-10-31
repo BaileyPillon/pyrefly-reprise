@@ -99,6 +99,20 @@ export function skyRevision(): number {
   return o === null ? 0 : SKY_OPTIONS.indexOf(o) + 1;
 }
 
+/** What the screen draws in a Farplane chapter right now: `release69` (the look is held and no rig is armed: the plate as release 69 draws it), `r70` (the rig and the arena are up and no option patches the table: the failing grade, the control arm) or the option. */
+export type SkyScreen = 'release69' | 'r70' | SkyOption;
+
+/**
+ * Which picture a still taken now would show, so a still is never labelled with an option that is patching nothing. `rigArmed` is the look state's own answer (`lookState.armed && lookState.pro`: the bold look and the pro arena are built; the caller reads it, this
+ * module stays free of the look state). The word changes the table the LUT is built from, but the table reaches the screen only through the rig, which `LookState.applyChapterLook` arms when the battle sets up: on a page that opened WITHOUT the word a
+ * later `__pyrefly.skyGrade('b')` sets `active` and leaves the screen at `release69`. Null outside Chapter V and Chapter XI.
+ */
+export function skyScreen(rigArmed: boolean): SkyScreen | null {
+  if (running === undefined) return null;
+  if (!rigArmed) return 'release69';
+  return skyActive() ?? 'r70';
+}
+
 /**
  * The room's pro table with the active option applied: the same room unchanged (the very object) when no option is active or the key is not the running chapter's plate; otherwise a patched copy (the table itself is never written).
  * `ProGrade.proRoom` wraps its lookup in this.
