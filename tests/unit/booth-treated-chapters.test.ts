@@ -43,9 +43,9 @@ const TREATED_NOW: Readonly<Record<string, { game: 'ffx' | 'ffx2'; since: string
 /** The pieces each joined chapter holds back, in the order of `TREATED_PIECES`: the booth pair holds none (the approved target). */
 const HELD_NOW: Readonly<Record<string, readonly string[]>> = {
   yunalesca: ['cam', 'breath', 'smear'],
-  'braskas-final-aeon': ['breath'], // batch 3b: each of the three holds the staged breath only
-  'seymour-omnis': ['breath'],
-  'isaaru-via-purifico': ['breath'],
+  'braskas-final-aeon': ['breath', 'moments'], // batch 3b: each of the three holds the staged breath; the review's M1 added the moments (Rikku, 0.52) to III and XII, and its m1 and m2 the camera to XII and XIV
+  'seymour-omnis': ['breath', 'cam', 'moments'],
+  'isaaru-via-purifico': ['breath', 'cam'],
   'ffx2-leblanc': ['breath'],
   'ffx2-vegnagun-shuyin': ['cam', 'breath'], // batch 2: Chapter V holds the colossus camera and the breath
   'ffx2-den-of-woe': ['breath'],
@@ -146,18 +146,18 @@ describe('the holds', () => {
     for (const p of TREATED_PIECES) if (p !== 'breath' && p !== 'cam' && p !== 'smear') expect(treatedHold('yunalesca', p), p).toBeUndefined();
   });
 
-  it("Chapters III, XII and XIV (batch 3b, FFX only) hold the staged breath and nothing else: each has sourced showpieces whose tone, sound and shot are a mockup decision, no BigMove names them (bigMoveOf stages Mega Flare for FFX-2 only), and the one telegraph hold in these chapters is Chapter III's; every other piece plays", () => {
+  it("Chapters III, XII and XIV (batch 3b, FFX only) hold the staged breath: each has sourced showpieces whose tone, sound and shot are a mockup decision, no BigMove names them (bigMoveOf stages Mega Flare for FFX-2 only), and the one telegraph hold in these chapters is Chapter III's; with the review's pieces III and XII also hold the moments and XII and XIV the camera, and every other piece plays", () => {
     const WORDS: Readonly<Record<string, readonly RegExp[]>> = {
       'braskas-final-aeon': [/Ultimate Jecht Shot/, /Triumphant Grasp/, /Jecht Bomber/, /TelegraphHold/, /possessed-bahamut-mega-flare/],
       'seymour-omnis': [/omnis-ultima/, /6:240/, /Total Annihilation is not in this fight/, /TelegraphHold/],
       'isaaru-via-purifico': [/Countdown/, /spathi-mega-flare/, /grothia-hellfire/, /pterya-energy-ray/, /bigMoveOf/],
     };
     for (const [id, words] of Object.entries(WORDS)) {
-      expect(Object.keys(PIECE_HOLDS[id]!), id).toEqual(['breath']);
+      expect(Object.keys(PIECE_HOLDS[id]!), id).toEqual(HELD_NOW[id]);
       for (const w of words) expect(treatedHold(id, 'breath'), `${id} ${w}`).toMatch(w);
       expect(treatedHold(id, 'breath'), id).toMatch(/Lifts when/);
       expect(treatedHold(id, 'breath'), id).toMatch(/hard rule 9/);
-      for (const p of TREATED_PIECES) if (p !== 'breath') expect(treatedHold(id, p), `${id} ${p}`).toBeUndefined();
+      for (const p of TREATED_PIECES) if (!HELD_NOW[id]!.includes(p)) expect(treatedHold(id, p), `${id} ${p}`).toBeUndefined();
     }
   });
 

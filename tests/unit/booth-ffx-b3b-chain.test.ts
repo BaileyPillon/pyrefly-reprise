@@ -33,6 +33,8 @@ import { setCappedAutoPlay } from './helpers/presenterCap.ts';
 /** A staging port that keeps what `EndingView` keeps (the marks), so the test reads what the player would see: `hud` is the HUD's opacity a minute after the last cue. */
 class RecordingPort implements StagingPort {
   readonly log: string[] = [];
+  /** Each ending cue with the foe it names (review m5: a freeze or a title at a mid-fight foe must fail, not only a wrong count). */
+  readonly endings: Array<{ kind: string; boss: string }> = [];
   marks: EndMarks = emptyEnd();
   clears = 0;
   breath(cue: BreathCue): void {
@@ -43,6 +45,7 @@ class RecordingPort implements StagingPort {
   }
   ending(cue: EndingCue): void {
     this.log.push(`ending:${cue.kind}`);
+    this.endings.push({ kind: cue.kind, boss: cue.kind === 'freeze' || cue.kind === 'title' ? cue.boss : '' });
     if (cue.kind === 'freeze') this.marks.freezeAt = 0;
     else if (cue.kind === 'title') this.marks.titleAt = 0;
     else if (cue.kind === 'pullback') this.marks.pullAt = 0;
@@ -191,7 +194,7 @@ async function playChain(id: string, seed: number) {
 }
 
 describe('the real chains, one layer', () => {
-  it.each(CHAPTERS)('$id: no ending cue before the last link, one clear per later link, the one title last, the HUD in at every link\'s start, the FFX Overdrive opening and no Change plate or held breath', async ({ id, links, overdrive, heads }) => {
+  it.each(CHAPTERS)('$id: no ending cue before the last link, one clear per later link, the one title last, the HUD in at every link\'s start, the FFX Overdrive opening and no Change plate or held breath', async ({ id, links, last, overdrive, heads }) => {
     const { result, port, hudAtLinkStart, headAtLinkStart, cap } = await playChain(id, 1);
     expect(result.links, `decisions ${cap.decisions()}, capped ${cap.capped()}`).toBe(links);
     expect(result.outcome.kind).toBe('victory');
@@ -199,6 +202,8 @@ describe('the real chains, one layer', () => {
     expect(port.log.filter((e) => e === 'ending:title')).toHaveLength(1);
     for (const [i, e] of port.log.entries()) if (e.startsWith('ending:')) expect(i, `${e} before the last link`).toBeGreaterThan(at(`link:${links}`)); // no freeze, title or pull-back at a seam: only the last link ends
     expect(port.log.filter((e) => e === 'ending:freeze')).toHaveLength(1); // the last blow of the last link freezes once
+    expect(port.endings.filter((e) => e.kind === 'freeze').map((e) => e.boss), 'the freeze is on the last link\'s foe, never a mid-fight one').toEqual([last]);
+    expect(port.endings.filter((e) => e.kind === 'title').map((e) => e.boss), 'the one title names the last link\'s foe').toEqual([last]);
     expect(port.log.filter((e) => e === 'ending:pullback')).toEqual([]); // the `pose` kind: the party cheers, no silent pull-back
     expect(port.clears).toBe(links - 1);
     if (links > 1) expect(port.log.lastIndexOf('clear')).toBeGreaterThan(at(`link:${links}`));

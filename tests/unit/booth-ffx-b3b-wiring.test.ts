@@ -25,6 +25,8 @@ import { setDemoChapter, setTreatedScope } from '../../src/engine/motion/DemoGat
 import { setStagingMode } from '../../src/engine/pro/staging/StagingSwitch.ts';
 
 const IDS = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'] as const;
+/** The pieces each of the three holds, in the table's order: the breath, and from the first review the moments (III, XII) and the camera (XII, XIV). */
+const HOLDS: Record<(typeof IDS)[number], string[]> = { 'braskas-final-aeon': ['breath', 'moments'], 'seymour-omnis': ['breath', 'cam', 'moments'], 'isaaru-via-purifico': ['breath', 'cam'] };
 const stage = { projectRect: () => null, project: () => null } as never;
 const mount = (chapterId: string) => attachProStage({ root: {} as HTMLElement, chapterId, stage });
 
@@ -91,14 +93,14 @@ describe('the sound pass follows the chapter run', () => {
 });
 
 describe('`__pyrefly.treated()` knows them', () => {
-  it('lists the three, names each one\'s single hold and says whether the running chapter is reached', () => {
+  it('lists the three, names each one\'s holds (the breath; with the review\'s pieces III and XII also the moments, XII and XIV the camera) and says whether the running chapter is reached', () => {
     const api: Record<string, unknown> = {};
     installProDebug(api);
     const treated = api['treated'] as (scope?: 'all' | 'pack' | null) => { scope: string; chapters: string[]; holds: Record<string, string[]>; running: string | null; reaches: boolean };
     const all = treated('all');
     for (const id of IDS) {
       expect(all.chapters).toContain(id);
-      expect(all.holds[id]).toEqual(['breath']);
+      expect(all.holds[id]).toEqual(HOLDS[id]);
     }
     for (const id of IDS) {
       setDemoChapter(id);

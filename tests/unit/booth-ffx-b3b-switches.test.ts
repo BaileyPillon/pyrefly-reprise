@@ -1,7 +1,7 @@
 /**
  * EVERY SWITCH THE TREATMENT RUNS THROUGH, in Chapters III, XII and XIV (release 71, branch `booth-ffx-b3b`; FFX only; Bailey 2026-10-30: the booth treatment for every listed chapter). `booth-treated-switches` pins the matrix over every listed and hidden
- * chapter under both scopes and `booth-b2-off-words` the lane-off words for every joined chapter; this file pins what is particular to these three: FFX's own layout, profile and tables (hard rule 14), the single hold (the staged breath), and that the directed
- * camera and the smear, which Chapter II holds, PLAY here (none is a swap-scope exception; the camera's offline read is no worse than the approved Chapter I's, `docs/handoff/booth-ffx-b3b.md` section 4).
+ * chapters under both scopes and `booth-b2-off-words` the lane-off words for every joined chapter; this file pins what is particular to these three: FFX's own layout, profile and tables (hard rule 14), their holds (the staged breath in all three; from the
+ * first review the moments in III and XII, the camera in XII and XIV: `docs/handoff/booth-ffx-b3b.md` sections 4 and 5), and that the smear, which Chapter II holds, PLAYS here (none is a swap-scope exception).
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { setDemoChapter, setPackScreen, setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
@@ -22,6 +22,9 @@ import { DemoGovernor } from '../../src/engine/governor/DemoGovernor.ts';
 import { chapterLook } from '../../src/engine/look/LookConfig.ts';
 
 const IDS = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'] as const;
+/** The chapters that hold the moments (the reserve Rikku's KO step, review M1) and the directed camera (the killing blow's plate at the live positions, m1; the aeon as the actor, m2). */
+const MOMENTS_HELD: readonly string[] = ['braskas-final-aeon', 'seymour-omnis'];
+const CAM_HELD: readonly string[] = ['seymour-omnis', 'isaaru-via-purifico'];
 
 function allOn(): void {
   setHudF1Mode('f1');
@@ -59,8 +62,8 @@ afterEach(() => {
   setPassChapter(undefined);
 });
 
-describe.each(IDS)('%s under the scope all: FFX\'s own game everywhere, every piece but the staged breath', (ID) => {
-  it('the HUD, the look, the arena, the rim, the curves with the real clips, the moments, the smear, the directed camera and its soft background, the staging, the effects, the feel, the sound and the governor all play, in FFX', () => {
+describe.each(IDS)('%s under the scope all: FFX\'s own game everywhere, every piece but the ones it holds', (ID) => {
+  it('the HUD, the look, the arena, the rim, the curves with the real clips, the moments, the smear, the directed camera and its soft background, the staging, the effects, the feel, the sound and the governor play, in FFX, except the moments and the camera where the chapter holds them', () => {
     allOn();
     setTreatedScope('all');
     setSwapScope('wide'); // the page's default: under node there is no page and the scope would read `pack`
@@ -77,12 +80,12 @@ describe.each(IDS)('%s under the scope all: FFX\'s own game everywhere, every pi
     expect(curvesOn()).toBe(true);
     expect(curvesGame()).toBe('ffx');
     expect(realKind()).toBe('snappy');
-    expect(momentsOn()).toBe(true);
+    expect(momentsOn()).toBe(!MOMENTS_HELD.includes(ID));
     expect(swapsInScope()).toBe(true); // not a swap-scope exception: no `smear` hold is owed
     expect(smearOn()).toBe(true);
-    expect(proCamOn()).toBe(true);
-    expect(proDofOn()).toBe(true);
-    expect(proCamGame()).toBe('ffx'); // the real FFX shots, never FFX-2's follower
+    expect(proCamOn()).toBe(!CAM_HELD.includes(ID));
+    expect(proDofOn()).toBe(!CAM_HELD.includes(ID));
+    expect(proCamGame()).toBe(CAM_HELD.includes(ID) ? null : 'ffx'); // the real FFX shots, never FFX-2's follower
     expect(stagingOn()).toBe(true);
     expect(stagingGame()).toBe('ffx');
     for (const piece of ['card', 'ending', 'opening'] as StagingPiece[]) {
@@ -99,7 +102,7 @@ describe.each(IDS)('%s under the scope all: FFX\'s own game everywhere, every pi
     expect(chapterLook(ID)).toEqual({ name: 'hd2d', strength: 'bold' });
   });
 
-  it('holds the staged breath and nothing else (nothing of the chapter is a BigMove; the layer is still there for the card, the Overdrive opening and the ending), with the booth pair next to it still playing it', () => {
+  it('holds the staged breath (nothing of the chapter is a BigMove; the layer is still there for the card, the Overdrive opening and the ending), with the booth pair next to it still playing it', () => {
     allOn();
     setTreatedScope('all');
     setDemoChapter(ID);
@@ -109,8 +112,38 @@ describe.each(IDS)('%s under the scope all: FFX\'s own game everywhere, every pi
     for (const booth of ['seymour-flux', 'ffx2-bahamut']) {
       setDemoChapter(booth);
       expect(proCamOn(), booth).toBe(true);
+      expect(momentsOn(), booth).toBe(true);
       expect(stagingPieceOn('breath'), booth).toBe(true);
     }
+  });
+
+  it.runIf(MOMENTS_HELD.includes(ID))('holds the moments and nothing else of the motion: release 68\'s KO and victory play, the curves with the real clips and the smear still do, and the booth pair next to it keeps the moments (review M1)', () => {
+    allOn();
+    setTreatedScope('all');
+    setSwapScope('wide');
+    setDemoChapter(ID);
+    expect(momentsOn()).toBe(false);
+    expect(curvesOn()).toBe(true);
+    expect(realKind()).toBe('snappy');
+    expect(smearOn()).toBe(true);
+    for (const booth of ['seymour-flux', 'ffx2-bahamut']) {
+      setMomentsMode('new');
+      setDemoChapter(booth);
+      expect(momentsOn(), booth).toBe(true);
+    }
+  });
+
+  it.runIf(CAM_HELD.includes(ID))('holds the directed camera with its soft background and nothing else of the pro layer: the HD-2D look, the arena and the staging still play, today\'s rig does not change (review m1, m2)', () => {
+    allOn();
+    setTreatedScope('all');
+    setDemoChapter(ID);
+    expect(proCamOn()).toBe(false);
+    expect(proDofOn()).toBe(false);
+    expect(proCamGame()).toBeNull();
+    expect(proLookOn()).toBe(true);
+    expect(proArenaFor(ID, '')).toBe(true);
+    expect(stagingOn()).toBe(true);
+    expect(chapterLook(ID)).toEqual({ name: 'hd2d', strength: 'bold' });
   });
 
   it("under `?treated=pack` (release 68) every one of them answers today's in the chapter", () => {
@@ -148,15 +181,16 @@ describe("the lane-off words, ?pack=off and a phone still give release 62's fram
     setFeelChapter(id);
     return [hudF1On(), proLookOn(), partyRimOff(), bossCleanOn(), curvesOn(), momentsOn(), smearOn(), proCamOn(), stagingOn(), fxNewOn(), audioNewOn(), inFeelChapter() && punchMode() === 'new'];
   };
-  const ON = new Array(12).fill(true);
   const OFF = new Array(12).fill(false);
+  /** [hud, look, rim, boss, curves, moments, smear, camera, staging, fx, audio, feel] with the chapter's holds: the moments at 5, the camera at 7. */
+  const on = (id: string): boolean[] => new Array(12).fill(true).map((v: boolean, i) => v && !(i === 5 && MOMENTS_HELD.includes(id)) && !(i === 7 && CAM_HELD.includes(id)));
 
-  it.each(IDS)('%s: on a desktop with no word the whole treatment plays (the breath is the one held piece and rides on the staging layer, which is on)', (id) => {
+  it.each(IDS)('%s: on a desktop with no word the whole treatment plays but the pieces the chapter holds (the breath rides on the staging layer, which is on)', (id) => {
     setTreatedScope('all');
     setSwapScope('wide');
     setPackScreen('desk');
     readFrom('');
-    expect(readAll(id)).toEqual(ON);
+    expect(readAll(id)).toEqual(on(id));
   });
 
   it.each(IDS)('%s: ?pack=off puts every piece back; a phone or a tablet has no pack by default; ?pack=demo (the booth address) forces it on', (id) => {
@@ -169,7 +203,7 @@ describe("the lane-off words, ?pack=off and a phone still give release 62's fram
     readFrom('');
     expect(readAll(id)).toEqual(OFF);
     readFrom('?pack=demo');
-    expect(readAll(id)).toEqual(ON);
+    expect(readAll(id)).toEqual(on(id));
   });
 
   it.each(IDS)('%s: ?pro=off takes the three pro lanes back and leaves the HUD, the motion, the effects and the sound as they were; ?treated=pack takes the chapter back whole', (id) => {
@@ -179,7 +213,7 @@ describe("the lane-off words, ?pack=off and a phone still give release 62's fram
     readFrom('?pro=off');
     const [hud, look, rim, boss, curves, moments, smear, cam, staging, fx, audio] = readAll(id);
     expect([look, cam, staging]).toEqual([false, false, false]);
-    expect([hud, rim, boss, curves, moments, smear, fx, audio]).toEqual(new Array(8).fill(true));
+    expect([hud, rim, boss, curves, moments, smear, fx, audio]).toEqual([true, true, true, true, !MOMENTS_HELD.includes(id), true, true, true]);
     readFrom('');
     setTreatedScope('pack');
     expect(readAll(id)).toEqual(OFF);

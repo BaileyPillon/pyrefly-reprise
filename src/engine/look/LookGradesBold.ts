@@ -86,7 +86,7 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
     },
     // Batch 3b (FFX, `booth-ffx-b3b`; `docs/handoff/booth-ffx-b3b.md` section 3). Dream's End: the plate's saturated pixels peak at hue 350 and 340 (the crimson sky) with the eye's yellow-orange at hue 40, a dark plate (mean luminance 0.189): wine shadows, a gold-cream highlight, the crimson lifted and
     // pulled toward itself and the eye's gold lifted. The Garden of Pain: hue 240 (the violet-blue sky, most of its saturated pixels) and 330 (the pink terrace and glow), mean luminance 0.236: indigo shadows, a pink-cream highlight. The Via Purifico: hue 350 and 0 (the red lamps) and 210 (the cold blue
-    // sheen of the floor under the far door), the darkest plate (0.155): wine shadows, a warm highlight, the lamps' red and the floor's blue each lifted. The sharp bands are the rooms' own (0.41, 0.34, 0.34).
+    // sheen of the floor under the far door), the darkest plate (0.155): wine shadows, a warm highlight, the lamps' red and the floor's blue each lifted. The sharp bands are the rooms' own (0.41, 0.39 for the Garden at CHAPTER FRAMING's party positions, 0.34).
     'dreams-end': {
       shadow: [0.2, 0.05, 0.22],
       highlight: [1.0, 0.86, 0.62],
@@ -97,7 +97,7 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       shadow: [0.12, 0.08, 0.42],
       highlight: [1.0, 0.86, 0.92],
       recipe: { exposure: 0.66, gamma: 1.0, contrast: 0.46, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.28, midSat: 0.32, sat: 0.92, hues: [{ hue: 240, width: 42, sat: 0.92, lum: 1.0, toward: [0.45, 0.4, 0.95], shift: 0.12 }, { hue: 330, width: 30, sat: 1.15, lum: 1.1, toward: [1, 0.45, 0.8], shift: 0.3 }] },
-      focus: 0.34,
+      focus: 0.39,
     },
     'via-purifico': {
       shadow: [0.14, 0.07, 0.18],

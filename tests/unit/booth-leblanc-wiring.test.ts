@@ -109,9 +109,9 @@ describe('`__pyrefly.treated()`', () => {
     expect(all.chapters).toEqual(['seymour-flux', 'yunalesca', 'braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico', 'ffx2-bahamut', 'ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'ffx2-den-of-woe', 'ffx2-fallen-aeons']);
     expect(all.holds).toEqual({
       yunalesca: ['breath', 'cam', 'smear'],
-      'braskas-final-aeon': ['breath'],
-      'seymour-omnis': ['breath'],
-      'isaaru-via-purifico': ['breath'],
+      'braskas-final-aeon': ['breath', 'moments'],
+      'seymour-omnis': ['breath', 'cam', 'moments'],
+      'isaaru-via-purifico': ['breath', 'cam'],
       'ffx2-leblanc': ['breath'],
       'ffx2-vegnagun-shuyin': ['cam', 'breath'],
       'ffx2-den-of-woe': ['breath'],

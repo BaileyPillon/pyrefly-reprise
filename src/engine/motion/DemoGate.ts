@@ -113,7 +113,7 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       '0.41 to 0.44 of the height apart (Yunalesca attack to cast, Auron follow to idle). A smear that played here would plan those cuts, so Chapter II keeps release 67\'s swap look as the exception says (`?swapscope=all` still reaches her). Lifts when her entry ' +
       'in `SwapSwitch.SCOPE_EXCEPTIONS` lifts: job `yunalesca-all-anchor` of docs/handoff/pc-scope.md (`?cutanchor=on` run in the chapter) reads no swap jerk of 40 px or more outside a named cut.',
   }),
-  // Batch 3b (`booth-ffx-b3b`, FFX only): each of the three holds the staged breath and nothing else; every other piece plays (`docs/handoff/booth-ffx-b3b.md` has the offline reads that decide the camera, the moments and the smear). None of the three is in
+  // Batch 3b (`booth-ffx-b3b`, FFX only): each of the three holds the staged breath; after the first review III and XII also hold the moments (the reserve Rikku's KO step) and XII and XIV the directed camera (the killing blow's plate at the live positions; the aeon as the actor); every other piece plays (`docs/handoff/booth-ffx-b3b.md` has the offline reads). None of the three is in
   // `SwapSwitch.SCOPE_EXCEPTIONS`, so no `smear` hold is owed (`tests/unit/booth-hold-guard.test.ts` reads both lists). The breath is held where its moves are sourced but its tone, sound and shot are a mockup decision (hard rule 9; the driver call of 2026-10-30).
   'braskas-final-aeon': Object.freeze({
     breath:
@@ -121,6 +121,11 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'so nothing in the seven links plays it today. The sourced candidates (research/ffx-bfa-yu-yevon.md sections 1.3 and 1.6) are Braska\'s Final Aeon\'s Ultimate Jecht Shot (`ultimate-jecht-shot`, form 2\'s Overdrive at half HP or less, the one move of these three chapters that already ' +
       'has a telegraph painting held before it: `TelegraphHold`), his form-1 Overdrive Triumphant Grasp and the anti-aeon Jecht Bomber. A father\'s last blow is not a mount\'s countdown, so its tone, sound and shot are a mockup decision (hard rule 9; the driver call of 2026-10-30: never guessed). ' +
       'Lifts when Bailey or the driver picks a tone and a shot for the Ultimate Jecht Shot (and for Triumphant Grasp and Jecht Bomber, if wanted) from a mockup, and `BigMove`, `NAME_OF` and `passRecipes.HEADLINE_BLOWS` are given rows for those ids (which hit, `first` or `last`, measured the way Mega Flare\'s was).',
+    moments:
+      'FFX, Chapter III: the moments hard-cut a party figure\'s hurt-to-KO swap (the KO cut into the lying painting, `PaintedActorLife.koCutWindow`: no blend frame, where release 68 blends five), and a cut whose step is over 0.5 of the drawn height fails CHK-027 (Leblanc\'s Rikku Thief, measured at 0.62, is the case). ' +
+      'The offline estimate of the step (`docs/handoff/booth-ffx-b3b.md` section 4) reads the reserve Rikku at 0.52, Kimahri 0.43, Wakka 0.40 and Lulu 0.39 of the drawn height, and it under-reads the three FFX-2 dresses measured in the page (0.47, 0.33 and 0.37 against 0.62, 0.50 to 0.52 and 0.48: ' +
+      'a ratio of 0.64 to 0.77), so Rikku would measure about 0.69. All seven can be fielded (the same seven as Chapter I\'s), so the chapter keeps release 68\'s KO (the plain cross, no rebound) and its victory; the curves, the smear and every other piece still play. ' +
+      'Lifts when job J5 of docs/handoff/booth-ffx-b3b.md (a knock-out per dress, the reserve Rikku first, on the continuity harness) reads every dress\'s hurt-to-KO swap at or under 0.5 of its drawn height and reports no unexcused swap jerk (CHK-027).',
   }),
   'seymour-omnis': Object.freeze({
     breath:
@@ -128,6 +133,17 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'His one sourced showpiece is the scripted Ultima (`omnis-ultima`, row 6:240, the whole party, magic DC 64, sections 3.1 and 4.4: it comes the turn after the Dispel that follows his attack counter filling), and no telegraph painting is held before it (`TelegraphHold` stages only Seymour Flux\'s Lance of Atrophy and ' +
       'Braska\'s Ultimate Jecht Shot); a breath for it needs a tone, a sound and a shot, which are mockup decisions (hard rule 9; the driver call of 2026-10-30: never guessed). Lifts when Bailey or the driver picks a tone and a shot for Ultima from a mockup, and `BigMove`, `NAME_OF` ' +
       'and `passRecipes.HEADLINE_BLOWS` are given a row for its id (which hit, `first` or `last`, measured the way Mega Flare\'s was).',
+    cam:
+      'FFX, Chapter XII: the pro camera\'s real shots were laid by the real-motion lane on Chapter I\'s Gagazet stage, and the Garden\'s killing blow, laid on the party where the live game stands it (CHAPTER FRAMING\'s row moves Tidus, Yuna and Auron 1.5 to 2 units back, CHAPTER_XII in `fx/mix/stageTable.ts`), ' +
+      'puts more of the frame past the plate than the approved chapter\'s: the offline read (`ProShots.laidShot` and `fitDolly`, no browser, `docs/handoff/booth-ffx-b3b.md` section 4) gives 37.7 percent at 16:9 and 39.9 at 21:9 against Chapter I\'s 24.5 and 32.6 under the same model (13.2 and 7.3 points over, ' +
+      'where the lane\'s tolerance is five and Chapter II\'s dome was held on 7.5); the cast and the Overdrive read no worse than Chapter I\'s, and a summoned aeon reads better. The model overstates (no pillars, no director clamp), which cannot call the push safe. The piece holds the directed camera, its real shots ' +
+      'and its soft background; the HD-2D look\'s own tilt-shift band stays. Lifts when job J2 of docs/handoff/booth-ffx-b3b.md (a cast, a landing, the killing blow and the victory at 16:9, 16:10, 21:9 and 4:3 on the real build) reads no plate edge, void or back of the plate beyond today\'s rig in any frame, ' +
+      'or the shots are clamped to the Garden plate\'s width and top margin.',
+    moments:
+      'FFX, Chapter XII: the moments hard-cut a party figure\'s hurt-to-KO swap (the KO cut into the lying painting, `PaintedActorLife.koCutWindow`: no blend frame, where release 68 blends five), and a cut whose step is over 0.5 of the drawn height fails CHK-027 (Leblanc\'s Rikku Thief, measured at 0.62, is the case). ' +
+      'The offline estimate of the step (`docs/handoff/booth-ffx-b3b.md` section 4) reads the reserve Rikku at 0.52, Kimahri 0.43, Wakka 0.40 and Lulu 0.39 of the drawn height, and it under-reads the three FFX-2 dresses measured in the page (0.47, 0.33 and 0.37 against 0.62, 0.50 to 0.52 and 0.48: ' +
+      'a ratio of 0.64 to 0.77), so Rikku would measure about 0.69. All seven can be fielded (the Switch brings the reserve into Tidus\'s, Yuna\'s or Auron\'s place), so the chapter keeps release 68\'s KO (the plain cross, no rebound) and its victory; the curves, the smear and every other piece still play. ' +
+      'Lifts when job J5 of docs/handoff/booth-ffx-b3b.md (a knock-out per dress, the reserve Rikku first, on the continuity harness) reads every dress\'s hurt-to-KO swap at or under 0.5 of its drawn height and reports no unexcused swap jerk (CHK-027).',
   }),
   'isaaru-via-purifico': Object.freeze({
     breath:
@@ -135,6 +151,12 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'research/ffx-isaaru-bevelle.md section 3) and is in neither table. The sourced candidates are that Countdown to Mega Flare (an announced countdown like Chapter IV\'s), Grothia\'s Hellfire (`grothia-hellfire`) and Pterya\'s Energy Ray (`pterya-energy-ray`), ' +
       'each an aeon\'s blow in a duel of aeons, whose tone, sound and shot are a mockup decision (hard rule 9; the driver call of 2026-10-30: never guessed). ' +
       'Lifts when Bailey or the driver picks the move, a tone and a shot from a mockup, `BigMove` and its id table are given the id (the announced countdown `moveOfName` reads for FFX-2 would need its FFX counterpart), and `passRecipes.HEADLINE_BLOWS` its hit.',
+    cam:
+      'FFX, Chapter XIV: the pro camera\'s real shots were laid by the real-motion lane on Chapter I\'s Gagazet stage for human-sized actors, and here it is Yuna\'s summoned aeon (3.2 tall, `VIA_ACTOR_HEIGHTS`, from the party\'s second slot) that acts, in the treated rooms\' narrowest plate (40 wide at 20 back; Chapter I\'s is 82 at 48, ' +
+      'the Garden\'s and Dream\'s End\'s 80 at 50: `VIA_BACKDROP`). The offline read (`ProShots.laidShot` and `fitDolly`, no browser, `docs/handoff/booth-ffx-b3b.md` section 4) with the aeon as the actor puts its killing blow\'s rectangle outside the viewport in 100 percent of the samples against Chapter I\'s aeon 44.4, ' +
+      'with 33.4 percent of the frame past the plate at 16:9 (37.2 at 21:9) against 18.6 (28.5); Yuna herself reads better than Chapter I\'s party. The model overstates (no pillars, no director clamp; every aeon is cropped in the cast and the Overdrive in Chapter I too), which cannot call the push safe. ' +
+      'The piece holds the directed camera, its real shots and its soft background; the HD-2D look\'s own tilt-shift band stays. Lifts when job J2 of docs/handoff/booth-ffx-b3b.md (the aeon\'s killing blow first, then a cast, a landing and the victory, at 16:9, 16:10, 21:9 and 4:3 on the real build) reads the aeon whole ' +
+      'and no plate edge, void or back of the plate beyond today\'s rig in any frame, or the shots are clamped to the Via plate\'s width and top margin.',
   }),
   'ffx2-leblanc': Object.freeze({
     breath:

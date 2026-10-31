@@ -66,10 +66,10 @@ export const ROOM_LOOKS: Readonly<Record<LookName, Readonly<Record<string, RoomL
     'zanarkand-dome': { focus: 0.35, light: { u: 0.338, v: 0.063, color: [0.97, 0.82, 0.98] } },
     // Batch 3b (FFX, `booth-ffx-b3b`; `docs/handoff/booth-ffx-b3b.md` section 3 has every number). The sharp band is the booth rule (focus = 0.36 + 0.727 x (the party's feet-and-knee middle at the idle rig - 0.187)). Dream's End (Chapter III): the burning eye is the light, the
     // painting's own (core at u 0.484, v 0.286 from the top, rgb 1.0 0.74 0.27; `findLight` takes the flame wall at the base, u 0.492, v 0.819, with its default cut), idle rig middle 0.259, 0.41. The Garden of Pain (Chapter XII): the pale pink glow low in the sky behind the dais is the key
-    // (the scene's own: `garden-of-pain.ts` keys its lights "from high and behind"; u 0.505, v 0.337; `findLight` takes a terrace tile, u 0.336, v 0.681), idle middle 0.152, 0.34. The Via Purifico (Chapter XIV): the lamp-lit haze at the hall's vanishing point (u 0.508, v 0.542, the engine's own pick,
+    // (the scene's own: `garden-of-pain.ts` keys its lights "from high and behind"; u 0.505, v 0.337; `findLight` takes a terrace tile, u 0.336, v 0.681), idle middle 0.225 with CHAPTER FRAMING's row (`fx/mix/stageTable.ts` CHAPTER_XII moves the party 1.5 to 2 units back; the scene's own slots read 0.152), 0.39 (review m1). The Via Purifico (Chapter XIV): the lamp-lit haze at the hall's vanishing point (u 0.508, v 0.542, the engine's own pick,
     // kept so the row does not depend on the pick), idle middle 0.155, 0.34.
     'dreams-end': { focus: 0.41, light: { u: 0.484, v: 0.286, color: [1.0, 0.76, 0.27] } },
-    'garden-of-pain': { focus: 0.34, light: { u: 0.505, v: 0.337, color: [0.82, 0.55, 0.82] } },
+    'garden-of-pain': { focus: 0.39, light: { u: 0.505, v: 0.337, color: [0.82, 0.55, 0.82] } },
     'via-purifico': { focus: 0.34, light: { u: 0.508, v: 0.542, color: [0.9, 0.42, 0.38] } },
     // Chapter IV (FFX-2), the Bevelle underground: the great skylight is the light (the picture's own brightest part); the band covers the girls and the dragon's coils.
     'bevelle-underground': { focus: 0.4 },

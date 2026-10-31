@@ -11,7 +11,7 @@ import { getChapter } from '../../src/data/encounters.ts';
 import { getChapterMeta } from '../../src/data/chapter-meta.ts';
 import { findEnemyGroup } from '../../src/app/screens/BattleScreenSetup.ts';
 import { BOSS_CLEAN_ARTS, BOSS_FEET, BOSS_FEET_POSES, bossCleanCard, bossCleanOn, setBossClean } from '../../src/engine/look/pro/BossClean.ts';
-import { setDemoChapter, setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
+import { setDemoChapter, setTreatedScope, treatedHold } from '../../src/engine/motion/DemoGate.ts';
 import { setPartyRim } from '../../src/engine/look/pro/PartyRimSwitch.ts';
 import { CHAPTER_LOOKS, chapterLook } from '../../src/engine/look/LookConfig.ts';
 import { ROOM_LOOKS, lutBytes } from '../../src/engine/look/LookGrades.ts';
@@ -28,6 +28,7 @@ import { realKeyOf, realRowOf } from '../../src/engine/motion/RealMotion.ts';
 import { DREAMS_END_RIGS, DREAMS_END_SLOTS } from '../../src/scenes/dreams-end.ts';
 import { GARDEN_BACKDROP, GARDEN_OF_PAIN_RIGS, GARDEN_OF_PAIN_SLOTS } from '../../src/scenes/garden-of-pain.ts';
 import { VIA_BACKDROP, VIA_PURIFICO_RIGS, VIA_PURIFICO_SLOTS } from '../../src/scenes/via-purifico.ts';
+import { liveFeet } from './booth-ffx-b3b-live-stage.ts';
 
 afterEach(() => {
   setTreatedScope(null);
@@ -47,7 +48,7 @@ interface Room {
   readonly room: string;
   /** The painting's own light (plate u from the left, v from the top; offline read, section 3) and the colour the rows give it. */
   readonly light: { readonly u: number; readonly v: number };
-  /** The sharp band the booth rule gives at this room's idle rig. */
+  /** The sharp band the booth rule gives at this room's idle rig, with the party where the live game stands it (`booth-ffx-b3b-live-stage.ts`; review m1: the Garden's 0.34 was read at the scene's own slots). */
   readonly focus: number;
   /** The plane the plate hangs on (the scene's own constants: Dream's End and the Garden 80 wide at z -50, the Via Purifico 40 wide at z -20). */
   readonly plate: { readonly width: number; readonly distance: number; readonly centreY: number };
@@ -62,9 +63,9 @@ interface Room {
 const toV3 = (p: unknown): V3 => (Array.isArray(p) ? [p[0] as number, p[1] as number, p[2] as number] : [(p as { x: number }).x, (p as { y: number }).y, (p as { z: number }).z]);
 const rigOf = (r: { position: unknown; lookAt: unknown; fov?: number | undefined }): Room['idle'] => ({ position: toV3(r.position), lookAt: toV3(r.lookAt), fov: r.fov ?? 32 });
 const ROOMS: readonly Room[] = [
-  { chapter: 'braskas-final-aeon', room: 'dreams-end', light: { u: 0.484, v: 0.286 }, focus: 0.41, plate: { width: 80, distance: -50, centreY: 1.23 }, idle: rigOf(DREAMS_END_RIGS['idle']!), party: DREAMS_END_SLOTS.party as V3[], height: 1.82, palette: { key: 0x431923, sky: 0x24141f } },
-  { chapter: 'seymour-omnis', room: 'garden-of-pain', light: { u: 0.505, v: 0.337 }, focus: 0.34, plate: GARDEN_BACKDROP, idle: rigOf(GARDEN_OF_PAIN_RIGS['idle']!), party: GARDEN_OF_PAIN_SLOTS.party as V3[], height: 1.8, palette: { key: 0x574ba2, sky: 0x2e37a3 } },
-  { chapter: 'isaaru-via-purifico', room: 'via-purifico', light: { u: 0.508, v: 0.542 }, focus: 0.34, plate: VIA_BACKDROP, idle: rigOf(VIA_PURIFICO_RIGS['idle']!), party: VIA_PURIFICO_SLOTS.party.slice(0, 1) as V3[], height: 1.68, palette: { key: 0x381f22, sky: 0x1d1b21 } },
+  { chapter: 'braskas-final-aeon', room: 'dreams-end', light: { u: 0.484, v: 0.286 }, focus: 0.41, plate: { width: 80, distance: -50, centreY: 1.23 }, idle: rigOf(DREAMS_END_RIGS['idle']!), party: DREAMS_END_SLOTS.party.map((s, i) => liveFeet('braskas-final-aeon', DREAMS_END_RIGS['idle']!, s, ['tidus', 'yuna', 'auron'][i]!)), height: 1.82, palette: { key: 0x431923, sky: 0x24141f } },
+  { chapter: 'seymour-omnis', room: 'garden-of-pain', light: { u: 0.505, v: 0.337 }, focus: 0.39, plate: GARDEN_BACKDROP, idle: rigOf(GARDEN_OF_PAIN_RIGS['idle']!), party: GARDEN_OF_PAIN_SLOTS.party.map((s, i) => liveFeet('seymour-omnis', GARDEN_OF_PAIN_RIGS['idle']!, s, ['tidus', 'yuna', 'auron'][i]!)), height: 1.8, palette: { key: 0x574ba2, sky: 0x2e37a3 } },
+  { chapter: 'isaaru-via-purifico', room: 'via-purifico', light: { u: 0.508, v: 0.542 }, focus: 0.34, plate: VIA_BACKDROP, idle: rigOf(VIA_PURIFICO_RIGS['idle']!), party: VIA_PURIFICO_SLOTS.party.slice(0, 1).map((s) => liveFeet('grothia', VIA_PURIFICO_RIGS['idle']!, s, 'yuna')), height: 1.68, palette: { key: 0x381f22, sky: 0x1d1b21 } },
 ];
 
 // ---- the camera maths of the reads (a pinhole, as `ProFit.ndcRect`): where a world point stands in the frame at a rig, 0..1 from the bottom-left
@@ -86,6 +87,9 @@ function frameOf(rig: Room['idle'], p: V3, aspect = 16 / 9): [number, number] {
 }
 const plateWorld = (R: Room, u: number, v: number): V3 => [(u - 0.5) * R.plate.width, R.plate.centreY + (0.5 - v) * ((R.plate.width * 1536) / 2688), R.plate.distance];
 
+/** The colour each room's light is authored in (the same in both looks; review m5: the cinematic Dream's End light's colour was the one unpinned number of the rows). */
+const LIGHT_COLOUR: Readonly<Record<string, readonly number[]>> = { 'dreams-end': [1.0, 0.76, 0.27], 'garden-of-pain': [0.82, 0.55, 0.82], 'via-purifico': [0.9, 0.42, 0.38] };
+
 describe.each(ROOMS)('$chapter ($room): the HD-2D look and the room rows', (R) => {
   const lights = [ROOM_LOOKS.hd2d[R.room]?.light, ROOM_LOOKS.cinematic[R.room]?.light];
 
@@ -103,6 +107,7 @@ describe.each(ROOMS)('$chapter ($room): the HD-2D look and the room rows', (R) =
       expect(l).toBeDefined();
       expect(l!.u).toBeCloseTo(R.light.u, 2);
       expect(l!.v).toBeCloseTo(R.light.v, 2);
+      expect([...l!.color], 'the light colour').toEqual(LIGHT_COLOUR[R.room]);
     }
     if (R.room === 'dreams-end') {
       expect(lights[0]!.v).toBeLessThan(0.4); // the burning eye in the upper half, not the flame wall at the base (v 0.82), which `findLight` takes with its default cut
@@ -252,6 +257,22 @@ describe('the arena is [ours] and says so: the rows name their still, the handof
     expect(note).toContain('booth-ffx-b3b-plate-grade.png');
     // a source comment that cites "job J<n> of the handoff" names the job the note defines under that number (the earlier batches' review found three citing another note's numbers)
     for (const m of src.matchAll(/job J(\d+) of the handoff/g)) expect(note, `J${m[1]}`).toMatch(new RegExp(`\\*\\*J${m[1]}, the before and after still pair`));
+  });
+
+  it('every job a hold in DemoGate.PIECE_HOLDS cites is defined in the note under that number and for that piece (J2 decides `cam`, J5 is the KO per dress that decides `moments`)', () => {
+    const note = readFileSync(resolve(__dirname, '../..', 'docs/handoff/booth-ffx-b3b.md'), 'utf8');
+    const JOB: Readonly<Record<string, RegExp>> = { cam: /\*\*J2 \(decides `cam`\)/, moments: /\*\*J5, a KO per dress/ };
+    let cited = 0;
+    for (const id of ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'])
+      for (const piece of ['cam', 'moments'] as const) {
+        const why = treatedHold(id, piece);
+        if (why === undefined) continue;
+        const jobs = [...why.matchAll(/job J(\d+) of docs\/handoff\/booth-ffx-b3b\.md/g)].map((m) => m[1]);
+        expect(jobs, `${id} ${piece}`).toEqual([piece === 'cam' ? '2' : '5']);
+        expect(note, `${id} ${piece}`).toMatch(JOB[piece]!);
+        cited++;
+      }
+    expect(cited).toBe(4); // III moments, XII cam and moments, XIV cam
   });
 });
 

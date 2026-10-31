@@ -101,7 +101,7 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(curvesOn(), `curves ${id}`).toBe(on);
       expect(realKind(), `real ${id}`).toBe(on ? 'snappy' : null);
       expect(inDemoChapter(id), `curves gate ${id}`).toBe(on);
-      expect(momentsOn(), `moments ${id}`).toBe(on);
+      expect(momentsOn(), `moments ${id}`).toBe(plays(scope, id, 'moments')); // Chapters III and XII hold the moments (the reserve Rikku's KO step, batch 3b review M1): release 68's KO and victory play there
       const smear = plays(scope, id, 'smear'); // Chapter II's swap exception: no smear planner there
       expect(smearOn(), `smear ${id}`).toBe(smear);
       expect(smearStyleNow(), `smear style ${id}`).toBe(smear ? 'paint' : 'off');

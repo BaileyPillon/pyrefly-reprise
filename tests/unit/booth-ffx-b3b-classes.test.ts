@@ -4,10 +4,11 @@
  * note for the browser jobs. This file reads the other three offline, with the real code and no browser:
  *
  * 2. a story script cutting the camera to a rig while the follower runs on top (`ProAutoStage.SCRIPTED_RIGS`): FFX has no follower, and none of the three chapters' scripts cuts to a rig the table names;
- * 3. the camera pushing a figure's painted rectangle outside the viewport: the FFX director's real shots (`ProShots.laidShot`, the play's own `fitDolly`) laid on each chapter's stage, the focus figures projected (`ProFit.ndcRect`) at 16:9 and 21:9, against the approved
- *    Chapter I laid the same way. The model overstates (it reads the approved chapter's own cast shot as cropping the caster in most samples: no director clamp, no pillars), so the claim is RELATIVE: no worse than the control; the finisher's push keeps the actor whole;
+ * 3. the camera pushing a figure's painted rectangle outside the viewport: the FFX director's real shots (`ProShots.laidShot`, the play's own `fitDolly`) laid on each chapter's stage WITH THE PARTY WHERE THE LIVE GAME STANDS IT (CHAPTER FRAMING's row, through the real `standFor` and
+ *    `sideShift`; review m1) and with a summoned aeon as the actor (m2), the actor projected (`ProFit.ndcRect`) at 16:9 and 21:9, against the approved Chapter I laid the same way. The model overstates (it reads the approved chapter's own cast shot as cropping the caster in most
+ *    samples: no director clamp, no pillars), so the claim is RELATIVE (five points of tolerance), and `PIECE_HOLDS[id].cam` is asserted exactly when a read exceeds it: held in XII and XIV, played in III;
  * 4. the moments piece turning a knock-out into a hard cut whose step is over 0.5 of the drawn height (Leblanc's Rikku Thief 0.62, Yuna Gunner 0.50 to 0.52): the offline estimate of each figure's hurt-to-KO step (`tools` script in the handoff), calibrated on the three FFX-2
- *    dresses that were measured in the page.
+ *    dresses that were measured in the page; `PIECE_HOLDS[id].moments` is asserted exactly when a figure the chapter can field is over the bounds (review M1: held in III and XII for the reserve Rikku, 0.52).
  */
 import { describe, expect, it } from 'vitest';
 import { getChapter } from '../../src/data/encounters.ts';
@@ -16,10 +17,13 @@ import { DREAMS_END_BFA_PIN, DREAMS_END_RIGS, DREAMS_END_ROW_SHIFT, DREAMS_END_S
 import { GARDEN_ACTOR_HEIGHTS, GARDEN_BACKDROP, GARDEN_BOSS_SPOT, GARDEN_OF_PAIN_RIGS, GARDEN_OF_PAIN_SLOTS } from '../../src/scenes/garden-of-pain.ts';
 import { VIA_ACTOR_HEIGHTS, VIA_AEON_SPOT, VIA_BACKDROP, VIA_PURIFICO_RIGS, VIA_PURIFICO_SLOTS } from '../../src/scenes/via-purifico.ts';
 import { SCRIPTED_RIGS, scriptedShot } from '../../src/engine/procam/ProAutoStage.ts';
-import { PIECE_HOLDS, treatedHold } from '../../src/engine/motion/DemoGate.ts';
+import { treatedHold } from '../../src/engine/motion/DemoGate.ts';
 import { characterOf, finisherKeys, laidShot, pickRow, rowsOf } from '../../src/engine/procam/ProShots.ts';
 import { lengthOf, sampleKeys } from '../../src/engine/procam/ProTrack.ts';
 import { bandOf, fitDolly, ndcRect, type Box } from '../../src/engine/procam/ProFit.ts';
+import { standFor } from '../../src/engine/fx/mix/stageTable.ts';
+import type { CameraRig } from '../../src/engine/BattleCamera.ts';
+import { liveFeet } from './booth-ffx-b3b-live-stage.ts';
 
 const IDS = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'] as const;
 
@@ -60,7 +64,7 @@ describe('class 2: the scripts cut the camera to the scene\'s own rigs, and none
 type V3 = [number, number, number];
 interface Stage {
   readonly plate: { readonly width: number; readonly distance: number; readonly centreY: number };
-  readonly party: ReadonlyArray<{ readonly char: string; readonly feet: V3 }>;
+  readonly party: ReadonlyArray<{ readonly char: string; readonly feet: V3; readonly height?: number; readonly aspect?: number }>;
   readonly boss: { readonly feet: V3; readonly height: number; readonly aspect: number };
 }
 const HEIGHT: Record<string, number> = { tidus: 1.82, yuna: 1.68, kimahri: 1.95, auron: 1.93 };
@@ -140,8 +144,8 @@ function read(stage: Stage, kind: 'cast' | 'overdrive' | 'finisher', aspect: num
   let shots = 0;
   const bossBody = box(stage.boss.feet, stage.boss.height, stage.boss.aspect, [0, stage.boss.height > 3 ? 0.75 : 1]);
   for (const m of stage.party) {
-    const ph = HEIGHT[m.char] ?? 1.8;
-    const actorBox = box(m.feet, ph, ASPECT[m.char] ?? 0.65);
+    const ph = m.height ?? HEIGHT[m.char] ?? 1.8;
+    const actorBox = box(m.feet, ph, m.aspect ?? ASPECT[m.char] ?? 0.65);
     const live = { actor: m.feet, target: stage.boss.feet, height: ph };
     const ch = characterOf(m.char, m.char);
     let keys;
@@ -173,69 +177,138 @@ function read(stage: Stage, kind: 'cast' | 'overdrive' | 'finisher', aspect: num
   return { outside: outside / Math.max(1, samples), plate: plate / Math.max(1, shots) };
 }
 
-describe('class 3: the directed camera of each chapter is no worse than the approved Chapter I laid the same way (the model overstates; the claim is relative)', () => {
-  for (const [name, aspect] of [['16:9', 16 / 9], ['21:9', 3440 / 1440]] as const) {
-    it.each(IDS)(`%s at ${name}: the cast and the Overdrive shots crop the actor in no more samples than Chapter I's and expose no more of the plate; the killing blow's push never crops the actor`, (id) => {
-      const stage = STAGES[id]!;
+// ------------------------------------------------------------------------------------------------ the live stage and the aeons (review m1 and m2)
+/** A scene's own numbers: its resting (`idle`) rig, which CHAPTER FRAMING moves the party from, its party slots, and the height a party-side aeon stands at (`BattlePresenterArt.worldHeightFor`: 0.7 of the scene's enemy height; the Via names its aeons' 3.2). */
+const SCENES: Record<string, { rig: CameraRig; slots: readonly V3[]; humans: readonly string[]; aeonHeight: number; boss: string }> = {
+  'braskas-final-aeon': { rig: DREAMS_END_RIGS['idle']!, slots: DREAMS_END_SLOTS.party as V3[], humans: ['tidus', 'yuna', 'auron'], aeonHeight: (DREAMS_END_SLOTS.enemyHeight ?? 4.2) * 0.7, boss: 'braskas-final-aeon' },
+  'seymour-omnis': { rig: GARDEN_OF_PAIN_RIGS['idle']!, slots: GARDEN_OF_PAIN_SLOTS.party as V3[], humans: ['tidus', 'yuna', 'auron'], aeonHeight: (GARDEN_OF_PAIN_SLOTS.enemyHeight ?? 4.2) * 0.7, boss: 'seymour-omnis' },
+  'isaaru-via-purifico': { rig: VIA_PURIFICO_RIGS['idle']!, slots: VIA_PURIFICO_SLOTS.party as V3[], humans: ['yuna'], aeonHeight: VIA_ACTOR_HEIGHTS.aeon, boss: 'grothia' },
+};
+const AEON_ASPECT = 0.9; // the painted aeons' silhouette width over height, our estimate (the Valefor, Ifrit, Ixion, Shiva and Bahamut paintings stand 0.8 to 1.0): rule 6 does not reach a camera model's input, and the control uses the same number
+const CONTROL_AEON_HEIGHT = 4.2 * 0.7; // Gagazet names no enemy height: the presenter's default 4.2, at 0.7 for an aeon
+
+/** Where the live game puts a party member: the scene's slot moved by CHAPTER FRAMING's row (`fx/mix/stageTable.ts`, on by default for FFX on a desktop), read through the real `standFor` and `sideShift` from today's resting rig, for the member's combatant id. */
+const livePlace = (id: string, member: string, slot: number): V3 => liveFeet(SCENES[id]!.boss, SCENES[id]!.rig, SCENES[id]!.slots[slot]!, member);
+
+/** A chapter's stage with the party the live game fields: the humans of the line-up, or the one aeon a summon stands in Yuna's slot (slot 1; the Via's comment says the same). */
+function liveStage(id: string, who: 'human' | 'aeon'): Stage {
+  const sc = SCENES[id]!;
+  const base = STAGES[id]!;
+  if (who === 'human') return { ...base, party: sc.humans.map((char, i) => ({ char, feet: livePlace(id, char, i) })) };
+  return { ...base, party: [{ char: 'valefor', feet: livePlace(id, 'valefor', 1), height: sc.aeonHeight, aspect: AEON_ASPECT }] };
+}
+const controlStage = (who: 'human' | 'aeon'): Stage => (who === 'human' ? STAGES['gagazet']! : { ...STAGES['gagazet']!, party: [{ char: 'valefor', feet: [0.3, 0, 1.0] as V3, height: CONTROL_AEON_HEIGHT, aspect: AEON_ASPECT }] });
+
+/** Every way the chapter's directed camera reads worse than the approved Chapter I laid the same way, at an aspect (the tolerance is the lane's: five points). Empty: the camera plays. */
+const TOLERANCE = 0.05;
+function camFailures(id: string, aspect: number): string[] {
+  const out: string[] = [];
+  for (const who of ['human', 'aeon'] as const) {
+    const stage = liveStage(id, who);
+    const control = controlStage(who);
+    for (const kind of ['cast', 'overdrive', 'finisher'] as const) {
+      const mine = read(stage, kind, aspect);
+      const base = read(control, kind, aspect);
+      if (mine.outside > base.outside + TOLERANCE) out.push(`${who} ${kind}: ${(100 * mine.outside).toFixed(1)}% of samples outside against Chapter I's ${(100 * base.outside).toFixed(1)}%`);
+      if (mine.plate > base.plate + TOLERANCE) out.push(`${who} ${kind}: ${(100 * mine.plate).toFixed(1)}% of the frame past the plate against Chapter I's ${(100 * base.plate).toFixed(1)}%`);
+    }
+  }
+  return out;
+}
+const ASPECTS = [['16:9', 16 / 9], ['21:9', 3440 / 1440]] as const;
+
+describe('class 3: the directed camera of each chapter, with the party where the live game stands it and with an aeon as the actor, against the approved Chapter I laid the same way (the model overstates; the claim is relative)', () => {
+  it('the live stage is the real one: Chapter XII moves its three apart and back (the row has a step for each), Chapter III moves the party right, Chapter XIV has no row; the Garden\'s middle foot-and-knee line moves from 0.152 to 0.225', () => {
+    const [tidus, yuna, auron] = ['tidus', 'yuna', 'auron'].map((m, i) => livePlace('seymour-omnis', m, i)) as [V3, V3, V3];
+    const raw = SCENES['seymour-omnis']!.slots;
+    expect(Math.hypot(tidus[0] - raw[0]![0], tidus[2] - raw[0]![2])).toBeGreaterThan(1.5);
+    expect(Math.hypot(yuna[0] - raw[1]![0], yuna[2] - raw[1]![2])).toBeGreaterThan(1.5);
+    expect(Math.hypot(auron[0] - raw[2]![0], auron[2] - raw[2]![2])).toBeGreaterThan(1.9);
+    expect(tidus[0]).toBeLessThan(yuna[0]); // Tidus left, Yuna right, Auron between and back
+    expect(auron[2]).toBeLessThan(Math.min(tidus[2], yuna[2]));
+    expect(livePlace('braskas-final-aeon', 'tidus', 0)[0] - SCENES['braskas-final-aeon']!.slots[0]![0]).toBeGreaterThan(0.1);
+    expect(standFor('ffx', [SCENES['isaaru-via-purifico']!.boss], false)).toBeNull();
+    expect(livePlace('isaaru-via-purifico', 'yuna', 0)).toEqual(SCENES['isaaru-via-purifico']!.slots[0]);
+  });
+
+  it.each(IDS)('%s: the cast and the Overdrive crop no more samples and expose no more of the plate than Chapter I\'s, and the human killing blow never crops the actor, at 16:9 and 21:9', (id) => {
+    for (const [, aspect] of ASPECTS) {
+      const stage = liveStage(id, 'human');
       for (const kind of ['cast', 'overdrive'] as const) {
         const mine = read(stage, kind, aspect);
-        const control = read(STAGES['gagazet']!, kind, aspect);
-        expect(mine.outside, `${id} ${kind} outside ${mine.outside.toFixed(3)} against Chapter I's ${control.outside.toFixed(3)}`).toBeLessThanOrEqual(control.outside + 0.05);
-        expect(mine.plate, `${id} ${kind} plate ${mine.plate.toFixed(3)} against Chapter I's ${control.plate.toFixed(3)}`).toBeLessThanOrEqual(control.plate + 0.05);
+        const control = read(controlStage('human'), kind, aspect);
+        expect(mine.outside, `${id} ${kind} outside`).toBeLessThanOrEqual(control.outside + TOLERANCE);
+        expect(mine.plate, `${id} ${kind} plate`).toBeLessThanOrEqual(control.plate + TOLERANCE);
       }
-      const fin = read(stage, 'finisher', aspect);
-      expect(fin.outside, `${id} finisher`).toBe(0);
-    });
-  }
-
-  it('so the camera is not held in any of the three: each holds the staged breath only (the one-row fallback, `PIECE_HOLDS[id].cam`, is named in the handoff and not built)', () => {
-    for (const id of IDS) {
-      expect(treatedHold(id, 'cam'), id).toBeUndefined();
-      expect(Object.keys(PIECE_HOLDS[id]!), id).toEqual(['breath']);
+      expect(read(stage, 'finisher', aspect).outside, `${id} finisher`).toBe(0);
     }
+  });
+
+  it('the directed camera is held where, and only where, the corrected read finds a shot worse than Chapter I\'s (an aeon as the actor, the killing blow\'s plate at the live positions); the holds name the numbers and what lifts them', () => {
+    const failing = IDS.filter((id) => ASPECTS.some(([, aspect]) => camFailures(id, aspect).length > 0));
+    for (const id of IDS) {
+      const why = ASPECTS.flatMap(([name, aspect]) => camFailures(id, aspect).map((f) => `${name} ${f}`));
+      expect(treatedHold(id, 'cam') !== undefined, `${id}: ${why.join(' | ') || 'every shot within five points of Chapter I\'s'}`).toBe(failing.includes(id));
+      if (failing.includes(id)) {
+        expect(treatedHold(id, 'cam'), id).toMatch(/Lifts when/);
+        expect(treatedHold(id, 'cam'), id).toMatch(/J2/);
+      }
+    }
+    expect(failing, 'the corrected read must still tell the three apart: Chapter III passes').not.toContain('braskas-final-aeon');
   });
 });
 
 // ------------------------------------------------------------------------------------------------ class 4: the knock-out's hard cut
 /**
  * The offline estimate of each figure's hurt-to-KO step (the vertical distance between where the silhouette's centroid stands above the floor in the two paintings, by `docs/target/pose-measure.json`'s baselines and scales, over the idle's drawn height; `ko-step-tmp.py`
- * of the lane, `docs/handoff/booth-ffx-b3b.md` section 3). CALIBRATION: the same estimate gives 0.47 for Rikku Thief, 0.33 for Yuna Gunner and 0.37 for Rikku Dark Knight, whose swap jerks were MEASURED in the page at 0.62 to 0.63, 0.50 to 0.52 and 0.48 of the drawn height
- * (the cap that excuses a planned smear is 0.5, `critic/policy.json` `continuity.smear.maxJerkShare`): a ratio of about 0.75 and a ranking that holds, but a crude instrument (it puts Yuna Gunner under Rikku Dark Knight). So the rule is a bound read against the passing dress:
- * a figure whose estimate is no higher than Rikku Dark Knight's 0.37 is as safe as the approved Chapter IV.
+ * of the lane, `docs/handoff/booth-ffx-b3b.md` section 4). CALIBRATION: the same estimate gives 0.47 for Rikku Thief, 0.33 for Yuna Gunner and 0.37 for Rikku Dark Knight, whose swap jerks were MEASURED in the page at 0.62 to 0.63, 0.50 to 0.52 and 0.48 of the drawn height
+ * (the cap that excuses a planned smear is 0.5, `critic/policy.json` `continuity.smear.maxJerkShare`): a ratio of 0.64 to 0.77 and no single ratio that sorts the three right, so it is a crude instrument that UNDER-reads. The rule is therefore two bounds, both raw: no figure the chapter
+ * can field stands above the cap of 0.5 (the review's M1: Rikku, 0.52, was over it and the lane played the moments anyway), and none above the largest estimate of the approved Chapter I's own active line-up (Kimahri, 0.43), the dress the target already plays.
  */
 const KO_STEP: Readonly<Record<string, number>> = {
-  tidus: 0.36, yuna: 0.24, auron: 0.29, // the active parties of Chapters III and XII (Tidus, Yuna, Auron) and Chapter XIV's (Yuna)
-  kimahri: 0.43, wakka: 0.4, lulu: 0.39, rikku: 0.52, // the reserve of Chapter III and XII, the same seven as the approved Chapter I's
+  tidus: 0.36, yuna: 0.24, auron: 0.29,
+  kimahri: 0.43, wakka: 0.4, lulu: 0.39, rikku: 0.52,
   valefor: 0.2, ifrit: 0.14, ixion: 0.13, shiva: 0.31, bahamut: 0.09, // the aeons, on the party's side and the possessed ones
   'braskas-final-aeon-1': 0.3, 'braskas-final-aeon-2': 0.05, 'yu-pagoda': 0.14, 'yu-yevon': 0.09, grothia: 0.14, pterya: 0.2, spathi: 0.08, // the foes with a KO painting
 };
-const REFERENCE_PASSING = 0.37; // Rikku Dark Knight (Chapter IV, approved: 0.48 measured)
-const REFERENCE_FAILING = 0.47; // Rikku Thief (Leblanc: 0.62 measured, held)
+const MEASURED_CAP = 0.5;
+const AEONS = ['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut'];
+const FOES = ['braskas-final-aeon-1', 'braskas-final-aeon-2', 'yu-pagoda', 'yu-yevon', 'grothia', 'pterya', 'spathi'];
+const activeOf = (id: string): string[] => {
+  const setup = setupForChapter(getChapter(id)!, 1);
+  const slots = (setup.party as { activeSlots?: readonly string[] }).activeSlots; // the FFX build's forced line-up (Tidus, Yuna and Auron; Yuna alone in Chapter XIV)
+  return setup.party.members.filter((m) => slots?.includes(m.id) ?? true).map((m) => m.id);
+};
+const fieldable = (id: string): string[] => [...setupForChapter(getChapter(id)!, 1).party.members.map((m) => m.id), ...AEONS, ...FOES];
+const TARGET_LIMIT = Math.max(...activeOf('seymour-flux').map((m) => KO_STEP[m]!));
+const heldMoments = (id: string): boolean => fieldable(id).some((m) => KO_STEP[m]! > Math.min(MEASURED_CAP, TARGET_LIMIT) + 0.005);
 
-describe('class 4: no figure that can be knocked out in these chapters steps further at the hurt-to-KO cut than the approved Chapter IV\'s Dark Knight', () => {
-  it('the calibration order holds: the failing dress stands above the passing one', () => {
-    expect(REFERENCE_FAILING).toBeGreaterThan(REFERENCE_PASSING);
+describe('class 4: the moments are held in a chapter that can field a figure stepping further at the hurt-to-KO cut than the cap or the approved target\'s own line-up', () => {
+  it('the bounds: the target\'s own limit is Kimahri\'s 0.43 (Tidus, Yuna and Kimahri are Chapter I\'s active line-up), under the 0.5 cap; the instrument\'s calibration dresses are ordered the way the page measured them (Thief over Dark Knight)', () => {
+    expect(activeOf('seymour-flux').sort()).toEqual(['kimahri', 'tidus', 'yuna']);
+    expect(TARGET_LIMIT).toBe(0.43);
+    expect(0.47).toBeGreaterThan(0.37); // Rikku Thief (0.62 measured, held in Leblanc) over Rikku Dark Knight (0.48 measured, plays in Chapter IV)
+    expect(KO_STEP['rikku']).toBeGreaterThan(MEASURED_CAP); // the raw estimate alone is over the cap
   });
 
-  it.each(IDS)('%s: the active party is at or under the passing reference, so the moments piece plays; the foes and the aeons are all under it', (id) => {
-    const setup = setupForChapter(getChapter(id)!, 1);
-    const slots = (setup.party as { activeSlots?: readonly string[] }).activeSlots; // the FFX build's forced line-up (Tidus, Yuna and Auron; Yuna alone in Chapter XIV)
-    const active = setup.party.members.filter((m) => slots?.includes(m.id) ?? true).map((m) => m.id);
-    expect(slots, id).toBeDefined();
-    expect(active.length).toBeGreaterThan(0);
-    for (const m of active) expect(KO_STEP[m], `${id}: ${m}`).toBeLessThanOrEqual(REFERENCE_PASSING + 0.005);
-    for (const name of ['valefor', 'ifrit', 'ixion', 'shiva', 'bahamut', 'braskas-final-aeon-1', 'braskas-final-aeon-2', 'yu-pagoda', 'yu-yevon', 'grothia', 'pterya', 'spathi']) expect(KO_STEP[name], name).toBeLessThanOrEqual(REFERENCE_PASSING);
-    expect(treatedHold(id, 'moments'), id).toBeUndefined();
-  });
-
-  it('the reserve members above the reference (Kimahri, Wakka, Lulu, Rikku) are the same ones the approved Chapter I can field (its party is the same seven), so the exposure is the target\'s own, and they are the KO-per-dress job\'s subjects', () => {
-    const over = Object.entries(KO_STEP).filter(([, v]) => v > REFERENCE_PASSING + 0.005).map(([k]) => k).sort();
-    expect(over).toEqual(['kimahri', 'lulu', 'rikku', 'wakka']);
-    for (const id of IDS) {
-      const members = setupForChapter(getChapter(id)!, 1).party.members.map((m) => m.id);
-      if (id !== 'isaaru-via-purifico') for (const m of over) expect(members, `${id}: ${m}`).toContain(m);
+  it.each(IDS)('%s: the moments piece is held exactly when a figure the chapter can field is over the bounds, and the hold names the dress and the number', (id) => {
+    const over = fieldable(id).filter((m) => KO_STEP[m]! > Math.min(MEASURED_CAP, TARGET_LIMIT) + 0.005);
+    expect(treatedHold(id, 'moments') !== undefined, `${id}: over the bounds: ${over.join(', ') || 'none'}`).toBe(heldMoments(id));
+    if (heldMoments(id)) {
+      expect(over, id).toEqual(['rikku']); // the only dress over: Kimahri, Wakka and Lulu are at or under the target's own
+      expect(treatedHold(id, 'moments'), id).toMatch(/Rikku at 0\.52/);
+      expect(treatedHold(id, 'moments'), id).toMatch(/Lifts when/);
+      expect(treatedHold(id, 'moments'), id).toMatch(/J5/);
     }
-    const chapterI = setupForChapter(getChapter('seymour-flux')!, 1).party.members.map((m) => m.id);
-    for (const m of over) expect(chapterI, m).toContain(m);
+  });
+
+  it('Chapters III and XII can field all seven of Chapter I\'s party (Rikku among them) and so hold the moments; Chapter XIV is Yuna alone with her aeons, all under the bounds, and plays them', () => {
+    expect(heldMoments('braskas-final-aeon')).toBe(true);
+    expect(heldMoments('seymour-omnis')).toBe(true);
+    expect(heldMoments('isaaru-via-purifico')).toBe(false);
+    expect(fieldable('braskas-final-aeon')).toContain('rikku');
+    expect(fieldable('seymour-omnis')).toContain('rikku');
+    expect(fieldable('isaaru-via-purifico')).not.toContain('rikku');
+    expect(activeOf('braskas-final-aeon').sort()).toEqual(['auron', 'tidus', 'yuna']);
   });
 });
