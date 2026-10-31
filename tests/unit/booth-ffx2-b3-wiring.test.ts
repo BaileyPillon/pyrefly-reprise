@@ -1,8 +1,8 @@
 /**
  * CHAPTER XIII THROUGH EVERY SWITCH AND EVERY MOUNT (release 71, branch `booth-ffx2-b3`; FFX-2 only; the plumbing is `booth-leblanc`'s). The same questions `booth-ffx2-b2-wiring.test.ts`, `booth-leblanc-wiring.test.ts` and `booth-treated-switches.test.ts` ask of Leblanc
  * and of batch 2, asked of Chapter XIII (Trema, Cloister 100): the pro layer mounts for it and for no other, the sound pass follows its run, every switch answers true but for the pieces `PIECE_HOLDS` names, and the lane-off words, a phone and `?treated=pack` still give release 62's,
- * or release 68's, frame in it. The holds: the staged breath (no move of Trema's or Paragon's is a `StagingPort.BigMove`, and the pick of a tone is a mockup decision) and the moments piece (the knock-out's cut: the three dresses' KO bodies are longer than the longest the harness has
- * passed; `booth-ffx2-b3-rows.test.ts` pins the numbers behind the reason). The directed camera is NOT held: its follower plays, and stands down on the link rig (`booth-ffx2-b3-seam.test.ts`).
+ * or release 68's, frame in it. The three holds: the directed camera (Paragon's approved giants frame stays: the follower would undo it, `booth-ffx2-b3-follower.test.ts` pins the numbers; its row and its stand-down on the link rig wait behind the hold, `booth-ffx2-b3-seam.test.ts`),
+ * the staged breath (no move of Trema's or Paragon's is a `StagingPort.BigMove`, and the pick of a tone is a mockup decision) and the moments piece (the knock-out's cut: no reading of the three dresses yet, `booth-ffx2-b3-rows.test.ts` pins the numbers behind the reason).
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 

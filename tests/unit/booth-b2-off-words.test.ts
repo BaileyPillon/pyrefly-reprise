@@ -22,7 +22,7 @@ import { inFeelChapter, punchMode, resetFeelForTests, setFeelChapter } from '../
 import { audioNewOn, passConfiguredBy, setAudioNew, setPassChapter } from '../../src/audio/pass/passSwitch.ts';
 import { DemoGovernor } from '../../src/engine/governor/DemoGovernor.ts';
 import { chapterLook } from '../../src/engine/look/LookConfig.ts';
-import { scopeExcepted, swapsInScope, setSwapScope } from '../../src/engine/motion/SwapSwitch.ts';
+import { WIDE_CHAPTERS, scopeExcepted, swapsInScope, setSwapScope } from '../../src/engine/motion/SwapSwitch.ts';
 
 const BOOTH = ['seymour-flux', 'ffx2-bahamut'];
 const TREATED = Object.keys(TREATED_CHAPTERS);
@@ -178,6 +178,31 @@ describe('the off words, chapter by chapter (every joined chapter reads as the u
       if (n === 'hd2d' || n === 'swapScope') continue;
       expect(got[n], `${id} ${n}`).toEqual(ctl[n]);
     }
+  });
+});
+
+describe('the swap scope, which the hidden FFX-2 control cannot stand in for (review m6 of booth-ffx2-b3)', () => {
+  // Batch 3 moved the FFX-2 control from `ffx2-trema` to the hidden `ffx2-valefor-besaid`, which is not on `SwapSwitch.WIDE_CHAPTERS`, so the off-word tests above no longer compare the `swapScope` field against a control. This pins it against the list itself, for every joined chapter
+  // and for the control: the swap scope is the wide list's own answer (a listed chapter, or a named exception), not the treatment's, and it does not move with the address.
+  it.each(JOINED)('%s: under the wide scope the field is its place on the wide list or among the exceptions, with no word, with ?pack=off and with ?treated=pack', (id) => {
+    setPackScreen('desk');
+    setSwapScope('wide');
+    for (const [scope, search] of [['all', ''], ['all', '?pack=off'], ['pack', '']] as const) {
+      setTreatedScope(scope);
+      readFrom(search);
+      expect(readAll(id).swapScope, `${id} under ${scope} ${search}`).toBe(WIDE_CHAPTERS.includes(id) || scopeExcepted(id));
+    }
+    expect(WIDE_CHAPTERS.includes(id), `${id} is a listed, selectable chapter`).toBe(true);
+  });
+
+  it('the hidden FFX-2 control is on neither list, so it answers false (the reason it cannot be compared with the joined chapters on this field)', () => {
+    setPackScreen('desk');
+    setSwapScope('wide');
+    setTreatedScope('all');
+    readFrom('');
+    expect(WIDE_CHAPTERS.includes(CONTROL.ffx2)).toBe(false);
+    expect(scopeExcepted(CONTROL.ffx2)).toBe(false);
+    expect(readAll(CONTROL.ffx2).swapScope).toBe(false);
   });
 });
 

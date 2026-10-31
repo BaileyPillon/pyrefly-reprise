@@ -6,6 +6,7 @@
  *
  * Pinned: what the chapter declares; the beat at a seam and at the end; the REAL chain (real engines, presenter and chain loop; every foe at 1 HP so it ends in a few turns, `helpers/weakChain.ts`) with a recording staging port that keeps the ending marks the way `EndingView` does:
  * no ending cue before the last link, one clear for the second link, the freeze once on the last blow, the one title last, the HUD in at the start of both links, and no `form-change` event in the whole chain.
+ * Review m7: the 1 HP shape skips the HP-threshold scripts (`trema-entrance`, the meteors) and the real defeat paths, so the same marks are also read on the SHIPPED fight (seed 3 wins, seed 1 loses in link 1; with the sleeps stubbed the real chain takes about a second).
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { getChapter } from '../../src/data/encounters.ts';
@@ -133,54 +134,81 @@ describe('the victory beat at a seam of the chain, and at the end', () => {
   });
 });
 
+/** The REAL chain of Chapter XIII (real FFX-2 engine, presenter and chain loop; the recording staging port), with the foes at 1 HP (`weak`) or at their shipped HP (Paragon 210,000, Trema 999,999), on one seed. */
+async function playChain(weak: boolean, seed: number) {
+  setDemoChapter(ID);
+  const real = getChapter(ID)!;
+  const chapter = weak ? weakChapter(real) : real;
+  const setup = setupForChapter(chapter, seed);
+  await registerBattleContent();
+  const engine: BattleEngine = new FFX2Engine({ ...ffx2EngineOptions(), minigames: false });
+  engine.setSeed(setup.seed);
+  engine.init(setup);
+  const port = new RecordingPort();
+  const stage = new FakeStage(setup.party.members.map((m) => m.id), chapter.enemyGroupRef.enemies.map((e) => e.id));
+  const presenter = new BattlePresenter({ stage, audio: new FakeAudio(), sleep: () => Promise.resolve(), staging: port });
+  presenter.setSpeed('normal');
+  setCappedAutoPlay(presenter, intendedStrategy);
+  const seen: BattleEvent[] = [];
+  const play = presenter.play.bind(presenter);
+  presenter.play = (events: readonly BattleEvent[], ...rest: unknown[]) => {
+    seen.push(...events);
+    return (play as (e: readonly BattleEvent[], ...r: unknown[]) => ReturnType<typeof play>)(events, ...rest);
+  };
+  // each link's foes stand on the field the way the real stage stands them
+  const restage = async (state: BattleState): Promise<void> => {
+    for (const known of [...stage.actors.keys()]) stage.removeCombatant(known);
+    for (const [slot, pid] of state.activeIds.entries()) await stage.addCombatant(pid, { artId: pid, side: 'party', slot });
+    for (const [slot, eid] of state.enemyIds.entries()) await stage.addCombatant(eid, { artId: eid, side: 'enemy', slot });
+  };
+  const hudAtLinkStart: number[] = [];
+  const result = await runEncounterChain({
+    chapter, presenter, engine, stage: { stage: restage }, group: chapter.enemyGroupRef, setup, seed, findGroup: weak ? findWeakGroup : findEnemyGroup, audio: new FakeAudio(),
+    onLink: ({ links: n }) => {
+      port.log.push(`link:${n}`);
+      hudAtLinkStart.push(port.hud());
+    },
+  });
+  return { port, seen, result, hudAtLinkStart };
+}
+
+/** What the chain of a won fight must show, weak or real (defect classes 1 and 5). */
+function expectWonChain(run: Awaited<ReturnType<typeof playChain>>): void {
+  const { port, seen, result, hudAtLinkStart } = run;
+  expect(result.links).toBe(2);
+  expect(result.outcome.kind).toBe('victory');
+  const kos = seen.filter((e) => e.type === 'ko').map((e) => (e as Extract<BattleEvent, { type: 'ko' }>).targetId);
+  expect(kos, 'both foes were knocked out in turn').toEqual(expect.arrayContaining(['paragon', 'trema']));
+  expect(seen.filter((e) => e.type === 'form-change'), 'the FFX-2 engine has no form change here: the freeze guard cannot fire').toEqual([]);
+  const at = (s: string): number => port.log.indexOf(s);
+  for (const [i, e] of port.log.entries()) if (e.startsWith('ending:')) expect(i, `${e} before the last link`).toBeGreaterThan(at('link:2'));
+  expect(port.log.filter((e) => e === 'ending:freeze'), `the freeze, in ${port.log.join(',')}`).toHaveLength(1);
+  expect(port.log.filter((e) => e === 'ending:title')).toHaveLength(1);
+  expect(at('ending:freeze')).toBeLessThan(at('ending:title'));
+  expect(port.clears).toBe(1);
+  expect(port.log.lastIndexOf('clear')).toBeGreaterThan(at('link:2'));
+  expect(port.log.lastIndexOf('clear')).toBeLessThan(at('ending:freeze'));
+  expect(hudAtLinkStart).toEqual([1, 1]);
+}
+
 describe('the real chain, one layer', () => {
-  it('no ending cue before the last link, one clear for the second link, the freeze once on the last blow, the one title last, the HUD in at both links\' start, and no form-change anywhere', async () => {
-    setDemoChapter(ID);
-    const real = getChapter(ID)!;
-    const chapter = weakChapter(real);
-    const setup = setupForChapter(chapter, 1);
-    await registerBattleContent();
-    const engine: BattleEngine = new FFX2Engine({ ...ffx2EngineOptions(), minigames: false });
-    engine.setSeed(setup.seed);
-    engine.init(setup);
-    const port = new RecordingPort();
-    const stage = new FakeStage(setup.party.members.map((m) => m.id), chapter.enemyGroupRef.enemies.map((e) => e.id));
-    const presenter = new BattlePresenter({ stage, audio: new FakeAudio(), sleep: () => Promise.resolve(), staging: port });
-    presenter.setSpeed('normal');
-    setCappedAutoPlay(presenter, intendedStrategy);
-    const seen: BattleEvent[] = [];
-    const play = presenter.play.bind(presenter);
-    presenter.play = (events: readonly BattleEvent[], ...rest: unknown[]) => {
-      seen.push(...events);
-      return (play as (e: readonly BattleEvent[], ...r: unknown[]) => ReturnType<typeof play>)(events, ...rest);
-    };
-    // each link's foes stand on the field the way the real stage stands them
-    const restage = async (state: BattleState): Promise<void> => {
-      for (const known of [...stage.actors.keys()]) stage.removeCombatant(known);
-      for (const [slot, pid] of state.activeIds.entries()) await stage.addCombatant(pid, { artId: pid, side: 'party', slot });
-      for (const [slot, eid] of state.enemyIds.entries()) await stage.addCombatant(eid, { artId: eid, side: 'enemy', slot });
-    };
-    const hudAtLinkStart: number[] = [];
-    const result = await runEncounterChain({
-      chapter, presenter, engine, stage: { stage: restage }, group: chapter.enemyGroupRef, setup, seed: 1, findGroup: findWeakGroup, audio: new FakeAudio(),
-      onLink: ({ links: n }) => {
-        port.log.push(`link:${n}`);
-        hudAtLinkStart.push(port.hud());
-      },
-    });
-    expect(result.links).toBe(2);
-    expect(result.outcome.kind).toBe('victory');
-    const kos = seen.filter((e) => e.type === 'ko').map((e) => (e as Extract<BattleEvent, { type: 'ko' }>).targetId);
-    expect(kos, 'both foes were knocked out in turn').toEqual(expect.arrayContaining(['paragon', 'trema']));
-    expect(seen.filter((e) => e.type === 'form-change'), 'the FFX-2 engine has no form change here: the freeze guard cannot fire').toEqual([]);
-    const at = (s: string): number => port.log.indexOf(s);
-    for (const [i, e] of port.log.entries()) if (e.startsWith('ending:')) expect(i, `${e} before the last link`).toBeGreaterThan(at('link:2'));
-    expect(port.log.filter((e) => e === 'ending:freeze'), `the freeze, in ${port.log.join(',')}`).toHaveLength(1);
-    expect(port.log.filter((e) => e === 'ending:title')).toHaveLength(1);
-    expect(at('ending:freeze')).toBeLessThan(at('ending:title'));
-    expect(port.clears).toBe(1);
-    expect(port.log.lastIndexOf('clear')).toBeGreaterThan(at('link:2'));
-    expect(port.log.lastIndexOf('clear')).toBeLessThan(at('ending:freeze'));
-    expect(hudAtLinkStart).toEqual([1, 1]);
+  it("every foe at 1 HP (the quick shape): no ending cue before the last link, one clear for the second link, the freeze once on the last blow, the one title last, the HUD in at both links' start, and no form-change anywhere", async () => {
+    expectWonChain(await playChain(true, 1));
+  }, 180_000);
+
+  it('the SHIPPED fight (review m7): Paragon at 210,000 HP and Trema at 999,999, seed 3 (a seed the real chain wins; about a second with the sleeps stubbed): the same marks, one clear, one freeze, one title, the HUD in at both starts', async () => {
+    const run = await playChain(false, 3);
+    const quick = await playChain(true, 3);
+    expect(run.seen.length, 'the shipped fight is many times longer than the 1 HP one (events the presenter was handed)').toBeGreaterThan(5 * quick.seen.length);
+    expectWonChain(run);
+  }, 180_000);
+
+  it('a DEFEAT in the real chain (seed 1 loses in link 1, review m7) cues only the fall: no freeze, no title, no second link', async () => {
+    const { port, result } = await playChain(false, 1);
+    expect(result.outcome.kind).toBe('defeat');
+    expect(port.log.filter((e) => e.startsWith('ending:'))).toEqual(['ending:fall']);
+    expect(port.log).not.toContain('link:2');
+    expect(port.log).not.toContain('ending:freeze');
+    expect(port.log).not.toContain('ending:title');
   }, 180_000);
 });

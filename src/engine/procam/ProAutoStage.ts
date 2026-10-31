@@ -77,9 +77,9 @@ export const AUTO_STAGES: Readonly<Record<string, AutoStage>> = Object.freeze({
 export const SCRIPTED_RIGS: Readonly<Record<string, readonly string[]>> = Object.freeze({
   'ffx2-fallen-aeons': Object.freeze(['road-links']),
   // Batch 3 (`booth-ffx2-b3`, FFX-2 only): Chapter XIII's kill link. Paragon's KO fires `paragon-falls`, whose first op cuts the camera to `trema-link` (`story/scripts/ffx2-trema.ts`, `TREMA_LINK_RIG`), and the scene starts the old man's entrance and Paragon's breaking apart only
-  // while the camera stands within `LINK_CAMERA_NEAR` (1.2) of that rig's position (`scenes/cloister-100-link.ts` `cameraAt`, probed from the first frame rendered there); the follower, blended halfway to its candidates, comes no nearer to it than 2.18 in 8 s (2.58 under Paragon's giants frame:
-  // 0 of 480 frames within 1.2), so a follower running over the cut would never start the beat (the seam's lines would play over a standing Paragon and no old man). The name is mirrored from `scenes/cloister-100-rigs.ts` (`CLOISTER_LINK_RIG`);
-  // `tests/unit/booth-ffx2-b3-seam.test.ts` pins the three spellings and the numbers.
+  // while the camera stands within `LINK_CAMERA_NEAR` (1.2) of that rig's position (`scenes/cloister-100-link.ts` `cameraAt`, probed from the first frame rendered there); the follower, blended halfway to its candidates, keeps off it by a margin that depends on WHICH candidate it stands on (review m2): candidates 0, 1 and 2 come no nearer than
+  // 1.43 (1.96 under Paragon's giants frame: 0 of 480 frames within 1.2), but candidate 3 comes to 0.52 on today's rig (480 of 480 frames within 1.2) and to 1.08 under the giants frame (352 of 480), so without this row the old man's entrance and Paragon's breaking apart would start about one fight in four
+  // and in the other three the seam's lines would play over a standing Paragon and no old man. The name is mirrored from `scenes/cloister-100-rigs.ts` (`CLOISTER_LINK_RIG`); `tests/unit/booth-ffx2-b3-seam.test.ts` pins the three spellings and the numbers for all four candidates.
   'ffx2-trema': Object.freeze(['trema-link']),
 });
 

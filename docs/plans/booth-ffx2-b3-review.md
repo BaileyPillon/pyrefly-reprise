@@ -20,7 +20,7 @@ One line in `DemoGate.TREATED_CHAPTERS` (`ffx2-trema`, FFX-2, `since: 'r71'`), t
 | 2 | victory kind | `hold` (`research/ffx-vs-ffx2-presentation.md` 2.2 and `ffx2-trema.md` section 13: no pose after a Via Infinito special boss on a first defeat): the quiet title and the silent pull-back, no cheer |
 | 3 | dresses with a decoded real-clip row | **none of the three**: Yuna Dark Knight, Rikku Alchemist and Paine Dark Knight; the dress guard keeps the White Mage, Dark Knight (Rikku) and Warrior rows off them (house curves) |
 | 4 | foes that yield, dissolve or stay | **both are `'held'`** (beaten and left standing, dimmed): Paragon is broken by the old man of the kill link, Trema answers Yuna and fades in the post scene (`research/ffx2-trema.md` section 2 steps 2 and 4). The freeze on Trema's last blow is therefore a job (J4) |
-| 5 | **a camera of its own** | **YES, twice.** (a) Paragon's giants frame (`fx/mix/giants.ts`, D-316): the follower's fit sits on its cap and Paragon's cast painting passes the frame's top by three times what the approved frame costs: **held `cam`**. (b) The kill link cuts the camera to `trema-link`, and the scene starts the old man's entrance only while the camera is within 1.2 of that rig: `SCRIPTED_RIGS` row built and pinned (dormant behind the hold) |
+| 5 | **a camera of its own** | **YES, twice.** (a) Paragon's giants frame (`fx/mix/giants.ts`, D-316): the follower's fit sits on its cap and Paragon's cast painting passes the frame's top by 2.4 times what the approved frame costs (45 and 72 px against 19 and 30; the first read said three times, on two different boxes): **held `cam`**. (b) The kill link cuts the camera to `trema-link`, and the scene starts the old man's entrance only while the camera is within 1.2 of that rig: `SCRIPTED_RIGS` row built and pinned (dormant behind the hold) |
 | 6 | maps that exist unshipped, and are they current | **none exist**: Yuna Dark Knight (16 poses), Rikku Alchemist (16), Paragon (4), Trema (4) and the room are GPU, the driver only; Paine Dark Knight's ship. The girls are lit by one of three, and the room has no depth map |
 | 7 | showpiece blow and who decides it | Trema's Meteor (twice) and Ultima, Oversoul Paragon's Final Impact: three tones, a mockup decision (rule 9): **held `breath`** |
 | 8 | what the research says about the air | "Pyreflies and Yevon flags are everywhere" (a single source) and the canon table marks the room `attested`: **no embers** (flags and pyreflies, no fire); the stage adds its own lens band |
@@ -33,10 +33,10 @@ One line in `DemoGate.TREATED_CHAPTERS` (`ffx2-trema`, FFX-2, `since: 'r71'`), t
 
 ## 3. What would make this wrong, and what answers it
 
-- A follower fighting a camera the story set: the kill link's `trema-link` rig (row 5b). Answered at the follower with the real classes (0 of 480 frames within the beat's radius without the stand-down, 480 of 480 with it; the camera closest 2.18 and 2.58) and held behind `cam` today.
+- A follower fighting a camera the story set: the kill link's `trema-link` rig (row 5b). Answered at the follower with the real classes, for all four candidates (without the stand-down the camera comes within the beat's radius in candidate 3 only, 480 of 480 frames on today's rig and 352 under the giants frame, and no nearer than 1.43 in candidates 0 to 2; 480 of 480 with it, in every candidate) and held behind `cam` today.
 - A follower fighting the approved giants frame (row 5a): answered by the hold; the numbers are pinned in `booth-ffx2-b3-rows.test.ts` so the lift is a decision against figures, not a feeling.
 - A mark of one link outliving its beat: the real two-link chain in `booth-ffx2-b3-chain.test.ts` (one clear, the freeze once, the one title last, the HUD in at both links' start).
-- A knock-out cut over the cap: held; job J7 reads each girl's cut.
+- A knock-out cut over the cap: held; there is no reading of the three dresses yet and the cap has two regimes (the 120 px floor in link 1, half the drawn height in link 2); job J7 reads each girl's cut in both links.
 - A freeze on a man who is about to speak: the ending stays on (the booth's own piece), job J4 reads it, the fallback is one row.
 - The booth pair: every hunk answers true first; job J9 proves the pixels.
 - Tests that used a chapter as an untreated control: `booth-b2-off-words` used Chapter XIII as the FFX-2 control; it now reads the hidden `ffx2-valefor-besaid`, which never joins (the swap scope is compared by its own list, not against the control).
@@ -44,3 +44,7 @@ One line in `DemoGate.TREATED_CHAPTERS` (`ffx2-trema`, FFX-2, `since: 'r71'`), t
 ## 4. Order of work for the batch after
 
 Answer rows 1 to 14 for each new chapter before building; rows 5, 12 and 4 were the ones that mattered here. FFX Chapter III (Braska's Final Aeon, a form boss) will ask row 13 for real.
+
+## 5. Note on the order of the preflight (review m12)
+
+The review of this branch noted that this preflight was written as the rows were built, not before the first line of code (rule 15 asks for five to ten minutes first). It did put the camera and the knock-out's cut behind holds before they shipped, so the substance was there; the next batch should answer rows 1 to 14 for its chapters before building, as section 4 says.

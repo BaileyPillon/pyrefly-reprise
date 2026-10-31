@@ -1,8 +1,8 @@
 /**
  * THE KILL LINK OF CHAPTER XIII UNDER THE FOLLOWER (release 71, branch `booth-ffx2-b3`; FFX-2 only; defect class 2 of the booth treatment: a story script cutting the camera to a rig while the follower runs on top). Paragon's KO fires the mid-battle script `paragon-falls`,
  * whose first op moves the camera to the `trema-link` rig (`camera(TREMA_LINK_RIG, 700)`), and the Cloister scene starts the old man's entrance and Paragon's breaking apart only while the camera stands within `LINK_CAMERA_NEAR` (1.2) of that rig's position
- * (`scenes/cloister-100-link.ts`: the probe is the first frame rendered there). The follower camera of the treatment runs on top of whatever rig the story has put the camera on and, blended halfway to its candidates, comes no nearer than 2.2 (2.6 under Paragon's giants frame),
- * so without the stand-down the beat never starts: the seam's ten lines play over a standing Paragon and no old man (the Road's M1 of batch 2, the same class). The stand-down is `ProAutoStage.SCRIPTED_RIGS['ffx2-trema']`.
+ * (`scenes/cloister-100-link.ts`: the probe is the first frame rendered there). The follower camera of the treatment runs on top of whatever rig the story has put the camera on and, blended halfway to its candidates, keeps off that rig by a margin that depends on WHICH of its four candidates it stands on (review m2): candidates 0, 1 and 2 stay 1.4 or more away (no frame within 1.2), but candidate 3 comes within 0.52 on today's rig (all 480 frames) and within 1.08 under Paragon's giants frame,
+ * so without the stand-down the beat starts or not by the luck of the candidate (about one fight in four), and in the other three the seam's ten lines play over a standing Paragon and no old man (the Road's M1 of batch 2, the same class). The stand-down is `ProAutoStage.SCRIPTED_RIGS['ffx2-trema']`.
  *
  * Run the way batch 2's review ran the Road's: the real `ProFollower` on the real Cloister members, then the real `ProDirector` on the real `ProLayer`.
  *
@@ -85,33 +85,64 @@ describe('the names that must agree', () => {
 });
 
 describe('the real follower on the Cloister, mid-fight, then the story cuts to the link rig', () => {
-  const settle = (base: Pose, paragonH: number, host: { scripted?: () => boolean }): ProFollower => {
+  /**
+   * The follower mid-fight on candidate `candidate` (review m2: the first version of this test only ever saw candidate 0, which `effectEnd` never advances; the follower re-picks the next-ranked angle at every second effect end, `REPICK_EVERY`, so two `effectEnd`s are one re-pick).
+   */
+  const settle = (base: Pose, paragonH: number, host: { scripted?: () => boolean }, candidate = 0): ProFollower => {
     const m = members(paragonH);
     const f = new ProFollower({ members: () => m, held: () => false, still: () => false, fitK: () => 1, ...host }, autoCameraFor(CHAPTER));
+    for (let k = 0; k < candidate * 2; k++) f.effectEnd();
+    expect(f.candidate).toBe(candidate);
     for (let i = 0; i < 60 * 4; i++) f.step(DT, base); // the fight so far: the weight and the glide have settled
     return f;
   };
   const CASES = [
-    ['today\'s rig, Paragon drawn 3.1 (a window wider than 1.79)', IDLE, 3.1, 2.1],
-    ['the giants frame, Paragon at his real height (a window up to 1.79)', GIANT, 9.447, 2.5],
+    ["today's rig, Paragon drawn 3.1 (a window wider than 1.79)", IDLE, 3.1, 'today'],
+    ['the giants frame, Paragon at his real height (a window up to 1.79)', GIANT, 9.447, 'giants'],
   ] as const;
+  const CANDIDATES = [0, 1, 2, 3] as const;
+  /** Every case under every candidate: [label, candidate, base, Paragon's height, case key]. */
+  const GRID = CASES.flatMap(([name, base, h, key]) => CANDIDATES.map((c) => [name, c, base, h, key] as const));
+  /** Offline read, 8 s on the link rig's cut with no stand-down, per candidate: [the closest the eye comes to the rig, frames of 480 within 1.2]. Measured here (the review's own run agreed on today's rig and on every candidate but the giants frame's 3, 436 against 352 frames, by a different settle). */
+  const WITHOUT: Record<'today' | 'giants', ReadonlyArray<readonly [number, number]>> = {
+    today: [[2.18, 0], [1.88, 0], [1.43, 0], [0.52, 480]],
+    giants: [[2.58, 0], [1.96, 0], [2.12, 0], [1.08, 352]],
+  };
 
-  it.each(CASES)('WITHOUT the stand-down (what the branch would ship): %s: 0 of 480 frames within the beat\'s radius, the camera never closer than the number named', (_name, base, h, nearest) => {
-    const f = settle(base, h, {});
-    let on = 0;
-    let closest = Infinity;
-    for (let i = 0; i < 60 * 8; i++) {
-      const p = f.step(DT, LINK);
-      closest = Math.min(closest, dist(p.pos, LINK.pos));
-      if (onRig(p)) on++;
+  it.each(GRID)(
+    "WITHOUT the stand-down (what the branch would ship): %s, candidate %d: the eye comes no nearer than the number measured, and the beat's frames are the number measured",
+    (_name, candidate, base, h, key) => {
+      const f = settle(base, h, {}, candidate);
+      let on = 0;
+      let closest = Infinity;
+      for (let i = 0; i < 60 * 8; i++) {
+        const p = f.step(DT, LINK);
+        closest = Math.min(closest, dist(p.pos, LINK.pos));
+        if (onRig(p)) on++;
+      }
+      const [near, frames] = WITHOUT[key][candidate]!;
+      expect(closest).toBeGreaterThan(near - 0.06);
+      expect(closest).toBeLessThan(near + 0.06);
+      expect(on === 0, `${frames} frames expected, ${on} seen`).toBe(frames === 0);
+      if (frames > 0) expect(Math.abs(on - frames)).toBeLessThanOrEqual(frames === 480 ? 0 : 40);
+    },
+  );
+
+  it('WITHOUT the stand-down the beat starts in one candidate of four and in no other: the stand-down is needed, and it is no mere guard against a theoretical case (review m2)', () => {
+    for (const [name, base, h] of CASES) {
+      const startsOn = CANDIDATES.filter((c) => {
+        const f = settle(base, h, {}, c);
+        let on = 0;
+        for (let i = 0; i < 60 * 8; i++) if (onRig(f.step(DT, LINK))) on++;
+        return on > 0;
+      });
+      expect(startsOn, name).toEqual([3]);
     }
-    expect(on).toBe(0);
-    expect(closest).toBeGreaterThan(nearest);
   });
 
-  it.each(CASES)('WITH it: %s: the very first frame of the cut is on the rig, and so is every frame after it (480 of 480)', (_name, base, h) => {
+  it.each(GRID)('WITH it: %s, candidate %d: the very first frame of the cut is on the rig, and so is every frame after it (480 of 480)', (_name, candidate, base, h) => {
     let cut = false;
-    const f = settle(base, h, { scripted: () => cut });
+    const f = settle(base, h, { scripted: () => cut }, candidate);
     const before = f.step(DT, base);
     expect(dist(before.pos, base.pos)).toBeGreaterThan(0.3); // the follower really was off the rig
     cut = true;
