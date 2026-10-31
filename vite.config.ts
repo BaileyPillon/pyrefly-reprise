@@ -7,6 +7,7 @@ import { releaseFromEnv } from './tools/build-stamp.mjs';
 import { SOURCEMAP_DIR_ENV, keepSourceMaps, pruneUnshipped } from './tools/dist-filter.mjs';
 import { pyreflyArtAtSign } from './tools/vite-art-at.mjs';
 import { pyreflyFfxLocal } from './tools/vite-ffx-local.mjs';
+import { pyreflyFxAssets } from './tools/vite-fx-assets.mjs';
 
 /** The base a production build is served from. Also used by tools/screenshot.mjs. */
 export const PROD_BASE = process.env.BASE_PATH ?? '/pyrefly-reprise/';
@@ -99,8 +100,9 @@ export default defineConfig(({ command, isPreview }) => {
     // Release 38 (r38-bytes): a production build ships the painted art as lossless WebP, derived from the PNG masters, which
     // stay in public/art untouched (`tools/art-derive.mjs`; `PYREFLY_ART_WEBP=off` ships the PNGs as before). Dev serves PNG.
     // Release 39: the game asks for a master as `idle%402x.png` (ArtShipped.ts); dev and preview serve it from `idle@2x.png` (tools/vite-art-at.mjs).
+    // `pyreflyFxAssets` (r69-fix): the dev server runs `tools/fx-assets.mjs ensure --warn` itself when it starts, so a start that skips `npm run dev`'s predev (`npx vite --port N`) still has the depth maps (a tree without public/fx drew a plate-less Chapter I).
     // The last: the dev server's read-only route to Bailey's own converted FFX files, `/__ffx-local/` (`tools/vite-ffx-local.mjs`): `apply: 'serve'`, so it is never in a build, and no preview hook, so never in `vite preview`.
-    plugins: [distFilter(sourceMapDir), pyreflyArtDerive(), pyreflyArtAtSign(), pyreflyFfxLocal()],
+    plugins: [distFilter(sourceMapDir), pyreflyFxAssets(), pyreflyArtDerive(), pyreflyArtAtSign(), pyreflyFfxLocal()],
     build: {
       target: 'es2022',
       outDir: 'dist',
