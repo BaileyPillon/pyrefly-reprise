@@ -87,6 +87,16 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'three timed stages, eight shots, the party knocked down, a finisher; "the perfect thing for a presentation layer to build around"), a three-beat comedy combo whose tone, sound and shot are a mockup decision ' +
       '(hard rule 9), and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays the breath today. Lifts when Bailey or the driver picks a tone and a shot for No Love Lost from a mockup and the breath ' +
       'plan (and, for the sound pass, `passRecipes.HEADLINE_BLOWS`, which hit) is given a row for its ids `x2-nll-1` to `x2-nll-3`.',
+    cam:
+      'FFX-2, Chapter VI: the directed camera follows her party on Bevelle\'s four candidates rebuilt about her room (`ProAutoStage.AUTO_STAGES`), which nobody scored for her group, and the follower crops Yuna at the left edge: ' +
+      'job J6 of the r69 booth-leblanc review sampled a party rectangle up to 155 px outside the viewport 17 times in 110 s at 2560 x 1440 (0.4 to 0.6 s each, as the follower cycles its candidates 1, 2, 3, 0), where Chapter IV ' +
+      'crops no one (1 sampled frame of 796, the dragon, never a party figure). Her frame keeps the resting camera of release 68, and with it the soft background of the tilt-shift band. ' +
+      'Lifts when `ProAutoStage` re-scores the candidates for her group (the lane\'s shot scores and the real fit rule) and 0 sampled frames of job J6 put a party rectangle outside the viewport.',
+    moments:
+      'FFX-2, Chapter VI: the moments hard-cut her Rikku Thief and Yuna Gunner at the hurt-to-KO swap (the KO cut into the lying painting, `PaintedActorLife.koCutWindow`): no blend frame, a swap jerk of 152 to 168 px for Rikku in 3 of 3 KOs ' +
+      '(0.62 to 0.63 of her drawn height) and 152 to 156 px for Yuna (0.50 to 0.52), over the 0.5 cap that excuses a planned smear (CHK-027 fails; the Dark Knight KO of Chapter IV sits at 0.48 and passes; release 68 blends five frames here). ' +
+      'Only `?moments=today` gives the blend back (`?smear=off` too, but it drops every planned smear; curves, real clips and feel leave the cut). She keeps the victory hop, the plain KO cross and the landing of release 68. ' +
+      'Lifts when the KO cut stays inside the planned-smear cap for her Rikku Thief and Yuna Gunner paintings (or is skipped where it would not) and a continuity run of her KOs with the moments on reports no unexcused swap jerk (CHK-027).',
   }),
 });
 

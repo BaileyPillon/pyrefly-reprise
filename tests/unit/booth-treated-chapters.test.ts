@@ -25,6 +25,8 @@ afterEach(() => setTreatedScope(null));
 
 const BOOTH = Object.keys(DEMO_CHAPTERS);
 const LISTED: readonly string[] = CHAPTER_IDS;
+/** The pieces Leblanc holds back, in the order of her rows in `PIECE_HOLDS` (each with its reason and its "Lifts when"); every other piece plays. */
+const LEBLANC_HELD: readonly string[] = ['breath', 'cam', 'moments'];
 
 /**
  * The listed chapters the treatment has NOT reached yet, each with the reason (the driver's rollout order, `docs/handoff/booth-leblanc.md`). A chapter leaves this table in the commit that adds it to
@@ -97,11 +99,17 @@ describe('the holds', () => {
     }
   });
 
-  it("Leblanc holds the staged breath only: her sourced showpiece is No Love Lost, a three-beat comedy combo whose tone is a mockup decision (the one hold of this release); every other piece plays", () => {
-    expect(Object.keys(PIECE_HOLDS['ffx2-leblanc']!)).toEqual(['breath']);
+  it("Leblanc holds the staged breath (her sourced showpiece is No Love Lost, a three-beat comedy combo whose tone is a mockup decision), the directed camera (the follower crops Yuna at the left edge: job J6) and the moments (the KO cut hard-cuts Rikku and Yuna past the smear cap); every other piece plays", () => {
+    expect(Object.keys(PIECE_HOLDS['ffx2-leblanc']!)).toEqual(LEBLANC_HELD);
     expect(treatedHold('ffx2-leblanc', 'breath')).toMatch(/No Love Lost/);
     expect(treatedHold('ffx2-leblanc', 'breath')).not.toMatch(/no sourced/i); // the review's M1: the research names the combo (section 4.5), so "nothing sourced" is false
-    for (const p of TREATED_PIECES) if (p !== 'breath') expect(treatedHold('ffx2-leblanc', p), p).toBeUndefined();
+    expect(treatedHold('ffx2-leblanc', 'cam')).toMatch(/crops Yuna at the left edge/);
+    expect(treatedHold('ffx2-leblanc', 'cam')).toMatch(/155 px/);
+    expect(treatedHold('ffx2-leblanc', 'cam')).toMatch(/Lifts when `ProAutoStage` re-scores the candidates for her group .* 0 sampled frames/);
+    expect(treatedHold('ffx2-leblanc', 'moments')).toMatch(/hard-cut her Rikku Thief and Yuna Gunner at the hurt-to-KO swap/);
+    expect(treatedHold('ffx2-leblanc', 'moments')).toMatch(/0\.62 to 0\.63/);
+    expect(treatedHold('ffx2-leblanc', 'moments')).toMatch(/Lifts when the KO cut stays inside the planned-smear cap .*\(CHK-027\)\.$/);
+    for (const p of TREATED_PIECES) if (!LEBLANC_HELD.includes(p)) expect(treatedHold('ffx2-leblanc', p), p).toBeUndefined();
     expect(treatedHold('seymour-flux', 'breath')).toBeUndefined();
     expect(treatedHold(undefined, 'hud')).toBeUndefined();
     expect(treatedHold('toString', 'hud')).toBeUndefined();
@@ -147,12 +155,12 @@ describe('who the treatment reaches', () => {
     expect(isTreatedChapter(undefined)).toBe(false);
   });
 
-  it('under all it is the booth pair and Leblanc: Leblanc plays every piece but the breath; no other listed or hidden chapter is reached', () => {
+  it('under all it is the booth pair and Leblanc: Leblanc plays every piece but the ones she holds; no other listed or hidden chapter is reached', () => {
     setTreatedScope('all');
     for (const id of [...LISTED, ...HIDDEN]) {
       const reached = BOOTH.includes(id) || id === 'ffx2-leblanc';
       expect(isTreatedChapter(id), id).toBe(reached);
-      for (const p of TREATED_PIECES) expect(isTreatedChapter(id, p), `${id} ${p}`).toBe(reached && !(id === 'ffx2-leblanc' && p === 'breath'));
+      for (const p of TREATED_PIECES) expect(isTreatedChapter(id, p), `${id} ${p}`).toBe(reached && !(id === 'ffx2-leblanc' && LEBLANC_HELD.includes(p)));
     }
     for (const p of TREATED_PIECES) for (const id of BOOTH) expect(isTreatedChapter(id, p), `${id} ${p}`).toBe(true); // the approved target is never held
     expect(isTreatedChapter(undefined, 'hud')).toBe(false);
