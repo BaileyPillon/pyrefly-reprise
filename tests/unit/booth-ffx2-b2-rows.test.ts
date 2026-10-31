@@ -180,6 +180,22 @@ describe('the pro arena', () => {
     expect(floor[2], 'floor').toBeGreaterThan(floor[0]); // blue-black, not grey
   });
 
+  it("the arena's key light is the colour of the room's own painted light (review of booth-b2, observation o2): the Den's is cyan, the two Farplane rooms' are lilac-white, each within 0.15 of the HD-2D row's light on every channel", () => {
+    for (const room of Object.keys(ROOMS)) {
+      const painted = ROOM_LOOKS.hd2d[room]!.light!.color;
+      const key = proRoom(room)!.lightColor;
+      for (let i = 0; i < 3; i++) expect(Math.abs(key[i]! - painted[i]!), `${room} channel ${i}`).toBeLessThanOrEqual(0.15);
+    }
+    const den = proRoom('den-of-woe')!.lightColor;
+    expect(den[1], 'den green').toBeGreaterThan(den[0] + 0.3); // cyan: green and blue stand over red
+    expect(den[2], 'den blue').toBeGreaterThan(den[0] + 0.3);
+    for (const room of ['farplane', 'road-to-the-farplane']) {
+      const k = proRoom(room)!.lightColor;
+      expect(k[2], room).toBeGreaterThanOrEqual(k[1]); // lilac-white: blue at least green
+      expect(k[0], room).toBeGreaterThan(0.9);
+    }
+  });
+
   it('the Farplane family is cooled and held under full saturation ("desaturate and cool as the player descends", `research/ffx2-vegnagun-shuyin.md` 10.4): the pink flowers lose saturation against the sky\'s blue', () => {
     const sat = (c: number[]): number => (Math.max(...c) - Math.min(...c)) / Math.max(...c, 1e-6);
     for (const room of ['farplane', 'road-to-the-farplane']) {

@@ -136,7 +136,7 @@ export const ROOM_BOLD: Readonly<Record<string, RoomBold>> = {
   // Chapter II (FFX, release 69, `booth-ffx-yunalesca`), the Zanarkand Dome: the hall stands in water (the plate's floor is a still pool that mirrors the columns and the sphere; the scene calls it "the wet floor"), so a high gloss like the Bevelle cathedral's; the
   // rim is the scene's own "cold violet" for its figures (`zanarkand-dome.ts`: a gold bounce from the sphere and a cold violet rim); the fog is the plate's violet, held down a little (the plate is bright and already hazy).
   // EMBERS: NONE ON PURPOSE. `research/ffx-vs-ffx2-presentation.md` section 8 supports pyreflies in this room ("the Dome is described as an enormous accumulation of pyreflies"), and the scene already carries two authored pyrefly fields and its own dust in
-  // the shafts (`zanarkand-dome.ts`, `ParticlePresets.pyreflies`), so a third system at the gold sphere would double what canon asks once; whether the Dome wants more than that is a browser look (job J11 of the handoff), and the one line to add sparks at the
+  // the shafts (`zanarkand-dome.ts`, `ParticlePresets.pyreflies`), so a third system at the gold sphere would double what canon asks once; whether the Dome wants more than that is a browser look (job J17 of `docs/handoff/booth-b2.md`, which was J11 of `docs/handoff/booth-ffx-yunalesca.md`), and the one line to add sparks at the
   // sphere is `embers: [[0.262, 0.788]]` (the sphere's centroid on the plate, from the top-left).
   'zanarkand-dome': {
     gloss: 0.7,

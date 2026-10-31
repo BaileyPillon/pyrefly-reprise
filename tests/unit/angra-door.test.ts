@@ -399,7 +399,7 @@ describe('the eight doors do not interfere', () => {
       await flush();
       expect(c.picked, `${other.word.slice(0, -1)}${WORD}`).toEqual([ANGRA]);
     }
-  });
+  }, 60_000); // about 11 s alone (real timers, one pair of door words at a time), so the 15 s default failed it in a full run under load (2026-10-30); a hang still fails, later
 });
 
 const keyDown = (key: string, init: KeyboardEventInit = {}): void => {

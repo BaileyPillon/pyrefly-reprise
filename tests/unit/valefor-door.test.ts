@@ -390,7 +390,7 @@ describe('the six doors do not interfere', () => {
       await flush();
       expect(c.picked, `${other.word.slice(0, -1)}${WORD}`).toEqual([VALEFOR]);
     }
-  });
+  }, 60_000); // about 10 s alone (it types the door words one pair at a time with real timers), so the 15 s default failed it in two full runs under load (2026-10-30); a hang still fails, later
 });
 
 const keyDown = (key: string, init: KeyboardEventInit = {}): void => {

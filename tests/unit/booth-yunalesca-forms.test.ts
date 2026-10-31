@@ -163,4 +163,23 @@ describe('a foe that falls into its next form is never the last blow (review m7:
     await wait2;
     expect(other.log).toEqual(['ending:freeze']);
   });
+
+  it("the guard reads only what comes AFTER the `ko` in hand (review of booth-b2, m3): an EARLIER `form-change` of the same foe in the burst does not block the last blow, with a `victory` after it or with the foe alone on the field", async () => {
+    const withVictory = new RecordingPort();
+    const wait = stageFreeze(ctxOf(withVictory, ['yunalesca'], [formChange('yunalesca', 0), ko('yunalesca', 1), victory(2)], 1), 'yunalesca');
+    expect(wait).toBeInstanceOf(Promise);
+    await wait;
+    expect(withVictory.log).toEqual(['ending:freeze']);
+
+    const alone = new RecordingPort();
+    const wait2 = stageFreeze(ctxOf(alone, ['yunalesca'], [formChange('yunalesca', 0), ko('yunalesca', 1)], 1), 'yunalesca');
+    expect(wait2).toBeInstanceOf(Promise);
+    await wait2;
+    expect(alone.log).toEqual(['ending:freeze']);
+
+    // and the same burst with the `form-change` AFTER the `ko` still holds nothing (the m7 guard, unchanged)
+    const after = new RecordingPort();
+    expect(stageFreeze(ctxOf(after, ['yunalesca'], [ko('yunalesca', 0), formChange('yunalesca', 1), victory(2)], 0), 'yunalesca')).toBeUndefined();
+    expect(after.log).toEqual([]);
+  });
 });
