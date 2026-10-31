@@ -25,6 +25,7 @@
  * Pure: no `three`, no DOM but the address of the page (hard rule 1).
  */
 import { demoChapter, demoGameOf, isTreatedChapter, packDemo, proLanes, queryWord } from '../../motion/DemoGate.ts';
+import { skyGradeFor } from './SkyGrade.ts';
 
 export type ProMode = 'pro' | 'today';
 export type ProPiece = 'arena' | 'seam' | 'hits' | 'numbers' | 'markers';
@@ -112,7 +113,7 @@ export function proPieceOn(piece: ProPiece): boolean {
 
 /** The pro ARENA for a chapter about to start (the battle names the chapter before the figures load, and the look asks before `demoChapter` is set on the first call): on, in that demo chapter, unless the address chose a look. */
 export function proArenaFor(chapterId: string | undefined, search: string | undefined = here()): boolean {
-  return proMode() === 'pro' && isTreatedChapter(chapterId, 'arena') && !offSet().has('arena') && !addressChoseLook(search);
+  return proMode() === 'pro' && (isTreatedChapter(chapterId, 'arena') || skyGradeFor(chapterId) !== null) && !offSet().has('arena') && !addressChoseLook(search); // the second term: `?skygrade=a|b|c` (`SkyGrade.ts`) plays the held arena in Chapters V and XI
 }
 
 /** The game of the running demo chapter, or undefined outside the demo chapters. */

@@ -101,7 +101,7 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(proLookOn(), `look ${id}`).toBe(on);
       expect(proPieceOn('hits'), `look hits ${id}`).toBe(on);
       expect(proGame(), `look game ${id}`).toBe(on ? GAME[id] : undefined);
-      expect(proArenaFor(id, ''), `arena ${id}`).toBe(on);
+      expect(proArenaFor(id, ''), `arena ${id}`).toBe(plays(scope, id, 'arena')); // Chapters V and XI hold the arena grade with the look (the Farplane's sky clips: booth-ffx2-b4-sky)
       expect(partyRimOff(), `rim ${id}`).toBe(on);
       expect(bossCleanOn(), `boss ${id}`).toBe(on);
       expect(curvesOn(), `curves ${id}`).toBe(on);
@@ -130,7 +130,7 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(audioNewOn(), `audio ${id}`).toBe(on);
       expect(passGame(), `audio game ${id}`).toBe(on ? GAME[id] : null);
       expect(new DemoGovernor().gate(true), `governor ${id}`).toBe(on);
-      expect(chapterLook(id) !== null, `hd2d ${id}`).toBe(on);
+      expect(chapterLook(id) !== null, `hd2d ${id}`).toBe(plays(scope, id, 'hd2d')); // Chapters V and XI hold the HD-2D bold look: the plate is release 69's
     }
   });
 

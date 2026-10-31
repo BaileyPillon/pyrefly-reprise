@@ -5,6 +5,7 @@
  */
 import type { GradeRecipe } from './LookGrades.ts';
 import { onProChange, proArenaFor } from './pro/ProSwitch.ts';
+import { setSkyRunning } from './pro/SkyGrade.ts';
 import { LOOK_QUALITIES, chapterLook, nextLook, nextQuality, parseLook, type LookDebug, type LookName, type LookQuality, type LookStrength } from './LookConfig.ts';
 
 export interface LookStateShape {
@@ -60,6 +61,7 @@ export function setLookName(name: LookName | null): void {
 export function applyChapterLook(chapterId: string | undefined, style: 'hd2d' | 'classic' = 'hd2d'): void {
   lastChapter = { id: chapterId, style };
   if (!lookState.auto) return;
+  setSkyRunning(style === 'classic' ? undefined : chapterId); // the measuring word's patch of the Farplane rooms applies only while Chapter V or XI is the chapter and the player's style allows a look (`pro/SkyGrade.ts`)
   let d = style === 'classic' ? null : chapterLook(chapterId);
   // lane pro-look: the PRO arena ("Cinematic contrast", both demo chapters, each graded from its own painting) takes the chapter's place: cinematic at bold strength with the room's pro grade.
   // Not under CLASSIC (the player's word), not in any other chapter, not when the address chose a look; off by default (`look/pro/ProSwitch.ts`).

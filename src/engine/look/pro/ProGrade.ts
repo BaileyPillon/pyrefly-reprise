@@ -18,6 +18,7 @@ import type { GradeRecipe } from '../LookGrades.ts';
 import type { Rgb } from '../LookConfig.ts';
 import { PRO_ARENA_FFX_B3A } from './ProGradeFfxB3a.ts'; // batch 3a's three FFX rooms (this file would pass 400 lines with them)
 import { FFX_B3B_ARENA } from './ProGradeFfx.ts'; // batch 3b's three FFX rows (a type-only import back: no runtime cycle)
+import { skyRevision, skyRoom } from './SkyGrade.ts'; // the measuring word's three lighter options for the Farplane's two plates (default off; `SkyGrade.ts`)
 
 const clamp01 = (x: number): number => (x < 0 ? 0 : x > 1 ? 1 : x);
 const smooth = (a: number, b: number, x: number): number => {
@@ -370,11 +371,11 @@ export const PRO_ARENA: Readonly<Record<string, ProRoom>> = {
 };
 
 /** The room's pro table, or undefined (a room without one keeps the chapter's own bold grade). */
-export const proRoom = (key: string): ProRoom | undefined => PRO_ARENA[key];
+export const proRoom = (key: string): ProRoom | undefined => skyRoom(key, PRO_ARENA[key]);
 
 let rev = 0;
 /** Bumped by every live tuning ({@link proTune}); the LUT cache key carries it, so a tuned room builds its LUT again. */
-export const proRev = (): number => rev;
+export const proRev = (): number => rev + skyRevision() / 10;
 
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 function merge(into: Record<string, unknown>, patch: Record<string, unknown>): void {

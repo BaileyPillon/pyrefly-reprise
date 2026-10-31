@@ -84,7 +84,7 @@ describe("the FFX lane's stageFreeze guard, in the FFX-2 chapters with links and
     setStagingMode('pro');
   });
 
-  // The r70 verdict pass took Chapters V and XI off the list: their rows run again, with no edit, the day one line puts them back (`itIf`).
+  // The r70 verdict pass took Chapters V and XI off the list and booth-ffx2-b4-sky put them back (the look held), so their rows run here again with no edit (`itIf` is a no-op for a listed chapter): the real chains of V (five links) and XI (three) are read.
   for (const row of CHAINS) itIf(row.id)(`${row.id}: the real chain emits no form-change, and the last blow of the last link freezes once, between the last link start and the one title`, async () => {
     const { id, links } = row;
     const weak = 'weak' in row;
@@ -133,8 +133,8 @@ describe("the FFX lane's stageFreeze guard, in the FFX-2 chapters with links and
   }, 180_000);
 
   it('the chains above cover every treated FFX-2 chapter (a chapter that joins the list is added to CHAINS or this fails)', () => {
-    expect(stillListed(CHAINS.map((c) => c.id)).sort()).toEqual([...FFX2_TREATED].sort()); // the withdrawn two keep their rows in CHAINS and are skipped above
-    expect(CHAINS.map((c) => c.id).filter((id) => !(FFX2_TREATED as string[]).includes(id)).sort()).toEqual(Object.keys(WITHDRAWN_R70).filter((id) => WITHDRAWN_R70[id]!.game === 'ffx2').sort());
+    expect(stillListed(CHAINS.map((c) => c.id)).sort()).toEqual([...FFX2_TREATED].sort()); // a chapter that leaves the list again keeps its row in CHAINS and is skipped above
+    expect(CHAINS.map((c) => c.id).filter((id) => !(FFX2_TREATED as string[]).includes(id)).sort()).toEqual(Object.keys(WITHDRAWN_R70).filter((id) => WITHDRAWN_R70[id]!.game === 'ffx2').sort()); // none today: IX and XII, the two still withdrawn, are FFX
   });
 });
 
