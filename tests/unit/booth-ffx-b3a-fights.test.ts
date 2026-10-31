@@ -169,7 +169,7 @@ describe.each(CASES)('the real fight of $id', (c) => {
     expect(getChapterMeta(c.id)?.victoryPose).not.toBe('hold'); // research/ffx-vs-ffx2-presentation.md 2.1: only Zanarkand withholds the pose in FFX
   });
 
-  it('names its own boss on the ribbon and the card (`headlineEnemy`: the declared boss of Chapter VII, else the first foe on the field that is not a part)', async () => {
+  it('names its own boss on the card and the opening caption (`headlineEnemy` handed the declared boss of Chapter VII, else the first foe on the field that is not a part); the RIBBON is read through the real HudF1 in `booth-ffx-b3a-ribbon.test.ts`, because this call passes `bossId` itself', async () => {
     const chapter = getChapter(c.id)!;
     const setup = setupForChapter(chapter, 1);
     await registerBattleContent();

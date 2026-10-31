@@ -15,6 +15,7 @@ import { SCOPE_EXCEPTIONS } from '../../src/engine/motion/SwapSwitch.ts';
 import { AUTO_STAGES, SCRIPTED_RIGS } from '../../src/engine/procam/ProAutoStage.ts';
 import { PRO_SHOTS } from '../../src/data/procam/proShots.ts';
 import { lengthOf, registerKeys, registrationOf, sampleKeys } from '../../src/engine/procam/ProTrack.ts';
+import { characterOf } from '../../src/engine/procam/ProShots.ts';
 import { MACALANIA_TEMPLE_RIGS } from '../../src/scenes/macalania-temple.ts';
 import { HIGHBRIDGE_RIGS } from '../../src/scenes/highbridge.ts';
 import { CAVERN_STOLEN_FAYTH_RIGS, CAVERN_STOLEN_FAYTH_SLOTS } from '../../src/scenes/cavern-stolen-fayth.ts';
@@ -108,7 +109,7 @@ describe('(3) what the real victory close-up keeps in frame, against the beat ea
     return { layings, end, perChar };
   }
 
-  it("Chapter VII: Seymour's body (he lies where he fell and stays through the victory, D-046) is in frame at the last key of 2 of the 18 victory close-ups: 0 of 6 for Tidus, 0 of 6 for Yuna, 2 of 6 for Kimahri; Rikku has no victory row at all, so the scene's own victory rig plays whenever she acts last", () => {
+  it("Chapter VII: Seymour's body (he lies where he fell and stays through the victory, D-046) is in frame at the last key of 2 of the 18 victory close-ups: 0 of 6 for Tidus, 0 of 6 for Yuna, 2 of 6 for Kimahri; Rikku has no row of her own and plays the Tidus close-up laid on her feet (`characterOf`), so her last blow is among Tidus's 0 of 6, not the scene's own rig", () => {
     const v = victoryShare(MACALANIA_TEMPLE_SLOTS.party as Array<[number, number, number]>, [2.5, 0, -5.8], 1.75, [2.5, 0.15, -5.8]);
     expect(v.layings).toBe(18);
     expect(v.end).toBe(2);
@@ -116,14 +117,19 @@ describe('(3) what the real victory close-up keeps in frame, against the beat ea
     expect(v.perChar['victory.yuna']).toEqual([6, 0]);
     expect(v.perChar['victory.kimahri']).toEqual([6, 2]);
     expect(Object.keys(PRO_SHOTS).filter((g) => g === 'victory.rikku' || g === 'victory.lulu')).toEqual([]);
+    // review MINOR 2: no row of her own does NOT mean the game's rig plays; anyone who is not Yuna or Kimahri is read as Tidus (the shot is registered to the real feet), and `victoryPlay` returns null only without a row or a spot
+    expect(characterOf('rikku', 'rikku')).toBe('tidus');
+    expect(PRO_SHOTS['victory.tidus']?.length).toBeGreaterThan(0);
   });
 
-  it("Chapter IX: the lit pad (the plate pixel the scene wakes after Yojimbo is recalled) is in frame at the last key of 4 of the 18 close-ups (0 of 6 for Yuna, 4 of 6 for Kimahri, and Tidus has a row too); Lulu has no victory row, so the scene's own victory rig plays whenever she acts last", () => {
+  it("Chapter IX: the lit pad (the plate pixel the scene wakes after Yojimbo is recalled) is in frame at the last key of 4 of the 18 close-ups (0 of 6 for Yuna, 4 of 6 for Kimahri, 0 of 6 for Tidus); Lulu has no row of her own and plays the Tidus close-up laid on her feet (`characterOf`), so her last blow is among Tidus's 0 of 6, not the scene's own rig", () => {
     const pad = platePoint(CAVERN_PLATE.pad.cx, CAVERN_PLATE.pad.cy);
     const v = victoryShare(CAVERN_STOLEN_FAYTH_SLOTS.party as Array<[number, number, number]>, [2.75, 0, -2.0], 1.75, pad);
     expect(v.layings).toBe(18);
     expect(v.end).toBe(4);
     expect(v.perChar['victory.yuna']).toEqual([6, 0]);
     expect(v.perChar['victory.kimahri']).toEqual([6, 4]);
+    expect(v.perChar['victory.tidus']).toEqual([6, 0]); // the row Lulu (the first slot here) is laid with
+    expect(characterOf('lulu', 'lulu')).toBe('tidus');
   });
 });

@@ -294,3 +294,15 @@ describe('what must stay as it is', () => {
     for (const hidden of ['exp-leblanc', 'sinspawn-gui', 'exp-fayth', 'ffx2-tourist-trap']) expect(looked).not.toContain(hidden);
   });
 });
+
+describe('review MINOR 5 (2026-10-30): five [ours] numbers the other tests in this file did not reach, pinned so that a retune is an edit made on purpose and not a drift under a green suite', () => {
+  // These are colour and gloss values set from the plates and graded offline; NO test can say they are RIGHT (the stills of job J11 owe that, hard rule 9). A green suite is not a colour check: it says only that the
+  // value below is the one the handoff and the plate-grade still were made with, so changing one means changing this line and showing Bailey the still again.
+  it('the Cavern gloss, the Macalania arena exposure, the cinematic Highbridge shadow tint, the hd2d Cavern highlight tint and the Macalania rim colour', () => {
+    expect(ROOM_BOLD['cavern-stolen-fayth']?.gloss).toBe(0.3);
+    expect(PRO_ARENA_FFX_B3A['macalania-temple']?.colour.exposure).toBe(0.95);
+    expect(ROOM_LOOKS.cinematic['bevelle-highbridge']?.shadow).toEqual([0.04, 0.06, 0.24]); // the Highbridge arena's look row (the bold table's own shadow [0.06, 0.05, 0.3] is pinned with its recipe above)
+    expect(boldRoom('hd2d', 'cavern-stolen-fayth')?.highlight).toEqual([0.86, 0.96, 1.0]);
+    expect(ROOM_BOLD['macalania-temple']?.rim).toEqual([0.45, 0.8, 1.0]);
+  });
+});

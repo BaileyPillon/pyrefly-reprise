@@ -46,7 +46,7 @@ export const PRO_ARENA_FFX_B3A: Readonly<Record<string, ProRoom>> = {
     haze: { colour: [0.12, 0.18, 0.4], amounts: [0.06, 0.05, 0.025], side: 0.1 },
     vignette: { amount: 0.5, radius: 0.42, tint: [0.0, 0.004, 0.03] },
     grain: 0.018,
-    // the arch, found on the painting (plate u 0.49, v 0.78 from the top); (u, v) is the frame point it started from (the arch at the first menu: screen x 0.45, y 0.7 from the bottom)
+    // the arch, found on the painting (plate u 0.49, v 0.78 from the top); (u, v) is the frame point it started from (the arch at the first menu: screen x 0.45, y 0.7 from the bottom). The look row's light (`LookGrades` ROOM_LOOKS) names v 0.8: the r64 plate is cool and bright from v 0.70 to 0.82 with no peak between 0.78 and 0.80, so the two are one light read twice, 0.02 of the plate apart, and both stay (a still is owed, J11)
     cone: { u: 0.45, v: 0.7, follow: false, paint: { u: 0.49, v: 0.78 }, colour: [0.45, 0.7, 1.0], strength: 0.4, spread: 0.38, reach: 2.0, rays: 0.3 },
   },
   // Chapter IX: the shaft of daylight is the only light (plate u 0.59, v 0.42); a cold white cone falls from it over the floor and Yojimbo, the cave falls to steel-black, and the dormant pad is the one thing left to wake at the end.
