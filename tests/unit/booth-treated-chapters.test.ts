@@ -35,14 +35,14 @@ const LEBLANC_HELD: readonly string[] = ['breath', 'cam', 'moments'];
 const TREATED_NOW: Readonly<Record<string, { game: 'ffx' | 'ffx2'; since: string }>> = {
   'seymour-flux': { game: 'ffx', since: 'r60' },
   yunalesca: { game: 'ffx', since: 'r70' },
-  'seymour-anima-macalania': { game: 'ffx', since: 'r71' }, // batch 3a, the FFX lane `booth-ffx-b3a`
-  'seymour-natus': { game: 'ffx', since: 'r71' },
-  'braskas-final-aeon': { game: 'ffx', since: 'r71' }, // batch 3b, the FFX lane `booth-ffx-b3b`
-  'isaaru-via-purifico': { game: 'ffx', since: 'r71' },
+  'seymour-anima-macalania': { game: 'ffx', since: 'r70' }, // batch 3a, the FFX lane `booth-ffx-b3a`
+  'seymour-natus': { game: 'ffx', since: 'r70' },
+  'braskas-final-aeon': { game: 'ffx', since: 'r70' }, // batch 3b, the FFX lane `booth-ffx-b3b`
+  'isaaru-via-purifico': { game: 'ffx', since: 'r70' },
   'ffx2-bahamut': { game: 'ffx2', since: 'r60' },
   'ffx2-leblanc': { game: 'ffx2', since: 'r69' },
   'ffx2-den-of-woe': { game: 'ffx2', since: 'r70' }, // batch 2, the FFX-2 lane `booth-ffx2-b2`
-  'ffx2-trema': { game: 'ffx2', since: 'r71' }, // batch 3, the FFX-2 lane `booth-ffx2-b3`
+  'ffx2-trema': { game: 'ffx2', since: 'r70' }, // batch 3, the FFX-2 lane `booth-ffx2-b3`
 };
 
 /** The pieces each joined chapter holds back, in the order of `TREATED_PIECES`: the booth pair holds none (the approved target). */
@@ -123,9 +123,9 @@ describe('the list', () => {
     expect(TREATED_CHAPTERS['ffx2-leblanc']).toEqual({ game: 'ffx2', since: 'r69' });
     expect(TREATED_CHAPTERS['yunalesca']).toEqual({ game: 'ffx', since: 'r70' }); // the first FFX chapter beyond Chapter I: FFX's layout, profile and tables (hard rule 14)
     expect(TREATED_CHAPTERS['ffx2-den-of-woe']).toEqual({ game: 'ffx2', since: 'r70' }); // batch 2: FFX-2 only (rule 14)
-    for (const id of ['seymour-anima-macalania', 'seymour-natus']) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r71' }); // batch 3a: FFX only (rule 14; the research notes open with the game case)
-    for (const id of ['braskas-final-aeon', 'isaaru-via-purifico']) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r71' }); // batch 3b: FFX only (rule 14): FFX's layout, profile and tables
-    expect(TREATED_CHAPTERS['ffx2-trema']).toEqual({ game: 'ffx2', since: 'r71' }); // batch 3: Chapter XIII, FFX-2 only (ATB, dresspheres, Garment Grids: `research/ffx2-trema.md` section 0)
+    for (const id of ['seymour-anima-macalania', 'seymour-natus']) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r70' }); // batch 3a: FFX only (rule 14; the research notes open with the game case)
+    for (const id of ['braskas-final-aeon', 'isaaru-via-purifico']) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r70' }); // batch 3b: FFX only (rule 14): FFX's layout, profile and tables
+    expect(TREATED_CHAPTERS['ffx2-trema']).toEqual({ game: 'ffx2', since: 'r70' }); // batch 3: Chapter XIII, FFX-2 only (ATB, dresspheres, Garment Grids: `research/ffx2-trema.md` section 0)
   });
 
   it('holds the booth pair, with the games DEMO_CHAPTERS gives them; the booth list itself stays two ids', () => {

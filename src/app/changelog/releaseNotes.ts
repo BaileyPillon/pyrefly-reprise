@@ -69,11 +69,21 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 69 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 70 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '70',
+    date: '2026-10-31',
+    lines: [
+      { tag: 'FFX', text: 'Chapters II, III, VII, X and XIV get the presentation of Chapter I: the lighter battle screen, the new hit look, the boss card and the quiet ending.' },
+      { tag: 'FFX-2', text: 'Chapters XIII and XV get the presentation of Chapter IV: the lighter battle screen, the new hit look, the boss card and the quiet ending.' },
+      { tag: 'FFX', text: 'Each of those five rooms is lit on its own, from the dome’s lavender cone of light to the red lamps of the Via Purifico.' },
+      { tag: 'Both', text: 'Chapters IX and XII in FFX and V and XI in FFX-2 keep the older look for now.' },
+    ],
+  },
   {
     release: '69',
     date: '2026-10-30',
