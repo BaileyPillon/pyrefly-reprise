@@ -1,0 +1,223 @@
+# booth-b4: batch 4 merged, eighteen of the nineteen listed chapters treated (release 71 candidate; both games, per chapter)
+
+Branch `booth-b4`, cut from `origin/r70-int` e3f51bf18 (release 70's integration, ten treated chapters; under its focused review in another tree, which this branch never touched). It is the `--no-ff` merge, in this order, of the three batch-4 lanes, each built and reviewed from that same base:
+
+| lane | tip | game case (rule 14) | what it does |
+|---|---|---|---|
+| `booth-ffx-b4-hud` | d874984e5 | **FFX only** (IX `yojimbo-cavern`, XII `seymour-omnis`; FFX-2 has no panel of this kind) | the F1 HUD laid out against the Zanmato gauge and the Omnis readout (`src/ui/hudf1/hudf1-chapters.css`); both chapters back on the list |
+| `booth-ffx2-b4-sky` | 646262ac6 | **FFX-2 only** (V `ffx2-vegnagun-shuyin`, XI `ffx2-fallen-aeons`) | both back on the list with `hd2d` and `arena` held (the Farplane's sky draws as release 69 draws it); `?skygrade=a\|b\|c` (default off) builds three lighter grades to film; XI also holds `cam` |
+| `booth-b4-last` | 1a5e4c221 | **FFX only** (VIII `evrae-airship`, XVIII `sin-face`, 27 `mirror-aeons`), **FFX-2 only** (XVI `ffx2-ixion-djose`) | four of the last five listed chapters join, with their holds in `src/engine/motion/PieceHoldsLast.ts`; XVII `sin-fins-core` stays out |
+
+Presentation only: no number of a fight changes. **No browser, dev server, Playwright or GPU ran in this merge** (the release-70 review owns the browser); the proof is `tsc`, the full suite, the real engines in the tests and the offline reads each lane wrote, and every browser read is a job below with its prediction (rule 15). Nothing deploys from this branch. Authority: Bailey 2026-10-30, "the nice treatment you gave to the booth chapters you need to now apply to all live and selectable chapters (meaning ones that arent hidden) please start with leblanc"; 2026-10-29, "keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations". Every call here is the driver's, delegated, and Bailey's to overturn. The three lane notes stay as the detail: [booth-ffx-b4-hud](booth-ffx-b4-hud.md), [booth-ffx2-b4-sky](booth-ffx2-b4-sky.md), [booth-b4-last](booth-b4-last.md).
+
+## 1. The merged state, per chapter
+
+**Eighteen of the nineteen listed chapters are treated: 11 FFX, 7 FFX-2.** `since` is `r71` for the eight this batch adds or returns (the driver's to renumber); release 70's ten keep `r60`, `r69` and `r70`. A held piece answers release 68/69's frame, every other piece plays; `?treated=pack` puts release 68's chapter back whole.
+
+| chapter | id | game | since | held pieces (the written reason and its "Lifts when" are in the hold) |
+|---|---|---|---|---|
+| I | `seymour-flux` | FFX | r60 | none (the approved target) |
+| II Yunalesca | `yunalesca` | FFX | r70 | `breath`, `cam`, `smear` |
+| III Braska's Final Aeon | `braskas-final-aeon` | FFX | r70 | `breath`, `moments` |
+| IV | `ffx2-bahamut` | FFX-2 | r60 | none (the approved target) |
+| V Vegnagun and Shuyin | `ffx2-vegnagun-shuyin` | FFX-2 | **r71** | `hd2d`, `arena`, `cam`, `breath`, `moments` |
+| VI Leblanc | `ffx2-leblanc` | FFX-2 | r69 | `breath`, `cam`, `moments` |
+| VII Macalania | `seymour-anima-macalania` | FFX | r70 | `breath`, `cam`, `moments` |
+| VIII Evrae | `evrae-airship` | FFX | **r71** | `breath`, `cam`, `moments` |
+| IX Yojimbo | `yojimbo-cavern` | FFX | **r71** | `breath`, `cam`, `moments` |
+| X Natus | `seymour-natus` | FFX | r70 | `breath`, `cam`, `moments` |
+| XI Fallen Aeons | `ffx2-fallen-aeons` | FFX-2 | **r71** | `hd2d`, `arena`, `cam`, `breath`, `moments` |
+| XII Seymour Omnis | `seymour-omnis` | FFX | **r71** | `breath`, `cam`, `moments` |
+| XIII Trema | `ffx2-trema` | FFX-2 | r70 | `cam`, `breath`, `moments` |
+| XIV Isaaru | `isaaru-via-purifico` | FFX | r70 | `breath`, `cam`, `moments` |
+| XV Den of Woe | `ffx2-den-of-woe` | FFX-2 | r70 | `cam`, `breath`, `moments` |
+| XVI Ixion at Djose | `ffx2-ixion-djose` | FFX-2 | **r71** | `hd2d`, `arena`, `breath`, `cam`, `moments`, `smear` |
+| **XVII Sin's Fins and Core** | `sin-fins-core` | FFX | **out (NOT_YET)** | no rows; plays release 68's frame whole |
+| XVIII Sin's face | `sin-face` | FFX | **r71** | `card`, `breath`, `cam`, `moments`, `smear` |
+| 27 Mirror Aeons | `mirror-aeons` | FFX | **r71** | `hd2d`, `arena`, `card`, `breath`, `cam`, `moments` |
+
+What each hold means, in one line each (the hold text has the numbers): `breath` waits for a tone and a shot picked from a mockup (rule 9; no move is a `BigMove`); `cam` waits for a browser read that the follower or the scene's own rig crops nothing worse than the frame it replaces; `moments` waits for a knock-out per dress or member that reads every cut at or under 0.5 of the drawn height (CHK-027); `smear` waits for the swap exception to lift; `card` waits for a clean browser read of the boss card (VIII/XVI play it; XVIII holds the 1.89-wide painting, 27 waits for its @2x master); `hd2d` and `arena` wait for a grade picked from stills (V and XI: the sky; 27: a per-act grade; XVI: a room row for the approved C2 plate, D-273, none exists).
+
+**Why XVII stays out** (the lane's call, kept): its Fin plate (`.ffx-sinfin`) sits on the F1 turn strip in links 1 and 2 (x 328 to 516 against the strip's 465 to 625, y 22 to 82 of the 640 x 360 grid), and its flight plate is the brightest of any listed chapter's fight plate (mean luminance 0.659 against the Farplane's 0.628 that the bold look clipped). The lift is now buildable on this branch (section 6, question 1): `hudf1-chapters.css`'s mechanism applied to `.ffx-sinfin`, then join with `hd2d` and `arena` held.
+
+## 2. The merge, step by step (every conflict and how it was resolved)
+
+Line endings of every resolved file were kept as they were (the tests and docs in this tree are CRLF).
+
+**Merge 1, `booth-ffx-b4-hud` into `r70-int`: no conflict.**
+
+**Merge 2, `booth-ffx2-b4-sky`: seven conflicts, all resolved to "both lanes' rows, one data line per chapter".**
+
+| file | conflict | resolution |
+|---|---|---|
+| `src/engine/motion/DemoGate.ts` | the doc comment over `TREATED_CHAPTERS` ("took four back out ... twelve are treated" on each side) | one sentence naming both returns (IX and XII on `booth-ffx-b4-hud`, V and XI on `booth-ffx2-b4-sky` with the look held): **fourteen**. The table's own lines (the two FFX rows from the HUD lane, the two FFX-2 rows from the sky lane, with their comments) merged by git with no conflict |
+| `docs/DEV.md` | four rows: the sky lane rewrote the V/XV/XI row and added a new V/XI row, the HUD lane rewrote the VII/X/IX and III/XII/XIV rows | the sky lane's two rows plus the HUD lane's two rows; nothing dropped |
+| `tests/unit/booth-r70-withdrawn.ts` | each lane removed a different pair from `WITHDRAWN_R70` | `WITHDRAWN_R70` is **empty** (nothing is withdrawn; the table stays as the place the next withdrawal goes); the sky lane's `RETURNED_R71` (V, XI), `itPlays` and `playsPiece` kept; the header says all four came back |
+| `tests/unit/booth-treated-chapters.test.ts` | counts, `HELD_WITHDRAWN`, `NOT_YET`, the two game assertions, `TREATED_NOW` | `HELD_WITHDRAWN` empty; `TREATED_NOW` and `HELD_NOW` carry all four (git merged those); the count 14; the new "no chapter of the verdicts is withdrawn" case replaces both lanes' "still withdrawn" cases; both lanes' game assertions kept, plus a `demoGameOf` check for IX and XII (it was only done for V and XI) |
+| `tests/unit/booth-b3-r70-verdicts.test.ts` | the two lanes each rebuilt the release-70 table test | `B4_HUD` (IX, XII) and `RETURNED_R71` (V, XI) both checked; the list is the union; the games test names both; the "withdrawn" case asserts the table is empty and keeps its loop for a later withdrawal |
+| `tests/unit/booth-b3-cross-lane.test.ts` | title of the smear-hold case | the count raised to 14 (the 12 each lane wrote was wrong for the union) |
+| `tests/unit/booth-leblanc-wiring.test.ts` | the `treated()` list | the 14 ids in the order `TREATED_CHAPTERS` gives |
+
+One cross-lane assumption broke after the merge and was fixed: `booth-ffx2-b4-sky-chain.test.ts` used `yojimbo-cavern` as its example of "a chapter still off the list"; it is now `sin-fins-core`.
+
+**Merge 3, `booth-b4-last`: eight conflicts.**
+
+| file | conflict | resolution |
+|---|---|---|
+| `src/engine/look/pro/ProGrade.ts` | two import lines added at the same place (`SkyGrade`, `ProGradeFfxLast`) | both kept; the file is 397 lines (394 at the base; no growth beyond 400) |
+| `src/engine/motion/DemoGate.ts` | the same doc sentence | one sentence: fourteen plus the last lane's four with their games, **eighteen of the nineteen**, XVII out |
+| `tests/unit/booth-treated-chapters.test.ts` | `TREATED_NOW`, `HELD_NOW`, `NOT_YET`, the count, the sorted list, both game blocks | both lanes' data lines kept (`TREATED_NOW` and `HELD_NOW` carry the last lane's four rows beside the sky lane's two each); `NOT_YET` is now `sin-fins-core` alone (the other four old entries left with the chapters); count 18; 18 + 1 = 19 holds |
+| `tests/unit/booth-b3-r70-verdicts.test.ts` | the table test again | `RELEASE_71_LAST` added next to `B4_HUD` and `RETURNED_R71`; the list is the union of four tables, 18; games: 11 FFX and 7 FFX-2; `since` of the last lane's four pinned |
+| `tests/unit/booth-b3-cross-lane.test.ts` | title of the smear-hold case (+ the count, the exceptions list, the `BRANCH` comment) | count 18; the list of chapters on both the list and the swap exceptions is `yunalesca`, `sin-face`, `ffx2-ixion-djose`, each holding `smear` |
+| `tests/unit/booth-leblanc-wiring.test.ts` | the `treated()` list | the 18 ids in `TREATED_CHAPTERS` order |
+| `tests/unit/booth-treated-switches.test.ts` | two comments over the arena and look assertions | both comments joined (the assertions are the same line) |
+| `tests/unit/r60-defaults.test.ts` | the list of chapters whose `chapterLook` is non-null | the HUD lane's 12 plus `evrae-airship` and `sin-face` = **14** (V, XI, 27 and XVI hold `hd2d`, so none has a look) |
+
+**The one holds reader.** `PieceHolds.ts` spreads `LAST_HOLDS` (from `PieceHoldsLast.ts`) into `PIECE_HOLDS`; the HUD and sky lanes' rows are in `PieceHolds.ts` itself. Read from the source: 16 rows (every treated chapter but the booth pair), each of the last lane's four is the very object in `PIECE_HOLDS`, none is also written in `PieceHolds.ts`, and no row belongs to an unlisted chapter (`tests/unit/booth-b4-cross-lane.test.ts`).
+
+## 3. Cross-lane checks (what was read, and what it says)
+
+New file `tests/unit/booth-b4-cross-lane.test.ts` (11 tests) pins these over the merged tree; the existing matrices that read the list from the source (`booth-b2-off-words`, `booth-treated-switches`, `booth-hold-guard`, `booth-b3-cross-lane`, the KO rule, the chain tests) cover the four new chapters and the four returned ones with no edit and pass.
+
+| check | result |
+|---|---|
+| The treated list is 18 of 19, XVII out | yes: `CHAPTER_IDS` has 19, the list 18, the one difference is `sin-fins-core`; no hidden or experimental id is on it; each id has the game the registry says |
+| The shared pins agree | one count (18) and one game split (11 / 7) in `booth-treated-chapters`, `booth-b3-r70-verdicts`, `booth-b3-cross-lane`, `booth-leblanc-wiring`, `r60-defaults` and the new file; the eight batch ids are all `r71`, the other ten keep their releases |
+| The off words restore release 69/70 in every treated chapter | `booth-b2-off-words` (`?pack=off`, a phone, `?treated=pack`, `?pro=off`, `?hud=today`, ...) walks `TREATED_CHAPTERS` against an untreated control of the chapter's own game; the 18 pass. `?treated=pack` leaves the booth pair only |
+| `HeadlineBoss` and `SCRIPTED_RIGS` hold for the new chapters | `booth-b3-cross-lane` walks every link of every treated chapter: the F1 ribbon names the formation's declared boss or the first visible non-part foe; the only declared boss besides Chapter VII's Seymour is Chapter 27's second link, Dark Yojimbo (`mirror-aeons:2:dark-yojimbo`); `SCRIPTED_RIGS` is still `ffx2-fallen-aeons` and `ffx2-trema`, both treated FFX-2 chapters (and both hold `cam`, so neither stand-down is read) |
+| `?skygrade=` reaches only V and XI, and is off by default | `SKY_CHAPTERS` has the two ids; with each of a, b, c set, `skyGradeFor` answers for those two and for none of the other 17 listed ids, `undefined` and `exp-leblanc`; no word, no answer; under `?treated=pack` the word reaches nothing; with the word set, `chapterLook` and `proArenaFor` of the other 16 treated chapters are byte for byte what they are without it; without the word V and XI answer `null` and `false` (release 69's plate) |
+| `hudf1-chapters.css` reaches only IX and XII | all 6 selectors hang from `.ffxhud.hud-f1` and from `.ffx-zg:not(.ffx-zg--phone)` or `.ffx-omr:not(.ffx-omr--phone)`, and name nothing of Sin, the clock or the Gaze pill. Both panels are `hidden` in every other battle: the gauge draws only for an enemy tagged `enemyGaugeRules === 'yojimbo'`, which only `applyYojimboSetup` sets; **Chapter 27's Dark Yojimbo carries the Dark Aeons' tag (`'dark-aeons'`), so IX's rules reach nothing there**; the Omnis readout is hidden unless the state carries Omnis disc state |
+| `sin-hud.css`'s F1 rules reach only XVIII | the two rules hang from `.hud-f1 .ffx-sinhud:not(.ffx-sinhud--phone)` and move only `.ffx-sinclock` and `.ffx-sinhud__gaze`; the file names neither `ffx-zg` nor `ffx-omr`; XVII is off the list, so the old HUD (no `.hud-f1`) draws the column where it always stood |
+| `tsc` | clean |
+| Files under 400 lines | every source file changed by the merge is under 400 (largest: `ProGrade.ts` 397, `LookBoldConfig.ts` 353, `HudF1.ts` 345, `LookGradesBold.ts` 300, `PieceHolds.ts` 280, `DemoGate.ts` 277); the test files over 400 are not source |
+| `node tools/orphans.mjs` | 2,233 modules, **24 orphaned**, the base's 24 (`SkyGrade.ts`, `PieceHoldsLast.ts`, `ProGradeFfxLast.ts`, `hudf1-chapters.css` are all imported) |
+| Contract changes | none of the touched files is listed in `docs/CONTRACTS.md` (each lane said so) |
+
+## 4. The browser jobs: ONE lean list per chapter (the union of the three lanes; nothing has run)
+
+**Common to every job.** `npm run build` of this branch into a scratch dist (never the shared `dist/`), `public/art` on `D:\pyrefly-art-r64`, `node tools/fx-assets.mjs ensure` first, headless Chromium on the GPU, the review-browser lock kept, seed 1, `?coach=off`, REDUCE MOTION off, real keys from the chapter select; controls are live release 69 and `?treated=pack` (release 68's frame); a fight is `await __pyrefly.trigger('battle:fast')` then `await __pyrefly.gotoChapter('<id>', { skipCutscenes: true, auto: 'intended' })`, console recorded. Sizes: 1600 x 900, 2560 x 1440 and 3440 x 1440 (1280 x 720 where a lane asked); pixels = grid px x the stage scale (2 at 1280 x 720, 2.5 at 1600 x 900, 4 at 2560 x 1440 and 3440 x 1440; the 3440 stage is the 2560 one centred, +440 px). Read every HUD rect as a bounding box (`getBoundingClientRect` of `.f1-ribbon`, `.f1-hero`, `.f1-cue`, `.ffx-cmd-area`, `.f1-prompts`, `.ig-ctb`, `.ig-stat-list` and the chapter's own panels), the pairwise overlaps and the 28 px text floor. **Every job fails on a console error or a warning from the treatment**, and passes `?treated=pack` only when it equals live.
+
+**The run order for the browser (cheapest first):** the eight L1 reads (one first menu each, three sizes, default and `?treated=pack`), then the two text-size reads (IX/XII at 115 and 130, XVIII at 115 and 130), then the skygrade stills (section 5), then the fights to results (L2), then the F-set once per chapter.
+
+### IX Yojimbo `yojimbo-cavern` (FFX; HUD-1 to HUD-6)
+- **L1, first menu of link 1, 1280 x 720, 1600 x 900, 2560 x 1440, 3440 x 1440** (HUD-1). Predicts the gauge panel's bbox x 884..1698 and y 18..252 at 2560 (+440 at 3440), ribbon-to-gauge gap 121 px and gauge-to-`.ig-ctb` gap 162 px at 2560 (60/81 at 1280, 76/102 at 1600); the `0%` read-out clear of the TURN ORDER caption by at least 250 px at 2560; text floor minEff 19.56 at 2560 (the gauge's four labels, live's size). Fails when any HUD pair intersects, a gap is under 60 px at 2560, or `?treated=pack` differs from live (gauge left 293.3 grid).
+- **L1t, the same at TEXT SIZE 115 and 130** (HUD-4). Predicts the gauge clears the ribbon by 68 px and the strip by 66 px at 115 (2560), and at 130 reaches 30 and 32 px into them (7.4 and 8.0 grid px, the disclosed residual); the panel does NOT grow with the setting (a loss against live, disclosed). If the read shows the gauge 26 px further left than this, the `transform-origin: center` rule did not apply in the browser.
+- **L2, a fight to the results** (HUD-2). Predicts ribbon "Yojimbo" (never Lady Ginnem), the sakura arrival, a Zanmato callout, one freeze on the last blow, the pad lights, the quiet title over the party's cheer; the gauge banner centred at x 1280 at 2560, top about 276 px, about 530 px wide, 314 px clear of the strip; the enemy-move banner's right edge under about 760 px at 2560.
+- **L3, Intel (G) open at the first menu** (HUD-3). Predicts an overlap is possible: the advisor's one-row tip can land over the gauge (the F1 shift of +166 grid px is applied after the solver measured the gauge). If `.mad__card[data-zone='tip']` intersects `.ffx-zg__panel` by one pixel, the prepared candidate (not built) folds the tip row in IX while the gauge is up.
+- **L4, the stills for Bailey** (HUD-5): the first menu at 2560 x 1440 in three panels (Chapter I, release 69, now) beside the r70 composite `ffx-ix-yojimbo-before-after.jpg`. Predicts a centred strip between the ribbon and the turn order with a hand's width of floor on each side.
+- Lifts to read when convenient: `cam` (victory with the pad lit, job J1 of `booth-ffx-b3a.md`), `moments` (a KO per member), `breath` (needs a mockup, not a read).
+
+### XII Seymour Omnis `seymour-omnis` (FFX; HUD-1 to HUD-6)
+- **L1, first menu, four sizes** (HUD-1). Predicts the Enemy Intent card's bbox y 822..979 at 2560 (two lines; a third line grows it upward, the foot stays), foot to `.ig-stat-list` top 24.8 px at 2560 (12.4 at 1280, 15.5 at 1600); no overlap with the acting hero's HP numeral (r70: 17 of 64 px clipped); the disc strip, `.ig-ctb`, ribbon, cards and verbs where they were at 100; text floor 19.2 at 2560 (the disc strip's 11 leaves, live's size).
+- **L1t, TEXT SIZE 115 and 130** (HUD-4). Predicts the card's foot 6.1 to 6.15 grid px above the cards; the disc strip follows the turn strip's left edge (clears the ribbon by 157 px at 115, reaches 37 px into it at 130: the carried residual); the strip's box tip to the turn strip's box stays positive (a pixel or less).
+- **L2, a fight to the results** (HUD-2). Predicts ribbon "Seymour Omnis"; the card's foot is 979 +- 1 px at 2560 at every menu whatever its text; one link, one freeze, the quiet title over Auron's clip about 4.0 s; 0 console errors; no matte warning.
+- **L3, Intel (G) open at the first menu, and at TEXT SIZE 130** (HUD-3). Predicts the Sensor plate lifts 21 grid px to about y 123..201 (492..804 px at 2560), clear of the turn strip's foot by 41 and of the card by 4.5; at 130 the two solvers (lift up, left slide) may not both fit: the read decides.
+- **L4, the stills for Bailey** (HUD-5): as IX, beside `ffx-xii-seymour-omnis-before-after.jpg`; the card sits one line above the cards.
+- Lifts to read when convenient: `cam` (a cast, a landing, the killing blow and the victory at 16:9, 16:10, 21:9, 4:3: job J2 of `booth-ffx-b3b.md`), `moments` (job J5, the reserve Rikku first).
+
+### V Vegnagun and Shuyin `ffx2-vegnagun-shuyin` (FFX-2; S1 to S9)
+- **L1 / S1, the plate, held: link 1 first menu at the three sizes, default against live release 69 and `?treated=pack`, read with `node tools/sky-plate-read.mjs v <png>`** (whole frame and the sky band; the band is the lift's number). Predicts the band equals live's within 5 mean and 1 point (179.4 mean, 0.2 percent over 240 at 2560), the whole frame within 8 mean and 1.5 points of live (101.5 and 2.66); fails when the band over 240 reads above 3 percent. Plus the HUD-overlap read of every HUD rect (S6): 0 overlapping pairs, text floor 28 px with 0 under.
+- **S2, the burst in frame: links 1 to 5 first menus at 1600 x 900, default against `?treated=pack`.** Predicts band over 240 at most 1.1 percent in every link (the pack reads 0.19, 0.36, 0.44, 0.56, 1.03); whole frames 101.6, 89.3, 76.6, 77.5, 98.3 mean and 2.5, 1.5, 1.6, 1.6, 1.8 percent over 240 for the pack.
+- **S4, Shuyin's freeze (the gate G1): the last blow of link 5 with the look held.** Predicts the base luma back near release 69's (about 100 to 110, against the r70 build's 128.7), the flash peak about 200 to 215 (+95 to +110; Chapter IV's reference +164.4 from a base of 35.4), the ring readable on the pink sky. The fallback stays one `ending` row.
+- **L2 / S7, a fight to the results through all five links.** Predicts 0 console errors and warnings from the treatment, the HUD opacity 1 at every first menu, no title before the last link, one freeze and one ring on the last blow, the quiet title and the slow pull-back after Shuyin, no cheer.
+- **S8, the frame budget: 150 s at 2560 x 1440 capped at 60 Hz.** Predicts cheaper than the r70 build (no look rig is built): p99 at most 25 ms, over 50 ms at most 3 a minute.
+- **S3, the three options as stills for Bailey: section 5.**
+- Lifts to read when convenient: `cam` (the follower stands down while the colossus rig is staged, or the fit keeps the approved crop), `moments`, and the `hd2d`/`arena` lift, which needs Bailey's pick from the section 5 stills.
+
+### XI Fallen Aeons `ffx2-fallen-aeons` (FFX-2; S1 to S9)
+- **L1 / S1, link 1 first menu at the three sizes, default against release 69 and `?treated=pack`, `node tools/sky-plate-read.mjs xi <png>`.** Predicts the band equals live's within 5 mean and 1 point (138.8, 1.51 percent); whole frame within 8 mean and 1.5 points of live (88.9 and 3.14: release 69's own whole frame already reads 3.14 over 240 from the old HUD's pale buttons, which is why the band is the number). HUD-overlap read and text floor as V.
+- **S2, links 1 to 3 first menus at 1600 x 900.** Predicts each link equal to the `?treated=pack` control of the same link within 3 points (the pack band reads 39.4, 0.6 and 10.5 percent because the aeons stand in it).
+- **S5, the Shiva seam (the gate G3): a fight to Shiva's last blow, default and `?treated=pack`.** Predicts the same as release 69: `procam()` reports itself held, the camera on `road-links`' rig from the seam's first frame, plate B and the four lines, no glide (the r70 glide of 0.45 s was the follower's).
+- **L2 / S7, a fight to the results through the three links.** Predicts 0 console errors and warnings, no title before the last link, one freeze, the title over the cheering party about 3.4 to 3.7 s.
+- **S8, the frame budget**, as V.
+- **S3 and S3b, the stills for Bailey and the burst in frame: section 5.**
+- Lifts to read when convenient: `cam` (the F5 crop sample, 110 s at 2560 x 1440 and 3440 x 1440, from the S3b scratch build; 0 sampled frames with a party rectangle outside the viewport), `moments`.
+
+### VIII Evrae `evrae-airship` (FFX; L1, L1b-none, L2, L3, J-A, F-set)
+- **L1, first menu of link 1 at 1600 x 900, 2560 x 1440 and 3440 x 1440, default then `?treated=pack`, the HUD-overlap read, and the before / after still beside Chapter I.** Predicts the FFX F1 slab (command block left, turn strip top right, text at the 28 px floor), ribbon "Evrae" (no bar until Sensor), the navy sky with the cream cone from the upper left (frame u 0.14, v 0.83), the party sharp on the band (0.42), Wakka's left edge 9 grid px right of the command block and Rikku's right edge 7 grid px left of the party cards, no pale rim on Evrae, mean luma at the first menu under release 68's and the share over 240 no higher than the control's (fail: exceeding the control by the V and XI margin, 126.6 against 101.5 and 13.5 against 2.7 percent).
+- **L2, a fight to the results.** Predicts the Overdrive opening, the Inhale's `breath-charge` painting as today and no held breath, one flash and one ring at Evrae's last blow (read the ring's origin on a falling serpent: it comes from where the chest was), the HUD out, the quiet title held 3.7 s (Tidus's cheer clip) over the cheering party, then the results.
+- **L3, the gates.** G-E: Evrae's ribbon and card at every menu; the order widget over the F1 command window (the Orders row must be reachable: the F1 window shows four verbs and the faded fifth).
+- **J-A, the battle-start card at 1600 x 900, 1280 x 800, 2560 x 1440, 3440 x 1440, default against `?treated=pack`, the card held for the 2.6 s push and its last frame.** Predicts the boss right, the name lower left clear of the painting's mass; Evrae's stray tail fragment (2,086 alpha pixels at the painting's left edge) floats at the bottom left: it is in the art (class 10, review m3), not ours. Fails if the eye or the teeth are cropped or the name covers the eye.
+- Lifts to read when convenient: `cam` (the deck's range director owns the rigs: no frame worse than its rig at 16:9, 21:9, 4:3, NEAR and FAR), `moments` (a KO per member, Rikku first).
+
+### XVIII Sin's face `sin-face` (FFX; L1, L1b, L2, L3, J-A, F-set)
+- **L1, as VIII over golden dusk, plus the pair of stills with Overdrive Sin's screen-space rim ON and OFF (review m7).** Predicts ribbon "Sin", the sun behind the party's heads, the clock column at x 200 to 294 clear of the ribbon, the Gaze pill under it; the head's edge no worse with the rim off than release 68's frame. Fails if a pale fringe shows with it off; then the flag comes off and the re-cut candidate stays open.
+- **L1b, the same at TEXT SIZE 115 and 130, default then `?treated=pack`.** Predicts no overlap of any HUD rect with the clock column or the Gaze pill; the column starts 28 and 30 grid px right of the grown ribbon (x 240 and 266 of 640: 70 and 75 px at 1600 x 900, 112 and 120 at 2560), the pill 7.3 and 6.6 grid px right of the grown cue line, the column's right edge (334 and 360) 107 and 57 grid px left of the grown turn strip. Fails if any rect overlaps, the advisor card lands on the column (it dodges the rectangle), or the column moves at the default size or under `?treated=pack`.
+- **L2, a fight to the results.** Predicts one freeze and ring on the head, the title held 4.0 s (Auron's clip); read the head's last blow (the clock's stage pose at that moment).
+- **L3, the gates.** G-S: the clock column against the strip at the default size (0 overlap) and the last blow of Sin's face.
+- **J-A, the battle-start card:** XVIII HOLDS the card, so default and `?treated=pack` are the same release 68 card; the lift run (`card` removed in a scratch build) predicts the painting 171 px wider than the frame at 1600 x 900 (the left 142 px behind the edge), the left 245 px behind the edge at 1280 x 800, the name over the jaw, the head whole at 3440 x 1440 (offset +503). Lift only if the scratch run shows both whole at all four sizes.
+- Lifts to read when convenient: `cam`, `moments`, `smear` (`sin-face-all-held-anchor`).
+
+### 27 Mirror Aeons `mirror-aeons` (FFX; L1, L2, G-M, F-set)
+- **L1, first menu of link 1, three sizes, default then `?treated=pack`.** Predicts release 68's daylight frame with the F1 slab (`hd2d`, `arena` and `card` held), ribbon "Dark Mindy" (the headline reads "Dark Sandy and Dark Mindy": the ribbon agrees).
+- **L2, a fight to the results through both links.** Predicts link 1 ends with no VICTORY word and no sunk HUD (`.ffxhud` opacity 1 at link 2's first menu), the plate swaps under the white pulse to the Cavern at release 68's grade, the ribbon reads "Dark Yojimbo" (the declared boss of link 2; his formation stands Daigoro beside him), one freeze and one title at the end. IX's gauge must NOT appear in link 2 (the Dark Aeons' tag, not Yojimbo's).
+- **G-M, the Mirror seam and Act II's card** (held: today's).
+- Lifts to read when convenient: the per-act grade from a still pair (then `hd2d` and `arena`), the road's @2x master (then `card`), `cam`, `moments`.
+
+### XVI Ixion at Djose `ffx2-ixion-djose` (FFX-2; L1, L2, G-I, J-A, J-B, F-set)
+- **L1, first menu, three sizes, default then `?treated=pack`, the before / after still beside Chapter IV.** Predicts release 68's frame on the approved C2 plate (the file keeps its `-provisional` name) with FFX-2's slab (ATB bars, pink accent on the right), ribbon "Ixion".
+- **L2, a fight to the results, then the post scene.** Predicts one freeze, the quiet title, the girls' cheer (3.4 s), the results; then the post scene (Ixion's last charge, Yuna's fall, the Abyss, the four whistles) starts clean (no title, vignette or HUD left over).
+- **G-I and J-B, Ixion's Recharge, the only warning for Thor's Hammer, at 1600 x 900, 2560 x 1440 and 3440 x 1440 with the F1 HUD against `?treated=pack`.** Predicts the banner shows at all three sizes for at least the control's dwell (the slot scan should find a free column; FFX-2's F1 geometry was not computed, so this is a prediction, not a read), and Thor's Hammer at the unchanged release 68 timing. **Fails if the banner is hidden or under the command window at any size: that is a major, and XVI comes back off the list until the slot is fixed.**
+- **J-A, the battle-start card:** composes as Evrae's (boss right, name lower left clear of the painting's mass). Fails if the eye or the teeth are cropped.
+- Lifts to read when convenient: the three room rows (`hd2d`, `arena`, then `cam` with an `AUTO_STAGES` row) each need a still pair beside Chapter IV, `moments` (Thief and Gunner first), `smear` (`ixion-all-held`).
+
+### XVII Sin's Fins and Core `sin-fins-core` (out)
+Nothing to read: it plays release 68's frame whole. The lift is not a browser job; it is the build in section 6, question 1.
+
+### F-set, once per treated chapter of this batch (the eight)
+The continuity harness (CHK-026 / CHK-027), one 150 s recording per chapter, default and `?treated=pack` (no worse than release 68's; the swap-jerk count, not only the worst; XVIII and XVI hold the smear, so their cuts are release 67's); loudness in the page (first menu, a mid-fight minute and the win) within 0.5 LU of the booth pair's; the frame budget (2560 x 1440 capped at 60 Hz: at or over 59.5 fps after the opening, p99 at or under 25 ms; Evrae's deck has the cloud layers, the bold pass and the boss mask; V and XI predict cheaper than r70); the phone gate (390 x 844 and 1024 x 768: the pack is off, no F1 HUD; the HD-2D look only where there is one: Evrae and Sin's face); the quick retry (lose once, TRY AGAIN: none of the four of the last lane has a recorded roar opening, so the time to the first menu should read under 12 s and no `PUBLIC_QUICK_RETRY_CHAPTERS` entry is owed; IX predicts over 12 s: HUD-6 F13); the off words in pixels (S9: `?treated=pack`, `?pack=off`, a phone, `?pro=off` give release 68's frame); the browser specs that play these chapters (`chapters`, `portraits`, `advisor-present`, `advisor-zone`, `hud-collision`, `intent-pause`), this build against release 68.
+
+## 5. The skygrade stills job for Bailey (Chapters V and XI; rule 9: he picks from pictures, the numbers do not)
+
+**What Bailey is choosing.** The Farplane's sky clipped to a flat white halo under the HD-2D bold look and the pro arena grade (Chapter V's first menu in the r70 read: mean luma 126.6 against release 69's 101.5, 13.5 percent of pixels over 240 against 2.7; the sky band 232.5 and 64.2 percent over 240 against 179.4 and 0.2). V and XI now come back with that look HELD, so they draw as release 69 draws them. Three lighter grades are built behind `?skygrade=a|b|c` (default off, the two plates only); the pick lifts the `hd2d` and `arena` holds. **Nothing here plays by default.**
+
+| option | idea | change on the room's pro table | predicted picture |
+|---|---|---|---|
+| **a** exposure cap | one lever | the room's exposure capped at 1.0 (the rows are 1.45 and 1.5) | the whole sky falls to about a quarter of the light; the burst's core is what stays bright. Band mean 110 to 200, over 240 5 to 45 percent |
+| **b** highlight roll-off | one lever | a soft knee on the colour transform (`shoulder` 0.5) and exposure capped at 1.2 | no clip up to four times the live sky; the burst keeps its gradation, the plate reads as a moody dusk. Band mean 120 to 200, over 240 **0 to 1 percent by construction, so the number cannot filter b: a flat grey-lilac plate would pass it, Bailey's eye does** |
+| **c** dimmer bold row | one lever | the added-light terms come down (beams 2.0 to 0.8, stage light 1.7 to 1.2, bloom strength 0.85 to 0.45 and threshold 0.66 to 0.8, figure key 1.5 to 1.3, the cone x 0.7), exposure capped at 1.2 | the burst throws less light into its own sky; the grade still clips where the sky's own pixels are bright. Band mean 150 to 230, over 240 20 to 60 percent: the one most likely to fail 3 percent |
+
+These are readings of an offline model that did not reproduce the browser (the engine's own LUT through the patched room, pinned in `booth-ffx2-b4-sky-grade.test.ts`), not measurements. The criterion is read on the sky band (V x 0.27 to 0.62, XI x 0.27 to 0.52, y 0.14 to 0.42), not the whole frame (release 69's own whole frame already reads 3.14 percent in XI from the old HUD's pale buttons); the whole frame is read against release 69's own for the same link and size.
+
+**The job (about 20 minutes of browser; it can wait for the free browser).**
+1. Build this branch into a scratch dist; `public/art` on r64; headless Chromium on the GPU; 2560 x 1440; seed 1; `?coach=off`.
+2. **Chapter V, link 1 first menu and link 5 first menu; Chapter XI, link 3 (Anima) first menu at the resting rig.** For each, five stills, each labelled by `__pyrefly.skyGrade().screen`, never by the word: **release 69** (the live site), **now** (default: `release69`), then the page opened with `?skygrade=a`, `?skygrade=b`, `?skygrade=c` (`screen` reads `a`, `b`, `c`) and the control arm on the `?skygrade=a` page (`__pyrefly.skyGrade(null)`: `screen` `r70`, the failing grade, unpatched). A page opened WITHOUT the word and then `skyGrade('b')` mid-battle leaves `screen` at `release69`: do not film that (the setter does not arm the rig mid-battle on purpose).
+3. Save `<chapter>-sky-<a|b|c|r70|r69>.png` and read each with `node tools/sky-plate-read.mjs <v|xi> <png>` (mean luma, share over 240, whole frame and the band).
+4. Composite four panels per chapter for Bailey, **Chapter IV on top as the booth target**, then release 69, then the options (a, b, c), the r70 failing grade at the foot as the "what we are fixing" panel. Phone cards (portrait) per `feedback-phone-friendly-decisions`: one card per chapter, the three options labelled A, B, C, one `AskUserQuestion` (A, B, C, "none: keep release 69's plate"), max 3 decisions in the whole batch.
+5. **S3b, the Road's burst in frame (XI only).** XI's burst is in frame only when the follower runs, and the follower is held, so no word offers it. A scratch build (never the shared `dist/`) of this branch with the XI `cam` row deleted from `PieceHolds.ts` (one row; the follower and its `road-links` stand-down then run) and nothing else changed; XI link 3 first menu and its first twelve cast frames (the r70 sample) at 2560 x 1440: (i) default (look held, follower on), (ii) `?skygrade=a`, `b`, `c` on the same build, (iii) `?treated=pack` as the control. Predicts (i) 1 to 4 percent over 235 on the cast frames (r70's bold look read 19.1; release 68's control 1.5): with `hd2d` held no light is added to the burst. **Fails when (i) reads more than 3 points above the control of the same link**: then the criterion is "no worse than the control", not 3.
+
+**What a pick does.** Bailey names a letter per chapter (or one for both: they share the sky); the hold's "Lifts when" is then met for `hd2d` and `arena` in that chapter by deleting its two rows and making the chosen option that room's grade (a one-table change in `ProGrade.ts`, which has 3 lines left under the cap: the next row moves a table out first). XI's `cam` lift is separate (S3b and the F5 crop sample). If none clears, the lane's fallback is to combine (`shoulder` of b with the exposure of a).
+
+## 6. Open questions for the driver (none sent to Bailey; none of these blocks the merge)
+
+1. **Chapter XVII is now buildable.** Its lift needs `hudf1-chapters.css`'s mechanism applied to `.ffx-sinfin` (finding 1: the Fin plate against the F1 turn strip; the clock half is already done for XVIII) and then joining with `hd2d` and `arena` held (finding 2: the flight plate's brightness is a look decision, the Mirror and Ixion pattern). Both halves are on this branch. A follow-up lane could do it with the offline overlap instrument (`booth-b4-last-classes.test.ts`); not built here (a merge, not a build).
+2. **`since` is `r71` for the eight** (driver's to renumber; nothing reads the number but the list's own tests).
+3. **IX with Intel (G) open:** the advisor's one-row tip can land over the gauge (HUD-3 decides; the prepared candidate folds the tip row in IX while the gauge is up).
+4. **TEXT SIZE 115 and 130 in IX and XII is a named LOSS against live** (the gauge and the disc strip no longer grow with the setting, and at 130 each reaches 7 to 9 grid px into the grown ribbon's end): carry it (the lane's choice), give the two chapters today's HUD at 115 and 130 (one condition in `hudF1On`), or a narrower gauge and strip (a mockup, rule 9). The two text-floor minors (the gauge's four labels at 19.6 px, the disc strip's eleven leaves at 19.2 px at 2560, live's size) are carried.
+5. **The band, not the frame, is the sky criterion** (the sky lane's call; the reason is in section 5). Say if you want the whole frame.
+6. **Should XI hold `hd2d` and `arena` at all, or only `cam`?** The r70 first menu at the idle rig was clean (85.0 and 0.8 percent against 88.9 and 3.1), and the halo was the follower's frame; S1 and S2 settle it; until they run both rows stay (deleting the two rows is the change).
+7. **Overdrive Sin's pale fringe (+15.5) and Ixion's translucent glow (+28.7)** are re-cut and rim questions that need a sheet and an art write (rule 8); Evrae's detached tail fragment is in the art (class 10). None is made.
+8. **Mirror Aeons' per-act grade** (the road's daylight, the cavern's cold stone) is a look decision from a still pair (`SceneBuild.swapBackdrop` must grade per plate).
+9. **`ProGrade.ts` is 397 lines**: the next row needs a table moved out first (the sky lane's question 8, the last lane's two rows moved into `ProGradeFfxLast.ts`).
+10. **Commit trailers differ by lane** (`Claude Sonnet 5.5` in the sky lane, `Claude Sonnet` in this merge as the brief asked); the driver's to normalise if it matters.
+11. **`NOW.md` and the ledgers are not touched here** (the driver owns the release entry); `critic-plan` classes these paths DEEP (a deep review is owed from 6321b2578): a focused review of the production candidate before a deploy, the deep review on the live build after it.
+
+## 7. Suggested CHANGELOG lines (the release's; tagged per game)
+
+- **FFX only (Chapters IX, XII, VIII, XVIII and the Mirror Aeons chapter: Yojimbo, Seymour Omnis, Evrae, Sin's face, the Mirror Aeons):** the booth treatment reaches five more FFX chapters. The Ink and Gold battle HUD with less on screen now fits Yojimbo's Zanmato gauge (it stands between the boss ribbon and the turn order instead of running under it) and Omnis's Enemy Intent card (one line above the party panel instead of over the acting hero's HP); at the larger text sizes (115 and 130) those two panels no longer grow with the setting, and the disc strip follows the turn order. On the airship, Evrae and Sin's face get the HD-2D look with the sharp band on the party and a cinematic arena (a cream cone from the sunlit cloud bank over a navy sky; a gold cone from the setting sun over a plum dusk), foes without a screen-space rim; Sin's face keeps its clock and Gaze pill clear of the new HUD at TEXT SIZE 115 and 130. All five: the pro look (hits, glass numbers, markers), the sampled strikes and real clips, the quiet ending (one freeze on the last blow, the quiet title, the party's cheer; the Mirror Aeons chapter's two acts cue nothing at their seam), the FFX Overdrive opening, the new effects, the feel and the sound pass. **Held, each with a written reason:** the staged breath (Zanmato, Ultima, Poison Breath, Giga-Graviton, the Dark aeons' Mega Graviton and Zanmato wait for a picked tone), the directed camera (Yojimbo's lit pad, Omnis's killing blow past the plate, the airship's range director, the Mirror stage's two plates), the knock-out cut and the new victory cheer, Sin's face's brush-stroke smear and boss card, and in the Mirror Aeons chapter the room's look, arena and boss card (two plates under one grade, the first with no @2x master). `?treated=pack` puts release 68's chapters back.
+- **FFX only, not in this release:** Chapter XVII (Sin's Fins and Core: the Fin plate would sit on the turn strip) plays release 68's frame.
+- **FFX-2 only (Chapters V, XI and XVI: Vegnagun and Shuyin; the Fallen Aeons; Ixion at Djose):** the booth treatment returns to the Farplane and reaches Djose. The Ink and Gold battle HUD with less on screen, the pro look (hits, glass numbers, markers), the boss card as a painting, the quiet ending (Chapter V ends on Shuyin with no cheer and a slow pull-back; the Fallen Aeons and Ixion end with the girls' cheer), the sampled strikes and real clips for the party, the new effects, the feel and the sound pass. **Held, each with a written reason:** the HD-2D look and the cinematic grade in Chapters V and XI (they clipped the Farplane's bright sky to a white halo, so the sky draws as release 69 draws it until a lighter grade is picked from stills) and in Chapter XVI (the approved Chamber plate has no look row yet), the camera (Chapter V keeps the approved colossus frame, Chapter XI keeps release 69's resting camera because its follower cropped Yuna, Chapter XVI has no camera row), the staged breath (Thor's Hammer among them), the knock-out cut and the new victory cheer, and Chapter XVI's brush-stroke smear. `?treated=pack` puts release 68's chapters back.
+- **Carried (disclosed), FFX only:** at TEXT SIZE 130 the Zanmato gauge (IX) and the disc strip (XII) reach 7 to 9 grid px (about 30 px at 2560 x 1440) into the grown boss ribbon's end; the gauge's labels (19.6 px at 2560) and the disc strip's leaves (19.2 px) read under the 28 px text floor (live's are the same size); and at 115 and 130 those two panels stay small where today's HUD grows them to 1.15 and 1.3 times.
+- **Both games, tooling and records, nothing a player sees:** `?skygrade=a|b|c` (default off; the Farplane's two plates only), `__pyrefly.skyGrade()` and `tools/sky-plate-read.mjs` for stills; `hudf1-chapters.css` (the F1 HUD against chapter panels; selectors only the gauge and the read-out can match); `PieceHoldsLast.ts` and `ProGradeFfxLast.ts`; the shared booth tests read the list and the holds from the source and pin eighteen chapters (`booth-b4-cross-lane`).
+
+## 8. Checks
+
+- `node node_modules/typescript/bin/tsc --noEmit`: clean (exit 0).
+- The booth family (`booth`, `r60-defaults`; 60 files after the merge, including the new cross-lane file): **see the counts in the commit and the return message** (section 9 below holds the full-suite line).
+- `node tools/orphans.mjs`: 2,233 modules, 24 orphaned, the base's 24.
+- Files under 400 lines: yes for every source file touched (largest `ProGrade.ts` 397).
+- Scratch: `D:/Tools/pyrefly-scratch/2026-10-31/booth-b4/` (the conflict resolvers, `crosscheck.mjs`, the vitest logs).
+
+## 9. The full suite on the merged tree
+
+Filled by the driver's return message (the run takes about 35 minutes with `--maxWorkers=3`): the counts are in the log `D:/Tools/pyrefly-scratch/2026-10-31/booth-b4/vitest-full.txt`.

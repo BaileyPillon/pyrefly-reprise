@@ -7,10 +7,10 @@
  *     otherwise the first visible non-part foe; a declared boss is a foe of its own formation; and the only links where the ribbon's foe and the formation's written `headline` disagree are the ones listed
  *     in `HEADLINE_DISAGREES` (a finding carried to the driver, not a defect this merge can fix without a data row).
  *  2. `ProAutoStage.SCRIPTED_RIGS` stays FFX-2's: no row names a chapter that is not FFX-2, and every row names a treated FFX-2 chapter.
- *  3. THE HOLD GUARD: a chapter on both `TREATED_CHAPTERS` and `SwapSwitch.SCOPE_EXCEPTIONS` holds `smear` (`booth-hold-guard` reads the two lists; the merged list was fourteen, is twelve after booth-ffx-b4-hud).
+ *  3. THE HOLD GUARD: a chapter on both `TREATED_CHAPTERS` and `SwapSwitch.SCOPE_EXCEPTIONS` holds `smear` (`booth-hold-guard` reads the two lists; the merged list was fourteen, is eighteen after batch 4: the r70 verdicts' four came back and booth-b4-last added four).
  *  4. THE KNOCK-OUT RULE'S INVARIANT over the merged list is in `tests/unit/engine/booth-b2-ko-rule.test.ts`; here, that no treated chapter's hold names a piece outside `TREATED_PIECES`.
  *
- * THE r70 VERDICT PASS (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four chapters back off the list (the list was ten); `booth-ffx-b4-hud` (FFX only) brought IX and XII back (the list is twelve, V and XI are still off). The ribbon walk is a function of the data and not of the list, so it walks all fourteen (`BRANCH`):
+ * THE r70 VERDICT PASS (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four chapters back off the list (the list was ten); batch 4 brought all four back (`booth-ffx-b4-hud`, FFX only: IX and XII; `booth-ffx2-b4-sky`, FFX-2 only: V and XI) and `booth-b4-last` added Chapters VIII, XVIII and 27 (FFX only) and XVI (FFX-2 only): the list is eighteen, Chapter XVII is the one listed chapter off it. The ribbon walk is a function of the data and not of the list, so it walks the list and any chapter a later verdict withdraws (`BRANCH`):
  * the ribbon of each is pinned for the day one line puts it back. The hold and the stand-down tables keep the withdrawn chapters' rows, unread.
  */
 import { afterEach, describe, expect, it } from 'vitest';
