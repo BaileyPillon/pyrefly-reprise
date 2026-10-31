@@ -325,7 +325,7 @@ describe('who the treatment reaches', () => {
     expect(isTreatedChapter(undefined)).toBe(false);
   });
 
-  it('under all it is the booth pair, Leblanc, Chapter II, batch 2 and batch 3 (batch 4 put IX, XII, V and XI back: fourteen): each plays every piece but the ones it holds; no other listed or hidden chapter is reached, and a withdrawn chapter answers like release 68 for every piece though its holds stay in the table', () => {
+  it('under all it is the booth pair, Leblanc, Chapter II, batch 2 and batch 3 (batch 4 put IX, XII, V and XI back and `booth-b4-last` added four: eighteen): each plays every piece but the ones it holds; no other listed or hidden chapter is reached, and a withdrawn chapter answers like release 68 for every piece though its holds stay in the table', () => {
     setTreatedScope('all');
     const listed = Object.keys(TREATED_CHAPTERS);
     for (const id of [...LISTED, ...HIDDEN]) {

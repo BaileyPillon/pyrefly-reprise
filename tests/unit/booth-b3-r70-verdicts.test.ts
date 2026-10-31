@@ -5,11 +5,11 @@
  * (`PieceHolds.ts`, the reason and its "Lifts when"); a chapter with a major defect the treatment introduced comes off `TREATED_CHAPTERS` (its rows stay, unread); a small confirmed defect with an obvious fix is fixed with a test, otherwise the
  * piece is held. The result: TEN chapters are treated in release 70, FOUR are off the list, and two chapters gained a `cam` hold. This file pins that result as one table, so a later edit to the list or to a hold is a decision made here too.
  *
- * **`booth-ffx-b4-hud` (2026-10-31, FFX only) brought two of the four back**: IX (`yojimbo-cavern`) and XII (`seymour-omnis`), whose defect was the F1 HUD's layout against their own panel (`src/ui/hudf1/hudf1-chapters.css`, `booth-ffx-b4-hud-layout.test.ts`, `docs/handoff/booth-ffx-b4-hud.md`). The release-70 table below stays as the ten; `B4_HUD` is the two. **`booth-ffx2-b4-sky` (FFX-2 only) brought the other two** (V and XI, `RETURNED_R71`): so the list is the union, FOURTEEN, and nothing is withdrawn.
+ * **`booth-ffx-b4-hud` (2026-10-31, FFX only) brought two of the four back**: IX (`yojimbo-cavern`) and XII (`seymour-omnis`), whose defect was the F1 HUD's layout against their own panel (`src/ui/hudf1/hudf1-chapters.css`, `booth-ffx-b4-hud-layout.test.ts`, `docs/handoff/booth-ffx-b4-hud.md`). The release-70 table below stays as the ten; `B4_HUD` is the two. **`booth-ffx2-b4-sky` (FFX-2 only) brought the other two** (V and XI, `RETURNED_R71`): so the union of those tables was fourteen, `booth-b4-last` added four more (`RELEASE_71_LAST`) and the list is EIGHTEEN, and nothing is withdrawn.
  *
  * Cases for a withdrawn chapter that the lanes wrote are not deleted: they are gated with `itIf` / `describeIf` (`booth-r70-withdrawn.ts`) and run again, with no edit, the day one line puts the chapter back.
  *
- * **`booth-ffx2-b4-sky` (FFX-2 only, `docs/handoff/booth-ffx2-b4-sky.md`) put Chapters V and XI back with the look held (`hd2d` and `arena`; Chapter XI `cam` too), so the list is FOURTEEN: release 70's ten, `B4_HUD`'s two and the two that returned (`RETURNED_R71`). The first three tests pin all of it.**
+ * **`booth-ffx2-b4-sky` (FFX-2 only, `docs/handoff/booth-ffx2-b4-sky.md`) put Chapters V and XI back with the look held (`hd2d` and `arena`; Chapter XI `cam` too), so the list was fourteen at that point: release 70's ten, `B4_HUD`'s two and the two that returned (`RETURNED_R71`); `booth-b4-last` made it EIGHTEEN (`RELEASE_71_LAST`). The first three tests pin all of it.**
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';

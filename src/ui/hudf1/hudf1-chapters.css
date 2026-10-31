@@ -28,6 +28,8 @@
  * TEXT SIZE 115 and 130 (`text-size.css` grows the old panel by `--pyr-ts` about its top centre): in the F1 HUD the ribbon grows right and the strip grows left, so the band between them is 277 grid px at 100, 229 at 115 and 181 at 130, and a
  * panel that grew with the setting (191 x 1.15 = 220, 191 x 1.3 = 248) would run into one or the other. The gauge keeps its size here: at 115 it clears the ribbon by 17.0 and the strip by 16.4 grid px; at 130 the band is narrower than the panel
  * (see the layout test: the sheared corners reach 7.4 grid px into the grown ribbon's end and 8.0 into the strip's box, clear of its first caption), the one residual of this fix, carried in `docs/handoff/booth-ffx-b4-hud.md`.
+ * Review of `booth-b4` (2026-10-31, finding c1): the residual is a regression against the live site, so the F1 HUD no longer plays in Chapters IX and XII above TEXT SIZE 115 (`HudF1Switch.F1_TEXT_CEILING`; today's HUD draws there, as release 69). The 130 rules in this sheet are reached
+ * only with the page word `?f1text=grow`, which is how the residual is measured; they stay for the day a narrower gauge and strip are picked (rule 9).
  */
 html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1 .ffx-zg:not(.ffx-zg--phone) .ffx-zg__panel {
   scale: none;
