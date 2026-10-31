@@ -87,6 +87,11 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'three timed stages, eight shots, the party knocked down, a finisher; "the perfect thing for a presentation layer to build around"), a three-beat comedy combo whose tone, sound and shot are a mockup decision ' +
       '(hard rule 9), and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays the breath today. Lifts when Bailey or the driver picks a tone and a shot for No Love Lost from a mockup and the breath ' +
       'plan (and, for the sound pass, `passRecipes.HEADLINE_BLOWS`, which hit) is given a row for its ids `x2-nll-1` to `x2-nll-3`.',
+    cam:
+      'FFX-2, Chapter VI: the directed camera follows her party on Bevelle\'s four candidates rebuilt about her room (`ProAutoStage.AUTO_STAGES`), which nobody scored for her group, and the follower crops Yuna at the left edge: ' +
+      'job J6 of the r69 booth-leblanc review sampled a party rectangle up to 155 px outside the viewport 17 times in 110 s at 2560 x 1440 (0.4 to 0.6 s each, as the follower cycles its candidates 1, 2, 3, 0), where Chapter IV ' +
+      'crops no one (1 sampled frame of 796, the dragon, never a party figure). Her frame keeps the resting camera of release 68, and with it the soft background of the tilt-shift band. ' +
+      'Lifts when `ProAutoStage` re-scores the candidates for her group (the lane\'s `shots.json` and the real fit rule) and 0 sampled frames of job J6 put a party rectangle outside the viewport.',
   }),
 });
 

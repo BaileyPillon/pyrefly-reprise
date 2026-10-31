@@ -107,7 +107,7 @@ describe('`__pyrefly.treated()`', () => {
     const all = treated('all');
     expect(all.scope).toBe('all');
     expect(all.chapters).toEqual(['seymour-flux', 'ffx2-bahamut', 'ffx2-leblanc']);
-    expect(all.holds).toEqual({ 'ffx2-leblanc': ['breath'] });
+    expect(all.holds).toEqual({ 'ffx2-leblanc': ['breath', 'cam'] }); // the pieces she holds, in the order of her rows
     expect(all.running).toBeNull();
     expect(all.reaches).toBe(false);
     setDemoChapter('ffx2-leblanc');
