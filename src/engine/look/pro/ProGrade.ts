@@ -343,6 +343,30 @@ export const PRO_ARENA: Readonly<Record<string, ProRoom>> = {
   },
   // Batch 3b (`booth-ffx-b3b`, FFX only): Dream's End, the Garden of Pain and the Via Purifico, in `ProGradeFfx.ts` (this file stood at 365 lines).
   ...FFX_B3B_ARENA,
+  // Batch 3 (FFX-2 only; `booth-ffx2-b3`, Bailey 2026-10-30). Chapter XIII, Cloister 100 of the Via Infinito: the Bevelle plate repainted (the same hall, the same skylight above the frame), so the grammar is Chapter IV's, one cool cone from the skylight and the rest to deep shadow and haze,
+  // in the repaint's own colours: blue-black with the skylight's cyan-white kept, the steel blue (hue 205, three quarters of the plate's saturated pixels) held under full saturation, and the gold of the banners and the medallion (hue 38) left as the one warm accent. The skylight's glyph is the
+  // plate's one star at the top of the hall (found at u 0.503, v 0.064 from the top: above the frame's top edge at the idle rig, frame v 1.16, so the cone starts at the edge as Chapter IV's does, at the skylight's frame u, 0.490 by the pinhole read less the 0.011 by which Chapter IV's
+  // shipped start sits left of its own read). [ours]: set from the plate's colours and graded offline through this table (`docs/handoff/booth-ffx2-b3.md`, `docs/screenshots/booth-ffx2-b3-plate-grade.png`); a still beside Chapter IV is owed before Bailey judges it (hard rule 9). The room has no
+  // embers and no live pyreflies of its own to double: see `LookBoldConfig.ts`.
+  'via-infinito': {
+    colour: {
+      exposure: 1.3,
+      gamma: 1.0,
+      contrast: 0.3,
+      pivot: 0.3,
+      sat: 1.12,
+      pulls: [[205, 40, -4, 0.88, 0.88], [190, 30, 0, 1.0, 1.05], [38, 24, 0, 1.1, 0.68]],
+      gradmap: { amount: 0.06, stops: [[0, [0.0, 0.01, 0.05]], [0.3, [0.03, 0.09, 0.24]], [0.6, [0.26, 0.46, 0.68]], [0.9, [0.84, 0.96, 1.0]], [1, [1, 1, 1]]] },
+      shadow: [[0.03, 0.06, 0.2], 0.38],
+      shadowTo: 0.45,
+    },
+    lightColor: [0.72, 0.9, 1.0],
+    tweaks: { 'stage.shaft': 0.6, 'bold.stage': 1.7, 'bold.fog': 1.5, 'bold.rim': 1.4, 'relight.key': 1.5, 'shaft.gain': 2.4 },
+    haze: { colour: [0.16, 0.26, 0.48], amounts: [0.06, 0.05, 0.02], side: 0.1 },
+    vignette: { amount: 0.5, radius: 0.42, tint: [0.0, 0.006, 0.03] },
+    grain: 0.018,
+    cone: { u: 0.48, v: 0.98, follow: false, paint: { u: 0.503, v: 0.064 }, colour: [0.5, 0.82, 1.0], strength: 0.46, spread: 0.36, reach: 2.2, rays: 0.35 },
+  },
 };
 
 /** The room's pro table, or undefined (a room without one keeps the chapter's own bold grade). */

@@ -60,6 +60,10 @@ export const AUTO_STAGES: Readonly<Record<string, AutoStage>> = Object.freeze({
   'ffx2-den-of-woe': { focus: [-0.782, 1.639, -1.187], homeAzimuthDeg: 4.07 },
   // Chapter XI, the Fallen Aeons: the widest link, the Sisters (Sandy (0.95, -4.9) 2.297, Cindy (1.85, -2.7) 1.480, Mindy (3.0, -4.0) hovering 0.55 over the stone, 1.260); Shiva and Anima are one figure each, the live centroid carries the difference.
   'ffx2-fallen-aeons': { focus: [0.258, 1.648, -1.892], homeAzimuthDeg: -1.26 },
+  // Batch 3 (`booth-ffx2-b3`, FFX-2 only). Chapter XIII, Cloister 100: the party on Chapter IV's own slots (-2.05, 1.45), (-1.3, 0.1), (-0.9, -1.5), 1.75 tall (`scenes/cloister-100.ts` PARTY_SLOTS, CLOISTER_ACTOR_HEIGHTS), the boss spot (1.05, 0, -5.8) and the idle eye (0, 3.0, 9.6), which is Bevelle's.
+  // The focus is the centroid of link 2's group at 0.9 of each height (Trema 1.784 on the boss spot): (-0.8, 1.583, -1.438), Chapter IV's focus (-0.8, 1.969, -1.437) lowered by its taller dragon; the home azimuth is the idle eye seen from it, atan2(0.8, 11.04) = 4.15 degrees, Chapter IV's 4.146.
+  // So the candidates are Chapter IV's with their height lowered by 0.386, and the follower's own `d = live focus - this focus` carries link 1 (Paragon, drawn 3.1 or at his giants height, `fx/mix/giants.ts`).
+  'ffx2-trema': { focus: [-0.8, 1.583, -1.438], homeAzimuthDeg: 4.15 },
 });
 
 /**
@@ -67,10 +71,16 @@ export const AUTO_STAGES: Readonly<Record<string, AutoStage>> = Object.freeze({
  * stays a cut and nothing is blended over it. Only a shot the SCENE draws by the camera's position needs a row: `ffx2-fallen-aeons`' `road-links` is the between-links shot after Shiva (D-119, "O-3 A with B as the
  * between-links shot"): the Road swaps plate A for plate B only while the camera is within `ROAD_LINKS_RADIUS` (0.9) of that rig, and every follower candidate stands 1.5 to 2.7 away from it, so a follower running
  * over the cut kept the seam's four lines on plate A. The name is mirrored from `scenes/road-to-the-farplane.ts` (`ROAD_LINKS_RIG`) and the story (`FALLEN_AEONS_LINKS_RIG`); `tests/unit/booth-ffx2-b2-seam.test.ts` pins the three.
- * Chapter V holds its follower for the whole chapter (`DemoGate.PIECE_HOLDS`), Chapter XV's scripts cut to no rig of their own, and the scripts of Chapter IV and Chapter VI cut to no position-gated art.
+ * Chapter V holds its follower for the whole chapter (`DemoGate.PIECE_HOLDS`), Chapter XV's scripts cut to no rig of their own, and the scripts of Chapter IV and Chapter VI cut to no position-gated art. Batch 3 adds the second row, Chapter XIII's `trema-link` (below):
+ * the same class, found by scanning every story script of the chapter for a `camera(...)` cut to a rig the scene watches.
  */
 export const SCRIPTED_RIGS: Readonly<Record<string, readonly string[]>> = Object.freeze({
   'ffx2-fallen-aeons': Object.freeze(['road-links']),
+  // Batch 3 (`booth-ffx2-b3`, FFX-2 only): Chapter XIII's kill link. Paragon's KO fires `paragon-falls`, whose first op cuts the camera to `trema-link` (`story/scripts/ffx2-trema.ts`, `TREMA_LINK_RIG`), and the scene starts the old man's entrance and Paragon's breaking apart only
+  // while the camera stands within `LINK_CAMERA_NEAR` (1.2) of that rig's position (`scenes/cloister-100-link.ts` `cameraAt`, probed from the first frame rendered there); the follower, blended halfway to its candidates, keeps off it by a margin that depends on WHICH candidate it stands on (review m2): candidates 0, 1 and 2 come no nearer than
+  // 1.43 (1.96 under Paragon's giants frame: 0 of 480 frames within 1.2), but candidate 3 comes to 0.52 on today's rig (480 of 480 frames within 1.2) and to 1.08 under the giants frame (352 of 480), so without this row the old man's entrance and Paragon's breaking apart would start about one fight in four
+  // and in the other three the seam's lines would play over a standing Paragon and no old man. The name is mirrored from `scenes/cloister-100-rigs.ts` (`CLOISTER_LINK_RIG`); `tests/unit/booth-ffx2-b3-seam.test.ts` pins the three spellings and the numbers for all four candidates.
+  'ffx2-trema': Object.freeze(['trema-link']),
 });
 
 /** Is the camera on a rig this chapter's script cut to (the follower then stands down)? */

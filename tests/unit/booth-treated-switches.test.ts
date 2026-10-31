@@ -107,7 +107,7 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(curvesOn(), `curves ${id}`).toBe(on);
       expect(realKind(), `real ${id}`).toBe(on ? 'snappy' : null);
       expect(inDemoChapter(id), `curves gate ${id}`).toBe(on);
-      expect(momentsOn(), `moments ${id}`).toBe(plays(scope, id, 'moments')); // Leblanc, Chapters V, XV, XI, VII, IX, X, III and XII hold the KO cut and the cheer (the unread or over-the-cap knock-out: tests/unit/engine/booth-b2-ko-rule.test.ts and each hold's own reason)
+      expect(momentsOn(), `moments ${id}`).toBe(plays(scope, id, 'moments')); // Leblanc, Chapters V, XV, XI, XIII, VII, IX, X, III and XII hold the KO cut and the cheer (the unread or over-the-cap knock-out: tests/unit/engine/booth-b2-ko-rule.test.ts and each hold's own reason); Chapter XIV plays it, named in that file's KO_CLEARED
       const smear = plays(scope, id, 'smear'); // Chapter II's swap exception: no smear planner there
       expect(smearOn(), `smear ${id}`).toBe(smear);
       expect(smearStyleNow(), `smear style ${id}`).toBe(smear ? 'paint' : 'off');

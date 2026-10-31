@@ -30,6 +30,7 @@ import { ProFollower, type Member } from '../../src/engine/procam/ProFollower.ts
 import type { Pose } from '../../src/engine/procam/ProTypes.ts';
 import { FakeAudio, FakeStage } from './helpers/FakeStage.ts';
 import { setCappedAutoPlay } from './helpers/presenterCap.ts';
+import { findWeakGroup, weakChapter } from './helpers/weakChain.ts';
 
 const FFX_TREATED = Object.keys(TREATED_CHAPTERS).filter((id) => TREATED_CHAPTERS[id]!.game === 'ffx');
 const FFX2_TREATED = Object.keys(TREATED_CHAPTERS).filter((id) => TREATED_CHAPTERS[id]!.game === 'ffx2');
@@ -66,13 +67,14 @@ class LogPort implements StagingPort {
   }
 }
 
-/** The FFX-2 chapters with links and parts: Leblanc (Acts), Chapter V (five links of parts), Chapter XV (three shades), Chapter XI (three links); Chapter IV, the booth's, is one link of one foe. */
+/** The FFX-2 chapters with links and parts: Leblanc (Acts), Chapter V (five links of parts), Chapter XV (three shades), Chapter XI (three links), Chapter XIII (Paragon, then Trema); Chapter IV, the booth's, is one link of one foe. */
 const CHAINS = [
   { id: 'ffx2-bahamut', links: 1 },
   { id: 'ffx2-leblanc', links: 3 },
   { id: 'ffx2-vegnagun-shuyin', links: 5 },
   { id: 'ffx2-den-of-woe', links: 3 },
   { id: 'ffx2-fallen-aeons', links: 3 },
+  { id: 'ffx2-trema', links: 2, weak: true }, // batch 3: Paragon, then Trema (two links; the FFX-2 engine has no form change in either). Its real fight is half an hour of Dark Knights (999,999 HP), so the chain runs with every foe at 1 HP (`helpers/weakChain.ts`)
 ] as const;
 
 describe("the FFX lane's stageFreeze guard, in the FFX-2 chapters with links and parts", () => {
@@ -81,9 +83,12 @@ describe("the FFX lane's stageFreeze guard, in the FFX-2 chapters with links and
     setStagingMode('pro');
   });
 
-  it.each(CHAINS)('$id: the real chain emits no form-change, and the last blow of the last link freezes once, between the last link start and the one title', async ({ id, links }) => {
+  it.each(CHAINS)('$id: the real chain emits no form-change, and the last blow of the last link freezes once, between the last link start and the one title', async (row) => {
+    const { id, links } = row;
+    const weak = 'weak' in row;
     setDemoChapter(id);
-    const chapter = getChapter(id)!;
+    const real = getChapter(id)!;
+    const chapter = weak ? weakChapter(real) : real;
     expect(chapter.game).toBe('ffx2');
     const setup = setupForChapter(chapter, 1);
     await registerBattleContent();
@@ -109,7 +114,7 @@ describe("the FFX lane's stageFreeze guard, in the FFX-2 chapters with links and
       for (const [slot, eid] of state.enemyIds.entries()) await stage.addCombatant(eid, { artId: eid, side: 'enemy', slot });
     };
     const result = await runEncounterChain({
-      chapter, presenter, engine, stage: { stage: restage }, group: chapter.enemyGroupRef, setup, seed: 1, findGroup: findEnemyGroup, audio: new FakeAudio(),
+      chapter, presenter, engine, stage: { stage: restage }, group: chapter.enemyGroupRef, setup, seed: 1, findGroup: weak ? findWeakGroup : findEnemyGroup, audio: new FakeAudio(),
       onLink: ({ links: n }) => port.log.push(`link:${n}`),
     });
     expect(result.links).toBe(links);

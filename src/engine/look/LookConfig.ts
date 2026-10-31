@@ -50,6 +50,8 @@ export const CHAPTER_LOOKS: Readonly<Record<string, { name: LookName; strength: 
   'ffx2-vegnagun-shuyin': { name: 'hd2d', strength: 'bold' },
   'ffx2-den-of-woe': { name: 'hd2d', strength: 'bold' },
   'ffx2-fallen-aeons': { name: 'hd2d', strength: 'bold' },
+  // Batch 3 (`booth-ffx2-b3`, FFX-2 only; Bailey 2026-10-30): Chapter XIII (Cloister 100 of the Via Infinito, scene `via-infinito`). Same rule: played only while the treatment reaches the chapter.
+  'ffx2-trema': { name: 'hd2d', strength: 'bold' },
 };
 
 /** The look a chapter plays with no `look` key in the address, or null (today's frame): a row of {@link CHAPTER_LOOKS} for a chapter the treatment reaches (`DemoGate.isTreatedChapter`, piece `hd2d`). */

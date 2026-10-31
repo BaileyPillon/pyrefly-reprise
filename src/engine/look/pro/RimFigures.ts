@@ -96,6 +96,13 @@ export const TREATED_RIM_FOES: Readonly<Record<string, 'ffx' | 'ffx2'>> = Object
   cindy: 'ffx2',
   mindy: 'ffx2',
   'x2-anima': 'ffx2',
+  // Batch 3 (`booth-ffx2-b3`, FFX-2 only; Chapter XIII, `ffx2-trema`): Paragon (Oversoul Paragon is the same combatant id and the same painting) and Trema. Neither is soft or translucent (Paragon's idle reads edge minus ring luminance -1.5 at 2x and -4.7 at 1x, Trema's -19.5 and -18.7, against the
+  // booth bosses' +1.5 and +7.7 after their re-cut and Natus's +19 and Omnis's +25 before one: no pale fringe is indicated), so no rim lets the whole frame share the party's clean edge. NO `BOSS_CLEAN_ARTS` or `BOSS_FEET` row for either (`docs/handoff/booth-ffx2-b3.md` has the footprints):
+  // Trema stands on his anchor (half width 0.266 of his height against the engine's pool of 0.36, centre +0.006), so a row would SHRINK his shadow; Paragon's footprint stands off his anchor (centre +0.255 of his height, half width 0.301, so the engine's pool of 0.36 covers about two thirds of it and
+  // lies a quarter of a height to the left of his feet; pre-existing and unchanged), which is Bahamut's tail-coil case and would want a row, but a row is five hand-set numbers (`squash`, `boost`, `tall`, `drop`, `front`) and a still decision, so it is held (open question 6 of the handoff). The old man of the
+  // kill link (`scenes/cloister-100-link.ts`) is a scene prop, not a combatant: it is untagged and keeps its rim.
+  paragon: 'ffx2',
+  trema: 'ffx2',
 });
 
 /** The stage's one call as it builds a figure: remember whether it is the party's (or an aeon's), a boss's companion, or a foe of a treated chapter that draws no rim. */
