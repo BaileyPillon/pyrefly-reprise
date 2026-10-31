@@ -18,7 +18,7 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 1124, from 2026-09-15 to 2026-10-31 (ids A-0001 to A-1124), 870 of them linked to at least one decision (1236 distinct decision ids).
+- **Rows:** 1125, from 2026-09-15 to 2026-10-31 (ids A-0001 to A-1125), 871 of them linked to at least one decision (1237 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
@@ -26,7 +26,7 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | art | 104 |
 | deploy | 97 |
 | review | 236 |
-| records | 62 |
+| records | 63 |
 | infrastructure | 33 |
 | account | 26 |
 | download | 15 |
@@ -36,21 +36,27 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | Month | Rows |
 |---|---|
 | September 2026 | 297 |
-| October 2026 | 827 |
+| October 2026 | 828 |
 
-- **By game:** 825 both, 110 n/a, 103 FFX, 86 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **By game:** 826 both, 110 n/a, 103 FFX, 86 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
 - **Deploys and releases:** 97 deploy rows: 86 lines of docs/deploys.log (67 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 4 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to 13:29:45 EDT on 2026-10-31, 2026-10-31T17:29:45Z (2026-10-31).
 - **Reviews:** 236 rows: 63 focused reviews (60 SHIP, 2 HOLD, 1 no verdict), 67 live checks (64 PASS, 1 FAIL, 1 UNVERIFIED, 1 no verdict), 24 deep rounds with a report (12 SHIP, 6 HOLD, 6 no verdict) and 82 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
 - **Not finished or not shipped:** 71 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[10-31](#2026-10-31) (21) · [10-30](#2026-10-30) (15) · [10-29](#2026-10-29) (22) · [10-28](#2026-10-28) (31) · [10-27](#2026-10-27) (10) · [10-26](#2026-10-26) (3) · [10-25](#2026-10-25) (21) · [10-24](#2026-10-24) (20) · [10-23](#2026-10-23) (16) · [10-22](#2026-10-22) (26) · [10-21](#2026-10-21) (17) · [10-20](#2026-10-20) (25) · [10-19](#2026-10-19) (43) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[10-31](#2026-10-31) (22) · [10-30](#2026-10-30) (15) · [10-29](#2026-10-29) (22) · [10-28](#2026-10-28) (31) · [10-27](#2026-10-27) (10) · [10-26](#2026-10-26) (3) · [10-25](#2026-10-25) (21) · [10-24](#2026-10-24) (20) · [10-23](#2026-10-23) (16) · [10-22](#2026-10-22) (26) · [10-21](#2026-10-21) (17) · [10-20](#2026-10-20) (25) · [10-19](#2026-10-19) (43) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
 
 ### 2026-10-31
 
+- **A-1125** · `records` · both · **Recorded release 70 on main: A-1112 to A-1125, D-1414 to D-1419, the deploy records, the CHANGELOG address, LIVE.md, in-flight branches, the promises check and NOW.md (records only)**
+  - What: The twenty-first records pass (a sub-agent for the release driver), in D:/pyrefly-release55. It ran critic-clear on the focused report (UNVERIFIED stays pending, as expected); committed the deploy records of release 70 (deploys.log line 87, the ledger, the artifact manifest, the pending marker for e3f51bf18 with the live obligation done, the cleared record of release 69, the focused and live reports with their scripts and the JSON evidence; no pictures, film, audio dumps or logs: 145 files) and pushed r70-int to origin/main as a fast-forward from c1ddce10d to 9c5d21b11 (36 commits); moved the branch r63-release to the same commit; recorded his words "ok keep going please" as D-1414 and the queue items 216h to 216l as D-1415 to D-1419 (each part its own decision) with update lines on D-1402, D-1411 and D-1413; wrote A-1112 to A-1125 (the two browser lanes, the crash probe, the lock lane, the verdict pass, the integration, the focused review, the deploy, the live check, the two gap passes with the first agent's hang noted, booth batch 4 and its merge, the D: cleanup and this pass); regenerated ACTIONS.md, DECISIONS.md and docs/LIVE.md; updated docs/target/in-flight.json and release 70's CHANGELOG address; ran the promises refresh and release check (range 6321b2578..e3f51bf18: closes 3 candidates, D-1406, D-1413 and D-1418, left unmarked because two chapters of each batch stayed off the list or a part is still carried; names 0; touches 1; 46 built promises wait, 318 untouched; OPEN 368, DONE 914); wrote the NOW.md banners; read critic-status (exit 1: focused and deep pending, 60 stalled issues); removed D:/pyrefly-release55/dist-gate (0 reparse points inside, no process using it; D: free space 89.4 to 99.7 GiB). Both games; records only, no gameplay change.
+  - Who: records sub-agent for the release driver · Decisions: D-1414, D-1402
+  - Result: done: pushed to origin/main (fast-forward only); no source file changed
+  - Evidence: `the records commits on origin/main (the first is 9c5d21b11, the second e17e82ee0)` · `docs/handoff/NOW.md (the 2026-10-31 18:30 EDT banners)` · `ACTIONS.md and DECISIONS.md`
+  - Reversible: yes, documentation, ledgers and records only; revert the records commits
 - **A-1124** · `maintenance` · n/a · **D: scratch cleanup of 2026-10-31 (02:30 to 02:41): 31.1 GiB of our own agent scratch removed, free space on D: from 70.14 to 102.41 GiB**
   - What: A sub-agent removed only what the brief allowed, with literal-path deletes: (a) 17.19 GiB of agent scratch copies and mirrors of the finished booth, rigs-v2, a11y-text and r69-fix reviews (no .git, newest file at least 3.4 hours old, no process using the path; the six junctions in the two r69-fix mirrors were unlinked first and their targets checked intact: the art mirror, node\_modules and public/fx); (b) 3.99 GiB of raw frame dumps (21,696 jpg) of the finished rigs-v3 job (its results.json, SUMMARY.md, clips and strips kept); (c) 9.92 GiB of vitest module-dump temp folders (361 folders, newest at least 6 hours old). The free-space gain was 32.3 GiB because the disk also gives back cluster slack from about 440,000 small files. Left and listed: newer vitest dumps (324 folders, 9.64 GiB; re-run around 08:00), the booth-b3 folder (running then), evidence folders, the records under D:/pyrefly-release55/critic (reviews 5.2 GiB, rounds 9.2 GiB, read only), and the biggest older items for a decision. Not touched: PCSX2, ComfyUI, Mirage and the other protected folders. n/a to the game.
   - Who: maintenance sub-agent for the release driver
