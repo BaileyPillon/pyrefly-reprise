@@ -137,18 +137,33 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'FFX-2, Chapter V: the held breath is the drain-and-flood built for Mega Flare (and, in FFX, Total Annihilation), and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays it today. The sourced candidates are the Core\'s ' +
       'Memento Mori after three Charge Core turns (`x2-vegnagun-memento-mori`, `research/ffx2-vegnagun-shuyin.md` section 4.1) and the Head\'s Nemo Ante Mortem Beatus, each a solemn all-party blow whose tone, sound and shot are a mockup decision ' +
       '(hard rule 9). Lifts when Bailey or the driver picks the move, a tone and a shot from a mockup, `BigMove` is given its id and `passRecipes.HEADLINE_BLOWS` its hit.',
+    moments:
+      'FFX-2, Chapter V: the moments hard-cut a girl at the hurt-to-KO swap (the KO cut into the lying painting, `PaintedActorLife.koCutWindow`, which needs the smear too; release 68 blends five frames), and CHK-027 fails a planned cut whose swap jerk is over 0.5 of her drawn height. ' +
+      'The Change menu of this chapter reaches Gunner and Thief on all three girls\' Garment Grids (`farplaneBuild` through `gridNodeContents`: Tempered Will, Flash of Steel and Pride of the Sword each hold Gunner, Thief, Warrior and Lady Luck beside the worn dress), and the harness read those very paintings over the cap in Leblanc: ' +
+      'Rikku Thief 0.61 to 0.63 and Yuna Gunner 0.50 to 0.52 of the drawn height (Rikku Dark Knight 0.48 in Chapter IV); the other dresses on the grids have no read, and none was taken in this room (where the lying body lies is the stage\'s, `ProneLay`). ' +
+      'The KO is release 68\'s plain cross here and the victory is release 68\'s (the cheer goes with the piece); the smear, the curves, the real clips and the quiet ending still play. Lifts when a continuity run of a KO per dress on the girls\' grids in this chapter, the moments on, reports no unexcused swap jerk (CHK-027: every hurt-to-KO cut at or under 0.5 of the drawn height); `tests/unit/engine/booth-b2-ko-rule.test.ts` binds the hold to the grids.',
   }),
   'ffx2-den-of-woe': Object.freeze({
     breath:
       'FFX-2, Chapter XV: the held breath is the drain-and-flood built for Mega Flare, and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays it today. None of the three shades has a move the research calls a showpiece; ' +
       'the one candidate is Nooj\'s Lightfall (`x2-den-nooj-lightfall`, 5,000 to everyone, `research/ffx2-gippal-den-of-woe.md` section 4.3 and C-4), a spell whose tone, sound and shot are a mockup decision (hard rule 9). Lifts when Bailey or the driver ' +
       'picks the move, a tone and a shot from a mockup, `BigMove` is given its id and `passRecipes.HEADLINE_BLOWS` its hit.',
+    moments:
+      'FFX-2, Chapter XV: the moments hard-cut a girl at the hurt-to-KO swap (the KO cut into the lying painting, `PaintedActorLife.koCutWindow`, which needs the smear too; release 68 blends five frames), and CHK-027 fails a planned cut whose swap jerk is over 0.5 of her drawn height. ' +
+      'The Change menu of this chapter reaches Gunner and Thief on all three girls\' Garment Grids (`farplaneBuild` through `gridNodeContents`: Tempered Will, Flash of Steel and Pride of the Sword each hold Gunner, Thief, Warrior and Lady Luck beside the worn dress), and the harness read those very paintings over the cap in Leblanc: ' +
+      'Rikku Thief 0.61 to 0.63 and Yuna Gunner 0.50 to 0.52 of the drawn height (Rikku Dark Knight 0.48 in Chapter IV); the other dresses on the grids have no read, and none was taken in this room (where the lying body lies is the stage\'s, `ProneLay`). ' +
+      'The KO is release 68\'s plain cross here and the victory is release 68\'s (the cheer goes with the piece); the smear, the curves, the real clips and the quiet ending still play. Lifts when a continuity run of a KO per dress on the girls\' grids in this chapter, the moments on, reports no unexcused swap jerk (CHK-027: every hurt-to-KO cut at or under 0.5 of the drawn height); `tests/unit/engine/booth-b2-ko-rule.test.ts` binds the hold to the grids.',
   }),
   'ffx2-fallen-aeons': Object.freeze({
     breath:
       'FFX-2, Chapter XI: the held breath is the drain-and-flood built for Mega Flare, and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays it today. The sourced candidates are Shiva\'s Diamond Dust (`x2-shiva-diamond-dust`, ' +
       'the action counter\'s payoff), the three Sisters\' Delta Attack (`x2-magus-delta-attack`, the party to 1 HP, gone once any sister falls) and Anima\'s Oblivion (`x2-anima-oblivion`), three different tones that are a mockup decision (hard rule 9) ' +
       '(`research/ffx2-fallen-aeons.md` sections 4.1 to 4.3). Lifts when Bailey or the driver picks the move, a tone and a shot from a mockup, `BigMove` is given its id and `passRecipes.HEADLINE_BLOWS` its hit.',
+    moments:
+      'FFX-2, Chapter XI: the moments hard-cut a girl at the hurt-to-KO swap (the KO cut into the lying painting, `PaintedActorLife.koCutWindow`, which needs the smear too; release 68 blends five frames), and CHK-027 fails a planned cut whose swap jerk is over 0.5 of her drawn height. ' +
+      'The Change menu of this chapter reaches Gunner and Thief on all three girls\' Garment Grids (`farplaneBuild` through `gridNodeContents`: Tempered Will, Flash of Steel and Pride of the Sword each hold Gunner, Thief, Warrior and Lady Luck beside the worn dress), and the harness read those very paintings over the cap in Leblanc: ' +
+      'Rikku Thief 0.61 to 0.63 and Yuna Gunner 0.50 to 0.52 of the drawn height (Rikku Dark Knight 0.48 in Chapter IV); the other dresses on the grids have no read, and none was taken in this room (where the lying body lies is the stage\'s, `ProneLay`). ' +
+      'The KO is release 68\'s plain cross in all three links and the victory is release 68\'s (the cheer goes with the piece); the smear, the curves, the real clips and the quiet ending still play. Lifts when a continuity run of a KO per dress on the girls\' grids in this chapter, the moments on, reports no unexcused swap jerk (CHK-027: every hurt-to-KO cut at or under 0.5 of the drawn height); `tests/unit/engine/booth-b2-ko-rule.test.ts` binds the hold to the grids.',
   }),
 });
 

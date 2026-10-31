@@ -80,10 +80,11 @@ afterEach(() => {
 });
 
 describe('the holds of batch 2', () => {
-  it('Chapter V holds the follower camera and the staged breath; Chapters XV and XI hold the staged breath only; every other piece plays', () => {
-    expect(Object.keys(PIECE_HOLDS['ffx2-vegnagun-shuyin']!).sort()).toEqual(['breath', 'cam']);
-    expect(Object.keys(PIECE_HOLDS['ffx2-den-of-woe']!)).toEqual(['breath']);
-    expect(Object.keys(PIECE_HOLDS['ffx2-fallen-aeons']!)).toEqual(['breath']);
+  it('Chapter V holds the follower camera, the staged breath and the moments; Chapters XV and XI hold the staged breath and the moments; every other piece plays', () => {
+    expect(Object.keys(PIECE_HOLDS['ffx2-vegnagun-shuyin']!).sort()).toEqual(['breath', 'cam', 'moments']);
+    expect(Object.keys(PIECE_HOLDS['ffx2-den-of-woe']!)).toEqual(['breath', 'moments']);
+    expect(Object.keys(PIECE_HOLDS['ffx2-fallen-aeons']!)).toEqual(['breath', 'moments']);
+    for (const id of B2) expect(treatedHold(id, 'moments'), id).toMatch(/Garment Grids/); // the knock-out rule (`tests/unit/engine/booth-b2-ko-rule.test.ts`)
     expect(treatedHold('ffx2-vegnagun-shuyin', 'cam')).toMatch(/colossus/);
     expect(treatedHold('ffx2-vegnagun-shuyin', 'cam')).toMatch(/D-228/);
     expect(treatedHold('ffx2-vegnagun-shuyin', 'breath')).toMatch(/Memento Mori/);
@@ -134,7 +135,7 @@ describe('the sound pass follows their run, in FFX-2, and gives itself back', ()
 });
 
 describe('every switch, in each of the three, under all', () => {
-  it('answers true but for the held pieces: the follower in Chapter V (and its soft background with it), the staged breath in all three', () => {
+  it('answers true but for the held pieces: the follower in Chapter V (and its soft background with it), the staged breath and the moments in all three (the knock-out rule)', () => {
     allOn();
     setTreatedScope('all');
     for (const id of B2) {
@@ -146,7 +147,7 @@ describe('every switch, in each of the three, under all', () => {
       expect(partyRimOff(), `rim ${id}`).toBe(true);
       expect(bossCleanOn(), `boss ${id}`).toBe(true);
       expect(curvesOn(), `curves ${id}`).toBe(true);
-      expect(momentsOn(), `moments ${id}`).toBe(true);
+      expect(momentsOn(), `moments ${id}`).toBe(false); // held: the girls' Garment Grids hold Gunner and Thief, which the harness read over the KO cap
       expect(smearOn(), `smear ${id}`).toBe(true);
       expect(proCamOn(), `camera ${id}`).toBe(camPlays(id));
       expect(proDofOn(), `camera dof ${id}`).toBe(camPlays(id));
@@ -200,10 +201,10 @@ describe("the lane-off words, ?pack=off and a phone give release 62's frame in e
     setFeelChapter(id);
     return [hudF1On(), proLookOn(), partyRimOff(), bossCleanOn(), curvesOn(), momentsOn(), smearOn(), proCamOn(), stagingOn(), fxNewOn(), audioNewOn(), inFeelChapter() && punchMode() === 'new'];
   };
-  /** The expected twelve in a chapter with the whole treatment on: the follower is the eighth, and Chapter V holds it. */
-  const full = (id: string): boolean[] => new Array(12).fill(true).map((v, i) => (i === 7 ? camPlays(id) : v));
+  /** The expected twelve in a chapter with the whole treatment on: the moments are the sixth and every chapter here holds them (the knock-out rule); the follower is the eighth, and Chapter V holds it. */
+  const full = (id: string): boolean[] => new Array(12).fill(true).map((v, i) => (i === 7 ? camPlays(id) : i === 5 ? false : v));
 
-  it('on a desktop with no word the whole treatment plays in each (the held follower aside)', () => {
+  it('on a desktop with no word the whole treatment plays in each (the held follower and moments aside)', () => {
     setTreatedScope('all');
     setPackScreen('desk');
     readFrom('');
@@ -229,7 +230,8 @@ describe("the lane-off words, ?pack=off and a phone give release 62's frame in e
     for (const id of B2) {
       const [hud, look, rim, boss, curves, moments, smear, cam, staging, fx, audio] = readAll(id);
       expect([look, cam, staging], id).toEqual([false, false, false]);
-      expect([hud, rim, boss, curves, moments, smear, fx, audio], id).toEqual(new Array(8).fill(true));
+      expect([hud, rim, boss, curves, smear, fx, audio], id).toEqual(new Array(7).fill(true));
+      expect(moments, id).toBe(false); // held with or without a word
     }
     readFrom('');
     setTreatedScope('pack');

@@ -110,9 +110,9 @@ describe('`__pyrefly.treated()`', () => {
     expect(all.holds).toEqual({
       yunalesca: ['breath', 'cam', 'smear'],
       'ffx2-leblanc': ['breath', 'cam', 'moments'], // the pieces she holds, in the order of her rows
-      'ffx2-vegnagun-shuyin': ['cam', 'breath'],
-      'ffx2-den-of-woe': ['breath'],
-      'ffx2-fallen-aeons': ['breath'],
+      'ffx2-vegnagun-shuyin': ['cam', 'breath', 'moments'],
+      'ffx2-den-of-woe': ['breath', 'moments'],
+      'ffx2-fallen-aeons': ['breath', 'moments'],
     });
     expect(all.running).toBeNull();
     expect(all.reaches).toBe(false);

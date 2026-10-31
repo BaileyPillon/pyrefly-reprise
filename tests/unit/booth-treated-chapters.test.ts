@@ -43,9 +43,9 @@ const TREATED_NOW: Readonly<Record<string, { game: 'ffx' | 'ffx2'; since: string
 const HELD_NOW: Readonly<Record<string, readonly string[]>> = {
   yunalesca: ['cam', 'breath', 'smear'],
   'ffx2-leblanc': ['cam', 'breath', 'moments'], // booth-leblanc: the follower crops Yuna (job J6) and the KO cut is a hard cut past the smear cap (CHK-027)
-  'ffx2-vegnagun-shuyin': ['cam', 'breath'], // batch 2: Chapter V holds the colossus camera and the breath
-  'ffx2-den-of-woe': ['breath'],
-  'ffx2-fallen-aeons': ['breath'],
+  'ffx2-vegnagun-shuyin': ['cam', 'breath', 'moments'], // batch 2: Chapter V holds the colossus camera and the breath; the three FFX-2 chapters hold the moments (the knock-out rule: Gunner and Thief on the girls' grids)
+  'ffx2-den-of-woe': ['breath', 'moments'],
+  'ffx2-fallen-aeons': ['breath', 'moments'],
 };
 
 /** Does the treatment play this piece in this chapter, under the `all` scope? */
