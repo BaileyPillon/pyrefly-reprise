@@ -177,7 +177,7 @@ describe('the boss and the rim', () => {
     tagRimFigure(boss, 'yunalesca', 'enemy');
     expect(rimSkipOf(boss)).toBe(false);
     setTreatedScope('all');
-    setDemoChapter('braskas-final-aeon'); // another chapter that plays an id of the same table is not reached
+    setDemoChapter('sinspawn-gui'); // a hidden chapter the treatment can never reach (Chapter III, which plays ids of the same table, is treated since batch 3b)
     expect(rimSkipOf(boss)).toBe(false);
   });
 

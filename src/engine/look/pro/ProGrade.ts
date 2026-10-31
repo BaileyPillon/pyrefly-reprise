@@ -17,6 +17,7 @@
 import type { GradeRecipe } from '../LookGrades.ts';
 import type { Rgb } from '../LookConfig.ts';
 import { PRO_ARENA_FFX_B3A } from './ProGradeFfxB3a.ts'; // batch 3a's three FFX rooms (this file would pass 400 lines with them)
+import { FFX_B3B_ARENA } from './ProGradeFfx.ts'; // batch 3b's three FFX rows (a type-only import back: no runtime cycle)
 
 const clamp01 = (x: number): number => (x < 0 ? 0 : x > 1 ? 1 : x);
 const smooth = (a: number, b: number, x: number): number => {
@@ -340,8 +341,9 @@ export const PRO_ARENA: Readonly<Record<string, ProRoom>> = {
     grain: 0.018,
     cone: { u: 0.97, v: 0.45, follow: false, paint: { u: 0.869, v: 0.599 }, colour: [0.3, 0.95, 0.95], strength: 0.26, spread: 0.5, reach: 1.5, rays: 0.15 },
   },
+  // Batch 3b (`booth-ffx-b3b`, FFX only): Dream's End, the Garden of Pain and the Via Purifico, in `ProGradeFfx.ts` (this file stood at 365 lines).
+  ...FFX_B3B_ARENA,
 };
-
 
 /** The room's pro table, or undefined (a room without one keeps the chapter's own bold grade). */
 export const proRoom = (key: string): ProRoom | undefined => PRO_ARENA[key];

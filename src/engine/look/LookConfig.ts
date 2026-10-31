@@ -39,6 +39,10 @@ export const CHAPTER_LOOKS: Readonly<Record<string, { name: LookName; strength: 
   'seymour-anima-macalania': { name: 'hd2d', strength: 'bold' },
   'yojimbo-cavern': { name: 'hd2d', strength: 'bold' },
   'seymour-natus': { name: 'hd2d', strength: 'bold' },
+  // Batch 3b (`booth-ffx-b3b`; the same word of Bailey's; FFX only): Chapter III (Braska's Final Aeon, Dream's End), Chapter XII (Seymour Omnis, the Garden of Pain) and Chapter XIV (Isaaru, the Via Purifico). Played only while the treatment reaches the chapter, like the rows above.
+  'braskas-final-aeon': { name: 'hd2d', strength: 'bold' },
+  'seymour-omnis': { name: 'hd2d', strength: 'bold' },
+  'isaaru-via-purifico': { name: 'hd2d', strength: 'bold' },
   'ffx2-bahamut': { name: 'hd2d', strength: 'bold' },
   // Release 69 (`booth-leblanc`; Bailey 2026-10-30: the booth treatment for every listed chapter, Leblanc first; FFX-2 only): Chapter VI, the Chateau's last room. The row plays only while the treatment reaches the chapter (`?treated=pack` puts release 68's frame back).
   'ffx2-leblanc': { name: 'hd2d', strength: 'bold' },

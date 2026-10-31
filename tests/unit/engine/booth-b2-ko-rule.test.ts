@@ -48,10 +48,21 @@ const MEASURED: Readonly<Record<string, { lo: number; hi: number; where: string 
 };
 
 /**
- * Chapters beyond the booth pair that play the KO's hard cut (moments and smear both), each with the evidence that every dress the player can field there reads under the cap. EMPTY for batch 2:
+ * Chapters beyond the booth pair that play the KO's hard cut (moments and smear both), each with the evidence that every dress the player can field there reads under the cap. Batch 2 has none:
  * Chapter II holds the smear, Leblanc and Chapters V, XV and XI hold the moments. A chapter that joins and plays both pieces is added here in the commit that lets it, with its reads.
+ * Batch 3: Chapter XIV (Isaaru in the Via Purifico, FFX) is the one, on the batch-3b lane's table and the recorded ratio below, NOT on a read in the page; its pre-deploy gate is the KO run of Yuna and her aeons.
  */
-const KO_CLEARED: Readonly<Record<string, string>> = {};
+const KO_CLEARED: Readonly<Record<string, string>> = {
+  'isaaru-via-purifico':
+    'Yuna alone (offline 0.24) with her aeons (offline 0.09 to 0.31): docs/handoff/booth-ffx-b3b.md section 4 class 4; and the recorded FFX plain-cross reads of Yuna (0.095 to 0.117, Chapter II) scaled by the largest plain-to-hard ratio any FFX figure shows (Kimahri 0.499 over 0.147)',
+};
+
+/** What the harness read for FFX party figures (swap jerk over the drawn height, 1600 x 900): the plain cross (release 68, `hard false`) and, where the booth Chapter I cuts it, the hard cut (`hard true`). */
+const FFX_READS: Readonly<Record<string, { plain: [number, number]; hard?: [number, number] }>> = {
+  tidus: { plain: [0.079, 0.079], hard: [0.092, 0.112] },
+  kimahri: { plain: [0.147, 0.222], hard: [0.495, 0.499] },
+  yuna: { plain: [0.095, 0.117] },
+};
 
 /** The cut window a party figure's KO is built with in this chapter and scope, with the moments and the smear forced on the way the pack does. */
 function koWindow(chapter: string, scope: 'all' | 'pack'): { window: number | undefined; moments: boolean; smear: boolean; cut: boolean | undefined; crossMs: number } {
@@ -111,6 +122,25 @@ describe('Chapter II: the KO is the plain cross, because the smear is held (the 
       if (KO_CLEARED[id] === undefined) expect(m !== undefined || s !== undefined, id).toBe(true);
       for (const why of [m, s]) if (why !== undefined) expect(why, id).toMatch(/Lifts when/);
     }
+  });
+});
+
+describe('Chapter XIV (batch 3b, FFX only): Yuna alone with her aeons plays the KO cut on the lane\'s table and the recorded ratio, and it is the only chapter that does', () => {
+  it('the real actor builds a cut window there, as in the booth pair, and KO_CLEARED names it with its evidence', () => {
+    const k = koWindow('isaaru-via-purifico', 'all');
+    expect([k.moments, k.smear]).toEqual([true, true]);
+    expect(k.window).toBeGreaterThan(0);
+    expect(k.cut).toBe(true);
+    expect(Object.keys(KO_CLEARED)).toEqual(['isaaru-via-purifico']);
+    expect(treatedHold('isaaru-via-purifico', 'moments')).toBeUndefined();
+  });
+
+  it('Yuna\'s worst recorded plain-cross read, times the largest plain-to-hard ratio an FFX figure shows, stays under the cap (an estimate: no FFX Yuna has been read at a hard cut)', () => {
+    const ratio = Math.max(...Object.values(FFX_READS).filter((r) => r.hard).map((r) => r.hard![1] / r.plain[0])); // Kimahri 0.499 / 0.147
+    expect(ratio).toBeCloseTo(3.39, 1);
+    expect(FFX_READS['yuna']!.plain[1] * ratio).toBeLessThan(CAP);
+    expect(FFX_READS['yuna']!.plain[1] * ratio).toBeGreaterThan(0.35); // the margin is real but not wide: the gate is a KO run, not this arithmetic
+    expect(FFX_READS['kimahri']!.hard![1]).toBeLessThan(CAP); // the approved Chapter I\'s own Kimahri sits 0.001 under it
   });
 });
 

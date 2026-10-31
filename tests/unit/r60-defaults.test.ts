@@ -31,13 +31,13 @@ describe('the look: which chapters get it by default', () => {
   it('Chapter I (FFX) and Chapter IV (FFX-2) get hd2d at bold strength; no other chapter of the shipped list does', () => {
     expect(chapterLook('seymour-flux')).toEqual({ name: 'hd2d', strength: 'bold' });
     expect(chapterLook('ffx2-bahamut')).toEqual({ name: 'hd2d', strength: 'bold' });
-    expect(Object.keys(CHAPTER_LOOKS).sort()).toEqual(['ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-fallen-aeons', 'ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'yojimbo-cavern', 'yunalesca']); // batch 3a adds Chapters VII, X and IX (FFX); release 69: Chapter VI and Chapter II have a row; batch 2 adds Chapters V, XV and XI (the treated list, `DemoGate.TREATED_CHAPTERS`)
+    expect(Object.keys(CHAPTER_LOOKS).sort()).toEqual(['braskas-final-aeon', 'ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-fallen-aeons', 'ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'isaaru-via-purifico', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'seymour-omnis', 'yojimbo-cavern', 'yunalesca']); // release 69: Chapter VI and Chapter II have a row; batch 2 adds Chapters V, XV and XI (the treated list, `DemoGate.TREATED_CHAPTERS`)
     setTreatedScope('pack'); // the page's `?treated=pack` (and a unit test's default): release 68's reach, the booth pair only
     const withLook = CHAPTERS.filter((c) => chapterLook(c.id) !== null).map((c) => `${c.id}:${c.game}`);
     expect(withLook.sort()).toEqual(['ffx2-bahamut:ffx2', 'seymour-flux:ffx']);
     for (const c of CHAPTERS) if (c.id !== 'seymour-flux' && c.id !== 'ffx2-bahamut') expect(chapterLook(c.id)).toBeNull();
     setTreatedScope('all'); // release 69: Leblanc and Chapter II join, then batch 2 (Chapters V, XV and XI, FFX-2), and nobody else
-    expect(CHAPTERS.filter((c) => chapterLook(c.id) !== null).map((c) => `${c.id}:${c.game}`).sort()).toEqual(['ffx2-bahamut:ffx2', 'ffx2-den-of-woe:ffx2', 'ffx2-fallen-aeons:ffx2', 'ffx2-leblanc:ffx2', 'ffx2-vegnagun-shuyin:ffx2', 'seymour-anima-macalania:ffx', 'seymour-flux:ffx', 'seymour-natus:ffx', 'yojimbo-cavern:ffx', 'yunalesca:ffx']);
+    expect(CHAPTERS.filter((c) => chapterLook(c.id) !== null).map((c) => `${c.id}:${c.game}`).sort()).toEqual(['braskas-final-aeon:ffx', 'ffx2-bahamut:ffx2', 'ffx2-den-of-woe:ffx2', 'ffx2-fallen-aeons:ffx2', 'ffx2-leblanc:ffx2', 'ffx2-vegnagun-shuyin:ffx2', 'isaaru-via-purifico:ffx', 'seymour-anima-macalania:ffx', 'seymour-flux:ffx', 'seymour-natus:ffx', 'seymour-omnis:ffx', 'yojimbo-cavern:ffx', 'yunalesca:ffx']);
   });
 
   it('the chapters that BORROW the two paintings as placeholders get nothing: the look is keyed by chapter, not by scene', () => {
