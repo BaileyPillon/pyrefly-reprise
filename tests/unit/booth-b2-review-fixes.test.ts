@@ -19,6 +19,7 @@ const SOURCES = [
   'src/engine/look/pro/ProGrade.ts',
   'src/engine/look/pro/RimFigures.ts',
   'src/engine/motion/DemoGate.ts',
+  'src/engine/motion/PieceHolds.ts',
 ] as const;
 
 /** The merged note's job lines: `- **J<n> (...): title ...`. */
