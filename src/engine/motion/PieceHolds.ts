@@ -123,6 +123,10 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'The offline estimate of the step (`docs/handoff/booth-ffx-b3b.md` section 4) reads the reserve Rikku at 0.52, Kimahri 0.43, Wakka 0.40 and Lulu 0.39 of the drawn height, and it under-reads the three FFX-2 dresses measured in the page (0.47, 0.33 and 0.37 against 0.62, 0.50 to 0.52 and 0.48: ' +
       'a ratio of 0.64 to 0.77), so Rikku would measure about 0.69. All seven can be fielded (the same seven as Chapter I\'s), so the chapter keeps release 68\'s KO (the plain cross, no rebound) and its victory; the curves, the smear and every other piece still play. ' +
       'Lifts when job J5 of docs/handoff/booth-ffx-b3b.md (a knock-out per dress, the reserve Rikku first, on the continuity harness) reads every dress\'s hurt-to-KO swap at or under 0.5 of its drawn height and reports no unexcused swap jerk (CHK-027).',
+    // `booth-b4` (r70 live-gap pass, FFX only): the real clips' return flip, scaled for Chapter I's Tidus, is drawn 1.66 times larger here. Held: the house curves (what `?curves=new` plays) play in Chapter III; Chapter I keeps its real clips.
+    real:
+      'FFX, Chapter III: Tidus\'s approved Chapter I return flip (the real-snappy clip\'s returnProfile) is drawn 1.66 times larger in Chapter III and reads as 169-287 px one-frame attack hops and 306-417 px Energy Rain leaps that release 69\'s look does not have ' +
+      '(live gap pass of release 70, D:/Tools/pyrefly-scratch/2026-10-31/r70/live-gaps2/). Lifts when the flip is scaled to the figure\'s drawn size and a CHK-027 run of Chapter III shows no teleport.',
   }),
   // Chapter XII left `TREATED_CHAPTERS` in the r70 verdict pass (`docs/handoff/booth-b3.md` section 12: the Enemy Intent card clipped the acting hero's HP numeral against the F1 party panel, a major) and is back on it in `booth-ffx-b4-hud` (the card's foot now stands 6 grid px above the first party card: `docs/handoff/booth-ffx-b4-hud.md`). The holds below are batch 3b's own and are read again.
   'seymour-omnis': Object.freeze({

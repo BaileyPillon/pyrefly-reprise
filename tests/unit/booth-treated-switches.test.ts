@@ -105,7 +105,7 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(partyRimOff(), `rim ${id}`).toBe(on);
       expect(bossCleanOn(), `boss ${id}`).toBe(on);
       expect(curvesOn(), `curves ${id}`).toBe(on);
-      expect(realKind(), `real ${id}`).toBe(on ? 'snappy' : null);
+      expect(realKind(), `real ${id}`).toBe(plays(scope, id, 'real') ? 'snappy' : null); // Chapter III holds `real` (booth-b4: the real clips' return flip is drawn 1.66 times larger there): the house curves play in it
       expect(inDemoChapter(id), `curves gate ${id}`).toBe(on);
       expect(momentsOn(), `moments ${id}`).toBe(plays(scope, id, 'moments')); // Leblanc, Chapters V, XV, XI, XIII, VII, IX, X, III, XII and XIV hold the KO cut and the cheer (the unread or over-the-cap knock-out: tests/unit/engine/booth-b2-ko-rule.test.ts and each hold's own reason); Chapter II plays them (its smear is held, so the KO stays the plain cross) and no chapter is named in that file's KO_CLEARED
       const smear = plays(scope, id, 'smear'); // Chapter II's swap exception: no smear planner there

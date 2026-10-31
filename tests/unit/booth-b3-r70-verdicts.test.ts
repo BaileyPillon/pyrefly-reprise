@@ -45,6 +45,11 @@ const RELEASE_70: Readonly<Record<string, readonly TreatedPiece[]>> = {
   'ffx2-den-of-woe': ['cam', 'breath', 'moments'], // Chapter XV, FFX-2: `cam` added by the r70 verdict
 };
 
+/** The holds added to a release-70 chapter after release 70 (appended to its row, the earlier rows unmoved): `booth-b4` holds `real` in Chapter III (FFX only), whose Tidus draws Chapter I's approved return flip 1.66 times larger (the live gap pass of release 70). */
+const R71_HELD_ADDED: Readonly<Record<string, readonly TreatedPiece[]>> = {
+  'braskas-final-aeon': ['real'],
+};
+
 /** What `booth-ffx-b4-hud` brought back (FFX only), each with the holds its lane's table gives (`booth-ffx-b3a.md` for IX, `booth-ffx-b3b.md` for XII) and the release it is on the list from. */
 const B4_HUD: Readonly<Record<string, readonly TreatedPiece[]>> = {
   'yojimbo-cavern': ['breath', 'cam', 'moments'], // Chapter IX, FFX: the Zanmato gauge stands between the F1 ribbon and the F1 turn strip
@@ -68,7 +73,7 @@ describe('the result of the r70 verdicts: ten treated, four off the list, two ca
       expect(getChapter(id)?.game, id).toBe(r.game); // rule 14: the game the registry says
     }
     for (const [id, held] of Object.entries({ ...RELEASE_70, ...B4_HUD, ...RELEASE_71_LAST })) {
-      expect(Object.keys(PIECE_HOLDS[id] ?? {}), id).toEqual([...held]);
+      expect(Object.keys(PIECE_HOLDS[id] ?? {}), id).toEqual([...held, ...(R71_HELD_ADDED[id] ?? [])]); // release 70's rows keep their order; a later hold is appended
       expect(getChapter(id)?.game, id).toBe(TREATED_CHAPTERS[id]!.game); // rule 14: the game the registry says
     }
     for (const id of Object.keys(B4_HUD)) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r71' }); // FFX only (rule 14): the panels are FFX HUD panels

@@ -112,7 +112,7 @@ describe('`__pyrefly.treated()`', () => {
       'seymour-anima-macalania': ['breath', 'cam', 'moments'],
       'seymour-natus': ['breath', 'cam', 'moments'],
       'yojimbo-cavern': ['breath', 'cam', 'moments'],
-      'braskas-final-aeon': ['breath', 'moments'],
+      'braskas-final-aeon': ['breath', 'moments', 'real'], // booth-b4: the real clips are held in Chapter III
       'seymour-omnis': ['breath', 'cam', 'moments'],
       'isaaru-via-purifico': ['breath', 'cam', 'moments'],
       'ffx2-leblanc': ['breath', 'cam', 'moments'], // the pieces she holds, in the order of her rows
