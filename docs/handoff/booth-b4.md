@@ -220,7 +220,14 @@ These are readings of an offline model that did not reproduce the browser (the e
 
 ## 9. The full suite on the merged tree
 
-Filled by the driver's return message (the run takes about 35 minutes with `--maxWorkers=3`): the counts are in the log `D:/Tools/pyrefly-scratch/2026-10-31/booth-b4/vitest-full.txt`.
+Two runs of the whole unit suite (`node node_modules/vitest/vitest.mjs run --maxWorkers=3 --testTimeout=60000 --hookTimeout=60000`, about 55 minutes each; logs in `D:/Tools/pyrefly-scratch/2026-10-31/booth-b4/`):
+
+| run | tree | result |
+|---|---|---|
+| 1, `vitest-full-fixed.txt` | `c3be6a7ae` (the review's fixes c1 to m3) | Test Files **1 failed**, 1800 passed, 26 skipped (1827); Tests 1 failed, 28,080 passed, 116 skipped, 1 todo (28,198). The one failure: `art-sidecar-redact.test.ts` (section 10: Ixion's hold reason named a .json file). It was in the merged tree from the start (`ca9b7baf2`); the review did not run the suite |
+| **2, `vitest-full-final.txt`** | **`ed25c84b2`** (the guard fix on top) | **Test Files 1803 passed, 26 skipped (1829); Tests 28,130 passed, 116 skipped, 1 todo (28,247); exit 0; no failure** |
+
+The 26 skipped files and 116 skipped tests are the suite's own `skipIf`s (the art-dependent cases, the gated Chapter XI follower seam cases and the rest), the same kinds as on the base. Also green on `ed25c84b2`: `node node_modules/typescript/bin/tsc --noEmit` (exit 0) and `node tools/orphans.mjs` (2,233 modules, 24 orphaned, the base's 24; the two new files are tests). The commit after `ed25c84b2` changes this note only (no test reads it).
 
 ## 10. The adversarial review of `ca9b7baf2` and what was done about it (2026-10-31)
 
