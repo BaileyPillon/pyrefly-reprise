@@ -1,0 +1,92 @@
+{
+ "tag": "c-ch6-1600",
+ "chapter": "ffx2-leblanc",
+ "base": "http://127.0.0.1:5871/",
+ "W": 1600,
+ "H": 900,
+ "phone": false,
+ "steps": [
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "awaitingMenu": true,
+   "toMenuS": 46.7
+  },
+  {
+   "s": "hud",
+   "overflowX": false,
+   "treated": {
+    "scope": "all",
+    "chapters": [
+     "seymour-flux",
+     "ffx2-bahamut",
+     "ffx2-leblanc"
+    ],
+    "holds": {
+     "ffx2-leblanc": [
+      "breath",
+      "cam",
+      "moments"
+     ]
+    },
+    "running": "ffx2-leblanc",
+    "reaches": true
+   },
+   "buttons": [
+    "G\nGUIDE:102x26",
+    "N\nHIDE MOVES:160x26",
+    "E\nENEMY MOVE:165x26"
+   ],
+   "f1": true
+  },
+  {
+   "s": "after-attack",
+   "screen": "battle"
+  },
+  {
+   "s": "turns",
+   "turns": 3
+  },
+  {
+   "s": 138,
+   "screen": "cutscene"
+  },
+  {
+   "s": "after-end",
+   "screen": "cutscene"
+  }
+ ],
+ "bundle": "http://127.0.0.1:5871/assets/index-dwcmDBjZ.js",
+ "toMenuMs": 46746,
+ "hud": {
+  "overflowX": false,
+  "treated": {
+   "scope": "all",
+   "chapters": [
+    "seymour-flux",
+    "ffx2-bahamut",
+    "ffx2-leblanc"
+   ],
+   "holds": {
+    "ffx2-leblanc": [
+     "breath",
+     "cam",
+     "moments"
+    ]
+   },
+   "running": "ffx2-leblanc",
+   "reaches": true
+  },
+  "buttons": [
+   "G\nGUIDE:102x26",
+   "N\nHIDE MOVES:160x26",
+   "E\nENEMY MOVE:165x26"
+  ],
+  "f1": true
+ },
+ "fpsAvg": 59,
+ "endText": "CHATEAU LEBLANC, GUADOSALAM\n · CLEARED\nRESULTS · 2:47\nVictory\nNEW BEST\nWe got it back.\nEXP\n446\n×3 PARTY\nAP\n3\nPER DRESSPHERE\nGIL\n435\nITEMS\nPotion, Black Choker, Favorite Outfit, Defense Veil, Charm Bangle, Twist Headband, Reassembled Sphere\n",
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": []
+}

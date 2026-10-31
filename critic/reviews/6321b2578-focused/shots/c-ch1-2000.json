@@ -1,0 +1,85 @@
+{
+ "tag": "c-ch1-2000",
+ "chapter": "seymour-flux",
+ "base": "http://127.0.0.1:5871/",
+ "W": 2000,
+ "H": 1012,
+ "phone": false,
+ "steps": [
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "awaitingMenu": true,
+   "toMenuS": 44.2
+  },
+  {
+   "s": "hud",
+   "overflowX": false,
+   "treated": {
+    "scope": "all",
+    "chapters": [
+     "seymour-flux",
+     "ffx2-bahamut",
+     "ffx2-leblanc"
+    ],
+    "holds": {
+     "ffx2-leblanc": [
+      "breath",
+      "cam",
+      "moments"
+     ]
+    },
+    "running": "seymour-flux",
+    "reaches": true
+   },
+   "buttons": [
+    "I\nHIDE:57x20",
+    "G\nGUIDE:114x30",
+    "N\nHIDE MOVES:164x27",
+    "E\nENEMY MOVE:169x27"
+   ],
+   "f1": true
+  },
+  {
+   "s": "after-attack",
+   "screen": "battle"
+  },
+  {
+   "s": "turns",
+   "turns": 3
+  }
+ ],
+ "bundle": "http://127.0.0.1:5871/assets/index-dwcmDBjZ.js",
+ "toMenuMs": 44240,
+ "hud": {
+  "overflowX": false,
+  "treated": {
+   "scope": "all",
+   "chapters": [
+    "seymour-flux",
+    "ffx2-bahamut",
+    "ffx2-leblanc"
+   ],
+   "holds": {
+    "ffx2-leblanc": [
+     "breath",
+     "cam",
+     "moments"
+    ]
+   },
+   "running": "seymour-flux",
+   "reaches": true
+  },
+  "buttons": [
+   "I\nHIDE:57x20",
+   "G\nGUIDE:114x30",
+   "N\nHIDE MOVES:164x27",
+   "E\nENEMY MOVE:169x27"
+  ],
+  "f1": true
+ },
+ "fpsAvg": 59.6,
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": []
+}

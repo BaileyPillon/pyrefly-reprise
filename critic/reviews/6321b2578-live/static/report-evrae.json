@@ -1,0 +1,151 @@
+{
+  "mode": "gpu",
+  "part": "evrae",
+  "consoleErrors": [],
+  "notFound": [],
+  "badStatus": [],
+  "html404img": [],
+  "audio": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-fahrenheit.mp3",
+    "https://echoesofspira.com/audio/voice/evrae-airship/evrae-airship.mid-evrae-first-inhale.002.mp3",
+    "https://echoesofspira.com/audio/voice/evrae-airship/evrae-airship.mid-evrae-first-inhale.002.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/evrae-airship/evrae-airship.mid-evrae-haste-phase.001.mp3",
+    "https://echoesofspira.com/audio/voice/evrae-airship/evrae-airship.mid-evrae-haste-phase.002.mp3",
+    "https://echoesofspira.com/audio/voice/evrae-airship/evrae-airship.quip-tidus.001.mp3",
+    "https://echoesofspira.com/audio/voice/evrae-airship/evrae-airship.quip-auron.001.mp3",
+    "https://echoesofspira.com/audio/music/boss-evrae.mp3",
+    "https://echoesofspira.com/audio/voice/evrae-airship/evrae-airship.pre.011.mp3",
+    "https://echoesofspira.com/audio/voice/evrae-airship/evrae-airship.pre.015.mp3",
+    "https://echoesofspira.com/audio/voice/evrae-airship/evrae-airship.pre.018.mp3",
+    "https://echoesofspira.com/audio/voice/evrae-airship/evrae-airship.pre.021.mp3",
+    "https://echoesofspira.com/audio/voice/evrae-airship/evrae-airship.pre.022.mp3",
+    "https://echoesofspira.com/audio/music/victory-ffx.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx.mp3",
+    "https://echoesofspira.com/audio/music/pause.mp3",
+    "https://echoesofspira.com/audio/music/boss-evrae.mp3"
+  ],
+  "steps": [
+    {
+      "step": "boot ready",
+      "ok": true,
+      "detail": " 1600x900"
+    },
+    {
+      "step": "title -> chapter-select",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "board cursor reached evrae-airship",
+      "ok": true,
+      "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+    },
+    {
+      "step": "evrae-airship: confirm -> party-prep",
+      "ok": true,
+      "detail": "screen=party-prep"
+    },
+    {
+      "step": "evrae-airship: prep + cutscene skip -> battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "evrae-airship: player turn reached",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) pack ON by default: F1 HUD present, no PAUSE button",
+      "ok": false,
+      "detail": "{\"f1\":true,\"hero\":true,\"pauseBtn\":true,\"pauseEls\":[\"BUTTON.battle-pause-chip ig|pause:open|vis=true\"],\"look\":null,\"rigs\":4,\"bodyTextHasGuide\":false}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) on battle screen with menu",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}): 1 boss bar, 0 Intel panels at first menu",
+      "ok": false,
+      "detail": "{\"ribbon\":0,\"igBossHp\":0,\"ffx2boss\":0,\"intel\":0,\"intelAll\":0,\"guide\":false,\"coachCards\":1,\"text\":\"Rikku Tidus Evrae Wakka Cid Rikku ORDERS ATTACK SPECIAL ▸ ×1 WHITE MAGIC ▸ ×1 ITEMS ▸ ×11 FLEE ▼ Q △ DEFEND A one-off action this encounter offers Tidus 1265 /1265 60 /60 OD Wakka 1430 /1430 40 /40 OD Rikku 880 /880 130 /130 OD Most players find Evrae one of t\"}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) Enter opens a sub-list (menu moved on)",
+      "ok": true,
+      "detail": "{\"s0\":\"Orders\",\"s1\":\"Attack\",\"afterEnter\":\"Attack\"}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) cancel (Escape) from the sub-list returns to the command menu on the battle screen",
+      "ok": true,
+      "detail": "{\"sc\":\"battle\",\"aw\":true,\"sel\":\"Attack\"}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) action confirmed with real keys (action-start in the battle log), battle running",
+      "ok": false,
+      "detail": "{\"tg\":\"{\\\"sel\\\":[]}\",\"lg\":[\"turn-start\"]}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) P opens pause",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) Escape resumes",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "errors": [],
+  "extra": {
+    "evraehud": {
+      "f1": true,
+      "hero": true,
+      "pauseBtn": true,
+      "pauseEls": [
+        "BUTTON.battle-pause-chip ig|pause:open|vis=true"
+      ],
+      "look": null,
+      "rigs": 4,
+      "bodyTextHasGuide": false
+    },
+    "evraeprobe": {
+      "ribbon": 0,
+      "igBossHp": 0,
+      "ffx2boss": 0,
+      "intel": 0,
+      "intelAll": 0,
+      "guide": false,
+      "coachCards": 1,
+      "text": "Rikku Tidus Evrae Wakka Cid Rikku ORDERS ATTACK SPECIAL ▸ ×1 WHITE MAGIC ▸ ×1 ITEMS ▸ ×11 FLEE ▼ Q △ DEFEND A one-off action this encounter offers Tidus 1265 /1265 60 /60 OD Wakka 1430 /1430 40 /40 OD Rikku 880 /880 130 /130 OD Most players find Evrae one of t"
+    },
+    "evraenav": {
+      "s0": "Orders",
+      "s1": "Attack",
+      "afterEnter": "Attack"
+    },
+    "evraecancel": {
+      "sc": "battle",
+      "aw": true,
+      "sel": "Attack"
+    },
+    "evraetarget": "{\"sel\":[]}",
+    "evraeactprobe": {
+      "ribbon": 0,
+      "igBossHp": 0,
+      "ffx2boss": 0,
+      "intel": 0,
+      "intelAll": 0,
+      "guide": false,
+      "coachCards": 1,
+      "text": "Rikku Tidus Evrae Wakka Cid Rikku PULL BACK Trigger THIS ORDER COSTS Turn now · Cid's next turn · 1 volley Volleys left 3 Tidus 1265 /1265 60 /60 OD Wakka 1430 /1430 40 /40 OD Rikku 880 /880 130 /130 OD I EVRAE Most players find Evrae one of the most troubleso"
+    },
+    "evraelog": "[\"turn-start\"]"
+  },
+  "elapsedMin": "0.9"
+}

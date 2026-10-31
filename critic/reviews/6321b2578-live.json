@@ -1,0 +1,94 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-10-31T06:42:57.222Z",
+  "build": {
+    "mainSha": "6321b2578",
+    "bundle": "dwcmDBjZ",
+    "artifactHash": "17d0a142380cd8001e1a0a9d7b73d388731e926ba055c5d4929b4b93090b703e"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/6321b2578.json --url https://echoesofspira.com/ --changed-from critic/artifacts/2a9340249.json --full -> result PASS, artifactHash 17d0a142380cd8001e1a0a9d7b73d388731e926ba055c5d4929b4b93090b703e, liveManifest match, checked 7169, mismatched [], missing [], wrongType [], errors []",
+      "reason": "Every listed file byte-identical with the right content type."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu), 1600x900 and 390x844 phone, fresh contexts, cache-busted URL, real keys. Screen and selectedId asserted before each step. FFX seymour-flux, FFX-2 ffx2-leblanc and FFX evrae-airship each reached a player turn, the Attack/Skill list opened, Escape cancelled to the command menu, the action was confirmed (action-start in the battle log); P/Escape pause and resume, H hide/restore on Ch I; prerendered music fetched (38 audio requests). 0 console errors, 0 404s, 0 responses >= 400.",
+      "reason": "Some reused r68 assertions were stale (coach card count, Evrae HUD, phone HUD) and failed in the script; they are expectations of the old build, not broken flows (LV-1). The Evrae action was re-run with correct keys and passed."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": false,
+      "evidence": "Master volume lowered 0.8 to 0.6 through the pause options with real ArrowLeft, page reloaded, boot ready, save:v1 masterVolume read back 0.6.",
+      "reason": "Lightweight only; the full upgrade matrix was not run in this pass."
+    }
+  ],
+  "staticChecks": {
+    "pose-census": {
+      "subjects": 146,
+      "paintings": 1106,
+      "pass": 829,
+      "waived": 79,
+      "rigged": 0,
+      "fail": 0,
+      "exempt": 198,
+      "byClass": {
+        "idle": 146,
+        "standing": 565,
+        "ko": 90,
+        "low": 71,
+        "wide": 4,
+        "staged": 176,
+        "part": 54
+      },
+      "byGame": {
+        "FFX-2": 777,
+        "FFX": 307,
+        "FF7": 22
+      },
+      "byRowStatus": {
+        "ok": 745,
+        "held": 84,
+        "waived": 79,
+        "none": 198
+      }
+    }
+  },
+  "coverage": {
+    "tested": [
+      "full exact artifact, 7169 files (--full)",
+      "title to chapter select to player turn: FFX Ch I seymour-flux, FFX-2 Ch VI ffx2-leblanc, FFX evrae-airship, phone 390x844 Ch I",
+      "sub-list, cancel and confirmed action on Ch I, Leblanc and Evrae",
+      "P and Escape pause/resume, H hide/restore",
+      "prerendered music fetch",
+      "settings reload persistence",
+      "pose census"
+    ],
+    "reused": [
+      "release 68 smoke script, adapted"
+    ],
+    "notTested": [
+      "full CHK-024 upgrade matrix",
+      "revive fix pixel behaviour",
+      "phone load-time numbers",
+      "Leblanc booth visual treatment and ?treated=pack",
+      "win/loss/retry paths"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 35,
+  "notes": "LV-1 informational: stale r68 assertions in the reused script (coach cards on Ch I, Evrae HUD, phone HUD) failed and are not build defects; the Evrae action re-run passed. The deep review remains owed."
+}

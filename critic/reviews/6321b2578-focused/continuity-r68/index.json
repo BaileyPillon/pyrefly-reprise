@@ -1,0 +1,1533 @@
+[
+ {
+  "file": "ffx2-leblanc-win-r68/00-title.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:16.677Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/01-briefing.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:18.216Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/03-card.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "ffx2-leblanc",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:22.093Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/04-prep.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:24.421Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/05-pre-scene.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:29.786Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/05b-scene-esc.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:31.310Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/seq-transition-into-battle/",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 56
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 367
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 764
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1080
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1379
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1683
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2132
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2439
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2815
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 3129
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:45.570Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/10-first-menu-coach.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": null
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:45.956Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/11-advisor.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:46.921Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/12-intent-E.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:48.904Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/13-guide-G.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:50.540Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/14-pause-Esc.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:52.629Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/14-pause-tab-next.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Rikku",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:53.553Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/14-pause-options.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:56.005Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/16-target-single.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "target selection after choosing ATTACK",
+  "asserted": "screen=battle targeting=true",
+  "verified": true,
+  "targets": 3,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:24:59.657Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/16b-after-cancel.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Escape from target selection",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:25:01.057Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/seq-party-action/",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Grenade)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 45
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 280
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 540
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 776
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1010
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1259
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1490
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1722
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1955
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2193
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:25:06.225Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/21-change-open.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "CHANGE opened (Garment Grid)",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:25:12.090Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/seq-spherechange/",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a spherechange chosen by real input",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 210
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 479
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 727
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 985
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1242
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1507
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1777
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2042
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2309
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2577
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:25:15.446Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/23-midfight.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "mid-fight after 4 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:25:19.434Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/seq-action-playing/",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:status-add)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 44
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 277
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 510
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 747
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1000
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1245
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1473
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1715
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1944
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2176
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:25:21.827Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/seq-seam-2/",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: chain seam 1 -> 2 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 47
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 408
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 758
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1110
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1465
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1823
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2174
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2529
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:26:54.610Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/20-link-2.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "fight, encounter link 2 of 3",
+  "asserted": "screen=battle links=2",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:26:58.024Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/24-seam-2-first-menu.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu after chain seam into link 2",
+  "asserted": "screen=battle awaitingMenu=true links=2",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 668,
+    "y": 651,
+    "w": 469,
+    "h": 184
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Yuna Grenade → all enemies IN ITEM 374–422 2 HITS NO MP 100% TO HIT Physical damage to all enemies. Most damage on the board — 398 to Logos."
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:26:59.561Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/seq-seam-3/",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: chain seam 2 -> 3 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 47
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 398
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 748
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1098
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1448
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1802
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2165
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2515
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:28:39.053Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/20-link-3.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "fight, encounter link 3 of 3",
+  "asserted": "screen=battle links=3",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:28:42.556Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/24-seam-3-first-menu.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu after chain seam into link 3",
+  "asserted": "screen=battle awaitingMenu=true links=3",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 669,
+    "y": 681,
+    "w": 468,
+    "h": 154
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Paine Attack → Logos 207–233 NO MP 63% TO HIT 2% CRIT Physical damage Most damage on the board — 220 to Logos."
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:28:54.065Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/31-results.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:34:52.202Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/33-after-confirm-scene.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "the scene after CONFIRM on the victory results",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:34:55.119Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/34-board-after.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after the win",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:35:52.976Z"
+ },
+ {
+  "file": "ffx2-leblanc-win-r68/35-board-reload.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after a reload (the clear must come back from the save)",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:35:55.159Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/00-title.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:35:58.803Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/01-briefing.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:00.339Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/03-card.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "evrae-airship",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:02.069Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/04-prep.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:04.414Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/05-pre-scene.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:09.742Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/05b-scene-esc.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:11.306Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/seq-transition-into-battle/",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 86
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 432
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 735
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1052
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1351
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1669
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1968
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2270
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2585
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2881
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:25.351Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/10-first-menu-coach.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:25.781Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/11-advisor.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:26.834Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/12-intent-E.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:28.902Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/13-guide-G.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:30.554Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/14-pause-Esc.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:32.637Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/14-pause-tab-next.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Wakka",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:33.580Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/14-pause-options.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:36.036Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/16-target-single.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "target selection after choosing ATTACK",
+  "asserted": "screen=battle targeting=true",
+  "verified": true,
+  "targets": 1,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:39.874Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/16b-after-cancel.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Escape from target selection",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:41.346Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/seq-party-action/",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Pull back)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 47
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 276
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 513
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 761
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 992
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1227
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1459
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1680
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1908
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2131
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:46.301Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/23-midfight.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:48.012Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/seq-action-playing/",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:action-end)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 51
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 273
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 518
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 740
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 976
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1210
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1438
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1676
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1912
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2145
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:36:50.352Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/26-orders-widget.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Chapter VIII Orders widget open by real input (Close in)",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:42:30.822Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/31-results.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:43:16.019Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/33-after-confirm-scene.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "the scene after CONFIRM on the victory results",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:43:18.945Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/34-board-after.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after the win",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:44:00.273Z"
+ },
+ {
+  "file": "evrae-airship-win-r68/35-board-reload.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after a reload (the clear must come back from the save)",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-10-31T05:44:02.514Z"
+ }
+]

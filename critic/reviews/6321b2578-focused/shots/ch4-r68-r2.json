@@ -1,0 +1,555 @@
+{
+ "tag": "ch4",
+ "arm": "r68",
+ "run": 2,
+ "chapter": "ffx2-bahamut",
+ "seed": 7,
+ "url": "http://127.0.0.1:5872/?coach=off",
+ "toMenuMs": 25905,
+ "shot": "D:/Tools/pyrefly-scratch/2026-10-30/r69-focused/j9/ch4-r68-r2.png",
+ "camPos": {
+  "fov": 34,
+  "pos": [
+   0.37720314890295337,
+   2.208271472223951,
+   9.758263344352649
+  ]
+ },
+ "treated": "n/a",
+ "fxB": {
+  "room": "bevelle-underground",
+  "plates": 4,
+  "lamps": 4,
+  "time": 12.27
+ },
+ "lookClock": null,
+ "screen": {
+  "chapter": "ffx2-bahamut",
+  "game": "ffx2",
+  "scene": "bevelle-underground",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 1,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": true,
+  "exitIntent": null,
+  "playTimeMs": 12749.599999999999,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "rikku",
+    "side": "party",
+    "art": "rikku-dark-knight",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "yuna",
+    "side": "party",
+    "art": "yuna-white-mage",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "paine",
+    "side": "party",
+    "art": "paine-warrior",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "bahamut",
+    "side": "enemy",
+    "art": "ffx2-bahamut",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   }
+  ],
+  "spellFx": {
+   "fx": {
+    "new": true,
+    "guard": {
+     "level": 0,
+     "scaleStep": 0,
+     "calmMs": 16.8,
+     "budgetMs": 21,
+     "busyMs": 0,
+     "steps": 0
+    }
+   },
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0.1,
+   "cpuMeanMs": 0.293,
+   "flights": {
+    "launched": 0,
+    "landed": 0,
+    "live": 0,
+    "lastLaunchAt": 0,
+    "lastLandAt": 0
+   }
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "idle",
+   "awaitingMenu": true,
+   "played": 10,
+   "lastEvents": [
+    {
+     "seq": 1,
+     "type": "atb",
+     "ms": 1
+    },
+    {
+     "seq": 2,
+     "type": "turn-start",
+     "ms": 129
+    },
+    {
+     "seq": 3,
+     "type": "action-start",
+     "ms": 1012
+    },
+    {
+     "seq": 4,
+     "type": "atb",
+     "ms": 0
+    },
+    {
+     "seq": 5,
+     "type": "atb",
+     "ms": 0
+    },
+    {
+     "seq": 6,
+     "type": "atb",
+     "ms": 0
+    },
+    {
+     "seq": 7,
+     "type": "atb",
+     "ms": 0
+    },
+    {
+     "seq": 8,
+     "type": "status-add",
+     "ms": 268
+    },
+    {
+     "seq": 9,
+     "type": "action-end",
+     "ms": 216
+    },
+    {
+     "seq": 10,
+     "type": "atb",
+     "ms": 0
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 1,
+   "ticks": 168,
+   "events": 11,
+   "result": null,
+   "combatants": [
+    {
+     "id": "yuna",
+     "hp": 690,
+     "maxHp": 690,
+     "mp": 130,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "rikku",
+     "hp": 1839,
+     "maxHp": 1839,
+     "mp": 158,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "curse"
+     ]
+    },
+    {
+     "id": "paine",
+     "hp": 1706,
+     "maxHp": 1706,
+     "mp": 67,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "bahamut",
+     "hp": 8400,
+     "maxHp": 8400,
+     "mp": 9999,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 0,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.5624290149163322,
+       "required": 13207,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.5009471807443726,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.4531876138433516,
+       "required": 13725,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0.8333126165320075,
+       "required": 8045,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 0
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 500.50000000000006,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.6703263420913153,
+       "required": 13207,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.5803432137285491,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.5570127504553735,
+       "required": 13725,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 1,
+       "required": 8045,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 1
+   },
+   {
+    "type": "turn-start",
+    "actorId": "bahamut",
+    "turn": 1,
+    "elapsedTicks": 15,
+    "seq": 2
+   },
+   {
+    "type": "action-start",
+    "actorId": "bahamut",
+    "command": {
+     "kind": "ability",
+     "id": "bahamut-curse",
+     "targets": [
+      "rikku"
+     ]
+    },
+    "abilityId": "bahamut-curse",
+    "abilityName": "Curse",
+    "targets": [
+     "rikku"
+    ],
+    "seq": 3
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 500.50000000000006,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 0.6703263420913153,
+       "required": 13207,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.5803432137285491,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.5570127504553735,
+       "required": 13725,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0,
+       "required": 8045,
+       "ready": false,
+       "charge": 0,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 4
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 2035.3666666666636,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 1,
+       "required": 13207,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.8238243815466905,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 0.8754098360655738,
+       "required": 13725,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0,
+       "required": 8045,
+       "ready": false,
+       "charge": 0.31682737620532153,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 5
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 2635.966666666666,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 1,
+       "required": 13207,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 0.9190996211277023,
+       "required": 17948,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 1,
+       "required": 13725,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0,
+       "required": 8045,
+       "ready": false,
+       "charge": 0.4408033060247952,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 6
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 3169.8333333333344,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 1,
+       "required": 13207,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 1,
+       "required": 17948,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 1,
+       "required": 13725,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0,
+       "required": 8045,
+       "ready": false,
+       "charge": 0.551004132530994,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 7
+   },
+   {
+    "type": "status-add",
+    "targetId": "rikku",
+    "sourceId": "bahamut",
+    "status": "curse",
+    "instance": {
+     "id": "curse",
+     "turnsRemaining": null,
+     "ticksRemaining": null,
+     "charges": null,
+     "stacks": 0,
+     "permanent": true,
+     "sourceId": "bahamut",
+     "sourceAbilityId": "bahamut-curse"
+    },
+    "seq": 8
+   },
+   {
+    "type": "action-end",
+    "actorId": "bahamut",
+    "seq": 9
+   },
+   {
+    "type": "atb",
+    "snapshot": {
+     "elapsedMs": 5372.033333333342,
+     "bars": [
+      {
+       "actorId": "yuna",
+       "fill": 1,
+       "required": 13207,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "rikku",
+       "fill": 1,
+       "required": 17948,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "paine",
+       "fill": 1,
+       "required": 13725,
+       "ready": true,
+       "charge": null,
+       "state": "normal"
+      },
+      {
+       "actorId": "bahamut",
+       "fill": 0,
+       "required": 8045,
+       "ready": false,
+       "charge": null,
+       "state": "normal"
+      }
+     ]
+    },
+    "seq": 10
+   }
+  ]
+ },
+ "consoleErrors": [],
+ "requestFailures": [],
+ "http4xx": []
+}

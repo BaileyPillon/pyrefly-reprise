@@ -1,0 +1,80 @@
+{
+ "tag": "r68-ch1-phone",
+ "chapter": "seymour-flux",
+ "base": "http://127.0.0.1:5872/",
+ "W": 390,
+ "H": 844,
+ "phone": true,
+ "steps": [
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "awaitingMenu": true,
+   "toMenuS": 42.4
+  },
+  {
+   "s": "hud",
+   "overflowX": false,
+   "treated": null,
+   "buttons": [
+    "DEFEND:104x40",
+    "GUIDE:77x32",
+    "TAP HERE SKIP :246x18",
+    "PAUSE:46x46"
+   ],
+   "f1": true
+  },
+  {
+   "s": "tap-attack",
+   "screen": "battle",
+   "phase": {
+    "speed": "normal",
+    "timeScale": 1,
+    "auto": false,
+    "aborted": false,
+    "phase": "command:tidus",
+    "awaitingMenu": true,
+    "played": 3,
+    "lastEvents": [
+     {
+      "seq": 0,
+      "type": "sensor",
+      "ms": 1
+     },
+     {
+      "seq": 1,
+      "type": "sensor",
+      "ms": 0
+     },
+     {
+      "seq": 2,
+      "type": "turn-start",
+      "ms": 108
+     }
+    ],
+    "lastCommand": null
+   }
+  }
+ ],
+ "bundle": "http://127.0.0.1:5872/assets/index-CahDxk82.js",
+ "toMenuMs": 42441,
+ "hud": {
+  "overflowX": false,
+  "treated": null,
+  "buttons": [
+   "DEFEND:104x40",
+   "GUIDE:77x32",
+   "TAP HERE SKIP :246x18",
+   "PAUSE:46x46"
+  ],
+  "f1": true
+ },
+ "attackRect": {
+  "x": 195,
+  "y": 422
+ },
+ "fpsAvg": 59.7,
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": []
+}

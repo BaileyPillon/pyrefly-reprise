@@ -1,0 +1,121 @@
+{
+ "tag": "r68-ch6-phone",
+ "chapter": "ffx2-leblanc",
+ "base": "http://127.0.0.1:5872/",
+ "W": 390,
+ "H": 844,
+ "phone": true,
+ "steps": [
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "awaitingMenu": true,
+   "toMenuS": 45.4
+  },
+  {
+   "s": "hud",
+   "overflowX": false,
+   "treated": null,
+   "buttons": [
+    "GUIDE:77x32",
+    "PAUSE:46x46"
+   ],
+   "f1": true
+  },
+  {
+   "s": "tap-attack",
+   "screen": "battle",
+   "phase": {
+    "speed": "normal",
+    "timeScale": 1,
+    "auto": false,
+    "aborted": false,
+    "phase": "idle",
+    "awaitingMenu": true,
+    "played": 19,
+    "lastEvents": [
+     {
+      "seq": 8,
+      "type": "turn-start",
+      "ms": 92
+     },
+     {
+      "seq": 9,
+      "type": "action-start",
+      "ms": 883
+     },
+     {
+      "seq": 10,
+      "type": "atb",
+      "ms": 0
+     },
+     {
+      "seq": 11,
+      "type": "atb",
+      "ms": 0
+     },
+     {
+      "seq": 12,
+      "type": "turn-start",
+      "ms": 93
+     },
+     {
+      "seq": 13,
+      "type": "action-start",
+      "ms": 249
+     },
+     {
+      "seq": 14,
+      "type": "miss",
+      "ms": 316
+     },
+     {
+      "seq": 15,
+      "type": "action-end",
+      "ms": 233
+     },
+     {
+      "seq": 16,
+      "type": "atb",
+      "ms": 0
+     },
+     {
+      "seq": 17,
+      "type": "atb",
+      "ms": 0
+     },
+     {
+      "seq": 18,
+      "type": "atb",
+      "ms": 0
+     },
+     {
+      "seq": 19,
+      "type": "atb",
+      "ms": 0
+     }
+    ],
+    "lastCommand": null
+   }
+  }
+ ],
+ "bundle": "http://127.0.0.1:5872/assets/index-CahDxk82.js",
+ "toMenuMs": 45369,
+ "hud": {
+  "overflowX": false,
+  "treated": null,
+  "buttons": [
+   "GUIDE:77x32",
+   "PAUSE:46x46"
+  ],
+  "f1": true
+ },
+ "attackRect": {
+  "x": 195,
+  "y": 670
+ },
+ "fpsAvg": 59.6,
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": []
+}

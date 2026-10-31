@@ -1,0 +1,140 @@
+{
+  "mode": "gpu",
+  "part": "ch6",
+  "consoleErrors": [],
+  "notFound": [],
+  "badStatus": [],
+  "html404img": [],
+  "audio": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx2-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-chateau-leblanc.mp3",
+    "https://echoesofspira.com/audio/music/boss-leblanc.mp3",
+    "https://echoesofspira.com/audio/music/victory-ffx2.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx2.mp3",
+    "https://echoesofspira.com/audio/music/pause.mp3",
+    "https://echoesofspira.com/audio/music/boss-leblanc.mp3"
+  ],
+  "steps": [
+    {
+      "step": "boot ready",
+      "ok": true,
+      "detail": " 1600x900"
+    },
+    {
+      "step": "title -> chapter-select",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "board cursor reached ffx2-leblanc",
+      "ok": true,
+      "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+    },
+    {
+      "step": "ffx2-leblanc: confirm -> party-prep",
+      "ok": true,
+      "detail": "screen=party-prep"
+    },
+    {
+      "step": "ffx2-leblanc: prep + cutscene skip -> battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "ffx2-leblanc: player turn reached",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) pack ON by default: F1 HUD present, no PAUSE button",
+      "ok": true,
+      "detail": "{\"f1\":true,\"hero\":true,\"pauseBtn\":false,\"pauseEls\":[\"BUTTON.battle-pause-chip ig ig--ffx2|pause:open|vis=false\"],\"look\":\"cinematic\",\"rigs\":6,\"bodyTextHasGuide\":false}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) on battle screen with menu",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}): 1 boss bar, 0 Intel panels at first menu",
+      "ok": true,
+      "detail": "{\"ribbon\":1,\"igBossHp\":0,\"ffx2boss\":0,\"intel\":0,\"intelAll\":0,\"guide\":false,\"coachCards\":1,\"text\":\"SCAN SCAN SCAN GN GN Yuna 831 /1034 51 /51 TH TH Rikku 934 /934 106 /106 WR WR Paine 1068 /1089 62 /62 ATTACK SKILL ◂ CHANGE ◂ ITEM ◂ G GUIDE Paine Grenade → all enemies IN ITEM NO MP Physical damage to all enemies. N HIDE MOVES Ormi WR Paine WARRIOR Grenade →\"}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) Enter opens a sub-list (menu moved on)",
+      "ok": true,
+      "detail": "{\"s0\":\"Attack\",\"s1\":\"Skill◂\",\"afterEnter\":\"Power Break4\"}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) cancel (Escape) from the sub-list returns to the command menu on the battle screen",
+      "ok": true,
+      "detail": "{\"sc\":\"battle\",\"aw\":true,\"sel\":\"Skill◂\"}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) action confirmed with real keys (action-start in the battle log), battle running",
+      "ok": true,
+      "detail": "{\"tg\":\"{\\\"sel\\\":[]}\",\"lg\":[\"turn-start\",\"action-start\",\"chain\",\"damage\",\"chain\",\"ko\",\"action-end\",\"atb\"]}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) P opens pause",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) Escape resumes",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "errors": [],
+  "extra": {
+    "ch6hud": {
+      "f1": true,
+      "hero": true,
+      "pauseBtn": false,
+      "pauseEls": [
+        "BUTTON.battle-pause-chip ig ig--ffx2|pause:open|vis=false"
+      ],
+      "look": "cinematic",
+      "rigs": 6,
+      "bodyTextHasGuide": false
+    },
+    "ch6probe": {
+      "ribbon": 1,
+      "igBossHp": 0,
+      "ffx2boss": 0,
+      "intel": 0,
+      "intelAll": 0,
+      "guide": false,
+      "coachCards": 1,
+      "text": "SCAN SCAN SCAN GN GN Yuna 831 /1034 51 /51 TH TH Rikku 934 /934 106 /106 WR WR Paine 1068 /1089 62 /62 ATTACK SKILL ◂ CHANGE ◂ ITEM ◂ G GUIDE Paine Grenade → all enemies IN ITEM NO MP Physical damage to all enemies. N HIDE MOVES Ormi WR Paine WARRIOR Grenade →"
+    },
+    "ch6nav": {
+      "s0": "Attack",
+      "s1": "Skill◂",
+      "afterEnter": "Power Break4"
+    },
+    "ch6cancel": {
+      "sc": "battle",
+      "aw": true,
+      "sel": "Skill◂"
+    },
+    "ch6target": "{\"sel\":[]}",
+    "ch6actprobe": {
+      "ribbon": 1,
+      "igBossHp": 0,
+      "ffx2boss": 0,
+      "intel": 0,
+      "intelAll": 0,
+      "guide": false,
+      "coachCards": 1,
+      "text": "SCAN SCAN SCAN GN GN Yuna 831 /1034 51 /51 TH TH Rikku 934 /934 106 /106 WR WR Paine 981 /1089 62 /62 ATTACK SKILL ◂ CHANGE ◂ ITEM ◂ G GUIDE Rikku Grenade → all enemies IN ITEM NO MP Physical damage to all enemies. N HIDE MOVES Ormi TH Rikku THIEF Grenade → al"
+    },
+    "ch6log": "[\"chain\",\"damage\",\"chain\",\"ko\",\"action-end\",\"atb\"]"
+  },
+  "elapsedMin": "0.9"
+}

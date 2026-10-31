@@ -1,0 +1,332 @@
+{
+ "tag": "ch1",
+ "arm": "now",
+ "run": 3,
+ "chapter": "seymour-flux",
+ "seed": 7,
+ "url": "http://127.0.0.1:5871/?coach=off",
+ "toMenuMs": 46565,
+ "shot": "D:/Tools/pyrefly-scratch/2026-10-30/r69-focused/j9/ch1-now-r3.png",
+ "camPos": {
+  "fov": 32,
+  "pos": [
+   -0.9874988813835539,
+   3.662930978736339,
+   11.897282883433638
+  ]
+ },
+ "treated": {
+  "scope": "all",
+  "chapters": [
+   "seymour-flux",
+   "ffx2-bahamut",
+   "ffx2-leblanc"
+  ],
+  "holds": {
+   "ffx2-leblanc": [
+    "breath",
+    "cam",
+    "moments"
+   ]
+  },
+  "running": "seymour-flux",
+  "reaches": true
+ },
+ "fxB": {
+  "room": "gagazet",
+  "plates": 4,
+  "lamps": 4,
+  "time": 12.03
+ },
+ "lookClock": null,
+ "screen": {
+  "chapter": "seymour-flux",
+  "game": "ffx",
+  "scene": "gagazet",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 1,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": true,
+  "exitIntent": null,
+  "playTimeMs": 12416.300000000003,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "mortiorchis",
+    "side": "enemy",
+    "art": "mortiorchis",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "tidus",
+    "side": "party",
+    "art": "tidus",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "yuna",
+    "side": "party",
+    "art": "yuna",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "kimahri",
+    "side": "party",
+    "art": "kimahri",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "seymour-flux",
+    "side": "enemy",
+    "art": "seymour-flux-body",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   }
+  ],
+  "spellFx": {
+   "fx": {
+    "new": true,
+    "guard": {
+     "level": 0,
+     "scaleStep": 0,
+     "calmMs": 16.65,
+     "budgetMs": 20.81,
+     "busyMs": 0,
+     "steps": 0
+    }
+   },
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0,
+   "cpuMeanMs": 0,
+   "flights": {
+    "launched": 0,
+    "landed": 0,
+    "live": 0,
+    "lastLaunchAt": 0,
+    "lastLandAt": 0
+   }
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "command:tidus",
+   "awaitingMenu": true,
+   "played": 3,
+   "lastEvents": [
+    {
+     "seq": 0,
+     "type": "sensor",
+     "ms": 0
+    },
+    {
+     "seq": 1,
+     "type": "sensor",
+     "ms": 0
+    },
+    {
+     "seq": 2,
+     "type": "turn-start",
+     "ms": 190
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 1,
+   "ticks": 0,
+   "events": 3,
+   "result": null,
+   "combatants": [
+    {
+     "id": "tidus",
+     "hp": 2420,
+     "maxHp": 2420,
+     "mp": 115,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "yuna",
+     "hp": 1500,
+     "maxHp": 1500,
+     "mp": 270,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "kimahri",
+     "hp": 2310,
+     "maxHp": 2310,
+     "mp": 130,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "auron",
+     "hp": 3410,
+     "maxHp": 3410,
+     "mp": 75,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "wakka",
+     "hp": 2530,
+     "maxHp": 2530,
+     "mp": 90,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "lulu",
+     "hp": 1375,
+     "maxHp": 1375,
+     "mp": 290,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "rikku",
+     "hp": 1540,
+     "maxHp": 1540,
+     "mp": 115,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "valefor",
+     "hp": 1530,
+     "maxHp": 1530,
+     "mp": 51,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ifrit",
+     "hp": 2075,
+     "maxHp": 2075,
+     "mp": 49,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ixion",
+     "hp": 2055,
+     "maxHp": 2055,
+     "mp": 54,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "shiva",
+     "hp": 1830,
+     "maxHp": 1830,
+     "mp": 59,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "bahamut",
+     "hp": 2935,
+     "maxHp": 2935,
+     "mp": 74,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "seymour-flux",
+     "hp": 70000,
+     "maxHp": 70000,
+     "mp": 512,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    },
+    {
+     "id": "mortiorchis",
+     "hp": 4000,
+     "maxHp": 4000,
+     "mp": 512,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "sensor",
+    "targetId": "seymour-flux",
+    "full": false,
+    "text": "Turns healing into a weapon. Kill the floating thing before it finishes counting.",
+    "hp": 70000,
+    "maxHp": 70000,
+    "mp": 512,
+    "maxMp": 512,
+    "weaknesses": [],
+    "seq": 0
+   },
+   {
+    "type": "sensor",
+    "targetId": "mortiorchis",
+    "full": false,
+    "text": "It is not attacking you. It is waiting for a number to fill.",
+    "hp": 4000,
+    "maxHp": 4000,
+    "mp": 512,
+    "maxMp": 512,
+    "weaknesses": [],
+    "seq": 1
+   },
+   {
+    "type": "turn-start",
+    "actorId": "tidus",
+    "turn": 1,
+    "elapsedTicks": 0,
+    "seq": 2
+   }
+  ]
+ },
+ "consoleErrors": [],
+ "requestFailures": [],
+ "http4xx": []
+}

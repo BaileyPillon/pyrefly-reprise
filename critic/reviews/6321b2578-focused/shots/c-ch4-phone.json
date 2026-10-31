@@ -1,0 +1,74 @@
+{
+ "tag": "c-ch4-phone",
+ "chapter": "ffx2-bahamut",
+ "base": "http://127.0.0.1:5871/",
+ "W": 390,
+ "H": 844,
+ "phone": true,
+ "steps": [
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "awaitingMenu": true,
+   "toMenuS": 25.6
+  },
+  {
+   "s": "hud",
+   "overflowX": false,
+   "treated": {
+    "scope": "all",
+    "chapters": [
+     "seymour-flux",
+     "ffx2-bahamut",
+     "ffx2-leblanc"
+    ],
+    "holds": {
+     "ffx2-leblanc": [
+      "breath",
+      "cam",
+      "moments"
+     ]
+    },
+    "running": "ffx2-bahamut",
+    "reaches": true
+   },
+   "buttons": [
+    "GUIDE:77x32",
+    "PAUSE:46x46"
+   ],
+   "f1": true
+  }
+ ],
+ "bundle": "http://127.0.0.1:5871/assets/index-dwcmDBjZ.js",
+ "toMenuMs": 25560,
+ "hud": {
+  "overflowX": false,
+  "treated": {
+   "scope": "all",
+   "chapters": [
+    "seymour-flux",
+    "ffx2-bahamut",
+    "ffx2-leblanc"
+   ],
+   "holds": {
+    "ffx2-leblanc": [
+     "breath",
+     "cam",
+     "moments"
+    ]
+   },
+   "running": "ffx2-bahamut",
+   "reaches": true
+  },
+  "buttons": [
+   "GUIDE:77x32",
+   "PAUSE:46x46"
+  ],
+  "f1": true
+ },
+ "attackRect": null,
+ "fpsAvg": 0,
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": []
+}

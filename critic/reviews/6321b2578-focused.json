@@ -1,0 +1,762 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-10-31T05:46:13.487Z",
+ "build": {
+  "mainSha": "6321b2578",
+  "bundle": "index-dwcmDBjZ.js"
+ },
+ "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "UNVERIFIED",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect introduced and no regression against live release 68 in what was measured: the booth pair (Chapter I FFX, Chapter IV FFX-2) answers as release 68 (first-menu pixel comparison, cross-build difference 6.69 percent against 6.83 within one build in Chapter I and 6.04 against 6.10 in Chapter IV; the 20 percent signature the lane saw is absent), with identical HUD and buttons at 1600x900, 2000x1012 and 390x844.",
+  "Leblanc (FFX-2 only) with the booth treatment plays from the real title to the Victory results by real keys, 0 console errors, 59 to 60 fps, and the continuity harness reads CHK-026 and CHK-027 PASS on it as on release 68 (see-through 1,682 against 1,706 ms a minute).",
+  "Evrae leaving SCOPE_EXCEPTIONS cuts see-through time from 3,205 to 1,328 ms a minute with CHK-027 PASS; its CHK-026 FAIL is release 68 own. The revive fix and the phone load order were not re-measured on the artifact (changedArea UNVERIFIED, owed to the deep review)."
+ ],
+ "checks": [
+  {
+   "id": "CHK-001",
+   "result": "UNVERIFIED",
+   "reason": "Agents cannot hear; no cue was auditioned.",
+   "game": "both",
+   "chapter": "all",
+   "state": "audio",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-002",
+   "result": "PASS",
+   "reason": "At 1600x900 and 2000x1012 the first menu of Chapters I, IV and VI owns the stage; no full-screen layer outlived its state (the Leblanc results capture is a mid-fade frame of the real Victory card; the end text read Victory / NEW BEST).",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut, ffx2-leblanc",
+   "state": "battle at 1600x900 and 2000x1012",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/shots/c-ch1-1600-01-menu.png",
+    "critic/reviews/6321b2578-focused/shots/c-ch6-1600-01-menu.png",
+    "critic/reviews/6321b2578-focused/shots/c-ch6-2000-01-menu.png",
+    "critic/reviews/6321b2578-focused/shots/c-ch4-2000-01-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 8
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "390x844 touch: Chapters I, IV and VI on the candidate list the same buttons as release 68 (PAUSE 46x46, GUIDE, DEFEND in Chapter I), no horizontal overflow; the phone sheet shows identical layouts. The Leblanc treatment is off on a phone, as designed.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut, ffx2-leblanc",
+   "state": "first menu 390x844",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/shots/phone-menus.jpg",
+    "critic/reviews/6321b2578-focused/shots/c-ch1-phone.json",
+    "critic/reviews/6321b2578-focused/shots/r68-ch1-phone.json"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 10
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "reason": "Only the defeat overlay (Chapter I) and the results card (Chapter VI) were seen to leave with their fight; booth cards, the Leblanc quiet ending frames and the Change plate were not driven to their ends by me (lane evidence only).",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-leblanc",
+   "state": "overlays",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/shots/c-ch1-1600-04-end.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "Leblanc first menu at 1600x900: the F1 slab HUD sits clear of the party, boss ribbon top left; Chapter I menu unchanged.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-leblanc",
+   "state": "first menu",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/shots/ch6-desk.jpg",
+    "critic/reviews/6321b2578-focused/shots/c-ch1-1600-01-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 3
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "Every name shown in full at 1600x900, 2000x1012 and 390x844 in Chapters I, IV and VI.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut, ffx2-leblanc",
+   "state": "first menu",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/shots/phone-menus.jpg",
+    "critic/reviews/6321b2578-focused/shots/c-ch6-1600-01-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "reason": "Cast art not judged against the approved masters; no art file changed in this release (art-derive verify PASS).",
+   "game": "both",
+   "chapter": "all",
+   "state": "cast",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-014",
+   "result": "PASS",
+   "reason": "Party and foes face each other in every captured Chapter I, IV, VI menu frame.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut, ffx2-leblanc",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/shots/c-ch6-1600-01-menu.png",
+    "critic/reviews/6321b2578-focused/shots/c-ch1-1600-01-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real Playwright keys from the title through board, prep and cutscene to the first menu, Attack and target by Enter and three more turns in Chapters I, IV, VI (and Vegnagun and Evrae first menus); real touch tap on Attack at 390x844. The debug API only set the seed and battle speed and handed the fight to the engine to reach the end: Chapter VI reached the Victory results, Chapter IV the post-fight cutscene, Chapter I the defeat overlay and Try Again reached party prep (as in release 68's review).",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut, ffx2-leblanc, ffx2-vegnagun-shuyin, evrae-airship",
+   "state": "title to battle to results",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/shots/c-ch1-1600.json",
+    "critic/reviews/6321b2578-focused/shots/c-ch4-1600.json",
+    "critic/reviews/6321b2578-focused/shots/c-ch6-1600.json",
+    "critic/reviews/6321b2578-focused/shots/c-veg-1600.json",
+    "critic/reviews/6321b2578-focused/shots/c-evrae-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 40
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture waited on window.__pyrefly.screen() == battle and awaitingMenu through toFirstMenu (throws on a failed wait); each run records the asserted screen.",
+   "game": "both",
+   "chapter": "all",
+   "state": "flow",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/shots/c-ch6-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "reason": "Production candidate dist-gate served with candidate-build.mjs --serve; index.html and the page name index-dwcmDBjZ.js (expected). art-derive verify PASS (5404 masters, 0 problems) and audit PASS. 0 console errors, 0 responses of 400 or more and 0 failed requests in all 22 play runs. art-browser-load and art-play-audit not run (the deploy runs them).",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "candidate",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/shots/c-ch1-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 12
+  },
+  {
+   "id": "CHK-018",
+   "result": "NOT APPLICABLE",
+   "reason": "No sprite or pose art changed.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-019",
+   "result": "PASS",
+   "reason": "art-derive verify and audit PASS on dist-gate (every derived file equals its master, nothing dangling, 38 strip thumbnails).",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "candidate",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/shots/c-ch1-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Cases: the revive fix is FFX only (the slide exists in FFX Chapters I and II; FFX-2 Chapter IV has none); the load order is both games, phone class; Evrae leaving SCOPE_EXCEPTIONS is FFX only; the Leblanc booth treatment is FFX-2 only.",
+   "game": "both",
+   "chapter": "all",
+   "state": "n/a",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/shots/phone-menus.jpg"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 2
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Presence and absence: treated() on the candidate lists holds only for ffx2-leblanc (breath, cam, moments); in Chapter I it reports running seymour-flux with no holds; Leblanc carries the F1 HUD and ?treated=pack gives release 68's panel layout; release 68 Leblanc has no treated(). Chapter I and IV HUDs match release 68; the Evrae change acts only in the FFX chapter.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut, ffx2-leblanc, evrae-airship",
+   "state": "first menus",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/shots/ch6-desk.jpg",
+    "critic/reviews/6321b2578-focused/shots/c-ch6-pack-1600-01-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 8
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Chapter VI: the engine-finished fight reached the Victory results and Enter; Chapter I: defeat overlay then Try Again to party prep; Chapter IV: win to the cutscene.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut, ffx2-leblanc",
+   "state": "fight end",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/shots/c-ch6-1600.json",
+    "critic/reviews/6321b2578-focused/shots/c-ch1-1600.json",
+    "critic/reviews/6321b2578-focused/shots/c-ch4-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 6
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Everything ran through the real title, board, prep and battle screens; the continuity harness plays with real keys.",
+   "game": "both",
+   "chapter": "all",
+   "state": "full flow",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/continuity/continuity-summary-seymour-flux.json",
+    "critic/reviews/6321b2578-focused/continuity/continuity-summary-ffx2-bahamut.json",
+    "critic/reviews/6321b2578-focused/continuity/continuity-summary-ffx2-leblanc.json",
+    "critic/reviews/6321b2578-focused/continuity/continuity-summary-evrae-airship.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "reason": "Harness on the candidate: Chapter VI PASS (release 68 PASS); Chapter IV PASS (release 68 PASS); Chapter I FAIL, numerically identical to release 68 (2 head swaps, worst 10.8 percent, 9.3 registered, 1 stature outside the band 0.765 to 1.057 in both); Evrae FAIL on 19 unregistered head swaps (worst 15.5 percent), the same 19 as release 68 (15.5 / 0.2 percent registered), so the failure is the build's own, not introduced here.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut, ffx2-leblanc, evrae-airship",
+   "state": "fight",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/continuity/continuity-summary-seymour-flux.json",
+    "critic/reviews/6321b2578-focused/continuity/continuity-summary-ffx2-bahamut.json",
+    "critic/reviews/6321b2578-focused/continuity/continuity-summary-ffx2-leblanc.json",
+    "critic/reviews/6321b2578-focused/continuity/continuity-summary-evrae-airship.json",
+    "critic/reviews/6321b2578-focused/continuity-r68/continuity-summary-evrae-airship.json",
+    "critic/reviews/6321b2578-focused/continuity-r68/continuity-summary-ffx2-leblanc.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 45
+  },
+  {
+   "id": "CHK-027",
+   "result": "PASS",
+   "reason": "All four chapters PASS. Chapter VI worst swap jerk 32.4 px, 0 snaps a minute (release 68 PASS). See-through ms a minute, candidate against release 68: Evrae 1,328 against 3,205; Chapter VI 1,682 against 1,706; Chapter I 516 against 517; Chapter IV 647 against 627.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut, ffx2-leblanc, evrae-airship",
+   "state": "fight",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/continuity/continuity-summary-seymour-flux.json",
+    "critic/reviews/6321b2578-focused/continuity/continuity-summary-ffx2-bahamut.json",
+    "critic/reviews/6321b2578-focused/continuity/continuity-summary-ffx2-leblanc.json",
+    "critic/reviews/6321b2578-focused/continuity/continuity-summary-evrae-airship.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 45
+  },
+  {
+   "id": "CHK-B1",
+   "result": "UNVERIFIED",
+   "reason": "Whether the music and effects are beautiful: no agent can hear.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "audio",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "harness": {
+   "schema": "continuity-harness/1",
+   "id": "5e1bbdec47c9e7206f710149081baf8ceab77dc6b230bec2117ef4eed133fc31",
+   "tree": {
+    "root": "D:/pyrefly-release55",
+    "head": "6321b2578d3df30cfffc2805d392c12bccafa844",
+    "dirty": []
+   },
+   "files": {
+    "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+    "critic/runner/lib/continuity-analyze.mjs": "a20e4de301b117cf4a98ecf99f58fe695aaedb18",
+    "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+    "critic/runner/lib/continuity-card.mjs": "2e0208df7bc9a922a27d519fc5ebb49bed3fafd9",
+    "critic/runner/lib/continuity-dissolve.mjs": "4a9a2ebc79b798dc6059312f0b885510f4cd79b3",
+    "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+    "critic/runner/lib/continuity-gaps.mjs": "7337b85eda92c5755d11ccbee84749ee231cfe3d",
+    "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+    "critic/runner/lib/continuity-ghostms.mjs": "d74a048e0c44be69d22b050973ec240fbec3db66",
+    "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+    "critic/runner/lib/continuity-probe.mjs": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25",
+    "critic/runner/lib/continuity-pure.mjs": "c30cf02831efe33d9726d0bae9f9b3e098292090",
+    "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+    "critic/runner/lib/continuity-rig-probe.mjs": "35bf097b7bbfa81abeb4daf8e78f0d9515ff3ab1",
+    "critic/runner/lib/continuity-rig.mjs": "6e1b891a9d237b4b9db52593303df5e1ffc812e4",
+    "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+    "critic/runner/lib/continuity-smear.mjs": "bb6bcae7b35d4d99465f0650e58554cc785af513",
+    "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+    "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+    "critic/runner/lib/continuity-summary.mjs": "c671aa6dbc9e6df72a767ace45e6a57cdb478053",
+    "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+    "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+    "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+    "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+    "critic/runner/lib/continuity-why.mjs": "e2f0063820045e9c5eb5bb2ece203c00bed1fe3d",
+    "critic/runner/lib/continuity.mjs": "d3fd3269395cfa928cd1566a81486359e28210cb",
+    "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+    "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+    "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+    "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+    "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+    "critic/runner/lib/route-pure.mjs": "4d484cc9c873d60c66b48e418bb688dd6248b647",
+    "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+    "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+    "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+    "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+    "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+    "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+   },
+   "policy": {
+    "continuitySha256": "5ef4a3ed6fec14518548de8b462466822a3cf3a41f11528f8e8abb143de6fa43",
+    "fileSha256": "9c72460c4bdd463ef02f5e1f01c2baa3aa5334f392c29b114da466ca9c54cc71",
+    "override": false,
+    "overrideSha256": null
+   },
+   "probe": {
+    "version": 3,
+    "blob": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25"
+   },
+   "poseTable": {
+    "path": "D:/Tools/pyrefly-scratch/pose-measure-6321b2578.json",
+    "sha256": "b8cead6d81a854dc7ac60a210ac702185cd33668b555f01bb24e60fd408e3940",
+    "subjects": 114,
+    "source": "explicit",
+    "buildSha": "6321b257",
+    "isCandidate": null
+   },
+   "waivers": {
+    "path": "D:\\pyrefly-release55\\docs\\target\\pose-waivers.json",
+    "sha256": "84fc043f4169733ef228cbf965eb2b0679f3f0e38f7f609e97d99135924f532f",
+    "rows": 80
+   },
+   "run": {
+    "query": null,
+    "setArt": null,
+    "browser": "gpu"
+   },
+   "changedDuringRun": false,
+   "chapterIds": [
+    "5e1bbdec47c9e7206f710149081baf8ceab77dc6b230bec2117ef4eed133fc31"
+   ],
+   "unstamped": [],
+   "chaptersByOtherHarness": [],
+   "aggregateSha256": "166aaad764650d6e3bdcabea73e373eaabd39541e857ab482511d58286b3c518"
+  },
+  "poseMeasure": {
+   "path": "D:/Tools/pyrefly-scratch/pose-measure-6321b2578.json",
+   "source": "explicit",
+   "subjects": 114,
+   "sha256": "b8cead6d81a854dc7ac60a210ac702185cd33668b555f01bb24e60fd408e3940",
+   "staleChapters": []
+  },
+  "base": "http://127.0.0.1:5871/",
+  "date": "2026-10-31T05:16:59.647Z",
+  "chapters": [
+   {
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "PASS"
+    },
+    "battleSeconds": 386.7,
+    "swaps": 209,
+    "snapsPerMinute": 0,
+    "ghostMsPerMinute": 516,
+    "maxHeadJumpPct": 10.8,
+    "maxFeetShiftPx": 4.9,
+    "worstJerkPx": 239.2,
+    "minStature": 0.765,
+    "heightOverBand": 1,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 0,
+    "dashesWorstPx": 239.2,
+    "frameP99Ms": 27.4,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.4,
+    "dedicated": true,
+    "strips": 18,
+    "worstSwapStrips": [
+     "seymour-flux-win-6321b2578/continuity/strips/swap-008-kimahri-ko-idle.jpg",
+     "seymour-flux-win-6321b2578/continuity/strips/swap-007-kimahri-idle-ko.jpg",
+     "seymour-flux-win-6321b2578/continuity/strips/swap-002-kimahri-idle-hurt.jpg",
+     "seymour-flux-win-6321b2578/continuity/strips/swap-235-yuna-hurt-critical.jpg",
+     "seymour-flux-win-6321b2578/continuity/strips/swap-237-yuna-critical-hurt.jpg",
+     "seymour-flux-win-6321b2578/continuity/strips/swap-054-kimahri-idle-ready.jpg",
+     "seymour-flux-win-6321b2578/continuity/strips/swap-055-kimahri-ready-idle.jpg",
+     "seymour-flux-win-6321b2578/continuity/strips/swap-265-auron-follow-idle.jpg",
+     "seymour-flux-win-6321b2578/continuity/strips/swap-017-yuna-idle-hurt.jpg",
+     "seymour-flux-win-6321b2578/continuity/strips/swap-144-yuna-hurt-idle.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "liveBaselineR68": {
+   "ffx2-leblanc": {
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 566.3 s of battle, 59.3 to 59.3 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 PASS; 1,706 ms of see-through a minute (102.3 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at 6321b2578; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows)).",
+    "checks": {
+     "CHK-026": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "353 of 571 measured swaps had a registered head (tolerance 3 percent); 218 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 571 swap(s) (stature 0.768 to 1.261, 66 out of band but waived), the silhouette's own feet 563 swap(s) (worst 3.3 px, 0 waived), 353 swap(s) across a recorded hold (real head worst 37.6 percent from the idle's), 0 on a painting with no fresh registration record"
+     },
+     "CHK-027": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "3 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 119.7 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 4 of 10 jerk(s) fell on a frame of more than 34 ms (3 of the 4 at a swap; 0 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them; 230 of 230 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 230 snap(s) not counted, 114 swap jerk(s) (worst 131.1 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+     }
+    }
+   },
+   "evrae-airship": {
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 380.9 s of battle, 59.6 to 59.6 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (19 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.2 percent where the head is registered)); CHK-027 PASS; 3,205 ms of see-through a minute (192.3 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at 6321b2578; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows)).",
+    "checks": {
+     "CHK-026": {
+      "result": "FAIL",
+      "reasons": [
+       "19 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.2 percent where the head is registered)"
+      ],
+      "note": "343 of 368 measured swaps had a registered head (tolerance 3 percent); 25 were read from a rig's own head mesh (tolerance 3 percent; 25 swap(s) were changes of a rig's key); 0 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 368 swap(s) (stature 0.785 to 1.098, 1 out of band but waived), the silhouette's own feet 341 swap(s) (worst 1.5 px, 0 waived), 342 swap(s) across a recorded hold (real head worst 21.8 percent from the idle's), 0 on a painting with no fresh registration record"
+     },
+     "CHK-027": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "2 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 52.9 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 1 of 4 jerk(s) fell on a frame of more than 34 ms (1 of the 1 at a swap; 0 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them"
+     }
+    }
+   }
+  },
+  "baselineSeymourAndBahamut": "critic/reviews/2a9340249-focused/continuity (release 68 build, harness 39fa82cc3c9e)",
+  "note": "Embedded summary is seymour-flux (candidate); the other three candidate chapters and release 68 controls (Leblanc, Evrae) are in otherChapters and liveBaselineR68, each read by the same harness; release 68 Chapter I and IV baselines in critic/reviews/2a9340249-focused/continuity",
+  "battleSeconds": 386.7,
+  "counted": 209,
+  "swaps": 270,
+  "size": {
+   "judged": 203,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 6,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 10.8,
+   "maxHeadJumpPctRegistration": 9.3,
+   "headOverTolerance": 2,
+   "maxFeetShiftPx": 4.9,
+   "feetOverTolerance": 0,
+   "feetDesigned": 0,
+   "feetDesignedWorstPx": 0,
+   "headMeasured": 203,
+   "headRegistration": 77,
+   "headRig": 105,
+   "rigSwaps": 105,
+   "headSilhouette": 21,
+   "headUnmeasured": 0,
+   "heightMeasured": 203,
+   "heightOverBand": 1,
+   "heightWaived": 0,
+   "minStature": 0.765,
+   "maxStature": 1.057,
+   "koLengthMeasured": 2,
+   "minKoLength": 0.599,
+   "koLengthReported": 2,
+   "feetSilMeasured": 76,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 7.9,
+   "holdSwaps": 75,
+   "worstRealHeadPct": 24.1,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "variantHeadSwaps": 0,
+   "worstVariantHeadPct": 0,
+   "variantHeadOutsideBand": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 40,
+   "hardCutsPerMinute": 6.21,
+   "ghostSwaps": 58,
+   "ghostFrames": 199,
+   "worstGhostSeverity": 0.333,
+   "ghostOverFail": 0,
+   "jerks": 8,
+   "worstJerkPx": 239.2,
+   "jerksOverFail": 5,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0.004,
+   "maxCentroidShiftPx": 182.8,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 0,
+   "smearsPlanned": 180,
+   "smearSwaps": 176,
+   "smearSnapsExcused": 63,
+   "jerksSmeared": 49,
+   "worstSmearedJerkPx": 206.3,
+   "swapJerks": 0,
+   "swapJerksWorstPx": 0,
+   "swapJerksOverFail": 0,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 8,
+   "dashesWorstPx": 239.2,
+   "dashesOverFail": 5,
+   "jerksLongFrame": 0,
+   "swapJerksLongFrame": 0,
+   "swapJerksSteadyOverFail": 0,
+   "ghostMs": 3328,
+   "ghostMsPerMinute": 516,
+   "ghostFramesPerMinute": 30.9,
+   "ghostFrames60PerMinute": 31
+  },
+  "frameTime": {
+   "frames": 22980,
+   "longFrames": 115,
+   "longFramePct": 0.5,
+   "worstP99Ms": 27.4,
+   "maxMs": 358.3,
+   "longMs": 34,
+   "source": "continuity-probe",
+   "pacingNumber": false
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "2 swap(s) change a head by more than the tolerance (worst 10.8 percent; 9.3 percent where the head is registered)",
+     "1 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.765 to 1.057; the bands are tools/posescale/pose-bands.mjs's)"
+    ],
+    "note": "77 of 203 measured swaps had a registered head (tolerance 3 percent); 105 were read from a rig's own head mesh (tolerance 3 percent; 105 swap(s) were changes of a rig's key); 21 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 203 swap(s) (stature 0.765 to 1.057, 0 out of band but waived), the silhouette's own feet 76 swap(s) (worst 7.9 px, 0 waived), 75 swap(s) across a recorded hold (real head worst 24.1 percent from the idle's), 0 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "PASS",
+    "reasons": [],
+    "note": "5 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 239.2 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 176 of 180 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 63 snap(s) not counted, 49 swap jerk(s) (worst 206.3 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 386.7 s of battle, 59.4 to 59.4 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (2 swap(s) change a head by more than the tolerance (worst 10.8 percent; 9.3 percent where the head is registered); 1 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.765 to 1.057; the bands are tools/posescale/pose-bands.mjs's)); CHK-027 PASS; 516 ms of see-through a minute (31 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at 6321b2578; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows)).",
+  "otherChapters": {
+   "ffx2-bahamut": {
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 340.6 s of battle, 59.1 to 59.1 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 PASS; 647 ms of see-through a minute (38.8 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at 6321b2578; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows)).",
+    "checks": {
+     "CHK-026": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "172 of 275 measured swaps had a registered head (tolerance 3 percent); 103 were read from a rig's own head mesh (tolerance 3 percent; 103 swap(s) were changes of a rig's key); 0 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 275 swap(s) (stature 0.898 to 1.085, 0 out of band but waived), the silhouette's own feet 172 swap(s) (worst 2 px, 0 waived), 172 swap(s) across a recorded hold (real head worst 26.5 percent from the idle's), 0 on a painting with no fresh registration record"
+     },
+     "CHK-027": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "1 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 44.8 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 1 of 2 jerk(s) fell on a frame of more than 34 ms (0 of the 0 at a swap; 0 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them; 183 of 183 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 96 snap(s) not counted, 84 swap jerk(s) (worst 87.2 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+     }
+    }
+   },
+   "ffx2-leblanc": {
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 520.8 s of battle, 59.1 to 59.1 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 PASS; 1,682 ms of see-through a minute (100.9 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at 6321b2578; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows)).",
+    "checks": {
+     "CHK-026": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "343 of 556 measured swaps had a registered head (tolerance 3 percent); 213 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 556 swap(s) (stature 0.769 to 1.261, 60 out of band but waived), the silhouette's own feet 548 swap(s) (worst 3 px, 0 waived), 343 swap(s) across a recorded hold (real head worst 37.6 percent from the idle's), 0 on a painting with no fresh registration record"
+     },
+     "CHK-027": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "2 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 48.5 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 4 of 7 jerk(s) fell on a frame of more than 34 ms (2 of the 4 at a swap; 0 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them; 256 of 256 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 256 snap(s) not counted, 87 swap jerk(s) (worst 87.9 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+     }
+    }
+   },
+   "evrae-airship": {
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 382 s of battle, 59.6 to 59.6 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (19 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.1 percent where the head is registered)); CHK-027 PASS; 1,328 ms of see-through a minute (79.7 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at 6321b2578; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows)).",
+    "checks": {
+     "CHK-026": {
+      "result": "FAIL",
+      "reasons": [
+       "19 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.1 percent where the head is registered)"
+      ],
+      "note": "273 of 298 measured swaps had a registered head (tolerance 3 percent); 25 were read from a rig's own head mesh (tolerance 3 percent; 25 swap(s) were changes of a rig's key); 0 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 298 swap(s) (stature 0.785 to 1.098, 1 out of band but waived), the silhouette's own feet 271 swap(s) (worst 2 px, 0 waived), 272 swap(s) across a recorded hold (real head worst 21.8 percent from the idle's), 0 on a painting with no fresh registration record"
+     },
+     "CHK-027": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "1 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 40.6 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 180 of 181 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 130 snap(s) not counted, 102 swap jerk(s) (worst 137.7 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+     }
+    }
+   }
+  }
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "R69-C1",
+   "severity": "major",
+   "title": "Evrae: 19 swaps change an unregistered head by more than the tolerance (CHK-026)",
+   "game": "FFX",
+   "chapter": "evrae-airship",
+   "expected": "CHK-026 PASS",
+   "observed": "The harness reads 19 swaps, worst 15.5 percent (0.1 percent where the head is registered); release 68 reads the same 19. The release changes only how long see-through frames last (3,205 to 1,328 ms a minute).",
+   "repro": "node critic/runner/lib/continuity.mjs --base=<candidate> --chapters=evrae-airship --pose-measure=<LF copy of docs/target/pose-measure.json>",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/continuity/continuity-summary-evrae-airship.json",
+    "critic/reviews/6321b2578-focused/continuity-r68/continuity-summary-evrae-airship.json"
+   ],
+   "confidence": "high (candidate and release 68 read alike)",
+   "requirement": "CHK-026",
+   "where": "unregistered Evrae heads (silhouette read); not traced",
+   "fix": "Register Evrae pose heads so the harness reads the registered head",
+   "acceptanceCheck": "Harness on evrae-airship reads CHK-026 PASS",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R69-C2",
+   "severity": "major",
+   "title": "Chapter I: 2 head swaps and 1 stature outside the band (CHK-026), as release 68",
+   "game": "FFX",
+   "chapter": "seymour-flux",
+   "expected": "CHK-026 PASS",
+   "observed": "2 swaps change a head by more than the tolerance (worst 10.8 percent, 9.3 registered); 1 pose outside its height band (0.765 to 1.057). Equals the release 68 review of 2a9340249 exactly.",
+   "repro": "continuity.mjs --chapters=seymour-flux",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/continuity/continuity-summary-seymour-flux.json"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-026",
+   "where": "Chapter I pose registration (R68-C3 carried)",
+   "fix": "see R68-C3",
+   "acceptanceCheck": "CHK-026 PASS on Chapter I",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R69-U1",
+   "severity": "polish",
+   "title": "The phone load-order gain and the revive fix were not re-measured on the production bundle by this review",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut",
+   "expected": "The release 69 claims confirmed on the exact artifact",
+   "observed": "Unthrottled localhost: the first menu on the emulated phone took 43.2 s (candidate) and 42.4 s (release 68) in Chapter I, 25.6 and 24.8 s in Chapter IV; both are dominated by the pre-battle cutscene taps, not the network, so the lane's throttled profile is not reproduced here. The revive slide fix is covered by 22 unit tests (pass) and the lane's browser runs on branch eef99cfb7.",
+   "repro": "throttled phone profile as budgets-2 b2-3 and b2-6; r69-revive R1",
+   "evidence": [
+    "critic/reviews/6321b2578-focused/shots/c-ch1-phone.json",
+    "critic/reviews/6321b2578-focused/shots/r68-ch1-phone.json"
+   ],
+   "confidence": "n/a",
+   "requirement": "CHK-015",
+   "where": "n/a",
+   "fix": "The deep review on the live build measures both",
+   "acceptanceCheck": "Deep review measures the phone first command and the revive x step",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Candidate identity (bundle index-dwcmDBjZ.js) and art (art-derive verify and audit PASS); 0 console errors in 22 runs",
+   "First-menu pixel comparison of Chapter I (3 runs per build) and Chapter IV (2 per build) against release 68, seed 7",
+   "Real-key flows in Chapters I, IV, VI (to results or defeat), Vegnagun and Evrae first menus at 1600x900; Chapters I, IV, VI menus at 2000x1012",
+   "390x844 touch in Chapters I, IV, VI against release 68",
+   "Continuity harness on Chapters I, IV, VI and Evrae on the candidate, and Chapter VI and Evrae on release 68",
+   "22 unit tests of the revive slide and the swap-scope tests pass"
+  ],
+  "reused": [
+   {
+    "what": "Chapter I and IV release 68 continuity baselines",
+    "from": "critic/reviews/2a9340249-focused/continuity",
+    "why": "release 68 build unchanged; same harness policy"
+   },
+   {
+    "what": "Revive R1 to R5 and phone budgets-2 measurements",
+    "from": "D:/Tools/pyrefly-scratch/2026-10-30/jobs (lane branches)",
+    "why": "not browser-measured on the production bundle in this review"
+   }
+  ],
+  "notTested": [
+   "Sound",
+   "The revive pop in a real browser on the production bundle",
+   "Phone first command under a throttled profile",
+   "The other 15 chapters of the plan (lane census only)",
+   "Booth end cards, attract card, picker idle",
+   "Hidden chapters (untouched)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Deep review on the live build: the revive pop on the artifact, the phone first command, the 15 unplayed chapters.",
+ "elapsedMinutes": 130
+}

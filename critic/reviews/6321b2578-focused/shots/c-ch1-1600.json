@@ -1,0 +1,94 @@
+{
+ "tag": "c-ch1-1600",
+ "chapter": "seymour-flux",
+ "base": "http://127.0.0.1:5871/",
+ "W": 1600,
+ "H": 900,
+ "phone": false,
+ "steps": [
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "awaitingMenu": true,
+   "toMenuS": 44.6
+  },
+  {
+   "s": "hud",
+   "overflowX": false,
+   "treated": {
+    "scope": "all",
+    "chapters": [
+     "seymour-flux",
+     "ffx2-bahamut",
+     "ffx2-leblanc"
+    ],
+    "holds": {
+     "ffx2-leblanc": [
+      "breath",
+      "cam",
+      "moments"
+     ]
+    },
+    "running": "seymour-flux",
+    "reaches": true
+   },
+   "buttons": [
+    "I\nHIDE:56x20",
+    "G\nGUIDE:102x26",
+    "N\nHIDE MOVES:160x26",
+    "E\nENEMY MOVE:165x26"
+   ],
+   "f1": true
+  },
+  {
+   "s": "after-attack",
+   "screen": "battle"
+  },
+  {
+   "s": "turns",
+   "turns": 3
+  },
+  {
+   "s": 13,
+   "screen": "pro-defeat"
+  },
+  {
+   "s": "after-end",
+   "screen": "party-prep"
+  }
+ ],
+ "bundle": "http://127.0.0.1:5871/assets/index-dwcmDBjZ.js",
+ "toMenuMs": 44575,
+ "hud": {
+  "overflowX": false,
+  "treated": {
+   "scope": "all",
+   "chapters": [
+    "seymour-flux",
+    "ffx2-bahamut",
+    "ffx2-leblanc"
+   ],
+   "holds": {
+    "ffx2-leblanc": [
+     "breath",
+     "cam",
+     "moments"
+    ]
+   },
+   "running": "seymour-flux",
+   "reaches": true
+  },
+  "buttons": [
+   "I\nHIDE:56x20",
+   "G\nGUIDE:102x26",
+   "N\nHIDE MOVES:160x26",
+   "E\nENEMY MOVE:165x26"
+  ],
+  "f1": true
+ },
+ "fpsAvg": 59.4,
+ "endText": "Seymour Flux\nSeymour Flux\nMortiorchis\nKO\nTidus\n0\n/2420\n115\n/115\nOD\nKO\nYuna\n0\n/1500\n270\n/270\nOD\nKO\nKimahri\n0\n/2310\n130\n/130\nOD\nG\nGUIDE\nSeymour Flux\nEnter\nSelect\nG\nIntel\nQ\nDefend\nP\nPause\nKO\nKO\nKO\nE\nENEMY MOVE\nSeymour Flux\nVICTORY\nTHE PARTY HA",
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": []
+}

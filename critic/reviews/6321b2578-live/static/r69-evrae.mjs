@@ -1,0 +1,26 @@
+import { chromium } from 'playwright';
+import { currentChromiumArgs } from './tools/browser-mode.mjs';
+const b = await chromium.launch({ headless: true, args: currentChromiumArgs(process.env) });
+const p = await (await b.newContext({ viewport: { width: 1600, height: 900 } })).newPage();
+const errs = [], nf = [];
+p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); }); p.on('pageerror', e => errs.push(String(e)));
+p.on('response', r => { if (r.status() >= 400) nf.push(r.status() + ' ' + r.url()); });
+await p.goto('https://echoesofspira.com/?livesmoke=' + Date.now(), { waitUntil: 'domcontentloaded' });
+await p.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 30000 });
+const scr = () => p.evaluate(() => window.__pyrefly?.app?.current?.name);
+const press = async (k, g = 150) => { await p.keyboard.press(k); await p.waitForTimeout(g); };
+for (let i = 0; i < 12 && (await scr()) !== 'chapter-select'; i++) await press('Enter', 800);
+for (let i = 0; i < 30; i++) { const s = await p.evaluate(() => window.__pyrefly.app.current.snapshot()); if (s.selectedId === 'evrae-airship') break; await press('ArrowRight'); }
+await press('Enter', 200); await p.waitForTimeout(1500); await press('Enter', 300);
+for (let i = 0; i < 80 && (await scr()) !== 'battle'; i++) await press('Enter', 450);
+await p.waitForFunction(() => window.__pyrefly?.battle?.()?.snapshot?.()?.playback?.awaitingMenu === true, null, { timeout: 60000 });
+console.log('screen', await scr(), 'sel', await p.evaluate(() => document.querySelector('.ig-cmd--selected')?.textContent));
+await press('ArrowDown', 300); console.log('sel', await p.evaluate(() => document.querySelector('.ig-cmd--selected')?.textContent));
+await press('Enter', 600); console.log('tgt', await p.evaluate(() => JSON.stringify(window.__pyrefly.targeting?.())));
+await press('Escape', 600); console.log('cancel awaiting', await p.evaluate(() => window.__pyrefly.battle().snapshot().playback.awaitingMenu));
+await press('Enter', 600); await press('Enter', 300); await p.waitForTimeout(4000);
+console.log('log', await p.evaluate(() => JSON.stringify((window.__pyrefly.battleState().log ?? []).slice(-8).map(e => e.type))));
+await p.screenshot({ path: 'D:/pyrefly-release55/critic/reviews/6321b2578-live/static/evrae-action.jpg', type: 'jpeg' });
+await press('KeyP', 900); console.log('pause', await scr()); await press('Escape', 800); console.log('resume', await scr());
+console.log('errs', errs.length, 'bad', JSON.stringify(nf));
+await b.close();

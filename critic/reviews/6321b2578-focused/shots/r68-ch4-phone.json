@@ -1,0 +1,42 @@
+{
+ "tag": "r68-ch4-phone",
+ "chapter": "ffx2-bahamut",
+ "base": "http://127.0.0.1:5872/",
+ "W": 390,
+ "H": 844,
+ "phone": true,
+ "steps": [
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "awaitingMenu": true,
+   "toMenuS": 24.8
+  },
+  {
+   "s": "hud",
+   "overflowX": false,
+   "treated": null,
+   "buttons": [
+    "GUIDE:77x32",
+    "PAUSE:46x46"
+   ],
+   "f1": true
+  }
+ ],
+ "bundle": "http://127.0.0.1:5872/assets/index-CahDxk82.js",
+ "toMenuMs": 24803,
+ "hud": {
+  "overflowX": false,
+  "treated": null,
+  "buttons": [
+   "GUIDE:77x32",
+   "PAUSE:46x46"
+  ],
+  "f1": true
+ },
+ "attackRect": null,
+ "fpsAvg": 0,
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": []
+}

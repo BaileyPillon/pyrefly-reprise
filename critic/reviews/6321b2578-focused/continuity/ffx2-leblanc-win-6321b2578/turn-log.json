@@ -1,0 +1,2599 @@
+[
+ {
+  "turn": 0,
+  "ms": 27,
+  "actor": "play:damage",
+  "want": {
+   "label": "Grenade",
+   "target": "all enemies",
+   "menu": "Item"
+  },
+  "took": "Grenade",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:908/934",
+   "paine:918/1089",
+   "ormi-entrance:1640/1640",
+   "dr-goon:232/232",
+   "fem-goon:167/167"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 41,
+    "actor": "rikku",
+    "did": "Grenade",
+    "targets": [
+     "ormi-entrance",
+     "dr-goon",
+     "fem-goon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 5231,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Grenade",
+   "target": "all enemies",
+   "menu": "Item"
+  },
+  "took": "Grenade",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:908/934",
+   "paine:918/1089",
+   "ormi-entrance:1640/1640",
+   "dr-goon:232/232",
+   "fem-goon:167/167"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 44,
+    "actor": "yuna",
+    "did": "Grenade",
+    "targets": [
+     "ormi-entrance",
+     "dr-goon",
+     "fem-goon"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 16209,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness Dance",
+   "target": "all enemies",
+   "menu": "Dressphere"
+  },
+  "took": "Darkness Dance",
+  "viaMenu": "Dressphere",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:908/934",
+   "paine:546/648",
+   "ormi-entrance:1148/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 83,
+    "actor": "paine",
+    "did": "Darkness Dance",
+    "targets": [
+     "ormi-entrance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 20962,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:908/934",
+   "paine:546/648",
+   "ormi-entrance:1148/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 95,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "ormi-entrance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 23213,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cheap Shot",
+   "target": "Ormi",
+   "menu": "Skill"
+  },
+  "took": "Cheap Shot",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:908/934",
+   "paine:546/648",
+   "ormi-entrance:1021/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi-entrance",
+   "wanted": "ormi-entrance",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 104,
+    "actor": "yuna",
+    "did": "Cheap Shot",
+    "targets": [
+     "ormi-entrance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 27163,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cheap Shot",
+   "target": "Ormi",
+   "menu": "Skill"
+  },
+  "took": "Cheap Shot",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:908/934",
+   "paine:546/648",
+   "ormi-entrance:852/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi-entrance",
+   "wanted": "ormi-entrance",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 119,
+    "actor": "yuna",
+    "did": "Cheap Shot",
+    "targets": [
+     "ormi-entrance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 30181,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:908/934",
+   "paine:546/648",
+   "ormi-entrance:742/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 125,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "ormi-entrance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 34698,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness Dance",
+   "target": "all enemies",
+   "menu": "Dressphere"
+  },
+  "took": "Darkness Dance",
+  "viaMenu": "Dressphere",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:908/934",
+   "paine:546/648",
+   "ormi-entrance:641/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 139,
+    "actor": "paine",
+    "did": "Darkness Dance",
+    "targets": [
+     "ormi-entrance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 37131,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cheap Shot",
+   "target": "Ormi",
+   "menu": "Skill"
+  },
+  "took": "Cheap Shot",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:908/934",
+   "paine:546/648",
+   "ormi-entrance:641/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi-entrance",
+   "wanted": "ormi-entrance",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 145,
+    "actor": "yuna",
+    "did": "Cheap Shot",
+    "targets": [
+     "ormi-entrance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 40179,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:908/934",
+   "paine:546/648",
+   "ormi-entrance:531/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 152,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "ormi-entrance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 42523,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cheap Shot",
+   "target": "Ormi",
+   "menu": "Skill"
+  },
+  "took": "Cheap Shot",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:908/934",
+   "paine:546/648",
+   "ormi-entrance:428/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi-entrance",
+   "wanted": "ormi-entrance",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 162,
+    "actor": "yuna",
+    "did": "Cheap Shot",
+    "targets": [
+     "ormi-entrance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 45639,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:908/934",
+   "paine:546/648",
+   "ormi-entrance:312/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 169,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "ormi-entrance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 48544,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:908/934",
+   "paine:273/648",
+   "ormi-entrance:213/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 188,
+    "actor": "yuna",
+    "did": "Hi-Potion",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 52190,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:908/934",
+   "paine:273/648",
+   "ormi-entrance:213/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 192,
+    "actor": "rikku",
+    "did": "Potion",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 56455,
+  "actor": "command:paine",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:0/934",
+   "paine:648/648",
+   "ormi-entrance:213/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 209,
+    "actor": "paine",
+    "did": "Phoenix Down",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 59513,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:233/934",
+   "paine:648/648",
+   "ormi-entrance:213/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 216,
+    "actor": "yuna",
+    "did": "Hi-Potion",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 63058,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:233/934",
+   "paine:648/648",
+   "ormi-entrance:213/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 220,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "ormi-entrance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 65941,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness Dance",
+   "target": "all enemies",
+   "menu": "Dressphere"
+  },
+  "took": "Darkness Dance",
+  "viaMenu": "Dressphere",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:934/934",
+   "paine:648/648",
+   "ormi-entrance:83/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 232,
+    "actor": "paine",
+    "did": "Darkness Dance",
+    "targets": [
+     "ormi-entrance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 71234,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:0/934",
+   "paine:648/648",
+   "ormi-entrance:83/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 253,
+    "actor": "yuna",
+    "did": "Phoenix Down",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 74525,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:233/934",
+   "paine:648/648",
+   "ormi-entrance:83/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 260,
+    "actor": "rikku",
+    "did": "Hi-Potion",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 78057,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Trigger Happy",
+   "target": "Ormi",
+   "menu": "Skill"
+  },
+  "took": "Trigger Happy",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:233/934",
+   "paine:648/648",
+   "ormi-entrance:83/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 265,
+    "actor": "yuna",
+    "did": "Trigger Happy",
+    "targets": [
+     "ormi-entrance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 83647,
+  "actor": "command:paine",
+  "want": {
+   "label": "Darkness Dance",
+   "target": "all enemies",
+   "menu": "Dressphere"
+  },
+  "took": "Darkness Dance",
+  "viaMenu": "Dressphere",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:934/934",
+   "paine:648/648",
+   "ormi-entrance:83/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 279,
+    "actor": "paine",
+    "did": "Darkness Dance",
+    "targets": [
+     "ormi-entrance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 86231,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:934/934",
+   "paine:648/648",
+   "ormi-entrance:83/1640",
+   "dr-goon:0/232",
+   "fem-goon:0/167"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 24,
+  "ms": 117528,
+  "actor": "play:damage",
+  "want": {
+   "label": "Grenade",
+   "target": "all enemies",
+   "menu": "Item"
+  },
+  "took": "Grenade",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1010/1034",
+   "rikku:934/934",
+   "paine:633/1089",
+   "logos-room:1432/1432",
+   "ormi-logos-room:1840/1840"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 25,
+  "ms": 120983,
+  "actor": "idle",
+  "want": {
+   "label": "Grenade",
+   "target": "all enemies",
+   "menu": "Item"
+  },
+  "took": "Grenade",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:861/1034",
+   "rikku:934/934",
+   "paine:633/1089",
+   "logos-room:1432/1432",
+   "ormi-logos-room:1840/1840"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 26,
+  "ms": 126259,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:861/1034",
+   "rikku:934/934",
+   "paine:609/1089",
+   "logos-room:1432/1432",
+   "ormi-logos-room:1840/1840"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos-room",
+   "wanted": "logos-room",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 27,
+  "ms": 133928,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Echo Screen",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Echo Screen",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:861/1034",
+   "rikku:907/934",
+   "paine:603/1089",
+   "logos-room:947/1432",
+   "ormi-logos-room:1337/1840"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 28,
+  "ms": 138196,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:861/1034",
+   "rikku:907/934",
+   "paine:603/1089",
+   "logos-room:947/1432",
+   "ormi-logos-room:1337/1840"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos-room",
+   "wanted": "logos-room",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 29,
+  "ms": 140041,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:861/1034",
+   "rikku:907/934",
+   "paine:603/1089",
+   "logos-room:833/1432",
+   "ormi-logos-room:1337/1840"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos-room",
+   "wanted": "logos-room",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 30,
+  "ms": 143679,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:907/934",
+   "paine:603/1089",
+   "logos-room:193/1432",
+   "ormi-logos-room:1337/1840"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos-room",
+   "wanted": "logos-room",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 31,
+  "ms": 145558,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:907/934",
+   "paine:603/1089",
+   "logos-room:82/1432",
+   "ormi-logos-room:1337/1840"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos-room",
+   "wanted": "logos-room",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 32,
+  "ms": 166470,
+  "actor": "command:paine",
+  "want": {
+   "label": "Armor Break",
+   "target": "Ormi",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:907/934",
+   "paine:603/1089",
+   "logos-room:0/1432",
+   "ormi-logos-room:1337/1840"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi-logos-room",
+   "wanted": "ormi-logos-room",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 33,
+  "ms": 171136,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cheap Shot",
+   "target": "Ormi",
+   "menu": "Skill"
+  },
+  "took": "Cheap Shot",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:907/934",
+   "paine:603/1089",
+   "logos-room:0/1432",
+   "ormi-logos-room:1337/1840"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi-logos-room",
+   "wanted": "ormi-logos-room",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 34,
+  "ms": 174953,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:907/934",
+   "paine:603/1089",
+   "logos-room:0/1432",
+   "ormi-logos-room:1029/1840"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 35,
+  "ms": 178881,
+  "actor": "command:paine",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:0/934",
+   "paine:603/1089",
+   "logos-room:0/1432",
+   "ormi-logos-room:909/1840"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 36,
+  "ms": 182555,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cheap Shot",
+   "target": "Ormi",
+   "menu": "Skill"
+  },
+  "took": "Cheap Shot",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:0/934",
+   "paine:603/1089",
+   "logos-room:0/1432",
+   "ormi-logos-room:909/1840"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi-logos-room",
+   "wanted": "ormi-logos-room",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 37,
+  "ms": 186444,
+  "actor": "command:paine",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:233/934",
+   "paine:603/1089",
+   "logos-room:0/1432",
+   "ormi-logos-room:780/1840"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 38,
+  "ms": 189957,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Light Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Light Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:233/934",
+   "paine:603/1089",
+   "logos-room:0/1432",
+   "ormi-logos-room:780/1840"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 39,
+  "ms": 195112,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:934/934",
+   "paine:523/1089",
+   "logos-room:0/1432",
+   "ormi-logos-room:780/1840"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 40,
+  "ms": 202148,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:934/934",
+   "paine:523/1089",
+   "logos-room:0/1432",
+   "ormi-logos-room:573/1840"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 41,
+  "ms": 204171,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Armor Break",
+   "target": "Ormi",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:934/934",
+   "paine:523/1089",
+   "logos-room:0/1432",
+   "ormi-logos-room:499/1840"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi-logos-room",
+   "wanted": "ormi-logos-room",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 42,
+  "ms": 208439,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:934/934",
+   "paine:523/1089",
+   "logos-room:0/1432",
+   "ormi-logos-room:499/1840"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 281,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "ormi-logos-room"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 43,
+  "ms": 212588,
+  "actor": "play:damage",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:934/934",
+   "paine:523/1089",
+   "logos-room:0/1432",
+   "ormi-logos-room:196/1840"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 44,
+  "ms": 237722,
+  "actor": "idle",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:710/1034",
+   "rikku:934/934",
+   "paine:523/1089",
+   "leblanc:1380/1380",
+   "logos:989/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos",
+   "wanted": "logos",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 45,
+  "ms": 239902,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:680/1034",
+   "rikku:934/934",
+   "paine:523/1089",
+   "leblanc:1380/1380",
+   "logos:989/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos",
+   "wanted": "logos",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 46,
+  "ms": 243174,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:680/1034",
+   "rikku:934/934",
+   "paine:523/1089",
+   "leblanc:1380/1380",
+   "logos:844/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos",
+   "wanted": "logos",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 47,
+  "ms": 248131,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:680/1034",
+   "rikku:934/934",
+   "paine:523/1089",
+   "leblanc:1380/1380",
+   "logos:673/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos",
+   "wanted": "logos",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 48,
+  "ms": 249788,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:680/1034",
+   "rikku:934/934",
+   "paine:523/1089",
+   "leblanc:1380/1380",
+   "logos:620/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos",
+   "wanted": "logos",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 49,
+  "ms": 252123,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:680/1034",
+   "rikku:934/934",
+   "paine:523/1089",
+   "leblanc:1380/1380",
+   "logos:439/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos",
+   "wanted": "logos",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 50,
+  "ms": 267288,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:519/1034",
+   "rikku:881/934",
+   "paine:499/1089",
+   "leblanc:1380/1380",
+   "logos:305/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos",
+   "wanted": "logos",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 51,
+  "ms": 269863,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:519/1034",
+   "rikku:881/934",
+   "paine:499/1089",
+   "leblanc:1380/1380",
+   "logos:250/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos",
+   "wanted": "logos",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 52,
+  "ms": 273925,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:519/1034",
+   "rikku:811/934",
+   "paine:484/1089",
+   "leblanc:1380/1380",
+   "logos:160/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos",
+   "wanted": "logos",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 323,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "logos"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 53,
+  "ms": 282835,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:519/1034",
+   "rikku:811/934",
+   "paine:461/1089",
+   "leblanc:1380/1380",
+   "logos:77/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 386,
+    "actor": "yuna",
+    "did": "Hi-Potion",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 54,
+  "ms": 308188,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:344/1034",
+   "rikku:351/934",
+   "paine:337/1089",
+   "leblanc:1380/1380",
+   "logos:107/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 535,
+    "actor": "rikku",
+    "did": "Hi-Potion",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 55,
+  "ms": 312902,
+  "actor": "command:paine",
+  "want": {
+   "label": "Power Break",
+   "target": "Logos",
+   "menu": "Skill"
+  },
+  "took": "Power Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:344/1034",
+   "rikku:351/934",
+   "paine:337/1089",
+   "leblanc:1380/1380",
+   "logos:107/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos",
+   "wanted": "logos",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 552,
+    "actor": "paine",
+    "did": "Power Break",
+    "targets": [
+     "logos"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 56,
+  "ms": 320051,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:344/1034",
+   "rikku:351/934",
+   "paine:1089/1089",
+   "leblanc:1380/1380",
+   "logos:107/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 608,
+    "actor": "yuna",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 57,
+  "ms": 334441,
+  "actor": "idle",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1024/1034",
+   "rikku:210/934",
+   "paine:1089/1089",
+   "leblanc:1380/1380",
+   "logos:12/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 727,
+    "actor": "paine",
+    "did": "Hi-Potion",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 58,
+  "ms": 338145,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Logos",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1024/1034",
+   "rikku:210/934",
+   "paine:1089/1089",
+   "leblanc:1380/1380",
+   "logos:12/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "logos",
+   "wanted": "logos",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 730,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "logos"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 59,
+  "ms": 353379,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1024/1034",
+   "rikku:210/934",
+   "paine:1089/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:1344/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi",
+   "wanted": "ormi",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 768,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "ormi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 60,
+  "ms": 359685,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1024/1034",
+   "rikku:934/934",
+   "paine:1089/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:1271/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi",
+   "wanted": "ormi",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 819,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "ormi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 61,
+  "ms": 363409,
+  "actor": "idle",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1024/1034",
+   "rikku:934/934",
+   "paine:1089/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:1218/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi",
+   "wanted": "ormi",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 843,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "ormi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 62,
+  "ms": 365403,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Armor Break",
+   "target": "Ormi",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1024/1034",
+   "rikku:934/934",
+   "paine:1089/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:1181/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi",
+   "wanted": "ormi",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 851,
+    "actor": "paine",
+    "did": "Armor Break",
+    "targets": [
+     "ormi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 63,
+  "ms": 374660,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1024/1034",
+   "rikku:934/934",
+   "paine:489/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:1181/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 927,
+    "actor": "rikku",
+    "did": "Hi-Potion",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 64,
+  "ms": 378595,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Light Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Light Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:1024/1034",
+   "rikku:934/934",
+   "paine:489/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:1181/1344"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 933,
+    "actor": "yuna",
+    "did": "Light Curtain",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 65,
+  "ms": 388641,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Armor Break",
+   "target": "Ormi",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1024/1034",
+   "rikku:934/934",
+   "paine:1089/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:1097/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi",
+   "wanted": "ormi",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 995,
+    "actor": "paine",
+    "did": "Armor Break",
+    "targets": [
+     "ormi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 66,
+  "ms": 398374,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1024/1034",
+   "rikku:934/934",
+   "paine:1089/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:1097/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi",
+   "wanted": "ormi",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1056,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "ormi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 67,
+  "ms": 402197,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1024/1034",
+   "rikku:934/934",
+   "paine:1089/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:1009/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi",
+   "wanted": "ormi",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1081,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "ormi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 68,
+  "ms": 409569,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Armor Break",
+   "target": "Ormi",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:1024/1034",
+   "rikku:874/934",
+   "paine:1089/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:825/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi",
+   "wanted": "ormi",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1141,
+    "actor": "paine",
+    "did": "Armor Break",
+    "targets": [
+     "ormi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 69,
+  "ms": 418914,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:920/1034",
+   "rikku:766/934",
+   "paine:1032/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:825/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi",
+   "wanted": "ormi",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1217,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "ormi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 70,
+  "ms": 421847,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:920/1034",
+   "rikku:766/934",
+   "paine:1032/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:777/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi",
+   "wanted": "ormi",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1236,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "ormi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 71,
+  "ms": 432278,
+  "actor": "command:paine",
+  "want": {
+   "label": "Armor Break",
+   "target": "Ormi",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:920/1034",
+   "rikku:706/934",
+   "paine:1032/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:462/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi",
+   "wanted": "ormi",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1318,
+    "actor": "paine",
+    "did": "Armor Break",
+    "targets": [
+     "ormi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 72,
+  "ms": 436766,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:920/1034",
+   "rikku:706/934",
+   "paine:1032/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:462/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi",
+   "wanted": "ormi",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1332,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "ormi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 73,
+  "ms": 441958,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Ormi",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:920/1034",
+   "rikku:706/934",
+   "paine:1032/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:407/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "ormi",
+   "wanted": "ormi",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1375,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "ormi"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 74,
+  "ms": 458607,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Leblanc",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:920/1034",
+   "rikku:706/934",
+   "paine:1032/1089",
+   "leblanc:1380/1380",
+   "logos:0/989",
+   "ormi:0/1344"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1420,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "leblanc"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 75,
+  "ms": 461008,
+  "actor": "command:paine",
+  "want": {
+   "label": "Mental Break",
+   "target": "Leblanc",
+   "menu": "Skill"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:920/1034",
+   "rikku:706/934",
+   "paine:1032/1089",
+   "leblanc:1268/1380",
+   "logos:0/989",
+   "ormi:0/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "leblanc",
+   "wanted": "leblanc",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1434,
+    "actor": "paine",
+    "did": "Mental Break",
+    "targets": [
+     "leblanc"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 76,
+  "ms": 465979,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Leblanc",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:768/1034",
+   "rikku:706/934",
+   "paine:1032/1089",
+   "leblanc:1268/1380",
+   "logos:0/989",
+   "ormi:0/1344"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1458,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "leblanc"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 77,
+  "ms": 471891,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Leblanc",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:768/1034",
+   "rikku:706/934",
+   "paine:1032/1089",
+   "leblanc:1062/1380",
+   "logos:0/989",
+   "ormi:0/1344"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1487,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "leblanc"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 78,
+  "ms": 475891,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Mental Break",
+   "target": "Leblanc",
+   "menu": "Skill"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:768/1034",
+   "rikku:706/934",
+   "paine:1032/1089",
+   "leblanc:595/1380",
+   "logos:0/989",
+   "ormi:0/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "leblanc",
+   "wanted": "leblanc",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1515,
+    "actor": "paine",
+    "did": "Mental Break",
+    "targets": [
+     "leblanc"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 79,
+  "ms": 480498,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Leblanc",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:768/1034",
+   "rikku:706/934",
+   "paine:1032/1089",
+   "leblanc:595/1380",
+   "logos:0/989",
+   "ormi:0/1344"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1525,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "leblanc"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 80,
+  "ms": 483772,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Leblanc",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:768/1034",
+   "rikku:706/934",
+   "paine:1032/1089",
+   "leblanc:442/1380",
+   "logos:0/989",
+   "ormi:0/1344"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1544,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "leblanc"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 81,
+  "ms": 490319,
+  "actor": "command:paine",
+  "want": {
+   "label": "Mental Break",
+   "target": "Leblanc",
+   "menu": "Skill"
+  },
+  "took": "Mental Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:768/1034",
+   "rikku:706/934",
+   "paine:1032/1089",
+   "leblanc:271/1380",
+   "logos:0/989",
+   "ormi:0/1344"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "leblanc",
+   "wanted": "leblanc",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1591,
+    "actor": "paine",
+    "did": "Mental Break",
+    "targets": [
+     "leblanc"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 82,
+  "ms": 494242,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Leblanc",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:768/1034",
+   "rikku:706/934",
+   "paine:1032/1089",
+   "leblanc:271/1380",
+   "logos:0/989",
+   "ormi:0/1344"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 1595,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "leblanc"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 83,
+  "ms": 497143,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Leblanc",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:768/1034",
+   "rikku:706/934",
+   "paine:1032/1089",
+   "leblanc:122/1380",
+   "logos:0/989",
+   "ormi:0/1344"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]
