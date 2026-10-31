@@ -47,6 +47,11 @@ export interface FollowerHost {
   members(): readonly Member[];
   /** A command menu holds the target frame. */
   held(): boolean;
+  /**
+   * A mid-battle script has CUT the camera to a shot of its own (`ProAutoStage.scriptedShot`: Chapter XI's `road-links` rig, the between-links shot whose plate the scene draws by the camera's position): the
+   * follower is the rig's own at once, a cut stays a cut, and it eases back in from there when the script cuts away. Optional and additive (booth-ffx2-b2, FFX-2 only): a host without it never stands down.
+   */
+  scripted?(): boolean;
   /** REDUCE MOTION. */
   still(): boolean;
   /** The never-crop dolly factor for this pose (1 = nobody is cropped). */
@@ -122,9 +127,15 @@ export class ProFollower {
     return mul3(f, 1 / m.length);
   }
 
-  /** Held: the pose goes home in {@link HOME_MS} on one curve (from where it stood when the hold began to the rig's own, which is on its way to the same frame), then it is the rig's. */
-  private home(dt: number, base: Pose): Pose {
-    if (this.homeT < 0 || this.homeFrom === null) {
+  /**
+   * Held: the pose goes home in {@link HOME_MS} on one curve (from where it stood when the hold began to the rig's own, which is on its way to the same frame), then it is the rig's. `cut`: a script cut the camera
+   * (`FollowerHost.scripted`), so there is no way home to glide: the rig's own pose at once.
+   */
+  private home(dt: number, base: Pose, cut = false): Pose {
+    if (cut) {
+      this.homeT = HOME_MS;
+      this.homeFrom = base;
+    } else if (this.homeT < 0 || this.homeFrom === null) {
       this.homeT = 0;
       this.homeFrom = this.pose ?? base;
     }
@@ -136,14 +147,15 @@ export class ProFollower {
     this.fov.velocity = 0;
     this.weight = 0;
     this.fitK = 1;
-    this.started = true;
+    this.started = !cut; // a cut ends in a cut: the first free step takes the rig the script returns to whole, it does not glide there from the cut shot
     this.pose = pose;
     return pose;
   }
 
   /** The pose the camera stands on this frame, given the game's own resting rig as `base`. */
   step(dt: number, base: Pose): Pose {
-    if (this.host.held()) return this.home(dt, base);
+    const cut = this.host.scripted?.() === true;
+    if (cut || this.host.held()) return this.home(dt, base, cut);
     this.homeT = -1;
     const f = this.focus();
     const calm = this.host.still() || f === null;

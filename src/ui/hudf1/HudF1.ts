@@ -22,6 +22,7 @@
 import type { BattleEvent, BattleState } from '../../battle/common/types.ts';
 import type { ActingSignal } from '../../engine/HudPort.ts';
 import { headlineEnemy } from '../../battle/common/headlineEnemy.ts';
+import { headlineBoss } from '../../engine/HeadlineBoss.ts';
 import { keyHint } from '../common/padGlyphs.ts';
 import { escapeHtml } from '../common/html.ts';
 import { HUD_F1_TUNE, hudF1On, onHudF1Change } from './HudF1Switch.ts';
@@ -202,7 +203,7 @@ export class HudF1 {
   sync(state: Readonly<BattleState>): void {
     this.lastState = state;
     if (!this.applied && !this.refresh()) return;
-    const boss = headlineEnemy(state);
+    const boss = headlineEnemy(state, headlineBoss()); // PR-0243: the running link's declared boss first (Chapter VII's Seymour, not the Guardian in slot 0), the same rule as the card and the caption
     this.ribbonEl.toggleAttribute('hidden', !boss);
     this.bossId = boss ? boss.id : '';
     this.syncBlind();

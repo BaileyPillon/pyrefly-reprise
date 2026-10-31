@@ -203,13 +203,13 @@ describe('everything else is unchanged', () => {
     expect(plays().map((a) => a.what)).toEqual(['play victory-ffx']);
     expect(plays()[0]!.during).toBe('cutscene');
     expect(heldAtResults).toBe('victory-ffx');
-  });
+  }, 60_000); // a whole Chapter I fight through the flow: about 1.5 s alone, 27 s in a full run under load (2026-10-30), which timed it out at 15 s and left its fight running into the next test
 
   it('Chapter IV with its story scene: the quiet cue, under the scene', async () => {
     await app.flow.runChapter('ffx2-bahamut', { seed: 56, skipPrep: true });
     expect(plays()[0]).toEqual({ what: 'play pause', during: 'cutscene' });
     expect(heldAtResults).toBe('pause');
-  });
+  }, 60_000);
 
   it('a loss asks for its cue after the swap, in demo mode or not (as before)', async () => {
     for (const demo of [true, false]) {

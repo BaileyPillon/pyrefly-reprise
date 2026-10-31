@@ -33,6 +33,7 @@ import type {
 import type { Chapter } from '../../data/encounters.ts';
 import type { BattleOutcome, BattlePresenter } from '../../engine/BattlePresenter.ts';
 import { setupForNextLink } from './BattleScreenSetup.ts';
+import { setHeadlineBoss } from '../../engine/HeadlineBoss.ts';
 import { fadeMsToSec } from '../../audio/AudioManager.ts';
 import { checkpointAt, type ChainCheckpoint } from './BattleChainCheckpoint.ts';
 import { chainSpoils } from './BattleChainSpoils.ts';
@@ -226,6 +227,7 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
     // PR-0138: the checkpoint keeps the spoils won before it, so a retry there still sums them.
     if (made) checkpoint = { ...made, won: [...won] };
     opts.onLink?.({ links, group, setup, checkpoint: made ? checkpoint : null });
+    setHeadlineBoss(group.bossId); // PR-0243 for the F1 ribbon: this link's declared boss, named BEFORE the link's first HUD sync (`run` names it again for any other caller)
     presenter.syncHud(engine);
     outcome = await presenter.run(engine, { headline: group.headline, bossId: group.bossId, moreLinks: group.nextGroupId !== undefined }); // PR-0205, PR-0243
 
@@ -261,6 +263,7 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
     const state = engine.state();
     setup = setupForNextLink(setup, nextGroup, state, opts.seed + links);
     group = nextGroup;
+    setHeadlineBoss(group.bossId); // the Save Sphere's cover below syncs the HUD for this link before the loop names its boss again
     // The screen can be left from the pause menu (RESTART ENCOUNTER, CHAPTER
     // SELECT, QUIT) while the next link is being staged or the Save Sphere card
     // plays: the exit aborts the presenter and releases the pause gate, so the

@@ -89,7 +89,7 @@ describe('a plan with the pass off', () => {
 
   it('is ignored outside a demo chapter even when the address asks', () => {
     setPassAddress('?pack=demo');
-    setPassChapter('yunalesca');
+    setPassChapter('sinspawn-gui'); // a hidden chapter the treatment never reaches (Chapter II is treated since release 69)
     const { am, starts } = mixer('ffx');
     am.playSfx('v2:hit-gun', { volume: 0.8, pass: plan() });
     expect(starts).toHaveLength(1);

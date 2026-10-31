@@ -76,6 +76,57 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       recipe: { exposure: 0.7, gamma: 1.0, contrast: 0.4, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.3, highlightSplit: 0.3, topBias: [1, 0.95, 0.82], topBiasAmount: 0.25, midSat: 0.3, sat: 1.0, hues: [{ hue: 228, width: 45, sat: 0.97, lum: 1.1, toward: [0.3, 0.78, 1.0], shift: 0.45 }, { hue: 200, width: 40, sat: 1.1, lum: 1.06 }] },
       focus: 0.36,
     },
+    // Chapter II (FFX, release 69, `booth-ffx-yunalesca`), the Zanarkand Dome: indigo-violet shadows, a warm gold-cream highlight (the sphere), the plate's own blue-violet (hue 230 to 260, most of its saturated pixels) and the sphere's gold (hue 35) each lifted
+    // and pulled toward itself; the plate is brighter than either booth room (mean luminance 0.337 against 0.181 and 0.254), so the exposure is held down to the Gagazet row's.
+    'zanarkand-dome': {
+      shadow: [0.16, 0.1, 0.5],
+      highlight: [1.0, 0.88, 0.74],
+      recipe: { exposure: 0.74, gamma: 1.0, contrast: 0.46, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.28, midSat: 0.32, sat: 1.04, hues: [{ hue: 245, width: 42, sat: 1.05, lum: 1.06, toward: [0.42, 0.38, 1.0], shift: 0.25 }, { hue: 35, width: 30, sat: 1.2, lum: 1.1, toward: [1, 0.72, 0.3], shift: 0.3 }] },
+      focus: 0.35,
+    },
+    // Batch 3a (`booth-ffx-b3a`, FFX only). Chapter VII, the Macalania antechamber: blue-indigo shadows, an ice-white highlight, the plate's cyan-blue (hue 190 to 220: 40,000 of its 48,000 saturated pixels) lifted and pulled toward itself and the braziers' gold (hue 20) kept warm; the plate is as luminous as
+    // Chapter I's snow (mean luminance 0.408 against 0.418), so the exposure is Gagazet's 0.7.
+    'macalania-temple': {
+      shadow: [0.08, 0.2, 0.5],
+      highlight: [0.88, 0.97, 1.0],
+      recipe: { exposure: 0.7, gamma: 1.0, contrast: 0.42, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.32, highlightSplit: 0.3, topBias: [1, 0.95, 0.82], topBiasAmount: 0.18, midSat: 0.3, sat: 1.0, hues: [{ hue: 205, width: 40, sat: 1.0, lum: 1.08, toward: [0.3, 0.78, 1.0], shift: 0.3 }, { hue: 22, width: 30, sat: 1.2, lum: 1.1, toward: [1, 0.72, 0.3], shift: 0.3 }] },
+      focus: 0.36,
+    },
+    // Chapter X, the Highbridge at night: navy-violet shadows, a warm amber highlight (the lamps), the lamps' orange (hue 22) and the sky's blue (hue 205) each lifted and pulled toward itself; a dark plate (mean 0.17, as Chapter IV's 0.18), so Chapter IV's exposure.
+    'bevelle-highbridge': {
+      shadow: [0.14, 0.12, 0.46],
+      highlight: [1.0, 0.84, 0.58],
+      recipe: { exposure: 1.0, gamma: 1.0, contrast: 0.5, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.42, highlightSplit: 0.3, midSat: 0.35, sat: 1.06, hues: [{ hue: 24, width: 22, sat: 1.1, lum: 1.06, toward: [1, 0.68, 0.26], shift: 0.25 }, { hue: 205, width: 36, sat: 1.15, lum: 1.08, toward: [0.25, 0.7, 1.0], shift: 0.22 }] },
+      focus: 0.33,
+    },
+    // Chapter IX, the Cavern: steel-blue shadows, a cold-white highlight, the stone's cyan-blue (hue 190 to 200) lifted and pulled toward itself; a dark plate (mean 0.215), so the exposure is not pulled down.
+    'cavern-stolen-fayth': {
+      shadow: [0.1, 0.16, 0.4],
+      highlight: [0.86, 0.96, 1.0],
+      recipe: { exposure: 0.92, gamma: 1.0, contrast: 0.46, pivot: 0.3, shoulder: 0.85, shadowSplit: 0.38, highlightSplit: 0.28, midSat: 0.25, sat: 0.98, hues: [{ hue: 198, width: 36, sat: 1.1, lum: 1.08, toward: [0.3, 0.74, 1.0], shift: 0.22 }] },
+      focus: 0.33,
+    },
+    // Batch 3b (FFX, `booth-ffx-b3b`; `docs/handoff/booth-ffx-b3b.md` section 3). Dream's End: the plate's saturated pixels peak at hue 350 and 340 (the crimson sky) with the eye's yellow-orange at hue 40, a dark plate (mean luminance 0.189): wine shadows, a gold-cream highlight, the crimson lifted and
+    // pulled toward itself and the eye's gold lifted. The Garden of Pain: hue 240 (the violet-blue sky, most of its saturated pixels) and 330 (the pink terrace and glow), mean luminance 0.236: indigo shadows, a pink-cream highlight. The Via Purifico: hue 350 and 0 (the red lamps) and 210 (the cold blue
+    // sheen of the floor under the far door), the darkest plate (0.155): wine shadows, a warm highlight, the lamps' red and the floor's blue each lifted. The sharp bands are the rooms' own (0.41, 0.39 for the Garden at CHAPTER FRAMING's party positions, 0.34).
+    'dreams-end': {
+      shadow: [0.2, 0.05, 0.22],
+      highlight: [1.0, 0.86, 0.62],
+      recipe: { exposure: 0.72, gamma: 1.0, contrast: 0.46, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.32, highlightSplit: 0.3, midSat: 0.3, sat: 0.96, hues: [{ hue: 350, width: 40, sat: 1.0, lum: 1.04, toward: [0.95, 0.2, 0.3], shift: 0.1 }, { hue: 40, width: 30, sat: 1.15, lum: 1.12, toward: [1, 0.72, 0.28], shift: 0.3 }] },
+      focus: 0.41,
+    },
+    'garden-of-pain': {
+      shadow: [0.12, 0.08, 0.42],
+      highlight: [1.0, 0.86, 0.92],
+      recipe: { exposure: 0.66, gamma: 1.0, contrast: 0.46, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.28, midSat: 0.32, sat: 0.92, hues: [{ hue: 240, width: 42, sat: 0.92, lum: 1.0, toward: [0.45, 0.4, 0.95], shift: 0.12 }, { hue: 330, width: 30, sat: 1.15, lum: 1.1, toward: [1, 0.45, 0.8], shift: 0.3 }] },
+      focus: 0.39,
+    },
+    'via-purifico': {
+      shadow: [0.14, 0.07, 0.18],
+      highlight: [1.0, 0.82, 0.66],
+      recipe: { exposure: 0.84, gamma: 1.0, contrast: 0.46, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.32, highlightSplit: 0.3, midSat: 0.3, sat: 1.02, hues: [{ hue: 350, width: 40, sat: 1.0, lum: 1.1, toward: [1, 0.25, 0.2], shift: 0.2 }, { hue: 210, width: 35, sat: 1.1, lum: 1.15, toward: [0.5, 0.75, 1.0], shift: 0.3 }] },
+      focus: 0.34,
+    },
     // Chapter IV: violet shadows, amber lamps against the cyan skylight (each hue lifted and pulled toward itself).
     'bevelle-underground': {
       shadow: [0.2, 0.12, 0.52],
@@ -90,6 +141,38 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       recipe: { exposure: 0.95, gamma: 1.0, contrast: 0.48, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.28, midSat: 0.32, sat: 1.06, hues: [{ hue: 313, width: 36, sat: 1.15, lum: 1.08, toward: [1, 0.4, 0.82], shift: 0.25 }, { hue: 190, width: 34, sat: 1.15, lum: 1.06, toward: [0.2, 0.85, 1.0], shift: 0.25 }] },
       focus: 0.39,
     },
+    // Batch 2 (`booth-ffx2-b2`, FFX-2 only). The Farplane (Chapter V) and the Road to the Farplane (Chapter XI) share one sky: indigo-violet shadows, a lilac-white highlight (the spire's burst), the blue-violet sky (hue 237), the lilac stone and flowers (hue 270) and the
+    // pink clouds (hue 320) each held and pulled toward themselves; exposure down as Chapter I's snow is (a luminous plate: the mean is 0.63 against Chapter IV's 0.18). The source orders the two rooms (`research/ffx2-vegnagun-shuyin.md` section 10.4: "desaturate and cool as the
+    // player descends", Road lavender-pink, Heart of the Farplane toward gunmetal), so the saturation is a little under 1 in both and a hair lower in Chapter V (0.96 against 0.98). That is ALL the order these rows give: the two rooms share one painted sky, a step as wide as
+    // the source's (the Heart cooler and greyer than the Road) is unseen and [ours] to pick, and it is a question for the still pair (`docs/handoff/booth-ffx2-b2.md`, open question 3, job J5; J11 in `docs/handoff/booth-b2.md`).
+    farplane: {
+      shadow: [0.2, 0.16, 0.56],
+      highlight: [1.0, 0.9, 1.0],
+      recipe: { exposure: 0.74, gamma: 1.0, contrast: 0.42, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.36, highlightSplit: 0.26, midSat: 0.3, sat: 0.96, hues: [{ hue: 237, width: 40, sat: 1.0, lum: 1.04, toward: [0.4, 0.5, 1.0], shift: 0.25 }, { hue: 270, width: 36, sat: 1.04, lum: 1.04, toward: [0.7, 0.5, 1.0], shift: 0.2 }, { hue: 320, width: 34, sat: 1.04, lum: 1.05, toward: [1.0, 0.5, 0.9], shift: 0.2 }] },
+      focus: 0.405,
+    },
+    'road-to-the-farplane': {
+      shadow: [0.2, 0.16, 0.56],
+      highlight: [1.0, 0.9, 1.0],
+      recipe: { exposure: 0.74, gamma: 1.0, contrast: 0.42, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.36, highlightSplit: 0.26, midSat: 0.3, sat: 0.98, hues: [{ hue: 237, width: 40, sat: 1.0, lum: 1.04, toward: [0.4, 0.5, 1.0], shift: 0.25 }, { hue: 270, width: 36, sat: 1.04, lum: 1.04, toward: [0.7, 0.5, 1.0], shift: 0.2 }, { hue: 320, width: 34, sat: 1.04, lum: 1.05, toward: [1.0, 0.5, 0.9], shift: 0.2 }] },
+      focus: 0.41,
+    },
+    // Chapter XV, the Den of Woe: blue-teal shadows (the cave's own dark), a pale-cyan highlight, the domes' cyan (hue 180) and the lit floor's teal-blue (hue 196) each lifted and pulled toward itself; the plate is dark (mean 0.21), so the exposure is not pulled down.
+    'den-of-woe': {
+      shadow: [0.06, 0.2, 0.46],
+      highlight: [0.82, 1.0, 1.0],
+      recipe: { exposure: 0.88, gamma: 1.0, contrast: 0.46, pivot: 0.3, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.28, midSat: 0.2, sat: 0.92, hues: [{ hue: 180, width: 30, sat: 1.08, lum: 1.06, toward: [0.3, 1.0, 0.95], shift: 0.2 }, { hue: 196, width: 36, sat: 1.0, lum: 1.0, toward: [0.2, 0.7, 1.0], shift: 0.15 }] },
+      focus: 0.41,
+    },
+    // Batch 3 (`booth-ffx2-b3`, FFX-2 only). Chapter XIII, Cloister 100: the Bevelle plate repainted, so Chapter IV's grammar (deep shadows, one skylight, one warm accent) in the repaint's own colours: steel-blue shadows (three quarters of the plate's saturated pixels sit at
+    // hue 200 to 220), a pale cyan-white highlight (the skylight's glyph), the blue (hue 205) and the gold of the banners and the medallion (hue 38, 13 percent of the saturated pixels) each lifted and pulled toward itself. The plate is a little brighter than Chapter IV's (mean luminance
+    // 0.212 against 0.181), so the exposure is a hair under Bevelle's (0.88 against 0.95). The band is the one row's, 0.38 (see `LookGrades`).
+    'via-infinito': {
+      shadow: [0.1, 0.18, 0.46],
+      highlight: [0.9, 1.0, 1.0],
+      recipe: { exposure: 0.88, gamma: 1.0, contrast: 0.48, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.42, highlightSplit: 0.3, midSat: 0.3, sat: 1.04, hues: [{ hue: 205, width: 28, sat: 1.04, lum: 1.05, toward: [0.25, 0.62, 1.0], shift: 0.2 }, { hue: 38, width: 26, sat: 1.2, lum: 1.1, toward: [1.0, 0.72, 0.3], shift: 0.3 }] },
+      focus: 0.38,
+    },
   },
   cinematic: {
     // Chapter I: deep indigo shadows and silver-cyan highlights, but with its colour (pass 1's 0.72 saturation read muddy): a cold, clear night.
@@ -98,6 +181,51 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       highlight: [0.84, 0.95, 1.0],
       recipe: { exposure: 0.54, gamma: 1.0, contrast: 0.6, pivot: 0.32, shoulder: 0.8, shadowSplit: 0.6, highlightSplit: 0.4, topBias: [1, 0.92, 0.8], topBiasAmount: 0.06, midSat: 0.25, sat: 0.88, hues: [{ hue: 228, width: 45, sat: 0.92, lum: 1.1, toward: [0.3, 0.78, 1.0], shift: 0.4 }, { hue: 200, width: 40, sat: 1.1, lum: 1.05 }] },
       fog: [0.46, 0.64, 0.92],
+    },
+    // Chapter II (release 69): violet-black shadows, the sphere's gold in the highlights, the blue-violet hall, a violet fog.
+    'zanarkand-dome': {
+      shadow: [0.08, 0.05, 0.3],
+      highlight: [1.0, 0.82, 0.6],
+      recipe: { exposure: 0.62, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 245, width: 42, sat: 1.05, lum: 1.06, toward: [0.42, 0.38, 1.0], shift: 0.25 }, { hue: 35, width: 30, sat: 1.25, lum: 1.12, toward: [1, 0.72, 0.3], shift: 0.3 }] },
+      fog: [0.3, 0.26, 0.5],
+    },
+    // Batch 3a (FFX only): Macalania's ice-blue black under an ice-white highlight; the Highbridge's navy-violet black under the lamps' amber; the Cavern's steel-black under a cold white.
+    'macalania-temple': {
+      shadow: [0.03, 0.1, 0.34],
+      highlight: [0.86, 0.96, 1.0],
+      recipe: { exposure: 0.54, gamma: 1.0, contrast: 0.6, pivot: 0.32, shoulder: 0.8, shadowSplit: 0.6, highlightSplit: 0.4, topBias: [1, 0.92, 0.8], topBiasAmount: 0.06, midSat: 0.25, sat: 0.88, hues: [{ hue: 205, width: 40, sat: 0.95, lum: 1.1, toward: [0.3, 0.78, 1.0], shift: 0.35 }, { hue: 22, width: 30, sat: 1.15, lum: 1.08, toward: [1, 0.72, 0.3], shift: 0.25 }] },
+      fog: [0.3, 0.52, 0.8],
+    },
+    'bevelle-highbridge': {
+      shadow: [0.06, 0.05, 0.3],
+      highlight: [1.0, 0.78, 0.5],
+      recipe: { exposure: 0.84, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 24, width: 22, sat: 1.15, lum: 1.08, toward: [1, 0.68, 0.26], shift: 0.3 }, { hue: 205, width: 36, sat: 1.15, lum: 1.08, toward: [0.25, 0.7, 1.0], shift: 0.25 }] },
+      fog: [0.14, 0.2, 0.42],
+    },
+    'cavern-stolen-fayth': {
+      shadow: [0.03, 0.07, 0.24],
+      highlight: [0.84, 0.95, 1.0],
+      recipe: { exposure: 0.86, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.25, sat: 0.9, hues: [{ hue: 198, width: 36, sat: 1.1, lum: 1.08, toward: [0.3, 0.74, 1.0], shift: 0.3 }] },
+      fog: [0.2, 0.3, 0.44],
+    },
+    // Batch 3b (FFX): the same hues under darker shadows and a steeper curve.
+    'dreams-end': {
+      shadow: [0.1, 0.03, 0.14],
+      highlight: [1.0, 0.8, 0.55],
+      recipe: { exposure: 0.66, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 350, width: 40, sat: 1.0, lum: 1.06, toward: [0.95, 0.2, 0.3], shift: 0.2 }, { hue: 40, width: 30, sat: 1.2, lum: 1.12, toward: [1, 0.72, 0.28], shift: 0.3 }] },
+      fog: [0.42, 0.14, 0.14],
+    },
+    'garden-of-pain': {
+      shadow: [0.07, 0.05, 0.3],
+      highlight: [1.0, 0.84, 0.92],
+      recipe: { exposure: 0.62, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 240, width: 42, sat: 1.05, lum: 1.06, toward: [0.4, 0.38, 1.0], shift: 0.25 }, { hue: 330, width: 30, sat: 1.2, lum: 1.1, toward: [1, 0.45, 0.8], shift: 0.3 }] },
+      fog: [0.3, 0.26, 0.55],
+    },
+    'via-purifico': {
+      shadow: [0.08, 0.04, 0.12],
+      highlight: [1.0, 0.76, 0.6],
+      recipe: { exposure: 0.7, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 350, width: 40, sat: 1.0, lum: 1.1, toward: [1, 0.25, 0.2], shift: 0.2 }, { hue: 210, width: 35, sat: 1.1, lum: 1.15, toward: [0.5, 0.75, 1.0], shift: 0.3 }] },
+      fog: [0.3, 0.16, 0.2],
     },
     // Chapter IV: violet-black shadows, amber lamps, cyan skylight, a cool violet fog.
     'bevelle-underground': {
@@ -112,6 +240,32 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       highlight: [1.0, 0.78, 0.9],
       recipe: { exposure: 0.84, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 313, width: 36, sat: 1.2, lum: 1.1, toward: [1, 0.4, 0.82], shift: 0.3 }, { hue: 190, width: 34, sat: 1.15, lum: 1.06, toward: [0.2, 0.85, 1.0], shift: 0.25 }] },
       fog: [0.3, 0.2, 0.46],
+    },
+    // Batch 2 (FFX-2 only): the Farplane family's violet-black shadows under a lilac-white highlight, the cave's teal-black under a pale cyan one.
+    farplane: {
+      shadow: [0.08, 0.06, 0.34],
+      highlight: [1.0, 0.86, 1.0],
+      recipe: { exposure: 0.6, gamma: 1.0, contrast: 0.6, pivot: 0.34, shoulder: 0.78, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.28, sat: 0.84, hues: [{ hue: 237, width: 40, sat: 0.98, lum: 1.04, toward: [0.4, 0.5, 1.0], shift: 0.3 }, { hue: 320, width: 34, sat: 1.0, lum: 1.05, toward: [1.0, 0.5, 0.9], shift: 0.25 }] },
+      fog: [0.34, 0.3, 0.6],
+    },
+    'road-to-the-farplane': {
+      shadow: [0.08, 0.06, 0.34],
+      highlight: [1.0, 0.86, 1.0],
+      recipe: { exposure: 0.6, gamma: 1.0, contrast: 0.6, pivot: 0.34, shoulder: 0.78, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.28, sat: 0.86, hues: [{ hue: 237, width: 40, sat: 0.98, lum: 1.04, toward: [0.4, 0.5, 1.0], shift: 0.3 }, { hue: 320, width: 34, sat: 1.0, lum: 1.05, toward: [1.0, 0.5, 0.9], shift: 0.25 }] },
+      fog: [0.34, 0.3, 0.6],
+    },
+    'den-of-woe': {
+      shadow: [0.02, 0.1, 0.26],
+      highlight: [0.8, 1.0, 1.0],
+      recipe: { exposure: 0.9, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.96, hues: [{ hue: 180, width: 30, sat: 1.15, lum: 1.1, toward: [0.3, 1.0, 0.95], shift: 0.3 }, { hue: 196, width: 36, sat: 1.12, lum: 1.06, toward: [0.2, 0.7, 1.0], shift: 0.25 }] },
+      fog: [0.14, 0.3, 0.4],
+    },
+    // Batch 3 (FFX-2 only): Chapter XIII's hall, blue-black shadows under a pale cyan highlight, the gold kept warm.
+    'via-infinito': {
+      shadow: [0.03, 0.08, 0.24],
+      highlight: [0.86, 1.0, 1.0],
+      recipe: { exposure: 0.86, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.96, hues: [{ hue: 205, width: 28, sat: 1.05, lum: 1.06, toward: [0.25, 0.62, 1.0], shift: 0.25 }, { hue: 38, width: 26, sat: 1.2, lum: 1.1, toward: [1.0, 0.72, 0.3], shift: 0.3 }] },
+      fog: [0.18, 0.28, 0.46],
     },
   },
 };

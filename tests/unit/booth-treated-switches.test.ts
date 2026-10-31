@@ -3,15 +3,15 @@
  * plumbing, Leblanc FFX-2 only). Each switch is forced ON the way its own tests force it, then the running chapter is named and the answer read:
  *
  *  - under `pack` (release 68's reach, `?treated=pack`, and a unit test with no page) a switch answers true in the booth pair and false in EVERY other chapter, Leblanc included: byte for byte what release 68 played;
- *  - under `all` it answers true in the booth pair (no piece of the approved target is ever held) and in Leblanc, and false in every other listed and hidden chapter; the pieces Leblanc holds are the staged breath, the
- *    directed camera and the moments (`DemoGate.PIECE_HOLDS`, each with its written reason), which answer false for her and true in the booth pair.
+ *  - under `all` it answers true in the booth pair (no piece of the approved target is ever held) and in every chapter on `TREATED_CHAPTERS` (Leblanc, Chapter II, and batch 2's Chapters V, XV and XI), except for the pieces
+ *    `PIECE_HOLDS` names for that chapter (every joined chapter holds the breath; Leblanc also the camera and the moments; Chapter II also the camera and the smear; Chapter V also the camera), and false in every other listed and hidden chapter.
  *
  * The browser has not been run for this (it is busy); the unit answers are the evidence that the gates moved and nothing else did.
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { Object3D } from 'three';
 import { CHAPTER_IDS } from '../../src/data/encounters.ts';
-import { setDemoChapter, setPackScreen, setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
+import { TREATED_CHAPTERS, setDemoChapter, setPackScreen, setTreatedScope, treatedHold, type TreatedPiece } from '../../src/engine/motion/DemoGate.ts';
 import { hudF1Game, hudF1ModeFromSearch, hudF1On, setHudF1Mode } from '../../src/ui/hudf1/HudF1Switch.ts';
 import { proArenaFor, proGame, proLookOn, proModeFromSearch, proPieceOn, setProMode, setProPiece } from '../../src/engine/look/pro/ProSwitch.ts';
 import { partyRimFromSearch, partyRimOff, setPartyRim } from '../../src/engine/look/pro/PartyRimSwitch.ts';
@@ -33,10 +33,18 @@ const LISTED: readonly string[] = CHAPTER_IDS;
 const HIDDEN = ['exp-leblanc', 'ff7-guard-scorpion', 'ffx2-masterpiece-theatre', 'sinspawn-gui', 'exp-fayth'];
 const ALL = [...LISTED, ...HIDDEN];
 const BOOTH = ['seymour-flux', 'ffx2-bahamut'];
-const GAME: Record<string, 'ffx' | 'ffx2'> = { 'seymour-flux': 'ffx', 'ffx2-bahamut': 'ffx2', 'ffx2-leblanc': 'ffx2' };
+// ONE mechanism for every treated chapter (the merge of `booth-ffx2-b2` and `booth-ffx-yunalesca`): the matrix reads the list and the holds from the source (`TREATED_CHAPTERS`, `PIECE_HOLDS`), so a chapter that joins, or a hold that
+// lifts, needs no edit here; `booth-treated-chapters.test.ts` pins WHICH chapters are on the list and WHICH pieces each holds (its TREATED_NOW and HELD_NOW), so the two files cannot drift together unseen.
+const GAME: Record<string, 'ffx' | 'ffx2'> = Object.fromEntries(Object.entries(TREATED_CHAPTERS).map(([id, e]) => [id, e.game]));
 
 /** The chapters each scope reaches. */
-const reached = (scope: 'pack' | 'all'): readonly string[] => (scope === 'pack' ? BOOTH : [...BOOTH, 'ffx2-leblanc']);
+const reached = (scope: 'pack' | 'all'): readonly string[] => (scope === 'pack' ? BOOTH : Object.keys(TREATED_CHAPTERS));
+
+/** The chapters beyond the booth pair that the `all` scope adds (every one holds the staged breath: `PIECE_HOLDS`). */
+const JOINED: readonly string[] = Object.keys(TREATED_CHAPTERS).filter((id) => !BOOTH.includes(id));
+
+/** Is this piece played in this chapter under the scope (reached, and not held)? A held piece answers today's. */
+const plays = (scope: 'pack' | 'all', id: string, piece: TreatedPiece): boolean => reached(scope).includes(id) && (BOOTH.includes(id) || treatedHold(id, piece) === undefined);
 
 /** The order `readAll` answers in, and the pieces of it Leblanc holds (`DemoGate.PIECE_HOLDS`); every other piece plays for her. */
 const READ_ORDER = ['hud', 'look', 'rim', 'boss', 'curves', 'moments', 'smear', 'cam', 'staging', 'fx', 'audio', 'feel'] as const;
@@ -99,11 +107,12 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(curvesOn(), `curves ${id}`).toBe(on);
       expect(realKind(), `real ${id}`).toBe(on ? 'snappy' : null);
       expect(inDemoChapter(id), `curves gate ${id}`).toBe(on);
-      expect(momentsOn(), `moments ${id}`).toBe(on && id !== 'ffx2-leblanc'); // one of her held pieces (the KO cut past the smear cap)
-      expect(smearOn(), `smear ${id}`).toBe(on);
-      expect(smearStyleNow(), `smear style ${id}`).toBe(on ? 'paint' : 'off');
+      expect(momentsOn(), `moments ${id}`).toBe(plays(scope, id, 'moments')); // Leblanc, Chapters V, XV, XI, XIII, VII, IX, X, III, XII and XIV hold the KO cut and the cheer (the unread or over-the-cap knock-out: tests/unit/engine/booth-b2-ko-rule.test.ts and each hold's own reason); Chapter II plays them (its smear is held, so the KO stays the plain cross) and no chapter is named in that file's KO_CLEARED
+      const smear = plays(scope, id, 'smear'); // Chapter II's swap exception: no smear planner there
+      expect(smearOn(), `smear ${id}`).toBe(smear);
+      expect(smearStyleNow(), `smear style ${id}`).toBe(smear ? 'paint' : 'off');
       expect(newMotionOn(), `new motion ${id}`).toBe(on);
-      const cam = on && id !== 'ffx2-leblanc'; // the directed camera is one of her held pieces (job J6: the follower crops Yuna at the left edge)
+      const cam = plays(scope, id, 'cam'); // Chapter II holds the directed camera (PR-0307) and Chapter V the colossus camera: today's rig plays there, and with it the soft background that rides on the camera
       expect(proCamOn(), `camera ${id}`).toBe(cam);
       expect(proDofOn(), `camera dof ${id}`).toBe(cam);
       expect(proCamGame(), `camera game ${id}`).toBe(cam ? GAME[id] : null);
@@ -138,15 +147,15 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
   });
 });
 
-describe('the pieces Leblanc holds: the staged breath, the directed camera and the moments', () => {
-  it('the breath stays today for her and plays in nobody else (the staging answers the piece, not only the chapter)', () => {
+describe('the pieces the joined chapters hold: the staged breath (every one), the directed camera and the moments (Leblanc), the camera and the smear (Chapter II, Chapter V)', () => {
+  it('the breath stays today for every joined chapter, Leblanc and Chapter II among them, and plays in the booth pair (the staging answers the piece, not only the chapter)', () => {
     allOn();
     setTreatedScope('all');
-    for (const id of [...BOOTH, 'ffx2-leblanc']) {
+    for (const id of [...BOOTH, ...JOINED]) {
       setDemoChapter(id);
-      expect(stagingPieceOn('breath'), id).toBe(id !== 'ffx2-leblanc');
-      expect(stagingPieceOnFor('breath', id), id).toBe(id !== 'ffx2-leblanc');
-      expect(stagingOn(), id).toBe(true); // the layer is still there for her card, her ending and her Change plate
+      expect(stagingPieceOn('breath'), id).toBe(BOOTH.includes(id));
+      expect(stagingPieceOnFor('breath', id), id).toBe(BOOTH.includes(id));
+      expect(stagingOn(), id).toBe(true); // the layer is still there for the card, the ending and the opening (Leblanc's Change plate, Chapter II's Overdrive opening)
     }
   });
 
@@ -179,9 +188,9 @@ describe('the pieces Leblanc holds: the staged breath, the directed camera and t
 });
 
 describe('the chapter-wide switches still say no without their own word', () => {
-  it('a switch left at today (no address word, no pack) answers false in Leblanc under all, as in the booth pair', () => {
+  it('a switch left at today (no address word, no pack) answers false in Leblanc and Chapter II under all, as in the booth pair', () => {
     setTreatedScope('all');
-    for (const id of [...BOOTH, 'ffx2-leblanc']) {
+    for (const id of [...BOOTH, ...JOINED]) {
       setDemoChapter(id);
       setPassChapter(id);
       expect([hudF1On(), proLookOn(), partyRimOff(), bossCleanOn(), curvesOn(), momentsOn(), smearOn(), proCamOn(), stagingOn(), fxNewOn(), audioNewOn()], id).toEqual(new Array(11).fill(false));

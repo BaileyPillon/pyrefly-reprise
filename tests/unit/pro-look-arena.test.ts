@@ -177,7 +177,7 @@ describe('the pro arena grade: the book regrade.colour() ported to the look LUT'
   it('both demo rooms have a pro table, other rooms do not', () => {
     expect(proRoom('gagazet')).toBeDefined();
     expect(proRoom('bevelle-underground')).toBeDefined();
-    expect(proRoom('den-of-woe')).toBeUndefined();
+    expect(proRoom('djose-chamber-provisional')).toBeUndefined(); // a room no chapter of the treatment stands in (the Den of Woe has had a table since batch 2, `booth-ffx2-b2`)
   });
 
   it('the LUT is its own: a pro room builds different bytes and a different cache key from the bold grade', () => {
@@ -190,7 +190,7 @@ describe('the pro arena grade: the book regrade.colour() ported to the look LUT'
     expect(diff).toBeGreaterThan(1000);
     expect(lutKey('cinematic', 'ffx', 'gagazet', pal, 'bold', null, true)).not.toBe(lutKey('cinematic', 'ffx', 'gagazet', pal, 'bold', null, false));
     // a room with no pro table ignores the flag
-    expect(lutKey('cinematic', 'ffx', 'den-of-woe', pal, 'bold', null, true)).toBe(lutKey('cinematic', 'ffx', 'den-of-woe', pal, 'bold', null, false));
+    expect(lutKey('cinematic', 'ffx', 'djose-chamber-provisional', pal, 'bold', null, true)).toBe(lutKey('cinematic', 'ffx', 'djose-chamber-provisional', pal, 'bold', null, false));
   });
 
   it('live tuning changes the cache key (so the LUT is built again)', () => {

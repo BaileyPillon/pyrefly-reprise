@@ -13,8 +13,10 @@
  * treatment no longer follows the two booth ids but {@link TREATED_CHAPTERS}, which grows one line per chapter (Leblanc first), with a written hold for any single piece a chapter is not ready for ({@link PIECE_HOLDS}) and `?treated=pack`
  * to put release 68's reach back. {@link DEMO_CHAPTERS} and {@link isDemoChapter} stay the booth pair, for the kiosk's own things (the picker, the seeds, the party rigs, the voiced lines).
  *
- * Game case (AGENTS.md rule 14): the gate is both games (shared plumbing); the chapter's game is read from the table (FFX Chapter I, FFX-2 Chapter IV, FFX-2 Chapter VI).
+ * Game case (AGENTS.md rule 14): the gate is both games (shared plumbing); the chapter's game is read from the table (FFX Chapter I, FFX-2 Chapter IV, FFX-2 Chapter VI, FFX Chapter II).
  */
+
+import { PIECE_HOLDS } from './PieceHolds.ts';
 
 export type DemoGame = 'ffx' | 'ffx2';
 
@@ -67,38 +69,37 @@ export interface TreatedEntry {
 }
 
 /**
- * THE LIST. The booth pair (release 60 and 64: the pair is on from the first release that had the pack) and Leblanc (release 69, `booth-leblanc`: Chapter VI, `ffx2-leblanc`, FFX-2; the HIDDEN experiment
- * `exp-leblanc` is not this chapter and is never listed). A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
+ * THE LIST. The booth pair (release 60 and 64: the pair is on from the first release that had the pack), Leblanc (release 69, `booth-leblanc`: Chapter VI, `ffx2-leblanc`, FFX-2; the HIDDEN experiment
+ * `exp-leblanc` is not this chapter and is never listed) and, in batch 2 (release 70, merged as `booth-b2`), Lady Yunalesca (the FFX lane `booth-ffx-yunalesca`: Chapter II, `yunalesca`, FFX; the first FFX chapter beyond Chapter I; built on the release 69 base, hence "release 69" in that lane's comments) and the three FFX-2 chapters named below, and, in batch 3 (release 71, the FFX-2 lane `booth-ffx2-b3`), Trema (Chapter XIII, `ffx2-trema`, FFX-2). **The r70 verdict pass (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four of the fourteen back out (IX, XII, V and XI: a major each, below); ten are treated.** A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
  */
 export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.freeze({
   'seymour-flux': { game: 'ffx', since: 'r60' },
+  yunalesca: { game: 'ffx', since: 'r70' },
+  // Batch 3a, the FFX lane `booth-ffx-b3a` (all FFX only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter VII (Seymour and Anima, the Macalania antechamber), Chapter X (Seymour Natus, the Highbridge of Bevelle) and Chapter IX (Yojimbo, the Cavern of the Stolen Fayth). Each holds the pieces
+  // named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber (batch 3 ships after release 70).
+  'seymour-anima-macalania': { game: 'ffx', since: 'r71' },
+  'seymour-natus': { game: 'ffx', since: 'r71' },
+  // Chapter IX (Yojimbo, `yojimbo-cavern`) LEFT THIS LIST in the r70 verdict pass (2026-10-31, `docs/handoff/booth-b3.md` section 12): its Zanmato gauge panel ends against the F1 turn strip, a major the treatment introduced and release 69 does not have.
+  // Its rows (look, arena, holds, rim) stay in their tables, unread, and it answers `NOT_YET` in `tests/unit/booth-treated-chapters.test.ts` until the layout is fixed and one line puts it back.
+  // Batch 3b (`booth-ffx-b3b`, FFX only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter III (Braska's Final Aeon, seven links), Chapter XII (Seymour Omnis and the four Mortiphasm discs) and Chapter XIV (Isaaru's contest of aeons,
+  // three links, Yuna alone). `since` is the batch's release number, the driver's to renumber.
+  'braskas-final-aeon': { game: 'ffx', since: 'r71' },
+  // Chapter XII (Seymour Omnis, `seymour-omnis`) LEFT THIS LIST in the r70 verdict pass: the Enemy Intent card of the disc tracker clips the acting hero's HP numeral against the F1 party panel (a major, introduced; release 69 stacks the card above the panel). Rows stay, unread.
+  'isaaru-via-purifico': { game: 'ffx', since: 'r71' },
   'ffx2-bahamut': { game: 'ffx2', since: 'r60' },
   'ffx2-leblanc': { game: 'ffx2', since: 'r69' },
+  // Batch 2, the FFX-2 lane `booth-ffx2-b2` (all FFX-2 only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter V (Vegnagun and Shuyin, five links), Chapter XV (the Den of Woe, three shades) and Chapter XI (the Fallen Aeons,
+  // three links). Each holds the pieces named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber.
+  // Chapters V (`ffx2-vegnagun-shuyin`) and XI (`ffx2-fallen-aeons`) LEFT THIS LIST in the r70 verdict pass: the HD-2D bold look clips the Farplane and the Road's very bright sky to a flat white halo (V's first menu and all five links; XI's fights
+  // whenever the follower brings the spire's burst into frame), a major the treatment introduced; Shuyin's freeze (the gate G1) cannot be read white on white. Their rows, holds and the follower's rows stay, unread.
+  'ffx2-den-of-woe': { game: 'ffx2', since: 'r70' },
+  // Batch 3, the FFX-2 lane `booth-ffx2-b3` (FFX-2 only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter XIII (Trema, Cloister 100 of the Via Infinito, two links: Paragon then Trema; the party Yuna Dark Knight, Rikku Alchemist, Paine Dark Knight, two dresses the
+  // treatment has not met). It holds the pieces named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber.
+  'ffx2-trema': { game: 'ffx2', since: 'r71' },
 });
 
-/**
- * Pieces a treated chapter does not play yet, each with the written reason and what lifts it (the shape of `SwapSwitch.SCOPE_EXCEPTIONS`: a reason of 80 characters or more, ending in "Lifts when ..."). A held
- * piece answers today's in that chapter and every other piece plays. The booth pair has none: they are the approved target.
- */
-export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<TreatedPiece, string>>>>> = Object.freeze({
-  'ffx2-leblanc': Object.freeze({
-    breath:
-      'FFX-2, Chapter VI: the held breath is the drain-and-flood built for Mega Flare (and, in FFX, Total Annihilation), a solemn beat. Her sourced showpiece is No Love Lost (research/ffx2-leblanc-syndicate.md section 4.5: ' +
-      'three timed stages, eight shots, the party knocked down, a finisher; "the perfect thing for a presentation layer to build around"), a three-beat comedy combo whose tone, sound and shot are a mockup decision ' +
-      '(hard rule 9), and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays the breath today. Lifts when Bailey or the driver picks a tone and a shot for No Love Lost from a mockup and the breath ' +
-      'plan (and, for the sound pass, `passRecipes.HEADLINE_BLOWS`, which hit) is given a row for its ids `x2-nll-1` to `x2-nll-3`.',
-    cam:
-      'FFX-2, Chapter VI: the directed camera follows her party on Bevelle\'s four candidates rebuilt about her room (`ProAutoStage.AUTO_STAGES`), which nobody scored for her group, and the follower crops Yuna at the left edge: ' +
-      'job J6 of the r69 booth-leblanc review sampled a party rectangle up to 155 px outside the viewport 17 times in 110 s at 2560 x 1440 (0.4 to 0.6 s each, as the follower cycles its candidates 1, 2, 3, 0), where Chapter IV ' +
-      'crops no one (1 sampled frame of 796, the dragon, never a party figure). Her frame keeps the resting camera of release 68, and with it the soft background of the tilt-shift band. ' +
-      'Lifts when `ProAutoStage` re-scores the candidates for her group (the lane\'s shot scores and the real fit rule) and 0 sampled frames of job J6 put a party rectangle outside the viewport.',
-    moments:
-      'FFX-2, Chapter VI: the moments hard-cut her Rikku Thief and Yuna Gunner at the hurt-to-KO swap (the KO cut into the lying painting, `PaintedActorLife.koCutWindow`): no blend frame, a swap jerk of 152 to 168 px for Rikku in 3 of 3 KOs ' +
-      '(0.62 to 0.63 of her drawn height) and 152 to 156 px for Yuna (0.50 to 0.52), over the 0.5 cap that excuses a planned smear (CHK-027 fails; the Dark Knight KO of Chapter IV sits at 0.48 and passes; release 68 blends five frames here). ' +
-      'Only `?moments=today` gives the blend back (`?smear=off` too, but it drops every planned smear; curves, real clips and feel leave the cut). She keeps the victory hop, the plain KO cross and the landing of release 68. ' +
-      'Lifts when the KO cut stays inside the planned-smear cap for her Rikku Thief and Yuna Gunner paintings (or is skipped where it would not) and a continuity run of her KOs with the moments on reports no unexcused swap jerk (CHK-027).',
-  }),
-});
+// {@link PIECE_HOLDS}, the written holds, lives in `PieceHolds.ts` (moved out when batch 3 passed the 400-line house limit) and is re-exported here, so every reader imports it from this module as before.
+export { PIECE_HOLDS };
 
 /**
  * WHICH CHAPTERS THE TREATMENT REACHES, by the address (`?treated=`): `all` (the default on a page) is {@link TREATED_CHAPTERS}; `pack` is release 68's, the booth pair only, whatever else the list says (one word to put

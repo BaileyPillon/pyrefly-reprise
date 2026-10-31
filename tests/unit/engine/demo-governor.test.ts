@@ -77,7 +77,7 @@ describe('when it may act', () => {
     const lanesOff = new DemoGovernor();
     run(lanesOff, 1000, 12, 3, 20, false);
     expect(govLive).toEqual({ level: 0, soft: 1, particles: 1, heavy: 1 });
-    setDemoChapter('yunalesca');
+    setDemoChapter('sinspawn-gui'); // a hidden chapter the treatment never reaches (Chapter II is treated since release 69)
     const other = new DemoGovernor();
     run(other, 1000, 12, 3, 20, true);
     expect(govLive.level).toBe(0);

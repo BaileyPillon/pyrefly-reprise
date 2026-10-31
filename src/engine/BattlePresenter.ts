@@ -25,6 +25,7 @@ import { playOpening } from './OpeningSkip.ts';
 import type { BattleOutcome } from './BattlePresenterPorts.ts';
 import { INPUT_STREAK_LIMIT, LIVELOCK_SPINS, outcomeOf } from './BattlePresenterUtil.ts';
 import { headlineEnemy } from '../battle/common/headlineEnemy.ts';
+import { setHeadlineBoss } from './HeadlineBoss.ts';
 import { BattlePresenterCommands } from './BattlePresenterCommands.ts';
 import { stageLinkBegins } from './BattlePresenterStaging.ts'; // lane "pro-staging": a later link of a chain starts with a clear layer (release 69 `booth-leblanc`)
 
@@ -39,6 +40,7 @@ export class BattlePresenter extends BattlePresenterCommands {
    * screen owns what happens next (chain, results, retry).
    */
   async run(engine: BattleEngine, link: { headline?: string; bossId?: string; moreLinks?: boolean } = {}): Promise<BattleOutcome> {
+    setHeadlineBoss(link.bossId); // PR-0243 for the F1 ribbon (`HeadlineBoss.ts`): this link's declared boss, or none; before the first HUD sync of the link
     this.ctx.moreLinks = link.moreLinks === true; // the chain says whether another formation follows (`BattleEncounterChain`)
     stageLinkBegins(this.ctx); // pro staging: the second link on starts with a clear layer, so a seam's marks (title, HUD-out) never reach the next formation
     // Ground the mid-burst row projection before a single event is played. The

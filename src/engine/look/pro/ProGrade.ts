@@ -16,6 +16,8 @@
  */
 import type { GradeRecipe } from '../LookGrades.ts';
 import type { Rgb } from '../LookConfig.ts';
+import { PRO_ARENA_FFX_B3A } from './ProGradeFfxB3a.ts'; // batch 3a's three FFX rooms (this file would pass 400 lines with them)
+import { FFX_B3B_ARENA } from './ProGradeFfx.ts'; // batch 3b's three FFX rows (a type-only import back: no runtime cycle)
 
 const clamp01 = (x: number): number => (x < 0 ? 0 : x > 1 ? 1 : x);
 const smooth = (a: number, b: number, x: number): number => {
@@ -179,7 +181,7 @@ export interface ProRoom {
 }
 
 /**
- * The arenas, "Cinematic contrast" (the B rows of `tools/dirs.py` and `base_for` of the book's `arena-light`; the third is Leblanc's, release 69). Keyed by the room's scene key (`LookRoom.key`).
+ * The arenas, "Cinematic contrast" (the B rows of `tools/dirs.py` and `base_for` of the book's `arena-light`; release 69 adds Chapter II's, FFX, and Leblanc's, FFX-2). Keyed by the room's scene key (`LookRoom.key`).
  * Chapter I, Mt. Gagazet (FFX): one cold moon throws a cone across the snow, everything else falls to teal-black, haze between the plate and the party, a rim toward the moon.
  * Chapter IV, the Bevelle underground (FFX-2): the skylight is the only light: a cool cone falls on Bahamut and the floor, the room drops to violet-black, the lamps shrink to embers.
  */
@@ -204,6 +206,32 @@ export const PRO_ARENA: Readonly<Record<string, ProRoom>> = {
     // the broad cold light across the snow under the moon; the engine's own moon shafts (`stage.shaft`) carry the beams
     cone: { u: 0.065, v: 0.83, follow: true, colour: [0.5, 0.8, 1.0], strength: 0.16, spread: 0.55, reach: 1.3, rays: 0.3 },
   },
+  // Chapter II (FFX, release 69; `booth-ffx-yunalesca`): the oculus is the only light (the painting says so: "a single shaft of cold pale light falling onto the dais"); it throws a pale lavender cone down the hall, the plate's bright violet falls to
+  // indigo-black, the gold sphere stays as the one warm thing (the booth grammar: one strong light and one accent, the rest to deep shadow and haze). The colours are the plate's (mean luminance 0.337, a violet hall, a gold sphere at hue 35, a pink dusk between
+  // the right-hand columns), so she reads brighter and bluer than Chapter I's teal-black snow. [ours]: set from the plate's own colours and graded offline through this table (`docs/handoff/booth-ffx-yunalesca.md`); a still beside Chapter I is owed before
+  // Bailey judges it (hard rule 9).
+  'zanarkand-dome': {
+    colour: {
+      exposure: 1.02,
+      gamma: 1.0,
+      contrast: 0.42,
+      pivot: 0.3,
+      sat: 1.1,
+      pulls: [[245, 50, -4, 0.9, 0.8], [320, 40, -8, 0.8, 0.72], [35, 28, 0, 1.12, 1.05]],
+      gradmap: { amount: 0.1, stops: [[0, [0.02, 0.0, 0.06]], [0.3, [0.09, 0.05, 0.24]], [0.6, [0.42, 0.34, 0.62]], [0.9, [0.97, 0.92, 1.0]], [1, [1, 1, 1]]] },
+      shadow: [[0.05, 0.03, 0.2], 0.4],
+      shadowTo: 0.45,
+    },
+    lightColor: [0.9, 0.84, 1.0],
+    tweaks: { 'stage.shaft': 0.6, 'bold.stage': 1.7, 'bold.fog': 1.3, 'bold.rim': 1.4, 'relight.key': 1.5, 'shaft.gain': 1.6 },
+    haze: { colour: [0.26, 0.22, 0.46], amounts: [0.06, 0.05, 0.03], side: 0.1 },
+    vignette: { amount: 0.55, radius: 0.42, tint: [0.005, 0.0, 0.03] },
+    grain: 0.018,
+    // the oculus, found on the painting (plate u 0.338, v 0.063 from the top) so the cone follows the camera; (u, v) is the frame point it started from (the oculus at the first menu: screen x about 0.36 and the frame's top)
+    cone: { u: 0.36, v: 0.97, follow: false, paint: { u: 0.338, v: 0.063 }, colour: [0.82, 0.74, 1.0], strength: 0.3, spread: 0.4, reach: 1.8, rays: 0.3 },
+  },
+  // Batch 3a (FFX only, `booth-ffx-b3a`): Chapter VII's Macalania antechamber, Chapter IX's Cavern and Chapter X's Highbridge, in `ProGradeFfxB3a.ts` (this file would pass 400 lines with them).
+  ...PRO_ARENA_FFX_B3A,
   'bevelle-underground': {
     colour: {
       exposure: 1.47,
@@ -247,8 +275,99 @@ export const PRO_ARENA: Readonly<Record<string, ProRoom>> = {
     // the heart, found on the painting (plate u 0.500, v 0.264 from the top) so the cone follows the camera; (u, v) is the frame point it started from (v up, so 1 - 0.264 less the frame's crop)
     cone: { u: 0.5, v: 0.74, follow: false, paint: { u: 0.5, v: 0.264 }, colour: [1.0, 0.5, 0.82], strength: 0.4, spread: 0.4, reach: 2.0, rays: 0.3 },
   },
+  // Batch 2 (FFX-2 only; `booth-ffx2-b2`, Bailey 2026-10-30). The grammar is the booth pair's (one strong light, the rest to deep shadow and haze), the rooms are three the booth never had; each row is [ours], set from the plate's own colours and graded offline through
+  // this table (`docs/handoff/booth-ffx2-b2.md`, `docs/screenshots/booth-ffx2-b2-plate-grade.png`), and a still beside Chapter IV is owed before Bailey judges it (hard rule 9; the booth pair is the approved target).
+  // Chapter V, the Heart of the Farplane: the spire's burst (the plate's one white-lilac star, u 0.505, v 0.285) is the only light; the luminous pastel sky falls to violet-indigo and its saturation is held under 1 ("the deeper you go, the less organic ... desaturate and cool as the player
+  // descends", `research/ffx2-vegnagun-shuyin.md` section 10.4; the source puts the Road at the lavender-pink end and this room toward gunmetal, and the two rows differ by a hair only: sat 0.90 against 0.92, exposure 1.45 against 1.50, a step the still pairs decide (J11 of `docs/handoff/booth-b2.md`, which was J5 of `docs/handoff/booth-ffx2-b2.md`)), a lilac cone falls from it. The burst is above the top of the frame at the idle rig and nearer the top still under the colossus master, so the cone starts at the top edge.
+  farplane: {
+    colour: {
+      exposure: 1.45,
+      gamma: 0.26,
+      contrast: 0.1,
+      pivot: 0.35,
+      sat: 0.9,
+      pulls: [[237, 40, -4, 0.84, 0.72], [270, 36, 0, 0.74, 0.7], [315, 46, 0, 0.62, 0.66]],
+      gradmap: { amount: 0.1, stops: [[0, [0.02, 0.0, 0.07]], [0.3, [0.1, 0.06, 0.26]], [0.6, [0.4, 0.32, 0.64]], [0.9, [0.96, 0.88, 1.0]], [1, [1, 1, 1]]] },
+      shadow: [[0.05, 0.03, 0.2], 0.4],
+      shadowTo: 0.45,
+    },
+    lightColor: [0.98, 0.88, 1.0],
+    tweaks: { 'stage.shaft': 0.6, 'bold.stage': 1.7, 'bold.fog': 1.2, 'bold.rim': 1.4, 'relight.key': 1.5, 'shaft.gain': 2.0 },
+    haze: { colour: [0.3, 0.22, 0.5], amounts: [0.06, 0.05, 0.03], side: 0.1 },
+    vignette: { amount: 0.52, radius: 0.42, tint: [0.01, 0.0, 0.04] },
+    grain: 0.018,
+    cone: { u: 0.46, v: 0.93, follow: false, paint: { u: 0.505, v: 0.285 }, colour: [0.9, 0.78, 1.0], strength: 0.42, spread: 0.4, reach: 2.0, rays: 0.3 },
+  },
+  // Chapter XI, the Road to the Farplane: the same sky and spire, so the same light and the same grammar; the platform's grey-violet stone with its glowing cracks is darker than Chapter V's flower field, so the room keeps a touch more of its exposure. The painting
+  // is laid higher here (`ROAD_BACKDROP.centreY` 8.8), so the burst sits above the frame's top edge (frame v 1.28 at the idle rig) and the cone starts at the edge.
+  'road-to-the-farplane': {
+    colour: {
+      exposure: 1.5,
+      gamma: 0.27,
+      contrast: 0.1,
+      pivot: 0.35,
+      sat: 0.92,
+      pulls: [[237, 40, -4, 0.84, 0.72], [270, 36, 0, 0.74, 0.7], [315, 46, 0, 0.62, 0.66]],
+      gradmap: { amount: 0.1, stops: [[0, [0.02, 0.0, 0.07]], [0.3, [0.1, 0.06, 0.26]], [0.6, [0.4, 0.32, 0.64]], [0.9, [0.96, 0.88, 1.0]], [1, [1, 1, 1]]] },
+      shadow: [[0.05, 0.03, 0.2], 0.4],
+      shadowTo: 0.45,
+    },
+    lightColor: [0.98, 0.88, 1.0],
+    tweaks: { 'stage.shaft': 0.6, 'bold.stage': 1.7, 'bold.fog': 1.2, 'bold.rim': 1.4, 'relight.key': 1.5, 'shaft.gain': 2.0 },
+    haze: { colour: [0.3, 0.22, 0.5], amounts: [0.06, 0.05, 0.03], side: 0.1 },
+    vignette: { amount: 0.52, radius: 0.42, tint: [0.01, 0.0, 0.04] },
+    grain: 0.018,
+    cone: { u: 0.46, v: 0.98, follow: false, paint: { u: 0.505, v: 0.285 }, colour: [0.9, 0.78, 1.0], strength: 0.42, spread: 0.4, reach: 2.0, rays: 0.3 },
+  },
+  // Chapter XV, the Den of Woe: a cold cave whose lights are floor domes: the right one (the plate's brightest, u 0.869, v 0.599) stands at the right edge of the idle frame and the left one off its left edge, so there is no light above the frame to hang a falling cone on.
+  // The cone is therefore the right dome's own glow pooled across the floor: low (strength 0.26 against the booth rooms' 0.4 to 0.48), short, no beams, anchored to the painted dome and starting at the frame's right edge; the arena's one-light rule
+  // (`pro-look-arena.test.ts`) holds and the browser job reads whether it earns its place. The room falls to blue-black with the domes' cyan and the lit floor kept, a haze and a vignette; the plate's own motes (and the scene's sparse live ones) are the only air.
+  'den-of-woe': {
+    colour: {
+      exposure: 1.3,
+      gamma: 1.0,
+      contrast: 0.3,
+      pivot: 0.3,
+      sat: 1.08,
+      pulls: [[180, 26, 0, 1.1, 1.06], [196, 36, 0, 1.05, 1.0], [228, 50, -4, 0.9, 0.8]],
+      gradmap: { amount: 0.08, stops: [[0, [0.0, 0.01, 0.04]], [0.3, [0.02, 0.1, 0.2]], [0.6, [0.2, 0.5, 0.62]], [0.9, [0.8, 0.98, 1.0]], [1, [1, 1, 1]]] },
+      shadow: [[0.02, 0.06, 0.16], 0.4],
+      shadowTo: 0.45,
+    },
+    lightColor: [0.5, 0.95, 0.95],
+    tweaks: { 'stage.shaft': 0.6, 'bold.stage': 1.7, 'bold.fog': 1.4, 'bold.rim': 1.4, 'relight.key': 1.5, 'shaft.gain': 2.0 },
+    haze: { colour: [0.1, 0.24, 0.36], amounts: [0.06, 0.05, 0.02], side: 0.1 },
+    vignette: { amount: 0.5, radius: 0.42, tint: [0.0, 0.01, 0.03] },
+    grain: 0.018,
+    cone: { u: 0.97, v: 0.45, follow: false, paint: { u: 0.869, v: 0.599 }, colour: [0.3, 0.95, 0.95], strength: 0.26, spread: 0.5, reach: 1.5, rays: 0.15 },
+  },
+  // Batch 3b (`booth-ffx-b3b`, FFX only): Dream's End, the Garden of Pain and the Via Purifico, in `ProGradeFfx.ts` (this file stood at 365 lines).
+  ...FFX_B3B_ARENA,
+  // Batch 3 (FFX-2 only; `booth-ffx2-b3`, Bailey 2026-10-30). Chapter XIII, Cloister 100 of the Via Infinito: the Bevelle plate repainted (the same hall, the same skylight above the frame), so the grammar is Chapter IV's, one cool cone from the skylight and the rest to deep shadow and haze,
+  // in the repaint's own colours: blue-black with the skylight's cyan-white kept, the steel blue (hue 205, three quarters of the plate's saturated pixels) held under full saturation, and the gold of the banners and the medallion (hue 38) left as the one warm accent. The skylight's glyph is the
+  // plate's one star at the top of the hall (found at u 0.503, v 0.064 from the top: above the frame's top edge at the idle rig, frame v 1.16, so the cone starts at the edge as Chapter IV's does, at the skylight's frame u, 0.490 by the pinhole read less the 0.011 by which Chapter IV's
+  // shipped start sits left of its own read). [ours]: set from the plate's colours and graded offline through this table (`docs/handoff/booth-ffx2-b3.md`, `docs/screenshots/booth-ffx2-b3-plate-grade.png`); a still beside Chapter IV is owed before Bailey judges it (hard rule 9). The room has no
+  // embers and no live pyreflies of its own to double: see `LookBoldConfig.ts`.
+  'via-infinito': {
+    colour: {
+      exposure: 1.3,
+      gamma: 1.0,
+      contrast: 0.3,
+      pivot: 0.3,
+      sat: 1.12,
+      pulls: [[205, 40, -4, 0.88, 0.88], [190, 30, 0, 1.0, 1.05], [38, 24, 0, 1.1, 0.68]],
+      gradmap: { amount: 0.06, stops: [[0, [0.0, 0.01, 0.05]], [0.3, [0.03, 0.09, 0.24]], [0.6, [0.26, 0.46, 0.68]], [0.9, [0.84, 0.96, 1.0]], [1, [1, 1, 1]]] },
+      shadow: [[0.03, 0.06, 0.2], 0.38],
+      shadowTo: 0.45,
+    },
+    lightColor: [0.72, 0.9, 1.0],
+    tweaks: { 'stage.shaft': 0.6, 'bold.stage': 1.7, 'bold.fog': 1.5, 'bold.rim': 1.4, 'relight.key': 1.5, 'shaft.gain': 2.4 },
+    haze: { colour: [0.16, 0.26, 0.48], amounts: [0.06, 0.05, 0.02], side: 0.1 },
+    vignette: { amount: 0.5, radius: 0.42, tint: [0.0, 0.006, 0.03] },
+    grain: 0.018,
+    cone: { u: 0.48, v: 0.98, follow: false, paint: { u: 0.503, v: 0.064 }, colour: [0.5, 0.82, 1.0], strength: 0.46, spread: 0.36, reach: 2.2, rays: 0.35 },
+  },
 };
-
 
 /** The room's pro table, or undefined (a room without one keeps the chapter's own bold grade). */
 export const proRoom = (key: string): ProRoom | undefined => PRO_ARENA[key];

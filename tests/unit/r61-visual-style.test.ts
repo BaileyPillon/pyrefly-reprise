@@ -178,7 +178,7 @@ describe('the look it switches (applyChapterLook)', () => {
     expect(lookWanted()).toBe(true);
     applyChapterLook('ffx2-bahamut', 'hd2d');
     expect(lookState).toMatchObject({ name: 'hd2d', strength: 'bold', armed: true });
-    applyChapterLook('yunalesca', 'hd2d');
+    applyChapterLook('sinspawn-gui', 'hd2d'); // a hidden chapter has no look row (Chapter II has one since release 69)
     expect(lookState).toMatchObject({ name: null, armed: false });
   });
 

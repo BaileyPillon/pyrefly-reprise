@@ -133,6 +133,35 @@ export const DEFAULT_ROOM_BOLD: RoomBold = { gloss: 0, embers: [], driftPx: 3 };
 export const ROOM_BOLD: Readonly<Record<string, RoomBold>> = {
   // Chapter I (FFX), Gagazet at night: snow and ice, a matte floor: no reflection; a pale icy haze, never a grey one.
   gagazet: { gloss: 0, embers: [], rim: [0.55, 0.85, 1.0], fog: [0.46, 0.66, 0.98], shadow: [0.13, 0.19, 0.42], fogScale: 0.8, driftPx: 3 },
+  // Chapter II (FFX, release 69, `booth-ffx-yunalesca`), the Zanarkand Dome: the hall stands in water (the plate's floor is a still pool that mirrors the columns and the sphere; the scene calls it "the wet floor"), so a high gloss like the Bevelle cathedral's; the
+  // rim is the scene's own "cold violet" for its figures (`zanarkand-dome.ts`: a gold bounce from the sphere and a cold violet rim); the fog is the plate's violet, held down a little (the plate is bright and already hazy).
+  // EMBERS: NONE ON PURPOSE. `research/ffx-vs-ffx2-presentation.md` section 8 supports pyreflies in this room ("the Dome is described as an enormous accumulation of pyreflies"), and the scene already carries two authored pyrefly fields and its own dust in
+  // the shafts (`zanarkand-dome.ts`, `ParticlePresets.pyreflies`), so a third system at the gold sphere would double what canon asks once; whether the Dome wants more than that is a browser look (job J17 of `docs/handoff/booth-b2.md`, which was J11 of `docs/handoff/booth-ffx-yunalesca.md`), and the one line to add sparks at the
+  // sphere is `embers: [[0.262, 0.788]]` (the sphere's centroid on the plate, from the top-left).
+  'zanarkand-dome': {
+    gloss: 0.7,
+    rim: [0.72, 0.62, 1.0],
+    embers: [],
+    fog: [0.3, 0.26, 0.5],
+    shadow: [0.1, 0.07, 0.3],
+    fogScale: 0.85,
+    driftPx: 3,
+  },
+  // Batch 3a (`booth-ffx-b3a`, FFX only; Bailey 2026-10-30). NO EMBERS in any of the three, each for its room's own source: Macalania's air is ice (`research/ffx-vs-ffx2-presentation.md` section 8.1: "ice, not pyreflies"; the scene draws its glitter and holds its pyreflies for Seymour's death, D-225), the Highbridge's motes are the pyreflies Natus is made of
+  // (`scenes/highbridge.ts`), and the Cavern draws its own night-sakura arrival: a lamp's sparks would be a second system of the same thing. The fog and the shafts are light, not particles, and stay. The one line to give a room sparks needs Bailey's yes (rule 10): Highbridge's lamps burn along the plate at v 0.51 to 0.53 (u 0.04, 0.14, 0.30, 0.70, 0.87, 0.97).
+  // Chapter VII: a mirror-ice floor (the bottom 11 percent of the plate; the scene's ground takes its blue): a high gloss as the cathedral's; the rim is the doors' cold cyan; the fog an ice-blue haze held down (the plate is luminous).
+  'macalania-temple': { gloss: 0.8, embers: [], rim: [0.45, 0.8, 1.0], fog: [0.26, 0.44, 0.7], shadow: [0.07, 0.13, 0.32], fogScale: 0.8, driftPx: 3 },
+  // Chapter X: a wet plaza that mirrors the lamps (the plate's reflections from row 0.8): a high gloss; the rim the night sky's blue (the scene's own `rimColor`); a deep navy fog.
+  'bevelle-highbridge': { gloss: 0.8, embers: [], rim: [0.5, 0.68, 1.0], fog: [0.14, 0.2, 0.46], shadow: [0.1, 0.1, 0.3], fogScale: 1, driftPx: 3 },
+  // Chapter IX: wet cave stone and a dormant pad (a little polish), the shaft's cold white for the rim, a steel fog.
+  'cavern-stolen-fayth': { gloss: 0.3, embers: [], rim: [0.55, 0.8, 1.0], fog: [0.2, 0.3, 0.46], shadow: [0.08, 0.12, 0.26], fogScale: 0.9, driftPx: 3 },
+  // Batch 3b (FFX, `booth-ffx-b3b`; `docs/handoff/booth-ffx-b3b.md` section 3). EMBERS: NONE ON PURPOSE in all three. Dream's End: `research/ffx-vs-ffx2-presentation.md` section 8 supports pyreflies and embers there (saturated with pyreflies, embers from the burning Abes emblem), and the scene already carries both
+  // (`dreams-end.ts`: embers rising in three depth bands, sparse red pyreflies, low ground haze), so a fourth system at the eye would double what canon asks once. The Garden of Pain and the Via Purifico: the section names neither room and their scenes draw no particles (`particles: []`), so nothing is invented (hard rule 6);
+  // a spark at the Via Purifico's lamps or the Garden's glow is one line (`embers: [[u, v]]`) and Bailey's yes (rule 10). Gloss: Dream's End a cracked dark stone floor with the flame wall's glare in it (0.4); the Garden's pale terrace tiles with a sheen (0.5); the Via Purifico's wet stone, the far door's light lying in it (0.85). Rims are each room's own
+  // key (the eye's gold, the scene's cold violet `0xc9a6ff`, the lamps' red); fogs and shadows the plates' own darks, tinted, not black.
+  'dreams-end': { gloss: 0.4, embers: [], rim: [1.0, 0.62, 0.3], fog: [0.46, 0.15, 0.14], shadow: [0.2, 0.05, 0.12], fogScale: 0.8, driftPx: 3 },
+  'garden-of-pain': { gloss: 0.5, embers: [], rim: [0.78, 0.65, 1.0], fog: [0.3, 0.26, 0.56], shadow: [0.1, 0.07, 0.34], fogScale: 0.85, driftPx: 3 },
+  'via-purifico': { gloss: 0.85, embers: [], rim: [1.0, 0.36, 0.26], fog: [0.32, 0.17, 0.22], shadow: [0.12, 0.06, 0.14], fogScale: 0.8, driftPx: 3 },
   // Chapter IV (FFX-2), the Bevelle underground: a polished cathedral floor (the lamps and the skylight sit in it); the four lamps of the painting throw embers.
   'bevelle-underground': {
     gloss: 0.8,
@@ -156,6 +185,20 @@ export const ROOM_BOLD: Readonly<Record<string, RoomBold>> = {
     fogScale: 0.9,
     driftPx: 3,
   },
+  // Batch 2 (`booth-ffx2-b2`, FFX-2 only; Bailey 2026-10-30). NO EMBERS in any of the three, for the reason each source gives: the Farplane's air is the pyreflies and the petals the scene already draws live ("pyreflies are not atmosphere, they are a statement about the dead", `research/ffx-vs-ffx2-presentation.md`
+  // section 8; `research/ffx2-vegnagun-shuyin.md` section 10.4: "a single GPU particle system running at low density throughout the chapter"), and the Den's plate paints its own motes and `scenes/den-of-woe.ts` adds sparse live ones ("live ones may double up"), so sparks from a lamp would be a third layer
+  // of the same thing. The fog and the shafts are light, not particles, and stay. Chapter V, the Heart of the Farplane: a flower field and mist (matte, no reflection), a lilac fog, the spire's white-lilac for the rim, the haze held down (the plate is luminous).
+  farplane: { gloss: 0.1, rim: [0.85, 0.72, 1.0], embers: [], fog: [0.5, 0.42, 0.85], shadow: [0.2, 0.14, 0.42], fogScale: 0.7, driftPx: 3 },
+  // Chapter XI, the Road to the Farplane: the same sky, a grey-violet stone platform with glowing cracks (a little polish).
+  'road-to-the-farplane': { gloss: 0.3, rim: [0.85, 0.72, 1.0], embers: [], fog: [0.5, 0.42, 0.85], shadow: [0.18, 0.12, 0.36], fogScale: 0.7, driftPx: 3 },
+  // Chapter XV, the Den of Woe: a lit wet stone floor under black rock, the domes' cyan for the rim and the fog's blue-teal.
+  'den-of-woe': { gloss: 0.35, rim: [0.35, 0.95, 0.95], embers: [], fog: [0.1, 0.26, 0.38], shadow: [0.05, 0.12, 0.22], fogScale: 0.9, driftPx: 3 },
+  // Batch 3 (`booth-ffx2-b3`, FFX-2 only; Bailey 2026-10-30). Chapter XIII, Cloister 100 of the Via Infinito: a polished floor (the plate's bottom fifth is a lit, reflecting slab, the skylight's cyan in it, like Chapter IV's cathedral floor: 0.7 a little under Bevelle's 0.8), the skylight's
+  // cyan for the rim, a steel-blue fog. NO EMBERS, for the source's reason: `research/ffx2-trema.md` section 6.1 says "Pyreflies and Yevon flags are everywhere" (a single source, Blackestmage): flags and pyreflies, no fire, so a warm spark at a banner is not sourced, and `pyreflyCanon.ts` marks this
+  // room's air as pyreflies (`attested`: the stage adds its faint lens band of seven motes, `PyreflyStage.ts` A-6; this scene draws no bands of its own, `particles: []`). `research/ffx-vs-ffx2-presentation.md` section 8 ("pyreflies are not atmosphere, they are a statement about the dead") does not list
+  // this room, so the canon table's pyreflies are the air and the sparks are not added; whether the hall wants more pyreflies than the lens band is a content addition that needs Bailey's yes (rule 10). The one line to give the banners sparks anyway is `embers: [[0.086, 0.565], [0.935, 0.56]]` (the
+  // banners' centroids on the plate, from the top-left). The room has no depth map in the shipped manifest (`lightMaps.depth` lists Bevelle and Gagazet), so the fog is the grade's and the arena's haze, not depth.
+  'via-infinito': { gloss: 0.7, rim: [0.4, 0.78, 1.0], embers: [], fog: [0.2, 0.3, 0.5], shadow: [0.1, 0.14, 0.32], fogScale: 1, driftPx: 3 },
 };
 
 export const roomBold = (key: string): RoomBold => ROOM_BOLD[key] ?? DEFAULT_ROOM_BOLD;

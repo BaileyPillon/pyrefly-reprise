@@ -6,8 +6,8 @@
  *  - FREEZE: the last blow lands and the frame HOLDS (`FREEZE_HOLD_MS`, half a second: the book's number for the held beat): the field's clock is stopped (the feel lane's hit-stop clock, `FxStagePort.freeze`), a white
  *    flash opens and falls, a shock ring leaves the boss's chest, the HUD goes out; then the boss goes up in light as it always did;
  *  - TITLE: a quiet VICTORY and the foe's name, top right, as the party's cheer begins (FFX, the cheer's own length is the real clip's: `data/motion/realMotion.ts` `poseMs`, Tidus 3,666.7 ms PROVEN) or as the
- *    party stands (FFX-2 Chapter IV: the sources withhold the pose, the fanfare and the quip after Bahamut, `research/ffx-vs-ffx2-presentation.md` 2.2 and the writing bible E6 / 5.4, so nothing is celebrated);
- *  - PULL-BACK (FFX-2 only): the silent pull-back stays as the transition: letterbox bars close in and the camera draws back into the results; it is a transition, not a pose.
+ *    party stands (FFX-2 Chapter IV: the sources withhold the pose, the fanfare and the quip after Bahamut, `research/ffx-vs-ffx2-presentation.md` 2.2 and the writing bible E6 / 5.4, so nothing is celebrated; FFX Chapter II, since release 69: nobody poses in Zanarkand, 2.1);
+ *  - PULL-BACK (the `hold` victory kind, either game): the silent pull-back stays as the transition: letterbox bars close in and the camera draws back into the results; it is a transition, not a pose. FFX-2 Chapter IV plays it (no pose after Bahamut) and, since release 69, FFX Chapter II does (nobody poses in Zanarkand, `research/ffx-vs-ffx2-presentation.md` 2.1; 2.2 says both games use the same device, withholding the celebration when the story is grave). [ours] as a transition; recorded as driver call (f) in `docs/handoff/booth-ffx-yunalesca.md`.
  * Defeat (the book's D3, "Overlay that keeps the scene"): the scene stays under a light dim while the last member falls and a caption drops in; the card and its two choices are the flow's overlay
  * (`app/screens/ProDefeatScreen.ts`).
  */

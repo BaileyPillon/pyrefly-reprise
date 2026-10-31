@@ -129,7 +129,7 @@ describe('the follower camera on her plate', () => {
     expect(autoCameraFor('seymour-flux')).toBe(PRO_AUTO_CAMERA);
     expect(autoCameraFor(undefined)).toBe(PRO_AUTO_CAMERA);
     expect(autoCameraFor('toString')).toBe(PRO_AUTO_CAMERA);
-    expect(Object.keys(AUTO_STAGES)).toEqual(['ffx2-leblanc']);
+    expect(Object.keys(AUTO_STAGES)).toEqual(['ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'ffx2-den-of-woe', 'ffx2-fallen-aeons', 'ffx2-trema']); // Leblanc's, batch 2's three (`booth-ffx2-b2-rows.test.ts`), then batch 3's (`booth-ffx2-b3-rows.test.ts`)
   });
 
   it("Leblanc's focus is the Act III group's centroid at 0.9 of each height, and the home azimuth is her idle rig's eye seen from it", () => {
