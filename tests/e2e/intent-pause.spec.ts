@@ -139,9 +139,10 @@ test.afterAll(() => {
 // PR-0122/PR-0123 defects this file exists to prove. `docs/DEV.md` /
 // `BattleScreenWiring.ts` name this flag for exactly this: "so every capture
 // harness sees the bare HUD."
-const url = (path = ''): string => {
+const url = (path = '', extra = ''): string => {
   const u = new URL(path, baseUrl);
   u.searchParams.set('coach', 'off');
+  for (const [key, value] of new URLSearchParams(extra)) u.searchParams.set(key, value); // a case's own address words (`?treated=pack`)
   return u.toString();
 };
 
@@ -181,8 +182,8 @@ async function waitUntil(
 const screenOf = (page: Page): Promise<string> => page.evaluate(() => window.__pyrefly!.screen());
 
 /** Title -> chapter select -> prep -> `chapterId`'s battle, real screen changes throughout. */
-async function enterChapter(page: Page, chapterId: string): Promise<void> {
-  await page.goto(url());
+async function enterChapter(page: Page, chapterId: string, extra = ''): Promise<void> {
+  await page.goto(url('', extra));
   await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 45_000 });
   await page.evaluate(() => window.__pyrefly!.setSeed(1)); // real keys draw a fresh first seed (PR-0008)
   await page.keyboard.press('Enter');
@@ -385,6 +386,13 @@ const CASES: Array<{
   screenshot: string | null;
   /** Fresh proof for this fix, at 1600x900 only — the old shot showed the escape, this shows it fixed. */
   cleanScreenshot: string | null;
+  /** Extra address words for this case (`treated=pack`: release 68's frame in a chapter the treatment joined). */
+  query?: string;
+  /**
+   * The F1 HUD's baseline (treated FFX-2 chapters: Chapter IV and, since release 69, Chapter VI): the legacy chip is mounted but parked INERT (opacity 0, pointer-events none) behind the F1 slab's own Intel
+   * (X), so there is no visible intent layer to escape the pause and nothing to hit-test; the case then proves the parking and the suspend / resume, not a hit on the chip.
+   */
+  f1Baseline?: boolean;
 }> = [
   {
     chapterId: 'seymour-flux',
@@ -416,13 +424,28 @@ const CASES: Array<{
     screenshot: null,
     cleanScreenshot: null,
   },
+  // Chapter 6 is a treated chapter since release 69 (`booth-leblanc`; `DemoGate.TREATED_CHAPTERS`): the F1 HUD is on in it, and the F1 declutter (r64, `app/demo/demoHud.ts` `f1PanelStart`: "Enemy details,
+  // guide and tips are behind X") is the treatment's baseline there, so the enemy-move read-out starts folded to its CHIP, as in FFX, and not as the panel release 68 showed (the r69-fix J11 run read 'chip' at both
+  // sizes). That chip is parked inert (opacity 0, pointer-events none) behind the F1 slab's own Intel, exactly as in Chapter IV (r69-fix dbg-chip), so this case runs the page as a player opens it and proves the
+  // parking, the suspend for the pause and the return (`f1Baseline`); the visible panel's z-order against the pause screen (the PR-0122 hit tests) is proved in the next case, release 68's frame.
   {
     chapterId: 'ffx2-leblanc',
-    label: 'chapter 6 (FFX-2, panel by default)',
+    label: 'chapter 6 (FFX-2, treated: the F1 declutter shows the chip by default)',
     needsE: false,
-    expectedTarget: 'panel',
+    expectedTarget: 'chip',
     screenshot: 'intent-pause-ch6.png',
     cleanScreenshot: 'pause-clean-ch6.png',
+    f1Baseline: true,
+  },
+  // `?treated=pack` is release 68's reach (the booth pair only): Chapter 6 draws the frame it always drew, with the enemy-intent PANEL on by default, which the PR-0122 hit tests need.
+  {
+    chapterId: 'ffx2-leblanc',
+    label: 'chapter 6 (FFX-2, ?treated=pack: release 68\'s frame, panel by default)',
+    needsE: false,
+    expectedTarget: 'panel',
+    screenshot: null,
+    cleanScreenshot: null,
+    query: 'treated=pack',
   },
 ];
 
@@ -437,7 +460,7 @@ for (const c of CASES) {
       page,
     }) => {
       await page.setViewportSize(size);
-      await enterChapter(page, c.chapterId);
+      await enterChapter(page, c.chapterId, c.query ?? '');
       await waitForCommandMenu(page);
 
       if (c.needsE) {
@@ -453,9 +476,19 @@ for (const c of CASES) {
       const cx = before.rect!.x + before.rect!.width / 2;
       const cy = before.rect!.y + before.rect!.height / 2;
 
-      // Sanity: before the pause, that point really is the target (panel or chip).
-      const beforePoint = await elementAt(page, cx, cy);
-      expect(beforePoint.insideEint, `expected the ${c.expectedTarget} at its own centre before pausing; got ${beforePoint.desc}`).toBe(true);
+      if (c.f1Baseline) {
+        // The F1 HUD parks the legacy chip inert: it is mounted (the rect above) but invisible and not hit-testable, so the sanity below is the parking itself, not a hit on the chip.
+        const parked = await page.evaluate(() => {
+          const toggle = document.querySelector<HTMLElement>('[data-role="enemy-intent-toggle"]');
+          const style = toggle ? getComputedStyle(toggle) : null;
+          return style ? { opacity: style.opacity, pointerEvents: style.pointerEvents } : null;
+        });
+        expect(parked, 'the F1 HUD should park the legacy chip invisible and inert').toEqual({ opacity: '0', pointerEvents: 'none' });
+      } else {
+        // Sanity: before the pause, that point really is the target (panel or chip).
+        const beforePoint = await elementAt(page, cx, cy);
+        expect(beforePoint.insideEint, `expected the ${c.expectedTarget} at its own centre before pausing; got ${beforePoint.desc}`).toBe(true);
+      }
 
       // ---- the two other escapees `pause-screen.css`'s z-index fix owns,
       // proven only at 1600x900 per the brief: the advisor card (present the
@@ -581,6 +614,14 @@ for (const c of CASES) {
       const after = await eintState(page);
       expect(after.suspended, 'still suspended after resume').toBe(false);
       expect(after.target, 'the panel should be back in the same (visible) state it had before pausing').toBe(before.target);
+      if (c.f1Baseline) {
+        const parkedAfter = await page.evaluate(() => {
+          const toggle = document.querySelector<HTMLElement>('[data-role="enemy-intent-toggle"]');
+          const style = toggle ? getComputedStyle(toggle) : null;
+          return style ? { opacity: style.opacity, pointerEvents: style.pointerEvents } : null;
+        });
+        expect(parkedAfter, 'after resume the legacy chip should be parked inert again, as before the pause').toEqual({ opacity: '0', pointerEvents: 'none' });
+      }
 
       // At 1600x900 the bot-played hit can move the panel between Escape and
       // resume, so the claim there is only "reachable again at its own rect"
@@ -588,7 +629,7 @@ for (const c of CASES) {
       // out by a few px on resume, so the claim there is just "the old point
       // is the panel again" — not exact-centre.
       let afterDesc = '';
-      const backAtOwnRect = await waitUntil(
+      const backAtOwnRect = c.f1Baseline ? true : await waitUntil(
         page,
         async () => {
           const state = await eintState(page);
@@ -604,7 +645,7 @@ for (const c of CASES) {
       );
       expect(backAtOwnRect, `after resume, the panel should be reachable again at its own rect; got ${afterDesc}`).toBe(true);
 
-      if (size.width !== 1600) {
+      if (size.width !== 1600 && !c.f1Baseline) {
         // The original PR-0122 claim, polled the same way: no bot action ran
         // this size, so the OLD point (`cx, cy`) should be the panel again —
         // not compared to a re-read centre, which can drift a few px on its

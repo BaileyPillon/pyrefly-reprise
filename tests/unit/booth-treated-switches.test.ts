@@ -4,7 +4,7 @@
  *
  *  - under `pack` (release 68's reach, `?treated=pack`, and a unit test with no page) a switch answers true in the booth pair and false in EVERY other chapter, Leblanc included: byte for byte what release 68 played;
  *  - under `all` it answers true in the booth pair (no piece of the approved target is ever held) and in every chapter on `TREATED_CHAPTERS` (Leblanc, Chapter II, and batch 2's Chapters V, XV and XI), except for the pieces
- *    `PIECE_HOLDS` names for that chapter (every joined chapter holds the breath; Chapter II also the camera and the smear; Chapter V also the camera), and false in every other listed and hidden chapter.
+ *    `PIECE_HOLDS` names for that chapter (every joined chapter holds the breath; Leblanc also the camera and the moments; Chapter II also the camera and the smear; Chapter V also the camera), and false in every other listed and hidden chapter.
  *
  * The browser has not been run for this (it is busy); the unit answers are the evidence that the gates moved and nothing else did.
  */
@@ -45,6 +45,12 @@ const JOINED: readonly string[] = Object.keys(TREATED_CHAPTERS).filter((id) => !
 
 /** Is this piece played in this chapter under the scope (reached, and not held)? A held piece answers today's. */
 const plays = (scope: 'pack' | 'all', id: string, piece: TreatedPiece): boolean => reached(scope).includes(id) && (BOOTH.includes(id) || treatedHold(id, piece) === undefined);
+
+/** The order `readAll` answers in, and the pieces of it Leblanc holds (`DemoGate.PIECE_HOLDS`); every other piece plays for her. */
+const READ_ORDER = ['hud', 'look', 'rim', 'boss', 'curves', 'moments', 'smear', 'cam', 'staging', 'fx', 'audio', 'feel'] as const;
+const LEBLANC_HELD_READS: readonly string[] = ['cam', 'moments'];
+/** What a desktop with no word reads in this chapter: all twelve for the booth pair, all but her held pieces for Leblanc. */
+const wholeTreatment = (id: string): boolean[] => READ_ORDER.map((p) => !(id === 'ffx2-leblanc' && LEBLANC_HELD_READS.includes(p)));
 
 function allOn(): void {
   setHudF1Mode('f1');
@@ -101,7 +107,7 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(curvesOn(), `curves ${id}`).toBe(on);
       expect(realKind(), `real ${id}`).toBe(on ? 'snappy' : null);
       expect(inDemoChapter(id), `curves gate ${id}`).toBe(on);
-      expect(momentsOn(), `moments ${id}`).toBe(on);
+      expect(momentsOn(), `moments ${id}`).toBe(plays(scope, id, 'moments')); // Leblanc holds the KO cut past the smear cap (CHK-027)
       const smear = plays(scope, id, 'smear'); // Chapter II's swap exception: no smear planner there
       expect(smearOn(), `smear ${id}`).toBe(smear);
       expect(smearStyleNow(), `smear style ${id}`).toBe(smear ? 'paint' : 'off');
@@ -141,8 +147,8 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
   });
 });
 
-describe('the one piece every joined chapter holds, the staged breath', () => {
-  it('stays today for Leblanc and Chapter II and plays in the booth pair (the staging answers the piece, not only the chapter)', () => {
+describe('the pieces the joined chapters hold: the staged breath (every one), the directed camera and the moments (Leblanc), the camera and the smear (Chapter II, Chapter V)', () => {
+  it('the breath stays today for every joined chapter, Leblanc and Chapter II among them, and plays in the booth pair (the staging answers the piece, not only the chapter)', () => {
     allOn();
     setTreatedScope('all');
     for (const id of [...BOOTH, ...JOINED]) {
@@ -151,6 +157,33 @@ describe('the one piece every joined chapter holds, the staged breath', () => {
       expect(stagingPieceOnFor('breath', id), id).toBe(BOOTH.includes(id));
       expect(stagingOn(), id).toBe(true); // the layer is still there for the card, the ending and the opening (Leblanc's Change plate, Chapter II's Overdrive opening)
     }
+  });
+
+  it('the directed camera (and its soft background) stays the resting camera of release 68 for her and plays in both booth chapters; ?treated=pack and every other chapter are unchanged', () => {
+    allOn();
+    setTreatedScope('all');
+    for (const id of [...BOOTH, 'ffx2-leblanc']) {
+      setDemoChapter(id);
+      const held = id === 'ffx2-leblanc';
+      expect([proCamOn(), proDofOn(), proCamGame()], id).toEqual(held ? [false, false, null] : [true, true, GAME[id]]);
+      expect(newMotionOn(), id).toBe(true); // the rest of the treatment still reaches her: the camera is one piece
+      expect(stagingOn(), id).toBe(true);
+    }
+    setDemoChapter('exp-leblanc');
+    expect(proCamOn()).toBe(false);
+  });
+
+  it('the moments (the KO cut and its rebound, the victory cheer) stay release 68 for her and play in the booth pair; the smear and the curves, which they only share a gate with, still reach her', () => {
+    allOn();
+    setTreatedScope('all');
+    for (const id of [...BOOTH, 'ffx2-leblanc']) {
+      setDemoChapter(id);
+      const held = id === 'ffx2-leblanc';
+      expect([momentsOn(), smearOn(), curvesOn(), newMotionOn()], id).toEqual([!held, true, true, true]);
+    }
+    setTreatedScope('pack');
+    setDemoChapter('ffx2-leblanc');
+    expect(momentsOn()).toBe(false);
   });
 });
 
@@ -225,11 +258,11 @@ describe("the lane-off words, ?pack=off and a phone still give release 62's fram
     return [hudF1On(), proLookOn(), partyRimOff(), bossCleanOn(), curvesOn(), momentsOn(), smearOn(), proCamOn(), stagingOn(), fxNewOn(), audioNewOn(), inFeelChapter() && punchMode() === 'new'];
   };
 
-  it('on a desktop with no word the whole treatment plays in Leblanc under all, as it does in the booth pair', () => {
+  it('on a desktop with no word the treatment plays in Leblanc under all, as it does in the booth pair, but for the pieces she holds', () => {
     setTreatedScope('all');
     setPackScreen('desk');
     readFrom('');
-    for (const id of [...BOOTH, 'ffx2-leblanc']) expect(readAll(id), id).toEqual(new Array(12).fill(true));
+    for (const id of [...BOOTH, 'ffx2-leblanc']) expect(readAll(id), id).toEqual(wholeTreatment(id));
   });
 
   it('?pack=off puts every piece back, in Leblanc and in the booth pair alike (the HD-2D look, which no pack word ever gated, follows ?look=off and OPTIONS > VISUAL STYLE)', () => {
@@ -245,7 +278,7 @@ describe("the lane-off words, ?pack=off and a phone still give release 62's fram
     readFrom('');
     for (const id of [...BOOTH, 'ffx2-leblanc']) expect(readAll(id), id).toEqual(new Array(12).fill(false));
     readFrom('?pack=demo'); // the booth address forces it on anywhere
-    for (const id of [...BOOTH, 'ffx2-leblanc']) expect(readAll(id), id).toEqual(new Array(12).fill(true));
+    for (const id of [...BOOTH, 'ffx2-leblanc']) expect(readAll(id), id).toEqual(wholeTreatment(id));
   });
 
   it('?pro=off takes the three pro lanes (look, camera, staging) back and leaves the HUD, the motion, the effects and the sound as they were; ?treated=pack takes Leblanc back whole', () => {
@@ -254,7 +287,8 @@ describe("the lane-off words, ?pack=off and a phone still give release 62's fram
     readFrom('?pro=off');
     const [hud, look, rim, boss, curves, moments, smear, cam, staging, fx, audio] = readAll('ffx2-leblanc');
     expect([look, cam, staging]).toEqual([false, false, false]);
-    expect([hud, rim, boss, curves, moments, smear, fx, audio]).toEqual(new Array(8).fill(true));
+    expect([hud, rim, boss, curves, smear, fx, audio]).toEqual(new Array(7).fill(true));
+    expect(moments).toBe(false); // held for her, with or without a word
     readFrom('');
     setTreatedScope('pack');
     expect(readAll('ffx2-leblanc')).toEqual(new Array(12).fill(false));

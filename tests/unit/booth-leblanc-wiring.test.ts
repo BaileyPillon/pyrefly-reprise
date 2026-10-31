@@ -109,7 +109,7 @@ describe('`__pyrefly.treated()`', () => {
     expect(all.chapters).toEqual(['seymour-flux', 'yunalesca', 'ffx2-bahamut', 'ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'ffx2-den-of-woe', 'ffx2-fallen-aeons']);
     expect(all.holds).toEqual({
       yunalesca: ['breath', 'cam', 'smear'],
-      'ffx2-leblanc': ['breath'],
+      'ffx2-leblanc': ['breath', 'cam', 'moments'], // the pieces she holds, in the order of her rows
       'ffx2-vegnagun-shuyin': ['cam', 'breath'],
       'ffx2-den-of-woe': ['breath'],
       'ffx2-fallen-aeons': ['breath'],
