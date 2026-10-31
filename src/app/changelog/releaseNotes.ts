@@ -81,7 +81,7 @@ export const RELEASE_NOTES: readonly ReleaseNote[] = [
       { tag: 'FFX', text: 'A revived figure no longer pops sideways as it stands back up.' },
       { tag: 'Both', text: 'On a phone the wait before a fight is shorter: on a slow connection about 7 seconds in Chapter I and 19 in Chapter IV.' },
       { tag: 'FFX', text: 'Evrae’s fight changes pose more cleanly, like the other fights: hits and spells cut instead of blending see-through.' },
-      { tag: 'FFX-2', text: 'Chapter VI gets the presentation of Chapters I and IV: the lighter battle screen, the new hit look, the follow camera, the boss card and the quiet ending.' },
+      { tag: 'FFX-2', text: 'Chapter VI gets the presentation of Chapters I and IV: the lighter battle screen, the new hit look, the boss card and the quiet ending.' },
     ],
   },
   {
