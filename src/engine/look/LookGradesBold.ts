@@ -84,6 +84,28 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       recipe: { exposure: 0.74, gamma: 1.0, contrast: 0.46, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.28, midSat: 0.32, sat: 1.04, hues: [{ hue: 245, width: 42, sat: 1.05, lum: 1.06, toward: [0.42, 0.38, 1.0], shift: 0.25 }, { hue: 35, width: 30, sat: 1.2, lum: 1.1, toward: [1, 0.72, 0.3], shift: 0.3 }] },
       focus: 0.35,
     },
+    // Batch 3a (`booth-ffx-b3a`, FFX only). Chapter VII, the Macalania antechamber: blue-indigo shadows, an ice-white highlight, the plate's cyan-blue (hue 190 to 220: 40,000 of its 48,000 saturated pixels) lifted and pulled toward itself and the braziers' gold (hue 20) kept warm; the plate is as luminous as
+    // Chapter I's snow (mean luminance 0.408 against 0.418), so the exposure is Gagazet's 0.7.
+    'macalania-temple': {
+      shadow: [0.08, 0.2, 0.5],
+      highlight: [0.88, 0.97, 1.0],
+      recipe: { exposure: 0.7, gamma: 1.0, contrast: 0.42, pivot: 0.3, shoulder: 0.86, shadowSplit: 0.32, highlightSplit: 0.3, topBias: [1, 0.95, 0.82], topBiasAmount: 0.18, midSat: 0.3, sat: 1.0, hues: [{ hue: 205, width: 40, sat: 1.0, lum: 1.08, toward: [0.3, 0.78, 1.0], shift: 0.3 }, { hue: 22, width: 30, sat: 1.2, lum: 1.1, toward: [1, 0.72, 0.3], shift: 0.3 }] },
+      focus: 0.36,
+    },
+    // Chapter X, the Highbridge at night: navy-violet shadows, a warm amber highlight (the lamps), the lamps' orange (hue 22) and the sky's blue (hue 205) each lifted and pulled toward itself; a dark plate (mean 0.17, as Chapter IV's 0.18), so Chapter IV's exposure.
+    'bevelle-highbridge': {
+      shadow: [0.14, 0.12, 0.46],
+      highlight: [1.0, 0.84, 0.58],
+      recipe: { exposure: 1.0, gamma: 1.0, contrast: 0.5, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.42, highlightSplit: 0.3, midSat: 0.35, sat: 1.06, hues: [{ hue: 24, width: 22, sat: 1.1, lum: 1.06, toward: [1, 0.68, 0.26], shift: 0.25 }, { hue: 205, width: 36, sat: 1.15, lum: 1.08, toward: [0.25, 0.7, 1.0], shift: 0.22 }] },
+      focus: 0.33,
+    },
+    // Chapter IX, the Cavern: steel-blue shadows, a cold-white highlight, the stone's cyan-blue (hue 190 to 200) lifted and pulled toward itself; a dark plate (mean 0.215), so the exposure is not pulled down.
+    'cavern-stolen-fayth': {
+      shadow: [0.1, 0.16, 0.4],
+      highlight: [0.86, 0.96, 1.0],
+      recipe: { exposure: 0.92, gamma: 1.0, contrast: 0.46, pivot: 0.3, shoulder: 0.85, shadowSplit: 0.38, highlightSplit: 0.28, midSat: 0.25, sat: 0.98, hues: [{ hue: 198, width: 36, sat: 1.1, lum: 1.08, toward: [0.3, 0.74, 1.0], shift: 0.22 }] },
+      focus: 0.33,
+    },
     // Chapter IV: violet shadows, amber lamps against the cyan skylight (each hue lifted and pulled toward itself).
     'bevelle-underground': {
       shadow: [0.2, 0.12, 0.52],
@@ -136,6 +158,25 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       highlight: [1.0, 0.82, 0.6],
       recipe: { exposure: 0.62, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 245, width: 42, sat: 1.05, lum: 1.06, toward: [0.42, 0.38, 1.0], shift: 0.25 }, { hue: 35, width: 30, sat: 1.25, lum: 1.12, toward: [1, 0.72, 0.3], shift: 0.3 }] },
       fog: [0.3, 0.26, 0.5],
+    },
+    // Batch 3a (FFX only): Macalania's ice-blue black under an ice-white highlight; the Highbridge's navy-violet black under the lamps' amber; the Cavern's steel-black under a cold white.
+    'macalania-temple': {
+      shadow: [0.03, 0.1, 0.34],
+      highlight: [0.86, 0.96, 1.0],
+      recipe: { exposure: 0.54, gamma: 1.0, contrast: 0.6, pivot: 0.32, shoulder: 0.8, shadowSplit: 0.6, highlightSplit: 0.4, topBias: [1, 0.92, 0.8], topBiasAmount: 0.06, midSat: 0.25, sat: 0.88, hues: [{ hue: 205, width: 40, sat: 0.95, lum: 1.1, toward: [0.3, 0.78, 1.0], shift: 0.35 }, { hue: 22, width: 30, sat: 1.15, lum: 1.08, toward: [1, 0.72, 0.3], shift: 0.25 }] },
+      fog: [0.3, 0.52, 0.8],
+    },
+    'bevelle-highbridge': {
+      shadow: [0.06, 0.05, 0.3],
+      highlight: [1.0, 0.78, 0.5],
+      recipe: { exposure: 0.84, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.98, hues: [{ hue: 24, width: 22, sat: 1.15, lum: 1.08, toward: [1, 0.68, 0.26], shift: 0.3 }, { hue: 205, width: 36, sat: 1.15, lum: 1.08, toward: [0.25, 0.7, 1.0], shift: 0.25 }] },
+      fog: [0.14, 0.2, 0.42],
+    },
+    'cavern-stolen-fayth': {
+      shadow: [0.03, 0.07, 0.24],
+      highlight: [0.84, 0.95, 1.0],
+      recipe: { exposure: 0.86, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.25, sat: 0.9, hues: [{ hue: 198, width: 36, sat: 1.1, lum: 1.08, toward: [0.3, 0.74, 1.0], shift: 0.3 }] },
+      fog: [0.2, 0.3, 0.44],
     },
     // Chapter IV: violet-black shadows, amber lamps, cyan skylight, a cool violet fog.
     'bevelle-underground': {

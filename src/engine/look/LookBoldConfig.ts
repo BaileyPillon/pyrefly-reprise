@@ -147,6 +147,14 @@ export const ROOM_BOLD: Readonly<Record<string, RoomBold>> = {
     fogScale: 0.85,
     driftPx: 3,
   },
+  // Batch 3a (`booth-ffx-b3a`, FFX only; Bailey 2026-10-30). NO EMBERS in any of the three, each for its room's own source: Macalania's air is ice (`research/ffx-vs-ffx2-presentation.md` section 8.1: "ice, not pyreflies"; the scene draws its glitter and holds its pyreflies for Seymour's death, D-225), the Highbridge's motes are the pyreflies Natus is made of
+  // (`scenes/highbridge.ts`), and the Cavern draws its own night-sakura arrival: a lamp's sparks would be a second system of the same thing. The fog and the shafts are light, not particles, and stay. The one line to give a room sparks needs Bailey's yes (rule 10): Highbridge's lamps burn along the plate at v 0.51 to 0.53 (u 0.04, 0.14, 0.30, 0.70, 0.87, 0.97).
+  // Chapter VII: a mirror-ice floor (the bottom 11 percent of the plate; the scene's ground takes its blue): a high gloss as the cathedral's; the rim is the doors' cold cyan; the fog an ice-blue haze held down (the plate is luminous).
+  'macalania-temple': { gloss: 0.8, embers: [], rim: [0.45, 0.8, 1.0], fog: [0.26, 0.44, 0.7], shadow: [0.07, 0.13, 0.32], fogScale: 0.8, driftPx: 3 },
+  // Chapter X: a wet plaza that mirrors the lamps (the plate's reflections from row 0.8): a high gloss; the rim the night sky's blue (the scene's own `rimColor`); a deep navy fog.
+  'bevelle-highbridge': { gloss: 0.8, embers: [], rim: [0.5, 0.68, 1.0], fog: [0.14, 0.2, 0.46], shadow: [0.1, 0.1, 0.3], fogScale: 1, driftPx: 3 },
+  // Chapter IX: wet cave stone and a dormant pad (a little polish), the shaft's cold white for the rim, a steel fog.
+  'cavern-stolen-fayth': { gloss: 0.3, embers: [], rim: [0.55, 0.8, 1.0], fog: [0.2, 0.3, 0.46], shadow: [0.08, 0.12, 0.26], fogScale: 0.9, driftPx: 3 },
   // Chapter IV (FFX-2), the Bevelle underground: a polished cathedral floor (the lamps and the skylight sit in it); the four lamps of the painting throw embers.
   'bevelle-underground': {
     gloss: 0.8,

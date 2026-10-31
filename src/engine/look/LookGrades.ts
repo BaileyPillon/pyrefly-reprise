@@ -64,6 +64,14 @@ export const ROOM_LOOKS: Readonly<Record<LookName, Readonly<Record<string, RoomL
     // sphere low on the left, u 0.273, v 0.792, so the shafts would climb from the floor), so the shafts and the rim follow the oculus. The sharp band is the booth's rule (Chapter I 0.36 at its feet-and-knee middle 0.187, Chapter IV 0.40 at 0.242, the
     // line through them) read at the dome's idle rig, where the party's feet and knees stand lower in the frame (middle 0.167): 0.35 (`docs/handoff/booth-ffx-yunalesca.md`).
     'zanarkand-dome': { focus: 0.35, light: { u: 0.338, v: 0.063, color: [0.97, 0.82, 0.98] } },
+    // Batch 3a (`booth-ffx-b3a`, FFX only). The sharp band is the booth's line (Chapter I 0.36 at its feet-and-knee middle 0.187, Chapter IV 0.40 at 0.242: focus = 0.36 + 0.727 * (middle - 0.187)) read at each room's idle rig and party arc:
+    // Macalania (layout B) middle 0.180 gives 0.355, so 0.36; the Highbridge and the Cavern stand on one idle rig and one arc (middle 0.140) and give 0.326, so 0.33 (`docs/handoff/booth-ffx-b3a.md`). The lights are authored where the engine's `findLight` would put the shafts and the rim on a spot that is off the frame or not the room's light.
+    // Chapter VII, the Macalania antechamber: the central ice door is the light (the painting's own, `macalania-temple.ts`: "the doors are light through ice, the room's own light source"; found on the plate at u 0.475, v 0.5; `findLight` takes the left door at u 0.07, which stands off the frame's left edge at the idle rig).
+    'macalania-temple': { focus: 0.36, light: { u: 0.475, v: 0.5, color: [0.55, 0.85, 1.0] } },
+    // Chapter X, the Highbridge at night: the open arch of the gate, the plate's one cool light between the amber lamps (u 0.49, v 0.8); `findLight` takes the left lamps (u 0.148).
+    'bevelle-highbridge': { focus: 0.33, light: { u: 0.49, v: 0.8, color: [0.55, 0.78, 1.0] } },
+    // Chapter IX, the Cavern's last chamber: the shaft of daylight right of centre is the light (u 0.59, v 0.42: where `findLight` finds it, u 0.586 v 0.431), so the authored row only names it.
+    'cavern-stolen-fayth': { focus: 0.33, light: { u: 0.59, v: 0.42, color: [0.7, 0.86, 1.0] } },
     // Chapter IV (FFX-2), the Bevelle underground: the great skylight is the light (the picture's own brightest part); the band covers the girls and the dragon's coils.
     'bevelle-underground': { focus: 0.4 },
     // Chapter VI (FFX-2, release 69), the Chateau's last room: the heart-shaped door inlay is the light (the painting's own pink, found on the plate at u 0.500, v 0.264 from the top; `findLight` would take the pale floor patch, which is brighter in luminance), so the
@@ -83,6 +91,10 @@ export const ROOM_LOOKS: Readonly<Record<LookName, Readonly<Record<string, RoomL
     gagazet: { shadow: [0.02, 0.1, 0.2], highlight: [1.0, 0.86, 0.66], recipe: { sat: 0.72, contrast: 0.74, pivot: 0.34, shadowSplit: 0.62, highlightSplit: 0.46 }, fog: [0.4, 0.52, 0.68] },
     // Chapter II (release 69): violet-black shadows under the gold of the sphere in the highlights, the oculus's pale lavender light, a violet fog over the wet floor.
     'zanarkand-dome': { shadow: [0.08, 0.05, 0.26], highlight: [1.0, 0.84, 0.66], recipe: { sat: 0.84, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.3, 0.26, 0.5], light: { u: 0.338, v: 0.063, color: [0.97, 0.82, 0.98] } },
+    // Batch 3a (FFX only): Macalania's ice-blue under a pale ice-white highlight and a cyan-blue fog; the Highbridge's navy-black under the lamps' amber and a deep navy fog; the Cavern's steel-black under a cold white and a steel fog.
+    'macalania-temple': { shadow: [0.03, 0.1, 0.24], highlight: [0.86, 0.96, 1.0], recipe: { sat: 0.82, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.26, 0.44, 0.66], light: { u: 0.475, v: 0.5, color: [0.55, 0.85, 1.0] } },
+    'bevelle-highbridge': { shadow: [0.04, 0.06, 0.24], highlight: [1.0, 0.8, 0.54], recipe: { sat: 0.84, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.14, 0.2, 0.42], light: { u: 0.49, v: 0.8, color: [0.55, 0.78, 1.0] } },
+    'cavern-stolen-fayth': { shadow: [0.03, 0.07, 0.18], highlight: [0.84, 0.94, 1.0], recipe: { sat: 0.84, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.2, 0.3, 0.44], light: { u: 0.59, v: 0.42, color: [0.7, 0.86, 1.0] } },
     // Chapter IV: violet-black shadows, the lamps' amber in the highlights against the cyan skylight, a cooler brown fog.
     'bevelle-underground': { shadow: [0.1, 0.05, 0.24], highlight: [1.0, 0.78, 0.52], recipe: { sat: 0.8, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.28, 0.32, 0.5] },
     // Chapter VI (release 69): violet-black shadows under a rose-cream highlight, the heart's light, a violet-rose fog over the cold machine room.

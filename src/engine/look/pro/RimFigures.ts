@@ -36,6 +36,17 @@ export const TREATED_RIM_FOES: Readonly<Record<string, 'ffx' | 'ffx2'>> = Object
   // per-form rows would need that plumbing changed first; (3) no pale matte fringe is indicated (edge minus ring luminance -17.2, +6.3, -17.9 against the booth bosses' +1.5 and +7.7 after their re-cut), so no re-cut art. She is flagged here, by combatant id,
   // like Leblanc's cast: no screen-space rim, so the frame shares the party's clean edge.
   yunalesca: 'ffx',
+  // Batch 3a (`booth-ffx-b3a`, FFX only; the same rule, the same switch, and NO `BOSS_CLEAN_ARTS` or `BOSS_FEET` row for any of them: the footprint and the re-cut are not read here, `docs/handoff/booth-ffx-b3a.md` section 3). Chapter VII: Seymour, the two Guado Guardians and Anima
+  // (edge minus ring luminance +4.1, -9.1, +7.4). Chapter X: Mortibody (-3.8). Chapter IX: Yojimbo and Daigoro (-15.6, -19.5). NOT LISTED, and kept with their rim as release 68 draws them: **Seymour Natus** (+19.3: the pale-fringe re-cut candidate of the inventory, held: a clean edge over a pale
+  // matte is the re-cut's job and no art is written here) and **Lady Ginnem** (+81.4 and a soft-alpha share of 1.13: a translucent glow like Shiva and Anima in Chapter XI, where a rim on top would be a second glow). Lifts when the re-cut of Natus is built (the id joins this table with it) or a look at
+  // job J8 of `docs/handoff/booth-ffx-b3a.md` shows Natus's or Ginnem's edge reads better without it.
+  'seymour-macalania': 'ffx',
+  'guado-guardian-a': 'ffx',
+  'guado-guardian-b': 'ffx',
+  'anima-macalania': 'ffx',
+  mortibody: 'ffx',
+  yojimbo: 'ffx',
+  daigoro: 'ffx',
   leblanc: 'ffx2',
   logos: 'ffx2',
   'logos-room': 'ffx2',

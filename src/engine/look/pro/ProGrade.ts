@@ -16,6 +16,7 @@
  */
 import type { GradeRecipe } from '../LookGrades.ts';
 import type { Rgb } from '../LookConfig.ts';
+import { PRO_ARENA_FFX_B3A } from './ProGradeFfxB3a.ts'; // batch 3a's three FFX rooms (this file would pass 400 lines with them)
 
 const clamp01 = (x: number): number => (x < 0 ? 0 : x > 1 ? 1 : x);
 const smooth = (a: number, b: number, x: number): number => {
@@ -228,6 +229,8 @@ export const PRO_ARENA: Readonly<Record<string, ProRoom>> = {
     // the oculus, found on the painting (plate u 0.338, v 0.063 from the top) so the cone follows the camera; (u, v) is the frame point it started from (the oculus at the first menu: screen x about 0.36 and the frame's top)
     cone: { u: 0.36, v: 0.97, follow: false, paint: { u: 0.338, v: 0.063 }, colour: [0.82, 0.74, 1.0], strength: 0.3, spread: 0.4, reach: 1.8, rays: 0.3 },
   },
+  // Batch 3a (FFX only, `booth-ffx-b3a`): Chapter VII's Macalania antechamber, Chapter IX's Cavern and Chapter X's Highbridge, in `ProGradeFfxB3a.ts` (this file would pass 400 lines with them).
+  ...PRO_ARENA_FFX_B3A,
   'bevelle-underground': {
     colour: {
       exposure: 1.47,
