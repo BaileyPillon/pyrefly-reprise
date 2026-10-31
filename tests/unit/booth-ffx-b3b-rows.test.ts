@@ -272,7 +272,7 @@ describe('the arena is [ours] and says so: the rows name their still, the handof
         expect(note, `${id} ${piece}`).toMatch(JOB[piece]!);
         cited++;
       }
-    expect(cited).toBe(4); // III moments, XII cam and moments, XIV cam
+    expect(cited).toBe(5); // III moments, XII cam and moments, XIV cam and moments (booth-b3 M1)
   });
 });
 

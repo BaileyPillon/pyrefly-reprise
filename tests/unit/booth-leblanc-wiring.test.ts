@@ -114,7 +114,7 @@ describe('`__pyrefly.treated()`', () => {
       'yojimbo-cavern': ['breath', 'cam', 'moments'],
       'braskas-final-aeon': ['breath', 'moments'],
       'seymour-omnis': ['breath', 'cam', 'moments'],
-      'isaaru-via-purifico': ['breath', 'cam'],
+      'isaaru-via-purifico': ['breath', 'cam', 'moments'],
       'ffx2-leblanc': ['breath', 'cam', 'moments'], // the pieces she holds, in the order of her rows
       'ffx2-vegnagun-shuyin': ['cam', 'breath', 'moments'],
       'ffx2-den-of-woe': ['breath', 'moments'],

@@ -58,7 +58,7 @@ const HELD_NOW: Readonly<Record<string, readonly string[]>> = {
   'yojimbo-cavern': ['breath', 'cam', 'moments'], // the lit pad of the victory (cam)
   'braskas-final-aeon': ['breath', 'moments'], // batch 3b: each of the three holds the staged breath; the review's M1 added the moments (Rikku, 0.52) to III and XII, and its m1 and m2 the camera to XII and XIV
   'seymour-omnis': ['breath', 'cam', 'moments'],
-  'isaaru-via-purifico': ['breath', 'cam'],
+  'isaaru-via-purifico': ['breath', 'cam', 'moments'], // the review of booth-b3 (M1): Yuna alone has no read at a hard cut; her aeons never take it
   'ffx2-trema': ['cam', 'breath', 'moments'], // batch 3: Chapter XIII holds the giants frame's camera (the follower undoes it), the staged breath (a tone pick) and the knock-out's cut (three KO bodies the registration data cannot clear)
 };
 
@@ -181,7 +181,7 @@ describe('the holds', () => {
     expect(treatedHold('seymour-natus', 'cam')).toBeUndefined(); // the plane model reads the Highbridge no worse than Gagazet and nothing authored by hand is lost (handoff section 3)
   });
 
-  it("Chapters III, XII and XIV (batch 3b, FFX only) hold the staged breath: each has sourced showpieces whose tone, sound and shot are a mockup decision, no BigMove names them (bigMoveOf stages Mega Flare for FFX-2 only), and the one telegraph hold in these chapters is Chapter III's; with the review's pieces III and XII also hold the moments and XII and XIV the camera, and every other piece plays", () => {
+  it("Chapters III, XII and XIV (batch 3b, FFX only) hold the staged breath: each has sourced showpieces whose tone, sound and shot are a mockup decision, no BigMove names them (bigMoveOf stages Mega Flare for FFX-2 only), and the one telegraph hold in these chapters is Chapter III's; with the review's pieces III, XII and XIV also hold the moments (booth-b3's M1 for XIV) and XII and XIV the camera, and every other piece plays", () => {
     const WORDS: Readonly<Record<string, readonly RegExp[]>> = {
       'braskas-final-aeon': [/Ultimate Jecht Shot/, /Triumphant Grasp/, /Jecht Bomber/, /TelegraphHold/, /possessed-bahamut-mega-flare/],
       'seymour-omnis': [/omnis-ultima/, /6:240/, /Total Annihilation is not in this fight/, /TelegraphHold/],

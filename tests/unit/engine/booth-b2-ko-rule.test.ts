@@ -14,10 +14,18 @@
  *    Pinned below with the real actor, and as the one reason this chapter is allowed to play moments (`KO_CLEARED` is empty: a chapter that plays both pieces must be named there with its evidence).
  *  - Chapters V, XV and XI (FFX-2 only): all three field the Farplane build; the girls' Garment Grids hold Gunner and Thief beside the worn dress, and the harness read those paintings over the cap in Leblanc (Rikku Thief 0.61 to 0.63, Yuna
  *    Gunner 0.50 to 0.52); the other dresses have no read. They hold `moments`.
+ *
+ * BATCH 3 AND THE REVIEW OF `booth-b3` (2026-10-31).
+ *  - Chapter XIV (FFX only): the first merge let it play the cut on an estimate; the review's M1 held it to the rule as written (a dress with no read is not under the cap), so it holds `moments` (job J5 lifts it). Only Yuna could ever take
+ *    the cut there: her five aeons are not toppling bodies (`KoFall.canTopple`), pinned below, and she is alone with no Switch, so the exposure was her own KO.
+ *  - Trema and Leblanc (FFX-2 only) field Gunner and Thief on their grids too (review m3): pinned below beside Chapters V, XV and XI, and the approved Chapter IV (the booth pair, not changed by the rule) fields them as well.
+ *  - The excuse CHK-027 really applies is the LARGER of `maxJerkPx` (120 px at 1600 wide) and half the drawn height (review m7), so the 0.5 share rule used here only ever over-holds a figure drawn under 240 px and never under-holds. A hold is
+ *    lifted on pixels AND on share, as the harness judges it.
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { reset, yuna } from './head-lock-fixture.ts';
-import { fallRun } from '../../../src/engine/KoFall.ts';
+import { canTopple, fallRun, koMode } from '../../../src/engine/KoFall.ts';
+import type { KoFacts } from '../../../src/engine/KoFall.ts';
 import { PIECE_HOLDS, TREATED_CHAPTERS, isTreatedChapter, setTreatedScope, treatedHold } from '../../../src/engine/motion/DemoGate.ts';
 import { setCurvesChapter } from '../../../src/engine/motion/CurvesSwitch.ts';
 import { momentsOn, setMomentsMode } from '../../../src/engine/motion/MomentsSwitch.ts';
@@ -48,14 +56,12 @@ const MEASURED: Readonly<Record<string, { lo: number; hi: number; where: string 
 };
 
 /**
- * Chapters beyond the booth pair that play the KO's hard cut (moments and smear both), each with the evidence that every dress the player can field there reads under the cap. Batch 2 has none:
- * Chapter II holds the smear, Leblanc and Chapters V, XV and XI hold the moments. A chapter that joins and plays both pieces is added here in the commit that lets it, with its reads.
- * Batch 3: Chapter XIV (Isaaru in the Via Purifico, FFX) is the one, on the batch-3b lane's table and the recorded ratio below, NOT on a read in the page; its pre-deploy gate is the KO run of Yuna and her aeons.
+ * Chapters beyond the booth pair that play the KO's hard cut (moments and smear both), each with the evidence that every dress the player can field there READS under the cap. None does: Chapter II holds the smear,
+ * Leblanc and Chapters III, V, VII, IX, X, XI, XII, XIII, XIV and XV hold the moments. A chapter that joins and plays both pieces is added here in the commit that lets it, with its reads from the page.
+ * Chapter XIV (Isaaru in the Via Purifico, FFX) was the one in the first merge, on an estimate and not a read; the review of `booth-b3` (M1, 2026-10-31) found that the rule as written holds it ("a dress with no read is NOT under the cap"),
+ * and it now holds `moments` with the J5 lift. Its aeons were never at risk: they cannot take the cut (pinned below).
  */
-const KO_CLEARED: Readonly<Record<string, string>> = {
-  'isaaru-via-purifico':
-    'Yuna alone (offline 0.24) with her aeons (offline 0.09 to 0.31): docs/handoff/booth-ffx-b3b.md section 4 class 4; and the recorded FFX plain-cross reads of Yuna (0.095 to 0.117, Chapter II) scaled by the largest plain-to-hard ratio any FFX figure shows (Kimahri 0.499 over 0.147)',
-};
+const KO_CLEARED: Readonly<Record<string, string>> = {};
 
 /** What the harness read for FFX party figures (swap jerk over the drawn height, 1600 x 900): the plain cross (release 68, `hard false`) and, where the booth Chapter I cuts it, the hard cut (`hard true`). */
 const FFX_READS: Readonly<Record<string, { plain: [number, number]; hard?: [number, number] }>> = {
@@ -125,22 +131,59 @@ describe('Chapter II: the KO is the plain cross, because the smear is held (the 
   });
 });
 
-describe('Chapter XIV (batch 3b, FFX only): Yuna alone with her aeons plays the KO cut on the lane\'s table and the recorded ratio, and it is the only chapter that does', () => {
-  it('the real actor builds a cut window there, as in the booth pair, and KO_CLEARED names it with its evidence', () => {
-    const k = koWindow('isaaru-via-purifico', 'all');
-    expect([k.moments, k.smear]).toEqual([true, true]);
-    expect(k.window).toBeGreaterThan(0);
-    expect(k.cut).toBe(true);
-    expect(Object.keys(KO_CLEARED)).toEqual(['isaaru-via-purifico']);
-    expect(treatedHold('isaaru-via-purifico', 'moments')).toBeUndefined();
+const XIV = 'isaaru-via-purifico';
+/** Yuna's five aeons in the Via Purifico (`booth-ffx-b3b-classes`: Valefor, Ifrit, Ixion, Shiva and Bahamut), by their art ids. */
+const XIV_AEONS = ['valefor', 'ifrit', 'shiva', 'ixion', 'bahamut'] as const;
+/** The facts `living.ts` reads for a party figure whose KO painting is a lying body, motion allowed (REDUCE MOTION off). */
+const toLying = (name: string): KoFacts => ({ rm: false, samePlane: false, samePainting: false, fromProne: false, toProne: true, name, partySide: true });
+
+describe('Chapter XIV (batch 3b, FFX only): Yuna alone has no read at a hard cut, so the moments are held (the review of booth-b3, M1)', () => {
+  it("the real actor builds release 68's KO there: no window, the plain cross; the smear still plays, under ?treated=pack nothing changes, and the booth pair next to it keeps the cut", () => {
+    const k = koWindow(XIV, 'all');
+    expect([k.moments, k.smear]).toEqual([false, true]);
+    expect(k.window).toBeUndefined();
+    expect(k.cut).toBeUndefined();
+    expect(k.crossMs).toBe(fallRun('topple', 'ffx')!.opts.crossMs);
+    expect(k.crossMs).toBeGreaterThan(60); // a blend over several frames, not a cut of a few milliseconds
+    expect(koWindow(XIV, 'pack').window).toBeUndefined();
+    expect(koWindow('seymour-flux', 'all').window).toBeGreaterThan(0);
+    expect(Object.keys(KO_CLEARED)).toEqual([]); // no chapter beyond the booth pair plays the cut on any evidence
   });
 
-  it('Yuna\'s worst recorded plain-cross read, times the largest plain-to-hard ratio an FFX figure shows, stays under the cap (an estimate: no FFX Yuna has been read at a hard cut)', () => {
+  it("an estimate is not a read: Yuna's worst recorded plain-cross read times the largest plain-to-hard ratio an FFX figure shows stays under the cap, and that is exactly why the hold is there (no FFX Yuna has been read at a hard cut)", () => {
     const ratio = Math.max(...Object.values(FFX_READS).filter((r) => r.hard).map((r) => r.hard![1] / r.plain[0])); // Kimahri 0.499 / 0.147
     expect(ratio).toBeCloseTo(3.39, 1);
     expect(FFX_READS['yuna']!.plain[1] * ratio).toBeLessThan(CAP);
-    expect(FFX_READS['yuna']!.plain[1] * ratio).toBeGreaterThan(0.35); // the margin is real but not wide: the gate is a KO run, not this arithmetic
-    expect(FFX_READS['kimahri']!.hard![1]).toBeLessThan(CAP); // the approved Chapter I\'s own Kimahri sits 0.001 under it
+    expect(FFX_READS['yuna']!.plain[1] * ratio).toBeGreaterThan(0.35); // the margin is real but not wide
+    expect(FFX_READS['yuna']!.hard).toBeUndefined(); // ...and there is no read to put in its place
+    expect(FFX_READS['kimahri']!.hard![1]).toBeLessThan(CAP); // the approved Chapter I's own Kimahri sits 0.001 under it, where the same estimators said 0.43
+  });
+
+  it('her five aeons can never take the cut: none is a toppling body, so the KO is a buckle and a cross whatever the moments do, and fallRun cuts only a topple (Yuna is the one body at risk)', () => {
+    for (const aeon of XIV_AEONS) {
+      expect(canTopple(aeon, true), aeon).toBe(false);
+      expect(koMode(toLying(aeon)), aeon).toBe('buckle-cross');
+    }
+    expect(koMode(toLying('yuna'))).toBe('topple');
+    for (const mode of ['cross', 'buckle-cross', 'flip'] as const) expect(fallRun(mode, 'ffx', 38)?.opts.cut, mode).toBeUndefined();
+    expect(fallRun('topple', 'ffx', 38)!.opts.cut).toBe(true);
+    const build = getChapter(XIV)!.buildRef as { activeSlots: string[] };
+    expect(build.activeSlots).toEqual(['yuna']); // forced solo, no Switch: her KO is the party wipe, so the exposure is the defeat frame
+  });
+
+  it('the hold says so: Yuna alone, no read, the aeons never cut, the estimate is not a read, the plain cross it keeps, job J5 and what lifts it (judged by pixels and by share)', () => {
+    const why = treatedHold(XIV, 'moments')!;
+    expect(why.length).toBeGreaterThanOrEqual(80);
+    expect(why).toMatch(/^FFX, Chapter XIV/);
+    expect(why).toMatch(/Only Yuna can take the cut here: her five aeons never do/);
+    expect(why).toMatch(/NO READ of FFX Yuna/);
+    expect(why).toMatch(/an estimate is not a read/);
+    expect(why).toMatch(/release 68's plain cross/);
+    expect(why).toMatch(/CHK-027/);
+    expect(why).toMatch(/Lifts when job J5 of docs\/handoff\/booth-ffx-b3b\.md/);
+    expect(why).toMatch(/by pixels and by share/);
+    expect(Object.keys(PIECE_HOLDS[XIV]!).sort()).toEqual(['breath', 'cam', 'moments']);
+    expect(treatedHold(XIV, 'smear')).toBeUndefined(); // only the piece the rule names is lost
   });
 });
 
@@ -194,6 +237,48 @@ describe('Chapters V, XV and XI: the girls can field Gunner and Thief, the harne
   });
 });
 
+describe('Trema and Leblanc (FFX-2 only): the girls\' grids field Gunner and Thief here too, so the moments stay held (review m3)', () => {
+  const TREMA = 'ffx2-trema';
+  const LEBLANC = 'ffx2-leblanc';
+
+  it('the real grids of Trema put the dresses the hold names in a fight, Gunner and Thief on all three girls among them', () => {
+    expect(fieldable(TREMA).sort()).toEqual(
+      ['yuna-dark-knight', 'yuna-white-mage', 'yuna-gunner', 'yuna-thief', 'yuna-lady-luck', 'rikku-alchemist', 'rikku-gunner', 'rikku-thief', 'rikku-warrior', 'rikku-lady-luck', 'paine-dark-knight', 'paine-warrior', 'paine-gunner', 'paine-thief', 'paine-lady-luck'].sort(),
+    );
+  });
+
+  it('the real grids of Leblanc (a different build: Songstress and the Mages where Trema has the Dark Knight and the Alchemist) put Gunner and Thief on Yuna and Rikku and Gunner on Paine', () => {
+    expect(fieldable(LEBLANC).sort()).toEqual(
+      ['yuna-gunner', 'yuna-songstress', 'yuna-white-mage', 'yuna-black-mage', 'yuna-thief', 'rikku-thief', 'rikku-black-mage', 'rikku-gunner', 'rikku-warrior', 'rikku-white-mage', 'paine-warrior', 'paine-white-mage', 'paine-gunner', 'paine-songstress'].sort(),
+    );
+  });
+
+  it.each([TREMA, LEBLANC])('%s: the grids field both dresses the harness read over the cap, most dresses have no read, so the rule fails and the chapter holds moments with its reason', (id) => {
+    const dresses = fieldable(id);
+    expect(dresses).toEqual(expect.arrayContaining(['rikku-thief', 'yuna-gunner', 'rikku-gunner', 'yuna-thief', 'paine-gunner']));
+    expect(dresses.filter((d) => MEASURED[d] === undefined).length).toBeGreaterThan(8);
+    expect(allUnderCap(dresses)).toBe(false);
+    expect(treatedHold(id, 'moments')).toMatch(/Lifts when/);
+    setTreatedScope('all');
+    expect(isTreatedChapter(id, 'moments')).toBe(false);
+    expect(isTreatedChapter(id)).toBe(true);
+  });
+
+  it.each([TREMA, LEBLANC])("%s: the real actor builds release 68's KO (no window, the plain cross), and under ?treated=pack nothing changes", (id) => {
+    const k = koWindow(id, 'all');
+    expect([k.moments, k.window, k.cut]).toEqual([false, undefined, undefined]);
+    expect(k.crossMs).toBe(fallRun('topple', 'ffx2')!.opts.crossMs);
+    expect(koWindow(id, 'pack').window).toBeUndefined();
+  });
+
+  it('Trema\'s hold names the over-cap pair beside the three starting dresses (the grid fields Gunner and Thief, Rikku Thief 0.61 to 0.63 and Yuna Gunner 0.50 to 0.52)', () => {
+    const why = treatedHold(TREMA, 'moments')!;
+    expect(why).toMatch(/Gunner and Thief/);
+    expect(why).toMatch(/Rikku Thief 0\.61 to 0\.63/);
+    expect(why).toMatch(/Yuna Gunner 0\.50 to 0\.52/);
+  });
+});
+
 describe('the table of reads is the one the holds quote (Leblanc\'s hold and these three say the same numbers)', () => {
   it('Leblanc\'s moments hold quotes Rikku Thief 0.62 to 0.63 and Yuna Gunner 0.50 to 0.52, inside the table\'s ranges', () => {
     const why = treatedHold('ffx2-leblanc', 'moments')!;
@@ -209,5 +294,19 @@ describe('the table of reads is the one the holds quote (Leblanc\'s hold and the
     expect(fieldable('ffx2-leblanc')).toEqual(expect.arrayContaining(['rikku-thief', 'yuna-gunner']));
     expect(fieldable('ffx2-bahamut')).toEqual(expect.arrayContaining(['rikku-thief', 'yuna-gunner']));
     expect(MEASURED['rikku-dark-knight']!.hi).toBeLessThan(CAP);
+  });
+});
+
+describe('the dome\'s Tidus 0.75 is a REDUCE MOTION run, not the moments\' cut (review m2)', () => {
+  it.each(['seymour-anima-macalania', 'yojimbo-cavern', 'seymour-natus'])('%s: the hold quotes it as a REDUCE MOTION run with no planned smear, and no longer as a hard cut', (id) => {
+    const why = treatedHold(id, 'moments')!;
+    expect(why).toMatch(/0\.75 \(Tidus, the dome of Chapter II: a REDUCE MOTION run, whose cut has no planned smear/);
+    expect(why).not.toMatch(/a hard cut with no planned smear/);
+    expect(why).toMatch(/Lifts when/);
+  });
+
+  it('the dome has no moments cut to read: its smear is held, so the KO there is the plain cross whatever the address says', () => {
+    expect(koWindow('yunalesca', 'all').window).toBeUndefined();
+    expect(koWindow('yunalesca', 'pack').window).toBeUndefined();
   });
 });

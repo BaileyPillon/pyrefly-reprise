@@ -282,6 +282,8 @@ const activeOf = (id: string): string[] => {
 const fieldable = (id: string): string[] => [...setupForChapter(getChapter(id)!, 1).party.members.map((m) => m.id), ...AEONS, ...FOES];
 const TARGET_LIMIT = Math.max(...activeOf('seymour-flux').map((m) => KO_STEP[m]!));
 const heldMoments = (id: string): boolean => fieldable(id).some((m) => KO_STEP[m]! > Math.min(MEASURED_CAP, TARGET_LIMIT) + 0.005);
+/** Held for want of a read, not for a number over the bounds (the review of booth-b3, M1): Yuna alone, estimated 0.24 and about 0.40 by the recorded ratio, with no read of her at a hard cut; her aeons never take the cut (`booth-b2-ko-rule`). */
+const UNREAD_HELD = ['isaaru-via-purifico'];
 
 describe('class 4: the moments are held in a chapter that can field a figure stepping further at the hurt-to-KO cut than the cap or the approved target\'s own line-up', () => {
   it('the bounds: the target\'s own limit is Kimahri\'s 0.43 (Tidus, Yuna and Kimahri are Chapter I\'s active line-up), under the 0.5 cap; the instrument\'s calibration dresses are ordered the way the page measured them (Thief over Dark Knight)', () => {
@@ -291,21 +293,27 @@ describe('class 4: the moments are held in a chapter that can field a figure ste
     expect(KO_STEP['rikku']).toBeGreaterThan(MEASURED_CAP); // the raw estimate alone is over the cap
   });
 
-  it.each(IDS)('%s: the moments piece is held exactly when a figure the chapter can field is over the bounds, and the hold names the dress and the number', (id) => {
+  it.each(IDS)('%s: the moments piece is held exactly when a figure the chapter can field is over the bounds, or has no read at all, and the hold names the dress and the number, or the lack of a read', (id) => {
     const over = fieldable(id).filter((m) => KO_STEP[m]! > Math.min(MEASURED_CAP, TARGET_LIMIT) + 0.005);
-    expect(treatedHold(id, 'moments') !== undefined, `${id}: over the bounds: ${over.join(', ') || 'none'}`).toBe(heldMoments(id));
+    expect(treatedHold(id, 'moments') !== undefined, `${id}: over the bounds: ${over.join(', ') || 'none'}`).toBe(heldMoments(id) || UNREAD_HELD.includes(id));
     if (heldMoments(id)) {
       expect(over, id).toEqual(['rikku']); // the only dress over: Kimahri, Wakka and Lulu are at or under the target's own
       expect(treatedHold(id, 'moments'), id).toMatch(/Rikku at 0\.52/);
       expect(treatedHold(id, 'moments'), id).toMatch(/Lifts when/);
       expect(treatedHold(id, 'moments'), id).toMatch(/J5/);
+    } else if (UNREAD_HELD.includes(id)) {
+      expect(over, id).toEqual([]); // the estimate alone would have let it play: that is the point, an estimate is not a read
+      expect(treatedHold(id, 'moments'), id).toMatch(/NO READ of FFX Yuna/);
+      expect(treatedHold(id, 'moments'), id).toMatch(/Lifts when/);
+      expect(treatedHold(id, 'moments'), id).toMatch(/J5/);
     }
   });
 
-  it('Chapters III and XII can field all seven of Chapter I\'s party (Rikku among them) and so hold the moments; Chapter XIV is Yuna alone with her aeons, all under the bounds, and plays them', () => {
+  it('Chapters III and XII can field all seven of Chapter I\'s party (Rikku among them) and so hold the moments; Chapter XIV is Yuna alone with her aeons, all under the bounds on the estimate, and holds them anyway for want of a read', () => {
     expect(heldMoments('braskas-final-aeon')).toBe(true);
     expect(heldMoments('seymour-omnis')).toBe(true);
-    expect(heldMoments('isaaru-via-purifico')).toBe(false);
+    expect(heldMoments('isaaru-via-purifico')).toBe(false); // the estimate is under the bounds...
+    expect(treatedHold('isaaru-via-purifico', 'moments')).toBeDefined(); // ...and the chapter holds the moments all the same (booth-b3 M1)
     expect(fieldable('braskas-final-aeon')).toContain('rikku');
     expect(fieldable('seymour-omnis')).toContain('rikku');
     expect(fieldable('isaaru-via-purifico')).not.toContain('rikku');

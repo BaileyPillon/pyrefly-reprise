@@ -22,8 +22,8 @@ import { DemoGovernor } from '../../src/engine/governor/DemoGovernor.ts';
 import { chapterLook } from '../../src/engine/look/LookConfig.ts';
 
 const IDS = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'] as const;
-/** The chapters that hold the moments (the reserve Rikku's KO step, review M1) and the directed camera (the killing blow's plate at the live positions, m1; the aeon as the actor, m2). */
-const MOMENTS_HELD: readonly string[] = ['braskas-final-aeon', 'seymour-omnis'];
+/** The chapters that hold the moments (the reserve Rikku's KO step, review M1; Yuna's unread KO cut in XIV, the review of booth-b3 M1) and the directed camera (the killing blow's plate at the live positions, m1; the aeon as the actor, m2). */
+const MOMENTS_HELD: readonly string[] = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'];
 const CAM_HELD: readonly string[] = ['seymour-omnis', 'isaaru-via-purifico'];
 
 function allOn(): void {

@@ -1,12 +1,12 @@
 /**
- * THE KO CUT IN CHAPTERS III AND XII IS HELD (release 71, branch `booth-ffx-b3b`, the review's M1; FFX only for the chapters, the gate is both games).
+ * THE KO CUT IN CHAPTERS III, XII AND XIV IS HELD (release 71, branch `booth-ffx-b3b`, the review's M1 for III and XII, and the review of `booth-b3`'s M1 for XIV; FFX only for the chapters, the gate is both games).
  *
  * The brief's class 4: the moments turn a party figure's knock-out into a hard cut of the hurt-to-KO swap (`PaintedActorLife.koCutWindow`, which needs `momentsOn()` and `smearOn()`), and a cut whose step is over 0.5 of the drawn height fails
  * CHK-027 (Leblanc's Rikku Thief, measured at 0.62). The lane's own table has the reserve Rikku at 0.52, over the cap on the raw number, and both chapters can field her (the same seven as the approved Chapter I's), so
- * `DemoGate.PIECE_HOLDS['braskas-final-aeon' | 'seymour-omnis'].moments` holds the piece. Chapter XIV is Yuna alone with her aeons, all under the bounds (`booth-ffx-b3b-classes`), and keeps it. These tests pin the real actor's answer: the window the live KO run is
+ * `DemoGate.PIECE_HOLDS['braskas-final-aeon' | 'seymour-omnis'].moments` holds the piece. Chapter XIV is Yuna alone with her aeons, all under the bounds on the offline estimate (`booth-ffx-b3b-classes`) but with no READ of her at a hard cut, and the rule holds an unread dress (`booth-b2-ko-rule`), so it holds the piece too. These tests pin the real actor's answer: the window the live KO run is
  * built with (`fx/mix/living.ts` passes `a.koCutWindow()` to `KoFall.fallRun`), the same shape as the Leblanc lane's.
  *
- * Chapter I and Chapter IV (the approved target) keep the cut; a held chapter under `?treated=pack` is release 68 (no cut, nothing treated).
+ * Chapter I and Chapter IV (the approved target) keep the cut (Chapter XIV, which the first merge let play it on an estimate, does not); a held chapter under `?treated=pack` is release 68 (no cut, nothing treated).
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { reset, yuna } from './head-lock-fixture.ts';
@@ -35,11 +35,11 @@ function koWindow(chapter: string, scope: 'all' | 'pack'): { window: number | un
   return { window, moments: momentsOn(), cut: run.opts.cut, crossMs: run.opts.crossMs };
 }
 
-const HELD = ['braskas-final-aeon', 'seymour-omnis'] as const;
+const HELD = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'] as const;
 
 describe('the KO cut of a party figure (the window the live KO run is built with)', () => {
-  it('Chapter I and Chapter IV cut the KO inside the smear window (the approved target: a cut of a few frames, the lying painting arrives under it), and Chapter XIV, which fields Yuna alone, does too', () => {
-    for (const chapter of ['seymour-flux', 'ffx2-bahamut', 'isaaru-via-purifico']) {
+  it('Chapter I and Chapter IV cut the KO inside the smear window (the approved target: a cut of a few frames, the lying painting arrives under it)', () => {
+    for (const chapter of ['seymour-flux', 'ffx2-bahamut']) {
       const k = koWindow(chapter, 'all');
       expect(k.moments, chapter).toBe(true);
       expect(k.window, chapter).toBeGreaterThan(0);
