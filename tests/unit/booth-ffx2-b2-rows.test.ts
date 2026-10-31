@@ -6,7 +6,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { Object3D } from 'three';
 import { setBossClean, bossCleanOn, bossCleanCard, BOSS_CLEAN_ARTS, BOSS_FEET } from '../../src/engine/look/pro/BossClean.ts';
-import { setDemoChapter, setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
+import { setDemoChapter, setTreatedScope, treatedHold } from '../../src/engine/motion/DemoGate.ts';
 import { CHAPTER_LOOKS, chapterLook } from '../../src/engine/look/LookConfig.ts';
 import { ROOM_LOOKS } from '../../src/engine/look/LookGrades.ts';
 import { boldRoom } from '../../src/engine/look/LookGradesBold.ts';
@@ -59,7 +59,8 @@ describe('the HD-2D look and the rooms\' rows', () => {
       setTreatedScope('pack');
       expect(chapterLook(id), id).toBeNull();
       setTreatedScope('all');
-      expect(chapterLook(id), id).toEqual(isListed(id) ? { name: 'hd2d', strength: 'bold' } : null); // the row stays; the look is unread while the chapter is off the list
+      // the row stays; the look is unread while the chapter is off the list (IX is not here) and, for Chapters V and XI, while `hd2d` is held (booth-ffx2-b4-sky: the bold look clips the Farplane's sky); the Den of Woe plays it
+      expect(chapterLook(id), id).toEqual(isListed(id) && treatedHold(id, 'hd2d') === undefined ? { name: 'hd2d', strength: 'bold' } : null);
     }
   });
 

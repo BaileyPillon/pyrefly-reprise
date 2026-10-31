@@ -119,12 +119,14 @@ describe('the follower\'s stand-down table and the hold guard over the merged li
   it('SCRIPTED_RIGS names only treated FFX-2 chapters (FFX has no follower), and holds a row for Chapter XI and for Chapter XIII', () => {
     const ids = Object.keys(SCRIPTED_RIGS);
     expect(ids.sort()).toEqual(['ffx2-fallen-aeons', 'ffx2-trema']);
-    for (const id of ids) expect(TREATED_CHAPTERS[id]?.game ?? WITHDRAWN_R70[id]?.game, id).toBe('ffx2'); // Chapter XI's row waits in the table while the chapter is off the list (r70)
-    expect(Object.keys(TREATED_CHAPTERS).filter((id) => ids.includes(id))).toEqual(['ffx2-trema']); // and only Chapter XIII's stand-down is read now
+    for (const id of ids) expect(TREATED_CHAPTERS[id]?.game ?? WITHDRAWN_R70[id]?.game, id).toBe('ffx2'); // both are treated FFX-2 chapters since booth-ffx2-b4-sky put Chapter XI back
+    expect(Object.keys(TREATED_CHAPTERS).filter((id) => ids.includes(id)).sort()).toEqual(['ffx2-fallen-aeons', 'ffx2-trema']);
+    // and both hold the camera, so neither stand-down is read while the follower is held (Chapter XI: it crops Yuna; Chapter XIII: it undoes the giants frame)
+    for (const id of ids) expect(treatedHold(id, 'cam'), id).toBeDefined();
   });
 
-  it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list was fourteen; the r70 verdicts left ten)', () => {
-    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(10);
+  it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list was fourteen; the r70 verdicts left ten; booth-ffx2-b4-sky put Chapters V and XI back: twelve, and neither is a swap exception)', () => {
+    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(12);
     const exceptions = Object.keys(SCOPE_EXCEPTIONS);
     const both = Object.keys(TREATED_CHAPTERS).filter((id) => exceptions.includes(id));
     expect(both).toEqual(['yunalesca']); // evrae-airship, sin-face and ffx2-ixion-djose are exceptions that the treatment has not reached

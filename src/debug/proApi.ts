@@ -7,6 +7,7 @@
  */
 import { PIECE_HOLDS, TREATED_CHAPTERS, demoChapter, isTreatedChapter, setTreatedScope, treatedScope, type TreatedScope } from '../engine/motion/DemoGate.ts';
 import { proTune } from '../engine/look/pro/ProGrade.ts';
+import { SKY_CHAPTERS, SKY_CHANGES, SKY_OPTIONS, setSkyOption, skyActive, skyOption, type SkyOption } from '../engine/look/pro/SkyGrade.ts';
 import { bossCleanMode, bossCleanOn, setBossClean, type BossCleanMode } from '../engine/look/pro/BossClean.ts';
 import { partyRimMode, partyRimOff, setPartyRim, type PartyRimMode } from '../engine/look/pro/PartyRimSwitch.ts';
 import { PRO_PIECES, dangerPulseFromSearch, proLookOn, proMode, proPieceOn, setProMode, setProPiece, type ProMode, type ProPiece } from '../engine/look/pro/ProSwitch.ts';
@@ -46,6 +47,14 @@ export function installProDebug(api: Record<string, unknown>): void {
   api['treated'] = (scope?: TreatedScope | null) => {
     if (scope === 'all' || scope === 'pack' || scope === null) setTreatedScope(scope);
     return { scope: treatedScope(), chapters: Object.keys(TREATED_CHAPTERS), holds: Object.fromEntries(Object.entries(PIECE_HOLDS).filter(([k]) => Object.prototype.hasOwnProperty.call(TREATED_CHAPTERS, k)).map(([k, v]) => [k, Object.keys(v)])), running: demoChapter() ?? null, reaches: isTreatedChapter(demoChapter()) };
+  };
+  /**
+   * `booth-ffx2-b4-sky` (FFX-2 only): the measuring word of the Farplane's two plates. `skyGrade()` reads `{ word, active, chapters, options }` (`word`: the option the address or the last call asked for, `active`: the option patching the running room, null with
+   * no word or outside Chapters V and XI); `skyGrade('a' | 'b' | 'c' | null)` sets it live (a battle already running picks it up on the next frame: the LUT key carries it), `skyGrade(null)` on a page that opened with the word plays the r70 grade unpatched (the failing control arm, same page and same frame); no argument is a read. Default off.
+   */
+  api['skyGrade'] = (w?: SkyOption | null) => {
+    if (w === null || (SKY_OPTIONS as readonly string[]).includes(w as string)) setSkyOption(w as SkyOption | null);
+    return { word: skyOption(), active: skyActive(), chapters: { ...SKY_CHAPTERS }, options: Object.fromEntries(SKY_OPTIONS.map((o) => [o, SKY_CHANGES[o].name])) };
   };
   /** Live tuning of one room's table for captures: `proTune('gagazet', { colour: { exposure: 0.8 } })`. */
   api['proTune'] = (room: string, patch: Record<string, unknown>): boolean => proTune(room, patch);

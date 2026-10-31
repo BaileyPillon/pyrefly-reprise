@@ -106,7 +106,7 @@ describe('`__pyrefly.treated()`', () => {
     const treated = api['treated'] as (scope?: 'all' | 'pack' | null) => { scope: string; chapters: string[]; holds: Record<string, string[]>; running: string | null; reaches: boolean };
     const all = treated('all');
     expect(all.scope).toBe('all');
-    expect(all.chapters).toEqual(['seymour-flux', 'yunalesca', 'seymour-anima-macalania', 'seymour-natus', 'braskas-final-aeon', 'isaaru-via-purifico', 'ffx2-bahamut', 'ffx2-leblanc', 'ffx2-den-of-woe', 'ffx2-trema']); // ten since the r70 verdicts (IX, XII, V and XI are off the list)
+    expect(all.chapters).toEqual(['seymour-flux', 'yunalesca', 'seymour-anima-macalania', 'seymour-natus', 'braskas-final-aeon', 'isaaru-via-purifico', 'ffx2-bahamut', 'ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'ffx2-trema']); // twelve: ten since the r70 verdicts (IX, XII, V and XI were off the list), V and XI back in booth-ffx2-b4-sky
     expect(all.holds).toEqual({
       yunalesca: ['breath', 'cam', 'smear'],
       'seymour-anima-macalania': ['breath', 'cam', 'moments'],
@@ -114,6 +114,8 @@ describe('`__pyrefly.treated()`', () => {
       'braskas-final-aeon': ['breath', 'moments'],
       'isaaru-via-purifico': ['breath', 'cam', 'moments'],
       'ffx2-leblanc': ['breath', 'cam', 'moments'], // the pieces she holds, in the order of her rows
+      'ffx2-vegnagun-shuyin': ['hd2d', 'arena', 'cam', 'breath', 'moments'], // booth-ffx2-b4-sky: the look held first (the plate is release 69's)
+      'ffx2-fallen-aeons': ['hd2d', 'arena', 'cam', 'breath', 'moments'],
       'ffx2-den-of-woe': ['cam', 'breath', 'moments'],
       'ffx2-trema': ['cam', 'breath', 'moments'],
     });

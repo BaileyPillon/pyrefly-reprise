@@ -10,7 +10,7 @@
  * waits for the hold's lift, proved here at the follower (which the lift would run): the first two sections and the follower tests below.
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { isTreatedChapter, setDemoChapter, setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
+import { isTreatedChapter, setDemoChapter, setTreatedScope, treatedHold } from '../../src/engine/motion/DemoGate.ts';
 import { SCRIPTED_RIGS, autoCameraFor, scriptedShot } from '../../src/engine/procam/ProAutoStage.ts';
 import { resetProCamForTests } from '../../src/engine/procam/ProCamSwitch.ts';
 import { ProDirector } from '../../src/engine/procam/ProDirector.ts';
@@ -291,8 +291,8 @@ describe('the real director and layer in Chapter XIII', () => {
   });
 
   it("Chapter IV and the Road are not affected: a follower there runs on a rig of the same name (the table is per chapter)", () => {
-    // The Road (Chapter XI) left the treated list in the r70 verdicts, so no follower is installed there and this case cannot read it; `stillListed` brings it back with the line.
-    for (const other of stillListed(['ffx2-bahamut', 'ffx2-fallen-aeons'])) {
+    // The Road (Chapter XI) is treated again (booth-ffx2-b4-sky) but holds the camera, so no follower is installed there and this case cannot read it; it reads the Road the day the `cam` hold lifts (the filter), and Chapter IV now.
+    for (const other of stillListed(['ffx2-bahamut', 'ffx2-fallen-aeons']).filter((id) => treatedHold(id, 'cam') === undefined)) {
       setDemoChapter(other);
       const w = world(CLOISTER);
       turn(w);
