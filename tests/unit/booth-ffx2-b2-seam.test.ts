@@ -46,8 +46,8 @@ describe('the names that must agree', () => {
     expect(scriptedShot(CHAPTER, 'idle')).toBe(false);
     expect(scriptedShot(CHAPTER, 'action')).toBe(false);
   });
-  it('only Chapter XI has a scripted shot, and it is a treated FFX-2 chapter (the booth pair and Leblanc cut to nothing the scene draws by position)', () => {
-    expect(Object.keys(SCRIPTED_RIGS)).toEqual([CHAPTER]);
+  it('only Chapter XI and, since batch 3, Chapter XIII have a scripted shot, and both are treated FFX-2 chapters (the booth pair and Leblanc cut to nothing the scene draws by position)', () => {
+    expect(Object.keys(SCRIPTED_RIGS)).toEqual([CHAPTER, 'ffx2-trema']);
     expect(TREATED_CHAPTERS[CHAPTER]!.game).toBe('ffx2');
     expect(scriptedShot('ffx2-bahamut', ROAD_LINKS_RIG)).toBe(false);
     expect(scriptedShot('ffx2-leblanc', ROAD_LINKS_RIG)).toBe(false);

@@ -121,6 +121,15 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       recipe: { exposure: 0.88, gamma: 1.0, contrast: 0.46, pivot: 0.3, shoulder: 0.84, shadowSplit: 0.4, highlightSplit: 0.28, midSat: 0.2, sat: 0.92, hues: [{ hue: 180, width: 30, sat: 1.08, lum: 1.06, toward: [0.3, 1.0, 0.95], shift: 0.2 }, { hue: 196, width: 36, sat: 1.0, lum: 1.0, toward: [0.2, 0.7, 1.0], shift: 0.15 }] },
       focus: 0.41,
     },
+    // Batch 3 (`booth-ffx2-b3`, FFX-2 only). Chapter XIII, Cloister 100: the Bevelle plate repainted, so Chapter IV's grammar (deep shadows, one skylight, one warm accent) in the repaint's own colours: steel-blue shadows (three quarters of the plate's saturated pixels sit at
+    // hue 200 to 220), a pale cyan-white highlight (the skylight's glyph), the blue (hue 205) and the gold of the banners and the medallion (hue 38, 13 percent of the saturated pixels) each lifted and pulled toward itself. The plate is a little brighter than Chapter IV's (mean luminance
+    // 0.212 against 0.181), so the exposure is a hair under Bevelle's (0.88 against 0.95). The band is the one row's, 0.38 (see `LookGrades`).
+    'via-infinito': {
+      shadow: [0.1, 0.18, 0.46],
+      highlight: [0.9, 1.0, 1.0],
+      recipe: { exposure: 0.88, gamma: 1.0, contrast: 0.48, pivot: 0.32, shoulder: 0.84, shadowSplit: 0.42, highlightSplit: 0.3, midSat: 0.3, sat: 1.04, hues: [{ hue: 205, width: 28, sat: 1.04, lum: 1.05, toward: [0.25, 0.62, 1.0], shift: 0.2 }, { hue: 38, width: 26, sat: 1.2, lum: 1.1, toward: [1.0, 0.72, 0.3], shift: 0.3 }] },
+      focus: 0.38,
+    },
   },
   cinematic: {
     // Chapter I: deep indigo shadows and silver-cyan highlights, but with its colour (pass 1's 0.72 saturation read muddy): a cold, clear night.
@@ -169,6 +178,13 @@ export const BOLD_ROOMS: Readonly<Record<'hd2d' | 'cinematic', RoomRecipes>> = {
       highlight: [0.8, 1.0, 1.0],
       recipe: { exposure: 0.9, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.96, hues: [{ hue: 180, width: 30, sat: 1.15, lum: 1.1, toward: [0.3, 1.0, 0.95], shift: 0.3 }, { hue: 196, width: 36, sat: 1.12, lum: 1.06, toward: [0.2, 0.7, 1.0], shift: 0.25 }] },
       fog: [0.14, 0.3, 0.4],
+    },
+    // Batch 3 (FFX-2 only): Chapter XIII's hall, blue-black shadows under a pale cyan highlight, the gold kept warm.
+    'via-infinito': {
+      shadow: [0.03, 0.08, 0.24],
+      highlight: [0.86, 1.0, 1.0],
+      recipe: { exposure: 0.86, gamma: 1.0, contrast: 0.62, pivot: 0.34, shoulder: 0.76, shadowSplit: 0.55, highlightSplit: 0.4, midSat: 0.3, sat: 0.96, hues: [{ hue: 205, width: 28, sat: 1.05, lum: 1.06, toward: [0.25, 0.62, 1.0], shift: 0.25 }, { hue: 38, width: 26, sat: 1.2, lum: 1.1, toward: [1.0, 0.72, 0.3], shift: 0.3 }] },
+      fog: [0.18, 0.28, 0.46],
     },
   },
 };

@@ -68,7 +68,7 @@ export interface TreatedEntry {
 
 /**
  * THE LIST. The booth pair (release 60 and 64: the pair is on from the first release that had the pack), Leblanc (release 69, `booth-leblanc`: Chapter VI, `ffx2-leblanc`, FFX-2; the HIDDEN experiment
- * `exp-leblanc` is not this chapter and is never listed) and, in batch 2 (release 70, merged as `booth-b2`), Lady Yunalesca (the FFX lane `booth-ffx-yunalesca`: Chapter II, `yunalesca`, FFX; the first FFX chapter beyond Chapter I; built on the release 69 base, hence "release 69" in that lane's comments) and the three FFX-2 chapters named below. A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
+ * `exp-leblanc` is not this chapter and is never listed) and, in batch 2 (release 70, merged as `booth-b2`), Lady Yunalesca (the FFX lane `booth-ffx-yunalesca`: Chapter II, `yunalesca`, FFX; the first FFX chapter beyond Chapter I; built on the release 69 base, hence "release 69" in that lane's comments) and the three FFX-2 chapters named below, and, in batch 3 (release 71, the FFX-2 lane `booth-ffx2-b3`), Trema (Chapter XIII, `ffx2-trema`, FFX-2). A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
  */
 export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.freeze({
   'seymour-flux': { game: 'ffx', since: 'r60' },
@@ -80,6 +80,9 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
   'ffx2-vegnagun-shuyin': { game: 'ffx2', since: 'r70' },
   'ffx2-den-of-woe': { game: 'ffx2', since: 'r70' },
   'ffx2-fallen-aeons': { game: 'ffx2', since: 'r70' },
+  // Batch 3, the FFX-2 lane `booth-ffx2-b3` (FFX-2 only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter XIII (Trema, Cloister 100 of the Via Infinito, two links: Paragon then Trema; the party Yuna Dark Knight, Rikku Alchemist, Paine Dark Knight, two dresses the
+  // treatment has not met). It holds the pieces named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber.
+  'ffx2-trema': { game: 'ffx2', since: 'r71' },
 });
 
 /**
@@ -139,6 +142,27 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'FFX-2, Chapter XI: the held breath is the drain-and-flood built for Mega Flare, and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays it today. The sourced candidates are Shiva\'s Diamond Dust (`x2-shiva-diamond-dust`, ' +
       'the action counter\'s payoff), the three Sisters\' Delta Attack (`x2-magus-delta-attack`, the party to 1 HP, gone once any sister falls) and Anima\'s Oblivion (`x2-anima-oblivion`), three different tones that are a mockup decision (hard rule 9) ' +
       '(`research/ffx2-fallen-aeons.md` sections 4.1 to 4.3). Lifts when Bailey or the driver picks the move, a tone and a shot from a mockup, `BigMove` is given its id and `passRecipes.HEADLINE_BLOWS` its hit.',
+  }),
+  // Batch 3 (FFX-2 only; `booth-ffx2-b3`, Chapter XIII). Three pieces wait, each with its reason; every other piece plays. The follower's row and its stand-down on the link rig are built and pinned (`ProAutoStage`), and wait behind the `cam` hold like Chapter V's.
+  'ffx2-trema': Object.freeze({
+    cam:
+      'FFX-2, Chapter XIII: link 1 plays the approved giants frame (`fx/mix/giants.ts`, D-316: Paragon at his real height, 9.45 units, 5.4 times the girls, the camera 1.9 times as far and 2.4 higher, in a window up to 1.79 wide) and the follower, blended halfway to its candidates, undoes it: ' +
+      'its never-crop fit (`ProFit`, the safe rectangle 0.84 by 0.9) sits on its 1.8 cap in 63 to 65 percent of the frames there, the girls fall to 0.73 to 0.79 of the approved frame\'s size (about 35 to 41 percent of today\'s, the giants floor being 45), and Paragon\'s cast painting, whose ' +
+      'box is 12 percent taller than his idle\'s, stands 0.12 of the half frame past the top edge (56 px at 1600x900, 90 px at 2560x1440) where the approved frame has 0.04 (19 and 30 px). The party is never cropped (0 of 3,120 frames in either link at 1600x900, 2560x1440 and 3440x1440, on the real follower ' +
+      'and fit), and Trema\'s link on today\'s rig reads clean (0 frames, the girls at 0.87 or more of the rig\'s size), but `cam` is one switch for the chapter and a hold for one link would be a second mechanism. The chapter keeps release 68\'s resting cameras and, with them, the soft background of the ' +
+      'tilt-shift band; the follower\'s row (`ProAutoStage.AUTO_STAGES`) and its stand-down on the kill link\'s rig (`SCRIPTED_RIGS`) are built and wait. Lifts when the follower stands down while the giants frame is staged (one line in `ProDirector`\'s `held`), so Trema\'s link plays it on the plain rig with ' +
+      'the rows already built, or a browser read (job J2 of docs/handoff/booth-ffx2-b3.md) shows Paragon\'s cast painting inside the frame under the follower.',
+    breath:
+      'FFX-2, Chapter XIII: the held breath is the drain-and-flood built for Mega Flare (and, in FFX, Total Annihilation), and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays it today. The sourced candidates are Trema\'s Meteor (`trema-meteor`: twelve hits on ' +
+      'random party members, each an eighth of their max HP, once at half and once at a quarter of his HP) and Ultima (`trema-ultima`, below a sixth), and Oversoul Paragon\'s Final Impact (`paragon-os-final-impact`, once, below a tenth of its HP) (`research/ffx2-trema.md` sections 4.2 and 12.2), ' +
+      'each a different tone (a sky that falls, a spell, a last strike) whose sound and shot are a mockup decision (hard rule 9); no telegraph painting is held before any of them (`TelegraphHold` stages only FFX moves). Lifts when Bailey or the driver picks the move, a tone and a shot from a ' +
+      'mockup, `BigMove` is given its id and `passRecipes.HEADLINE_BLOWS` its hit.',
+    moments:
+      'FFX-2, Chapter XIII: the moments piece turns a party knock-out into a hard cut (a planned smear cut from the hurt painting into the lying one, then a small landing rebound), and the continuity harness excuses such a cut only up to half the figure\'s drawn height (CHK-027, ' +
+      '`continuity.smear.maxJerkShare` 0.5). The step is the distance between the feet of the two planes, which includes the slide `ProneLay` gives the lying body (up to half its length), so the registration data cannot give it alone; what the data gives is the KO body\'s length against ' +
+      'the idle\'s height: 0.900 (Yuna Dark Knight), 0.896 (Rikku Alchemist) and 0.918 (Paine Dark Knight), longer than Chapter IV Rikku Dark Knight\'s 0.859, whose cut read 0.48, 0.02 under the cap in the release 69 jobs (where Leblanc\'s Rikku Thief, 1.197 long, read 0.62 and ' +
+      'Yuna Gunner, 0.588 long, 0.50 to 0.52: both over it). Nothing clears the three dresses, so the piece is held: a knock-out is today\'s plain cross and the held victory keeps the stance without the stand-down\'s small settle (the quiet title and the pull-back belong to `ending` and stay). ' +
+      'Lifts when a browser run of each girl\'s knock-out in this chapter (job J7 of docs/handoff/booth-ffx2-b3.md) reads every hurt-to-ko swap jerk at or under 0.5 of the drawn height (CHK-027 excused as a planned smear), or the cut is planned with a shorter step.',
   }),
 });
 

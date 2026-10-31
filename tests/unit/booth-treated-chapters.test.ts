@@ -35,6 +35,7 @@ const TREATED_NOW: Readonly<Record<string, { game: 'ffx' | 'ffx2'; since: string
   'ffx2-vegnagun-shuyin': { game: 'ffx2', since: 'r70' }, // batch 2, the FFX-2 lane `booth-ffx2-b2`
   'ffx2-den-of-woe': { game: 'ffx2', since: 'r70' },
   'ffx2-fallen-aeons': { game: 'ffx2', since: 'r70' },
+  'ffx2-trema': { game: 'ffx2', since: 'r71' }, // batch 3, the FFX-2 lane `booth-ffx2-b3`
 };
 
 /** The pieces each joined chapter holds back, in the order of `TREATED_PIECES`: the booth pair holds none (the approved target). */
@@ -44,6 +45,7 @@ const HELD_NOW: Readonly<Record<string, readonly string[]>> = {
   'ffx2-vegnagun-shuyin': ['cam', 'breath'], // batch 2: Chapter V holds the colossus camera and the breath
   'ffx2-den-of-woe': ['breath'],
   'ffx2-fallen-aeons': ['breath'],
+  'ffx2-trema': ['cam', 'breath', 'moments'], // batch 3: Chapter XIII holds the giants frame's camera (the follower undoes it), the staged breath (a tone pick) and the knock-out's cut (three KO bodies the registration data cannot clear)
 };
 
 /** Does the treatment play this piece in this chapter, under the `all` scope? */
@@ -60,7 +62,6 @@ const NOT_YET: Readonly<Record<string, string>> = {
   'yojimbo-cavern': 'FFX: three foes, no KO pose; maps owed',
   'seymour-natus': 'FFX: the re-cut question (pale fringe heuristic +19), maps owed',
   'seymour-omnis': 'FFX: five foes under the F1 ribbon and card',
-  'ffx2-trema': 'FFX-2: two new dresses without clip rows or maps, a giants camera row',
   'isaaru-via-purifico': 'FFX: a one-girl party under the FFX HUD, three links',
   'ffx2-ixion-djose': 'FFX-2: the plate is a stand-in until its real plate, a swap exception',
   'sin-fins-core': 'FFX: bespoke deck camera and many parts',
@@ -77,14 +78,15 @@ describe('the list', () => {
     expect(LISTED).toHaveLength(19);
   });
 
-  it('is Chapter I, Chapter IV, Leblanc, Chapter II and batch 2 (Vegnagun and Shuyin, the Den of Woe, the Fallen Aeons), each with the game the registry says (rule 14)', () => {
+  it('is Chapter I, Chapter IV, Leblanc, Chapter II, batch 2 (Vegnagun and Shuyin, the Den of Woe, the Fallen Aeons) and batch 3 (Trema), each with the game the registry says (rule 14)', () => {
     expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(Object.keys(TREATED_NOW).sort());
-    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(['ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-fallen-aeons', 'ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'seymour-flux', 'yunalesca']);
+    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(['ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-fallen-aeons', 'ffx2-leblanc', 'ffx2-trema', 'ffx2-vegnagun-shuyin', 'seymour-flux', 'yunalesca']);
     for (const [id, e] of Object.entries(TREATED_CHAPTERS)) expect(getChapter(id)?.game, id).toBe(e.game);
     for (const [id, e] of Object.entries(TREATED_NOW)) expect(TREATED_CHAPTERS[id], id).toEqual(e);
     expect(TREATED_CHAPTERS['ffx2-leblanc']).toEqual({ game: 'ffx2', since: 'r69' });
     expect(TREATED_CHAPTERS['yunalesca']).toEqual({ game: 'ffx', since: 'r70' }); // the first FFX chapter beyond Chapter I: FFX's layout, profile and tables (hard rule 14)
     for (const id of ['ffx2-vegnagun-shuyin', 'ffx2-den-of-woe', 'ffx2-fallen-aeons']) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx2', since: 'r70' }); // batch 2: all FFX-2 only (rule 14)
+    expect(TREATED_CHAPTERS['ffx2-trema']).toEqual({ game: 'ffx2', since: 'r71' }); // batch 3: Chapter XIII, FFX-2 only (ATB, dresspheres, Garment Grids: `research/ffx2-trema.md` section 0)
   });
 
   it('holds the booth pair, with the games DEMO_CHAPTERS gives them; the booth list itself stays two ids', () => {
@@ -142,6 +144,20 @@ describe('the holds', () => {
     for (const p of TREATED_PIECES) if (p !== 'breath' && p !== 'cam' && p !== 'smear') expect(treatedHold('yunalesca', p), p).toBeUndefined();
   });
 
+  it("Chapter XIII holds the directed camera (the follower undoes Paragon's approved giants frame), the staged breath (Meteor, Ultima and Final Impact need a mockup's tone) and the knock-out's cut (the three dresses' KO bodies are longer than the longest the harness has passed)", () => {
+    expect(Object.keys(PIECE_HOLDS['ffx2-trema']!).sort()).toEqual(['breath', 'cam', 'moments']);
+    expect(treatedHold('ffx2-trema', 'cam')).toMatch(/giants frame/);
+    expect(treatedHold('ffx2-trema', 'cam')).toMatch(/D-316/);
+    expect(treatedHold('ffx2-trema', 'cam')).toMatch(/SCRIPTED_RIGS/);
+    expect(treatedHold('ffx2-trema', 'breath')).toMatch(/Meteor/);
+    expect(treatedHold('ffx2-trema', 'breath')).toMatch(/Ultima/);
+    expect(treatedHold('ffx2-trema', 'breath')).toMatch(/Final Impact/);
+    expect(treatedHold('ffx2-trema', 'moments')).toMatch(/CHK-027/);
+    expect(treatedHold('ffx2-trema', 'moments')).toMatch(/0\.900/);
+    expect(treatedHold('ffx2-trema', 'moments')).toMatch(/0\.859/);
+    for (const p of TREATED_PIECES) if (p !== 'breath' && p !== 'moments' && p !== 'cam') expect(treatedHold('ffx2-trema', p), p).toBeUndefined();
+  });
+
   it('every hold in the table is the one this file expects (a new hold, or a lifted one, is a decision made in two places)', () => {
     for (const [id, rows] of Object.entries(PIECE_HOLDS)) expect(Object.keys(rows).sort(), id).toEqual([...(HELD_NOW[id] ?? [])].sort());
     for (const id of Object.keys(HELD_NOW)) expect(Object.keys(PIECE_HOLDS), id).toContain(id);
@@ -187,7 +203,7 @@ describe('who the treatment reaches', () => {
     expect(isTreatedChapter(undefined)).toBe(false);
   });
 
-  it('under all it is the booth pair, Leblanc, Chapter II and batch 2: each plays every piece but the ones it holds; no other listed or hidden chapter is reached', () => {
+  it('under all it is the booth pair, Leblanc, Chapter II, batch 2 and batch 3: each plays every piece but the ones it holds; no other listed or hidden chapter is reached', () => {
     setTreatedScope('all');
     const listed = Object.keys(TREATED_CHAPTERS);
     for (const id of [...LISTED, ...HIDDEN]) {

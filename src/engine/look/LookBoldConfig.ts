@@ -178,6 +178,12 @@ export const ROOM_BOLD: Readonly<Record<string, RoomBold>> = {
   'road-to-the-farplane': { gloss: 0.3, rim: [0.85, 0.72, 1.0], embers: [], fog: [0.5, 0.42, 0.85], shadow: [0.18, 0.12, 0.36], fogScale: 0.7, driftPx: 3 },
   // Chapter XV, the Den of Woe: a lit wet stone floor under black rock, the domes' cyan for the rim and the fog's blue-teal.
   'den-of-woe': { gloss: 0.35, rim: [0.35, 0.95, 0.95], embers: [], fog: [0.1, 0.26, 0.38], shadow: [0.05, 0.12, 0.22], fogScale: 0.9, driftPx: 3 },
+  // Batch 3 (`booth-ffx2-b3`, FFX-2 only; Bailey 2026-10-30). Chapter XIII, Cloister 100 of the Via Infinito: a polished floor (the plate's bottom fifth is a lit, reflecting slab, the skylight's cyan in it, like Chapter IV's cathedral floor: 0.7 a little under Bevelle's 0.8), the skylight's
+  // cyan for the rim, a steel-blue fog. NO EMBERS, for the source's reason: `research/ffx2-trema.md` section 6.1 says "Pyreflies and Yevon flags are everywhere" (a single source, Blackestmage): flags and pyreflies, no fire, so a warm spark at a banner is not sourced, and `pyreflyCanon.ts` marks this
+  // room's air as pyreflies (`attested`: the stage adds its faint lens band of seven motes, `PyreflyStage.ts` A-6; this scene draws no bands of its own, `particles: []`). `research/ffx-vs-ffx2-presentation.md` section 8 ("pyreflies are not atmosphere, they are a statement about the dead") does not list
+  // this room, so the canon table's pyreflies are the air and the sparks are not added; whether the hall wants more pyreflies than the lens band is a content addition that needs Bailey's yes (rule 10). The one line to give the banners sparks anyway is `embers: [[0.086, 0.565], [0.935, 0.56]]` (the
+  // banners' centroids on the plate, from the top-left). The room has no depth map in the shipped manifest (`lightMaps.depth` lists Bevelle and Gagazet), so the fog is the grade's and the arena's haze, not depth.
+  'via-infinito': { gloss: 0.7, rim: [0.4, 0.78, 1.0], embers: [], fog: [0.2, 0.3, 0.5], shadow: [0.1, 0.14, 0.32], fogScale: 1, driftPx: 3 },
 };
 
 export const roomBold = (key: string): RoomBold => ROOM_BOLD[key] ?? DEFAULT_ROOM_BOLD;

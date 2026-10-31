@@ -2,7 +2,7 @@
  * THE OFF WORDS IN EVERY TREATED CHAPTER (release 70, review of `booth-b2`, finding m2; both games: the list is read from source, so each chapter is judged under its own game).
  *
  * `booth-treated-switches` pins `?pack=off`, a phone and `?treated=pack` for the booth pair and Leblanc. After the merge seven chapters are treated, and the five that joined beyond the booth pair (Leblanc, Chapter II,
- * V, XV, XI) must give release 68's frame under each off word. Here each is read against an UNTREATED control of its own game (`braskas-final-aeon` for FFX, `ffx2-trema` for FFX-2): the two must answer
+ * V, XV, XI) must give release 68's frame under each off word. Here each is read against an UNTREATED control of its own game (`braskas-final-aeon` for FFX, `ffx2-valefor-besaid` for FFX-2): the two must answer
  * identically on every switch the pack gates. The list is `TREATED_CHAPTERS` itself, so a chapter that joins later is covered with no edit here, and the hidden and untreated chapters are checked never to answer treated.
  */
 import { afterEach, describe, expect, it } from 'vitest';
@@ -27,7 +27,7 @@ import { scopeExcepted, swapsInScope, setSwapScope } from '../../src/engine/moti
 const BOOTH = ['seymour-flux', 'ffx2-bahamut'];
 const TREATED = Object.keys(TREATED_CHAPTERS);
 const JOINED = TREATED.filter((id) => !BOOTH.includes(id));
-const CONTROL: Record<'ffx' | 'ffx2', string> = { ffx: 'braskas-final-aeon', ffx2: 'ffx2-trema' };
+const CONTROL: Record<'ffx' | 'ffx2', string> = { ffx: 'braskas-final-aeon', ffx2: 'ffx2-valefor-besaid' }; // batch 3: `ffx2-trema` joined the list, so the FFX-2 control is the hidden Valefor chapter, which never joins (the inventory's 7.4)
 const NAMES = ['hud', 'look', 'rim', 'boss', 'curves', 'moments', 'smear', 'cam', 'camdof', 'camgame', 'staging', 'stagingBreath', 'stagingCard', 'stagingEnding', 'stagingOpening', 'fx', 'audio', 'feel', 'governor', 'arena', 'hd2d', 'real', 'swapScope'] as const;
 type Name = (typeof NAMES)[number];
 
@@ -132,7 +132,7 @@ describe('the off words, chapter by chapter (every joined chapter reads as the u
     readFrom('?pack=off');
     const ctl = readAll(CONTROL[gameOf(id)]);
     for (const n of NAMES) {
-      if (n === 'hd2d') continue; // no pack word ever gated the HD-2D look
+      if (n === 'hd2d' || n === 'swapScope') continue; // no pack word ever gated the HD-2D look; the swap scope is its own list (`SwapSwitch.WIDE_CHAPTERS`), which the hidden control is not on (`pc-scope-swap-scope.test.ts` pins it)
       expect(got[n], `${id} ${n}`).toEqual(ctl[n]);
     }
   });
@@ -144,7 +144,9 @@ describe('the off words, chapter by chapter (every joined chapter reads as the u
     readFrom('');
     const got = readAll(id);
     const ctl = readAll(CONTROL[gameOf(id)]);
-    expect(got).toEqual(ctl);
+    const { swapScope: _gotScope, ...gotRest } = got; // the swap scope is its own list, not the treatment's (see the first test)
+    const { swapScope: _ctlScope, ...ctlRest } = ctl;
+    expect(gotRest).toEqual(ctlRest);
     for (const p of TREATED_PIECES) expect(isTreatedChapter(id, p), `${id} ${p}`).toBe(false);
   });
 
@@ -173,7 +175,7 @@ describe('the off words, chapter by chapter (every joined chapter reads as the u
     const got = readAll(id);
     const ctl = readAll(CONTROL[gameOf(id)]);
     for (const n of NAMES) {
-      if (n === 'hd2d') continue;
+      if (n === 'hd2d' || n === 'swapScope') continue;
       expect(got[n], `${id} ${n}`).toEqual(ctl[n]);
     }
   });

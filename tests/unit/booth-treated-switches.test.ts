@@ -101,7 +101,7 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(curvesOn(), `curves ${id}`).toBe(on);
       expect(realKind(), `real ${id}`).toBe(on ? 'snappy' : null);
       expect(inDemoChapter(id), `curves gate ${id}`).toBe(on);
-      expect(momentsOn(), `moments ${id}`).toBe(on);
+      expect(momentsOn(), `moments ${id}`).toBe(plays(scope, id, 'moments')); // Chapter XIII holds the knock-out's cut (batch 3): the moments piece reads the holds too
       const smear = plays(scope, id, 'smear'); // Chapter II's swap exception: no smear planner there
       expect(smearOn(), `smear ${id}`).toBe(smear);
       expect(smearStyleNow(), `smear style ${id}`).toBe(smear ? 'paint' : 'off');

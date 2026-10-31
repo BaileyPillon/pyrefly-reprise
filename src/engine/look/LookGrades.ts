@@ -77,6 +77,11 @@ export const ROOM_LOOKS: Readonly<Record<LookName, Readonly<Record<string, RoomL
     'road-to-the-farplane': { focus: 0.41, light: { u: 0.505, v: 0.285, color: [0.98, 0.9, 1.0] } },
     // Chapter XV, the Den of Woe: the right-hand cyan dome is the strongest light of the cave (u 0.869, v 0.599: at the right edge of the idle frame, so the shafts come from off screen); the left dome (u 0.169, v 0.530) is the weaker.
     'den-of-woe': { focus: 0.41, light: { u: 0.869, v: 0.599, color: [0.45, 0.97, 0.97] } },
+    // Batch 3 (`booth-ffx2-b3`, FFX-2 only; Bailey 2026-10-30). Chapter XIII, Cloister 100 of the Via Infinito: Chapter IV's own plate geometry and idle rig (the Bevelle plate repainted: 78 wide at z -50, the camera (0, 3.0, 9.6)), so the party's feet-and-knee middle stands where
+    // Chapter IV's does (0.241) and the band is Chapter IV's 0.40 at the idle rig; under Paragon's giants camera (a desktop window of aspect 1.2 to 1.79, `fx/mix/giants.ts`) the same middle stands at 0.172, which the booth rule (0.727 of a band per middle) puts at 0.35, so the one row
+    // is 0.38 (one link of each). The light is the skylight's glyph, the plate's one cyan-white star at the top of the hall (found on the plate at u 0.503, v 0.064 from the top, rgb 0.80 1.00 1.00; the engine's `findLight`, left alone, takes the lit banner on the left wall at
+    // u 0.133, v 0.597, as it does for Chapter IV), so the shafts and the rim follow the skylight (`docs/handoff/booth-ffx2-b3.md`).
+    'via-infinito': { focus: 0.38, light: { u: 0.503, v: 0.064, color: [0.8, 1.0, 1.0] } },
   },
   cinematic: {
     // Chapter I: a cold moonlit night, graded toward deep teal-indigo shadows and pale silver highlights, less saturated, the fog the colour of breath.
@@ -91,6 +96,8 @@ export const ROOM_LOOKS: Readonly<Record<LookName, Readonly<Record<string, RoomL
     farplane: { shadow: [0.07, 0.05, 0.3], highlight: [1.0, 0.88, 1.0], recipe: { sat: 0.8, contrast: 0.64, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.34, 0.3, 0.6], light: { u: 0.505, v: 0.285, color: [0.98, 0.9, 1.0] } },
     'road-to-the-farplane': { shadow: [0.07, 0.05, 0.3], highlight: [1.0, 0.88, 1.0], recipe: { sat: 0.8, contrast: 0.64, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.34, 0.3, 0.6], light: { u: 0.505, v: 0.285, color: [0.98, 0.9, 1.0] } },
     'den-of-woe': { shadow: [0.01, 0.07, 0.16], highlight: [0.8, 1.0, 1.0], recipe: { sat: 0.86, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.14, 0.3, 0.4], light: { u: 0.869, v: 0.599, color: [0.45, 0.97, 0.97] } },
+    // Batch 3 (FFX-2 only): Chapter XIII's hall, deep blue-black shadows under a pale cyan-white highlight (the skylight), a steel-blue haze, the skylight's glyph as the light.
+    'via-infinito': { shadow: [0.03, 0.08, 0.24], highlight: [0.86, 1.0, 1.0], recipe: { sat: 0.86, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.18, 0.28, 0.46], light: { u: 0.503, v: 0.064, color: [0.8, 1.0, 1.0] } },
   },
   anime: {},
 };
