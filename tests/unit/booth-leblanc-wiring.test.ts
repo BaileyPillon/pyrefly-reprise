@@ -117,7 +117,7 @@ describe('`__pyrefly.treated()`', () => {
       'ffx2-den-of-woe': ['cam', 'breath', 'moments'],
       'ffx2-trema': ['cam', 'breath', 'moments'],
       'evrae-airship': ['breath', 'cam', 'moments'], // booth-b4-last
-      'sin-face': ['breath', 'cam', 'moments', 'smear'],
+      'sin-face': ['card', 'breath', 'cam', 'moments', 'smear'],
       'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments'],
       'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'],
     });

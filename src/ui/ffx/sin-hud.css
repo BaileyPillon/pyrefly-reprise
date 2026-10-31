@@ -78,6 +78,22 @@
 .ffx-sinfin__sm { display: none; }
 .ffx-sinfin__calm { margin-top: 8px; font: 500 14px var(--ig-font-text); letter-spacing: 0.04em; color: rgba(244,241,232,0.6); }
 
+/* ------------------------------------------------------- the F1 HUD at TEXT SIZE 115 and 130 (FFX only; booth-b4-last review m1, 2026-10-31) */
+
+/* Chapter XVIII under the treatment draws the F1 slab (`hudf1*.css`), and at TEXT SIZE 115 and 130 the slab grows (`hudf1-textsize.css`): the boss ribbon reaches x 212 and 236 of the 640 x 360 grid, the hero 200.5 and 223, the
+   cue 232.7 and 259.4 (y 151 to 170 and 130 to 151). The clock column (x 200 to 294, y 12 to about 126) met the ribbon and the hero, and the Gaze pill (x 200 to 260, y 141 to 153) the cue. Both step right by the same amount, in frame px
+   (0.4 grid px each): 100 (40 grid) at 115 and 165 (66 grid) at 130, which puts the pill 7.3 and 6.6 grid px right of the grown cue (the safe zones' GAP is 6) and the column's right edge (334 and 360) well short of the grown turn
+   strip's left end (440.9 and 416.9). At the default size nothing moves (the column already stands 12 grid px right of the ribbon). The rules hang from `.hud-f1`, so the old HUD (`?hud=today`, `?treated=pack`, Chapter XVII
+   while it is out) draws the column where it always stood, and from the landscape widget only: the phone has no F1 slab. The advisor card reads these two rectangles (`hudAvoidSelectors`), so it dodges them where they stand now. */
+html[data-text-size='115']:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-sinhud:not(.ffx-sinhud--phone) .ffx-sinclock,
+html[data-text-size='115']:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-sinhud:not(.ffx-sinhud--phone) .ffx-sinhud__gaze {
+  translate: 100px 0;
+}
+html[data-text-size='130']:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-sinhud:not(.ffx-sinhud--phone) .ffx-sinclock,
+html[data-text-size='130']:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-sinhud:not(.ffx-sinhud--phone) .ffx-sinhud__gaze {
+  translate: 165px 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ffx-sinclock__seg.is-alarm, .ffx-sinfin__charge { animation: none; }
 }

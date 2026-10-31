@@ -2,7 +2,7 @@
  * THE DEFECT CLASSES OF THE EARLIER BATCHES, READ OFFLINE FOR THE LAST FIVE LISTED CHAPTERS (release 71, branch `booth-b4-last`; no browser, server, Playwright or GPU ran: `docs/handoff/booth-b4-last.md` section 4 has every number and says which read is a model and which is data).
  *
  *  - Class 9, a chapter-specific HUD panel against the F1 slab (the r70 majors of Chapters IX and XII): the F1 zones are built from the REAL stylesheets (`helpers/f1Zones.ts`, the a11y-text lane's instrument, a 640 x 360 grid) and each chapter's panel from ITS stylesheet. **The instrument is validated first
- *    on the known defect**: Chapter IX's Zanmato gauge panel, which the r70 browser run found ending against the turn strip, must read as an overlap here. Then Chapter XVII's Fin plate (sits on the strip: the chapter stays out), Chapter XVIII's clock column and Gaze pill (clear at the default TEXT SIZE, overlapping the ribbon at 115 and 130: a disclosed minor) and Evrae's deck
+ *    on the known defect**: Chapter IX's Zanmato gauge panel, which the r70 browser run found ending against the turn strip, must read as an overlap here. Then Chapter XVII's Fin plate (sits on the strip: the chapter stays out), Chapter XVIII's clock column and Gaze pill (clear at the default TEXT SIZE; overlapping the ribbon, the hero and the cue at 115 and 130 until the review's m1 fix, which steps both right in `sin-hud.css`) and Evrae's deck
  *    (no standing panel; the party and the coil against the F1 zones through the real NEAR rig).
  *  - Class 2, a script cutting the camera while the follower runs: FFX has no follower; Chapter XVI's scripts cut no rig (and its follower is held).
  *  - Class 6, a swap exception must hold the smear: Sin's face and Ixion at Djose hold it, Evrae (lifted in release 69) does not.
@@ -15,8 +15,9 @@ import { SCOPE_EXCEPTIONS, scopeExcepted } from '../../src/engine/motion/SwapSwi
 import { TREATED_RIM_FOES } from '../../src/engine/look/pro/RimFigures.ts';
 import { RANGE_STAGING } from '../../src/scenes/evrae-airship-range.ts';
 import { EVRAE_AIRSHIP_DECK_SLOTS } from '../../src/scenes/evrae-airship-deck.ts';
-import { FFX_ZONES, painted, overlap, num, type Box } from './helpers/f1Zones.ts';
-import { leafRules, readSource } from './helpers/cssEval.ts';
+import { FFX_ZONES, painted, overlap, num, ctx, type Box } from './helpers/f1Zones.ts';
+import { evalPair, lastDecl, leafRules, readSource } from './helpers/cssEval.ts';
+import { GAP } from '../../src/ui/ffx/hudSafeZones.ts';
 
 afterEach(() => setTreatedScope(null));
 
@@ -43,6 +44,16 @@ const FIN_PLATE = gridBox(sin, '.ffx-sinfin', 1600, { w: num(sin, '.ffx-sinfin',
 const CLOCK = gridBox(sin, '.ffx-sinclock', 1600, { h: 286 });
 const GAZE = gridBox(sin, '.ffx-sinhud__gaze', 1600, { w: 150, h: 30 });
 
+/** The selector the sheet's text-size step for one of the two Sin elements carries (FFX's attribute; `translate` is declared in the widget's frame px, 0.4 grid px each). */
+const sinSel = (ts: number, el: string): string => `html[data-text-size='${Math.round(ts * 100)}']:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-sinhud:not(.ffx-sinhud--phone) .${el}`;
+/** A Sin HUD box where it stands at a text size: its place at the default size plus the sheet's `translate` for that size (the zones above are in grid px). */
+const sinAt = (b: Box, ts: number, el: string): Box => {
+  const t = lastDecl(sin, sinSel(ts, el), 'translate');
+  return t === undefined ? b : { ...b, l: b.l + evalPair(t, ctx(ts))[0] * (640 / 1600) };
+};
+/** The distance between two boxes (0 when they touch or overlap). */
+const separation = (a: Box, b: Box): number => Math.hypot(Math.max(0, a.l - (b.l + b.w), b.l - (a.l + a.w)), Math.max(0, a.t - (b.t + b.h), b.t - (a.t + a.h)));
+
 describe('class 9: a chapter-specific HUD panel against the F1 slab, read from the stylesheets', () => {
   it("the instrument reads the KNOWN defect: Chapter IX's Zanmato gauge panel ends against the F1 turn strip at the default text size (the r70 browser run: its '0%' over the TURN ORDER caption)", () => {
     const strip = ZONE('turn strip', 1);
@@ -62,7 +73,7 @@ describe('class 9: a chapter-specific HUD panel against the F1 slab, read from t
     expect(queueRight - 73 - 5 * 3.56).toBeGreaterThan(FIN_PLATE.l + FIN_PLATE.w);
   });
 
-  it("Chapter XVIII's clock column and Gaze pill are clear of every F1 zone at the default text size (the ribbon ends 12 grid px short of the column), and meet the ribbon and the hero from 115 percent (345 grid px squared against the ribbon, then 1,170 at 130) and the Gaze pill meets the cue line: a disclosed minor at the larger TEXT SIZES, read in the browser (job L1b)", () => {
+  it("Chapter XVIII's clock column and Gaze pill, UNMOVED, are clear of every F1 zone at the default text size (the ribbon ends 12 grid px short of the column) and meet the ribbon and the hero from 115 percent (345 grid px squared against the ribbon, then 1,170 at 130) and the Gaze pill meets the cue line: the instrument reads the defect the review found (m1)", () => {
     expect(meets(CLOCK, 1)).toEqual([]);
     expect(meets(GAZE, 1)).toEqual([]);
     expect(CLOCK.l - (ZONE('boss ribbon', 1).l + ZONE('boss ribbon', 1).w)).toBeGreaterThanOrEqual(12);
@@ -72,6 +83,35 @@ describe('class 9: a chapter-specific HUD panel against the F1 slab, read from t
     expect(Math.round(overlap(CLOCK, ZONE('boss ribbon', 1.3)))).toBe(1170); // 36 x 32.5
     expect(meets(GAZE, 1.15)).toEqual(['hero', 'cue']);
     expect(meets(GAZE, 1.3)).toEqual(['cue']);
+  });
+
+  it("review m1 FIXED: the sheet steps the column and the pill right at 115 and 130 (100 and 165 frame px), so with the sheet's own steps both are clear of EVERY F1 zone at all three text sizes, by at least the safe zones' GAP, and the column ends well short of the grown turn strip", () => {
+    for (const ts of [1, 1.15, 1.3]) {
+      const clock = sinAt(CLOCK, ts, 'ffx-sinclock');
+      const gaze = sinAt(GAZE, ts, 'ffx-sinhud__gaze');
+      expect(meets(clock, ts), `clock at ${ts}`).toEqual([]);
+      expect(meets(gaze, ts), `gaze at ${ts}`).toEqual([]);
+      for (const z of FFX_ZONES) {
+        expect(separation(clock, painted(z, ts)), `clock to ${z.name} at ${ts}`).toBeGreaterThanOrEqual(GAP);
+        expect(separation(gaze, painted(z, ts)), `gaze to ${z.name} at ${ts}`).toBeGreaterThanOrEqual(GAP);
+      }
+      expect(ZONE('turn strip', ts).l - (clock.l + clock.w), `clock to the turn strip at ${ts}`).toBeGreaterThan(50);
+      expect(gaze.l, 'the pill stays under the column, in its left edge').toBe(clock.l);
+    }
+    expect(sinAt(CLOCK, 1, 'ffx-sinclock')).toEqual(CLOCK); // the default size does not move
+    expect(sinAt(CLOCK, 1.15, 'ffx-sinclock').l - CLOCK.l).toBeCloseTo(40, 6);
+    expect(sinAt(CLOCK, 1.3, 'ffx-sinclock').l - CLOCK.l).toBeCloseTo(66, 6);
+  });
+
+  it("the steps hang from `.hud-f1` and from the landscape widget only (the old HUD, `?treated=pack`, the phone and Chapter XVII while it is out draw the column where it always stood), name both elements, and no rule moves either one at the default size", () => {
+    const moving = leafRules(readSource('src/ui/ffx/sin-hud.css')).filter((r) => /translate:/.test(r.body) && /ffx-sinclock|ffx-sinhud__gaze/.test(r.sel));
+    expect(moving.map((r) => r.sel).sort()).toEqual(
+      ['115', '130'].flatMap((n) => ['ffx-sinclock', 'ffx-sinhud__gaze'].map((el) => sinSel(Number(n) / 100, el))).sort(),
+    );
+    for (const r of moving) {
+      expect(r.sel).toMatch(/^html\[data-text-size='(115|130)'\]:not\(\[data-phone-battle\]\) \.ffxhud\.hud-f1 \.ffx-sinhud:not\(\.ffx-sinhud--phone\) /);
+    }
+    expect(lastDecl(sin, sinSel(1, 'ffx-sinclock'), 'translate')).toBeUndefined();
   });
 
   it('Evrae has no standing panel of his own: the order widget is an overlay of the command cascade and its chip docks to the F1 turn strip itself (`AirshipOrders.dockChip(ctbList.el)`), and the Sin HUD is hidden in every battle whose state carries neither Sin\'s clock nor a Fin (`SinHud`)', () => {

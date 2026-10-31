@@ -62,9 +62,9 @@ const HELD_NOW: Readonly<Record<string, readonly string[]>> = {
   'isaaru-via-purifico': ['breath', 'cam', 'moments'], // the review of booth-b3 (M1): Yuna alone has no read at a hard cut; her aeons never take it
   'ffx2-trema': ['cam', 'breath', 'moments'], // batch 3: Chapter XIII holds the giants frame's camera (the follower undoes it), the staged breath (a tone pick) and the knock-out's cut (three KO bodies the registration data cannot clear)
   'evrae-airship': ['breath', 'cam', 'moments'], // `booth-b4-last`: the range director authors the deck's camera; the staged breath needs a tone pick; the knock-out cut is unread on this deck
-  'sin-face': ['breath', 'cam', 'moments', 'smear'], // the same deck, and a swap exception (`SwapSwitch.SCOPE_EXCEPTIONS`: Auron's lunge return is a planned cut over the cap)
+  'sin-face': ['card', 'breath', 'cam', 'moments', 'smear'], // the same deck, a swap exception (`SwapSwitch.SCOPE_EXCEPTIONS`: Auron's lunge return is a planned cut over the cap), and the widest boss painting (aspect 1.89: the full-bleed card crops the snout at 16:9)
   'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments'], // two plates under one room key, the first provisional and without an @2x master; the grade is applied once at the scene's entry
-  'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'], // a provisional plate (no room rows, no follower row) and a swap exception
+  'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'], // Bailey's approved Chamber plate (C2, D-273) with no room rows and no follower row yet, and a swap exception
 };
 
 /**
@@ -96,7 +96,7 @@ const playsUnderAll = (id: string, piece: string): boolean => Object.prototype.h
  */
 const NOT_YET: Readonly<Record<string, string>> = {
   // The last five listed chapters (`booth-b4-last`): four joined with holds (Evrae, Sin's face, Mirror Aeons, Ixion at Djose); Chapter XVII stays out, with two findings read offline against the F1 zones and the plates (`docs/handoff/booth-b4-last.md` section 4).
-  'sin-fins-core': "FFX: out of release 71 (booth-b4-last): the Fin plate (`.ffx-sinfin`, x 328 to 516 and y 22 to about 59 of the 640 x 360 grid at its minimum width) sits on the F1 turn strip (x 465 to 625, y 22 to 82) in links 1 and 2, a major the treatment would introduce, and the flight plate is the brightest in the game (mean luminance 0.659 against the Farplane's 0.628 that the bold look clipped); no rows are written",
+  'sin-fins-core': "FFX: out of release 71 (booth-b4-last): the Fin plate (`.ffx-sinfin`, x 328 to 516 and y 22 to about 59 of the 640 x 360 grid at its minimum width) sits on the F1 turn strip (x 465 to 625, y 22 to 82) in links 1 and 2, a major the treatment would introduce, and the flight plate is the brightest of any listed chapter's fight plate (mean luminance 0.659 against the Farplane's 0.628 that the bold look clipped; two unlisted plates, the unused Abyss stand-in and the hidden Sinspawn camp's road, are brighter still); no rows are written",
   // The r70 verdict pass took these four back off the list (`booth-r70-withdrawn.ts` has the reasons): one line in `TREATED_CHAPTERS` puts one back once its defect is fixed.
   ...Object.fromEntries(Object.entries(WITHDRAWN_R70).map(([id, w]) => [id, w.why])),
 };

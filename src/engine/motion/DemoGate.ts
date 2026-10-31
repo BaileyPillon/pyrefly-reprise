@@ -87,7 +87,7 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
   // Chapter XII (Seymour Omnis, `seymour-omnis`) LEFT THIS LIST in the r70 verdict pass: the Enemy Intent card of the disc tracker clips the acting hero's HP numeral against the F1 party panel (a major, introduced; release 69 stacks the card above the panel). Rows stay, unread.
   'isaaru-via-purifico': { game: 'ffx', since: 'r70' },
   // The last five listed chapters, the FFX lane `booth-b4-last` (FFX only; Bailey 2026-10-30: the booth treatment for every listed chapter; the holds are in `PieceHoldsLast.ts`): Chapter VIII (Evrae, on the Fahrenheit's deck), Chapter XVIII (Sin's face, link 4 on the same deck over the Bevelle plate) and
-  // the Mirror Aeons chapter (Chapter 27 in the list: two plates, no @2x master for the first). Chapter XVII (Sin's Fins and Core, `sin-fins-core`) does NOT join: its Fin plate meets the F1 turn strip and its flight plate is the brightest in the game (`tests/unit/booth-treated-chapters.test.ts` `NOT_YET`). `since` is the batch's release number.
+  // the Mirror Aeons chapter (Chapter 27 in the list: two plates, no @2x master for the first). Chapter XVII (Sin's Fins and Core, `sin-fins-core`) does NOT join: its Fin plate meets the F1 turn strip and its flight plate is the brightest of any listed chapter's fight plate, 0.659 against the Farplane's 0.628 that clipped (`tests/unit/booth-treated-chapters.test.ts` `NOT_YET`). `since` is the batch's release number.
   'evrae-airship': { game: 'ffx', since: 'r71' },
   'sin-face': { game: 'ffx', since: 'r71' },
   'mirror-aeons': { game: 'ffx', since: 'r71' },
@@ -101,7 +101,7 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
   // Batch 3, the FFX-2 lane `booth-ffx2-b3` (FFX-2 only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter XIII (Trema, Cloister 100 of the Via Infinito, two links: Paragon then Trema; the party Yuna Dark Knight, Rikku Alchemist, Paine Dark Knight, two dresses the
   // treatment has not met). It holds the pieces named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber.
   'ffx2-trema': { game: 'ffx2', since: 'r70' },
-  // The last five listed chapters, the FFX-2 item of `booth-b4-last` (FFX-2 only; Bailey 2026-10-30): Chapter XVI (Ixion at Djose, one link and a story close): the plate is a provisional one and Ixion's is a swap exception, so the room looks, the follower, the breath, the knock-out's cut and the smear planner wait
+  // The last five listed chapters, the FFX-2 item of `booth-b4-last` (FFX-2 only; Bailey 2026-10-30): Chapter XVI (Ixion at Djose, one link and a story close): its Chamber plate is Bailey's approved pick (C2, D-273) with no room row yet, and Ixion's is a swap exception, so the room looks, the follower, the breath, the knock-out's cut and the smear planner wait
   // behind written holds (`PieceHoldsLast.ts`). `since` is the batch's release number.
   'ffx2-ixion-djose': { game: 'ffx2', since: 'r71' },
 });

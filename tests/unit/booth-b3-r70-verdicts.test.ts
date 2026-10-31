@@ -44,7 +44,7 @@ const RELEASE_70: Readonly<Record<string, readonly TreatedPiece[]>> = {
 /** The four of the last five listed chapters that joined in release 71 (`booth-b4-last`; Chapter XVII stayed out): the list is release 70's ten plus these, and none of release 70's rows moved. */
 const RELEASE_71_LAST: Readonly<Record<string, readonly TreatedPiece[]>> = {
   'evrae-airship': ['breath', 'cam', 'moments'], // Chapter VIII, FFX
-  'sin-face': ['breath', 'cam', 'moments', 'smear'], // Chapter XVIII, FFX
+  'sin-face': ['card', 'breath', 'cam', 'moments', 'smear'], // Chapter XVIII, FFX
   'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments'], // Chapter 27, FFX
   'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'], // Chapter XVI, FFX-2
 };

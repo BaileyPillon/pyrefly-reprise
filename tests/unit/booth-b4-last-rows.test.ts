@@ -82,6 +82,18 @@ describe("the pro arenas, graded through the engine's own LUT", () => {
     for (const room of ['sin-fahrenheit-flight', 'mirror-aeons', 'djose-chamber-provisional']) expect(proRoom(room), room).toBeUndefined();
   });
 
+  it("each arena's light is the colour of its plate's own light (review m4, a mutation that survived the family): Evrae's cloud bank is a warm cream, Sin's setting sun a deeper gold, and neither is blue", () => {
+    expect(proRoom('evrae-airship-deck')!.lightColor).toEqual([1.0, 0.9, 0.78]);
+    expect(proRoom('sin-fahrenheit-bevelle')!.lightColor).toEqual([1.0, 0.86, 0.6]);
+    for (const room of ['evrae-airship-deck', 'sin-fahrenheit-bevelle']) {
+      const [r, g, b] = proRoom(room)!.lightColor!;
+      expect(r, room).toBeGreaterThanOrEqual(g);
+      expect(g, room).toBeGreaterThan(b);
+    }
+    // the plate's own light samples (rows above): the cloud bank rgb 0.99 0.92 0.88, the sun 0.98 0.94 0.77; the arena's light is warmer than the sample (a cone's colour is the light's, not the paint's)
+    expect(proRoom('sin-fahrenheit-bevelle')!.lightColor![2]).toBeLessThan(proRoom('evrae-airship-deck')!.lightColor![2]);
+  });
+
   it('the LUTs are monotone along the grey diagonal and clip nothing: white in leaves under 0.98 and a bright cloud (0.85 grey) under 0.93, in the hd2d bold grade and in the arena, for both rooms', () => {
     for (const { room, palette } of Object.values(ROOMS)) {
       for (const [kind, lut] of [['hd2d bold', lutBytes('hd2d', 'ffx', room, palette, 'bold', null, false)], ['pro arena', lutBytes('cinematic', 'ffx', room, palette, 'bold', null, true)]] as const) {
