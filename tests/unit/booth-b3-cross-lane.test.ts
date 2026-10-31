@@ -25,7 +25,7 @@ import { WITHDRAWN_R70 } from './booth-r70-withdrawn.ts';
 
 afterEach(() => setTreatedScope(null));
 
-/** Every chapter the branch built a treatment for: the twelve on the list and the two (V and XI) the r70 verdicts took back off it that are still off (the ribbon's boss does not depend on the list). */
+/** Every chapter the branch built a treatment for: the eighteen on the list (the r70 verdicts' four came back in batch 4, so none is withdrawn; the ribbon's boss does not depend on the list). */
 const BRANCH: readonly string[] = [...Object.keys(TREATED_CHAPTERS), ...Object.keys(WITHDRAWN_R70)];
 
 /** The state `headlineEnemy` reads, as a link begins: its formation's foes, parts and waiting forms flagged as the data flags them. */
@@ -88,7 +88,7 @@ describe('the F1 ribbon names the right foe in every link of every treated chapt
     }
   });
 
-  it('the declared bosses of the treated chapters are exactly Chapter VII\'s Seymour (the others name the first visible foe), and the ribbon of no treated link is a part or a waiting form', async () => {
+  it('the declared bosses of the treated chapters are exactly Chapter VII\'s Seymour and the Mirror Aeons chapter\'s Dark Yojimbo (the others name the first visible foe), and the ribbon of no treated link is a part or a waiting form', async () => {
     const declared: string[] = [];
     for (const id of BRANCH) {
       for (const l of await links(id)) {
@@ -99,7 +99,7 @@ describe('the F1 ribbon names the right foe in every link of every treated chapt
         expect(foe.flags.hidden ?? false, `${id} link ${l.index} ${l.ribbon}`).toBe(false);
       }
     }
-    expect(declared).toEqual(['seymour-anima-macalania:1:seymour-macalania']);
+    expect(declared).toEqual(['seymour-anima-macalania:1:seymour-macalania', 'mirror-aeons:2:dark-yojimbo']); // booth-b4-last: the Mirror Aeons chapter's second link declares Dark Yojimbo (his formation stands Daigoro beside him)
   });
 
   it('where a formation writes a headline for its reveal plate, the ribbon agrees with it except in the listed links', async () => {
@@ -125,11 +125,11 @@ describe('the follower\'s stand-down table and the hold guard over the merged li
     for (const id of ids) expect(treatedHold(id, 'cam'), id).toBeDefined();
   });
 
-  it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list was fourteen; the r70 verdicts left ten; batch 4 brought IX and XII (booth-ffx-b4-hud) and V and XI (booth-ffx2-b4-sky) back: fourteen again, and only Yunalesca is a swap exception)', () => {
-    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(14);
+  it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list was fourteen; the r70 verdicts left ten; batch 4 brought IX, XII, V and XI back and booth-b4-last added four: eighteen of the nineteen listed chapters)', () => {
+    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(18);
     const exceptions = Object.keys(SCOPE_EXCEPTIONS);
     const both = Object.keys(TREATED_CHAPTERS).filter((id) => exceptions.includes(id));
-    expect(both).toEqual(['yunalesca']); // evrae-airship, sin-face and ffx2-ixion-djose are exceptions that the treatment has not reached
+    expect(both).toEqual(['yunalesca', 'sin-face', 'ffx2-ixion-djose']); // booth-b4-last: Sin's face and Ixion at Djose joined, each holding the smear (Evrae left the exceptions in release 69)
     for (const id of both) expect(treatedHold(id, 'smear'), id).toBeDefined();
   });
 

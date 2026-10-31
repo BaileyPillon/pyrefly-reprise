@@ -51,27 +51,36 @@ const B4_HUD: Readonly<Record<string, readonly TreatedPiece[]>> = {
   'seymour-omnis': ['breath', 'cam', 'moments'], // Chapter XII, FFX: the Enemy Intent card's foot stands 6 grid px above the first party card
 };
 
-describe('the result of the r70 verdicts: ten treated, four off the list, two cam holds added; then all four back in batch 4 (IX and XII in booth-ffx-b4-hud, V and XI in booth-ffx2-b4-sky)', () => {
-  it('release 70 treated these ten chapters; batch 4 adds IX and XII (FFX only) and V and XI (FFX-2 only, the look held), all since r71: the list is the fourteen, each with the holds the table gives', () => {
-    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual([...Object.keys(RELEASE_70), ...Object.keys(B4_HUD), ...Object.keys(RETURNED_R71)].sort());
+/** The four of the last five listed chapters that joined in release 71 (`booth-b4-last`; Chapter XVII stayed out): the list is release 70's ten plus these, and none of release 70's rows moved. */
+const RELEASE_71_LAST: Readonly<Record<string, readonly TreatedPiece[]>> = {
+  'evrae-airship': ['breath', 'cam', 'moments'], // Chapter VIII, FFX
+  'sin-face': ['card', 'breath', 'cam', 'moments', 'smear'], // Chapter XVIII, FFX
+  'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments'], // Chapter 27, FFX
+  'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'], // Chapter XVI, FFX-2
+};
+
+describe('the result of the r70 verdicts: ten treated, four off the list, two cam holds added; then all four back in batch 4 (IX and XII in booth-ffx-b4-hud, V and XI in booth-ffx2-b4-sky) and the last five listed chapters\' four (booth-b4-last)', () => {
+  it('release 70 treated these ten chapters; batch 4 adds IX and XII (FFX only), V and XI (FFX-2 only, the look held) and the last five listed chapters\' four, all since r71: the list is the eighteen, each with the holds the table gives', () => {
+    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual([...Object.keys(RELEASE_70), ...Object.keys(B4_HUD), ...Object.keys(RETURNED_R71), ...Object.keys(RELEASE_71_LAST)].sort());
     for (const [id, r] of Object.entries(RETURNED_R71)) {
       expect(Object.keys(PIECE_HOLDS[id] ?? {}).sort(), id).toEqual([...r.held].sort());
       expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx2', since: 'r71' });
       expect(getChapter(id)?.game, id).toBe(r.game); // rule 14: the game the registry says
     }
-    for (const [id, held] of Object.entries({ ...RELEASE_70, ...B4_HUD })) {
+    for (const [id, held] of Object.entries({ ...RELEASE_70, ...B4_HUD, ...RELEASE_71_LAST })) {
       expect(Object.keys(PIECE_HOLDS[id] ?? {}), id).toEqual([...held]);
       expect(getChapter(id)?.game, id).toBe(TREATED_CHAPTERS[id]!.game); // rule 14: the game the registry says
     }
     for (const id of Object.keys(B4_HUD)) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r71' }); // FFX only (rule 14): the panels are FFX HUD panels
     for (const id of Object.keys(RELEASE_70)) expect(TREATED_CHAPTERS[id]!.since, id).toMatch(/^r(60|69|70)$/); // release 70's ten keep the release they joined
+    for (const id of Object.keys(RELEASE_71_LAST)) expect(TREATED_CHAPTERS[id]!.since, id).toBe('r71'); // the last five listed chapters' four: the batch's release
   });
 
-  it('the games of the fourteen: FFX is Chapters I, II, III, VII, IX, X, XII and XIV; FFX-2 is Chapters IV, V, VI, XI, XIII and XV', () => {
+  it('the games of the eighteen: FFX is Chapters I, II, III, VII, VIII, IX, X, XII, XIV, XVIII and 27; FFX-2 is Chapters IV, V, VI, XI, XIII, XV and XVI', () => {
     const ffx = Object.entries(TREATED_CHAPTERS).filter(([, e]) => e.game === 'ffx').map(([id]) => id).sort();
     const ffx2 = Object.entries(TREATED_CHAPTERS).filter(([, e]) => e.game === 'ffx2').map(([id]) => id).sort();
-    expect(ffx).toEqual(['braskas-final-aeon', 'isaaru-via-purifico', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'seymour-omnis', 'yojimbo-cavern', 'yunalesca']);
-    expect(ffx2).toEqual(['ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-fallen-aeons', 'ffx2-leblanc', 'ffx2-trema', 'ffx2-vegnagun-shuyin']);
+    expect(ffx).toEqual(['braskas-final-aeon', 'evrae-airship', 'isaaru-via-purifico', 'mirror-aeons', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'seymour-omnis', 'sin-face', 'yojimbo-cavern', 'yunalesca']);
+    expect(ffx2).toEqual(['ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-fallen-aeons', 'ffx2-ixion-djose', 'ffx2-leblanc', 'ffx2-trema', 'ffx2-vegnagun-shuyin']);
   });
 
   it('no chapter of the r70 verdicts is withdrawn now (batch 4 put all four back); a chapter a later verdict puts into WITHDRAWN_R70 answers release 68 for every piece under both scopes, in the game the registry says, and keeps its rows (look, holds) in the tables', () => {

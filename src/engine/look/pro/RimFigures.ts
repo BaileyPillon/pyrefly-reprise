@@ -103,6 +103,10 @@ export const TREATED_RIM_FOES: Readonly<Record<string, 'ffx' | 'ffx2'>> = Object
   // kill link (`scenes/cloister-100-link.ts`) is a scene prop, not a combatant: it is untagged and keeps its rim.
   paragon: 'ffx2',
   trema: 'ffx2',
+  // The last five listed chapters (`booth-b4-last`, FFX only; the same rule and the same switch; the measures are in `docs/handoff/booth-b4-last.md` section 3): Evrae (Chapter VIII, edge minus ring luminance -2.4: no pale fringe) and Overdrive Sin (Chapter XVIII, +15.5: a pale matte fringe, the C2 candidate, no art is written) on the Fahrenheit's deck. Both are single-form foes
+  // whose paintings the range director or the Sin poses swap in place; neither gets a `BOSS_FEET` or `BOSS_CLEAN_ARTS` row (their bottom-band footprints sit under the engine's pool: Evrae's FAR painting 0.35 of it, Sin's face 0.19: a row would SHRINK the shadow). Cid draws no figure. Chapter XVII's Fins, Genais and Core are not flagged: it does not join.
+  evrae: 'ffx',
+  'overdrive-sin': 'ffx',
 });
 
 /** The stage's one call as it builds a figure: remember whether it is the party's (or an aeon's), a boss's companion, or a foe of a treated chapter that draws no rim. */
