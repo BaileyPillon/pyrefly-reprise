@@ -25,8 +25,12 @@ import { emptyEnd, endFrame, type EndMarks } from '../../src/engine/pro/staging/
 import type { BreathCue, EndingCue, OpeningCue, StagingPort } from '../../src/engine/pro/staging/StagingPort.ts';
 import { FakeAudio, FakeStage } from './helpers/FakeStage.ts';
 import { setCappedAutoPlay } from './helpers/presenterCap.ts';
+import { itIf, stillListed } from './booth-r70-withdrawn.ts';
 
-/** The three chapters: the id, how many links chain, the victory kind the meta declares (rule 14: the sources withhold the pose after Shuyin only). */
+/**
+ * The three chapters: the id, how many links chain, the victory kind the meta declares (rule 14: the sources withhold the pose after Shuyin only). Chapters V and XI left the treated list in the r70 verdicts: their cases that need the
+ * treatment are skipped while they are off the list (`itIf`, `stillListed`) and run again with the line; the data case (what each chapter declares) stays.
+ */
 const CHAPTERS = [
   { id: 'ffx2-vegnagun-shuyin', links: 5, kind: 'hold' },
   { id: 'ffx2-den-of-woe', links: 3, kind: 'pose' },
@@ -103,7 +107,7 @@ describe('what each chapter declares (rule 14, from the sources)', () => {
 });
 
 describe('the victory beat at a seam of a chain, and at the end', () => {
-  it.each(CHAPTERS)('$id: a link that chains on cues nothing; the last link cues the one title', ({ id, kind }) => {
+  for (const { id, kind } of CHAPTERS) itIf(id)(`${id}: a link that chains on cues nothing; the last link cues the one title`, () => {
     setDemoChapter(id);
     const port = new RecordingPort();
     const foe = id === 'ffx2-vegnagun-shuyin' ? 'vegnagun-tail' : id === 'ffx2-den-of-woe' ? 'shade-baralai' : 'x2-shiva';
@@ -118,14 +122,14 @@ describe('the victory beat at a seam of a chain, and at the end', () => {
   });
 
   it('the cheer of Chapters XV and XI reads the FFX-2 table by dress: the longest decoded clip is Rikku Dark Knight\'s 3,400 ms (Yuna White Mage 3,000; Paine Dark Knight has no row and gives the floor)', () => {
-    for (const id of ['ffx2-den-of-woe', 'ffx2-fallen-aeons']) {
+    for (const id of stillListed(['ffx2-den-of-woe', 'ffx2-fallen-aeons'])) {
       setDemoChapter(id);
       const port = new RecordingPort();
       expect(stageVictory(ctxOf(port, 'x2-shiva'), 'pose', 900), id).toBe(3400);
     }
   });
 
-  it("Chapter V's beat is the quiet title and the pull-back, as Chapter IV's: no pose, no cheer's hold", () => {
+  itIf('ffx2-vegnagun-shuyin')("Chapter V's beat is the quiet title and the pull-back, as Chapter IV's: no pose, no cheer's hold", () => {
     setDemoChapter('ffx2-vegnagun-shuyin');
     const port = new RecordingPort();
     const ms = stageVictory(ctxOf(port, 'shuyin'), 'hold', 900);
@@ -149,7 +153,7 @@ describe('the victory beat at a seam of a chain, and at the end', () => {
 });
 
 describe('the real chain, one layer', () => {
-  it.each(CHAPTERS)('$id: no ending cue before the last link, one clear per later link, the one title last, the HUD in at every link\'s start', async ({ id, links }) => {
+  for (const { id, links } of CHAPTERS) itIf(id)(`${id}: no ending cue before the last link, one clear per later link, the one title last, the HUD in at every link\'s start`, async () => {
     setDemoChapter(id);
     const chapter = getChapter(id)!;
     const setup = setupForChapter(chapter, 1);

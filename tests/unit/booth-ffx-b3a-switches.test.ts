@@ -1,9 +1,9 @@
 /**
  * EVERY SWITCH THE TREATMENT RUNS THROUGH, in the three chapters of batch 3a (release 71, branch `booth-ffx-b3a`; Chapter VII `seymour-anima-macalania`, Chapter X `seymour-natus`, Chapter IX `yojimbo-cavern`; FFX only; Bailey 2026-10-30: the booth treatment for every listed chapter).
  * `booth-treated-switches` pins the matrix for every listed and hidden chapter under both scopes and `booth-b2-off-words` the off words for every joined chapter from the source; this file pins what is particular to these three: FFX's own layout, profile and tables
- * (hard rule 14), the smear that PLAYS (none is a swap exception, unlike Chapter II), the camera that plays in one and is held in two, the moments and the staged breath held in all, and the lane-off words, a phone and `?treated=pack` taking each back to release 68's frame.
+ * (hard rule 14), the smear that PLAYS (none is a swap exception, unlike Chapter II), the camera that plays in none since the r70 verdicts (VII and IX held it before, X's victory close-up crops Kimahri: gate G5 of `docs/handoff/booth-b3.md`), the moments and the staged breath held in all, and the lane-off words, a phone and `?treated=pack` taking each back to release 68's frame.
  */
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, expect, it } from 'vitest';
 import { setDemoChapter, setPackScreen, setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
 import { hudF1Game, hudF1ModeFromSearch, hudF1On, setHudF1Mode } from '../../src/ui/hudf1/HudF1Switch.ts';
 import { proArenaFor, proGame, proLookOn, proModeFromSearch, setProMode, setProPiece } from '../../src/engine/look/pro/ProSwitch.ts';
@@ -19,11 +19,12 @@ import { inFeelChapter, punchMode, resetFeelForTests, setFeelChapter } from '../
 import { audioNewOn, passConfiguredBy, passGame, setAudioNew, setPassChapter } from '../../src/audio/pass/passSwitch.ts';
 import { DemoGovernor } from '../../src/engine/governor/DemoGovernor.ts';
 import { chapterLook } from '../../src/engine/look/LookConfig.ts';
+import { describeIf } from './booth-r70-withdrawn.ts';
 
-/** The chapters and what each holds: [camera plays, moments play]. The staged breath is held in all three. */
+/** The chapters and what each holds: [camera plays, moments play]. The staged breath is held in all three. Chapter IX (`yojimbo-cavern`) left the treated list in the r70 verdicts: its cases are skipped while it is off the list (`describeIf`) and run again with the line. */
 const CHAPTERS: ReadonlyArray<{ id: string; cam: boolean; moments: boolean }> = [
   { id: 'seymour-anima-macalania', cam: false, moments: false },
-  { id: 'seymour-natus', cam: true, moments: false },
+  { id: 'seymour-natus', cam: false, moments: false }, // its camera played until the r70 verdict: the victory close-up crops Kimahri at the top edge (gate G5), so the camera is held
   { id: 'yojimbo-cavern', cam: false, moments: false },
 ];
 
@@ -62,7 +63,7 @@ afterEach(() => {
   setPassChapter(undefined);
 });
 
-describe.each(CHAPTERS)('$id under the scope all: FFX\'s own game everywhere, every piece but the ones it holds', ({ id, cam, moments }) => {
+for (const { id, cam, moments } of CHAPTERS) describeIf(id)(`${id} under the scope all: FFX's own game everywhere, every piece but the ones it holds`, () => {
   it('the HUD, the look, the arena, the rim, the curves with the real clips, the smear, the staging, the effects, the feel, the sound and the governor all play, in FFX', () => {
     allOn();
     setTreatedScope('all');
@@ -128,7 +129,7 @@ describe.each(CHAPTERS)('$id under the scope all: FFX\'s own game everywhere, ev
   });
 });
 
-describe.each(CHAPTERS)("$id: the lane-off words, ?pack=off and a phone still give release 62's frame (the same readers as the booth pair; no per-chapter word)", ({ id, cam, moments }) => {
+for (const { id, cam, moments } of CHAPTERS) describeIf(id)(`${id}: the lane-off words, ?pack=off and a phone still give release 62's frame (the same readers as the booth pair; no per-chapter word)`, () => {
   /** Force every switch the way the page would read it from this address (the screen class is the page's, set by the caller). */
   function readFrom(search: string): void {
     setHudF1Mode(hudF1ModeFromSearch(search));

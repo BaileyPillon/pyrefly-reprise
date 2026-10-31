@@ -20,7 +20,9 @@ import { inFeelChapter, punchMode, resetFeelForTests, setFeelChapter } from '../
 import { audioNewOn, passConfiguredBy, passGame, setAudioNew, setPassChapter } from '../../src/audio/pass/passSwitch.ts';
 import { DemoGovernor } from '../../src/engine/governor/DemoGovernor.ts';
 import { chapterLook } from '../../src/engine/look/LookConfig.ts';
+import { describeIf, itIf } from './booth-r70-withdrawn.ts';
 
+// Chapter XII (`seymour-omnis`) left the treated list in the r70 verdicts: its cases are skipped while it is off the list (`describeIf`, `itIf`) and run again with the line.
 const IDS = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'] as const;
 /** The chapters that hold the moments (the reserve Rikku's KO step, review M1; Yuna's unread KO cut in XIV, the review of booth-b3 M1) and the directed camera (the killing blow's plate at the live positions, m1; the aeon as the actor, m2). */
 const MOMENTS_HELD: readonly string[] = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'];
@@ -62,7 +64,7 @@ afterEach(() => {
   setPassChapter(undefined);
 });
 
-describe.each(IDS)('%s under the scope all: FFX\'s own game everywhere, every piece but the ones it holds', (ID) => {
+for (const ID of IDS) describeIf(ID)(`${ID} under the scope all: FFX's own game everywhere, every piece but the ones it holds`, () => {
   it('the HUD, the look, the arena, the rim, the curves with the real clips, the moments, the smear, the directed camera and its soft background, the staging, the effects, the feel, the sound and the governor play, in FFX, except the moments and the camera where the chapter holds them', () => {
     allOn();
     setTreatedScope('all');
@@ -185,7 +187,7 @@ describe("the lane-off words, ?pack=off and a phone still give release 62's fram
   /** [hud, look, rim, boss, curves, moments, smear, camera, staging, fx, audio, feel] with the chapter's holds: the moments at 5, the camera at 7. */
   const on = (id: string): boolean[] => new Array(12).fill(true).map((v: boolean, i) => v && !(i === 5 && MOMENTS_HELD.includes(id)) && !(i === 7 && CAM_HELD.includes(id)));
 
-  it.each(IDS)('%s: on a desktop with no word the whole treatment plays but the pieces the chapter holds (the breath rides on the staging layer, which is on)', (id) => {
+  for (const id of IDS) itIf(id)(`${id}: on a desktop with no word the whole treatment plays but the pieces the chapter holds (the breath rides on the staging layer, which is on)`, () => {
     setTreatedScope('all');
     setSwapScope('wide');
     setPackScreen('desk');
@@ -193,7 +195,7 @@ describe("the lane-off words, ?pack=off and a phone still give release 62's fram
     expect(readAll(id)).toEqual(on(id));
   });
 
-  it.each(IDS)('%s: ?pack=off puts every piece back; a phone or a tablet has no pack by default; ?pack=demo (the booth address) forces it on', (id) => {
+  for (const id of IDS) itIf(id)(`${id}: ?pack=off puts every piece back; a phone or a tablet has no pack by default; ?pack=demo (the booth address) forces it on`, () => {
     setTreatedScope('all');
     setSwapScope('wide');
     setPackScreen('desk');
@@ -206,7 +208,7 @@ describe("the lane-off words, ?pack=off and a phone still give release 62's fram
     expect(readAll(id)).toEqual(on(id));
   });
 
-  it.each(IDS)('%s: ?pro=off takes the three pro lanes back and leaves the HUD, the motion, the effects and the sound as they were; ?treated=pack takes the chapter back whole', (id) => {
+  for (const id of IDS) itIf(id)(`${id}: ?pro=off takes the three pro lanes back and leaves the HUD, the motion, the effects and the sound as they were; ?treated=pack takes the chapter back whole`, () => {
     setTreatedScope('all');
     setSwapScope('wide');
     setPackScreen('desk');

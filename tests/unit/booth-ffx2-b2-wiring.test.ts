@@ -3,6 +3,9 @@
  * Chapter V (Vegnagun and Shuyin), Chapter XV (the Den of Woe) and Chapter XI (the Fallen Aeons): the pro layer mounts for them and for no other, the sound pass follows their run, every switch answers true but for the pieces `PIECE_HOLDS` names, and the
  * lane-off words, a phone and `?treated=pack` still give release 62's, or release 68's, frame in each. The holds: the staged breath in all three (no move of theirs is a `StagingPort.BigMove`, and the pick of a tone is a mockup decision) and the
  * follower camera in Chapter V alone (its approved colossus frame; `booth-ffx2-b2-rows.test.ts` pins the measure behind the reason).
+ *
+ * **The r70 verdicts**: Chapters V and XI are off the treated list (a clipped sky), so under `all` they answer like release 68 in every switch and the pro layer does not mount for them (each case below asserts exactly that, with `isListed`,
+ * and asserts the treatment for the one that stays); their rows stay in the tables. Chapter XV holds the follower camera too (it crops Yuna about twice as often as release 69's frame), so no chapter of the three plays the camera.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -33,10 +36,11 @@ import { fxModeFromSearch, fxNewOn, setFxMode } from '../../src/engine/spellfx/F
 import { inFeelChapter, punchMode, resetFeelForTests, setFeelChapter } from '../../src/engine/feel/FeelSwitch.ts';
 import { DemoGovernor } from '../../src/engine/governor/DemoGovernor.ts';
 import { chapterLook } from '../../src/engine/look/LookConfig.ts';
+import { isListed } from './booth-r70-withdrawn.ts';
 
 const B2 = ['ffx2-vegnagun-shuyin', 'ffx2-den-of-woe', 'ffx2-fallen-aeons'] as const;
-/** Does the follower camera play in this chapter? Everywhere but Chapter V, which holds it. */
-const camPlays = (id: string): boolean => id !== 'ffx2-vegnagun-shuyin';
+/** Does the follower camera play in this chapter? In none of the three: Chapter V holds it (the colossus frame), Chapter XV since the r70 verdicts (the crop of Yuna), Chapter XI is off the list. */
+const camPlays = (_id: string): boolean => false;
 const stage = { projectRect: () => null, project: () => null } as never;
 const mount = (chapterId: string) => attachProStage({ root: {} as HTMLElement, chapterId, stage });
 
@@ -80,9 +84,9 @@ afterEach(() => {
 });
 
 describe('the holds of batch 2', () => {
-  it('Chapter V holds the follower camera, the staged breath and the moments; Chapters XV and XI hold the staged breath and the moments; every other piece plays', () => {
+  it('Chapter V holds the follower camera, the staged breath and the moments; Chapter XV holds the same three since the r70 verdict (the crop of Yuna); Chapter XI holds the staged breath and the moments; V and XI keep their rows while off the list; every other piece plays', () => {
     expect(Object.keys(PIECE_HOLDS['ffx2-vegnagun-shuyin']!).sort()).toEqual(['breath', 'cam', 'moments']);
-    expect(Object.keys(PIECE_HOLDS['ffx2-den-of-woe']!)).toEqual(['breath', 'moments']);
+    expect(Object.keys(PIECE_HOLDS['ffx2-den-of-woe']!).sort()).toEqual(['breath', 'cam', 'moments']);
     expect(Object.keys(PIECE_HOLDS['ffx2-fallen-aeons']!)).toEqual(['breath', 'moments']);
     for (const id of B2) expect(treatedHold(id, 'moments'), id).toMatch(/Garment Grids/); // the knock-out rule (`tests/unit/engine/booth-b2-ko-rule.test.ts`)
     expect(treatedHold('ffx2-vegnagun-shuyin', 'cam')).toMatch(/colossus/);
@@ -100,6 +104,10 @@ describe('the pro layer mounts for them, in their own game, and under `?treated=
     setTreatedScope('all');
     setStagingMode('pro');
     for (const id of B2) {
+      if (!isListed(id)) {
+        expect(mount(id), id).toBeNull(); // off the list since the r70 verdicts: no layer, release 68's frame
+        continue;
+      }
       expect(mount(id), id).not.toBeNull();
       expect(mounted.at(-1)!.game, id).toBe('ffx2');
     }
@@ -119,12 +127,12 @@ describe('the sound pass follows their run, in FFX-2, and gives itself back', ()
       setAudioNew(true);
       const makeup = vi.spyOn(audio, 'setPassMakeup');
       const done = sfxChapter(id, () => undefined);
-      expect(audioNewOn(), id).toBe(true);
-      expect(passGame(), id).toBe('ffx2');
-      expect(makeup.mock.calls.at(-1)![0], id).toBeGreaterThan(0);
+      expect(audioNewOn(), id).toBe(isListed(id)); // a chapter off the list since the r70 verdicts has no pass
+      expect(passGame(), id).toBe(isListed(id) ? 'ffx2' : null);
+      if (isListed(id)) expect(makeup.mock.calls.at(-1)![0], id).toBeGreaterThan(0);
       done();
       expect(audioNewOn(), id).toBe(false);
-      expect(makeup.mock.calls.at(-1)![0], id).toBe(0);
+      if (isListed(id)) expect(makeup.mock.calls.at(-1)![0], id).toBe(0);
       makeup.mockRestore();
       setTreatedScope('pack');
       const off = sfxChapter(id, () => undefined);
@@ -142,6 +150,12 @@ describe('every switch, in each of the three, under all', () => {
       setDemoChapter(id);
       setPassChapter(id);
       setFeelChapter(id);
+      if (!isListed(id)) {
+        // off the list since the r70 verdicts: every switch answers release 68's, the look included; the rows wait in the tables
+        expect([hudF1On(), proLookOn(), partyRimOff(), bossCleanOn(), curvesOn(), momentsOn(), smearOn(), proCamOn(), stagingOn(), fxNewOn(), audioNewOn(), inFeelChapter()], id).toEqual(new Array(12).fill(false));
+        expect(chapterLook(id), id).toBeNull();
+        continue;
+      }
       expect(hudF1On(), `hud ${id}`).toBe(true);
       expect(proLookOn(), `look ${id}`).toBe(true);
       expect(partyRimOff(), `rim ${id}`).toBe(true);
@@ -202,7 +216,7 @@ describe("the lane-off words, ?pack=off and a phone give release 62's frame in e
     return [hudF1On(), proLookOn(), partyRimOff(), bossCleanOn(), curvesOn(), momentsOn(), smearOn(), proCamOn(), stagingOn(), fxNewOn(), audioNewOn(), inFeelChapter() && punchMode() === 'new'];
   };
   /** The expected twelve in a chapter with the whole treatment on: the moments are the sixth and every chapter here holds them (the knock-out rule); the follower is the eighth, and Chapter V holds it. */
-  const full = (id: string): boolean[] => new Array(12).fill(true).map((v, i) => (i === 7 ? camPlays(id) : i === 5 ? false : v));
+  const full = (id: string): boolean[] => (isListed(id) ? new Array(12).fill(true).map((v, i) => (i === 7 ? camPlays(id) : i === 5 ? false : v)) : new Array(12).fill(false)); // a chapter off the list (r70) answers release 68's frame
 
   it('on a desktop with no word the whole treatment plays in each (the held follower and moments aside)', () => {
     setTreatedScope('all');
@@ -230,7 +244,7 @@ describe("the lane-off words, ?pack=off and a phone give release 62's frame in e
     for (const id of B2) {
       const [hud, look, rim, boss, curves, moments, smear, cam, staging, fx, audio] = readAll(id);
       expect([look, cam, staging], id).toEqual([false, false, false]);
-      expect([hud, rim, boss, curves, smear, fx, audio], id).toEqual(new Array(7).fill(true));
+      expect([hud, rim, boss, curves, smear, fx, audio], id).toEqual(new Array(7).fill(isListed(id)));
       expect(moments, id).toBe(false); // held with or without a word
     }
     readFrom('');

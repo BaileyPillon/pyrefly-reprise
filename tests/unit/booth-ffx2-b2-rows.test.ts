@@ -23,6 +23,7 @@ import { DEN_FIGURE_HEIGHTS, DEN_IDS, DEN_PARTY_HEIGHT, DEN_RIGS, DEN_SPOTS } fr
 import { ROAD_FIGURE_HEIGHTS, ROAD_IDS, ROAD_PARTY_HEIGHT, ROAD_RIGS, ROAD_SPOTS } from '../../src/scenes/road-to-the-farplane.ts';
 import { COLOSSUS_TABLES, COLOSSUS_PART_BASE_HEIGHT } from '../../src/scenes/farplane-colossus.ts';
 import { FARPLANE_SLOTS } from '../../src/scenes/farplane.ts';
+import { isListed, stillListed } from './booth-r70-withdrawn.ts';
 
 afterEach(() => {
   setTreatedScope(null);
@@ -30,6 +31,7 @@ afterEach(() => {
   setBossClean(null);
 });
 
+// Chapters V and XI left the treated list in the r70 verdicts: their rows stay in every table (the data cases below still read them) and the cases that need the treatment on read `isListed`.
 const B2 = ['ffx2-vegnagun-shuyin', 'ffx2-den-of-woe', 'ffx2-fallen-aeons'] as const;
 const ROOMS = { farplane: 'ffx2-vegnagun-shuyin', 'den-of-woe': 'ffx2-den-of-woe', 'road-to-the-farplane': 'ffx2-fallen-aeons' } as const;
 /** What the plates say (offline read of `public/art/backdrops/<room>.png`, u from the left, v from the top; `docs/handoff/booth-ffx2-b2.md`): the spire's burst on the Farplane and the Road, the right-hand dome of the Den. */
@@ -57,7 +59,7 @@ describe('the HD-2D look and the rooms\' rows', () => {
       setTreatedScope('pack');
       expect(chapterLook(id), id).toBeNull();
       setTreatedScope('all');
-      expect(chapterLook(id), id).toEqual({ name: 'hd2d', strength: 'bold' });
+      expect(chapterLook(id), id).toEqual(isListed(id) ? { name: 'hd2d', strength: 'bold' } : null); // the row stays; the look is unread while the chapter is off the list
     }
   });
 
@@ -281,7 +283,7 @@ describe('the foes draw no screen-space rim in their own chapter, and nowhere el
         expect(TREATED_RIM_FOES[foe], foe).toBe('ffx2');
         const o = new Object3D();
         tagRimFigure(o, foe, 'enemy');
-        expect(rimSkipOf(o), `${id} ${foe}`).toBe(true);
+        expect(rimSkipOf(o), `${id} ${foe}`).toBe(isListed(id)); // the flag is the row's; it is read only while the chapter is treated
       }
     }
     for (const kept of ['shuyin', ...Object.values(DEN_IDS)]) {
@@ -318,7 +320,7 @@ describe('the foes draw no screen-space rim in their own chapter, and nowhere el
 describe('the real clips follow the dress in all three (the dress guard of `booth-leblanc`, FFX-2 only)', () => {
   it('Yuna White Mage and Rikku Dark Knight play the rows decoded for them; Paine Dark Knight has none and plays the house curves; Chapter IV is untouched', () => {
     setTreatedScope('all');
-    for (const id of B2) {
+    for (const id of stillListed(B2)) {
       setDemoChapter(id);
       expect(realRowOf('ffx2', 'yuna-white-mage'), id).toBe(REAL_MOTION.ffx2['yuna']);
       expect(realRowOf('ffx2', 'rikku-dark-knight'), id).toBe(REAL_MOTION.ffx2['rikku']);

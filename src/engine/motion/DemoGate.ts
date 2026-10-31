@@ -70,7 +70,7 @@ export interface TreatedEntry {
 
 /**
  * THE LIST. The booth pair (release 60 and 64: the pair is on from the first release that had the pack), Leblanc (release 69, `booth-leblanc`: Chapter VI, `ffx2-leblanc`, FFX-2; the HIDDEN experiment
- * `exp-leblanc` is not this chapter and is never listed) and, in batch 2 (release 70, merged as `booth-b2`), Lady Yunalesca (the FFX lane `booth-ffx-yunalesca`: Chapter II, `yunalesca`, FFX; the first FFX chapter beyond Chapter I; built on the release 69 base, hence "release 69" in that lane's comments) and the three FFX-2 chapters named below, and, in batch 3 (release 71, the FFX-2 lane `booth-ffx2-b3`), Trema (Chapter XIII, `ffx2-trema`, FFX-2). A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
+ * `exp-leblanc` is not this chapter and is never listed) and, in batch 2 (release 70, merged as `booth-b2`), Lady Yunalesca (the FFX lane `booth-ffx-yunalesca`: Chapter II, `yunalesca`, FFX; the first FFX chapter beyond Chapter I; built on the release 69 base, hence "release 69" in that lane's comments) and the three FFX-2 chapters named below, and, in batch 3 (release 71, the FFX-2 lane `booth-ffx2-b3`), Trema (Chapter XIII, `ffx2-trema`, FFX-2). **The r70 verdict pass (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four of the fourteen back out (IX, XII, V and XI: a major each, below); ten are treated.** A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
  */
 export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.freeze({
   'seymour-flux': { game: 'ffx', since: 'r60' },
@@ -79,19 +79,20 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
   // named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber (batch 3 ships after release 70).
   'seymour-anima-macalania': { game: 'ffx', since: 'r71' },
   'seymour-natus': { game: 'ffx', since: 'r71' },
-  'yojimbo-cavern': { game: 'ffx', since: 'r71' },
+  // Chapter IX (Yojimbo, `yojimbo-cavern`) LEFT THIS LIST in the r70 verdict pass (2026-10-31, `docs/handoff/booth-b3.md` section 12): its Zanmato gauge panel ends against the F1 turn strip, a major the treatment introduced and release 69 does not have.
+  // Its rows (look, arena, holds, rim) stay in their tables, unread, and it answers `NOT_YET` in `tests/unit/booth-treated-chapters.test.ts` until the layout is fixed and one line puts it back.
   // Batch 3b (`booth-ffx-b3b`, FFX only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter III (Braska's Final Aeon, seven links), Chapter XII (Seymour Omnis and the four Mortiphasm discs) and Chapter XIV (Isaaru's contest of aeons,
   // three links, Yuna alone). `since` is the batch's release number, the driver's to renumber.
   'braskas-final-aeon': { game: 'ffx', since: 'r71' },
-  'seymour-omnis': { game: 'ffx', since: 'r71' },
+  // Chapter XII (Seymour Omnis, `seymour-omnis`) LEFT THIS LIST in the r70 verdict pass: the Enemy Intent card of the disc tracker clips the acting hero's HP numeral against the F1 party panel (a major, introduced; release 69 stacks the card above the panel). Rows stay, unread.
   'isaaru-via-purifico': { game: 'ffx', since: 'r71' },
   'ffx2-bahamut': { game: 'ffx2', since: 'r60' },
   'ffx2-leblanc': { game: 'ffx2', since: 'r69' },
   // Batch 2, the FFX-2 lane `booth-ffx2-b2` (all FFX-2 only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter V (Vegnagun and Shuyin, five links), Chapter XV (the Den of Woe, three shades) and Chapter XI (the Fallen Aeons,
   // three links). Each holds the pieces named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber.
-  'ffx2-vegnagun-shuyin': { game: 'ffx2', since: 'r70' },
+  // Chapters V (`ffx2-vegnagun-shuyin`) and XI (`ffx2-fallen-aeons`) LEFT THIS LIST in the r70 verdict pass: the HD-2D bold look clips the Farplane and the Road's very bright sky to a flat white halo (V's first menu and all five links; XI's fights
+  // whenever the follower brings the spire's burst into frame), a major the treatment introduced; Shuyin's freeze (the gate G1) cannot be read white on white. Their rows, holds and the follower's rows stay, unread.
   'ffx2-den-of-woe': { game: 'ffx2', since: 'r70' },
-  'ffx2-fallen-aeons': { game: 'ffx2', since: 'r70' },
   // Batch 3, the FFX-2 lane `booth-ffx2-b3` (FFX-2 only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter XIII (Trema, Cloister 100 of the Via Infinito, two links: Paragon then Trema; the party Yuna Dark Knight, Rikku Alchemist, Paine Dark Knight, two dresses the
   // treatment has not met). It holds the pieces named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber.
   'ffx2-trema': { game: 'ffx2', since: 'r71' },

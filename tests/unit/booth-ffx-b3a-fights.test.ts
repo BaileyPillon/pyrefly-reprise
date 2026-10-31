@@ -23,6 +23,7 @@ import { FFXEngine } from '../../src/battle/ffx/engine.ts';
 import { registerBattleContent } from '../../src/app/screens/BattleScreenContent.ts';
 import { setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
 import { setDemoChapter, setTreatedScope, treatedHold } from '../../src/engine/motion/DemoGate.ts';
+import { describeIf, itIf } from './booth-r70-withdrawn.ts';
 import { setStagingMode } from '../../src/engine/pro/staging/StagingSwitch.ts';
 import { setPace, setPaceGame } from '../../src/engine/pace.ts';
 import { takeDefeatNote } from '../../src/engine/pro/staging/DefeatNote.ts';
@@ -135,7 +136,8 @@ async function play(id: string): Promise<Played> {
   return { out, port, stage, events, foes, decisions: cap.decisions() };
 }
 
-describe.each(CASES)('the real fight of $id', (c) => {
+// Chapter IX left the treated list in the r70 verdicts: its case is skipped while it is off the list and runs again with the line (`describeIf`).
+for (const c of CASES) describeIf(c.id)(`the real fight of ${c.id}`, () => {
   it('wins with the shipped tactic; the one freeze falls on the last blow after every other foe has gone, then the quiet title, and nothing else of the ending (the cheer kind has no pull-back)', async () => {
     const p = await play(c.id);
     expect(p.out.kind, `decisions ${p.decisions}`).toBe('victory');
@@ -290,7 +292,7 @@ describe('the freeze guard on each formation (a synthetic burst: the bare presen
     expect(last.log).toEqual(['ending:freeze']);
   });
 
-  it('Chapter IX: Yojimbo\'s KO is the last blow because the victory follows, not because the field is empty (Lady Ginnem and Daigoro stand untargetable beside him, so "the last foe by the field" is never true); a KO with no victory behind it freezes nothing', async () => {
+  itIf('yojimbo-cavern')('Chapter IX: Yojimbo\'s KO is the last blow because the victory follows, not because the field is empty (Lady Ginnem and Daigoro stand untargetable beside him, so "the last foe by the field" is never true); a KO with no victory behind it freezes nothing', async () => {
     setDemoChapter('yojimbo-cavern');
     const foes = ['yojimbo', 'ginnem', 'daigoro'];
     const none = new RecordingPort();

@@ -35,7 +35,7 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       '0.41 to 0.44 of the height apart (Yunalesca attack to cast, Auron follow to idle). A smear that played here would plan those cuts, so Chapter II keeps release 67\'s swap look as the exception says (`?swapscope=all` still reaches her). Lifts when her entry ' +
       'in `SwapSwitch.SCOPE_EXCEPTIONS` lifts: job `yunalesca-all-anchor` of docs/handoff/pc-scope.md (`?cutanchor=on` run in the chapter) reads no swap jerk of 40 px or more outside a named cut.',
   }),
-  // Batch 3a (`booth-ffx-b3a`, FFX only; the driver call (a) of 2026-10-30 again: a staged breath that needs a tone or a sound pick is held with a reason and the candidate moves named, never guessed). Chapter VII holds `breath`, `cam` and `moments`; Chapter IX holds `breath`, `cam` and `moments`; Chapter X holds `breath` and `moments` (its camera plays).
+  // Batch 3a (`booth-ffx-b3a`, FFX only; the driver call (a) of 2026-10-30 again: a staged breath that needs a tone or a sound pick is held with a reason and the candidate moves named, never guessed). Chapter VII holds `breath`, `cam` and `moments`; Chapter IX holds `breath`, `cam` and `moments`; Chapter X holds `breath` and `moments` (its camera played until the r70 browser run, which added the `cam` row below: the victory close-up crops Kimahri) . **Four chapters left the treated list in the r70 verdict pass (IX, XII, V and XI: a major layout or look defect each, `docs/handoff/booth-b3.md` section 12); their rows below stay, unread, with a comment line each.**
   'seymour-anima-macalania': Object.freeze({
     breath:
       'FFX, Chapter VII: the held breath is the drain-and-flood built for Total Annihilation (and, in FFX-2, Mega Flare), and a move reaches it only by id (`StagingPort.BigMove`), so nothing in this fight plays it today. ' +
@@ -69,6 +69,11 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       '(`mortibody-desperado`: 468 to 529 to the whole party with every buff stripped, section 3.2); neither has a telegraph painting held before it (`TelegraphHold` stages only the Lance of Atrophy of Seymour Flux and the ' +
       'Ultimate Jecht Shot of Braska), and a breath needs a tone, a sound and a shot, which are mockup decisions (hard rule 9; the driver call of 2026-10-30: never guessed). Lifts when Bailey or the driver picks a tone and ' +
       'a shot for Flare (and for Desperado) from a mockup, and `BigMove`, `NAME_OF` and `passRecipes.HEADLINE_BLOWS` are given rows for those ids (which hit, `first` or `last`, measured the way Mega Flare was).',
+    cam:
+      'FFX, Chapter X: the directed victory is the real close-up of the last party actor, fitted to that actor and his company (`ProPlays.victoryPlay`), and when Tidus lands the last blow it is Kimahri\'s: it fills the whole frame height and cuts his horns, his hair and his raised hand, and Tidus\'s raised sword tip, at the top edge, with the victory title over his shoulder ' +
+      '(the r70 browser run of `docs/handoff/booth-b3.md`, gate G5: 4 of 4 runs, at 3440 x 1440, 1600 x 900 and 2560 x 1440, with 11.8 to 19.2 percent of the width lit in the frame\'s top 8 rows; the first menu, the landings and the killing blow read clean, and with Kimahri as the last actor the shot is wide and crops no one). ' +
+      'Today\'s rig, release 69\'s chapter, shows the whole party in the same frame, and so does Chapter I at 3440, so this is a regression and not the plate\'s. The piece holds the directed camera, its real shots and its soft background; today\'s rigs play and the HD-2D look\'s own tilt-shift band stays. ' +
+      'Lifts when the victory close-up is fitted so that no painted figure crosses the frame (the top and bottom 8 rows of the victory frame read at most 0.5 percent lit) at 16:9, 21:9 and 4:3 with Tidus, Yuna and Kimahri each as the last actor.',
     moments:
       'FFX, Chapter X: the moments cut the knock-out of a party member from the hurt painting to the lying one inside a planned smear (`PaintedActorLife.koCutWindow`: the moments and the smear both on), and CHK-027 excuses ' +
       'that cut only up to 0.5 of the drawn height (the critic policy\'s `continuity.smear.maxJerkShare`). Where the body lies is set per stage (`ProneLay` slides it by up to half its length along the floor) and the ' +
@@ -78,6 +83,7 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'so the cut plays often. The piece holds the knock-out cut and its rebound and the victory cheer; the plain knock-out cross and the victory of release 68 play. Lifts when a continuity run (CHK-027) of this chapter ' +
       'with the moments on, a knock-out of each of Tidus, Yuna and Kimahri, reads no unexcused swap jerk (every cut at or under 0.5 of the drawn height).',
   }),
+  // UNTREATED in the r70 verdict pass (`docs/handoff/booth-b3.md` section 12): Chapter IX is off `TREATED_CHAPTERS` (its Zanmato gauge panel ends against the F1 turn strip: a major, introduced, a regression against release 69). These rows are unread while it is off the list and are read again when one line puts it back.
   'yojimbo-cavern': Object.freeze({
     breath:
       'FFX, Chapter IX: the held breath is the drain-and-flood built for Total Annihilation (and, in FFX-2, Mega Flare), and a move reaches it only by id (`StagingPort.BigMove`), so nothing in this fight plays it today. ' +
@@ -117,6 +123,7 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'a ratio of 0.64 to 0.77), so Rikku would measure about 0.69. All seven can be fielded (the same seven as Chapter I\'s), so the chapter keeps release 68\'s KO (the plain cross, no rebound) and its victory; the curves, the smear and every other piece still play. ' +
       'Lifts when job J5 of docs/handoff/booth-ffx-b3b.md (a knock-out per dress, the reserve Rikku first, on the continuity harness) reads every dress\'s hurt-to-KO swap at or under 0.5 of its drawn height and reports no unexcused swap jerk (CHK-027).',
   }),
+  // UNTREATED in the r70 verdict pass (`docs/handoff/booth-b3.md` section 12): Chapter XII is off `TREATED_CHAPTERS` (the Enemy Intent card clips the acting hero's HP numeral against the F1 party panel: a major, introduced, a regression against release 69). These rows are unread until it is back on the list.
   'seymour-omnis': Object.freeze({
     breath:
       'FFX, Chapter XII: the held breath is the drain-and-flood built for Total Annihilation, and a move reaches it only by id (`StagingPort.BigMove`), so nothing Omnis does plays it today (research/ffx-seymour-omnis.md section 0.4: Total Annihilation is not in this fight, it is Seymour Flux\'s). ' +
@@ -173,6 +180,7 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
   }),
   // Batch 2 (FFX-2 only; the driver's call (a): a staged breath that needs a tone or a sound pick is held with a reason, never guessed; one plays only where the research sources the move and an existing telegraph hold already stages it, and
   // `TelegraphHold` holds Chapter I and Chapter III's moves alone, in FFX only).
+  // UNTREATED in the r70 verdict pass (`docs/handoff/booth-b3.md` section 12): Chapter V is off `TREATED_CHAPTERS` (the HD-2D bold look clips the Farplane's sky to a flat white halo over the colossus frame: a major, introduced; Shuyin's freeze cannot be read white on white). These rows are unread until it is back on the list.
   'ffx2-vegnagun-shuyin': Object.freeze({
     cam:
       'FFX-2, Chapter V: links 1 to 4 play the approved colossus staging (D-228, `scenes/farplane-colossus.ts`: a low fov-40 master camera looking up at a part drawn 9.7 to 12.6 times a girl\'s height (the table\'s scale of 4.3 to 5.6 on the stage\'s 4.1 default boss height, D-600), "no single camera frame ever contains it"), and ' +
@@ -190,6 +198,11 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'The KO is release 68\'s plain cross here and the victory is release 68\'s (the cheer goes with the piece); the smear, the curves, the real clips and the quiet ending still play. Lifts when a continuity run of a KO per dress on the girls\' grids in this chapter, the moments on, reports no unexcused swap jerk (CHK-027: every hurt-to-KO cut at or under 0.5 of the drawn height); `tests/unit/engine/booth-b2-ko-rule.test.ts` binds the hold to the grids.',
   }),
   'ffx2-den-of-woe': Object.freeze({
+    cam:
+      'FFX-2, Chapter XV: the follower (`ProAutoStage`, the Den\'s row; the never-crop fit, the safe rectangle 0.84 by 0.9) crops Yuna about twice as often as release 69\'s resting camera does. The r70 browser run of `docs/handoff/booth-b3.md` (the follower\'s crop sample, `__pyrefly.procam()` party rectangles through a real fight) read her rectangle outside the viewport ' +
+      'in 107 of 1,968 frames at 2560 x 1440 (5.4 percent, the left and bottom edges, worst 92 px) and 40 of 1,971 at 3440 x 1440 (worst 58 px), against release 69\'s own 55 of 1,980 (2.8 percent, worst 64 px) with no follower. The defect is minor and the baseline is release 69\'s, but Leblanc holds this piece for the same crop (17 sampled frames in 110 s) and the table keeps one rule: ' +
+      'the treatment does not crop a party member more often than the frame it replaces. The Den keeps the resting camera of release 68 and, with it, the soft background of the tilt-shift band; the follower\'s row (`ProAutoStage.AUTO_STAGES`) is built and waits. ' +
+      'Lifts when `ProAutoStage` re-scores the Den\'s candidates for its group (the lane\'s shot scores and the real fit rule) and 0 sampled frames of the crop sample (110 s at 2560 x 1440 and at 3440 x 1440, F5 of `docs/handoff/booth-b3.md`) put a party rectangle outside the viewport.',
     breath:
       'FFX-2, Chapter XV: the held breath is the drain-and-flood built for Mega Flare, and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays it today. None of the three shades has a move the research calls a showpiece; ' +
       'the one candidate is Nooj\'s Lightfall (`x2-den-nooj-lightfall`, 5,000 to everyone, `research/ffx2-gippal-den-of-woe.md` section 4.3 and C-4), a spell whose tone, sound and shot are a mockup decision (hard rule 9). Lifts when Bailey or the driver ' +
@@ -200,6 +213,7 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'Rikku Thief 0.61 to 0.63 and Yuna Gunner 0.50 to 0.52 of the drawn height (Rikku Dark Knight 0.48 in Chapter IV); the other dresses on the grids have no read, and none was taken in this room (where the lying body lies is the stage\'s, `ProneLay`). ' +
       'The KO is release 68\'s plain cross here and the victory is release 68\'s (the cheer goes with the piece); the smear, the curves, the real clips and the quiet ending still play. Lifts when a continuity run of a KO per dress on the girls\' grids in this chapter, the moments on, reports no unexcused swap jerk (CHK-027: every hurt-to-KO cut at or under 0.5 of the drawn height); `tests/unit/engine/booth-b2-ko-rule.test.ts` binds the hold to the grids.',
   }),
+  // UNTREATED in the r70 verdict pass (`docs/handoff/booth-b3.md` section 12): Chapter XI is off `TREATED_CHAPTERS` (the same clipped halo on the Road's sky whenever the follower brings the spire's burst into frame: a major, introduced). These rows are unread until it is back on the list.
   'ffx2-fallen-aeons': Object.freeze({
     breath:
       'FFX-2, Chapter XI: the held breath is the drain-and-flood built for Mega Flare, and no move of this chapter is named in `StagingPort.BigMove`, so nothing here plays it today. The sourced candidates are Shiva\'s Diamond Dust (`x2-shiva-diamond-dust`, ' +

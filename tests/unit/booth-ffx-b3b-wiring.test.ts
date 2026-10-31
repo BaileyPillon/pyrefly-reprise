@@ -23,7 +23,9 @@ import { installProDebug } from '../../src/debug/proApi.ts';
 import { getChapter } from '../../src/data/encounters.ts';
 import { setDemoChapter, setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
 import { setStagingMode } from '../../src/engine/pro/staging/StagingSwitch.ts';
+import { describeIf, isListed, itIf } from './booth-r70-withdrawn.ts';
 
+// Chapter XII (`seymour-omnis`) left the treated list in the r70 verdicts: its cases are skipped while it is off the list and run again with the line; `__pyrefly.treated()` neither lists it nor reports its holds meanwhile.
 const IDS = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'] as const;
 /** The pieces each of the three holds, in the table's order: the breath, and from the first review the moments (III, XII) and the camera (XII, XIV), and from the review of booth-b3 (M1) the moments of XIV too. */
 const HOLDS: Record<(typeof IDS)[number], string[]> = { 'braskas-final-aeon': ['breath', 'moments'], 'seymour-omnis': ['breath', 'cam', 'moments'], 'isaaru-via-purifico': ['breath', 'cam', 'moments'] };
@@ -42,7 +44,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe.each(IDS)("the pro layer mounts for %s, in FFX's game", (id) => {
+for (const id of IDS) describeIf(id)(`the pro layer mounts for ${id}, in FFX's game`, () => {
   it('under all it gets the layer with the ffx skin; under `?treated=pack` (release 68) it gets none; the booth pair keep theirs either way', () => {
     setTreatedScope('all');
     expect(mount(id)).not.toBeNull();
@@ -65,7 +67,7 @@ describe.each(IDS)("the pro layer mounts for %s, in FFX's game", (id) => {
 });
 
 describe('the sound pass follows the chapter run', () => {
-  it.each(IDS)("a %s run has the pass on in FFX (the master makeup is asked for, and the chapter's own results cue is the one the pass starts at the last blow: the `pose` kind plays the sting's place), and the run's end gives it back", (id) => {
+  for (const id of IDS) itIf(id)(`a ${id} run has the pass on in FFX (the master makeup is asked for, and the chapter's own results cue is the one the pass starts at the last blow: the \`pose\` kind plays the sting's place), and the run's end gives it back`, () => {
     setTreatedScope('all');
     setAudioNew(true);
     const makeup = vi.spyOn(audio, 'setPassMakeup');
@@ -83,7 +85,7 @@ describe('the sound pass follows the chapter run', () => {
     makeup.mockRestore();
   });
 
-  it.each(IDS)('under `?treated=pack` the pass stays off in %s, as in release 68', (id) => {
+  for (const id of IDS) it(`under \`?treated=pack\` the pass stays off in ${id}, as in release 68`, () => {
     setAudioNew(true);
     setTreatedScope('pack');
     const done = sfxChapter(id, () => undefined);
@@ -99,12 +101,12 @@ describe('`__pyrefly.treated()` knows them', () => {
     const treated = api['treated'] as (scope?: 'all' | 'pack' | null) => { scope: string; chapters: string[]; holds: Record<string, string[]>; running: string | null; reaches: boolean };
     const all = treated('all');
     for (const id of IDS) {
-      expect(all.chapters).toContain(id);
-      expect(all.holds[id]).toEqual(HOLDS[id]);
+      expect(all.chapters.includes(id), id).toBe(isListed(id));
+      expect(all.holds[id], id).toEqual(isListed(id) ? HOLDS[id] : undefined); // a withdrawn chapter's rows stay in the table, unread and unreported
     }
     for (const id of IDS) {
       setDemoChapter(id);
-      expect(treated().reaches, id).toBe(true);
+      expect(treated().reaches, id).toBe(isListed(id));
       expect(treated('pack').reaches, id).toBe(false);
       treated('all');
     }

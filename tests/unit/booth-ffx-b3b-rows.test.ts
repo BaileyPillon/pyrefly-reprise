@@ -29,6 +29,7 @@ import { DREAMS_END_RIGS, DREAMS_END_SLOTS } from '../../src/scenes/dreams-end.t
 import { GARDEN_BACKDROP, GARDEN_OF_PAIN_RIGS, GARDEN_OF_PAIN_SLOTS } from '../../src/scenes/garden-of-pain.ts';
 import { VIA_BACKDROP, VIA_PURIFICO_RIGS, VIA_PURIFICO_SLOTS } from '../../src/scenes/via-purifico.ts';
 import { liveFeet } from './booth-ffx-b3b-live-stage.ts';
+import { isListed } from './booth-r70-withdrawn.ts';
 
 afterEach(() => {
   setTreatedScope(null);
@@ -98,7 +99,8 @@ describe.each(ROOMS)('$chapter ($room): the HD-2D look and the room rows', (R) =
     setTreatedScope('pack');
     expect(chapterLook(R.chapter)).toBeNull();
     setTreatedScope('all');
-    expect(chapterLook(R.chapter)).toEqual({ name: 'hd2d', strength: 'bold' });
+    // Chapter XII left the list in the r70 verdicts: its row stays in the table (the line above), unread, so the look answers null under `all` until one line puts it back.
+    expect(chapterLook(R.chapter)).toEqual(isListed(R.chapter) ? { name: 'hd2d', strength: 'bold' } : null);
     expect(getChapter(R.chapter)?.game).toBe('ffx');
   });
 
@@ -321,7 +323,7 @@ describe('the boss and the rim', () => {
     setDemoChapter('isaaru-via-purifico');
     for (const id of ['isaaru', 'grothia', 'pterya', 'spathi']) expect(rim(id, 'enemy'), id).toBe(true);
     setDemoChapter('seymour-omnis');
-    expect(rim('seymour-omnis', 'enemy')).toBe(true);
+    expect(rim('seymour-omnis', 'enemy')).toBe(isListed('seymour-omnis')); // off the list since the r70 verdicts: release 68's rim
     setTreatedScope('pack');
     expect(rim('seymour-omnis', 'enemy')).toBe(false);
     setTreatedScope('all');
@@ -358,6 +360,7 @@ describe('what must stay as it is', () => {
       expect(WIDE_CHAPTERS, R.chapter).toContain(R.chapter);
       expect(chapterInScope(R.chapter, 'wide'), R.chapter).toBe(true);
       setDemoChapter(R.chapter);
+      if (!isListed(R.chapter)) continue; // off the list since the r70 verdicts: the scope facts above hold, the treated pieces below wait for the line
       expect(swapsInScope(), R.chapter).toBe(true);
       expect(smearOn(), R.chapter).toBe(true);
       expect(stanceNow(), R.chapter).toBe('v1a');

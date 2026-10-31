@@ -23,6 +23,7 @@ import { realKeyOf, realRowOf } from '../../src/engine/motion/RealMotion.ts';
 import { SCOPE_EXCEPTIONS, WIDE_CHAPTERS, scopeExcepted } from '../../src/engine/motion/SwapSwitch.ts';
 import { victoryKind } from '../../src/engine/motion/MomentsPlan.ts';
 import { classify, keepsToday } from '../../src/engine/fx/mix/masters.ts';
+import { isListed, itIf } from './booth-r70-withdrawn.ts';
 
 afterEach(() => {
   setTreatedScope(null);
@@ -101,7 +102,8 @@ describe.each(ROOMS)('$id ($room): the HD-2D look and the rows', (r) => {
     setTreatedScope('pack');
     expect(chapterLook(r.id)).toBeNull();
     setTreatedScope('all');
-    expect(chapterLook(r.id)).toEqual({ name: 'hd2d', strength: 'bold' });
+    // Chapter IX left the list in the r70 verdicts: its row stays in the table (the line above), unread, so the look answers null under `all` until one line puts it back.
+    expect(chapterLook(r.id)).toEqual(isListed(r.id) ? { name: 'hd2d', strength: 'bold' } : null);
   });
 
   it('names the plate\'s own light in both looks it is graded in (u, v read off the plate), and the sharp band follows the booth line at the idle rig', () => {
@@ -191,7 +193,7 @@ describe('the rows are [ours] and say so: set from the plates, graded offline, a
 });
 
 describe.each(ROOMS)('$id: the boss and the rim', (r) => {
-  it('draws no screen-space rim on the foes the row flags, none on the party, and nothing else by accident; the foes it leaves out keep release 68\'s rim', () => {
+  itIf(r.id)('draws no screen-space rim on the foes the row flags, none on the party, and nothing else by accident; the foes it leaves out keep release 68\'s rim', () => {
     setTreatedScope('all');
     setDemoChapter(r.id);
     setBossClean('clean');
@@ -290,7 +292,7 @@ describe('what must stay as it is', () => {
   it('every other listed chapter is still unreached by these rows: the look table lists the three and the chapters that were already treated, and no hidden chapter', () => {
     setTreatedScope('all');
     const looked = CHAPTERS.filter((c) => chapterLook(c.id) !== null).map((c) => c.id);
-    for (const { id } of ROOMS) expect(looked).toContain(id);
+    for (const { id } of ROOMS) expect((looked as string[]).includes(id), id).toBe(isListed(id)); // Chapter IX is off the list (r70): its row waits
     for (const hidden of ['exp-leblanc', 'sinspawn-gui', 'exp-fayth', 'ffx2-tourist-trap']) expect(looked).not.toContain(hidden);
   });
 });

@@ -22,9 +22,11 @@ import { installProDebug } from '../../src/debug/proApi.ts';
 import { setDemoChapter, setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
 import { setStagingMode } from '../../src/engine/pro/staging/StagingSwitch.ts';
 import { getChapter } from '../../src/data/encounters.ts';
+import { describeIf, isListed } from './booth-r70-withdrawn.ts';
 
 const IDS = ['seymour-anima-macalania', 'seymour-natus', 'yojimbo-cavern'] as const;
-const HOLDS: Record<string, string[]> = { 'seymour-anima-macalania': ['breath', 'cam', 'moments'], 'seymour-natus': ['breath', 'moments'], 'yojimbo-cavern': ['breath', 'cam', 'moments'] };
+// Chapter IX left the treated list in the r70 verdicts: its cases are skipped while it is off the list (`describeIf`), `__pyrefly.treated()` reports neither its place in the list nor its holds, and the line puts it all back.
+const HOLDS: Record<string, string[]> = { 'seymour-anima-macalania': ['breath', 'cam', 'moments'], 'seymour-natus': ['breath', 'cam', 'moments'], 'yojimbo-cavern': ['breath', 'cam', 'moments'] };
 
 const stage = { projectRect: () => null, project: () => null } as never;
 const mount = (chapterId: string) => attachProStage({ root: {} as HTMLElement, chapterId, stage });
@@ -41,7 +43,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe.each(IDS)('the pro layer mounts for %s, in FFX\'s game', (id) => {
+for (const id of IDS) describeIf(id)(`the pro layer mounts for ${id}, in FFX's game`, () => {
   it('under all it gets the layer with the ffx skin; under `?treated=pack` (release 68) it gets none; the booth pair keep theirs either way', () => {
     setTreatedScope('all');
     expect(mount(id)).not.toBeNull();
@@ -63,7 +65,7 @@ describe.each(IDS)('the pro layer mounts for %s, in FFX\'s game', (id) => {
   });
 });
 
-describe.each(IDS)('the sound pass follows the %s run', (id) => {
+for (const id of IDS) describeIf(id)(`the sound pass follows the ${id} run`, () => {
   it("the run has the pass on in FFX (the master makeup is asked for, and the chapter's own results cue is the one the pass starts at the last blow: the cheer path), and the run's end gives it back", () => {
     setTreatedScope('all');
     setAudioNew(true);
@@ -97,10 +99,10 @@ describe('`__pyrefly.treated()` knows them', () => {
     const treated = api['treated'] as (scope?: 'all' | 'pack' | null) => { scope: string; chapters: string[]; holds: Record<string, string[]>; running: string | null; reaches: boolean };
     const all = treated('all');
     for (const id of IDS) {
-      expect(all.chapters).toContain(id);
-      expect(all.holds[id]).toEqual(HOLDS[id]);
+      expect(all.chapters.includes(id), id).toBe(isListed(id));
+      expect(all.holds[id], id).toEqual(isListed(id) ? HOLDS[id] : undefined); // the rows of a withdrawn chapter stay in the table, unread and unreported
       setDemoChapter(id);
-      expect(treated().reaches, id).toBe(true);
+      expect(treated().reaches, id).toBe(isListed(id));
       expect(treated('pack').reaches, id).toBe(false);
       treated('all');
     }

@@ -9,6 +9,9 @@
  *  2. `ProAutoStage.SCRIPTED_RIGS` stays FFX-2's: no row names a chapter that is not FFX-2, and every row names a treated FFX-2 chapter.
  *  3. THE HOLD GUARD: a chapter on both `TREATED_CHAPTERS` and `SwapSwitch.SCOPE_EXCEPTIONS` holds `smear` (`booth-hold-guard` reads the two lists; the merged list is fourteen).
  *  4. THE KNOCK-OUT RULE'S INVARIANT over the merged list is in `tests/unit/engine/booth-b2-ko-rule.test.ts`; here, that no treated chapter's hold names a piece outside `TREATED_PIECES`.
+ *
+ * THE r70 VERDICT PASS (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four chapters back off the list (the list is ten). The ribbon walk is a function of the data and not of the list, so it still walks the withdrawn four (`BRANCH`):
+ * the ribbon of each is pinned for the day one line puts it back. The hold and the stand-down tables keep the withdrawn chapters' rows, unread.
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import type { BattleState, Combatant, EnemyGroupDef } from '../../src/battle/common/types.ts';
@@ -18,8 +21,12 @@ import { findEnemyGroup } from '../../src/app/screens/BattleScreenSetup.ts';
 import { TREATED_CHAPTERS, TREATED_PIECES, PIECE_HOLDS, setTreatedScope, treatedHold } from '../../src/engine/motion/DemoGate.ts';
 import { SCRIPTED_RIGS } from '../../src/engine/procam/ProAutoStage.ts';
 import { SCOPE_EXCEPTIONS } from '../../src/engine/motion/SwapSwitch.ts';
+import { WITHDRAWN_R70 } from './booth-r70-withdrawn.ts';
 
 afterEach(() => setTreatedScope(null));
+
+/** Every chapter the branch built a treatment for: the ten on the list and the four the r70 verdicts took back off it (the ribbon's boss does not depend on the list). */
+const BRANCH: readonly string[] = [...Object.keys(TREATED_CHAPTERS), ...Object.keys(WITHDRAWN_R70)];
 
 /** The state `headlineEnemy` reads, as a link begins: its formation's foes, parts and waiting forms flagged as the data flags them. */
 function opening(group: EnemyGroupDef): BattleState {
@@ -60,7 +67,7 @@ const HEADLINE_DISAGREES: Readonly<Record<string, readonly number[]>> = { 'ffx2-
 
 describe('the F1 ribbon names the right foe in every link of every treated chapter, both games', () => {
   it('every treated chapter has a chain the walk can follow, and its first link is the chapter\'s own', async () => {
-    for (const id of Object.keys(TREATED_CHAPTERS)) {
+    for (const id of BRANCH) {
       const ls = await links(id);
       expect(ls.length, id).toBeGreaterThan(0);
       expect(ls[0]!.group, id).toBe(getChapter(id)!.enemyGroupRef.id);
@@ -68,7 +75,7 @@ describe('the F1 ribbon names the right foe in every link of every treated chapt
   });
 
   it('a declared boss is a foe of its own formation, named by the ribbon when it stands on the field; otherwise the first visible non-part foe is named', async () => {
-    for (const id of Object.keys(TREATED_CHAPTERS)) {
+    for (const id of BRANCH) {
       for (const l of await links(id)) {
         expect(l.ribbon, `${id} link ${l.index}`).toBeDefined();
         if (l.declared !== undefined) {
@@ -83,7 +90,7 @@ describe('the F1 ribbon names the right foe in every link of every treated chapt
 
   it('the declared bosses of the treated chapters are exactly Chapter VII\'s Seymour (the others name the first visible foe), and the ribbon of no treated link is a part or a waiting form', async () => {
     const declared: string[] = [];
-    for (const id of Object.keys(TREATED_CHAPTERS)) {
+    for (const id of BRANCH) {
       for (const l of await links(id)) {
         if (l.declared !== undefined) declared.push(`${id}:${l.index}:${l.declared}`);
         const g = (await findEnemyGroup(l.group))!;
@@ -97,7 +104,7 @@ describe('the F1 ribbon names the right foe in every link of every treated chapt
 
   it('where a formation writes a headline for its reveal plate, the ribbon agrees with it except in the listed links', async () => {
     const disagree: Record<string, number[]> = {};
-    for (const id of Object.keys(TREATED_CHAPTERS)) {
+    for (const id of BRANCH) {
       for (const l of await links(id)) {
         if (l.headline === undefined || l.ribbonName === undefined) continue;
         const same = l.headline.toLowerCase().includes(l.ribbonName.toLowerCase()) || l.ribbonName.toLowerCase().includes(l.headline.toLowerCase());
@@ -112,11 +119,12 @@ describe('the follower\'s stand-down table and the hold guard over the merged li
   it('SCRIPTED_RIGS names only treated FFX-2 chapters (FFX has no follower), and holds a row for Chapter XI and for Chapter XIII', () => {
     const ids = Object.keys(SCRIPTED_RIGS);
     expect(ids.sort()).toEqual(['ffx2-fallen-aeons', 'ffx2-trema']);
-    for (const id of ids) expect(TREATED_CHAPTERS[id]?.game, id).toBe('ffx2');
+    for (const id of ids) expect(TREATED_CHAPTERS[id]?.game ?? WITHDRAWN_R70[id]?.game, id).toBe('ffx2'); // Chapter XI's row waits in the table while the chapter is off the list (r70)
+    expect(Object.keys(TREATED_CHAPTERS).filter((id) => ids.includes(id))).toEqual(['ffx2-trema']); // and only Chapter XIII's stand-down is read now
   });
 
-  it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list is fourteen)', () => {
-    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(14);
+  it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list was fourteen; the r70 verdicts left ten)', () => {
+    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(10);
     const exceptions = Object.keys(SCOPE_EXCEPTIONS);
     const both = Object.keys(TREATED_CHAPTERS).filter((id) => exceptions.includes(id));
     expect(both).toEqual(['yunalesca']); // evrae-airship, sin-face and ffx2-ixion-djose are exceptions that the treatment has not reached
@@ -125,7 +133,7 @@ describe('the follower\'s stand-down table and the hold guard over the merged li
 
   it('every hold in the table names a real piece, and none belongs to the booth pair or an unlisted chapter', () => {
     for (const [id, rows] of Object.entries(PIECE_HOLDS)) {
-      expect(TREATED_CHAPTERS[id], id).toBeDefined();
+      expect(TREATED_CHAPTERS[id] ?? WITHDRAWN_R70[id], id).toBeDefined(); // a withdrawn chapter's rows stay, unread
       expect(['seymour-flux', 'ffx2-bahamut'], id).not.toContain(id);
       for (const piece of Object.keys(rows)) expect(TREATED_PIECES, `${id} ${piece}`).toContain(piece);
     }

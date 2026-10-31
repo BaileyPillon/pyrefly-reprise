@@ -15,6 +15,9 @@
  *  - Chapters V, XV and XI (FFX-2 only): all three field the Farplane build; the girls' Garment Grids hold Gunner and Thief beside the worn dress, and the harness read those paintings over the cap in Leblanc (Rikku Thief 0.61 to 0.63, Yuna
  *    Gunner 0.50 to 0.52); the other dresses have no read. They hold `moments`.
  *
+ * THE r70 VERDICT PASS (2026-10-31, `docs/handoff/booth-b3.md` section 12) took Chapters V and XI back off the treated list (a clipped sky; FFX-2 only). Their holds stay in the table and the cases below still read them; the cases that need the
+ *   chapter treated (the piece answers today's, the smear still plays, the real actor's KO) run while the chapter is listed and are skipped while it is not, so one line back on the list turns them back on.
+ *
  * BATCH 3 AND THE REVIEW OF `booth-b3` (2026-10-31).
  *  - Chapter XIV (FFX only): the first merge let it play the cut on an estimate; the review's M1 held it to the rule as written (a dress with no read is not under the cap), so it holds `moments` (job J5 lifts it). Only Yuna could ever take
  *    the cut there: her five aeons are not toppling bodies (`KoFall.canTopple`), pinned below, and she is alone with no Switch, so the exposure was her own KO.
@@ -35,6 +38,7 @@ import { GARMENT_GRIDS } from '../../../src/data/ffx2/garment-grids/index.ts';
 import { garmentGridRegistryFrom } from '../../../src/battle/ffx2/adapters.ts';
 import { gridNodeContents } from '../../../src/battle/ffx2/setup.ts';
 import type { FFX2PartyBuild } from '../../../src/battle/common/types.ts';
+import { isListed } from '../booth-r70-withdrawn.ts';
 
 afterEach(() => {
   setTreatedScope(null);
@@ -208,15 +212,15 @@ describe('Chapters V, XV and XI: the girls can field Gunner and Thief, the harne
     expect(allUnderCap(dresses)).toBe(false);
     expect(treatedHold(id, 'moments')).toBeDefined();
     setTreatedScope('all');
-    expect(isTreatedChapter(id, 'moments')).toBe(false); // reached under `all`, and the piece answers today's
-    expect(isTreatedChapter(id, 'smear')).toBe(true);
-    expect(isTreatedChapter(id)).toBe(true);
+    expect(isTreatedChapter(id, 'moments')).toBe(false); // reached under `all`, and the piece answers today's (or not reached at all: the r70 withdrawn two)
+    expect(isTreatedChapter(id, 'smear')).toBe(isListed(id));
+    expect(isTreatedChapter(id)).toBe(isListed(id));
   });
 
   it.each(B2_FFX2)("%s: the real actor builds release 68's KO (no window, the plain cross), the piece the hold names is the only one lost, and under ?treated=pack nothing changes", (id) => {
     const k = koWindow(id, 'all');
     expect(k.moments).toBe(false);
-    expect(k.smear).toBe(true); // the smear still plays; only its KO cut waits for the moments
+    expect(k.smear).toBe(isListed(id)); // the smear still plays; only its KO cut waits for the moments (a withdrawn chapter plays neither: release 68's frame)
     expect(k.window).toBeUndefined();
     expect(k.cut).toBeUndefined();
     expect(k.crossMs).toBe(fallRun('topple', 'ffx2')!.opts.crossMs);

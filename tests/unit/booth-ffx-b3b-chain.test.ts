@@ -28,6 +28,7 @@ import { takeDefeatNote } from '../../src/engine/pro/staging/DefeatNote.ts';
 import { emptyEnd, endFrame, type EndMarks } from '../../src/engine/pro/staging/EndingPlan.ts';
 import type { BreathCue, EndingCue, OpeningCue, StagingPort } from '../../src/engine/pro/staging/StagingPort.ts';
 import { FakeAudio, FakeStage } from './helpers/FakeStage.ts';
+import { isListed, itIf } from './booth-r70-withdrawn.ts';
 import { setCappedAutoPlay } from './helpers/presenterCap.ts';
 
 /** A staging port that keeps what `EndingView` keeps (the marks), so the test reads what the player would see: `hud` is the HUD's opacity a minute after the last cue. */
@@ -65,6 +66,7 @@ class RecordingPort implements StagingPort {
  * The three chapters: the id, how many links chain, the foe each last link names (rule 14: all FFX; the sources withhold the pose at Zanarkand only), and whether the shipped tactic uses an Overdrive in this fight (Omnis is a puzzle fight:
  * the tactic never fills the gauge there, so the FFX Overdrive opening is read in a browser, job J2).
  */
+// Chapter XII (`seymour-omnis`) left the treated list in the r70 verdicts: the cases that need it treated are skipped while it is off the list (`itIf`) and run again with the line; its data case stays.
 const CHAPTERS = [
   { id: 'braskas-final-aeon', links: 7, last: 'yu-yevon', overdrive: true, heads: ['braskas-final-aeon', 'possessed-valefor', 'possessed-ifrit', 'possessed-ixion', 'possessed-shiva', 'possessed-bahamut', 'yu-yevon'] },
   { id: 'seymour-omnis', links: 1, last: 'seymour-omnis', overdrive: false, heads: ['seymour-omnis'] },
@@ -117,7 +119,7 @@ describe('what each chapter declares (rule 14, from the sources)', () => {
 });
 
 describe('the victory beat at a seam of a chain, and at the end', () => {
-  it.each(CHAPTERS)('$id: a link that chains on cues nothing and holds nothing beyond today\'s beat; the last link cues the one title', ({ id, last }) => {
+  for (const { id, last } of CHAPTERS) itIf(id)(`${id}: a link that chains on cues nothing and holds nothing beyond today\'s beat; the last link cues the one title`, () => {
     setDemoChapter(id);
     const port = new RecordingPort();
     const seam = ctxOf(port, last, { moreLinks: true });
@@ -132,7 +134,7 @@ describe('the victory beat at a seam of a chain, and at the end', () => {
   });
 
   it("the cheer's floor reads FFX's table: Tidus (3,666.7 ms), Yuna (3,200) and Auron (4,000) have decoded clips, so the beat of Chapters III and XII holds for Auron's, and Chapter XIV's, Yuna alone, for hers; never FFX-2's 3,000 or 3,400 ms rows", () => {
-    for (const { id, last } of CHAPTERS.filter((c) => c.id !== 'isaaru-via-purifico')) {
+    for (const { id, last } of CHAPTERS.filter((c) => c.id !== 'isaaru-via-purifico' && isListed(c.id))) {
       setDemoChapter(id);
       expect(stageVictory(ctxOf(new RecordingPort(), last), 'pose', 900), id).toBe(4000);
     }
@@ -194,7 +196,7 @@ async function playChain(id: string, seed: number) {
 }
 
 describe('the real chains, one layer', () => {
-  it.each(CHAPTERS)('$id: no ending cue before the last link, one clear per later link, the one title last, the HUD in at every link\'s start, the FFX Overdrive opening and no Change plate or held breath', async ({ id, links, last, overdrive, heads }) => {
+  for (const { id, links, last, overdrive, heads } of CHAPTERS) itIf(id)(`${id}: no ending cue before the last link, one clear per later link, the one title last, the HUD in at every link\'s start, the FFX Overdrive opening and no Change plate or held breath`, async () => {
     const { result, port, hudAtLinkStart, headAtLinkStart, cap } = await playChain(id, 1);
     expect(result.links, `decisions ${cap.decisions()}, capped ${cap.capped()}`).toBe(links);
     expect(result.outcome.kind).toBe('victory');

@@ -25,6 +25,7 @@ import { CLOISTER_100_RIGS, CLOISTER_100_SLOTS, CLOISTER_ACTOR_HEIGHTS, CLOISTER
 import { CLOISTER_LINK_RIG, CLOISTER_WIDE_RIGS } from '../../src/scenes/cloister-100-rigs.ts';
 import { LINK_CAMERA_NEAR } from '../../src/scenes/cloister-100-link.ts';
 import { TREMA_LINK_RIG } from '../../src/story/scripts/ffx2-trema.ts';
+import { stillListed } from './booth-r70-withdrawn.ts';
 
 const CHAPTER = 'ffx2-trema';
 const DT = 1 / 60;
@@ -290,7 +291,8 @@ describe('the real director and layer in Chapter XIII', () => {
   });
 
   it("Chapter IV and the Road are not affected: a follower there runs on a rig of the same name (the table is per chapter)", () => {
-    for (const other of ['ffx2-bahamut', 'ffx2-fallen-aeons']) {
+    // The Road (Chapter XI) left the treated list in the r70 verdicts, so no follower is installed there and this case cannot read it; `stillListed` brings it back with the line.
+    for (const other of stillListed(['ffx2-bahamut', 'ffx2-fallen-aeons'])) {
       setDemoChapter(other);
       const w = world(CLOISTER);
       turn(w);

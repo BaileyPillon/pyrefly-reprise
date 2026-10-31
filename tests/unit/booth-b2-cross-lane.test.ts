@@ -31,6 +31,7 @@ import type { Pose } from '../../src/engine/procam/ProTypes.ts';
 import { FakeAudio, FakeStage } from './helpers/FakeStage.ts';
 import { setCappedAutoPlay } from './helpers/presenterCap.ts';
 import { findWeakGroup, weakChapter } from './helpers/weakChain.ts';
+import { WITHDRAWN_R70, itIf, stillListed } from './booth-r70-withdrawn.ts';
 
 const FFX_TREATED = Object.keys(TREATED_CHAPTERS).filter((id) => TREATED_CHAPTERS[id]!.game === 'ffx');
 const FFX2_TREATED = Object.keys(TREATED_CHAPTERS).filter((id) => TREATED_CHAPTERS[id]!.game === 'ffx2');
@@ -83,7 +84,8 @@ describe("the FFX lane's stageFreeze guard, in the FFX-2 chapters with links and
     setStagingMode('pro');
   });
 
-  it.each(CHAINS)('$id: the real chain emits no form-change, and the last blow of the last link freezes once, between the last link start and the one title', async (row) => {
+  // The r70 verdict pass took Chapters V and XI off the list: their rows run again, with no edit, the day one line puts them back (`itIf`).
+  for (const row of CHAINS) itIf(row.id)(`${row.id}: the real chain emits no form-change, and the last blow of the last link freezes once, between the last link start and the one title`, async () => {
     const { id, links } = row;
     const weak = 'weak' in row;
     setDemoChapter(id);
@@ -131,7 +133,8 @@ describe("the FFX lane's stageFreeze guard, in the FFX-2 chapters with links and
   }, 180_000);
 
   it('the chains above cover every treated FFX-2 chapter (a chapter that joins the list is added to CHAINS or this fails)', () => {
-    expect(CHAINS.map((c) => c.id).sort()).toEqual([...FFX2_TREATED].sort());
+    expect(stillListed(CHAINS.map((c) => c.id)).sort()).toEqual([...FFX2_TREATED].sort()); // the withdrawn two keep their rows in CHAINS and are skipped above
+    expect(CHAINS.map((c) => c.id).filter((id) => !(FFX2_TREATED as string[]).includes(id)).sort()).toEqual(Object.keys(WITHDRAWN_R70).filter((id) => WITHDRAWN_R70[id]!.game === 'ffx2').sort());
   });
 });
 
@@ -150,7 +153,7 @@ function cameraCuts(node: unknown, into: Set<string> = new Set()): Set<string> {
 
 describe("the FFX-2 lane's SCRIPTED_RIGS, against the FFX chapters", () => {
   it('names FFX-2 chapters only (rule 14: the Road of Chapter XI is the one scene that draws a plate by the camera position)', () => {
-    for (const id of Object.keys(SCRIPTED_RIGS)) expect(TREATED_CHAPTERS[id]?.game, id).toBe('ffx2');
+    for (const id of Object.keys(SCRIPTED_RIGS)) expect(TREATED_CHAPTERS[id]?.game ?? WITHDRAWN_R70[id]?.game, id).toBe('ffx2'); // Chapter XI is withdrawn in r70: its row waits in the table
   });
 
   it.each(FFX_TREATED)('%s: none of its scripts cuts to a rig the table names for any chapter, and the stand-down answers false for every rig it cuts to', (id) => {

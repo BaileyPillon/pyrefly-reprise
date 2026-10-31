@@ -4,6 +4,9 @@
  * story has put the camera on; every one of its four candidates stands 1.5 to 2.7 away from the links rig, so before the fix the seam's four lines played on plate A with the camera half way to a candidate (0 of 480 frames on the rig).
  * The fix: while the camera's rig is one the chapter's script cut to for a position-gated shot (`ProAutoStage.SCRIPTED_RIGS`), the follower is the rig's own at once (`FollowerHost.scripted`).
  *
+ * **Chapter XI left the treated list in the r70 verdicts** (a clipped sky): the director cases that need its follower installed are skipped while it is off the list (`itIf`) and run again with the line; the follower-level cases, which
+ * do not read the list, stay.
+ *
  * Run the way the review ran it: the real `ProFollower` on the real Road members, then the real `ProDirector` on the real `ProLayer` (the harness of `engine/procam-director.test.ts`), and the scene's own `onLinksShot`.
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -18,6 +21,7 @@ import type { Pose } from '../../src/engine/procam/ProTypes.ts';
 import type { ActorHandle, BattleStage, CameraPort } from '../../src/engine/BattlePresenterPorts.ts';
 import { ROAD_FIGURE_HEIGHTS, ROAD_IDS, ROAD_LINKS_RIG, ROAD_PARTY_HEIGHT, ROAD_RIGS, ROAD_SPOTS, onLinksShot } from '../../src/scenes/road-to-the-farplane.ts';
 import { FALLEN_AEONS_LINKS_RIG } from '../../src/story/scripts/ffx2-fallen-aeons.ts';
+import { WITHDRAWN_R70, itIf } from './booth-r70-withdrawn.ts';
 
 const CHAPTER = 'ffx2-fallen-aeons';
 const DT = 1 / 60;
@@ -48,7 +52,7 @@ describe('the names that must agree', () => {
   });
   it('only Chapter XI and, since batch 3, Chapter XIII have a scripted shot, and both are treated FFX-2 chapters (the booth pair and Leblanc cut to nothing the scene draws by position)', () => {
     expect(Object.keys(SCRIPTED_RIGS)).toEqual([CHAPTER, 'ffx2-trema']);
-    expect(TREATED_CHAPTERS[CHAPTER]!.game).toBe('ffx2');
+    expect((TREATED_CHAPTERS[CHAPTER] ?? WITHDRAWN_R70[CHAPTER])!.game).toBe('ffx2'); // Chapter XI is withdrawn in r70; its stand-down row waits in the table
     expect(scriptedShot('ffx2-bahamut', ROAD_LINKS_RIG)).toBe(false);
     expect(scriptedShot('ffx2-leblanc', ROAD_LINKS_RIG)).toBe(false);
     expect(scriptedShot(undefined, ROAD_LINKS_RIG)).toBe(false);
@@ -186,14 +190,14 @@ describe('the real director and layer in Chapter XI', () => {
     new ProDirector(w.stage).turnStart?.({ camera: w.camera, speed: 'normal', skipping: false, ms: (b: number) => b, reducedMotion: false, actor: { id: 'yuna', side: 'party' } } as never);
     w.camera.layer.setBoxes(() => null);
   };
-  it('the follower is installed and follows in the fight (the treatment is on in Chapter XI)', () => {
+  itIf(CHAPTER)('the follower is installed and follows in the fight (the treatment is on in Chapter XI)', () => {
     const w = world(ROAD);
     turn(w);
     const p = run(w.camera.layer, 60 * 6, IDLE);
     expect(dist(p.pos, IDLE.pos)).toBeGreaterThan(0.5);
     expect(onRig(p)).toBe(false);
   });
-  it('Shiva falls, the story cuts to `road-links`: the layer draws the rig itself from the first frame on, so plate B shows (480 of 480)', () => {
+  itIf(CHAPTER)('Shiva falls, the story cuts to `road-links`: the layer draws the rig itself from the first frame on, so plate B shows (480 of 480)', () => {
     const w = world(ROAD);
     turn(w);
     run(w.camera.layer, 60 * 6, IDLE); // the fight
@@ -205,7 +209,7 @@ describe('the real director and layer in Chapter XI', () => {
     }
     expect(on).toBe(480);
   });
-  it('the seam ends (`camera(\'idle\', 0)`): the follower comes back without a jump', () => {
+  itIf(CHAPTER)('the seam ends (`camera(\'idle\', 0)`): the follower comes back without a jump', () => {
     const w = world(ROAD);
     turn(w);
     run(w.camera.layer, 60 * 6, IDLE);
