@@ -31,6 +31,8 @@
  */
 html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1 .ffx-zg:not(.ffx-zg--phone) .ffx-zg__panel {
   scale: none;
+  /* `text-size.css` also sets `transform-origin: center top` for the growth; the skew turns about it too, so left alone it would pivot on the top edge and the rows would sit 6 grid px left of where they stand at 100 (the centre). Review m1, 2026-10-31. */
+  transform-origin: center;
 }
 
 /* ------------------------------------------------------------------------------------------------ Chapter XII: the Enemy Intent card and the disc strip */
@@ -60,4 +62,6 @@ html[data-text-size='130']:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-omr:not(
 html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1 .ffx-omr:not(.ffx-omr--phone) .ffx-omr__strip {
   scale: none;
   translate: calc(-401.25px * (var(--pyr-ts) - 1)) 0;
+  /* the same pivot as the gauge's: the skew about the centre, as at 100, not the top edge `text-size.css` sets for its growth (review m1) */
+  transform-origin: center;
 }

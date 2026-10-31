@@ -33,8 +33,8 @@ interface Cand {
   at: (ts: number) => boolean;
 }
 
-/** The winning value of `prop` among the candidates that apply at `ts`: the greatest specificity, the later one on a tie (the order below is the load order of the sheets). */
-function winner(cands: readonly Cand[], prop: string, ts: number): string {
+/** The winning value of `prop` among the candidates that apply at `ts`: the greatest specificity, the later one on a tie (the order below is the load order of the sheets); undefined when no rule declares it. */
+function declared(cands: readonly Cand[], prop: string, ts: number): string | undefined {
   let best: { v: string; s: [number, number, number] } | undefined;
   for (const c of cands) {
     if (!c.at(ts)) continue;
@@ -43,8 +43,25 @@ function winner(cands: readonly Cand[], prop: string, ts: number): string {
     const s = specificity(c.sel);
     if (best === undefined || cmpSpec(s, best.s) >= 0) best = { v, s };
   }
-  if (best === undefined) throw new Error(`no ${prop}`);
-  return best.v;
+  return best?.v;
+}
+function winner(cands: readonly Cand[], prop: string, ts: number): string {
+  const v = declared(cands, prop, ts);
+  if (v === undefined) throw new Error(`no ${prop}`);
+  return v;
+}
+/**
+ * Where a panel's skew pivots, as a fraction of its height from its top (REVIEW m1, 2026-10-31). `transform: skewX()` turns about `transform-origin`, which the `scale` rules of `text-size.css` set to `center top` for the gauge and the disc strip at 115 and 130:
+ * the skew then pivots on the TOP edge and every row sits `SKEW x h / 2` further left than the browser's default, the centre, which is where it pivots at 100 (no rule sets one). A first version of this file sheared every box about its centre and so could not see it.
+ */
+function pivot(cands: readonly Cand[], ts: number): number {
+  const v = declared(cands, 'transform-origin', ts);
+  if (v === undefined) return 0.5;
+  const words = v.split(/\s+/);
+  if (words.includes('top')) return 0;
+  if (words.includes('bottom')) return 1;
+  if (words.every((w) => w === 'center')) return 0.5;
+  throw new Error(`transform-origin ${v} is not modelled`);
 }
 const always = (): boolean => true;
 const grown = (ts: number): boolean => ts !== 1;
@@ -52,13 +69,16 @@ const only = (n: number) => (ts: number): boolean => Math.abs(ts - n) < 1e-9;
 
 const px = (v: string, ts: number): number => (v === 'none' ? 1 : evalLength(v, ctx(ts)));
 
-/** The horizontal extent of a box at row `y`; a slab is sheared about its own centre (`skewX(-12deg)`: rows below the centre move left). */
-function xs(b: Box, y: number, slab: boolean): [number, number] {
-  const d = slab ? SKEW * (b.t + b.h / 2 - y) : 0;
+/** A box and the point its skew pivots on (a fraction of its height from the top: 0.5, the centre, unless a `transform-origin` says otherwise). */
+type PBox = Box & { pv?: number };
+
+/** The horizontal extent of a box at row `y`; a slab is sheared about its pivot (`skewX(-12deg)`: rows below the pivot move left). */
+function xs(b: PBox, y: number, slab: boolean): [number, number] {
+  const d = slab ? SKEW * (b.t + b.h * (b.pv ?? 0.5) - y) : 0;
   return [b.l + d, b.l + b.w + d];
 }
 /** The smallest horizontal clearance of `a` (to the left) from `b` over the rows they share; negative is an overlap, `Infinity` means they share no row. Both ends of the shared rows are enough: the clearance is linear in `y`. */
-function clearance(a: Box, aSlab: boolean, b: Box, bSlab: boolean): number {
+function clearance(a: PBox, aSlab: boolean, b: PBox, bSlab: boolean): number {
   const y0 = Math.max(a.t, b.t);
   const y1 = Math.min(a.t + a.h, b.t + b.h);
   if (y1 <= y0) return Infinity;
@@ -98,14 +118,14 @@ function gaugeScale(ts: number, f1on: boolean): number {
   const cands = gaugeCands(f1on).filter((c) => lastDecl(c.rules, c.sel, 'scale') !== undefined);
   return cands.some((c) => c.at(ts)) ? px(winner(cands, 'scale', ts), ts) : 1;
 }
-/** The gauge panel on the grid at a TEXT SIZE (grown about its top centre, `transform-origin: center top` of `text-size.css`). */
-function gauge(ts: number, f1on: boolean): Box {
+/** The gauge panel on the grid at a TEXT SIZE (grown about its top centre, `transform-origin: center top` of `text-size.css`), with the point its skew pivots on. */
+function gauge(ts: number, f1on: boolean): PBox {
   const cands = gaugeCands(f1on);
   const k = gaugeScale(ts, f1on);
   const l = px(winner(cands, 'left', ts), ts) * ZG_K;
   const w = px(winner(cands, 'width', ts), ts) * ZG_K;
   const t = px(winner(cands, 'top', ts), ts) * ZG_K;
-  return { l: l + w / 2 - (w * k) / 2, t, w: w * k, h: ZG_H * ZG_K * k };
+  return { l: l + w / 2 - (w * k) / 2, t, w: w * k, h: ZG_H * ZG_K * k, pv: pivot(cands, ts) };
 }
 
 describe('Chapter IX (FFX only): the Zanmato gauge against the F1 ribbon and turn strip', () => {
@@ -158,6 +178,20 @@ describe('Chapter IX (FFX only): the Zanmato gauge against the F1 ribbon and tur
     // the same panel with the old growth at 130 would have been far worse: 1.3 x 191 = 248 grid px in a 181 band
     const oldGrown = gauge(1.3, false);
     expect(clearance(ribbonAt(1.3), true, oldGrown, true) + clearance(oldGrown, true, stripAt(1.3), false)).toBeLessThan(toRibbon + toStrip - 40);
+  });
+
+  it('REVIEW m1: the skew pivots on the panel\'s centre at 115 and 130 as it does at 100, because the F1 rule answers the `transform-origin: center top` that `text-size.css` sets for the growth it switches off', () => {
+    for (const ts of SIZES) expect(gauge(ts, true).pv, `${ts}`).toBe(0.5);
+    expect(lastDecl(tsFfx, ZG_TS, 'transform-origin')).toBe('center top'); // the rule being answered is still where this file reads it
+    expect(lastDecl(chap, ZG_F1_TS, 'transform-origin')).toBe('center');
+    expect(gauge(1.15, false).pv, 'today\'s HUD keeps the top pivot of its growth').toBe(0);
+    expect(gauge(1.3, false).pv).toBe(0);
+    // what the pivot on the top edge would have cost: the rows sit SKEW x h / 2 (6.6 grid px, 26 px at 2560 x 1440) further left, so the clearances the file pins below are the centre pivot's, and these are the top pivot's
+    const topPivot = (ts: number): PBox => ({ ...gauge(ts, true), pv: 0 });
+    expect(clearance(ribbonAt(1.15), true, topPivot(1.15), true)).toBeCloseTo(10.34, 1);
+    expect(clearance(ribbonAt(1.3), true, topPivot(1.3), true)).toBeCloseTo(-14.06, 1);
+    expect(clearance(ribbonAt(1.15), true, gauge(1.15, true), true) - clearance(ribbonAt(1.15), true, topPivot(1.15), true), 'the pivot is worth 6.6 grid px at 115').toBeGreaterThan(6.5);
+    expect(clearance(ribbonAt(1.3), true, gauge(1.3, true), true), 'the 130 residual is the one the handoff discloses, not the pivot\'s').toBeGreaterThan(-7.5);
   });
 
   it('the rule that does it beats the one it overrides: specificity of the F1 selectors against the ones of `zanmato-gauge.css` and `text-size.css`, and the phone panel is excluded', () => {
@@ -247,15 +281,23 @@ describe('Chapter XII (FFX only): the disc strip keeps its distance from the F1 
   /** The strip's box in grid px: left 690 of the 1600 frame (276), about 185 wide (the evidence: gold rule from 272.6 to 457 at 2560 x 1440 with the shear), top 14 (5.6) and about 36 tall with its note. */
   const OMR_STRIP = { l: 690 * OMR_K, t: 14 * OMR_K, w: 185, h: 36 };
   const STRIP_SEL = `${FFX_PFX} .ffxhud.hud-f1 .ffx-omr:not(.ffx-omr--phone) .ffx-omr__strip`;
-  const stripBox = (ts: number, f1on: boolean): Box => {
+  const STRIP_TS = `${FFX_PFX} .ffxhud .ffx-omr__strip`;
+  const STRIP_CANDS: readonly Cand[] = [
+    { rules: omr, sel: '.ffx-omr__strip', at: always },
+    { rules: tsFfx, sel: STRIP_TS, at: grown },
+    { rules: chap, sel: STRIP_SEL, at: grown },
+  ];
+  const stripCands = (f1on: boolean): readonly Cand[] => (f1on ? STRIP_CANDS : STRIP_CANDS.filter((c) => c.rules !== chap));
+  const stripBox = (ts: number, f1on: boolean): PBox => {
+    const pv = pivot(stripCands(f1on), ts);
     if (ts === 1 || !f1on) {
       // today's: grown about its top centre (`text-size.css`)
-      const k = ts === 1 ? 1 : px(lastDecl(tsFfx, `${FFX_PFX} .ffxhud .ffx-omr__strip`, 'scale')!, ts);
-      return { l: OMR_STRIP.l + OMR_STRIP.w / 2 - (OMR_STRIP.w * k) / 2, t: OMR_STRIP.t, w: OMR_STRIP.w * k, h: OMR_STRIP.h * k };
+      const k = ts === 1 ? 1 : px(lastDecl(tsFfx, STRIP_TS, 'scale')!, ts);
+      return { l: OMR_STRIP.l + OMR_STRIP.w / 2 - (OMR_STRIP.w * k) / 2, t: OMR_STRIP.t, w: OMR_STRIP.w * k, h: OMR_STRIP.h * k, pv };
     }
     const shift = evalPair(lastDecl(chap, STRIP_SEL, 'translate')!, ctx(ts))[0] * OMR_K; // frame px to grid px
     expect(lastDecl(chap, STRIP_SEL, 'scale')).toBe('none');
-    return { l: OMR_STRIP.l + shift, t: OMR_STRIP.t, w: OMR_STRIP.w, h: OMR_STRIP.h };
+    return { l: OMR_STRIP.l + shift, t: OMR_STRIP.t, w: OMR_STRIP.w, h: OMR_STRIP.h, pv };
   };
 
   it('at 100 nothing changes (the browser read had no overlap at 1600 or 2560): the strip ends 4 grid px before the turn strip\'s box', () => {
@@ -284,6 +326,18 @@ describe('Chapter XII (FFX only): the disc strip keeps its distance from the F1 
     const c = clearance(ribbonAt(1.3), true, stripBox(1.3, true), true);
     expect(c).toBeCloseTo(-9.24, 1);
   });
+
+  it('REVIEW m1: the strip\'s skew pivots on its centre at 115 and 130 as at 100 (the F1 rule answers the `center top` of `text-size.css`); the top pivot would put 130 at -13.1 and 115 at 35.4', () => {
+    for (const ts of SIZES) expect(stripBox(ts, true).pv, `${ts}`).toBe(0.5);
+    expect(lastDecl(tsFfx, STRIP_TS, 'transform-origin')).toBe('center top');
+    expect(lastDecl(chap, STRIP_SEL, 'transform-origin')).toBe('center');
+    expect(stripBox(1.15, false).pv, 'today\'s HUD keeps the top pivot of its growth').toBe(0);
+    const topPivot = (ts: number): PBox => ({ ...stripBox(ts, true), pv: 0 });
+    expect(clearance(ribbonAt(1.15), true, topPivot(1.15), true)).toBeCloseTo(35.4, 1);
+    expect(clearance(ribbonAt(1.3), true, topPivot(1.3), true)).toBeCloseTo(-13.07, 1);
+    expect(clearance(ribbonAt(1.3), true, stripBox(1.3, true), true) - clearance(ribbonAt(1.3), true, topPivot(1.3), true), 'the pivot is worth 3.8 grid px at 130').toBeGreaterThan(3.7);
+    expect(clearance(stripBox(1.3, true), true, stripAt(1.3), false), 'and the strip\'s box tip stays short of the turn strip at 130').toBeGreaterThan(0);
+  });
 });
 
 // ---------------------------------------------------------------------------------------------------------------- what the new sheet may and may not touch
@@ -299,10 +353,14 @@ describe('hudf1-chapters.css touches nothing but the two panels, only under the 
     for (const bad of ['.ig-ctb', '.ig-stat', '.f1-', '.ffx-cmd', '.ffx2hud', '.ig-cmd']) expect(body, bad).not.toContain(bad);
   });
 
-  it('declares only the properties it means to: left (the gauge), scale and translate (the text-size answers), bottom (the card)', () => {
+  it('declares only the properties it means to: left (the gauge), scale, translate and transform-origin (the text-size answers), bottom (the card)', () => {
     const props = new Set<string>();
     for (const r of chap) for (const m of r.body.matchAll(/([a-z-]+)\s*:/g)) props.add(m[1]!);
-    expect([...props].sort()).toEqual(['bottom', 'left', 'scale', 'translate']);
+    expect([...props].sort()).toEqual(['bottom', 'left', 'scale', 'transform-origin', 'translate']);
+    // every rule that switches the growth off also puts the skew's pivot back where it is at 100 (review m1): no `scale: none` without a `transform-origin: center` beside it
+    const off = chap.filter((r) => /\bscale\s*:\s*none\b/.test(r.body));
+    expect(off.length).toBe(2);
+    for (const r of off) expect(r.body, r.sel).toMatch(/transform-origin\s*:\s*center\s*;/);
   });
 
   it('the older F1 sheets say nothing of either panel, and the old layouts keep their numbers (the panels are today\'s unless the F1 HUD is on)', () => {
