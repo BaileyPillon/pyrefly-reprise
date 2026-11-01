@@ -107,7 +107,7 @@ describe('the word', () => {
   });
 });
 
-describe('with no word nothing changes: the very table, the same LUT key, no chapter look and no arena', () => {
+describe('with no word nothing changes in Chapter V and in every other chapter: the very table, the same LUT key, no chapter look and no arena (Chapter XI plays grade C by default since r72: tests/unit/booth-r72-sky.test.ts)', () => {
   it("the room's table is the shipped object and the LUT key is the one it was before this branch (the key carries `proRev()`, unchanged by an absent word)", () => {
     setTreatedScope('all');
     setSkyRunning(V);
@@ -118,15 +118,18 @@ describe('with no word nothing changes: the very table, the same LUT key, no cha
     expect(key).toMatch(/:pro\d+$/);
   });
 
-  it('the held look stays held: no chapter look and no arena in either chapter, with or without a pro switch', () => {
+  it('the held look stays held in Chapter V: no chapter look and no arena, with the pro switch on; Chapter XI, which no longer holds it (r72), plays both with grade C by default', () => {
     setTreatedScope('all');
     setProMode('pro');
-    for (const id of [V, XI]) {
-      expect(chapterLook(id), id).toBeNull();
-      expect(proArenaFor(id, ''), id).toBe(false);
-      applyChapterLook(id);
-      expect([lookState.name, lookState.armed, lookState.pro], id).toEqual([null, false, false]);
-    }
+    expect(chapterLook(V)).toBeNull();
+    expect(proArenaFor(V, '')).toBe(false);
+    applyChapterLook(V);
+    expect([lookState.name, lookState.armed, lookState.pro]).toEqual([null, false, false]);
+    expect(chapterLook(XI)).toEqual({ name: 'hd2d', strength: 'bold' });
+    expect(proArenaFor(XI, '')).toBe(true);
+    applyChapterLook(XI);
+    expect([lookState.name, lookState.strength, lookState.armed, lookState.pro]).toEqual(['cinematic', 'bold', true, true]);
+    expect(skyActive()).toBe('c');
   });
 });
 
@@ -331,11 +334,11 @@ describe('`__pyrefly.skyGrade()`', () => {
     return api['skyGrade'] as (w?: SkyOption | null) => SkyRead;
   };
 
-  it('a page that opened WITHOUT the word: the battle sets up with the look held, and a word set mid-battle changes `active` but not the screen (`armed` false, `screen` release69) for either chapter', () => {
+  it('a page that opened WITHOUT the word in Chapter V: the battle sets up with the look held, and a word set mid-battle changes `active` but not the screen (`armed` false, `screen` release69); Chapter XI plays grade C by default since r72, so it is armed', () => {
     const sky = read();
     setTreatedScope('all');
     setProMode('pro');
-    for (const id of [V, XI]) {
+    for (const id of [V]) {
       setSkyOption(undefined);
       applyChapterLook(id); // the battle starts: no word, so the hold keeps the rig and the arena down
       expect([lookState.armed, lookState.pro], id).toEqual([false, false]);

@@ -33,7 +33,7 @@ export const RETURNED_R71: Readonly<Record<string, { readonly game: 'ffx2'; read
   'ffx2-fallen-aeons': {
     game: 'ffx2',
     was: "FFX-2: out of release 70 (r70 verdict): the same clipped halo on the Road's sky whenever the follower brings the spire's burst into frame (a major, introduced)",
-    held: ['hd2d', 'arena', 'cam', 'breath', 'moments'],
+    held: ['cam', 'breath', 'moments'], // r72 (`r72-sky`): the look and the arena play with grade C by default (Bailey's pick from stills); release 71 held `hd2d` and `arena` too, and `?skygrade=today` puts them back (`PieceHoldsSky.ts`)
   },
 });
 

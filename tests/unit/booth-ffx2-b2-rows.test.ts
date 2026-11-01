@@ -24,11 +24,13 @@ import { ROAD_FIGURE_HEIGHTS, ROAD_IDS, ROAD_PARTY_HEIGHT, ROAD_RIGS, ROAD_SPOTS
 import { COLOSSUS_TABLES, COLOSSUS_PART_BASE_HEIGHT } from '../../src/scenes/farplane-colossus.ts';
 import { FARPLANE_SLOTS } from '../../src/scenes/farplane.ts';
 import { isListed, stillListed } from './booth-r70-withdrawn.ts';
+import { setProMode } from '../../src/engine/look/pro/ProSwitch.ts';
 
 afterEach(() => {
   setTreatedScope(null);
   setDemoChapter(undefined);
   setBossClean(null);
+  setProMode(null);
 });
 
 // Chapters V and XI left the treated list in the r70 verdicts: their rows stay in every table (the data cases below still read them) and the cases that need the treatment on read `isListed`.
@@ -59,6 +61,7 @@ describe('the HD-2D look and the rooms\' rows', () => {
       setTreatedScope('pack');
       expect(chapterLook(id), id).toBeNull();
       setTreatedScope('all');
+      setProMode('pro'); // a desktop page: Chapter XI's look is its default grade's, which only the pro arena carries (r72 review M1; a unit test has no page, so the switch reads `today` and the look would stand aside)
       // the row stays; the look is unread while the chapter is off the list (IX is not here) and, for Chapters V and XI, while `hd2d` is held (booth-ffx2-b4-sky: the bold look clips the Farplane's sky); the Den of Woe plays it
       expect(chapterLook(id), id).toEqual(isListed(id) && treatedHold(id, 'hd2d') === undefined ? { name: 'hd2d', strength: 'bold' } : null);
     }

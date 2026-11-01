@@ -22,6 +22,7 @@ import { inFeelChapter, punchMode, resetFeelForTests, setFeelChapter } from '../
 import { audioNewOn, passConfiguredBy, setAudioNew, setPassChapter } from '../../src/audio/pass/passSwitch.ts';
 import { DemoGovernor } from '../../src/engine/governor/DemoGovernor.ts';
 import { chapterLook } from '../../src/engine/look/LookConfig.ts';
+import { SKY_DEFAULTS } from '../../src/engine/look/pro/SkyGrade.ts';
 import { WIDE_CHAPTERS, scopeExcepted, swapsInScope, setSwapScope } from '../../src/engine/motion/SwapSwitch.ts';
 
 const BOOTH = ['seymour-flux', 'ffx2-bahamut'];
@@ -158,7 +159,10 @@ describe('the off words, chapter by chapter (every joined chapter reads as the u
     const base = readAll(id);
     readFrom('?pro=off');
     const got = readAll(id);
-    const taken: Name[] = ['look', 'cam', 'camdof', 'staging', 'stagingBreath', 'stagingCard', 'stagingEnding', 'stagingOpening', 'arena'];
+    // r72 review M1: a chapter whose look is its DEFAULT sky grade's (Chapter XI) takes the look back too, since that grade reaches the screen only through the pro arena; every other chapter's HD-2D look rides on its own words and stays.
+    const skyDefault = Object.prototype.hasOwnProperty.call(SKY_DEFAULTS, id);
+    if (skyDefault) expect(base.hd2d, `${id} hd2d before`).toBe(true);
+    const taken: Name[] = ['look', 'cam', 'camdof', 'staging', 'stagingBreath', 'stagingCard', 'stagingEnding', 'stagingOpening', 'arena', ...(skyDefault ? (['hd2d'] as Name[]) : [])];
     for (const n of taken) expect(got[n], `${id} ${n}`).toBe(false);
     expect(got.camgame, id).toBeNull();
     for (const n of NAMES) {

@@ -113,7 +113,7 @@ export function proPieceOn(piece: ProPiece): boolean {
 
 /** The pro ARENA for a chapter about to start (the battle names the chapter before the figures load, and the look asks before `demoChapter` is set on the first call): on, in that demo chapter, unless the address chose a look. */
 export function proArenaFor(chapterId: string | undefined, search: string | undefined = here()): boolean {
-  return proMode() === 'pro' && (isTreatedChapter(chapterId, 'arena') || skyGradeFor(chapterId) !== null) && !offSet().has('arena') && !addressChoseLook(search); // the second term: `?skygrade=a|b|c` (`SkyGrade.ts`) plays the held arena in Chapters V and XI
+  return proMode() === 'pro' && (isTreatedChapter(chapterId, 'arena') || skyGradeFor(chapterId) !== null) && !offSet().has('arena') && !addressChoseLook(search); // the second term: `?skygrade=a|b|c` (`SkyGrade.ts`) plays Chapter V's held arena (Chapter XI's plays by default since r72 and is held again only by `?skygrade=today`)
 }
 
 /** The game of the running demo chapter, or undefined outside the demo chapters. */

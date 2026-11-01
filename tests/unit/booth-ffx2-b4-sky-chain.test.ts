@@ -23,7 +23,8 @@ describe('the chains of the two chapters run (they are not skipped) and are the 
     expect(playsPiece('ffx2-vegnagun-shuyin', 'cam')).toBe(false); // the colossus camera is held
     expect(playsPiece('ffx2-fallen-aeons', 'cam')).toBe(false); // the follower is held
     expect(playsPiece('ffx2-fallen-aeons', 'ending')).toBe(true); // the ending plays: the quiet title and the one freeze
-    expect(playsPiece('ffx2-vegnagun-shuyin', 'hd2d')).toBe(false); // the look is held
+    expect(playsPiece('ffx2-vegnagun-shuyin', 'hd2d')).toBe(false); // the look is held in Chapter V
+    expect(playsPiece('ffx2-fallen-aeons', 'hd2d')).toBe(true); // and plays in Chapter XI since r72 (grade C by default)
     expect(playsPiece('sin-fins-core', 'ending')).toBe(false); // a chapter still off the list (Chapter XVII, the only one) runs nothing; Chapter IX came back in booth-ffx-b4-hud
   });
 
@@ -43,7 +44,7 @@ describe('the chains of the two chapters run (they are not skipped) and are the 
     }
     const holds = readFileSync(resolve('tests/unit/booth-treated-chapters.test.ts'), 'utf8');
     expect(holds).toMatch(/'ffx2-vegnagun-shuyin': \['hd2d', 'arena', 'cam', 'breath', 'moments'\]/);
-    expect(holds).toMatch(/'ffx2-fallen-aeons': \['hd2d', 'arena', 'cam', 'breath', 'moments'\]/);
+    expect(holds).toMatch(/'ffx2-fallen-aeons': \['cam', 'breath', 'moments'\]/); // r72: the look plays in Chapter XI (grade C by default)
   });
 
   it.each(CHAINS)('$id: FFX-2, $links links, every link a foe of its own formation (the ribbon names one boss per link)', async ({ id, links }) => {

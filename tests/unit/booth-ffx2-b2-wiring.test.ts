@@ -87,7 +87,7 @@ describe('the holds of batch 2', () => {
   it('Chapter V holds the look (the HD-2D bold look and the arena grade), the follower camera, the staged breath and the moments; Chapter XV holds the camera, the breath and the moments since the r70 verdict (the crop of Yuna); Chapter XI holds the look, the camera, the breath and the moments (booth-ffx2-b4-sky); every other piece plays', () => {
     expect(Object.keys(PIECE_HOLDS['ffx2-vegnagun-shuyin']!).sort()).toEqual(['arena', 'breath', 'cam', 'hd2d', 'moments']);
     expect(Object.keys(PIECE_HOLDS['ffx2-den-of-woe']!).sort()).toEqual(['breath', 'cam', 'moments']);
-    expect(Object.keys(PIECE_HOLDS['ffx2-fallen-aeons']!).sort()).toEqual(['arena', 'breath', 'cam', 'hd2d', 'moments']);
+    expect(Object.keys(PIECE_HOLDS['ffx2-fallen-aeons']!).sort()).toEqual(['breath', 'cam', 'moments']); // r72: the look plays (grade C); release 71 held hd2d and arena too
     for (const id of B2) expect(treatedHold(id, 'moments'), id).toMatch(/Garment Grids/); // the knock-out rule (`tests/unit/engine/booth-b2-ko-rule.test.ts`)
     expect(treatedHold('ffx2-vegnagun-shuyin', 'cam')).toMatch(/colossus/);
     expect(treatedHold('ffx2-vegnagun-shuyin', 'cam')).toMatch(/D-228/);

@@ -46,7 +46,7 @@ const AFTER_R71: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readon
   'evrae-airship': { game: 'ffx', held: ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'] }, // VIII: the r71 verdict added hd2d and arena; the focused review of 10b426248 added real (R71-C2)
   'seymour-omnis': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // XII: back in r72-hud (the strip right-anchored, the Sensor card under the strip, the ribbon known to the solver)
   'seymour-natus': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // X
-  'ffx2-fallen-aeons': { game: 'ffx2', held: ['hd2d', 'arena', 'cam', 'breath', 'moments'] }, // XI: ships as built
+  'ffx2-fallen-aeons': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XI: shipped in r71 with hd2d and arena held too; r72 lifted those two (grade C by default; `?skygrade=today` is r71's XI: tests/unit/booth-r72-sky.test.ts)
   'ffx2-trema': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XIII
   'isaaru-via-purifico': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // XIV
   'ffx2-den-of-woe': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XV
@@ -166,12 +166,12 @@ describe('Chapter VIII (Evrae, FFX only) ships with the HD-2D look and the arena
 });
 
 describe('the chapters that ship as built hold nothing new', () => {
-  it('the Farplane\'s two (V and XI) keep hd2d and arena held and play the rest; Ixion keeps the room looks held; the Mirror Aeons chapter keeps its card and looks held; Braska\'s chapter holds `real` and Chapter I plays it', () => {
-    for (const id of ['ffx2-vegnagun-shuyin', 'ffx2-fallen-aeons']) {
-      expect(chapterLook(id), id).toBeNull();
-      expect(proArenaFor(id, ''), id).toBe(false);
-      expect(isTreatedChapter(id, 'hud'), id).toBe(true);
-    }
+  it('the Farplane\'s two: V keeps hd2d and arena held (XI plays them since r72) and both play the rest; Ixion keeps the room looks held; the Mirror Aeons chapter keeps its card and looks held; Braska\'s chapter holds `real` and Chapter I plays it', () => {
+    for (const id of ['ffx2-vegnagun-shuyin', 'ffx2-fallen-aeons']) expect(isTreatedChapter(id, 'hud'), id).toBe(true);
+    expect(chapterLook('ffx2-vegnagun-shuyin')).toBeNull(); // Chapter V keeps both holds
+    expect(proArenaFor('ffx2-vegnagun-shuyin', '')).toBe(false);
+    expect(chapterLook('ffx2-fallen-aeons')).toEqual({ name: 'hd2d', strength: 'bold' }); // Chapter XI plays them since r72 (grade C by default)
+    expect(proArenaFor('ffx2-fallen-aeons', '')).toBe(true);
     expect(isTreatedChapter('ffx2-ixion-djose', 'hd2d')).toBe(false);
     expect(isTreatedChapter('mirror-aeons', 'card')).toBe(false);
     for (const id of ['evrae-airship', 'sin-face', 'mirror-aeons']) expect(isTreatedChapter(id, 'real'), id).toBe(false); // the focused review of 10b426248 (R71-C2, R71-C1, R71-C3) held the real clips in the three
