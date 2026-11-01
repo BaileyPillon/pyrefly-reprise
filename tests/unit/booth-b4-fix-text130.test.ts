@@ -115,7 +115,7 @@ describe('Chapter IX and Chapter XII: the F1 HUD plays at 100 and 115 and gives 
 describe('nothing else changes', () => {
   it('every other treated chapter, the booth pair among them, keeps the F1 HUD at 100, 115 and 130 (in either attribute)', () => {
     const others = Object.keys(TREATED_CHAPTERS).filter((id) => !(CEILING_IDS as readonly string[]).includes(id));
-    expect(others).toHaveLength(15); // sixteen before the second focused review of the release 71 candidate took Sin's face off the list; seventeen treated less the two ceiling chapters after r72-hud
+    expect(others).toHaveLength(16); // eighteen treated less the two ceiling chapters (r72-hud put IX and XII back; the second focused review of the release 71 candidate took Sin's face off the list and r73-fast put it back)
     for (const id of others) {
       setDemoChapter(id);
       for (const v of ['100', '115', '130']) {

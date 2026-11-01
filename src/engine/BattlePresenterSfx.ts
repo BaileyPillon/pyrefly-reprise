@@ -22,7 +22,7 @@ import { DEPARTURE_KINDS } from './BattlePresenterDepartures.ts';
 import { LANDING_MOMENTS } from '../audio/sfxV2/eventCues.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { paceFactor } from './pace.ts';
-import { STRIKE_BEAT_MS, strikeBeatNow } from './StrikeBeat.ts';
+import { STRIKE_BEAT_MS, playbackScaleOf, strikeBeatNow } from './StrikeBeat.ts';
 import { realContactMsOf } from './motion/RealBeats.ts'; // `?curves=real`: the sound's lead is the real clip's contact frame
 import { castBeat } from './feel/MotionHooks.ts'; // `?motionsfx=` (demo chapters, off by default): the cloth rustle when a cast begins
 import type { PassPlan } from '../audio/pass/passTypes.ts'; // the sound pass (decision 184, `?audio=new`): layers under a blow
@@ -228,7 +228,7 @@ export function playCue(ctx: EventCtx, name: string, opts?: { volume?: number; d
   // boss's bespoke `sfxKey` never has to exist before the fight is playable.
   try {
     audio.playSfx(key, o);
-    if (moment === 'attack' && passGame()) attackBeat(ctx, scaled(ctx, strikeBeatNow(actorId ? ctx.stage?.actor?.(actorId)?.strikeHeft?.() : undefined))); // the sound pass: a critical's dip, timed from the swing
+    if (moment === 'attack' && passGame()) attackBeat(ctx, scaled(ctx, strikeBeatNow(actorId ? ctx.stage?.actor?.(actorId)?.strikeHeft?.() : undefined, undefined, playbackScaleOf(ctx)))); // the sound pass: a critical's dip, timed from the swing
   } catch {
     try {
       // The generic hit is the old fallback, unchanged: it asks for no recorded original and no beat.
@@ -273,7 +273,7 @@ function withParity(ctx: EventCtx, o: ParityOpts | undefined, voiced: SfxVoiced,
   }
   const covered = voiced.coveredBy?.filter((c) => action?.asked.has(c));
   if (covered && covered.length > 0) extra.coveredBy = covered;
-  const ahead = moment === 'attack' ? strikeBeatNow(actorId ? ctx.stage?.actor?.(actorId)?.strikeHeft?.() : undefined, realContactMsOf(ctx, actorId)) : BEAT_AHEAD_MS[moment]; // the sampled strike's contact when the new curves are on (motion pass, lane "core"): a heavy body's strike lands later
+  const ahead = moment === 'attack' ? strikeBeatNow(actorId ? ctx.stage?.actor?.(actorId)?.strikeHeft?.() : undefined, realContactMsOf(ctx, actorId), playbackScaleOf(ctx)) : BEAT_AHEAD_MS[moment]; // the sampled strike's contact when the new curves are on (motion pass, lane "core"): a heavy body's strike lands later
   if (ahead !== undefined && voiced.events) extra.beatMs = scaled(ctx, ahead);
   return Object.keys(extra).length === 0 ? o : { ...o, ...extra };
 }

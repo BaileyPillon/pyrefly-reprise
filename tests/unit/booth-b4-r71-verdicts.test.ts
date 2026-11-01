@@ -55,12 +55,12 @@ const AFTER_R71: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readon
   'mirror-aeons': { game: 'ffx', held: ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'] }, // 27: ships as built; the focused review of 10b426248 added real (R71-C3)
 };
 
-/** Taken off the list AFTER the r71 verdicts, by the driver's call on the second focused review of the release 71 candidate (`critic/reviews/4c01379d4-focused`, R71-C1; 2026-11-01): Chapter XVIII (FFX only). Its row in the table above stays (the rows are kept, unread); `booth-b4-r71-sin-face-off.test.ts` pins the withdrawal. */
-const OFF_AFTER_R71 = ['sin-face'] as const;
+/** Taken off the list AFTER the r71 verdicts, by the driver's call on the second focused review of the release 71 candidate (`critic/reviews/4c01379d4-focused`, R71-C1; 2026-11-01): Chapter XVIII (FFX only); put back by `r73-fast` (2026-11-01; `booth-b4-r71-sin-face-off.test.ts` pins the return). None is off the list now. */
+const OFF_AFTER_R71: readonly string[] = [];
 
-describe('the list after the r71 verdicts and r72-hud: eighteen of the nineteen (seventeen once the second focused review took Sin\'s face off)', () => {
-  it('is exactly the table above less the chapter the second focused review took off, with the game the registry says (rule 14), and 11 FFX and 7 FFX-2 before that (10 and 7 now)', () => {
-    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(Object.keys(AFTER_R71).filter((id) => !(OFF_AFTER_R71 as readonly string[]).includes(id)).sort());
+describe('the list after the r71 verdicts and r72-hud: eighteen of the nineteen (seventeen while the second focused review\'s withdrawal of Sin\'s face stood, eighteen again since r73-fast)', () => {
+  it('is exactly the table above, with the game the registry says (rule 14), and 11 FFX and 7 FFX-2', () => {
+    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(Object.keys(AFTER_R71).filter((id) => !OFF_AFTER_R71.includes(id)).sort());
     for (const [id, a] of Object.entries(AFTER_R71)) {
       expect(TREATED_CHAPTERS[id]?.game ?? WITHDRAWN_R70[id]?.game, id).toBe(a.game);
       expect(getChapter(id)?.game, id).toBe(a.game);
@@ -68,15 +68,15 @@ describe('the list after the r71 verdicts and r72-hud: eighteen of the nineteen 
     }
     expect(Object.values(AFTER_R71).filter((a) => a.game === 'ffx')).toHaveLength(11);
     expect(Object.values(AFTER_R71).filter((a) => a.game === 'ffx2')).toHaveLength(7);
-    expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx')).toHaveLength(10);
+    expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx')).toHaveLength(11);
     expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx2')).toHaveLength(7);
   });
 
-  it('the two listed chapters that are not treated are XVIII and XVII; XVIII is WITHDRAWN_R70 (FFX only) while XVII is the lane\'s NOT_YET (IX and XII came back in r72-hud)', () => {
+  it('the one listed chapter that is not treated is XVII (the lane\'s NOT_YET); nothing is WITHDRAWN_R70 (IX and XII came back in r72-hud, XVIII in r73-fast)', () => {
     const notTreated = CHAPTER_IDS.filter((id) => !Object.prototype.hasOwnProperty.call(TREATED_CHAPTERS, id)).sort();
     expect(CHAPTER_IDS).toHaveLength(19);
-    expect(notTreated).toEqual(['sin-face', 'sin-fins-core']);
-    expect(Object.keys(WITHDRAWN_R70).sort()).toEqual(['sin-face']);
+    expect(notTreated).toEqual(['sin-fins-core']);
+    expect(Object.keys(WITHDRAWN_R70).sort()).toEqual([]);
   });
 });
 

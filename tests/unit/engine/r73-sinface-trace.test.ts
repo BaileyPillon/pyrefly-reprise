@@ -8,30 +8,23 @@
  *
  * The REAL `PaintedActor` (real pose records and registration rows, the real mix and head lock) plays the REAL house strike (`StrikeCurve.PROFILES.ffx`, what `real` held falls back to) and today's `lunge` under a real camera that
  * draws the standing figure at a given height, 60 Hz, and every frame is read the way the continuity probe reads it: the registered head and feet through each plane's four projected corners, weighted by the planes' fade
- * (`figureTrack`), `detectJerks` with the policy's own thresholds. Chapter XVIII (`sin-face`) is off `TREATED_CHAPTERS`, so the strike cases read the nearest listed FFX chapter that plays the house curves (`evrae-airship`).
+ * (`figureTrack`), `detectJerks` with the policy's own thresholds. Chapter XVIII (`sin-face`) was off `TREATED_CHAPTERS` when this was written (it is back since r73-fast), so the strike cases read the nearest listed FFX chapter that plays the house curves (`evrae-airship`).
  *
  * What the review measured (`critic/reviews/4c01379d4-focused`, Chapter XVIII, `continuity.json`): Auron's hops 401.1 (feet), 278.3, 277.2, 256.4, 232.2, 230.6, 148.8, 148.6, 147.0, 147.0, 115.1, 115.0, 114.5, 113.6 px and Wakka's
  * 115.5, 114.2, 113.5, each at the frame a pose blend starts, the whole figure at once (head and feet together: `relPx` 4 to 8), the neighbouring steps 16 to 46 px (a one-frame spike, `localPx`), the ready>attack swap and the
  * attack>follow swap of one attack exactly 10 frames apart.
  */
-import type { PerspectiveCamera } from 'three';
-import { Vector3 } from 'three';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { detectJerks, median, unitSquareToQuad } from '../../../critic/runner/lib/continuity-pure.mjs';
-import { CFG, FRAME, corners, ctxOf } from './ko-fall-fixture.ts';
-import { PaintedActor, cameraAt, painting, reset, slotsOf, viewOf, type Actor } from './head-lock-fixture.ts';
-import { LivingFigure } from '../../../src/engine/fx/mix/living.ts';
-import { paceRate, setPaceGame } from '../../../src/engine/pace.ts';
+import { CFG } from './strike-trace-fixture.ts';
+import * as trace from './strike-trace-fixture.ts';
+import { reset } from './head-lock-fixture.ts';
+import { setPaceGame } from '../../../src/engine/pace.ts';
 import { setDemoChapter, setTreatedScope } from '../../../src/engine/motion/DemoGate.ts';
 import { setCurvesMode } from '../../../src/engine/motion/CurvesSwitch.ts';
-import { PROFILES, resolveStrike, sampleAt } from '../../../src/engine/motion/StrikeCurve.ts';
 import { LUNGE_MS } from '../../../src/engine/StrikeBeat.ts';
 import { SPEED_SCALE } from '../../../src/engine/BattlePresenterUtil.ts';
 import { moveScale, startAttackMove } from '../../../src/engine/motion/CurveBeats.ts';
-import type { StrikePlan } from '../../../src/engine/motion/StrikePlan.ts';
 
-const W = 1600;
-const H = 900;
 /** The nearest listed FFX chapter that plays the house curves (`real` held). */
 const PLAYS = 'evrae-airship';
 
@@ -49,143 +42,17 @@ afterEach(() => {
   reset();
 });
 
-const project = (v: Vector3, cam: PerspectiveCamera): { x: number; y: number } => {
-  const p = v.clone().project(cam);
-  return { x: (p.x * 0.5 + 0.5) * W, y: (-p.y * 0.5 + 0.5) * H };
-};
-const drawnPx = (a: Actor, cam: PerspectiveCamera): number => (1.82 * Math.abs(project(a.position, cam).y - project(a.headPoint(), cam).y)) / (a.headPoint().y - a.position.y);
-
-/** A camera that draws the standing figure `px` tall on the 900 px canvas (bisection on the distance: it is monotone). */
-function cameraDrawing(a: Actor, px: number): PerspectiveCamera {
-  let lo = 2;
-  let hi = 60;
-  for (let i = 0; i < 60; i++) {
-    const mid = (lo + hi) / 2;
-    if (drawnPx(a, cameraAt(2.4, mid)) > px) lo = mid;
-    else hi = mid;
-  }
-  return cameraAt(2.4, (lo + hi) / 2);
-}
-
-function figure(name: string, poses: readonly string[]): Actor {
-  const a = new PaintedActor({ name, worldHeight: 1.82, side: 'party', breathe: false, sway: false, shadow: false });
-  const set: Record<string, ReturnType<typeof painting>> = {};
-  for (const p of poses) set[p] = painting(name, p);
-  a.adoptPoses(set, 'idle');
-  a.position.set(0, 0, 0);
-  return a;
-}
-
-const applyMap = (m: number[], u: number, t: number): [number, number] => {
-  const w = m[6]! * u + m[7]! * t + m[8]!;
-  return [(m[0]! * u + m[1]! * t + m[2]!) / w, (m[3]! * u + m[4]! * t + m[5]!) / w];
-};
-
-interface Sample {
-  n: number;
-  t: number;
-  feet: [number, number];
-  head: [number, number];
-  cam: [number, number];
-}
-
 /**
- * The figure's registered feet and head on the 1600 x 900 canvas, read the way the probe's `figureTrack` reads them (`critic/runner/lib/continuity-pure.mjs`): each showing plane's registered feet and head through that plane's own
- * projected corners, averaged over the planes WEIGHTED BY THEIR FADE, so a crossfade glides between the two paintings and does not hop at 50 percent. (The first version of this function read the dominant plane alone, which added
- * a plane-flip step of its own at every swap that the probe does not have; review of 92bb3779d, minor 3.)
+ * THE CONTROL ARM (r73-fast). This file records the CAUSE of the 17 hops, and the cause is the house strike with its travel and return compressed by the playback speed, as release 72 played it. Since r73-fast the game keeps
+ * both at their normal length at every speed (`StrikeCurve.crossingFloors`; proved in `r73-fast-floor.test.ts`), so the strike played here is told not to (`floorCrossings: false`) and the shapes are resolved the same way:
+ * every case below reads release 72's strike, and its numbers are unchanged.
  */
-function sample(a: Actor, cam: PerspectiveCamera, n: number): Sample {
-  a.updateMatrixWorld(true);
-  const planes = slotsOf(a) as unknown as Array<{ pose: string; fade: number; mesh: { matrixWorld: never }; meta: { stanceX: number; width: number; height: number; head: [number, number, number, number] }; scale: { anchorY: number } }>;
-  let w = 0;
-  const feet: [number, number] = [0, 0];
-  const head: [number, number] = [0, 0];
-  for (const s of planes) {
-    if (!s.pose || s.fade <= 0.001) continue;
-    const map = unitSquareToQuad(corners(cam, s.mesh.matrixWorld)) as unknown as number[];
-    const m = s.meta;
-    const f = applyMap(map, m.stanceX / m.width, s.scale.anchorY / m.height);
-    const h = applyMap(map, (m.head[0] + m.head[2]) / 2, (m.head[1] + m.head[3]) / 2);
-    w += s.fade;
-    feet[0] += f[0] * s.fade;
-    feet[1] += f[1] * s.fade;
-    head[0] += h[0] * s.fade;
-    head[1] += h[1] * s.fade;
-  }
-  return { n, t: n * FRAME, feet: [feet[0] / w, feet[1] / w], head: [head[0] / w, head[1] / w], cam: [0, 0] };
-}
-
-/** One attack at 60 Hz: the track of the registered head and feet, frame by frame. `strike`: the house strike with the pose swaps on its marks (ready to attack on the fastest travel frame, attack to follow on the fastest frame home); else today's lunge. */
-function play(o: { name: string; drawn: number; reach: number; kind: 'strike' | 'lunge'; frames?: number; offsetMs?: number; timeScale?: number }): { track: Sample[]; marks: Record<string, number> } {
-  const a = figure(o.name, ['idle', 'ready', 'attack', 'follow']);
-  const living = new LivingFigure(a);
-  const cam = cameraDrawing(a, o.drawn);
-  const frame = (dt = FRAME): void => {
-    living.update(ctxOf({ dt: dt / 1000, realDt: dt / 1000 }));
-    a.update(dt / 1000, dt / 1000);
-    a.holdHead(viewOf(cam));
-    a.updateMatrixWorld(true);
-  };
-  a.setPose('ready', { immediate: true, force: true });
-  frame();
-  frame();
-  const track = [sample(a, cam, 0)];
-  const marks: Record<string, number> = {};
-  if (o.kind === 'strike') {
-    const plan: StrikePlan = {
-      distance: o.reach, game: 'ffx', timeScale: o.timeScale ?? 1, arc: true,
-      marks: { travelPeak: () => { marks['travelPeak'] = track.length; a.setPose('attack'); }, settlePeak: () => { marks['settlePeak'] = track.length; a.setPose('follow'); }, end: () => { marks['end'] = track.length; a.setPose('idle'); } },
-    };
-    void a.strike(plan);
-  } else {
-    a.setPose('attack');
-    void a.lunge(o.reach, LUNGE_MS, undefined, 1.4);
-  }
-  if (o.offsetMs) frame(Math.max(0.5, FRAME - o.offsetMs));
-  for (let i = 1; i < (o.frames ?? 80); i++) {
-    frame();
-    track.push(sample(a, cam, i));
-  }
-  return { track, marks };
-}
-
-/** The largest one-frame step of the registered head, forward (+) and back (-), over frames `from` to `to` of a track. */
-function worstSteps(track: Sample[], from = 1, to = track.length): { fwd: number; back: number } {
-  let fwd = 0;
-  let back = 0;
-  for (let i = Math.max(1, from); i < Math.min(track.length, to); i++) {
-    const d = track[i]!.head[0] - track[i - 1]!.head[0];
-    fwd = Math.max(fwd, d);
-    back = Math.max(back, -d);
-  }
-  return { fwd, back };
-}
+const play = (o: Omit<trace.PlayOptions, 'floorCrossings'>): ReturnType<typeof trace.play> => trace.play({ ...o, floorCrossings: false });
+const houseShares = (timeScale: number): ReturnType<typeof trace.houseShares> => trace.houseShares(timeScale, false);
+const { worstSteps, fastest, jerksOf } = trace;
 
 const NORMAL = SPEED_SCALE.normal;
 const FAST = SPEED_SCALE.fast;
-
-/** The worst one-frame share of the lunge distance of the house FFX strike's travel and of its way home, at a playback speed, walked at every offset of a 60 Hz frame at the game's default pace (what `play` plays). */
-function houseShares(timeScale: number): { travel: number; home: number } {
-  const shape = resolveStrike(PROFILES.ffx, { distance: 1, height: 1.82, heft: 0, timeScale, arcGain: 1 });
-  const frame = FRAME * paceRate('action'); // paced ms one displayed frame advances the strike's clock
-  let travel = 0;
-  let home = 0;
-  for (let t = 0; t + frame < shape.windupMs + shape.travelMs; t += 0.25) travel = Math.max(travel, sampleAt(shape, 'pre', t + frame).x - sampleAt(shape, 'pre', t).x);
-  for (let t = 0; t + frame < shape.returnMs + shape.settleMs; t += 0.25) home = Math.max(home, sampleAt(shape, 'post', t).x - sampleAt(shape, 'post', t + frame).x);
-  return { travel, home };
-}
-
-/** The largest one-frame step of the registered head over frames 1 to `to` of a track (px), the frame it arrives in, and the detector's own `local` ratio: that step over the median of its neighbours (`continuity-pure.mjs`). */
-function fastest(track: Sample[], to = 60): { peak: number; n: number; ratio: number } {
-  const steps = track.slice(1, to).map((s, i) => Math.abs(s.head[0] - track[i]!.head[0]));
-  const peak = Math.max(...steps);
-  const at = steps.indexOf(peak);
-  const near = steps.filter((_, i) => i !== at && Math.abs(i - at) <= CFG.motion.localWindow);
-  return { peak, n: at + 1, ratio: peak / Math.max(CFG.motion.jerkFloorPx, median(near)) };
-}
-
-/** The jerks the real detector reads in the first `to` frames of a track. */
-const jerksOf = (track: Sample[], to = 60): Array<{ n: number; px: number; ratio: number }> => (detectJerks(track.slice(0, to), 1, CFG) as Array<{ n: number; px: number; ratio: number }>).filter((e) => e.n < to);
 
 describe('the house strike\'s one-frame step is a law of the reach, the drawn size and the PLAYBACK SPEED', () => {
   it('the worst frame of the travel is 0.153 of the reach at normal speed and 0.461 of it at fast (the way home 0.081 and 0.251), whatever the figure is drawn at', () => {
@@ -319,7 +186,7 @@ describe('the real jerk detector: smooth at the strike\'s own speed, a one-frame
   it('at NORMAL a house strike of 4.1 units drawn 420 and 500 px, swaps on its travel peak and its way-home peak, reads no jerk in its first 60 frames, and the neighbours of its fastest frame are 60 to 100 percent of it', () => {
     for (const drawn of [420, 500]) {
       const { track, marks } = play({ name: 'auron', drawn, reach: 4.1, kind: 'strike', timeScale: NORMAL });
-      expect(Object.keys(marks).sort()).toEqual(['end', 'settlePeak', 'travelPeak']); // the swaps really were made on the marks
+      expect(Object.keys(marks).sort()).toEqual(['contact', 'end', 'settlePeak', 'travelPeak']); // the swaps really were made on the marks
       expect(jerksOf(track).map((e) => `${e.n}:${e.px}`), `${drawn} px`).toEqual([]);
       const steps = track.slice(1, 60).map((s, i) => Math.abs(s.head[0] - track[i]!.head[0]));
       const peak = Math.max(...steps);

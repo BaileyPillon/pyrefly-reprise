@@ -1,7 +1,7 @@
 /**
  * THE CHAPTERS THE r70 VERDICT PASS TOOK BACK OFF `TREATED_CHAPTERS` (2026-10-31, `docs/handoff/booth-b3.md` section 12; both games: IX and XII are FFX only, V and XI FFX-2 only). A helper, not a test file.
  *
- * **All four came back in release 71's batch 4, the r71 verdict pass (2026-10-31, `docs/handoff/booth-b4.md` section 12) took IX and XII (FFX only) off the list AGAIN, and the `r72-hud` lane (2026-11-01, `docs/handoff/r72-hud.md`) put IX and XII back: `WITHDRAWN_R70` holds ONE chapter now, Chapter XVIII (`sin-face`, FFX only), which the second focused review of the release 71 candidate (R71-C1) took off the list on 2026-11-01, `booth-b4-r71-sin-face-off.test.ts` (the table keeps its first pass's name and is the one the next withdrawal fills):** IX and XII (FFX only) came back in `booth-ffx-b4-hud` (`docs/handoff/booth-ffx-b4-hud.md`: the F1 HUD's
+ * **All four came back in release 71's batch 4, the r71 verdict pass (2026-10-31, `docs/handoff/booth-b4.md` section 12) took IX and XII (FFX only) off the list AGAIN, and the `r72-hud` lane (2026-11-01, `docs/handoff/r72-hud.md`) put IX and XII back: `WITHDRAWN_R70` held ONE chapter after that, Chapter XVIII (`sin-face`, FFX only), which the second focused review of the release 71 candidate (R71-C1) took off the list on 2026-11-01 (`booth-b4-r71-sin-face-off.test.ts`) and the `r73-fast` lane put back (2026-11-01, `docs/handoff/r73-fast.md`): the table is EMPTY now (it keeps its first pass's name and is the one the next withdrawal fills):** IX and XII (FFX only) came back in `booth-ffx-b4-hud` (`docs/handoff/booth-ffx-b4-hud.md`: the F1 HUD's
  * layout against their panels was fixed; the r71 browser read found two more overlaps, which `r72-hud` fixed in turn), V and XI (FFX-2 only) in `booth-ffx2-b4-sky` (`docs/handoff/booth-ffx2-b4-sky.md`) with the look held; the two FFX-2 chapters are named in {@link RETURNED_R71}, and {@link itPlays}
  * gates a case on a piece the chapter does not hold (the follower cases of Chapter XI wait for its `cam` hold to lift).**
  *
@@ -11,13 +11,9 @@
 import { describe, it } from 'vitest';
 import { PIECE_HOLDS, TREATED_CHAPTERS, type TreatedPiece } from '../../src/engine/motion/DemoGate.ts';
 
-/** The chapters withdrawn now (Chapter XVIII, `sin-face`, FFX only; the r72-hud lane put Chapters IX and XII, FFX only, back on the list), each with the game it is (rule 14) and the one-line reason the verdict gave (also the `NOT_YET` text of `booth-treated-chapters.test.ts`). */
+/** The chapters withdrawn now (none: the r72-hud lane put Chapters IX and XII, FFX only, back on the list and r73-fast put Chapter XVIII, `sin-face`, FFX only, back), each with the game it is (rule 14) and the one-line reason the verdict gave (also the `NOT_YET` text of `booth-treated-chapters.test.ts`). */
 export const WITHDRAWN_R70: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readonly why: string }>> = Object.freeze({
-  // The second focused review of the release 71 candidate (2026-11-01, `critic/reviews/4c01379d4-focused`, R71-C1): the driver's call took Chapter XVIII off the list (FFX only, rule 14); its rows (`PIECE_HOLDS['sin-face']`, `real` included), the look row, `sin-hud.css` and the cut-anchor row stay, unread.
-  'sin-face': {
-    game: 'ffx',
-    why: "FFX: out of release 71 (r71 verdict, the second focused review of 4c01379d4, R71-C1): with the real clips held, 17 one-frame hops over 100 px remain on the deck (Auron's teleport 401 px, Auron's dashes 113 to 278 px, Wakka's about 115 px, all on damage or knock-out swaps) against 0 on `?treated=pack` and on live, a major, introduced, a regression against live; the real clips are not the cause and the cause is not traced; its rows and holds stay, unread. Lifts when the cause of the remaining hops is traced and a CHK-027 run against ?treated=pack shows no hop the control does not have",
-  },
+  // EMPTY since r73-fast (2026-11-01): Chapter XVIII (`sin-face`, FFX only), the last entry, came back on the list (`docs/handoff/r73-fast.md`: the hops were the house strike at the fast playback speed, kept at its normal length now). The next withdrawal fills this table, with its reason and its lift.
 });
 
 /**

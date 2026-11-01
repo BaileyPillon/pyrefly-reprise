@@ -6,6 +6,14 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-11-01 — Lane r73-fast (the house strike's crossings keep their length at every playback speed; BOTH GAMES; additive, no contract file changed)
+
+No contract file changes (none of `src/sprites/format.ts`, `SpriteActor.ts`, `Input.ts`, `battle/common/types.ts`, `story/dsl.ts`, `data/encounters.ts`). Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call, his to overturn). Logged because the strike's shape, the contact beat and the swing sound's lead are shared by both games.
+
+- **`StrikeOptions.floorCrossings?: boolean`** (`motion/StrikeCurve.ts`; absent = on) and **`StrikePlan.floorCrossings?: false`** (`motion/StrikePlan.ts`; nothing in the game sets it: the control arm of the cause trace): a HOUSE strike's travel and return (not a real profile, not at `timeScale` 1 or more) are never shorter than they are at normal speed (`crossingFloors`, paced ms: the profile's length x the heft factor / the default pace factor). At `timeScale` 1 and over the shape is exactly release 72's.
+- **`StrikeBeat.strikeLagMs(heft, speed)`**, **`playbackScaleOf(ctx)`** and the third parameter of **`strikeBeatNow(heft, realContactMs, speed = 1)`**; `ContactBeat.armContact` and `meetContact` add the lag to their caps; `BattlePresenterSfx` passes the playback scale: the contact of the kept travel falls later at a speed under 1 and the waits and the swing's lead follow it. Zero at normal speed, in `skip`, with the curves off and for a real strike.
+- **Not additive, with its reason:** none in the types. At the fast playback speed (and in `skip`) a house strike (foes and bosses everywhere; a party figure in a chapter that holds `real`) takes longer to its blow (298 ms against 128 on screen at the default pace, FFX profile) and to be home (794 against 352); at normal speed nothing changes by a bit. Chapter I and Chapter IV play real rows, which the floor never touches.
+
 ## 2026-11-01 — Lane r73-fit (the return pace; FFX only; additive, no contract file changed)
 
 No contract file changes (none of `src/sprites/format.ts`, `SpriteActor.ts`, `Input.ts`, `battle/common/types.ts`, `story/dsl.ts`, `data/encounters.ts`). Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call, his to overturn). Logged for the same reason as the r72 entry below and with the same shape (the r73 review's minor m8): the strike plan and the strike clock are shared by both games.

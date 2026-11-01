@@ -33,4 +33,9 @@ export interface StrikePlan {
    * return plays as sampled.
    */
   returnPace?: (worldHeight: number) => number;
+  /**
+   * r73-fast (both games, `StrikeCurve.crossingFloors`): false plays the travel and the return at the playback speed like every other phase (release 72 and before), the control arm of `r73-sinface-trace.test.ts`. Absent: a
+   * house strike's travel and return keep their length at normal speed at every playback speed, so the figure never crosses the stage in a few frames (a real profile is not touched). Nothing in the game sets it.
+   */
+  floorCrossings?: false;
 }
