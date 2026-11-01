@@ -29,6 +29,7 @@ import { emptyEnd, endFrame, type EndMarks } from '../../src/engine/pro/staging/
 import type { BreathCue, EndingCue, OpeningCue, StagingPort } from '../../src/engine/pro/staging/StagingPort.ts';
 import { FakeAudio, FakeStage } from './helpers/FakeStage.ts';
 import { setCappedAutoPlay } from './helpers/presenterCap.ts';
+import { itIf, stillListed } from './booth-r70-withdrawn.ts';
 
 /** A staging port that keeps what `EndingView` keeps (the marks), so the test reads what the player would see: `hud` is the HUD's opacity a minute after the last cue. */
 class RecordingPort implements StagingPort {
@@ -154,7 +155,7 @@ describe('the victory beat at a seam of a chain, and at the end', () => {
   });
 
   it("the cheer's floor reads each chapter's OWN game's table: FFX's clips (Tidus 3,666.7, Auron 4,000) in Evrae, Sin's face and the Mirror Aeons chapter; Chapter XVI's White Mage Yuna and Dark Knight Rikku play the rows decoded for Chapter IV's dresses, so the cheer is FFX-2's 3,400 ms, never FFX's 3,666.7 or 4,000", () => {
-    for (const id of ['evrae-airship', 'sin-face', 'mirror-aeons']) {
+    for (const id of stillListed(['evrae-airship', 'sin-face', 'mirror-aeons'])) { // Sin's face is off the list for release 71 (R71-C1): its case turns on with the chapter
       setDemoChapter(id);
       expect(stageVictory(ctxOf(new RecordingPort(), 'x', id === 'evrae-airship' ? ['tidus', 'wakka', 'rikku'] : ['tidus', 'yuna', 'auron']), 'pose', 900), id).toBeGreaterThanOrEqual(3600);
     }
@@ -224,7 +225,8 @@ async function playChain(row: Row) {
 
 describe('the real chains, one layer', () => {
   for (const row of ROWS) {
-    it(`${row.id}: no ending cue before the last link, one clear per later link, one freeze and one title on ${row.last}, the HUD in at every link's start, no form change, no held breath`, async () => {
+    // a chapter off the list (Sin's face since the second focused review of the release 71 candidate) has no pro staging to read: the case turns on, with no edit, the day one line puts it back
+    itIf(row.id)(`${row.id}: no ending cue before the last link, one clear per later link, one freeze and one title on ${row.last}, the HUD in at every link's start, no form change, no held breath`, async () => {
       const { result, port, seen, atSwap, hudAtLinkStart, cap } = await playChain(row);
       const { links, last } = row;
       expect(result.links, `decisions ${cap.decisions()}, capped ${cap.capped()}`).toBe(links);

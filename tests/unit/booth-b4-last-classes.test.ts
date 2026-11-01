@@ -11,6 +11,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { getChapter } from '../../src/data/encounters.ts';
 import { PIECE_HOLDS, TREATED_CHAPTERS, isTreatedChapter, setTreatedScope, treatedHold } from '../../src/engine/motion/DemoGate.ts';
+import { WITHDRAWN_R70, stillListed } from './booth-r70-withdrawn.ts';
 import { SCOPE_EXCEPTIONS, scopeExcepted } from '../../src/engine/motion/SwapSwitch.ts';
 import { TREATED_RIM_FOES } from '../../src/engine/look/pro/RimFigures.ts';
 import { RANGE_STAGING } from '../../src/scenes/evrae-airship-range.ts';
@@ -206,9 +207,12 @@ describe('class 6: a swap exception holds the smear; the rim flags follow the lo
     for (const id of ['left-fin', 'right-fin', 'sin-left-fin', 'sin-right-fin', 'sinspawn-genais', 'sin-core', 'dark-mindy', 'dark-sandy', 'dark-cindy', 'dark-yojimbo', 'dark-daigoro', 'x2-ixion', 'cid']) expect(Object.prototype.hasOwnProperty.call(TREATED_RIM_FOES, id), id).toBe(false);
   });
 
-  it('a hold that names a piece is a hold the list reads: every one of the four chapters answers false for exactly the pieces its row names under the all scope', () => {
+  it('a hold that names a piece is a hold the list reads: every one of the listed chapters of the four answers false for exactly the pieces its row names under the all scope; Sin\'s face is off the list for release 71 (R71-C1) and answers false for every piece, its rows staying unread', () => {
     setTreatedScope('all');
-    for (const id of ['evrae-airship', 'sin-face', 'mirror-aeons', 'ffx2-ixion-djose']) {
+    expect(Object.keys(WITHDRAWN_R70)).toContain('sin-face');
+    for (const p of Object.keys(PIECE_HOLDS['sin-face']!)) expect(treatedHold('sin-face', p as never), `sin-face ${p}`).toBeDefined(); // the rows stay
+    expect(isTreatedChapter('sin-face')).toBe(false);
+    for (const id of stillListed(['evrae-airship', 'sin-face', 'mirror-aeons', 'ffx2-ixion-djose'])) {
       expect(isTreatedChapter(id), id).toBe(true);
       expect(TREATED_CHAPTERS[id]!.since).toBe('r71');
       for (const piece of Object.keys(PIECE_HOLDS[id]!)) expect(isTreatedChapter(id, piece as never), `${id} ${piece}`).toBe(false);

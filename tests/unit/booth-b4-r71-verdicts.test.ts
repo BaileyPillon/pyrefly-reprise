@@ -20,7 +20,7 @@ import { CHAPTER_LOOKS, chapterLook } from '../../src/engine/look/LookConfig.ts'
 import { FFX_LAST_ARENA } from '../../src/engine/look/pro/ProGradeFfxLast.ts';
 import { proArenaFor, setProMode } from '../../src/engine/look/pro/ProSwitch.ts';
 import { F1_TEXT_CEILING } from '../../src/ui/hudf1/HudF1Switch.ts';
-import { WITHDRAWN_R70 } from './booth-r70-withdrawn.ts';
+import { WITHDRAWN_R70, itIf } from './booth-r70-withdrawn.ts';
 
 beforeEach(() => {
   setTreatedScope('all');
@@ -51,23 +51,28 @@ const AFTER_R71: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readon
   'mirror-aeons': { game: 'ffx', held: ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'] }, // 27: ships as built; the focused review of 10b426248 added real (R71-C3)
 };
 
-describe('the list after the r71 verdicts: sixteen of the nineteen', () => {
-  it('is exactly the table above, with the game the registry says (rule 14), and 9 FFX and 7 FFX-2', () => {
-    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(Object.keys(AFTER_R71).sort());
+/** Taken off the list AFTER the r71 verdicts, by the driver's call on the second focused review of the release 71 candidate (`critic/reviews/4c01379d4-focused`, R71-C1; 2026-11-01): Chapter XVIII (FFX only). Its row in the table above stays (the rows are kept, unread); `booth-b4-r71-sin-face-off.test.ts` pins the withdrawal. */
+const OFF_AFTER_R71 = ['sin-face'] as const;
+
+describe('the list after the r71 verdicts: sixteen of the nineteen (fifteen once the second focused review took Sin\'s face off)', () => {
+  it('is exactly the table above less the chapter the second focused review took off, with the game the registry says (rule 14), and 9 FFX and 7 FFX-2 before that (8 and 7 now)', () => {
+    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(Object.keys(AFTER_R71).filter((id) => !(OFF_AFTER_R71 as readonly string[]).includes(id)).sort());
     for (const [id, a] of Object.entries(AFTER_R71)) {
-      expect(TREATED_CHAPTERS[id]!.game, id).toBe(a.game);
+      expect(TREATED_CHAPTERS[id]?.game ?? WITHDRAWN_R70[id]?.game, id).toBe(a.game);
       expect(getChapter(id)?.game, id).toBe(a.game);
       expect(Object.keys(PIECE_HOLDS[id] ?? {}).sort(), id).toEqual([...a.held].sort()); // the set of pieces held (the order of a row is its lane's; Evrae's order is pinned below)
     }
     expect(Object.values(AFTER_R71).filter((a) => a.game === 'ffx')).toHaveLength(9);
     expect(Object.values(AFTER_R71).filter((a) => a.game === 'ffx2')).toHaveLength(7);
+    expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx')).toHaveLength(8);
+    expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx2')).toHaveLength(7);
   });
 
-  it('the three listed chapters that are not treated are IX, XII and XVII, and the first two are WITHDRAWN_R70 (FFX only) while XVII is the lane\'s NOT_YET', () => {
+  it('the four listed chapters that are not treated are IX, XII, XVIII and XVII; IX, XII and XVIII are WITHDRAWN_R70 (FFX only) while XVII is the lane\'s NOT_YET', () => {
     const notTreated = CHAPTER_IDS.filter((id) => !Object.prototype.hasOwnProperty.call(TREATED_CHAPTERS, id)).sort();
     expect(CHAPTER_IDS).toHaveLength(19);
-    expect(notTreated).toEqual(['seymour-omnis', 'sin-fins-core', 'yojimbo-cavern']);
-    expect(Object.keys(WITHDRAWN_R70).sort()).toEqual(['seymour-omnis', 'yojimbo-cavern']);
+    expect(notTreated).toEqual(['seymour-omnis', 'sin-face', 'sin-fins-core', 'yojimbo-cavern']);
+    expect(Object.keys(WITHDRAWN_R70).sort()).toEqual(['seymour-omnis', 'sin-face', 'yojimbo-cavern']);
   });
 });
 
@@ -144,7 +149,8 @@ describe('Chapter VIII (Evrae, FFX only) ships with the HD-2D look and the arena
     expect(treatedHold('sin-face', 'cam')).toMatch(/tilt-shift band stays/);
   });
 
-  it('Sin\'s face (the same deck, FFX only) keeps the look and the arena: no hold was added there (job L1: the sun glare is the design, the party reads)', () => {
+  // off the list for release 71 (R71-C1): the case turns on, with no edit, the day one line puts the chapter back
+  itIf('sin-face')('Sin\'s face (the same deck, FFX only) keeps the look and the arena: no hold was added there (job L1: the sun glare is the design, the party reads)', () => {
     expect(chapterLook('sin-face')).toEqual({ name: 'hd2d', strength: 'bold' });
     expect(proArenaFor('sin-face', '')).toBe(true);
     expect(treatedHold('sin-face', 'hd2d')).toBeUndefined();

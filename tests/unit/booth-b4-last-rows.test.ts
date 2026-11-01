@@ -26,11 +26,11 @@ const ROOMS = {
 } as const;
 
 describe('the look rows of Evrae and Sin\'s face, in every table the engine reads', () => {
-  it('both chapters have the bold HD-2D row; Sin\'s face answers it under all and Evrae does not (the r71 verdict holds her look: the row stays, unread); release 68 under pack; the Mirror Aeons chapter and Chapter XVI have none; Chapter XVII has none', () => {
+  it('both chapters have the bold HD-2D row; neither answers it under all (the r71 verdict holds Evrae\'s look, and Sin\'s face is off the list for release 71 after the second focused review, R71-C1: the rows stay, unread); release 68 under pack; the Mirror Aeons chapter and Chapter XVI have none; Chapter XVII has none', () => {
     for (const id of Object.keys(ROOMS)) expect(CHAPTER_LOOKS[id], id).toEqual({ name: 'hd2d', strength: 'bold' });
     for (const id of ['mirror-aeons', 'ffx2-ixion-djose', 'sin-fins-core']) expect(Object.prototype.hasOwnProperty.call(CHAPTER_LOOKS, id), id).toBe(false);
     setTreatedScope('all');
-    expect(chapterLook('sin-face')).toEqual({ name: 'hd2d', strength: 'bold' });
+    expect(chapterLook('sin-face')).toBeNull(); // off the list: the row (CHAPTER_LOOKS, above) stays and nothing reads it
     expect(chapterLook('evrae-airship')).toBeNull(); // PIECE_HOLDS holds hd2d there (job L1: 12.19 percent over 240 against 2.68)
     for (const id of ['mirror-aeons', 'ffx2-ixion-djose', 'sin-fins-core']) expect(chapterLook(id), id).toBeNull();
     setTreatedScope('pack');

@@ -1,7 +1,7 @@
 /**
  * THE CHAPTERS THE r70 VERDICT PASS TOOK BACK OFF `TREATED_CHAPTERS` (2026-10-31, `docs/handoff/booth-b3.md` section 12; both games: IX and XII are FFX only, V and XI FFX-2 only). A helper, not a test file.
  *
- * **All four came back in release 71's batch 4, and the r71 verdict pass (2026-10-31, `docs/handoff/booth-b4.md` section 12) took IX and XII (FFX only) off the list AGAIN: `WITHDRAWN_R70` holds those two now (V and XI stay on the list; the table keeps its first pass's name):** IX and XII (FFX only) came back in `booth-ffx-b4-hud` (`docs/handoff/booth-ffx-b4-hud.md`: the F1 HUD's
+ * **All four came back in release 71's batch 4, and the r71 verdict pass (2026-10-31, `docs/handoff/booth-b4.md` section 12) took IX and XII (FFX only) off the list AGAIN: `WITHDRAWN_R70` holds those two now (V and XI stay on the list; the table keeps its first pass's name). **A third entry, Chapter XVIII (`sin-face`, FFX only), joined on 2026-11-01: the second focused review of the release 71 candidate (R71-C1) took it off the list, `booth-b4-r71-sin-face-off.test.ts`:** IX and XII (FFX only) came back in `booth-ffx-b4-hud` (`docs/handoff/booth-ffx-b4-hud.md`: the F1 HUD's
  * layout against their panels was fixed; the r71 browser read found two more overlaps, see each `why` below), V and XI (FFX-2 only) in `booth-ffx2-b4-sky` (`docs/handoff/booth-ffx2-b4-sky.md`) with the look held; the two FFX-2 chapters are named in {@link RETURNED_R71}, and {@link itPlays}
  * gates a case on a piece the chapter does not hold (the follower cases of Chapter XI wait for its `cam` hold to lift).**
  *
@@ -20,6 +20,11 @@ export const WITHDRAWN_R70: Readonly<Record<string, { readonly game: 'ffx' | 'ff
   'seymour-omnis': {
     game: 'ffx',
     why: "FFX: out of release 71 (r71 verdict): the disc strip and its note are painted over the F1 turn strip at every width under 1920 (58.7 x 29.6 px at 1280 x 720, 9.3 at 1600 x 900) and the Sensor plate overlaps the target plate (71.6 x 78 px at 1600 x 900, 201 x 67 at 1280), two majors, introduced, regressions against release 70; its rows and holds stay, unread",
+  },
+  // The second focused review of the release 71 candidate (2026-11-01, `critic/reviews/4c01379d4-focused`, R71-C1): the driver's call took Chapter XVIII off the list (FFX only, rule 14); its rows (`PIECE_HOLDS['sin-face']`, `real` included), the look row, `sin-hud.css` and the cut-anchor row stay, unread.
+  'sin-face': {
+    game: 'ffx',
+    why: "FFX: out of release 71 (r71 verdict, the second focused review of 4c01379d4, R71-C1): with the real clips held, 17 one-frame hops over 100 px remain on the deck (Auron's teleport 401 px, Auron's dashes 113 to 278 px, Wakka's about 115 px, all on damage or knock-out swaps) against 0 on `?treated=pack` and on live, a major, introduced, a regression against live; the real clips are not the cause and the cause is not traced; its rows and holds stay, unread. Lifts when the cause of the remaining hops is traced and a CHK-027 run against ?treated=pack shows no hop the control does not have",
   },
 });
 
