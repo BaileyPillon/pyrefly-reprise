@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-1981 decisions in all: 1419 registry rows, 352 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1330 of the written decisions record a blanket yes.
+2005 decisions in all: 1435 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1354 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1856 |
+| adopted | 1879 |
 | proposed | 9 |
 | deferred | 7 |
 | rejected | 16 |
-| superseded | 93 |
-| **All** | **1981** |
+| superseded | 94 |
+| **All** | **2005** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 156 |
-| art | 395 |
-| visuals | 169 |
+| art | 396 |
+| visuals | 173 |
 | camera | 76 |
 | audio | 160 |
 | ui | 222 |
 | story | 17 |
-| chapters | 287 |
+| chapters | 299 |
 | guide | 34 |
-| release | 102 |
+| release | 106 |
 | hosting | 18 |
-| process | 223 |
-| critic | 43 |
+| process | 224 |
+| critic | 45 |
 | data | 17 |
 | tech | 41 |
 | site | 21 |
-| **All** | **1981** |
+| **All** | **2005** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 1046 |
-| FFX only | 511 |
-| FFX-2 only | 406 |
+| both games | 1055 |
+| FFX only | 520 |
+| FFX-2 only | 412 |
 | FF7 hidden experiment | 18 |
-| **All** | **1981** |
+| **All** | **2005** |
 
 ## Standing rules in force
 
@@ -141,7 +141,7 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27) · [2026-10-28](#2026-10-28) · [2026-10-29](#2026-10-29) · [2026-10-30](#2026-10-30) · [2026-10-31](#2026-10-31)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27) · [2026-10-28](#2026-10-28) · [2026-10-29](#2026-10-29) · [2026-10-30](#2026-10-30) · [2026-10-31](#2026-10-31) · [2026-11-01](#2026-11-01)
 
 ## Ledger
 
@@ -9116,7 +9116,7 @@ Thursday · 18 decisions
   - Source: The driver's call of 2026-10-29 about 07:55 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372), recorded as a driver …
 - <a id="d-1402"></a>**D-1402** — He hands the driver every executive decision for the next few days and goes with all its recommendations: the delegation of items 211 and 212 (“the couple days”) is extended to “the next few days” (both games)
   - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
-  - What changed: Item 214, about 13:30 EDT on 2026-10-29. The delegation of D-1365 and D-1372 is extended from “the next couple days” to “the next few days”: the driver makes every executive decision, takes its own recommendations as his yes, records each call as a driver call that is his to overturn, and keeps going. His own rules stay: a rig is judged by him in motion before it goes on (D-1378, D-1401), only he can give the listening verdict (D-1371) and nothing he will see, hear or feel is built before he has picked (hard rule 9). What followed under it: release 68’s records and the deep review of the live build (round 31, A-1085), the release 69 lanes built on branches (A-1086 to A-1089) and, on 2026-10-30, the booth treatment for every selectable chapter (D-1403 to D-1406). Nothing was released under this row. Update 2026-10-31: release 69 went live under it (A-1101), the driver's calls of item 216 are D-1407 to D-1413, and the booth treatment's batches 2 and 3 are built on branches (A-1104 to A-1110). Update 2026-10-31 (evening): release 70 went live under it (A-1119); his words "ok keep going please" of the same day are D-1414; the driver's calls of items 216h to 216l are D-1415 to D-1419; booth batch 4 is built on branches (A-1123).
+  - What changed: Item 214, about 13:30 EDT on 2026-10-29. The delegation of D-1365 and D-1372 is extended from “the next couple days” to “the next few days”: the driver makes every executive decision, takes its own recommendations as his yes, records each call as a driver call that is his to overturn, and keeps going. His own rules stay: a rig is judged by him in motion before it goes on (D-1378, D-1401), only he can give the listening verdict (D-1371) and nothing he will see, hear or feel is built before he has picked (hard rule 9). What followed under it: release 68’s records and the deep review of the live build (round 31, A-1085), the release 69 lanes built on branches (A-1086 to A-1089) and, on 2026-10-30, the booth treatment for every selectable chapter (D-1403 to D-1406). Nothing was released under this row. Update 2026-10-31: release 69 went live under it (A-1101), the driver's calls of item 216 are D-1407 to D-1413, and the booth treatment's batches 2 and 3 are built on branches (A-1104 to A-1110). Update 2026-10-31 (evening): release 70 went live under it (A-1119); his words "ok keep going please" of the same day are D-1414; the driver's calls of items 216h to 216l are D-1415 to D-1419; booth batch 4 is built on branches (A-1123). Update 2026-11-01: release 71 went live under it (A-1142; fifteen of the nineteen listed chapters); his words of 2026-10-31 about 23:40 EDT ("im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.") are D-1423 and the six recommendations they covered are D-1424 to D-1429; the driver's calls of items 216m to 217l are D-1420 to D-1422 and D-1430 to D-1435; the release-72 lanes are built on branches (A-1133).
   - area process · both games · adopted · delivery in progress · see [D-1347](#d-1347), [D-1365](#d-1365), [D-1372](#d-1372), [D-1371](#d-1371) · refines [D-1372](#d-1372)
   - Source: Bailey, 2026-10-29 about 13:30 EDT (the decisions queue; the times are DRIVER-STATE.md’s date-stamped lines), typed in the chat, verbatim: “keep …
 
@@ -9237,7 +9237,7 @@ Friday · 33 decisions
 
 ### 2026-10-31
 
-Saturday · 27 decisions
+Saturday · 45 decisions
 
 - <a id="d-1413"></a>**D-1413** — DRIVER CALLs under his delegation, his to overturn: the calls on booth batch 3 (FFX Chapters VII, X and IX on origin/booth-ffx-b3a 587678940; FFX III, XII and XIV on origin/booth-ffx-b3b 919f5e72c; FFX-2 XIII on origin/booth-ffx2-b3 e2c8a494c), each its own part; batches 2 and 3 ship together as release 70
   - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
@@ -9290,7 +9290,7 @@ Saturday · 27 decisions
     - both games
 - <a id="d-1417"></a>**D-1417** — DRIVER CALLs under his delegation, his to overturn: booth batch 4 (origin/booth-ffx-b4-hud d874984e5, origin/booth-ffx2-b4-sky 646262ac6, origin/booth-b4-last 1a5e4c221), each its own part; release 71 is these chapters after a deep review settles releases 69 and 70
   - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
-  - What changed: Item 216j, about 12:00 EDT on 2026-10-31. The three lanes and their merge on origin/booth-b4 (54c540808, A-1123) are built, reviewed and pushed; none is on main, none is released, and none has been read in a browser. Eighteen of the nineteen listed chapters would be treated; Chapter XVII stays out.
+  - What changed: Item 216j, about 12:00 EDT on 2026-10-31. The three lanes and their merge on origin/booth-b4 (54c540808, A-1123) are built, reviewed and pushed; none is on main, none is released, and none has been read in a browser. Eighteen of the nineteen listed chapters would be treated; Chapter XVII stays out. Update 2026-11-01: batch 4 shipped in release 71 (A-1142) after its browser reads: IX and XII came off the list again, the real clips are held in VIII and the Mirror Aeons, Sin's face (XVIII) came off after the second focused review, and fifteen of the nineteen are treated (D-1422, D-1432, D-1434). The IX and XII HUD fix and Chapter XI's sky C are release-72 lanes (A-1133, D-1429).
   - area chapters · both games · adopted · delivery in progress · see [D-1415](#d-1415), [D-1411](#d-1411), [D-1413](#d-1413), [D-1406](#d-1406) · refines [D-1406](#d-1406)
   - Source: The driver's call of 2026-10-31 about 12:00 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …
   - <a id="d-1417-a"></a>**D-1417/a** — a: FFX IX Yojimbo and XII Omnis come back with their two HUD panels (the Zanmato gauge, the disc strip and the Enemy Intent card) moved clear of the F1 HUD in their own sheet; nothing moves in any other chapter
@@ -9311,7 +9311,7 @@ Saturday · 27 decisions
     - What changed: origin/booth-b4 (54c540808) merges the three lanes. The browser reads of IX, XII, V, XI, VIII, XVIII, the Mirror Aeons and XVI come before the release.
 - <a id="d-1418"></a>**D-1418** — DRIVER CALLs under his delegation, his to overturn: release 70 deploys on its focused review's SHIP, and the review's two continuity readings that were worse than live are rated polish and carried to release 71, each its own part
   - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
-  - What changed: Item 216k, recorded in the queue as about 13:50 EDT on 2026-10-31; the deploy line reads 13:29:45 EDT (17:29:45Z). The focused review of e3f51bf18 (A-1118, about 270 minutes: all 14 chapters played from the title by real keys, 0 console errors, the booth pair and Leblanc as release 69) said SHIP with the changed area UNVERIFIED; the deploy followed (A-1119) and the live check passed (A-1120).
+  - What changed: Item 216k, recorded in the queue as about 13:50 EDT on 2026-10-31; the deploy line reads 13:29:45 EDT (17:29:45Z). The focused review of e3f51bf18 (A-1118, about 270 minutes: all 14 chapters played from the title by real keys, 0 console errors, the booth pair and Leblanc as release 69) said SHIP with the changed area UNVERIFIED; the deploy followed (A-1119) and the live check passed (A-1120). Update 2026-11-01: deep review round 32 confirmed both readings as PR-0581 (Braska) and PR-0582 (Ixion's knock-out slide) and disclosed them (A-1129); Braska's real clips are held in release 71 (D-1420) and the flip fit and the eased slide are the release-72 motion lane (A-1133).
   - area release · both games · adopted · delivery in progress · see [D-1415](#d-1415), [D-931](#d-931), [D-1402](#d-1402) · refines [D-1415](#d-1415)
   - Source: critic/reviews/e3f51bf18-focused.json
   - <a id="d-1418-a"></a>**D-1418/a** — a: release 70 deploys on the focused review's SHIP (no critical defect introduced and no major regression against live in what was measured)
@@ -9322,6 +9322,115 @@ Saturday · 27 decisions
     - FFX
 - <a id="d-1419"></a>**D-1419** — DRIVER CALL under his delegation, his to overturn: in FFX Chapters IX Yojimbo and XII Omnis the new battle HUD is used up to TEXT SIZE 115; at 130 those two chapters draw today's HUD, and a narrower gauge and strip that fit at 130 need a mockup for Bailey before they are built (FFX only)
   - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
-  - What changed: Item 216l, about 15:00 EDT on 2026-10-31. At TEXT SIZE 130 Chapter IX's Zanmato gauge and Chapter XII's disc strip reached about 30 px into the boss ribbon at 2560 x 1440. Built on origin/booth-b4 (c3be6a7ae: the two chapters keep today's HUD above TEXT SIZE 115; the other treated chapters are untouched), not released. A narrower design is a perceivable change: it gets a mockup and Bailey's pick first (hard rule 9).
+  - What changed: Item 216l, about 15:00 EDT on 2026-10-31. At TEXT SIZE 130 Chapter IX's Zanmato gauge and Chapter XII's disc strip reached about 30 px into the boss ribbon at 2560 x 1440. Built on origin/booth-b4 (c3be6a7ae: the two chapters keep today's HUD above TEXT SIZE 115; the other treated chapters are untouched), not released. A narrower design is a perceivable change: it gets a mockup and Bailey's pick first (hard rule 9). Update 2026-11-01: the r71 browser read took IX and XII off the list again for overlaps the TEXT SIZE 115 rule did not cover (D-1422/g); the release-72 HUD lane (origin/r72-hud 5d0c09382) brings them back with the tip, the disc strip and the Sensor card moved clear, and its browser reads are owed (A-1133).
   - area ui · FFX · adopted · delivery in progress · see [D-1417](#d-1417), [D-1415](#d-1415) · refines [D-1417](#d-1417)
   - Source: The driver's call of 2026-10-31 about 15:00 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …
+- <a id="d-1420"></a>**D-1420** — DRIVER CALL under his delegation, his to overturn: in FFX Chapter III, Braska's Final Aeon, the real-clip piece is HELD in release 71 so Tidus keeps the house curves there; Chapter XIV Isaaru's 90 px knock-out jerk is polish, carried, and belongs to the floor slide (FFX only)
+  - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
+  - What changed: Item 216m, about 18:20 EDT on 2026-10-31, from the release-70 gap pass on the live build. Tidus's approved Chapter I return flip is drawn 1.66 times larger in Chapter III and reads as 169 to 287 px one-frame attack hops and 306 to 417 px Energy Rain leaps that release 69's look does not have. PIECE_HOLDS['braskas-final-aeon'] gains `real` (origin/booth-b4 016e54530, A-1128): the house curves play there, Chapter I and Chapter IV keep their real clips; the hold lifts when the flip is scaled to the figure's drawn size and a CHK-027 run shows no teleport. Isaaru's 90 px jerk is Ixion's lying body sliding along the floor at its maximum, not the smear and not a motion lane: polish, carried, its fix belongs to the floor slide. Shipped in release 71 (A-1142). Update 2026-11-01: round 32 confirmed both as PR-0581 and PR-0582 (A-1129); the release-72 motion lane scales the flip to Tidus's drawn size and lifts the Chapter III hold, and eases the floor slide (A-1133).
+  - area chapters · FFX · adopted · delivery implemented · see [D-1418](#d-1418), [D-1415](#d-1415), [D-1402](#d-1402) · refines [D-1418](#d-1418)
+  - Source: The driver's call of 2026-10-31 about 18:20 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …
+- <a id="d-1421"></a>**D-1421** — DRIVER CALL under his delegation, his to overturn: the sky choice for FFX-2 Chapters V and XI goes to Bailey as two picture cards with the driver's pick (XI: C, the dark night where the burst still shines; V: keep today's sky); until he answers, release 71 ships both with the look held, as release 69 draws their skies (FFX-2 only)
+  - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
+  - What changed: Item 216n, about 16:55 EDT on 2026-10-31. The two cards (chapter-xi-sky-choices.jpg and chapter-v-sky-choices.jpg: Now / A / B / C with the target strip) were made on booth-b4 and sent to Bailey (A-1126). The driver read them: XI's three options all read under 0.2 percent of sky pixels over 240 and look like the booth's dark night (C recommended); V's three still leave a large glare (A 37 percent, C 20.9 percent; B 0 percent but a grey haze), so keep today's sky. The look is his (hard rule 9): until he answers, both chapters ship with the look held. They did, in release 71 (A-1142). His answer came as the blanket yes of 23:40 EDT (D-1424, D-1425).
+  - area visuals · FFX-2 · adopted · delivery implemented · see [D-1417](#d-1417), [D-1424](#d-1424), [D-1425](#d-1425) · refines [D-1417](#d-1417)
+  - Source: The driver's call of 2026-10-31 about 16:55 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …
+- <a id="d-1422"></a>**D-1422** — DRIVER CALLs under his delegation, his to overturn: release 71 after its browser jobs (origin/booth-b4 4c6581b79), each its own part: sixteen of the nineteen listed chapters take the booth treatment; IX Yojimbo and XII Omnis wait again; XVII Sin's Fins and Core stays out (the sixteen became fifteen in D-1434)
+  - Bailey: “keep going please you make all executive decisions for the next few days. i'll go with all of your recommendations.” (blanket yes)
+  - What changed: Item 216o, about 22:35 EDT on 2026-10-31, from the two release-71 browser jobs (A-1130 FFX lane, A-1131 FFX-2 lane) applied to booth-b4 (A-1132). The sixteen: FFX I, II, III, VII, VIII, X, XIV, XVIII and the Mirror Aeons; FFX-2 IV, V, VI, XI, XIII, XV and XVI. Release 71 shipped fifteen of the nineteen after Chapter XVIII came off (D-1434, A-1142); each part below says what became of it.
+  - area chapters · both games · adopted · delivery implemented · see [D-1417](#d-1417), [D-1415](#d-1415), [D-1434](#d-1434) · refines [D-1417](#d-1417)
+  - Source: The driver's call of 2026-10-31 about 22:35 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …
+  - <a id="d-1422-a"></a>**D-1422/a** — a: FFX VIII Evrae joins with its look and its arena held: the bold look pushed 20 percent of his sky over white (luma 106.5 against 88.9 on live, 12.2 percent of pixels over 240 against 2.7)
+    - What changed: Live in release 71. In the first candidate the real clips also hopped Wakka (13 hops up to 494 px); D-1432 holds them there too.
+    - FFX
+  - <a id="d-1422-b"></a>**D-1422/b** — b: FFX XVIII Sin's face joins the treated list (brighter, minor, disclosed)
+    - What changed: Taken off the list again for release 71 by D-1434: after its real-clip hold it still showed 17 one-frame hops of 113 to 401 px that the untreated chapter does not have. Its rows stay for a later release.
+    - superseded by [D-1434](#d-1434) · delivery not scheduled · FFX
+  - <a id="d-1422-c"></a>**D-1422/c** — c: FFX 27, the Mirror Aeons, joins with its room looks held
+    - What changed: Live in release 71, with the real clips held (D-1432: 32 dash hops up to 206 px in the first candidate).
+    - FFX
+  - <a id="d-1422-d"></a>**D-1422/d** — d: FFX-2 V Vegnagun and XI Fallen Aeons join with their skies as releases 69 and 70 draw them (the look held)
+    - What changed: Live in release 71. The sky pick is D-1424 and D-1425; XI's sky C is a release-72 lane (A-1133).
+    - FFX-2
+  - <a id="d-1422-e"></a>**D-1422/e** — e: FFX-2 XVI Ixion at Djose joins; its Recharge banner reads clearly (clear of every panel, dwell 1.95 s)
+    - What changed: Live in release 71. The review disclosed two polish hops of 114 and 134 px (R71-C4).
+    - FFX-2
+  - <a id="d-1422-f"></a>**D-1422/f** — f: FFX III Braska plays the house curves (the real-clip hold, D-1420)
+    - What changed: Live in release 71: Tidus's attack hop reads 66 px against 277 on live.
+    - FFX
+  - <a id="d-1422-g"></a>**D-1422/g** — g: FFX IX Yojimbo and XII Omnis wait again, with their rows kept: the advisor's tip lands on the Zanmato gauge; Omnis's disc strip and Sensor plate overlap the turn strip and target plate
+    - What changed: Four majors, regressions against live, found by the browser read. They come back in the release-72 HUD lane (origin/r72-hud 5d0c09382, A-1133), whose browser reads HUD-1 to HUD-7 are owed.
+    - delivery in progress · FFX
+  - <a id="d-1422-h"></a>**D-1422/h** — h: FFX XVII Sin's Fins and Core stays out (the Fin plate sits on the F1 turn strip and the flight plate is brighter than the Farplane plate that clipped)
+    - What changed: No line in the treated list; it plays release 68's frame. It waits for a look decision.
+    - delivery not scheduled · FFX
+- <a id="d-1423"></a>**D-1423** — He is going to sleep, says keep going, goes with all the driver's recommendations and gives it the executive decisions for the next few days: the delegation of D-1402 stands, with every recommendation then on the table taken as his yes (both games)
+  - Bailey: “im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.” (blanket yes)
+  - What changed: Item 217, about 23:40 EDT on 2026-10-31. It narrows nothing and widens nothing: the delegation of 2026-10-29 (D-1402) stands, and his blanket yes takes the recommendations then on the table as his. Spelled out, each its own row: the Chapter XI sky (D-1424), the Chapter V sky (D-1425), Leblanc's room (D-1426), the rigs v3 (D-1427), release 71 on its focused review's SHIP (D-1428) and the release-72 scope (D-1429). His own rules stay: a rig is judged by him in motion before it goes on (so the rigs stay off), only he gives the listening verdict, nothing he will see, hear or feel is built before he has picked beyond what he named here (hard rule 9). What followed under it: the six release-72 lane builds (A-1133), round 32b (A-1134), release 71 integrated, reviewed four times, refused once by the build privacy gate and deployed (A-1135 to A-1142), and the driver's calls of items 217g to 217l (D-1430 to D-1435).
+  - area process · both games · adopted · delivery in progress · see [D-1402](#d-1402), [D-1414](#d-1414), [D-1347](#d-1347), [D-1365](#d-1365), [D-1372](#d-1372) · refines [D-1402](#d-1402)
+  - Source: Bailey, 2026-10-31 about 23:40 EDT (DRIVER-STATE logged it at 23:45 EDT), typed in the chat, verbatim: "im going to sleep please keep going. i'll go …
+- <a id="d-1424"></a>**D-1424** — FFX-2 Chapter XI, the Fallen Aeons, gets sky option C of the sky cards (dimmer lights: a dark night where the burst still shines; 0.1 to 0.2 percent of sky pixels over 240), built into release 72 behind its own browser read (FFX-2 only)
+  - Bailey: “im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.” (blanket yes)
+  - What changed: Item 217a. Built on origin/r72-sky 02972d521 (A-1133): Chapter XI plays sky grade C by default, with ?skygrade=today restoring release 71's Road, only where the pro arena plays (a phone, a tablet, ?pack=off, ?pro=off and ?look=today keep release 71's frame). It reads 0.58 and 0.61 percent of the whole frame over 240 at the first menu and 0.48 and 0.53 with the burst in frame. Not on main, not deployed; the jobs R72-1 to R72-9 are owed. Release 71 still draws the Road's sky as release 69 does.
+  - area visuals · FFX-2 · adopted · delivery in progress · see [D-1421](#d-1421), [D-1423](#d-1423) · refines [D-1421](#d-1421)
+  - Source: Bailey, 2026-10-31 about 23:40 EDT (DRIVER-STATE logged it at 23:45 EDT), typed in the chat, verbatim: "im going to sleep please keep going. i'll go …
+- <a id="d-1425"></a>**D-1425** — FFX-2 Chapter V, Vegnagun, keeps its sky as releases 69, 70 and 71 draw it (all three lighter options still glared) (FFX-2 only)
+  - Bailey: “im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.” (blanket yes)
+  - What changed: Item 217b. Nothing to build: both holds on Chapter V (the HD-2D bold look and the pro arena grade) stand, and the three ?skygrade options stay behind their measuring word, off. Option C left 21 percent of Chapter V's sky band over 240 (A 37 percent).
+  - area visuals · FFX-2 · adopted · nothing to build · see [D-1421](#d-1421), [D-1423](#d-1423) · refines [D-1421](#d-1421)
+  - Source: Bailey, 2026-10-31 about 23:40 EDT (DRIVER-STATE logged it at 23:45 EDT), typed in the chat, verbatim: "im going to sleep please keep going. i'll go …
+- <a id="d-1426"></a>**D-1426** — Leblanc's room (FFX-2 Chapter VI) stays as live: no recommendation to change it was made, and it waits for his own word if he finds it too dark (FFX-2 only)
+  - Bailey: “im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.” (blanket yes)
+  - What changed: Item 217c. No change to Leblanc's room. The before and after card went to him on 2026-10-31 at 04:33 EDT with a plain question whether the room is too dark; his answer is still open, and a change waits for his word.
+  - area visuals · FFX-2 · adopted · nothing to build · see [D-1423](#d-1423) · refines [D-1423](#d-1423)
+  - Source: Bailey, 2026-10-31 about 23:40 EDT (DRIVER-STATE logged it at 23:45 EDT), typed in the chat, verbatim: "im going to sleep please keep going. i'll go …
+- <a id="d-1427"></a>**D-1427** — The rigs v3 stay OFF: his standing rule (he judges a rig in motion before it goes on) is not covered by a blanket yes (both games)
+  - Bailey: “im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.” (blanket yes)
+  - What changed: Item 217d. The comparison clips went to him on 2026-10-30 at about 18:05 EDT (A-1096); his verdict is still open. No rig replaces a painting before he has seen it move.
+  - area art · both games · adopted · nothing to build · see [D-1423](#d-1423), [D-1409](#d-1409) · refines [D-1423](#d-1423)
+  - Source: Bailey, 2026-10-31 about 23:40 EDT (DRIVER-STATE logged it at 23:45 EDT), typed in the chat, verbatim: "im going to sleep please keep going. i'll go …
+- <a id="d-1428"></a>**D-1428** — Release 71 (sixteen of nineteen chapters in the plan, fifteen in the end) deploys on its focused review's SHIP once the deep review round 32 settles releases 69 and 70 (both games)
+  - Bailey: “im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.” (blanket yes)
+  - What changed: Item 217e. Round 32 finished at about 00:30 EDT on 2026-11-01 without settling the obligations (A-1129), round 32b settled them at about 05:00 EST (A-1134, D-1433), and release 71 went live at 09:14 EST on its fourth focused review (A-1141, A-1142; D-1430 to D-1435 carry the calls in between).
+  - area release · both games · adopted · delivery implemented · see [D-1423](#d-1423), [D-1417](#d-1417) · refines [D-1423](#d-1423)
+  - Source: Bailey, 2026-10-31 about 23:40 EDT (DRIVER-STATE logged it at 23:45 EDT), typed in the chat, verbatim: "im going to sleep please keep going. i'll go …
+- <a id="d-1429"></a>**D-1429** — Release 72 is: FFX IX Yojimbo (the advisor's tip over the Zanmato gauge) and XII Omnis (disc strip and Sensor plate over the turn strip and target plate) fixed and back; Braska's flip scaled to Tidus's drawn size so the real clips can return to Chapter III; Ixion's knock-out floor slide eased in Isaaru's fight; Chapter XI's sky C; Sin's Fins and Core stays out until a look decision (FFX; XI FFX-2)
+  - Bailey: “im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.” (blanket yes)
+  - What changed: Item 217f. Launched at 23:50 EDT as three code lanes from origin/booth-b4 4c6581b79 and built by about 02:05 on 2026-11-01 (A-1133): origin/r72-hud 5d0c09382 (IX and XII, FFX only), origin/r72-sky 02972d521 (XI, FFX-2 only) and origin/r72-motion 1bb6407f5 (the flip fit for Chapter III, FFX only; the knock-out slide ease, both games, shared plumbing). Built, not released; the browser reads (HUD-1 to HUD-9, R72-1 to R72-9, FF-1 to FF-6, KO-1 to KO-3 and BJ-1 to BJ-5) are owed and wait for the weekly reset or Bailey's word.
+  - area release · both games · adopted · delivery in progress · see [D-1423](#d-1423), [D-1419](#d-1419), [D-1420](#d-1420), [D-1424](#d-1424) · refines [D-1423](#d-1423)
+  - Source: Bailey, 2026-10-31 about 23:40 EDT (DRIVER-STATE logged it at 23:45 EDT), typed in the chat, verbatim: "im going to sleep please keep going. i'll go …
+
+### 2026-11-01
+
+Sunday · 6 decisions
+
+- <a id="d-1430"></a>**D-1430** — DRIVER CALL under his delegation, his to overturn: after deep review round 32 (SHIP; its obligations left unsettled) a gap pass writes round 32b from the saved full auditor results and the missing captures, with CHK-001 and CHK-B1 filed mandatory:false UNVERIFIED (his own listening verdict); release 71 deploys only after it settles (both games)
+  - Bailey: “im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.” (blanket yes)
+  - What changed: Item 217g, about 00:30 EDT on 2026-11-01. Round 32 lost six category scores to truncation and did not run CHK-002, 003, 006, 018, 019, 020 and 022. The gap pass is A-1134 (precedent: rounds 30b, 18b and 19b). The item also said to fold the release-72 motion lane into release 71 after its review; D-1431 revised that part within the hour.
+  - area critic · both games · adopted · delivery implemented · see [D-1428](#d-1428), [D-1431](#d-1431), [D-1433](#d-1433) · refines [D-1428](#d-1428)
+  - Source: The driver's call of 2026-11-01 about 00:30 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …
+- <a id="d-1431"></a>**D-1431** — DRIVER CALL under his delegation, his to overturn: release 71 goes to its focused review as built (10b426248, Braska's real clips held); the review runs the continuity harness on the six new chapters and Chapter III against the untreated control, and release 71 deploys only if none shows a one-frame hop over 100 px or a knock-out slide jerk over 80 px that the untreated chapter does not have; the motion lane goes into release 72 (both games)
+  - Bailey: “im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.” (blanket yes)
+  - What changed: Item 217h, about 00:50 EDT on 2026-11-01, revising item 217g so release 71 is not delayed by a rebuild before the account switch. The candidate was built at 00:50 (A-1135) and its review (A-1136) found those hops in three chapters, which is how the next two calls arose (D-1432, D-1434).
+  - area release · both games · adopted · delivery implemented · see [D-1430](#d-1430), [D-1429](#d-1429), [D-1432](#d-1432) · refines [D-1430](#d-1430)
+  - Source: The driver's call of 2026-11-01 about 00:50 EDT (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …
+- <a id="d-1432"></a>**D-1432** — DRIVER CALL under his delegation, his to overturn: release 71's first candidate (10b426248) is HELD by its focused review for one-frame hops the untreated chapters do not have in FFX XVIII Sin's face (28, up to 530 px), VIII Evrae (13 Wakka hops up to 494 px, one on a knock-out) and the Mirror Aeons (32 dash hops up to 206 px); the repair holds the real clips in those three chapters so they play the house curves, as Chapter III does, until the motion lane scales the clips to the drawn size and a continuity run passes (FFX only)
+  - Bailey: “im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.” (blanket yes)
+  - What changed: Item 217i, about 04:00 EST on 2026-11-01. The hold is origin/booth-b4 4f5a407c2, merged as eb5184081 (A-1135); the rebuilt candidate 4c01379d4 fixed Chapters VIII and 27 (0 hops, CHK-027 PASS) but not XVIII (D-1434). R71-C4, two polish hops of 114 and 134 px in FFX-2 Chapter XVI, was not held; the FFX-2 chapters keep their real clips.
+  - area chapters · FFX · adopted · delivery implemented · see [D-1420](#d-1420), [D-1431](#d-1431), [D-1434](#d-1434) · refines [D-1420](#d-1420)
+  - Source: The driver's call of 2026-11-01 about 04:00 EST (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …
+- <a id="d-1433"></a>**D-1433** — DRIVER CALL under his delegation, his to overturn: round 32b, the re-issue of deep review round 32 on live release 70, is accepted as settling the deep and focused obligations of releases 69 and 70 (changed area FAIL; ship SHIP); its eleven human judgments are Bailey's and are listed in round-32b.md for him, none sent tonight (both games)
+  - Bailey: “im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.” (blanket yes)
+  - What changed: Item 217j, about 05:00 EST on 2026-11-01. Changed area FAIL on CHK-003, CHK-009, CHK-020, CHK-026 and CHK-027; narrative 8.8 and interface 7.9 scored from the saved auditor results; audio, onboarding, prep and delivery stay UNVERIFIED with reasons; CHK-001 and CHK-B1 are filed mandatory:false UNVERIFIED as ratified in round 30b. critic-clear settled e3f51bf18 and moved its marker to critic/cleared; the records are on main (A-1134, A-1144).
+  - area critic · both games · adopted · delivery implemented · see [D-1430](#d-1430), [D-1428](#d-1428) · refines [D-1430](#d-1430)
+  - Source: The driver's call of 2026-11-01 about 05:00 EST (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …
+- <a id="d-1434"></a>**D-1434** — DRIVER CALL under his delegation, his to overturn: FFX XVIII Sin's face comes OFF the treated list for release 71 (after its real-clip hold it still showed 17 one-frame hops of 113 to 401 px on damage and knock-out swaps that the untreated chapter does not have; the cause is not traced); its rows stay for a later release; release 71 treats fifteen of the nineteen (FFX only)
+  - Bailey: “im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.” (blanket yes)
+  - What changed: Item 217k, about 06:25 EST on 2026-11-01, after the second focused review's HOLD of 4c01379d4 (A-1137). The real clips are not the cause (the hold was present and the hops remained); another treatment piece is suspected and its remaining hops are untraced. origin/booth-b4 0b18ba768, merged as 62613914d: DemoGate loses one list line, the withdrawn table gains the entry and its lift, the pins move to fifteen. The third review read Chapter XVIII at 0 hops, as live and ?treated=pack do (A-1138). It returns only when its remaining hops are traced and a continuity run passes.
+  - area chapters · FFX · adopted · delivery implemented · see [D-1432](#d-1432), [D-1422](#d-1422) · refines [D-1432](#d-1432)
+  - Source: The driver's call of 2026-11-01 about 06:25 EST (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …
+- <a id="d-1435"></a>**D-1435** — DRIVER CALL under his delegation, his to overturn: release 71 deploys on its third focused review's SHIP (0804dc482, changed area PASS: Sin's face plays release 70's untreated frame with 0 one-frame hops, Evrae and the Mirror Aeons 0 hops, five fights won by real keys, 0 console errors); fifteen of the nineteen listed chapters carry the booth treatment; the round 32 and 32b records are committed with release 71's records after the deploy (both games)
+  - Bailey: “im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.” (blanket yes)
+  - What changed: Item 217l, about 08:15 EST on 2026-11-01. The first deploy try of 0804dc482 was refused at about 08:40 by the build privacy gate (a drive path in a hold reason; A-1139); the fix is 6d7ecc8a5 (A-1140), whose delta review also read SHIP (A-1141), and release 71 went live at 09:14 EST on 2026-11-01 (main 6d7ecc8a5, bundle BqgCyT8R; A-1142). The round 32 and 32b records and release 71's deploy records are on main (A-1144).
+  - area release · both games · adopted · delivery implemented · see [D-1428](#d-1428), [D-1434](#d-1434), [D-1423](#d-1423) · refines [D-1428](#d-1428)
+  - Source: The driver's call of 2026-11-01 about 08:15 EST (the DRIVER-STATE line), made under his delegation (D-1347, D-1365, D-1372, D-1402), recorded as a …
