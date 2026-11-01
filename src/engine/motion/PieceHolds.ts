@@ -84,7 +84,7 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'so the cut plays often. The piece holds the knock-out cut and its rebound and the victory cheer; the plain knock-out cross and the victory of release 68 play. Lifts when a continuity run (CHK-027) of this chapter ' +
       'with the moments on, a knock-out of each of Tidus, Yuna and Kimahri, reads no unexcused swap jerk (every cut at or under 0.5 of the drawn height).',
   }),
-  // Chapter IX left `TREATED_CHAPTERS` in the r70 verdict pass (`docs/handoff/booth-b3.md` section 12: its Zanmato gauge panel ended against the F1 turn strip, a major) and is back on it in `booth-ffx-b4-hud` (the gauge now stands between the F1 ribbon and the F1 turn strip: `docs/handoff/booth-ffx-b4-hud.md`). The three holds below are batch 3a's own and are read again.
+  // UNTREATED in the r71 verdict pass (`docs/handoff/booth-b4.md` section 12): Chapter IX is off `TREATED_CHAPTERS` again (job HUD-3: the advisor's one-row tip lands on the Zanmato gauge when Intel is open and the target cursor is up, a major, introduced, a regression against release 70). It left in the r70 pass for the gauge against the F1 turn strip and came back on `booth-ffx-b4-hud`. These three holds are batch 3a's own and are unread while it is off the list, and read again when one line puts it back.
   'yojimbo-cavern': Object.freeze({
     breath:
       'FFX, Chapter IX: the held breath is the drain-and-flood built for Total Annihilation (and, in FFX-2, Mega Flare), and a move reaches it only by id (`StagingPort.BigMove`), so nothing in this fight plays it today. ' +
@@ -128,7 +128,7 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
       'FFX, Chapter III: Tidus\'s approved Chapter I return flip (the real-snappy clip\'s returnProfile) is drawn 1.66 times larger in Chapter III and reads as 169-287 px one-frame attack hops and 306-417 px Energy Rain leaps that release 69\'s look does not have ' +
       '(live gap pass of release 70, D:/Tools/pyrefly-scratch/2026-10-31/r70/live-gaps2/). Lifts when the flip is scaled to the figure\'s drawn size and a CHK-027 run of Chapter III shows no teleport.',
   }),
-  // Chapter XII left `TREATED_CHAPTERS` in the r70 verdict pass (`docs/handoff/booth-b3.md` section 12: the Enemy Intent card clipped the acting hero's HP numeral against the F1 party panel, a major) and is back on it in `booth-ffx-b4-hud` (the card's foot now stands 6 grid px above the first party card: `docs/handoff/booth-ffx-b4-hud.md`). The holds below are batch 3b's own and are read again.
+  // UNTREATED in the r71 verdict pass (`docs/handoff/booth-b4.md` section 12): Chapter XII is off `TREATED_CHAPTERS` again (job HUD-1: the disc strip and its note are painted over the F1 turn strip at every width under 1920, and job HUD-3: the Sensor plate overlaps the target plate; two majors, introduced, regressions against release 70). It left in the r70 pass for the Enemy Intent card against the party panel and came back on `booth-ffx-b4-hud` with the card fixed. These holds are batch 3b's own and are unread while it is off the list.
   'seymour-omnis': Object.freeze({
     breath:
       'FFX, Chapter XII: the held breath is the drain-and-flood built for Total Annihilation, and a move reaches it only by id (`StagingPort.BigMove`), so nothing Omnis does plays it today (research/ffx-seymour-omnis.md section 0.4: Total Annihilation is not in this fight, it is Seymour Flux\'s). ' +

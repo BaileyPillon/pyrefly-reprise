@@ -1,8 +1,8 @@
 /**
  * THE CHAPTERS THE r70 VERDICT PASS TOOK BACK OFF `TREATED_CHAPTERS` (2026-10-31, `docs/handoff/booth-b3.md` section 12; both games: IX and XII are FFX only, V and XI FFX-2 only). A helper, not a test file.
  *
- * **All four came back in release 71's batch 4, and NONE is withdrawn now (`WITHDRAWN_R70` is empty and stays as the table the next withdrawal fills):** IX and XII (FFX only) in `booth-ffx-b4-hud` (`docs/handoff/booth-ffx-b4-hud.md`: the F1 HUD's
- * layout against their panels is fixed; their lane tests pin them inline), V and XI (FFX-2 only) in `booth-ffx2-b4-sky` (`docs/handoff/booth-ffx2-b4-sky.md`) with the look held; the two FFX-2 chapters are named in {@link RETURNED_R71}, and {@link itPlays}
+ * **All four came back in release 71's batch 4, and the r71 verdict pass (2026-10-31, `docs/handoff/booth-b4.md` section 12) took IX and XII (FFX only) off the list AGAIN: `WITHDRAWN_R70` holds those two now (V and XI stay on the list; the table keeps its first pass's name):** IX and XII (FFX only) came back in `booth-ffx-b4-hud` (`docs/handoff/booth-ffx-b4-hud.md`: the F1 HUD's
+ * layout against their panels was fixed; the r71 browser read found two more overlaps, see each `why` below), V and XI (FFX-2 only) in `booth-ffx2-b4-sky` (`docs/handoff/booth-ffx2-b4-sky.md`) with the look held; the two FFX-2 chapters are named in {@link RETURNED_R71}, and {@link itPlays}
  * gates a case on a piece the chapter does not hold (the follower cases of Chapter XI wait for its `cam` hold to lift).**
  *
  * Their rows stay in every table (look, arena, rim, holds, the follower's) and the lane tests that pin what the treatment does in them stay too: each such case is gated with {@link itIf} or {@link describeIf}, which run it while the chapter is on
@@ -11,9 +11,16 @@
 import { describe, it } from 'vitest';
 import { PIECE_HOLDS, TREATED_CHAPTERS, type TreatedPiece } from '../../src/engine/motion/DemoGate.ts';
 
-/** The chapters still withdrawn (none now), each with the game it is (rule 14) and the one-line reason the verdict gave (also the `NOT_YET` text of `booth-treated-chapters.test.ts`). */
+/** The chapters withdrawn now (Chapters IX and XII, FFX only, since the r71 verdict pass), each with the game it is (rule 14) and the one-line reason the verdict gave (also the `NOT_YET` text of `booth-treated-chapters.test.ts`). */
 export const WITHDRAWN_R70: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readonly why: string }>> = Object.freeze({
-  // none: Chapters IX and XII (FFX only) and V and XI (FFX-2 only) are all back on the list (release 71, batch 4)
+  'yojimbo-cavern': {
+    game: 'ffx',
+    why: "FFX: out of release 71 (r71 verdict): with Intel (G) open and the target cursor up, the advisor's one-row tip lands on the Zanmato gauge (634 x 53 px at 2560 x 1440, 397 x 33 at 1600 x 900, 318 x 26 at 1280 x 720, over the boss name and the gauge header; live reads 0), a major, introduced, a regression against release 70; its rows and holds stay, unread",
+  },
+  'seymour-omnis': {
+    game: 'ffx',
+    why: "FFX: out of release 71 (r71 verdict): the disc strip and its note are painted over the F1 turn strip at every width under 1920 (58.7 x 29.6 px at 1280 x 720, 9.3 at 1600 x 900) and the Sensor plate overlaps the target plate (71.6 x 78 px at 1600 x 900, 201 x 67 at 1280), two majors, introduced, regressions against release 70; its rows and holds stay, unread",
+  },
 });
 
 /**

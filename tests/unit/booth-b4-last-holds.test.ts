@@ -23,7 +23,12 @@ afterEach(() => setTreatedScope(null));
 
 describe('the holds of the four chapters that joined', () => {
   it("Chapter VIII (Evrae, booth-b4-last, FFX only) holds the staged breath (Poison Breath, which his Inhale already telegraphs with its own painting), the directed camera (the range director authors the deck's rigs) and the moments (the knock-out cut is unread on the deck); every other piece plays, the smear among them (his swap exception was lifted in release 69)", () => {
-    expect(Object.keys(PIECE_HOLDS['evrae-airship']!)).toEqual(['breath', 'cam', 'moments']);
+    expect(Object.keys(PIECE_HOLDS['evrae-airship']!)).toEqual(['hd2d', 'arena', 'breath', 'cam', 'moments']); // the r71 verdict added the look: the cone is a white halo (job L1)
+    expect(treatedHold('evrae-airship', 'hd2d')).toMatch(/12\.19 and 12\.30 percent against 2\.68 and 2\.57/);
+    expect(treatedHold('evrae-airship', 'hd2d')).toMatch(/20\.05 percent against 0\.97/);
+    expect(treatedHold('evrae-airship', 'hd2d')).toMatch(/Chapters V and XI/);
+    expect(treatedHold('evrae-airship', 'arena')).toMatch(/evrae-airship-deck/);
+    expect(treatedHold('evrae-airship', 'arena')).toMatch(/PRO_ARENA/);
     expect(treatedHold('evrae-airship', 'breath')).toMatch(/evrae-poison-breath/);
     expect(treatedHold('evrae-airship', 'breath')).toMatch(/evrae-inhale/);
     expect(treatedHold('evrae-airship', 'breath')).toMatch(/TelegraphHold/);
@@ -33,7 +38,7 @@ describe('the holds of the four chapters that joined', () => {
     expect(treatedHold('evrae-airship', 'moments')).toMatch(/CHK-027/);
     expect(treatedHold('evrae-airship', 'moments')).toMatch(/0\.495 to 0\.499/);
     expect(treatedHold('evrae-airship', 'moments')).toMatch(/0\.21 on this very deck/);
-    for (const p of TREATED_PIECES) if (!['breath', 'cam', 'moments'].includes(p)) expect(treatedHold('evrae-airship', p), p).toBeUndefined();
+    for (const p of TREATED_PIECES) if (!['hd2d', 'arena', 'breath', 'cam', 'moments'].includes(p)) expect(treatedHold('evrae-airship', p), p).toBeUndefined();
   });
 
   it("Chapter XVIII (Sin's face, FFX only) holds the boss card (the widest boss painting of any treated chapter), the staged breath (Giga-Graviton, which the clock HUD already announces and which ends the fight in a defeat), the directed camera, the moments and, as a swap exception, the smear planner; every other piece plays", () => {
@@ -107,7 +112,7 @@ describe('the holds of the four chapters that joined', () => {
   });
 
   it('every hold of the two chapters that hold the room looks says what the real plate or the picked grade must do, and the ones that need a still name it (hard rule 9)', () => {
-    for (const id of ['mirror-aeons', 'ffx2-ixion-djose']) {
+    for (const id of ['evrae-airship', 'mirror-aeons', 'ffx2-ixion-djose']) {
       expect(treatedHold(id, 'hd2d'), id).toMatch(/still pair|picks a grade/);
       expect(treatedHold(id, 'arena'), id).toMatch(/still pair|picked from a still/);
     }
