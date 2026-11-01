@@ -72,6 +72,19 @@ export function firstUseRank(name: string): number {
   return i < 0 ? VARIANT_FIRST_USE.length : i;
 }
 
+/**
+ * The queue rank a variant look is asked for at (review of lane "r73-bytes", major 2: the stream must not turn a boss's first move into the part's resting image on a slow line).
+ * The three a fight shows first (hurt, telegraph, attack: {@link VARIANT_FIRST_USE}) share the idle lighting maps' rank (`2 * poseNeed('idle') + 1`, `FigureRelight.mapRank`), ahead of the party's
+ * everyday poses; cast, ko and any variant the list does not name keep the everyday moves' rank (`2 * poseNeed('attack')`). The same bytes in another order: the party's attack paintings start
+ * after about 1.5 MB more, a few seconds before anyone can choose an attack.
+ */
+export function variantRank(name: string): number {
+  return isFirstMove(name) ? 2 * poseNeed('idle') + 1 : 2 * poseNeed('attack');
+}
+
+/** One of the three variants a fight shows first: hurt, telegraph, attack (the look claim of lane "r73-bytes" rests on these having landed by the first menu). */
+export const isFirstMove = (name: string): boolean => firstUseRank(name) <= firstUseRank('attack');
+
 /** What the stream needs of the figure whose looks it fills (`RigFigure` is that figure). */
 export interface LookSink {
   /** The variant looks that are still the part's own image: the part's index, the look's index in its part, and its record. */
@@ -85,19 +98,22 @@ export interface LookSink {
 }
 
 /**
- * Bring a figure's pending variant looks in. Each waits for the phone's hold to open, then goes through the ranked queue (`LoadHold.queued`, the rank of an everyday move, `2 * LoadDiet.poseNeed`), in the order of
+ * Bring a figure's pending variant looks in. Each waits for the phone's hold to open, then goes through the ranked queue (`LoadHold.queued`, at {@link variantRank}), in the order of
  * {@link VARIANT_FIRST_USE}. A look that fails to load is asked for once more; if it fails again the part keeps its own image for that pose (a thing the rig gate cannot let happen for a file that ships; a dropped
  * line can) and the page says so once. Never rejects; resolves when every look has landed or given up.
  */
 export function streamLooks(sink: LookSink, base: string, fetchTex: (url: string) => Promise<Texture>, wantNormals: boolean, label: string): Promise<void> {
   const todo = sink.pendingLooks().sort((a, b) => firstUseRank(a.src.name) - firstUseRank(b.src.name));
+  const early = (t: (typeof todo)[number]): boolean => isFirstMove(t.src.name); // the books keep the three a fight shows first apart
   noteBytesCut('rigLooks', todo.length);
+  noteBytesCut('rigEarlyLooks', todo.filter(early).length);
   const one = async (t: (typeof todo)[number]): Promise<void> => {
     for (let attempt = 0; attempt < 2; attempt++) {
       if (sink.gone) return;
       try {
         sink.landLook(t.part, t.look, await fetchLook(t.src, base, sink.texScales, fetchTex, wantNormals));
         noteBytesCut('rigLanded');
+        if (early(t)) noteBytesCut('rigEarlyLanded');
         return;
       } catch {
         /* once more, then give up below */
@@ -107,6 +123,5 @@ export function streamLooks(sink: LookSink, base: string, fetchTex: (url: string
     noteBytesCut('rigFailed');
     console.warn(`[rig] ${label}: the ${t.src.name} image of part ${t.part} did not load; that part keeps its own image for it`);
   };
-  const rank = 2 * poseNeed('attack');
-  return Promise.all(todo.map((t) => whenBackgroundOpen().then(() => queued(rank, () => one(t))))).then(() => undefined);
+  return Promise.all(todo.map((t) => whenBackgroundOpen().then(() => queued(variantRank(t.src.name), () => one(t))))).then(() => undefined);
 }

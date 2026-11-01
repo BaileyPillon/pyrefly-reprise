@@ -52,7 +52,7 @@ interface Rig {
   cam: { current: PerspectiveCamera };
 }
 
-function rig(actors: GovernedActor[], z = 9): Rig {
+function rig(actors: GovernedActor[], z = 9, onLoad?: (n: number) => void): Rig {
   const budget = budgetFor('phone');
   const cam = { current: camera(z) };
   const loads: Rig['loads'] = [];
@@ -65,6 +65,7 @@ function rig(actors: GovernedActor[], z = 9): Rig {
     scalesFor: () => [2],
     load: async (url, scale, opts): Promise<LoadedPixels | null> => {
       loads.push({ url, scale, opts });
+      onLoad?.(loads.length);
       return { image: { width: META.width * scale, height: META.height * scale }, scale };
     },
     now: () => clock.t,
@@ -133,6 +134,20 @@ describe('the governor while the phone\'s entry holds the line', () => {
     expect(r.gov.anticipateSize([figure(1, 1)], 0.72)).toBeGreaterThanOrEqual(0);
     await tick(r, 4);
     expect(r.loads).toEqual([]);
+  });
+
+  it('held, the sibling poses of a magnified figure wait too (their masters are bytes of the line as well); opened, they follow (review of r73-bytes, minor 1)', async () => {
+    setForegroundFirst(true);
+    const r = rig([figure(2, 1, [0])], 9, (n) => {
+      if (n === 1) holdBackground(); // the hold begins as the first master is asked for: the drawn pose's upgrade is out, its sibling's has not been asked yet
+    });
+    r.cam.current = camera(2.2);
+    await tick(r, PERSIST_FRAMES + 12);
+    expect(r.loads.map((l) => l.url)).toEqual(['/art/characters/kimahri/pose0.png']);
+    expect(bytesBooks().governorNeeds).toBeGreaterThan(0);
+    releaseBackground();
+    await tick(r, 6);
+    expect(r.loads.map((l) => l.url)).toContain('/art/characters/kimahri/pose1.png');
   });
 
   it('?phonebytes=off holds the line but not the governor: release 70\'s behaviour', async () => {

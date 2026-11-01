@@ -64,14 +64,14 @@ export function bytesHeld(): boolean {
   return held && phoneBytes();
 }
 
-const byteBooks = { audioCues: 0, idleMaps: 0, rigLooks: 0, rigLanded: 0, rigFailed: 0, governorNeeds: 0 };
+const byteBooks = { audioCues: 0, idleMaps: 0, rigLooks: 0, rigLanded: 0, rigFailed: 0, rigEarlyLooks: 0, rigEarlyLanded: 0, governorNeeds: 0 };
 
 /** Count one cut that fired (the debug probe's `bytes` books; the browser job reads them to say which cut ran). */
 export function noteBytesCut(kind: keyof typeof byteBooks, n = 1): void {
   byteBooks[kind] += n;
 }
 
-/** What release 73's cuts did this page: results cues held, idle maps held, rig variant pieces held then landed (or failed), governor needs set aside. */
+/** What release 73's cuts did this page: results cues held, idle maps held, rig variant pieces held then landed (or failed; `rigEarly*` the three a fight shows first: hurt, telegraph, attack), governor needs set aside. */
 export function bytesBooks(): Readonly<typeof byteBooks> {
   return { ...byteBooks };
 }
