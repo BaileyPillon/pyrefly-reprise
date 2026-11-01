@@ -18,7 +18,7 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 1143, from 2026-09-15 to 2026-11-01 (ids A-0001 to A-1143), 888 of them linked to at least one decision (1250 distinct decision ids).
+- **Rows:** 1144, from 2026-09-15 to 2026-11-01 (ids A-0001 to A-1144), 889 of them linked to at least one decision (1250 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
@@ -26,7 +26,7 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 | art | 104 |
 | deploy | 99 |
 | review | 246 |
-| records | 63 |
+| records | 64 |
 | infrastructure | 33 |
 | account | 26 |
 | download | 15 |
@@ -37,21 +37,27 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 |---|---|
 | September 2026 | 297 |
 | October 2026 | 836 |
-| November 2026 | 10 |
+| November 2026 | 11 |
 
-- **By game:** 837 both, 111 n/a, 107 FFX, 88 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **By game:** 838 both, 111 n/a, 107 FFX, 88 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
 - **Deploys and releases:** 99 deploy rows: 87 lines of docs/deploys.log (67 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 4 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to 09:14 EST on 2026-11-01, 14:14:08Z (2026-11-01).
 - **Reviews:** 246 rows: 64 focused reviews (60 SHIP, 3 HOLD, 1 no verdict), 68 live checks (65 PASS, 1 FAIL, 1 UNVERIFIED, 1 no verdict), 25 deep rounds with a report (12 SHIP, 7 no verdict, 6 HOLD) and 89 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
 - **Not finished or not shipped:** 71 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[11-01](#2026-11-01) (10) · [10-31](#2026-10-31) (30) · [10-30](#2026-10-30) (15) · [10-29](#2026-10-29) (22) · [10-28](#2026-10-28) (31) · [10-27](#2026-10-27) (10) · [10-26](#2026-10-26) (3) · [10-25](#2026-10-25) (21) · [10-24](#2026-10-24) (20) · [10-23](#2026-10-23) (16) · [10-22](#2026-10-22) (26) · [10-21](#2026-10-21) (17) · [10-20](#2026-10-20) (25) · [10-19](#2026-10-19) (43) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[11-01](#2026-11-01) (11) · [10-31](#2026-10-31) (30) · [10-30](#2026-10-30) (15) · [10-29](#2026-10-29) (22) · [10-28](#2026-10-28) (31) · [10-27](#2026-10-27) (10) · [10-26](#2026-10-26) (3) · [10-25](#2026-10-25) (21) · [10-24](#2026-10-24) (20) · [10-23](#2026-10-23) (16) · [10-22](#2026-10-22) (26) · [10-21](#2026-10-21) (17) · [10-20](#2026-10-20) (25) · [10-19](#2026-10-19) (43) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
 
 ### 2026-11-01
 
+- **A-1144** · `records` · both · **Recorded release 71 on main: A-1126 to A-1144, D-1420 to D-1435, deep review rounds 32 and 32b, the deploy records, the CHANGELOG address, LIVE.md, in-flight branches, the promises check and NOW.md (records only)**
+  - What: The twenty-second records pass (a sub-agent for the release driver), in D:/pyrefly-release55. critic-clear on the 6d7ecc8a5 focused report had nothing to settle (the marker already read focused done PASS; a focused review cannot settle the deep obligation). It committed the round 32 and 32b records with the cleared record of e3f51bf18 (44ef524f8), then the deploy records of release 71 (4272c6bbe: deploys.log line 88, the ledger, the manifest, the pending marker, the CHANGELOG address, LIVE.md, the in-flight list, the four focused reports and the live report with scripts and JSON evidence; 207 files, no pictures, film, audio dumps or logs) and pushed r71-int to origin/main as a fast-forward from 58e28ccef; r63-release moved to the same commit. It recorded Bailey's words of 2026-10-31 23:40 as D-1423 with the six recommendations they covered as D-1424 to D-1429, the driver's calls of items 216m, 216n, 216o and 217g to 217l as D-1420 to D-1422 and D-1430 to D-1435 (update lines on D-1402, D-1417, D-1418 and D-1419), A-1126 to A-1143 and this row (ledgers in 63554eb2e); regenerated ACTIONS.md, DECISIONS.md and docs/LIVE.md; updated docs/target/in-flight.json (booth-b4, its three lanes and tools-lock-fair leave; r72-hud, r72-sky, r72-motion and the local r72 join) and release 71's CHANGELOG address. Promises (refresh and range e3f51bf18..6d7ecc8a5): the release check lists 5 candidates (D-1416, D-1419, D-1423, D-1424, D-1429), names 0, touches 1; none marked DONE (D-1424 and D-1429 are release-72 work, D-1419 and D-1423 stay in progress, D-1416's crash unknown is carried); 43 built promises wait, 322 untouched. critic:status exits 1 for the deep review of 6d7ecc8a5 and 87 stalled issues. dist-gate removed (10.3 GiB, 0 reparse points). The tests live-record, release-notes, title-changelog-panel, moved-notice and both ledgers passed. Nothing was built, deployed or reviewed; no browser, server or GPU was used.
+  - Who: records sub-agent for the release driver · Decisions: D-1423, D-1433, D-1435
+  - Result: done: release 71 and its records are on origin/main; the deep review of the live build (release 71) is owed
+  - Evidence: `commits 44ef524f8, 4272c6bbe and 63554eb2e on main, and the commit that holds this row` · `ACTIONS.md, DECISIONS.md, docs/LIVE.md, docs/handoff/NOW.md` · `node tools/critic-status.mjs, node D:/Tools/promises/promises.mjs --release-check e3f51bf18..6d7ecc8a5 (output summarised above; not in the repo)`
+  - Reversible: yes, documentation, ledgers and records only; revert the records commits
 - **A-1143** · `review` · both · **Live check of release 71: PASS (about 60 minutes, ending about 10:10 EST on 2026-11-01): the exact artifact (7,169 files compared) and real-key smoke on five treated chapters, 0 console errors**
   - What: Step 1 ran verify-live with --full against the build: 7,169 files compared, none mismatched, missing or of a wrong type. Step 2 used headless GPU-mode Chromium from node with real input: Chapters VIII (Evrae), V (Vegnagun and Shuyin), XI (the Fallen Aeons), XVI (Ixion) and 27 (the Mirror Aeons) each reached a first player menu; Cancel, Attack, Escape/P pause and H hide/restore worked; prerendered music was fetched and playing; 0 console errors, 0 not found. Step 3 (lightweight): the reduce-flashes setting survived a reload. Pose census: 829 pass, 79 waived, 0 fail, 198 exempt. Not tested: progress surviving a reload, the full CHK-024 matrix, the fidelity of the booth look and the holds judged by eye, phone width, and the untreated chapters.
   - Who: live-check sub-agent for the release driver · Decisions: D-1435
