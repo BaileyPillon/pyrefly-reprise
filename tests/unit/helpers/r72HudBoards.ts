@@ -1,9 +1,13 @@
 /**
  * The advisor solver's boards for Chapters IX and XII, rebuilt from the r71 browser reads (lane r72-hud, 2026-11-01; FFX only): the harness's panel boxes (`D:/Tools/pyrefly-scratch/2026-10-31/r71/ffx/evidence/hud3-*.json`, grid px) with
  * the cast's painted silhouettes. A helper for `r72-hud-solver.test.ts`, not a test file.
+ *
+ * Two sets: `R71_BOARDS` is what the r71 read measured (Chapter XII's disc strip and its note where the first lane's left-690 anchor put them), and `BOARDS` is the same boards with Chapter XII's strip and note where r72-hud's
+ * stylesheet puts them (right edge 457.2 at 100 and 433.1 at 115, 8 grid px narrower at 1280 x 720: `hudf1-chapters.css`; review m2). Chapter IX's boards are the same in both.
  */
 import { SKEW, STAGE, type AdvisorZone, type AdvisorZoneInput, type Rect } from '../../../src/ui/ffx/hudSafeZones.ts';
 import { TIP_BADGE, TIP_HEIGHT } from '../../../src/ui/ffx/advisorTip.ts';
+import { advisorInkRects, advisorKeepOffRects } from '../../../src/ui/ffx/hudAvoidSelectors.ts';
 
 const R = (left: number, top: number, right: number, bottom: number): Rect => ({ left, top, right, bottom });
 
@@ -22,7 +26,7 @@ export interface Board {
   was: Rect;
 }
 /** The first menu with Intel (G) open (`intel`) and with the target cursor up as well (`intel+target`), from the r71 sheets, by chapter, TEXT SIZE and window. 16:9 windows only: the stage is the window, 1 grid px = lb px. */
-export const BOARDS: Record<string, Board> = {
+export const R71_BOARDS: Record<string, Board> = {
   'IX 100 1600x900 intel': { cmdArea: R(28, 196, 207, 314), partyStatus: R(415, 251, 615, 342), guide: R(21, 66, 154, 137), sensor: null, ctb: R(465, 22, 626, 67), ribbon: R(25, 12, 191, 38), sprites: [R(216, 232, 260, 320), R(256, 196, 332, 312), R(324, 240, 392, 320)], enemies: [R(356, 124, 428, 232), R(336, 200, 364, 228)], ink: [R(220, 4, 425, 64)], was: R(445, 132, 631, 206) },
   'IX 100 1600x900 intel+target': { cmdArea: R(28, 196, 207, 314), partyStatus: R(427, 251, 627, 342), guide: R(21, 66, 154, 137), sensor: R(431, 143, 541, 191), ctb: R(465, 22, 626, 67), ribbon: R(25, 12, 191, 38), sprites: [R(216, 232, 260, 320), R(252, 200, 332, 312), R(324, 236, 392, 320)], enemies: [R(356, 128, 428, 228), R(336, 200, 364, 228)], ink: [R(220, 4, 425, 64)], was: R(200, 16, 380, 30) },
   'IX 100 2560x1440 intel': { cmdArea: R(28, 196, 207, 314), partyStatus: R(415, 251, 615, 342), guide: R(21, 66, 154, 137), sensor: null, ctb: R(465, 22, 626, 67), ribbon: R(25, 12, 191, 38), sprites: [R(220, 232, 260, 320), R(256, 196, 336, 312), R(328, 240, 392, 320)], enemies: [R(356, 128, 428, 228), R(336, 200, 364, 228)], ink: [R(220, 4, 425, 64)], was: R(446, 146, 630, 206) },
@@ -47,9 +51,24 @@ export const BOARDS: Record<string, Board> = {
 export const grow = (r: Rect, d: number): Rect => ({ left: r.left - d, top: r.top - d, right: r.right + d, bottom: r.bottom + d });
 export const tsOf = (key: string): number => Number(key.split(' ')[1]) / 100;
 export const chOf = (key: string): 'IX' | 'XII' => key.split(' ')[0] as 'IX' | 'XII';
+
+/**
+ * Chapter XII's disc strip and note where the shipped stylesheet puts them (`hudf1-chapters.css`: `right: 465px` of the 1600 frame, so the painted tip ends at 457.2 grid px at 100 and, carried by the 115 `translate`, 433.1 at 115;
+ * `--omr-tight` takes 8 grid px off the width at 1280 x 720). The note hangs from the strip's right edge (`right: 12px`), so it moves with it; the Enemy Intent card is not touched. The board's own widths are kept (they are the r71
+ * sheet's, rounded outwards), so this is the r71 strip moved, not a new measurement.
+ */
+function shippedXii(key: string, b: Board): Board {
+  const right = tsOf(key) === 1 ? 457.2 : 433.1;
+  const tight = key.includes('1280x720') ? 8 : 0;
+  const [strip, note, ...rest] = b.ink as [Rect, Rect, ...Rect[]];
+  const dx = right - strip.right;
+  return { ...b, ink: [R(strip.left + dx + tight, strip.top, right, strip.bottom), R(note.left + dx, note.top, note.right + dx, note.bottom), ...rest] };
+}
+/** The boards as shipped by r72-hud (Chapter XII's strip and note moved). */
+export const BOARDS: Record<string, Board> = Object.fromEntries(Object.entries(R71_BOARDS).map(([k, b]) => [k, chOf(k) === 'XII' ? shippedXii(k, b) : b]));
 /** The solver's input as `FFXBattleHud.solveAdvisorPlacement` builds it for these chapters: the F1 ribbon is `keepOff` (the tip) in both, and ink (`enemies`, the designed card) in XII only, when `ribbon` is on. */
-export function inputOf(key: string, ribbon: boolean): AdvisorZoneInput {
-  const b = BOARDS[key]!;
+export function inputOf(key: string, ribbon: boolean, boards: Record<string, Board> = BOARDS): AdvisorZoneInput {
+  const b = boards[key]!;
   const ts = tsOf(key);
   const g = b.guide!;
   const chips = [R(g.left, g.top - 11, g.left + 61, g.top), R(g.left + 61, g.top - 11, g.left + 112, g.top)];
@@ -67,6 +86,57 @@ export function inputOf(key: string, ribbon: boolean): AdvisorZoneInput {
     keepOff: [...chips, ...rib],
   };
 }
+/**
+ * The same input, with `enemies`' ink and `keepOff` produced by the REAL builders the FFX HUD calls (`hudAvoidSelectors.advisorInkRects` and `advisorKeepOffRects`) on a small DOM tree that carries the board's boxes (jsdom; review m2):
+ * `inputOf` wrote those two lists by hand and so passed on the base's source too. `ribbon` is the chapter's state, not a flag on a list: true = the F1 HUD is on (class `hud-f1`) with Yojimbo's gauge up (IX) or the read-out live
+ * (XII); false = the same chapter with the F1 HUD off, where the builders answer no ribbon. Needs a DOM (`// @vitest-environment jsdom`).
+ */
+export function hudInputOf(key: string, ribbon: boolean, boards: Record<string, Board> = BOARDS): AdvisorZoneInput {
+  const b = boards[key]!;
+  const ts = tsOf(key);
+  const g = b.guide!;
+  const rects = new WeakMap<HTMLElement, Rect>();
+  const el = (parent: HTMLElement, cls: string, r: Rect, tag = 'div'): HTMLElement => {
+    const e = document.createElement(tag);
+    e.className = cls;
+    rects.set(e, r);
+    parent.append(e);
+    return e;
+  };
+  const root = document.createElement('div');
+  root.className = ribbon ? 'ffxhud hud-f1' : 'ffxhud';
+  const stage = document.createElement('div');
+  root.append(stage);
+  const gaugeEls: HTMLElement[] = [];
+  if (chOf(key) === 'IX') {
+    const zg = el(stage, 'ffx-zg', b.ink[0]!);
+    gaugeEls.push(el(zg, 'ffx-zg__panel', b.ink[0]!));
+  } else {
+    root.setAttribute('data-omnis-readout', '');
+    el(stage, 'ffx-omr__strip', b.ink[0]!);
+    el(stage, 'ffx-omr__note', b.ink[1]!);
+    el(stage, 'ffx-omr__intent', b.ink[2]!);
+  }
+  el(stage, 'f1-ribbon', b.ribbon);
+  el(stage, 'sgd__toggle', R(g.left, g.top - 11, g.left + 61, g.top), 'button');
+  el(stage, 'sgd__keys', R(g.left + 61, g.top - 11, g.left + 112, g.top), 'button');
+  document.body.append(root);
+  const rectOf = (e: HTMLElement | null): Rect | null => (e ? (rects.get(e) ?? null) : null);
+  const input: AdvisorZoneInput = {
+    cmdArea: b.cmdArea,
+    cmdInfo: R(24, 121, 24 + 172 * ts, 121 + 33 * ts),
+    partyStatus: b.partyStatus,
+    guide: b.guide,
+    sensor: b.sensor,
+    intent: null,
+    ctb: b.ctb,
+    sprites: b.sprites.map((r) => grow(r, 4)),
+    enemies: [...b.enemies.map((r) => grow(r, 8)), ...advisorInkRects(root, gaugeEls, rectOf)],
+    keepOff: advisorKeepOffRects(root, rectOf),
+  };
+  root.remove();
+  return input;
+}
 export const apart = (a: Rect, b: Rect): number => Math.max(a.left - b.right, b.left - a.right, a.top - b.bottom, b.top - a.bottom);
 export const hits = (a: Rect, b: Rect): boolean => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
 /** The bar the tip paints (its card's box with the shear's reach on each side), at the `slide` the stylesheet adds, and the badge on its left (the chip, which is not slid). */
@@ -83,4 +153,3 @@ export function badge(z: AdvisorZone): Rect {
 export const slideOf = (ts: number): number => (ts === 1 ? 166 : 6 + 160 * ts);
 /** Every box the solver was given (the ribbon, when on, among them), for the clearance sums. */
 export const everything = (input: AdvisorZoneInput): Rect[] => [input.cmdArea, input.cmdInfo ?? input.cmdArea, input.partyStatus, ...(input.guide ? [input.guide] : []), ...(input.sensor ? [input.sensor] : []), ...(input.ctb ? [input.ctb] : []), ...input.sprites, ...(input.enemies ?? []), ...(input.keepOff ?? [])];
-

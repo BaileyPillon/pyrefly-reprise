@@ -174,6 +174,34 @@ describe('Chapter XII (FFX only): the Sensor card stands in the band under the t
     expect(grownTop).toBeLessThan(TURN_FOOT[1.15]!);
   });
 
+  it('REVIEW m4a, a decision: the rule has no `:not(.ffx-sensor--folded)`, so the FOLDED one-line chip stands at the same top (79) as the open card and folding does not move the anchor; it is the shorter box, so it clears the strip and the flag by more', () => {
+    expect(SENSOR_SEL).not.toContain('--folded');
+    const root = document.createElement('div');
+    root.className = 'ffxhud hud-f1 f1-intel';
+    root.setAttribute('data-omnis-readout', '');
+    const open = document.createElement('div');
+    open.className = 'ffx-sensor';
+    const folded = document.createElement('div');
+    folded.className = 'ffx-sensor ffx-sensor--folded';
+    root.append(open, folded);
+    document.body.append(root);
+    expect(open.matches(SENSOR_SEL)).toBe(true);
+    expect(folded.matches(SENSOR_SEL)).toBe(true);
+    // one line: padding 1 + 1.5 and a toggle line of at most 7.05 grid px (the floor at 1280 x 720) at 1.25 line height: under 12 grid px tall, so its foot is under 91, 55 above the highest flag read (146)
+    expect(top() + 12).toBeLessThan(91.01);
+    expect(Math.min(...Object.values(FLAGS).map((f) => f.t)) - (top() + 12)).toBeGreaterThan(50);
+    expect(top() - TURN_FOOT[1.15]!, 'the same air under the turn strip as the open card').toBeCloseTo(5.8, 6);
+  });
+
+  it('REVIEW m4c, pinned so a later edit sees it: the open card\'s two closest places are 5.3 grid px to the flag (1280 x 720, 100) and 5.8 to the turn strip\'s foot (115), both inside the HUD\'s own GAP of 6 (not an overlap, which is what the browser read counts)', () => {
+    const toFlag = FLAGS['1280x720']!.t - (top() + HEIGHT_AT['1280x720']!);
+    expect(toFlag).toBeCloseTo(5.35, 1);
+    expect(toFlag).toBeLessThan(6);
+    expect(toFlag).toBeGreaterThan(0);
+    expect(top() - TURN_FOOT[1.15]!).toBeLessThan(6);
+    expect(top() - TURN_FOOT[1.15]!).toBeGreaterThan(0);
+  });
+
   it('is clear of the flag in every window: either the rows are apart (5 grid px and more) or the columns are (the card is x 428 to 544, steered at most to 476 to 592)', () => {
     for (const [win, f] of Object.entries(FLAGS)) {
       const apart = f.t - (top() + HEIGHT_AT[win]!);
@@ -320,14 +348,13 @@ describe('hudAvoidSelectors.f1RibbonEls: the F1 ribbon is ink in Chapter IX (the
     expect(topChipEls(one.root)).not.toContain(one.ribbon);
   });
 
-  it('FFXBattleHud.ts reads it for the designed card\'s ink in Chapter XII alone, and did not grow (the file is over 400 lines and must not)', () => {
+  it('FFXBattleHud.ts reaches the ribbon only through the two builders (`advisorInkRects`, `advisorKeepOffRects`), which `r72-hud-wiring.test.ts` runs for real; it names neither `f1RibbonEls` nor `topChipEls` itself any more', () => {
     const src = readFileSync(resolve('src/ui/ffx/FFXBattleHud.ts'), 'utf8');
-    expect(src).toContain("...f1RibbonEls(this.el, 'omnis')");
-    expect(src).toContain('keepOff: topChipEls(this.el)');
-    expect((src.match(/\n/g) ?? []).length).toBeLessThanOrEqual(1811);
+    expect(src).not.toMatch(/\bf1RibbonEls\b|\btopChipEls\b/);
+    expect(src).toContain('advisorInkRects');
+    expect(src).toContain('advisorKeepOffRects');
   });
 });
-
 
 // ---------------------------------------------------------------------------------------------------------------- what this lane may and may not have touched
 

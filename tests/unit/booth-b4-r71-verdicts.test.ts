@@ -109,6 +109,9 @@ describe('Chapters IX and XII are back on the list (r72-hud, FFX only), `since` 
     const note = readFileSync(resolve('docs/handoff/r72-hud.md'), 'utf8').replace(/\r\n/g, '\n');
     for (const id of ['yojimbo-cavern', 'seymour-omnis']) expect(note, id).toContain(id);
     for (const job of ['HUD-1', 'HUD-2', 'HUD-3', 'HUD-4', 'HUD-5', 'HUD-6', 'HUD-7']) expect(note, job).toContain(job);
+    // the review's additions (m5, m6) and the hold condition: the two lines are back on offline proof only, so the note must keep saying which reads are owed
+    for (const job of ['HUD-3b', 'HUD-3c', 'HUD-3d', 'HUD-5b', 'HUD-5c', 'HUD-5d', 'HUD-6b', 'HUD-9']) expect(note, job).toContain(job);
+    expect(note).toContain('HOLD CONDITION');
     expect(note).toMatch(/FFX only/);
     expect(note).toMatch(/Prediction/i);
   });
