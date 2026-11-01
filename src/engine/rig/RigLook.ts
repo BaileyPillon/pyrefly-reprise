@@ -63,6 +63,8 @@ export async function fetchLook(src: RigPartData | RigVariantData, base: string,
 /**
  * The order a fight first draws a boss rig's variants in. The party moves first at the opening (the first thing a boss rig shows is a hit: hurt), a boss's move is shown by its telegraph and then its attack,
  * its cast is the other kind of move, and its ko is last. A variant this list does not name comes after these, in the file's order. (A heuristic of order, not a game fact: it changes when a variant lands, not what it is.)
+ * Game case (rule 14): "the party moves first" describes FFX's CTB opening; in FFX-2's ATB a boss can open the fight, so the order is not claimed for FFX-2. It does not need to be: hurt, telegraph and attack share one
+ * queue rank ({@link variantRank}) in both games, so inside that group the order is a tie-break of a few hundred milliseconds, and only cast and ko come later.
  */
 export const VARIANT_FIRST_USE: readonly string[] = ['hurt', 'telegraph', 'attack', 'cast', 'ko'];
 
