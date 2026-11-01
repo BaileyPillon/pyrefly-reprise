@@ -72,7 +72,7 @@ html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhu
 /*
  * ================================================================================================ r72-hud (2026-11-01; FFX ONLY: Chapter IX `yojimbo-cavern`, Chapter XII `seymour-omnis`; rule 14: FFX-2 has no panel of this kind, Chapter I and Chapter IV are untouched)
  *
- * The r71 browser read (`docs/handoff/booth-b4.md` section 12; `D:/Tools/pyrefly-scratch/2026-10-31/r71/ffx/`) took both chapters off the list again for overlaps the first lane's layout sums could not see, because they come from things the stylesheets do not place:
+ * The r71 browser read (`docs/handoff/booth-b4.md` section 12) took both chapters off the list again for overlaps the first lane's layout sums could not see, because they come from things the stylesheets do not place:
  *
  *  - IX (HUD-3): with Intel (G) open and the target cursor up, the Sensor plate takes the ground the full advisor card had, and the solver falls to the ONE-ROW TIP. It solves the tip against every box it knows (the gauge among them) and stands it left of the gauge, on the top row;
  *    then `hudf1.css` slides the tip 166 grid px right (`6 + 160 x scale` at 115 and 130) to clear the F1 ribbon, which the solver does not know. That is where the gauge stands: 634 x 53 px of tip over the boss name and the gauge header at 2560 x 1440.

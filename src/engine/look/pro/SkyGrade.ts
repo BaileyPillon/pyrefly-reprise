@@ -6,7 +6,7 @@
  * WHY. The r70 browser read (`docs/handoff/booth-b3.md` section 12) took Chapter V (`ffx2-vegnagun-shuyin`, the Heart of the Farplane) and Chapter XI (`ffx2-fallen-aeons`, the Road to the Farplane) off the treated list: the HD-2D
  * bold look over their very bright shared sky clips the spire's burst to a flat white halo (Chapter V's first menu: mean luma 126.6 against live's 101.5, 13.5 percent of pixels over 240 against 2.7; Chapter XI's fights whenever the
  * follower brings the burst into frame). They came back in release 71 with the look HELD (`PieceHolds.ts`: `hd2d` and `arena`), so the plate drew as release 69 draws it. A lighter grade is a LOOK decision (hard rule 9), so this module built
- * three candidates, filmed as stills beside release 69 and Chapter IV for Bailey (`D:/Tools/pyrefly-scratch/2026-10-31/sky-stills/`).
+ * three candidates, filmed as stills beside release 69 and Chapter IV for Bailey (the stills and their `numbers.json` are described in `docs/handoff/r72-sky.md`).
  *
  * WHAT r72 DOES WITH THE PICK. Bailey's pick is C ("dimmer lights: a dark night where the burst still shines"). Read on the stills (`numbers.json`, the share of pixels over 240; the lift's number is under 3): in Chapter XI C reads 0.58 and 0.61 percent
  * on the whole frame at the first menu of link 1 (band 0.05 and 0.14) and 0.48 and 0.53 with the burst in frame at the Anima link (band 0.24 and 0.43), so **Chapter XI plays C by default**: its `hd2d` and `arena` holds left `PIECE_HOLDS` (they live in

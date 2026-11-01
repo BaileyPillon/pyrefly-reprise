@@ -335,3 +335,42 @@ describe('the presenter hands the plan its fit (CurveBeats.startAttackMove, the 
     expect(plan.returnFit).toBeUndefined();
   });
 });
+
+describe("the fit measures the figure against the stage's own canvas, not the window (r72 review, minor: FlipFit.canvasHeight read window.innerHeight while PaintedStage.project measures against the canvas rect)", () => {
+  const a = figure('tidus');
+  const cam = cameraDrawing(a, DRAWN_THREE); // project() below maps to the 1600 x 900 canvas, so the figure is drawn 462 px of 900 on it
+  const base = stageOf(a, cam).stage;
+  const withMotion = (motion: unknown): BattleStage => ({ ...(base as object), motion }) as unknown as BattleStage;
+  const gainOn = (stage: BattleStage): number => {
+    setDemoChapter(THIRD);
+    return returnFitOf({ stage }, 'tidus', PROFILE, 1)!(1.82);
+  };
+
+  it('a canvas that fills the window (900 of 900): the same gain whether the stage names its canvas or not', () => {
+    const noPort = gainOn(base);
+    const named = gainOn(withMotion({ view: () => ({ w: W, h: 900 }) }));
+    expect(named).toBeCloseTo(noPort, 12);
+    expect(named).toBeCloseTo(DRAWN_ONE / DRAWN_THREE, 1);
+  });
+
+  it('a canvas shorter than the window (900 on a 1024 px window): the gain follows the canvas, as the stage projects, and the window alone would have read it wrong', () => {
+    g.innerHeight = 1024;
+    const named = gainOn(withMotion({ view: () => ({ w: W, h: 900 }) }));
+    expect(named).toBeCloseTo(DRAWN_ONE / DRAWN_THREE, 1); // what it is on the 900 px canvas, whatever the window around it
+    const windowOnly = gainOn(base); // the old reading: 1024 for a figure the stage drew against 900
+    expect(windowOnly).toBeGreaterThan(named + 0.05);
+  });
+
+  it('a canvas taller than the window (1000 of 900 shows) reads the canvas too', () => {
+    const named = gainOn(withMotion({ view: () => ({ w: W, h: 1000 }) }));
+    expect(named).toBeGreaterThan(gainOn(base)); // the same drawn pixels are a smaller share of a taller canvas, so less of the flip needs fitting
+  });
+
+  it('a stage that cannot name its canvas (no port, no view, no height) falls back to the window, as before', () => {
+    const viaWindow = gainOn(base);
+    expect(gainOn(withMotion({}))).toBe(viaWindow);
+    expect(gainOn(withMotion({ view: () => ({ w: W, h: 0 }) }))).toBe(viaWindow);
+    delete g.innerHeight;
+    expect(gainOn(withMotion({ view: () => ({ w: W, h: 0 }) }))).toBe(1); // neither can say: no fit
+  });
+});

@@ -1,7 +1,7 @@
 /**
  * THE RETURN FLIP, FITTED TO THE FIGURE'S DRAWN SIZE (booth-b4, r72-motion; FFX only; Bailey's delegation of 2026-10-31, "you make the executive decisions for the next few days", his to overturn).
  *
- * **The finding (the live gap pass of release 70, `D:/Tools/pyrefly-scratch/2026-10-31/r70/live-gaps2/`).** Tidus's approved Chapter I return is the real clip's flip (`data/motion/realMotion.ts`,
+ * **The finding (the live gap pass of release 70, `docs/handoff/r72-motion.md`).** Tidus's approved Chapter I return is the real clip's flip (`data/motion/realMotion.ts`,
  * `returnProfile`: the hip rises to 0.84 of his height, most of it in the first two frames). The lift is a share of his height, so the flip is the same in WORLD units wherever he stands, but a screen
  * draws him as big as its camera makes him: 280 px of the 900 px canvas in Chapter I (the flip's one-frame step reads 168 px at 1600 x 900, 141 in another sample, and 161 in Energy Rain) and 462 px in Chapter
  * III (277 and 275 px), 1.66 times bigger, which reads as a teleport (CHK-027's `jerks.teleportPx` is 300). Release 71's candidate held the real clips in Chapter III instead (`PieceHolds` `real`).
@@ -17,7 +17,7 @@
  * played), every house (`?curves=new`) strike, every FFX-2 strike (the girls' back-leaps are 0.14 to 0.54 of their height and no chapter has been read for them: rule 14), and any stage that cannot say how big
  * a figure is drawn (a unit-test fake, a canvas with no height): the gain is 1 there.
  *
- * Pure but for the page's height (`globalThis.innerHeight`, as `DemoGate.readPackScreen` reads it: the battle canvas is the window): no `three`, no clock, no engine state (hard rule 1).
+ * Pure but for the canvas's height: the stage's own (`BattleStage.motion.view().h`, the canvas `BattleStage.project` measures against, r72 review minor), else the page's (`globalThis.innerHeight`, as `DemoGate.readPackScreen` reads it) for a stage that cannot say: no `three`, no clock, no engine state (hard rule 1).
  */
 import type { CombatantId } from '../../battle/common/types.ts';
 import type { BattleStage } from '../BattlePresenterPorts.ts';
@@ -68,8 +68,14 @@ export function fitForStep(step: number, cap = flipStepCap()): number {
   return step > cap ? cap / step : 1;
 }
 
-/** The canvas's height, CSS px, as the page reports it; undefined when nothing can be read (a test, a tool). */
-function canvasHeight(): number | undefined {
+/**
+ * The canvas's height, CSS px, in the units `BattleStage.project` answers in: the stage's own canvas (`motion.view().h`), which is what `project` measures a point against, so a canvas that does not fill the window
+ * height (a letterboxed window, the phone's wider field) still reads true (r72 review minor). A stage with no motion port, or one whose canvas has no height, falls back to the window's (`globalThis.innerHeight`:
+ * the battle canvas is the window on a desktop); undefined when nothing can be read (a test, a tool).
+ */
+function canvasHeight(stage: BattleStage): number | undefined {
+  const own = stage.motion?.view?.().h; // `view?.` : a test double of the port may carry only the members it needs
+  if (typeof own === 'number' && own > 0) return own;
   const h = (globalThis as { innerHeight?: number }).innerHeight;
   return typeof h === 'number' && h > 0 ? h : undefined;
 }
@@ -79,7 +85,7 @@ function canvasHeight(): number | undefined {
  * projection, a flat figure) or the canvas has no height.
  */
 export function canvasPerUnit(stage: BattleStage, id: CombatantId): number | undefined {
-  const canvas = canvasHeight();
+  const canvas = canvasHeight(stage);
   const actor = stage.actor(id);
   const head = stage.project(id, 'head');
   const feet = stage.project(id, 'feet');
