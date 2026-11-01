@@ -50,7 +50,7 @@ import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
 import { withOverdriveFocus } from './overdriveFocus.ts';
 import { showOverdrivePlate } from './overdrivePlate.ts';
-import { INTENT_AVOID_SELECTORS, ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR, chipObstacleEls, chipReserveOf, rectsOf, topChipEls, type ViewportRect } from './hudAvoidSelectors.ts';
+import { INTENT_AVOID_SELECTORS, advisorInkRects, advisorKeepOffRects, chipReserveOf, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
 import { growToGrid, panelPresence, rectKey, sizeKey, unionOf } from './hudPlacementKeys.ts';
 import { doomNoteOf } from './DoomCounters.ts';
 import { zombieTargetNote } from './zombieTargetNote.ts';
@@ -1435,8 +1435,8 @@ export class FFXBattleHud implements HudPort {
     // Outwards, never inwards, so a snapped obstacle is never smaller than the
     // panel it stands for. The intent slab gets a coarser quantum because it is
     // the only input that moves *every frame*.
-    // Yojimbo's Zanmato gauge and banner (FFX, Chapter IX only) and Omnis's disc strip and intent line (Chapter XII only): ink, as solid as a boss.
-    const inkRects = [...this.zanmato.obstacleEls(), ...chipObstacleEls(this.el), ...this.el.querySelectorAll<HTMLElement>([...ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR].join())].flatMap((e) => growToGrid(this.stageRect(e), 1) ?? []);
+    // Yojimbo's Zanmato gauge and banner (FFX, Chapter IX only) and Omnis's disc strip and intent line (Chapter XII only): ink, as solid as a boss; in XII, with the F1 HUD on, the F1 boss ribbon too (r72-hud: `advisorInkRects`).
+    const inkRects = advisorInkRects(this.el, this.zanmato.obstacleEls(), (e) => this.stageRect(e));
     // Chapters I and III while the guide is folded: its G chip and the N chip's size, for the card that stands in the guide's place (`advisorFolded.ts`); null in every other fight and while the guide is open.
     const foldedGuide = this.guideStartsFolded && !this.guide.isVisible && !document.documentElement.dataset['phoneBattle']; // the upright phone keeps its own guide sheet and card
     const guideChip = foldedGuide ? growToGrid(this.stageRect(this.el.querySelector<HTMLElement>('.sgd__toggle')), 1) : null;
@@ -1473,7 +1473,7 @@ export class FFXBattleHud implements HudPort {
       // Plus the ink (`inkRects`, above).
       enemies: [...this.enemySpriteRects().map((r) => growToGrid(r, 4)!), ...inkRects],
       // What only the one-row tip reads (`advisorTip.ts`): the small chips along the top, the guide's G and scroll chips and the PAUSE chip.
-      keepOff: topChipEls(this.el).flatMap((e) => growToGrid(this.stageRect(e), 1) ?? []),
+      keepOff: advisorKeepOffRects(this.el, (e) => this.stageRect(e)),
       guideChip,
       chipSize: guideChip && nChip ? nChip.full : null,
       badgeSize: guideChip && nChip ? nChip.badge : null,

@@ -162,8 +162,8 @@ describe('no sheet sets the open Sensor card\'s top without the pin\'s lift agai
       .map((r) => ({ file: f.replace(/\\/g, '/'), selector: r.selector, top: declOf(r, 'top') })),
   );
 
-  it('finds the two desktop rules (the stylesheet\'s own and the floor\'s)', () => {
-    expect(cardTops.map((c) => c.file).sort()).toEqual(['common/hud-floor.css', 'ffx/ffx-hud.css']);
+  it('finds the three desktop rules (the stylesheet\'s own, the floor\'s and, since r72-hud, Chapter XII\'s F1 rule that stands the card under the turn strip: `hudf1/hudf1-chapters.css`, `[data-omnis-readout]` only)', () => {
+    expect(cardTops.map((c) => c.file).sort()).toEqual(['common/hud-floor.css', 'ffx/ffx-hud.css', 'hudf1/hudf1-chapters.css']);
   });
 
   it('each carries the pin\'s lift and the aim steer\'s', () => {

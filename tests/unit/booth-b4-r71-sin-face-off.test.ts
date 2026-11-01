@@ -49,10 +49,11 @@ describe('Chapter XVIII is off the list: release 68 plays there, under either sc
     expect(demoGameOf(ID, 'ffx')).toBe('ffx');
   });
 
-  it('release 71 treats fifteen of the nineteen listed chapters (8 FFX, 7 FFX-2); the real-clips hold still serves the two fixed chapters of the same review, VIII and the Mirror Aeons chapter, which stay on the list', () => {
+  it('release 71 treats fifteen of the nineteen listed chapters (8 FFX, 7 FFX-2) and release 72 seventeen (r72-hud put IX and XII, FFX only, back: 10 FFX, 7 FFX-2); the real-clips hold still serves the two fixed chapters of the same review, VIII and the Mirror Aeons chapter, which stay on the list', () => {
     const treated = Object.keys(TREATED_CHAPTERS);
-    expect(treated).toHaveLength(15);
-    expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx')).toHaveLength(8);
+    expect(treated).toHaveLength(17);
+    expect(treated).not.toContain(ID);
+    expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx')).toHaveLength(10);
     expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx2')).toHaveLength(7);
     for (const id of ['evrae-airship', 'mirror-aeons']) {
       expect(treated, id).toContain(id);
@@ -68,7 +69,7 @@ describe('the withdrawal is written down: the reason, the numbers and what lifts
     expect(w).toBeDefined();
     expect(w!.game).toBe('ffx');
     expect(getChapter(ID)?.game).toBe('ffx');
-    expect(Object.keys(WITHDRAWN_R70)).toEqual(['yojimbo-cavern', 'seymour-omnis', ID]);
+    expect(Object.keys(WITHDRAWN_R70)).toEqual([ID]); // IX and XII, withdrawn by the r71 verdicts, are back on the list (r72-hud)
   });
 
   it('the reason names the review, the finding, the measured hops, the control and the lift, in the form the NOT_YET table reads', () => {

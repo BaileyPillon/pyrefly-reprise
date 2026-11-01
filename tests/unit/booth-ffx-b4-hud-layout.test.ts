@@ -277,9 +277,12 @@ describe('Chapter XII (FFX only): the Enemy Intent card against the F1 party pan
   });
 });
 
+// r72-hud (2026-11-01, review m3): this model was the FIRST lane's, the strip anchored by its LEFT edge (690 of the frame) with the measured 185-wide box; the r71 browser read found that over the turn strip under 1920 px wide (the floor widens it to 190 to 222 grid px), so
+// `hudf1-chapters.css` now anchors it by its RIGHT edge (`right: 465px`: 454 grid px, the 1600 x 900 width of 195.9 reaching back to 258.1) and the box below is that shipped place. `tests/unit/r72-hud-layout.test.ts` pins it against every measured width (1280 to 3440); this file keeps the 115 / 130 `translate`, the pivot and the old growth.
 describe('Chapter XII (FFX only): the disc strip keeps its distance from the F1 turn strip as the strip grows left', () => {
-  /** The strip's box in grid px: left 690 of the 1600 frame (276), about 185 wide (the evidence: gold rule from 272.6 to 457 at 2560 x 1440 with the shear), top 14 (5.6) and about 36 tall with its note. */
-  const OMR_STRIP = { l: 690 * OMR_K, t: 14 * OMR_K, w: 185, h: 36 };
+  /** The strip's box in grid px as shipped: its right edge at 454 (`right: 465px` of the 1600 frame), 195.9 wide (the r71 sheet at 1600 x 900), top 14 (5.6) and about 36 tall with its note. Before r72-hud: left 690 of the frame (276), 185 wide. */
+  const OMR_W = 195.9;
+  const OMR_STRIP = { l: (1600 - 465) * OMR_K - OMR_W, t: 14 * OMR_K, w: OMR_W, h: 36 };
   const STRIP_SEL = `${FFX_PFX} .ffxhud.hud-f1 .ffx-omr:not(.ffx-omr--phone) .ffx-omr__strip`;
   const STRIP_TS = `${FFX_PFX} .ffxhud .ffx-omr__strip`;
   const STRIP_CANDS: readonly Cand[] = [
@@ -300,10 +303,11 @@ describe('Chapter XII (FFX only): the disc strip keeps its distance from the F1 
     return { l: OMR_STRIP.l + shift, t: OMR_STRIP.t, w: OMR_STRIP.w, h: OMR_STRIP.h, pv };
   };
 
-  it('at 100 nothing changes (the browser read had no overlap at 1600 or 2560): the strip ends 4 grid px before the turn strip\'s box', () => {
+  it('at 100 the strip ends 11 grid px before the turn strip\'s box (its sheared tip 7.7: the r72-hud anchor; before it, 4 and 0.7)', () => {
     const b = stripBox(1, true);
-    expect(b.l).toBeCloseTo(276, 6);
-    expect(clearance(b, true, stripAt(1), false)).toBeGreaterThan(0); // the box is 4 grid px short of the strip's box; the shear moves the lower rows left
+    expect(b.l).toBeCloseTo(258.1, 6);
+    expect(stripAt(1).l - (b.l + b.w)).toBeCloseTo(11, 6);
+    expect(clearance(b, true, stripAt(1), false)).toBeGreaterThan(7.5); // the box is 11 grid px short of the strip's box; the shear moves the lower rows left
   });
 
   it('REPRODUCES: today\'s growth about the top centre puts the strip across the F1 turn strip at 115 and 130', () => {
@@ -311,30 +315,30 @@ describe('Chapter XII (FFX only): the disc strip keeps its distance from the F1 
     expect(clearance(stripBox(1.3, false), true, stripAt(1.3), false)).toBeLessThan(-40);
   });
 
-  it('with the F1 rule it keeps its size and moves left by 160.5 grid px x (scale - 1): the gap to the strip is the one it has at 100, and at 115 it clears the grown ribbon by 39 grid px', () => {
-    expect(clearance(stripBox(1, true), true, stripAt(1), false)).toBeCloseTo(0.68, 1); // the box's top right tip, 0.7 grid px short of the strip's box (its caption starts 9 further in)
+  it('with the F1 rule it keeps its size and moves left by 160.5 grid px x (scale - 1): the gap to the strip is the one it has at 100, and at 115 it clears the grown ribbon by 21 grid px at the 1600 width', () => {
+    expect(clearance(stripBox(1, true), true, stripAt(1), false)).toBeCloseTo(7.68, 1); // the box's top right tip, 7.7 grid px short of the strip's box (its caption starts 9 further in)
     for (const ts of [1.15, 1.3]) {
-      expect(stripBox(ts, true).l - 276, `${ts}`).toBeCloseTo(-160.5 * (ts - 1), 1);
+      expect(stripBox(ts, true).l - 258.1, `${ts}`).toBeCloseTo(-160.5 * (ts - 1), 1);
       const b = stripBox(ts, true);
-      expect(stripAt(ts).l - (b.l + b.w), `${ts}: the plain gap is the one at 100`).toBeCloseTo(4, 2);
+      expect(stripAt(ts).l - (b.l + b.w), `${ts}: the plain gap is the one at 100`).toBeCloseTo(11, 2);
       expect(clearance(b, true, stripAt(ts), false), `${ts}: the sheared tip still stops short of the strip's box`).toBeGreaterThan(0);
     }
-    expect(clearance(ribbonAt(1.15), true, stripBox(1.15, true), true)).toBeCloseTo(39.23, 1);
+    expect(clearance(ribbonAt(1.15), true, stripBox(1.15, true), true)).toBeCloseTo(21.33, 1);
   });
 
-  it('at 130 the band (181 grid px) is narrower than the strip (185): its left end reaches the grown ribbon, pinned as the residual', () => {
+  it('at 130 the band (181 grid px) is narrower than the strip (195.9 at 1600 x 900, anchored by its right edge since r72-hud): its left end reaches 27.1 grid px into the grown ribbon, pinned as the residual of the hidden word ?f1text=grow (130 draws the unchanged HUD in these two chapters, not a shipped state)', () => {
     const c = clearance(ribbonAt(1.3), true, stripBox(1.3, true), true);
-    expect(c).toBeCloseTo(-9.24, 1);
+    expect(c).toBeCloseTo(-27.14, 1);
   });
 
-  it('REVIEW m1: the strip\'s skew pivots on its centre at 115 and 130 as at 100 (the F1 rule answers the `center top` of `text-size.css`); the top pivot would put 130 at -13.1 and 115 at 35.4', () => {
+  it('REVIEW m1: the strip\'s skew pivots on its centre at 115 and 130 as at 100 (the F1 rule answers the `center top` of `text-size.css`); the top pivot would put 130 at -31.0 and 115 at 17.5', () => {
     for (const ts of SIZES) expect(stripBox(ts, true).pv, `${ts}`).toBe(0.5);
     expect(lastDecl(tsFfx, STRIP_TS, 'transform-origin')).toBe('center top');
     expect(lastDecl(chap, STRIP_SEL, 'transform-origin')).toBe('center');
     expect(stripBox(1.15, false).pv, 'today\'s HUD keeps the top pivot of its growth').toBe(0);
     const topPivot = (ts: number): PBox => ({ ...stripBox(ts, true), pv: 0 });
-    expect(clearance(ribbonAt(1.15), true, topPivot(1.15), true)).toBeCloseTo(35.4, 1);
-    expect(clearance(ribbonAt(1.3), true, topPivot(1.3), true)).toBeCloseTo(-13.07, 1);
+    expect(clearance(ribbonAt(1.15), true, topPivot(1.15), true)).toBeCloseTo(17.5, 1);
+    expect(clearance(ribbonAt(1.3), true, topPivot(1.3), true)).toBeCloseTo(-30.97, 1);
     expect(clearance(ribbonAt(1.3), true, stripBox(1.3, true), true) - clearance(ribbonAt(1.3), true, topPivot(1.3), true), 'the pivot is worth 3.8 grid px at 130').toBeGreaterThan(3.7);
     expect(clearance(stripBox(1.3, true), true, stripAt(1.3), false), 'and the strip\'s box tip stays short of the turn strip at 130').toBeGreaterThan(0);
   });
@@ -346,20 +350,23 @@ describe('hudf1-chapters.css touches nothing but the two panels, only under the 
   const body = readSource('src/ui/hudf1/hudf1-chapters.css');
   it('every rule hangs from .ffxhud.hud-f1 and from one of the two panels, and names no other F1 zone', () => {
     expect(chap.length).toBeGreaterThanOrEqual(6);
+    // the first lane's two panels, and (r72-hud, `tests/unit/r72-hud-layout.test.ts`) the two chapters' own markers: Chapter XII's `data-omnis-readout` and Chapter IX's gauge that is up (`:has(.ffx-zg:not([hidden]):not(.ffx-zg--phone))`)
+    const marker = /\.ffx-zg:not\(\.ffx-zg--phone\) \.ffx-zg__panel$|\.ffx-omr:not\(\.ffx-omr--phone\) \.ffx-omr__(intent|strip)$|\[data-omnis-readout\]|:has\(\.ffx-zg:not\(\[hidden\]\):not\(\.ffx-zg--phone\)\)/;
     for (const r of chap) {
       expect(r.sel, r.sel).toContain('.ffxhud.hud-f1');
-      expect(/\.ffx-zg:not\(\.ffx-zg--phone\) \.ffx-zg__panel$|\.ffx-omr:not\(\.ffx-omr--phone\) \.ffx-omr__(intent|strip)$/.test(r.sel), r.sel).toBe(true);
+      expect(marker.test(r.sel), r.sel).toBe(true);
     }
-    for (const bad of ['.ig-ctb', '.ig-stat', '.f1-', '.ffx-cmd', '.ffx2hud', '.ig-cmd']) expect(body, bad).not.toContain(bad);
+    // no F1 zone but the Intel state (`.f1-intel`, the HUD root's class): the ribbon, hero, cue and prompt bar are named by `hudAvoidSelectors.f1RibbonEls` in TypeScript, never in this sheet
+    for (const bad of ['.ig-ctb', '.ig-stat', '.f1-ribbon', '.f1-hero', '.f1-cue', '.f1-prompts', '.f1-layer', '.ffx-cmd', '.ffx2hud', '.ig-cmd']) expect(body, bad).not.toContain(bad);
   });
 
-  it('declares only the properties it means to: left (the gauge), scale, translate and transform-origin (the text-size answers), bottom (the card)', () => {
+  it('declares only the properties it means to: left and right (the gauge, the strip), scale, translate and transform-origin (the text-size answers), bottom (the card); r72-hud adds the strip\'s gap and padding, the Sensor card\'s top and margin, and the tip\'s transform and max-width', () => {
     const props = new Set<string>();
-    for (const r of chap) for (const m of r.body.matchAll(/([a-z-]+)\s*:/g)) props.add(m[1]!);
-    expect([...props].sort()).toEqual(['bottom', 'left', 'scale', 'transform-origin', 'translate']);
-    // every rule that switches the growth off also puts the skew's pivot back where it is at 100 (review m1): no `scale: none` without a `transform-origin: center` beside it
+    for (const r of chap) for (const m of r.body.matchAll(/(--[a-z-]+|[a-z-]+)\s*:/g)) props.add(m[1]!);
+    expect([...props].sort()).toEqual(['--omr-tight', 'bottom', 'gap', 'left', 'margin-top', 'max-width', 'padding', 'right', 'scale', 'top', 'transform', 'transform-origin', 'translate']);
+    // every rule that switches the growth off also puts the skew's pivot back where it is at 100 (review m1): no `scale: none` without a `transform-origin: center` beside it (the gauge, the strip and, r72-hud, Chapter XII's Sensor card)
     const off = chap.filter((r) => /\bscale\s*:\s*none\b/.test(r.body));
-    expect(off.length).toBe(2);
+    expect(off.length).toBe(3);
     for (const r of off) expect(r.body, r.sel).toMatch(/transform-origin\s*:\s*center\s*;/);
   });
 
