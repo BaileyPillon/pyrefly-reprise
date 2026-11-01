@@ -1,13 +1,14 @@
 /**
- * THE REAL-CLIPS HOLD OF CHAPTER III (`booth-b4`, 2026-10-31; FFX only, a presentation hold, no number of a fight changes).
+ * THE REAL-CLIPS HOLD OF CHAPTER III, LIFTED (`booth-b4` put it on 2026-10-31; r72-motion lifts it; FFX only, a presentation change, no number of a fight changes).
  *
  * The live gap pass of release 70 (`D:/Tools/pyrefly-scratch/2026-10-31/r70/live-gaps2/`) found that Tidus's approved Chapter I return flip (the real-snappy clip's `returnProfile`) is drawn 1.66 times larger in Chapter III
- * and reads as 169 to 287 px one-frame attack hops and 306 to 417 px Energy Rain leaps that release 69's look does not have. `PIECE_HOLDS['braskas-final-aeon'].real` holds the real clips there: the gate that reads the piece
- * (`CurvesSwitch.realKind`) answers null, so every real consumer (`RealBeats`, `RealMoments`, `RealMotion`) answers undefined and the house curves play, which is what `?curves=new` plays. Chapter I keeps its real clips.
+ * and reads as 169 to 287 px one-frame attack hops and 306 to 417 px Energy Rain leaps that release 69's look does not have. `booth-b4` held `real` in `PIECE_HOLDS['braskas-final-aeon']` (the house curves played);
+ * the hold said "Lifts when the flip is scaled to the figure's drawn size and a CHK-027 run of Chapter III shows no teleport". `motion/FlipFit.ts` now scales the flip to the figure's drawn size (the worst frame of the
+ * flip is Chapter I's, about 170 px of 900, wherever Tidus is drawn bigger: `booth-b4-r72-flip-fit.test.ts` plays the real actor at both sizes), so the row is gone and Chapter III plays the real clips as Chapter I does.
  *
  * Game case (AGENTS.md rule 14): FFX only. Chapter III is an FFX chapter; no FFX-2 chapter holds `real`, and Chapter IV (FFX-2, the booth pair) plays its real clips as before.
  *
- * Each test fails without the row: take `real` out of the Chapter III hold and the first one answers true.
+ * Each test fails with the row back: put `real` into the Chapter III hold and the first one answers false.
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { PIECE_HOLDS, isTreatedChapter, setDemoChapter, setTreatedScope, treatedHold } from '../../src/engine/motion/DemoGate.ts';
@@ -27,73 +28,49 @@ afterEach(() => {
   setCurvesMode(null);
 });
 
-describe('Chapter III holds the real clips (booth-b4)', () => {
-  it('under the scope all Chapter III answers real=false and Chapter I answers real=true; Chapter IV (FFX-2) keeps its real clips too', () => {
+describe('Chapter III plays the real clips again (r72-motion)', () => {
+  it('under the scope all Chapter III, Chapter I and Chapter IV all answer real=true, and none of the three holds it', () => {
     setTreatedScope('all');
-    expect(isTreatedChapter(III, 'real')).toBe(false);
-    expect(isTreatedChapter(I, 'real')).toBe(true);
-    expect(isTreatedChapter(IV, 'real')).toBe(true);
-    expect(treatedHold(III, 'real')).toBeDefined();
-    expect(treatedHold(I, 'real')).toBeUndefined();
-    expect(treatedHold(IV, 'real')).toBeUndefined();
-    expect(inDemoChapter(III, 'real')).toBe(false);
-    expect(inDemoChapter(I, 'real')).toBe(true);
+    for (const id of [III, I, IV]) {
+      expect(isTreatedChapter(id, 'real'), id).toBe(true);
+      expect(treatedHold(id, 'real'), id).toBeUndefined();
+      expect(inDemoChapter(id, 'real'), id).toBe(true);
+    }
   });
 
-  it('the FFX chapters that hold real are Chapter III and (the focused review of 10b426248) VIII, XVIII and the Mirror Aeons: no other chapter in the table holds it, and Chapter III still holds its breath and its moments beside it', () => {
+  it('Chapter III does not hold real (and holds its breath and its moments as before); the three chapters of the focused review of 10b426248 that the fit does not reach, VIII, XVIII (rows unread) and the Mirror Aeons, still do', () => {
     const holders = Object.entries(PIECE_HOLDS).filter(([, rows]) => rows.real !== undefined).map(([id]) => id);
-    expect(holders.sort()).toEqual([III, 'evrae-airship', 'mirror-aeons', 'sin-face'].sort()); // all four are FFX chapters; no FFX-2 chapter holds real (booth-b4-real-hold-r71.test.ts pins the three)
-    expect(Object.keys(PIECE_HOLDS[III]!)).toEqual(['breath', 'moments', 'real']);
+    expect(holders.sort()).toEqual(['evrae-airship', 'mirror-aeons', 'sin-face']); // the fit scales a RETURN flip only (Tidus, Yuna, Kimahri): their hops are Wakka's attack-to-follow swaps and the dashes (docs/handoff/r72.md section 2)
+    expect(Object.keys(PIECE_HOLDS[III]!)).toEqual(['breath', 'moments']);
   });
 
-  it('the reason names the measure, the pass and what lifts it, in the house shape (80 characters or more, ends in its "Lifts when" clause, no .json)', () => {
-    const why = treatedHold(III, 'real')!;
-    expect(why.length).toBeGreaterThanOrEqual(80);
-    expect(why).toMatch(/^FFX, Chapter III: /);
-    expect(why).toMatch(/return flip/);
-    expect(why).toMatch(/returnProfile/);
-    expect(why).toMatch(/1\.66 times larger/);
-    expect(why).toMatch(/169-287 px/);
-    expect(why).toMatch(/306-417 px/);
-    expect(why).toMatch(/release 70/);
-    expect(why).toMatch(/Lifts when the flip is scaled to the figure's drawn size and a CHK-027 run of Chapter III shows no teleport\.$/);
-    expect(why).not.toMatch(/\.json/);
-  });
-
-  it('with the pack\'s default mode (real-snappy) Chapter III plays the house curves: the curves are on, no real kind, no real profile for Tidus, no real recoil; Chapter I plays the real clip', () => {
+  it("with the pack's default mode (real-snappy) Chapter III has the real kind, a real profile for Tidus and the real recoil, as Chapter I does", () => {
     setTreatedScope('all');
     setCurvesMode('real-snappy');
-
-    setDemoChapter(III);
-    expect(curvesOn()).toBe(true); // the curves still play (`curves` is not held): what `?curves=new` plays
-    expect(curvesGame()).toBe('ffx');
-    expect(realKind()).toBeNull();
-    expect(realProfileOf(ctx, 'tidus' as never)).toBeUndefined();
-    expect(realRecoilMs(ctx, 'tidus' as never, 321)).toBe(321); // the fallback: the house recoil
-
-    setDemoChapter(I);
-    expect(curvesOn()).toBe(true);
-    expect(realKind()).toBe('snappy');
-    expect(realProfileOf(ctx, 'tidus' as never)).toBeDefined(); // Chapter I keeps its real clips
+    for (const id of [III, I]) {
+      setDemoChapter(id);
+      expect(curvesOn(), id).toBe(true);
+      expect(curvesGame(), id).toBe('ffx');
+      expect(realKind(), id).toBe('snappy');
+      expect(realProfileOf(ctx, 'tidus' as never), id).toBeDefined();
+      expect(realRecoilMs(ctx, 'tidus' as never, 321), id).not.toBe(321); // the real clip's recovery, not the house fallback
+    }
   });
 
-  it('an explicit ?curves=real is held in Chapter III too (the real speed is the same clips), and ?curves=new answers the same in both chapters: no real kind, the house curves', () => {
+  it('an explicit ?curves=real plays the real kind in Chapter III too, and ?curves=new answers the same in both chapters: no real kind, the house curves', () => {
     setTreatedScope('all');
     setDemoChapter(III);
     setCurvesMode('real');
-    expect(realKind()).toBeNull();
-    expect(curvesOn()).toBe(true);
+    expect(realKind()).toBe('real');
     setCurvesMode('new');
     expect(realKind()).toBeNull();
     expect(curvesOn()).toBe(true);
     setDemoChapter(I);
     expect(realKind()).toBeNull(); // `new` is no real mode anywhere
     expect(curvesOn()).toBe(true);
-    setCurvesMode('real');
-    expect(realKind()).toBe('real');
   });
 
-  it('under `?treated=pack` (release 68) Chapter III answers no piece at all, as before; the hold changes nothing there', () => {
+  it('under `?treated=pack` (release 68) Chapter III answers no piece at all, as before; Chapter I plays the real clips', () => {
     setTreatedScope('pack');
     setCurvesMode('real-snappy');
     setDemoChapter(III);

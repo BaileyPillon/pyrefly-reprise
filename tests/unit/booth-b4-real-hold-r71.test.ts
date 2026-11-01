@@ -116,10 +116,10 @@ describe.each(HELD)('$id holds the real clips (booth-b4, $finding)', ({ id, chap
   });
 });
 
-describe('only these four FFX chapters hold real', () => {
-  it('Chapter III (booth-b4-real-hold.test.ts) and the three of this file are the whole table; no FFX-2 chapter holds real (R71-C4, Chapter XVI, is disclosed and not held), and the booth pair plays its real clips', () => {
+describe('only these three FFX chapters hold real', () => {
+  it('the three of this file are the whole table (Chapter III held it until r72-motion lifted it: booth-b4-real-hold.test.ts); no FFX-2 chapter holds real (R71-C4, Chapter XVI, is disclosed and not held), and the booth pair plays its real clips', () => {
     const holders = Object.entries(PIECE_HOLDS).filter(([, rows]) => rows.real !== undefined).map(([id]) => id).sort();
-    expect(holders).toEqual(['braskas-final-aeon', ...HELD.map((h) => h.id)].sort());
+    expect(holders).toEqual([...HELD.map((h) => h.id)].sort());
     for (const id of holders) expect(getChapter(id)?.game, id).toBe('ffx');
     setTreatedScope('all');
     expect(isTreatedChapter(XVI, 'real')).toBe(true);

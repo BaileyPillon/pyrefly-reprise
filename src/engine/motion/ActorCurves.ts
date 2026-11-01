@@ -36,6 +36,8 @@ export function startStrike(driver: CurveDriver, plan: StrikePlan, worldHeight: 
     void contact.hold.then(() => run.release(), () => run.release());
   }
   if (plan.marks) for (const [name, fn] of Object.entries(plan.marks)) if (fn) run.on(name as keyof NonNullable<StrikePlan['marks']>, fn);
+  const fit = plan.returnFit;
+  if (fit) run.on('holdEnd', () => run.setReturnFit(fit(worldHeight))); // r72-motion: the figure's drawn size at the moment the flip begins (the camera has moved since the strike was asked for)
   return done;
 }
 

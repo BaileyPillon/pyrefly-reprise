@@ -38,7 +38,7 @@ const AFTER_R71: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readon
   'seymour-flux': { game: 'ffx', held: [] }, // I, the approved target
   yunalesca: { game: 'ffx', held: ['cam', 'breath', 'smear'] }, // II
   'yojimbo-cavern': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // IX: back in r72-hud (the tip is solved against the ribbon and not slid)
-  'braskas-final-aeon': { game: 'ffx', held: ['breath', 'moments', 'real'] }, // III: `real` works (job III, the one-frame step 66 px against live's 277 and 279)
+  'braskas-final-aeon': { game: 'ffx', held: ['breath', 'moments'] }, // III: r71 shipped it with `real` held (the one-frame step 66 px against live's 277 and 279); r72-motion lifted that hold (FlipFit)
   'ffx2-bahamut': { game: 'ffx2', held: [] }, // IV, the approved target
   'ffx2-vegnagun-shuyin': { game: 'ffx2', held: ['hd2d', 'arena', 'cam', 'breath', 'moments'] }, // V: ships as built (the held sky equals live's)
   'ffx2-leblanc': { game: 'ffx2', held: ['breath', 'cam', 'moments'] }, // VI
@@ -166,7 +166,7 @@ describe('Chapter VIII (Evrae, FFX only) ships with the HD-2D look and the arena
 });
 
 describe('the chapters that ship as built hold nothing new', () => {
-  it('the Farplane\'s two: V keeps hd2d and arena held (XI plays them since r72) and both play the rest; Ixion keeps the room looks held; the Mirror Aeons chapter keeps its card and looks held; Braska\'s chapter holds `real` and Chapter I plays it', () => {
+  it('the Farplane\'s two: V keeps hd2d and arena held (XI plays them since r72) and both play the rest; Ixion keeps the room looks held; the Mirror Aeons chapter keeps its card and looks held; Braska\'s chapter plays `real` (r72-motion lifted its hold: the return flip is fitted to the drawn size) while VIII, XVIII and the Mirror Aeons keep theirs, and Chapter I plays it', () => {
     for (const id of ['ffx2-vegnagun-shuyin', 'ffx2-fallen-aeons']) expect(isTreatedChapter(id, 'hud'), id).toBe(true);
     expect(chapterLook('ffx2-vegnagun-shuyin')).toBeNull(); // Chapter V keeps both holds
     expect(proArenaFor('ffx2-vegnagun-shuyin', '')).toBe(false);
@@ -175,7 +175,7 @@ describe('the chapters that ship as built hold nothing new', () => {
     expect(isTreatedChapter('ffx2-ixion-djose', 'hd2d')).toBe(false);
     expect(isTreatedChapter('mirror-aeons', 'card')).toBe(false);
     for (const id of ['evrae-airship', 'sin-face', 'mirror-aeons']) expect(isTreatedChapter(id, 'real'), id).toBe(false); // the focused review of 10b426248 (R71-C2, R71-C1, R71-C3) held the real clips in the three
-    expect(isTreatedChapter('braskas-final-aeon', 'real')).toBe(false);
+    expect(isTreatedChapter('braskas-final-aeon', 'real')).toBe(true); // r72-motion: the hold is lifted (FlipFit scales Tidus's return flip to the drawn size)
     expect(isTreatedChapter('seymour-flux', 'real')).toBe(true);
   });
 });

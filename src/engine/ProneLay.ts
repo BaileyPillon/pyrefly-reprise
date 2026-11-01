@@ -17,11 +17,22 @@
  * General, not a Leblanc special case: any prone painting, any side, both
  * games (AGENTS.md rule 14: the actor layer is shared by FFX chapters 1-3 and
  * FFX-2 chapters 4-6).
+ *
+ * **The slide eases in (r72-motion, both games; shared plumbing).** The shift is CHOSEN on the frame the figure goes down, but the body does not
+ * start there: it slides from the station to the chosen place over {@link SLIDE_EASE_MS} (smootherstep, on the stage's real clock). The live gap pass
+ * of release 70 found Isaaru's Ixion lying 355 px (0.9 of half its length) from its station at the cross from the toppled painting to the lying one,
+ * a swap jerk of 89 to 91 px against CHK-027's allowance of 80 at 1600 wide, and the jerk is a quarter of the slide (250 px read 64, 340 read 86):
+ * the fall is a pose change and a slide at once. The place the body comes to rest, and so every choice that depends on it (the neighbours it must
+ * not cover, the HUD rows it must not hide, the frame it must not leave), is unchanged; only the path to it is. The old behaviour (the whole slide
+ * on the first frame) is what a caller with no clock gets: `layProneFigures` without `dt`.
  */
 
 import { PerspectiveCamera, Vector3 } from 'three';
 import type { BattleCamera } from './BattleCamera.ts';
 import type { PaintedActor } from './PaintedActor.ts';
+
+/** The clock the stage hands {@link layProneFigures}: the real frame time where the slide eases in, undefined (release 71's whole slide at once) under REDUCE MOTION, in an untreated chapter or with an off word. */
+export { slideEaseDt } from './motion/SlideEase.ts';
 
 /** Candidate shifts, as fractions of half the body's length. */
 const STEPS = [0, 0.25, -0.25, 0.5, -0.5, 0.75, -0.75, 1, -1];
@@ -31,6 +42,49 @@ const NEIGHBOUR_RANGE = 4.5;
 
 /** The rig that frames the whole field between beats. */
 const RESTING_RIG = 'idle';
+
+/**
+ * r72-motion: how long a body takes to slide from its station to the place `layProne` chose, ms. The cross from the toppled painting to the lying one begins about 230 ms after the figure goes down and the
+ * hold on the lying painting is long, so the slide is mostly seen after the fall: 700 ms puts about a quarter of it behind the cross and leaves the rest as a slow slide along the floor (the fastest frame is
+ * 1.875 times the average: 355 px over 700 ms is 16 px at 60 Hz at its fastest). 0 gives the old behaviour back.
+ */
+export const SLIDE_EASE_MS = 700;
+
+const smootherstep = (u: number): number => {
+  const x = u < 0 ? 0 : u > 1 ? 1 : u;
+  return x * x * x * (x * (x * 6 - 15) + 10);
+};
+
+interface Slide {
+  /** The shift the stage chose, world units: where the body comes to rest. */
+  to: number;
+  /** Ms since the figure went down. */
+  ms: number;
+}
+
+/** Bodies still sliding to the place chosen for them. */
+const sliding = new WeakMap<PaintedActor, Slide>();
+
+/** Where the body is on its way: nothing on the frame it goes down, exactly the chosen shift once {@link SLIDE_EASE_MS} has passed. */
+const slideAt = (s: Slide): number => (s.ms <= 0 ? 0 : s.ms >= SLIDE_EASE_MS ? s.to : s.to * smootherstep(s.ms / SLIDE_EASE_MS));
+
+/** Put every sliding body where its clock says (with `snap`, at the place chosen for it: a caller that gave no clock) and retire the ones that have arrived. */
+function placeSliding(actors: readonly PaintedActor[], snap: boolean): void {
+  for (const a of actors) {
+    const s = sliding.get(a);
+    if (!s) continue;
+    a.setProneShift(snap ? s.to : slideAt(s));
+    if (snap || s.ms >= SLIDE_EASE_MS) sliding.delete(a);
+  }
+}
+
+/** While a figure's place is chosen, every body still sliding stands at ITS chosen place, as the old call had it, so the new body is laid against where its neighbours will lie (review M2). */
+function parkSliding(actors: readonly PaintedActor[]): void {
+  for (const a of actors) {
+    const s = sliding.get(a);
+    if (s) a.setProneShift(s.to);
+  }
+}
 
 export interface NdcBox {
   x0: number;
@@ -154,30 +208,50 @@ const held = new WeakSet<PaintedActor>();
  * composition, measured where the painting is drawn. A wide standing painting
  * (Vegnagun's body, Chapter 5) counts as prone by its shape, and a slide picked
  * from whichever neighbours stand near it would move it off that spot.
+ *
+ * `dt` (seconds of the stage's real clock; r72-motion): with it a body eases to the place it was laid over {@link SLIDE_EASE_MS}; without it
+ * (a caller with no clock, the tests of the old behaviour, and the stage under REDUCE MOTION, in an untreated chapter or with an off word: `motion/SlideEase.ts`) the whole slide lands on the frame the
+ * figure goes down, as before, and a body that was part-way when the clock was withdrawn is put at its place at once.
+ *
+ * **The choices are the old call's** (review M2, r72): a figure's place is chosen against the places its neighbours will LIE at, not where they stand now. Every figure that goes down on a frame is laid first and
+ * stays at its chosen place until all of them are (so three bodies down on one frame see each other), and every body still sliding from an earlier frame is parked at its chosen place while the choice is made;
+ * only then does each go back to where its clock has it (the station, for the figures just laid).
  */
 export function layProneFigures(
   actors: readonly PaintedActor[],
   live: PerspectiveCamera,
   rigs?: BattleCamera,
   pinned?: ReadonlySet<PaintedActor>,
+  dt?: number,
 ): void {
+  let parked = false;
   for (const a of actors) {
     if (pinned?.has(a)) continue;
     const prone = a.isProne;
     if (prone === (laid.get(a) ?? false)) {
       if (held.has(a) && !a.proneLingers) { // the lying plane has faded out: the slide goes with it, unseen
         held.delete(a);
+        sliding.delete(a);
         a.setProneShift(0);
+      } else if (prone && dt !== undefined) { // still easing to the place it was laid: the clock moves here, the body is placed once every choice of the frame is made (below)
+        const s = sliding.get(a);
+        if (s) s.ms += Math.max(0, dt) * 1000;
       }
       continue;
     }
     laid.set(a, prone);
     if (!prone) {
+      const s = sliding.get(a);
+      if (s) { a.setProneShift(slideAt(s)); sliding.delete(a); } // a revive stops the slide where it is (not where a neighbour's choice parked it this frame): the held body keeps lying there while it fades (see `held`)
       if (a.proneLingers) held.add(a); // a revive: the body keeps lying where it lay while it fades (see `held`)
       else a.setProneShift(0);
       continue;
     }
     held.delete(a);
-    layProne(a, actors, layCameras(live, rigs));
+    if (!parked) { parkSliding(actors); parked = true; } // a no-op unless a body is still sliding
+    const lay = layProne(a, actors, layCameras(live, rigs));
+    if (dt !== undefined && SLIDE_EASE_MS > 0 && lay.shift !== 0) sliding.set(a, { to: lay.shift, ms: 0 }); // r72-motion: the choice is made now (and stays put until every choice of the frame is made), the body gets there over the fall
+    else sliding.delete(a);
   }
+  placeSliding(actors, dt === undefined);
 }

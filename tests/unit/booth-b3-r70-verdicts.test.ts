@@ -45,10 +45,8 @@ const RELEASE_70: Readonly<Record<string, readonly TreatedPiece[]>> = {
   'ffx2-den-of-woe': ['cam', 'breath', 'moments'], // Chapter XV, FFX-2: `cam` added by the r70 verdict
 };
 
-/** The holds added to a release-70 chapter after release 70 (appended to its row, the earlier rows unmoved): `booth-b4` holds `real` in Chapter III (FFX only), whose Tidus draws Chapter I's approved return flip 1.66 times larger (the live gap pass of release 70). */
-const R71_HELD_ADDED: Readonly<Record<string, readonly TreatedPiece[]>> = {
-  'braskas-final-aeon': ['real'],
-};
+/** The holds added to a release-70 chapter after release 70 (appended to its row, the earlier rows unmoved). `booth-b4` held `real` in Chapter III (FFX only) and r72-motion lifted it again (`motion/FlipFit.ts` fits the flip to the drawn size): none now. */
+const R71_HELD_ADDED: Readonly<Record<string, readonly TreatedPiece[]>> = {};
 
 /** What `booth-ffx-b4-hud` brought back (FFX only), each with the holds its lane's table gives (`booth-ffx-b3a.md` for IX, `booth-ffx-b3b.md` for XII) and the release it is on the list from. */
 const B4_HUD: Readonly<Record<string, readonly TreatedPiece[]>> = {
