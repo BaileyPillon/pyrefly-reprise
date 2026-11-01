@@ -1,0 +1,791 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-11-01T10:54:15.176Z",
+ "build": {
+  "mainSha": "4c01379d4"
+ },
+ "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "HOLD"
+ },
+ "shipReasons": [
+  "R71-C1 (Chapter XVIII) still has 17 one-frame hops over 100 px (up to 401 px) that ?treated=pack does not have: introduced by the candidate and a regression against live, major: HOLD",
+  "R71-C2 (Chapter VIII, 16 hops to 0) and R71-C3 (Mirror Aeons, 32 to 0) are fixed; CHK-027 PASS in both; Chapter I still plays its real clips"
+ ],
+ "checks": [
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "reason": "The served dist-gate names index-BZBJ5-uz.js, the expected bundle (play json bundle field and curl of index.html).",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "served candidate",
+   "evidence": [
+    "critic/reviews/4c01379d4-focused/play/p-sin-face-1600.json",
+    "critic/reviews/4c01379d4-focused/serve.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real keys (Enter, ArrowRight) from the title through chapter select, party prep and four turns to the first menu and three further command turns in XVIII (sin-face) and Chapter I (seymour-flux), 59.8 fps, 0 console errors, 0 4xx.",
+   "game": "FFX",
+   "chapter": "sin-face, seymour-flux",
+   "state": "battle, awaitingMenu",
+   "evidence": [
+    "critic/reviews/4c01379d4-focused/play/p-sin-face-1600.json",
+    "critic/reviews/4c01379d4-focused/play/p-seymour-flux-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 6
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "play.mjs asserts screen === battle and awaitingMenu before every capture (a failed wait throws).",
+   "game": "FFX",
+   "chapter": "sin-face, seymour-flux",
+   "state": "first menu",
+   "evidence": [
+    "critic/reviews/4c01379d4-focused/play/p-sin-face-1600-01-menu.png",
+    "critic/reviews/4c01379d4-focused/play/p-seymour-flux-1600-01-menu.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "treated().holds on the candidate: evrae-airship, sin-face and mirror-aeons each list \"real\"; seymour-flux (Chapter I) holds nothing so its real clips play; braskas-final-aeon keeps \"real\"; FFX-2 rows (ixion, vegnagun, fallen aeons) carry no \"real\". Matches the release notes.",
+   "game": "both",
+   "chapter": "VIII, XVIII, Mirror, I, III",
+   "state": "first menu",
+   "evidence": [
+    "critic/reviews/4c01379d4-focused/play/p-sin-face-1600.json",
+    "critic/reviews/4c01379d4-focused/play/p-seymour-flux-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Case: FFX only (VIII, XVIII and 27 are FFX chapters; research/ffx-*.md). Present in the three FFX chapters (holds read), absent from FFX-2 rows (no \"real\" in ixion, vegnagun, fallen aeons) and from Chapter I. No data value changed (dataAudit false).",
+   "game": "both",
+   "chapter": "VIII, XVIII, Mirror vs FFX-2",
+   "state": "treated().holds",
+   "evidence": [
+    "critic/reviews/4c01379d4-focused/play/p-sin-face-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "The harness route took evrae-airship, sin-face and mirror-aeons from the title to Victory by real keys (run.json outcome victory, fails [], consoleErrors [] in each).",
+   "game": "FFX",
+   "chapter": "VIII, XVIII, Mirror",
+   "state": "victory",
+   "evidence": [
+    "critic/reviews/4c01379d4-focused/continuity/evrae-airship-win-4c01379d4/run.json",
+    "critic/reviews/4c01379d4-focused/continuity/sin-face-win-4c01379d4/run.json",
+    "critic/reviews/4c01379d4-focused/continuity/mirror-aeons-win-4c01379d4/run.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 35
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "First menu legible at 1600x900 and 2000x1012 in the six new chapters and III; at TEXT SIZE 115 and 130 the Sin clock column (x 665) clears the F1 ribbon (right edge 598) and the command stack. The truncated label SPECI... is on live too.",
+   "game": "FFX + FFX-2",
+   "chapter": "VIII, XVIII, Mirror, V, XI, XVI, III",
+   "state": "first menu",
+   "evidence": [
+    "critic/reviews/10b426248-focused/shots/p-sin-face-1600-01-menu.png",
+    "critic/reviews/10b426248-focused/shots/ts-sin-face-1.3.png",
+    "critic/reviews/10b426248-focused/shots/ts-sin-face-1.15.json",
+    "critic/reviews/10b426248-focused/shots/ts-sin-face-1.3.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 25,
+   "reusedFrom": "critic/reviews/10b426248-focused.json",
+   "dependencyArgument": "This delta changes only which motion curves play (PieceHoldsLast.ts rows plus release-notes text); no layout, HUD or panel code differs between 10b426248 and 4c01379d4 (git diff --stat)."
+  },
+  {
+   "id": "CHK-008",
+   "result": "PASS",
+   "reason": "At the first menu the F1 panels do not cover the painted actors in VIII, XVIII, Mirror Aeons, V, XI, XVI, III (1600x900 and 2000x1012). The speech card at the start of XVIII covers the Sin clock and boss name for a moment: same on live.",
+   "game": "both",
+   "chapter": "six new chapters + III",
+   "state": "first menu",
+   "evidence": [
+    "critic/reviews/10b426248-focused/shots/p-mirror-aeons-1600-01-menu.png",
+    "critic/reviews/10b426248-focused/shots/p-ffx2-vegnagun-shuyin-1600-01-menu.png",
+    "critic/reviews/10b426248-focused/shots/p-sin-face-2000-01-menu.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 10,
+   "reusedFrom": "critic/reviews/10b426248-focused.json",
+   "dependencyArgument": "Same: no HUD or layout file differs between the two commits."
+  },
+  {
+   "id": "CHK-009",
+   "result": "PASS",
+   "reason": "XVIII names Sin, Mirror Aeons names Dark Mindy, V names Vegnagun in the first-menu ribbon.",
+   "game": "both",
+   "chapter": "XVIII, Mirror, V",
+   "state": "first menu",
+   "evidence": [
+    "critic/reviews/10b426248-focused/shots/p-sin-face-1600-01-menu.png",
+    "critic/reviews/10b426248-focused/shots/p-mirror-aeons-1600-01-menu.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 2,
+   "reusedFrom": "critic/reviews/10b426248-focused.json",
+   "dependencyArgument": "Same: no text or label code differs."
+  },
+  {
+   "id": "CHK-010",
+   "result": "PASS",
+   "reason": "Selection (gold slab on Attack/Special, cursor) is obvious in every new chapter at first menu.",
+   "game": "both",
+   "chapter": "new chapters",
+   "state": "first menu",
+   "evidence": [
+    "critic/reviews/10b426248-focused/shots/p-evrae-airship-1600-01-menu.png"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 2,
+   "reusedFrom": "critic/reviews/10b426248-focused.json",
+   "dependencyArgument": "Same: no menu code differs."
+  },
+  {
+   "id": "CHK-004",
+   "result": "NOT APPLICABLE",
+   "reason": "No change to what a panel names or who can press it.",
+   "game": "both",
+   "chapter": "all",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-007",
+   "result": "NOT APPLICABLE",
+   "reason": "Only the release-notes holds text changed (developer-facing).",
+   "game": "both",
+   "chapter": "all",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "reason": "Overlays not driven to their ends in this delta review (unchanged by the delta).",
+   "game": "FFX",
+   "chapter": "XVIII",
+   "state": "n/a",
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-013",
+   "result": "UNVERIFIED",
+   "reason": "Art not judged against approved masters; no art file differs (approvedArtCheck false).",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-001",
+   "result": "UNVERIFIED",
+   "reason": "Agents cannot hear.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-B1",
+   "result": "UNVERIFIED",
+   "reason": "Music and effects beauty: no agent can hear.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "reason": "Head-size reads fail as on the control and on live (VIII 19 swaps, worst 15.5 percent; XVIII 46, 15.5; Mirror 164, 19.7; 0.1 percent where the head is registered). Unchanged by this delta; not a regression (the previous report recorded the same on the control).",
+   "game": "FFX",
+   "chapter": "VIII, XVIII, Mirror",
+   "state": "continuity harness, win, seed 1",
+   "evidence": [
+    "critic/reviews/4c01379d4-focused/continuity/continuity-summary-evrae-airship.json",
+    "critic/reviews/4c01379d4-focused/continuity/continuity-summary-sin-face.json",
+    "critic/reviews/4c01379d4-focused/continuity/continuity-summary-mirror-aeons.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "Two of three PASS: Chapter VIII 0 raw one-frame hops over 100 px (was 16, up to 494; control 0), Mirror Aeons 0 (was 32; control 0), CHK-027 PASS in both. Chapter XVIII (sin-face) still reads 17 raw hops over 100 px (Auron teleport 401.1 px, Auron dashes 278 to 113 px, Wakka dashes 116 to 113 px; all on damage or knock-out swaps) against 0 on the control (?treated=pack, 10b426248-focused/continuity-control, reused: the delta touches only PieceHoldsLast, which the pack control does not read); previous candidate 28 up to 530.5 px. The hold is in place (treated().holds sin-face includes real) so the remaining hops do not come from the real clips alone. CHK-027 FAIL.",
+   "game": "FFX",
+   "chapter": "evrae-airship, sin-face, mirror-aeons",
+   "state": "continuity harness, win, seed 1",
+   "evidence": [
+    "critic/reviews/4c01379d4-focused/continuity/continuity-summary-evrae-airship.json",
+    "critic/reviews/4c01379d4-focused/continuity/continuity-summary-sin-face.json",
+    "critic/reviews/4c01379d4-focused/continuity/continuity-summary-mirror-aeons.json",
+    "critic/reviews/4c01379d4-focused/continuity/sin-face-win-4c01379d4/continuity/strips/jerk-000-auron.jpg",
+    "critic/reviews/10b426248-focused/continuity-control/continuity-summary-sin-face.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 35
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "evrae-airship",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "PASS"
+    },
+    "battleSeconds": 375.4,
+    "swaps": 375,
+    "snapsPerMinute": 0,
+    "ghostMsPerMinute": 1543,
+    "maxHeadJumpPct": 15.5,
+    "maxFeetShiftPx": 1.1,
+    "worstJerkPx": 58.3,
+    "minStature": 0.785,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 0,
+    "dashesWorstPx": 58.3,
+    "frameP99Ms": 22,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.7,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "evrae-airship-win-4c01379d4/continuity/strips/swap-094-lulu-ready-item.jpg",
+     "evrae-airship-win-4c01379d4/continuity/strips/swap-029-lulu-ready-cast.jpg",
+     "evrae-airship-win-4c01379d4/continuity/strips/swap-010-rikku-hurt-ko.jpg",
+     "evrae-airship-win-4c01379d4/continuity/strips/swap-012-rikku-ko-idle.jpg",
+     "evrae-airship-win-4c01379d4/continuity/strips/swap-202-kimahri-idle-hurt.jpg",
+     "evrae-airship-win-4c01379d4/continuity/strips/swap-204-kimahri-hurt-idle.jpg",
+     "evrae-airship-win-4c01379d4/continuity/strips/swap-062-wakka-idle-hurt.jpg",
+     "evrae-airship-win-4c01379d4/continuity/strips/swap-065-wakka-hurt-idle.jpg",
+     "evrae-airship-win-4c01379d4/continuity/strips/swap-402-kimahri-idle-victory.jpg",
+     "evrae-airship-win-4c01379d4/continuity/strips/swap-282-tidus-ready-attack.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "sin-face",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 171.3,
+    "swaps": 297,
+    "snapsPerMinute": 0,
+    "ghostMsPerMinute": 3177,
+    "maxHeadJumpPct": 15.5,
+    "maxFeetShiftPx": 1,
+    "worstJerkPx": 401.1,
+    "minStature": 0.9,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 0,
+    "dashesWorstPx": 278.3,
+    "frameP99Ms": 20.7,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.7,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "sin-face-win-4c01379d4/continuity/strips/swap-204-lulu-ready-item.jpg",
+     "sin-face-win-4c01379d4/continuity/strips/swap-014-lulu-ready-cast.jpg",
+     "sin-face-win-4c01379d4/continuity/strips/swap-253-lulu-critical-ready.jpg",
+     "sin-face-win-4c01379d4/continuity/strips/swap-060-wakka-idle-hurt.jpg",
+     "sin-face-win-4c01379d4/continuity/strips/swap-099-wakka-hurt-idle.jpg",
+     "sin-face-win-4c01379d4/continuity/strips/swap-280-wakka-hurt-critical.jpg",
+     "sin-face-win-4c01379d4/continuity/strips/swap-236-wakka-critical-hurt.jpg",
+     "sin-face-win-4c01379d4/continuity/strips/swap-297-lulu-critical-victory.jpg",
+     "sin-face-win-4c01379d4/continuity/strips/swap-242-lulu-hurt-cast.jpg",
+     "sin-face-win-4c01379d4/continuity/strips/swap-016-lulu-cast-idle.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "mirror-aeons",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "PASS"
+    },
+    "battleSeconds": 1138.5,
+    "swaps": 1009,
+    "snapsPerMinute": 0,
+    "ghostMsPerMinute": 1230,
+    "maxHeadJumpPct": 19.7,
+    "maxFeetShiftPx": 0.9,
+    "worstJerkPx": 73.3,
+    "minStature": 0.809,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 32.2,
+    "dashesWorstPx": 73.3,
+    "frameP99Ms": 27.9,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.8,
+    "dedicated": true,
+    "strips": 18,
+    "worstSwapStrips": [
+     "mirror-aeons-win-4c01379d4/continuity/strips/swap-334-lulu-cast-ko.jpg",
+     "mirror-aeons-win-4c01379d4/continuity/strips/swap-071-lulu-ko-critical.jpg",
+     "mirror-aeons-win-4c01379d4/continuity/strips/swap-037-lulu-ready-item.jpg",
+     "mirror-aeons-win-4c01379d4/continuity/strips/swap-007-lulu-ready-cast.jpg",
+     "mirror-aeons-win-4c01379d4/continuity/strips/swap-104-lulu-hurt-ko.jpg",
+     "mirror-aeons-win-4c01379d4/continuity/strips/swap-912-lulu-idle-ko.jpg",
+     "mirror-aeons-win-4c01379d4/continuity/strips/swap-115-lulu-ko-idle.jpg",
+     "mirror-aeons-win-4c01379d4/continuity/strips/swap-442-dark-sandy-hurt-ko.jpg",
+     "mirror-aeons-win-4c01379d4/continuity/strips/swap-435-tidus-ko-critical.jpg",
+     "mirror-aeons-win-4c01379d4/continuity/strips/swap-909-yuna-hurt-critical.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 375.4,
+  "counted": 375,
+  "swaps": 403,
+  "size": {
+   "judged": 298,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 77,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 15.5,
+   "maxHeadJumpPctRegistration": 0.1,
+   "headOverTolerance": 19,
+   "maxFeetShiftPx": 1.1,
+   "feetOverTolerance": 0,
+   "feetDesigned": 0,
+   "feetDesignedWorstPx": 0,
+   "headMeasured": 298,
+   "headRegistration": 273,
+   "headRig": 25,
+   "rigSwaps": 25,
+   "headSilhouette": 0,
+   "headUnmeasured": 0,
+   "heightMeasured": 298,
+   "heightOverBand": 0,
+   "heightWaived": 1,
+   "minStature": 0.785,
+   "maxStature": 1.097,
+   "koLengthMeasured": 1,
+   "minKoLength": 0.609,
+   "koLengthReported": 1,
+   "feetSilMeasured": 271,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 1.9,
+   "holdSwaps": 272,
+   "worstRealHeadPct": 21.8,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "variantHeadSwaps": 0,
+   "worstVariantHeadPct": 0,
+   "variantHeadOutsideBand": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 156,
+   "hardCutsPerMinute": 24.93,
+   "ghostSwaps": 155,
+   "ghostFrames": 581,
+   "worstGhostSeverity": 0.366,
+   "ghostOverFail": 0,
+   "jerks": 6,
+   "worstJerkPx": 58.3,
+   "jerksOverFail": 4,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0.004,
+   "maxCentroidShiftPx": 98.2,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 0,
+   "smearsPlanned": 176,
+   "smearSwaps": 175,
+   "smearSnapsExcused": 125,
+   "jerksSmeared": 70,
+   "worstSmearedJerkPx": 170,
+   "swapJerks": 0,
+   "swapJerksWorstPx": 0,
+   "swapJerksOverFail": 0,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 6,
+   "dashesWorstPx": 58.3,
+   "dashesOverFail": 4,
+   "jerksLongFrame": 3,
+   "swapJerksLongFrame": 0,
+   "swapJerksSteadyOverFail": 0,
+   "ghostMs": 9656,
+   "ghostMsPerMinute": 1543,
+   "ghostFramesPerMinute": 92.9,
+   "ghostFrames60PerMinute": 92.6
+  },
+  "frameTime": {
+   "frames": 22398,
+   "longFrames": 42,
+   "longFramePct": 0.2,
+   "worstP99Ms": 22,
+   "maxMs": 275.6,
+   "longMs": 34,
+   "source": "continuity-probe",
+   "pacingNumber": false
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "19 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.1 percent where the head is registered)"
+    ],
+    "note": "273 of 298 measured swaps had a registered head (tolerance 3 percent); 25 were read from a rig's own head mesh (tolerance 3 percent; 25 swap(s) were changes of a rig's key); 0 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 298 swap(s) (stature 0.785 to 1.097, 1 out of band but waived), the silhouette's own feet 271 swap(s) (worst 1.9 px, 0 waived), 272 swap(s) across a recorded hold (real head worst 21.8 percent from the idle's), 0 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "PASS",
+    "reasons": [],
+    "note": "4 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 58.3 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 3 of 6 jerk(s) fell on a frame of more than 34 ms (0 of the 0 at a swap; 0 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them; 175 of 176 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 125 snap(s) not counted, 70 swap jerk(s) (worst 170 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 375.4 s of battle, 59.7 to 59.7 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (19 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.1 percent where the head is registered)); CHK-027 PASS; 1,543 ms of see-through a minute (92.6 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at 4c01379d4; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows)).",
+  "base": "http://127.0.0.1:5877/",
+  "date": "2026-11-01T10:54:19.877Z",
+  "poseMeasure": {
+   "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+   "source": "harness-tree",
+   "subjects": 114,
+   "sha256": "b8cead6d81a854dc7ac60a210ac702185cd33668b555f01bb24e60fd408e3940",
+   "staleChapters": []
+  },
+  "harness": {
+   "schema": "continuity-harness/1",
+   "id": "5e1bbdec47c9e7206f710149081baf8ceab77dc6b230bec2117ef4eed133fc31",
+   "tree": {
+    "root": "D:/pyrefly-release55",
+    "head": "4c01379d456a039bac9557aefa0791355ee6a8bc",
+    "dirty": []
+   },
+   "files": {
+    "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+    "critic/runner/lib/continuity-analyze.mjs": "a20e4de301b117cf4a98ecf99f58fe695aaedb18",
+    "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+    "critic/runner/lib/continuity-card.mjs": "2e0208df7bc9a922a27d519fc5ebb49bed3fafd9",
+    "critic/runner/lib/continuity-dissolve.mjs": "4a9a2ebc79b798dc6059312f0b885510f4cd79b3",
+    "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+    "critic/runner/lib/continuity-gaps.mjs": "7337b85eda92c5755d11ccbee84749ee231cfe3d",
+    "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+    "critic/runner/lib/continuity-ghostms.mjs": "d74a048e0c44be69d22b050973ec240fbec3db66",
+    "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+    "critic/runner/lib/continuity-probe.mjs": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25",
+    "critic/runner/lib/continuity-pure.mjs": "c30cf02831efe33d9726d0bae9f9b3e098292090",
+    "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+    "critic/runner/lib/continuity-rig-probe.mjs": "35bf097b7bbfa81abeb4daf8e78f0d9515ff3ab1",
+    "critic/runner/lib/continuity-rig.mjs": "6e1b891a9d237b4b9db52593303df5e1ffc812e4",
+    "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+    "critic/runner/lib/continuity-smear.mjs": "bb6bcae7b35d4d99465f0650e58554cc785af513",
+    "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+    "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+    "critic/runner/lib/continuity-summary.mjs": "c671aa6dbc9e6df72a767ace45e6a57cdb478053",
+    "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+    "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+    "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+    "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+    "critic/runner/lib/continuity-why.mjs": "e2f0063820045e9c5eb5bb2ece203c00bed1fe3d",
+    "critic/runner/lib/continuity.mjs": "d3fd3269395cfa928cd1566a81486359e28210cb",
+    "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+    "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+    "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+    "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+    "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+    "critic/runner/lib/route-pure.mjs": "4d484cc9c873d60c66b48e418bb688dd6248b647",
+    "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+    "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+    "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+    "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+    "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+    "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+   },
+   "policy": {
+    "continuitySha256": "5ef4a3ed6fec14518548de8b462466822a3cf3a41f11528f8e8abb143de6fa43",
+    "fileSha256": "9c72460c4bdd463ef02f5e1f01c2baa3aa5334f392c29b114da466ca9c54cc71",
+    "override": false,
+    "overrideSha256": null
+   },
+   "probe": {
+    "version": 3,
+    "blob": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25"
+   },
+   "poseTable": {
+    "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+    "sha256": "b8cead6d81a854dc7ac60a210ac702185cd33668b555f01bb24e60fd408e3940",
+    "subjects": 114,
+    "source": "harness-tree",
+    "buildSha": "4c01379d",
+    "isCandidate": true
+   },
+   "waivers": {
+    "path": "D:\\pyrefly-release55\\docs\\target\\pose-waivers.json",
+    "sha256": "84fc043f4169733ef228cbf965eb2b0679f3f0e38f7f609e97d99135924f532f",
+    "rows": 80
+   },
+   "run": {
+    "query": null,
+    "setArt": null,
+    "browser": "gpu"
+   },
+   "changedDuringRun": false,
+   "chapterIds": [
+    "5e1bbdec47c9e7206f710149081baf8ceab77dc6b230bec2117ef4eed133fc31"
+   ],
+   "unstamped": [],
+   "chaptersByOtherHarness": [],
+   "aggregateSha256": "726c4df903364e4c3230c07855a827a5d13166d53a777b452f03aa1759ef7b5f"
+  },
+  "rawHopsOver100px": {
+   "evrae-airship": {
+    "candidate": {
+     "count": 0
+    },
+    "previousCandidate10b426248": {
+     "count": 16,
+     "worstPx": 493.9
+    },
+    "control": {
+     "count": 0,
+     "from": "10b426248-focused/continuity-control"
+    }
+   },
+   "sin-face": {
+    "candidate": {
+     "count": 17,
+     "worstPx": 401.1
+    },
+    "previousCandidate10b426248": {
+     "count": 28,
+     "worstPx": 530.5
+    },
+    "control": {
+     "count": 0,
+     "from": "10b426248-focused/continuity-control"
+    }
+   },
+   "mirror-aeons": {
+    "candidate": {
+     "count": 0
+    },
+    "previousCandidate10b426248": {
+     "count": 32,
+     "worstPx": 206.6
+    },
+    "control": {
+     "count": 0,
+     "from": "10b426248-focused/continuity-control"
+    }
+   }
+  }
+ },
+ "staticChecks": {
+  "pose-census": {
+   "subjects": 146,
+   "paintings": 1106,
+   "pass": 829,
+   "waived": 79,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 198,
+   "byClass": {
+    "idle": 146,
+    "standing": 565,
+    "ko": 90,
+    "low": 71,
+    "wide": 4,
+    "staged": 176,
+    "part": 54
+   },
+   "byGame": {
+    "FFX-2": 777,
+    "FFX": 307,
+    "FF7": 22
+   },
+   "byRowStatus": {
+    "ok": 745,
+    "held": 84,
+    "waived": 79,
+    "none": 198
+   }
+  }
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "build": "4c01379d4",
+   "confidence": "high",
+   "requirement": "CHK-027",
+   "where": "suspected: another piece of the XVIII treatment (Auron and Wakka damage and knock-out swap dashes); not the real clips, which are held (treated().holds sin-face includes real). Not traced.",
+   "id": "R71-C1",
+   "severity": "major",
+   "title": "Chapter XVIII Sin's face: 17 one-frame hops of 113 to 401 px (Auron and Wakka, on damage or knock-out) remain after the real hold; the pack control has 0",
+   "game": "FFX",
+   "chapter": "sin-face",
+   "expected": "No one-frame hop over 100 px that ?treated=pack does not have (the release 71 hold condition)",
+   "observed": "Candidate: 17 raw hops over 100 px (Auron teleport 401.1 px feet, Auron dashes 278.3, 277.2, 256.4, 232.2, 230.6, then 149 to 113 px, Wakka dashes 113 to 116 px); CHK-027 FAIL. Previous candidate: 28 up to 530.5 px. Control: 0.",
+   "repro": "PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=<candidate>/ --chapters=sin-face --tag=x against --base=\"<candidate>/?treated=pack&x=/\"; strip jerk-000-auron.jpg",
+   "evidence": [
+    "critic/reviews/4c01379d4-focused/continuity/sin-face-win-4c01379d4/continuity/continuity.json",
+    "critic/reviews/4c01379d4-focused/continuity/sin-face-win-4c01379d4/continuity/strips/jerk-000-auron.jpg",
+    "critic/reviews/10b426248-focused/continuity-control/continuity-summary-sin-face.json"
+   ],
+   "fix": "Find which treatment piece produces the damage-swap dashes in XVIII (run with each hold of the chapter in turn, or ?curves=new) and hold it; or take XVIII off the list as release 70 had it",
+   "acceptanceCheck": "CHK-027 run of XVIII reads no raw hop over 100 px",
+   "attempts": 1,
+   "introducedByCandidate": true,
+   "regressionVsLive": true,
+   "inNewFeature": false
+  },
+  {
+   "build": "10b426248",
+   "confidence": "medium",
+   "requirement": "CHK-027",
+   "where": "src/engine/motion/PieceHolds.ts / PieceHoldsLast.ts (suspected: the chapter does not hold `real`, so the approved Chapter I real-snappy return flip plays at Tidus's scale; Chapter III's row r71 `real` hold fixed exactly this for Tidus, and the same row is missing for these chapters)",
+   "id": "R71-C4",
+   "severity": "polish",
+   "title": "Chapter XVI Ixion: 2 dash hops of 114 and 134 px (Rikku, Yuna), against 0 on the control",
+   "game": "FFX-2",
+   "chapter": "ffx2-ixion-djose",
+   "expected": "No hop over 100 px",
+   "observed": "Two raw dashes in one frame (a 19.5 ms frame), CHK-027 PASS",
+   "repro": "continuity harness ffx2-ixion-djose, 144 s",
+   "evidence": [
+    "critic/reviews/10b426248-focused/continuity/continuity-summary-ffx2-ixion-djose.json",
+    "critic/reviews/10b426248-focused/continuity-control/continuity-summary-ffx2-ixion-djose.json"
+   ],
+   "fix": "Check the dash in XVI with the real hold",
+   "acceptanceCheck": "Hops over 100 px read 0",
+   "introducedByCandidate": true,
+   "regressionVsLive": true,
+   "inNewFeature": false
+  },
+  {
+   "build": "10b426248",
+   "confidence": "low",
+   "requirement": "CHK-013",
+   "where": "look grade (not traced)",
+   "id": "R71-P1",
+   "severity": "polish",
+   "title": "Chapter XVIII first menu: the bloom behind the party is very bright",
+   "game": "FFX",
+   "chapter": "sin-face",
+   "expected": "Party silhouettes keep their contrast",
+   "observed": "A white starburst behind the party; the figures stay readable",
+   "repro": "first menu of XVIII at 1600x900",
+   "evidence": [
+    "critic/reviews/10b426248-focused/sin-face-live-vs-cand.jpg"
+   ],
+   "fix": "Owner judgement of the look",
+   "acceptanceCheck": "Owner picks",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "Continuity harness on VIII, XVIII, Mirror Aeons to Victory by real keys (0 console errors each)",
+   "Real-key first menu plus three turns in XVIII and Chapter I at 1600x900",
+   "treated().holds read on the candidate",
+   "tsc not run; vitest booth-b4 real-hold files 39 passed"
+  ],
+  "reused": [
+   {
+    "what": "?treated=pack control runs of VIII, XVIII, Mirror (0 raw hops)",
+    "from": "critic/reviews/10b426248-focused/continuity-control",
+    "why": "the pack control bypasses the treatment pieces; the delta changes only PieceHoldsLast rows and tests/notes"
+   },
+   {
+    "what": "Layout, HUD, phone touch, text size, booth pair, V, XI, III, IX/XII, XVI findings",
+    "from": "critic/reviews/10b426248-focused.json",
+    "why": "git diff 10b426248 4c01379d4 touches only PieceHoldsLast.ts, releaseNotes.ts, docs and tests"
+   }
+  ],
+  "notTested": [
+   "2000x1012 and 390x844 layouts (unchanged by the delta)",
+   "XVI re-run (FFX-2 not held; R71-C4 polish carried)",
+   "Audio"
+  ]
+ },
+ "regressions": [
+  "R71-C1 Chapter XVIII: 17 one-frame hops over 100 px (up to 401) against 0 on the pack control and on live"
+ ],
+ "nextReview": "Focused review of a repaired candidate (CHK-027 on XVIII against ?treated=pack); the deep review on the live build stays owed.",
+ "elapsedMinutes": 100
+}

@@ -1,0 +1,14 @@
+{
+ "tag": "p-seymour-flux-1600",
+ "chapter": "seymour-flux",
+ "base": "http://127.0.0.1:5877/",
+ "W": 1600,
+ "H": 900,
+ "phone": false,
+ "steps": [],
+ "bundle": "http://127.0.0.1:5877/assets/index-BtjHKsK_.js",
+ "error": "no first menu after 240000 ms (screen battle)",
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": []
+}

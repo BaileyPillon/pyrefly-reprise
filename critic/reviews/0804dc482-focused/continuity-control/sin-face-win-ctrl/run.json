@@ -1,0 +1,2965 @@
+{
+ "chapter": "sin-face",
+ "game": "ffx",
+ "goal": "win",
+ "size": "1600x900",
+ "base": "http://127.0.0.1:5877/?treated=pack&x=/",
+ "mode": "gpu",
+ "hooks": [
+  "window.__pyrefly.setSeed(1) before the first key (CHK-015 labelled setup hook, PR-0202)"
+ ],
+ "seedPinned": 1,
+ "seed": 1,
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1,
+   "links": 1,
+   "firstEnemyAction": {
+    "seq": 1,
+    "actor": "overdrive-sin",
+    "ability": "Drawn to Sin.",
+    "targets": [
+     "overdrive-sin"
+    ]
+   }
+  }
+ ],
+ "firstEnemyAction": {
+  "seq": 1,
+  "actor": "overdrive-sin",
+  "ability": "Drawn to Sin.",
+  "targets": [
+   "overdrive-sin"
+  ]
+ },
+ "steps": [
+  {
+   "ms": 10082,
+   "k": "prepEscGoesTo",
+   "v": "party-prep"
+  },
+  {
+   "ms": 29480,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1
+   }
+  },
+  {
+   "ms": 43971,
+   "k": "targetProbe",
+   "v": "no target cursor opened: 16 and 16b not shot (PR-0213)"
+  },
+  {
+   "ms": 43976,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 1,
+    "actor": "overdrive-sin",
+    "ability": "Drawn to Sin.",
+    "targets": [
+     "overdrive-sin"
+    ]
+   }
+  },
+  {
+   "ms": 205212,
+   "k": "fight",
+   "v": {
+    "outcome": "undecided",
+    "turns": 45,
+    "ms": 161235,
+    "seams": 0,
+    "orders": 0
+   }
+  },
+  {
+   "ms": 212568,
+   "k": "continuity",
+   "v": "[continuity] sin-face: 174.527 s of battle, 10441 frames recorded, 288 swaps, 446 strips, 59.8 fps, 0 probe errors"
+  },
+  {
+   "ms": 212610,
+   "k": "continuity",
+   "v": "[continuity] sin-face: pose-measure D:\\pyrefly-release55\\docs\\target\\pose-measure.json (114 subjects, sha256 b8cead6d81a8, source harness-tree); build 0804dc48; the candidate's own table"
+  },
+  {
+   "ms": 218053,
+   "k": "continuity",
+   "v": "[continuity] sin-face: CHK-026 FAIL, CHK-027 PASS; max head jump 15.5% (0.2% registered, a control), stature 0.895 to 1.095 (0 out of band), max feet shift 1.1px (2.1px from the pixels), 0 snaps/min, worst swap jerk 0px (worst dash 47.9px), frame p99 19.8ms, 18 strips"
+  },
+  {
+   "ms": 236247,
+   "k": "postScene",
+   "v": {
+    "watch": {
+     "ms": 6068,
+     "shows": 1,
+     "advancedWithoutInput": false,
+     "firstLine": "The mouth is open. The Fahrenheit dives straight in.",
+     "screenAfterWatch": "cutscene"
+    },
+    "taps": 7,
+    "holds": 0,
+    "ended": true
+   }
+  }
+ ],
+ "picks": [
+  {
+   "turn": 0,
+   "ms": 6,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Hastega",
+    "target": "the party",
+    "menu": "White Magic"
+   },
+   "took": "Hastega",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:6492/6492",
+    "wakka:6492/6492",
+    "lulu:5700/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:140000/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 6,
+     "actor": "tidus",
+     "did": "Hastega",
+     "targets": [
+      "tidus",
+      "yuna",
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 1,
+   "ms": 3596,
+   "actor": "command:auron",
+   "want": {
+    "label": "Wakka",
+    "target": null,
+    "menu": "Switch"
+   },
+   "took": "Wakka",
+   "viaMenu": "Switch",
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:6492/6492",
+    "wakka:6492/6492",
+    "lulu:5700/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:140000/140000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 2,
+   "ms": 5467,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:6492/6492",
+    "wakka:6492/6492",
+    "lulu:5700/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:140000/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 13,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 3,
+   "ms": 9556,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Lulu",
+    "target": null,
+    "menu": "Switch"
+   },
+   "took": "Lulu",
+   "viaMenu": "Switch",
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:6492/6492",
+    "wakka:6492/6492",
+    "lulu:5700/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:139007/140000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   },
+   "engineDid": [
+    {
+     "seq": 18,
+     "actor": "lulu",
+     "did": "Doublecast: Firaga",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 5,
+   "ms": 18251,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Hastega",
+    "target": "the party",
+    "menu": "White Magic"
+   },
+   "took": "Hastega",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:6492/6492",
+    "wakka:6492/6492",
+    "lulu:5700/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:133162/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 26,
+     "actor": "tidus",
+     "did": "Hastega",
+     "targets": [
+      "tidus",
+      "lulu",
+      "wakka"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 6,
+   "ms": 22977,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:6492/6492",
+    "wakka:6492/6492",
+    "lulu:5700/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:133162/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 38,
+     "actor": "lulu",
+     "did": "Doublecast: Firaga",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 8,
+   "ms": 30836,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:6492/6492",
+    "wakka:6492/6492",
+    "lulu:5700/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:126256/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 49,
+     "actor": "lulu",
+     "did": "Doublecast: Firaga",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 10,
+   "ms": 38703,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Cheer",
+    "target": "the party",
+    "menu": "Special"
+   },
+   "took": "Cheer",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:6492/6492",
+    "wakka:6492/6492",
+    "lulu:5700/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:119382/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 56,
+     "actor": "tidus",
+     "did": "Cheer",
+     "targets": [
+      "tidus",
+      "lulu",
+      "wakka"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 11,
+   "ms": 43154,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Auron",
+    "target": null,
+    "menu": "Switch"
+   },
+   "took": "Auron",
+   "viaMenu": "Switch",
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:6492/6492",
+    "wakka:6492/6492",
+    "lulu:5700/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:119382/140000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 12,
+   "ms": 45523,
+   "actor": "command:auron",
+   "want": {
+    "label": "Armor Break",
+    "target": "Sin",
+    "menu": "Special"
+   },
+   "took": "Armor Break",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:6492/6492",
+    "wakka:6492/6492",
+    "lulu:5700/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:119382/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 67,
+     "actor": "auron",
+     "did": "Armor Break",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 13,
+   "ms": 51654,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:5787/6492",
+    "wakka:5741/6492",
+    "lulu:5021/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:117448/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 84,
+     "actor": "lulu",
+     "did": "Doublecast: Firaga",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 15,
+   "ms": 59710,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:5787/6492",
+    "wakka:5741/6492",
+    "lulu:5021/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:109977/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 91,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 16,
+   "ms": 61344,
+   "actor": "command:auron",
+   "want": {
+    "label": "Mental Break",
+    "target": "Sin",
+    "menu": "Special"
+   },
+   "took": "Mental Break",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:5787/6492",
+    "wakka:5741/6492",
+    "lulu:5021/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:108548/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 102,
+     "actor": "lulu",
+     "did": "Doublecast: Firaga",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 18,
+   "ms": 75430,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:5037/6492",
+    "wakka:5042/6492",
+    "lulu:4345/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:97620/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 122,
+     "actor": "lulu",
+     "did": "Doublecast: Firaga",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 20,
+   "ms": 83488,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:5037/6492",
+    "wakka:5042/6492",
+    "lulu:4345/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:87967/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 129,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 21,
+   "ms": 85119,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:5037/6492",
+    "wakka:5042/6492",
+    "lulu:4345/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:85366/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 145,
+     "actor": "lulu",
+     "did": "Doublecast: Firaga",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 23,
+   "ms": 95854,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:4355/6492",
+    "wakka:4355/6492",
+    "lulu:3718/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:76291/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 152,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 24,
+   "ms": 98870,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:4355/6492",
+    "wakka:4355/6492",
+    "lulu:3718/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:70604/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 164,
+     "actor": "lulu",
+     "did": "Doublecast: Firaga",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 26,
+   "ms": 109859,
+   "actor": "command:auron",
+   "want": {
+    "label": "Dragon Fang",
+    "target": "all enemies",
+    "menu": "Overdrive"
+   },
+   "took": "Dragon Fang",
+   "viaMenu": "Overdrive",
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:3673/6492",
+    "wakka:3656/6492",
+    "lulu:3086/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:60670/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 179,
+     "actor": "auron",
+     "did": "Dragon Fang",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 27,
+   "ms": 116485,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:3673/6492",
+    "wakka:3656/6492",
+    "lulu:3086/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:57101/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 188,
+     "actor": "lulu",
+     "did": "Doublecast: Firaga",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 29,
+   "ms": 123942,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:3673/6492",
+    "wakka:3656/6492",
+    "lulu:3086/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:47712/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 197,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 30,
+   "ms": 125038,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:3673/6492",
+    "wakka:3656/6492",
+    "lulu:3086/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:44964/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 202,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 31,
+   "ms": 127502,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Turbo Ether",
+    "target": "Lulu",
+    "menu": "Items"
+   },
+   "took": "Turbo Ether",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:2954/6492",
+    "wakka:2980/6492",
+    "lulu:2454/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:43440/140000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "lulu",
+    "wanted": "lulu",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 216,
+     "actor": "lulu",
+     "did": "Turbo Ether",
+     "targets": [
+      "lulu"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 32,
+   "ms": 130758,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:2954/6492",
+    "wakka:2980/6492",
+    "lulu:2454/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:43440/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 225,
+     "actor": "lulu",
+     "did": "Doublecast: Firaga",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 34,
+   "ms": 138270,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:2954/6492",
+    "wakka:2980/6492",
+    "lulu:2454/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:32505/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 232,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 35,
+   "ms": 139653,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:2954/6492",
+    "wakka:2980/6492",
+    "lulu:2454/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:31150/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 243,
+     "actor": "lulu",
+     "did": "Doublecast: Firaga",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 37,
+   "ms": 147186,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:2204/6492",
+    "wakka:2254/6492",
+    "lulu:1812/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:20088/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 257,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 38,
+   "ms": 148300,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:2204/6492",
+    "wakka:2254/6492",
+    "lulu:1812/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:18642/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 261,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 39,
+   "ms": 149401,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Firaga",
+    "target": "Sin",
+    "menu": "Black Magic"
+   },
+   "took": "Firaga",
+   "viaMenu": "Black Magic",
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:2204/6492",
+    "wakka:2254/6492",
+    "lulu:1812/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:16094/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 267,
+     "actor": "lulu",
+     "did": "Firaga",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 40,
+   "ms": 152101,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:2204/6492",
+    "wakka:2254/6492",
+    "lulu:1812/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:11800/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 273,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 41,
+   "ms": 153215,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:2204/6492",
+    "wakka:2254/6492",
+    "lulu:1812/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:10287/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 277,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 42,
+   "ms": 155451,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Firaga",
+    "target": "Sin",
+    "menu": "Black Magic"
+   },
+   "took": "Firaga",
+   "viaMenu": "Black Magic",
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:1463/6492",
+    "wakka:1544/6492",
+    "lulu:1123/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:7496/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 290,
+     "actor": "lulu",
+     "did": "Firaga",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 43,
+   "ms": 157904,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:1463/6492",
+    "wakka:1544/6492",
+    "lulu:1123/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:3519/140000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 294,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 44,
+   "ms": 159019,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Sin",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6492/6492",
+    "yuna:5130/5130",
+    "auron:1463/6492",
+    "wakka:1544/6492",
+    "lulu:1123/5700",
+    "rikku:6492/6492",
+    "kimahri:6492/6492",
+    "valefor:1886/1886",
+    "ifrit:2585/2585",
+    "ixion:2551/2551",
+    "shiva:2266/2266",
+    "bahamut:3657/3657",
+    "overdrive-sin:2006/140000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  }
+ ],
+ "seams": [],
+ "fails": [],
+ "contexts": {
+  "viewport": "1600x900",
+  "query": null,
+  "touch": null,
+  "gamepad": null,
+  "reduceMotion": null
+ },
+ "scriptedChange": "not applicable",
+ "budgetMs": 1800000,
+ "briefingText": "AURON “Nineteen fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.” ENTER / ESC SKIP — 20 SECONDS, ONCE D NEVER SHOW THIS AGAIN",
+ "boardAtEntry": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 19
+ },
+ "boardWalk": [
+  "seymour-flux",
+  "yunalesca",
+  "braskas-final-aeon",
+  "seymour-anima-macalania",
+  "evrae-airship",
+  "yojimbo-cavern",
+  "seymour-natus",
+  "seymour-omnis",
+  "isaaru-via-purifico",
+  "sin-fins-core",
+  "sin-face"
+ ],
+ "dossier": "AURON · 1 OF 3 “Start with this one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER XVIII Sin: the Face 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVII XVIII XXVII X-2 IV V VI XI XIII XV XVI Before the mouth is fully open Sin fell into Bevelle and rose again with wings. The main gun is still broken, so Cid flies the ship straight at its face, and the mouth begins to open. CTB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima VIII Evrae IX Yojimbo X Seymour Natus XII Seymour Omnis XIV Isaaru XVII Sin: the Fins and the Core XVIII Sin: the Face XXVII Mirror Aeons FINAL FANTASY X-2 IV Bahamut V Vegnagun VI Leblanc XI Fallen Aeons XIII Trema XV The Den of Woe XVI Ixion LOCATION Deck of the Fahrenheit — above Bevelle BOSS Sin PARTY T TIDUS Y YUNA A AURON BEST Not cleared LEFT/RIGHT CHOOSE · ",
+ "prepText": "AURON · 2 OF 3 “Your party is ready.” The tabs are for later. Start the battle. ESC SKIP THE GUIDE PARTY PREP XVIII · SIN: THE FACE — DECK OF THE FAHRENHEIT — ABOVE BEVELLE T Tidus S.LV 180 Y Yuna S.LV 175 A Auron S.LV 180 W Wakka S.LV 165 L Lulu S.LV 170 R Rikku S.LV 160 K Kimahri S.LV 150 CHAPTER STATS SPHERE GRID EQUIPMENT ITEMS OVERDRIVE FFX · XVIII Sin: the Face Before the Mouth Opens Sin fell into Bevelle and rose again with wings. The main gun is still broken, so Cid flies the ship straight at its face, and the mouth begins to open. Bevelle, below the wings nose to nose with it he is waiting OBJECTIVES Ride out the pull Bring Sin below half Defeat Sin before the mouth opens TIP Wakka and Lulu in and Hastega during the three pulls; Armor Break the moment it is in range; then everything, Overdrives included. Any Ward stops Gaze. START BATTLE T Tidus HP 6492/6492 · MP 140/140 WARRIOR Y Yuna HP 5130/5130 · MP 320/320 SUMMONER A Auron HP 6492/6492 · MP 100/100 SENTINEL",
+ "prepEsc": "party-prep",
+ "preScene": {
+  "lines": [
+   "CHAPTER XVIII · DECK OF THE FAHRENHEIT — ABOVE BEVELLE Yuna SUMMONER Tidus. Do you think it hurts him? AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER XVIII · DECK OF THE FAHRENHEIT — ABOVE BEVELLE Tidus GUARDIAN The old man? AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER XVIII · DECK OF THE FAHRENHEIT — ABOVE BEVELLE Yuna SUMMONER Being Si AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER XVIII · DECK OF THE FAHRENHEIT — ABOVE BEVELLE Yuna SUMMONER Being Sin. All this time. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU"
+  ],
+  "escOpens": "pause",
+  "holdsToSkip": 1
+ },
+ "firstState": {
+  "chapter": "sin-face",
+  "game": "ffx",
+  "scene": "sin-fahrenheit-bevelle",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 1,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": true,
+  "exitIntent": null,
+  "playTimeMs": 5216.399999999998,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "overdrive-sin",
+    "side": "enemy",
+    "art": "overdrive-sin",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "tidus",
+    "side": "party",
+    "art": "tidus",
+    "pose": "ready",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "yuna",
+    "side": "party",
+    "art": "yuna",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "auron",
+    "side": "party",
+    "art": "auron",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   }
+  ],
+  "spellFx": {
+   "fx": {
+    "new": false,
+    "guard": {
+     "level": 0,
+     "scaleStep": 0,
+     "calmMs": 16.6,
+     "budgetMs": 20.75,
+     "busyMs": 0,
+     "steps": 0
+    }
+   },
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0,
+   "cpuMeanMs": 0,
+   "flights": {
+    "launched": 0,
+    "landed": 0,
+    "live": 0,
+    "lastLaunchAt": 0,
+    "lastLandAt": 0
+   }
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "command:tidus",
+   "awaitingMenu": true,
+   "played": 5,
+   "lastEvents": [
+    {
+     "seq": 0,
+     "type": "turn-start",
+     "ms": 84
+    },
+    {
+     "seq": 1,
+     "type": "action-start",
+     "ms": 966
+    },
+    {
+     "seq": 2,
+     "type": "action-end",
+     "ms": 235
+    },
+    {
+     "seq": 3,
+     "type": "script-trigger",
+     "ms": 0
+    },
+    {
+     "seq": 4,
+     "type": "turn-start",
+     "ms": 86
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 2,
+   "ticks": 1,
+   "events": 5,
+   "result": null,
+   "combatants": [
+    {
+     "id": "tidus",
+     "hp": 6492,
+     "maxHp": 6492,
+     "mp": 140,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "yuna",
+     "hp": 5130,
+     "maxHp": 5130,
+     "mp": 320,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "auron",
+     "hp": 6492,
+     "maxHp": 6492,
+     "mp": 100,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "wakka",
+     "hp": 6492,
+     "maxHp": 6492,
+     "mp": 110,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "lulu",
+     "hp": 5700,
+     "maxHp": 5700,
+     "mp": 300,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "rikku",
+     "hp": 6492,
+     "maxHp": 6492,
+     "mp": 130,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "kimahri",
+     "hp": 6492,
+     "maxHp": 6492,
+     "mp": 140,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "valefor",
+     "hp": 1886,
+     "maxHp": 1886,
+     "mp": 62,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ifrit",
+     "hp": 2585,
+     "maxHp": 2585,
+     "mp": 59,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ixion",
+     "hp": 2551,
+     "maxHp": 2551,
+     "mp": 66,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "shiva",
+     "hp": 2266,
+     "maxHp": 2266,
+     "mp": 72,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "bahamut",
+     "hp": 3657,
+     "maxHp": 3657,
+     "mp": 91,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "overdrive-sin",
+     "hp": 140000,
+     "maxHp": 140000,
+     "mp": 999,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "turn-start",
+    "actorId": "overdrive-sin",
+    "turn": 1,
+    "elapsedTicks": 0,
+    "seq": 0
+   },
+   {
+    "type": "action-start",
+    "actorId": "overdrive-sin",
+    "command": {
+     "kind": "ability",
+     "id": "overdrive-sin-drawn",
+     "targets": [
+      "overdrive-sin"
+     ]
+    },
+    "abilityId": "overdrive-sin-drawn",
+    "abilityName": "Drawn to Sin.",
+    "targets": [
+     "overdrive-sin"
+    ],
+    "seq": 1
+   },
+   {
+    "type": "action-end",
+    "actorId": "overdrive-sin",
+    "seq": 2
+   },
+   {
+    "type": "script-trigger",
+    "name": "sin-first-pull",
+    "payload": {
+     "script": "sin-first-pull"
+    },
+    "seq": 3
+   },
+   {
+    "type": "turn-start",
+    "actorId": "tidus",
+    "turn": 2,
+    "elapsedTicks": 1,
+    "seq": 4
+   }
+  ]
+ },
+ "cardFirst": {
+  "viewport": "1600x900",
+  "card": {
+   "x": 560,
+   "y": 743,
+   "w": 430,
+   "h": 93
+  },
+  "rows": 4,
+  "overlapPx2": 0,
+  "cardText": "Tidus Hastega → the party IN WHITE MAGIC 30 MP Speeds the party’s turns up"
+ },
+ "focFirst": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 560,
+    "y": 743,
+    "w": 430,
+    "h": 93
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 445,
+    "w": 469,
+    "h": 391
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Tidus",
+    "eff": 17.5
+   },
+   {
+    "t": "Hastega",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "the party",
+    "eff": 21
+   },
+   {
+    "t": "in White Magic",
+    "eff": 14.2
+   },
+   {
+    "t": "30 MP",
+    "eff": 14.2
+   },
+   {
+    "t": "Speeds the party’s turns up",
+    "eff": 14.2
+   }
+  ]
+ },
+ "focAfterCoach": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 560,
+    "y": 743,
+    "w": 430,
+    "h": 93
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 445,
+    "w": 469,
+    "h": 391
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Tidus",
+    "eff": 17.5
+   },
+   {
+    "t": "Hastega",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "the party",
+    "eff": 21
+   },
+   {
+    "t": "in White Magic",
+    "eff": 14.2
+   },
+   {
+    "t": "30 MP",
+    "eff": 14.2
+   },
+   {
+    "t": "Speeds the party’s turns up",
+    "eff": 14.2
+   }
+  ]
+ },
+ "advisorText": "Tidus Hastega → the party IN WHITE MAGIC 30 MP Speeds the party’s turns up",
+ "advisorHiddenByN": true,
+ "intentText": " | SIN 5TH IN QUEUE Drawn to Sin. SCRIPTED Deals no damage.",
+ "pause": {
+  "esc": {
+   "paused": true,
+   "text": "Tidus Auron Yuna Tidus Sin Auron ATTACK SPECIAL ▸ ×4 WHITE MAGIC ▸ ×3 ITEMS ▸ ×15 FLEE ESCAPE ▼ Q △ DEFEND Open the Special menu. Tidus 6492 /6492 140 /140 OD Yuna 5130 /5130 320 /320 OD Auron 6492 /6492 100 /100 OD Level up on the Sphere Grid and refill whatever you've run low on. Before the next fight, put each character in armour with these abilities: Stoneproof or Stone Ward Confuseproof or Confuse Ward Zombieproof or Zombie Ward Another option is customizing equipment with Auto-Med, which uses a Remedy automatically when a status ailment hits; it costs 20 Remedies. Also carry a stock of Remedies for use during the battle. It is optional, but it eases the fight a lot. Overdrive Sin (the Head) BOSS BATTLE IN GAME DESCRIPTION: It drags the airship in while it gathers its power for the ultimate terror, Giga-Graviton. Stop it before it wipes everyone out! HP: 140,000 This battle runs on "
+  },
+  "optionsText": "Tidus Auron Yuna Tidus Sin Auron ATTACK SPECIAL ▸ ×4 WHITE MAGIC ▸ ×3 ITEMS ▸ ×15 FLEE ESCAPE ▼ Q △ DEFEND Open the Special menu. Tidus 6492 /6492 140 /140 OD Yuna 5130 /5130 320 /320 OD Auron 6492 /6492 100 /100 OD Level up on the Sphere Grid and refill whatever you've run low on. Before the next fight, put each character in armour with these abilities: Stoneproof or Stone Ward Confuseproof or Confuse Ward Zombieproof or Zombie Ward Another option is customizing equipment with Auto-Med, which uses a Remedy automatically when a status ailment hits; it costs 20 Remedies. Also carry a stock of Remedies for use during the battle. It is optional, but it eases the fight a lot. Overdrive Sin (the Head) BOSS BATTLE IN GAME DESCRIPTION: It drags the airship in while it gathers its power for the ultimate terror, Giga-Graviton. Stop it before it wipes everyone out! HP: 140,000 This battle runs on a clock: on its twelfth turn Sin uses its Overdrive, Giga-Graviton, an attack that ends the game on the spot. The bar above its head shows how near it is to firing. Summoning an aeon will not save you, so you must deal all 140,000 damage before then. Sin begins too far away to hit and slowly drifts into melee range. Spend the early turns buffing with Cheer, Luck and the like, and Tidus should put Hastega on everyone. Lulu or Wakka in the party can do damage even while Sin is distant. Auron shoul",
+  "tabs": [
+   "Tidus",
+   "Yuna",
+   "Auron",
+   "Chapter",
+   "Guide",
+   "Options"
+  ],
+  "resumedByEsc": true,
+  "pOpens": true,
+  "pCloses": true
+ },
+ "firstRows": [
+  "Attack",
+  "Special",
+  "White Magic",
+  "Items",
+  "Flee",
+  "Escape"
+ ],
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "victory",
+   "seed": 1,
+   "turns": 45,
+   "firstEnemyAction": {
+    "seq": 1,
+    "actor": "overdrive-sin",
+    "ability": "Drawn to Sin.",
+    "targets": [
+     "overdrive-sin"
+    ]
+   },
+   "final": true,
+   "stalledAt": null
+  }
+ ],
+ "seamCard": [],
+ "pauseRecoveries": 0,
+ "misses": [],
+ "orders": [],
+ "escapes": [],
+ "targetMismatches": [],
+ "pickerPlays": [],
+ "stallRecoveries": 0,
+ "lastChain": {
+  "links": 1,
+  "chainLength": 1,
+  "phase": "play:victory",
+  "turn": 45,
+  "ms": 160971
+ },
+ "mgSince": null,
+ "emptyPicks": 0,
+ "lastPartySeq": 294,
+ "doublecast": [
+  {
+   "turn": 4,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Doublecast: Firaga + Firaga",
+    "target": "Sin",
+    "menu": "Special"
+   },
+   "casts": [
+    "firaga",
+    "firaga"
+   ],
+   "steps": [
+    {
+     "found": "Doublecast"
+    },
+    {
+     "k": 0,
+     "spell": "Firaga"
+    },
+    {
+     "k": 1,
+     "spell": "Firaga"
+    }
+   ]
+  },
+  {
+   "turn": 7,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Doublecast: Firaga + Firaga",
+    "target": "Sin",
+    "menu": "Special"
+   },
+   "casts": [
+    "firaga",
+    "firaga"
+   ],
+   "steps": [
+    {
+     "found": "Doublecast"
+    },
+    {
+     "k": 0,
+     "spell": "Firaga"
+    },
+    {
+     "k": 1,
+     "spell": "Firaga"
+    }
+   ]
+  },
+  {
+   "turn": 9,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Doublecast: Firaga + Firaga",
+    "target": "Sin",
+    "menu": "Special"
+   },
+   "casts": [
+    "firaga",
+    "firaga"
+   ],
+   "steps": [
+    {
+     "found": "Doublecast"
+    },
+    {
+     "k": 0,
+     "spell": "Firaga"
+    },
+    {
+     "k": 1,
+     "spell": "Firaga"
+    }
+   ]
+  },
+  {
+   "turn": 14,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Doublecast: Firaga + Firaga",
+    "target": "Sin",
+    "menu": "Special"
+   },
+   "casts": [
+    "firaga",
+    "firaga"
+   ],
+   "steps": [
+    {
+     "found": "Doublecast"
+    },
+    {
+     "k": 0,
+     "spell": "Firaga"
+    },
+    {
+     "k": 1,
+     "spell": "Firaga"
+    }
+   ]
+  },
+  {
+   "turn": 17,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Doublecast: Firaga + Firaga",
+    "target": "Sin",
+    "menu": "Special"
+   },
+   "casts": [
+    "firaga",
+    "firaga"
+   ],
+   "steps": [
+    {
+     "found": "Doublecast"
+    },
+    {
+     "k": 0,
+     "spell": "Firaga"
+    },
+    {
+     "k": 1,
+     "spell": "Firaga"
+    }
+   ]
+  },
+  {
+   "turn": 19,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Doublecast: Firaga + Firaga",
+    "target": "Sin",
+    "menu": "Special"
+   },
+   "casts": [
+    "firaga",
+    "firaga"
+   ],
+   "steps": [
+    {
+     "found": "Doublecast"
+    },
+    {
+     "k": 0,
+     "spell": "Firaga"
+    },
+    {
+     "k": 1,
+     "spell": "Firaga"
+    }
+   ]
+  },
+  {
+   "turn": 22,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Doublecast: Firaga + Firaga",
+    "target": "Sin",
+    "menu": "Special"
+   },
+   "casts": [
+    "firaga",
+    "firaga"
+   ],
+   "steps": [
+    {
+     "found": "Doublecast"
+    },
+    {
+     "k": 0,
+     "spell": "Firaga"
+    },
+    {
+     "k": 1,
+     "spell": "Firaga"
+    }
+   ]
+  },
+  {
+   "turn": 25,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Doublecast: Firaga + Firaga",
+    "target": "Sin",
+    "menu": "Special"
+   },
+   "casts": [
+    "firaga",
+    "firaga"
+   ],
+   "steps": [
+    {
+     "found": "Doublecast"
+    },
+    {
+     "k": 0,
+     "spell": "Firaga"
+    },
+    {
+     "k": 1,
+     "spell": "Firaga"
+    }
+   ]
+  },
+  {
+   "turn": 28,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Doublecast: Firaga + Firaga",
+    "target": "Sin",
+    "menu": "Special"
+   },
+   "casts": [
+    "firaga",
+    "firaga"
+   ],
+   "steps": [
+    {
+     "found": "Doublecast"
+    },
+    {
+     "k": 0,
+     "spell": "Firaga"
+    },
+    {
+     "k": 1,
+     "spell": "Firaga"
+    }
+   ]
+  },
+  {
+   "turn": 33,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Doublecast: Firaga + Firaga",
+    "target": "Sin",
+    "menu": "Special"
+   },
+   "casts": [
+    "firaga",
+    "firaga"
+   ],
+   "steps": [
+    {
+     "found": "Doublecast"
+    },
+    {
+     "k": 0,
+     "spell": "Firaga"
+    },
+    {
+     "k": 1,
+     "spell": "Firaga"
+    }
+   ]
+  },
+  {
+   "turn": 36,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Doublecast: Firaga + Firaga",
+    "target": "Sin",
+    "menu": "Special"
+   },
+   "casts": [
+    "firaga",
+    "firaga"
+   ],
+   "steps": [
+    {
+     "found": "Doublecast"
+    },
+    {
+     "k": 0,
+     "spell": "Firaga"
+    },
+    {
+     "k": 1,
+     "spell": "Firaga"
+    }
+   ]
+  }
+ ],
+ "minigames": [
+  {
+   "turn": 27,
+   "kind": "bushido",
+   "title": "Dragon Fang",
+   "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+   "chips": [
+    "↓",
+    "←",
+    "↑",
+    "→",
+    "FL1",
+    "RR1",
+    "Enter✕",
+    "Esc○"
+   ],
+   "buttons": [
+    "down",
+    "left",
+    "up",
+    "right",
+    "l1",
+    "r1",
+    "confirm",
+    "cancel"
+   ],
+   "keys": [
+    "ArrowDown",
+    "ArrowLeft",
+    "ArrowUp",
+    "ArrowRight",
+    "f",
+    "r",
+    "Enter",
+    "x"
+   ],
+   "unknownGlyphs": [],
+   "closed": true,
+   "ms": 1319,
+   "engine": {
+    "actor": "auron",
+    "ability": "Dragon Fang",
+    "extra": {
+     "kind": "auron-sequence",
+     "sequence": {
+      "success": true,
+      "correctInputs": 8,
+      "timeRemainingMs": 2099.9999046325684,
+      "frame": 57
+     }
+    }
+   }
+  }
+ ],
+ "minigameShots": {
+  "bushido": true
+ },
+ "turns": 45,
+ "fightMs": 161235,
+ "afterFight": "cutscene",
+ "outcome": "victory",
+ "outcomeFrom": "results screen text",
+ "stalledAt": null,
+ "logKinds": {
+  "turn-start": 48,
+  "action-start": 50,
+  "action-end": 50,
+  "script-trigger": 1,
+  "mp-damage": 28,
+  "status-add": 14,
+  "switch": 3,
+  "damage": 68,
+  "overdrive-gauge": 17,
+  "counter": 7,
+  "message": 5,
+  "minigame-request": 1,
+  "mp-heal": 1
+ },
+ "continuity": {
+  "file": "continuity/continuity.json",
+  "checks": {
+   "CHK-026": "FAIL",
+   "CHK-027": "PASS"
+  },
+  "reasons": {
+   "CHK-026": [
+    "46 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.2 percent where the head is registered)"
+   ],
+   "CHK-027": []
+  },
+  "error": null
+ },
+ "post": {
+  "screen": "cutscene",
+  "lines": [
+   "The mouth is open. The Fahrenheit dives straight in.",
+   "Inside, it was quiet. Almost like the Farplane.",
+   "Lights drifted past us in the dark.",
+   "For a moment one of them was Seymour. He said nothing."
+  ],
+  "scene": {
+   "watch": {
+    "ms": 6068,
+    "shows": 1,
+    "advancedWithoutInput": false,
+    "firstLine": "The mouth is open. The Fahrenheit dives straight in.",
+    "screenAfterWatch": "cutscene"
+   },
+   "taps": 7,
+   "holds": 0,
+   "ended": true,
+   "lines": [
+    "The mouth is open. The Fahrenheit dives straight in.",
+    "Inside, it was quiet. Almost like the Farplane.",
+    "Lights drifted past us in the dark.",
+    "For a moment one of them was Seymour. He said nothing."
+   ]
+  }
+ },
+ "resultsScreen": "results",
+ "resultsText": "DECK OF THE FAHRENHEIT — ABOVE BEVELLE · CLEARED RESULTS · 3:01 Victory NEW BEST ...Okay. Next one. AP 20,000 ×5 PARTY GIL 12,000 ITEMS Lv. 3 Key Sphere T Tidus S.LV 180 · 20,000/22,000 AP +20,000AP Y Yuna S.LV 175 · 0/22,000 AP · no full turn taken · no AP +0AP A Auron S.LV 180 · 20,000/22,000 AP +20,000AP W Wakka S.LV 165 · 20,000/22,000 AP +20,000AP L Lulu S.LV 170 · 20,000/22,000 AP +20,000AP CONFIRM ▸",
+ "afterConfirm": [],
+ "afterResults": "chapter-select",
+ "boardAfter": {
+  "selectedIndex": 10,
+  "selectedId": "sin-face",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [
+   "sin-face"
+  ],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 1,
+  "total": 19
+ },
+ "boardAfterReload": {
+  "selectedIndex": 10,
+  "selectedId": "sin-face",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [
+   "sin-face"
+  ],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 1,
+  "total": 19
+ },
+ "dboxTimeline": [
+  {
+   "ms": 11952,
+   "lastMs": 15901,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "Tidus. Do you think it hurts him?",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 1
+  },
+  {
+   "ms": 15935,
+   "lastMs": 18618,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "The old man?",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 2
+  },
+  {
+   "ms": 18735,
+   "lastMs": 21918,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "Being Sin. All this time.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 3
+  },
+  {
+   "ms": 21969,
+   "lastMs": 22468,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "Yu Yevon joins the aeon that is summoned.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 4
+  },
+  {
+   "ms": 22484,
+   "lastMs": 22484,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "Small at first. It grows from there.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 5
+  },
+  {
+   "ms": 22501,
+   "lastMs": 22501,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "If we are quick, we may not need the Final Summoning.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 6
+  },
+  {
+   "ms": 22518,
+   "lastMs": 22534,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Then we're quick.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 7
+  },
+  {
+   "ms": 22552,
+   "lastMs": 22567,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "Tidus. Please... do not go away.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 8
+  },
+  {
+   "ms": 22585,
+   "lastMs": 22603,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "Yunie! Tidus! Something's happening to Sin!",
+   "portrait": "rikku.webp",
+   "narrate": false,
+   "show": 9
+  },
+  {
+   "ms": 22618,
+   "lastMs": 22634,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "Over Bevelle, Sin rises again. Now it has wings.",
+   "portrait": null,
+   "narrate": false,
+   "show": 10
+  },
+  {
+   "ms": 22653,
+   "lastMs": 22653,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "He is waiting for you.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 11
+  },
+  {
+   "ms": 22668,
+   "lastMs": 22668,
+   "screen": "cutscene",
+   "speaker": "Cid",
+   "role": "",
+   "text": "Main gun's still dead. No covering fire this time.",
+   "portrait": "cid.webp",
+   "narrate": false,
+   "show": 12
+  },
+  {
+   "ms": 22685,
+   "lastMs": 22685,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Then take us in. All the way in.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 13
+  },
+  {
+   "ms": 22702,
+   "lastMs": 22702,
+   "screen": "cutscene",
+   "speaker": "Cid",
+   "role": "",
+   "text": "Right up to its teeth. Brother, fly!",
+   "portrait": "cid.webp",
+   "narrate": false,
+   "show": 14
+  },
+  {
+   "ms": 22719,
+   "lastMs": 22734,
+   "screen": "cutscene",
+   "speaker": "Brother",
+   "role": "",
+   "text": "I will... I will get you there",
+   "portrait": null,
+   "narrate": false,
+   "show": 15
+  },
+  {
+   "ms": 22751,
+   "lastMs": 22768,
+   "screen": "cutscene",
+   "speaker": "Kimahri",
+   "role": "Guardian",
+   "text": "Kimahri is ready.",
+   "portrait": "kimahri.png",
+   "narrate": false,
+   "show": 16
+  },
+  {
+   "ms": 22785,
+   "lastMs": 22787,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Hey, old man! I'm coming!",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 17,
+   "endMs": 22787
+  },
+  {
+   "ms": 27270,
+   "lastMs": 29786,
+   "screen": "battle",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "It is pulling us in. Use the time.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 18,
+   "endMs": 29786
+  },
+  {
+   "ms": 206844,
+   "lastMs": 226219,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "The mouth is open. The Fahrenheit dives straight in.",
+   "portrait": null,
+   "narrate": false,
+   "show": 19
+  },
+  {
+   "ms": 226327,
+   "lastMs": 228210,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "Inside, it was quiet. Almost like the Farplane.",
+   "portrait": null,
+   "narrate": true,
+   "show": 20
+  },
+  {
+   "ms": 228243,
+   "lastMs": 229709,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "Lights drifted past us in the dark.",
+   "portrait": null,
+   "narrate": true,
+   "show": 21
+  },
+  {
+   "ms": 229743,
+   "lastMs": 231226,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "For a moment one of them was Seymour. He said nothing.",
+   "portrait": null,
+   "narrate": true,
+   "show": 22
+  },
+  {
+   "ms": 231260,
+   "lastMs": 234526,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "I thought the worst of it was behind us.",
+   "portrait": null,
+   "narrate": true,
+   "show": 23,
+   "endMs": 234543
+  }
+ ],
+ "audioDebugFile": {
+  "file": "sin-face-win-ctrl/audio-debug.jsonl",
+  "samples": 4,
+  "note": "one whole audioDebug() per line; nothing cut"
+ },
+ "minutes": 4.06,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "media": [
+  "http://127.0.0.1:5877/art/title/echo.webp",
+  "http://127.0.0.1:5877/art/characters/auron/idle.png",
+  "http://127.0.0.1:5877/art/backdrops/dreams-end.webp",
+  "http://127.0.0.1:5877/art/backdrops/gagazet.webp",
+  "http://127.0.0.1:5877/art/characters/mortiorchis/idle.png",
+  "http://127.0.0.1:5877/art/characters/seymour-flux-body/idle.png",
+  "http://127.0.0.1:5877/art/portraits/tidus.webp",
+  "http://127.0.0.1:5877/art/portraits/yuna.webp",
+  "http://127.0.0.1:5877/art/portraits/kimahri.png",
+  "http://127.0.0.1:5877/art/backdrops/gagazet.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/seymour-flux-body/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/zanarkand-dome.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/yunalesca-1/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/bevelle-underground.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/ffx2-bahamut/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/djose-chamber-provisional.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/x2-ixion/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/dreams-end.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/braskas-final-aeon-1/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/den-of-woe.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/baralai-shade/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/macalania-temple.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/anima/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/via-infinito.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/trema/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/evrae-airship-deck.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/evrae/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/road-to-the-farplane.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/x2-shiva/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/cavern-stolen-fayth.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/yojimbo-cavern/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/leblanc-last-room.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/leblanc/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/bevelle-highbridge.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/seymour-natus/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/farplane.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/vegnagun-body/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/garden-of-pain.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/seymour-omnis/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/via-purifico.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/isaaru/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/mushroom-rock-road.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/dark-mindy/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/sin-fahrenheit-flight.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/sin-left-fin/idle.thumb.png",
+  "http://127.0.0.1:5877/art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+  "http://127.0.0.1:5877/art/characters/overdrive-sin/idle.thumb.png",
+  "http://127.0.0.1:5877/art/portraits/auron.webp",
+  "http://127.0.0.1:5877/art/backdrops/zanarkand-dome.webp",
+  "http://127.0.0.1:5877/art/characters/yunalesca-1/idle.png",
+  "http://127.0.0.1:5877/art/portraits/yuna-x2.webp",
+  "http://127.0.0.1:5877/art/portraits/rikku-x2.webp",
+  "http://127.0.0.1:5877/art/portraits/paine.webp",
+  "http://127.0.0.1:5877/art/backdrops/bevelle-underground.webp",
+  "http://127.0.0.1:5877/art/characters/ffx2-bahamut/idle.png",
+  "http://127.0.0.1:5877/art/backdrops/djose-chamber-provisional.webp",
+  "http://127.0.0.1:5877/art/characters/x2-ixion/idle.png",
+  "http://127.0.0.1:5877/art/characters/braskas-final-aeon-1/idle.png",
+  "http://127.0.0.1:5877/art/backdrops/den-of-woe.webp",
+  "http://127.0.0.1:5877/art/characters/nooj-shade/idle.png",
+  "http://127.0.0.1:5877/art/characters/gippal-shade/idle.png",
+  "http://127.0.0.1:5877/art/characters/baralai-shade/idle.png",
+  "http://127.0.0.1:5877/art/portraits/rikku.webp",
+  "http://127.0.0.1:5877/art/portraits/wakka.webp",
+  "http://127.0.0.1:5877/art/portraits/lulu.webp",
+  "http://127.0.0.1:5877/art/characters/yuna-white-mage/idle.png",
+  "http://127.0.0.1:5877/art/characters/rikku-dark-knight/idle.png",
+  "http://127.0.0.1:5877/art/characters/paine-warrior/idle.png",
+  "http://127.0.0.1:5877/art/characters/paine-dark-knight/idle.png",
+  "http://127.0.0.1:5877/art/characters/yuna-dark-knight/idle.png",
+  "http://127.0.0.1:5877/art/characters/rikku-alchemist/idle.png",
+  "http://127.0.0.1:5877/art/characters/yuna-gunner/idle.png",
+  "http://127.0.0.1:5877/art/characters/rikku-thief/idle.png",
+  "http://127.0.0.1:5877/audio/music/title.mp3",
+  "http://127.0.0.1:5877/audio/sfx/sprite.mp3",
+  "http://127.0.0.1:5877/audio/sfx/sprite-v2.mp3",
+  "http://127.0.0.1:5877/audio/music/chapter-select.mp3",
+  "http://127.0.0.1:5877/art/portraits/seymour.webp",
+  "http://127.0.0.1:5877/art/backdrops/macalania-temple.webp",
+  "http://127.0.0.1:5877/art/characters/anima/idle.png",
+  "http://127.0.0.1:5877/art/characters/tidus/idle.png",
+  "http://127.0.0.1:5877/art/characters/yuna/idle.png",
+  "http://127.0.0.1:5877/art/characters/kimahri/idle.png",
+  "http://127.0.0.1:5877/art/backdrops/evrae-airship-deck.webp",
+  "http://127.0.0.1:5877/art/characters/evrae/idle.png",
+  "http://127.0.0.1:5877/art/backdrops/cavern-stolen-fayth.webp",
+  "http://127.0.0.1:5877/art/characters/yojimbo-cavern/idle.png",
+  "http://127.0.0.1:5877/art/backdrops/bevelle-highbridge.webp",
+  "http://127.0.0.1:5877/art/characters/seymour-natus/idle.png",
+  "http://127.0.0.1:5877/art/backdrops/garden-of-pain.webp",
+  "http://127.0.0.1:5877/art/characters/seymour-omnis/idle.webp",
+  "http://127.0.0.1:5877/art/backdrops/via-purifico.webp",
+  "http://127.0.0.1:5877/art/characters/isaaru/idle.png",
+  "http://127.0.0.1:5877/art/backdrops/sin-fahrenheit-flight.webp",
+  "http://127.0.0.1:5877/art/characters/sin-left-fin/idle.png",
+  "http://127.0.0.1:5877/art/backdrops/sin-fahrenheit-bevelle.webp",
+  "http://127.0.0.1:5877/art/characters/overdrive-sin/idle.png",
+  "http://127.0.0.1:5877/art/backdrops/mushroom-rock-road.webp",
+  "http://127.0.0.1:5877/art/characters/dark-mindy/idle.png",
+  "http://127.0.0.1:5877/audio/sfx/parity-ffx-core.mp3",
+  "http://127.0.0.1:5877/audio/music/scene-fahrenheit.mp3",
+  "http://127.0.0.1:5877/art/pause/ch18-sin-face.webp",
+  "http://127.0.0.1:5877/art/portraits/cid.webp",
+  "http://127.0.0.1:5877/audio/voice/sin-face/sin-face.mid-sin-first-pull.001.mp3",
+  "http://127.0.0.1:5877/audio/voice/seymour-flux/seymour-flux.quip-tidus.001.mp3",
+  "http://127.0.0.1:5877/audio/voice/seymour-flux/seymour-flux.quip-yuna.001.mp3",
+  "http://127.0.0.1:5877/audio/voice/seymour-flux/seymour-flux.quip-auron.001.mp3",
+  "http://127.0.0.1:5877/art/characters/tidus/ready.png",
+  "http://127.0.0.1:5877/art/characters/yuna/ready.png",
+  "http://127.0.0.1:5877/art/characters/auron/ready.png",
+  "http://127.0.0.1:5877/audio/music/boss-sin-countdown.mp3",
+  "http://127.0.0.1:5877/art/characters/tidus/attack.png",
+  "http://127.0.0.1:5877/art/characters/tidus/cast.png",
+  "http://127.0.0.1:5877/art/characters/tidus/item.png",
+  "http://127.0.0.1:5877/art/characters/tidus/hurt.png",
+  "http://127.0.0.1:5877/art/characters/tidus/ko.png",
+  "http://127.0.0.1:5877/art/characters/tidus/defend.webp",
+  "http://127.0.0.1:5877/art/characters/yuna/attack.png",
+  "http://127.0.0.1:5877/art/characters/yuna/cast.png",
+  "http://127.0.0.1:5877/art/characters/yuna/item.png",
+  "http://127.0.0.1:5877/art/characters/yuna/hurt.png",
+  "http://127.0.0.1:5877/art/characters/yuna/ko.png",
+  "http://127.0.0.1:5877/art/characters/auron/attack.png",
+  "http://127.0.0.1:5877/art/characters/auron/cast.png",
+  "http://127.0.0.1:5877/art/characters/auron/item.png",
+  "http://127.0.0.1:5877/art/characters/auron/hurt.png",
+  "http://127.0.0.1:5877/audio/music/victory-ffx.mp3",
+  "http://127.0.0.1:5877/art/characters/auron/ko.png",
+  "http://127.0.0.1:5877/art/characters/tidus/victory.png",
+  "http://127.0.0.1:5877/art/characters/tidus/sleep.png",
+  "http://127.0.0.1:5877/art/characters/tidus/critical.png",
+  "http://127.0.0.1:5877/art/characters/tidus/follow.png",
+  "http://127.0.0.1:5877/art/characters/tidus/od-energy-rain.png",
+  "http://127.0.0.1:5877/audio/music/defeat-ffx.mp3",
+  "http://127.0.0.1:5877/art/characters/tidus/od-slice-and-dice.png",
+  "http://127.0.0.1:5877/art/characters/yuna/victory.png",
+  "http://127.0.0.1:5877/art/characters/yuna/sleep.png",
+  "http://127.0.0.1:5877/art/characters/yuna/critical.png",
+  "http://127.0.0.1:5877/art/characters/yuna/follow.png",
+  "http://127.0.0.1:5877/art/characters/auron/victory.png",
+  "http://127.0.0.1:5877/art/characters/auron/sleep.png",
+  "http://127.0.0.1:5877/art/characters/auron/critical.png",
+  "http://127.0.0.1:5877/art/characters/auron/follow.webp",
+  "http://127.0.0.1:5877/art/pause/tidus.2x.webp",
+  "http://127.0.0.1:5877/art/pause/yuna.2x.webp",
+  "http://127.0.0.1:5877/art/pause/auron.2x.webp",
+  "http://127.0.0.1:5877/audio/voice/sin-face/sin-face.pre.001.mp3",
+  "http://127.0.0.1:5877/audio/voice/sin-face/sin-face.pre.002.mp3",
+  "http://127.0.0.1:5877/audio/voice/sin-face/sin-face.pre.003.mp3",
+  "http://127.0.0.1:5877/audio/voice/sin-face/sin-face.pre.004.mp3",
+  "http://127.0.0.1:5877/audio/voice/sin-face/sin-face.pre.005.mp3",
+  "http://127.0.0.1:5877/audio/music/pause.mp3",
+  "http://127.0.0.1:5877/art/pause/ch18-sin-face.2x.webp",
+  "http://127.0.0.1:5877/audio/voice/sin-face/sin-face.pre.006.mp3",
+  "http://127.0.0.1:5877/audio/voice/sin-face/sin-face.pre.007.mp3",
+  "http://127.0.0.1:5877/audio/voice/sin-face/sin-face.pre.008.mp3",
+  "http://127.0.0.1:5877/art/characters/overdrive-sin/stage-0.png",
+  "http://127.0.0.1:5877/art/portraits/overdrive-sin.png",
+  "http://127.0.0.1:5877/art/pause/tidus.webp",
+  "http://127.0.0.1:5877/art/portrait-parts/tidus/2x/mouth-open-smile.png",
+  "http://127.0.0.1:5877/art/portrait-parts/tidus/2x/mouth-concerned-press.png",
+  "http://127.0.0.1:5877/art/portrait-parts/tidus/2x/lidR-closed.png",
+  "http://127.0.0.1:5877/art/portrait-parts/tidus/2x/lidL-closed.png",
+  "http://127.0.0.1:5877/art/portrait-parts/tidus/2x/eyeR-socket.webp",
+  "http://127.0.0.1:5877/art/portrait-parts/tidus/2x/eyeR-iris.webp",
+  "http://127.0.0.1:5877/art/portrait-parts/tidus/2x/eyeR-catch.png",
+  "http://127.0.0.1:5877/art/portrait-parts/tidus/2x/eyeR-window.png",
+  "http://127.0.0.1:5877/art/portrait-parts/tidus/2x/eyeL-socket.webp",
+  "http://127.0.0.1:5877/art/portrait-parts/tidus/2x/eyeL-iris.webp",
+  "http://127.0.0.1:5877/art/portrait-parts/tidus/2x/eyeL-catch.png",
+  "http://127.0.0.1:5877/art/portrait-parts/tidus/2x/eyeL-window.png",
+  "http://127.0.0.1:5877/art/pause/yuna.webp",
+  "http://127.0.0.1:5877/art/portrait-parts/yuna/2x/mouth-open-smile.png",
+  "http://127.0.0.1:5877/art/portrait-parts/yuna/2x/mouth-concerned-press.png",
+  "http://127.0.0.1:5877/art/portrait-parts/yuna/2x/lidR-closed.png",
+  "http://127.0.0.1:5877/art/portrait-parts/yuna/2x/lidL-closed.png",
+  "http://127.0.0.1:5877/art/portrait-parts/yuna/2x/eyeR-socket.webp",
+  "http://127.0.0.1:5877/art/portrait-parts/yuna/2x/eyeR-iris.webp",
+  "http://127.0.0.1:5877/art/portrait-parts/yuna/2x/eyeR-catch.png",
+  "http://127.0.0.1:5877/art/portrait-parts/yuna/2x/eyeR-window.png",
+  "http://127.0.0.1:5877/art/portrait-parts/yuna/2x/eyeL-socket.webp",
+  "http://127.0.0.1:5877/art/portrait-parts/yuna/2x/eyeL-iris.webp",
+  "http://127.0.0.1:5877/art/portrait-parts/yuna/2x/eyeL-catch.png",
+  "http://127.0.0.1:5877/art/portrait-parts/yuna/2x/eyeL-window.png",
+  "http://127.0.0.1:5877/art/pause/auron.webp",
+  "http://127.0.0.1:5877/art/portrait-parts/auron/2x/mouth-open-smile.png",
+  "http://127.0.0.1:5877/art/portrait-parts/auron/2x/mouth-concerned-press.png",
+  "http://127.0.0.1:5877/art/portrait-parts/auron/2x/lidL-closed.png",
+  "http://127.0.0.1:5877/art/characters/wakka/idle.png",
+  "http://127.0.0.1:5877/art/characters/wakka/ready.png",
+  "http://127.0.0.1:5877/art/characters/wakka/attack.png",
+  "http://127.0.0.1:5877/art/characters/wakka/cast.png",
+  "http://127.0.0.1:5877/art/characters/wakka/item.png",
+  "http://127.0.0.1:5877/art/characters/wakka/hurt.webp",
+  "http://127.0.0.1:5877/art/characters/wakka/ko.png",
+  "http://127.0.0.1:5877/art/characters/wakka/defend.webp",
+  "http://127.0.0.1:5877/art/characters/wakka/victory.png",
+  "http://127.0.0.1:5877/art/characters/wakka/sleep.png",
+  "http://127.0.0.1:5877/art/characters/wakka/critical.png",
+  "http://127.0.0.1:5877/art/characters/wakka/follow.png",
+  "http://127.0.0.1:5877/art/characters/lulu/idle.png",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/fdef.png",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/fod.png",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/braid.png",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/train.png",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/skirt.png",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/doll.png",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/torso.png",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/armA.png",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/armB.png",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/shoulders.png",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/head.png",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/fdef.rim.webp",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/fod.rim.webp",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/doll.rim.webp",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/train.rim.webp",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/braid.rim.webp",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/skirt.rim.webp",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/torso.rim.webp",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/armA.rim.webp",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/armB.rim.webp",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/shoulders.rim.webp",
+  "http://127.0.0.1:5877/art/rigs/lulu/1x/head.rim.webp",
+  "http://127.0.0.1:5877/art/characters/overdrive-sin/stage-1.png",
+  "http://127.0.0.1:5877/art/characters/overdrive-sin/stage-2.png"
+ ]
+}

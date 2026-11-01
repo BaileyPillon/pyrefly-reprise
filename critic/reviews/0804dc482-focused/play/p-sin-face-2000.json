@@ -1,0 +1,14 @@
+{
+ "tag": "p-sin-face-2000",
+ "chapter": "sin-face",
+ "base": "http://127.0.0.1:5877/",
+ "W": 2000,
+ "H": 1012,
+ "phone": false,
+ "steps": [],
+ "bundle": "http://127.0.0.1:5877/assets/index-BtjHKsK_.js",
+ "error": "no first menu after 240000 ms (screen battle)",
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": []
+}
