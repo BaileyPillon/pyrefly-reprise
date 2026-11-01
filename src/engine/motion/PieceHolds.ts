@@ -126,7 +126,7 @@ export const PIECE_HOLDS: Readonly<Record<string, Readonly<Partial<Record<Treate
     // `booth-b4` (r70 live-gap pass, FFX only): the real clips' return flip, scaled for Chapter I's Tidus, is drawn 1.66 times larger here. Held: the house curves (what `?curves=new` plays) play in Chapter III; Chapter I keeps its real clips.
     real:
       'FFX, Chapter III: Tidus\'s approved Chapter I return flip (the real-snappy clip\'s returnProfile) is drawn 1.66 times larger in Chapter III and reads as 169-287 px one-frame attack hops and 306-417 px Energy Rain leaps that release 69\'s look does not have ' +
-      '(live gap pass of release 70, D:/Tools/pyrefly-scratch/2026-10-31/r70/live-gaps2/). Lifts when the flip is scaled to the figure\'s drawn size and a CHK-027 run of Chapter III shows no teleport.',
+      '(the live gap pass of release 70). Lifts when the flip is scaled to the figure\'s drawn size and a CHK-027 run of Chapter III shows no teleport.',
   }),
   // UNTREATED in the r71 verdict pass (`docs/handoff/booth-b4.md` section 12): Chapter XII is off `TREATED_CHAPTERS` again (job HUD-1: the disc strip and its note are painted over the F1 turn strip at every width under 1920, and job HUD-3: the Sensor plate overlaps the target plate; two majors, introduced, regressions against release 70). It left in the r70 pass for the Enemy Intent card against the party panel and came back on `booth-ffx-b4-hud` with the card fixed. These holds are batch 3b's own and are unread while it is off the list.
   'seymour-omnis': Object.freeze({
