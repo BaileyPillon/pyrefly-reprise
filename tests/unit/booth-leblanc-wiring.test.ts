@@ -118,9 +118,9 @@ describe('`__pyrefly.treated()`', () => {
       'ffx2-fallen-aeons': ['hd2d', 'arena', 'cam', 'breath', 'moments'],
       'ffx2-den-of-woe': ['cam', 'breath', 'moments'],
       'ffx2-trema': ['cam', 'breath', 'moments'],
-      'evrae-airship': ['hd2d', 'arena', 'breath', 'cam', 'moments'], // booth-b4-last; the r71 verdict added the look
-      'sin-face': ['card', 'breath', 'cam', 'moments', 'smear'],
-      'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments'],
+      'evrae-airship': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'], // booth-b4-last; the r71 verdict added the look; booth-b4 held the real clips (R71-C2)
+      'sin-face': ['card', 'breath', 'cam', 'moments', 'smear', 'real'], // booth-b4 held the real clips (R71-C1)
+      'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'], // booth-b4 held the real clips (R71-C3)
       'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'],
     });
     expect(all.running).toBeNull();

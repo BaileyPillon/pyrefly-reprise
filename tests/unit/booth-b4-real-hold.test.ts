@@ -40,9 +40,9 @@ describe('Chapter III holds the real clips (booth-b4)', () => {
     expect(inDemoChapter(I, 'real')).toBe(true);
   });
 
-  it('the hold is the one FFX chapter that holds real: no other chapter in the table holds it, and Chapter III still holds its breath and its moments beside it', () => {
+  it('the FFX chapters that hold real are Chapter III and (the focused review of 10b426248) VIII, XVIII and the Mirror Aeons: no other chapter in the table holds it, and Chapter III still holds its breath and its moments beside it', () => {
     const holders = Object.entries(PIECE_HOLDS).filter(([, rows]) => rows.real !== undefined).map(([id]) => id);
-    expect(holders).toEqual([III]);
+    expect(holders.sort()).toEqual([III, 'evrae-airship', 'mirror-aeons', 'sin-face'].sort()); // all four are FFX chapters; no FFX-2 chapter holds real (booth-b4-real-hold-r71.test.ts pins the three)
     expect(Object.keys(PIECE_HOLDS[III]!)).toEqual(['breath', 'moments', 'real']);
   });
 
