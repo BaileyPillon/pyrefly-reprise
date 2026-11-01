@@ -43,7 +43,7 @@ const AFTER_R71: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readon
   'ffx2-vegnagun-shuyin': { game: 'ffx2', held: ['hd2d', 'arena', 'cam', 'breath', 'moments'] }, // V: ships as built (the held sky equals live's)
   'ffx2-leblanc': { game: 'ffx2', held: ['breath', 'cam', 'moments'] }, // VI
   'seymour-anima-macalania': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // VII
-  'evrae-airship': { game: 'ffx', held: ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'] }, // VIII: the r71 verdict added hd2d and arena; the focused review of 10b426248 added real (R71-C2)
+  'evrae-airship': { game: 'ffx', held: ['hd2d', 'arena', 'breath', 'cam', 'moments'] }, // VIII: the r71 verdict added hd2d and arena; the focused review of 10b426248 added real (R71-C2); r73-fit lifted it
   'seymour-omnis': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // XII: back in r72-hud (the strip right-anchored, the Sensor card under the strip, the ribbon known to the solver)
   'seymour-natus': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // X
   'ffx2-fallen-aeons': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XI: shipped in r71 with hd2d and arena held too; r72 lifted those two (grade C by default; `?skygrade=today` is r71's XI: tests/unit/booth-r72-sky.test.ts)
@@ -52,7 +52,7 @@ const AFTER_R71: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readon
   'ffx2-den-of-woe': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XV
   'ffx2-ixion-djose': { game: 'ffx2', held: ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'] }, // XVI: ships as built, Ixion stays (job J-B)
   'sin-face': { game: 'ffx', held: ['card', 'breath', 'cam', 'moments', 'smear', 'real'] }, // XVIII: ships as built; the focused review of 10b426248 added real (R71-C1)
-  'mirror-aeons': { game: 'ffx', held: ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'] }, // 27: ships as built; the focused review of 10b426248 added real (R71-C3)
+  'mirror-aeons': { game: 'ffx', held: ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments'] }, // 27: ships as built; the focused review of 10b426248 added real (R71-C3); r73-fit lifted it
 };
 
 /** Taken off the list AFTER the r71 verdicts, by the driver's call on the second focused review of the release 71 candidate (`critic/reviews/4c01379d4-focused`, R71-C1; 2026-11-01): Chapter XVIII (FFX only). Its row in the table above stays (the rows are kept, unread); `booth-b4-r71-sin-face-off.test.ts` pins the withdrawal. */
@@ -124,7 +124,7 @@ describe('Chapters IX and XII are back on the list (r72-hud, FFX only), `since` 
 
 describe('Chapter VIII (Evrae, FFX only) ships with the HD-2D look and the arena grade held', () => {
   it('holds hd2d and arena first, then the three it held, each with the measured numbers and a "Lifts when"; every other piece plays', () => {
-    expect(Object.keys(PIECE_HOLDS['evrae-airship']!)).toEqual(['hd2d', 'arena', 'breath', 'cam', 'moments', 'real']); // `real` appended after the focused review of 10b426248 (R71-C2)
+    expect(Object.keys(PIECE_HOLDS['evrae-airship']!)).toEqual(['hd2d', 'arena', 'breath', 'cam', 'moments']); // `real` was appended after the focused review of 10b426248 (R71-C2) and lifted at r73-fit
     for (const p of ['hd2d', 'arena'] as const) {
       const why = treatedHold('evrae-airship', p)!;
       expect(why.length, p).toBeGreaterThan(300);
@@ -138,7 +138,7 @@ describe('Chapter VIII (Evrae, FFX only) ships with the HD-2D look and the arena
     expect(treatedHold('evrae-airship', 'hd2d')).toMatch(/no more than 3 points over/);
     expect(treatedHold('evrae-airship', 'hd2d')).toMatch(/1\.29 and 1\.20 percent of pixels over 240 and a sky band at 1\.38 and 0\.88 percent/); // the held frame, read in the apply pass (predicted at most 3.7 and 3)
     expect(treatedHold('evrae-airship', 'arena')).toMatch(/evrae-airship-deck/);
-    for (const p of TREATED_PIECES) expect(isTreatedChapter('evrae-airship', p), p).toBe(!['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'].includes(p));
+    for (const p of TREATED_PIECES) expect(isTreatedChapter('evrae-airship', p), p).toBe(!['hd2d', 'arena', 'breath', 'cam', 'moments'].includes(p));
   });
 
   it('the plate draws as release 68 draws it: no look, no arena grade, while the rows stay in their tables (unread) and the pro look, HUD and rim play', () => {
@@ -147,7 +147,7 @@ describe('Chapter VIII (Evrae, FFX only) ships with the HD-2D look and the arena
     expect(CHAPTER_LOOKS['evrae-airship']).toEqual({ name: 'hd2d', strength: 'bold' });
     expect(FFX_LAST_ARENA['evrae-airship-deck']).toBeDefined();
     for (const p of ['hud', 'look', 'rim', 'boss', 'ending', 'opening', 'curves', 'feel', 'fx', 'audio', 'governor'] as const) expect(isTreatedChapter('evrae-airship', p), p).toBe(true);
-    expect(isTreatedChapter('evrae-airship', 'real')).toBe(false); // held after the focused review of 10b426248 (R71-C2): the house curves play
+    expect(isTreatedChapter('evrae-airship', 'real')).toBe(true); // held after the focused review of 10b426248 (R71-C2), lifted at r73-fit (ReturnPace.ts paces Wakka's two-frame return): the real clips play
   });
 
   it('the camera hold no longer says the look\'s tilt-shift band stays (the look is held too); Sin\'s face, which keeps the look, still says it', () => {
@@ -166,7 +166,7 @@ describe('Chapter VIII (Evrae, FFX only) ships with the HD-2D look and the arena
 });
 
 describe('the chapters that ship as built hold nothing new', () => {
-  it('the Farplane\'s two: V keeps hd2d and arena held (XI plays them since r72) and both play the rest; Ixion keeps the room looks held; the Mirror Aeons chapter keeps its card and looks held; Braska\'s chapter plays `real` (r72-motion lifted its hold: the return flip is fitted to the drawn size) while VIII, XVIII and the Mirror Aeons keep theirs, and Chapter I plays it', () => {
+  it('the Farplane\'s two: V keeps hd2d and arena held (XI plays them since r72) and both play the rest; Ixion keeps the room looks held; the Mirror Aeons chapter keeps its card and looks held; Braska\'s chapter plays `real` (r72-motion lifted its hold: the return flip is fitted to the drawn size) while XVIII (off the list) keeps its row (r73-fit lifted the rows of VIII and of the Mirror Aeons), and Chapter I plays it', () => {
     for (const id of ['ffx2-vegnagun-shuyin', 'ffx2-fallen-aeons']) expect(isTreatedChapter(id, 'hud'), id).toBe(true);
     expect(chapterLook('ffx2-vegnagun-shuyin')).toBeNull(); // Chapter V keeps both holds
     expect(proArenaFor('ffx2-vegnagun-shuyin', '')).toBe(false);
@@ -174,7 +174,8 @@ describe('the chapters that ship as built hold nothing new', () => {
     expect(proArenaFor('ffx2-fallen-aeons', '')).toBe(true);
     expect(isTreatedChapter('ffx2-ixion-djose', 'hd2d')).toBe(false);
     expect(isTreatedChapter('mirror-aeons', 'card')).toBe(false);
-    for (const id of ['evrae-airship', 'sin-face', 'mirror-aeons']) expect(isTreatedChapter(id, 'real'), id).toBe(false); // the focused review of 10b426248 (R71-C2, R71-C1, R71-C3) held the real clips in the three
+    expect(isTreatedChapter('sin-face', 'real')).toBe(false); // the focused review of 10b426248 (R71-C1) held the real clips in Sin's face (off the list, its row stays)
+    for (const id of ['evrae-airship', 'mirror-aeons']) expect(isTreatedChapter(id, 'real'), id).toBe(true); // R71-C2 and R71-C3 held them; r73-fit lifted both (the flip fit and the return pace)
     expect(isTreatedChapter('braskas-final-aeon', 'real')).toBe(true); // r72-motion: the hold is lifted (FlipFit scales Tidus's return flip to the drawn size)
     expect(isTreatedChapter('seymour-flux', 'real')).toBe(true);
   });

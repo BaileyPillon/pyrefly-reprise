@@ -89,9 +89,9 @@ describe('Braska\'s chapter has no `real` row any more, so no guard may require 
     expect(PIECE_HOLDS['braskas-final-aeon']?.real).toBeUndefined();
   });
 
-  it('the three kept `real` holds are the ones the handoff names: VIII, XVIII and the Mirror Aeons', () => {
+  it('the `real` holds that remain are the ones the handoff names: r73-fit lifted VIII and the Mirror Aeons, so only XVIII (off the list) keeps one', () => {
     const holders = Object.entries(PIECE_HOLDS).filter(([, rows]) => rows.real !== undefined).map(([id]) => id).sort();
-    expect(holders).toEqual(['evrae-airship', 'mirror-aeons', 'sin-face']);
+    expect(holders).toEqual(['sin-face']);
   });
 
   it('SKY_TODAY_HOLDS (shipped text, like PIECE_HOLDS) is Chapter XI only, with its two reasons', () => {

@@ -16,6 +16,7 @@ import { heftOf } from './ActorCurves.ts';
 import { curvesGame, curvesOn } from './CurvesSwitch.ts';
 import { flowProfile } from './RunEase.ts'; // MF-04: the strike after a run that flows into it plays a readable wind-up (`?run=flow`, FFX-2 only)
 import { returnFitOf } from './FlipFit.ts'; // r72-motion (FFX only): the return flip scaled to the figure's drawn size, outside the booth pair
+import { returnPaceOf } from './ReturnPace.ts'; // r73-fit (FFX only): a way home with no flip, stretched out of the settle to the figure's drawn lunge, outside the booth pair
 import { realCastLift, realProfileOf } from './RealBeats.ts'; // `?curves=real` / `real-snappy`: the real game's own numbers for this figure, when the table has them
 
 /** The presenter's playback speed scale for the move (1 normal, 0.32 fast, 0 skip), with the presenter's `timeScale`; floored so a skipped move still ends. */
@@ -37,7 +38,8 @@ export function startAttackMove(ctx: EventCtx, actor: ActorHandle | undefined, p
     const flow = ranIn && !real ? flowProfile() : undefined; // MF-04: only after FFX-2's run-in, and only under `?run=flow` or `pace`
     const timeScale = moveScale(ctx);
     const returnFit = returnFitOf(ctx, attackerId, real, timeScale); // r72-motion: undefined in the booth pair, for a house strike and for FFX-2
-    void actor.strike({ distance: plan.distance, game: curvesGame(), timeScale, arc: !ranIn, contact, ...(real ? { profile: real } : flow ? { profile: flow } : {}), ...(Object.keys(marks).length ? { marks } : {}), ...(returnFit ? { returnFit } : {}) });
+    const returnPace = returnPaceOf(ctx, attackerId, real, timeScale, plan.distance); // r73-fit: the same three exclusions, and a strike whose way home is a flip (the fit above scales those)
+    void actor.strike({ distance: plan.distance, game: curvesGame(), timeScale, arc: !ranIn, contact, ...(real ? { profile: real } : flow ? { profile: flow } : {}), ...(Object.keys(marks).length ? { marks } : {}), ...(returnFit ? { returnFit } : {}), ...(returnPace ? { returnPace } : {}) });
     return;
   }
   void Promise.all([actor?.lunge(plan.distance, LUNGE_MS, contact, plan.house), actor?.squash(260, 0.45)]);
