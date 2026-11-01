@@ -1,0 +1,59 @@
+{
+ "tag": "ts-sin-face-1.15",
+ "chapter": "sin-face",
+ "size": 1.15,
+ "base": "http://127.0.0.1:5871/",
+ "W": 1600,
+ "H": 900,
+ "attrs": {
+  "input": "keyboard",
+  "pad": "xbox",
+  "textSize": "115",
+  "textSizeWide": "115"
+ },
+ "probe": {
+  "hudf1": true,
+  "named": {
+   ".ffx-sinclock": {
+    "x": 600,
+    "y": 30,
+    "w": 236,
+    "h": 227
+   },
+   ".ffx-sinhud__gaze": {
+    "x": 600,
+    "y": 352,
+    "w": 237,
+    "h": 28
+   },
+   ".f1-ribbon": {
+    "x": 62,
+    "y": 31,
+    "w": 475,
+    "h": 72
+   },
+   ".ig-cmd-stack": {
+    "x": 70,
+    "y": 447,
+    "w": 513,
+    "h": 336
+   }
+  },
+  "overlaps": [],
+  "cls": [
+   "phud-panel{\"x\":0,\"y\":0,\"w\":0,\"h\":0}",
+   "phud-shade{\"x\":0,\"y\":0,\"w\":0,\"h\":0}",
+   "ffxhud__stage{\"x\":0,\"y\":0,\"w\":1600,\"h\":900}",
+   "ffxhud__stage ffxhud__lift{\"x\":0,\"y\":0,\"w\":1600,\"h\":900}",
+   "ffxhud__overlay{\"x\":0,\"y\":0,\"w\":1600,\"h\":900}",
+   "ig-surface{\"x\":0,\"y\":0,\"w\":1600,\"h\":900}",
+   "phud-foot{\"x\":0,\"y\":0,\"w\":0,\"h\":0}",
+   "phud-guide{\"x\":0,\"y\":0,\"w\":0,\"h\":0}",
+   "phud-card{\"x\":0,\"y\":0,\"w\":0,\"h\":0}",
+   "phud-target{\"x\":0,\"y\":0,\"w\":0,\"h\":0}",
+   "stfore-layer{\"x\":0,\"y\":0,\"w\":1600,\"h\":900}"
+  ],
+  "ids": "ffxhud ig hud-f1 f1-finish f1-cmd-open"
+ },
+ "consoleErrors": []
+}

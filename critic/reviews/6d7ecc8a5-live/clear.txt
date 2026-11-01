@@ -1,0 +1,2 @@
+  settled live: PASS
+  still pending deep: a live review cannot settle a deep obligation

@@ -1,0 +1,2473 @@
+[
+ {
+  "turn": 0,
+  "ms": 14,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Steal",
+   "target": "Guado Guardian A",
+   "menu": "Special"
+  },
+  "took": "Steal",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:2000/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:2000/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "guado-guardian-a",
+   "wanted": "guado-guardian-a",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 13,
+    "actor": "rikku",
+    "did": "Steal",
+    "targets": [
+     "guado-guardian-a"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 3442,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Talk",
+   "target": null,
+   "menu": null
+  },
+  "took": "Talk",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:2000/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:2000/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 17,
+    "actor": "tidus",
+    "did": "Talk",
+    "targets": [
+     "guado-guardian-a"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 2,
+  "ms": 7195,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Talk",
+   "target": null,
+   "menu": null
+  },
+  "took": "Talk",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:2000/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:2000/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 3,
+  "ms": 8654,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Talk",
+   "target": null,
+   "menu": null
+  },
+  "took": "Talk",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:2000/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:2000/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 22,
+    "actor": "yuna",
+    "did": "Talk",
+    "targets": [
+     "guado-guardian-a"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 12125,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Steal",
+   "target": "Guado Guardian B",
+   "menu": "Special"
+  },
+  "took": "Steal",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:2000/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:2000/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "guado-guardian-b",
+   "wanted": "guado-guardian-b",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 27,
+    "actor": "rikku",
+    "did": "Steal",
+    "targets": [
+     "guado-guardian-b"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 18401,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Haste",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Haste",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:2000/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:2000/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 37,
+    "actor": "tidus",
+    "did": "Haste",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 21846,
+  "actor": "command:yuna",
+  "want": {
+   "label": "NulShock",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "NulShock",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:2000/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:2000/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 44,
+    "actor": "yuna",
+    "did": "NulShock",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 26219,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Haste",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Haste",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:2000/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:2000/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 51,
+    "actor": "tidus",
+    "did": "Haste",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 29706,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Petrify Grenade",
+   "target": "all enemies",
+   "menu": "Items"
+  },
+  "took": "Petrify Grenade",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:2000/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:2000/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 55,
+    "actor": "rikku",
+    "did": "Petrify Grenade",
+    "targets": [
+     "guado-guardian-a",
+     "seymour-macalania",
+     "guado-guardian-b"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 41761,
+  "actor": "command:yuna",
+  "want": {
+   "label": "NulTide",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "NulTide",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 73,
+    "actor": "yuna",
+    "did": "NulTide",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 46270,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Poison Fang",
+   "target": "Seymour",
+   "menu": "Items"
+  },
+  "took": "Poison Fang",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 79,
+    "actor": "rikku",
+    "did": "Poison Fang",
+    "targets": [
+     "seymour-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 51385,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Haste",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Haste",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:4086/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 85,
+    "actor": "tidus",
+    "did": "Haste",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 54739,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:4086/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 89,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "seymour-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 56414,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:4036/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 93,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "seymour-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 60727,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:3302/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 103,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 64062,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:3302/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 109,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "seymour-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 65730,
+  "actor": "command:yuna",
+  "want": {
+   "label": "NulBlaze",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "NulBlaze",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:3141/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 114,
+    "actor": "yuna",
+    "did": "NulBlaze",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 69881,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:3141/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 120,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 73195,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:3141/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 126,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "seymour-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 98209,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Valefor",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": "Valefor",
+  "viaMenu": "Summon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 143,
+    "actor": "yuna",
+    "did": "Summon",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 102493,
+  "actor": "command:valefor",
+  "want": {
+   "label": "Sonic Wings",
+   "target": "Anima",
+   "menu": "Aeon"
+  },
+  "took": "Sonic Wings",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:1146/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:18000/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 147,
+    "actor": "valefor",
+    "did": "Sonic Wings",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 107445,
+  "actor": "command:valefor",
+  "want": {
+   "label": "Energy Ray",
+   "target": "Anima",
+   "menu": "Overdrive"
+  },
+  "took": "Energy Ray (one-item group, direct)",
+  "viaMenu": "Overdrive",
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 160,
+    "actor": "valefor",
+    "did": "Energy Ray",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 119146,
+  "actor": "command:valefor",
+  "want": {
+   "label": "Sonic Wings",
+   "target": "Anima",
+   "menu": "Aeon"
+  },
+  "took": "Sonic Wings",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:159/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:14339/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 184,
+    "actor": "valefor",
+    "did": "Sonic Wings",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 125832,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:13850/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 201,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 24,
+  "ms": 127498,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:12602/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 207,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 25,
+  "ms": 129166,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:12407/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 212,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 26,
+  "ms": 130865,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Ifrit",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": "Ifrit",
+  "viaMenu": "Summon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:11281/18000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 218,
+    "actor": "yuna",
+    "did": "Summon",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 27,
+  "ms": 134963,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Meteor Strike",
+   "target": "Anima",
+   "menu": "Aeon"
+  },
+  "took": "Meteor Strike",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:1515/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:11281/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 222,
+    "actor": "ifrit",
+    "did": "Meteor Strike",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 28,
+  "ms": 141709,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Meteor Strike",
+   "target": "Anima",
+   "menu": "Aeon"
+  },
+  "took": "Meteor Strike",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:1003/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:10404/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 240,
+    "actor": "ifrit",
+    "did": "Meteor Strike",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 29,
+  "ms": 148629,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Shield",
+   "target": "Ifrit",
+   "menu": "Aeon"
+  },
+  "took": "Shield",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:491/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:9543/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 257,
+    "actor": "ifrit",
+    "did": "Shield",
+    "targets": [
+     "ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 30,
+  "ms": 153428,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Shield",
+   "target": "Ifrit",
+   "menu": "Aeon"
+  },
+  "took": "Shield",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:491/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:9543/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 267,
+    "actor": "ifrit",
+    "did": "Shield",
+    "targets": [
+     "ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 31,
+  "ms": 163063,
+  "actor": "command:ifrit",
+  "want": {
+   "label": "Meteor Strike",
+   "target": "Anima",
+   "menu": "Aeon"
+  },
+  "took": "Meteor Strike",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:13/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:9543/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 298,
+    "actor": "ifrit",
+    "did": "Meteor Strike",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 32,
+  "ms": 170250,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:8666/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 313,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 33,
+  "ms": 171918,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:8480/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 318,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 34,
+  "ms": 173629,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:7246/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 324,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 35,
+  "ms": 175332,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Ixion",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": "Ixion",
+  "viaMenu": "Summon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:7060/18000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 329,
+    "actor": "yuna",
+    "did": "Summon",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 36,
+  "ms": 179718,
+  "actor": "command:ixion",
+  "want": {
+   "label": "Aerospark",
+   "target": "Anima",
+   "menu": "Aeon"
+  },
+  "took": "Aerospark",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:1513/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:7060/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 333,
+    "actor": "ixion",
+    "did": "Aerospark",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 37,
+  "ms": 187360,
+  "actor": "command:ixion",
+  "want": {
+   "label": "Aerospark",
+   "target": "Anima",
+   "menu": "Aeon"
+  },
+  "took": "Aerospark",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:1014/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:6085/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 351,
+    "actor": "ixion",
+    "did": "Aerospark",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 38,
+  "ms": 194582,
+  "actor": "command:ixion",
+  "want": {
+   "label": "Aerospark",
+   "target": "Anima",
+   "menu": "Aeon"
+  },
+  "took": "Aerospark",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:538/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:5088/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 368,
+    "actor": "ixion",
+    "did": "Aerospark",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 39,
+  "ms": 201533,
+  "actor": "command:ixion",
+  "want": {
+   "label": "Aerospark",
+   "target": "Anima",
+   "menu": "Aeon"
+  },
+  "took": "Aerospark",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:64/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:4121/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 384,
+    "actor": "ixion",
+    "did": "Aerospark",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 40,
+  "ms": 210206,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:3128/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 404,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 41,
+  "ms": 211910,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Anima",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:1889/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 410,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 42,
+  "ms": 213592,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Shiva",
+   "target": null,
+   "menu": "Summon"
+  },
+  "took": "Shiva",
+  "viaMenu": "Summon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:1530/18000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  },
+  "engineDid": [
+   {
+    "seq": 415,
+    "actor": "yuna",
+    "did": "Summon",
+    "targets": []
+   }
+  ]
+ },
+ {
+  "turn": 43,
+  "ms": 217827,
+  "actor": "command:shiva",
+  "want": {
+   "label": "Shield",
+   "target": "Shiva",
+   "menu": "Aeon"
+  },
+  "took": "Shield",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:1530/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 419,
+    "actor": "shiva",
+    "did": "Shield",
+    "targets": [
+     "shiva"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 44,
+  "ms": 222330,
+  "actor": "command:shiva",
+  "want": {
+   "label": "Shield",
+   "target": "Shiva",
+   "menu": "Aeon"
+  },
+  "took": "Shield",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:1342/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:1530/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 429,
+    "actor": "shiva",
+    "did": "Shield",
+    "targets": [
+     "shiva"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 45,
+  "ms": 230025,
+  "actor": "command:shiva",
+  "want": {
+   "label": "Heavenly Strike",
+   "target": "Anima",
+   "menu": "Aeon"
+  },
+  "took": "Heavenly Strike",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:911/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:1530/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 455,
+    "actor": "shiva",
+    "did": "Heavenly Strike",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 46,
+  "ms": 236983,
+  "actor": "command:shiva",
+  "want": {
+   "label": "Heavenly Strike",
+   "target": "Anima",
+   "menu": "Aeon"
+  },
+  "took": "Heavenly Strike",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:452/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:965/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 474,
+    "actor": "shiva",
+    "did": "Heavenly Strike",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 47,
+  "ms": 241587,
+  "actor": "command:shiva",
+  "want": {
+   "label": "Heavenly Strike",
+   "target": "Anima",
+   "menu": "Aeon"
+  },
+  "took": "Heavenly Strike",
+  "viaMenu": "Aeon",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:452/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:447/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 485,
+    "actor": "shiva",
+    "did": "Heavenly Strike",
+    "targets": [
+     "anima-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 48,
+  "ms": 257067,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Auron",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Auron",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:0/18000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 49,
+  "ms": 259490,
+  "actor": "command:auron",
+  "want": {
+   "label": "Magic Break",
+   "target": "Seymour",
+   "menu": "Special"
+  },
+  "took": "Magic Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:6000/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:0/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 509,
+    "actor": "auron",
+    "did": "Magic Break",
+    "targets": [
+     "seymour-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 50,
+  "ms": 263275,
+  "actor": "command:tidus",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:632/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:5077/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:0/18000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 514,
+    "actor": "tidus",
+    "did": "X-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 51,
+  "ms": 267363,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:5077/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:0/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 518,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "seymour-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 52,
+  "ms": 269064,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Shell",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Shell",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:3951/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:0/18000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 524,
+    "actor": "yuna",
+    "did": "Shell",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 53,
+  "ms": 273703,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Spiral Cut",
+   "target": "Seymour",
+   "menu": "Overdrive"
+  },
+  "took": "Spiral Cut",
+  "viaMenu": "Overdrive",
+  "engineHp": [
+   "tidus:1265/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:3951/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:0/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 529,
+    "actor": "tidus",
+    "did": "Spiral Cut",
+    "targets": [
+     "seymour-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 54,
+  "ms": 289190,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Shell",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Shell",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:824/1265",
+   "yuna:482/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:2261/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:0/18000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 542,
+    "actor": "yuna",
+    "did": "Shell",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 55,
+  "ms": 293638,
+  "actor": "command:tidus",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:824/1265",
+   "yuna:482/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:2261/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:0/18000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 546,
+    "actor": "tidus",
+    "did": "X-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 56,
+  "ms": 298064,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:824/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:2261/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:0/18000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 551,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "seymour-macalania"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 57,
+  "ms": 299774,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Shell",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Shell",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:824/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1900/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:989/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:0/18000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 557,
+    "actor": "yuna",
+    "did": "Shell",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 58,
+  "ms": 306940,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:824/1265",
+   "yuna:1182/1182",
+   "rikku:850/850",
+   "wakka:1375/1375",
+   "auron:1445/1900",
+   "lulu:850/850",
+   "kimahri:1200/1200",
+   "valefor:0/1146",
+   "ifrit:0/1515",
+   "ixion:0/1513",
+   "shiva:0/1342",
+   "guado-guardian-a:0/2000",
+   "seymour-macalania:989/6000",
+   "guado-guardian-b:0/2000",
+   "anima-macalania:0/18000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

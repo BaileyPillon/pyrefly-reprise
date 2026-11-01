@@ -1,0 +1,2524 @@
+{
+ "chapter": "seymour-natus",
+ "game": "ffx",
+ "goal": "win",
+ "size": "1600x900",
+ "base": "http://127.0.0.1:5871/",
+ "mode": "gpu",
+ "hooks": [
+  "window.__pyrefly.setSeed(1) before the first key (CHK-015 labelled setup hook, PR-0202)"
+ ],
+ "seedPinned": 1,
+ "seed": 1,
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1,
+   "links": 1,
+   "firstEnemyAction": null
+  }
+ ],
+ "firstEnemyAction": {
+  "seq": 9,
+  "actor": "mortibody",
+  "ability": "Blizzard",
+  "targets": []
+ },
+ "steps": [
+  {
+   "ms": 9340,
+   "k": "prepEscGoesTo",
+   "v": "party-prep"
+  },
+  {
+   "ms": 28643,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1
+   }
+  },
+  {
+   "ms": 53964,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 9,
+    "actor": "mortibody",
+    "ability": "Blizzard",
+    "targets": []
+   }
+  },
+  {
+   "ms": 179446,
+   "k": "fight",
+   "v": {
+    "outcome": "victory",
+    "turns": 26,
+    "ms": 135341,
+    "seams": 0,
+    "orders": 0
+   }
+  },
+  {
+   "ms": 185459,
+   "k": "continuity",
+   "v": "[continuity] seymour-natus: 147.879 s of battle, 8818 frames recorded, 144 swaps, 197 strips, 59.6 fps, 0 probe errors"
+  },
+  {
+   "ms": 185497,
+   "k": "continuity",
+   "v": "[continuity] seymour-natus: pose-measure D:\\pyrefly-release55\\docs\\target\\pose-measure.json (114 subjects, sha256 b8cead6d81a8, source harness-tree); build e3f51bf1; the candidate's own table"
+  },
+  {
+   "ms": 191458,
+   "k": "continuity",
+   "v": "[continuity] seymour-natus: CHK-026 PASS, CHK-027 PASS; max head jump 13.4% (0.2% registered, a control), stature 0.781 to 1.098 (0 out of band), max feet shift 0.8px (7.8px from the pixels), 0 snaps/min, worst swap jerk 0px (worst dash 202.3px), frame p99 22.6ms, 19 strips"
+  },
+  {
+   "ms": 206331,
+   "k": "postScene",
+   "v": {
+    "watch": {
+     "ms": 6054,
+     "shows": 1,
+     "advancedWithoutInput": false,
+     "firstLine": "We made camp under the trees, far from the city.",
+     "screenAfterWatch": "cutscene"
+    },
+    "taps": 5,
+    "holds": 0,
+    "ended": true
+   }
+  }
+ ],
+ "picks": [
+  {
+   "turn": 0,
+   "ms": 7,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Talk",
+    "target": null,
+    "menu": null
+   },
+   "took": "Talk",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:1650/1650",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1400/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:2935/2935",
+    "seymour-natus:36000/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 3,
+     "actor": "tidus",
+     "did": "Talk",
+     "targets": [
+      "seymour-natus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 1,
+   "ms": 13656,
+   "actor": "command:kimahri",
+   "want": {
+    "label": "Rikku",
+    "target": null,
+    "menu": "Switch"
+   },
+   "took": "Rikku",
+   "viaMenu": "Switch",
+   "engineHp": [
+    "tidus:2139/2420",
+    "yuna:1407/1650",
+    "kimahri:2009/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1400/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:2935/2935",
+    "seymour-natus:36000/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 2,
+   "ms": 16048,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Reflect",
+    "target": "Seymour Natus",
+    "menu": "White Magic"
+   },
+   "took": "Reflect",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:2139/2420",
+    "yuna:1407/1650",
+    "kimahri:2009/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1400/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:2935/2935",
+    "seymour-natus:36000/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "seymour-natus",
+    "wanted": "seymour-natus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 18,
+     "actor": "rikku",
+     "did": "Reflect",
+     "targets": [
+      "seymour-natus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 3,
+   "ms": 22889,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:1062/2420",
+    "yuna:1407/1650",
+    "kimahri:2009/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:2935/2935",
+    "seymour-natus:36000/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 30,
+     "actor": "yuna",
+     "did": "Al Bhed Potion",
+     "targets": [
+      "tidus",
+      "yuna",
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 4,
+   "ms": 27121,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Haste",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Haste",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:2062/2420",
+    "yuna:1650/1650",
+    "kimahri:2009/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:2935/2935",
+    "seymour-natus:36000/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 41,
+     "actor": "tidus",
+     "did": "Haste",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 5,
+   "ms": 30554,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Auron",
+    "target": null,
+    "menu": "Switch"
+   },
+   "took": "Auron",
+   "viaMenu": "Switch",
+   "engineHp": [
+    "tidus:2062/2420",
+    "yuna:1650/1650",
+    "kimahri:2009/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:2935/2935",
+    "seymour-natus:36000/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 6,
+   "ms": 32668,
+   "actor": "command:auron",
+   "want": {
+    "label": "Talk",
+    "target": null,
+    "menu": null
+   },
+   "took": "Talk",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2062/2420",
+    "yuna:1650/1650",
+    "kimahri:2009/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:2935/2935",
+    "seymour-natus:36000/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 46,
+     "actor": "auron",
+     "did": "Talk",
+     "targets": [
+      "seymour-natus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 7,
+   "ms": 44832,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Bahamut",
+    "target": null,
+    "menu": "Summon"
+   },
+   "took": "Bahamut",
+   "viaMenu": "Summon",
+   "engineHp": [
+    "tidus:1767/2420",
+    "yuna:1395/1650",
+    "kimahri:2009/2310",
+    "auron:3121/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:2935/2935",
+    "seymour-natus:36000/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   },
+   "engineDid": [
+    {
+     "seq": 59,
+     "actor": "yuna",
+     "did": "Summon",
+     "targets": []
+    }
+   ]
+  },
+  {
+   "turn": 8,
+   "ms": 49536,
+   "actor": "command:bahamut",
+   "want": {
+    "label": "Mega Flare",
+    "target": "Seymour Natus",
+    "menu": "Overdrive"
+   },
+   "took": "Mega Flare (one-item group, direct)",
+   "viaMenu": "Overdrive",
+   "target": {
+    "confirmed": true,
+    "target": "seymour-natus",
+    "wanted": "seymour-natus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 63,
+     "actor": "bahamut",
+     "did": "Mega Flare",
+     "targets": [
+      "seymour-natus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 9,
+   "ms": 56588,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Haste",
+    "target": "Auron",
+    "menu": "White Magic"
+   },
+   "took": "Haste",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:1767/2420",
+    "yuna:1395/1650",
+    "kimahri:2009/2310",
+    "auron:3121/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:30691/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 76,
+     "actor": "tidus",
+     "did": "Haste",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 10,
+   "ms": 60336,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Seymour Natus",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1767/2420",
+    "yuna:1395/1650",
+    "kimahri:2009/2310",
+    "auron:3121/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:30691/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "seymour-natus",
+    "wanted": "seymour-natus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 80,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "seymour-natus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 11,
+   "ms": 62290,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Seymour Natus",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1767/2420",
+    "yuna:1395/1650",
+    "kimahri:2009/2310",
+    "auron:3121/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:26905/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "seymour-natus",
+    "wanted": "seymour-natus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 84,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "seymour-natus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 12,
+   "ms": 69377,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Yuna",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:348/2420",
+    "yuna:182/1650",
+    "kimahri:2009/2310",
+    "auron:2812/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:24559/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 103,
+     "actor": "tidus",
+     "did": "Hi-Potion",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 13,
+   "ms": 73384,
+   "actor": "command:auron",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Tidus",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:348/2420",
+    "yuna:1182/1650",
+    "kimahri:2009/2310",
+    "auron:2812/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:24559/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 108,
+     "actor": "auron",
+     "did": "Hi-Potion",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 14,
+   "ms": 77258,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Talk",
+    "target": null,
+    "menu": null
+   },
+   "took": "Talk",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1348/2420",
+    "yuna:1182/1650",
+    "kimahri:2009/2310",
+    "auron:2812/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:24559/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 113,
+     "actor": "yuna",
+     "did": "Talk",
+     "targets": [
+      "seymour-natus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 15,
+   "ms": 86578,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Seymour Natus",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1348/2420",
+    "yuna:1182/1650",
+    "kimahri:2009/2310",
+    "auron:2812/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:24559/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "seymour-natus",
+    "wanted": "seymour-natus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 119,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "seymour-natus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 16,
+   "ms": 90618,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Seymour Natus",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1348/2420",
+    "yuna:1182/1650",
+    "kimahri:2009/2310",
+    "auron:2812/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:20292/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "seymour-natus",
+    "wanted": "seymour-natus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 128,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "seymour-natus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 17,
+   "ms": 93897,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Seymour Natus",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1348/2420",
+    "yuna:1008/1650",
+    "kimahri:2009/2310",
+    "auron:2812/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:16445/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "seymour-natus",
+    "wanted": "seymour-natus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 137,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "seymour-natus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 18,
+   "ms": 98254,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:1348/2420",
+    "yuna:1008/1650",
+    "kimahri:2009/2310",
+    "auron:2812/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:14107/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 147,
+     "actor": "tidus",
+     "did": "Al Bhed Potion",
+     "targets": [
+      "tidus",
+      "yuna",
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 19,
+   "ms": 102379,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Seymour Natus",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2348/2420",
+    "yuna:1650/1650",
+    "kimahri:2009/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:14107/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "seymour-natus",
+    "wanted": "seymour-natus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 154,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "seymour-natus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 20,
+   "ms": 104297,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Haste",
+    "target": "Auron",
+    "menu": "White Magic"
+   },
+   "took": "Haste",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:2348/2420",
+    "yuna:1650/1650",
+    "kimahri:2009/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:10275/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 159,
+     "actor": "tidus",
+     "did": "Haste",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 21,
+   "ms": 108129,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Shell",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Shell",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:2348/2420",
+    "yuna:1650/1650",
+    "kimahri:2009/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:10275/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 164,
+     "actor": "yuna",
+     "did": "Shell",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 22,
+   "ms": 115204,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Seymour Natus",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:1650/1650",
+    "kimahri:2009/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:10275/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "seymour-natus",
+    "wanted": "seymour-natus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 172,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "seymour-natus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 23,
+   "ms": 117166,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Seymour Natus",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:1650/1650",
+    "kimahri:2009/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:7991/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "seymour-natus",
+    "wanted": "seymour-natus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 177,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "seymour-natus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 24,
+   "ms": 121100,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:1650/1650",
+    "kimahri:2009/2310",
+    "auron:1227/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:3884/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 187,
+     "actor": "tidus",
+     "did": "Hi-Potion",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 25,
+   "ms": 127247,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Seymour Natus",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:1650/1650",
+    "kimahri:2009/2310",
+    "auron:2227/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1207/1400",
+    "valefor:1146/1146",
+    "ifrit:1515/1515",
+    "ixion:1513/1513",
+    "shiva:1342/1342",
+    "bahamut:0/2935",
+    "seymour-natus:3884/36000",
+    "mortibody:4000/4000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "seymour-natus",
+    "wanted": "seymour-natus",
+    "mismatch": false
+   }
+  }
+ ],
+ "seams": [],
+ "fails": [],
+ "contexts": {
+  "viewport": "1600x900",
+  "query": null,
+  "touch": null,
+  "gamepad": null,
+  "reduceMotion": null
+ },
+ "scriptedChange": "not applicable",
+ "budgetMs": 1800000,
+ "briefingText": "AURON “Nineteen fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.” ENTER / ESC SKIP — 20 SECONDS, ONCE D NEVER SHOW THIS AGAIN",
+ "boardAtEntry": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 19
+ },
+ "boardWalk": [
+  "seymour-flux",
+  "yunalesca",
+  "braskas-final-aeon",
+  "seymour-anima-macalania",
+  "evrae-airship",
+  "yojimbo-cavern",
+  "seymour-natus"
+ ],
+ "dossier": "AURON · 1 OF 3 “Start with this one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER X Seymour Natus 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVII XVIII XXVII X-2 IV V VI XI XIII XV XVI The guardians turn back on the bridge Seymour meets them at the end of the bridge and offers death as a mercy. Kimahri stands his ground, and the others come back for him. CTB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima VIII Evrae IX Yojimbo X Seymour Natus XII Seymour Omnis XIV Isaaru XVII Sin: the Fins and the Core XVIII Sin: the Face XXVII Mirror Aeons FINAL FANTASY X-2 IV Bahamut V Vegnagun VI Leblanc XI Fallen Aeons XIII Trema XV The Den of Woe XVI Ixion LOCATION Highbridge of Bevelle — before the Main Gate BOSS Seymour Natus + Mortibody PARTY T TIDUS Y YUNA K KIMAHRI BEST Not cleared LEFT/R",
+ "prepText": "AURON · 2 OF 3 “Your party is ready.” The tabs are for later. Start the battle. ESC SKIP THE GUIDE PARTY PREP X · SEYMOUR NATUS — HIGHBRIDGE OF BEVELLE — BEFORE THE MAIN GATE T Tidus S.LV 24 Y Yuna S.LV 18 K Kimahri S.LV 22 A Auron S.LV 26 W Wakka S.LV 24 L Lulu S.LV 24 R Rikku S.LV 41 CHAPTER STATS SPHERE GRID EQUIPMENT ITEMS OVERDRIVE FFX · X Seymour Natus The Guardians Turn Back Seymour waits at the end of the bridge with Maester Kinoc dead at his feet, offering Yuna death as a mercy. Kimahri stands his ground alone, and the others turn back for him. the city lit at night no longer a man Mortibody always comes back OBJECTIVES Soften the stone Survive Flare Defeat Seymour Natus TIP He has no Defense, so every swing lands in full. Soften a stone guardian at once, Haste only Tidus and Auron, send Bahamut alone, and have Rikku Reflect Natus so Mortibody’s Cura bounces off him. START BATTLE T Tidus HP 2420/2420 · MP 115/115 WARRIOR Y Yuna HP 1650/1650 · MP 270/270 SUMMONER K Kimahri HP 2310/2310 · MP 130/130 STOIC",
+ "prepEsc": "party-prep",
+ "preScene": {
+  "lines": [
+   "CHAPTER X · HIGHBRIDGE OF BEVELLE — BEFORE THE MAIN GATE The bells were still going when we reached the steps. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER X · HIGHBRIDGE OF BEVELLE — BEFORE THE MAIN GATE They had rifles on us. She put her staff down. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER X · HIGHBRIDGE OF BEVELLE — BEFORE THE MAIN GATE He kissed her. Then he told them to shoot us. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER X · HIGHBRIDGE OF BEVELLE — BEFORE THE MAIN GATE She stepped off the edge, and Valefor caught her. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU"
+  ],
+  "escOpens": "pause",
+  "holdsToSkip": 1
+ },
+ "firstState": {
+  "chapter": "seymour-natus",
+  "game": "ffx",
+  "scene": "bevelle-highbridge",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 1,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": true,
+  "exitIntent": null,
+  "playTimeMs": 3800.100000000002,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "seymour-natus",
+    "side": "enemy",
+    "art": "seymour-natus",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "mortibody",
+    "side": "enemy",
+    "art": "mortibody",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "tidus",
+    "side": "party",
+    "art": "tidus",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "yuna",
+    "side": "party",
+    "art": "yuna",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "kimahri",
+    "side": "party",
+    "art": "kimahri",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   }
+  ],
+  "spellFx": {
+   "fx": {
+    "new": true,
+    "guard": {
+     "level": 0,
+     "scaleStep": 0,
+     "calmMs": 16.7,
+     "budgetMs": 20.88,
+     "busyMs": 0,
+     "steps": 0
+    }
+   },
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0,
+   "cpuMeanMs": 0,
+   "flights": {
+    "launched": 0,
+    "landed": 0,
+    "live": 0,
+    "lastLaunchAt": 0,
+    "lastLandAt": 0
+   }
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "command:tidus",
+   "awaitingMenu": true,
+   "played": 3,
+   "lastEvents": [
+    {
+     "seq": 0,
+     "type": "sensor",
+     "ms": 0
+    },
+    {
+     "seq": 1,
+     "type": "sensor",
+     "ms": 0
+    },
+    {
+     "seq": 2,
+     "type": "turn-start",
+     "ms": 132
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 1,
+   "ticks": 0,
+   "events": 3,
+   "result": null,
+   "combatants": [
+    {
+     "id": "tidus",
+     "hp": 2420,
+     "maxHp": 2420,
+     "mp": 115,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "yuna",
+     "hp": 1650,
+     "maxHp": 1650,
+     "mp": 270,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "kimahri",
+     "hp": 2310,
+     "maxHp": 2310,
+     "mp": 130,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "auron",
+     "hp": 3410,
+     "maxHp": 3410,
+     "mp": 75,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "wakka",
+     "hp": 2530,
+     "maxHp": 2530,
+     "mp": 90,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "lulu",
+     "hp": 1375,
+     "maxHp": 1375,
+     "mp": 290,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "rikku",
+     "hp": 1400,
+     "maxHp": 1400,
+     "mp": 130,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "valefor",
+     "hp": 1146,
+     "maxHp": 1146,
+     "mp": 38,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ifrit",
+     "hp": 1515,
+     "maxHp": 1515,
+     "mp": 36,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ixion",
+     "hp": 1513,
+     "maxHp": 1513,
+     "mp": 40,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "shiva",
+     "hp": 1342,
+     "maxHp": 1342,
+     "mp": 40,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "bahamut",
+     "hp": 2935,
+     "maxHp": 2935,
+     "mp": 74,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "seymour-natus",
+     "hp": 36000,
+     "maxHp": 36000,
+     "mp": 200,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    },
+    {
+     "id": "mortibody",
+     "hp": 4000,
+     "maxHp": 4000,
+     "mp": 50,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "sensor",
+    "targetId": "seymour-natus",
+    "full": false,
+    "text": "Casts elemental magic, then Break, then Flare.",
+    "hp": 36000,
+    "maxHp": 36000,
+    "mp": 200,
+    "maxMp": 200,
+    "weaknesses": [],
+    "seq": 0
+   },
+   {
+    "type": "sensor",
+    "targetId": "mortibody",
+    "full": false,
+    "text": "Watch what it casts: its master answers in kind.",
+    "hp": 4000,
+    "maxHp": 4000,
+    "mp": 50,
+    "maxMp": 50,
+    "weaknesses": [],
+    "seq": 1
+   },
+   {
+    "type": "turn-start",
+    "actorId": "tidus",
+    "turn": 1,
+    "elapsedTicks": 0,
+    "seq": 2
+   }
+  ]
+ },
+ "cardFirst": {
+  "viewport": "1600x900",
+  "card": {
+   "x": 507,
+   "y": 244,
+   "w": 366,
+   "h": 171
+  },
+  "rows": 4,
+  "overlapPx2": 0,
+  "cardText": "NEXT BEST MOVE Tidus Talk NO MP Talking to him is free power in this fight: +10 Strength for Tidus and Auron, +10 Magic Defense for Yuna."
+ },
+ "focFirst": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 507,
+    "y": 244,
+    "w": 366,
+    "h": 171
+   }
+  ],
+  "cmd": [
+   {
+    "x": 70,
+    "y": 491,
+    "w": 446,
+    "h": 293
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Next best move",
+    "eff": 14.2
+   },
+   {
+    "t": "Tidus",
+    "eff": 17.5
+   },
+   {
+    "t": "Talk",
+    "eff": 21
+   },
+   {
+    "t": "no MP",
+    "eff": 14.2
+   },
+   {
+    "t": "Talking to him is free power in this fig",
+    "eff": 14.2
+   }
+  ]
+ },
+ "focAfterCoach": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 507,
+    "y": 244,
+    "w": 366,
+    "h": 171
+   }
+  ],
+  "cmd": [
+   {
+    "x": 70,
+    "y": 491,
+    "w": 446,
+    "h": 293
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Next best move",
+    "eff": 14.2
+   },
+   {
+    "t": "Tidus",
+    "eff": 17.5
+   },
+   {
+    "t": "Talk",
+    "eff": 21
+   },
+   {
+    "t": "no MP",
+    "eff": 14.2
+   },
+   {
+    "t": "Talking to him is free power in this fig",
+    "eff": 14.2
+   }
+  ]
+ },
+ "advisorText": "NEXT BEST MOVE Tidus Talk NO MP Talking to him is free power in this fight: +10 Strength for Tidus and Auron, +10 Magic Defense for Yuna.",
+ "advisorHiddenByN": true,
+ "intentText": " | MORTIBODY 2ND IN QUEUE Blizzard SCRIPTED Magical Ice damage to the whole party - never misses. ICE DAMAGE TIDUS 270–304 12% HP YUNA 228–258 15% HP KIMAHRI 273–309 13% HP",
+ "pause": {
+  "esc": {
+   "paused": true,
+   "text": "Tidus Mortibody Kimahri TALK ATTACK SPECIAL ×3 WHITE MAGIC ×2 ITEMS ×11 ▼ Tidus 2420 /2420 115 /115 OD Yuna 1650 /1650 270 /270 OD Kimahri 2310 /2310 130 /130 OD I MORTIBODY G GUIDE NEXT BEST MOVE Tidus Talk NO MP Talking to him is free power in this fight: +10 Strength for Tidus and Auron, +10 Magic Defense for Yuna. N HIDE MOVES Seymour Natus Tidus Talk no MP Enter Select G Intel Q Defend P Pause VICTORY THE PARTY HAS FALLEN ECHOES OF SPIRA · FINAL FANTASY X Q L1 TIDUS YUNA KIMAHRI CHAPTER GUIDE OPTIONS ACCESSIBILITY CONTROLS MUSIC R1 E BATTLE STATS HP 2420/2420 MP 115/115 STRENGTH 31 MAGIC 16 DEFENCE 20 MAGIC DEF 18 AGILITY 30 IN THIS FIGHT OVERDRIVE 45% MODE WARRIOR TURN ORDER 1ST OF 5 CHAPTER X · HIGHBRIDGE OF BEVELLE — BEFORE THE MAIN GATE — THE GUARDIANS TURN BACK SOFTEN THE STONE ESC RESUME H PAINTING ONLY"
+  },
+  "optionsText": "Tidus Mortibody Kimahri TALK ATTACK SPECIAL ×3 WHITE MAGIC ×2 ITEMS ×11 ▼ Tidus 2420 /2420 115 /115 OD Yuna 1650 /1650 270 /270 OD Kimahri 2310 /2310 130 /130 OD I MORTIBODY G GUIDE NEXT BEST MOVE Tidus Talk NO MP Talking to him is free power in this fight: +10 Strength for Tidus and Auron, +10 Magic Defense for Yuna. N HIDE MOVES Seymour Natus Tidus Talk no MP Enter Select G Intel Q Defend P Pause VICTORY THE PARTY HAS FALLEN ECHOES OF SPIRA · FINAL FANTASY X Q L1 TIDUS YUNA KIMAHRI CHAPTER GUIDE OPTIONS ACCESSIBILITY CONTROLS MUSIC R1 E SETTINGS MASTER VOLUME 80 MUSIC 70 SOUND EFFECTS 70 VOICE 90 VOICE-OVER ON TEXT SPEED 1x EYE CANDY ALL ON VISUAL STYLE HD-2D STRATEGY GUIDE ON BATTLE HELP ON PRESENTATION THE ECHO · B THIS ENCOUNTER REPLAY BRIEFING ▸ RESTART ENCOUNTER ▸ CHAPTER SELECT ▸ QUIT TO TITLE ▸ ABOUT CREDITS ▸ CHAPTER X · HIGHBRIDGE OF BEVELLE — BEFORE THE MAIN GATE — THE GUARDIANS TURN BACK SOFTEN THE STONE ESC RESUME H PAINTING ONLY",
+  "tabs": [
+   "Tidus",
+   "Yuna",
+   "Kimahri",
+   "Chapter",
+   "Guide",
+   "Options"
+  ],
+  "resumedByEsc": true,
+  "pOpens": true,
+  "pCloses": true
+ },
+ "firstRows": [
+  "Talk",
+  "Attack",
+  "Special",
+  "White Magic",
+  "Items"
+ ],
+ "targetsShown": [
+  "mortibody",
+  "seymour-natus"
+ ],
+ "afterTargetCancel": {
+  "screen": "battle",
+  "targets": 0,
+  "rows": 5
+ },
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "victory",
+   "seed": 1,
+   "turns": 26,
+   "firstEnemyAction": {
+    "seq": 9,
+    "actor": "mortibody",
+    "ability": "Blizzard",
+    "targets": []
+   },
+   "final": true,
+   "stalledAt": null
+  }
+ ],
+ "seamCard": [],
+ "pauseRecoveries": 0,
+ "misses": [],
+ "orders": [],
+ "escapes": [],
+ "targetMismatches": [],
+ "pickerPlays": [],
+ "stallRecoveries": 0,
+ "lastChain": {
+  "links": 1,
+  "chainLength": 1,
+  "phase": "play:victory",
+  "turn": 26,
+  "ms": 135075
+ },
+ "mgSince": null,
+ "emptyPicks": 0,
+ "lastPartySeq": 187,
+ "turns": 26,
+ "fightMs": 135341,
+ "afterFight": "cutscene",
+ "outcome": "victory",
+ "outcomeFrom": "results screen text",
+ "stalledAt": null,
+ "logKinds": {
+  "sensor": 2,
+  "turn-start": 35,
+  "action-start": 36,
+  "message": 6,
+  "action-end": 36,
+  "script-trigger": 3,
+  "damage": 36,
+  "overdrive-gauge": 14,
+  "switch": 2,
+  "mp-damage": 5,
+  "status-add": 14,
+  "status-remove": 9,
+  "summon": 1,
+  "dismiss": 1,
+  "counter": 1,
+  "ko": 1,
+  "victory": 1
+ },
+ "continuity": {
+  "file": "continuity/continuity.json",
+  "checks": {
+   "CHK-026": "PASS",
+   "CHK-027": "PASS"
+  },
+  "reasons": {
+   "CHK-026": [],
+   "CHK-027": []
+  },
+  "error": null
+ },
+ "post": {
+  "screen": "cutscene",
+  "lines": [
+   "We made camp under the trees, far from the city.",
+   "Nobody said much. The fire kept going out.",
+   "Yuna prayed like always. I don't think it helped.",
+   "Bevelle was shut to us after that.",
+   "So we went the only way left. The Calm Lands."
+  ],
+  "scene": {
+   "watch": {
+    "ms": 6054,
+    "shows": 1,
+    "advancedWithoutInput": false,
+    "firstLine": "We made camp under the trees, far from the city.",
+    "screenAfterWatch": "cutscene"
+   },
+   "taps": 5,
+   "holds": 0,
+   "ended": true,
+   "lines": [
+    "We made camp under the trees, far from the city.",
+    "Nobody said much. The fire kept going out.",
+    "Yuna prayed like always. I don't think it helped.",
+    "Bevelle was shut to us after that.",
+    "So we went the only way left. The Calm Lands."
+   ]
+  }
+ },
+ "resultsScreen": "results",
+ "resultsText": "HIGHBRIDGE OF BEVELLE — BEFORE THE MAIN GATE · CLEARED RESULTS · 2:36 Victory OVERKILL ×1 NEW BEST AP 9,450 ×5 PARTY GIL 3,500 ITEMS Lv. 2 Key Sphere ×4 T Tidus +13 S.Lv S.LV 37 · 93/1,203 AP +9,450AP Y Yuna +17 S.Lv S.LV 35 · 550/1,037 AP +9,450AP K Kimahri S.LV 22 · 0/327 AP · no full turn taken · no AP +0AP A Auron +11 S.Lv S.LV 37 · 936/1,203 AP +9,450AP R Rikku +5 S.Lv S.LV 46 · 376/2,181 AP +9,450AP CONFIRM ▸",
+ "afterConfirm": [],
+ "afterResults": "chapter-select",
+ "boardAfter": {
+  "selectedIndex": 6,
+  "selectedId": "seymour-natus",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [
+   "seymour-natus"
+  ],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 1,
+  "total": 19
+ },
+ "boardAfterReload": {
+  "selectedIndex": 6,
+  "selectedId": "seymour-natus",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [
+   "seymour-natus"
+  ],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 1,
+  "total": 19
+ },
+ "dboxTimeline": [
+  {
+   "ms": 9771,
+   "lastMs": 14920,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "The bells were still going when we reached the steps.",
+   "portrait": null,
+   "narrate": true,
+   "show": 1
+  },
+  {
+   "ms": 14955,
+   "lastMs": 16438,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "They had rifles on us. She put her staff down.",
+   "portrait": null,
+   "narrate": true,
+   "show": 2
+  },
+  {
+   "ms": 16471,
+   "lastMs": 17937,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "He kissed her. Then he told them to shoot us.",
+   "portrait": null,
+   "narrate": true,
+   "show": 3
+  },
+  {
+   "ms": 17970,
+   "lastMs": 19454,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "She stepped off the edge, and Valefor caught her.",
+   "portrait": null,
+   "narrate": true,
+   "show": 4
+  },
+  {
+   "ms": 19487,
+   "lastMs": 21434,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "I thought that was the end of it. It wasn't close.",
+   "portrait": null,
+   "narrate": true,
+   "show": 5
+  },
+  {
+   "ms": 21537,
+   "lastMs": 21537,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "They tried us in a room full of the dead.",
+   "portrait": null,
+   "narrate": true,
+   "show": 6
+  },
+  {
+   "ms": 21554,
+   "lastMs": 21554,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "Then they dropped us in the dark to get rid of us.",
+   "portrait": null,
+   "narrate": true,
+   "show": 7
+  },
+  {
+   "ms": 21571,
+   "lastMs": 21571,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "The water tasted like rust. We swam out anyway.",
+   "portrait": null,
+   "narrate": true,
+   "show": 8
+  },
+  {
+   "ms": 21588,
+   "lastMs": 21605,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "We found each other at the bridge. All of us.",
+   "portrait": null,
+   "narrate": true,
+   "show": 9
+  },
+  {
+   "ms": 21638,
+   "lastMs": 21638,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "Yunie! You're okay! You're okay, right?",
+   "portrait": "rikku.webp",
+   "narrate": false,
+   "show": 10
+  },
+  {
+   "ms": 21654,
+   "lastMs": 21654,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "I'm all right. I'm sorry I made you worry.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 11
+  },
+  {
+   "ms": 21671,
+   "lastMs": 21687,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "Nobody's okay. But everybody's here, ya?",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 12
+  },
+  {
+   "ms": 21704,
+   "lastMs": 21704,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Kinoc.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 13
+  },
+  {
+   "ms": 21722,
+   "lastMs": 21722,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "He was afraid, so I gave him rest. It was a kindness.",
+   "portrait": "seymour-macalania.webp",
+   "narrate": false,
+   "show": 14
+  },
+  {
+   "ms": 21739,
+   "lastMs": 21739,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "Spira only knows how to hurt, Lady Yuna.",
+   "portrait": "seymour-macalania.webp",
+   "narrate": false,
+   "show": 15
+  },
+  {
+   "ms": 21754,
+   "lastMs": 21754,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "Come to Zanarkand with me. I will end all of it.",
+   "portrait": "seymour-macalania.webp",
+   "narrate": false,
+   "show": 16
+  },
+  {
+   "ms": 21771,
+   "lastMs": 21771,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "End it how? By becoming the thing that eats it?",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 17
+  },
+  {
+   "ms": 21787,
+   "lastMs": 21804,
+   "screen": "cutscene",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "By becoming the only mercy Spira has left.",
+   "portrait": "seymour-macalania.webp",
+   "narrate": false,
+   "show": 18
+  },
+  {
+   "ms": 21821,
+   "lastMs": 21887,
+   "screen": "cutscene",
+   "speaker": "Kimahri",
+   "role": "Guardian",
+   "text": "Yuna goes. Kimahri stays.",
+   "portrait": "kimahri.png",
+   "narrate": false,
+   "show": 19
+  },
+  {
+   "ms": 21939,
+   "lastMs": 21939,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Go. Now.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 20
+  },
+  {
+   "ms": 21954,
+   "lastMs": 21971,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "Yuna. Come.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 21
+  },
+  {
+   "ms": 21988,
+   "lastMs": 21988,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "He is my guardian.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 22
+  },
+  {
+   "ms": 22005,
+   "lastMs": 22021,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Then so are we. All of us.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 23
+  },
+  {
+   "ms": 22038,
+   "lastMs": 22048,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Hmph.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 24,
+   "endMs": 22048
+  },
+  {
+   "ms": 48121,
+   "lastMs": 50756,
+   "screen": "battle",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Stop talking. You never say anything.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 25
+  },
+  {
+   "ms": 50787,
+   "lastMs": 53237,
+   "screen": "battle",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "Then listen, son of Jecht. It is almost over.",
+   "portrait": "seymour-natus.webp",
+   "narrate": false,
+   "show": 26,
+   "endMs": 53237
+  },
+  {
+   "ms": 80103,
+   "lastMs": 83186,
+   "screen": "battle",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Kinoc was my friend once. Fool that he was.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 27
+  },
+  {
+   "ms": 83220,
+   "lastMs": 85637,
+   "screen": "battle",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "He thanked me, at the end. Ask him yourself.",
+   "portrait": "seymour-natus.webp",
+   "narrate": false,
+   "show": 28,
+   "endMs": 85637
+  },
+  {
+   "ms": 124684,
+   "lastMs": 127468,
+   "screen": "battle",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "You belong on the Farplane. I'll send you there.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 29
+  },
+  {
+   "ms": 127501,
+   "lastMs": 129884,
+   "screen": "battle",
+   "speaker": "Seymour",
+   "role": "Maester",
+   "text": "Then you will have to catch me, Lady Yuna.",
+   "portrait": "seymour-natus.webp",
+   "narrate": false,
+   "show": 30,
+   "endMs": 129884
+  },
+  {
+   "ms": 180464,
+   "lastMs": 198281,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "We made camp under the trees, far from the city.",
+   "portrait": null,
+   "narrate": true,
+   "show": 31
+  },
+  {
+   "ms": 198314,
+   "lastMs": 199781,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "Nobody said much. The fire kept going out.",
+   "portrait": null,
+   "narrate": true,
+   "show": 32
+  },
+  {
+   "ms": 199813,
+   "lastMs": 201296,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "Yuna prayed like always. I don't think it helped.",
+   "portrait": null,
+   "narrate": true,
+   "show": 33
+  },
+  {
+   "ms": 201331,
+   "lastMs": 202814,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "Bevelle was shut to us after that.",
+   "portrait": null,
+   "narrate": true,
+   "show": 34
+  },
+  {
+   "ms": 202848,
+   "lastMs": 205630,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "So we went the only way left. The Calm Lands.",
+   "portrait": null,
+   "narrate": true,
+   "show": 35,
+   "endMs": 205713
+  }
+ ],
+ "audioDebugFile": {
+  "file": "seymour-natus-win-e3f51bf18/audio-debug.jsonl",
+  "samples": 4,
+  "note": "one whole audioDebug() per line; nothing cut"
+ },
+ "minutes": 3.56,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "media": [
+  "art/title/echo.webp",
+  "art/characters/auron/idle.png",
+  "art/backdrops/dreams-end.webp",
+  "art/backdrops/gagazet.webp",
+  "art/characters/mortiorchis/idle.png",
+  "art/characters/seymour-flux-body/idle.png",
+  "art/portraits/tidus.webp",
+  "art/portraits/yuna.webp",
+  "art/portraits/kimahri.png",
+  "art/backdrops/gagazet.thumb.webp",
+  "art/characters/seymour-flux-body/idle.thumb.png",
+  "art/backdrops/zanarkand-dome.thumb.webp",
+  "art/characters/yunalesca-1/idle.thumb.png",
+  "art/backdrops/bevelle-underground.thumb.webp",
+  "art/characters/ffx2-bahamut/idle.thumb.png",
+  "art/backdrops/djose-chamber-provisional.thumb.webp",
+  "art/characters/x2-ixion/idle.thumb.png",
+  "art/backdrops/dreams-end.thumb.webp",
+  "art/characters/braskas-final-aeon-1/idle.thumb.png",
+  "art/backdrops/den-of-woe.thumb.webp",
+  "art/characters/baralai-shade/idle.thumb.png",
+  "art/backdrops/macalania-temple.thumb.webp",
+  "art/characters/anima/idle.thumb.png",
+  "art/backdrops/via-infinito.thumb.webp",
+  "art/characters/trema/idle.thumb.png",
+  "art/backdrops/evrae-airship-deck.thumb.webp",
+  "art/characters/evrae/idle.thumb.png",
+  "art/backdrops/road-to-the-farplane.thumb.webp",
+  "art/characters/x2-shiva/idle.thumb.png",
+  "art/backdrops/cavern-stolen-fayth.thumb.webp",
+  "art/characters/yojimbo-cavern/idle.thumb.png",
+  "art/backdrops/leblanc-last-room.thumb.webp",
+  "art/characters/leblanc/idle.thumb.png",
+  "art/backdrops/bevelle-highbridge.thumb.webp",
+  "art/characters/seymour-natus/idle.thumb.png",
+  "art/backdrops/farplane.thumb.webp",
+  "art/characters/vegnagun-body/idle.thumb.png",
+  "art/backdrops/garden-of-pain.thumb.webp",
+  "art/characters/seymour-omnis/idle.thumb.png",
+  "art/backdrops/via-purifico.thumb.webp",
+  "art/characters/isaaru/idle.thumb.png",
+  "art/backdrops/mushroom-rock-road.thumb.webp",
+  "art/characters/dark-mindy/idle.thumb.png",
+  "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+  "art/characters/sin-left-fin/idle.thumb.png",
+  "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+  "art/characters/overdrive-sin/idle.thumb.png",
+  "art/portraits/auron.webp",
+  "art/backdrops/zanarkand-dome.webp",
+  "art/characters/yunalesca-1/idle.png",
+  "art/portraits/yuna-x2.webp",
+  "art/portraits/rikku-x2.webp",
+  "art/portraits/paine.webp",
+  "art/backdrops/bevelle-underground.webp",
+  "art/characters/ffx2-bahamut/idle.png",
+  "art/backdrops/djose-chamber-provisional.webp",
+  "art/characters/x2-ixion/idle.png",
+  "art/characters/braskas-final-aeon-1/idle.png",
+  "art/backdrops/den-of-woe.webp",
+  "art/characters/nooj-shade/idle.png",
+  "art/characters/gippal-shade/idle.png",
+  "art/characters/baralai-shade/idle.png",
+  "art/portraits/rikku.webp",
+  "art/portraits/wakka.webp",
+  "art/portraits/lulu.webp",
+  "art/characters/yuna-white-mage/idle.png",
+  "art/characters/rikku-dark-knight/idle.png",
+  "art/characters/paine-warrior/idle.png",
+  "art/characters/paine-dark-knight/idle.png",
+  "art/characters/yuna-dark-knight/idle.png",
+  "art/characters/rikku-alchemist/idle.png",
+  "art/characters/yuna-gunner/idle.png",
+  "art/characters/rikku-thief/idle.png",
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "audio/sfx/sprite-v2.mp3",
+  "audio/music/chapter-select.mp3",
+  "art/portraits/seymour.webp",
+  "art/backdrops/macalania-temple.webp",
+  "art/characters/anima/idle.png",
+  "art/characters/tidus/idle.png",
+  "art/characters/yuna/idle.png",
+  "art/characters/kimahri/idle.png",
+  "art/backdrops/evrae-airship-deck.webp",
+  "art/characters/evrae/idle.png",
+  "art/backdrops/cavern-stolen-fayth.webp",
+  "art/characters/yojimbo-cavern/idle.png",
+  "art/backdrops/bevelle-highbridge.webp",
+  "art/characters/seymour-natus/idle.png",
+  "art/backdrops/garden-of-pain.webp",
+  "art/characters/seymour-omnis/idle.webp",
+  "art/backdrops/via-purifico.webp",
+  "art/characters/isaaru/idle.png",
+  "audio/sfx/parity-ffx-core.mp3",
+  "audio/music/scene-gagazet.mp3",
+  "art/pause/ch10-seymour-natus.webp",
+  "art/characters/seymour-natus/cast.png",
+  "art/characters/mortibody/idle.png",
+  "art/portraits/seymour-macalania.webp",
+  "audio/voice/seymour-natus/seymour-natus.mid-natus-talk-tidus.001.mp3",
+  "audio/voice/seymour-natus/seymour-natus.mid-natus-talk-auron.001.mp3",
+  "audio/voice/seymour-natus/seymour-natus.mid-natus-talk-yuna.001.mp3",
+  "audio/music/boss-seymour-natus.mp3",
+  "art/characters/tidus/ready.png",
+  "art/characters/yuna/ready.png",
+  "art/characters/kimahri/ready.png",
+  "art/characters/seymour-natus/hurt.png",
+  "art/characters/seymour-natus/ko.png",
+  "art/characters/mortibody/attack.png",
+  "art/characters/mortibody/cast.png",
+  "art/characters/mortibody/hurt.png",
+  "art/characters/tidus/attack.png",
+  "art/characters/tidus/cast.png",
+  "art/characters/tidus/item.png",
+  "audio/music/victory-ffx.mp3",
+  "art/characters/tidus/hurt.png",
+  "art/characters/tidus/ko.png",
+  "art/characters/tidus/defend.webp",
+  "art/characters/yuna/attack.png",
+  "art/characters/yuna/cast.png",
+  "art/characters/yuna/item.png",
+  "audio/music/defeat-ffx.mp3",
+  "art/characters/yuna/hurt.png",
+  "art/characters/yuna/ko.png",
+  "art/characters/kimahri/attack.png",
+  "art/characters/kimahri/cast.png",
+  "art/characters/kimahri/item.png",
+  "art/characters/kimahri/hurt.png",
+  "art/characters/kimahri/ko.png",
+  "art/characters/kimahri/defend.png",
+  "art/characters/tidus/victory.png",
+  "art/characters/tidus/sleep.png",
+  "art/characters/tidus/critical.png",
+  "art/characters/tidus/follow.png",
+  "art/characters/tidus/od-energy-rain.png",
+  "art/characters/tidus/od-slice-and-dice.png",
+  "art/characters/yuna/victory.png",
+  "art/characters/yuna/sleep.png",
+  "art/characters/yuna/critical.png",
+  "art/characters/yuna/follow.png",
+  "art/characters/kimahri/victory.png",
+  "art/characters/kimahri/sleep.png",
+  "art/characters/kimahri/critical.png",
+  "art/characters/kimahri/follow.png",
+  "art/pause/tidus.2x.webp",
+  "art/pause/yuna.2x.webp",
+  "art/pause/kimahri.2x.webp",
+  "audio/voice/seymour-natus/seymour-natus.pre.011.mp3",
+  "audio/voice/seymour-natus/seymour-natus.pre.013.mp3",
+  "audio/voice/seymour-natus/seymour-natus.pre.017.mp3",
+  "audio/voice/seymour-natus/seymour-natus.pre.020.mp3",
+  "audio/voice/seymour-natus/seymour-natus.pre.022.mp3",
+  "audio/music/pause.mp3",
+  "art/pause/ch10-seymour-natus.2x.webp",
+  "art/characters/seymour-natus-ring/idle.png",
+  "art/characters/tidus/idle.normal.png",
+  "art/characters/tidus/ready.normal.png",
+  "art/characters/tidus/attack.normal.png",
+  "art/characters/tidus/cast.normal.png",
+  "art/characters/tidus/item.normal.png",
+  "art/characters/tidus/hurt.normal.png",
+  "art/characters/tidus/ko.normal.png",
+  "art/characters/tidus/victory.normal.png",
+  "art/characters/tidus/defend.normal.png",
+  "art/characters/tidus/sleep.normal.png",
+  "art/characters/tidus/critical.normal.png",
+  "art/characters/tidus/follow.normal.png",
+  "art/characters/tidus/od-energy-rain.normal.png",
+  "art/characters/tidus/od-slice-and-dice.normal.png",
+  "art/characters/yuna/idle.normal.png",
+  "art/characters/yuna/ready.normal.png",
+  "art/characters/yuna/attack.normal.png",
+  "art/characters/yuna/cast.normal.png",
+  "art/characters/yuna/item.normal.png",
+  "art/characters/yuna/hurt.normal.png",
+  "art/characters/yuna/ko.normal.png",
+  "art/characters/yuna/victory.normal.png",
+  "art/characters/yuna/sleep.normal.png",
+  "art/characters/yuna/critical.normal.png",
+  "art/characters/yuna/follow.normal.png",
+  "art/characters/kimahri/idle.normal.png",
+  "art/characters/kimahri/ready.normal.png",
+  "art/characters/kimahri/attack.normal.png",
+  "art/characters/kimahri/cast.normal.png",
+  "art/characters/kimahri/item.normal.png",
+  "art/characters/kimahri/hurt.normal.png",
+  "art/characters/kimahri/ko.normal.png",
+  "art/characters/kimahri/victory.normal.png",
+  "art/characters/kimahri/defend.normal.png",
+  "art/characters/kimahri/sleep.normal.png",
+  "art/characters/kimahri/critical.normal.png",
+  "art/characters/kimahri/follow.normal.png",
+  "assets/ink-light-DNLnRxnq.webp",
+  "art/portraits/seymour-natus.webp",
+  "assets/paper-dark-CkmdjUsb.webp",
+  "art/pause/tidus.webp",
+  "art/portrait-parts/tidus/2x/mouth-open-smile.png",
+  "art/portrait-parts/tidus/2x/mouth-concerned-press.png",
+  "art/portrait-parts/tidus/2x/lidR-closed.png",
+  "art/portrait-parts/tidus/2x/lidL-closed.png",
+  "art/portrait-parts/tidus/2x/eyeR-socket.webp",
+  "art/portrait-parts/tidus/2x/eyeR-iris.webp",
+  "art/portrait-parts/tidus/2x/eyeR-catch.png",
+  "art/portrait-parts/tidus/2x/eyeR-window.png",
+  "art/portrait-parts/tidus/2x/eyeL-socket.webp",
+  "art/portrait-parts/tidus/2x/eyeL-iris.webp",
+  "art/portrait-parts/tidus/2x/eyeL-catch.png",
+  "art/portrait-parts/tidus/2x/eyeL-window.png",
+  "art/pause/yuna.webp",
+  "art/portrait-parts/yuna/2x/mouth-open-smile.png",
+  "art/portrait-parts/yuna/2x/mouth-concerned-press.png",
+  "art/portrait-parts/yuna/2x/lidR-closed.png",
+  "art/portrait-parts/yuna/2x/lidL-closed.png",
+  "art/portrait-parts/yuna/2x/eyeR-socket.webp",
+  "art/portrait-parts/yuna/2x/eyeR-iris.webp",
+  "art/portrait-parts/yuna/2x/eyeR-catch.png",
+  "art/portrait-parts/yuna/2x/eyeR-window.png",
+  "art/portrait-parts/yuna/2x/eyeL-socket.webp",
+  "art/portrait-parts/yuna/2x/eyeL-iris.webp",
+  "art/portrait-parts/yuna/2x/eyeL-catch.png",
+  "art/portrait-parts/yuna/2x/eyeL-window.png",
+  "art/pause/kimahri.webp",
+  "art/portrait-parts/kimahri/2x/mouth-open-smile.png",
+  "art/portrait-parts/kimahri/2x/mouth-concerned-press.png",
+  "art/portrait-parts/kimahri/2x/lidL-closed.png",
+  "art/portrait-parts/kimahri/2x/eyeL-socket.webp",
+  "art/portrait-parts/kimahri/2x/eyeL-iris.webp",
+  "art/portrait-parts/kimahri/2x/eyeL-catch.png",
+  "art/portrait-parts/kimahri/2x/eyeL-window.png",
+  "art/characters/rikku/idle.png",
+  "art/characters/rikku/ready.png",
+  "art/characters/rikku/attack.png",
+  "art/characters/rikku/cast.png",
+  "art/characters/rikku/item.png",
+  "art/characters/rikku/hurt.png",
+  "art/characters/rikku/ko.png",
+  "art/characters/rikku/victory.png",
+  "art/characters/rikku/sleep.png",
+  "art/characters/rikku/critical.png",
+  "art/characters/rikku/follow.png",
+  "art/characters/rikku/idle.normal.png",
+  "art/characters/rikku/ready.normal.png",
+  "art/characters/rikku/attack.normal.png",
+  "art/characters/rikku/cast.normal.png",
+  "art/characters/rikku/item.normal.png",
+  "art/characters/rikku/hurt.normal.png",
+  "art/characters/rikku/ko.normal.png",
+  "art/characters/rikku/victory.normal.png",
+  "art/characters/rikku/sleep.normal.png",
+  "art/characters/rikku/critical.normal.png",
+  "art/characters/rikku/follow.normal.png",
+  "art/characters/auron/ready.png",
+  "art/characters/auron/attack.png",
+  "art/characters/auron/cast.png",
+  "art/characters/auron/item.png",
+  "art/characters/auron/hurt.png",
+  "art/characters/auron/ko.png",
+  "art/characters/auron/victory.png",
+  "art/characters/auron/sleep.png",
+  "art/characters/auron/critical.png",
+  "art/characters/auron/follow.webp",
+  "art/characters/auron/idle.normal.png",
+  "art/characters/auron/ready.normal.png",
+  "art/characters/auron/attack.normal.png",
+  "art/characters/auron/cast.normal.png",
+  "art/characters/auron/item.normal.png",
+  "art/characters/auron/hurt.normal.png",
+  "art/characters/auron/ko.normal.png",
+  "art/characters/auron/victory.normal.png",
+  "art/characters/auron/sleep.normal.png",
+  "art/characters/auron/critical.normal.png",
+  "art/characters/auron/follow.normal.png",
+  "art/characters/bahamut/idle.png",
+  "art/characters/bahamut/attack.png",
+  "art/characters/bahamut/cast.png",
+  "art/characters/bahamut/hurt.png",
+  "art/characters/bahamut/ko.png",
+  "art/characters/bahamut/idle.normal.png",
+  "art/characters/bahamut/attack.normal.png",
+  "art/characters/bahamut/cast.normal.png",
+  "art/characters/bahamut/hurt.normal.png",
+  "art/characters/bahamut/ko.normal.png",
+  "art/characters/bahamut/idle%402x.png",
+  "art/characters/bahamut/attack%402x.png",
+  "art/characters/bahamut/cast%402x.png",
+  "art/characters/bahamut/hurt%402x.png",
+  "art/characters/bahamut/ko%402x.png",
+  "art/portraits/bahamut.webp"
+ ]
+}

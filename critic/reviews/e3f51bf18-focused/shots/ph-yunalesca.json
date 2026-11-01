@@ -1,0 +1,196 @@
+{
+ "tag": "ph-yunalesca",
+ "chapter": "yunalesca",
+ "base": "http://127.0.0.1:5871/",
+ "W": 390,
+ "H": 844,
+ "phone": true,
+ "steps": [
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "awaitingMenu": true,
+   "toMenuS": 52.7
+  },
+  {
+   "s": "hud",
+   "overflowX": false,
+   "treated": {
+    "scope": "all",
+    "chapters": [
+     "seymour-flux",
+     "yunalesca",
+     "seymour-anima-macalania",
+     "seymour-natus",
+     "braskas-final-aeon",
+     "isaaru-via-purifico",
+     "ffx2-bahamut",
+     "ffx2-leblanc",
+     "ffx2-den-of-woe",
+     "ffx2-trema"
+    ],
+    "holds": {
+     "yunalesca": [
+      "breath",
+      "cam",
+      "smear"
+     ],
+     "seymour-anima-macalania": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "seymour-natus": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "braskas-final-aeon": [
+      "breath",
+      "moments"
+     ],
+     "isaaru-via-purifico": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "ffx2-leblanc": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "ffx2-den-of-woe": [
+      "cam",
+      "breath",
+      "moments"
+     ],
+     "ffx2-trema": [
+      "cam",
+      "breath",
+      "moments"
+     ]
+    },
+    "running": "yunalesca",
+    "reaches": true
+   },
+   "buttons": [
+    "DEFEND:104x40",
+    "GUIDE:77x32",
+    "PAUSE:46x46"
+   ],
+   "f1": true,
+   "ribbon": [
+    " "
+   ],
+   "igBossHp": [],
+   "ffx2boss": [],
+   "look": "hd2d",
+   "plates": 2
+  },
+  {
+   "s": "tap-attack",
+   "screen": "battle",
+   "phase": {
+    "speed": "normal",
+    "timeScale": 1,
+    "auto": false,
+    "aborted": false,
+    "phase": "command:tidus",
+    "awaitingMenu": true,
+    "played": 1,
+    "lastEvents": [
+     {
+      "seq": 0,
+      "type": "turn-start",
+      "ms": 110
+     }
+    ],
+    "lastCommand": null
+   }
+  }
+ ],
+ "bundle": "http://127.0.0.1:5871/assets/index-UNVtEttT.js",
+ "toMenuMs": 52696,
+ "hud": {
+  "overflowX": false,
+  "treated": {
+   "scope": "all",
+   "chapters": [
+    "seymour-flux",
+    "yunalesca",
+    "seymour-anima-macalania",
+    "seymour-natus",
+    "braskas-final-aeon",
+    "isaaru-via-purifico",
+    "ffx2-bahamut",
+    "ffx2-leblanc",
+    "ffx2-den-of-woe",
+    "ffx2-trema"
+   ],
+   "holds": {
+    "yunalesca": [
+     "breath",
+     "cam",
+     "smear"
+    ],
+    "seymour-anima-macalania": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "seymour-natus": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "braskas-final-aeon": [
+     "breath",
+     "moments"
+    ],
+    "isaaru-via-purifico": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "ffx2-leblanc": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "ffx2-den-of-woe": [
+     "cam",
+     "breath",
+     "moments"
+    ],
+    "ffx2-trema": [
+     "cam",
+     "breath",
+     "moments"
+    ]
+   },
+   "running": "yunalesca",
+   "reaches": true
+  },
+  "buttons": [
+   "DEFEND:104x40",
+   "GUIDE:77x32",
+   "PAUSE:46x46"
+  ],
+  "f1": true,
+  "ribbon": [
+   " "
+  ],
+  "igBossHp": [],
+  "ffx2boss": [],
+  "look": "hd2d",
+  "plates": 2
+ },
+ "attackRect": {
+  "x": 195,
+  "y": 422
+ },
+ "fpsAvg": 60.5,
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": []
+}

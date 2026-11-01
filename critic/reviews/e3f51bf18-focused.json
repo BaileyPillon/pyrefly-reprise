@@ -1,0 +1,674 @@
+{
+  "rubricVersion": 2,
+  "review": "focused",
+  "date": "2026-10-31T17:07:09.926Z",
+  "build": {
+    "mainSha": "e3f51bf18",
+    "bundle": "index-UNVtEttT.js"
+  },
+  "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+  "verdicts": {
+    "deployment": "NOT APPLICABLE",
+    "changedArea": "UNVERIFIED",
+    "milestone": "not assessed",
+    "ship": "SHIP"
+  },
+  "shipReasons": [
+    "No critical defect introduced and no major regression against live release 69 in what was measured: all 14 chapters played from the real title by real keys through four turns at 1600x900 with 0 console errors, 58 to 60 fps, the F1 ribbon naming the declared boss (Seymour in Chapter VII) and the seven new chapters reaching the treatment.",
+    "The booth pair and Leblanc answer as release 69: first-menu pixel difference against live 4.7 percent (I), 7.9 to 13.9 percent (IV, against 11.8 percent between two live runs) and 5.7 percent (VI), within live-against-live noise; IX and XII (off the list) read within live noise (3.7 and 5.7 percent); V and XI (off the list) were checked only for treated().reaches false.",
+    "The continuity harness reads CHK-026 and CHK-027 worse than live in two chapters (R70-C1 Braska's Final Aeon, R70-C2 Isaaru) and equal or better in the other five; I rate both polish (one 90 px foot jerk under a smear trail, and reads the strips show no visible change for, with a camera cut counted as a teleport). If the owner counts a continuity FAIL as major, both are regressions and the rule makes this a HOLD; I did not."
+  ],
+  "checks": [
+    {
+      "id": "CHK-001",
+      "result": "UNVERIFIED",
+      "reason": "Agents cannot hear; no cue was auditioned.",
+      "game": "both",
+      "chapter": "all",
+      "state": "audio",
+      "evidence": [],
+      "mode": "manual",
+      "mandatory": true,
+      "minutes": 0
+    },
+    {
+      "id": "CHK-002",
+      "result": "PASS",
+      "reason": "First-menu layout at 1600x900 (14 chapters), 2000x1012 (4 treated chapters) and 390x844 touch (3 treated chapters): no horizontal overflow, the F1 HUD owns the window in every treated chapter.",
+      "game": "both",
+      "chapter": "seven treated chapters + I, IV, VI + four untreated",
+      "state": "battle first menu",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/shots/c-yunalesca-1600-01-menu.png",
+        "critic/reviews/e3f51bf18-focused/shots/c-seymour-natus-1600-01-menu.png",
+        "critic/reviews/e3f51bf18-focused/shots/w2-seymour-anima-macalania-01-menu.png",
+        "critic/reviews/e3f51bf18-focused/shots/ph-ffx2-trema-01-menu.png"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 25
+    },
+    {
+      "id": "CHK-003",
+      "result": "PASS",
+      "reason": "Text and buttons at the three sizes: GUIDE/HIDE MOVES/ENEMY MOVE and the phone PAUSE (46x46) and GUIDE (77x32) targets present; the known cut-off label SPECI... in Chapter XIV is on the live build too.",
+      "game": "both",
+      "chapter": "treated chapters",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/shots/c-isaaru-via-purifico-1600-01-menu.png",
+        "critic/reviews/e3f51bf18-focused/shots/ph-yunalesca-01-menu.png"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 10
+    },
+    {
+      "id": "CHK-006",
+      "result": "UNVERIFIED",
+      "reason": "Overlays were not driven to their ends; the opening speech card (Trema, Den of Woe, Isaaru) is the same on live.",
+      "game": "both",
+      "chapter": "various",
+      "state": "overlays",
+      "evidence": [],
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0
+    },
+    {
+      "id": "CHK-008",
+      "result": "PASS",
+      "reason": "In the seven treated chapters the F1 panels do not collide with the painted actors at the first menu (Yuna and Rikku speech cards overlay the HUD for a moment at battle start in Trema, Den of Woe and Isaaru: identical on live). Chapters IX and XII (off the list) answer as live.",
+      "game": "both",
+      "chapter": "seven treated chapters",
+      "state": "first menu",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/shots/c-ffx2-den-of-woe-1600-01-menu.png",
+        "critic/reviews/e3f51bf18-focused/shots/c-ffx2-trema-1600-01-menu.png"
+      ],
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 15
+    },
+    {
+      "id": "CHK-009",
+      "result": "PASS",
+      "reason": "The F1 ribbon names the declared boss: Seymour (Chapter VII, not the Guado Guardian in slot 0), Seymour Natus, Yunalesca, Braska's Final Aeon, Isaaru, Paragon (Trema), Baralai (Den of Woe). Pointed at by the new HeadlineBoss module.",
+      "game": "both",
+      "chapter": "seven treated chapters",
+      "state": "first menu",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/shots/c-seymour-anima-macalania-1600.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 5
+    },
+    {
+      "id": "CHK-013",
+      "result": "UNVERIFIED",
+      "reason": "Cast art not judged against the approved masters; no art file changed (art-derive verify and audit PASS on dist-gate: 5404 masters, 0 problems).",
+      "game": "both",
+      "chapter": "all",
+      "state": "art",
+      "evidence": [],
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 4
+    },
+    {
+      "id": "CHK-015",
+      "result": "PASS",
+      "reason": "Real keys from the title (Enter), chapter-select (ArrowRight), party prep (Enter), the scene skip, then Enter on Attack and Enter on the target, three more turns, in all 14 chapters at 1600x900; touch tap on Attack at 390x844 in Yunalesca, Trema and Anima. The cancel path (Escape) was not walked by me in this review.",
+      "game": "both",
+      "chapter": "all 14 played",
+      "state": "first menu to turn 4",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/shots/c-yunalesca-1600.json",
+        "critic/reviews/e3f51bf18-focused/shots/ph-ffx2-trema.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 40
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "reason": "Every capture asserted screen === battle and awaitingMenu before the shot; a failed cursor wait (5 chapters, my navigator pressed ArrowDown) was rerun, never captured.",
+      "game": "both",
+      "chapter": "all",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/shots/c-seymour-natus-1600.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 2
+    },
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "reason": "The exact candidate: dist-gate names index-UNVtEttT.js (confirmed from the served index.html and in the pages); art-derive verify PASS (5404 masters, 0 problems) and audit PASS (0 dangling); 0 console errors and 0 4xx in every run (14 + 3 phone + 4 wide + live pairs).",
+      "game": "both",
+      "chapter": "build",
+      "state": "artifact",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/shots/c-yunalesca-1600.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 8
+    },
+    {
+      "id": "CHK-020",
+      "result": "PASS",
+      "reason": "Shared plumbing (stageFreeze form-change guard, ProFollower scripted stand-down, HeadlineBoss) is both games; the FFX-only treated chapters (II, III, VII, X, XIV) and the FFX-2-only (XIII, XV) each play in their game; the F1 ribbon boss rule is the shared one.",
+      "game": "both",
+      "chapter": "all",
+      "state": "static + browser",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/shots/c-ffx2-den-of-woe-1600.json"
+      ],
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 10
+    },
+    {
+      "id": "CHK-021",
+      "result": "PASS",
+      "reason": "Presence in the intended game and absence elsewhere: treated().reaches is true in exactly the seven new chapters plus I, IV, VI and false in IX, XII, V and XI (off the list); IX and XII measured against live at 3.7 and 5.7 percent first-menu difference.",
+      "game": "both",
+      "chapter": "all 14",
+      "state": "first menu",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/shots/c-yojimbo-cavern-1600-01-menu.png",
+        "critic/reviews/e3f51bf18-focused/shots/L-yojimbo-cavern-1600-01-menu.png"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 10
+    },
+    {
+      "id": "CHK-022",
+      "result": "UNVERIFIED",
+      "reason": "No chapter was fought to its Victory results in this review (four real-key turns each); the lanes' own wins were not repeated. The continuity harness did play seven chapters to their wins on the candidate.",
+      "game": "both",
+      "chapter": "seven treated chapters",
+      "state": "results",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/continuity/index.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 0
+    },
+    {
+      "id": "CHK-023",
+      "result": "PASS",
+      "reason": "The treatment is reached through the real path: ?treated default, the F1 HUD, the directed look and the four fx plates draw in Chapters II, III, VII, XIV, XIII, XV (look cinematic, plates 4); Chapter X reports no fx plates (none in its room, per the lane).",
+      "game": "both",
+      "chapter": "treated chapters",
+      "state": "battle",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/shots/c-seymour-natus-1600.json"
+      ],
+      "mode": "automated",
+      "mandatory": false,
+      "minutes": 5
+    },
+    {
+      "id": "CHK-026",
+      "result": "FAIL",
+      "reason": "yunalesca: continuity harness (CHK-026/CHK-027): 1 chapter(s), 575.6 s of battle, 59.6 to 59.6 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (38 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 13.6 px at 1600 wide), whatever stance the registration claims); CHK-027 FAIL (1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 88.4 px)); 5,311 ms of see-through a minute (318.7 frames a minute at 60 Hz)\nbraskas-final-aeon: continuity harness (CHK-026/CHK-027): 1 chapter(s), 1633.2 s of battle, 59.5 to 59.5 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (54 swap(s) change a head by more than the tolerance (worst 58 percent; 46.8 percent where the head is registered); 4 swap(s) of a standing figure move its feet more than the tolerance (worst 10.8 px at 1600 wide); 18 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.732 to 1.497; the bands are tools/posescale/pose-bands.mjs's); 16 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 251 px at 1600 wide), whatever stance the registration claims); CHK-027 FAIL (8 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 221.4 px); 3 MID-MOVE teleport(s) of 300 px or more in one frame (worst 342.4 px: no lunge covers its whole reach in one frame)); 1,418 ms of see-through a minute (85.1 frames a minute at 60 Hz)\nseymour-anima-macalania: continuity harness (CHK-026/CHK-027): 1 chapter(s), 326.4 s of battle, 59.5 to 59.5 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (1 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 15.4 px a",
+      "game": "both",
+      "chapter": "seven treated chapters",
+      "state": "continuity harness, win, seed 1",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/continuity/continuity-summary-braskas-final-aeon.json",
+        "critic/reviews/e3f51bf18-focused/continuity/continuity-summary-yunalesca.json",
+        "critic/reviews/e3f51bf18-focused/continuity-live/continuity-summary-braskas-final-aeon.json"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 190
+    },
+    {
+      "id": "CHK-027",
+      "result": "FAIL",
+      "reason": "Candidate FAIL in Yunalesca (1 swap jerk against live 7), Braska's Final Aeon (8 swap jerks and 3 mid-move teleports from a camera cut against live 8 and none), Seymour and Anima (1 at seed 1, PASS at seed 2, live PASS), Isaaru (one 89.7 px Ixion foot jerk at seed 1 and 89.9 at seed 2, live PASS), Den of Woe (6 jerks, mostly a Change dress swap, no live baseline); PASS in Natus and Trema.",
+      "game": "both",
+      "chapter": "seven treated chapters",
+      "state": "continuity harness, win",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/continuity/continuity-summary-isaaru-via-purifico.json",
+        "critic/reviews/e3f51bf18-focused/continuity/isaaru-via-purifico-win-e3f51bf18/continuity/strips/jerk-000-ixion.jpg",
+        "critic/reviews/e3f51bf18-focused/continuity/braskas-final-aeon-win-e3f51bf18/continuity/strips/jerk-003-tidus.jpg"
+      ],
+      "mode": "automated",
+      "mandatory": true,
+      "minutes": 190
+    },
+    {
+      "id": "CHK-B1",
+      "result": "UNVERIFIED",
+      "reason": "Whether the music and effects are beautiful: no agent can hear.",
+      "game": "both",
+      "chapter": "all",
+      "state": "audio",
+      "evidence": [],
+      "mode": "manual",
+      "mandatory": false,
+      "minutes": 0
+    }
+  ],
+  "continuity": {
+    "schema": "continuity-summary/1",
+    "base": "http://127.0.0.1:5871/",
+    "date": "2026-10-31T14:16:03.830Z",
+    "chapters": [
+      {
+        "chapter": "yunalesca",
+        "game": "ffx",
+        "checks": {
+          "CHK-026": "FAIL",
+          "CHK-027": "FAIL"
+        },
+        "battleSeconds": 575.6,
+        "swaps": 820,
+        "snapsPerMinute": 0,
+        "ghostMsPerMinute": 5311,
+        "maxHeadJumpPct": 10.7,
+        "maxFeetShiftPx": 1.1,
+        "worstJerkPx": 256.1,
+        "minStature": 0.781,
+        "heightOverBand": 0,
+        "feetSilOver": 38,
+        "swapJerksWorstPx": 88.4,
+        "dashesWorstPx": 256.1,
+        "frameP99Ms": 29.8,
+        "frameP99MsIsPacing": false,
+        "jerksCovered": 0,
+        "fps": 59.6,
+        "dedicated": true,
+        "strips": 19,
+        "worstSwapStrips": [
+          "yunalesca-win-e3f51bf18/continuity/strips/swap-815-yuna-hurt-ko.jpg",
+          "yunalesca-win-e3f51bf18/continuity/strips/swap-827-wakka-hurt-ko.jpg",
+          "yunalesca-win-e3f51bf18/continuity/strips/swap-785-shiva-idle-ko.jpg",
+          "yunalesca-win-e3f51bf18/continuity/strips/swap-822-yuna-ko-idle.jpg",
+          "yunalesca-win-e3f51bf18/continuity/strips/swap-720-wakka-idle-hurt.jpg",
+          "yunalesca-win-e3f51bf18/continuity/strips/swap-718-yuna-critical-hurt.jpg",
+          "yunalesca-win-e3f51bf18/continuity/strips/swap-719-wakka-hurt-idle.jpg",
+          "yunalesca-win-e3f51bf18/continuity/strips/swap-722-yuna-hurt-critical.jpg",
+          "yunalesca-win-e3f51bf18/continuity/strips/swap-618-tidus-ready-attack.jpg",
+          "yunalesca-win-e3f51bf18/continuity/strips/swap-620-tidus-attack-follow.jpg"
+        ],
+        "unverified": null
+      }
+    ],
+    "note": "Chapters I, IV, VI (booth pair and Leblanc) not re-run: unchanged code path, first-menu pixel parity checked instead.",
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 575.6 s of battle, 59.6 to 59.6 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (38 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 13.6 px at 1600 wide), whatever stance the registration claims); CHK-027 FAIL (1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 88.4 px)); 5,311 ms of see-through a minute (318.7 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at e3f51bf18; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows)).",
+    "battleSeconds": 575.6,
+    "counted": 820,
+    "swaps": 830,
+    "size": {
+      "judged": 818,
+      "costumeSwaps": 0,
+      "sameArtSwaps": 2,
+      "costumeWorstHeadPct": 0,
+      "costumeWorstFeetPx": 0,
+      "maxHeadJumpPct": 10.7,
+      "maxHeadJumpPctRegistration": 0.2,
+      "headOverTolerance": 0,
+      "maxFeetShiftPx": 1.1,
+      "feetOverTolerance": 0,
+      "feetDesigned": 0,
+      "feetDesignedWorstPx": 0,
+      "headMeasured": 818,
+      "headRegistration": 627,
+      "headRig": 8,
+      "rigSwaps": 8,
+      "headSilhouette": 183,
+      "headUnmeasured": 0,
+      "heightMeasured": 818,
+      "heightOverBand": 0,
+      "heightWaived": 68,
+      "minStature": 0.781,
+      "maxStature": 1.082,
+      "koLengthMeasured": 4,
+      "minKoLength": 0.589,
+      "koLengthReported": 3,
+      "feetSilMeasured": 804,
+      "feetSilOver": 38,
+      "feetSilWaived": 46,
+      "maxFeetSilPx": 13.6,
+      "holdSwaps": 625,
+      "worstRealHeadPct": 32.7,
+      "realHeadOutsideBand": 0,
+      "realHeadWaived": 0,
+      "variantHeadSwaps": 0,
+      "worstVariantHeadPct": 0,
+      "variantHeadOutsideBand": 0,
+      "unregisteredSwaps": 0
+    },
+    "motion": {
+      "snaps": 0,
+      "snapsPerMinute": 0,
+      "hardCuts": 0,
+      "hardCutsPerMinute": 0,
+      "ghostSwaps": 754,
+      "ghostFrames": 3054,
+      "worstGhostSeverity": 0.38,
+      "ghostOverFail": 0,
+      "jerks": 59,
+      "worstJerkPx": 256.1,
+      "jerksOverFail": 57,
+      "jerksCovered": 0,
+      "worstCoveredJerkPx": 0,
+      "lowestIou": 0.001,
+      "maxCentroidShiftPx": 186,
+      "heldSwaps": 0,
+      "longestHeldFrames": 0,
+      "stagedChanges": 0,
+      "stagedSteps": 0,
+      "stagedSnapsExcused": 0,
+      "jerksAtStaged": 0,
+      "smearsPlanned": 0,
+      "smearSwaps": 0,
+      "smearSnapsExcused": 0,
+      "jerksSmeared": 0,
+      "worstSmearedJerkPx": 0,
+      "swapJerks": 3,
+      "swapJerksWorstPx": 88.4,
+      "swapJerksOverFail": 1,
+      "teleports": 0,
+      "teleportsWorstPx": 0,
+      "dashes": 56,
+      "dashesWorstPx": 256.1,
+      "dashesOverFail": 56,
+      "jerksLongFrame": 1,
+      "swapJerksLongFrame": 1,
+      "swapJerksSteadyOverFail": 1,
+      "ghostMs": 50953,
+      "ghostMsPerMinute": 5311,
+      "ghostFramesPerMinute": 318.3,
+      "ghostFrames60PerMinute": 318.7
+    },
+    "frameTime": {
+      "frames": 34287,
+      "longFrames": 164,
+      "longFramePct": 0.5,
+      "worstP99Ms": 29.8,
+      "maxMs": 525.4,
+      "longMs": 34,
+      "source": "continuity-probe",
+      "pacingNumber": false
+    },
+    "checks": {
+      "CHK-026": {
+        "result": "FAIL",
+        "reasons": [
+          "38 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 13.6 px at 1600 wide), whatever stance the registration claims"
+        ],
+        "note": "627 of 818 measured swaps had a registered head (tolerance 3 percent); 8 were read from a rig's own head mesh (tolerance 3 percent; 8 swap(s) were changes of a rig's key); 183 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 818 swap(s) (stature 0.781 to 1.082, 68 out of band but waived), the silhouette's own feet 804 swap(s) (worst 13.6 px, 46 waived), 625 swap(s) across a recorded hold (real head worst 32.7 percent from the idle's), 0 on a painting with no fresh registration record"
+      },
+      "CHK-027": {
+        "result": "FAIL",
+        "reasons": [
+          "1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 88.4 px)"
+        ],
+        "note": "56 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 256.1 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 1 of 59 jerk(s) fell on a frame of more than 34 ms (1 of the 3 at a swap; 1 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them"
+      }
+    },
+    "poseMeasure": {
+      "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+      "source": "harness-tree",
+      "subjects": 114,
+      "sha256": "b8cead6d81a854dc7ac60a210ac702185cd33668b555f01bb24e60fd408e3940",
+      "staleChapters": []
+    },
+    "harness": {
+      "schema": "continuity-harness/1",
+      "id": "5e1bbdec47c9e7206f710149081baf8ceab77dc6b230bec2117ef4eed133fc31",
+      "tree": {
+        "root": "D:/pyrefly-release55",
+        "head": "e3f51bf187e078a90aa7c6a5fc6eb3fa8a097b8b",
+        "dirty": []
+      },
+      "files": {
+        "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+        "critic/runner/lib/continuity-analyze.mjs": "a20e4de301b117cf4a98ecf99f58fe695aaedb18",
+        "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+        "critic/runner/lib/continuity-card.mjs": "2e0208df7bc9a922a27d519fc5ebb49bed3fafd9",
+        "critic/runner/lib/continuity-dissolve.mjs": "4a9a2ebc79b798dc6059312f0b885510f4cd79b3",
+        "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+        "critic/runner/lib/continuity-gaps.mjs": "7337b85eda92c5755d11ccbee84749ee231cfe3d",
+        "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+        "critic/runner/lib/continuity-ghostms.mjs": "d74a048e0c44be69d22b050973ec240fbec3db66",
+        "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+        "critic/runner/lib/continuity-probe.mjs": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25",
+        "critic/runner/lib/continuity-pure.mjs": "c30cf02831efe33d9726d0bae9f9b3e098292090",
+        "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+        "critic/runner/lib/continuity-rig-probe.mjs": "35bf097b7bbfa81abeb4daf8e78f0d9515ff3ab1",
+        "critic/runner/lib/continuity-rig.mjs": "6e1b891a9d237b4b9db52593303df5e1ffc812e4",
+        "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+        "critic/runner/lib/continuity-smear.mjs": "bb6bcae7b35d4d99465f0650e58554cc785af513",
+        "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+        "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+        "critic/runner/lib/continuity-summary.mjs": "c671aa6dbc9e6df72a767ace45e6a57cdb478053",
+        "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+        "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+        "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+        "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+        "critic/runner/lib/continuity-why.mjs": "e2f0063820045e9c5eb5bb2ece203c00bed1fe3d",
+        "critic/runner/lib/continuity.mjs": "d3fd3269395cfa928cd1566a81486359e28210cb",
+        "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+        "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+        "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+        "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+        "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+        "critic/runner/lib/route-pure.mjs": "4d484cc9c873d60c66b48e418bb688dd6248b647",
+        "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+        "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+        "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+        "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+        "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+        "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+      },
+      "policy": {
+        "continuitySha256": "5ef4a3ed6fec14518548de8b462466822a3cf3a41f11528f8e8abb143de6fa43",
+        "fileSha256": "9c72460c4bdd463ef02f5e1f01c2baa3aa5334f392c29b114da466ca9c54cc71",
+        "override": false,
+        "overrideSha256": null
+      },
+      "probe": {
+        "version": 3,
+        "blob": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25"
+      },
+      "poseTable": {
+        "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+        "sha256": "b8cead6d81a854dc7ac60a210ac702185cd33668b555f01bb24e60fd408e3940",
+        "subjects": 114,
+        "source": "harness-tree",
+        "buildSha": "e3f51bf1",
+        "isCandidate": true
+      },
+      "waivers": {
+        "path": "D:\\pyrefly-release55\\docs\\target\\pose-waivers.json",
+        "sha256": "84fc043f4169733ef228cbf965eb2b0679f3f0e38f7f609e97d99135924f532f",
+        "rows": 80
+      },
+      "run": {
+        "query": null,
+        "setArt": null,
+        "browser": "gpu"
+      },
+      "changedDuringRun": false,
+      "chapterIds": [
+        "5e1bbdec47c9e7206f710149081baf8ceab77dc6b230bec2117ef4eed133fc31"
+      ],
+      "unstamped": [],
+      "chaptersByOtherHarness": [],
+      "aggregateSha256": "ad01e3959af4b1d0387e7d2acae8b24b8216d8300d793318425a04d2d7c89725"
+    }
+  },
+  "targets": {
+    "required": 0,
+    "matched": 0,
+    "failing": 0,
+    "unverified": 0,
+    "waiting": 0
+  },
+  "issues": [
+    {
+      "build": "e3f51bf18",
+      "confidence": "medium",
+      "requirement": "CHK-026 / CHK-027",
+      "id": "R70-C1",
+      "severity": "polish",
+      "title": "Braska's Final Aeon: CHK-026 and CHK-027 read worse than live (swap and teleport reads the live build does not have)",
+      "game": "FFX",
+      "chapter": "braskas-final-aeon",
+      "expected": "CHK-026 and CHK-027 as live (live: CHK-026 FAIL on Lulu's switch swaps only, CHK-027 FAIL on 8 smeared swap jerks, no teleports)",
+      "observed": "Candidate adds CHK-026 fails on the boss (idle to hurt, 15 height and 8 head reads), Auron critical swaps, Tidus and Yuna critical to idle, and 3 mid-move teleports of 300 px or more on Tidus that the strip shows to be a hard camera cut between shots (the harness does not flag it a camera cut). The sampled strips (boss hurt to idle, Tidus critical to idle) show no change a player could see; the size ratios are measured against a moving directed camera.",
+      "repro": "node critic/runner/lib/continuity.mjs --base=<candidate> --chapters=braskas-final-aeon (about 30 minutes); live baseline the same on https://echoesofspira.com/",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/continuity/continuity-summary-braskas-final-aeon.json",
+        "critic/reviews/e3f51bf18-focused/continuity-live/continuity-summary-braskas-final-aeon.json",
+        "critic/reviews/e3f51bf18-focused/continuity/braskas-final-aeon-win-e3f51bf18/continuity/strips/jerk-003-tidus.jpg",
+        "critic/reviews/e3f51bf18-focused/continuity/braskas-final-aeon-win-e3f51bf18/continuity/strips/ghost-297-braskas-final-aeon-hurt-idle.jpg"
+      ],
+      "where": "directed camera (cam piece) plus smear on Braska's chapter; suspected, not traced",
+      "fix": "Mark the directed camera's hard cuts as camera cuts for the harness, or hold cam for this chapter until a CHK-026 read on the camera-on build is clean",
+      "acceptanceCheck": "Harness on braskas-final-aeon reads no teleport and no new CHK-026 fail beyond live's",
+      "introducedByCandidate": true,
+      "regressionVsLive": true,
+      "inNewFeature": false
+    },
+    {
+      "build": "e3f51bf18",
+      "confidence": "medium",
+      "requirement": "CHK-026 / CHK-027",
+      "id": "R70-C2",
+      "severity": "polish",
+      "title": "Isaaru: one 90 px foot jerk at an Ixion pose swap (CHK-027), recurs at a second seed",
+      "game": "FFX",
+      "chapter": "isaaru-via-purifico",
+      "expected": "CHK-027 PASS as live",
+      "observed": "Ixion's attack-to-idle swap jumps its feet 89.7 px (seed 1) and 89.9 px (seed 2) in one frame with no planned smear logged; the strip shows a red motion trail across the frame. Live passes at seed 1 (its own Ixion swap reads 44 px and is smeared); live at seed 2 was not run.",
+      "repro": "continuity.mjs --chapters=isaaru-via-purifico (about 5 minutes)",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/continuity/isaaru-via-purifico-win-e3f51bf18/continuity/strips/jerk-000-ixion.jpg",
+        "critic/reviews/e3f51bf18-focused/continuity-rerun/continuity-summary-isaaru-via-purifico.json",
+        "critic/reviews/e3f51bf18-focused/continuity-live/continuity-summary-isaaru-via-purifico.json"
+      ],
+      "where": "aeon swap while a smear plays; suspected",
+      "fix": "Let the smear planner log the Ixion cut or hold smear for this chapter",
+      "acceptanceCheck": "Harness reads CHK-027 PASS at seeds 1 and 2",
+      "introducedByCandidate": true,
+      "regressionVsLive": true,
+      "inNewFeature": false
+    },
+    {
+      "build": "e3f51bf18",
+      "confidence": "medium",
+      "requirement": "CHK-026 / CHK-027",
+      "id": "R70-C3",
+      "severity": "polish",
+      "title": "Yunalesca: CHK-026 and CHK-027 FAIL on the candidate and on live (carried), see-through time 5.3 s a minute against 4.6 live",
+      "game": "FFX",
+      "chapter": "yunalesca",
+      "expected": "CHK-026 PASS",
+      "observed": "Candidate: 38 stance swaps (worst 13.6 px), 1 swap jerk (88 px); live: 20 and 7 (worst 102 px). The swap exception held for her is untouched, so this is live's own, neither better nor worse in kind; see-through 318.7 against 274.4 frames a minute.",
+      "repro": "continuity.mjs --chapters=yunalesca",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/continuity/continuity-summary-yunalesca.json",
+        "critic/reviews/e3f51bf18-focused/continuity-live/continuity-summary-yunalesca.json"
+      ],
+      "where": "her SwapSwitch exception (held); not traced",
+      "fix": "Lift the held smear row per PIECE_HOLDS",
+      "acceptanceCheck": "job yunalesca-all-held-anchor reads no swap jerk of 40 px or more outside a named cut",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "build": "e3f51bf18",
+      "confidence": "medium",
+      "requirement": "CHK-026 / CHK-027",
+      "id": "R70-C4",
+      "severity": "polish",
+      "title": "Chapter VII and XIII: CHK-026 FAIL reads equal to live (carried)",
+      "game": "both",
+      "chapter": "seymour-anima-macalania, ffx2-trema",
+      "expected": "CHK-026 PASS",
+      "observed": "Anima: 1 stance swap of 15.4 px (live 15.9; 16.5 at seed 2); Trema: 16 feet swaps of at most 10.4 px (live the same 16, 10.4 px). CHK-027 on Trema is PASS (live FAIL, 1 jerk).",
+      "repro": "continuity.mjs on each",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/continuity/continuity-summary-seymour-anima-macalania.json",
+        "critic/reviews/e3f51bf18-focused/continuity-live/continuity-summary-seymour-anima-macalania.json",
+        "critic/reviews/e3f51bf18-focused/continuity/continuity-summary-ffx2-trema.json",
+        "critic/reviews/e3f51bf18-focused/continuity-live/continuity-summary-ffx2-trema.json"
+      ],
+      "where": "registration, not changed by this release",
+      "fix": "Register the stances",
+      "acceptanceCheck": "harness PASS",
+      "introducedByCandidate": false,
+      "regressionVsLive": false,
+      "inNewFeature": false
+    },
+    {
+      "build": "e3f51bf18",
+      "confidence": "medium",
+      "requirement": "CHK-026 / CHK-027",
+      "id": "R70-U1",
+      "severity": "suggestion",
+      "title": "Den of Woe CHK-027 FAIL (6 swap jerks, worst 167 px, mostly the Change dress swap) has no live baseline",
+      "game": "FFX-2",
+      "chapter": "ffx2-den-of-woe",
+      "expected": "baseline",
+      "observed": "Candidate only; the strip I read (Paine 44 px) is a dress Change inside a light burst, an intended cut. Live was not run.",
+      "repro": "continuity.mjs --chapters=ffx2-den-of-woe on the live URL (about 6 minutes)",
+      "evidence": [
+        "critic/reviews/e3f51bf18-focused/continuity/continuity-summary-ffx2-den-of-woe.json",
+        "critic/reviews/e3f51bf18-focused/continuity/ffx2-den-of-woe-win-e3f51bf18/continuity/strips/jerk-042-paine.jpg"
+      ],
+      "where": "n/a",
+      "fix": "Run the live baseline in the deep review",
+      "acceptanceCheck": "baseline comparison",
+      "introducedByCandidate": "unknown",
+      "regressionVsLive": "unknown",
+      "inNewFeature": false
+    }
+  ],
+  "coverage": {
+    "tested": [
+      "Candidate identity and art (bundle, art-derive verify and audit PASS)",
+      "Real-key first menu and four turns at 1600x900 in 14 chapters (7 new treated, I, IV, VI, and IX, XII, V, XI as off-list controls), 0 console errors",
+      "2000x1012 in Chapters III, VII, X, XV; 390x844 touch in II, VII, XIII",
+      "Cross-build first-menu pixel comparison against live release 69 for I, IV, VI, IX, XII (equal within noise) and VII, XIII (different, as intended; live Trema screenshot read by eye)",
+      "Continuity harness on seven chapters on the candidate, five on live release 69, and two candidate reruns at seed 2"
+    ],
+    "reused": [
+      {
+        "what": "Lane evidence of D:/Tools/pyrefly-scratch/2026-10-31/r70 (holds, composites)",
+        "from": "lane results.json",
+        "why": "read for what to look at; every verdict above was measured by me on dist-gate"
+      }
+    ],
+    "notTested": [
+      "Sound",
+      "Victory results of the seven new chapters by real keys (harness wins only)",
+      "The Escape cancel path of the new menus",
+      "Chapters VIII, XI to XIX other than XIII and XV, hidden chapters (untouched)",
+      "Live baseline for Chapter XV continuity",
+      "Chapter X victory close-up held by the new cam row: not played to the victory frame"
+    ]
+  },
+  "regressions": [
+    "R70-C1 Braska's Final Aeon continuity reads worse than live (polish)",
+    "R70-C2 Isaaru Ixion foot jerk (polish)"
+  ],
+  "nextReview": "Deep review on the live build after the deploy (shared presenter, F1 ribbon plumbing, seven new chapters); first, a live baseline of Chapter XV and a seed-2 Isaaru run on live.",
+  "elapsedMinutes": 270
+}

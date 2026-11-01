@@ -1,31 +1,22 @@
 {
-  "mainSha": "6321b2578",
-  "bundle": "dwcmDBjZ",
-  "deployedAt": "2026-10-31T06:09:39.720Z",
+  "mainSha": "e3f51bf18",
+  "bundle": "UNVtEttT",
+  "deployedAt": "2026-10-31T17:29:45.848Z",
   "liveUrl": "https://echoesofspira.com/",
   "artFiles": 4830,
   "policyVersion": 2,
-  "artifactHash": "17d0a142380cd8001e1a0a9d7b73d388731e926ba055c5d4929b4b93090b703e",
+  "artifactHash": "5720fa8287425ebb9f9b1575590436bf66d7a245d686bca9c6471beab55d1fe4",
   "review": "deep",
   "reasons": [
     "src/app/changelog/releaseNotes.ts: unclassified product path is a shared system",
-    "src/app/demo/switchboard.ts: unclassified product path is a shared system",
-    "src/app/saveVisualStyle.ts: unclassified product path is a shared system",
-    "src/app/sfxGame.ts: unclassified product path is a shared system",
-    "src/data/art/poseRegistrationFfx.ts: pose registration tables (every painted figure's scale, stance and head) is a shared system",
     "src/engine/BattlePresenter.ts: battle presenter and lifecycle is a shared system",
     "src/engine/BattlePresenterStaging.ts: battle presenter and lifecycle is a shared system",
-    "src/ui/hudf1/HudF1Switch.ts: unclassified product path is a shared system",
-    "vite.config.ts: build configuration and dependencies is a shared system"
+    "src/ui/hudf1/HudF1.ts: unclassified product path is a shared system"
   ],
   "systems": [
     "battle presenter and lifecycle",
-    "build configuration and dependencies",
     "debug API used by the evidence harness",
     "effects, lighting and sprites",
-    "music and sound files",
-    "pose gate, installer, rulers and waiver ledger (what may ship)",
-    "pose registration tables (every painted figure's scale, stance and head)",
     "title, chapter select, prep, pause and results screens, and the Pilgrimage run's own screens (a hidden prototype: src/app/pilgrim/)",
     "unclassified product path"
   ],
@@ -51,31 +42,26 @@
     "mirror-aeons"
   ],
   "checks": [
-    "CHK-001",
     "CHK-002",
     "CHK-003",
     "CHK-006",
     "CHK-008",
     "CHK-009",
     "CHK-013",
-    "CHK-014",
     "CHK-015",
     "CHK-016",
     "CHK-017",
-    "CHK-018",
-    "CHK-019",
     "CHK-020",
     "CHK-021",
     "CHK-022",
     "CHK-023",
     "CHK-026",
-    "CHK-027",
-    "CHK-B1"
+    "CHK-027"
   ],
   "liveArtifact": {
     "result": "PASS",
     "checked": 57,
-    "at": "2026-10-31T06:09:39.720Z"
+    "at": "2026-10-31T17:29:45.848Z"
   },
   "obligations": [
     {
@@ -83,18 +69,27 @@
       "status": "done",
       "requires": "exact-artifact verification and real-input smoke on the live URL",
       "result": "PASS",
-      "settledBy": "critic/reviews/6321b2578-live.json",
-      "settledAt": "2026-10-31T06:42:57.222Z"
+      "settledBy": "critic/reviews/e3f51bf18-live.json",
+      "settledAt": "2026-10-31T17:51:16.266Z"
     },
     {
       "kind": "focused",
-      "status": "pending",
-      "requires": "acceptance of the changed area"
+      "status": "done",
+      "requires": "acceptance of the changed area",
+      "result": "FAIL",
+      "settledBy": "critic/rounds/round-32b.json",
+      "settledAt": "2026-11-01T10:10:05.747Z"
     },
     {
       "kind": "deep",
-      "status": "pending",
-      "requires": "deep review of every affected chapter and system"
+      "status": "done",
+      "requires": "deep review of every affected chapter and system",
+      "carriedFrom": [
+        "6321b2578"
+      ],
+      "result": "FAIL",
+      "settledBy": "critic/rounds/round-32b.json",
+      "settledAt": "2026-11-01T10:10:05.747Z"
     }
   ]
 }

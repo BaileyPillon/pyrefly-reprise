@@ -69,11 +69,22 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 70 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 71 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '71',
+    date: '2026-11-01',
+    lines: [
+      { tag: 'FFX', text: 'Chapter VIII and the Mirror Aeons chapter get the presentation of Chapter I: the lighter battle screen, the new hit look and the quiet ending.' },
+      { tag: 'FFX-2', text: 'Chapters V, XI and XVI get the presentation of Chapter IV: the lighter battle screen, the new hit look, the boss card and the quiet ending.' },
+      { tag: 'Both', text: 'Evrae in FFX and Chapters V and XI in FFX-2 keep their older sky for now, until a lighter look is picked.' },
+      { tag: 'FFX', text: 'Chapters III, VIII and the Mirror Aeons chapter keep the older attack motion for now, because the new one made figures hop too far there.' },
+      { tag: 'FFX', text: 'Chapters IX, XII, XVII and XVIII (Sin’s face) keep the older look for now; in Sin’s face figures still hopped too far after a hit.' },
+    ],
+  },
   {
     release: '70',
     date: '2026-10-31',

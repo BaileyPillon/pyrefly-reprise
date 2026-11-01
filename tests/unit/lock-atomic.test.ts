@@ -3,7 +3,7 @@
  * Now the file is created with an exclusive open and a stale one is replaced by one atomic rename under a takeover mutex that asks again (`tools/lock-atomic.mjs`).
  *
  * Pinned here: the two primitives; the three writers of the lock (`tools/measure/lock.mjs`, `tools/rig-record-lock.mjs`, `tools/rig/lane/lane-lock.mjs`) each with TWO OR MORE REAL PROCESSES taking it in the same
- * millisecond (a barrier), over a free lock and over a stale one, with a second holder detected by an exclusive marker; and that the stale rule did not change (a lock younger than the line is waited for).
+ * millisecond (a barrier), over a free lock and over a stale one, with a second holder detected by an exclusive marker; and that a live lane's lock is still waited for (the stale rule itself is the fair one of `tools/lock-fair.mjs` since 2026-10-31; its tests are `lock-fair.test.ts` and `rig-record-lock.test.ts`).
  * No browser, no Vite: node child processes and temp folders only.
  */
 import { execFile } from 'node:child_process';
@@ -195,10 +195,10 @@ describe('real processes taking the lock in the same millisecond', () => {
   });
 });
 
-describe('the stale rule did not change', () => {
-  it('a lock younger than fifteen minutes is waited for by rig-record-lock, not taken over', async () => {
+describe('the stale rule keeps a live lane (fair rule, 2026-10-31: a dead pid or no write for fifteen minutes is stale)', () => {
+  it('a lock whose process runs and that was written within fifteen minutes is waited for by rig-record-lock, not taken over', async () => {
     const { takeRigRecord } = await import('../../tools/rig-record-lock.mjs');
-    writeFileSync(file, rec({ who: 'live lane', at: new Date(Date.now() - 14 * 60000).toISOString() }));
+    writeFileSync(file, rec({ who: 'live lane', pid: process.pid, at: new Date(Date.now() - 14 * 60000).toISOString() }));
     let done = false;
     const taking = takeRigRecord('lane x', { file, pollMs: 20 }).then((r: () => void) => {
       done = true;

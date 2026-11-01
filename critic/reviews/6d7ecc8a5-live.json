@@ -1,0 +1,32 @@
+{
+ "rubricVersion": 2,
+ "review": "live",
+ "date": "2026-11-01T15:10:00.000Z",
+ "build": {"mainSha": "6d7ecc8a5", "bundle": "BqgCyT8R", "artifactHash": "ac420514e36e944600deba3a05c074788982aaa78ba4c9ef9c81c6498b29dd7f"},
+ "verdicts": {"deployment": "PASS", "changedArea": "NOT APPLICABLE", "milestone": "not assessed"},
+ "checks": [
+  {"id": "CHK-017", "result": "PASS", "mandatory": true,
+   "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/6d7ecc8a5.json --url https://echoesofspira.com/ --changed-from critic/artifacts/e3f51bf18.json --full -> result PASS, artifactHash ac420514...9d7f, liveManifest match, checked 7169, mismatched [], missing [], wrongType [], errors []",
+   "reason": "Every listed file byte-identical with the right content type; index.html and press/index.html differ only by the Cloudflare Web Analytics beacon (366 bytes)."},
+  {"id": "CHK-016", "result": "PASS", "mandatory": true,
+   "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu, GPU mode, no black canvas), 1600x900, fresh contexts, cache-busted URL, real key presses and clicks (script critic/reviews/6d7ecc8a5-live/smoke.mjs, shots under critic/reviews/6d7ecc8a5-live/shots). Title (page shows RELEASE 71 · 6d7ecc8a) -> chapter-select -> party-prep -> pre-scene -> battle first menu, each screen asserted before the next step, for FFX VIII Evrae (evrae-airship), FFX-2 V Vegnagun (ffx2-vegnagun-shuyin), FFX-2 XI Fallen Aeons (ffx2-fallen-aeons), FFX-2 XVI Ixion (ffx2-ixion-djose) and the Mirror Aeons (typed word yojimbo -> mirror-aeons). __pyrefly.treated() lists all five in the treated chapters with the holds named in the release (Evrae hd2d/arena/breath/cam/moments/real; Vegnagun and Fallen Aeons hd2d/arena/cam/breath/moments; Ixion hd2d/arena/breath/cam/moments/smear; Mirror Aeons hd2d/arena/card/breath/cam/moments/real) and running=<chapter>, reaches=true in each. Cancel path: Attack opens target pick, Escape returns to the command list (same rows) in all five. Positive path: Attack + target confirmed, enemy HP read after. Escape pauses (screen pause) and resumes; P pauses and resumes; H hides the pause panels (70-81 visible panel nodes -> 10) and restores them (back to the same count). Music: prerendered mp3 fetched (title.mp3, chapter-select.mp3, boss-evrae / boss-vegnagun / boss-ffx2-fallen-aeons etc.) and audioDebug playing=boss-evrae / boss-vegnagun with prerendered manifest true, cues 43. Console errors 0, 404s 0, HTML-for-image 0 in every smoke run.",
+   "reason": "Booth visuals and holds were checked by the debug surface and screenshots taken, not judged by eye for fidelity (that is the deep review's job). Enemy HP after Attack was read as an absolute figure with no max, so damage landing is shown only by the action resolving, not by a before/after delta."},
+  {"id": "CHK-024", "result": "PASS", "mandatory": false,
+   "evidence": "Fresh context, FFX Chapter I first menu, pause > Accessibility tab clicked, REDUCE FLASHES clicked OFF -> ON, save key pyrefly-reprise:save:v1 changed, page reloaded, __pyreflyReady, save value byte-equal to the pre-reload value and contains reduceFlashes:true.",
+   "reason": "Lightweight only; no chapter progress (a win) was made in this run, so only the setting is shown to survive. The full upgrade matrix was not run."}
+ ],
+ "staticChecks": {
+  "pose-census": {"subjects": 146, "paintings": 1106, "pass": 829, "waived": 79, "rigged": 0, "fail": 0, "exempt": 198,
+   "byClass": {"idle": 146, "standing": 565, "ko": 90, "low": 71, "wide": 4, "staged": 176, "part": 54},
+   "byGame": {"FFX-2": 777, "FFX": 307, "FF7": 22},
+   "byRowStatus": {"ok": 745, "held": 84, "waived": 79, "none": 198}}
+ },
+ "coverage": {
+  "tested": ["full exact artifact, 7169 files (--full)", "title to chapter select to first player menu in FFX VIII Evrae, FFX-2 V Vegnagun, XI Fallen Aeons, XVI Ixion and the Mirror Aeons", "cancel path and positive Attack path in each", "Escape and P pause/resume, H hide/restore in each", "prerendered music fetched and playing", "reduce-flashes setting survives a reload", "pose census"],
+  "reused": ["focused reports 0804dc482 and 6d7ecc8a5 for the treatment itself and the privacy gate"],
+  "notTested": ["full CHK-024 upgrade matrix", "progress (a chapter win) surviving a reload", "booth treatment fidelity and the holds judged by eye", "FFX III, VIII-real-clip hold behaviour in play, IX, XII, XVII, XVIII (untreated) and the other treated chapters", "phone width and touch"]
+ },
+ "consoleErrors": 0,
+ "notFound": 0,
+ "elapsedMinutes": 60
+}

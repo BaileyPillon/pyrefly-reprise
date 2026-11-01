@@ -1,0 +1,139 @@
+{
+  "mode": "gpu",
+  "part": "trema",
+  "consoleErrors": [],
+  "notFound": [],
+  "badStatus": [],
+  "html404img": [],
+  "audio": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx2-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-bevelle-underground.mp3",
+    "https://echoesofspira.com/audio/music/victory-ffx2.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx2.mp3",
+    "https://echoesofspira.com/audio/music/pause.mp3",
+    "https://echoesofspira.com/audio/music/scene-bevelle-underground.mp3"
+  ],
+  "steps": [
+    {
+      "step": "boot ready",
+      "ok": true,
+      "detail": " 1600x900"
+    },
+    {
+      "step": "title -> chapter-select",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "board cursor reached ffx2-trema",
+      "ok": true,
+      "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+    },
+    {
+      "step": "ffx2-trema: confirm -> party-prep",
+      "ok": true,
+      "detail": "screen=party-prep"
+    },
+    {
+      "step": "ffx2-trema: prep + cutscene skip -> battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "ffx2-trema: player turn reached",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) pack ON by default: F1 HUD present, no PAUSE button",
+      "ok": true,
+      "detail": "{\"f1\":true,\"hero\":true,\"pauseBtn\":false,\"pauseEls\":[\"BUTTON.battle-pause-chip ig ig--ffx2|pause:open|vis=false\"],\"look\":\"cinematic\",\"rigs\":4,\"bodyTextHasGuide\":false}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) on battle screen with menu",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}): 1 boss bar, 0 Intel panels at first menu",
+      "ok": true,
+      "detail": "{\"ribbon\":1,\"igBossHp\":0,\"ffx2boss\":0,\"intel\":0,\"intelAll\":0,\"guide\":false,\"coachCards\":1,\"text\":\"SCAN DK DK Yuna 5355 /5355 338 /338 AL AL Rikku 5106 /5106 107 /107 DK DK Paine 5355 /5355 338 /338 ATTACK SKILL ◂ CHANGE ◂ ITEM ◂ G GUIDE NEXT BEST MOVE Yuna Attack → Paragon 6,436–7,268 NO MP 100% TO HIT 95% CRIT Physical damage Most damage on the board — 68\"}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) Enter opens a sub-list (menu moved on)",
+      "ok": true,
+      "detail": "{\"s0\":\"Attack\",\"s1\":\"Skill◂\",\"afterEnter\":\"Darkness\"}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) cancel (Escape) from the sub-list returns to the command menu on the battle screen",
+      "ok": true,
+      "detail": "{\"sc\":\"battle\",\"aw\":true,\"sel\":\"Skill◂\"}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) action confirmed with real keys (action-start in the battle log), battle running",
+      "ok": true,
+      "detail": "{\"tg\":\"{\\\"sel\\\":[]}\",\"lg\":[\"atb\",\"atb\",\"chain\",\"turn-start\",\"action-start\",\"miss\",\"action-end\",\"atb\"]}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) P opens pause",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) Escape resumes",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "errors": [],
+  "extra": {
+    "tremahud": {
+      "f1": true,
+      "hero": true,
+      "pauseBtn": false,
+      "pauseEls": [
+        "BUTTON.battle-pause-chip ig ig--ffx2|pause:open|vis=false"
+      ],
+      "look": "cinematic",
+      "rigs": 4,
+      "bodyTextHasGuide": false
+    },
+    "tremaprobe": {
+      "ribbon": 1,
+      "igBossHp": 0,
+      "ffx2boss": 0,
+      "intel": 0,
+      "intelAll": 0,
+      "guide": false,
+      "coachCards": 1,
+      "text": "SCAN DK DK Yuna 5355 /5355 338 /338 AL AL Rikku 5106 /5106 107 /107 DK DK Paine 5355 /5355 338 /338 ATTACK SKILL ◂ CHANGE ◂ ITEM ◂ G GUIDE NEXT BEST MOVE Yuna Attack → Paragon 6,436–7,268 NO MP 100% TO HIT 95% CRIT Physical damage Most damage on the board — 68"
+    },
+    "tremanav": {
+      "s0": "Attack",
+      "s1": "Skill◂",
+      "afterEnter": "Darkness"
+    },
+    "tremacancel": {
+      "sc": "battle",
+      "aw": true,
+      "sel": "Skill◂"
+    },
+    "trematarget": "{\"sel\":[]}",
+    "tremaactprobe": {
+      "ribbon": 1,
+      "igBossHp": 0,
+      "ffx2boss": 0,
+      "intel": 0,
+      "intelAll": 0,
+      "guide": false,
+      "coachCards": 1,
+      "text": "SCAN DK DK Yuna 5355 338 AL AL Rikku 5106 107 DK DK Paine 5355 338 G GUIDE Paragon Enter Select G Intel P Pause 7106 E ENEMY MOVE Paragon VICTORY THE PARTY HAS FALLEN"
+    },
+    "tremalog": "[\"chain\",\"turn-start\",\"action-start\",\"miss\",\"action-end\",\"atb\"]"
+  },
+  "elapsedMin": "0.6"
+}

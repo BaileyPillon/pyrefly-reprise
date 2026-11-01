@@ -1,0 +1,156 @@
+{
+  "mode": "gpu",
+  "part": "yun",
+  "consoleErrors": [],
+  "notFound": [],
+  "badStatus": [],
+  "html404img": [],
+  "audio": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-lady.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-zanarkand-dome.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.mid-yunalesca-form-3.002.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.mid-yunalesca-first-zombie.001.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.mid-yunalesca-first-zombie.002.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.mid-yunalesca-first-zombie.002.fb2.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-tidus.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-yuna.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.quip-auron.001.mp3",
+    "https://echoesofspira.com/audio/music/boss-challenge.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.pre.006.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.pre.007.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.pre.008.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.pre.015.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.pre.025.mp3",
+    "https://echoesofspira.com/audio/music/victory-ffx.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.pre.030.mp3",
+    "https://echoesofspira.com/audio/voice/yunalesca/yunalesca.pre.031.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-flux/seymour-flux.pre.017.mp3",
+    "https://echoesofspira.com/audio/music/pause.mp3",
+    "https://echoesofspira.com/audio/music/boss-challenge.mp3"
+  ],
+  "steps": [
+    {
+      "step": "boot ready",
+      "ok": true,
+      "detail": " 1600x900"
+    },
+    {
+      "step": "title -> chapter-select",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "board cursor reached yunalesca",
+      "ok": true,
+      "detail": "order=seymour-flux,yunalesca,braskas-final-aeon,seymour-anima-macalania,evrae-airship,yojimbo-cavern,seymour-natus,seymour-omnis,isaaru-via-purifico,sin-fins-core,sin-face,mirror-aeons,ffx2-bahamut,ffx2-vegnagun-shuyin,ffx2-leblanc,ffx2-fallen-aeons,ffx2-trema,ffx2-den-of-woe,ffx2-ixion-djose"
+    },
+    {
+      "step": "yunalesca: confirm -> party-prep",
+      "ok": true,
+      "detail": "screen=party-prep"
+    },
+    {
+      "step": "yunalesca: prep + cutscene skip -> battle",
+      "ok": true,
+      "detail": "screen=battle"
+    },
+    {
+      "step": "yunalesca: player turn reached",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) pack ON by default: F1 HUD present, no PAUSE button",
+      "ok": true,
+      "detail": "{\"f1\":true,\"hero\":true,\"pauseBtn\":false,\"pauseEls\":[\"BUTTON.battle-pause-chip ig|pause:open|vis=false\"],\"look\":\"cinematic\",\"rigs\":3,\"bodyTextHasGuide\":false}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) on battle screen with menu",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}): 1 boss bar, 0 Intel panels at first menu",
+      "ok": true,
+      "detail": "{\"ribbon\":1,\"igBossHp\":0,\"ffx2boss\":0,\"intel\":0,\"intelAll\":0,\"guide\":false,\"coachCards\":1,\"text\":\"Tidus Yunalesca Yuna ATTACK SPECIAL ×4 WHITE MAGIC ×3 ITEMS ×17 FLEE ▼ Tidus 3410 /3410 170 /170 OD Yuna 2450 /2450 290 /290 OD Auron 4400 /4400 110 /110 OD G GUIDE NEXT BEST MOVE Tidus Hastega → the party IN WHITE MAGIC 30 MP + HASTE Speeds the party’s turns \"}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) Enter opens a sub-list (menu moved on)",
+      "ok": true,
+      "detail": "{\"s0\":\"Attack\",\"s1\":\"Special▸×4\",\"afterEnter\":\"Cheer\"}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) cancel (Escape) from the sub-list returns to the command menu on the battle screen",
+      "ok": true,
+      "detail": "{\"sc\":\"battle\",\"aw\":true,\"sel\":\"Special▸×4\"}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) action confirmed with real keys (action-start in the battle log), battle running",
+      "ok": true,
+      "detail": "{\"tg\":\"{\\\"sel\\\":[]}\",\"lg\":[\"action-end\",\"status-tick\",\"turn-start\",\"action-start\",\"overdrive-gauge\",\"damage\",\"action-end\",\"turn-start\"]}"
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) P opens pause",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "Ch VI-or-IV(${CH}) Escape resumes",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "errors": [],
+  "extra": {
+    "yunhud": {
+      "f1": true,
+      "hero": true,
+      "pauseBtn": false,
+      "pauseEls": [
+        "BUTTON.battle-pause-chip ig|pause:open|vis=false"
+      ],
+      "look": "cinematic",
+      "rigs": 3,
+      "bodyTextHasGuide": false
+    },
+    "yunprobe": {
+      "ribbon": 1,
+      "igBossHp": 0,
+      "ffx2boss": 0,
+      "intel": 0,
+      "intelAll": 0,
+      "guide": false,
+      "coachCards": 1,
+      "text": "Tidus Yunalesca Yuna ATTACK SPECIAL ×4 WHITE MAGIC ×3 ITEMS ×17 FLEE ▼ Tidus 3410 /3410 170 /170 OD Yuna 2450 /2450 290 /290 OD Auron 4400 /4400 110 /110 OD G GUIDE NEXT BEST MOVE Tidus Hastega → the party IN WHITE MAGIC 30 MP + HASTE Speeds the party’s turns "
+    },
+    "yunnav": {
+      "s0": "Attack",
+      "s1": "Special▸×4",
+      "afterEnter": "Cheer"
+    },
+    "yuncancel": {
+      "sc": "battle",
+      "aw": true,
+      "sel": "Special▸×4"
+    },
+    "yuntarget": "{\"sel\":[]}",
+    "yunactprobe": {
+      "ribbon": 1,
+      "igBossHp": 0,
+      "ffx2boss": 0,
+      "intel": 0,
+      "intelAll": 0,
+      "guide": false,
+      "coachCards": 1,
+      "text": "Tidus Yunalesca Yuna Tidus 3410 170 Yuna 2450 290 Auron 4400 110 I YUNALESCA G GUIDE Yunalesca Enter Select G Intel Q Defend P Pause 884 E ENEMY MOVE Yunalesca VICTORY THE PARTY HAS FALLEN"
+    },
+    "yunlog": "[\"turn-start\",\"action-start\",\"overdrive-gauge\",\"damage\",\"action-end\",\"turn-start\"]"
+  },
+  "elapsedMin": "1.1"
+}

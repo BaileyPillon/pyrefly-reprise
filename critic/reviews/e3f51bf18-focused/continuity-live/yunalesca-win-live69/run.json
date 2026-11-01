@@ -1,0 +1,7567 @@
+{
+ "chapter": "yunalesca",
+ "game": "ffx",
+ "goal": "win",
+ "size": "1600x900",
+ "base": "https://echoesofspira.com/",
+ "mode": "gpu",
+ "hooks": [
+  "window.__pyrefly.setSeed(1) before the first key (CHK-015 labelled setup hook, PR-0202)"
+ ],
+ "seedPinned": 1,
+ "seed": 1,
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1,
+   "links": 1,
+   "firstEnemyAction": {
+    "seq": 1,
+    "actor": "yunalesca",
+    "ability": "Dispelling Slap",
+    "targets": [
+     "auron"
+    ]
+   }
+  }
+ ],
+ "firstEnemyAction": {
+  "seq": 1,
+  "actor": "yunalesca",
+  "ability": "Dispelling Slap",
+  "targets": [
+   "auron"
+  ]
+ },
+ "steps": [
+  {
+   "ms": 8577,
+   "k": "prepEscGoesTo",
+   "v": "party-prep"
+  },
+  {
+   "ms": 28036,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1
+   }
+  },
+  {
+   "ms": 42771,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 1,
+    "actor": "yunalesca",
+    "ability": "Dispelling Slap",
+    "targets": [
+     "auron"
+    ]
+   }
+  },
+  {
+   "ms": 756852,
+   "k": "fight",
+   "v": {
+    "outcome": "victory",
+    "turns": 138,
+    "ms": 714080,
+    "seams": 0,
+    "orders": 0
+   }
+  },
+  {
+   "ms": 786952,
+   "k": "continuity",
+   "v": "[continuity] yunalesca: 727.347 s of battle, 43417 frames recorded, 1156 swaps, 1450 strips, 59.7 fps, 0 probe errors"
+  },
+  {
+   "ms": 787001,
+   "k": "continuity",
+   "v": "[continuity] yunalesca: pose-measure D:\\pyrefly-release55\\docs\\target\\pose-measure.json (114 subjects, sha256 b8cead6d81a8, source harness-tree); build 6321b257; the candidate's own table"
+  },
+  {
+   "ms": 802070,
+   "k": "continuity",
+   "v": "[continuity] yunalesca: CHK-026 FAIL, CHK-027 FAIL; max head jump 10.7% (0.2% registered, a control), stature 0.781 to 1.119 (0 out of band), max feet shift 1px (12.8px from the pixels), 0 snaps/min, worst swap jerk 102.3px (worst dash 150.4px), frame p99 33.8ms, 19 strips"
+  }
+ ],
+ "picks": [
+  {
+   "turn": 0,
+   "ms": 11,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Hastega",
+    "target": "the party",
+    "menu": "White Magic"
+   },
+   "took": "Hastega",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:3972/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:24000/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 6,
+     "actor": "tidus",
+     "did": "Hastega",
+     "targets": [
+      "tidus",
+      "yuna",
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 1,
+   "ms": 3862,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Reflect",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Reflect",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:3972/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:24000/24000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 13,
+     "actor": "yuna",
+     "did": "Reflect",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 2,
+   "ms": 9969,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:3972/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:24000/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 17,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 3,
+   "ms": 13550,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Reflect",
+    "target": "Auron",
+    "menu": "White Magic"
+   },
+   "took": "Reflect",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:3972/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:22222/24000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 28,
+     "actor": "yuna",
+     "did": "Reflect",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 4,
+   "ms": 18565,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:3972/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:22222/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 32,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 5,
+   "ms": 22843,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Cheer",
+    "target": "the party",
+    "menu": "Special"
+   },
+   "took": "Cheer",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:1772/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:24000/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 43,
+     "actor": "tidus",
+     "did": "Cheer",
+     "targets": [
+      "tidus",
+      "yuna",
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 6,
+   "ms": 26106,
+   "actor": "command:yuna",
+   "want": {
+    "label": "X-Potion",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "X-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:1772/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:24000/24000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 49,
+     "actor": "yuna",
+     "did": "X-Potion",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 7,
+   "ms": 30548,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Cheer",
+    "target": "the party",
+    "menu": "Special"
+   },
+   "took": "Cheer",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:24000/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 55,
+     "actor": "tidus",
+     "did": "Cheer",
+     "targets": [
+      "tidus",
+      "yuna",
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 8,
+   "ms": 33814,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:24000/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 61,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 9,
+   "ms": 35719,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Dispel",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Dispel",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:24000/24000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 68,
+     "actor": "yuna",
+     "did": "Dispel",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 10,
+   "ms": 40898,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Cheer",
+    "target": "the party",
+    "menu": "Special"
+   },
+   "took": "Cheer",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:24000/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 73,
+     "actor": "tidus",
+     "did": "Cheer",
+     "targets": [
+      "tidus",
+      "yuna",
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 11,
+   "ms": 45498,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2251/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:24000/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 84,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 12,
+   "ms": 48979,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Reflect",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Reflect",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2251/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:21680/24000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 94,
+     "actor": "yuna",
+     "did": "Reflect",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 13,
+   "ms": 53773,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Cheer",
+    "target": "the party",
+    "menu": "Special"
+   },
+   "took": "Cheer",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2251/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:21680/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 98,
+     "actor": "tidus",
+     "did": "Cheer",
+     "targets": [
+      "tidus",
+      "yuna",
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 14,
+   "ms": 59427,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2251/2450",
+    "auron:2200/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:23880/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 109,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 15,
+   "ms": 62923,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Cheer",
+    "target": "the party",
+    "menu": "Special"
+   },
+   "took": "Cheer",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2251/2450",
+    "auron:2200/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:21586/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 118,
+     "actor": "tidus",
+     "did": "Cheer",
+     "targets": [
+      "tidus",
+      "yuna",
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 16,
+   "ms": 66206,
+   "actor": "command:yuna",
+   "want": {
+    "label": "X-Potion",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "X-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2251/2450",
+    "auron:2200/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:21586/24000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 124,
+     "actor": "yuna",
+     "did": "X-Potion",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 17,
+   "ms": 70650,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2251/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:21586/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 129,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 18,
+   "ms": 75191,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2100/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:18920/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 142,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 19,
+   "ms": 78725,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2100/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:17453/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 150,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 20,
+   "ms": 82249,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Dispel",
+    "target": "Auron",
+    "menu": "White Magic"
+   },
+   "took": "Dispel",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2100/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:14886/24000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 160,
+     "actor": "yuna",
+     "did": "Dispel",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 21,
+   "ms": 89723,
+   "actor": "command:auron",
+   "want": {
+    "label": "Shooting Star",
+    "target": "Yunalesca",
+    "menu": "Overdrive"
+   },
+   "took": "Shooting Star",
+   "viaMenu": "Overdrive",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2100/2450",
+    "auron:2200/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:17086/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 171,
+     "actor": "auron",
+     "did": "Shooting Star",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 22,
+   "ms": 101172,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2100/2450",
+    "auron:2200/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:11505/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 182,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 23,
+   "ms": 104685,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Reflect",
+    "target": "Auron",
+    "menu": "White Magic"
+   },
+   "took": "Reflect",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2100/2450",
+    "auron:2200/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:10182/24000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 191,
+     "actor": "yuna",
+     "did": "Reflect",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 24,
+   "ms": 111389,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2100/2450",
+    "auron:1924/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:10182/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 201,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 25,
+   "ms": 117155,
+   "actor": "command:yuna",
+   "want": {
+    "label": "NulBlaze",
+    "target": "the party",
+    "menu": "White Magic"
+   },
+   "took": "NulBlaze",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:1705/3410",
+    "yuna:2100/2450",
+    "auron:1924/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:10437/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 216,
+     "actor": "yuna",
+     "did": "NulBlaze",
+     "targets": [
+      "tidus",
+      "yuna",
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 26,
+   "ms": 123261,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1705/3410",
+    "yuna:2100/2450",
+    "auron:1924/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:10437/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 226,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 27,
+   "ms": 126821,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1705/3410",
+    "yuna:2100/2450",
+    "auron:1924/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:8058/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 235,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 28,
+   "ms": 131528,
+   "actor": "command:yuna",
+   "want": {
+    "label": "X-Potion",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "X-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:1705/3410",
+    "yuna:2100/2450",
+    "auron:1779/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:6602/24000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 247,
+     "actor": "yuna",
+     "did": "X-Potion",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 29,
+   "ms": 136307,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1705/3410",
+    "yuna:2100/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:6602/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 254,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 30,
+   "ms": 147327,
+   "actor": "command:yuna",
+   "want": {
+    "label": "X-Potion",
+    "target": "Tidus",
+    "menu": "Items"
+   },
+   "took": "X-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:1705/3410",
+    "yuna:2100/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:5168/24000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 263,
+     "actor": "yuna",
+     "did": "X-Potion",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 31,
+   "ms": 154189,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2100/2450",
+    "auron:2200/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:7368/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 275,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 32,
+   "ms": 157791,
+   "actor": "command:yuna",
+   "want": {
+    "label": "X-Potion",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "X-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2100/2450",
+    "auron:2200/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:4811/24000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 284,
+     "actor": "yuna",
+     "did": "X-Potion",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 33,
+   "ms": 162355,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2100/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:4811/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 289,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 34,
+   "ms": 167108,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:1934/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:3394/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 301,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 35,
+   "ms": 170739,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Curaga",
+    "target": "Yuna",
+    "menu": "White Magic"
+   },
+   "took": "Curaga",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:1934/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:1005/24000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 311,
+     "actor": "yuna",
+     "did": "Curaga",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 36,
+   "ms": 177105,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:2200/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:3205/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 320,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 37,
+   "ms": 180739,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:2200/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:1749/24000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 328,
+     "actor": "yuna",
+     "did": "Hi-Potion",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 38,
+   "ms": 185144,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:3200/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:1749/24000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 333,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 39,
+   "ms": 204307,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Holy Water",
+    "target": "Tidus",
+    "menu": "Items"
+   },
+   "took": "Holy Water",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3251/3410",
+    "yuna:2290/2450",
+    "auron:3047/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:48000/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 353,
+     "actor": "tidus",
+     "did": "Holy Water",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 40,
+   "ms": 206977,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Dispel",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Dispel",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3251/3410",
+    "yuna:2290/2450",
+    "auron:3047/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:48000/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 358,
+     "actor": "yuna",
+     "did": "Dispel",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 41,
+   "ms": 214212,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3251/3410",
+    "yuna:2290/2450",
+    "auron:3047/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:48000/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 366,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 42,
+   "ms": 215976,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3251/3410",
+    "yuna:2290/2450",
+    "auron:3047/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:46506/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 370,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 43,
+   "ms": 221112,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Dispel",
+    "target": "Auron",
+    "menu": "White Magic"
+   },
+   "took": "Dispel",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3251/3410",
+    "yuna:2290/2450",
+    "auron:2907/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:45478/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 384,
+     "actor": "yuna",
+     "did": "Dispel",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 44,
+   "ms": 226272,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3251/3410",
+    "yuna:2290/2450",
+    "auron:2907/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:45478/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 388,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 45,
+   "ms": 229438,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2955/3410",
+    "yuna:2290/2450",
+    "auron:2907/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:42632/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 397,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 46,
+   "ms": 234536,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2290/2450",
+    "auron:2761/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:40065/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 410,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 47,
+   "ms": 237619,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Holy Water",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "Holy Water",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3254/3410",
+    "yuna:2290/2450",
+    "auron:2761/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:38731/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 419,
+     "actor": "yuna",
+     "did": "Holy Water",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 48,
+   "ms": 243025,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Curaga",
+    "target": "Auron",
+    "menu": "White Magic"
+   },
+   "took": "Curaga",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2290/2450",
+    "auron:2761/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:38731/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 428,
+     "actor": "yuna",
+     "did": "Curaga",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 49,
+   "ms": 247479,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2290/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:38731/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 433,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 50,
+   "ms": 249150,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2290/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:36302/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 438,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 51,
+   "ms": 253069,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Holy Water",
+    "target": "Yuna",
+    "menu": "Items"
+   },
+   "took": "Holy Water",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2290/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:34835/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 446,
+     "actor": "yuna",
+     "did": "Holy Water",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 52,
+   "ms": 255661,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2290/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:34835/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 450,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 53,
+   "ms": 258786,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3104/3410",
+    "yuna:2290/2450",
+    "auron:4400/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:33379/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 459,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 54,
+   "ms": 263340,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Curaga",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Curaga",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:2942/3410",
+    "yuna:2138/2450",
+    "auron:4102/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:30861/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 476,
+     "actor": "yuna",
+     "did": "Curaga",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 55,
+   "ms": 267444,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2138/2450",
+    "auron:4102/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:30861/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 480,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 56,
+   "ms": 270871,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3248/3410",
+    "yuna:1988/2450",
+    "auron:3952/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:29416/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 492,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 57,
+   "ms": 274035,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Curaga",
+    "target": "Yuna",
+    "menu": "White Magic"
+   },
+   "took": "Curaga",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3248/3410",
+    "yuna:1988/2450",
+    "auron:3810/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:26859/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 502,
+     "actor": "yuna",
+     "did": "Curaga",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 58,
+   "ms": 279587,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3087/3410",
+    "yuna:2284/2450",
+    "auron:3658/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:26859/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 513,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 59,
+   "ms": 281275,
+   "actor": "command:auron",
+   "want": {
+    "label": "Power Break",
+    "target": "Yunalesca",
+    "menu": "Special"
+   },
+   "took": "Power Break",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:3087/3410",
+    "yuna:2284/2450",
+    "auron:3658/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:25465/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 518,
+     "actor": "auron",
+     "did": "Power Break",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 60,
+   "ms": 288177,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Curaga",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Curaga",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3087/3410",
+    "yuna:2450/2450",
+    "auron:3506/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:23046/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 533,
+     "actor": "yuna",
+     "did": "Curaga",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 61,
+   "ms": 292544,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2450/2450",
+    "auron:3506/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:23046/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 537,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 62,
+   "ms": 297739,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3089/3410",
+    "yuna:2286/2450",
+    "auron:3359/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:21574/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 555,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 63,
+   "ms": 300686,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Holy Water",
+    "target": "Tidus",
+    "menu": "Items"
+   },
+   "took": "Holy Water",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2937/3410",
+    "yuna:2286/2450",
+    "auron:3359/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:20157/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 564,
+     "actor": "yuna",
+     "did": "Holy Water",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 64,
+   "ms": 303761,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2937/3410",
+    "yuna:2286/2450",
+    "auron:3359/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:20157/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 568,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 65,
+   "ms": 307520,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Curaga",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Curaga",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3090/3410",
+    "yuna:2286/2450",
+    "auron:3359/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:17768/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 579,
+     "actor": "yuna",
+     "did": "Curaga",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 66,
+   "ms": 312157,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Remedy",
+    "target": "Yuna",
+    "menu": "Items"
+   },
+   "took": "Remedy",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2286/2450",
+    "auron:3359/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:17768/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 585,
+     "actor": "tidus",
+     "did": "Remedy",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 67,
+   "ms": 316372,
+   "actor": "command:auron",
+   "want": {
+    "label": "Shooting Star",
+    "target": "Yunalesca",
+    "menu": "Overdrive"
+   },
+   "took": "Shooting Star",
+   "viaMenu": "Overdrive",
+   "engineHp": [
+    "tidus:3410/3410",
+    "yuna:2286/2450",
+    "auron:3359/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:17768/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 591,
+     "actor": "auron",
+     "did": "Shooting Star",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 68,
+   "ms": 329962,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3088/3410",
+    "yuna:2116/2450",
+    "auron:3072/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:12227/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 611,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 69,
+   "ms": 333456,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Curaga",
+    "target": "Yuna",
+    "menu": "White Magic"
+   },
+   "took": "Curaga",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:2922/3410",
+    "yuna:2116/2450",
+    "auron:3072/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:10799/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 617,
+     "actor": "yuna",
+     "did": "Curaga",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 70,
+   "ms": 341881,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2323/3410",
+    "yuna:2288/2450",
+    "auron:2930/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:10799/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 632,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 71,
+   "ms": 345424,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Dispel",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Dispel",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:2117/3410",
+    "yuna:2288/2450",
+    "auron:2930/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:9432/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 638,
+     "actor": "yuna",
+     "did": "Dispel",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 72,
+   "ms": 353910,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2117/3410",
+    "yuna:2122/2450",
+    "auron:2930/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:9432/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 647,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 73,
+   "ms": 357456,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2117/3410",
+    "yuna:1984/2450",
+    "auron:2930/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:6816/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 653,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 74,
+   "ms": 365223,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Dispel",
+    "target": "Yuna",
+    "menu": "White Magic"
+   },
+   "took": "Dispel",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:561/3410",
+    "yuna:1680/2450",
+    "auron:2930/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:5399/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 672,
+     "actor": "yuna",
+     "did": "Dispel",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 75,
+   "ms": 370191,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:561/3410",
+    "yuna:1680/2450",
+    "auron:2930/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:5399/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 677,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 76,
+   "ms": 371971,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:561/3410",
+    "yuna:1680/2450",
+    "auron:2930/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:3982/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 681,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 77,
+   "ms": 377675,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Remedy",
+    "target": "Tidus",
+    "menu": "Items"
+   },
+   "took": "Remedy",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:561/3410",
+    "yuna:1680/2450",
+    "auron:1317/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:1563/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 695,
+     "actor": "yuna",
+     "did": "Remedy",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 78,
+   "ms": 381571,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Elixir",
+    "target": "Tidus",
+    "menu": "Items"
+   },
+   "took": "Elixir",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:561/3410",
+    "yuna:1680/2450",
+    "auron:1317/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:1563/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 699,
+     "actor": "tidus",
+     "did": "Elixir",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 79,
+   "ms": 388134,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Remedy",
+    "target": "Tidus",
+    "menu": "Items"
+   },
+   "took": "Remedy",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3257/3410",
+    "yuna:1510/2450",
+    "auron:1173/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:1563/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 713,
+     "actor": "yuna",
+     "did": "Remedy",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 80,
+   "ms": 391983,
+   "actor": "command:auron",
+   "want": {
+    "label": "Remedy",
+    "target": "Yuna",
+    "menu": "Items"
+   },
+   "took": "Remedy",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3257/3410",
+    "yuna:1510/2450",
+    "auron:1173/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:1563/48000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 717,
+     "actor": "auron",
+     "did": "Remedy",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 81,
+   "ms": 395673,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3257/3410",
+    "yuna:1510/2450",
+    "auron:1173/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:1563/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 721,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 82,
+   "ms": 399619,
+   "actor": "command:yuna",
+   "want": {
+    "label": "NulBlaze",
+    "target": "the party",
+    "menu": "White Magic"
+   },
+   "took": "NulBlaze",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:1350/2450",
+    "auron:1026/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:196/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 735,
+     "actor": "yuna",
+     "did": "NulBlaze",
+     "targets": [
+      "tidus",
+      "yuna",
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 83,
+   "ms": 404115,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:1350/2450",
+    "auron:1026/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:196/48000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 741,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 84,
+   "ms": 422199,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Wakka",
+    "target": null,
+    "menu": "Switch"
+   },
+   "took": "Wakka",
+   "viaMenu": "Switch",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:1350/2450",
+    "auron:1026/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:60000/60000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 85,
+   "ms": 425030,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:1350/2450",
+    "auron:1026/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:60000/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 755,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 86,
+   "ms": 428064,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Cura",
+    "target": "Wakka",
+    "menu": "White Magic"
+   },
+   "took": "Cura",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:1350/2450",
+    "auron:1026/4400",
+    "wakka:3294/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:58798/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "wakka",
+    "wanted": "wakka",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 764,
+     "actor": "yuna",
+     "did": "Cura",
+     "targets": [
+      "wakka"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 87,
+   "ms": 435564,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:1350/2450",
+    "auron:755/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:58798/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 774,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 88,
+   "ms": 440447,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:1350/2450",
+    "auron:411/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:56231/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 784,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 89,
+   "ms": 447267,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Phoenix Down",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "Phoenix Down",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:1350/2450",
+    "auron:0/4400",
+    "wakka:3287/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:55089/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 803,
+     "actor": "yuna",
+     "did": "Phoenix Down",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 90,
+   "ms": 450863,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:1350/2450",
+    "auron:2200/4400",
+    "wakka:3287/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:55089/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 808,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 91,
+   "ms": 453914,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:1350/2450",
+    "auron:2200/4400",
+    "wakka:3068/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:53845/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 816,
+     "actor": "yuna",
+     "did": "Hi-Potion",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 92,
+   "ms": 460698,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:931/2450",
+    "auron:2630/4400",
+    "wakka:2516/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:53845/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 827,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 93,
+   "ms": 463747,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:931/2450",
+    "auron:2204/4400",
+    "wakka:2516/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:52096/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 836,
+     "actor": "yuna",
+     "did": "Hi-Potion",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 94,
+   "ms": 469871,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:766/2450",
+    "auron:2975/4400",
+    "wakka:2300/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:52096/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 847,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 95,
+   "ms": 472965,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:766/2450",
+    "auron:2975/4400",
+    "wakka:2070/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:50866/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 855,
+     "actor": "yuna",
+     "did": "Hi-Potion",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 96,
+   "ms": 477214,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:766/2450",
+    "auron:3975/4400",
+    "wakka:2070/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:50866/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 859,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 97,
+   "ms": 482316,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Phoenix Down",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "Phoenix Down",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:766/2450",
+    "auron:0/4400",
+    "wakka:2070/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:49138/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 872,
+     "actor": "wakka",
+     "did": "Phoenix Down",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 98,
+   "ms": 485567,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:766/2450",
+    "auron:2200/4400",
+    "wakka:2070/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:49138/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 877,
+     "actor": "yuna",
+     "did": "Hi-Potion",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 99,
+   "ms": 489863,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:766/2450",
+    "auron:3200/4400",
+    "wakka:2070/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:1674/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:49138/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 881,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 100,
+   "ms": 494928,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Grand Summon",
+    "target": null,
+    "menu": "Overdrive"
+   },
+   "took": "Grand Summon (picker opened: Valefor)",
+   "viaMenu": "Overdrive",
+   "target": {
+    "confirmed": true,
+    "picker": true
+   },
+   "engineDid": [
+    {
+     "seq": 898,
+     "actor": "yuna",
+     "did": "Grand Summon",
+     "targets": []
+    }
+   ]
+  },
+  {
+   "turn": 101,
+   "ms": 503553,
+   "actor": "command:valefor",
+   "want": {
+    "label": "Energy Ray",
+    "target": "Yunalesca",
+    "menu": "Overdrive"
+   },
+   "took": "Energy Ray (one-item group, direct)",
+   "viaMenu": "Overdrive",
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 904,
+     "actor": "valefor",
+     "did": "Energy Ray",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 102,
+   "ms": 521561,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:607/2450",
+    "auron:2969/4400",
+    "wakka:1595/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:40206/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 940,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 103,
+   "ms": 524734,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:607/2450",
+    "auron:2752/4400",
+    "wakka:1595/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:38442/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 949,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 104,
+   "ms": 531169,
+   "actor": "command:auron",
+   "want": {
+    "label": "Phoenix Down",
+    "target": "Wakka",
+    "menu": "Items"
+   },
+   "took": "Phoenix Down",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:607/2450",
+    "auron:2752/4400",
+    "wakka:0/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:37253/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "wakka",
+    "wanted": "wakka",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 964,
+     "actor": "auron",
+     "did": "Phoenix Down",
+     "targets": [
+      "wakka"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 105,
+   "ms": 537096,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Wakka",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:159/2450",
+    "auron:2211/4400",
+    "wakka:1206/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:37253/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "wakka",
+    "wanted": "wakka",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 976,
+     "actor": "yuna",
+     "did": "Hi-Potion",
+     "targets": [
+      "wakka"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 106,
+   "ms": 541279,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:159/2450",
+    "auron:2211/4400",
+    "wakka:2206/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:37253/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 982,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 107,
+   "ms": 544749,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:159/2450",
+    "auron:1992/4400",
+    "wakka:2206/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:35525/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 992,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 108,
+   "ms": 547913,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Wakka",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:159/2450",
+    "auron:1992/4400",
+    "wakka:1970/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:34281/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "wakka",
+    "wanted": "wakka",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1000,
+     "actor": "yuna",
+     "did": "Hi-Potion",
+     "targets": [
+      "wakka"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 109,
+   "ms": 554030,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Wakka",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:159/2450",
+    "auron:1992/4400",
+    "wakka:3317/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:34281/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "wakka",
+    "wanted": "wakka",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1010,
+     "actor": "yuna",
+     "did": "Hi-Potion",
+     "targets": [
+      "wakka"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 110,
+   "ms": 558551,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:159/2450",
+    "auron:1992/4400",
+    "wakka:3520/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:34281/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1017,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 111,
+   "ms": 564342,
+   "actor": "command:auron",
+   "want": {
+    "label": "Phoenix Down",
+    "target": "Wakka",
+    "menu": "Items"
+   },
+   "took": "Phoenix Down",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:159/2450",
+    "auron:1992/4400",
+    "wakka:0/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:33069/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "wakka",
+    "wanted": "wakka",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1031,
+     "actor": "auron",
+     "did": "Phoenix Down",
+     "targets": [
+      "wakka"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 112,
+   "ms": 567608,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Wakka",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:159/2450",
+    "auron:1992/4400",
+    "wakka:1760/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:33069/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "wakka",
+    "wanted": "wakka",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1036,
+     "actor": "yuna",
+     "did": "Hi-Potion",
+     "targets": [
+      "wakka"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 113,
+   "ms": 571764,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:159/2450",
+    "auron:1992/4400",
+    "wakka:2760/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:33069/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1041,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 114,
+   "ms": 577868,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Phoenix Down",
+    "target": "Yuna",
+    "menu": "Items"
+   },
+   "took": "Phoenix Down",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:0/2450",
+    "auron:1556/4400",
+    "wakka:2521/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:31291/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1062,
+     "actor": "wakka",
+     "did": "Phoenix Down",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 115,
+   "ms": 581123,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:1225/2450",
+    "auron:1556/4400",
+    "wakka:2521/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:31291/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1067,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 116,
+   "ms": 585867,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:983/2450",
+    "auron:1340/4400",
+    "wakka:2047/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:30037/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1082,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 117,
+   "ms": 589378,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Yuna",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:983/2450",
+    "auron:1122/4400",
+    "wakka:2047/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:28158/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1092,
+     "actor": "yuna",
+     "did": "Hi-Potion",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 118,
+   "ms": 595674,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:1531/2450",
+    "auron:579/4400",
+    "wakka:1512/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:28158/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1104,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 119,
+   "ms": 598883,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Yuna",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:1531/2450",
+    "auron:579/4400",
+    "wakka:1271/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:27044/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1112,
+     "actor": "yuna",
+     "did": "Hi-Potion",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 120,
+   "ms": 602600,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:2450/2450",
+    "auron:579/4400",
+    "wakka:1271/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:27044/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1116,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 121,
+   "ms": 609061,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Shiva",
+    "target": null,
+    "menu": "Summon"
+   },
+   "took": "Shiva",
+   "viaMenu": "Summon",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:2450/2450",
+    "auron:203/4400",
+    "wakka:1271/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:23172/60000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   },
+   "engineDid": [
+    {
+     "seq": 1130,
+     "actor": "yuna",
+     "did": "Summon",
+     "targets": []
+    }
+   ]
+  },
+  {
+   "turn": 122,
+   "ms": 613826,
+   "actor": "command:shiva",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:2450/2450",
+    "auron:203/4400",
+    "wakka:1271/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:2004/2004",
+    "bahamut:3218/3218",
+    "yunalesca:23172/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1134,
+     "actor": "shiva",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 123,
+   "ms": 619056,
+   "actor": "command:shiva",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:2450/2450",
+    "auron:203/4400",
+    "wakka:1271/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:1344/2004",
+    "bahamut:3218/3218",
+    "yunalesca:20826/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1150,
+     "actor": "shiva",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 124,
+   "ms": 624694,
+   "actor": "command:shiva",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:2450/2450",
+    "auron:203/4400",
+    "wakka:1271/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:127/2004",
+    "bahamut:3218/3218",
+    "yunalesca:19552/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1164,
+     "actor": "shiva",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 125,
+   "ms": 631276,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:2450/2450",
+    "auron:86/4400",
+    "wakka:1271/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:0/2004",
+    "bahamut:3218/3218",
+    "yunalesca:17206/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1178,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 126,
+   "ms": 637927,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Phoenix Down",
+    "target": "Yuna",
+    "menu": "Items"
+   },
+   "took": "Phoenix Down",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:0/2450",
+    "auron:0/4400",
+    "wakka:1042/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:0/2004",
+    "bahamut:3218/3218",
+    "yunalesca:16017/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1195,
+     "actor": "wakka",
+     "did": "Phoenix Down",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 127,
+   "ms": 643313,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Phoenix Down",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "Phoenix Down",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:985/2450",
+    "auron:0/4400",
+    "wakka:812/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:0/2004",
+    "bahamut:3218/3218",
+    "yunalesca:16017/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1207,
+     "actor": "wakka",
+     "did": "Phoenix Down",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 128,
+   "ms": 646680,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:985/2450",
+    "auron:2200/4400",
+    "wakka:812/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:0/2004",
+    "bahamut:3218/3218",
+    "yunalesca:16017/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1212,
+     "actor": "yuna",
+     "did": "Hi-Potion",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 129,
+   "ms": 653125,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:985/2450",
+    "auron:4400/4400",
+    "wakka:812/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:0/2004",
+    "bahamut:3218/3218",
+    "yunalesca:16017/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1221,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 130,
+   "ms": 656141,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Ixion",
+    "target": null,
+    "menu": "Summon"
+   },
+   "took": "Ixion",
+   "viaMenu": "Summon",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:985/2450",
+    "auron:4400/4400",
+    "wakka:581/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:0/2004",
+    "bahamut:3218/3218",
+    "yunalesca:14773/60000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   },
+   "engineDid": [
+    {
+     "seq": 1229,
+     "actor": "yuna",
+     "did": "Summon",
+     "targets": []
+    }
+   ]
+  },
+  {
+   "turn": 131,
+   "ms": 660545,
+   "actor": "command:ixion",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:985/2450",
+    "auron:4400/4400",
+    "wakka:581/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:2251/2251",
+    "shiva:0/2004",
+    "bahamut:3218/3218",
+    "yunalesca:14773/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1233,
+     "actor": "ixion",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 132,
+   "ms": 667961,
+   "actor": "command:ixion",
+   "want": {
+    "label": "Thor's Hammer",
+    "target": "Yunalesca",
+    "menu": "Overdrive"
+   },
+   "took": "Thor's Hammer (one-item group, direct)",
+   "viaMenu": "Overdrive",
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1254,
+     "actor": "ixion",
+     "did": "Thor's Hammer",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 133,
+   "ms": 682561,
+   "actor": "command:auron",
+   "want": {
+    "label": "Shooting Star",
+    "target": "Yunalesca",
+    "menu": "Overdrive"
+   },
+   "took": "Shooting Star",
+   "viaMenu": "Overdrive",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:985/2450",
+    "auron:4400/4400",
+    "wakka:581/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:0/2251",
+    "shiva:0/2004",
+    "bahamut:3218/3218",
+    "yunalesca:5970/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1281,
+     "actor": "auron",
+     "did": "Shooting Star",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 134,
+   "ms": 692242,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:985/2450",
+    "auron:4183/4400",
+    "wakka:581/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:0/2251",
+    "shiva:0/2004",
+    "bahamut:3218/3218",
+    "yunalesca:2124/60000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 1290,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "yunalesca"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 135,
+   "ms": 698705,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Phoenix Down",
+    "target": "Wakka",
+    "menu": "Items"
+   },
+   "took": "Phoenix Down",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:568/2450",
+    "auron:3635/4400",
+    "wakka:0/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:0/2251",
+    "shiva:0/2004",
+    "bahamut:3218/3218",
+    "yunalesca:1005/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "wakka",
+    "wanted": "wakka",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1307,
+     "actor": "yuna",
+     "did": "Phoenix Down",
+     "targets": [
+      "wakka"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 136,
+   "ms": 704179,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Hi-Potion",
+    "target": "Wakka",
+    "menu": "Items"
+   },
+   "took": "Hi-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:568/2450",
+    "auron:3786/4400",
+    "wakka:1760/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:0/2251",
+    "shiva:0/2004",
+    "bahamut:3218/3218",
+    "yunalesca:1005/60000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "wakka",
+    "wanted": "wakka",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1318,
+     "actor": "yuna",
+     "did": "Hi-Potion",
+     "targets": [
+      "wakka"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 137,
+   "ms": 708820,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Yunalesca",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3106/3410",
+    "yuna:568/2450",
+    "auron:3989/4400",
+    "wakka:2760/3520",
+    "lulu:2530/2530",
+    "rikku:2860/2860",
+    "kimahri:3300/3300",
+    "valefor:0/1674",
+    "ifrit:2275/2275",
+    "ixion:0/2251",
+    "shiva:0/2004",
+    "bahamut:3218/3218",
+    "yunalesca:1005/60000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  }
+ ],
+ "seams": [],
+ "fails": [],
+ "contexts": {
+  "viewport": "1600x900",
+  "query": null,
+  "touch": null,
+  "gamepad": null,
+  "reduceMotion": null
+ },
+ "scriptedChange": "not applicable",
+ "budgetMs": 3000000,
+ "briefingText": "AURON “Nineteen fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.” ENTER / ESC SKIP — 20 SECONDS, ONCE D NEVER SHOW THIS AGAIN",
+ "boardAtEntry": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 19
+ },
+ "boardWalk": [
+  "seymour-flux",
+  "yunalesca"
+ ],
+ "dossier": "AURON · 1 OF 3 “Start with this one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER II Lady Yunalesca 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVII XVIII XXVII X-2 IV V VI XI XIII XV XVI The first summoner, and the price she set A thousand years of pilgrims came here to be told what it costs. She will explain it kindly. She will change twice. Someone has to refuse her. CTB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima VIII Evrae IX Yojimbo X Seymour Natus XII Seymour Omnis XIV Isaaru XVII Sin: the Fins and the Core XVIII Sin: the Face XXVII Mirror Aeons FINAL FANTASY X-2 IV Bahamut V Vegnagun VI Leblanc XI Fallen Aeons XIII Trema XV The Den of Woe XVI Ixion LOCATION Zanarkand Dome — the great hall BOSS Yunalesca PARTY T TIDUS Y YUNA A AURON BEST Not cleared LEFT/RIGHT CHOOSE · UP",
+ "prepText": "AURON · 2 OF 3 “Your party is ready.” The tabs are for later. Start the battle. ESC SKIP THE GUIDE PARTY PREP II · LADY YUNALESCA — ZANARKAND DOME — THE GREAT HALL T Tidus S.LV 46 Y Yuna S.LV 44 A Auron S.LV 48 W Wakka S.LV 44 L Lulu S.LV 44 R Rikku S.LV 42 K Kimahri S.LV 42 CHAPTER STATS SPHERE GRID EQUIPMENT ITEMS OVERDRIVE FFX · II Lady Yunalesca What Was Promised A thousand years of summoners came here to be told the same kind lie. She will not raise her voice, she will not once say anything untrue, and someone still has to refuse her. the great hall the third shape it isn't over OBJECTIVES Reach Form III with a Zombie still standing Dispel Yunalesca's Regen Defeat all three forms TIP Do not cure every Zombie before Form III — the one left standing survives Mega Death and can raise everyone else. START BATTLE T Tidus HP 3410/3410 · MP 170/170 WARRIOR Y Yuna HP 2450/2450 · MP 290/290 SUMMONER A Auron HP 4400/4400 · MP 110/110 SENTINEL",
+ "prepEsc": "party-prep",
+ "preScene": {
+  "lines": [
+   "CHAPTER II · ZANARKAND DOME — THE GREAT HALL Braska HIGH SUMMONER Thank you for coming this far with me. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER II · ZANARKAND DOME — THE GREAT HALL Jecht FINAL AEON Don't get soft on me now, Braska. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER II · ZANARKAND DOME — THE GREAT HALL Young Auron GUARDIAN My lord. There has to be another way. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER II · ZANARKAND DOME — THE GREAT HALL Braska HIGH SUMMONER If there is, I never found it. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU"
+  ],
+  "escOpens": "pause",
+  "holdsToSkip": 1
+ },
+ "firstState": {
+  "chapter": "yunalesca",
+  "game": "ffx",
+  "scene": "zanarkand-dome",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 1,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": true,
+  "exitIntent": null,
+  "playTimeMs": 5016.700000000004,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "yunalesca",
+    "side": "enemy",
+    "art": "yunalesca-1",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "tidus",
+    "side": "party",
+    "art": "tidus",
+    "pose": "ready",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "yuna",
+    "side": "party",
+    "art": "yuna",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "auron",
+    "side": "party",
+    "art": "auron",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   }
+  ],
+  "spellFx": {
+   "fx": {
+    "new": false,
+    "guard": {
+     "level": 0,
+     "scaleStep": 0,
+     "calmMs": 16.7,
+     "budgetMs": 20.87,
+     "busyMs": 0,
+     "steps": 0
+    }
+   },
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0.1,
+   "cpuMeanMs": 3.009,
+   "flights": {
+    "launched": 0,
+    "landed": 0,
+    "live": 0,
+    "lastLaunchAt": 0,
+    "lastLandAt": 0
+   }
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "command:tidus",
+   "awaitingMenu": true,
+   "played": 5,
+   "lastEvents": [
+    {
+     "seq": 0,
+     "type": "turn-start",
+     "ms": 77
+    },
+    {
+     "seq": 1,
+     "type": "action-start",
+     "ms": 266
+    },
+    {
+     "seq": 2,
+     "type": "damage",
+     "ms": 696
+    },
+    {
+     "seq": 3,
+     "type": "action-end",
+     "ms": 235
+    },
+    {
+     "seq": 4,
+     "type": "turn-start",
+     "ms": 110
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 2,
+   "ticks": 2,
+   "events": 5,
+   "result": null,
+   "combatants": [
+    {
+     "id": "tidus",
+     "hp": 3410,
+     "maxHp": 3410,
+     "mp": 170,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "yuna",
+     "hp": 2450,
+     "maxHp": 2450,
+     "mp": 290,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "auron",
+     "hp": 3972,
+     "maxHp": 4400,
+     "mp": 110,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "wakka",
+     "hp": 3520,
+     "maxHp": 3520,
+     "mp": 140,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "lulu",
+     "hp": 2530,
+     "maxHp": 2530,
+     "mp": 300,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "rikku",
+     "hp": 2860,
+     "maxHp": 2860,
+     "mp": 150,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "kimahri",
+     "hp": 3300,
+     "maxHp": 3300,
+     "mp": 160,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "valefor",
+     "hp": 1674,
+     "maxHp": 1674,
+     "mp": 55,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ifrit",
+     "hp": 2275,
+     "maxHp": 2275,
+     "mp": 52,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ixion",
+     "hp": 2251,
+     "maxHp": 2251,
+     "mp": 58,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "shiva",
+     "hp": 2004,
+     "maxHp": 2004,
+     "mp": 64,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "bahamut",
+     "hp": 3218,
+     "maxHp": 3218,
+     "mp": 81,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "yunalesca",
+     "hp": 24000,
+     "maxHp": 24000,
+     "mp": 500,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "turn-start",
+    "actorId": "yunalesca",
+    "turn": 1,
+    "elapsedTicks": 0,
+    "seq": 0
+   },
+   {
+    "type": "action-start",
+    "actorId": "yunalesca",
+    "command": {
+     "kind": "ability",
+     "id": "dispelling-slap",
+     "targets": [
+      "auron"
+     ]
+    },
+    "abilityId": "dispelling-slap",
+    "abilityName": "Dispelling Slap",
+    "targets": [
+     "auron"
+    ],
+    "seq": 1
+   },
+   {
+    "type": "damage",
+    "targetId": "auron",
+    "amount": 428,
+    "element": "none",
+    "crit": true,
+    "hitIndex": 0,
+    "hitCount": 1,
+    "sourceId": "yunalesca",
+    "affinity": "normal",
+    "seq": 2
+   },
+   {
+    "type": "action-end",
+    "actorId": "yunalesca",
+    "seq": 3
+   },
+   {
+    "type": "turn-start",
+    "actorId": "tidus",
+    "turn": 2,
+    "elapsedTicks": 2,
+    "seq": 4
+   }
+  ]
+ },
+ "cardFirst": {
+  "viewport": "1600x900",
+  "card": {
+   "x": 516,
+   "y": 231,
+   "w": 518,
+   "h": 154
+  },
+  "rows": 4,
+  "overlapPx2": 0,
+  "cardText": "NEXT BEST MOVE Tidus Hastega → the party IN WHITE MAGIC 30 MP + HASTE Speeds the party’s turns up It puts Haste on the party; next, Dispelling Slap hits for about 220."
+ },
+ "focFirst": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 516,
+    "y": 231,
+    "w": 518,
+    "h": 154
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 445,
+    "w": 469,
+    "h": 391
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Next best move",
+    "eff": 14.2
+   },
+   {
+    "t": "Tidus",
+    "eff": 17.5
+   },
+   {
+    "t": "Hastega",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "the party",
+    "eff": 21
+   },
+   {
+    "t": "in White Magic",
+    "eff": 14.2
+   },
+   {
+    "t": "30 MP",
+    "eff": 14.2
+   },
+   {
+    "t": "+ Haste",
+    "eff": 14.2
+   },
+   {
+    "t": "Speeds the party’s turns up",
+    "eff": 14.2
+   },
+   {
+    "t": "It puts Haste on the party; next, Dispel",
+    "eff": 14.2
+   }
+  ]
+ },
+ "focAfterCoach": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 516,
+    "y": 231,
+    "w": 518,
+    "h": 154
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 445,
+    "w": 469,
+    "h": 391
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Next best move",
+    "eff": 14.2
+   },
+   {
+    "t": "Tidus",
+    "eff": 17.5
+   },
+   {
+    "t": "Hastega",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "the party",
+    "eff": 21
+   },
+   {
+    "t": "in White Magic",
+    "eff": 14.2
+   },
+   {
+    "t": "30 MP",
+    "eff": 14.2
+   },
+   {
+    "t": "+ Haste",
+    "eff": 14.2
+   },
+   {
+    "t": "Speeds the party’s turns up",
+    "eff": 14.2
+   },
+   {
+    "t": "It puts Haste on the party; next, Dispel",
+    "eff": 14.2
+   }
+  ]
+ },
+ "advisorText": "NEXT BEST MOVE Tidus Hastega → the party IN WHITE MAGIC 30 MP + HASTE Speeds the party’s turns up It puts Haste on the party; next, Dispelling Slap hits for about 220.",
+ "advisorHiddenByN": true,
+ "intentText": " | YUNALESCA 4TH IN QUEUE Absorb SCRIPTED Non-elemental damage to one character - drains the damage back as HP - never misses. DAMAGE AURON 2,200 55% HP IF YOU ATTACK Answers every action that reaches her, a miss too: Blind to a physical one, Silence to a magical one, Sleep to one that is neither Her Blind/Silence gate reads the target she last picked, not your attacker (Tidus before her first move) — keep that one Blinded and the Blind counter never fires J HOLD · +1 MORE",
+ "pause": {
+  "esc": {
+   "paused": true,
+   "text": "Tidus Yuna Auron Yunalesca Tidus Yuna ATTACK SPECIAL ▸ ×4 WHITE MAGIC ▸ ×3 ITEMS ▸ ×17 FLEE ESCAPE ▼ Q △ DEFEND Physical damage Tidus 3410 /3410 170 /170 OD Yuna 2450 /2450 290 /290 OD Auron 3972 /4400 110 /110 OD A fight that needs preparing for is ahead. Berserk is off the table now, so take off any armour with Berserk Ward or Berserkproof. What you will meet instead is Darkness, aimed at characters who attack normally, and Silence, aimed at spellcasters. Give the fighters (Tidus, Auron, Wakka and Kimahri) Dark Ward or Darkproof armour, and the casters (Yuna and Lulu) Silence Ward or Silenceproof. Yunalesca BOSS BATTLE Three phases, and a new form for each. IN GAME DESCRIPTION: She heals Zombies with Curaga and Regen, and Holy Water is what cures Zombie. Her counters dispel buffs, and her Mind Blast puts a curse on aeons. PHASE 1: HP: 24,000 Phase 1 gives her two counters. Hit her phys"
+  },
+  "optionsText": "Tidus Yuna Auron Yunalesca Tidus Yuna ATTACK SPECIAL ▸ ×4 WHITE MAGIC ▸ ×3 ITEMS ▸ ×17 FLEE ESCAPE ▼ Q △ DEFEND Physical damage Tidus 3410 /3410 170 /170 OD Yuna 2450 /2450 290 /290 OD Auron 3972 /4400 110 /110 OD A fight that needs preparing for is ahead. Berserk is off the table now, so take off any armour with Berserk Ward or Berserkproof. What you will meet instead is Darkness, aimed at characters who attack normally, and Silence, aimed at spellcasters. Give the fighters (Tidus, Auron, Wakka and Kimahri) Dark Ward or Darkproof armour, and the casters (Yuna and Lulu) Silence Ward or Silenceproof. Yunalesca BOSS BATTLE Three phases, and a new form for each. IN GAME DESCRIPTION: She heals Zombies with Curaga and Regen, and Holy Water is what cures Zombie. Her counters dispel buffs, and her Mind Blast puts a curse on aeons. PHASE 1: HP: 24,000 Phase 1 gives her two counters. Hit her physically and the attacker is Blinded; hit her with magic and the caster is Silenced. Esuna handles both. Items work too: Blind yields to Eye Drops and Silence to Echo Screens, while a Remedy cures either. Rikku's Al Bhed Potions cure Silence and heal in one move. PHASE 2: HP: 48,000 Now she uses Hellbiter to turn the whole party into Zombies, then casts healing spells that hurt Zombies. Your own healing spells and items hurt them too. Curing everyone just makes her cast Hellbiter again, so leave a",
+  "tabs": [
+   "Tidus",
+   "Yuna",
+   "Auron",
+   "Chapter",
+   "Guide",
+   "Options"
+  ],
+  "resumedByEsc": true,
+  "pOpens": true,
+  "pCloses": true
+ },
+ "firstRows": [
+  "Attack",
+  "Special",
+  "White Magic",
+  "Items",
+  "Flee",
+  "Escape"
+ ],
+ "targetsShown": [
+  "yunalesca"
+ ],
+ "afterTargetCancel": {
+  "screen": "battle",
+  "targets": 0,
+  "rows": 6
+ },
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "victory",
+   "seed": 1,
+   "turns": 138,
+   "firstEnemyAction": {
+    "seq": 1,
+    "actor": "yunalesca",
+    "ability": "Dispelling Slap",
+    "targets": [
+     "auron"
+    ]
+   },
+   "final": true,
+   "stalledAt": null
+  }
+ ],
+ "seamCard": [],
+ "pauseRecoveries": 0,
+ "misses": [],
+ "orders": [],
+ "escapes": [],
+ "targetMismatches": [],
+ "pickerPlays": [
+  {
+   "turn": 100,
+   "want": {
+    "label": "Grand Summon",
+    "target": null,
+    "menu": "Overdrive"
+   },
+   "list": [
+    "Valefor",
+    "Ifrit",
+    "Ixion",
+    "Shiva",
+    "Bahamut"
+   ],
+   "chosen": "Valefor",
+   "why": "list picker: row chosen by arrows + Enter"
+  }
+ ],
+ "stallRecoveries": 0,
+ "lastChain": {
+  "links": 1,
+  "chainLength": 1,
+  "phase": "play:victory",
+  "turn": 138,
+  "ms": 713828
+ },
+ "mgSince": null,
+ "emptyPicks": 0,
+ "lastPartySeq": 1318,
+ "minigames": [
+  {
+   "turn": 22,
+   "kind": "bushido",
+   "title": "Shooting Star",
+   "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+   "chips": [
+    "Q△",
+    "Enter✕",
+    "K□",
+    "Esc○",
+    "←",
+    "→",
+    "Esc○"
+   ],
+   "buttons": [
+    "triangle",
+    "confirm",
+    "square",
+    "cancel",
+    "left",
+    "right",
+    "cancel"
+   ],
+   "keys": [
+    "q",
+    "Enter",
+    "k",
+    "x",
+    "ArrowLeft",
+    "ArrowRight",
+    "x"
+   ],
+   "unknownGlyphs": [],
+   "closed": true,
+   "ms": 1186,
+   "engine": {
+    "actor": "auron",
+    "ability": "Shooting Star",
+    "extra": {
+     "kind": "auron-sequence",
+     "sequence": {
+      "success": true,
+      "correctInputs": 7,
+      "timeRemainingMs": 2266.6666507720947,
+      "frame": 52
+     }
+    }
+   }
+  },
+  {
+   "turn": 68,
+   "kind": "bushido",
+   "title": "Shooting Star",
+   "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+   "chips": [
+    "Q△",
+    "Enter✕",
+    "K□",
+    "Esc○",
+    "←",
+    "→",
+    "Esc○"
+   ],
+   "buttons": [
+    "triangle",
+    "confirm",
+    "square",
+    "cancel",
+    "left",
+    "right",
+    "cancel"
+   ],
+   "keys": [
+    "q",
+    "Enter",
+    "k",
+    "x",
+    "ArrowLeft",
+    "ArrowRight",
+    "x"
+   ],
+   "unknownGlyphs": [],
+   "closed": true,
+   "ms": 1187,
+   "engine": {
+    "actor": "auron",
+    "ability": "Shooting Star",
+    "extra": {
+     "kind": "auron-sequence",
+     "sequence": {
+      "success": true,
+      "correctInputs": 7,
+      "timeRemainingMs": 2599.9999046325684,
+      "frame": 42
+     }
+    }
+   }
+  },
+  {
+   "turn": 134,
+   "kind": "bushido",
+   "title": "Shooting Star",
+   "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+   "chips": [
+    "Q△",
+    "Enter✕",
+    "K□",
+    "Esc○",
+    "←",
+    "→",
+    "Esc○"
+   ],
+   "buttons": [
+    "triangle",
+    "confirm",
+    "square",
+    "cancel",
+    "left",
+    "right",
+    "cancel"
+   ],
+   "keys": [
+    "q",
+    "Enter",
+    "k",
+    "x",
+    "ArrowLeft",
+    "ArrowRight",
+    "x"
+   ],
+   "unknownGlyphs": [],
+   "closed": true,
+   "ms": 1198,
+   "engine": {
+    "actor": "auron",
+    "ability": "Shooting Star",
+    "extra": {
+     "kind": "auron-sequence",
+     "sequence": {
+      "success": true,
+      "correctInputs": 7,
+      "timeRemainingMs": 2466.6666984558105,
+      "frame": 46
+     }
+    }
+   }
+  }
+ ],
+ "minigameShots": {
+  "bushido": true
+ },
+ "turns": 138,
+ "fightMs": 714080,
+ "afterFight": "cutscene",
+ "outcome": "victory",
+ "outcomeFrom": "results screen text",
+ "stalledAt": null,
+ "logKinds": {
+  "turn-start": 198,
+  "action-start": 256,
+  "damage": 238,
+  "action-end": 256,
+  "mp-damage": 24,
+  "status-add": 71,
+  "overdrive-gauge": 79,
+  "counter": 58,
+  "status-tick": 13,
+  "miss": 16,
+  "heal": 20,
+  "status-remove": 61,
+  "minigame-request": 4,
+  "script-trigger": 5,
+  "form-change": 2,
+  "message": 2,
+  "mp-heal": 1,
+  "switch": 1,
+  "ko": 12,
+  "revive": 8,
+  "summon": 3,
+  "dismiss": 3,
+  "victory": 1
+ },
+ "continuity": {
+  "file": "continuity/continuity.json",
+  "checks": {
+   "CHK-026": "FAIL",
+   "CHK-027": "FAIL"
+  },
+  "reasons": {
+   "CHK-026": [
+    "20 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 12.8 px at 1600 wide), whatever stance the registration claims"
+   ],
+   "CHK-027": [
+    "7 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 102.3 px)"
+   ]
+  },
+  "error": null
+ },
+ "post": {
+  "screen": "results",
+  "lines": []
+ },
+ "resultsScreen": "results",
+ "resultsText": "ZANARKAND DOME — THE GREAT HALL · CLEARED RESULTS · 12:14 Victory NEW BEST ...Okay. Next one. AP 14,000 ×4 PARTY GIL 9,000 ITEMS Lv. 3 Key Sphere T Tidus +5 S.Lv S.LV 51 · 1,690/2,913 AP +14,000AP Y Yuna +6 S.Lv S.LV 50 · 465/2,755 AP +14,000AP A Auron +5 S.Lv S.LV 53 · 197/3,247 AP +14,000AP W Wakka +6 S.Lv S.LV 50 · 465/2,755 AP +14,000AP CONFIRM ▸",
+ "afterConfirm": [
+  "cutscene"
+ ],
+ "epilogueShot": true,
+ "afterConfirmScenes": [
+  {
+   "watch": {
+    "ms": 6061,
+    "shows": 1,
+    "advancedWithoutInput": false,
+    "firstLine": "There. Now no one can summon it.",
+    "screenAfterWatch": "cutscene"
+   },
+   "taps": 25,
+   "holds": 0,
+   "ended": true,
+   "lines": [
+    "There. Now no one can summon it.",
+    "Not ever again.",
+    "I hope you find something better.",
+    "So that's it. Sin's still out there.",
+    "And we got nothing.",
+    "We got a no. That's not nothing.",
+    "It's very close to nothing.",
+    "It's a start.",
+    "I'd rather start with nothing than end with this.",
+    "Yuna chose. Kimahri follows.",
+    "Auron. Ten years ago.",
+    "You said she killed you.",
+    "Now you're asking the right questions.",
+    "That was the day we threw away the only plan.",
+    "I remember the quiet on the walk down.",
+    "I thought I was scared for Spira.",
+    "She looked lighter than she had in weeks."
+   ]
+  }
+ ],
+ "afterResults": "chapter-select",
+ "boardAfter": {
+  "selectedIndex": 1,
+  "selectedId": "yunalesca",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [
+   "yunalesca"
+  ],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 1,
+  "total": 19
+ },
+ "boardAfterReload": {
+  "selectedIndex": 1,
+  "selectedId": "yunalesca",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [
+   "yunalesca"
+  ],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 1,
+  "total": 19
+ },
+ "dboxTimeline": [
+  {
+   "ms": 8925,
+   "lastMs": 14092,
+   "screen": "cutscene",
+   "speaker": "Braska",
+   "role": "High Summoner",
+   "text": "Thank you for coming this far with me.",
+   "portrait": "braska.webp",
+   "narrate": false,
+   "show": 1
+  },
+  {
+   "ms": 14124,
+   "lastMs": 15591,
+   "screen": "cutscene",
+   "speaker": "Jecht",
+   "role": "Final Aeon",
+   "text": "Don't get soft on me now, Braska.",
+   "portrait": "jecht.webp",
+   "narrate": false,
+   "show": 2
+  },
+  {
+   "ms": 15624,
+   "lastMs": 17091,
+   "screen": "cutscene",
+   "speaker": "Young Auron",
+   "role": "Guardian",
+   "text": "My lord. There has to be another way.",
+   "portrait": "young-auron.webp",
+   "narrate": false,
+   "show": 3
+  },
+  {
+   "ms": 17125,
+   "lastMs": 18608,
+   "screen": "cutscene",
+   "speaker": "Braska",
+   "role": "High Summoner",
+   "text": "If there is, I never found it.",
+   "portrait": "braska.webp",
+   "narrate": false,
+   "show": 4
+  },
+  {
+   "ms": 18641,
+   "lastMs": 20624,
+   "screen": "cutscene",
+   "speaker": "Jecht",
+   "role": "Final Aeon",
+   "text": "Then we go in loud. Like always.",
+   "portrait": "jecht.webp",
+   "narrate": false,
+   "show": 5
+  },
+  {
+   "ms": 20691,
+   "lastMs": 20691,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "That was my old man. And Braska. And you.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 6
+  },
+  {
+   "ms": 20707,
+   "lastMs": 20707,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Ten years ago.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 7
+  },
+  {
+   "ms": 20725,
+   "lastMs": 20725,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Keep walking.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 8
+  },
+  {
+   "ms": 20741,
+   "lastMs": 20741,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "The statue's empty, you see.",
+   "portrait": null,
+   "narrate": false,
+   "show": 9
+  },
+  {
+   "ms": 20757,
+   "lastMs": 20757,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "Has been for ages. Nobody tells you that part",
+   "portrait": null,
+   "narrate": false,
+   "show": 10
+  },
+  {
+   "ms": 20774,
+   "lastMs": 20774,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "Empty? But the temple said the Final Aeon—",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 11
+  },
+  {
+   "ms": 20791,
+   "lastMs": 20791,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "The temple says a great many things.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 12
+  },
+  {
+   "ms": 20808,
+   "lastMs": 20808,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "You've walked a long way to be disappointed.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 13
+  },
+  {
+   "ms": 20823,
+   "lastMs": 20823,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "Come closer, child.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 14
+  },
+  {
+   "ms": 20842,
+   "lastMs": 20842,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "Lady Yunalesca. I've come for the Final Aeon.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 15
+  },
+  {
+   "ms": 20857,
+   "lastMs": 20857,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "Then choose one of them. One you love.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 16
+  },
+  {
+   "ms": 20873,
+   "lastMs": 20890,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "That is the price. It always was.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 17
+  },
+  {
+   "ms": 20908,
+   "lastMs": 20908,
+   "screen": "cutscene",
+   "speaker": "Kimahri",
+   "role": "Guardian",
+   "text": "Kimahri.",
+   "portrait": "kimahri.png",
+   "narrate": false,
+   "show": 18
+  },
+  {
+   "ms": 20924,
+   "lastMs": 20924,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "No. Me. Take me, ya?",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 19
+  },
+  {
+   "ms": 20941,
+   "lastMs": 20941,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "I'm no good at the rest of it anyway.",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 20
+  },
+  {
+   "ms": 20957,
+   "lastMs": 20957,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "Your father stood where you are standing.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 21
+  },
+  {
+   "ms": 20975,
+   "lastMs": 20992,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "He chose quickly. He was kind about it.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 22
+  },
+  {
+   "ms": 21008,
+   "lastMs": 21008,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "And when the Aeon becomes Sin, another comes.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 23
+  },
+  {
+   "ms": 21024,
+   "lastMs": 21024,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "And another. I have lost count",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 24
+  },
+  {
+   "ms": 21041,
+   "lastMs": 21041,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Wait. Becomes Sin? Say that again.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 25
+  },
+  {
+   "ms": 21058,
+   "lastMs": 21058,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "That's the plan? That's the whole plan?",
+   "portrait": "rikku.webp",
+   "narrate": false,
+   "show": 26
+  },
+  {
+   "ms": 21074,
+   "lastMs": 21074,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "Forever?",
+   "portrait": "rikku.webp",
+   "narrate": false,
+   "show": 27
+  },
+  {
+   "ms": 21090,
+   "lastMs": 21108,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "Hope is comforting.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 28
+  },
+  {
+   "ms": 21125,
+   "lastMs": 21125,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "It is also how I keep them walking.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 29
+  },
+  {
+   "ms": 21141,
+   "lastMs": 21141,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "She killed me for asking that.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 30
+  },
+  {
+   "ms": 21157,
+   "lastMs": 21173,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Ten years ago. Right there.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 31
+  },
+  {
+   "ms": 21190,
+   "lastMs": 21190,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "No.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 32
+  },
+  {
+   "ms": 21207,
+   "lastMs": 21207,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "Then you will die out there, in despair.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 33
+  },
+  {
+   "ms": 21223,
+   "lastMs": 21292,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "I would rather it were here. And gentle.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 34,
+   "endMs": 21292
+  },
+  {
+   "ms": 182787,
+   "lastMs": 185768,
+   "screen": "battle",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "A thousand years.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 35
+  },
+  {
+   "ms": 185802,
+   "lastMs": 188935,
+   "screen": "battle",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "You are the first to say no.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 36,
+   "endMs": 188935
+  },
+  {
+   "ms": 232683,
+   "lastMs": 235916,
+   "screen": "battle",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "You are making this longer than it needs to be.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 37,
+   "endMs": 235916
+  },
+  {
+   "ms": 239384,
+   "lastMs": 242016,
+   "screen": "battle",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Everybody's grey! Is that bad?!",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 38
+  },
+  {
+   "ms": 242050,
+   "lastMs": 245951,
+   "screen": "battle",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Stay grey. Her kindness kills the living.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 39,
+   "endMs": 245951
+  },
+  {
+   "ms": 451695,
+   "lastMs": 453559,
+   "screen": "battle",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "Very well. No more kindness.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 40
+  },
+  {
+   "ms": 453594,
+   "lastMs": 457923,
+   "screen": "battle",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Stay as you are. Do not let her cure you.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 41,
+   "endMs": 457923
+  },
+  {
+   "ms": 460861,
+   "lastMs": 462541,
+   "screen": "battle",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "Rest now. All of you.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 42
+  },
+  {
+   "ms": 462575,
+   "lastMs": 463744,
+   "screen": "battle",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "At once.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 43,
+   "endMs": 463744
+  },
+  {
+   "ms": 804177,
+   "lastMs": 812992,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "There. Now no one can summon it.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 44
+  },
+  {
+   "ms": 813026,
+   "lastMs": 814509,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "Not ever again.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 45
+  },
+  {
+   "ms": 814543,
+   "lastMs": 816025,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "I hope you find something better.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 46
+  },
+  {
+   "ms": 816059,
+   "lastMs": 818921,
+   "screen": "cutscene",
+   "speaker": "Yunalesca",
+   "role": "Unsent",
+   "text": "I never could.",
+   "portrait": "yunalesca.webp",
+   "narrate": false,
+   "show": 47
+  },
+  {
+   "ms": 819059,
+   "lastMs": 820542,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "So that's it. Sin's still out there.",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 48
+  },
+  {
+   "ms": 820576,
+   "lastMs": 822042,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "And we got nothing.",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 49
+  },
+  {
+   "ms": 822075,
+   "lastMs": 823558,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "We got a no. That's not nothing.",
+   "portrait": "rikku.webp",
+   "narrate": false,
+   "show": 50
+  },
+  {
+   "ms": 823592,
+   "lastMs": 825075,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "It's very close to nothing.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 51
+  },
+  {
+   "ms": 825108,
+   "lastMs": 826591,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "It's a start.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 52
+  },
+  {
+   "ms": 826625,
+   "lastMs": 829426,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "I'd rather start with nothing than end with this.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 53
+  },
+  {
+   "ms": 829525,
+   "lastMs": 831125,
+   "screen": "cutscene",
+   "speaker": "Kimahri",
+   "role": "Guardian",
+   "text": "Yuna chose. Kimahri follows.",
+   "portrait": "kimahri.png",
+   "narrate": false,
+   "show": 54
+  },
+  {
+   "ms": 831158,
+   "lastMs": 832641,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Auron. Ten years ago.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 55
+  },
+  {
+   "ms": 832675,
+   "lastMs": 834158,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "You said she killed you.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 56
+  },
+  {
+   "ms": 834191,
+   "lastMs": 837121,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Hmph.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 57
+  },
+  {
+   "ms": 837192,
+   "lastMs": 838675,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Now you're asking the right questions.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 58
+  },
+  {
+   "ms": 838709,
+   "lastMs": 842825,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "That's not an answer!",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 59
+  },
+  {
+   "ms": 842925,
+   "lastMs": 844708,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "That was the day we threw away the only plan.",
+   "portrait": null,
+   "narrate": true,
+   "show": 60
+  },
+  {
+   "ms": 844742,
+   "lastMs": 846224,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "I remember the quiet on the walk down.",
+   "portrait": null,
+   "narrate": true,
+   "show": 61
+  },
+  {
+   "ms": 846258,
+   "lastMs": 847741,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "I thought I was scared for Spira.",
+   "portrait": null,
+   "narrate": true,
+   "show": 62
+  },
+  {
+   "ms": 847774,
+   "lastMs": 850624,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "She looked lighter than she had in weeks.",
+   "portrait": null,
+   "narrate": true,
+   "show": 63,
+   "endMs": 850662
+  }
+ ],
+ "audioDebugFile": {
+  "file": "yunalesca-win-live69/audio-debug.jsonl",
+  "samples": 4,
+  "note": "one whole audioDebug() per line; nothing cut"
+ },
+ "minutes": 14.23,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "media": [
+  "art/title/echo.webp",
+  "art/characters/auron/idle.png",
+  "art/backdrops/dreams-end.webp",
+  "art/backdrops/gagazet.webp",
+  "art/characters/mortiorchis/idle.png",
+  "art/characters/seymour-flux-body/idle.png",
+  "art/portraits/tidus.webp",
+  "art/portraits/yuna.webp",
+  "art/portraits/kimahri.png",
+  "art/backdrops/gagazet.thumb.webp",
+  "art/characters/seymour-flux-body/idle.thumb.png",
+  "art/backdrops/zanarkand-dome.thumb.webp",
+  "art/characters/yunalesca-1/idle.thumb.png",
+  "art/backdrops/bevelle-underground.thumb.webp",
+  "art/characters/ffx2-bahamut/idle.thumb.png",
+  "art/backdrops/djose-chamber-provisional.thumb.webp",
+  "art/characters/x2-ixion/idle.thumb.png",
+  "art/backdrops/dreams-end.thumb.webp",
+  "art/characters/braskas-final-aeon-1/idle.thumb.png",
+  "art/backdrops/den-of-woe.thumb.webp",
+  "art/characters/baralai-shade/idle.thumb.png",
+  "art/backdrops/macalania-temple.thumb.webp",
+  "art/characters/anima/idle.thumb.png",
+  "art/backdrops/via-infinito.thumb.webp",
+  "art/characters/trema/idle.thumb.png",
+  "art/backdrops/evrae-airship-deck.thumb.webp",
+  "art/characters/evrae/idle.thumb.png",
+  "art/backdrops/road-to-the-farplane.thumb.webp",
+  "art/characters/x2-shiva/idle.thumb.png",
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "audio/sfx/sprite-v2.mp3",
+  "art/backdrops/cavern-stolen-fayth.thumb.webp",
+  "art/characters/yojimbo-cavern/idle.thumb.png",
+  "art/backdrops/leblanc-last-room.thumb.webp",
+  "art/characters/leblanc/idle.thumb.png",
+  "art/backdrops/bevelle-highbridge.thumb.webp",
+  "art/characters/seymour-natus/idle.thumb.png",
+  "art/backdrops/farplane.thumb.webp",
+  "art/characters/vegnagun-body/idle.thumb.png",
+  "art/backdrops/garden-of-pain.thumb.webp",
+  "art/characters/seymour-omnis/idle.thumb.png",
+  "art/backdrops/via-purifico.thumb.webp",
+  "art/characters/isaaru/idle.thumb.png",
+  "art/backdrops/mushroom-rock-road.thumb.webp",
+  "art/characters/dark-mindy/idle.thumb.png",
+  "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+  "art/characters/sin-left-fin/idle.thumb.png",
+  "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+  "art/characters/overdrive-sin/idle.thumb.png",
+  "art/portraits/auron.webp",
+  "art/backdrops/zanarkand-dome.webp",
+  "art/characters/yunalesca-1/idle.png",
+  "art/portraits/yuna-x2.webp",
+  "audio/music/chapter-select.mp3",
+  "art/portraits/rikku-x2.webp",
+  "art/portraits/paine.webp",
+  "art/backdrops/bevelle-underground.webp",
+  "art/characters/ffx2-bahamut/idle.png",
+  "art/backdrops/djose-chamber-provisional.webp",
+  "art/portraits/wakka.webp",
+  "art/portraits/lulu.webp",
+  "art/portraits/seymour.webp",
+  "art/characters/braskas-final-aeon-1/idle.png",
+  "audio/sfx/parity-ffx-lady.mp3",
+  "audio/sfx/parity-ffx-core.mp3",
+  "audio/music/scene-zanarkand-dome.mp3",
+  "art/pause/ch2-yunalesca.webp",
+  "art/portraits/yunalesca.webp",
+  "art/characters/yunalesca-3/idle.png",
+  "art/portraits/rikku.webp",
+  "art/portraits/braska.webp",
+  "audio/voice/yunalesca/yunalesca.mid-yunalesca-form-3.002.mp3",
+  "audio/voice/yunalesca/yunalesca.mid-yunalesca-first-zombie.001.fb1.mp3",
+  "audio/voice/yunalesca/yunalesca.mid-yunalesca-first-zombie.002.fb1.mp3",
+  "audio/voice/yunalesca/yunalesca.mid-yunalesca-first-zombie.002.fb2.mp3",
+  "audio/voice/seymour-flux/seymour-flux.quip-tidus.001.mp3",
+  "audio/voice/seymour-flux/seymour-flux.quip-yuna.001.mp3",
+  "audio/voice/seymour-flux/seymour-flux.quip-auron.001.mp3",
+  "art/portraits/jecht.webp",
+  "art/portraits/young-auron.webp",
+  "audio/music/boss-challenge.mp3",
+  "art/characters/tidus/idle.png",
+  "art/characters/yuna/idle.png",
+  "art/characters/tidus/ready.png",
+  "art/characters/yuna/ready.png",
+  "art/characters/auron/ready.png",
+  "audio/music/victory-ffx.mp3",
+  "art/characters/yunalesca-1/attack.png",
+  "art/characters/yunalesca-1/cast.png",
+  "art/characters/yunalesca-1/hurt.png",
+  "audio/music/defeat-ffx.mp3",
+  "art/characters/yunalesca-1/ko.png",
+  "art/characters/tidus/attack.png",
+  "art/characters/tidus/cast.png",
+  "art/characters/tidus/item.png",
+  "art/characters/tidus/hurt.png",
+  "art/characters/tidus/ko.png",
+  "art/characters/tidus/defend.webp",
+  "art/characters/yuna/attack.png",
+  "art/characters/yuna/cast.png",
+  "art/characters/yuna/item.png",
+  "art/characters/yuna/hurt.png",
+  "art/characters/yuna/ko.png",
+  "art/characters/auron/attack.png",
+  "art/characters/auron/cast.png",
+  "art/characters/auron/item.png",
+  "art/characters/auron/hurt.png",
+  "art/characters/auron/ko.png",
+  "art/characters/tidus/victory.png",
+  "art/characters/tidus/sleep.png",
+  "art/characters/tidus/critical.png",
+  "art/characters/tidus/follow.png",
+  "art/characters/tidus/od-energy-rain.png",
+  "art/characters/tidus/od-slice-and-dice.png",
+  "art/characters/yuna/victory.png",
+  "art/characters/yuna/sleep.png",
+  "art/characters/yuna/critical.png",
+  "art/characters/yuna/follow.png",
+  "art/characters/auron/victory.png",
+  "art/characters/auron/sleep.png",
+  "art/characters/auron/critical.png",
+  "art/characters/auron/follow.webp",
+  "art/pause/tidus.2x.webp",
+  "art/pause/yuna.2x.webp",
+  "art/pause/auron.2x.webp",
+  "audio/voice/yunalesca/yunalesca.pre.006.mp3",
+  "audio/voice/yunalesca/yunalesca.pre.007.mp3",
+  "audio/voice/yunalesca/yunalesca.pre.008.mp3",
+  "audio/voice/yunalesca/yunalesca.pre.015.mp3",
+  "audio/voice/yunalesca/yunalesca.pre.025.mp3",
+  "audio/music/pause.mp3",
+  "art/pause/ch2-yunalesca.2x.webp",
+  "fx/zanarkand-dome/depth.png",
+  "art/pause/tidus.webp",
+  "art/portrait-parts/tidus/2x/mouth-open-smile.png",
+  "art/portrait-parts/tidus/2x/mouth-concerned-press.png",
+  "art/portrait-parts/tidus/2x/lidR-closed.png",
+  "art/portrait-parts/tidus/2x/lidL-closed.png",
+  "art/portrait-parts/tidus/2x/eyeR-socket.webp",
+  "art/portrait-parts/tidus/2x/eyeR-iris.webp",
+  "art/portrait-parts/tidus/2x/eyeR-catch.png",
+  "art/portrait-parts/tidus/2x/eyeR-window.png",
+  "art/portrait-parts/tidus/2x/eyeL-socket.webp",
+  "art/portrait-parts/tidus/2x/eyeL-iris.webp",
+  "art/portrait-parts/tidus/2x/eyeL-catch.png",
+  "art/portrait-parts/tidus/2x/eyeL-window.png",
+  "art/pause/yuna.webp",
+  "art/portrait-parts/yuna/2x/mouth-open-smile.png",
+  "art/portrait-parts/yuna/2x/mouth-concerned-press.png",
+  "art/portrait-parts/yuna/2x/lidR-closed.png",
+  "art/portrait-parts/yuna/2x/lidL-closed.png",
+  "art/portrait-parts/yuna/2x/eyeR-socket.webp",
+  "art/portrait-parts/yuna/2x/eyeR-iris.webp",
+  "art/portrait-parts/yuna/2x/eyeR-catch.png",
+  "art/portrait-parts/yuna/2x/eyeR-window.png",
+  "art/portrait-parts/yuna/2x/eyeL-socket.webp",
+  "art/portrait-parts/yuna/2x/eyeL-iris.webp",
+  "art/portrait-parts/yuna/2x/eyeL-catch.png",
+  "art/portrait-parts/yuna/2x/eyeL-window.png",
+  "art/pause/auron.webp",
+  "art/portrait-parts/auron/2x/mouth-open-smile.png",
+  "art/portrait-parts/auron/2x/mouth-concerned-press.png",
+  "art/portrait-parts/auron/2x/lidL-closed.png",
+  "art/characters/yunalesca-2/idle.png",
+  "art/characters/yunalesca-2/attack.png",
+  "art/characters/yunalesca-2/cast.png",
+  "art/characters/yunalesca-2/hurt.png",
+  "art/characters/yunalesca-2/ko.png",
+  "art/characters/yunalesca-3/attack.png",
+  "art/characters/yunalesca-3/cast.png",
+  "art/characters/yunalesca-3/hurt.png",
+  "art/characters/yunalesca-3/ko.png",
+  "art/characters/wakka/idle.png",
+  "art/characters/wakka/ready.png",
+  "art/characters/wakka/attack.png",
+  "art/characters/wakka/cast.png",
+  "art/characters/wakka/item.png",
+  "art/characters/wakka/hurt.webp",
+  "art/characters/wakka/ko.png",
+  "art/characters/wakka/defend.webp",
+  "art/characters/wakka/victory.png",
+  "art/characters/wakka/sleep.png",
+  "art/characters/wakka/critical.png",
+  "art/characters/wakka/follow.png",
+  "art/characters/wakka/ready%402x.png",
+  "art/characters/wakka/attack%402x.png",
+  "art/characters/wakka/cast%402x.png",
+  "art/characters/wakka/hurt%402x.png",
+  "art/characters/wakka/item%402x.png",
+  "art/characters/wakka/idle%402x.png",
+  "art/characters/wakka/defend%402x.png",
+  "art/characters/wakka/critical%402x.png",
+  "art/characters/wakka/ko%402x.png",
+  "art/characters/wakka/victory%402x.png",
+  "art/characters/wakka/sleep%402x.png",
+  "art/characters/wakka/follow%402x.png",
+  "art/characters/valefor/idle.png",
+  "art/portraits/valefor.webp",
+  "art/rigs/valefor/1x/tail.png",
+  "art/rigs/valefor/1x/wing.png",
+  "art/rigs/valefor/1x/plume.png",
+  "art/rigs/valefor/1x/legF.png",
+  "art/rigs/valefor/1x/legN.png",
+  "art/rigs/valefor/1x/neck.png",
+  "art/rigs/valefor/1x/body.png",
+  "art/rigs/valefor/1x/head.png",
+  "art/rigs/valefor/1x/legF.rim.webp",
+  "art/rigs/valefor/1x/neck.rim.webp",
+  "art/rigs/valefor/1x/head.rim.webp",
+  "art/rigs/valefor/1x/tail.rim.webp",
+  "art/rigs/valefor/1x/body.rim.webp",
+  "art/rigs/valefor/1x/plume.rim.webp",
+  "art/rigs/valefor/1x/legN.rim.webp",
+  "art/rigs/valefor/1x/wing.rim.webp",
+  "art/characters/valefor/overdrive.png",
+  "art/characters/shiva/idle.png",
+  "art/characters/shiva/attack.png",
+  "art/characters/shiva/cast.png",
+  "art/characters/shiva/hurt.png",
+  "art/characters/shiva/ko.png",
+  "art/portraits/shiva.webp",
+  "art/characters/ixion/idle.png",
+  "art/characters/ixion/attack.png",
+  "art/characters/ixion/cast.png",
+  "art/characters/ixion/hurt.png",
+  "art/characters/ixion/ko.png",
+  "art/characters/ixion/idle%402x.png",
+  "art/characters/ixion/attack%402x.png",
+  "art/characters/ixion/cast%402x.png",
+  "art/characters/ixion/hurt%402x.png",
+  "art/characters/ixion/ko%402x.png",
+  "art/portraits/ixion.webp",
+  "art/characters/ixion/overdrive.png",
+  "audio/voice/yunalesca/yunalesca.post.009.mp3",
+  "audio/voice/yunalesca/yunalesca.post.010.mp3",
+  "audio/voice/yunalesca/yunalesca.post.012.mp3",
+  "audio/voice/yunalesca/yunalesca.post.013.mp3",
+  "audio/voice/yunalesca/yunalesca.post.014.mp3",
+  "audio/voice/yunalesca/yunalesca.post.015.mp3",
+  "audio/voice/yunalesca/yunalesca.post.016.mp3"
+ ]
+}

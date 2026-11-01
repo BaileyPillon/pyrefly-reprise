@@ -1,0 +1,108 @@
+{
+ "tag": "L-ffx2-leblanc-1600",
+ "chapter": "ffx2-leblanc",
+ "base": "https://echoesofspira.com/",
+ "W": 1600,
+ "H": 900,
+ "phone": false,
+ "steps": [
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "awaitingMenu": true,
+   "toMenuS": 46.3
+  },
+  {
+   "s": "hud",
+   "overflowX": false,
+   "treated": {
+    "scope": "all",
+    "chapters": [
+     "seymour-flux",
+     "ffx2-bahamut",
+     "ffx2-leblanc"
+    ],
+    "holds": {
+     "ffx2-leblanc": [
+      "breath",
+      "cam",
+      "moments"
+     ]
+    },
+    "running": "ffx2-leblanc",
+    "reaches": true
+   },
+   "buttons": [
+    "G\nGUIDE:102x26",
+    "N\nHIDE MOVES:160x26",
+    "E\nENEMY MOVE:165x26"
+   ],
+   "f1": true,
+   "ribbon": [
+    "Ormi"
+   ],
+   "igBossHp": [
+    "SCAN",
+    "SCAN",
+    "SCAN"
+   ],
+   "ffx2boss": [],
+   "look": "cinematic",
+   "plates": 4
+  },
+  {
+   "s": "after-attack",
+   "screen": "battle"
+  },
+  {
+   "s": "turns",
+   "turns": 3
+  }
+ ],
+ "bundle": "https://echoesofspira.com/assets/index-dwcmDBjZ.js",
+ "toMenuMs": 46330,
+ "hud": {
+  "overflowX": false,
+  "treated": {
+   "scope": "all",
+   "chapters": [
+    "seymour-flux",
+    "ffx2-bahamut",
+    "ffx2-leblanc"
+   ],
+   "holds": {
+    "ffx2-leblanc": [
+     "breath",
+     "cam",
+     "moments"
+    ]
+   },
+   "running": "ffx2-leblanc",
+   "reaches": true
+  },
+  "buttons": [
+   "G\nGUIDE:102x26",
+   "N\nHIDE MOVES:160x26",
+   "E\nENEMY MOVE:165x26"
+  ],
+  "f1": true,
+  "ribbon": [
+   "Ormi"
+  ],
+  "igBossHp": [
+   "SCAN",
+   "SCAN",
+   "SCAN"
+  ],
+  "ffx2boss": [],
+  "look": "cinematic",
+  "plates": 4
+ },
+ "fpsAvg": 59.1,
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": [
+  "https://echoesofspira.com/art/backdrops/via-infinito.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/characters/trema/idle.png net::ERR_ABORTED"
+ ]
+}
