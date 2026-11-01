@@ -78,11 +78,11 @@ export const RELEASE_NOTES: readonly ReleaseNote[] = [
     release: '71',
     date: '2026-11-01',
     lines: [
-      { tag: 'FFX', text: 'Chapters VIII, XVIII and the Mirror Aeons chapter get the presentation of Chapter I: the lighter battle screen, the new hit look and the quiet ending.' },
+      { tag: 'FFX', text: 'Chapter VIII and the Mirror Aeons chapter get the presentation of Chapter I: the lighter battle screen, the new hit look and the quiet ending.' },
       { tag: 'FFX-2', text: 'Chapters V, XI and XVI get the presentation of Chapter IV: the lighter battle screen, the new hit look, the boss card and the quiet ending.' },
       { tag: 'Both', text: 'Evrae in FFX and Chapters V and XI in FFX-2 keep their older sky for now, until a lighter look is picked.' },
-      { tag: 'FFX', text: 'Chapters III, VIII, XVIII and the Mirror Aeons chapter keep the older attack motion for now, because the new one made figures hop too far there.' },
-      { tag: 'FFX', text: 'Chapters IX, XII and XVII keep the older look for now.' },
+      { tag: 'FFX', text: 'Chapters III, VIII and the Mirror Aeons chapter keep the older attack motion for now, because the new one made figures hop too far there.' },
+      { tag: 'FFX', text: 'Chapters IX, XII, XVII and XVIII (Sin’s face) keep the older look for now; in Sin’s face figures still hopped too far after a hit.' },
     ],
   },
   {
