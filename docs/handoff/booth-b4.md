@@ -2,6 +2,8 @@
 
 > **Status after the second focused review (2026-11-01, section 14): FIFTEEN of the nineteen are treated (8 FFX, 7 FFX-2); Chapter XVIII (Sin's face, FFX only) is OFF the list for release 71.** Status after the r71 verdicts (2026-10-31, section 12): sixteen of the nineteen were treated (9 FFX, 7 FFX-2). Chapters IX and XII (FFX only) are OFF the list again, Chapter VIII (FFX only) holds `hd2d` and `arena`, the others ship as built.** Sections 1 to 11 are the merge's record; the rows of section 1 that changed are marked, and sections 4 and 7 are the pre-read jobs and lines (section 12 says which results and lines replace them).
 
+> **Status at release 72 (2026-11-01, [r72](r72.md)): SEVENTEEN of the nineteen are treated (10 FFX, 7 FFX-2).** The three release-72 lanes are merged onto this branch's release 71 content: Chapters IX and XII (FFX only) are back on the list (`r72-hud`), Chapter XI plays sky grade C by default with its `hd2d` and `arena` holds lifted (`r72-sky`, FFX-2 only), Chapter III plays the real clips with Tidus's return flip fitted to the drawn size (`r72-motion`, FFX only) and the knock-out slide eases in (both games). Chapters VIII and 27 keep the `real` holds of section 13 (the fit scales a return flip only; the model never reaches 100 px), Chapter XVIII stays off the list (section 14).
+
 Branch `booth-b4`, cut from `origin/r70-int` e3f51bf18 (release 70's integration, ten treated chapters; under its focused review in another tree, which this branch never touched). It is the `--no-ff` merge, in this order, of the three batch-4 lanes, each built and reviewed from that same base:
 
 | lane | tip | game case (rule 14) | what it does |
