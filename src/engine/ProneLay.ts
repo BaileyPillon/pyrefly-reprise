@@ -17,6 +17,14 @@
  * General, not a Leblanc special case: any prone painting, any side, both
  * games (AGENTS.md rule 14: the actor layer is shared by FFX chapters 1-3 and
  * FFX-2 chapters 4-6).
+ *
+ * **The slide eases in (r72-motion, both games; shared plumbing).** The shift is CHOSEN on the frame the figure goes down, but the body does not
+ * start there: it slides from the station to the chosen place over {@link SLIDE_EASE_MS} (smootherstep, on the stage's real clock). The live gap pass
+ * of release 70 found Isaaru's Ixion lying 355 px (0.9 of half its length) from its station at the cross from the toppled painting to the lying one,
+ * a swap jerk of 89 to 91 px against CHK-027's allowance of 80 at 1600 wide, and the jerk is a quarter of the slide (250 px read 64, 340 read 86):
+ * the fall is a pose change and a slide at once. The place the body comes to rest, and so every choice that depends on it (the neighbours it must
+ * not cover, the HUD rows it must not hide, the frame it must not leave), is unchanged; only the path to it is. The old behaviour (the whole slide
+ * on the first frame) is what a caller with no clock gets: `layProneFigures` without `dt`.
  */
 
 import { PerspectiveCamera, Vector3 } from 'three';
@@ -31,6 +39,31 @@ const NEIGHBOUR_RANGE = 4.5;
 
 /** The rig that frames the whole field between beats. */
 const RESTING_RIG = 'idle';
+
+/**
+ * r72-motion: how long a body takes to slide from its station to the place `layProne` chose, ms. The cross from the toppled painting to the lying one begins about 230 ms after the figure goes down and the
+ * hold on the lying painting is long, so the slide is mostly seen after the fall: 700 ms puts about a quarter of it behind the cross and leaves the rest as a slow slide along the floor (the fastest frame is
+ * 1.875 times the average: 355 px over 700 ms is 16 px at 60 Hz at its fastest). 0 gives the old behaviour back.
+ */
+export const SLIDE_EASE_MS = 700;
+
+const smootherstep = (u: number): number => {
+  const x = u < 0 ? 0 : u > 1 ? 1 : u;
+  return x * x * x * (x * (x * 6 - 15) + 10);
+};
+
+/** Bodies still sliding to the place chosen for them: the target shift (world units) and the ms since they went down. */
+const sliding = new WeakMap<PaintedActor, { to: number; ms: number }>();
+
+/** Advance one body's slide by `dt` seconds and place it; the last step is exactly the chosen shift. */
+function stepSlide(a: PaintedActor, dt: number): void {
+  const s = sliding.get(a);
+  if (!s) return;
+  s.ms += Math.max(0, dt) * 1000;
+  const u = s.ms / SLIDE_EASE_MS;
+  a.setProneShift(u >= 1 ? s.to : s.to * smootherstep(u));
+  if (u >= 1) sliding.delete(a);
+}
 
 export interface NdcBox {
   x0: number;
@@ -154,12 +187,16 @@ const held = new WeakSet<PaintedActor>();
  * composition, measured where the painting is drawn. A wide standing painting
  * (Vegnagun's body, Chapter 5) counts as prone by its shape, and a slide picked
  * from whichever neighbours stand near it would move it off that spot.
+ *
+ * `dt` (seconds of the stage's real clock; r72-motion): with it a body eases to the place it was laid over {@link SLIDE_EASE_MS}; without it
+ * (a caller with no clock, the tests of the old behaviour) the whole slide lands on the frame the figure goes down, as before.
  */
 export function layProneFigures(
   actors: readonly PaintedActor[],
   live: PerspectiveCamera,
   rigs?: BattleCamera,
   pinned?: ReadonlySet<PaintedActor>,
+  dt?: number,
 ): void {
   for (const a of actors) {
     if (pinned?.has(a)) continue;
@@ -167,17 +204,23 @@ export function layProneFigures(
     if (prone === (laid.get(a) ?? false)) {
       if (held.has(a) && !a.proneLingers) { // the lying plane has faded out: the slide goes with it, unseen
         held.delete(a);
+        sliding.delete(a);
         a.setProneShift(0);
-      }
+      } else if (prone && dt !== undefined) stepSlide(a, dt); // still easing to the place it was laid
       continue;
     }
     laid.set(a, prone);
     if (!prone) {
+      sliding.delete(a); // a revive stops the slide where it is: the held body keeps lying there while it fades (see `held`)
       if (a.proneLingers) held.add(a); // a revive: the body keeps lying where it lay while it fades (see `held`)
       else a.setProneShift(0);
       continue;
     }
     held.delete(a);
-    layProne(a, actors, layCameras(live, rigs));
+    const lay = layProne(a, actors, layCameras(live, rigs));
+    if (dt !== undefined && SLIDE_EASE_MS > 0 && lay.shift !== 0) { // r72-motion: the choice is made now, the body gets there over the fall
+      sliding.set(a, { to: lay.shift, ms: 0 });
+      a.setProneShift(0);
+    } else sliding.delete(a);
   }
 }

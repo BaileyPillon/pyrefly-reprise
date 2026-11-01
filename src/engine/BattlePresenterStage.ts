@@ -976,7 +976,7 @@ export class PaintedStage implements BattleStage {
       figures.map((s) => s.actor),
       this.opts.camera,
       this.opts.battleCamera,
-      pinned,
+      pinned, realDt, // r72-motion: the lying body eases to the place it was laid (ProneLay.SLIDE_EASE_MS), on the real clock so a hit-stop never leaves it half-way
     );
     // D-510: every shown plane's head held to the idle's on screen, under this frame's camera (HeadLockStage.ts). After `layProneFigures`, which slides a body along
     // the floor on the very frame it lies down: the lock reads the plane where it will be drawn.

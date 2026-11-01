@@ -27,8 +27,8 @@ const IDS = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'] as co
 /** The chapters that hold the moments (the reserve Rikku's KO step, review M1; Yuna's unread KO cut in XIV, the review of booth-b3 M1) and the directed camera (the killing blow's plate at the live positions, m1; the aeon as the actor, m2). */
 const MOMENTS_HELD: readonly string[] = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'];
 const CAM_HELD: readonly string[] = ['seymour-omnis', 'isaaru-via-purifico'];
-/** The chapter that holds the real clips (`booth-b4`: Tidus's Chapter I return flip is drawn 1.66 times larger in Chapter III): it plays the house curves, what `?curves=new` plays. */
-const REAL_HELD: readonly string[] = ['braskas-final-aeon'];
+/** The chapters that hold the real clips (they play the house curves, what `?curves=new` plays). `booth-b4` held Chapter III's (Tidus's return flip drawn 1.66 times larger); r72-motion lifted it (`motion/FlipFit.ts`): none now. */
+const REAL_HELD: readonly string[] = [];
 
 function allOn(): void {
   setHudF1Mode('f1');

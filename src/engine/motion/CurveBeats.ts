@@ -15,6 +15,7 @@ import { LUNGE_MS } from '../StrikeBeat.ts';
 import { heftOf } from './ActorCurves.ts';
 import { curvesGame, curvesOn } from './CurvesSwitch.ts';
 import { flowProfile } from './RunEase.ts'; // MF-04: the strike after a run that flows into it plays a readable wind-up (`?run=flow`, FFX-2 only)
+import { returnFitOf } from './FlipFit.ts'; // r72-motion (FFX only): the return flip scaled to the figure's drawn size, outside the booth pair
 import { realCastLift, realProfileOf } from './RealBeats.ts'; // `?curves=real` / `real-snappy`: the real game's own numbers for this figure, when the table has them
 
 /** The presenter's playback speed scale for the move (1 normal, 0.32 fast, 0 skip), with the presenter's `timeScale`; floored so a skipped move still ends. */
@@ -34,7 +35,9 @@ export function startAttackMove(ctx: EventCtx, actor: ActorHandle | undefined, p
     const holdOver = real && ranIn && attackerId && actor ? holdOverFor(actor) : undefined;
     const marks = { ...(contact.impact ? { travelPeak: contact.impact, ...(contact.settle ? { settlePeak: contact.settle } : {}), ...(contact.done ? { end: contact.done } : {}) } : {}), ...(holdOver ? { holdEnd: holdOver } : {}) };
     const flow = ranIn && !real ? flowProfile() : undefined; // MF-04: only after FFX-2's run-in, and only under `?run=flow` or `pace`
-    void actor.strike({ distance: plan.distance, game: curvesGame(), timeScale: moveScale(ctx), arc: !ranIn, contact, ...(real ? { profile: real } : flow ? { profile: flow } : {}), ...(Object.keys(marks).length ? { marks } : {}) });
+    const timeScale = moveScale(ctx);
+    const returnFit = returnFitOf(ctx, attackerId, real, timeScale); // r72-motion: undefined in the booth pair, for a house strike and for FFX-2
+    void actor.strike({ distance: plan.distance, game: curvesGame(), timeScale, arc: !ranIn, contact, ...(real ? { profile: real } : flow ? { profile: flow } : {}), ...(Object.keys(marks).length ? { marks } : {}), ...(returnFit ? { returnFit } : {}) });
     return;
   }
   void Promise.all([actor?.lunge(plan.distance, LUNGE_MS, contact, plan.house), actor?.squash(260, 0.45)]);

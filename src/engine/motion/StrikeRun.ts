@@ -40,6 +40,8 @@ export class StrikeRun {
   private readonly scratch: StrikeSample = { x: 0, lift: 0, sy: 1, lean: 0 };
   private readonly contactAt: number;
   private readonly peakAt: number;
+  /** r72-motion: the gain on the way home's lift (the real strike's leaping return), 1 unless {@link setReturnFit} says otherwise. */
+  private returnFit = 1;
 
   /**
    * @param shape the resolved strike
@@ -86,6 +88,11 @@ export class StrikeRun {
   /** The blow has landed (and its follow-through beat has run): the strike may go home once its minimum hold is over. */
   release(): void {
     this.released = true;
+  }
+
+  /** r72-motion (`FlipFit.ts`): scale the lift of the way home by `g` (clamped to 0..1) from the next sample on. Called on the `holdEnd` mark, before the return's first sample; the carry of a later strike folds the scaled lift out. */
+  setReturnFit(g: number): void {
+    this.returnFit = Number.isFinite(g) ? Math.min(1, Math.max(0, g)) : 1;
   }
 
   /** Stop where it is (the actor was disposed or the move replaced): no more marks. */
@@ -158,7 +165,7 @@ export class StrikeRun {
   sample(out: StrikePose = { x: 0, lift: 0, sy: 1, lean: 0 }): StrikePose {
     const r = this.finished ? sampleAt(this.shape, 'post', Number.MAX_VALUE, this.scratch) : sampleAt(this.shape, this.phase, this.local, this.scratch);
     out.x = r.x * this.distance;
-    out.lift = r.lift * this.height;
+    out.lift = r.lift * this.height * (this.phase === 'post' ? this.returnFit : 1);
     out.sy = r.sy;
     out.lean = r.lean;
     const c = this.carry;

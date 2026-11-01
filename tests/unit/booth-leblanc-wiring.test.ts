@@ -111,7 +111,7 @@ describe('`__pyrefly.treated()`', () => {
       yunalesca: ['breath', 'cam', 'smear'],
       'seymour-anima-macalania': ['breath', 'cam', 'moments'],
       'seymour-natus': ['breath', 'cam', 'moments'],
-      'braskas-final-aeon': ['breath', 'moments', 'real'], // booth-b4: the real clips are held in Chapter III
+      'braskas-final-aeon': ['breath', 'moments'], // booth-b4 held `real` here; r72-motion lifted it
       'isaaru-via-purifico': ['breath', 'cam', 'moments'],
       'ffx2-leblanc': ['breath', 'cam', 'moments'], // the pieces she holds, in the order of her rows
       'ffx2-vegnagun-shuyin': ['hd2d', 'arena', 'cam', 'breath', 'moments'], // booth-ffx2-b4-sky: the look held first (the plate is release 69's)

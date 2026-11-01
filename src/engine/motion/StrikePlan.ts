@@ -20,4 +20,10 @@ export interface StrikePlan {
   contact?: { hold: Promise<unknown>; reached: () => void };
   /** Anything that wants to schedule on the move's marks (the smear cut, the sound, the camera punch): called once each, in order, on the frame that crosses the mark. */
   marks?: Partial<Record<MarkName, () => void>>;
+  /**
+   * r72-motion (FFX only, `FlipFit.ts`): asked once, on the frame the hold ends and the way home begins, with the figure's world height; answers a gain in (0, 1] on the return's lift (the leaping return of a real
+   * strike), so a figure drawn bigger than the approved Chapter I Tidus does not cover more of the screen in one frame than that Tidus does. Absent (every strike in the booth pair, every house strike and every
+   * FFX-2 strike): the return plays as sampled.
+   */
+  returnFit?: (worldHeight: number) => number;
 }

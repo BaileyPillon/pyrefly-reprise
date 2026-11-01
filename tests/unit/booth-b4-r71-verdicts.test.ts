@@ -35,7 +35,7 @@ afterEach(() => {
 const AFTER_R71: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readonly held: readonly string[] }>> = {
   'seymour-flux': { game: 'ffx', held: [] }, // I, the approved target
   yunalesca: { game: 'ffx', held: ['cam', 'breath', 'smear'] }, // II
-  'braskas-final-aeon': { game: 'ffx', held: ['breath', 'moments', 'real'] }, // III: `real` works (job III, the one-frame step 66 px against live's 277 and 279)
+  'braskas-final-aeon': { game: 'ffx', held: ['breath', 'moments'] }, // III: r71 shipped it with `real` held (the one-frame step 66 px against live's 277 and 279); r72-motion lifted that hold (FlipFit)
   'ffx2-bahamut': { game: 'ffx2', held: [] }, // IV, the approved target
   'ffx2-vegnagun-shuyin': { game: 'ffx2', held: ['hd2d', 'arena', 'cam', 'breath', 'moments'] }, // V: ships as built (the held sky equals live's)
   'ffx2-leblanc': { game: 'ffx2', held: ['breath', 'cam', 'moments'] }, // VI
@@ -152,7 +152,7 @@ describe('Chapter VIII (Evrae, FFX only) ships with the HD-2D look and the arena
 });
 
 describe('the chapters that ship as built hold nothing new', () => {
-  it('the Farplane\'s two (V and XI) keep hd2d and arena held and play the rest; Ixion keeps the room looks held; the Mirror Aeons chapter keeps its card and looks held; Braska\'s chapter holds `real` and Chapter I plays it', () => {
+  it('the Farplane\'s two (V and XI) keep hd2d and arena held and play the rest; Ixion keeps the room looks held; the Mirror Aeons chapter keeps its card and looks held; Braska\'s chapter plays `real` (the r72 fit) as Chapter I does', () => {
     for (const id of ['ffx2-vegnagun-shuyin', 'ffx2-fallen-aeons']) {
       expect(chapterLook(id), id).toBeNull();
       expect(proArenaFor(id, ''), id).toBe(false);
@@ -160,7 +160,7 @@ describe('the chapters that ship as built hold nothing new', () => {
     }
     expect(isTreatedChapter('ffx2-ixion-djose', 'hd2d')).toBe(false);
     expect(isTreatedChapter('mirror-aeons', 'card')).toBe(false);
-    expect(isTreatedChapter('braskas-final-aeon', 'real')).toBe(false);
+    expect(isTreatedChapter('braskas-final-aeon', 'real')).toBe(true); // r72-motion: the hold is lifted
     expect(isTreatedChapter('seymour-flux', 'real')).toBe(true);
   });
 });
