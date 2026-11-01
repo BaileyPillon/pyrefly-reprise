@@ -56,8 +56,8 @@ const B4_HUD: Readonly<Record<string, readonly TreatedPiece[]>> = {
 
 /** The three of the last five listed chapters that are treated in release 71 (`booth-b4-last`; Chapter XVII stayed out and Chapter XVIII was taken off again by the second focused review, `SIN_FACE_OFF`): the list is release 70's ten plus these, and none of release 70's rows moved. */
 const RELEASE_71_LAST: Readonly<Record<string, readonly TreatedPiece[]>> = {
-  'evrae-airship': ['hd2d', 'arena', 'breath', 'cam', 'moments'], // Chapter VIII, FFX (hd2d and arena added by the r71 verdict: the cone is a white halo; `real` was held by the focused review of 10b426248, R71-C2, and lifted at r73-fit: ReturnPace.ts)
-  'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments'], // Chapter 27, FFX (`real` was held by the focused review of 10b426248, R71-C3, and lifted at r73-fit: the flip fit reaches it)
+  'evrae-airship': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'], // Chapter VIII, FFX (hd2d and arena added by the r71 verdict: the cone is a white halo; real added by the focused review of 10b426248, R71-C2)
+  'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'], // Chapter 27, FFX (real added by the focused review of 10b426248, R71-C3)
   'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'], // Chapter XVI, FFX-2
 };
 

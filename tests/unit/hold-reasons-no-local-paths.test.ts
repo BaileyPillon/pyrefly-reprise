@@ -77,10 +77,10 @@ describe('the written hold reasons are shipped text and name no folder of the bu
     for (const [id, pieces] of Object.entries(LAST_HOLDS)) for (const [piece, reason] of Object.entries(pieces)) expect(PIECE_HOLDS[id]?.[piece as 'real'], `${id}/${piece}`).toBe(reason);
   });
 
-  it("Braska's chapter no longer has a `real` row (the r72 motion lane fits its return flip to the drawn size instead, `motion/FlipFit.ts`), and the one `real` reason that remains (XVIII, off the list; r73-fit lifted VIII's and the Mirror Aeons') cites its pass without a folder", () => {
+  it("Braska's chapter no longer has a `real` row (the r72 motion lane fits its return flip to the drawn size instead, `motion/FlipFit.ts`), and the three `real` reasons that remain (VIII, XVIII, Mirror Aeons) cite their pass without a folder", () => {
     expect(PIECE_HOLDS['braskas-final-aeon']?.real, 'the hold the gate refused at release 71 was lifted in r72').toBeUndefined();
     const holders = Object.entries(PIECE_HOLDS).filter(([, pieces]) => pieces.real !== undefined);
-    expect(holders.map(([id]) => id).sort()).toEqual(['sin-face']);
+    expect(holders.map(([id]) => id).sort()).toEqual(['evrae-airship', 'mirror-aeons', 'sin-face']);
     for (const [id, pieces] of holders) {
       const reason = pieces.real ?? '';
       expect(reason, id).toMatch(/Status at release 72/);

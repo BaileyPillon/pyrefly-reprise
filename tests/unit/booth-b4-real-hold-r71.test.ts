@@ -1,6 +1,5 @@
 /**
- * THE REAL-CLIPS HOLD OF CHAPTERS VIII, XVIII AND THE MIRROR AEONS (`booth-b4`, 2026-11-01; FFX only, a presentation hold, no number of a fight changes). **r73-fit (2026-11-01) lifted VIII's and the Mirror Aeons' rows** (the return flip is fitted to the
- * drawn size, `motion/FlipFit.ts`, and a return with no flip is paced to the drawn lunge, `motion/ReturnPace.ts`: `booth-b4-r73-return-pace.test.ts`, `booth-b4-real-hold.test.ts`); **only Sin's face (off the list) keeps its row, which this file still pins.**
+ * THE REAL-CLIPS HOLD OF CHAPTERS VIII, XVIII AND THE MIRROR AEONS (`booth-b4`, 2026-11-01; FFX only, a presentation hold, no number of a fight changes).
  *
  * The focused review of the release 71 candidate 10b426248 (`critic/reviews/10b426248-focused`) held the candidate (HOLD) for one-frame figure hops over 100 px that `?treated=pack` does not have:
  *   R71-C1 Chapter XVIII (`sin-face`): 28 hops of 166 to 530 px (Auron's attack-to-follow swaps, Wakka's and Auron's dashes);
@@ -27,9 +26,11 @@ const I = 'seymour-flux';
 const IV = 'ffx2-bahamut';
 const XVI = 'ffx2-ixion-djose';
 
-/** The one chapter that still holds, with the finding its row answers, the numbers its reason carries and the pieces the chapter held before the row (the row is appended after them). */
+/** The three chapters, with the finding each row answers, the numbers its reason carries and the pieces the chapter held before the row (the row is appended after them). */
 const HELD: ReadonlyArray<{ id: string; chapter: string; finding: string; numbers: readonly RegExp[]; before: readonly string[] }> = [
+  { id: 'evrae-airship', chapter: 'Chapter VIII \\(Evrae\\)', finding: 'R71-C2', numbers: [/13 one-frame Wakka attack-to-follow swap hops of 161 to 494 px/, /feet at 490\.7 px/], before: ['hd2d', 'arena', 'breath', 'cam', 'moments'] },
   { id: 'sin-face', chapter: "Chapter XVIII \\(Sin's face\\)", finding: 'R71-C1', numbers: [/28 one-frame hops of 166 to 530 px/, /530\.5, 486 and 461 px/, /167 to 292 px/, /195 to 241 px/], before: ['card', 'breath', 'cam', 'moments', 'smear'] },
+  { id: 'mirror-aeons', chapter: 'Chapter 27 \\(Mirror Aeons\\)', finding: 'R71-C3', numbers: [/32 one-frame dash hops of 100 to 206\.6 px/, /24 of Tidus/, /8 of Yuna/], before: ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments'] },
 ];
 
 /** The slice of the presenter's stage the real answers read: the art id of a combatant (Tidus, in every chapter here). */
@@ -115,8 +116,8 @@ describe.each(HELD)('$id holds the real clips (booth-b4, $finding)', ({ id, chap
   });
 });
 
-describe('only this FFX chapter holds real', () => {
-  it('the one of this file is the whole table (Chapter III held it until r72-motion lifted it, Chapter VIII and the Mirror Aeons until r73-fit: booth-b4-real-hold.test.ts); no FFX-2 chapter holds real (R71-C4, Chapter XVI, is disclosed and not held), and the booth pair plays its real clips', () => {
+describe('only these three FFX chapters hold real', () => {
+  it('the three of this file are the whole table (Chapter III held it until r72-motion lifted it: booth-b4-real-hold.test.ts); no FFX-2 chapter holds real (R71-C4, Chapter XVI, is disclosed and not held), and the booth pair plays its real clips', () => {
     const holders = Object.entries(PIECE_HOLDS).filter(([, rows]) => rows.real !== undefined).map(([id]) => id).sort();
     expect(holders).toEqual([...HELD.map((h) => h.id)].sort());
     for (const id of holders) expect(getChapter(id)?.game, id).toBe('ffx');

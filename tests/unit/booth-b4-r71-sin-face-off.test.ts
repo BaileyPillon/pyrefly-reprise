@@ -49,7 +49,7 @@ describe('Chapter XVIII is off the list: release 68 plays there, under either sc
     expect(demoGameOf(ID, 'ffx')).toBe('ffx');
   });
 
-  it('release 71 treats fifteen of the nineteen listed chapters (8 FFX, 7 FFX-2) and release 72 seventeen (r72-hud put IX and XII, FFX only, back: 10 FFX, 7 FFX-2); the two fixed chapters of the same review, VIII and the Mirror Aeons chapter, stay on the list and, since r73-fit, play the real clips (the hold that fixed them is lifted: the flip fit and the return pace)', () => {
+  it('release 71 treats fifteen of the nineteen listed chapters (8 FFX, 7 FFX-2) and release 72 seventeen (r72-hud put IX and XII, FFX only, back: 10 FFX, 7 FFX-2); the real-clips hold still serves the two fixed chapters of the same review, VIII and the Mirror Aeons chapter, which stay on the list', () => {
     const treated = Object.keys(TREATED_CHAPTERS);
     expect(treated).toHaveLength(17);
     expect(treated).not.toContain(ID);
@@ -57,7 +57,7 @@ describe('Chapter XVIII is off the list: release 68 plays there, under either sc
     expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx2')).toHaveLength(7);
     for (const id of ['evrae-airship', 'mirror-aeons']) {
       expect(treated, id).toContain(id);
-      expect(treatedHold(id, 'real'), id).toBeUndefined(); // R71-C2 and R71-C3 were fixed by the hold (0 hops, CHK-027 PASS); r73-fit lifted it
+      expect(treatedHold(id, 'real'), id).toBeDefined(); // R71-C2 and R71-C3: fixed by the hold (0 hops, CHK-027 PASS)
     }
   });
 });

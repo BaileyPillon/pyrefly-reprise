@@ -120,8 +120,8 @@ describe('`__pyrefly.treated()`', () => {
       'ffx2-fallen-aeons': ['cam', 'breath', 'moments'], // r72: the look and the arena play (grade C by default)
       'ffx2-den-of-woe': ['cam', 'breath', 'moments'],
       'ffx2-trema': ['cam', 'breath', 'moments'],
-      'evrae-airship': ['hd2d', 'arena', 'breath', 'cam', 'moments'], // booth-b4-last; the r71 verdict added the look; booth-b4 held the real clips (R71-C2); r73-fit lifted that
-      'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments'], // booth-b4 held the real clips (R71-C3); r73-fit lifted that
+      'evrae-airship': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'], // booth-b4-last; the r71 verdict added the look; booth-b4 held the real clips (R71-C2)
+      'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'], // booth-b4 held the real clips (R71-C3)
       'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'],
     });
     expect(all.running).toBeNull();

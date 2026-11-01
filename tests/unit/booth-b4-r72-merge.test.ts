@@ -5,10 +5,8 @@
  *
  * The decision on the `real` holds (the driver's call, Bailey's word of 2026-10-31 23:40, "you make the executive decisions for the next few days"): the motion lane's fit scales a RETURN flip (Tidus, Yuna and
  * Kimahri have one in the real-snappy table; Wakka, Auron and Lulu have none) to at most Chapter I's 170 px of 900. Chapter III lifts (its hold asked for no teleport: the raw 275 px step at 462 px drawn is 165 fitted).
- * Chapters VIII, XVIII (off the list) and 27 kept theirs at the merge: their lift named no one-frame hop over 100 px, and the model of the scaled clip never reaches 100 px (Tidus 170 at every drawn size, Yuna 127 to 170, Kimahri
- * 101 to 170) and did not touch Wakka's attack-to-follow swaps (161 to 494 px) or the approach dashes (100 to 206.6 px).
- * **r73-fit (2026-11-01) lifted VIII's and 27's** on the bar of Chapter I's own largest frame (no teleport; no step larger than Chapter I's at the same share of the frame), Wakka's two-frame return being paced by
- * `motion/ReturnPace.ts` (`booth-b4-r73-return-pace.test.ts`): only Sin's face (off the list) keeps a `real` row.
+ * Chapters VIII, XVIII (off the list) and 27 keep theirs: their lift names no one-frame hop over 100 px, and the model of the scaled clip never reaches 100 px (Tidus 170 at every drawn size, Yuna 127 to 170, Kimahri
+ * 101 to 170) and does not touch Wakka's attack-to-follow swaps (161 to 494 px) or the approach dashes (100 to 206.6 px).
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -33,7 +31,7 @@ const MERGED: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readonly 
   'ffx2-vegnagun-shuyin': { game: 'ffx2', held: ['hd2d', 'arena', 'cam', 'breath', 'moments'] }, // V: today's sky
   'ffx2-leblanc': { game: 'ffx2', held: ['breath', 'cam', 'moments'] }, // VI
   'seymour-anima-macalania': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // VII
-  'evrae-airship': { game: 'ffx', held: ['hd2d', 'arena', 'breath', 'cam', 'moments'] }, // VIII: `real` was kept at the r72 merge and lifted at r73-fit
+  'evrae-airship': { game: 'ffx', held: ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'] }, // VIII: real stays held
   'yojimbo-cavern': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // IX: back (r72-hud)
   'seymour-natus': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // X
   'ffx2-fallen-aeons': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XI: hd2d and arena LIFTED by r72-sky (grade C by default)
@@ -42,7 +40,7 @@ const MERGED: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readonly 
   'isaaru-via-purifico': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // XIV
   'ffx2-den-of-woe': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XV
   'ffx2-ixion-djose': { game: 'ffx2', held: ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'] }, // XVI
-  'mirror-aeons': { game: 'ffx', held: ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments'] }, // 27: `real` was kept at the r72 merge and lifted at r73-fit
+  'mirror-aeons': { game: 'ffx', held: ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'] }, // 27: real stays held
 };
 
 const heldOf = (id: string): string[] => Object.keys(PIECE_HOLDS[id] ?? {}).filter((p) => treatedHold(id, p as never) !== undefined);
@@ -72,13 +70,12 @@ describe('the merged list: seventeen of the nineteen, each with the pieces it ho
   });
 });
 
-describe('the real holds after the fit: III lifted at r72, VIII and 27 lifted at r73-fit, only XVIII (off the list) keeps its row, no FFX-2 chapter holds it', () => {
-  it('exactly XVIII (rows unread) holds real; its reason keeps its numbers and its lift clause and carries the status of the fit before it', () => {
+describe('the real holds after the fit: III lifted, VIII and 27 kept (XVIII off), no FFX-2 chapter holds it', () => {
+  it('exactly VIII, XVIII (rows unread) and 27 hold real; each reason keeps its numbers and its lift clause and now carries the status of the fit before it', () => {
     const holders = Object.entries(PIECE_HOLDS).filter(([, rows]) => rows.real !== undefined).map(([id]) => id).sort();
-    expect(holders).toEqual(['sin-face']);
+    expect(holders).toEqual(['evrae-airship', 'mirror-aeons', 'sin-face']);
     for (const id of holders) expect(getChapter(id)?.game, id).toBe('ffx');
-    setTreatedScope('all');
-    for (const id of ['evrae-airship', 'mirror-aeons']) expect(isTreatedChapter(id, 'real'), id).toBe(true);
+    for (const id of ['evrae-airship', 'mirror-aeons']) expect(isTreatedChapter(id, 'real'), id).toBe(false);
     for (const id of holders) {
       const why = PIECE_HOLDS[id]!.real!;
       expect(why, id).toMatch(/Status at release 72 \(the merge of the motion lane, 2026-11-01\)/);
@@ -87,8 +84,8 @@ describe('the real holds after the fit: III lifted at r72, VIII and 27 lifted at
       expect(why.indexOf('Status at release 72'), id).toBeLessThan(why.indexOf('Lifts when'));
       expect(why, id).not.toMatch(/[A-Za-z]:[\\/]/); // shipped text names no local path (hold-reasons-no-local-paths)
     }
-    expect(PIECE_HOLDS['sin-face']!.real).toMatch(/Status at r73-fit/);
-    expect(PIECE_HOLDS['sin-face']!.real).toMatch(/Auron.s return is 153 paced ms with a 55 ms settle/);
+    expect(PIECE_HOLDS['evrae-airship']!.real).toMatch(/Wakka has no return flip/);
+    expect(PIECE_HOLDS['mirror-aeons']!.real).toMatch(/170 px for Tidus at every drawn size from 280 to 520 px and 127 to 170 px for Yuna/);
     for (const id of Object.keys(PIECE_HOLDS)) if (getChapter(id)?.game === 'ffx2') expect(PIECE_HOLDS[id]!.real, id).toBeUndefined();
   });
 

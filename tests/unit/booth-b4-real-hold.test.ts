@@ -14,7 +14,6 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { PIECE_HOLDS, isTreatedChapter, setDemoChapter, setTreatedScope, treatedHold } from '../../src/engine/motion/DemoGate.ts';
 import { curvesGame, curvesOn, inDemoChapter, realKind, setCurvesMode } from '../../src/engine/motion/CurvesSwitch.ts';
 import { realProfileOf, realRecoilMs } from '../../src/engine/motion/RealBeats.ts';
-import { getChapter } from '../../src/data/encounters.ts';
 
 const III = 'braskas-final-aeon';
 const I = 'seymour-flux';
@@ -39,9 +38,9 @@ describe('Chapter III plays the real clips again (r72-motion)', () => {
     }
   });
 
-  it('Chapter III does not hold real (and holds its breath and its moments as before); of the three chapters of the focused review of 10b426248 only XVIII (rows unread, off the list) still does: r73-fit lifted VIII and the Mirror Aeons (below)', () => {
+  it('Chapter III does not hold real (and holds its breath and its moments as before); the three chapters of the focused review of 10b426248 that the fit does not reach, VIII, XVIII (rows unread) and the Mirror Aeons, still do', () => {
     const holders = Object.entries(PIECE_HOLDS).filter(([, rows]) => rows.real !== undefined).map(([id]) => id);
-    expect(holders.sort()).toEqual(['sin-face']); // the fit scales a RETURN flip only (Tidus, Yuna, Kimahri); Wakka's two-frame return and Lulu's none are paced by ReturnPace.ts (r73-fit); Auron's swaps in Sin's face are not his return
+    expect(holders.sort()).toEqual(['evrae-airship', 'mirror-aeons', 'sin-face']); // the fit scales a RETURN flip only (Tidus, Yuna, Kimahri): their hops are Wakka's attack-to-follow swaps and the dashes (docs/handoff/r72.md section 2)
     expect(Object.keys(PIECE_HOLDS[III]!)).toEqual(['breath', 'moments']);
   });
 
@@ -80,66 +79,5 @@ describe('Chapter III plays the real clips again (r72-motion)', () => {
     expect(realKind()).toBeNull();
     setDemoChapter(I);
     expect(realKind()).toBe('snappy');
-  });
-});
-
-// ---------------------------------------------------------------------------------------------------------------- r73-fit: VIII and the Mirror Aeons
-
-/**
- * CHAPTER VIII (EVRAE) AND THE MIRROR AEONS PLAY THE REAL CLIPS AGAIN (r73-fit, 2026-11-01; FFX only; the driver's call under Bailey's delegation, his to overturn). The focused review of 10b426248 held both (R71-C2: 13 Wakka
- * attack-to-follow swap hops of 161 to 494 px; R71-C3: 32 Tidus and Yuna return-flip hops of 100 to 206.6 px). Release 72's fit scales the flip (Tidus 234.9 px in Chapter VIII, 177 to 206.6 in the Mirror Aeons, to Chapter I's 170); this
- * lane's `motion/ReturnPace.ts` stretches Wakka's two-frame return (and Lulu's none) out of the settle. The bar is Chapter I's own largest frame, no teleport: `booth-b4-r73-return-pace.test.ts` plays the real actor at the drawn sizes.
- */
-describe('Chapter VIII and the Mirror Aeons play the real clips again (r73-fit)', () => {
-  const LIFTED = [
-    ['evrae-airship', ['hd2d', 'arena', 'breath', 'cam', 'moments']],
-    ['mirror-aeons', ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments']],
-  ] as const;
-
-  it('under the scope all both answer real=true with no hold on it, and what they still hold is exactly what they held before (the other rows unmoved)', () => {
-    setTreatedScope('all');
-    for (const [id, held] of LIFTED) {
-      expect(isTreatedChapter(id, 'real'), id).toBe(true);
-      expect(treatedHold(id, 'real'), id).toBeUndefined();
-      expect(inDemoChapter(id, 'real'), id).toBe(true);
-      expect(Object.keys(PIECE_HOLDS[id]!), id).toEqual(held);
-    }
-  });
-
-  it("with the pack's default mode (real-snappy) both have the real kind, a real profile for Tidus and Wakka and the real recoil, as Chapter I does", () => {
-    setTreatedScope('all');
-    setCurvesMode('real-snappy');
-    for (const [id] of LIFTED) {
-      setDemoChapter(id);
-      expect(curvesOn(), id).toBe(true);
-      expect(realKind(), id).toBe('snappy');
-      expect(realProfileOf(ctx, 'tidus' as never), id).toBeDefined();
-      expect(realProfileOf(ctx, 'wakka' as never), id).toBeDefined();
-      expect(realRecoilMs(ctx, 'tidus' as never, 321), id).not.toBe(321);
-    }
-  });
-
-  it('?curves=new still answers the house curves in both, and under `?treated=pack` (release 68) neither answers any piece', () => {
-    setTreatedScope('all');
-    setCurvesMode('new');
-    for (const [id] of LIFTED) {
-      setDemoChapter(id);
-      expect(realKind(), id).toBeNull();
-      expect(curvesOn(), id).toBe(true);
-    }
-    setTreatedScope('pack');
-    setCurvesMode('real-snappy');
-    for (const [id] of LIFTED) {
-      setDemoChapter(id);
-      expect(isTreatedChapter(id, 'real'), id).toBe(false);
-      expect(curvesOn(), id).toBe(false);
-      expect(realKind(), id).toBeNull();
-    }
-  });
-
-  it("Sin's face (off the list) is the only chapter that still has a `real` row, and the chapters that play the real clips are FFX ones (rule 14)", () => {
-    expect(Object.entries(PIECE_HOLDS).filter(([, rows]) => rows.real !== undefined).map(([id]) => id)).toEqual(['sin-face']);
-    expect(getChapter('evrae-airship')?.game).toBe('ffx');
-    expect(getChapter('mirror-aeons')?.game).toBe('ffx');
   });
 });
