@@ -99,4 +99,4 @@ Common: a scratch build of this branch (`npm run build` into a scratch dist, nev
 
 ## 9. The wider run (every test file that reaches a changed file)
 
-`node node_modules/vitest/vitest.mjs run --changed origin/booth-b4 --maxWorkers=3 --testTimeout=60000 --hookTimeout=60000`, log `D:/Tools/pyrefly-scratch/2026-11-01/r72-sky/vitest-changed.txt`. Through `DemoGate.ts` this reaches most of the suite, including the chapter benches that take 3 to 9 minutes each. **Result: pending at the time of this commit; a later commit of this branch records it here.**
+`node node_modules/vitest/vitest.mjs run --changed origin/booth-b4 --maxWorkers=3 --testTimeout=60000 --hookTimeout=60000`, log `D:/Tools/pyrefly-scratch/2026-11-01/r72-sky/vitest-changed.txt`. Through `DemoGate.ts` this reaches most of the suite, including the chapter benches that take 3 to 9 minutes each. **Result: Test Files 936 passed, 25 skipped (961); Tests 12,355 passed, 125 skipped, 1 todo (12,481); exit 0; no failure** (started 00:24, ended 00:59 EDT; run on 8120cc7a1's tree, which this commit does not change in any source or test file).
