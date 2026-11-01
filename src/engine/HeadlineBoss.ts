@@ -8,8 +8,8 @@
  * (a HUD that outlives its presenter, a test that never ran one) can only ever match an id that is not in the state: it names nothing.
  *
  * Booth review of `booth-ffx-b3a` (2026-10-30), MAJOR 1: Chapter VII's formation stages Guado Guardian A in slot 0 and declares Seymour; the ribbon asked `headlineEnemy(state)` with no declared boss
- * and printed the Guardian until the summon removed the Guardians. Game case: shared plumbing (both games); only a formation that declares a `bossId` can differ: Chapter VII, and the formations of Biran and
- * Yenke, the Mirror aeons, the Last Summoning, Sinspawn Gui and FFX-2's Tourist Trap, none of which is on `DemoGate.TREATED_CHAPTERS`, so the F1 HUD draws for them only when a switch (`?hud=f1`) forces it.
+ * and printed the Guardian until the summon removed the Guardians. Game case: shared plumbing (both games); only a formation that declares a `bossId` can differ: Chapter VII and Chapter 27 (the Mirror aeons; its second link declares Dark Yojimbo), both on `DemoGate.TREATED_CHAPTERS` (booth-b4 review m2, 2026-10-31), and the formations of Biran and
+ * Yenke, the Last Summoning, Sinspawn Gui and FFX-2's Tourist Trap, none of which is on `DemoGate.TREATED_CHAPTERS`, so the F1 HUD draws for them only when a switch (`?hud=f1`) forces it.
  *
  * Pure: no DOM, no `three`, no randomness (AGENTS.md hard rule 1).
  */

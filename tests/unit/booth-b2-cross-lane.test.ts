@@ -75,6 +75,7 @@ const CHAINS = [
   { id: 'ffx2-vegnagun-shuyin', links: 5 },
   { id: 'ffx2-den-of-woe', links: 3 },
   { id: 'ffx2-fallen-aeons', links: 3 },
+  { id: 'ffx2-ixion-djose', links: 1, weak: true }, // booth-b4-last: Ixion at Djose, one link (the FFX-2 engine has no form change); its real fight is the fallen-aeon counter's whole length, so the chain runs with Ixion at 1 HP
   { id: 'ffx2-trema', links: 2, weak: true }, // batch 3: Paragon, then Trema (two links; the FFX-2 engine has no form change in either). Its real fight is half an hour of Dark Knights (999,999 HP), so the chain runs with every foe at 1 HP (`helpers/weakChain.ts`)
 ] as const;
 
@@ -84,7 +85,7 @@ describe("the FFX lane's stageFreeze guard, in the FFX-2 chapters with links and
     setStagingMode('pro');
   });
 
-  // The r70 verdict pass took Chapters V and XI off the list: their rows run again, with no edit, the day one line puts them back (`itIf`).
+  // The r70 verdict pass took Chapters V and XI off the list and booth-ffx2-b4-sky put them back (the look held), so their rows run here again with no edit (`itIf` is a no-op for a listed chapter): the real chains of V (five links) and XI (three) are read.
   for (const row of CHAINS) itIf(row.id)(`${row.id}: the real chain emits no form-change, and the last blow of the last link freezes once, between the last link start and the one title`, async () => {
     const { id, links } = row;
     const weak = 'weak' in row;
@@ -133,8 +134,8 @@ describe("the FFX lane's stageFreeze guard, in the FFX-2 chapters with links and
   }, 180_000);
 
   it('the chains above cover every treated FFX-2 chapter (a chapter that joins the list is added to CHAINS or this fails)', () => {
-    expect(stillListed(CHAINS.map((c) => c.id)).sort()).toEqual([...FFX2_TREATED].sort()); // the withdrawn two keep their rows in CHAINS and are skipped above
-    expect(CHAINS.map((c) => c.id).filter((id) => !(FFX2_TREATED as string[]).includes(id)).sort()).toEqual(Object.keys(WITHDRAWN_R70).filter((id) => WITHDRAWN_R70[id]!.game === 'ffx2').sort());
+    expect(stillListed(CHAINS.map((c) => c.id)).sort()).toEqual([...FFX2_TREATED].sort()); // a chapter that leaves the list again keeps its row in CHAINS and is skipped above
+    expect(CHAINS.map((c) => c.id).filter((id) => !(FFX2_TREATED as string[]).includes(id)).sort()).toEqual(Object.keys(WITHDRAWN_R70).filter((id) => WITHDRAWN_R70[id]!.game === 'ffx2').sort()); // none today: IX and XII, the two still withdrawn, are FFX
   });
 });
 
@@ -228,9 +229,9 @@ describe('the hold guard, across every treated chapter of both lanes', () => {
     }
   });
 
-  it('is not vacuous: both games are on the list, and the exceptions on it today are Chapter II alone', () => {
+  it('is not vacuous: both games are on the list, and the exceptions on it today are Chapter II, Sin\'s face and Ixion at Djose (booth-b4-last)', () => {
     expect(FFX_TREATED.length).toBeGreaterThan(0);
     expect(FFX2_TREATED.length).toBeGreaterThan(0);
-    expect(Object.keys(TREATED_CHAPTERS).filter((id) => scopeExcepted(id))).toEqual(['yunalesca']);
+    expect(Object.keys(TREATED_CHAPTERS).filter((id) => scopeExcepted(id))).toEqual(['yunalesca', 'sin-face', 'ffx2-ixion-djose']);
   });
 });

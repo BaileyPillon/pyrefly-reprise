@@ -106,16 +106,22 @@ describe('`__pyrefly.treated()`', () => {
     const treated = api['treated'] as (scope?: 'all' | 'pack' | null) => { scope: string; chapters: string[]; holds: Record<string, string[]>; running: string | null; reaches: boolean };
     const all = treated('all');
     expect(all.scope).toBe('all');
-    expect(all.chapters).toEqual(['seymour-flux', 'yunalesca', 'seymour-anima-macalania', 'seymour-natus', 'braskas-final-aeon', 'isaaru-via-purifico', 'ffx2-bahamut', 'ffx2-leblanc', 'ffx2-den-of-woe', 'ffx2-trema']); // ten since the r70 verdicts (IX, XII, V and XI are off the list)
+    expect(all.chapters).toEqual(['seymour-flux', 'yunalesca', 'seymour-anima-macalania', 'seymour-natus', 'braskas-final-aeon', 'isaaru-via-purifico', 'evrae-airship', 'sin-face', 'mirror-aeons', 'ffx2-bahamut', 'ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'ffx2-trema', 'ffx2-ixion-djose']); // sixteen (the r71 verdicts took IX and XII off again; eighteen at the merge): ten since the r70 verdicts (IX, XII, V and XI came off the list), IX and XII (FFX only) back in booth-ffx-b4-hud, V and XI (FFX-2 only) back in booth-ffx2-b4-sky and the last five listed chapters' four in booth-b4-last (Chapter XVII stays out)
     expect(all.holds).toEqual({
       yunalesca: ['breath', 'cam', 'smear'],
       'seymour-anima-macalania': ['breath', 'cam', 'moments'],
       'seymour-natus': ['breath', 'cam', 'moments'],
-      'braskas-final-aeon': ['breath', 'moments'],
+      'braskas-final-aeon': ['breath', 'moments', 'real'], // booth-b4: the real clips are held in Chapter III
       'isaaru-via-purifico': ['breath', 'cam', 'moments'],
       'ffx2-leblanc': ['breath', 'cam', 'moments'], // the pieces she holds, in the order of her rows
+      'ffx2-vegnagun-shuyin': ['hd2d', 'arena', 'cam', 'breath', 'moments'], // booth-ffx2-b4-sky: the look held first (the plate is release 69's)
+      'ffx2-fallen-aeons': ['hd2d', 'arena', 'cam', 'breath', 'moments'],
       'ffx2-den-of-woe': ['cam', 'breath', 'moments'],
       'ffx2-trema': ['cam', 'breath', 'moments'],
+      'evrae-airship': ['hd2d', 'arena', 'breath', 'cam', 'moments'], // booth-b4-last; the r71 verdict added the look
+      'sin-face': ['card', 'breath', 'cam', 'moments', 'smear'],
+      'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments'],
+      'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'],
     });
     expect(all.running).toBeNull();
     expect(all.reaches).toBe(false);

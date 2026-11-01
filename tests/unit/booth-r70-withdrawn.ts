@@ -1,35 +1,59 @@
 /**
- * THE FOUR CHAPTERS THE r70 VERDICT PASS TOOK BACK OFF `TREATED_CHAPTERS` (2026-10-31, `docs/handoff/booth-b3.md` section 12; both games: IX and XII are FFX only, V and XI FFX-2 only). A helper, not a test file.
+ * THE CHAPTERS THE r70 VERDICT PASS TOOK BACK OFF `TREATED_CHAPTERS` (2026-10-31, `docs/handoff/booth-b3.md` section 12; both games: IX and XII are FFX only, V and XI FFX-2 only). A helper, not a test file.
+ *
+ * **All four came back in release 71's batch 4, and the r71 verdict pass (2026-10-31, `docs/handoff/booth-b4.md` section 12) took IX and XII (FFX only) off the list AGAIN: `WITHDRAWN_R70` holds those two now (V and XI stay on the list; the table keeps its first pass's name):** IX and XII (FFX only) came back in `booth-ffx-b4-hud` (`docs/handoff/booth-ffx-b4-hud.md`: the F1 HUD's
+ * layout against their panels was fixed; the r71 browser read found two more overlaps, see each `why` below), V and XI (FFX-2 only) in `booth-ffx2-b4-sky` (`docs/handoff/booth-ffx2-b4-sky.md`) with the look held; the two FFX-2 chapters are named in {@link RETURNED_R71}, and {@link itPlays}
+ * gates a case on a piece the chapter does not hold (the follower cases of Chapter XI wait for its `cam` hold to lift).**
  *
  * Their rows stay in every table (look, arena, rim, holds, the follower's) and the lane tests that pin what the treatment does in them stay too: each such case is gated with {@link itIf} or {@link describeIf}, which run it while the chapter is on
  * `DemoGate.TREATED_CHAPTERS` and skips it while it is off. Putting one line back therefore turns the lane's own cases back on with no edit, and a regression in the built-but-unread rows shows at that moment.
  */
 import { describe, it } from 'vitest';
-import { TREATED_CHAPTERS } from '../../src/engine/motion/DemoGate.ts';
+import { PIECE_HOLDS, TREATED_CHAPTERS, type TreatedPiece } from '../../src/engine/motion/DemoGate.ts';
 
-/** The withdrawn chapters, each with the game it is (rule 14) and the one-line reason the verdict gave (also the `NOT_YET` text of `booth-treated-chapters.test.ts`). */
+/** The chapters withdrawn now (Chapters IX and XII, FFX only, since the r71 verdict pass), each with the game it is (rule 14) and the one-line reason the verdict gave (also the `NOT_YET` text of `booth-treated-chapters.test.ts`). */
 export const WITHDRAWN_R70: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readonly why: string }>> = Object.freeze({
   'yojimbo-cavern': {
     game: 'ffx',
-    why: 'FFX: out of release 70 (r70 verdict): the Zanmato gauge panel ends against the F1 turn strip (a major, introduced, a regression against release 69); its rows and holds stay, unread',
+    why: "FFX: out of release 71 (r71 verdict): with Intel (G) open and the target cursor up, the advisor's one-row tip lands on the Zanmato gauge (634 x 53 px at 2560 x 1440, 397 x 33 at 1600 x 900, 318 x 26 at 1280 x 720, over the boss name and the gauge header; live reads 0), a major, introduced, a regression against release 70; its rows and holds stay, unread",
   },
   'seymour-omnis': {
     game: 'ffx',
-    why: "FFX: out of release 70 (r70 verdict): the Enemy Intent card clips the acting hero's HP numeral against the F1 party panel (a major, introduced, a regression against release 69); its rows and holds stay, unread",
-  },
-  'ffx2-vegnagun-shuyin': {
-    game: 'ffx2',
-    why: "FFX-2: out of release 70 (r70 verdict): the HD-2D bold look clips the Farplane's sky to a flat white halo over the colossus frame (a major, introduced) and Shuyin's freeze cannot be read white on white; its rows and holds stay, unread",
-  },
-  'ffx2-fallen-aeons': {
-    game: 'ffx2',
-    why: "FFX-2: out of release 70 (r70 verdict): the same clipped halo on the Road's sky whenever the follower brings the spire's burst into frame (a major, introduced); its rows and holds stay, unread",
+    why: "FFX: out of release 71 (r71 verdict): the disc strip and its note are painted over the F1 turn strip at every width under 1920 (58.7 x 29.6 px at 1280 x 720, 9.3 at 1600 x 900) and the Sensor plate overlaps the target plate (71.6 x 78 px at 1600 x 900, 201 x 67 at 1280), two majors, introduced, regressions against release 70; its rows and holds stay, unread",
   },
 });
 
-/** Is this chapter on the treated list right now? (True for every chapter that was never withdrawn.) */
+/**
+ * The two chapters the r70 verdicts took off the list and `booth-ffx2-b4-sky` put back (FFX-2 only, rule 14), each with the r70 reason it left for and the pieces it comes back holding (the look: `hd2d` and `arena`, the two pieces that put light on the plate;
+ * Chapter XI also the camera, whose follower crops Yuna where release 69's frame never does). The reasons are the verdict's own words, kept as the record of what the holds answer.
+ */
+export const RETURNED_R71: Readonly<Record<string, { readonly game: 'ffx2'; readonly was: string; readonly held: readonly string[] }>> = Object.freeze({
+  'ffx2-vegnagun-shuyin': {
+    game: 'ffx2',
+    was: "FFX-2: out of release 70 (r70 verdict): the HD-2D bold look clips the Farplane's sky to a flat white halo over the colossus frame (a major, introduced) and Shuyin's freeze cannot be read white on white",
+    held: ['hd2d', 'arena', 'cam', 'breath', 'moments'],
+  },
+  'ffx2-fallen-aeons': {
+    game: 'ffx2',
+    was: "FFX-2: out of release 70 (r70 verdict): the same clipped halo on the Road's sky whenever the follower brings the spire's burst into frame (a major, introduced)",
+    held: ['hd2d', 'arena', 'cam', 'breath', 'moments'],
+  },
+});
+
+/** Is this chapter on the treated list right now? (True for every chapter that was never withdrawn, and for the two that returned.) */
 export function isListed(id: string): boolean {
   return Object.prototype.hasOwnProperty.call(TREATED_CHAPTERS, id);
+}
+
+/**
+ * `itPlays(id, piece)` is vitest's `it` while the chapter is on the list AND does not hold that piece, and `it.skip` otherwise: a case that needs a piece to play (Chapter XI's follower camera cases need `cam`) is written once and turns on, with no
+ * edit, the day the hold is lifted.
+ */
+export const itPlays = (id: string, piece: TreatedPiece): typeof it => (playsPiece(id, piece) ? it : (it.skip as unknown as typeof it));
+
+/** Does the treatment play this piece in this chapter, under the `all` scope: the chapter is listed and does not hold the piece. (The predicate behind {@link itPlays}.) */
+export function playsPiece(id: string, piece: TreatedPiece): boolean {
+  return isListed(id) && PIECE_HOLDS[id]?.[piece] === undefined;
 }
 
 /**

@@ -97,6 +97,11 @@ export const ROOM_LOOKS: Readonly<Record<LookName, Readonly<Record<string, RoomL
     // is 0.38 (one link of each). The light is the skylight's glyph, the plate's one cyan-white star at the top of the hall (found on the plate at u 0.503, v 0.064 from the top, rgb 0.80 1.00 1.00; the engine's `findLight`, left alone, takes the lit banner on the left wall at
     // u 0.133, v 0.597, as it does for Chapter IV), so the shafts and the rim follow the skylight (`docs/handoff/booth-ffx2-b3.md`).
     'via-infinito': { focus: 0.38, light: { u: 0.503, v: 0.064, color: [0.8, 1.0, 1.0] } },
+    // The last five listed chapters (`booth-b4-last`, FFX only; `docs/handoff/booth-b4-last.md` section 3 has every number). Both rooms are the Fahrenheit's deck: the party stands on the one arc (Tidus front-centre, the others behind) and the NEAR idle rig stands the figures higher than any approved room (feet at v 0.18 to 0.26,
+    // middle 0.272, against Chapter I's 0.187), so the sharp band is the booth rule (focus = 0.36 + 0.727 x (middle - 0.187)) = 0.42 at 16:9 and 21:9, one number per room as in every row (the range director's stand-back below 16:9 puts the middle at 0.306 and 0.350, bands 0.446 and 0.479). Evrae's light is the sunlit cloud bank above the hull
+    // (the painting's brightest blob, plate u 0.311, v 0.361, rgb 0.99 0.92 0.88; `findLight` takes a smaller bank at u 0.180, v 0.319); Sin's face has the setting sun itself (u 0.483, v 0.522, rgb 0.98 0.94 0.77; `findLight` takes the hull's glints at u 0.867, v 0.736 with its default cut).
+    'evrae-airship-deck': { focus: 0.42, light: { u: 0.311, v: 0.361, color: [0.99, 0.92, 0.88] } },
+    'sin-fahrenheit-bevelle': { focus: 0.42, light: { u: 0.483, v: 0.522, color: [0.98, 0.94, 0.77] } },
   },
   cinematic: {
     // Chapter I: a cold moonlit night, graded toward deep teal-indigo shadows and pale silver highlights, less saturated, the fog the colour of breath.
@@ -121,6 +126,9 @@ export const ROOM_LOOKS: Readonly<Record<LookName, Readonly<Record<string, RoomL
     'den-of-woe': { shadow: [0.01, 0.07, 0.16], highlight: [0.8, 1.0, 1.0], recipe: { sat: 0.86, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.14, 0.3, 0.4], light: { u: 0.869, v: 0.599, color: [0.45, 0.97, 0.97] } },
     // Batch 3 (FFX-2 only): Chapter XIII's hall, deep blue-black shadows under a pale cyan-white highlight (the skylight), a steel-blue haze, the skylight's glyph as the light.
     'via-infinito': { shadow: [0.03, 0.08, 0.24], highlight: [0.86, 1.0, 1.0], recipe: { sat: 0.86, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.18, 0.28, 0.46], light: { u: 0.503, v: 0.064, color: [0.8, 1.0, 1.0] } },
+    // The last five listed chapters (FFX): the deck's navy under a cream highlight and a sky-blue fog (Evrae's blue sky, hue 210, most of its saturated pixels); the golden dusk's violet-brown under a gold highlight and a dusk-lilac fog (Sin's face, hue 10 to 30).
+    'evrae-airship-deck': { shadow: [0.04, 0.08, 0.24], highlight: [1.0, 0.9, 0.76], recipe: { sat: 0.84, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.44, 0.54, 0.78], light: { u: 0.311, v: 0.361, color: [0.99, 0.92, 0.88] } },
+    'sin-fahrenheit-bevelle': { shadow: [0.1, 0.06, 0.2], highlight: [1.0, 0.82, 0.58], recipe: { sat: 0.84, contrast: 0.66, pivot: 0.32, shadowSplit: 0.55, highlightSplit: 0.4 }, fog: [0.5, 0.38, 0.48], light: { u: 0.483, v: 0.522, color: [0.98, 0.94, 0.77] } },
   },
   anime: {},
 };

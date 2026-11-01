@@ -39,7 +39,7 @@ import { chapterLook } from '../../src/engine/look/LookConfig.ts';
 import { isListed } from './booth-r70-withdrawn.ts';
 
 const B2 = ['ffx2-vegnagun-shuyin', 'ffx2-den-of-woe', 'ffx2-fallen-aeons'] as const;
-/** Does the follower camera play in this chapter? In none of the three: Chapter V holds it (the colossus frame), Chapter XV since the r70 verdicts (the crop of Yuna), Chapter XI is off the list. */
+/** Does the follower camera play in this chapter? In none of the three: Chapter V holds it (the colossus frame), Chapter XV since the r70 verdicts (the crop of Yuna), Chapter XI since `booth-ffx2-b4-sky` (the same crop, and the follower brings the burst into frame). */
 const camPlays = (_id: string): boolean => false;
 const stage = { projectRect: () => null, project: () => null } as never;
 const mount = (chapterId: string) => attachProStage({ root: {} as HTMLElement, chapterId, stage });
@@ -84,10 +84,10 @@ afterEach(() => {
 });
 
 describe('the holds of batch 2', () => {
-  it('Chapter V holds the follower camera, the staged breath and the moments; Chapter XV holds the same three since the r70 verdict (the crop of Yuna); Chapter XI holds the staged breath and the moments; V and XI keep their rows while off the list; every other piece plays', () => {
-    expect(Object.keys(PIECE_HOLDS['ffx2-vegnagun-shuyin']!).sort()).toEqual(['breath', 'cam', 'moments']);
+  it('Chapter V holds the look (the HD-2D bold look and the arena grade), the follower camera, the staged breath and the moments; Chapter XV holds the camera, the breath and the moments since the r70 verdict (the crop of Yuna); Chapter XI holds the look, the camera, the breath and the moments (booth-ffx2-b4-sky); every other piece plays', () => {
+    expect(Object.keys(PIECE_HOLDS['ffx2-vegnagun-shuyin']!).sort()).toEqual(['arena', 'breath', 'cam', 'hd2d', 'moments']);
     expect(Object.keys(PIECE_HOLDS['ffx2-den-of-woe']!).sort()).toEqual(['breath', 'cam', 'moments']);
-    expect(Object.keys(PIECE_HOLDS['ffx2-fallen-aeons']!)).toEqual(['breath', 'moments']);
+    expect(Object.keys(PIECE_HOLDS['ffx2-fallen-aeons']!).sort()).toEqual(['arena', 'breath', 'cam', 'hd2d', 'moments']);
     for (const id of B2) expect(treatedHold(id, 'moments'), id).toMatch(/Garment Grids/); // the knock-out rule (`tests/unit/engine/booth-b2-ko-rule.test.ts`)
     expect(treatedHold('ffx2-vegnagun-shuyin', 'cam')).toMatch(/colossus/);
     expect(treatedHold('ffx2-vegnagun-shuyin', 'cam')).toMatch(/D-228/);
@@ -143,7 +143,7 @@ describe('the sound pass follows their run, in FFX-2, and gives itself back', ()
 });
 
 describe('every switch, in each of the three, under all', () => {
-  it('answers true but for the held pieces: the follower in Chapter V (and its soft background with it), the staged breath and the moments in all three (the knock-out rule)', () => {
+  it('answers true but for the held pieces: the follower in all three (and its soft background with it), the staged breath and the moments in all three (the knock-out rule), and the HD-2D look in Chapters V and XI (the Farplane\'s sky clips under it)', () => {
     allOn();
     setTreatedScope('all');
     for (const id of B2) {
@@ -177,7 +177,8 @@ describe('every switch, in each of the three, under all', () => {
       expect(punchMode(), `feel punch ${id}`).toBe('new');
       expect(audioNewOn(), `audio ${id}`).toBe(true);
       expect(new DemoGovernor().gate(true), `governor ${id}`).toBe(true);
-      expect(chapterLook(id), `hd2d ${id}`).toEqual({ name: 'hd2d', strength: 'bold' });
+      // the look: Chapter XV plays the bold row; Chapters V and XI hold `hd2d` (and `arena`), so the plate is release 69's: no chapter look at all
+      expect(chapterLook(id), `hd2d ${id}`).toEqual(treatedHold(id, 'hd2d') === undefined ? { name: 'hd2d', strength: 'bold' } : null);
     }
   });
 

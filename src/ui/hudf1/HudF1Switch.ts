@@ -11,7 +11,7 @@
  *    cue sat on the first verb at the larger sizes), and that made the type SMALLER than at 100: F1's command labels are 12 grid px and its party names 12.5, against today's 9.8 and 9.3, so 115 drew 28 px
  *    labels where 100 drew 30 (Chapter I, 1600 x 900) and Chapter IV's party names went 31, 27, 30. Now the F1 HUD stays and GROWS with the setting (`hudf1-textsize.css`: every zone grows from the corner it is
  *    pinned to, the left column about its foot, as `text-size.css` does for today's panels). {@link F1_GROWS_WITH_TEXT_SIZE} is the one line to put release 67's behaviour back, and `?f1text=today` does it for a
- *    page. Read from the two attributes `app/applyComfort.ts` puts on <html>.
+ *    page. Read from the two attributes `app/applyComfort.ts` puts on <html>. **Two chapters step down at 130** ({@link F1_TEXT_CEILING}: Chapter IX and Chapter XII, whose own panels do not fit the band the grown slab leaves; `?f1text=grow` beats it).
  *
  * Game case (AGENTS.md rule 14): BOTH games, presentation only (no number, ability, turn order or fight rule changes); WHICH layout plays is the chapter's game: FFX (CTB) has the turn strip and
  * the command block on the left, FFX-2 (ATB) has no turn strip, ATB bars on the cards and everything mirrored to the right with the slant flipped and the pink accent.
@@ -83,9 +83,41 @@ export function setHudF1TextMode(value: HudF1TextMode | null): void {
   if (hudF1TextMode() !== before) for (const l of listeners) l();
 }
 
-/** True when the F1 HUD may draw at the current TEXT SIZE: always while it grows with the setting; else only at 100 (an absent attribute, as in a unit test, counts as 100). */
+/**
+ * The largest TEXT SIZE (percent) at which the F1 HUD plays in a chapter whose own panel meets the grown F1 slab (review of `booth-b4`, 2026-10-31, finding c1; FFX only, rule 14: FFX-2 has no panel of this kind). Above it the chapter
+ * keeps today's HUD, as release 69 draws it there, exactly as `?f1text=today` does for every chapter. Why: `hudf1-chapters.css` lays the Zanmato gauge (Chapter IX, `yojimbo-cavern`) and the Omnis disc strip (Chapter XII,
+ * `seymour-omnis`) in the band between the boss ribbon and the turn strip, which grow toward each other with the setting: the band is 277 grid px at 100, 229 at 115 and 181 at 130, and the panels are 191 and 185 wide, so at
+ * 130 the gauge reaches 7.4 grid px (about 30 px at 2560 x 1440) into the ribbon's end and 8.0 into the strip's box, the Omnis strip 9.2 into the ribbon's: a regression against the live site in an accessibility setting, with nothing
+ * to measure the fix against but a mockup (rule 9). At 100 and 115 both clear. Lifts when a narrower gauge and strip are picked from a mockup (then delete the row). Keyed by chapter id, read with `hasOwnProperty`.
+ */
+export const F1_TEXT_CEILING: Readonly<Record<string, number>> = Object.freeze({
+  'yojimbo-cavern': 115,
+  'seymour-omnis': 115,
+});
+
+/** TEXT SIZE in force, in percent: the larger of the two attributes `app/applyComfort.ts` puts on <html>; an absent or unreadable one counts as 100 (as in a unit test). */
+function textSizeNow(): number {
+  const d = document.documentElement.dataset;
+  const read = (v: string | undefined): number => {
+    const n = Number(v ?? 100);
+    return Number.isFinite(n) && n > 0 ? n : 100;
+  };
+  return Math.max(read(d['textSize']), read(d['textSizeWide']));
+}
+
+/** True when the page itself asked, with `?f1text=grow`, for the F1 HUD at every size in every chapter: it beats {@link F1_TEXT_CEILING} (for the A/B captures that measure what the ceiling hides). */
+function f1TextForced(): boolean {
+  return queryWord(here(), 'f1text') === 'grow';
+}
+
+/**
+ * True when the F1 HUD may draw at the current TEXT SIZE: in a chapter on {@link F1_TEXT_CEILING} only up to its ceiling (unless the page forces it); else always while it grows with the setting, or only at 100 (an absent
+ * attribute, as in a unit test, counts as 100).
+ */
 export function hudF1TextSizeOk(): boolean {
   if (typeof document === 'undefined') return true;
+  const id = demoChapter();
+  if (id !== undefined && Object.prototype.hasOwnProperty.call(F1_TEXT_CEILING, id) && textSizeNow() > F1_TEXT_CEILING[id]! && !f1TextForced()) return false;
   if (hudF1TextMode() === 'grow') return true;
   const d = document.documentElement.dataset;
   return (d['textSize'] ?? '100') === '100' && (d['textSizeWide'] ?? '100') === '100';

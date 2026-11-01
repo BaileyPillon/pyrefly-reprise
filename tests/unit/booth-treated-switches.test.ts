@@ -101,11 +101,11 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(proLookOn(), `look ${id}`).toBe(on);
       expect(proPieceOn('hits'), `look hits ${id}`).toBe(on);
       expect(proGame(), `look game ${id}`).toBe(on ? GAME[id] : undefined);
-      expect(proArenaFor(id, ''), `arena ${id}`).toBe(on);
+      expect(proArenaFor(id, ''), `arena ${id}`).toBe(plays(scope, id, 'arena')); // Chapters V and XI hold the arena grade with the look (the Farplane's sky clips: booth-ffx2-b4-sky); the Mirror Aeons chapter and Chapter XVI hold the room looks (booth-b4-last): release 68's grade plays there
       expect(partyRimOff(), `rim ${id}`).toBe(on);
       expect(bossCleanOn(), `boss ${id}`).toBe(on);
       expect(curvesOn(), `curves ${id}`).toBe(on);
-      expect(realKind(), `real ${id}`).toBe(on ? 'snappy' : null);
+      expect(realKind(), `real ${id}`).toBe(plays(scope, id, 'real') ? 'snappy' : null); // Chapter III holds `real` (booth-b4: the real clips' return flip is drawn 1.66 times larger there): the house curves play in it
       expect(inDemoChapter(id), `curves gate ${id}`).toBe(on);
       expect(momentsOn(), `moments ${id}`).toBe(plays(scope, id, 'moments')); // Leblanc, Chapters V, XV, XI, XIII, VII, IX, X, III, XII and XIV hold the KO cut and the cheer (the unread or over-the-cap knock-out: tests/unit/engine/booth-b2-ko-rule.test.ts and each hold's own reason); Chapter II plays them (its smear is held, so the KO stays the plain cross) and no chapter is named in that file's KO_CLEARED
       const smear = plays(scope, id, 'smear'); // Chapter II's swap exception: no smear planner there
@@ -118,8 +118,8 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(proCamGame(), `camera game ${id}`).toBe(cam ? GAME[id] : null);
       expect(stagingOn(), `staging ${id}`).toBe(on);
       for (const piece of ['card', 'ending', 'opening'] as StagingPiece[]) {
-        expect(stagingPieceOn(piece), `staging ${piece} ${id}`).toBe(on);
-        expect(stagingPieceOnFor(piece, id), `staging for ${piece} ${id}`).toBe(on);
+        expect(stagingPieceOn(piece), `staging ${piece} ${id}`).toBe(plays(scope, id, piece)); // the Mirror Aeons chapter holds the card (a full-bleed plate with no @2x master)
+        expect(stagingPieceOnFor(piece, id), `staging for ${piece} ${id}`).toBe(plays(scope, id, piece));
       }
       expect(fxNewOn(), `fx ${id}`).toBe(on);
       expect(inFxDemoChapter(id), `fx gate ${id}`).toBe(on);
@@ -130,7 +130,7 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       expect(audioNewOn(), `audio ${id}`).toBe(on);
       expect(passGame(), `audio game ${id}`).toBe(on ? GAME[id] : null);
       expect(new DemoGovernor().gate(true), `governor ${id}`).toBe(on);
-      expect(chapterLook(id) !== null, `hd2d ${id}`).toBe(on);
+      expect(chapterLook(id) !== null, `hd2d ${id}`).toBe(plays(scope, id, 'hd2d')); // every treated chapter has a row and plays the look unless it holds `hd2d`: Chapters V and XI hold the HD-2D bold look (the plate is release 69's, booth-ffx2-b4-sky), the Mirror Aeons chapter and Chapter XVI hold it too (booth-b4-last) and have no row
     }
   });
 

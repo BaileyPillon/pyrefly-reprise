@@ -210,7 +210,7 @@ describe('the foes draw no screen-space rim in their own chapter, and nowhere el
 
   it('under pack (release 68), in any other chapter and for the hidden Valefor (which plays no Paragon) the same ids keep their rim', () => {
     setBossClean('clean');
-    for (const [scope, chapter] of [['pack', ID], ['all', 'ffx2-ixion-djose'], ['all', 'ffx2-valefor-besaid'], ['all', 'exp-leblanc']] as const) {
+    for (const [scope, chapter] of [['pack', ID], ['all', 'ffx2-valefor-besaid'], ['all', 'exp-leblanc']] as const) {
       setTreatedScope(scope);
       setDemoChapter(chapter);
       for (const foe of ['paragon', 'trema']) {

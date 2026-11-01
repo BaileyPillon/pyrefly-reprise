@@ -14,6 +14,7 @@
  */
 
 import { isTreatedChapter } from '../motion/DemoGate.ts';
+import { skyGradeFor } from './pro/SkyGrade.ts';
 
 export type LookName = 'hd2d' | 'cinematic' | 'anime';
 export const LOOK_NAMES: readonly LookName[] = ['hd2d', 'cinematic', 'anime'];
@@ -52,11 +53,17 @@ export const CHAPTER_LOOKS: Readonly<Record<string, { name: LookName; strength: 
   'ffx2-fallen-aeons': { name: 'hd2d', strength: 'bold' },
   // Batch 3 (`booth-ffx2-b3`, FFX-2 only; Bailey 2026-10-30): Chapter XIII (Cloister 100 of the Via Infinito, scene `via-infinito`). Same rule: played only while the treatment reaches the chapter.
   'ffx2-trema': { name: 'hd2d', strength: 'bold' },
+  // The last five listed chapters (`booth-b4-last`, FFX; Bailey 2026-10-30): Chapter VIII (Evrae) and Chapter XVIII (Sin's face), both on the Fahrenheit's deck. Played only while the treatment reaches the chapter. The Mirror Aeons chapter and Chapter XVI (Ixion, FFX-2) hold the look (`PieceHoldsLast.ts`: a two-plate room and a provisional plate), so they have no row.
+  'evrae-airship': { name: 'hd2d', strength: 'bold' },
+  'sin-face': { name: 'hd2d', strength: 'bold' },
 };
 
-/** The look a chapter plays with no `look` key in the address, or null (today's frame): a row of {@link CHAPTER_LOOKS} for a chapter the treatment reaches (`DemoGate.isTreatedChapter`, piece `hd2d`). */
+/**
+ * The look a chapter plays with no `look` key in the address, or null (today's frame): a row of {@link CHAPTER_LOOKS} for a chapter the treatment reaches (`DemoGate.isTreatedChapter`, piece `hd2d`). **Chapters V and XI hold `hd2d`**
+ * (`PieceHolds.ts`: the bold look clips the Farplane's sky), so this answers null for them, the frame of release 69; the one exception is the measuring word `?skygrade=a|b|c` (`pro/SkyGrade.ts`, default off), which plays the row so the lighter options can be filmed.
+ */
 export function chapterLook(chapterId: string | undefined): { name: LookName; strength: LookStrength } | null {
-  return chapterId !== undefined && Object.prototype.hasOwnProperty.call(CHAPTER_LOOKS, chapterId) && isTreatedChapter(chapterId, 'hd2d') ? CHAPTER_LOOKS[chapterId]! : null;
+  return chapterId !== undefined && Object.prototype.hasOwnProperty.call(CHAPTER_LOOKS, chapterId) && (isTreatedChapter(chapterId, 'hd2d') || skyGradeFor(chapterId) !== null) ? CHAPTER_LOOKS[chapterId]! : null;
 }
 
 export interface LookRequest {

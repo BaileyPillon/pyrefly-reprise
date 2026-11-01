@@ -27,6 +27,8 @@ const IDS = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'] as co
 /** The chapters that hold the moments (the reserve Rikku's KO step, review M1; Yuna's unread KO cut in XIV, the review of booth-b3 M1) and the directed camera (the killing blow's plate at the live positions, m1; the aeon as the actor, m2). */
 const MOMENTS_HELD: readonly string[] = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'];
 const CAM_HELD: readonly string[] = ['seymour-omnis', 'isaaru-via-purifico'];
+/** The chapter that holds the real clips (`booth-b4`: Tidus's Chapter I return flip is drawn 1.66 times larger in Chapter III): it plays the house curves, what `?curves=new` plays. */
+const REAL_HELD: readonly string[] = ['braskas-final-aeon'];
 
 function allOn(): void {
   setHudF1Mode('f1');
@@ -65,7 +67,7 @@ afterEach(() => {
 });
 
 for (const ID of IDS) describeIf(ID)(`${ID} under the scope all: FFX's own game everywhere, every piece but the ones it holds`, () => {
-  it('the HUD, the look, the arena, the rim, the curves with the real clips, the moments, the smear, the directed camera and its soft background, the staging, the effects, the feel, the sound and the governor play, in FFX, except the moments and the camera where the chapter holds them', () => {
+  it('the HUD, the look, the arena, the rim, the curves with the real clips, the moments, the smear, the directed camera and its soft background, the staging, the effects, the feel, the sound and the governor play, in FFX, except the moments, the camera and (Chapter III, booth-b4) the real clips where the chapter holds them', () => {
     allOn();
     setTreatedScope('all');
     setSwapScope('wide'); // the page's default: under node there is no page and the scope would read `pack`
@@ -81,7 +83,7 @@ for (const ID of IDS) describeIf(ID)(`${ID} under the scope all: FFX's own game 
     expect(bossCleanOn()).toBe(true); // the rim half only (no `BOSS_CLEAN_ARTS` row): the foes are flagged by combatant id in `RimFigures.TREATED_RIM_FOES`
     expect(curvesOn()).toBe(true);
     expect(curvesGame()).toBe('ffx');
-    expect(realKind()).toBe('snappy');
+    expect(realKind()).toBe(REAL_HELD.includes(ID) ? null : 'snappy'); // Chapter III holds the real clips (booth-b4); the house curves still play (curvesOn above)
     expect(momentsOn()).toBe(!MOMENTS_HELD.includes(ID));
     expect(swapsInScope()).toBe(true); // not a swap-scope exception: no `smear` hold is owed
     expect(smearOn()).toBe(true);
@@ -119,14 +121,14 @@ for (const ID of IDS) describeIf(ID)(`${ID} under the scope all: FFX's own game 
     }
   });
 
-  it.runIf(MOMENTS_HELD.includes(ID))('holds the moments and nothing else of the motion: release 68\'s KO and victory play, the curves with the real clips and the smear still do, and the booth pair next to it keeps the moments (review M1)', () => {
+  it.runIf(MOMENTS_HELD.includes(ID))('holds the moments and nothing else of the motion: release 68\'s KO and victory play, the curves (with the real clips, except in Chapter III, which holds them) and the smear still do, and the booth pair next to it keeps the moments (review M1)', () => {
     allOn();
     setTreatedScope('all');
     setSwapScope('wide');
     setDemoChapter(ID);
     expect(momentsOn()).toBe(false);
     expect(curvesOn()).toBe(true);
-    expect(realKind()).toBe('snappy');
+    expect(realKind()).toBe(REAL_HELD.includes(ID) ? null : 'snappy');
     expect(smearOn()).toBe(true);
     for (const booth of ['seymour-flux', 'ffx2-bahamut']) {
       setMomentsMode('new');
