@@ -6,6 +6,9 @@
  * puts the burst in frame). The brief named a hold of the "look"; in the code the piece `look` is the pro hits, glass numbers and markers (`ProSwitch.proLookOn`), which put no light on the plate, so the two pieces that do are held and `look` plays
  * (the census below reads the source for every reader of the two pieces, so a new reader fails here until it is judged).
  *
+ * **r72 (`r72-sky`): Chapter XI no longer holds `hd2d` and `arena`** (it plays them with grade C by default: Bailey's pick from stills, `tests/unit/booth-r72-sky.test.ts`); this file keeps release 71's pins for Chapter V (both holds) and for Chapter XI's `cam` hold, and reads Chapter XI's
+ * two look holds, which `PieceHoldsSky.ts` keeps for `?skygrade=today`, under that word.
+ *
  * Game case (rule 14): FFX-2 only. Presentation only: no number of a fight changes.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
@@ -26,6 +29,7 @@ import {
 import { CHAPTER_LOOKS, chapterLook } from '../../src/engine/look/LookConfig.ts';
 import { applyChapterLook, lookState } from '../../src/engine/look/LookState.ts';
 import { PRO_ARENA } from '../../src/engine/look/pro/ProGrade.ts';
+import { setSkyOption } from '../../src/engine/look/pro/SkyGrade.ts';
 import { proArenaFor, proGame, proLookOn, proPieceOn, setProMode, setProPiece } from '../../src/engine/look/pro/ProSwitch.ts';
 import { SCOPE_EXCEPTIONS } from '../../src/engine/motion/SwapSwitch.ts';
 import { SCRIPTED_RIGS } from '../../src/engine/procam/ProAutoStage.ts';
@@ -39,6 +43,7 @@ const DEN = 'ffx2-den-of-woe'; // the one other chapter whose look plays on a pl
 const LIFT = 'Lifts when a lighter grade picked by Bailey from stills reads under 3 percent of pixels over 240 on the Farplane plates';
 
 afterEach(() => {
+  setSkyOption(undefined);
   setTreatedScope(null);
   setDemoChapter(undefined);
   setProMode(null);
@@ -53,15 +58,16 @@ afterEach(() => {
 });
 
 describe('the holds: the look in both chapters, the camera in Chapter XI too, each written to be lifted', () => {
-  it('Chapter V holds the look (the bold look and the arena grade), the colossus camera, the staged breath and the moments; Chapter XI the same five (the follower camera instead of the colossus one)', () => {
-    for (const id of SKY) expect(Object.keys(PIECE_HOLDS[id]!), id).toEqual(['hd2d', 'arena', 'cam', 'breath', 'moments']);
+  it('Chapter V holds the look (the bold look and the arena grade), the colossus camera, the staged breath and the moments; Chapter XI the follower camera, the staged breath and the moments (r72 lifted its look)', () => {
+    expect(Object.keys(PIECE_HOLDS[V]!)).toEqual(['hd2d', 'arena', 'cam', 'breath', 'moments']);
+    expect(Object.keys(PIECE_HOLDS[XI]!)).toEqual(['cam', 'breath', 'moments']);
     expect(treatedHold(V, 'cam')).toMatch(/colossus/);
     expect(treatedHold(XI, 'cam')).toMatch(/follower/);
     expect(treatedHold(XI, 'cam')).not.toMatch(/colossus/);
   });
 
-  it("both look holds carry the driver's lift: a lighter grade picked by Bailey from stills reads under 3 percent of pixels over 240 on the Farplane plates, the three candidates and the note named", () => {
-    for (const id of SKY) {
+  it("Chapter V's look holds carry the driver's lift: a lighter grade picked by Bailey from stills reads under 3 percent of pixels over 240 on the Farplane plates, the three candidates and the note named", () => {
+    for (const id of [V]) {
       for (const piece of ['hd2d', 'arena'] as const) {
         const why = treatedHold(id, piece)!;
         expect(why.length, `${id} ${piece}`).toBeGreaterThan(80);
@@ -74,7 +80,8 @@ describe('the holds: the look in both chapters, the camera in Chapter XI too, ea
     }
   });
 
-  it("the look holds state the r70 numbers they answer, the Chapter V ones from the first menu at 2560 x 1440 and the sky band above the party, the Chapter XI ones from the idle rig and the Anima link", () => {
+  it("the look holds state the r70 numbers they answer, the Chapter V ones from the first menu at 2560 x 1440 and the sky band above the party, the Chapter XI ones (kept for `?skygrade=today`) from the idle rig and the Anima link", () => {
+    setSkyOption('today'); // Chapter XI's two look holds answer only under this word since r72
     const v = treatedHold(V, 'hd2d')!;
     for (const n of [/126\.6/, /101\.5/, /13\.5 percent/, /232\.5/, /64\.2 percent/, /179\.4/, /21\.4 percent over 235/, /164\.4/, /149\.5/, /D-V1/]) expect(v).toMatch(n);
     const xi = treatedHold(XI, 'hd2d')!;
@@ -100,11 +107,7 @@ describe('the holds: the look in both chapters, the camera in Chapter XI too, ea
     expect(cam).toMatch(/and the Anima link's frames with the spire's burst in frame, filmed with the follower running, read under 3 percent of pixels over 240 on the Farplane plates under whatever grade the Road then plays, against release 69/);
     expect(cam).toMatch(/not a crop-only lift/);
     expect(cam.indexOf('put a party rectangle outside the viewport'), 'the original lift still comes first').toBeLessThan(cam.indexOf('burst in frame, filmed with the follower running'));
-    for (const piece of ['hd2d', 'arena'] as const) {
-      const why = treatedHold(XI, piece)!;
-      expect(why, piece).toMatch(/which in this chapter is the follower's frame only \(the held `cam` keeps the burst above the top edge\)/);
-      expect(why, piece).toMatch(/filmed from a scratch build without the `cam` row, job S3b of the note/);
-    }
+    for (const piece of ['hd2d', 'arena'] as const) expect(treatedHold(XI, piece), `XI ${piece}: lifted in r72, it answers only under the word 'today'`).toBeUndefined();
     for (const piece of ['hd2d', 'arena'] as const) expect(treatedHold(V, piece), `V ${piece}: the colossus frame is not the follower's`).not.toMatch(/S3b|scratch build/);
     const note = readFileSync(resolve('docs/handoff/booth-ffx2-b4-sky.md'), 'utf8');
     expect(note).toMatch(/\*\*S3b\*\*/);
@@ -129,13 +132,14 @@ describe('with the look held the plate is release 69\'s: no chapter look, no are
     expect(PRO_ARENA['farplane']!.colour.shoulder).toBeUndefined(); // the knee of option b is not a row of the table
   });
 
-  it('under all the chapter look is null and the arena is off; under pack the same (release 68); the Den of Woe, which holds neither, plays both', () => {
+  it('under all the chapter look is null and the arena is off in Chapter V, and under pack in both (release 68); Chapter XI plays both under all since r72; the Den of Woe, which holds neither, plays both', () => {
     setProMode('pro');
     for (const scope of ['all', 'pack'] as const) {
       setTreatedScope(scope);
       for (const id of SKY) {
-        expect(chapterLook(id), `${id} ${scope}`).toBeNull();
-        expect(proArenaFor(id, ''), `${id} ${scope}`).toBe(false);
+        const plays = scope === 'all' && id === XI;
+        expect(chapterLook(id), `${id} ${scope}`).toEqual(plays ? { name: 'hd2d', strength: 'bold' } : null);
+        expect(proArenaFor(id, ''), `${id} ${scope}`).toBe(plays);
       }
     }
     setTreatedScope('all');
@@ -143,17 +147,17 @@ describe('with the look held the plate is release 69\'s: no chapter look, no are
     expect(proArenaFor(DEN, '')).toBe(true);
   });
 
-  it("the look state a battle leaves in either chapter IS the state of a chapter the treatment does not reach and of `?treated=pack` (armed false, no look, not the pro arena, subtle), and the Den's is not", () => {
+  it("the look state a battle leaves in Chapter V IS the state of a chapter the treatment does not reach and of `?treated=pack` (armed false, no look, not the pro arena, subtle), in Chapter XI under pack, and the Den's is not; Chapter XI under all is the Den's (r72)", () => {
     setProMode('pro');
     const snap = (): unknown[] => [lookState.name, lookState.strength, lookState.armed, lookState.pro];
     applyChapterLook('ffx2-valefor-besaid'); // a hidden chapter the treatment never reaches: the control
     const control = snap();
     expect(control).toEqual([null, 'subtle', false, false]);
     setTreatedScope('all');
-    for (const id of SKY) {
-      applyChapterLook(id);
-      expect(snap(), id).toEqual(control);
-    }
+    applyChapterLook(V);
+    expect(snap(), V).toEqual(control);
+    applyChapterLook(XI);
+    expect(snap(), XI).toEqual(['cinematic', 'bold', true, true]); // lifted in r72
     setTreatedScope('pack');
     for (const id of SKY) {
       applyChapterLook(id);
@@ -177,10 +181,11 @@ describe('with the look held the plate is release 69\'s: no chapter look, no are
     }
   });
 
-  it('every piece but the held five plays in both chapters; the held five are the four hold rows and the arena (rule 14: FFX-2 only)', () => {
+  it('every piece but the held ones plays in both chapters: the five of Chapter V and the three of Chapter XI (r72 lifted its look; rule 14: FFX-2 only)', () => {
     setTreatedScope('all');
+    const HELD: Record<string, readonly string[]> = { [V]: ['hd2d', 'arena', 'cam', 'breath', 'moments'], [XI]: ['cam', 'breath', 'moments'] };
     for (const id of SKY) {
-      for (const p of TREATED_PIECES) expect(isTreatedChapter(id, p as TreatedPiece), `${id} ${p}`).toBe(!['hd2d', 'arena', 'cam', 'breath', 'moments'].includes(p));
+      for (const p of TREATED_PIECES) expect(isTreatedChapter(id, p as TreatedPiece), `${id} ${p}`).toBe(!HELD[id]!.includes(p));
       expect(getChapter(id)?.game, id).toBe('ffx2');
       expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx2', since: 'r71' });
     }

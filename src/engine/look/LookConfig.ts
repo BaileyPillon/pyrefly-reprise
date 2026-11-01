@@ -59,8 +59,9 @@ export const CHAPTER_LOOKS: Readonly<Record<string, { name: LookName; strength: 
 };
 
 /**
- * The look a chapter plays with no `look` key in the address, or null (today's frame): a row of {@link CHAPTER_LOOKS} for a chapter the treatment reaches (`DemoGate.isTreatedChapter`, piece `hd2d`). **Chapters V and XI hold `hd2d`**
- * (`PieceHolds.ts`: the bold look clips the Farplane's sky), so this answers null for them, the frame of release 69; the one exception is the measuring word `?skygrade=a|b|c` (`pro/SkyGrade.ts`, default off), which plays the row so the lighter options can be filmed.
+ * The look a chapter plays with no `look` key in the address, or null (today's frame): a row of {@link CHAPTER_LOOKS} for a chapter the treatment reaches (`DemoGate.isTreatedChapter`, piece `hd2d`). **Chapter V holds `hd2d`**
+ * (`PieceHolds.ts`: the bold look clips the Farplane's sky), so this answers null for it, the frame of release 69; the one exception is the measuring word `?skygrade=a|b|c` (`pro/SkyGrade.ts`), which plays the row so the lighter options can be filmed.
+ * **Chapter XI plays it (r72)** with grade C patched on by default (Bailey's pick from stills); `?skygrade=today` holds it again (`PieceHoldsSky.ts`), release 71's frame.
  */
 export function chapterLook(chapterId: string | undefined): { name: LookName; strength: LookStrength } | null {
   return chapterId !== undefined && Object.prototype.hasOwnProperty.call(CHAPTER_LOOKS, chapterId) && (isTreatedChapter(chapterId, 'hd2d') || skyGradeFor(chapterId) !== null) ? CHAPTER_LOOKS[chapterId]! : null;

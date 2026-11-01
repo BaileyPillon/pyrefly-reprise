@@ -37,7 +37,7 @@ describe('the look: which chapters get it by default', () => {
     expect(withLook.sort()).toEqual(['ffx2-bahamut:ffx2', 'seymour-flux:ffx']);
     for (const c of CHAPTERS) if (c.id !== 'seymour-flux' && c.id !== 'ffx2-bahamut') expect(chapterLook(c.id)).toBeNull();
     setTreatedScope('all'); // release 69: Leblanc and Chapter II join, then batch 2 (the Den of Woe, FFX-2) and batch 3; Chapters V, IX, XI and XII were taken back off by the r70 verdicts (their CHAPTER_LOOKS rows stay, unread); IX and XII (FFX only) came back in booth-ffx-b4-hud (the F1 HUD's layout against their panels is fixed), V and XI (FFX-2 only) in booth-ffx2-b4-sky with the look held (so they have no look), and booth-b4-last adds Evrae and Sin's face (FFX only; Mirror Aeons and Ixion hold the look); the r71 verdicts took IX and XII off the list again and hold Evrae's look (the cone is a white halo); nobody else
-    expect(CHAPTERS.filter((c) => chapterLook(c.id) !== null).map((c) => `${c.id}:${c.game}`).sort()).toEqual(['braskas-final-aeon:ffx', 'ffx2-bahamut:ffx2', 'ffx2-den-of-woe:ffx2', 'ffx2-leblanc:ffx2', 'ffx2-trema:ffx2', 'isaaru-via-purifico:ffx', 'seymour-anima-macalania:ffx', 'seymour-flux:ffx', 'seymour-natus:ffx', 'sin-face:ffx', 'yunalesca:ffx']);
+    expect(CHAPTERS.filter((c) => chapterLook(c.id) !== null).map((c) => `${c.id}:${c.game}`).sort()).toEqual(['braskas-final-aeon:ffx', 'ffx2-bahamut:ffx2', 'ffx2-den-of-woe:ffx2', 'ffx2-fallen-aeons:ffx2', 'ffx2-leblanc:ffx2', 'ffx2-trema:ffx2', 'isaaru-via-purifico:ffx', 'seymour-anima-macalania:ffx', 'seymour-flux:ffx', 'seymour-natus:ffx', 'sin-face:ffx', 'yunalesca:ffx']);
   });
 
   it('the chapters that BORROW the two paintings as placeholders get nothing: the look is keyed by chapter, not by scene', () => {

@@ -17,6 +17,7 @@
  */
 
 import { PIECE_HOLDS } from './PieceHolds.ts';
+import { SKY_TODAY_HOLDS } from './PieceHoldsSky.ts';
 
 export type DemoGame = 'ffx' | 'ffx2';
 
@@ -102,7 +103,8 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
   // three links). Each holds the pieces named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber.
   // Chapters V (`ffx2-vegnagun-shuyin`) and XI (`ffx2-fallen-aeons`) LEFT THIS LIST in the r70 verdict pass (the HD-2D bold look clips the Farplane and the Road's very bright sky to a flat white halo: V's first menu and all five links; XI's fights
   // whenever the follower brings the spire's burst into frame; a major the treatment introduced) and CAME BACK in `booth-ffx2-b4-sky` (FFX-2 only; `since` r71, the driver's to renumber) with the look HELD: `PieceHolds.ts` holds `hd2d` and `arena` in both, so the
-  // plate draws as release 69 draws it, and Chapter XI holds `cam` as well (its follower crops Yuna where release 69's frame never does). `?skygrade=a|b|c` (`look/pro/SkyGrade.ts`, default off) builds three lighter grades to film for Bailey.
+  // plate draws as release 69 draws it, and Chapter XI holds `cam` as well (its follower crops Yuna where release 69's frame never does). `?skygrade=a|b|c` (`look/pro/SkyGrade.ts`) builds three lighter grades to film for Bailey. **r72 (`r72-sky`): Chapter XI plays `hd2d` and `arena` with grade C by default**
+  // (Bailey's pick from the stills: "dimmer lights: a dark night where the burst still shines"; its two holds moved to `PieceHoldsSky.ts`, where `?skygrade=today` puts release 71's Chapter XI back); Chapter V keeps both holds (C leaves 21 percent of its sky band over 240).
   'ffx2-vegnagun-shuyin': { game: 'ffx2', since: 'r71' },
   'ffx2-fallen-aeons': { game: 'ffx2', since: 'r71' },
   'ffx2-den-of-woe': { game: 'ffx2', since: 'r70' },
@@ -144,9 +146,49 @@ export function setTreatedScope(value: TreatedScope | null): void {
   scopeNow = value;
 }
 
-/** The written reason a treated chapter holds a piece back, or undefined. */
+/**
+ * `?skygrade=` (r72, `look/pro/SkyGrade.ts`; FFX-2 only: the Farplane's two plates), the whole word: `a`, `b` or `c` (one of the three lighter grades, to film), `today` (release 71's Chapter XI: its `hd2d` and `arena` HELD again, see {@link SKY_TODAY_HOLDS}), `off` (set live only,
+ * `__pyrefly.skyGrade(null)`: no grade patches the room, the r70 control arm) or `default` (no word, or a word that names none of these: each chapter plays its own default, Chapter XI grade C and Chapter V nothing). The word lives here, beside `?treated=`, because the hold
+ * lookup below reads it and `SkyGrade.ts` imports this module, so it could not hold the state itself without a cycle.
+ */
+export type SkyWord = 'a' | 'b' | 'c' | 'today' | 'off' | 'default';
+
+/** `?skygrade=a|b|c|today` from a search string (pure): the word, or `default` (no word, no page, or a word that names none). */
+export function skyWordFromSearch(search: string | undefined): SkyWord {
+  const w = queryWord(search, 'skygrade');
+  return w === 'a' || w === 'b' || w === 'c' || w === 'today' ? w : 'default';
+}
+
+let skyWordNow: SkyWord | null = null;
+
+/** The word the page asked for (read once from the address). */
+export function skyWord(): SkyWord {
+  if (skyWordNow === null) skyWordNow = skyWordFromSearch(globalThis.location === undefined ? undefined : (globalThis.location.search ?? ''));
+  return skyWordNow;
+}
+
+/** Tests and `__pyrefly.skyGrade(...)`: force the word (`null` reads the address again). */
+export function setSkyWord(value: SkyWord | null): void {
+  skyWordNow = value;
+}
+
+/**
+ * The written reason a treated chapter holds a piece back, or undefined. A hold of {@link PIECE_HOLDS} always answers; a hold of {@link SKY_TODAY_HOLDS} (Chapter XI's `hd2d` and `arena`, which r72 plays by default) answers only while the address says `?skygrade=today`,
+ * so that word is release 71's Chapter XI exactly.
+ */
 export function treatedHold(id: string | undefined, piece: TreatedPiece): string | undefined {
-  return id === undefined || !Object.prototype.hasOwnProperty.call(PIECE_HOLDS, id) ? undefined : PIECE_HOLDS[id]![piece];
+  if (id === undefined) return undefined;
+  const own = Object.prototype.hasOwnProperty.call(PIECE_HOLDS, id) ? PIECE_HOLDS[id]![piece] : undefined;
+  if (own !== undefined || skyWord() !== 'today') return own;
+  return Object.prototype.hasOwnProperty.call(SKY_TODAY_HOLDS, id) ? SKY_TODAY_HOLDS[id]![piece] : undefined;
+}
+
+/** The pieces a chapter holds back right now: the ones `?skygrade=today` adds (release 71's order has them first), then `PIECE_HOLDS`' rows. The debug read `__pyrefly.treated().holds` reports this. */
+export function treatedHolds(id: string | undefined): string[] {
+  if (id === undefined) return [];
+  const own = Object.prototype.hasOwnProperty.call(PIECE_HOLDS, id) ? Object.keys(PIECE_HOLDS[id]!) : [];
+  const extra = skyWord() === 'today' && Object.prototype.hasOwnProperty.call(SKY_TODAY_HOLDS, id) ? Object.keys(SKY_TODAY_HOLDS[id]!) : [];
+  return [...extra.filter((p) => !own.includes(p)), ...own];
 }
 
 /**

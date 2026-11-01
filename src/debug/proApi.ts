@@ -5,9 +5,9 @@
  * on). The pro look plays only in the demo chapters (Chapter I `seymour-flux`, Chapter IV `ffx2-bahamut`): `proOn()` is the answer for the running chapter. `proPiece(piece, on?)` reads or sets one
  * piece (arena, seam, hits, numbers, markers) and answers whether it plays now.
  */
-import { PIECE_HOLDS, TREATED_CHAPTERS, demoChapter, isTreatedChapter, setTreatedScope, treatedScope, type TreatedScope } from '../engine/motion/DemoGate.ts';
+import { TREATED_CHAPTERS, demoChapter, isTreatedChapter, setTreatedScope, skyWord, treatedHolds, treatedScope, type TreatedScope } from '../engine/motion/DemoGate.ts';
 import { proTune } from '../engine/look/pro/ProGrade.ts';
-import { SKY_CHAPTERS, SKY_CHANGES, SKY_OPTIONS, setSkyOption, skyActive, skyOption, skyScreen, type SkyOption } from '../engine/look/pro/SkyGrade.ts';
+import { SKY_CHAPTERS, SKY_CHANGES, SKY_DEFAULTS, SKY_OPTIONS, setSkyOption, skyActive, skyOption, skyScreen, type SkyOption } from '../engine/look/pro/SkyGrade.ts';
 import { lookState } from '../engine/look/LookState.ts';
 import { bossCleanMode, bossCleanOn, setBossClean, type BossCleanMode } from '../engine/look/pro/BossClean.ts';
 import { partyRimMode, partyRimOff, setPartyRim, type PartyRimMode } from '../engine/look/pro/PartyRimSwitch.ts';
@@ -47,18 +47,19 @@ export function installProDebug(api: Record<string, unknown>): void {
   /** Release 69 (`booth-leblanc`): `treated()` reads which chapters the treatment reaches (`scope`: `all` = the list, `pack` = release 68's booth pair; `?treated=pack` does the same from the address), the list, each listed chapter's held pieces (the rows of a chapter the r70 verdicts took off the list stay in `PIECE_HOLDS`, unread, and are not reported) and whether the running chapter is reached; `treated('all' | 'pack' | null)` sets the scope for what starts from now on (a fight reads it as it sets up) and `null` reads the address again. */
   api['treated'] = (scope?: TreatedScope | null) => {
     if (scope === 'all' || scope === 'pack' || scope === null) setTreatedScope(scope);
-    return { scope: treatedScope(), chapters: Object.keys(TREATED_CHAPTERS), holds: Object.fromEntries(Object.entries(PIECE_HOLDS).filter(([k]) => Object.prototype.hasOwnProperty.call(TREATED_CHAPTERS, k)).map(([k, v]) => [k, Object.keys(v)])), running: demoChapter() ?? null, reaches: isTreatedChapter(demoChapter()) };
+    return { scope: treatedScope(), chapters: Object.keys(TREATED_CHAPTERS), holds: Object.fromEntries(Object.keys(TREATED_CHAPTERS).map((k): [string, string[]] => [k, treatedHolds(k)]).filter(([, v]) => v.length > 0)), running: demoChapter() ?? null, reaches: isTreatedChapter(demoChapter()) };
   };
   /**
-   * `booth-ffx2-b4-sky` (FFX-2 only): the measuring word of the Farplane's two plates. `skyGrade()` reads `{ word, active, armed, screen, chapters, options }` (`word`: the option the address or the last call asked for, `active`: the option patching the running room's table, null with
-   * no word or outside Chapters V and XI, `armed`: the look rig and the pro arena are up, the only way the table reaches the screen, `screen`: the picture a still taken now shows, `release69` | `r70` | `a` | `b` | `c`, null outside Chapters V and XI: LABEL A STILL BY `screen`, never
-   * by `active`); `skyGrade('a' | 'b' | 'c' | null)` sets the word live (a battle already running picks it up on the next frame: the LUT key carries it), `skyGrade(null)` on a page that opened with the word plays the r70 grade unpatched (the failing control arm, same page and same frame; `screen` says `r70`); no
-   * argument is a read. On a page that opened WITHOUT the word the rig is not armed (the look is held), so a call mid-battle changes `active` and leaves `screen` at `release69`: open the page with `?skygrade=` to film an option. Default off.
+   * `booth-ffx2-b4-sky` and `r72-sky` (FFX-2 only): the measuring word of the Farplane's two plates. `skyGrade()` reads `{ word, mode, active, armed, screen, chapters, defaults, options }` (`word`: the option the address or the last call named, null with none, `mode`: the whole word, `a` | `b` | `c` |
+   * `today` | `off` | `default`, `active`: the option patching the running room's table (the named one, else the chapter's default: Chapter XI grade C since r72), null outside Chapters V and XI or when no grade reaches the chapter, `armed`: the look rig and the pro arena are up, the only way the table reaches the
+   * screen, `screen`: the picture a still taken now shows, `release69` | `r70` | `a` | `b` | `c`, null outside Chapters V and XI: LABEL A STILL BY `screen`, never by `active`); `skyGrade('a' | 'b' | 'c' | 'today' | null)` sets the word live (a battle already running picks it up on the next frame as far as the
+   * room's table goes: the LUT key carries it), `skyGrade(null)` plays the room's own grade unpatched (the failing control arm, same page and same frame; `screen` says `r70` where the rig is armed), `skyGrade('today')` is release 71's Chapter XI (its look and arena held again from the next battle on); no argument is a read.
+   * The rig is built when a battle sets up, so a call mid-battle changes `active` and not what the rig is: open the page with the word (`?skygrade=`) to film an option or release 71's frame.
    */
-  api['skyGrade'] = (w?: SkyOption | null) => {
-    if (w === null || (SKY_OPTIONS as readonly string[]).includes(w as string)) setSkyOption(w as SkyOption | null);
+  api['skyGrade'] = (w?: SkyOption | 'today' | null) => {
+    if (w === null || w === 'today' || (SKY_OPTIONS as readonly string[]).includes(w as string)) setSkyOption(w);
     const armed = lookState.armed && lookState.pro;
-    return { word: skyOption(), active: skyActive(), armed, screen: skyScreen(armed), chapters: { ...SKY_CHAPTERS }, options: Object.fromEntries(SKY_OPTIONS.map((o) => [o, SKY_CHANGES[o].name])) };
+    return { word: skyOption(), mode: skyWord(), active: skyActive(), armed, screen: skyScreen(armed), chapters: { ...SKY_CHAPTERS }, defaults: { ...SKY_DEFAULTS }, options: Object.fromEntries(SKY_OPTIONS.map((o) => [o, SKY_CHANGES[o].name])) };
   };
   /** Live tuning of one room's table for captures: `proTune('gagazet', { colour: { exposure: 0.8 } })`. */
   api['proTune'] = (room: string, patch: Record<string, unknown>): boolean => proTune(room, patch);

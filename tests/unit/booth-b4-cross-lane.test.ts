@@ -78,10 +78,10 @@ describe('the one holds reader', () => {
 });
 
 describe('the measuring word ?skygrade=a|b|c', () => {
-  it('is off by default (no address, no word)', () => {
+  it('names no option by default (no address, no word), and the only chapter with a default grade is Chapter XI, grade C (r72; Chapter V has none)', () => {
     setSkyOption(undefined);
     expect(skyOption()).toBeNull();
-    for (const id of CHAPTER_IDS) expect(skyGradeFor(id), id).toBeNull();
+    for (const id of CHAPTER_IDS) expect(skyGradeFor(id), id).toBe(id === 'ffx2-fallen-aeons' ? 'c' : null);
   });
 
   it('reaches Chapter V and Chapter XI and no other chapter in either game, whichever option is set', () => {
@@ -106,8 +106,13 @@ describe('the measuring word ?skygrade=a|b|c', () => {
     }
   });
 
-  it('plays the held look and arena in V and XI only with the word, and holds them without it (release 69\'s plate)', () => {
-    setSkyOption(null);
+  it('plays the held look and arena in V only with the word and holds them without it (release 69\'s plate); Chapter XI plays them by default since r72 and holds them again only under `today`', () => {
+    setSkyOption(undefined);
+    expect(chapterLook('ffx2-vegnagun-shuyin')).toBeNull();
+    expect(proArenaFor('ffx2-vegnagun-shuyin', '')).toBe(false);
+    expect(chapterLook('ffx2-fallen-aeons')).not.toBeNull();
+    expect(proArenaFor('ffx2-fallen-aeons', '')).toBe(true);
+    setSkyOption('today');
     for (const id of SKY_LANE) {
       expect(chapterLook(id), id).toBeNull();
       expect(proArenaFor(id, ''), id).toBe(false);

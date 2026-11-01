@@ -115,7 +115,7 @@ describe('`__pyrefly.treated()`', () => {
       'isaaru-via-purifico': ['breath', 'cam', 'moments'],
       'ffx2-leblanc': ['breath', 'cam', 'moments'], // the pieces she holds, in the order of her rows
       'ffx2-vegnagun-shuyin': ['hd2d', 'arena', 'cam', 'breath', 'moments'], // booth-ffx2-b4-sky: the look held first (the plate is release 69's)
-      'ffx2-fallen-aeons': ['hd2d', 'arena', 'cam', 'breath', 'moments'],
+      'ffx2-fallen-aeons': ['cam', 'breath', 'moments'], // r72: the look and the arena play (grade C by default)
       'ffx2-den-of-woe': ['cam', 'breath', 'moments'],
       'ffx2-trema': ['cam', 'breath', 'moments'],
       'evrae-airship': ['hd2d', 'arena', 'breath', 'cam', 'moments'], // booth-b4-last; the r71 verdict added the look
