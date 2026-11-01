@@ -23,7 +23,7 @@ afterEach(() => setTreatedScope(null));
 
 describe('the holds of the four chapters that joined', () => {
   it("Chapter VIII (Evrae, booth-b4-last, FFX only) holds the staged breath (Poison Breath, which his Inhale already telegraphs with its own painting), the directed camera (the range director authors the deck's rigs) and the moments (the knock-out cut is unread on the deck); every other piece plays, the smear among them (his swap exception was lifted in release 69)", () => {
-    expect(Object.keys(PIECE_HOLDS['evrae-airship']!)).toEqual(['hd2d', 'arena', 'breath', 'cam', 'moments']); // the r71 verdict added the look: the cone is a white halo (job L1)
+    expect(Object.keys(PIECE_HOLDS['evrae-airship']!)).toEqual(['hd2d', 'arena', 'breath', 'cam', 'moments', 'real']); // the r71 verdict added the look: the cone is a white halo (job L1)
     expect(treatedHold('evrae-airship', 'hd2d')).toMatch(/12\.19 and 12\.30 percent against 2\.68 and 2\.57/);
     expect(treatedHold('evrae-airship', 'hd2d')).toMatch(/20\.05 percent against 0\.97/);
     expect(treatedHold('evrae-airship', 'hd2d')).toMatch(/Chapters V and XI/);
@@ -38,11 +38,11 @@ describe('the holds of the four chapters that joined', () => {
     expect(treatedHold('evrae-airship', 'moments')).toMatch(/CHK-027/);
     expect(treatedHold('evrae-airship', 'moments')).toMatch(/0\.495 to 0\.499/);
     expect(treatedHold('evrae-airship', 'moments')).toMatch(/0\.21 on this very deck/);
-    for (const p of TREATED_PIECES) if (!['hd2d', 'arena', 'breath', 'cam', 'moments'].includes(p)) expect(treatedHold('evrae-airship', p), p).toBeUndefined();
+    for (const p of TREATED_PIECES) if (!['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'].includes(p)) expect(treatedHold('evrae-airship', p), p).toBeUndefined();
   });
 
   it("Chapter XVIII (Sin's face, FFX only) holds the boss card (the widest boss painting of any treated chapter), the staged breath (Giga-Graviton, which the clock HUD already announces and which ends the fight in a defeat), the directed camera, the moments and, as a swap exception, the smear planner; every other piece plays", () => {
-    expect(Object.keys(PIECE_HOLDS['sin-face']!)).toEqual(['card', 'breath', 'cam', 'moments', 'smear']);
+    expect(Object.keys(PIECE_HOLDS['sin-face']!)).toEqual(['card', 'breath', 'cam', 'moments', 'smear', 'real']);
     expect(treatedHold('sin-face', 'card')).toMatch(/1410 x 745, aspect 1\.89/);
     expect(treatedHold('sin-face', 'card')).toMatch(/1,771 px wide on a 1600 x 900 frame/);
     expect(treatedHold('sin-face', 'card')).toMatch(/left 142 px/);
@@ -54,11 +54,11 @@ describe('the holds of the four chapters that joined', () => {
     expect(treatedHold('sin-face', 'smear')).toMatch(/SCOPE_EXCEPTIONS/);
     expect(treatedHold('sin-face', 'smear')).toMatch(/224\.4 px against a cap of half his drawn height, 221\.8/);
     expect(treatedHold('sin-face', 'smear')).toMatch(/sin-face-all-held-anchor/);
-    for (const p of TREATED_PIECES) if (!['card', 'breath', 'cam', 'moments', 'smear'].includes(p)) expect(treatedHold('sin-face', p), p).toBeUndefined();
+    for (const p of TREATED_PIECES) if (!['card', 'breath', 'cam', 'moments', 'smear', 'real'].includes(p)) expect(treatedHold('sin-face', p), p).toBeUndefined();
   });
 
   it("the Mirror Aeons chapter (FFX only) holds the room looks and the full-bleed card (two plates under one key, the first provisional with no @2x master and a mean luminance of 0.600, the grade applied once at the scene's entry), the staged breath, the camera and the moments; HUD, pro look, rim, boss, ending, opening, curves, feel, effects and audio play", () => {
-    expect(Object.keys(PIECE_HOLDS['mirror-aeons']!)).toEqual(['hd2d', 'arena', 'card', 'breath', 'cam', 'moments']);
+    expect(Object.keys(PIECE_HOLDS['mirror-aeons']!)).toEqual(['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real']);
     expect(treatedHold('mirror-aeons', 'hd2d')).toMatch(/TWO plates under one key/);
     expect(treatedHold('mirror-aeons', 'hd2d')).toMatch(/0\.600/);
     expect(treatedHold('mirror-aeons', 'hd2d')).toMatch(/0\.628/);
@@ -73,7 +73,7 @@ describe('the holds of the four chapters that joined', () => {
     expect(treatedHold('mirror-aeons', 'breath')).toMatch(/battle\/ffx\/ai\/dark-aeons-rules\.ts/);
     expect(treatedHold('mirror-aeons', 'breath')).toMatch(/data\/chapter-mirror-aeons\.ts/);
     expect(treatedHold('mirror-aeons', 'breath')).not.toMatch(/gauges start at 0 and the trio's Delta Attack is not in the pair: research/);
-    for (const p of TREATED_PIECES) if (!['hd2d', 'arena', 'card', 'breath', 'cam', 'moments'].includes(p)) expect(treatedHold('mirror-aeons', p), p).toBeUndefined();
+    for (const p of TREATED_PIECES) if (!['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'].includes(p)) expect(treatedHold('mirror-aeons', p), p).toBeUndefined();
   });
 
   it("Chapter XVI (Ixion at Djose, FFX-2 only) holds the room looks (no row exists for Bailey's approved Chamber plate and a row is a look decision), the follower (no AUTO_STAGES row), the staged breath, the moments and, as a swap exception, the smear planner; every other piece plays", () => {
