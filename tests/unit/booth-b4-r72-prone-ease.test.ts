@@ -200,9 +200,9 @@ describe('who it touches and who it leaves alone', () => {
     expect(s.slide[0]).not.toBe(0);
   });
 
-  it('the stage passes its real clock to the lay pass (source check: BattlePresenterStage.update calls layProneFigures with realDt)', () => {
+  it('the stage passes its real clock to the lay pass through the gate (source check: BattlePresenterStage.update calls layProneFigures with slideEaseDt(realDt, REDUCE MOTION); booth-b4-r72-slide-fixes.test.ts pins the gate)', () => {
     const src = readFileSync(resolve(__dirname, '../../src/engine/BattlePresenterStage.ts'), 'utf8');
-    expect(src).toMatch(/layProneFigures\(\s*figures\.map\(\(s\) => s\.actor\),\s*this\.opts\.camera,\s*this\.opts\.battleCamera,\s*pinned, realDt,/);
+    expect(src).toMatch(/layProneFigures\(\s*figures\.map\(\(s\) => s\.actor\),\s*this\.opts\.camera,\s*this\.opts\.battleCamera,\s*pinned, slideEaseDt\(realDt, this\.opts\.comfort\?\.\(\)\.reduceMotion === true\),/);
     expect(slots(rig('tidus').a)).toHaveLength(2);
   });
 });
