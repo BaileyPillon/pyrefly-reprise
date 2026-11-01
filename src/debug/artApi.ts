@@ -20,7 +20,7 @@ import type { StageArt } from '../engine/StageArt.ts';
 import { thumbStats } from '../engine/look/AlphaThumb.ts';
 import { extentsReads } from '../engine/look/AlphaPrime.ts';
 import { memoryBooks } from '../engine/LeaveRelease.ts';
-import { holdBooks } from '../engine/LoadHold.ts';
+import { bytesBooks, holdBooks } from '../engine/LoadHold.ts';
 
 /** The names of the GL programs the renderer has linked (three's `info.programs`), in link order: which program a long frame's `getProgramInfoLog` was waiting for. */
 function programNames(app: App): string[] {
@@ -37,7 +37,7 @@ function glMemory(app: App): { geometries: number; textures: number; programs: n
 export function installArtDebug(api: Record<string, unknown>, app: App): void {
   const stageArt = (): StageArt | null => (app.current as unknown as { stage?: { art?: StageArt } } | null)?.stage?.art ?? null;
   api['art'] = {
-    stats: () => ({ device: deviceClass(), budget: artBudget(), bufferWidth: bufferWidth(), pinned: forcedArtScale(), aa: app.renderer.aaMode, governor: stageArt()?.stats() ?? null, alpha: { ...thumbStats(), extents: { ...extentsReads } }, programs: programNames(app), memory: memoryBooks(), hold: holdBooks(), gl: glMemory(app) }),
+    stats: () => ({ device: deviceClass(), budget: artBudget(), bufferWidth: bufferWidth(), pinned: forcedArtScale(), aa: app.renderer.aaMode, governor: stageArt()?.stats() ?? null, alpha: { ...thumbStats(), extents: { ...extentsReads } }, programs: programNames(app), memory: memoryBooks(), hold: holdBooks(), bytes: bytesBooks(), gl: glMemory(app) }),
     tier: (cls: DeviceClass | null) => setArtTier(cls),
     force: (scale: number | null) => setForcedArtScale(scale),
     stage: (on: boolean | null) => setStagedUploads(on), // release 39.1: the staged uploads on or off for the next stage, as `?stage=off` does

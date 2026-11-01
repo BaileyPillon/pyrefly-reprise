@@ -23,6 +23,7 @@ import { SFX_DEFAULT_VOLUME, sfxBusGain, sfxMixFromUrl, type SfxMix } from './sf
 import { cutFading, retireSlot, startSlotRamp, type MusicSlot } from './musicSlot.ts';
 import { hasPrerenderedMusic, hasPrerenderedSfx, parseManifest, resolveAudioUrl, type AudioManifest } from './manifest.ts';
 import { MusicWarmHold } from './MusicWarm.ts';
+import { warmGate } from './WarmGate.ts'; // release 73: on the phone the cues the first fight does not play wait for the entry
 import { SfxSprites, type SfxPick } from './SfxSprites.ts';
 import { startSfxSource, type ParityVoice } from './sfxSource.ts';
 import { sfxGame, voiceKey, type SfxGame } from './sfxV2/voicing.ts';
@@ -424,12 +425,9 @@ export class AudioManager {
   }
 
   /**
-   * PR-0373: a chapter run starts (its card was just confirmed on the board). Fetch and decode these cues now, in the
-   * order given (scene, boss, victory), so that none waits on a fetch when the run asks for it. Plays nothing and changes
-   * nothing that plays or when. Never awaited, never throws, never blocks input: the pre-rendered manifest is read first,
-   * then each cue is fetched after the one before it. A cue with no rendered file is left alone (synthesising one early
-   * is a render, not a fetch), and with the audio still locked nothing is fetched. The cues are kept decoded until they
-   * are played or the returned function is called when the run ends (see `MusicWarm.ts`). Only the cues it is given.
+   * PR-0373: a chapter run starts (its card was just confirmed on the board). Fetch and decode these cues now, in the order given (scene, boss, victory), so that none waits on a fetch when the run asks for it.
+   * Plays nothing and changes nothing that plays or when; never awaited, never throws, never blocks input. A cue with no rendered file is left alone (synthesising one early is a render, not a fetch), and with
+   * the audio still locked nothing is fetched. Kept decoded until played or the returned function runs (`MusicWarm.ts`). Release 73: `WarmGate.ts` may make a cue wait (the phone's entry).
    */
   warmMusic(names: readonly string[]): () => void {
     const token = this.warmHold.begin(names.filter((name) => hasTrack(name)));
@@ -443,6 +441,8 @@ export class AudioManager {
     try {
       await this.loadManifest();
       for (const name of names) {
+        const wait = warmGate(name); // a cue the phone's first fight does not play waits for the hold to open (a plain `undefined` everywhere else)
+        if (wait) await wait;
         // A newer run, the end of this one, or a rebuilt context stops the fetching at the next cue.
         if (!this.warmHold.isCurrent(token) || this.ctx !== ctx) return;
         if (!hasTrack(name) || !hasPrerenderedMusic(this.manifest, name) || this.loader.has(name)) continue;
