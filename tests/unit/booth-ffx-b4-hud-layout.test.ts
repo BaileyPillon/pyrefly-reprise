@@ -277,6 +277,8 @@ describe('Chapter XII (FFX only): the Enemy Intent card against the F1 party pan
   });
 });
 
+// r72-hud (2026-11-01): the model below is the FIRST lane's, the strip anchored by its LEFT edge (690 of the frame) with the measured 185-wide box; the r71 browser read found it over the turn strip under 1920 px wide (the floor widens it to 190 to 222 grid px), so
+// `hudf1-chapters.css` now anchors it by its right edge (`right: 465px`) and `tests/unit/r72-hud-layout.test.ts` pins that place against the measured widths. What the cases below still prove is the 115 / 130 `translate`, the pivot and the old growth.
 describe('Chapter XII (FFX only): the disc strip keeps its distance from the F1 turn strip as the strip grows left', () => {
   /** The strip's box in grid px: left 690 of the 1600 frame (276), about 185 wide (the evidence: gold rule from 272.6 to 457 at 2560 x 1440 with the shear), top 14 (5.6) and about 36 tall with its note. */
   const OMR_STRIP = { l: 690 * OMR_K, t: 14 * OMR_K, w: 185, h: 36 };
@@ -346,20 +348,23 @@ describe('hudf1-chapters.css touches nothing but the two panels, only under the 
   const body = readSource('src/ui/hudf1/hudf1-chapters.css');
   it('every rule hangs from .ffxhud.hud-f1 and from one of the two panels, and names no other F1 zone', () => {
     expect(chap.length).toBeGreaterThanOrEqual(6);
+    // the first lane's two panels, and (r72-hud, `tests/unit/r72-hud-layout.test.ts`) the two chapters' own markers: Chapter XII's `data-omnis-readout` and Chapter IX's gauge that is up (`:has(.ffx-zg:not([hidden]):not(.ffx-zg--phone))`)
+    const marker = /\.ffx-zg:not\(\.ffx-zg--phone\) \.ffx-zg__panel$|\.ffx-omr:not\(\.ffx-omr--phone\) \.ffx-omr__(intent|strip)$|\[data-omnis-readout\]|:has\(\.ffx-zg:not\(\[hidden\]\):not\(\.ffx-zg--phone\)\)/;
     for (const r of chap) {
       expect(r.sel, r.sel).toContain('.ffxhud.hud-f1');
-      expect(/\.ffx-zg:not\(\.ffx-zg--phone\) \.ffx-zg__panel$|\.ffx-omr:not\(\.ffx-omr--phone\) \.ffx-omr__(intent|strip)$/.test(r.sel), r.sel).toBe(true);
+      expect(marker.test(r.sel), r.sel).toBe(true);
     }
-    for (const bad of ['.ig-ctb', '.ig-stat', '.f1-', '.ffx-cmd', '.ffx2hud', '.ig-cmd']) expect(body, bad).not.toContain(bad);
+    // no F1 zone but the Intel state (`.f1-intel`, the HUD root's class): the ribbon, hero, cue and prompt bar are named by `hudAvoidSelectors.f1RibbonEls` in TypeScript, never in this sheet
+    for (const bad of ['.ig-ctb', '.ig-stat', '.f1-ribbon', '.f1-hero', '.f1-cue', '.f1-prompts', '.f1-layer', '.ffx-cmd', '.ffx2hud', '.ig-cmd']) expect(body, bad).not.toContain(bad);
   });
 
-  it('declares only the properties it means to: left (the gauge), scale, translate and transform-origin (the text-size answers), bottom (the card)', () => {
+  it('declares only the properties it means to: left and right (the gauge, the strip), scale, translate and transform-origin (the text-size answers), bottom (the card); r72-hud adds the strip\'s gap and padding, the Sensor card\'s top and margin, and the tip\'s transform and max-width', () => {
     const props = new Set<string>();
-    for (const r of chap) for (const m of r.body.matchAll(/([a-z-]+)\s*:/g)) props.add(m[1]!);
-    expect([...props].sort()).toEqual(['bottom', 'left', 'scale', 'transform-origin', 'translate']);
-    // every rule that switches the growth off also puts the skew's pivot back where it is at 100 (review m1): no `scale: none` without a `transform-origin: center` beside it
+    for (const r of chap) for (const m of r.body.matchAll(/(--[a-z-]+|[a-z-]+)\s*:/g)) props.add(m[1]!);
+    expect([...props].sort()).toEqual(['--omr-tight', 'bottom', 'gap', 'left', 'margin-top', 'max-width', 'padding', 'right', 'scale', 'top', 'transform', 'transform-origin', 'translate']);
+    // every rule that switches the growth off also puts the skew's pivot back where it is at 100 (review m1): no `scale: none` without a `transform-origin: center` beside it (the gauge, the strip and, r72-hud, Chapter XII's Sensor card)
     const off = chap.filter((r) => /\bscale\s*:\s*none\b/.test(r.body));
-    expect(off.length).toBe(2);
+    expect(off.length).toBe(3);
     for (const r of off) expect(r.body, r.sel).toMatch(/transform-origin\s*:\s*center\s*;/);
   });
 

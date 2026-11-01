@@ -4,7 +4,7 @@
  * Each lane tested its own chapters on its own base (the HUD lane saw twelve treated chapters, the sky lane twelve, the last lane fourteen). These read the merged state from the source, so a later edit to the list, a hold
  * table or a stylesheet that breaks one lane's reach through another's fails here:
  *
- *  1. THE LIST: 16 of the 19 listed chapters are treated (Chapter XVII, `sin-fins-core`, and, since the r71 verdicts, Chapters IX and XII are the ones that are not), 9 of them FFX and 7 FFX-2 (rule 14, from the registry), each of the batch's six on `since` r71.
+ *  1. THE LIST: 18 of the 19 listed chapters are treated (Chapter XVII, `sin-fins-core`, is the one that is not), 11 of them FFX and 7 FFX-2 (rule 14, from the registry), each of the batch's eight on `since` r71.
  *  2. THE ONE HOLDS READER: `PIECE_HOLDS` carries the rows of `PieceHolds.ts` AND of `PieceHoldsLast.ts` (the very row objects), every treated chapter but the booth pair has a row, and no row belongs to an unlisted chapter.
  *  3. THE MEASURING WORD `?skygrade=a|b|c`: off by default, and when set it reaches Chapter V and Chapter XI and no other chapter, in either game (not the HUD lane's IX and XII, not the last lane's four).
  *  4. THE STYLESHEETS: `hudf1-chapters.css` (IX and XII) names only the Zanmato gauge's and the Omnis readout's own classes under `.ffxhud.hud-f1`; `sin-hud.css`'s F1 rules (XVIII) hang from `.hud-f1 .ffx-sinhud`;
@@ -15,7 +15,6 @@ import { resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { CHAPTER_IDS, getChapter } from '../../src/data/encounters.ts';
 import { PIECE_HOLDS, TREATED_CHAPTERS, setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
-import { WITHDRAWN_R70 } from './booth-r70-withdrawn.ts';
 import { LAST_HOLDS } from '../../src/engine/motion/PieceHoldsLast.ts';
 import { SKY_CHAPTERS, setSkyOption, skyGradeFor, skyOption } from '../../src/engine/look/pro/SkyGrade.ts';
 import { chapterLook } from '../../src/engine/look/LookConfig.ts';
@@ -39,23 +38,22 @@ afterEach(() => {
 });
 
 describe('the merged list', () => {
-  it('treats 16 of the 19 listed chapters; Chapter XVII (sin-fins-core) and, since the r71 verdicts, Chapters IX and XII are the ones that are not, and no hidden or experimental id is on it', () => {
+  it('treats 18 of the 19 listed chapters; Chapter XVII (sin-fins-core) is the one that is not, and no hidden or experimental id is on it', () => {
     const ids = Object.keys(TREATED_CHAPTERS);
     expect(CHAPTER_IDS).toHaveLength(19);
-    expect(ids).toHaveLength(16);
-    expect(CHAPTER_IDS.filter((id) => !ids.includes(id)).sort()).toEqual(['seymour-omnis', 'sin-fins-core', 'yojimbo-cavern']);
-    expect(Object.keys(WITHDRAWN_R70).sort()).toEqual([...HUD_LANE].sort()); // the HUD lane's two, off the list again (the r71 verdicts), rows unread
+    expect(ids).toHaveLength(18);
+    expect(CHAPTER_IDS.filter((id) => !ids.includes(id))).toEqual(['sin-fins-core']);
     for (const id of ids) expect(CHAPTER_IDS, id).toContain(id);
   });
 
-  it('is 9 FFX and 7 FFX-2, each in the game the registry says (rule 14), and the batch\'s six are all `since` r71', () => {
+  it('is 11 FFX and 7 FFX-2, each in the game the registry says (rule 14), and the batch\'s eight are all `since` r71', () => {
     const byGame = (g: string): string[] => Object.entries(TREATED_CHAPTERS).filter(([, e]) => e.game === g).map(([id]) => id);
-    expect(byGame('ffx')).toHaveLength(9);
+    expect(byGame('ffx')).toHaveLength(11);
     expect(byGame('ffx2')).toHaveLength(7);
     for (const [id, e] of Object.entries(TREATED_CHAPTERS)) expect(getChapter(id)?.game, id).toBe(e.game);
-    const batch = [...SKY_LANE, ...LAST_LANE.ffx, ...LAST_LANE.ffx2]; // the HUD lane's IX and XII left the list in the r71 verdicts
+    const batch = [...HUD_LANE, ...SKY_LANE, ...LAST_LANE.ffx, ...LAST_LANE.ffx2];
     for (const id of batch) expect(TREATED_CHAPTERS[id]?.since, id).toBe('r71');
-    for (const id of LAST_LANE.ffx) expect(TREATED_CHAPTERS[id]!.game, id).toBe('ffx');
+    for (const id of [...HUD_LANE, ...LAST_LANE.ffx]) expect(TREATED_CHAPTERS[id]!.game, id).toBe('ffx');
     for (const id of [...SKY_LANE, ...LAST_LANE.ffx2]) expect(TREATED_CHAPTERS[id]!.game, id).toBe('ffx2');
     expect(Object.keys(TREATED_CHAPTERS).filter((id) => TREATED_CHAPTERS[id]!.since === 'r71').sort()).toEqual([...batch].sort());
   });
@@ -72,7 +70,7 @@ describe('the one holds reader', () => {
 
   it('every treated chapter but the booth pair has a row, and no row belongs to an unlisted or unknown chapter', () => {
     for (const id of Object.keys(TREATED_CHAPTERS)) if (!BOOTH.includes(id)) expect(PIECE_HOLDS[id], id).toBeDefined();
-    for (const id of Object.keys(PIECE_HOLDS)) expect([...Object.keys(TREATED_CHAPTERS), ...Object.keys(WITHDRAWN_R70)], id).toContain(id); // IX and XII keep their rows, unread
+    for (const id of Object.keys(PIECE_HOLDS)) expect(Object.keys(TREATED_CHAPTERS), id).toContain(id);
     expect(Object.keys(PIECE_HOLDS)).toHaveLength(16);
   });
 });
@@ -95,9 +93,9 @@ describe('the measuring word ?skygrade=a|b|c', () => {
     expect(skyGradeFor('exp-leblanc')).toBeNull();
   });
 
-  it('changes nothing in the other fourteen treated chapters: the look and the arena answer as they do with no word', () => {
+  it('changes nothing in the other sixteen treated chapters: the look and the arena answer as they do with no word', () => {
     const others = Object.keys(TREATED_CHAPTERS).filter((id) => !(SKY_LANE as readonly string[]).includes(id));
-    expect(others).toHaveLength(14);
+    expect(others).toHaveLength(16);
     setSkyOption(null);
     const before = others.map((id) => [chapterLook(id), proArenaFor(id, '')]);
     for (const o of ['a', 'b', 'c'] as const) {
@@ -135,7 +133,8 @@ describe('the stylesheets reach only their chapters', () => {
     expect(sel.length).toBeGreaterThanOrEqual(6);
     for (const s of sel) {
       expect(s, s).toContain('.ffxhud.hud-f1');
-      expect(s, s).toMatch(/\.ffx-(zg|omr):not\(\.ffx-(zg|omr)--phone\)/);
+      // the first lane's two panels, and (r72-hud) the two chapters' own markers: Chapter XII's `data-omnis-readout` on the HUD root, Chapter IX's gauge that is up (`.ffx-zg:not([hidden]):not(.ffx-zg--phone)`)
+      expect(s, s).toMatch(/\.ffx-(zg|omr):not\(\.ffx-(zg|omr)--phone\)|\[data-omnis-readout\]|\.ffx-zg:not\(\[hidden\]\):not\(\.ffx-zg--phone\)/);
       expect(s, s).not.toMatch(/sin|clock|gaze/i);
     }
   });

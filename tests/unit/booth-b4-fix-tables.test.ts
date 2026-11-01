@@ -6,7 +6,6 @@ import { CHAPTERS, EXPERIMENT_CHAPTERS, UNLISTED_CHAPTERS, getChapter } from '..
 import { findEnemyGroup } from '../../src/app/screens/BattleScreenSetup.ts';
 import { TREATED_CHAPTERS, setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
 import { RIM_COMPANIONS, TREATED_RIM_FOES } from '../../src/engine/look/pro/RimFigures.ts';
-import { WITHDRAWN_R70 } from './booth-r70-withdrawn.ts';
 
 /**
  * THE REVIEW OF `booth-b4` (2026-10-31), MINORS m1, m2 AND m3 (both games; presentation records and one table pin, nothing a player sees).
@@ -56,9 +55,8 @@ describe('m1: TREATED_RIM_FOES against the booth pair and the treated list', () 
     expect(stagedBy.size, 'the walk finds the table\'s foes').toBeGreaterThan(20);
     for (const [foe, chapters] of stagedBy) {
       for (const id of chapters) {
-        const game = TREATED_CHAPTERS[id]?.game ?? WITHDRAWN_R70[id]?.game; // Chapter IX (off the list since the r71 verdicts) keeps its game and its rim rows, unread
-        expect(game, `${foe} is staged by ${id}, which is neither on the treated list nor withdrawn`).toBeDefined();
-        expect(game, `${foe} in ${id}`).toBe(TREATED_RIM_FOES[foe]);
+        expect(Object.prototype.hasOwnProperty.call(TREATED_CHAPTERS, id), `${foe} is staged by ${id}, which is not on the treated list`).toBe(true);
+        expect(TREATED_CHAPTERS[id]!.game, `${foe} in ${id}`).toBe(TREATED_RIM_FOES[foe]);
       }
     }
     expect(stagedBy.get('evrae')).toEqual(['evrae-airship']);

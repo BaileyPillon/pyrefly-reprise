@@ -6,7 +6,6 @@ import { HUD_F1_CLASS, HudF1, type HudF1Host } from '../../src/ui/hudf1/HudF1.ts
 import { F1_DAMAGE_K, F1_TEXT_CEILING, hudF1On, hudF1TextSizeOk, setHudF1Mode, setHudF1TextMode } from '../../src/ui/hudf1/HudF1Switch.ts';
 import { TIER_SIZE, sizeFactor } from '../../src/ui/common/proNumbers.ts';
 import { F1_ROWS, commandRowsCap } from '../../src/ui/common/hudTextSize.ts';
-import { isListed, itIf, stillListed } from './booth-r70-withdrawn.ts';
 
 /**
  * THE REVIEW OF `booth-b4`, FINDING c1 (2026-10-31; FFX only, rule 14: Chapter IX `yojimbo-cavern` and Chapter XII `seymour-omnis`; FFX-2 has no panel of this kind).
@@ -15,9 +14,6 @@ import { isListed, itIf, stillListed } from './booth-r70-withdrawn.ts';
  * a regression against the live site (release 69 draws today's HUD there) in an accessibility setting (`booth-ffx-b4-hud-layout.test.ts` pins the sheet's arithmetic). The fix is the one condition the lane offered: those two
  * chapters keep today's HUD above TEXT SIZE 115 (`HudF1Switch.F1_TEXT_CEILING`), exactly what release 69 draws there, and every reader that follows `hudF1On()` (the command rows, the damage numeral, the layer's class)
  * follows it. Each case below fails without the table.
- *
- * **The r71 verdict pass (2026-10-31) took both chapters off the list again** (`booth-r70-withdrawn.ts`: the advisor's tip on the gauge; the disc strip and the Sensor plate over the F1 chrome). The table's two rows stay, unread, and every case that needs the chapter on the list is gated with `itIf` / `stillListed`:
- * it runs again, with no edit, the day one line puts the chapter back; `booth-b4-r71-verdicts.test.ts` pins the unread state.
  */
 const CEILING_IDS = ['yojimbo-cavern', 'seymour-omnis'] as const;
 const root = document.documentElement;
@@ -48,7 +44,7 @@ describe('the table', () => {
     for (const [id, max] of Object.entries(F1_TEXT_CEILING)) {
       expect(max, id).toBe(115);
       expect(getChapter(id)?.game, id).toBe('ffx');
-      if (isListed(id)) expect(TREATED_CHAPTERS[id]?.game, id).toBe('ffx'); // off the list since the r71 verdicts: the row stays, unread
+      expect(TREATED_CHAPTERS[id]?.game, id).toBe('ffx');
       expect(treatedHold(id, 'hud'), `${id} plays the hud piece (the ceiling is its only exception)`).toBeUndefined();
     }
   });
@@ -59,7 +55,7 @@ describe('the table', () => {
 
 describe('Chapter IX and Chapter XII: the F1 HUD plays at 100 and 115 and gives way to today\'s at 130', () => {
   for (const id of CEILING_IDS) {
-    itIf(id)(`${id}: on at no attribute, 100 and 115, off at 130 in either attribute, and back on when it returns to 115`, () => {
+    it(`${id}: on at no attribute, 100 and 115, off at 130 in either attribute, and back on when it returns to 115`, () => {
       setDemoChapter(id);
       expect(hudF1On(), 'no attribute').toBe(true);
       sizeBoth('100');
@@ -80,7 +76,7 @@ describe('Chapter IX and Chapter XII: the F1 HUD plays at 100 and 115 and gives 
       expect(hudF1On(), 'back to 115').toBe(true);
     });
 
-    itIf(id)(`${id}: the readers that follow hudF1On() fall back with it at 130 (command rows, damage numeral) and keep F1's at 115`, () => {
+    it(`${id}: the readers that follow hudF1On() fall back with it at 130 (command rows, damage numeral) and keep F1's at 115`, () => {
       setDemoChapter(id);
       sizeBoth('115');
       expect(commandRowsCap(6), '115 rows').toBe(F1_ROWS);
@@ -91,7 +87,7 @@ describe('Chapter IX and Chapter XII: the F1 HUD plays at 100 and 115 and gives 
     });
   }
 
-  itIf('yojimbo-cavern')('the layer follows a change live, under the battle (the MutationObserver re-asks): off at 130, on again at 115, class and layer in step', async () => {
+  it('the layer follows a change live, under the battle (the MutationObserver re-asks): off at 130, on again at 115, class and layer in step', async () => {
     const stage = document.createElement('div');
     const host = document.createElement('div');
     host.append(stage);
@@ -145,7 +141,7 @@ describe('nothing else changes', () => {
 
   it('?f1text=today still gives every chapter release 67\'s step-down at 115 and 130 (the two chapters included), and ?f1text=grow beats the ceiling at 130', () => {
     setHudF1TextMode('today');
-    for (const id of stillListed(['seymour-flux', 'yojimbo-cavern', 'seymour-omnis'])) {
+    for (const id of ['seymour-flux', 'yojimbo-cavern', 'seymour-omnis']) {
       setDemoChapter(id);
       sizeBoth('100');
       expect(hudF1On(), `${id} at 100`).toBe(true);
@@ -156,14 +152,14 @@ describe('nothing else changes', () => {
     }
     setHudF1TextMode(null);
     history.replaceState(null, '', '/?f1text=grow');
-    for (const id of stillListed(CEILING_IDS)) {
+    for (const id of CEILING_IDS) {
       setDemoChapter(id);
       sizeBoth('130');
       expect(hudF1On(), `${id} at 130 under ?f1text=grow`).toBe(true);
     }
   });
 
-  itIf('seymour-omnis')('on a phone nothing changes: the F1 layer never draws there (the ceiling adds no new way on)', async () => {
+  it('on a phone nothing changes: the F1 layer never draws there (the ceiling adds no new way on)', async () => {
     const stage = document.createElement('div');
     const host = document.createElement('div');
     host.append(stage);
