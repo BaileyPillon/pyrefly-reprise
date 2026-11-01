@@ -98,8 +98,9 @@ describe('PR-0282: the cure hint follows BATTLE HELP and never covers a command 
 
   it("desktop FFX: the advisor's solver treats a visible hint card as an obstacle, a hidden one not", () => {
     const sel = [...ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR].join();
-    // The FFX HUD hands exactly this list to the solver.
-    expect(readFileSync(join(ROOT, 'src/ui/ffx/FFXBattleHud.ts'), 'utf8')).toContain('[...ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR].join()');
+    // The FFX HUD hands exactly this list to the solver: since r72-hud the HUD calls `advisorInkRects` (hudAvoidSelectors.ts), which builds the list from the panels and the hint card.
+    expect(readFileSync(join(ROOT, 'src/ui/ffx/hudAvoidSelectors.ts'), 'utf8')).toContain('[...ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR].join()');
+    expect(readFileSync(join(ROOT, 'src/ui/ffx/FFXBattleHud.ts'), 'utf8')).toContain('advisorInkRects(');
     const host = document.createElement('div');
     const card = new StatusHintCard('ffx', () => true);
     host.appendChild(card.el);
