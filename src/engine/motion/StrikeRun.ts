@@ -42,6 +42,8 @@ export class StrikeRun {
   private readonly peakAt: number;
   /** r72-motion: the gain on the way home's lift (the real strike's leaping return), 1 unless {@link setReturnFit} says otherwise. */
   private returnFit = 1;
+  /** r73-fit: the shape the way home is walked on: the strike's own until {@link setReturnPace} lengthens the return out of the settle. */
+  private post: StrikeShape;
 
   /**
    * @param shape the resolved strike
@@ -58,6 +60,7 @@ export class StrikeRun {
     autoRelease = false,
   ) {
     this.marks = strikeMarks(shape);
+    this.post = shape;
     this.contactAt = shape.windupMs + shape.travelMs;
     this.peakAt = shape.windupMs + travelPeakU(shape.bias) * shape.travelMs;
     this.released = autoRelease;
@@ -93,6 +96,19 @@ export class StrikeRun {
   /** r72-motion (`FlipFit.ts`): scale the lift of the way home by `g` (clamped to 0..1) from the next sample on. Called on the `holdEnd` mark, before the return's first sample; the carry of a later strike folds the scaled lift out. */
   setReturnFit(g: number): void {
     this.returnFit = Number.isFinite(g) ? Math.min(1, Math.max(0, g)) : 1;
+  }
+
+  /**
+   * r73-fit (`ReturnPace.ts`): lengthen the way home to `returnMs` paced ms, out of the settle, so the move's total (and the `end` mark) stays where it was. Clamped to the strike's own return at the least and to
+   * the return plus the settle at the most (nothing is ever shortened, nothing is added); a no-op unless it lengthens. Called on the `holdEnd` mark, before the return's first sample, like {@link setReturnFit}; the
+   * `settlePeak` mark (the fastest frame home, where the pose swaps) follows the longer return.
+   */
+  setReturnPace(returnMs: number): void {
+    const s = this.shape;
+    const total = s.returnMs + s.settleMs;
+    if (!Number.isFinite(returnMs)) return;
+    const r = Math.min(total, Math.max(s.returnMs, returnMs));
+    if (r > s.returnMs) this.post = { ...s, returnMs: r, settleMs: total - r };
   }
 
   /** Stop where it is (the actor was disposed or the move replaced): no more marks. */
@@ -142,12 +158,13 @@ export class StrikeRun {
         this.local = 0;
         this.fire('holdEnd');
       } else {
-        const total = s.returnMs + s.settleMs;
+        const p = this.post; // r73-fit: the same total as `s`, with the return longer where the pace fit asked
+        const total = p.returnMs + p.settleMs;
         const room = total - this.local;
         const step = Math.min(left, room);
         this.step(step);
         left -= step;
-        if (this.local >= 0.5 * s.returnMs - EPS) this.fire('settlePeak');
+        if (this.local >= 0.5 * p.returnMs - EPS) this.fire('settlePeak');
         if (this.local < total - EPS) return;
         this.finished = true;
         this.fire('end');
@@ -163,7 +180,7 @@ export class StrikeRun {
 
   /** The pose now, in world units (allocation-free: writes into `out`). */
   sample(out: StrikePose = { x: 0, lift: 0, sy: 1, lean: 0 }): StrikePose {
-    const r = this.finished ? sampleAt(this.shape, 'post', Number.MAX_VALUE, this.scratch) : sampleAt(this.shape, this.phase, this.local, this.scratch);
+    const r = this.finished ? sampleAt(this.post, 'post', Number.MAX_VALUE, this.scratch) : sampleAt(this.phase === 'post' ? this.post : this.shape, this.phase, this.local, this.scratch);
     out.x = r.x * this.distance;
     out.lift = r.lift * this.height * (this.phase === 'post' ? this.returnFit : 1);
     out.sy = r.sy;

@@ -26,4 +26,11 @@ export interface StrikePlan {
    * FFX-2 strike): the return plays as sampled.
    */
   returnFit?: (worldHeight: number) => number;
+  /**
+   * r73-fit (FFX only, `ReturnPace.ts`): asked once, on the same `holdEnd` frame, with the figure's world height; answers how long the way home should take, paced ms (the strike's own return at the least, the return
+   * plus the settle at the most: the run clamps, and the move's total never changes). For a real strike with no leaping return whose own return is shorter than the figure's drawn lunge allows (Wakka's is two frames
+   * long, Lulu's none), so the figure does not cross a third of the screen in one frame on the way home. Absent (the booth pair, every house strike, every FFX-2 strike, every strike with a leaping return): the
+   * return plays as sampled.
+   */
+  returnPace?: (worldHeight: number) => number;
 }
