@@ -69,6 +69,14 @@ describe('the handoff does not call the by-design slide ease in the booth pair "
     expect(j).toMatch(/final place equals release 71's/);
   });
 
+  it('section 9 maps each finding to its fix and says what is not fixed (the three disclosed conditions)', () => {
+    const at = note.indexOf('## 9. The review of `origin/r72`');
+    expect(at).toBeGreaterThan(note.indexOf('## 8. Open questions'));
+    const nine = note.slice(at);
+    for (const word of ['PieceHolds.ts', 'SKY_TODAY_HOLDS', 'canvasHeight', 'CONTRACT-CHANGES', 'Scratch-folder', 'J-ONE-1', 'Not fixed here']) expect(nine, word).toContain(word);
+    for (const word of ['IX and XII are back on offline proof only', 'CHK-027 run', 'bar no real clip can meet']) expect(nine, word).toContain(word);
+  });
+
   it("the Chapter I row of the per-chapter table says the same instead of 'nothing'", () => {
     const r = row('| I | `seymour-flux`');
     expect(r).toMatch(/invisible in the default real-snappy/);
