@@ -15,7 +15,7 @@
  *
  * THE WORD. `?skygrade=a|b|c|today` (and `__pyrefly.skyGrade('a' | 'b' | 'c' | 'today' | null)`). `a`, `b` or `c` plays that option in Chapter V or Chapter XI while the treatment reaches the chapter (`?treated=pack` and an address that chose a look by hand
  * answer release 68); `today` restores release 71 exactly (Chapter XI's two holds back, no option; Chapter V is already so); no word plays each chapter's default (XI: C, V: none). A page with no `skygrade` key reads nothing here but the address, and every chapter
- * but Chapter XI draws byte for byte as it would without this file's default. `?pro=off` with a grade reads the bold look alone (no pro table to patch: the unlightened row of the r70 read).
+ * but Chapter XI draws byte for byte as it would without this file's default. `?pro=off` with a NAMED grade reads the bold look alone (no pro table to patch: the unlightened row of the r70 read); with the chapter's DEFAULT grade the look stands aside with the arena (a phone or tablet, `?pack=off`, `?pro=off`, `?look=today` and `?prooff=arena` give release 71's frame: `LookConfig.chapterLook`, the r72 review's M1). Any `?skygrade=` word but `a`, `b`, `c` and `today` is no word and plays the default.
  *
  * THE THREE OPTIONS (each is one idea, so the stills answered one question each; the numbers are [ours], and a prediction for each is in `docs/handoff/booth-ffx2-b4-sky.md`):
  * - `a` EXPOSURE CAP: the room's exposure is capped at 1.0 (the r70 rows are 1.45 and 1.5), the one lever; every other term of the pro table stays as the r70 read had it.

@@ -14,7 +14,8 @@
  */
 
 import { isTreatedChapter } from '../motion/DemoGate.ts';
-import { skyGradeFor } from './pro/SkyGrade.ts';
+import { proArenaFor } from './pro/ProSwitch.ts';
+import { skyGradeFor, skyOption } from './pro/SkyGrade.ts';
 
 export type LookName = 'hd2d' | 'cinematic' | 'anime';
 export const LOOK_NAMES: readonly LookName[] = ['hd2d', 'cinematic', 'anime'];
@@ -61,10 +62,15 @@ export const CHAPTER_LOOKS: Readonly<Record<string, { name: LookName; strength: 
 /**
  * The look a chapter plays with no `look` key in the address, or null (today's frame): a row of {@link CHAPTER_LOOKS} for a chapter the treatment reaches (`DemoGate.isTreatedChapter`, piece `hd2d`). **Chapter V holds `hd2d`**
  * (`PieceHolds.ts`: the bold look clips the Farplane's sky), so this answers null for it, the frame of release 69; the one exception is the measuring word `?skygrade=a|b|c` (`pro/SkyGrade.ts`), which plays the row so the lighter options can be filmed.
- * **Chapter XI plays it (r72)** with grade C patched on by default (Bailey's pick from stills); `?skygrade=today` holds it again (`PieceHoldsSky.ts`), release 71's frame.
+ * **Chapter XI plays it (r72)** with grade C patched on by default (Bailey's pick from stills), and only where the pro arena plays (`proArenaFor`: a desktop, with no `?pack=off`, `?pro=off`, `?look=today` or `?prooff=arena`); on a phone or tablet and under those words it answers null, release 71's frame (the r72 review's M1). `?skygrade=today` holds it again (`PieceHoldsSky.ts`), release 71's frame.
  */
 export function chapterLook(chapterId: string | undefined): { name: LookName; strength: LookStrength } | null {
-  return chapterId !== undefined && Object.prototype.hasOwnProperty.call(CHAPTER_LOOKS, chapterId) && (isTreatedChapter(chapterId, 'hd2d') || skyGradeFor(chapterId) !== null) ? CHAPTER_LOOKS[chapterId]! : null;
+  if (chapterId === undefined || !Object.prototype.hasOwnProperty.call(CHAPTER_LOOKS, chapterId)) return null;
+  const sky = skyGradeFor(chapterId);
+  // r72 review M1 (FFX-2 only: Chapter XI): a grade that is only the chapter's DEFAULT (no option named) reaches the screen through the pro arena's room table alone, so with the arena off (a phone or tablet, `?pack=off`, `?pro=off`, `?look=today`,
+  // `?prooff=arena`) the look stands aside too: the bold look over this sky with nothing dimming it clips the burst (Chapter V's `?pro=off` read: 164.4 mean luma, 26.2 percent over 240), and release 71 gave the plain frame on every one of those paths.
+  if (sky !== null && skyOption() === null && !proArenaFor(chapterId)) return null;
+  return isTreatedChapter(chapterId, 'hd2d') || sky !== null ? CHAPTER_LOOKS[chapterId]! : null;
 }
 
 export interface LookRequest {

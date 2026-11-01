@@ -277,9 +277,9 @@ describe('what stands the default aside, as it stands the arena aside', () => {
     expect(skyActive()).toBeNull();
     lookState.auto = true;
     expect(proArenaFor(XI, '?look=hd2d')).toBe(false); // the address wins
-    setProMode('today'); // ?pro=off: the bold look alone, no pro table to patch
+    setProMode('today'); // ?pro=off (also a phone, ?pack=off, ?look=today): no pro table to patch, so the bold look alone is NOT played either (review M1; more in booth-r72-sky-m1.test.ts)
     expect(proArenaFor(XI, '')).toBe(false);
-    expect(chapterLook(XI)).toEqual({ name: 'hd2d', strength: 'bold' });
+    expect(chapterLook(XI)).toBeNull();
   });
 });
 

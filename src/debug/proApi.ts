@@ -5,7 +5,7 @@
  * on). The pro look plays only in the demo chapters (Chapter I `seymour-flux`, Chapter IV `ffx2-bahamut`): `proOn()` is the answer for the running chapter. `proPiece(piece, on?)` reads or sets one
  * piece (arena, seam, hits, numbers, markers) and answers whether it plays now.
  */
-import { TREATED_CHAPTERS, demoChapter, isTreatedChapter, setTreatedScope, skyWord, treatedHolds, treatedScope, type TreatedScope } from '../engine/motion/DemoGate.ts';
+import { PIECE_HOLDS, TREATED_CHAPTERS, demoChapter, isTreatedChapter, setTreatedScope, skyWord, treatedHolds, treatedScope, type TreatedScope } from '../engine/motion/DemoGate.ts';
 import { proTune } from '../engine/look/pro/ProGrade.ts';
 import { SKY_CHAPTERS, SKY_CHANGES, SKY_DEFAULTS, SKY_OPTIONS, setSkyOption, skyActive, skyOption, skyScreen, type SkyOption } from '../engine/look/pro/SkyGrade.ts';
 import { lookState } from '../engine/look/LookState.ts';
@@ -47,7 +47,7 @@ export function installProDebug(api: Record<string, unknown>): void {
   /** Release 69 (`booth-leblanc`): `treated()` reads which chapters the treatment reaches (`scope`: `all` = the list, `pack` = release 68's booth pair; `?treated=pack` does the same from the address), the list, each listed chapter's held pieces (the rows of a chapter the r70 verdicts took off the list stay in `PIECE_HOLDS`, unread, and are not reported) and whether the running chapter is reached; `treated('all' | 'pack' | null)` sets the scope for what starts from now on (a fight reads it as it sets up) and `null` reads the address again. */
   api['treated'] = (scope?: TreatedScope | null) => {
     if (scope === 'all' || scope === 'pack' || scope === null) setTreatedScope(scope);
-    return { scope: treatedScope(), chapters: Object.keys(TREATED_CHAPTERS), holds: Object.fromEntries(Object.keys(TREATED_CHAPTERS).map((k): [string, string[]] => [k, treatedHolds(k)]).filter(([, v]) => v.length > 0)), running: demoChapter() ?? null, reaches: isTreatedChapter(demoChapter()) };
+    return { scope: treatedScope(), chapters: Object.keys(TREATED_CHAPTERS), holds: Object.fromEntries(Object.keys(PIECE_HOLDS).filter((k) => Object.prototype.hasOwnProperty.call(TREATED_CHAPTERS, k)).map((k): [string, string[]] => [k, treatedHolds(k)])), running: demoChapter() ?? null, reaches: isTreatedChapter(demoChapter()) };
   };
   /**
    * `booth-ffx2-b4-sky` and `r72-sky` (FFX-2 only): the measuring word of the Farplane's two plates. `skyGrade()` reads `{ word, mode, active, armed, screen, chapters, defaults, options }` (`word`: the option the address or the last call named, null with none, `mode`: the whole word, `a` | `b` | `c` |
