@@ -96,9 +96,8 @@ describe.each(['pack', 'all'] as const)('with the scope %s', (scope) => {
       const on = yes.includes(id);
       setDemoChapter(id);
       setPassChapter(id);
-      const hud = plays(scope, id, 'hud'); // Chapter XII holds the F1 HUD since the r72 review (job J-HUD-5b): today's HUD plays there, every other piece of the treatment plays
-      expect(hudF1On(), `hud ${id}`).toBe(hud);
-      expect(hudF1Game(), `hud game ${id}`).toBe(hud ? GAME[id] : undefined);
+      expect(hudF1On(), `hud ${id}`).toBe(on);
+      expect(hudF1Game(), `hud game ${id}`).toBe(on ? GAME[id] : undefined);
       expect(proLookOn(), `look ${id}`).toBe(on);
       expect(proPieceOn('hits'), `look hits ${id}`).toBe(on);
       expect(proGame(), `look game ${id}`).toBe(on ? GAME[id] : undefined);

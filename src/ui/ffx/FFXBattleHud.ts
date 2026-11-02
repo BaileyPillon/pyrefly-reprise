@@ -50,7 +50,7 @@ import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
 import { withOverdriveFocus } from './overdriveFocus.ts';
 import { showOverdrivePlate } from './overdrivePlate.ts';
-import { INTENT_AVOID_SELECTORS, advisorInkRects, advisorKeepOffRects, chipReserveOf, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
+import { INTENT_AVOID_SELECTORS, advisorInkRects, advisorKeepOffRects, chipReserveOf, omnisFlagPanelRects, omnisFlagRect, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
 import { growToGrid, panelPresence, rectKey, sizeKey, unionOf } from './hudPlacementKeys.ts';
 import { doomNoteOf } from './DoomCounters.ts';
 import { zombieTargetNote } from './zombieTargetNote.ts';
@@ -940,7 +940,7 @@ export class FFXBattleHud implements HudPort {
     // docked above a high enemy landed on its third line. The desktop card hangs on the boss and is not listed.
     // Its box is grown 4 px each way: the plate's real height is 36 px against the dock's 34 px estimate, so a plate docked flush read 1 to 2 px onto the strip's border.
     const intentStrip = this.el.ownerDocument.documentElement.dataset['phoneBattle'] ? solidPanelRects([this.intent.el]).map((r) => ({ x: r.x - 4, y: r.y - 4, w: r.w + 8, h: r.h + 8 })) : [];
-    this.commandMenu.setPanels([...panels, ...intentStrip, ...partyFaceRects(this.fieldPartyIds(), (id) => this.targeting?.rect(id) ?? null)]);
+    this.commandMenu.setPanels([...panels, ...intentStrip, ...omnisFlagPanelRects(this.el), ...partyFaceRects(this.fieldPartyIds(), (id) => this.targeting?.rect(id) ?? null)]); // r74-omnis: in Chapter XII on the F1 HUD the plate also docks off the Enemy Intent line
     // The cursor drew itself before this call (the selection is published from
     // `TargetCursor.publish`, downstream of `reposition`), so the first frame
     // of a new aim would otherwise dock its plate against the *previous*
@@ -1073,7 +1073,7 @@ export class FFXBattleHud implements HudPort {
       bottom: card.bottom,
     };
 
-    const dx = sensorSteerDx(home, figure, STAGE.width);
+    const dx = sensorSteerDx(home, figure, STAGE.width, undefined, omnisFlagRect(this.el, (e) => this.stageRect(e))); // r74-omnis: Chapter XII on the F1 HUD also steers clear of the target flag (`flagSteer.ts`); null everywhere else
     if (dx === null) el.style.removeProperty('--ffx-sensor-dx');
     else el.style.setProperty('--ffx-sensor-dx', `${Math.round(dx * 10) / 10}px`);
   }

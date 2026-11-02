@@ -8,14 +8,16 @@
  *  - Chapters IX, III, VII, XIV, I, II and X: ship, no new hold (IX met the hold condition: 0 overlapping pairs; III's `real` hold stays lifted: 0 teleports against 3).
  *  - **FFX-2 lane: ship, no hold row.** Chapter XI plays grade C by default (`hd2d` and `arena` stay lifted), Chapter V and Chapter IV are unchanged.
  *
- * What this file pins: the one new hold, who holds the F1 HUD (Chapter XII alone), that no verdict took a chapter off the list or added a hold anywhere else, and that the handoff note records the verdicts (`docs/handoff/r72.md` section 10).
+ * What this file pins: that no verdict took a chapter off the list or added a hold anywhere else, and that the handoff note records the verdicts (`docs/handoff/r72.md` section 10).
+ *
+ * **r74-omnis (2026-11-02, FFX only) LIFTED the one hold these verdicts added** (Chapter XII's `hud` row): the advisor card, its chip and the tip are steered clear of the target flag (`ui/ffx/flagSteer.ts`), so the F1 HUD plays in XII again. The row's text,
+ * with its numbers and its "Lifts when", is kept in `docs/handoff/r74-omnis.md` section 8 and pinned by `r74-omnis-lift.test.ts`; the first block below says what the table is now.
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { getChapter } from '../../src/data/encounters.ts';
 import { PIECE_HOLDS, TREATED_CHAPTERS, TREATED_PIECES, isTreatedChapter, setTreatedScope, treatedHold, treatedHolds } from '../../src/engine/motion/DemoGate.ts';
-import { findLocalPaths } from '../../tools/dist-local-paths.mjs';
 
 afterEach(() => {
   setTreatedScope(null);
@@ -24,39 +26,29 @@ afterEach(() => {
 const OMNIS = 'seymour-omnis';
 const note = (): string => readFileSync(resolve('docs/handoff/r72.md'), 'utf8').replace(/\r\n/g, '\n');
 
-describe('Chapter XII holds the F1 HUD (FFX only; r72 review, job J-HUD-5b) and plays every other piece it played', () => {
-  it('is on the list, FFX in the registry and in the table, and holds hud first, then the three it held', () => {
+describe('Chapter XII holds the three pieces it held before the r72 review and plays the F1 HUD again (FFX only; the hud row of the r72 review, job J-HUD-5b, was lifted in r74-omnis)', () => {
+  it('is on the list, FFX in the registry and in the table, and holds breath, cam and moments: no hud row', () => {
     expect(getChapter(OMNIS)?.game).toBe('ffx');
     expect(TREATED_CHAPTERS[OMNIS]).toEqual({ game: 'ffx', since: 'r71' });
-    expect(Object.keys(PIECE_HOLDS[OMNIS]!)).toEqual(['hud', 'breath', 'cam', 'moments']);
-    expect(treatedHolds(OMNIS)).toEqual(['hud', 'breath', 'cam', 'moments']);
+    expect(Object.keys(PIECE_HOLDS[OMNIS]!)).toEqual(['breath', 'cam', 'moments']);
+    expect(treatedHolds(OMNIS)).toEqual(['breath', 'cam', 'moments']);
+    expect(treatedHold(OMNIS, 'hud')).toBeUndefined();
   });
 
-  it('the reason carries the measured numbers, says what the hold costs and what plays on, names no folder of the build machine, and ends in its "Lifts when"', () => {
-    const why = treatedHold(OMNIS, 'hud')!;
-    expect(why.length).toBeGreaterThan(600);
-    for (const w of [/232 stops/, /34 of them/, /1600 x 900 in 5 of 29/, /1366 x 768 in 2/, /1440 x 810 in 9/, /1536 x 864 in 6/, /1920 x 1080 in 11/, /15\.3 grid px/, /1\.7 grid px/, /2560 and 3440 wide and TEXT SIZE 115 read 0/, /no text is covered/, /87 of 87/, /41 of 87/, /0 teleports/]) {
-      expect(why, String(w)).toMatch(w);
-    }
-    expect(why).toMatch(/the real clips, the flip fit, the slide ease and the look play/);
-    expect(why).toMatch(/Lifts when the advisor card is steered against the flag's dock boxes, or hidden while the cursor is up at those widths, and the 29-stop cursor walk reads 0 overlapping pairs at 1280, 1366, 1440, 1536, 1600, 1920 and 2560 wide at TEXT SIZE 100 and 115 with 0 console errors\.$/);
-    expect(findLocalPaths(why), 'a drive-letter or user-profile path').toEqual([]);
-    expect(/pyrefly-scratch/i.test(why)).toBe(false);
-  });
-
-  it('under all it plays every piece but the four it holds; under `?treated=pack` (release 68) none', () => {
+  it('under all it plays every piece but the three it holds, the hud piece among those that play; under `?treated=pack` (release 68) none', () => {
     setTreatedScope('all');
     expect(isTreatedChapter(OMNIS)).toBe(true);
-    for (const p of TREATED_PIECES) expect(isTreatedChapter(OMNIS, p), p).toBe(!['hud', 'breath', 'cam', 'moments'].includes(p));
+    expect(isTreatedChapter(OMNIS, 'hud')).toBe(true);
+    for (const p of TREATED_PIECES) expect(isTreatedChapter(OMNIS, p), p).toBe(!['breath', 'cam', 'moments'].includes(p));
     setTreatedScope('pack');
     expect(isTreatedChapter(OMNIS)).toBe(false);
     for (const p of TREATED_PIECES) expect(isTreatedChapter(OMNIS, p), `${p} pack`).toBe(false);
   });
 });
 
-describe('nothing else changed: no other chapter holds the F1 HUD, no verdict took a chapter off the list, and the other hold sets are the merge\'s', () => {
-  it('Chapter XII is the only chapter that holds hud', () => {
-    for (const [id, rows] of Object.entries(PIECE_HOLDS)) expect(Object.prototype.hasOwnProperty.call(rows, 'hud'), id).toBe(id === OMNIS);
+describe('nothing else changed: no chapter holds the F1 HUD now, no verdict took a chapter off the list, and the other hold sets are the merge\'s', () => {
+  it("no chapter holds hud (r74-omnis lifted the only one, Chapter XII's)", () => {
+    for (const [id, rows] of Object.entries(PIECE_HOLDS)) expect(Object.prototype.hasOwnProperty.call(rows, 'hud'), id).toBe(false);
   });
 
   it('eighteen of the nineteen listed chapters are treated at release 73 (11 FFX, 7 FFX-2): no r72 verdict took a chapter off, r73-fast put Chapter XVIII back (release 72 had seventeen, 10 FFX), and Chapter XVII stays off', () => {

@@ -27,8 +27,6 @@ const IDS = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'] as co
 /** The chapters that hold the moments (the reserve Rikku's KO step, review M1; Yuna's unread KO cut in XIV, the review of booth-b3 M1) and the directed camera (the killing blow's plate at the live positions, m1; the aeon as the actor, m2). */
 const MOMENTS_HELD: readonly string[] = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'];
 const CAM_HELD: readonly string[] = ['seymour-omnis', 'isaaru-via-purifico'];
-/** The chapters that hold the F1 HUD (the `hud` piece): Chapter XII since the r72 review of the release 72 candidate (job J-HUD-5b: the target flag meets the Move advisor card in 34 of 232 cursor stops); it plays today's HUD, every other piece plays. */
-const HUD_HELD: readonly string[] = ['seymour-omnis'];
 /** The chapters that hold the real clips (they play the house curves, what `?curves=new` plays). `booth-b4` held Chapter III's (Tidus's return flip drawn 1.66 times larger); r72-motion lifted it (`motion/FlipFit.ts`): none now. */
 const REAL_HELD: readonly string[] = [];
 
@@ -76,8 +74,8 @@ for (const ID of IDS) describeIf(ID)(`${ID} under the scope all: FFX's own game 
     setDemoChapter(ID);
     setPassChapter(ID);
     setFeelChapter(ID);
-    expect(hudF1On()).toBe(!HUD_HELD.includes(ID)); // Chapter XII holds the F1 HUD (r72 review): today's HUD plays
-    expect(hudF1Game()).toBe(HUD_HELD.includes(ID) ? undefined : 'ffx'); // the FFX layout (command block left, the three-slot turn strip, the Overdrive bars), never FFX-2's right-hand slab
+    expect(hudF1On()).toBe(true);
+    expect(hudF1Game()).toBe('ffx'); // the FFX layout (command block left, the three-slot turn strip, the Overdrive bars), never FFX-2's right-hand slab
     expect(proLookOn()).toBe(true);
     expect(proGame()).toBe('ffx');
     expect(proArenaFor(ID, '')).toBe(true);
@@ -120,31 +118,6 @@ for (const ID of IDS) describeIf(ID)(`${ID} under the scope all: FFX's own game 
       expect(proCamOn(), booth).toBe(true);
       expect(momentsOn(), booth).toBe(true);
       expect(stagingPieceOn('breath'), booth).toBe(true);
-    }
-  });
-
-  it.runIf(HUD_HELD.includes(ID))('holds the F1 HUD and nothing else (r72 review, J-HUD-5b): the release 71 HUD plays at every TEXT SIZE, while the look, the arena, the rim, the curves with the real clips, the smear, the staging, the effects, the feel and the sound still play in FFX', () => {
-    allOn();
-    setTreatedScope('all');
-    setSwapScope('wide');
-    setDemoChapter(ID);
-    setPassChapter(ID);
-    setFeelChapter(ID);
-    expect(hudF1On()).toBe(false);
-    expect(hudF1Game()).toBeUndefined();
-    expect(proLookOn()).toBe(true);
-    expect(proArenaFor(ID, '')).toBe(true);
-    expect(partyRimOff()).toBe(true);
-    expect(curvesOn()).toBe(true);
-    expect(realKind()).toBe('snappy');
-    expect(smearOn()).toBe(true);
-    expect(stagingOn()).toBe(true);
-    expect(fxNewOn()).toBe(true);
-    expect(inFeelChapter()).toBe(true);
-    expect(audioNewOn()).toBe(true);
-    for (const booth of ['seymour-flux', 'ffx2-bahamut']) {
-      setDemoChapter(booth);
-      expect(hudF1On(), booth).toBe(true); // the booth pair next to it keeps the F1 HUD
     }
   });
 
@@ -213,8 +186,8 @@ describe("the lane-off words, ?pack=off and a phone still give release 62's fram
     return [hudF1On(), proLookOn(), partyRimOff(), bossCleanOn(), curvesOn(), momentsOn(), smearOn(), proCamOn(), stagingOn(), fxNewOn(), audioNewOn(), inFeelChapter() && punchMode() === 'new'];
   };
   const OFF = new Array(12).fill(false);
-  /** [hud, look, rim, boss, curves, moments, smear, camera, staging, fx, audio, feel] with the chapter's holds: the F1 HUD at 0, the moments at 5, the camera at 7. */
-  const on = (id: string): boolean[] => new Array(12).fill(true).map((v: boolean, i) => v && !(i === 0 && HUD_HELD.includes(id)) && !(i === 5 && MOMENTS_HELD.includes(id)) && !(i === 7 && CAM_HELD.includes(id)));
+  /** [hud, look, rim, boss, curves, moments, smear, camera, staging, fx, audio, feel] with the chapter's holds: the moments at 5, the camera at 7. */
+  const on = (id: string): boolean[] => new Array(12).fill(true).map((v: boolean, i) => v && !(i === 5 && MOMENTS_HELD.includes(id)) && !(i === 7 && CAM_HELD.includes(id)));
 
   for (const id of IDS) itIf(id)(`${id}: on a desktop with no word the whole treatment plays but the pieces the chapter holds (the breath rides on the staging layer, which is on)`, () => {
     setTreatedScope('all');
@@ -244,7 +217,7 @@ describe("the lane-off words, ?pack=off and a phone still give release 62's fram
     readFrom('?pro=off');
     const [hud, look, rim, boss, curves, moments, smear, cam, staging, fx, audio] = readAll(id);
     expect([look, cam, staging]).toEqual([false, false, false]);
-    expect([hud, rim, boss, curves, moments, smear, fx, audio]).toEqual([!HUD_HELD.includes(id), true, true, true, !MOMENTS_HELD.includes(id), true, true, true]);
+    expect([hud, rim, boss, curves, moments, smear, fx, audio]).toEqual([true, true, true, true, !MOMENTS_HELD.includes(id), true, true, true]);
     readFrom('');
     setTreatedScope('pack');
     expect(readAll(id)).toEqual(OFF);
