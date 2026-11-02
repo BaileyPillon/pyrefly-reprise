@@ -1,0 +1,10146 @@
+{
+ "schema": "continuity/1",
+ "chapter": "yojimbo-cavern",
+ "game": "ffx",
+ "base": "http://127.0.0.1:5731/?treated=pack&x=/",
+ "mode": "gpu",
+ "date": "2026-11-02T02:52:23.025Z",
+ "dedicated": true,
+ "view": [
+  0,
+  0,
+  1600,
+  900
+ ],
+ "probe": {
+  "frames": 8791,
+  "battleFrames": 7166,
+  "battleSeconds": 119.757,
+  "maxDtMs": 132.2,
+  "slowFrames": 9,
+  "fps": 59.8,
+  "copyMsMean": 0.039,
+  "errors": [],
+  "eventSource": "the engine state read from window.__pyrefly (plane fades and corners per frame); no engine hook"
+ },
+ "poseMeasure": {
+  "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+  "sha256": "b8cead6d81a854dc7ac60a210ac702185cd33668b555f01bb24e60fd408e3940",
+  "subjects": 114,
+  "source": "harness-tree",
+  "buildSha": "01a76777",
+  "candidate": {
+   "sha256": "b8cead6d81a854dc7ac60a210ac702185cd33668b555f01bb24e60fd408e3940",
+   "subjects": 114
+  },
+  "isCandidate": true,
+  "note": null
+ },
+ "harness": {
+  "schema": "continuity-harness/1",
+  "id": "5e1bbdec47c9e7206f710149081baf8ceab77dc6b230bec2117ef4eed133fc31",
+  "tree": {
+   "root": "D:/pyrefly-release55",
+   "head": "01a767770d14540940ee54b90d8ec923031588a3",
+   "dirty": []
+  },
+  "files": {
+   "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+   "critic/runner/lib/continuity-analyze.mjs": "a20e4de301b117cf4a98ecf99f58fe695aaedb18",
+   "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+   "critic/runner/lib/continuity-card.mjs": "2e0208df7bc9a922a27d519fc5ebb49bed3fafd9",
+   "critic/runner/lib/continuity-dissolve.mjs": "4a9a2ebc79b798dc6059312f0b885510f4cd79b3",
+   "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+   "critic/runner/lib/continuity-gaps.mjs": "7337b85eda92c5755d11ccbee84749ee231cfe3d",
+   "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+   "critic/runner/lib/continuity-ghostms.mjs": "d74a048e0c44be69d22b050973ec240fbec3db66",
+   "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+   "critic/runner/lib/continuity-probe.mjs": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25",
+   "critic/runner/lib/continuity-pure.mjs": "c30cf02831efe33d9726d0bae9f9b3e098292090",
+   "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+   "critic/runner/lib/continuity-rig-probe.mjs": "35bf097b7bbfa81abeb4daf8e78f0d9515ff3ab1",
+   "critic/runner/lib/continuity-rig.mjs": "6e1b891a9d237b4b9db52593303df5e1ffc812e4",
+   "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+   "critic/runner/lib/continuity-smear.mjs": "bb6bcae7b35d4d99465f0650e58554cc785af513",
+   "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+   "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+   "critic/runner/lib/continuity-summary.mjs": "c671aa6dbc9e6df72a767ace45e6a57cdb478053",
+   "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+   "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+   "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+   "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+   "critic/runner/lib/continuity-why.mjs": "e2f0063820045e9c5eb5bb2ece203c00bed1fe3d",
+   "critic/runner/lib/continuity.mjs": "d3fd3269395cfa928cd1566a81486359e28210cb",
+   "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+   "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+   "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+   "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+   "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+   "critic/runner/lib/route-pure.mjs": "4d484cc9c873d60c66b48e418bb688dd6248b647",
+   "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+   "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+   "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+   "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+   "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+   "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+  },
+  "policy": {
+   "continuitySha256": "5ef4a3ed6fec14518548de8b462466822a3cf3a41f11528f8e8abb143de6fa43",
+   "fileSha256": "9c72460c4bdd463ef02f5e1f01c2baa3aa5334f392c29b114da466ca9c54cc71",
+   "override": false,
+   "overrideSha256": null
+  },
+  "probe": {
+   "version": 3,
+   "blob": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25"
+  },
+  "poseTable": {
+   "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+   "sha256": "b8cead6d81a854dc7ac60a210ac702185cd33668b555f01bb24e60fd408e3940",
+   "subjects": 114,
+   "source": "harness-tree",
+   "buildSha": "01a76777",
+   "isCandidate": true
+  },
+  "waivers": {
+   "path": "D:\\pyrefly-release55\\docs\\target\\pose-waivers.json",
+   "sha256": "84fc043f4169733ef228cbf965eb2b0679f3f0e38f7f609e97d99135924f532f",
+   "rows": 80
+  },
+  "run": {
+   "query": null,
+   "setArt": null,
+   "browser": "gpu"
+  },
+  "changedDuringRun": false
+ },
+ "staleTable": false,
+ "poseWaivers": {
+  "path": "D:\\pyrefly-release55\\docs\\target\\pose-waivers.json",
+  "rows": 80
+ },
+ "anchorNotes": [],
+ "coverage": {
+  "figures": [
+   "ginnem",
+   "yojimbo",
+   "daigoro",
+   "kimahri",
+   "yuna",
+   "lulu"
+  ],
+  "measuredWithRegistration": [
+   "yuna",
+   "kimahri"
+  ],
+  "measuredFromRig": [
+   "lulu"
+  ],
+  "measuredFromSilhouetteOnly": [
+   "yojimbo",
+   "daigoro"
+  ],
+  "rigs": [
+   {
+    "figure": "lulu",
+    "rig": "lulu",
+    "keys": [
+     "idle",
+     "ready",
+     "cast",
+     "hurt",
+     "critical",
+     "victory"
+    ],
+    "swaps": 18,
+    "counted": 17,
+    "settled": 17,
+    "headMeasured": 17,
+    "feetMeasured": 16
+   }
+  ],
+  "posesWithAnchors": 13,
+  "posesTotal": 19,
+  "staleRegistrationRecords": 0,
+  "tracking": "centroid",
+  "trackedByCentroid": [],
+  "unregistered": [],
+  "waived": [],
+  "poses": [
+   {
+    "figure": "ginnem",
+    "pose": "idle",
+    "url": "/art/characters/ginnem/idle.png",
+    "head": null,
+    "stance": "registration",
+    "prone": false,
+    "class": "idle",
+    "registered": true,
+    "waived": false
+   },
+   {
+    "figure": "yojimbo",
+    "pose": "idle",
+    "url": "/art/characters/yojimbo-cavern/idle.png",
+    "head": null,
+    "stance": "registration",
+    "prone": false,
+    "class": "idle",
+    "registered": true,
+    "waived": false
+   },
+   {
+    "figure": "daigoro",
+    "pose": "idle",
+    "url": "/art/characters/daigoro/idle.png",
+    "head": null,
+    "stance": "registration",
+    "prone": false,
+    "class": "idle",
+    "registered": true,
+    "waived": false
+   },
+   {
+    "figure": "kimahri",
+    "pose": "idle",
+    "url": "/art/characters/kimahri/idle.png",
+    "head": "registration",
+    "stance": "registration",
+    "prone": false,
+    "class": "idle",
+    "registered": true,
+    "waived": false
+   },
+   {
+    "figure": "yuna",
+    "pose": "idle",
+    "url": "/art/characters/yuna/idle.png",
+    "head": "registration",
+    "stance": "registration",
+    "prone": false,
+    "class": "idle",
+    "registered": true,
+    "waived": false
+   },
+   {
+    "figure": "lulu",
+    "pose": "idle",
+    "url": null,
+    "head": null,
+    "stance": null,
+    "prone": null,
+    "class": null,
+    "registered": null,
+    "waived": false
+   },
+   {
+    "figure": "yojimbo",
+    "pose": "cast",
+    "url": "/art/characters/yojimbo-cavern/cast.png",
+    "head": null,
+    "stance": "registration",
+    "prone": false,
+    "class": "standing",
+    "registered": true,
+    "waived": false
+   },
+   {
+    "figure": "yojimbo",
+    "pose": "hurt",
+    "url": "/art/characters/yojimbo-cavern/hurt.png",
+    "head": null,
+    "stance": "registration",
+    "prone": false,
+    "class": "standing",
+    "registered": true,
+    "waived": false
+   },
+   {
+    "figure": "yuna",
+    "pose": "item",
+    "url": "/art/characters/yuna/item.png",
+    "head": "registration",
+    "stance": "registration",
+    "prone": false,
+    "class": "standing",
+    "registered": true,
+    "waived": false
+   },
+   {
+    "figure": "lulu",
+    "pose": "ready",
+    "url": null,
+    "head": null,
+    "stance": null,
+    "prone": null,
+    "class": null,
+    "registered": null,
+    "waived": false
+   },
+   {
+    "figure": "lulu",
+    "pose": "cast",
+    "url": null,
+    "head": null,
+    "stance": null,
+    "prone": null,
+    "class": null,
+    "registered": null,
+    "waived": false
+   },
+   {
+    "figure": "daigoro",
+    "pose": "cast",
+    "url": "/art/characters/daigoro/cast.png",
+    "head": null,
+    "stance": "registration",
+    "prone": false,
+    "class": "standing",
+    "registered": true,
+    "waived": false
+   },
+   {
+    "figure": "lulu",
+    "pose": "hurt",
+    "url": null,
+    "head": null,
+    "stance": null,
+    "prone": null,
+    "class": null,
+    "registered": null,
+    "waived": false
+   },
+   {
+    "figure": "yuna",
+    "pose": "hurt",
+    "url": "/art/characters/yuna/hurt.png",
+    "head": "registration",
+    "stance": "registration",
+    "prone": false,
+    "class": "standing",
+    "registered": true,
+    "waived": false
+   },
+   {
+    "figure": "lulu",
+    "pose": "critical",
+    "url": null,
+    "head": null,
+    "stance": null,
+    "prone": null,
+    "class": null,
+    "registered": null,
+    "waived": false
+   },
+   {
+    "figure": "yuna",
+    "pose": "cast",
+    "url": "/art/characters/yuna/cast.png",
+    "head": "registration",
+    "stance": "registration",
+    "prone": false,
+    "class": "standing",
+    "registered": true,
+    "waived": false
+   },
+   {
+    "figure": "kimahri",
+    "pose": "victory",
+    "url": "/art/characters/kimahri/victory.png",
+    "head": "registration",
+    "stance": "registration",
+    "prone": false,
+    "class": "standing",
+    "registered": true,
+    "waived": false
+   },
+   {
+    "figure": "yuna",
+    "pose": "victory",
+    "url": "/art/characters/yuna/victory.png",
+    "head": "registration",
+    "stance": "registration",
+    "prone": false,
+    "class": "standing",
+    "registered": true,
+    "waived": false
+   },
+   {
+    "figure": "lulu",
+    "pose": "victory",
+    "url": null,
+    "head": null,
+    "stance": null,
+    "prone": null,
+    "class": null,
+    "registered": null,
+    "waived": false
+   }
+  ]
+ },
+ "perFigure": {
+  "yojimbo": {
+   "swaps": 35,
+   "headRegistered": 0,
+   "headRig": 0,
+   "massRead": 35,
+   "worstHeadPct": 0,
+   "worstMassPct": 4.8,
+   "worstFeetPx": 0.1,
+   "snaps": 0,
+   "sizeOver": 0,
+   "feetOver": 0,
+   "heightOver": 0,
+   "feetSilOver": 0,
+   "minStature": 0.9633
+  },
+  "yuna": {
+   "swaps": 15,
+   "headRegistered": 15,
+   "headRig": 0,
+   "massRead": 0,
+   "worstHeadPct": 0.1,
+   "worstMassPct": 0,
+   "worstFeetPx": 0.3,
+   "snaps": 0,
+   "sizeOver": 0,
+   "feetOver": 0,
+   "heightOver": 0,
+   "feetSilOver": 0,
+   "minStature": 0.9011
+  },
+  "lulu": {
+   "swaps": 17,
+   "headRegistered": 0,
+   "headRig": 17,
+   "massRead": 0,
+   "worstHeadPct": 15.4,
+   "worstMassPct": 0,
+   "worstFeetPx": 0,
+   "snaps": 0,
+   "sizeOver": 13,
+   "feetOver": 0,
+   "heightOver": 0,
+   "feetSilOver": 0,
+   "minStature": 0.8094
+  },
+  "daigoro": {
+   "swaps": 10,
+   "headRegistered": 0,
+   "headRig": 0,
+   "massRead": 10,
+   "worstHeadPct": 0,
+   "worstMassPct": 0,
+   "worstFeetPx": 0,
+   "snaps": 0,
+   "sizeOver": 0,
+   "feetOver": 0,
+   "heightOver": 0,
+   "feetSilOver": 0,
+   "minStature": 1
+  },
+  "kimahri": {
+   "swaps": 1,
+   "headRegistered": 1,
+   "headRig": 0,
+   "massRead": 0,
+   "worstHeadPct": 0,
+   "worstMassPct": 0,
+   "worstFeetPx": 0,
+   "snaps": 0,
+   "sizeOver": 0,
+   "feetOver": 0,
+   "heightOver": 0,
+   "feetSilOver": 0,
+   "minStature": 0.9711
+  }
+ },
+ "summary": {
+  "battleSeconds": 119.8,
+  "swaps": 80,
+  "counted": 78,
+  "excludedByCut": 1,
+  "excludedNotShowing": 1,
+  "swapsPerMinute": 39.08,
+  "size": {
+   "judged": 78,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 0,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "headMeasured": 78,
+   "headRegistration": 16,
+   "headRig": 17,
+   "headSilhouette": 45,
+   "headUnmeasured": 0,
+   "maxHeadJumpPct": 15.4,
+   "maxHeadJumpPctRegistration": 0.1,
+   "maxHeadJumpPctRig": 15.4,
+   "rigSwaps": 17,
+   "headOverTolerance": 13,
+   "cardHead": {
+    "measured": 16,
+    "maxPct": 0.9,
+    "byClass": {
+     "ok": 16
+    }
+   },
+   "feetMeasured": 77,
+   "maxFeetShiftPx": 0.3,
+   "feetOverTolerance": 0,
+   "feetDesigned": 0,
+   "feetDesignedWorstPx": 0,
+   "heightMeasured": 78,
+   "heightOverBand": 0,
+   "heightWaived": 0,
+   "minStature": 0.809,
+   "maxStature": 1.095,
+   "koLengthMeasured": 0,
+   "minKoLength": null,
+   "koLengthReported": 1,
+   "feetSilMeasured": 61,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 4.5,
+   "holdSwaps": 16,
+   "worstRealHeadPct": 23.1,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "variantHeadSwaps": 0,
+   "worstVariantHeadPct": 0,
+   "variantHeadOutsideBand": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "snapsGapExcused": 0,
+   "hardCuts": 29,
+   "hardCutsPerMinute": 14.53,
+   "snapsByToPose": {},
+   "lowestIou": 0.136,
+   "maxCentroidShiftPx": 82.3,
+   "ghostSwaps": 21,
+   "ghostFrames": 59,
+   "worstGhostSeverity": 0.297,
+   "ghostOverFail": 0,
+   "ghostMs": 990,
+   "ghostMsPerMinute": 496,
+   "ghostFramesPerMinute": 29.6,
+   "ghostFrames60PerMinute": 29.8,
+   "ghostDesignedExcused": 0,
+   "jerks": 1,
+   "jerksMidMove": 1,
+   "worstJerkPx": 24.2,
+   "jerksOverFail": 0,
+   "swapJerks": 0,
+   "swapJerksWorstPx": 0,
+   "swapJerksOverFail": 0,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 1,
+   "dashesWorstPx": 24.2,
+   "dashesOverFail": 0,
+   "jerksLongFrame": 0,
+   "swapJerksLongFrame": 0,
+   "swapJerksSteadyOverFail": 0,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 0,
+   "jerksDissolveTravel": 0,
+   "worstDissolveTravelPx": 0,
+   "jerksStagedExcused": 0,
+   "worstStagedExcusedJerkPx": 0,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "smearsPlanned": 30,
+   "smearSwaps": 30,
+   "smearSnapsExcused": 24,
+   "jerksSmeared": 6,
+   "worstSmearedJerkPx": 39.3
+  },
+  "frameTime": {
+   "frames": 7166,
+   "p50Ms": 16.7,
+   "p90Ms": 17.8,
+   "p99Ms": 19.7,
+   "maxMs": 132.2,
+   "longFrames": 9,
+   "longFramePct": 0.1,
+   "longMs": 34,
+   "source": "continuity-probe",
+   "pacingNumber": false
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "13 swap(s) change a head by more than the tolerance (worst 15.4 percent; 0.1 percent where the head is registered)"
+    ],
+    "note": "16 of 78 measured swaps had a registered head (tolerance 3 percent); 17 were read from a rig's own head mesh (tolerance 3 percent; 17 swap(s) were changes of a rig's key); 45 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 78 swap(s) (stature 0.809 to 1.095, 0 out of band but waived), the silhouette's own feet 61 swap(s) (worst 4.5 px, 0 waived), 16 swap(s) across a recorded hold (real head worst 23.1 percent from the idle's), 0 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "PASS",
+    "reasons": [],
+    "note": "30 of 30 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 24 snap(s) not counted, 6 swap jerk(s) (worst 39.3 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+   }
+  },
+  "flickers": {
+   "windowMs": 300,
+   "pairs": [
+    "ready>idle>ready"
+   ],
+   "count": 0,
+   "countedPairs": 0,
+   "perMinute": 0,
+   "ghostFrames": 0,
+   "ghostShare": 0,
+   "ghostFramesPerMinute": 0,
+   "byPair": {},
+   "byFigure": {},
+   "medianGapMs": null
+  },
+  "classes": {
+   "windowMs": {
+    "interlude": 150,
+    "hurtString": 600,
+    "windUp": 600,
+    "why": 400
+   },
+   "source": {
+    "why": "log",
+    "whyTagged": 43,
+    "designed": "log",
+    "logCapped": {
+     "reasons": false,
+     "designed": false
+    }
+   },
+   "byClass": [
+    {
+     "cls": "Hurt recovery",
+     "swaps": 14,
+     "perMinute": 7.01,
+     "ghostFrames": 42,
+     "ghostMs": 706,
+     "ghostMsPerMinute": 354,
+     "ghostFramesPerMinute": 21,
+     "severityMax": 0.297,
+     "planned": 0,
+     "designed": 0
+    },
+    {
+     "cls": "Item ends (item to idle)",
+     "swaps": 4,
+     "perMinute": 2,
+     "ghostFrames": 8,
+     "ghostMs": 135,
+     "ghostMsPerMinute": 68,
+     "ghostFramesPerMinute": 4,
+     "severityMax": 0.242,
+     "planned": 0,
+     "designed": 0
+    },
+    {
+     "cls": "Victory pose",
+     "swaps": 2,
+     "perMinute": 1,
+     "ghostFrames": 8,
+     "ghostMs": 132,
+     "ghostMsPerMinute": 66,
+     "ghostFramesPerMinute": 4,
+     "severityMax": 0.276,
+     "planned": 0,
+     "designed": 0
+    },
+    {
+     "cls": "Cast ends (cast to idle)",
+     "swaps": 12,
+     "perMinute": 6.01,
+     "ghostFrames": 1,
+     "ghostMs": 17,
+     "ghostMsPerMinute": 9,
+     "ghostFramesPerMinute": 0.5,
+     "severityMax": 0.13,
+     "planned": 0,
+     "designed": 12
+    },
+    {
+     "cls": "RIG key flip (boss)",
+     "swaps": 17,
+     "perMinute": 8.52,
+     "ghostFrames": 0,
+     "ghostMs": 0,
+     "ghostMsPerMinute": 0,
+     "ghostFramesPerMinute": 0,
+     "severityMax": 0,
+     "planned": 0,
+     "designed": 0
+    },
+    {
+     "cls": "Hurt (hit lands)",
+     "swaps": 14,
+     "perMinute": 7.01,
+     "ghostFrames": 0,
+     "ghostMs": 0,
+     "ghostMsPerMinute": 0,
+     "ghostFramesPerMinute": 0,
+     "severityMax": 0,
+     "planned": 14,
+     "designed": 0
+    },
+    {
+     "cls": "Cast begins (idle to cast)",
+     "swaps": 11,
+     "perMinute": 5.51,
+     "ghostFrames": 0,
+     "ghostMs": 0,
+     "ghostMsPerMinute": 0,
+     "ghostFramesPerMinute": 0,
+     "severityMax": 0,
+     "planned": 11,
+     "designed": 0
+    },
+    {
+     "cls": "Item begins (idle to item)",
+     "swaps": 4,
+     "perMinute": 2,
+     "ghostFrames": 0,
+     "ghostMs": 0,
+     "ghostMsPerMinute": 0,
+     "ghostFramesPerMinute": 0,
+     "severityMax": 0,
+     "planned": 4,
+     "designed": 0
+    }
+   ],
+   "stance": {
+    "source": "log",
+    "up": {
+     "menu": {
+      "swaps": 3,
+      "perMinute": 1.5,
+      "ghostFrames": 0,
+      "ghostMs": 0,
+      "ghostMsPerMinute": 0,
+      "ghostFramesPerMinute": 0,
+      "severityMax": 0
+     }
+    },
+    "down": {}
+   },
+   "interludes": {
+    "count": 0,
+    "perMinute": 0,
+    "countedPairs": 0,
+    "ghostFrames": 0,
+    "ghostMs": 0,
+    "ghostMsPerMinute": 0,
+    "ghostFramesPerMinute": 0,
+    "ghostShare": 0,
+    "byTo": {},
+    "medianGapMs": null
+   },
+   "hurtStrings": {
+    "count": 0,
+    "perMinute": 0,
+    "ghostFrames": 0,
+    "ghostMs": 0,
+    "ghostMsPerMinute": 0,
+    "medianGapMs": null
+   },
+   "designedBlend": {
+    "report": true,
+    "excuse": false,
+    "maxMs": 100,
+    "maxSeverity": 1,
+    "logged": 12,
+    "matched": 12,
+    "swaps": 12,
+    "perMinute": 6.01,
+    "ghostFrames": 1,
+    "ghostMs": 17,
+    "ghostMsPerMinute": 9,
+    "ghostFramesPerMinute": 0.5,
+    "severityMax": 0.13,
+    "excused": 0,
+    "undesignedGhostMsPerMinute": 487
+   }
+  },
+  "run": {
+   "fps": 59.8,
+   "maxDtMs": 132.2,
+   "slowFrames": 9,
+   "frames": 7166,
+   "probeErrors": 0
+  }
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "FAIL",
+   "reasons": [
+    "13 swap(s) change a head by more than the tolerance (worst 15.4 percent; 0.1 percent where the head is registered)"
+   ],
+   "note": "16 of 78 measured swaps had a registered head (tolerance 3 percent); 17 were read from a rig's own head mesh (tolerance 3 percent; 17 swap(s) were changes of a rig's key); 45 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 78 swap(s) (stature 0.809 to 1.095, 0 out of band but waived), the silhouette's own feet 61 swap(s) (worst 4.5 px, 0 waived), 16 swap(s) across a recorded hold (real head worst 23.1 percent from the idle's), 0 on a painting with no fresh registration record"
+  },
+  "CHK-027": {
+   "result": "PASS",
+   "reasons": [],
+   "note": "30 of 30 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 24 snap(s) not counted, 6 swap jerk(s) (worst 39.3 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+  }
+ },
+ "worst": {
+  "swaps": [
+   9,
+   78,
+   30,
+   57,
+   23,
+   4,
+   31,
+   12,
+   11,
+   79
+  ],
+  "jerks": [
+   6
+  ],
+  "ghosts": [
+   3,
+   59,
+   40,
+   68,
+   7
+  ]
+ },
+ "strips": [
+  {
+   "kind": "swap",
+   "id": 9,
+   "file": "strips/swap-009-lulu-ready-cast.jpg",
+   "bytes": 55180
+  },
+  {
+   "kind": "swap",
+   "id": 78,
+   "file": "strips/swap-078-kimahri-idle-victory.jpg",
+   "bytes": 99688
+  },
+  {
+   "kind": "swap",
+   "id": 30,
+   "file": "strips/swap-030-yuna-hurt-idle.jpg",
+   "bytes": 89839
+  },
+  {
+   "kind": "swap",
+   "id": 57,
+   "file": "strips/swap-057-yuna-idle-hurt.jpg",
+   "bytes": 108224
+  },
+  {
+   "kind": "swap",
+   "id": 23,
+   "file": "strips/swap-023-yuna-item-idle.jpg",
+   "bytes": 81322
+  },
+  {
+   "kind": "swap",
+   "id": 4,
+   "file": "strips/swap-004-yuna-idle-item.jpg",
+   "bytes": 57316
+  },
+  {
+   "kind": "swap",
+   "id": 31,
+   "file": "strips/swap-031-yojimbo-idle-hurt.jpg",
+   "bytes": 102511
+  },
+  {
+   "kind": "swap",
+   "id": 12,
+   "file": "strips/swap-012-yojimbo-hurt-idle.jpg",
+   "bytes": 105634
+  },
+  {
+   "kind": "swap",
+   "id": 11,
+   "file": "strips/swap-011-lulu-cast-idle.jpg",
+   "bytes": 83325
+  },
+  {
+   "kind": "swap",
+   "id": 79,
+   "file": "strips/swap-079-yuna-idle-victory.jpg",
+   "bytes": 72085
+  },
+  {
+   "kind": "ghost",
+   "id": 3,
+   "file": "strips/ghost-003-yojimbo-hurt-idle.jpg",
+   "bytes": 104798
+  },
+  {
+   "kind": "ghost",
+   "id": 59,
+   "file": "strips/ghost-059-yuna-hurt-idle.jpg",
+   "bytes": 93661
+  },
+  {
+   "kind": "ghost",
+   "id": 40,
+   "file": "strips/ghost-040-yuna-item-idle.jpg",
+   "bytes": 85305
+  },
+  {
+   "kind": "ghost",
+   "id": 68,
+   "file": "strips/ghost-068-yuna-cast-idle.jpg",
+   "bytes": 95410
+  },
+  {
+   "kind": "ghost",
+   "id": 7,
+   "file": "strips/ghost-007-yojimbo-hurt-idle.jpg",
+   "bytes": 98653
+  },
+  {
+   "kind": "jerk",
+   "id": 6,
+   "file": null,
+   "why": "the page held no strip for this event (the cap was reached, or the frames were gone)"
+  }
+ ],
+ "swaps": [
+  {
+   "id": 0,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 1339,
+   "tMs": 24763.1,
+   "dtMs": 15.19999999999709,
+   "stallMs": 60.2,
+   "cause": {
+    "type": "action-start",
+    "actorId": "yojimbo",
+    "targetId": null,
+    "abilityId": "yojimbo-summon",
+    "framesBefore": 7
+   },
+   "startFrame": 1339,
+   "notShowing": true,
+   "counted": false,
+   "camCut": false,
+   "staged": null,
+   "head": null,
+   "feet": null,
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "snap": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 40,
+    "strength": 0.22000000000000003,
+    "flash": true,
+    "overlap": 0.902283105022831,
+    "anchorDistance": 0.010440658072970085,
+    "glide": null
+   },
+   "snapSmear": false
+  },
+  {
+   "id": 1,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 1397,
+   "tMs": 25729.9,
+   "dtMs": 9.700000000000728,
+   "stallMs": 0,
+   "cause": {
+    "type": "action-start",
+    "actorId": "yojimbo",
+    "targetId": null,
+    "abilityId": "yojimbo-summon",
+    "framesBefore": 65
+   },
+   "startFrame": 1396,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 132.9,
+    "toPx": 132.4,
+    "ratio": 0.9968,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.929,
+    "centroidShiftPx": 2.9,
+    "areaRatio": 0.975
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 1,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 296.3,
+    "toPx": 296.3,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0.1,
+    "dy": 0,
+    "px": 0.1,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.3,
+     3.3
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 306.10276052332495,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 32.5,
+    "source": "log"
+   },
+   "designed": {
+    "cls": "castEnd",
+    "ms": 50
+   }
+  },
+  {
+   "id": 2,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 2709,
+   "tMs": 47836.4,
+   "dtMs": 7.700000000004366,
+   "stallMs": 115.5,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 88
+   },
+   "startFrame": 2709,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 133.5,
+    "toPx": 139.9,
+    "ratio": 1.0476,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.262,
+    "centroidShiftPx": 40.2,
+    "areaRatio": 1.087
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 290.1,
+    "toPx": 279.6,
+    "ratio": 0.9637,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9637,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 1.1,
+    "dy": 3,
+    "px": 3.2,
+    "gate": "dy",
+    "gatePx": 3,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.2,
+     0.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 299.5141774607672,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.3296258719086874,
+    "flash": false,
+    "overlap": 0.32593532022828153,
+    "anchorDistance": 0.12173402273626684,
+    "glide": null
+   },
+   "snapSmear": true
+  },
+  {
+   "id": 3,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 2796,
+   "tMs": 49281.6,
+   "dtMs": 19.799999999995634,
+   "stallMs": 0,
+   "cause": {
+    "type": "turn-start",
+    "actorId": "yuna",
+    "targetId": null,
+    "abilityId": null,
+    "framesBefore": 0
+   },
+   "startFrame": 2793,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 135.4,
+    "toPx": 129.2,
+    "ratio": 0.9543,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0.1,
+    "px": 0.1,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.262,
+    "centroidShiftPx": 38.2,
+    "areaRatio": 0.918
+   },
+   "ghost": {
+    "frames": 3,
+    "ms": 50,
+    "peak": 0.403,
+    "severity": 0.297,
+    "worstFrame": 2796
+   },
+   "blendFrames": 7,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 277.8,
+    "toPx": 288.3,
+    "ratio": 1.0378,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9636,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -1.1,
+    "dy": -2.9,
+    "px": 3.1,
+    "gate": "dy",
+    "gatePx": 2.9,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.2,
+     3.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 297.6135497587433,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/ghost-003-yojimbo-hurt-idle.jpg"
+  },
+  {
+   "id": 4,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "item",
+   "n": 3137,
+   "tMs": 54992.8,
+   "dtMs": 30.60000000000582,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 1
+   },
+   "startFrame": 3137,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 15.2,
+    "toPx": 15.2,
+    "ratio": 0.9997,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.1185,
+     "toWorld": 0.119,
+     "ratio": 1.0041,
+     "lockFrom": 1,
+     "lockTo": 1.004,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.245,
+    "centroidShiftPx": 40.9,
+    "areaRatio": 0.917
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 193.6,
+    "toPx": 176.2,
+    "ratio": 0.91,
+    "vs": "idle",
+    "pose": "item",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.91,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0.4,
+    "dy": -0.8,
+    "px": 0.9,
+    "gate": "dy",
+    "gatePx": 0.8,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.3,
+     0.6
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 1.2306,
+    "fromHeld": null,
+    "toHeld": 1.231,
+    "costPct": 23.1,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 199.0552812662855,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 37,
+    "strength": 0.33539267015706814,
+    "flash": true,
+    "overlap": 0.31151832460732987,
+    "anchorDistance": 0.0976556617643053,
+    "glide": null
+   },
+   "snapSmear": true,
+   "why": {
+    "reason": "item",
+    "ageMs": 34.6,
+    "source": "log"
+   },
+   "strip": "strips/swap-004-yuna-idle-item.jpg"
+  },
+  {
+   "id": 5,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 3225,
+   "tMs": 56444.8,
+   "dtMs": 15.900000000001455,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 89
+   },
+   "startFrame": 3225,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 132.3,
+    "toPx": 138.6,
+    "ratio": 1.0477,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0.1,
+    "px": 0.1,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.261,
+    "centroidShiftPx": 40.1,
+    "areaRatio": 1.083
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 285,
+    "toPx": 274.7,
+    "ratio": 0.9639,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9639,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 1.1,
+    "dy": 3,
+    "px": 3.2,
+    "gate": "dy",
+    "gatePx": 3,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.2,
+     0.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 294.2163319736007,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.3296258719086874,
+    "flash": false,
+    "overlap": 0.32593532022828153,
+    "anchorDistance": 0.12173402273626684,
+    "glide": null
+   },
+   "snapSmear": true
+  },
+  {
+   "id": 6,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "item",
+   "toPose": "idle",
+   "n": 3302,
+   "tMs": 57728.4,
+   "dtMs": 15.400000000001455,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 3299,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 21,
+    "toPx": 21,
+    "ratio": 1.0001,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.12,
+     "toWorld": 0.1191,
+     "ratio": 0.9926,
+     "lockFrom": 1.008,
+     "lockTo": 1,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.244,
+    "centroidShiftPx": 56.5,
+    "areaRatio": 1.092
+   },
+   "ghost": {
+    "frames": 2,
+    "ms": 33,
+    "peak": 0.317,
+    "severity": 0.24,
+    "worstFrame": 3302
+   },
+   "blendFrames": 6,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 237.8,
+    "toPx": 261,
+    "ratio": 1.0977,
+    "vs": "idle",
+    "pose": "item",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.911,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -0.6,
+    "dy": 1,
+    "px": 1.2,
+    "gate": "dy",
+    "gatePx": 1,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.8,
+     0.4
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 0.8124,
+    "fromHeld": 1.231,
+    "toHeld": null,
+    "costPct": -18.8,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 268.9033887848944,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 63.5,
+    "source": "log"
+   }
+  },
+  {
+   "id": 7,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 3312,
+   "tMs": 57896.2,
+   "dtMs": 16.89999999999418,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 3309,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 137,
+    "toPx": 130.7,
+    "ratio": 0.9542,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.262,
+    "centroidShiftPx": 38.4,
+    "areaRatio": 0.922
+   },
+   "ghost": {
+    "frames": 3,
+    "ms": 50,
+    "peak": 0.402,
+    "severity": 0.297,
+    "worstFrame": 3312
+   },
+   "blendFrames": 7,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 284.2,
+    "toPx": 294.9,
+    "ratio": 1.0375,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9639,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -1.1,
+    "dy": -3,
+    "px": 3.2,
+    "gate": "dy",
+    "gatePx": 3,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.2,
+     3.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 304.40006570301534,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/ghost-007-yojimbo-hurt-idle.jpg"
+  },
+  {
+   "id": 8,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "ready",
+   "n": 3319,
+   "tMs": 58016.3,
+   "dtMs": 20.60000000000582,
+   "stallMs": 0,
+   "cause": {
+    "type": "turn-start",
+    "actorId": "lulu",
+    "targetId": null,
+    "abilityId": null,
+    "framesBefore": 6
+   },
+   "startFrame": 3318,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 42.3,
+    "toPx": 37.8,
+    "ratio": 0.95,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": -4.5,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 4.5,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": true,
+   "failFeet": false,
+   "height": {
+    "fromPx": 270.3,
+    "toPx": 279.9,
+    "ratio": 1.0954,
+    "vs": "idle",
+    "pose": "ready",
+    "side": "to",
+    "class": "standing",
+    "stature": 1.0954,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "idle",
+    "toKey": "ready",
+    "settled": true,
+    "framesToSettle": 8,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": 9.7,
+      "dy": 8.7
+     },
+     "centroid": {
+      "dx": -6.8,
+      "dy": -1.5
+     }
+    },
+    "cutJumpPx": 0.2
+   },
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "menu",
+    "ageMs": 9,
+    "source": "log"
+   }
+  },
+  {
+   "id": 9,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "ready",
+   "toPose": "cast",
+   "n": 3427,
+   "tMs": 59812.9,
+   "dtMs": 16.599999999998545,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 16
+   },
+   "startFrame": 3426,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 31,
+    "toPx": 36.7,
+    "ratio": 1.1543,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": 6.8,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 6.8,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": true,
+   "failFeet": false,
+   "height": {
+    "fromPx": 232.9,
+    "toPx": 224.7,
+    "ratio": 0.9411,
+    "vs": "pair",
+    "pose": null,
+    "side": null,
+    "class": "standing>standing",
+    "stature": null,
+    "length": null,
+    "band": null,
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "ready",
+    "toKey": "cast",
+    "settled": true,
+    "framesToSettle": 8,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": -16.8,
+      "dy": -11.1
+     },
+     "centroid": {
+      "dx": 8.2,
+      "dy": -2.1
+     }
+    },
+    "cutJumpPx": 0.2
+   },
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 16.4,
+    "source": "log"
+   },
+   "strip": "strips/swap-009-lulu-ready-cast.jpg"
+  },
+  {
+   "id": 10,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 3522,
+   "tMs": 61396.3,
+   "dtMs": 18,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 3522,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 139,
+    "toPx": 145.6,
+    "ratio": 1.0476,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.26,
+    "centroidShiftPx": 42.4,
+    "areaRatio": 1.08
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 297.4,
+    "toPx": 286.5,
+    "ratio": 0.9633,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9633,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 1.2,
+    "dy": 3,
+    "px": 3.3,
+    "gate": "dy",
+    "gatePx": 3,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.3,
+     0.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 307.00718232640736,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.3296258719086874,
+    "flash": false,
+    "overlap": 0.32593532022828153,
+    "anchorDistance": 0.12173402273626684,
+    "glide": null
+   },
+   "snapSmear": true
+  },
+  {
+   "id": 11,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 3543,
+   "tMs": 61746.7,
+   "dtMs": 18.39999999999418,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 3542,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 53.8,
+    "toPx": 48.2,
+    "ratio": 0.9119,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": -4.5,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 4.5,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6.4
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": true,
+   "failFeet": false,
+   "height": {
+    "fromPx": 320.1,
+    "toPx": 305.5,
+    "ratio": 0.9701,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1.0308,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "cast",
+    "toKey": "idle",
+    "settled": true,
+    "framesToSettle": 8,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": 14.4,
+      "dy": 5.6
+     },
+     "centroid": {
+      "dx": -3.8,
+      "dy": 4.7
+     }
+    },
+    "cutJumpPx": 0.2
+   },
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 17,
+    "source": "log"
+   },
+   "strip": "strips/swap-011-lulu-cast-idle.jpg"
+  },
+  {
+   "id": 12,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 3553,
+   "tMs": 61911.2,
+   "dtMs": 15.39999999999418,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 3550,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 144,
+    "toPx": 137.4,
+    "ratio": 0.9543,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0.1,
+    "dy": -0.1,
+    "px": 0.1,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.26,
+    "centroidShiftPx": 40.2,
+    "areaRatio": 0.921
+   },
+   "ghost": {
+    "frames": 3,
+    "ms": 50,
+    "peak": 0.402,
+    "severity": 0.297,
+    "worstFrame": 3553
+   },
+   "blendFrames": 7,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 298.7,
+    "toPx": 309.8,
+    "ratio": 1.0374,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.964,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -1.1,
+    "dy": -3.2,
+    "px": 3.4,
+    "gate": "dy",
+    "gatePx": 3.2,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.2,
+     3.4
+    ],
+    "tolerancePx": 6.2,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 319.8447474947806,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/swap-012-yojimbo-hurt-idle.jpg"
+  },
+  {
+   "id": 13,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 3565,
+   "tMs": 62112.6,
+   "dtMs": 17.099999999998545,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "lulu",
+    "abilityId": null,
+    "framesBefore": 8
+   },
+   "startFrame": 3565,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 133.1,
+    "toPx": 133.5,
+    "ratio": 1.0032,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.936,
+    "centroidShiftPx": 3.5,
+    "areaRatio": 1.029
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 299.9,
+    "toPx": 299.9,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "to",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -0.1,
+    "dy": 0,
+    "px": 0.1,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.3,
+     3.3
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 309.65494505981985,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.22000000000000003,
+    "flash": true,
+    "overlap": 0.902283105022831,
+    "anchorDistance": 0.010440658072970085,
+    "glide": null
+   },
+   "snapSmear": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 30.5,
+    "source": "log"
+   }
+  },
+  {
+   "id": 14,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 3622,
+   "tMs": 63062,
+   "dtMs": 16.5,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "lulu",
+    "abilityId": null,
+    "framesBefore": 65
+   },
+   "startFrame": 3621,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 138.3,
+    "toPx": 137.9,
+    "ratio": 0.9968,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0.1,
+    "dy": 0,
+    "px": 0.1,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.938,
+    "centroidShiftPx": 3.5,
+    "areaRatio": 0.973
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 1,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 308.6,
+    "toPx": 308.6,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0.2,
+    "dy": 0,
+    "px": 0.2,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.4,
+     3.4
+    ],
+    "tolerancePx": 6.2,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 318.71628841337866,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 33.9,
+    "source": "log"
+   },
+   "designed": {
+    "cls": "castEnd",
+    "ms": 50
+   }
+  },
+  {
+   "id": 15,
+   "figure": "daigoro",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 3637,
+   "tMs": 63318.1,
+   "dtMs": 23.299999999995634,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "lulu",
+    "abilityId": null,
+    "framesBefore": 80
+   },
+   "startFrame": 3637,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 53.4,
+    "toPx": 53.4,
+    "ratio": 1.0005,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.999,
+    "centroidShiftPx": 0,
+    "areaRatio": 1.001
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 76.9,
+    "toPx": 76.9,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "to",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     2.2,
+     2.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 79.85156541984625,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.22000000000000003,
+    "flash": true,
+    "overlap": 1,
+    "anchorDistance": 0,
+    "glide": null
+   },
+   "snapSmear": false,
+   "why": {
+    "reason": "cast",
+    "ageMs": 37.7,
+    "source": "log"
+   }
+  },
+  {
+   "id": 16,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 3701,
+   "tMs": 64378.7,
+   "dtMs": 17.19999999999709,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 3700,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 43.6,
+    "toPx": 44,
+    "ratio": 1.0076,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": 5.1,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 5.1,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 13,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 281.9,
+    "toPx": 255.5,
+    "ratio": 0.9131,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9131,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "idle",
+    "toKey": "hurt",
+    "settled": true,
+    "framesToSettle": 13,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": -38.7,
+      "dy": 12.7
+     },
+     "centroid": {
+      "dx": 3.2,
+      "dy": -3.9
+     }
+    },
+    "cutJumpPx": 0
+   },
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 17,
+   "figure": "daigoro",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 3725,
+   "tMs": 64777.8,
+   "dtMs": 15.900000000001455,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 3724,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 50.7,
+    "toPx": 50.7,
+    "ratio": 0.9995,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.999,
+    "centroidShiftPx": 0,
+    "areaRatio": 0.999
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 1,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 73.6,
+    "toPx": 73.6,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     2.1,
+     2.1
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 76.5023529049924,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 32,
+    "source": "log"
+   },
+   "designed": {
+    "cls": "castEnd",
+    "ms": 50
+   }
+  },
+  {
+   "id": 18,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 3730,
+   "tMs": 64862.3,
+   "dtMs": 16.900000000001455,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 3729,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 43.6,
+    "toPx": 42.2,
+    "ratio": 0.9925,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": -4.9,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 4.9,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 255.6,
+    "toPx": 273.3,
+    "ratio": 1.0951,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9131,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "hurt",
+    "toKey": "idle",
+    "settled": true,
+    "framesToSettle": 8,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": 37.8,
+      "dy": -12
+     },
+     "centroid": {
+      "dx": -3.1,
+      "dy": 3.8
+     }
+    },
+    "cutJumpPx": 0.1
+   },
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 19,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 4063,
+   "tMs": 70413.2,
+   "dtMs": 18.69999999999709,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 89
+   },
+   "startFrame": 4063,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 132,
+    "toPx": 138.3,
+    "ratio": 1.0474,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.26,
+    "centroidShiftPx": 39.7,
+    "areaRatio": 1.085
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 284.3,
+    "toPx": 273.9,
+    "ratio": 0.9633,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9633,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 1.1,
+    "dy": 2.9,
+    "px": 3.1,
+    "gate": "dy",
+    "gatePx": 2.9,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.2,
+     0.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 293.4702412511361,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.3296258719086874,
+    "flash": false,
+    "overlap": 0.32593532022828153,
+    "anchorDistance": 0.12173402273626684,
+    "glide": null
+   },
+   "snapSmear": true
+  },
+  {
+   "id": 20,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 4150,
+   "tMs": 71861.6,
+   "dtMs": 17.5,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 4147,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 137.1,
+    "toPx": 130.8,
+    "ratio": 0.954,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.261,
+    "centroidShiftPx": 38.3,
+    "areaRatio": 0.921
+   },
+   "ghost": {
+    "frames": 3,
+    "ms": 50,
+    "peak": 0.401,
+    "severity": 0.296,
+    "worstFrame": 4150
+   },
+   "blendFrames": 7,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 284.6,
+    "toPx": 295.3,
+    "ratio": 1.0377,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9637,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -1.1,
+    "dy": -3,
+    "px": 3.2,
+    "gate": "dy",
+    "gatePx": 3,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.2,
+     3.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 304.86025077074254,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 21,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "item",
+   "n": 4399,
+   "tMs": 76011.7,
+   "dtMs": 15.30000000000291,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 1
+   },
+   "startFrame": 4399,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 15.4,
+    "toPx": 15.4,
+    "ratio": 1.0001,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.1191,
+     "toWorld": 0.1196,
+     "ratio": 1.0039,
+     "lockFrom": 1,
+     "lockTo": 1.004,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": -0.1,
+    "dy": 0.1,
+    "px": 0.1,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.245,
+    "centroidShiftPx": 41.1,
+    "areaRatio": 0.918
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 195.9,
+    "toPx": 178.2,
+    "ratio": 0.9101,
+    "vs": "idle",
+    "pose": "item",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9101,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0.4,
+    "dy": -0.7,
+    "px": 0.8,
+    "gate": "dy",
+    "gatePx": 0.7,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.3,
+     0.6
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 1.2311,
+    "fromHeld": null,
+    "toHeld": 1.231,
+    "costPct": 23.1,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 201.29487077419535,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 37,
+    "strength": 0.33539267015706814,
+    "flash": true,
+    "overlap": 0.31151832460732987,
+    "anchorDistance": 0.09764991861255698,
+    "glide": null
+   },
+   "snapSmear": true,
+   "why": {
+    "reason": "item",
+    "ageMs": 17.8,
+    "source": "log"
+   }
+  },
+  {
+   "id": 22,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 4487,
+   "tMs": 77477.7,
+   "dtMs": 16.5,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 89
+   },
+   "startFrame": 4487,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 132.4,
+    "toPx": 138.7,
+    "ratio": 1.0476,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.261,
+    "centroidShiftPx": 40.3,
+    "areaRatio": 1.089
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 285.4,
+    "toPx": 275,
+    "ratio": 0.9634,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9634,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 1.1,
+    "dy": 2.9,
+    "px": 3.1,
+    "gate": "dy",
+    "gatePx": 2.9,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.2,
+     0.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 294.66211582081604,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.3296258719086874,
+    "flash": false,
+    "overlap": 0.32593532022828153,
+    "anchorDistance": 0.12173402273626684,
+    "glide": null
+   },
+   "snapSmear": true
+  },
+  {
+   "id": 23,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "item",
+   "toPose": "idle",
+   "n": 4564,
+   "tMs": 78762.1,
+   "dtMs": 17.30000000000291,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 4561,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 21.1,
+    "toPx": 21.1,
+    "ratio": 0.9996,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.1204,
+     "toWorld": 0.1194,
+     "ratio": 0.9923,
+     "lockFrom": 1.008,
+     "lockTo": 1,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.242,
+    "centroidShiftPx": 56.8,
+    "areaRatio": 1.09
+   },
+   "ghost": {
+    "frames": 2,
+    "ms": 35,
+    "peak": 0.319,
+    "severity": 0.242,
+    "worstFrame": 4564
+   },
+   "blendFrames": 6,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 239.8,
+    "toPx": 263.3,
+    "ratio": 1.098,
+    "vs": "idle",
+    "pose": "item",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9108,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -0.7,
+    "dy": 1,
+    "px": 1.2,
+    "gate": "dy",
+    "gatePx": 1,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.8,
+     0.4
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 0.812,
+    "fromHeld": 1.231,
+    "toHeld": null,
+    "costPct": -18.8,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 271.3332867526577,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 66.2,
+    "source": "log"
+   },
+   "strip": "strips/swap-023-yuna-item-idle.jpg"
+  },
+  {
+   "id": 24,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 4574,
+   "tMs": 78927.8,
+   "dtMs": 16.10000000000582,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 4571,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 136.8,
+    "toPx": 130.6,
+    "ratio": 0.9543,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.26,
+    "centroidShiftPx": 38.2,
+    "areaRatio": 0.919
+   },
+   "ghost": {
+    "frames": 3,
+    "ms": 51,
+    "peak": 0.402,
+    "severity": 0.297,
+    "worstFrame": 4574
+   },
+   "blendFrames": 7,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 283.5,
+    "toPx": 294.2,
+    "ratio": 1.0378,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9636,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -1.1,
+    "dy": -3,
+    "px": 3.2,
+    "gate": "dy",
+    "gatePx": 3,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.2,
+     3.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 303.70538767035396,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "turn-start",
+    "ageMs": -13.2,
+    "source": "log"
+   }
+  },
+  {
+   "id": 25,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 4582,
+   "tMs": 79061.5,
+   "dtMs": 17,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yuna",
+    "abilityId": null,
+    "framesBefore": 7
+   },
+   "startFrame": 4582,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 128,
+    "toPx": 128.3,
+    "ratio": 1.0031,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.939,
+    "centroidShiftPx": 3.2,
+    "areaRatio": 1.029
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 287.9,
+    "toPx": 287.9,
+    "ratio": 0.9998,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9998,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -0.1,
+    "dy": 0,
+    "px": 0.1,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.2,
+     3.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 297.27060483673796,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.22000000000000003,
+    "flash": true,
+    "overlap": 0.902283105022831,
+    "anchorDistance": 0.010440658072970085,
+    "glide": null
+   },
+   "snapSmear": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 29.6,
+    "source": "log"
+   }
+  },
+  {
+   "id": 26,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 4640,
+   "tMs": 80026.8,
+   "dtMs": 15.19999999999709,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yuna",
+    "abilityId": null,
+    "framesBefore": 65
+   },
+   "startFrame": 4639,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 132.8,
+    "toPx": 132.4,
+    "ratio": 0.9968,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.936,
+    "centroidShiftPx": 3,
+    "areaRatio": 0.975
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 1,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 296.2,
+    "toPx": 296.2,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0.1,
+    "dy": 0,
+    "px": 0.1,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.3,
+     3.3
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 305.8137505083772,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 32.4,
+    "source": "log"
+   },
+   "designed": {
+    "cls": "castEnd",
+    "ms": 50
+   }
+  },
+  {
+   "id": 27,
+   "figure": "daigoro",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 4654,
+   "tMs": 80260.2,
+   "dtMs": 16,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yuna",
+    "abilityId": null,
+    "framesBefore": 79
+   },
+   "startFrame": 4654,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 51.5,
+    "toPx": 51.6,
+    "ratio": 1.0005,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.999,
+    "centroidShiftPx": 0,
+    "areaRatio": 1.001
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 74.4,
+    "toPx": 74.4,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "to",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     2.1,
+     2.1
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 77.25195790399101,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 37,
+    "strength": 0.22000000000000003,
+    "flash": true,
+    "overlap": 1,
+    "anchorDistance": 0,
+    "glide": null
+   },
+   "snapSmear": false,
+   "why": {
+    "reason": "cast",
+    "ageMs": 30,
+    "source": "log"
+   }
+  },
+  {
+   "id": 28,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 4719,
+   "tMs": 81351.4,
+   "dtMs": 22.89999999999418,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 4719,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 18.8,
+    "toPx": 18.8,
+    "ratio": 1.0002,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.1194,
+     "toWorld": 0.1202,
+     "ratio": 1.007,
+     "lockFrom": 1,
+     "lockTo": 1.007,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": -0.1,
+    "dy": 0.1,
+    "px": 0.2,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.226,
+    "centroidShiftPx": 54.2,
+    "areaRatio": 0.905
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 223.9,
+    "toPx": 201.8,
+    "ratio": 0.9011,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9011,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 22.7,
+    "dy": -1,
+    "px": 22.7,
+    "gate": "dy",
+    "gatePx": 1,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.4,
+     22.6
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 1.1632,
+    "fromHeld": null,
+    "toHeld": 1.163,
+    "costPct": 16.3,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 230.41762627889395,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.34483011463230584,
+    "flash": false,
+    "overlap": 0.3487766788131182,
+    "anchorDistance": 0.09119398885391124,
+    "glide": null
+   },
+   "snapSmear": true
+  },
+  {
+   "id": 29,
+   "figure": "daigoro",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 4742,
+   "tMs": 81727.4,
+   "dtMs": 16.19999999999709,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 4741,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 48.7,
+    "toPx": 48.7,
+    "ratio": 0.9995,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.999,
+    "centroidShiftPx": 0,
+    "areaRatio": 0.999
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 1,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 70.7,
+    "toPx": 70.7,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     2,
+     2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 73.40551750379535,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 31.9,
+    "source": "log"
+   },
+   "designed": {
+    "cls": "castEnd",
+    "ms": 50
+   }
+  },
+  {
+   "id": 30,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 4751,
+   "tMs": 81877.9,
+   "dtMs": 17.59999999999127,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 4748,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 18.7,
+    "toPx": 18.6,
+    "ratio": 0.9995,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.1204,
+     "toWorld": 0.1196,
+     "ratio": 0.993,
+     "lockFrom": 1.007,
+     "lockTo": 1,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": 0.1,
+    "dy": -0.2,
+    "px": 0.3,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.225,
+    "centroidShiftPx": 50.5,
+    "areaRatio": 1.104
+   },
+   "ghost": {
+    "frames": 3,
+    "ms": 50,
+    "peak": 0.326,
+    "severity": 0.253,
+    "worstFrame": 4751
+   },
+   "blendFrames": 6,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 215.1,
+    "toPx": 238.5,
+    "ratio": 1.1092,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9016,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -20.8,
+    "dy": 0.4,
+    "px": 20.8,
+    "gate": "dy",
+    "gatePx": 0.4,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     20.7,
+     0.4
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 0.8594,
+    "fromHeld": 1.163,
+    "toHeld": null,
+    "costPct": -14.1,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 246.09124324120106,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/swap-030-yuna-hurt-idle.jpg"
+  },
+  {
+   "id": 31,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 5075,
+   "tMs": 87278.8,
+   "dtMs": 16.60000000000582,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 89
+   },
+   "startFrame": 5075,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 131.9,
+    "toPx": 138.2,
+    "ratio": 1.0477,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.259,
+    "centroidShiftPx": 40.1,
+    "areaRatio": 1.081
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 284.1,
+    "toPx": 273.8,
+    "ratio": 0.9636,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9636,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 1.1,
+    "dy": 2.9,
+    "px": 3.1,
+    "gate": "dy",
+    "gatePx": 2.9,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.2,
+     0.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 293.3132497859583,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.3296258719086874,
+    "flash": false,
+    "overlap": 0.32593532022828153,
+    "anchorDistance": 0.12173402273626684,
+    "glide": null
+   },
+   "snapSmear": true,
+   "strip": "strips/swap-031-yojimbo-idle-hurt.jpg"
+  },
+  {
+   "id": 32,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 5178,
+   "tMs": 88994.4,
+   "dtMs": 16.29999999998836,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 5175,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 136.3,
+    "toPx": 130.1,
+    "ratio": 0.9541,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.26,
+    "centroidShiftPx": 38,
+    "areaRatio": 0.921
+   },
+   "ghost": {
+    "frames": 3,
+    "ms": 50,
+    "peak": 0.402,
+    "severity": 0.297,
+    "worstFrame": 5178
+   },
+   "blendFrames": 7,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 282.1,
+    "toPx": 292.7,
+    "ratio": 1.0376,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9638,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -1.1,
+    "dy": -3,
+    "px": 3.2,
+    "gate": "dy",
+    "gatePx": 3,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.2,
+     3.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 302.1500165480718,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 33,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "ready",
+   "n": 5185,
+   "tMs": 89119.6,
+   "dtMs": 22.60000000000582,
+   "stallMs": 0,
+   "cause": {
+    "type": "turn-start",
+    "actorId": "lulu",
+    "targetId": null,
+    "abilityId": null,
+    "framesBefore": 6
+   },
+   "startFrame": 5184,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 42.2,
+    "toPx": 37.7,
+    "ratio": 0.95,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": -4.4,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 4.4,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": true,
+   "failFeet": false,
+   "height": {
+    "fromPx": 269.6,
+    "toPx": 279.3,
+    "ratio": 1.0954,
+    "vs": "idle",
+    "pose": "ready",
+    "side": "to",
+    "class": "standing",
+    "stature": 1.0954,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "idle",
+    "toKey": "ready",
+    "settled": true,
+    "framesToSettle": 8,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": 8.2,
+      "dy": 9.6
+     },
+     "centroid": {
+      "dx": -6.8,
+      "dy": -1.5
+     }
+    },
+    "cutJumpPx": 0.2
+   },
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "menu",
+    "ageMs": 9.2,
+    "source": "log"
+   }
+  },
+  {
+   "id": 34,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "ready",
+   "toPose": "cast",
+   "n": 5299,
+   "tMs": 91011.2,
+   "dtMs": 16.69999999999709,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 16
+   },
+   "startFrame": 5298,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 31,
+    "toPx": 36.7,
+    "ratio": 1.1543,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": 6.8,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 6.8,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": true,
+   "failFeet": false,
+   "height": {
+    "fromPx": 232.9,
+    "toPx": 224.7,
+    "ratio": 0.9411,
+    "vs": "pair",
+    "pose": null,
+    "side": null,
+    "class": "standing>standing",
+    "stature": null,
+    "length": null,
+    "band": null,
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "ready",
+    "toKey": "cast",
+    "settled": true,
+    "framesToSettle": 8,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": -16.4,
+      "dy": -12.9
+     },
+     "centroid": {
+      "dx": 8.2,
+      "dy": -2.1
+     }
+    },
+    "cutJumpPx": 0.2
+   },
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 16.3,
+    "source": "log"
+   }
+  },
+  {
+   "id": 35,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 5394,
+   "tMs": 92595.4,
+   "dtMs": 15.799999999988358,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 5394,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 138.6,
+    "toPx": 145.2,
+    "ratio": 1.0477,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.262,
+    "centroidShiftPx": 42.3,
+    "areaRatio": 1.088
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 295.6,
+    "toPx": 284.8,
+    "ratio": 0.9635,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9635,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 1.2,
+    "dy": 3,
+    "px": 3.3,
+    "gate": "dy",
+    "gatePx": 3,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.3,
+     0.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 305.1873195268767,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 37,
+    "strength": 0.3296258719086874,
+    "flash": false,
+    "overlap": 0.32593532022828153,
+    "anchorDistance": 0.12173402273626684,
+    "glide": null
+   },
+   "snapSmear": true
+  },
+  {
+   "id": 36,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 5415,
+   "tMs": 92946,
+   "dtMs": 17.19999999999709,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 5414,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 53.9,
+    "toPx": 48.3,
+    "ratio": 0.9119,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": -4.5,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 4.5,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6.4
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": true,
+   "failFeet": false,
+   "height": {
+    "fromPx": 320.7,
+    "toPx": 306.3,
+    "ratio": 0.9701,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1.0308,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "cast",
+    "toKey": "idle",
+    "settled": true,
+    "framesToSettle": 8,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": 14.9,
+      "dy": 6.5
+     },
+     "centroid": {
+      "dx": -3.8,
+      "dy": 4.7
+     }
+    },
+    "cutJumpPx": 0.2
+   },
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 15.1,
+    "source": "log"
+   }
+  },
+  {
+   "id": 37,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 5425,
+   "tMs": 93112.1,
+   "dtMs": 17.20000000001164,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 5422,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 142.5,
+    "toPx": 136,
+    "ratio": 0.9547,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0.1,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.263,
+    "centroidShiftPx": 39.9,
+    "areaRatio": 0.923
+   },
+   "ghost": {
+    "frames": 3,
+    "ms": 50,
+    "peak": 0.402,
+    "severity": 0.296,
+    "worstFrame": 5425
+   },
+   "blendFrames": 7,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 293,
+    "toPx": 304.2,
+    "ratio": 1.0381,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9633,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -1.1,
+    "dy": -3.1,
+    "px": 3.2,
+    "gate": "dy",
+    "gatePx": 3.1,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.2,
+     3.3
+    ],
+    "tolerancePx": 6.1,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 314.00003582802344,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 38,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "item",
+   "n": 5683,
+   "tMs": 97410.8,
+   "dtMs": 16.30000000000291,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 1
+   },
+   "startFrame": 5683,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 16.2,
+    "toPx": 16.2,
+    "ratio": 0.9999,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.1192,
+     "toWorld": 0.1197,
+     "ratio": 1.0044,
+     "lockFrom": 1,
+     "lockTo": 1.004,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.246,
+    "centroidShiftPx": 43.1,
+    "areaRatio": 0.913
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 206.4,
+    "toPx": 187.8,
+    "ratio": 0.9099,
+    "vs": "idle",
+    "pose": "item",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9099,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0.5,
+    "dy": -0.8,
+    "px": 0.9,
+    "gate": "dy",
+    "gatePx": 0.8,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.3,
+     0.6
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 1.2309,
+    "fromHeld": null,
+    "toHeld": 1.231,
+    "costPct": 23.1,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 212.30495166151914,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.33539267015706814,
+    "flash": true,
+    "overlap": 0.31151832460732987,
+    "anchorDistance": 0.09767475711325795,
+    "glide": null
+   },
+   "snapSmear": true,
+   "why": {
+    "reason": "item",
+    "ageMs": 26,
+    "source": "log"
+   }
+  },
+  {
+   "id": 39,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 5771,
+   "tMs": 98878.4,
+   "dtMs": 16,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 89
+   },
+   "startFrame": 5771,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 139.3,
+    "toPx": 145.8,
+    "ratio": 1.0474,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.262,
+    "centroidShiftPx": 41.9,
+    "areaRatio": 1.085
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 303.3,
+    "toPx": 292.3,
+    "ratio": 0.9635,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9635,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 1.1,
+    "dy": 3.1,
+    "px": 3.3,
+    "gate": "dy",
+    "gatePx": 3.1,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.4,
+     0.2
+    ],
+    "tolerancePx": 6.1,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 313.17936154861815,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.3296258719086874,
+    "flash": false,
+    "overlap": 0.32593532022828153,
+    "anchorDistance": 0.12173402273626684,
+    "glide": null
+   },
+   "snapSmear": true
+  },
+  {
+   "id": 40,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "item",
+   "toPose": "idle",
+   "n": 5848,
+   "tMs": 100161.7,
+   "dtMs": 17.09999999999127,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 5845,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 22.5,
+    "toPx": 22.5,
+    "ratio": 1.0005,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.1198,
+     "toWorld": 0.1188,
+     "ratio": 0.9918,
+     "lockFrom": 1.008,
+     "lockTo": 1,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.243,
+    "centroidShiftPx": 60.8,
+    "areaRatio": 1.093
+   },
+   "ghost": {
+    "frames": 2,
+    "ms": 33,
+    "peak": 0.319,
+    "severity": 0.241,
+    "worstFrame": 5848
+   },
+   "blendFrames": 6,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 253.7,
+    "toPx": 278.5,
+    "ratio": 1.0977,
+    "vs": "idle",
+    "pose": "item",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.911,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -0.7,
+    "dy": 1.1,
+    "px": 1.3,
+    "gate": "dy",
+    "gatePx": 1.1,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.8,
+     0.5
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 0.8128,
+    "fromHeld": 1.231,
+    "toHeld": null,
+    "costPct": -18.7,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 287.1050330453995,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 64.9,
+    "source": "log"
+   },
+   "strip": "strips/ghost-040-yuna-item-idle.jpg"
+  },
+  {
+   "id": 41,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 5858,
+   "tMs": 100328.1,
+   "dtMs": 16.80000000000291,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 5855,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 141,
+    "toPx": 134.6,
+    "ratio": 0.9545,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.26,
+    "centroidShiftPx": 39.7,
+    "areaRatio": 0.927
+   },
+   "ghost": {
+    "frames": 3,
+    "ms": 53,
+    "peak": 0.402,
+    "severity": 0.297,
+    "worstFrame": 5858
+   },
+   "blendFrames": 7,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 289.4,
+    "toPx": 300.3,
+    "ratio": 1.0378,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9636,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -1.2,
+    "dy": -3.1,
+    "px": 3.3,
+    "gate": "dy",
+    "gatePx": 3.1,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.2,
+     3.3
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 310.00316127420376,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "turn-start",
+    "ageMs": -15.8,
+    "source": "log"
+   }
+  },
+  {
+   "id": 42,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 5866,
+   "tMs": 100463.4,
+   "dtMs": 18.39999999999418,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "lulu",
+    "abilityId": null,
+    "framesBefore": 7
+   },
+   "startFrame": 5866,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 132.1,
+    "toPx": 132.5,
+    "ratio": 1.0031,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.935,
+    "centroidShiftPx": 3.6,
+    "areaRatio": 1.028
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 295,
+    "toPx": 295,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "to",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -0.1,
+    "dy": 0,
+    "px": 0.1,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.2,
+     3.3
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 304.57759684520465,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.22000000000000003,
+    "flash": true,
+    "overlap": 0.902283105022831,
+    "anchorDistance": 0.010440658072970085,
+    "glide": null
+   },
+   "snapSmear": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 29.7,
+    "source": "log"
+   }
+  },
+  {
+   "id": 43,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 5924,
+   "tMs": 101429.6,
+   "dtMs": 19,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "lulu",
+    "abilityId": null,
+    "framesBefore": 65
+   },
+   "startFrame": 5923,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 139.5,
+    "toPx": 139,
+    "ratio": 0.9966,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.934,
+    "centroidShiftPx": 3.8,
+    "areaRatio": 0.97
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 1,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 313.3,
+    "toPx": 313.3,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0.1,
+    "dy": 0,
+    "px": 0.1,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.5,
+     3.4
+    ],
+    "tolerancePx": 6.3,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 323.5584529880187,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 34.4,
+    "source": "log"
+   },
+   "designed": {
+    "cls": "castEnd",
+    "ms": 50
+   }
+  },
+  {
+   "id": 44,
+   "figure": "daigoro",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 5938,
+   "tMs": 101660.9,
+   "dtMs": 16.89999999999418,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "lulu",
+    "abilityId": null,
+    "framesBefore": 79
+   },
+   "startFrame": 5938,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 53.6,
+    "toPx": 53.6,
+    "ratio": 1.0005,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.999,
+    "centroidShiftPx": 0,
+    "areaRatio": 1.001
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 77.1,
+    "toPx": 77.1,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "to",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     2.2,
+     2.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 80.20504971633649,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 37,
+    "strength": 0.22000000000000003,
+    "flash": true,
+    "overlap": 1,
+    "anchorDistance": 0,
+    "glide": null
+   },
+   "snapSmear": false,
+   "why": {
+    "reason": "cast",
+    "ageMs": 30.4,
+    "source": "log"
+   }
+  },
+  {
+   "id": 45,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "critical",
+   "n": 5995,
+   "tMs": 102612.7,
+   "dtMs": 17.69999999999709,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 5994,
+   "camCut": true,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 49.2,
+    "toPx": 45.8,
+    "ratio": 1.0485,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": null,
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 7,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": true,
+   "failFeet": false,
+   "height": {
+    "fromPx": 311.2,
+    "toPx": 232.5,
+    "ratio": 0.8231,
+    "vs": "idle",
+    "pose": "critical",
+    "side": "to",
+    "class": "low",
+    "stature": 0.8231,
+    "length": null,
+    "band": [
+     0.75,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "idle",
+    "toKey": "critical",
+    "settled": false,
+    "framesToSettle": null,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": 31.3,
+      "dy": 44.9
+     },
+     "centroid": {
+      "dx": -23.6,
+      "dy": 16.2
+     }
+    },
+    "cutJumpPx": 0.8
+   },
+   "notShowing": false,
+   "counted": false
+  },
+  {
+   "id": 46,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "critical",
+   "toPose": "hurt",
+   "n": 6002,
+   "tMs": 102728,
+   "dtMs": 15.89999999999418,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 6001,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 45.8,
+    "toPx": 44.1,
+    "ratio": 0.961,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": null,
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 13,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": true,
+   "failFeet": false,
+   "height": {
+    "fromPx": 232.5,
+    "toPx": 256.1,
+    "ratio": 1.1094,
+    "vs": "pair",
+    "pose": null,
+    "side": null,
+    "class": "low>standing",
+    "stature": null,
+    "length": null,
+    "band": null,
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "critical",
+    "toKey": "hurt",
+    "settled": true,
+    "framesToSettle": 13,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": -69.2,
+      "dy": -31.1
+     },
+     "centroid": {
+      "dx": 27,
+      "dy": -20
+     }
+    },
+    "cutJumpPx": 0
+   },
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 47,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "critical",
+   "n": 6032,
+   "tMs": 103227.3,
+   "dtMs": 16.40000000000873,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 6031,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 44,
+    "toPx": 45.9,
+    "ratio": 1.0444,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": -11.1,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 11.1,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": true,
+   "failFeet": false,
+   "height": {
+    "fromPx": 257.7,
+    "toPx": 228.4,
+    "ratio": 0.8864,
+    "vs": "pair",
+    "pose": null,
+    "side": null,
+    "class": "standing>low",
+    "stature": null,
+    "length": null,
+    "band": null,
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "hurt",
+    "toKey": "critical",
+    "settled": true,
+    "framesToSettle": 8,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": 70.4,
+      "dy": 38.3
+     },
+     "centroid": {
+      "dx": -28.6,
+      "dy": 21.4
+     }
+    },
+    "cutJumpPx": 1
+   },
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 48,
+   "figure": "daigoro",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 6042,
+   "tMs": 103394.9,
+   "dtMs": 17.5,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 6041,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 50.8,
+    "toPx": 50.8,
+    "ratio": 0.9995,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.999,
+    "centroidShiftPx": 0,
+    "areaRatio": 0.999
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 1,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 73.9,
+    "toPx": 73.9,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     2.1,
+     2.1
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 76.80079752190073,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 31.1,
+    "source": "log"
+   },
+   "designed": {
+    "cls": "castEnd",
+    "ms": 50
+   }
+  },
+  {
+   "id": 49,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "critical",
+   "toPose": "idle",
+   "n": 6290,
+   "tMs": 107528.2,
+   "dtMs": 16.80000000000291,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 6289,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 45.9,
+    "toPx": 43.7,
+    "ratio": 0.9503,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": 6,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 6,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": true,
+   "failFeet": false,
+   "height": {
+    "fromPx": 228.6,
+    "toPx": 282.4,
+    "ratio": 1.2355,
+    "vs": "idle",
+    "pose": "critical",
+    "side": "from",
+    "class": "low",
+    "stature": 0.8094,
+    "length": null,
+    "band": [
+     0.75,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "critical",
+    "toKey": "idle",
+    "settled": true,
+    "framesToSettle": 8,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": -31.6,
+      "dy": -50.7
+     },
+     "centroid": {
+      "dx": 25.4,
+      "dy": -17.4
+     }
+    },
+    "cutJumpPx": 0.8
+   },
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 50,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "item",
+   "n": 6574,
+   "tMs": 112260.6,
+   "dtMs": 17.10000000000582,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 1
+   },
+   "startFrame": 6574,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 16.1,
+    "toPx": 16.1,
+    "ratio": 0.9997,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.1186,
+     "toWorld": 0.1191,
+     "ratio": 1.0042,
+     "lockFrom": 1,
+     "lockTo": 1.004,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.246,
+    "centroidShiftPx": 43.1,
+    "areaRatio": 0.918
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 204,
+    "toPx": 185.6,
+    "ratio": 0.9098,
+    "vs": "idle",
+    "pose": "item",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9098,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0.5,
+    "dy": -0.8,
+    "px": 0.9,
+    "gate": "dy",
+    "gatePx": 0.8,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.3,
+     0.6
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 1.2306,
+    "fromHeld": null,
+    "toHeld": 1.231,
+    "costPct": 23.1,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 209.60059637319742,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.33539267015706814,
+    "flash": true,
+    "overlap": 0.31151832460732987,
+    "anchorDistance": 0.09767085709621333,
+    "glide": null
+   },
+   "snapSmear": true,
+   "why": {
+    "reason": "item",
+    "ageMs": 22.5,
+    "source": "log"
+   }
+  },
+  {
+   "id": 51,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 6662,
+   "tMs": 113727.3,
+   "dtMs": 16.60000000000582,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 89
+   },
+   "startFrame": 6662,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 138.2,
+    "toPx": 144.8,
+    "ratio": 1.0476,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.26,
+    "centroidShiftPx": 41.8,
+    "areaRatio": 1.084
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 298.5,
+    "toPx": 287.7,
+    "ratio": 0.9636,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9636,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 1.2,
+    "dy": 3,
+    "px": 3.3,
+    "gate": "dy",
+    "gatePx": 3,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.3,
+     0.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 308.13141676888455,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.3296258719086874,
+    "flash": false,
+    "overlap": 0.32593532022828153,
+    "anchorDistance": 0.12173402273626684,
+    "glide": null
+   },
+   "snapSmear": true
+  },
+  {
+   "id": 52,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "item",
+   "toPose": "idle",
+   "n": 6739,
+   "tMs": 115011.1,
+   "dtMs": 16.40000000000873,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 6736,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 22.6,
+    "toPx": 22.6,
+    "ratio": 1.0004,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.1203,
+     "toWorld": 0.1192,
+     "ratio": 0.9913,
+     "lockFrom": 1.008,
+     "lockTo": 1,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0.1,
+    "px": 0.1,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.243,
+    "centroidShiftPx": 60.9,
+    "areaRatio": 1.092
+   },
+   "ghost": {
+    "frames": 2,
+    "ms": 34,
+    "peak": 0.317,
+    "severity": 0.24,
+    "worstFrame": 6739
+   },
+   "blendFrames": 6,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 255.8,
+    "toPx": 280.9,
+    "ratio": 1.0979,
+    "vs": "idle",
+    "pose": "item",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9108,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -0.7,
+    "dy": 1.1,
+    "px": 1.3,
+    "gate": "dy",
+    "gatePx": 1.1,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.8,
+     0.5
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 0.8127,
+    "fromHeld": 1.231,
+    "toHeld": null,
+    "costPct": -18.7,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 289.3769600365585,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 65.4,
+    "source": "log"
+   }
+  },
+  {
+   "id": 53,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 6749,
+   "tMs": 115178.1,
+   "dtMs": 16.5,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 6746,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 142.3,
+    "toPx": 135.8,
+    "ratio": 0.9544,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0.1,
+    "dy": 0,
+    "px": 0.1,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.26,
+    "centroidShiftPx": 39.8,
+    "areaRatio": 0.92
+   },
+   "ghost": {
+    "frames": 3,
+    "ms": 52,
+    "peak": 0.402,
+    "severity": 0.297,
+    "worstFrame": 6749
+   },
+   "blendFrames": 7,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 294.4,
+    "toPx": 305.4,
+    "ratio": 1.0377,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9637,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -1.1,
+    "dy": -3.1,
+    "px": 3.3,
+    "gate": "dy",
+    "gatePx": 3.1,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.2,
+     3.4
+    ],
+    "tolerancePx": 6.1,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 315.2988502992042,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "turn-start",
+    "ageMs": -15.1,
+    "source": "log"
+   }
+  },
+  {
+   "id": 54,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 6757,
+   "tMs": 115312.4,
+   "dtMs": 16.29999999998836,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yuna",
+    "abilityId": null,
+    "framesBefore": 7
+   },
+   "startFrame": 6757,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 133.4,
+    "toPx": 133.8,
+    "ratio": 1.0032,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -0.1,
+    "dy": 0,
+    "px": 0.1,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.933,
+    "centroidShiftPx": 3.7,
+    "areaRatio": 1.028
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 300.6,
+    "toPx": 300.6,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "to",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -0.2,
+    "dy": 0,
+    "px": 0.2,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.3,
+     3.4
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 310.25780006310885,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.22000000000000003,
+    "flash": true,
+    "overlap": 0.902283105022831,
+    "anchorDistance": 0.010440658072970085,
+    "glide": null
+   },
+   "snapSmear": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 28.1,
+    "source": "log"
+   }
+  },
+  {
+   "id": 55,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 6815,
+   "tMs": 116276.5,
+   "dtMs": 17,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yuna",
+    "abilityId": null,
+    "framesBefore": 65
+   },
+   "startFrame": 6814,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 139,
+    "toPx": 138.5,
+    "ratio": 0.9966,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.933,
+    "centroidShiftPx": 3.9,
+    "areaRatio": 0.972
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 1,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 311.3,
+    "toPx": 311.3,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0.1,
+    "dy": 0,
+    "px": 0.1,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.5,
+     3.4
+    ],
+    "tolerancePx": 6.2,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 321.5523130067641,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 33,
+    "source": "log"
+   },
+   "designed": {
+    "cls": "castEnd",
+    "ms": 50
+   }
+  },
+  {
+   "id": 56,
+   "figure": "daigoro",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 6829,
+   "tMs": 116508.8,
+   "dtMs": 16.19999999999709,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yuna",
+    "abilityId": null,
+    "framesBefore": 79
+   },
+   "startFrame": 6829,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 53.4,
+    "toPx": 53.4,
+    "ratio": 1.0005,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.999,
+    "centroidShiftPx": 0,
+    "areaRatio": 1.001
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 76.7,
+    "toPx": 76.7,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "to",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     2.2,
+     2.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 79.70627327883301,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 37,
+    "strength": 0.22000000000000003,
+    "flash": true,
+    "overlap": 1,
+    "anchorDistance": 0,
+    "glide": null
+   },
+   "snapSmear": false,
+   "why": {
+    "reason": "cast",
+    "ageMs": 30.8,
+    "source": "log"
+   }
+  },
+  {
+   "id": 57,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 6894,
+   "tMs": 117592.4,
+   "dtMs": 16.19999999999709,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 6894,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 20.1,
+    "toPx": 20.1,
+    "ratio": 1.0008,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.1189,
+     "toWorld": 0.1197,
+     "ratio": 1.007,
+     "lockFrom": 1,
+     "lockTo": 1.007,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0.3,
+    "px": 0.3,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.225,
+    "centroidShiftPx": 58.1,
+    "areaRatio": 0.9
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 237,
+    "toPx": 213.7,
+    "ratio": 0.9016,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9016,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 24.3,
+    "dy": -1.3,
+    "px": 24.3,
+    "gate": "dy",
+    "gatePx": 1.3,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.4,
+     24.1
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 1.1639,
+    "fromHeld": null,
+    "toHeld": 1.163,
+    "costPct": 16.4,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 243.85000512610196,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 37,
+    "strength": 0.34764430846661293,
+    "flash": false,
+    "overlap": 0.3487766788131182,
+    "anchorDistance": 0.0912117061220521,
+    "glide": null
+   },
+   "snapSmear": true,
+   "strip": "strips/swap-057-yuna-idle-hurt.jpg"
+  },
+  {
+   "id": 58,
+   "figure": "daigoro",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 6917,
+   "tMs": 117976,
+   "dtMs": 16.19999999999709,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 6916,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 50.8,
+    "toPx": 50.7,
+    "ratio": 0.9995,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.999,
+    "centroidShiftPx": 0,
+    "areaRatio": 0.999
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 1,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 73.8,
+    "toPx": 73.8,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     2.1,
+     2.1
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 76.70014667521833,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 32.8,
+    "source": "log"
+   },
+   "designed": {
+    "cls": "castEnd",
+    "ms": 50
+   }
+  },
+  {
+   "id": 59,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 6926,
+   "tMs": 118125.4,
+   "dtMs": 16.09999999999127,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 6923,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 19.9,
+    "toPx": 19.9,
+    "ratio": 0.9995,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.1204,
+     "toWorld": 0.1195,
+     "ratio": 0.9926,
+     "lockFrom": 1.007,
+     "lockTo": 1,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": 0,
+    "dy": -0.2,
+    "px": 0.2,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.226,
+    "centroidShiftPx": 53.7,
+    "areaRatio": 1.103
+   },
+   "ghost": {
+    "frames": 3,
+    "ms": 49,
+    "peak": 0.326,
+    "severity": 0.252,
+    "worstFrame": 6926
+   },
+   "blendFrames": 6,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 228.9,
+    "toPx": 253.9,
+    "ratio": 1.1094,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9014,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -22.2,
+    "dy": 0.8,
+    "px": 22.3,
+    "gate": "dy",
+    "gatePx": 0.8,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     22.1,
+     0.4
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 0.8594,
+    "fromHeld": 1.163,
+    "toHeld": null,
+    "costPct": -14.1,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 261.8769987990546,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/ghost-059-yuna-hurt-idle.jpg"
+  },
+  {
+   "id": 60,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "ready",
+   "n": 6937,
+   "tMs": 118310.9,
+   "dtMs": 18.09999999999127,
+   "stallMs": 0,
+   "cause": {
+    "type": "turn-start",
+    "actorId": "lulu",
+    "targetId": null,
+    "abilityId": null,
+    "framesBefore": 6
+   },
+   "startFrame": 6936,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 41.3,
+    "toPx": 37.5,
+    "ratio": 0.95,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": -4.4,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 4.4,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": true,
+   "failFeet": false,
+   "height": {
+    "fromPx": 267.8,
+    "toPx": 281.1,
+    "ratio": 1.0954,
+    "vs": "idle",
+    "pose": "ready",
+    "side": "to",
+    "class": "standing",
+    "stature": 1.0954,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "idle",
+    "toKey": "ready",
+    "settled": true,
+    "framesToSettle": 8,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": 8.4,
+      "dy": 8.4
+     },
+     "centroid": {
+      "dx": -6.7,
+      "dy": -1.5
+     }
+    },
+    "cutJumpPx": 0.2
+   },
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "menu",
+    "ageMs": 7.2,
+    "source": "log"
+   }
+  },
+  {
+   "id": 61,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "ready",
+   "toPose": "cast",
+   "n": 7046,
+   "tMs": 120126.3,
+   "dtMs": 16.80000000000291,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 16
+   },
+   "startFrame": 7045,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 32.7,
+    "toPx": 38.6,
+    "ratio": 1.1543,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": 7.1,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 7.1,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": true,
+   "failFeet": false,
+   "height": {
+    "fromPx": 245.4,
+    "toPx": 235.7,
+    "ratio": 0.9411,
+    "vs": "pair",
+    "pose": null,
+    "side": null,
+    "class": "standing>standing",
+    "stature": null,
+    "length": null,
+    "band": null,
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "ready",
+    "toKey": "cast",
+    "settled": true,
+    "framesToSettle": 8,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": -18.4,
+      "dy": -12.4
+     },
+     "centroid": {
+      "dx": 8.6,
+      "dy": -2.2
+     }
+    },
+    "cutJumpPx": 0.2
+   },
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 16.5,
+    "source": "log"
+   }
+  },
+  {
+   "id": 62,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 7141,
+   "tMs": 121709.5,
+   "dtMs": 16.39999999999418,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 7141,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 138.5,
+    "toPx": 145.1,
+    "ratio": 1.0476,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.26,
+    "centroidShiftPx": 42.7,
+    "areaRatio": 1.081
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 295.2,
+    "toPx": 284.4,
+    "ratio": 0.9634,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9634,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 1.2,
+    "dy": 3,
+    "px": 3.3,
+    "gate": "dy",
+    "gatePx": 3,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.3,
+     0.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 304.7138001469575,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.3296258719086874,
+    "flash": false,
+    "overlap": 0.32593532022828153,
+    "anchorDistance": 0.12173402273626684,
+    "glide": null
+   },
+   "snapSmear": true
+  },
+  {
+   "id": 63,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 7162,
+   "tMs": 122060,
+   "dtMs": 16.5,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 7161,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 53.9,
+    "toPx": 48.3,
+    "ratio": 0.9119,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": -4.5,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 4.5,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6.4
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": true,
+   "failFeet": false,
+   "height": {
+    "fromPx": 320.4,
+    "toPx": 305.9,
+    "ratio": 0.9701,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1.0308,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "cast",
+    "toKey": "idle",
+    "settled": true,
+    "framesToSettle": 8,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": 13.1,
+      "dy": 6.3
+     },
+     "centroid": {
+      "dx": -3.8,
+      "dy": 4.7
+     }
+    },
+    "cutJumpPx": 0.2
+   },
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 15.1,
+    "source": "log"
+   }
+  },
+  {
+   "id": 64,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 7172,
+   "tMs": 122226,
+   "dtMs": 16.39999999999418,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 7169,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 144,
+    "toPx": 137.4,
+    "ratio": 0.9544,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.26,
+    "centroidShiftPx": 40.3,
+    "areaRatio": 0.923
+   },
+   "ghost": {
+    "frames": 3,
+    "ms": 51,
+    "peak": 0.402,
+    "severity": 0.297,
+    "worstFrame": 7172
+   },
+   "blendFrames": 7,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 298.7,
+    "toPx": 310,
+    "ratio": 1.0378,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9636,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -1.1,
+    "dy": -3.2,
+    "px": 3.4,
+    "gate": "dy",
+    "gatePx": 3.2,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.2,
+     3.4
+    ],
+    "tolerancePx": 6.2,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 320.0079100584859,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 65,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 7508,
+   "tMs": 127826.6,
+   "dtMs": 16.40000000000873,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 89
+   },
+   "startFrame": 7508,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 137.5,
+    "toPx": 144.1,
+    "ratio": 1.0476,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.261,
+    "centroidShiftPx": 41.7,
+    "areaRatio": 1.089
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 296.2,
+    "toPx": 285.4,
+    "ratio": 0.9635,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9635,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 1.1,
+    "dy": 3,
+    "px": 3.2,
+    "gate": "dy",
+    "gatePx": 3,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.3,
+     0.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 305.79946451882483,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 37,
+    "strength": 0.3296258719086874,
+    "flash": false,
+    "overlap": 0.32593532022828153,
+    "anchorDistance": 0.12173402273626684,
+    "glide": null
+   },
+   "snapSmear": true
+  },
+  {
+   "id": 66,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 7595,
+   "tMs": 129277.2,
+   "dtMs": 16.80000000000291,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 7592,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 142.7,
+    "toPx": 136.2,
+    "ratio": 0.9545,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0.1,
+    "dy": 0,
+    "px": 0.1,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.261,
+    "centroidShiftPx": 39.4,
+    "areaRatio": 0.923
+   },
+   "ghost": {
+    "frames": 3,
+    "ms": 51,
+    "peak": 0.402,
+    "severity": 0.297,
+    "worstFrame": 7595
+   },
+   "blendFrames": 7,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 296.4,
+    "toPx": 307.7,
+    "ratio": 1.0378,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9635,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -1.1,
+    "dy": -3.2,
+    "px": 3.3,
+    "gate": "dy",
+    "gatePx": 3.2,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.2,
+     3.4
+    ],
+    "tolerancePx": 6.2,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 317.6030856273283,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 67,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 7729,
+   "tMs": 131518.8,
+   "dtMs": 25.5,
+   "stallMs": 0,
+   "cause": {
+    "type": "action-start",
+    "actorId": "yuna",
+    "targetId": null,
+    "abilityId": "nulblaze",
+    "framesBefore": 17
+   },
+   "startFrame": 7729,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 16.2,
+    "toPx": 16.2,
+    "ratio": 0.9998,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.1193,
+     "toWorld": 0.1197,
+     "ratio": 1.0033,
+     "lockFrom": 1,
+     "lockTo": 1.004,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": 0,
+    "dy": -0.2,
+    "px": 0.2,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.479,
+    "centroidShiftPx": 11.7,
+    "areaRatio": 1.009
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 206.3,
+    "toPx": 211.3,
+    "ratio": 1.0243,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "to",
+    "class": "standing",
+    "stature": 1.0243,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 1.1,
+    "dy": -0.3,
+    "px": 1.1,
+    "gate": "dy",
+    "gatePx": 0.3,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.3,
+     1
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 0.9788,
+    "fromHeld": null,
+    "toHeld": 0.979,
+    "costPct": -2.1,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 216.75305072824233,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.2499823217442546,
+    "flash": true,
+    "overlap": 0.5250441956393636,
+    "anchorDistance": 0.020651667886719408,
+    "glide": null
+   },
+   "snapSmear": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 42.1,
+    "source": "log"
+   }
+  },
+  {
+   "id": 68,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 7834,
+   "tMs": 133261,
+   "dtMs": 16.89999999999418,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 7833,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 20.2,
+    "toPx": 20.2,
+    "ratio": 1.0002,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.12,
+     "toWorld": 0.1194,
+     "ratio": 0.9949,
+     "lockFrom": 1.006,
+     "lockTo": 1,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0.2,
+    "px": 0.2,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.477,
+    "centroidShiftPx": 14.7,
+    "areaRatio": 0.98
+   },
+   "ghost": {
+    "frames": 1,
+    "ms": 17,
+    "peak": 0.248,
+    "severity": 0.13,
+    "worstFrame": 7833
+   },
+   "blendFrames": 1,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 264.2,
+    "toPx": 257.4,
+    "ratio": 0.9743,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1.0264,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -1.4,
+    "dy": 0.5,
+    "px": 1.4,
+    "gate": "dy",
+    "gatePx": 0.5,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     1.2,
+     0.4
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 1.0217,
+    "fromHeld": 0.979,
+    "toHeld": null,
+    "costPct": 2.2,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 271.05149418514566,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 34.1,
+    "source": "log"
+   },
+   "designed": {
+    "cls": "castEnd",
+    "ms": 50
+   },
+   "strip": "strips/ghost-068-yuna-cast-idle.jpg"
+  },
+  {
+   "id": 69,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 7855,
+   "tMs": 133611.5,
+   "dtMs": 18.10000000000582,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "lulu",
+    "abilityId": null,
+    "framesBefore": 7
+   },
+   "startFrame": 7855,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 125.1,
+    "toPx": 125.5,
+    "ratio": 1.0033,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.936,
+    "centroidShiftPx": 3.3,
+    "areaRatio": 1.024
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 283,
+    "toPx": 283,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "to",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -0.1,
+    "dy": 0,
+    "px": 0.1,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.1,
+     3.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 292.1331374561947,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 37,
+    "strength": 0.22000000000000003,
+    "flash": true,
+    "overlap": 0.902283105022831,
+    "anchorDistance": 0.010440658072970085,
+    "glide": null
+   },
+   "snapSmear": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 31.6,
+    "source": "log"
+   }
+  },
+  {
+   "id": 70,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 7913,
+   "tMs": 134576.5,
+   "dtMs": 14.799999999988358,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "lulu",
+    "abilityId": null,
+    "framesBefore": 65
+   },
+   "startFrame": 7912,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 138.7,
+    "toPx": 138.2,
+    "ratio": 0.9967,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.937,
+    "centroidShiftPx": 3.4,
+    "areaRatio": 0.975
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 1,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 309.6,
+    "toPx": 309.6,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0.1,
+    "dy": 0,
+    "px": 0.1,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.4,
+     3.4
+    ],
+    "tolerancePx": 6.2,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 319.7439366117831,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 32.1,
+    "source": "log"
+   },
+   "designed": {
+    "cls": "castEnd",
+    "ms": 50
+   }
+  },
+  {
+   "id": 71,
+   "figure": "daigoro",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 7927,
+   "tMs": 134810.1,
+   "dtMs": 17.70000000001164,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "lulu",
+    "abilityId": null,
+    "framesBefore": 79
+   },
+   "startFrame": 7927,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 53.7,
+    "toPx": 53.7,
+    "ratio": 1.0005,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.999,
+    "centroidShiftPx": 0,
+    "areaRatio": 1.001
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 77.5,
+    "toPx": 77.5,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "to",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     2.2,
+     2.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 80.51131907999024,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.22000000000000003,
+    "flash": true,
+    "overlap": 1,
+    "anchorDistance": 0,
+    "glide": null
+   },
+   "snapSmear": false,
+   "why": {
+    "reason": "cast",
+    "ageMs": 28.7,
+    "source": "log"
+   }
+  },
+  {
+   "id": 72,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 7991,
+   "tMs": 135877.1,
+   "dtMs": 17.20000000001164,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 7990,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 43.7,
+    "toPx": 44.1,
+    "ratio": 1.0076,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": 5.2,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 5.2,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 13,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 283,
+    "toPx": 256.4,
+    "ratio": 0.9131,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9131,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "idle",
+    "toKey": "hurt",
+    "settled": true,
+    "framesToSettle": 13,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": -40.3,
+      "dy": 12.8
+     },
+     "centroid": {
+      "dx": 3.2,
+      "dy": -3.9
+     }
+    },
+    "cutJumpPx": 0
+   },
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 73,
+   "figure": "daigoro",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 8015,
+   "tMs": 136277,
+   "dtMs": 15.799999999988358,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 8014,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 50.7,
+    "toPx": 50.6,
+    "ratio": 0.9995,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.999,
+    "centroidShiftPx": 0,
+    "areaRatio": 0.999
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 1,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 73.4,
+    "toPx": 73.4,
+    "ratio": 1,
+    "vs": "idle",
+    "pose": "cast",
+    "side": "from",
+    "class": "standing",
+    "stature": 1,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "gate": "dy",
+    "gatePx": 0,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     2.1,
+     2.1
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 76.30655279856384,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 32.9,
+    "source": "log"
+   },
+   "designed": {
+    "cls": "castEnd",
+    "ms": 50
+   }
+  },
+  {
+   "id": 74,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 8021,
+   "tMs": 136377.1,
+   "dtMs": 16.800000000017462,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 8020,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 43.7,
+    "toPx": 42.3,
+    "ratio": 0.9925,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": -4.9,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 4.9,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 256.4,
+    "toPx": 273.8,
+    "ratio": 1.0951,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9131,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "hurt",
+    "toKey": "idle",
+    "settled": true,
+    "framesToSettle": 8,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": 36.6,
+      "dy": -13.4
+     },
+     "centroid": {
+      "dx": -3.1,
+      "dy": 3.8
+     }
+    },
+    "cutJumpPx": 0.1
+   },
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 75,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 8362,
+   "tMs": 142059.7,
+   "dtMs": 16.900000000023283,
+   "stallMs": 0,
+   "cause": {
+    "type": "ko",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 89
+   },
+   "startFrame": 8362,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 138,
+    "toPx": 144.6,
+    "ratio": 1.0475,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.26,
+    "centroidShiftPx": 42,
+    "areaRatio": 1.083
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 298.1,
+    "toPx": 287.2,
+    "ratio": 0.9634,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9634,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": 1.1,
+    "dy": 3.1,
+    "px": 3.3,
+    "gate": "dy",
+    "gatePx": 3.1,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     3.3,
+     0.2
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 307.71331219172174,
+   "notShowing": false,
+   "counted": true,
+   "smear": {
+    "style": "paint",
+    "kind": "plane",
+    "cutMs": 38,
+    "strength": 0.3296258719086874,
+    "flash": false,
+    "overlap": 0.32593532022828153,
+    "anchorDistance": 0.12173402273626684,
+    "glide": null
+   },
+   "snapSmear": true
+  },
+  {
+   "id": 76,
+   "figure": "yojimbo",
+   "side": "enemy",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 8445,
+   "tMs": 143443.7,
+   "dtMs": 16.800000000017462,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 8442,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 145.5,
+    "toPx": 138.9,
+    "ratio": 0.9546,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0.1,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.261,
+    "centroidShiftPx": 40.7,
+    "areaRatio": 0.923
+   },
+   "ghost": {
+    "frames": 3,
+    "ms": 49,
+    "peak": 0.401,
+    "severity": 0.296,
+    "worstFrame": 8445
+   },
+   "blendFrames": 7,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 301.4,
+    "toPx": 312.7,
+    "ratio": 1.0377,
+    "vs": "idle",
+    "pose": "hurt",
+    "side": "from",
+    "class": "standing",
+    "stature": 0.9637,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels"
+   },
+   "feetSil": {
+    "dx": -1.2,
+    "dy": -3.2,
+    "px": 3.4,
+    "gate": "dy",
+    "gatePx": 3.2,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.2,
+     3.4
+    ],
+    "tolerancePx": 6.3,
+    "waived": null
+   },
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 322.8241665365219,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 77,
+   "figure": "lulu",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "victory",
+   "n": 8576,
+   "tMs": 145639.6,
+   "dtMs": 29.89999999999418,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 8575,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 47,
+    "toPx": 44.7,
+    "ratio": 0.9502,
+    "source": "rig",
+    "metric": "head",
+    "label": "rig"
+   },
+   "feet": {
+    "dx": -5.5,
+    "dy": 0,
+    "px": 0,
+    "sidewaysPx": 5.5,
+    "standing": true,
+    "source": "rig",
+    "gate": "dy",
+    "gatePx": 0,
+    "tolerancePx": 6
+   },
+   "outline": null,
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": true,
+   "failFeet": false,
+   "height": {
+    "fromPx": 298.5,
+    "toPx": 290.4,
+    "ratio": 0.9701,
+    "vs": "idle",
+    "pose": "victory",
+    "side": "to",
+    "class": "standing",
+    "stature": null,
+    "length": null,
+    "band": null,
+    "flags": [],
+    "report": [
+     "props-out-unread"
+    ],
+    "waived": null,
+    "source": "rig"
+   },
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "rig": {
+    "name": "lulu",
+    "fromKey": "idle",
+    "toKey": "victory",
+    "settled": true,
+    "framesToSettle": 8,
+    "headMetric": "head",
+    "moved": {
+     "head": {
+      "dx": -16,
+      "dy": 8.9
+     },
+     "centroid": {
+      "dx": -7.5,
+      "dy": 4.6
+     }
+    },
+    "cutJumpPx": 0.2
+   },
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 78,
+   "figure": "kimahri",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "victory",
+   "n": 8580,
+   "tMs": 145692.9,
+   "dtMs": 16.39999999999418,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 8576,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 45.7,
+    "toPx": 45.7,
+    "ratio": 1.0001,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.2584,
+     "toWorld": 0.2593,
+     "ratio": 1.0035,
+     "lockFrom": 1,
+     "lockTo": 1.003,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0,
+    "px": 0,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.136,
+    "centroidShiftPx": 82.3,
+    "areaRatio": 0.784
+   },
+   "ghost": {
+    "frames": 4,
+    "ms": 66,
+    "peak": 0.319,
+    "severity": 0.276,
+    "worstFrame": 8580
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 372.7,
+    "toPx": 388.2,
+    "ratio": 1.0415,
+    "vs": "idle",
+    "pose": "victory",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9711,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels",
+    "basis": "body"
+   },
+   "feetSil": {
+    "dx": 78.5,
+    "dy": -4.5,
+    "px": 78.6,
+    "gate": "dy",
+    "gatePx": 4.5,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     54.9,
+     23.7
+    ],
+    "tolerancePx": 7.8,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 1.0311,
+    "fromHeld": null,
+    "toHeld": 1.031,
+    "costPct": 3.1,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 399.62425164146373,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/swap-078-kimahri-idle-victory.jpg"
+  },
+  {
+   "id": 79,
+   "figure": "yuna",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "victory",
+   "n": 8580,
+   "tMs": 145692.9,
+   "dtMs": 16.39999999999418,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 8576,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 21.8,
+    "toPx": 21.8,
+    "ratio": 0.9994,
+    "source": "registration",
+    "metric": "head",
+    "label": "control",
+    "card": {
+     "fromWorld": 0.1196,
+     "toWorld": 0.1201,
+     "ratio": 1.0046,
+     "lockFrom": 1,
+     "lockTo": 1.005,
+     "class": "ok"
+    }
+   },
+   "feet": {
+    "dx": 0,
+    "dy": 0.2,
+    "px": 0.2,
+    "standing": true,
+    "source": "registration"
+   },
+   "outline": {
+    "iou": 0.456,
+    "centroidShiftPx": 13.6,
+    "areaRatio": 0.87
+   },
+   "ghost": {
+    "frames": 4,
+    "ms": 66,
+    "peak": 0.411,
+    "severity": 0.224,
+    "worstFrame": 8580
+   },
+   "blendFrames": 8,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": false,
+   "snapStaged": false,
+   "hardCut": false,
+   "failHead": false,
+   "failFeet": false,
+   "height": {
+    "fromPx": 272.6,
+    "toPx": 288.6,
+    "ratio": 1.0589,
+    "vs": "idle",
+    "pose": "victory",
+    "side": "to",
+    "class": "standing",
+    "stature": 0.9012,
+    "length": null,
+    "band": [
+     0.9,
+     1.1
+    ],
+    "flags": [],
+    "report": [],
+    "waived": null,
+    "source": "pixels",
+    "basis": "body"
+   },
+   "feetSil": {
+    "dx": -12,
+    "dy": 0.3,
+    "px": 12,
+    "gate": "dy",
+    "gatePx": 0.3,
+    "standing": true,
+    "source": "silhouette",
+    "registeredGapPx": [
+     0.4,
+     12.1
+    ],
+    "tolerancePx": 6,
+    "waived": null
+   },
+   "headReal": {
+    "ratio": 1.1983,
+    "fromHeld": null,
+    "toHeld": 1.199,
+    "costPct": 19.8,
+    "band": [
+     0.8,
+     1.45
+    ],
+    "outsideBand": false,
+    "waived": null
+   },
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": false,
+   "figurePx": 295.0632855846353,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/swap-079-yuna-idle-victory.jpg"
+  }
+ ],
+ "jerks": [
+  {
+   "n": 6894,
+   "t": 117592.4,
+   "px": 39.3,
+   "localPx": 2,
+   "ratio": 19.6,
+   "part": "head",
+   "dx": 26.7,
+   "dy": 28.9,
+   "relPx": 39.2,
+   "figure": "yuna",
+   "atSwap": true,
+   "kind": "swap",
+   "frameMs": 16.2,
+   "longFrame": false,
+   "smeared": {
+    "style": "paint",
+    "kind": "plane",
+    "swap": 57,
+    "share": 0.161
+   },
+   "cause": null,
+   "id": 0
+  },
+  {
+   "n": 4719,
+   "t": 81351.4,
+   "px": 36.8,
+   "localPx": 2,
+   "ratio": 18.4,
+   "part": "head",
+   "dx": 24.5,
+   "dy": 27.6,
+   "relPx": 36.7,
+   "figure": "yuna",
+   "atSwap": true,
+   "kind": "swap",
+   "frameMs": 22.9,
+   "longFrame": false,
+   "smeared": {
+    "style": "paint",
+    "kind": "plane",
+    "swap": 28,
+    "share": 0.16
+   },
+   "cause": null,
+   "id": 1
+  },
+  {
+   "n": 5683,
+   "t": 97410.8,
+   "px": 31.5,
+   "localPx": 2,
+   "ratio": 15.7,
+   "part": "head",
+   "dx": 20.2,
+   "dy": 24.1,
+   "relPx": 32.4,
+   "figure": "yuna",
+   "atSwap": true,
+   "kind": "swap",
+   "frameMs": 16.3,
+   "longFrame": false,
+   "smeared": {
+    "style": "paint",
+    "kind": "plane",
+    "swap": 38,
+    "share": 0.148
+   },
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 1
+   },
+   "id": 2
+  },
+  {
+   "n": 6574,
+   "t": 112260.6,
+   "px": 31.1,
+   "localPx": 2,
+   "ratio": 15.5,
+   "part": "head",
+   "dx": 20.4,
+   "dy": 23.5,
+   "relPx": 32.1,
+   "figure": "yuna",
+   "atSwap": true,
+   "kind": "swap",
+   "frameMs": 17.1,
+   "longFrame": false,
+   "smeared": {
+    "style": "paint",
+    "kind": "plane",
+    "swap": 50,
+    "share": 0.148
+   },
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 1
+   },
+   "id": 3
+  },
+  {
+   "n": 4399,
+   "t": 76011.7,
+   "px": 29.9,
+   "localPx": 2,
+   "ratio": 14.9,
+   "part": "head",
+   "dx": 20,
+   "dy": 22.2,
+   "relPx": 30.9,
+   "figure": "yuna",
+   "atSwap": true,
+   "kind": "swap",
+   "frameMs": 15.3,
+   "longFrame": false,
+   "smeared": {
+    "style": "paint",
+    "kind": "plane",
+    "swap": 21,
+    "share": 0.149
+   },
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 1
+   },
+   "id": 4
+  },
+  {
+   "n": 3137,
+   "t": 54992.8,
+   "px": 29.5,
+   "localPx": 2,
+   "ratio": 14.8,
+   "part": "head",
+   "dx": 19.2,
+   "dy": 22.5,
+   "relPx": 30.6,
+   "figure": "yuna",
+   "atSwap": true,
+   "kind": "swap",
+   "frameMs": 30.6,
+   "longFrame": false,
+   "smeared": {
+    "style": "paint",
+    "kind": "plane",
+    "swap": 4,
+    "share": 0.148
+   },
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "yojimbo",
+    "abilityId": null,
+    "framesBefore": 1
+   },
+   "id": 5
+  },
+  {
+   "n": 6011,
+   "t": 102877.4,
+   "px": 24.2,
+   "localPx": 7.6,
+   "ratio": 3.2,
+   "part": "head",
+   "dx": -22.8,
+   "dy": -8.2,
+   "relPx": 21.7,
+   "figure": "lulu",
+   "atSwap": false,
+   "kind": "dash",
+   "frameMs": 16.3,
+   "longFrame": false,
+   "cause": null,
+   "id": 6,
+   "strip": null
+  }
+ ],
+ "cameraCuts": {
+  "note": "frames in which the camera alone moved a figure by the cut line or more (a cut or a whip); swaps and jerks that fall with one are left out",
+  "count": 17,
+  "frames": [
+   2673,
+   3188,
+   3485,
+   3693,
+   4026,
+   4450,
+   4711,
+   5038,
+   5357,
+   5734,
+   5995,
+   6625,
+   6886,
+   7104,
+   7471,
+   7984,
+   8325
+  ]
+ },
+ "wash": {
+  "note": "the wash of the Save Sphere card (an HTML veil the canvas strips cannot show): where it was up, and the jerks whose step happened under it. A jerk with covered:true is excused by continuity.wash in the policy and is not in the summary or the verdict; every jerk in this file carries the wash over its step when there was one.",
+  "selector": "[data-testid=\"save-sphere\"] .ssphere__wash",
+  "alpha": null,
+  "excuse": false,
+  "minCover": 0.7,
+  "framesSeen": 0,
+  "maxOpacity": 0,
+  "spans": [],
+  "jerksUnderWash": 0,
+  "jerksCovered": 0,
+  "worstCoveredPx": 0
+ },
+ "smear": {
+  "note": "planned smears (continuity.smear in the policy): the engine logs every cut it plans as a smear on a big change; a swap that matches a log entry (same figure, same pair, inside its window) is not a snap and a jerk of at most maxJerkPx at it is not counted. Every other fast swap is judged as before.",
+  "policy": {
+   "excuse": true,
+   "slackMs": 12,
+   "maxJerkPx": 120,
+   "maxJerkShare": 0.5,
+   "elastic": true,
+   "bigOverlap": 0.5,
+   "bigAnchor": 0.12,
+   "glideFeet": true
+  },
+  "glide": {
+   "logged": 0,
+   "matched": 0,
+   "feetExcused": 0,
+   "feetSilExcused": 0,
+   "worstFeetPx": 0,
+   "worstFeetShare": 0
+  },
+  "planned": 30,
+  "matched": 30,
+  "unmatched": 0,
+  "snapsExcused": 24,
+  "jerksExcused": 6,
+  "worstJerkPx": 39.3,
+  "worstJerkShare": 0.161,
+  "byStyle": {
+   "paint": 30
+  },
+  "byKind": {
+   "plane": 30
+  }
+ },
+ "battleLog": {
+  "events": 162,
+  "byType": {
+   "sensor": 3,
+   "turn-start": 20,
+   "action-start": 25,
+   "action-end": 25,
+   "damage": 56,
+   "overdrive-gauge": 20,
+   "mp-damage": 4,
+   "status-add": 5,
+   "status-remove": 2,
+   "ko": 1,
+   "victory": 1
+  }
+ }
+}

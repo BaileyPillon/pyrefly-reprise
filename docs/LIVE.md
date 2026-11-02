@@ -8,33 +8,38 @@
 | | |
 |---|---|
 | Site | https://echoesofspira.com/ |
-| Commit | `6d7ecc8a5` (Release 71 (r71)) |
-| Bundle | `BqgCyT8R` |
-| Deployed | 2026-11-01T14:14:08.497Z (2026-11-01 09:14 EST) |
-| Deploy log | `docs/deploys.log` line 88: cloudflare, 4830 art files |
-| Artifact (SHA-256) | `ac420514e36e944600deba3a05c074788982aaa78ba4c9ef9c81c6498b29dd7f` |
+| Commit | `01a767770` (Release 72 (r72)) |
+| Bundle | `Cz_6EQVK` |
+| Deployed | 2026-11-02T04:29:26.601Z (2026-11-01 23:29 EST) |
+| Deploy log | `docs/deploys.log` line 89: cloudflare, 4830 art files |
+| Artifact (SHA-256) | `664d823bcbcbe896e14fc7f73aabda4aadc4f119b24d8ba4303c1f83c0e27553` |
 | The deploy's own byte check | PASS (57 files compared with the build) |
-| Marker | `critic/pending/6d7ecc8a5.json` (pending) |
+| Marker | `critic/pending/01a767770.json` (pending) |
 | Owner override | none |
-| CHANGELOG entry | 2026-11-01 · Release 71 (r71), the booth treatment reaches five more chapters: two of FFX's (VIII Evrae, 27 the Mirror Aeons) and three of FFX-2's (V Vegnagun and Shuyin, XI the Fallen Aeons, XVI Ixion at Djose), each with the pieces it is not ready for held back and written down; the real clips are held in Chapters III, VIII and 27, so the house curves play there; four FFX chapters (IX, XII, XVII and XVIII Sin's face) stay on the older look (each item says which game) |
-| Focused review | critic/reviews/6d7ecc8a5-focused.json: ship SHIP, changed area PASS |
-| Live check | critic/reviews/6d7ecc8a5-live.json: deployment PASS |
+| CHANGELOG entry | 2026-11-01 · Release 72 (r72), the booth treatment returns to two more FFX chapters (IX Yojimbo and XII Seymour Omnis, whose F1 battle HUD stays held), Braska's real attack clips come back with Tidus's return flip fitted to the screen, the Road to the Farplane (FFX-2 Chapter XI) plays a dimmer night sky, and a knocked-out figure's body slides to its place; seventeen of the nineteen listed chapters (each item says which game) |
+| Focused review | critic/reviews/01a767770-focused.json: ship SHIP, changed area FAIL |
+| Live check | critic/reviews/01a767770-live.json: deployment PASS |
 
-Is this commit on main? `git merge-base --is-ancestor 6d7ecc8a5 origin/main` exits 0 when it is.
+Is this commit on main? `git merge-base --is-ancestor 01a767770 origin/main` exits 0 when it is.
 
 ## Review obligations still open
 
 | Build | Obligation | What it needs |
 |---|---|---|
-| `6d7ecc8a5` | deep | deep review of every affected chapter and system |
+| `01a767770` | deep (carries 1 earlier builds) | deep review of every affected chapter and system |
 
-The ledger counts 1 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 2 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
-None: `critic/reviews/6d7ecc8a5-focused.json` lists no major or critical issue.
+From `critic/reviews/01a767770-focused.json` (a major that is not a regression is disclosed and carried into the next batch):
 
-## Branches in flight (as of 2026-11-01, the release 71 records pass (release 71 live: main 6d7ecc8a5, bundle BqgCyT8R, fifteen of the nineteen listed chapters treated; release 72 = the three r72 lanes below, built on branches, not browser-read))
+| Issue | Severity | Introduced by this build | Regression against the previous live build | What |
+|---|---|---|---|---|
+| R72-1 | major | yes | no | Chapter XII (F1 HUD held): the TARGET flag lands on the Sensor card at alternate cursor stops |
+| R72-2 | major | no | no | Chapter III: 8 gated swap jerks (worst 229.5 px) and head-size swaps (worst 58 percent) remain |
+
+## Branches in flight (as of 2026-11-02, the release 72 records pass (release 72 live: main 01a767770, bundle Cz_6EQVK, seventeen of the nineteen listed chapters treated in code with Chapter XII’s F1 HUD held; release 73 = the five r73 lanes below, built on branches, not browser-read))
 
 Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.
 
@@ -52,10 +57,11 @@ Kept by hand by whoever records a pass; tools/live-record.mjs prints it into doc
 | `saves-portable` | `c1852fa05` | both (save-data class) | ChatGPT point 9: export and import a save as a checksummed file behind ?saveport=on, off by default; NOT merged into r68-int or release 68 (D-1379); a browser pass and a deep review are owed before the word comes off (A-1054) |
 | `rigs-v2` | `9f90c3441` | both (Tidus FFX, Rikku Dark Knight FFX-2) | the party rig pilots rebuilt (tidus-v2, rikku-dark-knight-v2 in D:/pyrefly-art-rigs) behind ?partyrigs=v2 with a motion audit; pushed; OUT of release 68 (D-1398): the clips (A-1073) show 0 ghost frames but a cut from standing to lying at the knock-out and four broken frames on Rikku's return (D-1401); nothing installed |
 | `rigs-v3` | `f2dd94f79` | both (Tidus FFX, Rikku Dark Knight FFX-2) | pushed; three rounds done on 2026-10-29 and 10-30 (A-1089): rigs-v2 on r68-final plus the painting’s knock-out topple and rise for a rig, the held pose through each cut, the settle before a KO from a flinch and the harness’s stature reading for rigs (D-1401); behind ?partyrigs=, off by default; not merged, nothing installed; the clips for him come first |
-| `r72-hud` | `5d0c09382` | FFX only (Chapters IX and XII); FFX-2, Chapter I, Chapter IV and every other treated chapter untouched | pushed; release 72 lane (A-1133): Chapters IX and XII come back on the treated list because the F1 HUD no longer lays the advisor’s tip over the Zanmato gauge, the disc strip over the turn strip or the Sensor card over the target flag; built and reviewed (0 critical, 0 major), not browser-read (the reads HUD-1 to HUD-9 are owed before a candidate carries it); not on main, not deployed |
-| `r72-sky` | `02972d521` | FFX-2 only (Chapter XI, the Fallen Aeons) | pushed; release 72 lane (A-1133): Chapter XI plays sky grade C by default, only where the pro arena plays (a phone, a tablet, ?pack=off, ?pro=off and ?look=today keep release 71’s sky), ?skygrade=today restores it; Chapter V keeps today’s sky; the cards went to Bailey on 2026-10-31 and his blanket yes took the driver’s pick (D-1424, D-1425); built and reviewed, not browser-read (R72-1 to R72-9 owed); not on main, not deployed |
-| `r72-motion` | `1bb6407f5` | item 1 FFX only (Tidus’s return flip fitted to his drawn size so Chapter III plays the real clips again); item 2 both games (shared plumbing: the knock-out floor slide eases over 700 ms) | pushed; release 72 lane (A-1133): the motion lane, built and reviewed (three majors in item 2 fixed), not browser-read (FF-1 to FF-6, KO-1 to KO-4, BJ-1 to BJ-5 owed); VIII, XVIII and the Mirror Aeons keep their real holds until their clips are scaled to the drawn size and a CHK-027 run passes; not on main, not deployed |
-| `r72` | `87bba54e1` | per chapter: IX, XII, III FFX only; XI FFX-2 only; the slide both games | NOT PUSHED (local, the r29-plate worktree): the integration of the three r72 lanes on booth-b4 d23a20b97, seventeen of the nineteen listed chapters treated (XVII and XVIII not), the real-hold decision with its numbers and one browser job list for release 72 in docs/handoff/r72.md; its own review and fix pass was running when this was recorded; release 72 waits for the browser reads, which wait for the weekly reset or Bailey’s word |
+| `r73-sinface` | `54a504ced` | FFX only for the trace and for Chapter XVIII (Sin’s face); both games for the one shared fix (a tap of R shorter than a frame no longer leaves the battle on fast playback: shared battle-screen plumbing) | pushed; release 73 lane (A-1153): the offline trace of Chapter XVIII’s 17 one-frame hops finds them to be the house strike played at the fast playback speed (a sub-frame tap of R left the speed stuck on fast); the chapter stays off the treated list until a browser read and a continuity run pass (the guard booth-b4-r71-sin-face-off.test.ts); built and reviewed (3 major and 5 minor of its first version fixed), not browser-read; not on main, not deployed |
+| `r73-fit` | `396fdd0d4` | FFX only (Wakka’s two-frame return, Lulu’s none; Chapter VIII and the Mirror Aeons) | pushed; release 73 lane (A-1153): a way home with no flip is paced to the figure’s drawn lunge; the lift of the real-clip holds in Chapter VIII and the Mirror Aeons was put back by the adversarial review (M1) and the driver did not lift them (the fit moved 3 of 32 Mirror hops, D-1440); built and reviewed, not browser-read; not on main, not deployed |
+| `r73-bytes` | `b0ff8945a` | both games, phone class only (shared plumbing; Chapter I FFX and Chapter IV FFX-2 are where the bytes are) | pushed; release 73 lane (A-1153): a phone’s battle entry stops waiting for the idle lighting maps, the boss rig’s variant looks, the results cues and the governor’s 2x masters (modelled upper bounds: 13.2 to 7.3 MB in Chapter I, 16.3 to 9.7 MB in Chapter IV); no half-size art; ships only after its browser read (D-1440); built and reviewed (mutant-checked), not browser-read; not on main, not deployed |
+| `r73-method` | `4dd33b98a` | both games (a plan page and a handoff; the per-item cases are in the page); no product code | pushed; release 73 lane (A-1153): the written method check for the pose-swap family (PR-0531, PR-0380, PR-0379) in docs/plans/pose-swap-method-check-2026-11.md with its job specs and one document guard test; written and reviewed; nothing a player sees; not on main |
+| `r73-fast` | `22653e3b4` | both games for the strike (shared presentation plumbing, the house strike only); FFX only for Chapter XVIII’s return to the treated list | pushed; release 73 lane (A-1153): built on r73-sinface with r73-fit merged; the house strike’s travel and way home keep their normal length at every playback speed (no one-frame step larger than at normal speed; ?fastfloor=part and ?fastfloor=today stay as words, D-1441); Chapter XVIII goes back on the treated list once its browser read at normal and fast speed passes; built and reviewed (0 critical, 2 major and 6 minor, fixed), not browser-read; nothing deploys from it yet |
 
 Nothing on this list is live. `node tools/live-record.mjs --branches` compares the tips with git.
 
@@ -63,9 +69,9 @@ Nothing on this list is live. `node tools/live-record.mjs --branches` compares t
 
 | Deployed (UTC) | Commit | Bundle | Log line |
 |---|---|---|---|
+| 2026-11-02T04:29:26.601Z | `01a767770` | `Cz_6EQVK` | 89 |
 | 2026-11-01T14:14:08.497Z | `6d7ecc8a5` | `BqgCyT8R` | 88 |
 | 2026-10-31T17:29:45.848Z | `e3f51bf18` | `UNVtEttT` | 87 |
 | 2026-10-31T06:09:39.720Z | `6321b2578` | `dwcmDBjZ` | 86 |
 | 2026-10-29T14:45:49.392Z | `2a9340249` | `CahDxk82` | 85 |
 | 2026-10-29T01:15:32.273Z | `04631aedf` | `B3DkcOaU` | 84 |
-| 2026-10-28T06:50:44.901Z | `2b48cee95` | `BwPs1UaV` | 83 |

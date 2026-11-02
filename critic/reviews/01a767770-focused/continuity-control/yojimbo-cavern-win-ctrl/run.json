@@ -1,0 +1,2046 @@
+{
+ "chapter": "yojimbo-cavern",
+ "game": "ffx",
+ "goal": "win",
+ "size": "1600x900",
+ "base": "http://127.0.0.1:5731/?treated=pack&x=/",
+ "mode": "gpu",
+ "hooks": [
+  "window.__pyrefly.setSeed(1) before the first key (CHK-015 labelled setup hook, PR-0202)"
+ ],
+ "seedPinned": 1,
+ "seed": 1,
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1,
+   "links": 1,
+   "firstEnemyAction": {
+    "seq": 4,
+    "actor": "yojimbo",
+    "ability": "Summon",
+    "targets": [
+     "ginnem"
+    ]
+   }
+  }
+ ],
+ "firstEnemyAction": {
+  "seq": 4,
+  "actor": "yojimbo",
+  "ability": "Summon",
+  "targets": [
+   "ginnem"
+  ]
+ },
+ "steps": [
+  {
+   "ms": 9106,
+   "k": "prepEscGoesTo",
+   "v": "party-prep"
+  },
+  {
+   "ms": 28448,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1
+   }
+  },
+  {
+   "ms": 43264,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 4,
+    "actor": "yojimbo",
+    "ability": "Summon",
+    "targets": [
+     "ginnem"
+    ]
+   }
+  },
+  {
+   "ms": 150051,
+   "k": "fight",
+   "v": {
+    "outcome": "victory",
+    "turns": 14,
+    "ms": 106788,
+    "seams": 0,
+    "orders": 0
+   }
+  },
+  {
+   "ms": 158251,
+   "k": "continuity",
+   "v": "[continuity] yojimbo-cavern: 119.757 s of battle, 7169 frames recorded, 80 swaps, 79 strips, 59.8 fps, 0 probe errors"
+  },
+  {
+   "ms": 158302,
+   "k": "continuity",
+   "v": "[continuity] yojimbo-cavern: pose-measure D:\\pyrefly-release55\\docs\\target\\pose-measure.json (114 subjects, sha256 b8cead6d81a8, source harness-tree); build 01a76777; the candidate's own table"
+  },
+  {
+   "ms": 161535,
+   "k": "continuity",
+   "v": "[continuity] yojimbo-cavern: CHK-026 FAIL, CHK-027 PASS; max head jump 15.4% (0.1% registered, a control), stature 0.809 to 1.095 (0 out of band), max feet shift 0.3px (4.5px from the pixels), 0 snaps/min, worst swap jerk 0px (worst dash 24.2px), frame p99 19.7ms, 15 strips"
+  },
+  {
+   "ms": 190302,
+   "k": "postScene",
+   "v": {
+    "watch": {
+     "ms": 6073,
+     "shows": 1,
+     "advancedWithoutInput": false,
+     "firstLine": "She's gone. Truly, this time.",
+     "screenAfterWatch": "cutscene"
+    },
+    "taps": 14,
+    "holds": 0,
+    "ended": true
+   }
+  }
+ ],
+ "picks": [
+  {
+   "turn": 0,
+   "ms": 8,
+   "actor": "command:kimahri",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Yojimbo",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:1500/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "yojimbo:33000/33000",
+    "ginnem:10/10",
+    "daigoro:1/1"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 7,
+     "actor": "kimahri",
+     "did": "Fire Gem",
+     "targets": [
+      "yojimbo"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 1,
+   "ms": 8688,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Yojimbo",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:1500/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "yojimbo:29977/33000",
+    "ginnem:10/10",
+    "daigoro:1/1"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 16,
+     "actor": "yuna",
+     "did": "Fire Gem",
+     "targets": [
+      "yojimbo"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 2,
+   "ms": 15755,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Fira",
+    "target": "Yojimbo",
+    "menu": "Black Magic"
+   },
+   "took": "Fira",
+   "viaMenu": "Black Magic",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:1500/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "yojimbo:26924/33000",
+    "ginnem:10/10",
+    "daigoro:1/1"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 26,
+     "actor": "lulu",
+     "did": "Fira",
+     "targets": [
+      "yojimbo"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 3,
+   "ms": 22839,
+   "actor": "command:kimahri",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Yojimbo",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:1500/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:781/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "yojimbo:24851/33000",
+    "ginnem:10/10",
+    "daigoro:1/1"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 39,
+     "actor": "kimahri",
+     "did": "Fire Gem",
+     "targets": [
+      "yojimbo"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 4,
+   "ms": 29743,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Yojimbo",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:1500/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:781/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "yojimbo:21961/33000",
+    "ginnem:10/10",
+    "daigoro:1/1"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 48,
+     "actor": "yuna",
+     "did": "Fire Gem",
+     "targets": [
+      "yojimbo"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 5,
+   "ms": 39676,
+   "actor": "command:kimahri",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Yojimbo",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:915/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:781/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "yojimbo:18955/33000",
+    "ginnem:10/10",
+    "daigoro:1/1"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 64,
+     "actor": "kimahri",
+     "did": "Fire Gem",
+     "targets": [
+      "yojimbo"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 6,
+   "ms": 46938,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Fira",
+    "target": "Yojimbo",
+    "menu": "Black Magic"
+   },
+   "took": "Fira",
+   "viaMenu": "Black Magic",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:915/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:781/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "yojimbo:15891/33000",
+    "ginnem:10/10",
+    "daigoro:1/1"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 75,
+     "actor": "lulu",
+     "did": "Fira",
+     "targets": [
+      "yojimbo"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 7,
+   "ms": 51104,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Yojimbo",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:915/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:781/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "yojimbo:13733/33000",
+    "ginnem:10/10",
+    "daigoro:1/1"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 80,
+     "actor": "yuna",
+     "did": "Fire Gem",
+     "targets": [
+      "yojimbo"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 8,
+   "ms": 61508,
+   "actor": "command:kimahri",
+   "want": {
+    "label": "Mega-Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Mega-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:915/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:173/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "yojimbo:10722/33000",
+    "ginnem:10/10",
+    "daigoro:1/1"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 98,
+     "actor": "kimahri",
+     "did": "Mega-Potion",
+     "targets": [
+      "lulu",
+      "kimahri",
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 9,
+   "ms": 65938,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Yojimbo",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:1500/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "yojimbo:10722/33000",
+    "ginnem:10/10",
+    "daigoro:1/1"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 105,
+     "actor": "yuna",
+     "did": "Fire Gem",
+     "targets": [
+      "yojimbo"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 10,
+   "ms": 76061,
+   "actor": "command:lulu",
+   "want": {
+    "label": "Fira",
+    "target": "Yojimbo",
+    "menu": "Black Magic"
+   },
+   "took": "Fira",
+   "viaMenu": "Black Magic",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:908/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "yojimbo:7640/33000",
+    "ginnem:10/10",
+    "daigoro:1/1"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 122,
+     "actor": "lulu",
+     "did": "Fira",
+     "targets": [
+      "yojimbo"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 11,
+   "ms": 80193,
+   "actor": "command:kimahri",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Yojimbo",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:908/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "yojimbo:5525/33000",
+    "ginnem:10/10",
+    "daigoro:1/1"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 127,
+     "actor": "kimahri",
+     "did": "Fire Gem",
+     "targets": [
+      "yojimbo"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 12,
+   "ms": 87006,
+   "actor": "command:yuna",
+   "want": {
+    "label": "NulBlaze",
+    "target": "the party",
+    "menu": "White Magic"
+   },
+   "took": "NulBlaze",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:908/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:1375/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "yojimbo:2589/33000",
+    "ginnem:10/10",
+    "daigoro:1/1"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 137,
+     "actor": "yuna",
+     "did": "NulBlaze",
+     "targets": [
+      "lulu",
+      "kimahri",
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 13,
+   "ms": 94389,
+   "actor": "command:kimahri",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Yojimbo",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "yuna:908/1500",
+    "kimahri:2310/2310",
+    "auron:3410/3410",
+    "wakka:2530/2530",
+    "lulu:760/1375",
+    "rikku:1540/1540",
+    "valefor:1530/1530",
+    "ifrit:2075/2075",
+    "ixion:2055/2055",
+    "shiva:1830/1830",
+    "bahamut:2935/2935",
+    "yojimbo:2589/33000",
+    "ginnem:10/10",
+    "daigoro:1/1"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  }
+ ],
+ "seams": [],
+ "fails": [],
+ "contexts": {
+  "viewport": "1600x900",
+  "query": null,
+  "touch": null,
+  "gamepad": null,
+  "reduceMotion": null
+ },
+ "scriptedChange": "not applicable",
+ "budgetMs": 1800000,
+ "briefingText": "AURON “Nineteen fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.” ENTER / ESC SKIP — 20 SECONDS, ONCE D NEVER SHOW THIS AGAIN",
+ "boardAtEntry": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 19
+ },
+ "boardWalk": [
+  "seymour-flux",
+  "yunalesca",
+  "braskas-final-aeon",
+  "seymour-anima-macalania",
+  "evrae-airship",
+  "yojimbo-cavern"
+ ],
+ "dossier": "AURON · 1 OF 3 “Start with this one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER IX Yojimbo 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVII XVIII XXVII X-2 IV V VI XI XIII XV XVI A guardian's last duty to her first summoner Lulu guarded one summoner before Yuna, and she died in this cave. She never left it. Her aeon still answers her, and it strikes harder every time it is struck. CTB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima VIII Evrae IX Yojimbo X Seymour Natus XII Seymour Omnis XIV Isaaru XVII Sin: the Fins and the Core XVIII Sin: the Face XXVII Mirror Aeons FINAL FANTASY X-2 IV Bahamut V Vegnagun VI Leblanc XI Fallen Aeons XIII Trema XV The Den of Woe XVI Ixion LOCATION Cavern of the Stolen Fayth — the last chamber BOSS Yojimbo + Lady Ginnem + Daigoro PARTY L LULU K KIMA",
+ "prepText": "AURON · 2 OF 3 “Your party is ready.” The tabs are for later. Start the battle. ESC SKIP THE GUIDE PARTY PREP IX · YOJIMBO — CAVERN OF THE STOLEN FAYTH — THE LAST CHAMBER T Tidus S.LV 30 Y Yuna S.LV 32 K Kimahri S.LV 25 A Auron S.LV 35 W Wakka S.LV 30 L Lulu S.LV 30 R Rikku S.LV 42 CHAPTER STATS SPHERE GRID EQUIPMENT ITEMS OVERDRIVE FFX · IX Yojimbo A Guardian's Last Duty Lulu guarded one summoner before Yuna, and that summoner died in this cave without ever being sent. Her aeon still answers her, and every blow it takes brings its killing stroke closer. the last chamber, cold light the long blade, drawn Lady Ginnem, never sent OBJECTIVES ??? Let an aeon take Zanmato Defeat Yojimbo TIP Spells land in full and swords at about half. Each action aimed at him fills his gauge, and at 100 comes Zanmato, 9,999 to all three: have an aeon out by then. START BATTLE L Lulu HP 1375/1375 · MP 290/290 BLACK MAGE K Kimahri HP 2310/2310 · MP 130/130 STOIC Y Yuna HP 1500/1500 · MP 270/270 SUMMONER",
+ "prepEsc": "party-prep",
+ "preScene": {
+  "lines": [
+   "CHAPTER IX · CAVERN OF THE STOLEN FAYTH — THE LAST CHAMBER Lulu GUARDIAN There is a fayth inside. And fiends. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER IX · CAVERN OF THE STOLEN FAYTH — THE LAST CHAMBER Wakka GUARDIAN Wait. This is the place, ya? Where you and her... AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER IX · CAVERN OF THE STOLEN FAYTH — THE LAST CHAMBER Lulu GUARDIAN Yes. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "CHAPTER IX · CAVERN OF THE STOLEN FAYTH — THE LAST CHAMBER Tidus GUARDIAN Her who? AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU"
+  ],
+  "escOpens": "pause",
+  "holdsToSkip": 1
+ },
+ "firstState": {
+  "chapter": "yojimbo-cavern",
+  "game": "ffx",
+  "scene": "cavern-stolen-fayth",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 1,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": true,
+  "exitIntent": null,
+  "playTimeMs": 4633.100000000002,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "ginnem",
+    "side": "enemy",
+    "art": "ginnem",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "yojimbo",
+    "side": "enemy",
+    "art": "yojimbo-cavern",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "daigoro",
+    "side": "enemy",
+    "art": "daigoro",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "kimahri",
+    "side": "party",
+    "art": "kimahri",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "yuna",
+    "side": "party",
+    "art": "yuna",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "lulu",
+    "side": "party",
+    "art": "lulu",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   }
+  ],
+  "spellFx": {
+   "fx": {
+    "new": false,
+    "guard": {
+     "level": 0,
+     "scaleStep": 0,
+     "calmMs": 16.65,
+     "budgetMs": 20.81,
+     "busyMs": 0,
+     "steps": 0
+    }
+   },
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0,
+   "cpuMeanMs": 0,
+   "flights": {
+    "launched": 0,
+    "landed": 0,
+    "live": 0,
+    "lastLaunchAt": 0,
+    "lastLandAt": 0
+   }
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "command:kimahri",
+   "awaitingMenu": true,
+   "played": 7,
+   "lastEvents": [
+    {
+     "seq": 0,
+     "type": "sensor",
+     "ms": 0
+    },
+    {
+     "seq": 1,
+     "type": "sensor",
+     "ms": 0
+    },
+    {
+     "seq": 2,
+     "type": "sensor",
+     "ms": 0
+    },
+    {
+     "seq": 3,
+     "type": "turn-start",
+     "ms": 106
+    },
+    {
+     "seq": 4,
+     "type": "action-start",
+     "ms": 965
+    },
+    {
+     "seq": 5,
+     "type": "action-end",
+     "ms": 235
+    },
+    {
+     "seq": 6,
+     "type": "turn-start",
+     "ms": 84
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 2,
+   "ticks": 10,
+   "events": 7,
+   "result": null,
+   "combatants": [
+    {
+     "id": "tidus",
+     "hp": 2420,
+     "maxHp": 2420,
+     "mp": 115,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "yuna",
+     "hp": 1500,
+     "maxHp": 1500,
+     "mp": 270,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "kimahri",
+     "hp": 2310,
+     "maxHp": 2310,
+     "mp": 130,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "auron",
+     "hp": 3410,
+     "maxHp": 3410,
+     "mp": 75,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "wakka",
+     "hp": 2530,
+     "maxHp": 2530,
+     "mp": 90,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "lulu",
+     "hp": 1375,
+     "maxHp": 1375,
+     "mp": 290,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "rikku",
+     "hp": 1540,
+     "maxHp": 1540,
+     "mp": 115,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "valefor",
+     "hp": 1530,
+     "maxHp": 1530,
+     "mp": 51,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ifrit",
+     "hp": 2075,
+     "maxHp": 2075,
+     "mp": 49,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ixion",
+     "hp": 2055,
+     "maxHp": 2055,
+     "mp": 54,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "shiva",
+     "hp": 1830,
+     "maxHp": 1830,
+     "mp": 59,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "bahamut",
+     "hp": 2935,
+     "maxHp": 2935,
+     "mp": 74,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "yojimbo",
+     "hp": 33000,
+     "maxHp": 33000,
+     "mp": 2000,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    },
+    {
+     "id": "ginnem",
+     "hp": 10,
+     "maxHp": 10,
+     "mp": 0,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    },
+    {
+     "id": "daigoro",
+     "hp": 1,
+     "maxHp": 1,
+     "mp": 0,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "sensor",
+    "targetId": "yojimbo",
+    "full": false,
+    "text": "",
+    "seq": 0
+   },
+   {
+    "type": "sensor",
+    "targetId": "ginnem",
+    "full": false,
+    "text": "",
+    "seq": 1
+   },
+   {
+    "type": "sensor",
+    "targetId": "daigoro",
+    "full": false,
+    "text": "",
+    "seq": 2
+   },
+   {
+    "type": "turn-start",
+    "actorId": "yojimbo",
+    "turn": 1,
+    "elapsedTicks": 0,
+    "seq": 3
+   },
+   {
+    "type": "action-start",
+    "actorId": "yojimbo",
+    "command": {
+     "kind": "ability",
+     "id": "yojimbo-summon",
+     "targets": [
+      "ginnem"
+     ]
+    },
+    "abilityId": "yojimbo-summon",
+    "abilityName": "Summon",
+    "targets": [
+     "ginnem"
+    ],
+    "seq": 4
+   },
+   {
+    "type": "action-end",
+    "actorId": "yojimbo",
+    "seq": 5
+   },
+   {
+    "type": "turn-start",
+    "actorId": "kimahri",
+    "turn": 2,
+    "elapsedTicks": 10,
+    "seq": 6
+   }
+  ]
+ },
+ "cardFirst": {
+  "viewport": "1600x900",
+  "card": {
+   "x": 1106,
+   "y": 261,
+   "w": 264,
+   "h": 254
+  },
+  "rows": 4,
+  "overlapPx2": 0,
+  "cardText": "Kimahri Fire Gem → Yojimbo IN ITEMS 2,810–3,175 5 HITS NO MP ALWAYS HITS Deals fire damage to five random enemies. Most damage on the board — 3000 to Yojimbo."
+ },
+ "focFirst": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 1106,
+    "y": 261,
+    "w": 264,
+    "h": 254
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 511,
+    "w": 451,
+    "h": 324
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Kimahri",
+    "eff": 17.5
+   },
+   {
+    "t": "Fire Gem",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "Yojimbo",
+    "eff": 21
+   },
+   {
+    "t": "in Items",
+    "eff": 14.2
+   },
+   {
+    "t": "2,810–3,175",
+    "eff": 14.2
+   },
+   {
+    "t": "5 hits",
+    "eff": 14.2
+   },
+   {
+    "t": "no MP",
+    "eff": 14.2
+   },
+   {
+    "t": "always hits",
+    "eff": 14.2
+   },
+   {
+    "t": "Deals fire damage to five random enemies",
+    "eff": 14.2
+   },
+   {
+    "t": "Most damage on the board — 3000 to Yojim",
+    "eff": 14.2
+   }
+  ]
+ },
+ "focAfterCoach": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 1106,
+    "y": 261,
+    "w": 264,
+    "h": 254
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 511,
+    "w": 451,
+    "h": 324
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Kimahri",
+    "eff": 17.5
+   },
+   {
+    "t": "Fire Gem",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "Yojimbo",
+    "eff": 21
+   },
+   {
+    "t": "in Items",
+    "eff": 14.2
+   },
+   {
+    "t": "2,810–3,175",
+    "eff": 14.2
+   },
+   {
+    "t": "5 hits",
+    "eff": 14.2
+   },
+   {
+    "t": "no MP",
+    "eff": 14.2
+   },
+   {
+    "t": "always hits",
+    "eff": 14.2
+   },
+   {
+    "t": "Deals fire damage to five random enemies",
+    "eff": 14.2
+   },
+   {
+    "t": "Most damage on the board — 3000 to Yojim",
+    "eff": 14.2
+   }
+  ]
+ },
+ "advisorText": "Kimahri Fire Gem → Yojimbo IN ITEMS 2,810–3,175 5 HITS NO MP ALWAYS HITS Deals fire damage to five random enemies. Most damage on the board — 3000 to Yojimbo.",
+ "advisorHiddenByN": true,
+ "intentText": " | YOJIMBO 4TH IN QUEUE Daigoro SCRIPTED Deals no damage. DAMAGE · RANDOM TARGET LULU 544–615 42% HP KIMAHRI 517–584 24% HP YUNA 553–624 39% HP Lands on one of these, picked when it acts.",
+ "pause": {
+  "esc": {
+   "paused": true,
+   "text": "Kimahri Yuna Lulu Yojimbo Kimahri Yojimbo ATTACK SPECIAL ▸ ×1 ITEMS ▸ ×27 ESCAPE SWITCH ▸ ×4 Q △ DEFEND Physical damage Lulu 1375 /1375 290 /290 OD Kimahri 2310 /2310 130 /130 OD Yuna 1500 /1500 270 /270 OD The Cavern of the Stolen Fayth can be done on your initial trip through the Calm Lands, but it is best to return when your characters are far stronger. The game is easy to finish without Yojimbo. Kimahri's Overdrive - Ronso Rage HELPFUL HINT Use Lancet on a Ghost in this area and Kimahri can learn the Doom Ronso Rage. Yojimbo In the next area an unsent summoner, Lady Ginnem, waits. Lulu once guarded her. She starts the fight and calls up Yojimbo. Yojimbo is not too hard to beat, and Yuna's aeons are there if you struggle. He has 33,000 HP. G HIDE GUIDE [ ] SCROLL Kimahri Fire Gem → Yojimbo IN ITEMS 2,810–3,175 5 HITS NO MP ALWAYS HITS Deals fire damage to five random enemies. Most dam"
+  },
+  "optionsText": "Kimahri Yuna Lulu Yojimbo Kimahri Yojimbo ATTACK SPECIAL ▸ ×1 ITEMS ▸ ×27 ESCAPE SWITCH ▸ ×4 Q △ DEFEND Physical damage Lulu 1375 /1375 290 /290 OD Kimahri 2310 /2310 130 /130 OD Yuna 1500 /1500 270 /270 OD The Cavern of the Stolen Fayth can be done on your initial trip through the Calm Lands, but it is best to return when your characters are far stronger. The game is easy to finish without Yojimbo. Kimahri's Overdrive - Ronso Rage HELPFUL HINT Use Lancet on a Ghost in this area and Kimahri can learn the Doom Ronso Rage. Yojimbo In the next area an unsent summoner, Lady Ginnem, waits. Lulu once guarded her. She starts the fight and calls up Yojimbo. Yojimbo is not too hard to beat, and Yuna's aeons are there if you struggle. He has 33,000 HP. G HIDE GUIDE [ ] SCROLL Kimahri Fire Gem → Yojimbo IN ITEMS 2,810–3,175 5 HITS NO MP ALWAYS HITS Deals fire damage to five random enemies. Most damage on the board — 3000 to Yojimbo. N HIDE MOVES Yojimbo 0% DAIGORO + KOZUKA + WAKIZASHI Next: Daigoro PAUSE ECHOES OF SPIRA · FINAL FANTASY X Q L1 LULU KIMAHRI YUNA CHAPTER GUIDE OPTIONS ACCESSIBILITY CONTROLS MUSIC R1 E SETTINGS MASTER VOLUME 80 MUSIC 70 SOUND EFFECTS 70 VOICE 90 VOICE-OVER ON TEXT SPEED 1x EYE CANDY ALL ON VISUAL STYLE HD-2D STRATEGY GUIDE ON BATTLE HELP ON PRESENTATION THE ECHO · B THIS ENCOUNTER REPLAY BRIEFING ▸ RESTART ENCOUNTER ▸ CHAPTER SELECT ▸ QUIT TO TITLE ▸ ABOUT CR",
+  "tabs": [
+   "Lulu",
+   "Kimahri",
+   "Yuna",
+   "Chapter",
+   "Guide",
+   "Options"
+  ],
+  "resumedByEsc": true,
+  "pOpens": true,
+  "pCloses": true
+ },
+ "firstRows": [
+  "Attack",
+  "Special",
+  "Items",
+  "Escape",
+  "Switch"
+ ],
+ "targetsShown": [
+  "yojimbo"
+ ],
+ "afterTargetCancel": {
+  "screen": "battle",
+  "targets": 0,
+  "rows": 5
+ },
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "victory",
+   "seed": 1,
+   "turns": 14,
+   "firstEnemyAction": {
+    "seq": 4,
+    "actor": "yojimbo",
+    "ability": "Summon",
+    "targets": [
+     "ginnem"
+    ]
+   },
+   "final": true,
+   "stalledAt": null
+  }
+ ],
+ "seamCard": [],
+ "pauseRecoveries": 0,
+ "misses": [],
+ "orders": [],
+ "escapes": [],
+ "targetMismatches": [],
+ "pickerPlays": [],
+ "stallRecoveries": 0,
+ "lastChain": {
+  "links": 1,
+  "chainLength": 1,
+  "phase": "play:victory",
+  "turn": 14,
+  "ms": 106485
+ },
+ "mgSince": null,
+ "emptyPicks": 0,
+ "lastPartySeq": 137,
+ "turns": 14,
+ "fightMs": 106788,
+ "afterFight": "cutscene",
+ "outcome": "victory",
+ "outcomeFrom": "results screen text",
+ "stalledAt": null,
+ "logKinds": {
+  "sensor": 3,
+  "turn-start": 20,
+  "action-start": 25,
+  "action-end": 25,
+  "damage": 56,
+  "overdrive-gauge": 20,
+  "mp-damage": 4,
+  "status-add": 5,
+  "status-remove": 2,
+  "ko": 1,
+  "victory": 1
+ },
+ "continuity": {
+  "file": "continuity/continuity.json",
+  "checks": {
+   "CHK-026": "FAIL",
+   "CHK-027": "PASS"
+  },
+  "reasons": {
+   "CHK-026": [
+    "13 swap(s) change a head by more than the tolerance (worst 15.4 percent; 0.1 percent where the head is registered)"
+   ],
+   "CHK-027": []
+  },
+  "error": null
+ },
+ "post": {
+  "screen": "cutscene",
+  "lines": [
+   "She's gone. Truly, this time.",
+   "...",
+   "I thought this would hurt more.",
+   "You were good, Lu. You were really good.",
+   "Wakka.",
+   "I'm just sayin'. Stronger than before, ya?",
+   "Perhaps.",
+   "Were you with her the whole way?",
+   "Not the whole way. That was the problem.",
+   "You finished it.",
+   "Yes. I did.",
+   "...Go on, Yuna. The fayth is waiting for you."
+  ],
+  "scene": {
+   "watch": {
+    "ms": 6073,
+    "shows": 1,
+    "advancedWithoutInput": false,
+    "firstLine": "She's gone. Truly, this time.",
+    "screenAfterWatch": "cutscene"
+   },
+   "taps": 14,
+   "holds": 0,
+   "ended": true,
+   "lines": [
+    "She's gone. Truly, this time.",
+    "...",
+    "I thought this would hurt more.",
+    "You were good, Lu. You were really good.",
+    "Wakka.",
+    "I'm just sayin'. Stronger than before, ya?",
+    "Perhaps.",
+    "Were you with her the whole way?",
+    "Not the whole way. That was the problem.",
+    "You finished it.",
+    "Yes. I did.",
+    "...Go on, Yuna. The fayth is waiting for you."
+   ]
+  }
+ },
+ "resultsScreen": "results",
+ "resultsText": "CAVERN OF THE STOLEN FAYTH — THE LAST CHAMBER · CLEARED RESULTS · 2:07 Victory NEW BEST AP 0 ×3 PARTY GIL 0 L Lulu S.LV 30 · 0/695 AP +0AP K Kimahri S.LV 25 · 0/442 AP +0AP Y Yuna S.LV 32 · 0/820 AP +0AP CONFIRM ▸",
+ "afterConfirm": [],
+ "afterResults": "chapter-select",
+ "boardAfter": {
+  "selectedIndex": 5,
+  "selectedId": "yojimbo-cavern",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [
+   "yojimbo-cavern"
+  ],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 1,
+  "total": 19
+ },
+ "boardAfterReload": {
+  "selectedIndex": 5,
+  "selectedId": "yojimbo-cavern",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [
+   "yojimbo-cavern"
+  ],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 1,
+  "total": 19
+ },
+ "dboxTimeline": [
+  {
+   "ms": 10961,
+   "lastMs": 14861,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "There is a fayth inside. And fiends.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 1
+  },
+  {
+   "ms": 14893,
+   "lastMs": 16361,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "Wait. This is the place, ya? Where you and her...",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 2
+  },
+  {
+   "ms": 16393,
+   "lastMs": 17877,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "Yes.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 3
+  },
+  {
+   "ms": 17910,
+   "lastMs": 19376,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Her who?",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 4
+  },
+  {
+   "ms": 19410,
+   "lastMs": 21424,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "The first summoner I guarded. She died in there.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 5
+  },
+  {
+   "ms": 21444,
+   "lastMs": 21444,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "The fayth was taken from a temple. Long ago.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 6
+  },
+  {
+   "ms": 21460,
+   "lastMs": 21460,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "No fayth, no training. No training, no Final Aeon.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 7
+  },
+  {
+   "ms": 21478,
+   "lastMs": 21478,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "So whoever stole it saved somebody. Good.",
+   "portrait": "rikku.webp",
+   "narrate": false,
+   "show": 8
+  },
+  {
+   "ms": 21493,
+   "lastMs": 21513,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "...Can't say I hate that.",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 9
+  },
+  {
+   "ms": 21561,
+   "lastMs": 21561,
+   "screen": "cutscene",
+   "speaker": "Kimahri",
+   "role": "Guardian",
+   "text": "Unsent.",
+   "portrait": "kimahri.png",
+   "narrate": false,
+   "show": 10
+  },
+  {
+   "ms": 21578,
+   "lastMs": 21578,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "...Lady Ginnem.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 11
+  },
+  {
+   "ms": 21594,
+   "lastMs": 21594,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "You know her?",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 12
+  },
+  {
+   "ms": 21610,
+   "lastMs": 21610,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "I was her guardian. Her only one.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 13
+  },
+  {
+   "ms": 21626,
+   "lastMs": 21644,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "I was too young to keep her alive.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 14
+  },
+  {
+   "ms": 21735,
+   "lastMs": 21735,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "She won't let me send her.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 15
+  },
+  {
+   "ms": 21744,
+   "lastMs": 21744,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Then there's nothing left of her to ask.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 16
+  },
+  {
+   "ms": 21761,
+   "lastMs": 21761,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "No. There is one thing left.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 17
+  },
+  {
+   "ms": 21778,
+   "lastMs": 21778,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "I still owe her a guardian.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 18
+  },
+  {
+   "ms": 21794,
+   "lastMs": 21852,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "Stand back, Yuna. This one is mine.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 19,
+   "endMs": 21852
+  },
+  {
+   "ms": 155522,
+   "lastMs": 168671,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "She's gone. Truly, this time.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 20
+  },
+  {
+   "ms": 168706,
+   "lastMs": 170187,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "...",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 21
+  },
+  {
+   "ms": 170220,
+   "lastMs": 171704,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "I thought this would hurt more.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 22
+  },
+  {
+   "ms": 171737,
+   "lastMs": 173204,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "You were good, Lu. You were really good.",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 23
+  },
+  {
+   "ms": 173237,
+   "lastMs": 174705,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "Wakka.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 24
+  },
+  {
+   "ms": 174737,
+   "lastMs": 176221,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "I'm just sayin'. Stronger than before, ya?",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 25
+  },
+  {
+   "ms": 176254,
+   "lastMs": 177738,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "Perhaps.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 26
+  },
+  {
+   "ms": 177771,
+   "lastMs": 179254,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Were you with her the whole way?",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 27
+  },
+  {
+   "ms": 179287,
+   "lastMs": 180771,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "Not the whole way. That was the problem.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 28
+  },
+  {
+   "ms": 180805,
+   "lastMs": 182271,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "You finished it.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 29
+  },
+  {
+   "ms": 182304,
+   "lastMs": 183787,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "Yes. I did.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 30
+  },
+  {
+   "ms": 183820,
+   "lastMs": 186731,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "I was supposed to finish it THEN!",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 31
+  },
+  {
+   "ms": 186838,
+   "lastMs": 189722,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "...Go on, Yuna. The fayth is waiting for you.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 32,
+   "endMs": 189813
+  }
+ ],
+ "audioDebugFile": {
+  "file": "yojimbo-cavern-win-ctrl/audio-debug.jsonl",
+  "samples": 4,
+  "note": "one whole audioDebug() per line; nothing cut"
+ },
+ "minutes": 3.29,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "media": [
+  "http://127.0.0.1:5731/art/title/echo.webp",
+  "http://127.0.0.1:5731/art/characters/auron/idle.png",
+  "http://127.0.0.1:5731/art/backdrops/dreams-end.webp",
+  "http://127.0.0.1:5731/art/backdrops/gagazet.webp",
+  "http://127.0.0.1:5731/art/characters/mortiorchis/idle.png",
+  "http://127.0.0.1:5731/art/characters/seymour-flux-body/idle.png",
+  "http://127.0.0.1:5731/art/portraits/tidus.webp",
+  "http://127.0.0.1:5731/art/portraits/yuna.webp",
+  "http://127.0.0.1:5731/art/portraits/kimahri.png",
+  "http://127.0.0.1:5731/art/backdrops/gagazet.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/seymour-flux-body/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/zanarkand-dome.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/yunalesca-1/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/bevelle-underground.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/ffx2-bahamut/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/djose-chamber-provisional.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/x2-ixion/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/dreams-end.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/braskas-final-aeon-1/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/den-of-woe.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/baralai-shade/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/macalania-temple.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/anima/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/via-infinito.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/trema/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/evrae-airship-deck.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/evrae/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/road-to-the-farplane.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/x2-shiva/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/cavern-stolen-fayth.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/yojimbo-cavern/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/leblanc-last-room.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/leblanc/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/bevelle-highbridge.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/seymour-natus/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/farplane.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/vegnagun-body/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/garden-of-pain.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/seymour-omnis/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/via-purifico.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/isaaru/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/mushroom-rock-road.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/dark-mindy/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/sin-fahrenheit-flight.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/sin-left-fin/idle.thumb.png",
+  "http://127.0.0.1:5731/art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+  "http://127.0.0.1:5731/art/characters/overdrive-sin/idle.thumb.png",
+  "http://127.0.0.1:5731/art/portraits/auron.webp",
+  "http://127.0.0.1:5731/art/backdrops/zanarkand-dome.webp",
+  "http://127.0.0.1:5731/art/characters/yunalesca-1/idle.png",
+  "http://127.0.0.1:5731/art/portraits/yuna-x2.webp",
+  "http://127.0.0.1:5731/art/portraits/rikku-x2.webp",
+  "http://127.0.0.1:5731/art/portraits/paine.webp",
+  "http://127.0.0.1:5731/art/backdrops/bevelle-underground.webp",
+  "http://127.0.0.1:5731/art/characters/ffx2-bahamut/idle.png",
+  "http://127.0.0.1:5731/art/backdrops/djose-chamber-provisional.webp",
+  "http://127.0.0.1:5731/art/characters/x2-ixion/idle.png",
+  "http://127.0.0.1:5731/art/characters/braskas-final-aeon-1/idle.png",
+  "http://127.0.0.1:5731/art/backdrops/den-of-woe.webp",
+  "http://127.0.0.1:5731/art/characters/nooj-shade/idle.png",
+  "http://127.0.0.1:5731/art/characters/gippal-shade/idle.png",
+  "http://127.0.0.1:5731/art/characters/baralai-shade/idle.png",
+  "http://127.0.0.1:5731/art/portraits/rikku.webp",
+  "http://127.0.0.1:5731/art/portraits/wakka.webp",
+  "http://127.0.0.1:5731/art/portraits/lulu.webp",
+  "http://127.0.0.1:5731/art/characters/yuna-white-mage/idle.png",
+  "http://127.0.0.1:5731/art/characters/rikku-dark-knight/idle.png",
+  "http://127.0.0.1:5731/art/characters/paine-warrior/idle.png",
+  "http://127.0.0.1:5731/art/characters/paine-dark-knight/idle.png",
+  "http://127.0.0.1:5731/art/characters/yuna-dark-knight/idle.png",
+  "http://127.0.0.1:5731/art/characters/rikku-alchemist/idle.png",
+  "http://127.0.0.1:5731/art/characters/yuna-gunner/idle.png",
+  "http://127.0.0.1:5731/art/characters/rikku-thief/idle.png",
+  "http://127.0.0.1:5731/audio/music/title.mp3",
+  "http://127.0.0.1:5731/audio/sfx/sprite.mp3",
+  "http://127.0.0.1:5731/audio/sfx/sprite-v2.mp3",
+  "http://127.0.0.1:5731/audio/music/chapter-select.mp3",
+  "http://127.0.0.1:5731/art/portraits/seymour.webp",
+  "http://127.0.0.1:5731/art/backdrops/macalania-temple.webp",
+  "http://127.0.0.1:5731/art/characters/anima/idle.png",
+  "http://127.0.0.1:5731/art/characters/tidus/idle.png",
+  "http://127.0.0.1:5731/art/characters/yuna/idle.png",
+  "http://127.0.0.1:5731/art/characters/kimahri/idle.png",
+  "http://127.0.0.1:5731/art/backdrops/evrae-airship-deck.webp",
+  "http://127.0.0.1:5731/art/characters/evrae/idle.png",
+  "http://127.0.0.1:5731/art/backdrops/cavern-stolen-fayth.webp",
+  "http://127.0.0.1:5731/art/characters/yojimbo-cavern/idle.png",
+  "http://127.0.0.1:5731/art/backdrops/bevelle-highbridge.webp",
+  "http://127.0.0.1:5731/art/characters/seymour-natus/idle.png",
+  "http://127.0.0.1:5731/art/backdrops/garden-of-pain.webp",
+  "http://127.0.0.1:5731/art/characters/seymour-omnis/idle.webp",
+  "http://127.0.0.1:5731/audio/sfx/parity-ffx-core.mp3",
+  "http://127.0.0.1:5731/audio/music/scene-gagazet.mp3",
+  "http://127.0.0.1:5731/art/pause/ch9-yojimbo.webp",
+  "http://127.0.0.1:5731/art/characters/yojimbo-cavern/cast.png",
+  "http://127.0.0.1:5731/art/characters/ginnem/idle.png",
+  "http://127.0.0.1:5731/audio/voice/yojimbo-cavern/yojimbo-cavern.mid-yojimbo-zanmato-next.001.mp3",
+  "http://127.0.0.1:5731/audio/voice/yojimbo-cavern/yojimbo-cavern.mid-yojimbo-aeon-takes-zanmato.001.mp3",
+  "http://127.0.0.1:5731/art/characters/daigoro/idle.png",
+  "http://127.0.0.1:5731/art/characters/lulu/idle.png",
+  "http://127.0.0.1:5731/art/characters/lulu/ready.png",
+  "http://127.0.0.1:5731/art/characters/kimahri/ready.png",
+  "http://127.0.0.1:5731/art/characters/yuna/ready.png",
+  "http://127.0.0.1:5731/art/characters/yojimbo-cavern/attack.png",
+  "http://127.0.0.1:5731/audio/music/boss-yojimbo.mp3",
+  "http://127.0.0.1:5731/art/characters/yojimbo-cavern/hurt.png",
+  "http://127.0.0.1:5731/art/characters/daigoro/cast.png",
+  "http://127.0.0.1:5731/art/characters/lulu/attack.png",
+  "http://127.0.0.1:5731/art/characters/lulu/cast.webp",
+  "http://127.0.0.1:5731/art/characters/lulu/item.png",
+  "http://127.0.0.1:5731/art/characters/lulu/hurt.png",
+  "http://127.0.0.1:5731/art/characters/lulu/ko.webp",
+  "http://127.0.0.1:5731/art/characters/lulu/defend.webp",
+  "http://127.0.0.1:5731/art/characters/kimahri/attack.png",
+  "http://127.0.0.1:5731/art/characters/kimahri/cast.png",
+  "http://127.0.0.1:5731/art/characters/kimahri/item.png",
+  "http://127.0.0.1:5731/art/characters/kimahri/hurt.png",
+  "http://127.0.0.1:5731/art/characters/kimahri/ko.png",
+  "http://127.0.0.1:5731/art/characters/kimahri/defend.png",
+  "http://127.0.0.1:5731/audio/music/victory-ffx.mp3",
+  "http://127.0.0.1:5731/art/characters/yuna/attack.png",
+  "http://127.0.0.1:5731/art/characters/yuna/cast.png",
+  "http://127.0.0.1:5731/art/characters/yuna/item.png",
+  "http://127.0.0.1:5731/art/characters/yuna/hurt.png",
+  "http://127.0.0.1:5731/audio/music/defeat-ffx.mp3",
+  "http://127.0.0.1:5731/art/characters/yuna/ko.png",
+  "http://127.0.0.1:5731/art/characters/lulu/victory.webp",
+  "http://127.0.0.1:5731/art/characters/lulu/sleep.png",
+  "http://127.0.0.1:5731/art/characters/lulu/critical.png",
+  "http://127.0.0.1:5731/art/characters/lulu/follow.png",
+  "http://127.0.0.1:5731/art/characters/lulu/od-fury.png",
+  "http://127.0.0.1:5731/art/characters/kimahri/victory.png",
+  "http://127.0.0.1:5731/art/characters/kimahri/sleep.png",
+  "http://127.0.0.1:5731/art/characters/kimahri/critical.png",
+  "http://127.0.0.1:5731/art/characters/kimahri/follow.png",
+  "http://127.0.0.1:5731/art/characters/yuna/victory.png",
+  "http://127.0.0.1:5731/art/characters/yuna/sleep.png",
+  "http://127.0.0.1:5731/art/characters/yuna/critical.png",
+  "http://127.0.0.1:5731/art/characters/yuna/follow.png",
+  "http://127.0.0.1:5731/art/pause/lulu.2x.webp",
+  "http://127.0.0.1:5731/art/pause/kimahri.2x.webp",
+  "http://127.0.0.1:5731/art/pause/yuna.2x.webp",
+  "http://127.0.0.1:5731/audio/voice/yojimbo-cavern/yojimbo-cavern.pre.004.mp3",
+  "http://127.0.0.1:5731/audio/voice/yojimbo-cavern/yojimbo-cavern.pre.007.mp3",
+  "http://127.0.0.1:5731/audio/voice/yojimbo-cavern/yojimbo-cavern.pre.012.mp3",
+  "http://127.0.0.1:5731/audio/voice/yojimbo-cavern/yojimbo-cavern.pre.015.mp3",
+  "http://127.0.0.1:5731/audio/voice/yojimbo-cavern/yojimbo-cavern.pre.016.mp3",
+  "http://127.0.0.1:5731/audio/music/pause.mp3",
+  "http://127.0.0.1:5731/art/pause/ch9-yojimbo.2x.webp",
+  "http://127.0.0.1:5731/art/backdrops/cavern-stolen-fayth/sakura.webp",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/fdef.png",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/fod.png",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/braid.png",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/train.png",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/skirt.png",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/doll.png",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/torso.png",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/armA.png",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/armB.png",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/shoulders.png",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/head.png",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/fdef.rim.webp",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/skirt.rim.webp",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/doll.rim.webp",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/braid.rim.webp",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/fod.rim.webp",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/torso.rim.webp",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/train.rim.webp",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/armA.rim.webp",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/head.rim.webp",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/shoulders.rim.webp",
+  "http://127.0.0.1:5731/art/rigs/lulu/1x/armB.rim.webp",
+  "http://127.0.0.1:5731/art/pause/lulu.webp",
+  "http://127.0.0.1:5731/art/portrait-parts/lulu/2x/mouth-open-smile.png",
+  "http://127.0.0.1:5731/art/portrait-parts/lulu/2x/mouth-concerned-press.png",
+  "http://127.0.0.1:5731/art/portrait-parts/lulu/2x/lidR-closed.png",
+  "http://127.0.0.1:5731/art/portrait-parts/lulu/2x/lidL-closed.png",
+  "http://127.0.0.1:5731/art/portrait-parts/lulu/2x/eyeR-socket.webp",
+  "http://127.0.0.1:5731/art/portrait-parts/lulu/2x/eyeR-iris.webp",
+  "http://127.0.0.1:5731/art/portrait-parts/lulu/2x/eyeR-catch.png",
+  "http://127.0.0.1:5731/art/portrait-parts/lulu/2x/eyeR-window.png",
+  "http://127.0.0.1:5731/art/portrait-parts/lulu/2x/eyeL-socket.webp",
+  "http://127.0.0.1:5731/art/portrait-parts/lulu/2x/eyeL-iris.webp",
+  "http://127.0.0.1:5731/art/portrait-parts/lulu/2x/eyeL-catch.png",
+  "http://127.0.0.1:5731/art/portrait-parts/lulu/2x/eyeL-window.png",
+  "http://127.0.0.1:5731/art/pause/kimahri.webp",
+  "http://127.0.0.1:5731/art/portrait-parts/kimahri/2x/mouth-open-smile.png",
+  "http://127.0.0.1:5731/art/portrait-parts/kimahri/2x/mouth-concerned-press.png",
+  "http://127.0.0.1:5731/art/portrait-parts/kimahri/2x/lidL-closed.png",
+  "http://127.0.0.1:5731/art/portrait-parts/kimahri/2x/eyeL-socket.webp",
+  "http://127.0.0.1:5731/art/portrait-parts/kimahri/2x/eyeL-iris.webp",
+  "http://127.0.0.1:5731/art/portrait-parts/kimahri/2x/eyeL-catch.png",
+  "http://127.0.0.1:5731/art/portrait-parts/kimahri/2x/eyeL-window.png",
+  "http://127.0.0.1:5731/art/pause/yuna.webp",
+  "http://127.0.0.1:5731/art/portrait-parts/yuna/2x/mouth-open-smile.png",
+  "http://127.0.0.1:5731/art/portrait-parts/yuna/2x/mouth-concerned-press.png",
+  "http://127.0.0.1:5731/art/portrait-parts/yuna/2x/lidR-closed.png",
+  "http://127.0.0.1:5731/art/portrait-parts/yuna/2x/lidL-closed.png",
+  "http://127.0.0.1:5731/art/portrait-parts/yuna/2x/eyeR-socket.webp",
+  "http://127.0.0.1:5731/art/portrait-parts/yuna/2x/eyeR-iris.webp",
+  "http://127.0.0.1:5731/art/portrait-parts/yuna/2x/eyeR-catch.png",
+  "http://127.0.0.1:5731/art/portrait-parts/yuna/2x/eyeR-window.png",
+  "http://127.0.0.1:5731/art/portrait-parts/yuna/2x/eyeL-socket.webp",
+  "http://127.0.0.1:5731/art/portrait-parts/yuna/2x/eyeL-iris.webp",
+  "http://127.0.0.1:5731/art/portrait-parts/yuna/2x/eyeL-catch.png",
+  "http://127.0.0.1:5731/art/portrait-parts/yuna/2x/eyeL-window.png",
+  "http://127.0.0.1:5731/audio/voice/yojimbo-cavern/yojimbo-cavern.post.001.mp3",
+  "http://127.0.0.1:5731/audio/voice/yojimbo-cavern/yojimbo-cavern.post.008.mp3",
+  "http://127.0.0.1:5731/audio/voice/yojimbo-cavern/yojimbo-cavern.post.010.mp3"
+ ]
+}

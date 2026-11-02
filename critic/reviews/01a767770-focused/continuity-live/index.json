@@ -1,0 +1,633 @@
+[
+ {
+  "file": "seymour-anima-macalania-win-live71/00-title.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:39:53.718Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/01-briefing.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:39:55.190Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/03-card.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "seymour-anima-macalania",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:39:56.645Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/04-prep.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:39:59.033Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/05-pre-scene.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:04.359Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/05b-scene-esc.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:05.884Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/seq-transition-into-battle/",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 137
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 442
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 749
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1051
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1371
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1674
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1979
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2401
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2708
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 3018
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:20.052Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/10-first-menu-coach.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:24.197Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/11-advisor.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:24.565Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/12-intent-E.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:26.609Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/13-guide-G.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:28.244Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/14-pause-Esc.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:30.299Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/14-pause-tab-next.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Yuna",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:31.217Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/14-pause-options.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:33.662Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/16-target-single.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "target selection after choosing ATTACK",
+  "asserted": "screen=battle targeting=true",
+  "verified": true,
+  "targets": 3,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:37.324Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/16b-after-cancel.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Escape from target selection",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:38.763Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/seq-party-action/",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Steal)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 49
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 293
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 527
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 759
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 984
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1214
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1442
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1676
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1909
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2144
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:42.189Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/seq-action-playing/",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:message)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 38
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 269
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 504
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 736
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 970
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1209
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1438
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1670
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1904
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2152
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:45.637Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/23-midfight.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:40:47.372Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/28-swordplay-overlay.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Spiral Cut: SWORDPLAY · PRESS ENTER IN THE GOLD ZONE",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:45:13.702Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/31-results.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:46:18.395Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/33-after-confirm-scene.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "the scene after CONFIRM on the victory results",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:46:21.293Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/34-board-after.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after the win",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:47:06.887Z"
+ },
+ {
+  "file": "seymour-anima-macalania-win-live71/35-board-reload.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after a reload (the clear must come back from the save)",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T03:47:08.776Z"
+ }
+]

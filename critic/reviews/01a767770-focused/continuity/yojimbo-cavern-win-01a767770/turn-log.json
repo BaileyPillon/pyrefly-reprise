@@ -1,0 +1,584 @@
+[
+ {
+  "turn": 0,
+  "ms": 8,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Yojimbo",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "yojimbo:33000/33000",
+   "ginnem:10/10",
+   "daigoro:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 7,
+    "actor": "kimahri",
+    "did": "Fire Gem",
+    "targets": [
+     "yojimbo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 8788,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Yojimbo",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "yojimbo:29977/33000",
+   "ginnem:10/10",
+   "daigoro:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 16,
+    "actor": "yuna",
+    "did": "Fire Gem",
+    "targets": [
+     "yojimbo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 2,
+  "ms": 15610,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Fira",
+   "target": "Yojimbo",
+   "menu": "Black Magic"
+  },
+  "took": "Fira",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "yojimbo:26924/33000",
+   "ginnem:10/10",
+   "daigoro:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 26,
+    "actor": "lulu",
+    "did": "Fira",
+    "targets": [
+     "yojimbo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 22471,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Yojimbo",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:781/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "yojimbo:24851/33000",
+   "ginnem:10/10",
+   "daigoro:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 39,
+    "actor": "kimahri",
+    "did": "Fire Gem",
+    "targets": [
+     "yojimbo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 29155,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Yojimbo",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:781/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "yojimbo:21961/33000",
+   "ginnem:10/10",
+   "daigoro:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 48,
+    "actor": "yuna",
+    "did": "Fire Gem",
+    "targets": [
+     "yojimbo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 38908,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Yojimbo",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:915/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:781/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "yojimbo:18955/33000",
+   "ginnem:10/10",
+   "daigoro:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 64,
+    "actor": "kimahri",
+    "did": "Fire Gem",
+    "targets": [
+     "yojimbo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 45868,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Fira",
+   "target": "Yojimbo",
+   "menu": "Black Magic"
+  },
+  "took": "Fira",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:915/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:781/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "yojimbo:15891/33000",
+   "ginnem:10/10",
+   "daigoro:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 75,
+    "actor": "lulu",
+    "did": "Fira",
+    "targets": [
+     "yojimbo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 49929,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Yojimbo",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:915/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:781/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "yojimbo:13733/33000",
+   "ginnem:10/10",
+   "daigoro:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 80,
+    "actor": "yuna",
+    "did": "Fire Gem",
+    "targets": [
+     "yojimbo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 59979,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:915/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:173/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "yojimbo:10722/33000",
+   "ginnem:10/10",
+   "daigoro:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 98,
+    "actor": "kimahri",
+    "did": "Mega-Potion",
+    "targets": [
+     "lulu",
+     "kimahri",
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 64604,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Yojimbo",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "yojimbo:10722/33000",
+   "ginnem:10/10",
+   "daigoro:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 105,
+    "actor": "yuna",
+    "did": "Fire Gem",
+    "targets": [
+     "yojimbo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 74341,
+  "actor": "command:lulu",
+  "want": {
+   "label": "Fira",
+   "target": "Yojimbo",
+   "menu": "Black Magic"
+  },
+  "took": "Fira",
+  "viaMenu": "Black Magic",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:908/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "yojimbo:7640/33000",
+   "ginnem:10/10",
+   "daigoro:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 122,
+    "actor": "lulu",
+    "did": "Fira",
+    "targets": [
+     "yojimbo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 78182,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Yojimbo",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:908/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "yojimbo:5525/33000",
+   "ginnem:10/10",
+   "daigoro:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 127,
+    "actor": "kimahri",
+    "did": "Fire Gem",
+    "targets": [
+     "yojimbo"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 84886,
+  "actor": "command:yuna",
+  "want": {
+   "label": "NulBlaze",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "NulBlaze",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:908/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "yojimbo:2589/33000",
+   "ginnem:10/10",
+   "daigoro:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 137,
+    "actor": "yuna",
+    "did": "NulBlaze",
+    "targets": [
+     "lulu",
+     "kimahri",
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 92146,
+  "actor": "command:kimahri",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Yojimbo",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:908/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:760/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "yojimbo:2589/33000",
+   "ginnem:10/10",
+   "daigoro:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

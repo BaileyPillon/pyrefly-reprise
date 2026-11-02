@@ -1,0 +1,4203 @@
+[
+ {
+  "turn": 0,
+  "ms": 8,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Wakka",
+   "target": null,
+   "menu": "Switch"
+  },
+  "took": "Wakka",
+  "viaMenu": "Switch",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:80000/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 1,
+  "ms": 3834,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Mortiphasm A",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:80000/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 2,
+  "ms": 4911,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Mortiphasm A",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:80000/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "mortiphasm-1",
+   "wanted": "mortiphasm-1",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 2,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "mortiphasm-1"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 19573,
+  "actor": "command:auron",
+  "want": {
+   "label": "Armor Break",
+   "target": "Seymour Omnis",
+   "menu": "Special"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:4228/6492",
+   "wakka:3195/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:80000/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 23,
+    "actor": "auron",
+    "did": "Armor Break",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 23232,
+  "actor": "command:yuna",
+  "want": {
+   "label": "NulBlaze",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "NulBlaze",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:4228/6492",
+   "wakka:3195/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:79619/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 30,
+    "actor": "yuna",
+    "did": "NulBlaze",
+    "targets": [
+     "wakka",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 36524,
+  "actor": "command:yuna",
+  "want": {
+   "label": "NulBlaze",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "NulBlaze",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:3084/6492",
+   "wakka:3195/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:79619/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 54,
+    "actor": "yuna",
+    "did": "NulBlaze",
+    "targets": [
+     "wakka",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 40888,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Mortiphasm B",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:3084/6492",
+   "wakka:3195/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:79619/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "mortiphasm-2",
+   "wanted": "mortiphasm-2",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 60,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "mortiphasm-2"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 43710,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:3084/6492",
+   "wakka:3195/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:79619/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 65,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 45624,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:3084/6492",
+   "wakka:3195/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:76818/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 71,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 58399,
+  "actor": "command:wakka",
+  "want": {
+   "label": "X-Potion",
+   "target": "Wakka",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:5394/6492",
+   "wakka:2021/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:76818/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "wakka",
+   "wanted": "wakka",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 92,
+    "actor": "wakka",
+    "did": "X-Potion",
+    "targets": [
+     "wakka"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 61693,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:5394/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:76818/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 97,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 71797,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Wakka",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:5394/6492",
+   "wakka:4296/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:74217/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "wakka",
+   "wanted": "wakka",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 116,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "wakka"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 75955,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:5394/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:74217/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-omnis",
+   "wanted": "seymour-omnis",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 121,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 78125,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:5394/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:72860/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 125,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 88391,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:3171/6492",
+   "wakka:4255/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:70017/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 145,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 92697,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:4255/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:70017/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-omnis",
+   "wanted": "seymour-omnis",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 151,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 103483,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:4255/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:68614/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 162,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 105409,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Wakka",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:4255/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:65876/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "wakka",
+   "wanted": "wakka",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 168,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "wakka"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 109610,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:65876/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-omnis",
+   "wanted": "seymour-omnis",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 173,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 117532,
+  "actor": "command:auron",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:1622/5130",
+   "auron:2762/6492",
+   "wakka:2991/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:64608/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 187,
+    "actor": "auron",
+    "did": "X-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 121304,
+  "actor": "command:auron",
+  "want": {
+   "label": "X-Potion",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:2762/6492",
+   "wakka:2991/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:64608/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 192,
+    "actor": "auron",
+    "did": "X-Potion",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 127934,
+  "actor": "command:yuna",
+  "want": {
+   "label": "NulFrost",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "NulFrost",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:2991/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:64608/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 201,
+    "actor": "yuna",
+    "did": "NulFrost",
+    "targets": [
+     "wakka",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 132549,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Mortiphasm A",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:2991/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:64608/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "mortiphasm-1",
+   "wanted": "mortiphasm-1",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 207,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "mortiphasm-1"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 135024,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:2991/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:64608/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 212,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 24,
+  "ms": 136949,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Wakka",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:2991/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:62070/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "wakka",
+   "wanted": "wakka",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 217,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "wakka"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 25,
+  "ms": 149995,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:5298/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:62070/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-omnis",
+   "wanted": "seymour-omnis",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 239,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 26,
+  "ms": 151932,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:5298/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:60682/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 243,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 27,
+  "ms": 162478,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:3002/5130",
+   "auron:2094/6492",
+   "wakka:4332/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:57955/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 262,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 28,
+  "ms": 166879,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Mortiphasm B",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:3002/5130",
+   "auron:6492/6492",
+   "wakka:4332/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:57955/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "mortiphasm-2",
+   "wanted": "mortiphasm-2",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 268,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "mortiphasm-2"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 29,
+  "ms": 177884,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:4100/5130",
+   "auron:5321/6492",
+   "wakka:4332/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:57955/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 286,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 30,
+  "ms": 179821,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Wakka",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:4100/5130",
+   "auron:5321/6492",
+   "wakka:4332/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:55407/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "wakka",
+   "wanted": "wakka",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 291,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "wakka"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 31,
+  "ms": 192437,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:2986/5130",
+   "auron:5321/6492",
+   "wakka:5318/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:55407/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-omnis",
+   "wanted": "seymour-omnis",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 308,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 32,
+  "ms": 194385,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:2986/5130",
+   "auron:5321/6492",
+   "wakka:5318/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:54145/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 312,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 33,
+  "ms": 197182,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:2986/5130",
+   "auron:5321/6492",
+   "wakka:5318/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:51354/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 318,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 34,
+  "ms": 202361,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:5321/6492",
+   "wakka:5318/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:51354/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 325,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 35,
+  "ms": 204315,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:5321/6492",
+   "wakka:5318/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:48743/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-omnis",
+   "wanted": "seymour-omnis",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 329,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 36,
+  "ms": 212419,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:1900/5130",
+   "auron:1477/6492",
+   "wakka:1620/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:47392/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 344,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 37,
+  "ms": 216813,
+  "actor": "command:auron",
+  "want": {
+   "label": "X-Potion",
+   "target": "Wakka",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:1900/5130",
+   "auron:6492/6492",
+   "wakka:1620/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:47392/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "wakka",
+   "wanted": "wakka",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 349,
+    "actor": "auron",
+    "did": "X-Potion",
+    "targets": [
+     "wakka"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 38,
+  "ms": 220798,
+  "actor": "command:wakka",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:1900/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:47392/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 354,
+    "actor": "wakka",
+    "did": "X-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 39,
+  "ms": 224785,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:47392/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 361,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 40,
+  "ms": 226720,
+  "actor": "command:yuna",
+  "want": {
+   "label": "NulTide",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "NulTide",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:44538/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 366,
+    "actor": "yuna",
+    "did": "NulTide",
+    "targets": [
+     "wakka",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 41,
+  "ms": 231670,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Mortiphasm A",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:44538/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "mortiphasm-1",
+   "wanted": "mortiphasm-1",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 372,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "mortiphasm-1"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 42,
+  "ms": 243168,
+  "actor": "command:yuna",
+  "want": {
+   "label": "NulTide",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "NulTide",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:5344/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:44538/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 394,
+    "actor": "yuna",
+    "did": "NulTide",
+    "targets": [
+     "wakka",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 43,
+  "ms": 248090,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:5344/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:44538/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 400,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 44,
+  "ms": 250044,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Mortiphasm B",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:5344/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:41716/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "mortiphasm-2",
+   "wanted": "mortiphasm-2",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 404,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "mortiphasm-2"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 45,
+  "ms": 261468,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:4011/5130",
+   "auron:4191/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:41716/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 425,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 46,
+  "ms": 265929,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:4011/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:41716/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 429,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 47,
+  "ms": 277006,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:2884/5130",
+   "auron:5389/6492",
+   "wakka:5407/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:39062/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-omnis",
+   "wanted": "seymour-omnis",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 448,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 48,
+  "ms": 278984,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:2884/5130",
+   "auron:5389/6492",
+   "wakka:5407/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:37674/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 453,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 49,
+  "ms": 282851,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:5389/6492",
+   "wakka:5407/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:37674/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 457,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 50,
+  "ms": 293972,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:3083/6492",
+   "wakka:4264/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:35147/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-omnis",
+   "wanted": "seymour-omnis",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 475,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 51,
+  "ms": 297112,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:3083/6492",
+   "wakka:4264/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:33900/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 481,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 52,
+  "ms": 301606,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:4264/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:33900/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 486,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 53,
+  "ms": 304744,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:4264/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:31278/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-omnis",
+   "wanted": "seymour-omnis",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 493,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 54,
+  "ms": 306766,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:4264/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:29932/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 497,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 55,
+  "ms": 308512,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Wakka",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:4264/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:27278/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "wakka",
+   "wanted": "wakka",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 502,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "wakka"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 56,
+  "ms": 318676,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Turbo Ether",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "Turbo Ether",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:1847/5130",
+   "auron:2633/6492",
+   "wakka:2766/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:27278/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 516,
+    "actor": "wakka",
+    "did": "Turbo Ether",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 57,
+  "ms": 323275,
+  "actor": "command:auron",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:1847/5130",
+   "auron:2633/6492",
+   "wakka:2766/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:27278/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 522,
+    "actor": "auron",
+    "did": "X-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 58,
+  "ms": 327146,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:2633/6492",
+   "wakka:2766/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:27278/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 528,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 59,
+  "ms": 331659,
+  "actor": "command:wakka",
+  "want": {
+   "label": "X-Potion",
+   "target": "Wakka",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:2766/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:27278/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "wakka",
+   "wanted": "wakka",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 533,
+    "actor": "wakka",
+    "did": "X-Potion",
+    "targets": [
+     "wakka"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 60,
+  "ms": 335101,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:27278/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 538,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 61,
+  "ms": 344982,
+  "actor": "command:yuna",
+  "want": {
+   "label": "NulShock",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "NulShock",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:4211/6492",
+   "wakka:4247/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:24487/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 556,
+    "actor": "yuna",
+    "did": "NulShock",
+    "targets": [
+     "wakka",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 62,
+  "ms": 349594,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Mortiphasm A",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:4211/6492",
+   "wakka:4247/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:24487/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "mortiphasm-1",
+   "wanted": "mortiphasm-1",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 562,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "mortiphasm-1"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 63,
+  "ms": 352117,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:4211/6492",
+   "wakka:4247/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:24487/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 567,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 64,
+  "ms": 362676,
+  "actor": "command:yuna",
+  "want": {
+   "label": "NulShock",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "NulShock",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:4211/6492",
+   "wakka:4247/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:21907/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 588,
+    "actor": "yuna",
+    "did": "NulShock",
+    "targets": [
+     "wakka",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 65,
+  "ms": 367271,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Mortiphasm B",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:4211/6492",
+   "wakka:4247/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:21907/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "mortiphasm-2",
+   "wanted": "mortiphasm-2",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 594,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "mortiphasm-2"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 66,
+  "ms": 379403,
+  "actor": "command:auron",
+  "want": {
+   "label": "X-Potion",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:1923/6492",
+   "wakka:4247/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:21907/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 615,
+    "actor": "auron",
+    "did": "X-Potion",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 67,
+  "ms": 382889,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Wakka",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:4247/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:21907/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "wakka",
+   "wanted": "wakka",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 621,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "wakka"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 68,
+  "ms": 386981,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:21907/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 625,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 69,
+  "ms": 394947,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:19233/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-omnis",
+   "wanted": "seymour-omnis",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 635,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 70,
+  "ms": 396957,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Stamina Tonic",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Stamina Tonic",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:5130/5130",
+   "auron:6492/6492",
+   "wakka:6492/6492",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:19233/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 639,
+    "actor": "yuna",
+    "did": "Stamina Tonic",
+    "targets": [
+     "wakka",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 71,
+  "ms": 408206,
+  "actor": "command:auron",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:1609/9999",
+   "auron:2762/9999",
+   "wakka:2892/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:19233/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 655,
+    "actor": "auron",
+    "did": "X-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 72,
+  "ms": 411930,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:9999/9999",
+   "auron:2762/9999",
+   "wakka:2892/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:19233/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 661,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 73,
+  "ms": 416503,
+  "actor": "command:wakka",
+  "want": {
+   "label": "X-Potion",
+   "target": "Wakka",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:9999/9999",
+   "auron:8326/9999",
+   "wakka:2892/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:19233/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "wakka",
+   "wanted": "wakka",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 666,
+    "actor": "wakka",
+    "did": "X-Potion",
+    "targets": [
+     "wakka"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 74,
+  "ms": 420025,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:9999/9999",
+   "auron:8326/9999",
+   "wakka:9999/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:19233/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 671,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 75,
+  "ms": 422061,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Mortiphasm A",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:9999/9999",
+   "auron:8326/9999",
+   "wakka:9999/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:16663/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "mortiphasm-1",
+   "wanted": "mortiphasm-1",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 677,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "mortiphasm-1"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 76,
+  "ms": 424598,
+  "actor": "command:yuna",
+  "want": {
+   "label": "NulBlaze",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "NulBlaze",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:9999/9999",
+   "auron:8326/9999",
+   "wakka:9999/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:16663/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 683,
+    "actor": "yuna",
+    "did": "NulBlaze",
+    "targets": [
+     "wakka",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 77,
+  "ms": 428955,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:9999/9999",
+   "auron:8326/9999",
+   "wakka:9999/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:16663/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 689,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 78,
+  "ms": 439292,
+  "actor": "command:yuna",
+  "want": {
+   "label": "NulBlaze",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "NulBlaze",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:9999/9999",
+   "auron:8326/9999",
+   "wakka:9999/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:14125/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 710,
+    "actor": "yuna",
+    "did": "NulBlaze",
+    "targets": [
+     "wakka",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 79,
+  "ms": 443698,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Mortiphasm B",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:9999/9999",
+   "auron:8326/9999",
+   "wakka:9999/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:14125/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "mortiphasm-2",
+   "wanted": "mortiphasm-2",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 716,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "mortiphasm-2"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 80,
+  "ms": 454908,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:9999/9999",
+   "auron:7205/9999",
+   "wakka:8905/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:14125/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 736,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 81,
+  "ms": 456955,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Elixir",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Elixir",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:9999/9999",
+   "auron:7205/9999",
+   "wakka:8905/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:11535/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 740,
+    "actor": "yuna",
+    "did": "Elixir",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 82,
+  "ms": 462372,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:9999/9999",
+   "auron:9999/9999",
+   "wakka:8905/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:11535/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-omnis",
+   "wanted": "seymour-omnis",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 745,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 83,
+  "ms": 466820,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:9999/9999",
+   "auron:9999/9999",
+   "wakka:8905/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:10210/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 754,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 84,
+  "ms": 468570,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cura",
+   "target": "Wakka",
+   "menu": "White Magic"
+  },
+  "took": "Cura",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:9999/9999",
+   "auron:9999/9999",
+   "wakka:8905/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:7609/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "wakka",
+   "wanted": "wakka",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 759,
+    "actor": "yuna",
+    "did": "Cura",
+    "targets": [
+     "wakka"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 85,
+  "ms": 477772,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:6531/9999",
+   "auron:6326/9999",
+   "wakka:6189/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:7609/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "seymour-omnis",
+   "wanted": "seymour-omnis",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 770,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 86,
+  "ms": 479852,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:6531/9999",
+   "auron:6326/9999",
+   "wakka:6189/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:6242/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 774,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 87,
+  "ms": 481607,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Curaga",
+   "target": "Wakka",
+   "menu": "White Magic"
+  },
+  "took": "Curaga",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:6531/9999",
+   "auron:6326/9999",
+   "wakka:6189/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:3420/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "wakka",
+   "wanted": "wakka",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 779,
+    "actor": "yuna",
+    "did": "Curaga",
+    "targets": [
+     "wakka"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 88,
+  "ms": 485808,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:6531/9999",
+   "auron:6326/9999",
+   "wakka:9999/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:3420/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 785,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "seymour-omnis"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 89,
+  "ms": 487570,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Mortiphasm A",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:6531/9999",
+   "auron:6326/9999",
+   "wakka:9999/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:809/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "mortiphasm-1",
+   "wanted": "mortiphasm-1",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 789,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "mortiphasm-1"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 90,
+  "ms": 490176,
+  "actor": "command:yuna",
+  "want": {
+   "label": "NulFrost",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "NulFrost",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:6531/9999",
+   "auron:6326/9999",
+   "wakka:9999/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:809/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 795,
+    "actor": "yuna",
+    "did": "NulFrost",
+    "targets": [
+     "wakka",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 91,
+  "ms": 503350,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Seymour Omnis",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:6492/6492",
+   "yuna:7616/9999",
+   "auron:6326/9999",
+   "wakka:9999/9999",
+   "lulu:5700/5700",
+   "rikku:6492/6492",
+   "kimahri:6492/6492",
+   "valefor:1886/1886",
+   "ifrit:2585/2585",
+   "ixion:2551/2551",
+   "shiva:2266/2266",
+   "bahamut:3657/3657",
+   "seymour-omnis:809/80000",
+   "mortiphasm-1:1/1",
+   "mortiphasm-2:1/1",
+   "mortiphasm-3:1/1",
+   "mortiphasm-4:1/1"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

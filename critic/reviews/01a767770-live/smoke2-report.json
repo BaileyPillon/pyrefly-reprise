@@ -1,0 +1,39 @@
+{
+ "out": [
+  {
+   "s": "cursor on XII",
+   "o": true
+  },
+  {
+   "s": "XII at player turn",
+   "o": true
+  },
+  {
+   "s": "1st Escape (guide card absorbs or pauses)",
+   "o": true,
+   "d": "pause"
+  },
+  {
+   "s": "Escape reaches pause",
+   "o": true,
+   "d": "pause"
+  },
+  {
+   "s": "pause settings change persisted to save",
+   "o": true,
+   "d": "len 1812->1812"
+  },
+  {
+   "s": "Escape resumed to battle",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "reload keeps changed save",
+   "o": true,
+   "d": "1812 vs 1812"
+  }
+ ],
+ "errs": [],
+ "nf": []
+}

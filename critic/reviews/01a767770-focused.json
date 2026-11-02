@@ -1,0 +1,761 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-11-02T04:06:05.557Z",
+ "build": {
+  "mainSha": "01a767770"
+ },
+ "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect: IX, XII, VII, XIV and III played title to results by real keys, 0 console errors, 0 teleports outside III (and 0 in III).",
+  "No regression against live: the XII flag overlap replaces a comparable live overlap (flag over the disc strip); VII dashes are smaller than live (166.6 vs 244.7 px); III failures are the class of the pack and release 70 baselines; IX dashes 0 against 24.2 px on the control.",
+  "Majors R72-1 and R72-2 are disclosed and carried into the next batch; the release is better than live."
+ ],
+ "checks": [
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "reason": "dist-gate serves bundle index-Cz_6EQVK.js (the expected one); node tools/dist-local-paths.mjs reports 0 hits in 1367 text files; 0 console errors, 0 4xx in every play run.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "served candidate",
+   "evidence": [
+    "critic/reviews/01a767770-focused/play/c-ch1-1600.json",
+    "critic/reviews/01a767770-focused/play/c-xi-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 2
+  },
+  {
+   "id": "CHK-003",
+   "result": "PASS",
+   "reason": "IX 0 overlapping HUD panel pairs in every state read (base, Intel, target cursor and six cursor stops, at 1600x900 and 2000x1012). XII (F1 HUD held) 0 pairs in base, Intel and the first target state; the cursor stops are issue R72-1 (CHK-009). Text floor not re-measured here (FFX lane).",
+   "game": "FFX",
+   "chapter": "IX yojimbo-cavern, XII seymour-omnis",
+   "state": "first menu, Intel, target cursor",
+   "evidence": [
+    "critic/reviews/01a767770-focused/play/hud-ix-cand.json",
+    "critic/reviews/01a767770-focused/play/hud-xii-cand.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 6
+  },
+  {
+   "id": "CHK-009",
+   "result": "FAIL",
+   "reason": "XII: at alternate cursor stops the TARGET flag lands on the Sensor card (98 x 79 px at 1600, 80 x 85 at 2000) with a text collision; live shows the flag over the disc strip text at the same stop (a different overlap); ?treated=pack read 0 pairs. Issue R72-1.",
+   "game": "FFX",
+   "chapter": "XII seymour-omnis",
+   "state": "target cursor, ArrowRight and ArrowLeft stops",
+   "evidence": [
+    "critic/reviews/01a767770-focused/play/hud-xii-cand2.json",
+    "critic/reviews/01a767770-focused/play/hud-xii-cand2-1600-cursor1.png",
+    "critic/reviews/01a767770-focused/play/hud-xii-live2-1600-cursor1.png",
+    "critic/reviews/01a767770-focused/play/hud-xii-pack.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 8
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Chapter I (seymour-flux) played by real keys to 4 turns at 1600x900: 0 console errors, 59.7 fps. The shared slide ease produced no one-frame hop over 100 px that its control lacks in IX, XII, VII or XIV.",
+   "game": "both",
+   "chapter": "I seymour-flux; VII, IX, XII, XIV",
+   "state": "real-key play",
+   "evidence": [
+    "critic/reviews/01a767770-focused/play/c-ch1-1600.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 4
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Case: IX, XII and III FFX only (the FFX F1 HUD ribbon and the real clips; research/ffx-vs-ffx2-presentation.md); XI sky option C FFX-2 only; the slide ease both. Presence: treated() lists IX, XII, III and XI; XI plays with a dark violet sky and a legible party (0 console errors, 59.3 fps at 1600, 59.1 at 2000). Absence: the FFX-2 chapter XI draws the FFX-2 ATB HUD and no F1 ribbon.",
+   "game": "both",
+   "chapter": "XI ffx2-fallen-aeons, I, IX, XII",
+   "state": "first menu",
+   "evidence": [
+    "critic/reviews/01a767770-focused/play/c-xi-1600-01-menu.png",
+    "critic/reviews/01a767770-focused/play/c-xi-1600.json",
+    "critic/reviews/01a767770-focused/play/c-xi-2000.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 4
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Every continuity run is one continuous real-key route from the title to the results for IX, XII, VII, XIV and III.",
+   "game": "FFX",
+   "chapter": "IX, XII, VII, XIV, III",
+   "state": "title to results",
+   "evidence": [
+    "critic/reviews/01a767770-focused/continuity/continuity-summary-yojimbo-cavern.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 60
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "reason": "III FAIL (54 head-size swaps over tolerance, worst 58.1 percent, feet 11.4 px, 18 stature outside band); IX FAIL (15.4 percent, identical on the ?treated=pack control); VII FAIL (22.2 percent; live 22.1, pack 22.2); XII PASS (8.7, control 8.7); XIV PASS. Every FAIL equals its control or live read. Issue R72-2.",
+   "game": "FFX",
+   "chapter": "III, IX, XII, VII, XIV",
+   "state": "full fight",
+   "evidence": [
+    "critic/reviews/01a767770-focused/continuity/continuity-summary-braskas-final-aeon.json",
+    "critic/reviews/01a767770-focused/continuity/continuity-summary-yojimbo-cavern.json",
+    "critic/reviews/01a767770-focused/continuity-control/continuity-summary-yojimbo-cavern.json",
+    "critic/reviews/01a767770-focused/continuity-live/continuity-summary-seymour-anima-macalania.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 60
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "III FAIL: 0 teleports, 8 gated swap jerks (worst 229.5 px, Auron and Yuna swaps on cuts and two stall frames), 42 dashes up to 162.2 px. IX PASS (0 dashes against 24.2 px on the control). XII PASS (swap jerk 30 px vs 27.8; dashes worst 84.1 px against 0 on the control, under 100 px). VII PASS (worst dash 166.6 px; live 244.7, pack 124.7). XIV PASS (swap jerk 26.2, 0 teleports). No hop over 100 px that the control lacks in IX, XII, VII or XIV. Issue R72-2.",
+   "game": "FFX",
+   "chapter": "III, IX, XII, VII, XIV",
+   "state": "full fight",
+   "evidence": [
+    "critic/reviews/01a767770-focused/continuity/continuity-summary-braskas-final-aeon.json",
+    "critic/reviews/01a767770-focused/continuity/continuity-summary-seymour-omnis.json",
+    "critic/reviews/01a767770-focused/continuity-control/continuity-summary-seymour-omnis.json",
+    "critic/reviews/01a767770-focused/continuity/cont.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 60
+  },
+  {
+   "id": "CHK-013",
+   "result": "NOT APPLICABLE",
+   "reason": "No audio change in this release.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture asserted screen battle (and awaitingMenu where it applies) before the shot; a failed wait throws; no wrong-screen capture.",
+   "game": "both",
+   "chapter": "all",
+   "state": "capture",
+   "evidence": [
+    "critic/reviews/01a767770-focused/scripts/hudcheck.mjs",
+    "critic/reviews/01a767770-focused/scripts/lib.mjs"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-004",
+   "result": "UNVERIFIED",
+   "reason": "Not measured by this review; lane evidence only; 390x844 not run (hudf1-chapters.css is the desktop F1 HUD).",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-006",
+   "result": "UNVERIFIED",
+   "reason": "Not run (no pause, results or options change in the diff).",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-007",
+   "result": "UNVERIFIED",
+   "reason": "Not run; lane evidence only.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-008",
+   "result": "UNVERIFIED",
+   "reason": "Not run; lane evidence only.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-010",
+   "result": "UNVERIFIED",
+   "reason": "Not run; lane evidence only.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-015",
+   "result": "UNVERIFIED",
+   "reason": "Not assessed: timings were taken beside a GPU art batch and are noisy (fps 59.1 to 59.9, p99 19.6 to 27.4 ms); no timing regression is called.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-023",
+   "result": "UNVERIFIED",
+   "reason": "Not run by this review.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "yojimbo-cavern",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "PASS"
+    },
+    "battleSeconds": 118.8,
+    "swaps": 78,
+    "snapsPerMinute": 0,
+    "ghostMsPerMinute": 644,
+    "maxHeadJumpPct": 15.4,
+    "maxFeetShiftPx": 0.2,
+    "worstJerkPx": 0,
+    "minStature": 0.809,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 0,
+    "dashesWorstPx": 0,
+    "frameP99Ms": 19.9,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.8,
+    "dedicated": true,
+    "strips": 15,
+    "worstSwapStrips": [
+     "yojimbo-cavern-win-01a767770/continuity/strips/swap-009-lulu-ready-cast.jpg",
+     "yojimbo-cavern-win-01a767770/continuity/strips/swap-078-kimahri-idle-victory.jpg",
+     "yojimbo-cavern-win-01a767770/continuity/strips/swap-057-yuna-idle-hurt.jpg",
+     "yojimbo-cavern-win-01a767770/continuity/strips/swap-060-yuna-hurt-idle.jpg",
+     "yojimbo-cavern-win-01a767770/continuity/strips/swap-023-yuna-item-idle.jpg",
+     "yojimbo-cavern-win-01a767770/continuity/strips/swap-004-yuna-idle-item.jpg",
+     "yojimbo-cavern-win-01a767770/continuity/strips/swap-007-yojimbo-hurt-idle.jpg",
+     "yojimbo-cavern-win-01a767770/continuity/strips/swap-010-yojimbo-idle-hurt.jpg",
+     "yojimbo-cavern-win-01a767770/continuity/strips/swap-011-lulu-cast-idle.jpg",
+     "yojimbo-cavern-win-01a767770/continuity/strips/swap-079-yuna-idle-victory.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "seymour-omnis",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "PASS"
+    },
+    "battleSeconds": 524.6,
+    "swaps": 632,
+    "snapsPerMinute": 0,
+    "ghostMsPerMinute": 1396,
+    "maxHeadJumpPct": 8.7,
+    "maxFeetShiftPx": 1.5,
+    "worstJerkPx": 84.1,
+    "minStature": 0.781,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 30,
+    "dashesWorstPx": 84.1,
+    "frameP99Ms": 23.1,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.9,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "seymour-omnis-win-01a767770/continuity/strips/swap-104-wakka-hurt-idle.jpg",
+     "seymour-omnis-win-01a767770/continuity/strips/swap-005-wakka-idle-hurt.jpg",
+     "seymour-omnis-win-01a767770/continuity/strips/swap-137-yuna-hurt-critical.jpg",
+     "seymour-omnis-win-01a767770/continuity/strips/swap-056-wakka-critical-hurt.jpg",
+     "seymour-omnis-win-01a767770/continuity/strips/swap-061-wakka-hurt-critical.jpg",
+     "seymour-omnis-win-01a767770/continuity/strips/swap-236-yuna-hurt-idle.jpg",
+     "seymour-omnis-win-01a767770/continuity/strips/swap-340-yuna-idle-hurt.jpg",
+     "seymour-omnis-win-01a767770/continuity/strips/swap-569-yuna-item-idle.jpg",
+     "seymour-omnis-win-01a767770/continuity/strips/swap-499-yuna-idle-item.jpg",
+     "seymour-omnis-win-01a767770/continuity/strips/swap-041-auron-critical-idle.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "seymour-anima-macalania",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "PASS"
+    },
+    "battleSeconds": 325.8,
+    "swaps": 291,
+    "snapsPerMinute": 0,
+    "ghostMsPerMinute": 1044,
+    "maxHeadJumpPct": 22.2,
+    "maxFeetShiftPx": 0.9,
+    "worstJerkPx": 166.6,
+    "minStature": 0.787,
+    "heightOverBand": 0,
+    "feetSilOver": 1,
+    "swapJerksWorstPx": 0,
+    "dashesWorstPx": 166.6,
+    "frameP99Ms": 24.2,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.7,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "seymour-anima-macalania-win-01a767770/continuity/strips/swap-269-shiva-hurt-ko.jpg",
+     "seymour-anima-macalania-win-01a767770/continuity/strips/swap-295-yuna-hurt-critical.jpg",
+     "seymour-anima-macalania-win-01a767770/continuity/strips/swap-113-tidus-ready-attack.jpg",
+     "seymour-anima-macalania-win-01a767770/continuity/strips/swap-109-rikku-attack-follow.jpg",
+     "seymour-anima-macalania-win-01a767770/continuity/strips/swap-115-tidus-attack-follow.jpg",
+     "seymour-anima-macalania-win-01a767770/continuity/strips/swap-057-rikku-follow-idle.jpg",
+     "seymour-anima-macalania-win-01a767770/continuity/strips/swap-015-yuna-idle-hurt.jpg",
+     "seymour-anima-macalania-win-01a767770/continuity/strips/swap-017-yuna-hurt-idle.jpg",
+     "seymour-anima-macalania-win-01a767770/continuity/strips/swap-220-ixion-hurt-ko.jpg",
+     "seymour-anima-macalania-win-01a767770/continuity/strips/swap-107-rikku-ready-attack.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "isaaru-via-purifico",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "PASS"
+    },
+    "battleSeconds": 258.9,
+    "swaps": 223,
+    "snapsPerMinute": 0,
+    "ghostMsPerMinute": 475,
+    "maxHeadJumpPct": 22,
+    "maxFeetShiftPx": 1.3,
+    "worstJerkPx": 55.2,
+    "minStature": 0.802,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 26.2,
+    "dashesWorstPx": 55.2,
+    "frameP99Ms": 19.6,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.7,
+    "dedicated": true,
+    "strips": 19,
+    "worstSwapStrips": [
+     "isaaru-via-purifico-win-01a767770/continuity/strips/swap-012-shiva-hurt-ko.jpg",
+     "isaaru-via-purifico-win-01a767770/continuity/strips/swap-017-yuna-hurt-idle.jpg",
+     "isaaru-via-purifico-win-01a767770/continuity/strips/swap-015-yuna-idle-hurt.jpg",
+     "isaaru-via-purifico-win-01a767770/continuity/strips/swap-233-ixion-idle-ko.jpg",
+     "isaaru-via-purifico-win-01a767770/continuity/strips/swap-009-shiva-attack-idle.jpg",
+     "isaaru-via-purifico-win-01a767770/continuity/strips/swap-006-shiva-idle-attack.jpg",
+     "isaaru-via-purifico-win-01a767770/continuity/strips/swap-159-ixion-attack-idle.jpg",
+     "isaaru-via-purifico-win-01a767770/continuity/strips/swap-168-ixion-idle-attack.jpg",
+     "isaaru-via-purifico-win-01a767770/continuity/strips/swap-248-spathi-idle-ko.jpg",
+     "isaaru-via-purifico-win-01a767770/continuity/strips/swap-030-grothia-hurt-ko.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "braskas-final-aeon",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 1629.6,
+    "swaps": 1422,
+    "snapsPerMinute": 0,
+    "ghostMsPerMinute": 1414,
+    "maxHeadJumpPct": 58.1,
+    "maxFeetShiftPx": 11.4,
+    "worstJerkPx": 229.5,
+    "minStature": 0.732,
+    "heightOverBand": 18,
+    "feetSilOver": 16,
+    "swapJerksWorstPx": 229.5,
+    "dashesWorstPx": 162.2,
+    "frameP99Ms": 27.4,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.7,
+    "dedicated": true,
+    "strips": 13,
+    "worstSwapStrips": [
+     "braskas-final-aeon-win-01a767770/continuity/strips/swap-1046-tidus-critical-idle.jpg",
+     "braskas-final-aeon-win-01a767770/continuity/strips/swap-031-yuna-critical-idle.jpg",
+     "braskas-final-aeon-win-01a767770/continuity/strips/swap-216-shiva-hurt-ko.jpg",
+     "braskas-final-aeon-win-01a767770/continuity/strips/swap-022-yuna-critical-hurt.jpg",
+     "braskas-final-aeon-win-01a767770/continuity/strips/swap-025-yuna-hurt-critical.jpg",
+     "braskas-final-aeon-win-01a767770/continuity/strips/swap-899-tidus-attack-follow.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "controls": {
+   "yojimbo-cavern pack": "continuity-control/continuity-summary-yojimbo-cavern.json",
+   "seymour-omnis pack": "continuity-control/continuity-summary-seymour-omnis.json",
+   "seymour-anima-macalania pack": "continuity-control/continuity-summary-seymour-anima-macalania.json",
+   "seymour-anima-macalania live71": "continuity-live/continuity-summary-seymour-anima-macalania.json"
+  },
+  "harness": {
+   "schema": "continuity-harness/1",
+   "id": "5e1bbdec47c9e7206f710149081baf8ceab77dc6b230bec2117ef4eed133fc31",
+   "tree": {
+    "root": "D:/pyrefly-release55",
+    "head": "01a767770d14540940ee54b90d8ec923031588a3",
+    "dirty": []
+   },
+   "files": {
+    "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+    "critic/runner/lib/continuity-analyze.mjs": "a20e4de301b117cf4a98ecf99f58fe695aaedb18",
+    "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+    "critic/runner/lib/continuity-card.mjs": "2e0208df7bc9a922a27d519fc5ebb49bed3fafd9",
+    "critic/runner/lib/continuity-dissolve.mjs": "4a9a2ebc79b798dc6059312f0b885510f4cd79b3",
+    "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+    "critic/runner/lib/continuity-gaps.mjs": "7337b85eda92c5755d11ccbee84749ee231cfe3d",
+    "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+    "critic/runner/lib/continuity-ghostms.mjs": "d74a048e0c44be69d22b050973ec240fbec3db66",
+    "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+    "critic/runner/lib/continuity-probe.mjs": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25",
+    "critic/runner/lib/continuity-pure.mjs": "c30cf02831efe33d9726d0bae9f9b3e098292090",
+    "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+    "critic/runner/lib/continuity-rig-probe.mjs": "35bf097b7bbfa81abeb4daf8e78f0d9515ff3ab1",
+    "critic/runner/lib/continuity-rig.mjs": "6e1b891a9d237b4b9db52593303df5e1ffc812e4",
+    "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+    "critic/runner/lib/continuity-smear.mjs": "bb6bcae7b35d4d99465f0650e58554cc785af513",
+    "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+    "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+    "critic/runner/lib/continuity-summary.mjs": "c671aa6dbc9e6df72a767ace45e6a57cdb478053",
+    "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+    "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+    "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+    "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+    "critic/runner/lib/continuity-why.mjs": "e2f0063820045e9c5eb5bb2ece203c00bed1fe3d",
+    "critic/runner/lib/continuity.mjs": "d3fd3269395cfa928cd1566a81486359e28210cb",
+    "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+    "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+    "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+    "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+    "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+    "critic/runner/lib/route-pure.mjs": "4d484cc9c873d60c66b48e418bb688dd6248b647",
+    "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+    "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+    "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+    "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+    "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+    "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+   },
+   "policy": {
+    "continuitySha256": "5ef4a3ed6fec14518548de8b462466822a3cf3a41f11528f8e8abb143de6fa43",
+    "fileSha256": "9c72460c4bdd463ef02f5e1f01c2baa3aa5334f392c29b114da466ca9c54cc71",
+    "override": false,
+    "overrideSha256": null
+   },
+   "probe": {
+    "version": 3,
+    "blob": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25"
+   },
+   "poseTable": {
+    "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+    "sha256": "b8cead6d81a854dc7ac60a210ac702185cd33668b555f01bb24e60fd408e3940",
+    "subjects": 114,
+    "source": "harness-tree",
+    "buildSha": "01a76777",
+    "isCandidate": true
+   },
+   "waivers": {
+    "path": "D:\\pyrefly-release55\\docs\\target\\pose-waivers.json",
+    "sha256": "84fc043f4169733ef228cbf965eb2b0679f3f0e38f7f609e97d99135924f532f",
+    "rows": 80
+   },
+   "run": {
+    "query": null,
+    "setArt": null,
+    "browser": "gpu"
+   },
+   "changedDuringRun": false,
+   "chapterIds": [
+    "5e1bbdec47c9e7206f710149081baf8ceab77dc6b230bec2117ef4eed133fc31"
+   ],
+   "unstamped": [],
+   "chaptersByOtherHarness": [],
+   "aggregateSha256": "aac9f266158d02c5e41304b35a1260e7f6c849dcbf3c78ad10f5bceb48962455"
+  },
+  "battleSeconds": 524.6,
+  "counted": 632,
+  "swaps": 638,
+  "size": {
+   "judged": 632,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 0,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 8.7,
+   "maxHeadJumpPctRegistration": 0.2,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 1.5,
+   "feetOverTolerance": 0,
+   "feetDesigned": 0,
+   "feetDesignedWorstPx": 0,
+   "headMeasured": 632,
+   "headRegistration": 385,
+   "headRig": 0,
+   "rigSwaps": 0,
+   "headSilhouette": 247,
+   "headUnmeasured": 0,
+   "heightMeasured": 632,
+   "heightOverBand": 0,
+   "heightWaived": 0,
+   "minStature": 0.781,
+   "maxStature": 1.081,
+   "koLengthMeasured": 0,
+   "minKoLength": null,
+   "koLengthReported": 0,
+   "feetSilMeasured": 632,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 3.2,
+   "holdSwaps": 385,
+   "worstRealHeadPct": 28.2,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "variantHeadSwaps": 0,
+   "worstVariantHeadPct": 0,
+   "variantHeadOutsideBand": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 300,
+   "hardCutsPerMinute": 34.31,
+   "ghostSwaps": 332,
+   "ghostFrames": 727,
+   "worstGhostSeverity": 0.301,
+   "ghostOverFail": 0,
+   "jerks": 53,
+   "worstJerkPx": 84.1,
+   "jerksOverFail": 23,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0.128,
+   "maxCentroidShiftPx": 107.2,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 0,
+   "smearsPlanned": 318,
+   "smearSwaps": 306,
+   "smearSnapsExcused": 305,
+   "jerksSmeared": 156,
+   "worstSmearedJerkPx": 216.1,
+   "swapJerks": 30,
+   "swapJerksWorstPx": 30,
+   "swapJerksOverFail": 0,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 23,
+   "dashesWorstPx": 84.1,
+   "dashesOverFail": 23,
+   "jerksLongFrame": 0,
+   "swapJerksLongFrame": 0,
+   "swapJerksSteadyOverFail": 0,
+   "ghostMs": 12210,
+   "ghostMsPerMinute": 1396,
+   "ghostFramesPerMinute": 83.1,
+   "ghostFrames60PerMinute": 83.8
+  },
+  "frameTime": {
+   "frames": 31436,
+   "longFrames": 26,
+   "longFramePct": 0.1,
+   "worstP99Ms": 23.1,
+   "maxMs": 152.8,
+   "longMs": 34,
+   "source": "continuity-probe",
+   "pacingNumber": false
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "PASS",
+    "reasons": [],
+    "note": "385 of 632 measured swaps had a registered head (tolerance 3 percent); 247 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 632 swap(s) (stature 0.781 to 1.081, 0 out of band but waived), the silhouette's own feet 632 swap(s) (worst 3.2 px, 0 waived), 385 swap(s) across a recorded hold (real head worst 28.2 percent from the idle's), 0 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "PASS",
+    "reasons": [],
+    "note": "23 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 84.1 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 306 of 318 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 305 snap(s) not counted, 156 swap jerk(s) (worst 216.1 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 524.6 s of battle, 59.9 to 59.9 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 PASS; 1,396 ms of see-through a minute (83.8 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at 01a767770; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows)).",
+  "poseMeasure": {
+   "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+   "source": "harness-tree",
+   "subjects": 114,
+   "sha256": "b8cead6d81a854dc7ac60a210ac702185cd33668b555f01bb24e60fd408e3940",
+   "staleChapters": []
+  }
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "R72-1",
+   "severity": "major",
+   "title": "Chapter XII (F1 HUD held): the TARGET flag lands on the Sensor card at alternate cursor stops",
+   "game": "FFX",
+   "chapter": "seymour-omnis",
+   "expected": "The flag and the Sensor card never overlap while the target cursor moves",
+   "observed": "At cursor stops 1, 3 and 5 of a six-key walk the flag overlaps the Sensor card by 98 x 79 px at 1600x900 and 80 x 85 at 2000x1012, the title text colliding. Live shows the flag over the disc strip text at the same stop (a different overlap); the pack control read 0 pairs.",
+   "repro": "?coach=off seed 1: Chapter XII, G (Intel), Enter on Attack, ArrowRight",
+   "evidence": [
+    "critic/reviews/01a767770-focused/play/hud-xii-cand2.json",
+    "critic/reviews/01a767770-focused/play/hud-xii-cand2-1600-cursor1.png",
+    "critic/reviews/01a767770-focused/play/hud-xii-live2-1600-cursor1.png"
+   ],
+   "confidence": "medium",
+   "requirement": "CHK-003 / CHK-009",
+   "where": "src/ui/ffx/hudAvoidSelectors.ts, flag placement (suspected)",
+   "fix": "Steer the flag against the Sensor card as well as the advisor card, or fold the Sensor card while the cursor is up",
+   "acceptanceCheck": "hudcheck cursor walk reads 0 pairs at 1600 and 2000 wide",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R72-2",
+   "severity": "major",
+   "title": "Chapter III: 8 gated swap jerks (worst 229.5 px) and head-size swaps (worst 58 percent) remain",
+   "game": "FFX",
+   "chapter": "braskas-final-aeon",
+   "expected": "No swap jerk over 80 px, heads within 3 percent",
+   "observed": "CHK-026 and CHK-027 FAIL. 0 teleports; the gated jerks are Auron and Yuna swaps on camera cuts and stall frames, the class the lane read on ?treated=pack and the release 70 candidate (3 teleports there). 42 mid-move dashes up to 162.2 px. The Tidus strips (attack to follow, critical to idle) are cuts, not the return flip. This review made no live Chapter III run.",
+   "repro": "continuity harness braskas-final-aeon, 1630 s of battle",
+   "evidence": [
+    "critic/reviews/01a767770-focused/continuity/continuity-summary-braskas-final-aeon.json"
+   ],
+   "confidence": "medium",
+   "requirement": "CHK-026, CHK-027",
+   "where": "pose registration of the Chapter III victory and critical paintings (suspected)",
+   "fix": "Register the Auron and Yuna victory and critical heads; cover the swaps with the cut",
+   "acceptanceCheck": "continuity III reads 0 gated swap jerks",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  },
+  {
+   "id": "R72-3",
+   "severity": "polish",
+   "title": "Chapter XII real-clip dashes up to 84.1 px against 0 on the control",
+   "game": "FFX",
+   "chapter": "seymour-omnis",
+   "expected": "No new dashes",
+   "observed": "XII dashes worst 84.1 px (under the 100 px bar); IX head swap 15.4 percent on both candidate and control",
+   "repro": "continuity harness",
+   "evidence": [
+    "critic/reviews/01a767770-focused/continuity/continuity-summary-seymour-omnis.json",
+    "critic/reviews/01a767770-focused/continuity-control/continuity-summary-seymour-omnis.json"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-027",
+   "where": "real clips (suspected)",
+   "fix": "Review the XII dash strips",
+   "acceptanceCheck": "dashes under 60 px",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "dist-gate bundle and privacy gate",
+   "IX and XII HUD overlap walks at 1600x900 and 2000x1012 (candidate; XII also pack and live)",
+   "continuity harness on IX, XII, VII, XIV, III (candidate), IX, XII, VII (pack), VII (live)",
+   "Chapter I and XI by real keys to 4 turns at 1600x900 (XI also 2000x1012), PYREFLY_BROWSER=gpu"
+  ],
+  "reused": [
+   {
+    "what": "text floor, sky-plate luma, strike frames, 2560 and 3440 sizes",
+    "from": "D:/Tools/pyrefly-scratch/2026-11-01/r72/{ffx,ffx2}/results.json",
+    "why": "the lanes measured them on the same code with the sweep harness"
+   }
+  ],
+  "notTested": [
+   "390x844",
+   "live Chapter III continuity run",
+   "XIV and III pack controls",
+   "per-disc cursor reads in XII",
+   "other FFX-2 chapters",
+   "timing regressions (GPU art batch noise)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "Deep review on the live build (owed): III real clips, XII HUD lift, XI sky.",
+ "elapsedMinutes": 125
+}

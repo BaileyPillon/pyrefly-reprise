@@ -1,0 +1,157 @@
+{
+ "tag": "xii-live",
+ "chapter": "seymour-omnis",
+ "query": "?coach=off",
+ "reads": [
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "base",
+   "f1": false,
+   "n": 10,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "intel",
+   "f1": false,
+   "n": 10,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "intel+target",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "cursor0",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "cursor1",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "cursor2",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "cursor3",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "cursor4",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "cursor5",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "base",
+   "f1": false,
+   "n": 10,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "intel",
+   "f1": false,
+   "n": 10,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "intel+target",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "cursor0",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "cursor1",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "cursor2",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "cursor3",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "cursor4",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "cursor5",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  }
+ ],
+ "bundle": [
+  "https://echoesofspira.com/assets/index-BqgCyT8R.js"
+ ],
+ "treated": "{\"scope\":\"all\",\"chapters\":[\"seymour-flux\",\"yunalesca\",\"seymour-anima-macalania\",\"seymour-natus\",\"braskas-final-aeon\",\"isaaru-via-purifico\",\"evrae-airship\",\"mirror-aeons\",\"ffx2-bahamut\",\"ffx2-leblanc\",\"ffx2-vegnagun-shuyin\",\"ffx2-fallen-aeons\",\"ffx2-den-of-woe\",\"ffx2-trema\",\"ffx2-ixion-djose\"],\"holds",
+ "consoleErrors": [],
+ "http4xx": []
+}

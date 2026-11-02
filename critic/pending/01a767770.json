@@ -1,20 +1,20 @@
 {
-  "mainSha": "6d7ecc8a5",
-  "bundle": "BqgCyT8R",
-  "deployedAt": "2026-11-01T14:14:08.497Z",
+  "mainSha": "01a767770",
+  "bundle": "Cz_6EQVK",
+  "deployedAt": "2026-11-02T04:29:26.601Z",
   "liveUrl": "https://echoesofspira.com/",
   "artFiles": 4830,
   "policyVersion": 2,
-  "artifactHash": "ac420514e36e944600deba3a05c074788982aaa78ba4c9ef9c81c6498b29dd7f",
+  "artifactHash": "664d823bcbcbe896e14fc7f73aabda4aadc4f119b24d8ba4303c1f83c0e27553",
   "review": "deep",
   "reasons": [
     "src/app/changelog/releaseNotes.ts: unclassified product path is a shared system",
-    "src/ui/hudf1/HudF1.ts: unclassified product path is a shared system",
-    "src/ui/hudf1/HudF1Switch.ts: unclassified product path is a shared system",
+    "src/engine/BattlePresenterStage.ts: battle presenter and lifecycle is a shared system",
     "src/ui/hudf1/hudf1-chapters.css: unclassified product path is a shared system"
   ],
   "systems": [
     "FFX HUD",
+    "battle presenter and lifecycle",
     "debug API used by the evidence harness",
     "effects, lighting and sprites",
     "unclassified product path"
@@ -55,13 +55,14 @@
     "CHK-020",
     "CHK-021",
     "CHK-022",
+    "CHK-023",
     "CHK-026",
     "CHK-027"
   ],
   "liveArtifact": {
     "result": "PASS",
     "checked": 57,
-    "at": "2026-11-01T14:14:08.497Z"
+    "at": "2026-11-02T04:29:26.601Z"
   },
   "obligations": [
     {
@@ -69,21 +70,24 @@
       "status": "done",
       "requires": "exact-artifact verification and real-input smoke on the live URL",
       "result": "PASS",
-      "settledBy": "critic/reviews/6d7ecc8a5-live.json",
-      "settledAt": "2026-11-01T15:10:00.000Z"
+      "settledBy": "critic/reviews/01a767770-live.json",
+      "settledAt": "2026-11-02T05:20:00.000Z"
     },
     {
       "kind": "focused",
       "status": "done",
       "requires": "acceptance of the changed area",
-      "result": "PASS",
-      "settledBy": "critic/reviews/6d7ecc8a5-focused.json",
-      "settledAt": "2026-11-01T13:53:32.515Z"
+      "result": "FAIL",
+      "settledBy": "critic/reviews/01a767770-focused.json",
+      "settledAt": "2026-11-02T04:06:05.557Z"
     },
     {
       "kind": "deep",
       "status": "pending",
-      "requires": "deep review of every affected chapter and system"
+      "requires": "deep review of every affected chapter and system",
+      "carriedFrom": [
+        "6d7ecc8a5"
+      ]
     }
   ]
 }

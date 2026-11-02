@@ -1,0 +1,377 @@
+{
+ "tag": "xii-live2",
+ "chapter": "seymour-omnis",
+ "query": "?coach=off",
+ "reads": [
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "base",
+   "f1": false,
+   "n": 10,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "intel",
+   "f1": false,
+   "n": 10,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "intel+target",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "cursor0",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "cursor1",
+   "f1": false,
+   "n": 12,
+   "pairs": [],
+   "rects": [
+    {
+     "k": "cmdarea",
+     "id": "cmdarea0",
+     "x": 75.5,
+     "y": 444.6,
+     "w": 468.9,
+     "h": 391,
+     "txt": "AttackSpecial▸×4White Magic▸×3Item ▸×15F"
+    },
+    {
+     "k": "cmdstack",
+     "id": "cmdstack0",
+     "x": 75.5,
+     "y": 444.6,
+     "w": 468.9,
+     "h": 391,
+     "txt": "AttackSpecial▸×4White Magic▸×3Item ▸×15F"
+    },
+    {
+     "k": "cmdinfo",
+     "id": "cmdinfo0",
+     "x": 70.5,
+     "y": 337.4,
+     "w": 410.1,
+     "h": 47.6,
+     "txt": "Phy ical damage"
+    },
+    {
+     "k": "ctb",
+     "id": "ctb0",
+     "x": 1367.7,
+     "y": 124.4,
+     "w": 183.4,
+     "h": 376.6,
+     "txt": "Tidu \n      T\n    \n      Seymour Omni \n "
+    },
+    {
+     "k": "statlist",
+     "id": "statlist0",
+     "x": 1038.8,
+     "y": 645.7,
+     "w": 535.5,
+     "h": 224.3,
+     "txt": "T\n      Tidu \n      6492/6492\n      140/"
+    },
+    {
+     "k": "omrstrip",
+     "id": "omrstrip0",
+     "x": 682.1,
+     "y": 14,
+     "w": 489.7,
+     "h": 74,
+     "txt": "Di c facing himFireFireFireFireAb orb Fi"
+    },
+    {
+     "k": "omrnote",
+     "id": "omrnote0",
+     "x": 862,
+     "y": 88,
+     "w": 279.8,
+     "h": 22,
+     "txt": "Colour order: our e timate"
+    },
+    {
+     "k": "omrintent",
+     "id": "omrintent0",
+     "x": 1073.4,
+     "y": 542.6,
+     "w": 481.1,
+     "h": 99.4,
+     "txt": "Enemy intentEvery di c  how  Fire: four "
+    },
+    {
+     "k": "sensor",
+     "id": "sensor0",
+     "x": 855.3,
+     "y": 338,
+     "w": 290.9,
+     "h": 192.5,
+     "txt": "Seymour Omni \n      HP  ? ? ?\n      \n   "
+    },
+    {
+     "k": "advcard",
+     "id": "advcard0",
+     "x": 18.3,
+     "y": 73.8,
+     "w": 610.4,
+     "h": 213.8,
+     "txt": "Next be t moveTidu Tidu 1WakkaSwitchin S"
+    },
+    {
+     "k": "advtoggle",
+     "id": "advtoggle0",
+     "x": 38.2,
+     "y": 41.3,
+     "w": 160.2,
+     "h": 26.3,
+     "txt": "Nhide move "
+    },
+    {
+     "k": "tplate",
+     "id": "tplate0",
+     "x": 984.8,
+     "y": 216.9,
+     "w": 151.2,
+     "h": 36,
+     "txt": "Seymour Omni "
+    }
+   ]
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "cursor2",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "cursor3",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "cursor4",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 1600,
+   "H": 900,
+   "state": "cursor5",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "base",
+   "f1": false,
+   "n": 10,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "intel",
+   "f1": false,
+   "n": 10,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "intel+target",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "cursor0",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "cursor1",
+   "f1": false,
+   "n": 12,
+   "pairs": [],
+   "rects": [
+    {
+     "k": "cmdarea",
+     "id": "cmdarea0",
+     "x": 185.4,
+     "y": 499.9,
+     "w": 527.2,
+     "h": 439.6,
+     "txt": "AttackSpecial▸×4White Magic▸×3Item ▸×15F"
+    },
+    {
+     "k": "cmdstack",
+     "id": "cmdstack0",
+     "x": 185.4,
+     "y": 499.9,
+     "w": 527.2,
+     "h": 439.6,
+     "txt": "AttackSpecial▸×4White Magic▸×3Item ▸×15F"
+    },
+    {
+     "k": "cmdinfo",
+     "id": "cmdinfo0",
+     "x": 179.7,
+     "y": 379.4,
+     "w": 461.2,
+     "h": 53.5,
+     "txt": "Phy ical damage"
+    },
+    {
+     "k": "ctb",
+     "id": "ctb0",
+     "x": 1639.7,
+     "y": 139.9,
+     "w": 204.9,
+     "h": 423.4,
+     "txt": "Tidu \n      T\n    \n      Seymour Omni \n "
+    },
+    {
+     "k": "statlist",
+     "id": "statlist0",
+     "x": 1268.5,
+     "y": 726,
+     "w": 602.2,
+     "h": 252.3,
+     "txt": "T\n      Tidu \n      6492/6492\n      140/"
+    },
+    {
+     "k": "omrstrip",
+     "id": "omrstrip0",
+     "x": 867.5,
+     "y": 15.7,
+     "w": 534.7,
+     "h": 83.2,
+     "txt": "Di c facing himFireFireFireFireAb orb Fi"
+    },
+    {
+     "k": "omrnote",
+     "id": "omrnote0",
+     "x": 1086.9,
+     "y": 99,
+     "w": 281.6,
+     "h": 22.5,
+     "txt": "Colour order: our e timate"
+    },
+    {
+     "k": "omrintent",
+     "id": "omrintent0",
+     "x": 1307.6,
+     "y": 611.3,
+     "w": 540.8,
+     "h": 110.6,
+     "txt": "Enemy intentEvery di c  how  Fire: four "
+    },
+    {
+     "k": "sensor",
+     "id": "sensor0",
+     "x": 1096.5,
+     "y": 390.7,
+     "w": 325.3,
+     "h": 208,
+     "txt": "Seymour Omni \n      HP  ? ? ?\n      \n   "
+    },
+    {
+     "k": "advcard",
+     "id": "advcard0",
+     "x": 121.9,
+     "y": 91.1,
+     "w": 684.7,
+     "h": 232.2,
+     "txt": "Next be t moveTidu Tidu 1WakkaSwitchin S"
+    },
+    {
+     "k": "advtoggle",
+     "id": "advtoggle0",
+     "x": 143.7,
+     "y": 57.6,
+     "w": 164.3,
+     "h": 26.7,
+     "txt": "Nhide move "
+    },
+    {
+     "k": "tplate",
+     "id": "tplate0",
+     "x": 1237.5,
+     "y": 248.3,
+     "w": 151.2,
+     "h": 36,
+     "txt": "Seymour Omni "
+    }
+   ]
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "cursor2",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "cursor3",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "cursor4",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  },
+  {
+   "W": 2000,
+   "H": 1012,
+   "state": "cursor5",
+   "f1": false,
+   "n": 12,
+   "pairs": []
+  }
+ ],
+ "bundle": [
+  "https://echoesofspira.com/assets/index-BqgCyT8R.js"
+ ],
+ "treated": "{\"scope\":\"all\",\"chapters\":[\"seymour-flux\",\"yunalesca\",\"seymour-anima-macalania\",\"seymour-natus\",\"braskas-final-aeon\",\"isaaru-via-purifico\",\"evrae-airship\",\"mirror-aeons\",\"ffx2-bahamut\",\"ffx2-leblanc\",\"ffx2-vegnagun-shuyin\",\"ffx2-fallen-aeons\",\"ffx2-den-of-woe\",\"ffx2-trema\",\"ffx2-ixion-djose\"],\"holds",
+ "consoleErrors": [],
+ "http4xx": []
+}

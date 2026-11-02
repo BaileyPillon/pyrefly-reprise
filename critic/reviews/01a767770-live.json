@@ -1,0 +1,25 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-11-02T05:20:00.000Z",
+  "build": { "mainSha": "01a767770", "bundle": "Cz_6EQVK", "artifactHash": "664d823bcbcbe896e14fc7f73aabda4aadc4f119b24d8ba4303c1f83c0e27553" },
+  "verdicts": { "deployment": "PASS", "changedArea": "NOT APPLICABLE", "milestone": "not assessed" },
+  "checks": [
+    { "id": "CHK-017", "result": "PASS", "mandatory": true,
+      "evidence": "verify-live --full against critic/artifacts/01a767770.json (changed-from 6d7ecc8a5): PASS, liveManifest match, 7169 files checked, 0 mismatched, 0 missing, 0 wrongType, 0 errors; artifactHash 664d823b...7553; index.html and press/index.html identical once Cloudflare's analytics beacon is removed." },
+    { "id": "CHK-016", "result": "PASS", "mandatory": true,
+      "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu), fresh context, 1600x900, cache-busted live URL, real key presses. Each capture asserted on screen name (title, chapter-select with board selectedId, party-prep, battle) and awaitingMenu before the screenshot: IX Yojimbo (FFX, yojimbo-cavern), XII Omnis (FFX, seymour-omnis), III Braska (FFX, braskas-final-aeon), XI Fallen Aeons (FFX-2, ffx2-fallen-aeons) each reached a player turn. IX: submenu then Escape cancel returned to the command menu; Attack confirmed with real Enter; P opened pause, H hid and restored panels, resume returned to battle. XII: Escape (first press absorbed by the first-use guide card, by design) then pause, H, resume. Prerendered music fetched: 93 mp3 requests incl. audio/music/title.mp3 and audio/sfx/sprite-v2.mp3. Console errors 0, 404s 0 across both scripts and 4 reruns. Screenshots in critic/reviews/01a767770-live/." },
+    { "id": "CHK-024", "result": "UNVERIFIED", "mandatory": false,
+      "reason": "Lightweight pass only. Reload re-booted and the save blob (pyrefly-reprise:save:v1) was byte-identical before and after reload in every run (1559/1559, 1829/1829, 1830/1830, 1812/1812 chars). A deliberate settings change through the pause OPTIONS tab was not demonstrated with real keys (tab focus varied between runs; the last run changed the save but no settings key differed), and no progress-making clear was played. The upgrade matrix is not part of this pass.",
+      "evidence": "reload blob equality only" }
+  ],
+  "staticChecks": { "pose-census": { "subjects": 146, "paintings": 1106, "pass": 829, "waived": 79, "rigged": 0, "fail": 0, "exempt": 198, "byClass": { "idle": 146, "standing": 565, "ko": 90, "low": 71, "wide": 4, "staged": 176, "part": 54 }, "byGame": { "FFX-2": 777, "FFX": 307, "FF7": 22 }, "byRowStatus": { "ok": 745, "held": 84, "waived": 79, "none": 198 } } },
+  "coverage": {
+    "tested": ["exact artifact (full, 7169 files)", "title to chapter-select to IX, XII, III, XI to a player turn", "IX cancel path and attack confirm", "Escape, P pause and resume, H hide and restore", "prerendered music fetched", "reload blob survival", "static pose census"],
+    "reused": [],
+    "notTested": ["full upgrade matrix (CHK-024)", "a deliberate setting change surviving reload", "progress surviving reload", "playing any chapter to its outcome", "visual judgment of the HUD move on IX and the knock-out slide ease (deep review owed)", "audio by ear"]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 50
+}

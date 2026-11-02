@@ -1,0 +1,315 @@
+{
+  "mode": "gpu",
+  "url": "https://echoesofspira.com/?livesmoke=1793594723132",
+  "consoleErrors": [],
+  "notFound": [],
+  "steps": [
+    {
+      "step": "boot ready",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "initial screen is title",
+      "ok": true,
+      "detail": "title"
+    },
+    {
+      "step": "title -> chapter-select",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "board snapshot",
+      "ok": true,
+      "detail": "{\"selectedIndex\":0,\"selectedId\":\"seymour-flux\",\"tiles\":19,\"coming\":[],\"cleared\":[],\"order\":[\"seymour-flux\",\"yunalesca\",\"braskas-final-aeon\",\"seymour-anima-macalania\",\"evrae-airship\",\"yojimbo-cavern\",\"seymour-natus\",\"seymour-omnis\",\"isaaru-via-purifico\",\"sin-fins-core\",\"sin-face\",\"mirror-aeons\",\"ffx2"
+    },
+    {
+      "step": "IX Yojimbo (FFX): chapter-select cursor on yojimbo-cavern",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "IX Yojimbo (FFX): party-prep",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "IX Yojimbo (FFX): battle screen",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "IX Yojimbo (FFX): reached a player turn (awaitingMenu)",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "IX Yojimbo (FFX): state intended",
+      "ok": true,
+      "detail": "{\"chapter\":null,\"keys\":[\"version\",\"seed\",\"screen\",\"stack\",\"overlayDepth\",\"frameCount\",\"elapsed\",\"registered\",\"save\",\"flowStep\",\"flowScreens\",\"screenState\"]}"
+    },
+    {
+      "step": "IX: submenu open then Escape cancel returns to command menu",
+      "ok": true,
+      "detail": "cmdEls=29"
+    },
+    {
+      "step": "IX: attack command issued (real Enter), battle still running",
+      "ok": true,
+      "detail": "battle"
+    },
+    {
+      "step": "IX: Escape opens pause",
+      "ok": false,
+      "detail": "battle"
+    },
+    {
+      "step": "IX: P opens pause",
+      "ok": true,
+      "detail": "pause"
+    },
+    {
+      "step": "IX: H hides then restores panels",
+      "ok": true,
+      "detail": "before=visible/1/battle-pause-chip ig hidden=[{\"c\":\"battle-pause-chip ig\",\"vis\":\"visible\",\"op\":\"1\",\"disp\":\"none\",\"w\":0},{\"c\":\"pause ig\",\"vis\":\"visible\",\"op\":\"1\",\"disp\":\"block\",\"w\":1600},{\"c\":\"pause__stage lb-stage pause--bare\",\"vis\":\"visible\",\"o restored=[{\"c\":\"battle-pause-chip ig\",\"vis\":\"visible\",\"op\":\"1\",\"disp\":\"none\",\"w\":0},{\"c\":\"pause ig\",\"vis\":\"visible\",\"op\":\"1\",\"disp\":\"block\",\"w\":1600},{\"c\":\"pause__stage lb-stage\",\"vis\":\"visible\",\"op\":\"1\",\"disp"
+    },
+    {
+      "step": "IX: pause key presses",
+      "ok": true,
+      "detail": "saveChanged=false"
+    },
+    {
+      "step": "IX: resumes to battle",
+      "ok": true,
+      "detail": "battle"
+    },
+    {
+      "step": "reload: app re-boots",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "reload: save blob identical (settings and progress survive)",
+      "ok": true,
+      "detail": "len=1559 -> 1559"
+    },
+    {
+      "step": "XII Omnis (FFX): chapter-select cursor on seymour-omnis",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "XII Omnis (FFX): party-prep",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "XII Omnis (FFX): battle screen",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "XII Omnis (FFX): reached a player turn (awaitingMenu)",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "XII Omnis (FFX): state intended",
+      "ok": true,
+      "detail": "{\"chapter\":null,\"keys\":[\"version\",\"seed\",\"screen\",\"stack\",\"overlayDepth\",\"frameCount\",\"elapsed\",\"registered\",\"save\",\"flowStep\",\"flowScreens\",\"screenState\"]}"
+    },
+    {
+      "step": "XII: Escape opens pause",
+      "ok": false,
+      "detail": "battle"
+    },
+    {
+      "step": "XII: P opens pause",
+      "ok": true,
+      "detail": "pause"
+    },
+    {
+      "step": "XII: H hides then restores panels",
+      "ok": true,
+      "detail": "before=visible/1/battle-pause-chip ig hidden=[{\"c\":\"battle-pause-chip ig\",\"vis\":\"visible\",\"op\":\"1\",\"disp\":\"block\",\"w\":96},{\"c\":\"pause ig\",\"vis\":\"visible\",\"op\":\"1\",\"disp\":\"block\",\"w\":1600},{\"c\":\"pause__stage lb-stage pause--bare\",\"vis\":\"visible\", restored=[{\"c\":\"battle-pause-chip ig\",\"vis\":\"visible\",\"op\":\"1\",\"disp\":\"block\",\"w\":96},{\"c\":\"pause ig\",\"vis\":\"visible\",\"op\":\"1\",\"disp\":\"block\",\"w\":1600},{\"c\":\"pause__stage lb-stage\",\"vis\":\"visible\",\"op\":\"1\",\"di"
+    },
+    {
+      "step": "XII: pause key presses",
+      "ok": true,
+      "detail": "saveChanged=false"
+    },
+    {
+      "step": "XII: resumes to battle",
+      "ok": true,
+      "detail": "battle"
+    },
+    {
+      "step": "III Braska (FFX): chapter-select cursor on braskas-final-aeon",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "III Braska (FFX): party-prep",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "III Braska (FFX): battle screen",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "III Braska (FFX): reached a player turn (awaitingMenu)",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "III Braska (FFX): state intended",
+      "ok": true,
+      "detail": "{\"chapter\":null,\"keys\":[\"version\",\"seed\",\"screen\",\"stack\",\"overlayDepth\",\"frameCount\",\"elapsed\",\"registered\",\"save\",\"flowStep\",\"flowScreens\",\"screenState\"]}"
+    },
+    {
+      "step": "XI Fallen Aeons (FFX-2): chapter-select cursor on ffx2-fallen-aeons",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "XI Fallen Aeons (FFX-2): party-prep",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "XI Fallen Aeons (FFX-2): battle screen",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "XI Fallen Aeons (FFX-2): reached a player turn (awaitingMenu)",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "step": "XI Fallen Aeons (FFX-2): state intended",
+      "ok": true,
+      "detail": "{\"chapter\":null,\"keys\":[\"version\",\"seed\",\"screen\",\"stack\",\"overlayDepth\",\"frameCount\",\"elapsed\",\"registered\",\"save\",\"flowStep\",\"flowScreens\",\"screenState\"]}"
+    },
+    {
+      "step": "prerendered audio files fetched over the network",
+      "ok": true,
+      "detail": "count=93 sample=https://echoesofspira.com/audio/music/title.mp3 | https://echoesofspira.com/audio/sfx/sprite.mp3 | https://echoesofspira.com/audio/sfx/sprite-v2.mp3"
+    }
+  ],
+  "errors": [],
+  "audio": [
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-gagazet.mp3",
+    "https://echoesofspira.com/audio/voice/yojimbo-cavern/yojimbo-cavern.mid-yojimbo-zanmato-next.001.mp3",
+    "https://echoesofspira.com/audio/voice/yojimbo-cavern/yojimbo-cavern.mid-yojimbo-aeon-takes-zanmato.001.mp3",
+    "https://echoesofspira.com/audio/music/boss-yojimbo.mp3",
+    "https://echoesofspira.com/audio/voice/yojimbo-cavern/yojimbo-cavern.pre.004.mp3",
+    "https://echoesofspira.com/audio/voice/yojimbo-cavern/yojimbo-cavern.pre.007.mp3",
+    "https://echoesofspira.com/audio/voice/yojimbo-cavern/yojimbo-cavern.pre.012.mp3",
+    "https://echoesofspira.com/audio/voice/yojimbo-cavern/yojimbo-cavern.pre.015.mp3",
+    "https://echoesofspira.com/audio/voice/yojimbo-cavern/yojimbo-cavern.pre.016.mp3",
+    "https://echoesofspira.com/audio/music/victory-ffx.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx.mp3",
+    "https://echoesofspira.com/audio/music/pause.mp3",
+    "https://echoesofspira.com/audio/music/boss-yojimbo.mp3",
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-dreams-end.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-omnis/seymour-omnis.mid-omnis-disc-lesson.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-omnis/seymour-omnis.mid-omnis-disc-lesson.001.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-omnis/seymour-omnis.mid-omnis-disc-lesson.001.fb2.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-omnis/seymour-omnis.mid-omnis-disc-turned.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-omnis/seymour-omnis.mid-omnis-disc-turned.001.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-omnis/seymour-omnis.mid-omnis-first-glow.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-omnis/seymour-omnis.mid-omnis-first-glow.001.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-omnis/seymour-omnis.mid-omnis-first-reset.001.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-omnis/seymour-omnis.mid-omnis-first-reset.001.fb1.mp3",
+    "https://echoesofspira.com/audio/music/boss-seymour-omnis.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-omnis/seymour-omnis.pre.003.mp3",
+    "https://echoesofspira.com/audio/voice/seymour-omnis/seymour-omnis.pre.007.mp3",
+    "https://echoesofspira.com/audio/music/victory-ffx.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx.mp3",
+    "https://echoesofspira.com/audio/music/pause.mp3",
+    "https://echoesofspira.com/audio/music/boss-seymour-omnis.mp3",
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-final-aeon.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-dreams-end.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-bfa-talk.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-bfa-sword.002.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-jecht-falls.005.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-jecht-falls.008.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-jecht-falls.010.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-jecht-falls.011.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.001.fb1.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.002.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.003.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.004.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.006.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.008.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.009.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-enters.010.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-valefor-falls.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-ifrit-enters.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-ifrit-enters.002.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-ifrit-falls.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-ixion-enters.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-ixion-falls.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-shiva-enters.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-bahamut-enters.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-bahamut-enters.002.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-bahamut-falls.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-bahamut-falls.002.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-yu-yevon-arrives.001.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-yu-yevon-arrives.002.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.mid-yu-yevon-arrives.003.mp3",
+    "https://echoesofspira.com/audio/music/boss-jecht.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.pre.002.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.pre.005.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.pre.007.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.pre.013.mp3",
+    "https://echoesofspira.com/audio/voice/braskas-final-aeon/braskas-final-aeon.pre.019.mp3",
+    "https://echoesofspira.com/audio/music/victory-ffx.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx.mp3",
+    "https://echoesofspira.com/audio/music/title.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite.mp3",
+    "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+    "https://echoesofspira.com/audio/music/chapter-select.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx2-aeons.mp3",
+    "https://echoesofspira.com/audio/sfx/parity-ffx2-core.mp3",
+    "https://echoesofspira.com/audio/music/scene-farplane.mp3",
+    "https://echoesofspira.com/audio/music/boss-ffx2-fallen-aeons.mp3",
+    "https://echoesofspira.com/audio/music/victory-ffx2.mp3",
+    "https://echoesofspira.com/audio/music/defeat-ffx2.mp3"
+  ],
+  "saveBeforePauseProbe": "{\"version\":1,\"updatedAt\":1793594798395,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"yunalesca\":{\"id\":\"yunalesca\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"braskas-final-aeon\":{\"id\":\"braskas-final-aeon\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"seymour-anima-macalania\":{\"id\":\"seymour-anima-macalania\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"evrae-airship\":{\"id\":\"evrae-airship\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"yojimbo-cavern\":{\"id\":\"yojimbo-cavern\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":15132.600000000006},\"seymour-natus\":{\"id\":\"seymour-natus\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"seymour-omnis\":{\"id\":\"seymour-omnis\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":9566.299999999997}},\"unlocked\":[],\"settings\":{\"masterVolume\":0.8,\"musicVolume\":0.7,\"sfxVolume\":0.7,\"sfxBalanceMigrated\":true,\"voiceOn\":true,\"voiceVolume\":0.9,\"textSpeed\":1,\"skipSeenCutscenes\":false,\"lowEffects\":false,\"fxLight\":true,\"fxLiving\":true,\"fxSpectacle\":true,\"fxDof\":true,\"fxFog\":true,\"fxEdges\":true,\"fxBreath\":true,\"fxKo\":true,\"fxFraming\":true,\"fxHero\":true,\"fxSphere\":true,\"fxSplash\":true,\"textSize\":1,\"reduceFlashes\":false,\"colourVision\":\"off\",\"guideVisible\":true,\"advisorVisible\":true,\"intentVisible\":true,\"ffx2Atb\":\"wait\",\"ffx2AtbMigrated\":true,\"pausePanelsHidden\":false,\"battleHelp\":true,\"titleArt\":\"echo\",\"titleArtPicked\":false,\"chapterSelectMusic\":\"b\",\"visualStyle\":\"hd2d\",\"reduceMotion\":false},\"seenCoach\":[\"briefing\",\"firstrun-board\",\"firstrun-prep\",\"ffx-turn-order\",\"firstrun-battle\"],\"flags\":{}}",
+  "saveAfterPauseProbe": "{\"version\":1,\"updatedAt\":1793594798395,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"yunalesca\":{\"id\":\"yunalesca\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"braskas-final-aeon\":{\"id\":\"braskas-final-aeon\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"seymour-anima-macalania\":{\"id\":\"seymour-anima-macalania\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"evrae-airship\":{\"id\":\"evrae-airship\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"yojimbo-cavern\":{\"id\":\"yojimbo-cavern\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":15132.600000000006},\"seymour-natus\":{\"id\":\"seymour-natus\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0},\"seymour-omnis\":{\"id\":\"seymour-omnis\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":9566.299999999997}},\"unlocked\":[],\"settings\":{\"masterVolume\":0.8,\"musicVolume\":0.7,\"sfxVolume\":0.7,\"sfxBalanceMigrated\":true,\"voiceOn\":true,\"voiceVolume\":0.9,\"textSpeed\":1,\"skipSeenCutscenes\":false,\"lowEffects\":false,\"fxLight\":true,\"fxLiving\":true,\"fxSpectacle\":true,\"fxDof\":true,\"fxFog\":true,\"fxEdges\":true,\"fxBreath\":true,\"fxKo\":true,\"fxFraming\":true,\"fxHero\":true,\"fxSphere\":true,\"fxSplash\":true,\"textSize\":1,\"reduceFlashes\":false,\"colourVision\":\"off\",\"guideVisible\":true,\"advisorVisible\":true,\"intentVisible\":true,\"ffx2Atb\":\"wait\",\"ffx2AtbMigrated\":true,\"pausePanelsHidden\":false,\"battleHelp\":true,\"titleArt\":\"echo\",\"titleArtPicked\":false,\"chapterSelectMusic\":\"b\",\"visualStyle\":\"hd2d\",\"reduceMotion\":false},\"seenCoach\":[\"briefing\",\"firstrun-board\",\"firstrun-prep\",\"ffx-turn-order\",\"firstrun-battle\"],\"flags\":{}}",
+  "saveSummary": {
+    "keys": [
+      "version",
+      "updatedAt",
+      "chapters",
+      "unlocked",
+      "settings",
+      "seenCoach",
+      "flags"
+    ],
+    "settingsKeys": 36,
+    "cleared": null
+  },
+  "elapsedMinutes": 2.2
+}
