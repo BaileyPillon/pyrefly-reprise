@@ -14,7 +14,7 @@
 | Deploy log | `docs/deploys.log` line 89: cloudflare, 4830 art files |
 | Artifact (SHA-256) | `664d823bcbcbe896e14fc7f73aabda4aadc4f119b24d8ba4303c1f83c0e27553` |
 | The deploy's own byte check | PASS (57 files compared with the build) |
-| Marker | `critic/pending/01a767770.json` (pending) |
+| Marker | `critic/cleared/01a767770.json` (cleared) |
 | Owner override | none |
 | CHANGELOG entry | 2026-11-01 · Release 72 (r72), the booth treatment returns to two more FFX chapters (IX Yojimbo and XII Seymour Omnis, whose F1 battle HUD stays held), Braska's real attack clips come back with Tidus's return flip fitted to the screen, the Road to the Farplane (FFX-2 Chapter XI) plays a dimmer night sky, and a knocked-out figure's body slides to its place; seventeen of the nineteen listed chapters (each item says which game) |
 | Focused review | critic/reviews/01a767770-focused.json: ship SHIP, changed area FAIL |
@@ -24,11 +24,9 @@ Is this commit on main? `git merge-base --is-ancestor 01a767770 origin/main` exi
 
 ## Review obligations still open
 
-| Build | Obligation | What it needs |
-|---|---|---|
-| `01a767770` | deep (carries 1 earlier builds) | deep review of every affected chapter and system |
+None: every marker in `critic/pending` is settled.
 
-The ledger counts 2 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 0 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
