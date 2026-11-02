@@ -57,6 +57,7 @@ import { heldOffStage } from './SummonStaging.ts';
 import { paceRate } from './pace.ts';
 import { ItemOrbStage } from './ItemOrbStage.ts'; // FFX item gesture: the orb of light and the hand it leaves (`BattlePresenterItem.ts`)
 import { SOFT_BLOOM_CAP, softWash } from './flashRules.ts'; // PR-0032: REDUCE FLASHES
+import { impactsOwned, withOwnImpacts } from './ownImpacts.ts'; // a scene that draws its own hits (`SceneStaging.ownImpacts`)
 import { StageArt } from './StageArt.ts';
 import type { StageHost } from './TextureStager.ts';
 
@@ -142,6 +143,10 @@ export class PaintedStage implements BattleStage {
   /** The battle camera behind the FFX-2 target-frame hold (`TargetFrameHold.ts`, PR-0150). */
   readonly camera: HoldableCamera;
   readonly vfx: VfxPort;
+  /** The scene draws its own hits (`SceneStaging.ownImpacts`, `ownImpacts.ts`): the Spectacle port installed on this stage keeps no `hit` (`app/screens/battleSpectacle.ts`). */
+  get ownImpacts(): boolean {
+    return impactsOwned(this.opts.slots);
+  }
   /**
    * The selection marks on the field — the accent pool and the quiet dim of
    * option B. The HUD drives it; the debug API reads it back.
@@ -831,7 +836,12 @@ export class PaintedStage implements BattleStage {
 
   // ------------------------------------------------------------------ effects
 
+  /** The effects port: the stage's own, except in a scene that draws its own hits (`SceneStaging.ownImpacts`, `ownImpacts.ts`), where the shared impact effects are off. */
   private makeVfxPort(): VfxPort {
+    return withOwnImpacts(this.makeStageVfxPort(), impactsOwned(this.opts.slots));
+  }
+
+  private makeStageVfxPort(): VfxPort {
     const impactAt = async (
       at: CombatantId | 'screen',
       key: string,

@@ -18,6 +18,7 @@ import { eyeCandy } from '../../engine/fx/EyeCandy.ts';
 import { fxDebugHooks } from '../../engine/fx/fxDebugHooks.ts';
 import { cEnergyBump, fxShared, stepCEnergy } from '../../engine/fx/fxShared.ts';
 import { govLive } from '../../engine/governor/GovernorLive.ts';
+import { withOwnImpactsFx } from '../../engine/ownImpacts.ts';
 import { SpectacleFx } from '../../engine/fx/c/SpectacleFx.ts';
 import { SpectaclePass } from '../../engine/fx/c/SpectaclePass.ts';
 import type { SpectacleFlags } from '../../engine/fx/c/SpectacleRules.ts';
@@ -105,7 +106,7 @@ export function attachSpectacle(o: {
       return { w: c.clientWidth || window.innerWidth, h: c.clientHeight || window.innerHeight, dpr: o.renderer.renderer.getPixelRatio() };
     },
   });
-  o.stage.fx = fx;
+  o.stage.fx = o.stage.ownImpacts ? withOwnImpactsFx(fx) : fx; // a scene that draws its own hits (`SceneStaging.ownImpacts`) keeps the splash and the victory arc but not the Spectacle's hit (`engine/ownImpacts.ts`)
   // The splash paintings for this battle's likely movers, so the first splash does not wait.
   for (const s of o.stage.snapshot()) {
     prepareMixSplash(s.art, game);

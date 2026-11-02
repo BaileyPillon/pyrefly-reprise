@@ -6,6 +6,7 @@
  * eighteen, the unlisted FF7 experiment, the hidden experiments):
  *
  * - the listed chapters are 1 to 18, in `CHAPTERS` order, one each, and then Mirror Aeons, **27**, listed 2026-10-15 on Bailey's word (the hidden experiments hold 19 to 26, so the board's nineteenth card reads XXVII);
+ * - the hidden Wind Waker chapter (FFX-2, 2026-10-20) takes **30** as a PLACEHOLDER (29 is the 3D Bahamut branch's): the release driver assigns the real number at merge;
  * - 0 means "no place on the board" and only the unlisted FF7 experiment wears it;
  * - the hidden experiments are above the eighteen and each has its own: 19 the Leblanc preview, 20 the FFX-2 Experiment, 21 Sinspawn Gui, 22 Fayth (Evrae with FFX's camera), 23 the Tourist Trap, 24 Valefor at Besaid, 25 Biran and Yenke, 26 Angra Mainyu;
  * - every number is within the type's union (`Chapter.number`), so a typo fails `tsc` before it fails here.
@@ -38,6 +39,11 @@ describe('chapter numbers', () => {
       expect(c.number, c.id).toBeGreaterThan(18);
       expect(c.number, c.id).not.toBe(27);
     }
+  });
+
+  it('the hidden Wind Waker chapter holds the placeholder number 30, and is an experiment of its own', () => {
+    const c = EXPERIMENT_CHAPTERS.find((x) => x.id === 'exp-windwaker');
+    expect(c).toMatchObject({ game: 'ffx2', experimental: true, number: 30 });
   });
 
   it('the known experiments keep their numbers: Leblanc 19, the FFX-2 Experiment 20, Sinspawn Gui 21, Fayth 22, Tourist Trap 23, Valefor at Besaid 24, Biran and Yenke 25, Angra Mainyu 26', () => {

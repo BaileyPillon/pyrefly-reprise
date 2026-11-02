@@ -74,7 +74,7 @@ describe('the word against every other door word', () => {
   const others = CHAPTER_DOORS.map((d) => d.word).filter((w) => w !== WORD);
 
   it('no word begins with, ends with or contains the other, and no end of one is the beginning of the other, in either order', () => {
-    expect(others).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', 'summon']); // `summon` is The Last Summoning's (FFX, hidden chapter 28)
+    expect(others).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', 'summon', 'waker']); // `summon` is The Last Summoning's (FFX, hidden chapter 28); `waker` is the Wind Waker chapter's (FFX-2, hidden, a placeholder word)
     for (const other of others) {
       for (const [a, b] of [[WORD, other], [other, WORD]] as const) {
         expect(a.startsWith(b), `${a} begins ${b}`).toBe(false);
