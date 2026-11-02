@@ -20,6 +20,7 @@
  */
 
 import { MIRROR_ACT_I_PLATE, MIRROR_AEONS_SCENE } from '../ffx/mirror-aeons-ids.ts';
+import { EXP_YRP_SCENE } from '../yrp-ids.ts';
 
 /** Every art namespace there is. A subject id that starts `<namespace>-` belongs to it. */
 export const ART_NAMESPACES = ['exp-leblanc'] as const;
@@ -45,6 +46,7 @@ export function artNamespaceOfScene(sceneKey: string | undefined): ArtNamespace 
  */
 export const SCENE_BACKDROP_FILE: Readonly<Record<string, string>> = {
   [MIRROR_AEONS_SCENE]: MIRROR_ACT_I_PLATE,
+  [EXP_YRP_SCENE]: 'bevelle-underground', // the hidden 3D Bahamut (FFX-2): Chapter IV's chamber is drawn over Chapter IV's own plate
 };
 
 /** The backdrop file (`art/backdrops/<file>.png`) a scene key stands for: its own name unless {@link SCENE_BACKDROP_FILE} says it is a code key. */

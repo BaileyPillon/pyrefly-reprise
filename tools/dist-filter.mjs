@@ -20,6 +20,9 @@
  *   sixteen pictures in `public/bts/` stay on disk and out of every build until the switch is turned on; with it on,
  *   this rule is gone and they ship. The page's code and words are kept out of the bundle by the same constant.
  *
+ * - `models-exp/**`: the models of the hidden experimental 3D Bahamut chapter (branch `exp-yrp-3d`, 2026-10-19; `src/engine/yrp3d/`). Local only: they are large, gitignored and never committed, and nothing ships them
+ *   (the chapter stands a neutral capsule in any slot whose model is missing). Until Bailey and the release driver decide to fold the chapter in, no build carries them.
+ *
  * Source maps are the fourth kind (PR-0328, adopted by Bailey 2026-10-03 as
  * D-335): the three `.js.map` files of release 36 weighed 22,775,896 bytes,
  * nobody in the game or the critic's tooling ever requests them, and the site
@@ -52,6 +55,7 @@ export function isUnshippedPublicFile(rel) {
   const p = rel.split(sep).join('/').replace(/^\/+/, '');
   if (p === 'audio/candidates' || p.startsWith('audio/candidates/')) return true;
   if (!BTS_LIVE && (p === 'bts' || p.startsWith('bts/'))) return true;
+  if (p === 'models-exp' || p.startsWith('models-exp/')) return true;
   if (!p.startsWith('art/')) return false;
   if (/\.raw\.png$/i.test(p)) return true;
   return /\.[0-9]+\.(png|json)$/i.test(p);
@@ -142,7 +146,7 @@ export function pruneUnshipped(root) {
   for (const rel of removed) rmSync(join(root, rel), { force: true });
   // The candidates folder (and the page's picture folder while its switch is off) goes too, so no
   // empty directory ships (only when it is a real, now empty folder).
-  for (const folder of [join(root, 'audio', 'candidates'), join(root, 'bts')]) {
+  for (const folder of [join(root, 'audio', 'candidates'), join(root, 'bts'), join(root, 'models-exp', 'yrp'), join(root, 'models-exp')]) {
     try {
       const st = lstatSync(folder);
       if (st.isDirectory() && !st.isSymbolicLink() && readdirSync(folder).length === 0) rmSync(folder, { recursive: true });

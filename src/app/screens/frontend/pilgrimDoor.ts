@@ -16,8 +16,8 @@
  * letter M is `select`, which party prep would not act on, and the board's next frame (`opening`) consumes every press before any other screen can see it. The first letter P is bound to nothing, so a first press
  * moves nothing. (P pauses a BATTLE through a raw listener of its own; the board has none.)
  *
- * The one overlap with the table's words, and why it is harmless: `pilgrim` ends in `m` and `mushroom` begins with `m` (`tests/unit/chapter-doors.test.ts` forbids that inside the table, which is why this row is
- * kept beside it). `pilgrim` finishes first and the board is shut from that frame (`opening`), so the continuation `ushroom` can never be typed on the board that has opened; no other word begins, ends with or contains it.
+ * The overlaps with the table's words, and why they are harmless: `pilgrim` ends in `m` and `mushroom` begins with `m`, and `yrp` (the hidden 3D Bahamut, 2026-10-19) ends in the `p` that `pilgrim` begins with
+ * (`tests/unit/chapter-doors.test.ts` forbids that inside the table, which is why this row is kept beside it). `pilgrim` finishes first and the board is shut from that frame (`opening`), so the continuation `ushroom` can never be typed on the board that has opened; no other word begins, ends with or contains it.
  *
  * ONE named constant: to change the word, change the line below (lower-case letters, `KeyboardEvent.key`). The unlock is not remembered: the word is typed on each visit.
  *

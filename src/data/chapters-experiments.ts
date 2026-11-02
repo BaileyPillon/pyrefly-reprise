@@ -15,6 +15,8 @@
  * - **Angra Mainyu** (`'ffx2-angra-mainyu'`, number 26, 2026-10-14; FFX-2 only): the Chapter 5 mission "Showdown in the Sands", the Bikanel Desert fiend and its arms Zarich and Tawrich; word `angra` (25 is the Biran and Yenke lane's).
  * - **The Last Summoning** (`'last-summoning'`, number 28, 2026-10-15; FFX only): Dream's End as a gauntlet in the player's order with the full roster of eight aeons, Yojimbo and the Magus Sisters among them; word `summon` (27 is the Dark Mirror lane's).
  *
+ *  * - **Bahamut in 3D** (`'exp-yrp-3d'`, number 29, 2026-10-19; FFX-2 only): Chapter IV's Bahamut fight drawn as a real 3D scene with toon-shaded models, frame A's camera; word `yrp`.
+ *
  * A further hidden chapter registers here, by adding its record to the list below, not by editing `./encounters.ts`.
  *
  * Split out of `./encounters.ts` for the house 400-line rule (AGENTS.md hard rule 7); `encounters.ts` still exports `EXPERIMENT_CHAPTERS`
@@ -32,8 +34,9 @@ import { FFX2_VALEFOR_BESAID } from './chapter-ffx2-valefor-besaid.ts';
 import { BIRAN_YENKE } from './chapter-biran-yenke.ts';
 import { FFX2_ANGRA_MAINYU } from './chapter-ffx2-angra-mainyu.ts';
 import { LAST_SUMMONING } from './chapter-last-summoning.ts';
+import { experimentalYrp } from './chapter-exp-yrp-3d.ts';
 
-/** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
-export function experimentChapters(ffx2Leblanc: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING] as const;
+/** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from, and `ffx2Bahamut` the listed Chapter IV, which the 3D Bahamut is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
+export function experimentChapters(ffx2Leblanc: Chapter, ffx2Bahamut: Chapter): readonly Chapter[] {
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, experimentalYrp(ffx2Bahamut)] as const;
 }

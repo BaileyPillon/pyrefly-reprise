@@ -65,7 +65,7 @@ describe('the haze is neutral until a room asks for it', () => {
   });
 
   it('only the experimental room\'s option A row is its own: Chapter VI\'s and every other row keep their values', () => {
-    const others = Object.keys(SCENE_LOOKS_A).filter((k) => k !== 'exp-leblanc-last-room');
+    const others = Object.keys(SCENE_LOOKS_A).filter((k) => k !== 'exp-leblanc-last-room' && k !== 'exp-yrp-3d-stage'); // the real-models chapter's row (2026-10-21, FFX-2 only) is its own too: tests/unit/yrp3d/eyecandy-look.test.ts
     expect(others.length).toBeGreaterThan(5);
     // the fixture is the rows as the committed build had them (tests/fixtures/exp-leblanc/other-looks.json)
     const fixture = JSON.parse(read('tests/fixtures/exp-leblanc/other-looks.json')) as { palettes: Record<string, unknown>; looks: Record<string, unknown> };

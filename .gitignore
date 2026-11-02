@@ -72,3 +72,7 @@ critic/rounds/*/
 
 # build-lane scratch progress log: the lanes write PROGRESS.md at the repository root while they work; it never belongs in a commit
 PROGRESS.md
+
+# The hidden 3D Bahamut chapter's models (branch exp-yrp-3d): yuna.glb, rikku.glb, paine.glb, bahamut.glb and a placeholder.glb.
+# Local only: never committed (large, and the repo is public) and never shipped (tools/dist-filter.mjs leaves them out of every build).
+public/models-exp/
