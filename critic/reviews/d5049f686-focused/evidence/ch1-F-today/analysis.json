@@ -1,0 +1,343 @@
+{
+ "id": "ch1-F-today",
+ "chapter": "seymour-flux",
+ "base": "http://127.0.0.1:5733/",
+ "date": "2026-11-02T20:48:26.036Z",
+ "checks": {
+  "CHK-026": "FAIL",
+  "CHK-027": "FAIL"
+ },
+ "reasons": {
+  "CHK-026": [
+   "2 swap(s) change a head by more than the tolerance (worst 10.8 percent; 9.3 percent where the head is registered)",
+   "1 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.765 to 1.057; the bands are tools/posescale/pose-bands.mjs's)"
+  ],
+  "CHK-027": [
+   "2 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 416.7 px)"
+  ]
+ },
+ "battleSeconds": 259.2,
+ "fps": 59.2,
+ "frames": 15344,
+ "maxDtMs": 385.5,
+ "slowFrames": 104,
+ "chk026": {
+  "headOverTolerance": 2,
+  "maxHeadJumpPct": 10.8,
+  "maxHeadJumpPctRegistration": 9.3,
+  "feetOverTolerance": 0,
+  "heightOverBand": 1
+ },
+ "chk027": {
+  "jerks": 17,
+  "worstJerkPx": 416.7,
+  "jerksOverFail": 16,
+  "teleports": 0,
+  "teleportsWorstPx": 0,
+  "dashes": 15,
+  "dashesWorstPx": 145,
+  "swapJerks": 2,
+  "swapJerksWorstPx": 416.7,
+  "snaps": 0,
+  "ghostSwaps": 49
+ },
+ "hopsOver100": {
+  "count": 8,
+  "worstPx": 416.7,
+  "byFigure": {
+   "kimahri": {
+    "count": 1,
+    "worstPx": 416.7
+   },
+   "bahamut": {
+    "count": 1,
+    "worstPx": 145
+   },
+   "auron": {
+    "count": 6,
+    "worstPx": 113.5
+   }
+  },
+  "list": [
+   {
+    "n": 4067,
+    "figure": "kimahri",
+    "px": 416.7,
+    "part": "head",
+    "kind": "swap",
+    "atSwap": true,
+    "ratio": 40.7,
+    "localPx": 10.2,
+    "frameMs": 17.4,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 3767,
+    "figure": "bahamut",
+    "px": 145,
+    "part": "feet",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 20.8,
+    "localPx": 7,
+    "frameMs": 12.5,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 9193,
+    "figure": "auron",
+    "px": 113.5,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 13,
+    "localPx": 8.7,
+    "frameMs": 16.4,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 12760,
+    "figure": "auron",
+    "px": 113.2,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 12.9,
+    "localPx": 8.8,
+    "frameMs": 17.7,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 16796,
+    "figure": "auron",
+    "px": 112.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 9.1,
+    "localPx": 12.4,
+    "frameMs": 17.3,
+    "longFrame": false,
+    "cause": "ko"
+   },
+   {
+    "n": 15295,
+    "figure": "auron",
+    "px": 111.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 12.7,
+    "localPx": 8.8,
+    "frameMs": 16.2,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 13969,
+    "figure": "auron",
+    "px": 110.7,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 12.4,
+    "localPx": 8.9,
+    "frameMs": 18.3,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 8143,
+    "figure": "auron",
+    "px": 110.4,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 14.7,
+    "localPx": 7.5,
+    "frameMs": 35.6,
+    "longFrame": true,
+    "cause": "damage"
+   }
+  ]
+ },
+ "largestStepPx": 416.7,
+ "largestStepByFigure": {
+  "kimahri": 416.7,
+  "auron": 172.3,
+  "tidus": 160.9,
+  "bahamut": 145,
+  "seymour-flux": 100,
+  "valefor": 89.3,
+  "yuna": 77,
+  "mortiorchis": 59.1
+ },
+ "attackGaps": {
+  "kimahri": [
+   10
+  ],
+  "auron": [
+   7,
+   7,
+   7,
+   7,
+   7,
+   7
+  ]
+ },
+ "castGaps": {},
+ "blow": {
+  "kimahri": [
+   {
+    "swapN": 4058,
+    "numeralN": 4077,
+    "frames": 19,
+    "ms": 367,
+    "txt": "0",
+    "gap": 10
+   }
+  ],
+  "auron": [
+   {
+    "swapN": 8146,
+    "numeralN": 8165,
+    "frames": 19,
+    "ms": 334,
+    "txt": "728",
+    "gap": 7
+   },
+   {
+    "swapN": 9197,
+    "numeralN": 9214,
+    "frames": 17,
+    "ms": 338,
+    "txt": "840",
+    "gap": 7
+   },
+   {
+    "swapN": 12764,
+    "numeralN": 12783,
+    "frames": 19,
+    "ms": 336,
+    "txt": "1560",
+    "gap": 7
+   },
+   {
+    "swapN": 13973,
+    "numeralN": 13991,
+    "frames": 18,
+    "ms": 334,
+    "txt": "1705",
+    "gap": 7
+   },
+   {
+    "swapN": 15299,
+    "numeralN": 15318,
+    "frames": 19,
+    "ms": 334,
+    "txt": "1642",
+    "gap": 7
+   },
+   {
+    "swapN": 16800,
+    "numeralN": 16819,
+    "frames": 19,
+    "ms": 330,
+    "txt": "2462",
+    "gap": 7
+   }
+  ]
+ },
+ "attackGapStats": {
+  "kimahri": {
+   "n": 1,
+   "min": 10,
+   "median": 10,
+   "max": 10
+  },
+  "auron": {
+   "n": 6,
+   "min": 7,
+   "median": 7,
+   "max": 7
+  }
+ },
+ "castGapStats": {},
+ "blowStats": {
+  "kimahri": {
+   "n": 1,
+   "min": 19,
+   "median": 19,
+   "max": 19
+  },
+  "auron": {
+   "n": 6,
+   "min": 17,
+   "median": 19,
+   "max": 19
+  }
+ },
+ "speed": {
+  "samples": 265,
+  "runs": [
+   {
+    "speed": "normal",
+    "seconds": 1,
+    "fromBf": 1,
+    "toBf": 1
+   },
+   {
+    "speed": "fast",
+    "seconds": 264,
+    "fromBf": 10,
+    "toBf": 15708
+   }
+  ],
+  "reassertions": 2,
+  "reassertedFrom": {
+   "normal": 2
+  },
+  "rPresses": 1,
+  "numerals": 88,
+  "errors": [],
+  "lastSample": {
+   "k": "s",
+   "t": 290271,
+   "bf": 15708,
+   "speed": "fast",
+   "phase": "play:victory",
+   "reasserts": 2,
+   "r": 1
+  },
+  "samplesBySpeed": {
+   "normal": 1,
+   "fast": 264
+  }
+ },
+ "run": {
+  "outcome": "victory",
+  "fails": 0,
+  "consoleErrors": 0,
+  "query": "?coach=off&fastfloor=today",
+  "seeds": [
+   {
+    "at": "battle start",
+    "engineSeed": 1,
+    "links": 1,
+    "firstEnemyAction": {
+     "seq": 3,
+     "actor": "seymour-flux",
+     "ability": "Lance of Atrophy",
+     "targets": [
+      "kimahri"
+     ]
+    }
+   }
+  ]
+ },
+ "summaryReportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 259.2 s of battle, 59.2 to 59.2 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (2 swap(s) change a head by more than the tolerance (worst 10.8 percent; 9.3 percent where the head is registered); 1 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.765 to 1.057; the bands are tools/posescale/pose-bands.mjs's)); CHK-027 FAIL (2 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 416.7 px)); 658 ms of see-through a minute (39.5 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at d5049f686; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows); PYREFLY_QUERY=?coach=off&fastfloor=today)."
+}

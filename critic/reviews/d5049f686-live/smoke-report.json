@@ -1,0 +1,145 @@
+{
+ "out": [
+  {
+   "s": "ix chapter-select",
+   "o": true,
+   "d": "chapter-select"
+  },
+  {
+   "s": "ix cursor on yojimbo-cavern",
+   "o": true,
+   "d": "yojimbo-cavern"
+  },
+  {
+   "s": "ix party-prep",
+   "o": true
+  },
+  {
+   "s": "ix battle + player turn",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "ix submenu then Escape stays in battle",
+   "o": true,
+   "d": "awaiting after open=true screen=battle"
+  },
+  {
+   "s": "ix fast-forward held through a strike (speed seen)",
+   "o": true,
+   "d": "sawFast=true"
+  },
+  {
+   "s": "ix back at a player turn after the strike",
+   "o": true
+  },
+  {
+   "s": "ix P pauses",
+   "o": true,
+   "d": "pause"
+  },
+  {
+   "s": "ix H hides then restores",
+   "o": false,
+   "d": "visible/1/block -> visible/1/block"
+  },
+  {
+   "s": "ix resume to battle",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "ix Escape reaches pause",
+   "o": true,
+   "d": "first=pause then=pause"
+  },
+  {
+   "s": "ix Escape resumes",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "xi chapter-select",
+   "o": true,
+   "d": "chapter-select"
+  },
+  {
+   "s": "xi cursor on ffx2-fallen-aeons",
+   "o": true,
+   "d": "ffx2-fallen-aeons"
+  },
+  {
+   "s": "xi party-prep",
+   "o": true
+  },
+  {
+   "s": "xi battle + player turn",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "xi submenu then Escape stays in battle",
+   "o": true,
+   "d": "awaiting after open=true screen=battle"
+  },
+  {
+   "s": "xi fast-forward held through a strike (speed seen)",
+   "o": true,
+   "d": "sawFast=true"
+  },
+  {
+   "s": "xi back at a player turn after the strike",
+   "o": true
+  },
+  {
+   "s": "xi P pauses",
+   "o": true,
+   "d": "pause"
+  },
+  {
+   "s": "xi H hides then restores",
+   "o": false,
+   "d": "visible/1/block -> visible/1/block"
+  },
+  {
+   "s": "xi resume to battle",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "xi Escape reaches pause",
+   "o": false,
+   "d": "first=battle then=battle"
+  },
+  {
+   "s": "xi Escape resumes",
+   "o": false,
+   "d": "pause"
+  },
+  {
+   "s": "settings key press changed the save",
+   "o": true,
+   "d": "len 2775->2775"
+  },
+  {
+   "s": "reload keeps the save",
+   "o": true,
+   "d": "2775 vs 2775"
+  }
+ ],
+ "errs": [],
+ "nf": [],
+ "mp3": 33,
+ "mp3sample": [
+  "https://echoesofspira.com/audio/music/title.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+  "https://echoesofspira.com/audio/music/chapter-select.mp3",
+  "https://echoesofspira.com/audio/music/scene-gagazet.mp3",
+  "https://echoesofspira.com/audio/sfx/parity-ffx-core.mp3",
+  "https://echoesofspira.com/audio/voice/yojimbo-cavern/yojimbo-cavern.mid-yojimbo-zanmato-next.001.mp3",
+  "https://echoesofspira.com/audio/voice/yojimbo-cavern/yojimbo-cavern.mid-yojimbo-aeon-takes-zanmato.001.mp3",
+  "https://echoesofspira.com/audio/voice/yojimbo-cavern/yojimbo-cavern.pre.015.mp3",
+  "https://echoesofspira.com/audio/voice/yojimbo-cavern/yojimbo-cavern.pre.004.mp3"
+ ]
+}

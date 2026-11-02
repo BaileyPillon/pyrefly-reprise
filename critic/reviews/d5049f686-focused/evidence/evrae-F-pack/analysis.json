@@ -1,0 +1,203 @@
+{
+ "id": "evrae-F-pack",
+ "chapter": "evrae-airship",
+ "base": "http://127.0.0.1:5733/",
+ "date": "2026-11-02T18:53:44.012Z",
+ "checks": {
+  "CHK-026": "FAIL",
+  "CHK-027": "FAIL"
+ },
+ "reasons": {
+  "CHK-026": [
+   "19 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.2 percent where the head is registered)"
+  ],
+  "CHK-027": [
+   "1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 379 px)"
+  ]
+ },
+ "battleSeconds": 237,
+ "fps": 58.5,
+ "frames": 13859,
+ "maxDtMs": 191.4,
+ "slowFrames": 70,
+ "chk026": {
+  "headOverTolerance": 19,
+  "maxHeadJumpPct": 15.5,
+  "maxHeadJumpPctRegistration": 0.2,
+  "feetOverTolerance": 0,
+  "heightOverBand": 0
+ },
+ "chk027": {
+  "jerks": 4,
+  "worstJerkPx": 379,
+  "jerksOverFail": 1,
+  "teleports": 0,
+  "teleportsWorstPx": 0,
+  "dashes": 2,
+  "dashesWorstPx": 27.2,
+  "swapJerks": 2,
+  "swapJerksWorstPx": 379,
+  "snaps": 0,
+  "ghostSwaps": 148
+ },
+ "hopsOver100": {
+  "count": 1,
+  "worstPx": 379,
+  "byFigure": {
+   "evrae": {
+    "count": 1,
+    "worstPx": 379
+   }
+  },
+  "list": [
+   {
+    "n": 3191,
+    "figure": "evrae",
+    "px": 379,
+    "part": "feet",
+    "kind": "swap",
+    "atSwap": true,
+    "ratio": 189.5,
+    "localPx": 2,
+    "frameMs": 44.4,
+    "longFrame": true,
+    "cause": "turn-start"
+   }
+  ]
+ },
+ "largestStepPx": 379,
+ "largestStepByFigure": {
+  "evrae": 379,
+  "kimahri": 131.1,
+  "tidus": 120.2,
+  "wakka": 86.1,
+  "rikku": 37
+ },
+ "attackGaps": {
+  "rikku": [
+   6
+  ],
+  "kimahri": [
+   4
+  ]
+ },
+ "castGaps": {
+  "lulu": [
+   42,
+   42,
+   42,
+   42,
+   42
+  ]
+ },
+ "blow": {
+  "rikku": [
+   {
+    "swapN": 2838,
+    "numeralN": 2843,
+    "frames": 5,
+    "ms": 96,
+    "txt": "156",
+    "gap": 6
+   }
+  ],
+  "kimahri": [
+   {
+    "swapN": 15298,
+    "numeralN": 15311,
+    "frames": 13,
+    "ms": 223,
+    "txt": "491",
+    "gap": 4
+   }
+  ]
+ },
+ "attackGapStats": {
+  "rikku": {
+   "n": 1,
+   "min": 6,
+   "median": 6,
+   "max": 6
+  },
+  "kimahri": {
+   "n": 1,
+   "min": 4,
+   "median": 4,
+   "max": 4
+  }
+ },
+ "castGapStats": {
+  "lulu": {
+   "n": 5,
+   "min": 42,
+   "median": 42,
+   "max": 42
+  }
+ },
+ "blowStats": {
+  "rikku": {
+   "n": 1,
+   "min": 5,
+   "median": 5,
+   "max": 5
+  },
+  "kimahri": {
+   "n": 1,
+   "min": 13,
+   "median": 13,
+   "max": 13
+  }
+ },
+ "speed": {
+  "samples": 242,
+  "runs": [
+   {
+    "speed": "normal",
+    "seconds": 1,
+    "fromBf": 1,
+    "toBf": 1
+   },
+   {
+    "speed": "fast",
+    "seconds": 241,
+    "fromBf": 6,
+    "toBf": 14185
+   }
+  ],
+  "reassertions": 1,
+  "reassertedFrom": {
+   "normal": 1
+  },
+  "rPresses": 0,
+  "numerals": 208,
+  "errors": [],
+  "lastSample": {
+   "k": "s",
+   "t": 266769,
+   "bf": 14185,
+   "speed": "fast",
+   "phase": "play:ko",
+   "reasserts": 1,
+   "r": 0
+  },
+  "samplesBySpeed": {
+   "normal": 1,
+   "fast": 241
+  }
+ },
+ "run": {
+  "outcome": "victory",
+  "fails": 0,
+  "consoleErrors": 0,
+  "query": "?coach=off&treated=pack",
+  "seeds": [
+   {
+    "at": "battle start",
+    "engineSeed": 1,
+    "links": 1,
+    "firstEnemyAction": null
+   }
+  ]
+ },
+ "summaryReportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 237 s of battle, 58.5 to 58.5 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (19 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.2 percent where the head is registered)); CHK-027 FAIL (1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 379 px)); 2,303 ms of see-through a minute (138.2 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at d5049f686; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows); PYREFLY_QUERY=?coach=off&treated=pack)."
+}

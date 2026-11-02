@@ -1,0 +1,309 @@
+{
+ "tag": "d-ch1-1600",
+ "chapter": "seymour-flux",
+ "base": "http://127.0.0.1:5733/",
+ "W": 1600,
+ "H": 900,
+ "phone": false,
+ "steps": [
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "awaitingMenu": true,
+   "toMenuS": 47.1
+  },
+  {
+   "s": "hud",
+   "overflowX": false,
+   "treated": {
+    "scope": "all",
+    "chapters": [
+     "seymour-flux",
+     "yunalesca",
+     "seymour-anima-macalania",
+     "seymour-natus",
+     "yojimbo-cavern",
+     "braskas-final-aeon",
+     "seymour-omnis",
+     "isaaru-via-purifico",
+     "evrae-airship",
+     "sin-face",
+     "mirror-aeons",
+     "ffx2-bahamut",
+     "ffx2-leblanc",
+     "ffx2-vegnagun-shuyin",
+     "ffx2-fallen-aeons",
+     "ffx2-den-of-woe",
+     "ffx2-trema",
+     "ffx2-ixion-djose"
+    ],
+    "holds": {
+     "yunalesca": [
+      "breath",
+      "cam",
+      "smear"
+     ],
+     "seymour-anima-macalania": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "seymour-natus": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "yojimbo-cavern": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "braskas-final-aeon": [
+      "breath",
+      "moments"
+     ],
+     "seymour-omnis": [
+      "hud",
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "isaaru-via-purifico": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "ffx2-leblanc": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "ffx2-vegnagun-shuyin": [
+      "hd2d",
+      "arena",
+      "cam",
+      "breath",
+      "moments"
+     ],
+     "ffx2-den-of-woe": [
+      "cam",
+      "breath",
+      "moments"
+     ],
+     "ffx2-fallen-aeons": [
+      "cam",
+      "breath",
+      "moments"
+     ],
+     "ffx2-trema": [
+      "cam",
+      "breath",
+      "moments"
+     ],
+     "evrae-airship": [
+      "hd2d",
+      "arena",
+      "breath",
+      "cam",
+      "moments",
+      "real"
+     ],
+     "sin-face": [
+      "card",
+      "breath",
+      "cam",
+      "moments",
+      "smear",
+      "real"
+     ],
+     "mirror-aeons": [
+      "hd2d",
+      "arena",
+      "card",
+      "breath",
+      "cam",
+      "moments",
+      "real"
+     ],
+     "ffx2-ixion-djose": [
+      "hd2d",
+      "arena",
+      "breath",
+      "cam",
+      "moments",
+      "smear"
+     ]
+    },
+    "running": "seymour-flux",
+    "reaches": true
+   },
+   "buttons": [
+    "I\nHIDE:56x20",
+    "G\nGUIDE:102x26",
+    "N\nHIDE MOVES:160x26",
+    "E\nENEMY MOVE:165x26"
+   ],
+   "f1": true,
+   "ribbon": [
+    "Seymour Flux"
+   ],
+   "igBossHp": [],
+   "ffx2boss": [],
+   "look": "cinematic",
+   "plates": 4
+  },
+  {
+   "s": "after-attack",
+   "screen": "battle"
+  },
+  {
+   "s": "turns",
+   "turns": 3
+  }
+ ],
+ "bundle": "http://127.0.0.1:5733/assets/index-DY38b3Cj.js",
+ "toMenuMs": 47147,
+ "hud": {
+  "overflowX": false,
+  "treated": {
+   "scope": "all",
+   "chapters": [
+    "seymour-flux",
+    "yunalesca",
+    "seymour-anima-macalania",
+    "seymour-natus",
+    "yojimbo-cavern",
+    "braskas-final-aeon",
+    "seymour-omnis",
+    "isaaru-via-purifico",
+    "evrae-airship",
+    "sin-face",
+    "mirror-aeons",
+    "ffx2-bahamut",
+    "ffx2-leblanc",
+    "ffx2-vegnagun-shuyin",
+    "ffx2-fallen-aeons",
+    "ffx2-den-of-woe",
+    "ffx2-trema",
+    "ffx2-ixion-djose"
+   ],
+   "holds": {
+    "yunalesca": [
+     "breath",
+     "cam",
+     "smear"
+    ],
+    "seymour-anima-macalania": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "seymour-natus": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "yojimbo-cavern": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "braskas-final-aeon": [
+     "breath",
+     "moments"
+    ],
+    "seymour-omnis": [
+     "hud",
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "isaaru-via-purifico": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "ffx2-leblanc": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "ffx2-vegnagun-shuyin": [
+     "hd2d",
+     "arena",
+     "cam",
+     "breath",
+     "moments"
+    ],
+    "ffx2-den-of-woe": [
+     "cam",
+     "breath",
+     "moments"
+    ],
+    "ffx2-fallen-aeons": [
+     "cam",
+     "breath",
+     "moments"
+    ],
+    "ffx2-trema": [
+     "cam",
+     "breath",
+     "moments"
+    ],
+    "evrae-airship": [
+     "hd2d",
+     "arena",
+     "breath",
+     "cam",
+     "moments",
+     "real"
+    ],
+    "sin-face": [
+     "card",
+     "breath",
+     "cam",
+     "moments",
+     "smear",
+     "real"
+    ],
+    "mirror-aeons": [
+     "hd2d",
+     "arena",
+     "card",
+     "breath",
+     "cam",
+     "moments",
+     "real"
+    ],
+    "ffx2-ixion-djose": [
+     "hd2d",
+     "arena",
+     "breath",
+     "cam",
+     "moments",
+     "smear"
+    ]
+   },
+   "running": "seymour-flux",
+   "reaches": true
+  },
+  "buttons": [
+   "I\nHIDE:56x20",
+   "G\nGUIDE:102x26",
+   "N\nHIDE MOVES:160x26",
+   "E\nENEMY MOVE:165x26"
+  ],
+  "f1": true,
+  "ribbon": [
+   "Seymour Flux"
+  ],
+  "igBossHp": [],
+  "ffx2boss": [],
+  "look": "cinematic",
+  "plates": 4
+ },
+ "fpsAvg": 59.1,
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": []
+}

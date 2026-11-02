@@ -1,0 +1,58 @@
+{
+ "out": [
+  {
+   "s": "xi chapter-select",
+   "o": true,
+   "d": "chapter-select"
+  },
+  {
+   "s": "xi cursor on ffx2-fallen-aeons",
+   "o": true,
+   "d": "ffx2-fallen-aeons"
+  },
+  {
+   "s": "xi party-prep",
+   "o": true
+  },
+  {
+   "s": "xi battle + player turn",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "xi Escape reaches pause (presses until)",
+   "o": true,
+   "d": "pause"
+  },
+  {
+   "s": "xi Escape resumes",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "settings key press changed the save",
+   "o": true,
+   "d": "len 2775->2775"
+  },
+  {
+   "s": "reload keeps the save",
+   "o": true,
+   "d": "2775 vs 2775"
+  }
+ ],
+ "errs": [],
+ "nf": [],
+ "mp3": 14,
+ "mp3sample": [
+  "https://echoesofspira.com/audio/music/title.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+  "https://echoesofspira.com/audio/sfx/sprite.mp3",
+  "https://echoesofspira.com/audio/music/chapter-select.mp3",
+  "https://echoesofspira.com/audio/sfx/parity-ffx2-aeons.mp3",
+  "https://echoesofspira.com/audio/sfx/parity-ffx2-core.mp3",
+  "https://echoesofspira.com/audio/music/scene-farplane.mp3",
+  "https://echoesofspira.com/audio/music/boss-ffx2-fallen-aeons.mp3",
+  "https://echoesofspira.com/audio/music/victory-ffx2.mp3",
+  "https://echoesofspira.com/audio/music/defeat-ffx2.mp3"
+ ]
+}

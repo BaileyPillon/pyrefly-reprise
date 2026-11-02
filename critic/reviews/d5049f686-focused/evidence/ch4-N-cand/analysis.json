@@ -1,0 +1,108 @@
+{
+ "id": "ch4-N-cand",
+ "chapter": "ffx2-bahamut",
+ "base": "http://127.0.0.1:5733/",
+ "date": "2026-11-02T21:20:43.934Z",
+ "checks": {
+  "CHK-026": "PASS",
+  "CHK-027": "PASS"
+ },
+ "reasons": {
+  "CHK-026": [],
+  "CHK-027": []
+ },
+ "battleSeconds": 341.1,
+ "fps": 59.4,
+ "frames": 20270,
+ "maxDtMs": 157.9,
+ "slowFrames": 352,
+ "chk026": {
+  "headOverTolerance": 0,
+  "maxHeadJumpPct": 0.7,
+  "maxHeadJumpPctRegistration": 0.1,
+  "feetOverTolerance": 0,
+  "heightOverBand": 0
+ },
+ "chk027": {
+  "jerks": 2,
+  "worstJerkPx": 32.1,
+  "jerksOverFail": 0,
+  "teleports": 0,
+  "teleportsWorstPx": 0,
+  "dashes": 2,
+  "dashesWorstPx": 32.1,
+  "swapJerks": 0,
+  "swapJerksWorstPx": 0,
+  "snaps": 0,
+  "ghostSwaps": 73
+ },
+ "hopsOver100": {
+  "count": 0,
+  "worstPx": 0,
+  "byFigure": {},
+  "list": []
+ },
+ "largestStepPx": 92,
+ "largestStepByFigure": {
+  "rikku": 92,
+  "yuna": 75.9,
+  "paine": 56.6,
+  "bahamut": 24.8
+ },
+ "attackGaps": {},
+ "castGaps": {},
+ "blow": {},
+ "attackGapStats": {},
+ "castGapStats": {},
+ "blowStats": {},
+ "speed": {
+  "samples": 346,
+  "runs": [
+   {
+    "speed": "normal",
+    "seconds": 346,
+    "fromBf": 1,
+    "toBf": 20628
+   }
+  ],
+  "reassertions": 0,
+  "reassertedFrom": {},
+  "rPresses": 0,
+  "numerals": 71,
+  "errors": [],
+  "lastSample": {
+   "k": "s",
+   "t": 372848,
+   "bf": 20628,
+   "speed": "normal",
+   "phase": "play:victory",
+   "reasserts": 0,
+   "r": 0
+  },
+  "samplesBySpeed": {
+   "normal": 346
+  }
+ },
+ "run": {
+  "outcome": "victory",
+  "fails": 0,
+  "consoleErrors": 0,
+  "query": "?coach=off",
+  "seeds": [
+   {
+    "at": "battle start",
+    "engineSeed": 1,
+    "links": 1,
+    "firstEnemyAction": {
+     "seq": 3,
+     "actor": "bahamut",
+     "ability": "Curse",
+     "targets": [
+      "yuna"
+     ]
+    }
+   }
+  ]
+ },
+ "summaryReportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 341.1 s of battle, 59.4 to 59.4 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 PASS; 595 ms of see-through a minute (35.7 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at d5049f686; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows); PYREFLY_QUERY=?coach=off)."
+}

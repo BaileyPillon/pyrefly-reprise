@@ -1,0 +1,25 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-11-02T23:55:00.000Z",
+  "build": { "mainSha": "d5049f686", "bundle": "DY38b3Cj", "artifactHash": "8ef3b770031ce3b7d143055a4fa0bff7001e6ae14187512eca72089f0e3b264e" },
+  "verdicts": { "deployment": "PASS", "changedArea": "NOT APPLICABLE", "milestone": "not assessed" },
+  "checks": [
+    { "id": "CHK-017", "result": "PASS", "mandatory": true,
+      "evidence": "verify-live --full against critic/artifacts/d5049f686.json (changed-from 01a767770): PASS, liveManifest match, 7169 files checked, 0 mismatched, 0 missing, 0 wrongType, 0 errors; artifactHash 8ef3b770...264e; index.html and press/index.html identical once Cloudflare's analytics beacon is removed." },
+    { "id": "CHK-016", "result": "PASS", "mandatory": true,
+      "evidence": "Headless Playwright (PYREFLY_BROWSER=gpu), fresh context per chapter, 1600x900, cache-busted live URL, real key presses. Each capture asserted screen name (chapter-select with board selectedId, party-prep, battle) and awaitingMenu before the shot: IX Yojimbo (FFX, yojimbo-cavern) and XI Fallen Aeons (FFX-2, ffx2-fallen-aeons) each reached a player turn. Changed flow (fast-forward strike floor): R held through an Attack strike on both, presenter speed seen above normal, battle returned to the next player turn. Cancel path: command submenu opened then Escape stayed in battle. P paused, H hid the panels (screenshot: painting only, 'H SHOW PANELS') and restored them, Escape resumed. XI: the first Escape was absorbed by the first-use guide card, a later Escape paused and the next resumed. Prerendered music fetched (title.mp3, chapter-select.mp3, scene-*.mp3, boss-yojimbo.mp3, boss-ffx2-fallen-aeons.mp3, victory-*.mp3; 33 + 14 mp3 requests). Console errors 0, 404s 0 across the runs. Screenshots in critic/reviews/d5049f686-live/." },
+    { "id": "CHK-024", "result": "UNVERIFIED", "mandatory": false,
+      "reason": "Lightweight pass only. After reload the save blob (pyrefly-reprise:save:v1) was byte-identical to before (2775/2775 chars). A deliberate setting change through the pause OPTIONS tab was not demonstrated with real keys (no settings key differed) and no progress-making clear was played. The upgrade matrix is not part of this pass.",
+      "evidence": "reload blob equality only" }
+  ],
+  "staticChecks": { "pose-census": { "subjects": 146, "paintings": 1106, "pass": 829, "waived": 79, "rigged": 0, "fail": 0, "exempt": 198, "byClass": { "idle": 146, "standing": 565, "ko": 90, "low": 71, "wide": 4, "staged": 176, "part": 54 }, "byGame": { "FFX-2": 777, "FFX": 307, "FF7": 22 }, "byRowStatus": { "ok": 745, "held": 84, "waived": 79, "none": 198 } } },
+  "coverage": {
+    "tested": ["exact artifact (full, 7169 files)", "title to chapter-select to IX and XI to a player turn", "fast-forward held through a strike on IX (FFX) and XI (FFX-2)", "cancel path", "Escape, P pause and resume, H hide and restore", "prerendered music fetched", "reload blob survival", "static pose census"],
+    "reused": [],
+    "notTested": ["full upgrade matrix (CHK-024)", "a deliberate setting change surviving reload", "progress surviving reload", "?fastfloor= variants (floor|part|today) and a frame-level look at the strike timing at fast speed (deep review owed)", "Chapter XVIII Sin face and the phone battle entry (deep review owed)", "playing any chapter to its outcome", "audio by ear"]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 50
+}

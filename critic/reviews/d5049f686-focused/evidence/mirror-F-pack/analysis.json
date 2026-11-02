@@ -1,0 +1,167 @@
+{
+ "id": "mirror-F-pack",
+ "chapter": "mirror-aeons",
+ "base": "http://127.0.0.1:5733/",
+ "date": "2026-11-02T19:44:24.989Z",
+ "checks": {
+  "CHK-026": "FAIL",
+  "CHK-027": "PASS"
+ },
+ "reasons": {
+  "CHK-026": [
+   "165 swap(s) change a head by more than the tolerance (worst 19.6 percent; 0.2 percent where the head is registered)"
+  ],
+  "CHK-027": []
+ },
+ "battleSeconds": 720.7,
+ "fps": 59.5,
+ "frames": 42899,
+ "maxDtMs": 1060.6,
+ "slowFrames": 264,
+ "chk026": {
+  "headOverTolerance": 165,
+  "maxHeadJumpPct": 19.6,
+  "maxHeadJumpPctRegistration": 0.2,
+  "feetOverTolerance": 0,
+  "heightOverBand": 0
+ },
+ "chk027": {
+  "jerks": 26,
+  "worstJerkPx": 81,
+  "jerksOverFail": 11,
+  "teleports": 0,
+  "teleportsWorstPx": 0,
+  "dashes": 21,
+  "dashesWorstPx": 81,
+  "swapJerks": 5,
+  "swapJerksWorstPx": 28.4,
+  "snaps": 0,
+  "ghostSwaps": 448
+ },
+ "hopsOver100": {
+  "count": 0,
+  "worstPx": 0,
+  "byFigure": {},
+  "list": []
+ },
+ "largestStepPx": 122.5,
+ "largestStepByFigure": {
+  "tidus": 122.5,
+  "yuna": 88.8,
+  "dark-yojimbo": 54.7,
+  "lulu": 48.3,
+  "dark-sandy": 43.3,
+  "dark-mindy": 35.7
+ },
+ "attackGaps": {},
+ "castGaps": {
+  "lulu": [
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   36,
+   30,
+   30,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   74,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   32,
+   27,
+   27,
+   27,
+   27
+  ]
+ },
+ "blow": {},
+ "attackGapStats": {},
+ "castGapStats": {
+  "lulu": {
+   "n": 37,
+   "min": 27,
+   "median": 27,
+   "max": 74
+  }
+ },
+ "blowStats": {},
+ "speed": {
+  "samples": 721,
+  "runs": [
+   {
+    "speed": "normal",
+    "seconds": 1,
+    "fromBf": 1,
+    "toBf": 1
+   },
+   {
+    "speed": "fast",
+    "seconds": 720,
+    "fromBf": 14,
+    "toBf": 43238
+   }
+  ],
+  "reassertions": 1,
+  "reassertedFrom": {
+   "normal": 1
+  },
+  "rPresses": 0,
+  "numerals": 635,
+  "errors": [],
+  "lastSample": {
+   "k": "s",
+   "t": 752500,
+   "bf": 43238,
+   "speed": "fast",
+   "phase": "play:ko",
+   "reasserts": 1,
+   "r": 0
+  },
+  "samplesBySpeed": {
+   "normal": 1,
+   "fast": 720
+  }
+ },
+ "run": {
+  "outcome": "victory",
+  "fails": 0,
+  "consoleErrors": 0,
+  "query": "?coach=off&treated=pack",
+  "seeds": [
+   {
+    "at": "battle start",
+    "engineSeed": 1,
+    "links": 1,
+    "firstEnemyAction": null
+   },
+   {
+    "at": "link 2",
+    "engineSeed": 2,
+    "links": 2,
+    "firstEnemyAction": null
+   }
+  ]
+ },
+ "summaryReportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 720.7 s of battle, 59.5 to 59.5 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (165 swap(s) change a head by more than the tolerance (worst 19.6 percent; 0.2 percent where the head is registered)); CHK-027 PASS; 1,777 ms of see-through a minute (106.6 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at d5049f686; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows); PYREFLY_QUERY=?coach=off&treated=pack)."
+}

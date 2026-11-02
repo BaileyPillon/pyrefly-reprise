@@ -1,0 +1,321 @@
+{
+ "tag": "p-ch1-live",
+ "chapter": "seymour-flux",
+ "base": "https://echoesofspira.com/",
+ "W": 390,
+ "H": 844,
+ "phone": true,
+ "steps": [
+  {
+   "s": "first-menu",
+   "screen": "battle",
+   "awaitingMenu": true,
+   "toMenuS": 45.5
+  },
+  {
+   "s": "hud",
+   "overflowX": false,
+   "treated": {
+    "scope": "all",
+    "chapters": [
+     "seymour-flux",
+     "yunalesca",
+     "seymour-anima-macalania",
+     "seymour-natus",
+     "yojimbo-cavern",
+     "braskas-final-aeon",
+     "seymour-omnis",
+     "isaaru-via-purifico",
+     "evrae-airship",
+     "mirror-aeons",
+     "ffx2-bahamut",
+     "ffx2-leblanc",
+     "ffx2-vegnagun-shuyin",
+     "ffx2-fallen-aeons",
+     "ffx2-den-of-woe",
+     "ffx2-trema",
+     "ffx2-ixion-djose"
+    ],
+    "holds": {
+     "yunalesca": [
+      "breath",
+      "cam",
+      "smear"
+     ],
+     "seymour-anima-macalania": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "seymour-natus": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "yojimbo-cavern": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "braskas-final-aeon": [
+      "breath",
+      "moments"
+     ],
+     "seymour-omnis": [
+      "hud",
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "isaaru-via-purifico": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "ffx2-leblanc": [
+      "breath",
+      "cam",
+      "moments"
+     ],
+     "ffx2-vegnagun-shuyin": [
+      "hd2d",
+      "arena",
+      "cam",
+      "breath",
+      "moments"
+     ],
+     "ffx2-den-of-woe": [
+      "cam",
+      "breath",
+      "moments"
+     ],
+     "ffx2-fallen-aeons": [
+      "cam",
+      "breath",
+      "moments"
+     ],
+     "ffx2-trema": [
+      "cam",
+      "breath",
+      "moments"
+     ],
+     "evrae-airship": [
+      "hd2d",
+      "arena",
+      "breath",
+      "cam",
+      "moments",
+      "real"
+     ],
+     "mirror-aeons": [
+      "hd2d",
+      "arena",
+      "card",
+      "breath",
+      "cam",
+      "moments",
+      "real"
+     ],
+     "ffx2-ixion-djose": [
+      "hd2d",
+      "arena",
+      "breath",
+      "cam",
+      "moments",
+      "smear"
+     ]
+    },
+    "running": "seymour-flux",
+    "reaches": true
+   },
+   "buttons": [
+    "DEFEND:104x40",
+    "GUIDE:77x32",
+    "TAP HERE SKIP :246x18",
+    "PAUSE:46x46"
+   ],
+   "f1": true,
+   "ribbon": [
+    " "
+   ],
+   "igBossHp": [],
+   "ffx2boss": [],
+   "look": "hd2d",
+   "plates": 2
+  },
+  {
+   "s": "tap-attack",
+   "screen": "battle",
+   "phase": {
+    "speed": "normal",
+    "timeScale": 1,
+    "auto": false,
+    "aborted": false,
+    "phase": "command:tidus",
+    "awaitingMenu": true,
+    "played": 3,
+    "lastEvents": [
+     {
+      "seq": 0,
+      "type": "sensor",
+      "ms": 0
+     },
+     {
+      "seq": 1,
+      "type": "sensor",
+      "ms": 0
+     },
+     {
+      "seq": 2,
+      "type": "turn-start",
+      "ms": 87
+     }
+    ],
+    "lastCommand": null
+   }
+  }
+ ],
+ "bundle": "https://echoesofspira.com/assets/index-Cz_6EQVK.js",
+ "toMenuMs": 45467,
+ "hud": {
+  "overflowX": false,
+  "treated": {
+   "scope": "all",
+   "chapters": [
+    "seymour-flux",
+    "yunalesca",
+    "seymour-anima-macalania",
+    "seymour-natus",
+    "yojimbo-cavern",
+    "braskas-final-aeon",
+    "seymour-omnis",
+    "isaaru-via-purifico",
+    "evrae-airship",
+    "mirror-aeons",
+    "ffx2-bahamut",
+    "ffx2-leblanc",
+    "ffx2-vegnagun-shuyin",
+    "ffx2-fallen-aeons",
+    "ffx2-den-of-woe",
+    "ffx2-trema",
+    "ffx2-ixion-djose"
+   ],
+   "holds": {
+    "yunalesca": [
+     "breath",
+     "cam",
+     "smear"
+    ],
+    "seymour-anima-macalania": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "seymour-natus": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "yojimbo-cavern": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "braskas-final-aeon": [
+     "breath",
+     "moments"
+    ],
+    "seymour-omnis": [
+     "hud",
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "isaaru-via-purifico": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "ffx2-leblanc": [
+     "breath",
+     "cam",
+     "moments"
+    ],
+    "ffx2-vegnagun-shuyin": [
+     "hd2d",
+     "arena",
+     "cam",
+     "breath",
+     "moments"
+    ],
+    "ffx2-den-of-woe": [
+     "cam",
+     "breath",
+     "moments"
+    ],
+    "ffx2-fallen-aeons": [
+     "cam",
+     "breath",
+     "moments"
+    ],
+    "ffx2-trema": [
+     "cam",
+     "breath",
+     "moments"
+    ],
+    "evrae-airship": [
+     "hd2d",
+     "arena",
+     "breath",
+     "cam",
+     "moments",
+     "real"
+    ],
+    "mirror-aeons": [
+     "hd2d",
+     "arena",
+     "card",
+     "breath",
+     "cam",
+     "moments",
+     "real"
+    ],
+    "ffx2-ixion-djose": [
+     "hd2d",
+     "arena",
+     "breath",
+     "cam",
+     "moments",
+     "smear"
+    ]
+   },
+   "running": "seymour-flux",
+   "reaches": true
+  },
+  "buttons": [
+   "DEFEND:104x40",
+   "GUIDE:77x32",
+   "TAP HERE SKIP :246x18",
+   "PAUSE:46x46"
+  ],
+  "f1": true,
+  "ribbon": [
+   " "
+  ],
+  "igBossHp": [],
+  "ffx2boss": [],
+  "look": "hd2d",
+  "plates": 2
+ },
+ "attackRect": {
+  "x": 195,
+  "y": 422
+ },
+ "fpsAvg": 59.9,
+ "consoleErrors": [],
+ "http4xx": [],
+ "requestFailures": [
+  "https://echoesofspira.com/art/characters/baralai-shade/idle.png net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/rikku.webp net::ERR_ABORTED"
+ ]
+}

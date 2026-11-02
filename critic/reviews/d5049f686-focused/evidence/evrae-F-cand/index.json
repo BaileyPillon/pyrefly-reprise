@@ -1,0 +1,570 @@
+[
+ {
+  "file": "evrae-airship-win-evrae-F-cand/00-title.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:39:49.529Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/03-card.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "evrae-airship",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:39:51.079Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/04-prep.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:39:53.474Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/05-pre-scene.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:01.022Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/05b-scene-esc.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:02.565Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/seq-transition-into-battle/",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 189
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 488
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 803
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1102
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1420
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1737
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2038
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2353
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2654
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2953
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:16.617Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/10-first-menu-coach.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:17.092Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/11-advisor.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:17.556Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/12-intent-E.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:19.648Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/13-guide-G.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:21.314Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/14-pause-Esc.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:23.382Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/14-pause-tab-next.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Wakka",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:24.324Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/14-pause-options.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:26.781Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/16-target-single.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "target selection after choosing ATTACK",
+  "asserted": "screen=battle targeting=true",
+  "verified": true,
+  "targets": 1,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:30.638Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/16b-after-cancel.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Escape from target selection",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:32.141Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/seq-party-action/",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Pull back)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 59
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 299
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 532
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 767
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1016
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1267
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1498
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1732
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1981
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2215
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:37.218Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/23-midfight.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:38.948Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/seq-action-playing/",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:damage)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 78
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 318
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 560
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 810
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1082
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1323
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1568
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1807
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2040
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2274
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:40:41.414Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/26-orders-widget.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Chapter VIII Orders widget open by real input (Close in)",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:44:09.781Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/31-results.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:44:40.663Z"
+ },
+ {
+  "file": "evrae-airship-win-evrae-F-cand/33-after-confirm-scene.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "the scene after CONFIRM on the victory results",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:44:43.569Z"
+ }
+]

@@ -1,0 +1,53 @@
+[
+ {
+  "id": "sin-F-cand",
+  "c26": "FAIL",
+  "c27": "PASS",
+  "sec": 153.1,
+  "fps": 59.4,
+  "hops100": 0,
+  "worst": 0,
+  "largest": 67.6,
+  "jerks": 3,
+  "over": 1,
+  "tele": 0,
+  "dash": 2,
+  "head": 46,
+  "atkGap": 22,
+  "byFig": "{}"
+ },
+ {
+  "id": "sin-N-cand",
+  "c26": "FAIL",
+  "c27": "PASS",
+  "sec": 199.9,
+  "fps": 59.3,
+  "hops100": 0,
+  "worst": 0,
+  "largest": 37.8,
+  "jerks": 1,
+  "over": 0,
+  "tele": 0,
+  "dash": 1,
+  "head": 48,
+  "atkGap": 31,
+  "byFig": "{}"
+ },
+ {
+  "id": "sin-N-pack",
+  "c26": "FAIL",
+  "c27": "PASS",
+  "sec": 200,
+  "fps": 59.6,
+  "hops100": 0,
+  "worst": 0,
+  "largest": 50.5,
+  "jerks": 8,
+  "over": 0,
+  "tele": 0,
+  "dash": 8,
+  "head": 49,
+  "atkGap": 6,
+  "byFig": "{}"
+ }
+]

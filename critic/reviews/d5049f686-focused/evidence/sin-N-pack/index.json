@@ -1,0 +1,590 @@
+[
+ {
+  "file": "sin-face-win-sin-N-pack/00-title.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:33:37.384Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/03-card.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select, this chapter chosen by real input",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "selectedId": "sin-face",
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:33:40.564Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/04-prep.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:33:42.939Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/05-pre-scene.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:33:50.513Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/05b-scene-esc.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:33:52.067Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/seq-transition-into-battle/",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 60
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 374
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 685
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1002
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1314
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1624
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1937
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2235
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2555
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2870
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:34:06.086Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/10-first-menu-coach.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:34:06.596Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/11-advisor.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:34:07.063Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/12-intent-E.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:34:09.334Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/13-guide-G.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:34:11.052Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/14-pause-Esc.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:34:13.160Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/14-pause-tab-next.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Yuna",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:34:14.137Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/14-pause-options.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:34:16.624Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/seq-party-action/",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Hastega)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 62
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 292
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 528
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 777
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1012
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1295
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1545
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1782
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2028
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2346
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:34:25.277Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/23-midfight.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:34:29.199Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/25-doublecast.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after a Doublecast chosen by real input",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:34:38.367Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/seq-action-playing/",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:action-start)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 45
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 294
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 529
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 759
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 993
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1227
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1462
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1714
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1961
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2209
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:34:42.636Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/28-bushido-overlay.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Dragon Fang: BUSHIDO · ENTER THE SEQUENCE",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:36:12.679Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/30-post-scene.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "post-battle scene after a victory",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:37:46.323Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/31-results.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:38:05.621Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/34-board-after.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after the win",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:38:08.412Z"
+ },
+ {
+  "file": "sin-face-win-sin-N-pack/35-board-reload.png",
+  "game": "ffx",
+  "chapter": "sin-face",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after a reload (the clear must come back from the save)",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T18:38:10.562Z"
+ }
+]

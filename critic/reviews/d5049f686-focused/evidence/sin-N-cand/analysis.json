@@ -1,0 +1,395 @@
+{
+ "id": "sin-N-cand",
+ "chapter": "sin-face",
+ "base": "http://127.0.0.1:5733/",
+ "date": "2026-11-02T18:31:31.345Z",
+ "checks": {
+  "CHK-026": "FAIL",
+  "CHK-027": "PASS"
+ },
+ "reasons": {
+  "CHK-026": [
+   "48 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.1 percent where the head is registered)"
+  ],
+  "CHK-027": []
+ },
+ "battleSeconds": 199.9,
+ "fps": 59.3,
+ "frames": 11853,
+ "maxDtMs": 670.1,
+ "slowFrames": 66,
+ "chk026": {
+  "headOverTolerance": 48,
+  "maxHeadJumpPct": 15.5,
+  "maxHeadJumpPctRegistration": 0.1,
+  "feetOverTolerance": 0,
+  "heightOverBand": 0
+ },
+ "chk027": {
+  "jerks": 1,
+  "worstJerkPx": 24.1,
+  "jerksOverFail": 0,
+  "teleports": 0,
+  "teleportsWorstPx": 0,
+  "dashes": 1,
+  "dashesWorstPx": 24.1,
+  "swapJerks": 0,
+  "swapJerksWorstPx": 0,
+  "snaps": 0,
+  "ghostSwaps": 140
+ },
+ "hopsOver100": {
+  "count": 0,
+  "worstPx": 0,
+  "byFigure": {},
+  "list": []
+ },
+ "largestStepPx": 37.8,
+ "largestStepByFigure": {
+  "auron": 37.8,
+  "overdrive-sin": 24.6
+ },
+ "attackGaps": {
+  "auron": [
+   31,
+   33,
+   33,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30
+  ],
+  "wakka": [
+   32,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31,
+   32,
+   31,
+   31,
+   31,
+   31,
+   31,
+   31
+  ]
+ },
+ "castGaps": {
+  "tidus": [
+   122,
+   108,
+   106
+  ],
+  "auron": [
+   98,
+   98
+  ],
+  "lulu": [
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   111,
+   111
+  ]
+ },
+ "blow": {
+  "auron": [
+   {
+    "swapN": 7493,
+    "numeralN": 7512,
+    "frames": 19,
+    "ms": 320,
+    "txt": "2601",
+    "gap": 31
+   },
+   {
+    "swapN": 8237,
+    "numeralN": 8256,
+    "frames": 19,
+    "ms": 324,
+    "txt": "5687",
+    "gap": 33
+   },
+   {
+    "swapN": 9336,
+    "numeralN": 9354,
+    "frames": 18,
+    "ms": 311,
+    "txt": "3545",
+    "gap": 33
+   },
+   {
+    "swapN": 10037,
+    "numeralN": 10056,
+    "frames": 19,
+    "ms": 321,
+    "txt": "2748",
+    "gap": 30
+   },
+   {
+    "swapN": 10669,
+    "numeralN": 10688,
+    "frames": 19,
+    "ms": 321,
+    "txt": "2538",
+    "gap": 30
+   },
+   {
+    "swapN": 11327,
+    "numeralN": 11346,
+    "frames": 19,
+    "ms": 322,
+    "txt": "2727",
+    "gap": 30
+   },
+   {
+    "swapN": 12055,
+    "numeralN": 12074,
+    "frames": 19,
+    "ms": 318,
+    "txt": "2548",
+    "gap": 30
+   },
+   {
+    "swapN": 12581,
+    "numeralN": 12600,
+    "frames": 19,
+    "ms": 320,
+    "txt": "2791",
+    "gap": 30
+   },
+   {
+    "swapN": 13168,
+    "numeralN": 13187,
+    "frames": 19,
+    "ms": 321,
+    "txt": "2611",
+    "gap": 30
+   }
+  ],
+  "wakka": [
+   {
+    "swapN": 2947,
+    "numeralN": 2966,
+    "frames": 19,
+    "ms": 322,
+    "txt": "993",
+    "gap": 32
+   },
+   {
+    "swapN": 3865,
+    "numeralN": 3883,
+    "frames": 18,
+    "ms": 308,
+    "txt": "943",
+    "gap": 31
+   },
+   {
+    "swapN": 4344,
+    "numeralN": 4362,
+    "frames": 18,
+    "ms": 302,
+    "txt": "1028",
+    "gap": 31
+   },
+   {
+    "swapN": 5592,
+    "numeralN": 5609,
+    "frames": 17,
+    "ms": 280,
+    "txt": "1497",
+    "gap": 31
+   },
+   {
+    "swapN": 6079,
+    "numeralN": 6094,
+    "frames": 15,
+    "ms": 303,
+    "txt": "1429",
+    "gap": 31
+   },
+   {
+    "swapN": 7003,
+    "numeralN": 7021,
+    "frames": 18,
+    "ms": 302,
+    "txt": "1524",
+    "gap": 31
+   },
+   {
+    "swapN": 7597,
+    "numeralN": 7615,
+    "frames": 18,
+    "ms": 308,
+    "txt": "1406",
+    "gap": 31
+   },
+   {
+    "swapN": 8404,
+    "numeralN": 8423,
+    "frames": 19,
+    "ms": 320,
+    "txt": "1474",
+    "gap": 32
+   },
+   {
+    "swapN": 9481,
+    "numeralN": 9499,
+    "frames": 18,
+    "ms": 307,
+    "txt": "1451",
+    "gap": 31
+   },
+   {
+    "swapN": 10138,
+    "numeralN": 10156,
+    "frames": 18,
+    "ms": 308,
+    "txt": "1524",
+    "gap": 31
+   },
+   {
+    "swapN": 11163,
+    "numeralN": 11181,
+    "frames": 18,
+    "ms": 302,
+    "txt": "1355",
+    "gap": 31
+   },
+   {
+    "swapN": 11952,
+    "numeralN": 11970,
+    "frames": 18,
+    "ms": 304,
+    "txt": "1446",
+    "gap": 31
+   },
+   {
+    "swapN": 12479,
+    "numeralN": 12497,
+    "frames": 18,
+    "ms": 304,
+    "txt": "1513",
+    "gap": 31
+   },
+   {
+    "swapN": 13068,
+    "numeralN": 13086,
+    "frames": 18,
+    "ms": 305,
+    "txt": "1513",
+    "gap": 31
+   }
+  ]
+ },
+ "attackGapStats": {
+  "auron": {
+   "n": 9,
+   "min": 30,
+   "median": 30,
+   "max": 33
+  },
+  "wakka": {
+   "n": 14,
+   "min": 31,
+   "median": 31,
+   "max": 32
+  }
+ },
+ "castGapStats": {
+  "tidus": {
+   "n": 3,
+   "min": 106,
+   "median": 108,
+   "max": 122
+  },
+  "auron": {
+   "n": 2,
+   "min": 98,
+   "median": 98,
+   "max": 98
+  },
+  "lulu": {
+   "n": 13,
+   "min": 111,
+   "median": 160,
+   "max": 160
+  }
+ },
+ "blowStats": {
+  "auron": {
+   "n": 9,
+   "min": 18,
+   "median": 19,
+   "max": 19
+  },
+  "wakka": {
+   "n": 14,
+   "min": 15,
+   "median": 18,
+   "max": 19
+  }
+ },
+ "speed": {
+  "samples": 206,
+  "runs": [
+   {
+    "speed": "normal",
+    "seconds": 206,
+    "fromBf": 1,
+    "toBf": 12165
+   }
+  ],
+  "reassertions": 0,
+  "reassertedFrom": {},
+  "rPresses": 1,
+  "numerals": 99,
+  "errors": [],
+  "lastSample": {
+   "k": "s",
+   "t": 231154,
+   "bf": 12165,
+   "speed": "normal",
+   "phase": "play:victory",
+   "reasserts": 0,
+   "r": 1
+  },
+  "samplesBySpeed": {
+   "normal": 206
+  }
+ },
+ "run": {
+  "outcome": "victory",
+  "fails": 0,
+  "consoleErrors": 0,
+  "query": "?coach=off",
+  "seeds": [
+   {
+    "at": "battle start",
+    "engineSeed": 1,
+    "links": 1,
+    "firstEnemyAction": {
+     "seq": 1,
+     "actor": "overdrive-sin",
+     "ability": "Drawn to Sin.",
+     "targets": [
+      "overdrive-sin"
+     ]
+    }
+   }
+  ]
+ },
+ "summaryReportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 199.9 s of battle, 59.3 to 59.3 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (48 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.1 percent where the head is registered)); CHK-027 PASS; 2,696 ms of see-through a minute (161.7 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at d5049f686; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows); PYREFLY_QUERY=?coach=off)."
+}

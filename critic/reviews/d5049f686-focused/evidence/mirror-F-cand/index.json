@@ -1,0 +1,695 @@
+[
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/00-title.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:15:29.644Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/04-prep.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:15:33.680Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/05-pre-scene.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:15:42.295Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/05b-scene-esc.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:15:43.802Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/seq-transition-into-battle/",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 573
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 862
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 1164
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1484
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1801
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 2094
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 2401
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2701
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 3013
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 3311
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:15:58.221Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/10-first-menu-coach.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:15:58.690Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/11-advisor.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:15:59.143Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/12-intent-E.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:16:01.228Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/13-guide-G.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:16:02.874Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/14-pause-Esc.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:16:04.937Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/14-pause-tab-next.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Yuna",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:16:05.856Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/14-pause-options.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:16:08.220Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/16-target-single.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "target selection after choosing ATTACK",
+  "asserted": "screen=battle targeting=true",
+  "verified": true,
+  "targets": 2,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:16:11.912Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/16b-after-cancel.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Escape from target selection",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:16:13.387Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/seq-party-action/",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Quick Hit)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 88
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 358
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 701
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 967
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1216
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1465
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1709
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1942
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2181
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2411
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:16:17.803Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/23-midfight.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "mid-fight after 3 real commands",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:16:26.160Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/seq-action-playing/",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:status-add)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 46
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 294
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 570
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 810
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1053
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1293
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1544
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1812
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2043
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2292
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:16:44.782Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/seq-seam-2/",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: chain seam 1 -> 2 (phase change)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 1152
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 1508
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 1857
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 2208
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 2554
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 2903
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 3256
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 3603
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:23:52.014Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/20-link-2.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "fight, encounter link 2 of 2",
+  "asserted": "screen=battle links=2",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:23:55.615Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/24-seam-2-first-menu.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu after chain seam into link 2",
+  "asserted": "screen=battle awaitingMenu=true links=2",
+  "verified": true,
+  "pr0091": {
+   "viewport": "1600x900",
+   "card": {
+    "x": 519,
+    "y": 215,
+    "w": 593,
+    "h": 130
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Tidus Cheer → the party IN SPECIAL NO MP + CHEER It puts Cheer on the party; next, Daigoro bites for about 6,500."
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:23:57.290Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/28-swordplay-overlay.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Energy Rain: SWORDPLAY · PRESS ENTER IN THE GOLD ZONE",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:24:22.524Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/30-post-scene.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "post-battle scene after a victory",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:29:04.204Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/31-results.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a victory",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:29:26.584Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/34-board-after.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after the win",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:29:29.368Z"
+ },
+ {
+  "file": "mirror-aeons-win-mirror-F-cand/35-board-reload.png",
+  "game": "ffx",
+  "chapter": "mirror-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "chapter select after a reload (the clear must come back from the save)",
+  "asserted": "screen=chapter-select",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "chapter-select"
+   ],
+   "titleRoots": 0,
+   "screen": "chapter-select"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-02T19:29:31.475Z"
+ }
+]

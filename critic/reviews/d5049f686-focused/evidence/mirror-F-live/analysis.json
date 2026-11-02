@@ -1,0 +1,653 @@
+{
+ "id": "mirror-F-live",
+ "chapter": "mirror-aeons",
+ "base": "https://echoesofspira.com/",
+ "date": "2026-11-02T21:53:20.814Z",
+ "checks": {
+  "CHK-026": "FAIL",
+  "CHK-027": "FAIL"
+ },
+ "reasons": {
+  "CHK-026": [
+   "163 swap(s) change a head by more than the tolerance (worst 19.6 percent; 0.1 percent where the head is registered)"
+  ],
+  "CHK-027": [
+   "1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 56.7 px)"
+  ]
+ },
+ "battleSeconds": 716.7,
+ "fps": 58.6,
+ "frames": 41993,
+ "maxDtMs": 1103.2,
+ "slowFrames": 538,
+ "chk026": {
+  "headOverTolerance": 163,
+  "maxHeadJumpPct": 19.6,
+  "maxHeadJumpPctRegistration": 0.1,
+  "feetOverTolerance": 0,
+  "heightOverBand": 0
+ },
+ "chk027": {
+  "jerks": 117,
+  "worstJerkPx": 284.3,
+  "jerksOverFail": 96,
+  "teleports": 0,
+  "teleportsWorstPx": 0,
+  "dashes": 114,
+  "dashesWorstPx": 284.3,
+  "swapJerks": 3,
+  "swapJerksWorstPx": 56.7,
+  "snaps": 0,
+  "ghostSwaps": 426
+ },
+ "hopsOver100": {
+  "count": 27,
+  "worstPx": 284.3,
+  "byFigure": {
+   "dark-mindy": {
+    "count": 18,
+    "worstPx": 284.3
+   },
+   "dark-sandy": {
+    "count": 6,
+    "worstPx": 152.8
+   },
+   "dark-yojimbo": {
+    "count": 2,
+    "worstPx": 111
+   },
+   "tidus": {
+    "count": 1,
+    "worstPx": 110.4
+   }
+  },
+  "list": [
+   {
+    "n": 20896,
+    "figure": "dark-mindy",
+    "px": 284.3,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 32.6,
+    "localPx": 8.7,
+    "frameMs": 14.7,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 19574,
+    "figure": "dark-mindy",
+    "px": 270.5,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 31.9,
+    "localPx": 8.5,
+    "frameMs": 42.6,
+    "longFrame": true,
+    "cause": "damage"
+   },
+   {
+    "n": 22416,
+    "figure": "dark-mindy",
+    "px": 198,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 21.4,
+    "localPx": 9.2,
+    "frameMs": 16.2,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 15429,
+    "figure": "dark-mindy",
+    "px": 189.1,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 16,
+    "localPx": 11.8,
+    "frameMs": 17,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 20213,
+    "figure": "dark-mindy",
+    "px": 188.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 19.4,
+    "localPx": 9.7,
+    "frameMs": 6.5,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 7735,
+    "figure": "dark-mindy",
+    "px": 188.3,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 17,
+    "localPx": 11.1,
+    "frameMs": 16,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 17196,
+    "figure": "dark-mindy",
+    "px": 187.2,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 18.7,
+    "localPx": 10,
+    "frameMs": 18.7,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 16177,
+    "figure": "dark-mindy",
+    "px": 185.6,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 17.1,
+    "localPx": 10.8,
+    "frameMs": 18.9,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 5437,
+    "figure": "dark-mindy",
+    "px": 168.4,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 17.1,
+    "localPx": 9.8,
+    "frameMs": 15.2,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 4229,
+    "figure": "dark-sandy",
+    "px": 152.8,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 11.3,
+    "localPx": 13.5,
+    "frameMs": 59,
+    "longFrame": true,
+    "cause": "damage"
+   },
+   {
+    "n": 10051,
+    "figure": "dark-sandy",
+    "px": 124.5,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 11.8,
+    "localPx": 10.6,
+    "frameMs": 15.5,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 15602,
+    "figure": "dark-sandy",
+    "px": 122.1,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 11.6,
+    "localPx": 10.6,
+    "frameMs": 17.3,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 17368,
+    "figure": "dark-sandy",
+    "px": 121.6,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 11.5,
+    "localPx": 10.6,
+    "frameMs": 17,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 16349,
+    "figure": "dark-sandy",
+    "px": 117.1,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 10.9,
+    "localPx": 10.7,
+    "frameMs": 16.4,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 25480,
+    "figure": "dark-mindy",
+    "px": 112,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 12,
+    "localPx": 9.4,
+    "frameMs": 16.9,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 36714,
+    "figure": "dark-yojimbo",
+    "px": 111,
+    "part": "feet",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 10.6,
+    "localPx": 10.5,
+    "frameMs": 17,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 36984,
+    "figure": "dark-yojimbo",
+    "px": 110.6,
+    "part": "feet",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 10.8,
+    "localPx": 10.2,
+    "frameMs": 16.3,
+    "longFrame": false,
+    "cause": "ko"
+   },
+   {
+    "n": 32857,
+    "figure": "tidus",
+    "px": 110.4,
+    "part": "feet",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 7.9,
+    "localPx": 13.9,
+    "frameMs": 17.3,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 15438,
+    "figure": "dark-mindy",
+    "px": 107.5,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4.4,
+    "localPx": 24.6,
+    "frameMs": 16.8,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 19584,
+    "figure": "dark-mindy",
+    "px": 106.5,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4.4,
+    "localPx": 24.4,
+    "frameMs": 16.4,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 22426,
+    "figure": "dark-mindy",
+    "px": 106.5,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4.3,
+    "localPx": 24.6,
+    "frameMs": 15.8,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 20906,
+    "figure": "dark-mindy",
+    "px": 106.3,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4.2,
+    "localPx": 25.4,
+    "frameMs": 17.3,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 7745,
+    "figure": "dark-mindy",
+    "px": 106.2,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4.2,
+    "localPx": 25,
+    "frameMs": 14.7,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 16187,
+    "figure": "dark-mindy",
+    "px": 106,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4.2,
+    "localPx": 25.2,
+    "frameMs": 15,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 20223,
+    "figure": "dark-mindy",
+    "px": 105.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4.2,
+    "localPx": 25.4,
+    "frameMs": 17.4,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 17206,
+    "figure": "dark-mindy",
+    "px": 105.4,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 5.1,
+    "localPx": 20.6,
+    "frameMs": 15.7,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 12327,
+    "figure": "dark-sandy",
+    "px": 100.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 9.6,
+    "localPx": 10.5,
+    "frameMs": 18,
+    "longFrame": false,
+    "cause": "action-start"
+   }
+  ]
+ },
+ "largestStepPx": 284.3,
+ "largestStepByFigure": {
+  "dark-mindy": 284.3,
+  "dark-sandy": 152.8,
+  "tidus": 129.9,
+  "dark-yojimbo": 111,
+  "yuna": 94.1,
+  "lulu": 48.3
+ },
+ "attackGaps": {
+  "tidus": [
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   6,
+   7,
+   7,
+   7,
+   6,
+   7,
+   6,
+   7,
+   7
+  ],
+  "yuna": [
+   7,
+   6,
+   7,
+   6,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   7,
+   6,
+   7
+  ]
+ },
+ "castGaps": {
+  "lulu": [
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   30,
+   36,
+   30,
+   30,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   74,
+   26,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   28,
+   27
+  ]
+ },
+ "blow": {
+  "tidus": [
+   {
+    "swapN": 15156,
+    "numeralN": 15171,
+    "frames": 15,
+    "ms": 321,
+    "txt": "65785",
+    "gap": 7
+   },
+   {
+    "swapN": 17536,
+    "numeralN": 17555,
+    "frames": 19,
+    "ms": 322,
+    "txt": "71047",
+    "gap": 7
+   }
+  ],
+  "yuna": [
+   {
+    "swapN": 34918,
+    "numeralN": 34937,
+    "frames": 19,
+    "ms": 321,
+    "txt": "47085",
+    "gap": 7
+   },
+   {
+    "swapN": 40891,
+    "numeralN": 40900,
+    "frames": 9,
+    "ms": 321,
+    "txt": "43558",
+    "gap": 6
+   },
+   {
+    "swapN": 41821,
+    "numeralN": 41840,
+    "frames": 19,
+    "ms": 321,
+    "txt": "47438",
+    "gap": 7
+   }
+  ]
+ },
+ "attackGapStats": {
+  "tidus": {
+   "n": 24,
+   "min": 6,
+   "median": 7,
+   "max": 7
+  },
+  "yuna": {
+   "n": 16,
+   "min": 6,
+   "median": 7,
+   "max": 7
+  }
+ },
+ "castGapStats": {
+  "lulu": {
+   "n": 36,
+   "min": 26,
+   "median": 27,
+   "max": 74
+  }
+ },
+ "blowStats": {
+  "tidus": {
+   "n": 2,
+   "min": 15,
+   "median": 19,
+   "max": 19
+  },
+  "yuna": {
+   "n": 3,
+   "min": 9,
+   "median": 19,
+   "max": 19
+  }
+ },
+ "speed": {
+  "samples": 718,
+  "runs": [
+   {
+    "speed": "normal",
+    "seconds": 1,
+    "fromBf": 1,
+    "toBf": 1
+   },
+   {
+    "speed": "fast",
+    "seconds": 717,
+    "fromBf": 14,
+    "toBf": 42332
+   }
+  ],
+  "reassertions": 1,
+  "reassertedFrom": {
+   "normal": 1
+  },
+  "rPresses": 0,
+  "numerals": 433,
+  "errors": [],
+  "lastSample": {
+   "k": "s",
+   "t": 749238,
+   "bf": 42332,
+   "speed": "fast",
+   "phase": "play:victory",
+   "reasserts": 1,
+   "r": 0
+  },
+  "samplesBySpeed": {
+   "normal": 1,
+   "fast": 717
+  }
+ },
+ "run": {
+  "outcome": "victory",
+  "fails": 0,
+  "consoleErrors": 0,
+  "query": "?coach=off",
+  "seeds": [
+   {
+    "at": "battle start",
+    "engineSeed": 1,
+    "links": 1,
+    "firstEnemyAction": null
+   },
+   {
+    "at": "link 2",
+    "engineSeed": 2,
+    "links": 2,
+    "firstEnemyAction": null
+   }
+  ]
+ },
+ "summaryReportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 716.7 s of battle, 58.6 to 58.6 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (163 swap(s) change a head by more than the tolerance (worst 19.6 percent; 0.1 percent where the head is registered)); CHK-027 FAIL (1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 56.7 px)); 1,891 ms of see-through a minute (113.5 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at d5049f686; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows); PYREFLY_QUERY=?coach=off)."
+}

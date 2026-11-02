@@ -1,0 +1,471 @@
+{
+ "id": "ch4-F-today",
+ "chapter": "ffx2-bahamut",
+ "base": "http://127.0.0.1:5733/",
+ "date": "2026-11-02T21:11:56.576Z",
+ "checks": {
+  "CHK-026": "PASS",
+  "CHK-027": "FAIL"
+ },
+ "reasons": {
+  "CHK-026": [],
+  "CHK-027": [
+   "1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 288 px)"
+  ]
+ },
+ "battleSeconds": 193.2,
+ "fps": 59.1,
+ "frames": 11418,
+ "maxDtMs": 153.2,
+ "slowFrames": 170,
+ "chk026": {
+  "headOverTolerance": 0,
+  "maxHeadJumpPct": 0.7,
+  "maxHeadJumpPctRegistration": 0.2,
+  "feetOverTolerance": 0,
+  "heightOverBand": 0
+ },
+ "chk027": {
+  "jerks": 34,
+  "worstJerkPx": 290.2,
+  "jerksOverFail": 31,
+  "teleports": 0,
+  "teleportsWorstPx": 0,
+  "dashes": 33,
+  "dashesWorstPx": 290.2,
+  "swapJerks": 1,
+  "swapJerksWorstPx": 288,
+  "snaps": 0,
+  "ghostSwaps": 78
+ },
+ "hopsOver100": {
+  "count": 26,
+  "worstPx": 290.2,
+  "byFigure": {
+   "rikku": {
+    "count": 11,
+    "worstPx": 290.2
+   },
+   "paine": {
+    "count": 11,
+    "worstPx": 203.5
+   },
+   "bahamut": {
+    "count": 4,
+    "worstPx": 161.6
+   }
+  },
+  "list": [
+   {
+    "n": 8275,
+    "figure": "rikku",
+    "px": 290.2,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 31.8,
+    "localPx": 9.1,
+    "frameMs": 16.1,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 9467,
+    "figure": "rikku",
+    "px": 289.2,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 32.1,
+    "localPx": 9,
+    "frameMs": 16.8,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 8775,
+    "figure": "rikku",
+    "px": 288,
+    "part": "head",
+    "kind": "swap",
+    "atSwap": true,
+    "ratio": 16.8,
+    "localPx": 17.1,
+    "frameMs": 15.5,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 12219,
+    "figure": "paine",
+    "px": 203.5,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 16.4,
+    "localPx": 12.4,
+    "frameMs": 16.1,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 11013,
+    "figure": "rikku",
+    "px": 199.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 28.6,
+    "localPx": 7,
+    "frameMs": 16.5,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 12121,
+    "figure": "rikku",
+    "px": 199.3,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 28.9,
+    "localPx": 6.9,
+    "frameMs": 21,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 12462,
+    "figure": "rikku",
+    "px": 199.3,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 27.3,
+    "localPx": 7.3,
+    "frameMs": 17.5,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 11451,
+    "figure": "rikku",
+    "px": 199.2,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 28.9,
+    "localPx": 6.9,
+    "frameMs": 16.2,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 7876,
+    "figure": "paine",
+    "px": 192.7,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 17,
+    "localPx": 11.3,
+    "frameMs": 16.1,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 12553,
+    "figure": "paine",
+    "px": 190.5,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 14.6,
+    "localPx": 13.1,
+    "frameMs": 18.3,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 10413,
+    "figure": "rikku",
+    "px": 185.3,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 26.1,
+    "localPx": 7.1,
+    "frameMs": 13.8,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 9942,
+    "figure": "rikku",
+    "px": 184.5,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 25.9,
+    "localPx": 7.1,
+    "frameMs": 16,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 11627,
+    "figure": "paine",
+    "px": 182.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 14.9,
+    "localPx": 12.2,
+    "frameMs": 17.6,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 8205,
+    "figure": "paine",
+    "px": 179.4,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 14.7,
+    "localPx": 12.2,
+    "frameMs": 16.6,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 9811,
+    "figure": "paine",
+    "px": 178.1,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 14.7,
+    "localPx": 12.1,
+    "frameMs": 16.9,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 9375,
+    "figure": "paine",
+    "px": 177.8,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 14.5,
+    "localPx": 12.2,
+    "frameMs": 16.8,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 11192,
+    "figure": "paine",
+    "px": 177.8,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 14.5,
+    "localPx": 12.3,
+    "frameMs": 31.7,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 7804,
+    "figure": "rikku",
+    "px": 166.1,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 25.3,
+    "localPx": 6.6,
+    "frameMs": 15.2,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 12774,
+    "figure": "rikku",
+    "px": 165.8,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 26.2,
+    "localPx": 6.3,
+    "frameMs": 17.8,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 10759,
+    "figure": "paine",
+    "px": 162,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 14.7,
+    "localPx": 11,
+    "frameMs": 16.5,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 8480,
+    "figure": "bahamut",
+    "px": 161.6,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 50.3,
+    "localPx": 3.2,
+    "frameMs": 16.5,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 8681,
+    "figure": "paine",
+    "px": 153.8,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 12.7,
+    "localPx": 12.1,
+    "frameMs": 17,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 2893,
+    "figure": "bahamut",
+    "px": 148.7,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 42.9,
+    "localPx": 3.5,
+    "frameMs": 17.5,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 10281,
+    "figure": "paine",
+    "px": 131.5,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 10.7,
+    "localPx": 12.3,
+    "frameMs": 17.7,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 3080,
+    "figure": "bahamut",
+    "px": 110.7,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 33.6,
+    "localPx": 3.3,
+    "frameMs": 17.6,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 1934,
+    "figure": "bahamut",
+    "px": 109,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 33.4,
+    "localPx": 3.3,
+    "frameMs": 16.8,
+    "longFrame": false,
+    "cause": "action-start"
+   }
+  ]
+ },
+ "largestStepPx": 290.2,
+ "largestStepByFigure": {
+  "rikku": 290.2,
+  "paine": 203.5,
+  "bahamut": 161.6,
+  "yuna": 91.9
+ },
+ "attackGaps": {},
+ "castGaps": {},
+ "blow": {},
+ "attackGapStats": {},
+ "castGapStats": {},
+ "blowStats": {},
+ "speed": {
+  "samples": 199,
+  "runs": [
+   {
+    "speed": "normal",
+    "seconds": 1,
+    "fromBf": 1,
+    "toBf": 1
+   },
+   {
+    "speed": "fast",
+    "seconds": 198,
+    "fromBf": 10,
+    "toBf": 11763
+   }
+  ],
+  "reassertions": 1,
+  "reassertedFrom": {
+   "normal": 1
+  },
+  "rPresses": 0,
+  "numerals": 76,
+  "errors": [],
+  "lastSample": {
+   "k": "s",
+   "t": 224688,
+   "bf": 11763,
+   "speed": "fast",
+   "phase": "play:victory",
+   "reasserts": 1,
+   "r": 0
+  },
+  "samplesBySpeed": {
+   "normal": 1,
+   "fast": 198
+  }
+ },
+ "run": {
+  "outcome": "victory",
+  "fails": 0,
+  "consoleErrors": 0,
+  "query": "?coach=off&fastfloor=today",
+  "seeds": [
+   {
+    "at": "battle start",
+    "engineSeed": 1,
+    "links": 1,
+    "firstEnemyAction": {
+     "seq": 3,
+     "actor": "bahamut",
+     "ability": "Curse",
+     "targets": [
+      "yuna"
+     ]
+    }
+   }
+  ]
+ },
+ "summaryReportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 193.2 s of battle, 59.1 to 59.1 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 288 px)); 1,145 ms of see-through a minute (68.7 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at d5049f686; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows); PYREFLY_QUERY=?coach=off&fastfloor=today)."
+}
