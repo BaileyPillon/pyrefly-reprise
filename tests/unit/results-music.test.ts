@@ -75,7 +75,7 @@ describe('which cue the results screen plays (resultsCueFor)', () => {
         expect(cue, c.id).toBeNull();
         continue;
       }
-      expect(cue?.cue, c.id).toBe(c.id === 'ffx2-bahamut' ? 'pause' : c.game === 'ffx' ? 'victory-ffx' : 'victory-ffx2');
+      expect(cue?.cue, c.id).toBe(c.id === 'ffx2-bahamut' || c.id === 'exp-yrp-3d' ? 'pause' : c.game === 'ffx' ? 'victory-ffx' : 'victory-ffx2');
       expect(cue?.kind).toBe('victory');
       expect(cue?.fade).toBe(VICTORY_FADE_S);
     }

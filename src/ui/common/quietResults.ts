@@ -23,6 +23,8 @@
  * No `three`, no DOM; pure data.
  */
 
+import { EXP_YRP_ID } from '../../data/yrp-ids.ts'; // a module with no imports of its own
+
 /** What one fight's quiet results change. */
 export interface QuietResults {
   /** The music cue the results screen plays on a WIN, instead of the chapter's own `music.victory`. A defeat keeps its own cue (`defeat-ffx2`). */
@@ -31,9 +33,13 @@ export interface QuietResults {
   readonly bodyFaces: readonly string[];
 }
 
-/** Chapter id to what it changes. Chapter IV only: every chapter not named here is untouched. */
+/**
+ * Chapter id to what it changes. Chapter IV, and the hidden 3D Bahamut (ch-yrp, 2026-11-02; FFX-2 only), which is that same fight drawn in 3D and takes the same sources and the same pick (the driver's pick under
+ * Bailey's blanket yes, his to overturn: the alternative is the generic FFX-2 results with `victory-bahamut`). Every chapter not named here is untouched.
+ */
 export const QUIET_RESULTS: Readonly<Record<string, QuietResults>> = {
   'ffx2-bahamut': { cue: 'pause', bodyFaces: ['rikku'] },
+  [EXP_YRP_ID]: { cue: 'pause', bodyFaces: ['rikku'] },
 };
 
 /** The quiet-results record of a chapter, or null for every other chapter (and for none). */
