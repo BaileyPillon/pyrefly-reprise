@@ -13,6 +13,9 @@
  * **The guard at the end still fails if Chapter XVIII is on the list without its reason lifted:** the day it is on, the reason is gone from `WITHDRAWN_R70` AND the handoff note (`docs/handoff/booth-b4.md`) carries a `SIN-FACE LIFT:` line that names the traced cause, says
  * `?treated=pack`, and either names an existing CHK-027 report of a run (`critic/reviews/<sha>-focused|live|deep.json`) or says the run is OWED and names the job specs (`docs/handoff/r73-fast.md`, which must exist and carry them). Since r73-fast the line says OWED: no
  * browser ran in the lane, so the run against `?treated=pack` at normal AND fast speed is the next focused review's job; the day a report exists the line names it, and this guard then reads the file.
+ *
+ * **OWED is a state of the TREE, never of the CUT (r73 merge review, finding 1, 2026-11-02):** the chapter was release 71's HOLD cause, and "unknown on a critical is a HOLD". A report the line names must now read CHK-027 PASS for `sin-face`
+ * (`liftReportVerdict`, not only exist), and `tools/deploy-pages.mjs`'s release gate refuses while the line still says OWED or names a report that does not read PASS (`tools/owed-lifts.mjs`; `tests/unit/r73-merge-review-fixes.test.ts`).
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -24,6 +27,7 @@ import { setProMode } from '../../src/engine/look/pro/ProSwitch.ts';
 import { CUT_ANCHOR_CHAPTERS } from '../../src/engine/motion/CutAnchor.ts';
 import { SCOPE_EXCEPTIONS } from '../../src/engine/motion/SwapSwitch.ts';
 import { WITHDRAWN_R70, isListed } from './booth-r70-withdrawn.ts';
+import { liftReportVerdict } from '../../tools/owed-lifts.mjs';
 
 const ID = 'sin-face';
 const NOTE_PATH = 'docs/handoff/booth-b4.md';
@@ -123,7 +127,7 @@ describe('the handoff note carries both decisions (sections 14 and 15)', () => {
 });
 
 describe('Chapter XVIII does not stay on the list without its reason lifted', () => {
-  it('the day it is on the list the reason is gone from WITHDRAWN_R70 and the handoff note carries a `SIN-FACE LIFT:` line that names the traced cause, says ?treated=pack and either names an existing CHK-027 report or says the run is OWED and names the job specs; a lift line with the chapter off the list is a half-made change', () => {
+  it('the day it is on the list the reason is gone from WITHDRAWN_R70 and the handoff note carries a `SIN-FACE LIFT:` line that names the traced cause, says ?treated=pack and either names an existing CHK-027 report that reads PASS or says the run is OWED and names the job specs (the cut refuses the OWED form: tools/owed-lifts.mjs); a lift line with the chapter off the list is a half-made change', () => {
     const note = readFileSync(resolve(NOTE_PATH), 'utf8').replace(/\r\n/g, '\n');
     if (!isListed(ID)) {
       expect(WITHDRAWN_R70[ID]?.why).toMatch(/Lifts when the cause of the remaining hops is traced and a CHK-027 run against \?treated=pack shows no hop the control does not have$/);
@@ -137,7 +141,8 @@ describe('Chapter XVIII does not stay on the list without its reason lifted', ()
     expect(lift![1]).toMatch(/\?treated=pack/);
     const report = lift![1]!.match(/critic\/reviews\/[0-9a-f]{7,40}-(?:focused|live|deep)\.json/);
     if (report) {
-      expect(existsSync(resolve(report[0])), `${report[0]} exists`).toBe(true);
+      const verdict = liftReportVerdict(process.cwd(), report[0], ID, 'CHK-027'); // exists AND reads CHK-027 PASS for the chapter (a report that exists and says FAIL is not a lift)
+      expect(verdict.state, verdict.detail).toBe('pass');
       return;
     }
     // no report yet: the line must say the run is owed and name the job specs, and the specs must exist

@@ -138,6 +138,7 @@ import {
   writePendingMarker,
 } from './critic-pending.mjs';
 import { lastDeployedSha, planForRepo, readLedger, writeLedger } from './critic-plan.mjs';
+import { findOwedLifts } from './owed-lifts.mjs';
 import { loadPolicy, releasePolicy, validateReport } from './critic-policy.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -243,21 +244,23 @@ export function parseOwnerOverride(raw) {
 /**
  * The release gate (Bailey, 2026-09-21: "A, B, and C together please."). Pure:
  * the caller does the actual fail()/log() side effects. It answers one
- * question — may this candidate go public now? — from three refusals:
+ * question — may this candidate go public now? — from four refusals:
  *
  *   1. a change to a shipped file with no validated focused or deep report for
  *      this commit (RULE B: focused review BEFORE the deploy, deep after it);
  *   2. a candidate review whose ship verdict is HOLD (RULE A: a critical the
  *      change introduced, a regression against live, or an unknown tag on a
  *      critical). Disclosed majors do not appear here;
- *   3. the third deploy while a deep review is still owed (RULE B's cap).
+ *   3. the third deploy while a deep review is still owed (RULE B's cap);
+ *   4. a chapter on the treated list whose lift proof is still OWED (r73 merge review, finding 1: tools/owed-lifts.mjs; a chapter that was a HOLD cause does not ship on a promise,
+ *      and `--skip-tests` does not skip this, it is not a test).
  *
  * The save-data class (`deepBeforeDeploy`) demands that the report be a deep
  * one. Only the owner's own words turn the refusals into a warning, and they
  * settle nothing (RULE C, unchanged from commit d333b06).
  */
 export function resolveReleaseGate({
-  focusedBeforeDeploy, deepBeforeDeploy, evidence, deepOwed = [], maxDeploysWithDeepOwed = 1, ownerOverrideWords, skipped = [],
+  focusedBeforeDeploy, deepBeforeDeploy, evidence, deepOwed = [], maxDeploysWithDeepOwed = 1, ownerOverrideWords, skipped = [], owedLifts = [],
 }) {
   const why = skipped.length ? `; ${describeSkipped(skipped)}` : ''; // reports for this commit that validateReport refused, with the reason (a continuity-harness identity refusal looked like "no report")
   const refusals = [];
@@ -275,6 +278,7 @@ export function resolveReleaseGate({
   if (deepOwed.length >= maxDeploysWithDeepOwed) {
     refusals.push(`${deepOwed.length} live build(s) already owe a deep review (${deepOwed.join(', ')}): at most ${maxDeploysWithDeepOwed} deploys may go out while a deep review is owed, so this one refuses until one is settled with node tools/critic-clear.mjs (critic/RUBRIC.md section 4)`);
   }
+  for (const lift of owedLifts) refusals.push(`${lift.why} (a chapter whose proof is unknown does not ship: critic/RUBRIC.md section 3, "unknown on a critical is a HOLD"; tools/owed-lifts.mjs)`);
   if (!refusals.length) return { action: 'proceed', refusals };
   if (!ownerOverrideWords) return { action: 'fail', message: refusals.join('; '), refusals };
   return { action: 'proceed-with-warning', warningLines: formatOwnerOverrideWarning(ownerOverrideWords, refusals), refusals };
@@ -311,6 +315,7 @@ function releaseGateFor(plan, mainSha) {
     maxDeploysWithDeepOwed: release.maxDeploysWithDeepOwed,
     ownerOverrideWords: OWNER_OVERRIDE_WORDS,
     skipped,
+    owedLifts: findOwedLifts(ROOT),
   });
   return { gate, evidence, deepOwed };
 }
