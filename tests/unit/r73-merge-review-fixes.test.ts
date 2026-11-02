@@ -16,8 +16,9 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
 import { TREATED_CHAPTERS } from '../../src/engine/motion/DemoGate.ts';
+import { shipEvidenceFor } from '../../tools/critic-ship-evidence.mjs';
 import { resolveReleaseGate } from '../../tools/deploy-pages.mjs';
-import { LIFT_NOTES, findOwedLifts, isListedInSource, liftReportVerdict } from '../../tools/owed-lifts.mjs';
+import { LIFT_NOTES, REPORT_RE, findOwedLifts, isListedInSource, liftReportVerdict } from '../../tools/owed-lifts.mjs';
 
 const ROOT = process.cwd();
 const text = (rel: string): string => readFileSync(resolve(ROOT, rel), 'utf8').replace(/\r\n/g, '\n');
@@ -74,7 +75,7 @@ describe('finding 1: a listed chapter whose lift proof is OWED blocks the cut (t
       return;
     }
     expect(line).not.toBeNull();
-    const named = line![1]!.match(/critic\/reviews\/[0-9a-f]{7,40}-(?:focused|live|deep)\.json/);
+    const named = line![1]!.match(REPORT_RE);
     if (named) {
       expect(owed).toEqual([]);
       expect(liftReportVerdict(ROOT, named[0], ID, 'CHK-027').state).toBe('pass');
@@ -213,5 +214,67 @@ describe('finding 3: the predictions for Chapter XVIII do not say CHK-026 PASS; 
     }
     const viii = REVIEW.continuity.chapters.find((c) => c.chapter === 'evrae-airship')!;
     expect(viii.checks).toEqual({ 'CHK-026': 'FAIL', 'CHK-027': 'PASS' });
+  });
+});
+
+describe('r73 apply step: the lift line names Sin\'s face\'s own lift proof, and the gate can read that name (REPORT_RE widened, 2026-11-02)', () => {
+  const PROOF = 'critic/reviews/r73-sinface-chk027.json';
+  const PROOF_LINE = `${CAUSE}, report ${PROOF}`;
+
+  it('REPORT_RE accepts a build review (sha-focused|live|deep) and a lift proof (r<release>-<name>); it refuses a bare release, a short sha, another folder, another extension and a path walk', () => {
+    for (const ok of ['critic/reviews/4c01379d4-focused.json', 'critic/reviews/abcdef1-live.json', 'critic/reviews/0123456789abcdef0123456789abcdef01234567-deep.json', PROOF, 'critic/reviews/r73-x.json']) {
+      expect(ok.match(REPORT_RE)?.[0], ok).toBe(ok);
+    }
+    for (const no of ['critic/reviews/r73.json', 'critic/reviews/abc-focused.json', 'critic/reviews/r73-sinface-chk027.md', 'critic/rounds/r73-sinface.json', 'docs/r73-sinface.json', 'critic/reviews/rx-sinface.json', 'critic/reviews/r73--sinface.json', 'critic/reviews/r73-Sinface.json']) {
+      expect(no.match(REPORT_RE)?.[0] === no, no).toBe(false);
+    }
+    expect('see ../critic/reviews/r73-a.json'.match(REPORT_RE)?.[0]).toBe('critic/reviews/r73-a.json'); // the match is the repo-relative tail, never a walk out of it
+  });
+
+  it('a scratch tree: a lift-proof name that reads PASS clears the lift, one that reads FAIL or holds no run of the chapter does not', () => {
+    expect(findOwedLifts(tree({ listed: true, line: PROOF_LINE, reports: { [PROOF]: report([['sin-face', 'PASS'], ['sin-face', 'PASS']]) } }))).toEqual([]);
+    const fail = findOwedLifts(tree({ listed: true, line: PROOF_LINE, reports: { [PROOF]: report([['sin-face', 'PASS'], ['sin-face', 'FAIL']]) } }));
+    expect(fail).toHaveLength(1);
+    expect(fail[0]!.why).toMatch(/CHK-027 FAIL for sin-face/);
+    const none = findOwedLifts(tree({ listed: true, line: PROOF_LINE, reports: { [PROOF]: report([['mirror-aeons', 'PASS']]) } }));
+    expect(none[0]!.why).toMatch(/holds no continuity run of sin-face/);
+    expect(findOwedLifts(tree({ listed: true, line: PROOF_LINE }))[0]!.why).toMatch(/does not exist/);
+  });
+
+  it('the REAL tree: the line names the proof, the proof reads CHK-027 PASS in all four candidate runs (normal and fast, seeds 1 and 2), the control arms and the sensitivity arm are kept apart, and the cut finds nothing owed', () => {
+    const line = text(NOTE).match(/^SIN-FACE LIFT: (.*)$/m)![1]!;
+    expect(line.match(REPORT_RE)![0]).toBe(PROOF);
+    expect(line).toMatch(/normal AND fast/);
+    expect(line).toMatch(/\?treated=pack/);
+    expect(liftReportVerdict(ROOT, PROOF, ID, 'CHK-027')).toMatchObject({ state: 'pass' });
+    expect(findOwedLifts(ROOT)).toEqual([]);
+    const rep = JSON.parse(text(PROOF)) as {
+      review: string;
+      build: { sha: string; mainSha?: string };
+      verdicts: { liftProof: string };
+      continuity: {
+        chapters: Array<{ chapter: string; role: string; speed: string; seed: number; checks: Record<string, string> }>;
+        controls: Array<{ role: string; speed: string; checks: Record<string, string> }>;
+        sensitivity: Array<{ speed: string; checks: Record<string, string> }>;
+      };
+    };
+    expect(rep.verdicts.liftProof).toBe('PASS');
+    const runs = rep.continuity.chapters;
+    expect(runs.map((c) => `${c.speed}/${c.seed}`).sort()).toEqual(['fast/1', 'fast/2', 'normal/1', 'normal/2']); // both speeds, both seeds: what "normal AND fast" in the line means
+    for (const c of runs) {
+      expect(c.chapter).toBe(ID);
+      expect(c.role).toBe('candidate');
+      expect(c.checks['CHK-027']).toBe('PASS');
+    }
+    expect(rep.continuity.controls.map((c) => c.speed).sort()).toEqual(['fast', 'normal']);
+    expect(rep.continuity.sensitivity[0]!.checks['CHK-027']).toBe('FAIL'); // the same fight with release 72's strike: the zero is not a blind harness
+  });
+
+  it('the proof is a lift proof, not a review of the build: it names no build.mainSha and its review is "lift-proof", so the deploy gate never counts it as the candidate\'s focused or deep review', () => {
+    const rep = JSON.parse(text(PROOF)) as { review: string; build: { sha: string; mainSha?: string } };
+    expect(rep.review).toBe('lift-proof');
+    expect(rep.build.mainSha).toBeUndefined();
+    expect(shipEvidenceFor(ROOT, rep.build.sha)).toBeNull();
+    expect(text('critic/reviews/r73-sinface-chk027.md')).toMatch(/Chapter XVIII \(Sin's face\): CHK-027 lift proof/);
   });
 });

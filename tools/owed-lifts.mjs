@@ -27,7 +27,13 @@ export const LIFT_NOTES = Object.freeze([
 ]);
 
 const DEMO_GATE = 'src/engine/motion/DemoGate.ts';
-const REPORT_RE = /critic\/reviews\/[0-9a-f]{7,40}-(?:focused|live|deep)\.json/;
+/**
+ * The report paths a lift line may name: a review report of a build (`critic/reviews/<sha>-focused|live|deep.json`) or a lift proof of its own (`critic/reviews/r<release>-<name>.json`, e.g. `r73-sinface-chk027.json`:
+ * one chapter against one check, written by the lane that ran it, with `review: "lift-proof"` and no `build.mainSha`, so the deploy gate never reads it as the build's focused or deep review (`shipEvidenceFor`)).
+ * Whatever the name, the file is read by `liftReportVerdict`: it must hold a continuity run of the chapter and read PASS for the check in every run. Widened in the r73 apply step (2026-11-02): the Sin's-face proof is a
+ * lift proof, not a review of a sha, and naming it `<sha>-focused.json` would have passed it off as the focused review the gate asks for.
+ */
+export const REPORT_RE = /critic\/reviews\/(?:[0-9a-f]{7,40}-(?:focused|live|deep)|r\d+-[a-z0-9]+(?:-[a-z0-9]+)*)\.json/;
 
 function readText(root, rel) {
   try {

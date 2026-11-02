@@ -36,3 +36,6 @@ export declare function liftReportVerdict(root: string, reportRel: string, id: s
 
 /** Every listed chapter whose lift is not yet proved by a review report that reads PASS. */
 export declare function findOwedLifts(root?: string): OwedLift[];
+
+/** The report paths a lift line may name: `critic/reviews/<sha>-focused|live|deep.json` or a lift proof `critic/reviews/r<release>-<name>.json`. */
+export declare const REPORT_RE: RegExp;
