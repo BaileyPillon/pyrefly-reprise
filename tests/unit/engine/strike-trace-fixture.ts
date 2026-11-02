@@ -95,6 +95,8 @@ export interface PlayOptions {
   timeScale?: number;
   /** false: the travel and the return play at the playback speed like every other phase (release 72 and before), the control arm of the cause trace. Absent: the game as it is. */
   floorCrossings?: false;
+  /** r73-fast review (`?fastfloor=part`): the share of its normal-speed length each crossing keeps. Absent: all of it. */
+  crossingKeep?: number;
 }
 
 /** One attack at 60 Hz: the track of the registered head and feet, frame by frame. `strike`: the house strike with the pose swaps on its marks (ready to attack on the fastest travel frame, attack to follow on the fastest frame home); else today's lunge. */
@@ -117,6 +119,7 @@ export function play(o: PlayOptions): { track: Sample[]; marks: Record<string, n
     const plan: StrikePlan = {
       distance: o.reach, game: 'ffx', timeScale: o.timeScale ?? 1, arc: true,
       ...(o.floorCrossings === false ? { floorCrossings: false as const } : {}),
+      ...(o.crossingKeep !== undefined ? { crossingKeep: o.crossingKeep } : {}),
       marks: { travelPeak: () => { marks['travelPeak'] = track.length; a.setPose('attack'); }, contact: () => { marks['contact'] = track.length; }, settlePeak: () => { marks['settlePeak'] = track.length; a.setPose('follow'); }, end: () => { marks['end'] = track.length; a.setPose('idle'); } },
     };
     void a.strike(plan);

@@ -120,6 +120,8 @@ export interface StrikeOptions {
    * true: a HOUSE strike's travel and return never run shorter than they do at normal speed (`crossingFloors`). A real profile (`?curves=real`) is not touched either way.
    */
   readonly floorCrossings?: boolean;
+  /** r73-fast review (MAJOR-1; `FastFloor.ts`, `?fastfloor=`): the share (0..1, absent = 1) of its normal-speed length each crossing keeps; 0 is `floorCrossings: false`. */
+  readonly crossingKeep?: number;
 }
 
 /** A profile resolved for one strike: durations in paced ms (what the actor's clock counts), amounts as shares. */
@@ -161,11 +163,11 @@ export function heftFactors(heft: number): { time: number; hold: number; ret: nu
  * shortens the wind-up, the hold and the settle, but not the TRAVEL and the RETURN, the two phases where the figure crosses the stage: compressed by the speed they cover the reach in about five and eight frames and step 0.46
  * and 0.25 of it in one (0.15 and 0.08 at normal), one-frame hops of 113 to 500 px at the sizes the figures are drawn (`docs/handoff/r73-sinface.md`, `r73-fast.md`). A crossing's step per frame, as a share of the figure's
  * drawn height, is a law of the reach over the height and of the crossing's length alone, so with the length kept the step is the one the same strike takes at normal speed, in Chapter I too. At `timeScale` 1 or more both are
- * the phases as they were: nothing changes at normal speed.
+ * the phases as they were: nothing changes at normal speed. `keep` (0..1, default 1; `FastFloor.ts`): the share of that length each crossing keeps (the step per frame is then normal's over `keep`).
  */
-export function crossingFloors(profile: StrikeProfile, f: { time: number; ret: number }): { travelMs: number; returnMs: number } {
+export function crossingFloors(profile: StrikeProfile, f: { time: number; ret: number }, keep = 1): { travelMs: number; returnMs: number } {
   const dpf = defaultPaceFactor(profile.game);
-  return { travelMs: (profile.travelMs * f.time) / dpf, returnMs: (profile.returnMs * f.ret) / dpf };
+  return { travelMs: ((profile.travelMs * f.time) / dpf) * keep, returnMs: ((profile.returnMs * f.ret) / dpf) * keep };
 }
 
 export function resolveStrike(profile: StrikeProfile, o: StrikeOptions): StrikeShape {
@@ -174,7 +176,8 @@ export function resolveStrike(profile: StrikeProfile, o: StrikeOptions): StrikeS
   const rp = profile.real; // `?curves=real`: the real durations are the move's own (a boss's 4.2 s is not stretched again), and a phase is at least a frame long (a zero-length travel would divide by zero)
   const t = rp?.exactTime ? { time: 1, hold: 1, ret: 1 } : f;
   const floor = rp ? REAL_MIN_MS : 0;
-  const keep = rp || o.floorCrossings === false || (o.timeScale ?? 1) >= 1 ? { travelMs: 0, returnMs: 0 } : crossingFloors(profile, f); // r73-fast: a house strike's crossings keep their normal length at every speed under normal (at 1 and over the shape is exactly release 72's)
+  const share = o.floorCrossings === false ? 0 : clamp01(o.crossingKeep ?? 1);
+  const keep = rp || share <= 0 || (o.timeScale ?? 1) >= 1 ? { travelMs: 0, returnMs: 0 } : crossingFloors(profile, f, share); // r73-fast: a house strike's crossings keep their normal length at every speed under normal (at 1 and over the shape is exactly release 72's)
   const k = Math.max(0.02, o.timeScale ?? 1) / defaultPaceFactor(profile.game);
   const arcGain = clamp01(o.arcGain ?? 1);
   const liftGain = arcGain * f.arc * Math.max(0, o.realGain ?? 1);

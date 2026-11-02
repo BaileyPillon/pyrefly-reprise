@@ -228,7 +228,7 @@ export function playCue(ctx: EventCtx, name: string, opts?: { volume?: number; d
   // boss's bespoke `sfxKey` never has to exist before the fight is playable.
   try {
     audio.playSfx(key, o);
-    if (moment === 'attack' && passGame()) attackBeat(ctx, scaled(ctx, strikeBeatNow(actorId ? ctx.stage?.actor?.(actorId)?.strikeHeft?.() : undefined, undefined, playbackScaleOf(ctx)))); // the sound pass: a critical's dip, timed from the swing
+    if (moment === 'attack' && passGame()) attackBeat(ctx, scaled(ctx, strikeBeatNow(actorId ? ctx.stage?.actor?.(actorId)?.strikeHeft?.() : undefined, undefined, realContactMsOf(ctx, actorId) === undefined ? playbackScaleOf(ctx) : 1))); // the sound pass: a critical's dip, timed from the swing (r73-fast review MINOR-2: the floor's lag only for a house strike; a real strike is not floored, so its marker is release 72's at every speed)
   } catch {
     try {
       // The generic hit is the old fallback, unchanged: it asks for no recorded original and no beat.
