@@ -24,8 +24,8 @@ import { getChapter } from '../../src/data/encounters.ts';
 import { PIECE_HOLDS, TREATED_CHAPTERS, setDemoChapter, setTreatedScope } from '../../src/engine/motion/DemoGate.ts';
 import { setStagingMode } from '../../src/engine/pro/staging/StagingSwitch.ts';
 
-const IDS = ['evrae-airship', 'mirror-aeons', 'ffx2-ixion-djose'] as const; // Chapter XVIII (`sin-face`) is off the list for release 71 (the second focused review, R71-C1): it is pinned below as getting none of the four
-const GAME: Record<(typeof IDS)[number], 'ffx' | 'ffx2'> = { 'evrae-airship': 'ffx', 'mirror-aeons': 'ffx', 'ffx2-ixion-djose': 'ffx2' };
+const IDS = ['evrae-airship', 'sin-face', 'mirror-aeons', 'ffx2-ixion-djose'] as const;
+const GAME: Record<(typeof IDS)[number], 'ffx' | 'ffx2'> = { 'evrae-airship': 'ffx', 'sin-face': 'ffx', 'mirror-aeons': 'ffx', 'ffx2-ixion-djose': 'ffx2' };
 const stage = { projectRect: () => null, project: () => null } as never;
 const mount = (chapterId: string) => attachProStage({ root: {} as HTMLElement, chapterId, stage });
 
@@ -65,17 +65,15 @@ for (const id of IDS) {
   });
 }
 
-describe("Chapters XVII (Sin's Fins and Core) and XVIII (Sin's face, off the list for release 71 after the second focused review, R71-C1) are not treated: no layer, no sound pass, not on the list", () => {
-  for (const id of ['sin-fins-core', 'sin-face'] as const) {
-    it(`${id}: the layer does not mount under all, and the sound pass stays off for its run`, () => {
-      setTreatedScope('all');
-      expect(mount(id)).toBeNull();
-      setAudioNew(true);
-      const done = sfxChapter(id, () => undefined);
-      expect(audioNewOn()).toBe(false);
-      done();
-    });
-  }
+describe("Chapter XVII (Sin's Fins and Core) is not treated: no layer, no sound pass, not on the list", () => {
+  it('the layer does not mount under all, and the sound pass stays off for its run', () => {
+    setTreatedScope('all');
+    expect(mount('sin-fins-core')).toBeNull();
+    setAudioNew(true);
+    const done = sfxChapter('sin-fins-core', () => undefined);
+    expect(audioNewOn()).toBe(false);
+    done();
+  });
 });
 
 describe('the sound pass follows the chapter run', () => {
@@ -112,7 +110,7 @@ describe('the sound pass follows the chapter run', () => {
 });
 
 describe('`__pyrefly.treated()` knows them', () => {
-  it("lists the three with their holds in the table's order, never Chapter XVII or Chapter XVIII (off the list for release 71), and says whether the running chapter is reached", () => {
+  it("lists the four with their holds in the table's order, never Chapter XVII, and says whether the running chapter is reached", () => {
     const api: Record<string, unknown> = {};
     installProDebug(api);
     const treated = api['treated'] as (scope?: 'all' | 'pack' | null) => { scope: string; chapters: string[]; holds: Record<string, string[]>; running: string | null; reaches: boolean };
@@ -124,18 +122,14 @@ describe('`__pyrefly.treated()` knows them', () => {
     }
     expect(all.chapters).not.toContain('sin-fins-core');
     expect(all.holds['sin-fins-core']).toBeUndefined();
-    expect(all.chapters).not.toContain('sin-face'); // its rows stay in the table, unread: `treated()` lists the holds of the listed chapters only
-    expect(all.holds['sin-face']).toBeUndefined();
     for (const id of IDS) {
       setDemoChapter(id);
       expect(treated().reaches, id).toBe(true);
       expect(treated('pack').reaches, id).toBe(false);
       treated('all');
     }
-    for (const id of ['sin-fins-core', 'sin-face']) {
-      setDemoChapter(id);
-      expect(treated().reaches, id).toBe(false);
-    }
+    setDemoChapter('sin-fins-core');
+    expect(treated().reaches).toBe(false);
     treated(null);
   });
 });

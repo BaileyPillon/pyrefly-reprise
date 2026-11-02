@@ -18,6 +18,8 @@
  */
 
 import { audio } from '../audio/index.ts';
+import { setWarmGate } from '../audio/WarmGate.ts'; // release 73 (lane "r73-bytes"): on the phone the cues the first fight does not play wait for the entry
+import { bytesHeld, noteBytesCut, whenBackgroundOpen } from '../engine/LoadHold.ts';
 import { getChapter, type Chapter, type ChapterId } from '../data/encounters.ts';
 import { cueForGroup } from './screens/BattleEncounterChain.ts';
 import { resultsCueFor } from './screens/resultsMusic.ts';
@@ -35,14 +37,33 @@ export function chapterWarmCues(chapter: Chapter): string[] {
 }
 
 /**
+ * Release 73 (lane "r73-bytes", both games): the cues of {@link chapterWarmCues} that the first command does not need, the ones after the scene's bed and the first fight's theme: the victory and the defeat
+ * cues. A phone whose pre-battle scene is short is still fetching them when the battle screen begins to enter (release 70, Chapter IV: 1.6 MB inside the entry), so they wait for the entry's hold.
+ */
+export function chapterLaterCues(chapter: Chapter): string[] {
+  const first = new Set<string | null | undefined>([chapter.music.scene, cueForGroup(chapter, chapter.enemyGroupRef, 'first').track]);
+  return chapterWarmCues(chapter).filter((cue) => !first.has(cue));
+}
+
+/**
  * Warm chapter `id`'s cues until the returned function runs (which also runs `release`). Mirrors `sfxChapter`
  * (`src/app/sfxGame.ts`): the run that starts the warm is the run that ends the hold.
+ *
+ * Release 73: the later cues ({@link chapterLaterCues}) wait while the phone's entry holds the line (`LoadHold.bytesHeld`) and are fetched, in the same order, once it opens; with no hold (every desktop,
+ * `?phonebytes=off`, a chapter whose warm finished before the entry began) the gate answers nothing and the warm is exactly what it was.
  */
 export function musicChapter(id: ChapterId, release: () => void): () => void {
   const chapter = getChapter(id);
+  const later = new Set(chapter ? chapterLaterCues(chapter) : []);
+  const ungate = setWarmGate((cue) => {
+    if (!later.has(cue) || !bytesHeld()) return undefined;
+    noteBytesCut('audioCues');
+    return whenBackgroundOpen();
+  });
   const end = chapter ? audio.warmMusic(chapterWarmCues(chapter)) : null;
   return () => {
     end?.();
+    ungate();
     release();
   };
 }

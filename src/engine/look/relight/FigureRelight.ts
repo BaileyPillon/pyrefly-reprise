@@ -12,7 +12,7 @@ import { artManifest } from '../../ArtManifest.ts';
 import { normalMapScaleFor } from '../../ArtManifestMaps.ts';
 import { lookState } from '../LookState.ts';
 import { MAX_POINT_LIGHTS, normalMapUrl } from './RelightConfig.ts';
-import { queued } from '../../LoadHold.ts'; // lane "budgets-2": on the phone class the maps start through a ranked queue, the poses a fight draws first first
+import { bytesHeld, noteBytesCut, queued, whenBackgroundOpen } from '../../LoadHold.ts'; // lane "budgets-2": on the phone class the maps start through a ranked queue, the poses a fight draws first first; release 73: the idle maps wait for the hold too
 import { poseNeed } from '../../LoadDiet.ts';
 import { figureState } from '../../ArtTier.ts';
 
@@ -181,6 +181,8 @@ function fetchMap(url: string, rank: number | null = null): void {
   };
   if (rank === null) go().catch(failed);
   else {
+    // Release 73 (lane "r73-bytes"): a map asked for while the phone's entry holds the line (the idle map of a figure being drawn for the first time) starts when the hold opens, first in the queue; it is not drawn before the field is shown.
+    const ask = (): Promise<void> => (bytesHeld() ? (noteBytesCut('idleMaps'), whenBackgroundOpen().then(() => queued(rank, turn))) : queued(rank, turn));
     const turn = (): Promise<void> => {
       if (starts.get(url) !== promote) return Promise.resolve(); // a pose being drawn started it ahead of its rank, or it was released, or it was asked for again by someone else
       starts.delete(url);
@@ -188,9 +190,12 @@ function fetchMap(url: string, rank: number | null = null): void {
     };
     const promote = (): void => void turn().catch(failed);
     starts.set(url, promote);
-    queued(rank, turn).catch(failed);
+    ask().catch(failed);
   }
 }
+
+/** The queue's rank of the map of the painting at `paintingUrl`: `2 * need + 1` (`LoadDiet.poseNeed`), so a pose comes before its own map and the maps of the poses drawn first before the poses drawn last. */
+const mapRank = (paintingUrl: string | undefined): number => 2 * poseNeed(figureState(paintingUrl ?? '') ?? 'idle') + 1;
 
 /** The URL of the normal map a painting would be lit with, or null when the build ships none for it (the manifest names which maps exist). */
 function mapUrlFor(paintingUrl: string | undefined, scale: number | undefined, placeholder: boolean): string | null {
@@ -214,7 +219,7 @@ export function prefetchRelight(paintingUrl: string | undefined, scale: number |
     pinned.set(url, (pinned.get(url) ?? 0) + 1);
     held?.add(url);
   }
-  if (!cache.has(url)) fetchMap(url, 2 * poseNeed(figureState(paintingUrl ?? '') ?? 'idle') + 1);
+  if (!cache.has(url)) fetchMap(url, mapRank(paintingUrl));
   else touched.set(url, epochNow);
   return url;
 }
@@ -267,7 +272,7 @@ export function bindRelight(material: ShaderMaterial, paintingUrl: string | unde
     let w = waiters.get(url);
     if (!w) waiters.set(url, (w = new Set()));
     w.add(material);
-    if (!hit) fetchMap(url);
-    else starts.get(url)?.(); // queued for later and not started: this pose is being drawn now, so its map goes ahead of the rank order (a map already on its way has no entry here)
+    if (!hit) fetchMap(url, bytesHeld() ? mapRank(paintingUrl) : null); // release 73: while the entry holds the line the map of a pose drawn for the first time waits for the hold, at the head of the queue
+    else if (!bytesHeld()) starts.get(url)?.(); // queued for later and not started: this pose is being drawn now, so its map goes ahead of the rank order (a map already on its way has no entry here); not while the entry holds the line
   }
 }

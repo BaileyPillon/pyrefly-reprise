@@ -125,13 +125,13 @@ describe('the follower\'s stand-down table and the hold guard over the merged li
     for (const id of ids) expect(treatedHold(id, 'cam'), id).toBeDefined();
   });
 
-  it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list was fourteen; the r70 verdicts left ten; batch 4 brought IX, XII, V and XI back and booth-b4-last added four: eighteen of the nineteen listed chapters; the r71 verdicts took IX and XII off again: sixteen; the second focused review of the candidate took Sin\'s face off: fifteen; r72-hud put IX and XII back: seventeen)', () => {
-    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(17);
+  it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list was fourteen; the r70 verdicts left ten; batch 4 brought IX, XII, V and XI back and booth-b4-last added four: eighteen of the nineteen listed chapters; the r71 verdicts took IX and XII off again: sixteen; the second focused review of the candidate took Sin\'s face off: fifteen; r72-hud put IX and XII back: seventeen; r73-fast put Sin\'s face back: eighteen)', () => {
+    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(18);
     const exceptions = Object.keys(SCOPE_EXCEPTIONS);
     const both = Object.keys(TREATED_CHAPTERS).filter((id) => exceptions.includes(id));
-    expect(both).toEqual(['yunalesca', 'ffx2-ixion-djose']); // booth-b4-last: Sin's face and Ixion at Djose joined, each holding the smear (Evrae left the exceptions in release 69); Sin's face is off the list for release 71, so only Ixion is read here
+    expect(both).toEqual(['yunalesca', 'sin-face', 'ffx2-ixion-djose']); // booth-b4-last: Sin's face and Ixion at Djose joined, each holding the smear (Evrae left the exceptions in release 69); Sin's face left for release 71 and is back since r73-fast
     for (const id of both) expect(treatedHold(id, 'smear'), id).toBeDefined();
-    // and Sin's face, withdrawn, keeps its smear row and its exception, unread: the guard reads them the day one line puts it back
+    // and Sin's face (back on the list since r73-fast) keeps its smear row and its exception: the guard above reads them
     expect(exceptions).toContain('sin-face');
     expect(PIECE_HOLDS['sin-face']?.smear).toBeDefined();
   });

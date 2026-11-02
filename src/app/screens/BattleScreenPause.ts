@@ -31,8 +31,12 @@ import { padEndsOpening } from './padOpeningSkip.ts'; // release 62 (PR-0481): a
 import { withdrawLineFrom } from './withdrawal.ts';
 import { sceneScale } from '../../engine/crisp/sceneScale.ts';
 import { BattleScreenBase } from './BattleScreenBase.ts';
+import { FastForwardHold } from './FastForwardHold.ts';
 
 export abstract class BattleScreenPause extends BattleScreenBase {
+  /** R1 held = fast-forward (`FastForwardHold.ts`). */
+  protected readonly fastHold = new FastForwardHold();
+
   // ------------------------------------------------------------- the pause
 
   /** The presenter's wall clock behind the pause gate: the ATB pump's wait (the engine reads real time) and its own timeouts. The pause overlay stops `update`, so the presenter
@@ -315,9 +319,8 @@ export abstract class BattleScreenPause extends BattleScreenBase {
       return;
     }
 
-    // Fast-forward is held, not toggled: the FFX convention.
-    if (input.justPressed('r1')) this.presenter?.fastForward();
-    if (input.justReleased('r1')) this.presenter?.setSpeed('normal');
+    // Fast-forward is held, not toggled: the FFX convention. `FastForwardHold` also ends it on a frame where the key is no longer down (a tap shorter than a frame never reported its release; r73-sinface).
+    this.fastHold.update(input, this.presenter);
   }
 
   /** The live engine, for the debug API's `forceCommand` / `snapshotState`. */

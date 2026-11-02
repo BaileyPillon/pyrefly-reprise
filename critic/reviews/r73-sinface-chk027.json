@@ -1,0 +1,294 @@
+{
+ "rubricVersion": 2,
+ "review": "lift-proof",
+ "date": "2026-11-02T14:33:28.266Z",
+ "build": {
+  "branch": "r73",
+  "sha": "313e18dc2",
+  "note": "dev server on the r73 tree; seed 1; 1600x900; real keys; ?coach=off; REDUCE MOTION off; headless Chromium on the GPU"
+ },
+ "subject": "Chapter XVIII (sin-face): CHK-027 at normal AND at fast speed against ?treated=pack at the same seed (docs/handoff/booth-b4.md section 15, jobs J73-2 and J73-3)",
+ "verdicts": {
+  "liftProof": "PASS",
+  "ship": "not assessed (this is the lift proof of one chapter, not a focused review)"
+ },
+ "checks": {
+  "CHK-027": {
+   "result": "PASS",
+   "reason": "the candidate reads CHK-027 PASS at normal speed and at fast speed, and has no one-frame hop over 100 px that the control lacks at either speed",
+   "game": "FFX",
+   "chapter": "sin-face"
+  },
+  "CHK-026": {
+   "result": "FAIL",
+   "reason": "a carried class, not the lift criterion: {\"normal\":[48,49],\"fast\":[46,46]} swaps over the head tolerance (candidate, control); worst {\"normal\":[15.5,15.5],\"fast\":[15.5,15.5]} percent",
+   "game": "FFX",
+   "chapter": "sin-face"
+  }
+ },
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "base": "http://127.0.0.1:5373/ (dev server, r73 tree)",
+  "date": "2026-11-02T14:33:28.266Z",
+  "chapters": [
+   {
+    "chapter": "sin-face",
+    "game": "ffx",
+    "arm": "normal speed, candidate",
+    "role": "candidate",
+    "speed": "normal",
+    "seed": 1,
+    "run": "sin-N-cand",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "PASS"
+    },
+    "reasons": {
+     "CHK-026": [
+      "48 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.2 percent where the head is registered)"
+     ],
+     "CHK-027": []
+    },
+    "battleSeconds": 197.6,
+    "hopsOver100px": 0,
+    "worstHopPx": 0,
+    "playbackSpeedLog": [
+     "normal 204s"
+    ],
+    "reassertions": 0,
+    "rPresses": 1,
+    "base": "http://127.0.0.1:5373/"
+   },
+   {
+    "chapter": "sin-face",
+    "game": "ffx",
+    "arm": "fast speed (re-asserted every frame), candidate",
+    "role": "candidate",
+    "speed": "fast",
+    "seed": 1,
+    "run": "sin-F-cand",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "PASS"
+    },
+    "reasons": {
+     "CHK-026": [
+      "46 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.2 percent where the head is registered)"
+     ],
+     "CHK-027": []
+    },
+    "battleSeconds": 152,
+    "hopsOver100px": 0,
+    "worstHopPx": 0,
+    "playbackSpeedLog": [
+     "normal 1s",
+     "fast 158s"
+    ],
+    "reassertions": 2,
+    "rPresses": 1,
+    "base": "http://127.0.0.1:5373/"
+   },
+   {
+    "chapter": "sin-face",
+    "game": "ffx",
+    "arm": "normal speed, candidate, seed 2",
+    "role": "candidate",
+    "speed": "normal",
+    "seed": 2,
+    "run": "sin2-N-cand",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "PASS"
+    },
+    "reasons": {
+     "CHK-026": [
+      "51 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.2 percent where the head is registered)"
+     ],
+     "CHK-027": []
+    },
+    "battleSeconds": 201.5,
+    "hopsOver100px": 0,
+    "worstHopPx": 0,
+    "playbackSpeedLog": [
+     "normal 207s"
+    ],
+    "reassertions": 0,
+    "rPresses": 1,
+    "base": "http://127.0.0.1:5373/"
+   },
+   {
+    "chapter": "sin-face",
+    "game": "ffx",
+    "arm": "fast speed (re-asserted every frame), candidate, seed 2",
+    "role": "candidate",
+    "speed": "fast",
+    "seed": 2,
+    "run": "sin2-F-cand",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "PASS"
+    },
+    "reasons": {
+     "CHK-026": [
+      "48 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.1 percent where the head is registered)"
+     ],
+     "CHK-027": []
+    },
+    "battleSeconds": 153.6,
+    "hopsOver100px": 0,
+    "worstHopPx": 0,
+    "playbackSpeedLog": [
+     "normal 1s",
+     "fast 159s"
+    ],
+    "reassertions": 2,
+    "rPresses": 1,
+    "base": "http://127.0.0.1:5373/"
+   }
+  ],
+  "controls": [
+   {
+    "chapter": "sin-face",
+    "game": "ffx",
+    "arm": "normal speed, control ?treated=pack",
+    "role": "control",
+    "speed": "normal",
+    "seed": 1,
+    "run": "sin-N-ctrl",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "PASS"
+    },
+    "reasons": {
+     "CHK-026": [
+      "49 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.2 percent where the head is registered)"
+     ],
+     "CHK-027": []
+    },
+    "battleSeconds": 199.2,
+    "hopsOver100px": 0,
+    "worstHopPx": 0,
+    "playbackSpeedLog": [
+     "normal 205s"
+    ],
+    "reassertions": 0,
+    "rPresses": 1,
+    "base": "http://127.0.0.1:5373/"
+   },
+   {
+    "chapter": "sin-face",
+    "game": "ffx",
+    "arm": "fast speed (re-asserted every frame), control ?treated=pack",
+    "role": "control",
+    "speed": "fast",
+    "seed": 1,
+    "run": "sin-F-ctrl",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "PASS"
+    },
+    "reasons": {
+     "CHK-026": [
+      "46 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.2 percent where the head is registered)"
+     ],
+     "CHK-027": []
+    },
+    "battleSeconds": 151.3,
+    "hopsOver100px": 0,
+    "worstHopPx": 0,
+    "playbackSpeedLog": [
+     "normal 1s",
+     "fast 157s"
+    ],
+    "reassertions": 2,
+    "rPresses": 1,
+    "base": "http://127.0.0.1:5373/"
+   }
+  ],
+  "sensitivity": [
+   {
+    "chapter": "sin-face (sensitivity run, not a candidate arm)",
+    "game": "ffx",
+    "arm": "fast speed (re-asserted), candidate with ?fastfloor=today (release 72 strike): the control that the harness sees the defect",
+    "role": "sensitivity",
+    "speed": "fast",
+    "seed": 1,
+    "run": "sin-F-today",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "reasons": {
+     "CHK-026": [
+      "46 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.2 percent where the head is registered)"
+     ],
+     "CHK-027": [
+      "1 MID-MOVE teleport(s) of 300 px or more in one frame (worst 400.9 px: no lunge covers its whole reach in one frame)"
+     ]
+    },
+    "battleSeconds": 150.5,
+    "hopsOver100px": 26,
+    "worstHopPx": 400.9,
+    "playbackSpeedLog": [
+     "normal 1s",
+     "fast 156s"
+    ],
+    "reassertions": 2,
+    "rPresses": 1,
+    "base": "http://127.0.0.1:5373/"
+   }
+  ]
+ },
+ "verdictDetail": {
+  "normal": {
+   "speed": "normal",
+   "chk027": "PASS",
+   "chk027Control": "PASS",
+   "chk026": "FAIL",
+   "chk026Control": "FAIL",
+   "hopsCandidate": 0,
+   "hopsControl": 0,
+   "worstHopCandidate": 0,
+   "worstHopControl": 0,
+   "extraByFigure": {},
+   "noNewHop": true,
+   "speedLogOk": true,
+   "reassertions": 0,
+   "rPresses": 1,
+   "chk026Swaps": [
+    48,
+    49
+   ],
+   "chk026Worst": [
+    15.5,
+    15.5
+   ],
+   "pass": true
+  },
+  "fast": {
+   "speed": "fast",
+   "chk027": "PASS",
+   "chk027Control": "PASS",
+   "chk026": "FAIL",
+   "chk026Control": "FAIL",
+   "hopsCandidate": 0,
+   "hopsControl": 0,
+   "worstHopCandidate": 0,
+   "worstHopControl": 0,
+   "extraByFigure": {},
+   "noNewHop": true,
+   "speedLogOk": true,
+   "reassertions": 2,
+   "rPresses": 1,
+   "chk026Swaps": [
+    46,
+    46
+   ],
+   "chk026Worst": [
+    15.5,
+    15.5
+   ],
+   "pass": true
+  }
+ }
+}

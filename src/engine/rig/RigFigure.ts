@@ -17,12 +17,8 @@ import {
   BufferGeometry,
   DataTexture,
   Group,
-  LinearFilter,
-  LinearMipmapLinearFilter,
   Mesh,
-  NoColorSpace,
   RGBAFormat,
-  SRGBColorSpace,
   Sphere,
   TextureLoader,
   Vector2,
@@ -42,32 +38,13 @@ import { makePartMaterial, setPartTexel } from './RigMaterial.ts';
 import { RigSkeleton } from './RigSkeleton.ts';
 import { idleSlot, type CarrierInternals } from './RigCarrier.ts';
 import { rigFileUrl, type RigScale, type RigTextures } from './RigTier.ts';
+import { configure, fetchLook, streamLooks, type LookImages, type LookSink } from './RigLook.ts'; // release 73 (lane "r73-bytes"): one look at a time, and the variants streamed in after the build on a phone
+import { bytesHeld } from '../LoadHold.ts';
 
 /** World-z step between draw-order layers: far below anything that reorders two actors, far above double precision's sort noise. */
 export const LAYER_DZ = 0.002;
 
-const configure = (t: Texture, mips: boolean): Texture => {
-  t.colorSpace = SRGBColorSpace;
-  t.magFilter = LinearFilter;
-  t.minFilter = mips ? LinearMipmapLinearFilter : LinearFilter;
-  t.generateMipmaps = mips;
-  t.anisotropy = 8;
-  t.needsUpdate = true;
-  return t;
-};
-
-/** A normal piece is data, not colour: no colour space, mips, linear. */
-const configureNormal = (t: Texture): Texture => {
-  t.colorSpace = NoColorSpace;
-  t.magFilter = LinearFilter;
-  t.minFilter = LinearMipmapLinearFilter;
-  t.generateMipmaps = true;
-  t.anisotropy = 4;
-  t.needsUpdate = true;
-  return t;
-};
-
-export class RigFigure {
+export class RigFigure implements LookSink {
   /** Follows the idle plane. Add it to the carrier's `inner`. */
   readonly plane = new Group();
   readonly skeleton: RigSkeleton;
@@ -78,6 +55,9 @@ export class RigFigure {
   private scales: RigTextures = { map: 2, rim: 2 };
   /** True when the parts were built lit (the HD-2D look was armed when the figure loaded and the file carries normal pieces): the parts compile the relight block and bind a piece per look. */
   private lit = false;
+  /** Release 73: settles when every streamed variant look has landed or given up (already settled for a figure built whole), and whether the figure has been disposed. */
+  private settled: Promise<void> = Promise.resolve();
+  private disposed = false;
   /** The camera and the drawing buffer's height as of the last draw: what the magnification of the idle's texel is measured with (`view`). */
   private seen: { camera: PerspectiveCamera; height: number } | null = null;
   private readonly bufferSize = new Vector2();
@@ -98,28 +78,17 @@ export class RigFigure {
     const fetchTex = loadTexture ?? fig.defaultFetch();
     // release 61, the HD-2D look: a normal piece is fetched only when the caller asked (the rigs share of the texture budget has room for it) and a look with a relight is armed. One that does not load is not an error: that look is not lit.
     const wantNormals = normals && rigRelightWanted();
-    const fetchNormal = async (file: string | null): Promise<Texture | null> => {
-      if (!wantNormals || !file) return null;
-      try {
-        return configureNormal(await fetchTex(rigFileUrl(base, file, 2)));
-      } catch {
-        return null;
-      }
-    };
-    const need = data.parts.map(async (p) => ({
-      p,
-      images: await Promise.all(
-        [p, ...p.variants].map(async (src) => ({
-          src,
-          map: configure(await fetchTex(rigFileUrl(base, src.png, textures.map)), true),
-          rim: src.rimMode === 'mask' && src.rim ? configure(await fetchTex(rigFileUrl(base, src.rim, textures.rim)), true) : null,
-          normal: await fetchNormal(src.normal),
-        })),
-      ),
-    }));
+    // release 73: while the phone's entry holds the line only each part's own look is waited for; a variant is the part's own image until it lands (`RigLook.streamLooks`)
+    const stream = bytesHeld();
+    const need = data.parts.map(async (p) => {
+      const images: Array<{ src: RigPartData | RigVariantData; pending?: boolean } & LookImages> = await Promise.all((stream ? [p] : [p, ...p.variants]).map(async (src) => ({ src, ...(await fetchLook(src, base, textures, fetchTex, wantNormals)) })));
+      if (stream) for (const v of p.variants) images.push({ src: v, pending: true, map: images[0]!.map, rim: images[0]!.rim, normal: images[0]!.normal });
+      return { p, images };
+    });
     const loaded = await Promise.all(need);
     fig.lit = loaded.some((l) => l.images.some((i) => i.normal !== null));
     fig.build(loaded);
+    if (stream) fig.settled = streamLooks(fig, base, fetchTex, wantNormals, data.name);
     return fig;
   }
 
@@ -144,16 +113,19 @@ export class RigFigure {
    */
   async swapMaps(base: string, scale: RigScale, loadTexture?: (url: string) => Promise<Texture>): Promise<void> {
     if (scale === this.scales.map) return;
+    await this.settled; // release 73: a streamed variant arrives at the scale the figure has, so the scale changes only when none is on its way
     const fetchTex = loadTexture ?? this.defaultFetch();
-    const fresh = await Promise.all(this.parts.map(async (p) => Promise.all(p.looks.map(async (l) => configure(await fetchTex(rigFileUrl(base, l.src.png, scale)), true)))));
+    const fresh = await Promise.all(this.parts.map(async (p) => Promise.all(p.looks.map(async (l) => (l.pending ? null : configure(await fetchTex(rigFileUrl(base, l.src.png, scale)), true))))));
     if (this.parts.length !== fresh.length) {
-      for (const t of fresh.flat()) t.dispose(); // the figure went while the textures were on their way
+      for (const t of fresh.flat()) t?.dispose(); // the figure went while the textures were on their way
       return;
     }
     this.parts.forEach((p, i) => {
       p.looks.forEach((l, j) => {
+        const next = fresh[i]![j];
+        if (!next) return; // a look that never landed (release 73) has no map to swap
         const old = l.map;
-        l.map = fresh[i]![j]!;
+        l.map = next;
         old.dispose();
       });
       p.material.uniforms['map']!.value = this.lookOf(p).map;
@@ -171,7 +143,7 @@ export class RigFigure {
     return this.white;
   }
 
-  private build(loaded: Array<{ p: RigPartData; images: Array<{ src: RigPartData | RigVariantData; map: Texture; rim: Texture | null; normal: Texture | null }> }>): void {
+  private build(loaded: Array<{ p: RigPartData; images: Array<{ src: RigPartData | RigVariantData; pending?: boolean } & LookImages> }>): void {
     const slot = idleSlot(this.carrier);
     const rimK = this.rimTexelK();
     this.texelSeen = rimK;
@@ -180,7 +152,7 @@ export class RigFigure {
     const rest = restState(this.data);
     loaded.forEach(({ p, images }, layer) => {
       const geos = new Map<Float32Array, { geo: BufferGeometry; pos: Float32Array }>(); // a variant with the part's own mesh shares its geometry
-      const looks: Look[] = images.map(({ src, map, rim, normal }) => {
+      const looks: Look[] = images.map(({ src, map, rim, normal, pending }) => {
         let g = geos.get(src.verts);
         if (!g) {
           const n = src.verts.length / 2;
@@ -195,7 +167,7 @@ export class RigFigure {
           g = { geo, pos };
           geos.set(src.verts, g);
         }
-        return { src, geo: g.geo, pos: g.pos, map, rim, normal };
+        return { src, geo: g.geo, pos: g.pos, map, rim, normal, ...(pending ? { pending } : {}) };
       });
       const own = looks[0]!;
       const material = makePartMaterial({
@@ -233,7 +205,51 @@ export class RigFigure {
 
   /** The look a part shows now (a hidden part: its own). */
   private lookOf(p: PartRt): Look {
-    return p.looks[p.state >= 0 ? p.state + 1 : 0]!;
+    const l = p.looks[p.state >= 0 ? p.state + 1 : 0]!;
+    return l.pending ? p.looks[0]! : l; // release 73: a variant still on its way is the part's own image
+  }
+
+  /** Put the look the part's state names on its mesh and material (`setPartState`, and a streamed look landing on a part that is showing it). */
+  private showLook(p: PartRt): void {
+    const l = this.lookOf(p);
+    const u = p.material.uniforms;
+    p.mesh.geometry = l.geo;
+    u['map']!.value = l.map;
+    u['rimMask']!.value = l.rim ?? this.whiteMask();
+    u['rimOn']!.value = l.src.rimMode === 'mask' ? 1 : 0;
+    u['rimGain']!.value = l.src.rimMode === 'off' ? 0 : 1;
+    setPartNormal(p.material, l.normal);
+    setPartTexel(p.material, this.texelSeen, l.src.box[2], l.src.box[3]);
+    p.mesh.visible = this.plane.visible;
+  }
+
+  /** The variant looks still on their way (`RigLook.streamLooks`), in file order. */
+  pendingLooks(): Array<{ part: number; look: number; src: RigVariantData }> {
+    return this.parts.flatMap((p, part) => p.looks.flatMap((l, look) => (l.pending ? [{ part, look, src: l.src as RigVariantData }] : [])));
+  }
+
+  /** The scales the textures are at now. */
+  get texScales(): RigTextures {
+    return this.scales;
+  }
+
+  get gone(): boolean {
+    return this.disposed;
+  }
+
+  /** A streamed variant look arrived: it replaces the part's own image as that look, and goes on the mesh now if the part is showing it (the next `skin()` poses it). A figure that went meanwhile frees it. */
+  landLook(part: number, look: number, t: LookImages): void {
+    const p = this.parts[part];
+    const l = p?.looks[look];
+    if (!p || !l?.pending) {
+      t.map.dispose();
+      t.rim?.dispose();
+      t.normal?.dispose();
+      return;
+    }
+    Object.assign(l, t);
+    delete l.pending;
+    if (p.state === look - 1) this.showLook(p);
   }
 
   /**
@@ -255,16 +271,7 @@ export class RigFigure {
         p.mesh.visible = false;
         return;
       }
-      const l = this.lookOf(p);
-      const u = p.material.uniforms;
-      p.mesh.geometry = l.geo;
-      u['map']!.value = l.map;
-      u['rimMask']!.value = l.rim ?? this.whiteMask();
-      u['rimOn']!.value = l.src.rimMode === 'mask' ? 1 : 0;
-      u['rimGain']!.value = l.src.rimMode === 'off' ? 0 : 1;
-      setPartNormal(p.material, l.normal);
-      setPartTexel(p.material, this.texelSeen, l.src.box[2], l.src.box[3]);
-      p.mesh.visible = this.plane.visible;
+      this.showLook(p);
     });
   }
 
@@ -356,7 +363,7 @@ export class RigFigure {
 
   /** Whether the parts were built lit, and how many looks (a part's own image or a variant) have a normal piece: for `rigInfo`, the captures and the tests. */
   get relightInfo(): { lit: boolean; pieces: number } {
-    return { lit: this.lit, pieces: this.parts.reduce((n, p) => n + p.looks.filter((l) => l.normal !== null).length, 0) };
+    return { lit: this.lit, pieces: this.parts.reduce((n, p) => n + p.looks.filter((l) => !l.pending && l.normal !== null).length, 0) };
   }
 
   get vertexCount(): number {
@@ -364,6 +371,7 @@ export class RigFigure {
   }
 
   dispose(): void {
+    this.disposed = true;
     for (const p of this.parts) {
       for (const geo of new Set(p.looks.map((l) => l.geo))) geo.dispose();
       p.material.dispose();

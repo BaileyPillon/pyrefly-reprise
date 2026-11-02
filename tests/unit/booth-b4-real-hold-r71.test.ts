@@ -11,16 +11,12 @@
  * Game case (AGENTS.md rule 14): FFX only. All three are FFX chapters (the registry and `TREATED_CHAPTERS` say so); FFX-2's Chapter IV is the approved target and Chapter XVI plays its real clips as before.
  *
  * Each test fails without the rows: take `real` out of a chapter's hold and its first case answers true.
- *
- * **Chapter XVIII (`sin-face`) was then taken OFF the list for release 71** (the second focused review, `critic/reviews/4c01379d4-focused`, R71-C1: 17 hops over 100 px remain after the hold, against 0 on `?treated=pack`; `booth-b4-r71-sin-face-off.test.ts`). Its row stays, unread: the cases that
- * need the chapter on the list (`itIf`) skip while it is off and turn on, with no edit, the day one line puts it back; the row's own text is still pinned.
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { PIECE_HOLDS, TREATED_CHAPTERS, isTreatedChapter, setDemoChapter, setTreatedScope, treatedHold } from '../../src/engine/motion/DemoGate.ts';
 import { curvesOn, inDemoChapter, realKind, setCurvesMode } from '../../src/engine/motion/CurvesSwitch.ts';
 import { realProfileOf, realRecoilMs } from '../../src/engine/motion/RealBeats.ts';
 import { getChapter } from '../../src/data/encounters.ts';
-import { WITHDRAWN_R70, isListed, itIf } from './booth-r70-withdrawn.ts';
 
 const I = 'seymour-flux';
 const IV = 'ffx2-bahamut';
@@ -43,7 +39,7 @@ afterEach(() => {
 });
 
 describe.each(HELD)('$id holds the real clips (booth-b4, $finding)', ({ id, chapter, finding, numbers, before }) => {
-  itIf(id)('under the scope all the chapter answers real=false and Chapter I real=true; the other pieces it did not hold still play', () => {
+  it('under the scope all the chapter answers real=false and Chapter I real=true; the other pieces it did not hold still play', () => {
     setTreatedScope('all');
     expect(isTreatedChapter(id, 'real')).toBe(false);
     expect(isTreatedChapter(I, 'real')).toBe(true);
@@ -57,8 +53,7 @@ describe.each(HELD)('$id holds the real clips (booth-b4, $finding)', ({ id, chap
   it('the row is appended after the pieces the chapter held (the earlier rows unmoved) and the chapter is an FFX one (rule 14)', () => {
     expect(Object.keys(PIECE_HOLDS[id]!)).toEqual([...before, 'real']);
     expect(getChapter(id)?.game).toBe('ffx');
-    if (isListed(id)) expect(TREATED_CHAPTERS[id]).toEqual({ game: 'ffx', since: 'r71' });
-    else expect(WITHDRAWN_R70[id]?.game, `${id} is off the list: withdrawn, FFX only`).toBe('ffx');
+    expect(TREATED_CHAPTERS[id]).toEqual({ game: 'ffx', since: 'r71' });
   });
 
   it('the reason names the finding, the measured hops, the review, the control and what lifts it, in the house shape (80 characters or more, ends in its "Lifts when" clause, no .json or .png)', () => {
@@ -77,7 +72,7 @@ describe.each(HELD)('$id holds the real clips (booth-b4, $finding)', ({ id, chap
     expect(why).not.toMatch(/\.png/);
   });
 
-  itIf(id)('with the pack\'s default mode (real-snappy) the chapter plays the house curves: the curves are on, no real kind, no real profile for Tidus, no real recoil; Chapter I plays the real clip', () => {
+  it('with the pack\'s default mode (real-snappy) the chapter plays the house curves: the curves are on, no real kind, no real profile for Tidus, no real recoil; Chapter I plays the real clip', () => {
     setTreatedScope('all');
     setCurvesMode('real-snappy');
 
@@ -93,7 +88,7 @@ describe.each(HELD)('$id holds the real clips (booth-b4, $finding)', ({ id, chap
     expect(realProfileOf(ctx, 'tidus' as never)).toBeDefined(); // Chapter I keeps its real clips
   });
 
-  itIf(id)('an explicit ?curves=real is held here too, and ?curves=new answers the same as the hold: no real kind, the house curves', () => {
+  it('an explicit ?curves=real is held here too, and ?curves=new answers the same as the hold: no real kind, the house curves', () => {
     setTreatedScope('all');
     setDemoChapter(id);
     setCurvesMode('real');

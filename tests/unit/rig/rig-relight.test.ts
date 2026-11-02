@@ -17,6 +17,7 @@ vi.mock('../../../src/engine/ProceduralArt.ts', () => {
 // the painted idle plane the rig carries is bound to its own map by the painted path (it needs a browser's image loader); that path is not under test here
 vi.mock('../../../src/engine/look/relight/FigureRelight.ts', async (orig) => ({ ...(await orig<typeof import('../../../src/engine/look/relight/FigureRelight.ts')>()), bindRelight: () => undefined }));
 
+const { holdBackground, releaseBackground, resetHoldForTests, setForegroundFirst } = await import('../../../src/engine/LoadHold.ts');
 const { RigActor } = await import('../../../src/engine/rig/RigActor.ts');
 const { readRig } = await import('../../../src/engine/rig/RigData.ts');
 const { chooseRig, clearRigCache } = await import('../../../src/engine/rig/RigLoad.ts');
@@ -158,6 +159,20 @@ describe('a lit rig', () => {
       expect(m.vertexShader).toContain('vClip = gl_Position');
     }
     expect(a.rigInfo().relight).toEqual({ lit: true, pieces: 8 }); // the seven parts' own looks and the `back` variant; `head.wide` has none
+  });
+
+  it('while the phone\'s entry holds the line the variants are not counted as lit pieces until they land (review of r73-bytes, minor 1)', async () => {
+    setForegroundFirst(true);
+    holdBackground();
+    try {
+      const a = await rigged(litFile(), true);
+      expect(a.rigInfo().relight).toEqual({ lit: true, pieces: 7 }); // the seven own looks; the `back` variant shares its part's piece until it lands
+      releaseBackground();
+      for (let i = 0; i < 40; i++) await Promise.resolve();
+      expect(a.rigInfo().relight).toEqual({ lit: true, pieces: 8 });
+    } finally {
+      resetHoldForTests();
+    }
   });
 
   it('shares the light cells with every painted figure: ONE key, rim and set of point lights', async () => {

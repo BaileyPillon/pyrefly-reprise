@@ -107,12 +107,13 @@ export function bytesUnder(prefix: string, keep: (path: string) => boolean = () 
   return n;
 }
 
-function manifest(): ArtManifest {
+/** The art manifest of the local art folder, parsed (release 73: the phone-entry model reads it too). */
+export function manifest(): ArtManifest {
   manifestJson ??= JSON.parse(readFileSync(resolve(ROOT, 'public', 'art', 'manifest.json'), 'utf8'));
   return parseArtManifest(manifestJson)!;
 }
 
-interface CombatantLike {
+export interface CombatantLike {
   id: string;
   side: string;
   spriteKey?: string;
@@ -128,7 +129,7 @@ interface StateLike {
 }
 
 /** The figures a chapter stages at its opening, as `battlePreload.stagedIds` lists them. */
-async function figuresOf(chapter: Chapter): Promise<CombatantLike[]> {
+export async function figuresOf(chapter: Chapter): Promise<CombatantLike[]> {
   const engine = await createEngine(chapter.game, setupForChapter(chapter, 1), { automated: true });
   const state = engine.state() as unknown as StateLike;
   const ids = new Set<string>([...state.activeIds, ...(state.aeonIds ?? (state.aeonId ? [state.aeonId] : [])), ...state.enemyIds]);

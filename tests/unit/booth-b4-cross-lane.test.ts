@@ -4,7 +4,7 @@
  * Each lane tested its own chapters on its own base (the HUD lane saw twelve treated chapters, the sky lane twelve, the last lane fourteen). These read the merged state from the source, so a later edit to the list, a hold
  * table or a stylesheet that breaks one lane's reach through another's fails here:
  *
- *  1. THE LIST: 17 of the 19 listed chapters are treated (Chapter XVII, `sin-fins-core`, and, since the second focused review of the candidate, Chapter XVIII, `sin-face`, are the ones that are not; Chapters IX and XII left in the r71 verdicts and came back in r72-hud), 10 of them FFX and 7 FFX-2 (rule 14, from the registry), each of the batch's seven on `since` r71.
+ *  1. THE LIST: 18 of the 19 listed chapters are treated (Chapter XVII, `sin-fins-core`, is the one that is not; Chapters IX and XII left in the r71 verdicts and came back in r72-hud, and Chapter XVIII, `sin-face`, left after the second focused review of the candidate and came back in r73-fast), 11 of them FFX and 7 FFX-2 (rule 14, from the registry), each of the batch's seven on `since` r71.
  *  2. THE ONE HOLDS READER: `PIECE_HOLDS` carries the rows of `PieceHolds.ts` AND of `PieceHoldsLast.ts` (the very row objects), every treated chapter but the booth pair has a row, and no row belongs to an unlisted chapter.
  *  3. THE MEASURING WORD `?skygrade=a|b|c`: off by default, and when set it reaches Chapter V and Chapter XI and no other chapter, in either game (not the HUD lane's IX and XII, not the last lane's four).
  *  4. THE STYLESHEETS: `hudf1-chapters.css` (IX and XII) names only the Zanmato gauge's and the Omnis readout's own classes under `.ffxhud.hud-f1`; `sin-hud.css`'s F1 rules (XVIII) hang from `.hud-f1 .ffx-sinhud`;
@@ -25,8 +25,8 @@ import { ZANMATO_GAUGE_RULES } from '../../src/ui/ffx/zanmatoGaugeModel.ts';
 
 const HUD_LANE = ['yojimbo-cavern', 'seymour-omnis'] as const; // FFX only
 const SKY_LANE = ['ffx2-vegnagun-shuyin', 'ffx2-fallen-aeons'] as const; // FFX-2 only
-const LAST_LANE = { ffx: ['evrae-airship', 'mirror-aeons'], ffx2: ['ffx2-ixion-djose'] } as const; // the treated three of `booth-b4-last`, less Sin's face (FFX only), which the second focused review of the candidate took off the list (R71-C1); its rows stay in `PieceHoldsLast.ts`
-const LAST_WITHDRAWN = ['sin-face'] as const;
+const LAST_LANE = { ffx: ['evrae-airship', 'sin-face', 'mirror-aeons'], ffx2: ['ffx2-ixion-djose'] } as const; // the treated four of `booth-b4-last`: Sin's face (FFX only) left the list after the second focused review of the release 71 candidate (R71-C1) and is back since r73-fast
+const LAST_WITHDRAWN: readonly string[] = []; // nothing is withdrawn now (`booth-r70-withdrawn.ts` is empty)
 const BOOTH = ['seymour-flux', 'ffx2-bahamut'];
 
 beforeEach(() => {
@@ -40,21 +40,21 @@ afterEach(() => {
 });
 
 describe('the merged list', () => {
-  it('treats 17 of the 19 listed chapters; Chapter XVII (sin-fins-core) and, since the second focused review of the candidate, Chapter XVIII (sin-face) are the ones that are not (IX and XII came back in r72-hud), and no hidden or experimental id is on it', () => {
+  it('treats 18 of the 19 listed chapters; Chapter XVII (sin-fins-core) is the one that is not (IX and XII came back in r72-hud, Chapter XVIII (sin-face) in r73-fast), and no hidden or experimental id is on it', () => {
     const ids = Object.keys(TREATED_CHAPTERS);
     expect(CHAPTER_IDS).toHaveLength(19);
-    expect(ids).toHaveLength(17);
-    expect(CHAPTER_IDS.filter((id) => !ids.includes(id)).sort()).toEqual(['sin-face', 'sin-fins-core']);
-    expect(Object.keys(WITHDRAWN_R70).sort()).toEqual([...LAST_WITHDRAWN].sort()); // Sin's face (R71-C1), rows unread; the HUD lane's two are back on the list (r72-hud)
+    expect(ids).toHaveLength(18);
+    expect(CHAPTER_IDS.filter((id) => !ids.includes(id)).sort()).toEqual(['sin-fins-core']);
+    expect(Object.keys(WITHDRAWN_R70).sort()).toEqual([...LAST_WITHDRAWN].sort()); // none: the HUD lane's two are back on the list (r72-hud) and so is Sin's face (r73-fast)
     for (const id of ids) expect(CHAPTER_IDS, id).toContain(id);
   });
 
-  it('is 10 FFX and 7 FFX-2, each in the game the registry says (rule 14), and the batch\'s seven are all `since` r71', () => {
+  it('is 11 FFX and 7 FFX-2, each in the game the registry says (rule 14), and the batch\'s seven are all `since` r71', () => {
     const byGame = (g: string): string[] => Object.entries(TREATED_CHAPTERS).filter(([, e]) => e.game === g).map(([id]) => id);
-    expect(byGame('ffx')).toHaveLength(10);
+    expect(byGame('ffx')).toHaveLength(11);
     expect(byGame('ffx2')).toHaveLength(7);
     for (const [id, e] of Object.entries(TREATED_CHAPTERS)) expect(getChapter(id)?.game, id).toBe(e.game);
-    const batch = [...HUD_LANE, ...SKY_LANE, ...LAST_LANE.ffx, ...LAST_LANE.ffx2]; // the HUD lane's IX and XII left the list in the r71 verdicts and came back in r72-hud; Sin's face left after the second focused review
+    const batch = [...HUD_LANE, ...SKY_LANE, ...LAST_LANE.ffx, ...LAST_LANE.ffx2]; // the HUD lane's IX and XII left the list in the r71 verdicts and came back in r72-hud; Sin's face left after the second focused review and is back since r73-fast
     for (const id of batch) expect(TREATED_CHAPTERS[id]?.since, id).toBe('r71');
     for (const id of [...HUD_LANE, ...LAST_LANE.ffx]) expect(TREATED_CHAPTERS[id]!.game, id).toBe('ffx');
     for (const id of [...SKY_LANE, ...LAST_LANE.ffx2]) expect(TREATED_CHAPTERS[id]!.game, id).toBe('ffx2');
@@ -73,7 +73,7 @@ describe('the one holds reader', () => {
 
   it('every treated chapter but the booth pair has a row, and no row belongs to an unlisted or unknown chapter', () => {
     for (const id of Object.keys(TREATED_CHAPTERS)) if (!BOOTH.includes(id)) expect(PIECE_HOLDS[id], id).toBeDefined();
-    for (const id of Object.keys(PIECE_HOLDS)) expect([...Object.keys(TREATED_CHAPTERS), ...Object.keys(WITHDRAWN_R70)], id).toContain(id); // IX, XII and Sin's face keep their rows, unread
+    for (const id of Object.keys(PIECE_HOLDS)) expect([...Object.keys(TREATED_CHAPTERS), ...Object.keys(WITHDRAWN_R70)], id).toContain(id); // IX and XII (once withdrawn) and Sin's face (back since r73-fast) keep their rows
     expect(Object.keys(PIECE_HOLDS)).toHaveLength(16);
   });
 });
@@ -96,9 +96,9 @@ describe('the measuring word ?skygrade=a|b|c', () => {
     expect(skyGradeFor('exp-leblanc')).toBeNull();
   });
 
-  it('changes nothing in the other fifteen treated chapters: the look and the arena answer as they do with no word', () => {
+  it('changes nothing in the other sixteen treated chapters: the look and the arena answer as they do with no word', () => {
     const others = Object.keys(TREATED_CHAPTERS).filter((id) => !(SKY_LANE as readonly string[]).includes(id));
-    expect(others).toHaveLength(15);
+    expect(others).toHaveLength(16);
     setSkyOption(null);
     const before = others.map((id) => [chapterLook(id), proArenaFor(id, '')]);
     for (const o of ['a', 'b', 'c'] as const) {

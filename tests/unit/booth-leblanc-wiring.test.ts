@@ -106,7 +106,7 @@ describe('`__pyrefly.treated()`', () => {
     const treated = api['treated'] as (scope?: 'all' | 'pack' | null) => { scope: string; chapters: string[]; holds: Record<string, string[]>; running: string | null; reaches: boolean };
     const all = treated('all');
     expect(all.scope).toBe('all');
-    expect(all.chapters).toEqual(['seymour-flux', 'yunalesca', 'seymour-anima-macalania', 'seymour-natus', 'yojimbo-cavern', 'braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico', 'evrae-airship', 'mirror-aeons', 'ffx2-bahamut', 'ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'ffx2-trema', 'ffx2-ixion-djose']); // seventeen (eighteen at the merge, Sin's face off for release 71 after the second focused review): ten since the r70 verdicts (IX, XII, V and XI came off the list), IX and XII (FFX only) back in booth-ffx-b4-hud, V and XI (FFX-2 only) back in booth-ffx2-b4-sky and the last five listed chapters' four in booth-b4-last (Chapter XVII stays out)
+    expect(all.chapters).toEqual(['seymour-flux', 'yunalesca', 'seymour-anima-macalania', 'seymour-natus', 'yojimbo-cavern', 'braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico', 'evrae-airship', 'sin-face', 'mirror-aeons', 'ffx2-bahamut', 'ffx2-leblanc', 'ffx2-vegnagun-shuyin', 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'ffx2-trema', 'ffx2-ixion-djose']); // seventeen (eighteen at the merge, Sin's face off for release 71 after the second focused review): ten since the r70 verdicts (IX, XII, V and XI came off the list), IX and XII (FFX only) back in booth-ffx-b4-hud, V and XI (FFX-2 only) back in booth-ffx2-b4-sky and the last five listed chapters' four in booth-b4-last (Chapter XVII stays out)
     expect(all.holds).toEqual({
       yunalesca: ['breath', 'cam', 'smear'],
       'seymour-anima-macalania': ['breath', 'cam', 'moments'],
@@ -121,6 +121,7 @@ describe('`__pyrefly.treated()`', () => {
       'ffx2-den-of-woe': ['cam', 'breath', 'moments'],
       'ffx2-trema': ['cam', 'breath', 'moments'],
       'evrae-airship': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'], // booth-b4-last; the r71 verdict added the look; booth-b4 held the real clips (R71-C2)
+      'sin-face': ['card', 'breath', 'cam', 'moments', 'smear', 'real'], // back on r73-fast; booth-b4 held the real clips (R71-C1)
       'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'], // booth-b4 held the real clips (R71-C3)
       'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'],
     });

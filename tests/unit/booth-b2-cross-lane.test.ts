@@ -229,9 +229,9 @@ describe('the hold guard, across every treated chapter of both lanes', () => {
     }
   });
 
-  it('is not vacuous: both games are on the list, and the exceptions on it today are Chapter II and Ixion at Djose (booth-b4-last; Sin\'s face is an exception too but is off the list for release 71, its smear row stays unread)', () => {
+  it('is not vacuous: both games are on the list, and the exceptions on it today are Chapter II, Sin\'s face and Ixion at Djose (booth-b4-last)', () => {
     expect(FFX_TREATED.length).toBeGreaterThan(0);
     expect(FFX2_TREATED.length).toBeGreaterThan(0);
-    expect(Object.keys(TREATED_CHAPTERS).filter((id) => scopeExcepted(id))).toEqual(['yunalesca', 'ffx2-ixion-djose']);
+    expect(Object.keys(TREATED_CHAPTERS).filter((id) => scopeExcepted(id))).toEqual(['yunalesca', 'sin-face', 'ffx2-ixion-djose']);
   });
 });

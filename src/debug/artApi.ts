@@ -20,7 +20,14 @@ import type { StageArt } from '../engine/StageArt.ts';
 import { thumbStats } from '../engine/look/AlphaThumb.ts';
 import { extentsReads } from '../engine/look/AlphaPrime.ts';
 import { memoryBooks } from '../engine/LeaveRelease.ts';
-import { holdBooks } from '../engine/LoadHold.ts';
+import { bytesBooks, holdBooks } from '../engine/LoadHold.ts';
+import { relightStats } from '../engine/look/relight/FigureRelight.ts';
+import { setEntryMarkProbe } from '../engine/EntryMarks.ts';
+
+/** Release 73's books plus how many lighting maps have landed or turned out missing (the maps held at the entry are `idleMaps`; the difference is what is still on its way): the browser job reads it at `stats()` and, through the entry marks, AT `pyrefly:enter:shown`. */
+export function bytesReading(): ReturnType<typeof bytesBooks> & { mapsLoaded: number; mapsMissing: number } {
+  return { ...bytesBooks(), mapsLoaded: relightStats.loaded, mapsMissing: relightStats.missing };
+}
 
 /** The names of the GL programs the renderer has linked (three's `info.programs`), in link order: which program a long frame's `getProgramInfoLog` was waiting for. */
 function programNames(app: App): string[] {
@@ -36,8 +43,9 @@ function glMemory(app: App): { geometries: number; textures: number; programs: n
 
 export function installArtDebug(api: Record<string, unknown>, app: App): void {
   const stageArt = (): StageArt | null => (app.current as unknown as { stage?: { art?: StageArt } } | null)?.stage?.art ?? null;
+  setEntryMarkProbe(bytesReading); // every `pyrefly:enter:*` mark carries it as its `detail` from now on
   api['art'] = {
-    stats: () => ({ device: deviceClass(), budget: artBudget(), bufferWidth: bufferWidth(), pinned: forcedArtScale(), aa: app.renderer.aaMode, governor: stageArt()?.stats() ?? null, alpha: { ...thumbStats(), extents: { ...extentsReads } }, programs: programNames(app), memory: memoryBooks(), hold: holdBooks(), gl: glMemory(app) }),
+    stats: () => ({ device: deviceClass(), budget: artBudget(), bufferWidth: bufferWidth(), pinned: forcedArtScale(), aa: app.renderer.aaMode, governor: stageArt()?.stats() ?? null, alpha: { ...thumbStats(), extents: { ...extentsReads } }, programs: programNames(app), memory: memoryBooks(), hold: holdBooks(), bytes: bytesReading(), gl: glMemory(app) }),
     tier: (cls: DeviceClass | null) => setArtTier(cls),
     force: (scale: number | null) => setForcedArtScale(scale),
     stage: (on: boolean | null) => setStagedUploads(on), // release 39.1: the staged uploads on or off for the next stage, as `?stage=off` does

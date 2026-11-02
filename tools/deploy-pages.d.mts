@@ -44,6 +44,8 @@ export declare function resolveReleaseGate(input: {
   ownerOverrideWords: string | null;
   /** Reports for this commit that validateReport refused (from shipEvidenceFor's `skipped`): named in the refusal when no report was accepted. */
   skipped?: { path: string; errors: string[] }[];
+  /** Chapters on the treated list whose lift proof is still OWED (`findOwedLifts`, tools/owed-lifts.mjs): each is a refusal. */
+  owedLifts?: { id: string; label: string; why: string }[];
 }): ReleaseGateResult;
 
 /** The loud warning block printed (and, on --dry-run, previewed) for an owner override. */

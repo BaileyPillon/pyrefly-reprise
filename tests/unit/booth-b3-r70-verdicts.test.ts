@@ -54,48 +54,40 @@ const B4_HUD: Readonly<Record<string, readonly TreatedPiece[]>> = {
   'seymour-omnis': ['hud', 'breath', 'cam', 'moments'], // r72 review: `hud` held (J-HUD-5b) // Chapter XII, FFX: the Enemy Intent card's foot stands 6 grid px above the first party card
 };
 
-/** The three of the last five listed chapters that are treated in release 71 (`booth-b4-last`; Chapter XVII stayed out and Chapter XVIII was taken off again by the second focused review, `SIN_FACE_OFF`): the list is release 70's ten plus these, and none of release 70's rows moved. */
+/** The four of the last five listed chapters that are treated since r73-fast (`booth-b4-last`; Chapter XVII stayed out; Chapter XVIII was taken off by the second focused review of release 71 and put back by `r73-fast`): the list is release 70's ten plus these, and none of release 70's rows moved. */
 const RELEASE_71_LAST: Readonly<Record<string, readonly TreatedPiece[]>> = {
   'evrae-airship': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'], // Chapter VIII, FFX (hd2d and arena added by the r71 verdict: the cone is a white halo; real added by the focused review of 10b426248, R71-C2)
+  'sin-face': ['card', 'breath', 'cam', 'moments', 'smear', 'real'], // Chapter XVIII, FFX (real added by the first focused review, R71-C1 of 10b426248; off the list in release 71, back since r73-fast)
   'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'], // Chapter 27, FFX (real added by the focused review of 10b426248, R71-C3)
   'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'], // Chapter XVI, FFX-2
 };
 
-/** Chapter XVIII (Sin's face, FFX only) joined with `booth-b4-last` and was taken OFF the list for release 71 by the driver's call on the second focused review (`critic/reviews/4c01379d4-focused`, R71-C1: 17 one-frame hops over 100 px after the real hold, against 0 on `?treated=pack`). **Its rows stay, unread: this table pins them (`real` added by the first focused review, R71-C1 of 10b426248).** */
-const SIN_FACE_OFF: Readonly<Record<string, readonly TreatedPiece[]>> = {
-  'sin-face': ['card', 'breath', 'cam', 'moments', 'smear', 'real'], // Chapter XVIII, FFX
-};
-
 describe('the result of the r70 verdicts: ten treated, four off the list, two cam holds added; then all four back in batch 4 (IX and XII in booth-ffx-b4-hud, V and XI in booth-ffx2-b4-sky) and the last five listed chapters\' four (booth-b4-last)', () => {
-  it('release 70 treated these ten chapters; batch 4 added V and XI (FFX-2 only, the look held) and the last five listed chapters\' four, all since r71 (IX and XII came back too, the r71 verdicts took them off again and r72-hud put them back; the second focused review took Sin\'s face off): the list is the seventeen, each with the holds the table gives; Sin\'s face keeps its rows', () => {
+  it('release 70 treated these ten chapters; batch 4 added V and XI (FFX-2 only, the look held) and the last five listed chapters\' four, all since r71 (IX and XII came back too, the r71 verdicts took them off again and r72-hud put them back; the second focused review took Sin\'s face off and r73-fast put it back): the list is the eighteen, each with the holds the table gives', () => {
     expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual([...Object.keys(RELEASE_70), ...Object.keys(B4_HUD), ...Object.keys(RETURNED_R71), ...Object.keys(RELEASE_71_LAST)].sort());
     for (const [id, r] of Object.entries(RETURNED_R71)) {
       expect(Object.keys(PIECE_HOLDS[id] ?? {}).sort(), id).toEqual([...r.held].sort());
       expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx2', since: 'r71' });
       expect(getChapter(id)?.game, id).toBe(r.game); // rule 14: the game the registry says
     }
-    for (const [id, held] of Object.entries({ ...RELEASE_70, ...B4_HUD, ...RELEASE_71_LAST, ...SIN_FACE_OFF })) {
+    for (const [id, held] of Object.entries({ ...RELEASE_70, ...B4_HUD, ...RELEASE_71_LAST })) {
       expect(Object.keys(PIECE_HOLDS[id] ?? {}), id).toEqual([...held, ...(R71_HELD_ADDED[id] ?? [])]); // release 70's rows keep their order; a later hold is appended
       expect(getChapter(id)?.game, id).toBe(TREATED_CHAPTERS[id]?.game ?? WITHDRAWN_R70[id]?.game); // rule 14: the game the registry says
-    }
-    for (const id of Object.keys(SIN_FACE_OFF)) {
-      expect(TREATED_CHAPTERS, id).not.toHaveProperty(id); // off the list for release 71 (the second focused review, R71-C1)
-      expect(WITHDRAWN_R70[id]?.game, id).toBe('ffx'); // FFX only (rule 14): the deck is Chapter VIII's, an FFX scene
     }
     for (const id of Object.keys(B4_HUD)) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r71' }); // FFX only (rule 14): the panels are FFX HUD panels
     for (const id of Object.keys(RELEASE_70)) expect(TREATED_CHAPTERS[id]!.since, id).toMatch(/^r(60|69|70)$/); // release 70's ten keep the release they joined
     for (const id of Object.keys(RELEASE_71_LAST)) expect(TREATED_CHAPTERS[id]!.since, id).toBe('r71'); // the last five listed chapters' four: the batch's release
   });
 
-  it('the games of the seventeen: FFX is Chapters I, II, III, VII, VIII, IX, X, XII, XIV and 27; FFX-2 is Chapters IV, V, VI, XI, XIII, XV and XVI', () => {
+  it('the games of the eighteen: FFX is Chapters I, II, III, VII, VIII, IX, X, XII, XIV, XVIII and 27; FFX-2 is Chapters IV, V, VI, XI, XIII, XV and XVI', () => {
     const ffx = Object.entries(TREATED_CHAPTERS).filter(([, e]) => e.game === 'ffx').map(([id]) => id).sort();
     const ffx2 = Object.entries(TREATED_CHAPTERS).filter(([, e]) => e.game === 'ffx2').map(([id]) => id).sort();
-    expect(ffx).toEqual(['braskas-final-aeon', 'evrae-airship', 'isaaru-via-purifico', 'mirror-aeons', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'seymour-omnis', 'yojimbo-cavern', 'yunalesca']);
+    expect(ffx).toEqual(['braskas-final-aeon', 'evrae-airship', 'isaaru-via-purifico', 'mirror-aeons', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'seymour-omnis', 'sin-face', 'yojimbo-cavern', 'yunalesca']);
     expect(ffx2).toEqual(['ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-fallen-aeons', 'ffx2-ixion-djose', 'ffx2-leblanc', 'ffx2-trema', 'ffx2-vegnagun-shuyin']);
   });
 
-  it('Chapter XVIII is withdrawn now (the second focused review; IX and XII came back in r72-hud, V and XI in batch 4); each chapter in WITHDRAWN_R70 answers release 68 for every piece under both scopes, in the game the registry says, and keeps its rows (look, holds) in the tables', () => {
-    expect(Object.keys(WITHDRAWN_R70)).toEqual(['sin-face']);
+  it('nothing is withdrawn now (Chapter XVIII, the second focused review\'s, came back in r73-fast; IX and XII in r72-hud, V and XI in batch 4); each chapter in WITHDRAWN_R70 (none) answers release 68 for every piece under both scopes, in the game the registry says, and keeps its rows (look, holds) in the tables', () => {
+    expect(Object.keys(WITHDRAWN_R70)).toEqual([]);
     for (const [id, w] of Object.entries(WITHDRAWN_R70)) {
       for (const scope of ['all', 'pack'] as const) {
         setTreatedScope(scope);
