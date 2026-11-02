@@ -6,6 +6,17 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-11-02 — Lane r74-revive (a revive's cross is longer and even, so no frame of it steps the tracked feet or head 40 px; BOTH GAMES; additive, no contract file changed)
+
+Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call, his to overturn). Branch `r74-revive`, from `origin/r73-int` `d5049f686`. PR-0570.
+
+- **New `engine/motion/ReviveCross.ts`**: `REVIVE_CROSS_MS` (160), `reviveCross(u)` (the lying painting's and the standing one's fades at progress `u`: the incoming share of the pair is `u` itself and the lesser plane peaks at `KO_CROSS_PEAK` in the middle) and the `?revive=` switch (`reviveWord()`, `reviveEvenOn()`, `reviveWordFromSearch(search)`, `setReviveWord(word | null)`; `today` is release 73's 75 ms capped cross, anything else reads `even`).
+- **`KoFall`**: `KoRunOptions.even?: boolean` (a revive's cross is `reviveCross`; a `cut` still wins over it), `reviveRun(travel, eased = false, even = false)` (a third parameter; with `even` false the run is release 73's, option for option) and `REVIVE_EVEN_MS` (480). The longer cross is played only by a body that topples and gets up (`travel`) and not by the held `?kotopple=eased` revive (rise 420, 160 + 420 would pass `TIMING.revive`, 520). `KO_CROSS_MS`, `REVIVE_MS` (395, now `?revive=today`'s) and the fall are unchanged.
+- **`fx/mix/living.ts`** passes `reviveEvenOn()` to `reviveRun`; its header comment names the 480 ms. Nothing else in the mix changes.
+- **Tests** (new): `tests/unit/engine/revive-even-cross.test.ts` (the premise: release 73's cross steps Wakka's weighted feet 92.8 px at 60 Hz offline against the live 83 to 88; the even cross under 40 px for ten figures at 60, 120 and 144 Hz, with a live run's frame times and with the eased knock-out slide), `revive-even-cross-run.test.ts` (the run's numbers, `?revive=today` frame by frame, what keeps the capped cross, the maths, the address, the stance table) and `revive-even-fixture.ts`; `ko-revive-actor.test.ts` and `m3-ko-eased-harness.test.ts` now name `?revive=today` (they guard release 73's 75 ms timeline and the eased arm's comparison with it). Handoff: `docs/handoff/r74-revive.md`.
+
+Game case: BOTH games (shared plumbing: the KO run, the living mix and the actor layer serve FFX chapters 1 to 3 and FFX-2 chapters 4 to 6; no source gives either game a revive blend, so the cross is `[ours]` and one for both). Measured in FFX Chapter II (Yunalesca); read offline for seven FFX figures and three FFX-2 dresspheres.
+
 ## 2026-11-02 — r73 merge review, finding 4 (the strike floor does not apply in skip; BOTH GAMES; additive, no contract file changed)
 
 Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call, his to overturn). Branch `r73`.

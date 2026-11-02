@@ -2,6 +2,7 @@ import { PlaneGeometry, Vector2, Vector4, type BufferGeometry, type Mesh, type O
 import { departureKindOf } from '../../BattlePresenterDepartures.ts';
 import { KO_GIANTS, KO_MACHINES, canTopple, fallRun, koCrossMs, koFallOff, koMode, reviveRun, type KoMode, type KoRun } from '../../KoFall.ts';
 import { moveWord } from '../../motion/MoveSwitch.ts'; // MF-17 (`?kotopple=eased`): the party figure's topple and revive ease in from rest and out to rest
+import { reviveEvenOn } from '../../motion/ReviveCross.ts'; // r74-revive (`?revive=today` gives release 73's 75 ms capped cross back): a body that topples and gets up crosses over 160 ms with an even share
 import { realBuckleMs } from '../../motion/RealMoments.ts'; // `?curves=real` / `real-snappy`: the buckle lasts until the real clip's floor impact
 import { KoPuff } from '../../KoPuff.ts';
 import { TOPPLE_RAD, contentCentreX, headCentreX, headMiddleU, tipSide, type SlotTip } from '../../KoTip.ts';
@@ -29,7 +30,7 @@ export { patchLiving } from './livingShader.ts';
  *   flagged prone (a Sin fin, Vegnagun's tail) crosses at once, with no buckle. REDUCE MOTION stays a plain cut and
  *   a revive under it stays the actor's own blend: the page recommends "stays a cut unless you say otherwise" and
  *   Bailey took the page defaults. The revive mirrors the fall (FA-3): the lying painting crosses to the standing one already
- *   toppled, which stands up from the floor pivot in 395 ms, inside the presenter's revive wait. The Syndicate's
+ *   toppled, which stands up from the floor pivot in 480 ms (a 160 ms even cross, then the 320 ms rise: r74-revive, `motion/ReviveCross.ts`; 395 ms with the 75 ms capped cross under `?revive=today`), inside the presenter's revive wait. The Syndicate's
  *   yield, a held or a dismissed departure are left as they are (VP-1001-47).
  *
  * Attached by a scene walk, never by a hook in `PaintedActor` (over 400 lines, rule 7): the figure's
@@ -221,7 +222,7 @@ export class LivingFigure {
     if (from === to || a.life?.state === 'down' || from.pose === to.pose) return;
     const travel = from.scale.prone === true && to.scale.prone !== true && canTopple(a.name, partySide);
     const side = travel ? tipSide(headMiddleU(from.meta.head), from.mesh.scale.x < 0 ? -1 : 1, partySide ? 1 : -1) : 0;
-    this.begin({ run: reviveRun(travel, moveWord('kotopple') === 'eased'), mode: travel ? 'topple' : 'cross', from, to, stand: to, lying: from, side });
+    this.begin({ run: reviveRun(travel, moveWord('kotopple') === 'eased', reviveEvenOn()), mode: travel ? 'topple' : 'cross', from, to, stand: to, lying: from, side });
     if (travel) this.last.rises++;
   }
 

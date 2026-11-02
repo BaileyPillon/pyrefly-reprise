@@ -23,6 +23,7 @@ import { CFG, FRAME, analyzeSwap, anchors, fall, index, lying, revive, rig, slot
 import { detectJerks, figureTrack } from '../../../critic/runner/lib/continuity-pure.mjs';
 import { KO_CROSS_PEAK } from '../../../src/engine/PoseBlend.ts';
 import { setMoveWord } from '../../../src/engine/motion/MoveSwitch.ts';
+import { setReviveWord } from '../../../src/engine/motion/ReviveCross.ts';
 
 beforeEach(() => setMoveWord('kotopple', 'eased')); // the word is opt-in since the review of release 68's flips: this file names it
 afterEach(() => {
@@ -68,6 +69,7 @@ function read(r: ReturnType<typeof rig>, rec: Frames, from: number, to: number):
 
 function eased(game: (typeof GAMES)[number], subject: string, word: 'eased' | 'today' = 'eased'): { fall: Read; revive: Read } {
   setMoveWord('kotopple', word);
+  setReviveWord('today'); // r74-revive: both arms read release 73's 75 ms capped cross (`?revive=today`): this file compares the eased revive with today's, and the even cross (`revive-even-cross.test.ts`) is today's cure, not the eased arm's
   const r = rig(subject, { game });
   const played = fall(r, 40); // the planes exist once the figure has been knocked out
   const fallRead = read(r, played, index(r.a, standing(r.a)), index(r.a, lying(r.a)));
