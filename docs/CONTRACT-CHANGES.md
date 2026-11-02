@@ -6,6 +6,25 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-11-02 — Lane ch-keeper (the hidden Spectral Keeper chapter's glyph platforms; FFX ONLY; additive)
+
+Authority: Bailey 2026-11-02, "i'll go with all of your recommendations please implement all the unimplemented chapters that i decided on" (D-1039 and its paper preflight `docs/plans/ch-keeper-review.md`; the driver's picks are in `docs/handoff/ch-keeper.md`, his to overturn). Branch `ch-keeper`, from `origin/r73-int` `d5049f686`.
+
+Contract files changed (`src/battle/common/types.ts`, `src/data/encounters.ts`), both additive and inert for every other chapter:
+
+- **`EnemyGroupDef.platformRing?: true`** and **`EnemyGroupDef.frontLineFirstStrike?: true`** (FFX only; the Spectral Keeper's formation `dome02_00`): the first marks a formation that runs the glyph platforms (`battle/ffx/platforms.ts`: a Move row for the party, platform numbers 1 to 6 and the rock 7 in `state.flags` `plat.*`, the seven Circles); the second gives the three active members First Strike in the opening counters (`adapt/ctb.ts#openingCtb`). Absent on every other group, so no other battle reads either.
+- **`BattleEvent` gains `{ type: 'platform'; who; from; to }`** (FFX only): a character hopped from one platform to another with Move. Emitted only by `platforms.ts#moveTo`; the presenter does not animate it in this build (the engine also says it as a `message` event), so no other consumer changes.
+- **`ChapterId`** gains `'spectral-keeper'`, **`ListedChapterId`** excludes it, **`Chapter.number`** gains `29` (`src/data/encounters.ts`, three words edited on existing lines; the file stays at 399 lines). The chapter is registered through `chapters-experiments.ts` (hidden, `experimental: true`), not in `CHAPTERS` or `CHAPTER_IDS`.
+
+Non-contract plumbing in the same lane (FFX only, inert elsewhere):
+
+- `battle/ffx/formation-commands.ts`: `GAME_COMMAND.guard` (0x3022) and `.sentinel` (0x3023), and `menuCommandOf` maps the ability ids `guard` and `sentinel` to them (both are `special` rows, so the category alone would grey every Special row); the formation's four switched-off commands are Escape, Flee, Guard and Sentinel for everyone. The module also re-exports `applyPlatformSetup` and `markFirstStrike` so `setup.ts` (399 lines) gains no import line.
+- `battle/ffx/adapt/ctb.ts`: `takesPart`, `schedulerView` and `advanceClock` treat an unarmed Circle (`platforms.ts#isIdleCycler`) as a character the clock counts but gives no turn: its counter resets to the stored base on reaching 0, and **`advanceClock` now runs stretch by stretch** (an idle Circle's reset is not a turn, so the clock goes on to the next stretch, as the scheduler kernel does tick by tick); with no idle Circle in the battle the loop runs exactly once and the elapsed ticks and counters are those of the old single stretch.
+- `battle/ffx/ai/index.ts`: `TriggerHandler.apply` gains an optional third argument, the submitted `TriggerCommand` (the Move trigger reads its aim); the `move` handler is registered. `execute.ts` passes it, and hands a Switch's platform to the member coming in (`platforms.ts#handOverPlatform`, a no-op outside the ring).
+- `battle/ffx/commands.ts` adds the Move row through `platforms.ts#moveRows` (empty outside the ring); `data/ffx/enemies/hidden-ffx.ts` and `data/ffx/command-records/enemies.ts` register the seven rows and the formation.
+
+Game case: FFX only. Nothing here is read by an FFX-2 chapter.
+
 ## 2026-11-02 — r73 merge review, finding 4 (the strike floor does not apply in skip; BOTH GAMES; additive, no contract file changed)
 
 Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call, his to overturn). Branch `r73`.

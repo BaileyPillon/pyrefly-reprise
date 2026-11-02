@@ -36,6 +36,8 @@ import { buildMirrorAeonsScene, MIRROR_SLOTS } from './mirror-aeons.ts'; // Mirr
 import { MIRROR_AEONS_SCENE } from '../data/ffx/mirror-aeons-ids.ts';
 import { buildLastSummoningScene, LAST_SUMMONING_SLOTS } from './last-summoning.ts'; // the Last Summoning's Dream's End (FFX only, hidden chapter): Chapter III's scene with Yojimbo, the Sisters and Anima staged
 import { LAST_SUMMONING_SCENE } from '../data/ffx/last-summoning-ids.ts';
+import { buildSpectralKeeperScene, SPECTRAL_KEEPER_SLOTS } from './spectral-keeper.ts'; // the Spectral Keeper's glyph ring (FFX only, hidden chapter): the Dome's scene with the Keeper and the glyphs staged
+import { SPECTRAL_KEEPER_SCENE } from '../data/ffx/spectral-keeper-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -57,6 +59,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   { key: MIRROR_AEONS_SCENE, title: 'Mushroom Rock Road and the Cavern of the Stolen Fayth — Mirror Aeons', build: buildDemoScene, slots: MIRROR_SLOTS, placeholder: false },
   // The Last Summoning (FFX only, hidden chapter): Dream's End as Chapter III builds it, with the full roster's possessed aeons staged.
   { key: LAST_SUMMONING_SCENE, title: "Dream's End — the Last Summoning", build: buildDemoScene, slots: LAST_SUMMONING_SLOTS, placeholder: false },
+  // The Spectral Keeper (FFX only, hidden chapter): the Zanarkand Dome as Chapter II builds it, with the Keeper in the middle of the glyph ring.
+  { key: SPECTRAL_KEEPER_SCENE, title: 'Zanarkand Dome — the Spectral Keeper', build: buildDemoScene, slots: SPECTRAL_KEEPER_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -70,4 +74,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [ANGRA_MAINYU_SCENE]: buildAngraMainyuDesertScene, // the hidden Angra Mainyu chapter (FFX-2 only)
   [MIRROR_AEONS_SCENE]: buildMirrorAeonsScene, // the hidden Mirror Aeons chapter (FFX only)
   [LAST_SUMMONING_SCENE]: buildLastSummoningScene, // the hidden Last Summoning chapter (FFX only)
+  [SPECTRAL_KEEPER_SCENE]: buildSpectralKeeperScene, // the hidden Spectral Keeper chapter (FFX only)
 };

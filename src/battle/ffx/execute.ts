@@ -21,6 +21,7 @@ import { itemAbility, payForItem } from './item-use.ts';
 import { type MixOutcome, mixFailed } from './mix.ts';
 import { dismissAeon, summonAeon } from './aeons.ts';
 import { triggerHandler } from './ai/index.ts';
+import { handOverPlatform } from './platforms.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
 import { revealForSensorAuto } from './sensor.ts';
 import { resolveDoublecast } from './doublecast.ts';
@@ -135,6 +136,7 @@ export function executeCommand(
         return { rank: 0, rejected: true, damageDealt: 0 };
       }
       ctx.state.activeIds[slotIndex] = inId;
+      handOverPlatform(ctx, outId, inId); // the Spectral Keeper's glyphs: the member coming in takes the platform (no-op elsewhere)
       ctx.state.reserveIds = ctx.state.reserveIds.filter((id) => id !== inId).concat(outId);
       incoming.removed = false;
       incoming.slot = outgoing.slot;
@@ -166,7 +168,7 @@ export function executeCommand(
       // second flavour; `TriggerCommand.id` has always been an arbitrary string
       // [types.ts], so the table lives in `ai/index.ts` and no contract moved.
       const handler = triggerHandler(command.id);
-      const accepted = handler ? handler.apply(ctx, actor) : false;
+      const accepted = handler ? handler.apply(ctx, actor, command) : false;
       // A refused trigger says so rather than spending a turn in silence, which
       // reads as a broken button — §1.6's third Talk is offered and
       // deliberately inert, and an order from someone who cannot give one is

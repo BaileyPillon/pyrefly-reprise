@@ -256,7 +256,7 @@ describe('the pure rule', () => {
   it('the switch is on, and the ids are the game\'s', () => {
     expect(FORMATION_COMMAND_DISABLES).toBe(true);
     expect(GAME_COMMAND).toEqual({
-      attack: 0x3000, item: 0x3001, switch: 0x3002, escape: 0x3003, weapon: 0x3004, armor: 0x3005, flee: 0x3018, skill: 0x3113, special: 0x3114, blackMagic: 0x3115, whiteMagic: 0x3116,
+      attack: 0x3000, item: 0x3001, switch: 0x3002, escape: 0x3003, weapon: 0x3004, armor: 0x3005, flee: 0x3018, guard: 0x3022, sentinel: 0x3023, skill: 0x3113, special: 0x3114, blackMagic: 0x3115, whiteMagic: 0x3116, // guard and sentinel: the hidden Spectral Keeper's formation switches them off (RE 2.2)
     });
   });
 

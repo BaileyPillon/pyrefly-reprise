@@ -43,6 +43,7 @@ export const REACH_ZERO_COMMANDS: ReadonlySet<number> = new Set([
   0x30dd, 0x30de, // Oblivion, Daigoro
   0x30e4, 0x30e5, 0x30e6, 0x30e7, 0x30e9, 0x30ff, // the Magus Sisters: Cindy's and Sandy's Attacks, Camisade, Razzia, Passado
   0x30eb, 0x30ec, 0x30ed, 0x30ee,
+  0x3103, // Move (the hidden Spectral Keeper's party command: the game's table says reach 0; only a Circle, which has no BattleDistance, is ever its aim)
 ]);
 
 /**
