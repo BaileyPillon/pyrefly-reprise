@@ -12,7 +12,7 @@
  */
 
 import { AnimationMixer, Quaternion, Vector3, type AnimationClip, type Object3D } from 'three';
-import type { Role, Windows } from './clipSequencer.ts';
+import type { Role, Windows } from './wwSequencer.ts';
 import { headTurn, wrapAngle, FACE_OFF_DEG, HEAD_TURN_MAX_DEG, type V3 } from './layout.ts';
 
 const UP = new Vector3(0, 1, 0);

@@ -1,5 +1,5 @@
 /**
- * **The Wind Waker chapter's clips** (`src/engine/ww3d/clips.ts`, `clipSequencer.ts`, `clipAnalysis.ts`, `pose.ts`; FFX-2 only), pinned without a GPU: which of a file's clips is which role (the stance clip `idle_combat` is the base,
+ * **The Wind Waker chapter's clips** (`src/engine/ww3d/clips.ts`, `wwSequencer.ts`, `clipAnalysis.ts`, `pose.ts`; FFX-2 only), pinned without a GPU: which of a file's clips is which role (the stance clip `idle_combat` is the base,
  * `walk` and `run` are named and never played), the root-motion lock, the strike window found from the bone rotations, the state machine that orders the clips (the event-to-clip map: attack, cast, hit, victory, a knock-out held),
  * and a rig on a made-up skeleton.
  */
@@ -7,7 +7,7 @@ import { AnimationClip, Bone, Group, Object3D, QuaternionKeyframeTrack, VectorKe
 import { describe, expect, it } from 'vitest';
 
 import { attackWindow, motionEnergy, quatAt, strikeTime, wholeWindow } from '../../../src/engine/ww3d/clipAnalysis.ts';
-import { FADE_IN, FADE_OUT, ClipSequencer, type Windows } from '../../../src/engine/ww3d/clipSequencer.ts';
+import { FADE_IN, FADE_OUT, ClipSequencer, type Windows } from '../../../src/engine/ww3d/wwSequencer.ts';
 import { ClipRig, ROLE_PATTERNS, STANCE_CLIP, UNUSED_CLIPS, flattenRoot, lockRoot, rootBoneName, roleClips, windowsOfClips } from '../../../src/engine/ww3d/clips.ts';
 import { HeadTurn, hipsYaw, yawOffsetsOf } from '../../../src/engine/ww3d/pose.ts';
 

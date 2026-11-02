@@ -20,7 +20,6 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { WW_MODEL_DIR, WW_PROP_DIR, WW_TEMPLE_DIR } from '../../src/data/windwaker-ids.ts';
 import { MODEL_FILE, PROP_NAMES, TEMPLE_NAMES, WW_CAST } from '../../src/engine/ww3d/layout.ts';
 import { isUnshippedPublicFile } from '../../tools/dist-filter.mjs';
-// @ts-expect-error: a plain .mjs tool with no type declarations
 import { check, copyTree, readList, recordOf } from '../../tools/ww-models.mjs';
 
 interface Listed { path: string; bytes: number; sha256: string }

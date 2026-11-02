@@ -1,5 +1,5 @@
 /**
- * **A rigged model's animation, driven by the battle** (the hidden Wind Waker chapter, FFX-2 only): the model's clips on one three.js `AnimationMixer`, in the order `./clipSequencer.ts` decides, over the windows
+ * **A rigged model's animation, driven by the battle** (the hidden Wind Waker chapter, FFX-2 only): the model's clips on one three.js `AnimationMixer`, in the order `./wwSequencer.ts` decides, over the windows
  * `./clipAnalysis.ts` finds. A model with no clip for a role simply never plays it; a model with no clips at all (Valefor is one static mesh, and a capsule has none) has no rig and stays procedural (the actor's own
  * breath, lunge, recoil, hop and fall, and the skin's flash and glow).
  *
@@ -28,7 +28,7 @@
 
 import { AnimationMixer, LoopOnce, LoopRepeat, type AnimationAction, type AnimationClip, type Object3D } from 'three';
 import { attackWindow, motionEnergy, wholeWindow, type RotationTrack } from './clipAnalysis.ts';
-import { ClipSequencer, type Command, type Role, type Windows } from './clipSequencer.ts';
+import { ClipSequencer, type Command, type Role, type Windows } from './wwSequencer.ts';
 import { wrapAngle } from './layout.ts';
 
 /** The names that make a clip a role's, in the order roles are looked for. */
