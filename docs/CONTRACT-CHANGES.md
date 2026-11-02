@@ -6,6 +6,19 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-11-02 — Lane ch-yrp (the hidden 3D Bahamut folded into the release line as Chapter 31; FFX-2 only; additive, one contract file changed)
+
+Authority: Bailey 2026-11-02, "i'll go with all of your recommendations please implement all the unimplemented chapters that i decided on" (after 2026-10-31 ~23:40 EDT, "you make the executive decisions for the next few days"); the chapter itself is his: D-1098 "I like it can we do an experimental 3d chapter that's hidden?", D-1101 Bahamut, D-1103 the word yrp, D-1131 "Real FFX-2 models (Recommended)". Branch `ch-yrp`: `exp-yrp-real` (e7c74c2de) merged onto `origin/r73-int` (d5049f686); `docs/handoff/ch-yrp.md` has the whole note.
+
+- **`src/data/encounters.ts`** (the one contract file): `ChapterId` gains `'exp-yrp-3d'`; `ListedChapterId` excludes it (no board card); `Chapter.number` gains `29 | 30 | 31 | 32` (29 and 30 are the Spectral Keeper's and the Fallen Maesters', 31 this chapter's, 32 the Wind Waker chapter's: assigned 2026-11-02; only 31 is used here); `EXPERIMENT_CHAPTERS` gains the derived record. Nothing is removed or narrowed. A digest of every other registered chapter's record (the 19 listed, the unlisted FF7 experiment, the other hidden ones, their pause metadata) is identical before and after (59 rows).
+- **`experimentChapters(ffx2Leblanc, ffx2Bahamut)`** (`src/data/chapters-experiments.ts`) takes Chapter IV's record as a second argument, to derive the chapter from; its one caller is `encounters.ts`.
+- **`BattlePresenterArt.ART_KEY`** (new export, `'artId'`): `PaintedStage` writes `actor.userData[ART_KEY]` when it stages a figure and when `setArt` swaps its painting, so a model standing in for the painting knows which dressphere the battle says the girl wears. No actor behaves differently for having it.
+- **`tools/dist-filter.mjs`** (both games, delivery plumbing): `isUnshippedPublicFile` no longer drops all of `models-exp/`; the new `isShippedModelFile` names the chapter's set (43 files, 141.3 MiB, none over the host's 25 MiB; `src/data/yrp-ids.ts` `YRP_SHIPPED_*`), `shippedDressIndex` and `trimDressIndex` rewrite the build copy's dress manifest to the shipped folders with `hd` off, and `pruneUnshipped` removes the folders it empties. A tree without `public/models-exp` (every other lane's) behaves exactly as before. New `tools/yrp-models-verify.mjs` (`--dir <build>` or `--source [<public>]`) proves a build or tree carries the set whole.
+- **`critic/runner/lib/route-pure.mjs`: `DOOR_WORDS`** gains `'exp-yrp-3d': 'yrp'`, so the critic's route can open the chapter.
+- **Tests**: `tests/unit/yrp-ship-set.test.ts` (27, new), `critic-route-doors.test.ts` (the door count 11 to 12), the two music-routing tests (the chapter plays Chapter IV's cues by reference), `dist-filter.test.ts`, `layout.test.ts` and `load.test.ts` (the game's own Bahamut is the default boss; the AI one is `?boss=ai`).
+
+Game case: FFX-2 only for the chapter (Chapter IV's Bahamut fight, drawn in 3D with the game's own FFX-2 models); BOTH for the delivery plumbing, which changes nothing for a build that has no `public/models-exp`.
+
 ## 2026-11-02 — r73 merge review, finding 4 (the strike floor does not apply in skip; BOTH GAMES; additive, no contract file changed)
 
 Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call, his to overturn). Branch `r73`.

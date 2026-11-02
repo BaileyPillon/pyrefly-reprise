@@ -1,7 +1,7 @@
 /**
  * **The girls' dresspheres as models** (the hidden 3D Bahamut chapter, the real-models branch `exp-yrp-real`; FFX-2 only). In FFX-2 a dressphere is a costume: Yuna in White Mage is not Yuna in Gunner, and the weapon, the
  * clip set and the silhouette change with it. Bailey picked "match + change live" (2026-10-22): each girl's model always matches the dressphere her battle state says, and a change mid-fight swaps the model at the moment
- * the game does it. The models are the game's own, extracted locally from Bailey's Steam FFX-2 copy (`tools/yrp-dress-install.mjs` puts them in the gitignored `public/models-exp/yrp/dress/`; never committed, never shipped).
+ * the game does it. The models are the game's own, extracted locally from Bailey's Steam FFX-2 copy (`tools/yrp-dress-install.mjs` puts them in the gitignored `public/models-exp/yrp/dress/`; never committed; a production build ships the base tier of the 14 that Chapter IV's Garment Grids reach, `data/yrp-ids.ts` and `tools/dist-filter.mjs`).
  *
  * This file is the **pure** part (no `three`, no DOM): which models there are, which one a dressphere is, and which dressphere a painting's id names.
  *

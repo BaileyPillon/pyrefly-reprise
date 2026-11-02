@@ -1,9 +1,9 @@
 /**
- * **The hidden 3D Bahamut chapter** (`exp-yrp-3d`, chapter 29; branch `exp-yrp-3d`; **FFX-2 only**, AGENTS.md rule 14): Chapter IV's fight, opened by the typed word `yrp` and drawn as a real 3D scene.
+ * **The hidden 3D Bahamut chapter** (`exp-yrp-3d`, chapter 31; branch `exp-yrp-3d`; **FFX-2 only**, AGENTS.md rule 14): Chapter IV's fight, opened by the typed word `yrp` and drawn as a real 3D scene.
  *
  * What this file pins:
  *
- * 1. **It is a hidden experiment, not a chapter**: registered with the experiments (`chapters-experiments.ts`), in neither `CHAPTERS` nor `CHAPTER_IDS` (every count stays nineteen), number 29, `experimental`
+ * 1. **It is a hidden experiment, not a chapter**: registered with the experiments (`chapters-experiments.ts`), in neither `CHAPTERS` nor `CHAPTER_IDS` (every count stays nineteen), number 31, `experimental`
  *    (its attempts, clears and time go to the experiments' store, never the save), pause metadata in `UNLISTED_CHAPTER_META` with the EXP numeral, FFX-2 in the tactics' game table.
  * 2. **It is Chapter IV's encounter, by reference**: the same party build, formation, scripts, music, Sensor line and card words; only the id, the number, the scene key and the title are its own. **No battle data of its
  *    own** (AGENTS.md rule 6). Chapter IV's own record is untouched.
@@ -34,13 +34,13 @@ import { playChain } from '../helpers/ffx2ChainPlay.ts';
 const chapter = getChapter(EXP_YRP_ID)!;
 
 describe('the chapter is a hidden experiment: no card, no count, no save', () => {
-  it('is registered with the experiments and not with the nineteen: number 29, FFX-2, experimental, on its own scene', () => {
+  it('is registered with the experiments and not with the nineteen: number 31, FFX-2, experimental, on its own scene', () => {
     expect(chapter).toBeDefined();
     expect(EXPERIMENT_CHAPTERS.map((c) => c.id)).toContain('exp-yrp-3d');
     expect(CHAPTERS.map((c) => c.id as string)).not.toContain('exp-yrp-3d');
     expect((CHAPTER_IDS as readonly string[]).includes('exp-yrp-3d')).toBe(false);
     expect(CHAPTER_IDS).toHaveLength(19);
-    expect([chapter.id, chapter.number, chapter.game, chapter.experimental, chapter.sceneKey]).toEqual(['exp-yrp-3d', 29, 'ffx2', true, 'exp-yrp-3d-stage']);
+    expect([chapter.id, chapter.number, chapter.game, chapter.experimental, chapter.sceneKey]).toEqual(['exp-yrp-3d', 31, 'ffx2', true, 'exp-yrp-3d-stage']);
     expect([EXP_YRP_ID, EXP_YRP_SCENE]).toEqual(['exp-yrp-3d', 'exp-yrp-3d-stage']); // the no-import ids module says what the record says
     expect(YRP_MODEL_DIR).toBe('models-exp/yrp');
     expect(new Set(EXPERIMENT_CHAPTERS.map((c) => c.number)).size).toBe(EXPERIMENT_CHAPTERS.length); // every number is its own

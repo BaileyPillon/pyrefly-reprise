@@ -26,9 +26,9 @@
  *   of the deck, a soft contact shadow under each figure, and a neutral grade that encodes (Bailey called the first in-game stage "very dark with heavy post-processing"). `?yrp=painted` keeps Chapter IV's room, lights and grade.
  * - **The models.** `../engine/yrp3d/` (loaded on use, so no other chapter carries it): the real FFX-2 Yuna, Rikku and Paine, `public/models-exp/yrp-hd/` (4x textures, one subdivision level) when their file is there and
  *   `public/models-exp/yrp/` when not, with their own battle motions, on the stage's actors, with the painted planes switched off. `?models=base` takes the base folder alone (the comparison between the two). **The boss is the
- *   AI-made Bahamut playing the game's own Bahamut clips** (the v2 rig, `bahamut-ai-rigged.glb` and `bahamut-ai-anims.glb`; his own physically based look; frame A's size and place); `?bossrig=simple`, or a disk without the
- *   rigged files, keeps his first motion (`bahamut-ai.glb`, the procedural wing flap and breath); `?boss=real` fights the game's own (`bahamut.glb`, his real clips at 4x). A slot whose file is missing stands on a neutral capsule, so the
- *   chapter always plays. `?yrp=painted` keeps every figure a painted billboard (the comparison with the paintings).
+ *   game's own Bahamut** (`bahamut.glb`, his real clips at 4x; the driver's pick of 2026-11-02, his to overturn); `?boss=ai` fights the AI-made one playing the game's clips (the v2 rig, `bahamut-ai-rigged.glb` and `bahamut-ai-anims.glb`;
+ *   his own physically based look), `?boss=ai&bossrig=simple`, or a disk without the rigged files, his first motion (`bahamut-ai.glb`, the procedural wing flap and breath): local comparisons, the AI files are never shipped. A slot whose file is missing stands on a
+ *   neutral capsule, so the chapter always plays. `?yrp=painted` keeps every figure a painted billboard (the comparison with the paintings).
  *
  * The upright phone is not staged (Chapter IV's phone rig and slice fit are for its own layout); this chapter is a desktop experiment.
  */

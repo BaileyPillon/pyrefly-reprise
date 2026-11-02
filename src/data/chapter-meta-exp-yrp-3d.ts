@@ -1,5 +1,5 @@
 /**
- * Pause-screen and prebattle-tab metadata — **Experimental: Bahamut in 3D** (`./chapter-exp-yrp-3d.ts`; FFX-2 only, hidden chapter number 29, Bailey 2026-10-19).
+ * Pause-screen and prebattle-tab metadata — **Experimental: Bahamut in 3D** (`./chapter-exp-yrp-3d.ts`; FFX-2 only, hidden chapter number 31, Bailey 2026-10-19).
  *
  * Chapter IV's record with the chapter's working title: the objectives, the tip, the quote, the snapshots and the music keys are Chapter IV's (`FFX2_BAHAMUT_META` in `./chapter-meta.ts`, which owns it and
  * passes it in), because the encounter is, and so are its paintings. The numeral is `EXP` (the cutscene eyebrow and the prep header say so too).

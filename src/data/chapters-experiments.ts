@@ -15,7 +15,7 @@
  * - **Angra Mainyu** (`'ffx2-angra-mainyu'`, number 26, 2026-10-14; FFX-2 only): the Chapter 5 mission "Showdown in the Sands", the Bikanel Desert fiend and its arms Zarich and Tawrich; word `angra` (25 is the Biran and Yenke lane's).
  * - **The Last Summoning** (`'last-summoning'`, number 28, 2026-10-15; FFX only): Dream's End as a gauntlet in the player's order with the full roster of eight aeons, Yojimbo and the Magus Sisters among them; word `summon` (27 is the Dark Mirror lane's).
  *
- *  * - **Bahamut in 3D** (`'exp-yrp-3d'`, number 29, 2026-10-19; FFX-2 only): Chapter IV's Bahamut fight drawn as a real 3D scene with toon-shaded models, frame A's camera; word `yrp`.
+ * - **Bahamut in 3D** (`'exp-yrp-3d'`, number 31, 2026-10-19 as 29, renumbered 2026-11-02; FFX-2 only): Chapter IV's Bahamut fight drawn as a real 3D scene with the real FFX-2 models, frame b's camera; word `yrp`.
  *
  * A further hidden chapter registers here, by adding its record to the list below, not by editing `./encounters.ts`.
  *

@@ -32,12 +32,11 @@ describe('what never ships', () => {
     for (const p of [
       'audio/candidates/evrae-near.mp3',
       'audio/candidates/C-round1-battle-ffx-A-x12.ogg',
-      'models-exp/yrp/yuna.glb', // the hidden 3D Bahamut's local-only models (branch exp-yrp-3d)
-      'models-exp/yrp/bahamut.glb',
-      'models-exp/yrp/bahamut-ai.glb', // the real-models branch (exp-yrp-real): the AI boss, the clips, the HD folder and the clip map; Bailey's own extracted files, never shipped
-      'models-exp/yrp/yuna-anims.glb',
-      'models-exp/yrp/clipmap.json',
+      'models-exp/yrp/bahamut-ai.glb', // the hidden 3D Bahamut's models: most ship since ch-yrp (2026-11-02; tests/unit/yrp-ship-set.test.ts pins the set); the AI boss, the HD girls and the HD tier never do
+      'models-exp/yrp/bahamut-ai-rigged.glb',
       'models-exp/yrp-hd/yuna.glb',
+      'models-exp/yrp/dress/yuna-gunner/hd/anims.glb',
+      'models-exp/yrp/dress/yuna-samurai/anims.glb',
       'art/portraits/f4blulu.1.raw.png',
       'art/portraits/f4lulu.3.png',
       'art/characters/ffx2-bahamut/ko.2.json',

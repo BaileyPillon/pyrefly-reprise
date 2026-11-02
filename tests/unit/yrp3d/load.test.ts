@@ -4,8 +4,8 @@
  * 1. **The folders**: HD first and the base after it by default (HD whenever its file is there, figure by figure), the base alone for `?models=base`.
  * 2. **Each figure's parts**: its model from the first folder that has `<id>.glb`, its clips from the base folder's `<id>-anims.glb` (the same motions without the HD textures' weight; the HD folder's when the base has none),
  *    the clip map from `clipmap.json` in the same order, the `.chr` scale from the model's extras; a clips file alone shows its own mesh.
- * 3. **Which Bahamut**: the AI-made one by default (`bahamut-ai.glb`, no clips, his own physically based look, the procedural wing flap), the game's (`bahamut.glb` and his clips at 4x) for `?boss=real`, the AI mesh with the
- *    moved clips for `?bossrig=clips` when its rigged files are on disk and the procedural AI boss when they are not. A missing AI file is a capsule, never the game's Bahamut in disguise.
+ * 3. **Which Bahamut**: the game's own by default (`bahamut.glb` and his clips at 4x; the driver's pick of 2026-11-02), the AI-made one only for `?boss=ai` (a local comparison: the AI mesh with the moved clips when its
+ *    rigged files are on disk, the procedural AI boss, `bahamut-ai.glb` with no clips and the wing flap, when they are not or for `&bossrig=simple`). A missing AI file is a capsule, never the game's Bahamut in disguise.
  * 4. **The fallbacks**: a figure with no file stands on the neutral capsule (and the log says nothing), one whose file will not parse is a capsule and a line in the log; every id always has a model.
  * 5. **The reads**: a body is a model only if it begins "glTF" (a dev server answers an unknown path with its index page and status 200), a map only if it is JSON, and the `.chr` scale comes from the extras in the shapes
  *    the extraction wrote.
@@ -87,6 +87,7 @@ function folder(dir: string, anims: boolean, ids: readonly YrpId[] = YRP_CAST, a
 
 const HEIGHTS = { yuna: 1.9, rikku: 1.9, paine: 1.9, bahamut: 5 } as const;
 const REAL: BossChoice = { boss: 'real', rig: false };
+const AI: BossChoice = { boss: 'ai', rig: true };
 const opts = (io: LoaderIO, dirs: readonly string[], warn?: (m: string) => void, choice?: BossChoice) => ({ base: '/', dirs, heights: HEIGHTS, io, ...(warn ? { warn } : {}), ...(choice ? { choice } : {}) });
 const GIRLS: readonly YrpId[] = ['yuna', 'rikku', 'paine'];
 
@@ -180,9 +181,9 @@ describe("each figure's parts", () => {
 describe('which Bahamut', () => {
   const both = (): { io: LoaderIO; fetched: string[] } => fakeIO({ ...folder(BASE, true), [url(BASE, AI_BOSS_FILES.rigged)]: 1, [url(BASE, AI_BOSS_FILES.anims)]: 2 }, {}, { bahamut: 4 });
 
-  it("by default is the AI-made one playing the game's clips (2026-10-22): the rigged file, his clips, his own physically based look, no wing flap (the clips move the wings), and the game's Bahamut's files are never fetched", async () => {
+  it("with ?boss=ai is the AI-made one playing the game's clips (2026-10-22): the rigged file, his clips, his own physically based look, no wing flap (the clips move the wings), and the game's Bahamut's files are never fetched", async () => {
     const t = both();
-    const models = await loadYrpModels(opts(t.io, [BASE]));
+    const models = await loadYrpModels(opts(t.io, [BASE], undefined, AI));
     expect(models.sources['bahamut']).toEqual({ mesh: BASE, clips: BASE, file: 'bahamut-ai-rigged.glb', look: 'pbr' });
     const boss = models.models.get('bahamut')!;
     expect([boss.source, boss.animated, boss.flaps, boss.playsKo, boss.playingClip]).toEqual(['own', true, false, true, 'APPEAR_00']);
@@ -192,7 +193,15 @@ describe('which Bahamut', () => {
     models.dispose();
   });
 
-  it("with ?boss=real is the game's own: bahamut.glb and his clips, at 4x, in the diffuse look, with no wing flap (his clips move the wings)", async () => {
+  it("by default is the game's own (the driver's pick of 2026-11-02): bahamut.glb and his clips, at 4x, in the diffuse look, with no wing flap (his clips move the wings), and no AI file is fetched", async () => {
+    const t = both();
+    const models = await loadYrpModels(opts(t.io, [BASE]));
+    expect(models.sources['bahamut']).toEqual({ mesh: BASE, clips: BASE, file: 'bahamut.glb', look: 'diffuse' });
+    expect(t.fetched.some((u) => u.includes('bahamut-ai'))).toBe(false);
+    models.dispose();
+  });
+
+  it("with ?boss=real is the same as the default (the old way to ask)", async () => {
     const t = both();
     const models = await loadYrpModels(opts(t.io, [BASE], undefined, REAL));
     expect(models.sources['bahamut']).toEqual({ mesh: BASE, clips: BASE, file: 'bahamut.glb', look: 'diffuse' });
@@ -212,17 +221,17 @@ describe('which Bahamut', () => {
     models.dispose();
   });
 
-  it('with no rigged files on disk (the default asks for them) plays the procedural AI boss, not a hole and not the game\'s Bahamut', async () => {
+  it('with ?boss=ai and no rigged files on disk (the AI default asks for them) plays the procedural AI boss, not a hole and not the game\'s Bahamut', async () => {
     const t = fakeIO(folder(BASE, true));
-    const models = await loadYrpModels(opts(t.io, [BASE]));
+    const models = await loadYrpModels(opts(t.io, [BASE], undefined, AI));
     expect(models.sources['bahamut']).toMatchObject({ file: 'bahamut-ai.glb', look: 'pbr', clips: null });
     expect([models.models.get('bahamut')!.animated, models.models.get('bahamut')!.flaps]).toEqual([false, true]);
     models.dispose();
   });
 
-  it('with no AI file at all stands the capsule, never the game\'s Bahamut in disguise (the real one is only for ?boss=real)', async () => {
+  it('with ?boss=ai and no AI file at all stands the capsule, never the game\'s Bahamut in disguise (the game\'s is the default boss, not the AI comparison\'s fallback)', async () => {
     const t = fakeIO(folder(BASE, true, YRP_CAST, false));
-    const models = await loadYrpModels(opts(t.io, [BASE]));
+    const models = await loadYrpModels(opts(t.io, [BASE], undefined, AI));
     expect(models.capsules).toEqual(['bahamut']);
     expect(models.models.get('bahamut')!.source).toBe('capsule');
     models.dispose();

@@ -1,5 +1,5 @@
 /**
- * **Experimental: Bahamut in 3D** (branch `exp-yrp-3d`; hidden chapter number 29; **FFX-2 only**, AGENTS.md rule 14).
+ * **Experimental: Bahamut in 3D** (branch `exp-yrp-3d`; hidden chapter number 31; **FFX-2 only**, AGENTS.md rule 14).
  *
  * Bailey, 2026-10-19 (verbatim): "I like it can we do an experimental 3d chapter that's hidden?" His picks: the FFX-2 trio against a boss, the look "Painted toon", the boss Bahamut, the secret word `yrp`; on
  * the plan "Yes that's fine"; then "I'll go with all of your recommendations. I'm going to bed so you have all the freedom from here. Surprise me and amaze me when I wake up!"
@@ -11,7 +11,7 @@
  * What differs is the picture and the label:
  *
  * - `sceneKey` is `exp-yrp-3d-stage` (`../scenes/exp-yrp-3d-stage.ts`): Chapter IV's chamber under frame A's camera ("classic, now in 3D": a high three-quarter view, the trio in a loose row on the right, Bahamut filling
- *   the left half), with the real FFX-2 models on the stage's actors (`public/models-exp/yrp/<id>.glb`, `../engine/yrp3d/`); a slot whose file is missing stands on a neutral capsule (the real-models branch: Yuna, Rikku and Paine are the real FFX-2 models, Bahamut the AI-made one, `?boss=real` the game's own);
+ *   the left half), with the real FFX-2 models on the stage's actors (`public/models-exp/yrp/<id>.glb`, `../engine/yrp3d/`); a slot whose file is missing stands on a neutral capsule (Yuna, Rikku and Paine are the real FFX-2 models in their own dresspheres, and so is Bahamut: the game's own model and clips are the default boss since 2026-11-02, the AI-made one is `?boss=ai`, a local comparison that is never shipped);
  * - the title is the working title below (no source and no decision gives one; AGENTS.md rule 9).
  *
  * **It is an experiment, not a listed chapter.** `experimental: true` sends its attempts, clears and play time to the experiments' own store, never to the save, so it is out of the board's "N of 18", the veteran
@@ -39,7 +39,7 @@ export function experimentalYrp(base: Chapter): Chapter {
   return {
     ...base,
     id: EXP_YRP_ID,
-    number: 29, // after the Last Summoning's 28; the card says EXP, not XXIX (`ui/common/roman.ts` `chapterNumeral`)
+    number: 31, // 29 and 30 are the Spectral Keeper's and the Fallen Maesters' (assigned 2026-11-02; the branch first took 29); the card says EXP, not XXXI (`ui/common/roman.ts` `chapterNumeral`)
     experimental: true,
     ...EXP_YRP_TEXT,
     sceneKey: EXP_YRP_SCENE,

@@ -1,0 +1,128 @@
+# ch-yrp: the hidden 3D Bahamut on the real FFX-2 models (Chapter 31, word `yrp`)
+
+**Branch `ch-yrp`** (from `origin/r73-int` d5049f686; `origin/exp-yrp-real` e7c74c2de merged `--no-ff` with no textual conflict, then this lane's commit), pushed. **Game case: FFX-2 only** (AGENTS.md rule 14): the chapter is Chapter IV's Bahamut fight (`research/ffx2-bahamut.md`) drawn as a real 3D scene with the game's own FFX-2 Yuna, Rikku, Paine and Bahamut. The delivery plumbing (`tools/dist-filter.mjs`) is shared and changes nothing for a build that has no `public/models-exp`.
+**Status: built, hidden, folded into the release line, nothing deployed.** It is not on the board, not in "of 18" and not listed anywhere; it opens only by the typed word. The browser jobs in section 9 are written with predictions and **not run** (this lane ran no browser, dev server or GPU).
+
+Bailey's words (the chapter is his): 2026-10-19 "I like it can we do an experimental 3d chapter that's hidden?" (D-1098), the FFX-2 trio against a boss (D-1099), Bahamut (D-1101), the word `yrp` (D-1103), "Yes that's fine" (D-1102); 2026-10-20 "Real FFX-2 models (Recommended)" (D-1131); 2026-10-22 the framing "b: dolly in" and "match + change live" for the dresspheres. 2026-11-02, "i'll go with all of your recommendations please implement all the unimplemented chapters that i decided on" is the authority for folding it in; the picks the old branch left open are the driver's, in section 4, **"driver pick, his to overturn"**.
+
+## 1. Play it
+
+1. From the title, reach the chapter-select board.
+2. Type `yrp` (any case, letters at most 2 s apart, `KEY_GAP_MS`). No card, no sound: the board opens the chapter's party prep (numeral `EXP`). The word is three letters, the shortest on the table; `tests/unit/yrp-door.test.ts` (18) drives the real `Input`, board and title screen. On a phone the same word typed in the long-press field works (`doorField.ts`), but **the chapter is a desktop experiment** (section 11, Q4).
+3. Enter starts the fight. It is Chapter IV's fight, by reference: same party (Yuna White Mage 23, Rikku Dark Knight 24, Paine Warrior 25), same Bahamut, same script, music, Sensor line and victory quips. Frame b (the dolly-in) is the camera; `?frame=a` and `?frame=c` are the older framings.
+4. A clear goes to the experiments' own store (`pyrefly-reprise:experiments:v1`), never the save.
+5. Query switches (all local comparisons, none needed): `?boss=ai` (the Meshy Bahamut, local files only, section 4), `?models=base|hd`, `?dress=off` (one model per girl), `?yrp=painted` (every figure a painted billboard, Chapter IV's room), `?frame=a|c`.
+
+## 2. What the chapter is (what `exp-yrp-real` built, 17 commits)
+
+- **The door and the record**: `yrpDoor.ts`, `chapterDoors.ts` row, `chapter-exp-yrp-3d.ts` (Chapter IV's record under id `exp-yrp-3d`, `experimental: true`, scene `exp-yrp-3d-stage`), `chapter-meta-exp-yrp-3d.ts`, `yrp-ids.ts`. `tests/unit/chapters/exp-yrp-3d.test.ts` plays both records to the same event log on several seeds: the chapter adds no battle data of its own (rule 6 untouched).
+- **The scene** (`src/scenes/exp-yrp-3d-stage.ts`): Chapter IV's chamber under frame b, a soft studio light, a wet tile floor with reflections and contact shadows, a neutral grade; `src/engine/yrp3d/` (29 modules, loaded on use so no other chapter carries them): the loader, the skin that carries a model on each painted actor with the painted planes switched off, the clip sequencer that plays the game's own motions on the battle's events, weapons on the game's locators, the shot director (Mega Flare takes frame c's camera), the neutral capsule fallback for any missing file.
+- **The dresspheres** (Bailey: "match + change live"): each girl's model is the game's own for the dressphere her battle says, and a spherechange swaps it behind a short white light; the library warms only the two Garment Grid neighbours (`dressLib.ts`, `dressReach.ts`). One tiny additive hook in the shared presenter carries this: `ART_KEY` (`BattlePresenterArt.ts`, written by `PaintedStage`).
+- **Tests in the branch**: 23 files under `tests/unit/yrp3d` and the chapter's four beside them (`chapters/exp-yrp-3d.test.ts`, `chapters/exp-yrp-3d-scene.test.ts`, `yrp-door.test.ts`, `engine/stage-art-key.test.ts`); two of them (`real-files`, `real-dress-files`) run the real local models through three's real glTF loader and are skipped when the models are not on the disk.
+
+## 3. What this lane did (the delta on top of the merge)
+
+1. **Merged** `exp-yrp-real` onto `r73-int` (798 commits ahead of its base). No conflict; I then read every touched file outside the chapter's folders (38, all additive wiring, section 5) and ran the checks below.
+2. **Number 31** (was 29): `Chapter.number` gains `29 | 30 | 31 | 32` (additive; 29 Spectral Keeper, 30 Fallen Maesters, 32 Wind Waker are the other lanes'; **the same union edit from another lane merges as a conflict on one line**: take `| 29 | 30 | 31 | 32`). The `ChapterId` line and its comment also gain `'exp-yrp-3d'` (and `ListedChapterId` excludes it): every lane adds an id to that same line, so expect one conflict there. Logged in `docs/CONTRACT-CHANGES.md` (`encounters.ts` is the one contract file touched).
+3. **The boss is the real FFX-2 Bahamut by default** (driver pick, section 4). `bossChoice` now returns `{ boss: 'real' }` unless the page says `?boss=ai`. The Meshy AI Bahamut and his rig stay in the code as a local comparison; his files never ship.
+4. **A production build now ships the models** (they were dropped whole before): `tools/dist-filter.mjs` ships 43 files, 141.3 MiB (section 6), rewrites the build copy's dress manifest, and `tools/yrp-models-verify.mjs` proves a build or tree carries the set whole.
+5. **Two registries the merge left behind**: the critic route's door table (`critic/runner/lib/route-pure.mjs` `DOOR_WORDS` gains `'exp-yrp-3d': 'yrp'`, and `critic-route-doors.test.ts` counts 12 doors) and the two music-routing tests that pin which chapter plays which cue (the chapter plays Chapter IV's cues by reference: `scene-bevelle-underground`, `boss-bahamut`, `victory-bahamut`).
+6. **Stale claims fixed in comments**: "never shipped" in `yrp-ids.ts`, `dress.ts`, `.gitignore`, `yrp-dress-install.mjs`, the dist-filter header and the old dist-filter test list.
+
+## 4. Driver picks (each with its alternative) and Bailey's own picks it rests on
+
+Under his blanket yes of 2026-11-02 the picks the preflight left open take the option closest to the real game. **Driver pick, his to overturn:**
+
+| # | Pick | Why | The alternative (not built) |
+|---|---|---|---|
+| P1 | **Chapter number 31, word `yrp`**; the number union opens 29 to 32 | the word is his (D-1103); the numbers were assigned in this wave (29 Keeper, 30 Maesters, 31 yrp, 32 waker) | the branch's first number 29 (collides with the Keeper) |
+| P2 | **The boss is the game's own Bahamut** (`bahamut.glb` HD 16.7 MB, his real clips, the diffuse look) | the chapter is "the real FFX-2 models" (D-1131), so the boss is one of them: the game's own motions on the game's own model, one cast in one look; the AI-made 3D models drew "uncanny valley" and "AI slop" from him (D-1117, D-1130; the girls' Meshy cast was withdrawn 2026-10-20), his Meshy Bahamut drew a "pretty cool" and no pick was recorded between the two; the Meshy files are 32.6, 33.6 and 35.9 MB, **over the host's 25 MiB file limit, so he could not ship as they are** | the Meshy Bahamut with the game's clips moved onto him (the branch's default until now): `?boss=ai` locally; shipping him needs files under 25 MiB |
+| P3 | **Base textures for the dress library, HD only for Bahamut** | the dress HD tier is 688 MB and six files are over 25 MiB (`yuna-floral-fallal` 37 MB, `rikku-machina-maw` 31, `yuna-gunner` 29, `paine-warrior` 28, `paine-gunner` 27, `yuna-songstress` 26); a swap would wait on a 25 MB file; base files are 3.9 to 6.3 MB | HD for the eleven reachable dresses that fit (about 265 MB in place of their 55 MB of base files) with the three over the limit (`yuna-gunner`, `paine-warrior`, `paine-gunner`) re-exported with smaller textures: needs an export pass (section 6, ART NEEDS) |
+| P4 | **Ship only the 14 dresspheres on Chapter IV's three Garment Grids** | the engine lets a girl change only to a dressphere one link away on her grid (`battle/ffx2/menu.ts`), so nothing else can be asked for: Yuna White Mage, Gunner, Thief, Warrior, Black Mage; Rikku Dark Knight, Gunner, Thief, Warrior, Black Mage; Paine Warrior, Gunner, Thief, Black Mage. A test recomputes the list from the build | all 45 (228 MiB at base textures) |
+| P5 | **No HD models for the three girls' plain figures** | with the dress library the plain figures are only the fallback when the library does not load (`load.ts`: a girl takes the starter first); base ones ship | ship `yrp-hd/{yuna,rikku,paine}.glb` (54 MB) |
+| P6 | **The models stay in `public/models-exp/`** (gitignored, like the paintings) and the release tree needs them there | the art's pattern; a mirror and backup of the models is Bailey's/the driver's disk decision (section 11, Q3) | a mirror `D:\pyrefly-models-yrp` with a junction, like the art |
+| P7 | **No story of its own**: it plays Chapter IV's pre, mid and post scripts and victory quips by reference (`scriptsRef` is in the spread) | the brief asks for no new lines (rule 6); the story draft location is `src/story/scripts/ffx2-bahamut.ts` and `research/writing-bible.md`, nothing new was written | a one-card hidden-chapter framing line (his words to write or approve) |
+| P8 | **Working title kept: "Bahamut, in 3D (Experimental)"** | no source and no decision gives one (rule 9) | his pick |
+| P9 | **Not in the demo pack** (`DemoGate.PIECE_HOLDS` is keyed by chapter id; hidden chapters are excluded from the booth treatment) | the pack's HUD, sound pass and frame governor are for Chapters I and IV by his words; a 3D scene is a different surface | add `exp-yrp-3d` to the pack after he has judged it in play |
+
+Bailey's own picks it rests on (not the driver's): the boss is Bahamut (D-1101); the girls on the real models; frame **b** (2026-10-22 "b: dolly in"); **"match + change live"** dresspheres (2026-10-22); the soft neutral light, not toon ("plastic"); hidden, by the typed word.
+
+## 5. Nothing changes outside the chapter (the proof)
+
+- **The diff against `origin/r73-int`** touches 38 files outside `src/engine/yrp3d/` and `tests/unit/yrp3d/`, all wiring that adds a row or an export: `chapterDoors.ts` (+1 row), `pilgrimDoor.ts` (a comment), `artNamespace.ts` (+1 row mapping the scene to Chapter IV's plate), `chapter-meta.ts` (+1 unlisted record), `chapters-experiments.ts` (+1 record, a second parameter), `encounters.ts` (the ids, the number union), `BattlePresenterArt.ts` (+`ART_KEY`), `BattlePresenterStage.ts` (+2 `userData` writes), `sceneLooks.ts` (+1 row), `pyreflyCanon.ts` (+1 row), `tactics/lookup.ts` (+1 row), `experiment-scenes.ts` (+1 row and factory), the door, dist-filter and route tables, and the tests that pin those tables.
+- **A digest of the registered records**, run on the base (`origin/r73-int`, extracted with `git archive`) and on this branch (`D:/Tools/pyrefly-scratch/2026-11-02/ch-yrp/digest.mjs`): the 19 listed chapters, the unlisted FF7 experiment, the other nine hidden experiments, `CHAPTER_META`, the unlisted metadata, and the id, number and game lists, each as a hash of the record with every function by its source: **59 of 59 rows identical**, the new chapter excluded.
+- **Chapter IV's own tests, the door tests, the dist-filter tests and the registries' tests pass** (section 8). The chapter's engine test plays Chapter IV and the new record to the same event log.
+- **`PaintedStage`** writes `actor.userData.artId`; nothing reads it but the yrp skin (`stage-art-key.test.ts`, 3).
+- **The yrp engine is a dynamic import** (`exp-yrp-3d-stage.ts`): no other chapter fetches it. J8 checks the network of Chapters I and IV for zero `models-exp` requests.
+
+## 6. Where the build reads the models, and what a production build ships
+
+**Where the page reads them**: `import.meta.env.BASE_URL` + `models-exp/yrp/` (the base folder) and `models-exp/yrp-hd/` (the HD folder, tried first, per figure), `YRP_MODEL_DIRS` in `src/data/yrp-ids.ts`; the dress library is `models-exp/yrp/dress/index.json` and `dress/<girl>-<dressphere>/{anims.glb,clipmap.json}` (`dressLib.ts`). Production base is `/` on Cloudflare (`BASE_PATH=/`), so `https://echoesofspira.com/models-exp/yrp/...`. In `npm run dev` the folder is served from `public/` as it is. **A missing file never breaks the fight**: the slot stands on a neutral capsule (so a release cut from a tree without the models plays, with capsules: the verifier below catches that).
+
+**What it ships** (until now the filter dropped `models-exp/**` whole, so a build had none): `isShippedModelFile` in `tools/dist-filter.mjs`, from the lists in `src/data/yrp-ids.ts`:
+
+| | files | MiB |
+|---|---|---|
+| base figures, clips, weapons, clip map (`models-exp/yrp/`) | 12 | 56.0 (incl. `yuna-anims.glb` 22.6) |
+| the game's Bahamut in HD and the HD clip map (`models-exp/yrp-hd/`) | 2 | 15.9 |
+| the dress manifest (rewritten in the build copy: 14 entries, `hd` off, 2.0 KB) | 1 | 0.002 |
+| 14 dresspheres, `anims.glb` (3.9 to 6.3 MB) and `clipmap.json` | 28 | 69.3 |
+| **total** | **43** | **141.3** (largest 22.62 MiB; the host's file limit is 25 MiB) |
+
+Dropped: the AI boss (3 files), the HD girls (3), every dress `hd/` (29) and the 31 dresspheres no grid reaches: 97 files, 996 MiB. **Proved without a browser**: a real copy of `public/models-exp` pruned and verified in build mode: `yrp-models-verify build ...: PASS, 43 files, 141.3 MiB, nothing else of models-exp`; the same on the source tree (`--source public`); `findUnshipped` leaves nothing; no empty folder ships.
+
+**What a release must do** (the one new step): the tree that builds has `public/models-exp` as it has the art. Cut a release from a worktree: junction or copy `D:\pyrefly-yrp-real\public\models-exp` (1.1 GB; the sole copy besides the extraction in `D:/Tools/ffx-parity/assets/runtime/yrp-dress/` and `D:/Tools/pyrefly-scratch/2026-10-20/real-ffx2*`) into the release tree's `public/`, run `node tools/yrp-models-verify.mjs --source public` before the build and `node tools/yrp-models-verify.mjs --dir <dist-release>` after it, before the deploy's upload gate. **Recommended, not wired (the driver's call, it changes every release's preflight): call `verifyYrpModels` from `tools/deploy-pages.mjs` next to `findUnshipped`.** The site's 800 MB line no longer binds on Cloudflare (the live artifact is 11.06 GB, 7,170 files); the 25 MiB file limit and the 20,000-file limit (7,170 + 43) do.
+
+**Cost to a player**: the chapter's entry loads about 40.8 MB before the fight opens (the three starters 14.9 MB, Bahamut's HD model 16.7 MB, his clips 9.2 MB, the clip map) and about 31.8 MB more in the background after it starts (the six neighbours below). Hidden and desktop-only; no other chapter pays any of it.
+
+### ART NEEDS (every painting or model the chapter wants that is not on this disk)
+
+**None is missing for the chapter as built.** What it uses, all present: the 4 figures' models and 14 dresspheres (local, listed above); the 45-entry dress library; Chapter IV's plate `bevelle-underground` (+`@2x`, depth map) and the 14 painted dresses `art/characters/<girl>-<dressphere>` (the `?yrp=painted` comparison and the presenter's art ids); the three weapon files. **Optional, only if the P3 alternative is chosen:** three dress models re-exported under the host's limit: `yuna-gunner`, `paine-warrior`, `paine-gunner` (HD, now 28.7, 28.4 and 26.7 MB), at 2048 px textures with one subdivision level, from `D:/Tools/ffx-parity/assets/runtime/yrp-dress/` by the extraction scripts (style reference: the HD files of the same girls that already fit, e.g. `yuna-white-mage/hd/anims.glb` 25.2 MB). **Optional and unrequested:** a hidden-chapter entry card or a title card (none exists; the chapter has no card by design), and a 3D-staged phone layout (the phone rig is Chapter IV's).
+
+## 7. Story
+
+None of its own (P7). The chapter plays Chapter IV's `ffx2BahamutScripts` (pre, mid, post, victory quips) through `chapter.scriptsRef`; the story layer is `src/story/scripts/ffx2-bahamut.ts` and its sources `research/writing-bible.md`. No line was written or changed, so there is nothing for Bailey to read.
+
+## 8. Checks run (CPU only)
+
+- `node node_modules/typescript/bin/tsc --noEmit -p .`: clean.
+- `node tools/orphans.mjs`: 2,275 modules, no yrp module orphaned (24 orphans are the older audio, sprite and engine files).
+- Targeted vitest (`--maxWorkers=3`): the chapter set, `tests/unit/yrp3d` (all files, 24 incl. `real-files` and `real-dress-files` against the real local models), `yrp-door`, `chapters/exp-yrp-3d*`, `chapter-doors`, `chapter-numbers`, `pilgrim-door`, `dist-filter`, `yrp-ship-set` (27 new), `engine/grade-haze`, `engine/stage-art-key`, `critic-route-*`, the two music-routing tests; the counts and the registry run are in section 12.
+- `node tools/fx-assets.mjs ensure`: PASS (26 depth-map files restored from the backup into `public/fx`).
+- A real-filesystem dry run of the prune and the verifier (above). **Not run**: `npm run build` (it copies the 11 GB art tree; the integrator's build does), the Playwright specs, anything in a browser.
+
+## 9. Browser jobs (specs and predictions; to run under the one lock when the browser is free)
+
+Predictions are from the code and the files; a miss is a finding. Serve the production build (`BASE_PATH=/`) on a free port and stop it by port afterwards.
+
+- **J1, the door and the entry, on the built artifact.** Chapter select, type `yrp`. Predict: party prep opens with the numeral `EXP`, no sound; Enter starts; the first command menu shows Yuna in White Mage with Chapter IV's HUD. Network: `models-exp/yrp/dress/index.json` (2.0 KB, 14 entries), `dress/yuna-white-mage/anims.glb` (3,872,700 B), `dress/rikku-dark-knight/anims.glb` (4,834,920), `dress/paine-warrior/anims.glb` (6,188,324), their three `clipmap.json`, `models-exp/yrp-hd/bahamut.glb` (16,658,980), `models-exp/yrp/bahamut-anims.glb` (9,166,056), `models-exp/yrp/clipmap.json` (60,442); all 200; **zero 404 under `/models-exp/`; zero requests for `bahamut-ai*`, `yrp-hd/{yuna,rikku,paine}.glb` or any `/hd/` path**; about 40.8 MB in all; 0 console errors; no `[yrp3d]` warning.
+- **J2, the figures are models, not capsules** (dev server, `window.__yrp3d`): `models.capsules` is empty, `models.sources.bahamut` is `{ file: 'bahamut.glb', look: 'diffuse' }` with HD mesh and base clips, the girls' sources are the dress starters; a screenshot at 1600 x 900 has no flat grey capsule. **Predict the girls at about 36 percent of the frame's height (frame b), as the branch measured.**
+- **J3, the boss in the frame (the real uncertainty).** Frame b was tuned with the AI boss (a different silhouette). Predict the real Bahamut (fitted to 5.0 world units against the girls' 1.9) fits with his wings inside the frame at 1600 x 900 and 2560 x 1440 with at least 3 percent margin at the top; **if his wings or head clip the top edge, `BOSS_HEIGHT`/`BOSS_SPOT` in `layout.ts` or the `idle` rig in `frames.ts` is the knob**; this one needs Bailey's eye, not a number.
+- **J4, the dress swap.** After the fight starts, predict six warm fetches spaced out, in this set: `yuna-gunner`, `yuna-black-mage`, `rikku-gunner`, `rikku-black-mage`, `paine-gunner`, `paine-black-mage` (`reachFor` gives gunner and black-mage for each starter; 5.6, 4.9, 6.2, 5.5, 5.2 and 4.4 MB, 31.8 MB). Yuna changes to Gunner through the Change menu: her model swaps at the white light with no network request at the swap (Gunner was warm), the weapons are in the model; after it her reach is White Mage and Thief, and the library warms those.
+- **J5, Bahamut's motion.** His clips play on the battle's events: idle, attack with the rear-up before the lunge (the attack starts about 0.94 s into the tap, the girls' at 0), cast for Mega Flare with the orb, the KO fall of four parts at the end; Mega Flare takes frame c's camera and returns. Predict no T-pose at any frame in a 60 s capture and no NaN bone (the real-files test already proves every pose on the real skeleton).
+- **J6, a full fight with real keys to the results**: Chapter IV's silent results (no fanfare), `victory-bahamut`; afterwards the experiments' store has `exp-yrp-3d` with one clear and **the save is byte-identical to its state before the fight**.
+- **J7, Chapter IV and Chapter I are unchanged**: the same first-menu time within the run-to-run spread, and **zero requests for `models-exp`, `dressLib`, `skin` or any yrp chunk** in either chapter's network log.
+- **J8, `?boss=ai` and `?models=base`** (dev server with the local files): the AI Bahamut still plays his moved clips; `?models=base` loads only the base folder. Predict identical behaviour to the branch before the merge.
+- **J9, the built-artifact gates** (CPU): `npm run build`, then `node tools/yrp-models-verify.mjs --dir dist` PASS (43 files, 141.3 MiB), `node tools/art-derive.mjs audit --dir dist` unchanged, the upload gate (`checkUploadLimits`) reports the largest file as a model at 22.62 MiB under 25.
+- **J10, the phone (not a gate)**: at 390 x 844 the word typed in the long-press field opens the chapter; predict a layout that is Chapter IV's phone rig over a 3D scene it was not slice-fitted for. Record, do not fix.
+
+## 10. Suggested CHANGELOG lines (the release's, not this branch's)
+
+- **FFX-2 only:** a hidden Chapter 31, "Bahamut, in 3D" (type `yrp` on chapter select): Chapter IV's fight with the game's own Yuna, Rikku, Paine and Bahamut as 3D models in the Bevelle chamber; each girl wears the dressphere the battle says and changes with it.
+- **Both (delivery):** a build now ships the hidden chapter's models (43 files, 141 MB, none over the host's file limit) and `tools/yrp-models-verify.mjs` proves a build carries them whole; no other chapter's files or timing change.
+- **Both (plumbing):** the critic route knows the new word; the chapter numbers 29 to 32 are open for the new chapters.
+
+## 11. Open questions for the driver (none sent to Bailey)
+
+1. **Q1, the boss's look needs Bailey's eye** (J3): the real Bahamut was only ever compared with `?boss=real`; he is now the default at frame b, which was tuned on the AI mesh. If he prefers the Meshy one, it needs his files under 25 MiB (now 32.6, 33.6 and 35.9 MB) to ship.
+2. **Q2, HD in the live chapter** (P3): base textures for the girls, HD for Bahamut. A mixed look (sharp boss, softer girls) is possible; the alternative is an export pass for three files.
+3. **Q3, the models' home and backup**: they exist once in `D:\pyrefly-yrp-real\public\models-exp` and as extraction output; a release tree needs them in `public/models-exp`. A mirror (`D:\pyrefly-models-yrp`, 1.1 GB, or just the 43 shipped files, 141 MB) with a backup, like the art, and wiring `verifyYrpModels` into the deploy preflight, are the driver's disk and process calls.
+4. **Q4, the phone**: the word works in the long-press field on a phone, where the chapter is not staged. Keep it as a desktop-only surprise, or refuse the door on a phone (a one-line guard in `yrpDoor.ts` that the other hidden doors do not have)?
+5. **Q5, merge order and the shared lines**: this branch edits the `ChapterId`/`number` lines, `DOOR_WORDS`, the door-count test and the music tests that every new hidden chapter edits; merge the four chapter lanes one by one and take the union on each (the door count is then 13 to 15).
+6. **Q6, the review class**: `node tools/critic-plan.mjs --paths` on this branch's files (below); the chapter is hidden, but the combat-core-adjacent hook (`ART_KEY`) and the delivery filter are shared.
+
+## 12. Results (interim, written at the first commit; the final line is at the end of this section)
+
+- tsc clean; orphans: no yrp module.
+- Passing: the chapter set above (32 files, 439 tests on the bare merge), then after this lane's edits `tests/unit/yrp3d` + the chapter, door, dist-filter and ship-set tests (the new `yrp-ship-set.test.ts` 22, `yrp-models-verify.test.ts` 15 against the real local models), `critic-route-*`, the three other doors' table pins (`gagazet-door`, `summon-door`, `yojimbo-door`) and the two music-routing tests.
+- **Found by the registry run and fixed** (a new hidden chapter touches every table that lists them): the critic route's `DOOR_WORDS` (+ its count test), the three door tests that pin the full word table, the two music-routing tests. The full unit suite (1,895 files) was not run to the end: this PC was at 100 percent CPU from other work and a file took 10 to 15 s to start; the 114 test files that name the hidden chapters, the chapter table, the door table, the scene table or the tactics lookup were run instead (the line below says how that ended).

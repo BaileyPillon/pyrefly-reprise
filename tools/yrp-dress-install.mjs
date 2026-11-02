@@ -3,7 +3,7 @@
  * Installs the real FFX-2 dressphere models for the hidden 3D Bahamut chapter (FFX-2 only; `src/engine/yrp3d/dress.ts`) into the gitignored `public/models-exp/yrp/dress/`.
  *
  * The models are extracted locally from Bailey's own Steam FFX-2 copy (`D:/Tools/ffx-parity/assets/runtime/yrp-dress/`, written by the extraction scripts; `dress-map.json` says which girl in which dressphere is which model)
- * and are never committed or shipped (`tools/dist-filter.mjs`). For each `<girl>-<dressphere>` folder the chapter needs three files: `anims.glb` (the armed model, base resolution, with every clip), `clipmap.json`
+ * and are never committed; a production build ships the base tier of the dresspheres Chapter IV's grids reach (`tools/dist-filter.mjs`, `src/data/yrp-ids.ts`). For each `<girl>-<dressphere>` folder the chapter needs three files: `anims.glb` (the armed model, base resolution, with every clip), `clipmap.json`
  * (which clips are which pose) and, where the extraction made one, `hd/anims.glb` (the same with the 4x texture and one subdivision level). The static `model.glb` files are not needed: a clips file carries its mesh.
  * Files are **hard-linked** when the two folders share a drive (no second copy of a gigabyte of models) and copied when they do not.
  *

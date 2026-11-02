@@ -42,7 +42,7 @@ describe('the word (pure)', () => {
   it('is one constant: three lower-case letters (as Bailey picked it), leading to a hidden FFX-2 experiment numbered 29', () => {
     expect(WORD).toMatch(/^[a-z]{3}$/);
     expect(YRP).toBe('exp-yrp-3d');
-    expect(getChapter(YRP)).toMatchObject({ id: YRP, game: 'ffx2', experimental: true, number: 29 });
+    expect(getChapter(YRP)).toMatchObject({ id: YRP, game: 'ffx2', experimental: true, number: 31 });
     expect(EXPERIMENT_CHAPTERS.map((c) => c.id)).toContain(YRP);
     expect(CHAPTER_DOORS.find((d) => d.word === WORD)?.chapter).toBe(YRP);
   });
