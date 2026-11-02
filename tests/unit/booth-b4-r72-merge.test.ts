@@ -42,21 +42,22 @@ const MERGED: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readonly 
   'ffx2-ixion-djose': { game: 'ffx2', held: ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'] }, // XVI
   'sin-face': { game: 'ffx', held: ['card', 'breath', 'cam', 'moments', 'smear', 'real'] }, // XVIII: back on r73-fast; real stays held
   'mirror-aeons': { game: 'ffx', held: ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'] }, // 27: real stays held
+  'sin-fins-core': { game: 'ffx', held: ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'] }, // XVII: joined in r74-fins (the nineteenth; the table was the release 72 merge's eighteen)
 };
 
 const heldOf = (id: string): string[] => Object.keys(PIECE_HOLDS[id] ?? {}).filter((p) => treatedHold(id, p as never) !== undefined);
 
 describe('the merged list: seventeen of the nineteen at the merge (eighteen since r73-fast put Sin\'s face back), each with the pieces it holds', () => {
-  it('is exactly the table, in the game the registry says (rule 14): 11 FFX and 7 FFX-2; Chapter XVII is the one that is not', () => {
+  it('is exactly the table, in the game the registry says (rule 14): 12 FFX and 7 FFX-2; every listed chapter is treated since r74-fins (Chapter XVII was the one that was not)', () => {
     expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(Object.keys(MERGED).sort());
     for (const [id, m] of Object.entries(MERGED)) {
       expect(TREATED_CHAPTERS[id]!.game, id).toBe(m.game);
       expect(getChapter(id)?.game, id).toBe(m.game);
       expect(heldOf(id), id).toEqual(m.held);
     }
-    expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx')).toHaveLength(11);
+    expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx')).toHaveLength(12);
     expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx2')).toHaveLength(7);
-    expect(CHAPTER_IDS.filter((id) => !(id in TREATED_CHAPTERS)).sort()).toEqual(['sin-fins-core']);
+    expect(CHAPTER_IDS.filter((id) => !(id in TREATED_CHAPTERS)).sort()).toEqual([]);
     expect(Object.keys(WITHDRAWN_R70)).toEqual([]); // nothing is withdrawn
   });
 
@@ -74,7 +75,7 @@ describe('the merged list: seventeen of the nineteen at the merge (eighteen sinc
 describe('the real holds after the fit: III lifted, VIII and 27 kept (XVIII off), no FFX-2 chapter holds it', () => {
   it('exactly VIII, XVIII (rows unread) and 27 hold real; each reason keeps its numbers and its lift clause and now carries the status of the fit before it', () => {
     const holders = Object.entries(PIECE_HOLDS).filter(([, rows]) => rows.real !== undefined).map(([id]) => id).sort();
-    expect(holders).toEqual(['evrae-airship', 'mirror-aeons', 'sin-face']);
+    expect(holders).toEqual(['evrae-airship', 'mirror-aeons', 'sin-face', 'sin-fins-core']); // r74-fins: Chapter XVII holds it too (the same deck as VIII and XVIII)
     for (const id of holders) expect(getChapter(id)?.game, id).toBe('ffx');
     for (const id of ['evrae-airship', 'mirror-aeons']) expect(isTreatedChapter(id, 'real'), id).toBe(false);
     for (const id of holders) {

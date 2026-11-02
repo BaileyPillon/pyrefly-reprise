@@ -4,7 +4,7 @@
  * Each lane tested its own chapters on its own base (the HUD lane saw twelve treated chapters, the sky lane twelve, the last lane fourteen). These read the merged state from the source, so a later edit to the list, a hold
  * table or a stylesheet that breaks one lane's reach through another's fails here:
  *
- *  1. THE LIST: 18 of the 19 listed chapters are treated (Chapter XVII, `sin-fins-core`, is the one that is not; Chapters IX and XII left in the r71 verdicts and came back in r72-hud, and Chapter XVIII, `sin-face`, left after the second focused review of the candidate and came back in r73-fast), 11 of them FFX and 7 FFX-2 (rule 14, from the registry), each of the batch's seven on `since` r71.
+ *  1. THE LIST: all 19 listed chapters are treated since r74-fins (Chapter XVII, `sin-fins-core`, was the one that was not; Chapters IX and XII left in the r71 verdicts and came back in r72-hud, and Chapter XVIII, `sin-face`, left after the second focused review of the candidate and came back in r73-fast), 11 of them FFX and 7 FFX-2 (rule 14, from the registry), each of the batch's seven on `since` r71 (Chapter XVII, joined in r74, is the twelfth FFX one).
  *  2. THE ONE HOLDS READER: `PIECE_HOLDS` carries the rows of `PieceHolds.ts` AND of `PieceHoldsLast.ts` (the very row objects), every treated chapter but the booth pair has a row, and no row belongs to an unlisted chapter.
  *  3. THE MEASURING WORD `?skygrade=a|b|c`: off by default, and when set it reaches Chapter V and Chapter XI and no other chapter, in either game (not the HUD lane's IX and XII, not the last lane's four).
  *  4. THE STYLESHEETS: `hudf1-chapters.css` (IX and XII) names only the Zanmato gauge's and the Omnis readout's own classes under `.ffxhud.hud-f1`; `sin-hud.css`'s F1 rules (XVIII) hang from `.hud-f1 .ffx-sinhud`;
@@ -27,6 +27,7 @@ const HUD_LANE = ['yojimbo-cavern', 'seymour-omnis'] as const; // FFX only
 const SKY_LANE = ['ffx2-vegnagun-shuyin', 'ffx2-fallen-aeons'] as const; // FFX-2 only
 const LAST_LANE = { ffx: ['evrae-airship', 'sin-face', 'mirror-aeons'], ffx2: ['ffx2-ixion-djose'] } as const; // the treated four of `booth-b4-last`: Sin's face (FFX only) left the list after the second focused review of the release 71 candidate (R71-C1) and is back since r73-fast
 const LAST_WITHDRAWN: readonly string[] = []; // nothing is withdrawn now (`booth-r70-withdrawn.ts` is empty)
+const R74 = ['sin-fins-core'] as const; // r74-fins: Chapter XVII, FFX only, joined after the batch; its rows live in PieceHoldsLast.ts too
 const BOOTH = ['seymour-flux', 'ffx2-bahamut'];
 
 beforeEach(() => {
@@ -40,18 +41,18 @@ afterEach(() => {
 });
 
 describe('the merged list', () => {
-  it('treats 18 of the 19 listed chapters; Chapter XVII (sin-fins-core) is the one that is not (IX and XII came back in r72-hud, Chapter XVIII (sin-face) in r73-fast), and no hidden or experimental id is on it', () => {
+  it('treats all 19 listed chapters (Chapter XVII, sin-fins-core, joined in r74-fins as the last; IX and XII came back in r72-hud, Chapter XVIII (sin-face) in r73-fast), and no hidden or experimental id is on it', () => {
     const ids = Object.keys(TREATED_CHAPTERS);
     expect(CHAPTER_IDS).toHaveLength(19);
-    expect(ids).toHaveLength(18);
-    expect(CHAPTER_IDS.filter((id) => !ids.includes(id)).sort()).toEqual(['sin-fins-core']);
+    expect(ids).toHaveLength(19);
+    expect(CHAPTER_IDS.filter((id) => !ids.includes(id)).sort()).toEqual([]);
     expect(Object.keys(WITHDRAWN_R70).sort()).toEqual([...LAST_WITHDRAWN].sort()); // none: the HUD lane's two are back on the list (r72-hud) and so is Sin's face (r73-fast)
     for (const id of ids) expect(CHAPTER_IDS, id).toContain(id);
   });
 
-  it('is 11 FFX and 7 FFX-2, each in the game the registry says (rule 14), and the batch\'s seven are all `since` r71', () => {
+  it('is 12 FFX and 7 FFX-2, each in the game the registry says (rule 14), and the batch\'s seven are all `since` r71 (Chapter XVII is `since` r74)', () => {
     const byGame = (g: string): string[] => Object.entries(TREATED_CHAPTERS).filter(([, e]) => e.game === g).map(([id]) => id);
-    expect(byGame('ffx')).toHaveLength(11);
+    expect(byGame('ffx')).toHaveLength(12);
     expect(byGame('ffx2')).toHaveLength(7);
     for (const [id, e] of Object.entries(TREATED_CHAPTERS)) expect(getChapter(id)?.game, id).toBe(e.game);
     const batch = [...HUD_LANE, ...SKY_LANE, ...LAST_LANE.ffx, ...LAST_LANE.ffx2]; // the HUD lane's IX and XII left the list in the r71 verdicts and came back in r72-hud; Sin's face left after the second focused review and is back since r73-fast
@@ -64,7 +65,7 @@ describe('the merged list', () => {
 
 describe('the one holds reader', () => {
   it('PIECE_HOLDS carries the rows of PieceHolds.ts and of PieceHoldsLast.ts (the very objects), each last-lane id once', () => {
-    expect(Object.keys(LAST_HOLDS).sort()).toEqual([...LAST_LANE.ffx, ...LAST_LANE.ffx2, ...LAST_WITHDRAWN].sort()); // Sin's face keeps its rows, unread
+    expect(Object.keys(LAST_HOLDS).sort()).toEqual([...LAST_LANE.ffx, ...LAST_LANE.ffx2, ...R74, ...LAST_WITHDRAWN].sort()); // Sin's face keeps its rows, unread
     for (const id of Object.keys(LAST_HOLDS)) expect(PIECE_HOLDS[id], id).toBe(LAST_HOLDS[id]);
     const src = readFileSync(resolve('src/engine/motion/PieceHolds.ts'), 'utf8');
     for (const id of Object.keys(LAST_HOLDS)) expect(src, `${id} is written once, in PieceHoldsLast.ts`).not.toMatch(new RegExp(`^\\s*'${id}': Object\\.freeze`, 'm'));
@@ -74,7 +75,7 @@ describe('the one holds reader', () => {
   it('every treated chapter but the booth pair has a row, and no row belongs to an unlisted or unknown chapter', () => {
     for (const id of Object.keys(TREATED_CHAPTERS)) if (!BOOTH.includes(id)) expect(PIECE_HOLDS[id], id).toBeDefined();
     for (const id of Object.keys(PIECE_HOLDS)) expect([...Object.keys(TREATED_CHAPTERS), ...Object.keys(WITHDRAWN_R70)], id).toContain(id); // IX and XII (once withdrawn) and Sin's face (back since r73-fast) keep their rows
-    expect(Object.keys(PIECE_HOLDS)).toHaveLength(16);
+    expect(Object.keys(PIECE_HOLDS)).toHaveLength(17); // r74-fins added Chapter XVII's row
   });
 });
 
@@ -96,9 +97,9 @@ describe('the measuring word ?skygrade=a|b|c', () => {
     expect(skyGradeFor('exp-leblanc')).toBeNull();
   });
 
-  it('changes nothing in the other sixteen treated chapters: the look and the arena answer as they do with no word', () => {
+  it('changes nothing in the other seventeen treated chapters: the look and the arena answer as they do with no word', () => {
     const others = Object.keys(TREATED_CHAPTERS).filter((id) => !(SKY_LANE as readonly string[]).includes(id));
-    expect(others).toHaveLength(16);
+    expect(others).toHaveLength(17); // sixteen before r74-fins joined Chapter XVII (no look row: it holds hd2d and arena)
     setSkyOption(null);
     const before = others.map((id) => [chapterLook(id), proArenaFor(id, '')]);
     for (const o of ['a', 'b', 'c'] as const) {
@@ -147,14 +148,14 @@ describe('the stylesheets reach only their chapters', () => {
     }
   });
 
-  it('sin-hud.css\'s F1 rules (Chapter XVIII) hang from .hud-f1 .ffx-sinhud and move only the clock column and the Gaze pill', () => {
+  it('sin-hud.css\'s F1 rules (Chapter XVIII\'s clock column and Gaze pill, and since r74-fins Chapter XVII\'s Fin plate) hang from .hud-f1 .ffx-sinhud and move only those three', () => {
     const css = readFileSync(resolve('src/ui/ffx/sin-hud.css'), 'utf8');
     const sel = css.replace(/\/\*[\s\S]*?\*\//g, '').split('}').map((r) => r.split('{')[0]!.trim()).filter((s) => s.includes('hud-f1'));
     expect(sel.length).toBeGreaterThanOrEqual(2);
     for (const s of sel) {
       for (const part of s.split(',').map((p) => p.trim())) {
         expect(part, part).toContain('.hud-f1 .ffx-sinhud:not(.ffx-sinhud--phone)');
-        expect(part, part).toMatch(/\.ffx-sinclock$|\.ffx-sinhud__gaze$/);
+        expect(part, part).toMatch(/\.ffx-sinclock$|\.ffx-sinhud__gaze$|\.ffx-sinfin$/);
       }
     }
     expect(css).not.toMatch(/ffx-zg|ffx-omr/);

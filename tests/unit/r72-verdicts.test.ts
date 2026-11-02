@@ -59,11 +59,11 @@ describe('nothing else changed: no other chapter holds the F1 HUD, no verdict to
     for (const [id, rows] of Object.entries(PIECE_HOLDS)) expect(Object.prototype.hasOwnProperty.call(rows, 'hud'), id).toBe(id === OMNIS);
   });
 
-  it('eighteen of the nineteen listed chapters are treated at release 73 (11 FFX, 7 FFX-2): no r72 verdict took a chapter off, r73-fast put Chapter XVIII back (release 72 had seventeen, 10 FFX), and Chapter XVII stays off', () => {
-    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(18);
-    expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx')).toHaveLength(11);
+  it('all nineteen listed chapters are treated since r74-fins (12 FFX, 7 FFX-2): no r72 verdict took a chapter off, r73-fast put Chapter XVIII back (release 72 had seventeen, 10 FFX) and r74-fins joined Chapter XVII, the last', () => {
+    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(19);
+    expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx')).toHaveLength(12);
     expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx2')).toHaveLength(7);
-    expect(Object.keys(TREATED_CHAPTERS)).not.toContain('sin-fins-core');
+    expect(Object.keys(TREATED_CHAPTERS)).toContain('sin-fins-core'); // r74-fins
     expect(Object.keys(TREATED_CHAPTERS)).toContain('sin-face'); // r73-fast (docs/handoff/r73-fast.md): the house strike's crossings keep their length at fast, so the chapter's hops are gone in the model; the CHK-027 run is owed (docs/handoff/r73.md)
   });
 

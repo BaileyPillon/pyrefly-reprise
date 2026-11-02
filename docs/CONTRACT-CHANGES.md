@@ -6,6 +6,15 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-11-02 — Lane r74-fins (Chapter XVII joins the treated list; FFX only; additive, no contract file changed)
+
+Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call, his to overturn). Branch `r74-fins`, from `origin/r73-int` `d5049f686`. Game case: FFX only (`sin-fins-core` is an FFX chapter: CTB, Cid's Trigger Command, the airship range).
+
+- **`DemoGate.TREATED_CHAPTERS`** gains `'sin-fins-core': { game: 'ffx', since: 'r74' }` (the nineteenth; 12 FFX, 7 FFX-2). **`PieceHoldsLast.LAST_HOLDS`** gains the row `sin-fins-core` (`hd2d`, `arena`, `breath`, `cam`, `moments`, `real`), after the FFX rows and before Chapter XVI's; `PIECE_HOLDS` carries it by its existing spread. No type, no export and no switch module changes.
+- **`HudF1Switch.F1_TEXT_CEILING`** gains `'sin-fins-core': 115` (the F1 HUD plays at 100 and 115 in the chapter and draws today's HUD at 130, as for Chapters IX and XII).
+- **`ui/ffx/sin-hud.css`** gains two rules for the Fin plate under `.ffxhud.hud-f1` (landscape widget only): `right: 467px; left: auto` and, at TEXT SIZE 115, `translate: -60px 0`. The old HUD, `?treated=pack`, the phone and TEXT SIZE 130 are untouched.
+- **Tests:** `tests/unit/r74-fins-rows.test.ts`, `r74-fins-hud.test.ts` (the plate against the F1 zones, its width read from the shipped font through the new `helpers/woff2Width.ts`), `r74-fins-wiring.test.ts` and `r74-fins-chain.test.ts` (the real three-link chain on seed 1), and the pins of the earlier lanes that counted eighteen of the nineteen or named Chapter XVII as the one that is off (21 files, listed in `docs/handoff/r74-fins.md` section 6).
+
 ## 2026-11-02 — r73 merge review, finding 4 (the strike floor does not apply in skip; BOTH GAMES; additive, no contract file changed)
 
 Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call, his to overturn). Branch `r73`.

@@ -2,7 +2,7 @@
  * THE HOLDS OF THE LAST FIVE LISTED CHAPTERS (release 71, branch `booth-b4-last`; Bailey 2026-10-30: the booth treatment for every listed chapter; the driver's calls under his delegation, his to overturn). `PieceHoldsLast.ts` holds the written reasons; this file pins, per chapter, the
  * pieces it holds, the words that make each reason the chapter's own (the sourced move, the plate's measure, the exception's job), and that every other piece plays. The shared tables of `booth-treated-chapters.test.ts` (`HELD_NOW`, `NOT_YET`) pin the same lists from the other side: a hold is a decision made in two places.
  *
- * Game case (rule 14): Chapters VIII and XVIII and the Mirror Aeons chapter are FFX only (the airship's range game has no FFX-2 counterpart, `research/ffx-evrae-airship.md` section 0.4); Chapter XVI is FFX-2 only (`research/ffx2-ixion-djose.md` section 0). Chapter XVII does not join and has no hold.
+ * Game case (rule 14): Chapters VIII and XVIII and the Mirror Aeons chapter are FFX only (the airship's range game has no FFX-2 counterpart, `research/ffx-evrae-airship.md` section 0.4); Chapter XVI is FFX-2 only (`research/ffx2-ixion-djose.md` section 0). Chapter XVII did not join in release 71 and has no hold in this batch (it joined in r74-fins: `r74-fins-rows.test.ts`).
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -92,7 +92,7 @@ describe('the holds of the four chapters that joined', () => {
   });
 
 
-  it("the rows live in PieceHoldsLast.ts and PIECE_HOLDS carries them (the same objects), every reason is 80 characters or more and ends in its \"Lifts when\" clause, and no hold belongs to Chapter XVII, which stayed out", () => {
+  it("the rows live in PieceHoldsLast.ts and PIECE_HOLDS carries them (the same objects), every reason is 80 characters or more and ends in its \"Lifts when\" clause, and Chapter XVII's row (r74-fins, the fifth) follows the four", () => {
     for (const [id, rows] of Object.entries(LAST_HOLDS)) {
       expect(PIECE_HOLDS[id], id).toBe(rows);
       for (const [piece, why] of Object.entries(rows)) {
@@ -101,8 +101,8 @@ describe('the holds of the four chapters that joined', () => {
         expect(why!, `${id} ${piece}`).toMatch(/Lifts when .*\.$/);
       }
     }
-    expect(Object.keys(LAST_HOLDS)).toEqual(['evrae-airship', 'sin-face', 'mirror-aeons', 'ffx2-ixion-djose']);
-    expect(Object.prototype.hasOwnProperty.call(PIECE_HOLDS, 'sin-fins-core')).toBe(false);
+    expect(Object.keys(LAST_HOLDS)).toEqual(['evrae-airship', 'sin-face', 'mirror-aeons', 'sin-fins-core', 'ffx2-ixion-djose']); // r74-fins put Chapter XVII's row after the FFX rows and before Chapter XVI's
+    expect(Object.prototype.hasOwnProperty.call(PIECE_HOLDS, 'sin-fins-core')).toBe(true);
   });
 
   it('the knock-out rule: every one of the four holds the moments or the smear (Sin\'s face and Ixion both), so no chapter beyond the booth pair cuts the knock-out on an unread dress', () => {

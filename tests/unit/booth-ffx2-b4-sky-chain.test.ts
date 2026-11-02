@@ -25,7 +25,7 @@ describe('the chains of the two chapters run (they are not skipped) and are the 
     expect(playsPiece('ffx2-fallen-aeons', 'ending')).toBe(true); // the ending plays: the quiet title and the one freeze
     expect(playsPiece('ffx2-vegnagun-shuyin', 'hd2d')).toBe(false); // the look is held in Chapter V
     expect(playsPiece('ffx2-fallen-aeons', 'hd2d')).toBe(true); // and plays in Chapter XI since r72 (grade C by default)
-    expect(playsPiece('sin-fins-core', 'ending')).toBe(false); // a chapter still off the list (Chapter XVII, the only one) runs nothing; Chapter IX came back in booth-ffx-b4-hud
+    expect(playsPiece('exp-leblanc', 'ending')).toBe(false); // a chapter off the list (the hidden experiment; no listed chapter is off it since r74-fins joined Chapter XVII) runs nothing
   });
 
   it('the two lane files name both chapters in their chain tables (a chapter that left either table would stop being walked)', () => {

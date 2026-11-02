@@ -94,6 +94,23 @@ html[data-text-size='130']:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-sinhud:n
   translate: 165px 0;
 }
 
+/* ------------------------------------------------------- the Fin plate under the F1 HUD (FFX only; r74-fins, 2026-11-02) */
+
+/* Chapter XVII under the treatment draws the F1 slab, whose turn strip stands at x 465 to 625.5 of the 640 x 360 grid (440.9 to 625.5 at TEXT SIZE 115) and y 22 to 82, and the Fin plate (links I and II) stood at x 328 and
+   out to 516 or more, ON the strip's first tiles (51 grid px at the minimum width, a major the treatment would have introduced: `docs/handoff/booth-b4-last.md` section 1). Under `.hud-f1` the plate is anchored by its RIGHT edge,
+   `right: 467px` of the 1600 frame: its layout box ends at 453.2 grid px and the shear's half height (3.9) puts its painted tip at 457.1, 7.9 grid px short of the strip, whatever its width. The width is the charge line's, 195.9 grid px
+   (406.8 frame px of Chakra Petch Bold at 15 px with its 0.14em spacing, in a row 448.8 wide, in a plate 489.8: read from the font file, `tests/unit/r74-fins-hud.test.ts`), so the left end falls at 257.3, 65 grid px right of the
+   ribbon (right end 188) and 253.4 at its lowest corner. At 115 the strip grows to the left, to 440.9, and the plate follows it by the same 24 grid px (`translate`: tip 433.1, 7.8 short of the strip, left end 233.3 against the grown
+   ribbon's 212). Above 115 the band between the ribbon and the strip is 180.9 grid px, narrower than the plate, so the chapter keeps today's HUD there (`HudF1Switch.F1_TEXT_CEILING`): no 130 rule. The rules hang from `.hud-f1` and
+   from the landscape widget only, so the old HUD (`?hud=today`, `?treated=pack`, TEXT SIZE 130) and the phone draw the plate where it always stood; the advisor card reads the plate's rectangle (`hudAvoidSelectors`), so it dodges it where it stands now. */
+.ffxhud.hud-f1 .ffx-sinhud:not(.ffx-sinhud--phone) .ffx-sinfin {
+  left: auto;
+  right: 467px;
+}
+html[data-text-size='115']:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-sinhud:not(.ffx-sinhud--phone) .ffx-sinfin {
+  translate: -60px 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ffx-sinclock__seg.is-alarm, .ffx-sinfin__charge { animation: none; }
 }
