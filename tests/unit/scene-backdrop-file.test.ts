@@ -13,6 +13,8 @@ import { plateUrlFor } from '../../src/app/screens/battlePreload.ts';
 import { backdropFileOf, SCENE_BACKDROP_FILE } from '../../src/data/art/artNamespace.ts';
 import { CHAPTERS, EXPERIMENT_CHAPTERS, UNLISTED_CHAPTERS } from '../../src/data/encounters.ts';
 import { MIRROR_ACT_I_PLATE, MIRROR_AEONS_SCENE } from '../../src/data/ffx/mirror-aeons-ids.ts';
+import { DJOSE_CHAMBER_PLATE } from '../../src/data/ixion-plates.ts';
+import { EXP_WINDWAKER_SCENE } from '../../src/data/windwaker-ids.ts';
 
 const BACKDROPS = new URL('../../public/art/backdrops/', import.meta.url);
 
@@ -23,7 +25,9 @@ describe('a scene key that is a code key names the backdrop file it draws', () =
     expect(backdropFileOf('gagazet')).toBe('gagazet');
     expect(backdropFileOf(undefined)).toBeUndefined();
     expect(backdropFileOf('constructor')).toBe('constructor'); // a key on Object.prototype is not an entry
-    expect(Object.keys(SCENE_BACKDROP_FILE)).toEqual([MIRROR_AEONS_SCENE]);
+    // the hidden Wind Waker chapter (FFX-2 only, Chapter 32) is the second code key: its stage is 3D with no plate of its own, and the board, the prep wash and the cutscenes show hidden chapter 24's (the Djose chamber's)
+    expect(backdropFileOf(EXP_WINDWAKER_SCENE)).toBe(DJOSE_CHAMBER_PLATE);
+    expect(Object.keys(SCENE_BACKDROP_FILE)).toEqual([MIRROR_AEONS_SCENE, EXP_WINDWAKER_SCENE]);
   });
 
   it('the battle preload warms the plate the stage opens on, not backdrops/mirror-aeons.png', () => {

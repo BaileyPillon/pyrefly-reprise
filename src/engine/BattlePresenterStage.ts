@@ -143,10 +143,7 @@ export class PaintedStage implements BattleStage {
   /** The battle camera behind the FFX-2 target-frame hold (`TargetFrameHold.ts`, PR-0150). */
   readonly camera: HoldableCamera;
   readonly vfx: VfxPort;
-  /** The scene draws its own hits (`SceneStaging.ownImpacts`, `ownImpacts.ts`): the Spectacle port installed on this stage keeps no `hit` (`app/screens/battleSpectacle.ts`). */
-  get ownImpacts(): boolean {
-    return impactsOwned(this.opts.slots);
-  }
+  get ownImpacts(): boolean { return impactsOwned(this.opts.slots); } // the scene draws its own hits (`SceneStaging.ownImpacts`, `ownImpacts.ts`): the Spectacle port installed on this stage keeps no `hit`
   /**
    * The selection marks on the field — the accent pool and the quiet dim of
    * option B. The HUD drives it; the debug API reads it back.
@@ -242,7 +239,7 @@ export class PaintedStage implements BattleStage {
       },
       () => paceRate('action') * (opts.spellFx?.rate?.() ?? 1),
     );
-    this.vfx = this.makeVfxPort();
+    this.vfx = withOwnImpacts(this.makeVfxPort(), impactsOwned(opts.slots)); // a scene that draws its own hits has the shared impact effects off (`ownImpacts.ts`); any other scene keeps this very port
     this.art = new StageArt({
       actors: () => [...this.actors.values()].map((s) => s.actor),
       party: () => [...this.actors.values()].filter((s) => s.kind === 'party').map((s) => s.actor),
@@ -836,12 +833,7 @@ export class PaintedStage implements BattleStage {
 
   // ------------------------------------------------------------------ effects
 
-  /** The effects port: the stage's own, except in a scene that draws its own hits (`SceneStaging.ownImpacts`, `ownImpacts.ts`), where the shared impact effects are off. */
   private makeVfxPort(): VfxPort {
-    return withOwnImpacts(this.makeStageVfxPort(), impactsOwned(this.opts.slots));
-  }
-
-  private makeStageVfxPort(): VfxPort {
     const impactAt = async (
       at: CombatantId | 'screen',
       key: string,

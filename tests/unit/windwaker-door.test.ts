@@ -390,7 +390,7 @@ describe('the other doors do not interfere', () => {
       await flush();
       expect(c.picked, `${other.word.slice(0, -1)}${WORD}`).toEqual([WINDWAKER]);
     }
-  });
+  }, 120_000); // three real boards per other door (36 mounts at thirteen doors): about 14 s on a quiet machine, so the 15 s default flakes whenever the PC is busy
 });
 
 const keyDown = (key: string, init: KeyboardEventInit = {}): void => {
