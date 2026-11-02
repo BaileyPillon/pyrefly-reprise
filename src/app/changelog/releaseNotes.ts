@@ -69,11 +69,22 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 71 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 72 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '72',
+    date: '2026-11-01',
+    lines: [
+      { tag: 'FFX', text: 'Yojimbo (Chapter IX) and Seymour Omnis (Chapter XII) get the presentation of Chapter I again: the new hit look, the boss card and the quiet ending, and Yojimbo also the lighter battle screen.' },
+      { tag: 'FFX', text: 'Omnis keeps the older battle screen for now, because the target flag can still sit over the advice card.' },
+      { tag: 'FFX', text: 'Braska’s Final Aeon (Chapter III) plays the real attack motion again, with Tidus’s leap home sized to how big he is drawn.' },
+      { tag: 'FFX-2', text: 'The Road to the Farplane (Chapter XI) plays a darker night sky, so the spire’s burst of light shines instead of washing out the screen.' },
+      { tag: 'Both', text: 'A knocked-out figure now slides to where it lies instead of jumping there.' },
+    ],
+  },
   {
     release: '71',
     date: '2026-11-01',
