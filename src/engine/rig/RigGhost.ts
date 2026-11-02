@@ -23,6 +23,8 @@ export interface Look {
   rim: Texture | null;
   /** The look's normal piece for the HD-2D light (format v2.2), null where the file gives none or the look is off. */
   normal: Texture | null;
+  /** Release 73 (`RigLook.streamLooks`): a variant look whose own images are still on their way; until they land its textures are the part's own, and the part shows its own look (`RigFigure.lookOf`). */
+  pending?: boolean;
 }
 
 export interface PartRt {

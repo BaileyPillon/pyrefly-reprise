@@ -2,6 +2,7 @@ import type { PerspectiveCamera, Texture } from 'three';
 import { pickScale, requiredScale, textureMB } from './ArtBudget.ts';
 import { EVICT_EVERY_MS, MAX_LOADS, PERSIST_MS, SAFETY, SEEN_WINDOW_MS, URGENT_EXTRA, type Entry, type Need } from './ArtEntry.ts';
 import { coolOff, coolingFor, evictions, HOT_HEAT, poseHeat, roomFor, WARM_MIN_PIXELS, warmMB, warmRoom } from './ArtMemory.ts';
+import { bytesHeld, noteBytesCut } from './LoadHold.ts'; // release 73 (lane "r73-bytes"): no on-demand master is asked for while the phone's entry holds the line
 import { imageHeight, imageWidth, pixelsPer1xTexel, type GovernedActor, type GovernedPainting, type GovernedStage, type GovernorDeps, type GovernorStats, type LoadedPixels } from './ArtMeasure.ts';
 
 export { PERSIST_MS, SEEN_WINDOW_MS } from './ArtEntry.ts';
@@ -247,7 +248,9 @@ export class ArtGovernor {
   }
 
   private dispatch(needs: Need[]): void {
+    const held = bytesHeld(); // release 73: behind the load card nothing is magnified for anyone, so a master that must be fetched starts when the hold opens; a warm-up (pixels already here) goes on
     for (const n of needs) {
+      if (held && !n.warm) { noteBytesCut('governorNeeds'); continue; }
       if (this.inflight >= MAX_LOADS + (n.rank === 0 ? URGENT_EXTRA : 0)) break; // a figure on screen never waits behind a speculative load
       const e = n.entry;
       if (e.loading >= n.want) continue;

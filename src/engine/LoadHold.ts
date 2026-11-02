@@ -43,6 +43,40 @@ export function foregroundFirst(): boolean {
 }
 
 /**
+ * Release 73 (lane "r73-bytes", BOTH games, shared loading plumbing; ChatGPT point 5, `docs/BUDGETS.md` B2a): the second half of the phone's hold. Release 69's hold keeps the later poses and the
+ * lighting maps off the line while the entry loads, but release 70's phone10 run (`critic/rounds/round-32/gaps-G4-walks-optional/4d-delivery`) still moved 8.8 MB (Chapter I) and 15.3 MB (Chapter IV) between
+ * the screen's first line and the last figure, and the first command waited for them at 1.25 MB/s: the idle lighting maps of the figures (2.2 and 1.8 MB, asked for by the first draw of each, which the hold did
+ * not defer), the boss rig's variant pieces (2.8 and 3.3 MB: attack, cast, hurt, telegraph, ko, each with its rim and normal pieces, awaited whole before the rig could be built), the chapter's results cues
+ * (the victory and defeat music, 1.6 MB in Chapter IV, fetched behind the fight's own theme), and a magnified figure's 2x master (0.9 MB in Chapter I, the governor's on-demand upgrade). None of them is
+ * drawn or heard before the first command. While the hold is shut they wait for it, and start when it opens (the lighting maps and the rig pieces through the same ranked queue as the later poses).
+ * `?phonebytes=off` brings release 69/70's order back while the hold stays; `?phonediet=off` takes both away.
+ */
+export function phoneBytes(): boolean {
+  try {
+    return new URLSearchParams(globalThis.location?.search ?? '').get('phonebytes') !== 'off';
+  } catch {
+    return true;
+  }
+}
+
+/** True while the entry holds the line AND release 73's four cuts are on: the idle maps, the rig's variant pieces, the results cues and the governor's upgrades wait for the hold to open. */
+export function bytesHeld(): boolean {
+  return held && phoneBytes();
+}
+
+const byteBooks = { audioCues: 0, idleMaps: 0, rigLooks: 0, rigLanded: 0, rigFailed: 0, rigEarlyLooks: 0, rigEarlyLanded: 0, governorNeeds: 0 };
+
+/** Count one cut that fired (the debug probe's `bytes` books; the browser job reads them to say which cut ran). */
+export function noteBytesCut(kind: keyof typeof byteBooks, n = 1): void {
+  byteBooks[kind] += n;
+}
+
+/** What release 73's cuts did this page: results cues held, idle maps held, rig variant pieces held then landed (or failed; `rigEarly*` the three a fight shows first: hurt, telegraph, attack), governor needs set aside. */
+export function bytesBooks(): Readonly<typeof byteBooks> {
+  return { ...byteBooks };
+}
+
+/**
  * How many of the loads after the hold (the later poses of every figure, the lighting maps) are in flight at once on the phone class. Started all together they share the line equally and land together,
  * twenty seconds on; at eight the first of them land in the first five, in {@link queued}'s rank order.
  */
@@ -157,5 +191,6 @@ export function resetHoldForTests(): void {
   opened = Promise.resolve();
   lateQueue.reset();
   for (const k of Object.keys(books) as Array<keyof typeof books>) books[k] = 0;
+  for (const k of Object.keys(byteBooks) as Array<keyof typeof byteBooks>) byteBooks[k] = 0;
   override = undefined;
 }
