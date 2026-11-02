@@ -4,8 +4,10 @@
  * The cause (`r73-sinface-trace.test.ts`, which keeps release 72's strike as its control arm): the presenter plays the house strike at `SPEED_SCALE x timeScale` and `fast` is 0.32, so its travel landed in about 5 frames and its way
  * home in 8, one-frame steps of 0.46 and 0.25 of the reach (0.15 and 0.08 at normal). `StrikeCurve.crossingFloors` keeps the TRAVEL and the RETURN at the length they have at normal speed; the wind-up, the hold and the settle still
  * take the speed. The step per frame, as a share of the figure's drawn height, is a law of the reach over the height and of the crossing's length (see below), so it is then the step the same strike takes at normal speed, in Chapter I
- * too. This file proves it with the REAL `PaintedActor` read the way the continuity probe reads it, at normal (1), 0.64, `fast` (0.32), 0.1 and `skip` (`moveScale`'s floor, 0.02), at 280, 420 and 600 px drawn and reaches of 1.4,
+ * too. This file proves it with the REAL `PaintedActor` read the way the continuity probe reads it, at normal (1), 0.64, `fast` (0.32) and 0.1, at 280, 420 and 600 px drawn and reaches of 1.4,
  * 3 and 4.4 units (the solver's cap), and pins what the floor must NOT touch: normal speed (byte for byte), every real profile (Chapter I and Chapter IV play real-snappy), and the contact's timing in the presenter.
+ *
+ * Merge review finding 4: the floor applies from `FLOOR_MIN_SCALE` (0.05) up to just under 1, NOT in `skip` (0.02), which keeps release 72's shape (`r73-skip-floor.test.ts`). The cases below that once ran at `skip` run at the scales the floor is on at.
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { CFG, FRAME, fastest, jerksOf, play, worstSteps } from './strike-trace-fixture.ts';
@@ -39,9 +41,9 @@ afterEach(() => {
 
 const NORMAL = SPEED_SCALE.normal;
 const FAST = SPEED_SCALE.fast;
-const SKIP = 0.02; // `moveScale`'s floor under `skip`
-/** Every playback scale the game has (normal, fast, skip) and two in between that a `timeScale` knob can make. */
-const SPEEDS = [NORMAL, 0.64, FAST, 0.1, SKIP] as const;
+const SKIP = 0.02; // `moveScale`'s floor under `skip`: below FLOOR_MIN_SCALE
+/** The playback scales the floor applies at: the game's fast and two in between that a `timeScale` knob can make. Skip (0.02) keeps release 72's shape and has its own cases (`r73-skip-floor.test.ts`). */
+const FLOORED = [0.64, FAST, 0.1] as const;
 const SIZES = [280, 420, 600] as const;
 const REACHES = [1.4, 3, 4.4] as const;
 const FRAMES = 90;
@@ -52,14 +54,14 @@ describe('the shape: the crossings keep their normal length, the rest takes the 
       for (const heft of [0, 0.5, 1]) {
         for (const distance of [0.6, 1.4, 3, 4.4]) {
           const o = { distance, height: 1.82, heft, timeScale };
-          expect(resolveStrike(PROFILES[game], o), `${game} ${timeScale} ${heft} ${distance}`).toEqual(resolveStrike(PROFILES[game], { ...o, floorCrossings: false }));
+          expect(JSON.stringify(resolveStrike(PROFILES[game], o)), `${game} ${timeScale} ${heft} ${distance}`).toBe(JSON.stringify(resolveStrike(PROFILES[game], { ...o, floorCrossings: false })));
         }
       }
     }
   });
 
-  it.each(['ffx', 'ffx2'] as const)('%s: at fast, at skip and in between the travel and the return are the lengths they have at normal speed; the wind-up, the hold, the settle and the snap are the speed\'s', (game) => {
-    for (const timeScale of [0.64, FAST, 0.1, SKIP]) {
+  it.each(['ffx', 'ffx2'] as const)('%s: at fast and in between (down to 0.1) the travel and the return are the lengths they have at normal speed; the wind-up, the hold, the settle and the snap are the speed\'s', (game) => {
+    for (const timeScale of FLOORED) {
       for (const heft of [0, 0.4, 1]) {
         const o = { distance: 2, height: 1.82, heft, timeScale };
         const now = resolveStrike(PROFILES[game], o);
@@ -77,7 +79,7 @@ describe('the shape: the crossings keep their normal length, the rest takes the 
     }
   });
 
-  it.each(['ffx', 'ffx2'] as const)('%s: the worst one-frame share of the reach, in the travel and on the way home, is the same at fast, at skip and in between as at normal speed (both games\' profiles; 60 Hz, every 0.25 ms offset); without the floor it is 2.5 to 20 times as big', (game) => {
+  it.each(['ffx', 'ffx2'] as const)('%s: the worst one-frame share of the reach, in the travel and on the way home, is the same at fast and in between as at normal speed (both games\' profiles; 60 Hz, every 0.25 ms offset); without the floor it is 2.5 to 20 times as big', (game) => {
     setPaceGame(game);
     const worst = (timeScale: number, floorCrossings?: false): { travel: number; home: number } => {
       const shape = resolveStrike(PROFILES[game], { distance: 1, height: 1.82, heft: 0, timeScale, arcGain: 1, ...(floorCrossings === false ? { floorCrossings } : {}) });
@@ -91,11 +93,10 @@ describe('the shape: the crossings keep their normal length, the rest takes the 
     const normal = worst(1);
     expect(normal.travel).toBeGreaterThan(0.1);
     expect(normal.travel).toBeLessThan(0.3);
-    for (const timeScale of [0.64, FAST, 0.1, SKIP]) {
+    for (const timeScale of FLOORED) {
       const now = worst(timeScale);
       expect(now.travel, `${game} travel @${timeScale}`).toBeLessThanOrEqual(normal.travel * 1.005);
       expect(now.home, `${game} home @${timeScale}`).toBeLessThanOrEqual(normal.home * 1.005);
-      if (timeScale === SKIP) continue; // unfloored, the whole travel is shorter than one frame: the step is the entire reach (the actor table below reads it)
       const raw = worst(timeScale, false);
       expect(raw.travel / normal.travel, `${game} raw travel @${timeScale}`).toBeGreaterThan(timeScale === 0.64 ? 1.2 : 2.4);
       expect(raw.home / normal.home, `${game} raw home @${timeScale}`).toBeGreaterThan(timeScale === 0.64 ? 1.2 : 2.4);
@@ -151,7 +152,7 @@ describe('on the real actor: the step per frame is the normal speed\'s at every 
     }
   });
 
-  it.each(SPEEDS.filter((s) => s !== NORMAL))('at scale %d no frame of the whole move steps further than the same strike does at normal speed (px, and as a share of the figure\'s drawn height), forward or back', (timeScale) => {
+  it.each(FLOORED)('at scale %d no frame of the whole move steps further than the same strike does at normal speed (px, and as a share of the figure\'s drawn height), forward or back', (timeScale) => {
     for (const drawn of SIZES) {
       for (const reach of REACHES) {
         const base = play({ name: 'auron', drawn, reach, kind: 'strike', timeScale: NORMAL, frames: FRAMES });
@@ -165,7 +166,7 @@ describe('on the real actor: the step per frame is the normal speed\'s at every 
     }
   });
 
-  it.each(SPEEDS)('at scale %d the registered head reads no jerk over 100 px in the whole move, and the fastest frame is no spike: its ratio to its neighbours is under 1.7 (the detector\'s line is 3), at 280 to 600 px and 1.4 to 4.4 units', (timeScale) => {
+  it.each([NORMAL, ...FLOORED])('at scale %d the registered head reads no jerk over 100 px in the whole move, and the fastest frame is no spike: its ratio to its neighbours is under 1.7 (the detector\'s line is 3), at 280 to 600 px and 1.4 to 4.4 units', (timeScale) => {
     for (const drawn of SIZES) {
       for (const reach of REACHES) {
         const { track } = play({ name: 'auron', drawn, reach, kind: 'strike', timeScale, frames: FRAMES });
@@ -184,12 +185,12 @@ describe('on the real actor: the step per frame is the normal speed\'s at every 
       for (const reach of REACHES) {
         const lunge = jerksOf(play({ name: 'auron', drawn, reach, kind: 'lunge', frames: FRAMES }).track, FRAMES);
         worstLunge = Math.max(worstLunge, ...lunge.map((e) => e.px));
-        for (const timeScale of SPEEDS) worstStrike = Math.max(worstStrike, ...jerksOf(play({ name: 'auron', drawn, reach, kind: 'strike', timeScale, frames: FRAMES }).track, FRAMES).map((e) => e.px));
+        for (const timeScale of [NORMAL, ...FLOORED]) worstStrike = Math.max(worstStrike, ...jerksOf(play({ name: 'auron', drawn, reach, kind: 'strike', timeScale, frames: FRAMES }).track, FRAMES).map((e) => e.px));
       }
     }
     expect(worstLunge).toBeGreaterThan(20);
     expect(worstLunge).toBeLessThan(70);
-    expect(worstStrike).toBeLessThan(100); // no strike jerk over 100 px at any of the five speeds (what is left is the wind-up's pull-back and the end-of-move idle swap, 28 to 69 px, the lunge's own size)
+    expect(worstStrike).toBeLessThan(100); // no strike jerk over 100 px at any of the four speeds the floor is on at (what is left is the wind-up's pull-back and the end-of-move idle swap, 28 to 69 px, the lunge's own size)
   });
 
   it('the travel and the way home take as many frames at fast as at normal: from the travel peak to the way-home peak is 21 frames at fast (the control arm: 10) and about 29 at normal', () => {
@@ -223,13 +224,13 @@ describe('the control arm: without the floor the same strike hops at fast and at
     expect(over100).toBeGreaterThanOrEqual(8);
   });
 
-  it('at skip the unfloored strike crosses the stage in one frame (a step of 0.25 to 0.9 of the drawn height, ratio over 10); floored it does not', () => {
+  it('at skip the default strike IS the unfloored one (release 72\'s, kept on purpose, merge review finding 4): it crosses the stage in one frame (a step of 0.25 to 0.9 of the drawn height, ratio over 10), in a move that is over in under 4 frames', () => {
     for (const drawn of SIZES) {
       for (const reach of REACHES) {
         const raw = fastest(play({ name: 'auron', drawn, reach, kind: 'strike', timeScale: SKIP, frames: FRAMES, floorCrossings: false }).track, FRAMES);
         expect(raw.ratio, `${drawn}px ${reach}`).toBeGreaterThan(10);
         expect(raw.peak / drawn, `${drawn}px ${reach}`).toBeGreaterThan(0.24);
-        expect(fastest(play({ name: 'auron', drawn, reach, kind: 'strike', timeScale: SKIP, frames: FRAMES }).track, FRAMES).ratio).toBeLessThan(1.7);
+        expect(fastest(play({ name: 'auron', drawn, reach, kind: 'strike', timeScale: SKIP, frames: FRAMES }).track, FRAMES)).toEqual(raw);
       }
     }
   });

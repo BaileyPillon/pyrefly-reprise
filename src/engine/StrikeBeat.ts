@@ -15,7 +15,7 @@ import type { EventCtx } from './BattlePresenterEvents.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
 import { curvesGame, curvesOn } from './motion/CurvesSwitch.ts';
 import { fastFloorKeep } from './motion/FastFloor.ts'; // `?fastfloor=`: how much of its normal-speed length each crossing keeps (1 by default)
-import { PROFILES, crossingFloors, defaultPaceFactor, heftFactors } from './motion/StrikeCurve.ts';
+import { PROFILES, crossingFloors, defaultPaceFactor, floorsAt, heftFactors } from './motion/StrikeCurve.ts';
 
 /** The lunge's duration, ms at timeScale 1 (`actor.lunge(distance, LUNGE_MS, ...)`). */
 export const LUNGE_MS = 440;
@@ -40,22 +40,22 @@ export function strikeBeatNow(heft = 0, realContactMs?: number, speed = 1): numb
 /**
  * r73-fast (both games): how much later the HOUSE strike's contact falls under a playback scale below 1 than (wind-up + travel) x scale, ms at scale 1 and pace 1 (the unit of {@link strikeBeatNow} and of the contact beat's
  * waits, which the presenter then multiplies by the scale). `resolveStrike` keeps the travel at its normal length at `fast` (the return is not waited on), so the contact is wind-up x scale + travel: a wait written for (wind-up + travel) x scale would
- * give up on the strike 170 ms before it lands (the blow on air, VP-1001-06) and the swing sound would peak that much early. Zero at scale 1 or more, with the curves off, and (the caller passes none) for a real strike.
+ * give up on the strike 170 ms before it lands (the blow on air, VP-1001-06) and the swing sound would peak that much early. Zero at scale 1 or more, under `FLOOR_MIN_SCALE` (skip), with the curves off, and (the caller passes none) for a real strike.
  */
 export function strikeLagMs(heft = 0, speed = 1): number {
   const keep = fastFloorKeep(); // 1 (the floor), 0.75 (`?fastfloor=part`: the travel on screen is 0.75 of its normal length, so the lag is the travel times (0.75 / speed - 1), none at a speed above 0.75), 0 (`today`)
-  if (!curvesOn() || !(speed > 0) || speed >= 1 || keep <= 0) return 0;
+  if (!curvesOn() || !floorsAt(speed) || keep <= 0) return 0; // `floorsAt`: the shape's own test (from `FLOOR_MIN_SCALE` up to just under 1), so skip and the scales under it, where the strike keeps release 72's shape, owe no lag
   return Math.max(0, Math.round(crossingFloors(PROFILES[curvesGame()], heftFactors(heft)).travelMs * (keep / speed - 1)));
 }
 
 /**
  * r73-fast review (MINOR-1): how much longer the house strike's whole move runs than the speed alone puts it, ms at scale 1 and pace 1 (the unit of {@link strikeLagMs}): BOTH crossings (the travel's {@link strikeLagMs}
  * and the way home's, floors.returnMs x (keep / speed - 1)). `KeyPoses.idleAtEnd`'s net (`MARKS_NET_MS`, sized when the move ended 352 ms after the strike began at fast) is lengthened by it, so the net never puts the idle up
- * before the strike's own `end` mark (it did at fast: 750 ms against 800 for a party figure, 850 against 1083 for a heft-1 foe). Zero at normal speed, in skip, with the curves off and for `?fastfloor=today`; the caller passes none for a real strike.
+ * before the strike's own `end` mark (it did at fast: 750 ms against 800 for a party figure, 850 against 1083 for a heft-1 foe). Zero at normal speed, in skip (and under `FLOOR_MIN_SCALE`), with the curves off and for `?fastfloor=today`; the caller passes none for a real strike.
  */
 export function crossingLagMs(heft = 0, speed = 1): number {
   const keep = fastFloorKeep();
-  if (!curvesOn() || !(speed > 0) || speed >= 1 || keep <= 0) return 0;
+  if (!curvesOn() || !floorsAt(speed) || keep <= 0) return 0; // as `strikeLagMs`
   const floors = crossingFloors(PROFILES[curvesGame()], heftFactors(heft));
   return Math.max(0, Math.round((floors.travelMs + floors.returnMs) * (keep / speed - 1)));
 }

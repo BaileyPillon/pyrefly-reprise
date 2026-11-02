@@ -92,8 +92,8 @@ describe('MAJOR-1: ?fastfloor= compares the floor with release 72\'s fast and a 
     expect(fastFloor()).toBe('floor');
   });
 
-  it.each(['ffx', 'ffx2'] as const)('%s: crossingKeep scales the floor (1 = the floor, 0 = floorCrossings false, 0.75 = three quarters of the normal-speed length) and does nothing at a scale of 1 or more or on a real profile', (game) => {
-    for (const timeScale of [0.64, FAST, 0.1, SKIP]) {
+  it.each(['ffx', 'ffx2'] as const)('%s: crossingKeep scales the floor (1 = the floor, 0 = floorCrossings false, 0.75 = three quarters of the normal-speed length) and does nothing at a scale of 1 or more, in skip or on a real profile', (game) => {
+    for (const timeScale of [0.64, FAST, 0.1]) {
       for (const heft of [0, 1]) {
         const o = { distance: 2, height: 1.82, heft, timeScale };
         const normal = resolveStrike(PROFILES[game], { ...o, timeScale: 1 });
@@ -106,7 +106,7 @@ describe('MAJOR-1: ?fastfloor= compares the floor with release 72\'s fast and a 
         expect(crossingFloors(PROFILES[game], heftFactors(heft), 0.75).travelMs).toBeCloseTo(crossingFloors(PROFILES[game], heftFactors(heft)).travelMs * 0.75, 9);
       }
     }
-    for (const timeScale of [1, 1.7]) expect(resolveStrike(PROFILES[game], { distance: 2, height: 1.82, timeScale, crossingKeep: 0.4 })).toEqual(resolveStrike(PROFILES[game], { distance: 2, height: 1.82, timeScale, floorCrossings: false }));
+    for (const timeScale of [1, 1.7, SKIP]) expect(resolveStrike(PROFILES[game], { distance: 2, height: 1.82, timeScale, crossingKeep: 0.4 })).toEqual(resolveStrike(PROFILES[game], { distance: 2, height: 1.82, timeScale, floorCrossings: false }));
     let n = 0;
     for (const row of Object.values(REAL_MOTION[game])) {
       if (!row.attack) continue;
@@ -134,12 +134,12 @@ describe('MAJOR-1: ?fastfloor= compares the floor with release 72\'s fast and a 
     expect(seen[2]!.crossingKeep).toBe(0);
   });
 
-  it('on the real actor part sits between the floor and release 72: a step 1.15 to 1.4 times normal\'s (never over 1 / 0.75), the detector\'s ratio under 2.7 and no jerk over 100 px, at 280 to 600 px, reaches 1.4 to 4.4, at 0.64, fast, 0.1 and skip', () => {
+  it('on the real actor part sits between the floor and release 72: a step 1.15 to 1.4 times normal\'s (never over 1 / 0.75), the detector\'s ratio under 2.7 and no jerk over 100 px, at 280 to 600 px, reaches 1.4 to 4.4, at 0.64, fast and 0.1', () => {
     for (const drawn of [280, 420, 600] as const) {
       for (const reach of [1.4, 3, 4.4] as const) {
         const base = { name: 'auron', drawn, reach, kind: 'strike' as const, frames: 90 };
         const normal = worstSteps(play({ ...base, timeScale: NORMAL }).track, 1, 90).fwd;
-        for (const timeScale of [0.64, FAST, 0.1, SKIP]) {
+        for (const timeScale of [0.64, FAST, 0.1]) {
           const { track } = play({ ...base, timeScale, crossingKeep: 0.75 });
           const part = worstSteps(track, 1, 90).fwd;
           expect(part, `${drawn}px ${reach} @${timeScale}`).toBeLessThanOrEqual((normal / 0.75) * 1.03 + 1);

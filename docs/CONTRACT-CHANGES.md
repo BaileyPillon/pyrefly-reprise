@@ -6,6 +6,12 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-11-02 — r73 merge review, finding 4 (the strike floor does not apply in skip; BOTH GAMES; additive, no contract file changed)
+
+Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call, his to overturn). Branch `r73`.
+
+- **`StrikeCurve.FLOOR_MIN_SCALE`** (0.05) and **`StrikeCurve.floorsAt(scale)`** (`scale >= FLOOR_MIN_SCALE && scale < 1`), new exports: `resolveStrike` floors a HOUSE strike's crossings only where `floorsAt(timeScale)` holds (before: at every `timeScale` under 1, so skip's 0.02 played them at full length, about 40 frames, while the waits took skip as 0). `StrikeBeat.strikeLagMs` and `crossingLagMs` ask the same `floorsAt`, so the shape and the lags agree at every speed. Skip and anything under 0.05 keep release 72's shape exactly (every heft, reach and `?fastfloor=` word); fast (0.32), 0.1, 0.64 and the rest up to just under 1 keep the floor; 1 and over, and a real profile, are untouched. Nothing in a type changes for a caller. Handoff: `docs/handoff/r73.md` section 11 row 4; tests: `tests/unit/engine/r73-skip-floor.test.ts` (new), `r73-fast-floor.test.ts` and `r73-fast-review.test.ts` (the cases that ran at skip now run at the floored scales).
+
 ## 2026-11-01 — Lane r73-bytes (what a phone's battle entry waits for; branch `r73-bytes`, from `origin/r72` `2f9c91791`; plumbing for BOTH games; additive)
 
 No contract file changes (none of `src/sprites/format.ts`, `SpriteActor.ts`, `Input.ts`, `battle/common/types.ts`, `story/dsl.ts`, `data/encounters.ts`). Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call, his to overturn). ChatGPT point 5 (`docs/BUDGETS.md` B2a). Logged because the loading plumbing is shared by both games (CHK-020) and because `RigFigure.load` and the music warm change their order on a phone.
