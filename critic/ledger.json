@@ -1,19 +1,8 @@
 {
   "lastDeep": {
-    "sha": "e3f51bf18",
-    "date": "2026-11-01T10:10:05.747Z",
-    "source": "critic/rounds/round-32b.json"
+    "sha": "01a767770",
+    "date": "2026-11-02T12:00:39.110Z",
+    "source": "critic/rounds/round-33b.json"
   },
-  "deploysSinceDeep": [
-    {
-      "sha": "6d7ecc8a5",
-      "date": "2026-11-01T14:14:08.497Z",
-      "substantial": true
-    },
-    {
-      "sha": "01a767770",
-      "date": "2026-11-02T04:29:26.601Z",
-      "substantial": true
-    }
-  ]
+  "deploysSinceDeep": []
 }

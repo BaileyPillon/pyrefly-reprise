@@ -1,0 +1,1517 @@
+# Round 33b: deep re-issue of round 33 for the live build 01a767770 (releases 71 and 72, bundle Cz_6EQVK), with the full 19-chapter continuity harness
+
+```text
+Supersedes: round-33 (same build, same artifact hash; round 33 embedded the four-chapter partial of a harness that was still running; precedent rounds 30b and 32b)
+Build / artifact / target version: main 01a767770, bundle index-Cz_6EQVK.js, artifactHash 664d823bcbcbe896e14fc7f73aabda4aadc4f119b24d8ba4303c1f83c0e27553, targets.json sha256 1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2
+Review: deep (the live build https://echoesofspira.com/, owed by releases 71 and 72 since round 32b)
+Deployment: PASS: CHK-017 PASS (verify-live 77 files 0 mismatched, the live index names index-Cz_6EQVK.js, 300 of 300 audio files equal live) plus the capture owner's clean runs (0 console errors, 0 not-found in 31 runs and 8,482 requests).
+Changed area: FAIL: CHK-003 and CHK-009 (PR-0586), CHK-020 (PR-0543), CHK-008, CHK-011, CHK-026 and CHK-027 (PR-0584, PR-0531, PR-0380, PR-0379). CHK-002, 006, 013, 014, 015, 016, 017, 018, 019, 021, 022 and 023 PASS. Better than release 70 where measured: Braska teleports 3 to 0, KO slide jerks repaired in Isaaru and Anima, Isaaru CHK-026 and CHK-027 now PASS, Yojimbo and Omnis treated without a regression. Round 33b (the full 19-chapter harness): CHK-026 FAILS in 12 chapters and CHK-027 in 6 (round 32b: 13 and 8); no chapter went from PASS to FAIL on either check, Isaaru passes both and Anima passes CHK-027.
+Ship: SHIP: no critical defect; no regression against the live build (this IS the live build; against release 70 nothing that worked is broken, see issueClosures); every major is carried, none was introduced by this build except as noted, and majors are disclosed. Round 33b: the full harness found no critical defect and no PASS-to-FAIL regression in any of the 19 chapters; see shipReasons for the within-FAIL numbers that moved the wrong way. Majors disclosed: PR-0584, PR-0531, PR-0380, PR-0379, PR-0603, PR-0570, PR-0517, PR-0459, PR-0148, PR-0567, PR-0295
+Milestone: not assessed (a deep review cannot accept one)
+Quality: PROVISIONAL, no full score; scored categories: combat 9.4, encounter 9.2, visual 8.4, feel 7.9, narrative 8.8, interface 7.8, prep 8.9, delivery 8.5; UNVERIFIED (no number, never averaged away): audio, onboarding
+Targets: required 32 / matched 25 / failing 0 / unverified 5 / waiting 2
+Top issues: PR-0584 Braska pose-swap jerks up to 232.6 px (teleports repaired); PR-0531/0380/0379 pose-swap continuity (CHK-026 FAIL in 12 of 19 chapters, CHK-027 FAIL in 6 of 19, all read; no chapter turned from PASS to FAIL against round 32b); PR-0603 Chapter XII card prints "TIDUS 4,132-2,333"; PR-0148 no listening verdict; PR-0567 phone load; PR-0586 selected F1 row cut in Evrae, Braska, Isaaru
+Coverage: 19 of 19 chapters by real keys; the continuity harness fresh on 19 of 19 chapters (11,220.8 s of battle, embedded unchanged); required coverage not tested: none; retry in Chapter I (phone) and Chapter IV (FFX-2, timed 9.3 s); six-size pause matrix; 57-surface legibility sweep; see the coverage matrix
+Next required review and why: none owed for this build once critic-clear accepts this re-issue; the next deep review is owed after the next deploy and owes the harness on the six CHK-027 FAIL chapters, the written method check for the pose-swap family, the Lulu rig-head decision, the fixes of PR-0603 and PR-0586 re-read on live, and Bailey's listening and feel verdicts
+Elapsed review time / repeated work avoided: 80 min of the chief in all (30 for round 33, about 50 for this re-issue); the capture owner, five auditors and the harness ran separately; the round-33 capture, auditors, engine, audio and prep evidence is carried unchanged with its dependency arguments, and the harness is read once, in full, instead of reused
+```
+
+## Score output (verbatim from tools/critic-score.mjs)
+```text
+score: PROVISIONAL — no verified score for audio, onboarding (never averaged away, never zero)
+below the 9 floor: visual, feel, narrative, interface, prep, delivery
+milestone: not accepted
+  - a deep review cannot accept a milestone
+  - score is provisional: no verified score for audio, onboarding
+  - category visual is below the 9 floor
+  - category feel is below the 9 floor
+  - category narrative is below the 9 floor
+  - category interface is below the 9 floor
+  - category prep is below the 9 floor
+  - category delivery is below the 9 floor
+  - mandatory check CHK-003 is FAIL
+  - mandatory check CHK-009 is FAIL
+  - mandatory check CHK-020 is FAIL
+  - mandatory check CHK-026 is FAIL
+  - mandatory check CHK-027 is FAIL
+  - 11 critical or major issue(s) remain open
+  - 5 required target(s) unverified
+  - 2 required target(s) waiting
+  - only 25 of 32 required targets matched
+  - human judgment not recorded: Audio: Bailey's numeric listening score for the shipped mix: music, sound effects, voice and the conference sound pass (CHK-B1, PR-0148)
+  - human judgment not recorded: Art and feel: the still beside Chapter I of the treated arenas' grade (booth-ffx-b3b J6, PR-0585), and whether the release-70 Braska and Isaaru holds stay on while PR-0581 and PR-0582 are open
+  - human judgment not recorded: Feel: are the planned smear hard cuts (21.1 a minute in the full round 33b read), the pro camera shots and the big turn cut-in the look he wants (PR-0530, PR-0521, PR-0536; CHK-B2)
+  - human judgment not recorded: Feel: is Yuna's dress change a hard swap under a flash, or should it blend (PR-0589)
+  - human judgment not recorded: Art: should the Rikku Dark Knight and Paine Warrior ready and attack poses be repainted or only registered (PR-0517)
+  - human judgment not recorded: Audio: keep or change the silent Chapter IV results screen (PR-0504)
+  - human judgment not recorded: Audio: the sound pass in the ten treated chapters, by ear (PR-0588)
+  - human judgment not recorded: Interface: is the one-row advisor chip the F1 target, or should the reason line return (PR-0519)
+  - human judgment not recorded: Narrative: portrait expression on grief lines in both games (PR-0485)
+  - human judgment not recorded: Accessibility: do COLOUR VISION, TEXT SIZE, REDUCE FLASHES and REDUCE MOTION do what he wants (PR-0503, PR-0559)
+  - human judgment not recorded: Interface: build key remapping (the mock shows REMAP KEYS) or drop the line from the rubric reading (PR-0596)
+  - human judgment not recorded: Art: the treated Yojimbo arena against the approved cold chamber, and the other treated arenas (J6, PR-0585): keep the grade or lift the plate's exposure
+  - human judgment not recorded: Interface: should the Mirror Aeons get enemy-move cards (PR-0608)
+  - human judgment not recorded: Cinematic: is the chest-down framing of Auron in the Braska possession seams intended (PR-0611)
+  - human judgment not recorded: Feel: should the first dress-change coach card on a phone hold the clock or dock to the bottom (PR-0610)
+report: valid evidence
+```
+
+## What changed from round 33
+- The continuity block is now the stamped summary of the FULL 19-chapter run (harness 5e1bbdec47c9, the release tree's own; 11,220.8 s of battle, 11,176 swaps judged), embedded unchanged. Round 33 carried the four chapters that had finished (the partial stays in the folder as continuity-summary-partial4.json).
+- CHK-026 and CHK-027 are re-recorded from the full run (both FAIL, both mandatory, strips and per-chapter files as evidence). The reuse of the focused run for Anima, Yojimbo, Isaaru and Omnis is gone: all four were read again and agree on both checks and on every reason (Yojimbo's mid-move dashes are the one number that differs: 0 there, 3 up to 70.5 px here, reported and not gated).
+- `coverage.requiredNotTested` is empty: the eleven unread chapters are read. The owner-only and hardware items stay in `notTested` with their reasons, and a second seed and a non-Chromium run of the harness join them.
+- Verdicts are unchanged: deployment PASS, changed area FAIL, milestone not assessed, ship SHIP. Scores are unchanged (visual 8.4, feel 7.9, delivery 8.5 re-read on the full harness; audio and onboarding UNVERIFIED with their reasons; CHK-001 and CHK-B1 stay mandatory:false UNVERIFIED for Bailey's ears, precedent 30b and 32b, decision 212l). The provisional flag on the harness half of visual, feel and delivery is lifted from their text.
+- Issues: no id added, no severity changed, no tag changed. PR-0531, PR-0380, PR-0379, PR-0570, PR-0534, PR-0529, PR-0544, PR-0580, PR-0582, PR-0530, R72-3 and PR-0612 carry the full-run numbers; the eleven newly read chapters map to existing tickets by root cause (Lulu's rig head, PR-0534; Trema's Paragon feet, PR-0529; Chapter III, PR-0584; the swap-jerk and see-through classes, PR-0380 and PR-0379).
+- Corrections to round 33's text: Anima fails CHK-026 on one stance miss (15.1 px), not on a 22.2 percent head; the harness took 3 hours 48 minutes, not "about five hours"; Yojimbo's dashes are 0 in the focused run and 70.5 px at most in the full run.
+
+## What the full harness showed, against round 32b (the complete read of release 70)
+| Measure | Round 32b | Round 33b |
+|---|---|---|
+| Chapters read, seconds of battle | 19, 10638.5 | 19, 11220.8 |
+| CHK-026 FAIL chapters | 13 | 12 |
+| CHK-027 FAIL chapters | 8 | 6 |
+| Head swaps over tolerance (worst %) | 445 (97.1) | 415 (94.4) |
+| Feet moves over 2 px (worst px) | 26 (18) | 24 (14.5) |
+| Height-band misses | 25 | 23 |
+| Stance misses (worst px) | 54 (290.7) | 59 (270.6) |
+| Swap jerks over 40 px (worst px) | 34 (227.3) | 54 (255.2) |
+| Mid-move teleports | 3 | 0 |
+| Dashes over the fail line (reported, not gated) | 138 | 189 |
+| Snaps a minute (cap 0.25) | 0 | 0 |
+| See-through ms a minute (worst severity) | 1623 (0.367) | 1831 (0.374) |
+| Hard cuts a minute | 22.5 | 21.06 |
+
+No chapter went from PASS to FAIL on either check. Repaired since 32b: Isaaru (both checks), Anima (CHK-027), the Braska teleports. Measured worse inside chapters that already failed: Yunalesca (swap jerks over the line 3 to 21 on a fight 2.6 times as long with 14 revives; 7 revive steps of 50 to 131 px, PR-0570), Sin core worst jerk 169.3 to 255.2 px (an untreated chapter), Den of Woe 139.9 to 169.4 px, Ixion see-through 3,444 to 4,729 ms a minute. The other 18 chapters sit at 33 swap jerks over the line against 31.
+
+## Verdicts
+- **deployment**: PASS: CHK-017 PASS (verify-live 77 files 0 mismatched, the live index names index-Cz_6EQVK.js, 300 of 300 audio files equal live) plus the capture owner's clean runs (0 console errors, 0 not-found in 31 runs and 8,482 requests).
+- **changedArea**: FAIL: CHK-003 and CHK-009 (PR-0586), CHK-020 (PR-0543), CHK-008, CHK-011, CHK-026 and CHK-027 (PR-0584, PR-0531, PR-0380, PR-0379). CHK-002, 006, 013, 014, 015, 016, 017, 018, 019, 021, 022 and 023 PASS. Better than release 70 where measured: Braska teleports 3 to 0, KO slide jerks repaired in Isaaru and Anima, Isaaru CHK-026 and CHK-027 now PASS, Yojimbo and Omnis treated without a regression. Round 33b (the full 19-chapter harness): CHK-026 FAILS in 12 chapters and CHK-027 in 6 (round 32b: 13 and 8); no chapter went from PASS to FAIL on either check, Isaaru passes both and Anima passes CHK-027.
+- **milestone**: not assessed (a deep review cannot accept one); audio and onboarding stay UNVERIFIED and CHK-001 and CHK-B1 need Bailey's ears.
+- **ship**: SHIP: no critical defect; no regression against the live build (this IS the live build; against release 70 nothing that worked is broken, see issueClosures); every major is carried, none was introduced by this build except as noted, and majors are disclosed. Round 33b: the full harness found no critical defect and no PASS-to-FAIL regression in any of the 19 chapters; see shipReasons for the within-FAIL numbers that moved the wrong way.
+
+Why SHIP:
+- This review judges the live build, so ship answers whether it should stay: no critical defect (crash, lock, lost progress or an encounter that cannot finish) was found; 19 of 19 chapters were won by real keys with 0 console errors and 0 not-found, loss then TRY AGAIN reached the retried battle in Chapter I and Chapter IV, and the exact artifact equals the deploy manifest.
+- No regression against release 70: the three round-32b regressions inside the booth treatment are repaired where re-measured (Braska teleports 3 to 0, Isaaru KO-slide jerk 89.6 to 26.2 px, Anima 80.3 to 0) and release 72 added Yojimbo and Omnis without a swap jerk over the 40 px line (Omnis reads 30 swap jerks, all under 30 px, and 23 dashes up to 84.1 px: R72-3).
+- The majors are carried, not new: PR-0584, PR-0531, PR-0380, PR-0379 (pose-swap continuity), PR-0570, PR-0517, PR-0459, PR-0148 (no listening verdict), PR-0567, PR-0295; the one new major, PR-0603 (an impossible damage range on the Chapter XII card), is wrong information in one row of one card, not introduced by release 71 or 72 (round 32 printed it), and is disclosed.
+- Round 33b, the full harness (19 of 19 chapters, 11,220.8 s of battle, 11,176 swaps judged): CHK-026 FAILS in 12 chapters and CHK-027 in 6; against round 32b, the complete read of release 70 (13 and 8), no chapter went from PASS to FAIL on either check, Isaaru passes both, Anima passes CHK-027, mid-move teleports are 3 to 0 and snaps stay 0.00 a minute. Measured worse inside chapters that already failed: Yunalesca swap jerks over the line 3 to 21 on a fight 2.6 times as long (14 revives, 7 of them stepping 50 to 131 px: the revive-step class of PR-0570, suspected to be the way back up from the eased KO slide, not traced), Sin core worst single jerk 169.3 to 255.2 px (the same 321 to 322 swap-kind jerks of 40 px or more as before, and Chapter XVII is not treated), Den of Woe 139.9 to 169.4 px, Ixion see-through 3,444 to 4,729 ms a minute (PR-0379 already names it). Each sits under an existing tagged major, none is shown to be introduced by release 71 or 72, none flips a check, so they are disclosed and carried, not a HOLD. No complete release 71 reading exists (its focused review read Chapter XVIII only; the live release 71 control of Anima reads the same as this build), so round 32b is the baseline.
+
+## The ten categories
+### combat 9.4
+Combat auditor, round 33 (deep, live 01a767770, no browser). git diff e3f51bf18..01a767770 is EMPTY for src/battle, src/data, src/engine/tactics, src/story, research and src/app/SaveData.ts; the 31 changed src files are booth, motion, look and HUD presentation (ProneLay and SlideEase, FlipFit, SkyGrade, PieceHolds, HudF1) and none emits, reorders or alters a BattleEvent or touches the seeded RNG. Re-run, not assumed: all 16 round-32 probe and parity outputs are md5-identical (kernel 478 checks and kernelx2 68 checks 0 mismatches; immunefuzz 51,782 forks 0 friendly fire; chain Braska 95/100); the engine event streams of the capture owner's logs equal round 32 at the same seed up to the first player-timed input. Unit suite 28,554 tests, 28,411 passed, 17 failed in three tooling files that the chief's harness broke by setting TEMP inside the repo (rerun with TEMP outside: 64 of 64), 0 real failures; 12 HP and 8 reward values spot-checked against research/. Real runtime: 28 battle logs, 0 NaN, 0 positive party-on-party damage, 0 console errors, 142 distinct enemy actions all named in research/. Held back from higher (all carried): the Items-list touch path (PR-0483), Chapter III links 3 to 6 Summon rows (PR-0460: the gap pass read link 3 in a browser and the probe still disagrees), the 2560x1440 crash unproven (PR-0565), and FFX-2 retry shown only for Chapter IV. Nothing found a combat defect, regression or lock. Score unchanged from round 32b.
+
+### encounter 9.2
+Encounter auditor, round 33. Data, AI scripts, phases, rewards and the chapter registry are byte-identical to round 32 and all 16 engine benches re-ran md5-identical, so the win rates are the round 29 to 32 numbers (FFX 200 seeds: Flux 200, Yunalesca 180, Braska 197, Anima 189, Evrae 194, Yojimbo 196, Natus 190, Omnis 174, Via Purifico 180, Sin core 178, Sin face 200, Mirror Aeons 148; FFX-2 100 seeds: Bahamut 100, Vegnagun 99, Leblanc 100, Fallen Aeons 100, Trema 71, Den of Woe 100, Ixion 100). Credible wrong lines lose (attack-only 0/40 in 12 of 12 FFX and 5 of 5 FFX-2 chapters tested; Sin core's long-carried "unresolved 40" was traced this round to the engine's designed stalemate guard, "The battle cannot be won from here.", not a hang). Real flows: all 19 chapters won from the title by real keys with the same rewards as round 32 (Trema on seed 2 after two seed-1 defeats; Mirror Aeons on a rerun with a larger budget). Held back: Trema about 60 percent at human pace and the real route lost seed 1 twice (PR-0227), Mirror Aeons 74 percent and about 19 to 20 minutes (PR-0592), Omnis 87 percent, Den of Woe 95 percent at human pace, hidden chapters that do not punish credible mistakes, demo mode's 50 percent gauges.
+
+### visual 8.4
+Visual auditor, round 33; the harness half re-read in round 33b on the full 19-chapter run. Approved art intact: verify-approved 917 ok, 0 mismatched, 0 missing. CREDITS against round 32b: Braska teleports 3 to 0, Ixion and Isaaru KO slides repaired (Isaaru swap jerk 89.6 to 26.2 px, Macalania 80.3 to 0), Yojimbo (release 72) reads as the approved gold, orange and purple boss A with a legible gauge and no snaps, every chapter's first menu shows its boss and every chip a painted portrait, facing correct in all 19 sweep frames. DEBITS: CHK-026 FAILS in 12 of 19 chapters and CHK-027 in 6 (Braska 94.4 percent heads and 232.6 px jerks, Yunalesca 21 swap jerks, Sin core 255.2 px, Vegnagun 202.9 px, Den of Woe 169.4 px; five of the twelve CHK-026 chapters fail on Lulu's rig-head reading alone, 0.1 to 0.2 percent where the head is registered, PR-0534), Yojimbo's arena is far darker than the approved chamber (extends PR-0585, Bailey's call), Braska and Yunalesca midfight frames hide the boss (CHK-011), party figures stack (PR-0549). The 11 chapters unread in round 33 are now read and hold the failures round 32b found (no PASS chapter turned FAIL, Isaaru is repaired), so the score is re-read and unchanged at 8.4: the credits and the debits both stand. characterModels and animation stay at most 7.0 while CHK-026 fails.
+
+### feel 7.9
+Feel auditor, round 33; the harness half re-read in round 33b on the full run. Real-key play of 19 chapters plus extra sizes, 0 console errors: ESC opens the pause in the pre-scene and HOLD ENTER skips it in 28 of 28 runs, dialogue advances on each tap, chain seams are paced, the turn cut-in clears inside three frames in the strips read. Same-bundle continuity: the release-70 regressions are repaired (Braska teleports 3 to 0, Isaaru swap jerk 89.6 to 26.2 px, Anima 80.3 to 0, Yojimbo dashes 24.2 px in 32b, 0 in the focused run and 3 up to 70.5 px in the full run (reported, not gated), snaps 0.00 a minute in every chapter read). Still breaking: Chapter III 9 swap jerks (worst 232.6 px) and 42 dashes, Yunalesca 21 swap jerks and 4,632 ms a minute of see-through, CHK-026 FAIL in five chapters read, so the animation sub-score stays at its cap. Not measured: retry timing beyond the one FFX-2 stamp (9.3 s) and the phone Chapter I one (9.7 s), the booth clips of VIII, XI, XVI and the Mirror Aeons. Battle screen to first menu 8.2 to 16.5 s (PR-0607), reported not scored down. +0.1 on round 32b for the repairs confirmed on this exact bundle. Round 33b, all 19 chapters read: snaps 0.00 a minute in every one, mid-move teleports 0, swap jerks over the line 54 in 6 chapters (Yunalesca 21 on a 22-minute fight with 14 revives; the other 18 chapters 33 against 31 in round 32b), see-through 1,831 ms a minute (worst Ixion 4,729, Yunalesca 4,632, Trema 2,730, Sin face 2,576), hard cuts 21.1 a minute. The animation sub-score stays at its cap and 7.9 holds.
+
+### narrative 8.8
+Narrative auditor, round 33: the text judgement is REUSED from round 32 (8.8) because git diff e3f51bf18..01a767770 over src/story, research/writing-bible.md and src/data/encounters.ts is empty and release 71 and 72 changed motion, holds, sky grade, HUD placement and a slide ease, not a line of text; no open related defect except the carried portrait expression (PR-0485). Fresh: all 19 chapters played to their aftermath by keyboard with the lines read from the DOM timeline (Flux "You can't send what refuses to go", Yunalesca "There. Now no one can summon it.", Braska "Overdue. By ten years.", Bahamut results with no victory word and Rikku "...Yunie.", Vegnagun "...Let's go home.", Yojimbo "She's gone. Truly, this time.", Omnis "So. This is how it ends for me.", Isaaru "No. Please. Keep that for the road ahead.", Ixion "Where the fayth stood, there's only a hole."); the 390x844 touch run of Chapter IV reads cleanly in its pre-scene and post scene (new this round). Held under 9.0 by the carried portrait expression, no recorded human judgement on grief-line expression, and no phone reading of the Chapter I scenes (the phone run still loses at turn 35).
+
+### audio UNVERIFIED
+UNVERIFIED, no number. No agent can hear and there is no numeric owner listening verdict for this mix (the only number is 7/10 for the generated music, D-804, older than the sound, SFX and voice passes). Technical half PASS on the live artifact: qa --strict exit 0, 43 cues 0 findings, -16.21 to -16.01 LUFS, worst true peak -1.48 dBTP, 0 clipped, loop seams 43 of 43; 319 mp3 decode with 0 errors; 300 of 300 shipped audio files sha256-equal to the manifest and fetched 200 from the live site; 62 audio test files (1,015 tests) pass. Routing: every cached track in 179 snapshots is prerendered (0 synth), every chapter's cue at first menu, seam and results equals THEMES.md, wins end on victory-ffx or victory-ffx2 and losses on defeat-ffx or defeat-ffx2, and release 72's reach shows in Yojimbo and Omnis (victory-ffx at the last blow, absent in round 32). Not evidenced: loudness of the sound pass in the seven chapters release 71 and 72 added, a dense last-blow-to-results timeline, the pause music state in a fight, ending beds, and Bailey's ears (PR-0148, PR-0588).
+
+### interface 7.8
+Interface auditor, round 33 (about 60 frames looked at; 57 of 57 battle surfaces and six sizes measured). WORKS: the F1 HUD draws in the release 71 and 72 chapters and reads as one system (Yojimbo's Daigoro, Kozuka and Wakizashi gauge clears the ribbon, card and turn strip), target selection is clear in every chapter seen with 0 targets left after cancel in 24 of 24 desktop runs, 0 target mismatches and 0 label mismatches in 2,478 of 2,487 picks, intent separates certain from conditional, broken boards stay right, 0 text under 14 px on 4,507 elements, 0 developer vocabulary in 391 strings, 0 horizontal scroll. PROBLEMS: one visibly wrong number (PR-0603: Chapter XII card "TIDUS 4,132-2,333"), a contradictory-copy class (PR-0604), a suspected advisor no-op loop (PR-0605) and a suspected card figure mismatch (PR-0606); the carried stalled set did not move (PR-0586 now in newly treated Evrae, PR-0540, PR-0502, PR-0516, PR-0518, PR-0542, PR-0543). Round 32b was 7.9; this is 7.8.
+
+### onboarding UNVERIFIED
+UNVERIFIED, no number, for the seventh review. The newcomer walkthrough is SIMULATED (scripted real-input runs from a fresh profile, no human newcomer, no real phone or controller). The capture route again never opens the pause ACCESSIBILITY, CONTROLS or MUSIC tabs and sets no TEXT SIZE, REDUCE MOTION, REDUCE FLASHES, LOW EFFECTS or COLOUR VISION; release 72 added code for exactly that (the F1_TEXT_CEILING step-down for Chapters IX and XII and the XVIII sin-hud shifts at 115 and 130) and none of it is framed. Seen: the title strip, Auron's skippable briefing that teaches the CTB/ATB difference, the three-step board guide with ESC SKIP, the phone first-time coach cards. Reused: round 32b G4 (ACCESSIBILITY rows set their attributes; desktop F1 HUD grows with TEXT SIZE) for files unchanged since. Defects seen (carried): phone pause hides ACCESSIBILITY behind a cut tab strip, 22 px RESUME, unexplained VISUAL STYLE and PRESENTATION, key remapping not built (PR-0596, a question). Never averaged away; blocks any milestone claim.
+
+### prep 8.9
+Prep auditor, round 33. PROVED on this build: results and rewards read clearly and trace to research in all 19 chapters (spot checks: Chapter I AP 10,000 x4 / gil 6,000 / Lv. 4 Key Sphere; Bahamut EXP 1,300 / AP 15 / gil 1,000; Ixion EXP 2,600 / AP 15 / gil 1,800 / Soul of Thamasa; Evrae 5,400 AP / 2,600 gil; Natus 9,450 AP; Omnis 24,000 AP / 12,000 gil / Lv. 3 Key Sphere; Yojimbo and Braska 0 / 0 as the sources give), 22 of 22 victory runs keep the clear after a real reload, retry is fast where shown (Chapter I phone: defeat results to party prep 3.1 s and a first menu 6.6 s later; FFX-2 Chapter IV 9.3 s). REUSED with a dependency argument: the prep agency half (Sphere Grid walk and activation, Overdrive equip, FFX-2 read-only tabs) from round 32 G4 walks 4c, because git diff e3f51bf18..01a767770 over src/app, src/ui, src/data, src/battle and src/story is releaseNotes.ts plus the battle HUD files only and no art or audio byte changed. Weaknesses (carried, minor): PR-0594, PR-0555, PR-0557, the phone prep strip cut at open. Not seen on this build: a desktop lose-then-retry in either game with card frames. First scored this round; 0.1 under the 9.0 anchor because the agency half is not re-walked.
+
+### delivery 8.5
+Delivery auditor, round 33, live bundle Cz_6EQVK, artifactHash 664d823b.... PROVED: exact artifact (verify-live PASS, 77 files, 0 mismatched, the live index names index-Cz_6EQVK.js, 7,169 files compared at deploy); 0 console errors, 0 not-found, 0 html-as-image in 31 runs and 8,482 requests; no renderer crash in about 280 minutes of play (PR-0565 did not recur); 19 of 19 chapters won by real input; cold load to an interactive title 0.7 s median (3 of 3 runs, 3.1 MB, 15 requests) and 16.7 s on a 1.6 Mbit/s 150 ms profile (PR-0520 closed in 32b); art-derive audit and verify PASS; saves unchanged and 215 persistence tests pass. Frame times from the full harness (round 33b): 55.6 to 59.9 fps in all 19 chapters, FFX-2 included (Vegnagun 59.7, Leblanc 59.3, Fallen Aeons 59.6, Trema 56.1 with a p99 of 89.1 ms, Den of Woe 59.8, Ixion 59.7), and a 12.1 s frame in Yunalesca on a shared host (PR-0580). MEASURED WEAKNESSES: first-command wait 8.2 to 16.5 s (PR-0607), the phone Chapter I touch route loses at turn 35 (PR-0539), Trema 56.1 fps and p99 89.1 ms (PR-0544), Chromium only (WebKit and Safari findings PR-0563 and PR-0564 neither re-measured nor refuted), page-memory growth (PR-0573). Round 23 scored 8.7 on a smaller scope.
+
+## Visual sub-scores (outside the weighted score)
+characterModels 7, enemyModels 7.9, animation 7, fidelity 8.4, camera 7.4. characterModels and animation sit at their cap while CHK-026 fails; enemyModels holds at 7.9 (Yojimbo reads as the approved boss A; the Mirror Aeons, Sin and Ixion are now read by the harness and show the same classes as in round 32b: Lulu's rig head, and the Sin left fin at 255.2 px); fidelity 8.4 (0.1 down: Yojimbo's arena is graded far darker than the approved chamber, PR-0585); camera 7.4 unchanged (Braska midfight framing PR-0583, Braska/Flux/Bahamut camera cuts PR-0521).
+
+## Continuity harness
+The aggregate in "continuity" is the stamped summary of the FULL 19-chapter run (critic/rounds/round-33/continuity/continuity-summary.json), embedded unchanged by node tools/continuity-id.mjs --embed; harness 5e1bbdec47c9 equals the release tree's (checked with --check before the embed and by critic-score and critic-clear after it). It replaces the four-chapter partial of round 33 (continuity-summary-partial4.json), which stays in the folder as history. The four chapters round 33 took from the focused run were read again in this run.
+
+```text
+continuity harness (CHK-026/CHK-027): 19 chapter(s), 11220.8 s of battle, 55.6 to 59.9 fps, 19 of 19 run by the dedicated harness; CHK-026 FAIL (415 swap(s) change a head by more than the tolerance (worst 94.4 percent; 94.4 percent where the head is registered); 24 swap(s) of a standing figure move its feet more than the tolerance (worst 14.5 px at 1600 wide); 23 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.732 to 1.499; the bands are tools/posescale/pose-bands.mjs's); 59 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 270.6 px at 1600 wide), whatever stance the registration claims); CHK-027 FAIL (54 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 255.2 px)); 1,831 ms of see-through a minute (109.9 frames a minute at 60 Hz) Read by harness 5e1bbdec47c9 (38 files; tree D:/pyrefly-release55 at 41d76d9aa; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows)).
+```
+
+| Chapter | Game | CHK-026 | CHK-027 | battle s | worst head % | worst swap jerk px | dashes worst px | see-through ms/min | fps | p99 ms |
+|---|---|---|---|---|---|---|---|---|---|---|
+| seymour-flux | ffx | FAIL | PASS | 397.6 | 10.8 | 0 | 240.6 | 512 | 58.2 | 35.9 |
+| yunalesca | ffx | FAIL | FAIL | 1294.8 | 21.6 | 153.5 | 252.8 | 4632 | 55.6 | 64.3 |
+| braskas-final-aeon | ffx | FAIL | FAIL | 1661.9 | 94.4 | 232.6 | 160.6 | 1417 | 59 | 36 |
+| ffx2-bahamut | ffx2 | PASS | PASS | 342.6 | 0.7 | 25 | 44.9 | 649 | 59.1 | 43.4 |
+| ffx2-vegnagun-shuyin | ffx2 | PASS | FAIL | 809 | 9.4 | 202.9 | 0 | 726 | 59.7 | 28.6 |
+| ffx2-leblanc | ffx2 | PASS | PASS | 533.9 | 28.8 | 33 | 50 | 1739 | 59.3 | 39 |
+| seymour-anima-macalania | ffx | FAIL | PASS | 332.2 | 22.1 | 0 | 166 | 1025 | 59.5 | 26.3 |
+| evrae-airship | ffx | FAIL | PASS | 381.8 | 15.5 | 0 | 76.2 | 1507 | 59.6 | 24.8 |
+| yojimbo-cavern | ffx | FAIL | PASS | 119.6 | 15.4 | 0 | 70.5 | 632 | 59.7 | 21.5 |
+| seymour-natus | ffx | PASS | PASS | 148.5 | 13.4 | 0 | 172.2 | 1534 | 59.6 | 23.2 |
+| ffx2-fallen-aeons | ffx2 | FAIL | FAIL | 396.6 | 15.6 | 44.6 | 0 | 1215 | 59.6 | 29.4 |
+| seymour-omnis | ffx | PASS | PASS | 525.1 | 8.7 | 29.9 | 84.1 | 1391 | 59.9 | 25.9 |
+| ffx2-trema | ffx2 | FAIL | PASS | 1265 | 2.3 | 27.8 | 63.1 | 2730 | 56.1 | 89.1 |
+| isaaru-via-purifico | ffx | PASS | PASS | 261.2 | 22 | 26.4 | 55.1 | 487 | 59.8 | 19.6 |
+| ffx2-den-of-woe | ffx2 | PASS | FAIL | 266.4 | 2.8 | 169.4 | 0 | 1068 | 59.8 | 21.9 |
+| ffx2-ixion-djose | ffx2 | FAIL | PASS | 149.4 | 18.9 | 0 | 133.7 | 4729 | 59.7 | 25.2 |
+| sin-fins-core | ffx | FAIL | FAIL | 1019.9 | 15.5 | 255.2 | 119.6 | 1362 | 59.9 | 22.4 |
+| sin-face | ffx | FAIL | PASS | 175.8 | 15.5 | 0 | 47.8 | 2576 | 59.8 | 20.6 |
+| mirror-aeons | ffx | FAIL | PASS | 1139.5 | 19.7 | 0 | 131.9 | 1234 | 59.8 | 27.1 |
+
+## Target gate
+required 32, matched 25, failing 0, unverified 5, waiting 2. Visual auditor's counts from critic/rounds/round-33/targets (32 composites, in-game against the approved tiles). The five unverified and two waiting are surfaces with no tile or no settled frame; none fails. targets.json is unchanged since round 32b (sha256 1b09ad4e...).
+
+## Checks
+| Check | Result | Mandatory | Reason |
+|---|---|---|---|
+| CHK-001 | UNVERIFIED | no | Technical half PASS on the live artifact (qa --strict 43 cues 0 findings, -16.21 to -16.01 LUFS, worst true peak -1.48 dBTP, 319 mp3 decode with 0 errors, 300 of 300 shipped audio files sha256-equal to the manifest and fetched 200 from the live site, 250 cached tracks over 179 AudioManager snapshots all prerendered, 62 audio test files with 1,015 tests passing) but the check needs Bailey's own listening verdict (AGEN ... |
+| CHK-B1 | UNVERIFIED | no | Bailey's numeric listening verdict on the shipped mix does not exist (docs/audio/OWNER-VERDICT.md has no entry after 2026-09-28; the only number is "I like all the music 7/10", D-804, music only and older than the sound, SFX and voice passes now reaching seventeen of nineteen listed chapters). D-1371: it cannot be delegated. Filed mandatory:false and UNVERIFIED (precedent 30b, 32b; decision 212l). |
+| CHK-B2 | UNVERIFIED | no | Bailey's feel verdict on the release 71 and 72 motion (booth holds, fitted return flip, eased KO slide) is not recorded and he is asleep; requested for his next session with the Chapter III and VII strips. |
+| CHK-002 | PASS | yes | sweep.mjs matrix, six sizes, each a fresh context, real Escape: the pause opened and closed at 1280x720, 1600x900, 2000x1012, 2560x1080 and 3840x2160 (capped plate at 3840 as D-450 allows), currentSrc pause/tidus.2x.webp, scrollWidth equals clientWidth at every size, plate rects cover the window or slide as D-070 describes. At 390x844 the keyboard pause does not open on touch (a phone has no Esc) and the phone matrix ... |
+| CHK-003 | FAIL | yes | Under 14 px: none (4,507 battle elements on 57 of 57 surfaces, matrix at six sizes, 12 phone surfaces and 546 elements, smallest 14 px, 0 horizontal scroll). The clipped half fails on one visible label: Isaaru (Chapter XIV) "Special" .ffx-cmd__label, 53 px of text in a 47 px box on three surfaces (PR-0586, carried). The 12 phone and one matrix "clipped" counts are the PAUSE chip's visually hidden label, judged the sa ... |
+| CHK-004 | UNVERIFIED | no | 0 target mismatches and 0 label mismatches in 2,478 of 2,487 desktop picks and the chip names action, target, cost and menu path in every frame read. The remaining nine picks (Evrae turns 68 to 80, identical in round 32) want Potion for Kimahri and the engine plays Al Bhed Potion at full HP; no frame of the chip at turn 68 was captured, so whether the chip or the harness mapped the label is not settled (PR-0605). Pho ... |
+| CHK-005 | PASS | no | Broken boards stay right: Chapter I with Kimahri KO proposes Mega Phoenix (no MP) at 1600, 2560 and 4K; Chapter IV with Yuna cursed shows "CURSE Yuna: Holy Water, Esuna, Remedy"; Evrae's card marks KO on Tidus and Rikku. The Evrae full-HP Potion loop is PR-0605, not a broken-board case. |
+| CHK-006 | PASS | yes | E and G open and close, target cancel returns to the same menu with 0 targets left in all 24 desktop runs that have the field, the FFX phone defeat reached RESULTS, RETRY, party prep and the retried fight with the old intent gone (ZOMBIE 98 percent became 50 percent). The FFX-2 half and the later-link retry rest on the round 32b G3 reuse (52 asserts, 51 ok, both games, nine chains) with the dependency argument below. |
+| CHK-007 | PASS | no | 0 developer vocabulary in 391 distinct captured player-facing strings (the seven "ffx2-..." hits are chapter ids in board arrays). Coverage is 391 strings, not the per-element dump of round 32; every frame read was also free of ids and citations. |
+| CHK-008 | FAIL | no | Polish-level overlaps in sampled frames, all carried or transient: Omnis F1 HUD text over the boss and the party legs, Trema's dialogue card over Yuna's HP row, the Vegnagun target plate over Rikku's name header, Ixion's painted body under the command rows, the Omnis intent card over its guide card, Chapter XII's TARGET flag on the Sensor card (R72-1), Yunalesca behind Auron and the HP plate. No panel covers a face o ... |
+| CHK-009 | FAIL | yes | The selected F1 row's hint or label is cut in more chapters: Evrae ORDERS (newly treated in release 71) and Braska TALK print "A one-off action this..." and Isaaru prints "SPECI..." (53 px in 47); phone CHANGE tiles clip "UNNER" and "GRANTS: BLUI". PR-0586 and PR-0518, carried, minor. Names of enemies, allies and abilities are otherwise whole in every frame read; the boss ribbon names the declared boss in Chapters VI ... |
+| CHK-010 | PASS | no | The target step in every chapter with a target frame: pointing hand (FFX) or lotus ring (FFX-2) plus a TARGET flag with name and damage type, dimmed party rows, and on the phone a labelled confirm button "ATTACK -> BAHAMUT" with BACK. No all-party desktop target frame exists this round. |
+| CHK-011 | FAIL | no | Two midfight frames hide the headline boss: Braska's Final Aeon sits mostly out of frame under the turn order at a command moment (identical to round 32, PR-0583) and Yunalesca is behind Auron's lunge, the 1778 numeral and the HP plate in 23-midfight. In the first-menu sweep every enemy of all 19 chapters is visible. |
+| CHK-012 | PASS | no | No monogram or missing painting on any chip in the 19-chapter sweep, the midfight frames and the phone rails. Sampled, not the full roster of every form and aeon. |
+| CHK-013 | PASS | yes | Approved art judged in the running game against its tile (32 in-game composites); verify-approved at ROOT=D:/pyrefly-release55 gives 917 ok, 0 mismatched, 0 missing (approved 869, judge-locked 48). The shipped derivatives were not re-hashed by this lane (the deploy gate and CHK-017 do). Treated-arena darkness (now Yojimbo too) is recorded as a question for Bailey (PR-0585), not a replacement proposal. |
+| CHK-014 | PASS | yes | Party faces the foe and foes face the party or left in every sweep frame and composite read (Yojimbo, Evrae, Natus, Ixion, Vegnagun, Leblanc included); no actor mirrors into a neighbour. The numeric slot-sign cross-check was not run. |
+| CHK-015 | PASS | yes | All 19 chapters played from title to board with real keyboard input (touch for the phone runs). The only hook is the labelled setSeed(1), listed in run.json.hooks; 0 injected frames of 733. The gap pass used the labelled autoBattle and setBattleSpeed hooks to reach Braska link 3 and switched them off before the capture (named in its note). |
+| CHK-016 | PASS | yes | Every capture asserts its screen. 725 of 733 index entries carry a verified assertion; 8 are flagged UNVERIFIED by the harness and none is used as proof (six 30-post-scene frames where the scene plays after the results tally, two FFX phone pause frames where Esc was spent on the coach). Gap index 34 of 34 verified. |
+| CHK-017 | PASS | yes | verify-live against critic/artifacts/01a767770.json: PASS, liveManifest match, 77 changed files checked, 0 mismatched, 0 missing, 0 wrong type; the live HTML names assets/index-Cz_6EQVK.js; the stored manifest's rehash agrees with artifactHash 664d823b...; 300 of 300 audio entries fetched 200 and sha256-equal; the deploy-time live review compared all 7,169 files PASS. |
+| CHK-018 | PASS | yes | art-derive audit --dir dist-release (hash equal to live): PASS, 1,360 text files, 1,372 literal art names (43 a shipped file, 1,329 a derived master, 0 dangling), 38 of 38 thumbnails; every shipped audio path is a registry or manifest id and present live (audio tests pass). |
+| CHK-019 | PASS | yes | The manifest decodes 5,785 files ok (2 intentional blank, audioUnverified 0); art-derive verify PASS (5,404 masters, 5,052 pixel-compared, 0 problems); ffmpeg decodes all 319 mp3 with 0 errors; 0 html-served-as-image and 0 not-found across 8,482 art and audio requests in 31 live runs. The all-images-load-in-WebKit-and-Chromium tool was not re-run (the media bytes are identical to round 32b's: no art or audio byte cha ... |
+| CHK-020 | FAIL | yes | Polish-level and unchanged (PR-0543): the FFX target step shows "Enter Select / G Intel / Q Defend / P Pause" and no ENTER CONFIRM / ESC BACK strip that the FFX-2 target step draws, and the strip says "Intel" for the panel headed GUIDE. Everything else paired is the same screen or a deliberate game difference with a source (CTB turn strip against ATB gauges, Q Defend and FLEE FFX only, dresspheres, accent colour). Th ... |
+| CHK-021 | PASS | yes | Every release 71 and 72 presentation change carries its written game case and the code enforces it: FlipFit FFX only (returnFitOf undefined unless curvesGame() is ffx, never for the booth pair or a house strike), SkyGrade FFX-2 only (SKY_CHAPTERS names ffx2-vegnagun-shuyin and ffx2-fallen-aeons), SlideEase and ProneLay both games as shared plumbing gated by curvesOn(), REDUCE MOTION and ?kofall=off, F1 HUD for IX and ... |
+| CHK-022 | PASS | yes | WIN: all 19 listed chapters reached results, CONFIRM, the post scene where one exists (it plays after the tally, afterConfirm cutscene), chapter select and a real reload with the clear kept, 0 console errors, 0 not-found. LOSS and RETRY fresh on this build: Chapter I phone run (defeat results, RETRY, party prep 3.1 s, first menu 6.6 s later, retried battle, retrySeed 1001), FFX-2 Chapter IV by the gap pass (pro-defea ... |
+| CHK-023 | PASS | yes | Each changed subsystem traced from a real input to the event, the effect and the state a frame later: no engine subsystem changed (event streams identical to round 32 until the first player-timed input), 28 battle logs show Overdrive minigames, Doublecast, Summon, form-change, script-trigger, minigame-request and ko events firing with finite data and no console error; the presenter-side additions are reached by the n ... |
+| CHK-024 | NOT APPLICABLE | no | Persistence did not change: git diff e3f51bf18..01a767770 over src/app is src/app/changelog/releaseNotes.ts only, no localStorage, sessionStorage, getItem, setItem, indexedDB or schema-version line added anywhere in src; 18 save, settings and defaults vitest files (215 tests) pass; 22 of 22 victory runs keep the clear after a real reload. |
+| CHK-026 | FAIL | yes | The continuity harness (harness 5e1bbdec47c9, release tree D:/pyrefly-release55, GPU, seed 1, 1600x900, pose table b8cead6d) read ALL 19 chapters fresh on this build in one run (11,220.8 s of battle, 11,176 swaps judged). FAIL in 12 chapters: Seymour Flux (2 Auron head swaps, worst 10.8 percent; one height-band miss), Yunalesca (37 silhouette-stance misses, 34 of them the boss idle to hurt and back and 3 Shiva, worst ... |
+| CHK-027 | FAIL | yes | The same full run, 19 of 19 chapters. FAIL in 6: Yunalesca (21 swap jerks of 40 px or more, worst 153.5 px), Braska (9, worst 232.6 px), Sin core (8, worst 255.2 px, the left fin), Den of Woe (7, worst 169.4 px, Rikku critical to hurt), Vegnagun (5, worst 202.9 px, the tail) and Fallen Aeons (4, worst 44.6 px). PASS in 13 (Flux, Bahamut, Leblanc, Anima, Evrae, Yojimbo, Natus, Omnis, Trema, Isaaru, Ixion, Sin face, Mi ... |
+
+## Coverage matrix
+### Tested
+- Live exact artifact: verify-live PASS (77 files, 0 mismatched), the live index names index-Cz_6EQVK.js, 300 of 300 audio files fetched and equal.
+- All 19 chapters won by real keys from the title to results, CONFIRM, the post scene and chapter select with the clear kept after reload; 733 captures (725 asserted), 0 injected, 0 console errors, 0 not-found.
+- Continuity harness (CHK-026 and CHK-027) on all 19 chapters fresh in one run: 11,220.8 s of battle, 11,176 swaps judged, harness 5e1bbdec47c9, GPU, seed 1, 1600x900, run by the capture owner (PID 6356, 02:31 to 06:19 EST); the stamped aggregate critic/rounds/round-33/continuity/continuity-summary.json is embedded unchanged. The four chapters of the same-artifact focused run (Anima, Yojimbo, Isaaru, Omnis) were read again in it and agree on both checks and on the reasons (Anima one stance miss, 15.3 against 15.1 px; Yojimbo 13 Lulu head swaps both times; Isaaru and Omnis PASS both times); the one number that differs is Yojimbo's mid-move dashes (0 in the focused run, 3 up to 70.5 px here: reported, not gated).
+- Loss and retry: Chapter I phone (defeat to retried battle), FFX-2 Chapter IV desktop (TRY AGAIN to first menu 9.3 s), Trema twice to the defeat screen.
+- Six-size pause matrix, legibility sweep of 57 battle surfaces and 12 phone surfaces, phone pause by real tap (Chapters I and IV), Braska link 3 Summon rows in a browser, 32 target composites against the approved tiles.
+- Engines: 16 probes and measures md5-identical to round 32b; the full unit suite on this tree (28,554 tests, 0 real failures); audio technical half (qa, decode, hashes, routing over 179 snapshots); art-derive audit and verify.
+### Reused (with the dependency argument)
+- Later-link retry in the nine chained chapters (CHK-022) and CHK-006 overlay exits: from critic/rounds/round-32b.json G3. BattleEncounterChain, BattleScreen*, the presenter lifecycle, src/battle, src/data and SaveData are byte-identical; six of the nine chapters carried the same treatment mechanism in release 70 and read clean; the residual risk for Vegnagun, Fallen Aeons and Mirror Aeons is listed under notTested.
+- Narrative text judgement (8.8): from critic/rounds/round-32.json. git diff over src/story, research/writing-bible.md and src/data/encounters.ts is empty between e3f51bf18 and 01a767770; no open related defect except PR-0485.
+- Prep agency (Sphere Grid, Overdrive equip, FFX-2 read-only tabs) and onboarding ACCESSIBILITY rows for files unchanged since: from critic/rounds/round-32/gaps-G4-walks-optional (bundle UNVtEttT). No prep, pause, settings or access file changed between e3f51bf18 and 01a767770; not reused for the new F1 chapters or the new ceiling.
+- Audio title and board cue state, boss-shuyin at gain 1 and the retried fight's theme: from critic/rounds/round-32b.json (G4 4e-audio, G3). git diff over src/audio, public/audio, tools/audio and docs/audio is empty and 0 of 300 audio entries changed.
+- Carried issue text of the round-32b issues not touched by a round-33 lane (marked carriedFrom round-32b): from critic/rounds/round-32b.json. Their code and assets are unchanged by releases 71 and 72 and no round-33 lane contradicted them.
+### Not tested
+- Chapter III links 4 to 6 Summon rows in a browser (PR-0460); the phone Items list rows beyond page 1 (PR-0483).
+- Retry from a later link of Vegnagun, Fallen Aeons and Mirror Aeons on the release 71 treatment (reused from 32b for the mechanism; not re-run).
+- Phone pause by tap on every chapter; the 390x844 FFX phone pause plate rect (read from the frame, not measured); 4:3 and 1440p; Firefox, WebKit, Safari, a real phone or controller.
+- Pause ACCESSIBILITY, CONTROLS and MUSIC panes, TEXT SIZE 115 and 130 on the F1 chapters IX, XII and XVIII, REDUCE FLASHES and COLOUR VISION frames (PR-0612).
+- Master loudness and true peak of the sound pass in the seven chapters added in releases 71 and 72; a dense last-blow-to-results music timeline; the pause music state in a fight; ending beds; the voice-counter anomaly in the Mirror Aeons and Sin face (started = asked + 1, as in round 32, not audible-proved).
+- The eased KO slide and the fitted Tidus return flip as pixels in the live bundle beyond the harness numbers; the booth clips of VIII, XI, XVI and the Mirror Aeons (real clips held there); Chapter XI Magus Sisters tile and the Evrae order widget at a command moment; Yojimbo at 2000x1012; the chip at Evrae turn 68 (PR-0605).
+- Bailey's listening verdict (CHK-001, CHK-B1) and his feel verdict on the new motion (CHK-B2): filed mandatory:false UNVERIFIED.
+- The first-time fan list was read through the Chapter III seam item (its tail was cut in the hand-over); the items read are mapped to issues.
+- A second seed or another size of the continuity harness in any chapter (the 150 px dash line of PR-0581 and a second seed for Chapter III are open); CHK-026 and CHK-027 on WebKit, Firefox or a phone (the harness is Chromium on the GPU at 1600x900, seed 1).
+### Required and not tested (blocks settling the deep obligation)
+- none
+
+## Encounters through their real flow
+- yunalesca: real flow completed; victory seed 1, 199 turns; post scene plays after the tally
+- isaaru-via-purifico: real flow completed; victory seed 1, 38 turns; PR-0586 Special label clipped
+- braskas-final-aeon: real flow completed; victory seed 1, 284 turns, 6 seams; release 72 real clips and return flip; midfight composition as r32
+- seymour-flux: real flow completed; victory seed 1 at 1600x900 and 2000x1012, 53 turns; lose-and-retry shown (defeat, retry, second battle); 390x844 touch run lost at turn 35 as in round 32
+- seymour-natus: real flow completed; victory seed 1, 26 turns
+- seymour-anima-macalania: real flow completed; victory seed 1, 58 turns; post scene after the tally
+- yojimbo-cavern: real flow completed; victory seed 1, 14 turns; release 72 treated booth; post scene watched
+- seymour-omnis: real flow completed; victory seed 1, 92 turns; Chapter XII F1 HUD held
+- evrae-airship: real flow completed; victory seed 1, 85 turns; release 71 booth treatment
+- mirror-aeons: real flow completed; victory on a rerun (209 turns, 1,137 s); the first run stalled at link 2 on the capture budget, as in round 32
+- ffx2-trema: real flow completed; defeat on seed 1 twice (turn 217; turn 30 in the Paragon link), victory on seed 2 in 22 min; pro-defeat screen reached
+- ffx2-den-of-woe: real flow completed; victory seed 1, 33 turns
+- ffx2-ixion-djose: real flow completed; victory seed 1, 31 turns; release 71 booth
+- ffx2-bahamut: real flow completed; victory at 1600x900, 2000x1012 and 390x844 touch, 60 turns; lose-and-retry reached the pro-defeat screen and, in the gap pass, TRY AGAIN to the first menu in 9.3 s
+- ffx2-leblanc: real flow completed; victory seed 1, 92 turns
+- ffx2-vegnagun-shuyin: real flow completed; victory seed 1, 86 turns; release 71 booth
+- ffx2-fallen-aeons: real flow completed; victory seed 1, 52 turns; release 71 booth and release 72 sky option C
+- sin-fins-core: real flow completed; victory seed 1, 315 turns; untreated chapter
+- sin-face: real flow completed; victory seed 1, 45 turns; untreated chapter, fast-speed strike hops not fixed on live
+
+## Ranked issue list (112; 109 open: 11 major, 71 minor, 27 polish)
+Critical: none. Closures and narrowings:
+- PR-0581: The teleport half is verified fixed on this build (fresh Braska harness: 0 teleports against 3 of 302 to 340 px in round 32b; release 72 FlipFit). The ticket stays open at minor for the 160.6 px dashes against the 150 px line and a second seed.
+- PR-0582: Verified repaired in the three chapters read on this bundle (Isaaru 89.6 to 26.4 px, Macalania 80.3 to 0, Ixion 0 swap jerks; release 72 SlideEase); open at minor for a second seed.
+- R72-2: Merged into PR-0584 (one root defect, three reports).
+- PR-0587: Stays fixed (verified round 32b); this round adds a fresh FFX-2 Chapter IV retry with ms stamps (9.3 s) and the later-link retries are reused with a written argument (CHK-022).
+
+### PR-0584 [major] visual, FFX: Chapter III Braska: pose swaps still change head, height and stance and Auron/Yuna/Tidus jerk up to 232.6 px at the victory cheer and the critical swaps (CHK-026 and CHK-027 FAIL; teleports repaired; the focused review's R72-2)
+- Status: open; carried from round-32b; last seen round 33; confidence: high for the measurement; medium for what the player sees at the cheer
+- Chapter and state: Chapter III braskas-final-aeon, treated Chapter III, end of fight, harness swaps 1171, 1172 and 1767
+- Observed: FRESH (this review, harness 5e1bbdec47c9, seed 1, 1600x900, 1,661.9 s of battle, 1,425 swaps counted): CHK-026 FAIL: 58 head swaps over tolerance (worst 94.4 percent where registered; 762 of the swaps are across a recorded hold and read up to 95.1 percent from the idle), 8 feet moves over 2 px (worst 14.5 px), 21 swaps outside the height band (stature 0.732 to 1.499), 17 silhouette-stance misses (worst 270.6 px). CHK-027 FAIL: 9 swap jerks of 40 px or more (worst 232.6 px), 0 teleports (round 32b: 3 of 306 to 340 px), 42 mid-move dashes over 40 px (worst 160.6 px, reported not gated). Same-artifact focused run read 58.1 percent / 229.5 px / 8 jerks, the same class. Most of the numbers sit at the victory cheer and the critical idles, where the camera cuts to a close-up of one figure a few frames earlier, so what the player sees at the swap is not settled by the numbers (strips swap-919-tidus-critical-idle, swap-1171-tidus-idle-victory, swap-031-yuna-critical-idle in the fresh run). Better than round 32b (head 97.1 percent, swap jerk 227.3 px, 3 teleports): the teleports are gone and the jerk count fell from 34 to 9; the head, height and stance numbers did not move.
+- Expected: Head within 3 percent where registered, feet within 2 px, no single-frame step of 40 px or more at a swap (CHK-026, CHK-027).
+- Repro and seed: Chapter III to the end; harness swaps 1171, 1172, 1767; strip jerk-046-auron.
+- Evidence: critic/rounds/round-33/continuity/braskas-final-aeon-win-r33/continuity/continuity.json; critic/rounds/round-33/continuity/braskas-final-aeon-win-r33/continuity/strips/swap-919-tidus-critical-idle.jpg; critic/rounds/round-33/continuity/braskas-final-aeon-win-r33/continuity/strips/swap-1171-tidus-idle-victory.jpg; critic/reviews/01a767770-focused/continuity/continuity-summary-braskas-final-aeon.json; critic/reviews/01a767770-focused/continuity/braskas-final-aeon-win-01a767770/continuity/strips/jerk-008-auron.jpg
+- Requirement: CHK-026
+- Smallest fix: Register the Chapter III critical and victory paintings in docs/target/pose-measure.json, or decide with a probe whether swaps under the victory close-up are excused by a written rule (the question PR-0584 asked in round 32b); the method check of proposal 1 comes first.
+- Acceptance check: Harness on braskas-final-aeon: CHK-026 and CHK-027 PASS, or a written rule excuses the swaps under the victory camera and the harness applies it.
+- Ship tags: introducedByCandidate false, regressionVsLive false, inNewFeature false
+
+### PR-0531 [major] visual, both: Figures still change head, height or feet at pose swaps: CHK-026 FAILS in 12 of the 19 chapters the harness read on this build (full 19-chapter read, round 33b; 13 of 19 in round 32b); Isaaru is repaired and passes
+- Status: open; carried from round-32b; last seen round 33b; confidence: high (all 19 chapters read on this build, one run, one harness)
+- Chapter and state: 12 of 19 chapters: seymour-flux, yunalesca, braskas-final-aeon, seymour-anima-macalania, evrae-airship, yojimbo-cavern, ffx2-fallen-aeons, ffx2-trema, ffx2-ixion-djose, sin-fins-core, sin-face, mirror-aeons, every pose swap of 19 chapters won by real keys, live, 1600x900, seed 1
+- Observed: Harness (10,638.5 s of battle, 11,649 swaps, harness 5e1bbdec47c9, pose table b8cead6d): 445 head swaps over tolerance (worst 97.1 percent at Braska's victory cheer; 15.5 percent is Lulu's rig head), 26 feet moves over 2 px (worst 18 px, Braska; Trema Paragon 10.4 px), 25 swaps outside the height band (round 31: 5; 23 of them in Braska), 54 silhouette-stance misses (23). FAIL in 13 of 19: Seymour Flux, Yunalesca, Braska, Anima, Evrae, Yojimbo, Fallen Aeons, Trema, Isaaru, Ixion, Sin core, Sin face, Mirror Aeons. PASS: Bahamut, Vegnagun, Leblanc, Natus, Omnis, Den of Woe. Leblanc, new in r69, is PASS on CHK-026 and CHK-027. Braska is worse than round 31 (PR-0584). ROUND 33B: Full harness (harness 5e1bbdec47c9, GPU, seed 1, 1600x900, 19 of 19 chapters, 11,220.8 s of battle, 11,176 swaps judged): 415 head swaps over tolerance (round 32b: 445; worst 94.4 percent at Braska's cheer), 24 feet moves over 2 px (26; worst 14.5 px in Braska; Trema's Paragon 10.3 px), 23 swaps outside the height band (25; 21 in Braska, one in Flux, one in Ixion), 59 silhouette-stance misses (54: Yunalesca 37, Braska 17, Fallen Aeons 4, Anima 1). FAIL in 12 chapters, PASS in 7 (Bahamut, Vegnagun, Leblanc, Natus, Omnis, Den of Woe and Isaaru, repaired since 32b by the KO-slide ease). By root cause: (1) Lulu's rig head is 397 of the 415 head fails (PR-0534): Evrae, Yojimbo, Sin core, Sin face and the Mirror Aeons fail CHK-026 on that reading alone; (2) Chapter III, PR-0584: 58 heads, 8 feet, 21 heights, 17 stances; (3) Yunalesca's boss idle to hurt and back, 34 of its 37 stance misses, up to 14.7 px; (4) Trema's Paragon feet, PR-0529: 16 swaps, 10.3 px; (5) singles: Anima's boss idle to KO (15.1 px), Ixion's Yuna idle to hurt (height), Fallen Aeons' X-2 Shiva idle to attack (3 stance misses up to 18 px), Flux's Auron (2 heads, 1 height). No chapter that passed in 32b fails now. Correction to round 33's focused-run line 'Anima FAIL 22.2 percent': Anima fails CHK-026 on one stance miss, not on a head (the 22 percent ratio in its summary is not a counted fail).
+- Expected: Head within 3 percent, standing feet within 2 px at 1600 wide, stature inside the pose band at every swap (CHK-026).
+- Repro and seed: node critic/runner/lib/continuity.mjs --base=https://echoesofspira.com/ --chapters=<chapter> --goal=win --size=1600x900 --seed=1 (PYREFLY_BROWSER=gpu); the 19-chapter run of this round is critic/rounds/round-31/continuity
+- Evidence: critic/rounds/round-32/continuity/continuity-summary.json; critic/rounds/round-32/continuity/ffx2-trema-win-r32/continuity/strips/swap-207-paragon-idle-cast.jpg; critic/rounds/round-32/continuity/braskas-final-aeon-win-r32/continuity/strips/swap-1172-yuna-idle-victory.jpg; critic/reviews/01a767770-focused/continuity/continuity-summary-yojimbo-cavern.json; critic/reviews/01a767770-focused/continuity/continuity-summary-isaaru-via-purifico.json; critic/rounds/round-33/continuity/continuity-summary.json; critic/rounds/round-33/continuity/yojimbo-cavern-win-r33/continuity/continuity.json; critic/rounds/round-33/continuity/seymour-anima-macalania-win-r33/continuity/continuity.json
+- Requirement: CHK-026, RUBRIC 6a (Bailey 2026-10-04: "characters change size and height across poses ... ruins the immersion")
+- Smallest fix: Re-register the pose paintings the strips name to the idle head and ground line (registration, never a repaint on taste), refit the Den of Woe and Ixion poses outside their height band, and have the harness read the head from the part's own box for rig figures; do not loosen the tolerance. A written method check is owed before a third batch (RUBRIC section 8: open in rounds 29, 30, 30b, 31).
+- Acceptance check: Harness on Chapters I, IV, VII, IX, XI, XII, XIII, XVI: feet, height and stance lists empty outside written waivers; the five named strips show one size.
+- Ship tags: introducedByCandidate false, regressionVsLive false, inNewFeature false
+
+### PR-0380 [major] feel, both: CHK-027 FAILS in 6 of the 19 chapters (full read, round 33b): Yunalesca 21 swap jerks of 40 px or more (worst 153.5 px), Braska 9 (232.6 px), Sin core 8 (255.2 px), Den of Woe 7 (169.4 px), Vegnagun 5 (202.9 px), Fallen Aeons 4 (44.6 px); 54 in all (round 32b: 34); teleports 3 to 0; Anima and Isaaru now pass
+- Status: open; carried from round-32b; last seen round 33b; confidence: high
+- Chapter and state: II, III, V, XI, XII, XIV, XVII, XIX (yunalesca, braskas-final-aeon, ffx2-vegnagun-shuyin, ffx2-fallen-aeons, ffx2-trema, ffx2-den-of-woe, sin-fins-core, mirror-aeons), every frame of every fight, 19 chapters, live
+- Observed: Harness: 34 swap jerks of 40 px or more (worst 227.3 px, Braska), 3 mid-move teleports of 300 px or more (340 px, Braska Tidus: PR-0581), 138 dashes over the fail line (worst 294.5 px), 175 jerks over the fail line; snaps 0.00 a minute (the 7.5 animation cap does not bind). FAIL: Yunalesca, Braska, Vegnagun (tail 201.6 px), Anima (Ixion 80.3 px: PR-0582), Fallen Aeons (45.5 px), Isaaru (89.6 px: PR-0582), Den of Woe (Rikku 139.9 px stand-to-kneel drop), Sin core (left fin 169.3 px). Better than round 31 at swaps (66 to 34); worse in Braska, Anima and Isaaru, which the booth treatment first reached in release 70. ROUND 33B: Full harness, 19 of 19 chapters: 54 swap jerks of 40 px or more (32b: 34; worst 255.2 px in Sin core's left fin, 232.6 px in Braska), 0 mid-move teleports (32b: 3 of 302 to 340 px in Braska), 189 dashes over the fail line (138; reported, not gated; worst 252.8 px), snaps 0.00 a minute in every chapter. FAIL: Yunalesca 21, Braska 9, Sin core 8, Den of Woe 7 (Rikku critical to hurt 169.4 px), Vegnagun 5 (tail 202.9 px), Fallen Aeons 4. PASS: Flux, Bahamut, Leblanc, Anima (80.3 px to 0, repaired), Evrae, Yojimbo, Natus, Omnis (30 swap jerks, all under 30 px), Trema, Isaaru (89.6 to 26.4 px, repaired), Ixion, Sin face and the Mirror Aeons. The rise from 34 to 54 is one chapter: Yunalesca 3 to 21 on a fight 2.6 times as long (1,294.8 s against 491.8 s, 14 revives against none), and 7 of its 14 revive swaps step 50 to 131 px in one frame (Wakka 131, 125, 94, 94; Yuna 65, 53; Auron 50) where live release 69 read 3 of 8 up to 89 px and release 70's candidate 1 revive with no step; this is the revive-step class of PR-0570. The other 18 chapters go from 31 to 33 over the line. The repeated events are the same swaps: the harness lists 322 swap-kind jerks of 40 px or more in Sin core against 321 in 32b and 45 against 43 in Den of Woe; where a chapter's worst single event moved up (Sin core 169.3 to 255.2 px, Den of Woe 139.9 to 169.4 px) it is a different frame of the same class, and Chapter XVII is not a treated chapter. Not shown to be a regression of release 71 or 72; the cause of Yunalesca's step is not traced (suspect, not proven: the eased KO slide of release 72 eases the fall but not the way back up).
+- Expected: No jump of 40 px or more in one frame at a pose swap, or a swap that happens under a cut with no ghost (CHK-027).
+- Repro and seed: Continuity harness, ffx2-vegnagun-shuyin and sin-fins-core, seed 1, 1600x900 (strips under critic/rounds/round-31/continuity/<chapter>-win-r31/continuity/strips)
+- Evidence: critic/rounds/round-32/continuity/continuity-summary.json; critic/rounds/round-32/continuity/ffx2-den-of-woe-win-r32/continuity/strips/jerk-004-rikku.jpg; critic/rounds/round-32/continuity/isaaru-via-purifico-win-r32/continuity/strips/jerk-000-ixion.jpg; critic/rounds/round-33/continuity/yunalesca-win-r33/continuity/continuity.json; critic/rounds/round-33/continuity/braskas-final-aeon-win-r33/continuity/continuity.json; critic/rounds/round-33/continuity/continuity-summary.json; critic/rounds/round-33/continuity/sin-fins-core-win-r33/continuity/continuity.json; critic/rounds/round-33/continuity/ffx2-den-of-woe-win-r33/continuity/continuity.json; critic/rounds/round-33/continuity/ffx2-vegnagun-shuyin-win-r33/continuity/continuity.json
+- Requirement: CHK-027 (Bailey 2026-10-04)
+- Smallest fix: Start with the Sin fins/core and Vegnagun swap lists (the worst two); register Ixion hurt and KO to one feet anchor; extend the registered stance to the poses the lists name. Method check owed (RUBRIC section 8).
+- Acceptance check: Harness on the eight chapters: swap jerks over the line under 10 in total.
+- Ship tags: introducedByCandidate false, regressionVsLive false, inNewFeature false
+
+### PR-0379 [major] feel, both: See-through cross-dissolves at pose swaps: 1,831 ms a minute over all 19 chapters (round 32b: 1,623), worst severity 0.374; Ixion 4,729, Yunalesca 4,632, Trema 2,730 and Sin face 2,576 ms a minute stay over
+- Status: open; carried from round-32b; last seen round 33b; confidence: high
+- Chapter and state: worst: Ixion 4,729, Yunalesca 4,632, Trema 2,730, Sin face 2,576 ms a minute (14 of 19 chapters over 1,000), all fights, live, ?swapscope=wide default in 13 chapters
+- Observed: Harness: 1,623 ms a minute of see-through frames (97.4 frames a minute at 60 Hz), worst severity 0.367 under the 0.4 line, 0 over the fail line. Yunalesca 5,611 ms a minute (strip ghost-233), Ixion 3,444, Trema 2,644, Sin face 2,548 remain the worst. Gated swap jerks 66 to 34. ROUND 33B: Full harness, 19 of 19 chapters: 1,831 ms a minute of see-through (105.4 frames a minute, 109.9 at 60 Hz; 32b: 1,623 and 97.4), worst severity 0.374 under the 0.4 line, 0 over the fail line. 14 chapters sit over the 1,000 line: Ixion 4,729 (32b: 3,444), Yunalesca 4,632 (5,611), Trema 2,730, Sin face 2,576, Leblanc 1,739, Natus 1,534, Evrae 1,507, Braska 1,417, Omnis 1,391, Sin core 1,362, Mirror Aeons 1,234, Fallen Aeons 1,215, Den of Woe 1,068, Anima 1,025; under it: Bahamut 649, Vegnagun 726, Yojimbo 632, Flux 512, Isaaru 487. Ixion is the one that got worse (+1,285), read on a fight half as long (149.4 s against 304.7 s). The first-time fan shows the same class on screen: Ixion drawn as a double outline before its leap (evidence/ffx2-ixion-djose-win-r33/seq-spherechange/f03.jpg, read by the chief), Tidus as two overlapped poses in Yunalesca (seq-party-action/f01.jpg) and in the Mirror Aeons.
+- Expected: Under 1,000 ms a minute of see-through in every chapter (the issue's own line).
+- Repro and seed: Continuity harness, any chapter, seed 1.
+- Evidence: critic/rounds/round-32/continuity/continuity-summary.json; critic/rounds/round-33/evidence/ffx2-ixion-djose-win-r33/seq-spherechange/f03.jpg; critic/rounds/round-33/evidence/yunalesca-win-r33/seq-party-action/f01.jpg; critic/rounds/round-33/continuity/continuity-summary.json
+- Requirement: CHK-027 item 3
+- Smallest fix: Continue the planned list: Evrae head registration, Sin face lunge return, Yunalesca planned cuts over 120 px, then move each of the four exceptions to the wide scope when its blocker clears.
+- Acceptance check: All 19 chapters under 1,000 ms a minute or named exceptions.
+- Ship tags: introducedByCandidate false, regressionVsLive false, inNewFeature false
+
+### PR-0603 [major] interface, FFX: The Chapter XII intent card prints an impossible damage range: "TIDUS 4,132-2,333" (low end above the high end)
+- Status: open; confidence: high that the numbers are shown; low on the cause
+- Chapter and state: XII seymour-omnis, seymour-omnis, seed 1, default 1600x900, first menu, key E, Mortiphasm Spells (second in the queue)
+- Observed: The card reads "DAMAGE  TIDUS 4,132-2,333  68% HP  AURON 2,066-2,333  34% HP". Tidus's low bound is twice Auron's and above his own high bound. Round 32 printed the same text (run.json intentText) and nobody filed it. Confirmed by the confirmer from the stored round-33 run.json; the card was not re-rendered live by the confirmer, and the chief read the capture owner's run.json and frame.
+- Expected: A range that reads low to high for every listed target (Tidus's low bound is probably 2,066, matching Auron), so the player can judge whether a Mortiphasm hit is survivable.
+- Repro and seed: https://echoesofspira.com/, Chapter XII, setSeed(1) before the first key, play to the first menu, press E. Frame: evidence/seymour-omnis-win-r33/12-intent-E.png; text in seymour-omnis-win-r33/run.json intentText.
+- Evidence: critic/rounds/round-33/evidence/seymour-omnis-win-r33/12-intent-E.png; critic/rounds/round-33/evidence/seymour-omnis-win-r33/run.json
+- Requirement: RUBRIC section 2 and CHK-004: enemy intent honest, certain separated from conditional (wrong information is major)
+- Where (traced only if stated): Chapter XII FFX intent card (src/battle/ffx/intent.ts area); cause not traced
+- Smallest fix: Find where the card builds the per-target low bound for the Mortiphasm spells (suspected: a doubled or unclamped minimum for Tidus; not traced) and correct it; add a unit assertion that every intent range satisfies min <= max across all chapters' cards.
+- Acceptance check: The Omnis E card on seed 1 reads low <= high for every row; the unit assertion over all chapters' cards passes.
+- Ship tags: introducedByCandidate false, regressionVsLive false, inNewFeature false
+
+### PR-0570 [major] feel, FFX only (Chapter I Tidus; Chapter II Tidus peaks 39.3 px and Chapter IV Rikku 30.9 px, no step): Chapter I Tidus's revive steps 89 px sideways in one frame at +117 ms (r68 removed the first-frame pop; the step moved later)
+- Status: open; carried from round-32b; last seen round 33b; confidence: medium
+- Chapter and state: seymour-flux, Tidus revived from knock-out, 60 Hz stepped frames, live
+- Observed: Release 69 fixed this: the revive slide target is read once at revive start (unit suite revive-follows-slide passes; Mega Phoenix and Phoenix Down revives resolve through the real menu in the Chapter I runs). The harness's Chapter I run lists no one-frame revive step of Tidus over the fail line (seymour-flux CHK-027 PASS, 0 swap jerks), but Tidus head moves of 80 to 162 px at swaps under a smear are present (frames 22585, 11541, 22705). The revive step itself was not isolated, so the fix is probable and not closed. ROUND 33: Fresh Flux harness: 0 swap jerks, 8 dashes over 40 px (worst 240.6 px; 32b 241.2 px). The Tidus revive step is not isolated by the harness summary; carried unchanged. ROUND 33B: the full harness finds the same revive-step class in Yunalesca: 14 revives, 7 of them step 50 to 131 px in one frame at the swap from knock-out to idle (Wakka 131, 125, 94, 94; Yuna 65, 53; Auron 50), against 3 of 8 (to 89 px) on live release 69 and 1 revive with no step on release 70's candidate. Chapter I reads 7 revives and 1 step (58 px) as in 32b; the Mirror Aeons 18 revives and none, Leblanc 3 and none, Sin core 5 and one (166 px; 40 px in 32b). So the step is not only Tidus's in Chapter I: it belongs to the revive swap, cause not traced. Tags unchanged.
+- Expected: No step over 40 px in one frame of a revive (CHK-027 item 4).
+- Repro and seed: https://echoesofspira.com/?coach=off, Chapter I, seed 1: let Kimahri fall, revive him or Tidus (Mega Phoenix or Phoenix Down); record 60 Hz stepped frames and track the standing plane (probe D:/Tools/pyrefly-scratch/2026-10-29/r68/gaps/lib).
+- Evidence: critic/rounds/round-32/continuity/seymour-flux-win-r32/continuity/continuity.json; critic/rounds/round-32/evidence/seymour-flux-win-r32/turn-log.json; critic/rounds/round-33/continuity/yunalesca-win-r33/continuity/continuity.json; critic/rounds/round-33/continuity/sin-fins-core-win-r33/continuity/continuity.json
+- Requirement: CHK-027 item 4; parent PR-0473
+- Smallest fix: Isolate the Chapter I revive in the harness (Tidus after Phoenix Down at +117 ms) and read the plane step; close if under 40 px.
+- Acceptance check: One revive strip of Tidus with a plane step under 40 px at +117 ms.
+- Ship tags: introducedByCandidate unknown, regressionVsLive false, inNewFeature false
+
+### PR-0517 [major] visual, FFX-2 only: FFX-2 Chapter IV: Rikku's and Paine's attack and ready poses still read as a different-sized figure from their idle (carried; r68's ready hold did not change it)
+- Status: open; carried from round-32b; last seen round 32; confidence: medium (one strip read in full by the chief; the others by their headers)
+- Chapter and state: ffx2-bahamut, Paine attack to follow, Rikku attack to follow and idle to attack
+- Observed: Carried. The fan strips show it again in Leblanc: Rikku grows to about 1.4 times when her ready stance starts (ffx2-leblanc seq-action-playing frames 6 to 9, seq-party-action frames 0 to 1), and Ormi's Shield Bash lunge is a pink ghost that pops back to its seat (a double-image read, folded here and into PR-0379). The harness CHK-026 reads Leblanc and Bahamut as PASS, because the head control passes a registered pose by construction (PR-0534).
+- Expected: A figure keeps one size across a pose change (CHK-026; Bailey 2026-10-04).
+- Repro and seed: Continuity harness ffx2-bahamut, seed 1, 1600x900.
+- Evidence: critic/rounds/round-31/continuity/ffx2-bahamut-win-r31/continuity/strips/swap-202-paine-attack-follow.jpg; critic/rounds/round-31/continuity/ffx2-bahamut-win-r31/continuity/strips/swap-207-rikku-attack-follow.jpg; critic/rounds/round-31/continuity/ffx2-bahamut-win-r31/continuity/strips/swap-267-rikku-idle-attack.jpg
+- Requirement: CHK-026, PR-0517 (ask Bailey: repaint or register only; human judgment unrecorded)
+- Smallest fix: Register the attack and follow paintings to the idle head and ground line (or give the swap a smear cut); Bailey decides whether the Dark Knight and Warrior ready poses are repainted.
+- Acceptance check: Strip header real head within 3 percent for the named swaps; harness stays PASS.
+- Ship tags: introducedByCandidate false, regressionVsLive false, inNewFeature false
+
+### PR-0459 [major] visual, FFX only: Chapter I (FFX): Auron's head changes 9.3 percent at two swaps and one swap draws him at stature 0.765 (CHK-026 FAIL, still open, a fourth deep review)
+- Status: open; carried from round-32b; last seen round 33; confidence: high
+- Chapter and state: seymour-flux, Auron attack/follow/idle swaps, killing-blow close-up
+- Observed: Chapter I (FFX): Seymour Flux CHK-026 FAIL again (max head jump 10.8 percent, 1 stature miss); the strips were not re-read for Auron specifically this round. Carried; folded into PR-0531's numbers. ROUND 33: Fresh Flux harness: head worst 10.8 percent (9.4 where registered), 2 head swaps over tolerance, one swap outside the height band (stature 0.765): the same readings as round 32b.
+- Expected: Head within 3 percent at every swap (CHK-026).
+- Repro and seed: Continuity harness, seymour-flux, seed 1, 1600x900; strips swap-265-auron-follow-idle.jpg and the Auron entries of continuity.json.
+- Evidence: critic/rounds/round-32/continuity/seymour-flux-win-r32/continuity/continuity.json
+- Requirement: CHK-026
+- Smallest fix: Method check first (RUBRIC section 8; stalled since round 29): read the two strips, re-register Auron follow to the idle head, re-run Chapter I.
+- Acceptance check: Chapter I harness: Auron worstHeadPct under 3 and heightOver 0.
+- Ship tags: introducedByCandidate false, regressionVsLive false, inNewFeature false
+
+### PR-0148 [major] audio, both: No numeric owner listening verdict covers the shipped mix (carried; an evidence gap, not a player defect)
+- Status: open; carried from round-32b; last seen round 32; confidence: high
+- Chapter and state: all, owner listening
+- Observed: Carried, an evidence gap and not a player defect: docs/audio/OWNER-VERDICT.md has no entry after 2026-09-28; the only number is 'I like all the music 7/10' (2026-10-13, D-804), music only, before the re-rendered victory cues, the SFX and voice passes and the conference sound pass. The technical half is clean (qa --strict 0 findings, 300 of 300 live files byte-equal, 0 synth fallbacks).
+- Expected: CHK-B1: a dated verbatim numeric verdict naming the build or cue set.
+- Repro and seed: Read docs/target/decisions.json (D-804, D-1310, D-1371) and docs/audio/OWNER-VERDICT.md.
+- Evidence: critic/rounds/round-32/audio/qa.log; docs/audio/OWNER-VERDICT.md
+- Requirement: RUBRIC audio: Bailey's listening assessment; CHK-B1
+- Smallest fix: Bailey listens to docs/audio/audition.html and gives a 0 to 10 number for music, SFX and voice, recorded verbatim.
+- Acceptance check: A dated verbatim numeric verdict naming the build or cue set is recorded.
+- Ship tags: introducedByCandidate false, regressionVsLive false, inNewFeature false
+
+### PR-0567 [major] delivery, both: A phone on a 10 Mbit/s line waits 11.1 s (Chapter I) and 18.4 s (Chapter IV) on the loading card, 80.1 and 60.7 MB on the wire, before the first command (release 68: 19.8 s and 42.4 s, about 94 MB); the 8 s and 50 MB lines are still missed
+- Status: open; carried from round-32b; last seen round 32b; confidence: medium (one run per chapter, host 28 to 32 percent busy)
+- Chapter and state: seymour-flux and ffx2-bahamut (measured); suspected for all, first-command job, phone10 profile (390x844, DPR 2, touch, CPU x4, 10 Mbit/s, 40 ms), real keys and taps, candidate bundle of the live artifact
+- Observed: Carried and unmeasured on the build: round 31 read 19.8 s (Chapter I) and 42.4 s (Chapter IV) on the loading card on a 10 Mbit/s phone profile. Release 69 added ?phonediet (CHANGELOG, the builder's own claim: 20.4 to 13.8 s and 42.3 to 23.7 s, with the 8 s budget still missed). No independent run measured the live build this round; PR-0573 (page memory per chapter change) is likewise not re-read after release 69's screen release and LeaveRelease.endFight. ROUND 32b ADDITION (G4 (4d) on the live release-70 bundle): phone10 profile (390x844, DPR 2, touch, CPU x4, 10 Mbit/s, 40 ms), pad route: Chapter I load wait 11.1 s (card 10.5 s, total 61.0 s, 80.1 MB to the menu), Chapter IV load wait 18.4 s (card 18.3 s, total 49.1 s, 60.7 MB). The release 68 candidate read 19.8 s and 93.6 MB (Chapter I) and 42.4 s and 94.0 MB (Chapter IV), so the load order of release 69 helps (about 9 s and 24 s less) but the 8 s budget and the 50 MB acceptance line are still missed (+3.1 s and +10.4 s). The host was 28 to 32 percent busy (the release 71 build), so these numbers are upper bounds. Three runs per chapter were not made.
+- Expected: A phone reaches the first command menu without a 20 to 40 s load card; the 5 s goal of BUDGETS B2a holds on the desktop line.
+- Repro and seed: critic/reviews/2a9340249-focused/budgets jobs/first-command.mjs --profile=phone10 --mode=pad (emulation only; a desktop GPU is not a phone).
+- Evidence: critic/reviews/2a9340249-focused/budgets/first-command-phone10-pad-cand68.json; critic/reviews/2a9340249-focused/budgets/first-command-phone10-pad-r67.json; critic/reviews/2a9340249-focused/budgets/first-command-desk50-pad-cand68.json; critic/rounds/round-32/gaps-G4-walks-optional/4d-delivery/phone10/first-command-phone10-pad-r32-g4-live.json
+- Requirement: RUBRIC section 2 and 6 delivery; BUDGETS B2a, B3a (proposed)
+- Smallest fix: Measure the wire set before the first menu with ?loaddiet=off and on, find what is fetched before the opening poses need it (suspected: the whole chapter's 1x paintings plus board strips), defer the rest until after the first menu.
+- Acceptance check: Three runs per chapter: phone10 wire bytes to the first menu at most 50 MB, load wait at most 8 s, desk50 Chapter I load card at most 5.0 s.
+- Ship tags: introducedByCandidate false, regressionVsLive false, inNewFeature false
+
+### PR-0295 [major] interface, both: Heavy party-prep tabs are a desktop frame squeezed onto a phone (carried; not re-examined; the prep tab strip is cut at ACCESS on the 390x844 prep capture)
+- Status: open; carried from round-32b; last seen round 32b; confidence: low this round
+- Chapter and state: prep, phone, carried
+- Observed: Carried, not re-walked: only the first prep tab was captured at 390x844 (the strip is cut at 'ACCESS' in Chapter IV). ROUND 32b ADDITION (G4 (4c) evidence, severity left to the driver): The phone prep tabs were walked by tap and swipe on the live bundle (FFX CHAPTER, STATS, SPHERE GRID, EQUIPMENT, ITEMS, OVERDRIVE; FFX-2 CHAPTER, DRESSPHERES, STATS, ACCESSORIES, ITEMS): the strip is cut at open (3 of 6 FFX tabs and 2 of 5 FFX-2 tabs off screen) and the tabs are 37 px tall, but a real swipe moves the strip, it follows the selected tab, and the tabs seen are phone layouts (stacked, foldable sections), so "a desktop frame squeezed onto a phone" is not what the tabs walked show.
+- Expected: A phone prep that is a phone layout.
+- Repro and seed: 390x844 touch, any chapter, prep screen.
+- Evidence: critic/rounds/round-32/evidence/ffx2-bahamut-win-r32-phone-touch/04-prep.png; critic/rounds/round-32/gaps-G4-walks-optional/4c-ffx/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4c-ffx2/run.json
+- Requirement: RUBRIC section 6 prep and interface
+- Smallest fix: Walk it (PR-0503), then fix on what the walk shows.
+- Acceptance check: Per tab at 390x844: opened by tap, readable, one change made, visible in the first menu.
+- Ship tags: introducedByCandidate false, regressionVsLive false, inNewFeature false
+
+### PR-0586 [minor] interface, FFX only: R32-INT-01: the F1 command row cuts the selected row's own label or hint ('SPECI...' on Isaaru, 'A one-off action this...' on Braska and Natus)
+- Status: open; carried from round-32b; last seen round 33; confidence: high that it shows; medium on the cause
+- Chapter and state: Chapter XIV Isaaru (Yuna), Chapter III Braska, Chapter X Natus, F1 command row at 1600x900, real keys, seed 1, cursor on SPECIAL (Isaaru) or TALK (Braska, Natus)
+- Observed: With the cursor on SPECIAL the row prints 'SPECI...  x2  Open the Special ...': the label loses its last letters before the hint does. On TALK the hint ends 'A one-off action this...'. In round 31 the Braska and Yuna rows (old HUD) printed TALK and SPECIAL whole. The builder traces it to the F1 row's label against its x2 badge and inline description (docs/handoff/booth-b3.md 12.4); I did not trace the CSS line. ROUND 32b ADDITION (G2 layout sweep): Instrument confirmation on the live bundle: sweep.mjs battle, Isaaru, 1600x900, first menu: .ffx-cmd__label 'Special' sw 53 / cw 47 on three surfaces (out-battle.json results['isaaru-via-purifico']); the four other FFX F1 chapters swept (Yunalesca, Braska, Anima, Natus) and the four FFX-2 chapters (Bahamut, Leblanc, Trema, Den of Woe) cut no label at the first-menu cursor state. The TALK-row hint cut on Braska and Natus is a different cursor state and was not reproduced by this sweep (kept as filed). ROUND 32b ADDITION (G4): The same cut is on Chapter I (FFX, F1 since earlier releases) at every TEXT SIZE: SPECIAL (x4) reads 53 px of text in a 47 px box, SWITCH (x4) 49 in 40, and the inline description is cut as well; the F1 CSS did not change between releases 69 and 70, so in Chapter I the cut is older than the candidate. The candidate tags below are right for the chapters the F1 HUD newly reached (Isaaru, Braska, Natus); they do not describe Chapter I. ROUND 33: Still open and now seen in a chapter release 71 newly treated: Evrae ORDERS prints "A one-off action this..." cut; Braska TALK the same; Isaaru "Special" label 53 px of text in a 47 px box on three sweep surfaces (the only clipped visible label of 57 surfaces and 4,507 elements). Second review at this severity with no change.
+- Expected: Every name that can be shown is shown in full; a hint may shorten, a label may not (CHK-009).
+- Repro and seed: Real keys from the title: Chapter XIV, party prep, Start Battle, first menu, cursor on SPECIAL (1600x900, seed 1); Chapters III and X, TALK.
+- Evidence: critic/rounds/round-32/evidence/isaaru-via-purifico-win-r32/13-guide-G.png; critic/rounds/round-32/evidence/braskas-final-aeon-win-r32/12-intent-E.png; critic/rounds/round-32/evidence/seymour-natus-win-r32/12-intent-E.png; critic/rounds/round-32/gaps-G2-layout/battle-a/gaps/sweep/out-battle.json; critic/rounds/round-32/gaps-G2-layout/battle-a/gaps/sweep-battle-isaaru-via-purifico/01-battle-menu.png; critic/rounds/round-32/gaps-G4-walks-optional/4a-seymour-flux/run.json; critic/rounds/round-33/evidence/gaps/sweep/out-battle.json; critic/rounds/round-33/evidence/evrae-airship-win-r33/12-intent-E.png; critic/rounds/round-33/evidence/braskas-final-aeon-win-r33/12-intent-E.png
+- Requirement: CHK-009
+- Smallest fix: Let the label keep its width and truncate the inline description first.
+- Acceptance check: The label prints whole on every selected row of the three chapters at 1600x900 and 2000x1012.
+
+### PR-0585 [minor] visual, both: Approved backdrops are graded much darker in the treated chapters (Leblanc, Braska, Macalania, Natus, and now Yojimbo, treated in release 72): a question for Bailey, not a replacement
+- Status: open; carried from round-32b; last seen round 33; confidence: medium
+- Chapter and state: treated chapters (Leblanc, Braska, Macalania, Natus and the other booth chapters), battle arenas, releases 69 and 70, 1600x900
+- Observed: The grade is the intended booth treatment, but Leblanc's backdrop C reads dark magenta, Braska's red sky near black and Macalania dim blue in battle. The handoff (booth-ffx-b3b J6) says a still beside Chapter I is owed before Bailey judges it. ROUND 33: Chapter IX Yojimbo (release 72): the approved cold grey-blue chamber with a shaft of daylight shows only a faint light shaft over a near-black void in the build (evidence/yojimbo-cavern-win-r33/23-midfight.png against targets/yojimbo-chamber.jpg); Yojimbo himself matches the approved boss A. Same family as the earlier four; Bailey still has not judged J6.
+- Expected: Approved art stays recognisable in the running game; Bailey judges the grade.
+- Repro and seed: Compare critic/rounds/round-32/targets/leblanc-backdrop.jpg and critic/rounds/round-32/targets/braska-r31-vs-r32-first-menu.jpg.
+- Evidence: critic/rounds/round-32/targets/leblanc-backdrop.jpg; critic/rounds/round-32/targets/macalania-backdrop.jpg; critic/rounds/round-32/targets/natus.jpg; critic/rounds/round-33/targets/yojimbo-chamber.jpg; critic/rounds/round-33/evidence/yojimbo-cavern-win-r33/23-midfight.png
+- Requirement: approved-target gate; Bailey judgment
+- Smallest fix: Show Bailey the still beside Chapter I (job J6) and take his verdict. No change before that.
+- Acceptance check: Bailey's recorded verdict on the arena grade.
+
+### PR-0227 [minor] encounter, FFX-2: Trema's real route lost seed 1 twice this round (a win in round 32); the fight stays a coin-flip-plus at human pace (carried from rounds 25 to 27)
+- Status: open; confidence: high
+- Chapter and state: XIII ffx2-trema, real keys, advisor's pick each turn, seed 1
+- Observed: Defeat at turn 217 with Trema at 24,313 of 999,999 HP, and a second defeat at turn 30 inside the Paragon link; seed 2 won in 229 turns (21:07). The engine measure is unchanged and md5-identical to round 32 (intended line 71 of 100 seeds). The pinned seed does not pin the outcome because FFX-2 plays in real-time ATB. Reached the pro-defeat screen both times.
+- Expected: A 999,999 HP superboss is allowed to be hard (research/ffx2-trema.md); the win rate for a competent human should sit where the sources put it. Round 32 recorded about 60 percent at human pace.
+- Repro and seed: Chapter XIII, default party, advisor's NEXT BEST MOVE each turn, setSeed(1); bench: tests/unit/ffx2-parity-measure.test.ts with PYREFLY_MEASURE=1 PYREFLY_MEASURE_SEEDS=1-100.
+- Evidence: critic/rounds/round-33/evidence/ffx2-trema-win-r33/run.json; critic/rounds/round-33/evidence/ffx2-trema-win-r33-s2/run.json; critic/rounds/round-33/audit-combat/ffx2-measure-cand-1-100.json
+- Requirement: encounter authenticity and balance
+- Where (traced only if stated): src/data/ffx2/enemies/trema.ts is sourced and correct; a balance question
+- Smallest fix: No change without Bailey's yes (boss-side numbers are never tuned without measured options); if he wants it gentler, build and measure the sourced alternatives and ask once.
+- Acceptance check: ffx2-parity-measure seeds 1-100 for the chosen option, win rate named against the research.
+
+### PR-0592 [minor] harness, FFX: Mirror Aeons needs about 20 minutes of fight, above the route harness default budget of 15 minutes (the first run stalled at link 2; the 40-minute rerun won in 20.3 min)
+- Status: open; carried from round-32b; last seen round 33; confidence: high
+- Chapter and state: mirror-aeons, route.mjs mirror-aeons win --seed=1
+- Observed: First run stopped at the budget on link 2 (162 turns, 900 s); the rerun with --budget=2400000 won in 20.3 min. Round 31 measured 19.8 min. ROUND 33: Round 33: the first Mirror Aeons run again stopped at link 2 when the capture budget (901 s, 163 turns) ran out; the rerun with a 3,000 s budget won in 209 turns and 1,137 s (19 min 19 s). A harness budget, not a stall.
+- Expected: The route budget covers the longest chapter.
+- Repro and seed: route.mjs mirror-aeons win --seed=1, default budget, then with --budget=2400000.
+- Evidence: critic/rounds/round-32/evidence/mirror-aeons-win-r32/run.json; critic/rounds/round-32/evidence/mirror-aeons-win-r32b/run.json
+- Requirement: harness
+- Smallest fix: Add mirror-aeons to LONG_FIGHT_BUDGET_MS in critic/runner/lib/route-pure.mjs.
+- Acceptance check: A default-budget run completes.
+
+### PR-0607 [minor] delivery, both: From the battle slate to the first command menu takes a median 9.5 s (8.2 to 16.5 s) on a desktop and 8.2 to 12.7 s on the phone: 15 of 19 chapters are over the builder's own 8 s budget; Chapter I 15.8 to 16.5 s at six sizes
+- Status: open; confidence: medium
+- Chapter and state: every chapter; Chapter I worst, unthrottled desktop, 1600x900 and five other sizes, seed 1, cache cold; host shared with other review lanes
+- Observed: slateToMenuMs from the capture owner's gap runs: Chapter I 16.2 s at 1600x900, 15.8 s at 2000x1012, 16.3 s at 1280x720 and 3840x2160; Anima 14.1 s; Bahamut 11.7 s; the rest 8.2 to 11.7 s. The wait contains the intro slate and, in Chapter I, Seymour's opening Lance of Atrophy, and no round-32 baseline exists for this number. The cold title load is fine (0.7 s, 3.1 MB). The sweeps shared the host, so the figures are upper bounds. The delivery auditor rated this major; the chief rates it minor because it is an upper bound on a shared host against the builder's own budget, not a rubric limit, and the confirmer would keep it major only if an idle-host remeasure also fails.
+- Expected: The builder's budget: 8 s and 50 MB on the phone profile; RUBRIC section 2 asks for a load under five seconds on named conditions.
+- Repro and seed: Fresh headless Chromium (PYREFLY_BROWSER=gpu), https://echoesofspira.com/, Enter twice at the title, pick Chapter I, Enter through prep and scene, time screen=battle to awaitingMenu (critic/runner/lib/gap-boot.mjs, slateToMenuMs).
+- Evidence: critic/rounds/round-33/evidence/gaps/index.json; critic/rounds/round-33/evidence/gaps/coldload/out.json
+- Requirement: RUBRIC section 2 platform goals; delivery
+- Smallest fix: Re-measure on an idle host and on the phone10 profile for Chapters I and IV; split the slate from the opening action in the capture; if still over, trim what the first fight preloads before the first command (suspected, not traced). Related: PR-0481, PR-0567, PR-0572.
+- Acceptance check: Median first-command wait at most 8 s on an idle host in every chapter, recorded with the host CPU busy percent.
+
+### PR-0581 [minor] feel, FFX: R70-C1 Braska: the return-flip teleports are repaired (release 72 FlipFit: 3 teleports of 302 to 340 px to 0); mid-move dashes of 160.6 px remain over the 150 px acceptance line
+- Status: open; carried from round-32b; last seen round 33; confidence: high for the measurement and the strip; the cause is suspected
+- Chapter and state: Chapter III braskas-final-aeon, treated Chapter III, win by real keys, seed 1, 1600x900 (the dedicated continuity harness) and the orchestrator live-gap lane on the same bundle UNVtEttT; absent at ?treated=pack
+- Observed: Round-32 harness (braskas-final-aeon-win-r32): 3 mid-move teleports of Tidus of 340, 312.8 and 302.1 px in one frame (no pose swap, not a camera cut: all other figures step 20 px or less in the same frame; Tidus's own move speed is about 45 px a frame), 138 dashes over the fail line (worst 294.5 px). The live-gap lane (live70, 1,696.7 s) reads four teleports of 306 to 417 px in Energy Rain (worst 416.6 px) and 26 plain-Attack hops of 254 to 290 px straight up in one frame, against a live-69 control of 116 px at most; the pack arm's worst dash is 116.2 px. Round 31 (release 68) Braska had 0 teleports and a worst dash of 153.6 px. The focused review of this build (critic/reviews/e3f51bf18-focused.json) rated this polish from a three-seed read; the deep review reads the whole run, finds the player-visible size of it (a main character crossing a third of the screen in one frame, twice a fight, in the third chapter) and rates it major. ROUND 33: Fresh harness, Chapter III: 0 teleports (32b: 3), 42 dashes over 40 px, worst 160.6 px (32b: 294.5 px; acceptance line 150 px; seed 2 not run). The teleport half is verified fixed on this build; the dash remainder is carried under PR-0380 and this ticket stays open at minor until a second seed reads under 150 px.
+- Expected: A move may not move a figure faster than the move itself: no single-frame plane step above the policy limit (CHK-027 item 4) and no dash over 150 px.
+- Repro and seed: PYREFLY_BROWSER=gpu node critic/runner/lib/continuity.mjs --base=https://echoesofspira.com/ --chapters=braskas-final-aeon --goal=win --size=1600x900 --seed=1 --tag=r32; read continuity.json jerks of kind teleport (figure tidus, about 1195 s, frame 69853); compare with ?treated=pack.
+- Evidence: critic/rounds/round-32/continuity/braskas-final-aeon-win-r32/continuity/strips/jerk-005-tidus.jpg; critic/rounds/round-32/continuity/braskas-final-aeon-win-r32/continuity/continuity.json; D:/Tools/pyrefly-scratch/2026-10-31/r70/live-gaps/evidence/cont/continuity-summary-braska-live.json; D:/Tools/pyrefly-scratch/2026-10-31/r70/live-gaps/evidence/braskas-final-aeon-win-live70/continuity/strips/jerk-000-tidus.jpg
+- Requirement: CHK-027 items 4 and 9, RUBRIC 6a; animation and camera sub-scores
+- Smallest fix: Suspected cause (not traced to a line): the treated Braska hold in src/engine/motion/PieceHolds.ts lets Tidus's return flip draw 1.66x larger, which the plane-step reads as a jump. Smallest correction: hold the flip at the idle's size for the treated chapter (or take the Braska row out of PIECE_HOLDS) until the curves lane re-measures it.
+- Acceptance check: Harness on braskas-final-aeon, seeds 1 and 2: 0 teleports of 300 px or more, no dash over 150 px, CHK-027 PASS for Tidus.
+
+### PR-0582 [minor] feel, FFX: R70-C2 KO floor slide: repaired in the two chapters re-measured on this build (Isaaru swap jerk 89.6 to 26.2 px, Anima/Macalania 80.3 to 0, release 72 SlideEase); Ixion (FFX-2 XVI) is now read: CHK-027 PASS, 0 swap jerks
+- Status: open; carried from round-32b; last seen round 33b; confidence: high for the measurement; medium for the cause
+- Chapter and state: Chapter XIV isaaru-via-purifico and Chapter VII seymour-anima-macalania, treated Chapters XIV and VII, win by real keys, seed 1 (and seed 2 in XIV), 1600x900
+- Observed: Harness: Ixion idle-to-KO feet jerk 89.6 px in Chapter XIV (frame 16224, about 274 s) and 80.3 px in Chapter VII (frame 14824, about 252 s); round 31 read 27.3 px and 0 px. The live-gap lane read 89.2 px (seed 1) and 90.8 px (seed 2) in XIV with the KO painting placed 355 px from the idle plane (ProneLay at its maximum) against minus 9 px at ?treated=pack. ?pro=off and ?pack=off do not remove it; ?hud=today shrinks the slide to 250 px and passes seed 1 but not seed 2 (86.4 px). Strip swap-233-ixion-idle-ko.jpg shows the lying body well to the right of the standing figure after a red blend. The finding is wider than the focused review's (Chapter XIV only). ROUND 33: Same-artifact focused run (reused: the bundle is byte-identical to live): Isaaru CHK-027 PASS at 26.2 px, Macalania 0 px. Round 33b: Ixion itself (ffx2-ixion-djose) is now read on this build by the full harness: CHK-027 PASS, 0 swap jerks (one KO swap, no step), 3 dashes over 40 px (worst 133.7 px, reported); so Isaaru, Anima and Ixion all read clean on swap jerks; the fan read of Ixion in the sphere-change sequence shows a leap and return with a see-through double outline (PR-0379) and no measurable hop (the sequence frames are not one frame apart; a one-frame teleport is NOT established and is withdrawn).
+- Expected: A KO lands where the figure fell; the KO swap moves the feet less than 40 px in one frame (CHK-027 item 9).
+- Repro and seed: Harness --chapters=isaaru-via-purifico (and seymour-anima-macalania) --seed=1 or 2; read swap jerks for figure ixion; compare ?treated=pack.
+- Evidence: critic/rounds/round-32/continuity/isaaru-via-purifico-win-r32/continuity/strips/jerk-000-ixion.jpg; critic/rounds/round-32/continuity/seymour-anima-macalania-win-r32/continuity/strips/jerk-026-ixion.jpg; D:/Tools/pyrefly-scratch/2026-10-31/r70/live-gaps/evidence/cont/continuity-summary-isaaru-live-s1.json; D:/Tools/pyrefly-scratch/2026-10-31/r70/live-gaps/evidence/cont/continuity-summary-isaaru-live-s2.json
+- Requirement: CHK-027 item 9 (a jerk at a pose swap is gated), RUBRIC 6a
+- Smallest fix: Suspected: ProneLay (src/engine/motion) picks its maximum slide candidate under the treated holds' setProneAvoid areas. Smallest correction: cap the KO plane within 40 px of the standing plane, or ease it over the dissolve.
+- Acceptance check: Harness on Chapters XIV (seeds 1 and 2) and VII: Ixion's swap jerk under 40 px.
+
+### PR-0604 [minor] interface, FFX: "Deals no damage." heads intent cards that then list damage (Yojimbo's Daigoro, Omnis's Mortiphasm Spells)
+- Status: open; confidence: high
+- Chapter and state: IX yojimbo-cavern, XII seymour-omnis, first menu, key E, seed 1
+- Observed: Yojimbo's card reads "Daigoro SCRIPTED Deals no damage." directly above "DAMAGE - RANDOM TARGET LULU 544-615 ... Lands on one of these, picked when it acts." The order itself deals none (research/ffx-yojimbo.md) and the dog's bite lands on one character, so each half is true and the card reads as a contradiction. Present in round 32.
+- Expected: A lead that says what the player will see ("Orders the dog; its bite lands on one of these"), with no "Deals no damage" above a damage block.
+- Repro and seed: Chapter IX, seed 1, first menu, press E: evidence/yojimbo-cavern-win-r33/12-intent-E.png.
+- Evidence: critic/rounds/round-33/evidence/yojimbo-cavern-win-r33/12-intent-E.png
+- Requirement: CHK-004
+- Where (traced only if stated): src/battle/ffx/intent.ts:330 (the string; the order-row branch is suspected)
+- Smallest fix: Suppress "Deals no damage" when the row carries a follow-up or per-target damage block; use an order-specific lead for dog and trigger orders.
+- Acceptance check: Yojimbo and Omnis E cards no longer print "Deals no damage" above a damage block; Sin "Drawn to Sin" keeps it.
+
+### PR-0605 [minor] interface, FFX: Evrae turns 68 to 80: the advisor wants "Potion -> Kimahri" nine times on a full-HP party and the played action is "Al Bhed Potion" on all three (suspected; no frame of the chip)
+- Status: open; confidence: low to medium (data only)
+- Chapter and state: VIII evrae-airship, seed 1, Chapter VIII from turn 66
+- Observed: turn-log entries 68 to 80 (identical in round 32): want {Potion, Kimahri, Items}, took "Al Bhed Potion"; battle-log seq 535 to 556 shows +1000 on Tidus, Wakka and Kimahri while all three are at full HP with no status. Either the chip names an item the list does not hold or the harness mapped the label; no frame of the chip at turn 68 exists.
+- Expected: A recommendation the actor can press as worded, on a target it helps; with nothing to heal the chip should offer the waiting move or a buff.
+- Repro and seed: Chapter VIII Evrae, seed 1, follow the advisor from turn 66; data in evidence/evrae-airship-win-r33/turn-log.json 68 to 80 and battle-log.json seq 535 to 556.
+- Evidence: critic/rounds/round-33/evidence/evrae-airship-win-r33/turn-log.json; critic/rounds/round-33/evidence/evrae-airship-win-r33/battle-log.json
+- Requirement: CHK-004
+- Where (traced only if stated): src/engine/tactics (suspected, not traced)
+- Smallest fix: Capture the chip at turn 68 first; if it reads Potion, derive the label and target from the row the menu offers and add a no-op-heal guard (suspected: src/engine/tactics).
+- Acceptance check: A frame of the Evrae chip at turn 68 shows an item that exists with the target it will hit; no heal is advised at full HP.
+
+### PR-0606 [minor] interface, FFX-2: Vegnagun's Tail Beam card shows Yuna 1,126 and Paine 2,654 where the sourced rule is 31.25 percent of maximum HP (777 and 1,832); Rikku 1,766 matches (suspected; no played hit)
+- Status: open; confidence: low (no engine run this round)
+- Chapter and state: V ffx2-vegnagun-shuyin, link 1, key E
+- Observed: Card: YUNA 1,126, RIKKU 1,766, PAINE 2,654 (Yuna 1238/2488, Rikku 4402/5652, Paine 4612/5862). The G card and src/data/ffx2/enemies/vegnagun-abilities.ts say 31.25 percent of maximum HP: 777, 1,766, 1,832. Yuna and Paine read 1.449 times higher. The tail never acted in this run, so no played hit settles it.
+- Expected: Card figures equal what the engine deals and the rule the guide states.
+- Repro and seed: Chapter V, seed 1, first menu, press E (ffx2-vegnagun-shuyin-win-r33/12-intent-E.png); run the engine's Tail Beam against the three targets.
+- Evidence: critic/rounds/round-33/evidence/ffx2-vegnagun-shuyin-win-r33/12-intent-E.png
+- Requirement: AGENTS.md rule 6 and CHK-004
+- Where (traced only if stated): src/battle/ffx2 intent estimate against abilities-vegnagun (not traced)
+- Smallest fix: Run the engine's Tail Beam on Yuna and Paine at those HP; correct whichever of card, engine or guide sentence is wrong.
+- Acceptance check: Card, guide and engine agree for all three.
+
+### PR-0610 [minor] feel, FFX-2: Phone: the first-time dress-change coach card covers the upper half of the fight, with the party and Bahamut behind it, while the gauges keep running, until it fades on its own
+- Status: open; confidence: medium
+- Chapter and state: IV ffx2-bahamut, 390x844 touch, first dress-sphere change, touch run, first Change command
+- Observed: The card ("Rikku: New dress, new moves ... pick the gate that pays.", FADES ON ITS OWN, FIRST TIME ONLY) sits over the battle in all ten sampled frames of the change sequence (seq-spherechange f00 to f09, f04 read by the chief) under the banner "GAUGES RUNNING - A COMMAND HOLDS THEM". The first-time fan rated it critical; the chief rates it minor: it appears once, fades by itself, hides no control and does not stop play. The Active-mode clock continues behind it, which is the reason it is worth a decision.
+- Expected: A first-time hint that does not hide the action it describes, or that holds the clock while it is up on a phone.
+- Repro and seed: 390x844 touch, Chapter IV, seed 1, open CHANGE for the first time.
+- Evidence: critic/rounds/round-33/evidence/ffx2-bahamut-win-r33-phone-touch/seq-spherechange/f04.jpg
+- Requirement: CHK-008, first-time fan (D-423)
+- Where (traced only if stated): phone coach card layout; not traced
+- Smallest fix: Dock the card at the bottom of the phone screen, or shorten it to one line; keep the fade.
+- Acceptance check: The party and the boss are visible in every frame of the first Change sequence at 390x844.
+
+### PR-0460 [minor] combat, FFX only: Chapter III possession links 3 to 6 Summon rows still not seen in a browser this round (carried; reused from round 30b under a written argument)
+- Status: open; carried from round-32b; last seen round 33; confidence: medium
+- Chapter and state: braskas-final-aeon, links 3 to 6
+- Observed: Carried: the real-key Braska run (284 turns, 6 seams) used Summon once (Bahamut, link 1); links 3 to 6 never opened the Summon or Grand Summon rows. The engine probe ch3 shows every row enabled with a picker of five aeons (md5-identical to round 31). ROUND 33: Gap pass, browser read at Chapter III link 3 (possessed Ifrit; the link was reached with the labelled autoBattle and fast-speed hooks, switched off before the capture): Yuna's menu shows OVERDRIVE READY and no Summon row; opening it shows "GRAND SUMMON - NO AEON AVAILABLE - CANCEL TO GO BACK" with Ixion, Shiva and Bahamut as greyed empty bars, which matches scriptCommandDisables and research/ffx-bfa-yu-yevon.md section 7 (the roster is exhausted during the possessed-aeon links). The engine probe ch3 of this round reports every row enabled for links 3 to 6, so probe and browser disagree and nobody has reconciled them. Links 4 to 6 were not reached in a browser. Not a player-facing defect as far as read; the evidence gap stays open.
+- Expected: Seen by real keys.
+- Repro and seed: As round 30b.
+- Evidence: critic/rounds/round-30/gaps2; critic/rounds/round-33/evidence/gaps/braska-summon-rows3/07-yuna-down.png; critic/rounds/round-33/evidence/gaps/braska-summon-rows3/rows.json
+- Requirement: CHK-023
+- Smallest fix: As carried.
+- Acceptance check: As carried.
+
+### PR-0539 [minor] harness, both: Critic harness limits (carried): the phone Items list is 6 rows of 27 for the route, timed sequences carry no frame timestamps, the capture owner's retry folder for Chapter IV mixes runs and its images are not indexed (R31-U1), and the cardFirst advisor measurement describes a card not on screen (R31-INT-09)
+- Status: open; carried from round-32b; last seen round 33; confidence: high
+- Chapter and state: critic runner, tools
+- Observed: Carried and widened: the phone Items list is 6 rows of 27 for the route and the harness never taps the page button (PR-0483); the route budget misses Mirror Aeons (PR-0592); the post scene still is taken before the scene (PR-0593); the engine logs of Vegnagun, Ixion, Sin core and Sin face end before the final victory event and the run.json fight step reads 'undecided' (those four victories rest on the results screen text, which reads Victory with the clear time). ROUND 33: Round 33 again: the 390x844 Chapter I touch run lost at turn 35 where the desktop run wins at 53 (identical to round 32); the touch bot took Attack because it could not reach Poison Fang. The route reached the defeat results, RETRY, party prep and a second battle on touch. Chapter IV on touch wins in 60 turns.
+- Expected: One run per folder, every image indexed.
+- Repro and seed: ls --time-style=full-iso on the folder against run.json.
+- Evidence: critic/rounds/round-31/evidence/ffx2-bahamut-lose-retry/run.json
+- Requirement: CHK-016
+- Smallest fix: Re-run into a clean folder with the images indexed.
+- Acceptance check: A folder whose run.json and images share one run and are in index.json with verified true.
+
+### PR-0594 [minor] prep, FFX only: Mirror Aeons results row prints 'S.LV 180 - 28,000/22,000 AP' with no Sphere Level gain
+- Status: open; carried from round-32b; last seen round 33; confidence: medium (the display is observed; the cause is suspected, not traced)
+- Chapter and state: mirror-aeons, Mirror Aeons (Chapter XII) win by real keys, seed 1, 1600x900, results screen
+- Observed: After a won Mirror Aeons run (FFX, 209 turns) the results card shows AP 28,000 x3 party and each row 'S.LV 180 / 175 / 170 - 28,000/22,000 AP +28,000 AP' with no '+1 S.Lv' badge. A progress readout above its own threshold contradicts itself: the rule in src/battle/ffx/results.ts (apForLevel capped at 22,000, levels gained while banked is at least the cost) would give a level, and Omnis, the same game and the same rule, shows 24,000 AP as '+1 S.Lv, 2,000/22,000'. The battle log's link-1 result carries sphereLevelsGained 0 for all three with ap 20,000 while the displayed AP is 28,000 (the chain's two links paid 20,000 and 8,000); suspected cause: the level count is made from the last link's own AP while the screen shows the pooled total. The same string is in the round 30 and round 31 continuity runs, so it is old, not new. ROUND 33: Confirmed on the live bundle again (Mirror Aeons results resultsText: "S.LV 180 - 28,000/22,000 AP" with no Sphere Level gain).
+- Expected: Either a +S.Lv badge with a remainder under the threshold, or an AP figure that matches the level maths; never a bar above its own limit. Which number is the game's is for the sources to settle (research/ffx-mirror-aeons.md lists the sisters at 10,000 AP each, 12,000 on Overkill); not invented here.
+- Repro and seed: Real keys from the title: chapter select to Mirror Aeons (Chapter XII), seed 1, win both links (about 20 minutes), read the results card (critic/rounds/round-32/evidence/mirror-aeons-win-r32b/31-results.png, run.json resultsText).
+- Evidence: critic/rounds/round-32/evidence/mirror-aeons-win-r32b/31-results.png
+- Requirement: RUBRIC section 6 prep: understandable results
+- Smallest fix: Make the level count and the displayed AP come from the same total in a pooled or chained FFX result (src/battle/ffx/results.ts sphereLevels against src/ui/common/resultsMath.ts sphereGridDetail), then re-read against the research rows.
+- Acceptance check: Mirror Aeons win: every member row has remainder below its threshold or a +S.Lv badge; Omnis and Sin core rows unchanged.
+
+### PR-0583 [minor] visual, FFX: Braska 23-midfight: at a command moment the aeon is mostly out of frame under the turn order and the red sky reads near black (CHK-011 FAIL)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: Chapter III braskas-final-aeon, treated Chapter III, real keys, seed 1, 1600x900, capture 23-midfight
+- Observed: Only the aeon's sword and shoulder show at the top right under the turn order; round 31's frame of the same capture step showed the whole aeon under a red sun. The other frames of the chapter (first menu, targeting, link seams) show the boss well.
+- Expected: The headline boss's head and torso are inside the frame at every command moment (CHK-011).
+- Repro and seed: Chapter III, real keys, seed 1, 1600x900; capture 23-midfight.
+- Evidence: critic/rounds/round-32/evidence/braskas-final-aeon-win-r32/23-midfight.png; critic/rounds/round-32/targets/braska-r31-vs-r32-first-menu.jpg
+- Requirement: CHK-011
+- Smallest fix: Check the treated pro-camera shot for the second form against the form's height, or add a CHAPTER FRAMING row.
+- Acceptance check: At every command moment of the chapter the boss's head and torso are inside the frame.
+
+### PR-0587 [minor] delivery, both: Retry after a loss inside a later link of a chained chapter is UNVERIFIED on the release 69 and 70 build
+- Status: fixed (verified round 32b); carried from round-32b; last seen round 32b; confidence: medium
+- Chapter and state: Chapter VI Leblanc (new), Chapter III Braska link 3 and later, Vegnagun, Trema, Sin core, Mirror Aeons, lose then TRY AGAIN in a chain on e3f51bf18
+- Observed: Releases 69 and 70 changed the chain runner (setHeadlineBoss per link), the presenter's run (stageLinkBegins clears the staging layer from link 2) and BattleScreen.releaseParts. Loss and TRY AGAIN was re-shown on this build only in single-link Chapters I and IV. No capture lost link 2 or later of a chained chapter and pressed TRY AGAIN. Nothing observed failing; unit tests booth-leblanc-chain and chain-checkpoint pass.
+- Expected: The retried link starts at the checkpoint with its own boss in the ribbon, a clear staging layer, music, a first menu, and the earlier links' rewards summed (PR-0138).
+- Repro and seed: Real keys, Chapter VI Leblanc: win link 1, lose link 2 (idle), CONFIRM, TRY AGAIN; read the ribbon, the first menu and the results sum. Repeat in Chapter III link 3 or later.
+- Evidence: critic/rounds/round-32/evidence/seymour-flux-lose-retry/run.json; critic/rounds/round-32/evidence/ffx2-bahamut-lose-retry/run.json; critic/rounds/round-32/gaps-G3-chains-overlays/g3-summary.json; critic/rounds/round-32/gaps-G3-chains-overlays/g3-extension-summary.json
+- Requirement: CHK-022
+- Smallest fix: Add a lose-and-retry capture in Leblanc and Braska link 3 to the next review.
+- Acceptance check: Retry reaches a first menu of the retried link in about 10 s, the ribbon names that link, 0 console errors, the results sum the earlier links.
+
+### PR-0588 [minor] audio, both: The sound pass (+4 dB makeup, -14 dB voice duck, layered hits) now plays in ten chapters but its level was measured only in Chapters I and IV
+- Status: open; carried from round-32b; confidence: medium (reach proved from code, level unmeasured)
+- Chapter and state: FFX II, III, VII, X, XIV; FFX-2 VI, XIII, XV (the treated chapters), desktop, live, seed 1
+- Observed: Releases 69 and 70 changed audioNewOn() to isTreatedChapter(run,'audio') (src/audio/pass/passSwitch.ts:72); no PIECE_HOLDS row holds 'audio', so the pass runs in every treated chapter. passMix.ts states its numbers came from Chapter I and IV recordings. The capture evidence holds no loudness, true-peak or voice-over-music reading for the other chapters. The safety shaper bounds the peak by design, but the live result is not shown.
+- Expected: Short-term loudness median about -16 to -14 LUFS, true peak at or under -1 dBTP and every voice line at least +6 dB over the music in the treated chapters too (passMix.ts targets).
+- Repro and seed: Play Chapters II, III and VI with the master tapped (window.__pyrefly.audioPass() reports makeup and trim) and run the existing measure tools against a Chapter I fight.
+- Evidence: critic/rounds/round-32/evidence/seymour-anima-macalania-win-r32/audio-debug.jsonl; critic/rounds/round-32/evidence/seymour-omnis-win-r32/audio-debug.jsonl
+- Requirement: CHK-001 (anything an agent cannot perceive gets a technical gate), CHK-023
+- Smallest fix: Record one fight each in Chapters II, III and VI and one more FFX-2 chapter, run tools/audio measure, and either confirm the targets or give the chapter its own makeup row. Measurement first; no change until read.
+- Acceptance check: A measurement file per chapter in the review folder inside the targets.
+
+### PR-0589 [minor] feel, FFX-2 only: First-time fan: Yuna's dress change is a one-frame swap of a small hooded figure for a taller Warrior under a flash and a label, with Ixion see-through and doubled in the same frames
+- Status: open; carried from round-32b; confidence: low to medium (strips read by a fan reviewer, not strip-by-strip by the chief)
+- Chapter and state: Chapters V, XV, XIII dressphere change (Yuna white mage to Warrior), dressphere change during an enemy action, ATB, seed 1
+- Observed: Fan sheets of ffx2-vegnagun-shuyin, ffx2-ixion-djose and ffx2-den-of-woe spherechange: the white mage is replaced in one frame by the Warrior, who reads taller and a step forward; the 'Yuna Warrior GATE Blue' label sits on the guide text for a few frames; in the Ixion strip Ixion is a see-through double then jumps in front of the party. The harness counts four costume swaps (worst head 50.2 percent, feet 23.1 px) separately from same-art swaps. A dress change is a designed transformation, so the size change is partly intended; whether the pop is the look Bailey wants is his call.
+- Expected: A transformation reads as one continuous move; no label over readable text.
+- Repro and seed: FFX-2 Chapter V or XV, Change to Warrior on Yuna; read seq-spherechange.
+- Evidence: critic/rounds/round-32/scratch/fan-sheets/ffx2-vegnagun-shuyin-win-r32__seq-spherechange.jpg; critic/rounds/round-32/scratch/fan-sheets/ffx2-ixion-djose-win-r32__seq-spherechange.jpg; critic/rounds/round-32/scratch/fan-sheets/ffx2-den-of-woe-win-r32__seq-spherechange.jpg
+- Requirement: CHK-026 (costume swaps), CHK-027 item 6; first-time-fan lens (D-423)
+- Smallest fix: Ask Bailey whether the dress change should be a blended or held transformation; no change until he answers.
+- Acceptance check: Bailey's verdict on the Yuna dress-change strip.
+
+### PR-0590 [minor] delivery, both: Chapter I retry reaches the first menu in 9.7 s, double round 31's 4.9 s (one noisy lane; Chapter IV 9.9 s against 10.2 s)
+- Status: open; carried from round-32b; confidence: low
+- Chapter and state: Chapter I and IV retry, seymour-flux-lose-retry, real keys, 1600x900
+- Observed: TRY AGAIN to first menu 9,747 ms (pro-defeat, party-prep, battle), defeat panel 974 ms after the last KO. The capture shared the machine with other lanes, so this is low confidence.
+- Expected: Retry no slower than the previous live build.
+- Repro and seed: Lose Chapter I on seed 1, press Enter on TRY AGAIN, time to the first command menu on a quiet machine.
+- Evidence: critic/rounds/round-32/evidence/seymour-flux-lose-retry/run.json
+- Requirement: respectful skip and replay pacing
+- Smallest fix: Re-measure on a single quiet lane; if it holds, look at release 69's load order for the party-prep step on a retry.
+- Acceptance check: Single-lane real-key retry of Chapter I in 6 s or less to the first menu.
+
+### PR-0571 [minor] interface, FFX-2 only: Phone FFX-2 enemy-move line abbreviates the party to 'Yun / Rik / Pai' (new in r68; trades round 30's split figure for abbreviated names)
+- Status: open; carried from round-32b; confidence: high
+- Chapter and state: Chapter IV, 390x844 touch, first menu and CHANGE list
+- Observed: Round 30 (r66) printed 'YUNA 168-190 / RIKKU 92-104 / PAINE 115-' with the last range broken over two lines; r68 prints 'Yun 168-190 / Rik 92-104 / Pai 115-130' on two rows and 'ACTS NEXT' became 'NEXT'. The figures are whole now; the names are abbreviated although the row has room (about 100 px free). The FFX line keeps full names. Chief read scratch/phone-intent-cmp.png.
+- Expected: Names whole where they fit (CHK-009), figures not split.
+- Repro and seed: 390x844 touch, Chapter IV, first menu.
+- Evidence: critic/rounds/round-31/evidence/ffx2-bahamut-win-phone-touch/21-change-open.png; critic/rounds/round-31/scratch/phone-intent-cmp.png
+- Requirement: CHK-009, CHK-020
+- Smallest fix: Keep full names and wrap by pair, or abbreviate only when a name does not fit its slot.
+- Acceptance check: Yuna, Rikku and Paine whole at 390x844 with no figure split.
+
+### PR-0572 [minor] delivery, both: Release 68's load-diet claim is not shown by the first-command job (bytes and wait equal release 67's within noise)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: seymour-flux, ffx2-bahamut, desk50 and phone10
+- Observed: Wire bytes to the first menu 110.31 / 112.03 MB against 110.34 / 111.89 (desk50) and 93.56 / 94.04 against 93.65 / 92.19 (phone10); load wait 5.92 / 4.44 s against 6.03 / 4.53 and 19.8 / 42.4 against 20.1 / 39.2. The release note says the first menu no longer waits for every pose; the handoff says it changes what the menu waits for, not what is fetched.
+- Expected: The measured wait or bytes fall, or the note does not claim it.
+- Repro and seed: critic/reviews/2a9340249-focused/budgets first-command-*-cand68.json against *-r67.json; also with ?loaddiet=off.
+- Evidence: critic/reviews/2a9340249-focused/budgets/first-command-phone10-pad-cand68.json
+- Requirement: RUBRIC section 5 (match proof to the claim)
+- Smallest fix: Run the pair default vs ?loaddiet=off on phone10 and say which is which, or reword the player note.
+- Acceptance check: Paired run shows the stated difference or the note is changed.
+
+### PR-0573 [minor] delivery, both: Page memory climbs 60 to 110 MB with every chapter change, no plateau in five visits (434 to 700 MB at the board; tree peak 3,225 MB); the focused review rated it major
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: seymour-flux and ffx2-bahamut, five visits with the board between, desk50
+- Observed: chapter-memory job: 434, 440, 511, 624, 700 MB at the board; JS heap flat (24.7 to 31.4 MB); growth 74 percent against a proposed 10 percent budget (r67: 321 to 642, 85 percent). DOM at the board is flat from the third visit (r67 rose), but the gap pass still reads CDP nodes +485 a visit (223 detached, no HUD classes). No failure observed; the budget is proposed, not owner-approved, so the chief rates it minor.
+- Expected: Memory settles (cache caps 96 paintings / 900 MB; texture governor 2,600 MB).
+- Repro and seed: critic/reviews/2a9340249-focused/budgets chapter-memory job; run to eight or more visits.
+- Evidence: critic/reviews/2a9340249-focused/budgets/chapter-memory-desk50-cand68.json
+- Requirement: RUBRIC section 2 and 6 (stability)
+- Smallest fix: Extend the job to eight changes and trace which cache holds the growth (the JS heap is not it).
+- Acceptance check: Growth between visit 4 and 8 within 10 percent, tree peak at most 3,500 MB.
+
+### PR-0580 [minor] delivery, both: Frame-time outliers in the live 19-chapter run: Yunalesca one 5,610 ms frame and p99 51 ms (56.2 fps), Mirror Aeons 1,026 ms, Braska 705 ms, Vegnagun 482 ms, Trema p99 74.7 ms (extends PR-0544, PR-0480, PR-0527)
+- Status: open; carried from round-32b; last seen round 33b; confidence: medium for the numbers, low for cause
+- Chapter and state: yunalesca, mirror-aeons, braskas-final-aeon, ffx2-vegnagun-shuyin, ffx2-trema, continuity probe, 1600x900, GPU
+- Observed: frameTime.maxMs 5,609.7 (Yunalesca, longFramePct 2.6, fps 56.2), 1,026.2 (Mirror Aeons), 704.5 (Braska), 481.5 (Vegnagun; r66 446); Trema p99 74.7 ms, 2.3 percent over 34 ms, 56.7 fps (r66 71.2 ms, same). Other chapters 59.5 to 60 fps with p99 19 to 39 ms. The combat auditor's unit suite ran on the same host during the harness, so a host stall is possible for the 5.6 s frame: not shown either way (harness frameP99MsIsPacing false). ROUND 33: Fresh harness frame times: Yunalesca 55.6 fps, p99 64.3 ms and one 12,140 ms frame (32b: 5,610 ms, 56.9 fps, p99 41.7 ms); Flux 58.2 fps and a 1,419.5 ms frame; Braska 59.0 fps, p99 36.0 ms, max 677.6 ms (focused run on the same bundle: 722.9 ms); Bahamut 59.1 fps, max 168.2 ms. The host was shared with other review lanes (Mirror Aeons rerun, Trema seed 2) while the harness ran, so the 12.1 s frame may be host contention; it is not proven to be the game. ROUND 33B: Full harness frame times, 19 of 19 chapters: 55.6 to 59.9 fps. The tails: Trema 56.1 fps, p99 89.1 ms, 2.5 percent of frames over 34 ms; Yunalesca 55.6 fps, p99 64.3 ms, 3.6 percent; Bahamut 59.1 fps, p99 43.4 ms; Leblanc 59.3 fps, p99 39.0 ms; Braska 59.0 fps, p99 36.0 ms; Flux 58.2 fps, p99 35.9 ms. The longest frames: Yunalesca 12,140.1 ms, Flux 1,419.5, Mirror Aeons 943.4, Braska 677.6, Vegnagun 645.9. The other 13 chapters read 59.5 to 59.9 fps with p99 19.6 to 29.4 ms.
+- Expected: BUDGETS B4a to B4c: at least 59.5 fps, p99 at most 25 ms, at most 0.5 percent over 34 ms in every chapter.
+- Repro and seed: Continuity harness, Yunalesca and Trema, seed 1, host idle.
+- Evidence: critic/rounds/round-31/continuity/yunalesca-win-r31/continuity/continuity.json; critic/rounds/round-31/continuity/ffx2-trema-win-r31/continuity/continuity.json; critic/rounds/round-31/continuity/continuity-summary.json; critic/rounds/round-33/continuity/continuity-summary.json
+- Requirement: RUBRIC section 2 (60 fps, report spikes)
+- Smallest fix: Re-run Yunalesca on an idle host to settle the 5.6 s frame; per-frame trace of Trema against battle clock and phase (PR-0544).
+- Acceptance check: Yunalesca max frame under 500 ms on an idle host; Trema p99 at most 25 ms.
+
+### PR-0565 [minor] delivery, FFX-2: A renderer crash again: the chief's Chapter VI gap run (Leblanc) ended in "Page crashed" after about seven minutes of polling an empty menu (extends PR-0565)
+- Status: open; carried from round-32b; last seen round 32; confidence: low
+- Chapter and state: ffx2-leblanc, headless Chromium gpu, live, enemy turns with the command menu closed
+- Observed: r31: the chief's Chapter VI gap run ended in 'Page crashed' once. Round 32 added 3 full Leblanc fights at 2560x1440 (seeds 1, 2 and 3, GPU mode, crash, pageerror and console-error listeners on): all reached results in 305 to 319 s with 0 crashes and 0 console errors. Together with the 0 of 21 earlier runs the crash is unreproduced in 0 of 24. That is not proof of absence; the first-menu command row at 2560x1440 was captured but not judged separately.
+- Expected: No renderer crash in a long session.
+- Repro and seed: critic/rounds/round-31/gaps-chief/th-probe.mjs ffx2-leblanc with the Defend branch removed (the menu never reopens).
+- Evidence: critic/rounds/round-32/evidence/gaps/leblanc-2k-crash-probe.json; critic/rounds/round-32/evidence/gaps/leblanc-2k-crash-s1
+- Requirement: RUBRIC section 2 (stability)
+- Smallest fix: Capture the renderer's crash dump on the next occurrence; the long-session memory growth (PR-0573) is a suspect.
+- Acceptance check: No crash across ten 10-minute idle runs.
+
+### PR-0479 [minor] visual, FFX only: Chapter I action shot: the humanoid Seymour's upper body leaves the top of the frame under the turn order (the creature's head is inside; the confirmer refuted the 'head cropped' wording)
+- Status: open; carried from round-32b; confidence: high
+- Chapter and state: seymour-flux, mid-fight, 1600x900
+- Observed: In 23-midfight.png the Mortiorchis head with spines and jaw is wholly inside the frame (about y 20 to 300); the humanoid torso at the right runs off the top edge and the turn-order icons overlap it. In seq-party-action f02 the same figure is cropped at the top. Carried at minor since round 30; the auditor's raise to major is not supported.
+- Expected: Outside an intended close-up the boss stays in frame.
+- Repro and seed: Chapter I by real keys, seed 1, first attack.
+- Evidence: critic/rounds/round-31/evidence/seymour-flux-win/23-midfight.png; critic/rounds/round-31/evidence/seymour-flux-win/seq-party-action/f02.jpg
+- Requirement: CHK-008
+- Smallest fix: Lower the action camera for this boss or move the turn order off the quad.
+- Acceptance check: Same state: the torso is wholly inside the frame.
+
+### PR-0530 [minor] feel, both: Question for Bailey: hard cuts rose from 75 to 3,864 (22 a minute) because ?swapscope=wide turned the planned smear cuts on in 13 more chapters; the fan reads them as camera jerks and pops (Chapter I battle start, the Chapter IV sphere change, Braska seams)
+- Status: open; carried from round-32b; last seen round 33b; confidence: medium
+- Chapter and state: all; fan captures in seymour-flux, ffx2-bahamut, braskas-final-aeon, continuity run and the fan's strips
+- Observed: Unchanged: 3,990 planned hard cuts in 10,638.5 s (22.5 a minute), 4,772 smears planned, 4,606 swaps smeared. Awaiting Bailey's verdict on the look. ROUND 33B: the full run reads 3,939 hard cuts in 11,220.8 s (21.1 a minute), 4,674 smears planned and 4,556 swaps smeared.
+- Expected: Bailey's judgment of the planned smear cuts and the pro camera shots (PR-0530, PR-0521).
+- Repro and seed: Chapter I and IV by real keys; see the fan's captures seq-transition-into-battle and seq-spherechange.
+- Evidence: critic/rounds/round-31/evidence/seymour-flux-win/seq-transition-into-battle; critic/rounds/round-31/evidence/ffx2-bahamut-win/seq-spherechange; critic/rounds/round-31/continuity/continuity-summary.json
+- Requirement: RUBRIC 6a (the definition of a jerk is Bailey's, D-420 to D-426)
+- Smallest fix: Show Bailey the strips and ask; build nothing until he answers.
+- Acceptance check: A recorded verbatim judgment.
+
+### PR-0473 [minor] feel, FFX only (Chapter I): A revive is a dissolve with no rise: Kimahri returns as a pale see-through figure over Yuna (carried, re-observed by the fan in three Chapter I runs)
+- Status: open; carried from round-32b; last seen round 33; confidence: high
+- Chapter and state: seymour-flux, Mega Phoenix revive
+- Observed: seq-party-action f07 to f09 at 1600, 2000 and the phone: the revived figure is pale for three frames and floats above the floor line with Yuna drawn through it. See PR-0570 for the one-frame step. ROUND 33: The fan again: Mega Phoenix in Chapter I shows a see-through Kimahri fading in over Yuna, and for one sampled frame he stands with the KO tag still over him (seq-party-action f06 to f09).
+- Expected: A rise that reads as standing up.
+- Repro and seed: Chapter I turn 3, Mega Phoenix with Kimahri down.
+- Evidence: critic/rounds/round-31/evidence/seymour-flux-win/seq-party-action/f07.jpg; critic/rounds/round-31/evidence/seymour-flux-win-2k/seq-party-action
+- Requirement: CHK-027 item 4
+- Smallest fix: As PR-0570, then a rise.
+- Acceptance check: Strip of the revive shows one figure, grounded, from frame 0.
+
+### PR-0534 [minor] visual, FFX only: Lulu's rig head reads 5 to 20 percent different at ready, cast and idle in the FFX chapters (397 of the 415 CHK-026 head fails in the full round 33b read; about 470 of 476 in round 31; likely the head part's box, not a visible jump)
+- Status: open; carried from round-32b; last seen round 33b; confidence: medium
+- Chapter and state: Chapters II, III, VII to XIX with Lulu, continuity harness
+- Observed: headRig 920 swaps read from the rig's own head mesh; the chapter strips show no visible jump. Harness head fails 476 (round 30b 489). ROUND 33B: headRig 916 swaps read from the rig's own head mesh in the full run; 397 of the 415 head fails are Lulu (Mirror Aeons 164, Sin core 113, Sin face 46, Braska 42, Evrae 19, Yojimbo 13), 15.5 to 19.7 percent against 0.1 to 0.2 percent where the head is registered. Evrae, Yojimbo, Sin core, Sin face and the Mirror Aeons have no other CHK-026 reason. The strips still show no visible jump. Still a suspected measurement artifact; severity unchanged.
+- Expected: The harness reads the head from the part's own box.
+- Repro and seed: Continuity harness, braskas-final-aeon, strip swap-172-lulu-ready-item.jpg (round 30b path).
+- Evidence: critic/rounds/round-31/continuity/continuity-summary.json; critic/rounds/round-33/continuity/continuity-summary.json
+- Requirement: CHK-026
+- Smallest fix: Read the rig head with its own box in critic/runner/lib/continuity-rig.mjs, or show the strips are not visible.
+- Acceptance check: Lulu rig head swaps under 5 percent or shown not visible.
+
+### PR-0529 [minor] visual, FFX-2 only: FFX-2 Chapter XII (Trema): Paragon's feet move 10.5 px at the cast-to-idle swap with nine see-through frames and height x1.13 (carried)
+- Status: open; carried from round-32b; last seen round 33b; confidence: high
+- Chapter and state: ffx2-trema, Paragon cast to idle
+- Observed: strip swap-147: two overlapped Paragons for nine frames, feet 10.5 px apart (22.2 px from the pixels); the only feet-over fail of the 19 chapters at that size. ROUND 33B: the full harness reads 16 Paragon feet moves over the 2 px line, worst 10.3 px (cast to hurt 5, hurt to cast 5, idle to cast 3, cast to idle 3); it is the only feet-over-tolerance figure outside Chapter III and the Chapter I victory-cheer swaps, and Trema's CHK-026 FAIL rests on it alone.
+- Expected: Feet within 2 px, a cut or a short blend.
+- Repro and seed: Continuity harness ffx2-trema, seed 1.
+- Evidence: critic/rounds/round-31/continuity/ffx2-trema-win-r31/continuity/strips/swap-147-paragon-cast-idle.jpg; critic/rounds/round-33/continuity/ffx2-trema-win-r33/continuity/strips/swap-131-paragon-cast-hurt.jpg
+- Requirement: CHK-026, CHK-027
+- Smallest fix: Register Paragon cast and idle feet; shorten the blend on this boss.
+- Acceptance check: Paragon swaps have 3 or fewer ghost frames, feet within 2 px.
+
+### PR-0516 [minor] interface, both: Panels over painted actors and live controls (CHK-008 FAIL, carried): the Chapter I E card covers the NOW tile of the turn order; the Vegnagun chain counter, panels and damage numbers stack; the 'Possessed ...' banner crosses the aeon's body
+- Status: open; carried from round-32b; last seen round 33; confidence: high
+- Chapter and state: Chapter I, Chapter V, Chapter III seams, E card open; chain fight; aeon seams
+- Observed: At 1600 and 2000 the opened E card sits over the current actor's turn-order tile ('3RD IN QUEUE' over 'NOW') and Seymour's figure (R31-INT-02). The fan lists the same class: the Vegnagun chain box cut at the screen edge ('x1.9') with piled damage numbers, the Possessed Ixion/Valefor/Bahamut/Yu Yevon banner as a dark bar across the aeon, and the big turn cut-in covering the party at turn start (PR-0536). The 80-state sweep at 1280x720 and 2560x1440 was not re-run (PR-0552, PR-0553, PR-0560 carried). ROUND 32 AUDITOR ADDITION (interface-onboarding R32-INT-04; FFX only, F1 Chapter VII): At 1600 and 2000 the Chapter I card sits over the NOW tile and the acting hero's portrait. In Chapter VII the card starts at x about 353 and hides the right part of the 'Seymour' ribbon and its HP bar. ROUND 32 AUDITOR ADDITION (visual-targets "Carried framing and overlap polish", the Omnis item; FFX only): Omnis's advisor text lies over the boss and the party's legs (the Flux and Yunalesca items of the same issue are PR-0479 and PR-0553). ROUND 33: The fan and the sweep add: the F1 guide and advisor text over the boss and the party in Omnis and the Sin chapters, the dress-change plate over the next figure's head (Ixion, Leblanc, Bahamut), Braska's dialogue card over the party health panel (Vegnagun seam), Ixion's painted body under the command rows, the Omnis intent card over its own guide card, and Yuna's dialogue card over her own HP row in Trema. All polish; no needed control is hidden.
+- Expected: No panel hides the current actor's turn slot or a figure it should not (CHK-008).
+- Repro and seed: Chapter I first menu, press E, screenshot.
+- Evidence: critic/rounds/round-31/evidence/seymour-flux-win/12-intent-E.png; critic/rounds/round-31/evidence/seymour-flux-win-2k/12-intent-E.png; critic/rounds/round-31/evidence/ffx2-vegnagun-shuyin-win/seq-action-playing; critic/rounds/round-31/evidence/braskas-final-aeon-win/seq-seam-2; critic/rounds/round-32/evidence/seymour-anima-macalania-win-r32/12-intent-E.png
+- Requirement: CHK-008, docs/ENGINE-API.md#hud-safe-area
+- Smallest fix: Anchor the intent card left of or below the turn order; move the possessed banner off the body.
+- Acceptance check: Intersection of the card and the NOW tile is 0 at 1280x720, 1600x900, 2000x1012, 2560x1440 in Chapter I.
+
+### PR-0502 [minor] interface, both: The boss's bark box, the opening quip banner and the turn-intro wipe cover the first command menu (carried, stalled, now also on retry)
+- Status: open; carried from round-32b; last seen round 32b; confidence: high
+- Chapter and state: Chapter I first menu; Chapter I and IV retry, awaitingMenu true
+- Observed: Seymour's line 'It's quieter on the other side.' covers SPECIAL, WHITE MAGIC and ITEMS at 1600, 2000 and the phone while the menu is awaiting input; the banner lasts under 1 s (gap pass); on both retries the first menu is under the actor's full-height portrait wipe. Seymour's banter card hides Skills and Magic rows and Tidus's plate (visual auditor, 10-first-menu-coach). ROUND 32 AUDITOR ADDITION (interface-onboarding R32-INT-03; both games, the newly treated chapters): Chapter I: Seymour's line covers SPECIAL, WHITE MAGIC and ITEMS at 1600, 2000 and 390, and again on the retry. Isaaru: Yuna's line covers the boss ribbon. Trema: Yuna's line covers her party plate and the command menu's lower edge. Den of Woe: Paine's line covers the ribbon and Baralai's intent card. Anima: the Rikku turn-intro wipe covers the whole menu at the frame asserted awaitingMenu=true.
+- Expected: The command rows are visible while the menu awaits input, or the menu does not await until they are.
+- Repro and seed: Chapter I real keys, first menu, no key pressed; or lose and TRY AGAIN.
+- Evidence: critic/rounds/round-31/evidence/seymour-flux-win/10-first-menu-coach.png; critic/rounds/round-31/evidence/seymour-flux-lose-retry/3-retry-menu.jpg; critic/rounds/round-31/evidence/ffx2-bahamut-lose-retry/3-retry-menu.jpg; critic/rounds/round-32/evidence/isaaru-via-purifico-win-r32/12-intent-E.png; critic/rounds/round-32/evidence/ffx2-trema-win-r32/12-intent-E.png; critic/rounds/round-32/evidence/ffx2-den-of-woe-win-r32/12-intent-E.png; critic/rounds/round-32/evidence/seymour-anima-macalania-win-r32/10-first-menu-coach.png
+- Requirement: CHK-008, CHK-006
+- Smallest fix: Place the bark clear of the command stack or hold awaiting until it has cleared.
+- Acceptance check: At awaitingMenu true the command rows are unobscured.
+
+### PR-0540 [minor] interface, both: Chapter I intent card shows the IF YOU ATTACK header with no body (carried, stalled; third review at the same severity)
+- Status: open; carried from round-32b; last seen round 32b; confidence: high
+- Chapter and state: Chapter I, E card at 1600 and 2000
+- Observed: The conditional body (Delay Attack or Buster punished with party-wide Slowga; Protect under 75 percent; Reflect and phase 2 under 50 percent) is in the DOM but the card height clips it until J is held. Chapter II shows its body. ROUND 32 AUDITOR ADDITION (interface-onboarding R32-INT-02; both games, no longer Chapter I only): Chapter I: the 'IF YOU ATTACK' header is shown with no body and 'J HOLD +3 MORE' under it (1600 and 2000). Den of Woe: the IF YOU ATTACK text is cut mid-sentence ('Counts every result the party applies to him (each landing strike, a miss or a no-effect hit once): at 8'), '+1 MORE'. Leblanc: a whole-party Thunder lists Yuna and a half-faded Rikku, Paine is not shown, '+11 MORE'. The cue to read more exists; the default state hides the conditional rule.
+- Expected: The conditional half is readable by default or the header is not drawn without a body.
+- Repro and seed: Chapter I, seed 1, first menu, press E.
+- Evidence: critic/rounds/round-31/evidence/seymour-flux-win/12-intent-E.png; critic/rounds/round-31/evidence/seymour-flux-win-2k/12-intent-E.png; critic/rounds/round-32/evidence/ffx2-den-of-woe-win-r32/12-intent-E.png; critic/rounds/round-32/evidence/ffx2-leblanc-win-r32/12-intent-E.png
+- Requirement: RUBRIC section 2 (enemy intent separates certain from conditional)
+- Smallest fix: Let the card grow to its content as Chapter II's does.
+- Acceptance check: E shows a non-empty IF YOU ATTACK body without J; scrollHeight equals clientHeight.
+
+### PR-0541 [minor] interface, FFX-2 only: Chapter IV desktop CHANGE list: 'GRANTS: BLUE' is pink on cream and nearly invisible, and a grant is never explained (carried, stalled)
+- Status: open; carried from round-32b; confidence: high
+- Chapter and state: ffx2-bahamut, CHANGE open at 1600 and 2000
+- Observed: The unselected WARRIOR row's GRANTS: BLUE is nearly invisible; Gunner's GRANTS: GREEN on the selected row reads.
+- Expected: Readable rows and one line saying what a grant is.
+- Repro and seed: Chapter IV, ArrowDown to CHANGE, Enter.
+- Evidence: critic/rounds/round-31/evidence/ffx2-bahamut-win/21-change-open.png; critic/rounds/round-31/evidence/ffx2-bahamut-win-2k/21-change-open.png
+- Requirement: CHK-003, CHK-007
+- Smallest fix: Use the row ink for unselected GRANTS and add one explanatory line.
+- Acceptance check: GRANTS contrast at least 4.5:1 selected and unselected.
+
+### PR-0518 [minor] interface, both: Phone 390x844: CHANGE tiles clip their text (UNNER, GRANTS: BLUI), the pause header wraps over the tab dots, the tab strip is cut at CHAPTER with no scroll cue (ACCESSIBILITY, CONTROLS and MUSIC are reached only by an unprompted swipe), the options pane stops at a half row, and the phone pause shows keyboard hints (carried, stalled; merges PR-0554, R31-ONB-01)
+- Status: open; carried from round-32b; last seen round 32b; confidence: high
+- Chapter and state: Chapter I and IV phone, pause by the chip; CHANGE list
+- Observed: The pause chip is a 46x46 target and a tap opens the pause (gap pass). A real touch swipe on the strip scrolls it; nothing hints at it. Smallest visible text on the phone pause is 14 px; no horizontal page scroll (scrollWidth 390). ROUND 32b ADDITION (G2 layout sweep): At 390x844 (touch context, Escape) the pause on e3f51bf18 still draws the header 'ECHOES OF SPIRA - FINAL FANTASY X' wrapped onto two lines against the tab dots, the tab strip cut at CHAPTER with no scroll cue, and the keyboard hints 'ESC RESUME' and 'H PAINTING ONLY'; the plate itself covers the window (-489.1,-2.4, 1486.7x849.6) and the face is partly under the stat block. Not a new defect. ROUND 32b ADDITION (G4 (4b)): Phone pause: GUIDE to MUSIC are off screen at open; a real swipe scrolls the strip (0, 275, 550) and tapping ACCESSIBILITY, CONTROLS and MUSIC makes each the active tab; nothing hints at the strip.
+- Expected: Every tab reachable by sight; tiles whole; touch hints on a touch device.
+- Repro and seed: 390x844 touch, Chapter I, tap the chip, read the strip.
+- Evidence: critic/rounds/round-31/evidence/gaps/seymour-flux-phone-pause/phone-pause-0.png; critic/rounds/round-31/evidence/gaps/seymour-flux-phone-pause2/swipe1.png; critic/rounds/round-31/evidence/ffx2-bahamut-win-phone-touch/21-change-open.png; critic/rounds/round-32/gaps-G2-layout/matrix/gaps/sweep-matrix-390x844/02-pause.png; critic/rounds/round-32/gaps-G4-walks-optional/4b-seymour-flux/run.json
+- Requirement: CHK-003, CHK-009, onboarding (device usability)
+- Smallest fix: Fade the strip edge as a scroll cue; hide keyboard hints on touch; fit the tile text.
+- Acceptance check: Strip shows an edge cue; no clipped tile text at 390x844.
+
+### PR-0542 [minor] interface, both: Pause chrome labels are low contrast, about 1.9 to 3.5:1 by pixel sampling (carried, stalled)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: pause, pause at 1600 and 2000
+- Observed: header 1.88:1, BATTLE STATS 2.37, H PAINTING ONLY 2.83, inactive tab 3.49, options section titles 2.38 (thin antialiased text, rough figure).
+- Expected: At least 4.5:1 for small text.
+- Repro and seed: Pause screenshot, sample.
+- Evidence: critic/rounds/round-31/evidence/seymour-flux-win/14-pause-Esc.png
+- Requirement: CHK-003
+- Smallest fix: Raise the label tokens.
+- Acceptance check: Sampled contrast at least 4.5:1.
+
+### PR-0543 [minor] interface, FFX only: FFX target mode lacks the Enter/Esc strip FFX-2 shows, and the hint strip calls the guide 'Intel' (carried, stalled; CHK-020 polish difference)
+- Status: open; carried from round-32b; last seen round 32b; confidence: high
+- Chapter and state: FFX target mode, target step
+- Observed: FFX-2 target frames show ENTER CONFIRM / ESC BACK; FFX frames do not; the hint strip labels the guide Intel while its panel says GUIDE. ROUND 32b ADDITION (G1 pairing (CHK-020)): Re-read on 64 round-32 frames in four chapter pairs: the FFX target step still has no ENTER CONFIRM / ESC BACK strip while src/ui/ffx2/TargetPlates.ts:28 draws one for FFX-2, and the hint strip still says Intel for the panel headed GUIDE. Same on the F1 HUD and the older HUD; present in release 69; not a regression.
+- Expected: The same help in both, in one word.
+- Repro and seed: Chapter I, Attack, target step.
+- Evidence: critic/rounds/round-31/evidence/seymour-flux-win/16-target-single.png; critic/rounds/round-32/gaps-G1-static/chk020-pairing.json
+- Requirement: CHK-020
+- Smallest fix: Add the strip and unify the word.
+- Acceptance check: Both games print the strip; one word for the guide.
+
+### PR-0483 [minor] interface, FFX (Chapter I phone): A touch player's route to Poison Fang and Holy Water in the 27-item Chapter I list: the pager, both target steps and the Holy Water confirm work by real taps (round 32b); a Poison Fang confirm tap on an enemy plate was not made
+- Status: open; carried from round-32b; last seen round 32b; confidence: high that the harness caused the defeats; medium that the player path is whole
+- Chapter and state: seymour-flux, 390x844 touch
+- Observed: The phone Chapter I routes were lost at seeds 1 and 2 (23 of 35 and 20 of 39 picks wanted Poison Fang or Holy Water and took Attack; desktop 2 of 53, with no Attack substitutions; Bahamut at 390x844 touch 0 mismatches). The chief's gap pass opened ITEMS by real taps ('1-6 OF 27', the previous button disabled), tapped the 44x44 next button ('7-12 OF 27') and tapped HOLY WATER, which opened its target step ('HOLY WATER -> TIDUS', help text 'Tap another ally to switch'). The route harness (critic/runner/lib/route-fight.mjs lines 229 to 238) reads only the six visible rows and falls back to Attack, which is how the run lost; CommandMenuPaging.ts and its unit test pass. The first draft of this finding was a major phone defect with low confidence on cause; the gap pass refutes it as a product defect, and it is filed minor for what stays unproven. ROUND 32 AUDITOR ADDITION (interface-onboarding R32-INT-10; FFX-2 Chapter IV phone, low confidence; would be major only if a touch-only probe shows no route): Chapter I phone, two seeds: only the first six of 27 Items rows were found (Mega Phoenix applied; Poison Fang, Holy Water, X-Potion not: 23 and 20 picks 'want != took', Attack taken) and both runs were defeated (turn 35 and 39). Chapter IV phone: 5 of 5 taps on the Rikku plate for Cure/Cura were 'tap blocked' and finished by a key fallback. I cannot tell a harness limit from a product defect on these frames. ROUND 32b ADDITION (G4 (4b) on the live bundle): Chapter I at 390x844: the Items pager (44 x 44 buttons, 1-6 OF 27) reaches Holy Water on page 2 and Poison Fang on page 4 by real taps; Poison Fang opens an enemy target step (plates mortiorchis, seymour-flux) and BACK works by tap; Holy Water opens the ally step with plates yuna 75 x 96 and tidus 95 x 103, elementFromPoint at each plate centre is that plate, the first tap on another ally switches the target (HOLY WATER to YUNA) and a second tap on the same plate confirms (awaitingMenu drops at once). The route exists; the acceptance wording (want equals took on every row) is met for Holy Water; a Poison Fang confirm tap on an enemy plate was not made, so the issue stays open as a minor until the next touch run.
+- Expected: A touch player can reach every row the advisor names and aim an ally.
+- Repro and seed: 390x844 touch, Chapter I, Items, swipe to Holy Water, Yuna as target.
+- Evidence: critic/rounds/round-32/evidence/gaps/phone-items-pager/run.json; critic/rounds/round-32/evidence/seymour-flux-win-r32-phone-touch/run.json; critic/rounds/round-32/evidence/seymour-flux-win-r32-phone-s2-touch/turn-log.json; critic/rounds/round-32/evidence/ffx2-bahamut-win-r32-phone-touch/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4b-seymour-flux/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4b-seymour-flux/b3-poison-fang-target.jpg; critic/rounds/round-32/gaps-G4-walks-optional/4b-seymour-flux/b4-holy-water-target.jpg; critic/rounds/round-32/gaps-G4-walks-optional/4b-seymour-flux/b5-after-confirm.jpg
+- Requirement: CHK-015, CHK-004
+- Smallest fix: Teach the route harness to tap the page button when the wanted row is not among the six visible rows (PR-0539); then tap Poison Fang and a target plate with real touch events.
+- Acceptance check: A 390x844 touch run of Chapter I takes Holy Water and Poison Fang as named (want equals took on every row).
+
+### PR-0558 [minor] interface, both (F1 HUD: Chapters I and IV): At TEXT SIZE 115 and 130 the desktop F1 HUD overlaps: the boss ribbon over the guide chip and the intent panel over the turn strip; the Chapter IV help band sat under the PAUSE chip (merges R68-P1)
+- Status: open; carried from round-32b; last seen round 32b; confidence: medium
+- Chapter and state: Chapter I, IV, TEXT SIZE 115 and 130
+- Observed: Focused review R68-P1 (candidate bundle, 1280x720 and 1600x900). The gap pass set TEXT SIZE 100 to 115 to 130 on the live pause and saw data-text-size set and the tab strip larger; it did not capture the battle HUD at 130 (r68 now scales the desktop HUD, so PR-0559 is probably fixed, not re-verified). ROUND 32b ADDITION (G4 (4a, 4f), sized on the live bundle): Chapter I: the E card covers the turn strip, 80 x 111 px at TEXT SIZE 100 (that is PR-0516), 137 x 128 at 115 and 221 x 145 at 130, with the folded Sensor tab also under it by 6, 10 and 14 px. Chapter IV at 130: the guide chips (G HIDE GUIDE and [ ] SCROLL) overlap the boss ribbon by 14 px and hide the HP SCAN chip; at 100 and 115 they clear it. The help band under the PAUSE chip was not seen (the F1 HUD has no PAUSE chip on the desktop).
+- Expected: No overlap at any text size.
+- Repro and seed: Pause, ACCESSIBILITY, TEXT SIZE 130, resume, open E and G.
+- Evidence: critic/reviews/2a9340249-focused.json; critic/rounds/round-31/evidence/gaps/seymour-flux-a11y-keys/a11y-after-changes.png; critic/rounds/round-32/gaps-G4-walks-optional/crops/ch4-guide-vs-ribbon-100-115-130.png; critic/rounds/round-32/gaps-G4-walks-optional/4f-ffx2-panels/ts130-again-g-plus1500.jpg; critic/rounds/round-32/gaps-G4-walks-optional/4a-ffx2-bahamut/run.json
+- Requirement: CHK-008, onboarding (text size)
+- Smallest fix: Reflow the ribbon and the intent panel under the larger scale.
+- Acceptance check: Rect intersections 0 at 130 in Chapters I and IV.
+
+### PR-0549 [minor] visual, both: Party figures stack on each other in staging: Auron is almost wholly behind Tidus in Chapter III; the party reads as toys against Vegnagun and Bahamut (carried)
+- Status: open; carried from round-32b; confidence: high
+- Chapter and state: braskas-final-aeon, ffx2-vegnagun-shuyin, mid-fight
+- Observed: Only Auron's coat edge shows behind Tidus in 23-midfight (two figures read). The fan also lists Ixion's body sitting through Yu Yevon.
+- Expected: Three readable figures.
+- Repro and seed: Chapter III by real keys, seed 1, 23-midfight.
+- Evidence: critic/rounds/round-31/evidence/braskas-final-aeon-win/23-midfight.png
+- Requirement: CHK-008
+- Smallest fix: Offset Auron's slot in this chapter's layout.
+- Acceptance check: All three heroes visible at the first menu.
+
+### PR-0521 [minor] feel, FFX-2 (Chapter IV): Pro camera framing in the action stills: Bahamut zooms and shifts within a turn; the sphere change swings the scene sideways (carried; see PR-0530 for the question to Bailey)
+- Status: open; carried from round-32b; last seen round 33; confidence: medium
+- Chapter and state: ffx2-bahamut, seq-action-playing and seq-spherechange at 250 ms steps
+- Observed: Carried and widened by the first-time fan: a hard camera cut mid-action in Seymour Flux (a boss framing flips to a wide shot, the party at about half size, frames 2 to 3 of seq-action-playing), in Braska (a tight dark close-up to a wide shot, party about two thirds), in the Den of Woe seams (the party jumps about 1.8 times closer; seam 3's first frame has no party), and in Sin (the head about 1.4 times larger after the Yuna cut-in). 22.5 hard cuts a minute (3,990 in 10,638 s) are the planned smear cuts (PR-0530) awaiting Bailey. ROUND 33: The fan adds three camera readings: Flux (party big on the left to half the size in the centre in one frame, boss jumps), Braska midfight (a close dark view with the boss out of frame cuts to a wide view) and Bahamut at the sphere change (Bahamut leaps to the top-left corner and shrinks). Pro camera cuts, not new.
+- Expected: A coherent camera (Bailey's judgment, PR-0530).
+- Repro and seed: Chapter IV, Rikku WARRIOR change at 1600 and 2000.
+- Evidence: critic/rounds/round-31/evidence/ffx2-bahamut-win/seq-spherechange; critic/rounds/round-31/evidence/ffx2-bahamut-win-2k/seq-spherechange
+- Requirement: CHK-B2
+- Smallest fix: Ask Bailey.
+- Acceptance check: A recorded verdict.
+
+### PR-0481 [minor] feel, both: Time to the first command: about 42 s in Chapter I and 21 to 23 s in Chapter IV from picking the chapter (pre-scene read included); the retry is now 4.9 s (Chapter I) and 10.2 s (Chapter IV)
+- Status: open; carried from round-32b; confidence: high
+- Chapter and state: Chapters I and IV, real keys, desktop line
+- Observed: Round 30b: 43.2 s and 26.6 s; retry 16.5 s and 9.9 s. The chained chapters retry in 9.6 to 13.6 s (this round's gap runs).
+- Expected: A short wait to the first command.
+- Repro and seed: Chapter select to awaitingMenu with a timer.
+- Evidence: critic/rounds/round-31/evidence/seymour-flux-win/run.json; critic/rounds/round-31/gaps-chief/lose-braskas-final-aeon.log
+- Requirement: RUBRIC section 2 (pace)
+- Smallest fix: See PR-0567.
+- Acceptance check: As PR-0567.
+
+### PR-0532 [minor] audio, FFX only: Chapter I's win fanfare is cut at the results swap and restarted from its first note (carried; contradicts D-1295 'one fanfare')
+- Status: open; carried from round-32b; last seen round 32; confidence: medium
+- Chapter and state: seymour-flux, results swap
+- Observed: Carried and reached further: the early victory cue (FFX only) is in the fading list at gain 0.64 and 0.002 with no current track 4.0 s (Anima) and 17.4 s (Natus) before the results panel, and the results snapshot then shows victory-ffx current at gain 1: the same cut-and-restart round 31 read in Chapter I, now in two more chapters. Two snapshots, not a dense timeline; a fade could also be the cue ending.
+- Expected: D-1295: one fanfare.
+- Repro and seed: Chapter I win, dense audioDebug timeline from the last blow.
+- Evidence: critic/rounds/round-32/evidence/seymour-anima-macalania-win-r32/audio-debug.jsonl; critic/rounds/round-32/evidence/seymour-natus-win-r32/audio-debug.jsonl
+- Requirement: AUDIO phase transitions; D-1295
+- Smallest fix: Skip the exit's stopMusic for a win when the results cue is already current.
+- Acceptance check: A 100 ms timeline shows victory-ffx continuous.
+
+### PR-0514 [minor] audio, both: The first UI sounds of a session fall back to the procedural synth, more often and for longer this round (7 of 11 logged runs, up to 14 sounds in the FFX-2 chapters; round 30: 2 of 17)
+- Status: open; carried from round-32b; confidence: medium for the entries, none for the cause
+- Chapter and state: title and chapter select, first 2 to 7 s of a fresh profile, cold profile, live network
+- Observed: ffx2-bahamut-win-2k 13 synth sounds 3.47 to 6.05 s; phone 9; vegnagun 14 (3.83 to 6.58 s); the Chapter I runs are clean. Cause not established (sprites 2.7 and 4.6 MB over the live network, host load, or the r68 load order).
+- Expected: CHK-001 item 3: nothing falls back to synth.
+- Repro and seed: Fresh profile, FFX-2 chapter select to Chapter IV; move and confirm within 3 to 6 s.
+- Evidence: critic/rounds/round-31/evidence/ffx2-bahamut-win-2k/audio-debug.jsonl; critic/rounds/round-31/evidence/ffx2-vegnagun-shuyin-win/audio-debug.jsonl
+- Requirement: CHK-001 item 3
+- Smallest fix: Gate the UI cue on the first sprite decode, or start its fetch ahead of art.
+- Acceptance check: Ten cold runs log no synth entry in the first 7 s.
+
+### PR-0504 [minor] audio, FFX-2 only: Chapter IV win results are silent on the default desktop build, by a release 62 pick nobody has heard (carried question for Bailey; re-observed at 1600 and 2000)
+- Status: open; carried from round-32b; last seen round 32; confidence: high
+- Chapter and state: ffx2-bahamut, results
+- Observed: Carried and re-observed in round 32: Chapter IV desktop wins (1600x900, 2000x1012) end with music.current null at results; the 390x844 touch win plays 'pause' at results because the pass is off on phone class. D-1352 keeps silence until Bailey has listened.
+- Expected: Bailey's decision.
+- Repro and seed: Chapter IV win.
+- Evidence: critic/rounds/round-31/evidence/ffx2-bahamut-win/audio-debug.jsonl
+- Requirement: AUDIO
+- Smallest fix: Ask Bailey.
+- Acceptance check: A recorded verdict.
+
+### PR-0523 [minor] interface, both: Esc from the command menu closes an open guide panel first, so the pause seems ignored (carried; re-observed in Den of Woe, Trema and Via Purifico; a gap-pass Esc after ACCESSIBILITY row changes took more than 1.2 s to close, not reproduced as a defect)
+- Status: open; carried from round-32b; last seen round 32b; confidence: medium
+- Chapter and state: ffx2-den-of-woe, ffx2-trema, isaaru-via-purifico, guide panel open
+- Observed: pOpens and resumedByEsc are true; three pause captures read screen battle. ROUND 32 AUDITOR ADDITION (interface-onboarding R32-INT-13; FFX only, Chapter I phone): Both FFX phone runs: Esc at the command menu returned the plain menu and the pause frames are UNVERIFIED; the FFX-2 phone run (no coach at that moment) paused normally. The pause chip works (r31).
+- Expected: The first Esc pauses or the panel says it closed first.
+- Repro and seed: Open the guide, press Esc.
+- Evidence: critic/rounds/round-31/continuity/ffx2-trema-win-r31/14-pause-Esc.png; critic/rounds/round-32/evidence/seymour-flux-win-r32-phone-touch/14-pause-Esc.png
+- Requirement: CHK-015
+- Smallest fix: As carried.
+- Acceptance check: As carried.
+
+### PR-0550 [minor] interface, FFX only: Gamepad: the A that confirms the target also stops Wakka's first reel as the overlay opens (carried; the pad evidence is reused from round 30b under a written argument)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: Wakka Overdrive, virtual pad
+- Observed: Not re-driven this round (reused from round 30b).
+- Expected: The first reel runs until pressed.
+- Repro and seed: As in round 30b.
+- Evidence: critic/rounds/round-30/gaps2/g2
+- Requirement: CHK-023
+- Smallest fix: As carried.
+- Acceptance check: As carried.
+
+### PR-0503 [minor] process, both: Prep agency (STATS, SPHERE GRID, EQUIPMENT, ITEMS, OVERDRIVE; DRESSSPHERES, ACCESSORIES) and the r68 prep tab roles were never walked by key or touch (carried, the fourteenth review; the pause ACCESSIBILITY tab was walked by round 31's gap pass, not by round 32's (PR-0597))
+- Status: open; carried from round-32b; last seen round 32b; confidence: high
+- Chapter and state: all, prep
+- Observed: 291 entries, 11 of them prep first tab; none opens another tab or changes a value. ROUND 31's gap pass walked pause E (Tidus, Yuna, Kimahri, Chapter, Guide, Options, Accessibility, Controls, Music), TEXT SIZE 100 to 115 to 130 (data-text-size), REDUCE MOTION, REDUCE FLASHES, LOW EFFECTS toggles. Not done: COLOUR VISION on a frame, key remap, prep tabs, hold-Home reset. RUBRIC section 8 requires the method check before another attempt; none is written. ROUND 32b ADDITION (G4 (4c) walked the prep tabs, and 4a/4b the pause tabs, in round 32b): Every prep tab of both games was opened by key and by tap on the live bundle (see PR-0295 for the list); the FFX Sphere Grid and Overdrive controls were exercised; FFX-2 prep exposes no value-changing control. The acceptance wording (the changed value shown in the first menu) is not met: a STR node and an Overdrive mode do not appear on the first command menu. The pause ACCESSIBILITY, CONTROLS and MUSIC tabs were walked by key at 1600x900 and by tap at 390x844 in Chapters I and IV (PR-0597).
+- Expected: Per game and input: each prep tab opened, one change made, visible in the first menu.
+- Repro and seed: Add one scripted real-input walk to the capture owner.
+- Evidence: critic/rounds/round-31/evidence/index.json; critic/rounds/round-31/evidence/gaps/seymour-flux-a11y/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4c-ffx/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4c-ffx2/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4a-seymour-flux/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4b-seymour-flux/run.json
+- Requirement: RUBRIC section 6 and 8
+- Smallest fix: Write the method check; assign the walk to the capture owner's script.
+- Acceptance check: A run.json with the walks and the changed value in the first menu, both games, both sizes.
+
+### PR-0520 [minor] delivery, both: First-load time on the live URL still not measured in a browser (carried, the fourth review)
+- Status: fixed (verified round 32b); carried from round-32b; last seen round 32b; confidence: high that it is unmeasured
+- Chapter and state: title, cold edge
+- Observed: Node-side arithmetic: cold title about 3.1 MB on the wire (bundle 1,450,107 B brotli in 0.47 s), inside the proposed 4 MB. No browser timing.
+- Expected: Title usable under 5 s cold on a named profile.
+- Repro and seed: PYREFLY_BROWSER=gpu node critic/runner/lib/coldload.mjs --base=https://echoesofspira.com/
+- Evidence: critic/reviews/2a9340249-focused/cold-cand/gaps/coldload/out.json; critic/rounds/round-32/gaps-G4-walks-optional/4d-delivery/gaps/coldload/out.json; critic/rounds/round-32/gaps-G4-walks-optional/4i-title-enter/run.json
+- Requirement: CHK-017 cold-load clause
+- Smallest fix: Run coldload.mjs against the live URL.
+- Acceptance check: A report line with the median and the throttled load.
+
+### PR-0544 [minor] delivery, FFX-2: FFX-2 Trema 56.7 fps, p99 74.7 ms, 2.3 percent over 34 ms (carried since round 30; see PR-0580 for the other outliers)
+- Status: open; carried from round-32b; last seen round 33b; confidence: high for numbers
+- Chapter and state: ffx2-trema, continuity probe
+- Observed: Live run: 56.7 fps, 1,588 of 67,748 frames over 34 ms, max 158 ms. ROUND 33B: Trema is now read by the full harness: 56.1 fps, p99 89.1 ms, 1,795 of 70,968 frames over 34 ms (2.5 percent), max 169.4 ms; the same shape as the round 30 reading (56.7 fps, p99 74.7 ms) with a longer tail. The other FFX-2 chapters read 59.1 to 59.8 fps.
+- Expected: B4a to B4c.
+- Repro and seed: Trema continuity.
+- Evidence: critic/rounds/round-31/continuity/ffx2-trema-win-r31/continuity/continuity.json; critic/rounds/round-33/continuity/ffx2-trema-win-r33/continuity/continuity.json
+- Requirement: RUBRIC section 2
+- Smallest fix: Per-frame trace first.
+- Acceptance check: p99 at most 25 ms.
+
+### PR-0547 [minor] interface, FFX-2 only: FFX-2 results ledger names the dressphere Rikku started in, not the one she finished in (carried, re-observed)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: ffx2-bahamut, results
+- Observed: As round 30b.
+- Expected: The finishing dress.
+- Repro and seed: Chapter IV win, change Rikku, results.
+- Evidence: critic/rounds/round-31/evidence/ffx2-bahamut-win/31-results.png
+- Requirement: RUBRIC prep (understandable results)
+- Smallest fix: As carried.
+- Acceptance check: As carried.
+
+### PR-0099 [minor] audio, both: Stand-in or borrowed scene beds and battle cues in eleven chapters (carried; not re-judged by ear)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: eleven chapters, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0515 [minor] interface, FFX-2 only: Doublecast advice says NO MP while the spell picker shows the MP cost (carried, not re-examined)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: doublecast, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0485 [minor] narrative, both: Portrait expression never follows the line; 46 emotion tags are read by nothing (carried; no story file changed)
+- Status: open; carried from round-32b; last seen round 32; confidence: medium
+- Chapter and state: all, carried
+- Observed: Carried: dboxTimeline shows one portrait file per speaker for the whole scene (Leblanc: rikku-x2.webp, paine.webp); no expression change on grief lines. Awaits Bailey.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0537 [minor] visual, FFX only: The live Chapter I boss card has no approved target (carried, not re-examined)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: Chapter I, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0552 [minor] interface, FFX-2 only: FFX-2 Mega Flare telegraph: the CHAIN counter is drawn over the ATTACK row (carried; not re-observed)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: Chapter IV, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0555 [minor] prep, FFX only: The prep STATS tab keeps the pre-spend value after a Sphere Grid activation (carried; not walked)
+- Status: open; carried from round-32b; last seen round 32b; confidence: medium
+- Chapter and state: prep, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title. ROUND 32b ADDITION (G4 (4c)): Confirmed by tap with numbers: after WALK AND ACTIVATE the grid says Strength +2 activated and STR is now 33, Power 12 to 11 and the roster S.LV 30 to 28, while the STATS tab still shows S.LV 30 and STRENGTH 31.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json; critic/rounds/round-32/gaps-G4-walks-optional/4c-ffx/seymour-flux-tap-stats-1-after-spend.jpg; critic/rounds/round-32/gaps-G4-walks-optional/4c-ffx/seymour-flux-tap-grid-1-after.jpg
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0556 [minor] onboarding, FFX only: The Sphere Grid card says Enter acts, but Enter after the card starts the battle (carried; not walked)
+- Status: open; carried from round-32b; last seen round 32b; confidence: medium
+- Chapter and state: prep, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title. ROUND 32b ADDITION (G4 (4c, 4h), reworded): The stated sequence (Enter after the card starts the battle) was not reproduced. Seen instead: while WALKING the shell hint under the grid says ENTER BEGINS THE BATTLE - ESC BACK while the canvas footer says ENTER ACTS - ESC RELEASES, and the first Esc while WALKING left WALKING lit (the second released it); in one run Esc left the prep for the chapter board.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json; critic/rounds/round-32/gaps-G4-walks-optional/4h-grid-keys/run.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0557 [minor] prep, FFX only: OVERDRIVE modes on the prep tab have no keyboard route (carried; not walked)
+- Status: open; carried from round-32b; last seen round 32b; confidence: medium
+- Chapter and state: prep, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title. ROUND 32b ADDITION (G4 (4c)): Confirmed by key on the live bundle: the desktop OVERDRIVE mode rows (STOIC, WARRIOR) have no tabindex, no role and no key route; the phone rows have tabindex 0 and role button and a tap moves EQUIPPED from WARRIOR to STOIC.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json; critic/rounds/round-32/gaps-G4-walks-optional/4c-ffx/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4c-ffx/seymour-flux-key-od-0.jpg
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0559 [minor] onboarding, both: TEXT SIZE scaled the pause and the phone command menu but not the desktop battle HUD (r68 a11y-text now scales it per the focused review; not re-verified live)
+- Status: fixed (verified round 32b); carried from round-32b; last seen round 32b; confidence: medium
+- Chapter and state: all, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json; critic/rounds/round-32/gaps-G4-walks-optional/4a-seymour-flux/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4a-ffx2-bahamut/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4b-seymour-flux/b1-phone-textsize-130-menu.jpg
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0560 [minor] interface, FFX only: Chapter I ally target with the Items list open: rows cover the TARGET plate and hand (carried; not re-observed)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: Chapter I, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0561 [minor] prep, FFX-2 only: The FFX-2 prep STATS tab does not say it leaves accessories and the Garment Grid out (carried; not walked)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: prep, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0562 [minor] onboarding, both: On the phone the first-run guide step 3 pointer covers part of the TIP text (carried; not re-observed)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: phone, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0563 [minor] delivery, both: WebKit 26.6: party-plate portraits draw as noise at the first menu (carried; Chromium only this round)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: Chapter I, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0564 [minor] delivery, both: WebKit 26.6 holds 12 to 26 fps at the first menu (carried; Chromium only this round)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: all, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0566 [minor] feel, both: First sight still stalls: the first 0.1 to 4.1 s of every battle carry 5 to 9 frames over 100 ms (carried; the live run records the worst frames, not when they fall)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: all, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0568 [minor] feel, both: hz-matrix: chained beats differ 25 to 30 ms between 60 and 120 or 144 Hz (carried; not re-run)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: Chapter IV, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0596 [minor] onboarding, both: Key remapping is not built: CONTROLS is a read-only list
+- Status: open; carried from round-32b; confidence: high
+- Chapter and state: Pause CONTROLS tab, pause CONTROLS tab, e3f51bf18 (frame of round 31, source read at e3f51bf18)
+- Observed: The CONTROLS tab lists G/X, N/RT, E/RS, J/LT, Q/Y, F/LB, Esc/Menu, H/Y, Enter/Z/A and so on and offers no way to change any binding.
+- Expected: The rubric's onboarding category names remapping among the accommodations.
+- Repro and seed: Esc, then tab to CONTROLS (round-31 frame pause-E7.png).
+- Evidence: critic/rounds/round-31/evidence/gaps/seymour-flux-a11y/pause-E7.png
+- Requirement: RUBRIC section 6 onboarding (text and input access)
+- Smallest fix: Question for Bailey, not a proposal to build: the mock shows it, the code says it is not built, and no issue tracked it. Decide build or drop the line from the rubric reading.
+- Acceptance check: A decision recorded in decisions.json; if built, rebinding one key persists across reload and shows in the hint strip.
+
+### PR-0597 [minor] process, both: The capture owner's route still never opens ACCESSIBILITY, CONTROLS or MUSIC, so onboarding has had no number for six reviews
+- Status: open; carried from round-32b; last seen round 32b; confidence: high
+- Chapter and state: Pause, round-32 capture-owner route: run.json pause.tabs and the 14-pause frames of every run
+- Observed: run.json pause.tabs lists six tabs in every run and the 14-pause frames stop at OPTIONS; the three tabs appear only as labels. The phone FFX pause frames are UNVERIFIED in both seeds. ROUND 32b ADDITION (G4 (4a, 4b)): The gap groups walked ACCESSIBILITY, CONTROLS and MUSIC by key (1600x900) and by tap (390x844) in Chapters I and IV and measured TEXT SIZE 100/115/130 on the first menus, so this round has the frames; the capture owner's route itself still does not open the tabs, so the issue stays for the next index.
+- Expected: A deep review shows text size, motion, flash and colour-vision settings on frames, on desktop and phone.
+- Repro and seed: Read run.json pause.tabs and index.json state of the 14-pause frames in any r32 run.
+- Evidence: critic/rounds/round-32/auditors/audit_interface-onboarding.md; critic/rounds/round-32/gaps-G4-walks-optional/4a-seymour-flux/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4a-ffx2-bahamut/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4b-ffx2-bahamut/run.json
+- Requirement: RUBRIC section 5 (match proof to the claim); CHK-003 scope
+- Smallest fix: Add to the route: open the pause, step to ACCESSIBILITY, set TEXT SIZE 130, REDUCE MOTION, REDUCE FLASHES, LOW EFFECTS and COLOUR VISION one at a time, screenshot each with the first menu behind it, on desktop and phone, in one F1 chapter of each game.
+- Acceptance check: The next index.json has one verified frame per setting per game and per size.
+
+### PR-0598 [minor] interface, both: The key prompt strip (Enter Select / G Intel / Q Defend / P Pause) is hidden from link 2 of an F1 chain: the victory-state class f1-over outlives its link
+- Status: open; carried from round-32b; confidence: high for the measurement and the cause (the class and the rule are in the source)
+- Chapter and state: F1 chains: Leblanc (FFX-2 VI), Trema (XIII), Den of Woe (XV), Isaaru (FFX XIV), Braska (FFX III), first command menu of link 2 or later of a chained chapter that draws the F1 HUD, 1600x900, real keys, seed 1; link 1 and every retried link 1 show the strip
+- Observed: G3 read .f1-prompts at every first menu: at the link 2 and link 3 seam menus of Isaaru, Den of Woe, Trema, Leblanc (links 2 and 3) and Braska (link 3) the strip has opacity 0 and the HUD root carries f1-over (seamPrompts 0, seamF1OverOnHudRoot true, the rule 'hud-f1 f1-over f1-prompts' matches); at link 1 and at every retried link 1 (a new BattleScreen and HUD) it is 1. Cause read in the source at e3f51bf18: HudF1.onEvent (src/ui/hudf1/HudF1.ts:250) adds f1-over on every victory or defeat event, only release() removes it (lines 164 and 194), and hudf1-act.css line 30 hides .f1-prompts under it; a chain's link victory is a victory event. The strip is the on-screen key help, so a player who reaches link 2 loses it exactly when a new boss arrives. Fallen Aeons (old HUD) keeps its prompts at links 2 and 3.
+- Expected: The victory-state class lives only for the link that ended; each link's first menu shows the key help.
+- Repro and seed: Real keys, Leblanc: win link 1, read .f1-prompts opacity at the link 2 first menu (0) and after a loss and RETRY at link 1 (1). Same in Isaaru link 3, Den of Woe link 3, Trema link 2, Braska link 3.
+- Evidence: critic/rounds/round-32/gaps-G3-chains-overlays/3c-isaaru/run.json; critic/rounds/round-32/gaps-G3-chains-overlays/3c-den-of-woe/run.json; critic/rounds/round-32/gaps-G3-chains-overlays/3b-trema/run.json; critic/rounds/round-32/gaps-G3-chains-overlays/3d-leblanc/run.json; critic/rounds/round-32/gaps-G3-chains-overlays/3e-leblanc/run.json; critic/rounds/round-32/gaps-G3-chains-overlays/3f-braska/run.json; critic/rounds/round-32/gaps-G3-chains-overlays/g3-summary.json
+- Requirement: CHK-006 (adjacent: a link-victory state outlives its owner), RUBRIC interface and onboarding (key help)
+- Smallest fix: Clear f1-over (and the other end-of-fight classes) when the next link begins, in the presenter's link seam (stageLinkBegins / the chain runner), not only in release().
+- Acceptance check: At the first menu of every link of Leblanc, Braska, Isaaru, Trema and Den of Woe the .f1-prompts opacity is 1 and f1-over is absent from the HUD root.
+
+### PR-0599 [minor] delivery, FFX-2 only: Retry from link 5 of Chapter V takes 38.6 s from the key to the first menu; every other retry took 9.5 to 16.5 s
+- Status: open; carried from round-32b; confidence: low to medium (one run, cause not traced)
+- Chapter and state: Chapter V Vegnagun and Shuyin, link 5, live bundle, 1600x900, real Enter on RETRY after a loss at link 5 (Shuyin); the earlier links by the labelled hook
+- Observed: The results card names Defeat (turns 7, attempts 1); Enter on RETRY reached the battle (screens results, battle: no cutscene screen) and the first menu 38.55 s later, with Shuyin, boss-shuyin at gain 1 and resumeAt 5. The 9 other retries read in the same pass took 9.5 to 16.5 s (Fallen Aeons 16.5 s and 10.4 s, Trema 13.8 s, Sin core 11.1 s, Mirror Aeons 10.6 s, Isaaru 11.6 s, Den of Woe 10.6 s, Leblanc 9.5 s and 9.7 s, Braska 11.3 s). G4 (4e) saw the same link-5 entrance hold the music in silence from 26.4 to 40.8 s on the first visit, which is the likely share. Not traced: whether the retried link replays that entrance inside the battle and whether Enter skips it.
+- Expected: A retry of a link the player has seen returns to the first menu in about 10 s (PR-0587 acceptance); an entrance already seen is skippable.
+- Repro and seed: Chapter V, hook to link 5, lose, Enter on RETRY, time to the first menu (3g-shuyin).
+- Evidence: critic/rounds/round-32/gaps-G3-chains-overlays/3g-shuyin/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4e-audio/run.json
+- Requirement: respectful skip and replay pacing
+- Smallest fix: Read the retried link 5 start in the presenter; if the entrance replays, let a held Enter skip it as the first visit does.
+- Acceptance check: Retry of Chapter V link 5 reaches the first menu in 15 s or less, or the entrance is skippable by the same key as on the first visit.
+
+### PR-0600 [minor] onboarding, both: Phone pause touch targets: every ACCESSIBILITY row is 350 x 20 px and RESUME is 156 x 22 px, below 44 px and below the 24 px WCAG 2.2 AA minimum
+- Status: open; carried from round-32b; last seen round 33; confidence: high
+- Chapter and state: Phone pause (Chapters I and IV), 390x844, DPR 2, touch, pause opened by the PAUSE chip, Chapter I (FFX) and Chapter IV (FFX-2)
+- Observed: G4 (4b): the tab buttons are 47 px tall, but the five ACCESSIBILITY rows (TEXT SIZE, REDUCE MOTION, REDUCE FLASHES, LOW EFFECTS, COLOUR VISION) are 350 x 20 px and the RESUME control is 156 x 22 px; all are tappable (data-action pause:row:<id>). Related to PR-0578 (board chips). ROUND 33: Fresh gap-pass measure on the live bundle (390x844 touch, Chapters I and IV): the PAUSE chip is 46 x 46 px and opens the pause by a real tap; the RESUME control .pause__back is 142 x 22 px, below the 44 px minimum; it works by tap.
+- Expected: A touch target of at least 44 px (24 px is the WCAG 2.2 AA floor) for the controls a player with a motor or vision need reaches for.
+- Repro and seed: Phone, Esc or the PAUSE chip, ACCESSIBILITY tab, read the row rects.
+- Evidence: critic/rounds/round-32/gaps-G4-walks-optional/4b-seymour-flux/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4b-ffx2-bahamut/run.json; critic/rounds/round-32/gaps-G4-walks-optional/4b-seymour-flux/p1-accessibility.jpg; critic/rounds/round-33/evidence/gaps/phonepause-ch1b/phonepause.json; critic/rounds/round-33/evidence/gaps/phonepause-ch1b/02-pause-tap.png
+- Requirement: RUBRIC section 6 onboarding (text and input access)
+- Smallest fix: Give the pause rows and RESUME a 44 px minimum height on the phone class.
+- Acceptance check: Every pause row and RESUME at 390x844 is at least 44 px tall.
+
+### PR-0601 [minor] interface, FFX only: Phone Items list: three of the six tiles on page 1 cut their names (MEGA-POTI..., PHOENIX DO..., MEGA PHOE...) and the pager's next button covers the left edge of the GUIDE chip
+- Status: open; carried from round-32b; confidence: high
+- Chapter and state: Chapter I phone Items list, 390x844, Chapter I first menu, ITEMS, page 1 of 27
+- Observed: G4 (4b): MEGA-POTION, PHOENIX DOWN and MEGA PHOENIX are ellipsized in their tiles; the next-page button (44 x 44) sits on the left edge of the GUIDE chip (same family as PR-0518 CHANGE tiles).
+- Expected: Every name that can be shown is shown in full (CHK-009).
+- Repro and seed: Phone, Chapter I, ITEMS, read page 1.
+- Evidence: critic/rounds/round-32/gaps-G4-walks-optional/4b-seymour-flux/b2-items-page1.jpg; critic/rounds/round-32/gaps-G4-walks-optional/4b-seymour-flux/run.json
+- Requirement: CHK-009
+- Smallest fix: Let the item tile wrap to two lines or shrink the count badge; move the pager clear of the guide chip.
+- Acceptance check: Page 1 of the phone Items list prints all six names whole and the pager does not overlap a chip.
+
+### PR-0602 [minor] onboarding, both: Phone prep: the first-run Auron guide box and the START BATTLE spotlight sit over the Sphere Grid first-time card and cover part of its text and its SHOW ME ON THE GRID button
+- Status: open; carried from round-32b; confidence: high
+- Chapter and state: Phone party prep, first visit to SPHERE GRID, 390x844, Chapter I party prep, first visit to the SPHERE GRID tab (FFX card; the guide overlay is both games)
+- Observed: G4 (4c): the Auron box ("Tabs are for later. Tap START BATTLE.") and the spotlight cover the card's text and its SHOW ME ON THE GRID button; GOT IT (102 x 44) is reachable.
+- Expected: A first-time card and the guide box do not compete for the same space; both stay readable.
+- Repro and seed: Phone, fresh profile, Chapter I, party prep, tap SPHERE GRID.
+- Evidence: critic/rounds/round-32/gaps-G4-walks-optional/4c-ffx/seymour-flux-tap-tab_SPHERE_GRID-card.jpg; critic/rounds/round-32/gaps-G4-walks-optional/4c-ffx/run.json
+- Requirement: RUBRIC section 6 onboarding
+- Smallest fix: Dismiss or move the Auron box while a first-time card is up.
+- Acceptance check: The card's text and both of its buttons are uncovered on a fresh profile at 390x844.
+
+### R72-1 [minor] interface, FFX: Chapter XII: the TARGET flag lands on the Sensor card at alternate cursor stops (the focused review's R72-1, rated major there; the chief rates it minor after reading both frames)
+- Status: open; confidence: medium
+- Chapter and state: XII seymour-omnis (F1 HUD held), ?coach=off, seed 1, G (Intel), Enter on Attack, ArrowRight
+- Observed: At cursor stops 1, 3 and 5 the flag overlaps the Sensor card by 98 x 79 px at 1600x900 and 80 x 85 at 2000x1012, the card title text colliding. The live build shows the flag over the disc strip text at the same stop, a different overlap of the same class. The chief read hud-xii-cand2-1600-cursor1.png and hud-xii-live2-1600-cursor1.png: both collide, the candidate's hides part of the Sensor card's title ("Seymour Omnis") and the live one hides "FACING HIM"; neither hides a control that is needed, and the Sensor card is information, so this is polish-grade overlap (CHK-008) and not wrong information.
+- Expected: The flag and the Sensor card never overlap while the target cursor moves.
+- Repro and seed: ?coach=off seed 1: Chapter XII, G, Enter on Attack, ArrowRight.
+- Evidence: critic/reviews/01a767770-focused/play/hud-xii-cand2.json; critic/reviews/01a767770-focused/play/hud-xii-cand2-1600-cursor1.png; critic/reviews/01a767770-focused/play/hud-xii-live2-1600-cursor1.png
+- Requirement: CHK-003 / CHK-008 / CHK-009
+- Where (traced only if stated): src/ui/ffx/hudAvoidSelectors.ts, flag placement (suspected)
+- Smallest fix: Steer the flag clear of the Sensor card as well as the advisor card, or fold the Sensor card while the cursor is up.
+- Acceptance check: hudcheck cursor walk reads 0 pairs at 1600 and 2000 wide.
+
+### PR-0591 [polish] interface, FFX-2 only: First-time fan: the CHAIN counter box changes place from frame to frame (right edge, under the tail, mid-screen) and is clipped at the right edge
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: Chapter V Vegnagun, chain attack, 1600x900
+- Observed: In seq-action-playing the CHAIN box moves in the 10 frames and is cut off at the screen edge in several; the guide and intent cards also sit over Shiva (Fallen Aeons) and the tail (Vegnagun).
+- Expected: A counter sits still and inside the screen.
+- Repro and seed: Chapter V chain attack; fan sheet ffx2-vegnagun-shuyin-win-r32__seq-action-playing.
+- Evidence: critic/rounds/round-32/scratch/fan-sheets/ffx2-vegnagun-shuyin-win-r32__seq-action-playing.jpg; critic/rounds/round-32/scratch/fan-sheets/ffx2-fallen-aeons-win-r32__seq-party-action.jpg
+- Requirement: CHK-008
+- Smallest fix: Anchor the counter to one slot.
+- Acceptance check: The CHAIN box does not move between consecutive frames and is not clipped.
+
+### PR-0593 [polish] harness, both: 30-post-scene.png is taken before the post scene (it plays after CONFIRM): eight runs log 'screen wanted cutscene got results' and the scene still is missing
+- Status: open; carried from round-32b; confidence: high
+- Chapter and state: six chapters, any win run of seymour-flux, evrae-airship, ffx2-leblanc and three more
+- Observed: The scene is reachable and its lines were read after CONFIRM (33-after-confirm-scene.png, Leblanc: Rikku, "That's for robbing our airship!"), but the 30 capture reads results.
+- Expected: The post-scene frame is asserted where the scene is.
+- Repro and seed: Read run.json fails of the six runs.
+- Evidence: critic/rounds/round-32/evidence/ffx2-leblanc-win-r32/run.json
+- Requirement: CHK-016
+- Smallest fix: Assert 33-after-confirm-scene.png as the post-scene capture.
+- Acceptance check: No UNVERIFIED on the post-scene frame.
+
+### PR-0577 [polish] interface, FFX-2 only: FFX-2 target flag plate overlaps the command panel edge and clips the status tag ("Curse") at 1280 to 2000 wide (new in r68)
+- Status: open; carried from round-32b; confidence: medium (focused review; not re-observed live by the chief)
+- Chapter and state: Chapter IV, target step
+- Observed: Focused review R68-P2, candidate bundle (same artifact as live).
+- Expected: No overlap and no clipped tag.
+- Repro and seed: Chapter IV, Attack, target step, 1280 to 2000 wide.
+- Evidence: critic/reviews/2a9340249-focused.json
+- Requirement: CHK-008
+- Smallest fix: Offset the flag clear of the panel edge.
+- Acceptance check: Flag and panel rects do not intersect at five widths.
+
+### PR-0578 [polish] interface, both: Phone board: three text chips under 44 px (skip the guide 18 px, two hint chips) (R68-P3)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: phone board, 390x844
+- Observed: Focused review R68-P3; the chief's phone sweep read 14 px type, none under 14 px, on the battle menu, first menu and pause (separate from touch-target size).
+- Expected: 44 px touch targets.
+- Repro and seed: tools/text-floor-sweep.mjs --touch=1 --targets=1 --sizes=390x844.
+- Evidence: critic/reviews/2a9340249-focused.json; critic/rounds/round-31/gaps-chief/gaps/sweep/out-phone.json
+- Requirement: RUBRIC onboarding (device usability)
+- Smallest fix: Pad the chips to 44 px.
+- Acceptance check: Touch-target probe lists no control under 44 px on the board.
+
+### PR-0579 [polish] visual, FFX-2 only: Magic Break caption box sits over its own pink tag and clips it (FFX-2 Chapter IV, 2000x1012; one capture)
+- Status: open; carried from round-32b; confidence: low
+- Chapter and state: ffx2-bahamut, mid-fight
+- Observed: The caption box overlaps the MAGIC BREAK tag so the tag text is half hidden. On the phone the same two labels sit side by side without clipping (23-midfight).
+- Expected: One readable label.
+- Repro and seed: node critic/runner/lib/route.mjs ffx2-bahamut win --size=2000x1012 --seed=1; open 23-midfight.png (moment dependent).
+- Evidence: critic/rounds/round-31/evidence/ffx2-bahamut-win-2k/23-midfight.png
+- Requirement: CHK-011
+- Smallest fix: Offset the tag or drop the duplicate while the caption shows.
+- Acceptance check: A Magic Break capture shows one readable label.
+
+### PR-0553 [polish] interface, FFX only: Chapter II: Tidus's HP plate covers Yunalesca's lower body in the hit frame; the party panel crosses Auron's boots (carried)
+- Status: open; carried from round-32b; confidence: high
+- Chapter and state: yunalesca, first hit, 1600x900
+- Observed: The plate sits over her legs and feet during the damage burst.
+- Expected: HUD off the boss body or faded over it.
+- Repro and seed: Chapter II, seed 3, first hit, 23-midfight.
+- Evidence: critic/rounds/round-31/evidence/yunalesca-win/23-midfight.png
+- Requirement: CHK-008
+- Smallest fix: Move the plates down or fade over a boss quad.
+- Acceptance check: No plate over the boss body at that moment.
+
+### PR-0548 [polish] feel, both: Hit flashes, whiteouts and glow edges wash out the figure for a frame or more (carried): Braska's Final Aeon is a white blob for five frames on a heal, Vegnagun flickers copper for a frame, Rikku glows double at the sphere change
+- Status: open; carried from round-32b; last seen round 33; confidence: medium
+- Chapter and state: braskas-final-aeon, ffx2-vegnagun-shuyin, ffx2-bahamut, effect frames
+- Observed: Fan strips: braska seq-action-playing f02-f06; vegnagun seq-action-playing f04 and f09; bahamut seq-spherechange f01-f02. ROUND 33: The fan again: a red see-through aeon over Yuna in the Isaaru summon, a translucent purple Bahamut with a smear over its wings, and Wakka smeared orange by Firaga in Omnis (single captures).
+- Expected: A flash that stays readable.
+- Repro and seed: Chapter III Power Wave heal; Chapter V chain; Chapter IV change.
+- Evidence: critic/rounds/round-31/evidence/braskas-final-aeon-win/seq-action-playing; critic/rounds/round-31/evidence/ffx2-vegnagun-shuyin-win/seq-action-playing
+- Requirement: CHK-027 (flicker)
+- Smallest fix: Cap the heal wash and the glow on the figure's alpha.
+- Acceptance check: The figure outline stays readable in the named frames.
+
+### PR-0574 [polish] feel, FFX only: A boss or aeon and its pagodas appear in one frame (Braska battle start and aeon swaps); the party flashes from faded to full in one frame at the seams (first-time fan; the feel auditor read seams 3 and 5 as readable and paced)
+- Status: open; carried from round-32b; last seen round 33; confidence: low
+- Chapter and state: braskas-final-aeon, seq-transition-into-battle f02 to f03; seq-seam-2/4/6/7
+- Observed: See captures; the arena is empty for about 1.1 s, then a flash and the possessed aeon with a name banner. ROUND 33: The fan counts the same class in four more chapters: the arena opens with the party alone and the boss appears a frame later (Yojimbo f03 to f04, Flux, Isaaru Grothia, Trema Paragon), and Paragon arrives painted gold like its title card and re-tints to cold blue over the next few frames. It sits inside the battle-intro slate; polish.
+- Expected: A readable arrival.
+- Repro and seed: Chapter III by real keys.
+- Evidence: critic/rounds/round-31/evidence/braskas-final-aeon-win/seq-transition-into-battle; critic/rounds/round-31/evidence/braskas-final-aeon-win/seq-seam-2
+- Requirement: CHK-027 (popping)
+- Smallest fix: None until Bailey judges the seam look (PR-0530).
+- Acceptance check: A recorded verdict.
+
+### PR-0575 [polish] feel, FFX only: MISS pops over healthy allies when a party-wide Mega Phoenix is used with one ally down (unsourced; do not change without a source)
+- Status: open; carried from round-32b; confidence: low
+- Chapter and state: seymour-flux, turn 3 Mega Phoenix
+- Observed: The engine logs miss reason wrong-state for tidus and yuna while Kimahri's revive resolves; it reads as if the item failed. Round 30b saw the same.
+- Expected: Unknown: no source says what the original draws.
+- Repro and seed: Chapter I seed 1 turn 3.
+- Evidence: critic/rounds/round-31/evidence/seymour-flux-win/seq-party-action/f04.jpg; critic/rounds/round-31/evidence/seymour-flux-win/battle-log.json
+- Requirement: AGENTS rule 6
+- Smallest fix: Source the original, or ask Bailey.
+- Acceptance check: A sourced statement then the same repro.
+
+### PR-0576 [polish] feel, FFX only: UNVERIFIED observation: a blank cream cutscene frame between the Yunalesca victory and the results card
+- Status: open; carried from round-32b; confidence: low
+- Chapter and state: yunalesca, victory to results
+- Observed: yunalesca-win/30-post-scene.png: flat cream with the chapter eyebrow and the advance strip and no painting; the harness read the screen as results (UNVERIFIED capture). Chapter I shows a washed painting.
+- Expected: The painting under the wash, or a few frames only.
+- Repro and seed: Chapter II seed 3, capture at the end of the fight (timed sequence needed).
+- Evidence: critic/rounds/round-31/evidence/yunalesca-win/30-post-scene.png
+- Requirement: CHK-022
+- Smallest fix: None until measured.
+- Acceptance check: A timed sequence shows under 500 ms of a painting-less frame.
+
+### PR-0536 [polish] feel, both: The turn cut-in (MF-16) covers nearly half the stage for several frames at every turn start in every chapter the fan looked at; the first-time fan rated it major
+- Status: open; carried from round-32b; last seen round 33; confidence: medium
+- Chapter and state: all, turn start
+- Observed: Carried; the first-time fan counted the turn-start cut-in covering most of the stage for about three frames in 11 chapters of both games (Trema, Den of Woe, Fallen Aeons, Bahamut, Yojimbo, Sin face, Evrae, Yunalesca, Natus, Mirror Aeons) and a giant damage number over the boss. A design choice awaiting Bailey's look (PR-0530). ROUND 33: The fan again: the big turn-start portrait slides over the left third or half of the stage for about 3 of every 10 sampled frames in 14 chapters of both games (40 sequences). A design choice awaiting Bailey (PR-0530); nothing new.
+- Expected: Bailey's judgment.
+- Repro and seed: Any chapter, turn start.
+- Evidence: critic/rounds/round-31/evidence/yunalesca-win/seq-transition; critic/rounds/round-31/evidence/ffx2-vegnagun-shuyin-win/seq-transition
+- Requirement: RUBRIC feel (readable effects)
+- Smallest fix: Ask Bailey.
+- Acceptance check: A recorded verdict.
+
+### PR-0528 [polish] visual, both: First-time fan polish breakers kept: attacks that do not visibly connect (a Yunalesca slash arc around Tidus while she stands at the right edge; a Bahamut hit that arrives as a purple streak from off-screen), one empty-stage frame as Bahamut fades in, a monster vanishing for a frame (Mortiorchis)
+- Status: open; carried from round-32b; last seen round 32; confidence: low
+- Chapter and state: yunalesca, ffx2-bahamut, seymour-flux, effects
+- Observed: Carried; round 32 adds two fan readings: Vegnagun's Tail Beam damage number (1766) and a pink ring appear on Rikku but the tail does not visibly fire toward her (seq-party-action frames 4 to 8), and Ormi's Shield Bash lunge returns in one frame with a MISS floating in the gap.
+- Expected: Effects aimed at their target.
+- Repro and seed: see captures
+- Evidence: critic/rounds/round-31/evidence/yunalesca-win/seq-transition-into-battle; critic/rounds/round-31/evidence/ffx2-bahamut-win/seq-spherechange
+- Requirement: CHK-027
+- Smallest fix: Aim the slash and the streak from the actor.
+- Acceptance check: Frames show origin at the actor.
+
+### PR-0524 [polish] encounter, FFX-2 only: research/ffx2-bahamut.md still carries the superseded Mega Flare constant 24 and the 614 to 1,165 damage with no banner (carried)
+- Status: open; carried from round-32b; last seen round 32; confidence: high
+- Chapter and state: ffx2-bahamut, docs
+- Observed: Carried: research/ffx2-bahamut.md still carries the superseded Mega Flare constant and damage range with no banner (git diff 2a9340249 e3f51bf18 -- research is empty).
+- Expected: A superseded banner.
+- Repro and seed: head and section 2.3 of research/ffx2-bahamut.md against re-ffx2-ai-bahamut-vegnagun.md section 2.3.
+- Evidence: research/ffx2-bahamut.md
+- Requirement: AGENTS rule 6
+- Smallest fix: Add the banner.
+- Acceptance check: The banner exists.
+
+### PR-0533 [polish] test-coverage, both (tooling): The 15 s default test timeout fails 27 CPU-bound suites when the suite shares the host with browser jobs (extends PR-0533; the 13 files pass 239 of 239 serially)
+- Status: open; carried from round-32b; confidence: high
+- Chapter and state: advisor, strategy-chapter2, door tests, ui-ffx2-atbmode, audio-manifest-io, full suite 27,254 tests
+- Observed: 28 failed in 27 suites, all 15 s timeouts (one EPERM on a lock file) while the harness ran.
+- Expected: A green full suite on a loaded host.
+- Repro and seed: npm test while a capture runs.
+- Evidence: critic/rounds/round-31/audit-combat/full-suite.json
+- Requirement: AGENTS Done means
+- Smallest fix: Give the fuzz-style files a 60 s timeout; retry the lock open on EPERM.
+- Acceptance check: npm test passes while one browser job runs.
+
+### PR-0519 [polish] interface, both: Question for Bailey (carried): the default F1 HUD shows the advisor as a one-row chip; the reason, benefit and CURES KO tag live only in the G card
+- Status: open; carried from round-32b; confidence: high
+- Chapter and state: Chapters I and IV, first menu
+- Observed: Advice itself is right: 784 of 784 picks found their row; the reason is one key away.
+- Expected: Bailey's decision.
+- Repro and seed: Chapter I first menu.
+- Evidence: critic/rounds/round-31/evidence/seymour-flux-win/11-advisor.png
+- Requirement: RUBRIC interface
+- Smallest fix: Ask Bailey.
+- Acceptance check: A recorded verdict.
+
+### PR-0546 [polish] prep, both: The pro-defeat card now names its cause at normal speed ('Felled by Attack, turn 4, attempt 1' ) after r67's repair; the SKIP-speed wording was not re-run
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: Chapters I and IV, defeat card
+- Observed: Seen at normal speed in both chapters; SKIP not re-run.
+- Expected: A cause at every speed.
+- Repro and seed: Lose with battle speed SKIP.
+- Evidence: critic/rounds/round-31/evidence/seymour-flux-lose-retry/run.json; critic/rounds/round-31/evidence/ffx2-bahamut-lose-retry/run.json
+- Requirement: RUBRIC prep (understandable defeat)
+- Smallest fix: Run it at SKIP.
+- Acceptance check: The card names a cause at SKIP.
+
+### PR-0487 [polish] onboarding, FFX only: 'He strikes first' coach against a turn order that puts Seymour third (carried; not reproduced in seed 1 where Seymour does strike first)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: Chapter I phone, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0508 [polish] onboarding, both: VISUAL STYLE and PRESENTATION 'THE ECHO - B' are unexplained and the FFX options pane shows no focused row (carried)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: options, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0569 [polish] delivery, both: Firefox console font warnings for Rajdhani and Chakra (carried; Chromium only this round)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: all, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0526 [polish] interface, both: Small copy and fit points in the booth and phone surfaces (carried, not re-examined)
+- Status: open; carried from round-32b; last seen round 33; confidence: medium
+- Chapter and state: booth, phone, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title. ROUND 33: The fan adds: two banners stack, "Strike" over "Shield Bash", in the first Ormi action of Leblanc (seq-transition-into-battle f05 to f07).
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0527 [polish] delivery, both: UNVERIFIED observation: one 129.8 s gap with no frames in 1 of 11 runs in round 29 (carried; none seen in the 19 live runs, but see the 5.6 s frame in PR-0580)
+- Status: open; carried from round-32b; confidence: medium
+- Chapter and state: harness, carried
+- Observed: Carried from round 30b; not re-examined by any round-31 lane, so nothing is claimed beyond the title.
+- Expected: as in the earlier rounds that opened it
+- Repro and seed: as in the entry of critic/rounds/round-30b.json
+- Evidence: critic/rounds/round-30b.json
+- Requirement: see the round 30b entry
+- Smallest fix: unchanged from round 30b
+- Acceptance check: unchanged from round 30b
+
+### PR-0595 [polish] interface, FFX only: A ready Overdrive sits as the fifth row inside the bottom fade; the advisor's star is the only cue
+- Status: open; carried from round-32b; confidence: medium (contrast not measured)
+- Chapter and state: Chapter XIV Isaaru, Chapter XIV Isaaru, F1 command menu, Yuna, 1600x900
+- Observed: 'OVERDRIVE (star) READY' is drawn at roughly a quarter strength under the scroll fade with a down arrow; the advisor's pick (Grand Summon: Shiva, IN OVERDRIVE) lives in that row while the cursor starts on SPECIAL.
+- Expected: A ready Overdrive reads as ready without scrolling.
+- Repro and seed: Chapter XIV first menu, Yuna, 1600x900.
+- Evidence: critic/rounds/round-32/evidence/isaaru-via-purifico-win-r32/13-guide-G.png
+- Requirement: RUBRIC interface (legible values)
+- Smallest fix: Float a ready Overdrive row to the top slot or exempt it from the fade.
+- Acceptance check: At 1600 the OVERDRIVE row's text contrast is at least 4.5:1 whenever the gauge is full.
+
+### PR-0608 [polish] interface, FFX: Mirror Aeons offers no enemy-move card (E shows nothing, no E label): a question for Bailey, not a build
+- Status: open; confidence: medium
+- Chapter and state: XXVII mirror-aeons, first menu, key E, seed 1
+- Observed: run.json intentText is empty, the turn strip carries no "E ENEMY MOVE" label and the key strip lacks E. Same in round 32. Consistent (no false promise) but the only chapter without enemy intent; intent data exists for Yojimbo (yojimbo-rules.ts).
+- Expected: Either an intent card for Dark Sandy, Dark Mindy and Dark Yojimbo or a written reason.
+- Repro and seed: Chapter XXVII, seed 1, first menu, press E: evidence/mirror-aeons-win-r33b/12-intent-E.png.
+- Evidence: critic/rounds/round-33/evidence/mirror-aeons-win-r33b/12-intent-E.png
+- Requirement: honest intent (a question, not a proposal to build)
+- Where (traced only if stated): intent data coverage
+- Smallest fix: Decide whether the Mirror Aeons get cards (needs Bailey's yes).
+- Acceptance check: A decision is recorded.
+
+### PR-0609 [polish] interface, both: At 3840x2160 with a device pixel ratio of 1 the pause text does not grow with the screen (about 0.8 percent of height against 1.6 percent at 1600x900)
+- Status: open; confidence: low on player impact
+- Chapter and state: I seymour-flux at 3840x2160 DPR 1, sweep matrix
+- Observed: Battle HUD minimum 25.2 css px at 4K, pause minimum 17 px; in the frame the pause stats and tab strip are small on a 2160 px canvas. DPR 1 at 4K is the harsh case; a real 4K screen is usually run at 150 to 200 percent.
+- Expected: The pause scales like the battle HUD, or the size is known to be reached only with OS scaling.
+- Repro and seed: evidence/gaps/sweep-matrix-3840x2160/02-pause.png and out-matrix.json.
+- Evidence: critic/rounds/round-33/evidence/gaps/sweep-matrix-3840x2160/02-pause.png; critic/rounds/round-33/evidence/gaps/sweep/out-matrix.json
+- Requirement: CHK-003
+- Where (traced only if stated): pause CSS; not traced
+- Smallest fix: Scale the pause text with the viewport above 2560 wide, or confirm real 4K screens run scaled.
+- Acceptance check: Pause minimum effective size at 4K DPR 1 at least 22 px, or recorded as accepted.
+
+### PR-0611 [polish] visual, FFX: Possessed Ifrit and Possessed Shiva seam scenes frame Auron from the chest down for the whole seam, with no face: a question whether that framing is the intent
+- Status: open; confidence: low
+- Chapter and state: III braskas-final-aeon, seams 3 and 5, seq-seam-3 and seq-seam-5, f00 to f09
+- Observed: A low close-up of Auron's coat, sword and legs on a near-black ground; the first frame is nearly black. It reads as a deliberate stylised shot (a detail shot of the coat), and no defect is established. Seams 4, 6 and 7 were not opened by the fan.
+- Expected: The seam shot shows what the story beat needs; if the face is meant to be out of frame this is intended.
+- Repro and seed: Chapter III, seed 1, reach seam 3 and 5.
+- Evidence: critic/rounds/round-33/evidence/braskas-final-aeon-win-r33/seq-seam-3/f03.jpg
+- Requirement: cinematic direction; a question for Bailey
+- Where (traced only if stated): seam scene camera
+- Smallest fix: None until Bailey says whether the framing is wanted.
+- Acceptance check: Bailey's answer recorded.
+
+### PR-0612 [polish] harness, both: The capture route and the harness leave gaps this round: no ACCESSIBILITY, CONTROLS or MUSIC frames and no TEXT SIZE 115/130 on the new F1 chapters (seventh review), the continuity harness took 3 hours 48 minutes for 19 chapters (02:31 to 06:19 EST) and finished after round 33 was first written, and the desktop lose runs end at the defeat state with no retry step
+- Status: open; last seen round 33b; confidence: high
+- Chapter and state: critic capture route, critic capture owner and gap pass
+- Observed: run.json pause.tabs lists only the character tabs, Chapter, Guide and Options; the harness had read 4 of 19 chapters after 73 minutes and all 19 by 06:19 (round 33b); the FFX-2 Chapter IV retry was added by the gap pass (retry-ffx2-bahamut, 9.3 s from TRY AGAIN to the first menu) but the FFX Chapter I desktop retry has no timed file.
+- Expected: An accessibility leg in the route, a harness run that finishes inside the review, and a retry step in every lose run.
+- Repro and seed: evidence/*/run.json.
+- Evidence: critic/rounds/round-33/continuity/run.log; critic/rounds/round-33/evidence/gaps/retry-ffx2-bahamut/timed.json
+- Requirement: RUBRIC section 6 onboarding; CHK-026/027 required evidence
+- Where (traced only if stated): critic/runner
+- Smallest fix: Add the accessibility leg and the retry step to the route; start the continuity harness first in the next deep review, in two halves on two profiles, so it finishes. Critic tooling only.
+- Acceptance check: Frames exist for each listed state and the harness summary is written before the report.
+
+### R72-3 [polish] feel, FFX: Chapter XII real-clip dashes up to 84.1 px against 0 on the control (carried from the focused review)
+- Status: open; last seen round 33b; confidence: high
+- Chapter and state: XII seymour-omnis, continuity harness, seed 1, same-artifact focused run
+- Observed: Dashes worst 84.1 px (under the 100 px bar); swap jerk 30 px; CHK-026 and CHK-027 PASS. The control build has 0 dashes. ROUND 33B: the full run reads the same Omnis numbers (23 dashes over 40 px, worst 84.1 px; 30 swap jerks, worst 29.9 px; CHK-026 and CHK-027 PASS).
+- Expected: No new dashes from the real clips.
+- Repro and seed: Continuity harness on seymour-omnis, seed 1.
+- Evidence: critic/reviews/01a767770-focused/continuity/continuity-summary-seymour-omnis.json
+- Requirement: CHK-027
+- Smallest fix: Review the XII dash strips and ease the clip entry.
+- Acceptance check: Dashes under 60 px on XII.
+
+## What stands between this build and acceptance
+- The milestone is not assessed here; it needs every category at least 9.0 and the weighted score at 9.60 unrounded, with audio and onboarding scored (Bailey's ears and an accessibility capture leg), no open critical or major issue (eleven majors are open), every required target matched (25 of 32), the continuity harness PASS on all 19 chapters (it FAILS CHK-026 in twelve and CHK-027 in six), and Bailey's recorded judgments.
+- This review's own obligation (the deep review of releases 71 and 72) has no coverage left to read; it is settled by critic-clear if the report is accepted.
+
+## Proposals (nothing here is built without Bailey's yes)
+- Written method check for the pose-swap family before anything is built (RUBRIC section 8: PR-0531, PR-0380 and PR-0379 have now stood open at the same severity in rounds 29, 30, 30b, 31, 32, 32b and 33): read the worst strip per class (Braska critical and victory swaps, Yunalesca 21 swap jerks, the Lulu rig head (five chapters fail CHK-026 on it alone), Anima's one KO stance miss, Yunalesca's seven revive steps, Ixion and Sin fin), say which release 70 to 72 switches helped (the KO slide ease and the return-flip fit did; the head and height numbers did not move), then choose continue, change method, small probe, defer or ask Bailey. Nothing built without his yes.
+- A correction, not a feature: fix the Chapter XII Mortiphasm low bound (PR-0603) and add a unit assertion that every intent range satisfies min <= max in every chapter; check Vegnagun's Tail Beam figures (PR-0606) in the same pass. Needs a normal go-ahead because it touches battle intent text, not game data.
+- Question for Bailey: keep the treated arenas' darker grade or lift the plate's exposure in the treated look (J6, PR-0585), now with Yojimbo as the fifth case.
+- Question for Bailey: should the Mirror Aeons get enemy-move cards (PR-0608), and is the chest-down Auron framing in the Braska seams intended (PR-0611).
+- Critic tooling, no product change: add an accessibility leg and a desktop retry step to the capture route; start the continuity harness first and in two halves so it finishes inside the review; re-measure the first-command wait on an idle host and on the phone10 profile (PR-0607, PR-0612).
+- Small touch fix when the phone passes next: a 44 px hit area for RESUME and the ACCESSIBILITY rows (PR-0600), and dock or shorten the first dress-change coach card (PR-0610).
+
+Next review: If critic-clear accepts this re-issue, the deep obligation of releases 71 and 72 is settled and the next deep review is owed only after the next deploy. It owes: the harness on Chapters II, III, V, XI, XVII and XIX (the six CHK-027 FAIL chapters) after any change to the booth holds or the KO and revive path, a second seed for Chapter III's dashes (PR-0581), the written method check for the pose-swap family (RUBRIC section 8: PR-0531, PR-0380, PR-0379 and PR-0570), the decision on Lulu's rig-head measure (PR-0534: five chapters fail CHK-026 on it alone), the fixes of PR-0603, PR-0586, PR-0598 and PR-0599 re-read on live, the four UNVERIFIED items (audio, onboarding by an accessibility capture leg, Bailey's listening and feel verdicts), and a later-link retry in Vegnagun, Fallen Aeons and Mirror Aeons.
