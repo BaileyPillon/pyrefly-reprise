@@ -96,18 +96,18 @@ describe('decideRelease: what a deploy may carry', () => {
 });
 
 describe('checkReleaseForDeploy reads the real notes file', () => {
-  it('finds the notes where the tool says, and the newest is 72 today', async () => {
+  it('finds the notes where the tool says, and the newest is 73 today', async () => {
     expect(NOTES_FILE).toBe('src/app/changelog/releaseNotes.ts');
     const mod = await loadReleaseNotes(REPO);
-    expect(mod.newestRelease(mod.RELEASE_NOTES)).toBe('72');
+    expect(mod.newestRelease(mod.RELEASE_NOTES)).toBe('73');
     expect(mod.validateReleaseNotes(mod.RELEASE_NOTES)).toEqual([]);
   });
 
-  it('lets 72 go (its note is the newest) and refuses 73 until its note is written', async () => {
-    expect(await checkReleaseForDeploy({ root: REPO, requested: '72', preview: false })).toMatchObject({ ok: true, release: '72' });
-    const next = await checkReleaseForDeploy({ root: REPO, requested: '73', preview: false });
+  it('lets 73 go (its note is the newest) and refuses 74 until its note is written', async () => {
+    expect(await checkReleaseForDeploy({ root: REPO, requested: '73', preview: false })).toMatchObject({ ok: true, release: '73' });
+    const next = await checkReleaseForDeploy({ root: REPO, requested: '74', preview: false });
     expect(next.ok).toBe(false);
-    if (!next.ok) expect(next.error).toMatch(/Write the 73 note first/);
+    if (!next.ok) expect(next.error).toMatch(/Write the 74 note first/);
     expect((await checkReleaseForDeploy({ root: REPO, requested: undefined, preview: false })).ok).toBe(false);
     expect((await checkReleaseForDeploy({ root: REPO, requested: true, preview: false })).ok).toBe(false);
   });

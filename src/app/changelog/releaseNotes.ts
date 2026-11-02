@@ -69,11 +69,22 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 72 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 73 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '73',
+    date: '2026-11-02',
+    lines: [
+      { tag: 'Both', text: 'Fast-forward now keeps each attacker’s run-up and walk back at normal length, so fighters glide instead of jumping across the stage; a fast attack is about twice as quick as normal, not three times.' },
+      { tag: 'FFX', text: 'Sin’s face (Chapter XVIII) gets the presentation of Chapter I: the new hit look and the lighter battle screen. Its boss card and camera stay as before.' },
+      { tag: 'FFX', text: 'Wakka’s and Lulu’s walk back after an attack is spread over more frames, so they no longer snap home.' },
+      { tag: 'Both', text: 'On a phone the wait before a fight is shorter again: on a slow connection Chapter I now waits about 5 seconds and Chapter IV about 12.' },
+      { tag: 'FFX-2', text: 'On a slow phone connection, Bahamut’s first moves in Chapter IV can show his resting pose for a few seconds.' },
+    ],
+  },
   {
     release: '72',
     date: '2026-11-01',
