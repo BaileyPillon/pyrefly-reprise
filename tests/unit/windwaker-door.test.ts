@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 /**
  * The hidden door to the Wind Waker chapter (FFX-2 only; branch `exp-windwaker`, 2026-10-20): the word `waker`, typed on chapter select, opens hidden chapter 24's Valefor fight drawn in the style of Wind Waker HD
- * (`exp-windwaker`). **The word and the chapter's number (30) are placeholders**: the release driver assigns the real ones at merge.
+ * (`exp-windwaker`). **The word `waker` and the chapter's number (32) are assigned** (the release driver, 2026-11-02).
  *
  * Written against the Valefor door's suite (`valefor-door.test.ts`): the real `Input`, real key events, the real board and title screen. It pins that
  *
@@ -45,10 +45,10 @@ function typeWord(door: WordDoor, word: string, start = 0, step = 100): Array<'o
 }
 
 describe('the word (pure)', () => {
-  it('is one constant: lower-case letters, long enough to be typed by hand, leading to a hidden FFX-2 experiment numbered 30 (a placeholder)', () => {
+  it('is one constant: lower-case letters, long enough to be typed by hand, leading to a hidden FFX-2 experiment numbered 32', () => {
     expect(WORD).toMatch(/^[a-z]{4,}$/);
     expect(WINDWAKER).toBe('exp-windwaker');
-    expect(getChapter(WINDWAKER)).toMatchObject({ id: WINDWAKER, game: 'ffx2', experimental: true, number: 30 });
+    expect(getChapter(WINDWAKER)).toMatchObject({ id: WINDWAKER, game: 'ffx2', experimental: true, number: 32 });
     expect(EXPERIMENT_CHAPTERS.map((c) => c.id)).toContain(WINDWAKER);
     expect(CHAPTER_DOORS.find((d) => d.word === WORD)?.chapter).toBe(WINDWAKER);
   });

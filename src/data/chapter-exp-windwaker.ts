@@ -1,5 +1,5 @@
 /**
- * **Experimental: Valefor at Besaid, in Wind Waker HD style** (branch `exp-windwaker`; hidden chapter, placeholder number 30; **FFX-2 only**, AGENTS.md rule 14).
+ * **Experimental: Valefor at Besaid, in Wind Waker HD style** (branch `exp-windwaker`; hidden chapter, number 32, word `waker`, assigned 2026-11-02; **FFX-2 only**, AGENTS.md rule 14).
  *
  * Bailey, 2026-10-20 (chat, verbatim): "a new experimental hidden chapter (separate from the ones we're working ) and make it like wind waker hd esque graphics for for our ffx/ffx-2 game". His picks: the
  * encounter "C: YRP vs Valefor" (FFX-2 only: Yuna, Rikku and Paine against Valefor at Besaid), the proportions "Wind Waker short", the secret word `waker`; after seeing the look lab in motion: "Build the chapter"
@@ -19,7 +19,7 @@
  * check and total play time. It is not in `CHAPTERS` or `CHAPTER_IDS`; `EXPERIMENT_CHAPTERS` lists it (`./chapters-experiments.ts`) and `getChapter` finds it. **It is hidden**: chapter select has no card for it, and
  * typing `waker` on the board opens it (`../app/screens/frontend/windwakerDoor.ts`, the table in `../app/screens/frontend/chapterDoors.ts`).
  *
- * **The number and the word are placeholders.** The release driver assigns the real ones at merge (the 3D Bahamut branch uses 29 and `yrp`).
+ * **The number and the word are assigned (the release driver, 2026-11-02):** number 32, word `waker` (the Spectral Keeper 29, the Fallen Maesters 30 and the 3D Bahamut `yrp` chapter 31 are on their own branches).
  *
  * A direct import of `FFX2_VALEFOR_BESAID` is no cycle: that record imports only the `Chapter` type from `./encounters.ts`.
  */
@@ -42,7 +42,7 @@ export const EXP_WINDWAKER_TEXT = {
 export const EXP_WINDWAKER: Chapter = {
   ...FFX2_VALEFOR_BESAID,
   id: EXP_WINDWAKER_ID,
-  number: 30, // PLACEHOLDER: the release driver assigns the real number at merge (29 is the 3D Bahamut branch's); the card says EXP, not XXX (`ui/common/roman.ts` `chapterNumeral`)
+  number: 32, // assigned 2026-11-02 (29 the Spectral Keeper, 30 the Fallen Maesters, 31 the 3D Bahamut); the card says EXP, not XXX (`ui/common/roman.ts` `chapterNumeral`)
   experimental: true,
   ...EXP_WINDWAKER_TEXT,
   sceneKey: EXP_WINDWAKER_SCENE,

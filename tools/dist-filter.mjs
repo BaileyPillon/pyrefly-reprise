@@ -20,9 +20,10 @@
  *   sixteen pictures in `public/bts/` stay on disk and out of every build until the switch is turned on; with it on,
  *   this rule is gone and they ship. The page's code and words are kept out of the bundle by the same constant.
  *
- * - `models-exp/**`: the models of the hidden experimental Wind Waker chapter (branch `exp-windwaker`, 2026-10-20; `src/engine/ww3d/`, `public/models-exp/windwaker/`): the cast, the boss, and the swappable weapons and
- *   temple pieces. Local only: they are large, gitignored and never committed, and nothing ships them (the chapter stands a neutral capsule in any slot whose model is missing). Until Bailey and the release driver
- *   decide to fold the chapter in, no build carries them.
+ * - `models-exp/**` except `models-exp/windwaker/**`: experimental 3D models that belong to no chapter being shipped (an allow-list: a new experiment's models stay out of every build until its folder is named here).
+ *   `models-exp/windwaker/**` SHIPS (2026-11-02, the hidden Wind Waker chapter, Chapter 32, FFX-2 only: `src/engine/ww3d/`, the cast, the boss and the swappable weapon and temple pieces; the chapter loads them at run
+ *   time and stands a neutral capsule in any slot whose file is missing). They are large, gitignored and never committed (the repo is public), so like `public/art` and `public/fx` they come from this disk:
+ *   `tools/ww-models.mjs` records, backs up and verifies them, and a build from a clean worktree needs them restored first.
  *
  * Source maps are the fourth kind (PR-0328, adopted by Bailey 2026-10-03 as
  * D-335): the three `.js.map` files of release 36 weighed 22,775,896 bytes,
@@ -56,7 +57,7 @@ export function isUnshippedPublicFile(rel) {
   const p = rel.split(sep).join('/').replace(/^\/+/, '');
   if (p === 'audio/candidates' || p.startsWith('audio/candidates/')) return true;
   if (!BTS_LIVE && (p === 'bts' || p.startsWith('bts/'))) return true;
-  if (p === 'models-exp' || p.startsWith('models-exp/')) return true;
+  if ((p === 'models-exp' || p.startsWith('models-exp/')) && p !== 'models-exp/windwaker' && !p.startsWith('models-exp/windwaker/')) return true; // an allow-list: only the Wind Waker chapter's folder ships
   if (!p.startsWith('art/')) return false;
   if (/\.raw\.png$/i.test(p)) return true;
   return /\.[0-9]+\.(png|json)$/i.test(p);
@@ -147,7 +148,7 @@ export function pruneUnshipped(root) {
   for (const rel of removed) rmSync(join(root, rel), { force: true });
   // The candidates folder (and the page's picture folder while its switch is off) goes too, so no
   // empty directory ships (only when it is a real, now empty folder).
-  for (const folder of [join(root, 'audio', 'candidates'), join(root, 'bts'), join(root, 'models-exp', 'windwaker', 'props'), join(root, 'models-exp', 'windwaker', 'temple'), join(root, 'models-exp', 'windwaker'), join(root, 'models-exp')]) {
+  for (const folder of [join(root, 'audio', 'candidates'), join(root, 'bts'), join(root, 'models-exp')]) {
     try {
       const st = lstatSync(folder);
       if (st.isDirectory() && !st.isSymbolicLink() && readdirSync(folder).length === 0) rmSync(folder, { recursive: true });

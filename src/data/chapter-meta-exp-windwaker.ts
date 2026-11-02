@@ -1,5 +1,5 @@
 /**
- * Pause-screen and prebattle-tab metadata - **Experimental: Valefor at Besaid (Wind Waker)** (`./chapter-exp-windwaker.ts`; FFX-2 only, hidden chapter, placeholder number 30, Bailey 2026-10-20).
+ * Pause-screen and prebattle-tab metadata - **Experimental: Valefor at Besaid (Wind Waker)** (`./chapter-exp-windwaker.ts`; FFX-2 only, hidden chapter, number 32, Bailey 2026-10-20).
  *
  * **Game case: FFX-2 only** [AGENTS.md rule 14]. Chapter 24's record with the chapter's working title: the objectives, the tip, the quote, the snapshots and the music keys are chapter 24's
  * (`VALEFOR_BESAID_META` in `./chapter-meta-ffx2-valefor-besaid.ts`), because the encounter is, and so are its paintings. The numeral is `EXP` (the cutscene eyebrow and the prep header say so too).

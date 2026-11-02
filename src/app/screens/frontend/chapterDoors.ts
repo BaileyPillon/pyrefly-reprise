@@ -21,7 +21,7 @@
  * `tests/unit/chapter-doors.test.ts` pins the table: every word is distinct and none begins with, ends with or contains another, and no word's end is another's beginning, so one run of letters can
  * only ever finish one door. The four older doors' suites and `fayth-door.test.ts` drive the board itself with real key events.
  *
- * **`summon`** (FFX, the hidden Last Summoning, `./summonDoor.ts`: S is `down`, M is `select`; U, O and N are unbound) is a plain `WordDoor` too, and so is **`waker`** (FFX-2, the hidden Wind Waker chapter, `./windwakerDoor.ts`: W is `up`, A is `left`, E is `start`, R is `r1`; K is unbound; a placeholder word).
+ * **`summon`** (FFX, the hidden Last Summoning, `./summonDoor.ts`: S is `down`, M is `select`; U, O and N are unbound) is a plain `WordDoor` too, and so is **`waker`** (FFX-2, the hidden Wind Waker chapter, `./windwakerDoor.ts`: W is `up`, A is `left`, E is `start`, R is `r1`; K is unbound).
  *
  * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor` and `angra`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo` and `summon`.
  */

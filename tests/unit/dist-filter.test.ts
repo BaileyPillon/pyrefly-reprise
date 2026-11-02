@@ -32,9 +32,8 @@ describe('what never ships', () => {
     for (const p of [
       'audio/candidates/evrae-near.mp3',
       'audio/candidates/C-round1-battle-ffx-A-x12.ogg',
-      'models-exp/windwaker/yuna.glb', // the hidden Wind Waker chapter's local-only models (branch exp-windwaker)
-      'models-exp/windwaker/props/pistol.glb',
-      'models-exp/windwaker/temple/wall.glb',
+      'models-exp/yrp/yuna.glb', // an experiment whose folder is not named in the allow-list (the 3D Bahamut branch's models, say) stays out of every build
+      'models-exp/some-new-experiment/props/pistol.glb',
       'art/portraits/f4blulu.1.raw.png',
       'art/portraits/f4lulu.3.png',
       'art/characters/ffx2-bahamut/ko.2.json',
@@ -56,6 +55,11 @@ describe('what never ships', () => {
       'art/backdrops/ch1-2.png', // a digit inside the stem is not a take number
       'art/portraits/tidus-v2.png',
       'models-expansion/readme.txt', // only the models-exp folder itself is left out, not a name that merely begins with it
+      'models-exp/windwaker/yuna.glb', // the hidden Wind Waker chapter (Chapter 32, FFX-2 only) SHIPS its models, 2026-11-02: the cast, the boss,
+      'models-exp/windwaker/valefor.glb',
+      'models-exp/windwaker/props/pistol.glb', // the swappable weapons
+      'models-exp/windwaker/temple/wall.glb', // and the swappable temple pieces
+      'models-exp\\windwaker\\rikku.glb', // either slash
       'assets/index-4f2a.js',
       'index.html',
     ]) {

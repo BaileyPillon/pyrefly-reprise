@@ -1,0 +1,61 @@
+{
+ "what": "The hidden Wind Waker chapter's models (public/models-exp/windwaker, gitignored): name, size and sha256 only. tools/ww-models.mjs verifies, backs up and restores them.",
+ "backup": "D:/Tools/pyrefly-models-backup/windwaker",
+ "files": [
+  {
+   "path": "paine.glb",
+   "bytes": 4138384,
+   "sha256": "abbae17d9605ea1f205e5b2505db509fa44e31386bfee1c820478ca2bfc4d7ab"
+  },
+  {
+   "path": "props/dagger.glb",
+   "bytes": 2311152,
+   "sha256": "12496ebeccb9f72070360082db8ec27c92d179babc70ba3019196211ca208abd"
+  },
+  {
+   "path": "props/pistol.glb",
+   "bytes": 2173312,
+   "sha256": "17e47460f064c43e583a95bc28a737223af79c56c372a87523e0b65d5652c8e8"
+  },
+  {
+   "path": "props/sword.glb",
+   "bytes": 1751872,
+   "sha256": "3e96525471926caa7bde19832bb1190991b25b7d252483b76ac5259925f8d430"
+  },
+  {
+   "path": "rikku.glb",
+   "bytes": 5828532,
+   "sha256": "ad8acf8ecb4603f1870afa7ba8f32329a8957a6e006f022a27a1aedf5b5cbd63"
+  },
+  {
+   "path": "temple/brazier.glb",
+   "bytes": 1954608,
+   "sha256": "d421d4db7dec4d7a754a51a280d15a1f6a6c4514938e572f6644500d74b48c43"
+  },
+  {
+   "path": "temple/door.glb",
+   "bytes": 2194320,
+   "sha256": "4c2343f31f3ad396d4270f587d5548d59e5d5e827ac04955d8356baa08444b13"
+  },
+  {
+   "path": "temple/pillar.glb",
+   "bytes": 2756016,
+   "sha256": "2b582a0be374636beca5702899f43704e846890b2329fd5f4e64afa9ec808029"
+  },
+  {
+   "path": "temple/wall.glb",
+   "bytes": 1778456,
+   "sha256": "11c8fe4469217db8b8cf40f344e7c05be10ff049c0a97ec6e8b1dd0956470e80"
+  },
+  {
+   "path": "valefor.glb",
+   "bytes": 4045936,
+   "sha256": "1bbba1daed5cf1c1600f0bff9e26f6146f1cd8089ceb69beff62dc7ea1420ec8"
+  },
+  {
+   "path": "yuna.glb",
+   "bytes": 4949940,
+   "sha256": "1a187691637aefdf586193401513dc89708b22de111680522303bc159c344089"
+  }
+ ]
+}

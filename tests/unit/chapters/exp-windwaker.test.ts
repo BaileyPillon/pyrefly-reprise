@@ -1,16 +1,17 @@
 /**
- * **The hidden Wind Waker chapter** (`exp-windwaker`, placeholder number 30; branch `exp-windwaker`; **FFX-2 only**, AGENTS.md rule 14): hidden chapter 24's Valefor fight, opened by the typed word `waker` and drawn in the
+ * **The hidden Wind Waker chapter** (`exp-windwaker`, number 32; branches `exp-windwaker` and `ch-waker`; **FFX-2 only**, AGENTS.md rule 14): hidden chapter 24's Valefor fight, opened by the typed word `waker` and drawn in the
  * style of Wind Waker HD.
  *
  * What this file pins:
  *
- * 1. **It is a hidden experiment, not a chapter**: registered with the experiments (`chapters-experiments.ts`), in neither `CHAPTERS` nor `CHAPTER_IDS` (every count stays nineteen), number 30 (a placeholder),
+ * 1. **It is a hidden experiment, not a chapter**: registered with the experiments (`chapters-experiments.ts`), in neither `CHAPTERS` nor `CHAPTER_IDS` (every count stays nineteen), number 32,
  *    `experimental` (its attempts, clears and time go to the experiments' store, never the save), pause metadata in `UNLISTED_CHAPTER_META` with the EXP numeral, FFX-2 in the tactics' game table.
  * 2. **It is chapter 24's encounter, by reference**: the same party build, formation, scripts, music, Sensor line and card words; only the id, the number, the scene key and the title are its own. **No battle data of its
  *    own** (AGENTS.md rule 6). Chapter 24's own record is untouched.
  * 3. **The determinism proof**: the seeded FFX-2 engine, played through the app's own path with the shipped autopilot line, makes exactly chapter 24's event log on every seed tried.
  * 4. **Its scene**: a real scene row, a canon row (FFX-2), the backdrop file chapter 24's plate (so the board, the prep wash and the cutscenes find a picture), the side table with its row.
- * 5. **The models stay out of builds**: `public/models-exp/` is gitignored and `tools/dist-filter.mjs` leaves it out.
+ * 5. **The models are local files that ship**: `public/models-exp/` is gitignored (the repo is public), `tools/dist-filter.mjs` names `models-exp/windwaker/**` as shipped (and leaves every other experiment's models out), and
+ *    `tools/ww/ww-models.json` lists exactly the eleven files the chapter loads (`tests/unit/ww-models-tool.test.ts`).
  */
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -39,14 +40,14 @@ const chapter = getChapter(EXP_WINDWAKER_ID)!;
 const base = FFX2_VALEFOR_BESAID;
 
 describe('the chapter is a hidden experiment: no card, no count, no save', () => {
-  it('is registered with the experiments and not with the nineteen: number 30, FFX-2, experimental, on its own scene', () => {
+  it('is registered with the experiments and not with the nineteen: number 32, FFX-2, experimental, on its own scene', () => {
     expect(chapter).toBeDefined();
     expect(chapter).toBe(EXP_WINDWAKER);
     expect(EXPERIMENT_CHAPTERS.map((c) => c.id)).toContain('exp-windwaker');
     expect(CHAPTERS.map((c) => c.id as string)).not.toContain('exp-windwaker');
     expect((CHAPTER_IDS as readonly string[]).includes('exp-windwaker')).toBe(false);
     expect(CHAPTER_IDS).toHaveLength(19);
-    expect([chapter.id, chapter.number, chapter.game, chapter.experimental, chapter.sceneKey]).toEqual(['exp-windwaker', 30, 'ffx2', true, 'exp-windwaker-stage']);
+    expect([chapter.id, chapter.number, chapter.game, chapter.experimental, chapter.sceneKey]).toEqual(['exp-windwaker', 32, 'ffx2', true, 'exp-windwaker-stage']);
     expect([EXP_WINDWAKER_ID, EXP_WINDWAKER_SCENE]).toEqual(['exp-windwaker', 'exp-windwaker-stage']); // the no-import ids module says what the record says
     expect(new Set(EXPERIMENT_CHAPTERS.map((c) => c.number)).size).toBe(EXPERIMENT_CHAPTERS.length); // every number is its own
   });
@@ -173,16 +174,18 @@ describe('its scene', () => {
   });
 });
 
-// ------------------------------------------------- the models stay out of builds
+// ------------------------------------------------- the models are local files that ship
 
-describe('the models are local only', () => {
+describe('the models are local files that the build ships', () => {
   const root = fileURLToPath(new URL('../../../', import.meta.url));
 
-  it('keeps the model, prop and temple folders under public/models-exp/ and out of every build', () => {
+  it('keeps the model, prop and temple folders under public/models-exp/windwaker and ships them in every build (Chapter 32, 2026-11-02)', () => {
     for (const dir of [WW_MODEL_DIR, WW_PROP_DIR, WW_TEMPLE_DIR]) expect(dir.startsWith('models-exp/windwaker')).toBe(true);
-    for (const rel of ['yuna', 'rikku', 'paine', 'valefor'].map((n) => `${WW_MODEL_DIR}/${n}.glb`)) expect(isUnshippedPublicFile(rel), rel).toBe(true);
-    for (const rel of ['pistol', 'dagger', 'sword'].map((n) => `${WW_PROP_DIR}/${n}.glb`)) expect(isUnshippedPublicFile(rel), rel).toBe(true);
-    for (const rel of ['wall', 'door', 'brazier', 'pillar'].map((n) => `${WW_TEMPLE_DIR}/${n}.glb`)) expect(isUnshippedPublicFile(rel), rel).toBe(true);
+    for (const rel of ['yuna', 'rikku', 'paine', 'valefor'].map((n) => `${WW_MODEL_DIR}/${n}.glb`)) expect(isUnshippedPublicFile(rel), rel).toBe(false);
+    for (const rel of ['pistol', 'dagger', 'sword'].map((n) => `${WW_PROP_DIR}/${n}.glb`)) expect(isUnshippedPublicFile(rel), rel).toBe(false);
+    for (const rel of ['wall', 'door', 'brazier', 'pillar'].map((n) => `${WW_TEMPLE_DIR}/${n}.glb`)) expect(isUnshippedPublicFile(rel), rel).toBe(false);
+    // an allow-list: another experiment's models (the 3D Bahamut branch's, say) still stay out of every build
+    expect(isUnshippedPublicFile('models-exp/yrp/yuna.glb')).toBe(true);
   });
 
   it('is gitignored: the repo is public and the files are large', () => {

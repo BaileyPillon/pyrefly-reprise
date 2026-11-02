@@ -16,10 +16,10 @@
  *
  * ONE named constant: to change the word, change the line below (lower-case letters, `KeyboardEvent.key`). The tests read the constant, never a literal, and `tests/unit/chapter-doors.test.ts` pins that no door's word
  * begins with, ends with or contains another's, and that no word's end is another's beginning: `waker` begins with `w` (no other word ends in `w`, `wa`, `wak` or `wake`) and ends in `r` (no other word begins with `r`,
- * `er`, `ker`, `aker` or `waker`), so it overlaps `limit`, `leblanc`, `experiment`, `mushroom`, `fayth`, `daigoro`, `valefor`, `gagazet`, `angra`, `yojimbo` and `summon` in no position (and the 3D Bahamut branch's
+ * `er`, `ker`, `aker` or `waker`), so it overlaps `limit`, `leblanc`, `experiment`, `mushroom`, `fayth`, `daigoro`, `valefor`, `gagazet`, `angra`, `yojimbo`, `summon` and `pilgrim` in no position (and the 3D Bahamut branch's
  * `yrp`, which neither begins nor ends with any of its letters in common positions).
  *
- * THE WORD AND THE NUMBER ARE PLACEHOLDERS: the release driver assigns the real ones at merge.
+ * THE WORD (`waker`) AND THE NUMBER (32) ARE ASSIGNED: the release driver, 2026-11-02 (Bailey picked the word, 2026-10-20: "waker").
  *
  * Game case: FFX-2 only (the chapter is hidden chapter 24's Valefor fight); the board and the door are shared plumbing.
  */
