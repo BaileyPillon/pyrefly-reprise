@@ -33,7 +33,7 @@
  */
 
 import { koCross } from './PoseBlend.ts';
-import { REVIVE_CROSS_MS, reviveCross } from './motion/ReviveCross.ts';
+import { REVIVE_CROSS_MS, REVIVE_RISE_MS, reviveCross } from './motion/ReviveCross.ts';
 import { CUT_AT } from './motion/SmearPlan.ts';
 import { DEMO_KO_CROSS_MS } from './motion/DemoBlend.ts';
 import { demoMotionOn } from './motion/DemoMotion.ts';
@@ -57,8 +57,8 @@ export const PUFF_FALL = 1;
 export const PUFF_REVIVE = 0.6;
 /** What a revive takes in all: the cross and the rise. Must stay under `TIMING.revive` (520) so the menu is never delayed. */
 export const REVIVE_MS = KO_CROSS_MS + RISE_MS;
-/** r74-revive (`?revive=even`, `motion/ReviveCross.ts`): what a revive takes in all with its longer, even cross (160 + 320 = 480), still under `TIMING.revive` (520). */
-export const REVIVE_EVEN_MS = REVIVE_CROSS_MS + RISE_MS;
+/** r74-revive (`?revive=even`, `motion/ReviveCross.ts`): what a revive takes in all with its longer, even cross (200 + 300 = 500), still under `TIMING.revive` (520). */
+export const REVIVE_EVEN_MS = REVIVE_CROSS_MS + REVIVE_RISE_MS;
 /** The cross a KO or a revive plays now: `KO_CROSS_MS`, or the demo's slightly longer one under `?motion=demo` (`motion/DemoBlend.ts`; 100 ms, still inside the landing squash and `TIMING.revive`). */
 export const koCrossMs = (): number => (demoMotionOn() ? DEMO_KO_CROSS_MS : KO_CROSS_MS);
 
@@ -315,9 +315,9 @@ export function fallRun(mode: KoMode, game: KoGame, cutMs?: number, buckleMs?: n
 
 /** The revive's run: with `travel` the lying body crosses to the toppled figure and stands up (FA-3); without, only the short cross (figures that never topple). REDUCE MOTION plays no run at all: the actor's own blend, as before FA-3. */
 export function reviveRun(travel: boolean, eased = false, even = false): KoRun {
-  // r74-revive: only a body that topples and gets up (`travel`) plays the longer even cross, and not the held eased revive (its rise is 420: 160 + 420 would pass `TIMING.revive`); `even` false is release 73's run exactly
+  // r74-revive: only a body that topples and gets up (`travel`) plays the longer even cross, and not the held eased revive (its rise is 420: 200 + 420 would pass `TIMING.revive`); `even` false is release 73's run exactly
   const longer = even && travel && !eased;
-  return new KoRun({ kind: 'revive', holdMs: 0, crossMs: longer ? Math.max(REVIVE_CROSS_MS, koCrossMs()) : koCrossMs(), riseMs: travel ? (eased ? RISE_EASED_MS : RISE_MS) : 0, travel, buckle: travel, puff: travel ? PUFF_REVIVE : 0, ...(travel && eased ? { eased: true } : {}), ...(longer ? { even: true } : {}) });
+  return new KoRun({ kind: 'revive', holdMs: 0, crossMs: longer ? Math.max(REVIVE_CROSS_MS, koCrossMs()) : koCrossMs(), riseMs: travel ? (eased ? RISE_EASED_MS : longer ? REVIVE_RISE_MS : RISE_MS) : 0, travel, buckle: travel, puff: travel ? PUFF_REVIVE : 0, ...(travel && eased ? { eased: true } : {}), ...(longer ? { even: true } : {}) });
 }
 
 // ------------------------------------------------------------------------- the dust puff
