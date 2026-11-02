@@ -1,0 +1,173 @@
+# ch-waker: the hidden Wind Waker chapter, Chapter 32 (FFX-2 only)
+
+Lane `ch-waker`, tree `D:/pyrefly-ww`, branch `ch-waker` (cut from `origin/r73-int` d5049f686, merged with `exp-windwaker`). Written 2026-11-02 by the lane's sub-agent for the release driver. Nothing is deployed. No browser, dev server, Playwright or GPU was run: every browser check below is a job spec with its prediction written first. One CPU-only production build was run into the lane's scratch folder (W0).
+
+Authority: Bailey, 2026-11-02, "i'll go with all of your recommendations please implement all the unimplemented chapters that i decided on"; 2026-10-31 ~23:40 EDT, "you make the executive decisions for the next few days". The chapter itself is his: D-1123 ("lets try a new experimental hidden chapter ... wind waker hd esque graphics"), D-1124 (C: YRP vs Valefor), D-1125 (Wind Waker short), D-1127 (word "waker"), D-1157 ("Build the chapter (Recommended)"), D-1158 ("HD"), D-1159 to D-1162 (all four fixes), D-1163 (cap 550), D-1164 ("Keep starting outfits").
+
+**Game case: FFX-2 only.** It is hidden chapter 24's Valefor fight (`ffx2-valefor-besaid`, `research/ffx2-fallen-aeons.md` section 7.1, `[verified: 2 sources]`) by reference, drawn in a Wind Waker HD toon style: Yuna (Gunner), Rikku (Thief) and Paine (Warrior) against Valefor. No battle data of its own (rule 6). The shared plumbing (registries, door table, dist filter, three optional scene fields) is "both" and is proven inert for every other chapter (section 4).
+
+## 1. What is on the branch
+
+| sha | what |
+|---|---|
+| `origin/exp-windwaker` ed92784e0 | the local branch, pushed unchanged first (no force): 19 commits, 83 files, +10.6k lines on r60-art 1cea6e937. It was the only copy |
+| e80dfa976 | the pure merge onto `origin/r73-int` d5049f686 (766 commits of drift); two textual conflicts, section 3 |
+| 26ac79d95 | number 32, the models ship (dist-filter allow-list), `tools/ww-models.mjs` + list + test, CONTRACT-CHANGES entry |
+| 475729d1a | two older tests updated to what the chapter changes, the Stage edit shrunk from +10 to +2 lines, the door stress test given room |
+| dfa692623 | the two guards that scan the source and `public/` know the chapter; `clipSequencer.ts` renamed `wwSequencer.ts` |
+| (the last commit) | this handoff and `docs/plans/ch-waker-review.md` |
+
+## 2. What is playable now
+
+Type `waker` on chapter select (no card on the board; the arrow keys never find it; the phone's long-press field takes it too). It opens party prep, chapter 24's cutscenes and music by reference, then the fight in a 3D toon temple chamber: toon-shaded Meshy models on the stage's actors (the three girls; Valefor with a vertex-shader wing flap), pistols, daggers and a sword on the hand bones (the files in `props/`), a temple kit (`temple/`) tiled round a 25-tile wall, the target shot's low camera, flat star bursts and curly smoke for hits, and Valefor's Energy Ray, Energy Blast and Sonic Wings drawn as toon objects. The player-facing numeral is `EXP`; the title is the working title "Valefor at Besaid (Wind Waker)". Dev-only: `?ww=hd|hd-soft|classic|painted` (`painted` plays chapter 24's own scene, for comparison) and `globalThis.__ww3d`.
+
+State of the look, last measured on r60 (polish 2, tip ed92784e0; 82 stills and 4 clips sent to Bailey 2026-11-01 with no recorded verdict): hair tops .330 / .468 / .553 of the frame (TARGET-C .33 / .47 / .55), floor 13.2 percent (TARGET-C 13.2), mean luma 135.6 with the HUD off (TARGET-C 119.3), no white blob on any hit, console 0 errors. **None of it has been seen on the r73-int code**: see the job specs (section 8).
+
+## 3. The merge, and what it changed
+
+Conflicts (the only two; both keep the current game):
+- `src/app/screens/BattleScreen.ts`: r73-int moved the stage construction to `BattleScreenEncounter.ts`. Took r73-int's `BattleScreen.ts` and re-applied the chapter's one change where the code now lives: `rigs: rigsForScene(this.scene.slots, readRigFigures)` plus its import (383 lines; the file stays under 400).
+- `src/app/screens/battleSpectacle.ts`: both imports kept (`govLive` from r73-int, `withOwnImpactsFx` from the chapter).
+
+Then, as separate commits:
+- **Number 32, word `waker`** (`EXP_WINDWAKER.number`; the `Chapter.number` union gains 32 only; CONTRACT-CHANGES entry written). The Spectral Keeper (29), the Fallen Maesters (30) and yrp (31) add their own members on their own branches, so **expect conflicts on the `ChapterId`, `ListedChapterId` and `number` union lines of `src/data/encounters.ts` and in the registries; keep every member** (`... | 28 | 29 | 30 | 31 | 32`). The same lines: `chapter-meta.ts`, `chapters-experiments.ts`, `chapterDoors.ts`, `experiment-scenes.ts`, `pyreflyCanon.ts`, `tactics/lookup.ts`, `route-pure.mjs`, `artNamespace.ts` (and its test `scene-backdrop-file.test.ts`, which lists the code keys), `chapter-doors.test.ts`, `chapter-numbers.test.ts`, `dist-filter.test.ts`, `ui-ffx-guide-folded-scenes.test.ts` (which lists the scenes that say `guideFolded`), and the neighbour lists of the other door tests.
+- **The door word.** `waker` was checked against every word on r73-int (limit, leblanc, experiment, mushroom, fayth, daigoro, valefor, gagazet, angra, yojimbo, summon, pilgrim): `chapter-doors.test.ts` pins that no word begins with, ends with or contains another and that no end is another's beginning. The Keeper's and the Maesters' words are not chosen yet: `waker` begins with w and ends with r, so a word that begins with r, or ends with w, wa, wak or wake, would collide (that test will say).
+- **The models SHIP** (the brief: "confirm the build reads and ships them"). Before: `tools/dist-filter.mjs` dropped `models-exp/**` from every build, so the live chapter would have drawn capsules. Now an allow-list: `models-exp/windwaker/**` ships, every other `models-exp` folder (yrp's, say) still stays out. The scene builds the file URLs from `import.meta.env.BASE_URL`, so both hosts' bases work. The files are gitignored (the repo is public; eleven `.glb`, 33,882,528 bytes), so like `public/fx` they come from this disk: **`tools/ww-models.mjs`** (`record`, `verify [--dir]`, `backup`, `restore`, `ensure [--warn]`, types in `ww-models.d.mts`) with the list `tools/ww/ww-models.json` (names, sizes, sha256) and a backup copy in `D:/Tools/pyrefly-models-backup/windwaker` (a new folder, verified; `PYREFLY_WW_BACKUP` overrides it). `tests/unit/ww-models-tool.test.ts` pins the list to exactly the eleven files the chapter asks for. The GLB JSON chunks carry no local path, scratch name or account name (scanned). A `.glb` has no decoder in `artifact-manifest.mjs`, so it is hashed only. The 800,000,000-byte line no longer binds on Cloudflare (NOW.md 2026-10-04); the models add 33.9 MB; they revalidate (no hash in the name).
+- **What the driver must add to the release steps** (I did not touch `tools/deploy-pages.mjs`: 1018 lines, over the house limit, and the deploy gate is yours): before the build, `node tools/ww-models.mjs ensure` (it restores from the backup into the release worktree's `public/models-exp/windwaker`; a clean worktree has no such folder), and after the build `node tools/ww-models.mjs verify --dir <build>/models-exp/windwaker`. Without them a release cut from a clean worktree ships a chapter that silently draws capsules. `.gitignore` already holds `public/models-exp/`.
+- **Two guards and two pins older than the chapter** (found by running the related and the source-scanning tests, not by the chapter's own): `scene-backdrop-file.test.ts` (the second code key), `ui-ffx-guide-folded-scenes.test.ts` (`guideFolded` was FFX-only; it was even asserting the FFX-2 HUD "ignores" it, which the chapter's own `BattleScreenWiring.ts` change contradicted), `art-url-sources.test.ts` (the scene reads the base for its model URLs; it is on the short list now), `ffx-local-guard.test.ts` (two assertions: no retail file type in `public/`, so the eleven original models are let through BY NAME AND SHA256 only, and the motion modules' importers, where `ww3d/clipSequencer.ts` shared a stem with the FFX module, so it is now `ww3d/wwSequencer.ts`).
+- **The sparse worktree** (`D:/pyrefly-ww`) now also checks out `docs/*.md`, `docs/handoff`, `docs/target`, `docs/plans`, `docs/booth`, `docs/audio`, `docs/deploys.log`, two small concept files and the pause prototype's `src` (it had no `docs/`), so `tsc` is clean and the audio and ledger tests can run. The old patterns are in the lane folder (`sparse-checkout.before`). The art junction `public/art` now points at `D:\pyrefly-art-r64` (the old target `D:\pyrefly-art-r60` was checked intact: 6010 files).
+- **House rules:** every `ww3d` file is under 400 lines (the longest, `model.ts`, is 396); `BattleScreenEncounter.ts` 383, `chapter-meta.ts` 397; `BattlePresenterStage.ts` was already 1072 lines and takes +2 (an import and a one-line getter; the port wrap is in the constructor line). `node tools/orphans.mjs`: 24 modules, all pre-existing, none new.
+
+## 4. Nothing changes outside the chapter: the proof
+
+Every shared (non-chapter) source file the chapter touches, with why it is inert elsewhere:
+
+| file | change | why every other scene reads exactly as before |
+|---|---|---|
+| `scenes/types.ts` | optional `SceneBuild.ownGrade`; optional `SceneStaging.noRigs`, `ownImpacts`; `stagingOf` copies them only when `=== true`; `mountScene` calls `setOwnGrade` only when `build.ownGrade` | omitted by every other scene (`ww3d/own-grade.test.ts`, `ww3d/own-impacts.test.ts`) |
+| `app/screens/BattleScreenEncounter.ts` | `rigs: rigsForScene(this.scene.slots, readRigFigures)` | `rigsForScene` returns the setting function itself unless `slots.noRigs` (`own-grade.test.ts`, its last test) |
+| `engine/fx/a/GoldenHour.ts`, `engine/fx/a/ownGrade.ts` | the "which game's recipe" decision moves into `optionAGame` | the same answer as the inline code unless the scene is marked `ownGrade` (10 tests) |
+| `engine/BattlePresenterStage.ts`, `engine/ownImpacts.ts` | the constructor wraps the stage's own port: `withOwnImpacts(port, impactsOwned(slots))`; a one-line getter | `withOwnImpacts` returns the SAME object when not owned; `own-impacts.test.ts` (12) includes the real `PaintedStage` playing the impact bloom, sparks and slash "as it always has" |
+| `app/screens/battleSpectacle.ts` | `stage.fx = stage.ownImpacts ? withOwnImpactsFx(fx) : fx` | the same object when not owned |
+| `app/screens/BattleScreenWiring.ts` | the FFX-2 HUD starts its guide folded when `guideFolded` | no other FFX-2 scene sets `guideFolded` (only `dreams-end-giants`, `gagazet-giants` for FFX, and this stage; `ui-ffx-guide-folded-scenes.test.ts` now pins all three, `ffx2-guide-folded-start.test.ts` the HUD) |
+| registries, door table, canon, lookup, `artNamespace`, `experiment-scenes`, `route-pure.mjs` | one row each | additive; the door word is checked against every other word |
+| `tools/dist-filter.mjs` | `models-exp/windwaker/**` ships | nothing else under `public/` changes class (`dist-filter.test.ts`: 15) |
+| `.gitignore` | `public/models-exp/` | |
+
+Also: chapter 24's record is untouched and this chapter plays exactly its event log on seeds 1 and 2 (`exp-windwaker.test.ts`); `src/battle/**` is untouched (rule 1; `ownImpacts.ts` imports types only); the three optional scene fields default to off. **Not proven here: that the other chapters DRAW the same pixels.** That is job W5 below, a browser job, owed.
+
+## 5. Tests
+
+`npx tsc --noEmit`: clean (exit 0) on the final tree. Run with `TEMP=TMP=D:/Tools/pyrefly-scratch/tmp`, `--maxWorkers=3`. The full suite is 1,886 files; the PC was at 100 percent CPU from other lanes all session, so I ran by reverse dependency instead of the whole of it:
+
+- **The chapter's own and its tooling** (21 files, 315 tests on the merged tree; re-run after each later change, all green): `tests/unit/ww3d/*` (15 files), `chapters/exp-windwaker` (17), `windwaker-door` (22), `ww-models-tool` (11, new), `dist-filter` (15), `chapter-doors` (10), `chapter-numbers` (4), `ffx2-guide-folded-start` (3).
+- **The related set, 550 files** (every test that names a shared file the chapter touched: `BattleScreen*`, `PaintedStage`, `GoldenHour`, `scenes/types`, `data/encounters`, `chapter-meta`, the doors, the canon, the lookup, `artNamespace`, `dist-filter`, the HUDs), five chunks: **7,847 tests passed in 547 files on the first pass.** 16 files failed: 12 for a missing file in the old sparse tree (`docs/audio/*`, one screenshot, one concept file; green once checked out), 2 older pins the chapter changes (`scene-backdrop-file`, `ui-ffx-guide-folded-scenes`; updated, section 3), 2 door stress tests that time out under CPU load (`windwaker-door`, and `valefor-door`, which is not this lane's: 52 s alone on the busy PC; `windwaker-door` now has a 120 s limit). Three more files could not start a worker under load; they passed on re-run. After the fixes: re-run of the failed files and the stage tests, 36 files, 591 tests, all green; each door suite green alone.
+- **The source-scanning tests the related set did not name** (108 more files that read `src/` or `public/`): 2,098 tests passed; 2 files failed on 3 tests that the chapter caused (`art-url-sources`, and two in `ffx-local-guard`); fixed, section 3, and re-run green with the chapter's 19 files.
+- **Not run:** the remaining ~1,230 files (they name none of the changed modules and read no source tree). If the driver wants the proof the AGENTS.md rule asks for before a push of main, `npm test` is the command; the door suites will need `--testTimeout=120000` on a busy PC.
+
+## 6. Driver picks (Bailey's blanket yes, 2026-11-02): "driver pick, his to overturn"
+
+Where the preflight or the chapter's own record left a pick open, the option taken is the one the preflight recommends, or the one closest to the real game / to his own words when it names none. Each with its alternative:
+
+| # | Pick (driver pick, his to overturn) | Alternative |
+|---|---|---|
+| P1 | **Number 32, word `waker`.** The word is his (D-1127 "waker"); the number is the driver's assignment (29 Keeper, 30 Maesters, 31 yrp, 32 this). The card and the prep header say `EXP`, not a numeral | any other free number; the word is his and does not move |
+| P2 | **Title stays "Valefor at Besaid (Wind Waker)"** (the working title; it names the encounter, which is chapter 24's, and the style, in his own words) | "Besaid, Wind Waker style" or any title he writes; one string in `chapter-exp-windwaker.ts` |
+| P3 | **Stays hidden**: no board card, opens only by the typed word (and the phone's long-press field). Not in "of 19", the save, the veteran check or play time | list it on the board as a card (needs a board painting; D-848: listing hidden chapters is his call after he plays them) |
+| P4 | **The eleven model files SHIP in the production build** (`models-exp/windwaker/**` allow-listed in the dist filter) | keep them out and let the live chapter draw capsules (the approved look is the toon models, so this makes the chapter pointless live) |
+| P5 | **The models stay out of git** (public repo, 33.9 MB) and travel by list + backup + verify (`tools/ww-models.mjs`) | commit them to the private art repo `BaileyPillon/pyrefly-art` (art is versioned there) and have the release restore from it; or Git LFS |
+| P6 | **No guide page of its own**: chapter 24's strategy-guide card and advisor line are found through the boss on the board (`x2-valefor`), so they work here; a pause-screen guide page keyed by the chapter id would show none | copy chapter 24's guide doc under the new id (new content for a hidden chapter: rule 10, needs his yes) |
+| P7 | **No story of its own**: chapter 24's cutscenes, lines and Sensor line by reference (`research/writing-bible.md` governs them). Story draft: none exists or is owed | a Wind-Waker-flavoured intro (new content, his yes) |
+| P8 | **Music = chapter 24's cues** by reference (`music` on the record) | a stand-in track in the toon mood (audio is delegated to the driver, but new music is new content) |
+| P9 | **Girls stay in their starting outfits** (Gunner, Thief, Warrior) after a dressphere change: his own pick, D-1164 "Keep starting outfits" | revisit after the conference (already noted: now past) |
+| P10 | **The FFX-2 strategy guide starts folded in this chapter only** (the girls' heads stand under the open sheet at the target shot) | leave it open and move the camera (the target shot is his approved framing) |
+| P11 | **Shading `hd`** (his: D-1158 "HD"); `hd-soft` and `classic` stay as dev-only `?ww=` words | none; his pick |
+| P12 | **Merged with a plain merge commit** (never a rebase here; the branch had been pushed unchanged first) so the 19 commits of history stay | squash |
+| P13 | **Backup copy of the models in `D:/Tools/pyrefly-models-backup/windwaker`** (new folder, 33.9 MB, verified by sha256) | another folder via `PYREFLY_WW_BACKUP` |
+| P14 | **Release class DEEP is accepted as it is**: the focused review before the deploy, the deep review on the live build; the paper preflight is `docs/plans/ch-waker-review.md` | a deep review before the deploy (the save-data class only, so not needed) |
+
+## 7. ART NEEDS (nothing is blocking; the chapter plays with what is on disk)
+
+On disk and used, no new art: the four toon models and the seven weapon and temple pieces (`public/models-exp/windwaker`, Meshy 492 of 550 credits spent, Bailey's own HD look); chapter 24's Djose-chamber plate for the board, the prep wash and the cutscenes (`DJOSE_CHAMBER_PLATE`, an approved painting; it fits as a stand-in, as it does for chapter 24, though its painted look will sit beside a toon fight); every portrait, battle sprite and splash painting is chapter 24's by reference.
+
+Does not exist, would improve it (all optional, none built):
+
+| # | Need | Subject and poses | Size | Style reference |
+|---|---|---|---|---|
+| A1 | **Knock-out clips for the three girls** (`ko` / `knock` by name; none in the files, so a downed girl is tipped onto her back by code) | Yuna, Rikku, Paine: a stagger, a fall, a lie-flat hold, 1.2 to 1.6 s, same 24-joint rig and clip names as the files | animation into the existing `yuna.glb`, `rikku.glb`, `paine.glb` (24 joints, 30 fps) | the models' own `hit` clip; Wind Waker's short flop |
+| A2 | **Victory loops** (the clips play once: Yuna 7.4 s, Rikku 6.9 s, Paine 1.5 s, then the girl returns to the stance) | the last 2 s of each as a hold, or Paine's lengthened to about 4 s | same files | their own `victory` clips |
+| A3 | **A rigged Valefor** (her file has no skeleton: hover, bob and the wing flap are code and a vertex shader; no hurt, cast or KO clip) | idle, Energy Ray cast, Blast charge, Sonic Wings, hurt, KO (she falls to the floor by code today) | one GLB, about 40k triangles, the existing `valefor.glb` mesh skinned | the approved Valefor painting in `public/art/characters/valefor/` (teal and gold) and the model's own colours |
+| A4 | **A toon Besaid temple plate** for the board, prep and cutscenes (instead of chapter 24's painted Djose chamber) | the chamber of TARGET-C: blue wall, braziers, door, light shaft, spiral-cloud sky, no figures | 1920x1080 plate in the backdrop convention (`art/backdrops/<scene>.png`) | `docs/concepts/exp-windwaker/TARGET-C.jpg`; ChatGPT Images via `codex exec` (the Art Room cannot render a non-house style, see the WW lesson); Bailey alone approves |
+| A5 | **Smaller textures** (not new art): eleven 2048 px base-colour maps decode to about 240 MB of GPU memory; the weapons and braziers could ship at 512 or 1024 | all eleven | re-export only | n/a |
+
+Not needed: dressphere outfits (D-1164 keeps the starting outfits); a board thumbnail (the chapter is hidden); the anime / Genshin version (a different chapter, decided only in part: D-1225, D-1438, waiting on his look pick).
+
+## 8. Browser job specs, predictions first (rule 15)
+
+None of these ran. The harness is the lane's own, in `D:/Tools/pyrefly-scratch/2026-10-20/windwaker/polish2/`: `job.mjs` (claims `RIG-RECORD.next`, takes `RIG-RECORD`, starts vite on 5293 to 5296 from `D:\pyrefly-ww`, stops it by pid, always releases), `play.mjs` (real keys from the title to the victory; stills and clips; `--seed`, `--want ray,blast,wings,hit,victory`, `--reenter`), `tune.mjs` (the target-shot measurements). Copy them to a new job folder first; they were last run on r60 code, so the debug API they read (`window.__pyrefly`) may have drifted: a harness failure is not a chapter failure. GPU Chromium (`PYREFLY_BROWSER=gpu`), one job at a time, `TEMP=TMP=D:/Tools/pyrefly-scratch/tmp`, 1600x900. Evidence under `D:/Tools/pyrefly-scratch/2026-11-02/ch-waker/jobs/<job>/`.
+
+### W0. The production build ships the models (CPU only; no browser)
+
+`BASE_PATH=/ node node_modules/vite/bin/vite.js build --outDir <scratch>/dist-ww --emptyOutDir` (not `npm run build`: its prebuild rewrites the art manifest in the art mirror), then `node tools/ww-models.mjs verify --dir <scratch>/dist-ww/models-exp/windwaker`, `buildManifest` over `models-exp`, `findUnshipped`, and `node tools/dist-local-paths.mjs --dir <scratch>/dist-ww`.
+**Prediction:** `ww-models verify: PASS` (11 files, 33,882,528 bytes); nothing else under `dist-ww/models-exp`; `findUnshipped` empty; the manifest lists the eleven as `bytes` + `sha256` with no `decode` field (a `.glb` has no decoder in `artifact-manifest.mjs`) and no problem. **Miss:** any file absent or different (then the dist filter or the plugin order is wrong: stop, read, do not tune).
+**RESULT (run 2026-11-02 18:09 to 18:14 on this tree, CPU only, output in the lane's scratch and deleted afterwards): PASS.** The build took 51 s (`dist-filter: left out 338 unshipped file(s)`). `ww-models verify` on the build: PASS, the eleven files, 33,882,528 bytes, every sha256 equal to the list. `models-exp` holds only `windwaker/` (nothing else was let through). `findUnshipped`: 0. `buildManifest` over `models-exp`: 11 files, no problems, no `decode` field. The bundle names `models-exp/windwaker` in one chunk (`game-*.js`) and not in the main `index-*.js`, so no other chapter's load carries the chapter. The build privacy gate (`dist-local-paths`): no local path, no claude.ai link, no stray sidecar key in 1,372 text files. A full deploy-grade build (the art identity audit, `art-browser-load`, the deploy's own checks) was NOT run: that is the deploy's.
+
+### W1. Smoke by real keys: the word, prep, the fight, a victory (about 6 minutes)
+
+`job.mjs --max 8 --what "ww smoke" -- node play.mjs --mode stills --budget-min 6 --seed 7 --want ray,hit,victory`.
+**Prediction:** `waker` typed on chapter select opens prep (no card; the arrow keys never find it); prep shows `EXP` and the title; the cutscenes are chapter 24's; the fight starts in the toon temple; console errors 0, page errors 0, failed requests 0; exactly 11 requests under `models-exp/windwaker/` (4 models, 3 `props/`, 4 `temple/`), all 200, 33,882,528 bytes together; `__ww3d.skin.carrying` is `own` for yuna, rikku, paine and x2-valefor; no `[ww3d]` log line names a capsule or a missing swap; the BATTLE START card holds 4 to 6 s (polish 1 on r60: 4 s; r73's byte cuts may move it); Valefor stands once (no painted rig under the model); a victory reaches the results and returns to chapter select.
+**Miss:** any request 404, `carrying` not `own` for one (then `internalsOf` returned null after the `PaintedActor` split: the actor stays painted; read `skin.ts` `internalsOf`), or a doubled Valefor.
+
+### W2. The target shot against TARGET-C (about 4 minutes)
+
+`job.mjs --max 5 --what "ww layout" -- node tune.mjs --do layout --budget-min 3` (HUD off and on, sway off, each girl alone on grey, the floor alone in red).
+**Prediction (polish 2's numbers, which the merge should not move; `fx/mix/framing.ts` is unchanged):** hair tops .330 / .468 / .553 of the frame (+-.015; TARGET-C .33 / .47 / .55); Yuna's boots .988 (+-.01); floor share 13.2 percent (+-1.5; TARGET-C 13.2); mean luma 135.6 HUD off (+-8; TARGET-C 119.3) and 101.9 HUD on (+-12); the advisor card clears Paine's boot by about 26 px (**the one number most likely to move: `FFX2BattleHud` changed in 10 commits**; if the card now overlaps her boot, the knob is Paine's slot, `-0.43` in `layout.ts`, 0.26 m left cleared it last time; do not tune blind).
+**Miss:** a top off by more than .03, or a luma over 160 (the whiteout is back: the eye-candy post is running, so `optionAGame` is not seeing `ownGrade`).
+
+### W3. A full fight round: hits, Ray, Blast, Wings, victory (about 8 minutes)
+
+`job.mjs --max 12 --what "ww fight" -- node play.mjs --mode stills --budget-min 9.5 --seed 7 --want ray,blast,wings,hit,victory --reenter`.
+**Prediction:** every hit shows a flat 4-, 5- or 6-point star (orange outline, yellow body, white core) and 3 to 5 smoke puffs, never a white blob; luma at hits 134 to 137, at the Blast 134 to 137 (polish 2; the pre-fix blast was 171.6); the Blast orb white share at or under 12 percent; victory poses luma 128 to 138; leaving and re-entering (`--reenter`) disposes cleanly: one Valefor, one stage, `__ww3d` rebuilt, JS heap not growing by more than 150 MB over the second run.
+**Miss:** a white ring or rays over a girl (then `ownImpacts` is not reaching the stage port: read `makeVfxPort`), or a heap that doubles.
+
+### W4. Motion clips, judged by Bailey in motion (about 10 minutes; his standing rule: rigs are judged in motion)
+
+`job.mjs --max 12 --what "ww clips" -- node play.mjs --mode video --budget-min 9 --seed 7` then `cut-clips.mjs`: idle, an attack round, Valefor's three moves, a KO and the victory, 30 fps, 1600x900.
+**Prediction:** the head turn is steady (no yaw pop of more than 5 degrees at a clip cut), Valefor's flap rises on every action and she lunges and sways three-quarter, the girls' strikes land in the windows the tests pin (Yuna 2.0 to 3.1 s of 7.3 s). **Known weak points, so no surprise:** a downed girl tips over stiffly (no KO clip: A1), Paine's victory is 1.5 s and returns to the stance (A2), Valefor falls by code (A3). Send the clips to him; no verdict is recorded for the 11-01 set either.
+
+### W5. Nothing else changed: the same pixels as r73-int (about 15 minutes; the proof section 4 cannot give)
+
+For `seymour-flux` (Chapter I, FFX), `ffx2-bahamut` (Chapter IV, FFX-2) and `ffx2-valefor-besaid` (hidden 24, FFX-2): the same seed (7), sway off, 1600x900, the first settled idle frame, HUD off and on, from (a) a build or dev server of `origin/r73-int` d5049f686 (the release candidate's, or `git archive` into scratch with the `node_modules` junction; no `git worktree add`) and (b) this branch. **First run (a) twice for the noise floor** (film grain reads the frame clock and the particles drift).
+**Prediction:** the mean absolute difference of (b) against (a) is no larger than (a) against (a) in every channel, in all three chapters; the event logs of a scripted fight (seed 7, 40 turns) are byte-identical (the unit suite already pins this for chapter 24 against this chapter, and the engines are untouched). **Miss:** a difference above the noise in the first idle frame: bisect the five shared files of section 4 (the likeliest is `GoldenHour.ts`'s `optionAGame`).
+
+### W6. The door by a keyboard and by a phone (about 5 minutes)
+
+On chapter select: `waker` by keys; the same through the phone long-press field (375x812 touch emulation); then every other word (the twelve) still opens its own chapter; a wrong letter resets.
+**Prediction:** as `windwaker-door.test.ts` and `phone-door-field.test.ts` (both green in jsdom): no card moves, prep opens for `exp-windwaker`, and the arrow keys never select it.
+
+### W7. Cost: frame time, memory, a phone (about 6 minutes)
+
+At the target shot for 60 s, then once at 375x812 portrait.
+**Prediction:** p95 frame time at or under 20 ms at 1600x900 on the RTX 5070 Ti (no measurement exists yet; the 4096 shadow map and 11 textures are the cost); decoded texture memory about 240 MB (11 x 2048 x 2048 x 4 bytes x 1.33); first load of the models 33.9 MB from the site. **The phone is expected to MISS and is a first look only**: the layout, the lens shift and the HUD were built and measured at 16:9 only, and 34 MB plus 240 MB of textures is heavy for a phone; record it, do not tune, and say so to Bailey (a hidden chapter is exempt from the phone budgets until he lists it).
+
+## 9. CHANGELOG lines (game tag; for the release that carries the chapter; not yet applied to `CHANGELOG.md`, which belongs to the release driver)
+
+The player note (`src/app/changelog/releaseNotes.ts`) names no hidden chapter and no secret word, as the last releases' notes do ("no hidden chapter named"), so none is owed for this chapter; the lines below are the engineering CHANGELOG's, and they leave the typed word out too.
+
+- **FFX-2 only, a new hidden chapter in a Wind Waker HD style: "Valefor at Besaid (Wind Waker)" (Chapter 32, branch `ch-waker`, no card on the board).** Yuna, Rikku and Paine, three heads tall in flat toon colour, fight Valefor in a lit temple chamber with a low camera, sun shafts and spiral clouds; hits are flat star bursts and curly smoke instead of the usual bloom; Valefor flaps, lunges and fires her Energy Ray, Energy Blast and Sonic Wings as toon objects. The fight is chapter 24's (the same numbers, moves and music); only the picture is new. It has no card on the board and is not part of any count or the save.
+- **Both (delivery): the build now ships `models-exp/windwaker/` (eleven model files, 33.9 MB) and `tools/ww-models.mjs` checks them.** No other chapter changes; the three new scene options (`ownGrade`, `noRigs`, `ownImpacts`) are off for every other scene.
+
+## 10. Open questions (for the driver; none needs Bailey before the build, all are his to overturn)
+
+1. **The Meshy look in motion.** He called the yrp Meshy cast "AI slop" (2026-10-20 21:40), then picked "Build the chapter" and "HD" for this one after seeing its look lab (~23:40), and picked "Meshy toon" for the anime version (10-22). No verdict is recorded on the 82 stills and 4 clips of 11-01, and his standing rule is that rigs are judged in motion: W4 makes the clips again on r73-int. If he calls it uncanny: a written method check before a third try (rule 15).
+2. **Release timing.** The chapter classes DEEP (`critic-plan`, the paper preflight is `docs/plans/ch-waker-review.md`): a focused review before the deploy, a deep review on the live build after. At most two deploys may go out while a deep review is owed; Keeper + Maesters ship together (SK14/FM13), yrp and this chapter are the other two. Four chapters in one release is the driver's call.
+3. **The deploy steps** (section 3): `ww-models.mjs ensure` before the build and `verify` after it. Left to you because `deploy-pages.mjs` is over the house limit and is the gate.
+4. **Where the models live.** The local backup is one disk. P5 offers the private art repo as a second copy; it needs his word only if you want the 33.9 MB in git.
+5. **Door suites cost O(doors squared).** With 13 doors each suite's "two typed in a row" test mounts 36 real boards: 14 s quiet, 50 s on a busy PC, against a 15 s default. All ten door suites flake alike under load; this lane gave its own a 120 s limit and left the others alone.
+6. **The phone.** The chapter was built and measured at 16:9 only; W7 is a first look. A hidden chapter has no phone budget until he lists it.
+7. **The anime (Genshin / Guilty Gear) version** is a different chapter, decided only in part (D-1225, D-1438; waits on his look pick and a Meshy credit cap): not touched here.
+8. **Ledger rows** (yours; I wrote none): the push of `exp-windwaker` (the first off-disk copy), this branch, the models backup folder, the dist-filter allow-list, the tool, the picks P1 to P14 as "driver pick".
+
+## 11. What to do with this branch
+
+`git fetch origin; git merge origin/ch-waker` into the release integration (expect the union-line conflicts of section 3). Before the build: `node tools/ww-models.mjs ensure`. After it: `node tools/ww-models.mjs verify --dir <build>/models-exp/windwaker`. Then W1, W2, W3 and W5 on the candidate build (about 35 minutes of GPU, one job at a time), W4 for Bailey, and the focused review. Nothing in this branch deploys by itself.
