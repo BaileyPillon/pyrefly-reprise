@@ -6,6 +6,7 @@ import { HUD_F1_CLASS, HudF1, type HudF1Host } from '../../src/ui/hudf1/HudF1.ts
 import { F1_DAMAGE_K, F1_TEXT_CEILING, hudF1On, hudF1TextSizeOk, setHudF1Mode, setHudF1TextMode } from '../../src/ui/hudf1/HudF1Switch.ts';
 import { TIER_SIZE, sizeFactor } from '../../src/ui/common/proNumbers.ts';
 import { F1_ROWS, commandRowsCap } from '../../src/ui/common/hudTextSize.ts';
+import { itPlays, playsPiece } from './booth-r70-withdrawn.ts';
 
 /**
  * THE REVIEW OF `booth-b4`, FINDING c1 (2026-10-31; FFX only, rule 14: Chapter IX `yojimbo-cavern` and Chapter XII `seymour-omnis`; FFX-2 has no panel of this kind).
@@ -39,14 +40,29 @@ afterEach(() => {
 });
 
 describe('the table', () => {
-  it('names Chapter IX and Chapter XII and nothing else, at 115, both FFX, both treated with the hud piece played (not held)', () => {
+  it('names Chapter IX and Chapter XII and nothing else, at 115, both FFX, both treated; IX plays the hud piece (the ceiling is its only exception) and XII HOLDS it since the r72 review (J-HUD-5b), the ceiling kept for the day the hold lifts', () => {
     expect(Object.keys(F1_TEXT_CEILING).sort()).toEqual([...CEILING_IDS].sort());
     for (const [id, max] of Object.entries(F1_TEXT_CEILING)) {
       expect(max, id).toBe(115);
       expect(getChapter(id)?.game, id).toBe('ffx');
       expect(TREATED_CHAPTERS[id]?.game, id).toBe('ffx');
-      expect(treatedHold(id, 'hud'), `${id} plays the hud piece (the ceiling is its only exception)`).toBeUndefined();
+      if (id === 'seymour-omnis') expect(treatedHold(id, 'hud'), 'XII holds the hud piece').toMatch(/Lifts when .*29-stop cursor walk reads 0 overlapping pairs/);
+      else expect(treatedHold(id, 'hud'), `${id} plays the hud piece (the ceiling is its only exception)`).toBeUndefined();
     }
+  });
+
+  it('Chapter XII holds the F1 HUD (r72 review, J-HUD-5b): the release 71 HUD at every TEXT SIZE, the F1 readers off, while the ceiling rows stay for the lift', () => {
+    expect(playsPiece('seymour-omnis', 'hud')).toBe(false);
+    setDemoChapter('seymour-omnis');
+    for (const v of ['100', '115', '130']) {
+      sizeBoth(v);
+      expect(hudF1On(), `XII at ${v}`).toBe(false);
+      if (v === '130') expect(commandRowsCap(6), "XII rows at 130: TEXT SIZE's own four").toBe(4);
+      expect(sizeFactor('damage', 'normal'), `XII numeral at ${v}: the glass one`).toBe(TIER_SIZE.normal);
+    }
+    setHudF1TextMode('grow');
+    sizeBoth('100');
+    expect(hudF1On(), 'XII under ?f1text=grow: the hold beats the word').toBe(false);
   });
   it('is frozen (a later edit is a decision made in the file)', () => {
     expect(Object.isFrozen(F1_TEXT_CEILING)).toBe(true);
@@ -55,7 +71,7 @@ describe('the table', () => {
 
 describe('Chapter IX and Chapter XII: the F1 HUD plays at 100 and 115 and gives way to today\'s at 130', () => {
   for (const id of CEILING_IDS) {
-    it(`${id}: on at no attribute, 100 and 115, off at 130 in either attribute, and back on when it returns to 115`, () => {
+    itPlays(id, 'hud')(`${id}: on at no attribute, 100 and 115, off at 130 in either attribute, and back on when it returns to 115`, () => {
       setDemoChapter(id);
       expect(hudF1On(), 'no attribute').toBe(true);
       sizeBoth('100');
@@ -76,7 +92,7 @@ describe('Chapter IX and Chapter XII: the F1 HUD plays at 100 and 115 and gives 
       expect(hudF1On(), 'back to 115').toBe(true);
     });
 
-    it(`${id}: the readers that follow hudF1On() fall back with it at 130 (command rows, damage numeral) and keep F1's at 115`, () => {
+    itPlays(id, 'hud')(`${id}: the readers that follow hudF1On() fall back with it at 130 (command rows, damage numeral) and keep F1's at 115`, () => {
       setDemoChapter(id);
       sizeBoth('115');
       expect(commandRowsCap(6), '115 rows').toBe(F1_ROWS);
@@ -141,7 +157,7 @@ describe('nothing else changes', () => {
 
   it('?f1text=today still gives every chapter release 67\'s step-down at 115 and 130 (the two chapters included), and ?f1text=grow beats the ceiling at 130', () => {
     setHudF1TextMode('today');
-    for (const id of ['seymour-flux', 'yojimbo-cavern', 'seymour-omnis']) {
+    for (const id of ['seymour-flux', 'yojimbo-cavern', 'seymour-omnis'].filter((c) => playsPiece(c, 'hud'))) { // XII holds the hud piece (r72 review): it answers off at every size, pinned above
       setDemoChapter(id);
       sizeBoth('100');
       expect(hudF1On(), `${id} at 100`).toBe(true);
@@ -152,7 +168,7 @@ describe('nothing else changes', () => {
     }
     setHudF1TextMode(null);
     history.replaceState(null, '', '/?f1text=grow');
-    for (const id of CEILING_IDS) {
+    for (const id of CEILING_IDS.filter((c) => playsPiece(c, 'hud'))) {
       setDemoChapter(id);
       sizeBoth('130');
       expect(hudF1On(), `${id} at 130 under ?f1text=grow`).toBe(true);

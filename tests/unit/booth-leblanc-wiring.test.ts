@@ -113,7 +113,7 @@ describe('`__pyrefly.treated()`', () => {
       'seymour-natus': ['breath', 'cam', 'moments'],
       'yojimbo-cavern': ['breath', 'cam', 'moments'],
       'braskas-final-aeon': ['breath', 'moments'], // booth-b4 held `real` here; r72-motion lifted it
-      'seymour-omnis': ['breath', 'cam', 'moments'],
+      'seymour-omnis': ['hud', 'breath', 'cam', 'moments'],
       'isaaru-via-purifico': ['breath', 'cam', 'moments'],
       'ffx2-leblanc': ['breath', 'cam', 'moments'], // the pieces she holds, in the order of her rows
       'ffx2-vegnagun-shuyin': ['hd2d', 'arena', 'cam', 'breath', 'moments'], // booth-ffx2-b4-sky: the look held first (the plate is release 69's)
