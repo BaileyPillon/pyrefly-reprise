@@ -10,6 +10,8 @@
  */
 
 import { currentTextScale } from '../common/hudTextSize.ts';
+import { growToGrid } from './hudPlacementKeys.ts';
+import type { Rect } from './hudSafeZones.ts';
 
 /**
  * Yojimbo's Zanmato gauge (FFX, Chapter IX only; `ZanmatoGauge.ts`): the panel
@@ -136,13 +138,54 @@ export function chipObstacleEls(hud: HTMLElement): HTMLElement[] {
 }
 
 /**
+ * The F1 boss ribbon (`.f1-ribbon`, top left: x 28 to 188 at 100 percent, y 12.5 to 37.5, grown about its left with TEXT SIZE) **in the two chapters whose own panel stands in the same top band** (r72-hud; FFX only,
+ * rule 14: FFX-2's HUD never reaches this solver; the F1 layer is Chapter I's and IV's, and the two chapters of the batch):
+ *
+ *  - `'zanmato'`: Chapter IX while Yojimbo's gauge is up (`.ffx-zg` not hidden, landscape);
+ *  - `'omnis'`: Chapter XII while the disc strip read-out is live (`data-omnis-readout` on the HUD root).
+ *
+ * The advisor's solver does not know the layer's own slabs, and nothing had to until these panels: Chapter I's one-row tip stands left of the ribbon's end and the stylesheet slides it 166 grid px right
+ * to clear it (`hudf1.css`), which is exactly where the gauge (IX) and the disc strip (XII, at 115) stand (r71 jobs HUD-3: 634 x 53 px of tip over the gauge at 2560 x 1440), and the designed card's chip sat on the
+ * ribbon's foot in XII at 2560 x 1440 and 1600 x 900. In these two chapters the ribbon is a solid box like the panel beside it (the tip reads it as `keepOff`, the designed card as ink: `FFXBattleHud.solveAdvisorPlacement`)
+ * and the slide is off (`hudf1-chapters.css`), so the bar is solved clear of it where it stands. With the F1 HUD off, or in any other chapter, the answer is empty and nothing moves: Chapter I's tip keeps its slide.
+ */
+export function f1RibbonEls(hud: HTMLElement, only?: 'zanmato' | 'omnis'): HTMLElement[] {
+  if (!hud.classList.contains('hud-f1')) return [];
+  const zanmato = only !== 'omnis' && hud.querySelector('.ffx-zg:not([hidden]):not(.ffx-zg--phone)') !== null;
+  const omnis = only !== 'zanmato' && hud.hasAttribute('data-omnis-readout');
+  return zanmato || omnis ? [...hud.querySelectorAll<HTMLElement>('.f1-ribbon')] : [];
+}
+
+/**
  * The key chips along the top of the stage that the advisor's one-row tip must keep off at **every** text size (`advisorTip.ts`; the designed card never meets them at 100 percent, which is
- * why `chipObstacleEls` above asks for them only when TEXT SIZE has grown them): the guide's `G` chip and its scroll chip inside the HUD, and the screen's `PAUSE` chip. A hidden one measures zero
- * and is skipped by the caller.
+ * why `chipObstacleEls` above asks for them only when TEXT SIZE has grown them): the guide's `G` chip and its scroll chip inside the HUD, and the screen's `PAUSE` chip, and, in Chapters IX and XII
+ * with the F1 HUD on, the F1 boss ribbon ({@link f1RibbonEls}). A hidden one measures zero and is skipped by the caller.
  */
 export function topChipEls(hud: HTMLElement): HTMLElement[] {
   const doc = hud.ownerDocument;
-  return [...hud.querySelectorAll<HTMLElement>('.sgd__toggle, .sgd__keys'), ...doc.querySelectorAll<HTMLElement>('.battle-pause-chip')];
+  return [...hud.querySelectorAll<HTMLElement>('.sgd__toggle, .sgd__keys'), ...doc.querySelectorAll<HTMLElement>('.battle-pause-chip'), ...f1RibbonEls(hud)];
+}
+
+/** A DOM box in the stage's own 640 x 360 grid px, or `null` when it is hidden or zero-size (`FFXBattleHud.stageRect`; a test supplies its own). */
+export type StageRectOf = (el: HTMLElement | null) => Rect | null;
+
+/**
+ * The solid boxes the advisor's solver is given as ink besides the cast and the bosses (`enemies` in its input; the designed card and the tip both read them), snapped outwards to whole grid px: the
+ * chapter panels it dodges (`gaugeEls` is the Zanmato gauge's own list, `ZanmatoGauge.obstacleEls`), the key chips when TEXT SIZE has grown them, **in Chapter XII with the F1 HUD on the F1 boss ribbon**
+ * ({@link f1RibbonEls} asked for `'omnis'` only: in IX the ribbon is the tip's `keepOff`, not ink, so the designed card does not move there), the disc strip, its note and its intent line, the Sin HUD,
+ * and the status hint. Moved out of `FFXBattleHud.solveAdvisorPlacement` (r72-hud, review m1) so a test can run the wiring: the call there is one line, and a neutralised list survived every other test.
+ */
+export function advisorInkRects(hud: HTMLElement, gaugeEls: readonly HTMLElement[], rectOf: StageRectOf): Rect[] {
+  const panels = hud.querySelectorAll<HTMLElement>([...ADVISOR_PANEL_SELECTORS, STATUS_HINT_SELECTOR].join());
+  return [...gaugeEls, ...chipObstacleEls(hud), ...f1RibbonEls(hud, 'omnis'), ...panels].flatMap((e) => growToGrid(rectOf(e), 1) ?? []);
+}
+
+/**
+ * What only the one-row tip reads (`keepOff` in the solver's input): {@link topChipEls} (the guide's chips, the PAUSE chip and, in IX with the gauge up and XII with the read-out live, the F1 ribbon) as
+ * snapped boxes. Moved out of `FFXBattleHud.solveAdvisorPlacement` with {@link advisorInkRects}.
+ */
+export function advisorKeepOffRects(hud: HTMLElement, rectOf: StageRectOf): Rect[] {
+  return topChipEls(hud).flatMap((e) => growToGrid(rectOf(e), 1) ?? []);
 }
 
 /** Room the advisor's own chip needs above its card, grid px: its measured height plus the gap; 0 when it is not up, at 100 % or on the phone. */

@@ -7,7 +7,7 @@
  *     otherwise the first visible non-part foe; a declared boss is a foe of its own formation; and the only links where the ribbon's foe and the formation's written `headline` disagree are the ones listed
  *     in `HEADLINE_DISAGREES` (a finding carried to the driver, not a defect this merge can fix without a data row).
  *  2. `ProAutoStage.SCRIPTED_RIGS` stays FFX-2's: no row names a chapter that is not FFX-2, and every row names a treated FFX-2 chapter.
- *  3. THE HOLD GUARD: a chapter on both `TREATED_CHAPTERS` and `SwapSwitch.SCOPE_EXCEPTIONS` holds `smear` (`booth-hold-guard` reads the two lists; the merged list was fourteen, is eighteen after batch 4: the r70 verdicts' four came back and booth-b4-last added four; sixteen after the r71 verdicts took IX and XII off again; fifteen after the second focused review of the release 71 candidate took Sin's face off, which keeps its exception and its smear row, unread).
+ *  3. THE HOLD GUARD: a chapter on both `TREATED_CHAPTERS` and `SwapSwitch.SCOPE_EXCEPTIONS` holds `smear` (`booth-hold-guard` reads the two lists; the merged list was fourteen, is eighteen after batch 4: the r70 verdicts' four came back and booth-b4-last added four; sixteen after the r71 verdicts took IX and XII off again; fifteen after the second focused review of the release 71 candidate took Sin's face off, which keeps its exception and its smear row, unread; seventeen after r72-hud put IX and XII back).
  *  4. THE KNOCK-OUT RULE'S INVARIANT over the merged list is in `tests/unit/engine/booth-b2-ko-rule.test.ts`; here, that no treated chapter's hold names a piece outside `TREATED_PIECES`.
  *
  * THE r70 VERDICT PASS (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four chapters back off the list (the list was ten); batch 4 brought all four back (`booth-ffx-b4-hud`, FFX only: IX and XII; `booth-ffx2-b4-sky`, FFX-2 only: V and XI) and `booth-b4-last` added Chapters VIII, XVIII and 27 (FFX only) and XVI (FFX-2 only): the list is eighteen, Chapter XVII is the one listed chapter off it. The ribbon walk is a function of the data and not of the list, so it walks the list and any chapter a later verdict withdraws (`BRANCH`):
@@ -125,8 +125,8 @@ describe('the follower\'s stand-down table and the hold guard over the merged li
     for (const id of ids) expect(treatedHold(id, 'cam'), id).toBeDefined();
   });
 
-  it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list was fourteen; the r70 verdicts left ten; batch 4 brought IX, XII, V and XI back and booth-b4-last added four: eighteen of the nineteen listed chapters; the r71 verdicts took IX and XII off again: sixteen; the second focused review of the candidate took Sin\'s face off: fifteen)', () => {
-    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(15);
+  it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list was fourteen; the r70 verdicts left ten; batch 4 brought IX, XII, V and XI back and booth-b4-last added four: eighteen of the nineteen listed chapters; the r71 verdicts took IX and XII off again: sixteen; the second focused review of the candidate took Sin\'s face off: fifteen; r72-hud put IX and XII back: seventeen)', () => {
+    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(17);
     const exceptions = Object.keys(SCOPE_EXCEPTIONS);
     const both = Object.keys(TREATED_CHAPTERS).filter((id) => exceptions.includes(id));
     expect(both).toEqual(['yunalesca', 'ffx2-ixion-djose']); // booth-b4-last: Sin's face and Ixion at Djose joined, each holding the smear (Evrae left the exceptions in release 69); Sin's face is off the list for release 71, so only Ixion is read here

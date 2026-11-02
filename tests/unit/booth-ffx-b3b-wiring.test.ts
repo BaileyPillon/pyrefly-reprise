@@ -28,7 +28,7 @@ import { describeIf, isListed, itIf } from './booth-r70-withdrawn.ts';
 // Chapter XII (`seymour-omnis`) left the treated list in the r70 verdicts: its cases are skipped while it is off the list and run again with the line; `__pyrefly.treated()` neither lists it nor reports its holds meanwhile.
 const IDS = ['braskas-final-aeon', 'seymour-omnis', 'isaaru-via-purifico'] as const;
 /** The pieces each of the three holds, in the table's order: the breath, and from the first review the moments (III, XII) and the camera (XII, XIV), and from the review of booth-b3 (M1) the moments of XIV too. */
-const HOLDS: Record<(typeof IDS)[number], string[]> = { 'braskas-final-aeon': ['breath', 'moments', 'real'], 'seymour-omnis': ['breath', 'cam', 'moments'], 'isaaru-via-purifico': ['breath', 'cam', 'moments'] };
+const HOLDS: Record<(typeof IDS)[number], string[]> = { 'braskas-final-aeon': ['breath', 'moments'], 'seymour-omnis': ['hud', 'breath', 'cam', 'moments'], 'isaaru-via-purifico': ['breath', 'cam', 'moments'] };
 const stage = { projectRect: () => null, project: () => null } as never;
 const mount = (chapterId: string) => attachProStage({ root: {} as HTMLElement, chapterId, stage });
 

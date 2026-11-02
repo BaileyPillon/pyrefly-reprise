@@ -1,5 +1,6 @@
 /*
  * THE F1 HUD AND THE CHAPTERS' OWN PANELS (lane booth-ffx-b4-hud, 2026-10-31; FFX ONLY: Chapter IX `yojimbo-cavern` and Chapter XII `seymour-omnis`; rule 14: FFX-2 has no chapter panel of this kind and the F1 HUD of Chapter IV is untouched).
+ * This first block is the first pass (the gauge, the Enemy Intent card, the disc strip's size at 115 and 130); the second pass of 2026-11-01 (lane r72-hud, the block further down) adds the advisor's tip, the disc strip's anchor and XII's Sensor card, so the file now places five things in these two chapters.
  *
  * The r70 verdict pass took both chapters off the treated list for one defect each (`docs/handoff/booth-b3.md` section 12.4): the F1 slab moved today's turn strip from the right edge (a column of rows) to the top right (a row of three slots,
  * left 465) and the party cards up (top 251 against today's 258.25), and each chapter has one panel of its own that was laid out against today's HUD:
@@ -65,5 +66,75 @@ html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhu
   scale: none;
   translate: calc(-401.25px * (var(--pyr-ts) - 1)) 0;
   /* the same pivot as the gauge's: the skew about the centre, as at 100, not the top edge `text-size.css` sets for its growth (review m1) */
+  transform-origin: center;
+}
+
+/*
+ * ================================================================================================ r72-hud (2026-11-01; FFX ONLY: Chapter IX `yojimbo-cavern`, Chapter XII `seymour-omnis`; rule 14: FFX-2 has no panel of this kind, Chapter I and Chapter IV are untouched)
+ *
+ * The r71 browser read (`docs/handoff/booth-b4.md` section 12) took both chapters off the list again for overlaps the first lane's layout sums could not see, because they come from things the stylesheets do not place:
+ *
+ *  - IX (HUD-3): with Intel (G) open and the target cursor up, the Sensor plate takes the ground the full advisor card had, and the solver falls to the ONE-ROW TIP. It solves the tip against every box it knows (the gauge among them) and stands it left of the gauge, on the top row;
+ *    then `hudf1.css` slides the tip 166 grid px right (`6 + 160 x scale` at 115 and 130) to clear the F1 ribbon, which the solver does not know. That is where the gauge stands: 634 x 53 px of tip over the boss name and the gauge header at 2560 x 1440.
+ *  - XII (HUD-1): the disc strip stands at left 690 of the 1600 frame (grid 276) and is 190 to 222 grid px wide (the 14 px text floor widens it below 1920 px), so its right end is over the F1 turn strip (left 465) at every width under 1920, and 2 grid px short of it at 2560.
+ *  - XII (HUD-3): the Sensor card (left 436, top 166, lifted 44 by the F1 sheet and the read-out's own clear of the intent line: top 122) is over the pro target flag (docked at the boss's flank, 369 to 528 across the three windows, y 146 to 204); at 115 the slide above puts the tip over the strip, and the
+ *    designed card and its chip stand on the ribbon's foot (the solver does not know the ribbon).
+ *
+ * What changes, in the three places that were wrong (every rule hangs from `.ffxhud.hud-f1` and from the chapter's own marker, so it matches nothing in any other chapter, nothing with the F1 HUD off, and nothing on the phone):
+ *
+ *  1. The solver is told about the ribbon in these two chapters (`hudAvoidSelectors.f1RibbonEls`: the tip reads it as `keepOff`, in XII the designed card as ink), so it stands the bar and the card on real ground, and the slide is OFF here (below): the bar is where the solver put it.
+ *  2. XII's disc strip is anchored by its RIGHT edge, 8 grid px short of the turn strip's left edge (465, and 440.9 at 115: the strip's own `translate` below still follows it), and gives up to 5 frame px of padding and gap at the windows where the floor has widened it (`--lb-scale` under 2.5).
+ *  3. XII's Sensor card stands in the band under the turn strip (top 79; 75 to 81 tall with the type floor), clear of the flag at every window read, and keeps its size at 115 (a card grown about its foot would reach the strip).
+ *  4. Named losses (carried for Bailey, `docs/handoff/r72-hud.md` section 9): at TEXT SIZE 115 IX's gauge, XII's disc strip AND XII's Sensor card keep their size (the card's type is 13 percent smaller than live's 115, which grows it 1.15 x), and at 130 both chapters
+ *     draw today's HUD (`HudF1Switch.F1_TEXT_CEILING`). The Sensor rule has no `:not(.ffx-sensor--folded)`: the folded one-line chip stands at the same top (79) as the open card, so folding and unfolding does not move the anchor (review m4; one line tall, it clears the strip
+ *     as far as the open card and the flag by more; not yet read in a browser, job HUD-5c). The card's clearances are 5.3 grid px to the flag at 1280 x 720 and 5.8 to the turn strip's foot at 115, inside the HUD's own GAP of 6 (not an overlap; the closest the layout comes).
+ *
+ * The arithmetic (every number below read from the stylesheets and from the r71 sheets, `tests/unit/r72-hud-layout.test.ts`) and the browser jobs HUD-1 to HUD-7 with their predictions are in `docs/handoff/r72-hud.md`.
+ */
+
+/* ------------------------------------------------------------------------------------------------ the advisor's tip is not slid in these two chapters */
+
+/* 100: `hudf1.css` slides the bar 166 grid px right of the box the solver gave it, clear of a ribbon the solver does not know. Here the solver knows the ribbon, so the bar stays in its box. */
+.ffxhud.hud-f1.f1-intel[data-omnis-readout] .mad__card[data-zone='tip'],
+.ffxhud.hud-f1.f1-intel:has(.ffx-zg:not([hidden]):not(.ffx-zg--phone)) .mad__card[data-zone='tip'] {
+  transform: skewX(var(--ig-skew));
+}
+/* 115 and 130: `hudf1-textsize.css` slides it `6 + 160 x scale` and caps its width at the room that leaves (`575.5 - 320.5 x scale`); neither applies where the bar is not slid, and the solver's own width (at most 226) governs. */
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1.f1-intel[data-omnis-readout] .mad__card[data-zone='tip'],
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1.f1-intel:has(.ffx-zg:not([hidden]):not(.ffx-zg--phone)) .mad__card[data-zone='tip'] {
+  transform: skewX(var(--ig-skew));
+  max-width: none;
+}
+
+/* ------------------------------------------------------------------------------------------------ Chapter XII: the disc strip against the turn strip, at every window */
+
+/*
+ * The strip's RIGHT edge is what has to stay clear of the turn strip (left 465, grown left to 440.9 at 115; the 115 rule above, `translate`, carries it), and the strip's width is not ours: it is the text floor's (14 px: 190.2 grid px wide at 2560 x 1440, 195.9 at 1600 x 900, 205.9 at 1440 x 810, 212.7 at
+ * 1366 x 768, 221.65 at 1280 x 720, measured with the shear in the r71 sheets). Anchored by the right edge at `right: 465px` of the 1600 frame (454 grid px, plus the shear's half height 3.2: the painted tip ends at 457.2), the gap to the turn strip is 7.8 grid px at every window and the left end
+ * falls where the width puts it. At 100 that is 235 at 1280 and 267 at 2560, 44.6 and 76 grid px clear of the ribbon (right end 190.7). At 115 the whole strip is carried 24.1 left and its left end is 219.4 at 1280 x 720 (the one tight window: 221.65 wide; the ribbon, grown, ends at 215.05), which is why the
+ * strip gives up padding and gap there: `--omr-tight` is 0 from 1600 x 900 up (`--lb-scale` 2.5), 3.7 frame px at 1366 x 768 and 5 at 1280 x 720 and under (clamped), taken off the left and right padding and the two gaps (four places: 20 frame px, 8 grid px, at 1280). No label changes size: the floor stays.
+ */
+.ffxhud.hud-f1 .ffx-omr:not(.ffx-omr--phone) .ffx-omr__strip {
+  --omr-tight: clamp(0px, calc((2.5 - var(--lb-scale, 2.5)) * 10px), 5px);
+  left: auto;
+  right: 465px;
+  gap: calc(14px - var(--omr-tight));
+  padding: 8px calc(18px - var(--omr-tight)) 8px calc(14px - var(--omr-tight));
+}
+
+/* ------------------------------------------------------------------------------------------------ Chapter XII: the Sensor card out of the flag's way */
+
+/*
+ * With Intel (G) open the F1 sheet stands the Sensor card at top 144 (166 less its own 22), and the read-out lifts it clear of the intent line (22 more): top 122, 75 to 81 tall (the type floor: 75 at 2560 x 1440, 78 at 1600 x 900, 81 at 1280 x 720), x 436 to 536 (the shear: 428 to 544). The pro target flag docks at the boss's flank (r71 reads, grid px: x 296 to 369 at 2560, 369 to 456 at 1600,
+ * 419 to 528 at 1280; y 146 to 204) and the two met (71.6 x 78 px at 1600, 201 x 67 at 1280). The band under the turn strip, above every flag read and the intent card (top 203 at 100, 184 at 115), is y 79 to 160: the card stands there (top 79, the strip's foot at 115 is 73.2: 5.8 clear; its foot is 154 at 2560, 157 at 1600 and 160 at 1280), 5.4 above the
+ * highest flag read that shares its columns, at 1280 (165.4; 12 at 1600; at 2560 the flag is left of the card altogether), where the `margin-top` of the F1 sheet and the read-out's lift are no longer needed (the lift reads 0 here: nothing is under it). `left` and the steer (`--ffx-sensor-dx`) are untouched. At 115 the card keeps its size (`scale: none`: grown about its foot it would rise 11.7 grid px into the strip).
+ */
+.ffxhud.hud-f1.f1-intel[data-omnis-readout] .ffx-sensor {
+  margin-top: 0;
+  top: calc(79px + var(--ffx-sensor-dy, 0px) + var(--ffx-sensor-py, 0px));
+}
+html[data-text-size]:not([data-text-size='100']):not([data-phone-battle]) .ffxhud.hud-f1.f1-intel[data-omnis-readout] .ffx-sensor {
+  scale: none;
+  /* `text-size.css` sets `transform-origin: right bottom` for the growth; the skew turns about it too, so left alone it would pivot on the foot and the rows would sit 8 grid px right of where they stand at 100 (the same as review m1 for the gauge and the strip) */
   transform-origin: center;
 }

@@ -17,6 +17,7 @@
  */
 
 import { PIECE_HOLDS } from './PieceHolds.ts';
+import { SKY_TODAY_HOLDS } from './PieceHoldsSky.ts';
 
 export type DemoGame = 'ffx' | 'ffx2';
 
@@ -70,7 +71,7 @@ export interface TreatedEntry {
 
 /**
  * THE LIST. The booth pair (release 60 and 64: the pair is on from the first release that had the pack), Leblanc (release 69, `booth-leblanc`: Chapter VI, `ffx2-leblanc`, FFX-2; the HIDDEN experiment
- * `exp-leblanc` is not this chapter and is never listed) and, in batch 2 (release 70, merged as `booth-b2`), Lady Yunalesca (the FFX lane `booth-ffx-yunalesca`: Chapter II, `yunalesca`, FFX; the first FFX chapter beyond Chapter I; built on the release 69 base, hence "release 69" in that lane's comments) and the three FFX-2 chapters named below, and, in batch 3 (also release 70 at the integration, the FFX-2 lane `booth-ffx2-b3`), Trema (Chapter XIII, `ffx2-trema`, FFX-2). **The r70 verdict pass (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four of the fourteen back out (IX, XII, V and XI: a major each, below); ten were treated in release 70; Chapters IX and XII are back on `booth-ffx-b4-hud` (FFX only: the F1 HUD's layout against their own panels is fixed, `docs/handoff/booth-ffx-b4-hud.md`) and Chapters V and XI are back on `booth-ffx2-b4-sky` (FFX-2 only, `docs/handoff/booth-ffx2-b4-sky.md`) with the HD-2D look and the pro arena grade HELD (`PieceHolds.ts`), so the Farplane's sky draws as release 69 draws it: fourteen are treated.** **The last five listed chapters (`booth-b4-last`, `docs/handoff/booth-b4-last.md`) add four with written holds (Chapters VIII, XVIII and 27 FFX only, Chapter XVI FFX-2 only): eighteen of the nineteen listed chapters were treated at the merge; Chapter XVII (`sin-fins-core`) stays out.** **The r71 verdict pass (2026-10-31, `docs/handoff/booth-b4.md` section 12) took Chapters IX and XII (FFX only: a major each, below) back out and added `hd2d` and `arena` holds to Chapter VIII: sixteen of the nineteen listed chapters are treated.** **The driver's call on the second focused review of the release 71 candidate (2026-11-01, `critic/reviews/4c01379d4-focused`, R71-C1) took Chapter XVIII (Sin's face, FFX only) off: 17 one-frame hops over 100 px remain after the real hold, against 0 on `?treated=pack`; its rows stay, unread: fifteen of the nineteen listed chapters are treated.** A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
+ * `exp-leblanc` is not this chapter and is never listed) and, in batch 2 (release 70, merged as `booth-b2`), Lady Yunalesca (the FFX lane `booth-ffx-yunalesca`: Chapter II, `yunalesca`, FFX; the first FFX chapter beyond Chapter I; built on the release 69 base, hence "release 69" in that lane's comments) and the three FFX-2 chapters named below, and, in batch 3 (also release 70 at the integration, the FFX-2 lane `booth-ffx2-b3`), Trema (Chapter XIII, `ffx2-trema`, FFX-2). **The r70 verdict pass (2026-10-31, `docs/handoff/booth-b3.md` section 12) took four of the fourteen back out (IX, XII, V and XI: a major each, below); ten were treated in release 70; Chapters IX and XII are back on `booth-ffx-b4-hud` (FFX only: the F1 HUD's layout against their own panels is fixed, `docs/handoff/booth-ffx-b4-hud.md`) and Chapters V and XI are back on `booth-ffx2-b4-sky` (FFX-2 only, `docs/handoff/booth-ffx2-b4-sky.md`) with the HD-2D look and the pro arena grade HELD (`PieceHolds.ts`), so the Farplane's sky draws as release 69 draws it: fourteen are treated.** **The last five listed chapters (`booth-b4-last`, `docs/handoff/booth-b4-last.md`) add four with written holds (Chapters VIII, XVIII and 27 FFX only, Chapter XVI FFX-2 only): eighteen of the nineteen listed chapters were treated at the merge; Chapter XVII (`sin-fins-core`) stays out.** **The r71 verdict pass (2026-10-31, `docs/handoff/booth-b4.md` section 12) took Chapters IX and XII (FFX only: a major each, below) back out and added `hd2d` and `arena` holds to Chapter VIII: sixteen of the nineteen listed chapters are treated.** **The driver's call on the second focused review of the release 71 candidate (2026-11-01, `critic/reviews/4c01379d4-focused`, R71-C1) took Chapter XVIII (Sin's face, FFX only) off: 17 one-frame hops over 100 px remain after the real hold, against 0 on `?treated=pack`; its rows stay, unread: fifteen of the nineteen listed chapters are treated. `r72-hud` (2026-11-01, `docs/handoff/r72-hud.md`) puts IX and XII back (FFX only: their HUD layout fixed, below), the pair's `since` r71 as the first lane wrote it (the driver's to renumber): seventeen of the nineteen listed chapters are treated (10 FFX, 7 FFX-2), and Chapters XVII and XVIII are the two that are not.** A twentieth id fails `tests/unit/booth-treated-chapters.test.ts` until it names a chapter the registry lists, with the game the registry says.
  */
 export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.freeze({
   'seymour-flux': { game: 'ffx', since: 'r60' },
@@ -79,17 +80,19 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
   // named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber (batch 3 shipped together with batch 2, in release 70, at the r70 integration).
   'seymour-anima-macalania': { game: 'ffx', since: 'r70' },
   'seymour-natus': { game: 'ffx', since: 'r70' },
-  // Chapter IX (Yojimbo, `yojimbo-cavern`, FFX only) LEFT THIS LIST in the r70 verdict pass (a major: the Zanmato gauge panel ended against the F1 turn strip), CAME BACK on `booth-ffx-b4-hud` (the gauge between the F1 ribbon and the F1 turn strip: `src/ui/hudf1/hudf1-chapters.css`) and LEFT AGAIN in the
-  // r71 verdict pass (2026-10-31, `docs/handoff/booth-b4.md` section 12, job HUD-3): with Intel (G) open and the target cursor up, the advisor's one-row tip lands on the gauge (634 x 53 px at 2560 x 1440, 397 x 33 at 1600 x 900, 318 x 26 at 1280 x 720; it covers the boss name and the gauge header; live reads 0 in the same states), a major the
-  // treatment introduced and release 70 does not have (the layout reads HUD-1, HUD-2 and HUD-4 at 130 were exact). Its rows (look, arena, holds, rim), `hudf1-chapters.css` and `F1_TEXT_CEILING` stay, unread; it answers `NOT_YET` in `tests/unit/booth-treated-chapters.test.ts`. It comes back when the tip row folds or moves
-  // while the gauge is up and HUD-3 reads 0 overlaps at 1280, 1600 and 2560 at TEXT SIZE 100 and 115 (one line puts it back, and the lane's own gated cases turn on with no edit).
+  // Chapter IX (Yojimbo, `yojimbo-cavern`, FFX only) LEFT THIS LIST in the r70 verdict pass (a major: the Zanmato gauge panel ended against the F1 turn strip), CAME BACK on `booth-ffx-b4-hud` (the gauge between the F1 ribbon and the F1 turn strip: `src/ui/hudf1/hudf1-chapters.css`), LEFT AGAIN in the
+  // r71 verdict pass (2026-10-31, `docs/handoff/booth-b4.md` section 12, job HUD-3: with Intel (G) open and the target cursor up, the advisor's one-row tip landed on the gauge, 634 x 53 px at 2560 x 1440, 397 x 33 at 1600 x 900, 318 x 26 at 1280 x 720; live reads 0) and is BACK on `r72-hud`
+  // (2026-11-01, `docs/handoff/r72-hud.md`, FFX only): the F1 ribbon is a solid box to the advisor's solver while the gauge is up (`hudAvoidSelectors.f1RibbonEls`: the tip solves against it, clear of the gauge), and the tip is NOT slid right of the ribbon here (`hudf1-chapters.css`: the stylesheet's 166 grid px is Chapter I's),
+  // so the bar stands where it was solved. It holds the pieces named in {@link PIECE_HOLDS}, and `F1_TEXT_CEILING` still hands it today's HUD at TEXT SIZE 130. The browser read (HUD-1 to HUD-7 of the handoff) is the next review's: `since` stays r71 (the batch's release number, the driver's to renumber).
+  'yojimbo-cavern': { game: 'ffx', since: 'r71' },
   // Batch 3b (`booth-ffx-b3b`, FFX only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter III (Braska's Final Aeon, seven links), Chapter XII (Seymour Omnis and the four Mortiphasm discs) and Chapter XIV (Isaaru's contest of aeons,
   // three links, Yuna alone). `since` is the batch's release number, the driver's to renumber.
   'braskas-final-aeon': { game: 'ffx', since: 'r70' },
-  // Chapter XII (Seymour Omnis, `seymour-omnis`, FFX only) LEFT THIS LIST in the r70 verdict pass (a major: the Enemy Intent card clipped the acting hero's HP numeral), CAME BACK on `booth-ffx-b4-hud` (the card's foot 6 grid px above the first party card: `hudf1-chapters.css`) and LEFT AGAIN in the r71
-  // verdict pass (2026-10-31, `docs/handoff/booth-b4.md` section 12, jobs HUD-1 and HUD-3): the disc strip and its note are painted over the F1 turn strip at every width under 1920 at TEXT SIZE 100 (58.7 x 29.6 px at 1280 x 720, 43.8 x 29.9 at 1366 x 768, 30.8 x 31.5 at 1440 x 810, 16.2 at 1536 x 864, 9.3 at 1600 x 900; over the TURN ORDER
-  // caption and the NOW tag; live reads 0 because its turn order is a right-hand column) and, with Intel (G) and the target cursor, the Sensor plate overlaps the target plate (71.6 x 78 px at 1600, 201 x 67 at 1280): two majors the treatment introduced. The card half of the lane was exact (foot 979 on all 233 sampled frames). Its rows,
-  // `hudf1-chapters.css` and `F1_TEXT_CEILING` stay, unread; it answers `NOT_YET`. It comes back when the strip and its note lie left of the turn strip at every width from 1280 and HUD-1 and HUD-3 read 0 overlaps at 1280, 1366, 1440 and 1600 (one line puts it back).
+  // Chapter XII (Seymour Omnis, `seymour-omnis`, FFX only) LEFT THIS LIST in the r70 verdict pass (a major: the Enemy Intent card clipped the acting hero's HP numeral), CAME BACK on `booth-ffx-b4-hud` (the card's foot 6 grid px above the first party card: `hudf1-chapters.css`), LEFT AGAIN in the r71
+  // verdict pass (2026-10-31, `docs/handoff/booth-b4.md` section 12, jobs HUD-1 and HUD-3: the disc strip and its note painted over the F1 turn strip at every width under 1920, 58.7 x 29.6 px at 1280 x 720 and 9.3 at 1600 x 900; the Sensor plate over the target flag, 71.6 x 78 px at 1600, 201 x 67 at 1280)
+  // and is BACK on `r72-hud` (2026-11-01, `docs/handoff/r72-hud.md`, FFX only): the strip is anchored by its right edge 8 grid px short of the turn strip (and gives up padding at the small windows), the Sensor card stands under the turn strip clear of the flag, the F1 ribbon is a solid box to the advisor's
+  // solver (the card and the tip stand clear of it) and the tip is not slid (`hudf1-chapters.css`, `hudAvoidSelectors.f1RibbonEls`). It holds the pieces named in {@link PIECE_HOLDS}; the card half of the first lane was exact (foot 979 on all 233 sampled frames) and is untouched. Named losses (carried for Bailey, `r72-hud.md` section 9): at TEXT SIZE 115 the disc strip AND the Sensor card keep their size here (the card's type is 13 percent smaller than live's 115; IX's gauge keeps its size too), and at 130 the chapter draws today's HUD.
+  'seymour-omnis': { game: 'ffx', since: 'r71' },
   'isaaru-via-purifico': { game: 'ffx', since: 'r70' },
   // The last five listed chapters, the FFX lane `booth-b4-last` (FFX only; Bailey 2026-10-30: the booth treatment for every listed chapter; the holds are in `PieceHoldsLast.ts`): Chapter VIII (Evrae, on the Fahrenheit's deck), Chapter XVIII (Sin's face, link 4 on the same deck over the Bevelle plate) and
   // the Mirror Aeons chapter (Chapter 27 in the list: two plates, no @2x master for the first). Chapter XVII (Sin's Fins and Core, `sin-fins-core`) does NOT join: its Fin plate meets the F1 turn strip and its flight plate is the brightest of any listed chapter's fight plate, 0.659 against the Farplane's 0.628 that clipped (`tests/unit/booth-treated-chapters.test.ts` `NOT_YET`). `since` is the batch's release number.
@@ -104,7 +107,8 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
   // three links). Each holds the pieces named in {@link PIECE_HOLDS} and plays every other piece. `since` is the batch's release number, the driver's to renumber.
   // Chapters V (`ffx2-vegnagun-shuyin`) and XI (`ffx2-fallen-aeons`) LEFT THIS LIST in the r70 verdict pass (the HD-2D bold look clips the Farplane and the Road's very bright sky to a flat white halo: V's first menu and all five links; XI's fights
   // whenever the follower brings the spire's burst into frame; a major the treatment introduced) and CAME BACK in `booth-ffx2-b4-sky` (FFX-2 only; `since` r71, the driver's to renumber) with the look HELD: `PieceHolds.ts` holds `hd2d` and `arena` in both, so the
-  // plate draws as release 69 draws it, and Chapter XI holds `cam` as well (its follower crops Yuna where release 69's frame never does). `?skygrade=a|b|c` (`look/pro/SkyGrade.ts`, default off) builds three lighter grades to film for Bailey.
+  // plate draws as release 69 draws it, and Chapter XI holds `cam` as well (its follower crops Yuna where release 69's frame never does). `?skygrade=a|b|c` (`look/pro/SkyGrade.ts`) builds three lighter grades to film for Bailey. **r72 (`r72-sky`): Chapter XI plays `hd2d` and `arena` with grade C by default**
+  // (Bailey's pick from the stills: "dimmer lights: a dark night where the burst still shines"; its two holds moved to `PieceHoldsSky.ts`, where `?skygrade=today` puts release 71's Chapter XI back); Chapter V keeps both holds (C leaves 21 percent of its sky band over 240).
   'ffx2-vegnagun-shuyin': { game: 'ffx2', since: 'r71' },
   'ffx2-fallen-aeons': { game: 'ffx2', since: 'r71' },
   'ffx2-den-of-woe': { game: 'ffx2', since: 'r70' },
@@ -146,9 +150,49 @@ export function setTreatedScope(value: TreatedScope | null): void {
   scopeNow = value;
 }
 
-/** The written reason a treated chapter holds a piece back, or undefined. */
+/**
+ * `?skygrade=` (r72, `look/pro/SkyGrade.ts`; FFX-2 only: the Farplane's two plates), the whole word: `a`, `b` or `c` (one of the three lighter grades, to film), `today` (release 71's Chapter XI: its `hd2d` and `arena` HELD again, see {@link SKY_TODAY_HOLDS}), `off` (set live only,
+ * `__pyrefly.skyGrade(null)`: no grade patches the room, the r70 control arm) or `default` (no word, or a word that names none of these: each chapter plays its own default, Chapter XI grade C and Chapter V nothing). The word lives here, beside `?treated=`, because the hold
+ * lookup below reads it and `SkyGrade.ts` imports this module, so it could not hold the state itself without a cycle.
+ */
+export type SkyWord = 'a' | 'b' | 'c' | 'today' | 'off' | 'default';
+
+/** `?skygrade=a|b|c|today` from a search string (pure): the word, or `default` (no word, no page, or a word that names none). */
+export function skyWordFromSearch(search: string | undefined): SkyWord {
+  const w = queryWord(search, 'skygrade');
+  return w === 'a' || w === 'b' || w === 'c' || w === 'today' ? w : 'default';
+}
+
+let skyWordNow: SkyWord | null = null;
+
+/** The word the page asked for (read once from the address). */
+export function skyWord(): SkyWord {
+  if (skyWordNow === null) skyWordNow = skyWordFromSearch(globalThis.location === undefined ? undefined : (globalThis.location.search ?? ''));
+  return skyWordNow;
+}
+
+/** Tests and `__pyrefly.skyGrade(...)`: force the word (`null` reads the address again). */
+export function setSkyWord(value: SkyWord | null): void {
+  skyWordNow = value;
+}
+
+/**
+ * The written reason a treated chapter holds a piece back, or undefined. A hold of {@link PIECE_HOLDS} always answers; a hold of {@link SKY_TODAY_HOLDS} (Chapter XI's `hd2d` and `arena`, which r72 plays by default) answers only while the address says `?skygrade=today`,
+ * so that word is release 71's Chapter XI exactly.
+ */
 export function treatedHold(id: string | undefined, piece: TreatedPiece): string | undefined {
-  return id === undefined || !Object.prototype.hasOwnProperty.call(PIECE_HOLDS, id) ? undefined : PIECE_HOLDS[id]![piece];
+  if (id === undefined) return undefined;
+  const own = Object.prototype.hasOwnProperty.call(PIECE_HOLDS, id) ? PIECE_HOLDS[id]![piece] : undefined;
+  if (own !== undefined || skyWord() !== 'today') return own;
+  return Object.prototype.hasOwnProperty.call(SKY_TODAY_HOLDS, id) ? SKY_TODAY_HOLDS[id]![piece] : undefined;
+}
+
+/** The pieces a chapter holds back right now: the ones `?skygrade=today` adds (release 71's order has them first), then `PIECE_HOLDS`' rows. The debug read `__pyrefly.treated().holds` reports this. */
+export function treatedHolds(id: string | undefined): string[] {
+  if (id === undefined) return [];
+  const own = Object.prototype.hasOwnProperty.call(PIECE_HOLDS, id) ? Object.keys(PIECE_HOLDS[id]!) : [];
+  const extra = skyWord() === 'today' && Object.prototype.hasOwnProperty.call(SKY_TODAY_HOLDS, id) ? Object.keys(SKY_TODAY_HOLDS[id]!) : [];
+  return [...extra.filter((p) => !own.includes(p)), ...own];
 }
 
 /**

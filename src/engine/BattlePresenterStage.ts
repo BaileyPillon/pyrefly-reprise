@@ -37,7 +37,7 @@ import { HoldableCamera } from './TargetFrameHold.ts';
 import { stageCamera } from './StageFacing.ts';
 import { departureKindOf } from './BattlePresenterDepartures.ts';
 import { disposeStoneShards, stoneShatter } from './StoneShards.ts';
-import { layProneFigures } from './ProneLay.ts';
+import { layProneFigures, slideEaseDt } from './ProneLay.ts';
 import { holdHeads } from './HeadLockStage.ts';
 import { downWithoutKoPainting } from './KoFallback.ts';
 import { cutRigsOf } from './motion/CutRig.ts';
@@ -976,7 +976,7 @@ export class PaintedStage implements BattleStage {
       figures.map((s) => s.actor),
       this.opts.camera,
       this.opts.battleCamera,
-      pinned,
+      pinned, slideEaseDt(realDt, this.opts.comfort?.().reduceMotion === true), // r72-motion: the lying body eases to the place it was laid (ProneLay.SLIDE_EASE_MS) on the real clock, only where the new curves play and never under REDUCE MOTION (motion/SlideEase.ts)
     );
     // D-510: every shown plane's head held to the idle's on screen, under this frame's camera (HeadLockStage.ts). After `layProneFigures`, which slides a body along
     // the floor on the very frame it lies down: the lock reads the plane where it will be drawn.
