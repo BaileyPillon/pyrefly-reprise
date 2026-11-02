@@ -99,16 +99,26 @@ html[data-text-size='130']:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-sinhud:n
 /* Chapter XVII under the treatment draws the F1 slab, whose turn strip stands at x 465 to 625.5 of the 640 x 360 grid (440.9 to 625.5 at TEXT SIZE 115) and y 22 to 82, and the Fin plate (links I and II) stood at x 328 and
    out to 516 or more, ON the strip's first tiles (51 grid px at the minimum width, a major the treatment would have introduced: `docs/handoff/booth-b4-last.md` section 1). Under `.hud-f1` the plate is anchored by its RIGHT edge,
    `right: 467px` of the 1600 frame: its layout box ends at 453.2 grid px and the shear's half height (3.9) puts its painted tip at 457.1, 7.9 grid px short of the strip, whatever its width. The width is the charge line's, 195.9 grid px
-   (406.8 frame px of Chakra Petch Bold at 15 px with its 0.14em spacing, in a row 448.8 wide, in a plate 489.8: read from the font file, `tests/unit/r74-fins-hud.test.ts`), so the left end falls at 257.3, 65 grid px right of the
-   ribbon (right end 188) and 253.4 at its lowest corner. At 115 the strip grows to the left, to 440.9, and the plate follows it by the same 24 grid px (`translate`: tip 433.1, 7.8 short of the strip, left end 233.3 against the grown
-   ribbon's 212). Above 115 the band between the ribbon and the strip is 180.9 grid px, narrower than the plate, so the chapter keeps today's HUD there (`HudF1Switch.F1_TEXT_CEILING`): no 130 rule. The rules hang from `.hud-f1` and
-   from the landscape widget only, so the old HUD (`?hud=today`, `?treated=pack`, TEXT SIZE 130) and the phone draw the plate where it always stood; the advisor card reads the plate's rectangle (`hudAvoidSelectors`), so it dodges it where it stands now. */
+   (406.8 frame px of Chakra Petch Bold at 15 px with its 0.14em spacing, in a row 448.8 wide, in a plate 489.8: read from the font file, `tests/unit/r74-fins-hud.test.ts`), so the left end falls at 257.3 (253.4 at its lowest corner), 62.7 grid px right of the
+   ribbon's painted edge (the ribbon is a skewed slab: 188 declared, 190.7 at its top corner) at that corner. At 115 the strip grows to the left, to 440.9, and the plate follows it by the same 24 grid px (`translate`: tip 433.1, 7.8 short of the strip, left end 233.3 against the grown
+   ribbon's painted edge, 215.1: 14.3 at the lowest corner). Above 115 the band between the ribbon and the strip is 180.9 grid px, narrower than the plate, so the chapter keeps today's HUD there (`HudF1Switch.F1_TEXT_CEILING`): no 130 rule. The rules hang from `.hud-f1` and
+   from the landscape widget only, so the old HUD (`?hud=today`, `?treated=pack`, TEXT SIZE 130) and the phone draw the plate where it always stood; the advisor card reads the plate's rectangle (`hudAvoidSelectors`), so it dodges it where it stands now.
+
+   Two more things stand in the plate's new place (the review of r74-fins, `f55189837`, 2026-11-02). (1) The top HELP bar (`.ffx-helpbar`, the enemy's ability name, centred at x 320, at least 128 wide: x 256 to 384 or more, y 4 to 26.9) is under the plate's old
+   top (22.4) for the whole of the plate's width, so the plate covers the bar's gold underline and bottom padding (4.5 grid px); `top: 82.3px` of the frame puts the plate's top at 32.9, 6.0 under the bar's foot. (2) The action banner (`.ig-banner`, left 21.33, top 43
+   under the grown ribbon, 32 high) runs out to the plate for the longest order lines ("Kimahri orders Cid to pull back" reached x 264.7 against the plate's left end at 255.3, an overlap of 9.4 grid px, 23 px at 1600 x 900, at the very moment the charge line asks for it),
+   and the plate (z-index 12) is above it. Whenever a Fin plate stands in the landscape widget under the F1 HUD the banner stands UNDER the plate at `top: 75.95px`: the plate's foot is 69.9 (92.5 frame px of height at 0.4), the banner's top 75.95 is 6.0 below it, and its foot 107.9 is 6.0 above the
+   hero's top at TEXT SIZE 115 (114; 140 at 100). It is one `:has()` rule on the F1 root (the sheets already use the form) and it beats the text-size step's `top` (`hudf1-textsize.css`: 18 + 25 x scale) by specificity, not by order. */
 .ffxhud.hud-f1 .ffx-sinhud:not(.ffx-sinhud--phone) .ffx-sinfin {
   left: auto;
   right: 467px;
+  top: 82.3px;
 }
 html[data-text-size='115']:not([data-phone-battle]) .ffxhud.hud-f1 .ffx-sinhud:not(.ffx-sinhud--phone) .ffx-sinfin {
   translate: -60px 0;
+}
+.ffxhud.hud-f1:has(.ffx-sinhud:not(.ffx-sinhud--phone):not([hidden]) .ffx-sinfin:not([hidden])) .ig-banner {
+  top: 75.95px;
 }
 
 @media (prefers-reduced-motion: reduce) {

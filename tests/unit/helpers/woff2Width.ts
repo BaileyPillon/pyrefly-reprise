@@ -25,6 +25,8 @@ export interface FontMetrics {
   advance(ch: string, px: number): number;
   /** Does the face draw this character? */
   has(ch: string): boolean;
+  /** `line-height: normal` in em: the `hhea` ascender less the descender (a negative number) plus the line gap, over the units per em (the Chakra Petch faces set USE_TYPO_METRICS, whose typographic metrics are the same numbers). */
+  lineHeight: number;
 }
 
 /** Read a font's metrics from a `.woff2` under the repository root (`rel` is relative to it). */
@@ -72,6 +74,7 @@ export function fontMetrics(rel: string): FontMetrics {
   };
   const upm = data.readUInt16BE(at('head') + 18);
   const hmetrics = data.readUInt16BE(at('hhea') + 34);
+  const lineHeight = (data.readInt16BE(at('hhea') + 4) - data.readInt16BE(at('hhea') + 6) + data.readInt16BE(at('hhea') + 8)) / upm;
   const hmtx = at('hmtx');
   const advanceOf = (gid: number): number => data.readUInt16BE(hmtx + 4 * Math.min(gid, hmetrics - 1));
   const cmap = at('cmap');
@@ -116,6 +119,7 @@ export function fontMetrics(rel: string): FontMetrics {
   };
   return {
     upm,
+    lineHeight,
     advance: (ch, px) => (advanceOf(gidOf(ch.codePointAt(0)!)) / upm) * px,
     has: (ch) => gidOf(ch.codePointAt(0)!) !== 0,
   };

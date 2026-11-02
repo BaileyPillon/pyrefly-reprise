@@ -152,8 +152,12 @@ describe('the stylesheets reach only their chapters', () => {
     const css = readFileSync(resolve('src/ui/ffx/sin-hud.css'), 'utf8');
     const sel = css.replace(/\/\*[\s\S]*?\*\//g, '').split('}').map((r) => r.split('{')[0]!.trim()).filter((s) => s.includes('hud-f1'));
     expect(sel.length).toBeGreaterThanOrEqual(2);
+    // r74-fins review major 1: ONE more rule, the action banner stepping under the Fin plate, only while a plate stands in the landscape widget under the F1 root (the Sin HUD's own phone widget and a hidden plate never match)
+    const BANNER_RULE = '.ffxhud.hud-f1:has(.ffx-sinhud:not(.ffx-sinhud--phone):not([hidden]) .ffx-sinfin:not([hidden])) .ig-banner';
+    expect(sel.filter((s) => s === BANNER_RULE)).toHaveLength(1);
     for (const s of sel) {
       for (const part of s.split(',').map((p) => p.trim())) {
+        if (part === BANNER_RULE) continue;
         expect(part, part).toContain('.hud-f1 .ffx-sinhud:not(.ffx-sinhud--phone)');
         expect(part, part).toMatch(/\.ffx-sinclock$|\.ffx-sinhud__gaze$|\.ffx-sinfin$/);
       }

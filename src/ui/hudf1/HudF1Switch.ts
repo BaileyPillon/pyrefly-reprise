@@ -91,7 +91,7 @@ export function setHudF1TextMode(value: HudF1TextMode | null): void {
  * to measure the fix against but a mockup (rule 9). At 100 and 115 both clear. Lifts when a narrower gauge and strip are picked from a mockup (then delete the row). Keyed by chapter id, read with `hasOwnProperty`.
  *
  * **r74-fins (FFX only): Chapter XVII (`sin-fins-core`) joins the table at 115.** Its Fin plate (`.ffx-sinfin`, links I and II) stands in the same band, right-anchored 7.9 grid px short of the turn strip at 100 and 7.8 at 115 (`sin-hud.css`), and it is 195.9 grid px wide in its widest
- * state (the charge line, read from the font file: `tests/unit/r74-fins-hud.test.ts`), so it clears the ribbon by 65 grid px at 100 and 17 at 115. The band between the ribbon and the strip is 277, 228.9 and 180.9 grid px at 100, 115 and 130, and the plate needs 195.9 plus a GAP
+ * state (the charge line, read from the font file: `tests/unit/r74-fins-hud.test.ts`), so it clears the ribbon's painted edge (the ribbon is a skewed slab) by 62.7 grid px at 100 and 14.3 at 115. The band between that edge and the strip is 274.3, 225.9 and 177.4 grid px at 100, 115 and 130, and the plate needs 195.9 plus a GAP
  * (6) on each side, 207.9: at 130 the band is too narrow, so the chapter keeps today's HUD there, as release 71 did (`docs/handoff/r74-fins.md`). Lifts when a narrower plate is picked from a mockup (then delete the row).
  */
 export const F1_TEXT_CEILING: Readonly<Record<string, number>> = Object.freeze({
