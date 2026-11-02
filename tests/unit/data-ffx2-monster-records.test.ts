@@ -98,6 +98,8 @@ describe('FFX-2 monster rows are the game\'s rows', () => {
       if (key.startsWith('ffx2-besaid-valefor/')) continue;
       // The hidden Angra Mainyu's rows 268 to 270 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/angra_mainyu_rows.json, tests/unit/chapters/angra-mainyu-data.test.ts).
       if (key.startsWith('ffx2-bikanel-angra-mainyu/')) continue;
+      // The hidden Fallen Maesters' rows 221, 69, 232 and 239 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/fallen_maesters_rows.json, tests/unit/chapters/fallen-maesters-data.test.ts).
+      if (key.startsWith('ffx2-via-infinito-floor-')) continue;
       const row = ROWS[key];
       expect(row, `${key}: no fixture row`).toBeDefined();
       if (row === undefined) continue;

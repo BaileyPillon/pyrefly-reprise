@@ -53,6 +53,9 @@ import { x2ValeforAbilities } from './valefor-abilities.ts';
 // Angra Mainyu, Zarich and Tawrich in the Bikanel Desert (FFX-2 Chapter 5, the mission "Showdown in the Sands"; the hidden chapter "Angra Mainyu", FFX-2 only): `./angra-mainyu.ts`.
 import { angraMainyuGroups } from './angra-mainyu.ts';
 import { x2AngraMainyuAbilities } from './angra-mainyu-abilities.ts';
+// Aranea, Black Elemental, Concherer and Chac on the Via Infinito's floors 20, 40, 60 and 80 (the hidden chapter "The Fallen Maesters", FFX-2 only): `./fallen-maesters.ts`.
+import { fallenMaestersGroups } from './fallen-maesters.ts';
+import { x2FallenMaestersAbilities } from './fallen-maesters-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -72,6 +75,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...touristTrapGroups,
   ...valeforGroups,
   ...angraMainyuGroups,
+  ...fallenMaestersGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -101,6 +105,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...touristTrapAbilities,
   ...x2ValeforAbilities,
   ...x2AngraMainyuAbilities,
+  ...x2FallenMaestersAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };
