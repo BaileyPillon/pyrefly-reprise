@@ -40,23 +40,24 @@ const MERGED: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readonly 
   'isaaru-via-purifico': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // XIV
   'ffx2-den-of-woe': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XV
   'ffx2-ixion-djose': { game: 'ffx2', held: ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'] }, // XVI
+  'sin-face': { game: 'ffx', held: ['card', 'breath', 'cam', 'moments', 'smear', 'real'] }, // XVIII: back on r73-fast; real stays held
   'mirror-aeons': { game: 'ffx', held: ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'] }, // 27: real stays held
 };
 
 const heldOf = (id: string): string[] => Object.keys(PIECE_HOLDS[id] ?? {}).filter((p) => treatedHold(id, p as never) !== undefined);
 
-describe('the merged list: seventeen of the nineteen, each with the pieces it holds', () => {
-  it('is exactly the table, in the game the registry says (rule 14): 10 FFX and 7 FFX-2; Chapters XVII and XVIII are the two that are not', () => {
+describe('the merged list: seventeen of the nineteen at the merge (eighteen since r73-fast put Sin\'s face back), each with the pieces it holds', () => {
+  it('is exactly the table, in the game the registry says (rule 14): 11 FFX and 7 FFX-2; Chapter XVII is the one that is not', () => {
     expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(Object.keys(MERGED).sort());
     for (const [id, m] of Object.entries(MERGED)) {
       expect(TREATED_CHAPTERS[id]!.game, id).toBe(m.game);
       expect(getChapter(id)?.game, id).toBe(m.game);
       expect(heldOf(id), id).toEqual(m.held);
     }
-    expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx')).toHaveLength(10);
+    expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx')).toHaveLength(11);
     expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx2')).toHaveLength(7);
-    expect(CHAPTER_IDS.filter((id) => !(id in TREATED_CHAPTERS)).sort()).toEqual(['sin-face', 'sin-fins-core']);
-    expect(Object.keys(WITHDRAWN_R70)).toEqual(['sin-face']); // Sin's face keeps its rows, unread
+    expect(CHAPTER_IDS.filter((id) => !(id in TREATED_CHAPTERS)).sort()).toEqual(['sin-fins-core']);
+    expect(Object.keys(WITHDRAWN_R70)).toEqual([]); // nothing is withdrawn
   });
 
   it('Chapters IX and XII (r72-hud, FFX only) are on the list since r71 and Chapters III and XI play the pieces the lanes lifted (the real clips; the HD-2D look and the pro arena under grade C)', () => {

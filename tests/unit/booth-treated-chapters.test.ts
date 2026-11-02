@@ -55,7 +55,7 @@ const TREATED_NOW: Readonly<Record<string, { game: 'ffx' | 'ffx2'; since: string
   'ffx2-den-of-woe': { game: 'ffx2', since: 'r70' }, // batch 2, the FFX-2 lane `booth-ffx2-b2`
   'ffx2-trema': { game: 'ffx2', since: 'r70' }, // batch 3, the FFX-2 lane `booth-ffx2-b3`
   'evrae-airship': { game: 'ffx', since: 'r71' }, // the last five listed chapters, `booth-b4-last`
-  // 'sin-face' (XVIII) left the list for release 71 (the second focused review, R71-C1, 2026-11-01): NOT_YET (WITHDRAWN_R70), its rows stay, unread (HELD_WITHDRAWN)
+  'sin-face': { game: 'ffx', since: 'r71' }, // XVIII: left the list for release 71 (the second focused review, R71-C1, 2026-11-01) and is back since r73-fast (the hops were the house strike at the fast playback speed: docs/handoff/r73-fast.md)
   'mirror-aeons': { game: 'ffx', since: 'r71' },
   'ffx2-vegnagun-shuyin': { game: 'ffx2', since: 'r71' }, // back in `booth-ffx2-b4-sky` (FFX-2 only) with the look held
   'ffx2-fallen-aeons': { game: 'ffx2', since: 'r71' }, // back in `booth-ffx2-b4-sky`, the look and the camera held
@@ -77,6 +77,7 @@ const HELD_NOW: Readonly<Record<string, readonly string[]>> = {
   'ffx2-vegnagun-shuyin': ['hd2d', 'arena', 'cam', 'breath', 'moments'], // `booth-ffx2-b4-sky`: the look (the bold look and the arena grade clip the Farplane's sky), the colossus camera, the staged breath, the KO cut
   'ffx2-fallen-aeons': ['cam', 'breath', 'moments'], // `booth-ffx2-b4-sky` held the look too (the same sky); r72 lifted it (grade C by default, `?skygrade=today` holds it again: `PieceHoldsSky.ts`): the follower (it crops Yuna and brings the burst into frame), the staged breath, the KO cut
   'evrae-airship': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'], // r71 focused review (10b426248, R71-C2): `real` held, 13 one-frame Wakka swap hops of 161 to 494 px;  `booth-b4-last`; the r71 verdict added the look (the bold look and the cone put the first menu at 12.19 percent over 240 against 2.68: a white halo); the range director authors the deck's camera; the staged breath needs a tone pick; the knock-out cut is unread on this deck
+  'sin-face': ['card', 'breath', 'cam', 'moments', 'smear', 'real'], // r71 focused review (10b426248, R71-C1): `real` held (and still held since r73-fast: the real clips are not the cause of the hops, and nothing measured them there)
   'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'], // r71 focused review (10b426248, R71-C3): `real` held, 32 one-frame dash hops of 100 to 206.6 px;  two plates under one room key, the first provisional and without an @2x master; the grade is applied once at the scene's entry
   'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'], // Bailey's approved Chamber plate (C2, D-273) with no room rows and no follower row yet, and a swap exception
 };
@@ -85,7 +86,7 @@ const HELD_NOW: Readonly<Record<string, readonly string[]>> = {
  * The holds of the chapters withdrawn now (XVIII, Sin's face, since the second focused review of the release 71 candidate; IX and XII came back in r72-hud and V and XI in batch 4, their holds are in `HELD_NOW`): a chapter a later verdict withdraws keeps its rows in `PIECE_HOLDS`, unread while it is off the list, and they come back into force with one line.
  */
 const HELD_WITHDRAWN: Readonly<Record<string, readonly string[]>> = {
-  'sin-face': ['card', 'breath', 'cam', 'moments', 'smear', 'real'], // r71 focused review (10b426248, R71-C1): `real` held, 28 one-frame hops of 166 to 530 px;  the same deck, a swap exception (`SwapSwitch.SCOPE_EXCEPTIONS`: Auron's lunge return is a planned cut over the cap), and the widest boss painting (aspect 1.89: the full-bleed card crops the snout at 16:9)
+  // none: Chapter XVIII (Sin's face) came back on r73-fast, and its row is in HELD_NOW
 };
 
 /** The one answer the Den's camera test needs: the piece in the chapter under the `all` scope, the scope put back after. */
@@ -119,11 +120,11 @@ describe('the list', () => {
     for (const id of Object.keys(NOT_YET)) expect(LISTED, id).toContain(id);
     expect(treated.length + Object.keys(NOT_YET).length).toBe(LISTED.length);
     expect(LISTED).toHaveLength(19);
-    expect(treated).toHaveLength(17); // r72-hud put IX and XII back (fifteen before); the second focused review of the release 71 candidate took Sin's face off (R71-C1: eighteen at the merge, sixteen after the r71 verdicts took IX and XII off). r70: ten of fourteen, then batch 4: IX, XII, V and XI back (booth-ffx-b4-hud, booth-ffx2-b4-sky) and four of the last five listed chapters (booth-b4-last; Chapter XVII stays out)
+    expect(treated).toHaveLength(18); // r73-fast put Sin's face back (seventeen before); r72-hud put IX and XII back (fifteen before); the second focused review of the release 71 candidate took Sin's face off (R71-C1: eighteen at the merge, sixteen after the r71 verdicts took IX and XII off). r70: ten of fourteen, then batch 4: IX, XII, V and XI back (booth-ffx-b4-hud, booth-ffx2-b4-sky) and four of the last five listed chapters (booth-b4-last; Chapter XVII stays out)
   });
 
-  it('the second focused review of the candidate withdrew Chapter XVIII (FFX only, WITHDRAWN_R70; IX and XII, withdrawn by the r71 verdict pass, came back in r72-hud): each chapter in WITHDRAWN_R70 is NOT_YET with its reason, off the list, and its rows and holds stay in the tables (unread); V and XI (FFX-2 only, back from the r70 pass in booth-ffx2-b4-sky) are on the list and not NOT_YET', () => {
-    expect(Object.keys(WITHDRAWN_R70)).toEqual(['sin-face']);
+  it('nothing is withdrawn now (the second focused review of the candidate withdrew Chapter XVIII, FFX only, and r73-fast put it back; IX and XII, withdrawn by the r71 verdict pass, came back in r72-hud): each chapter in WITHDRAWN_R70 (none) is NOT_YET with its reason, off the list, and its rows and holds stay in the tables (unread); V and XI (FFX-2 only, back from the r70 pass in booth-ffx2-b4-sky) are on the list and not NOT_YET', () => {
+    expect(Object.keys(WITHDRAWN_R70)).toEqual([]);
     for (const id of ['yojimbo-cavern', 'seymour-omnis', 'ffx2-vegnagun-shuyin', 'ffx2-fallen-aeons']) {
       expect(Object.keys(TREATED_CHAPTERS), id).toContain(id);
       expect(Object.prototype.hasOwnProperty.call(NOT_YET, id), id).toBe(false);
@@ -139,7 +140,7 @@ describe('the list', () => {
 
   it('is Chapter I, Chapter IV, Leblanc, Chapter II, batch 2 (the Den of Woe), batch 3a (Macalania, Natus), batch 3b (Braska\'s Final Aeon, Isaaru) and batch 3 FFX-2 (Trema), each with the game the registry says (rule 14); Yojimbo and Omnis (FFX) are back from the r70 verdicts (booth-ffx-b4-hud), and Vegnagun and Shuyin and the Fallen Aeons (FFX-2) are back too (booth-ffx2-b4-sky, since r71)', () => {
     expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(Object.keys(TREATED_NOW).sort());
-    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(['braskas-final-aeon', 'evrae-airship', 'ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-fallen-aeons', 'ffx2-ixion-djose', 'ffx2-leblanc', 'ffx2-trema', 'ffx2-vegnagun-shuyin', 'isaaru-via-purifico', 'mirror-aeons', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'seymour-omnis', 'yojimbo-cavern', 'yunalesca']);
+    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual(['braskas-final-aeon', 'evrae-airship', 'ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-fallen-aeons', 'ffx2-ixion-djose', 'ffx2-leblanc', 'ffx2-trema', 'ffx2-vegnagun-shuyin', 'isaaru-via-purifico', 'mirror-aeons', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'seymour-omnis', 'sin-face', 'yojimbo-cavern', 'yunalesca']);
     for (const [id, e] of Object.entries(TREATED_CHAPTERS)) expect(getChapter(id)?.game, id).toBe(e.game);
     for (const [id, e] of Object.entries(TREATED_NOW)) expect(TREATED_CHAPTERS[id], id).toEqual(e);
     expect(TREATED_CHAPTERS['ffx2-leblanc']).toEqual({ game: 'ffx2', since: 'r69' });
@@ -149,7 +150,7 @@ describe('the list', () => {
     for (const id of ['braskas-final-aeon', 'isaaru-via-purifico']) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r70' }); // batch 3b: FFX only (rule 14): FFX's layout, profile and tables
     expect(TREATED_CHAPTERS['ffx2-trema']).toEqual({ game: 'ffx2', since: 'r70' }); // batch 3: Chapter XIII, FFX-2 only (ATB, dresspheres, Garment Grids: `research/ffx2-trema.md` section 0)
     for (const id of ['yojimbo-cavern', 'seymour-omnis']) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r71' }); // r72-hud (the r71 verdicts took them off): FFX only (rule 14), the HUD panels of Chapters IX and XII are FFX HUD panels
-    expect(TREATED_CHAPTERS).not.toHaveProperty('sin-face'); // the second focused review: off the list (FFX only, rule 14; WITHDRAWN_R70 says ffx)
+    expect(TREATED_CHAPTERS['sin-face']).toEqual({ game: 'ffx', since: 'r71' }); // the second focused review took it off the list and r73-fast put it back: FFX only (rule 14; the registry says ffx)
     for (const id of Object.keys(RETURNED_R71)) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx2', since: 'r71' }); // `booth-ffx2-b4-sky`: Chapters V and XI, FFX-2 only (ATB and dresspheres: `research/ffx2-vegnagun-shuyin.md`, `research/ffx2-fallen-aeons.md`)
     for (const id of ['evrae-airship', 'mirror-aeons']) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r71' }); // booth-b4-last (Sin's face is off the list for release 71: WITHDRAWN_R70): FFX only (the airship's range game has no FFX-2 counterpart, `research/ffx-evrae-airship.md` section 0.4; the Mirror Aeons chapter is FFX's)
     expect(TREATED_CHAPTERS['ffx2-ixion-djose']).toEqual({ game: 'ffx2', since: 'r71' }); // booth-b4-last: Chapter XVI, FFX-2 only (ATB, dresspheres, the fallen-aeon counter: `research/ffx2-ixion-djose.md` section 0)

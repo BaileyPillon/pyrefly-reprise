@@ -26,6 +26,8 @@ import { curvesOn } from './motion/CurvesSwitch.ts'; // motion pass (lane "core"
 import { stanceDone, stanceOnIdle } from './motion/StanceSwap.ts'; // fluidity pass (MF-05): a figure on the ready STANCE with the idle painting (?stance=v1a|v1b)
 import { noteReason } from './motion/SwapLog.ts';
 import { interludeMode } from './motion/SwapSwitch.ts'; // fluidity pass (MF-01): ?interlude=attack is post-flicker's hold alone
+import { realContactMsOf } from './motion/RealBeats.ts'; // r73-fast review: a real strike's move is not lengthened by the floor, so its net stays what it was
+import { crossingLagMs, playbackScaleOf } from './StrikeBeat.ts'; // r73-fast review (MINOR-1): the house strike's crossings keep their normal length at fast, so the net waits for them
 
 /** How long the follow-through holds at full reach before the strike goes home, ms at timeScale 1. */
 export const FOLLOW_BEAT_MS = 180;
@@ -173,6 +175,15 @@ function marksSwaps(ctx: EventCtx): Map<CombatantId, Owed> {
 export const MARKS_NET_MS = 900;
 
 /**
+ * r73-fast review (MINOR-1): the net for `id`'s strike at the playback speed now, ms at timeScale 1. {@link MARKS_NET_MS} was sized when the move at fast ended 352 ms after the strike began; with the floor the house strike's travel and
+ * way home keep their normal length (`StrikeBeat.crossingLagMs`), so the net grows by what they add and never beats the strike's own `end` mark. Exactly {@link MARKS_NET_MS} at normal speed, in skip, with the curves off and for a real strike.
+ */
+export function marksNetMs(ctx: EventCtx, id: CombatantId): number {
+  if (realContactMsOf(ctx, id) !== undefined) return MARKS_NET_MS;
+  return MARKS_NET_MS + crossingLagMs(ctx.stage?.actor?.(id)?.strikeHeft?.() ?? 0, playbackScaleOf(ctx));
+}
+
+/**
  * The strike has turned for home (its `settlePeak` mark, the fastest frame of the way back): the impact painting goes to the follow-through when the figure has one (D-313), else to the
  * idle. It may fall after `actionEnd` (the action ends about 0.1 s before the fastest frame of the way home, measured in Chapter I), which is why `actionEnd` waits for it ({@link idleAtEnd}).
  * Not when the move's own key painting (an Overdrive's) is what holds the figure.
@@ -213,7 +224,7 @@ export function idleAtEnd(ctx: EventCtx, actor: { setPose(n: string): void } | u
     if (id) noteReason(id, 'idle', 'after-action');
     return;
   }
-  void ctx.sleep(MARKS_NET_MS).then(() => {
+  void ctx.sleep(marksNetMs(ctx, id)).then(() => {
     if (marksSwaps(ctx).get(id) !== owed) return; // the marks did it, or a later attack took over
     marksSwaps(ctx).delete(id);
     actor?.setPose('idle');

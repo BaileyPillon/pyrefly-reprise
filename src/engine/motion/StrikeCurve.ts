@@ -115,6 +115,13 @@ export interface StrikeOptions {
   readonly arcGain?: number;
   /** A real profile only (`?curves=real`): the global gain on its lifts (`RealMotion.realArcGain`, default 1; `?realarc=`). */
   readonly realGain?: number;
+  /**
+   * r73-fast (both games): false gives the strike's two crossings (the travel and the return) the playback speed like every other phase (release 72 and before: the control arm of `r73-sinface-trace.test.ts`). Absent or
+   * true: a HOUSE strike's travel and return never run shorter than they do at normal speed (`crossingFloors`). A real profile (`?curves=real`) is not touched either way.
+   */
+  readonly floorCrossings?: boolean;
+  /** r73-fast review (MAJOR-1; `FastFloor.ts`, `?fastfloor=`): the share (0..1, absent = 1) of its normal-speed length each crossing keeps; 0 is `floorCrossings: false`. */
+  readonly crossingKeep?: number;
 }
 
 /** A profile resolved for one strike: durations in paced ms (what the actor's clock counts), amounts as shares. */
@@ -151,21 +158,35 @@ export function heftFactors(heft: number): { time: number; hold: number; ret: nu
   return { time: 1 + 0.3 * h, hold: 1 + 0.35 * h, ret: 1 + 0.4 * h, arc: 1 - 0.6 * h, squash: 1 - 0.35 * h, pull: 1 + 0.3 * h, over: 1 - 0.3 * h };
 }
 
+/**
+ * r73-fast (both games): the shortest a HOUSE strike's two crossings run, paced ms: their lengths at normal speed (`timeScale` 1), for a figure of this heft (`f` = `heftFactors(heft)`). The playback speed (`fast` 0.32) still
+ * shortens the wind-up, the hold and the settle, but not the TRAVEL and the RETURN, the two phases where the figure crosses the stage: compressed by the speed they cover the reach in about five and eight frames and step 0.46
+ * and 0.25 of it in one (0.15 and 0.08 at normal), one-frame hops of 113 to 500 px at the sizes the figures are drawn (`docs/handoff/r73-sinface.md`, `r73-fast.md`). A crossing's step per frame, as a share of the figure's
+ * drawn height, is a law of the reach over the height and of the crossing's length alone, so with the length kept the step is the one the same strike takes at normal speed, in Chapter I too. At `timeScale` 1 or more both are
+ * the phases as they were: nothing changes at normal speed. `keep` (0..1, default 1; `FastFloor.ts`): the share of that length each crossing keeps (the step per frame is then normal's over `keep`).
+ */
+export function crossingFloors(profile: StrikeProfile, f: { time: number; ret: number }, keep = 1): { travelMs: number; returnMs: number } {
+  const dpf = defaultPaceFactor(profile.game);
+  return { travelMs: ((profile.travelMs * f.time) / dpf) * keep, returnMs: ((profile.returnMs * f.ret) / dpf) * keep };
+}
+
 export function resolveStrike(profile: StrikeProfile, o: StrikeOptions): StrikeShape {
   const d = Math.max(0.05, o.distance);
   const f = heftFactors(o.heft ?? 0);
   const rp = profile.real; // `?curves=real`: the real durations are the move's own (a boss's 4.2 s is not stretched again), and a phase is at least a frame long (a zero-length travel would divide by zero)
   const t = rp?.exactTime ? { time: 1, hold: 1, ret: 1 } : f;
   const floor = rp ? REAL_MIN_MS : 0;
+  const share = o.floorCrossings === false ? 0 : clamp01(o.crossingKeep ?? 1);
+  const keep = rp || share <= 0 || (o.timeScale ?? 1) >= 1 ? { travelMs: 0, returnMs: 0 } : crossingFloors(profile, f, share); // r73-fast: a house strike's crossings keep their normal length at every speed under normal (at 1 and over the shape is exactly release 72's)
   const k = Math.max(0.02, o.timeScale ?? 1) / defaultPaceFactor(profile.game);
   const arcGain = clamp01(o.arcGain ?? 1);
   const liftGain = arcGain * f.arc * Math.max(0, o.realGain ?? 1);
   return {
     game: profile.game,
     windupMs: Math.max(floor, profile.windupMs * k * t.time),
-    travelMs: Math.max(floor, profile.travelMs * k * t.time),
+    travelMs: Math.max(floor, profile.travelMs * k * t.time, keep.travelMs),
     holdMs: profile.holdMs * k * t.hold,
-    returnMs: profile.returnMs * k * t.ret,
+    returnMs: Math.max(profile.returnMs * k * t.ret, keep.returnMs),
     settleMs: profile.settleMs * k * t.ret,
     snapMs: profile.snapMs * k,
     pull: rp?.approach ? 0 : Math.min(profile.pullback, profile.pullbackMax / d) * f.pull,

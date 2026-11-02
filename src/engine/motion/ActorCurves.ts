@@ -17,7 +17,7 @@ export const heftOf = (worldHeight: number): number => clamp01((worldHeight - PA
 
 /** Begin the strike a plan describes on `driver`; resolves when the move is over. */
 export function startStrike(driver: CurveDriver, plan: StrikePlan, worldHeight: number): Promise<void> {
-  const shape = resolveStrike(plan.profile ?? PROFILES[plan.game], { distance: plan.distance, height: worldHeight, heft: heftOf(worldHeight), timeScale: plan.timeScale, arcGain: plan.arc ? 1 : 0, ...(plan.profile?.real ? { realGain: realArcGain() } : {}) });
+  const shape = resolveStrike(plan.profile ?? PROFILES[plan.game], { distance: plan.distance, height: worldHeight, heft: heftOf(worldHeight), timeScale: plan.timeScale, arcGain: plan.arc ? 1 : 0, ...(plan.profile?.real ? { realGain: realArcGain() } : {}), ...(plan.floorCrossings === false ? { floorCrossings: false } : {}), ...(plan.crossingKeep !== undefined ? { crossingKeep: plan.crossingKeep } : {}) });
   const contact = plan.contact;
   const { run, done } = driver.begin(shape, plan.distance, worldHeight, contact === undefined);
   // The lane "feel" motion sounds (`?motionsfx=`, off by default): the whoosh of the step, asked for as the travel begins so that its loudest moment is the fastest frame (`travelPeak`), in on-screen ms.
@@ -38,6 +38,8 @@ export function startStrike(driver: CurveDriver, plan: StrikePlan, worldHeight: 
   if (plan.marks) for (const [name, fn] of Object.entries(plan.marks)) if (fn) run.on(name as keyof NonNullable<StrikePlan['marks']>, fn);
   const fit = plan.returnFit;
   if (fit) run.on('holdEnd', () => run.setReturnFit(fit(worldHeight))); // r72-motion: the figure's drawn size at the moment the flip begins (the camera has moved since the strike was asked for)
+  const pace = plan.returnPace;
+  if (pace) run.on('holdEnd', () => run.setReturnPace(pace(worldHeight))); // r73-fit: the same moment, the same reading, for a way home with no flip to scale
   return done;
 }
 

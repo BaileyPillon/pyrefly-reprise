@@ -21,6 +21,7 @@ import type { EventCtx } from './BattlePresenterEvents.ts';
 import { followThrough } from './KeyPoses.ts';
 import { curvesOn } from './motion/CurvesSwitch.ts'; // motion pass (lane "core")
 import { realContactMsOf } from './motion/RealBeats.ts'; // `?curves=real`: a real strike's contact is later than the house one (up to 1.5 s for a boss), so the waits below grow with it
+import { playbackScaleOf, strikeLagMs } from './StrikeBeat.ts'; // r73-fast: the house strike's travel keeps its normal length at a playback speed under 1, so its contact falls later than the speed alone puts it
 
 /** What a lunge is handed: hold at the apex until `hold` settles; call `reached` at the apex. */
 export interface LungeContact {
@@ -54,6 +55,11 @@ interface Pending {
 
 const pending = new WeakMap<EventCtx, Pending>();
 
+/** r73-fast: how much longer the waits below are for `attacker`'s house strike at this playback speed (ms at scale 1; 0 at normal speed, with the curves off, for a real strike and in `skip`, whose waits are all zero). */
+function lagOf(ctx: EventCtx, attacker: CombatantId): number {
+  return strikeLagMs(ctx.stage?.actor?.(attacker)?.strikeHeft?.() ?? 0, playbackScaleOf(ctx));
+}
+
 /** Arm the contact for `attacker`'s lunge (replacing any left over). */
 export function armContact(ctx: EventCtx, attacker: CombatantId): LungeContact {
   releaseContact(ctx);
@@ -64,7 +70,7 @@ export function armContact(ctx: EventCtx, attacker: CombatantId): LungeContact {
   pending.set(ctx, { attacker, reached, release });
   // The new strike reaches its contact later (wind-up and travel are 0.4 s, not 0.255 s): the cap counts from the lunge's start, so it is lengthened by the same difference.
   const real = realContactMsOf(ctx, attacker); // undefined unless a real mode is on and the table has the attacker
-  const cap = real === undefined ? CONTACT_HOLD_MAX_MS + (curvesOn() ? CURVES_CONTACT_EXTRA_MS : 0) : Math.max(CONTACT_HOLD_MAX_MS + CURVES_CONTACT_EXTRA_MS, real + CONTACT_HOLD_MAX_MS);
+  const cap = real === undefined ? CONTACT_HOLD_MAX_MS + (curvesOn() ? CURVES_CONTACT_EXTRA_MS + lagOf(ctx, attacker) : 0) : Math.max(CONTACT_HOLD_MAX_MS + CURVES_CONTACT_EXTRA_MS, real + CONTACT_HOLD_MAX_MS);
   return { hold: Promise.race([held, ctx.sleep(cap)]), reached: reach };
 }
 
@@ -76,7 +82,7 @@ export async function meetContact(ctx: EventCtx, targetId: CombatantId): Promise
   const p = pending.get(ctx);
   if (!p || p.attacker === targetId) return;
   const real = realContactMsOf(ctx, p.attacker);
-  await Promise.race([p.reached, ctx.sleep(real === undefined ? CONTACT_WAIT_MAX_MS : Math.max(CONTACT_WAIT_MAX_MS, real + CONTACT_REAL_SLACK_MS))]);
+  await Promise.race([p.reached, ctx.sleep(real === undefined ? CONTACT_WAIT_MAX_MS + lagOf(ctx, p.attacker) : Math.max(CONTACT_WAIT_MAX_MS, real + CONTACT_REAL_SLACK_MS))]);
   if (pending.get(ctx) !== p) return;
   // D-313: a painted follow-through goes up as the blow lands and holds at full reach for a beat.
   pending.delete(ctx);
