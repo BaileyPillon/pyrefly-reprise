@@ -37,5 +37,8 @@ export declare function liftReportVerdict(root: string, reportRel: string, id: s
 /** Every listed chapter whose lift is not yet proved by a review report that reads PASS. */
 export declare function findOwedLifts(root?: string): OwedLift[];
 
+/** The text of a repo-relative file (CRLF read as LF), or `null` when it cannot be read. */
+export declare function readText(root: string, rel: string): string | null;
+
 /** The report paths a lift line may name: `critic/reviews/<sha>-focused|live|deep.json` or a lift proof `critic/reviews/r<release>-<name>.json`. */
 export declare const REPORT_RE: RegExp;

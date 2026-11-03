@@ -35,7 +35,7 @@ const MERGED: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readonly 
   'yojimbo-cavern': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // IX: back (r72-hud)
   'seymour-natus': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // X
   'ffx2-fallen-aeons': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XI: hd2d and arena LIFTED by r72-sky (grade C by default)
-  'seymour-omnis': { game: 'ffx', held: ['hud', 'breath', 'cam', 'moments'] }, // XII: back (r72-hud), its F1 HUD held by the r72 review (J-HUD-5b)
+  'seymour-omnis': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // XII: back (r72-hud)
   'ffx2-trema': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XIII
   'isaaru-via-purifico': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // XIV
   'ffx2-den-of-woe': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XV

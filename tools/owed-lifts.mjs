@@ -35,7 +35,7 @@ const DEMO_GATE = 'src/engine/motion/DemoGate.ts';
  */
 export const REPORT_RE = /critic\/reviews\/(?:[0-9a-f]{7,40}-(?:focused|live|deep)|r\d+-[a-z0-9]+(?:-[a-z0-9]+)*)\.json/;
 
-function readText(root, rel) {
+export function readText(root, rel) {
   try {
     return readFileSync(join(root, rel), 'utf8').replace(/\r\n/g, '\n');
   } catch {

@@ -27,9 +27,8 @@ import { ffx2EngineOptions, registerBattleContent } from '../../src/app/screens/
 import { findEnemyGroup, setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
 import { runEncounterChain } from '../../src/app/screens/BattleEncounterChain.ts';
 import type { EnemyGroupDef } from '../../src/battle/common/types.ts';
-import { HUD_F1_CLASS, HudF1, type HudF1Host } from '../../src/ui/hudf1/HudF1.ts';
+import { HudF1, type HudF1Host } from '../../src/ui/hudf1/HudF1.ts';
 import { setHudF1Mode } from '../../src/ui/hudf1/HudF1Switch.ts';
-import { playsPiece } from './booth-r70-withdrawn.ts';
 import { FakeAudio, FakeStage } from './helpers/FakeStage.ts';
 import { setCappedAutoPlay } from './helpers/presenterCap.ts';
 
@@ -135,33 +134,7 @@ describe('Chapter VII: the ribbon names Seymour, the declared boss, through a re
 });
 
 describe('every treated chapter, both games: the ribbon names what the card names, and a chapter that declares no boss did not move', () => {
-  const IDS = Object.keys(TREATED_CHAPTERS).filter((id) => playsPiece(id, 'hud')); // a chapter that holds the hud piece (XII since the r72 review, J-HUD-5b) draws no F1 ribbon: its case is the next one
-  const HUD_HELD = Object.keys(TREATED_CHAPTERS).filter((id) => !playsPiece(id, 'hud'));
-
-  it('the chapters that hold the hud piece are exactly Chapter XII, and the others are every other treated chapter', () => {
-    expect(HUD_HELD).toEqual(['seymour-omnis']);
-    expect(IDS).toHaveLength(Object.keys(TREATED_CHAPTERS).length - 1);
-  });
-
-  it.each(HUD_HELD)('%s (hud held): the F1 layer stays off (the release 71 HUD plays, no F1 class on the root), and the card still names the boss it declares', async (id) => {
-    setDemoChapter(id);
-    const chapter = getChapter(id)!;
-    const { engine } = await engineFor(id);
-    const state = engine.state() as BattleState;
-    const declared = chapter.enemyGroupRef.bossId;
-    const root = document.createElement('div');
-    const stage = document.createElement('div');
-    root.append(stage);
-    document.body.append(root);
-    const f1 = new HudF1(chapter.game === 'ffx2' ? 'ffx2' : 'ffx');
-    f1.mount({ game: chapter.game === 'ffx2' ? 'ffx2' : 'ffx', root, stage, cmdStack: () => null, cmdBlock: () => null, helpText: () => '', heroRow: () => null });
-    setHeadlineBoss(declared);
-    f1.sync(state);
-    expect(f1.on).toBe(false);
-    expect(root.classList.contains(HUD_F1_CLASS)).toBe(false);
-    expect(headlineEnemy(state, declared)!.name).toBeTruthy();
-    f1.unmount();
-  }, 60_000);
+  const IDS = Object.keys(TREATED_CHAPTERS);
 
   it.each(IDS)('%s', async (id) => {
     setDemoChapter(id);

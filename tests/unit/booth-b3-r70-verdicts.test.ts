@@ -51,7 +51,7 @@ const R71_HELD_ADDED: Readonly<Record<string, readonly TreatedPiece[]>> = {};
 /** What `booth-ffx-b4-hud` brought back (FFX only), each with the holds its lane's table gives (`booth-ffx-b3a.md` for IX, `booth-ffx-b3b.md` for XII) and the release it is on the list from. */
 const B4_HUD: Readonly<Record<string, readonly TreatedPiece[]>> = {
   'yojimbo-cavern': ['breath', 'cam', 'moments'], // Chapter IX, FFX: the Zanmato gauge stands between the F1 ribbon and the F1 turn strip
-  'seymour-omnis': ['hud', 'breath', 'cam', 'moments'], // r72 review: `hud` held (J-HUD-5b) // Chapter XII, FFX: the Enemy Intent card's foot stands 6 grid px above the first party card
+  'seymour-omnis': ['breath', 'cam', 'moments'], // Chapter XII (the r72 review's `hud` hold, J-HUD-5b, was lifted in r74-omnis), FFX: the Enemy Intent card's foot stands 6 grid px above the first party card
 };
 
 /** The four of the last five listed chapters that are treated since r73-fast (`booth-b4-last`; Chapter XVII stayed out; Chapter XVIII was taken off by the second focused review of release 71 and put back by `r73-fast`): the list is release 70's ten plus these, and none of release 70's rows moved. */
