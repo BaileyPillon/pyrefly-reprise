@@ -33,6 +33,7 @@
  */
 
 import { koCross } from './PoseBlend.ts';
+import { REVIVE_CROSS_MS, REVIVE_RISE_MS, reviveCross } from './motion/ReviveCross.ts';
 import { CUT_AT } from './motion/SmearPlan.ts';
 import { DEMO_KO_CROSS_MS } from './motion/DemoBlend.ts';
 import { demoMotionOn } from './motion/DemoMotion.ts';
@@ -56,6 +57,8 @@ export const PUFF_FALL = 1;
 export const PUFF_REVIVE = 0.6;
 /** What a revive takes in all: the cross and the rise. Must stay under `TIMING.revive` (520) so the menu is never delayed. */
 export const REVIVE_MS = KO_CROSS_MS + RISE_MS;
+/** r74-revive (`?revive=even`, `motion/ReviveCross.ts`): what a revive takes in all with its longer, even cross (200 + 300 = 500), still under `TIMING.revive` (520). */
+export const REVIVE_EVEN_MS = REVIVE_CROSS_MS + REVIVE_RISE_MS;
 /** The cross a KO or a revive plays now: `KO_CROSS_MS`, or the demo's slightly longer one under `?motion=demo` (`motion/DemoBlend.ts`; 100 ms, still inside the landing squash and `TIMING.revive`). */
 export const koCrossMs = (): number => (demoMotionOn() ? DEMO_KO_CROSS_MS : KO_CROSS_MS);
 
@@ -151,6 +154,8 @@ export interface KoRunOptions {
   eased?: boolean;
   /** Motion pass, step 3: the cross is a CUT inside the smear's window (the old painting whole until half-way, the new one from there) instead of the capped cross. */
   cut?: boolean;
+  /** r74-revive: the cross is the revive's even-share one (`motion/ReviveCross.ts`) instead of the capped cross. A revive's only; a `cut` wins over it. */
+  even?: boolean;
 }
 
 const clamp01 = (x: number): number => (x < 0 ? 0 : x > 1 ? 1 : x);
@@ -269,7 +274,7 @@ export class KoRun {
       }
       case 'cross': {
         const u = clamp01(this.cross / o.crossMs);
-        const c = o.cut ? { from: u < CUT_AT ? 1 : 0, to: u < CUT_AT ? 0 : 1 } : koCross(u); // a cut: no frame shows both paintings (the smear covers the change)
+        const c = o.cut ? { from: u < CUT_AT ? 1 : 0, to: u < CUT_AT ? 0 : 1 } : o.even ? reviveCross(u) : koCross(u); // a cut: no frame shows both paintings (the smear covers the change); r74: a revive's even cross
         // a fall's buckle is full from here; a revive's unwinds with its turn
         const b = fall ? 1 : tip * tip;
         const l = fall ? KO_LEAN : KO_LEAN * tip;
@@ -309,8 +314,10 @@ export function fallRun(mode: KoMode, game: KoGame, cutMs?: number, buckleMs?: n
 }
 
 /** The revive's run: with `travel` the lying body crosses to the toppled figure and stands up (FA-3); without, only the short cross (figures that never topple). REDUCE MOTION plays no run at all: the actor's own blend, as before FA-3. */
-export function reviveRun(travel: boolean, eased = false): KoRun {
-  return new KoRun({ kind: 'revive', holdMs: 0, crossMs: koCrossMs(), riseMs: travel ? (eased ? RISE_EASED_MS : RISE_MS) : 0, travel, buckle: travel, puff: travel ? PUFF_REVIVE : 0, ...(travel && eased ? { eased: true } : {}) });
+export function reviveRun(travel: boolean, eased = false, even = false): KoRun {
+  // r74-revive: only a body that topples and gets up (`travel`) plays the longer even cross, and not the held eased revive (its rise is 420: 200 + 420 would pass `TIMING.revive`); `even` false is release 73's run exactly
+  const longer = even && travel && !eased;
+  return new KoRun({ kind: 'revive', holdMs: 0, crossMs: longer ? Math.max(REVIVE_CROSS_MS, koCrossMs()) : koCrossMs(), riseMs: travel ? (eased ? RISE_EASED_MS : longer ? REVIVE_RISE_MS : RISE_MS) : 0, travel, buckle: travel, puff: travel ? PUFF_REVIVE : 0, ...(travel && eased ? { eased: true } : {}), ...(longer ? { even: true } : {}) });
 }
 
 // ------------------------------------------------------------------------- the dust puff
