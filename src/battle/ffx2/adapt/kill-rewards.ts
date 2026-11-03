@@ -27,6 +27,7 @@ export const KILL_ITEM_ID: Readonly<Record<number, string>> = {
   0x2011: 'x2-grenade',
   0x2028: 'x2-supreme-gem',
   0x202e: 'x2-dark-matter',
+  0x203b: 'x2-stamina-tonic',
   0x203f: 'x2-hero-drink',
   0x7029: 'reassembled-sphere',
   0x7046: 'magical-dances-vol-1',

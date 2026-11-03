@@ -16,6 +16,8 @@
  * - **The Last Summoning** (`'last-summoning'`, number 28, 2026-10-15; FFX only): Dream's End as a gauntlet in the player's order with the full roster of eight aeons, Yojimbo and the Magus Sisters among them; word `summon` (27 is the Dark Mirror lane's).
  * - **The Spectral Keeper** (`'spectral-keeper'`, number 29, 2026-11-02; FFX only): the beast at the foot of the Dome's lift, fought on six glyph platforms; word `keeper` (28 is the Last Summoning lane's).
  *
+ * - **The Fallen Maesters** (`'ffx2-fallen-maesters'`, number 30, 2026-11-02; FFX-2 only): the Via Infinito's fixed floor fights 20, 40, 60 and 80 (Aranea, the Black Elemental, Concherer, Chac) as four fresh links; word `infinito`.
+ *
  * A further hidden chapter registers here, by adding its record to the list below, not by editing `./encounters.ts`.
  *
  * Split out of `./encounters.ts` for the house 400-line rule (AGENTS.md hard rule 7); `encounters.ts` still exports `EXPERIMENT_CHAPTERS`
@@ -34,8 +36,9 @@ import { BIRAN_YENKE } from './chapter-biran-yenke.ts';
 import { FFX2_ANGRA_MAINYU } from './chapter-ffx2-angra-mainyu.ts';
 import { LAST_SUMMONING } from './chapter-last-summoning.ts';
 import { SPECTRAL_KEEPER } from './chapter-spectral-keeper.ts';
+import { FFX2_FALLEN_MAESTERS } from './chapter-ffx2-fallen-maesters.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS] as const;
 }

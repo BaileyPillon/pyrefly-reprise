@@ -91,6 +91,9 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   // The hidden Angra Mainyu's fifteen rows (the boss's eight, Zarich's five, Tawrich's two: monmagic 0x4129 to 0x412d, 0x41f1 to 0x41f4, the Leblanc Osmose 0x406d and six party rows) are the RE note's, pinned
   // against their own numbers-only fixture (tests/fixtures/parity/ffx2/angra_mainyu_rows.json, tests/unit/chapters/angra-mainyu-data.test.ts).
   if (label.startsWith('x2-angra-') || label.startsWith('x2-zarich-') || label.startsWith('x2-tawrich-')) return;
+  // The hidden Fallen Maesters' fifteen rows (Aranea's three, the Black Elemental's five, Concherer's four, Chac's three: monmagic 0x4003 to 0x41dd and the party rows 0x304b, 0x3170, 0x3171) are the RE note's, pinned
+  // against their own numbers-only fixture (tests/fixtures/parity/ffx2/fallen_maesters_rows.json, tests/unit/chapters/fallen-maesters-data.test.ts).
+  if (label.startsWith('x2-aranea-') || label.startsWith('x2-black-elemental-') || label.startsWith('x2-concherer-') || label.startsWith('x2-chac-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();
   if (!row) return;
