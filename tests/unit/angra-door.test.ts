@@ -16,6 +16,7 @@
  * The tests read the word from its one constant, never a literal.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { useDoorClock } from './helpers/doorClock.ts';
 
 import { PartyPrepScreen } from '../../src/app/screens/PartyPrepScreen.ts';
 import { TitleScreen } from '../../src/app/screens/TitleScreen.ts';
@@ -374,6 +375,7 @@ describe('the word opens it on chapter select', () => {
 
 describe('the eight doors do not interfere', () => {
   it('each word opens its own chapter and nothing else', async () => {
+    useDoorClock(); // the cases below type forty boards' words in a loop: a virtual clock, so a stalled test process cannot make a word stale (helpers/doorClock.ts)
     expect(CHAPTER_DOORS.map((d) => d.word)).toContain(WORD);
     for (const row of CHAPTER_DOORS) {
       const rig = mount();
@@ -385,6 +387,7 @@ describe('the eight doors do not interfere', () => {
   });
 
   it('the first word to finish wins when two are typed in a row, and a half-typed word before another spoils neither', async () => {
+    useDoorClock(); // the cases below type forty boards' words in a loop: a virtual clock, so a stalled test process cannot make a word stale (helpers/doorClock.ts)
     for (const other of CHAPTER_DOORS.filter((d) => d.word !== WORD)) {
       const a = mount();
       a.typeWord(WORD + other.word);

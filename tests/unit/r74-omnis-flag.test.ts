@@ -380,9 +380,9 @@ describe('the Sensor card steers clear of the flag as well as the figure (Chapte
 describe('FFXBattleHud.ts passes the flag and the panels by two in-place lines, and did not grow', () => {
   const src = readFileSync(resolve('src/ui/ffx/FFXBattleHud.ts'), 'utf8');
 
-  it('the dock gets omnisFlagPanelRects(this.el) between the phone strip and the party faces; steerSensor gets omnisFlagRect(this.el, ...) as its flag', () => {
+  it('the dock gets omnisFlagPanelRects(this.el) between the phone strip and the party faces; steerSensor gets omnisSensorFlagRect(this.el, ...) as its flag (R72-1, 219r: the old looks too)', () => {
     expect(src).toContain('...intentStrip, ...omnisFlagPanelRects(this.el), ...partyFaceRects(');
-    expect(src).toContain('sensorSteerDx(home, figure, STAGE.width, undefined, omnisFlagRect(this.el, (e) => this.stageRect(e)))');
+    expect(src).toContain('sensorSteerDx(home, figure, STAGE.width, undefined, omnisSensorFlagRect(this.el, (e) => this.stageRect(e)))');
   });
 
   it('the two builders are still called as r72-hud wrote them (the flag rides inside them), and the file is over 400 lines and must not grow', () => {

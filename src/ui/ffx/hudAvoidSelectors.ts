@@ -15,7 +15,7 @@ import { growToGrid } from './hudPlacementKeys.ts';
 import type { Rect } from './hudSafeZones.ts';
 
 // Chapter XII's target flag against the advisor (r74-omnis; the module explains): the HUD asks for the flag's box and its dock panels through this module's import line.
-export { omnisFlagPanelRects, omnisFlagRect } from './flagSteer.ts';
+export { omnisFlagPanelRects, omnisFlagRect, omnisSensorFlagRect } from './flagSteer.ts';
 
 /**
  * Yojimbo's Zanmato gauge (FFX, Chapter IX only; `ZanmatoGauge.ts`): the panel

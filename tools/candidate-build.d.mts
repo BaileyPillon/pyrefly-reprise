@@ -18,3 +18,5 @@ export function candidatePreviewArgs(outDir: string, port: number | string): str
 export function candidateUrl(port: number | string): string;
 export function bundleOfIndexHtml(html: string): string | null;
 export function newestReleaseOf(root: string): Promise<string | null>;
+/** The hidden 3D Bahamut's models in a built candidate (`tools/yrp-models-verify.mjs --dir`, as the deploy runs it); skipped when the tree has no such tool. */
+export function checkYrpModels(root: string, dist: string): { ok: boolean; skipped: string | null; detail: string };

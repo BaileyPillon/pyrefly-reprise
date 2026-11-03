@@ -46,6 +46,24 @@ export const HOLD_LIFTS = Object.freeze([
       'J74-7': job(['pairs', 'consoleErrors']), // an ally and a self flag (Cure, Item) against the advisor, the chip, the tip and the Sensor card
     }),
   }),
+  // r74-int review MAJOR-2 (2026-11-03): Chapter XVII is on the treated list on OFFLINE arithmetic only (the Fin plate's width read from the font file), and its own note says a candidate that carries the line "must not
+  // reach production before FIN-1 to FIN-4 and FIN-9 have run and read as predicted". Its release-71 major (the Fin plate on the F1 turn strip) is not something the cut may take on trust. The chapter's `hud` PLAYS (the
+  // treatment moves the plate clear of the strip), so the way back is a `hud` row for the chapter in PieceHoldsLast.ts (the lane's own fallback), which makes nothing owed here, exactly as for Chapter XII's.
+  Object.freeze({
+    id: 'fins-hud',
+    label: "Chapter XVII's F1 HUD (the Fin plate clear of the turn strip, the action banner under it)",
+    chapter: 'sin-fins-core',
+    piece: 'hud',
+    note: 'docs/handoff/r74-fins.md',
+    marker: 'FINS-HUD LIFT:',
+    jobs: Object.freeze({
+      'FIN-1': job(['pairs', 'consoleErrors']), // TEXT SIZE 100, the charged state, four window sizes: 0 overlapping pairs among the plate, the ribbon, hero, cue, verbs, prompts, strip, Sensor card, advisor and the target flag
+      'FIN-2': job(['pairs', 'consoleErrors']), // the calm and plain-NEAR states, and TEXT SIZE 115 for all three: 0 pairs
+      'FIN-3': job(['consoleErrors']), // TEXT SIZE 130, ?hud=today, ?treated=pack and the phone keep release 72's plate (a read of the paths that keep today's; the named ?f1text=grow loss is predicted, not a pair)
+      'FIN-4': job(['consoleErrors'], { skyOver240Pct: 1.0, frameOver240DeltaPct: 1.0, meanLumaDiff: 6 }), // the sky: the share over 240 in the sky band, the whole frame's share over the control's, the mean luma against the control
+      'FIN-9': job(['pairs', 'consoleErrors']), // the action banner under the plate, every order-giver, at 100 and 115, then link III: 0 rectangle overlaps
+    }),
+  }),
 ]);
 
 const HOLD_FILES = Object.freeze(['src/engine/motion/PieceHolds.ts', 'src/engine/motion/PieceHoldsLast.ts']);

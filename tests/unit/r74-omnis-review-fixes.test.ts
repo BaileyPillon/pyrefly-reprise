@@ -154,8 +154,13 @@ describe('m2: the Sensor steer\'s flag branch, the cases the first tests left un
     expect(m.dx(), 'the flag gone: the card comes home').toBe('');
   });
 
-  it('outside the gate (the F1 HUD off, or the read-out not live) the flag is nobody\'s business: the card is not steered', () => {
-    for (const s of [{ f1: false, omnis: true }, { f1: true, omnis: false }, { f1: false, omnis: false }]) {
+  it('outside the gate (the read-out not live) the flag is nobody\'s business: the card is not steered; with the read-out live and the F1 HUD off (the old looks) it IS, since R72-1 / 219r (tests/unit/r74-omnis-old-looks.test.ts)', () => {
+    const old = mount({ f1: false, omnis: true });
+    place(old.plate, FLAG_ON_CARD);
+    old.aim();
+    expect(old.dx(), 'an old look: the same steer as the F1 HUD').not.toBe('');
+    expect(hits(old.cardBox(), FLAG_ON_CARD), 'and the card is clear of the flag').toBe(false);
+    for (const s of [{ f1: true, omnis: false }, { f1: false, omnis: false }]) {
       const m = mount(s);
       place(m.plate, FLAG_ON_CARD);
       m.aim();

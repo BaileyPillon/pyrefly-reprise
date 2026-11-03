@@ -20,7 +20,7 @@ Authority: Bailey, 2026-11-02, "i'll go with all of your recommendations please 
 
 ## 2. What is playable now
 
-Type `waker` on chapter select (no card on the board; the arrow keys never find it; the phone's long-press field takes it too). It opens party prep, chapter 24's cutscenes and music by reference, then the fight in a 3D toon temple chamber: toon-shaded Meshy models on the stage's actors (the three girls; Valefor with a vertex-shader wing flap), pistols, daggers and a sword on the hand bones (the files in `props/`), a temple kit (`temple/`) tiled round a 25-tile wall, the target shot's low camera, flat star bursts and curly smoke for hits, and Valefor's Energy Ray, Energy Blast and Sonic Wings drawn as toon objects. The player-facing numeral is `EXP`; the title is the working title "Valefor at Besaid (Wind Waker)". Dev-only: `?ww=hd|hd-soft|classic|painted` (`painted` plays chapter 24's own scene, for comparison) and `globalThis.__ww3d`.
+Type `waker` on chapter select (no card on the board; the arrow keys never find it; on a phone the long-press field takes the word and opens nothing, because the door is desktop-only since the driver's decision 219q, `r74.md` section 9.4). It opens party prep, chapter 24's cutscenes and music by reference, then the fight in a 3D toon temple chamber: toon-shaded Meshy models on the stage's actors (the three girls; Valefor with a vertex-shader wing flap), pistols, daggers and a sword on the hand bones (the files in `props/`), a temple kit (`temple/`) tiled round a 25-tile wall, the target shot's low camera, flat star bursts and curly smoke for hits, and Valefor's Energy Ray, Energy Blast and Sonic Wings drawn as toon objects. The player-facing numeral is `EXP`; the title is the working title "Valefor at Besaid (Wind Waker)". Dev-only: `?ww=hd|hd-soft|classic|painted` (`painted` plays chapter 24's own scene, for comparison) and `globalThis.__ww3d`.
 
 State of the look, last measured on r60 (polish 2, tip ed92784e0; 82 stills and 4 clips sent to Bailey 2026-11-01 with no recorded verdict): hair tops .330 / .468 / .553 of the frame (TARGET-C .33 / .47 / .55), floor 13.2 percent (TARGET-C 13.2), mean luma 135.6 with the HUD off (TARGET-C 119.3), no white blob on any hit, console 0 errors. **None of it has been seen on the r73-int code**: see the job specs (section 8).
 
@@ -74,7 +74,7 @@ Where the preflight or the chapter's own record left a pick open, the option tak
 |---|---|---|
 | P1 | **Number 32, word `waker`.** The word is his (D-1127 "waker"); the number is the driver's assignment (29 Keeper, 30 Maesters, 31 yrp, 32 this). The card and the prep header say `EXP`, not a numeral | any other free number; the word is his and does not move |
 | P2 | **Title stays "Valefor at Besaid (Wind Waker)"** (the working title; it names the encounter, which is chapter 24's, and the style, in his own words) | "Besaid, Wind Waker style" or any title he writes; one string in `chapter-exp-windwaker.ts` |
-| P3 | **Stays hidden**: no board card, opens only by the typed word (and the phone's long-press field). Not in "of 19", the save, the veteran check or play time | list it on the board as a card (needs a board painting; D-848: listing hidden chapters is his call after he plays them) |
+| P3 | **Stays hidden**: no board card, opens only by the typed word on a desktop window (the phone's long-press field takes the word and opens nothing, decision 219q). Not in "of 19", the save, the veteran check or play time | list it on the board as a card (needs a board painting; D-848: listing hidden chapters is his call after he plays them) |
 | P4 | **The eleven model files SHIP in the production build** (`models-exp/windwaker/**` allow-listed in the dist filter) | keep them out and let the live chapter draw capsules (the approved look is the toon models, so this makes the chapter pointless live) |
 | P5 | **The models stay out of git** (public repo, 33.9 MB) and travel by list + backup + verify (`tools/ww-models.mjs`) | commit them to the private art repo `BaileyPillon/pyrefly-art` (art is versioned there) and have the release restore from it; or Git LFS |
 | P6 | **No guide page of its own**: chapter 24's strategy-guide card and advisor line are found through the boss on the board (`x2-valefor`), so they work here; a pause-screen guide page keyed by the chapter id would show none | copy chapter 24's guide doc under the new id (new content for a hidden chapter: rule 10, needs his yes) |
@@ -143,13 +143,13 @@ For `seymour-flux` (Chapter I, FFX), `ffx2-bahamut` (Chapter IV, FFX-2) and `ffx
 
 ### W6. The door by a keyboard and by a phone (about 5 minutes)
 
-On chapter select: `waker` by keys; the same through the phone long-press field (375x812 touch emulation); then every other word (the twelve) still opens its own chapter; a wrong letter resets.
-**Prediction:** as `windwaker-door.test.ts` and `phone-door-field.test.ts` (both green in jsdom): no card moves, prep opens for `exp-windwaker`, and the arrow keys never select it.
+On chapter select in a desktop window: `waker` by keys; then every other word (the twelve) still opens its own chapter; a wrong letter resets. Then `waker` through the phone long-press field (375x812 touch emulation): since decision 219q it opens nothing and the field stays up, and every other word still opens its own chapter there.
+**Prediction:** as `windwaker-door.test.ts`, `phone-door-field.test.ts` and `r74-hidden-3d-phone-doors.test.ts` (all green in jsdom): on the desktop no card moves, prep opens for `exp-windwaker`, and the arrow keys never select it; on the phone tier the word opens nothing.
 
-### W7. Cost: frame time, memory, a phone (about 6 minutes)
+### W7. Cost: frame time and memory (about 6 minutes; the phone half was dropped by decision 219q)
 
-At the target shot for 60 s, then once at 375x812 portrait.
-**Prediction:** p95 frame time at or under 20 ms at 1600x900 on the RTX 5070 Ti (no measurement exists yet; the 4096 shadow map and 11 textures are the cost); decoded texture memory about 240 MB (11 x 2048 x 2048 x 4 bytes x 1.33); first load of the models 33.9 MB from the site. **The phone is expected to MISS and is a first look only**: the layout, the lens shift and the HUD were built and measured at 16:9 only, and 34 MB plus 240 MB of textures is heavy for a phone; record it, do not tune, and say so to Bailey (a hidden chapter is exempt from the phone budgets until he lists it).
+At the target shot for 60 s in a desktop window. (The earlier second run at 375x812 portrait is dropped: the door is desktop-only since decision 219q, so a phone cannot reach the chapter.)
+**Prediction:** p95 frame time at or under 20 ms at 1600x900 on the RTX 5070 Ti (no measurement exists yet; the 4096 shadow map and 11 textures are the cost); decoded texture memory about 240 MB (11 x 2048 x 2048 x 4 bytes x 1.33); first load of the models 33.9 MB from the site. **The phone is not measured**: the layout, the lens shift and the HUD were built and measured at 16:9 only, and 34 MB plus 240 MB of textures is heavy for a phone; since decision 219q the phone tier cannot open the chapter at all, so there is no phone cost to record.
 
 ## 9. CHANGELOG lines (game tag; for the release that carries the chapter; not yet applied to `CHANGELOG.md`, which belongs to the release driver)
 
@@ -165,7 +165,7 @@ The player note (`src/app/changelog/releaseNotes.ts`) names no hidden chapter an
 3. **The deploy steps** (section 3): `ww-models.mjs ensure` before the build and `verify` after it. Left to you because `deploy-pages.mjs` is over the house limit and is the gate.
 4. **Where the models live.** The local backup is one disk. P5 offers the private art repo as a second copy; it needs his word only if you want the 33.9 MB in git.
 5. **Door suites cost O(doors squared).** With 13 doors each suite's "two typed in a row" test mounts 36 real boards: 14 s quiet, 50 s on a busy PC, against a 15 s default. All ten door suites flake alike under load; this lane gave its own a 120 s limit and left the others alone.
-6. **The phone.** The chapter was built and measured at 16:9 only; W7 is a first look. A hidden chapter has no phone budget until he lists it.
+6. **The phone.** The chapter was built and measured at 16:9 only. ANSWERED by the driver, decision 219q (2026-11-03): the door is desktop-only and refuses on the phone tier (`r74.md` section 9.4), so no phone budget applies until Bailey lists the chapter.
 7. **The anime (Genshin / Guilty Gear) version** is a different chapter, decided only in part (D-1225, D-1438; waits on his look pick and a Meshy credit cap): not touched here.
 8. **Ledger rows** (yours; I wrote none): the push of `exp-windwaker` (the first off-disk copy), this branch, the models backup folder, the dist-filter allow-list, the tool, the picks P1 to P14 as "driver pick".
 

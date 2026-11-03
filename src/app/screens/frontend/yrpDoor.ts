@@ -5,7 +5,8 @@
  * chapters' words (`./secretDoor.ts`, `./faythDoor.ts`, `./angraDoor.ts`): type the word on chapter select (any case, at most `KEY_GAP_MS` between letters; a wrong letter, a pause or a key the board
  * answers, such as an arrow, resets silently) and the board settles on the chapter, with no card, no sound and no sign. It settles on the frame after the last letter, which takes that letter's press
  * (`ChapterSelectScreen.handleInput`, the `opening` frame). The unlock is not remembered: the word is typed on each visit. The board has no card for the chapter (`chapterGrid.ts`), so nothing else leads in.
- * On a phone the same word is typed in the long-press field (`./doorField.ts`), which feeds the same matcher.
+ * On a phone the same word is typed in the long-press field (`./doorField.ts`), which feeds the same matcher. **The chapter is desktop-only** (driver decision 219q, 2026-11-03; FFX-2 only): on the phone tier
+ * (`ArtDevice.deviceClass() === 'phone'`) the door stays shut through the table's `gate` (`./chapterDoors.ts` `desktopOnly`), so the word typed there, on a keyboard or in the long-press field, opens nothing and shows nothing.
  *
  * Which letters are bound, and why the word is safe (checked against `app/Input.ts` `KEY_MAP`, pinned by `tests/unit/yrp-door.test.ts` with the real `Input`, the real board and the real title screen):
  * **Y is bound to nothing**, **R is `r1`**, **P is bound to nothing** (P pauses a BATTLE through a raw listener of its own; the board has none). The first letter Y moves nothing; the R is a later letter and is

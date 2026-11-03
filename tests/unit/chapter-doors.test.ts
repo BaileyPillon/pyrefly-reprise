@@ -60,7 +60,8 @@ describe('the table', () => {
     }
     for (const id of LISTED_DOOR_CHAPTERS) expect((CHAPTER_IDS as readonly string[]).includes(id), id).toBe(true);
     expect(CHAPTER_DOORS.filter((d) => d.secret === true).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion']);
-    expect(CHAPTER_DOORS.filter((d) => d.gate !== undefined).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion']);
+    // Three gated rows: FF7's switch, and (driver decision 219q, 2026-11-03; FFX-2 only) the two hidden 3D chapters, desktop-only (`tests/unit/r74-hidden-3d-phone-doors.test.ts`)
+    expect(CHAPTER_DOORS.filter((d) => d.gate !== undefined).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion', 'exp-yrp-3d', 'exp-windwaker']);
     for (const d of CHAPTER_DOORS.filter((x) => x.secret !== true && x.chapter !== 'mirror-aeons')) expect(getChapter(d.chapter), d.chapter).toMatchObject({ experimental: true });
     expect(getChapter('mirror-aeons')?.experimental).toBeUndefined();
   });

@@ -52,14 +52,35 @@ export function omnisF1On(hud: HTMLElement): boolean {
 const hits = (a: Rect, b: Rect): boolean => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
 const contains = (outer: Rect, inner: Rect): boolean => outer.left <= inner.left && outer.top <= inner.top && outer.right >= inner.right && outer.bottom >= inner.bottom;
 
-/** The flag's box in the stage's grid px, or `null` when it is not up (no target cursor), or this is not Chapter XII on the F1 HUD. */
-export function omnisFlagRect(hud: HTMLElement, rectOf: RectOf): Rect | null {
-  if (!omnisF1On(hud)) return null;
+/**
+ * Chapter XII's disc read-out is live, in whatever layout the HUD is drawn: the F1 HUD, or release 71's frame (TEXT SIZE 130, `?hud=today`, `?treated=pack`). Not on the upright phone (its HUD is its own, and the F1 gate never reached it either).
+ * The Sensor card's flag steer stands on this (R72-1, driver decision 219r, 2026-11-03); the advisor's does not (it stays on {@link omnisF1On}).
+ */
+export function omnisReadoutOn(hud: HTMLElement): boolean {
+  return hud.hasAttribute('data-omnis-readout') && !document.documentElement.hasAttribute('data-phone-battle');
+}
+
+/** The first pro target flag with a size, in the stage's grid px, or `null` when none is up. */
+function flagBox(hud: HTMLElement, rectOf: RectOf): Rect | null {
   for (const el of hud.querySelectorAll<HTMLElement>(FLAG_SELECTOR)) {
     const r = rectOf(el);
     if (r && r.right > r.left && r.bottom > r.top) return r;
   }
   return null;
+}
+
+/** The flag's box in the stage's grid px, or `null` when it is not up (no target cursor), or this is not Chapter XII on the F1 HUD. The advisor card and the dock read this one. */
+export function omnisFlagRect(hud: HTMLElement, rectOf: RectOf): Rect | null {
+  return omnisF1On(hud) ? flagBox(hud, rectOf) : null;
+}
+
+/**
+ * The flag's box for the SENSOR CARD's steer (`FFXBattleHud.steerSensor`): the same box in Chapter XII on the F1 HUD, and now in Chapter XII's old looks too (R72-1, driver decision 219r, 2026-11-03; FFX only): at TEXT SIZE 130 the F1 HUD is
+ * off (`F1_TEXT_CEILING`), and `?hud=today` and `?treated=pack` draw release 71's HUD, in which the Sensor card stands at the foot of the turn order (top 135 at TEXT SIZE 100) and lay on the flag at alternate stops of the cursor's walk. `null`
+ * everywhere else: no read-out marker (Chapter I, every other chapter, FFX-2) and the phone move by not one pixel.
+ */
+export function omnisSensorFlagRect(hud: HTMLElement, rectOf: RectOf): Rect | null {
+  return omnisReadoutOn(hud) ? flagBox(hud, rectOf) : null;
 }
 
 /** The held box per HUD: set the first time the flag lies on the advisor, kept while the flag stays inside it, replaced when it leaves, dropped when the flag is gone. */
