@@ -390,7 +390,7 @@ describe('the other doors do not interfere', () => {
       await flush();
       expect(c.picked, `${other.word.slice(0, -1)}${WORD}`).toEqual([WINDWAKER]);
     }
-  }, 120_000); // three real boards per other door (36 mounts at thirteen doors): about 14 s on a quiet machine, so the 15 s default flakes whenever the PC is busy
+  }, 180_000); // fifteen doors at the r74 integration (three real boards per other door, 42 mounts): about 16 s on a quiet machine and over 60 s when the PC is busy, so the pair test gets 180 s; a hang still fails, later (earlier note: three real boards per other door (36 mounts at thirteen doors): about 14 s on a quiet machine, so the 15 s default flakes whenever the PC is busy)
 });
 
 const keyDown = (key: string, init: KeyboardEventInit = {}): void => {

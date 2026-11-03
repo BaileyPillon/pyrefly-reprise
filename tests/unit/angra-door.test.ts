@@ -399,7 +399,7 @@ describe('the eight doors do not interfere', () => {
       await flush();
       expect(c.picked, `${other.word.slice(0, -1)}${WORD}`).toEqual([ANGRA]);
     }
-  }, 60_000); // about 11 s alone (real timers, one pair of door words at a time), so the 15 s default failed it in a full run under load (2026-10-30); a hang still fails, later
+  }, 180_000); // fifteen doors at the r74 integration (three real boards per other door, 42 mounts): about 16 s on a quiet machine and over 60 s when the PC is busy, so the pair test gets 180 s; a hang still fails, later (earlier note: about 11 s alone (real timers, one pair of door words at a time), so the 15 s default failed it in a full run under load (2026-10-30); a hang still fails, later)
 });
 
 const keyDown = (key: string, init: KeyboardEventInit = {}): void => {

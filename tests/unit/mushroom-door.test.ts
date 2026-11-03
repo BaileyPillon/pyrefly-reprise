@@ -365,7 +365,7 @@ describe('the three doors do not interfere', () => {
       await flush();
       expect(rig.picked, typed).toEqual([opens]);
     }
-  });
+  }, 180_000); // fifteen doors at the r74 integration (three real boards per other door, 42 mounts): about 16 s on a quiet machine and over 60 s when the PC is busy, so the pair test gets 180 s; a hang still fails, later
 
   it('a half-typed word before another does not spoil either', async () => {
     const a = mount();

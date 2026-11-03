@@ -331,7 +331,7 @@ describe('the five doors do not interfere', () => {
       await flush();
       expect(c.picked, `${other.word.slice(0, -1)}${WORD}`).toEqual([FAYTH]);
     }
-  });
+  }, 180_000); // fifteen doors at the r74 integration (three real boards per other door, 42 mounts): about 16 s on a quiet machine and over 60 s when the PC is busy, so the pair test gets 180 s; a hang still fails, later
 });
 
 const keyDown = (key: string, init: KeyboardEventInit = {}): void => {
