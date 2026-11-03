@@ -13,7 +13,7 @@
  * - **Tourist Trap** (`'ffx2-tourist-trap'`, number 23, 2026-10-14; FFX-2 only): Yojimbo and Daigoro in the Cavern of the Stolen Fayth, the optional mission; word `daigoro`.
  * - **Biran and Yenke** (`'biran-yenke'`, number 25, 2026-10-14; FFX only): Kimahri alone against the two Ronso at the Mountain Gate of Mt. Gagazet, where Lancet teaches him Ronso Rages; word `gagazet`.
  * - **Angra Mainyu** (`'ffx2-angra-mainyu'`, number 26, 2026-10-14; FFX-2 only): the Chapter 5 mission "Showdown in the Sands", the Bikanel Desert fiend and its arms Zarich and Tawrich; word `angra` (25 is the Biran and Yenke lane's).
- * - **Valefor at Besaid, Wind Waker** (`'exp-windwaker'`, number 32, 2026-10-20; FFX-2 only): hidden chapter 24's Valefor fight drawn as a Wind Waker HD style 3D scene; word `waker` (29 is the 3D Bahamut branch's).
+ * - **Valefor at Besaid, Wind Waker** (`'exp-windwaker'`, number 32, 2026-10-20; FFX-2 only): hidden chapter 24's Valefor fight drawn as a Wind Waker HD style 3D scene; word `waker` (31 is the 3D Bahamut's, 29 the Spectral Keeper's and 30 the Fallen Maesters').
  * - **The Last Summoning** (`'last-summoning'`, number 28, 2026-10-15; FFX only): Dream's End as a gauntlet in the player's order with the full roster of eight aeons, Yojimbo and the Magus Sisters among them; word `summon` (27 is the Dark Mirror lane's).
  * - **The Spectral Keeper** (`'spectral-keeper'`, number 29, 2026-11-02; FFX only): the beast at the foot of the Dome's lift, fought on six glyph platforms; word `keeper` (28 is the Last Summoning lane's).
  *
