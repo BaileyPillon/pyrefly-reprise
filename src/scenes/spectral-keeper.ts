@@ -4,7 +4,6 @@ import { ZANARKAND_DOME_SLOTS, buildZanarkandDomeScene } from './zanarkand-dome.
 import type { FloorDecal, PartAnchor, PartAnchors } from '../engine/PartAnchors.ts';
 import {
   SPECTRAL_ARMED_FLAG_PREFIX,
-  SPECTRAL_AT_FLAG_PREFIX,
   SPECTRAL_CIRCLE_IDS,
   SPECTRAL_GLYPH_DECALS,
   SPECTRAL_KEEPER_ID,
@@ -63,8 +62,8 @@ export const SPECTRAL_KEEPER_ENEMY_SPOTS: Readonly<Record<string, Spot>> = { [SP
 export const SPECTRAL_KEEPER_PART_ANCHORS: PartAnchors = Object.fromEntries(
   SPECTRAL_CIRCLE_IDS.map((id, i) => {
     const spot = SPECTRAL_KEEPER_GLYPH_SPOTS[i] as Spot;
-    // The painting (r75-boss-art): platforms 1 to 6 the glyph in three states (the occupied one while a member of the front line stands on it, the mine's while it is armed), the rock (platform 7) its one stone.
-    const decal: FloorDecal = i < ROCK_INDEX ? { ...SPECTRAL_GLYPH_DECALS, standing: { flagPrefix: SPECTRAL_AT_FLAG_PREFIX, platform: i + 1 } } : { unlit: SPECTRAL_ROCK_DECAL };
+    // The painting (r75-boss-art): platforms 1 to 6 the glyph in three states (the occupied one while the engine counts a member of the front line on it (`platformOccupancy.ts`), the mine's while it is armed), the rock (platform 7) its one stone.
+    const decal: FloorDecal = i < ROCK_INDEX ? { ...SPECTRAL_GLYPH_DECALS, standing: { platform: i + 1 } } : { unlit: SPECTRAL_ROCK_DECAL };
     return [id, { mode: 'overhead', offset: [spot[0] - CENTRE[0], 0, spot[2] - CENTRE[2]], floorRing: { radius: GLYPH_RING_RADIUS, litFlag: SPECTRAL_ARMED_FLAG_PREFIX + id, decal } } as PartAnchor];
   }),
 );

@@ -39,6 +39,7 @@ import {
   START_PLATFORMS,
 } from './ai/spectral-keeper-rules.ts';
 import { scriptIdOf } from './ai/hooks.ts';
+import { heldPlatform, occupiedPlatforms, standingIds } from './platformOccupancy.ts'; // the state-only half (who holds a platform), shared with the stage's painted glyphs
 
 /** Is this battle one that runs the glyph platforms (its formation said so at set-up)? */
 export function ringActive(ctx: Ctx): boolean {
@@ -50,8 +51,7 @@ const armedKey = (id: CombatantId): string => ARMED_PREFIX + id;
 
 /** The platform a character stands on (1 to 6, 7 for the rock), or `undefined` when it has none (a benched member, an aeon). */
 export function platformOf(ctx: Ctx, id: CombatantId): number | undefined {
-  const value = ctx.state.flags[atKey(id)];
-  return typeof value === 'number' ? value : undefined;
+  return heldPlatform(ctx.state.flags, id);
 }
 
 /** Put a character on a platform. */
@@ -78,7 +78,7 @@ export function isCircle(c: FFXCombatant): boolean {
 
 /** The three front-line members, in slot order, who still stand on the field (an Ejected member has left; a KO'd one is still on its platform). */
 function standing(ctx: Ctx): FFXCombatant[] {
-  return ctx.state.activeIds.map((id) => tryActor(ctx, id)).filter((c): c is FFXCombatant => c !== undefined && onField(c));
+  return standingIds(ctx.state).map((id) => tryActor(ctx, id)).filter((c): c is FFXCombatant => c !== undefined);
 }
 
 /** The front-line member standing on a platform, if any (the first in slot order). */
@@ -88,10 +88,11 @@ export function occupantAt(ctx: Ctx, platform: number): FFXCombatant | undefined
 
 /** The ring Circles whose platform nobody holds, in platform order: the legal targets of Move (a ticking mine's platform included). */
 export function freeCircleIds(ctx: Ctx): CombatantId[] {
+  const held = occupiedPlatforms(ctx.state); // the same answer the stage's painted glyphs read (`platformOccupancy.ts`)
   const out: CombatantId[] = [];
   for (let p = 1; p <= RING_PLATFORMS; p++) {
     const circle = circleOf(ctx, p);
-    if (circle !== undefined && onField(circle) && occupantAt(ctx, p) === undefined) out.push(circle.id);
+    if (circle !== undefined && onField(circle) && !held.has(p)) out.push(circle.id);
   }
   return out;
 }

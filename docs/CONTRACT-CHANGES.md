@@ -6,6 +6,13 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-11-03 — r75-boss-art fix pass (the painted glyphs read the engine's own platform count; FFX only; additive, no contract file changed)
+
+Authority: the driver's decisions 219u under Bailey's delegation (Bailey 2026-11-02 ~16:40 EST, "i'll go with all of your recommendations please implement all the unimplemented chapters that i decided on"; the driver's call, his to overturn). Branch `r75-boss-art`. Game case: the glyphs are FFX only (the hidden Spectral Keeper); the `PartRings.sync` argument is shared plumbing (both games), inert for every anchor without a decal.
+
+- **New `battle/ffx/platformOccupancy.ts`** (pure; no DOM, no `three`): `standingIds(view)`, `occupiedPlatforms(view)`, `heldPlatform(flags, id)`, `platformFlagOf(id)` and `PlatformView = Pick<BattleState, 'activeIds' | 'combatants' | 'flags'>`. `battle/ffx/platforms.ts` (`platformOf`, `occupantAt` through `standing`, `freeCircleIds`) reads it: the same answers as before, from one source, so the stage's picture of a platform and the Move row cannot disagree (a Switch leaves the outgoing member's `plat.at.*` flag and an Eject never clears it; the engine's answer counts only the active members still on the field).
+- `engine/PartAnchors.ts` (not a contract file): `decalStateOf(state, ring)` takes the battle state instead of its flags and shows `occupied` only where `occupiedPlatforms` says; `FloorDecal.standing` is `{ platform }` (the `flagPrefix` is gone, and `SPECTRAL_AT_FLAG_PREFIX` with it); `PartRings.sync(id, state)`'s state argument gains `activeIds` (the stage passes its whole `BattleState`; a test with a hand-made state adds `activeIds`, as `spectral-keeper-scene.test.ts` now does). No other anchor sets a decal.
+
 ## 2026-11-02 — Lane r74-revive (a revive's cross is longer and even, so no frame of it steps the tracked feet or head 40 px; BOTH GAMES; additive, no contract file changed)
 
 Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call, his to overturn). Branch `r74-revive`, from `origin/r73-int` `d5049f686`. PR-0570.

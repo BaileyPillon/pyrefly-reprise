@@ -6,15 +6,16 @@
 import { describe, expect, it } from 'vitest';
 import { Color, Group, Mesh, MeshBasicMaterial, PerspectiveCamera, Texture } from 'three';
 import { LIT_RING_COLOUR, PartRings, decalStateOf, type DecalLoader, type FloorDecal, type PartAnchor } from '../../../src/engine/PartAnchors.ts';
-import { SPECTRAL_ARMED_FLAG_PREFIX, SPECTRAL_AT_FLAG_PREFIX, SPECTRAL_CIRCLE_IDS, SPECTRAL_GLYPH_DECALS, SPECTRAL_ROCK_DECAL } from '../../../src/data/ffx/spectral-keeper-ids.ts';
+import { SPECTRAL_ARMED_FLAG_PREFIX, SPECTRAL_CIRCLE_IDS, SPECTRAL_GLYPH_DECALS, SPECTRAL_ROCK_DECAL } from '../../../src/data/ffx/spectral-keeper-ids.ts';
 import { AT_PREFIX, ARMED_PREFIX } from '../../../src/battle/ffx/ai/spectral-keeper-rules.ts';
+import { platformFlagOf } from '../../../src/battle/ffx/platformOccupancy.ts';
 import { SPECTRAL_KEEPER_PART_ANCHORS } from '../../../src/scenes/spectral-keeper.ts';
 
 const camera = new PerspectiveCamera();
 const parent = { x: 1, y: 0, z: -5, height: 3 };
 const flush = (): Promise<void> => new Promise((r) => setTimeout(r, 0));
 
-const DECAL: FloorDecal = { unlit: 'art/decals/u.png', occupied: 'art/decals/o.png', mined: 'art/decals/m.png', standing: { flagPrefix: 'plat.at.', platform: 3 } };
+const DECAL: FloorDecal = { unlit: 'art/decals/u.png', occupied: 'art/decals/o.png', mined: 'art/decals/m.png', standing: { platform: 3 } };
 const anchor = (decal: FloorDecal | undefined, litFlag = 'plat.armed.c3'): PartAnchor => ({ mode: 'overhead', offset: [0.5, 0, 1], floorRing: { radius: 0.8, litFlag, ...(decal ? { decal } : {}) } });
 
 /** A loader that answers with one texture per path (`null` for a path in `missing`), and remembers them. */
@@ -31,7 +32,19 @@ function loaderOf(missing: string[] = []): { load: DecalLoader; textures: Map<st
   return { load, textures, asked };
 }
 
-const state = (flags: Record<string, unknown>): Parameters<PartRings['sync']>[1] => ({ combatants: { c3: { alive: true } } as never, flags: flags as never });
+/**
+ * A battle state in the shape the engine keeps it for the glyphs: three active members on the field (Tidus, Yuna, Auron, as the Keeper's formation opens) and the ring's Circle, and the flags given. The glyph reads who stands
+ * where from the active, on-field members' `plat.at.<member>` flags (`platformOccupancy.ts`), not from the raw flags alone; `gone` takes members off the field (an Eject).
+ */
+const FRONT = ['tidus', 'yuna', 'auron'] as const;
+const state = (flags: Record<string, unknown>, gone: readonly string[] = []): NonNullable<Parameters<PartRings['sync']>[1]> => ({
+  activeIds: [...FRONT],
+  combatants: {
+    c3: { alive: true, statuses: {} },
+    ...Object.fromEntries(FRONT.map((id) => [id, { id, alive: true, removed: false, statuses: gone.includes(id) ? { eject: {} } : {} }])),
+  } as never,
+  flags: flags as never,
+});
 const ringOf = (root: Group): Mesh => root.children.find((m) => m.name === 'part-ring:c3') as Mesh;
 const decalOf = (root: Group): Mesh | undefined => root.children.find((m) => m.name === 'part-decal:c3') as Mesh | undefined;
 const frames = (rings: PartRings, flags: Record<string, unknown>, n = 12): void => {
@@ -43,24 +56,30 @@ const frames = (rings: PartRings, flags: Record<string, unknown>, n = 12): void 
 
 describe('decalStateOf: which picture shows', () => {
   const ring = { litFlag: 'plat.armed.c3', decal: DECAL };
-  it('the plain picture with no flags, no state, or nobody on it', () => {
+  it('the plain picture with no state, no flags, or nobody on it', () => {
     expect(decalStateOf(undefined, ring)).toBe('unlit');
-    expect(decalStateOf({}, ring)).toBe('unlit');
-    expect(decalStateOf({ 'plat.at.tidus': 2, 'plat.at.yuna': 5 }, ring)).toBe('unlit');
+    expect(decalStateOf(null, ring)).toBe('unlit');
+    expect(decalStateOf(state({}), ring)).toBe('unlit');
+    expect(decalStateOf(state({ 'plat.at.tidus': 2, 'plat.at.yuna': 5 }), ring)).toBe('unlit');
   });
-  it('the occupied picture while a member stands on THIS platform (the flag value is the platform number)', () => {
-    expect(decalStateOf({ 'plat.at.auron': 3 }, ring)).toBe('occupied');
-    expect(decalStateOf({ 'plat.at.auron': 4 }, ring)).toBe('unlit');
-    expect(decalStateOf({ 'something.else': 3 }, ring)).toBe('unlit');
+  it('the occupied picture while a member on the field stands on THIS platform (the flag value is the platform number)', () => {
+    expect(decalStateOf(state({ 'plat.at.auron': 3 }), ring)).toBe('occupied');
+    expect(decalStateOf(state({ 'plat.at.auron': 4 }), ring)).toBe('unlit');
+    expect(decalStateOf(state({ 'something.else': 3 }), ring)).toBe('unlit');
+  });
+  it('a flag alone is not a member standing there: a benched member\'s stale flag, and an Ejected member\'s, leave the plain picture (the engine says the platform is free)', () => {
+    expect(decalStateOf(state({ 'plat.at.wakka': 3 }), ring), 'wakka is not on the front line').toBe('unlit');
+    expect(decalStateOf(state({ 'plat.at.auron': 3 }, ['auron']), ring), 'auron was Ejected').toBe('unlit');
+    expect(decalStateOf(state({ 'plat.at.auron': 3 }), ring)).toBe('occupied');
   });
   it('the mine\'s picture while the ring is lit, whoever stands on it (a member can Move onto a ticking mine)', () => {
-    expect(decalStateOf({ 'plat.armed.c3': true }, ring)).toBe('mined');
-    expect(decalStateOf({ 'plat.armed.c3': true, 'plat.at.auron': 3 }, ring)).toBe('mined');
-    expect(decalStateOf({ 'plat.armed.c3': false, 'plat.at.auron': 3 }, ring)).toBe('occupied');
+    expect(decalStateOf(state({ 'plat.armed.c3': true }), ring)).toBe('mined');
+    expect(decalStateOf(state({ 'plat.armed.c3': true, 'plat.at.auron': 3 }), ring)).toBe('mined');
+    expect(decalStateOf(state({ 'plat.armed.c3': false, 'plat.at.auron': 3 }), ring)).toBe('occupied');
   });
   it('a decal with no `standing` never shows occupied; a ring with no lit flag is never mined', () => {
-    expect(decalStateOf({ 'plat.at.auron': 3 }, { litFlag: 'x', decal: { unlit: 'u' } })).toBe('unlit');
-    expect(decalStateOf({ 'plat.armed.c3': true }, { decal: DECAL })).toBe('unlit');
+    expect(decalStateOf(state({ 'plat.at.auron': 3 }), { litFlag: 'x', decal: { unlit: 'u' } })).toBe('unlit');
+    expect(decalStateOf(state({ 'plat.armed.c3': true }), { decal: DECAL })).toBe('unlit');
   });
 });
 
@@ -188,16 +207,16 @@ describe('the Spectral Keeper\'s anchors use it', () => {
       const ring = a.mode === 'overhead' ? a.floorRing! : undefined;
       expect(ring?.decal, id).toBeDefined();
       if (i < 6) {
-        expect(ring!.decal, id).toEqual({ ...SPECTRAL_GLYPH_DECALS, standing: { flagPrefix: SPECTRAL_AT_FLAG_PREFIX, platform: i + 1 } });
+        expect(ring!.decal, id).toEqual({ ...SPECTRAL_GLYPH_DECALS, standing: { platform: i + 1 } });
       } else {
         expect(ring!.decal, id).toEqual({ unlit: SPECTRAL_ROCK_DECAL });
       }
     });
   });
 
-  it('the flag prefixes are the battle layer\'s (a copy that drifted would leave a glyph unlit under a member)', () => {
-    expect(SPECTRAL_AT_FLAG_PREFIX).toBe(AT_PREFIX);
+  it('the armed-flag prefix is the battle layer\'s (a copy that drifted would leave a mine unlit); the occupied picture has no copy of its own: it reads the engine\'s `platformOccupancy.ts`, whose flag is AT_PREFIX', () => {
     expect(SPECTRAL_ARMED_FLAG_PREFIX).toBe(ARMED_PREFIX);
+    expect(platformFlagOf('auron')).toBe(AT_PREFIX + 'auron');
   });
 
   it('every decal path is an art path under art/decals/ (the stage resolves it with artUrl)', () => {

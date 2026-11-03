@@ -10237,16 +10237,11 @@
   },
   "driver:2026-11-03-boss-art (item 219m, delegated by Bailey)": {
    "words": "Bailey, 2026-11-02 ~16:40 EST: \"i'll go with all of your recommendations please implement all the unimplemented chapters that i decided on\"; 2026-10-31: \"you make the executive decisions for the next few days.\"",
-   "decision": "item 219m of the driver's list (the Spectral Keeper and Fallen Maesters paintings), under the delegation of 2026-10-31 and 2026-11-02; the D-number is owed by the records pass",
-   "note": "DRIVER CALL, delegated by Bailey; not Bailey's own approval of the pictures. The paintings of the hidden FFX Spectral Keeper (chapter 29, FFX only: the Keeper idle attack cast hurt ko and idle@2x, the glyph in three states, the aeon rock, the turn-list face, the pause plate, the chapter card and thumbnail) and of the hidden FFX-2 Fallen Maesters (chapter 30, FFX-2 only: Aranea, the Black Elemental, Concherer with a cracked-shell idle, Chac, each idle attack cast hurt and idle@2x, the pause plate, the chapter card and thumbnail), made 2026-11-02 and 03 in D:/Tools/pyrefly-scratch/2026-11-02/art-poses/set (MANIFEST.md): every pose a Method W warp of its idle, no repaint; the plates are composites of the approved backdrops and the idles. Staged for install by branch r75-boss-art (docs/handoff/r75-boss-art.md); each pin is the sha256 of the staged file, which is the candidate byte for byte. New files, nothing replaced, so nothing was archived.",
+   "decision": "item 219m of the driver's list (the Spectral Keeper and Fallen Maesters paintings), under the delegation of 2026-10-31 and 2026-11-02; item 219u (2026-11-03) holds the Keeper's attack painting back: staged, not installed, not pinned; the D-number is owed by the records pass",
+   "note": "DRIVER CALL, delegated by Bailey; not Bailey's own approval of the pictures. The paintings of the hidden FFX Spectral Keeper (chapter 29, FFX only: the Keeper idle cast hurt ko and idle@2x (its attack painting is held back, 219u), the glyph in three states, the aeon rock, the turn-list face, the pause plate, the chapter card and thumbnail) and of the hidden FFX-2 Fallen Maesters (chapter 30, FFX-2 only: Aranea, the Black Elemental, Concherer with a cracked-shell idle, Chac, each idle attack cast hurt and idle@2x, the pause plate, the chapter card and thumbnail), made 2026-11-02 and 03 in D:/Tools/pyrefly-scratch/2026-11-02/art-poses/set (MANIFEST.md): every pose a Method W warp of its idle, no repaint; the plates are composites of the approved backdrops and the idles. Staged for install by branch r75-boss-art (docs/handoff/r75-boss-art.md); each pin is the sha256 of the staged file, which is the candidate byte for byte. New files, nothing replaced, so nothing was archived.",
    "public/art/characters/spectral-keeper/idle.png": {
     "sha256": "52caec9b7365e46af60747409da2fde101fb683ec2f246a6a9db3700145fe066",
     "mtime": "2026-11-03T05:12:12.880Z",
-    "delegated": "2026-11-03"
-   },
-   "public/art/characters/spectral-keeper/attack.png": {
-    "sha256": "8aca617ca8ab182cd625807a7137014481b30d5a276c6b72635478646d5c2cc2",
-    "mtime": "2026-11-03T06:57:53.703Z",
     "delegated": "2026-11-03"
    },
    "public/art/characters/spectral-keeper/cast.png": {

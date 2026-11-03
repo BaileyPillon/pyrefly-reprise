@@ -369,7 +369,6 @@ export const POSE_REGISTRATION_FOES: PoseRegistrationTable = {
     overdrive: { stanceX: 585.5, status: 'ok', class: 'standing', stature: 1.037, iou: 0.356, sha: '99a10a220359f14e' },
   },
   'spectral-keeper': {
-    attack: { stanceX: 462, feetRow: 1028, status: 'waived', class: 'standing', stature: 1.013, iou: 0.464, sha: '8aca617ca8ab182c' },
     cast: { stanceX: 376.5, feetRow: 1102.0, status: 'ok', class: 'standing', stature: 1.088, iou: 0.59, sha: '6bb637a070901f45' },
     hurt: { scale: 1.02, stanceX: 376.5, feetRow: 908.0, status: 'ok', class: 'standing', stature: 0.91, iou: 0.596, sha: '9c7afb341dfdce7c' },
     idle: { stanceX: 376.5, feetRow: 1014.0, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '52caec9b7365e46a' },

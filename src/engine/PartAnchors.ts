@@ -23,6 +23,7 @@
  */
 
 import type { BattleState } from '../battle/common/types.ts';
+import { occupiedPlatforms } from '../battle/ffx/platformOccupancy.ts';
 import {
   AdditiveBlending,
   Color,
@@ -77,24 +78,31 @@ export type DecalState = 'unlit' | 'occupied' | 'mined';
 /**
  * **A painting that replaces a floor ring** (FFX only: the Spectral Keeper's glyph platforms and its aeon rock, r75-boss-art; the paintings are `art/decals/*.png`, square, the glyph's outer circle touching the edges, so the plane is the
  * ring's diameter wide). Each path is an `art/...png` path the stage's loader resolves. While the plain picture has not loaded, or has no file, the ring is drawn as before: a tree without the art plays exactly as it did.
- * `standing` names the battle-state flags that say who stands where (`plat.at.<member>` holds a platform number) and this decal's platform: the `occupied` picture shows while any of them equals it. The `mined` picture shows while the ring's `litFlag` is up.
+ * `standing` names this decal's platform number: the `occupied` picture shows while the **engine** counts that platform as held (somebody on the front line, still on the field, stands on it: `occupiedPlatforms`, the same answer that decides which
+ * platforms Move may land on, so a Switch's stale flag or an Ejected member's never lights a free glyph; r75-boss-art, review finding M1, decision 219u). The `mined` picture shows while the ring's `litFlag` is up.
  */
 export interface FloorDecal {
   readonly unlit: string;
   readonly occupied?: string;
   readonly mined?: string;
-  readonly standing?: { readonly flagPrefix: string; readonly platform: number };
+  readonly standing?: { readonly platform: number };
 }
 
 /** Loads one decal painting (`art/...png` path): its texture, or null when the file is absent. Injected by the stage (`BattlePresenterStage.ts`), so this module imports no art loader. */
 export type DecalLoader = (path: string) => Promise<Texture | null>;
 
-/** Which of a decal's pictures shows: the mine's while the ring is lit, else the occupied one while somebody stands on the platform, else the plain one. Pure. */
-export function decalStateOf(flags: Readonly<Record<string, unknown>> | undefined, floorRing: { litFlag?: string; decal?: FloorDecal }): DecalState {
-  if (!flags) return 'unlit';
-  if (floorRing.litFlag !== undefined && flags[floorRing.litFlag] === true) return 'mined';
+/** What a decal's state is read from: the three fields the engine's own platform answer needs (`platformOccupancy.ts`). */
+export type DecalView = Pick<BattleState, 'activeIds' | 'combatants' | 'flags'>;
+
+/**
+ * Which of a decal's pictures shows: the mine's while the ring is lit, else the occupied one while the engine counts the platform as held, else the plain one. Pure.
+ * **Occupied is the engine's answer, not a raw `plat.at.*` flag** (a flag outlives a Switch and an Eject; `occupiedPlatforms` is what `freeCircleIds`, and so Move, use), so a glyph never shows a free platform as taken.
+ */
+export function decalStateOf(state: DecalView | null | undefined, floorRing: { litFlag?: string; decal?: FloorDecal }): DecalState {
+  if (!state) return 'unlit';
+  if (floorRing.litFlag !== undefined && state.flags[floorRing.litFlag] === true) return 'mined';
   const at = floorRing.decal?.standing;
-  if (at && Object.entries(flags).some(([key, value]) => key.startsWith(at.flagPrefix) && value === at.platform)) return 'occupied';
+  if (at && occupiedPlatforms(state).has(at.platform)) return 'occupied';
   return 'unlit';
 }
 
@@ -260,14 +268,14 @@ export class PartRings {
   }
 
   /** Per frame from the stage: whether the part is alive, and whether its floor ring is lit (the anchor's `litFlag` is true in the battle's flags). Inert for a ring with no `litFlag`. */
-  sync(id: string, state: Pick<BattleState, 'combatants' | 'flags'> | null | undefined): void {
+  sync(id: string, state: DecalView | null | undefined): void {
     const e = this.rings.get(id);
     if (!e) return;
     e.alive = state?.combatants[id]?.alive !== false;
     const floorRing = e.anchor.mode === 'overhead' ? e.anchor.floorRing : undefined;
     const flag = floorRing?.litFlag;
     e.litNow = flag !== undefined && state?.flags[flag] === true;
-    if (floorRing?.decal) e.want = decalStateOf(state?.flags, floorRing);
+    if (floorRing?.decal) e.want = decalStateOf(state, floorRing);
   }
 
   /** Re-place and fade every ring. `parentOf` returns the live parent, or undefined when it has left. */

@@ -419,14 +419,5 @@
    ],
    "why": "r75-boss-art: the pose is the idle's own pixels warped and painted at the idle's pixel scale; its sidecar registration (idle top-left at 115,-24 in this file) puts the idle's stance x (624) at 739; the silhouette reading differs by 7 to 14 px (the lashed tongue and the head turn), so this passes the gate either way and is closer to the painting"
   }
- },
- "spectral-keeper": {
-  "attack": {
-   "stance": [
-    462,
-    1028
-   ],
-   "why": "r75-boss-art: the attack is the idle's own pixels warped and painted at the idle's pixel scale; its sidecar registration (idle top-left at 86,50 in this file) puts the idle's stance x (376) at 462. The silhouette reading (x 672) is the right claw alone, because the tail blade is raised off the floor: aligning that to the idle's stance would slide the claw 210 px and leave the idle-to-attack overlap at 0.07 (0.51 with this value). Row 1028 is the claw's own mass; its thin dark talons hang 44 px below it"
-  }
  }
 }

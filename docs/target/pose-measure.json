@@ -19005,27 +19005,6 @@
     1.0
    ],
    "poses": {
-    "attack": {
-     "anchor": [
-      565.9,
-      58.5
-     ],
-     "baseline": 1072.0,
-     "prone": false,
-     "scale": null,
-     "scaleSrc": "unreviewed",
-     "sha": "8aca617ca8ab182cd625807a7137014481b30d5a276c6b72635478646d5c2cc2",
-     "size": [
-      798,
-      1089
-     ],
-     "stance": {
-      "row": 1028,
-      "src": "hand",
-      "x": 462
-     },
-     "standing": true
-    },
     "cast": {
      "anchor": [
       374.5,
