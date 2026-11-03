@@ -32,7 +32,7 @@ import {
   type Material,
   type PerspectiveCamera,
 } from 'three';
-import { MIN_LEAD, ORB, ORB_BANDS, ORB_COLOURS, curlPoints, movePhase, orbCapRadius, orbRadius, type MoveKind } from './moves.ts';
+import { MIN_LEAD, ORB, ORB_BANDS, ORB_COLOURS, ORB_MAX_SHARE, ORB_MAX_SHARE_CALM, curlPoints, movePhase, orbCapRadius, orbRadius, type MoveKind } from './moves.ts';
 
 const Y = new Vector3(0, 1, 0);
 
@@ -115,9 +115,12 @@ interface Running {
 export class MoveFx {
   readonly group = new Group();
   private running: Running[] = [];
+  /** Is REDUCE FLASHES on? Asked every frame (the player can turn it on mid-fight). */
+  private readonly calm: () => boolean;
 
-  constructor() {
+  constructor(opts: { readonly calm?: () => boolean } = {}) {
     this.group.name = 'ww-move-fx';
+    this.calm = opts.calm ?? ((): boolean => false);
   }
 
   /** How many effects are alive now. */
@@ -169,7 +172,7 @@ export class MoveFx {
     mesh.onBeforeRender = (_renderer, _scene, camera: Camera): void => {
       const cam = camera as PerspectiveCamera;
       let drawn = state.wanted;
-      if (cam.isPerspectiveCamera) drawn = Math.min(drawn, orbCapRadius(cam.position.distanceTo(mesh.position), cam.fov, cam.aspect));
+      if (cam.isPerspectiveCamera) drawn = Math.min(drawn, orbCapRadius(cam.position.distanceTo(mesh.position), cam.fov, cam.aspect, this.calm() ? ORB_MAX_SHARE_CALM : ORB_MAX_SHARE));
       drawn = Math.max(0.001, drawn);
       if (drawn !== state.drawn || mesh.scale.x !== drawn) {
         state.drawn = drawn;
@@ -199,12 +202,13 @@ export class MoveFx {
     });
     r.step = (age: number): void => {
       const p = movePhase('ray', age, r.lead);
+      const calm = this.calm();
       r.orb!.wanted = Math.max(0.001, 0.32 * p.charge * (p.fire > 0 ? 1.4 : p.fade));
       muzzle.scale.setScalar(r.orb!.wanted);
       muzzleMat.uniforms['uOpacity']!.value = p.fade;
       for (const { sleeve, core, len } of beams) {
         const open = age >= r.lead ? p.fade : 0;
-        const w = age >= r.lead ? 0.2 * (0.9 + 0.1 * Math.sin(age * 40)) : 0.001;
+        const w = age >= r.lead ? 0.2 * (0.9 + (calm ? 0 : 0.1 * Math.sin(age * 40))) : 0.001;
         sleeve.scale.set(Math.max(0.001, w), len, Math.max(0.001, w));
         core.scale.set(Math.max(0.001, w * 0.5), len, Math.max(0.001, w * 0.5));
         for (const b of [sleeve, core]) {
@@ -232,10 +236,11 @@ export class MoveFx {
     ring.rotation.x = Math.PI / 2; // a flat ring about the vertical axis
     r.step = (age: number): void => {
       const p = movePhase('blast', age, r.lead);
-      r.orb!.wanted = Math.max(0.001, orbRadius(p));
+      const calm = this.calm();
+      r.orb!.wanted = Math.max(0.001, orbRadius(p, calm));
       orb.scale.setScalar(r.orb!.wanted);
       orbMat.uniforms['uOpacity']!.value = p.fade;
-      orbMat.uniforms['uBands']!.value.x = ORB_BANDS.core + 0.05 * Math.sin(age * 18); // the core shimmers
+      orbMat.uniforms['uBands']!.value.x = ORB_BANDS.core + (calm ? 0 : 0.05 * Math.sin(age * 18)); // the core shimmers (still under REDUCE FLASHES)
       const since = Math.max(0, age - r.lead);
       ring.scale.setScalar(Math.max(0.001, 0.4 + since * 6));
       ring.visible = since > 0;

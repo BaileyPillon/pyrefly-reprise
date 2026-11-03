@@ -21,6 +21,14 @@ export const HIT_COLOURS = {
   puffLine: '#b3c4e6',
 } as const;
 
+/**
+ * **REDUCE FLASHES** (the ACCESSIBILITY row, PR-0032; `HitFx`'s `calm`). This chapter draws its own hits (`SceneStaging.ownImpacts`), which turns off the shared Spectacle hit whose impact frame goes soft under the row
+ * (`SpectacleRules`), so the star keeps the setting itself: the star is {@link CALM_STAR_SCALE} of its size, begins at {@link CALM_STAR_START} and does not overshoot, and its white core (the brightest part) is not drawn.
+ */
+export const CALM_STAR_SCALE = 0.6;
+export const CALM_STAR_START = 0.7;
+export const CALM_STAR_OVERSHOOT = 1;
+
 /** The star's life, seconds at normal speed, and how long it takes to reach its biggest. */
 export const STAR_LIFE = 0.25;
 export const STAR_POP = 0.06;
@@ -56,26 +64,33 @@ export const STAR_HEIGHT_CAP = 2.2;
 export const HEAVY_SCALE = 1.25;
 export const LATER_SCALE = 0.8;
 
-/** The plan for a blow on a figure `height` metres tall. */
-export function hitPlan(height: number, info: HitInfo): HitPlan {
+/** The plan for a blow on a figure `height` metres tall; `calm` (REDUCE FLASHES) draws the star at {@link CALM_STAR_SCALE} of its size. */
+export function hitPlan(height: number, info: HitInfo, calm = false): HitPlan {
   const later = info.hitIndex > 0;
-  const radius = STAR_SHARE * Math.min(Math.max(height, 0), STAR_HEIGHT_CAP) * (info.heavy ? HEAVY_SCALE : later ? LATER_SCALE : 1);
+  const radius = STAR_SHARE * Math.min(Math.max(height, 0), STAR_HEIGHT_CAP) * (info.heavy ? HEAVY_SCALE : later ? LATER_SCALE : 1) * (calm ? CALM_STAR_SCALE : 1);
   return { points: info.heavy ? 6 : later ? 4 : 5, radius, puffs: info.heavy ? 5 : later ? 3 : 4 };
 }
 
 /**
  * The star's size `age` seconds after the blow, as a share of its nominal radius: 0 before it begins, pops from {@link STAR_START} to {@link STAR_OVERSHOOT} over {@link STAR_POP} (ease out), then shrinks to 0 at
- * {@link STAR_LIFE} (it holds its size a moment and collapses at the end), 0 after.
+ * {@link STAR_LIFE} (it holds its size a moment and collapses at the end), 0 after. `calm` (REDUCE FLASHES) pops from {@link CALM_STAR_START} to 1 with no overshoot.
  */
-export function starScale(age: number): number {
+export function starScale(age: number, calm = false): number {
   if (!(age >= 0) || age >= STAR_LIFE) return 0;
+  const start = calm ? CALM_STAR_START : STAR_START;
+  const peak = calm ? CALM_STAR_OVERSHOOT : STAR_OVERSHOOT;
   if (age < STAR_POP) {
     const u = age / STAR_POP;
     const e = 1 - (1 - u) ** 3;
-    return STAR_START + (STAR_OVERSHOOT - STAR_START) * e;
+    return start + (peak - start) * e;
   }
   const u = (age - STAR_POP) / (STAR_LIFE - STAR_POP);
-  return STAR_OVERSHOOT * (1 - u ** 1.6);
+  return peak * (1 - u ** 1.6);
+}
+
+/** The layers a star is drawn in, first to last: all three, or under REDUCE FLASHES (`calm`) the outline and the body only (no white core). */
+export function starLayerNames(calm = false): ReadonlyArray<'outline' | 'body' | 'core'> {
+  return calm ? ['outline', 'body'] : ['outline', 'body', 'core'];
 }
 
 /** The star's turn `age` seconds after the blow, radians (the base angle is the burst's own). */

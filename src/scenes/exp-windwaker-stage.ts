@@ -22,6 +22,7 @@ import { Group, Vector3 } from 'three';
 import { Backdrop } from '../engine/Backdrop.ts';
 import type { CameraRig } from '../engine/BattleCamera.ts';
 import { LightRig } from '../engine/Lighting.ts';
+import { eyeCandy } from '../engine/fx/EyeCandy.ts';
 import { RIGS, TARGET_POSITION, type RigData } from '../engine/ww3d/camera.ts';
 import { BOSS_HEIGHT, BOSS_SPOT, ENEMY_SLOTS, PARTY_HEIGHT, PARTY_SLOTS, WORLD_HEIGHT, WW_BOSS_ID, type V3 } from '../engine/ww3d/layout.ts';
 import { EXP_WINDWAKER_SCENE, WW_MODEL_DIR, WW_PROP_DIR, WW_TEMPLE_DIR } from '../data/windwaker-ids.ts';
@@ -138,9 +139,10 @@ export const buildExpWindwakerStageScene: SceneFactory = async (opts: SceneBuild
   });
 
   mark('models');
-  const fx = new MoveFx();
+  const calm = (): boolean => eyeCandy.reduceFlashes; // REDUCE FLASHES (PR-0032): the scene draws its own hits and moves, so the row is kept here (smaller star, no white core, no orb burst, still shimmers)
+  const fx = new MoveFx({ calm });
   group.add(fx.group);
-  const hits = new HitFx();
+  const hits = new HitFx({ calm });
   group.add(hits.group);
   const skin = new WwSkin({ host: group, models, fx, hits });
   const directed = tapDirector(undefined, skin.listener); // the beats start the models' clips (attack and cast), the move effects and the wings' flap

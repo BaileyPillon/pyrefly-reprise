@@ -41,6 +41,7 @@ import {
   puffState,
   starAngle,
   starCapRadius,
+  starLayerNames,
   starPoints,
   starScale,
   type HitInfo,
@@ -109,6 +110,8 @@ interface Burst {
   readonly star: Mesh[];
   readonly base: number;
   readonly life: number;
+  /** REDUCE FLASHES was on when the blow landed: the star is smaller, does not overshoot and has no white core. */
+  readonly calm: boolean;
   age: number;
   /** The star's nominal radius as last drawn after the frame cap (a test's and the debug view's read). */
   drawn: number;
@@ -119,6 +122,8 @@ export interface BurstView {
   readonly age: number;
   readonly points: number;
   readonly puffs: number;
+  /** The burst was drawn calm (REDUCE FLASHES). */
+  readonly calm: boolean;
   /** The star's size now as a share of its nominal radius (`starScale`). */
   readonly scale: number;
   /** The nominal radius the plan asked for and the radius drawn after the frame cap, metres. */
@@ -135,9 +140,12 @@ export class HitFx {
   private readonly cloudLine = cloudGeometry(PUFF_OUTLINE);
   private readonly curl = curlGeometry();
   private readonly starMaterials = { outline: flat(HIT_COLOURS.outline), body: flat(HIT_COLOURS.body), core: flat(HIT_COLOURS.core) };
+  /** Is REDUCE FLASHES on? Asked at each blow (the player can turn it on mid-fight). */
+  private readonly calm: () => boolean;
 
-  constructor() {
+  constructor(opts: { readonly calm?: () => boolean } = {}) {
     this.group.name = 'ww-hit-fx';
+    this.calm = opts.calm ?? ((): boolean => false);
   }
 
   /** How many bursts are alive now. */
@@ -147,7 +155,7 @@ export class HitFx {
 
   /** The bursts alive now (a test's and the debug view's read). */
   get bursts(): BurstView[] {
-    return this.running.map((b) => ({ age: b.age, points: b.plan.points, puffs: b.puffs.length, scale: starScale(b.age), radius: b.plan.radius, drawn: b.drawn }));
+    return this.running.map((b) => ({ age: b.age, points: b.plan.points, puffs: b.puffs.length, calm: b.calm, scale: starScale(b.age, b.calm), radius: b.plan.radius, drawn: b.drawn }));
   }
 
   /** How many meshes the effects hold in the scene right now. */
@@ -170,7 +178,8 @@ export class HitFx {
 
   /** Start a burst at `at` (the world point a blow lands on: a figure's chest) on a figure `height` metres tall. */
   burst(at: Vector3, info: HitInfo, height: number): void {
-    const plan = hitPlan(height, info);
+    const calm = this.calm();
+    const plan = hitPlan(height, info, calm);
     const seed = ++this.counter;
     const base = (seed % 7) * 0.31;
     const puffPlans = puffLayout(plan.puffs, seed);
@@ -185,14 +194,14 @@ export class HitFx {
       this.group.add(m);
       return m;
     };
-    const b: Burst = { at: at.clone(), plan, puffs: [], star: [], base, life: burstLife(puffPlans), age: 0, drawn: plan.radius };
+    const b: Burst = { at: at.clone(), plan, puffs: [], star: [], base, life: burstLife(puffPlans), calm, age: 0, drawn: plan.radius };
     // The hooks only pose a mesh from the live camera; whether a mesh is shown, and a puff's opacity, are set by `update` (a hidden mesh is never rendered, so its hook would never run to show it).
-    for (const layer of ['outline', 'body', 'core'] as const) {
+    for (const layer of starLayerNames(calm)) {
       const m = add(this.starFor(plan.points), this.starMaterials[layer], ORDER[layer], (camera, mesh) => {
         camera.getWorldQuaternion(CAM_Q);
         mesh.quaternion.copy(CAM_Q).multiply(SPIN_Q.setFromAxisAngle(Z, starAngle(base, b.age)));
         mesh.position.copy(b.at);
-        mesh.scale.setScalar(this.radiusFor(b, camera) * starScale(b.age) * STAR_LAYERS[layer]);
+        mesh.scale.setScalar(this.radiusFor(b, camera) * starScale(b.age, b.calm) * STAR_LAYERS[layer]);
         mesh.updateMatrixWorld();
       });
       m.visible = true;
@@ -231,7 +240,7 @@ export class HitFx {
         this.free(b);
         continue;
       }
-      const star = starScale(b.age) > 0.001;
+      const star = starScale(b.age, b.calm) > 0.001;
       for (const m of b.star) m.visible = star;
       for (const p of b.puffs) {
         const st = puffState(p.puff, b.age);

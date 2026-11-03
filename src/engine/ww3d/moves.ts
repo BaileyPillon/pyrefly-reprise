@@ -97,15 +97,21 @@ export function orbCapRadius(distance: number, fovDeg: number, aspect: number, s
   return (distance * q) / Math.sqrt(1 + q * q);
 }
 
+/**
+ * **REDUCE FLASHES** (PR-0032; `MoveFx`'s `calm`): the Blast's orb does not burst past its charged size and covers at most {@link ORB_MAX_SHARE_CALM} of the frame (a quarter of the frame in one bright disc is a flash),
+ * and the two shimmers (the Ray's width, about 6 Hz, and the Blast's core, about 3 Hz) are still.
+ */
+export const ORB_MAX_SHARE_CALM = 0.08;
+
 /** The orb's bands, on the surface's N.V (1 at the middle of the disc, 0 at its edge): a white core above `core`, a yellow band down to `mid`, an orange rim down to `line`, a thin deep-orange outline below. Flat colours, no gradient. */
 export const ORB_BANDS = { core: 0.82, mid: 0.5, line: 0.14 } as const;
 /** The bands' colours, as display (sRGB) hex: core, mid, rim, outline. Every one is under 1.0 in luminance, so nothing of the orb is above the bloom's threshold. */
 export const ORB_COLOURS = { core: '#fff6d6', mid: '#ffd23c', rim: '#ff8a1c', line: '#d94a0c' } as const;
 
-/** The orb's radius `phase` of the way through its life, metres, before the frame cap ({@link orbCapRadius}). */
-export function orbRadius(phase: MovePhase): number {
+/** The orb's radius `phase` of the way through its life, metres, before the frame cap ({@link orbCapRadius}); `calm` (REDUCE FLASHES) has no burst at the blow. */
+export function orbRadius(phase: MovePhase, calm = false): number {
   const swell = ORB.radius * (0.15 + 0.85 * phase.charge);
-  const burst = phase.charge >= 1 ? ORB.burst : 1;
+  const burst = !calm && phase.charge >= 1 ? ORB.burst : 1;
   return swell * burst;
 }
 
