@@ -95,7 +95,7 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
   'seymour-omnis': { game: 'ffx', since: 'r71' },
   'isaaru-via-purifico': { game: 'ffx', since: 'r70' },
   // The last five listed chapters, the FFX lane `booth-b4-last` (FFX only; Bailey 2026-10-30: the booth treatment for every listed chapter; the holds are in `PieceHoldsLast.ts`): Chapter VIII (Evrae, on the Fahrenheit's deck), Chapter XVIII (Sin's face, link 4 on the same deck over the Bevelle plate) and
-  // the Mirror Aeons chapter (Chapter 27 in the list: two plates, no @2x master for the first). Chapter XVII (Sin's Fins and Core, `sin-fins-core`) does NOT join: its Fin plate meets the F1 turn strip and its flight plate is the brightest of any listed chapter's fight plate, 0.659 against the Farplane's 0.628 that clipped (`tests/unit/booth-treated-chapters.test.ts` `NOT_YET`). `since` is the batch's release number.
+  // the Mirror Aeons chapter (Chapter 27 in the list: two plates, no @2x master for the first). Chapter XVII (Sin's Fins and Core, `sin-fins-core`) did NOT join in release 71 (its Fin plate met the F1 turn strip and its flight plate is the brightest of any listed chapter's fight plate, 0.659 against the Farplane's 0.628 that clipped) and joins at the end of this list (r74). `since` is the batch's release number.
   'evrae-airship': { game: 'ffx', since: 'r71' },
   // Chapter XVIII (Sin's face, `sin-face`, FFX only) LEFT THIS LIST for release 71 (the driver's call on the second focused HOLD, 2026-11-01: `critic/reviews/4c01379d4-focused`, R71-C1: 17 one-frame hops over 100 px with the real clips held, against 0 on `?treated=pack`) and is BACK on `r73-fast`
   // (2026-11-01, `docs/handoff/r73-fast.md`; both games' plumbing, FFX only for the chapter): the hops were the house strike played at the FAST playback speed (a sub-frame tap of R1, the Bushido sequence's chip, left the review's run on fast from Auron's Dragon Fang on, `r73-sinface`), the strike's travel and
@@ -103,6 +103,10 @@ export const TREATED_CHAPTERS: Readonly<Record<string, TreatedEntry>> = Object.f
   // (`PieceHoldsLast.ts`, including `real`, which stays held), the look row, `sin-hud.css` and the cut-anchor row are as they were. The CHK-027 run against `?treated=pack` at normal AND fast speed is the next focused review's job (r73-fast.md section 6); `booth-b4-r71-sin-face-off.test.ts` asks for it by name in the `SIN-FACE LIFT:` line of the handoff note.
   'sin-face': { game: 'ffx', since: 'r71' }, // `since` stays r71: the batch it joined in (the driver's to renumber)
   'mirror-aeons': { game: 'ffx', since: 'r71' },
+  // Chapter XVII (Sin's Fins and Core, `sin-fins-core`, FFX only), `r74-fins` (`docs/handoff/r74-fins.md`; the driver's call under Bailey's 2026-10-31 words, his to overturn). The Fin plate (`.ffx-sinfin`) that sat on the F1 turn strip in links I and II now stands in the band between the boss ribbon and the strip (`sin-hud.css`; the F1 sheet's own
+  // zones, `tests/unit/r74-fins-hud.test.ts`), and above TEXT SIZE 115, where that band (181 grid px at 130) is narrower than the plate, the chapter keeps today's HUD (`HudF1Switch.F1_TEXT_CEILING`, as IX and XII do). The flight plate is the brightest of any listed fight plate (0.659), so `hd2d` and `arena` are held (the V and XI pattern: the sky as today), with
+  // `breath`, `cam`, `moments` and `real` (`PieceHoldsLast.ts`). Its deck camera is Sin's authored master (`fx/mix/masters.ts` `keepsToday`). `since` is the lane's release number, the driver's to renumber.
+  'sin-fins-core': { game: 'ffx', since: 'r74' },
   'ffx2-bahamut': { game: 'ffx2', since: 'r60' },
   'ffx2-leblanc': { game: 'ffx2', since: 'r69' },
   // Batch 2, the FFX-2 lane `booth-ffx2-b2` (all FFX-2 only; Bailey 2026-10-30: the booth treatment for every listed chapter): Chapter V (Vegnagun and Shuyin, five links), Chapter XV (the Den of Woe, three shades) and Chapter XI (the Fallen Aeons,

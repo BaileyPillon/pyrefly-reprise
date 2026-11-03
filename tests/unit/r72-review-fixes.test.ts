@@ -91,7 +91,7 @@ describe('Braska\'s chapter has no `real` row any more, so no guard may require 
 
   it('the three kept `real` holds are the ones the handoff names: VIII, XVIII and the Mirror Aeons', () => {
     const holders = Object.entries(PIECE_HOLDS).filter(([, rows]) => rows.real !== undefined).map(([id]) => id).sort();
-    expect(holders).toEqual(['evrae-airship', 'mirror-aeons', 'sin-face']);
+    expect(holders).toEqual(['evrae-airship', 'mirror-aeons', 'sin-face', 'sin-fins-core']); // r74-fins added Chapter XVII, on the same deck
   });
 
   it('SKY_TODAY_HOLDS (shipped text, like PIECE_HOLDS) is Chapter XI only, with its two reasons', () => {

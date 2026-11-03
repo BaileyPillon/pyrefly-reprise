@@ -39,8 +39,8 @@ afterEach(() => {
 });
 
 describe('the table', () => {
-  it('names Chapter IX and Chapter XII and nothing else, at 115, both FFX, both treated with the hud piece played (not held)', () => {
-    expect(Object.keys(F1_TEXT_CEILING).sort()).toEqual([...CEILING_IDS].sort());
+  it('names Chapter IX, Chapter XII and (r74-fins) Chapter XVII and nothing else, at 115, all FFX, all treated with the hud piece played (not held): IX plays it (the ceiling is its only exception), XII plays it again since r74-omnis lifted the r72 hold, XVII plays it from the start', () => {
+    expect(Object.keys(F1_TEXT_CEILING).sort()).toEqual([...CEILING_IDS, 'sin-fins-core'].sort()); // Chapter XVII (r74-fins): its Fin plate needs 195.9 grid px and the band is 180.9 at 130 (tests/unit/r74-fins-hud.test.ts)
     for (const [id, max] of Object.entries(F1_TEXT_CEILING)) {
       expect(max, id).toBe(115);
       expect(getChapter(id)?.game, id).toBe('ffx');
@@ -114,8 +114,8 @@ describe('Chapter IX and Chapter XII: the F1 HUD plays at 100 and 115 and gives 
 
 describe('nothing else changes', () => {
   it('every other treated chapter, the booth pair among them, keeps the F1 HUD at 100, 115 and 130 (in either attribute)', () => {
-    const others = Object.keys(TREATED_CHAPTERS).filter((id) => !(CEILING_IDS as readonly string[]).includes(id));
-    expect(others).toHaveLength(16); // eighteen treated less the two ceiling chapters (r72-hud put IX and XII back; the second focused review of the release 71 candidate took Sin's face off the list and r73-fast put it back)
+    const others = Object.keys(TREATED_CHAPTERS).filter((id) => !(CEILING_IDS as readonly string[]).includes(id) && id !== 'sin-fins-core');
+    expect(others).toHaveLength(16); // nineteen treated less the three ceiling chapters (r74-fins added Chapter XVII, the third); before: eighteen less the two (r72-hud put IX and XII back; the second focused review of the release 71 candidate took Sin's face off the list and r73-fast put it back)
     for (const id of others) {
       setDemoChapter(id);
       for (const v of ['100', '115', '130']) {
@@ -130,7 +130,7 @@ describe('nothing else changes', () => {
 
   it('a chapter off the list, a hidden id and the hostile ids answer as they did (the ceiling reads own keys only)', () => {
     sizeBoth('130');
-    for (const id of ['sin-fins-core', 'exp-leblanc', 'nonsense', '__proto__', 'constructor', 'toString', 'hasOwnProperty']) {
+    for (const id of ['exp-leblanc', 'nonsense', '__proto__', 'constructor', 'toString', 'hasOwnProperty']) { // (Chapter XVII left this list when it joined the ceiling table in r74-fins; no listed chapter is off the list now)
       setDemoChapter(id);
       expect(hudF1TextSizeOk(), id).toBe(true);
       expect(hudF1On(), id).toBe(false); // not treated: today's HUD whatever the size

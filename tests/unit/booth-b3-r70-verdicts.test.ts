@@ -45,6 +45,11 @@ const RELEASE_70: Readonly<Record<string, readonly TreatedPiece[]>> = {
   'ffx2-den-of-woe': ['cam', 'breath', 'moments'], // Chapter XV, FFX-2: `cam` added by the r70 verdict
 };
 
+/** What `r74-fins` brought onto the list (FFX only, Chapter XVII): its holds in its row's order (`PieceHoldsLast.ts`). */
+const R74_FINS: Readonly<Record<string, readonly TreatedPiece[]>> = {
+  'sin-fins-core': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'], // Chapter XVII, FFX: the flight plate is the brightest fight plate (the V and XI pattern), the Gravija breath, the range director's camera, the KO cut, the real clips on a deck that hops
+};
+
 /** The holds added to a release-70 chapter after release 70 (appended to its row, the earlier rows unmoved). `booth-b4` held `real` in Chapter III (FFX only) and r72-motion lifted it again (`motion/FlipFit.ts` fits the flip to the drawn size): none now. */
 const R71_HELD_ADDED: Readonly<Record<string, readonly TreatedPiece[]>> = {};
 
@@ -64,25 +69,26 @@ const RELEASE_71_LAST: Readonly<Record<string, readonly TreatedPiece[]>> = {
 
 describe('the result of the r70 verdicts: ten treated, four off the list, two cam holds added; then all four back in batch 4 (IX and XII in booth-ffx-b4-hud, V and XI in booth-ffx2-b4-sky) and the last five listed chapters\' four (booth-b4-last)', () => {
   it('release 70 treated these ten chapters; batch 4 added V and XI (FFX-2 only, the look held) and the last five listed chapters\' four, all since r71 (IX and XII came back too, the r71 verdicts took them off again and r72-hud put them back; the second focused review took Sin\'s face off and r73-fast put it back): the list is the eighteen, each with the holds the table gives', () => {
-    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual([...Object.keys(RELEASE_70), ...Object.keys(B4_HUD), ...Object.keys(RETURNED_R71), ...Object.keys(RELEASE_71_LAST)].sort());
+    expect(Object.keys(TREATED_CHAPTERS).sort()).toEqual([...Object.keys(RELEASE_70), ...Object.keys(B4_HUD), ...Object.keys(RETURNED_R71), ...Object.keys(RELEASE_71_LAST), ...Object.keys(R74_FINS)].sort());
     for (const [id, r] of Object.entries(RETURNED_R71)) {
       expect(Object.keys(PIECE_HOLDS[id] ?? {}).sort(), id).toEqual([...r.held].sort());
       expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx2', since: 'r71' });
       expect(getChapter(id)?.game, id).toBe(r.game); // rule 14: the game the registry says
     }
-    for (const [id, held] of Object.entries({ ...RELEASE_70, ...B4_HUD, ...RELEASE_71_LAST })) {
+    for (const [id, held] of Object.entries({ ...RELEASE_70, ...B4_HUD, ...RELEASE_71_LAST, ...R74_FINS })) {
       expect(Object.keys(PIECE_HOLDS[id] ?? {}), id).toEqual([...held, ...(R71_HELD_ADDED[id] ?? [])]); // release 70's rows keep their order; a later hold is appended
       expect(getChapter(id)?.game, id).toBe(TREATED_CHAPTERS[id]?.game ?? WITHDRAWN_R70[id]?.game); // rule 14: the game the registry says
     }
     for (const id of Object.keys(B4_HUD)) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r71' }); // FFX only (rule 14): the panels are FFX HUD panels
     for (const id of Object.keys(RELEASE_70)) expect(TREATED_CHAPTERS[id]!.since, id).toMatch(/^r(60|69|70)$/); // release 70's ten keep the release they joined
     for (const id of Object.keys(RELEASE_71_LAST)) expect(TREATED_CHAPTERS[id]!.since, id).toBe('r71'); // the last five listed chapters' four: the batch's release
+    for (const id of Object.keys(R74_FINS)) expect(TREATED_CHAPTERS[id], id).toEqual({ game: 'ffx', since: 'r74' }); // Chapter XVII, joined last
   });
 
-  it('the games of the eighteen: FFX is Chapters I, II, III, VII, VIII, IX, X, XII, XIV, XVIII and 27; FFX-2 is Chapters IV, V, VI, XI, XIII, XV and XVI', () => {
+  it('the games of the nineteen: FFX is Chapters I, II, III, VII, VIII, IX, X, XII, XIV, XVII, XVIII and 27; FFX-2 is Chapters IV, V, VI, XI, XIII, XV and XVI', () => {
     const ffx = Object.entries(TREATED_CHAPTERS).filter(([, e]) => e.game === 'ffx').map(([id]) => id).sort();
     const ffx2 = Object.entries(TREATED_CHAPTERS).filter(([, e]) => e.game === 'ffx2').map(([id]) => id).sort();
-    expect(ffx).toEqual(['braskas-final-aeon', 'evrae-airship', 'isaaru-via-purifico', 'mirror-aeons', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'seymour-omnis', 'sin-face', 'yojimbo-cavern', 'yunalesca']);
+    expect(ffx).toEqual(['braskas-final-aeon', 'evrae-airship', 'isaaru-via-purifico', 'mirror-aeons', 'seymour-anima-macalania', 'seymour-flux', 'seymour-natus', 'seymour-omnis', 'sin-face', 'sin-fins-core', 'yojimbo-cavern', 'yunalesca']);
     expect(ffx2).toEqual(['ffx2-bahamut', 'ffx2-den-of-woe', 'ffx2-fallen-aeons', 'ffx2-ixion-djose', 'ffx2-leblanc', 'ffx2-trema', 'ffx2-vegnagun-shuyin']);
   });
 

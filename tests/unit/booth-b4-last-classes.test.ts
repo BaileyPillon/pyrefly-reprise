@@ -62,7 +62,7 @@ describe('class 9: a chapter-specific HUD panel against the F1 slab, read from t
     expect(ZG_PANEL.l).toBeLessThan(strip.l);
   });
 
-  it("Chapter XVII's Fin plate (links 1 and 2) sits ON the F1 turn strip at the default text size: it starts 137 grid px left of the strip and is at least 188 wide, so it reaches 51 grid px into it, a major the treatment would introduce (so the chapter stays out)", () => {
+  it("Chapter XVII's Fin plate (links 1 and 2) sits ON the F1 turn strip at the default text size: it starts 137 grid px left of the strip and is at least 188 wide, so it reaches 51 grid px into it, a major the treatment would introduce (so the chapter stayed out of release 71; r74-fins moves the plate, r74-fins-hud.test.ts)", () => {
     const strip = ZONE('turn strip', 1);
     expect(FIN_PLATE.w).toBeGreaterThanOrEqual(188); // 470 frame px at the minimum
     expect(meets(FIN_PLATE, 1)).toEqual(['turn strip']);
@@ -213,7 +213,7 @@ describe('class 6: a swap exception holds the smear; the rim flags follow the lo
       expect(TREATED_CHAPTERS[id]!.since).toBe('r71');
       for (const piece of Object.keys(PIECE_HOLDS[id]!)) expect(isTreatedChapter(id, piece as never), `${id} ${piece}`).toBe(false);
     }
-    expect(isTreatedChapter('sin-fins-core')).toBe(false); // Chapter XVII does not join
-    expect(Object.prototype.hasOwnProperty.call(PIECE_HOLDS, 'sin-fins-core')).toBe(false);
+    expect(isTreatedChapter('sin-fins-core')).toBe(true); // Chapter XVII joined in r74-fins (its rows and its plate: tests/unit/r74-fins-rows.test.ts, r74-fins-hud.test.ts)
+    expect(Object.prototype.hasOwnProperty.call(PIECE_HOLDS, 'sin-fins-core')).toBe(true);
   });
 });

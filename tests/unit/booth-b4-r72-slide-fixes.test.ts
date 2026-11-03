@@ -59,7 +59,7 @@ describe('M3: the ease answers to the same switches as the rest of the treatment
     expect(run(1 / 60)).toBe(1 / 60);
   });
 
-  it.each(['sin-fins-core', 'exp-leblanc', 'a-hidden-chapter', undefined])('an untreated chapter (%s) gives release 71 its whole slide on the first frame: no clock (XVII is the listed chapter off the list; XVIII came back in r73-fast)', (id) => {
+  it.each(['exp-leblanc', 'a-hidden-chapter', undefined])('an untreated chapter (%s) gives release 71 its whole slide on the first frame: no clock (no listed chapter is off the list now: XVII joined in r74-fins, XVIII came back in r73-fast)', (id) => {
     setDemoChapter(id);
     expect(slideEaseOn(false)).toBe(false);
     expect(run(1 / 60)).toBeUndefined();
