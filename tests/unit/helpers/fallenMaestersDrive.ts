@@ -75,14 +75,17 @@ export function openFloor(floor: Floor, seed: number, opts: OpenOptions = {}): F
   if (opts.immortal) for (const id of GIRLS) makeInvincible(engine.state().combatants[id] as unknown as FFX2Combatant);
   if (opts.breakDamageLimit) {
     for (const id of ['yuna', 'paine']) {
-      const girl = engine.state().combatants[id] as unknown as FFX2Combatant;
+      const girl = unit(engine, id);
       girl.aiMemory = { ...(girl.aiMemory ?? {}), bdl: true };
     }
   }
   return engine;
 }
 
-export const unit = (engine: FFX2Engine, id: string): FFX2Combatant => engine.state().combatants[id] as unknown as FFX2Combatant;
+/** A combatant as the engine holds it, with the AI memory a script keeps on an enemy (the girls carry the `bdl` flag of the Break Damage Limit rig in it). */
+export type Unit = FFX2Combatant & { aiMemory?: Record<string, unknown> };
+
+export const unit = (engine: FFX2Engine, id: string): Unit => engine.state().combatants[id] as unknown as Unit;
 
 /** How many actions `actor` has finished so far. */
 export function endsOf(engine: FFX2Engine, actor: string): number {
@@ -129,7 +132,7 @@ export function attackOf(d: Input, target: string): Command {
 export const move = (id: string, targets: string[] = []): Command => ({ kind: 'ability', id, targets });
 
 /** The girls as the engine holds them. */
-export function girlsOf(engine: FFX2Engine): FFX2Combatant[] {
+export function girlsOf(engine: FFX2Engine): Unit[] {
   return GIRLS.map((id) => unit(engine, id));
 }
 
@@ -272,7 +275,7 @@ export function fight(floor: Floor, seed: number, line: LineName, opts: OpenOpti
     girlsAlive: girlsOf(engine).filter((g) => g.alive).length,
     moves,
     kos,
-    shellBroken: (b.aiMemory as Record<string, unknown> | undefined)?.['conchererShellBroken'] === 1,
+    shellBroken: b.aiMemory?.['conchererShellBroken'] === 1,
     log,
   };
 }

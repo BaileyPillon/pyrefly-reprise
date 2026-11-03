@@ -13,7 +13,6 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import type { FFX2Combatant } from '../../../src/battle/common/types.ts';
 import { x2Concherer } from '../../../src/data/ffx2/enemies/fallen-maesters.ts';
 import {
   GIRLS,
@@ -31,6 +30,7 @@ import {
   rowOf,
   unit,
   type Floor,
+  type Unit,
 } from '../helpers/fallenMaestersDrive.ts';
 
 /** Open a floor with the forced script and run until the fiend has done `commands`. */
@@ -43,7 +43,7 @@ function run(floor: Floor, commands: ReturnType<typeof move>[], seed = 1, setup?
   return engine;
 }
 
-const give = (u: FFX2Combatant, status: string): void => {
+const give = (u: Unit, status: string): void => {
   u.statuses[status as 'petrify'] = { id: status, turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: true } as never;
 };
 
@@ -109,7 +109,7 @@ describe('the Black Elemental [RE §7.3, §8]', () => {
     for (const id of GIRLS) {
       const hit = damageOn(ultima, id)[0]!;
       expect(hit.amount, id).toBe(9999);
-      expect(hit.capped, id).toBe(true);
+      expect((hit as { capped?: boolean }).capped, id).toBe(true);
     }
     expect(unit(ultima, 'rikku').alive).toBe(false); // 5,106 HP
     const flare = run(1, [move('x2-black-elemental-flare', ['paine'])]);
@@ -274,7 +274,7 @@ describe('Chac [RE §7.5, §8]', () => {
     const engine = run(3, [move('x2-chac-heavens-cataract')]);
     for (const id of GIRLS) {
       const girl = unit(engine, id);
-      for (const stage of ['def-down', 'mdef-down', 'accu-down', 'eva-down', 'luck-down']) expect(girl.statuses[stage]?.stacks, `${id} ${stage}`).toBe(10);
+      for (const stage of ['def-down', 'mdef-down', 'accu-down', 'eva-down', 'luck-down']) expect(girl.statuses[stage as 'def-down']?.stacks, `${id} ${stage}`).toBe(10);
       const hit = damageOn(engine, id)[0]!;
       expect(hit.amount, id).toBeGreaterThan(8_000);
       expect(hit.amount, id).toBeLessThanOrEqual(99_999);

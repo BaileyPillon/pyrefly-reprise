@@ -207,7 +207,7 @@ describe('the Black Elemental: Absorb below a third of its HP [RE §7.3 step 1]'
     const edge = blackElemental({ hp: 3_333 });
     edge.poll(1, 0);
     expect(edge.rng.calls.length).toBe(2); // the mix's mod 2, then (branch 1) mod 3... only 2 here: roll, then the search (Berserk branch)
-    expect(edge.rng.calls.every(([lo, hi]) => hi === 0xffff || hi === 0x7fffffff)).toBe(true);
+    expect(edge.rng.calls.every(([, hi]) => hi === 0xffff || hi === 0x7fffffff)).toBe(true);
   });
 
   it('a roll of 0 mod 4 is Absorb on the girl with the most HP: a first search is drawn and thrown away, then the girls tied for the top are searched', () => {

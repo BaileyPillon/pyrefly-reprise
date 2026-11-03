@@ -76,8 +76,8 @@ describe('the word against every other door word', () => {
   const others = registered;
   void DARK_MIRROR_WORD;
 
-  it('the registered neighbours are the ten already in the table, the Mirror Aeons chapter’s `yojimbo` among them', () => {
-    expect(registered).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', DARK_MIRROR_WORD]);
+  it('the registered neighbours are the eleven already in the table (`infinito`, the Fallen Maesters, the last), the Mirror Aeons chapter’s `yojimbo` among them', () => {
+    expect(registered).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', DARK_MIRROR_WORD, 'infinito']);
   });
 
   it('no word begins with, ends with or contains the other, and no end of one is the beginning of the other, in either order (the Dark Mirror lane\'s yojimbo included)', () => {

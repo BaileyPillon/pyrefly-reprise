@@ -17,6 +17,7 @@
  * **Hit rule** (hard rule 5): the two Attacks that roll (`accuracy formula 2`, the race with the monster's ACC) are the ONLY moves of the four that can miss, and each sets `canMiss: true`; every other move carries
  * `canMiss: false` explicitly because its accuracy formula is 0 or 1 (the rows read "always hits"), and an unset field silently rolls.
  * **Multi-target halving:** the FFX-2 engine halves only the *party's* Black and White Magic cast on all (`src/battle/ffx2/execute.ts`), so none of these takes any.
+ * Confidence: [verified: the game's own table, read byte by byte by the RE session and pinned by `tests/unit/chapters/fallen-maesters-data.test.ts` against `tests/fixtures/parity/ffx2/fallen_maesters_rows.json`]; where a field is `[I]` (the Evasion and Luck slots of Heaven's Cataract) it says so below.
  * **Not built here:** the Oversoul versions' moves (Dual Catalyst, Tempus Laxit, Slurp, Demi, Hunter's Gaze, Destroy Soft, Destroy Remedy, 10,000 Gil Smoosher and the rest of `research/re-ffx2-fallen-maesters.md` §9.3): FM2 (a), normal only.
  */
 
