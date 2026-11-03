@@ -73,7 +73,7 @@ describe('the handoff note (docs/handoff/r74-omnis.md)', () => {
     expect(top).toMatch(/Game case \(rule 14\): FFX only/);
     expect(top).toMatch(/HOLD CONDITION/);
     expect(top).toMatch(/offline proof only/);
-    expect(top).toMatch(/J74-1 to J74-4/);
+    expect(top).toMatch(/J74-1 to J74-7/);
     expect(top).toMatch(/Nothing deploys from this branch/);
   });
 
@@ -89,10 +89,10 @@ describe('the handoff note (docs/handoff/r74-omnis.md)', () => {
     expect(s).toMatch(/33 stops over the advisor and one over the Enemy Intent line/); // the count, corrected
   });
 
-  it('carries the jobs J74-1 to J74-6 with predictions, the CHANGELOG lines with their game tags and the open questions', () => {
+  it('carries the jobs J74-1 to J74-7 with predictions, the CHANGELOG lines with their game tags and the open questions', () => {
     const n = note();
     const jobs = n.slice(n.indexOf('## 6. '), n.indexOf('## 7. '));
-    for (const j of ['J74-1', 'J74-2', 'J74-3', 'J74-4', 'J74-5', 'J74-6']) expect(jobs, j).toContain(`**${j}**`);
+    for (const j of ['J74-1', 'J74-2', 'J74-3', 'J74-4', 'J74-5', 'J74-6', 'J74-7']) expect(jobs, j).toContain(`**${j}**`);
     expect(jobs).toMatch(/predictions \(written before any run\)/);
     expect(jobs).toMatch(/0 pairs at every stop of every state/);
     const log = n.slice(n.indexOf('## 7. '), n.indexOf('## 8. '));

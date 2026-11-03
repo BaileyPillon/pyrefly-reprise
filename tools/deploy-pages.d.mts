@@ -46,6 +46,8 @@ export declare function resolveReleaseGate(input: {
   skipped?: { path: string; errors: string[] }[];
   /** Chapters on the treated list whose lift proof is still OWED (`findOwedLifts`, tools/owed-lifts.mjs): each is a refusal. */
   owedLifts?: { id: string; label: string; why: string }[];
+  /** Piece holds lifted on a model whose browser proof is still OWED (`findOwedHoldLifts`, tools/owed-hold-lifts.mjs): each is a refusal. */
+  owedHoldLifts?: { id: string; label: string; why: string }[];
 }): ReleaseGateResult;
 
 /** The loud warning block printed (and, on --dry-run, previewed) for an owner override. */

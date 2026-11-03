@@ -47,8 +47,6 @@ const gridOf = (el: HTMLElement | null): Rect | null => {
   return R(g((b.left + 512) / K), g((b.top + 288) / K), g((b.right + 512) / K), g((b.bottom + 288) / K));
 };
 
-// ---------------------------------------------------------------------------------------------------------------- flagSteer.ts on small trees
-
 interface Tree { root: HTMLElement; card: HTMLElement; chip: HTMLElement; flag: HTMLElement; intent: HTMLElement }
 function tree(o: { f1?: boolean; omnis?: boolean } = {}): Tree {
   const root = document.createElement('div');
@@ -203,8 +201,6 @@ describe('the Enemy Intent line is a panel the flag docks off (Chapter XII on th
   });
 });
 
-// ---------------------------------------------------------------------------------------------------------------- the real HUD
-
 /** An open sky (no party in the way): the designed card stands at x 213 to 439, y 95 to 199, its chip above it (`r72-hud-wiring.test.ts`). */
 function mountHud(state: { f1: boolean; omnis: boolean }): { hud: FFXBattleHud; plate: HTMLElement; cardEl: HTMLElement; zone: () => AdvisorZone | null; box: () => Rect } {
   const root = document.createElement('div');
@@ -321,8 +317,6 @@ describe('the HUD hands the dock its panels: the Enemy Intent line in Chapter XI
   });
 });
 
-// ---------------------------------------------------------------------------------------------------------------- the Sensor card
-
 describe('the Sensor card steers clear of the flag as well as the figure (Chapter XII on the F1 HUD: `flag`)', () => {
   /** The F1 layout's Sensor card at its resting place: x 428 to 544, top 79, 78 tall (1600 x 900), read by the walk. */
   const CARD = { left: 428, right: 544, top: 79, bottom: 157 };
@@ -382,8 +376,6 @@ describe('the Sensor card steers clear of the flag as well as the figure (Chapte
     expect(stops).toBe(290);
   });
 });
-
-// ---------------------------------------------------------------------------------------------------------------- the source
 
 describe('FFXBattleHud.ts passes the flag and the panels by two in-place lines, and did not grow', () => {
   const src = readFileSync(resolve('src/ui/ffx/FFXBattleHud.ts'), 'utf8');

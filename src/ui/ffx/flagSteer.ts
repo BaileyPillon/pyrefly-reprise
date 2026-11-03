@@ -6,10 +6,10 @@
  *
  * The r72 browser read walked the target cursor over 232 stops in Chapter XII (29 per window, eight windows, TEXT SIZE 100) and read the pro target flag (`.ffx-target__plate`) over the Move advisor card in 33 of them (1600 x 900 in 5, 1366 x 768 in 2,
  * 1440 x 810 in 9, 1536 x 864 in 6, 1920 x 1080 in 11, up to 15.3 px wide) and over the Enemy Intent line in one, 34 in all (`PieceHolds.ts`' old `hud` hold, this change lifts it; its text is kept in `docs/handoff/r74-omnis.md` section 8). The cause is in the
- * order of the two solvers. The flag docks beside the glove (`TargetCursor.dockFor`), against the panels it was handed at the last key press and with a PLATE WIDTH ESTIMATE (`targetCursorParts.plateWidth`) that is 15.6 to 21.9 px (5.5 to 7.8 grid px) under the
- * flag it draws (201.7 px against 217.4 at 1280 to 1600 wide, 213.0 against 230.7 at 1920, 269.3 against 291.2 at 2560), so it hangs that far past the place it judged itself clear; and the advisor card is solved without knowing the flag at all, in the narrow
- * ground left of the Mortiphasm discs (x 203 to 300), where the flag's left edge lands (295 to 303). The two meet on the card's right edge. Fixing the estimate would move the flag in every chapter of both games (shared plumbing); this moves the card
- * in Chapter XII, and only when the flag is on it.
+ * order of the two solvers. The flag docks beside the glove (`TargetCursor.dockFor`), against the panels it was handed at the last key press and with an UNSKEWED box (`targetCursorParts.plateBox` of `plateWidth`, which is right to about 1 px: 201.7 px at 1280 to 1600 wide, 213.0 at 1920, 269.3 at 2560) for a flag drawn
+ * with `skewX(-12deg)`, so its bounding box is wider by its own height times tan 12 degrees (217.4, 230.7 and 291.2 px: 15.6 to 21.9 px, 5.5 to 7.8 grid px) and hangs that far past the place the dock judged it clear; and the advisor card is solved without knowing the flag at all, in the narrow
+ * ground left of the Mortiphasm discs (x 203 to 300), where the flag's left edge lands (295 to 303). The two meet on the card's right edge. Fixing the dock's box (`plateBox` widened by the flag's height times tan 12 degrees; review m1, `docs/handoff/r74-omnis.md` section 9) would move the flag in every chapter of both games
+ * (shared plumbing); this moves the card in Chapter XII, and only when the flag is on it.
  *
  * ## What it does
  *
