@@ -14,11 +14,14 @@
  *    `tools/ww/ww-models.json` lists exactly the eleven files the chapter loads (`tests/unit/ww-models-tool.test.ts`).
  */
 import { beforeAll, describe, expect, it } from 'vitest';
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
-import { contentReport, registerBattleContent } from '../../../src/app/screens/BattleScreenContent.ts';
+import type { Command } from '../../../src/battle/common/types.ts';
+import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
+import { contentReport, ffx2EngineOptions, registerBattleContent } from '../../../src/app/screens/BattleScreenContent.ts';
 import { setupForChapter } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { backdropFileOf } from '../../../src/data/art/artNamespace.ts';
 import { EXP_WINDWAKER, EXP_WINDWAKER_TEXT } from '../../../src/data/chapter-exp-windwaker.ts';
@@ -142,6 +145,40 @@ describe('the determinism proof: exp-windwaker plays to exactly the event log of
 
   it('is a proof that can fail: a different seed is a different log', async () => {
     expect((await play(chapter, 1)).digest).not.toBe((await play(chapter, 2)).digest);
+  }, 240_000);
+
+  // The defeat path (the review of 2026-11-02 checked one seed by hand): the party starts at 1 HP and only attacks, so Valefor's real moves fell all three girls; the two chapters must fall the same way.
+  /** One fight to its end with the party at 1 HP and the attack-only fallback; the outcome, the engine turns, the party's knock-outs and the digest of the whole log. */
+  function playDefeat(c: typeof chapter, seed: number): { outcome: string; turns: number; partyKos: number; digest: string } {
+    const engine = new FFX2Engine({ ...ffx2EngineOptions(), minigames: false });
+    const setup = setupForChapter(c, seed);
+    engine.setSeed(setup.seed);
+    engine.init(setup);
+    for (const m of Object.values(engine.state().combatants)) if (m.side === 'party') (m as { hp: number }).hp = 1;
+    for (let i = 0; i < 40_000; i += 1) {
+      const d = engine.nextDecision();
+      if (d.kind === 'resolved') continue;
+      if (d.kind === 'waiting') {
+        engine.tick(Math.max(1, d.nextEventMs));
+        continue;
+      }
+      if (d.kind === 'battle-over') {
+        const state = engine.state();
+        const partyKos = state.log.filter((e) => e.type === 'ko' && state.combatants[e.targetId]?.side === 'party').length;
+        return { outcome: String(d.result.outcome), turns: d.result.turns, partyKos, digest: createHash('sha1').update(JSON.stringify(state.log)).digest('hex') };
+      }
+      const row = d.commands.find((r) => r.enabled && r.command.kind === 'attack') ?? d.commands.find((r) => r.enabled);
+      const target = row?.validTargets[0];
+      engine.submit((row ? { ...row.command, targets: target ? [target] : [] } : { kind: 'defend', targets: [] }) as Command);
+    }
+    return { outcome: 'unresolved', turns: 0, partyKos: 0, digest: '' };
+  }
+
+  it('seed 1, a defeat: the party at 1 HP falls to Valefor, all three girls, and the log is chapter 24\'s to the byte', () => {
+    const mine = playDefeat(chapter, 1);
+    expect(mine.outcome).toBe('defeat');
+    expect(mine.partyKos).toBe(3);
+    expect(mine).toEqual(playDefeat(base, 1));
   }, 240_000);
 });
 
