@@ -3,7 +3,7 @@ export const ART_WEBP_ENV: string;
 export const ART_THUMBS_ENV: string;
 export const BASE_ENV: string;
 export const INHERITED_BUILD_ENV: readonly string[];
-export type BundleInputs = { base: string; release: string; buildSha: string; artWebp: string; artThumbs: string };
+export type BundleInputs = { base: string; release: string; buildSha: string; artWebp: string; artThumbs: string; threeSrc: string };
 export function releaseBuildEnv(input: {
   release: string;
   host?: { base: string };

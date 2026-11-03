@@ -113,7 +113,7 @@ describe('`__pyrefly.treated()`', () => {
       'seymour-natus': ['breath', 'cam', 'moments'],
       'yojimbo-cavern': ['breath', 'cam', 'moments'],
       'braskas-final-aeon': ['breath', 'moments'], // booth-b4 held `real` here; r72-motion lifted it
-      'seymour-omnis': ['breath', 'cam', 'moments'],
+      'seymour-omnis': ['hud', 'breath', 'cam', 'moments'],
       'isaaru-via-purifico': ['breath', 'cam', 'moments'],
       'ffx2-leblanc': ['breath', 'cam', 'moments'], // the pieces she holds, in the order of her rows
       'ffx2-vegnagun-shuyin': ['hd2d', 'arena', 'cam', 'breath', 'moments'], // booth-ffx2-b4-sky: the look held first (the plate is release 69's)
@@ -123,7 +123,7 @@ describe('`__pyrefly.treated()`', () => {
       'evrae-airship': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'], // booth-b4-last; the r71 verdict added the look; booth-b4 held the real clips (R71-C2)
       'sin-face': ['card', 'breath', 'cam', 'moments', 'smear', 'real'], // back on r73-fast; booth-b4 held the real clips (R71-C1)
       'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'], // booth-b4 held the real clips (R71-C3)
-      'sin-fins-core': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'], // r74-fins: the sky, the breath, the camera, the KO cut and the real clips of the deck
+      'sin-fins-core': ['hud', 'hd2d', 'arena', 'breath', 'cam', 'moments', 'real'], // r74-fins (hud held since the r74 browser read): the sky, the breath, the camera, the KO cut and the real clips of the deck
       'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'],
     });
     expect(all.running).toBeNull();

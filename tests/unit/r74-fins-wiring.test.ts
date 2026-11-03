@@ -91,13 +91,13 @@ describe('the sound pass follows the chapter run', () => {
 });
 
 describe('`__pyrefly.treated()` knows the chapter', () => {
-  it('lists it with its six holds in the row\'s order, in FFX\'s game, and says whether the running chapter is reached', () => {
+  it('lists it with its seven holds in the row\'s order, in FFX\'s game, and says whether the running chapter is reached', () => {
     const api: Record<string, unknown> = {};
     installProDebug(api);
     const treated = api['treated'] as (scope?: 'all' | 'pack' | null) => { scope: string; chapters: string[]; holds: Record<string, string[]>; running: string | null; reaches: boolean };
     const all = treated('all');
     expect(all.chapters).toContain(ID);
-    expect(all.holds[ID]).toEqual(['hd2d', 'arena', 'breath', 'cam', 'moments', 'real']);
+    expect(all.holds[ID]).toEqual(['hud', 'hd2d', 'arena', 'breath', 'cam', 'moments', 'real']);
     expect(all.holds[ID]).toEqual(Object.keys(PIECE_HOLDS[ID]!));
     expect(TREATED_CHAPTERS[ID]!.game).toBe('ffx');
     setDemoChapter(ID);

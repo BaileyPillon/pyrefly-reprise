@@ -3,8 +3,8 @@
  * (`sin-fins-core`), is the last of the nineteen listed chapters the booth treatment reaches. **Game case (rule 14): FFX only** (CTB, Cid's Trigger Command, the airship range, `research/ffx-sin.md` section 0.3); FFX-2 has no counterpart and no
  * FFX-2 table is touched. What this file pins, in the shape of `booth-b4-last-holds` and `booth-b4-last-rows`:
  *
- *  - the list entry (FFX, `since` r74) and the six holds in the row's order (`hd2d`, `arena`, `breath`, `cam`, `moments`, `real`), each reason with the words that make it this chapter's own and the "Lifts when" that ends it, and that every
- *    other piece plays;
+ *  - the list entry (FFX, `since` r74) and the seven holds in the row's order (`hud`, `hd2d`, `arena`, `breath`, `cam`, `moments`, `real`), each reason with the words that make it this chapter's own and the "Lifts when" that ends it, and that every
+ *    other piece plays. **`hud` is the r74 browser read's (2026-11-03, `docs/handoff/r74.md` section 3.9: FIN-1, FIN-2, FIN-4): the lane's own fallback, so the chapter joins with release 72's HUD**;
  *  - the facts under the holds, read from the code (rule 3): no room row exists for the flight plate in any table the look reads (the V and XI pattern holds the sky as it is), the framing keeps Sin's authored deck camera in all three links,
  *    the chapter is on the wide swap scope with no exception (no `smear` hold owed), the party can field the members whose real clips hop, and the deck is Chapters VIII's and XVIII's.
  */
@@ -27,7 +27,7 @@ import { SIN_FLIGHT_PLATE, SIN_PARTY_HEIGHT } from '../../src/scenes/evrae-airsh
 afterEach(() => setTreatedScope(null));
 
 const ID = 'sin-fins-core';
-const HELD = ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'] as const;
+const HELD = ['hud', 'hd2d', 'arena', 'breath', 'cam', 'moments', 'real'] as const;
 /** The deck's other two chapters (Evrae's and Sin's face): the same stage, the same party arc, the same rigs. */
 const DECK_MATES = ['evrae-airship', 'sin-face'] as const;
 
@@ -50,8 +50,8 @@ describe('the list entry: FFX only, joined in r74', () => {
   });
 });
 
-describe('the six holds, in the row\'s order, each with its own words and its lift', () => {
-  it('the row is in PieceHoldsLast.ts (the very object PIECE_HOLDS carries), after the FFX rows and before Chapter XVI\'s, and names exactly the six pieces', () => {
+describe('the seven holds, in the row\'s order, each with its own words and its lift', () => {
+  it('the row is in PieceHoldsLast.ts (the very object PIECE_HOLDS carries), after the FFX rows and before Chapter XVI\'s, and names exactly the seven pieces', () => {
     expect(Object.keys(PIECE_HOLDS[ID]!)).toEqual([...HELD]);
     expect(PIECE_HOLDS[ID]).toBe(LAST_HOLDS[ID]);
     expect(Object.keys(LAST_HOLDS).indexOf(ID)).toBe(Object.keys(LAST_HOLDS).indexOf('mirror-aeons') + 1);
@@ -67,6 +67,14 @@ describe('the six holds, in the row\'s order, each with its own words and its li
       expect(why, p).toMatch(/Lifts when .*\.$/);
       expect(why, p).toMatch(/^FFX, Chapter XVII \(Sin's Fins and Core\)/);
     }
+  });
+
+  it('hud: the r74 browser read\'s numbers (FIN-1, FIN-2, FIN-4, FIN-3, FIN-9), what stays as release 72 draws it, and a "Lifts when" that names both defects and how the sky read is retaken', () => {
+    const why = treatedHold(ID, 'hud')!;
+    for (const w of [/FIN-1 to FIN-4 and FIN-9/, /508\.1 \/ 635\.2 \/ 1016\.3 px/, /914\.3 \/ 1142\.9 \/ 1828\.6/, /15\.7 \/ 19\.6 \/ 31\.4 px/, /89\.5 x 2\.2 px at link II, 1600 x 900, cursor on/, /760 x 97 px/, /145 x 10 px/, /9\.84 and 9\.63 levels/, /0\.88 and 0\.21 with the HUD hidden/, /5\.82 grid px gap/]) expect(why, String(w)).toMatch(w);
+    expect(why).toMatch(/both arms draw release 72\'s HUD/);
+    expect(why).toMatch(/Lifts when the Sensor card stops touching the flag at link II \(1600 x 900, cursor on\), the advisor card stops covering the boss ribbon at 2560 x 1440 at TEXT SIZE 115 with Intel on and the plate charged, and FIN-1 to FIN-4 and FIN-9 then read 0 pairs/);
+    expect(why).toMatch(/with the HUD hidden or with both arms drawing one HUD and its mean luma within 6 levels\.$/);
   });
 
   it('hd2d: the flight plate is the brightest of any listed chapter\'s fight plate (0.659 against the Farplane\'s 0.628, its top 40 percent 0.664 against the deck\'s 0.446), and the V and XI pattern holds the sky as it is', () => {
@@ -135,10 +143,10 @@ describe('the six holds, in the row\'s order, each with its own words and its li
     expect(why).toMatch(/StrikeCurve\.crossingFloors/);
   });
 
-  it('every other piece plays under the all scope (the HUD, the pro look, the card, the ending, the opening, the curves, the smear, the feel, the new effects, the sound pass and the governor), and none plays under the pack scope', () => {
+  it('every other piece plays under the all scope (the pro look, the card, the ending, the opening, the curves, the smear, the feel, the new effects, the sound pass and the governor; the HUD since the r74 browser read is held), and none plays under the pack scope', () => {
     setTreatedScope('all');
     for (const p of TREATED_PIECES) expect(isTreatedChapter(ID, p), p).toBe(!(HELD as readonly string[]).includes(p));
-    for (const p of ['hud', 'look', 'rim', 'boss', 'card', 'ending', 'opening', 'curves', 'smear', 'feel', 'fx', 'audio', 'governor'] as const) expect(treatedHold(ID, p), p).toBeUndefined();
+    for (const p of ['look', 'rim', 'boss', 'card', 'ending', 'opening', 'curves', 'smear', 'feel', 'fx', 'audio', 'governor'] as const) expect(treatedHold(ID, p), p).toBeUndefined();
     setTreatedScope('pack');
     for (const p of TREATED_PIECES) expect(isTreatedChapter(ID, p), p).toBe(false);
     expect(isTreatedChapter(ID)).toBe(false);

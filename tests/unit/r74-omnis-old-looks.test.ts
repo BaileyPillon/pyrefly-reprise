@@ -7,7 +7,8 @@
  * the F1 HUD above 115: `HudF1Switch.F1_TEXT_CEILING`), `?hud=today` and `?treated=pack`. The driver decided to apply the same steer there. Only the SENSOR CARD's steer is extended (`flagSteer.omnisSensorFlagRect`, gated on
  * the read-out's marker alone, and not on the upright phone); the advisor card, its ink and the dock's panels stay on the F1 gate. Pins:
  *
- * 1. the old looks ARE old looks, by the product's own switches: at TEXT SIZE 130, with `?hud=today`, and with `?treated=pack`, `hudF1On()` answers false for Chapter XII, and at 100 and 115 in the default look it answers true;
+ * 1. the old looks ARE old looks, by the product's own switches: at TEXT SIZE 130, with `?hud=today`, and with `?treated=pack`, `hudF1On()` answers false for Chapter XII, **and, since the r74 browser read put Chapter XII's `hud` hold back
+ *    (2026-11-03, `docs/handoff/r74.md` section 3.9), at 100 and 115 in the default look too: every look of Chapter XII is an old look, so this steer is the one that plays in the default look at every size**;
  * 2. the gate: the marker alone (F1 on or off) gives the flag; no marker (Chapter I, every other chapter) gives nothing in every look; the phone gives nothing; the advisor's `omnisFlagRect` is unchanged (F1 only);
  * 3. the real `FFXBattleHud`, in each old look: a flag on the Sensor card sets `--ffx-sensor-dx`, the card stands clear of the flag, the property goes with the flag; with the F1 HUD on it does what it always did; with no marker it is not
  *    steered at any size, and the advisor card is not touched in an old look;
@@ -65,11 +66,11 @@ afterEach(() => {
 });
 
 describe('the old looks are old looks, by the product\'s own switches', () => {
-  it('the F1 HUD plays in Chapter XII at TEXT SIZE 100 and 115 in the default look, and not at 130, with ?hud=today or with ?treated=pack', () => {
+  it('the F1 HUD plays in Chapter XII in NO look since the r74 browser read put the hud hold back: not at TEXT SIZE 100 or 115 in the default look (the hold), not at 130 (the ceiling), not with ?hud=today or with ?treated=pack', () => {
     const on = Object.fromEntries(Object.entries(LOOKS).map(([name, look]) => [name, enter(look)]));
     expect(on).toEqual({
-      'default, TEXT SIZE 100 (the F1 HUD)': true,
-      'default, TEXT SIZE 115 (the F1 HUD)': true,
+      'default, TEXT SIZE 100 (the F1 HUD)': false,
+      'default, TEXT SIZE 115 (the F1 HUD)': false,
       'TEXT SIZE 130 (above the ceiling)': false,
       '?hud=today, TEXT SIZE 100': false,
       '?hud=today, TEXT SIZE 130': false,
@@ -177,7 +178,7 @@ describe('the real FFXBattleHud: the Sensor card steps off a flag that lies on i
   it('each old look: a flag on the card sets the steer property, the card stands clear of the flag, and the card comes home when the flag goes', () => {
     for (const [name, look] of Object.entries(LOOKS)) {
       const f1 = enter(look);
-      if (f1) continue; // the F1 looks are the next case
+      expect(f1, `${name}: the hud hold is in place, so every look is an old look`).toBe(false);
       const home = look.text === 130 ? HOME['old130']! : HOME['old100']!;
       const m = mount({ f1: false, omnis: true }, home);
       m.aim();
@@ -193,9 +194,10 @@ describe('the real FFXBattleHud: the Sensor card steps off a flag that lies on i
     }
   });
 
-  it('the F1 looks (TEXT SIZE 100 and 115, default): what r74-omnis built, unchanged', () => {
-    for (const [name, look] of Object.entries(LOOKS)) {
-      if (!enter(look)) continue;
+  it('the F1 layout (TEXT SIZE 100 and 115, default; held today, played the day the hud hold lifts): what r74-omnis built, unchanged', () => {
+    for (const name of ['default, TEXT SIZE 100 (the F1 HUD)', 'default, TEXT SIZE 115 (the F1 HUD)']) {
+      const look = LOOKS[name]!;
+      enter(look);
       const m = mount({ f1: true, omnis: true }, HOME['f1']!);
       const flag = onCard(HOME['f1']!);
       place(m.flag, flag);

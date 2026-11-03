@@ -72,7 +72,7 @@ const HELD_NOW: Readonly<Record<string, readonly string[]>> = {
   'seymour-natus': ['breath', 'cam', 'moments'], // its camera played until the r70 verdict: the victory close-up of Kimahri crops him at the top edge (gate G5), so the camera is held
   'braskas-final-aeon': ['breath', 'moments'], // r72-motion lifted the `real` hold booth-b4 added (FlipFit); batch 3b: each of the three holds the staged breath; the review's M1 added the moments (Rikku, 0.52) to III and XII, and its m1 and m2 the camera to XII and XIV; booth-b4 added `real` (the r70 live gap pass: Tidus's Chapter I return flip is drawn 1.66 times larger here)
   'yojimbo-cavern': ['breath', 'cam', 'moments'], // batch 3a (back in booth-ffx-b4-hud): the staged breath (Zanmato needs a tone pick), the lit pad of the victory (cam), the unread knock-out cut (moments)
-  'seymour-omnis': ['breath', 'cam', 'moments'], // batch 3b (back in booth-ffx-b4-hud): the staged breath, the killing blow's plate (cam), the reserve Rikku's KO step (moments)
+  'seymour-omnis': ['hud', 'breath', 'cam', 'moments'], // r72 review (J-HUD-5b): the F1 HUD (hud) is held, the target flag meets the Move advisor card in 34 of 232 cursor stops; batch 3b (back in booth-ffx-b4-hud): the staged breath, the killing blow's plate (cam), the reserve Rikku's KO step (moments)
   'isaaru-via-purifico': ['breath', 'cam', 'moments'], // the review of booth-b3 (M1): Yuna alone has no read at a hard cut; her aeons never take it
   'ffx2-trema': ['cam', 'breath', 'moments'], // batch 3: Chapter XIII holds the giants frame's camera (the follower undoes it), the staged breath (a tone pick) and the knock-out's cut (three KO bodies the registration data cannot clear)
   'ffx2-vegnagun-shuyin': ['hd2d', 'arena', 'cam', 'breath', 'moments'], // `booth-ffx2-b4-sky`: the look (the bold look and the arena grade clip the Farplane's sky), the colossus camera, the staged breath, the KO cut
@@ -81,7 +81,7 @@ const HELD_NOW: Readonly<Record<string, readonly string[]>> = {
   'sin-face': ['card', 'breath', 'cam', 'moments', 'smear', 'real'], // r71 focused review (10b426248, R71-C1): `real` held (and still held since r73-fast: the real clips are not the cause of the hops, and nothing measured them there)
   'mirror-aeons': ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'], // r71 focused review (10b426248, R71-C3): `real` held, 32 one-frame dash hops of 100 to 206.6 px;  two plates under one room key, the first provisional and without an @2x master; the grade is applied once at the scene's entry
   'ffx2-ixion-djose': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'], // Bailey's approved Chamber plate (C2, D-273) with no room rows and no follower row yet, and a swap exception
-  'sin-fins-core': ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'], // r74-fins: the flight plate is the brightest fight plate (0.659; the V and XI pattern holds the sky), the Gravija breath needs a tone pick, the deck's camera is the range director's and Sin's authored master, the KO cut is unread, and the real clips hop on this deck in VIII and XVIII
+  'sin-fins-core': ['hud', 'hd2d', 'arena', 'breath', 'cam', 'moments', 'real'], // r74-fins (hud held since the r74 browser read, 2026-11-03): the flight plate is the brightest fight plate (0.659; the V and XI pattern holds the sky), the Gravija breath needs a tone pick, the deck's camera is the range director's and Sin's authored master, the KO cut is unread, and the real clips hop on this deck in VIII and XVIII
 };
 
 /**

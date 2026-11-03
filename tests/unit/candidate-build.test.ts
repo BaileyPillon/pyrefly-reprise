@@ -103,7 +103,7 @@ describe("the candidate is built for the deploy's base (release 60)", () => {
     for (const env of shells) {
       const compared = compareWithDeploy('60', env);
       expect(compared.differences, JSON.stringify(env)).toEqual([]);
-      expect(compared.candidate).toEqual({ base: '/', release: '60', buildSha: '(git HEAD of the tree)', artWebp: 'exact', artThumbs: 'on' });
+      expect(compared.candidate).toEqual({ base: '/', release: '60', buildSha: '(git HEAD of the tree)', artWebp: 'exact', artThumbs: 'on', threeSrc: 'on' });
     }
   });
 
@@ -111,6 +111,14 @@ describe("the candidate is built for the deploy's base (release 60)", () => {
     const compared = compareWithDeploy('60', { PYREFLY_ART_WEBP: 'off', PYREFLY_BUILD_SHA: '1cea6e93' });
     expect(compared.inherited).toEqual(['PYREFLY_BUILD_SHA=1cea6e93', 'PYREFLY_ART_WEBP=off']);
     expect(compared.differences).toEqual([]);
+  });
+
+  it('names the three-from-source switch (r74-int CHECK-1): a shell that sets PYREFLY_THREE_SRC=off is listed, printed, and a candidate cut with it differs from a deploy cut without it', () => {
+    const compared = compareWithDeploy('60', { PYREFLY_THREE_SRC: 'off' });
+    expect(compared.inherited).toEqual(['PYREFLY_THREE_SRC=off']);
+    expect(compared.candidate.threeSrc).toBe('off');
+    expect(compared.differences).toEqual([]); // one shell: the candidate and the deploy read the same word
+    expect(diffBundleInputs(bundleInputs({ PYREFLY_THREE_SRC: 'off' }), bundleInputs({}))).toEqual([{ key: 'threeSrc', a: 'off', b: 'on' }]);
   });
 
   it('would catch the release 60 candidate: the release name and no base is not what the deploy builds with', () => {

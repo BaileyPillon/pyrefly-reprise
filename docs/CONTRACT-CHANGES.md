@@ -6,6 +6,14 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-11-03 — r74-int: the browser read of the two HUD lifts (hold rows only; FFX only; additive, no contract file changed)
+
+Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call under it, his to overturn). Branch `r74-int` (`d31a7ede3`), job verdicts of 2026-11-03 (`docs/handoff/r74.md` sections 3.9 and 10). Game case: FFX only for both holds (Chapters XII and XVII are FFX chapters); the build-input line is shared plumbing for both games.
+
+- **`PieceHolds.PIECE_HOLDS['seymour-omnis']`** gets its `hud` row back (release 73's key, first of four) with a new reason (the r74 numbers) and a new "Lifts when"; **`PieceHoldsLast.LAST_HOLDS['sin-fins-core']`** gains a `hud` row (first of seven). No type, no export and no switch module changes; `F1_TEXT_CEILING` keeps both chapters. `tools/owed-hold-lifts.mjs` is unchanged and answers an empty list on the tip.
+- **`tools/release-build.mjs`** reads `PYREFLY_THREE_SRC` as a build input (`INHERITED_BUILD_ENV`, `bundleInputs().threeSrc`, one more printed line); `BundleInputs` in `release-build.d.mts` gains `threeSrc`.
+- **Tests:** the pins of the two holds (`docs/handoff/r74.md` section 10.2) and `tests/unit/release-build.test.ts` / `candidate-build.test.ts`.
+
 ## 2026-11-02 — Lane r74-revive (a revive's cross is longer and even, so no frame of it steps the tracked feet or head 40 px; BOTH GAMES; additive, no contract file changed)
 
 Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call, his to overturn). Branch `r74-revive`, from `origin/r73-int` `d5049f686`. PR-0570.
