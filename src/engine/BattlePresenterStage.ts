@@ -14,6 +14,7 @@ import { ART_KEY, artCandidatesFor, characterUrl, resolveArt, resolvePoseMap, su
 import { figureHeight, formPlanScale, partyStature, sceneOwnHeight, STATURE_KEY } from './PartyStature.ts';
 import { backToShared, statureOf } from './SharedHeight.ts';
 import { inArtNamespace } from '../data/art/artNamespace.ts';
+import { artUrl, tryLoadTexture } from './PaintedArt.ts';
 import { paintedPoses } from './EnemyActionPose.ts';
 import type { ArrivalClock, BattleStage, Point2, VfxPort } from './BattlePresenterPorts.ts';
 import { arrivalsOf, type ArrivalCleanup, type ArrivalDirectors } from './StageArrivals.ts';
@@ -202,7 +203,7 @@ export class PaintedStage implements BattleStage {
 
   constructor(opts: PaintedStageOptions) {
     this.opts = opts;
-    this.partRings = new PartRings(opts.scene);
+    this.partRings = new PartRings(opts.scene, (path) => tryLoadTexture(artUrl(path))); // a floor ring's painting (the Keeper's glyphs, `FloorDecal`); a missing file leaves the ring
     this.groundLuma = groundLumaOf(opts.scene);
     this.arrivals = opts.arrivals ?? arrivalsOf(opts.scene);
     this.highlight = new TargetHighlight({

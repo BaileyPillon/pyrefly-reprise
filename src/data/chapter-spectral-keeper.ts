@@ -46,7 +46,7 @@ export const SPECTRAL_KEEPER: Chapter = {
   ...SPECTRAL_KEEPER_TEXT,
   location: 'Zanarkand Dome — the foot of the lift',
   sceneKey: SPECTRAL_KEEPER_SCENE,
-  thumbnailKey: 'chapter-yunalesca', // a stand-in: Chapter II's card (the same hall); the chapter's own card is owed (docs/handoff/ch-keeper.md "ART NEEDS")
+  thumbnailKey: 'chapter-spectral-keeper', // the chapter's own card (`pause/ch29-spectral-keeper-card`, thumbnail `-thumb`; r75-boss-art): a key only, nothing loads it until the board lists the chapter (docs/handoff/r75-boss-art.md)
   buildRef: zanarkandBuild,
   enemyGroupRef: spectralKeeperGroup,
   scriptsRef: spectralKeeperScripts,

@@ -29,9 +29,11 @@ import {
   DoubleSide,
   Mesh,
   MeshBasicMaterial,
+  PlaneGeometry,
   RingGeometry,
   type Camera,
   type Object3D,
+  type Texture,
 } from 'three';
 
 /** Where a part lives on its parent's painting, in the painting's own pixels. */
@@ -62,11 +64,38 @@ export interface OverheadAnchor {
   /** World offset from the parent's position. None of these numbers is game data. */
   offset: [dx: number, y: number, dz: number];
   /**
-   * **A ring flat on the floor at the anchor** (FFX only: the hidden Spectral Keeper's glyph platforms, which have no painting yet). Omitted, an overhead
+   * **A ring flat on the floor at the anchor** (FFX only: the hidden Spectral Keeper's glyph platforms; a `decal` painting replaces the ring where the art is installed, r75-boss-art). Omitted, an overhead
    * anchor draws nothing (Vegnagun's Nodes and the Mortiphasm discs are off-frame or painted props). `radius` is in world units; the offset's `y` is the floor.
    * `litFlag` names a battle-state flag (`BattleState.flags`) that turns the ring amber while it is true (the Keeper's lit mines).
    */
-  floorRing?: { radius: number; litFlag?: string };
+  floorRing?: { radius: number; litFlag?: string; decal?: FloorDecal };
+}
+
+/** The pictures a floor ring's painting has, one per state. Only `unlit` is needed: it stands for every state the others leave out. */
+export type DecalState = 'unlit' | 'occupied' | 'mined';
+
+/**
+ * **A painting that replaces a floor ring** (FFX only: the Spectral Keeper's glyph platforms and its aeon rock, r75-boss-art; the paintings are `art/decals/*.png`, square, the glyph's outer circle touching the edges, so the plane is the
+ * ring's diameter wide). Each path is an `art/...png` path the stage's loader resolves. While the plain picture has not loaded, or has no file, the ring is drawn as before: a tree without the art plays exactly as it did.
+ * `standing` names the battle-state flags that say who stands where (`plat.at.<member>` holds a platform number) and this decal's platform: the `occupied` picture shows while any of them equals it. The `mined` picture shows while the ring's `litFlag` is up.
+ */
+export interface FloorDecal {
+  readonly unlit: string;
+  readonly occupied?: string;
+  readonly mined?: string;
+  readonly standing?: { readonly flagPrefix: string; readonly platform: number };
+}
+
+/** Loads one decal painting (`art/...png` path): its texture, or null when the file is absent. Injected by the stage (`BattlePresenterStage.ts`), so this module imports no art loader. */
+export type DecalLoader = (path: string) => Promise<Texture | null>;
+
+/** Which of a decal's pictures shows: the mine's while the ring is lit, else the occupied one while somebody stands on the platform, else the plain one. Pure. */
+export function decalStateOf(flags: Readonly<Record<string, unknown>> | undefined, floorRing: { litFlag?: string; decal?: FloorDecal }): DecalState {
+  if (!flags) return 'unlit';
+  if (floorRing.litFlag !== undefined && flags[floorRing.litFlag] === true) return 'mined';
+  const at = floorRing.decal?.standing;
+  if (at && Object.entries(flags).some(([key, value]) => key.startsWith(at.flagPrefix) && value === at.platform)) return 'occupied';
+  return 'unlit';
 }
 
 export type PartAnchor = OnParentAnchor | OverheadAnchor;
@@ -158,6 +187,10 @@ interface RingEntry {
   litNow: boolean;
   /** The colour has left the violet and is owed a reset once the glow has gone. */
   tinted: boolean;
+  /** Which of a decal's pictures the battle state asks for (`decalStateOf`, set by `sync`); only a ring with a decal reads it. */
+  want: DecalState;
+  /** The painting that stands in for the ring, once its plain picture has loaded (`FloorDecal`); absent until then and for every ring without one. */
+  decal?: { mesh: Mesh; maps: Partial<Record<DecalState, Texture>> };
 }
 
 /**
@@ -169,7 +202,11 @@ interface RingEntry {
 export class PartRings {
   private readonly rings = new Map<string, RingEntry>();
 
-  constructor(private readonly root: Object3D) {}
+  constructor(
+    private readonly root: Object3D,
+    /** Loads a floor decal's painting; none given (the unit tests, a tree with no art), no decal is ever drawn and every ring stays a ring. */
+    private readonly loadDecal?: DecalLoader,
+  ) {}
 
   /** Add (or replace) the ring for `id`. An overhead anchor gets one only when it asks for a floor ring (`floorRing`); otherwise it is off-frame. */
   add(id: string, anchor: PartAnchor): void {
@@ -191,7 +228,30 @@ export class PartRings {
     mesh.renderOrder = 7;
     if (ground) mesh.rotation.x = -Math.PI / 2;
     this.root.add(mesh);
-    this.rings.set(id, { mesh, anchor, ground, level: 1, alive: true, lit: 0, litNow: false, tinted: false });
+    const entry: RingEntry = { mesh, anchor, ground, level: 1, alive: true, lit: 0, litNow: false, tinted: false, want: 'unlit' };
+    this.rings.set(id, entry);
+    const decal = anchor.mode === 'overhead' ? anchor.floorRing?.decal : undefined;
+    if (decal && this.loadDecal) void this.attachDecal(id, entry, radius, decal, this.loadDecal);
+  }
+
+  /** Load the decal's pictures; when the plain one is there, lay its plane under the ring (the ring then hides). A file that is missing, or a ring removed meanwhile, leaves things as they were. */
+  private async attachDecal(id: string, entry: RingEntry, radius: number, decal: FloorDecal, load: DecalLoader): Promise<void> {
+    const maps: Partial<Record<DecalState, Texture>> = {};
+    for (const state of ['unlit', 'occupied', 'mined'] as const) {
+      const path = decal[state];
+      if (!path) continue;
+      const texture = await Promise.resolve().then(() => load(path)).catch(() => null);
+      if (texture) maps[state] = texture;
+    }
+    if (this.rings.get(id) !== entry || !maps.unlit) return;
+    const mat = new MeshBasicMaterial({ map: maps.unlit, transparent: true, opacity: 0, depthWrite: false, depthTest: false, side: DoubleSide });
+    const mesh = new Mesh(new PlaneGeometry(radius * 2, radius * 2), mat);
+    mesh.name = `part-decal:${id}`;
+    mesh.renderOrder = 6; // under the ring (7): an amber ring may still be drawn over a decal that has no mine picture
+    mesh.rotation.x = -Math.PI / 2;
+    mesh.visible = false;
+    this.root.add(mesh);
+    entry.decal = { mesh, maps };
   }
 
   setAlive(id: string, alive: boolean): void {
@@ -204,8 +264,10 @@ export class PartRings {
     const e = this.rings.get(id);
     if (!e) return;
     e.alive = state?.combatants[id]?.alive !== false;
-    const flag = e.anchor.mode === 'overhead' ? e.anchor.floorRing?.litFlag : undefined;
+    const floorRing = e.anchor.mode === 'overhead' ? e.anchor.floorRing : undefined;
+    const flag = floorRing?.litFlag;
     e.litNow = flag !== undefined && state?.flags[flag] === true;
+    if (floorRing?.decal) e.want = decalStateOf(state?.flags, floorRing);
   }
 
   /** Re-place and fade every ring. `parentOf` returns the live parent, or undefined when it has left. */
@@ -225,12 +287,26 @@ export class PartRings {
         e.tinted = e.lit > 0.001;
       }
       e.mesh.visible = e.level > 0.02 && !!parent;
+      const decal = e.decal;
+      if (decal) {
+        // The painting is the platform now: it takes the state's picture (the plain one stands for a state with none) and fades with the ring. The ring hides, except an amber one over a lit decal that has no mine picture (the rock).
+        const dm = decal.mesh.material as MeshBasicMaterial;
+        const map = decal.maps[e.want] ?? decal.maps.unlit ?? null;
+        if (dm.map !== map) {
+          dm.map = map;
+          dm.needsUpdate = true;
+        }
+        dm.opacity = 0.96 * e.level;
+        decal.mesh.visible = e.level > 0.02 && !!parent;
+        if (!(e.litNow && !decal.maps.mined)) e.mesh.visible = false;
+      }
       if (!parent) continue;
       const [x, y, z] = anchorPoint(e.anchor, parent);
       if (e.anchor.mode === 'overhead') {
         // A floor ring on an overhead anchor lies flat and round: the camera's own angle foreshortens it (no extra squash on top).
         e.mesh.position.set(x, y + 0.03, z);
         e.mesh.scale.set(1, 1, 1);
+        decal?.mesh.position.set(x, y + 0.02, z);
         continue;
       }
       e.mesh.position.set(x, e.anchor.ring.ground ? parent.y + 0.03 : y, z);
@@ -242,13 +318,14 @@ export class PartRings {
     }
   }
 
-  /** What the debug snapshot and the tests read back. */
-  snapshot(): Array<{ id: string; visible: boolean; opacity: number; at: [number, number, number] }> {
+  /** What the debug snapshot and the tests read back. `decal` is there only for a ring whose painting has loaded: the picture it shows and whether it is drawn. */
+  snapshot(): Array<{ id: string; visible: boolean; opacity: number; at: [number, number, number]; decal?: { state: DecalState; visible: boolean } }> {
     return [...this.rings.entries()].map(([id, e]) => ({
       id,
       visible: e.mesh.visible,
       opacity: +(e.mesh.material as MeshBasicMaterial).opacity.toFixed(3),
       at: [e.mesh.position.x, e.mesh.position.y, e.mesh.position.z],
+      ...(e.decal ? { decal: { state: e.decal.maps[e.want] ? e.want : ('unlit' as const), visible: e.decal.mesh.visible } } : {}),
     }));
   }
 
@@ -259,6 +336,11 @@ export class PartRings {
     e.mesh.removeFromParent();
     e.mesh.geometry.dispose();
     (e.mesh.material as MeshBasicMaterial).dispose();
+    if (e.decal) {
+      e.decal.mesh.removeFromParent();
+      e.decal.mesh.geometry.dispose();
+      (e.decal.mesh.material as MeshBasicMaterial).dispose(); // the textures belong to the loader's cache and stay
+    }
   }
 
   dispose(): void {

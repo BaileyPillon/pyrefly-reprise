@@ -1,0 +1,188 @@
+/**
+ * **The art of the two hidden boss chapters (r75-boss-art).** The Spectral Keeper (chapter 29, FFX only) and the Fallen Maesters (chapter 30, FFX-2 only: Aranea, the Black Elemental, Concherer, Chac)
+ * have paintings staged for install; the driver picked them under Bailey's delegation (item 219m). This file holds the two ends of that to each other:
+ *
+ *  1. **Everything the code names is in the set.** Every file a chapter's data, scene and pause metadata reference (sprite poses, the glyph and rock decals, the turn-list face, the pause plates, the snapshots that are
+ *     new art) is pinned in `docs/target/approved-hashes.json`'s set `driver:2026-11-03-boss-art`, and every pinned 1x pose has a registration row stamped with the same painting (`sha`). Reads no art file.
+ *  2. **Installed, the files are the pinned ones.** When a tree has the art (`public/art`, or the folder `BOSS_ART_ROOT` names: the stage `D:/Tools/pyrefly-scratch/2026-11-03/boss-art-install/stage/art` or an art mirror),
+ *     every pin's file hashes to its sha256, every PNG has a house sidecar (the ten shipped fields, the painting's own size) and every file is in a game-aware place. Skipped where the art is not installed
+ *     (`public/art` is gitignored: the same pattern as `pose-install-bosses-0926.test.ts`).
+ *
+ * Game case: the Keeper's files are FFX only, the four fiends' FFX-2 only; nothing here is true of both.
+ */
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { describe, expect, it } from 'vitest';
+import approved from '../../../docs/target/approved-hashes.json';
+import waivers from '../../../docs/target/pose-waivers.json';
+import faceCrops from '../../../src/ui/common/face-crops.json';
+import { SIDECAR_FIELDS } from '../../../tools/art-sidecar-fields.mjs';
+import { POSE_REGISTRATION_FOES } from '../../../src/data/art/poseRegistrationFoes.ts';
+import { SPECTRAL_KEEPER_META } from '../../../src/data/chapter-meta-spectral-keeper.ts';
+import { FALLEN_MAESTERS_META } from '../../../src/data/chapter-meta-ffx2-fallen-maesters.ts';
+import { SPECTRAL_KEEPER } from '../../../src/data/chapter-spectral-keeper.ts';
+import { FALLEN_MAESTERS_BODY_IDS } from '../../../src/data/fallen-maesters-ids.ts';
+import { spectralKeeper } from '../../../src/data/ffx/enemies/spectral-keeper.ts';
+import { SPECTRAL_GLYPH_DECALS, SPECTRAL_KEEPER_ID, SPECTRAL_ROCK_DECAL } from '../../../src/data/ffx/spectral-keeper-ids.ts';
+import { floor20AraneaGroup, floor40BlackElementalGroup, floor60ConchererGroup, floor80ChacGroup } from '../../../src/data/ffx2/enemies/fallen-maesters.ts';
+import { SPECTRAL_KEEPER_PART_ANCHORS } from '../../../src/scenes/spectral-keeper.ts';
+import { ENEMY_POSES } from '../../../src/engine/BattlePresenterArt.ts';
+
+const SET_KEY = 'driver:2026-11-03-boss-art (item 219m, delegated by Bailey)';
+const sets = (approved as { sets: Record<string, Record<string, unknown>> }).sets;
+const set = sets[SET_KEY];
+
+/** The pins, by their path under public/art. */
+const pins = new Map<string, string>(
+  Object.entries(set ?? {})
+    .filter(([key]) => key.startsWith('public/art/'))
+    .map(([key, value]) => [key.slice('public/art/'.length), (value as { sha256: string }).sha256]),
+);
+
+/** The poses a painted enemy is asked for: the presenter's list less the wind-up slot (it resolves to the idle) and, for a fiend that dies as pyreflies, the KO. */
+const poses = (withKo: boolean): string[] => ENEMY_POSES.filter((p) => p !== 'telegraph' && (withKo || p !== 'ko'));
+const figure = (key: string, withKo: boolean): string[] => poses(withKo).map((p) => `characters/${key}/${p}.png`);
+
+/** Every spriteKey the four floors draw (the data names them; the constants only name the keys). */
+const fiendKeys = (): string[] => [floor20AraneaGroup, floor40BlackElementalGroup, floor60ConchererGroup, floor80ChacGroup].flatMap((g) => g.enemies.map((e) => e.spriteKey));
+
+describe('the set is recorded', () => {
+  it('has Bailey\'s delegation words, the decision, the note and 43 image pins, none a path outside the set\'s folders', () => {
+    expect(set, `${SET_KEY} in approved-hashes.json`).toBeDefined();
+    expect(String(set!['words'])).toContain("i'll go with all of your recommendations please implement all the unimplemented chapters that i decided on");
+    expect(String(set!['decision'])).toContain('219m');
+    expect(String(set!['note'])).toMatch(/DRIVER CALL, delegated by Bailey; not Bailey's own approval/);
+    expect(pins.size).toBe(43);
+    for (const [path, sha] of pins) {
+      expect(sha, path).toMatch(/^[0-9a-f]{64}$/);
+      expect(path, path).toMatch(/^(characters\/(spectral-keeper|x2-aranea|x2-black-elemental|x2-concherer|x2-chac)\/|decals\/spectral-|portraits\/spectral-keeper\.png$|pause\/(ch29-spectral-keeper|ffx2-fallen-maesters))/);
+    }
+  });
+
+  it('no file is pinned twice in two sets of the ledger (a new file, nothing replaced)', () => {
+    for (const [other, body] of Object.entries(sets)) {
+      if (other === SET_KEY) continue;
+      for (const key of Object.keys(body)) expect(pins.has(key.replace(/^public\/art\//, '')), `${other}: ${key}`).toBe(false);
+    }
+  });
+});
+
+describe('every file the Spectral Keeper chapter names is in the set (FFX only)', () => {
+  it('the Keeper draws characters/spectral-keeper: idle, attack, cast, hurt, ko and the idle master', () => {
+    expect(spectralKeeper().spriteKey).toBe(SPECTRAL_KEEPER_ID);
+    expect(SPECTRAL_KEEPER_ID).toBe('spectral-keeper');
+    for (const file of [...figure(SPECTRAL_KEEPER_ID, true), `characters/${SPECTRAL_KEEPER_ID}/idle@2x.png`]) expect(pins.has(file), file).toBe(true);
+  });
+
+  it('the glyph in three states and the rock: every decal a part anchor asks for', () => {
+    const asked = new Set<string>();
+    for (const a of Object.values(SPECTRAL_KEEPER_PART_ANCHORS)) {
+      if (a.mode !== 'overhead' || !a.floorRing?.decal) continue;
+      for (const key of ['unlit', 'occupied', 'mined'] as const) if (a.floorRing.decal[key]) asked.add(a.floorRing.decal[key]!);
+    }
+    expect([...asked].sort()).toEqual([...Object.values(SPECTRAL_GLYPH_DECALS), SPECTRAL_ROCK_DECAL].sort());
+    for (const path of asked) expect(pins.has(path.replace(/^art\//, '')), path).toBe(true);
+  });
+
+  it('the pause plate (heroArt, with its 2x master) and the snapshot of the Keeper itself', () => {
+    expect(SPECTRAL_KEEPER_META.heroArt).toBe('pause/ch29-spectral-keeper');
+    expect(pins.has(`${SPECTRAL_KEEPER_META.heroArt}.png`)).toBe(true);
+    expect(pins.has(`${SPECTRAL_KEEPER_META.heroArt}.2x.webp`)).toBe(true);
+    const own = SPECTRAL_KEEPER_META.snapshots.map((s) => s.image).filter((i) => i.startsWith(`characters/${SPECTRAL_KEEPER_ID}/`));
+    expect(own).toEqual([`characters/${SPECTRAL_KEEPER_ID}/idle.png`]);
+    for (const snap of SPECTRAL_KEEPER_META.snapshots) if (/spectral|x2-(aranea|chac|concherer|black)/.test(snap.image)) expect(pins.has(snap.image), snap.image).toBe(true);
+  });
+
+  it('the turn-list face is portraits/spectral-keeper.png, framed by its own sidecar (`focal`, `portraitFocal` in portrait.ts), so the crop table has no row for it', () => {
+    expect(pins.has('portraits/spectral-keeper.png')).toBe(true);
+    expect((faceCrops.portraits as Record<string, unknown>)[SPECTRAL_KEEPER_ID], 'no table row: the table\'s guard test reads the file, and the file is not in every tree').toBeUndefined();
+  });
+
+  it('the chapter card and its thumbnail (a key and files no code loads until the board lists the chapter)', () => {
+    expect(SPECTRAL_KEEPER.thumbnailKey).toBe('chapter-spectral-keeper');
+    for (const f of ['pause/ch29-spectral-keeper-card.png', 'pause/ch29-spectral-keeper-card.2x.webp', 'pause/ch29-spectral-keeper-thumb.png']) expect(pins.has(f), f).toBe(true);
+  });
+});
+
+describe('every file the Fallen Maesters chapter names is in the set (FFX-2 only)', () => {
+  it('the four floors draw x2-aranea, x2-black-elemental, x2-concherer and x2-chac: idle, attack, cast, hurt and the idle master (no KO: they die as pyreflies)', () => {
+    expect(fiendKeys().sort()).toEqual([...FALLEN_MAESTERS_BODY_IDS].sort());
+    for (const key of FALLEN_MAESTERS_BODY_IDS) for (const file of [...figure(key, false), `characters/${key}/idle@2x.png`]) expect(pins.has(file), file).toBe(true);
+  });
+
+  it('Concherer\'s cracked-shell idle and its master are staged too (nothing draws it yet: no code swaps an enemy idle on a status)', () => {
+    expect(pins.has('characters/x2-concherer/idle-cracked.png')).toBe(true);
+    expect(pins.has('characters/x2-concherer/idle-cracked@2x.png')).toBe(true);
+  });
+
+  it('the pause plate, its 2x master, the snapshot of Aranea and the card and thumbnail', () => {
+    expect(FALLEN_MAESTERS_META.heroArt).toBe('pause/ffx2-fallen-maesters');
+    expect(pins.has(`${FALLEN_MAESTERS_META.heroArt}.png`)).toBe(true);
+    expect(pins.has(`${FALLEN_MAESTERS_META.heroArt}.2x.webp`)).toBe(true);
+    expect(FALLEN_MAESTERS_META.snapshots.map((s) => s.image)).toContain('characters/x2-aranea/idle.png');
+    for (const snap of FALLEN_MAESTERS_META.snapshots) if (/x2-(aranea|chac|concherer|black)/.test(snap.image)) expect(pins.has(snap.image), snap.image).toBe(true);
+    for (const f of ['pause/ffx2-fallen-maesters-card.png', 'pause/ffx2-fallen-maesters-card.2x.webp', 'pause/ffx2-fallen-maesters-thumb.png']) expect(pins.has(f), f).toBe(true);
+  });
+});
+
+describe('every pinned 1x pose is registered with the very painting that is pinned (rule 16: no painting ships without a row)', () => {
+  const posePins = [...pins].filter(([path]) => /^characters\/[^/]+\/[^@/]+\.png$/.test(path));
+  it('there are 22 of them (the five idles and the 17 other poses; the six masters are not poses)', () => {
+    expect(posePins.length).toBe(22);
+  });
+  it.each(posePins)('%s has a stamped row whose sha is the pinned painting\'s', (path, sha) => {
+    const [, subject, file] = /^characters\/([^/]+)\/(.+)\.png$/.exec(path)!;
+    const row = POSE_REGISTRATION_FOES[subject!]?.[file!];
+    expect(row, `${subject}/${file} has a registration row`).toBeDefined();
+    expect(row!.sha, 'the row was stamped from this painting').toBe(sha.slice(0, 16));
+    expect(row!.status, `${subject}/${file}: ok, held or waived, never blocked`).toMatch(/^(ok|held|waived)$/);
+  });
+  it('exactly four rows are waived, the four whose stance is registered by the painting\'s own offset (docs/handoff/r75-boss-art.md): Keeper attack, Aranea attack cast hurt', () => {
+    const waived = Object.entries(POSE_REGISTRATION_FOES)
+      .filter(([subject]) => /^(spectral-keeper|x2-aranea|x2-black-elemental|x2-concherer|x2-chac)$/.test(subject))
+      .flatMap(([subject, rows]) => Object.entries(rows).filter(([, r]) => r.status === 'waived').map(([pose]) => `${subject}/${pose}`));
+    expect(waived.sort()).toEqual(['spectral-keeper/attack', 'x2-aranea/attack', 'x2-aranea/cast', 'x2-aranea/hurt']);
+  });
+  it('each waiver row quotes Bailey from a decision that holds the quotation, and names the painting by its full sha256', () => {
+    const rows = (waivers as { rows: Array<{ subject: string; pose: string; sha: string; source?: string; words?: string; legacy?: boolean }> }).rows.filter((r) => !r.legacy && /^(spectral-keeper|x2-aranea)$/.test(r.subject));
+    expect(rows.map((r) => `${r.subject}/${r.pose}`).sort()).toEqual(['spectral-keeper/attack', 'x2-aranea/attack', 'x2-aranea/cast', 'x2-aranea/hurt']);
+    for (const r of rows) {
+      expect(r.sha, `${r.subject}/${r.pose}`).toBe(pins.get(`characters/${r.subject}/${r.pose}.png`));
+      expect(r.source).toBe('D-1444');
+      expect(r.words).toContain("i'll go with all of your recommendations please implement all the unimplemented chapters that i decided on");
+    }
+  });
+});
+
+// ------------------------------------------------------------------------------------------------ installed: the files are the pinned ones
+
+const root = [process.env['BOSS_ART_ROOT'], resolve('public/art')].filter((r): r is string => !!r).find((r) => existsSync(join(r, 'characters', 'spectral-keeper', 'idle.png')));
+const sha256 = (file: string): string => createHash('sha256').update(readFileSync(file)).digest('hex');
+const pngSize = (file: string): [number, number] => {
+  const head = readFileSync(file).subarray(0, 24);
+  return [head.readUInt32BE(16), head.readUInt32BE(20)];
+};
+
+describe.skipIf(!root)('the installed files on this disk (public/art is gitignored; BOSS_ART_ROOT names another folder)', () => {
+  it.each([...pins])('%s is the pinned file', (path, sha) => {
+    const file = join(root!, path);
+    expect(existsSync(file), `${path} is installed`).toBe(true);
+    expect(sha256(file), `${path} is the staged bytes`).toBe(sha);
+  });
+
+  it('the turn-list face carries its focal point (the red eye of the helm) in its sidecar, in the fractions portrait.ts reads', () => {
+    const json = JSON.parse(readFileSync(join(root!, 'portraits/spectral-keeper.json'), 'utf8')) as { focal?: { fx: number; fy: number; ipd: number } };
+    expect(json.focal).toEqual({ fx: 0.422, fy: 0.507, ipd: 0.17 });
+  });
+
+  it.each([...pins].filter(([path]) => path.endsWith('.png')))('%s has a house sidecar: the shipped fields only, the painting\'s own size', (path) => {
+    const sidecar = join(root!, path.replace(/\.png$/, '.json'));
+    expect(existsSync(sidecar), `${path.replace(/\.png$/, '.json')} beside it`).toBe(true);
+    const json = JSON.parse(readFileSync(sidecar, 'utf8')) as Record<string, unknown>;
+    expect(Object.keys(json).filter((k) => !(SIDECAR_FIELDS as readonly string[]).includes(k)), 'fields the game does not read').toEqual([]);
+    expect(JSON.stringify(json)).not.toMatch(/[A-Za-z]:[\\/]|Administrator|Users[\\/]/);
+    const [w, h] = pngSize(join(root!, path));
+    expect([json['width'], json['height']]).toEqual([w, h]);
+  });
+});

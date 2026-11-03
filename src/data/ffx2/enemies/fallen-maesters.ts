@@ -14,7 +14,8 @@
  * standing (`restoresPartyOnEntry`) and **no Save Sphere card** (`noSaveSphereCard`: the glyph is not a Save Sphere); items spent stay spent. Each of those links is also the retry checkpoint, so a defeat on floor 60 retries floor 60.
  * **Escape is off** on all four (FM8: as the other story bosses; the game's own answer, Q3, is unread). The Oversoul versions are not built (FM2 (a)).
  *
- * **Art: none exists yet.** The four paintings are on the art needs list (`docs/handoff/ch-maesters.md`); until they are installed the presenter draws its fallback for the four sprite keys.
+ * **Art (r75-boss-art, the driver's picks under Bailey's delegation, item 219m):** the four paintings `characters/x2-aranea`, `x2-black-elemental`, `x2-concherer` (with a cracked-shell idle nothing draws yet) and `x2-chac` are staged for install
+ * (`docs/handoff/r75-boss-art.md`); a tree that has not got them draws the presenter's fallback for the four sprite keys.
  * **Sizes** (the model scale before each monster in its formation: Aranea 125, Black Elemental 200, Concherer 115, Chac 150 percent [RE §5.1]) are NOT staged yet: `src/scenes/cloister-100.ts` is untouched and every fiend stands at the stage's default boss height until the stature read (RE Q14) and the paintings exist.
  */
 

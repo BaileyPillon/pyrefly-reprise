@@ -9,8 +9,9 @@
  *   and magic); the Black Elemental has almost no HP and a Reflect, and its Magic climbs every third action; Concherer's shell breaks on one hit of about twenty thousand; Chac petrifies and a blow on stone destroys a girl.
  * - `quote` is Paine's line from the first seam (`../story/scripts/ffx2-fallen-maesters.ts`), our own.
  * - `objectives`: get past Aranea (floor 40 reached), get past Concherer (floor 80 reached), the win.
- * - `heroArt` has no painting of its own yet: the card shows the Via Infinito's plate as `heroArtFallback` (the four fiends have no paintings yet; the art needs list is in the handoff).
- * - `snapshots`: the Via Infinito's plate, Paragon's idle (the hall's other boss; approved) and Paine's FFX-2 portrait (approved). No snapshot of the four fiends exists yet.
+ * - `heroArt` is the pause plate `pause/ffx2-fallen-maesters` (painted for this chapter, r75-boss-art: the four fiends in the Via Infinito's hall; the driver picked it under Bailey's delegation, item 219m);
+ *   the Via Infinito's plate is the `heroArtFallback` while a tree has not got it.
+ * - `snapshots`: the Via Infinito's plate, Aranea's idle (the first fiend; it replaced Paragon's, the hall's other boss, as the middle snapshot) and Paine's FFX-2 portrait (approved).
  * - `musicKeys`: the field bed, the aeon cue (a flagged stand-in), the fanfare, as the record's.
  */
 
@@ -22,7 +23,7 @@ export const FALLEN_MAESTERS_META: ChapterMeta = {
   gameLabel: 'FFX-2',
   numeral: 'EXP',
   ...FALLEN_MAESTERS_TEXT,
-  heroArt: 'pause/ffx2-fallen-maesters', // no painting yet: the fallback below shows
+  heroArt: 'pause/ffx2-fallen-maesters', // the chapter's pause plate; the fallback below shows in a tree that has not got it
   heroArtFallback: 'backdrops/via-infinito.png',
   quote: { text: 'Then we stop it before the fifth bite.', speaker: 'Paine' },
   handwritten: 'the glyph heals. nothing else does',
@@ -38,7 +39,7 @@ export const FALLEN_MAESTERS_META: ChapterMeta = {
     'Chac turns girls to stone, and a blow on stone destroys them.',
   snapshots: [
     { image: 'backdrops/via-infinito.png', caption: 'the Great Cloisters' },
-    { image: 'characters/paragon/idle.png', caption: 'the hall below' },
+    { image: 'characters/x2-aranea/idle.png', caption: 'the hall below' },
     { image: 'portraits/paine.png', caption: 'count the bites' },
   ],
   focalCharacterId: 'paine',

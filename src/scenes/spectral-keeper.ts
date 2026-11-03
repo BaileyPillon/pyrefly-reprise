@@ -1,8 +1,15 @@
 import type { SceneBuild, SceneBuildOptions, SceneFactory } from './types.ts';
 import type { SceneSlots, Spot } from './index.ts';
 import { ZANARKAND_DOME_SLOTS, buildZanarkandDomeScene } from './zanarkand-dome.ts';
-import type { PartAnchor, PartAnchors } from '../engine/PartAnchors.ts';
-import { SPECTRAL_ARMED_FLAG_PREFIX, SPECTRAL_CIRCLE_IDS, SPECTRAL_KEEPER_ID } from '../data/ffx/spectral-keeper-ids.ts';
+import type { FloorDecal, PartAnchor, PartAnchors } from '../engine/PartAnchors.ts';
+import {
+  SPECTRAL_ARMED_FLAG_PREFIX,
+  SPECTRAL_AT_FLAG_PREFIX,
+  SPECTRAL_CIRCLE_IDS,
+  SPECTRAL_GLYPH_DECALS,
+  SPECTRAL_KEEPER_ID,
+  SPECTRAL_ROCK_DECAL,
+} from '../data/ffx/spectral-keeper-ids.ts';
 
 // ---------------------------------------------------------------------------
 // The Zanarkand Dome, the hidden Spectral Keeper's stage (FFX only)
@@ -28,6 +35,8 @@ const RX = 2.3;
 const RZ = 2.0;
 /** A glyph ring's radius: under half the nearest spacing between two glyphs (2.0, platforms 2 and 3), so neighbouring rings never touch. `[estimate]`. */
 export const GLYPH_RING_RADIUS = 0.8;
+/** The index of the aeon rock among the seven Circles (platform 7): it has one stone picture, not the glyph's three. */
+const ROCK_INDEX = 6;
 
 /**
  * The glyph anchors of platforms 1 to 6 (RE 2.4's table, game (x, z) = (0, 72), (64, 36), (64, -36), (0, -72), (-64, -36), (-64, 36), scaled to the stage): platform 1 is the near point, 2 and 3 on the right
@@ -49,12 +58,14 @@ export const SPECTRAL_KEEPER_ENEMY_SPOTS: Readonly<Record<string, Spot>> = { [SP
 /**
  * The glyphs, figure-less (`SceneStaging.partAnchors`, the mechanism Vegnagun's Nodes use: 'overhead' mode, a world offset from the parent's feet): the stage draws no silhouette for a Circle, the target cursor and the turn
  * ring still find it, and the Circle follows the Keeper (its `flags.partOf`). **Each anchor asks for a floor ring** (`floorRing`, `PartAnchors.ts`): an overhead anchor draws nothing without one, so before this the platforms
- * were invisible (the review's major 1). A ring turns **amber while its Circle is armed** (`litFlag`, the engine's `plat.armed.<id>` flag): the only on-screen tell of a mine. The painting of the glyph (`spectral-glyph`, owed) replaces the ring when it exists. `[estimate]`, browser-checked by the job specs.
+ * were invisible (the review's major 1). A ring turns **amber while its Circle is armed** (`litFlag`, the engine's `plat.armed.<id>` flag): the only on-screen tell of a mine. The painting of the glyph (`art/decals/spectral-glyph-*.png`, the rock `spectral-aeon-rock.png`; staged by r75-boss-art) replaces the ring where it is installed and loaded (`FloorDecal`, `PartAnchors.ts`); a tree without it keeps the rings. `[estimate]`, browser-checked by the job specs.
  */
 export const SPECTRAL_KEEPER_PART_ANCHORS: PartAnchors = Object.fromEntries(
   SPECTRAL_CIRCLE_IDS.map((id, i) => {
     const spot = SPECTRAL_KEEPER_GLYPH_SPOTS[i] as Spot;
-    return [id, { mode: 'overhead', offset: [spot[0] - CENTRE[0], 0, spot[2] - CENTRE[2]], floorRing: { radius: GLYPH_RING_RADIUS, litFlag: SPECTRAL_ARMED_FLAG_PREFIX + id } } as PartAnchor];
+    // The painting (r75-boss-art): platforms 1 to 6 the glyph in three states (the occupied one while a member of the front line stands on it, the mine's while it is armed), the rock (platform 7) its one stone.
+    const decal: FloorDecal = i < ROCK_INDEX ? { ...SPECTRAL_GLYPH_DECALS, standing: { flagPrefix: SPECTRAL_AT_FLAG_PREFIX, platform: i + 1 } } : { unlit: SPECTRAL_ROCK_DECAL };
+    return [id, { mode: 'overhead', offset: [spot[0] - CENTRE[0], 0, spot[2] - CENTRE[2]], floorRing: { radius: GLYPH_RING_RADIUS, litFlag: SPECTRAL_ARMED_FLAG_PREFIX + id, decal } } as PartAnchor];
   }),
 );
 
