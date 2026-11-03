@@ -10,7 +10,7 @@
  * counterpart and read 0.
  *
  * **What a store reaches** (writes): the hit points (`+0x3b4`, raw, no clamp, no KO routine), the death pattern (`+0x2d8`; the copy a revive restores, `+0x2da`, is the same
- * byte and the engine keeps one) and Agility (`+0x39a`). A store to any other offset throws, so a script that starts to use an id the engine does not model is a failing test,
+ * byte and the engine keeps one), Agility (`+0x39a`), and Defense and Magic Defense (`+0x397`, `+0x399`: Concherer's shell break). A store to any other offset throws, so a script that starts to use an id the engine does not model is a failing test,
  * not a lost write. A hit-point write that clears the Death bit (the in-place revival of the Act III death entries, row XE3) throws too: it is not built, it waits for the
  * window of No Love Lost (`docs/handoff/re-parity-rc9-x2-stat-setter.md`). The routines the setter asks for after a store are not run: the low-HP check and the HP-state
  * refresh that follow a hit-point write mean nothing to a monster (the SOS flag and the weak pose are a girl's and the presenter's), and a monster's status recompute only
@@ -33,6 +33,12 @@ import {
 
 /** `Chr+0x39a`, the Agility byte the recovery formula divides by. */
 const AGILITY_OFFSET = 0x39a;
+/**
+ * `Chr+0x397` and `Chr+0x399`, the Defense (stat id 12) and Magic Defense (stat id 14) bytes: Concherer's shell break stores 0 in both, which the setter turns into 1 (the hidden Fallen Maesters chapter, floor 60;
+ * `research/re-ffx2-fallen-maesters.md` §7.4; FFX-2 only). Before, no wired script wrote them.
+ */
+const DEFENSE_OFFSET = 0x397;
+const MAGIC_DEFENSE_OFFSET = 0x399;
 
 function worldOf(bySlot: ReadonlyMap<number, Ffx2Unit>): StatWorld {
   const nothing = (kind: string, offset: number): never => {
@@ -72,6 +78,12 @@ function applyWrite(unit: Ffx2Unit, w: StatWrite, id: number): void {
       return; // the pattern a revive puts back: the engine keeps the one byte
     case AGILITY_OFFSET:
       unit.stats = { ...unit.stats, agi: w.value };
+      return;
+    case DEFENSE_OFFSET:
+      unit.stats = { ...unit.stats, def: w.value };
+      return;
+    case MAGIC_DEFENSE_OFFSET:
+      unit.stats = { ...unit.stats, mdef: w.value };
       return;
     case APPLIED_STATUS_OFFSET:
       throw new Error('stat setter: a hit-point write that revives a dead monster in place is lane X2-E row XE3, which is not built (it waits for the window of No Love Lost)');

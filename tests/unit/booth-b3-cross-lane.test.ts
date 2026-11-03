@@ -126,7 +126,7 @@ describe('the follower\'s stand-down table and the hold guard over the merged li
   });
 
   it('every chapter on both the treated list and the swap exceptions holds the smear (the merged list was fourteen; the r70 verdicts left ten; batch 4 brought IX, XII, V and XI back and booth-b4-last added four: eighteen of the nineteen listed chapters; the r71 verdicts took IX and XII off again: sixteen; the second focused review of the candidate took Sin\'s face off: fifteen; r72-hud put IX and XII back: seventeen; r73-fast put Sin\'s face back: eighteen)', () => {
-    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(18);
+    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(19); // r74-fins joined Chapter XVII, the last listed chapter (eighteen before); it is not a swap exception, so the list below is unchanged
     const exceptions = Object.keys(SCOPE_EXCEPTIONS);
     const both = Object.keys(TREATED_CHAPTERS).filter((id) => exceptions.includes(id));
     expect(both).toEqual(['yunalesca', 'sin-face', 'ffx2-ixion-djose']); // booth-b4-last: Sin's face and Ixion at Djose joined, each holding the smear (Evrae left the exceptions in release 69); Sin's face left for release 71 and is back since r73-fast

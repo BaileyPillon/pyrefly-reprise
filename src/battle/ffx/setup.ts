@@ -44,7 +44,7 @@ import { applyOmnisSetup } from './ai/seymour-omnis-rules.ts';
 import { applyIsaaruSetup } from './ai/isaaru-rules.ts';
 import { applyAeonDuelSetup } from './aeon-duel.ts';
 import { applyFormationFlags } from './formation-flags.ts';
-import { applyFormationCommandDisables } from './formation-commands.ts';
+import { applyFormationCommandDisables, applyPlatformSetup, markFirstStrike } from './formation-commands.ts';
 import { applyPossessionOpening, mirrorPossessedAeon } from './ai/possession-setup.ts';
 import { initYojimbo } from './adapt/yojimbo.ts';
 import { initSisters } from './adapt/sisters.ts';
@@ -379,7 +379,7 @@ export function buildBattle(
     if (c) startAutoStatuses(ctx, c);
   }
 
-  spendEntryDraws(ctx, group.id); // the game's two draws before the opening counters: the start-type roll (stream 1, discarded) and the placement shuffle of linked monsters [adapt/entry.ts; RC8, FFX only]
+  markFirstStrike(ctx, group); spendEntryDraws(ctx, group.id); // markFirstStrike: the Spectral Keeper's front line has First Strike (inert elsewhere; platforms.ts). The game's two draws before the opening counters: the start-type roll (stream 1, discarded) and the placement shuffle of linked monsters [adapt/entry.ts; RC8, FFX only]
   seedInitialCtb(ctx, setup.condition ?? 'normal');
   applyPossessionOpening(ctx); // the possession fights' and Yu Yevon's opening counters [ai/possession-setup.ts]
   // Per-encounter scripted setup, each a no-op in every battle but its own. Macalania's opening is "a scripted pre-turn sequence" [ffx-seymour-anima-macalania §5.2]: Protect and Shell here.
@@ -394,6 +394,6 @@ export function buildBattle(
   applySinSetups(ctx); // Sin: link 4's clock and pulls, then links 1-3 (the Fins, Genais and the Core) [ffx-sin §5]
   applyGuiSetup(ctx); // Sinspawn Gui: the fight number, the body's acceleration line, the arms without turns, Wakka's reach [re-ffx-ai-gui §3, §5]
   applyBiranYenkeSetup(ctx); // Biran and Yenke: both brothers' HP, STR, MAG, AGI and MDF from Kimahri's, at the battle's start [re-ffx-biran-yenke §3]
-  applyDarkAeonsSetup(ctx, group); // Mirror Aeons: the sisters' and Yojimbo's starting gauges, the battle id the scripts branch on, the dog without turns [re-ffx-yojimbo-sisters-feasibility §3, §4]
+  applyPlatformSetup(ctx, group); applyDarkAeonsSetup(ctx, group); // applyPlatformSetup: the Spectral Keeper's front line on platforms 1 to 3 and its Circles without turns (inert elsewhere; platforms.ts). Mirror Aeons: the sisters' and Yojimbo's starting gauges, the battle id the scripts branch on, the dog without turns [re-ffx-yojimbo-sisters-feasibility §3, §4]
   return ctx;
 }

@@ -22,6 +22,7 @@ import type {
   StatusInstance,
 } from '../../../src/battle/common/types.ts';
 import { FFXContentRegistry } from '../../../src/battle/ffx/index.ts';
+import { SPECTRAL_ROWS } from '../../../src/data/ffx/spectral-keeper-ids.ts';
 import { tickSpeed as baseCtb } from '../../../src/battle/ffx/kernel/ctb.ts';
 import { makeActorRuntime, type Ctx, type FFXRuntime } from '../../../src/battle/ffx/state.ts';
 import type { CritCheckInput } from '../../../src/battle/ffx/kernel/crit.ts';
@@ -330,6 +331,12 @@ export function oracleInputs(sit: Situation, live: Live): { hit: HitCheckInput; 
 }
 
 /**
+ * Rows only a chapter's script queues, whose target, count and draws are the script's and are tested with it: the hidden Spectral Keeper's (`tests/unit/chapters/spectral-keeper-*.test.ts`). They stay out of the
+ * generic wiring sample, so adding the chapter moves none of this file's seeded picks (the Keeper's three single-target rows had pushed the CTB-class count from 6 to 5 and the floor was loosened to follow; it is back at "more than 5").
+ */
+const SCRIPT_ONLY_ROWS: ReadonlySet<string> = new Set(Object.values(SPECTRAL_ROWS));
+
+/**
  * The abilities a random situation may use: recorded, damaging, single-target, nothing scripted, no revival.
  *
  * This pool is the DAMAGE oracle's (W1): each copy keeps the game's record words but not its status payload (the chance, duration,
@@ -351,6 +358,7 @@ export function wiringPool(all: readonly AbilityDef[]): AbilityDef[] {
         a.extra?.['statsFrom'] === undefined &&
         a.extra?.['opensSubmenu'] === undefined &&
         a.extra?.['stealRoll'] === undefined &&
+        !SCRIPT_ONLY_ROWS.has(a.id) &&
         a.hits >= 1 &&
         a.hits <= 3,
     )

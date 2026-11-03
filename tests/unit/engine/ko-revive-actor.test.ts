@@ -8,6 +8,7 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { setMoveWord } from '../../../src/engine/motion/MoveSwitch.ts';
+import { setReviveWord } from '../../../src/engine/motion/ReviveCross.ts';
 import { reset } from './head-lock-fixture.ts';
 import { CFG, FRAME, analyzeSwap, anchors, fall, index, lying, revive, rig, slots } from './ko-fall-fixture.ts';
 import { detectJerks, figureTrack } from '../../../critic/runner/lib/continuity-pure.mjs';
@@ -19,10 +20,15 @@ import { TOPPLE_RAD } from '../../../src/engine/KoTip.ts';
 // This file's timeline is release 67's (the topple's 14-frame hold, the revive's 395 ms): every test here names `today`, so it keeps guarding that look whichever way `?kotopple`'s default is set
 // (release 68 held MF-17 at `today`: the adversarial review's F1, Kimahri's eased fall fails CHK-027 in the harness's maths).
 // The eased arm under the same harness maths is `m3-ko-eased-harness.test.ts`; its own timeline is `mf17-ko-eased.test.ts`.
-beforeEach(() => setMoveWord('kotopple', 'today'));
+// r74-revive: the revive's cross is the 75 ms capped one here (`?revive=today`, release 73's); the even cross's own timeline and numbers are `revive-even-cross.test.ts`.
+beforeEach(() => {
+  setMoveWord('kotopple', 'today');
+  setReviveWord('today');
+});
 afterEach(() => {
   reset();
   setMoveWord('kotopple', null);
+  setReviveWord(null);
 });
 
 /** A figure that has fallen and lies there (the fall played through), ready to be revived. */

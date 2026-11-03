@@ -16,7 +16,7 @@ describe('the route\'s table of door words is the board\'s', () => {
   it('has one word for every door of the board and no other, chapter for chapter', () => {
     const app = Object.fromEntries(CHAPTER_DOORS.map((d) => [d.chapter, d.word]));
     expect({ ...DOOR_WORDS }).toEqual(app);
-    expect(Object.keys(DOOR_WORDS)).toHaveLength(11); // limit, leblanc, experiment, mushroom, fayth, daigoro, valefor, gagazet, angra, yojimbo, summon
+    expect(Object.keys(DOOR_WORDS)).toHaveLength(15); // limit, leblanc, experiment, mushroom, fayth, daigoro, valefor, gagazet, angra, yojimbo, summon, keeper, infinito, yrp, waker
   });
 
   it('answers null for a chapter that has a card on the board (the arrow-key walk finds it)', () => {
@@ -25,6 +25,7 @@ describe('the route\'s table of door words is the board\'s', () => {
     for (const id of listed) expect(doorWordFor(id), id).toBeNull();
     expect(doorWordFor('sinspawn-gui')).toBe('mushroom');
     expect(doorWordFor('last-summoning')).toBe('summon');
+    expect(doorWordFor('spectral-keeper')).toBe('keeper');
     expect(doorWordFor('toString')).toBeNull(); // not an inherited property
   });
 });

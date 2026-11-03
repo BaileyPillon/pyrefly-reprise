@@ -72,7 +72,7 @@ describe('the word (pure)', () => {
 describe('the word against every table word', () => {
   const others = CHAPTER_DOORS.map((d) => d.word);
 
-  it('no word begins with, ends with or contains the other, and the only end-of-one-is-the-start-of-the-other is the single letter m (pilgrim, mushroom)', () => {
+  it('no word begins with, ends with or contains the other, and the only ends-of-one-that-are-the-start-of-the-other are the single letters m (pilgrim, mushroom) and p (yrp, pilgrim)', () => {
     const overlaps: string[] = [];
     for (const other of others) {
       for (const [a, b] of [[WORD, other], [other, WORD]] as const) {
@@ -82,7 +82,8 @@ describe('the word against every table word', () => {
         for (let k = 1; k <= Math.min(a.length, b.length); k++) if (a.slice(-k) === b.slice(0, k)) overlaps.push(`${a}>${b}:${a.slice(-k)}`);
       }
     }
-    expect(overlaps).toEqual(['pilgrim>mushroom:m']);
+    // `yrp` (the hidden 3D Bahamut, 2026-10-19) ends in the p that `pilgrim` begins with: harmless for the reason `pilgrim`/`mushroom` is (see `pilgrimDoor.ts`): the board is shut from the frame `yrp` opens it on, so `ilgrim` can never be typed on it.
+    expect(overlaps).toEqual(['pilgrim>mushroom:m', 'yrp>pilgrim:p']);
   });
 
   it('typed back to back with each table word in either order, each word finishes exactly once at its own last letter', () => {

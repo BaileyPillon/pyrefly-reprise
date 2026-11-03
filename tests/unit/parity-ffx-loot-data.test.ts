@@ -19,6 +19,7 @@ import { describe, expect, it } from 'vitest';
 import { MIX_ITEM_IDS } from '../../src/battle/ffx/kernel/mix-table.ts';
 import { ENEMY_GROUPS_BY_ID, ITEMS } from '../../src/data/ffx/index.ts';
 import { DARK_CINDY_ID, DARK_DAIGORO_ID, DARK_MINDY_ID, DARK_SANDY_ID, DARK_YOJIMBO_ID } from '../../src/data/ffx/mirror-aeons-ids.ts';
+import { SPECTRAL_CIRCLE_IDS, SPECTRAL_KEEPER_ID } from '../../src/data/ffx/spectral-keeper-ids.ts';
 import { BFA_LINE_FILE, dropsOfRecord, FFX_LOOT_RECORDS, ITEM_ID_OF_NUMBER, lootOf, lootRewards } from '../../src/data/ffx/loot/index.ts';
 
 interface Row {
@@ -85,8 +86,11 @@ describe('every shipped monster has the right record, and its listed rewards are
    * The Dark Aeons of Chapter XXVII (Mirror Aeons, hidden, FFX only, r50) are not among the 43 files this lane read: their rewards are the chapter's own rows (`data/ffx/enemies/dark-aeons.ts`, "RE section 2
    * loot rows": AP, AP on an Overkill, one always-dropping slot) and carry no `loot` record, so the death keeps the older path for them (`payKill` rolls only a monster that has a record). Not invented here (rule 6):
    * a record for them waits for a read of their files. The lane was built on r49, before the chapter; r51-rc names them so the table stays exact for the other enemies.
+   *
+   * **The hidden Spectral Keeper chapter's bodies (m129 and the seven m146 Circles, 2026-11-02) are in the same case:** the RE note gives the Keeper's four reward fields and its drop, steal and Bribe rows, but its 0x118-byte chunk's digest
+   * is not in the repo (the record's `source` line needs it) and the fixture is the private note's parse of the 43 files, so the Keeper pays through `rewards` alone and a Circle pays nothing (it never dies). Not invented (rule 6).
    */
-  const NO_RECORD: ReadonlySet<string> = new Set([DARK_CINDY_ID, DARK_SANDY_ID, DARK_MINDY_ID, DARK_YOJIMBO_ID, DARK_DAIGORO_ID]);
+  const NO_RECORD: ReadonlySet<string> = new Set([DARK_CINDY_ID, DARK_SANDY_ID, DARK_MINDY_ID, DARK_YOJIMBO_ID, DARK_DAIGORO_ID, SPECTRAL_KEEPER_ID, ...SPECTRAL_CIRCLE_IDS]);
   const everyone = Object.values(ENEMY_GROUPS_BY_ID).flatMap((g) => [...g.enemies, ...(g.parts ?? [])]);
   const shipped = everyone.filter((e) => !NO_RECORD.has(e.id));
 

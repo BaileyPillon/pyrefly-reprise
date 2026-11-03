@@ -6,7 +6,7 @@
  *    leaves it out of a build and keeps it for the dev server. `vite.config.ts` registers it beside the other plugins.
  * 2. **The middleware is read-only and stays inside its folder**: it serves a file from a temp root, and refuses every traversal (`..`, encoded and doubled, absolute paths, drive letters, backslashes, NUL,
  *    a symlink out of the root), a directory, any method but GET and HEAD; a missing root is a 404, not a crash; a request outside the route is left to Vite.
- * 3. **No retail file type is in the repo**: git tracks no `.glb`, `.gltf`, `.phyre`, `.dds` or `.mgrp` anywhere, `public/` (tracked and on this disk) holds none.
+ * 3. **No retail file type is in the repo**: git tracks no `.glb`, `.gltf`, `.phyre`, `.dds` or `.mgrp` anywhere, `public/` (tracked) holds none, and neither does the folder on this disk, except the hidden Wind Waker chapter's own eleven model files (Chapter 32, FFX-2 only: Meshy-made, not FFX's, listed by name and sha256 in `tools/ww/ww-models.json`).
  * 4. **The probe does nothing unless `import.meta.env.DEV`**: it returns null, fetches nothing and says nothing when it is false (the manifest's shape and the probe's failures are `ffx-local-manifest.test.ts`'s).
  *
  * Game case: FFX only (the files are FFX's); shared dev plumbing.
@@ -24,6 +24,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest
 import viteConfig from '../../vite.config.ts';
 import { FFX_LOCAL_DEFAULT_ROOT, FFX_LOCAL_ENV, ffxLocalMiddleware, ffxLocalRoot, pyreflyFfxLocal, resolveInside } from '../../tools/vite-ffx-local.mjs';
 import { probeFfxLocal } from '../../src/engine/ffx3d/localAssets.ts';
+import { readList as wwModelList } from '../../tools/ww-models.mjs';
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const RETAIL = new Set(['.glb', '.gltf', '.phyre', '.dds', '.mgrp']);
@@ -225,13 +226,16 @@ describe('no retail file type reaches the repo', () => {
     expect(retail(git('ls-files')), 'tracked anywhere').toEqual([]);
   });
 
-  it('public/ on this disk holds none either (an untracked file there would ship in a build)', () => {
+  it('public/ on this disk holds none either (an untracked file there would ship in a build), except the eleven original model files of the hidden Wind Waker chapter, listed by name and sha256', () => {
+    // The Wind Waker chapter (FFX-2 only, Chapter 32) SHIPS its own models (Meshy-made and cleaned in Blender, not FFX's): `public/models-exp/windwaker/`, gitignored, listed in tools/ww/ww-models.json
+    // and checked by tools/ww-models.mjs (its size and sha256). Only those eleven names are let through, so a retail file dropped into that folder, or anywhere else in public/, is still found.
+    const listed = new Set(wwModelList().map((f) => `models-exp/windwaker/${f.path}`));
     const found: string[] = [];
     const walk = (dir: string): void => {
       for (const entry of readdirSync(dir, { withFileTypes: true })) {
         const path = join(dir, entry.name);
         if (entry.isDirectory()) walk(path);
-        else if (RETAIL.has(extname(entry.name).toLowerCase())) found.push(path);
+        else if (RETAIL.has(extname(entry.name).toLowerCase()) && !listed.has(relative(join(REPO, 'public'), path).split(sep).join('/'))) found.push(path);
       }
     };
     try {
@@ -292,7 +296,8 @@ describe('the camera glue and the skin are reached only through a dev-gated dyna
   /** The files under src/ that import `stem.ts`, statically (`from '...'`) or dynamically (`import('...')`). */
   const importersOf = (stem: string): string[] => {
     const re = new RegExp(`from '[^']*${stem}\\.ts'|import\\('[^']*${stem}\\.ts'\\)`);
-    return allSources().filter((src) => re.test(src.text)).map((src) => src.path);
+    // `src/engine/yrp3d/` has a `clipSequencer.ts` and a `clipMap.ts` of its own (the hidden 3D Bahamut's, FFX-2 only, models shipped with the build): same names as ffx3d's, not ffx3d's modules (r74 integration)
+    return allSources().filter((src) => re.test(src.text) && !src.path.startsWith('src/engine/yrp3d/')).map((src) => src.path);
   };
 
   it('exp-fayth-camera.ts is imported by the deck scene alone, and exp-fayth-skin.ts by the deck scene and the camera glue', () => {

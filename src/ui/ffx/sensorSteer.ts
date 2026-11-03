@@ -40,18 +40,32 @@ const GAP = 6;
  * returned as a steer — a card that is already clear gets `null`, so the
  * stylesheet's own resting place is what a player who never opens a target
  * cursor sees.
+ *
+ * `flag` (r74-omnis; Chapter XII on the F1 HUD only, every other caller leaves it `null` and gets the answer it always got): the pro target flag's box. When the card, where the figure's steer leaves it,
+ * lies on the flag, the card is steered against the figure and the flag together (the one box that holds both); if neither side of that box has room, the figure's answer stands.
  */
 export function sensorSteerDx(
   card: GridBox,
   figure: GridBox,
   stageWidth: number,
   margin = SENSOR_STAGE_MARGIN,
+  flag: GridBox | null = null,
 ): number | null {
+  const base = steerClear(card, figure, stageWidth, margin);
+  if (!flag) return base;
+  const dx = base ?? 0;
+  if (!overlaps({ left: card.left + dx, right: card.right + dx, top: card.top, bottom: card.bottom }, flag)) return base;
+  const both = { left: Math.min(figure.left, flag.left), right: Math.max(figure.right, flag.right), top: Math.min(figure.top, flag.top), bottom: Math.max(figure.bottom, flag.bottom) };
+  return steerClear(card, both, stageWidth, margin) ?? base;
+}
+
+const overlaps = (a: GridBox, b: GridBox): boolean => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+
+/** The steer against one obstacle: the nearer side with room, or `null` (the card is clear of it, or no side has room). */
+function steerClear(card: GridBox, figure: GridBox, stageWidth: number, margin: number): number | null {
   const width = card.right - card.left;
   if (width <= 0) return null;
-  const overlapsX = figure.left < card.right && figure.right > card.left;
-  const overlapsY = figure.top < card.bottom && figure.bottom > card.top;
-  if (!overlapsX || !overlapsY) return null;
+  if (!overlaps(card, figure)) return null;
 
   const toLeft = figure.left - GAP - width - card.left;
   const toRight = figure.right + GAP - card.left;

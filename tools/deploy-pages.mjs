@@ -139,6 +139,7 @@ import {
 } from './critic-pending.mjs';
 import { lastDeployedSha, planForRepo, readLedger, writeLedger } from './critic-plan.mjs';
 import { findOwedLifts } from './owed-lifts.mjs';
+import { findOwedHoldLifts } from './owed-hold-lifts.mjs';
 import { loadPolicy, releasePolicy, validateReport } from './critic-policy.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -253,14 +254,15 @@ export function parseOwnerOverride(raw) {
  *      critical). Disclosed majors do not appear here;
  *   3. the third deploy while a deep review is still owed (RULE B's cap);
  *   4. a chapter on the treated list whose lift proof is still OWED (r73 merge review, finding 1: tools/owed-lifts.mjs; a chapter that was a HOLD cause does not ship on a promise,
- *      and `--skip-tests` does not skip this, it is not a test).
+ *      and `--skip-tests` does not skip this, it is not a test). A piece HOLD lifted on a model (Chapter XII's `hud`, r74-omnis review M1: tools/owed-hold-lifts.mjs) is the same refusal until its
+ *      browser jobs have a passing proof report.
  *
  * The save-data class (`deepBeforeDeploy`) demands that the report be a deep
  * one. Only the owner's own words turn the refusals into a warning, and they
  * settle nothing (RULE C, unchanged from commit d333b06).
  */
 export function resolveReleaseGate({
-  focusedBeforeDeploy, deepBeforeDeploy, evidence, deepOwed = [], maxDeploysWithDeepOwed = 1, ownerOverrideWords, skipped = [], owedLifts = [],
+  focusedBeforeDeploy, deepBeforeDeploy, evidence, deepOwed = [], maxDeploysWithDeepOwed = 1, ownerOverrideWords, skipped = [], owedLifts = [], owedHoldLifts = [],
 }) {
   const why = skipped.length ? `; ${describeSkipped(skipped)}` : ''; // reports for this commit that validateReport refused, with the reason (a continuity-harness identity refusal looked like "no report")
   const refusals = [];
@@ -278,7 +280,7 @@ export function resolveReleaseGate({
   if (deepOwed.length >= maxDeploysWithDeepOwed) {
     refusals.push(`${deepOwed.length} live build(s) already owe a deep review (${deepOwed.join(', ')}): at most ${maxDeploysWithDeepOwed} deploys may go out while a deep review is owed, so this one refuses until one is settled with node tools/critic-clear.mjs (critic/RUBRIC.md section 4)`);
   }
-  for (const lift of owedLifts) refusals.push(`${lift.why} (a chapter whose proof is unknown does not ship: critic/RUBRIC.md section 3, "unknown on a critical is a HOLD"; tools/owed-lifts.mjs)`);
+  for (const lift of [...owedLifts, ...owedHoldLifts]) refusals.push(`${lift.why} (a chapter whose proof is unknown does not ship: critic/RUBRIC.md section 3, "unknown on a critical is a HOLD"; tools/owed-lifts.mjs)`);
   if (!refusals.length) return { action: 'proceed', refusals };
   if (!ownerOverrideWords) return { action: 'fail', message: refusals.join('; '), refusals };
   return { action: 'proceed-with-warning', warningLines: formatOwnerOverrideWarning(ownerOverrideWords, refusals), refusals };
@@ -316,6 +318,7 @@ function releaseGateFor(plan, mainSha) {
     ownerOverrideWords: OWNER_OVERRIDE_WORDS,
     skipped,
     owedLifts: findOwedLifts(ROOT),
+    owedHoldLifts: findOwedHoldLifts(ROOT),
   });
   return { gate, evidence, deepOwed };
 }
@@ -695,9 +698,7 @@ async function main() {
   // so a value left in the shell cannot decide the title's build number. Both come from `releaseBuildEnv` (tools/release-build.mjs), the one function a
   // review's candidate (tools/candidate-build.mjs) also builds with, so the reviewed bundle is this bundle (release 60: it was not; the candidate had no base).
   log(`building: npx vite build --outDir dist-release --emptyOutDir with BASE_PATH=${HOST.base} (source maps are kept in ${sourceMapDir}, none ship)`);
-  if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir'], { env: releaseBuildEnv({ release: RELEASE, host: HOST, sourceMapDir }) }).status !== 0) {
-    fail('vite build failed — see output above');
-  }
+  if (runNpx(['vite', 'build', '--outDir', 'dist-release', '--emptyOutDir'], { env: releaseBuildEnv({ release: RELEASE, host: HOST, sourceMapDir }) }).status !== 0) fail('vite build failed — see output above');
 
   // PR-0100 / PR-0173: candidates, raw renders and numbered takes never ship (vite.config.ts prunes them).
   const unshipped = findUnshipped(DIST);
@@ -715,6 +716,8 @@ async function main() {
   const artFileCount = countFiles(artCharactersDir);
   log(`build ok: index.html present, ${artFileCount} files under art/characters`);
   if (run(process.execPath, [join(ROOT, 'tools', 'fx-assets.mjs'), 'verify', '--dir', join(DIST, 'fx')]).status !== 0) fail('the build did not ship public/fx intact — see output above');
+  // ch-yrp (review MAJOR-3): the hidden 3D Bahamut's models are local files (gitignored); a tree without them ships the chapter on capsules, so the build must hold exactly the shipped set (tools/yrp-models-verify.mjs).
+  if (run(process.execPath, [join(ROOT, 'tools', 'yrp-models-verify.mjs'), '--dir', DIST]).status !== 0) fail('the build does not carry the hidden 3D Bahamut\'s models whole — see output above');
 
   // Release 38 (r38-bytes): the painted art ships as lossless WebP derived from the PNG masters. Prove it from the files about to
   // be published, not from the cache that made them: every shipped WebP decodes to its master's pixels (RGBA, sha256), the build

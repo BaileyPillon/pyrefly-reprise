@@ -31,6 +31,7 @@ import { permWord } from './words.ts';
 import { has, statusOf } from '../predicates.ts';
 import { type Ctx, enemies, friendlies, isAlive, onField, rtOf } from '../state.ts';
 import { SLOT_COUNT, combatantAtSlot, isAeonSlot, slotOf } from './slots.ts';
+import { hasFrontFirstStrike, isIdleCycler } from '../platforms.ts'; // the Spectral Keeper's glyphs: an idle Circle's counter cycles, and its formation gives the front line First Strike (both inert in every other battle)
 
 /** A temporal counter as the kernels read it: 0 when the status is off, 255 when it is permanent, else the turns left (1 to 254). */
 export function counterOf(c: FFXCombatant, status: StatusId): number {
@@ -68,7 +69,7 @@ export function startTypeOf(condition: 'normal' | 'preemptive' | 'ambush' | 'scr
 
 /** Does the clock count this combatant, and may it become ready? (The engine's queue membership, §4 of the CTB note.) */
 function takesPart(ctx: Ctx, c: FFXCombatant): boolean {
-  return onField(c) && ctx.rt.actors.get(c.id)?.ordersOnly !== true;
+  return onField(c) && (ctx.rt.actors.get(c.id)?.ordersOnly !== true || isIdleCycler(ctx, c));
 }
 
 /** The scheduler kernel's view of the field: one entry per slot, an empty slot is a character that is not in the battle. */
@@ -82,14 +83,15 @@ export function schedulerView(ctx: Ctx): SchedChr[] {
       continue;
     }
     const rt = rtOf(ctx, c.id);
+    const idle = isIdleCycler(ctx, c); // an unarmed Circle: no turns, the counter resets to the stored base each time it reaches 0 (`kernel/ctb-scheduler.ts`); a counter already at 0 is shown as that base
     out.push({
       inBattle: present.has(c.id) && takesPart(ctx, c),
       dead: !isAlive(c),
       perm: permWord(c),
       queued: 0,
-      ctb: rt.ctb & 0xff,
+      ctb: idle && (rt.ctb & 0xff) === 0 ? rt.icv : rt.ctb & 0xff,
       baseCtb: rt.icv,
-      getsTurns: true,
+      getsTurns: !idle,
       tickCounter: rt.regenTicks,
       rank: 3,
       agi: c.stats.agi,
@@ -116,20 +118,28 @@ export function readyOrder(ctx: Ctx, view: readonly SchedChr[] = schedulerView(c
  * character's rank to 3. Nothing else happens in a tick.
  */
 export function advanceClock(ctx: Ctx): number {
-  const view = schedulerView(ctx);
-  if (view.some((c) => isReady(c))) return 0;
-  const ticked: number[] = [];
-  for (let slot = 0; slot < view.length; slot++) if (isTicked(view[slot] as SchedChr)) ticked.push(slot);
-  if (ticked.length === 0) return 0;
-  const k = Math.min(...ticked.map((slot) => (view[slot] as SchedChr).ctb));
-  for (const slot of ticked) {
-    const c = combatantAtSlot(ctx, slot);
-    if (!c) continue;
-    const rt = rtOf(ctx, c.id);
-    rt.ctb = (view[slot] as SchedChr).ctb - k;
-    rt.regenTicks = Math.min(255, rt.regenTicks + k);
+  let total = 0;
+  // One stretch is enough in every battle but the Spectral Keeper's: the smallest counter belongs to somebody who then takes a turn. An idle Circle (`platforms.ts#isIdleCycler`) is the exception: its counter
+  // reaching 0 only resets it to its base and is no turn, so the clock goes on to the next stretch, as the scheduler kernel does tick by tick.
+  for (let stretch = 0; stretch < 1024; stretch++) {
+    const view = schedulerView(ctx);
+    if (view.some((c) => isReady(c))) return total;
+    const ticked: number[] = [];
+    for (let slot = 0; slot < view.length; slot++) if (isTicked(view[slot] as SchedChr)) ticked.push(slot);
+    if (ticked.length === 0) return total;
+    const k = Math.min(...ticked.map((slot) => (view[slot] as SchedChr).ctb));
+    for (const slot of ticked) {
+      const c = combatantAtSlot(ctx, slot);
+      if (!c) continue;
+      const rt = rtOf(ctx, c.id);
+      rt.ctb = (view[slot] as SchedChr).ctb - k;
+      if (rt.ctb === 0 && !(view[slot] as SchedChr).getsTurns) rt.ctb = (view[slot] as SchedChr).baseCtb; // an idle Circle's counter resets to its base on reaching 0
+      rt.regenTicks = Math.min(255, rt.regenTicks + k);
+    }
+    total += k;
+    if (k === 0) return total;
   }
-  return k;
+  return total;
 }
 
 /** The character who takes the next turn: the first of the ready ones in the game's order. */
@@ -174,7 +184,7 @@ export function openingCtb(ctx: Ctx, condition: 'normal' | 'preemptive' | 'ambus
       agi: c ? c.stats.agi : 0,
       haste: c ? hasteCounter(c) : 0,
       slow: c ? slowCounter(c) : 0,
-      autoA: c && c.side !== 'enemy' && hasAuto(c, 'first-strike') ? AUTO_FIRST_STRIKE : 0,
+      autoA: c && c.side !== 'enemy' && (hasAuto(c, 'first-strike') || hasFrontFirstStrike(ctx, c)) ? AUTO_FIRST_STRIKE : 0,
       inBattle: c !== undefined && present.has(c.id) && takesPart(ctx, c),
       isAeon: isAeonSlot(slot),
     });

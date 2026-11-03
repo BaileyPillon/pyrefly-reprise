@@ -22,8 +22,10 @@
  * {@link PartRings} is the small three.js layer the stage drives.
  */
 
+import type { BattleState } from '../battle/common/types.ts';
 import {
   AdditiveBlending,
+  Color,
   DoubleSide,
   Mesh,
   MeshBasicMaterial,
@@ -59,6 +61,12 @@ export interface OverheadAnchor {
   mode: 'overhead';
   /** World offset from the parent's position. None of these numbers is game data. */
   offset: [dx: number, y: number, dz: number];
+  /**
+   * **A ring flat on the floor at the anchor** (FFX only: the hidden Spectral Keeper's glyph platforms, which have no painting yet). Omitted, an overhead
+   * anchor draws nothing (Vegnagun's Nodes and the Mortiphasm discs are off-frame or painted props). `radius` is in world units; the offset's `y` is the floor.
+   * `litFlag` names a battle-state flag (`BattleState.flags`) that turns the ring amber while it is true (the Keeper's lit mines).
+   */
+  floorRing?: { radius: number; litFlag?: string };
 }
 
 export type PartAnchor = OnParentAnchor | OverheadAnchor;
@@ -133,13 +141,23 @@ export const GROUND_RING_SQUASH = 0.46;
 
 /** Violet, the fiend turn-ring colour the C* mock used. */
 export const PART_RING_COLOUR = 0xc8a0ff;
+/** Amber, a floor ring that is lit (`floorRing.litFlag`: a glyph with a live mine). `[estimate]`, the look is Bailey's to judge. */
+export const LIT_RING_COLOUR = 0xffa23a;
+const LIT_RING = new Color(LIT_RING_COLOUR);
 
 interface RingEntry {
   mesh: Mesh;
-  anchor: OnParentAnchor;
+  anchor: PartAnchor;
+  /** True for a ring flat on the floor (an on-parent foot ring, or an overhead anchor's floor ring). */
+  ground: boolean;
   /** 1 while the part is alive, eased to 0 once it is KO'd. */
   level: number;
   alive: boolean;
+  /** 0 to 1: how far the ring has eased to the lit colour (a floor ring whose `litFlag` is true). */
+  lit: number;
+  litNow: boolean;
+  /** The colour has left the violet and is owed a reset once the glow has gone. */
+  tinted: boolean;
 }
 
 /**
@@ -153,10 +171,12 @@ export class PartRings {
 
   constructor(private readonly root: Object3D) {}
 
-  /** Add (or replace) the ring for `id`. Overhead anchors get none: they are off-frame. */
+  /** Add (or replace) the ring for `id`. An overhead anchor gets one only when it asks for a floor ring (`floorRing`); otherwise it is off-frame. */
   add(id: string, anchor: PartAnchor): void {
     this.remove(id);
-    if (anchor.mode !== 'onParent') return;
+    const ground = anchor.mode === 'onParent' ? anchor.ring.ground : anchor.floorRing !== undefined;
+    const radius = anchor.mode === 'onParent' ? anchor.ring.radius : anchor.floorRing?.radius;
+    if (radius === undefined) return;
     const mat = new MeshBasicMaterial({
       color: PART_RING_COLOUR,
       transparent: true,
@@ -166,18 +186,26 @@ export class PartRings {
       side: DoubleSide,
       blending: AdditiveBlending,
     });
-    const r = anchor.ring.radius;
-    const mesh = new Mesh(new RingGeometry(r * 0.86, r, 48), mat);
+    const mesh = new Mesh(new RingGeometry(radius * 0.86, radius, 48), mat);
     mesh.name = `part-ring:${id}`;
     mesh.renderOrder = 7;
-    if (anchor.ring.ground) mesh.rotation.x = -Math.PI / 2;
+    if (ground) mesh.rotation.x = -Math.PI / 2;
     this.root.add(mesh);
-    this.rings.set(id, { mesh, anchor, level: 1, alive: true });
+    this.rings.set(id, { mesh, anchor, ground, level: 1, alive: true, lit: 0, litNow: false, tinted: false });
   }
 
   setAlive(id: string, alive: boolean): void {
     const e = this.rings.get(id);
     if (e) e.alive = alive;
+  }
+
+  /** Per frame from the stage: whether the part is alive, and whether its floor ring is lit (the anchor's `litFlag` is true in the battle's flags). Inert for a ring with no `litFlag`. */
+  sync(id: string, state: Pick<BattleState, 'combatants' | 'flags'> | null | undefined): void {
+    const e = this.rings.get(id);
+    if (!e) return;
+    e.alive = state?.combatants[id]?.alive !== false;
+    const flag = e.anchor.mode === 'overhead' ? e.anchor.floorRing?.litFlag : undefined;
+    e.litNow = flag !== undefined && state?.flags[flag] === true;
   }
 
   /** Re-place and fade every ring. `parentOf` returns the live parent, or undefined when it has left. */
@@ -187,11 +215,24 @@ export class PartRings {
       const target = e.alive && parent ? 1 : 0;
       const k = Math.min(1, dt * 4);
       e.level += (target - e.level) * k;
+      e.lit += ((e.litNow ? 1 : 0) - e.lit) * k;
       const mat = e.mesh.material as MeshBasicMaterial;
-      mat.opacity = 0.62 * e.level;
+      mat.opacity = (0.62 + 0.33 * e.lit) * e.level;
+      if (e.lit > 0.001 || e.tinted) {
+        // only a lit floor ring ever leaves the violet; when the glow has gone the colour is put back exactly
+        mat.color.setHex(PART_RING_COLOUR);
+        if (e.lit > 0.001) mat.color.lerp(LIT_RING, e.lit);
+        e.tinted = e.lit > 0.001;
+      }
       e.mesh.visible = e.level > 0.02 && !!parent;
       if (!parent) continue;
       const [x, y, z] = anchorPoint(e.anchor, parent);
+      if (e.anchor.mode === 'overhead') {
+        // A floor ring on an overhead anchor lies flat and round: the camera's own angle foreshortens it (no extra squash on top).
+        e.mesh.position.set(x, y + 0.03, z);
+        e.mesh.scale.set(1, 1, 1);
+        continue;
+      }
       e.mesh.position.set(x, e.anchor.ring.ground ? parent.y + 0.03 : y, z);
       if (e.anchor.ring.ground) e.mesh.scale.set(1, GROUND_RING_SQUASH, 1);
       else {

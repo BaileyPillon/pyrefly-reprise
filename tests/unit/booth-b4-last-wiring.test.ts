@@ -1,7 +1,6 @@
 /**
  * THE WIRING OF THE TREATED LIST, for the last five listed chapters (release 71, branch `booth-b4-last`; Chapters VIII, XVIII and the Mirror Aeons chapter are FFX only, Chapter XVI is FFX-2 only). `booth-yunalesca-wiring` and `booth-ffx-b3b-wiring` pin the four places that ask the list on a page: the
- * pro layer's mount (`battleProStage.attachProStage`), the chapter run's sound pass (`sfxGame.sfxChapter` -> `passSwitch`: each game's makeup and victory cue), the playtest board's gate, and the debug word `__pyrefly.treated()`. This pins the same four for the four chapters that joined, and that Chapter XVII
- * (not treated) gets none of them.
+ * pro layer's mount (`battleProStage.attachProStage`), the chapter run's sound pass (`sfxGame.sfxChapter` -> `passSwitch`: each game's makeup and victory cue), the playtest board's gate, and the debug word `__pyrefly.treated()`. This pins the same four for the four chapters that joined (Chapter XVII joined in r74-fins: `r74-fins-wiring.test.ts` pins its four).
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -65,13 +64,16 @@ for (const id of IDS) {
   });
 }
 
-describe("Chapter XVII (Sin's Fins and Core) is not treated: no layer, no sound pass, not on the list", () => {
-  it('the layer does not mount under all, and the sound pass stays off for its run', () => {
+describe("Chapter XVII (Sin's Fins and Core) joined in r74-fins: the layer mounts under all and the sound pass runs (its own wiring is pinned in r74-fins-wiring.test.ts)", () => {
+  it('the layer mounts under all and not under `?treated=pack`, and the sound pass is on for its run', () => {
     setTreatedScope('all');
+    expect(mount('sin-fins-core')).not.toBeNull();
+    setTreatedScope('pack');
     expect(mount('sin-fins-core')).toBeNull();
+    setTreatedScope('all');
     setAudioNew(true);
     const done = sfxChapter('sin-fins-core', () => undefined);
-    expect(audioNewOn()).toBe(false);
+    expect(audioNewOn()).toBe(true);
     done();
   });
 });
@@ -110,7 +112,7 @@ describe('the sound pass follows the chapter run', () => {
 });
 
 describe('`__pyrefly.treated()` knows them', () => {
-  it("lists the four with their holds in the table's order, never Chapter XVII, and says whether the running chapter is reached", () => {
+  it("lists the four with their holds in the table's order (Chapter XVII too since r74-fins, pinned in its own file), and says whether the running chapter is reached", () => {
     const api: Record<string, unknown> = {};
     installProDebug(api);
     const treated = api['treated'] as (scope?: 'all' | 'pack' | null) => { scope: string; chapters: string[]; holds: Record<string, string[]>; running: string | null; reaches: boolean };
@@ -120,8 +122,8 @@ describe('`__pyrefly.treated()` knows them', () => {
       expect(all.holds[id], id).toEqual(Object.keys(PIECE_HOLDS[id]!));
       expect(TREATED_CHAPTERS[id]!.game, id).toBe(GAME[id]);
     }
-    expect(all.chapters).not.toContain('sin-fins-core');
-    expect(all.holds['sin-fins-core']).toBeUndefined();
+    expect(all.chapters).toContain('sin-fins-core');
+    expect(all.holds['sin-fins-core']).toEqual(Object.keys(PIECE_HOLDS['sin-fins-core']!));
     for (const id of IDS) {
       setDemoChapter(id);
       expect(treated().reaches, id).toBe(true);
@@ -129,7 +131,7 @@ describe('`__pyrefly.treated()` knows them', () => {
       treated('all');
     }
     setDemoChapter('sin-fins-core');
-    expect(treated().reaches).toBe(false);
+    expect(treated().reaches).toBe(true);
     treated(null);
   });
 });

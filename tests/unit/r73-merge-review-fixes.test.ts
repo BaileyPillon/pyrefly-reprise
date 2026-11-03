@@ -59,7 +59,7 @@ describe('finding 1: a listed chapter whose lift proof is OWED blocks the cut (t
 
   it('reads the list from the source the way the real list says it: every listed id is found, a comment or an unlisted id is not', () => {
     for (const id of Object.keys(TREATED_CHAPTERS)) expect(isListedInSource(ROOT, id), id).toBe(true);
-    for (const id of ['sin-fins-core', 'exp-leblanc', 'not-a-chapter', 'sin']) expect(isListedInSource(ROOT, id), id).toBe(false);
+    for (const id of ['exp-leblanc', 'not-a-chapter', 'sin']) expect(isListedInSource(ROOT, id), id).toBe(false); // (Chapter XVII left this list when it joined in r74-fins)
     const scratch = tree({ listed: false, line: CAUSE });
     expect(isListedInSource(scratch, ID)).toBe(false); // the commented line and the key after the block do not count
     expect(isListedInSource(scratch, 'mirror-aeons')).toBe(true);

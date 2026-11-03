@@ -32,6 +32,17 @@ describe('what never ships', () => {
     for (const p of [
       'audio/candidates/evrae-near.mp3',
       'audio/candidates/C-round1-battle-ffx-A-x12.ogg',
+      'models-exp/yrp/bahamut-ai.glb', // the hidden 3D Bahamut's models: most ship since ch-yrp (2026-11-02; tests/unit/yrp-ship-set.test.ts pins the set); the AI boss, the HD girls and the HD tier never do
+      'models-exp/yrp/bahamut-ai-rigged.glb',
+      'models-exp/yrp-hd/yuna.glb',
+      'models-exp/yrp/dress/yuna-gunner/hd/anims.glb',
+      'models-exp/yrp/dress/yuna-samurai/anims.glb',
+      'models-exp/some-new-experiment/props/pistol.glb',
+      'models-exp/windwaker-yrp/yuna.glb', // the allow-list names a FOLDER: a sibling that merely begins with it stays out (the review of 2026-11-02, mutant M18)
+      'models-exp/windwakerx/yuna.glb',
+      'models-exp/windwaker2/props/pistol.glb',
+      'models-exp/windwaker-old',
+      'models-exp\\windwaker-yrp\\yuna.glb',
       'art/portraits/f4blulu.1.raw.png',
       'art/portraits/f4lulu.3.png',
       'art/characters/ffx2-bahamut/ko.2.json',
@@ -52,6 +63,12 @@ describe('what never ships', () => {
       'art/characters/evrae/idle-far.png',
       'art/backdrops/ch1-2.png', // a digit inside the stem is not a take number
       'art/portraits/tidus-v2.png',
+      'models-expansion/readme.txt', // only the models-exp folder itself is left out, not a name that merely begins with it
+      'models-exp/windwaker/yuna.glb', // the hidden Wind Waker chapter (Chapter 32, FFX-2 only) SHIPS its models, 2026-11-02: the cast, the boss,
+      'models-exp/windwaker/valefor.glb',
+      'models-exp/windwaker/props/pistol.glb', // the swappable weapons
+      'models-exp/windwaker/temple/wall.glb', // and the swappable temple pieces
+      'models-exp\\windwaker\\rikku.glb', // either slash
       'assets/index-4f2a.js',
       'index.html',
     ]) {

@@ -21,13 +21,20 @@
  * `tests/unit/chapter-doors.test.ts` pins the table: every word is distinct and none begins with, ends with or contains another, and no word's end is another's beginning, so one run of letters can
  * only ever finish one door. The four older doors' suites and `fayth-door.test.ts` drive the board itself with real key events.
  *
- * **`summon`** (FFX, the hidden Last Summoning, `./summonDoor.ts`: S is `down`, M is `select`; U, O and N are unbound) is a plain `WordDoor` too.
+ * **`summon`** (FFX, the hidden Last Summoning, `./summonDoor.ts`: S is `down`, M is `select`; U, O and N are unbound) is a plain `WordDoor` too, and so is **`yrp`** (FFX-2, the hidden 3D Bahamut, `./yrpDoor.ts`: R is `r1`; Y and P are unbound; three letters, the shortest word on the table), and so is **`waker`** (FFX-2, the hidden Wind Waker chapter, `./windwakerDoor.ts`: W is `up`, A is `left`, E is `start`, R is `r1`; K is unbound).
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor` and `angra`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo` and `summon`.
+ * **`keeper`** (FFX, the hidden Spectral Keeper, `./keeperDoor.ts`: K and P are unbound, E is `start`, R is `r1`) is a plain `WordDoor` too.
+ *
+ * **`yrp` and `waker` are desktop-only** (driver decision 219q, 2026-11-03; FFX-2 only): their rows carry the `desktopOnly` gate, so on the phone tier the door stays shut as FF7's does while its switch is off (see `desktopOnly` below).
+ *
+ * **`infinito`** (FFX-2, the hidden Fallen Maesters, `./maestersDoor.ts`: only F is a bound key, `l1`, which the board ignores; I, N, T and O are unbound) is a plain `WordDoor` too.
+ *
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon` and `keeper`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
 import { ff7ExperimentReady } from '../../experiments/ff7Flag.ts';
+import { deviceClass } from '../../../engine/ArtDevice.ts';
 import { DOOR_WORD, SecretDoor, WordDoor, type DoorResult } from './secretDoor.ts';
 import { EXP_LEBLANC_DOOR_CHAPTER, EXP_LEBLANC_DOOR_WORD } from './leblancDoor.ts';
 import { EXPERIMENT_DOOR_CHAPTER, EXPERIMENT_DOOR_WORD } from './experimentDoor.ts';
@@ -39,7 +46,19 @@ import { GAGAZET_DOOR_CHAPTER, GAGAZET_DOOR_WORD } from './gagazetDoor.ts';
 import { ANGRA_DOOR_CHAPTER, ANGRA_DOOR_WORD } from './angraDoor.ts';
 import { YOJIMBO_DOOR_CHAPTER, YOJIMBO_DOOR_WORD } from './yojimboDoor.ts';
 import { SUMMON_DOOR_CHAPTER, SUMMON_DOOR_WORD } from './summonDoor.ts';
+import { KEEPER_DOOR_CHAPTER, KEEPER_DOOR_WORD } from './keeperDoor.ts';
+import { MAESTERS_DOOR_CHAPTER, MAESTERS_DOOR_WORD } from './maestersDoor.ts';
 import { PILGRIM_DOOR_CHAPTER, PILGRIM_DOOR_WORD } from './pilgrimDoor.ts';
+import { YRP_DOOR_CHAPTER, YRP_DOOR_WORD } from './yrpDoor.ts';
+import { WINDWAKER_DOOR_CHAPTER, WINDWAKER_DOOR_WORD } from './windwakerDoor.ts';
+
+/**
+ * **The two hidden 3D chapters are desktop-only** (driver decision 219q, 2026-11-03; FFX-2 only: `yrp`, the 3D Bahamut, and `waker`, the Wind Waker Valefor). They are not staged for a phone: the Wind Waker is expected to miss the phone budgets
+ * and the 3D Bahamut's models are 141 MB. On the phone tier (`ArtDevice.deviceClass()`: an upright window under 600 px, a coarse pointer on a screen whose short side is under 600 px, or `?arttier=phone`) these two doors stay shut,
+ * through the table's own `gate`: the word is typed and nothing opens, with no screen, no word and no sound beyond what a shut door already gives (the keyboard's board goes on, and the phone's long-press field stays as it was, so the
+ * word looks like any other). Read when the door opens, so a window that turns into a phone, or back, is judged as it is then. Every other door is unchanged on a phone (`tests/unit/r74-hidden-3d-phone-doors.test.ts`).
+ */
+const desktopOnly = (): boolean => deviceClass() !== 'phone';
 
 /** One door: a word on the keyboard and the chapter it opens. */
 export interface ChapterDoor {
@@ -47,7 +66,7 @@ export interface ChapterDoor {
   readonly word: string;
   /** Where the word leads. */
   readonly chapter: ChapterId;
-  /** The door stays shut while this answers false (FF7's switch, `app/experiments/ff7Flag.ts`). Absent: always open. Read when the door opens, never earlier. */
+  /** The door stays shut while this answers false (FF7's switch, `app/experiments/ff7Flag.ts`; the two hidden 3D chapters' phone tier, {@link desktopOnly}). Absent: always open. Read when the door opens, never earlier. */
   readonly gate?: () => boolean;
   /**
    * FF7's door: its word is matched by the visit's `SecretDoor` (so the label taps and the pad sequence open the same chapter), the chapter opens in the key's own handler instead of the next
@@ -69,6 +88,10 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: ANGRA_DOOR_WORD, chapter: ANGRA_DOOR_CHAPTER },
   { word: YOJIMBO_DOOR_WORD, chapter: YOJIMBO_DOOR_CHAPTER },
   { word: SUMMON_DOOR_WORD, chapter: SUMMON_DOOR_CHAPTER },
+  { word: KEEPER_DOOR_WORD, chapter: KEEPER_DOOR_CHAPTER },
+  { word: MAESTERS_DOOR_WORD, chapter: MAESTERS_DOOR_CHAPTER },
+  { word: YRP_DOOR_WORD, chapter: YRP_DOOR_CHAPTER, gate: desktopOnly },
+  { word: WINDWAKER_DOOR_WORD, chapter: WINDWAKER_DOOR_CHAPTER, gate: desktopOnly },
 ];
 
 /**

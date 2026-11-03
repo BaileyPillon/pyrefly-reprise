@@ -27,10 +27,10 @@ const LIFT_CLAUSE = /Lifts when the real clips' one-frame steps are scaled to th
 describe('M1: Chapter VIII and the Mirror Aeons hold the real clips again', () => {
   it('exactly VIII, XVIII (off the list) and 27 have a `real` row, all FFX chapters; Chapter I and Chapter III play the real clips', () => {
     const holders = Object.entries(PIECE_HOLDS).filter(([, rows]) => rows.real !== undefined).map(([id]) => id).sort();
-    expect(holders).toEqual(['evrae-airship', 'mirror-aeons', 'sin-face']);
+    expect(holders).toEqual(['evrae-airship', 'mirror-aeons', 'sin-face', 'sin-fins-core']); // r74-fins added Chapter XVII (the same deck)
     for (const id of holders) expect(getChapter(id)?.game, id).toBe('ffx');
     setTreatedScope('all');
-    for (const id of ['evrae-airship', 'mirror-aeons', 'sin-face']) expect(isTreatedChapter(id, 'real'), id).toBe(false);
+    for (const id of ['evrae-airship', 'mirror-aeons', 'sin-face', 'sin-fins-core']) expect(isTreatedChapter(id, 'real'), id).toBe(false);
     for (const id of ['seymour-flux', 'braskas-final-aeon']) expect(isTreatedChapter(id, 'real'), id).toBe(true);
   });
 

@@ -184,9 +184,9 @@ describe('the model of the game against the scan', () => {
 // ---------------------------------------------------------------------------------------------------------------------- the data
 
 describe('the data carries the list on exactly the groups the model says, and it is the model\'s list', () => {
-  it('the three Isaaru groups, and Biran and Yenke (Kimahri\'s Switch, RC11), and no other group of the game, carry commandDisables', () => {
+  it('the three Isaaru groups, Biran and Yenke (Kimahri\'s Switch, RC11) and the hidden Spectral Keeper (Escape, Flee, Guard and Sentinel for everyone: RE 2.2), and no other group of the game, carry commandDisables', () => {
     const marked = Object.values(ENEMY_GROUPS_BY_ID).filter((g) => g.commandDisables !== undefined).map((g) => g.id).sort();
-    expect(marked).toEqual([...Object.values(ISAARU_FORMATIONS), BIRAN_YENKE_GROUP_ID].sort());
+    expect(marked).toEqual([...Object.values(ISAARU_FORMATIONS), BIRAN_YENKE_GROUP_ID, 'spectral-keeper'].sort());
     expect(ISAARU_GROUPS.map((g) => g.commandDisables)).toEqual([ISAARU_COMMAND_DISABLES, ISAARU_COMMAND_DISABLES, ISAARU_COMMAND_DISABLES]);
   });
 

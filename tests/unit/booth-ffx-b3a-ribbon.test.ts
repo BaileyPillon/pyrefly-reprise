@@ -138,9 +138,9 @@ describe('every treated chapter, both games: the ribbon names what the card name
   const IDS = Object.keys(TREATED_CHAPTERS).filter((id) => playsPiece(id, 'hud')); // a chapter that holds the hud piece (XII since the r72 review, J-HUD-5b) draws no F1 ribbon: its case is the next one
   const HUD_HELD = Object.keys(TREATED_CHAPTERS).filter((id) => !playsPiece(id, 'hud'));
 
-  it('the chapters that hold the hud piece are exactly Chapter XII, and the others are every other treated chapter', () => {
-    expect(HUD_HELD).toEqual(['seymour-omnis']);
-    expect(IDS).toHaveLength(Object.keys(TREATED_CHAPTERS).length - 1);
+  it('the chapters that hold the hud piece are exactly Chapter XII (r72 review, J-HUD-5b; put back by the r74 browser read) and Chapter XVII (r74 browser read, FIN-1 and FIN-2), and the others are every other treated chapter', () => {
+    expect(HUD_HELD).toEqual(['seymour-omnis', 'sin-fins-core']);
+    expect(IDS).toHaveLength(Object.keys(TREATED_CHAPTERS).length - 2);
   });
 
   it.each(HUD_HELD)('%s (hud held): the F1 layer stays off (the release 71 HUD plays, no F1 class on the root), and the card still names the boss it declares', async (id) => {

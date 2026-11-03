@@ -40,7 +40,7 @@ describe('Chapter III plays the real clips again (r72-motion)', () => {
 
   it('Chapter III does not hold real (and holds its breath and its moments as before); the three chapters of the focused review of 10b426248 that the fit does not reach, VIII, XVIII (rows unread) and the Mirror Aeons, still do', () => {
     const holders = Object.entries(PIECE_HOLDS).filter(([, rows]) => rows.real !== undefined).map(([id]) => id);
-    expect(holders.sort()).toEqual(['evrae-airship', 'mirror-aeons', 'sin-face']); // the fit scales a RETURN flip only (Tidus, Yuna, Kimahri): their hops are Wakka's attack-to-follow swaps and the dashes (docs/handoff/r72.md section 2)
+    expect(holders.sort()).toEqual(['evrae-airship', 'mirror-aeons', 'sin-face', 'sin-fins-core']); // + r74-fins: Chapter XVII, the third chapter on the Fahrenheit's deck // the fit scales a RETURN flip only (Tidus, Yuna, Kimahri): their hops are Wakka's attack-to-follow swaps and the dashes (docs/handoff/r72.md section 2)
     expect(Object.keys(PIECE_HOLDS[III]!)).toEqual(['breath', 'moments']);
   });
 

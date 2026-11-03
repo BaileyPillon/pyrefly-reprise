@@ -70,6 +70,7 @@ const KEEPS_CONTROL_SCRIPTS: ReadonlySet<string> = new Set([
   'bfa-form-2',
   'braskas-final-aeon',
   'sinspawn-gui', // research/re-ffx-ai-gui.md section 5: the body keeps control (property 256 := 1)
+  'spectral-keeper', // research/re-ffx-spectral-keeper.md section 4.1: the Keeper keeps control when Provoked (its tail and its Attack go to the Provoker)
 ]);
 
 /** Does this combatant keep control of its script when Provoked? (Only the scripts above set it; every other monster is taken as 0.) */

@@ -40,7 +40,9 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'ffx2-masterpiece-theatre': 'ffx2', // the Experiment (hidden chapter, 2026-10-10)
   'ffx2-tourist-trap': 'ffx2', // the Tourist Trap (hidden chapter, 2026-10-14)
   'ffx2-valefor-besaid': 'ffx2', // Valefor at Besaid (hidden chapter, 2026-10-14)
+  'exp-windwaker': 'ffx2', // Valefor at Besaid in Wind Waker style (hidden chapter, 2026-10-20; hidden chapter 24's fight)
   'ffx2-angra-mainyu': 'ffx2', // Angra Mainyu (hidden chapter, 2026-10-14)
+  'exp-yrp-3d': 'ffx2', // Bahamut in 3D (hidden chapter, 2026-10-19; Chapter IV's fight)
   'ffx2-fallen-aeons': 'ffx2',
   'seymour-omnis': 'ffx',
   'isaaru-via-purifico': 'ffx',
@@ -49,6 +51,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'biran-yenke': 'ffx', // the hidden Biran and Yenke chapter (FFX only)
   'mirror-aeons': 'ffx', // the hidden Mirror Aeons chapter (FFX only)
   'last-summoning': 'ffx', // the hidden Last Summoning chapter (FFX only, 2026-10-15)
+  'spectral-keeper': 'ffx', // the hidden Spectral Keeper chapter (FFX only, 2026-11-02)
 };
 
 /** `state.flags` key prefix of an aeon lock's reason (`battle/ffx/aeon-duel.ts#AEON_LOCK_REASON_PREFIX`, restated so this module stays out of the battle layer's import graph; the Last Summoning's guide test pins the copy). */

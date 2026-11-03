@@ -122,6 +122,10 @@ describe('ElevenLabs music of 2026-10-10: the engine routes three FFX-2 encounte
     expect(await resolved('ffx2-bahamut')).toEqual(['boss-bahamut']);
   });
 
+  it("the hidden 3D Bahamut (FFX-2 only, ch-yrp) is Chapter IV's fight by reference, so it plays boss-bahamut too", async () => {
+    expect(await resolved('exp-yrp-3d')).toEqual(['boss-bahamut']);
+  });
+
   it("Chapter VI's three Leblanc acts and the hidden Leblanc chapter play boss-leblanc on every link", async () => {
     expect(await resolved('ffx2-leblanc')).toEqual(['boss-leblanc', 'boss-leblanc', 'boss-leblanc']);
     expect(await resolved('exp-leblanc')).toEqual(['boss-leblanc', 'boss-leblanc', 'boss-leblanc']);
@@ -130,7 +134,7 @@ describe('ElevenLabs music of 2026-10-10: the engine routes three FFX-2 encounte
   it('leaves every other chapter on its own cue: the Fallen Aeons and Ixion took the batch-1 aeon cue on the same day (audio-music-batch1-2026-10-10.test.ts); no FFX chapter names a new cue', async () => {
     for (const id of ['ffx2-fallen-aeons', 'ffx2-ixion-djose']) expect((await resolved(id)).every((cue) => cue === 'boss-ffx2-fallen-aeons'), id).toBe(true);
     for (const chapter of [...CHAPTERS, ...EXPERIMENT_CHAPTERS]) {
-      if (['ffx2-bahamut', 'ffx2-leblanc', 'exp-leblanc'].includes(chapter.id)) continue;
+      if (['ffx2-bahamut', 'ffx2-leblanc', 'exp-leblanc', 'exp-yrp-3d'].includes(chapter.id)) continue;
       expect((await resolved(chapter.id)).filter((cue) => NEW.includes(cue)), chapter.id).toEqual([]);
       expect([chapter.music.battle, chapter.music.phase2, chapter.music.scene].filter((cue) => cue && NEW.includes(cue)), chapter.id).toEqual([]);
     }

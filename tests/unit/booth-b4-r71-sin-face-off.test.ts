@@ -60,12 +60,12 @@ describe('Chapter XVIII is back on the list (r73-fast): FFX only, with its six h
     expect(treatedHold(ID, 'real')).toMatch(/R71-C1/); // the first review's finding stays in the row
   });
 
-  it('eighteen of the nineteen listed chapters are treated (11 FFX, 7 FFX-2); Chapter XVII (sin-fins-core) is the one that is not; the real-clips hold still serves VIII and the Mirror Aeons chapter, which stay on the list (r73-fast measured them and left the holds: r73-fast.md section 5)', () => {
+  it('all nineteen listed chapters are treated since r74-fins (12 FFX, 7 FFX-2; eighteen before, Chapter XVII (sin-fins-core) the one that was not); the real-clips hold still serves VIII and the Mirror Aeons chapter, which stay on the list (r73-fast measured them and left the holds: r73-fast.md section 5)', () => {
     const treated = Object.keys(TREATED_CHAPTERS);
-    expect(treated).toHaveLength(18);
+    expect(treated).toHaveLength(19);
     expect(treated).toContain(ID);
-    expect(treated).not.toContain('sin-fins-core');
-    expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx')).toHaveLength(11);
+    expect(treated).toContain('sin-fins-core'); // r74-fins
+    expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx')).toHaveLength(12);
     expect(Object.values(TREATED_CHAPTERS).filter((e) => e.game === 'ffx2')).toHaveLength(7);
     for (const id of ['evrae-airship', 'mirror-aeons']) {
       expect(treated, id).toContain(id);

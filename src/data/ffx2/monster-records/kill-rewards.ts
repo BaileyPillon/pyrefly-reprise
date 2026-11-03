@@ -69,4 +69,10 @@ export const KILL_REWARD_ROWS: Readonly<Record<string, FFX2KillReward>> = {
   "ffx2-bikanel-angra-mainyu/x2-zarich": row(1, 269, 0, 0, 0, 0, [0x0000, 0, 0x0000, 0]), // Zarich
   "ffx2-bikanel-angra-mainyu/x2-tawrich": row(1, 270, 0, 0, 0, 0, [0x0000, 0, 0x0000, 0]), // Tawrich
   "ffx2-cloister-trema-arena/trema": row(1, 328, 2000, 1, 3000, 255, [0x202e, 2, 0x202e, 3]), // Trema
+  // The hidden Fallen Maesters (the Via Infinito floors 20, 40, 60 and 80; RE note re-ffx2-fallen-maesters §4.1): EXP, Gil, AP and the drop byte are the rows'. The drop slots hold ONLY the items whose game ids this repo already pairs with a name
+  // (Stamina Tonic 0x203b in `research/re-ffx2-commands.md`; Mythril Bangle, Crystal Gloves and Pixie Dust in the table above); Mana Tonic, Tetra Gloves, Blessed Gem and Shining Gem have none, so those slots are 0 (rule 6).
+  "ffx2-via-infinito-floor-20-aranea/x2-aranea": row(1, 221, 4000, 1, 800, 255, [0x203b, 1, 0x9002, 1]), // Aranea
+  "ffx2-via-infinito-floor-40-black-elemental/x2-black-elemental": row(1, 69, 770, 1, 380, 255, [0x0000, 0, 0x0000, 0]), // Black Elemental
+  "ffx2-via-infinito-floor-60-concherer/x2-concherer": row(1, 232, 6000, 1, 1200, 255, [0x0000, 0, 0x900e, 1]), // Concherer
+  "ffx2-via-infinito-floor-80-chac/x2-chac": row(1, 239, 2200, 1, 750, 255, [0x0000, 0, 0x9012, 1]), // Chac
 };

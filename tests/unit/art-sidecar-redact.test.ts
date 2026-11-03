@@ -50,8 +50,8 @@ const fieldsOf = (scope: Scope): string[] => [...new Set(READERS.filter((r) => r
 const readFieldsFor = (rel: string): string[] =>
   rel === 'art/manifest.json' || rel === 'art/portrait-parts/manifest.json' ? fieldsOf(rel) : /^art\/rigs\/[^/]+\/rig\.json$/.test(rel) ? fieldsOf('art/rigs/<subject>/rig.json') : fieldsOf('painting');
 
-/** Not art JSON: the audio manifest, the voice-over's chapter manifests (`public/audio/voice/<chapter>.json`, release 39.5: audio, read by `story/voice/voiceManifest.ts`), the dev-only route to Bailey's own converted FFX files (`/__ffx-local/`, never in a build), a lint pattern. */
-const NOT_ART = [`src${sep}audio${sep}`, `src${sep}story${sep}voice${sep}`, `src${sep}engine${sep}ffx3d${sep}`, `src${sep}engine${sep}ffxcam${sep}`, `src${sep}story${sep}textLint.ts`];
+/** Not art JSON: the hidden 3D Bahamut's own model files (`src/engine/yrp3d/`, `src/data/yrp-ids.ts`: the clip maps and the dress manifest under `models-exp/`, FFX-2 only, ch-yrp; the shipped copies are scanned for a local path by `tools/yrp-models-verify.mjs`, r74 integration), the audio manifest, the voice-over's chapter manifests (`public/audio/voice/<chapter>.json`, release 39.5: audio, read by `story/voice/voiceManifest.ts`), the dev-only route to Bailey's own converted FFX files (`/__ffx-local/`, never in a build), a lint pattern. */
+const NOT_ART = [`src${sep}audio${sep}`, `src${sep}story${sep}voice${sep}`, `src${sep}engine${sep}ffx3d${sep}`, `src${sep}engine${sep}ffxcam${sep}`, `src${sep}story${sep}textLint.ts`, `src${sep}engine${sep}yrp3d${sep}`, `src${sep}data${sep}yrp-ids.ts`];
 
 const sourceFiles = (dir: string): string[] =>
   readdirSync(dir).flatMap((name) => {

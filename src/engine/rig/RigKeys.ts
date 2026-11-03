@@ -19,6 +19,7 @@ import { POSE_FALLBACKS } from '../BattlePresenterActors.ts';
 import type { RigKey } from '../../data/art/rigTypes.ts';
 import type { RigData } from './RigData.ts';
 import { C_OX, C_OY, C_ROT, C_SX, C_SY, CH, bindPose } from './RigSkeleton.ts';
+import { RIG_HEAD_HOLD, holdPartSize } from './RigHeadHold.ts';
 
 /**
  * The names the presenter asks for that `POSE_FALLBACKS` (the actor's own chain) does not list, as the art loader's chain has them
@@ -71,10 +72,15 @@ export function compileKey(data: RigData, key: RigKey, into?: Float64Array): Flo
   return out;
 }
 
-/** Every key of the rig, compiled once. */
-export function compileKeys(data: RigData): Map<string, Float64Array> {
+/**
+ * Every key of the rig, compiled once. A rig listed in `RIG_HEAD_HOLD` (Lulu's, PR-0534) has its head part held at the idle's size in every key (`RigHeadHold.ts`); `hold: false` gives the file's own keys back
+ * (the tests that compare the lock with what the file draws, and the census of a rig's head).
+ */
+export function compileKeys(data: RigData, hold = true): Map<string, Float64Array> {
   const out = new Map<string, Float64Array>();
   for (const [name, key] of data.keys) out.set(name, compileKey(data, key));
+  const part = hold ? RIG_HEAD_HOLD[data.name] : undefined;
+  if (part) holdPartSize(data, out, part);
   return out;
 }
 

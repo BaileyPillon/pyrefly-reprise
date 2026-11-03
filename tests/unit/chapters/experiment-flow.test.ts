@@ -179,7 +179,10 @@ describe('the data behind it', () => {
     const flagged = [...Object.values(FFX_GROUPS_BY_ID), ...Object.values(FFX2_GROUPS_BY_ID)].filter((g) => g.noSaveSphereCard === true).map((g) => g.id);
     // Mirror Aeons (FFX, listed 2026-10-16) sets it on the five Dark Yojimbo tiers, which are the cavern's Act II and heal the party and the aeons on entry with no Save Sphere card (`dark-aeons-groups.ts`).
     const mirrorTiers = ['70', '71', '72', '73', '74'].map((n) => `mirror-yojimbo-nagi05_${n}`);
-    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-'))).toEqual([DJOSE_EXPERIMENT_2]);
+    // The hidden Fallen Maesters (FFX-2, 2026-11-02) sets it on floors 40, 60 and 80 of the Via Infinito: the glyph between the floors heals the party, which is no Save Sphere (`data/ffx2/enemies/fallen-maesters.ts`).
+    const maesters = ['40-black-elemental', '60-concherer', '80-chac'].map((n) => `ffx2-via-infinito-floor-${n}`);
+    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-') && !id.startsWith('ffx2-via-infinito-floor-'))).toEqual([DJOSE_EXPERIMENT_2]);
+    expect(flagged.filter((id) => id.startsWith('ffx2-via-infinito-floor-')).sort()).toEqual(maesters);
     expect(flagged.filter((id) => id.startsWith('mirror-yojimbo-')).sort()).toEqual(mirrorTiers);
   });
 

@@ -53,6 +53,7 @@ import { setFeelChapter } from '../../engine/feel/FeelSwitch.ts';
 import { setMotionSfxSpeed } from '../../engine/feel/MotionBeats.ts';
 import { battleComfort } from './battleComfort.ts';
 import { readReduceFlashes, readRigFigures } from '../accessFlags.ts';
+import { rigsForScene } from '../../engine/rig/sceneRigs.ts';
 import { battleCameraPreset, battleLayoutProjector } from './battleCameraComfort.ts';
 import { bracketAnimations } from '../../engine/BattlePresenterAnimating.ts';
 import { warmShaders } from './BattleScreenWarmup.ts';
@@ -135,7 +136,7 @@ export abstract class BattleScreenEncounter extends BattleScreenCard {
       planSettled: framingPlanSettled, // the battle-start card and the opening wait for that plan before a menu can open (`fx/mix/openingGate.ts`)
       arrivalOwed: framingArrivalOwed,
       reduceFlashes: readReduceFlashes, // PR-0032: phase lighting lands at once, every wash and flash is softened, the bloom peaks at 35 %
-      rigs: readRigFigures, // the rig: a figure with a gated rig is drawn as one (`engine/rig/`; `?rig=off` and the hidden `fxRig` setting turn it off)
+      rigs: rigsForScene(this.scene.slots, readRigFigures), // the rig: a figure with a gated rig is drawn as one (`engine/rig/`; `?rig=off` and the hidden `fxRig` setting turn it off)
       cameraPreset: battleCameraPreset(chapter.game), // fb2-0929: `calm` by default (D-291), `?cam=current` for the old camera (CameraPreset.ts)
     });
 

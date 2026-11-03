@@ -15,6 +15,7 @@
  * The tests read the word from its one constant, never a literal.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { useDoorClock } from './helpers/doorClock.ts';
 
 import { PartyPrepScreen } from '../../src/app/screens/PartyPrepScreen.ts';
 import { TitleScreen } from '../../src/app/screens/TitleScreen.ts';
@@ -344,6 +345,7 @@ describe('the word opens it on chapter select', () => {
 
 describe('the three doors do not interfere', () => {
   it('each word opens its own chapter and nothing else', async () => {
+    useDoorClock(); // the cases below type forty boards' words in a loop: a virtual clock, so a stalled test process cannot make a word stale (helpers/doorClock.ts)
     for (const [typed, opens] of [[DOOR_WORD, FF7], [LEBLANC, EXP_LEBLANC], [WORD, GUI]] as const) {
       const rig = mount();
       rig.typeWord(typed);
@@ -354,6 +356,7 @@ describe('the three doors do not interfere', () => {
   });
 
   it('the first word to finish wins when two are typed in a row, whichever order', async () => {
+    useDoorClock(); // the cases below type forty boards' words in a loop: a virtual clock, so a stalled test process cannot make a word stale (helpers/doorClock.ts)
     for (const [typed, opens] of [
       [WORD + DOOR_WORD, GUI],
       [DOOR_WORD + WORD, FF7],
@@ -365,7 +368,7 @@ describe('the three doors do not interfere', () => {
       await flush();
       expect(rig.picked, typed).toEqual([opens]);
     }
-  });
+  }, 180_000); // fifteen doors at the r74 integration (three real boards per other door, 42 mounts): about 16 s on a quiet machine and over 60 s when the PC is busy, so the pair test gets 180 s; a hang still fails, later
 
   it('a half-typed word before another does not spoil either', async () => {
     const a = mount();

@@ -89,10 +89,15 @@ export function setHudF1TextMode(value: HudF1TextMode | null): void {
  * `seymour-omnis`) in the band between the boss ribbon and the turn strip, which grow toward each other with the setting: the band is 277 grid px at 100, 229 at 115 and 181 at 130, and the panels are 191 and 185 wide, so at
  * 130 the gauge reaches 7.4 grid px (about 30 px at 2560 x 1440) into the ribbon's end and 8.0 into the strip's box, the Omnis strip 9.2 into the ribbon's: a regression against the live site in an accessibility setting, with nothing
  * to measure the fix against but a mockup (rule 9). At 100 and 115 both clear. Lifts when a narrower gauge and strip are picked from a mockup (then delete the row). Keyed by chapter id, read with `hasOwnProperty`.
+ *
+ * **r74-fins (FFX only): Chapter XVII (`sin-fins-core`) joins the table at 115.** Its Fin plate (`.ffx-sinfin`, links I and II) stands in the same band, right-anchored 7.9 grid px short of the turn strip at 100 and 7.8 at 115 (`sin-hud.css`), and it is 195.9 grid px wide in its widest
+ * state (the charge line, read from the font file: `tests/unit/r74-fins-hud.test.ts`), so it clears the ribbon's painted edge (the ribbon is a skewed slab) by 62.7 grid px at 100 and 14.3 at 115. The band between that edge and the strip is 274.3, 225.9 and 177.4 grid px at 100, 115 and 130, and the plate needs 195.9 plus a GAP
+ * (6) on each side, 207.9: at 130 the band is too narrow, so the chapter keeps today's HUD there, as release 71 did (`docs/handoff/r74-fins.md`). Lifts when a narrower plate is picked from a mockup (then delete the row).
  */
 export const F1_TEXT_CEILING: Readonly<Record<string, number>> = Object.freeze({
   'yojimbo-cavern': 115,
   'seymour-omnis': 115,
+  'sin-fins-core': 115,
 });
 
 /** TEXT SIZE in force, in percent: the larger of the two attributes `app/applyComfort.ts` puts on <html>; an absent or unreadable one counts as 100 (as in a unit test). */

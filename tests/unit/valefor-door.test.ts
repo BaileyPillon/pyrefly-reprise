@@ -16,6 +16,7 @@
  * The tests read the word from its one constant, never a literal.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { useDoorClock } from './helpers/doorClock.ts';
 
 import { PartyPrepScreen } from '../../src/app/screens/PartyPrepScreen.ts';
 import { TitleScreen } from '../../src/app/screens/TitleScreen.ts';
@@ -366,6 +367,7 @@ describe('the word opens it on chapter select', () => {
 
 describe('the six doors do not interfere', () => {
   it('each word opens its own chapter and nothing else', async () => {
+    useDoorClock(); // the cases below type forty boards' words in a loop: a virtual clock, so a stalled test process cannot make a word stale (helpers/doorClock.ts)
     for (const row of CHAPTER_DOORS) {
       const rig = mount();
       rig.typeWord(row.word);
@@ -376,6 +378,7 @@ describe('the six doors do not interfere', () => {
   });
 
   it('the first word to finish wins when two are typed in a row, and a half-typed word before another spoils neither', async () => {
+    useDoorClock(); // the cases below type forty boards' words in a loop: a virtual clock, so a stalled test process cannot make a word stale (helpers/doorClock.ts)
     for (const other of CHAPTER_DOORS.filter((d) => d.word !== WORD)) {
       const a = mount();
       a.typeWord(WORD + other.word);
@@ -390,7 +393,7 @@ describe('the six doors do not interfere', () => {
       await flush();
       expect(c.picked, `${other.word.slice(0, -1)}${WORD}`).toEqual([VALEFOR]);
     }
-  }, 60_000); // about 10 s alone (it types the door words one pair at a time with real timers), so the 15 s default failed it in two full runs under load (2026-10-30); a hang still fails, later
+  }, 180_000); // fifteen doors at the r74 integration (three real boards per other door, 42 mounts): about 16 s on a quiet machine and over 60 s when the PC is busy, so the pair test gets 180 s; a hang still fails, later (earlier note: about 10 s alone (it types the door words one pair at a time with real timers), so the 15 s default failed it in two full runs under load (2026-10-30); a hang still fails, later)
 });
 
 const keyDown = (key: string, init: KeyboardEventInit = {}): void => {

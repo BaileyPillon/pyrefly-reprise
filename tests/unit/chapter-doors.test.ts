@@ -1,7 +1,7 @@
 /**
  * **The chapter-select board's doors, as one table** (`src/app/screens/frontend/chapterDoors.ts`): the one test over every word at once.
  *
- * Each door's own suite (`ff7-secret-door`, `exp-leblanc-door`, `ffx2-experiment-door`, `mushroom-door`, `fayth-door`, `daigoro-door`, `valefor-door`, `gagazet-door`, `angra-door`, `yojimbo-door`, `summon-door`) drives the board with real key events and compared its word with its neighbours' by hand,
+ * Each door's own suite (`ff7-secret-door`, `exp-leblanc-door`, `ffx2-experiment-door`, `mushroom-door`, `fayth-door`, `daigoro-door`, `valefor-door`, `gagazet-door`, `angra-door`, `yojimbo-door`, `summon-door`, `yrp-door`) drives the board with real key events and compared its word with its neighbours' by hand,
  * each with the neighbours it knew of. This one reads the table, so a word added tomorrow is checked against every word that is already there:
  *
  * - **no word begins with, ends with or contains another**, and **no end of one word is the beginning of another** (a run of letters that finishes one word must not also start, or finish, a second one:
@@ -28,11 +28,11 @@ function type(doors: BoardDoors, word: string, start = 0, step = 100) {
 }
 
 describe('the table', () => {
-  it('holds the ten doors in the order they were added, each word a run of lower-case letters long enough to be typed by hand', () => {
-    expect(WORDS).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', 'yojimbo', 'summon']);
+  it('holds the fifteen doors in the order they were added, each word a run of lower-case letters long enough to be typed by hand (three, for `yrp`, as Bailey picked it)', () => {
+    expect(WORDS).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', 'yojimbo', 'summon', 'keeper', 'infinito', 'yrp', 'waker']);
     expect(WORDS[0]).toBe(DOOR_WORD);
     expect(new Set(WORDS).size).toBe(WORDS.length);
-    for (const w of WORDS) expect(w, w).toMatch(/^[a-z]{4,}$/);
+    for (const w of WORDS) expect(w, w).toMatch(/^[a-z]{3,}$/);
   });
 
   it('no word begins with, ends with or contains another, and no end of one word is the beginning of another', () => {
@@ -60,14 +60,15 @@ describe('the table', () => {
     }
     for (const id of LISTED_DOOR_CHAPTERS) expect((CHAPTER_IDS as readonly string[]).includes(id), id).toBe(true);
     expect(CHAPTER_DOORS.filter((d) => d.secret === true).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion']);
-    expect(CHAPTER_DOORS.filter((d) => d.gate !== undefined).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion']);
+    // Three gated rows: FF7's switch, and (driver decision 219q, 2026-11-03; FFX-2 only) the two hidden 3D chapters, desktop-only (`tests/unit/r74-hidden-3d-phone-doors.test.ts`)
+    expect(CHAPTER_DOORS.filter((d) => d.gate !== undefined).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion', 'exp-yrp-3d', 'exp-windwaker']);
     for (const d of CHAPTER_DOORS.filter((x) => x.secret !== true && x.chapter !== 'mirror-aeons')) expect(getChapter(d.chapter), d.chapter).toMatchObject({ experimental: true });
     expect(getChapter('mirror-aeons')?.experimental).toBeUndefined();
   });
 
   it('leads the FFX words to FFX chapters and the FFX-2 words to FFX-2 chapters (the game of the row is the chapter\'s)', () => {
     const game = (word: string): string | undefined => getChapter(CHAPTER_DOORS.find((d) => d.word === word)!.chapter)?.game;
-    expect([game('limit'), game('leblanc'), game('experiment'), game('mushroom'), game('fayth'), game('daigoro'), game('valefor'), game('gagazet'), game('angra'), game('yojimbo'), game('summon')]).toEqual(['ff7', 'ffx2', 'ffx2', 'ffx', 'ffx', 'ffx2', 'ffx2', 'ffx', 'ffx2', 'ffx', 'ffx']);
+    expect([game('limit'), game('leblanc'), game('experiment'), game('mushroom'), game('fayth'), game('daigoro'), game('valefor'), game('gagazet'), game('angra'), game('yojimbo'), game('summon'), game('keeper'), game('infinito'), game('yrp'), game('waker')]).toEqual(['ff7', 'ffx2', 'ffx2', 'ffx', 'ffx', 'ffx2', 'ffx2', 'ffx', 'ffx2', 'ffx', 'ffx', 'ffx', 'ffx2', 'ffx2', 'ffx2']);
   });
 });
 

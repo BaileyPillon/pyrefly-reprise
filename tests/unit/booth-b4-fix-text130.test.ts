@@ -40,29 +40,33 @@ afterEach(() => {
 });
 
 describe('the table', () => {
-  it('names Chapter IX and Chapter XII and nothing else, at 115, both FFX, both treated; IX plays the hud piece (the ceiling is its only exception) and XII HOLDS it since the r72 review (J-HUD-5b), the ceiling kept for the day the hold lifts', () => {
-    expect(Object.keys(F1_TEXT_CEILING).sort()).toEqual([...CEILING_IDS].sort());
+  it('names Chapter IX, Chapter XII and (r74-fins) Chapter XVII and nothing else, at 115, all FFX, all treated; IX plays the hud piece (the ceiling is its only exception), XII HOLDS it again (the r72 review, J-HUD-5b, put back by the r74 browser read) and XVII HOLDS it from the start (the r74 browser read), the ceiling kept for the day each hold lifts', () => {
+    expect(Object.keys(F1_TEXT_CEILING).sort()).toEqual([...CEILING_IDS, 'sin-fins-core'].sort()); // Chapter XVII (r74-fins): its Fin plate needs 195.9 grid px and the band is 180.9 at 130 (tests/unit/r74-fins-hud.test.ts)
     for (const [id, max] of Object.entries(F1_TEXT_CEILING)) {
       expect(max, id).toBe(115);
       expect(getChapter(id)?.game, id).toBe('ffx');
       expect(TREATED_CHAPTERS[id]?.game, id).toBe('ffx');
-      if (id === 'seymour-omnis') expect(treatedHold(id, 'hud'), 'XII holds the hud piece').toMatch(/Lifts when .*29-stop cursor walk reads 0 overlapping pairs/);
+      if (id === 'seymour-omnis') expect(treatedHold(id, 'hud'), 'XII holds the hud piece').toMatch(/Lifts when .*29-stop cursor walk reads 0 pairs at all 29 stops of all eight windows/);
+      else if (id === 'sin-fins-core') expect(treatedHold(id, 'hud'), 'XVII holds the hud piece').toMatch(/Lifts when the Sensor card stops touching the flag at link II/);
       else expect(treatedHold(id, 'hud'), `${id} plays the hud piece (the ceiling is its only exception)`).toBeUndefined();
     }
   });
 
-  it('Chapter XII holds the F1 HUD (r72 review, J-HUD-5b): the release 71 HUD at every TEXT SIZE, the F1 readers off, while the ceiling rows stay for the lift', () => {
-    expect(playsPiece('seymour-omnis', 'hud')).toBe(false);
-    setDemoChapter('seymour-omnis');
-    for (const v of ['100', '115', '130']) {
-      sizeBoth(v);
-      expect(hudF1On(), `XII at ${v}`).toBe(false);
-      if (v === '130') expect(commandRowsCap(6), "XII rows at 130: TEXT SIZE's own four").toBe(4);
-      expect(sizeFactor('damage', 'normal'), `XII numeral at ${v}: the glass one`).toBe(TIER_SIZE.normal);
+  it('Chapters XII and XVII hold the F1 HUD (r74 browser read, 2026-11-03): the release 71 and release 72 HUD at every TEXT SIZE, the F1 readers off, while the ceiling rows stay for the lift', () => {
+    for (const id of ['seymour-omnis', 'sin-fins-core']) {
+      expect(playsPiece(id, 'hud'), id).toBe(false);
+      setDemoChapter(id);
+      for (const v of ['100', '115', '130']) {
+        sizeBoth(v);
+        expect(hudF1On(), `${id} at ${v}`).toBe(false);
+        if (v === '130') expect(commandRowsCap(6), `${id} rows at 130: TEXT SIZE's own four`).toBe(4);
+        expect(sizeFactor('damage', 'normal'), `${id} numeral at ${v}: the glass one`).toBe(TIER_SIZE.normal);
+      }
+      setHudF1TextMode('grow');
+      sizeBoth('100');
+      expect(hudF1On(), `${id} under ?f1text=grow: the hold beats the word`).toBe(false);
+      setHudF1TextMode(null);
     }
-    setHudF1TextMode('grow');
-    sizeBoth('100');
-    expect(hudF1On(), 'XII under ?f1text=grow: the hold beats the word').toBe(false);
   });
   it('is frozen (a later edit is a decision made in the file)', () => {
     expect(Object.isFrozen(F1_TEXT_CEILING)).toBe(true);
@@ -130,8 +134,8 @@ describe('Chapter IX and Chapter XII: the F1 HUD plays at 100 and 115 and gives 
 
 describe('nothing else changes', () => {
   it('every other treated chapter, the booth pair among them, keeps the F1 HUD at 100, 115 and 130 (in either attribute)', () => {
-    const others = Object.keys(TREATED_CHAPTERS).filter((id) => !(CEILING_IDS as readonly string[]).includes(id));
-    expect(others).toHaveLength(16); // eighteen treated less the two ceiling chapters (r72-hud put IX and XII back; the second focused review of the release 71 candidate took Sin's face off the list and r73-fast put it back)
+    const others = Object.keys(TREATED_CHAPTERS).filter((id) => !(CEILING_IDS as readonly string[]).includes(id) && id !== 'sin-fins-core');
+    expect(others).toHaveLength(16); // nineteen treated less the three ceiling chapters (r74-fins added Chapter XVII, the third); before: eighteen less the two (r72-hud put IX and XII back; the second focused review of the release 71 candidate took Sin's face off the list and r73-fast put it back)
     for (const id of others) {
       setDemoChapter(id);
       for (const v of ['100', '115', '130']) {
@@ -146,7 +150,7 @@ describe('nothing else changes', () => {
 
   it('a chapter off the list, a hidden id and the hostile ids answer as they did (the ceiling reads own keys only)', () => {
     sizeBoth('130');
-    for (const id of ['sin-fins-core', 'exp-leblanc', 'nonsense', '__proto__', 'constructor', 'toString', 'hasOwnProperty']) {
+    for (const id of ['exp-leblanc', 'nonsense', '__proto__', 'constructor', 'toString', 'hasOwnProperty']) { // (Chapter XVII left this list when it joined the ceiling table in r74-fins; no listed chapter is off the list now)
       setDemoChapter(id);
       expect(hudF1TextSizeOk(), id).toBe(true);
       expect(hudF1On(), id).toBe(false); // not treated: today's HUD whatever the size
@@ -157,7 +161,7 @@ describe('nothing else changes', () => {
 
   it('?f1text=today still gives every chapter release 67\'s step-down at 115 and 130 (the two chapters included), and ?f1text=grow beats the ceiling at 130', () => {
     setHudF1TextMode('today');
-    for (const id of ['seymour-flux', 'yojimbo-cavern', 'seymour-omnis'].filter((c) => playsPiece(c, 'hud'))) { // XII holds the hud piece (r72 review): it answers off at every size, pinned above
+    for (const id of ['seymour-flux', 'yojimbo-cavern', 'seymour-omnis'].filter((c) => playsPiece(c, 'hud'))) { // XII holds the hud piece (r74 browser read): it answers off at every size, pinned above
       setDemoChapter(id);
       sizeBoth('100');
       expect(hudF1On(), `${id} at 100`).toBe(true);

@@ -30,6 +30,7 @@
 
 /** Which game a piece of content belongs to (`'ff7'`: the hidden experiment, `./types-ff7.ts`; branches audited in `./game.ts`). */ export type GameId = 'ffx' | 'ffx2' | 'ff7';
 import type { Ff7Combatant, Ff7Command, Ff7LimitGaugeFields, Ff7MessageTag, Ff7PartyBuild } from './types-ff7.ts'; export type * from './types-ff7.ts';
+import type { PlatformEvent, PlatformGroupFields } from './types-keeper.ts'; // FFX only: the Spectral Keeper's glyph platforms (the group flags and the hop event); the file is split out so this one does not grow
 
 /** Stable identifier for a combatant instance inside one battle. */
 export type CombatantId = string;
@@ -2344,6 +2345,7 @@ export type BattleEvent =
       reason: 'command' | 'ko' | 'banished';
     })
   | (BattleEventBase & { type: 'switch'; outId: CombatantId; inId: CombatantId })
+  | PlatformEvent // FFX only (the Spectral Keeper): a hop between glyph platforms, `./types-keeper.ts`
   | (BattleEventBase & {
       type: 'form-change';
       enemyId: CombatantId;
@@ -3079,7 +3081,7 @@ export interface FormationCommandOff {
 }
 
 /** One battle's enemy formation. */
-export interface EnemyGroupDef {
+export interface EnemyGroupDef extends PlatformGroupFields {
   /** Formation id, e.g. `'seymour-flux'`. */
   id: string;
   game: GameId;

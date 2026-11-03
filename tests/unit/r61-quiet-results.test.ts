@@ -49,7 +49,7 @@ const faceSrcs = (root: HTMLElement, who: string): string[] => {
 
 describe('the table: Chapter IV of FFX-2 and nothing else', () => {
   it('names exactly one chapter, and it is an FFX-2 chapter', () => {
-    expect(Object.keys(QUIET_RESULTS)).toEqual(['ffx2-bahamut']);
+    expect(Object.keys(QUIET_RESULTS)).toEqual(['ffx2-bahamut', 'exp-yrp-3d']); // Chapter IV, and its hidden 3D version (ch-yrp), the same fight
     expect(getChapter('ffx2-bahamut')?.game).toBe('ffx2');
     expect(getChapter('ffx2-bahamut')?.number).toBe(4);
   });
