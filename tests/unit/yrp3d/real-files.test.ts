@@ -198,8 +198,10 @@ describe.skipIf(!have)('the real files through the real loader', () => {
     expect(ratio).toBeLessThan(7);
     expect([boss.animated, boss.playsKo, boss.flaps]).toEqual([true, true, false]);
     boss.root.updateMatrixWorld(true);
-    const box = new Box3().setFromObject(boss.root);
-    expect(box.max.y - box.min.y).toBeCloseTo(5, 1);
+    const box = new Box3().setFromObject(boss.root, true); // every vertex of the idle pose he is fitted by: 5 tall, standing on y 0 (ch-yrp review MAJOR-4: the fit was by his default pose, wings spread and centred on his middle)
+    expect(box.max.y - box.min.y).toBeGreaterThan(4.85);
+    expect(box.max.y - box.min.y).toBeLessThan(5.15);
+    expect(Math.abs(box.min.y)).toBeLessThan(0.08);
     const plans = plansFor('bahamut', map, (await load('bahamut-anims.glb')).animations.map((c) => c.name));
     expect(plans.ko).toEqual({ enter: ['DEAD_00', 'DEAD_01', 'DEAD_02'], hold: 'DEAD_03', exit: [] });
     expect(plans.attack?.exit).toEqual(['ATTACK1_02', 'ATTACK1_03']);

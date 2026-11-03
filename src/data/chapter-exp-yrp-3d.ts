@@ -1,7 +1,7 @@
 /**
  * **Experimental: Bahamut in 3D** (branch `exp-yrp-3d`; hidden chapter number 31; **FFX-2 only**, AGENTS.md rule 14).
  *
- * Bailey, 2026-10-19 (verbatim): "I like it can we do an experimental 3d chapter that's hidden?" His picks: the FFX-2 trio against a boss, the look "Painted toon", the boss Bahamut, the secret word `yrp`; on
+ * Bailey, 2026-10-19 (verbatim): "I like it can we do an experimental 3d chapter that's hidden?" His picks: the FFX-2 trio against a boss, the boss Bahamut, the secret word `yrp` (his first look pick, "Painted toon", was dropped on 2026-10-20 for the real FFX-2 models in a soft light: "plastic"); on
  * the plan "Yes that's fine"; then "I'll go with all of your recommendations. I'm going to bed so you have all the freedom from here. Surprise me and amaze me when I wake up!"
  *
  * **It is Chapter IV's encounter** (`FFX2_BAHAMUT` in `./encounters.ts`: Bevelle Underground; Bahamut against Yuna, Rikku and Paine), so every rule that holds for Chapter IV holds here: the same party build, the same
@@ -10,8 +10,8 @@
  *
  * What differs is the picture and the label:
  *
- * - `sceneKey` is `exp-yrp-3d-stage` (`../scenes/exp-yrp-3d-stage.ts`): Chapter IV's chamber under frame A's camera ("classic, now in 3D": a high three-quarter view, the trio in a loose row on the right, Bahamut filling
- *   the left half), with the real FFX-2 models on the stage's actors (`public/models-exp/yrp/<id>.glb`, `../engine/yrp3d/`); a slot whose file is missing stands on a neutral capsule (Yuna, Rikku and Paine are the real FFX-2 models in their own dresspheres, and so is Bahamut: the game's own model and clips are the default boss since 2026-11-02, the AI-made one is `?boss=ai`, a local comparison that is never shipped);
+ * - `sceneKey` is `exp-yrp-3d-stage` (`../scenes/exp-yrp-3d-stage.ts`): Chapter IV's chamber under frame b's camera (his pick of 2026-10-22, "b: dolly in": a low three-quarter view, the trio a third of the frame's height on the right, Bahamut in frame on the left from his feet to his horns;
+ *   `?frame=a` is the older, higher "classic" one), with the real FFX-2 models on the stage's actors (`public/models-exp/yrp/<id>.glb`, `../engine/yrp3d/`); a slot whose file is missing stands on a neutral capsule (Yuna, Rikku and Paine are the real FFX-2 models in their own dresspheres, and so is Bahamut: the game's own model and clips are the default boss since 2026-11-02, the AI-made one is `?boss=ai`, a local comparison that is never shipped);
  * - the title is the working title below (no source and no decision gives one; AGENTS.md rule 9).
  *
  * **It is an experiment, not a listed chapter.** `experimental: true` sends its attempts, clears and play time to the experiments' own store, never to the save, so it is out of the board's "N of 18", the veteran

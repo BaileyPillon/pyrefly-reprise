@@ -14,7 +14,7 @@
  * Chapter IV's; what this scene changes is the staging, the camera and **the look** (the girls must read clearly in the arena: Bailey found the first in-game shots too dark, too blue and too small), and what it adds is the figures'
  * light and the skin that carries the real models:
  *
- * - **Staging.** The party's three slots are the frame's (frame A's, moved 1.9 m toward Bahamut in the default frame b), Bahamut's spot and the reserve spots are frame A's; the girls stand at 1.9 and Bahamut at 5.0 (`PARTY_HEIGHT`, `BOSS_HEIGHT`); bodies face each other along x (the party toward -x,
+ * - **Staging.** The party's three slots are the frame's (frame A's, moved 1.9 m toward Bahamut in the default frame b), Bahamut's spot and the reserve spots are frame A's; the girls stand at 1.9 and Bahamut's idle silhouette at 4.5 (`PARTY_HEIGHT`, `BOSS_HEIGHT`); bodies face each other along x (the party toward -x,
  *   Bahamut toward +x: `SceneStaging.sideFacing`, the switch FF7's reactor and the hidden Fayth chapter use); `holdParty` keeps the stage's relaxation off the row. The light pools under the figures move with them.
  * - **The camera.** `idle`, `intro`, `action`, `party`, `enemy`, `bahamut` and `victory` are `RIGS` (the names Chapter IV's presenter and script ask for); the close shots take a long lens from further back and none is tighter
  *   than waist-up. The painting's parallax stack is aligned for the new `idle` (`SceneBuildOptions.cameraRef`), so the bands register at rest.
@@ -45,6 +45,7 @@ import type { YrpModels } from '../engine/yrp3d/load.ts';
 import { EXP_YRP_SCENE, YRP_MODEL_DIRS } from '../data/yrp-ids.ts';
 import { buildDemoScene } from './demo.ts';
 import { buildBevelleUndergroundScene } from './bevelle-underground.ts';
+import { bevelleBuild } from '../data/ffx2/builds/bevelle.ts'; // static: the build is in the main bundle already (`data/encounters.ts` imports it), and a dynamic import of it only made the bundler split its neighbours into shared chunks (ch-yrp review minor 2)
 import type { ScenePalette } from '../engine/Renderer.ts';
 import type { SceneEntry, SceneSlots } from './index.ts';
 import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneStaging } from './types.ts';
@@ -113,7 +114,7 @@ export const buildExpYrp3dStageScene: SceneFactory = async (opts: SceneBuildOpti
   let figureLights: Light[] = [];
   let directed: SceneStaging['shotDirector'] = YRP_SHOT_DIRECTOR;
   if (!paintedForced(search)) {
-    const [{ YrpSkin }, { loadYrpModels, modelDirs }, { applyStage }, rig, { openDressLibrary }, { reachFor }, { dressOff }, { bevelleBuild }] = await Promise.all([
+    const [{ YrpSkin }, { loadYrpModels, modelDirs }, { applyStage }, rig, { openDressLibrary }, { reachFor }, { dressOff }] = await Promise.all([
       import('../engine/yrp3d/skin.ts'),
       import('../engine/yrp3d/load.ts'),
       import('../engine/yrp3d/stageLook.ts'),
@@ -121,7 +122,6 @@ export const buildExpYrp3dStageScene: SceneFactory = async (opts: SceneBuildOpti
       import('../engine/yrp3d/dressLib.ts'),
       import('../engine/yrp3d/dressReach.ts'),
       import('../engine/yrp3d/dress.ts'),
-      import('../data/ffx2/builds/bevelle.ts'),
     ]);
     const heights = { yuna: PARTY_HEIGHT, rikku: PARTY_HEIGHT, paine: PARTY_HEIGHT, bahamut: BOSS_HEIGHT };
     const dirs = modelDirs(search, YRP_MODEL_DIRS);

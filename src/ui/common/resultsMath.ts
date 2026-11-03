@@ -38,9 +38,7 @@ export function formatNumber(n: number): string {
  * covers it so a caller checking "should this feel grim" gets one answer).
  */
 export const GRIM_CHAPTER_IDS: ReadonlySet<string> = new Set([
-  'seymour-flux',
-  'yunalesca',
-  'ffx2-bahamut',
+  'seymour-flux', 'yunalesca', 'ffx2-bahamut',
   EXP_YRP_ID, // the hidden 3D Bahamut (FFX-2 only, ch-yrp) is Chapter IV's fight, so it is grim for the same reason
 ]);
 

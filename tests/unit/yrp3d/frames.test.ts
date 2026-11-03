@@ -200,7 +200,7 @@ describe('frame c: a lower, closer three-quarter, the girls at about 45 percent,
   });
 
   it('lets Bahamut tower out of the top of the frame: his horns are above it, his feet and the most of his body in it, on the left', () => {
-    expect(b.bahamut.top).toBeLessThan(-0.05);
+    expect(b.bahamut.top).toBeLessThan(0); // the horns are above the frame (BOSS_HEIGHT 4.5, the idle silhouette: -0.044 by the layout box)
     expect(b.bahamut.bottom).toBeGreaterThan(0.5);
     expect(b.bahamut.bottom).toBeLessThan(0.75);
     expect(b.bahamut.right).toBeLessThan(b.paine.left);

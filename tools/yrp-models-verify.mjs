@@ -9,6 +9,10 @@
  *   node tools/yrp-models-verify.mjs --source [<public>] the SOURCE `public/`: every file of the set is there and whole (extras and the full manifest are expected there)
  *
  * "Whole" means a binary glTF whose header says version 2 and its own length (a copy cut short fails), or a JSON file that parses. Exit 0 = PASS, 1 = FAIL (every problem is printed).
+ * The deploy runs this on every build (`tools/deploy-pages.mjs`, next to the fx check, before the build is hashed): a release cut from a tree without `public/models-exp` (a clean worktree has none; the folder is gitignored)
+ * has no models folder at all, and it would otherwise ship the chapter on grey capsules with every other gate green (ch-yrp review MAJOR-3). To ship the chapter on capsules ON PURPOSE, set `PYREFLY_YRP_MODELS=capsules`
+ * for that one run: a build with NO models folder then passes with a warning. A build with some of the files and not all still fails.
+ * A BUILD is also scanned for a local path in a string (a drive path or the scratch folder's name, in a JSON file or in a glTF's JSON chunk): a path on this PC never ships (ch-yrp review MAJOR-2).
  * Reads files only; never writes or deletes. Game case: FFX-2 only (the models are the game's own Yuna, Rikku, Paine and Bahamut); the check is shared delivery plumbing.
  */
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
@@ -18,7 +22,7 @@ import { fileURLToPath } from 'node:url';
 
 import { YRP_MODEL_DIRS, YRP_SHIPPED_BASE_FILES, YRP_SHIPPED_DRESS_FOLDERS, YRP_SHIPPED_HD_FILES } from '../src/data/yrp-ids.ts';
 import { CLOUDFLARE_LIMITS } from './deploy-host.mjs';
-import { shippedDressIndex } from './dist-filter.mjs';
+import { carriesLocalPath, shippedDressIndex } from './dist-filter.mjs';
 
 /** Every file the set contains, as a path under the root with forward slashes. */
 export function expectedYrpFiles() {
@@ -37,6 +41,18 @@ function glbProblem(path) {
   if (b.readUInt32LE(4) !== 2) return `is glTF version ${b.readUInt32LE(4)}, not 2`;
   if (b.readUInt32LE(8) !== b.length) return `says ${b.readUInt32LE(8)} bytes in its header and has ${b.length} (cut short or padded)`;
   return null;
+}
+
+/** The JSON text of a binary glTF (its first chunk), or '' when the header does not say one; the BIN chunk is never read as text. */
+function glbJsonText(buf) {
+  if (buf.length < 20 || buf.toString('latin1', 0, 4) !== 'glTF' || buf.toString('latin1', 16, 20) !== 'JSON') return '';
+  return buf.toString('utf8', 20, Math.min(buf.length, 20 + buf.readUInt32LE(12)));
+}
+
+/** Why a file's text names a place on the PC that built it (a JSON file, or a glTF's JSON chunk), or null; the path itself is never printed. */
+function localPathProblem(full, isGlb) {
+  const buf = readFileSync(full);
+  return carriesLocalPath(isGlb ? glbJsonText(buf) : buf.toString('utf8')) ? 'has a local path in a string' : null;
 }
 
 /** Every file under `dir` as a path relative to it with forward slashes (links are not followed). */
@@ -73,6 +89,10 @@ export function verifyYrpModels(root, { mode = 'build', limits = CLOUDFLARE_LIMI
     bytes += size;
     if (size === 0) problems.push(`${rel}: empty`);
     if (size > limits.maxFileBytes) problems.push(`${rel}: ${size} bytes is over the host's ${limits.maxFileBytes}-byte limit for one file`);
+    if (mode === 'build') {
+      const local = localPathProblem(full, rel.endsWith('.glb'));
+      if (local) problems.push(`${rel}: ${local}`);
+    }
     if (rel.endsWith('.glb')) {
       const why = glbProblem(full);
       if (why) problems.push(`${rel}: ${why}`);
@@ -107,6 +127,10 @@ export function verifyYrpModels(root, { mode = 'build', limits = CLOUDFLARE_LIMI
 
 const MIB = 1048576;
 
+/** The one environment value that lets a build with no models folder through (see the header). */
+export const CAPSULES_ENV = 'PYREFLY_YRP_MODELS';
+export const CAPSULES_OK = 'capsules';
+
 function main(argv) {
   const source = argv.includes('--source');
   const flag = source ? '--source' : '--dir';
@@ -114,12 +138,21 @@ function main(argv) {
   const given = at >= 0 && argv[at + 1] && !argv[at + 1].startsWith('--') ? argv[at + 1] : null;
   const dir = resolve(given ?? (source ? 'public' : 'dist'));
   const result = verifyYrpModels(dir, { mode: source ? 'source' : 'build' });
+  const absent = !source && !existsSync(join(dir, 'models-exp'));
+  if (!result.ok && absent && process.env[CAPSULES_ENV] === CAPSULES_OK) {
+    console.log(`yrp-models-verify build ${dir}: WARNING, no models-exp folder: the hidden 3D Bahamut (Chapter 31) will play on grey capsules (${CAPSULES_ENV}=${CAPSULES_OK} was set on purpose)`);
+    return 0;
+  }
   if (result.ok) {
     console.log(`yrp-models-verify ${source ? 'source' : 'build'} ${dir}: PASS, ${result.files} files, ${(result.bytes / MIB).toFixed(1)} MiB${source ? '' : ', nothing else of models-exp'}`);
     return 0;
   }
   console.log(`yrp-models-verify ${source ? 'source' : 'build'} ${dir}: FAIL`);
-  for (const p of result.problems) console.log(`  ${p}`);
+  if (!absent) for (const p of result.problems) console.log(`  ${p}`); // an absent folder is one line below, not 43 "missing"
+  if (absent) {
+    console.log('  this build holds no models-exp folder: it was cut from a tree without public/models-exp (the folder is gitignored, like the paintings), so the hidden 3D Bahamut would ship on grey capsules.');
+    console.log(`  link or copy the models folder into the release tree's public/ and build again (docs/handoff/ch-yrp.md section 6); to ship the chapter on capsules on purpose, set ${CAPSULES_ENV}=${CAPSULES_OK} for this run.`);
+  }
   return 1;
 }
 

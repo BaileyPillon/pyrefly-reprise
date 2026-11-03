@@ -39,7 +39,7 @@ function typeWord(door: WordDoor, word: string, start = 0, step = 100): Array<'o
 }
 
 describe('the word (pure)', () => {
-  it('is one constant: three lower-case letters (as Bailey picked it), leading to a hidden FFX-2 experiment numbered 29', () => {
+  it('is one constant: three lower-case letters (as Bailey picked it), leading to a hidden FFX-2 experiment numbered 31', () => {
     expect(WORD).toMatch(/^[a-z]{3}$/);
     expect(YRP).toBe('exp-yrp-3d');
     expect(getChapter(YRP)).toMatchObject({ id: YRP, game: 'ffx2', experimental: true, number: 31 });

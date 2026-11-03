@@ -30,7 +30,7 @@ const GROUPS = { ...FFX_GROUPS, ...FFX2_GROUPS };
 /** Every chapter the sounds can be heard in, with what its party and its foes carry. */
 export function chapterFacts() {
   const out = [];
-  for (const id of [...CHAPTER_IDS, 'exp-leblanc', 'sinspawn-gui']) {
+  for (const id of [...CHAPTER_IDS, 'exp-leblanc', 'exp-yrp-3d', 'sinspawn-gui']) {
     const chapter = getChapter(id);
     if (!chapter || (chapter.game !== 'ffx' && chapter.game !== 'ffx2')) continue;
     const build = chapter.buildRef;

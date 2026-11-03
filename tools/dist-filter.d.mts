@@ -10,3 +10,6 @@ export function findUnshipped(root: string): string[];
 export function findSourceMapReferences(root: string): string[];
 export function keepSourceMaps(root: string, dest: string): string[];
 export function pruneUnshipped(root: string): string[];
+export function carriesLocalPath(text: string): boolean;
+export function scrubLocalPaths(text: string): string;
+export function scrubModelNotes(root: string): string[];

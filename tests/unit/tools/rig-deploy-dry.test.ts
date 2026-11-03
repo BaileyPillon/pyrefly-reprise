@@ -31,6 +31,9 @@ function fakeRoot(mutate?: (rig: string, root: string) => void): { root: string;
     cpSync(join(ROOT, 'tools'), join(base, 'tools'), { recursive: true, filter: (src) => !/[\\/]zz-[^\\/]*$/.test(src) && !/__pycache__/.test(src) });
     // The deploy tools read the title's release notes and the Behind the Scenes switch from the source tree (release 39.5, `tools/release-notes.mjs`, `tools/dist-filter.mjs`): two import-free leaf folders.
     cpSync(join(ROOT, 'src', 'app', 'changelog'), join(base, 'src', 'app', 'changelog'), { recursive: true });
+    // `tools/dist-filter.mjs` reads the hidden 3D Bahamut's shipped-model lists from `src/data/yrp-ids.ts` (ch-yrp, 2026-11-02): a third import-free leaf, which the fixture lacked (the whole file failed to start the deploy).
+    mkdirSync(join(base, 'src', 'data'), { recursive: true });
+    cpSync(join(ROOT, 'src', 'data', 'yrp-ids.ts'), join(base, 'src', 'data', 'yrp-ids.ts'));
     symlinkSync(join(ROOT, 'node_modules'), join(base, 'node_modules'), 'junction');
     writeFileSync(join(base, 'package.json'), JSON.stringify({ name: 'fake', type: 'module' }));
     mkdirSync(join(base, 'public'), { recursive: true });

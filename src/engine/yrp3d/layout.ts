@@ -61,11 +61,16 @@ export const BOSS_SPOT: V3 = [-3.2, 0, -3.0];
 export const ENEMY_SLOTS: readonly V3[] = [BOSS_SPOT, [-0.6, 0, -5.8], [-6.2, 0, -6.0]];
 
 /**
- * World heights, staging (ours): the girls' a little over the stage's house default (1.82, `BEVELLE_GIRLS_HEIGHT`) so a model reads at the camera's distance, and Bahamut's 5.0, 2.6 times theirs (Chapter IV's painting is 3.5 and
- * the giants' table has him at 3.3 times the girls, `data/ffx2/fiend-stature.ts`; frame A wants him to fill the left half of the frame with the whole figure in it, the wings out).
+ * World heights, staging (ours): the girls' a little over the stage's house default (1.82, `BEVELLE_GIRLS_HEIGHT`) so a model reads at the camera's distance, and Bahamut's 4.5, 2.4 times theirs: **the height of his IDLE
+ * silhouette standing on the floor** (a model's box is taken in the pose it rests in, `fitBoxOf`; ch-yrp review MAJOR-4). The game has him 3.3 times the girls in battle (his idle-bone height 58 over their 17.48,
+ * `data/ffx2/fiend-stature.ts`, `research/ffx2-bahamut.md` 9.3), which would be 6.3 here; frame b, Bailey's pick, holds the girls at a third of the frame's height, and at 6.3 the top quarter of him is above the frame.
+ * Measured on the real model (HD mesh, 16,179 vertices, the idle clip) through frame b at 16:9 and 4:3: 5.0 touches the top edge (top -0.002) and loses 17 percent of the width off the left; 4.5 keeps the horns 8 percent of the
+ * frame's height below its top (3 percent in the cast pose) with the far wing tip leaving the left edge, as frame A's does. **Driver pick under the blanket yes of 2026-11-02, his to overturn**: the sourced 3.3 times needs a
+ * camera that holds the girls at a quarter of the frame, which is the older frame A he moved away from. The same fit used to stand him on his default pose (wings spread, 87 tall, his lowest point 57 below his middle), which
+ * left his idle floating 2.6 above the floor.
  */
 export const PARTY_HEIGHT = 1.9;
-export const BOSS_HEIGHT = 5.0;
+export const BOSS_HEIGHT = 4.5;
 
 /** How wide each figure stands, half-width in world units: a girl with her arms in, and Bahamut with his wings out (for the frame's boxes and the lunge's reach; a model's own box wins at run time). */
 export const HALF_WIDTH: Readonly<Record<YrpId, number>> = { yuna: 0.42, rikku: 0.4, paine: 0.42, bahamut: 4.4 };
@@ -266,6 +271,17 @@ export function fitBox(box: BoxData, height: number): Fit {
   const cz = (box.min[2] + box.max[2]) / 2;
   const w = Math.max(box.max[0] - box.min[0], box.max[2] - box.min[2]);
   return { scale, offset: [-cx * scale, -box.min[1] * scale, -cz * scale], widthOverHeight: h > 1e-6 ? w / h : 1 };
+}
+
+/**
+ * The box a model is fitted by: its default pose's (`rest`, measured as loaded), unless that pose does not stand where the model does. The girls' default pose has the feet on the floor (Yuna 0.00 against her idle's 0.01 in
+ * the game's units, Rikku 0.03 and 0.02, Paine 0 and 0), so they keep it; Bahamut's default pose is centred on his middle, wings spread (87.85 tall, from 57 below the origin to 31 above) and his idle stands on it (57 tall, from
+ * -0.4), so a fit by the default pose stood him half his height in the air. When the idle pose's lowest point is more than 5 percent of the default box's height from the default's, the idle's box is the one to fit by.
+ * An empty or non-finite `posed` box changes nothing.
+ */
+export function fitBoxOf(rest: BoxData, posed: BoxData | null): BoxData {
+  if (!posed || ![...posed.min, ...posed.max].every(Number.isFinite) || posed.max[1] - posed.min[1] < 1e-6) return rest;
+  return Math.abs(posed.min[1] - rest.min[1]) > 0.05 * (rest.max[1] - rest.min[1]) ? posed : rest;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------

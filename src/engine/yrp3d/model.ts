@@ -27,7 +27,7 @@ import { attachProps, type Attached } from './props.ts';
 import { attachWeapons, type WeaponsAttached } from './weapons.ts';
 import { disposeShade, drive, shadeify, type ShadeSet } from './shade.ts';
 import { flapSpecOf, makeFlap, setFlap, type FlapUniforms } from './flap.ts';
-import { fitBox, YRP_BOSS_ID, type BoxData, type Look, type YrpId } from './layout.ts';
+import { fitBox, fitBoxOf, YRP_BOSS_ID, type BoxData, type Look, type YrpId } from './layout.ts';
 import { Orb } from './orb.ts';
 
 /** Where a model came from: its own file, or the neutral capsule that stands in for a missing one. */
@@ -109,7 +109,7 @@ export class YrpModel {
   private readonly rear = new Group();
   private readonly fit = new Group();
   private readonly set: ShadeSet;
-  private readonly natural: BoxData;
+  private natural: BoxData;
   /** The model's clips driven by the battle (`./clips.ts`), or null for a model with no idle clip (a capsule has none): it stays procedural. */
   private readonly rig: ClipRig | null;
   /** The procedural weapons parented to the hands (`./props.ts`), or none (the real ones replaced them, or the figure holds nothing). */
@@ -170,6 +170,15 @@ export class YrpModel {
     if (this.orb) this.rear.add(this.orb.sprite); // the orb rears with the chest it hangs at
     this.place();
     this.rig = rigged ? new ClipRig(scene, clips, plans, id) : null;
+    if (this.rig && id === YRP_BOSS_ID) this.groundOnIdle(scene);
+  }
+
+  /** Bahamut is fitted by the pose he rests in: his default pose is centred on his middle, so a fit by it left his idle floating (`fitBoxOf`). The rig has set his idle by now; the girls keep their default boxes. */
+  private groundOnIdle(scene: Object3D): void {
+    scene.updateMatrixWorld(true);
+    const b = new Box3().setFromObject(scene, true);
+    this.natural = fitBoxOf(this.natural, { min: [b.min.x, b.min.y, b.min.z], max: [b.max.x, b.max.y, b.max.z] });
+    this.place();
   }
 
   /** The figure's height now, world units. */

@@ -6,6 +6,7 @@
  *
  * Game case: FFX-2 only (the models are the game's own Yuna, Rikku, Paine and Bahamut); the check is shared delivery plumbing.
  */
+import { spawnSync } from 'node:child_process';
 import { existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, relative, sep } from 'node:path';
@@ -128,6 +129,67 @@ describe('the verifier', () => {
     expect(r.ok).toBe(false);
     expect(r.problems).toHaveLength(43);
     expect(r.problems.every((p) => p.endsWith(': missing'))).toBe(true);
+  });
+});
+
+// ---- the command line, and the deploy that runs it (review MAJOR-3) -------------------------------------------------
+describe('the deploy gate', () => {
+  const TOOL = join(process.cwd(), 'tools', 'yrp-models-verify.mjs');
+  const cli = (dir: string, env: Record<string, string> = {}): { status: number | null; out: string } => {
+    const r = spawnSync(process.execPath, [TOOL, '--dir', dir], { encoding: 'utf8', env: { ...process.env, PYREFLY_YRP_MODELS: '', ...env } });
+    return { status: r.status, out: `${r.stdout}${r.stderr}` };
+  };
+
+  it('refuses a build cut from a tree without the models, in one explanation, and names the way to fix it', () => {
+    tmp = mkdtempSync(join(tmpdir(), 'pyrefly-yrp-gate-'));
+    writeFileSync(join(tmp, 'index.html'), '<html>');
+    const r = cli(tmp);
+    expect(r.status).toBe(1);
+    expect(r.out).toContain('FAIL');
+    expect(r.out).toContain('holds no models-exp folder');
+    expect(r.out).toContain('grey capsules');
+    expect(r.out).toContain('PYREFLY_YRP_MODELS=capsules');
+    expect(r.out.split('\n').filter((l) => l.endsWith(': missing')), 'no line per missing file').toEqual([]);
+  });
+
+  it('lets a build with no models folder through only when the run says capsules on purpose, with a warning', () => {
+    tmp = mkdtempSync(join(tmpdir(), 'pyrefly-yrp-gate-'));
+    const r = cli(tmp, { PYREFLY_YRP_MODELS: 'capsules' });
+    expect(r.status).toBe(0);
+    expect(r.out).toContain('WARNING');
+    expect(r.out).toContain('grey capsules');
+    expect(cli(tmp, { PYREFLY_YRP_MODELS: 'yes' }).status, 'any other value').toBe(1);
+  });
+
+  it('never lets a half-there set through, even when capsules were asked for', () => {
+    tmp = mkdtempSync(join(tmpdir(), 'pyrefly-yrp-gate-'));
+    mkdirSync(join(tmp, BASE), { recursive: true });
+    writeFileSync(join(tmp, BASE, 'yuna.glb'), tinyGlb());
+    const r = cli(tmp, { PYREFLY_YRP_MODELS: 'capsules' });
+    expect(r.status).toBe(1);
+    expect(r.out).toContain('yuna-anims.glb: missing');
+  });
+
+  it('passes a whole, pruned build', () => {
+    tmp = mkdtempSync(join(tmpdir(), 'pyrefly-yrp-gate-'));
+    for (const rel of expectedYrpFiles()) {
+      mkdirSync(dirname(join(tmp, rel)), { recursive: true });
+      writeFileSync(join(tmp, rel), rel.endsWith('.glb') ? tinyGlb() : '{}');
+    }
+    writeFileSync(join(tmp, BASE, 'dress', 'index.json'), JSON.stringify(shippedDressIndex(fullManifest())));
+    const r = cli(tmp);
+    expect(r.status).toBe(0);
+    expect(r.out).toContain('PASS, 43 files');
+  });
+
+  it('is run by tools/deploy-pages.mjs on the finished build, before that build is hashed, and a failure stops the deploy', () => {
+    const src = readFileSync(join(process.cwd(), 'tools', 'deploy-pages.mjs'), 'utf8');
+    const at = (needle: string): number => src.indexOf(needle);
+    const gate = at("'yrp-models-verify.mjs'), '--dir', DIST");
+    expect(gate).toBeGreaterThan(-1);
+    expect(gate).toBeGreaterThan(at("runNpx(['vite', 'build'"));
+    expect(gate).toBeLessThan(at('await buildManifest(DIST)'));
+    expect(src.slice(gate, gate + 250)).toContain('fail(');
   });
 });
 
