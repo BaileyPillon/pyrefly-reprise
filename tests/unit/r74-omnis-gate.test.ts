@@ -76,9 +76,10 @@ function tree(opts: { listed?: boolean; holdsHud?: boolean; line?: string | null
 const OWED_LINE = 'OWED: jobs J74-1 to J74-7 have not run';
 const NAMED_LINE = `the jobs J74-1 to J74-7 read 0 pairs, report ${REPORT}`;
 
-describe('the table is data: one row, the lifted hud hold of Chapter XII, its note and marker, and the seven jobs with their numbers', () => {
+describe('the table is data: the first row is the lifted hud hold of Chapter XII, its note and marker, and the seven jobs with their numbers', () => {
   it('shape', () => {
-    expect(HOLD_LIFTS).toHaveLength(1);
+    expect(HOLD_LIFTS).toHaveLength(2); // Chapter XII's, then Chapter XVII's (r74-int review MAJOR-2: tests/unit/r74-fins-gate.test.ts)
+    expect(HOLD_LIFTS[0]!.id).toBe('omnis-hud');
     expect({ id: row.id, chapter: row.chapter, piece: row.piece, note: row.note, marker: row.marker }).toEqual({ id: 'omnis-hud', chapter: OMNIS, piece: 'hud', note: NOTE, marker: 'OMNIS-HUD LIFT:' });
     expect(Object.keys(row.jobs)).toEqual(JOBS);
     expect(row.jobs['J74-1']!.zero).toEqual(['pairs', 'textOverlaps', 'consoleErrors']);
@@ -133,7 +134,7 @@ describe('the REAL tree: while the hud hold is lifted and the line names no pass
   it('the invariant, whichever state the tree is in', () => {
     expect(Object.keys(TREATED_CHAPTERS)).toContain(OMNIS);
     const lifted = !Object.prototype.hasOwnProperty.call(PIECE_HOLDS[OMNIS]!, 'hud');
-    const owed = findOwedHoldLifts(ROOT);
+    const owed = findOwedHoldLifts(ROOT).filter((o) => o.id === 'omnis-hud'); // Chapter XVII's row answers beside it (tests/unit/r74-fins-gate.test.ts)
     if (!lifted) {
       expect(owed, 'the hold is in place: nothing to prove').toEqual([]);
       return;
@@ -155,7 +156,7 @@ describe('the REAL tree: while the hud hold is lifted and the line names no pass
   });
 
   it('the cut: with the real tree\'s answer the gate fails while owed (no review is needed for the refusal to stand), and only the owner\'s own words make it a warning', () => {
-    const owed = findOwedHoldLifts(ROOT);
+    const owed = findOwedHoldLifts(ROOT).filter((o) => o.id === 'omnis-hud');
     const none = { focusedBeforeDeploy: false, deepBeforeDeploy: false, evidence: null, ownerOverrideWords: null };
     const gate = resolveReleaseGate({ ...none, owedHoldLifts: owed });
     if (owed.length === 0) {
