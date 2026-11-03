@@ -1,3 +1,4 @@
+import { setOwnGrade } from '../engine/fx/a/ownGrade.ts';
 import type { ArrivalDirectors } from '../engine/StageArrivals.ts';
 import type { PartAnchors } from '../engine/PartAnchors.ts';
 import type { Group, Scene, Vector3 } from 'three';
@@ -42,6 +43,12 @@ export interface SceneBuild extends SceneStaging {
 
   /** Key / fill / rim / ambient plus the flickerable practical. */
   readonly lights: LightRig;
+
+  /**
+   * Optional: the scene draws its own grade (a 3D stage with a palette of its own, the hidden Wind Waker chapter). The eye-candy post of option A (`engine/fx/a/GoldenHour.ts`, built from a painting's
+   * colours) then never runs on it (`engine/fx/a/ownGrade.ts`). Omitted by every other scene, which reads exactly as before.
+   */
+  readonly ownGrade?: boolean;
 
   /**
    * Weather and atmosphere fields, already parented to {@link group} and
@@ -160,6 +167,16 @@ export interface SceneStaging {
    * PR-0002 A, D-041).
    */
   readonly holdParty?: boolean;
+  /**
+   * Every figure is drawn as its painting set, never as a painted rig (`engine/rig/sceneRigs.ts`). For a scene that puts its own 3D model on each actor and switches the painted planes off (the hidden
+   * Wind Waker chapter): a rig's parts are not planes, so a rigged boss would stand twice. Omitted by every other scene, which follows the `fxRig` setting.
+   */
+  readonly noRigs?: boolean;
+  /**
+   * The scene draws its own hits (`engine/ownImpacts.ts`): the stage's shared impact bloom, sparks, slash, drawn spell effect and SKILL TRAVEL shot are not drawn for it. For a scene whose figures are toon models held under
+   * the bloom threshold, where the shared white bloom reads as a blob (the hidden Wind Waker chapter draws a flat star burst and smoke puffs from the shot director's `impact` beat). Omitted by every other scene, which reads exactly as before.
+   */
+  readonly ownImpacts?: boolean;
   /**
    * A standing spot for a named enemy combatant, overriding its slot. The
    * formation solver and the relaxation leave it there. For a machine whose
@@ -287,6 +304,8 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.partAnchors) out.partAnchors = build.partAnchors;
   if (build.figureBloomMaskArt) out.figureBloomMaskArt = build.figureBloomMaskArt;
   if (build.holdParty) out.holdParty = true;
+  if (build.noRigs === true) out.noRigs = true;
+  if (build.ownImpacts === true) out.ownImpacts = true;
   if (build.enemySpots) out.enemySpots = build.enemySpots;
   if (build.figureHeights) out.figureHeights = build.figureHeights;
   if (build.formHeights) out.formHeights = build.formHeights;
@@ -352,6 +371,7 @@ export function mountScene(build: SceneBuild, scene: Scene): void {
   scene.add(build.group);
   if (build.backdrop.fog) scene.fog = build.backdrop.fog;
   if (build.backdrop.background) scene.background = build.backdrop.background;
+  if (build.ownGrade) setOwnGrade(scene, true); // a 3D stage with its own palette: the eye-candy post of option A leaves it alone (`engine/fx/a/ownGrade.ts`)
 }
 
 /** Undo {@link mountScene} without disposing the scene. */

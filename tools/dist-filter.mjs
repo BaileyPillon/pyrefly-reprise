@@ -20,10 +20,13 @@
  *   sixteen pictures in `public/bts/` stay on disk and out of every build until the switch is turned on; with it on,
  *   this rule is gone and they ship. The page's code and words are kept out of the bundle by the same constant.
  *
- * - `models-exp/**` except the chapter's shipped set: the models of the hidden 3D Bahamut chapter (FFX-2 only, `src/engine/yrp3d/`). They are large, gitignored and never committed (the tree that builds has them, as it has the
+ * - `models-exp/**` except the two chapters' shipped sets (an allow-list: a new experiment's models stay out of every build until its folder is named here). (1) The models of the hidden 3D Bahamut chapter (FFX-2 only, `src/engine/yrp3d/`). They are large, gitignored and never committed (the tree that builds has them, as it has the
  *   art), and until 2026-11-02 nothing shipped them. Since the retail-assets rule was lifted (Bailey, 2026-10-18) and the chapter was folded in (branch `ch-yrp`) a build ships `isShippedModelFile`'s files: the base figures, their clips and
  *   weapons, the game's Bahamut in HD, and the fourteen dresspheres on Chapter IV's three Garment Grids at the base texture size (`YRP_SHIPPED_*`, `src/data/yrp-ids.ts`), with a `dress/index.json` rewritten to list only those
  *   (`trimDressIndex`), and their JSON notes cleaned of any local path (`scrubModelNotes`: the extraction wrote a scratch folder's path into one clip map's evidence line; ch-yrp review MAJOR-2). Never shipped: the AI boss's files, the HD figures of the girls, the HD tier of the dresspheres (688 MB; six files are over the 25 MiB the host takes) and the dresspheres no grid reaches.
+ *   (2) `models-exp/windwaker/**` SHIPS whole (2026-11-02, the hidden Wind Waker chapter, Chapter 32, FFX-2 only: `src/engine/ww3d/`, the cast, the boss and the swappable weapon and temple pieces; the chapter loads them at run
+ *   time and stands a neutral capsule in any slot whose file is missing). Like `public/art` and `public/fx` they come from this disk and are never committed (the repo is public): `tools/ww-models.mjs` records, backs up and
+ *   verifies them, and a build from a clean worktree needs them restored first (`tools/vite-ww-models.mjs`). The allow-list names a FOLDER: a sibling that merely begins with `windwaker` stays out.
  *
  * Source maps are the fourth kind (PR-0328, adopted by Bailey 2026-10-03 as
  * D-335): the three `.js.map` files of release 36 weighed 22,775,896 bytes,
@@ -61,12 +64,17 @@ const SHIPPED_BASE = new Set(YRP_SHIPPED_BASE_FILES.map((f) => `${YRP_MODEL_DIRS
 const SHIPPED_HD = new Set(YRP_SHIPPED_HD_FILES.map((f) => `${YRP_MODEL_DIRS.hd}/${f}`));
 const SHIPPED_DRESS = new Set(YRP_SHIPPED_DRESS_FOLDERS);
 
+/** The hidden Wind Waker chapter's models folder under a build root (ch-waker): it ships whole, every file in it (`tools/ww-models.mjs`, `tools/vite-ww-models.mjs`). */
+const WINDWAKER_DIR = 'models-exp/windwaker';
+
 /**
  * Does this file of the hidden 3D Bahamut's models ship? (`p` is a path under the build root with forward slashes, starting `models-exp/`.) The base figures, clips, weapons and clip map; the game's Bahamut in HD and the HD clip
- * map; the shipped dresspheres' `anims.glb` and `clipmap.json` and the manifest (which `trimDressIndex` rewrites). Nothing else under `models-exp/`: not the AI boss, not the HD girls, not an HD dressphere.
+ * map; the shipped dresspheres' `anims.glb` and `clipmap.json` and the manifest (which `trimDressIndex` rewrites); and everything in the hidden Wind Waker chapter's own folder (`models-exp/windwaker/`, shipped whole; a sibling folder that merely begins with the name is not it).
+ * Nothing else under `models-exp/`: not the AI boss, not the HD girls, not an HD dressphere, not an experiment whose folder is not named here.
  * @param {string} p
  */
 export function isShippedModelFile(p) {
+  if (p === WINDWAKER_DIR || p.startsWith(`${WINDWAKER_DIR}/`)) return true;
   if (SHIPPED_BASE.has(p) || SHIPPED_HD.has(p) || p === DRESS_INDEX) return true;
   if (!p.startsWith(DRESS_DIR)) return false;
   const [folder, file, ...more] = p.slice(DRESS_DIR.length).split('/');

@@ -21,7 +21,7 @@
  * `tests/unit/chapter-doors.test.ts` pins the table: every word is distinct and none begins with, ends with or contains another, and no word's end is another's beginning, so one run of letters can
  * only ever finish one door. The four older doors' suites and `fayth-door.test.ts` drive the board itself with real key events.
  *
- * **`summon`** (FFX, the hidden Last Summoning, `./summonDoor.ts`: S is `down`, M is `select`; U, O and N are unbound) is a plain `WordDoor` too, and so is **`yrp`** (FFX-2, the hidden 3D Bahamut, `./yrpDoor.ts`: R is `r1`; Y and P are unbound; three letters, the shortest word on the table).
+ * **`summon`** (FFX, the hidden Last Summoning, `./summonDoor.ts`: S is `down`, M is `select`; U, O and N are unbound) is a plain `WordDoor` too, and so is **`yrp`** (FFX-2, the hidden 3D Bahamut, `./yrpDoor.ts`: R is `r1`; Y and P are unbound; three letters, the shortest word on the table), and so is **`waker`** (FFX-2, the hidden Wind Waker chapter, `./windwakerDoor.ts`: W is `up`, A is `left`, E is `start`, R is `r1`; K is unbound).
  *
  * **`keeper`** (FFX, the hidden Spectral Keeper, `./keeperDoor.ts`: K and P are unbound, E is `start`, R is `r1`) is a plain `WordDoor` too.
  *
@@ -47,6 +47,7 @@ import { KEEPER_DOOR_CHAPTER, KEEPER_DOOR_WORD } from './keeperDoor.ts';
 import { MAESTERS_DOOR_CHAPTER, MAESTERS_DOOR_WORD } from './maestersDoor.ts';
 import { PILGRIM_DOOR_CHAPTER, PILGRIM_DOOR_WORD } from './pilgrimDoor.ts';
 import { YRP_DOOR_CHAPTER, YRP_DOOR_WORD } from './yrpDoor.ts';
+import { WINDWAKER_DOOR_CHAPTER, WINDWAKER_DOOR_WORD } from './windwakerDoor.ts';
 
 /** One door: a word on the keyboard and the chapter it opens. */
 export interface ChapterDoor {
@@ -79,6 +80,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: KEEPER_DOOR_WORD, chapter: KEEPER_DOOR_CHAPTER },
   { word: MAESTERS_DOOR_WORD, chapter: MAESTERS_DOOR_CHAPTER },
   { word: YRP_DOOR_WORD, chapter: YRP_DOOR_CHAPTER },
+  { word: WINDWAKER_DOOR_WORD, chapter: WINDWAKER_DOOR_CHAPTER },
 ];
 
 /**

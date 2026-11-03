@@ -6,13 +6,13 @@
  * (`ui-strategy-guide-start-folded.test.ts` pins the guide's half, `ui-ffx-advisor-folded.test.ts` the card's). This file pins the plumbing in between:
  *
  *  - `stagingOf` copies it when a scene says `true` and only then, like every optional staging field;
- *  - **exactly two scenes say it**: Seymour Flux's (Gagazet) and Braska's Final Aeon's (the Dream's End), the two FFX fights whose giants filled the sky the card stood in. No other scene file names it,
- *    so no other chapter's guide or card moves;
- *  - `createHud` hands it to the FFX HUD and to nothing else: the FFX-2 HUD takes the same argument list and ignores it, and a scene that does not say it leaves the guide to the saved preference;
+ *  - **exactly three scenes say it**: Seymour Flux's (Gagazet) and Braska's Final Aeon's (the Dream's End), the two FFX fights whose giants filled the sky the card stood in, and (2026-11-02, FFX-2 only) the hidden Wind
+ *    Waker chapter's stage, whose girls' heads stand under the open sheet. No other scene file names it, so no other chapter's guide or card moves;
+ *  - `createHud` hands it to the FFX HUD, and to the FFX-2 HUD's guide (`StrategyGuide.startFolded`, pinned by `ffx2-guide-folded-start.test.ts`; only the Wind Waker chapter says it), and a scene that does not say it leaves the guide to the saved preference;
  *  - the HUD guards the folded card against being cut off at its foot (`FFXBattleHud.guardFoldedCard`): a card still taller than its rail on the last rung of the density ladder for a few frames in a row
  *    is replaced by the tip for the rest of that decision, and the card is tried again at the next.
  *
- * **Game case: FFX only** [AGENTS.md rule 14]: FFX Chapters I and III; FFX-2 never reads it.
+ * **Game case:** FFX for Chapters I and III; FFX-2 reads it only for the hidden Wind Waker chapter [AGENTS.md rule 14].
  */
 
 import { readdirSync, readFileSync } from 'node:fs';
@@ -52,13 +52,13 @@ describe('SceneStaging.guideFolded', () => {
     expect(stagingOf(DREAMS_END_STAGING).guideFolded).toBe(true);
   });
 
-  it('is named by no other scene file: only the type, its copier and the two giants\' staging files', () => {
+  it('is named by no other scene file: only the type, its copier, the two giants\' staging files and the Wind Waker stage (FFX-2 only)', () => {
     const dir = join(here, '../../src/scenes');
     const users = readdirSync(dir)
       .filter((f) => f.endsWith('.ts'))
       .filter((f) => /\bguideFolded\b/.test(readFileSync(join(dir, f), 'utf8')))
       .sort();
-    expect(users).toEqual(['dreams-end-giants.ts', 'gagazet-giants.ts', 'types.ts']);
+    expect(users).toEqual(['dreams-end-giants.ts', 'exp-windwaker-stage.ts', 'gagazet-giants.ts', 'types.ts']);
   });
 
   it('reaches the engine\'s scene slots by the one spread every scene goes through (`scenes/index.ts`: `...stagingOf(build)`)', () => {
@@ -98,10 +98,20 @@ describe('createHud', () => {
     }
   });
 
-  it('is ignored by the FFX-2 HUD', () => {
+  it('leaves the FFX-2 HUD\'s guide on the saved preference (on) when the scene does not say it: every FFX-2 chapter but the hidden Wind Waker one', () => {
+    for (const folded of [undefined, false]) {
+      const root = mountedHud('ffx2', folded);
+      hudUpdate(root);
+      expect(sheetOf(root).hidden, `folded ${String(folded)}`).toBe(false);
+      root.remove();
+    }
+  });
+
+  it('starts the FFX-2 HUD\'s guide folded when the scene says so (only the hidden Wind Waker chapter does; FFX-2 only)', () => {
     const root = mountedHud('ffx2', true);
     hudUpdate(root);
-    expect(sheetOf(root).hidden).toBe(false);
+    expect(sheetOf(root).hidden, 'the sheet is folded to its chip').toBe(true);
+    expect(root.querySelector<HTMLElement>('.sgd__toggle')!.hidden, 'and the chip is there to bring it back').toBe(false);
   });
 
   it('is the FFX HUD\'s own call: `startGuideFolded` on a bare HUD does the same', () => {

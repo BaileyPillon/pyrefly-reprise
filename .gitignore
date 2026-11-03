@@ -43,6 +43,10 @@ public/art/
 # refuses a build without them.
 public/fx/
 #
+# The hidden Wind Waker chapter's models (branch exp-windwaker): models-exp/windwaker/ (yuna, rikku, paine, valefor) plus props/ and temple/ for the swappable weapons and temple pieces.
+# Local only: never committed (large, and the repo is public) and never shipped (tools/dist-filter.mjs leaves models-exp/ out of every build).
+public/models-exp/
+#
 # Audio previews from tools/render-track.mjs (~10 MB each). Nothing ships as an
 # audio file — the game synthesises everything at runtime — so these are
 # previews only and regenerate with `node tools/render-track.mjs all`.

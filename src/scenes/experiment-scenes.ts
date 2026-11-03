@@ -11,6 +11,7 @@
  * - the hidden Angra Mainyu chapter's desert (FFX-2 only): the Bikanel Desert under the FFX-2 camera, on a provisional new plate (`./angra-mainyu-desert.ts`);
  * - the hidden Last Summoning chapter's Dream's End (FFX only): Chapter III's scene with the staging of the aeons Chapter III never fields (`./last-summoning.ts`);
  * - the hidden 3D Bahamut chapter's chamber (FFX-2 only): Chapter IV's Bevelle underground under frame b's camera (the dolly-in; `?frame=a` is the older one), with the real FFX-2 models on the actors, softly lit (`./exp-yrp-3d-stage.ts`).
+ * - the hidden Wind Waker chapter's temple (FFX-2 only): a procedural toon chamber under the target shot's low camera, with toon models on the actors (`./exp-windwaker-stage.ts`).
  *
  * Each row is real (the factory wins); `build` is the unreachable demo diorama, as for every scene with a factory of its own. Moved here unchanged from `./index.ts`, except Fayth's, which is new.
  * Game case: each row is its own chapter's game's, as tagged; the table is shared plumbing.
@@ -41,6 +42,8 @@ import { buildSpectralKeeperScene, SPECTRAL_KEEPER_SLOTS } from './spectral-keep
 import { SPECTRAL_KEEPER_SCENE } from '../data/ffx/spectral-keeper-ids.ts';
 import { buildExpYrp3dStageScene, EXP_YRP_SCENE_ENTRY } from './exp-yrp-3d-stage.ts'; // the 3D Bahamut's chamber (FFX-2 only, hidden chapter): Chapter IV's room under frame b, the real models on its actors
 import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
+import { buildExpWindwakerStageScene, EXP_WINDWAKER_SCENE_ENTRY } from './exp-windwaker-stage.ts'; // the Wind Waker chamber (FFX-2 only, hidden chapter): a toon temple, toon models on its actors
+import { EXP_WINDWAKER_SCENE } from '../data/windwaker-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -66,6 +69,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   { key: SPECTRAL_KEEPER_SCENE, title: 'Zanarkand Dome — the Spectral Keeper', build: buildDemoScene, slots: SPECTRAL_KEEPER_SLOTS, placeholder: false },
   // The 3D Bahamut (FFX-2 only, hidden chapter): Chapter IV's chamber under frame b's camera, with the real FFX-2 models on the actors.
   EXP_YRP_SCENE_ENTRY,
+  // The Wind Waker chapter (FFX-2 only, hidden chapter): a toon temple chamber under the target shot's camera, with toon-shaded models on the actors.
+  EXP_WINDWAKER_SCENE_ENTRY,
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -81,4 +86,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [LAST_SUMMONING_SCENE]: buildLastSummoningScene, // the hidden Last Summoning chapter (FFX only)
   [SPECTRAL_KEEPER_SCENE]: buildSpectralKeeperScene, // the hidden Spectral Keeper chapter (FFX only)
   [EXP_YRP_SCENE]: buildExpYrp3dStageScene, // the hidden 3D Bahamut chapter (FFX-2 only)
+  [EXP_WINDWAKER_SCENE]: buildExpWindwakerStageScene, // the hidden Wind Waker chapter (FFX-2 only)
 };

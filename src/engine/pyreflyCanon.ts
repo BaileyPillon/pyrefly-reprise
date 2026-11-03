@@ -24,6 +24,7 @@ import { LAST_SUMMONING_SCENE } from '../data/ffx/last-summoning-ids.ts';
 import { SPECTRAL_KEEPER_SCENE } from '../data/ffx/spectral-keeper-ids.ts';
 import { ANGRA_MAINYU_SCENE } from '../data/angra-mainyu-ids.ts';
 import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
+import { EXP_WINDWAKER_SCENE } from '../data/windwaker-ids.ts';
 
 /**
  * People, who die as people: the presentation plan's A-5 row ("Humans
@@ -152,6 +153,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   [SPECTRAL_KEEPER_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Zanarkand Dome [verified: 2 sources]` },
   // The 3D Bahamut (the hidden chapter, FFX-2 only; `scenes/exp-yrp-3d-stage.ts`): Chapter IV's chamber, so the Bevelle underground's row.
   [EXP_YRP_SCENE]: { game: 'ffx2', verdict: 'absent', cite: `${PRES}, Bevelle Underground [single source]: "Machina, not spirits"; the chamber is Chapter IV's` },
+  // Valefor at Besaid in Wind Waker style (the hidden chapter, FFX-2 only; `scenes/exp-windwaker-stage.ts`): hidden chapter 24's fight, so its row (the Djose chamber's stand-in for Besaid's); the temple is a stand-in.
+  [EXP_WINDWAKER_SCENE]: { game: 'ffx2', verdict: 'unattested', cite: "research/ffx2-ixion-djose.md §6.1 (the chamber the chapter 24 fight stands in): the arena rows name no particles; no source describes Besaid's chamber" },
   // Angra Mainyu (the hidden chapter, FFX-2 only): the Bikanel Desert.
   [ANGRA_MAINYU_SCENE]: { game: 'ffx2', verdict: 'unattested', cite: 'research/ffx2-angra-mainyu.md §1: no source names particles in the desert fight' },
   // FF7 only (the hidden Guard Scorpion experiment): pyreflies are Spira's, so the stage adds neither the band nor the dissolve.

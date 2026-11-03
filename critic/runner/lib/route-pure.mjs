@@ -280,6 +280,7 @@ export const DOOR_WORDS = Object.freeze({
   'spectral-keeper': 'keeper',
   'ffx2-fallen-maesters': 'infinito',
   'exp-yrp-3d': 'yrp',
+  'exp-windwaker': 'waker', // the hidden Wind Waker chapter (FFX-2, number 32, 2026-10-20)
 });
 
 /** The word that opens a chapter the board has no card for, or null for a chapter with a card (the arrow-key walk finds it). */
