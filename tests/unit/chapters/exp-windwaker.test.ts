@@ -13,11 +13,12 @@
  * 5. **The models are local files that ship**: `public/models-exp/` is gitignored (the repo is public), `tools/dist-filter.mjs` names `models-exp/windwaker/**` as shipped (and leaves every other experiment's models out), and
  *    `tools/ww/ww-models.json` lists exactly the eleven files the chapter loads (`tests/unit/ww-models-tool.test.ts`).
  */
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
+import { contentReport, registerBattleContent } from '../../../src/app/screens/BattleScreenContent.ts';
 import { setupForChapter } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { backdropFileOf } from '../../../src/data/art/artNamespace.ts';
 import { EXP_WINDWAKER, EXP_WINDWAKER_TEXT } from '../../../src/data/chapter-exp-windwaker.ts';
@@ -115,6 +116,21 @@ const play = (c: typeof chapter, seed: number): ReturnType<typeof playChain> => 
 };
 
 describe('the determinism proof: exp-windwaker plays to exactly the event log of ffx2-valefor-besaid', () => {
+  // The engine reads its abilities and its enemies' AI from the registries the app fills at start (`playChain`: "the caller has run `registerBattleContent`"). Without them Valefor is the engine's stub: on seed 1 she takes
+  // 45 no-op actions and never harms the party (93 turns), and "the same log as chapter 24" would be a proof about two stubs. The review of 2026-11-02 (MAJ-1) found this file did not register.
+  beforeAll(async () => {
+    await registerBattleContent();
+  });
+
+  it('is played with the real Valefor, not the engine stub: the content is registered and she acts about a dozen times, not 45', async () => {
+    expect(contentReport().abilitiesFfx2, 'the FFX-2 abilities are registered').toBeGreaterThan(0);
+    const mine = await play(chapter, 1);
+    expect(mine.outcome).toBe('victory');
+    expect(mine.enemyActions, 'the real AI acts a handful of times (12 on seed 1); the stub 45').toBeGreaterThan(5);
+    expect(mine.enemyActions).toBeLessThan(30);
+    expect(mine.engineTurns, 'the real fight is 53 turns on seed 1; the stub 93').toBeLessThan(80);
+  }, 240_000);
+
   for (const seed of [1, 2]) {
     it(`seed ${seed}: the same outcome, the same engine turns and the same event log (one digest), through the app's own path`, async () => {
       const mine = await play(chapter, seed);
