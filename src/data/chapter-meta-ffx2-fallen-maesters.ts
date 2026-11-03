@@ -33,7 +33,8 @@ export const FALLEN_MAESTERS_META: ChapterMeta = {
   ],
   // Short enough for the prep card's tip box (about five lines at 1600 x 900): the guide card in battle carries the rest.
   tip:
-    'Each floor is a fresh fight, and the glyph between them mends you. Concherer’s shell breaks on one hit of about twenty thousand; ' +
+    'Each floor is a fresh fight, and the glyph between them mends you. Concherer’s shell breaks on one hit of about twenty thousand, ' +
+    'which only Paine’s Break Damage Limit reaches: Change her across The End’s red and green gates and back to the Dark Knight first. ' +
     'Chac turns girls to stone, and a blow on stone destroys them.',
   snapshots: [
     { image: 'backdrops/via-infinito.png', caption: 'the Great Cloisters' },

@@ -226,16 +226,28 @@ describe('Concherer [RE §7.4, §8]', () => {
     expect(unit(engine, boss).stats.def).toBe(x2Concherer.stats.def);
   });
 
-  it('with the shell broken the same Attack hits a girl the way it hit before (no change to the party), and Concherer stands with DEF 1', () => {
-    const f = forced(2);
-    const engine = openFloor(2, 1, { group: f.group });
-    const boss = unit(engine, bossOf(2));
-    (boss.aiMemory ??= {})['conchererShellBroken'] = 1;
-    boss.stats = { ...boss.stats, def: 1, mdef: 1 };
-    f.forced.queue.push(move('x2-concherer-attack', ['paine']));
-    expect(playUntilBossActed(engine, bossOf(2), 1)).toBe(true);
-    const next = f.forced.queue.length;
-    expect(next).toBe(0);
+  it('with the shell broken the same Attack hits a girl the way it hit before (the party is untouched by the break), and Concherer stands with DEF 1 afterwards', () => {
+    // This party's Luck (Rabite's Foot) beats Concherer's accuracy every time (the Attack misses; probed over 12 seeds), so a girl with no Luck and no Evasion takes it: otherwise "the same hit" is two empty lists.
+    const attackOnPaine = (broken: boolean): { hits: number[]; def: number; mdef: number } => {
+      const f = forced(2);
+      const engine = openFloor(2, 1, { group: f.group });
+      const paine = unit(engine, 'paine');
+      paine.stats = { ...paine.stats, luck: 0, eva: 0 };
+      const boss = unit(engine, bossOf(2));
+      if (broken) {
+        (boss.aiMemory ??= {})['conchererShellBroken'] = 1;
+        boss.stats = { ...boss.stats, def: 1, mdef: 1 };
+      }
+      f.forced.queue.push(move('x2-concherer-attack', ['paine']));
+      expect(playUntilBossActed(engine, bossOf(2), 1)).toBe(true);
+      return { hits: damageOn(engine, 'paine').map((e) => e.amount ?? 0), def: boss.stats.def, mdef: boss.stats.mdef };
+    };
+    const whole = attackOnPaine(false);
+    const cracked = attackOnPaine(true);
+    expect(whole.hits.length, 'the Attack lands on a girl with no Luck and no Evasion (otherwise this test compares two empty lists)').toBeGreaterThan(0);
+    expect(cracked.hits).toEqual(whole.hits);
+    expect([cracked.def, cracked.mdef]).toEqual([1, 1]);
+    expect([whole.def, whole.mdef]).toEqual([x2Concherer.stats.def, x2Concherer.stats.mdef]);
   });
 });
 

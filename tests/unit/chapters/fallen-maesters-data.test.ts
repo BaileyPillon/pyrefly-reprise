@@ -147,10 +147,12 @@ describe('the ailments and the special words [RE §4.2, §7.8]', () => {
       expect(word(enemy) & SPECIAL_NO_INTERRUPT, enemy.id).not.toBe(0);
       expect(enemy.immunityFlags, enemy.id).toContain('immune-to-delay');
       expect(resisted(enemy, 'action-cancel'), enemy.id).toBe(255);
+      expect(resisted(enemy, 'delay-effect'), enemy.id).toBe(255);
     }
     expect(word(x2Chac) & (SPECIAL_NO_ATB_DAMAGE | SPECIAL_NO_INTERRUPT)).toBe(0);
     expect(x2Chac.immunityFlags).not.toContain('immune-to-delay');
     expect(resisted(x2Chac, 'action-cancel')).toBe(0);
+    expect(resisted(x2Chac, 'delay-effect'), 'Chac carries no delay-effect entry: a dead field there would read as protection she does not have').toBe(0);
     for (const enemy of Object.values(ENEMIES)) expect(enemy.immunityFlags, enemy.id).toContain('immune-to-percentage-damage'); // bit 0
   });
 });
@@ -188,6 +190,20 @@ describe('the moves against the appendix [RE §8]', () => {
     expect(r['x2-chac-heavens-cataract']!.flagsDamage & 0x80).toBe(0x80);
     expect([r['x2-concherer-attack']!.shatter, r['x2-chac-attack']!.shatter, r['x2-chac-heavens-cataract']!.shatter]).toEqual([100, 100, 100]);
     expect(r['x2-aranea-attack']!.shatter).toBe(10);
+  });
+
+  it('the ability definitions agree with their rows where the engine reads the definition and not the record: the damage type follows the row\'s damage flags (Spider Bite is "other"), Ultima is not reflectable and Flare is, Heaven\'s Cataract drops each of its five stages by ten', () => {
+    const ability = (id: string) => x2FallenMaestersAbilities.find((a) => a.id === id)!;
+    for (const [id, row] of Object.entries(FIXTURE.moves)) {
+      // Rows with no damage at all (a status, a buff, the presentation rows) are "other" whatever their flags say; the others follow bit 1 (physical) and bit 2 (magical) of the row's damage flags.
+      if (row.power === 0 && row.damageClass === 0) continue;
+      const expected = row.flagsDamage & 1 ? 'physical' : row.flagsDamage & 2 ? 'magical' : 'other';
+      expect(ability(id).damageType, `${id} (damage flags 0x${row.flagsDamage.toString(16)})`).toBe(expected);
+    }
+    expect(ability('x2-aranea-spider-bite').damageType).toBe('other');
+    expect(ability('x2-black-elemental-ultima').flags ?? []).not.toContain('reflectable');
+    expect(ability('x2-black-elemental-flare').flags ?? []).toContain('reflectable');
+    expect((ability('x2-chac-heavens-cataract').statusEffects ?? []).map((e) => [e.status, e.stacks])).toEqual([['def-down', 10], ['mdef-down', 10], ['accu-down', 10], ['eva-down', 10], ['luck-down', 10]]);
   });
 
   it('the abilities are the data catalog\'s (ALL_BOSS_ABILITIES) and none is missing a command record', () => {
@@ -250,6 +266,32 @@ describe('the party (FM3 a)', () => {
     expect(fallenMaestersBuild).not.toBe(viaInfinitoBuild);
     expect(fallenMaestersBuild.members[0]).not.toBe(viaInfinitoBuild.members[0]);
     expect(fallenMaestersBuild.members.map((m) => m.level)).toEqual([99, 99, 99]);
+  });
+});
+
+describe('the player-facing words tell the truth about the kit (review of ch-maesters, major 1)', () => {
+  it('nobody starts with a gate crossed, so Paine\'s Break Damage Limit (The End\'s red and green gates) is not on at the start: the walk is pinned in fallen-maesters-walk.test.ts', () => {
+    const paine = fallenMaestersBuild.members.find((m) => m.id === 'paine')!;
+    expect(paine.garmentGrid).toMatchObject({ id: 'the-end', passedGates: [] });
+    for (const m of fallenMaestersBuild.members) expect(m.garmentGrid.passedGates, m.id).toEqual([]);
+  });
+
+  it('the prep tip and the Concherer guide line say how a 20,000 hit is made (Paine\'s Break Damage Limit across The End\'s red and green gates), not only that one is needed', () => {
+    expect(FALLEN_MAESTERS_META.tip).toMatch(/twenty thousand/);
+    expect(FALLEN_MAESTERS_META.tip).toMatch(/Break Damage Limit/);
+    expect(FALLEN_MAESTERS_META.tip).toMatch(/The End/);
+    expect(FALLEN_MAESTERS_META.tip).toMatch(/red and green/);
+    expect(x2Concherer.sensorText).toMatch(/twenty thousand/);
+    expect(x2Concherer.sensorText).toMatch(/Paine/);
+    expect(x2Concherer.sensorText).toMatch(/limit/);
+  });
+
+  it('Chac\'s guide line promises no slow-down: the Lv 99 three has learned no Delay move (Warrior\'s Delay Attack and Delay Buster, the Trainer\'s) and no girl has the Warrior learned, so a Change to it teaches nothing', () => {
+    expect(x2Chac.sensorText).not.toMatch(/slow/i);
+    const learned = fallenMaestersBuild.members.flatMap((m) => Object.values(m.abilitiesLearned ?? {}).flatMap((l) => l.learned));
+    expect(learned.length).toBeGreaterThan(0);
+    expect(learned.filter((id) => /delay/i.test(id))).toEqual([]);
+    for (const m of fallenMaestersBuild.members) expect(Object.keys(m.abilitiesLearned ?? {}), m.id).not.toContain('warrior');
   });
 });
 

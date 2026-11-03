@@ -69,6 +69,13 @@ describe('house style on paper', () => {
     }
   });
 
+  it('the Megaton Press callout says WHAT breaks the shell (the limit), not only that a big hit does: the party starts with the Break Damage Limit off (review of ch-maesters, major 1)', () => {
+    const text = saysOf(S.midScripts['first-megaton-press']!).map((s) => s.text).join(' ');
+    expect(text).toMatch(/shell/i);
+    expect(text).toMatch(/limit/i);
+    expect(text).not.toMatch(/one big hit/i);
+  });
+
   it('keeps the spoken lines of the girls inside the 60-character line (narration may run to the box\'s two lines)', () => {
     for (const [name, script] of allScripts()) {
       for (const s of saysOf(script)) {

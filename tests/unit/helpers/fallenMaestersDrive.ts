@@ -15,6 +15,7 @@ import { fallenMaestersGroups } from '../../../src/data/ffx2/enemies/fallen-maes
 import { FALLEN_MAESTERS_BODY_IDS } from '../../../src/data/fallen-maesters-ids.ts';
 import { ffx2Options } from './ffx2ChapterDrive.ts';
 import { logOf, makeInvincible, nextInput, topUp, type AngraEv } from './angraMainyuDrive.ts';
+import { walkChange } from './fallenMaestersWalk.ts';
 
 export { logOf, makeInvincible, nextInput, topUp, type AngraEv };
 
@@ -151,7 +152,7 @@ export function outcomeOf(engine: FFX2Engine): string | undefined {
 // Lines (test inputs standing in for a player)
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-export type LineName = 'defend' | 'darkness' | 'curtains' | 'charon' | 'remedy' | 'remedy-charon';
+export type LineName = 'defend' | 'darkness' | 'curtains' | 'charon' | 'paine-charon' | 'walk' | 'chain' | 'remedy' | 'remedy-charon';
 
 /** A girl who is down and can be raised: not one a petrified blow destroyed (Death and Eject), which no item brings back. */
 function fallenGirl(engine: FFX2Engine): FFX2Combatant | undefined {
@@ -174,6 +175,9 @@ export const LINES: Record<LineName, (boss: string) => Turn> = {
   darkness: (boss) => (d, engine) => mend(d, engine) ?? knight(d, boss, DARKNESS),
   curtains: (boss) => curtainsLine(boss, DARKNESS),
   charon: (boss) => curtainsLine(boss, CHARON),
+  'paine-charon': (boss) => curtainsLine(boss, (actor) => (actor === 'paine' ? CHARON : DARKNESS)),
+  walk: (boss) => walkLine(boss),
+  chain: (boss) => chainLine(boss),
   remedy: (boss) => curtainsLine(boss, DARKNESS, true),
   'remedy-charon': (boss) => curtainsLine(boss, CHARON, true),
 };
@@ -182,7 +186,7 @@ const DARKNESS = 'x2-dark-knight-darkness';
 const CHARON = 'x2-dark-knight-charon';
 
 /** The curtains line: Rikku's first two turns are a Light Curtain and a Lunar Curtain on the party (a fallen girl is raised first), then mend; the knights cast `spell`. */
-function curtainsLine(boss: string, spell: string, cureStone = false): Turn {
+function curtainsLine(boss: string, spell: string | ((actor: string) => string), cureStone = false): Turn {
   let rikkuTurns = 0;
   return (d, engine) => {
     if (cureStone && d.actorId === 'rikku') {
@@ -201,7 +205,36 @@ function curtainsLine(boss: string, spell: string, cureStone = false): Turn {
       if (rikkuTurns === 1) return rowOf(d, 'item', 'x2-light-curtain', []) ?? null;
       if (rikkuTurns === 2) return rowOf(d, 'item', 'x2-lunar-curtain', []) ?? null;
     }
-    return mend(d, engine) ?? knight(d, boss, spell);
+    return mend(d, engine) ?? knight(d, boss, typeof spell === 'string' ? spell : spell(d.actorId));
+  };
+}
+
+/**
+ * The walk line: what a player does with the build as it is. Paine spends her first turns on Changes along The End's grid (the red and the green gate, then home to the Dark Knight; the menu's own rows), Rikku and
+ * Yuna play the curtains line meanwhile (Rikku's Light and Lunar Curtain, then mending; Yuna's Darkness), and Paine casts Charon once she wears the Dark Knight with the limit broken. Nothing is written to the girl.
+ */
+function walkLine(boss: string): Turn {
+  const rest = curtainsLine(boss, (actor) => (actor === 'paine' ? CHARON : DARKNESS));
+  return (d, engine) => (d.actorId === 'paine' ? walkChange(d, engine, 'paine', ['red', 'green']) : null) ?? rest(d, engine);
+}
+
+/**
+ * The chain line: the shape of the sourced answer to Chac (a chain or a delay-lock from the first second: `research/ffx2-combat-core.md` §1.7, the Steam and Split reports it cites). Rikku's first turn is the Change to the Gunner (one link from the
+ * Alchemist), then she mends (a Remedy on a girl turned to stone, a Megalixir under half) or fires Trigger Happy; the knights Attack to keep the window open. It is what the kit as given can do toward a chain, and it is a measurement, not a recommendation.
+ */
+function chainLine(boss: string): Turn {
+  return (d, engine) => {
+    if (d.actorId !== 'rikku') return attackOf(d, boss);
+    if (unit(engine, 'rikku').dresspheres?.current === 'alchemist') {
+      const change = d.commands.find((c) => c.enabled && c.command.kind === 'spherechange' && c.command.extra.toDressphere === 'gunner');
+      if (change) return change.command as Command;
+    }
+    const stone = girlsOf(engine).find((g) => g.alive && g.statuses['petrify'] !== undefined);
+    const cure = stone ? rowOf(d, 'item', 'x2-remedy', [stone.id]) : null;
+    if (cure) return cure;
+    const low = lowestFraction(engine);
+    const mend = low && low.hp < low.stats.maxHp * 0.5 ? rowOf(d, 'item', 'x2-megalixir', []) : null;
+    return mend ?? rowOf(d, 'ability', 'x2-gunner-trigger-happy', [boss]) ?? attackOf(d, boss);
   };
 }
 

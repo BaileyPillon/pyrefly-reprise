@@ -9,8 +9,11 @@
  * 1. **Floor 20 (Aranea) is easy**: the Lv 99 party wins every seed on the Darkness line (the preflight's R2: Lv 99 against a Lv 52 fiend).
  * 2. **Floor 40 (the Black Elemental) is nearly as easy** in this engine: it has 9,999 HP, and its Reflect is data only (no redirect is built), so the Dark Knights' Darkness lands; its Ultima is the only way to lose.
  * 3. **Floor 60 (Concherer) is decided by the shell**: Darkness never reaches the 10,000 a result the shell needs (it loses), a Break-Damage-Limit Charon does (it wins), so the floor is the puzzle of getting a girl to break
- *    the limit (The End's gates), which the build does not start with.
- * 4. **Floor 80 (Chac) is not won by either simple line** and a party that only defends loses on every floor from 60 on; the fight ends (a victory or a defeat), never in a stalemate.
+ *    the limit (The End's gates), which the build does not start with. **The `walk` line is the proof that a player can** (the review of `ch-maesters`, major 1): Paine spends four turns on the Changes the menu offers, then casts Charon,
+ *    and the floor is won on about six seeds in ten with nothing written to the party (`fallen-maesters-walk.test.ts` pins the walk itself). The `breakDamageLimit` rig below is a shortcut for the other lines, not the way a player gets there.
+ * 4. **Floor 80 (Chac) is not won by any line measured**, simple, walking or chaining (Rikku a Gunner on Trigger Happy, the knights attacking): she acts several times before the first girl, turns the party to stone and shatters it in
+ *    seconds of game time. A party that only defends loses on every floor from 60 on; the fight ends (a victory or a defeat), never in a stalemate. The sourced answers (a chain or a delay-lock from the first second) need a kit
+ *    and an initiative this build does not give: it stays a hard optional fight, disclosed in the handoff and Bailey's call.
  */
 import { describe, expect, it } from 'vitest';
 
@@ -86,6 +89,15 @@ describe('floor 60: Concherer is decided by the shell', () => {
     expect(c.unresolved).toBe(0);
   });
 
+  it('a PLAYER can win it with the build as given: Paine walks the grid of The End (four Changes, rows the menu offers), then casts Charon; the shell breaks in most fights and the floor is won on a good share of the seeds', () => {
+    const c = cell(2, 'walk');
+    show('floor 60 Concherer, walk line (nothing written to the party)', c);
+    expect(c.unresolved).toBe(0);
+    expect(c.shell).toBeGreaterThanOrEqual(Math.ceil(SEEDS * 0.6));
+    expect(c.wins).toBeGreaterThanOrEqual(Math.ceil(SEEDS * 0.3));
+    expect(c.wins, 'the walk is worth taking: it beats the line that never walks').toBeGreaterThan(cell(2, 'darkness').wins);
+  }, 120_000);
+
   it('without it the same Charon line (9,999 a hit) never breaks the shell and loses', () => {
     const c = cell(2, 'charon');
     show('floor 60 Concherer, charon line without it', c);
@@ -95,8 +107,16 @@ describe('floor 60: Concherer is decided by the shell', () => {
 });
 
 describe('floor 80: Chac is not won by a simple line', () => {
-  it('the Darkness and Charon lines lose, in seconds of game time, and the fight always ends', () => {
-    for (const line of ['darkness', 'charon'] as LineName[]) {
+  it('nor by the chain line, the shape of the sourced answer (Rikku a Gunner on Trigger Happy, the knights attacking): Chac acts first and often, and the party is gone in well under two minutes', () => {
+    const c = cell(3, 'chain');
+    show('floor 80 Chac, chain line', c);
+    expect(c.unresolved).toBe(0);
+    expect(c.wins).toBe(0);
+    expect(c.minutes / SEEDS).toBeLessThan(2);
+  }, 120_000);
+
+  it('the Darkness, Charon and walk lines lose, in seconds of game time, and the fight always ends', () => {
+    for (const line of ['darkness', 'charon', 'walk'] as LineName[]) {
       const c = cell(3, line, { breakDamageLimit: line === 'charon' });
       show(`floor 80 Chac, ${line} line`, c);
       expect(c.unresolved, line).toBe(0);

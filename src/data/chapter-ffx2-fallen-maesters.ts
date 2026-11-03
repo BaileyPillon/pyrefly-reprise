@@ -58,7 +58,7 @@ export const FFX2_FALLEN_MAESTERS: Chapter = {
   sensorTexts: {
     [X2_ARANEA_ID]: 'Four bites, then a cloud that poisons, stops and saps. Be ready for every fifth.',
     [X2_BLACK_ELEMENTAL_ID]: 'Almost no HP, almost no way in, and a gauge that never stops filling. End it before its Magic climbs.',
-    [X2_CONCHERER_ID]: 'One crushing blow in four while the shell holds. A single hit of about twenty thousand cracks it.',
-    [X2_CHAC_ID]: 'Stone, then shatter. She turns a girl to rock, and a blow on the rock destroys her. Slow her down.',
+    [X2_CONCHERER_ID]: 'One crushing blow in four while the shell holds. A single hit of about twenty thousand cracks it: only Paine, with the limit broken.',
+    [X2_CHAC_ID]: 'Stone, then shatter. She is far faster than the three of you, turns a girl to rock, and a blow on the rock destroys her.',
   },
 };

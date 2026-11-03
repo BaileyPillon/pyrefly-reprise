@@ -184,6 +184,10 @@ describe('the Black Elemental: the mix [RE §7.3 step 4]', () => {
     expect(run([1, 0])).toBe(A.ultima);
     expect(run([1, 1, 0])).toBe(A.flare);
     expect(run([1, 2, 0])).toBe(A.flare);
+    // The second modulus is 2, not 3: the values 0 and 1 read the same under both, so 2, 3 and 4 are what tell them apart (2 mod 2 = 0 is Ultima, 3 mod 2 = 1 is Flare, 4 mod 2 = 0 is Ultima; mod 3 each would be another move).
+    expect(run([0, 2])).toBe(A.ultima);
+    expect(run([0, 3, 0])).toBe(A.flare);
+    expect(run([0, 4])).toBe(A.ultima);
     // 6 combinations of the draws, weighted by the branch (mod 2): Ultima 1/2 x 1/2 + 1/2 x 1/3 = 5/12.
     expect((1 / 2) * (1 / 2) + (1 / 2) * (1 / 3)).toBeCloseTo(5 / 12, 10);
   });
@@ -195,6 +199,26 @@ describe('the Black Elemental: the mix [RE §7.3 step 4]', () => {
     const c = b.poll(0, 0);
     expect([b.id(c), b.targets(c)]).toEqual([A.berserk, ['paine']]); // one candidate: no search draw
     expect(b.rng.calls).toEqual([ROLL_RANGE]);
+  });
+});
+
+describe('the Black Elemental: who Flare and the stand-in scene are aimed by [RE §7.3, §7.7]', () => {
+  it('Flare is aimed UNIFORMLY (the search value mod 3 picks the girl in slot order), not near-weighted: at these values the two searches name different girls', () => {
+    for (const [raw, girl] of [[0, 'yuna'], [1, 'rikku'], [2, 'paine'], [4, 'rikku'], [5, 'paine']] as const) {
+      const b = blackElemental();
+      expect(b.targets(b.poll(1, 1, raw)), `raw ${raw}`).toEqual([girl]);
+    }
+    expect(nearPick(1), 'at raw 1 the near-weighted search names Yuna, the uniform one Rikku: this is what separates them').toBe('yuna');
+  });
+
+  it('[inferred] the stand-in scene is pinned by VALUE (Trema scene positions), so moving a girl is a decision and not a silent change of every near-weighted pick: Yuna 44.6 percent, Rikku and Paine 27.7 each', () => {
+    expect(MAESTERS_SCENE).toEqual({ boss: { x: -25, z: 0 }, girls: [{ x: 30, z: 0 }, { x: 25, z: 18 }, { x: 25, z: -18 }] });
+    const w = sceneWeights(MAESTERS_SCENE, [0, 1, 2]);
+    const total = w.reduce((a, b) => a + b, 0);
+    expect(w).toEqual([575, 357, 357]);
+    expect(w.map((x) => Math.round((x / total) * 1000) / 10)).toEqual([44.6, 27.7, 27.7]);
+    // The Attack's pick follows the table (a running sum reached by r = raw mod 1,289, inclusive), at the edges of each girl's share.
+    expect([nearPick(0), nearPick(575), nearPick(576), nearPick(932), nearPick(933), nearPick(1288)]).toEqual(['yuna', 'yuna', 'rikku', 'rikku', 'paine', 'paine']);
   });
 });
 

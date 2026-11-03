@@ -147,7 +147,7 @@ const MID_SCRIPTS: Record<string, StoryScript> = {
   // Concherer's first Megaton Press: one blow that ignores armour.
   [FIRST_MEGATON_PRESS]: [
     say('rikku-x2', 'That one ignores armor!', { auto: 1200 }),
-    say('paine', 'Crack the shell. One big hit.', { auto: 1300 }),
+    say('paine', 'Crack the shell. Break the limit first.', { auto: 1500 }), // ours: the how (Break Damage Limit, The End's gates; the review of ch-maesters, major 1): the party does not start with the limit broken
   ],
   // Chac's first Stony Glare: a girl turns to stone, and a blow on stone destroys her.
   [FIRST_STONY_GLARE]: [

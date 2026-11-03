@@ -15,7 +15,7 @@
  * **Escape is off** on all four (FM8: as the other story bosses; the game's own answer, Q3, is unread). The Oversoul versions are not built (FM2 (a)).
  *
  * **Art: none exists yet.** The four paintings are on the art needs list (`docs/handoff/ch-maesters.md`); until they are installed the presenter draws its fallback for the four sprite keys.
- * **Sizes** (the model scale before each monster in its formation: Aranea 125, Black Elemental 200, Concherer 115, Chac 150 percent [RE §5.1]) are staging, in `src/scenes/cloister-100.ts`.
+ * **Sizes** (the model scale before each monster in its formation: Aranea 125, Black Elemental 200, Concherer 115, Chac 150 percent [RE §5.1]) are NOT staged yet: `src/scenes/cloister-100.ts` is untouched and every fiend stands at the stage's default boss height until the stature read (RE Q14) and the paintings exist.
  */
 
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
@@ -231,7 +231,7 @@ export const x2Concherer: EnemyDef = {
   },
   abilityIds: [CONCHERER_ATTACK_ID, CONCHERER_MEGATON_PRESS_ID, CONCHERER_GUNK_ID, CONCHERER_BROKEN_SHELL_ID],
   flags: { isBoss: true },
-  sensorText: 'One crushing blow in four while the shell holds. A single hit of about twenty thousand cracks it.',
+  sensorText: 'One crushing blow in four while the shell holds. A single hit of about twenty thousand cracks it: only Paine, with the limit broken.',
   scanText: 'A hermit fiend with a shell nothing small can crack. Break it, and it only claws.',
 };
 
@@ -282,7 +282,7 @@ export const x2Chac: EnemyDef = {
   },
   abilityIds: [CHAC_ATTACK_ID, CHAC_STONY_GLARE_ID, CHAC_HEAVENS_CATARACT_ID],
   flags: { isBoss: true },
-  sensorText: 'Stone, then shatter. She turns a girl to rock, and a blow on the rock destroys her. Slow her down.',
+  sensorText: 'Stone, then shatter. She is far faster than the three of you, turns a girl to rock, and a blow on the rock destroys her.',
   scanText: 'A basilisk of the last floors. Her glare turns a girl to stone, and a stone girl does not survive a second blow.',
 };
 
