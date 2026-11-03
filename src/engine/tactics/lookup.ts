@@ -49,6 +49,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'biran-yenke': 'ffx', // the hidden Biran and Yenke chapter (FFX only)
   'mirror-aeons': 'ffx', // the hidden Mirror Aeons chapter (FFX only)
   'last-summoning': 'ffx', // the hidden Last Summoning chapter (FFX only, 2026-10-15)
+  'spectral-keeper': 'ffx', // the hidden Spectral Keeper chapter (FFX only, 2026-11-02)
 };
 
 /** `state.flags` key prefix of an aeon lock's reason (`battle/ffx/aeon-duel.ts#AEON_LOCK_REASON_PREFIX`, restated so this module stays out of the battle layer's import graph; the Last Summoning's guide test pins the copy). */

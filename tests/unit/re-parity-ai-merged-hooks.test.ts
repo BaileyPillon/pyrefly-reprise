@@ -67,13 +67,16 @@ const LANE_C = [
 const poke = (id: string, targeting: AbilityDef['targeting'] = 'single-enemy'): AbilityDef =>
   exactHit(id, 100, { targeting, flags: ['always-break-damage-limit', 'ignores-armored', 'long-range'] });
 
+/** Scripts that register hooks but not `onHit`: the Spectral Keeper's Circles hook `onTargeted` only (the glyph lighting, RE 5.2; they can never be hit). */
+const HOOKS_WITHOUT_ON_HIT: ReadonlySet<string> = new Set(['spectral-circle']);
+
 /** The shipped enemies whose script listens to `onHit`: [group id, enemy id, script id]. */
 function hookedEnemies(): Array<[string, string, string]> {
   const out: Array<[string, string, string]> = [];
   for (const [groupId, group] of Object.entries(ENEMY_GROUPS_BY_ID)) {
     for (const enemy of group.enemies) {
       const script = enemy.forms[0]?.aiScriptId ?? enemy.aiScriptId;
-      if (script !== undefined && registeredHookScriptIds().includes(script)) out.push([groupId, enemy.id, script]);
+      if (script !== undefined && !HOOKS_WITHOUT_ON_HIT.has(script) && registeredHookScriptIds().includes(script)) out.push([groupId, enemy.id, script]);
     }
   }
   return out;

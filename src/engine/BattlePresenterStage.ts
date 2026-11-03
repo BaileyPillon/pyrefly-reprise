@@ -965,7 +965,7 @@ export class PaintedStage implements BattleStage {
       (id) => {
         const staged = this.actors.get(id);
         if (!staged) return undefined;
-        this.partRings.setAlive(id, this.lastState?.combatants[id]?.alive !== false);
+        this.partRings.sync(id, this.lastState); // alive, and (a floor ring with a `litFlag`: the Keeper's glyphs) lit
         return this.parentPose(staged);
       },
       this.opts.camera,

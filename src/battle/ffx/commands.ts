@@ -23,6 +23,7 @@ import { aeonSummonable } from './adapt/aeon-party.ts';
 import { triggerHandler } from './ai/index.ts';
 import { aeonMenuRows } from './aeon-commands.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
+import { moveRows } from './platforms.ts'; // the Spectral Keeper's Move (a row only in the formation that runs the glyph platforms)
 
 /**
  * The command a **menu marker** row must actually submit.
@@ -267,6 +268,7 @@ function menuRows(ctx: Ctx, user: FFXCombatant): AvailableCommand[] {
   const defendDef = abilityOf(ctx, DEFEND_ABILITY_ID);
   // A formation that switched Defend off (Isaaru's aeon contest; `formation-flags.ts`) has no Defend row for the party or an aeon.
   if (defendDef && !defendTakenFrom(ctx, user)) rows.push(rowFor(ctx, user, defendDef, { kind: 'defend', targets: [] }));
+  rows.push(...moveRows(ctx, user)); // the glyph platforms' Move: no row outside the Spectral Keeper's formation
 
   // Switch: the incoming member takes the turn happening right now, so the turn
   // is not consumed by the swap [ffx-combat-core §1.7].

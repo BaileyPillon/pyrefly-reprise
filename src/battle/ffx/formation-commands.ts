@@ -50,6 +50,8 @@ import { type Ctx, abilityOf } from './state.ts';
 import { AEON_SLOT } from './adapt/slots.ts';
 import { aeonRosterRemoved, applyRosterRemoval, rosterEmptied } from './roster-removal.ts';
 
+export { applyPlatformSetup, markFirstStrike } from './platforms.ts'; // the Spectral Keeper's set-up calls reach `setup.ts` through this module (it is at the house 400 lines)
+
 /** The one switch. `false` makes {@link applyFormationCommandDisables} a no-op, so no battle sets a flag and every menu is as before. */
 export const FORMATION_COMMAND_DISABLES = true;
 
@@ -77,6 +79,8 @@ export const GAME_COMMAND = {
   weapon: 0x3004,
   armor: 0x3005,
   flee: 0x3018,
+  guard: 0x3022, // Auron's Guard and Sentinel are commands of their own in the game (the Spectral Keeper's formation switches both off for everyone)
+  sentinel: 0x3023,
   skill: 0x3113,
   special: 0x3114,
   blackMagic: 0x3115,
@@ -155,6 +159,8 @@ export function menuCommandOf(ctx: Ctx, command: Command): number | undefined {
     case 'escape':
       return command.extra?.mode === 'party' ? GAME_COMMAND.flee : GAME_COMMAND.escape;
     case 'ability': {
+      if (command.id === 'guard') return GAME_COMMAND.guard; // ids 0x3022 and 0x3023: both are `special` rows, so the category would grey every Special row
+      if (command.id === 'sentinel') return GAME_COMMAND.sentinel;
       const category = abilityOf(ctx, command.id)?.category;
       return category === undefined ? undefined : COMMAND_OF_CATEGORY[category];
     }

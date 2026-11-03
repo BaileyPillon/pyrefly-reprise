@@ -7,7 +7,7 @@
  * [ffx-combat-core §12.2].
  */
 
-import type { Command, FFXCombatant } from '../../common/types.ts';
+import type { Command, FFXCombatant, TriggerCommand } from '../../common/types.ts';
 import { type Ctx, isAlive, livingEnemies, livingFriendlies, tryActor } from '../state.ts';
 import { type AiContext, aiContextFor, getAiScript } from './types.ts';
 import { consumeSeymourTalk, seymourTalkAvailable, seymourTalkOffered } from './seymour-flux.ts';
@@ -47,6 +47,8 @@ import './sin-scripts.ts';
 import './sinspawn-gui.ts'; // the hidden Sinspawn Gui chapter (FFX only): the body, the head and the arms
 import './biran-yenke.ts'; // the hidden Biran and Yenke chapter (FFX only): the two Ronso
 import './dark-aeons.ts'; // the hidden Mirror Aeons chapter (FFX only): Dark Yojimbo, the three Dark Magus Sisters and the dog
+import './spectral-keeper.ts'; // the hidden Spectral Keeper chapter (FFX only): the Keeper and its Circles (the glyph mines)
+import { freeCircleIds, moveTo, platformOf, ringActive } from '../platforms.ts';
 
 export * from './types.ts';
 export { consumeSeymourTalk, seymourTalkAvailable, fluxPhase } from './seymour-flux.ts';
@@ -178,7 +180,7 @@ export interface TriggerHandler {
   available: (ctx: Ctx, user: FFXCombatant) => boolean;
   /** Is the command in this actor's list at all in this fight? Absent: always (the airship orders). Talk only exists where a formation script adds it ({@link talkOffered}); read under `MENU_DRAW_PARITY`. */
   offered?: (ctx: Ctx, user: FFXCombatant) => boolean;
-  apply: (ctx: Ctx, user: FFXCombatant) => boolean;
+  apply: (ctx: Ctx, user: FFXCombatant, command?: TriggerCommand) => boolean;
   /** Why the menu row is greyed when `available` is false (a function when the reason depends on the state). */
   disabledReason: string | ((ctx: Ctx, user: FFXCombatant) => string);
   /** What the banner says when a submitted trigger is refused. */
@@ -212,6 +214,14 @@ const TRIGGERS: Readonly<Record<string, TriggerHandler>> = {
     // than spending a turn in silence, which reads as a broken button.
     disabledReason: (ctx) => talkDisabledReason(ctx),
     rejectedMessage: (user) => `${user.name} has nothing left to say`,
+  },
+  /** **Move** (the hidden Spectral Keeper chapter, FFX only): the trigger carries the Circle it is aimed at; see `platforms.ts#moveTo`. */
+  move: {
+    available: (ctx, user) => freeCircleIds(ctx).length > 0 && platformOf(ctx, user.id) !== undefined,
+    offered: (ctx) => ringActive(ctx),
+    apply: (ctx, user, command) => moveTo(ctx, user, command),
+    disabledReason: 'No free glyph',
+    rejectedMessage: (user) => `${user.name} cannot step there`,
   },
   /**
    * **Evrae, on the *Fahrenheit*** — the three orders to Cid
