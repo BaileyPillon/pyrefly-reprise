@@ -62,8 +62,9 @@ describe('Chapter XII plays the F1 HUD again and holds the three pieces it held 
   it('no other chapter holds hud, and the other chapters\' hold sets are the ones release 73 carried', () => {
     for (const [id, rows] of Object.entries(PIECE_HOLDS)) expect(Object.prototype.hasOwnProperty.call(rows, 'hud'), id).toBe(false);
     expect(Object.keys(PIECE_HOLDS['yojimbo-cavern']!)).toEqual(['breath', 'cam', 'moments']);
-    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(18);
-    expect(Object.keys(TREATED_CHAPTERS)).not.toContain('sin-fins-core');
+    expect(Object.keys(TREATED_CHAPTERS)).toHaveLength(19); // eighteen in release 73; r74-fins added Chapter XVII, the nineteenth (this lane's own base had eighteen and `not.toContain('sin-fins-core')`; the r74 integration)
+    expect(Object.keys(TREATED_CHAPTERS)).toContain('sin-fins-core');
+    expect(Object.prototype.hasOwnProperty.call(PIECE_HOLDS, 'sin-fins-core') ? Object.keys(PIECE_HOLDS['sin-fins-core']!) : []).not.toContain('hud');
   });
 });
 
