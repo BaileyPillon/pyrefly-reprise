@@ -21,7 +21,9 @@
  *   --port     the preview's port (required with --serve; the runners use 5400 to 5990)
  *
  * Before the build it checks that the art manifest is current (`tools/gen/manifest.mjs --check`; the deploy regenerates it, so a stale one would ship different art). After it runs the
- * checks the deploy runs on its own output: index.html is made for the host's base (`checkBuildBase`) and `public/fx` shipped intact (`tools/fx-assets.mjs verify`). It then
+ * checks the deploy runs on its own output: index.html is made for the host's base (`checkBuildBase`), `public/fx` shipped intact (`tools/fx-assets.mjs verify`) and the hidden 3D Bahamut's
+ * models shipped whole (`tools/yrp-models-verify.mjs`, r74-int review MINOR-3: the deploy refuses a build without them, so a candidate built without them would be reviewed on grey capsules and
+ * published with the models). The hidden Wind Waker chapter's models are enforced by the build itself (`tools/vite-ww-models.mjs` fires for any build with `PYREFLY_RELEASE` set, which this one has). It then
  * prints the bundle: **record that name as `build.bundle` in the review report**, so `critic-clear` can compare it with the deployed one.
  *
  * The runner scripts (`critic/runner/focused.js`, `deep.js`, `release.js`) and the runner's self-test call it instead of `vite build`; `tests/unit/candidate-build.test.ts` holds that.
@@ -134,6 +136,17 @@ function runTool(root, rel, toolArgs) {
   return spawnSync(process.execPath, [realpathSync(script), ...toolArgs], { cwd: root, encoding: 'utf8' });
 }
 
+/**
+ * The hidden 3D Bahamut's models in a built candidate (r74-int review MINOR-3): the same check the deploy runs on its build (`tools/deploy-pages.mjs`), so a candidate cut from a tree without `public/models-exp/yrp`
+ * (a clean worktree has none: the folder is gitignored) is refused here instead of being reviewed on capsules. `PYREFLY_YRP_MODELS=capsules` in the shell passes it with the tool's own warning, as it does the deploy.
+ * A tree that has no such tool is skipped (the deploy of that tree would not run it either). Returns `{ ok, skipped, detail }`.
+ */
+export function checkYrpModels(root, dist) {
+  const r = runTool(root, join('tools', 'yrp-models-verify.mjs'), ['--dir', dist]);
+  if (r.status === 0) return { ok: true, skipped: r.skipped ?? null, detail: (r.stdout || '').trim() };
+  return { ok: false, skipped: null, detail: (r.stderr || r.stdout || '').trim() || `exit ${r.status}` };
+}
+
 async function serve(root, out, port) {
   if (!/^[0-9]{2,5}$/.test(String(port))) {
     console.error('candidate-build: --serve needs --port <number> (the runners use 5400 to 5990)');
@@ -237,9 +250,14 @@ async function main(argv) {
     console.error(`candidate-build: public/fx did not ship intact (${(fx.stderr || fx.stdout || '').trim()}): the deploy restores it from the backup first, so this candidate is not the build it would publish`);
     return 1;
   }
+  const yrp = checkYrpModels(root, dist);
+  if (!yrp.ok) {
+    console.error(`candidate-build: the build does not carry the hidden 3D Bahamut's models whole (${yrp.detail}): the deploy refuses such a build, so this candidate is not the one it would publish (build from a tree that has public/models-exp/yrp, or set PYREFLY_YRP_MODELS=capsules to review the chapter on capsules on purpose)`);
+    return 1;
+  }
   const bundle = bundleOfIndexHtml(html);
-  const skipped = [manifest.skipped, fx.skipped].filter(Boolean);
-  console.log(`candidate-build: base ok (index.html loads ${CANDIDATE_HOST.base}assets/index-*.js), ${fx.skipped ? 'public/fx not checked' : 'public/fx intact'}, ${manifest.skipped ? 'art manifest not checked' : 'art manifest current'}${skipped.length ? ` (this tree has no ${skipped.join(' or ')})` : ''}`);
+  const skipped = [manifest.skipped, fx.skipped, yrp.skipped].filter(Boolean);
+  console.log(`candidate-build: base ok (index.html loads ${CANDIDATE_HOST.base}assets/index-*.js), ${fx.skipped ? 'public/fx not checked' : 'public/fx intact'}, ${manifest.skipped ? 'art manifest not checked' : 'art manifest current'}, ${yrp.skipped ? '3D Bahamut models not checked' : '3D Bahamut models whole (or capsules on purpose)'}${skipped.length ? ` (this tree has no ${skipped.join(' or ')})` : ''}`);
   console.log(`candidate-build: bundle ${bundle ?? '(none found)'}: record it as build.bundle in the review report; critic-clear compares it with the deployed bundle`);
   return bundle ? 0 : 1;
 }
