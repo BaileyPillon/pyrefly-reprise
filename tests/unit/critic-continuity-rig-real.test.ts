@@ -193,7 +193,7 @@ describe.skipIf(SHIPPED.length === 0)('the rigs the game ships, from their own f
 // them. Lulu's defend and od-fury bring in a front-view upper body and shrink her side head to 0.8, so the head part's mesh read 0.80 and 1.25 (a 25 percent head jump) in those four changes of key; they
 // are now read as a change of head (the head the registration gives the key, 0.959 and 1.029 of the idle's, inside the standing band 0.85 to 1.15) and the mesh ratio is not compared. Kimahri's follow key
 // (1.29 of the idle's height, PR-0462, the spear bone's scale of 1.327) is a real defect of the rig and still fails on its height. The head meshes of the keys that keep the same head part are read as before.
-describe.skipIf(!SHIPPED.includes('lulu') || !SHIPPED.includes('kimahri'))('a front-view key is not a head jump, and a real defect is still one', () => {
+describe.skipIf(!SHIPPED.includes('lulu'))('a front-view key is not a head jump, and a real defect is still one', () => {
   const MEASURE = loadPoseMeasure(resolve(__dirname, '..', '..', 'docs', 'target', 'pose-measure.json'));
   type Row = { fromPose: string; toPose: string; counted: boolean; failHead: boolean; failHeight: boolean; failRealHead?: boolean; head: { metric: string; ratio: number | null } | null; headReal: { ratio: number; outsideBand: boolean; band: number[] } | null; height: { stature: number | null; flags: string[] } | null; rig: { headMetric: string | null } };
   const replay = async (name: string, measure: unknown): Promise<Row[]> => {
@@ -240,7 +240,22 @@ describe.skipIf(!SHIPPED.includes('lulu') || !SHIPPED.includes('kimahri'))('a fr
     expect(bare.filter((s) => s.rig.headMetric === 'variant')).toHaveLength(4);
   }, 240_000);
 
-  it('kimahri: the follow key is still 1.29 of the idle\'s height and still fails CHK-026 on it (PR-0462), with or without the records', async () => {
+  // PR-0534 (r74-lulu). Round 33b: 397 of the 415 CHK-026 head failures were Lulu's rig head, 5 to 15 percent different between keys (cast to idle 0.912, ready to cast 1.154). The reading was exact: her head part hangs
+  // on a shell bone under the spine, the fitter scales the spine, and the head took the scale. `RigHeadHold` sets the shell bone's scale to the inverse of what it inherits, where the keys are compiled; this is the
+  // real engine, probe and analysis reading every change of key of the shipped file again.
+  it('lulu: with the head lock no change of key moves the head part, so CHK-026 has no head failure on her rig (PR-0534)', async () => {
+    const swaps = await replay('lulu', MEASURE);
+    const mesh = swaps.filter((s) => s.rig.headMetric === 'head');
+    expect(mesh).toHaveLength(20); // 12 keys out and back, less the four changes into and out of the two front-view keys
+    for (const s of mesh) {
+      expect(s.head!.ratio, `${s.fromPose} > ${s.toPose}`).toBeGreaterThan(0.99);
+      expect(s.head!.ratio, `${s.fromPose} > ${s.toPose}`).toBeLessThan(1.01);
+      expect(s.failHead).toBe(false);
+    }
+    expect(swaps.filter((s) => s.failHead)).toHaveLength(0);
+  }, 240_000);
+
+  it.skipIf(!SHIPPED.includes('kimahri'))('kimahri: the follow key is still 1.29 of the idle\'s height and still fails CHK-026 on it (PR-0462), with or without the records', async () => {
     for (const measure of [MEASURE, null]) {
       const swaps = await replay('kimahri', measure);
       const follow = swaps.filter((s) => s.fromPose === 'follow' || s.toPose === 'follow');

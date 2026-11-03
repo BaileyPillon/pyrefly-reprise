@@ -1,0 +1,352 @@
+{
+ "note": "Lulu's rig head swaps as the continuity harness recorded them in round 33b (harness 5e1bbdec47c9, GPU, seed 1, 1600x900, 19 of 19 chapters): the unique change-of-key pairs with how many times each was seen, how many failed CHK-026's 3 percent head tolerance, and the head ratio (the square root of the head part's mesh area after over before) the harness wrote. Read from critic/rounds/round-33/continuity/<chapter>/continuity/continuity.json. r74-lulu, PR-0534.",
+ "harness": "5e1bbdec47c9e7206f710149081baf8ceab77dc6b230bec2117ef4eed133fc31",
+ "totals": {
+  "swaps": 508,
+  "counted": 508,
+  "failHead": 397,
+  "chapters": {
+   "braskas-final-aeon": {
+    "swaps": 71,
+    "failHead": 42
+   },
+   "evrae-airship": {
+    "swaps": 25,
+    "failHead": 19
+   },
+   "mirror-aeons": {
+    "swaps": 187,
+    "failHead": 164
+   },
+   "sin-face": {
+    "swaps": 58,
+    "failHead": 46
+   },
+   "sin-fins-core": {
+    "swaps": 150,
+    "failHead": 113
+   },
+   "yojimbo-cavern": {
+    "swaps": 17,
+    "failHead": 13
+   }
+  }
+ },
+ "pairs": [
+  {
+   "from": "attack",
+   "to": "critical",
+   "metric": "head",
+   "swaps": 1,
+   "failHead": 1,
+   "ratios": [
+    1.0702
+   ]
+  },
+  {
+   "from": "attack",
+   "to": "idle",
+   "metric": "head",
+   "swaps": 4,
+   "failHead": 0,
+   "ratios": [
+    1.0169,
+    1.0209
+   ]
+  },
+  {
+   "from": "cast",
+   "to": "critical",
+   "metric": "head",
+   "swaps": 10,
+   "failHead": 9,
+   "ratios": [
+    0.9596,
+    0.9957
+   ]
+  },
+  {
+   "from": "cast",
+   "to": "hurt",
+   "metric": "head",
+   "swaps": 1,
+   "failHead": 1,
+   "ratios": [
+    0.9188
+   ]
+  },
+  {
+   "from": "cast",
+   "to": "idle",
+   "metric": "head",
+   "swaps": 75,
+   "failHead": 75,
+   "ratios": [
+    0.9119,
+    0.9284
+   ]
+  },
+  {
+   "from": "cast",
+   "to": "ko",
+   "metric": "head",
+   "swaps": 1,
+   "failHead": 1,
+   "ratios": [
+    0.8032
+   ]
+  },
+  {
+   "from": "critical",
+   "to": "hurt",
+   "metric": "head",
+   "swaps": 10,
+   "failHead": 10,
+   "ratios": [
+    0.9575,
+    0.9609
+   ]
+  },
+  {
+   "from": "critical",
+   "to": "idle",
+   "metric": "head",
+   "swaps": 15,
+   "failHead": 15,
+   "ratios": [
+    0.9503
+   ]
+  },
+  {
+   "from": "critical",
+   "to": "ready",
+   "metric": "head",
+   "swaps": 15,
+   "failHead": 15,
+   "ratios": [
+    0.8701,
+    0.9028,
+    0.9056,
+    0.9329,
+    0.9384
+   ]
+  },
+  {
+   "from": "critical",
+   "to": "victory",
+   "metric": "head",
+   "swaps": 1,
+   "failHead": 1,
+   "ratios": [
+    0.903
+   ]
+  },
+  {
+   "from": "follow",
+   "to": "attack",
+   "metric": "head",
+   "swaps": 5,
+   "failHead": 2,
+   "ratios": [
+    1.0218,
+    1.034,
+    1.0341
+   ]
+  },
+  {
+   "from": "hurt",
+   "to": "cast",
+   "metric": "head",
+   "swaps": 4,
+   "failHead": 4,
+   "ratios": [
+    1.0874,
+    1.0883
+   ]
+  },
+  {
+   "from": "hurt",
+   "to": "critical",
+   "metric": "head",
+   "swaps": 13,
+   "failHead": 11,
+   "ratios": [
+    1.0048,
+    1.0107,
+    1.0412,
+    1.0444
+   ]
+  },
+  {
+   "from": "hurt",
+   "to": "idle",
+   "metric": "head",
+   "swaps": 43,
+   "failHead": 0,
+   "ratios": [
+    0.9925,
+    0.993,
+    0.9934,
+    0.9951,
+    0.9992
+   ]
+  },
+  {
+   "from": "hurt",
+   "to": "ko",
+   "metric": "head",
+   "swaps": 2,
+   "failHead": 2,
+   "ratios": [
+    0.8734
+   ]
+  },
+  {
+   "from": "idle",
+   "to": "critical",
+   "metric": "head",
+   "swaps": 5,
+   "failHead": 5,
+   "ratios": [
+    1.0522,
+    1.0523
+   ]
+  },
+  {
+   "from": "idle",
+   "to": "hurt",
+   "metric": "head",
+   "swaps": 51,
+   "failHead": 0,
+   "ratios": [
+    1.0076
+   ]
+  },
+  {
+   "from": "idle",
+   "to": "ko",
+   "metric": "head",
+   "swaps": 7,
+   "failHead": 7,
+   "ratios": [
+    0.8741,
+    0.8776,
+    0.8799,
+    0.88
+   ]
+  },
+  {
+   "from": "idle",
+   "to": "ready",
+   "metric": "head",
+   "swaps": 121,
+   "failHead": 121,
+   "ratios": [
+    0.9332,
+    0.9491,
+    0.9495,
+    0.95,
+    0.957,
+    0.9688
+   ]
+  },
+  {
+   "from": "idle",
+   "to": "victory",
+   "metric": "head",
+   "swaps": 4,
+   "failHead": 4,
+   "ratios": [
+    0.9502
+   ]
+  },
+  {
+   "from": "item",
+   "to": "critical",
+   "metric": "head",
+   "swaps": 2,
+   "failHead": 2,
+   "ratios": [
+    0.9594
+   ]
+  },
+  {
+   "from": "item",
+   "to": "idle",
+   "metric": "head",
+   "swaps": 8,
+   "failHead": 8,
+   "ratios": [
+    0.9117
+   ]
+  },
+  {
+   "from": "ko",
+   "to": "critical",
+   "metric": "head",
+   "swaps": 8,
+   "failHead": 8,
+   "ratios": [
+    1.1958
+   ]
+  },
+  {
+   "from": "ko",
+   "to": "idle",
+   "metric": "head",
+   "swaps": 2,
+   "failHead": 2,
+   "ratios": [
+    1.1144,
+    1.1281
+   ]
+  },
+  {
+   "from": "od-fury",
+   "to": "idle",
+   "metric": "variant",
+   "swaps": 1,
+   "failHead": 0,
+   "ratios": []
+  },
+  {
+   "from": "ready",
+   "to": "cast",
+   "metric": "head",
+   "swaps": 83,
+   "failHead": 83,
+   "ratios": [
+    1.1543
+   ]
+  },
+  {
+   "from": "ready",
+   "to": "follow",
+   "metric": "head",
+   "swaps": 5,
+   "failHead": 0,
+   "ratios": [
+    1.001,
+    1.0091
+   ]
+  },
+  {
+   "from": "ready",
+   "to": "item",
+   "metric": "head",
+   "swaps": 10,
+   "failHead": 10,
+   "ratios": [
+    1.1545
+   ]
+  },
+  {
+   "from": "ready",
+   "to": "od-fury",
+   "metric": "variant",
+   "swaps": 1,
+   "failHead": 0,
+   "ratios": []
+  }
+ ]
+}
