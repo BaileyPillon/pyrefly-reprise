@@ -10234,6 +10234,226 @@
    "words": "you can make all the decisions for me, ill go with all your recommendations. i still cant play it unfortunately. time crunch.",
    "decision": "D-1327 (item 200f) under D-1321 (item 200); restated D-1333",
    "note": "DRIVER CALL, delegated by Bailey; not Bailey's own approval of the pictures. Bailey, 2026-10-24 13:40 EDT (the queue; DRIVER-STATE logged it at 13:57 EDT), typed in the chat, verbatim \"you can make all the decisions for me, ill go with all your recommendations. i still cant play it unfortunately. time crunch.\"; restated at 18:00 EDT, verbatim \"I'll go with all of your recommendations. You make the calls please.\" (D-1333). The driver's call (D-1327, item 200f): the repainted poses go in for Yuna and Kimahri (FFX only) and for Rikku in Dark Knight and Paine in Warrior (FFX-2 only), only the poses the proposal marked better, canon A (locked to the idle) in Chapter IV; Tidus (attack and hurt carry detached-piece and edge flags) and Yuna in White Mage (only 2 poses gain) were NOT repainted and keep the paintings of the colour-lock batch (set driver:2026-10-22-colour-lock (D-1182 to D-1292, delegated by Bailey)). Built as r64-art (docs/handoff/r64-art.md, docs/handoff/r64-art-shas.json): 4 figures x 5 poses x 5 files (the 1x painting, @2x, @3x, @4x, the normal map), 100 files in the art mirror D:/pyrefly-art-r64; this ledger pins the 20 1x paintings (21 pins: Kimahri's sleep is pinned in two sets). The replaced paintings went to the private art repo first (archive 2026-10-24-2026-10-24-repaint-4-figures, commit 754a4ca, all 100 files; new 1x masters in current/, commit 8e2cde8). Shipped in release 63 (2026-10-25 02:52 EDT) and release 64. The Echo painting's new 2x master (title/echo.2x.webp, D-1328) is a new file, not a replacement, and has no pin here. Recorded on 2026-10-26 under item 205d of the driver's list (deep review round 29, PR-0513: 89 approved paintings changed, ledger not updated; 828 ok, 89 mismatched), Bailey 2026-10-25 ~23:45 EDT, verbatim \"im aboiut to go to sleep i'll go with all your recommendations and i delegate all decision making to you for now. just keep going please!\". The pins are in the sets where they already were (each moved to the shipped hash, the old record one supersedes down with a backup); this set holds the words and the facts once. Records only: no art file was changed."
+  },
+  "driver:2026-11-03-boss-art (item 219m, delegated by Bailey)": {
+   "words": "Bailey, 2026-11-02 ~16:40 EST: \"i'll go with all of your recommendations please implement all the unimplemented chapters that i decided on\"; 2026-10-31: \"you make the executive decisions for the next few days.\"",
+   "decision": "item 219m of the driver's list (the Spectral Keeper and Fallen Maesters paintings), under the delegation of 2026-10-31 and 2026-11-02; the D-number is owed by the records pass",
+   "note": "DRIVER CALL, delegated by Bailey; not Bailey's own approval of the pictures. The paintings of the hidden FFX Spectral Keeper (chapter 29, FFX only: the Keeper idle attack cast hurt ko and idle@2x, the glyph in three states, the aeon rock, the turn-list face, the pause plate, the chapter card and thumbnail) and of the hidden FFX-2 Fallen Maesters (chapter 30, FFX-2 only: Aranea, the Black Elemental, Concherer with a cracked-shell idle, Chac, each idle attack cast hurt and idle@2x, the pause plate, the chapter card and thumbnail), made 2026-11-02 and 03 in D:/Tools/pyrefly-scratch/2026-11-02/art-poses/set (MANIFEST.md): every pose a Method W warp of its idle, no repaint; the plates are composites of the approved backdrops and the idles. Staged for install by branch r75-boss-art (docs/handoff/r75-boss-art.md); each pin is the sha256 of the staged file, which is the candidate byte for byte. New files, nothing replaced, so nothing was archived.",
+   "public/art/characters/spectral-keeper/idle.png": {
+    "sha256": "52caec9b7365e46af60747409da2fde101fb683ec2f246a6a9db3700145fe066",
+    "mtime": "2026-11-03T05:12:12.880Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/spectral-keeper/attack.png": {
+    "sha256": "8aca617ca8ab182cd625807a7137014481b30d5a276c6b72635478646d5c2cc2",
+    "mtime": "2026-11-03T06:57:53.703Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/spectral-keeper/cast.png": {
+    "sha256": "6bb637a070901f459d6cd2c2704534bb998966afaf9cf9969f5ba1c9f39f6db7",
+    "mtime": "2026-11-03T06:57:51.704Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/spectral-keeper/hurt.png": {
+    "sha256": "9c7afb341dfdce7c89073357ae3fa9f4231192fc0f9707c96c7cdee2a2ef5d6c",
+    "mtime": "2026-11-03T06:57:52.389Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/spectral-keeper/ko.png": {
+    "sha256": "b2abccaff03382d89a554ddfa5ea2ac422155740805b9db83516adaf204fd37d",
+    "mtime": "2026-11-03T06:57:53.074Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/spectral-keeper/idle@2x.png": {
+    "sha256": "fcb61dfa02b3e1c55f5c13063802a9cef6513d5c9cd096aaafeecb34cfdf6917",
+    "mtime": "2026-11-03T06:08:02.188Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-aranea/idle.png": {
+    "sha256": "111a49273049349993f1386ac058d8580bad1fada80ee4cf4651f5074222ff5f",
+    "mtime": "2026-11-03T07:09:20.437Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-aranea/attack.png": {
+    "sha256": "5040530f36c237b21f3ec24a5ed353864fce6178fe23412751041aab1aa96691",
+    "mtime": "2026-11-03T07:09:31.081Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-aranea/cast.png": {
+    "sha256": "8b7f3d8e1ac82525ae13d10c760456a15bd5e6c44e443deb39beb51a7933e610",
+    "mtime": "2026-11-03T07:09:33.266Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-aranea/hurt.png": {
+    "sha256": "074b52ee8500a21041664dc9217eb018fecb9c61d7a1e163475a7aefbd1f84b4",
+    "mtime": "2026-11-03T07:09:35.499Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-aranea/idle@2x.png": {
+    "sha256": "2c9478eae78834a4919cda96de1e91553c0e491af071b2d14df553664f6aa5aa",
+    "mtime": "2026-11-03T07:10:00.622Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-black-elemental/idle.png": {
+    "sha256": "2821359234c6b200e845025aac10c94d8e6a84a972643b8ed635101c7b57b090",
+    "mtime": "2026-11-03T07:21:23.892Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-black-elemental/attack.png": {
+    "sha256": "49ef8cb4caed58737fe4bb212040f6b76af618d3bed309699ca8531d9ecad35d",
+    "mtime": "2026-11-03T07:21:26.289Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-black-elemental/cast.png": {
+    "sha256": "9d2125e10acea4a8dcef6a3954284bd7b478f41dfc9c122abc0d165bea5115de",
+    "mtime": "2026-11-03T07:21:28.626Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-black-elemental/hurt.png": {
+    "sha256": "2db56693d2db9d6c64a11307a8447404e7fc52917ccbd9b89fe460b4ece5e1a7",
+    "mtime": "2026-11-03T07:21:30.988Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-black-elemental/idle@2x.png": {
+    "sha256": "e56aec946951c67f3c969537947cd67be9a66cb25fb730dc935e7b54cc56fd28",
+    "mtime": "2026-11-03T07:21:44.843Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-concherer/idle.png": {
+    "sha256": "45500d6b8f7ee2193736a7d69bd18d2c6433768d5681b1fb218945d8b1590e74",
+    "mtime": "2026-11-03T07:17:35.576Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-concherer/attack.png": {
+    "sha256": "a36647f0aedc4a85340b434483a5047e5d990e37a682609ccc0e3e549bc76581",
+    "mtime": "2026-11-03T07:18:51.937Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-concherer/cast.png": {
+    "sha256": "e660ecd85b9ee85d3029c68db4fefffbeb98d1ed467d60949b6bc12182e5288e",
+    "mtime": "2026-11-03T07:18:34.137Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-concherer/hurt.png": {
+    "sha256": "b86e6d49dfe7774ae57774f5094affc305cf9a160a60f01a9067a24ed5bdac9d",
+    "mtime": "2026-11-03T07:18:36.449Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-concherer/idle-cracked.png": {
+    "sha256": "3e7535adca19a5e6557734fd69cb9055603ccbf04d2412908b791f336682649f",
+    "mtime": "2026-11-03T07:19:53.071Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-concherer/idle@2x.png": {
+    "sha256": "abeedac3f30fc29d556670e76dd70170396c570a8217ce79a0bf7e8d15f5f959",
+    "mtime": "2026-11-03T07:20:20.261Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-concherer/idle-cracked@2x.png": {
+    "sha256": "014bb941f6b48caef629b43eeba57380495a8c3e6c96359cb90611b02e202824",
+    "mtime": "2026-11-03T07:20:20.287Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-chac/idle.png": {
+    "sha256": "b82359a2dc5a861fc14da57863e56b05d75acbc0076628259d1c9d3b75561c83",
+    "mtime": "2026-11-03T05:11:55.304Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-chac/attack.png": {
+    "sha256": "c207b38cf7ad30bd2fc576e0d32f3b9ec5b879cbfa1e10412358e3c24c74d99b",
+    "mtime": "2026-11-03T07:15:01.272Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-chac/cast.png": {
+    "sha256": "5d62b12de9c4cb4d876796225dc1c297e608c363e710cc6db70faa1fe61aa6e6",
+    "mtime": "2026-11-03T07:15:03.322Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-chac/hurt.png": {
+    "sha256": "6aba240744d984d0fcdb7add603e50ab2aae6013804229847b1547d8ade503f0",
+    "mtime": "2026-11-03T07:15:05.313Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/characters/x2-chac/idle@2x.png": {
+    "sha256": "b9baae829c50463e8d10272c8b811b49bc5e28d9de09063feff89b08a4fd7ba9",
+    "mtime": "2026-11-03T06:10:25.070Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/decals/spectral-glyph-unlit.png": {
+    "sha256": "0b04ba132f74111851af8e74f1cea4a3618d7ac8f7aafe3a19dad1d6248eb657",
+    "mtime": "2026-11-03T07:21:51.986Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/decals/spectral-glyph-occupied.png": {
+    "sha256": "4441a8d1d4febb53e8fe3b8823ded7b445b2fe0c0c04afa09d49f81ac9d5a165",
+    "mtime": "2026-11-03T07:21:52.012Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/decals/spectral-glyph-mined.png": {
+    "sha256": "2a979c70766a40d7af41c7000adfbeeda7fb0609ed1dbd0f76a9beeb3943726c",
+    "mtime": "2026-11-03T07:21:52.040Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/decals/spectral-aeon-rock.png": {
+    "sha256": "febee5a7df7f6c450d5cdf5ab320265b7e765c1def3efdac6d9f124e86f6553c",
+    "mtime": "2026-11-03T07:21:52.079Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/portraits/spectral-keeper.png": {
+    "sha256": "14dbe97c30b69653184783f9a2fe489377bf64eaba5ebff40f28dde8bb17976b",
+    "mtime": "2026-11-03T06:16:23.867Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/pause/ch29-spectral-keeper.png": {
+    "sha256": "2f6e72186018ca40621da28cb1f2e73c448b0a75710dc95553d9d0e64d80aece",
+    "mtime": "2026-11-03T07:24:41.692Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/pause/ch29-spectral-keeper.2x.webp": {
+    "sha256": "f05fb7ebc01a56ed322f0407b11a603e7e363e3dc2560c9c1943ec96a1da1b5b",
+    "mtime": "2026-11-03T07:25:08.178Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/pause/ffx2-fallen-maesters.png": {
+    "sha256": "6bfe996b392b6e78a3ee547a2a7a9bab8d8e8a0df20ee088d97fca6ceca0ed7f",
+    "mtime": "2026-11-03T07:24:15.495Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/pause/ffx2-fallen-maesters.2x.webp": {
+    "sha256": "d4574bb730c129898197e4f0a75e904135bb635098ccb6a33a45d814f01e5a55",
+    "mtime": "2026-11-03T07:25:01.752Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/pause/ch29-spectral-keeper-card.png": {
+    "sha256": "edcbf06263470d8c934dee2795c4d13916e7d76ac14f606a23ebb73b8b02b490",
+    "mtime": "2026-11-03T06:12:00.294Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/pause/ch29-spectral-keeper-card.2x.webp": {
+    "sha256": "d39bda815e8494aa685ba528e69e0c12d9be264acaf4ecee032384eb22af8c97",
+    "mtime": "2026-11-03T06:19:06.291Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/pause/ch29-spectral-keeper-thumb.png": {
+    "sha256": "67a023ceb185e71f0af6a4354baf53b5a33e0e3fc2db93f755d1158faf41a364",
+    "mtime": "2026-11-03T06:18:57.953Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/pause/ffx2-fallen-maesters-card.png": {
+    "sha256": "4d48e8c25841a4a3d377d059589f155db8caf8a1025b66daea76eb6eef4cfd6c",
+    "mtime": "2026-11-03T07:25:39.125Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/pause/ffx2-fallen-maesters-card.2x.webp": {
+    "sha256": "c261709a82ac05ebd781c334222f5c5e6e132b97e73c469a62c2f9d9e667d8bc",
+    "mtime": "2026-11-03T07:25:40.041Z",
+    "delegated": "2026-11-03"
+   },
+   "public/art/pause/ffx2-fallen-maesters-thumb.png": {
+    "sha256": "6d3f38b767eed40c7c725c0de05a07701374f14d371e7615f7e445bb1320130c",
+    "mtime": "2026-11-03T07:25:40.091Z",
+    "delegated": "2026-11-03"
+   }
   }
  }
 }

@@ -368,6 +368,13 @@ export const POSE_REGISTRATION_FOES: PoseRegistrationTable = {
     ko: { stanceX: 472.0, status: 'ok', class: 'ko', stature: 0.76, iou: 0.416, sha: '82190ad31b742c72' },
     overdrive: { stanceX: 585.5, status: 'ok', class: 'standing', stature: 1.037, iou: 0.356, sha: '99a10a220359f14e' },
   },
+  'spectral-keeper': {
+    attack: { stanceX: 462, feetRow: 1028, status: 'waived', class: 'standing', stature: 1.013, iou: 0.464, sha: '8aca617ca8ab182c' },
+    cast: { stanceX: 376.5, feetRow: 1102.0, status: 'ok', class: 'standing', stature: 1.088, iou: 0.59, sha: '6bb637a070901f45' },
+    hurt: { scale: 1.02, stanceX: 376.5, feetRow: 908.0, status: 'ok', class: 'standing', stature: 0.91, iou: 0.596, sha: '9c7afb341dfdce7c' },
+    idle: { stanceX: 376.5, feetRow: 1014.0, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '52caec9b7365e46a' },
+    ko: { status: 'ok', class: 'ko', stature: 0.497, lengthRatio: 1.148, iou: 0.094, sha: 'b2abccaff03382d8' },
+  },
   trema: {
     attack: { stanceX: 460.0, status: 'waived', class: 'standing', stature: 1.016, iou: 0.456, sha: '82ef14f66ccbc889' },
     cast: { stanceX: 402.5, status: 'ok', class: 'standing', stature: 1, iou: 0.96, sha: '14d21a7cfdcc710b' },
@@ -413,6 +420,31 @@ export const POSE_REGISTRATION_FOES: PoseRegistrationTable = {
     idle: { stanceX: 552.5, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '60d4e46a82cd9dc9' },
     ko: { stanceX: 377.5, status: 'ok', class: 'ko', stature: 0.898, iou: 0.346, sha: '52a809a10db4ac61' },
     overdrive: { stanceX: 486.0, status: 'ok', class: 'standing', stature: 0.986, iou: 0.414, sha: '0ce67e776023eb89' },
+  },
+  'x2-aranea': {
+    attack: { stanceX: 514, upright: true, status: 'waived', class: 'standing', stature: 0.95, iou: 0.799, sha: '5040530f36c237b2' },
+    cast: { stanceX: 544, upright: true, status: 'waived', class: 'standing', stature: 1.017, iou: 0.81, sha: '8b7f3d8e1ac82525' },
+    hurt: { stanceX: 500, upright: true, status: 'waived', class: 'standing', stature: 1.035, iou: 0.791, sha: '074b52ee8500a210' },
+    idle: { stanceX: 469.0, upright: true, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '111a492730493499' },
+  },
+  'x2-black-elemental': {
+    attack: { stanceX: 390.0, status: 'ok', class: 'standing', stature: 0.985, iou: 0.579, sha: '49ef8cb4caed5873' },
+    cast: { stanceX: 438.0, status: 'ok', class: 'standing', stature: 1.001, iou: 0.717, sha: '9d2125e10acea4a8' },
+    hurt: { stanceX: 411.0, status: 'ok', class: 'standing', stature: 0.984, iou: 0.55, sha: '2db56693d2db9d6c' },
+    idle: { stanceX: 469.0, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '2821359234c6b200' },
+  },
+  'x2-chac': {
+    attack: { stanceX: 634, upright: true, status: 'ok', class: 'standing', stature: 1.043, iou: 0.819, sha: 'c207b38cf7ad30bd' },
+    cast: { stanceX: 681, upright: true, status: 'ok', class: 'standing', stature: 0.992, iou: 0.899, sha: '5d62b12de9c4cb4d' },
+    hurt: { stanceX: 739, upright: true, status: 'ok', class: 'standing', stature: 0.968, iou: 0.832, sha: '6aba240744d984d0' },
+    idle: { stanceX: 623.5, upright: true, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: 'b82359a2dc5a861f' },
+  },
+  'x2-concherer': {
+    attack: { stanceX: 679.5, upright: true, status: 'ok', class: 'standing', stature: 1, iou: 0.936, sha: 'a36647f0aedc4a85' },
+    cast: { stanceX: 644.5, upright: true, status: 'ok', class: 'standing', stature: 1, iou: 0.926, sha: 'e660ecd85b9ee85d' },
+    hurt: { stanceX: 642.0, upright: true, status: 'ok', class: 'standing', stature: 1.001, iou: 0.909, sha: 'b86e6d49dfe7774a' },
+    idle: { stanceX: 635.5, upright: true, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '45500d6b8f7ee219' },
+    'idle-cracked': { stanceX: 585.0, upright: true, status: 'ok', class: 'standing', stature: 1, iou: 0.812, sha: '3e7535adca19a5e6' },
   },
   'x2-ixion': {
     attack: { stanceX: 596.5, upright: true, status: 'ok', class: 'standing', stature: 0.999, iou: 0.364, sha: 'cb52a3caef3229bf' },

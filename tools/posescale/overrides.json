@@ -344,5 +344,89 @@
     "why": "pc-residues (PR-0531, 2026-10-28; FFX-2 only: Rikku Thief, the Leblanc chapter): the hurt painting is lifted to the floor and read 0.879 to 0.885 of the idle's height on the screen in nine swaps (the head lock's factor and the lens take 2.4 percent off the card's 0.901), under the 0.90 band; lifted to 0.93 on the card it reads about 0.91 on the screen"
    }
   }
+ },
+ "x2-aranea": {
+  "idle": {
+   "standing": true
+  },
+  "attack": {
+   "standing": true,
+   "stance": [
+    514,
+    678
+   ],
+   "why": "r75-boss-art: the pose is the idle's own pixels warped and painted at the idle's pixel scale; its sidecar registration (idle top-left at 45,-34 in this file) puts the idle's stance x (469) at 514; the silhouette reading drops the lifted front leg from the support band and lands 144 px to the right of that (idle-to-pose overlap 0.38 against 0.80)"
+  },
+  "cast": {
+   "standing": true,
+   "stance": [
+    544,
+    724
+   ],
+   "why": "r75-boss-art: the pose is the idle's own pixels warped and painted at the idle's pixel scale; its sidecar registration (idle top-left at 75,12 in this file) puts the idle's stance x (469) at 544; the silhouette reading drops the lifted front leg from the support band and lands 144 px to the right of that (idle-to-pose overlap 0.38 against 0.80)"
+  },
+  "hurt": {
+   "standing": true,
+   "stance": [
+    500,
+    736
+   ],
+   "why": "r75-boss-art: the pose is the idle's own pixels warped and painted at the idle's pixel scale; its sidecar registration (idle top-left at 31,24 in this file) puts the idle's stance x (469) at 500; the silhouette reading drops the lifted front leg from the support band and lands 144 px to the right of that (idle-to-pose overlap 0.38 against 0.80)"
+  }
+ },
+ "x2-concherer": {
+  "idle": {
+   "standing": true
+  },
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle-cracked": {
+   "standing": true
+  }
+ },
+ "x2-chac": {
+  "idle": {
+   "standing": true
+  },
+  "attack": {
+   "standing": true,
+   "stance": [
+    634,
+    818
+   ],
+   "why": "r75-boss-art: the pose is the idle's own pixels warped and painted at the idle's pixel scale; its sidecar registration (idle top-left at 10,34 in this file) puts the idle's stance x (624) at 634; the silhouette reading differs by 7 to 14 px (the lashed tongue and the head turn), so this passes the gate either way and is closer to the painting"
+  },
+  "cast": {
+   "standing": true,
+   "stance": [
+    681,
+    779
+   ],
+   "why": "r75-boss-art: the pose is the idle's own pixels warped and painted at the idle's pixel scale; its sidecar registration (idle top-left at 57,-5 in this file) puts the idle's stance x (624) at 681; the silhouette reading differs by 7 to 14 px (the lashed tongue and the head turn), so this passes the gate either way and is closer to the painting"
+  },
+  "hurt": {
+   "standing": true,
+   "stance": [
+    739,
+    760
+   ],
+   "why": "r75-boss-art: the pose is the idle's own pixels warped and painted at the idle's pixel scale; its sidecar registration (idle top-left at 115,-24 in this file) puts the idle's stance x (624) at 739; the silhouette reading differs by 7 to 14 px (the lashed tongue and the head turn), so this passes the gate either way and is closer to the painting"
+  }
+ },
+ "spectral-keeper": {
+  "attack": {
+   "stance": [
+    462,
+    1028
+   ],
+   "why": "r75-boss-art: the attack is the idle's own pixels warped and painted at the idle's pixel scale; its sidecar registration (idle top-left at 86,50 in this file) puts the idle's stance x (376) at 462. The silhouette reading (x 672) is the right claw alone, because the tail blade is raised off the floor: aligning that to the idle's stance would slide the claw 210 px and leave the idle-to-attack overlap at 0.07 (0.51 with this value). Row 1028 is the claw's own mass; its thin dark talons hang 44 px below it"
+  }
  }
 }

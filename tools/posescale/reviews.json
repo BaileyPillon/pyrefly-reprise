@@ -489,5 +489,8 @@
   "cast": "=",
   "hurt": "=",
   "ko": "keep"
+ },
+ "spectral-keeper": {
+  "hurt": 1.02
  }
 }
