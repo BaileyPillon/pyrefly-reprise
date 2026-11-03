@@ -7,7 +7,7 @@
  * `ready` and `victory`, 0.88 in `ko`. The rig gate's band for a real head is 0.85 to 1.15, so every key passed it, while the continuity check (CHK-026) holds a head to 3 percent between two keys: 397 of round
  * 33b's 415 head failures were this (cast to idle 0.912 and ready to cast 1.154 are the commonest). Her rig cannot be re-fitted or re-stamped in this release (the gate refuses it today for four reasons that
  * have nothing to do with the head: `docs/handoff/r74-lulu.md`), so the lock is applied where the keys are compiled instead: the shell bone's own scale is set to the inverse of the scale it inherits, and the
- * head part is drawn at `1` in every key. Only the head, and the braid that hangs from it, stop growing with the spine; the body keeps its fitted stretch.
+ * head part is drawn at the idle key's own size in every key (1.0000 for her: her idle inherits no scale). Only the head, and the braid that hangs from it, stop growing with the spine; the body keeps its fitted stretch.
  *
  * What it leaves alone: the idle (the rest); a key that hides the part (format v2); a key that already puts its own scale on the shell bone (Lulu's version 1 `defend` and `od-fury` shrink it to 0.8 to tuck the
  * side head behind a front-view upper body: that is another head, which the continuity harness reads as a variant); a rig not in `RIG_HEAD_HOLD`; a part that is not rigid on one bone.
@@ -25,7 +25,7 @@ export interface HeadHoldRow {
   key: string;
   /** `held`: the shell bone's scale was set; `unchanged`: the head already read 1; `idle`, `hidden` (the key hides the part) and `explicit` (the key scales the shell itself): left alone. */
   action: 'held' | 'unchanged' | 'idle' | 'hidden' | 'explicit';
-  /** The part's linear size over the idle's before the lock and after it. */
+  /** The part's linear size over the idle key's before the lock and after it (1 is the idle's own). */
   before: number;
   after: number;
 }
@@ -46,7 +46,8 @@ export function shellBoneOf(data: RigData, partName: string): number {
 }
 
 /**
- * Set the shell bone's scale in every compiled key so the part is drawn at the idle's size. Changes `compiled` in place; returns what it did to each key.
+ * Set the shell bone's scale in every compiled key so the part is drawn at the idle KEY's size (the bind pose's only when the rig has no idle key; the two agree for Lulu, whose idle inherits no scale, and
+ * a rig whose idle does carry a scale is held to that scale and not to 1). Changes `compiled` in place; returns what it did to each key.
  * @param compiled the rig's keys as channels (`compileKeys`, before the lock)
  */
 export function holdPartSize(data: RigData, compiled: Map<string, Float64Array>, partName: string): HeadHoldRow[] {
@@ -61,16 +62,19 @@ export function holdPartSize(data: RigData, compiled: Map<string, Float64Array>,
     return Math.sqrt(Math.abs(sk.m[q]! * sk.m[q + 3]! - sk.m[q + 1]! * sk.m[q + 2]!));
   };
   const rows: HeadHoldRow[] = [];
+  const idlePose = compiled.get('idle');
+  const target = idlePose ? sizeIn(idlePose) : 1;
+  if (!(target > 0)) return [];
   for (const [name, pose] of compiled) {
     const before = sizeIn(pose);
-    const row = (action: HeadHoldRow['action'], after = before): void => { rows.push({ key: name, action, before, after }); };
+    const row = (action: HeadHoldRow['action'], after = before): void => { rows.push({ key: name, action, before: before / target, after: after / target }); };
     if (name === 'idle') { row('idle'); continue; }
     const named = data.keys.get(name)?.parts?.[partName];
     if (named ? named.show === false : part.hidden) { row('hidden'); continue; }
     const o = shell * CH;
     if (pose[o + C_SX] !== 1 || pose[o + C_SY] !== 1) { row('explicit'); continue; }
-    if (!(before > 0) || Math.abs(before - 1) < 5e-5) { row('unchanged'); continue; }
-    const local = 1 / before;
+    if (!(before > 0) || Math.abs(before / target - 1) < 5e-5) { row('unchanged'); continue; }
+    const local = target / before;
     if (!(local > 0 && local <= 4)) { row('unchanged'); continue; } // out of the format's range (0, 4]: leave the key as the file has it
     pose[o + C_SX] = local;
     pose[o + C_SY] = local;

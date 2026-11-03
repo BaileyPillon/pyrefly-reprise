@@ -11,7 +11,7 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { RigFile } from '../../../src/data/art/rigTypes.ts';
 import { readRig, type RigData } from '../../../src/engine/rig/RigData.ts';
-import { compileKeys } from '../../../src/engine/rig/RigKeys.ts';
+import { RigTransition, compileKeys } from '../../../src/engine/rig/RigKeys.ts';
 import { RIG_HEAD_HOLD, holdPartSize, shellBoneOf } from '../../../src/engine/rig/RigHeadHold.ts';
 import { C_SX, C_SY, CH, RigSkeleton } from '../../../src/engine/rig/RigSkeleton.ts';
 import { makeRigFile } from './rig-fixture.ts';
@@ -72,6 +72,40 @@ describe('the head lock (RigHeadHold)', () => {
     expect(headSize(data, byName.get('front')!) / headSize(data, byName.get('idle')!)).toBeCloseTo(0.8, 4);
     // nothing else moves: the keys' other channels are the file's
     expect(Array.from(byName.get('grow')!.slice(0, o))).toEqual(Array.from(free.get('grow')!.slice(0, o)));
+  });
+
+  it('holds the head to the size of the IDLE key, not of the bind pose: an idle that inherits a scale sets the target (review of r74-lulu, finding 3)', () => {
+    const f = shelled();
+    f.keys.idle = { bones: { chest: { sx: 1.1, sy: 1.1 } }, source: 'characters/testfig/idle' };
+    const data = load(f);
+    const free = compileKeys(data, false);
+    expect(headSize(data, free.get('grow')!) / headSize(data, free.get('idle')!)).toBeCloseTo(1.2 / 1.1, 4);
+    expect(headSize(data, free.get('flat')!) / headSize(data, free.get('idle')!)).toBeCloseTo(1 / 1.1, 4);
+    const keys = new Map([...free].map(([k, v]) => [k, Float64Array.from(v)]));
+    const rows = holdPartSize(data, keys, 'head');
+    for (const k of ['grow', 'shrink', 'flat']) expect(headSize(data, keys.get(k)!) / headSize(data, keys.get('idle')!), k).toBeCloseTo(1, 4);
+    // the rows say it over the idle's: grow was 1.2 / 1.1 of it, flat was 1 / 1.1 (held to the bind pose's 1 it would have read 'unchanged' and stayed 9 percent smaller than the idle's)
+    expect(rows.find((r) => r.key === 'grow')).toMatchObject({ action: 'held' });
+    expect(rows.find((r) => r.key === 'grow')!.before).toBeCloseTo(1.2 / 1.1, 4);
+    expect(rows.find((r) => r.key === 'grow')!.after).toBeCloseTo(1, 4);
+    expect(rows.find((r) => r.key === 'flat')).toMatchObject({ action: 'held' });
+    // the idle itself is the target and is never changed
+    expect(Array.from(keys.get('idle')!)).toEqual(Array.from(free.get('idle')!));
+  });
+
+  it('never writes a scale outside the format\'s range (0, 4]: a key whose inherited scale would need a counter-scale above 4 is left as the file has it', () => {
+    const f = shelled();
+    f.keys.near = { bones: { root: { sx: 0.3, sy: 0.3 } }, source: 'authored' }; // counter-scale 3.33: inside the range
+    f.keys.tiny = { bones: { root: { sx: 0.2, sy: 0.2 } }, source: 'authored' }; // counter-scale 5: outside it
+    const data = load(f);
+    const keys = new Map([...compileKeys(data, false)].map(([k, v]) => [k, Float64Array.from(v)]));
+    const rows = holdPartSize(data, keys, 'head');
+    const o = data.boneIndex.get('headS')! * CH;
+    expect(rows.find((r) => r.key === 'near')!.action).toBe('held');
+    expect(keys.get('near')![o + C_SX]).toBeCloseTo(1 / 0.3, 6);
+    expect(rows.find((r) => r.key === 'tiny')!.action).toBe('unchanged');
+    expect(keys.get('tiny')![o + C_SX]).toBe(1);
+    expect(keys.get('tiny')![o + C_SY]).toBe(1);
   });
 
   it('is on for a rig by its name: a rig called lulu is held by compileKeys, any other is not; hold=false gives the file back', () => {
@@ -169,6 +203,30 @@ describe.skipIf(!existsSync(RIG))('Lulu\'s rig: round 33b\'s recorded head swaps
     expect((1 + worst) / (1 - worst)).toBeLessThan(1 + TOLERANCE);
   });
 
+  // Review of r74-lulu, finding 1. The proof above blends two keys in a straight line (1.46 percent at the worst). The game moves the bones with RigTransition, whose carried velocity can overshoot a key, and a move can be
+  // interrupted by another: the head then strays a little further from the idle's. Measured (seeded chains of three interrupted moves, 120 to 420 ms): 1.53 percent. A swap whose two ends are both mid-move can
+  // therefore pass 3 percent in a rare chain (5 of 40,218 constructed before/after pairs, worst 4.15 percent); a SETTLED swap (the key itself on both sides) is exactly 1.0000. This pins the excursion.
+  it('under the real RigTransition (overshoot, interrupted moves) the head strays at most 2 percent from the size in the idle key; it was over 8 percent without the lock', () => {
+    const idle = headSize(data, held.get('idle')!);
+    const idleFree = headSize(data, free.get('idle')!);
+    const names = [...held.keys()].filter((k) => k !== 'defend' && k !== 'od-fury');
+    let seed = 12345;
+    const rand = (): number => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+    const stray = (keys: Map<string, Float64Array>, base: number): number => {
+      let worst = 0;
+      for (let trial = 0; trial < 400; trial++) {
+        const tr = new RigTransition(data.bones.length * CH, keys.get('idle')!);
+        for (let q = 0; q < 3; q++) {
+          tr.retarget(keys.get(names[Math.floor(rand() * names.length)]!)!, 120 + rand() * 300);
+          for (let i = 0, n = 1 + Math.floor(rand() * 30); i < n; i++) { tr.step(1 / 60); worst = Math.max(worst, Math.abs(headSize(data, tr.current) / base - 1)); }
+        }
+      }
+      return worst;
+    };
+    expect(stray(held, idle)).toBeLessThan(0.02);
+    expect(stray(free, idleFree)).toBeGreaterThan(0.08);
+  });
+
   it('what it costs: only the head shell bone differs from the file\'s keys, and the free keys are the 5 to 15 percent the harness saw', () => {
     const shell = data.boneIndex.get('headS')!;
     for (const [k, pose] of held) {
@@ -183,6 +241,22 @@ describe.skipIf(!existsSync(RIG))('Lulu\'s rig: round 33b\'s recorded head swaps
 // The lock is Lulu's alone: every other rig the game ships compiles to the very same channels with it on and off, so Chapter I (Seymour's body), Chapter IV (FFX-2's Bahamut) and every other rig chapter read as they did.
 const RIGS_DIR = resolve(__dirname, '..', '..', '..', 'public', 'art', 'rigs');
 describe.skipIf(!existsSync(RIG))('the lock changes no other rig', () => {
+  // Review of r74-lulu, finding 5. The test below reads every OTHER shipped rig, none of which has a head that drifts (their head part inherits a scale of exactly 1 in every key), so it passes even when the lock is
+  // applied to every rig by mistake. This one gives the lock a head that does drift, Lulu's own file under another name, and needs the table to say no.
+  it('a rig whose head drifts exactly like the Lulu one is NOT held unless the table names it (the file renamed: compiled as the file has it; named lulu: held)', () => {
+    const file = JSON.parse(readFileSync(RIG, 'utf8')) as RigFile;
+    const named = (name: string): RigData => load({ ...file, name });
+    const otherOn = compileKeys(named('not-lulu'), true), otherOff = compileKeys(named('not-lulu'), false);
+    const luluOn = compileKeys(named('lulu'), true);
+    let moved = 0;
+    for (const [k, pose] of otherOn) {
+      expect(Array.from(pose), `not-lulu/${k}`).toEqual(Array.from(otherOff.get(k)!));
+      if (Array.from(pose).some((v, j) => v !== luluOn.get(k)![j])) moved++;
+    }
+    expect(moved).toBeGreaterThanOrEqual(10); // the control: the lock does hold her ten drifting keys, so the equality above is not vacuous
+  });
+
+
   it('every other shipped rig compiles to the same channels with the lock on and off', () => {
     let read = 0;
     for (const name of readdirSync(RIGS_DIR).filter((n) => n !== 'lulu' && existsSync(resolve(RIGS_DIR, n, 'rig.json')))) {
