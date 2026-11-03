@@ -296,7 +296,8 @@ describe('the camera glue and the skin are reached only through a dev-gated dyna
   /** The files under src/ that import `stem.ts`, statically (`from '...'`) or dynamically (`import('...')`). */
   const importersOf = (stem: string): string[] => {
     const re = new RegExp(`from '[^']*${stem}\\.ts'|import\\('[^']*${stem}\\.ts'\\)`);
-    return allSources().filter((src) => re.test(src.text)).map((src) => src.path);
+    // `src/engine/yrp3d/` has a `clipSequencer.ts` and a `clipMap.ts` of its own (the hidden 3D Bahamut's, FFX-2 only, models shipped with the build): same names as ffx3d's, not ffx3d's modules (r74 integration)
+    return allSources().filter((src) => re.test(src.text) && !src.path.startsWith('src/engine/yrp3d/')).map((src) => src.path);
   };
 
   it('exp-fayth-camera.ts is imported by the deck scene alone, and exp-fayth-skin.ts by the deck scene and the camera glue', () => {
