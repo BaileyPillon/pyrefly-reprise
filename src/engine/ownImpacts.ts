@@ -41,13 +41,18 @@ export function withOwnImpacts(port: VfxPort, owned: boolean): VfxPort {
 }
 
 /**
- * `fx` (option C's port on the stage) without its `hit`: `fxHit` answers null for a port with none, and the blow keeps the presenter's own shake and hit-stop. The splash, the dissolve, the victory arc and the opening stay
- * (they are not impacts). `enabled` still follows the option, so a port that is off stays off.
+ * `fx` (option C's port on the stage) without its `hit`: `fxHit` answers null for a port with none, and the blow keeps the presenter's own shake and hit-stop. The splash, the dissolve, the freeze on a fight's last blow,
+ * the victory arc and the opening stay (they are not impacts). `enabled` still follows the option, so a port that is off stays off.
  */
 export function withOwnImpactsFx(fx: FxStagePort): FxStagePort {
+  // every member of the port is decided here: forwarded below, or `hit`, dropped on purpose. A member added to `FxStagePort` fails `tsc` until it is named in `Decided` and forwarded
+  type Decided = 'enabled' | 'hit' | 'actionOpen' | 'dissolve' | 'freeze' | 'victory' | 'opening';
+  const everyMemberDecided: [Exclude<keyof FxStagePort, Decided>] extends [never] ? true : never = true;
+  void everyMemberDecided;
   const out: { -readonly [K in keyof FxStagePort]: FxStagePort[K] } = { enabled: () => fx.enabled() };
   if (fx.actionOpen) out.actionOpen = (o) => fx.actionOpen!(o);
   if (fx.dissolve) out.dissolve = (id) => fx.dissolve!(id);
+  if (fx.freeze) out.freeze = (ms) => fx.freeze!(ms); // the field's clock held for the freeze on a fight's last blow (`BattlePresenterStaging.stageFreeze`): not an impact, so it stays (the review of 2026-11-02 found it dropped)
   if (fx.victory) out.victory = (kind) => fx.victory!(kind);
   if (fx.opening) out.opening = () => fx.opening!();
   return out;

@@ -122,6 +122,7 @@ describe('withOwnImpactsFx — BATTLE SPECTACLE (option C) keeps its splash and 
       actionOpen: vi.fn(async () => undefined),
       hit: vi.fn(() => ({ freezeMs: 140, shook: true })),
       dissolve: vi.fn(),
+      freeze: vi.fn(),
       victory: vi.fn(() => 900),
       opening: vi.fn(),
     };
@@ -153,6 +154,14 @@ describe('withOwnImpactsFx — BATTLE SPECTACLE (option C) keeps its splash and 
     expect(own.enabled()).toBe(true);
     const off = withOwnImpactsFx(spyFx(false).port);
     expect(off.enabled()).toBe(false);
+  });
+
+  it('forwards the freeze on the last blow of a fight: it holds the clock of the field and is not an impact (it was dropped before the review of 2026-11-02)', () => {
+    const { port, calls } = spyFx();
+    const own = withOwnImpactsFx(port);
+    expect(own.freeze).toBeTypeOf('function');
+    own.freeze!(850);
+    expect(calls['freeze']).toHaveBeenCalledWith(850);
   });
 
   it('leaves out a method the option did not have', () => {
