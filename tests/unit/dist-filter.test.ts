@@ -34,6 +34,11 @@ describe('what never ships', () => {
       'audio/candidates/C-round1-battle-ffx-A-x12.ogg',
       'models-exp/yrp/yuna.glb', // an experiment whose folder is not named in the allow-list (the 3D Bahamut branch's models, say) stays out of every build
       'models-exp/some-new-experiment/props/pistol.glb',
+      'models-exp/windwaker-yrp/yuna.glb', // the allow-list names a FOLDER: a sibling that merely begins with it stays out (the review of 2026-11-02, mutant M18)
+      'models-exp/windwakerx/yuna.glb',
+      'models-exp/windwaker2/props/pistol.glb',
+      'models-exp/windwaker-old',
+      'models-exp\\windwaker-yrp\\yuna.glb',
       'art/portraits/f4blulu.1.raw.png',
       'art/portraits/f4lulu.3.png',
       'art/characters/ffx2-bahamut/ko.2.json',

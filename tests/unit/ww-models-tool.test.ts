@@ -12,7 +12,7 @@
  */
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -20,7 +20,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { WW_MODEL_DIR, WW_PROP_DIR, WW_TEMPLE_DIR } from '../../src/data/windwaker-ids.ts';
 import { MODEL_FILE, PROP_NAMES, TEMPLE_NAMES, WW_CAST } from '../../src/engine/ww3d/layout.ts';
 import { isUnshippedPublicFile } from '../../tools/dist-filter.mjs';
-import { check, copyTree, readList, recordOf } from '../../tools/ww-models.mjs';
+import { WW_MODELS_SRC, check, copyTree, readList, recordOf } from '../../tools/ww-models.mjs';
 
 interface Listed { path: string; bytes: number; sha256: string }
 
@@ -95,6 +95,27 @@ describe('check, recordOf and copyTree', () => {
     expect(check(join(tmpdir(), 'ww-models-not-there'), files)).toHaveLength(11);
   });
 
+  it('checks the sha256 and not only the size: a copy of the right length with one byte flipped is "differs" (the review of 2026-11-02, mutant M16)', () => {
+    const files = fakeList(paths);
+    const dir = fakeFolder(files);
+    const flipped = Buffer.from(`fake valefor.glb`);
+    flipped[0] = flipped[0]! ^ 1;
+    writeFileSync(join(dir, 'valefor.glb'), flipped);
+    expect(statSync(join(dir, 'valefor.glb')).size, 'the same length').toBe(files.find((f) => f.path === 'valefor.glb')!.bytes);
+    expect(check(dir, files)).toEqual(['differs valefor.glb']);
+  });
+
+  it('restores a same-length corrupted copy too (copyTree compares hashes, not sizes)', () => {
+    const files = fakeList(paths);
+    const backup = fakeFolder(files);
+    const dir = fakeFolder(files);
+    const flipped = Buffer.from(`fake yuna.glb`);
+    flipped[5] = flipped[5]! ^ 1;
+    writeFileSync(join(dir, 'yuna.glb'), flipped);
+    expect(copyTree(backup, dir, files)).toBe(1);
+    expect(check(dir, files)).toEqual([]);
+  });
+
   it('restores what is missing or different from a backup and copies nothing else', () => {
     const files = fakeList(paths);
     const backup = fakeFolder(files);
@@ -108,6 +129,15 @@ describe('check, recordOf and copyTree', () => {
   it('records a folder as name, size and sha256, sorted', () => {
     const files = fakeList(paths);
     expect(recordOf(fakeFolder(files))).toEqual([...files].sort((a, b) => (a.path < b.path ? -1 : 1)));
+  });
+});
+
+describe('the real files, where this disk has them (the review of 2026-11-02, mutant M14)', () => {
+  // The committed list is only as good as the files it was recorded from. `ffx-local-guard` reads the list from git; nothing else checked that the models on a disk with them still match it, so a list recorded from a
+  // stale export (or edited by hand) passed every test. A disk without the models (a clean worktree, a review copy) skips this and the tool's `ensure` says so at build time.
+  const have = existsSync(WW_MODELS_SRC) && readList().every((f) => existsSync(join(WW_MODELS_SRC, f.path)));
+  it.runIf(have)('match the list: all eleven, with the recorded size and sha256', () => {
+    expect(check(WW_MODELS_SRC)).toEqual([]);
   });
 });
 
