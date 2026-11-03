@@ -5,7 +5,7 @@
  * those: the party reaches the Keeper after the Chamber of the Fayth, "immediately following the Spectral Keeper" is the build point of Chapter II (`src/data/ffx/builds/zanarkand.ts`), and the Keeper stands at the bottom of the
  * Cloister lift (`research/ffx-yunalesca.md` section 1, `[single source]`, now agreed by `research/re-ffx-spectral-keeper.md`); the game's own scripts give the Keeper no line and no cutscene text is read from the files
  * (`research/re-ffx-spectral-keeper.md` section 9), so **the Keeper speaks no word**. **Every line is ours** and quotes nothing of the game's script [AGENTS.md rule 8]. Voices from `research/writing-bible.md`: Auron laconic and
- * dry (section 1.2), Lulu dry (1.5), Wakka warm and plain with his "ya" (1.4), Tidus asking what he does not know (1.1), Yuna complete and unhurried (1.3), Kimahri in the third person, three to eight words, **once** (1.7).
+ * dry (section 1.4), Lulu dry (1.6), Wakka warm and plain with his "ya" (1.5), Tidus asking what he does not know (1.1), Yuna complete and unhurried (1.3), Kimahri in the third person, three to eight words, **once** (1.7).
  *
  * `pre` is eleven lines, `post` six; no mid-battle scripts and no victory quips (the fight is a gate, and the next room is Yunalesca's). The lines teach the fight in the party's voice without a tutorial: *do not stand where it is
  * looking*, *the marks on the floor are not decoration* (the sweep zone and the mines).

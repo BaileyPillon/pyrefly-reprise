@@ -3,6 +3,7 @@
  */
 
 import type { BattleEngine, BattleEvent, BattleSetup, Command, Decision, FFXCombatant, FFXPartyBuild } from '../../../src/battle/common/types.ts';
+import type { Ctx } from '../../../src/battle/ffx/state.ts';
 import { FFXContentRegistry, createFFXEngine } from '../../../src/battle/ffx/index.ts';
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../../src/data/ffx/index.ts';
 import { zanarkandBuild } from '../../../src/data/ffx/builds/zanarkand.ts';
@@ -85,3 +86,24 @@ export function runDefending(engine: BattleEngine, stop: (e: BattleEngine) => bo
     engine.submit(defend());
   }
 }
+
+export const ctxOf = (engine: BattleEngine): Ctx => (engine as unknown as { ctx: Ctx }).ctx;
+export const party = ['tidus', 'yuna', 'auron'] as const;
+
+/** Advance (the others defend) to `who`'s input. */
+export function inputFor(engine: BattleEngine, who: string, max = 60): Input {
+  for (let i = 0; i < max; i++) {
+    const d = nextInput(engine);
+    if (d.actorId === who) return d;
+    engine.submit(defend());
+  }
+  throw new Error(`no input for ${who}`);
+}
+
+export const events = (engine: BattleEngine): readonly BattleEvent[] => log(engine);
+export const keeperActions = (engine: BattleEngine): string[] => actionList(events(engine)).filter((a) => a.startsWith(`${KEEPER}:`)).map((a) => a.slice(KEEPER.length + 1));
+export const lastSweep = (engine: BattleEngine): string[] => {
+  const starts = events(engine).filter((e) => e.type === 'action-start' && e.actorId === KEEPER && e.abilityId === 'keeper-attack-all');
+  const last = starts[starts.length - 1];
+  return last && last.type === 'action-start' ? [...last.targets] : [];
+};

@@ -1,6 +1,6 @@
 /**
- * The word `keeper` opens the hidden Spectral Keeper chapter (FFX only; `src/app/screens/frontend/keeperDoor.ts`): typed on the board's doors it finishes on the last letter and leads to the chapter, and the word does not
- * overlap any other door's (the table's invariant, restated for this row).
+ * The word `keeper` against the table of doors (FFX only; `src/app/screens/frontend/keeperDoor.ts`): typed on `BoardDoors` it finishes on the last letter and leads to the chapter, and the word overlaps no other door's (the table's invariant,
+ * restated for this row). **This file drives `BoardDoors` alone**; the real `Input`, the real board, the title and party prep are in `spectral-keeper-board.test.ts` (the review found this header had promised them).
  */
 
 import { describe, expect, it } from 'vitest';

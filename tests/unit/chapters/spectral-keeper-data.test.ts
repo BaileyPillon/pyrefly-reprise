@@ -30,6 +30,7 @@ describe('the battle layer keeps copies of the ids, and they equal the data laye
     expect(battleRules.KEEPER_SCRIPT).toBe(ids.SPECTRAL_KEEPER_SCRIPT);
     expect(battleRules.CIRCLE_SCRIPT).toBe(ids.SPECTRAL_CIRCLE_SCRIPT);
     expect(battleRules.KEEPER_ROWS).toEqual(ids.SPECTRAL_ROWS);
+    expect(battleRules.ARMED_PREFIX).toBe(ids.SPECTRAL_ARMED_FLAG_PREFIX); // the stage lights a glyph's ring by this flag
   });
 });
 

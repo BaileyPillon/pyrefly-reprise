@@ -30,6 +30,7 @@
 
 /** Which game a piece of content belongs to (`'ff7'`: the hidden experiment, `./types-ff7.ts`; branches audited in `./game.ts`). */ export type GameId = 'ffx' | 'ffx2' | 'ff7';
 import type { Ff7Combatant, Ff7Command, Ff7LimitGaugeFields, Ff7MessageTag, Ff7PartyBuild } from './types-ff7.ts'; export type * from './types-ff7.ts';
+import type { PlatformEvent, PlatformGroupFields } from './types-keeper.ts'; // FFX only: the Spectral Keeper's glyph platforms (the group flags and the hop event); the file is split out so this one does not grow
 
 /** Stable identifier for a combatant instance inside one battle. */
 export type CombatantId = string;
@@ -2344,8 +2345,7 @@ export type BattleEvent =
       reason: 'command' | 'ko' | 'banished';
     })
   | (BattleEventBase & { type: 'switch'; outId: CombatantId; inId: CombatantId })
-  /** FFX only (the Spectral Keeper, `battle/ffx/platforms.ts`): a character hopped from one glyph platform to another (Move). `from` and `to` are platform numbers, 1 to 6 on the ring, 7 the aeon rock. Presentation: the hop. Absent from every other battle. */
-  | (BattleEventBase & { type: 'platform'; who: CombatantId; from: number; to: number })
+  | PlatformEvent // FFX only (the Spectral Keeper): a hop between glyph platforms, `./types-keeper.ts`
   | (BattleEventBase & {
       type: 'form-change';
       enemyId: CombatantId;
@@ -3081,7 +3081,7 @@ export interface FormationCommandOff {
 }
 
 /** One battle's enemy formation. */
-export interface EnemyGroupDef {
+export interface EnemyGroupDef extends PlatformGroupFields {
   /** Formation id, e.g. `'seymour-flux'`. */
   id: string;
   game: GameId;
@@ -3210,16 +3210,6 @@ export interface EnemyGroupDef {
    * the turn kept open. Read by `battle/ffx/formation-flags.ts` and nothing else; absent everywhere else, so no other battle changes.
    */
   defendOff?: boolean;
-  /**
-   * **FFX only, "this formation runs the glyph platforms"** (the Spectral Keeper, `dome02_00`; `research/re-ffx-spectral-keeper.md` sections 2 to 5, `docs/handoff/ch-keeper.md`): the front line stands on numbered platforms (1 to 6 on a ring round the boss, 7 the aeon rock),
-   * every party member gets the **Move** command, and the formation's seven Circles are the platforms (never part of the victory, only Move can aim at them). Read by `battle/ffx/platforms.ts` and nothing else; absent everywhere else, so no other battle changes.
-   */
-  platformRing?: true;
-  /**
-   * **FFX only, "the whole front line has First Strike"** (the Spectral Keeper's formation script writes First Strike := 1 on the front line, `research/re-ffx-spectral-keeper.md` section 2.2 item 6): the opening counters treat each of the three active members as the equipment
-   * ability First Strike does (`kernel/ctb-init.ts`), so all three act before the boss's first turn. Read by `adapt/ctb.ts#openingCtb` through `platforms.ts#markFirstStrike`; absent everywhere else.
-   */
-  frontLineFirstStrike?: true;
   /**
    * **FFX only, "these menu commands are switched off in this formation"** (re-parity RC10, `docs/handoff/re-parity-rc10-ffx-isaaru-commands.md`): the game's
    * formation script calls `setCommandDisabled(who, command, 1)` once per command, before the first turn, and the menu gate treats that command as unusable for

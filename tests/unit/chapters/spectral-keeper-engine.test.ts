@@ -1,39 +1,16 @@
 /**
  * The hidden Spectral Keeper chapter on the real engine (FFX only; Tidus, Yuna and Auron on the glyph platforms, seeded): the rules of `research/re-ffx-spectral-keeper.md` as they play. Each case is an acceptance case of the
- * paper preflight (T11): First Strike, the switched-off commands, Move and the platforms, the sweep, the hit counter, the mines (lay, blast, fizzle, walking away), aeon mode, a victory and a defeat, determinism, and the
- * absence of all of it from another chapter's battle.
+ * paper preflight (T11): First Strike, the switched-off commands, Move and the platforms, the sweep, the hit counter and the mines (lay, blast, fizzle, walking away). Aeon mode, the whole fight, determinism and a fork are in
+ * `spectral-keeper-fight.test.ts`; the counter, the miss and the order of the aeon gains in `spectral-keeper-counter.test.ts`; the absence of all of it from another chapter's battle in `spectral-keeper-absence.test.ts`; winnability in `spectral-keeper-measure.test.ts`.
  */
 
 import { describe, expect, it } from 'vitest';
 import type { BattleEngine, BattleEvent, Command } from '../../../src/battle/common/types.ts';
-import type { Ctx } from '../../../src/battle/ffx/state.ts';
 import { ENEMY_GROUPS_BY_ID } from '../../../src/data/ffx/index.ts';
 import { armCircle, frontTrio, setHitCount, setMinesLive } from '../../../src/battle/ffx/platforms.ts';
 import {
-  KEEPER, actionList, actor, circleId, defend, flags, invincible, log, move, newEngine, nextInput, platformOfId, row, scan, swing,
-  type Input,
+  KEEPER, actionList, actor, circleId, ctxOf, defend, events, flags, inputFor, invincible, keeperActions, lastSweep, move, newEngine, nextInput, party, platformOfId, row, swing, type Input,
 } from '../helpers/keeperDrive.ts';
-
-const ctxOf = (engine: BattleEngine): Ctx => (engine as unknown as { ctx: Ctx }).ctx;
-const party = ['tidus', 'yuna', 'auron'] as const;
-
-/** Advance (the others defend) to `who`'s input. */
-function inputFor(engine: BattleEngine, who: string, max = 60): Input {
-  for (let i = 0; i < max; i++) {
-    const d = nextInput(engine);
-    if (d.actorId === who) return d;
-    engine.submit(defend());
-  }
-  throw new Error(`no input for ${who}`);
-}
-
-const events = (engine: BattleEngine): readonly BattleEvent[] => log(engine);
-const keeperActions = (engine: BattleEngine): string[] => actionList(events(engine)).filter((a) => a.startsWith(`${KEEPER}:`)).map((a) => a.slice(KEEPER.length + 1));
-const lastSweep = (engine: BattleEngine): string[] => {
-  const starts = events(engine).filter((e) => e.type === 'action-start' && e.actorId === KEEPER && e.abilityId === 'keeper-attack-all');
-  const last = starts[starts.length - 1];
-  return last && last.type === 'action-start' ? [...last.targets] : [];
-};
 
 describe('the opening (RE 2.2)', () => {
   it('all three of the front line act before the Keeper does (First Strike), on platforms 1, 2 and 3', () => {
@@ -350,117 +327,5 @@ describe('the mines (RE 4.3, 5)', () => {
     armCircle(ctxOf(engine), circleId(5));
     setMinesLive(ctxOf(engine), 1);
     expect(engine.predictTurnOrder(40).some((p) => p.actorId === circleId(5))).toBe(true);
-  });
-});
-
-describe('aeon mode (RE 4.4)', () => {
-  function summoned(seed: number): BattleEngine {
-    const engine = newEngine(seed);
-    const d = inputFor(engine, 'yuna');
-    const summon = d.commands.find((c) => c.command.kind === 'summon' && c.enabled);
-    expect(summon, 'Yuna has an aeon to call').toBeDefined();
-    engine.submit(summon!.command);
-    return engine;
-  }
-
-  it('with an aeon out the Keeper uses its plain Attack, not the tail and not the sweep, and never changes "in front"', () => {
-    const engine = summoned(61);
-    const front = flags(engine)['plat.front'];
-    for (let i = 0; i < 14; i++) {
-      const n = engine.nextDecision();
-      if (n.kind !== 'player-input') continue;
-      engine.submit(swing(n) ?? defend());
-    }
-    // Only what the Keeper did while an aeon stood on the field (between the summon and the dismissal) is this rule's.
-    const acts: string[] = [];
-    let out = false;
-    for (const e of events(engine)) {
-      if (e.type === 'summon') out = true;
-      else if (e.type === 'dismiss') out = false;
-      else if (out && e.type === 'action-start' && e.actorId === KEEPER) acts.push(e.abilityId ?? '');
-    }
-    expect(acts).toContain('keeper-aeon-attack');
-    expect(acts).not.toContain('keeper-berserk-tail');
-    expect(acts).not.toContain('keeper-attack-all');
-    expect(flags(engine)['plat.front']).toBe(front);
-  });
-
-  it('each Keeper turn adds 1 to the counter and each hit adds 2; the mine is the rock\'s Circle, which kills a random living aeon', () => {
-    const engine = summoned(62);
-    const ctx = ctxOf(engine);
-    setHitCount(ctx, 4);
-    let blasted = false;
-    for (let i = 0; i < 60 && !blasted; i++) {
-      const n = engine.nextDecision();
-      if (n.kind === 'battle-over') break;
-      if (n.kind === 'player-input') engine.submit(defend());
-      blasted = actionList(events(engine)).includes(`${circleId(7)}:keeper-mine-blast`);
-    }
-    expect(actionList(events(engine))).toContain(`${KEEPER}:keeper-glyph-mine`);
-    expect(blasted).toBe(true);
-    expect(events(engine).some((e) => e.type === 'ko')).toBe(true);
-  });
-});
-
-describe('the whole fight', () => {
-  it('a victory: the Keeper falls and pays 7,000 gil and 12,000 AP', () => {
-    const engine = newEngine(71);
-    let over = false;
-    for (let i = 0; i < 4000 && !over; i++) {
-      invincible(engine); // a mechanic test: the rules above are the fight, this is the other end of it
-      for (const id of party) {
-        // a mine's Death ignores HP: stand a fallen member up so the line runs to the end (the blasts themselves are the mines' cases above)
-        const c = actor(engine, id);
-        if (c.statuses['ko']) {
-          delete c.statuses['ko'];
-          c.alive = true;
-        }
-      }
-      const d = engine.nextDecision();
-      if (d.kind === 'battle-over') {
-        over = true;
-        expect(d.result.outcome).toBe('victory');
-        expect(d.result.gil).toBe(7_000);
-        expect(d.result.ap).toBeGreaterThanOrEqual(12_000);
-        break;
-      }
-      if (d.kind === 'player-input') engine.submit(swing(d) ?? defend());
-    }
-    expect(over).toBe(true);
-    expect(actor(engine, KEEPER).hp).toBe(0);
-  });
-
-  it('a defeat: a party that only defends is swept and mined out', () => {
-    const engine = newEngine(72);
-    let outcome: string | undefined;
-    for (let i = 0; i < 400 && outcome === undefined; i++) {
-      const d = engine.nextDecision();
-      if (d.kind === 'battle-over') outcome = d.result.outcome;
-      else if (d.kind === 'player-input') engine.submit(swing(d) ?? defend());
-    }
-    expect(outcome).toBe('defeat');
-  });
-
-  it('is deterministic: the same seed plays the same log', () => {
-    const play = (seed: number): string => {
-      const engine = newEngine(seed);
-      for (let i = 0; i < 60; i++) {
-        invincible(engine);
-        const d = engine.nextDecision();
-        if (d.kind === 'battle-over') break;
-        if (d.kind === 'player-input') engine.submit(swing(d) ?? defend());
-      }
-      return JSON.stringify(log(engine));
-    };
-    expect(play(81)).toBe(play(81));
-    expect(play(81)).not.toBe(play(82));
-  });
-
-  it('a fork plays on from the same state (the advisor\'s dry runs see the platforms)', () => {
-    const engine = newEngine(83);
-    inputFor(engine, 'tidus');
-    const fork = (engine as unknown as { fork(seed: number): BattleEngine }).fork(5);
-    expect(party.map((id) => platformOfId(fork, id))).toEqual([1, 2, 3]);
-    expect(scan(nextInput(fork))).toBeNull(); // Tidus has no Scan: the fork's menu is the real one
   });
 });

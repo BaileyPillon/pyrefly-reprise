@@ -4,6 +4,7 @@
  * registered chapters are repeated here for this one.
  */
 
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import { getChapter } from '../../../src/data/encounters.ts';
@@ -12,6 +13,8 @@ import type { Step, StoryScript } from '../../../src/story/dsl.ts';
 import { SEAM_BUDGET_MS, scriptDurationMs } from '../../../src/story/registry.ts';
 import { spectralKeeperScripts } from '../../../src/story/scripts/spectral-keeper.ts';
 
+const src = readFileSync(new URL('../../../src/story/scripts/spectral-keeper.ts', import.meta.url), 'utf8');
+const header = src.slice(0, src.indexOf('*/'));
 const chapter = getChapter('spectral-keeper')!;
 const scripts = chapter.scriptsRef;
 const lines = (script: StoryScript): Array<Extract<Step, { type: 'say' | 'narrate' }>> => script.filter((s): s is Extract<Step, { type: 'say' | 'narrate' }> => s.type === 'say' || s.type === 'narrate');
@@ -57,8 +60,27 @@ describe('the voices keep to the writing bible', () => {
     for (const l of all) expect(l.text.split(/\s+/).length, l.text).toBeLessThanOrEqual(15);
   });
 
-  it('the draft says it is a draft', () => {
-    // The file header carries the word so a reader who opens it sees it first (SK11: Bailey reads it before it ships).
-    expect(String(spectralKeeperScripts)).toBeDefined();
+  it('the file says it is a draft for Bailey to read (SK11), first, where a reader who opens it sees it', () => {
+    expect(header).toMatch(/THIS IS A DRAFT FOR BAILEY TO READ/);
+    expect(src.indexOf('THIS IS A DRAFT')).toBeLessThan(src.indexOf('import '));
+  });
+
+  it('every writing-bible section the header cites is the voice it names (the review found Auron, Wakka and Lulu cited one section off)', () => {
+    const bible = readFileSync(new URL('../../../research/writing-bible.md', import.meta.url), 'utf8');
+    const flat = header.replace(/\r?\n \* /g, ' ');
+    const cited: Array<[string, RegExp]> = [
+      ['Tidus', /Tidus asking what he does not know \((\d\.\d+)\)/],
+      ['Yuna', /Yuna complete and unhurried \((\d\.\d+)\)/],
+      ['Auron', /Auron laconic and dry \((?:section )?(\d\.\d+)\)/],
+      ['Wakka', /Wakka warm and plain with his "ya" \((\d\.\d+)\)/],
+      ['Lulu', /Lulu dry \((\d\.\d+)\)/],
+      ['Kimahri', /Kimahri in the third person[^(]*\*\*once\*\* \((\d\.\d+)\)/],
+    ];
+    for (const [who, pattern] of cited) {
+      const m = pattern.exec(flat);
+      expect(m, `the header cites ${who}`).not.toBeNull();
+      const section = m![1]!;
+      expect(bible, `${who} is section ${section} of the writing bible`).toMatch(new RegExp(`^### ${section.replace('.', '\\.')} ${who}`, 'm'));
+    }
   });
 });

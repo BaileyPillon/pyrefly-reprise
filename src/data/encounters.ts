@@ -105,7 +105,7 @@ export interface ChapterMusic {
 export interface Chapter {
   id: ChapterId;
   game: GameId;
-  /** Display order on chapter select, 1–18 (XVII and XVIII, Sin, listed 2026-09-29); 0 = no place on the board (FF7 experiment); the hidden experiments take 19 (Leblanc preview), 20 (the FFX-2 experiment lane's), 21 (Sinspawn Gui) 22 (Fayth: Evrae with FFX's camera), 23 (Tourist Trap), 24 (Valefor at Besaid), 25 (Biran and Yenke), 26 (Angra Mainyu) and 27 (Mirror Aeons, listed after Sin) and 28 (The Last Summoning). Unique except 0 (`tests/unit/chapter-numbers.test.ts`). */
+  /** Display order on chapter select, 1–18 (XVII and XVIII, Sin, listed 2026-09-29); 0 = no place on the board (FF7 experiment); the hidden experiments take 19 (Leblanc preview), 20 (the FFX-2 experiment lane's), 21 (Sinspawn Gui) 22 (Fayth: Evrae with FFX's camera), 23 (Tourist Trap), 24 (Valefor at Besaid), 25 (Biran and Yenke), 26 (Angra Mainyu) and 27 (Mirror Aeons, listed after Sin) and 28 (The Last Summoning) and 29 (The Spectral Keeper). Unique except 0 (`tests/unit/chapter-numbers.test.ts`). */
   number: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29;
   /** An experiment: its attempts, clears and time go to the experiments' store, never the save, and it is no part of any count. FF7's Guard Scorpion is hidden (no card; `BattleScreenExperiment`); the FFX-2 Leblanc preview is hidden too (no card; its word on chapter select, `./chapter-exp-leblanc.ts`) and plays through the chapters' own flow. */
   experimental?: true;

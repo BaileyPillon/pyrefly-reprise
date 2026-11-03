@@ -28,6 +28,9 @@ export const SPECTRAL_CIRCLE_IDS = [
   'spectral-circle-7',
 ] as const;
 
+/** The battle-state flag that says a Circle is armed (a lit mine); the stage lights that glyph's ring by it. The battle layer keeps its own copy of the prefix (`ARMED_PREFIX`). */
+export const SPECTRAL_ARMED_FLAG_PREFIX = 'plat.armed.' as const;
+
 /** AI script ids (registered by `battle/ffx/ai/spectral-keeper.ts`). */
 export const SPECTRAL_KEEPER_SCRIPT = 'spectral-keeper' as const;
 export const SPECTRAL_CIRCLE_SCRIPT = 'spectral-circle' as const;
