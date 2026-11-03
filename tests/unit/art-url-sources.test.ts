@@ -62,7 +62,8 @@ const codeOf = (relative: string) => CODE.get(join(SRC, relative))!;
 describe('art URLs come from artUrl', () => {
   // The last two are the dev-only route to Bailey's own converted FFX files (`/__ffx-local/`): both return before any request unless `import.meta.env.DEV`, they name no art master, and nothing they read is shipped.
   // The Wind Waker scene (FFX-2 only, Chapter 32) reads the base for the URLs of its own model files (`models-exp/windwaker/*.glb`, `engine/ww3d/layout.ts#modelUrl`): they are models, not art, and no master of theirs is derived.
-  const MAY_READ_THE_BASE = new Set(['engine/PaintedArt.ts', 'engine/ArtManifest.ts', 'audio/AudioManager.ts', 'engine/ffx3d/localAssets.ts', 'engine/ffxcam/load.ts', 'scenes/exp-windwaker-stage.ts']);
+  // The hidden 3D Bahamut's scene (FFX-2 only, Chapter 31) reads the base the same way, for its own model folders (`models-exp/yrp/`, `models-exp/yrp-hd/`): models, not art (r74 integration).
+  const MAY_READ_THE_BASE = new Set(['engine/PaintedArt.ts', 'engine/ArtManifest.ts', 'audio/AudioManager.ts', 'engine/ffx3d/localAssets.ts', 'engine/ffxcam/load.ts', 'scenes/exp-windwaker-stage.ts', 'scenes/exp-yrp-3d-stage.ts']);
 
   it('reads the source set it checks', () => {
     expect(ALL.length).toBeGreaterThan(400);
