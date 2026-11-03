@@ -10,7 +10,7 @@
 
 import { Vector3, type PerspectiveCamera, type Scene } from 'three';
 import type { AnyCombatant, BattleState, CombatantId, Side } from '../battle/common/types.ts';
-import { artCandidatesFor, characterUrl, resolveArt, resolvePoseMap, summonArtId, worldHeightFor } from './BattlePresenterArt.ts';
+import { ART_KEY, artCandidatesFor, characterUrl, resolveArt, resolvePoseMap, summonArtId, worldHeightFor } from './BattlePresenterArt.ts';
 import { figureHeight, formPlanScale, partyStature, sceneOwnHeight, STATURE_KEY } from './PartyStature.ts';
 import { backToShared, statureOf } from './SharedHeight.ts';
 import { inArtNamespace } from '../data/art/artNamespace.ts';
@@ -388,7 +388,7 @@ export class PaintedStage implements BattleStage {
     // The rig first (its awaits all come before the figure exists), then the painting set made right here by the one `await PaintedActor.create` it always was: no extra tick between a built figure and what the presenter does with it.
     // A figure the demo's prebuild parked for this very question (`FigureCache.ts`) is taken instead, its textures already up and its programs built; with nothing parked this line is what it always was.
     const built: BuiltFigure = takeParkedFigure(this.opts.sceneKey, c.id, spec.fingerprint) ?? (await tryRigFigure(request)) ?? { actor: await PaintedActor.create(request.opts), rig: null };
-    const actor = built.actor;
+    const actor = built.actor; actor.userData[ART_KEY] = artId; // the art id the battle says this figure is, for a model that stands in for the painting (`BattlePresenterArt.ART_KEY`)
     const planned = size.stature !== 1 ? size.stature : formPlanScale(this.opts.slots, c.id, artId, spec.shared, worldHeight); // a figure at a scene's form height is planned at the shared one too
     if (planned !== 1) actor.userData[STATURE_KEY] = planned; // the framing plans the party at the shared height, as before (`fx/mix/planFig.ts`)
 
@@ -686,7 +686,7 @@ export class PaintedStage implements BattleStage {
     const staged = this.actors.get(id);
     if (!staged || staged.artId === artId) return;
     const before = staged.artId;
-    staged.artId = artId;
+    staged.artId = staged.actor.userData[ART_KEY] = artId; // both at once, before the paintings load: a model that stands in for them swaps with the flash, not after the files
     const poses = await resolvePoseMap(artId, staged.kind);
     staged.painted = paintedPoses(artId, poses, characterUrl);
     this.fitFormHeight(id, staged, before, artId); // before the poses load, so their scale is solved at the new height

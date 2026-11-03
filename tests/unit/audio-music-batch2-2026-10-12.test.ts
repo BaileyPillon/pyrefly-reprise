@@ -250,6 +250,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
     'ffx2-fallen-maesters': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons'] }, // the hidden Fallen Maesters (FFX-2 only, 2026-11-02): the Via Infinito's four floors play the same "Aeons" cue, a flagged stand-in (FM10), by reference
     'mirror-aeons': { scene: 'scene-gagazet', links: ['boss-challenge', 'boss-yojimbo'] }, // the hidden Mirror Aeons chapter (FFX only, 2026-10-15): the mountain's bed as the stand-in, the generic "Challenge" boss cue for the Sisters and Yojimbo's own cue for Dark Yojimbo, both by reference
     'spectral-keeper': { scene: 'scene-zanarkand-dome', links: ['boss-challenge'] }, // the hidden Spectral Keeper (FFX only, 2026-11-02): the Dome's own bed and Yunalesca's "Challenge" cue as a flagged stand-in (preflight SK10), by reference (no new cue)
+    'exp-yrp-3d': { scene: 'scene-bevelle-underground', links: ['boss-bahamut'] }, // the hidden 3D Bahamut (FFX-2 only, ch-yrp 2026-11-02): Chapter IV's fight by reference, so Chapter IV's bed and its "Yuna's Ballad" cue (no new cue)
     'last-summoning': { scene: 'scene-dreams-end', links: ['boss-yu-yevon'] }, // the hidden Last Summoning (FFX only, 2026-10-15): Dream's End's own bed and Yu Yevon's theme, by reference (no new cue)
   };
 
@@ -277,7 +278,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
       'boss-den-of-woe': ['ffx2-den-of-woe'],
       'boss-experiment': ['ffx2-masterpiece-theatre'],
       'scene-chateau-leblanc': ['ffx2-leblanc', 'exp-leblanc'],
-      'victory-bahamut': ['ffx2-bahamut'],
+      'victory-bahamut': ['ffx2-bahamut', 'exp-yrp-3d'], // the hidden 3D Bahamut is Chapter IV's record by reference, so it ends on Chapter IV's quiet resolve too
     };
     for (const c of batch2.cues.filter((x) => x.mode === 'new' && owners[x.cue])) {
       for (const chapter of allChapters()) {

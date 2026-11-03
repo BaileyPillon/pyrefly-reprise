@@ -21,13 +21,13 @@
  * `tests/unit/chapter-doors.test.ts` pins the table: every word is distinct and none begins with, ends with or contains another, and no word's end is another's beginning, so one run of letters can
  * only ever finish one door. The four older doors' suites and `fayth-door.test.ts` drive the board itself with real key events.
  *
- * **`summon`** (FFX, the hidden Last Summoning, `./summonDoor.ts`: S is `down`, M is `select`; U, O and N are unbound) is a plain `WordDoor` too.
+ * **`summon`** (FFX, the hidden Last Summoning, `./summonDoor.ts`: S is `down`, M is `select`; U, O and N are unbound) is a plain `WordDoor` too, and so is **`yrp`** (FFX-2, the hidden 3D Bahamut, `./yrpDoor.ts`: R is `r1`; Y and P are unbound; three letters, the shortest word on the table).
  *
  * **`keeper`** (FFX, the hidden Spectral Keeper, `./keeperDoor.ts`: K and P are unbound, E is `start`, R is `r1`) is a plain `WordDoor` too.
  *
  * **`infinito`** (FFX-2, the hidden Fallen Maesters, `./maestersDoor.ts`: only F is a bound key, `l1`, which the board ignores; I, N, T and O are unbound) is a plain `WordDoor` too.
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra` and `infinito`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo` and `summon`.
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon` and `keeper`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -46,6 +46,7 @@ import { SUMMON_DOOR_CHAPTER, SUMMON_DOOR_WORD } from './summonDoor.ts';
 import { KEEPER_DOOR_CHAPTER, KEEPER_DOOR_WORD } from './keeperDoor.ts';
 import { MAESTERS_DOOR_CHAPTER, MAESTERS_DOOR_WORD } from './maestersDoor.ts';
 import { PILGRIM_DOOR_CHAPTER, PILGRIM_DOOR_WORD } from './pilgrimDoor.ts';
+import { YRP_DOOR_CHAPTER, YRP_DOOR_WORD } from './yrpDoor.ts';
 
 /** One door: a word on the keyboard and the chapter it opens. */
 export interface ChapterDoor {
@@ -77,6 +78,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: SUMMON_DOOR_WORD, chapter: SUMMON_DOOR_CHAPTER },
   { word: KEEPER_DOOR_WORD, chapter: KEEPER_DOOR_CHAPTER },
   { word: MAESTERS_DOOR_WORD, chapter: MAESTERS_DOOR_CHAPTER },
+  { word: YRP_DOOR_WORD, chapter: YRP_DOOR_CHAPTER },
 ];
 
 /**

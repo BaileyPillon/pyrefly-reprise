@@ -218,6 +218,22 @@ export const SCENE_LOOKS_A: Readonly<Record<string, SceneLookA>> = {
     vignetteTint: '#9a96c8',
     vignetteAdd: 0,
   },
+  /**
+   * The hidden real-models Bahamut chapter's stage (FFX-2 only; branch `exp-yrp-real`, 2026-10-21; key `EXP_YRP_SCENE`). Bailey: "the color grade in the game currently doesnt work with this
+   * experimental chapter. the bold look makes things way oversaturated and bad." The chapter carries its own neutral grade (`engine/yrp3d/stageLook.ts`, `YRP_PALETTE`, which encodes) and lights the real
+   * figures as the turntable's soft studio; the FFX-2 defaults then sat on top of it: the Pink Hour LUT (violet shadows, +0.26 mid saturation, a steep S-curve), a bloom from 0.45 at x1.5 that turned
+   * every cast flash and lantern into a halo and washed Bahamut to a silver ghost, the violet vignette, and star glints on the lamps. This row keeps the palette's own numbers: no look LUT, the palette's
+   * faint bloom (threshold 0.94, strength 0.16, radius 0.5: only the lantern cores and the Mega Flare orb glow), a neutral dark vignette and no extra vignette, no stars, no shafts (the plate paints its own).
+   */
+  'exp-yrp-3d-stage': {
+    ...FFX2_BASE,
+    shafts: [],
+    bloom: { threshold: 0.94, strength: 0.16, radius: 0.5 },
+    streak: { ...FFX2_BASE.streak, gain: 0 },
+    look: 0,
+    vignetteTint: '#0c0c12',
+    vignetteAdd: 0,
+  },
 };
 
 /** A room with no entry still gets the look, the bloom and the grade, with no shafts. */

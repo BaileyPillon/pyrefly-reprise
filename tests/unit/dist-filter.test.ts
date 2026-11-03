@@ -32,6 +32,11 @@ describe('what never ships', () => {
     for (const p of [
       'audio/candidates/evrae-near.mp3',
       'audio/candidates/C-round1-battle-ffx-A-x12.ogg',
+      'models-exp/yrp/bahamut-ai.glb', // the hidden 3D Bahamut's models: most ship since ch-yrp (2026-11-02; tests/unit/yrp-ship-set.test.ts pins the set); the AI boss, the HD girls and the HD tier never do
+      'models-exp/yrp/bahamut-ai-rigged.glb',
+      'models-exp/yrp-hd/yuna.glb',
+      'models-exp/yrp/dress/yuna-gunner/hd/anims.glb',
+      'models-exp/yrp/dress/yuna-samurai/anims.glb',
       'art/portraits/f4blulu.1.raw.png',
       'art/portraits/f4lulu.3.png',
       'art/characters/ffx2-bahamut/ko.2.json',

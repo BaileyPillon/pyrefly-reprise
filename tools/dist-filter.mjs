@@ -20,6 +20,11 @@
  *   sixteen pictures in `public/bts/` stay on disk and out of every build until the switch is turned on; with it on,
  *   this rule is gone and they ship. The page's code and words are kept out of the bundle by the same constant.
  *
+ * - `models-exp/**` except the chapter's shipped set: the models of the hidden 3D Bahamut chapter (FFX-2 only, `src/engine/yrp3d/`). They are large, gitignored and never committed (the tree that builds has them, as it has the
+ *   art), and until 2026-11-02 nothing shipped them. Since the retail-assets rule was lifted (Bailey, 2026-10-18) and the chapter was folded in (branch `ch-yrp`) a build ships `isShippedModelFile`'s files: the base figures, their clips and
+ *   weapons, the game's Bahamut in HD, and the fourteen dresspheres on Chapter IV's three Garment Grids at the base texture size (`YRP_SHIPPED_*`, `src/data/yrp-ids.ts`), with a `dress/index.json` rewritten to list only those
+ *   (`trimDressIndex`), and their JSON notes cleaned of any local path (`scrubModelNotes`: the extraction wrote a scratch folder's path into one clip map's evidence line; ch-yrp review MAJOR-2). Never shipped: the AI boss's files, the HD figures of the girls, the HD tier of the dresspheres (688 MB; six files are over the 25 MiB the host takes) and the dresspheres no grid reaches.
+ *
  * Source maps are the fourth kind (PR-0328, adopted by Bailey 2026-10-03 as
  * D-335): the three `.js.map` files of release 36 weighed 22,775,896 bytes,
  * nobody in the game or the critic's tooling ever requests them, and the site
@@ -35,10 +40,12 @@
  *
  * Game case: both (delivery plumbing, CHK-017).
  */
-import { copyFileSync, lstatSync, mkdirSync, readFileSync, readdirSync, rmSync } from 'node:fs';
+import { copyFileSync, lstatSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, extname, join, relative, sep } from 'node:path';
 
 import { BTS_LIVE } from '../src/app/changelog/behindTheScenes.ts';
+import { YRP_MODEL_DIRS, YRP_SHIPPED_BASE_FILES, YRP_SHIPPED_DRESS_FOLDERS, YRP_SHIPPED_HD_FILES } from '../src/data/yrp-ids.ts';
+import { findLocalPaths, redactLocalPaths } from './dist-local-paths.mjs';
 
 /**
  * The environment variable that asks a build to keep its source maps off to the
@@ -47,11 +54,31 @@ import { BTS_LIVE } from '../src/app/changelog/behindTheScenes.ts';
  */
 export const SOURCEMAP_DIR_ENV = 'PYREFLY_SOURCEMAP_DIR';
 
+/** The folder of the hidden 3D Bahamut's dress library under a build root, and its manifest. */
+const DRESS_DIR = `${YRP_MODEL_DIRS.base}/dress/`;
+const DRESS_INDEX = `${DRESS_DIR}index.json`;
+const SHIPPED_BASE = new Set(YRP_SHIPPED_BASE_FILES.map((f) => `${YRP_MODEL_DIRS.base}/${f}`));
+const SHIPPED_HD = new Set(YRP_SHIPPED_HD_FILES.map((f) => `${YRP_MODEL_DIRS.hd}/${f}`));
+const SHIPPED_DRESS = new Set(YRP_SHIPPED_DRESS_FOLDERS);
+
+/**
+ * Does this file of the hidden 3D Bahamut's models ship? (`p` is a path under the build root with forward slashes, starting `models-exp/`.) The base figures, clips, weapons and clip map; the game's Bahamut in HD and the HD clip
+ * map; the shipped dresspheres' `anims.glb` and `clipmap.json` and the manifest (which `trimDressIndex` rewrites). Nothing else under `models-exp/`: not the AI boss, not the HD girls, not an HD dressphere.
+ * @param {string} p
+ */
+export function isShippedModelFile(p) {
+  if (SHIPPED_BASE.has(p) || SHIPPED_HD.has(p) || p === DRESS_INDEX) return true;
+  if (!p.startsWith(DRESS_DIR)) return false;
+  const [folder, file, ...more] = p.slice(DRESS_DIR.length).split('/');
+  return more.length === 0 && SHIPPED_DRESS.has(folder) && (file === 'anims.glb' || file === 'clipmap.json');
+}
+
 /** @param {string} rel a path relative to the build root (or `public/`), either slash. */
 export function isUnshippedPublicFile(rel) {
   const p = rel.split(sep).join('/').replace(/^\/+/, '');
   if (p === 'audio/candidates' || p.startsWith('audio/candidates/')) return true;
   if (!BTS_LIVE && (p === 'bts' || p.startsWith('bts/'))) return true;
+  if (p === 'models-exp' || p.startsWith('models-exp/')) return !isShippedModelFile(p);
   if (!p.startsWith('art/')) return false;
   if (/\.raw\.png$/i.test(p)) return true;
   return /\.[0-9]+\.(png|json)$/i.test(p);
@@ -136,19 +163,97 @@ export function keepSourceMaps(root, dest) {
   return kept;
 }
 
+/**
+ * The dress library's manifest as it ships: only the entries whose folder ships, each with `hd` off (the HD tier is not shipped, so the page must not ask for it). A pure function of the parsed manifest; null when it is not one
+ * (no `entries` array), which leaves the file as it is.
+ * @param {unknown} json
+ */
+export function shippedDressIndex(json) {
+  if (typeof json !== 'object' || json === null || Array.isArray(json) || !Array.isArray(json.entries)) return null;
+  const entries = json.entries
+    .filter((e) => typeof e === 'object' && e !== null && SHIPPED_DRESS.has(e.folder))
+    .map((e) => ({ ...e, hd: false }));
+  return { ...json, entries };
+}
+
+/** Rewrite the shipped copy of `models-exp/yrp/dress/index.json` in a pruned build (`shippedDressIndex`). Returns whether a manifest was there to rewrite; the build's own copy only, never the source. */
+export function trimDressIndex(root) {
+  const file = join(root, ...DRESS_INDEX.split('/'));
+  let parsed;
+  try {
+    parsed = JSON.parse(readFileSync(file, 'utf8'));
+  } catch {
+    return false; // no manifest (the chapter then plays on its single model per girl) or not JSON (left for the page to refuse)
+  }
+  const trimmed = shippedDressIndex(parsed);
+  if (!trimmed) return false;
+  writeFileSync(file, `${JSON.stringify(trimmed, null, 1)}\n`);
+  return true;
+}
+
+/**
+ * Does this text name a place on the PC that built it? The privacy gate's one definition of a local path (`tools/dist-local-paths.mjs` `findLocalPaths`: a drive path or a user-profile path), and the scratch folder's name
+ * alone, which is just as local. The shipped models carry provenance notes written by the extraction scripts (a clip map's `evidence` line once named the folder its probe renders were in), and a local path is never
+ * shipped in a string (house rule; ch-yrp review MAJOR-2).
+ * @param {string} text
+ */
+export function carriesLocalPath(text) {
+  return findLocalPaths(text).length > 0 || text.includes('pyrefly-scratch');
+}
+
+/**
+ * The text of a shipped note with every local path taken out. A parenthetical that names one goes whole (with the space before it, so "...shows (renders in D:/x/y); the loops..." reads "...shows; the loops..."); any path
+ * left is cut to its last name as the painting sidecars' are (`redactLocalPaths`); the scratch folder's name alone becomes "(a local folder)". Pure. The caller parses the result again before it writes it.
+ * @param {string} text
+ */
+export function scrubLocalPaths(text) {
+  const whole = text.replace(/[ \t]*\([^()"]*\)/g, (m) => (carriesLocalPath(m) ? '' : m));
+  return redactLocalPaths(whole).replace(/[^\s"'()<>|,;]*pyrefly-scratch[^\s"'()<>|,;]*/g, '(a local folder)');
+}
+
+/**
+ * Take the local paths out of the shipped copies of the models' JSON notes (the dresspheres' clip maps) in a pruned build. A file that has none is not touched; one that would stop parsing after the scrub is left alone
+ * and named in the return so the verifier's scan reports it. The build's own copy only, never the source (the source is a hard link to the extraction output). Returns the files rewritten.
+ */
+export function scrubModelNotes(root) {
+  const done = [];
+  for (const { rel, full } of listFiles(join(root, 'models-exp'))) {
+    if (extname(rel).toLowerCase() !== '.json') continue;
+    const text = readFileSync(full, 'utf8');
+    if (!carriesLocalPath(text)) continue;
+    const clean = scrubLocalPaths(text);
+    try {
+      JSON.parse(clean);
+    } catch {
+      continue;
+    }
+    writeFileSync(full, clean);
+    done.push(`models-exp/${rel}`);
+  }
+  return done;
+}
+
+/** Remove the empty folders under `dir`, deepest first, and `dir` itself when it ends up empty. Real folders only: a link is never followed or removed. */
+function removeEmptyFolders(dir) {
+  let st;
+  try {
+    st = lstatSync(dir);
+  } catch {
+    return; // no such folder
+  }
+  if (!st.isDirectory() || st.isSymbolicLink()) return;
+  for (const name of readdirSync(dir)) removeEmptyFolders(join(dir, name));
+  if (readdirSync(dir).length === 0) rmSync(dir, { recursive: true });
+}
+
 /** Delete them from a finished build. Returns what was removed. */
 export function pruneUnshipped(root) {
   const removed = findUnshipped(root);
   for (const rel of removed) rmSync(join(root, rel), { force: true });
-  // The candidates folder (and the page's picture folder while its switch is off) goes too, so no
-  // empty directory ships (only when it is a real, now empty folder).
-  for (const folder of [join(root, 'audio', 'candidates'), join(root, 'bts')]) {
-    try {
-      const st = lstatSync(folder);
-      if (st.isDirectory() && !st.isSymbolicLink() && readdirSync(folder).length === 0) rmSync(folder, { recursive: true });
-    } catch {
-      /* no such folder */
-    }
-  }
+  trimDressIndex(root);
+  scrubModelNotes(root);
+  // The candidates folder (and the page's picture folder while its switch is off) goes too, and so do the models' folders
+  // that held only unshipped files, so no empty directory ships (only real, now empty folders).
+  for (const folder of [join(root, 'audio', 'candidates'), join(root, 'bts'), join(root, 'models-exp')]) removeEmptyFolders(folder);
   return removed;
 }

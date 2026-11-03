@@ -8,6 +8,7 @@ import { ff7MemberRows } from '../ff7/ff7ResultRows.ts';
 import { apForLevel } from '../../battle/ffx/results.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { artNamespaceOfScene } from '../../data/art/artNamespace.ts';
+import { EXP_YRP_ID } from '../../data/yrp-ids.ts';
 import { ITEMS as FFX_ITEMS } from '../../data/ffx/index.ts';
 import {
   ABILITIES as FFX2_ABILITIES,
@@ -37,9 +38,8 @@ export function formatNumber(n: number): string {
  * covers it so a caller checking "should this feel grim" gets one answer).
  */
 export const GRIM_CHAPTER_IDS: ReadonlySet<string> = new Set([
-  'seymour-flux',
-  'yunalesca',
-  'ffx2-bahamut',
+  'seymour-flux', 'yunalesca', 'ffx2-bahamut',
+  EXP_YRP_ID, // the hidden 3D Bahamut (FFX-2 only, ch-yrp) is Chapter IV's fight, so it is grim for the same reason
 ]);
 
 export function isGrimChapter(chapterId: string): boolean {
@@ -51,7 +51,7 @@ export function isGrimChapter(chapterId: string): boolean {
  * victory pose, no fanfare, no quips [writing-bible §5.4, `dsl.ts` `ResultsStep.silent`].
  */
 export function isSilentResultsChapter(chapterId: string): boolean {
-  return chapterId === 'ffx2-bahamut';
+  return chapterId === 'ffx2-bahamut' || chapterId === EXP_YRP_ID; // the hidden 3D Bahamut is that same fight (its blurb: "Nobody cheers when this one is over"), so the same sources apply
 }
 
 /**

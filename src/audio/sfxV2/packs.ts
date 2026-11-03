@@ -40,6 +40,7 @@ export const BOSS_PACKS: Readonly<Record<string, readonly string[]>> = {
   'ffx2-leblanc': ['ffx2-leblanc'],
   'exp-leblanc': ['ffx2-leblanc'], // the hidden Leblanc chapter plays the same fight
   'ffx2-bahamut': ['ffx2-bahamut'],
+  'exp-yrp-3d': ['ffx2-bahamut'], // the hidden 3D Bahamut plays Chapter IV's fight, so Bahamut's roar and Impulse (`ffx2.boss.bahamut`, `ffx2.boss.impulse`) need his pack (ch-yrp review MAJOR-1; FFX-2 only)
   'ffx2-fallen-aeons': ['ffx2-aeons'],
   'ffx2-ixion-djose': ['ffx2-aeons'],
   'ffx2-vegnagun-shuyin': ['ffx2-machina', 'ffx2-shuyin'],

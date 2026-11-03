@@ -77,6 +77,13 @@ const FORM_ART_IDS: ReadonlySet<string> = new Set(['yunalesca', 'braskas-final-a
 /** FFX-2 art ids that collide with an FFX id and need the game prefix. */
 const FFX2_PREFIXED: ReadonlySet<string> = new Set(['bahamut']);
 
+/**
+ * The key an actor's `userData` keeps the art id it is staged under at (the stage writes it when it adds the actor and again when `setArt` swaps the painting: a form change, an FFX-2 spherechange). A model that stands in for
+ * the painting reads it off the actor to know what the battle says the figure is now (the hidden 3D Bahamut chapter's dressphere models, `engine/yrp3d/dress.ts`); nothing else in the engine reads it. Additive: no actor behaves
+ * differently for having it.
+ */
+export const ART_KEY = 'artId';
+
 /** The painted-art id for a live combatant. */
 export function artIdFor(c: AnyCombatant): string {
   const id = c.id;

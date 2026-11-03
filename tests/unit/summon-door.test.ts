@@ -76,8 +76,8 @@ describe('the word against every other door word', () => {
   const others = registered;
   void DARK_MIRROR_WORD;
 
-  it('the registered neighbours are the twelve already in the table (the Spectral Keeper’s `keeper` and, last, the Fallen Maesters’ `infinito`), the Mirror Aeons chapter’s `yojimbo` among them', () => {
-    expect(registered).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', DARK_MIRROR_WORD, 'keeper', 'infinito']);
+  it('the registered neighbours are the thirteen already in the table (the Spectral Keeper’s `keeper`, the Fallen Maesters’ `infinito` and, last, the hidden 3D Bahamut’s `yrp`), the Mirror Aeons chapter’s `yojimbo` among them', () => {
+    expect(registered).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', DARK_MIRROR_WORD, 'keeper', 'infinito', 'yrp']); // `yrp`: the hidden 3D Bahamut's (FFX-2, chapter 31, ch-yrp 2026-11-02)
   });
 
   it('no word begins with, ends with or contains the other, and no end of one is the beginning of the other, in either order (the Dark Mirror lane\'s yojimbo included)', () => {
