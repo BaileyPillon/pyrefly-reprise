@@ -237,8 +237,11 @@ describe('the models are local files that the build ships', () => {
     for (const rel of ['yuna', 'rikku', 'paine', 'valefor'].map((n) => `${WW_MODEL_DIR}/${n}.glb`)) expect(isUnshippedPublicFile(rel), rel).toBe(false);
     for (const rel of ['pistol', 'dagger', 'sword'].map((n) => `${WW_PROP_DIR}/${n}.glb`)) expect(isUnshippedPublicFile(rel), rel).toBe(false);
     for (const rel of ['wall', 'door', 'brazier', 'pillar'].map((n) => `${WW_TEMPLE_DIR}/${n}.glb`)) expect(isUnshippedPublicFile(rel), rel).toBe(false);
-    // an allow-list: another experiment's models (the 3D Bahamut branch's, say) still stay out of every build
-    expect(isUnshippedPublicFile('models-exp/yrp/yuna.glb')).toBe(true);
+    // an allow-list: another experiment's models (one whose folder no set names) still stay out of every build. The 3D Bahamut's own set (Chapter 31) ships since ch-yrp, beside this folder (r74 integration:
+    // `yrp/yuna.glb` is one of its 43 files, `yrp/bahamut-ai.glb` is not)
+    expect(isUnshippedPublicFile('models-exp/some-new-experiment/yuna.glb')).toBe(true);
+    expect(isUnshippedPublicFile('models-exp/yrp/yuna.glb')).toBe(false);
+    expect(isUnshippedPublicFile('models-exp/yrp/bahamut-ai.glb')).toBe(true);
   });
 
   it('is gitignored: the repo is public and the files are large', () => {
