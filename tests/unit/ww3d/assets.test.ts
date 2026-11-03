@@ -1,6 +1,6 @@
 /**
  * **The cleaned assets of 2026-10-21, loaded from disk** (`public/models-exp/windwaker/`: Valefor `valefor-v2`, Rikku `rikku-v3`, the three weapons in `props/`, the four temple pieces in `temple/`; the hidden Wind Waker
- * chapter, FFX-2 only). The files are local only (gitignored, never committed, never shipped), so every test here is skipped on a machine without them. Where they are, each file is read in Node, with no renderer: the glTF's
+ * chapter, FFX-2 only). The files are kept out of git (they do ship in a production build), so every test here is skipped on a machine without them. Where they are, each file is read in Node, with no renderer: the glTF's
  * JSON for its size and convention, and three's own `GLTFLoader` (pictures stripped) for the chapter's own loaders to place:
  *
  * 1. **Each file is what the handoff says**: a weapon has its origin at the grip centre, its tip along +Z, +Y up, and its length (0.22 m the pistol, 0.28 the dagger, 0.85 the sword); a temple piece stands on y 0, centred

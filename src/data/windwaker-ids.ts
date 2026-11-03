@@ -13,7 +13,7 @@ export const EXP_WINDWAKER_ID = 'exp-windwaker' as const;
 export const EXP_WINDWAKER_SCENE = 'exp-windwaker-stage' as const;
 
 /**
- * The folder the figures' models are dropped into, under `public/` (gitignored, never committed, never shipped: `tools/dist-filter.mjs` leaves `models-exp/` out of every build): `yuna.glb`, `rikku.glb`,
+ * The folder the figures' models are dropped into, under `public/` (gitignored, never committed; they SHIP in a production build: `tools/dist-filter.mjs` lets `models-exp/windwaker/**` through and leaves every other `models-exp/` folder out): `yuna.glb`, `rikku.glb`,
  * `paine.glb` and `valefor.glb`. A figure with no file here stands on a neutral capsule (`../engine/ww3d/capsule.ts`) and the chapter still plays.
  */
 export const WW_MODEL_DIR = 'models-exp/windwaker' as const;

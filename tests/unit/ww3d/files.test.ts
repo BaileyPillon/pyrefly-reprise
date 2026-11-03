@@ -1,5 +1,5 @@
 /**
- * **The real model files, when they are on disk** (`public/models-exp/windwaker/*.glb`; the hidden Wind Waker chapter, FFX-2 only). The files are local only (gitignored, never committed, never shipped), so every test here is
+ * **The real model files, when they are on disk** (`public/models-exp/windwaker/*.glb`; the hidden Wind Waker chapter, FFX-2 only). The files are kept out of git (they do ship in a production build), so every test here is
  * skipped on a machine without them. Where they are, the contract the chapter's code is written to is read straight off the glTF's JSON chunk (no renderer, no loader):
  *
  * - each girl is one skinned mesh on a skeleton with the bones the chapter reads (the head turn, the weapons, the facing), clips named for what they are with the stance clip `idle_combat` among them, and no knock-out clip;

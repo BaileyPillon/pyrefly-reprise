@@ -11,8 +11,8 @@
  * - **Staging.** The party's three slots, Valefor's spot and the reserve spots are the lab's (`../engine/ww3d/layout.ts`); `holdParty` keeps the stage's relaxation off the slots (the girls' weapons are aimed at them);
  *   Valefor's world height is published (`figureHeights`) and she hovers on the model's own hover and bob.
  * - **The look.** `?ww=hd` (the default), `?ww=hd-soft` (half the bloom) or `?ww=classic` (no bloom, a razor-hard terminator) choose the lab's variant; `?ww=painted` plays chapter 24's own scene, the comparison.
- * - **Loaded on use.** Everything under `../engine/ww3d/` is imported dynamically, so no other chapter carries it. The files are local only (`tools/dist-filter.mjs`): on the website the chapter plays on capsules and
- *   procedural weapons and temple pieces.
+ * - **Loaded on use.** Everything under `../engine/ww3d/` is imported dynamically, so no other chapter carries it. The files are kept out of git but SHIP in a production build (`tools/dist-filter.mjs`; `tools/vite-ww-models.mjs` fails a release
+ *   build that lacks them): a tree or a build without them plays on capsules and procedural weapons and temple pieces.
  * - **Swappable.** `models-exp/windwaker/props/<pistol|dagger|sword>.glb` and `temple/<wall|door|brazier|pillar>.glb` replace the procedural stand-ins when they exist (`../engine/ww3d/swaps.ts`).
  *
  * The upright phone is not staged; this chapter is a desktop experiment.

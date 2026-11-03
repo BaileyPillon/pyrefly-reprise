@@ -2,7 +2,7 @@
  * **How bytes arrive and become a scene** (the hidden Wind Waker chapter; FFX-2 only): the one place the chapter touches `fetch` and three's glTF loader, so a test can hand it fakes. Used by the models
  * (`./model.ts`) and by the swappable props and temple pieces (`./swaps.ts`).
  *
- * The files are **local only**: gitignored, never committed (the repo is public and the files are large) and never shipped (`tools/dist-filter.mjs`), so a missing file is the normal case on the website and a fetch
+ * The files are **kept out of git** (the repo is public and the files are large) and **ship in a production build** (`tools/dist-filter.mjs` names `models-exp/windwaker/**`; `tools/vite-ww-models.mjs` restores them before a build and fails a release build that lacks them), so a missing file is the case of a dev tree or a build made without them and a fetch
  * that fails, a status that is not OK, or a body that is not a binary glTF all mean the same thing: no file. Draco and Meshopt are not decoded.
  */
 

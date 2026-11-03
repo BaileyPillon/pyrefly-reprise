@@ -1,5 +1,5 @@
 /**
- * **Reading the real Wind Waker model files in Node** (FFX-2 only; `public/models-exp/windwaker/`, local only: gitignored, never committed, never shipped). Shared by `ww3d/files.test.ts` and `ww3d/assets.test.ts`, which skip
+ * **Reading the real Wind Waker model files in Node** (FFX-2 only; `public/models-exp/windwaker/`, kept out of git; they do ship in a production build). Shared by `ww3d/files.test.ts` and `ww3d/assets.test.ts`, which skip
  * themselves on a machine without the files.
  *
  * - {@link readGltf} / {@link boxOf}: the glTF's JSON chunk and a mesh's position box, with no renderer and no loader;

@@ -1,6 +1,6 @@
 /**
- * **A loaded model, made toon and fitted to a figure** (the hidden Wind Waker chapter; FFX-2 only): `yuna.glb`, `rikku.glb`, `paine.glb` and `valefor.glb`. The files are **local only**: gitignored, never committed (the repo
- * is public and the files are large) and never shipped (`tools/dist-filter.mjs`). A slot with no file stands on the neutral capsule (`./capsule.ts`), so the chapter always plays with something on every mark.
+ * **A loaded model, made toon and fitted to a figure** (the hidden Wind Waker chapter; FFX-2 only): `yuna.glb`, `rikku.glb`, `paine.glb` and `valefor.glb`. The files are **kept out of git** (the repo
+ * is public and the files are large) and **ship in a production build** (`tools/dist-filter.mjs`, `tools/ww-models.mjs`, `tools/vite-ww-models.mjs`). A slot with no file stands on the neutral capsule (`./capsule.ts`), so the chapter always plays with something on every mark.
  *
  * ## What a file must be (the contract the real models are made to)
  *
