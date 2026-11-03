@@ -68,13 +68,22 @@ const SHIPPED_DRESS = new Set(YRP_SHIPPED_DRESS_FOLDERS);
 const WINDWAKER_DIR = 'models-exp/windwaker';
 
 /**
+ * Is this path the hidden Wind Waker chapter's models folder, or a file in it? (`p` is under the build root with forward slashes.) The whole folder ships; `tools/yrp-models-verify.mjs` lets it stand beside the 3D Bahamut's set
+ * (r74 integration: the two chapters' model sets ship together). A sibling folder that merely begins with the name is not it.
+ * @param {string} p
+ */
+export function isWindwakerModelFile(p) {
+  return p === WINDWAKER_DIR || p.startsWith(`${WINDWAKER_DIR}/`);
+}
+
+/**
  * Does this file of the hidden 3D Bahamut's models ship? (`p` is a path under the build root with forward slashes, starting `models-exp/`.) The base figures, clips, weapons and clip map; the game's Bahamut in HD and the HD clip
  * map; the shipped dresspheres' `anims.glb` and `clipmap.json` and the manifest (which `trimDressIndex` rewrites); and everything in the hidden Wind Waker chapter's own folder (`models-exp/windwaker/`, shipped whole; a sibling folder that merely begins with the name is not it).
  * Nothing else under `models-exp/`: not the AI boss, not the HD girls, not an HD dressphere, not an experiment whose folder is not named here.
  * @param {string} p
  */
 export function isShippedModelFile(p) {
-  if (p === WINDWAKER_DIR || p.startsWith(`${WINDWAKER_DIR}/`)) return true;
+  if (isWindwakerModelFile(p)) return true;
   if (SHIPPED_BASE.has(p) || SHIPPED_HD.has(p) || p === DRESS_INDEX) return true;
   if (!p.startsWith(DRESS_DIR)) return false;
   const [folder, file, ...more] = p.slice(DRESS_DIR.length).split('/');

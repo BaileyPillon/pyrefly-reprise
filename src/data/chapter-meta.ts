@@ -15,7 +15,6 @@
  * focal character's documented voice; they are not transcriptions of any
  * script line.
  */
-
 import type { GameId } from '../battle/common/types.ts';
 import type { ChapterId } from './encounters.ts';
 import { FFX2_LEBLANC_META } from './chapter-meta-ffx2-leblanc.ts';

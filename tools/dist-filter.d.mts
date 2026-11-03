@@ -2,6 +2,7 @@
 export const SOURCEMAP_DIR_ENV: 'PYREFLY_SOURCEMAP_DIR';
 export function isUnshippedPublicFile(rel: string): boolean;
 export function isShippedModelFile(p: string): boolean;
+export function isWindwakerModelFile(p: string): boolean;
 export function shippedDressIndex(json: unknown): { entries: Array<Record<string, unknown>> } | null;
 export function trimDressIndex(root: string): boolean;
 export function isSourceMapFile(rel: string): boolean;
