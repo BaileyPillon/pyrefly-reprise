@@ -13,6 +13,7 @@ import { plateUrlFor } from '../../src/app/screens/battlePreload.ts';
 import { backdropFileOf, SCENE_BACKDROP_FILE } from '../../src/data/art/artNamespace.ts';
 import { CHAPTERS, EXPERIMENT_CHAPTERS, UNLISTED_CHAPTERS } from '../../src/data/encounters.ts';
 import { MIRROR_ACT_I_PLATE, MIRROR_AEONS_SCENE } from '../../src/data/ffx/mirror-aeons-ids.ts';
+import { SPECTRAL_KEEPER_SCENE } from '../../src/data/ffx/spectral-keeper-ids.ts';
 
 const BACKDROPS = new URL('../../public/art/backdrops/', import.meta.url);
 
@@ -23,7 +24,8 @@ describe('a scene key that is a code key names the backdrop file it draws', () =
     expect(backdropFileOf('gagazet')).toBe('gagazet');
     expect(backdropFileOf(undefined)).toBeUndefined();
     expect(backdropFileOf('constructor')).toBe('constructor'); // a key on Object.prototype is not an entry
-    expect(Object.keys(SCENE_BACKDROP_FILE)).toEqual([MIRROR_AEONS_SCENE]);
+    expect(backdropFileOf(SPECTRAL_KEEPER_SCENE)).toBe('zanarkand-dome'); // the hidden Spectral Keeper's stage draws Chapter II's Dome plate
+    expect(Object.keys(SCENE_BACKDROP_FILE)).toEqual([MIRROR_AEONS_SCENE, SPECTRAL_KEEPER_SCENE]);
   });
 
   it('the battle preload warms the plate the stage opens on, not backdrops/mirror-aeons.png', () => {

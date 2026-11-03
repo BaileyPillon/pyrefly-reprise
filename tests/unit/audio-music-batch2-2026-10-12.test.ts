@@ -248,6 +248,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
     'ffx2-valefor-besaid': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Valefor at Besaid (FFX-2 only): the aeon cue Chapter XI and Ixion play, our own take
     'ffx2-angra-mainyu': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Angra Mainyu (FFX-2 only, 2026-10-14): the same "Aeons" cue, by reference
     'mirror-aeons': { scene: 'scene-gagazet', links: ['boss-challenge', 'boss-yojimbo'] }, // the hidden Mirror Aeons chapter (FFX only, 2026-10-15): the mountain's bed as the stand-in, the generic "Challenge" boss cue for the Sisters and Yojimbo's own cue for Dark Yojimbo, both by reference
+    'spectral-keeper': { scene: 'scene-zanarkand-dome', links: ['boss-challenge'] }, // the hidden Spectral Keeper (FFX only, 2026-11-02): the Dome's own bed and Yunalesca's "Challenge" cue as a flagged stand-in (preflight SK10), by reference (no new cue)
     'last-summoning': { scene: 'scene-dreams-end', links: ['boss-yu-yevon'] }, // the hidden Last Summoning (FFX only, 2026-10-15): Dream's End's own bed and Yu Yevon's theme, by reference (no new cue)
   };
 
@@ -269,7 +270,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
 
   it('plays each new cue in its own chapters only, and only in its own game (an FFX cue in FFX chapters, an FFX-2 cue in FFX-2 chapters)', async () => {
     const owners: Record<string, string[]> = {
-      'boss-challenge': ['yunalesca', 'sinspawn-gui', 'biran-yenke', 'mirror-aeons'],
+      'boss-challenge': ['yunalesca', 'sinspawn-gui', 'biran-yenke', 'mirror-aeons', 'spectral-keeper'],
       'boss-gui': ['sinspawn-gui'],
       'boss-seymour-omnis': ['seymour-omnis'],
       'boss-den-of-woe': ['ffx2-den-of-woe'],

@@ -51,7 +51,7 @@ export const berserkTail: AbilityDef = row({ id: SPECTRAL_ROWS.tail, name: 'Bers
  * multi flag never decides it (and a Provoked Keeper's single-target redirect leaves it alone).
  */
 export const attackAll: AbilityDef = row({
-  id: SPECTRAL_ROWS.sweep, name: 'Attack All', power: 32, formula: 'strength', damageType: 'physical', targeting: 'all-enemies', hits: 1, accuracy: 126, shatterChance: 120, extra: { groupTarget: true },
+  id: SPECTRAL_ROWS.sweep, name: 'Attack All', power: 32, formula: 'strength', damageType: 'physical', targeting: 'all-enemies', hits: 1, accuracy: 126, extra: { groupTarget: true }, // no `shatterChance` of our own: the record's shatter byte is 120 (a Petrified target shatters when a draw % 101 < 120, so always) and the record is the one the engine reads; the contract's percentage cannot say 120
 });
 
 /** 0x604D: no hit record, so nothing lands; the Circle it reaches lights. `groupTarget`: the two (or one) Circles the script armed, whatever their targetable bit. */

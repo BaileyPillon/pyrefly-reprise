@@ -145,8 +145,9 @@ describe("the attached records are the game's table", () => {
     // record fixes (FFX only, 2026-10-15: the possessed Yojimbo's Daigoro record is gone and his Kozuka (0x60e0) and Wakizashi (0x60e1) each have their record, both in the game's fixture, and the possessed Sisters' joint-action token is one of ours with no record).
     // 512, 509 and 3 in release 52, where both lines meet: Mirror Aeons + RC9 FFX-M read 510, 508 and 2; the Last Summoning adds Kozuka and Wakizashi and
     // moves Daigoro and the Sisters token to "no record" (+2 abilities, +1 record, +1 without).
-    expect(ALL_ABILITIES).toHaveLength(512);
-    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(509);
+    // 519 and 516 since the hidden Spectral Keeper chapter (FFX only, 2026-11-02): its seven rows (0x6045 to 0x604e and the party's Move 0x3103), each with its record, all in the game's fixtures.
+    expect(ALL_ABILITIES).toHaveLength(519);
+    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(516);
     expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(3);
   });
 });
@@ -340,6 +341,7 @@ const KNOWN_STATUS_DIFFERENCES: readonly string[] = [
   // The Dark Aeons (the hidden Mirror Aeons chapter): the extra-status word (Auto-Life, Curse, Doom) and the cleanse bits live in the record, which is the one the kernel reads; the ability carries only the regular statuses.
   'dark-calamity: extra bits 0x0, record 0x400',
   'dark-mega-graviton: extra bits 0x0, record 0x4000',
+  'keeper-glyph-mine: extra bits 0x0, record 0x4000', // the Spectral Keeper's Glyph Mine: Doom in the extra word, but no hit record, so nothing lands (RE 1.4); ours inflicts nothing
   'dark-razzia: cleanse in the record, ours none',
   'dark-razzia: extra bits 0x0, record 0x200',
   'dark-zanmato: cleanse in the record, ours none',
@@ -426,7 +428,7 @@ describe("the status bytes of the attached records are the game's table (re-pari
       'mortibody-water: 10 -> 0',
       'natus-flare: 10 -> 0',
     ]);
-    expect(added).toBe(151);
+    expect(added).toBe(152); // 151 until the hidden Spectral Keeper's Attack All (shatter byte 120, over the contract's 0 to 100: the record alone carries it)
   });
 
   it('the stage-buff mask has no bits above the six stacks, and an amount whenever it is set', () => {
