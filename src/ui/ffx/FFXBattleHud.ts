@@ -50,7 +50,7 @@ import { AirshipOrders } from './AirshipOrders.ts';
 import { ZanmatoGauge } from './ZanmatoGauge.ts';
 import { withOverdriveFocus } from './overdriveFocus.ts';
 import { showOverdrivePlate } from './overdrivePlate.ts';
-import { INTENT_AVOID_SELECTORS, advisorInkRects, advisorKeepOffRects, chipReserveOf, omnisFlagPanelRects, omnisFlagRect, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
+import { INTENT_AVOID_SELECTORS, advisorInkRects, advisorKeepOffRects, chipReserveOf, omnisFlagPanelRects, omnisSensorFlagRect, rectsOf, type ViewportRect } from './hudAvoidSelectors.ts';
 import { growToGrid, panelPresence, rectKey, sizeKey, unionOf } from './hudPlacementKeys.ts';
 import { doomNoteOf } from './DoomCounters.ts';
 import { zombieTargetNote } from './zombieTargetNote.ts';
@@ -1073,7 +1073,7 @@ export class FFXBattleHud implements HudPort {
       bottom: card.bottom,
     };
 
-    const dx = sensorSteerDx(home, figure, STAGE.width, undefined, omnisFlagRect(this.el, (e) => this.stageRect(e))); // r74-omnis: Chapter XII on the F1 HUD also steers clear of the target flag (`flagSteer.ts`); null everywhere else
+    const dx = sensorSteerDx(home, figure, STAGE.width, undefined, omnisSensorFlagRect(this.el, (e) => this.stageRect(e))); // r74-omnis + R72-1 (219r): Chapter XII, on the F1 HUD and in the old looks, also steers clear of the target flag (`flagSteer.ts`); null everywhere else
     if (dx === null) el.style.removeProperty('--ffx-sensor-dx');
     else el.style.setProperty('--ffx-sensor-dx', `${Math.round(dx * 10) / 10}px`);
   }
