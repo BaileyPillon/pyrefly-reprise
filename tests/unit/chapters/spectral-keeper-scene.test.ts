@@ -3,6 +3,8 @@
  * (`floorRing`, `src/engine/PartAnchors.ts`): the ch-keeper review's major 1 (a player saw no platform, no sweep zone and no lit mine). Pure three.js, no renderer.
  */
 
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { Color, Group, PerspectiveCamera, type Mesh, type MeshBasicMaterial } from 'three';
 import { LIT_RING_COLOUR, PART_RING_COLOUR, PartRings, type ParentPose, type PartAnchor } from '../../../src/engine/PartAnchors.ts';
@@ -93,6 +95,33 @@ describe('the glyph platforms are drawn', () => {
     expect(lit.opacity).toBeGreaterThan(idle.opacity); // brighter as well as amber
     frames([], 60); // the blast: disarmed
     expect(colourOf(SPECTRAL_CIRCLE_IDS[2]!)).toBe(violet); // and the colour is put back exactly, not left a shade off
+  });
+
+  it('the STAGE wires it (r74-int review MINOR-2, mutation N02): each frame, for each ring, PaintedStage calls PartRings.sync with the battle state, not only a bare alive flag; the state it reads is the engine\'s live one', () => {
+    // The unit cases above drive `sync` by hand; nothing else stands between them and the screen. A stage that called `setAlive` (alive only) instead of `sync` kept every other test green and drew no lit glyph.
+    const src = readFileSync(resolve(process.cwd(), 'src/engine/BattlePresenterStage.ts'), 'utf8').replace(/\r\n/g, '\n');
+    const at = src.indexOf('this.partRings.update(');
+    expect(at, 'the stage updates its part rings').toBeGreaterThan(0);
+    const call = src.slice(at, src.indexOf('this.opts.camera,', at));
+    expect(call, 'the per-frame callback syncs the ring with the battle state').toMatch(/this\.partRings\.sync\(id, this\.lastState\)/);
+    expect(src, 'the bare alive flag never replaces the sync').not.toMatch(/partRings\.setAlive\(/);
+    expect(src, 'the state the stage reads is the one it was staged with (the engine mutates it in place)').toMatch(/async stage\(state: BattleState\): Promise<void> \{\n\s+this\.lastState = state;/);
+    // and the ring the callback reaches is the one PartRings lights: a flag set on the live state lights the ring, the same object read a frame later
+    const { rings, root } = build({ ...SPECTRAL_KEEPER_PART_ANCHORS });
+    const live = { combatants: Object.fromEntries(SPECTRAL_CIRCLE_IDS.map((id) => [id, { alive: true }])), flags: {} as Record<string, boolean> };
+    const id = SPECTRAL_CIRCLE_IDS[1]!;
+    const colour = (): number => ((root.children.find((m) => m.name === `part-ring:${id}`) as Mesh).material as MeshBasicMaterial).color.getHex();
+    for (let i = 0; i < 20; i++) {
+      rings.sync(id, live as never);
+      rings.update(0.25, () => keeper, camera);
+    }
+    expect(colour()).toBe(new Color(PART_RING_COLOUR).getHex());
+    live.flags[`${SPECTRAL_ARMED_FLAG_PREFIX}${id}`] = true; // the engine arms the Circle in place
+    for (let i = 0; i < 30; i++) {
+      rings.sync(id, live as never);
+      rings.update(0.25, () => keeper, camera);
+    }
+    expect(colour()).toBe(new Color(LIT_RING_COLOUR).getHex());
   });
 
   it('every glyph ring names its own Circle\'s flag, and the prefix is the data layer\'s', () => {
