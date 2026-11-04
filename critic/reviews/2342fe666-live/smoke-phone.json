@@ -1,0 +1,48 @@
+{
+ "steps": [
+  {
+   "k": "tier",
+   "v": {
+    "w": 812,
+    "h": 375,
+    "coarse": true
+   }
+  },
+  {
+   "k": "phone.yrp",
+   "v": "chapter-select"
+  },
+  {
+   "k": "check.phone.yrp refused",
+   "v": {
+    "ok": true,
+    "d": "chapter-select"
+   }
+  },
+  {
+   "k": "phone.waker",
+   "v": "chapter-select"
+  },
+  {
+   "k": "check.phone.waker refused",
+   "v": {
+    "ok": true,
+    "d": "chapter-select"
+   }
+  },
+  {
+   "k": "phone.keeper",
+   "v": "party-prep"
+  },
+  {
+   "k": "check.phone.keeper opens",
+   "v": {
+    "ok": true,
+    "d": "party-prep"
+   }
+  }
+ ],
+ "fails": [],
+ "consoleErrors": [],
+ "notFound": []
+}

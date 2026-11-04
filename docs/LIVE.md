@@ -8,40 +8,41 @@
 | | |
 |---|---|
 | Site | https://echoesofspira.com/ |
-| Commit | `d5049f686` (Release 73 (r73)) |
-| Bundle | `DY38b3Cj` |
-| Deployed | 2026-11-02T23:02:53.337Z (2026-11-02 18:02 EST) |
-| Deploy log | `docs/deploys.log` line 90: cloudflare, 4830 art files |
-| Artifact (SHA-256) | `8ef3b770031ce3b7d143055a4fa0bff7001e6ae14187512eca72089f0e3b264e` |
-| The deploy's own byte check | PASS (57 files compared with the build) |
-| Marker | `critic/pending/d5049f686.json` (pending) |
+| Commit | `2342fe666` (Release 74 (r74)) |
+| Bundle | `eSs6-WR_` |
+| Deployed | 2026-11-04T00:44:28.732Z (2026-11-03 19:44 EST) |
+| Deploy log | `docs/deploys.log` line 91: cloudflare, 4830 art files |
+| Artifact (SHA-256) | `e0cb661928f6598d94db8930e4d6832a5c4c15bf83d37dcec6b57165d4ec8fdd` |
+| The deploy's own byte check | PASS (153 files compared with the build) |
+| Marker | `critic/pending/2342fe666.json` (pending) |
 | Owner override | none |
-| CHANGELOG entry | 2026-11-02 · Release 73 (r73), fast-forward stops making fighters jump across the stage (a house strike keeps its run-up and its way home at normal length, so a fast attack is about twice as quick as normal, not three times), Sin's face (FFX Chapter XVIII) joins the booth treatment on a passing proof, a phone's battle entry waits about 7 s less (FFX Chapter I now inside the 8 s budget, FFX-2 Chapter IV not yet), Wakka's and Lulu's way home is spread out, and the pose-swap method check is written; eighteen of the nineteen listed chapters (each item says which game) |
-| Focused review | critic/reviews/d5049f686-focused.json: ship SHIP, changed area FAIL |
-| Live check | critic/reviews/d5049f686-live.json: deployment PASS |
+| CHANGELOG entry | 2026-11-03 · Release 74 (r74), Sin's Fins and Core (FFX Chapter XVII) joins the booth treatment as the nineteenth and last listed chapter (its new battle HUD held back), Lulu's head holds its size from pose to pose, a revive gets a longer and even cross, Chapter XII's Sensor card steps off the target flag in the fight screen it still draws, and four hidden chapters arrive on typed words (the Spectral Keeper, the Fallen Maesters, Bahamut in 3D, Valefor in Wind Waker style); nineteen of the nineteen listed chapters (each item says which game) |
+| Focused review | critic/reviews/2342fe666-focused.json: ship SHIP, changed area FAIL |
+| Live check | critic/reviews/2342fe666-live.json: deployment PASS |
 
-Is this commit on main? `git merge-base --is-ancestor d5049f686 origin/main` exits 0 when it is.
+Is this commit on main? `git merge-base --is-ancestor 2342fe666 origin/main` exits 0 when it is.
 
 ## Review obligations still open
 
 | Build | Obligation | What it needs |
 |---|---|---|
-| `d5049f686` | deep | deep review of every affected chapter and system |
+| `2342fe666` | deep (carries 1 earlier builds) | deep review of every affected chapter and system |
 
-The ledger counts 1 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 2 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
-From `critic/reviews/d5049f686-focused.json` (a major that is not a regression is disclosed and carried into the next batch):
+From `critic/reviews/2342fe666-focused.json` (a major that is not a regression is disclosed and carried into the next batch):
 
 | Issue | Severity | Introduced by this build | Regression against the previous live build | What |
 |---|---|---|---|---|
-| R73-1 | major | no | no | Chapter VIII (Evrae) at fast: two swap jerks (Evrae 411 px, Wakka 196 px) fail CHK-027 |
-| R73-2 | major | no | no | Mirror Aeons (Chapter 27): one 55 px swap jerk fails CHK-027 at normal and at fast |
-| R73-3 | major | no | no | Chapters I and IV at fast: real-row hops over 100 px remain (I 7, IV 25); the floor does not reach real rows |
-| R73-4 | major | no | no | Head-size swaps over tolerance (CHK-026) in XVIII, VIII, 27 and I, equal to their controls |
+| R74-1 | major | no | no | Chapter III (Braska) CHK-026 and CHK-027 FAIL: head up to 58 percent and swap jerk 226 px |
+| R74-2 | major | no | no | Fast speed swap jerks of 390 to 410 px in I, IV, VIII and XVII (CHK-027) |
+| R74-3 | major | no | no | Chapter I CHK-026: head jump 10.8 percent, 1 height over band |
+| R74-4 | major | no | no | FFX-2 half of the revive cross unread; Chapter XII Sensor steer and Chapter XVII fins hold not read on a production build |
+| R74-5 | major | yes | no | Hidden 3D Bahamut leaks about 34 textures per lose-and-retry |
 
-## Branches in flight (as of 2026-11-02, the release 73 records pass (release 73 live: main d5049f686, bundle DY38b3Cj, eighteen of the nineteen listed chapters treated in code; release 74 = the four r74 lanes and the four owed chapters below, built on branches, not browser-read))
+## Branches in flight (as of 2026-11-03, the release 74 records pass (release 74 live: main 2342fe666, bundle eSs6-WR_, nineteen of the nineteen listed chapters treated in code with the battle HUDs of Chapters XII and XVII held, and four hidden chapters on typed words; the deep review round 34 on the live build is owed by releases 73 and 74; release 75 = origin/r75-boss-art below, built on a branch, not installed, not read in a browser))
 
 Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.
 
@@ -49,8 +50,6 @@ Kept by hand by whoever records a pass; tools/live-record.mjs prints it into doc
 |---|---|---|---|
 | `motion-rigs` | `eda138e06` | both (Tidus FFX, Rikku Dark Knight FFX-2) | the party rig pilots: candidate configs tidus-x-t1, tidus-x-t2 and rikku-dark-knight-x-v1 on the approved colour-locked paintings (all gate OK); not merged; release 63 ships with the party rigs off (?partyrigs=on is the only way in; D-1322, item 200a), and no rig replaces a painting before he has seen it move (D-1086, D-1097) |
 | `motion-art-t2` | `538159e72` | FFX (Tidus) | the second art build for Tidus in grey shorts (mirror D:/pyrefly-art-motion-t2: the shorts idle plus 7 retouches); a second build because its registration is compiled in; release 63 ships Tidus as T1, the set locked to the darker live idle (D-1322, item 200a), so T2 is not picked and stays here for his eye after the conference |
-| `exp-yrp-real` | `e7c74c2de` | FFX-2 only | the real-models track of the hidden yrp chapter (secret word yrp; the Gullwings against Bahamut on the real FFX-2 models, after his rejection of the AI toon cast): a neutral stage grade with its own eye-candy row, a capped rim accent, the opt-in framing mockups with frame b (dolly in) now the default, each girl's model following her dressphere and swapped at the sphere change behind a short white light, the library warmed two Garment Grid neighbours deep (39 ms to a model), the game's own weapons; pushed; merged into ch-yrp on 2026-11-02 (Chapter 31); out of the conference builds; in no release |
-| `exp-windwaker` | `ed92784e0` | FFX-2 only | pushed unchanged on 2026-11-02 (its single copy, D-1448) and merged into ch-waker, which renumbers it 32; cut from r60-art 1cea6e937: the Wind Waker hidden chapter (secret word waker, placeholder number 30): the Gullwings, about 3 heads tall, against Valefor with the Meshy models in a Wind Waker HD look, chapter 24's encounter data; polish 2 validated at ed92784e0 (a toon impact burst in place of the shared white blob, the target shot, the advisor card); a Genshin / Guilty Gear version is being explored (decision 177, round 1 with no game code); out of the conference builds; in no release |
 | `anim-proto-2` | `8525ae459` | FFX (Lulu); clip plumbing both games | animation pass 2 behind the dev flag ?anim=proto&style=P2: the orb toss, a gather, channel and release cast, knees, hit-stop on the game's own clip frames; he liked the orb toss (D-1070); nothing ships from it yet. Pass 1 is branch anim-proto (cfff4367d) |
 | `anim-proto-3` | `48d868454` | FFX (Lulu); clip plumbing both games | animation pass 3 on Lulu, a prototype behind the dev flag: the doll flies to the target and back, the knockout kneels through a procedural skirt fold, the cast channel gets a glow, glyphs and motes, the grey frame is fixed; open: the skirt fin in the knockout, the doll floating near the head, a small attack doll; nothing ships from it (the orb ship, anim-orb-ship, went live in release 59) |
 | `rig` | `db2caa6d9` | both (shared plumbing; the subjects are FFX first) | the rig lane's trunk: r55 shipped it up to 59c766ec0 (Kimahri and Lulu); this tip adds Auron's first pass, which stays off |
@@ -59,14 +58,7 @@ Kept by hand by whoever records a pass; tools/live-record.mjs prints it into doc
 | `saves-portable` | `c1852fa05` | both (save-data class) | ChatGPT point 9: export and import a save as a checksummed file behind ?saveport=on, off by default; NOT merged into r68-int or release 68 (D-1379); a browser pass and a deep review are owed before the word comes off (A-1054) |
 | `rigs-v2` | `9f90c3441` | both (Tidus FFX, Rikku Dark Knight FFX-2) | the party rig pilots rebuilt (tidus-v2, rikku-dark-knight-v2 in D:/pyrefly-art-rigs) behind ?partyrigs=v2 with a motion audit; pushed; OUT of release 68 (D-1398): the clips (A-1073) show 0 ghost frames but a cut from standing to lying at the knock-out and four broken frames on Rikku's return (D-1401); nothing installed |
 | `rigs-v3` | `f2dd94f79` | both (Tidus FFX, Rikku Dark Knight FFX-2) | pushed; three rounds done on 2026-10-29 and 10-30 (A-1089): rigs-v2 on r68-final plus the painting’s knock-out topple and rise for a rig, the held pose through each cut, the settle before a KO from a flinch and the harness’s stature reading for rigs (D-1401); behind ?partyrigs=, off by default; not merged, nothing installed; the clips for him come first |
-| `r74-lulu` | `2d650665b` | FFX only (Lulu's rig only; Chapter I and FFX-2 Chapter IV unchanged by construction) | pushed; release 74 lane (A-1164): PR-0534: Lulu's rig head was a real 5 to 15 percent change between poses (her head part inherits the fitted spine scale; 397 of 508 counted swaps over 3 percent in round 33b), not a harness misreading; the engine now holds the head at the idle's size (RIG_HEAD_HOLD lists only lulu); built and checked offline, not browser-read; not on main, not deployed |
-| `r74-revive` | `d1b7e1264` | both games (shared plumbing: the knock-out run, the living mix, the actor layer) | pushed; release 74 lane (A-1165): PR-0570: a revive's first frames continue from the lying figure's place (a 200 ms even cross and a 300 ms rise instead of the 100 ms cross that stepped about 88 px in Yunalesca's chapter); on by default in code, pending its motion clip (J74-3); built and reviewed (two majors fixed), not browser-read; not on main, not deployed |
-| `r74-omnis` | `895cb6bb3` | FFX only (Chapter XII, Seymour Omnis) | pushed; release 74 lane (A-1166): Chapter XII's F1 HUD plays again: the advisor card steps off the target flag once the flag lies on it, the flag docks off the Enemy Intent line and the Sensor card steers clear of the flag; the hud hold is lifted on offline proof only and the branch must not reach production before J74-1 to J74-4 read 0 overlapping pairs; not browser-read; not on main, not deployed |
-| `r74-fins` | `d9de240a7` | FFX only (Chapter XVII, Sin's Fins and Core) | pushed; release 74 lane (A-1167): Chapter XVII joins the treated list, the nineteenth and last (the Fin plate stands clear of the F1 turn strip and under the HELP bar, the action banner steps under the plate); on offline proof only: it must not reach production before FIN-1 to FIN-4 and FIN-9 have run; built and reviewed, not browser-read; not on main, not deployed |
-| `ch-keeper` | `6c07085c3` | FFX only (hidden Chapter 29, the word keeper) | pushed; owed chapter 1 of 4 (A-1168; D-1039, D-1445): the Spectral Keeper at the Zanarkand Dome behind the typed word keeper: the glyph platforms, Move, First Strike, the sweep, the hit counter, the mines (their own turn is the blast), aeon mode, Guard and Sentinel off; real-engine tests through a victory and a defeat; every stage number is an estimate until its browser jobs run; the open picks are the driver's, his to overturn (D-1446); not browser-read; not on main, not deployed |
-| `ch-maesters` | `c23ff3721` | FFX-2 only (hidden Chapter 30, the word infinito) | pushed (c23ff3721, 2026-11-02 evening); owed chapter 2 of 4 (A-1169; D-1039, D-1445): the Fallen Maesters on Via Infinito floors 20, 40, 60 and 80 (Aranea, Black Elemental, Concherer, Chac) as four fresh links; the data, AI, chapter record, door and story are written, tsc is clean and the data, AI, engine, flow, door, story and bench tests pass (the bench reads floors 20 and 40 clearable and 60 and 80 not, a tuning finding); the registry, door and stat-setter plumbing is shared and inert elsewhere; not browser-read; not on main, not deployed |
-| `ch-yrp` | `861dc435a` | FFX-2 only (hidden Chapter 31, the word yrp; the delivery plumbing is both games) | pushed; owed chapter 3 of 4 (A-1170; D-1098 to D-1131, D-1447): the hidden 3D Bahamut on the real FFX-2 models (Chapter IV's fight by reference), exp-yrp-real merged; the boss defaults to the game's own Bahamut, the chapter is number 31, the dist filter ships a 43-file model allow-list of 141 MiB with no file over 25 MiB; its browser jobs are written and not run; not on main, not deployed |
-| `ch-waker` | `8ca50dc41` | FFX-2 only (hidden Chapter 32, the word waker; the shared plumbing is inert for every other chapter) | pushed; owed chapter 4 of 4 (A-1171; D-1123 to D-1164, D-1448): the Wind Waker chapter (Valefor at Besaid in a Wind Waker HD toon style) merged from exp-windwaker (pushed unchanged first), renumbered 32, its models ship through a dist-filter allow-list; the W0 production build passes; its browser jobs are written and not run; not on main, not deployed |
+| `r75-boss-art` | `efb45301f` | FFX only for the Spectral Keeper's paintings, the glyph decals and its portrait; FFX-2 only for the Fallen Maesters' paintings (Aranea, the Black Elemental, Concherer, Chac); shared plumbing (review class DEEP, both games) for PartRings.sync and the art registration | pushed (origin/r75-boss-art efb45301f); release 75 lane (A-1186, A-1187; D-1457, D-1463, D-1465, D-1466, the driver's delegated calls, his to overturn under his words of 2026-11-02 and 2026-10-31): the boss paintings for the hidden Spectral Keeper (FFX, Chapter 29) and the Fallen Maesters (FFX-2, Chapter 30) as a branch (registration rows, 42 hash pins, 3 waivers, wiring, tests) and an install kit (D:/Tools/pyrefly-scratch/2026-11-03/boss-art-install/INSTALL.md: 70 of 82 staged files install, 12 are held: the Keeper's attack painting and the chapter cards and thumbnails no code reads yet); Concherer's cracked-shell idle stays unwired and the Black Elemental stays standing (an options round for both is owed to Bailey); NOT installed (no art mirror, no public/art, no private-repo copy written), not merged into main, not deployed, not read in a browser; a code pass on top of it (the Keeper's physical moves on its idle, the 12 held files, the yrp texture leak, the Maesters' short prep tip) is running in another tree and is not pushed; the driver runs the install steps after the deep review of the live build, then the release 75 candidate |
 
 Nothing on this list is live. `node tools/live-record.mjs --branches` compares the tips with git.
 
@@ -74,9 +66,9 @@ Nothing on this list is live. `node tools/live-record.mjs --branches` compares t
 
 | Deployed (UTC) | Commit | Bundle | Log line |
 |---|---|---|---|
+| 2026-11-04T00:44:28.732Z | `2342fe666` | `eSs6-WR_` | 91 |
 | 2026-11-02T23:02:53.337Z | `d5049f686` | `DY38b3Cj` | 90 |
 | 2026-11-02T04:29:26.601Z | `01a767770` | `Cz_6EQVK` | 89 |
 | 2026-11-01T14:14:08.497Z | `6d7ecc8a5` | `BqgCyT8R` | 88 |
 | 2026-10-31T17:29:45.848Z | `e3f51bf18` | `UNVtEttT` | 87 |
 | 2026-10-31T06:09:39.720Z | `6321b2578` | `dwcmDBjZ` | 86 |
-| 2026-10-29T14:45:49.392Z | `2a9340249` | `CahDxk82` | 85 |
