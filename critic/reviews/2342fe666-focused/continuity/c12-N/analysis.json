@@ -1,0 +1,472 @@
+{
+ "id": "c12-N",
+ "chapter": "seymour-omnis",
+ "base": "http://127.0.0.1:5561/",
+ "date": "2026-11-03T21:14:57.172Z",
+ "checks": {
+  "CHK-026": "PASS",
+  "CHK-027": "PASS"
+ },
+ "reasons": {
+  "CHK-026": [],
+  "CHK-027": []
+ },
+ "battleSeconds": 524.3,
+ "fps": 59.9,
+ "frames": 31418,
+ "maxDtMs": 159.7,
+ "slowFrames": 31,
+ "chk026": {
+  "headOverTolerance": 0,
+  "maxHeadJumpPct": 8.7,
+  "maxHeadJumpPctRegistration": 0.2,
+  "feetOverTolerance": 0,
+  "heightOverBand": 0
+ },
+ "chk027": {
+  "jerks": 49,
+  "worstJerkPx": 79.4,
+  "jerksOverFail": 23,
+  "teleports": 0,
+  "teleportsWorstPx": 0,
+  "dashes": 23,
+  "dashesWorstPx": 79.4,
+  "swapJerks": 26,
+  "swapJerksWorstPx": 28.2,
+  "snaps": 0,
+  "ghostSwaps": 332
+ },
+ "hopsOver100": {
+  "count": 0,
+  "worstPx": 0,
+  "byFigure": {},
+  "list": []
+ },
+ "largestStepPx": 162.7,
+ "largestStepByFigure": {
+  "wakka": 162.7,
+  "auron": 67.6,
+  "yuna": 57.4
+ },
+ "attackGaps": {
+  "wakka": [
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16
+  ],
+  "auron": [
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   26,
+   27,
+   27
+  ]
+ },
+ "castGaps": {},
+ "blow": {
+  "wakka": [
+   {
+    "swapN": 6975,
+    "numeralN": 7003,
+    "frames": 28,
+    "ms": 468,
+    "txt": "1357",
+    "gap": 16
+   },
+   {
+    "swapN": 7986,
+    "numeralN": 8013,
+    "frames": 27,
+    "ms": 468,
+    "txt": "1403",
+    "gap": 16
+   },
+   {
+    "swapN": 9002,
+    "numeralN": 9029,
+    "frames": 27,
+    "ms": 463,
+    "txt": "1268",
+    "gap": 16
+   },
+   {
+    "swapN": 11425,
+    "numeralN": 11453,
+    "frames": 28,
+    "ms": 467,
+    "txt": "1388",
+    "gap": 16
+   },
+   {
+    "swapN": 13978,
+    "numeralN": 14005,
+    "frames": 27,
+    "ms": 462,
+    "txt": "1262",
+    "gap": 16
+   },
+   {
+    "swapN": 14692,
+    "numeralN": 14719,
+    "frames": 27,
+    "ms": 464,
+    "txt": "1351",
+    "gap": 16
+   },
+   {
+    "swapN": 19054,
+    "numeralN": 19081,
+    "frames": 27,
+    "ms": 465,
+    "txt": "1388",
+    "gap": 16
+   },
+   {
+    "swapN": 20084,
+    "numeralN": 20111,
+    "frames": 27,
+    "ms": 464,
+    "txt": "1247",
+    "gap": 16
+   },
+   {
+    "swapN": 20735,
+    "numeralN": 20762,
+    "frames": 27,
+    "ms": 463,
+    "txt": "1346",
+    "gap": 16
+   },
+   {
+    "swapN": 30212,
+    "numeralN": 30239,
+    "frames": 27,
+    "ms": 466,
+    "txt": "1325",
+    "gap": 16
+   },
+   {
+    "swapN": 31142,
+    "numeralN": 31170,
+    "frames": 28,
+    "ms": 468,
+    "txt": "1367",
+    "gap": 16
+   }
+  ],
+  "auron": [
+   {
+    "swapN": 5035,
+    "numeralN": 5059,
+    "frames": 24,
+    "ms": 408,
+    "txt": "2801",
+    "gap": 27
+   },
+   {
+    "swapN": 6118,
+    "numeralN": 6142,
+    "frames": 24,
+    "ms": 409,
+    "txt": "2601",
+    "gap": 27
+   },
+   {
+    "swapN": 7096,
+    "numeralN": 7120,
+    "frames": 24,
+    "ms": 409,
+    "txt": "2843",
+    "gap": 27
+   },
+   {
+    "swapN": 8625,
+    "numeralN": 8649,
+    "frames": 24,
+    "ms": 408,
+    "txt": "2738",
+    "gap": 27
+   },
+   {
+    "swapN": 10526,
+    "numeralN": 10550,
+    "frames": 24,
+    "ms": 409,
+    "txt": "2538",
+    "gap": 27
+   },
+   {
+    "swapN": 11533,
+    "numeralN": 11557,
+    "frames": 24,
+    "ms": 408,
+    "txt": "2727",
+    "gap": 27
+   },
+   {
+    "swapN": 13094,
+    "numeralN": 13118,
+    "frames": 24,
+    "ms": 409,
+    "txt": "2548",
+    "gap": 27
+   },
+   {
+    "swapN": 14085,
+    "numeralN": 14109,
+    "frames": 24,
+    "ms": 406,
+    "txt": "2791",
+    "gap": 27
+   },
+   {
+    "swapN": 14563,
+    "numeralN": 14587,
+    "frames": 24,
+    "ms": 409,
+    "txt": "2611",
+    "gap": 27
+   },
+   {
+    "swapN": 15919,
+    "numeralN": 15943,
+    "frames": 24,
+    "ms": 409,
+    "txt": "2854",
+    "gap": 27
+   },
+   {
+    "swapN": 17324,
+    "numeralN": 17348,
+    "frames": 24,
+    "ms": 408,
+    "txt": "2822",
+    "gap": 27
+   },
+   {
+    "swapN": 18385,
+    "numeralN": 18409,
+    "frames": 24,
+    "ms": 409,
+    "txt": "2654",
+    "gap": 27
+   },
+   {
+    "swapN": 19397,
+    "numeralN": 19421,
+    "frames": 24,
+    "ms": 408,
+    "txt": "2527",
+    "gap": 27
+   },
+   {
+    "swapN": 20536,
+    "numeralN": 20560,
+    "frames": 24,
+    "ms": 407,
+    "txt": "2622",
+    "gap": 27
+   },
+   {
+    "swapN": 20846,
+    "numeralN": 20870,
+    "frames": 24,
+    "ms": 408,
+    "txt": "2654",
+    "gap": 27
+   },
+   {
+    "swapN": 22554,
+    "numeralN": 22578,
+    "frames": 24,
+    "ms": 408,
+    "txt": "2791",
+    "gap": 27
+   },
+   {
+    "swapN": 23577,
+    "numeralN": 23601,
+    "frames": 24,
+    "ms": 410,
+    "txt": "2580",
+    "gap": 27
+   },
+   {
+    "swapN": 25683,
+    "numeralN": 25707,
+    "frames": 24,
+    "ms": 409,
+    "txt": "2674",
+    "gap": 27
+   },
+   {
+    "swapN": 27652,
+    "numeralN": 27676,
+    "frames": 24,
+    "ms": 409,
+    "txt": "2570",
+    "gap": 27
+   },
+   {
+    "swapN": 28194,
+    "numeralN": 28218,
+    "frames": 24,
+    "ms": 407,
+    "txt": "2538",
+    "gap": 27
+   },
+   {
+    "swapN": 29766,
+    "numeralN": 29790,
+    "frames": 24,
+    "ms": 409,
+    "txt": "2590",
+    "gap": 27
+   },
+   {
+    "swapN": 30472,
+    "numeralN": 30496,
+    "frames": 24,
+    "ms": 408,
+    "txt": "2601",
+    "gap": 27
+   },
+   {
+    "swapN": 31260,
+    "numeralN": 31283,
+    "frames": 23,
+    "ms": 410,
+    "txt": "2822",
+    "gap": 26
+   },
+   {
+    "swapN": 31620,
+    "numeralN": 31643,
+    "frames": 23,
+    "ms": 408,
+    "txt": "2611",
+    "gap": 27
+   },
+   {
+    "swapN": 32680,
+    "numeralN": 32704,
+    "frames": 24,
+    "ms": 408,
+    "txt": "2758",
+    "gap": 27
+   }
+  ]
+ },
+ "attackGapStats": {
+  "wakka": {
+   "n": 23,
+   "min": 16,
+   "median": 16,
+   "max": 16
+  },
+  "auron": {
+   "n": 25,
+   "min": 26,
+   "median": 27,
+   "max": 27
+  }
+ },
+ "castGapStats": {},
+ "blowStats": {
+  "wakka": {
+   "n": 11,
+   "min": 27,
+   "median": 27,
+   "max": 28
+  },
+  "auron": {
+   "n": 25,
+   "min": 23,
+   "median": 24,
+   "max": 24
+  }
+ },
+ "speed": {
+  "samples": 527,
+  "runs": [
+   {
+    "speed": "normal",
+    "seconds": 527,
+    "fromBf": 1,
+    "toBf": 31733
+   }
+  ],
+  "reassertions": 0,
+  "reassertedFrom": {},
+  "rPresses": 0,
+  "numerals": 200,
+  "errors": [],
+  "lastSample": {
+   "k": "s",
+   "t": 554803,
+   "bf": 31733,
+   "speed": "normal",
+   "phase": "play:victory",
+   "reasserts": 0,
+   "r": 0
+  },
+  "samplesBySpeed": {
+   "normal": 527
+  }
+ },
+ "run": {
+  "outcome": "victory",
+  "fails": 0,
+  "consoleErrors": 0,
+  "query": "?coach=off",
+  "seeds": [
+   {
+    "at": "battle start",
+    "engineSeed": 1,
+    "links": 1,
+    "firstEnemyAction": null
+   }
+  ]
+ },
+ "summaryReportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 524.3 s of battle, 59.9 to 59.9 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 PASS; 1,391 ms of see-through a minute (83.5 frames a minute at 60 Hz) Read by harness 683a773fead4 (38 files; tree D:/pyrefly-release55 at 2342fe666; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows); PYREFLY_QUERY=?coach=off)."
+}

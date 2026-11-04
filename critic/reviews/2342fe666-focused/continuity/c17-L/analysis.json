@@ -1,0 +1,1590 @@
+{
+ "id": "c17-L",
+ "chapter": "sin-fins-core",
+ "base": "https://echoesofspira.com/",
+ "date": "2026-11-03T22:38:57.087Z",
+ "checks": {
+  "CHK-026": "FAIL",
+  "CHK-027": "FAIL"
+ },
+ "reasons": {
+  "CHK-026": [
+   "133 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.2 percent where the head is registered)"
+  ],
+  "CHK-027": [
+   "13 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 253.3 px)"
+  ]
+ },
+ "battleSeconds": 1247,
+ "fps": 59.9,
+ "frames": 74722,
+ "maxDtMs": 332,
+ "slowFrames": 71,
+ "chk026": {
+  "headOverTolerance": 133,
+  "maxHeadJumpPct": 15.5,
+  "maxHeadJumpPctRegistration": 0.2,
+  "feetOverTolerance": 0,
+  "heightOverBand": 0
+ },
+ "chk027": {
+  "jerks": 31,
+  "worstJerkPx": 253.3,
+  "jerksOverFail": 14,
+  "teleports": 0,
+  "teleportsWorstPx": 0,
+  "dashes": 18,
+  "dashesWorstPx": 117.7,
+  "swapJerks": 13,
+  "swapJerksWorstPx": 253.3,
+  "snaps": 0,
+  "ghostSwaps": 465
+ },
+ "hopsOver100": {
+  "count": 3,
+  "worstPx": 253.3,
+  "byFigure": {
+   "left-fin": {
+    "count": 1,
+    "worstPx": 253.3
+   },
+   "right-fin": {
+    "count": 1,
+    "worstPx": 123.8
+   },
+   "tidus": {
+    "count": 1,
+    "worstPx": 117.7
+   }
+  },
+  "list": [
+   {
+    "n": 17258,
+    "figure": "left-fin",
+    "px": 253.3,
+    "part": "feet",
+    "kind": "swap",
+    "atSwap": true,
+    "ratio": 48.5,
+    "localPx": 5.2,
+    "frameMs": 37.7,
+    "longFrame": true
+   },
+   {
+    "n": 25233,
+    "figure": "right-fin",
+    "px": 123.8,
+    "part": "feet",
+    "kind": "swap",
+    "atSwap": true,
+    "ratio": 36.5,
+    "localPx": 3.4,
+    "frameMs": 35.6,
+    "longFrame": true,
+    "cause": "action-start"
+   },
+   {
+    "n": 4447,
+    "figure": "tidus",
+    "px": 117.7,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": true,
+    "ratio": 3.7,
+    "localPx": 31.8,
+    "frameMs": 16.2,
+    "longFrame": false,
+    "cause": "damage"
+   }
+  ]
+ },
+ "largestStepPx": 253.3,
+ "largestStepByFigure": {
+  "left-fin": 253.3,
+  "tidus": 164.8,
+  "auron": 144.3,
+  "right-fin": 123.8,
+  "wakka": 115,
+  "kimahri": 109.6,
+  "sin-core": 99.5,
+  "yuna": 83.8,
+  "sinspawn-genais": 71.6,
+  "lulu": 26.2
+ },
+ "attackGaps": {
+  "tidus": [
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   4,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   100,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   75,
+   5,
+   5,
+   5,
+   5,
+   5
+  ],
+  "yuna": [
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5
+  ],
+  "auron": [
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5
+  ],
+  "wakka": [
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5
+  ],
+  "lulu": [
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6
+  ]
+ },
+ "castGaps": {
+  "lulu": [
+   111,
+   111,
+   111,
+   111,
+   111,
+   127,
+   111,
+   111,
+   111,
+   111,
+   111,
+   111,
+   111,
+   111,
+   111,
+   111,
+   111,
+   111,
+   110,
+   106,
+   106,
+   106,
+   106,
+   106,
+   114
+  ]
+ },
+ "blow": {
+  "tidus": [
+   {
+    "swapN": 4463,
+    "numeralN": 4474,
+    "frames": 11,
+    "ms": 238,
+    "txt": "975",
+    "gap": 5
+   },
+   {
+    "swapN": 4900,
+    "numeralN": 4914,
+    "frames": 14,
+    "ms": 249,
+    "txt": "1259",
+    "gap": 5
+   },
+   {
+    "swapN": 5102,
+    "numeralN": 5116,
+    "frames": 14,
+    "ms": 246,
+    "txt": "2272",
+    "gap": 5
+   },
+   {
+    "swapN": 5224,
+    "numeralN": 5238,
+    "frames": 14,
+    "ms": 246,
+    "txt": "1244",
+    "gap": 5
+   },
+   {
+    "swapN": 7968,
+    "numeralN": 7982,
+    "frames": 14,
+    "ms": 247,
+    "txt": "691",
+    "gap": 5
+   },
+   {
+    "swapN": 9119,
+    "numeralN": 9133,
+    "frames": 14,
+    "ms": 247,
+    "txt": "680",
+    "gap": 5
+   },
+   {
+    "swapN": 9226,
+    "numeralN": 9240,
+    "frames": 14,
+    "ms": 248,
+    "txt": "672",
+    "gap": 5
+   },
+   {
+    "swapN": 16409,
+    "numeralN": 16423,
+    "frames": 14,
+    "ms": 245,
+    "txt": "745",
+    "gap": 5
+   },
+   {
+    "swapN": 16817,
+    "numeralN": 16832,
+    "frames": 15,
+    "ms": 250,
+    "txt": "818",
+    "gap": 5
+   },
+   {
+    "swapN": 17447,
+    "numeralN": 17460,
+    "frames": 13,
+    "ms": 248,
+    "txt": "813",
+    "gap": 4
+   },
+   {
+    "swapN": 18144,
+    "numeralN": 18158,
+    "frames": 14,
+    "ms": 247,
+    "txt": "807",
+    "gap": 5
+   },
+   {
+    "swapN": 18756,
+    "numeralN": 18770,
+    "frames": 14,
+    "ms": 247,
+    "txt": "778",
+    "gap": 5
+   },
+   {
+    "swapN": 24771,
+    "numeralN": 24785,
+    "frames": 14,
+    "ms": 237,
+    "txt": "754",
+    "gap": 5
+   },
+   {
+    "swapN": 25193,
+    "numeralN": 25207,
+    "frames": 14,
+    "ms": 247,
+    "txt": "1961",
+    "gap": 5
+   },
+   {
+    "swapN": 25506,
+    "numeralN": 25520,
+    "frames": 14,
+    "ms": 247,
+    "txt": "754",
+    "gap": 5
+   },
+   {
+    "swapN": 25709,
+    "numeralN": 25723,
+    "frames": 14,
+    "ms": 245,
+    "txt": "818",
+    "gap": 5
+   },
+   {
+    "swapN": 26216,
+    "numeralN": 26230,
+    "frames": 14,
+    "ms": 246,
+    "txt": "3850",
+    "gap": 5
+   },
+   {
+    "swapN": 30922,
+    "numeralN": 30936,
+    "frames": 14,
+    "ms": 250,
+    "txt": "1000",
+    "gap": 100
+   },
+   {
+    "swapN": 32045,
+    "numeralN": 32060,
+    "frames": 15,
+    "ms": 250,
+    "txt": "739",
+    "gap": 5
+   },
+   {
+    "swapN": 37686,
+    "numeralN": 37701,
+    "frames": 15,
+    "ms": 250,
+    "txt": "834",
+    "gap": 5
+   },
+   {
+    "swapN": 38301,
+    "numeralN": 38315,
+    "frames": 14,
+    "ms": 248,
+    "txt": "834",
+    "gap": 5
+   },
+   {
+    "swapN": 51061,
+    "numeralN": 51075,
+    "frames": 14,
+    "ms": 237,
+    "txt": "967",
+    "gap": 5
+   },
+   {
+    "swapN": 51160,
+    "numeralN": 51174,
+    "frames": 14,
+    "ms": 249,
+    "txt": "985",
+    "gap": 5
+   },
+   {
+    "swapN": 52078,
+    "numeralN": 52092,
+    "frames": 14,
+    "ms": 246,
+    "txt": "936",
+    "gap": 5
+   },
+   {
+    "swapN": 52569,
+    "numeralN": 52583,
+    "frames": 14,
+    "ms": 248,
+    "txt": "989",
+    "gap": 5
+   },
+   {
+    "swapN": 52954,
+    "numeralN": 52968,
+    "frames": 14,
+    "ms": 248,
+    "txt": "1008",
+    "gap": 5
+   },
+   {
+    "swapN": 54445,
+    "numeralN": 54460,
+    "frames": 15,
+    "ms": 254,
+    "txt": "906",
+    "gap": 5
+   },
+   {
+    "swapN": 54655,
+    "numeralN": 54669,
+    "frames": 14,
+    "ms": 245,
+    "txt": "944",
+    "gap": 5
+   },
+   {
+    "swapN": 55270,
+    "numeralN": 55284,
+    "frames": 14,
+    "ms": 244,
+    "txt": "641",
+    "gap": 5
+   },
+   {
+    "swapN": 56346,
+    "numeralN": 56360,
+    "frames": 14,
+    "ms": 243,
+    "txt": "607",
+    "gap": 5
+   },
+   {
+    "swapN": 57302,
+    "numeralN": 57316,
+    "frames": 14,
+    "ms": 245,
+    "txt": "1313",
+    "gap": 5
+   },
+   {
+    "swapN": 58137,
+    "numeralN": 58151,
+    "frames": 14,
+    "ms": 242,
+    "txt": "624",
+    "gap": 5
+   },
+   {
+    "swapN": 59290,
+    "numeralN": 59304,
+    "frames": 14,
+    "ms": 245,
+    "txt": "619",
+    "gap": 5
+   },
+   {
+    "swapN": 59575,
+    "numeralN": 59589,
+    "frames": 14,
+    "ms": 244,
+    "txt": "611",
+    "gap": 5
+   },
+   {
+    "swapN": 60471,
+    "numeralN": 60485,
+    "frames": 14,
+    "ms": 243,
+    "txt": "1253",
+    "gap": 5
+   },
+   {
+    "swapN": 61322,
+    "numeralN": 61336,
+    "frames": 14,
+    "ms": 243,
+    "txt": "652",
+    "gap": 5
+   },
+   {
+    "swapN": 61827,
+    "numeralN": 61841,
+    "frames": 14,
+    "ms": 243,
+    "txt": "607",
+    "gap": 5
+   },
+   {
+    "swapN": 62315,
+    "numeralN": 62329,
+    "frames": 14,
+    "ms": 244,
+    "txt": "600",
+    "gap": 5
+   },
+   {
+    "swapN": 63325,
+    "numeralN": 63339,
+    "frames": 14,
+    "ms": 243,
+    "txt": "658",
+    "gap": 5
+   },
+   {
+    "swapN": 63927,
+    "numeralN": 63941,
+    "frames": 14,
+    "ms": 244,
+    "txt": "622",
+    "gap": 5
+   },
+   {
+    "swapN": 64395,
+    "numeralN": 64409,
+    "frames": 14,
+    "ms": 244,
+    "txt": "1189",
+    "gap": 5
+   },
+   {
+    "swapN": 64684,
+    "numeralN": 64698,
+    "frames": 14,
+    "ms": 243,
+    "txt": "652",
+    "gap": 5
+   },
+   {
+    "swapN": 64905,
+    "numeralN": 64919,
+    "frames": 14,
+    "ms": 243,
+    "txt": "634",
+    "gap": 5
+   },
+   {
+    "swapN": 65213,
+    "numeralN": 65227,
+    "frames": 14,
+    "ms": 243,
+    "txt": "661",
+    "gap": 5
+   },
+   {
+    "swapN": 66124,
+    "numeralN": 66138,
+    "frames": 14,
+    "ms": 243,
+    "txt": "611",
+    "gap": 5
+   },
+   {
+    "swapN": 67100,
+    "numeralN": 67114,
+    "frames": 14,
+    "ms": 243,
+    "txt": "527",
+    "gap": 5
+   },
+   {
+    "swapN": 67326,
+    "numeralN": 67340,
+    "frames": 14,
+    "ms": 243,
+    "txt": "540",
+    "gap": 5
+   },
+   {
+    "swapN": 68314,
+    "numeralN": 68328,
+    "frames": 14,
+    "ms": 243,
+    "txt": "1259",
+    "gap": 5
+   },
+   {
+    "swapN": 68715,
+    "numeralN": 68729,
+    "frames": 14,
+    "ms": 243,
+    "txt": "1235",
+    "gap": 5
+   },
+   {
+    "swapN": 69386,
+    "numeralN": 69400,
+    "frames": 14,
+    "ms": 243,
+    "txt": "1174",
+    "gap": 5
+   },
+   {
+    "swapN": 70077,
+    "numeralN": 70091,
+    "frames": 14,
+    "ms": 244,
+    "txt": "487",
+    "gap": 5
+   },
+   {
+    "swapN": 71165,
+    "numeralN": 71179,
+    "frames": 14,
+    "ms": 245,
+    "txt": "1630",
+    "gap": 75
+   },
+   {
+    "swapN": 71748,
+    "numeralN": 71762,
+    "frames": 14,
+    "ms": 243,
+    "txt": "1230",
+    "gap": 5
+   },
+   {
+    "swapN": 72384,
+    "numeralN": 72398,
+    "frames": 14,
+    "ms": 242,
+    "txt": "1159",
+    "gap": 5
+   },
+   {
+    "swapN": 74103,
+    "numeralN": 74117,
+    "frames": 14,
+    "ms": 244,
+    "txt": "1197",
+    "gap": 5
+   },
+   {
+    "swapN": 74715,
+    "numeralN": 74729,
+    "frames": 14,
+    "ms": 244,
+    "txt": "1244",
+    "gap": 5
+   },
+   {
+    "swapN": 75441,
+    "numeralN": 75455,
+    "frames": 14,
+    "ms": 245,
+    "txt": "495",
+    "gap": 5
+   }
+  ],
+  "yuna": [
+   {
+    "swapN": 5322,
+    "numeralN": 5336,
+    "frames": 14,
+    "ms": 238,
+    "txt": "288",
+    "gap": 5
+   },
+   {
+    "swapN": 24666,
+    "numeralN": 24680,
+    "frames": 14,
+    "ms": 239,
+    "txt": "163",
+    "gap": 5
+   },
+   {
+    "swapN": 25399,
+    "numeralN": 25413,
+    "frames": 14,
+    "ms": 245,
+    "txt": "173",
+    "gap": 5
+   },
+   {
+    "swapN": 26108,
+    "numeralN": 26122,
+    "frames": 14,
+    "ms": 247,
+    "txt": "426",
+    "gap": 5
+   },
+   {
+    "swapN": 26570,
+    "numeralN": 26584,
+    "frames": 14,
+    "ms": 247,
+    "txt": "432",
+    "gap": 5
+   },
+   {
+    "swapN": 27435,
+    "numeralN": 27449,
+    "frames": 14,
+    "ms": 245,
+    "txt": "430",
+    "gap": 5
+   },
+   {
+    "swapN": 31307,
+    "numeralN": 31321,
+    "frames": 14,
+    "ms": 245,
+    "txt": "167",
+    "gap": 5
+   },
+   {
+    "swapN": 32145,
+    "numeralN": 32159,
+    "frames": 14,
+    "ms": 247,
+    "txt": "167",
+    "gap": 5
+   },
+   {
+    "swapN": 32862,
+    "numeralN": 32876,
+    "frames": 14,
+    "ms": 245,
+    "txt": "174",
+    "gap": 5
+   },
+   {
+    "swapN": 55057,
+    "numeralN": 55071,
+    "frames": 14,
+    "ms": 233,
+    "txt": "253",
+    "gap": 5
+   },
+   {
+    "swapN": 55719,
+    "numeralN": 55733,
+    "frames": 14,
+    "ms": 243,
+    "txt": "268",
+    "gap": 5
+   },
+   {
+    "swapN": 58891,
+    "numeralN": 58905,
+    "frames": 14,
+    "ms": 243,
+    "txt": "556",
+    "gap": 5
+   },
+   {
+    "swapN": 59191,
+    "numeralN": 59205,
+    "frames": 14,
+    "ms": 243,
+    "txt": "272",
+    "gap": 5
+   },
+   {
+    "swapN": 59826,
+    "numeralN": 59840,
+    "frames": 14,
+    "ms": 243,
+    "txt": "264",
+    "gap": 5
+   },
+   {
+    "swapN": 61590,
+    "numeralN": 61604,
+    "frames": 14,
+    "ms": 245,
+    "txt": "258",
+    "gap": 5
+   },
+   {
+    "swapN": 62566,
+    "numeralN": 62580,
+    "frames": 14,
+    "ms": 244,
+    "txt": "275",
+    "gap": 5
+   },
+   {
+    "swapN": 64582,
+    "numeralN": 64596,
+    "frames": 14,
+    "ms": 243,
+    "txt": "279",
+    "gap": 5
+   },
+   {
+    "swapN": 65111,
+    "numeralN": 65125,
+    "frames": 14,
+    "ms": 244,
+    "txt": "253",
+    "gap": 5
+   },
+   {
+    "swapN": 67886,
+    "numeralN": 67900,
+    "frames": 14,
+    "ms": 244,
+    "txt": "534",
+    "gap": 5
+   },
+   {
+    "swapN": 68417,
+    "numeralN": 68431,
+    "frames": 14,
+    "ms": 244,
+    "txt": "518",
+    "gap": 5
+   }
+  ],
+  "auron": [
+   {
+    "swapN": 51896,
+    "numeralN": 51908,
+    "frames": 12,
+    "ms": 213,
+    "txt": "2101",
+    "gap": 5
+   },
+   {
+    "swapN": 55158,
+    "numeralN": 55170,
+    "frames": 12,
+    "ms": 210,
+    "txt": "1618",
+    "gap": 5
+   },
+   {
+    "swapN": 58037,
+    "numeralN": 58049,
+    "frames": 12,
+    "ms": 211,
+    "txt": "1820",
+    "gap": 5
+   },
+   {
+    "swapN": 58559,
+    "numeralN": 58571,
+    "frames": 12,
+    "ms": 211,
+    "txt": "1705",
+    "gap": 5
+   },
+   {
+    "swapN": 59010,
+    "numeralN": 59022,
+    "frames": 12,
+    "ms": 212,
+    "txt": "1813",
+    "gap": 5
+   },
+   {
+    "swapN": 59394,
+    "numeralN": 59406,
+    "frames": 12,
+    "ms": 211,
+    "txt": "1665",
+    "gap": 5
+   },
+   {
+    "swapN": 63829,
+    "numeralN": 63841,
+    "frames": 12,
+    "ms": 210,
+    "txt": "1618",
+    "gap": 5
+   },
+   {
+    "swapN": 64280,
+    "numeralN": 64292,
+    "frames": 12,
+    "ms": 212,
+    "txt": "1637",
+    "gap": 5
+   },
+   {
+    "swapN": 64789,
+    "numeralN": 64801,
+    "frames": 12,
+    "ms": 211,
+    "txt": "1738",
+    "gap": 5
+   },
+   {
+    "swapN": 65010,
+    "numeralN": 65022,
+    "frames": 12,
+    "ms": 212,
+    "txt": "3424",
+    "gap": 5
+   },
+   {
+    "swapN": 73143,
+    "numeralN": 73155,
+    "frames": 12,
+    "ms": 211,
+    "txt": "4353",
+    "gap": 5
+   },
+   {
+    "swapN": 74428,
+    "numeralN": 74440,
+    "frames": 12,
+    "ms": 211,
+    "txt": "3424",
+    "gap": 5
+   },
+   {
+    "swapN": 75226,
+    "numeralN": 75238,
+    "frames": 12,
+    "ms": 212,
+    "txt": "3165",
+    "gap": 5
+   }
+  ],
+  "wakka": [
+   {
+    "swapN": 7104,
+    "numeralN": 7117,
+    "frames": 13,
+    "ms": 239,
+    "txt": "1340",
+    "gap": 5
+   },
+   {
+    "swapN": 8720,
+    "numeralN": 8735,
+    "frames": 15,
+    "ms": 263,
+    "txt": "541",
+    "gap": 5
+   },
+   {
+    "swapN": 10709,
+    "numeralN": 10723,
+    "frames": 14,
+    "ms": 247,
+    "txt": "709",
+    "gap": 5
+   },
+   {
+    "swapN": 11916,
+    "numeralN": 11930,
+    "frames": 14,
+    "ms": 245,
+    "txt": "816",
+    "gap": 5
+   },
+   {
+    "swapN": 13023,
+    "numeralN": 13037,
+    "frames": 14,
+    "ms": 246,
+    "txt": "829",
+    "gap": 5
+   },
+   {
+    "swapN": 13722,
+    "numeralN": 13736,
+    "frames": 14,
+    "ms": 247,
+    "txt": "869",
+    "gap": 5
+   },
+   {
+    "swapN": 14680,
+    "numeralN": 14694,
+    "frames": 14,
+    "ms": 245,
+    "txt": "855",
+    "gap": 5
+   },
+   {
+    "swapN": 15596,
+    "numeralN": 15610,
+    "frames": 14,
+    "ms": 246,
+    "txt": "899",
+    "gap": 5
+   },
+   {
+    "swapN": 16231,
+    "numeralN": 16245,
+    "frames": 14,
+    "ms": 246,
+    "txt": "799",
+    "gap": 5
+   },
+   {
+    "swapN": 16918,
+    "numeralN": 16933,
+    "frames": 15,
+    "ms": 252,
+    "txt": "853",
+    "gap": 5
+   },
+   {
+    "swapN": 17651,
+    "numeralN": 17665,
+    "frames": 14,
+    "ms": 245,
+    "txt": "892",
+    "gap": 5
+   },
+   {
+    "swapN": 18245,
+    "numeralN": 18259,
+    "frames": 14,
+    "ms": 247,
+    "txt": "892",
+    "gap": 5
+   },
+   {
+    "swapN": 19152,
+    "numeralN": 19167,
+    "frames": 15,
+    "ms": 265,
+    "txt": "802",
+    "gap": 5
+   },
+   {
+    "swapN": 21511,
+    "numeralN": 21526,
+    "frames": 15,
+    "ms": 250,
+    "txt": "888",
+    "gap": 5
+   },
+   {
+    "swapN": 21613,
+    "numeralN": 21627,
+    "frames": 14,
+    "ms": 245,
+    "txt": "902",
+    "gap": 5
+   },
+   {
+    "swapN": 21997,
+    "numeralN": 22012,
+    "frames": 15,
+    "ms": 249,
+    "txt": "895",
+    "gap": 5
+   },
+   {
+    "swapN": 29625,
+    "numeralN": 29639,
+    "frames": 14,
+    "ms": 236,
+    "txt": "2044",
+    "gap": 5
+   },
+   {
+    "swapN": 30294,
+    "numeralN": 30308,
+    "frames": 14,
+    "ms": 247,
+    "txt": "849",
+    "gap": 5
+   },
+   {
+    "swapN": 31207,
+    "numeralN": 31221,
+    "frames": 14,
+    "ms": 246,
+    "txt": "849",
+    "gap": 5
+   },
+   {
+    "swapN": 31405,
+    "numeralN": 31418,
+    "frames": 13,
+    "ms": 248,
+    "txt": "829",
+    "gap": 5
+   },
+   {
+    "swapN": 31937,
+    "numeralN": 31951,
+    "frames": 14,
+    "ms": 245,
+    "txt": "872",
+    "gap": 5
+   },
+   {
+    "swapN": 32244,
+    "numeralN": 32258,
+    "frames": 14,
+    "ms": 246,
+    "txt": "809",
+    "gap": 5
+   },
+   {
+    "swapN": 32760,
+    "numeralN": 32774,
+    "frames": 14,
+    "ms": 244,
+    "txt": "799",
+    "gap": 5
+   },
+   {
+    "swapN": 33166,
+    "numeralN": 33180,
+    "frames": 14,
+    "ms": 246,
+    "txt": "816",
+    "gap": 5
+   },
+   {
+    "swapN": 33504,
+    "numeralN": 33519,
+    "frames": 15,
+    "ms": 250,
+    "txt": "836",
+    "gap": 5
+   },
+   {
+    "swapN": 33950,
+    "numeralN": 33964,
+    "frames": 14,
+    "ms": 245,
+    "txt": "813",
+    "gap": 5
+   },
+   {
+    "swapN": 34219,
+    "numeralN": 34233,
+    "frames": 14,
+    "ms": 248,
+    "txt": "1612",
+    "gap": 5
+   },
+   {
+    "swapN": 35018,
+    "numeralN": 35032,
+    "frames": 14,
+    "ms": 248,
+    "txt": "899",
+    "gap": 5
+   },
+   {
+    "swapN": 35913,
+    "numeralN": 35927,
+    "frames": 14,
+    "ms": 246,
+    "txt": "813",
+    "gap": 5
+   },
+   {
+    "swapN": 36858,
+    "numeralN": 36872,
+    "frames": 14,
+    "ms": 245,
+    "txt": "816",
+    "gap": 5
+   },
+   {
+    "swapN": 37458,
+    "numeralN": 37472,
+    "frames": 14,
+    "ms": 246,
+    "txt": "839",
+    "gap": 5
+   },
+   {
+    "swapN": 38086,
+    "numeralN": 38100,
+    "frames": 14,
+    "ms": 246,
+    "txt": "813",
+    "gap": 5
+   },
+   {
+    "swapN": 39213,
+    "numeralN": 39227,
+    "frames": 14,
+    "ms": 245,
+    "txt": "869",
+    "gap": 5
+   },
+   {
+    "swapN": 40044,
+    "numeralN": 40058,
+    "frames": 14,
+    "ms": 246,
+    "txt": "813",
+    "gap": 5
+   },
+   {
+    "swapN": 40838,
+    "numeralN": 40852,
+    "frames": 14,
+    "ms": 247,
+    "txt": "809",
+    "gap": 5
+   },
+   {
+    "swapN": 41142,
+    "numeralN": 41156,
+    "frames": 14,
+    "ms": 248,
+    "txt": "819",
+    "gap": 5
+   },
+   {
+    "swapN": 41875,
+    "numeralN": 41889,
+    "frames": 14,
+    "ms": 245,
+    "txt": "876",
+    "gap": 5
+   },
+   {
+    "swapN": 43336,
+    "numeralN": 43350,
+    "frames": 14,
+    "ms": 244,
+    "txt": "849",
+    "gap": 5
+   },
+   {
+    "swapN": 43929,
+    "numeralN": 43943,
+    "frames": 14,
+    "ms": 247,
+    "txt": "809",
+    "gap": 5
+   },
+   {
+    "swapN": 45445,
+    "numeralN": 45459,
+    "frames": 14,
+    "ms": 246,
+    "txt": "1626",
+    "gap": 5
+   },
+   {
+    "swapN": 45899,
+    "numeralN": 45914,
+    "frames": 15,
+    "ms": 254,
+    "txt": "888",
+    "gap": 5
+   },
+   {
+    "swapN": 46492,
+    "numeralN": 46507,
+    "frames": 15,
+    "ms": 250,
+    "txt": "899",
+    "gap": 5
+   },
+   {
+    "swapN": 47170,
+    "numeralN": 47184,
+    "frames": 14,
+    "ms": 249,
+    "txt": "853",
+    "gap": 5
+   },
+   {
+    "swapN": 47810,
+    "numeralN": 47824,
+    "frames": 14,
+    "ms": 248,
+    "txt": "853",
+    "gap": 5
+   },
+   {
+    "swapN": 48788,
+    "numeralN": 48802,
+    "frames": 14,
+    "ms": 246,
+    "txt": "1672",
+    "gap": 5
+   }
+  ],
+  "lulu": [
+   {
+    "swapN": 56087,
+    "numeralN": 56103,
+    "frames": 16,
+    "ms": 277,
+    "txt": "216",
+    "gap": 6
+   },
+   {
+    "swapN": 56589,
+    "numeralN": 56605,
+    "frames": 16,
+    "ms": 277,
+    "txt": "202",
+    "gap": 6
+   },
+   {
+    "swapN": 57550,
+    "numeralN": 57566,
+    "frames": 16,
+    "ms": 276,
+    "txt": "222",
+    "gap": 6
+   },
+   {
+    "swapN": 60218,
+    "numeralN": 60234,
+    "frames": 16,
+    "ms": 276,
+    "txt": "213",
+    "gap": 6
+   },
+   {
+    "swapN": 61070,
+    "numeralN": 61086,
+    "frames": 16,
+    "ms": 276,
+    "txt": "205",
+    "gap": 6
+   },
+   {
+    "swapN": 62062,
+    "numeralN": 62078,
+    "frames": 16,
+    "ms": 278,
+    "txt": "221",
+    "gap": 6
+   },
+   {
+    "swapN": 63002,
+    "numeralN": 63018,
+    "frames": 16,
+    "ms": 276,
+    "txt": "205",
+    "gap": 6
+   },
+   {
+    "swapN": 65614,
+    "numeralN": 65630,
+    "frames": 16,
+    "ms": 278,
+    "txt": "217",
+    "gap": 6
+   },
+   {
+    "swapN": 66381,
+    "numeralN": 66397,
+    "frames": 16,
+    "ms": 279,
+    "txt": "208",
+    "gap": 6
+   }
+  ]
+ },
+ "attackGapStats": {
+  "tidus": {
+   "n": 57,
+   "min": 4,
+   "median": 5,
+   "max": 100
+  },
+  "yuna": {
+   "n": 20,
+   "min": 5,
+   "median": 5,
+   "max": 5
+  },
+  "auron": {
+   "n": 13,
+   "min": 5,
+   "median": 5,
+   "max": 5
+  },
+  "wakka": {
+   "n": 45,
+   "min": 5,
+   "median": 5,
+   "max": 5
+  },
+  "lulu": {
+   "n": 9,
+   "min": 6,
+   "median": 6,
+   "max": 6
+  }
+ },
+ "castGapStats": {
+  "lulu": {
+   "n": 25,
+   "min": 106,
+   "median": 111,
+   "max": 127
+  }
+ },
+ "blowStats": {
+  "tidus": {
+   "n": 57,
+   "min": 11,
+   "median": 14,
+   "max": 15
+  },
+  "yuna": {
+   "n": 20,
+   "min": 14,
+   "median": 14,
+   "max": 14
+  },
+  "auron": {
+   "n": 13,
+   "min": 12,
+   "median": 12,
+   "max": 12
+  },
+  "wakka": {
+   "n": 45,
+   "min": 13,
+   "median": 14,
+   "max": 15
+  },
+  "lulu": {
+   "n": 9,
+   "min": 16,
+   "median": 16,
+   "max": 16
+  }
+ },
+ "speed": {
+  "samples": 1244,
+  "runs": [
+   {
+    "speed": "normal",
+    "seconds": 1244,
+    "fromBf": 1,
+    "toBf": 75084
+   }
+  ],
+  "reassertions": 0,
+  "reassertedFrom": {},
+  "rPresses": 2,
+  "numerals": 467,
+  "errors": [],
+  "lastSample": {
+   "k": "s",
+   "t": 1278165,
+   "bf": 75084,
+   "speed": "normal",
+   "phase": "play:victory",
+   "reasserts": 0,
+   "r": 2
+  },
+  "samplesBySpeed": {
+   "normal": 1244
+  }
+ },
+ "run": {
+  "outcome": "victory",
+  "fails": 0,
+  "consoleErrors": 0,
+  "query": "?coach=off",
+  "seeds": [
+   {
+    "at": "battle start",
+    "engineSeed": 1,
+    "links": 1,
+    "firstEnemyAction": null
+   },
+   {
+    "at": "link 2",
+    "engineSeed": 2,
+    "links": 2,
+    "firstEnemyAction": null
+   },
+   {
+    "at": "link 3",
+    "engineSeed": 3,
+    "links": 3,
+    "firstEnemyAction": null
+   }
+  ]
+ },
+ "summaryReportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 1247 s of battle, 59.9 to 59.9 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (133 swap(s) change a head by more than the tolerance (worst 15.5 percent; 0.2 percent where the head is registered)); CHK-027 FAIL (13 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 253.3 px)); 1,208 ms of see-through a minute (72.5 frames a minute at 60 Hz) Read by harness 683a773fead4 (38 files; tree D:/pyrefly-release55 at 2342fe666; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows); PYREFLY_QUERY=?coach=off)."
+}

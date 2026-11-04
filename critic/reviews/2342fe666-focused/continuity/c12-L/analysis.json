@@ -1,0 +1,472 @@
+{
+ "id": "c12-L",
+ "chapter": "seymour-omnis",
+ "base": "https://echoesofspira.com/",
+ "date": "2026-11-03T22:49:10.193Z",
+ "checks": {
+  "CHK-026": "PASS",
+  "CHK-027": "PASS"
+ },
+ "reasons": {
+  "CHK-026": [],
+  "CHK-027": []
+ },
+ "battleSeconds": 523.1,
+ "fps": 59.9,
+ "frames": 31348,
+ "maxDtMs": 165.6,
+ "slowFrames": 29,
+ "chk026": {
+  "headOverTolerance": 0,
+  "maxHeadJumpPct": 8.7,
+  "maxHeadJumpPctRegistration": 0.2,
+  "feetOverTolerance": 0,
+  "heightOverBand": 0
+ },
+ "chk027": {
+  "jerks": 48,
+  "worstJerkPx": 79.5,
+  "jerksOverFail": 23,
+  "teleports": 0,
+  "teleportsWorstPx": 0,
+  "dashes": 23,
+  "dashesWorstPx": 79.5,
+  "swapJerks": 25,
+  "swapJerksWorstPx": 28.3,
+  "snaps": 0,
+  "ghostSwaps": 332
+ },
+ "hopsOver100": {
+  "count": 0,
+  "worstPx": 0,
+  "byFigure": {},
+  "list": []
+ },
+ "largestStepPx": 162,
+ "largestStepByFigure": {
+  "wakka": 162,
+  "auron": 67.6,
+  "yuna": 57.5
+ },
+ "attackGaps": {
+  "wakka": [
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16,
+   16
+  ],
+  "auron": [
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27
+  ]
+ },
+ "castGaps": {},
+ "blow": {
+  "wakka": [
+   {
+    "swapN": 6994,
+    "numeralN": 7019,
+    "frames": 25,
+    "ms": 427,
+    "txt": "1357",
+    "gap": 16
+   },
+   {
+    "swapN": 8001,
+    "numeralN": 8024,
+    "frames": 23,
+    "ms": 429,
+    "txt": "1403",
+    "gap": 16
+   },
+   {
+    "swapN": 9002,
+    "numeralN": 9027,
+    "frames": 25,
+    "ms": 429,
+    "txt": "1268",
+    "gap": 16
+   },
+   {
+    "swapN": 11430,
+    "numeralN": 11455,
+    "frames": 25,
+    "ms": 430,
+    "txt": "1388",
+    "gap": 16
+   },
+   {
+    "swapN": 13988,
+    "numeralN": 14013,
+    "frames": 25,
+    "ms": 431,
+    "txt": "1262",
+    "gap": 16
+   },
+   {
+    "swapN": 14705,
+    "numeralN": 14730,
+    "frames": 25,
+    "ms": 429,
+    "txt": "1351",
+    "gap": 16
+   },
+   {
+    "swapN": 19069,
+    "numeralN": 19094,
+    "frames": 25,
+    "ms": 430,
+    "txt": "1388",
+    "gap": 16
+   },
+   {
+    "swapN": 20097,
+    "numeralN": 20122,
+    "frames": 25,
+    "ms": 426,
+    "txt": "1247",
+    "gap": 16
+   },
+   {
+    "swapN": 20746,
+    "numeralN": 20771,
+    "frames": 25,
+    "ms": 429,
+    "txt": "1346",
+    "gap": 16
+   },
+   {
+    "swapN": 30158,
+    "numeralN": 30183,
+    "frames": 25,
+    "ms": 428,
+    "txt": "1325",
+    "gap": 16
+   },
+   {
+    "swapN": 31094,
+    "numeralN": 31119,
+    "frames": 25,
+    "ms": 429,
+    "txt": "1367",
+    "gap": 16
+   }
+  ],
+  "auron": [
+   {
+    "swapN": 5060,
+    "numeralN": 5082,
+    "frames": 22,
+    "ms": 371,
+    "txt": "2801",
+    "gap": 27
+   },
+   {
+    "swapN": 6137,
+    "numeralN": 6159,
+    "frames": 22,
+    "ms": 372,
+    "txt": "2601",
+    "gap": 27
+   },
+   {
+    "swapN": 7114,
+    "numeralN": 7136,
+    "frames": 22,
+    "ms": 371,
+    "txt": "2843",
+    "gap": 27
+   },
+   {
+    "swapN": 8626,
+    "numeralN": 8648,
+    "frames": 22,
+    "ms": 372,
+    "txt": "2738",
+    "gap": 27
+   },
+   {
+    "swapN": 10529,
+    "numeralN": 10551,
+    "frames": 22,
+    "ms": 373,
+    "txt": "2538",
+    "gap": 27
+   },
+   {
+    "swapN": 11539,
+    "numeralN": 11561,
+    "frames": 22,
+    "ms": 372,
+    "txt": "2727",
+    "gap": 27
+   },
+   {
+    "swapN": 13101,
+    "numeralN": 13123,
+    "frames": 22,
+    "ms": 372,
+    "txt": "2548",
+    "gap": 27
+   },
+   {
+    "swapN": 14096,
+    "numeralN": 14118,
+    "frames": 22,
+    "ms": 372,
+    "txt": "2791",
+    "gap": 27
+   },
+   {
+    "swapN": 14577,
+    "numeralN": 14599,
+    "frames": 22,
+    "ms": 373,
+    "txt": "2611",
+    "gap": 27
+   },
+   {
+    "swapN": 15929,
+    "numeralN": 15951,
+    "frames": 22,
+    "ms": 373,
+    "txt": "2854",
+    "gap": 27
+   },
+   {
+    "swapN": 17335,
+    "numeralN": 17357,
+    "frames": 22,
+    "ms": 372,
+    "txt": "2822",
+    "gap": 27
+   },
+   {
+    "swapN": 18402,
+    "numeralN": 18424,
+    "frames": 22,
+    "ms": 373,
+    "txt": "2654",
+    "gap": 27
+   },
+   {
+    "swapN": 19409,
+    "numeralN": 19431,
+    "frames": 22,
+    "ms": 372,
+    "txt": "2527",
+    "gap": 27
+   },
+   {
+    "swapN": 20546,
+    "numeralN": 20568,
+    "frames": 22,
+    "ms": 372,
+    "txt": "2622",
+    "gap": 27
+   },
+   {
+    "swapN": 20859,
+    "numeralN": 20881,
+    "frames": 22,
+    "ms": 372,
+    "txt": "2654",
+    "gap": 27
+   },
+   {
+    "swapN": 22556,
+    "numeralN": 22578,
+    "frames": 22,
+    "ms": 371,
+    "txt": "2791",
+    "gap": 27
+   },
+   {
+    "swapN": 23568,
+    "numeralN": 23590,
+    "frames": 22,
+    "ms": 372,
+    "txt": "2580",
+    "gap": 27
+   },
+   {
+    "swapN": 25671,
+    "numeralN": 25693,
+    "frames": 22,
+    "ms": 371,
+    "txt": "2674",
+    "gap": 27
+   },
+   {
+    "swapN": 27609,
+    "numeralN": 27631,
+    "frames": 22,
+    "ms": 371,
+    "txt": "2570",
+    "gap": 27
+   },
+   {
+    "swapN": 28149,
+    "numeralN": 28171,
+    "frames": 22,
+    "ms": 371,
+    "txt": "2538",
+    "gap": 27
+   },
+   {
+    "swapN": 29717,
+    "numeralN": 29739,
+    "frames": 22,
+    "ms": 374,
+    "txt": "2590",
+    "gap": 27
+   },
+   {
+    "swapN": 30419,
+    "numeralN": 30441,
+    "frames": 22,
+    "ms": 372,
+    "txt": "2601",
+    "gap": 27
+   },
+   {
+    "swapN": 31209,
+    "numeralN": 31231,
+    "frames": 22,
+    "ms": 370,
+    "txt": "2822",
+    "gap": 27
+   },
+   {
+    "swapN": 31565,
+    "numeralN": 31587,
+    "frames": 22,
+    "ms": 372,
+    "txt": "2611",
+    "gap": 27
+   },
+   {
+    "swapN": 32620,
+    "numeralN": 32642,
+    "frames": 22,
+    "ms": 372,
+    "txt": "2758",
+    "gap": 27
+   }
+  ]
+ },
+ "attackGapStats": {
+  "wakka": {
+   "n": 23,
+   "min": 16,
+   "median": 16,
+   "max": 16
+  },
+  "auron": {
+   "n": 25,
+   "min": 27,
+   "median": 27,
+   "max": 27
+  }
+ },
+ "castGapStats": {},
+ "blowStats": {
+  "wakka": {
+   "n": 11,
+   "min": 23,
+   "median": 25,
+   "max": 25
+  },
+  "auron": {
+   "n": 25,
+   "min": 22,
+   "median": 22,
+   "max": 22
+  }
+ },
+ "speed": {
+  "samples": 526,
+  "runs": [
+   {
+    "speed": "normal",
+    "seconds": 526,
+    "fromBf": 1,
+    "toBf": 31659
+   }
+  ],
+  "reassertions": 0,
+  "reassertedFrom": {},
+  "rPresses": 0,
+  "numerals": 200,
+  "errors": [],
+  "lastSample": {
+   "k": "s",
+   "t": 553606,
+   "bf": 31659,
+   "speed": "normal",
+   "phase": "play:victory",
+   "reasserts": 0,
+   "r": 0
+  },
+  "samplesBySpeed": {
+   "normal": 526
+  }
+ },
+ "run": {
+  "outcome": "victory",
+  "fails": 0,
+  "consoleErrors": 0,
+  "query": "?coach=off",
+  "seeds": [
+   {
+    "at": "battle start",
+    "engineSeed": 1,
+    "links": 1,
+    "firstEnemyAction": null
+   }
+  ]
+ },
+ "summaryReportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 523.1 s of battle, 59.9 to 59.9 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 PASS; 1,398 ms of see-through a minute (83.9 frames a minute at 60 Hz) Read by harness 683a773fead4 (38 files; tree D:/pyrefly-release55 at 2342fe666; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows); PYREFLY_QUERY=?coach=off)."
+}

@@ -1,0 +1,151 @@
+{
+ "steps": [
+  {
+   "k": "check.word",
+   "v": {
+    "ok": true,
+    "d": "party-prep"
+   }
+  },
+  {
+   "k": "before",
+   "v": {
+    "screen": "battle",
+    "pauseEls": 1,
+    "bare": false
+   }
+  },
+  {
+   "k": "check.P opens pause",
+   "v": {
+    "ok": true,
+    "d": "pause"
+   }
+  },
+  {
+   "k": "H",
+   "v": {
+    "b0": {
+     "screen": "pause",
+     "pauseEls": 79,
+     "bare": false
+    },
+    "b1": {
+     "screen": "pause",
+     "pauseEls": 79,
+     "bare": true
+    },
+    "b2": {
+     "screen": "pause",
+     "pauseEls": 79,
+     "bare": false
+    },
+    "set1": true,
+    "set2": false
+   }
+  },
+  {
+   "k": "check.H toggles hidden flag and restores",
+   "v": {
+    "ok": true,
+    "d": {
+     "set1": true,
+     "set2": false
+    }
+   }
+  },
+  {
+   "k": "check.P resumes",
+   "v": {
+    "ok": true,
+    "d": "battle"
+   }
+  },
+  {
+   "k": "Esc after resume",
+   "v": "battle"
+  },
+  {
+   "k": "check.Escape opens pause",
+   "v": {
+    "ok": false,
+    "d": "battle (command menu: Esc is back, not pause; see canPauseOnCancel)"
+   }
+  },
+  {
+   "k": "P then Esc",
+   "v": "battle"
+  },
+  {
+   "k": "pre-reload setting",
+   "v": true
+  },
+  {
+   "k": "battle end",
+   "v": "{\"chapterId\":\"spectral-keeper\",\"outcome\":\"defeat\",\"result\":{\"outcome\":\"defeat\",\"turns\":25,\"elapsedTicks\":168,\"elapsedMs\":0,\"ap\":0,\"exp\":0,\"gil\":0,\"drops\":[],\"overkilled\":[],\"sphereLevelsGained\":{},\"tu"
+  },
+  {
+   "k": "screen after",
+   "v": "results"
+  },
+  {
+   "k": "save before/after chapters",
+   "v": {
+    "beforeSave": "{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0}}",
+    "after": "{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":0,\"playTimeMs\":0}}",
+    "keys": [
+     "version",
+     "updatedAt",
+     "chapters",
+     "unlocked",
+     "settings",
+     "seenCoach",
+     "flags"
+    ]
+   }
+  },
+  {
+   "k": "after reload",
+   "v": {
+    "setting": true,
+    "pre2": true,
+    "chaptersSame": true,
+    "screen": "title"
+   }
+  },
+  {
+   "k": "check.setting survived reload",
+   "v": {
+    "ok": true,
+    "d": {
+     "pre2": true,
+     "now": true
+    }
+   }
+  },
+  {
+   "k": "check.progress survived reload",
+   "v": {
+    "ok": true,
+    "d": "chapters equal"
+   }
+  }
+ ],
+ "fails": [
+  "Escape opens pause"
+ ],
+ "consoleErrors": [
+  "Failed to load resource: the server responded with a status of 404 ()",
+  "Failed to load resource: the server responded with a status of 404 ()"
+ ],
+ "notFound": [
+  {
+   "url": "https://echoesofspira.com/art/characters/spectral-keeper/idle.png",
+   "status": 404
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/spectral-keeper/idle.png",
+   "status": 404
+  }
+ ]
+}

@@ -1,0 +1,1338 @@
+{
+ "id": "c3-L",
+ "chapter": "braskas-final-aeon",
+ "base": "https://echoesofspira.com/",
+ "date": "2026-11-03T23:19:55.211Z",
+ "checks": {
+  "CHK-026": "FAIL",
+  "CHK-027": "FAIL"
+ },
+ "reasons": {
+  "CHK-026": [
+   "59 swap(s) change a head by more than the tolerance (worst 94.6 percent; 94.6 percent where the head is registered)",
+   "10 swap(s) of a standing figure move its feet more than the tolerance (worst 13.9 px at 1600 wide)",
+   "23 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.733 to 1.513; the bands are tools/posescale/pose-bands.mjs's)",
+   "16 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 355.1 px at 1600 wide), whatever stance the registration claims"
+  ],
+  "CHK-027": [
+   "8 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 222.8 px)"
+  ]
+ },
+ "battleSeconds": 1638.5,
+ "fps": 59.7,
+ "frames": 97755,
+ "maxDtMs": 390.6,
+ "slowFrames": 590,
+ "chk026": {
+  "headOverTolerance": 59,
+  "maxHeadJumpPct": 94.6,
+  "maxHeadJumpPctRegistration": 94.6,
+  "feetOverTolerance": 10,
+  "heightOverBand": 23
+ },
+ "chk027": {
+  "jerks": 63,
+  "worstJerkPx": 222.8,
+  "jerksOverFail": 50,
+  "teleports": 0,
+  "teleportsWorstPx": 0,
+  "dashes": 47,
+  "dashesWorstPx": 167,
+  "swapJerks": 16,
+  "swapJerksWorstPx": 222.8,
+  "snaps": 0,
+  "ghostSwaps": 708
+ },
+ "hopsOver100": {
+  "count": 47,
+  "worstPx": 222.8,
+  "byFigure": {
+   "auron": {
+    "count": 6,
+    "worstPx": 222.8
+   },
+   "yuna": {
+    "count": 2,
+    "worstPx": 167
+   },
+   "tidus": {
+    "count": 39,
+    "worstPx": 160.8
+   }
+  },
+  "list": [
+   {
+    "n": 95773,
+    "figure": "auron",
+    "px": 222.8,
+    "part": "head",
+    "kind": "swap",
+    "atSwap": true,
+    "ratio": 111.4,
+    "localPx": 2,
+    "frameMs": 209.7,
+    "longFrame": true,
+    "cause": "status-add"
+   },
+   {
+    "n": 72883,
+    "figure": "auron",
+    "px": 219,
+    "part": "head",
+    "kind": "swap",
+    "atSwap": true,
+    "ratio": 109.5,
+    "localPx": 2,
+    "frameMs": 183.7,
+    "longFrame": true
+   },
+   {
+    "n": 97392,
+    "figure": "yuna",
+    "px": 167,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 7.7,
+    "localPx": 21.7,
+    "frameMs": 16.6,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 79439,
+    "figure": "auron",
+    "px": 166.8,
+    "part": "head",
+    "kind": "swap",
+    "atSwap": true,
+    "ratio": 83.4,
+    "localPx": 2,
+    "frameMs": 3.6,
+    "longFrame": false
+   },
+   {
+    "n": 87907,
+    "figure": "tidus",
+    "px": 160.8,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.9,
+    "localPx": 40.9,
+    "frameMs": 16.7,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 93448,
+    "figure": "tidus",
+    "px": 160.3,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4,
+    "localPx": 40.2,
+    "frameMs": 16.8,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 71459,
+    "figure": "tidus",
+    "px": 160,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.9,
+    "localPx": 40.8,
+    "frameMs": 15.8,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 94151,
+    "figure": "tidus",
+    "px": 160,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4,
+    "localPx": 40.2,
+    "frameMs": 15.9,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 55603,
+    "figure": "tidus",
+    "px": 159.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4,
+    "localPx": 39.6,
+    "frameMs": 15.4,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 56939,
+    "figure": "tidus",
+    "px": 159.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4,
+    "localPx": 39.5,
+    "frameMs": 17.8,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 72006,
+    "figure": "tidus",
+    "px": 159.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4,
+    "localPx": 39.5,
+    "frameMs": 16.2,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 86812,
+    "figure": "tidus",
+    "px": 159.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4,
+    "localPx": 40,
+    "frameMs": 16.9,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 56123,
+    "figure": "tidus",
+    "px": 159.8,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.9,
+    "localPx": 40.8,
+    "frameMs": 16.6,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 88361,
+    "figure": "tidus",
+    "px": 159.8,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4,
+    "localPx": 40.3,
+    "frameMs": 17.5,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 90136,
+    "figure": "tidus",
+    "px": 159.8,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4,
+    "localPx": 39.9,
+    "frameMs": 16.9,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 90662,
+    "figure": "tidus",
+    "px": 159.6,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4,
+    "localPx": 40.1,
+    "frameMs": 15.7,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 59171,
+    "figure": "tidus",
+    "px": 159.5,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4.1,
+    "localPx": 39.3,
+    "frameMs": 15.6,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 58331,
+    "figure": "tidus",
+    "px": 159.3,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4,
+    "localPx": 40.2,
+    "frameMs": 16.8,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 75806,
+    "figure": "tidus",
+    "px": 159.3,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.8,
+    "localPx": 42,
+    "frameMs": 15.2,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 89438,
+    "figure": "tidus",
+    "px": 159.3,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.9,
+    "localPx": 40.5,
+    "frameMs": 16.7,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 78249,
+    "figure": "tidus",
+    "px": 159.2,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.7,
+    "localPx": 43.4,
+    "frameMs": 15.5,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 66315,
+    "figure": "tidus",
+    "px": 159.1,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4,
+    "localPx": 40,
+    "frameMs": 16.7,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 81854,
+    "figure": "tidus",
+    "px": 158.8,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.5,
+    "localPx": 46,
+    "frameMs": 15.6,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 70443,
+    "figure": "tidus",
+    "px": 158.7,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4,
+    "localPx": 40.1,
+    "frameMs": 15.1,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 77523,
+    "figure": "tidus",
+    "px": 158.7,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.7,
+    "localPx": 43.4,
+    "frameMs": 15.9,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 87269,
+    "figure": "tidus",
+    "px": 158.7,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.8,
+    "localPx": 41.5,
+    "frameMs": 16.6,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 81303,
+    "figure": "tidus",
+    "px": 158.6,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.3,
+    "localPx": 47.5,
+    "frameMs": 16.6,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 94939,
+    "figure": "tidus",
+    "px": 158.6,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.8,
+    "localPx": 41.6,
+    "frameMs": 17.1,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 76262,
+    "figure": "tidus",
+    "px": 158.4,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.6,
+    "localPx": 44.1,
+    "frameMs": 15.2,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 83595,
+    "figure": "tidus",
+    "px": 158.2,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.3,
+    "localPx": 47.9,
+    "frameMs": 16.2,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 83840,
+    "figure": "tidus",
+    "px": 158.2,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.3,
+    "localPx": 47.9,
+    "frameMs": 17.6,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 82866,
+    "figure": "tidus",
+    "px": 158,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.4,
+    "localPx": 47.1,
+    "frameMs": 16.7,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 84564,
+    "figure": "tidus",
+    "px": 157.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 3.4,
+    "localPx": 46.8,
+    "frameMs": 16.9,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 98482,
+    "figure": "tidus",
+    "px": 157.6,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 5.8,
+    "localPx": 27.1,
+    "frameMs": 15.5,
+    "longFrame": false,
+    "cause": "ko"
+   },
+   {
+    "n": 79034,
+    "figure": "tidus",
+    "px": 157.5,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 5.1,
+    "localPx": 30.7,
+    "frameMs": 16.3,
+    "longFrame": false
+   },
+   {
+    "n": 74439,
+    "figure": "tidus",
+    "px": 153.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 5.4,
+    "localPx": 28.5,
+    "frameMs": 17.2,
+    "longFrame": false,
+    "cause": "ko"
+   },
+   {
+    "n": 69649,
+    "figure": "tidus",
+    "px": 153.6,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4.9,
+    "localPx": 31,
+    "frameMs": 18,
+    "longFrame": false
+   },
+   {
+    "n": 97524,
+    "figure": "tidus",
+    "px": 148.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 7.8,
+    "localPx": 19.1,
+    "frameMs": 15.6,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 73731,
+    "figure": "tidus",
+    "px": 144.9,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 6.5,
+    "localPx": 22.3,
+    "frameMs": 15.7,
+    "longFrame": false,
+    "cause": "damage"
+   },
+   {
+    "n": 80538,
+    "figure": "tidus",
+    "px": 144.8,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 6.3,
+    "localPx": 22.8,
+    "frameMs": 17.5,
+    "longFrame": false,
+    "cause": "action-start"
+   },
+   {
+    "n": 95561,
+    "figure": "auron",
+    "px": 144.3,
+    "part": "head",
+    "kind": "swap",
+    "atSwap": true,
+    "ratio": 72.2,
+    "localPx": 2,
+    "frameMs": 10.9,
+    "longFrame": false
+   },
+   {
+    "n": 85664,
+    "figure": "auron",
+    "px": 143.2,
+    "part": "head",
+    "kind": "swap",
+    "atSwap": true,
+    "ratio": 71.6,
+    "localPx": 2,
+    "frameMs": 11,
+    "longFrame": false
+   },
+   {
+    "n": 62725,
+    "figure": "tidus",
+    "px": 138.3,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 9.8,
+    "localPx": 14,
+    "frameMs": 16.4,
+    "longFrame": false
+   },
+   {
+    "n": 99106,
+    "figure": "auron",
+    "px": 136.1,
+    "part": "head",
+    "kind": "swap",
+    "atSwap": true,
+    "ratio": 61.2,
+    "localPx": 2.2,
+    "frameMs": 9.5,
+    "longFrame": false
+   },
+   {
+    "n": 85376,
+    "figure": "tidus",
+    "px": 134.3,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 9.2,
+    "localPx": 14.6,
+    "frameMs": 16.4,
+    "longFrame": false
+   },
+   {
+    "n": 92082,
+    "figure": "tidus",
+    "px": 133.7,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 9.2,
+    "localPx": 14.5,
+    "frameMs": 16,
+    "longFrame": false
+   },
+   {
+    "n": 98193,
+    "figure": "yuna",
+    "px": 104,
+    "part": "head",
+    "kind": "dash",
+    "atSwap": false,
+    "ratio": 4.4,
+    "localPx": 23.8,
+    "frameMs": 16.4,
+    "longFrame": false,
+    "cause": "damage"
+   }
+  ]
+ },
+ "largestStepPx": 379.3,
+ "largestStepByFigure": {
+  "auron": 379.3,
+  "tidus": 200.7,
+  "yuna": 167,
+  "lulu": 44.8,
+  "valefor": 40.1,
+  "ifrit": 36.9,
+  "possessed-valefor": 36.5,
+  "possessed-ifrit": 29.1
+ },
+ "attackGaps": {
+  "auron": [
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   30,
+   27,
+   27,
+   31,
+   27,
+   27,
+   27,
+   30,
+   30,
+   27,
+   30,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   30,
+   26,
+   27,
+   27,
+   27,
+   27,
+   27,
+   26,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   30,
+   26,
+   27,
+   27
+  ],
+  "yuna": [
+   27,
+   30
+  ],
+  "tidus": [
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   32,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29,
+   29
+  ]
+ },
+ "castGaps": {
+  "lulu": [
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   376,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   160,
+   223
+  ]
+ },
+ "blow": {
+  "auron": [
+   {
+    "swapN": 3526,
+    "numeralN": 3551,
+    "frames": 25,
+    "ms": 423,
+    "txt": "1112",
+    "gap": 27
+   },
+   {
+    "swapN": 4522,
+    "numeralN": 4547,
+    "frames": 25,
+    "ms": 429,
+    "txt": "1130",
+    "gap": 27
+   },
+   {
+    "swapN": 6307,
+    "numeralN": 6332,
+    "frames": 25,
+    "ms": 422,
+    "txt": "1125",
+    "gap": 27
+   },
+   {
+    "swapN": 8689,
+    "numeralN": 8714,
+    "frames": 25,
+    "ms": 421,
+    "txt": "1206",
+    "gap": 27
+   },
+   {
+    "swapN": 10880,
+    "numeralN": 10905,
+    "frames": 25,
+    "ms": 423,
+    "txt": "1184",
+    "gap": 27
+   },
+   {
+    "swapN": 11629,
+    "numeralN": 11654,
+    "frames": 25,
+    "ms": 422,
+    "txt": "1189",
+    "gap": 27
+   },
+   {
+    "swapN": 12139,
+    "numeralN": 12164,
+    "frames": 25,
+    "ms": 424,
+    "txt": "2180",
+    "gap": 30
+   },
+   {
+    "swapN": 14339,
+    "numeralN": 14364,
+    "frames": 25,
+    "ms": 422,
+    "txt": "1265",
+    "gap": 27
+   },
+   {
+    "swapN": 14915,
+    "numeralN": 14940,
+    "frames": 25,
+    "ms": 422,
+    "txt": "1368",
+    "gap": 27
+   },
+   {
+    "swapN": 21081,
+    "numeralN": 21106,
+    "frames": 25,
+    "ms": 421,
+    "txt": "3183",
+    "gap": 31
+   },
+   {
+    "swapN": 23376,
+    "numeralN": 23401,
+    "frames": 25,
+    "ms": 423,
+    "txt": "1577",
+    "gap": 27
+   },
+   {
+    "swapN": 24370,
+    "numeralN": 24395,
+    "frames": 25,
+    "ms": 422,
+    "txt": "1501",
+    "gap": 27
+   },
+   {
+    "swapN": 27796,
+    "numeralN": 27820,
+    "frames": 24,
+    "ms": 421,
+    "txt": "1577",
+    "gap": 27
+   },
+   {
+    "swapN": 33003,
+    "numeralN": 33027,
+    "frames": 24,
+    "ms": 423,
+    "txt": "3254",
+    "gap": 30
+   },
+   {
+    "swapN": 33774,
+    "numeralN": 33798,
+    "frames": 24,
+    "ms": 423,
+    "txt": "3054",
+    "gap": 30
+   },
+   {
+    "swapN": 34614,
+    "numeralN": 34639,
+    "frames": 25,
+    "ms": 422,
+    "txt": "1508",
+    "gap": 27
+   },
+   {
+    "swapN": 46488,
+    "numeralN": 46513,
+    "frames": 25,
+    "ms": 449,
+    "txt": "3263",
+    "gap": 30
+   },
+   {
+    "swapN": 48292,
+    "numeralN": 48317,
+    "frames": 25,
+    "ms": 422,
+    "txt": "1614",
+    "gap": 27
+   },
+   {
+    "swapN": 61381,
+    "numeralN": 61406,
+    "frames": 25,
+    "ms": 423,
+    "txt": "1817",
+    "gap": 27
+   },
+   {
+    "swapN": 71556,
+    "numeralN": 71636,
+    "frames": 80,
+    "ms": 1411,
+    "txt": "2435",
+    "gap": 27
+   },
+   {
+    "swapN": 72353,
+    "numeralN": 72378,
+    "frames": 25,
+    "ms": 421,
+    "txt": "3512",
+    "gap": 30
+   },
+   {
+    "swapN": 74057,
+    "numeralN": 74082,
+    "frames": 25,
+    "ms": 421,
+    "txt": "1357",
+    "gap": 26
+   },
+   {
+    "swapN": 79161,
+    "numeralN": 79186,
+    "frames": 25,
+    "ms": 419,
+    "txt": "1591",
+    "gap": 27
+   },
+   {
+    "swapN": 85488,
+    "numeralN": 85513,
+    "frames": 25,
+    "ms": 419,
+    "txt": "1959",
+    "gap": 27
+   },
+   {
+    "swapN": 92193,
+    "numeralN": 92218,
+    "frames": 25,
+    "ms": 417,
+    "txt": "1467",
+    "gap": 27
+   },
+   {
+    "swapN": 93544,
+    "numeralN": 93569,
+    "frames": 25,
+    "ms": 420,
+    "txt": "1543",
+    "gap": 27
+   },
+   {
+    "swapN": 95034,
+    "numeralN": 95059,
+    "frames": 25,
+    "ms": 419,
+    "txt": "3109",
+    "gap": 30
+   },
+   {
+    "swapN": 97219,
+    "numeralN": 97244,
+    "frames": 25,
+    "ms": 418,
+    "txt": "2593",
+    "gap": 26
+   },
+   {
+    "swapN": 98031,
+    "numeralN": 98056,
+    "frames": 25,
+    "ms": 418,
+    "txt": "2739",
+    "gap": 27
+   },
+   {
+    "swapN": 98918,
+    "numeralN": 98943,
+    "frames": 25,
+    "ms": 418,
+    "txt": "2530",
+    "gap": 27
+   }
+  ],
+  "yuna": [
+   {
+    "swapN": 97370,
+    "numeralN": 97396,
+    "frames": 26,
+    "ms": 437,
+    "txt": "294",
+    "gap": 27
+   },
+   {
+    "swapN": 98168,
+    "numeralN": 98196,
+    "frames": 28,
+    "ms": 470,
+    "txt": "538",
+    "gap": 30
+   }
+  ],
+  "tidus": [
+   {
+    "swapN": 56099,
+    "numeralN": 56127,
+    "frames": 28,
+    "ms": 477,
+    "txt": "764",
+    "gap": 29
+   },
+   {
+    "swapN": 71435,
+    "numeralN": 71463,
+    "frames": 28,
+    "ms": 478,
+    "txt": "753",
+    "gap": 29
+   },
+   {
+    "swapN": 73708,
+    "numeralN": 73735,
+    "frames": 27,
+    "ms": 452,
+    "txt": "649",
+    "gap": 29
+   },
+   {
+    "swapN": 74415,
+    "numeralN": 74443,
+    "frames": 28,
+    "ms": 475,
+    "txt": "662",
+    "gap": 29
+   },
+   {
+    "swapN": 76238,
+    "numeralN": 76266,
+    "frames": 28,
+    "ms": 476,
+    "txt": "729",
+    "gap": 29
+   },
+   {
+    "swapN": 77499,
+    "numeralN": 77527,
+    "frames": 28,
+    "ms": 467,
+    "txt": "707",
+    "gap": 29
+   },
+   {
+    "swapN": 78225,
+    "numeralN": 78253,
+    "frames": 28,
+    "ms": 468,
+    "txt": "757",
+    "gap": 29
+   },
+   {
+    "swapN": 81279,
+    "numeralN": 81307,
+    "frames": 28,
+    "ms": 467,
+    "txt": "872",
+    "gap": 29
+   },
+   {
+    "swapN": 82839,
+    "numeralN": 82867,
+    "frames": 28,
+    "ms": 470,
+    "txt": "1676",
+    "gap": 32
+   },
+   {
+    "swapN": 83571,
+    "numeralN": 83599,
+    "frames": 28,
+    "ms": 468,
+    "txt": "872",
+    "gap": 29
+   },
+   {
+    "swapN": 83816,
+    "numeralN": 83844,
+    "frames": 28,
+    "ms": 469,
+    "txt": "876",
+    "gap": 29
+   },
+   {
+    "swapN": 87245,
+    "numeralN": 87273,
+    "frames": 28,
+    "ms": 470,
+    "txt": "675",
+    "gap": 29
+   },
+   {
+    "swapN": 87883,
+    "numeralN": 87911,
+    "frames": 28,
+    "ms": 468,
+    "txt": "669",
+    "gap": 29
+   },
+   {
+    "swapN": 94915,
+    "numeralN": 94943,
+    "frames": 28,
+    "ms": 470,
+    "txt": "695",
+    "gap": 29
+   },
+   {
+    "swapN": 97501,
+    "numeralN": 97528,
+    "frames": 27,
+    "ms": 452,
+    "txt": "1127",
+    "gap": 29
+   },
+   {
+    "swapN": 98458,
+    "numeralN": 98486,
+    "frames": 28,
+    "ms": 470,
+    "txt": "1202",
+    "gap": 29
+   },
+   {
+    "swapN": 98789,
+    "numeralN": 98817,
+    "frames": 28,
+    "ms": 467,
+    "txt": "1183",
+    "gap": 29
+   }
+  ]
+ },
+ "attackGapStats": {
+  "auron": {
+   "n": 54,
+   "min": 26,
+   "median": 27,
+   "max": 31
+  },
+  "yuna": {
+   "n": 2,
+   "min": 27,
+   "median": 30,
+   "max": 30
+  },
+  "tidus": {
+   "n": 35,
+   "min": 29,
+   "median": 29,
+   "max": 32
+  }
+ },
+ "castGapStats": {
+  "lulu": {
+   "n": 23,
+   "min": 160,
+   "median": 160,
+   "max": 376
+  }
+ },
+ "blowStats": {
+  "auron": {
+   "n": 30,
+   "min": 24,
+   "median": 25,
+   "max": 80
+  },
+  "yuna": {
+   "n": 2,
+   "min": 26,
+   "median": 28,
+   "max": 28
+  },
+  "tidus": {
+   "n": 17,
+   "min": 27,
+   "median": 28,
+   "max": 28
+  }
+ },
+ "speed": {
+  "samples": 1630,
+  "runs": [
+   {
+    "speed": "normal",
+    "seconds": 1630,
+    "fromBf": 1,
+    "toBf": 98071
+   }
+  ],
+  "reassertions": 0,
+  "reassertedFrom": {},
+  "rPresses": 0,
+  "numerals": 673,
+  "errors": [],
+  "lastSample": {
+   "k": "s",
+   "t": 1668849,
+   "bf": 98071,
+   "speed": "normal",
+   "phase": "play:victory",
+   "reasserts": 0,
+   "r": 0
+  },
+  "samplesBySpeed": {
+   "normal": 1630
+  }
+ },
+ "run": {
+  "outcome": "victory",
+  "fails": 0,
+  "consoleErrors": 0,
+  "query": "?coach=off",
+  "seeds": [
+   {
+    "at": "battle start",
+    "engineSeed": 1,
+    "links": 1,
+    "firstEnemyAction": {
+     "seq": 2,
+     "actor": "braskas-final-aeon",
+     "ability": "Left-Arm Strike",
+     "targets": [
+      "auron"
+     ]
+    }
+   },
+   {
+    "at": "link 2",
+    "engineSeed": 2,
+    "links": 2,
+    "firstEnemyAction": null
+   },
+   {
+    "at": "link 3",
+    "engineSeed": 3,
+    "links": 3,
+    "firstEnemyAction": null
+   },
+   {
+    "at": "link 4",
+    "engineSeed": 4,
+    "links": 4,
+    "firstEnemyAction": null
+   },
+   {
+    "at": "link 5",
+    "engineSeed": 5,
+    "links": 5,
+    "firstEnemyAction": null
+   },
+   {
+    "at": "link 6",
+    "engineSeed": 6,
+    "links": 6,
+    "firstEnemyAction": null
+   },
+   {
+    "at": "link 7",
+    "engineSeed": 7,
+    "links": 7,
+    "firstEnemyAction": null
+   }
+  ]
+ },
+ "summaryReportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 1638.5 s of battle, 59.7 to 59.7 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (59 swap(s) change a head by more than the tolerance (worst 94.6 percent; 94.6 percent where the head is registered); 10 swap(s) of a standing figure move its feet more than the tolerance (worst 13.9 px at 1600 wide); 23 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.733 to 1.513; the bands are tools/posescale/pose-bands.mjs's); 16 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 355.1 px at 1600 wide), whatever stance the registration claims); CHK-027 FAIL (8 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 222.8 px)); 1,428 ms of see-through a minute (85.7 frames a minute at 60 Hz) Read by harness 683a773fead4 (38 files; tree D:/pyrefly-release55 at 2342fe666; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows); PYREFLY_QUERY=?coach=off)."
+}
