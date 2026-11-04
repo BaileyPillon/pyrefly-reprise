@@ -137,16 +137,23 @@ export interface YrpModels {
   dispose(): void;
 }
 
-/** Free a parsed scene's geometry and textures. */
+/**
+ * Free a parsed scene's geometry and textures: **every** texture its materials hold (r75 fix pass, decision 219v item 4), not only the colour map. The AI Bahamut's look (`pbr`, `?boss=ai`) keeps the file's material whole, so
+ * its normal, roughness, metalness and occlusion maps are drawn too, and a colour map alone left them on the GPU.
+ */
 export function freeScene(scene: Object3D): void {
   scene.traverse((o) => {
     const mesh = o as Mesh;
     if (!mesh.isMesh) return;
     mesh.geometry?.dispose();
     for (const m of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
-      const mat = m as { map?: { dispose(): void } | null; dispose?(): void } | undefined;
-      mat?.map?.dispose();
-      mat?.dispose?.();
+      const mat = m as unknown as ({ dispose?(): void } & Record<string, unknown>) | undefined;
+      if (!mat) continue;
+      for (const value of Object.values(mat)) {
+        const texture = value as { isTexture?: boolean; dispose?(): void } | null;
+        if (texture?.isTexture === true) texture.dispose?.();
+      }
+      mat.dispose?.();
     }
   });
 }

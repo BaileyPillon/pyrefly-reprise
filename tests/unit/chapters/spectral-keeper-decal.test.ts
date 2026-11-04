@@ -13,6 +13,7 @@ import { Group, PerspectiveCamera, Texture } from 'three';
 import { PartRings, decalStateOf, type DecalLoader, type DecalState, type FloorDecal, type PartAnchor } from '../../../src/engine/PartAnchors.ts';
 import { SPECTRAL_KEEPER_PART_ANCHORS } from '../../../src/scenes/spectral-keeper.ts';
 import { armCircle, freeCircleIds } from '../../../src/battle/ffx/platforms.ts';
+import { occupiedPlatforms, standingIds } from '../../../src/battle/ffx/platformOccupancy.ts';
 import { actor, circleId, ctxOf, inputFor, move, newEngine, nextInput, platformOfId } from '../helpers/keeperDrive.ts';
 
 type Engine = ReturnType<typeof newEngine>;
@@ -139,5 +140,34 @@ describe('the stage\'s call (`PartRings.sync` with the engine\'s own state) draw
     expect(drawn[circleId(2)], 'platform 2 is free').toBe('unlit');
     expect(drawn[circleId(4)], 'platform 4 is held by Wakka').toBe('occupied');
     expect([1, 2, 3, 4, 5, 6, 7].map((p) => drawn[circleId(p)])).toEqual(glyphs(engine));
+  });
+});
+
+describe('a state without `activeIds` shows nothing occupied instead of throwing (FFX only; r75 fix pass, decision 219v item 2)', () => {
+  // A hand-made or partial state: the combatants and the flags, with the plat.at.* flags a finished fight leaves behind and no front line.
+  const partial = { combatants: {}, flags: { 'plat.at.tidus': 1, 'plat.at.yuna': 2, 'plat.at.auron': 3 } };
+
+  it('standingIds is an empty list and occupiedPlatforms an empty set', () => {
+    expect(standingIds(partial)).toEqual([]);
+    expect(occupiedPlatforms(partial).size).toBe(0);
+  });
+
+  it('decalStateOf answers plain for every glyph (the flags alone never make a platform occupied), and the mine still shows', () => {
+    for (let p = 1; p <= 7; p++) expect(decalStateOf(partial, ringOf(p)), `glyph ${p}`).toBe('unlit');
+    const lit = { ...partial, flags: { ...partial.flags, 'plat.armed.spectral-circle-5': true } };
+    expect(decalStateOf(lit, ringOf(5))).toBe('mined');
+  });
+
+  it('PartRings.sync takes such a state without throwing, and the ring draws the plain picture', async () => {
+    const root = new Group();
+    const rings = new PartRings(root, async () => new Texture());
+    rings.add(circleId(1), SPECTRAL_KEEPER_PART_ANCHORS[circleId(1)] as PartAnchor);
+    await new Promise((r) => setTimeout(r, 0));
+    expect(() => rings.sync(circleId(1), partial)).not.toThrow();
+    for (let i = 0; i < 12; i++) {
+      rings.sync(circleId(1), partial);
+      rings.update(0.25, () => ({ x: 0, y: 0, z: -6, height: 3 }), new PerspectiveCamera());
+    }
+    expect(rings.snapshot().find((r) => r.id === circleId(1))?.decal?.state).toBe('unlit');
   });
 });

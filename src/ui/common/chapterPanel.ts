@@ -19,6 +19,7 @@
 
 import './chapter-panel.css';
 import type { ChapterMeta } from '../../data/chapter-meta.ts';
+import { prepTipFor } from '../../data/chapter-prep-tips.ts';
 import { ART_INDEX_CACHE, loadArtManifest, manifestKnowsAssetNow, pause2xUrlFor, pauseStemOf } from '../../engine/ArtManifest.ts';
 import { sidecarUrlOf } from '../../engine/ArtShipped.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
@@ -431,11 +432,14 @@ export function snapshotsHtml(meta: ChapterMeta): string {
     .join('');
 }
 
-/** The canon strategy line, under its gold TIP label. */
-export function tipHtml(meta: ChapterMeta): string {
-  return `<div class="cpanel__tip"><span class="cpanel__tip-label">TIP</span><span class="cpanel__tip-text">${escapeHtml(
-    meta.tip,
-  )}</span></div>`;
+/**
+ * The canon strategy line, under its gold TIP label. `prep: true` is the party prep's CHAPTER tab (review read MA-10): a chapter with a short tip (`data/chapter-prep-tips.ts`) gets BOTH forms in the block, `--full` and
+ * `--short`, and `chapter-panel-tab.css` shows the short one from 600 px up; the phone's stacked card and the pause screen (which never passes `prep`) keep the whole tip. Any other chapter renders exactly as ever.
+ */
+export function tipHtml(meta: ChapterMeta, opts: { prep?: boolean } = {}): string {
+  const short = opts.prep === true ? prepTipFor(meta.id) : undefined;
+  const text = short === undefined ? `<span class="cpanel__tip-text">${escapeHtml(meta.tip)}</span>` : `<span class="cpanel__tip-text cpanel__tip-text--full">${escapeHtml(meta.tip)}</span><span class="cpanel__tip-text cpanel__tip-text--short">${escapeHtml(short)}</span>`;
+  return `<div class="cpanel__tip"><span class="cpanel__tip-label">TIP</span>${text}</div>`;
 }
 
 export interface DossierOptions extends ObjectiveListOptions {

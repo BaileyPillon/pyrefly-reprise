@@ -23,6 +23,13 @@
  * slash cue, roll), a fallback to `cast` gets today's cast beat, so an enemy
  * without an attack painting plays exactly as it did.
  *
+ * One opt-in (r75 fix pass, decision 219v item 1; FFX only, the hidden Spectral
+ * Keeper, `data/art/physicalOnIdle.ts`): a subject that lists itself there plays
+ * the ATTACK beat for a physical move even while it has no attack painting; the
+ * pose chain (`attack`, `ready`, `idle`) then shows its idle, with no cast cue,
+ * no blue flash and no caster lift. Off by default, so every other enemy in both
+ * games is unchanged.
+ *
  * Both games (shared presenter plumbing, `critic/CHECKS.md` CHK-020): FFX and
  * FFX-2 rows mark physical with the same `damageType` (FFX-2's engine reads it
  * in `execute.ts` `attackClass`). No `three`, no DOM (hard rule 1).
@@ -47,18 +54,20 @@ export function isPhysicalAction(facts: AbilityFacts | undefined): boolean {
  * `side` is the actor's team (`BattleStage.sideOf`), `facts` the chapter's
  * ability rows, `paints` whether the actor has its own painting for a pose
  * (`BattleStage.paints`). Any of them missing keeps today's `poseForCommand`.
+ * `onIdle` is the subject's opt-in ({@link physicalOnIdle}, resolved by the caller from the figure's art id); absent or false is every other enemy.
  */
 export function poseForAction(
   event: Extract<BattleEvent, { type: 'action-start' }>,
   side: 'party' | 'enemy' | 'aeon' | undefined,
   facts: ((id: AbilityId) => AbilityFacts | undefined) | null | undefined,
   paints: ((pose: string) => boolean) | undefined,
+  onIdle?: boolean,
 ): string {
   const base = poseForCommand(event.command.kind);
   if (side !== 'enemy' || event.command.kind !== 'ability' || !facts) return base;
   const id = event.abilityId ?? event.command.id;
   if (!isPhysicalAction(facts(id))) return base;
-  return paints?.('attack') ? 'attack' : base;
+  return onIdle === true || paints?.('attack') ? 'attack' : base;
 }
 
 /**

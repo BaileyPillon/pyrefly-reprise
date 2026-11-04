@@ -32,7 +32,8 @@ export const FALLEN_MAESTERS_META: ChapterMeta = {
     { id: 'get-past-concherer', label: 'Get past Concherer', rule: { kind: 'link-reached', link: 4 } },
     { id: 'defeat-chac', label: 'Defeat Chac', rule: { kind: 'victory' } },
   ],
-  // Short enough for the prep card's tip box (about five lines at 1600 x 900): the guide card in battle carries the rest.
+  // The full tip: the pause screen's prose and the phone's stacked card show all of it. The desktop prep band shows about five lines of it at 1600 x 900 and this is ten, so that card shows the short form in
+  // `./chapter-prep-tips.ts` (r75 fix pass, decision 219v item 5; review read MA-10).
   tip:
     'Each floor is a fresh fight, and the glyph between them mends you. Concherer’s shell breaks on one hit of about twenty thousand, ' +
     'which only Paine’s Break Damage Limit reaches: Change her across The End’s red and green gates and back to the Dark Knight first. ' +

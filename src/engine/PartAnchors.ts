@@ -22,8 +22,7 @@
  * {@link PartRings} is the small three.js layer the stage drives.
  */
 
-import type { BattleState } from '../battle/common/types.ts';
-import { occupiedPlatforms } from '../battle/ffx/platformOccupancy.ts';
+import { occupiedPlatforms, type PlatformView } from '../battle/ffx/platformOccupancy.ts';
 import {
   AdditiveBlending,
   Color,
@@ -91,8 +90,8 @@ export interface FloorDecal {
 /** Loads one decal painting (`art/...png` path): its texture, or null when the file is absent. Injected by the stage (`BattlePresenterStage.ts`), so this module imports no art loader. */
 export type DecalLoader = (path: string) => Promise<Texture | null>;
 
-/** What a decal's state is read from: the three fields the engine's own platform answer needs (`platformOccupancy.ts`). */
-export type DecalView = Pick<BattleState, 'activeIds' | 'combatants' | 'flags'>;
+/** What a decal's state is read from: the fields the engine's own platform answer needs (`platformOccupancy.ts`; a state without `activeIds` shows no platform occupied, decision 219v item 2). */
+export type DecalView = PlatformView;
 
 /**
  * Which of a decal's pictures shows: the mine's while the ring is lit, else the occupied one while the engine counts the platform as held, else the plain one. Pure.

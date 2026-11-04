@@ -13,8 +13,11 @@ import type { BattleState, CombatantId } from '../common/types.ts';
 import { AT_PREFIX } from './ai/spectral-keeper-rules.ts';
 import { onField } from './predicates.ts';
 
-/** The part of a battle state the glyphs are read from. */
-export type PlatformView = Pick<BattleState, 'activeIds' | 'combatants' | 'flags'>;
+/**
+ * The part of a battle state the glyphs are read from. `activeIds` is optional on purpose: a hand-made or partial state (a scene test's, a stage handed a state before the engine has seated the front line) may lack it,
+ * and the answer for such a state is an empty occupancy ({@link standingIds}), not a throw (r75 fix pass, decision 219v item 2). A real `BattleState` always carries it.
+ */
+export type PlatformView = Pick<BattleState, 'combatants' | 'flags'> & { readonly activeIds?: BattleState['activeIds'] };
 
 /** The battle-state flag that holds a member's platform. */
 export const platformFlagOf = (id: CombatantId): string => AT_PREFIX + id;
@@ -25,9 +28,9 @@ export function heldPlatform(flags: Readonly<Record<string, unknown>>, id: Comba
   return typeof value === 'number' ? value : undefined;
 }
 
-/** The members who stand on the glyphs: the active front line, in slot order, less anyone who has left the field (an Ejected member). A KO'd member still stands there. */
+/** The members who stand on the glyphs: the active front line, in slot order, less anyone who has left the field (an Ejected member). A KO'd member still stands there. A state with no `activeIds` has nobody standing (an empty list). */
 export function standingIds(view: PlatformView): CombatantId[] {
-  return view.activeIds.filter((id) => {
+  return (view.activeIds ?? []).filter((id) => {
     const c = view.combatants[id];
     return c !== undefined && onField(c);
   });

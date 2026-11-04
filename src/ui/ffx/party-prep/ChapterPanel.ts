@@ -174,7 +174,7 @@ export function makeChapterPanel(game: GameId): PrepPanel {
           <div class="prepchap__colwrap">
             <div class="prepchap__col prepchap__col--brief" data-scrollcol>
               ${objectivesHtml(meta)}
-              ${tipHtml(meta)}
+              ${tipHtml(meta, { prep: true })}
             </div>
             <div class="prepchap__cue prepchap__cue--top" aria-hidden="true"></div>
             <div class="prepchap__cue prepchap__cue--bottom" aria-hidden="true"></div>

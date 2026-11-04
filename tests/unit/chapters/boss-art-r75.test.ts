@@ -15,7 +15,7 @@
  * physical moves play the presenter's no-attack-painting chain until a repaint; Aranea's attack, cast and hurt keep their stance waivers.
  */
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import approved from '../../../docs/target/approved-hashes.json';
@@ -182,6 +182,67 @@ describe('the Keeper\'s attack painting is held back (decision 219u): staged, no
   });
 });
 
+/**
+ * Pinned and staged, but NOT in the first install (decision 219v item 3, the driver under Bailey's delegation, 2026-11-03): the chapter cards and thumbnails that nothing reads yet (6 images, 4,481,396 bytes of
+ * masters, about 3.6 MB shipped). The install tool (`boss-art-install/make-mirror.mjs`, its `HELD` list) leaves them in the stage with their sidecars; the pins STAY (the bytes stay locked for the second install,
+ * and a tree that carries them must carry exactly these bytes). `verify-approved.mjs` therefore reports these six as `missing` after the first install: that is the expected answer, `INSTALL.md` step 5 says so.
+ */
+const HELD_FROM_FIRST_INSTALL = [
+  'pause/ch29-spectral-keeper-card.png',
+  'pause/ch29-spectral-keeper-card.2x.webp',
+  'pause/ch29-spectral-keeper-thumb.png',
+  'pause/ffx2-fallen-maesters-card.png',
+  'pause/ffx2-fallen-maesters-card.2x.webp',
+  'pause/ffx2-fallen-maesters-thumb.png',
+] as const;
+const isHeld = (path: string): boolean => (HELD_FROM_FIRST_INSTALL as readonly string[]).includes(path);
+
+describe('the chapter cards and thumbnails are held for the first install (decision 219v item 3): pinned, staged, read by no code', () => {
+  /** Every source file under src/ with its comments left out (a comment may mention a file; only code or data that names it would load it). */
+  const stripComments = (text: string): string =>
+    text
+      .split('\n')
+      .filter((line) => !/^\s*(\*|\/\*|\/\/)/.test(line))
+      .map((line) => line.replace(/\s\/\/.*$/, ''))
+      .join('\n');
+  const sourceText = (): string => {
+    const out: string[] = [];
+    const walk = (dir: string): void => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const full = join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (/\.(ts|css|html|json|mjs)$/.test(entry.name)) out.push(stripComments(readFileSync(full, 'utf8')));
+      }
+    };
+    walk(resolve(process.cwd(), 'src'));
+    return out.join('\n');
+  };
+
+  it('all six are pinned (their bytes stay locked) and there are exactly six: two cards, their two 2x masters, two thumbnails', () => {
+    for (const path of HELD_FROM_FIRST_INSTALL) expect(pins.has(path), path).toBe(true);
+    const cardsAndThumbs = [...pins.keys()].filter((p) => /^pause\/(ch29-spectral-keeper|ffx2-fallen-maesters)-(card|thumb)\./.test(p) && !p.endsWith('.json'));
+    expect(cardsAndThumbs.sort()).toEqual([...HELD_FROM_FIRST_INSTALL].sort());
+  });
+
+  it('nothing under src/ names any of them, so the first install loses nothing the game draws (the reason they are held)', () => {
+    const text = sourceText();
+    for (const path of HELD_FROM_FIRST_INSTALL) expect(text.includes(path.replace(/^pause\//, '').replace(/\.(png|2x\.webp)$/, '')), `${path} is named in src/`).toBe(false);
+  });
+
+  it('the plates the chapters DO draw are not held: the hero art of both pause tabs is pinned and installed', () => {
+    expect(isHeld(`${SPECTRAL_KEEPER_META.heroArt}.png`)).toBe(false);
+    expect(isHeld(`${FALLEN_MAESTERS_META.heroArt}.png`)).toBe(false);
+    expect(isHeld(`${FALLEN_MAESTERS_META.heroArt}.2x.webp`)).toBe(false);
+  });
+
+  it('the handoff and the install note say they are held (the counts follow: 36 images and 34 sidecars install)', () => {
+    const handoff = readFileSync(resolve(process.cwd(), 'docs/handoff/r75-boss-art.md'), 'utf8').replace(/\r\n/g, '\n');
+    expect(handoff).toMatch(/cards and thumbnails/i);
+    expect(handoff).toMatch(/36 install/);
+    expect(handoff).toMatch(/held for the first install/i);
+  });
+});
+
 describe('the review class is written down (m2 of the check, decision 219u): DEEP, both games', () => {
   const handoff = readFileSync(resolve(process.cwd(), 'docs/handoff/r75-boss-art.md'), 'utf8').replace(/\r\n/g, '\n');
   it('says the change is shared-system class with review DEEP and both games, and why (the floor-decal plumbing runs in every battle)', () => {
@@ -209,6 +270,7 @@ const pngSize = (file: string): [number, number] => {
 describe.skipIf(!root)('the installed files on this disk (public/art is gitignored; BOSS_ART_ROOT names another folder)', () => {
   it.each([...pins])('%s is the pinned file', (path, sha) => {
     const file = join(root!, path);
+    if (isHeld(path) && !existsSync(file)) return; // held for the first install (219v item 3): absent is the expected answer; present, it must be the pinned bytes
     expect(existsSync(file), `${path} is installed`).toBe(true);
     expect(sha256(file), `${path} is the staged bytes`).toBe(sha);
   });
@@ -219,6 +281,7 @@ describe.skipIf(!root)('the installed files on this disk (public/art is gitignor
   });
 
   it.each([...pins].filter(([path]) => path.endsWith('.png')))('%s has a house sidecar: the shipped fields only, the painting\'s own size', (path) => {
+    if (isHeld(path) && !existsSync(join(root!, path))) return; // held for the first install (219v item 3)
     const sidecar = join(root!, path.replace(/\.png$/, '.json'));
     expect(existsSync(sidecar), `${path.replace(/\.png$/, '.json')} beside it`).toBe(true);
     const json = JSON.parse(readFileSync(sidecar, 'utf8')) as Record<string, unknown>;

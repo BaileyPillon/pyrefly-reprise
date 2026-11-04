@@ -12,6 +12,7 @@ import { actionOfBlow, awaitSpellLanding, beginSpellAction, endSpellAction, spar
 import { chargeFx, odOpening, prerollFx } from './BattlePresenterBossFx.ts';
 import { stageCharge, stageFall, stageKo, stageLift, stageMark, stageVictory } from './BattlePresenterStaging.ts'; // lane "pro-staging": the held breath, the freeze on the last blow, the openings (all no-ops unless `?staging=pro` in a demo chapter)
 import { poseForAction } from './EnemyActionPose.ts';
+import { physicalOnIdle } from '../data/art/physicalOnIdle.ts'; // r75 (FFX only, the Spectral Keeper): a physical move plays the attack beat on the idle painting while the attack painting is held back
 export { settleForMenu, settleOpening } from './BattlePresenterSettle.ts'; // moved at the r63 integration to keep this file under 400 lines; the old import path still works
 import { itemGestureFor, startItemGesture } from './BattlePresenterItem.ts'; // FFX only: an item use is the game's orb of light, not a flask
 import { victoryPoseOf } from './VictoryPose.ts';
@@ -61,7 +62,7 @@ export async function actionStart(
   // attack-pose, both games); everything else is `poseForCommand` as before.
   const pose = poseForAction(event, ctx.stage.sideOf(event.actorId), ctx.deps.abilityFacts, (p) =>
     ctx.stage.paints?.(event.actorId, p) === true,
-  );
+  physicalOnIdle(ctx.stage.artOf?.(event.actorId)));
   const od = armOdKey(ctx, event); // r37 slot: this move's own Overdrive / Special painting (null when it has none)
   const windUp = !odOpensAction(od) && windUpOpens(ctx, event, pose); // D-313: the wind-up painting, then the impact at the apex
   const item = pose === 'item' ? itemGestureFor(ctx, event) : null; // FFX only: no flask (the stance), the orb or the glow (`BattlePresenterItem.ts`); null everywhere else
