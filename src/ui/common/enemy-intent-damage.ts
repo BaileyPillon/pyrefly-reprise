@@ -17,13 +17,25 @@ function num(n: number): string {
   return Math.abs(Math.round(n)).toLocaleString('en-US');
 }
 
+/**
+ * A row's variance band as printed magnitudes, **low first** (PR-0603), or `null` when both ends round to one figure. The engine's `min` is the figure at the bottom of the roll
+ * and `max` the figure at the top, but a heal's bounds are negative and a bound that was ever priced on another board than its twin would come out reversed; the card prints
+ * magnitudes, so it sorts them and a range can never read "4,132-2,333". Shared with the phone line (`enemy-intent-phone.ts`), both games.
+ */
+export function bandOf(t: Pick<IntentTargetView, 'min' | 'max'>): { lo: number; hi: number } | null {
+  const a = Math.abs(Math.round(t.min));
+  const b = Math.abs(Math.round(t.max));
+  return a === b ? null : { lo: Math.min(a, b), hi: Math.max(a, b) };
+}
+
 function rowHtml(t: IntentTargetView): string {
   // The sign is the engine's: positive means HP is lost. A boss healing
   // itself therefore reads as a negative amount, and the row says so rather
   // than printing a bare number the player has to interpret.
   const restoring = t.amount < 0;
   const pct = Math.round(t.hpFraction * 100);
-  const band = t.min !== t.max ? `${num(t.min)}–${num(t.max)}` : num(t.amount);
+  const range = bandOf(t);
+  const band = range ? `${num(range.lo)}–${num(range.hi)}` : num(t.amount);
   const hit = t.hitChancePercent !== null && t.hitChancePercent < 100 ? ` <i>${Math.max(0, Math.round(t.hitChancePercent))}% to hit</i>` : '';
   return (
     `<li class="eint__dmg${t.lethal ? ' eint__dmg--lethal' : ''}${restoring ? ' eint__dmg--heal' : ''}">` +

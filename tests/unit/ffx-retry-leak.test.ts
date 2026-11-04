@@ -10,7 +10,8 @@
  *
  * What this file does, with no GL: runs the scene's real setup (`loadFfxModels` over a stand-in glTF loader that hands back skinned and textured scenes, `FfxSkin` on real `PaintedActor`s, then the scene's teardown
  * order: `skin.dispose()`, `models.dispose()`), "draws" every model (each skinned mesh's skeleton makes its bone texture) and counts, per retry, the textures made against the textures freed (`Texture.prototype.dispose`
- * is spied). Over five retries nothing may stay alive. Mutations: `freeAll` without the skeleton line fails three of the four tests (the two retry tests and the single-model one); `unlit` back on the colour map alone fails three (the two retry tests and the last).
+ * is spied). Over five retries nothing may stay alive. Mutations: `freeAll` without the skeleton line fails three of the four tests (the two retry tests and the single-model one); `unlit` back on the colour map alone fails three (the two retry tests and the last); and, the weapon being a skinned file of its own as the real ones are (r75-code3), deleting
+ * `parts.skeletons.push(...more.skeletons)` in `models.ts` (the weapon's skeleton) fails the same three as the skeleton line does.
  *
  * Game case: FFX only (the files are FFX's).
  */
@@ -66,11 +67,14 @@ function stageScene(): Group {
   return scene;
 }
 
-/** Tidus's weapon: a static mesh with a colour map and a normal map. */
+/**
+ * Tidus's weapon: a SKINNED mesh with a skeleton of its own, a colour map and a normal map. The converter's weapon files are skinned (the real `evrae/rikku-weapon.glb` is), so the weapon hangs under the actor's
+ * hand bone with a second `Skeleton` that the actor's teardown does not reach; `loadActor` hands it to the model's list (`parts.skeletons.push(...more.skeletons)`). The stand-in used to be a static box, which left
+ * that line unproved (r75-code3, the round 34 test finding): deleting it freed every texture the test counted.
+ */
 function weaponScene(): Group {
-  const scene = new Group();
+  const scene = skinnedFigure({ parts: ['weapon'], normalMaps: true });
   scene.userData = { ffx: { runtimeScale: 1 } };
-  scene.add(new Mesh(new BoxGeometry(0.1, 1, 0.1), new MeshStandardMaterial({ map: pixel('weapon-colour'), normalMap: pixel('weapon-normal') })));
   return scene;
 }
 
@@ -154,15 +158,15 @@ describe('a model\'s bone textures are the model\'s to free (FFX only)', () => {
     const models = await loadFfxModels(manifest);
     const tidus = models.actors['tidus']!;
     const evrae = models.actors['evrae']!;
-    expect(skinnedUnder(tidus.root)).toHaveLength(3);
+    expect(skinnedUnder(tidus.root), 'three body parts and the skinned weapon under his hand').toHaveLength(4);
     const tidusBones = new Set(drawSkinned(tidus.root));
     const evraeBones = new Set(drawSkinned(evrae.root));
-    expect(tidusBones.size, 'the three parts share the one skeleton of the file').toBe(1);
+    expect(tidusBones.size, 'the three body parts share the one skeleton of the file; the weapon has a skeleton of its own').toBe(2);
     expect(evraeBones.size).toBe(1);
     tidus.dispose();
     expect(ledger.alive(tidusBones)).toEqual([]);
     expect(ledger.alive(evraeBones), 'Evrae is still on the field: his texture stays').toHaveLength(1);
-    expect(skinnedUnder(tidus.root)[0]!.skeleton.boneTexture, 'cleared, so a new draw would make a new one').toBeNull();
+    for (const mesh of skinnedUnder(tidus.root)) expect(mesh.skeleton.boneTexture, `${mesh.name}: cleared, so a new draw would make a new one`).toBeNull();
     evrae.dispose();
     expect(ledger.alive(evraeBones)).toEqual([]);
     models.dispose();
@@ -172,12 +176,12 @@ describe('a model\'s bone textures are the model\'s to free (FFX only)', () => {
 describe('five entries into the chapter through the scene\'s real setup (FFX only)', () => {
   const RETRIES = 5;
 
-  it('each retry makes the same textures (two skeletons\' bone textures, the figures\', the weapon\'s and the stage\'s maps) and after its teardown NONE is left on the GPU (mutation: fails)', async () => {
+  it('each retry makes the same textures (three skeletons\' bone textures, the figures\', the weapon\'s and the stage\'s maps) and after its teardown NONE is left on the GPU (mutation: fails)', async () => {
     const perRetry: number[] = [];
     let stillAlive = 0;
     for (let i = 0; i < RETRIES; i++) {
       const a = await attempt();
-      expect(a.bones.size, 'a bone texture per skeleton: Tidus\'s and Evrae\'s').toBe(2);
+      expect(a.bones.size, 'a bone texture per skeleton: Tidus\'s, his weapon\'s and Evrae\'s').toBe(3);
       expect(ledger.alive(a.made), 'while the fight is on everything is up').toHaveLength(a.made.size);
       a.teardown();
       perRetry.push(a.made.size);

@@ -33,7 +33,7 @@ import {
   garmentGridRegistryFrom,
   itemRegistryFrom,
 } from '../../../src/battle/ffx2/index.ts';
-import { CHAPTERS } from '../../../src/data/encounters.ts';
+import { getChapter } from '../../../src/data/encounters.ts';
 import { intendedStrategy } from '../../../src/engine/BattlePresenterStrategies.ts';
 import { buildAdvisorView, type AdvisorOptions } from '../../../src/engine/tactics/advisor.ts';
 
@@ -61,11 +61,11 @@ export interface Harness {
   options: AdvisorOptions;
 }
 
-function ffxHarness(groupId: string, seed: number, party: unknown): Harness {
+function ffxHarness(groupId: string, seed: number, party: unknown, chapterGroup?: unknown): Harness {
   const content = new FFXContentRegistry();
   content.addAbilities(ALL_ABILITIES);
   content.addItems(Object.values(ITEMS));
-  const group = ENEMY_GROUPS_BY_ID[groupId];
+  const group = ENEMY_GROUPS_BY_ID[groupId] ?? (chapterGroup as typeof ENEMY_GROUPS_BY_ID[string] | undefined);
   if (!group) throw new Error(`${groupId} group missing from the data layer`);
   const engine = createFFXEngine({ content, autoResolveMinigames: true });
   engine.setSeed(seed);
@@ -81,7 +81,7 @@ function ffxHarness(groupId: string, seed: number, party: unknown): Harness {
   return { engine: engine as unknown as Harness['engine'], options: { ffxContent: content } };
 }
 
-function ffx2Harness(groupId: string, seed: number, party: unknown): Harness {
+function ffx2Harness(groupId: string, seed: number, party: unknown, chapterGroup?: unknown): Harness {
   const abilities = abilityRegistryFrom(Object.values(ffx2data.ABILITIES));
   const items = itemRegistryFrom(Object.values(ffx2data.ITEMS));
   const engine = new FFX2Engine({
@@ -91,7 +91,7 @@ function ffx2Harness(groupId: string, seed: number, party: unknown): Harness {
     garmentGrids: garmentGridRegistryFrom(Object.values(ffx2data.GARMENT_GRIDS)),
     minigames: false,
   });
-  const group = ffx2data.ENEMY_GROUPS_BY_ID[groupId];
+  const group = ffx2data.ENEMY_GROUPS_BY_ID[groupId] ?? (chapterGroup as (typeof ffx2data.ENEMY_GROUPS_BY_ID)[string] | undefined);
   if (!group) throw new Error(`${groupId} group missing from the FFX-2 data layer`);
   engine.setSeed(seed);
   engine.init({
@@ -107,15 +107,15 @@ function ffx2Harness(groupId: string, seed: number, party: unknown): Harness {
 }
 
 export function harnessFor(chapterId: string, seed: number): Harness {
-  const chapter = CHAPTERS.find((c) => c.id === chapterId);
+  const chapter = getChapter(chapterId); // the listed chapters and the hidden ones (r75-code3: the range sweep plays them all)
   if (!chapter) throw new Error(`no chapter "${chapterId}"`);
   return chapter.game === 'ffx2'
-    ? ffx2Harness(chapter.enemyGroupRef.id, seed, chapter.buildRef)
-    : ffxHarness(chapter.enemyGroupRef.id, seed, chapter.buildRef);
+    ? ffx2Harness(chapter.enemyGroupRef.id, seed, chapter.buildRef, chapter.enemyGroupRef)
+    : ffxHarness(chapter.enemyGroupRef.id, seed, chapter.buildRef, chapter.enemyGroupRef);
 }
 
 export function gameOf(chapterId: string): 'ffx' | 'ffx2' {
-  return CHAPTERS.find((c) => c.id === chapterId)?.game === 'ffx2' ? 'ffx2' : 'ffx';
+  return getChapter(chapterId)?.game === 'ffx2' ? 'ffx2' : 'ffx';
 }
 
 /** The last legal thing on the menu, so a driver can never stall the engine. */

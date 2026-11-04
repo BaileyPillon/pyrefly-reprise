@@ -59,19 +59,18 @@ function rikkuMenu(engine: FFX2Engine, events: BattleEvent[]): Input {
 }
 
 describe("Chapter XIII's real build: Rikku mixes from the real bag", () => {
-  it('she is an Alchemist with Mix learned and the bag the build names; her menu lists the Mix row, greyed until the picker exists, and it opens the overlay a picker will answer', async () => {
+  it('she is an Alchemist with Mix learned and the bag the build names; her menu does not list the Mix row while the picker is not built (PR-0619)', async () => {
     const { engine, units, flags } = await trema();
     const rikku = units['rikku'] as Ffx2Unit;
     expect(rikku.dresspheres?.current).toBe('alchemist');
     expect([flags[`inventory:${LIGHT}`], flags[`inventory:${LUNAR}`], flags[`inventory:${MEGALIXIR}`]]).toEqual([10, 10, 99]);
     const menu = rikkuMenu(engine, []);
     const mix = menu.commands.find((c) => c.command.kind === 'ability' && c.command.id === 'x2-alchemist-mix');
-    // Greyed on the r51 merge (the driver's item 88e): the row stays listed and opens the overlay the picker will answer, but it cannot be chosen until that screen exists
-    // (`constants.ts#MIX_PICKER`), so no player picks the bare Mix and an unattended Alchemist never Mixes. The next test submits the Mix directly, as an AI or a headless run does.
-    expect(mix?.enabled).toBe(false);
-    expect(mix?.disabledReason).toBe('Not built');
-    expect(mix?.opensMinigame).toBe('rikku-mix');
-    expect(menu.commands.filter((c) => c.disabledReason === 'Not built'), 'only the Mix row carries the reason').toHaveLength(1);
+    // Not listed while the picker is not built (PR-0619, the driver's decision of 2026-11-04: show nothing that is not built; the r51 merge's greyed "Not built" row, the driver's item 88e, is gone): no player sees
+    // or picks the bare Mix and an unattended Alchemist never Mixes (`constants.ts#MIX_PICKER`). The next test submits the Mix directly, as an AI or a headless run does.
+    expect(mix, 'the Mix row is not in her menu').toBeUndefined();
+    expect(menu.commands.some((c) => c.opensMinigame === 'rikku-mix'), 'nothing in the menu opens the Mix overlay').toBe(false);
+    expect(menu.commands.some((c) => /not built/i.test(c.disabledReason ?? '')), 'no row in her menu is greyed as unbuilt').toBe(false);
     expect(menu.commands.find((c) => c.command.kind === 'ability' && c.command.id === 'x2-alchemist-stash-potion')?.enabled, 'her other Alchemist rows are unchanged').toBe(true);
   });
 
