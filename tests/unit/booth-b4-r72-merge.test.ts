@@ -35,14 +35,14 @@ const MERGED: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readonly 
   'yojimbo-cavern': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // IX: back (r72-hud)
   'seymour-natus': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // X
   'ffx2-fallen-aeons': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XI: hd2d and arena LIFTED by r72-sky (grade C by default)
-  'seymour-omnis': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // XII: back (r72-hud)
+  'seymour-omnis': { game: 'ffx', held: ['hud', 'breath', 'cam', 'moments'] }, // XII: back (r72-hud), its F1 HUD held by the r72 review (J-HUD-5b)
   'ffx2-trema': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XIII
   'isaaru-via-purifico': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // XIV
   'ffx2-den-of-woe': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XV
   'ffx2-ixion-djose': { game: 'ffx2', held: ['hd2d', 'arena', 'breath', 'cam', 'moments', 'smear'] }, // XVI
   'sin-face': { game: 'ffx', held: ['card', 'breath', 'cam', 'moments', 'smear', 'real'] }, // XVIII: back on r73-fast; real stays held
   'mirror-aeons': { game: 'ffx', held: ['hd2d', 'arena', 'card', 'breath', 'cam', 'moments', 'real'] }, // 27: real stays held
-  'sin-fins-core': { game: 'ffx', held: ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'] }, // XVII: joined in r74-fins (the nineteenth; the table was the release 72 merge's eighteen)
+  'sin-fins-core': { game: 'ffx', held: ['hud', 'hd2d', 'arena', 'breath', 'cam', 'moments', 'real'] }, // XVII (hud held since the r74 browser read): joined in r74-fins (the nineteenth; the table was the release 72 merge's eighteen)
 };
 
 const heldOf = (id: string): string[] => Object.keys(PIECE_HOLDS[id] ?? {}).filter((p) => treatedHold(id, p as never) !== undefined);

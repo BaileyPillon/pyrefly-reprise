@@ -6,7 +6,7 @@
  *    leaves it out of a build and keeps it for the dev server. `vite.config.ts` registers it beside the other plugins.
  * 2. **The middleware is read-only and stays inside its folder**: it serves a file from a temp root, and refuses every traversal (`..`, encoded and doubled, absolute paths, drive letters, backslashes, NUL,
  *    a symlink out of the root), a directory, any method but GET and HEAD; a missing root is a 404, not a crash; a request outside the route is left to Vite.
- * 3. **No retail file type is in the repo**: git tracks no `.glb`, `.gltf`, `.phyre`, `.dds` or `.mgrp` anywhere, `public/` (tracked) holds none, and neither does the folder on this disk, except the hidden Wind Waker chapter's own eleven model files (Chapter 32, FFX-2 only: Meshy-made, not FFX's, listed by name and sha256 in `tools/ww/ww-models.json`).
+ * 3. **No retail file type is in the repo**: git tracks no `.glb`, `.gltf`, `.phyre`, `.dds` or `.mgrp` anywhere, `public/` (tracked) holds none, and neither does the folder on this disk, except the hidden Wind Waker chapter's own eleven model files (Chapter 32, FFX-2 only: Meshy-made, not FFX's, listed by name and sha256 in `tools/ww/ww-models.json`), and the hidden 3D Bahamut's own two folders `models-exp/yrp/` and `models-exp/yrp-hd/` (Chapter 31, FFX-2 only: the game's own FFX-2 models, shipped by name and pruned otherwise).
  * 4. **The probe does nothing unless `import.meta.env.DEV`**: it returns null, fetches nothing and says nothing when it is false (the manifest's shape and the probe's failures are `ffx-local-manifest.test.ts`'s).
  *
  * Game case: FFX only (the files are FFX's); shared dev plumbing.
@@ -226,16 +226,24 @@ describe('no retail file type reaches the repo', () => {
     expect(retail(git('ls-files')), 'tracked anywhere').toEqual([]);
   });
 
-  it('public/ on this disk holds none either (an untracked file there would ship in a build), except the eleven original model files of the hidden Wind Waker chapter, listed by name and sha256', () => {
+  it('public/ on this disk holds none either (an untracked file there would ship in a build), except the eleven original model files of the hidden Wind Waker chapter, listed by name and sha256, and the two folders of the hidden 3D Bahamut', () => {
     // The Wind Waker chapter (FFX-2 only, Chapter 32) SHIPS its own models (Meshy-made and cleaned in Blender, not FFX's): `public/models-exp/windwaker/`, gitignored, listed in tools/ww/ww-models.json
     // and checked by tools/ww-models.mjs (its size and sha256). Only those eleven names are let through, so a retail file dropped into that folder, or anywhere else in public/, is still found.
     const listed = new Set(wwModelList().map((f) => `models-exp/windwaker/${f.path}`));
+    // The hidden 3D Bahamut's own two folders (Chapter 31, FFX-2 only, the game's own FFX-2 models; the retail-assets rule was lifted 2026-10-18) are the second let-through, as a release tree holds them (r74 release tree):
+    // a build ships exactly the files `tools/yrp-models-verify.mjs` lists (it refuses any other file of `models-exp/`) and `tools/dist-filter.mjs` prunes the rest, so nothing else in these folders can ship;
+    // a retail file anywhere else in public/, or in a sibling folder, is still found.
+    const yrpFolders = ['models-exp/yrp/', 'models-exp/yrp-hd/'];
     const found: string[] = [];
     const walk = (dir: string): void => {
       for (const entry of readdirSync(dir, { withFileTypes: true })) {
         const path = join(dir, entry.name);
-        if (entry.isDirectory()) walk(path);
-        else if (RETAIL.has(extname(entry.name).toLowerCase()) && !listed.has(relative(join(REPO, 'public'), path).split(sep).join('/'))) found.push(path);
+        if (entry.isDirectory()) {
+          walk(path);
+          continue;
+        }
+        const rel = relative(join(REPO, 'public'), path).split(sep).join('/');
+        if (RETAIL.has(extname(entry.name).toLowerCase()) && !listed.has(rel) && !yrpFolders.some((f) => rel.startsWith(f))) found.push(path);
       }
     };
     try {

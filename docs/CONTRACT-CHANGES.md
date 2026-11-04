@@ -13,6 +13,14 @@ Authority: the driver's decisions 219u under Bailey's delegation (Bailey 2026-11
 - **New `battle/ffx/platformOccupancy.ts`** (pure; no DOM, no `three`): `standingIds(view)`, `occupiedPlatforms(view)`, `heldPlatform(flags, id)`, `platformFlagOf(id)` and `PlatformView = Pick<BattleState, 'activeIds' | 'combatants' | 'flags'>`. `battle/ffx/platforms.ts` (`platformOf`, `occupantAt` through `standing`, `freeCircleIds`) reads it: the same answers as before, from one source, so the stage's picture of a platform and the Move row cannot disagree (a Switch leaves the outgoing member's `plat.at.*` flag and an Eject never clears it; the engine's answer counts only the active members still on the field).
 - `engine/PartAnchors.ts` (not a contract file): `decalStateOf(state, ring)` takes the battle state instead of its flags and shows `occupied` only where `occupiedPlatforms` says; `FloorDecal.standing` is `{ platform }` (the `flagPrefix` is gone, and `SPECTRAL_AT_FLAG_PREFIX` with it); `PartRings.sync(id, state)`'s state argument gains `activeIds` (the stage passes its whole `BattleState`; a test with a hand-made state adds `activeIds`, as `spectral-keeper-scene.test.ts` now does). No other anchor sets a decal.
 
+## 2026-11-03 — r74-int: the browser read of the two HUD lifts (hold rows only; FFX only; additive, no contract file changed)
+
+Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call under it, his to overturn). Branch `r74-int` (`d31a7ede3`), job verdicts of 2026-11-03 (`docs/handoff/r74.md` sections 3.9 and 10). Game case: FFX only for both holds (Chapters XII and XVII are FFX chapters); the build-input line is shared plumbing for both games.
+
+- **`PieceHolds.PIECE_HOLDS['seymour-omnis']`** gets its `hud` row back (release 73's key, first of four) with a new reason (the r74 numbers) and a new "Lifts when"; **`PieceHoldsLast.LAST_HOLDS['sin-fins-core']`** gains a `hud` row (first of seven). No type, no export and no switch module changes; `F1_TEXT_CEILING` keeps both chapters. `tools/owed-hold-lifts.mjs` is unchanged and answers an empty list on the tip.
+- **`tools/release-build.mjs`** reads `PYREFLY_THREE_SRC` as a build input (`INHERITED_BUILD_ENV`, `bundleInputs().threeSrc`, one more printed line); `BundleInputs` in `release-build.d.mts` gains `threeSrc`.
+- **Tests:** the pins of the two holds (`docs/handoff/r74.md` section 10.2) and `tests/unit/release-build.test.ts` / `candidate-build.test.ts`.
+
 ## 2026-11-02 — Lane r74-revive (a revive's cross is longer and even, so no frame of it steps the tracked feet or head 40 px; BOTH GAMES; additive, no contract file changed)
 
 Authority: Bailey 2026-10-31 ~23:40 EDT, "i'll go with all of your recommendations. you make the executive decisions for the next few days" (the driver's call, his to overturn). Branch `r74-revive`, from `origin/r73-int` `d5049f686`. PR-0570.

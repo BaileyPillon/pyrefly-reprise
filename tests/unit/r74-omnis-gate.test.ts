@@ -117,7 +117,8 @@ describe('holdIsInSource reads the hold tables as the tables are', () => {
     expect(checked).toBeGreaterThan(100);
     expect(Object.keys(PIECE_HOLDS)).toContain('sin-face'); // a chapter whose rows live in PieceHoldsLast.ts is read there
     expect(holdIsInSource(ROOT, 'sin-face', 'breath')).toBe(true);
-    expect(holdIsInSource(ROOT, OMNIS, 'hud')).toBe(false); // the lift this lane makes
+    expect(holdIsInSource(ROOT, OMNIS, 'hud')).toBe(true); // the lift this lane made, put back by the r74 browser read (2026-11-03): the hold is in place, so nothing is owed
+    expect(holdIsInSource(ROOT, 'sin-fins-core', 'hud')).toBe(true); // and Chapter XVII holds hud from the same read
     expect(holdIsInSource(ROOT, OMNIS, 'breath')).toBe(true);
     expect(holdIsInSource(ROOT, 'not-a-chapter', 'hud')).toBe(false);
   });

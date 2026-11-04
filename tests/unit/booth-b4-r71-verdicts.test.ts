@@ -44,7 +44,7 @@ const AFTER_R71: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readon
   'ffx2-leblanc': { game: 'ffx2', held: ['breath', 'cam', 'moments'] }, // VI
   'seymour-anima-macalania': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // VII
   'evrae-airship': { game: 'ffx', held: ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'] }, // VIII: the r71 verdict added hd2d and arena; the focused review of 10b426248 added real (R71-C2)
-  'seymour-omnis': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // XII: back in r72-hud (the strip right-anchored, the Sensor card under the strip, the ribbon known to the solver)
+  'seymour-omnis': { game: 'ffx', held: ['hud', 'breath', 'cam', 'moments'] }, // XII: back in r72-hud, its F1 HUD held by the r72 review (J-HUD-5b) (the strip right-anchored, the Sensor card under the strip, the ribbon known to the solver)
   'seymour-natus': { game: 'ffx', held: ['breath', 'cam', 'moments'] }, // X
   'ffx2-fallen-aeons': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XI: shipped in r71 with hd2d and arena held too; r72 lifted those two (grade C by default; `?skygrade=today` is r71's XI: tests/unit/booth-r72-sky.test.ts)
   'ffx2-trema': { game: 'ffx2', held: ['cam', 'breath', 'moments'] }, // XIII
@@ -57,7 +57,7 @@ const AFTER_R71: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readon
 
 /** r74-fins (2026-11-02) joined Chapter XVII, the nineteenth: the list now is the eighteen above and this one (FFX only; `PieceHoldsLast.ts` carries its row). */
 const JOINED_R74: Readonly<Record<string, { readonly game: 'ffx' | 'ffx2'; readonly held: readonly string[] }>> = {
-  'sin-fins-core': { game: 'ffx', held: ['hd2d', 'arena', 'breath', 'cam', 'moments', 'real'] }, // XVII: the sky as today (V and XI pattern), the breath, the range director's camera, the KO cut, the real clips; the Fin plate moved clear of the strip
+  'sin-fins-core': { game: 'ffx', held: ['hud', 'hd2d', 'arena', 'breath', 'cam', 'moments', 'real'] }, // XVII (hud held since the r74 browser read): the sky as today (V and XI pattern), the breath, the range director's camera, the KO cut, the real clips; the Fin plate moved clear of the strip
 };
 const LIST_NOW = { ...AFTER_R71, ...JOINED_R74 };
 
@@ -88,21 +88,23 @@ describe('the list after the r71 verdicts and r72-hud: eighteen of the nineteen 
 
 describe('Chapters IX and XII are back on the list (r72-hud, FFX only), `since` r71 as the first lane wrote it, with the rows they had', () => {
   for (const id of ['yojimbo-cavern', 'seymour-omnis'] as const) {
-    it(`${id}: treated under all for every piece but the three it holds, and not at all under pack (release 68's chapters); FFX in the registry and on the list`, () => {
+    it(`${id}: treated under all for every piece but the ones it holds (IX the three; XII also the hud piece since the r72 review, J-HUD-5b), and not at all under pack (release 68's chapters); FFX in the registry and on the list`, () => {
       expect(getChapter(id)?.game).toBe('ffx');
       expect(TREATED_CHAPTERS[id]).toEqual({ game: 'ffx', since: 'r71' }); // the batch's release number, as the first lane wrote it (the driver's to renumber)
       setTreatedScope('all');
       expect(isTreatedChapter(id)).toBe(true);
-      for (const p of TREATED_PIECES) expect(isTreatedChapter(id, p), `${id} ${p}`).toBe(!['breath', 'cam', 'moments'].includes(p));
+      const held = id === 'seymour-omnis' ? ['hud', 'breath', 'cam', 'moments'] : ['breath', 'cam', 'moments']; // XII: the F1 HUD waits for the flag/advisor-card fix (PieceHolds.ts, J-HUD-5b)
+      for (const p of TREATED_PIECES) expect(isTreatedChapter(id, p), `${id} ${p}`).toBe(!held.includes(p));
       setTreatedScope('pack');
       expect(isTreatedChapter(id), `${id} pack`).toBe(false);
       for (const p of TREATED_PIECES) expect(isTreatedChapter(id, p), `${id} ${p} pack`).toBe(false);
     });
 
-    it(`${id}: the rows are the ones the lanes wrote (the three holds with a "Lifts when", the look row, the text-size ceiling that hands today's HUD over at 130), and the look and the arena play`, () => {
+    it(`${id}: the rows are the ones the lanes wrote (the three holds with a "Lifts when", XII's hud hold from the r72 review, the look row, the text-size ceiling that hands today's HUD over at 130), and the look and the arena play`, () => {
       setTreatedScope('all');
-      expect(Object.keys(PIECE_HOLDS[id]!)).toEqual(['breath', 'cam', 'moments']);
-      for (const p of ['breath', 'cam', 'moments'] as const) expect(treatedHold(id, p), `${id} ${p}`).toMatch(/Lifts when/);
+      const rows = id === 'seymour-omnis' ? (['hud', 'breath', 'cam', 'moments'] as const) : (['breath', 'cam', 'moments'] as const);
+      expect(Object.keys(PIECE_HOLDS[id]!)).toEqual([...rows]);
+      for (const p of rows) expect(treatedHold(id, p), `${id} ${p}`).toMatch(/Lifts when/);
       expect(CHAPTER_LOOKS[id]).toEqual({ name: 'hd2d', strength: 'bold' });
       expect(chapterLook(id)).toEqual({ name: 'hd2d', strength: 'bold' });
       expect(proArenaFor(id, '')).toBe(true);

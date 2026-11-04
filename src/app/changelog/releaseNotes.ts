@@ -69,11 +69,21 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 73 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 74 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '74',
+    date: '2026-11-03',
+    lines: [
+      { tag: 'FFX', text: 'Sin’s Fins and Core (Chapter XVII) gets the presentation of Chapter I: the new hit look, glass numbers, fighter motion, effects and sound. Its battle screen stays as it was.' },
+      { tag: 'FFX', text: 'Lulu’s head now stays the same size from pose to pose; it no longer swells when she casts or shrinks when she is knocked out.' },
+      { tag: 'FFX', text: 'Chapter XII’s Sensor card now steps off the target flag at more cursor positions than before.' },
+      { tag: 'Both', text: 'A revived fighter now rises through a longer, even blend from the lying figure to the standing one, so it no longer jumps.' },
+    ],
+  },
   {
     release: '73',
     date: '2026-11-02',

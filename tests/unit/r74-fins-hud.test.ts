@@ -452,12 +452,12 @@ describe("above TEXT SIZE 115 the chapter draws release 72's HUD (the band is na
     expect(Object.keys(F1_TEXT_CEILING).sort()).toEqual(['seymour-omnis', 'sin-fins-core', 'yojimbo-cavern']);
   });
 
-  it('the F1 HUD plays at 100 and 115 and not at 130 in Chapter XVII (the text mode grow, the default for a page)', () => {
+  it('the ceiling stands at 100, 115 and 130 in Chapter XVII (the text mode grow, the default for a page), and the F1 HUD is off at every size while the chapter holds the hud piece (the r74 browser read, 2026-11-03)', () => {
     setHudF1TextMode('grow');
     for (const [v, on] of [['100', true], ['115', true], ['130', false]] as const) {
       sizeBoth(v);
-      expect(hudF1TextSizeOk(), v).toBe(on);
-      expect(hudF1On(), v).toBe(on);
+      expect(hudF1TextSizeOk(), v).toBe(on); // the ceiling, kept for the day the hold lifts
+      expect(hudF1On(), v).toBe(false); // the hold: release 72's HUD plays at every size (the plate rules are gated on .hud-f1 and are inert)
     }
   });
 

@@ -15,6 +15,7 @@ import { THUMBS_ENV } from '../../tools/art-thumbs.mjs';
 import { RELEASE_ENV } from '../../tools/build-stamp.mjs';
 import { DEFAULT_HOST, HOSTS, hostBuildEnv } from '../../tools/deploy-host.mjs';
 import { SOURCEMAP_DIR_ENV } from '../../tools/dist-filter.mjs';
+import { THREE_SRC_ENV } from '../../tools/vite-three-src.mjs';
 import {
   ART_THUMBS_ENV,
   ART_WEBP_ENV,
@@ -113,8 +114,8 @@ describe('the variables a build reads, by name', () => {
     expect(SOURCEMAP_DIR_ENV).toBe('PYREFLY_SOURCEMAP_DIR');
   });
 
-  it('are the three the deploy leaves to the shell on purpose', () => {
-    expect([...INHERITED_BUILD_ENV].sort()).toEqual([ART_THUMBS_ENV, ART_WEBP_ENV, BUILD_SHA_ENV].sort());
+  it('are the four the deploy leaves to the shell on purpose (the three-from-source switch since r74-int CHECK-1)', () => {
+    expect([...INHERITED_BUILD_ENV].sort()).toEqual([ART_THUMBS_ENV, ART_WEBP_ENV, BUILD_SHA_ENV, THREE_SRC_ENV].sort());
   });
 });
 
@@ -126,14 +127,17 @@ describe('bundleInputs: what vite.config.ts and the art plugin will read', () =>
       buildSha: '(git HEAD of the tree)',
       artWebp: 'exact',
       artThumbs: 'on',
+      threeSrc: 'on',
     });
     expect(read('vite.config.ts')).toContain(`process.env.BASE_PATH ?? '${HOSTS.github.base}'`);
   });
 
   it('reads set values, trimmed and lower-cased where the tools do', () => {
-    expect(bundleInputs({ BASE_PATH: '/', PYREFLY_RELEASE: ' 60 ', PYREFLY_BUILD_SHA: ' 1cea6e93 ', PYREFLY_ART_WEBP: ' OFF ', PYREFLY_ART_THUMBS: 'Off' })).toEqual({
-      base: '/', release: '60', buildSha: '1cea6e93', artWebp: 'off', artThumbs: 'off',
+    expect(bundleInputs({ BASE_PATH: '/', PYREFLY_RELEASE: ' 60 ', PYREFLY_BUILD_SHA: ' 1cea6e93 ', PYREFLY_ART_WEBP: ' OFF ', PYREFLY_ART_THUMBS: 'Off', PYREFLY_THREE_SRC: ' OFF ' })).toEqual({
+      base: '/', release: '60', buildSha: '1cea6e93', artWebp: 'off', artThumbs: 'off', threeSrc: 'off',
     });
+    // the switch is on for unset, empty and every other word (tools/vite-three-src.mjs threeSrcOn)
+    for (const v of [undefined, '', 'on', 'yes', '0']) expect(bundleInputs({ PYREFLY_THREE_SRC: v }).threeSrc, String(v)).toBe('on');
     // an empty BASE_PATH is a value, as `??` reads it
     expect(bundleInputs({ BASE_PATH: '' }).base).toBe('');
   });
@@ -152,7 +156,7 @@ describe('bundleInputs: what vite.config.ts and the art plugin will read', () =>
 
   it('prints one line per input', () => {
     expect(formatBundleInputs(bundleInputs({ BASE_PATH: '/', PYREFLY_RELEASE: '60' }))).toEqual([
-      'base /', 'release 60', 'build sha (git HEAD of the tree)', 'art WebP scope exact', 'strip thumbnails on',
+      'base /', 'release 60', 'build sha (git HEAD of the tree)', 'art WebP scope exact', 'strip thumbnails on', 'three from source on',
     ]);
     expect(formatBundleInputs(bundleInputs({}))[1]).toBe('release (none)');
   });

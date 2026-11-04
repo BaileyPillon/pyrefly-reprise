@@ -219,7 +219,9 @@ describe.skipIf(!haveModels)('the real files (local only: skipped without public
       }
     };
     walk(root);
-    return out.filter((rel) => !isUnshippedPublicFile(rel)).sort();
+    // The 3D Bahamut's own two folders only: a tree that also holds the hidden Wind Waker chapter's `models-exp/windwaker/` (a release tree does, r74) ships that folder too, and its files are
+    // proved by `ww-models.mjs verify` and `r74-int-models-both.test.ts`, not by this set.
+    return out.filter((rel) => (rel.startsWith(`${BASE}/`) || rel.startsWith(`${HD}/`)) && !isUnshippedPublicFile(rel)).sort();
   };
 
   it('has every file of the set, and nothing else ships: 12 base files, 2 HD files, the manifest and 28 dress files', () => {

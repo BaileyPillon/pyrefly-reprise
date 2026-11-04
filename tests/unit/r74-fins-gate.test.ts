@@ -114,9 +114,9 @@ describe('the table is data: the second row is Chapter XVII, its note and marker
 });
 
 describe('holdIsInSource reads Chapter XVII\'s row as the tables are', () => {
-  it('the real tables: the chapter holds six pieces and `hud` is not one of them; another chapter\'s `hud` row is not this chapter\'s', () => {
-    expect(Object.keys(PIECE_HOLDS[FINS]!).sort()).toEqual(['arena', 'breath', 'cam', 'hd2d', 'moments', 'real']);
-    expect(holdIsInSource(ROOT, FINS, 'hud')).toBe(false);
+  it('the real tables: the chapter holds seven pieces and `hud` is one of them since the r74 browser read (nothing is owed); another chapter\'s `hud` row is not this chapter\'s', () => {
+    expect(Object.keys(PIECE_HOLDS[FINS]!).sort()).toEqual(['arena', 'breath', 'cam', 'hd2d', 'hud', 'moments', 'real']);
+    expect(holdIsInSource(ROOT, FINS, 'hud')).toBe(true);
     expect(holdIsInSource(ROOT, FINS, 'real')).toBe(true);
     expect(holdIsInSource(ROOT, FINS, 'breath')).toBe(true);
   });

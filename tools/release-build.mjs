@@ -14,9 +14,10 @@
  *   PYREFLY_RELEASE      the newest player note's name (`tools/build-stamp.mjs`), never the shell's
  *   PYREFLY_SOURCEMAP_DIR  set by the deploy (the maps are kept, none ship), removed for a candidate; neither changes a byte that ships (proved on the release 60 tree)
  *
- * Three more variables decide bytes and are NOT pinned, because the deploy honours them on purpose (`PYREFLY_ART_WEBP=off` is its documented way to ship PNGs):
- * `PYREFLY_BUILD_SHA`, `PYREFLY_ART_WEBP`, `PYREFLY_ART_THUMBS`. {@link bundleInputs} reads all of them as `vite.config.ts` and the art plugin do, so a candidate can print what it
- * built with and say when the shell sets one of the three.
+ * Four more variables decide bytes and are NOT pinned, because the deploy honours them on purpose (`PYREFLY_ART_WEBP=off` is its documented way to ship PNGs):
+ * `PYREFLY_BUILD_SHA`, `PYREFLY_ART_WEBP`, `PYREFLY_ART_THUMBS`, and since r74 `PYREFLY_THREE_SRC` (`tools/vite-three-src.mjs`: `off` is the stock `three` build, anything else draws `three` from its
+ * source modules, which changes the chunk set, 18 static scripts against 10, and the `index-*.js` name: r74-int independent check CHECK-1). {@link bundleInputs} reads all of them as `vite.config.ts`
+ * and the plugins do, so a candidate can print what it built with and say when the shell sets one of the four.
  *
  * Pure: no file, no process, no network. `tests/unit/release-build.test.ts` and `tests/unit/candidate-build.test.ts` hold the contract.
  */
@@ -24,6 +25,7 @@
 import { RELEASE_ENV } from './build-stamp.mjs';
 import { DEFAULT_HOST, HOSTS, hostBuildEnv } from './deploy-host.mjs';
 import { SOURCEMAP_DIR_ENV } from './dist-filter.mjs';
+import { THREE_SRC_ENV, threeSrcOn } from './vite-three-src.mjs';
 
 /** The environment variable that overrides the commit the build stamps (`vite.config.ts` `buildSha`). */
 export const BUILD_SHA_ENV = 'PYREFLY_BUILD_SHA';
@@ -35,7 +37,7 @@ export const ART_THUMBS_ENV = 'PYREFLY_ART_THUMBS';
 export const BASE_ENV = 'BASE_PATH';
 
 /** The variables a build reads that the deploy leaves to the shell and a candidate therefore cannot pin. */
-export const INHERITED_BUILD_ENV = Object.freeze([BUILD_SHA_ENV, ART_WEBP_ENV, ART_THUMBS_ENV]);
+export const INHERITED_BUILD_ENV = Object.freeze([BUILD_SHA_ENV, ART_WEBP_ENV, ART_THUMBS_ENV, THREE_SRC_ENV]);
 
 /**
  * The environment a production `vite build` runs in. The host's base and the release name are set explicitly, so nothing left in the shell decides them; the source-map folder
@@ -68,6 +70,7 @@ export function bundleInputs(env = process.env) {
     buildSha: trimmed(BUILD_SHA_ENV) || '(git HEAD of the tree)',
     artWebp: trimmed(ART_WEBP_ENV).toLowerCase() || 'exact',
     artThumbs: trimmed(ART_THUMBS_ENV).toLowerCase() || 'on',
+    threeSrc: threeSrcOn(env) ? 'on' : 'off', // tools/vite-three-src.mjs: `off` (any case, blanks trimmed) is the one word that turns it off
   };
 }
 
@@ -88,6 +91,7 @@ export function formatBundleInputs(inputs) {
     `build sha ${inputs.buildSha}`,
     `art WebP scope ${inputs.artWebp}`,
     `strip thumbnails ${inputs.artThumbs}`,
+    `three from source ${inputs.threeSrc}`,
   ];
 }
 
