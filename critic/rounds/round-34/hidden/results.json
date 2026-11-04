@@ -1,0 +1,993 @@
+{
+ "round": 34,
+ "label": "hidden",
+ "generatedAt": "2026-11-04T08:16:30.250Z",
+ "live": {
+  "release": 74,
+  "main": "2342fe666",
+  "bundle": "eSs6-WR_",
+  "url": "https://echoesofspira.com/",
+  "note": "src, tests and critic/runner are byte-identical between 2342fe666 and the release tree HEAD fc3326153"
+ },
+ "viewport": "1600x900",
+ "input": "real key presses by headless Chromium on the GPU (PYREFLY_BROWSER=gpu), never the debug API for an action",
+ "mechanics": [
+  {
+   "chapter": "spectral-keeper",
+   "game": "FFX only",
+   "check": "CHK-023",
+   "mechanic": "the door and the opening",
+   "result": "PASS",
+   "numbers": {
+    "afterDoor": "party-prep",
+    "battleSeed": 1
+   },
+   "evidence": [
+    "critic/rounds/round-34/hidden/keeper-ring-r2/01-party-prep.png",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/02-pre-scene.png",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/03-opening-first-menu.png"
+   ],
+   "note": "the word typed on the board by real keys opened party prep with no card; Enter, the pre scene held through, the battle; seven rings were drawn on the floor at the opening (violet 0xc8a0ff, opacity 0.62, read from the three.js scene)"
+  },
+  {
+   "chapter": "spectral-keeper",
+   "game": "FFX only",
+   "check": "CHK-023",
+   "mechanic": "the menu: Move row, Escape / Flee / Guard / Sentinel switched off",
+   "result": "PASS",
+   "numbers": {
+    "tidusRows": [
+     "Move *",
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items",
+     "Flee (greyed)"
+    ],
+    "auronSpecialRows": [
+     "Power Break",
+     "Armor Break",
+     "Magic Break",
+     "Mental Break",
+     "Threaten",
+     "Guard (greyed)",
+     "Sentinel (greyed)"
+    ]
+   },
+   "evidence": [
+    "critic/rounds/round-34/hidden/keeper-ring-r2/04-first-menu-rows.png",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/04b-auron-special-rows.png",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/04c-auron-special-scrolled.png"
+   ],
+   "note": "Move is the first row for Tidus (\"Step to a free glyph. It costs the turn.\"); Flee is greyed; Auron's Guard and Sentinel are greyed in his Special list; there is no Escape row"
+  },
+  {
+   "chapter": "spectral-keeper",
+   "game": "FFX only",
+   "check": "CHK-023",
+   "mechanic": "Move to a glyph (menu, target cursor on the ring, the event, the flag, the banner)",
+   "result": "PASS",
+   "numbers": {
+    "moves": [
+     "tidus 1->5",
+     "yuna 2->4",
+     "auron 3->6",
+     "tidus 5->2",
+     "auron 6->3"
+    ],
+    "cursorFirstSelection": [
+     "spectral-circle-6"
+    ],
+    "cursorTargetPlate": "TARGET Glyph 5 (screenshot)",
+    "flagAfter": [
+     {
+      "tidus": 5,
+      "yuna": 2,
+      "auron": 3
+     },
+     {
+      "tidus": 5,
+      "yuna": 4,
+      "auron": 3
+     },
+     {
+      "tidus": 5,
+      "yuna": 4,
+      "auron": 6
+     },
+     {
+      "tidus": 2,
+      "yuna": 4,
+      "auron": 6
+     },
+     {
+      "tidus": 2,
+      "yuna": 4,
+      "auron": 3
+     }
+    ]
+   },
+   "evidence": [
+    "critic/rounds/round-34/hidden/keeper-ring-r2/05-move-cursor.png",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/06-move-cursor-on-glyph.png",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/w-001-tidus-move.jpg",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/m-01-after-move.png",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/battle-log.json"
+   ],
+   "note": "five Moves by real keys (Tidus 1->5, Yuna 2->4, Auron 3->6, Tidus 5->2, Auron 6->3): each is an action-start \"move\" aimed at spectral-circle-N, a platform event, the banner \"<name> steps to glyph N\" and plat.at.<id> = N at the next menu; the cursor lands on the Circle (plate \"TARGET Glyph N\"); the turn passes to the next actor"
+  },
+  {
+   "chapter": "spectral-keeper",
+   "game": "FFX only",
+   "check": "CHK-023",
+   "mechanic": "the Keeper's counter: Attack All on the platform in front and its two neighbours only",
+   "result": "PASS",
+   "numbers": {
+    "sweepsRing": 11,
+    "sweepsAeonRun": 3,
+    "allTargetsEqualTheZone": true,
+    "counterEvents": {
+     "keeper-attack-all": 11
+    },
+    "firstSweeps": [
+     {
+      "front": 6,
+      "zone": [
+       6,
+       1,
+       5
+      ],
+      "hit": [
+       "auron"
+      ],
+      "expected": [
+       "auron"
+      ]
+     },
+     {
+      "front": 6,
+      "zone": [
+       6,
+       1,
+       5
+      ],
+      "hit": [
+       "auron"
+      ],
+      "expected": [
+       "auron"
+      ]
+     },
+     {
+      "front": 2,
+      "zone": [
+       2,
+       3,
+       1
+      ],
+      "hit": [
+       "tidus"
+      ],
+      "expected": [
+       "tidus"
+      ]
+     },
+     {
+      "front": 6,
+      "zone": [
+       6,
+       1,
+       5
+      ],
+      "hit": [
+       "auron"
+      ],
+      "expected": [
+       "auron"
+      ]
+     }
+    ]
+   },
+   "evidence": [
+    "critic/rounds/round-34/hidden/keeper-ring-r2/w-030-spectral-keeper-keeper-attack-all.jpg",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/eval.json",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/battle-log.json"
+   ],
+   "note": "replayed from the live log: positions from the platform events, the front from each tail, KO and revive from their events; every one of 11 sweeps (and 3 of 3 in the aeon run, none during aeon mode) named exactly the living members standing in the zone; with Tidus on 2 and Yuna on 4 and front 6 the sweep hit Auron alone"
+  },
+  {
+   "chapter": "spectral-keeper",
+   "game": "FFX only",
+   "check": "CHK-023",
+   "mechanic": "the hit counter (plat.count): +1 per damaging hit, the lay at 4 or more, the reset",
+   "result": "PASS",
+   "numbers": {
+    "menuSnapshotsCompared": 31,
+    "allEqualTheModel": true,
+    "countAtTheLays": [
+     5,
+     4,
+     4,
+     5
+    ],
+    "liveEqualsDryRunDecisions": "24/24 (ring seed 1), 7/7 (aeon seed 2)"
+   },
+   "evidence": [
+    "critic/rounds/round-34/hidden/keeper-ring-r2/eval.json",
+    "critic/rounds/round-34/hidden/keeper-aeon/eval.json",
+    "critic/rounds/round-34/hidden/pred-keeper-ring-seed1.txt",
+    "critic/rounds/round-34/hidden/pred-keeper-aeon-seed2.txt"
+   ],
+   "note": "the counter read from the engine at every menu equals the model replayed from the log (24 + 7 snapshots); the live battle equals the dry run on the real engine event for event (307 events, 131 events)"
+  },
+  {
+   "chapter": "spectral-keeper",
+   "game": "FFX only",
+   "check": "CHK-023",
+   "mechanic": "Glyph Mine arming: two glyphs armed, the banner, the amber rings, the Circle tiles on the turn list",
+   "result": "PASS",
+   "numbers": {
+    "lays": [
+     {
+      "targets": [
+       "spectral-circle-3",
+       "spectral-circle-4"
+      ],
+      "countBefore": 5
+     },
+     {
+      "targets": [
+       "spectral-circle-4",
+       "spectral-circle-6"
+      ],
+      "countBefore": 4
+     }
+    ],
+    "flareMessages": 4,
+    "litRingsWhileArmed": true,
+    "ringsCalmWhenNoneArmed": true,
+    "armedRing": "0xffa23a at opacity 0.95",
+    "calmRing": "0xc8a0ff at opacity 0.62"
+   },
+   "evidence": [
+    "critic/rounds/round-34/hidden/keeper-ring-r2/m-10-lit-glyphs.png",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/w-120-spectral-keeper-keeper-glyph-mine.jpg",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/w-193-spectral-circle-4-keeper-mine-blast.jpg",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/trace.json"
+   ],
+   "note": "two lays in the ring run (glyphs 3+4 at count 5, glyphs 4+6 at count 4): \"Glyph N flares\" twice each, plat.armed.* true and plat.mines 2, the two floor rings amber while armed (read from the scene: opacity 0.95, colour 0xffa23a) and back to violet 0.62 after, and \"Glyph 3\" / \"Glyph 4\" tiles (letter G) in the turn list"
+  },
+  {
+   "chapter": "spectral-keeper",
+   "game": "FFX only",
+   "check": "CHK-023",
+   "mechanic": "a mine's own turn: the blast on an occupied glyph (Death), the fizzle on an empty one, the fuse in ticks",
+   "result": "PASS",
+   "numbers": {
+    "turns": [
+     {
+      "circle": "spectral-circle-4",
+      "what": "keeper-mine-blast",
+      "victim": "yuna",
+      "ticksAfterLay": 63
+     },
+     {
+      "circle": "spectral-circle-3",
+      "what": "keeper-mine-fizzle",
+      "victim": "spectral-circle-3",
+      "ticksAfterLay": 69
+     },
+     {
+      "circle": "spectral-circle-4",
+      "what": "keeper-mine-blast",
+      "victim": "yuna",
+      "ticksAfterLay": 24
+     },
+     {
+      "circle": "spectral-circle-6",
+      "what": "keeper-mine-fizzle",
+      "victim": "spectral-circle-6",
+      "ticksAfterLay": 70
+     }
+    ],
+    "fuseRangeTicks": [
+     24,
+     70
+    ],
+    "fuseBaseEstimate": 84
+   },
+   "evidence": [
+    "critic/rounds/round-34/hidden/keeper-ring-r2/w-193-spectral-circle-4-keeper-mine-blast.jpg",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/w-209-spectral-circle-3-keeper-mine-fizzle.jpg",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/m-16-after-mine.png",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/eval.json"
+   ],
+   "note": "glyph 4 blasted Yuna (KO) twice, 63 and 24 ticks after its lay; glyph 3 (empty) fizzled 69 ticks after and glyph 6 (Auron stepped off it at decision 21) fizzled 70 ticks after: walking away is the defence. Every fuse is within the [estimate] base 84."
+  },
+  {
+   "chapter": "spectral-keeper",
+   "game": "FFX only",
+   "check": "CHK-023",
+   "mechanic": "aeon mode: a summoned aeon takes the field, the Keeper answers with its plain Attack, no sweep and no tail",
+   "result": "PASS",
+   "numbers": {
+    "summoned": "bahamut",
+    "keeperAeonAttacks": 3,
+    "counterEvents": {
+     "keeper-attack-all": 3,
+     "keeper-aeon-attack": 2
+    },
+    "sweepsDuringAeonMode": 0,
+    "tailsDuringAeonMode": 0,
+    "tailsOutsideAeonMode": 4
+   },
+   "evidence": [
+    "critic/rounds/round-34/hidden/keeper-aeon/m-06-lit-glyphs.png",
+    "critic/rounds/round-34/hidden/keeper-aeon/w-044-spectral-keeper-keeper-aeon-attack.jpg",
+    "critic/rounds/round-34/hidden/keeper-aeon/eval.json",
+    "critic/rounds/round-34/hidden/keeper-aeon/battle-log.json"
+   ],
+   "note": "Yuna Summon -> Bahamut by real keys; while Bahamut was out the Keeper used only keeper-aeon-attack (two as the answer to Bahamut's hits, one on its own turn), no Attack All and no tail; the tail and the sweep came back after Bahamut fell"
+  },
+  {
+   "chapter": "spectral-keeper",
+   "game": "FFX only",
+   "check": "CHK-023",
+   "mechanic": "aeon mode: the counter gains 1 a Keeper turn and 2 a hit; the mine is the rock's (platform 7); it blasts a living aeon",
+   "result": "PASS",
+   "numbers": {
+    "countBeforeSummon": 1,
+    "bahamutHitPlus2PlusKeeperTurnPlus1": "count 1 -> 4 at the lay (model equals the engine at every menu)",
+    "rockLay": [
+     "spectral-circle-7"
+    ],
+    "rockBlast": {
+     "victim": "bahamut",
+     "ticksAfterLay": 40
+    },
+    "rockRingColour": "0xffa23a at 0.95 while armed"
+   },
+   "evidence": [
+    "critic/rounds/round-34/hidden/keeper-aeon/m-06-lit-glyphs.png",
+    "critic/rounds/round-34/hidden/keeper-aeon/w-049-spectral-keeper-keeper-glyph-mine.jpg",
+    "critic/rounds/round-34/hidden/keeper-aeon/w-068-spectral-circle-7-keeper-mine-blast.jpg",
+    "critic/rounds/round-34/hidden/keeper-aeon/eval.json"
+   ],
+   "note": "at count 4 with an aeon out the Keeper laid ONE mine, on the rock (\"The rock flares\", spectral-circle-7, the turn list shows \"Glyph Rock\"); 40 ticks later the rock's Circle blasted Bahamut (KO)"
+  },
+  {
+   "chapter": "ffx2-fallen-maesters",
+   "game": "FFX-2 only",
+   "check": "CHK-023",
+   "mechanic": "the four floors entered in order by the game's own seams",
+   "result": "PASS",
+   "numbers": {
+    "floors": [
+     "x2-aranea",
+     "x2-black-elemental",
+     "x2-concherer",
+     "x2-chac"
+    ],
+    "pauseScreen": [
+     "BATTLE 1 OF 4",
+     "BATTLE 2 OF 4",
+     "BATTLE 3 OF 4",
+     "BATTLE 4 OF 4"
+    ],
+    "engineSeedPerFloor": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "girlsAtFullHpOnEntry": true,
+    "floorsEndedInVictoryBeforeTheNext": [
+     true,
+     true,
+     true
+    ],
+    "secondsToFloor80": 213.6,
+    "replication": {
+     "run": "maesters-walk-s1c",
+     "floors": [
+      "x2-aranea",
+      "x2-black-elemental",
+      "x2-concherer",
+      "x2-chac"
+     ],
+     "pause": [
+      "1/4",
+      "2/4",
+      "3/4",
+      "4/4"
+     ]
+    }
+   },
+   "evidence": [
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/f1-00-first-menu-aranea.png",
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/f2-00-first-menu-black-elemental.png",
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/f3-01-pause.png",
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/f4-00-first-menu-chac.png",
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/f4-01-pause.png",
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/trace.json"
+   ],
+   "note": "door word infinito by real keys; Aranea and the Black Elemental fell to a plain line (Rikku attacks, Yuna and Paine Darkness); floor 60 fell to a real key after the shell break (next rows); the seam opened floor 80 (Chac). The pause screen reads \"BATTLE n OF 4\" on each floor."
+  },
+  {
+   "chapter": "ffx2-fallen-maesters",
+   "game": "FFX-2 only",
+   "check": "CHK-023",
+   "mechanic": "Paine's walk across The End's gates by the menu's own Change rows (what gives Break Damage Limit)",
+   "result": "PASS",
+   "numbers": {
+    "changes": [
+     "Paine changes dark-knight to Warrior",
+     "Paine changes warrior to Gunner",
+     "Paine changes gunner to Thief",
+     "Paine changes thief to Dark Knight"
+    ],
+    "changeRowsOffered": [
+     [
+      "Warrior",
+      "Thief",
+      "Lady Luck"
+     ],
+     [
+      "Dark Knight",
+      "Gunner",
+      "Lady Luck"
+     ],
+     [
+      "Warrior",
+      "Thief",
+      "Lady Luck"
+     ],
+     [
+      "Dark Knight",
+      "Gunner",
+      "Lady Luck"
+     ]
+    ],
+    "gatesAfterEachDecision": [
+     "paine:10710 dark-knight []",
+     "paine:8244 warrior [blue]",
+     "paine:5674 gunner [blue+yellow]",
+     "paine:6894 thief [blue+yellow+green]",
+     "paine:10710 dark-knight [blue+yellow+green+red]",
+     "paine:0 KO dark-knight [blue+yellow+green+red]"
+    ],
+    "atTheEnd": "paine:0 KO dark-knight [blue+yellow+green+red]"
+   },
+   "evidence": [
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/trace.json",
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/battle-log-concherer.json"
+   ],
+   "note": "four Change rows chosen by real keys on Paine's turns (Dark Knight to Warrior, Gunner, Thief and back to Dark Knight: gates blue, yellow, green, red), each costing her turn; nothing was written to the engine for this"
+  },
+  {
+   "chapter": "ffx2-fallen-maesters",
+   "game": "FFX-2 only",
+   "check": "CHK-023",
+   "mechanic": "Concherer's shell breaks on ONE result of 10,000 HP or more (the message, the banner, DEF and MDEF to 1, only Attacks afterwards)",
+   "result": "PASS",
+   "numbers": {
+    "resultsBeforeTheBreak": [
+     6688,
+     6539,
+     6290
+    ],
+    "breakingResult": {
+     "seq": 280,
+     "amount": 21420
+    },
+    "charonCastBy": [
+     "paine"
+    ],
+    "messageCount": 1,
+    "messageSeq": 281,
+    "defMdefBefore": [
+     122,
+     122
+    ],
+    "defMdefAfter": [
+     1,
+     1
+    ],
+    "concherersActionsAfter": [
+     "x2-concherer-attack"
+    ],
+    "bannerOnScreen": "CONCHERER'S SHELL BREAKS!",
+    "bannerFiles": [
+     "f3-03-shell-banner-0.jpg",
+     "f3-03-shell-banner-1.jpg",
+     "f3-03-shell-banner-2.jpg"
+    ]
+   },
+   "evidence": [
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/f3-03-shell-banner-0.jpg",
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/w-concherer-281-SHELL-BREAK.jpg",
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/battle-log-concherer.json",
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/trace.json"
+   ],
+   "note": "every result before the break was under 10,000 (the best 6,688); Paine's Charon, with the limit broken by the walk, was 21,420; the message \"Concherer's shell breaks!\" came once and the banner CONCHERER'S SHELL BREAKS! was on screen with the damage number; DEF and MDEF read 122 before and 1 after; Concherer used only Attack afterwards"
+  },
+  {
+   "chapter": "ffx2-fallen-maesters",
+   "game": "FFX-2 only",
+   "check": "CHK-023",
+   "mechanic": "Chac's floor reached; Stony Glare petrifies, her Attack destroys the stone girl, Heaven's Cataract takes the party's stats down",
+   "result": "PASS",
+   "numbers": {
+    "chacActionsInOrder": [
+     "attack",
+     "stony-glare",
+     "attack",
+     "attack",
+     "heavens-cataract"
+    ],
+    "petrified": "paine",
+    "destroyedByAttackSeq": 49,
+    "koThenEject": true,
+    "cataractStatDowns": 10,
+    "cataractStatDownKinds": [
+     "def-down",
+     "mdef-down",
+     "accu-down",
+     "eva-down",
+     "luck-down"
+    ],
+    "outcome": "defeat (4:19 of play on a plain line; nothing tuned)"
+   },
+   "evidence": [
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/f4-00-first-menu-chac.png",
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/w-chac-010-x2-chac-stony-glare.jpg",
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/w-chac-076-x2-chac-heavens-cataract.jpg",
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/battle-log-chac.json",
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/f9-results.png"
+   ],
+   "note": "script trigger first-stony-glare, Paine turned to stone, Chac's Attack on the stone girl was KO then Eject (destroyed), Heaven's Cataract hit the party (Def, Mdef, Accuracy, Evasion and Luck down on each girl); the intent panel named the move (\"Heaven's Cataract\", Yuna 8,034 KO, Rikku 5,106 KO) before it landed"
+  }
+ ],
+ "continuity": [
+  {
+   "chapter": "spectral-keeper",
+   "game": "FFX only",
+   "kind": "painted (boss silhouette stand-in and Tidus, Yuna, Auron)",
+   "run1": {
+    "seed": 1,
+    "harnessResult": {
+     "CHK-026": "UNVERIFIED",
+     "CHK-027": "UNVERIFIED"
+    },
+    "why": [
+     "only 54.3 s of battle were played (needs 60)"
+    ],
+    "battleSeconds": 54.3,
+    "swaps": 77,
+    "numbers": {
+     "maxHeadJumpPct": 0.1,
+     "maxFeetShiftPx": 0.6,
+     "stature": [
+      0.781,
+      1.021
+     ],
+     "swapJerksWorstPx": 0,
+     "snapsPerMinute": 0,
+     "ghostOverFail": 23,
+     "frameP99Ms": 21.8
+    },
+    "evidence": "critic/rounds/round-34/hidden/continuity/spectral-keeper-win-r34/continuity/continuity.json"
+   },
+   "run3": {
+    "route": "lose (every turn Defend: the longer fight)",
+    "seed": 1,
+    "harnessResult": {
+     "CHK-026": "UNVERIFIED",
+     "CHK-027": "UNVERIFIED"
+    },
+    "why": [
+     "only 41.8 s of battle were played (needs 60)",
+     "only 41.8 s of battle were played (needs 60)"
+    ],
+    "battleSeconds": 41.8,
+    "swaps": 30,
+    "numbers": {
+     "maxHeadJumpPct": 0.1,
+     "maxFeetShiftPx": 0.7,
+     "maxFeetSilPx": 1.6,
+     "stature": [
+      0.9,
+      1.021
+     ],
+     "heightOverBand": 0,
+     "swapJerksWorstPx": 0,
+     "snapsPerMinute": 0,
+     "ghostOverFail": 7,
+     "worstGhostSeverity": 0.423,
+     "frameP99Ms": 23.2
+    },
+    "evidence": "critic/rounds/round-34/hidden/continuity-keeper-lose/spectral-keeper-lose-r34/continuity/continuity.json"
+   },
+   "run4": {
+    "route": "the probe attached to the live Keeper job (Move line, seed 1; NOT the dedicated harness route, so informational), the fight lasting longer than the harness routes",
+    "harnessResult": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "why": [
+     "69 swap(s) show a double image of severity 0.4 or more (worst 0.423)"
+    ],
+    "battleSeconds": 176.5,
+    "swapsCounted": 232,
+    "numbers": {
+     "maxHeadJumpPct": 0.1,
+     "maxFeetShiftPx": 0.7,
+     "maxFeetSilPx": 2.4,
+     "stature": [
+      0.781,
+      1.057
+     ],
+     "heightOverBand": 0,
+     "swapJerks": 0,
+     "swapJerksWorstPx": 0,
+     "snapsPerMinute": 0,
+     "ghostSwaps": 232,
+     "ghostOverFail": 69,
+     "worstGhostSeverity": 0.423,
+     "frameP99Ms": 20.7,
+     "fps": 59.9
+    },
+    "mechanicsRunAlongside": {
+     "keeper-berserk-tail-": 10,
+     "keeper-attack-all-": 9,
+     "keeper-glyph-mine-": 2,
+     "keeper-mine-blast-": 2,
+     "keeper-mine-fizzle-": 2
+    },
+    "evidence": "critic/rounds/round-34/hidden/keeper-ring-probe/continuity/continuity.json"
+   },
+   "run2": {
+    "seed": 2,
+    "harnessResult": {
+     "CHK-026": "UNVERIFIED",
+     "CHK-027": "UNVERIFIED"
+    },
+    "why": [
+     "only 52 s of battle were played (needs 60)",
+     "only 52 s of battle were played (needs 60)"
+    ],
+    "battleSeconds": 52,
+    "swaps": 70,
+    "numbers": {
+     "maxHeadJumpPct": 0.1,
+     "maxFeetShiftPx": 0.7,
+     "stature": [
+      0.781,
+      1.021
+     ],
+     "swapJerksWorstPx": 0,
+     "snapsPerMinute": 0,
+     "ghostOverFail": 22,
+     "worstGhostSeverity": 0.423,
+     "frameP99Ms": 21.3
+    },
+    "evidence": "critic/rounds/round-34/hidden/continuity-keeper-s2/spectral-keeper-win-r34/continuity/continuity.json",
+    "harnessStamp": "683a773fead43636b1bec907343f31a5feee5e09230cf79b76c569efe9c690b3"
+   }
+  },
+  {
+   "chapter": "ffx2-fallen-maesters",
+   "game": "FFX-2 only",
+   "kind": "painted girls; the four fiends are procedural placeholders (silhouette-only reading)",
+   "harnessResult": {
+    "CHK-026": "PASS",
+    "CHK-027": "FAIL"
+   },
+   "why": [
+    "45 swap(s) show a double image of severity 0.4 or more (worst 0.426)"
+   ],
+   "battleSeconds": 94.8,
+   "swaps": 119,
+   "numbers": {
+    "maxHeadJumpPct": 0.1,
+    "maxFeetShiftPx": 0.7,
+    "maxFeetSilPx": 50.4,
+    "stature": [
+     0.898,
+     1.151
+    ],
+    "heightOverBand": 0,
+    "snapsPerMinute": 0,
+    "swapJerks": 1,
+    "swapJerksWorstPx": 33.3,
+    "ghostSwaps": 119,
+    "ghostOverFail": 45,
+    "worstGhostSeverity": 0.426,
+    "frameP99Ms": 22.6
+   },
+   "evidence": [
+    "critic/rounds/round-34/hidden/continuity/ffx2-fallen-maesters-win-r34/continuity/continuity.json",
+    "critic/rounds/round-34/hidden/continuity/ffx2-fallen-maesters-win-r34/continuity/strips/swap-117-yuna-follow-critical.jpg",
+    "critic/rounds/round-34/hidden/continuity/ffx2-fallen-maesters-win-r34/continuity/strips/swap-008-rikku-follow-idle.jpg",
+    "critic/rounds/round-34/hidden/continuity/ffx2-fallen-maesters-win-r34/continuity/strips/swap-096-yuna-hurt-critical.jpg",
+    "critic/rounds/round-34/hidden/continuity/ffx2-fallen-maesters-win-r34/continuity/strips/swap-120-yuna-critical-hurt.jpg"
+   ]
+  },
+  {
+   "chapter": "exp-yrp-3d",
+   "game": "FFX-2 only",
+   "kind": "3D rigs (not painted pose swaps)",
+   "CHK-026": {
+    "result": "NOT APPLICABLE",
+    "reason": "the figures are 3D rigs, not painted pose swaps; the harness reads rigs by their head, feet and centroid and says PASS (head jump 0.6 percent, feet shift 0 px), recorded as information only"
+   },
+   "CHK-027": {
+    "result": "PASS",
+    "by": "the harness (rig probe), seed 1, 1600x900, GPU",
+    "battleSeconds": 330.2,
+    "swaps": 87,
+    "numbers": {
+     "snapsPerMinute": 0,
+     "swapJerksWorstPx": 0,
+     "dashesWorstPx": 81.1,
+     "teleports": 0,
+     "oneFrameJumpsOver100px": 0,
+     "frameP99Ms": 36.6
+    },
+    "note": "no one-frame jump over 100 px (the worst mid-move dash was 81.1 px, reported and not gated)",
+    "evidence": "critic/rounds/round-34/hidden/continuity/exp-yrp-3d-win-r34/continuity/continuity.json"
+   }
+  },
+  {
+   "chapter": "exp-windwaker",
+   "game": "FFX-2 only",
+   "kind": "3D rigs, toon shading (not painted pose swaps)",
+   "CHK-026": {
+    "result": "NOT APPLICABLE",
+    "reason": "the figures are 3D models, not painted pose swaps"
+   },
+   "harness": {
+    "CHK-027": "UNVERIFIED",
+    "why": [
+     "the probe saw no battle (14742 frames, 4 figures): no battle screen with its field shown"
+    ],
+    "note": "the continuity probe reads painted planes and the rigs it has a config for; the Wind Waker stage gave it 0 figures over 14,742 frames"
+   },
+   "CHK-027": {
+    "result": "PASS",
+    "by": "a frame-difference read (capture-waker.mjs, NOT the harness): every animation frame the projected screen position of the four figures' anchors with the current camera, now against one frame ago (camera motion cancels), 1600x900 on the GPU, the fight played by the debug API's autoBattle (a motion reading, not an action proof)",
+    "seconds": 45.9,
+    "frames": 2755,
+    "fps": 60,
+    "frameMs": {
+     "p50": 16.69999999999709,
+     "p99": 16.80000000000291,
+     "max": 16.80000000000291
+    },
+    "oneFrameJumpsOver100px": 0,
+    "over40px": 14,
+    "worstPx": 41.3,
+    "worstPerObject": {
+     "actor:x2-valefor": 0,
+     "actor:rikku": 0,
+     "actor:yuna": 0,
+     "actor:paine": 41.3
+    },
+    "tracked": [
+     "actor:x2-valefor",
+     "actor:rikku",
+     "actor:yuna",
+     "actor:paine"
+    ],
+    "note": "the 14 jumps of 40 px or more are all Paine's and are a steady 41 px a frame over consecutive frames (a run at about 2,450 px a second), not a teleport; the rigs the 3D models hang on were not tracked separately (the stage's rig registry answered nothing), so a jump of a model inside its anchor is not read",
+    "evidence": [
+     "critic/rounds/round-34/hidden/waker-capture2/result.json",
+     "critic/rounds/round-34/hidden/waker-capture2/frames.json",
+     "critic/rounds/round-34/hidden/waker-capture2/00-first-menu.png"
+    ]
+   }
+  }
+ ],
+ "debugSetups": [
+  {
+   "job": "maesters maesters-walk-s1d",
+   "floor": 3,
+   "what": "Concherer's HP set to 15,000 after the shell break was read, so a real Charon ends the floor",
+   "result": {
+    "was": 293259,
+    "now": 15000
+   }
+  }
+ ],
+ "findings": [
+  {
+   "id": "K-F1",
+   "severity": "minor, known",
+   "text": "the figure does not walk to the glyph it Moves to (no presenter hop for the platform event in this build); Tidus stays among the party while the log says glyph 5. Disclosed in the lane handoff (section 10).",
+   "evidence": [
+    "critic/rounds/round-34/hidden/keeper-ring-r2/m-01-after-move.png",
+    "critic/rounds/round-34/hidden/keeper-ring-r2/m-02-after-move.png"
+   ],
+   "figureRectBeforeAfterFirstMove": {
+    "before": [
+     699,
+     525,
+     291,
+     330
+    ],
+    "after": [
+     661,
+     475,
+     254,
+     382
+    ]
+   }
+  },
+  {
+   "id": "K-F2",
+   "severity": "minor",
+   "text": "the advisor card on Yuna's menu at decision 10 forecasts the Keeper's next move as \"Glyph 2 uses Glyph Mine before Auron can act\": it names an idle Circle (Glyph 2) as the user of Glyph Mine; the user is the Spectral Keeper (the log: spectral-keeper:keeper-glyph-mine, seq 120). The same card shows \"Next best move Life -> Auron\" correctly.",
+   "evidence": [
+    "critic/rounds/round-34/hidden/keeper-ring-r2/m-10-lit-glyphs.png"
+   ]
+  },
+  {
+   "id": "M-F1",
+   "severity": "minor",
+   "text": "after the shell breaks the boss strip still shows its two status icons (Shell and Protect) although DEF and MDEF read 1, so the HUD has no picture of the break beyond the banner; and the banner is headed by the name of whoever was acting in that frame (\"Yuna\", whose Darkness was on screen), not by Concherer or Paine",
+   "evidence": [
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/f3-03-shell-banner-0.jpg",
+    "critic/rounds/round-34/hidden/maesters-walk-s1d/f3-02-shell-broken.png"
+   ]
+  }
+ ],
+ "disclosures": [
+  "the Keeper has no painting (404 on art/characters/spectral-keeper/idle.png, a boss silhouette stands in) and the glyph is a violet ring: known placeholders (handoff section 6)",
+  "the Maesters job set Concherer's HP to 15,000 through the debug API AFTER the shell break had been read (so a real key could end the floor and the seam open floor 80); no other state was written; the break itself, the walk and every cast were real keys",
+  "the four fiends have no paintings (404 on art/characters/x2-aranea/idle.png and the others): known placeholders"
+ ],
+ "unverified": [
+  {
+   "chapter": "spectral-keeper",
+   "what": "the live-game checks Q1 (start platforms 1, 2, 3), Q2 (the fuse 84 against 45: the live page shows 63, 69 and 70 ticks, which a base of 45 would not allow, but it reproduces the engine and not the game), Q3, Q4, Q6, Q11",
+   "why": "they ask what the original game does; the page runs the repo engine"
+  }
+ ],
+ "harnessWait": {
+  "pid": 59260,
+  "exitedAt": "2026-11-04 02:16:53 EST (07:16:53Z)",
+  "note": "waited by polling; no browser of this job ran before the exit; its REPORT LINE is in critic/rounds/round-34/continuity/run.log"
+ },
+ "provenance": [
+  {
+   "run": "keeper-ring",
+   "status": "attempt 1, stopped by hand after 22 decisions: a script bug (the item-row matcher), not a product defect; its first five decisions are on file and equal attempt 2's"
+  },
+  {
+   "run": "keeper-ring-r2",
+   "status": "USED for the Keeper ring verdicts (seed 1, 24 decisions, defeat after 3.27 min)"
+  },
+  {
+   "run": "keeper-aeon",
+   "status": "USED for the aeon verdicts (seed 2, 7 decisions)"
+  },
+  {
+   "run": "keeper-ring-probe",
+   "status": "the ring plan again with the continuity probe attached (176.5 s of battle): same events as keeper-ring-r2, read for CHK-026/027 as supplementary information"
+  },
+  {
+   "run": "maesters-walk-s1, -s1b, -s3",
+   "status": "earlier attempts: s1 stopped (the acting girl was read from the last turn-start, wrong in FFX-2), s1b ran the walk to the shell break but lost the party before the next menu (the break message was shot, the numbers were not read), s3 stopped (Darkness was not offered at 711 HP and the script had no fallback)"
+  },
+  {
+   "run": "maesters-walk-s1c",
+   "status": "complete run with every floor's whole battle log kept (replication of s1d: same floors, same shell break at seq 281 with 21,420, same Chac sequence)"
+  },
+  {
+   "run": "maesters-walk-s1d",
+   "status": "USED for the Maesters verdicts (adds the on-screen banner capture and the pause text read from the page body)"
+  },
+  {
+   "run": "continuity (4 chapters), continuity-keeper-s2, continuity-keeper-lose",
+   "status": "the review harness on keeper, infinito, yrp, waker; then keeper again on seed 2 and on the lose route"
+  },
+  {
+   "run": "waker-capture, waker-capture2",
+   "status": "the frame-difference reads of the Wind Waker chapter; waker-capture2 is the one used (the first tracked the same four anchors)"
+  }
+ ],
+ "method": {
+  "keys": "every action is a real key press (Playwright keyboard) through the menus a player uses; the engine state, the battle log and the scene's ring objects are READ through window.__pyrefly (battleState, battleLog, targeting, the three.js scene); the seed is pinned by window.__pyrefly.setSeed before the first key (the labelled setup hook of the review harness); the only write to the engine is the single debug setup in debugSetups (the HP of Concherer after the break was read); the fight of the Wind Waker capture was played by autoBattle of the debug API (a motion reading)",
+  "seeds": "the Keeper dry runs on the real engine predicted the live battles decision for decision (predictions.json, pred-keeper-*.txt); the live logs equal them event for event",
+  "lock": "each browser job took D:/Tools/pyrefly-scratch/RIG-RECORD per job (tools/rig-record-lock.mjs); jobs killed by hand left their dead-pid record, replaced by the next taker"
+ },
+ "continuityHarness": {
+  "stamp": {
+   "schema": "continuity-harness/1",
+   "id": "683a773fead43636b1bec907343f31a5feee5e09230cf79b76c569efe9c690b3",
+   "tree": {
+    "root": "D:/pyrefly-release55",
+    "head": "fc3326153e5b5ed94ffcfef32d3082bf6dbb5077",
+    "dirty": []
+   },
+   "files": {
+    "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+    "critic/runner/lib/continuity-analyze.mjs": "a20e4de301b117cf4a98ecf99f58fe695aaedb18",
+    "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+    "critic/runner/lib/continuity-card.mjs": "2e0208df7bc9a922a27d519fc5ebb49bed3fafd9",
+    "critic/runner/lib/continuity-dissolve.mjs": "4a9a2ebc79b798dc6059312f0b885510f4cd79b3",
+    "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+    "critic/runner/lib/continuity-gaps.mjs": "7337b85eda92c5755d11ccbee84749ee231cfe3d",
+    "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+    "critic/runner/lib/continuity-ghostms.mjs": "d74a048e0c44be69d22b050973ec240fbec3db66",
+    "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+    "critic/runner/lib/continuity-probe.mjs": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25",
+    "critic/runner/lib/continuity-pure.mjs": "c30cf02831efe33d9726d0bae9f9b3e098292090",
+    "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+    "critic/runner/lib/continuity-rig-probe.mjs": "35bf097b7bbfa81abeb4daf8e78f0d9515ff3ab1",
+    "critic/runner/lib/continuity-rig.mjs": "6e1b891a9d237b4b9db52593303df5e1ffc812e4",
+    "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+    "critic/runner/lib/continuity-smear.mjs": "bb6bcae7b35d4d99465f0650e58554cc785af513",
+    "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+    "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+    "critic/runner/lib/continuity-summary.mjs": "c671aa6dbc9e6df72a767ace45e6a57cdb478053",
+    "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+    "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+    "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+    "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+    "critic/runner/lib/continuity-why.mjs": "e2f0063820045e9c5eb5bb2ece203c00bed1fe3d",
+    "critic/runner/lib/continuity.mjs": "d3fd3269395cfa928cd1566a81486359e28210cb",
+    "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+    "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+    "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+    "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+    "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+    "critic/runner/lib/route-pure.mjs": "549d138066cc866d4e17d5eadc2b07b8f794e1ef",
+    "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+    "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+    "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+    "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+    "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+    "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+   },
+   "policy": {
+    "continuitySha256": "5ef4a3ed6fec14518548de8b462466822a3cf3a41f11528f8e8abb143de6fa43",
+    "fileSha256": "9c72460c4bdd463ef02f5e1f01c2baa3aa5334f392c29b114da466ca9c54cc71",
+    "override": false,
+    "overrideSha256": null
+   },
+   "probe": {
+    "version": 3,
+    "blob": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25"
+   },
+   "poseTable": {
+    "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+    "sha256": "b8cead6d81a854dc7ac60a210ac702185cd33668b555f01bb24e60fd408e3940",
+    "subjects": 114,
+    "source": "harness-tree",
+    "buildSha": "2342fe66",
+    "isCandidate": true
+   },
+   "waivers": {
+    "path": "D:\\pyrefly-release55\\docs\\target\\pose-waivers.json",
+    "sha256": "84fc043f4169733ef228cbf965eb2b0679f3f0e38f7f609e97d99135924f532f",
+    "rows": 80
+   },
+   "run": {
+    "query": null,
+    "setArt": null,
+    "browser": "gpu"
+   },
+   "changedDuringRun": false,
+   "chapterIds": [
+    "683a773fead43636b1bec907343f31a5feee5e09230cf79b76c569efe9c690b3"
+   ],
+   "unstamped": [],
+   "chaptersByOtherHarness": [],
+   "aggregateSha256": "94612ac34ed22b95cc328e559cce6ceb434d29f92f365c10eb9d5d40c3b4df4b"
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 4 chapter(s), 479.3 s of battle, 59.4 to 59.6 fps, 3 of 4 run by the dedicated harness; CHK-026 UNVERIFIED (not verified in: spectral-keeper, exp-windwaker); CHK-027 FAIL (68 swap(s) show a double image of severity 0.4 or more (worst 0.426)); 1,280 ms of see-through a minute (76.8 frames a minute at 60 Hz); 1 chapter(s) were not run by the dedicated harness (no marker: an older file or a failed run), so their numbers are not scored Read by harness 683a773fead4 (38 files; tree D:/pyrefly-release55 at fc3326153; policy 5ef4a3ed; probe v3 2c2bfe73; pose table b8cead6d (114 subjects); waivers 84fc043f (80 rows)).",
+  "evidence": "critic/rounds/round-34/hidden/continuity/continuity-summary.json",
+  "note": "the four-chapter summary is a hidden-chapter run, not the 19-chapter aggregate of PR-0627; it is stamped by the same harness tree as the main run"
+ }
+}

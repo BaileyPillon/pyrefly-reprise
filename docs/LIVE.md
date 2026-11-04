@@ -14,7 +14,7 @@
 | Deploy log | `docs/deploys.log` line 91: cloudflare, 4830 art files |
 | Artifact (SHA-256) | `e0cb661928f6598d94db8930e4d6832a5c4c15bf83d37dcec6b57165d4ec8fdd` |
 | The deploy's own byte check | PASS (153 files compared with the build) |
-| Marker | `critic/pending/2342fe666.json` (pending) |
+| Marker | `critic/cleared/2342fe666.json` (cleared) |
 | Owner override | none |
 | CHANGELOG entry | 2026-11-03 · Release 74 (r74), Sin's Fins and Core (FFX Chapter XVII) joins the booth treatment as the nineteenth and last listed chapter (its new battle HUD held back), Lulu's head holds its size from pose to pose, a revive gets a longer and even cross, Chapter XII's Sensor card steps off the target flag in the fight screen it still draws, and four hidden chapters arrive on typed words (the Spectral Keeper, the Fallen Maesters, Bahamut in 3D, Valefor in Wind Waker style); nineteen of the nineteen listed chapters (each item says which game) |
 | Focused review | critic/reviews/2342fe666-focused.json: ship SHIP, changed area FAIL |
@@ -24,11 +24,9 @@ Is this commit on main? `git merge-base --is-ancestor 2342fe666 origin/main` exi
 
 ## Review obligations still open
 
-| Build | Obligation | What it needs |
-|---|---|---|
-| `2342fe666` | deep (carries 1 earlier builds) | deep review of every affected chapter and system |
+None: every marker in `critic/pending` is settled.
 
-The ledger counts 2 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 0 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
@@ -42,7 +40,7 @@ From `critic/reviews/2342fe666-focused.json` (a major that is not a regression i
 | R74-4 | major | no | no | FFX-2 half of the revive cross unread; Chapter XII Sensor steer and Chapter XVII fins hold not read on a production build |
 | R74-5 | major | yes | no | Hidden 3D Bahamut leaks about 34 textures per lose-and-retry |
 
-## Branches in flight (as of 2026-11-03, the release 74 records pass (release 74 live: main 2342fe666, bundle eSs6-WR_, nineteen of the nineteen listed chapters treated in code with the battle HUDs of Chapters XII and XVII held, and four hidden chapters on typed words; the deep review round 34 on the live build is owed by releases 73 and 74; release 75 = origin/r75-boss-art below, built on a branch, not installed, not read in a browser))
+## Branches in flight (as of 2026-11-04, the round 34b records pass (release 74 live: main 2342fe666, bundle eSs6-WR_, nineteen of the nineteen listed chapters treated in code with the battle HUDs of Chapters XII and XVII held, and four hidden chapters on typed words; the deep review round 34b on the live build settled the deep obligation of releases 73 and 74, so no review is owed; release 75 = origin/r75-boss-art below, built on a branch, not installed, not read in a browser))
 
 Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.
 
