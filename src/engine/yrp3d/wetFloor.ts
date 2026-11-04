@@ -112,9 +112,20 @@ export class WetFloor {
     return this.back ? { width: this.back.width, height: this.back.height } : null;
   }
 
+  /**
+   * Free the floor's targets, material, geometry **and the textures its material draws with** (release 75 second code pass, the driver's decision 1; FFX-2 only, the hidden 3D Bahamut chapter; the +1 texture a retry
+   * that the release 74 read YR-11 still showed after the skeletons were freed). `Reflector` builds its material from a CLONE of the shader's uniforms (`UniformsUtils.clone`), so `uGrain` is a clone of the stage's grain
+   * texture, not the stage's own: the floor draws with (and so uploads) the clone, and the stage's `grain.dispose()` frees the original, which was never uploaded (the renderer frees only a texture it has initialised,
+   * `WebGLTextures.deallocateTexture`). Nothing disposed the clone, so its GPU texture stayed after every retry. `Reflector.dispose` frees its render target and its material; this frees the clone. (A render target's
+   * texture goes with its target.)
+   */
   dispose(): void {
     this.back?.dispose();
     this.back = null;
+    for (const uniform of Object.values((this.mesh.material as ShaderMaterial).uniforms)) {
+      const texture = uniform.value as Texture | null;
+      if (texture?.isTexture === true && texture.isRenderTargetTexture !== true) texture.dispose();
+    }
     this.mesh.dispose();
     this.mesh.geometry.dispose();
     this.mesh.removeFromParent();

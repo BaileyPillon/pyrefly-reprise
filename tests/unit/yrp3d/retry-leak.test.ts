@@ -12,8 +12,14 @@
  * with the library as its `preload`, `YrpSkin` on real `PaintedActor`s, `applyStage`, then the scene's `dispose` order: the stage look, then the skin) over fake files whose figures are skinned and textured, cloned by the real
  * `SkeletonUtils.clone`, "draws" them (every skinned mesh gets its bone texture) and counts, per retry, the textures that were made against the textures that were freed (`Texture.prototype.dispose` is spied). Over N retries
  * nothing may stay alive. Mutation: `disposeShade` without the skeleton line fails every test marked below (12 textures a retry stay on the GPU); `freeScene` back on the colour map alone fails the last test.
+ *
+ * **The one texture a retry the skeletons did not account for (release 75 second code pass, the driver's decision 1; the check's m1: the read was +34 a retry, the real files' skinned meshes are 33).** Found by building the
+ * real scene (`scenes/exp-yrp-3d-stage.ts` under jsdom) with every `Texture` and `RenderTarget` constructed tracked and asking which were not disposed after the scene's `dispose`: the **wet floor's grain**. `WetFloor`
+ * builds a three.js `Reflector`, which builds its material from a CLONE of the shader's uniforms (`UniformsUtils.clone`), so the floor draws with (and the renderer uploads) a clone of the stage's grain texture, and the stage's
+ * `grain.dispose()` frees the original, which is never uploaded: nothing disposed the clone, so it stayed on the GPU, +1 a retry. `WetFloor.dispose` frees the textures its material draws with now; the retry test counts that texture among the ones made (and requires it to be there), and the last-but-one block pins the mechanism. Mutation: `WetFloor.dispose` without the
+ * loop fails the retry tests and that block.
  */
-import { AnimationClip, Bone, BoxGeometry, DataTexture, Float32BufferAttribute, Group, Mesh, MeshStandardMaterial, Scene, Skeleton, SkinnedMesh, Texture, Uint16BufferAttribute, VectorKeyframeTrack, type Object3D } from 'three';
+import { AnimationClip, Bone, BoxGeometry, DataTexture, Float32BufferAttribute, Group, Mesh, MeshStandardMaterial, Scene, ShaderMaterial, Skeleton, SkinnedMesh, Texture, Uint16BufferAttribute, VectorKeyframeTrack, type Object3D } from 'three';
 import { clone as skeletonClone } from 'three/addons/utils/SkeletonUtils.js';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
@@ -24,6 +30,7 @@ import { freeScene, loadYrpModels, type LoaderIO } from '../../../src/engine/yrp
 import { disposeShade, shadeify } from '../../../src/engine/yrp3d/shade.ts';
 import { YrpSkin } from '../../../src/engine/yrp3d/skin.ts';
 import { applyStage } from '../../../src/engine/yrp3d/stageLook.ts';
+import { WetFloor } from '../../../src/engine/yrp3d/wetFloor.ts';
 
 // ------------------------------------------------------------------------------------------------ the fakes
 
@@ -198,6 +205,18 @@ async function attempt(): Promise<Attempt> {
     if (!material || !('map' in material) || !material.map) return;
     if (material.map.isRenderTargetTexture !== true) made.add(material.map); // the contact discs' and the orb's map
   });
+  // the wet floor's shader textures: `Reflector` clones the shader's uniforms, so the grain the floor draws with is a CLONE of the stage's own (m1, the +1 a retry the skeletons did not account for)
+  const floorTextures: Texture[] = [];
+  host.traverse((o) => {
+    const material = (o as Mesh).material as ShaderMaterial | undefined;
+    if (!material || material.isShaderMaterial !== true) return;
+    for (const u of Object.values(material.uniforms)) {
+      const t = u.value as Texture | null;
+      if (t?.isTexture === true && t.isRenderTargetTexture !== true) floorTextures.push(t);
+    }
+  });
+  expect(floorTextures, 'the wet floor draws with the grain texture').toHaveLength(1);
+  for (const t of floorTextures) made.add(t);
   return {
     made,
     bones,
@@ -283,6 +302,19 @@ describe('five lose-and-retry cycles through the scene\'s real setup (YR-11; FFX
     second.teardown();
     await settle();
     expect(alive(second.made)).toEqual([]);
+  });
+});
+
+describe('the wet floor frees the grain texture it draws with (m1 of the release 74 deep review\'s check: the +1 texture a retry the skeletons did not account for; FFX-2 only)', () => {
+  it('the floor\'s material draws with a CLONE of the stage\'s grain, so the stage\'s own dispose frees a texture that was never drawn; the floor\'s dispose frees the clone (mutation: fails)', () => {
+    const grain = pixel();
+    const floor = new WetFloor(grain);
+    const drawn = (floor.mesh.material as ShaderMaterial).uniforms['uGrain']!.value as Texture;
+    expect(drawn, 'Reflector clones the uniforms: the texture the floor draws with (and the renderer uploads) is not the stage\'s').not.toBe(grain);
+    grain.dispose(); // what `applyStage(...).dispose()` does with its own: the original was never the one drawn
+    expect(freed.has(drawn), 'the clone is still up after the stage freed the original').toBe(false);
+    floor.dispose();
+    expect(freed.has(drawn), 'the floor frees the texture it draws with').toBe(true);
   });
 });
 

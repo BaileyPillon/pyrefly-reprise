@@ -19,6 +19,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import approved from '../../../docs/target/approved-hashes.json';
+import heldPins from '../../../docs/target/held-pins-r75-boss-art.json';
 import waivers from '../../../docs/target/pose-waivers.json';
 import faceCrops from '../../../src/ui/common/face-crops.json';
 import measure from '../../../docs/target/pose-measure.json';
@@ -54,12 +55,12 @@ const figure = (key: string, withKo: boolean): string[] => poses(withKo).map((p)
 const fiendKeys = (): string[] => [floor20AraneaGroup, floor40BlackElementalGroup, floor60ConchererGroup, floor80ChacGroup].flatMap((g) => g.enemies.map((e) => e.spriteKey));
 
 describe('the set is recorded', () => {
-  it('has Bailey\'s delegation words, the decision, the note and 42 image pins (43 less the Keeper\'s held-back attack), none a path outside the set\'s folders', () => {
+  it('has Bailey\'s delegation words, the decision, the note and 36 image pins (43 images less the Keeper\'s held-back attack and the six held cards and thumbnails), none a path outside the set\'s folders', () => {
     expect(set, `${SET_KEY} in approved-hashes.json`).toBeDefined();
     expect(String(set!['words'])).toContain("i'll go with all of your recommendations please implement all the unimplemented chapters that i decided on");
     expect(String(set!['decision'])).toContain('219m');
     expect(String(set!['note'])).toMatch(/DRIVER CALL, delegated by Bailey; not Bailey's own approval/);
-    expect(pins.size).toBe(42);
+    expect(pins.size).toBe(36);
     for (const [path, sha] of pins) {
       expect(sha, path).toMatch(/^[0-9a-f]{64}$/);
       expect(path, path).toMatch(/^(characters\/(spectral-keeper|x2-aranea|x2-black-elemental|x2-concherer|x2-chac)\/|decals\/spectral-|portraits\/spectral-keeper\.png$|pause\/(ch29-spectral-keeper|ffx2-fallen-maesters))/);
@@ -107,9 +108,9 @@ describe('every file the Spectral Keeper chapter names is in the set (FFX only)'
     expect((faceCrops.portraits as Record<string, unknown>)[SPECTRAL_KEEPER_ID], 'no table row: the table\'s guard test reads the file, and the file is not in every tree').toBeUndefined();
   });
 
-  it('the chapter card and its thumbnail (a key and files no code loads until the board lists the chapter)', () => {
+  it('the chapter card and its thumbnail are a key and files no code loads until the board lists the chapter: not pinned here (held out with their bytes, `held-pins-r75-boss-art.json`)', () => {
     expect(SPECTRAL_KEEPER.thumbnailKey).toBe('chapter-spectral-keeper');
-    for (const f of ['pause/ch29-spectral-keeper-card.png', 'pause/ch29-spectral-keeper-card.2x.webp', 'pause/ch29-spectral-keeper-thumb.png']) expect(pins.has(f), f).toBe(true);
+    for (const f of ['pause/ch29-spectral-keeper-card.png', 'pause/ch29-spectral-keeper-card.2x.webp', 'pause/ch29-spectral-keeper-thumb.png']) expect(pins.has(f), f).toBe(false);
   });
 });
 
@@ -124,13 +125,13 @@ describe('every file the Fallen Maesters chapter names is in the set (FFX-2 only
     expect(pins.has('characters/x2-concherer/idle-cracked@2x.png')).toBe(true);
   });
 
-  it('the pause plate, its 2x master, the snapshot of Aranea and the card and thumbnail', () => {
+  it('the pause plate, its 2x master and the snapshot of Aranea (the card and thumbnail are held out: not pinned here)', () => {
     expect(FALLEN_MAESTERS_META.heroArt).toBe('pause/ffx2-fallen-maesters');
     expect(pins.has(`${FALLEN_MAESTERS_META.heroArt}.png`)).toBe(true);
     expect(pins.has(`${FALLEN_MAESTERS_META.heroArt}.2x.webp`)).toBe(true);
     expect(FALLEN_MAESTERS_META.snapshots.map((s) => s.image)).toContain('characters/x2-aranea/idle.png');
     for (const snap of FALLEN_MAESTERS_META.snapshots) if (/x2-(aranea|chac|concherer|black)/.test(snap.image)) expect(pins.has(snap.image), snap.image).toBe(true);
-    for (const f of ['pause/ffx2-fallen-maesters-card.png', 'pause/ffx2-fallen-maesters-card.2x.webp', 'pause/ffx2-fallen-maesters-thumb.png']) expect(pins.has(f), f).toBe(true);
+    for (const f of ['pause/ffx2-fallen-maesters-card.png', 'pause/ffx2-fallen-maesters-card.2x.webp', 'pause/ffx2-fallen-maesters-thumb.png']) expect(pins.has(f), f).toBe(false);
   });
 });
 
@@ -183,9 +184,10 @@ describe('the Keeper\'s attack painting is held back (decision 219u): staged, no
 });
 
 /**
- * Pinned and staged, but NOT in the first install (decision 219v item 3, the driver under Bailey's delegation, 2026-11-03): the chapter cards and thumbnails that nothing reads yet (6 images, 4,481,396 bytes of
- * masters, about 3.6 MB shipped). The install tool (`boss-art-install/make-mirror.mjs`, its `HELD` list) leaves them in the stage with their sidecars; the pins STAY (the bytes stay locked for the second install,
- * and a tree that carries them must carry exactly these bytes). `verify-approved.mjs` therefore reports these six as `missing` after the first install: that is the expected answer, `INSTALL.md` step 5 says so.
+ * Staged, but NOT in the first install and NOT pinned (decision 219v item 3, the driver under Bailey's delegation, 2026-11-03, and the release 75 second code pass): the chapter cards and thumbnails that nothing reads
+ * yet (6 images, 4,481,396 bytes of masters, about 3.6 MB shipped). The install tool (`boss-art-install/make-mirror.mjs`, its `HELD` list) leaves them in the stage with their sidecars. The first pass kept their pins in
+ * the ledger, so `verify-approved.mjs` reported six `missing` after the install; the second pass moved the six entries, verbatim, into `docs/target/held-pins-r75-boss-art.json`, so it reports `missing: 0` and the
+ * entries (and these tests) come back with the files at the second install. While they are out, a tree that carries one of the files must still carry exactly the held bytes (the installed block at the foot).
  */
 const HELD_FROM_FIRST_INSTALL = [
   'pause/ch29-spectral-keeper-card.png',
@@ -196,8 +198,9 @@ const HELD_FROM_FIRST_INSTALL = [
   'pause/ffx2-fallen-maesters-thumb.png',
 ] as const;
 const isHeld = (path: string): boolean => (HELD_FROM_FIRST_INSTALL as readonly string[]).includes(path);
+const held = heldPins as { set: string; pins: Record<string, { sha256: string; mtime: string; delegated: string }> };
 
-describe('the chapter cards and thumbnails are held for the first install (decision 219v item 3): pinned, staged, read by no code', () => {
+describe('the chapter cards and thumbnails are held for the first install (decision 219v item 3, second code pass): staged, NOT pinned, read by no code', () => {
   /** Every source file under src/ with its comments left out (a comment may mention a file; only code or data that names it would load it). */
   const stripComments = (text: string): string =>
     text
@@ -218,10 +221,21 @@ describe('the chapter cards and thumbnails are held for the first install (decis
     return out.join('\n');
   };
 
-  it('all six are pinned (their bytes stay locked) and there are exactly six: two cards, their two 2x masters, two thumbnails', () => {
-    for (const path of HELD_FROM_FIRST_INSTALL) expect(pins.has(path), path).toBe(true);
-    const cardsAndThumbs = [...pins.keys()].filter((p) => /^pause\/(ch29-spectral-keeper|ffx2-fallen-maesters)-(card|thumb)\./.test(p) && !p.endsWith('.json'));
-    expect(cardsAndThumbs.sort()).toEqual([...HELD_FROM_FIRST_INSTALL].sort());
+  it('none of the six is in the ledger (so verify-approved reports missing 0 after the first install), in this set or any other', () => {
+    for (const path of HELD_FROM_FIRST_INSTALL) expect(pins.has(path), `${path} in the set`).toBe(false);
+    expect([...pins.keys()].filter((p) => /-(card|thumb)\./.test(p)), 'no card or thumbnail pin is left').toEqual([]);
+    for (const [other, body] of Object.entries(sets)) for (const path of HELD_FROM_FIRST_INSTALL) expect(`public/art/${path}` in body, `${other}: ${path}`).toBe(false);
+  });
+
+  it('their entries are kept verbatim for the second install: exactly six (two cards, their two 2x masters, two thumbnails), each the ledger\'s entry shape, for this set', () => {
+    expect(held.set).toBe(SET_KEY);
+    expect(Object.keys(held.pins).map((k) => k.replace(/^public\/art\//, '')).sort()).toEqual([...HELD_FROM_FIRST_INSTALL].sort());
+    for (const [key, entry] of Object.entries(held.pins)) {
+      expect(Object.keys(entry).sort(), key).toEqual(['delegated', 'mtime', 'sha256']);
+      expect(entry.sha256, key).toMatch(/^[0-9a-f]{64}$/);
+      expect(entry.delegated, key).toBe('2026-11-03');
+      expect(Number.isNaN(Date.parse(entry.mtime)), `${key}: mtime parses`).toBe(false);
+    }
   });
 
   it('nothing under src/ names any of them, so the first install loses nothing the game draws (the reason they are held)', () => {
@@ -235,11 +249,13 @@ describe('the chapter cards and thumbnails are held for the first install (decis
     expect(isHeld(`${FALLEN_MAESTERS_META.heroArt}.2x.webp`)).toBe(false);
   });
 
-  it('the handoff and the install note say they are held (the counts follow: 36 images and 34 sidecars install)', () => {
+  it('the handoff says they are held and out of the ledger, and where their entries are (the counts follow: 36 images and 34 sidecars install, 36 pins)', () => {
     const handoff = readFileSync(resolve(process.cwd(), 'docs/handoff/r75-boss-art.md'), 'utf8').replace(/\r\n/g, '\n');
     expect(handoff).toMatch(/cards and thumbnails/i);
     expect(handoff).toMatch(/36 install/);
     expect(handoff).toMatch(/held for the first install/i);
+    expect(handoff).toMatch(/held-pins-r75-boss-art\.json/);
+    expect(handoff).toMatch(/missing: 0/);
   });
 });
 
@@ -270,9 +286,14 @@ const pngSize = (file: string): [number, number] => {
 describe.skipIf(!root)('the installed files on this disk (public/art is gitignored; BOSS_ART_ROOT names another folder)', () => {
   it.each([...pins])('%s is the pinned file', (path, sha) => {
     const file = join(root!, path);
-    if (isHeld(path) && !existsSync(file)) return; // held for the first install (219v item 3): absent is the expected answer; present, it must be the pinned bytes
     expect(existsSync(file), `${path} is installed`).toBe(true);
     expect(sha256(file), `${path} is the staged bytes`).toBe(sha);
+  });
+
+  it.each(HELD_FROM_FIRST_INSTALL)('%s (held out of the ledger) is absent, as the first install leaves it, or the held bytes', (path) => {
+    const file = join(root!, path);
+    if (!existsSync(file)) return; // the expected answer after the first install
+    expect(sha256(file), `${path} is present: it must be the staged bytes kept in held-pins-r75-boss-art.json`).toBe(held.pins[`public/art/${path}`]!.sha256);
   });
 
   it('the turn-list face carries its focal point (the red eye of the helm) in its sidecar, in the fractions portrait.ts reads', () => {
@@ -281,7 +302,6 @@ describe.skipIf(!root)('the installed files on this disk (public/art is gitignor
   });
 
   it.each([...pins].filter(([path]) => path.endsWith('.png')))('%s has a house sidecar: the shipped fields only, the painting\'s own size', (path) => {
-    if (isHeld(path) && !existsSync(join(root!, path))) return; // held for the first install (219v item 3)
     const sidecar = join(root!, path.replace(/\.png$/, '.json'));
     expect(existsSync(sidecar), `${path.replace(/\.png$/, '.json')} beside it`).toBe(true);
     const json = JSON.parse(readFileSync(sidecar, 'utf8')) as Record<string, unknown>;

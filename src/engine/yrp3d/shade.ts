@@ -16,7 +16,8 @@
  * Needs three.js only; no DOM. Game case: FFX-2 only.
  */
 
-import { Color, MeshStandardMaterial, SRGBColorSpace, type BufferGeometry, type Material, type Mesh, type Object3D, type SkinnedMesh, type Texture } from 'three';
+import { Color, MeshStandardMaterial, SRGBColorSpace, type BufferGeometry, type Material, type Mesh, type Object3D, type Texture } from 'three';
+import { disposeSkeletonsOf } from '../skeletons.ts';
 import { patchFlap, type FlapUniforms } from './flap.ts';
 import { SHADE, type Look } from './layout.ts';
 import { LAYER, LOOK } from './look.ts';
@@ -148,7 +149,7 @@ export function drive(set: ShadeSet, channels: { colour: Color; emissive: Color;
  */
 export function disposeShade(set: ShadeSet, geometries = false): void {
   for (const m of set.materials) m.dispose();
-  for (const mesh of set.meshes) (mesh as Partial<SkinnedMesh>).skeleton?.dispose();
+  disposeSkeletonsOf(set.meshes);
   if (geometries) {
     for (const g of set.geometries) g.dispose();
     for (const t of set.textures) t.dispose();
