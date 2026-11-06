@@ -315,9 +315,10 @@ describe('the chain: three formations, each a fresh fight (BG1)', () => {
     expect(baralaiGroup.musicCues).toEqual([{ at: 'start', track: 'boss-den-of-woe', fadeMs: 800 }]);
   });
 
-  it('art: Georapella and the Precepts Guard have no painting yet (their own sprite keys, the presenter\'s placeholder); Baralai stands in with the Den of Woe shade\'s painting (a flagged stand-in)', () => {
-    expect([x2Georapella.spriteKey, x2PreceptsGuard.spriteKey, x2Baralai.spriteKey]).toEqual(['x2-georapella', 'x2-precepts-guard', 'baralai-shade']);
-    expect(x2Baralai.spriteKey).toBe(shadeBaralai.spriteKey);
+  it('art (r76b art install): each guardian draws a set of its own (`x2-georapella`, `x2-precepts-guard`, `x2-baralai`: the living man, no longer the Den of Woe shade\'s painting)', () => {
+    expect([x2Georapella.spriteKey, x2PreceptsGuard.spriteKey, x2Baralai.spriteKey]).toEqual(['x2-georapella', 'x2-precepts-guard', 'x2-baralai']);
+    expect(x2Baralai.spriteKey).not.toBe(shadeBaralai.spriteKey);
+    expect(shadeBaralai.spriteKey).toBe('baralai-shade');
   });
 });
 

@@ -6,6 +6,8 @@ Written 2026-11-06 by a Sonnet sub-agent of the release driver. **Not the Spectr
 
 Authority: Bailey, relayed by the driver, verbatim: "implement all unimplemented chapters please" (2026-11-06 about 00:30 EST), "yes on all these too" (about 00:55 EST), and, 2026-10-31, "you make the executive decisions for the next few days. i'll go with all of your recommendations." **Every pick in section 5 is the paper preflight's own recommendation or the bench's, "driver's call, his to overturn"; the alternative is written beside it.**
 
+**UPDATE 2026-11-06 (r76b art install): the Keeper's paintings of the art list are made, registered and wired** (idle, wings, attack, cast, hurt, ko, a face and the pause plate `pause/ch39-sanctuary-keeper`; the driver's picks under Bailey's delegation, his to overturn): `docs/handoff/r76b-art-install.md`. Held: the card and thumbnail, a summit variant of the Gagazet plate; the `wings` pose is installed but drawn by no code yet. The "not painted yet" lines below describe the branch before the install. FFX only.
+
 ## 0. What changed against the preflight (read first)
 
 1. **The shipped front line is Tidus, Yuna, Auron, not the preflight's Tidus, Yuna, Lulu (SK2).** The preflight said the bench would run both and report. It did: the guides' line wins **138 of 200 seeds (69 percent) with Auron** (the preflight's own target band, 60 to 80) and **39 of 200 (19.5 percent) with Lulu**. Auron's Armor Break is the damage; Lulu's Bio can be a Poison Fang from Tidus's hand. One line in `src/data/ffx/builds/sanctuary-keeper.ts` turns it back.

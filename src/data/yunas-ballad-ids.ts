@@ -28,11 +28,12 @@ export const YUNAS_BALLAD_BODY_IDS = [X2_POSSESSED_RIKKU_ID, X2_POSSESSED_PAINE_
 export const BALLAD_SEAM_RIKKU = 'rikku-freed';
 
 /**
- * The stand-in paintings: the party's own sets (`public/art/characters/<key>/`), which the presenter mirrors to face the party because they are painted facing right (`BattlePresenterActors.mirrorFor`).
- * No tint: the presenter has no data-driven tint for an enemy, so the stand-ins are plain. The possession look (a pyrefly glow, cold eyes) is ART NEEDS in `docs/handoff/ch-yunas-ballad.md`.
+ * The paintings (`public/art/characters/<key>/`, installed by the r76b art install, `docs/handoff/r76b-art-install.md`): the party's own Rikku and Paine sets, mirrored to face the party (the sidecars say `facing: left`, so
+ * `BattlePresenterActors.mirrorFor` draws them as they are) and tinted cold with pale eyes. The possession look is our invention, to show Bailey (the repo note says no source describes how the illusions look).
+ * Before the install the chapter drew the party's own `rikku` and `paine-warrior` sets, which the presenter mirrored because they are painted facing right; a tree without the art draws the placeholder.
  */
-export const POSSESSED_RIKKU_SPRITE = 'rikku';
-export const POSSESSED_PAINE_SPRITE = 'paine-warrior';
+export const POSSESSED_RIKKU_SPRITE = X2_POSSESSED_RIKKU_ID;
+export const POSSESSED_PAINE_SPRITE = X2_POSSESSED_PAINE_ID;
 
 /** The AI script ids (`src/battle/ffx2/ai/yunas-ballad.ts`; the data file names the same strings, a test pins them). */
 export const POSSESSED_RIKKU_SCRIPT_ID = 'x2-possessed-rikku';

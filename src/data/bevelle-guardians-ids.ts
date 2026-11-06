@@ -37,12 +37,13 @@ export const GUARDIANS_SEAM_2 = 'precepts-guard-fallen';
 export const BARALAI_COUNT_NINE_TRIGGER = 'baralai-count-nine';
 
 /**
- * The paintings (`public/art/characters/<key>/`). Georapella and the Precepts Guard have none yet (the presenter draws its procedural placeholder for an unpainted key); **Baralai stands in with the Den of Woe
- * shade's painting** (`baralai-shade`, the same man as a spectre: idle, cast, hurt, ko), flagged, until the living Baralai is painted (`x2-baralai` in the handoff's art list, with attack and glint poses).
+ * The paintings (`public/art/characters/<key>/`, installed by the r76b art install, `docs/handoff/r76b-art-install.md`): Georapella is the Geosgaeno set under an FFX-2 key with a painted cast, the Precepts Guard
+ * the approved Spectral Keeper set under an FFX-2 key, and Baralai the living man, grown from the Den of Woe shade's set (idle, attack, cast, hurt, ko and the glint), which the chapter drew before it was painted.
+ * A tree without the art draws the presenter's procedural placeholder for an unpainted key.
  */
 export const GEORAPELLA_SPRITE = 'x2-georapella';
 export const PRECEPTS_GUARD_SPRITE = 'x2-precepts-guard';
-export const BARALAI_SPRITE = 'baralai-shade';
+export const BARALAI_SPRITE = X2_BARALAI_ID;
 
 /** The AI script ids (`src/battle/ffx2/ai/bevelle-guardians.ts`; the data file names the same strings, a test pins them). */
 export const GEORAPELLA_SCRIPT_ID = 'x2-georapella';

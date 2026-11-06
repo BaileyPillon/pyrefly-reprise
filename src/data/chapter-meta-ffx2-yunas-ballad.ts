@@ -9,9 +9,9 @@
  *   possessed Paine has Defense 70 and Magic Defense 7.
  * - `quote` is Yuna's line from the pre scene (`../story/scripts/ffx2-yunas-ballad.ts`), our own.
  * - `objectives`: survive a Grenade, free Rikku (the second duel reached), free Paine (the win).
- * - `heroArt` is the Den of Woe's own pause plate (`pause/ch15-ffx2-den-of-woe`, Chapter XV's, Bailey's pick of 2026-09-25) as a stand-in: the chapter has no plate of its own yet (ART NEEDS in `docs/handoff/ch-yunas-ballad.md`).
- *   `heroArtFallback`, Paine's FFX-2 portrait, shows only if the plate is missing.
- * - `snapshots`: the Den's plate, Yuna's White Mage idle and Paine's FFX-2 portrait (all approved art; stand-ins until the chapter's own paintings exist).
+ * - `heroArt` is the chapter's own pause plate `pause/ffx2-yunas-ballad` (r76b art install; a composite of Yuna, as the White Mage, against the two possessed girls on the Den's plate). `heroArtFallback`, Paine's FFX-2
+ *   portrait, shows only if the plate is missing. Before the install it was the Den of Woe's own plate (`pause/ch15-ffx2-den-of-woe`, Chapter XV's) as a stand-in.
+ * - `snapshots`: the Den's plate, Yuna's White Mage idle and the possessed Paine's own painting (`x2-possessed-paine`).
  * - `musicKeys`: the field bed, the Den's cue, the fanfare, as the record's.
  */
 
@@ -24,7 +24,7 @@ export const YUNAS_BALLAD_META: ChapterMeta = {
   numeral: 'EXP',
   ...YUNAS_BALLAD_TEXT,
   bossLine: 'Rikku, then Paine',
-  heroArt: 'pause/ch15-ffx2-den-of-woe', // the Den's plate, a stand-in
+  heroArt: 'pause/ffx2-yunas-ballad',
   heroArtFallback: 'portraits/paine.png',
   quote: { text: 'I will not run, and I will not give up on you.', speaker: 'Yuna' },
   handwritten: 'two friends, one girl, no rest between',
@@ -37,7 +37,7 @@ export const YUNAS_BALLAD_META: ChapterMeta = {
   snapshots: [
     { image: 'backdrops/den-of-woe.png', caption: 'the sealed cave' },
     { image: 'characters/yuna-white-mage/idle.png', caption: 'alone at the front' },
-    { image: 'portraits/paine.png', caption: 'a slow blade' },
+    { image: 'characters/x2-possessed-paine/idle.png', caption: 'a slow blade' },
   ],
   focalCharacterId: 'yuna',
   musicKeys: ['scene-bevelle-underground', 'boss-den-of-woe', 'victory-ffx2'],

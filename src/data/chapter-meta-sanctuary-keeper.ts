@@ -7,8 +7,8 @@
  * - `quote` is a line Auron speaks in the pre scene (`src/story/scripts/sanctuary-keeper.ts`, a draft for Bailey to read), our own words in his register (writing bible section 1.4: laconic, dry).
  * - `objectives` are ours, each a rule `src/ui/common/chapterObjectives.ts` already answers: bring it below three quarters, below a half, and the win.
  * - `tip` and `handwritten` are our own words over the research's sourced rules (RE sections 4 and 6): no number in them.
- * - `heroArt` is the pause plate `pause/ch39-sanctuary-keeper` (**not painted yet**); `heroArtFallback`, Chapter I's Gagazet plate, shows in its place. `snapshots`: the mountain's plate and two of the party's idles (stand-ins
- *   until the chapter's own paintings exist).
+ * - `heroArt` is the pause plate `pause/ch39-sanctuary-keeper` (r76b art install); `heroArtFallback`, Chapter I's Gagazet plate, shows only if it is missing. `snapshots`: the mountain's plate, the Keeper's own painting
+ *   and Yuna's idle (the spell sent back).
  * - `musicKeys` are the cues the chapter plays: the mountain's bed, the stand-in boss cue and the FFX fanfare.
  */
 
@@ -34,8 +34,8 @@ export const SANCTUARY_KEEPER_META: ChapterMeta = {
   tip: 'Plain blows cannot outrun its healing. Poison it, then Reflect it, and its own spell mends you. Shell before the breath.',
   snapshots: [
     { image: 'backdrops/gagazet.png', caption: 'the summit road' },
+    { image: 'characters/sanctuary-keeper/idle.png', caption: 'keep walking' },
     { image: 'characters/yuna/idle.png', caption: 'its own spell, back on it' },
-    { image: 'characters/auron/idle.png', caption: 'keep walking' },
   ],
   focalCharacterId: 'auron',
   musicKeys: ['scene-gagazet', 'boss-seymour', 'victory-ffx'],

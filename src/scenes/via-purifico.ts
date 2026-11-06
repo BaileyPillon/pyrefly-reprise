@@ -189,14 +189,29 @@ export const VIA_PURIFICO_PALETTE: ScenePalette = {
   tiltMaxBlur: 3.2,
 };
 
+/** The plate of Chapter XIV's own stage (`art/backdrops/<key>.png`). */
+export const VIA_PLATE = 'via-purifico';
+
+/**
+ * **The Via Purifico's stage on a plate of its own choosing** (the hidden Flooded Ways, FFX only, r76b art install): the same plane, ground, fog, lights, rigs and slots as {@link buildViaPurificoScene}, opening on
+ * `openingPlate`, and the build's `swapBackdrop(key)` (the chain's hook, `EnemyGroupDef.plate`, `BattleScreenEncounter`) puts another plate on the plane (`art/backdrops/<key>.png`; the caller covers the cut with a white
+ * pulse). `warm` names the plates the chapter will swap to next: they are requested once when the stage is built, so the swap is a texture already in the browser's cache (as the Mushroom Rock Road's is). Chapter XIV's
+ * scene is this factory with its own plate and no `warm`, so it is unchanged; no group of that chapter names a plate, so its `swapBackdrop` is never called.
+ */
+export function viaPurificoOnPlate(openingPlate: string, warm: readonly string[] = []): SceneFactory {
+  return async (opts: SceneBuildOptions = {}): Promise<SceneBuild> => buildViaPurifico(opts, openingPlate, warm);
+}
+
 /** **The Via Purifico, the last chamber**, as a {@link SceneFactory}. Owns no combatants. */
-export const buildViaPurificoScene: SceneFactory = async (opts: SceneBuildOptions = {}): Promise<SceneBuild> => {
+export const buildViaPurificoScene: SceneFactory = viaPurificoOnPlate(VIA_PLATE);
+
+async function buildViaPurifico(opts: SceneBuildOptions, openingPlate: string, warm: readonly string[]): Promise<SceneBuild> {
   const group = new Group();
   group.name = 'scene:via-purifico';
   const low = opts.quality === 'low';
   const rigs = viaRigsFor(viaRenderAspect());
   const cameraRef = opts.cameraRef ?? VIA_CAMERA_REF;
-  const url = artUrl('art/backdrops/via-purifico.png');
+  const url = artUrl(`art/backdrops/${openingPlate}.png`);
 
   const backdropOptions = {
     url,
@@ -219,6 +234,16 @@ export const buildViaPurificoScene: SceneFactory = async (opts: SceneBuildOption
 
   let backdrop = await Backdrop.create(backdropOptions);
   backdrop.applyTo(group);
+  // The plates a chain swaps to next are fetched now, so the swap under the white pulse is a texture already in the browser's cache.
+  if (typeof Image !== 'undefined') {
+    for (const plate of warm) {
+      try {
+        new Image().src = artUrl(`art/backdrops/${plate}.png`);
+      } catch {
+        /* a failed warm-up costs only a slower swap */
+      }
+    }
+  }
 
   const lights = new LightRig({
     palette: backdrop.palette,
@@ -271,6 +296,14 @@ export const buildViaPurificoScene: SceneFactory = async (opts: SceneBuildOption
     enemyHeight: VIA_ACTOR_HEIGHTS.aeon,
     ...VIA_STAGING,
     palette: { ...VIA_PURIFICO_PALETTE },
+    /** Another plate of the same layout on the painting plane (the flooded chapter's later areas); the caller covers the cut with a white pulse. */
+    async swapBackdrop(key: string): Promise<void> {
+      const next = await Backdrop.create({ ...backdropOptions, url: artUrl(`art/backdrops/${key}.png`) });
+      const wasIn = backdrop.group.parent;
+      backdrop.dispose();
+      backdrop = next;
+      if (wasIn) backdrop.applyTo(wasIn);
+    },
     update(dt: number): void {
       backdrop.update(dt);
       lights.update(dt);
@@ -287,4 +320,4 @@ export const buildViaPurificoScene: SceneFactory = async (opts: SceneBuildOption
       group.clear();
     },
   };
-};
+}

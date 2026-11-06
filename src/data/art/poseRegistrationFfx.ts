@@ -24,6 +24,15 @@ export const POSE_REGISTRATION_FFX: PoseRegistrationTable = {
     'idle-near': { scale: 1.0, stanceX: 770.9, upright: true, head: [0.0088, 0.1339, 0.132, 0.2742], status: 'ok', class: 'standing', stature: 1, headReal: 1, iou: 1, sha: 'f4d167f413bd2786' },
     ko: { status: 'waived', class: 'ko', stature: 1.474, iou: 0.185, sha: '5d8c8d5913dbab03' },
   },
+  'evrae-altana': {
+    attack: { scale: 1.011, stanceX: 833.5, upright: true, head: [0.0283, 0.2431, 0.1378, 0.3819], status: 'waived', class: 'standing', stature: 0.99, headReal: 1.011, iou: 0.843, sha: 'fb64036945175216' },
+    'breath-charge': { scale: 1.0, stanceX: 770.9, upright: true, head: [0.0088, 0.1339, 0.132, 0.2742], status: 'ok', class: 'standing', stature: 1, headReal: 1, iou: 0.977, sha: 'fbf7a5282666a4cb' },
+    hurt: { scale: 0.965, stanceX: 770.3, upright: true, head: [0.0462, 0.1064, 0.1739, 0.2368], status: 'ok', class: 'standing', stature: 1.037, headReal: 0.965, iou: 0.756, sha: '2c70b283d5fbb220' },
+    idle: { stanceX: 770.9, upright: true, head: [0.0088, 0.1339, 0.132, 0.2742], status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '2580cd3cada96c3c' },
+    'idle-far': { head: [0.0293, 0.0943, 0.166, 0.3249], status: 'ok', class: 'wide', stature: 0.587, headReal: 1, lengthRatio: 1.321, iou: 0.031, sha: '1b13d15e79c14981' },
+    'idle-near': { scale: 1.0, stanceX: 770.9, upright: true, head: [0.0088, 0.1339, 0.132, 0.2742], status: 'ok', class: 'standing', stature: 1, headReal: 1, iou: 1, sha: '2580cd3cada96c3c' },
+    ko: { stanceX: 288.4, head: [0.1229, 0.805, 0.2771, 0.8996], status: 'ok', class: 'ko', stature: 1.475, headReal: 1, iou: 0.231, sha: 'bd5758467feb8556' },
+  },
   kimahri: {
     attack: { scale: 1.031, stanceX: 411.0, head: [0.5133, 0.2116, 0.7174, 0.2969], status: 'ok', class: 'standing', stature: 0.969, headReal: 1.03, iou: 0.47, sha: '585ffbb1996994cd' },
     cast: { scale: 0.99, stanceX: 317.5, head: [0.2931, 0.1304, 0.5103, 0.2162], status: 'ok', class: 'standing', stature: 1.011, headReal: 0.99, iou: 0.391, sha: 'b21f868fe11c2912' },

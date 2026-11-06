@@ -461,5 +461,52 @@
   "hurt": {
    "standing": true
   }
+ },
+ "evrae-altana": {
+  "idle": {
+   "standing": true
+  },
+  "attack": {
+   "standing": true
+  },
+  "breath-charge": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  },
+  "idle-near": {
+   "standing": true
+  },
+  "ko": {
+   "standing": true
+  }
+ },
+ "gate-lock": {
+  "idle": {
+   "standing": true
+  }
+ },
+ "geosgaeno": {
+  "attack": {
+   "feetRowKept": {
+    "by": "r76b art install (a Sonnet sub-agent of the release driver), 2026-11-06, read by eye on the painting",
+    "why": "the striking claw hangs 5.5 percent of the painting below the tentacle ends, so the row of the soles is above the alpha baseline by design"
+   }
+  },
+  "hurt": {
+   "feetRowKept": {
+    "by": "r76b art install (a Sonnet sub-agent of the release driver), 2026-11-06, read by eye on the painting",
+    "why": "the striking claw hangs 2.4 percent of the painting below the tentacle ends, so the row of the soles is above the alpha baseline by design"
+   }
+  }
+ },
+ "x2-georapella": {
+  "hurt": {
+   "feetRowKept": {
+    "by": "r76b art install (a Sonnet sub-agent of the release driver), 2026-11-06, read by eye on the painting",
+    "why": "the striking claw hangs 2.4 percent of the painting below the tentacle ends, so the row of the soles is above the alpha baseline by design"
+   }
+  }
  }
 }

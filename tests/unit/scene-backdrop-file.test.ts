@@ -8,6 +8,8 @@
  */
 
 import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { plateUrlFor } from '../../src/app/screens/battlePreload.ts';
 import { backdropFileOf, SCENE_BACKDROP_FILE } from '../../src/data/art/artNamespace.ts';
@@ -16,14 +18,19 @@ import { MIRROR_ACT_I_PLATE, MIRROR_AEONS_SCENE } from '../../src/data/ffx/mirro
 import { SPECTRAL_KEEPER_SCENE } from '../../src/data/ffx/spectral-keeper-ids.ts';
 import { DARK_AEONS_SCENE } from '../../src/data/ffx/dark-aeons-six-ids.ts';
 import { PENANCE_SCENE } from '../../src/data/ffx/penance-ids.ts';
-import { FLOODED_WAYS_SCENE } from '../../src/data/ffx/flooded-ways-ids.ts';
+import { FLOODED_PLATES, FLOODED_WAYS_SCENE } from '../../src/data/ffx/flooded-ways-ids.ts';
 import { SANCTUARY_KEEPER_SCENE } from '../../src/data/ffx/sanctuary-keeper-ids.ts';
 import { EXP_YRP_SCENE } from '../../src/data/yrp-ids.ts';
 import { DJOSE_CHAMBER_PLATE } from '../../src/data/ixion-plates.ts';
 import { EXP_WINDWAKER_SCENE } from '../../src/data/windwaker-ids.ts';
 import { EXP_ANIME_SCENE } from '../../src/data/anime-ids.ts';
 
-const BACKDROPS = new URL('../../public/art/backdrops/', import.meta.url);
+/** The art folder: the one `BOSS_ART_ROOT` names (an art mirror; the full suite runs with it) when it has backdrops, else this tree's `public/art`. */
+const BOSS_ART_BACKDROPS = process.env['BOSS_ART_ROOT'] ? join(process.env['BOSS_ART_ROOT'], 'backdrops') : undefined;
+const BACKDROPS = BOSS_ART_BACKDROPS && existsSync(BOSS_ART_BACKDROPS) ? pathToFileURL(`${BOSS_ART_BACKDROPS}/`) : new URL('../../public/art/backdrops/', import.meta.url);
+/** The plates the r76b art install added (the Flooded Ways'): a `public/art` that still points at an earlier mirror does not have them, and that is the link's age, not a chapter's fault. */
+const R76B_PLATES: ReadonlySet<string> = new Set(Object.values(FLOODED_PLATES));
+const R76B_INSTALLED = existsSync(new URL('baaj-waterway.png', BACKDROPS));
 
 describe('a scene key that is a code key names the backdrop file it draws', () => {
   it('Mirror Aeons draws Mushroom Rock Road\'s plate; every other scene key is its own file name', () => {
@@ -35,7 +42,7 @@ describe('a scene key that is a code key names the backdrop file it draws', () =
     expect(backdropFileOf(SPECTRAL_KEEPER_SCENE)).toBe('zanarkand-dome'); // the hidden Spectral Keeper's stage draws Chapter II's Dome plate
     expect(backdropFileOf(DARK_AEONS_SCENE)).toBe('mushroom-rock-road'); // the hidden Dark Aeons' stage is one scene with seven plates: no file is named for it, so it draws the first link's plate
     expect(backdropFileOf(PENANCE_SCENE)).toBe('evrae-airship-deck'); // the hidden Penance chapter's stage draws Chapter VIII's deck plate (ch-penance, 2026-11-06)
-    expect(backdropFileOf(FLOODED_WAYS_SCENE)).toBe('via-purifico'); // the hidden Flooded Ways' stage is the Via Purifico's plate (2026-11-06): no file is named for it
+    expect(backdropFileOf(FLOODED_WAYS_SCENE)).toBe('via-purifico-flooded-1'); // the hidden Flooded Ways' stage is the Via Purifico's stage on four plates of its own (r76b art install): no file is named for it, so the board draws the first area's
     expect(backdropFileOf(SANCTUARY_KEEPER_SCENE)).toBe('gagazet'); // the hidden Sanctuary Keeper's stage draws Chapter I's Mt. Gagazet plate (ch-sanctuary-keeper, 2026-11-06)
     expect([...Object.keys(SCENE_BACKDROP_FILE)].sort()).toEqual([MIRROR_AEONS_SCENE, DARK_AEONS_SCENE, FLOODED_WAYS_SCENE, SPECTRAL_KEEPER_SCENE, PENANCE_SCENE, SANCTUARY_KEEPER_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE, EXP_ANIME_SCENE].sort()); // the set of code-keyed scenes, whatever order a merge lists them in
     expect(backdropFileOf(EXP_YRP_SCENE)).toBe('bevelle-underground'); // the hidden 3D Bahamut is drawn over Chapter IV's own plate (ch-yrp)
@@ -52,6 +59,7 @@ describe('a scene key that is a code key names the backdrop file it draws', () =
   it.skipIf(!existsSync(BACKDROPS))('every chapter\'s backdrop file is there (the local art)', () => {
     for (const c of [...CHAPTERS, ...UNLISTED_CHAPTERS, ...EXPERIMENT_CHAPTERS].filter((x) => x.game !== 'ff7')) { // FF7's plate has its own path (`battlePreload.ts#SCENE_PLATES`)
       const file = backdropFileOf(c.sceneKey);
+      if (R76B_PLATES.has(file) && !R76B_INSTALLED) continue;
       expect(existsSync(new URL(`${file}.png`, BACKDROPS)), `${c.id}: art/backdrops/${file}.png`).toBe(true);
     }
   });

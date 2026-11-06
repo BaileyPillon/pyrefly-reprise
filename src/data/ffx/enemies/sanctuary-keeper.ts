@@ -71,7 +71,7 @@ export function sanctuaryKeeper(): EnemyDef {
   return {
     id: SANCTUARY_KEEPER_ID,
     name: 'Sanctuary Keeper',
-    spriteKey: SANCTUARY_KEEPER_SPRITE, // `characters/sanctuary-keeper/` is owed (the art list in docs/handoff/ch-sanctuary-keeper.md); a tree without it draws the stage's fallback figure
+    spriteKey: SANCTUARY_KEEPER_SPRITE, // `characters/sanctuary-keeper/` is painted (r76b art install); a tree without it draws the stage's fallback figure
     slot: 0,
     stats,
     hp: stats.hp,

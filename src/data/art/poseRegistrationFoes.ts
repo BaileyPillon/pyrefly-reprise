@@ -159,6 +159,18 @@ export const POSE_REGISTRATION_FOES: PoseRegistrationTable = {
     idle: { stanceX: 139.5, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '96e9c1df626043f0' },
     ko: { status: 'ok', class: 'ko', stature: 0.383, lengthRatio: 0.97, iou: 0.038, sha: '11346022d4aafdec' },
   },
+  'gate-lock': {
+    idle: { stanceX: 52.5, upright: true, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '6a611c4f752c0d17' },
+    ko: { stanceX: 53.0, status: 'ok', class: 'ko', stature: 2.215, iou: 0.213, sha: 'e7759b941bbdc4dc' },
+  },
+  geosgaeno: {
+    attack: { stanceX: 633.5, feetRow: 756.0, status: 'waived', class: 'standing', stature: 1.039, iou: 0.56, sha: '8029e0ed503b1fe6' },
+    cast: { stanceX: 678.0, upright: true, status: 'ok', class: 'standing', stature: 0.942, iou: 0.558, sha: '4f8496a174b56f96' },
+    hold: { stanceX: 279.5, status: 'ok', class: 'standing', stature: 1.069, iou: 0.377, sha: 'd40a6a305f900ce4' },
+    hurt: { stanceX: 527.0, feetRow: 728.0, status: 'waived', class: 'standing', stature: 1.001, iou: 0.515, sha: '8affdf8a2f031fb8' },
+    idle: { stanceX: 466.5, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '8c9eed28978a6218' },
+    ko: { stanceX: 301.5, status: 'ok', class: 'ko', stature: 1.241, iou: 0.463, sha: 'c2673a4359ec9c49' },
+  },
   ginnem: {
     idle: { stanceX: 368.5, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '061d0021abc18af7' },
   },
@@ -309,6 +321,14 @@ export const POSE_REGISTRATION_FOES: PoseRegistrationTable = {
     idle: { stanceX: 908.0, upright: true, status: 'ok', class: 'idle', stature: 0.999, iou: 1, sha: '182a2084a3ee0d35' },
     ko: { status: 'ok', class: 'ko', stature: 0.687, lengthRatio: 1.623, iou: 0.221, sha: '3f075d336057c3c1' },
     overdrive: { stanceX: 272.5, upright: true, status: 'ok', class: 'standing', stature: 0.965, iou: 0.32, sha: '0534de30bd83be89' },
+  },
+  'sanctuary-keeper': {
+    attack: { stanceX: 238.0, upright: true, status: 'waived', class: 'standing', stature: 0.794, iou: 0.353, sha: '06383f2ae6465c74' },
+    cast: { stanceX: 205.5, upright: true, status: 'waived', class: 'standing', stature: 0.667, iou: 0.335, sha: '53e5765df6efc2ec' },
+    hurt: { stanceX: 228.0, status: 'waived', class: 'standing', stature: 1.241, iou: 0.42, sha: '3fb2b6e8f6ac0f06' },
+    idle: { stanceX: 234.0, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '4d749d43e49fe4a7' },
+    ko: { status: 'ok', class: 'ko', stature: 0.395, lengthRatio: 1.703, iou: 0.2, sha: '34c1edd51fca036c' },
+    wings: { stanceX: 176.0, status: 'waived', class: 'standing', stature: 1.259, iou: 0.262, sha: '1e703760c797cf00' },
   },
   sandy: {
     attack: { stanceX: 195.5, status: 'ok', class: 'standing', stature: 0.956, iou: 0.41, sha: '3fc23dc874f77fbd' },
@@ -496,6 +516,14 @@ export const POSE_REGISTRATION_FOES: PoseRegistrationTable = {
     hurt: { stanceX: 500, upright: true, status: 'waived', class: 'standing', stature: 1.035, iou: 0.791, sha: '074b52ee8500a210' },
     idle: { stanceX: 469.0, upright: true, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '111a492730493499' },
   },
+  'x2-baralai': {
+    attack: { stanceX: 278.5, status: 'waived', class: 'standing', stature: 0.687, iou: 0.437, sha: '053b67f6bd1d07e5' },
+    cast: { stanceX: 363.0, status: 'ok', class: 'standing', stature: 1, iou: 0.819, sha: '927c4c08f9d50346' },
+    glint: { stanceX: 500.5, status: 'ok', class: 'standing', stature: 0.995, iou: 0.45, sha: '5ae1ef870fbaef9b' },
+    hurt: { stanceX: 255.0, status: 'ok', class: 'standing', stature: 1.046, iou: 0.479, sha: '4a1f4961696b7267' },
+    idle: { stanceX: 275.5, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '881b9dd07d7edb1f' },
+    ko: { status: 'ok', class: 'ko', stature: 0.38, lengthRatio: 0.998, iou: 0.086, sha: '23961d8141308e62' },
+  },
   'x2-black-elemental': {
     attack: { stanceX: 390.0, status: 'ok', class: 'standing', stature: 0.985, iou: 0.579, sha: '49ef8cb4caed5873' },
     cast: { stanceX: 438.0, status: 'ok', class: 'standing', stature: 1.001, iou: 0.717, sha: '9d2125e10acea4a8' },
@@ -515,6 +543,12 @@ export const POSE_REGISTRATION_FOES: PoseRegistrationTable = {
     idle: { stanceX: 635.5, upright: true, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '45500d6b8f7ee219' },
     'idle-cracked': { stanceX: 585.0, upright: true, status: 'ok', class: 'standing', stature: 1, iou: 0.812, sha: '3e7535adca19a5e6' },
   },
+  'x2-georapella': {
+    cast: { stanceX: 393.5, status: 'waived', class: 'standing', stature: 1.194, iou: 0.343, sha: '1a057b6b3c416623' },
+    hurt: { stanceX: 527.0, feetRow: 728.0, status: 'waived', class: 'standing', stature: 1.001, iou: 0.515, sha: '8affdf8a2f031fb8' },
+    idle: { stanceX: 466.5, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '8c9eed28978a6218' },
+    ko: { stanceX: 301.5, status: 'ok', class: 'ko', stature: 1.241, iou: 0.463, sha: 'c2673a4359ec9c49' },
+  },
   'x2-ixion': {
     attack: { stanceX: 596.5, upright: true, status: 'ok', class: 'standing', stature: 0.999, iou: 0.364, sha: 'cb52a3caef3229bf' },
     cast: { stanceX: 571.5, upright: true, status: 'ok', class: 'standing', stature: 0.987, iou: 0.328, sha: '501f0dc7f5d8ea6a' },
@@ -522,6 +556,12 @@ export const POSE_REGISTRATION_FOES: PoseRegistrationTable = {
     idle: { stanceX: 635.5, upright: true, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: 'd24f15dfd00a5f14' },
     ko: { status: 'ok', class: 'ko', stature: 0.718, lengthRatio: 1.575, iou: 0.635, sha: '5347ba687c33f88f' },
     overdrive: { stanceX: 571.5, upright: true, status: 'ok', class: 'standing', stature: 0.987, iou: 0.328, sha: '721d4433cff32f4b' },
+  },
+  'x2-precepts-guard': {
+    cast: { stanceX: 376.5, feetRow: 1102.0, status: 'ok', class: 'standing', stature: 1.088, iou: 0.59, sha: '6bb637a070901f45' },
+    hurt: { scale: 1.02, stanceX: 376.5, feetRow: 908.0, status: 'ok', class: 'standing', stature: 0.91, iou: 0.596, sha: '9c7afb341dfdce7c' },
+    idle: { stanceX: 376.5, feetRow: 1014.0, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '52caec9b7365e46a' },
+    ko: { status: 'ok', class: 'ko', stature: 0.497, lengthRatio: 1.148, iou: 0.094, sha: 'b2abccaff03382d8' },
   },
   'x2-shiva': {
     attack: { stanceX: 407.0, status: 'ok', class: 'standing', stature: 1.055, iou: 0.362, sha: '85f90e2ab0f079d4' },

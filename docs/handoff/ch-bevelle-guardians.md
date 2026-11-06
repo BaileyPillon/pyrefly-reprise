@@ -6,6 +6,8 @@ Written 2026-11-06 by a Sonnet sub-agent of the release driver (plan row 37, wav
 
 Authority: Bailey, relayed by the driver, 2026-11-06 ~00:30 EST "implement all unimplemented chapters please", ~00:55 EST "yes on all these too"; 2026-10-31 "you make the executive decisions for the next few days. i'll go with all of your recommendations". **Every pick in section 5 is a driver's call, "his to overturn", with its alternative.**
 
+**UPDATE 2026-11-06 (r76b art install): Georapella, the Precepts Guard, the living Baralai and the pause plate are made, registered and wired** (Georapella is the Geosgaeno set under an FFX-2 key with a painted cast, the Precepts Guard the approved Spectral Keeper set under an FFX-2 key; `BARALAI_SPRITE` is now `x2-baralai`, no longer the Den of Woe shade; the driver's picks under Bailey's delegation, his to overturn): `docs/handoff/r76b-art-install.md`. Held: the two FFX-2 turn-list tiles (FFX-2 has no turn list), the card and thumbnail. The "stand-in" and "no painting yet" lines below describe the branch before the install. FFX-2 only.
+
 ## 1. Play it
 
 1. From the title, reach the chapter-select board. Type **`drillshot`** (any case, letters at most 2 s apart; the board shows no hint). It opens the chapter's party prep itself, with no card and no sound before it. The first letter D is the board's `right` key, so the cursor takes ONE step for it; the R is `r1` (ignored), the S is claimed by the word, the last letter T is bound to nothing. On a phone the long-press field on the "Chapter select" label takes the same word.

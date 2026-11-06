@@ -13,7 +13,8 @@
  * between the five Den fights (wiki-level, 4 sources): the second link carries the whole party state (`carriesFullPartyState`, the Den's GP3 a), and it is the retry checkpoint (`checkpointOnEntry`, the Den's GP4 b), so a
  * defeat by Paine retries Paine with the HP and MP Yuna entered with; a defeat by Rikku starts over. **Escape is off** on both (the fights are scripted).
  *
- * **Art:** no painting of the possession exists; the two fighters wear the party's own sets as stand-ins (`rikku`, `paine-warrior`), which the presenter mirrors to face the party. The sizes are the girls' own (the
+ * **Art (r76b art install, `docs/handoff/r76b-art-install.md`):** the two fighters wear `x2-possessed-rikku` and `x2-possessed-paine`, mirrored, cold-tinted copies of the party's own `rikku` and `paine-warrior` sets
+ * (they face left, so the presenter draws them as they are); the possession look is our invention, to show Bailey. A tree without the art draws the placeholder. The sizes are the girls' own (the
  * scene stands them at the party's world height, `src/scenes/den-of-woe.ts`).
  */
 

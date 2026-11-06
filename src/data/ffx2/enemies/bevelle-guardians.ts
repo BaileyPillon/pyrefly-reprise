@@ -19,8 +19,8 @@
  *
  * Confidence: [verified: the game's own table, read byte by byte by the RE lane and pinned by `tests/unit/chapters/bevelle-guardians-data.test.ts`; the party, the music and the art are stand-ins and estimates, each said where it is set].
  *
- * **Art:** Georapella and the Precepts Guard have no painting yet: the presenter draws its procedural placeholder for `x2-georapella` and `x2-precepts-guard`. Baralai stands in with the Den of Woe shade's painting
- * (`baralai-shade`) until the living Baralai is painted. The art list is in the handoff.
+ * **Art (r76b art install, `docs/handoff/r76b-art-install.md`):** `x2-georapella` (the Geosgaeno set under an FFX-2 key, with a painted cast), `x2-precepts-guard` (the approved Spectral Keeper set under an FFX-2 key)
+ * and `x2-baralai` (the living man, grown from the Den of Woe shade's set) are painted; a tree without the art draws the presenter's procedural placeholder.
  */
 
 import type { EnemyDef, EnemyGroupDef, StatusImmunities } from '../../../battle/common/types.ts';
@@ -188,7 +188,7 @@ export const x2PreceptsGuard: EnemyDef = {
 export const x2Baralai: EnemyDef = {
   id: X2_BARALAI_ID,
   name: 'Baralai',
-  spriteKey: BARALAI_SPRITE, // a flagged stand-in: the Den of Woe shade's painting until the living Baralai is painted
+  spriteKey: BARALAI_SPRITE, // `x2-baralai`: the living man (the Den of Woe shade's `baralai-shade` stood here before the r76b art install)
   slot: 0,
   stats: {
     hp: 3380, // [RE §4.1 row 175]

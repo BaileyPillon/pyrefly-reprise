@@ -10,7 +10,7 @@
  *   the build has learned none (Yuna owns the White Mage but has learned nothing of it). It is short enough to need no short form on the desktop card (a line model of the band, and a browser read).
  * - `quote` is Paine's line from the opening scene (`../story/scripts/ffx2-farplane-cup.ts`), our own.
  * - `objectives`: get past Auron (duel 2 reached), get past the second duelist (duel 3 reached, his name still masked), the win.
- * - `heroArt` is the pause plate `pause/ffx2-farplane-cup` (no painting yet: the Den of Woe's plate is the `heroArtFallback`, which the stage uses too).
+ * - `heroArt` is the pause plate `pause/ffx2-farplane-cup` (r76b art install: Auron, Tidus and Seymour on the Den's stage, a composite); the Den of Woe's plate is the `heroArtFallback` and the stage's own plate.
  * - `snapshots`: the Den of Woe's plate (the stand-in stage), Auron's idle (the first duelist) and Paine's FFX-2 portrait (approved).
  * - `musicKeys`: the field bed, the superboss cue (a flagged stand-in), the fanfare, as the record's.
  */
@@ -23,7 +23,7 @@ export const FARPLANE_CUP_META: ChapterMeta = {
   gameLabel: 'FFX-2',
   numeral: 'EXP',
   ...FARPLANE_CUP_TEXT,
-  heroArt: 'pause/ffx2-farplane-cup', // no painting yet: the fallback below shows
+  heroArt: 'pause/ffx2-farplane-cup', // painted by the r76b art install; the fallback below shows only if it is missing
   heroArtFallback: 'backdrops/den-of-woe.png',
   quote: { text: 'The first one carries a sword.', speaker: 'Paine' },
   handwritten: 'three names on a door. no rounds',

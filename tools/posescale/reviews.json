@@ -492,5 +492,29 @@
  },
  "spectral-keeper": {
   "hurt": 1.02
+ },
+ "evrae-altana": {
+  "attack": "=",
+  "breath-charge": "=",
+  "hurt": "=",
+  "idle-far": "=",
+  "idle-near": "=",
+  "ko": "="
+ },
+ "x2-precepts-guard": {
+  "hurt": 1.02
+ },
+ "x2-possessed-rikku": {
+  "attack": 0.734,
+  "cast": 1,
+  "hurt": 0.9,
+  "item": 1,
+  "ko": "="
+ },
+ "x2-possessed-paine": {
+  "attack": 1.014,
+  "cast": 1.185,
+  "hurt": 1.125,
+  "ko": 0.963
  }
 }

@@ -41,8 +41,22 @@ export const PHOTON_SPRAY_TWIN = 0x606b;
 /** The party of both links: Tidus (character 0), Wakka (4) and Rikku (6), with Switch off (RE 2.3). */
 export const SWIMMERS = ['tidus', 'wakka', 'rikku'] as const;
 
-/** The Via Purifico plate, standing in for all four places (the art list in the handoff: three derived water plates and a Baaj plate are owed). */
-export const FLOODED_PLATE = 'via-purifico';
+/**
+ * The plates of the four places (r76b art install, `docs/handoff/r76b-art-install.md`; `public/art/backdrops/<key>.png`, 2688 x 1536 with a 5376 x 3072 master): the three water variants of Chapter XIV's Via Purifico plate, one
+ * per area (the floor under a thin sheet, a water line at 0.56, submerged), and the Baaj Temple's own (pale stone, green light). Before the install every place wore the Via Purifico's dry plate (`FLOODED_PLATE_DRY`).
+ */
+export const FLOODED_PLATES = {
+  area1: 'via-purifico-flooded-1',
+  area2: 'via-purifico-flooded-2',
+  area3: 'via-purifico-flooded-3',
+  baaj: 'baaj-waterway',
+} as const;
+
+/** The plate the scene opens on, and the one the board, the party prep, the start card and the pause tab draw (`data/art/artNamespace.ts`, `SCENE_BACKDROP_FILE`): the first area's. */
+export const FLOODED_PLATE = FLOODED_PLATES.area1;
+
+/** The dry Via Purifico plate that stood in for all four places before the install (still Chapter XIV's own, and the fallback of the pause hero). */
+export const FLOODED_PLATE_DRY = 'via-purifico';
 
 /** One link of the chain, in order: the three areas of the Via Purifico, then the Baaj Temple. */
 export interface FloodedLink {
@@ -59,10 +73,10 @@ export interface FloodedLink {
 }
 
 export const FLOODED_LINKS: readonly FloodedLink[] = [
-  { key: 'area-1', groupId: 'flooded-area-1', formation: 'stbv00_10', bodyId: EVRAE_ALTANA_ID, headline: 'Evrae Altana', plate: FLOODED_PLATE, area: 1 },
-  { key: 'area-2', groupId: 'flooded-area-2', formation: 'stbv00_11', bodyId: EVRAE_ALTANA_ID, headline: 'Evrae Altana', plate: FLOODED_PLATE, area: 2 },
-  { key: 'area-3', groupId: 'flooded-area-3', formation: 'stbv00_12', bodyId: EVRAE_ALTANA_ID, headline: 'Evrae Altana', plate: FLOODED_PLATE, area: 3 },
-  { key: 'geosgaeno', groupId: 'flooded-geosgaeno', formation: 'bjyt02_02', bodyId: GEOSGAENO_ID, headline: 'Geosgaeno', plate: FLOODED_PLATE, area: 0 },
+  { key: 'area-1', groupId: 'flooded-area-1', formation: 'stbv00_10', bodyId: EVRAE_ALTANA_ID, headline: 'Evrae Altana', plate: FLOODED_PLATES.area1, area: 1 },
+  { key: 'area-2', groupId: 'flooded-area-2', formation: 'stbv00_11', bodyId: EVRAE_ALTANA_ID, headline: 'Evrae Altana', plate: FLOODED_PLATES.area2, area: 2 },
+  { key: 'area-3', groupId: 'flooded-area-3', formation: 'stbv00_12', bodyId: EVRAE_ALTANA_ID, headline: 'Evrae Altana', plate: FLOODED_PLATES.area3, area: 3 },
+  { key: 'geosgaeno', groupId: 'flooded-geosgaeno', formation: 'bjyt02_02', bodyId: GEOSGAENO_ID, headline: 'Geosgaeno', plate: FLOODED_PLATES.baaj, area: 0 },
 ];
 
 /** group id -> link, for the setup and the rules. */

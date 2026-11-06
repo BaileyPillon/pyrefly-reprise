@@ -6,6 +6,8 @@ Written 2026-11-06 by a Sonnet sub-agent of the release driver (wave 2, lane 36)
 
 Authority: Bailey, relayed by the driver, verbatim: "implement all unimplemented chapters please" (2026-11-06 about 00:30 EST), "yes on all these too" (about 00:55 EST) and, 2026-10-31, "you make the executive decisions for the next few days. i'll go with all of your recommendations." **Every pick in section 4 is the preflight's recommendation unless the row says otherwise; each is "driver's call, his to overturn", and the alternative is written beside it.**
 
+**UPDATE 2026-11-06 (r76b art install): the paintings and plates of the ART NEEDS list are made, registered and wired** (Evrae Altana as a bone, slate and green recolour of the airship Evrae, Geosgaeno, the Gate Lock closed and opened, the three flooded Via Purifico plates and the Baaj waterway plate, two turn-list faces and the pause plate `pause/ch36-flooded-ways`; the driver's picks under Bailey's delegation, his to overturn): `docs/handoff/r76b-art-install.md` has what is installed, the gate numbers, the waivers and what is held (the card and thumbnail; the stage heights; the plates on screen). Each link now names its own plate and the Via Purifico stage swaps to it at the seam. The "stand-in" and "owed" lines below describe the branch before the install. FFX only.
+
 ## 0. The fix pass after the adversarial review of 73bd97caa (2026-11-06; wave 2, lane 36; **FFX only**, the same case as the chapter)
 
 The review found one critical (C1), two majors (M1, M2) and nine minors (m1 to m9). Every critical and major is fixed; the minors are fixed where cheap and the rest are open issues (section 9).

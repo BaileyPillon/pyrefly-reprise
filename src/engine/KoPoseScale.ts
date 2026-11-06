@@ -39,6 +39,9 @@ export const KO_POSE_SCALE: Readonly<Record<string, number>> = {
   'yuna-gunner': 0.6,
   'yuna-black-mage': 0.66,
   'rikku-black-mage': 1.15,
+  // The possessed Rikku of the hidden Yuna's Ballad (FFX-2 only, r76b art install): a mirrored, tinted copy of the FFX Rikku set, whose KO is the same long picture, so it is drawn at Rikku's own 0.56. (The possessed
+  // Paine's KO carries its scale in its sidecar, as Paine's own does, so it needs no row.)
+  'x2-possessed-rikku': 0.56,
 };
 
 const CHARACTER_POSE = /\/art\/characters\/([^/]+)\/([^/.?#]+)\.png(?:[?#].*)?$/;

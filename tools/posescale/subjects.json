@@ -834,5 +834,63 @@
   "game": "foe",
   "rowFromBaseline": true,
   "note": "the hidden FFX Penance chapter 35, the Left Arm, a byte copy of the Right Arm set (r76 art install): no face box and no head reading"
+ },
+ "evrae-altana": {
+  "game": "ffx",
+  "face": [
+   10,
+   105,
+   150,
+   215
+  ],
+  "stance": "mass",
+  "note": "the hidden FFX Flooded Ways chapter 36, Evrae Altana (r76b art install): a recolour of the approved Evrae set with the approved alpha, so the face box, stance and readings are Evrae's"
+ },
+ "geosgaeno": {
+  "game": "foe",
+  "note": "the hidden FFX Flooded Ways chapter 36, Geosgaeno (r76b art install): a creature, so no face box and no head reading; the soles are read from the silhouette (the striking claw hangs below the tentacle ends in some poses)"
+ },
+ "gate-lock": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Flooded Ways chapter 36, the Gate Lock (r76b art install): a prop, closed (idle) and opened (ko); no face box and no head reading"
+ },
+ "sanctuary-keeper": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Sanctuary Keeper chapter 39 (r76b art install): a creature, so no face box and no head reading; the soles are the alpha baseline"
+ },
+ "x2-georapella": {
+  "game": "foe",
+  "note": "the hidden FFX-2 Bevelle Guardians chapter 37, Georapella (r76b art install): the Geosgaeno set under an FFX-2 key (idle, hurt, ko and the 2x master are byte copies) with a painted cast; no face box and no head reading; the soles are read from the silhouette, as Geosgaeno's are"
+ },
+ "x2-precepts-guard": {
+  "game": "foe",
+  "note": "the hidden FFX-2 Bevelle Guardians chapter 37, the Precepts Guard (r76b art install): byte copies of the approved Spectral Keeper set under an FFX-2 key, so its registration is the Keeper's (no rowFromBaseline: the thin talon tips hang below the claws)"
+ },
+ "x2-baralai": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Bevelle Guardians chapter 37, Baralai, the living man (r76b art install): grown from the Den of Woe shade's set and registered as the shade is (no face box, the soles are the alpha baseline)"
+ },
+ "x2-possessed-rikku": {
+  "game": "ffx2",
+  "face": [
+   332,
+   160,
+   456,
+   254
+  ],
+  "note": "the hidden FFX-2 Yuna's Ballad chapter 40, the possessed Rikku (r76b art install): the approved FFX Rikku set mirrored to face the party and tinted; the face box is Rikku's mirrored across the idle (648 wide); the readings and anchors are Rikku's mirrored"
+ },
+ "x2-possessed-paine": {
+  "game": "ffx2",
+  "face": [
+   174,
+   126,
+   278,
+   191
+  ],
+  "note": "the hidden FFX-2 Yuna's Ballad chapter 40, the possessed Paine (r76b art install): the approved FFX-2 Paine Warrior set mirrored to face the party and tinted; the face box is hers mirrored across the idle (408 wide); the readings and anchors are hers mirrored"
  }
 }

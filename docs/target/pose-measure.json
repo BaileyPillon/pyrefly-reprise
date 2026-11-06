@@ -3206,6 +3206,272 @@
     }
    }
   },
+  "evrae-altana": {
+   "game": "ffx",
+   "headsComplete": true,
+   "idleHead": [
+    10.0,
+    105.0,
+    150.0,
+    215.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      105.0,
+      245.0
+     ],
+     "baseline": 767.0,
+     "current": 1.0,
+     "head": [
+      35.8,
+      190.6,
+      174.2,
+      299.4
+     ],
+     "prone": true,
+     "reading": 1.0,
+     "ruled": {
+      "basis": "box",
+      "head": 1,
+      "headRatio": 1.011,
+      "height": 1.02177,
+      "lift": null,
+      "mean": 1.011,
+      "rule": "geomean/1",
+      "stature": 0.989
+     },
+     "scale": 1.011,
+     "scaleSrc": "ruled",
+     "sha": "fb640369451752164fded6e371454b09999c7681708aa64c4378a3bef3f39b43",
+     "size": [
+      1264,
+      784
+     ],
+     "stance": {
+      "row": 767.0,
+      "src": "mass",
+      "x": 833.5,
+      "x0": 24.0,
+      "x1": 1185.0
+     },
+     "standing": true,
+     "stature": 0.989
+    },
+    "breath-charge": {
+     "anchor": [
+      80.0,
+      160.0
+     ],
+     "baseline": 768.0,
+     "current": 1.0,
+     "head": [
+      10,
+      105,
+      150,
+      215
+     ],
+     "prone": true,
+     "reading": 1.0,
+     "ruled": {
+      "basis": "box",
+      "head": 1,
+      "headRatio": 1,
+      "height": 1,
+      "lift": null,
+      "mean": 1,
+      "rule": "geomean/1",
+      "stature": 1
+     },
+     "scale": 1,
+     "scaleSrc": "ruled",
+     "sha": "fbf7a5282666a4cba9b8e2296322049c67e84c2a279ccfaec95632b45ff7f612",
+     "size": [
+      1136,
+      784
+     ],
+     "stance": {
+      "row": 768.0,
+      "src": "mass",
+      "x": 770.9,
+      "x0": 0.0,
+      "x1": 1120.0
+     },
+     "standing": true,
+     "stature": 1
+    },
+    "hurt": {
+     "anchor": [
+      125.0,
+      150.0
+     ],
+     "baseline": 858.0,
+     "current": 1.0,
+     "head": [
+      52.5,
+      93,
+      197.5,
+      207
+     ],
+     "prone": true,
+     "reading": 1.0,
+     "ruled": {
+      "basis": "box",
+      "head": 1,
+      "headRatio": 0.965,
+      "height": 0.93061,
+      "lift": null,
+      "mean": 0.965,
+      "rule": "geomean/1",
+      "stature": 1.037
+     },
+     "scale": 0.965,
+     "scaleSrc": "ruled",
+     "sha": "2c70b283d5fbb220c659596e7eadf79fdc456b57e2e1af28b76569dd0546675f",
+     "size": [
+      1136,
+      874
+     ],
+     "stance": {
+      "row": 858.0,
+      "src": "mass",
+      "x": 770.3,
+      "x0": 0.0,
+      "x1": 1120.0
+     },
+     "standing": true,
+     "stature": 1.037
+    },
+    "idle": {
+     "anchor": [
+      80.0,
+      160.0
+     ],
+     "baseline": 768.0,
+     "head": [
+      10.0,
+      105.0,
+      150.0,
+      215.0
+     ],
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "2580cd3cada96c3c5b2799e802fbead31d0c688e6c22c6256a0650d3776bfb37",
+     "size": [
+      1136,
+      784
+     ],
+     "stance": {
+      "row": 768.0,
+      "src": "mass",
+      "x": 770.9,
+      "x0": 0.0,
+      "x1": 1120.0
+     },
+     "standing": true
+    },
+    "idle-far": {
+     "anchor": [
+      100.0,
+      100.0
+     ],
+     "baseline": 459.0,
+     "current": 1.0,
+     "head": [
+      30.0,
+      45.0,
+      170.0,
+      155.0
+     ],
+     "prone": true,
+     "reading": 1.0,
+     "scale": 1.0,
+     "scaleSrc": "noise",
+     "sha": "1b13d15e79c14981bfae7670c4096eaf260d03d11c2c396fb5290fa726a4aab2",
+     "size": [
+      1024,
+      477
+     ],
+     "stance": null,
+     "standing": false
+    },
+    "idle-near": {
+     "anchor": [
+      80.0,
+      160.0
+     ],
+     "baseline": 768.0,
+     "current": 1.0,
+     "head": [
+      10,
+      105,
+      150,
+      215
+     ],
+     "prone": true,
+     "reading": 1.0,
+     "ruled": {
+      "basis": "box",
+      "head": 1,
+      "headRatio": 1,
+      "height": 1,
+      "lift": null,
+      "mean": 1,
+      "rule": "geomean/1",
+      "stature": 1
+     },
+     "scale": 1,
+     "scaleSrc": "ruled",
+     "sha": "2580cd3cada96c3c5b2799e802fbead31d0c688e6c22c6256a0650d3776bfb37",
+     "size": [
+      1136,
+      784
+     ],
+     "stance": {
+      "row": 768.0,
+      "src": "mass",
+      "x": 770.9,
+      "x0": 0.0,
+      "x1": 1120.0
+     },
+     "standing": true,
+     "stature": 1
+    },
+    "ko": {
+     "anchor": [
+      110.0,
+      600.0
+     ],
+     "baseline": 688.0,
+     "current": 1.65,
+     "head": [
+      67.6,
+      566.7,
+      152.4,
+      633.3
+     ],
+     "prone": false,
+     "reading": 1.65,
+     "scale": 1.65,
+     "scaleSrc": "noise",
+     "sha": "bd5758467feb8556114f5d13be68dcc8bd7a438bbfd53ea9482c37a3e0f46b67",
+     "size": [
+      550,
+      704
+     ],
+     "stance": {
+      "row": 688.0,
+      "src": "mass",
+      "x": 288.4,
+      "x0": 52.0,
+      "x1": 534.0
+     },
+     "standing": true,
+     "stature": 1.472
+    }
+   }
+  },
   "ffx2-bahamut": {
    "game": "foe",
    "headsComplete": false,
@@ -3646,6 +3912,223 @@
      ],
      "stance": null,
      "standing": false
+    }
+   }
+  },
+  "gate-lock": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 378.0,
+     "prone": true,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "6a611c4f752c0d172347e97aa5c8222e1d72f72888b1701f710a4bbcedcfdfa9",
+     "size": [
+      659,
+      394
+     ],
+     "stance": {
+      "row": 378.0,
+      "src": "silhouette",
+      "x": 52.5,
+      "x0": 28.0,
+      "x1": 77.0
+     },
+     "standing": true
+    },
+    "ko": {
+     "anchor": [
+      55.4,
+      732.5
+     ],
+     "baseline": 837.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "e7759b941bbdc4dc3014a658402a1d9e54a4e7789afb433f9264bb0ff08ca86f",
+     "size": [
+      414,
+      854
+     ],
+     "stance": {
+      "row": 837.0,
+      "src": "silhouette",
+      "x": 53.0,
+      "x0": 21.0,
+      "x1": 85.0
+     },
+     "standing": true
+    }
+   }
+  },
+  "geosgaeno": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      477.3,
+      118.5
+     ],
+     "baseline": 799.0,
+     "feetRowKept": {
+      "by": "r76b art install (a Sonnet sub-agent of the release driver), 2026-11-06, read by eye on the painting",
+      "why": "the striking claw hangs 5.5 percent of the painting below the tentacle ends, so the row of the soles is above the alpha baseline by design"
+     },
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "8029e0ed503b1fe632116a57e7010a1785e5a7ee932e3c00f0d357f9db5839d1",
+     "size": [
+      886,
+      820
+     ],
+     "stance": {
+      "row": 756.0,
+      "src": "silhouette",
+      "x": 633.5,
+      "x0": 573.0,
+      "x1": 694.0
+     },
+     "standing": true
+    },
+    "cast": {
+     "anchor": [
+      823.5,
+      217.3
+     ],
+     "baseline": 686.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "4f8496a174b56f96acee334331c26b1e389026916a3dda2b2adfd26891dc7c0e",
+     "size": [
+      971,
+      703
+     ],
+     "stance": {
+      "row": 686.0,
+      "src": "silhouette",
+      "x": 678.0,
+      "x0": 611.0,
+      "x1": 745.0
+     },
+     "standing": true
+    },
+    "hold": {
+     "anchor": [
+      296.9,
+      42.5
+     ],
+     "baseline": 776.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "d40a6a305f900ce426c844ccfef098b4645c87f669e91918e63b11d99d29d9cc",
+     "size": [
+      792,
+      792
+     ],
+     "stance": {
+      "row": 774.0,
+      "src": "silhouette",
+      "x": 279.5,
+      "x0": 188.0,
+      "x1": 371.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      374.4,
+      68.5
+     ],
+     "baseline": 746.0,
+     "feetRowKept": {
+      "by": "r76b art install (a Sonnet sub-agent of the release driver), 2026-11-06, read by eye on the painting",
+      "why": "the striking claw hangs 2.4 percent of the painting below the tentacle ends, so the row of the soles is above the alpha baseline by design"
+     },
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "8affdf8a2f031fb818226a4701edd36103246365e3c29ee255e10eb8f7ce33e4",
+     "size": [
+      793,
+      762
+     ],
+     "stance": {
+      "row": 728.0,
+      "src": "silhouette",
+      "x": 527.0,
+      "x0": 422.0,
+      "x1": 632.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 727.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "8c9eed28978a6218f0fb58ba5d75088e0ca0526b3c307ddbf0f63ce10c01b3be",
+     "size": [
+      823,
+      744
+     ],
+     "stance": {
+      "row": 728.0,
+      "src": "silhouette",
+      "x": 466.5,
+      "x0": 393.0,
+      "x1": 540.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "ko": {
+     "anchor": [
+      254.4,
+      20.5
+     ],
+     "baseline": 898.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "c2673a4359ec9c498b0ca2d224fe132a40bfd0620162f6fa330acbb13331bf54",
+     "size": [
+      660,
+      914
+     ],
+     "stance": {
+      "row": 898.0,
+      "src": "silhouette",
+      "x": 301.5,
+      "x0": 191.0,
+      "x1": 412.0
+     },
+     "standing": true
     }
    }
   },
@@ -18087,6 +18570,151 @@
     }
    }
   },
+  "sanctuary-keeper": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      935.3,
+      182.2
+     ],
+     "baseline": 567.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "06383f2ae6465c749889a494aaa6c54a58af123f9e519ec9e0868871702c9ce4",
+     "size": [
+      1101,
+      586
+     ],
+     "stance": {
+      "row": 567.0,
+      "src": "silhouette",
+      "x": 238.0,
+      "x0": 202.0,
+      "x1": 274.0
+     },
+     "standing": true
+    },
+    "cast": {
+     "anchor": [
+      624.0,
+      155.2
+     ],
+     "baseline": 478.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "53e5765df6efc2ec9fab808645f6b08c778672e5c711504f7f10ebadad955b90",
+     "size": [
+      739,
+      496
+     ],
+     "stance": {
+      "row": 478.0,
+      "src": "silhouette",
+      "x": 205.5,
+      "x0": 130.0,
+      "x1": 281.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      602.7,
+      200.5
+     ],
+     "baseline": 878.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "3fb2b6e8f6ac0f068f8303577b23febab2668b3b8cfe52d9fdd4516e56911873",
+     "size": [
+      805,
+      896
+     ],
+     "stance": {
+      "row": 878.0,
+      "src": "silhouette",
+      "x": 228.0,
+      "x0": 189.0,
+      "x1": 267.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 711.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "4d749d43e49fe4a710b7e6b91a9709eb6044e99c5af2694c361c8a9deedd0e46",
+     "size": [
+      670,
+      728
+     ],
+     "stance": {
+      "row": 711.0,
+      "src": "silhouette",
+      "x": 234.0,
+      "x0": 197.0,
+      "x1": 271.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "ko": {
+     "anchor": [
+      1029.1,
+      99.7
+     ],
+     "baseline": 288.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "34c1edd51fca036c989898afb357f7f62cfe62f4878469b69028f10ccde1639a",
+     "size": [
+      1210,
+      311
+     ],
+     "stance": null,
+     "standing": false
+    },
+    "wings": {
+     "anchor": [
+      627.9,
+      200.5
+     ],
+     "baseline": 893.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "1e703760c797cf00515dad245c3c9439744782024a76113f0209739a9f16cc5e",
+     "size": [
+      713,
+      911
+     ],
+     "stance": {
+      "row": 893.0,
+      "src": "silhouette",
+      "x": 176.0,
+      "x0": 79.0,
+      "x1": 273.0
+     },
+     "standing": true
+    }
+   }
+  },
   "sandy": {
    "game": "foe",
    "headsComplete": false,
@@ -22314,6 +22942,151 @@
     }
    }
   },
+  "x2-baralai": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      112.8,
+      20.5
+     ],
+     "baseline": 717.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "053b67f6bd1d07e549311377f3f4a46f35cb6ecd4921d5695e96fa74a188da72",
+     "size": [
+      635,
+      733
+     ],
+     "stance": {
+      "row": 717.0,
+      "src": "silhouette",
+      "x": 278.5,
+      "x0": 238.0,
+      "x1": 319.0
+     },
+     "standing": true
+    },
+    "cast": {
+     "anchor": [
+      266.5,
+      40.5
+     ],
+     "baseline": 1032.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "927c4c08f9d5034684bccf2c18ad8f670fd28a8a0b815b3a184de2e960ca2c69",
+     "size": [
+      575,
+      1048
+     ],
+     "stance": {
+      "row": 1032.0,
+      "src": "silhouette",
+      "x": 363.0,
+      "x0": 332.0,
+      "x1": 394.0
+     },
+     "standing": true
+    },
+    "glint": {
+     "anchor": [
+      337.8,
+      28.5
+     ],
+     "baseline": 1027.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "5ae1ef870fbaef9b1867014464da9f691d498af2f16970a2d3e18e30bc3bbe6e",
+     "size": [
+      615,
+      1043
+     ],
+     "stance": {
+      "row": 1027.0,
+      "src": "silhouette",
+      "x": 500.5,
+      "x0": 457.0,
+      "x1": 544.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      297.2,
+      96.5
+     ],
+     "baseline": 1081.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "4a1f4961696b72674301b4b4d20ed7d8e47d2295f0788e31928e22c9e0d1472a",
+     "size": [
+      508,
+      1097
+     ],
+     "stance": {
+      "row": 1081.0,
+      "src": "silhouette",
+      "x": 255.0,
+      "x0": 225.0,
+      "x1": 285.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 1032.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "881b9dd07d7edb1f8fa9e3be1a00e272863e7d11a06133598c8a450e414a04ed",
+     "size": [
+      479,
+      1048
+     ],
+     "stance": {
+      "row": 1032.0,
+      "src": "silhouette",
+      "x": 275.5,
+      "x0": 244.0,
+      "x1": 307.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "ko": {
+     "anchor": [
+      888.0,
+      132.1
+     ],
+     "baseline": 403.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "23961d8141308e625e01a84bb30005b47760dbace96c27a28143a22a05c05489",
+     "size": [
+      1046,
+      419
+     ],
+     "stance": null,
+     "standing": false
+    }
+   }
+  },
   "x2-black-elemental": {
    "game": "foe",
    "headsComplete": false,
@@ -22644,6 +23417,115 @@
     }
    }
   },
+  "x2-georapella": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "cast": {
+     "anchor": [
+      457.1,
+      128.5
+     ],
+     "baseline": 865.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "1a057b6b3c4166231f888087da0dcfc5b7a2c414a16913db35c8ef0cad5d2f9b",
+     "size": [
+      968,
+      881
+     ],
+     "stance": {
+      "row": 862.0,
+      "src": "silhouette",
+      "x": 393.5,
+      "x0": 373.0,
+      "x1": 414.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      374.4,
+      68.5
+     ],
+     "baseline": 746.0,
+     "feetRowKept": {
+      "by": "r76b art install (a Sonnet sub-agent of the release driver), 2026-11-06, read by eye on the painting",
+      "why": "the striking claw hangs 2.4 percent of the painting below the tentacle ends, so the row of the soles is above the alpha baseline by design"
+     },
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "8affdf8a2f031fb818226a4701edd36103246365e3c29ee255e10eb8f7ce33e4",
+     "size": [
+      793,
+      762
+     ],
+     "stance": {
+      "row": 728.0,
+      "src": "silhouette",
+      "x": 527.0,
+      "x0": 422.0,
+      "x1": 632.0
+     },
+     "standing": true
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 727.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "8c9eed28978a6218f0fb58ba5d75088e0ca0526b3c307ddbf0f63ce10c01b3be",
+     "size": [
+      823,
+      744
+     ],
+     "stance": {
+      "row": 728.0,
+      "src": "silhouette",
+      "x": 466.5,
+      "x0": 393.0,
+      "x1": 540.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "ko": {
+     "anchor": [
+      254.4,
+      20.5
+     ],
+     "baseline": 898.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "c2673a4359ec9c498b0ca2d224fe132a40bfd0620162f6fa330acbb13331bf54",
+     "size": [
+      660,
+      914
+     ],
+     "stance": {
+      "row": 898.0,
+      "src": "silhouette",
+      "x": 301.5,
+      "x0": 191.0,
+      "x1": 412.0
+     },
+     "standing": true
+    }
+   }
+  },
   "x2-ixion": {
    "game": "foe",
    "headsComplete": false,
@@ -22785,6 +23667,550 @@
       "x1": 754.0
      },
      "standing": true
+    }
+   }
+  },
+  "x2-possessed-paine": {
+   "game": "ffx2",
+   "headsComplete": true,
+   "idleHead": [
+    174.0,
+    126.0,
+    278.0,
+    191.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      507.0,
+      118.0
+     ],
+     "baseline": 823.0,
+     "current": 1.15,
+     "head": [
+      466.4,
+      92.6,
+      547.6,
+      143.4
+     ],
+     "held": {
+      "by": "the W3 sizing rule (pick 89e, the release driver), under Bailey 2026-10-16: \"pose continuity is the strongest recurring issue we need a permanent fix for this please.\" and his standing \"I'll go with all of your recommendations\"",
+      "headRatio": 1.264,
+      "reading": 1.014,
+      "readingStature": 0.712,
+      "stature": 0.9
+     },
+     "prone": false,
+     "reading": 1.014,
+     "ruled": {
+      "basis": "box",
+      "head": 1.014,
+      "headRatio": 1.264,
+      "height": 1.42432,
+      "lift": "floor",
+      "mean": 1.202,
+      "rule": "geomean/1",
+      "stature": 0.9
+     },
+     "scale": 1.282,
+     "scaleSrc": "held",
+     "sha": "6658816d73545a5ad6bbbe6aa4622ff76557cb7e4ba2f53dde8e87c65f7b0ab4",
+     "size": [
+      937,
+      840
+     ],
+     "stance": {
+      "row": 824.0,
+      "src": "silhouette",
+      "x": 587.0,
+      "x0": 259.0,
+      "x1": 915.0
+     },
+     "standing": true,
+     "stature": 0.9
+    },
+    "cast": {
+     "anchor": [
+      255.0,
+      220.0
+     ],
+     "baseline": 945.0,
+     "current": 1.09,
+     "head": [
+      212,
+      193.1,
+      298,
+      246.9
+     ],
+     "prone": false,
+     "reading": 1.185,
+     "ruled": {
+      "basis": "box",
+      "head": 1.185,
+      "headRatio": 1.021,
+      "height": 1.23574,
+      "lift": null,
+      "mean": 1.21,
+      "rule": "geomean/1",
+      "stature": 0.979
+     },
+     "scale": 1.21,
+     "scaleSrc": "ruled",
+     "sha": "deed11d234498fc1418c65ad6f78b5ee3fde288c0739293c6b3b5ceafae06382",
+     "size": [
+      587,
+      961
+     ],
+     "stance": {
+      "row": 946.0,
+      "src": "silhouette",
+      "x": 232.5,
+      "x0": 138.0,
+      "x1": 327.0
+     },
+     "standing": true,
+     "stature": 0.979
+    },
+    "hurt": {
+     "anchor": [
+      506.0,
+      107.0
+     ],
+     "baseline": 847.0,
+     "current": 1.25,
+     "head": [
+      464.3,
+      80.9,
+      547.7,
+      133.1
+     ],
+     "prone": false,
+     "reading": 1.125,
+     "ruled": {
+      "basis": "box",
+      "head": 1.125,
+      "headRatio": 1.108,
+      "height": 1.38313,
+      "lift": null,
+      "mean": 1.247,
+      "rule": "geomean/1",
+      "stature": 0.902
+     },
+     "scale": 1.247,
+     "scaleSrc": "ruled",
+     "sha": "bc8a34413654fef1780b3d875e7f8611e478cac1f4c3eec7dda9b6ed0bf01bb3",
+     "size": [
+      744,
+      863
+     ],
+     "stance": {
+      "row": 848.0,
+      "src": "silhouette",
+      "x": 432.0,
+      "x0": 298.0,
+      "x1": 566.0
+     },
+     "standing": true,
+     "stature": 0.902
+    },
+    "idle": {
+     "anchor": [
+      226.0,
+      158.5
+     ],
+     "baseline": 1164.0,
+     "head": [
+      174.0,
+      126.0,
+      278.0,
+      191.0
+     ],
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "8876e49f77f6891eae1a6490d1e3e4a9a9d35bd0cb3a64c5b4b8d53ff9b61a40",
+     "size": [
+      408,
+      1180
+     ],
+     "stance": {
+      "row": 1164.0,
+      "src": "silhouette",
+      "x": 240.5,
+      "x0": 116.0,
+      "x1": 365.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "ko": {
+     "anchor": [
+      278.0,
+      150.0
+     ],
+     "baseline": 397.0,
+     "current": 1.0,
+     "head": [
+      224.0,
+      116.3,
+      332.0,
+      183.7
+     ],
+     "prone": true,
+     "reading": 0.963,
+     "scale": 0.963,
+     "scaleSrc": "reviewed",
+     "sha": "ad1684a6c0b8c11adacbd8fd5b20b54552e7fbbc5233b1933cd14d5598a69410",
+     "size": [
+      1198,
+      411
+     ],
+     "stance": null,
+     "standing": false
+    }
+   }
+  },
+  "x2-possessed-rikku": {
+   "game": "ffx2",
+   "headsComplete": true,
+   "idleHead": [
+    332.0,
+    160.0,
+    456.0,
+    254.0
+   ],
+   "poses": {
+    "attack": {
+     "anchor": [
+      372.0,
+      260.0
+     ],
+     "baseline": 1188.0,
+     "current": 1.0,
+     "head": [
+      297.7,
+      203.7,
+      446.3,
+      316.3
+     ],
+     "held": {
+      "by": "the W3 sizing rule (pick 89e, the release driver), under Bailey 2026-10-16: \"pose continuity is the strongest recurring issue we need a permanent fix for this please.\" and his standing \"I'll go with all of your recommendations\"",
+      "headRatio": 1.138,
+      "reading": 0.734,
+      "readingStature": 0.792,
+      "stature": 0.901
+     },
+     "prone": false,
+     "reading": 0.734,
+     "ruled": {
+      "basis": "box",
+      "head": 0.734,
+      "headRatio": 1.138,
+      "height": 0.92681,
+      "lift": "floor",
+      "mean": 0.825,
+      "rule": "geomean/1",
+      "stature": 0.901
+     },
+     "scale": 0.835,
+     "scaleSrc": "held",
+     "sha": "f2df93992ffb34688bfd14da61e7fd654b07757dd267c12d1e77b5d6c3359ba7",
+     "size": [
+      772,
+      1204
+     ],
+     "stance": {
+      "row": 1188.0,
+      "src": "silhouette",
+      "x": 410.5,
+      "x0": 209.0,
+      "x1": 612.0
+     },
+     "standing": true,
+     "stature": 0.901
+    },
+    "cast": {
+     "anchor": [
+      285.0,
+      210.0
+     ],
+     "baseline": 1053.0,
+     "current": 1.0,
+     "head": [
+      224.5,
+      164.1,
+      345.5,
+      255.9
+     ],
+     "prone": false,
+     "reading": 1.0,
+     "ruled": {
+      "basis": "box",
+      "head": 1,
+      "headRatio": 1.025,
+      "height": 1.05014,
+      "lift": null,
+      "mean": 1.025,
+      "rule": "geomean/1",
+      "stature": 0.976
+     },
+     "scale": 1.025,
+     "scaleSrc": "ruled",
+     "sha": "32834483fb1a230b70f9c912d58230a3401b8310d7dc7e0353b43a483b247984",
+     "size": [
+      475,
+      1069
+     ],
+     "stance": {
+      "row": 1054.0,
+      "src": "silhouette",
+      "x": 279.0,
+      "x0": 150.0,
+      "x1": 408.0
+     },
+     "standing": true,
+     "stature": 0.976
+    },
+    "hurt": {
+     "anchor": [
+      144.0,
+      155.0
+     ],
+     "baseline": 1135.0,
+     "current": 1.0,
+     "head": [
+      77.7,
+      104.7,
+      210.3,
+      205.3
+     ],
+     "prone": false,
+     "reading": 0.9,
+     "ruled": {
+      "basis": "box",
+      "head": 0.9,
+      "headRatio": 1.039,
+      "height": 0.97232,
+      "lift": null,
+      "mean": 0.935,
+      "rule": "geomean/1",
+      "stature": 0.962
+     },
+     "scale": 0.935,
+     "scaleSrc": "ruled",
+     "sha": "56fa7d1bd4952eb64414186685c196983e9629bf7cb348f059267aca0cf178dc",
+     "size": [
+      419,
+      1151
+     ],
+     "stance": {
+      "row": 1136.0,
+      "src": "silhouette",
+      "x": 237.5,
+      "x0": 143.0,
+      "x1": 332.0
+     },
+     "standing": true,
+     "stature": 0.962
+    },
+    "idle": {
+     "anchor": [
+      394.0,
+      207.0
+     ],
+     "baseline": 1104.0,
+     "head": [
+      332.0,
+      160.0,
+      456.0,
+      254.0
+     ],
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "c6340aa964ef22c752138edc28f1b23194934ebcdfc27c729e05abe2eb757ea0",
+     "size": [
+      648,
+      1120
+     ],
+     "stance": {
+      "row": 1104.0,
+      "src": "silhouette",
+      "x": 390.0,
+      "x0": 284.0,
+      "x1": 496.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "item": {
+     "anchor": [
+      233.0,
+      130.0
+     ],
+     "baseline": 1143.0,
+     "current": 1.0,
+     "head": [
+      169.9,
+      82.2,
+      296.1,
+      177.8
+     ],
+     "prone": false,
+     "reading": 1.0,
+     "ruled": {
+      "basis": "box",
+      "head": 1,
+      "headRatio": 0.983,
+      "height": 0.96628,
+      "lift": null,
+      "mean": 0.983,
+      "rule": "geomean/1",
+      "stature": 1.017
+     },
+     "scale": 0.983,
+     "scaleSrc": "ruled",
+     "sha": "ab5dee7d9c47254b50d6712c6b9ccf16d7a806b590769bbedee6b408abe86f5f",
+     "size": [
+      400,
+      1159
+     ],
+     "stance": {
+      "row": 1144.0,
+      "src": "silhouette",
+      "x": 236.0,
+      "x0": 143.0,
+      "x1": 329.0
+     },
+     "standing": true,
+     "stature": 1.017
+    },
+    "ko": {
+     "anchor": [
+      166.0,
+      150.0
+     ],
+     "baseline": 450.0,
+     "current": 0.56,
+     "head": [
+      55.3,
+      66.1,
+      276.7,
+      233.9
+     ],
+     "prone": true,
+     "reading": 0.56,
+     "scale": 0.56,
+     "scaleSrc": "noise",
+     "sha": "ad26bf45bdfea52e40860ebe00b6b7416333a8bf81f52e24ace1959f63110861",
+     "size": [
+      1216,
+      467
+     ],
+     "stance": null,
+     "standing": false
+    }
+   }
+  },
+  "x2-precepts-guard": {
+   "game": "foe",
+   "headsComplete": false,
+   "idleHead": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "poses": {
+    "cast": {
+     "anchor": [
+      374.5,
+      78.5
+     ],
+     "baseline": 1110.0,
+     "prone": false,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "6bb637a070901f459d6cd2c2704534bb998966afaf9cf9969f5ba1c9f39f6db7",
+     "size": [
+      706,
+      1127
+     ],
+     "stance": {
+      "row": 1102.0,
+      "src": "silhouette",
+      "x": 376.5,
+      "x0": 136.0,
+      "x1": 617.0
+     },
+     "standing": true
+    },
+    "hurt": {
+     "anchor": [
+      659.0,
+      32.5
+     ],
+     "baseline": 915.0,
+     "current": 1.0,
+     "prone": false,
+     "reading": 1.02,
+     "scale": 1.02,
+     "scaleSrc": "reviewed",
+     "sha": "9c7afb341dfdce7c89073357ae3fa9f4231192fc0f9707c96c7cdee2a2ef5d6c",
+     "size": [
+      932,
+      932
+     ],
+     "stance": {
+      "row": 908.0,
+      "src": "silhouette",
+      "x": 376.5,
+      "x0": 141.0,
+      "x1": 612.0
+     },
+     "standing": true,
+     "stature": 0.912
+    },
+    "idle": {
+     "anchor": [
+      0.5,
+      0.5
+     ],
+     "baseline": 1022.0,
+     "prone": false,
+     "scale": 1.0,
+     "scaleSrc": "reference",
+     "sha": "52caec9b7365e46af60747409da2fde101fb683ec2f246a6a9db3700145fe066",
+     "size": [
+      799,
+      1039
+     ],
+     "stance": {
+      "row": 1014.0,
+      "src": "silhouette",
+      "x": 376.5,
+      "x0": 138.0,
+      "x1": 615.0
+     },
+     "standing": true,
+     "stature": 1.0
+    },
+    "ko": {
+     "anchor": [
+      996.4,
+      166.3
+     ],
+     "baseline": 511.0,
+     "prone": true,
+     "scale": null,
+     "scaleSrc": "unreviewed",
+     "sha": "b2abccaff03382d89a554ddfa5ea2ac422155740805b9db83516adaf204fd37d",
+     "size": [
+      1172,
+      533
+     ],
+     "stance": null,
+     "standing": false
     }
    }
   },

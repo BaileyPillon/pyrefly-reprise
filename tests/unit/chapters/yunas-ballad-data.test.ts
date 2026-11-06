@@ -257,9 +257,9 @@ describe('the chain: two formations, HP and MP carried (YB1, YB2)', () => {
     expect(ids.POSSESSED_PAINE_SCRIPT_ID).toBe(x2PossessedPaine.aiScriptId);
   });
 
-  it('the stand-in paintings are the party\'s own sets (rikku, paine-warrior), mirrored by the presenter to face the party, with no tint (a plain stand-in)', () => {
-    expect([x2PossessedRikku.spriteKey, x2PossessedPaine.spriteKey]).toEqual(['rikku', 'paine-warrior']);
-    expect([x2PossessedRikku.forms[0]!.spriteKey, x2PossessedPaine.forms[0]!.spriteKey]).toEqual(['rikku', 'paine-warrior']);
+  it('the paintings are the possessed sets (r76b art install): `x2-possessed-rikku` and `x2-possessed-paine`, mirrored and cold-tinted copies of the party\'s own sets that already face left (no longer the party\'s `rikku` and `paine-warrior`, which the presenter mirrored)', () => {
+    expect([x2PossessedRikku.spriteKey, x2PossessedPaine.spriteKey]).toEqual(['x2-possessed-rikku', 'x2-possessed-paine']);
+    expect([x2PossessedRikku.forms[0]!.spriteKey, x2PossessedPaine.forms[0]!.spriteKey]).toEqual(['x2-possessed-rikku', 'x2-possessed-paine']);
   });
 });
 

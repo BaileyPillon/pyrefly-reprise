@@ -66,7 +66,7 @@ export function geosgaeno(): EnemyDef {
   return {
     id: GEOSGAENO_ID,
     name: 'Geosgaeno',
-    spriteKey: GEOSGAENO_ID, // `characters/geosgaeno/` is owed (the handoff's art list); the stage draws its fallback figure until it exists
+    spriteKey: GEOSGAENO_ID, // `characters/geosgaeno/` is painted (r76b art install); a tree without the art draws the stage's fallback figure
     slot: 0,
     stats,
     hp: stats.hp,
@@ -101,7 +101,7 @@ export function evraeAltana(): EnemyDef {
   return {
     id: EVRAE_ALTANA_ID,
     name: 'Evrae Altana',
-    spriteKey: 'evrae', // the airship Evrae's painting stands in (RE 1.1: the game's Altana is a skeletal model of its own); `characters/evrae-altana/` is owed, the handoff's art list
+    spriteKey: EVRAE_ALTANA_ID, // `characters/evrae-altana/` (r76b art install): a bone, slate and green recolour of the airship Evrae's set (RE 1.1: the game's Altana is a skeletal model of its own); the airship Evrae's `evrae` stood here before
     slot: 0,
     stats,
     hp: stats.hp,
@@ -109,7 +109,7 @@ export function evraeAltana(): EnemyDef {
     affinities: { holy: 'weak' },
     immunities: { ...at(ALTANA_IMMUNE), darkness: 50, slow: 50 },
     immunityFlags: ['boss', 'immune-to-life', 'immune-to-bribe'] satisfies ImmunityFlag[],
-    forms: [{ name: 'Evrae Altana', spriteKey: 'evrae', hp: stats.hp }],
+    forms: [{ name: 'Evrae Altana', spriteKey: EVRAE_ALTANA_ID, hp: stats.hp }],
     aiScriptId: FLOODED_SCRIPTS.evrae,
     rewards: {
       ap: 5_800,
@@ -138,7 +138,7 @@ export function gateLock(index: 0 | 1): EnemyDef {
   return {
     id,
     name: GATE_LOCK_NAME,
-    spriteKey: 'gate-lock', // one painting serves both (they wear one model, RE 1.1); owed
+    spriteKey: 'gate-lock', // one painting serves both (they wear one model, RE 1.1): `idle` is the closed lock, `ko` the opened one (r76b art install)
     slot: index + 1,
     stats,
     hp: stats.hp,

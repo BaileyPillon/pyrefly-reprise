@@ -23,7 +23,7 @@ import { MIRROR_ACT_I_PLATE, MIRROR_AEONS_SCENE } from '../ffx/mirror-aeons-ids.
 import { SPECTRAL_KEEPER_SCENE } from '../ffx/spectral-keeper-ids.ts';
 import { DARK_AEONS_SCENE, DARK_SIX_PLATES } from '../ffx/dark-aeons-six-ids.ts';
 import { PENANCE_SCENE } from '../ffx/penance-ids.ts';
-import { FLOODED_WAYS_SCENE } from '../ffx/flooded-ways-ids.ts';
+import { FLOODED_PLATE, FLOODED_WAYS_SCENE } from '../ffx/flooded-ways-ids.ts';
 import { SANCTUARY_KEEPER_SCENE } from '../ffx/sanctuary-keeper-ids.ts';
 import { EXP_YRP_SCENE } from '../yrp-ids.ts';
 import { EXP_WINDWAKER_SCENE } from '../windwaker-ids.ts';
@@ -55,7 +55,7 @@ export function artNamespaceOfScene(sceneKey: string | undefined): ArtNamespace 
 export const SCENE_BACKDROP_FILE: Readonly<Record<string, string>> = {
   [MIRROR_AEONS_SCENE]: MIRROR_ACT_I_PLATE,
   [DARK_AEONS_SCENE]: DARK_SIX_PLATES.valefor, // the hidden Dark Aeons' stage is one scene with seven plates (2026-11-06, FFX only): no file is named `dark-aeons`, so the board, party prep and the start card paint the first link's plate
-  [FLOODED_WAYS_SCENE]: 'via-purifico', // the hidden Flooded Ways' stage is Chapter XIV's Via Purifico plate (2026-11-06, FFX only): no file of its own, and the art mirror is not written into
+  [FLOODED_WAYS_SCENE]: FLOODED_PLATE, // the hidden Flooded Ways' stage is Chapter XIV's Via Purifico stage with four plates of its own (2026-11-06, FFX only): no file is named `flooded-ways`, so the board, party prep, the start card and the pause tab paint the first area's plate
   [SPECTRAL_KEEPER_SCENE]: 'zanarkand-dome', // the hidden Spectral Keeper's stage is Chapter II's Dome plate (2026-11-02, FFX only): no file of its own, and the art mirror is not written into
   [PENANCE_SCENE]: 'evrae-airship-deck', // the hidden Penance chapter's stage is Chapter VIII's deck plate (2026-11-06, FFX only): no file of its own, and the art mirror is not written into
   [SANCTUARY_KEEPER_SCENE]: 'gagazet', // the hidden Sanctuary Keeper's stage is Chapter I's Mt. Gagazet plate (2026-11-06, FFX only): no file of its own, and the art mirror is not written into

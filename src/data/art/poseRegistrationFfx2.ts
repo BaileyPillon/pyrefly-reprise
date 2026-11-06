@@ -267,6 +267,21 @@ export const POSE_REGISTRATION_FFX2: PoseRegistrationTable = {
     sleep: { scale: 0.916, stanceX: 406.0, head: [0.6731, 0.3233, 0.7992, 0.3761], status: 'ok', class: 'low', stature: 0.873, headReal: 1.144, iou: 0.481, sha: '2c214fde6191b0b4' },
     victory: { scale: 1.122, stanceX: 155.5, head: [0.4219, 0.22, 0.6466, 0.2628], status: 'ok', class: 'standing', stature: 1.074, headReal: 1.02, iou: 0.464, sha: '6de2c4719c3c3327' },
   },
+  'x2-possessed-paine': {
+    attack: { scale: 1.282, stanceX: 587.0, head: [0.4978, 0.1102, 0.5844, 0.1707], status: 'held', class: 'standing', stature: 0.899, headReal: 1.263, iou: 0.185, sha: '6658816d73545a5a' },
+    cast: { scale: 1.21, stanceX: 232.5, head: [0.3612, 0.2009, 0.5077, 0.2569], status: 'ok', class: 'standing', stature: 0.978, headReal: 1.02, iou: 0.451, sha: 'deed11d234498fc1' },
+    hurt: { scale: 1.247, stanceX: 432.0, head: [0.6241, 0.0937, 0.7362, 0.1542], status: 'ok', class: 'standing', stature: 0.901, headReal: 1.107, iou: 0.268, sha: 'bc8a34413654fef1' },
+    idle: { stanceX: 240.5, head: [0.4265, 0.1068, 0.6814, 0.1619], status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '8876e49f77f6891e' },
+    ko: { scale: 0.985, head: [0.187, 0.283, 0.2771, 0.447], status: 'ok', class: 'ko', stature: 0.315, headReal: 1, lengthRatio: 0.991, iou: 0.112, sha: 'ad1684a6c0b8c11a' },
+  },
+  'x2-possessed-rikku': {
+    attack: { scale: 0.835, stanceX: 410.5, head: [0.3856, 0.1692, 0.5781, 0.2627], status: 'held', class: 'standing', stature: 0.901, headReal: 1.138, iou: 0.417, sha: 'f2df93992ffb3468' },
+    cast: { scale: 1.025, stanceX: 279.0, head: [0.4726, 0.1535, 0.7274, 0.2394], status: 'ok', class: 'standing', stature: 0.975, headReal: 1.024, iou: 0.458, sha: '32834483fb1a230b' },
+    hurt: { scale: 0.935, stanceX: 237.5, head: [0.1854, 0.091, 0.5019, 0.1784], status: 'ok', class: 'standing', stature: 0.961, headReal: 1.039, iou: 0.398, sha: '56fa7d1bd4952eb6' },
+    idle: { stanceX: 390.0, head: [0.5123, 0.1429, 0.7037, 0.2268], status: 'ok', class: 'idle', stature: 1, iou: 1, sha: 'c6340aa964ef22c7' },
+    item: { scale: 0.983, stanceX: 236.0, head: [0.4248, 0.0709, 0.7403, 0.1534], status: 'ok', class: 'standing', stature: 1.017, headReal: 0.983, iou: 0.479, sha: 'ab5dee7d9c47254b' },
+    ko: { scale: 0.573, head: [0.0455, 0.1415, 0.2275, 0.5009], status: 'ok', class: 'ko', stature: 0.218, headReal: 1, lengthRatio: 0.616, iou: 0.08, sha: 'ad26bf45bdfea52e' },
+  },
   'yuna-black-mage': {
     attack: { scale: 0.977, stanceX: 672.0, head: [0.4343, 0.1623, 0.5607, 0.2257], status: 'ok', class: 'standing', stature: 1.016, headReal: 0.982, iou: 0.135, sha: '8f044f65e5606f69' },
     cast: { scale: 0.967, stanceX: 345.5, head: [0.3842, 0.1395, 0.5166, 0.2036], status: 'ok', class: 'standing', stature: 1.005, headReal: 0.994, iou: 0.468, sha: '796eec370deb9860' },

@@ -18,7 +18,7 @@ export const SANCTUARY_KEEPER_GROUP_ID = 'sanctuary-keeper' as const;
 export const SANCTUARY_KEEPER_ID = 'sanctuary-keeper' as const;
 
 /**
- * The painting's key (`public/art/characters/<key>/`). **Not painted yet** (the stage draws its boss-silhouette stand-in); the key is fixed here so the painting drops in without a code change.
+ * The painting's key (`public/art/characters/<key>/`), painted by the r76b art install (`docs/handoff/r76b-art-install.md`: idle, wings, attack, cast, hurt, ko and the idle master); a tree without the art draws the stage's boss-silhouette stand-in.
  * Th'uban (`m282`, program row 54, the wiki's colour swap of this monster) is meant to reuse the same painting.
  */
 export const SANCTUARY_KEEPER_SPRITE = 'sanctuary-keeper' as const;

@@ -10,7 +10,8 @@
  *   on the two-Phoenix-Down route, where Evrae Altana falls in the first area and the chain goes straight on to Geosgaeno, the Baaj row ticks and so does the first gate (the first area is over, its gate passed), and
  *   the label says only that, not that a second gate was played.
  * - `tip` and `handwritten` are our own words over the research's sourced rules (RE 2.2, 4.1, 4.3): stone breaks in the water, the dead take damage from healing, and the swallowed one can strike back from inside.
- * - `heroArt` is the pause plate `pause/ch36-flooded-ways` (not made yet: the art list in the handoff); `heroArtFallback`, an existing approved plate of the Via Purifico, shows meanwhile.
+ * - `heroArt` is the pause plate `pause/ch36-flooded-ways` (r76b art install: Evrae Altana over the second area's water plate with Geosgaeno at the right, a gathering and not a scene of the fight); `heroArtFallback`, an existing approved plate of the Via Purifico, shows only if it is missing.
+ * - `snapshots` are the chapter's own paintings (three, as the pause tab lays them out): the first area's water plate, Evrae Altana and Geosgaeno.
  * - `musicKeys` are the cues the chapter plays: the bed, the stand-in boss cue and the FFX fanfare.
  */
 
@@ -38,9 +39,9 @@ export const FLOODED_WAYS_META: ChapterMeta = {
   ],
   tip: 'A gaze that lands shatters its victim in the water. Healing hurts the dead one. Swallowed? Strike from inside.',
   snapshots: [
-    { image: 'backdrops/via-purifico.png', caption: 'the flooded way' },
-    { image: 'characters/evrae/idle.png', caption: 'what guards the gates' },
-    { image: 'characters/rikku/idle.png', caption: 'and one who swims faster than the rest' },
+    { image: 'backdrops/via-purifico-flooded-1.png', caption: 'the flooded way' },
+    { image: 'characters/evrae-altana/idle.png', caption: 'what guards the gates' },
+    { image: 'characters/geosgaeno/idle.png', caption: 'and what waits in the temple' },
   ],
   focalCharacterId: 'rikku',
   musicKeys: ['scene-gagazet', 'battle-ffx', 'victory-ffx'],

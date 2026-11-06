@@ -10794,6 +10794,541 @@
     "mtime": "2026-11-06T09:59:38.688Z",
     "delegated": "2026-11-06"
    }
+  },
+  "driver:2026-11-06-wave2-chapters-art (items 220m and 220n, delegated by Bailey)": {
+   "words": "Bailey, 2026-11-06 ~00:30 EST: \"implement all unimplemented chapters please\"; ~00:55 EST: \"yes on all these too\" (building every researched boss he never picked); 2026-10-31: \"you make the executive decisions for the next few days. i'll go with all of your recommendations.\"",
+   "decision": "item 220m (a new boss takes the FAITHFUL reading of the game model: image to image over a render of the real model, no options round) and item 220n (the driver accepted the wave-2 paintings) of the driver's list, under the delegation of 2026-10-31 and 2026-11-06; the D-number is owed by the records pass",
+   "note": "DRIVER CALL, delegated by Bailey; not Bailey's own approval of the pictures. The paintings of the wave-2 hidden chapters, made 2026-11-06 in D:/Tools/pyrefly-scratch/2026-11-06/art-w2 (stage/MANIFEST.md, stage/provenance.json): the hidden FFX Flooded Ways (chapter 36, FFX only: Evrae Altana, a bone, slate and green recolour of the approved Evrae set with the approved alpha; Geosgaeno idle, hold, cast (the swallow), attack, hurt, ko and idle@2x; the Gate Lock closed (idle) and opened (ko); the three water variants of the Via Purifico plate and the Baaj waterway plate with their 2x masters; three turn-list faces; the pause plate), the hidden FFX Sanctuary Keeper (chapter 39, FFX only: idle, wings, attack, cast, hurt, ko and idle@2x; a face; the pause plate), the hidden FFX-2 Bevelle Guardians (chapter 37, FFX-2 only: Georapella, the Geosgaeno set under an FFX-2 key with a painted cast; the Precepts Guard, byte copies of the approved Spectral Keeper set under an FFX-2 key; Baralai, the living man; the pause plate), the hidden FFX-2 Yuna's Ballad (chapter 40, FFX-2 only: the possessed Rikku and Paine, mirrored and tinted copies of the approved Rikku and Paine Warrior sets; the pause plate) and the hidden FFX-2 Farplane Cup (chapter 38, FFX-2 only: the pause plate). Each is the game model's own frame painted image to image at the idle's pixel scale (the recolours and copies are pixel operations on approved sets); the plates are deterministic composites and water passes over approved backdrops, and the Baaj plate a green-graded txt2img. Each pin is the sha256 of the staged file, which is the candidate byte for byte. New files, nothing replaced, so nothing was archived. The two FFX-2 turn-list tiles (Georapella, Precepts Guard) are held: FFX-2 has no turn list. The chapter cards and thumbnails are not made (read by no code until the board lists the chapters).",
+   "public/art/backdrops/baaj-waterway.png": {
+    "sha256": "d815f150555596965bd8db4b14ee5460f46c6f97568702d994d34601c095563a",
+    "mtime": "2026-11-06T15:25:30.654Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/backdrops/baaj-waterway@2x.png": {
+    "sha256": "6f18e938bcb8ea663702ec98953db625af0dee37596c056ea442c422cd764490",
+    "mtime": "2026-11-06T15:25:46.872Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/backdrops/via-purifico-flooded-1.png": {
+    "sha256": "c508c2b57c930400dc52d322cb4c1d32c4a3766818fadebcfee8d1a0eb407191",
+    "mtime": "2026-11-06T14:45:10.693Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/backdrops/via-purifico-flooded-1@2x.png": {
+    "sha256": "540825f79c750f5cadfd41ff453dc25eaa856690c60d32632e4f7144f40aa8d2",
+    "mtime": "2026-11-06T14:58:02.170Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/backdrops/via-purifico-flooded-2.png": {
+    "sha256": "1c23a82227baa4af31ebe35d998b9012d3e364fffd425a51b639e7639a64da6d",
+    "mtime": "2026-11-06T14:45:17.588Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/backdrops/via-purifico-flooded-2@2x.png": {
+    "sha256": "dca8e932421ab6cba7489b5076b693b812f0c7c5bcd464f6cbd7db8c45a935ca",
+    "mtime": "2026-11-06T14:58:23.636Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/backdrops/via-purifico-flooded-3.png": {
+    "sha256": "ec30432e9d982ee565095b186f967ab789ffc96e262d1b660fda0dc8a17ec5d4",
+    "mtime": "2026-11-06T14:45:56.440Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/backdrops/via-purifico-flooded-3@2x.png": {
+    "sha256": "3cce26d11f456440873c477e3f05f2ad2e9e0cc33766d5dd610c0dcbf563adc5",
+    "mtime": "2026-11-06T14:58:45.008Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/attack.png": {
+    "sha256": "fb640369451752164fded6e371454b09999c7681708aa64c4378a3bef3f39b43",
+    "mtime": "2026-11-06T14:33:06.190Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/attack@2x.png": {
+    "sha256": "3b5ead5b287a1d035838c1f94e5758ee7fd4da6778fc94fca6442cb7646ab8ae",
+    "mtime": "2026-11-06T14:33:08.488Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/attack@3x.png": {
+    "sha256": "61ff0f0f36763cffb0e324f9508bbc162951ec002f29cc0d9707d43fdbce6fd4",
+    "mtime": "2026-11-06T14:33:13.853Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/attack@4x.png": {
+    "sha256": "fdfab4c12ca11d17a154061baedefb23aae2be9d96f4f188b19ea3ad922ff6df",
+    "mtime": "2026-11-06T14:33:23.704Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/breath-charge.png": {
+    "sha256": "fbf7a5282666a4cba9b8e2296322049c67e84c2a279ccfaec95632b45ff7f612",
+    "mtime": "2026-11-06T14:33:24.508Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/breath-charge@2x.png": {
+    "sha256": "d76a0ffcc0bbf45168d21f82fa46c4af44a38039999fd38bcfe1406cf6d5f0fc",
+    "mtime": "2026-11-06T14:33:26.526Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/breath-charge@3x.png": {
+    "sha256": "002092ec4cb75968edb4b005bdebe9d2cc544092cbf304acefa9511655275ba2",
+    "mtime": "2026-11-06T14:33:31.240Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/breath-charge@4x.png": {
+    "sha256": "54390ec2c4874714d7ce06d36f9174b543d30519120447a1bc49aa6dd6f724d7",
+    "mtime": "2026-11-06T14:33:39.618Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/hurt.png": {
+    "sha256": "2c70b283d5fbb220c659596e7eadf79fdc456b57e2e1af28b76569dd0546675f",
+    "mtime": "2026-11-06T14:33:40.381Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/hurt@2x.png": {
+    "sha256": "7a6af2421cb330b65b0086ef8022479d28a58d04b01f0832bdfc6ec3f510557a",
+    "mtime": "2026-11-06T14:33:42.402Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/hurt@3x.png": {
+    "sha256": "dfc32c734d91fb6ddcc43614894e38a0f036a2286c1a2414355c68b5d7aa5e0b",
+    "mtime": "2026-11-06T14:33:47.020Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/hurt@4x.png": {
+    "sha256": "385033e3d9cd84ad6bcd4d23cf987f1e7c90f33150b589864190e423ce16358f",
+    "mtime": "2026-11-06T14:33:55.604Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/idle-far.png": {
+    "sha256": "1b13d15e79c14981bfae7670c4096eaf260d03d11c2c396fb5290fa726a4aab2",
+    "mtime": "2026-11-06T14:33:56.118Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/idle-far@2x.png": {
+    "sha256": "ba41c0a33c39eb6f72eb26477143e72748e5cec0ff04bb4db57c5cc7f9195283",
+    "mtime": "2026-11-06T14:33:57.101Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/idle-near.png": {
+    "sha256": "2580cd3cada96c3c5b2799e802fbead31d0c688e6c22c6256a0650d3776bfb37",
+    "mtime": "2026-11-06T14:33:57.750Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/idle-near@2x.png": {
+    "sha256": "f962648e6813af8718690802e0c004224796aebabfdeb784d2df5b5e7613f2e8",
+    "mtime": "2026-11-06T14:33:59.803Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/idle-near@3x.png": {
+    "sha256": "95b351bb61d0dbf93f96c7f2bbbe72901222d17a41c0e7994dbf7fe72dae97f1",
+    "mtime": "2026-11-06T14:34:04.321Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/idle-near@4x.png": {
+    "sha256": "25673f8bfffba43f1407e5dd7e6e1b031e4e2caa60ddff3b8b19260c336fe607",
+    "mtime": "2026-11-06T14:34:12.900Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/idle.png": {
+    "sha256": "2580cd3cada96c3c5b2799e802fbead31d0c688e6c22c6256a0650d3776bfb37",
+    "mtime": "2026-11-06T14:34:13.660Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/idle@2x.png": {
+    "sha256": "796a223e1ecd750ac659cd001226929eafd6555488733e4e6b3e8adad9feda7e",
+    "mtime": "2026-11-06T14:34:15.830Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/idle@3x.png": {
+    "sha256": "95b351bb61d0dbf93f96c7f2bbbe72901222d17a41c0e7994dbf7fe72dae97f1",
+    "mtime": "2026-11-06T14:34:20.558Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/idle@4x.png": {
+    "sha256": "25673f8bfffba43f1407e5dd7e6e1b031e4e2caa60ddff3b8b19260c336fe607",
+    "mtime": "2026-11-06T14:34:29.345Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/ko.png": {
+    "sha256": "bd5758467feb8556114f5d13be68dcc8bd7a438bbfd53ea9482c37a3e0f46b67",
+    "mtime": "2026-11-06T14:34:29.962Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/ko@2x.png": {
+    "sha256": "5d04d9af4707f6e07f24ed881de9aad9710a959db8430e8f89a7fec3ec1122e0",
+    "mtime": "2026-11-06T14:34:31.097Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/ko@3x.png": {
+    "sha256": "71770acb6b36bb234a55c4275631d5368e9ad475ceeb8fb4810e5ebe03d23582",
+    "mtime": "2026-11-06T14:34:33.277Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/evrae-altana/ko@4x.png": {
+    "sha256": "421f951e932ce0540d2ac3db18aa9f5f606ef80624a43f2b7882ccc2b5f38da1",
+    "mtime": "2026-11-06T14:34:36.841Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/gate-lock/idle.png": {
+    "sha256": "6a611c4f752c0d172347e97aa5c8222e1d72f72888b1701f710a4bbcedcfdfa9",
+    "mtime": "2026-11-06T14:57:13.176Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/gate-lock/ko.png": {
+    "sha256": "e7759b941bbdc4dc3014a658402a1d9e54a4e7789afb433f9264bb0ff08ca86f",
+    "mtime": "2026-11-06T14:57:18.040Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/geosgaeno/attack.png": {
+    "sha256": "8029e0ed503b1fe632116a57e7010a1785e5a7ee932e3c00f0d357f9db5839d1",
+    "mtime": "2026-11-06T14:54:29.183Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/geosgaeno/cast.png": {
+    "sha256": "4f8496a174b56f96acee334331c26b1e389026916a3dda2b2adfd26891dc7c0e",
+    "mtime": "2026-11-06T14:49:40.249Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/geosgaeno/hold.png": {
+    "sha256": "d40a6a305f900ce426c844ccfef098b4645c87f669e91918e63b11d99d29d9cc",
+    "mtime": "2026-11-06T14:49:26.073Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/geosgaeno/hurt.png": {
+    "sha256": "8affdf8a2f031fb818226a4701edd36103246365e3c29ee255e10eb8f7ce33e4",
+    "mtime": "2026-11-06T14:49:30.696Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/geosgaeno/idle.png": {
+    "sha256": "8c9eed28978a6218f0fb58ba5d75088e0ca0526b3c307ddbf0f63ce10c01b3be",
+    "mtime": "2026-11-06T14:55:41.458Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/geosgaeno/idle@2x.png": {
+    "sha256": "c58e3016129fb892656547c321dc14c3be8b6a5f51f8e49df19ed7a9b17fd55d",
+    "mtime": "2026-11-06T14:58:54.014Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/geosgaeno/ko.png": {
+    "sha256": "c2673a4359ec9c498b0ca2d224fe132a40bfd0620162f6fa330acbb13331bf54",
+    "mtime": "2026-11-06T14:49:35.540Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/sanctuary-keeper/attack.png": {
+    "sha256": "06383f2ae6465c749889a494aaa6c54a58af123f9e519ec9e0868871702c9ce4",
+    "mtime": "2026-11-06T14:51:35.411Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/sanctuary-keeper/cast.png": {
+    "sha256": "53e5765df6efc2ec9fab808645f6b08c778672e5c711504f7f10ebadad955b90",
+    "mtime": "2026-11-06T14:51:39.135Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/sanctuary-keeper/hurt.png": {
+    "sha256": "3fb2b6e8f6ac0f068f8303577b23febab2668b3b8cfe52d9fdd4516e56911873",
+    "mtime": "2026-11-06T14:54:49.389Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/sanctuary-keeper/idle.png": {
+    "sha256": "4d749d43e49fe4a710b7e6b91a9709eb6044e99c5af2694c361c8a9deedd0e46",
+    "mtime": "2026-11-06T14:51:27.684Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/sanctuary-keeper/idle@2x.png": {
+    "sha256": "3398f8e8a468fa7bf998f2d8b1d9e91bfb8174a6d4a54bb54418d0d3cf2a6c6b",
+    "mtime": "2026-11-06T14:58:53.986Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/sanctuary-keeper/ko.png": {
+    "sha256": "34c1edd51fca036c989898afb357f7f62cfe62f4878469b69028f10ccde1639a",
+    "mtime": "2026-11-06T14:51:46.421Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/sanctuary-keeper/wings.png": {
+    "sha256": "1e703760c797cf00515dad245c3c9439744782024a76113f0209739a9f16cc5e",
+    "mtime": "2026-11-06T14:51:31.541Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-baralai/attack.png": {
+    "sha256": "053b67f6bd1d07e549311377f3f4a46f35cb6ecd4921d5695e96fa74a188da72",
+    "mtime": "2026-11-06T15:24:56.615Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-baralai/cast.png": {
+    "sha256": "927c4c08f9d5034684bccf2c18ad8f670fd28a8a0b815b3a184de2e960ca2c69",
+    "mtime": "2026-11-06T15:20:09.095Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-baralai/glint.png": {
+    "sha256": "5ae1ef870fbaef9b1867014464da9f691d498af2f16970a2d3e18e30bc3bbe6e",
+    "mtime": "2026-11-06T15:20:08.082Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-baralai/hurt.png": {
+    "sha256": "4a1f4961696b72674301b4b4d20ed7d8e47d2295f0788e31928e22c9e0d1472a",
+    "mtime": "2026-11-06T15:20:02.177Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-baralai/idle.png": {
+    "sha256": "881b9dd07d7edb1f8fa9e3be1a00e272863e7d11a06133598c8a450e414a04ed",
+    "mtime": "2026-11-06T15:14:38.521Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-baralai/idle@2x.png": {
+    "sha256": "99763275c3ac2b945b2b6edc17de1209755120c558d0aec8cd652c10d9c4b4b8",
+    "mtime": "2026-11-06T15:20:22.232Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-baralai/ko.png": {
+    "sha256": "23961d8141308e625e01a84bb30005b47760dbace96c27a28143a22a05c05489",
+    "mtime": "2026-11-06T15:20:08.580Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-georapella/cast.png": {
+    "sha256": "1a057b6b3c4166231f888087da0dcfc5b7a2c414a16913db35c8ef0cad5d2f9b",
+    "mtime": "2026-11-06T15:03:24.718Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-georapella/hurt.png": {
+    "sha256": "8affdf8a2f031fb818226a4701edd36103246365e3c29ee255e10eb8f7ce33e4",
+    "mtime": "2026-11-06T14:49:30.696Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-georapella/idle.png": {
+    "sha256": "8c9eed28978a6218f0fb58ba5d75088e0ca0526b3c307ddbf0f63ce10c01b3be",
+    "mtime": "2026-11-06T14:55:41.458Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-georapella/idle@2x.png": {
+    "sha256": "c58e3016129fb892656547c321dc14c3be8b6a5f51f8e49df19ed7a9b17fd55d",
+    "mtime": "2026-11-06T14:58:54.014Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-georapella/ko.png": {
+    "sha256": "c2673a4359ec9c498b0ca2d224fe132a40bfd0620162f6fa330acbb13331bf54",
+    "mtime": "2026-11-06T14:49:35.540Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-paine/attack.png": {
+    "sha256": "6658816d73545a5ad6bbbe6aa4622ff76557cb7e4ba2f53dde8e87c65f7b0ab4",
+    "mtime": "2026-11-06T14:48:50.570Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-paine/attack@2x.png": {
+    "sha256": "d700e4aa1558de3797d5f642b978408c760e5521d62cf59e1f7579bb4755e986",
+    "mtime": "2026-11-06T14:48:53.684Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-paine/cast.png": {
+    "sha256": "deed11d234498fc1418c65ad6f78b5ee3fde288c0739293c6b3b5ceafae06382",
+    "mtime": "2026-11-06T14:48:54.790Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-paine/cast@2x.png": {
+    "sha256": "baae7b04fb45959655466119adba1f9dfe628615210eb03923dce6a683c538da",
+    "mtime": "2026-11-06T14:48:56.967Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-paine/hurt.png": {
+    "sha256": "bc8a34413654fef1780b3d875e7f8611e478cac1f4c3eec7dda9b6ed0bf01bb3",
+    "mtime": "2026-11-06T14:48:57.964Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-paine/hurt@2x.png": {
+    "sha256": "8bff9feee651466cc9ba85954b46fc08358ff518da85b8b3874d482783ab7ca1",
+    "mtime": "2026-11-06T14:49:00.412Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-paine/idle.png": {
+    "sha256": "8876e49f77f6891eae1a6490d1e3e4a9a9d35bd0cb3a64c5b4b8d53ff9b61a40",
+    "mtime": "2026-11-06T14:48:36.103Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-paine/idle@2x.png": {
+    "sha256": "bfaaed1c77717ac8d22c8213d9487e97f470bcc3a239512b99db4d4b5e6abd02",
+    "mtime": "2026-11-06T14:48:38.145Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-paine/idle@3x.png": {
+    "sha256": "8a57717d3f4fc883c31dd2e53eb48af031d1e56d8ebe1e849438debc615bf612",
+    "mtime": "2026-11-06T14:48:42.156Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-paine/idle@4x.png": {
+    "sha256": "e0d5a660241b70bf4540ed8f2628c04957995c3c6090c1990ec58daac8e7bf9d",
+    "mtime": "2026-11-06T14:48:49.280Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-paine/ko.png": {
+    "sha256": "ad1684a6c0b8c11adacbd8fd5b20b54552e7fbbc5233b1933cd14d5598a69410",
+    "mtime": "2026-11-06T14:49:01.487Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-paine/ko@2x.png": {
+    "sha256": "9eda1d3408a7d735d0e1416d4c8fa69d02519a49e127d1e2a7bad9dd2ce4170e",
+    "mtime": "2026-11-06T14:49:03.311Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-rikku/attack.png": {
+    "sha256": "f2df93992ffb34688bfd14da61e7fd654b07757dd267c12d1e77b5d6c3359ba7",
+    "mtime": "2026-11-06T14:48:17.847Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-rikku/attack@2x.png": {
+    "sha256": "80d1dbdb72e72934362b4a65e63edaa955b921c6061307d853f725cb08e80ce4",
+    "mtime": "2026-11-06T14:48:21.504Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-rikku/cast.png": {
+    "sha256": "32834483fb1a230b70f9c912d58230a3401b8310d7dc7e0353b43a483b247984",
+    "mtime": "2026-11-06T14:48:22.963Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-rikku/cast@2x.png": {
+    "sha256": "ce9d42e23e59a565e14b22b14bd5329cbbc6f678e68b37f5727feaca7b7a4792",
+    "mtime": "2026-11-06T14:48:25.179Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-rikku/hurt.png": {
+    "sha256": "56fa7d1bd4952eb64414186685c196983e9629bf7cb348f059267aca0cf178dc",
+    "mtime": "2026-11-06T14:48:29.285Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-rikku/hurt@2x.png": {
+    "sha256": "c8fb7400ce5a6469d86c664ab23dc9f1287308b6eb867661729325127673d5f3",
+    "mtime": "2026-11-06T14:48:31.523Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-rikku/idle.png": {
+    "sha256": "c6340aa964ef22c752138edc28f1b23194934ebcdfc27c729e05abe2eb757ea0",
+    "mtime": "2026-11-06T14:47:57.632Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-rikku/idle@2x.png": {
+    "sha256": "7dbe2f76e7bd8b1576d26cf077e2b0e9eda1f3d115379dd3bb7f22d035c29107",
+    "mtime": "2026-11-06T14:48:00.477Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-rikku/idle@3x.png": {
+    "sha256": "5e5243ced1b46d92e310eb61b4cbaa82d65935e5c7c7466b11f4f87d8689f485",
+    "mtime": "2026-11-06T14:48:06.428Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-rikku/idle@4x.png": {
+    "sha256": "6faa990311f1a408d596cd43d942d92f138b7c395f4d558bcb7abdbfd4f65683",
+    "mtime": "2026-11-06T14:48:16.312Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-rikku/item.png": {
+    "sha256": "ab5dee7d9c47254b50d6712c6b9ccf16d7a806b590769bbedee6b408abe86f5f",
+    "mtime": "2026-11-06T14:48:26.208Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-rikku/item@2x.png": {
+    "sha256": "b1b28fb227a8ab58851f6cd2dcd7c20ece07eaacf282f5e1f44f997eac73f7be",
+    "mtime": "2026-11-06T14:48:28.240Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-rikku/ko.png": {
+    "sha256": "ad26bf45bdfea52e40860ebe00b6b7416333a8bf81f52e24ace1959f63110861",
+    "mtime": "2026-11-06T14:48:32.775Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-possessed-rikku/ko@2x.png": {
+    "sha256": "43162019680a8816a1fc04d07980423b97839f1814bff21a1b5ad1a0cc7523c8",
+    "mtime": "2026-11-06T14:48:35.049Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-precepts-guard/cast.png": {
+    "sha256": "6bb637a070901f459d6cd2c2704534bb998966afaf9cf9969f5ba1c9f39f6db7",
+    "mtime": "2026-11-03T06:57:51.704Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-precepts-guard/hurt.png": {
+    "sha256": "9c7afb341dfdce7c89073357ae3fa9f4231192fc0f9707c96c7cdee2a2ef5d6c",
+    "mtime": "2026-11-03T06:57:52.389Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-precepts-guard/idle.png": {
+    "sha256": "52caec9b7365e46af60747409da2fde101fb683ec2f246a6a9db3700145fe066",
+    "mtime": "2026-11-03T05:12:12.880Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-precepts-guard/idle@2x.png": {
+    "sha256": "fcb61dfa02b3e1c55f5c13063802a9cef6513d5c9cd096aaafeecb34cfdf6917",
+    "mtime": "2026-11-03T06:08:02.188Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/x2-precepts-guard/ko.png": {
+    "sha256": "b2abccaff03382d89a554ddfa5ea2ac422155740805b9db83516adaf204fd37d",
+    "mtime": "2026-11-03T06:57:53.074Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/pause/ch36-flooded-ways.2x.webp": {
+    "sha256": "4a7d73d0c74bef5afca8483ad206428b96b2fe9300fc77ebf92995cfaaaac2ad",
+    "mtime": "2026-11-06T15:25:18.803Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/pause/ch36-flooded-ways.png": {
+    "sha256": "c5cb65133e525676d0e649220b5f7f827d70f234d3989396ea632286b745471e",
+    "mtime": "2026-11-06T15:25:17.413Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/pause/ch39-sanctuary-keeper.2x.webp": {
+    "sha256": "c0516dc945a7d7a9ef9172056071626f5d036437a81d9e039f7b2793de905fbb",
+    "mtime": "2026-11-06T15:25:20.903Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/pause/ch39-sanctuary-keeper.png": {
+    "sha256": "8fb0d0263b39d7941765cc7e1877e0ab011d0d313f4ec1c0a2e35b51c77e8991",
+    "mtime": "2026-11-06T15:25:19.492Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/pause/ffx2-bevelle-guardians.2x.webp": {
+    "sha256": "0943857b7af313df928fc74c97be9f39eca3af7f4cc75b3bf5a359ca95501081",
+    "mtime": "2026-11-06T15:25:26.821Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/pause/ffx2-bevelle-guardians.png": {
+    "sha256": "4aa8a2da0152560c30f11018b46ed4346342a781af4dfaffd2e9d721d22d2280",
+    "mtime": "2026-11-06T15:25:25.433Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/pause/ffx2-farplane-cup.2x.webp": {
+    "sha256": "4e76896930128fed1877a7b3bc411d8279aedd2195e23f397f8ede71f1de193e",
+    "mtime": "2026-11-06T15:25:24.842Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/pause/ffx2-farplane-cup.png": {
+    "sha256": "3f3c5f044108d258d9e41bf2ab2811c77985f1c960c2d65c4531092a26e54b5d",
+    "mtime": "2026-11-06T15:25:23.547Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/pause/ffx2-yunas-ballad.2x.webp": {
+    "sha256": "a6affb4fd07da74ba77af98e2c98e12e6a4bbeeb271ade5082cbcce0ffeb2b99",
+    "mtime": "2026-11-06T15:25:22.813Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/pause/ffx2-yunas-ballad.png": {
+    "sha256": "0a7ba2ad9790e27a2caf5515136a6cb9a16a744ea5e75e0dd9190bc355c1195b",
+    "mtime": "2026-11-06T15:25:21.683Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/portraits/evrae-altana.png": {
+    "sha256": "da4be32fa29460ab5a3786e076a6825589b1755057abbc97e9a07e70c6204bf2",
+    "mtime": "2026-11-06T14:59:19.685Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/portraits/geosgaeno.png": {
+    "sha256": "e8d545d8e8d93b2a4f88c4f0f0e04c04f4ba51abbab1ad4647d45d570a5eb364",
+    "mtime": "2026-11-06T14:59:19.296Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/portraits/sanctuary-keeper.png": {
+    "sha256": "77780295b13b434f94f84e278db7f1f46c519ce75b92f5fe68956fe1d042a1fc",
+    "mtime": "2026-11-06T14:59:18.882Z",
+    "delegated": "2026-11-06"
+   }
   }
  }
 }
