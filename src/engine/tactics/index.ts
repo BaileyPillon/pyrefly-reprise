@@ -56,6 +56,7 @@ import { SINSPAWN_GUI_BOSS_IDS, sinspawnGui } from './sinspawn-gui.ts';
 import { BIRAN_YENKE_BOSS_IDS, biranYenke } from './biran-yenke.ts';
 import { MIRROR_AEONS_BOSS_IDS, mirrorAeons } from './mirror-aeons.ts';
 import { LAST_SUMMONING_BOSS_IDS, lastSummoning } from './last-summoning.ts';
+import { OMEGA_RUINS_BOSS_IDS, omegaRuins } from './omega-ruins.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -100,6 +101,7 @@ export { sinspawnGui, SINSPAWN_GUI_BOSS_IDS } from './sinspawn-gui.ts'; // the h
 export { biranYenke, BIRAN_YENKE_BOSS_IDS } from './biran-yenke.ts'; // the hidden Biran and Yenke chapter (FFX only)
 export { mirrorAeons, MIRROR_AEONS_BOSS_IDS } from './mirror-aeons.ts'; // the hidden Mirror Aeons chapter (FFX only)
 export { lastSummoning, LAST_SUMMONING_BOSS_IDS } from './last-summoning.ts'; // the hidden Last Summoning chapter (FFX only)
+export { omegaRuins, OMEGA_RUINS_BOSS_IDS } from './omega-ruins.ts'; // the hidden Omega Ruins chapter (FFX only)
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -180,6 +182,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...BIRAN_YENKE_BOSS_IDS.map((bossId) => ({ chapterId: 'biran-yenke', bossId, tactic: biranYenke })),
   // The hidden Mirror Aeons chapter (FFX only): the three Dark Magus Sisters and Dark Yojimbo; the line is the aeon as fodder for the big move, Mindy first.
   ...MIRROR_AEONS_BOSS_IDS.map((bossId) => ({ chapterId: 'mirror-aeons', bossId, tactic: mirrorAeons })),
+  // The hidden Omega Ruins chapter (FFX only): Auto-Life on the line against Nemesis, never an Overdrive, a swing for the two Weapons (plain blows from Nemesis's side lose to nothing but its count).
+  ...OMEGA_RUINS_BOSS_IDS.map((bossId) => ({ chapterId: 'omega-ruins', bossId, tactic: omegaRuins })),
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

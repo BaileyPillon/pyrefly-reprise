@@ -36,6 +36,7 @@ export const TURN_ORDER_LINES: Readonly<Record<string, string>> = {
   'sinspawn-gui': TURN_ORDER_PARTY_FIRST,
   'exp-fayth': TURN_ORDER_PARTY_FIRST,
   'last-summoning': TURN_ORDER_PARTY_FIRST,
+  'omega-ruins': TURN_ORDER_PARTY_FIRST, // the hidden Omega Ruins chapter (2026-11-06): the front line's First Strike and Haste open all three fights of the chain before the Weapon or Nemesis acts (the test's engine count over 20 seeds and all three acts)
   'spectral-keeper': TURN_ORDER_PARTY_FIRST, // the formation gives the front line First Strike, so all three act before the Keeper in every seed (the engine count is the test's)
 };
 

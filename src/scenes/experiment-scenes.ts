@@ -40,6 +40,8 @@ import { buildLastSummoningScene, LAST_SUMMONING_SLOTS } from './last-summoning.
 import { LAST_SUMMONING_SCENE } from '../data/ffx/last-summoning-ids.ts';
 import { buildSpectralKeeperScene, SPECTRAL_KEEPER_SLOTS } from './spectral-keeper.ts'; // the Spectral Keeper's glyph ring (FFX only, hidden chapter): the Dome's scene with the Keeper and the glyphs staged
 import { SPECTRAL_KEEPER_SCENE } from '../data/ffx/spectral-keeper-ids.ts';
+import { buildOmegaRuinsScene, OMEGA_RUINS_SLOTS } from './omega-ruins.ts'; // the Omega Ruins (FFX only, hidden chapter): the Cavern's plate with the three Weapons' staging
+import { OMEGA_RUINS_SCENE } from '../data/ffx/omega-ruins-ids.ts';
 import { buildExpYrp3dStageScene, EXP_YRP_SCENE_ENTRY } from './exp-yrp-3d-stage.ts'; // the 3D Bahamut's chamber (FFX-2 only, hidden chapter): Chapter IV's room under frame b, the real models on its actors
 import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
 import { buildExpWindwakerStageScene, EXP_WINDWAKER_SCENE_ENTRY } from './exp-windwaker-stage.ts'; // the Wind Waker chamber (FFX-2 only, hidden chapter): a toon temple, toon models on its actors
@@ -71,6 +73,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   EXP_YRP_SCENE_ENTRY,
   // The Wind Waker chapter (FFX-2 only, hidden chapter): a toon temple chamber under the target shot's camera, with toon-shaded models on the actors.
   EXP_WINDWAKER_SCENE_ENTRY,
+  // The Omega Ruins (FFX only, hidden chapter): the Cavern of the Stolen Fayth's plate and scene, with the Weapons and Nemesis alone on the boss spot.
+  { key: OMEGA_RUINS_SCENE, title: 'The Omega Ruins', build: buildDemoScene, slots: OMEGA_RUINS_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -87,4 +91,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [SPECTRAL_KEEPER_SCENE]: buildSpectralKeeperScene, // the hidden Spectral Keeper chapter (FFX only)
   [EXP_YRP_SCENE]: buildExpYrp3dStageScene, // the hidden 3D Bahamut chapter (FFX-2 only)
   [EXP_WINDWAKER_SCENE]: buildExpWindwakerStageScene, // the hidden Wind Waker chapter (FFX-2 only)
+  [OMEGA_RUINS_SCENE]: buildOmegaRuinsScene, // the hidden Omega Ruins chapter (FFX only)
 };

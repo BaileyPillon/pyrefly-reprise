@@ -181,7 +181,10 @@ describe('the data behind it', () => {
     const mirrorTiers = ['70', '71', '72', '73', '74'].map((n) => `mirror-yojimbo-nagi05_${n}`);
     // The hidden Fallen Maesters (FFX-2, 2026-11-02) sets it on floors 40, 60 and 80 of the Via Infinito: the glyph between the floors heals the party, which is no Save Sphere (`data/ffx2/enemies/fallen-maesters.ts`).
     const maesters = ['40-black-elemental', '60-concherer', '80-chac'].map((n) => `ffx2-via-infinito-floor-${n}`);
-    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-') && !id.startsWith('ffx2-via-infinito-floor-'))).toEqual([DJOSE_EXPERIMENT_2]);
+    // The hidden Omega Ruins (FFX, 2026-11-06) sets it on its Acts II and III: the chain keeps the party whole between the three fights, which is no Save Sphere (`data/ffx/enemies/weapons-groups.ts`).
+    const ruins = ['omega-ruins-nemesis', 'omega-ruins-omega'];
+    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-') && !id.startsWith('ffx2-via-infinito-floor-') && !id.startsWith('omega-ruins-'))).toEqual([DJOSE_EXPERIMENT_2]);
+    expect(flagged.filter((id) => id.startsWith('omega-ruins-')).sort()).toEqual(ruins);
     expect(flagged.filter((id) => id.startsWith('ffx2-via-infinito-floor-')).sort()).toEqual(maesters);
     expect(flagged.filter((id) => id.startsWith('mirror-yojimbo-')).sort()).toEqual(mirrorTiers);
   });

@@ -56,6 +56,10 @@ const ROWS: ReadonlyArray<readonly [string, number]> = [
   // The hidden Spectral Keeper chapter (2026-11-02): the Keeper (m129) and its seven Circles (m146) carry no forced action (`research/re-ffx-spectral-keeper.md` 1.2: forced action word "none"), so Berserk, Confuse and Provoke drop their turns.
   ['spectral-keeper', 0x0000], // m129
   ...[1, 2, 3, 4, 5, 6, 7].map((n): readonly [string, number] => [`spectral-circle-${n}`, 0x0000]), // m146
+  // The hidden Omega Ruins chapter (2026-11-06): Ultima Weapon (m99) and Omega Weapon (m100) carry the monster Attack 0x4000 as their forced action; Nemesis (m276) none (`research/re-ffx-omega-ultima-nemesis.md` 1.1). All three are immune to Berserk, Confuse and Provoke, so the word is never read.
+  ['ultima-weapon', 0x4000], // m99
+  ['omega-weapon', 0x4000], // m100
+  ['nemesis', 0x0000], // m276
 ];
 
 /** The forced-action word of an enemy by our id, or `undefined` when no monster file is matched to it. */

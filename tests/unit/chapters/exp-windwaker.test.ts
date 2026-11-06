@@ -214,8 +214,8 @@ describe('its scene', () => {
     expect(row.cite).toMatch(/no source describes Besaid/);
   });
 
-  it('is the last row of the hidden chapters\' side table, which keeps every other row in order', () => {
-    expect(EXPERIMENT_SCENE_ENTRIES.at(-1)).toBe(EXP_WINDWAKER_SCENE_ENTRY);
+  it('is the second-to-last row of the hidden chapters\' side table, which keeps every other row in order (the Omega Ruins\' follows it)', () => {
+    expect(EXPERIMENT_SCENE_ENTRIES.at(-2)).toBe(EXP_WINDWAKER_SCENE_ENTRY);
     expect(Object.keys(EXPERIMENT_SCENE_FACTORIES)).toContain('exp-windwaker-stage');
   });
 

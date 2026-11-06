@@ -168,10 +168,10 @@ describe('its scene', () => {
     expect(pyreflyCanonFor('bevelle-underground')!.verdict).toBe(row.verdict);
   });
 
-  it('is the second-to-last row of the hidden chapters\' side table, which keeps every other row in order', () => {
-    expect(EXPERIMENT_SCENE_ENTRIES.at(-2)).toBe(EXP_YRP_SCENE_ENTRY); // the Wind Waker's row (ch-waker) follows it at the r74 integration
+  it('is the third-to-last row of the hidden chapters\' side table, which keeps every other row in order', () => {
+    expect(EXPERIMENT_SCENE_ENTRIES.at(-3)).toBe(EXP_YRP_SCENE_ENTRY); // the Wind Waker's row (ch-waker) follows it at the r74 integration, and the Omega Ruins' the Wind Waker's
     expect(Object.keys(EXPERIMENT_SCENE_FACTORIES)).toContain('exp-yrp-3d-stage');
     expect(EXPERIMENT_SCENE_ENTRIES.map((e) => e.key)).toContain(EXP_LEBLANC_SCENE);
-    expect(EXPERIMENT_SCENE_ENTRIES).toHaveLength(12); // ten with this chapter alone; the Spectral Keeper's and the Wind Waker's rows are the other two
+    expect(EXPERIMENT_SCENE_ENTRIES).toHaveLength(13); // ten with this chapter alone; the Spectral Keeper's, the Wind Waker's and the Omega Ruins' rows are the other three
   });
 });

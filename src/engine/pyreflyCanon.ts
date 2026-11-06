@@ -22,6 +22,7 @@ import { GAGAZET_RONSO_SCENE } from '../data/ffx/biran-yenke-ids.ts';
 import { MIRROR_AEONS_SCENE } from '../data/ffx/mirror-aeons-ids.ts';
 import { LAST_SUMMONING_SCENE } from '../data/ffx/last-summoning-ids.ts';
 import { SPECTRAL_KEEPER_SCENE } from '../data/ffx/spectral-keeper-ids.ts';
+import { OMEGA_RUINS_SCENE } from '../data/ffx/omega-ruins-ids.ts';
 import { ANGRA_MAINYU_SCENE } from '../data/angra-mainyu-ids.ts';
 import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
 import { EXP_WINDWAKER_SCENE } from '../data/windwaker-ids.ts';
@@ -151,6 +152,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   [LAST_SUMMONING_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Dream's End [verified: 2 sources]` },
   // The Spectral Keeper (the hidden chapter, FFX only): the Zanarkand Dome as Chapter II builds it, so the Dome's row.
   [SPECTRAL_KEEPER_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Zanarkand Dome [verified: 2 sources]` },
+  // The Omega Ruins (the hidden chapter, FFX only; `scenes/omega-ruins.ts`): the Cavern of the Stolen Fayth's plate and scene, so the Cavern's row; no source names particles in the Ruins (research/re-ffx-omega-ultima-nemesis.md section 2).
+  [OMEGA_RUINS_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-yojimbo.md §6.2 beat 3 (the Cavern, whose plate the Ruins stand on): nothing on the room; research/re-ffx-omega-ultima-nemesis.md §2: the formations name no particles', treatment: 'As the Cavern: cold light and mist, nothing added; the guardians go dark where they stood' },
   // The 3D Bahamut (the hidden chapter, FFX-2 only; `scenes/exp-yrp-3d-stage.ts`): Chapter IV's chamber, so the Bevelle underground's row.
   [EXP_YRP_SCENE]: { game: 'ffx2', verdict: 'absent', cite: `${PRES}, Bevelle Underground [single source]: "Machina, not spirits"; the chamber is Chapter IV's` },
   // Valefor at Besaid in Wind Waker style (the hidden chapter, FFX-2 only; `scenes/exp-windwaker-stage.ts`): hidden chapter 24's fight, so its row (the Djose chamber's stand-in for Besaid's); the temple is a stand-in.

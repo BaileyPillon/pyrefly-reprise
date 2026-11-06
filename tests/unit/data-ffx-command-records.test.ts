@@ -146,8 +146,9 @@ describe("the attached records are the game's table", () => {
     // 512, 509 and 3 in release 52, where both lines meet: Mirror Aeons + RC9 FFX-M read 510, 508 and 2; the Last Summoning adds Kozuka and Wakizashi and
     // moves Daigoro and the Sisters token to "no record" (+2 abilities, +1 record, +1 without).
     // 519 and 516 since the hidden Spectral Keeper chapter (FFX only, 2026-11-02): its seven rows (0x6045 to 0x604e and the party's Move 0x3103), each with its record, all in the game's fixtures.
-    expect(ALL_ABILITIES).toHaveLength(519);
-    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(516);
+    // 533 and 530 since the hidden Omega Ruins chapter (FFX only, 2026-11-06): the three Weapons' fourteen rows (0x407f, 0x4022, 0x4023, 0x604f, 0x606e, 0x6072, 0x6071, 0x410f, 0x4067, 0x40f0, 0x40d8, 0x40d9, 0x40f4, 0x40f3), each with its record, all in the game's fixtures; Holy, Ultima and Demi are the player's own rows.
+    expect(ALL_ABILITIES).toHaveLength(533);
+    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(530);
     expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(3);
   });
 });

@@ -21,6 +21,7 @@
 
 import { MIRROR_ACT_I_PLATE, MIRROR_AEONS_SCENE } from '../ffx/mirror-aeons-ids.ts';
 import { SPECTRAL_KEEPER_SCENE } from '../ffx/spectral-keeper-ids.ts';
+import { OMEGA_RUINS_PLATE, OMEGA_RUINS_SCENE } from '../ffx/omega-ruins-ids.ts';
 import { EXP_YRP_SCENE } from '../yrp-ids.ts';
 import { EXP_WINDWAKER_SCENE } from '../windwaker-ids.ts';
 import { DJOSE_CHAMBER_PLATE } from '../ixion-plates.ts';
@@ -50,6 +51,7 @@ export function artNamespaceOfScene(sceneKey: string | undefined): ArtNamespace 
 export const SCENE_BACKDROP_FILE: Readonly<Record<string, string>> = {
   [MIRROR_AEONS_SCENE]: MIRROR_ACT_I_PLATE,
   [SPECTRAL_KEEPER_SCENE]: 'zanarkand-dome', // the hidden Spectral Keeper's stage is Chapter II's Dome plate (2026-11-02, FFX only): no file of its own, and the art mirror is not written into
+  [OMEGA_RUINS_SCENE]: OMEGA_RUINS_PLATE, // the hidden Omega Ruins chapter's stage is the Cavern of the Stolen Fayth's plate (2026-11-06, FFX only): no file of its own, and the art mirror is not written into
   [EXP_YRP_SCENE]: 'bevelle-underground', // the hidden 3D Bahamut (FFX-2): Chapter IV's chamber is drawn over Chapter IV's own plate
   [EXP_WINDWAKER_SCENE]: DJOSE_CHAMBER_PLATE, // the hidden Wind Waker chapter (FFX-2): the stage is 3D and has no plate; the board, the prep wash and the cutscenes show hidden chapter 24's (the Djose chamber's) plate, as chapter 24 does
 };

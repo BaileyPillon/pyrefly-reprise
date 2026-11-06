@@ -14,6 +14,7 @@ import { backdropFileOf, SCENE_BACKDROP_FILE } from '../../src/data/art/artNames
 import { CHAPTERS, EXPERIMENT_CHAPTERS, UNLISTED_CHAPTERS } from '../../src/data/encounters.ts';
 import { MIRROR_ACT_I_PLATE, MIRROR_AEONS_SCENE } from '../../src/data/ffx/mirror-aeons-ids.ts';
 import { SPECTRAL_KEEPER_SCENE } from '../../src/data/ffx/spectral-keeper-ids.ts';
+import { OMEGA_RUINS_PLATE, OMEGA_RUINS_SCENE } from '../../src/data/ffx/omega-ruins-ids.ts';
 import { EXP_YRP_SCENE } from '../../src/data/yrp-ids.ts';
 import { DJOSE_CHAMBER_PLATE } from '../../src/data/ixion-plates.ts';
 import { EXP_WINDWAKER_SCENE } from '../../src/data/windwaker-ids.ts';
@@ -28,7 +29,9 @@ describe('a scene key that is a code key names the backdrop file it draws', () =
     expect(backdropFileOf(undefined)).toBeUndefined();
     expect(backdropFileOf('constructor')).toBe('constructor'); // a key on Object.prototype is not an entry
     expect(backdropFileOf(SPECTRAL_KEEPER_SCENE)).toBe('zanarkand-dome'); // the hidden Spectral Keeper's stage draws Chapter II's Dome plate
-    expect(Object.keys(SCENE_BACKDROP_FILE)).toEqual([MIRROR_AEONS_SCENE, SPECTRAL_KEEPER_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE]);
+    expect(backdropFileOf(OMEGA_RUINS_SCENE)).toBe('cavern-stolen-fayth'); // the hidden Omega Ruins' stage draws the Cavern of the Stolen Fayth's plate (ch-omega-ruins, 2026-11-06)
+    expect(OMEGA_RUINS_PLATE).toBe('cavern-stolen-fayth');
+    expect(Object.keys(SCENE_BACKDROP_FILE)).toEqual([MIRROR_AEONS_SCENE, SPECTRAL_KEEPER_SCENE, OMEGA_RUINS_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE]);
     expect(backdropFileOf(EXP_YRP_SCENE)).toBe('bevelle-underground'); // the hidden 3D Bahamut is drawn over Chapter IV's own plate (ch-yrp)
     // the hidden Wind Waker chapter (FFX-2 only, Chapter 32) is the second code key: its stage is 3D with no plate of its own, and the board, the prep wash and the cutscenes show hidden chapter 24's (the Djose chamber's)
     expect(backdropFileOf(EXP_WINDWAKER_SCENE)).toBe(DJOSE_CHAMBER_PLATE);
