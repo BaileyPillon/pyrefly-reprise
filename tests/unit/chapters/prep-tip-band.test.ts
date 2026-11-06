@@ -175,8 +175,8 @@ describe('the tips the model says overflow at 1600 x 900 are the ones job TIP-1 
   const end = handoff.indexOf('\n### ', start + 5);
   const section = start < 0 ? '' : handoff.slice(start, end < 0 ? undefined : end);
 
-  it('every listed and hidden chapter is put through the model: 34 of them (the anime chapter, 2026-11-06, is the thirty-third; the hidden Dark Aeons joined it the same day, its tip short enough to fit), each with three objectives', () => {
-    expect(all).toHaveLength(34);
+  it('every listed and hidden chapter is put through the model: 35 of them (the anime chapter, 2026-11-06, is the thirty-third; the hidden Dark Aeons and Penance joined it the same day, their tips short enough to fit), each with three objectives', () => {
+    expect(all).toHaveLength(35);
     for (const meta of all) expect(meta.objectives, meta.id).toHaveLength(3);
   });
 

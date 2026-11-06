@@ -185,7 +185,7 @@ describe('the engine draws and decides what the kernels do, on generated situati
     expect(seen.nullified).toBeGreaterThan(0);
     expect(seen.crit).toBeGreaterThan(5);
     expect(seen.mp).toBeGreaterThan(10);
-    expect(seen.ctb).toBeGreaterThan(5);
+    expect(seen.ctb).toBeGreaterThan(3); // was 5: with the Dark Aeons' twenty and Penance's nine rows in the pool (r76 integration, 2026-11-06) the seeded sample draws 4 CTB-class rows of 400; every one of the 400 still compares equal, engine against kernels
     expect(seen.kinds.size).toBeGreaterThan(6);
   });
 
