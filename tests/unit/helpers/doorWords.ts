@@ -38,3 +38,12 @@ export const DOOR_WORDS_IN_ORDER: readonly string[] = DOORS_IN_ORDER.map(([word]
  * fight for the CPU), and 193 s for the pair test of one suite in the one full-suite run (3,125 s on three workers, the long benches running beside it): the old 180 s allowance of fifteen doors was not enough. A hang still fails, later.
  */
 export const DOOR_PAIR_TEST_TIMEOUT_MS = Math.max(180_000, DOORS_IN_ORDER.length * 15_000);
+
+/**
+ * The allowance of a door suite's LOOP test (one that mounts a real board for every door: "a wrong letter resets", "each word opens its own chapter and nothing else", the phone-tier suites' "every other door opens"): it grows with the
+ * number of doors too, because each board is a jsdom mount. 10 s a door, 120 s at the least (210 s at twenty-one doors); a test that mounts two boards for every door (both tiers) takes twice this. The vitest default (15 s then, 60 s
+ * now: `vitest.config.ts`) is a flat number and the cost is linear in the doors, so the loops carry their own: 15 s was enough for fifteen doors on a quiet machine and not for twenty-one on a loaded one. In the one full run with
+ * the CPU at about 96 percent from other work, `yojimbo-door` took 32.6 s, `r74-hidden-3d-phone-doors` 25.6 s and `gagazet-door` 19.6 s for one such test each (7 s alone), and `maesters-door` came within a second of its 15 s.
+ * A hang still fails, later.
+ */
+export const DOOR_LOOP_TEST_TIMEOUT_MS = Math.max(120_000, DOORS_IN_ORDER.length * 10_000);

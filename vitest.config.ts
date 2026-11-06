@@ -17,8 +17,15 @@ export default defineConfig({
      * ignore red, which is worse than a slow test.
      *
      * If a test ever genuinely hangs, it still fails here — just later.
+     *
+     * 60s since the r76b review (2026-11-06): the same reasoning one step on. The full run on a
+     * machine with other work taking ~96 percent of the CPU (three workers) put 17 tests over 15s
+     * that pass in 2 to 8s alone and that no change touched (`advisor-floor`, `advisor-menu`,
+     * `advisor-note`, `pause-restart-checkpoint`, `tourist-trap-bench`, three door loops). The door
+     * suites' loops and pairs carry their own, door-scaled allowances (`tests/unit/helpers/doorWords.ts`);
+     * every bench with a long run names its own. A hang still fails, a minute in.
      */
-    testTimeout: 15_000,
-    hookTimeout: 15_000,
+    testTimeout: 60_000,
+    hookTimeout: 60_000,
   },
 });

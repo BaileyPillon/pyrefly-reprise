@@ -27,6 +27,7 @@ import { setFf7ExperimentReadyForTests } from '../../src/app/experiments/ff7Flag
 import { audio } from '../../src/audio/index.ts';
 import { setArtTier } from '../../src/engine/ArtDevice.ts';
 import type { ChapterId } from '../../src/data/encounters.ts';
+import { DOOR_LOOP_TEST_TIMEOUT_MS } from './helpers/doorWords.ts';
 
 const DESKTOP_ONLY = [
   { word: YRP_DOOR_WORD, chapter: YRP_DOOR_CHAPTER },
@@ -224,7 +225,7 @@ describe('the keyboard on the board', () => {
         expect(rig.picked, `${d.word} on ${tier}`).toEqual([d.chapter]);
       }
     }
-  });
+  }, 2 * DOOR_LOOP_TEST_TIMEOUT_MS); // a real board per door on each of the two tiers: twice the door-scaled allowance (`helpers/doorWords.ts`)
 
   it('a window that is a phone when the word finishes refuses; the same word on a wide window opens (the tier is read at the last letter)', async () => {
     const rig = mount();
@@ -280,7 +281,7 @@ describe('the phone\'s long-press field', () => {
       await flush();
       expect(rig.picked, d.word).toEqual([d.chapter]);
     }
-  });
+  }, DOOR_LOOP_TEST_TIMEOUT_MS); // one real board per door (`helpers/doorWords.ts`)
 });
 
 describe('the record', () => {

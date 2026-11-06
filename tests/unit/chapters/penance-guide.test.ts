@@ -1,8 +1,8 @@
 /**
  * Penance's guide card, page and prep tip teach the guides' winning line (FFX only; `src/data/guides/penance.ts`, `docs/penance.ts`, `chapter-meta-penance.ts`; hidden chapter 35, the word `judgment`).
  *
- * The line is Jegged's Penance page's, in our own words, and it is the line `docs/handoff/ch-penance.md` section 5.1 plays on the real engine (55 of 100 battles, 65 of 100 on held-out seeds; none without Three Stars):
- * Three Stars first, then Quick Hit; one hand down at every one of Penance's turns, a hand's last blow held until just before it acts; Dispel Penance's Regen and whoever Immolation breaks.
+ * The line is the public guides' (Jegged, GamerGuides, eip.gg and Game8 between them; no one page gives all of it), in our own words, and it is the line `docs/handoff/ch-penance.md` section 5.1 plays on the real engine (55 of 100 battles, 65 of 100 on held-out seeds; none without Three Stars):
+ * the Nul-All Mix, then Three Stars and Quick Hit; one hand down at every one of Penance's turns, a hand's last blow held until just before it acts; Dispel Penance's Regen and whoever Immolation breaks.
  *
  * What is pinned: the registration of the card and the page (the registries pair them: `strategy-guide.test.ts`, `guide-doc.test.ts`); that every rule, hint and phase is cited in the corpus form; that each of the three
  * teachings is in the tip, the card and the page; that the page prints the data's HP, Steal and Drops; that no number is invented; that the tip fits the prep card's band at 1600 x 900; that the panel finds the card on Penance's
@@ -65,8 +65,8 @@ describe('the three teachings are in the tip, the card and the page', () => {
   const page = docStrings(doc).join('\n');
   const rules = PENANCE_GUIDE.rules.map((r) => r.text).join('\n');
 
-  it('Three Stars first, then Quick Hit', () => {
-    expect(PENANCE_META.tip).toMatch(/Three Stars first, then Quick Hit/);
+  it('the Nul-All Mix, then Three Stars, then Quick Hit (the measured line opens with the Mix, so the tip names it before Three Stars)', () => {
+    expect(PENANCE_META.tip).toMatch(/^Nul-All Mix, Three Stars, Quick Hit\./);
     expect(rules).toMatch(/Three Stars on your first calm turn/);
     expect(rules).toMatch(/Quick Hit, Dispel and Esuna/);
     expect(page).toMatch(/Then use Three Stars on the first calm turn/);
@@ -74,7 +74,7 @@ describe('the three teachings are in the tip, the card and the page', () => {
   });
 
   it('keep one hand down at every one of Penance\'s turns, and hold a hand\'s last blow until just before it acts', () => {
-    expect(PENANCE_META.tip).toMatch(/Keep a hand down at every Penance turn/);
+    expect(PENANCE_META.tip).toMatch(/Keep a hand down each Penance turn/);
     expect(PENANCE_META.tip).toMatch(/hold its last blow till just before it acts/);
     expect(rules).toMatch(/Keep one hand down at every one of Penance's turns/);
     expect(rules).toMatch(/hold the last until just before its turn/);

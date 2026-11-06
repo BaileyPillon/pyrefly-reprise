@@ -2,7 +2,7 @@
  * The hidden Penance chapter (the colossus over the Fahrenheit's deck and its two hands): the guide's one page for this fight.
  *
  * **Game case: FFX only** (AGENTS.md rule 14). Laid out as the FFX encounter guide lays a boss page out (`../doc-types.ts`): the boss header, the stat lines (HP, Steal, Drops), the advice in order, the strategy as numbered
- * steps. The strategy is Jegged's Penance page's, in our own words (Three Stars first, then Quick Hit; the hands never allowed a turn, with the last blow held until just before one acts; one hand down at every one of
+ * steps. The strategy is the public guides' line (Jegged, GamerGuides, eip.gg and Game8 between them; no one page gives all of it, and `ch-penance.md` 5.1 gives each row with its pages), in our own words (Three Stars first, then Quick Hit; the hands never allowed a turn, with the last blow held until just before one acts; one hand down at every one of
  * Penance's turns; a Dispel for Penance's Regen and for whoever Immolation breaks), and it is the line `docs/handoff/ch-penance.md` section 5.1 plays on the real engine (55 of 100 battles won, 65 of 100 on held-out seeds,
  * none without Three Stars). Every figure is the game's own (`research/re-ffx-penance.md`: the HP, the 99,999 of Judgment Day and of a broken-armour blow, the 20 of the count, the 12 ticks, the six blows, the three quarters of
  * Tera Graviton and of the split), and the page prints the Steal and the Drops the chapter pays. The guides disagree on which hand falls first (Game8 takes the Right Arm); the page takes the Left Arm, the one the engine

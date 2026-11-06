@@ -3,9 +3,9 @@
  * [research/re-ffx-penance.md "RE section n" (the monster records, the moves, the AI and the Break limits read from the game's own files), research/ffx-combat-core.md sections 2.10, 4.2, 7.1 and 8.2
  * (Break statuses, the status table, Quick Hit, the Three Stars item)]. Every cite below names one of them in the corpus's own form: the digest first, then the game's file.
  *
- * **The strategy this card teaches is the public guides' one**, in our own words: Jegged's Penance page (`jegged.com`, Final Fantasy X, Side Quests; the research note's section 1 and 8 name it and the three others it was checked
- * against) gives Three Stars first so Quick Hit, Dispel and Esuna cost nothing once the MP is gone, a hand killed the moment it stands, the hands never allowed a turn, one hand down at each of Penance's turns, and a Dispel for
- * Penance's Regen and for whoever Immolation breaks. `docs/handoff/ch-penance.md` section 5.1 plays that strategy on the real engine and measures it (55 of 100 battles won with no state edit, 65 of 100 on held-out seeds;
+ * **The strategy this card teaches is the public guides' one**, in our own words, and not any one page's: Jegged's Penance page (`jegged.com`, Final Fantasy X, Side Quests), GamerGuides, eip.gg and Game8 (the research note's sections 1 and 8 name the four)
+ * between them give Three Stars first so Quick Hit, Dispel and Esuna cost nothing once the MP is gone, a hand killed the moment it stands, the hands never allowed a turn (the last blow held until just before a hand acts), one hand down at each
+ * of Penance's turns, and a Dispel for Penance's Regen and for whoever Immolation breaks. No one page gives all of it, so no row is credited to one page here: `docs/handoff/ch-penance.md` section 5.1 gives each row with its pages and plays that strategy on the real engine and measures it (55 of 100 battles won with no state edit, 65 of 100 on held-out seeds;
  * without Three Stars none): the card is written from that table, so each rule below is a rule the measured line obeys. The page and the tests (`tests/unit/helpers/penanceGuide.ts`) hold the line; the card says why.
  *
  * **Game case: FFX only** [AGENTS.md rule 14]. Penance, its hands and the Three Stars item exist in the International and HD Remaster releases of FFX; FFX-2 has nothing like them and nothing here applies to it.

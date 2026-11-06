@@ -28,6 +28,7 @@ import { EXPERIMENTS_KEY } from '../../src/app/experiments/experimentRecords.ts'
 import { PILGRIM_KEY } from '../../src/app/pilgrim/runStore.ts';
 import { PILGRIM_FIRST_CHAPTER } from '../../src/app/pilgrim/route.ts';
 import { audio } from '../../src/audio/index.ts';
+import { DOOR_LOOP_TEST_TIMEOUT_MS } from './helpers/doorWords.ts';
 import { CHAPTER_IDS, getChapter } from '../../src/data/encounters.ts';
 
 const WORD = PILGRIM_DOOR_WORD;
@@ -282,7 +283,7 @@ describe('the word on chapter select', () => {
     await flush();
     expect(rig.picked).toEqual(['mirror-aeons']);
     expect(rig.armed).toEqual([]);
-  });
+  }, DOOR_LOOP_TEST_TIMEOUT_MS); // one real board per door: the allowance follows the number of doors (`helpers/doorWords.ts`)
 
   it('a pause over 2 s between letters resets it, and the word typed again after the pause opens', async () => {
     let t = 5_000;

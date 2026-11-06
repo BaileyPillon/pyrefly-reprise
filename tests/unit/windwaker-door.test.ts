@@ -17,7 +17,7 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useDoorClock } from './helpers/doorClock.ts';
-import { DOOR_PAIR_TEST_TIMEOUT_MS } from './helpers/doorWords.ts';
+import { DOOR_PAIR_TEST_TIMEOUT_MS, DOOR_LOOP_TEST_TIMEOUT_MS } from './helpers/doorWords.ts';
 
 import { PartyPrepScreen } from '../../src/app/screens/PartyPrepScreen.ts';
 import { TitleScreen } from '../../src/app/screens/TitleScreen.ts';
@@ -315,7 +315,7 @@ describe('the word opens it on chapter select', () => {
       expect(rig.picked, wrong).toEqual([]);
       expect(rig.settled, wrong).toEqual([]);
     }
-  });
+  }, DOOR_LOOP_TEST_TIMEOUT_MS); // one real board per door: the allowance follows the number of doors (`helpers/doorWords.ts`)
 
   it('a pause over 2 s between letters resets it, and the word typed again after the pause opens', async () => {
     let t = 5_000;
@@ -376,7 +376,7 @@ describe('the other doors do not interfere', () => {
       expect(rig.picked, row.word).toEqual([row.chapter]);
       expect(rig.settled, row.word).toEqual([row.chapter]);
     }
-  });
+  }, DOOR_LOOP_TEST_TIMEOUT_MS); // one real board per door: the allowance follows the number of doors (`helpers/doorWords.ts`)
 
   it('the first word to finish wins when two are typed in a row, and a half-typed word before another spoils neither', async () => {
     useDoorClock(); // the cases below type forty boards' words in a loop: a virtual clock, so a stalled test process cannot make a word stale (helpers/doorClock.ts)
