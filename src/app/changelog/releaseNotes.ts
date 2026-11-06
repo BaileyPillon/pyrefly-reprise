@@ -69,11 +69,21 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 74 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 75 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '75',
+    date: '2026-11-06',
+    lines: [
+      { tag: 'FFX', text: 'Chapter XII’s enemy-move card no longer prints a damage range backwards (it showed 4,132-2,333 for Seymour Omnis’s spells); it now reads low to high and keeps one target across the range.' },
+      { tag: 'FFX-2', text: 'Rikku as an Alchemist no longer shows a greyed-out Mix in the command menu while Mix cannot be used.' },
+      { tag: 'FFX', text: 'On a desktop-sized window the party prep card’s tip is a shorter form of the same words for Seymour Natus, Seymour Omnis, Isaaru and the Mirror Aeons, so it is not cut off mid-line at 1600 x 900.' },
+      { tag: 'FFX-2', text: 'The same shorter tip on the prep card for the Fallen Aeons, Trema and the Den of Woe.' },
+    ],
+  },
   {
     release: '74',
     date: '2026-11-03',

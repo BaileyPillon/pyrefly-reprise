@@ -204,7 +204,7 @@ describe('the chapter cards and thumbnails are held for the first install (decis
   /** Every source file under src/ with its comments left out (a comment may mention a file; only code or data that names it would load it). */
   const stripComments = (text: string): string =>
     text
-      .split('\n')
+      .split(/\r?\n/) // a Windows checkout (core.autocrlf) has CRLF: the trailing-comment strip below ends at the line end
       .filter((line) => !/^\s*(\*|\/\*|\/\/)/.test(line))
       .map((line) => line.replace(/\s\/\/.*$/, ''))
       .join('\n');
