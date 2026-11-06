@@ -46,6 +46,8 @@ import { angraMainyuScripts } from './angra-mainyu.ts';
 // Aranea, the Black Elemental, Concherer and Chac on the Via Infinito's floors 20, 40, 60 and 80 (the hidden chapter "The Fallen Maesters", FFX-2 only): the game's own four scripts, poll by poll.
 import { fallenMaestersAScripts } from './fallen-maesters-a.ts';
 import { fallenMaestersBScripts } from './fallen-maesters-b.ts';
+// Georapella, the Precepts Guard and Baralai on the Bevelle Underground's floors 3 and 7 (the hidden chapter "The Guardians of the Bevelle Underground", FFX-2 only): the game's own three scripts, poll by poll.
+import { bevelleGuardiansScripts } from './bevelle-guardians.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -89,6 +91,7 @@ const SCRIPTS: readonly AiScript[] = [
   ...angraMainyuScripts,
   ...fallenMaestersAScripts,
   ...fallenMaestersBScripts,
+  ...bevelleGuardiansScripts,
   idleScript,
   basicAttackScript,
 ];

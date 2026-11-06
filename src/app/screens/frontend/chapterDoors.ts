@@ -29,7 +29,9 @@
  *
  * **`infinito`** (FFX-2, the hidden Fallen Maesters, `./maestersDoor.ts`: only F is a bound key, `l1`, which the board ignores; I, N, T and O are unbound) is a plain `WordDoor` too.
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon` and `keeper`.
+ * **`drillshot`** (FFX-2, the hidden Bevelle Guardians, `./drillshotDoor.ts`: D is `right`, R is `r1`, S is `down`; I, L, H, O and T are unbound) is a plain `WordDoor` too.
+ *
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon` and `keeper`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -48,6 +50,7 @@ import { YOJIMBO_DOOR_CHAPTER, YOJIMBO_DOOR_WORD } from './yojimboDoor.ts';
 import { SUMMON_DOOR_CHAPTER, SUMMON_DOOR_WORD } from './summonDoor.ts';
 import { KEEPER_DOOR_CHAPTER, KEEPER_DOOR_WORD } from './keeperDoor.ts';
 import { MAESTERS_DOOR_CHAPTER, MAESTERS_DOOR_WORD } from './maestersDoor.ts';
+import { DRILLSHOT_DOOR_CHAPTER, DRILLSHOT_DOOR_WORD } from './drillshotDoor.ts';
 import { PILGRIM_DOOR_CHAPTER, PILGRIM_DOOR_WORD } from './pilgrimDoor.ts';
 import { YRP_DOOR_CHAPTER, YRP_DOOR_WORD } from './yrpDoor.ts';
 import { WINDWAKER_DOOR_CHAPTER, WINDWAKER_DOOR_WORD } from './windwakerDoor.ts';
@@ -92,6 +95,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: MAESTERS_DOOR_WORD, chapter: MAESTERS_DOOR_CHAPTER },
   { word: YRP_DOOR_WORD, chapter: YRP_DOOR_CHAPTER, gate: desktopOnly },
   { word: WINDWAKER_DOOR_WORD, chapter: WINDWAKER_DOOR_CHAPTER, gate: desktopOnly },
+  { word: DRILLSHOT_DOOR_WORD, chapter: DRILLSHOT_DOOR_CHAPTER },
 ];
 
 /**

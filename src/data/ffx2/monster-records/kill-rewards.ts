@@ -75,4 +75,8 @@ export const KILL_REWARD_ROWS: Readonly<Record<string, FFX2KillReward>> = {
   "ffx2-via-infinito-floor-40-black-elemental/x2-black-elemental": row(1, 69, 770, 1, 380, 255, [0x0000, 0, 0x0000, 0]), // Black Elemental
   "ffx2-via-infinito-floor-60-concherer/x2-concherer": row(1, 232, 6000, 1, 1200, 255, [0x0000, 0, 0x900e, 1]), // Concherer
   "ffx2-via-infinito-floor-80-chac/x2-chac": row(1, 239, 2200, 1, 750, 255, [0x0000, 0, 0x9012, 1]), // Chac
+  // The hidden Bevelle guardians (floors 3 and 7 of the Bevelle Underground; RE note re-ffx2-bevelle-underground §4.1): EXP, Gil, AP, the drop byte (255, always) and the item slots are the rows' own (NulTide Ring, Regen Bangle, Pearl Necklace).
+  "ffx2-bevelle-underground-floor-3-georapella/x2-georapella": row(1, 262, 800, 1, 1000, 255, [0x902e, 1, 0x902e, 1]), // Georapella
+  "ffx2-bevelle-underground-floor-3-precepts-guard/x2-precepts-guard": row(1, 263, 700, 1, 800, 255, [0x905a, 1, 0x905a, 1]), // Precepts Guard
+  "ffx2-bevelle-underground-floor-7-baralai/x2-baralai": row(1, 175, 1000, 10, 1300, 255, [0x904e, 1, 0x904e, 1]), // Baralai
 };
