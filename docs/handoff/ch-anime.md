@@ -1,10 +1,177 @@
-# ch-anime: the hidden anime chapter, Chapter 33 (FFX-2 only), part 1 (code)
+# ch-anime: the hidden anime chapter, Chapter 33 (FFX-2 only): part 2 (the look and the motion) first, then part 1 (the code)
 
-Lane `ch-anime`, the sparse worktree of the Wind Waker lane, branch `ch-anime` (cut from `origin/r75-boss-art` b98906229), written 2026-11-06 by the lane's sub-agent for the release driver. **Nothing is deployed.** Part 1 is the code, the models in place, the tests and the first GPU smoke; part 2 (the proportion pass, the retargeted idle, the temple v2) waits for Bailey's eye on the look (the survey's milestones M2 and M2b).
+Lane `ch-anime`, the sparse worktree of the Wind Waker lane, branch `ch-anime` (cut from `origin/r75-boss-art` b98906229), written 2026-11-06 by the lane's sub-agent for the release driver. **Nothing is deployed.** Part 1 (sections 1 to 10 below) is the code, the models in place, the tests and the first GPU smoke; **part 2 (the next section) is built on top of it: the proportion pass, the retargeted idle and victory, a Valefor of her own, the wet floor and the air, the clips for Bailey, and the finish pass that checked it (P2.11).** Where part 2 says a part-1 statement no longer holds, part 2 wins; part 1 is left as it was written.
 
 Authority: Bailey, 2026-10-22 00:00 EDT, "make a genshin / guilty gear version of the chapter"; 2026-11-01 14:30 EST, "Meshy toon (Recommended)" (the models: "the only set that reads as anime"); 2026-11-06 ~00:30 EST, "implement all unimplemented chapters please", ~00:55 EST, "you can spend as much meshy credits as you see fit. use your own judgment."; 2026-10-31, "you make the executive decisions for the next few days. i'll go with all of your recommendations". The look, the word, the number and the title were never answered by him: they are **driver picks, his to overturn** (section 4).
 
 **Game case: FFX-2 only.** It is hidden chapter 24's Valefor fight (`ffx2-valefor-besaid`, `research/ffx2-fallen-aeons.md` section 7.1, `[verified: 2 sources]`) by reference, as the Wind Waker chapter is: Yuna (Gunner), Rikku (Thief), Paine (Warrior) against Valefor, the same build, formation, scripts, music, Sensor line and card words. **No battle data of its own (rule 6): no number in this lane comes from anywhere but chapter 24's record; the staging numbers (slots, heights, camera) are ours, not game data.** The registries, the door row and the optional-config seam on the ww3d modules are shared plumbing ("both", CHK-020), additive and inert for every other chapter (section 3).
+
+## Part 2 (2026-11-06, the look and the motion): the taller cast, an upright idle, a victory, a feathered Valefor of her own, a wet floor and some air, six clips for Bailey
+
+Authority: the same as part 1 (Bailey 2026-11-06 ~00:30 EST "implement all unimplemented chapters please", ~00:55 EST "you can spend as much meshy credits as you see fit. use your own judgment.", 2026-10-31 "you make the executive decisions for the next few days. i'll go with all of your recommendations"); the picks below are the driver's, his to overturn. Branch `ch-anime`, still **nothing deployed**.
+
+**Game case: FFX-2 only** (unchanged: hidden chapter 24's Valefor fight by reference; no battle data of its own, rule 6). Every number in part 2 is staging (proportions, clips, a floor, a model), none is game data. The seam additions are shared plumbing ("both", CHK-020), additive and inert for every other chapter (section P2.3).
+
+### P2.1 What changed
+
+| What | Where | Notes |
+|---|---|---|
+| **The taller cast** | `tools/anime/proportion.mjs` (pure node, no Blender, no credits) over the stored LOD1 files; the three girls' files in `public/models-exp/windwaker/anime/` are replaced | head 0.78 / 0.80 / 0.84 about the Head joint, legs 1.10 / 1.10 / 1.08 long, spine 1.02, slimmer 0.97, neck 1.10. Height over the head's length (Head to `head_end`): Yuna 6.08 to **7.90**, Rikku 7.20 to 9.02, Paine 5.82 to 7.01 (Yuna measured chin to crown: 5.4 to **7.0** heads) |
+| **An upright idle and a victory** | `tools/anime/retarget.mjs` (by bone name) | the Wind Waker cast's `idle` (upright, the head level) replaces each girl's crouched, head-bowed `idle`; its `victory` is new (Yuna 8.6 s, Rikku 9.4 s, Paine 1.5 s). The feet are lifted by a forward-kinematics read of the toe joints (within 3 cm of the rest feet in every clip but Rikku's jumping victory) |
+| **A Valefor of her own** | `public/models-exp/windwaker/anime/valefor.glb` (new), `tools/anime/valefor-fit.mjs`, `animeLayout.ts` (`ANIME_FILES`, `ANIME_WING`, `ANIME_BOSS_POINTS`) | feathered, with gold armour and blue plumes, after concept frame A: a **Flux 2 klein** edit of the frame (on the local ComfyUI, four candidates, no credit) made a clean symmetric front view on plain grey; **Meshy** image-to-3D from it (35 credits, 25 thousand triangles, a 2048 px map); fitted to the file convention of v2 (3.5 m, claws on y 0 and z 0, centred, specks dropped, the map regraded 1.35 times as saturated, the BIN repacked: 2.96 MB). The Wind Waker chapter keeps its own `valefor.glb`; v2 stays in the lab as `ANIME_VALEFOR_V2` |
+| **The wet floor** | `engine/ww3d/stageAnime.ts` (new), `scenes/exp-anime-stage.ts` | the temple's sand floor is a polished blue-grey stone and a planar mirror lies 1 cm over it (the figures, Valefor, the door, the torches and the waterfalls stand on their own reflection); drawn **once per game frame**; `?reflect=0` leaves the mirror out; a low-quality build has none |
+| **The air** | `stageAnime.ts` `addAtmosphere` | the waterfalls' thin ribbons are widened to 2.6 times (their streaks repeat across, the curtain dimmed to 0.82), a soft mist at the foot of each, 140 dust motes drifting in the light shaft (a seeded field) |
+| **The cast aura** | `engine/ww3d/cel.ts` | the outer step of the rim band halved (0.4 to 0.2): a cast Yuna's white top washed yellow in part 1 |
+| **The files' recipes** | `tools/anime/cast.mjs`, `valefor-fit.mjs` | `cast.mjs` reproduces the three shipped girls **byte for byte** from the stored LOD1 files; `valefor-fit.mjs` makes `anime/valefor.glb` from the stored raw Meshy model |
+| **Delivery** | `tools/ww/ww-models.json` (15 files now: the Wind Waker chapter's eleven, the three girls, her Valefor), the models store (a part-2 folder: the four files, and the raw Meshy model with its map and the four klein candidates, all hashed), the second-disk backup of it (hash-checked), the older ww backup | the pre-pass girls are untouched in the store (the part-1 folder's LOD1 files); the raw Meshy Valefor, its map and the four klein candidates exist only there and on its backup |
+| **Clips for Bailey** | the lane's scratch (outside the repo, nothing from it is committed) | idle, attack, cast, hit, ko, victory (1600x900 mp4, under 10 MB each), two bonus rig clips, one contact sheet (section P2.5) |
+
+Commits on `origin/ch-anime` after part 1's `3cee026d7`: `f1718ce63` (the cast, the tools, the floor), `cd2d0b0d6` (Valefor, the air, the staging seam) and this handoff.
+
+### P2.2 Picks, with the alternative of each ("driver pick, his to overturn")
+
+| # | Pick | Alternative |
+|---|---|---|
+| P12 | **The proportions: Yuna about 7 heads** (head 0.78, legs 1.10), Rikku a little smaller-headed than that (0.80: she is the youngest and her hair mass is large), Paine 0.84 (she is already the tallest). The preview sheets (the pilot's sheets, in the lane's scratch) showed no neck seam, no face damage, no hair loss at 5 cm per pixel | head 0.86 (6.1 heads: a mild change), head 0.75 plus slim 0.97 (7.0 with a smaller face), legs 1.16 (6.9, very long legs); each is one line in `tools/anime/cast.mjs` `RECIPES`; or a Meshy rebuild at 7 heads (150 to 250 credits, if his eye on this fails: the pilot passed mine, not his) |
+| P13 | **A pure-node pass, not Blender** (the brief named a Blender pilot): the same maths as "pose-bone scale, apply pose as rest", run on the glTF directly, every step testable (`anime-tools.test.ts`), no python and no permission prompt | the Blender route (`lifelike/pipeline/build_glb.py` is the model for it) |
+| P14 | **The upright `idle` of the Wind Waker cast** replaces the crouched one. At the idle rig the girls stand relaxed with the weapons at the hip; an attack runs in from the stance and returns | the Wind Waker `idle_combat` (a combat stance: it reads like the toon's own crouch in the preview sheet, so it was not taken); keep the crouch (the store has the originals) |
+| P15 | **The Wind Waker `victory`** is retargeted (it was missing: a won fight left the girls in the stance) | none needed; a Meshy library action is 3 credits a girl |
+| P16 | **A polished blue-grey stone with a planar mirror at 0.55 strength**, a Fresnel-like curve, a few taps of blur and a slow ripple | the part-1 sand (no switch: it is the Wind Waker chapter's floor); a stone with no mirror (`?reflect=0`); a stronger or weaker mirror (`ANIME_FLOOR.strength`, one number) |
+| P17 | **Valefor is rebuilt** (the survey's single best spend): the Flux 2 klein edit of frame A, then Meshy, then the fit; the map regraded 1.35 times as saturated (the Meshy map is flat-lit and pale beside the frame). **35 credits (balance 4,440 to 4,405)**; the ledger is the Meshy run's own state file and log in the lane's scratch. The path was chosen because GPT Images is paused ("do not collaborate with codex") and a crop of the frame has the right wing cut by its edge and a busy background (a mirrored crop was tried and gave a double-headed bird) | keep `valefor-v2` (`ANIME_FILES` names the file; one line); a second Meshy run from another klein candidate (the other three klein candidates are in the models store; 35 credits each); the real FFX-2 Valefor m164 (dark, fallen: faithful, not the concept) |
+| P18 | **The wing numbers and the points** of the new file are measured by `valefor-fit.mjs` (`ANIME_WING`: the bend starts 0.7 m from her centre line and is full at 2.4 m, nothing under 1.4 m bends, the shoulder pivot 2.2 m up, 22 degrees at 0.6 Hz; the mouth at the beak 0.98 m forward of the claws and 2.86 m up, the chest at 1.9 m, 0.55 m forward) | tune them by eye in `animeLayout.ts` (the wing's tearing, if any, shows first at the shoulders) |
+| P19 | **The slots and the camera are unchanged**: the upright cast fits the lab's framing inside the bands predicted in part 1 (section P2.4, J1), and the NEXT BEST MOVE card no longer overlaps Paine (the part-1 overlap was the crouched stance's width: 48 px then, 0 px now, 11 px of clearance) | the layout re-fit part 1 held back |
+| P20 | **The aura's outer step halved**; **the waterfalls widened and dimmed** | leave them (0.4; 0.62 m, undimmed: `AIR` in `stageAnime.ts`) |
+
+### P2.3 The seam, and why nothing else changed
+
+| file | change | why every other chapter reads exactly as before |
+|---|---|---|
+| `engine/ww3d/stage.ts` | the floor mesh gets the name `ww-floor` | a name; nothing reads it but `stageAnime.ts` (`stage.test.ts` and `stage-anime.test.ts`) |
+| `engine/ww3d/stageAnime.ts` | new | imported only by the anime scene |
+| `engine/ww3d/layout.ts` | `WwStaging` gains optional `wing` and `bossPoints` | `WW_STAGING` has neither (`staging.test.ts`) |
+| `engine/ww3d/wing.ts` | `WingShape` (an interface) types the flap's numbers; `WING` is the same object | a type |
+| `engine/ww3d/model.ts`, `skin.ts` | read `staging.wing` and `staging.bossPoints`, fall back to `WING`, `MOUTH_LOCAL`, `CHEST_LOCAL` | omitted, the same constants |
+| `engine/ww3d/cel.ts` | the outer glow step 0.4 to 0.2 | the cel material is the anime chapter's alone |
+| `engine/ww3d/animeLayout.ts` | `ANIME_NATIVE_HEIGHT`, `ANIME_FILES`, `ANIME_WING`, `ANIME_BOSS_POINTS` | the anime chapter's table |
+| the four models' files | the three girls replaced, `anime/valefor.glb` added | same names and rig for the girls; the new file is the anime chapter's alone |
+
+Not changed: `src/battle/**`, `BattlePresenter*.ts`, the Wind Waker chapter's files, `tools/dist-filter.mjs`, `tools/vite-ww-models.mjs`. The Wind Waker chapter's own pixel A/B against a base build is **still owed** (part 1, A4): it needs a second tree; the 15 ww3d suites and `exp-windwaker.test.ts` are green.
+
+### P2.4 Browser jobs, predictions first (rule 15)
+
+Predictions were written at 08:03 UTC (03:03 EST), **before the first part-2 GPU job ran** (the predictions file in the lane's scratch, for the cast; the floor, the air and Valefor were not predicted in writing: they were looked at as stills and then judged); the harness is part 1's (copied, with a high-quality recorder added: Chrome's screencast, JPEG frames piped to ffmpeg, because Playwright's own video caps at about 1 Mbps). Headless Chromium on the RTX 5070 Ti (ANGLE D3D11), 1600x900, seed 7, REDUCE MOTION off, one job at a time under `RIG-RECORD`. Every run: console 0, page 0, failed requests 0.
+
+**J1 (var-genshin, the new cast, the old sand floor): PASS, every band held.**
+
+| Prediction | Result |
+|---|---|
+| 1. same opening, errors 0, no patch failure, `own` and `cel` throughout | **Held** (`carrying` own for all four, every material `cel`, `playing: "idle"` for the three girls) |
+| 2. Yuna's head 0.14 of her height (before about 0.185) | **Held by eye** on the idle-rig still (hair top to chin about 70 px of 555); measured on the file: 7.0 heads chin to crown |
+| 3. hair tops Yuna .36 +- .03, Rikku .47 +- .04, Paine .52 +- .04 (part 1's crouch: .406, .505, .542) | **Yuna .359, Rikku .478, Paine .519: all in band.** Yuna's root projects at y 1.01 (her stance's feet are in front of her origin, as in part 1) |
+| 4. no girl looks at the floor | **Held** |
+| 5. the weapons may look held low in the upright idle | **Partly**: at the idle rig the pistols and daggers sit at the hips, the sword runs level at Paine's hip; acceptable; at the party rig they read as "ready at the hip". A polish item (A6) |
+| 6. mean luma 137 +- 6 | **136.4** (party rig 143.4, enemy rig 135.8) |
+| 7. no neck seam or stretched texture band | **Held** at this size (stills `13`, `14`, `15`) |
+
+**J2 (the wet floor): PASS.** The mirror drew first time: the door's wheel, the flames, the waterfalls, Valefor's claws and the girls' boots stand on their reflections; mean luma **129.5** idle rig (the sand's 136.4 was the brighter floor), 122.5 party rig; hair tops unchanged (.358).
+
+**J3 (hudfit): the part-1 overlap is gone.** The NEXT BEST MOVE card [773, 675, 1137, 835]; Yuna [122, 313, 255, 837], Rikku [447, 436, 581, 804], Paine [702, 468, 762, 790]: overlap 0 px for all three (Paine's right edge is 11 px from the card's left edge; part 1: 48 px inside it).
+
+**J6 (the air) and J7 (the new Valefor): looked at as stills.** The waterfalls first drawn 3.4 times as wide with their picture stretched were a blocky white-blue wall, the brightest thing in the room: they are 2.6 times as wide now, the picture repeats across them and the colour is dimmed to 0.82 (they read as cascades, like the concept frame). The new Valefor stands in the same place at the same 5 m: her wings, plumes and armour read, her colours are the frame's (teal body, green and yellow wings, gold armour, blue plumes) rather than the flat v2's; her hull outline follows the wing flap.
+
+**J8 (the clips): PASS.** One job: the showcase rigs (idle, party, enemy; the battle layer hidden), a full fight to a win with the battle layer drawn invisible by CSS (the menus still take the keys), and a knock-out run, all recorded in high quality. The fight by real keys: Valefor's Attack on a girl, Yuna's Protect (cast), Paine's and Rikku's attacks, Sonic Wings, the Energy Ray, a last blow (the harness brought Valefor low), `victory`, the victory poses (the engine holds them 3.3 s, then the results screen), back to the board. The girls return to the upright idle after each action; the strike runs in and back; no spin or pop at a cut in the sampled frames. **Not frame-stepped**: the clips are for Bailey's eye.
+
+### P2.5 The clips
+
+In the lane's scratch (nothing from it is committed): `1-idle.mp4` (the target shot), `2-attack.mp4`, `3-cast.mp4`, `4-hit.mp4`, `5-ko.mp4`, `6-victory.mp4` (5 s: the engine's own pose time), bonus `7-party-closeup.mp4` and `8-valefor-closeup.mp4`, and `contact-sheet.png` (a row per clip, three frames each). 1600x900, H.264, no sound, each under 10 MB.
+
+### P2.6 What is a stand-in (part 2's view; part 1's list stands where not replaced)
+
+- **The temple** is still the Wind Waker chapter's stage (R 12 m, blue brick, procedural, the Meshy kit), now with a stone floor, a mirror, wide waterfalls, mist and motes. Still missing against the concept frame: the steps up to the door, a real pool, natural vines.
+- **Valefor** is a static mesh (one file, no skeleton): the flap is the vertex shader's, the hover and bob are code, as for v2. Her colours are Meshy's, regraded; her face (a beak and a red gem) is small on screen.
+- **The idle** is the Wind Waker cast's, retargeted; **the victory** likewise; **the attack, hit, cast and ko clips are still the Meshy toon girls' own** (gestures, not weapon actions: the strike does not meet the weapon).
+- **The weapons** are the Wind Waker chapter's files at 1.3; no thumb mount.
+- **The proportions** are a free geometric pass, not a remodel: the head is a uniform scale (the face keeps its look), the arms and legs are stretched along their bones, nothing is re-sculpted; a sleeve, a skirt or a boot is stretched with the limb it hangs on.
+- **The mirror** reflects everything including the light shaft's additive cards; it is blurred a few taps and rippled, not a true rough reflection.
+
+### P2.7 Tools and how to regenerate
+
+```
+node tools/anime/cast.mjs --orig <dir of the stored LOD1 files> [--out <dir>] [--report]            # the three girls, byte for byte
+node tools/anime/proportion.mjs in.glb out.glb --head 0.78 --leg 1.10 --spine 1.02 --arm 1.5 --slim 0.97 --neck 1.1 [--report]
+node tools/anime/retarget.mjs target.glb source.glb --map idle:idle,victory:victory [--calib median|first] [--report]
+node tools/anime/valefor-fit.mjs <the raw Meshy model.glb> <out.glb> --height 3.5 --min-tris 12 --saturation 1.35 [--report]
+node tools/ww-models.mjs record     # after the files change: the list's hashes
+```
+
+`glbkit.mjs` is the small GLB reader and writer under them (`compactGlb` repacks a file a rewrite left bytes behind in). Valefor's picture: `Flux 2 klein 9B` (`flux-2-klein-9b-kv-fp8`, text encoder `qwen_3_8b_fp8mixed`, VAE `flux2-vae`) on the local ComfyUI from concept frame A with the prompt "remove the three girls, the temple, the waterfalls, the vines and all the scenery; keep only the large feathered winged creature; alone, full body, seen exactly from the front, symmetrical, both wings spread wide and level, the claws pointing down; plain flat light grey background; same colours, same gold armour, same feather style" (4 steps, cfg 1, seeds 11 to 14, the fourth taken). The part-1 harness is not committed (scratch); its additions in part 2 are a `--hq` recorder (CDP screencast to ffmpeg), `--hud-css`, a `showcase` mode (the rigs held for a time) and an event log with times (`cut-clips.mjs` cuts the clips by them).
+
+### P2.8 Tests
+
+`tsc --noEmit` clean. New or changed: `ww3d/stage-anime.test.ts` (20: the curve, the floor's name, the stone, the mirror, once per frame, low quality, dispose, the mote field, the air), `anime-tools.test.ts` (15, a synthetic rig and a synthetic static mesh: the head scaled about its joint, the soles on the floor, the IBMs the inverses of the bind pose, the clips' translations, a retarget by bone name with its lift, a replaced clip, a report that changes nothing, the Valefor fit and the repack), `ww3d/anime-files.test.ts` (15, three new: the proportion band per girl, the idle's hips, the victory window; the clip list now has `victory`), `ww3d/anime-layout.test.ts` (14: her file, the wing numbers, the points), the two models-list pins (fifteen). `node tools/orphans.mjs`: 24 modules, the same as the base, none new. **The suite:** the anime and Wind Waker files were re-run in the finish pass (P2.11): 34 files, 500 tests, all pass; the full suite was not.
+
+### P2.9 What part 3 needs (the art list)
+
+| # | Need | What | Cost / route |
+|---|---|---|---|
+| A3 | **A rigged Valefor** | the new mesh is static: a skeleton and clips (idle, Energy Ray cast, Blast charge, Sonic Wings, hurt, KO) so her wings and tail move as feathers, not as a bend | Meshy rig (5 credits) and animations (3 each) do not fit a winged biped well: Blender weight painting by hand; or keep the shader |
+| A4 | **Temple v3** | the steps up to the door, a pool at the waterfalls' feet, natural vines | about 200 lines in `stageAnime.ts`, 3 to 5 hours; the kit 35 credits a piece |
+| A5 | **A toon Besaid plate** for the board, prep and cutscenes | in place of chapter 24's painted Djose chamber | one ChatGPT Images frame (or a Flux 2 klein edit, as for Valefor); Bailey alone approves |
+| A6 | **Weapon mounts and weapon-true attacks** | the lab's "thumb" mount; the strike meeting the weapon; the pistols aimed by the arm, not by the wrist | a `mount` field on `PropSpec`; clips by retarget from the Wind Waker cast's `attack` (it carries the weapon action) |
+| A7 | **Bailey's eye** | the proportions (P12), the upright idle (P14), the floor and the air (P16, P20), the new Valefor (P17), the look default and the cast in motion | the clips |
+
+### P2.10 Open issues
+
+1. **Bailey's eye** on all of it (the clips are in the lane's scratch): a miss on "AI slop" is a written method check (rule 15), not a third try.
+2. **The upright idle may read as a pose, not a stance**: the girls stand relaxed until a command; if he wants a ready stance, the choice is P14's alternatives.
+3. **The mirror's cost**: it draws the room once more per game frame; measured only as "no console error and about 40 captured frames a second on the RTX 5070 Ti" (with the new Valefor's 25 thousand triangles and her hull drawn twice). Not measured on a weak GPU (the low-quality build has none); the door is desktop only.
+4. **Valefor's wing flap on a new mesh**: the numbers are measured, not tuned in motion; a tear at the shoulders on a hard flap would show in the clips first (none in the sampled frames).
+5. **The Wind Waker chapter's pixel A/B** is still owed (needs a second tree).
+6. **The suite's one pre-existing failure** (`chapters/boss-art-r75.test.ts`, held-card file name) is on the branch's base as well: r75's own.
+7. **Release slot**, unchanged: the chapter classes DEEP. The shipped size grew by 2.96 MB (her Valefor) and about 1.4 MB (the girls: two clips each); the build's check lists 15 files.
+8. **Harness additions are scratch**: `play.mjs` is about 900 lines in the lane's folder; if the chapter is reviewed again, the clips' recorder (`--hq`) is worth moving into `tools/`.
+
+### P2.11 The finish pass (2026-11-06, a second agent: the notes above checked against the code, the files and the clips, then merged here)
+
+The part-2 builder pushed its code and stopped before merging these notes. This pass changed no code and no model file; it re-ran the checks below, looked at the clips, corrected two statements (C1 and C2) and wrote this section. Game case unchanged: FFX-2 only (records only).
+
+| Check | Result |
+|---|---|
+| `npx tsc --noEmit` | clean |
+| the anime and Wind Waker suites | **34 files, 500 tests, all pass**: the whole `tests/unit/ww3d/` folder (`stage-anime` 20, `anime-files` 15, `anime-layout` 14, `skin` 31, `stage` 16, `staging` 8, `layout` 23, `model` 16 among them), `anime-tools` 15, `anime-door` 13, `windwaker-door` 22, `vite-ww-models` 14, `ww-models-tool` 14, `chapter-doors` 10, `chapters/exp-anime` 19, `chapters/exp-windwaker` 19, `chapters/prep-tip-band` 15. The counts in P2.8 hold. The Wind Waker chapter's own suites (`exp-windwaker`, `windwaker-door`, the `ww3d/` folder) are among them and green, as the byte-identical rule asks. The full `npm test` was **not** re-run in this pass (open issue 6 stands) |
+| `node tools/orphans.mjs` | 24 orphaned modules, the base's own; none is an anime module |
+| the three girls | `tools/anime/cast.mjs` re-run on the stored LOD1 files: the three files it writes equal the shipped ones **byte for byte** (the same sha256 as `tools/ww/ww-models.json`) |
+| the models | `node tools/ww-models.mjs verify`: PASS (15 files). The store's part-2 folder and its second-disk backup: all 11 files equal their `SHA256SUMS` |
+| the numbers in the code | `ANIME_WING`, `ANIME_BOSS_POINTS`, `ANIME_FILES`, `ANIME_NATIVE_HEIGHT`, `ANIME_FLOOR.strength` 0.55, `AIR` (2.6 times, tone 0.82, 3 mist sprites a fall, 140 motes), the aura step 0.2, the floor's name: all as P2.1 to P2.3 say. `git diff 3cee026d7 HEAD` over the shared engine files (`stage`, `layout`, `wing`, `model`, `skin`, `cel`) is exactly the table of P2.3 (a name, two optional fields, a type, fallbacks, one constant) |
+| the committed diff | adds no local path, scratch folder name or account name |
+
+**The Meshy spend, part 2.** One task, **35 credits**: the Valefor image-to-3D (Meshy 7.1, 4k geometry, 2k textures, PBR off, a 15,000 quad remesh target, image enhancement on) from the fourth klein candidate; the run's own balance reads 4,440 before and 4,405 after (a delta of 35; the run set itself a cap of 70 and made no second task). Its ledger lists that one step only: the mirrored-crop try that gave a double-headed bird is not in it. **Part 1 spent none.** Everything else in part 2 was free: Flux 2 klein on the local ComfyUI, the proportion pass, the retarget and the fit are pure node and local. No rig, animation, retexture or girl-rebuild task was bought (the 150 to 250 credit 7-head rebuild of P12 stays an option). The raw Meshy model, its map and the four candidates are in the models store and its backup.
+
+**The clips, sampled with ffmpeg (six frames a clip, then a few at full size).** All eight are 1600x900, H.264, 30 fps, no sound, 4.4 to 9.4 MB: idle 9.5 s, attack 8 s, cast 8 s, hit 6.5 s, ko 12 s, victory 5.2 s, party close-up 6.5 s, Valefor close-up 5.5 s. What they show:
+
+- **idle (the target shot):** the three girls stand upright and relaxed, the weapons at the hip, the heads level; Valefor hovers and flaps in front of the door; the floor mirrors everything; the waterfalls read as wide cascades with the vines and the shaft's light. No neck seam, no face damage at this size.
+- **attack, cast and hit are cuts of the one recorded fight** (the girls act, Valefor takes the blows and answers), not three separate takes. **attack:** Yuna aims her pistol arm, Paine steps in and slashes, Rikku runs in, strikes and returns; grey smoke puffs and a gold star burst mark the blows on Valefor, a white wind curl sweeps from her toward the party near the end, and every girl is back in the upright idle afterwards. No spin or pop at a cut in the sampled frames (not frame-stepped).
+- **cast:** Yuna's spell gesture (an arm swept out and up), Rikku's leap, cloud puffs over Valefor, the white curl; then the idle again.
+- **hit:** the blow's reaction: Valefor flashes orange with a gold star on her chest at the moment of the blow, smoke puffs at Rikku's strike, Yuna aiming and Paine lunging; no girl is hurt in this cut (the girl that goes down is in the ko clip).
+- **ko:** Rikku jumps, falls and lies on the floor for the rest of the clip while Yuna and Paine stand and Valefor flaps on; the lying pose rests on the floor.
+- **victory (5 s, the engine's own pose time):** after the last blow Valefor is gone and the camera pushes in on the three; Yuna stands with both arms raised, Rikku with her hands up and her feet off the floor, Paine still with the sword held low.
+- **party close-up:** the three at a low angle in the upright idle with a slight sway; the mirror and the torches behind; the weapons held at the hips.
+- **Valefor close-up:** wings spread level, the gold armour, the blue plumes and the red gem read; the flap bends at the shoulders and no tearing shows in the sampled frames (open issue 4 stays: this is a look, not a frame-by-frame proof).
+
+**Corrections found in the finish pass**
+
+- **C1. The idle clip is not a pure hold.** The showcase mode holds the camera rig, but the real fight keeps running underneath with its layer hidden, so two battle effects show in the 9.5 s clip: a gold hit star in front of Rikku at about 3 s and a white curl over Valefor at about 8 s. The poses themselves are the upright idle throughout. If Bailey wants a pure hold for the target shot, the recorder pauses the battle first (a harness change, no game change).
+- **C2. Only Yuna reaches 7 heads on the face measure.** P2.1's bands (Yuna 7.90, Rikku 9.02, Paine 7.01) measure the Head joint to `head_end` (the bone length; the files test pins it). The tool's own `heads` (chin to crown, the hair included, `proportion.mjs --report`) reads, before the pass and after: **Yuna 5.41 to 7.02, Paine 5.18 to 6.29, Rikku 3.45 to 4.29**. Rikku's hair mass counts as head, and she reads short and big-headed in the clips beside Yuna. That fits the Rikku of the game (the youngest, the shortest) but it is the proportion to watch for Bailey's eye (open issue 9).
+
+**Open issues added by the finish pass** (the list of P2.10 stands)
+
+9. **Rikku (4.3 heads) and Paine (6.3) sit below Yuna's 7.0 by the face measure** (C2): one line each in `tools/anime/cast.mjs` `RECIPES` and a re-run, then `tools/ww-models.mjs record`, if Bailey wants them taller; the alternative is the Meshy rebuild at 7 heads.
+10. **The idle clip carries two ambient battle effects** (C1).
+11. **No full `npm test` on the final tree**; the targeted suites above are green and `tsc` is clean.
+
+---
+
+# Part 1 (2026-11-06, the code), as written
 
 ## 1. What is on the branch
 
