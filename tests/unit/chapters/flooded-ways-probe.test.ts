@@ -4,11 +4,15 @@
  */
 
 import { describe, expect, it } from 'vitest';
+import { swimmersBuild } from '../../../src/data/ffx/builds/swimmers.ts';
+import { withWards } from '../helpers/floodedBench.ts';
 import { actor, defend, flags, invincible, log, newEngine, nextInput, nextInputOf, row } from '../helpers/floodedDrive.ts';
+
+const WARDED = withWards(swimmersBuild, ['tidus', 'wakka', 'rikku']);
 
 describe('the death blow, in order', () => {
   it('9,999 to Tidus, Wakka and Rikku, then Geosgaeno\'s own KO, then the defeat', () => {
-    const e = newEngine(7, 'geosgaeno');
+    const e = newEngine(7, 'geosgaeno', WARDED);
     let held = '';
     for (let i = 0; i < 200 && held === ''; i++) {
       invincible(e);

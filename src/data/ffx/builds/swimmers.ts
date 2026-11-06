@@ -11,9 +11,11 @@
  *   copies the Gagazet preset's Sphere Grid cell for cell, Rikku's MP pinned at Chapter VIII's 130), because Chapter X measured its midpoint party at 8/200 wins and the upper-bound party at 116/200 and picked the upper
  *   bound (`docs/plans/chapter-natus-review.md`). The Fahrenheit cells (`./fahrenheit.ts`, 1,265 / 1,430 / 880 HP) are the lower bound. **Every cell keeps the `[estimate]` label the Gagazet preset gives it**; none is set by hand
  *   and none is tuned toward a result (rule 15).
- * - **Equipment is Highbridge's, carried forward, with a Stone Ward added on Tidus and Wakka** (pick GV4; Rikku already wears hers from Chapter VIII): the guides' standing advice for both fights, and the armour is slot-rich
- *   (two slots, `hp-10` and `stone-ward`). A Stone Ward takes 50 off a Petrify chance, so against Stone Punch and Stone Gaze (both 50) it makes the Petrify never land: **the shatter rule is real in the engine and is not met by
- *   this party unless the Wards come off** (the bench prints that ablation, `tools/flooded-ways-bench.mjs`).
+ * - **Equipment is Highbridge's, carried forward, unchanged: Rikku's Stone Ward alone** (pick GV4, **the driver's call against the preflight's recommendation, "driver's call, his to overturn"**). The preflight recommended
+ *   a Stone Ward added on Tidus and Wakka too, "the guides' standing advice". A Stone Ward takes 50 off a Petrify chance, so against Stone Punch and Stone Gaze (both 50) it makes the Petrify never land: **with three Wards the
+ *   shatter rule, the chapter's sharpest rule, is real in the engine and never met** (Geosgaeno 95 percent for the elemental line, 200 seeds), and it adds an armour no source gives to two members. The bench measured both
+ *   (`docs/handoff/ch-flooded-ways.md` section 5): Rikku's Ward alone keeps the water rule alive (about 0.6 members shattered a fight) and puts Geosgaeno at 82 percent, nearer the plan's 60 to 80 band, with nothing
+ *   added to anyone's gear. The preflight's three Wards are the one list `WARDED` below: add the two ids and the build is the preflight's.
  * - **The bag is Highbridge's** (Chapter VIII's, carried forward) **plus the preflight's kit** ({@link SWIMMERS_KIT}: the four gems, Poison Fang, X-Potions, and 30 Phoenix Downs). The preflight said the preset's bag already
  *   held these; it does not (12 Phoenix Downs, no gems, no X-Potion), so the list is added, exactly as written, as an `[estimate]`. **Against Evrae Altana the bag is a two-item fight** (two Phoenix Downs or two X-Potions kill a Zombie
  *   that cannot be healed past its 16,384): the chapter does not hide it and does not nerf the boss; the bag's stock is the preset lever (pick GV10), measured by the bench, never the monster.
@@ -24,10 +26,16 @@ import type { FFXMemberBuild, FFXPartyBuild } from '../../../battle/common/types
 import { highbridgeBuild } from './highbridge.ts';
 import { SWIMMERS } from '../flooded-ways-ids.ts';
 
-/** A member with the Stone Ward joined to the armour's auto-abilities (two slots: `hp-10` and `stone-ward`). */
+/**
+ * Who has a Stone Ward added to the armour they carry (two slots: `hp-10` and `stone-ward`). **Nobody**: Rikku's is Chapter VIII's and is already on her armour. The preflight's pick (GV4) was `['tidus', 'wakka']`;
+ * the bench's table in the handoff prints both.
+ */
+export const WARDED: readonly string[] = [];
+
+/** A member with the Stone Ward joined to the armour's auto-abilities. */
 function warded(m: FFXMemberBuild): FFXMemberBuild {
   const armor = m.equipment.armor;
-  if (armor.autoAbilities.includes('stone-ward')) return m;
+  if (!WARDED.includes(m.id) || armor.autoAbilities.includes('stone-ward')) return m;
   return { ...m, equipment: { ...m.equipment, armor: { ...armor, autoAbilities: [...armor.autoAbilities, 'stone-ward'] } } };
 }
 
@@ -35,7 +43,7 @@ function swimmer(id: (typeof SWIMMERS)[number]): FFXMemberBuild {
   const m = structuredClone(highbridgeBuild.members.find((x) => x.id === id));
   if (m === undefined) throw new Error(`swimmers: ${id} missing from the Highbridge preset`);
   m.learnedAbilityIds = m.learnedAbilityIds.filter((a) => a !== 'talk');
-  return id === 'rikku' ? m : warded(m);
+  return warded(m);
 }
 
 /**

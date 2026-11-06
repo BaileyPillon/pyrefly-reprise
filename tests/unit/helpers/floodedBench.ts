@@ -185,6 +185,16 @@ export async function evraeRate(seeds: number, line: Line, party: FFXPartyBuild 
   return tally(out);
 }
 
+/** The party with a Stone Ward on exactly these members (the others' armour keeps whatever else it had). */
+export function withWards(party: FFXPartyBuild, wardedIds: readonly string[]): FFXPartyBuild {
+  const out = structuredClone(party);
+  for (const m of out.members) {
+    const rest = m.equipment.armor.autoAbilities.filter((a) => a !== 'stone-ward');
+    m.equipment.armor.autoAbilities = wardedIds.includes(m.id) ? [...rest, 'stone-ward'] : rest;
+  }
+  return out;
+}
+
 /** The party with the bag changed: `kit` false removes the preflight's kit (the Highbridge bag as it was, 12 Phoenix Downs). */
 export function withBag(party: FFXPartyBuild, kit: boolean): FFXPartyBuild {
   if (kit) return party;

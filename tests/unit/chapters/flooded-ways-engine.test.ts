@@ -16,8 +16,12 @@ import {
   actions, actor, content, ctxOf, defend, engineOnGroup, flags, invincible, log, newEngine, nextInput, nextInputOf, playEngine, row, setup, unwarded, type Input,
 } from '../helpers/floodedDrive.ts';
 import { createFFXEngine } from '../../../src/battle/ffx/index.ts';
+import { swimmersBuild } from '../../../src/data/ffx/builds/swimmers.ts';
+import { withWards } from '../helpers/floodedBench.ts';
 
 const SWIM = ['tidus', 'wakka', 'rikku'] as const;
+/** All three in a Stone Ward (the preflight's pick): nobody is shattered, so a mechanic stays on its mechanic. */
+const WARDED = withWards(swimmersBuild, SWIM);
 const hpOf = (e: BattleEngine): Record<string, number> => Object.fromEntries(SWIM.map((id) => [id, actor(e, id).hp]));
 const gone = (e: BattleEngine): string[] => SWIM.filter((id) => actor(e, id).statuses['eject'] !== undefined);
 
@@ -50,15 +54,27 @@ describe('T0: in the water a Petrify that lands shatters its victim (RE 2.2)', (
     expect(found).toBe(1);
   });
 
-  it('the shipped party wears Stone Wards (50 off a Petrify of 50): over 40 seeds of both links not one member shatters or is petrified', () => {
+  it('a Stone Ward takes 50 off a Petrify of 50: a party with all three Wards (the preflight\'s pick) is never shattered or petrified, over 40 seeds of both links', () => {
+    const warded = withWards(swimmersBuild, SWIM);
     for (const link of ['area-1', 'geosgaeno'] as const) {
       for (let seed = 1; seed <= 40; seed++) {
-        const e = newEngine(seed, link);
+        const e = newEngine(seed, link, warded);
         idle(e, 24);
         expect(gone(e), `${link} seed ${seed}`).toEqual([]);
         for (const id of SWIM) expect(actor(e, id).statuses['petrify'], `${link} seed ${seed} ${id}`).toBeUndefined();
       }
     }
+  });
+
+  it('the shipped party has Rikku\'s Ward alone: Rikku is never shattered, and Tidus or Wakka are, in the first area, on some of 40 seeds', () => {
+    let shattered = 0;
+    for (let seed = 1; seed <= 40; seed++) {
+      const e = newEngine(seed, 'area-1');
+      idle(e, 24);
+      expect(gone(e), `seed ${seed}`).not.toContain('rikku');
+      shattered += gone(e).length;
+    }
+    expect(shattered).toBeGreaterThan(0);
   });
 
   it('the same gaze on dry land (the formation not a water battle) leaves a Petrified member in the fight, never an Eject', () => {
@@ -117,7 +133,7 @@ describe('T0: Evrae Altana is an automatic Zombie, and healing it is the way to 
 
 describe("Evrae Altana's script (RE 4.3)", () => {
   it('while three stand it alternates Stone Gaze and Photon Spray, opening with a Gaze', () => {
-    const e = newEngine(3, 'area-1');
+    const e = newEngine(3, 'area-1', WARDED);
     idle(e, 70);
     const mine = actions(log(e), 'evrae-altana');
     expect(mine.length).toBeGreaterThanOrEqual(6);
@@ -311,7 +327,7 @@ function untilHeld(e: BattleEngine): string {
 
 describe('the swallow-hold (RE 4.1)', () => {
   it('the swallowed character is out of the fight: untargetable, no Attack can name them, and their menu is Struggle and Defend', () => {
-    const e = newEngine(7, 'geosgaeno');
+    const e = newEngine(7, 'geosgaeno', WARDED);
     const held = untilHeld(e);
     expect(actor(e, held).flags.untargetable).toBe(true);
     // Their own turn: nextInputOf stops where they are asked.
@@ -324,7 +340,7 @@ describe('the swallow-hold (RE 4.1)', () => {
   });
 
   it('everything but Struggle and Defend is refused for the held character: the turn stays open', () => {
-    const e = newEngine(7, 'geosgaeno');
+    const e = newEngine(7, 'geosgaeno', WARDED);
     const held = untilHeld(e);
     const d = nextInputOf(e, held);
     e.submit({ kind: 'attack', targets: ['geosgaeno'] });
@@ -358,7 +374,7 @@ describe('the swallow-hold (RE 4.1)', () => {
   });
 
   it('if the held character waits (Defend), the spit-out hits all three for their HP minus 1 and leaves them at 1 HP; Geosgaeno\'s maximum HP is back after', () => {
-    const e = newEngine(7, 'geosgaeno');
+    const e = newEngine(7, 'geosgaeno', WARDED);
     const held = untilHeld(e);
     // Put the party at known HP so the numbers read plainly: the victim 2,000, the others 5,000 and 1,500.
     const hp: Record<string, number> = { tidus: 5_000, wakka: 5_000, rikku: 5_000 };
@@ -383,7 +399,7 @@ describe('the swallow-hold (RE 4.1)', () => {
   });
 
   it('a victim whose HP is below the others\' wait and nobody falls; a victim above the others\' takes them with them (the swallowed one\'s HP minus 1 to each)', () => {
-    const e = newEngine(7, 'geosgaeno');
+    const e = newEngine(7, 'geosgaeno', WARDED);
     const held = untilHeld(e);
     for (const id of SWIM) {
       actor(e, id).stats.maxHp = 9_999;
@@ -397,7 +413,7 @@ describe('the swallow-hold (RE 4.1)', () => {
   });
 
   it('Struggle: the held character strikes from inside and takes their own HP (a KO); nobody else is hurt; the hold ends and Geosgaeno\'s maximum HP is back', () => {
-    const e = newEngine(7, 'geosgaeno');
+    const e = newEngine(7, 'geosgaeno', WARDED);
     const held = untilHeld(e);
     const d = nextInputOf(e, held);
     const before = hpOf(e);
@@ -411,7 +427,7 @@ describe('the swallow-hold (RE 4.1)', () => {
   });
 
   it('Defend is open to the held character: they wait', () => {
-    const e = newEngine(7, 'geosgaeno');
+    const e = newEngine(7, 'geosgaeno', WARDED);
     const held = untilHeld(e);
     const d = nextInputOf(e, held);
     expect(d.commands.some((c) => c.label === 'Defend' && c.enabled)).toBe(true);
@@ -420,7 +436,7 @@ describe('the swallow-hold (RE 4.1)', () => {
   });
 
   it('killing Geosgaeno while it holds someone: 9,999 to the whole front line, the held one included; a party under that is a defeat, though the monster is dead too', () => {
-    const e = newEngine(7, 'geosgaeno');
+    const e = newEngine(7, 'geosgaeno', WARDED);
     const held = untilHeld(e);
     for (const id of SWIM) {
       actor(e, id).stats.maxHp = 9_000;
@@ -439,7 +455,7 @@ describe('the swallow-hold (RE 4.1)', () => {
   });
 
   it('killing it with nobody inside is the ordinary win and costs the party nothing', () => {
-    const e = newEngine(7, 'geosgaeno');
+    const e = newEngine(7, 'geosgaeno', WARDED);
     actor(e, 'geosgaeno').hp = 1;
     const d = nextInput(e);
     const hp = hpOf(e);

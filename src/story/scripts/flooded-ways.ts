@@ -79,7 +79,7 @@ export const floodedWaysScripts: ChapterScripts = {
     say('wakka', "Fair's for blitzball, ya."), // 2
     beat(1400),
     say('rikku', 'Tidus, you went all quiet in there. Were you scared? Be honest!'), // 3
-    say('tidus', 'A bit. It had me for a whole turn and I still do not know how I got out.'), // 4
+    say('tidus', 'A bit. I was inside it. I still do not know how I got out.'), // 4
     say('wakka', 'You hit it from the inside, brudda. That is how.'), // 5
     say('rikku', 'Okay okay okay: next time we bring a bigger plan!'), // 6
     results(),

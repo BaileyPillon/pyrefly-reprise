@@ -12,7 +12,7 @@ import { COMMAND_RECORDS_FLOODED_WAYS, FLOODED_WAYS_ABILITIES } from '../../../s
 import { ALTANA_OVERKILL, GEOSGAENO_OVERKILL, evraeAltana, gateLock, geosgaeno } from '../../../src/data/ffx/enemies/flooded-ways.ts';
 import { FLOODED_GROUPS } from '../../../src/data/ffx/enemies/flooded-ways-groups.ts';
 import * as ids from '../../../src/data/ffx/flooded-ways-ids.ts';
-import { swimmersBuild } from '../../../src/data/ffx/builds/swimmers.ts';
+import { WARDED, swimmersBuild } from '../../../src/data/ffx/builds/swimmers.ts';
 import { UNLISTED_CHAPTER_META } from '../../../src/data/chapter-meta.ts';
 import { getScene } from '../../../src/scenes/index.ts';
 import { CHAPTER_DOORS } from '../../../src/app/screens/frontend/chapterDoors.ts';
@@ -224,9 +224,12 @@ describe('the party: Tidus, Wakka and Rikku, the only three who can swim', () =>
     expect(r!.stats.maxMp).toBe(130); // Chapter VIII's pinned MP, as Chapter X has it
   });
 
-  it('Rikku wears her Stone Ward from Chapter VIII; Tidus and Wakka have one added next to their hp-10; Talk is gone', () => {
-    for (const m of swimmersBuild.members) expect(m.equipment.armor.autoAbilities, m.id).toContain('stone-ward');
-    expect(swimmersBuild.members[0]!.equipment.armor.autoAbilities).toContain('hp-10');
+  it('the equipment is the Highbridge preset\'s, unchanged: Rikku wears her Stone Ward from Chapter VIII, Tidus and Wakka their hp-10 and no Ward (pick GV4: the preflight\'s added Wards are measured in the handoff, not shipped); Talk is gone', () => {
+    const [t, w, r] = swimmersBuild.members;
+    expect(r!.equipment.armor.autoAbilities).toEqual(['stone-ward']);
+    expect(t!.equipment.armor.autoAbilities).toEqual(['hp-10']);
+    expect(w!.equipment.armor.autoAbilities).toEqual(['hp-10']);
+    expect(WARDED).toEqual([]);
     for (const m of swimmersBuild.members) expect(m.learnedAbilityIds, m.id).not.toContain('talk');
   });
 
