@@ -246,6 +246,9 @@ describe('the moves against the rows [RE §7]', () => {
       }
       expect((a.flags ?? []).includes('reflectable'), `${id}: reflectable`).toBe((row.flagsMisc & 0x80) !== 0);
       expect((a.flags ?? []).includes('heals'), `${id}: heals`).toBe((row.flagsDamage & 0x10) !== 0);
+      // The Delay bits of the misc word (weak 0x1000, strong 0x2000): Tidus's Delay Buster is the strong one (review fix, 2026-11-06: the definition had carried the weak flag).
+      expect((a.flags ?? []).includes('weak-delay'), `${id}: weak delay`).toBe((row.flagsMisc & 0x1000) !== 0);
+      expect((a.flags ?? []).includes('strong-delay'), `${id}: strong delay`).toBe((row.flagsMisc & 0x2000) !== 0);
     }
   });
 

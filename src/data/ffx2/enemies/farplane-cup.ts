@@ -11,7 +11,7 @@
  * script decoded from the kernel tables.
  *
  * **Three fixed duels, not a tournament (pick DU1).** The cup has no formation row and no launcher in the files (RE §5), so its rounds, rewards and recruiting are not sourced and are not built. Duel 1 (Auron), then 2
- * (Tidus) and 3 (Seymour) chain by `nextGroupId`; a 15-second seam between them (the story) mends the girls, and links 2 and 3 are entered at full HP and MP with a fallen girl standing (`restoresPartyOnEntry`) and no Save
+ * (Tidus) and 3 (Seymour) chain by `nextGroupId`; a seam between them (the story: 12.8 s after Auron and 11.0 s after the second duelist, pinned under 16 s by `farplane-cup-story.test.ts`) mends the girls, and links 2 and 3 are entered at full HP and MP with a fallen girl standing (`restoresPartyOnEntry`) and no Save
  * Sphere card (`noSaveSphereCard`); items spent stay spent. Each of those links is also the retry checkpoint (a defeat on duel 2 retries duel 2). **Escape is off** on all three. Each duelist stands alone in slot 1: the
  * weapon props (rows 312, 318, 320) are visual only (RE §2.4).
  *

@@ -4,9 +4,10 @@
  * (`tools/rig-record-lock.mjs`: one browser job at a time on this PC; the job promises to finish inside ten minutes). It opens the chapter by its typed word, looks at party prep, plays the pre scene by
  * keyboard, takes the first menu of duel 1 (Auron, on the Den of Woe's stage), plays turns with the real keys (Enter on Attack, Enter on the one target), then writes Auron's HP down to a few hundred (a debug
  * write to the battle state, as the Mirror and Dark Aeons smokes do: the fight itself is not a measurement of difficulty) and carries on by keys until the first fight is won and the seam has played, stopping at the
- * first menu of duel 2 (the masked duelist, "????").
+ * first menu of duel 2 (the masked duelist, "????"); then (the review-fix pass) writes the masked duelist's HP down the same way, plays the second seam, checks Seymour's first menu (his sprite is seen in the
+ * screenshot), writes his HP down and carries the keys to the results page and the post scene, whose line names the hidden duelist.
  *
- *   PYREFLY_BROWSER=gpu node tools/farplane-cup-smoke.mjs [--base http://127.0.0.1:5231/] [--out docs/screenshots/ch-farplane-cup] [--tag desk] [--w 1600 --h 900] [--touch] [--seed 7]
+ *   PYREFLY_BROWSER=gpu node tools/farplane-cup-smoke.mjs [--base http://127.0.0.1:5231/] [--out docs/screenshots/ch-farplane-cup] [--tag desk] [--w 1600 --h 900] [--touch] [--seed 7] [--late-shots]
  *
  * Exit code 1 on a failed check. Headless only (`PYREFLY_BROWSER=gpu` for the real GPU); never the Chrome extension or the built-in pane. **The three duelists are existing party paintings** (`characters/auron`,
  * `tidus`, `seymour-guest`), so no placeholder warning is expected for them; the pause hero `pause/ffx2-farplane-cup` and the card thumbnail are keys with no painting yet, and a 404 for them is the one accepted.
@@ -29,6 +30,7 @@ const TAG = arg('--tag', 'smoke');
 const W = Number(arg('--w', '1600'));
 const H = Number(arg('--h', '900'));
 const TOUCH = flag('--touch');
+const LATE_ONLY = flag('--late-shots');
 const SEED = Number(arg('--seed', '7'));
 mkdirSync(OUT, { recursive: true });
 
@@ -63,6 +65,7 @@ try {
     if (r.status() >= 400) missing.push(`${r.status()} ${r.url().slice(0, 160)}`);
   });
   const shot = async (name) => {
+    if (LATE_ONLY && !/^[789]/.test(name)) return; // --late-shots: only duel 3 and the close are saved (the earlier pictures of the first run stand)
     const p = join(OUT, `${TAG}-${name}.jpg`);
     await page.screenshot({ path: p, type: 'jpeg', quality: 90 });
     log(`shot.${name}`, p);
@@ -218,6 +221,77 @@ try {
     await dismissCoach();
     await page.waitForTimeout(600);
     await shot('6a-duel-2-menu-clear');
+
+    // --- duel 2 to duel 3: the masked duelist's HP written down (a debug write, as for Auron), then the keys carry the fight, the second seam and Seymour's first menu ---------------------------
+    await page.evaluate((id) => {
+      const st = window.__pyrefly.battleState();
+      if (st.combatants[id].hp > 600) st.combatants[id].hp = 600;
+    }, ids.X2_CUP_TIDUS_ID);
+    const t1 = Date.now();
+    let duel3 = false;
+    for (let i = 0; Date.now() - t1 < 4 * 60_000 && !duel3; i++) {
+      const st = await page.evaluate(() => {
+        const b = window.__pyrefly.battleState?.();
+        return b ? { enemies: b.enemyIds } : null;
+      });
+      if (st && st.enemies.includes(ids.X2_CUP_SEYMOUR_ID)) {
+        duel3 = true;
+        break;
+      }
+      if ((await screenNow()) === 'results') break;
+      await page.keyboard.press('Enter');
+      await page.waitForTimeout(700);
+    }
+    log('fight 2 result', { duel3, ms: Date.now() - t1 });
+    check('duel 2 is won by the keys and the second seam leads to duel 3', duel3, {});
+    if (duel3) {
+      await waitBattleMenu(page, 120000);
+      await page.waitForTimeout(2500);
+      const f3 = await field();
+      log('field.3', f3);
+      check('duel 3 opens with Seymour alone at full HP', f3?.enemies.length === 1 && f3.enemies[0].id === ids.X2_CUP_SEYMOUR_ID && f3.enemies[0].hp === 145_500 && f3.enemies[0].name === 'Seymour', f3?.enemies);
+      const lost3 = await page.evaluate(() => {
+        const out = {};
+        for (const e of window.__pyrefly.battleLog?.() ?? []) if (e.type === 'damage' && ['yuna', 'rikku', 'paine'].includes(e.targetId)) out[e.targetId] = (out[e.targetId] ?? 0) + (e.amount ?? 0);
+        return out;
+      });
+      check('the girls opened duel 3 whole (the arena mended them again): each girl HP is her maximum less the damage this fight has dealt her', f3?.girls.every((g) => (g.alive ? g.hp === g.maxHp - (lost3[g.id] ?? 0) : (lost3[g.id] ?? 0) >= g.maxHp)), { girls: f3?.girls, lost3 });
+      const text3 = await page.evaluate(() => document.body.innerText.replace(/\s+/g, ' '));
+      check('the HUD names Seymour', /Seymour/.test(text3), text3.slice(0, 200));
+      await shot('7-duel-3-first-menu');
+      await dismissCoach();
+      await page.waitForTimeout(600);
+      await shot('7a-duel-3-menu-clear');
+
+      // --- Seymour's HP written down, then the keys carry the fight to the results page and the post scene -----------------------------------------------------------------------------------
+      await page.evaluate((id) => {
+        const st = window.__pyrefly.battleState();
+        if (st.combatants[id].hp > 600) st.combatants[id].hp = 600;
+      }, ids.X2_CUP_SEYMOUR_ID);
+      const t2 = Date.now();
+      let reached = null;
+      let postText = '';
+      let revealed = false;
+      for (let i = 0; Date.now() - t2 < 4 * 60_000 && !revealed; i++) {
+        const sc = await screenNow();
+        if (sc === 'results' || sc === 'cutscene') {
+          if (reached === null) await shot('8-close-first');
+          reached = reached === 'cutscene' ? 'cutscene' : sc; // 'cutscene' once the post scene has played at all
+          const txt = await page.evaluate(() => document.body.innerText.replace(/\s+/g, ' ').slice(0, 800));
+          postText += ` ${txt}`;
+          if (/hidden name finally prints/i.test(txt)) {
+            revealed = true;
+            await shot('9-post-scene-reveal');
+            break;
+          }
+        }
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(700);
+      }
+      log('fight 3 result', { reached, revealed, ms: Date.now() - t2 });
+      check('duel 3 is won by the keys and the chapter reaches its close (the results page or the post scene)', reached !== null, { reached });
+      check('the post scene names the hidden duelist (the board line "the hidden name finally prints: Tidus")', revealed, postText.slice(0, 300));
+    }
   }
 
   const accepted = /pause\/ffx2-farplane-cup|chapter-ffx2-farplane-cup/;

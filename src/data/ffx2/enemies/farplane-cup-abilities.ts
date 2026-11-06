@@ -67,6 +67,7 @@ export const x2FarplaneCupAbilities: AbilityDef[] = [
     damageType: 'physical',
     element: ['none'],
     targeting: 'all-enemies',
+    flags: ['weak-delay'], // the row's misc word 0x60201006 carries the weak Delay bit 0x1000 (the engine reads the record, so play is unchanged; the definition now says the same)
     messageTemplate: 'Auron uses Dragon Fang',
   },
   {
@@ -171,7 +172,7 @@ export const x2FarplaneCupAbilities: AbilityDef[] = [
     element: ['none'],
     targeting: 'single-enemy',
     canMiss: true,
-    flags: ['weak-delay'],
+    flags: ['strong-delay'], // the row's misc word 0x20212056 carries the strong Delay bit 0x2000 (not the weak 0x1000), as the party's own Delay Buster (`x2-warrior-delay-buster`) does
     messageTemplate: '{user} uses Delay Buster on {target}',
   },
   {

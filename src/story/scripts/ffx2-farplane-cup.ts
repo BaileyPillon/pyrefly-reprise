@@ -10,7 +10,7 @@
  *
  * 1. **pre**: the arena, three names on the door, the first duelist.
  * 2. **two seams** (a seam is a mid-battle script that plays at a link's fall: the first and the second duelist): the arena mends the girls (no Save Sphere card plays between the duels, so the line says why the girls are whole
- *    again), the next fighter. Each is about 8 to 10 seconds with the player's hands off.
+ *    again), the next fighter. Each plays with the player's hands off: 12.8 s after Auron and 11.0 s after the second duelist (`scriptDurationMs`; `farplane-cup-story.test.ts` pins both under 16 s).
  * 3. **mid-battle callouts** (three, each a short interrupt): Auron's first Shooting Star, the second duelist's first Blitz Ace, Seymour's first Meteor.
  * 4. **post**: the last duelist falls; the hidden name is read out; one short sincere exchange; the joke restored.
  *
@@ -45,7 +45,7 @@ const PRE: StoryScript = [
 
 // --------------------------------------------------------------------------- seams
 
-/** The seam from duel 1 to duel 2: Auron's fall. Authored as a hands-off beat; every `say` carries its own `auto`. About 9 seconds. */
+/** The seam from duel 1 to duel 2: Auron's fall. Authored as a hands-off beat; every `say` carries its own `auto`. 12.8 s of script time (`scriptDurationMs`). */
 const SEAM_1: StoryScript = [
   say('none', 'The swordsman lowers his blade, nods once, and walks back into the dark.', { auto: 1700 }), // ours: he falls
   flash(200, '#d8c8ff'),
@@ -55,7 +55,7 @@ const SEAM_1: StoryScript = [
   say('none', 'Someone steps into the light with a name the arena has hidden.', { auto: 2100 }), // ours: the masked name (pick DU3)
 ];
 
-/** The seam from duel 2 to duel 3: the second duelist's fall. About 9 seconds. The name stays hidden until the post scene. */
+/** The seam from duel 2 to duel 3: the second duelist's fall. 11.0 s of script time. The name stays hidden until the post scene. */
 const SEAM_2: StoryScript = [
   say('none', 'He grins, takes one step back, and is gone like a thought.', { auto: 1600 }), // ours: he falls
   flash(200, '#d8c8ff'),

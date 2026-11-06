@@ -24,7 +24,7 @@ Paper preflight under `critic/RUBRIC.md` §4 (AGENTS.md rule 15), in the format 
 
 ## 2. What the player experiences, turn by turn (plain words)
 
-**The chain (pick DU1).** Three duels, a 15-second seam between them (HP and MP restored, a fallen girl stands; the Maesters pattern), escape off. **Order (DU2): Auron, Tidus, Seymour** (the rows' own order). Each duelist stands alone in slot 1; the weapon props are visual.
+**The chain (pick DU1).** Three duels, a seam between them (as built: 12.8 s after Auron and 11.0 s after the masked duelist; the preflight guessed 15 s) (HP and MP restored, a fallen girl stands; the Maesters pattern), escape off. **Order (DU2): Auron, Tidus, Seymour** (the rows' own order). Each duelist stands alone in slot 1; the weapon props are visual.
 
 **Duel 1, Auron (Lv 74, 187,500 HP, AGI 141).** He acts every 2.5 s. Each turn: Attack half the time; **Shooting Star** (an Eject at chance 254, 2.0 s charge), **Dragon Fang** (the whole party, about 3,600 before Defense, 2.5 s) or **Full Break** (a big physical hit that drops STR, MAG, DEF and MDEF by 2 stages) a sixth each (RE §6.2). Below a quarter of his HP he adds Mega-Potion heals (a fixed 2,000 to his side) and, if no girl can take Shooting Star, **Shin Zantetsu** (Death at 80 on the whole party); once at an eighth he drinks an X-Potion (at most 9,999). **The lesson is the Eject and the stage drops.**
 
@@ -99,7 +99,7 @@ New hidden chapter + shared plumbing → **focused before the wave deploy, deep 
 
 | # | Pick | Alternative |
 |---|---|---|
-| DU1 | three fixed duels with 15 s full-restore seams | a full "cup" with rounds (no source) |
+| DU1 | three fixed duels with full-restore seams (12.8 s and 11.0 s as built; the preflight said 15 s) | a full "cup" with rounds (no source) |
 | DU2 | order Auron, Tidus, Seymour | HP order or the wiki's (unsourced) |
 | DU3 | masked name "????" during the fight, reveal after | "Tidus" shown plainly |
 | DU4 | `viaInfinitoBuild` unchanged | a lower-level build (no source) |

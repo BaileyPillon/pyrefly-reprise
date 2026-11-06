@@ -114,8 +114,8 @@ describe('the other lines', () => {
   }, 300_000);
 });
 
-describe('the options with numbers (the rows are NOT touched; each is a rig the test applies, standing for a lever the sources do not give)', () => {
-  it('(a) an Eject resist byte of 255 on the girls (what an accessory against Eject would do) takes Shooting Star out of the fight; (b) a Lv 74 party (the level of the duelists) lets their own statuses land: the table the handoff carries', () => {
+describe('the options with numbers (the rows are NOT touched; each is a rig the test applies: (a) stands for the sourced rule that a Special-dressphere wearer cannot be Ejected, which the engine does not yet apply (handoff section 6); (b) for a lever no source gives)', () => {
+  it('(a) an Eject resist byte of 255 on the girls (what a Special dressphere would do if the engine applied the rule of research/ffx2-combat-core.md 2.8 and 3.15) takes Shooting Star out of the fight; (b) a Lv 74 party (the level of the duelists) lets their own statuses land: the table the handoff carries', () => {
     const noEject = { name: 'eject-proof', setup: (e: Parameters<NonNullable<OpenOptions['setup']>>[0]): void => girlsOf(e).forEach((g) => { g.immunities['eject'] = 255; }) };
     const lv74 = { name: 'lv74', setup: (e: Parameters<NonNullable<OpenOptions['setup']>>[0]): void => girlsOf(e).forEach((g) => { g.level = 74; }) };
     const asBuilt = cell(0, 'curtains');
