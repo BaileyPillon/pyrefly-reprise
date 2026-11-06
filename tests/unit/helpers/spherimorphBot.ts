@@ -3,7 +3,7 @@
  * Aeons and Sanctuary Keeper benches' method). Test-only. It reads what a player reads (the menu's rows, the statuses on the icons, the HP bars, the spell the boss answers with) and **never the script's hidden state**:
  * the weakness is found the way a player finds it, from the battle's log.
  *
- * A **line** is a plan on a common skeleton. The skeleton stands a fallen member up (Phoenix Down) and heals the hurt (Cura, or an item); what is left goes into the line's own plan. The lines:
+ * A **line** is a plan on a common skeleton. The blind line's skeleton stands a fallen member up (Phoenix Down) and heals the hurt (Cura, or an item); what is left goes into the line's own plan. The lines:
  *
  * - **careless**: everyone Attacks (what a player does who has not read the guides). Lulu swings her staff.
  * - **blind**: the skeleton's care, Tidus Attacks, Lulu casts the highest tier of an element drawn at random every turn (no clue read): the player who guesses.
@@ -96,11 +96,9 @@ function decide(engine: BattleEngine, d: Input, line: Line, rand: () => number, 
   if (line.kind === 'careless') return fallback();
 
   const party = front(engine).filter(alive);
-  if (line.care) {
-    const tended = care(d, party);
-    if (tended) return tended;
-  }
   if (line.kind === 'blind') {
+    const tended = care(d, party); // the blind line has no tactic to bring its own care
+    if (tended) return tended;
     if (me === 'lulu') {
       const pick = TIERS[Math.floor(rand() * TIERS.length)]!;
       for (const id of pick) {
@@ -121,7 +119,14 @@ function decide(engine: BattleEngine, d: Input, line: Line, rand: () => number, 
     if (first === null && clueOf(log) !== null) memo.clue = [...log];
     if (memo.clue !== null) proxy = { ...engine, state: () => ({ ...engine.state(), log: memo.clue as BattleEvent[] }) } as unknown as BattleEngine;
   }
-  const commands: AvailableCommand[] = d.commands.filter((c) => !(!line.protect && c.command.kind === 'ability' && c.command.id === 'protect'));
+  // The shipped tactic keeps the party up itself (its rule 1). An ablation takes a piece away by not offering the rows it would press.
+  const HEALS = new Set(['phoenix-down', 'potion', 'hi-potion', 'x-potion', 'mega-potion', 'cure', 'cura']);
+  const commands: AvailableCommand[] = d.commands.filter((c) => {
+    const id = 'id' in c.command ? String((c.command as { id?: unknown }).id) : '';
+    if (!line.protect && c.command.kind === 'ability' && id === 'protect') return false;
+    if (!line.care && HEALS.has(id)) return false;
+    return true;
+  });
   const pick = shippedTactic(me, commands, proxy);
   if (pick) return pick;
   // no opinion: Tidus, Auron, Wakka, Kimahri and Rikku swing (the generic ladder), the casters wait
