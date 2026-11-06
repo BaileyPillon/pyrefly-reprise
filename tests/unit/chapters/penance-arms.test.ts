@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { BattleEngine, BattleEvent } from '../../../src/battle/common/types.ts';
 import { queueMembers } from '../../../src/battle/ffx/turnQueue.ts';
-import { LEFT_ARM, PENANCE, RIGHT_ARM, actions, actor, ctxOf, defend, flags, log, newEngine, nextInput, row, swing, turnClock } from '../helpers/penanceDrive.ts';
+import { LEFT_ARM, PENANCE, RIGHT_ARM, actor, ctxOf, defend, flags, log, newEngine, nextInput, row, swing, turnClock } from '../helpers/penanceDrive.ts';
 
 type Action = Extract<BattleEvent, { type: 'action-start' }>;
 const startsOf = (e: BattleEngine, who: string): Action[] => log(e).filter((x): x is Action => x.type === 'action-start' && x.actorId === who);
@@ -111,6 +111,10 @@ describe('an arm\'s turn (RE 5.3)', () => {
         both = first;
         const statuses = (id: string): string[] => Object.keys(actor(e, id).statuses);
         for (const id of [PENANCE, RIGHT_ARM, LEFT_ARM]) expect(statuses(id), id).toEqual(expect.arrayContaining(['shell', 'regen', 'protect']));
+        // a status spell: no damage event at all (a `magic` row of power 0 would draw a "0" numeral on each of the three)
+        const at = log(e).findIndex((x) => x === first);
+        const end = log(e).findIndex((x, i) => i > at && x.type === 'action-end');
+        expect(log(e).slice(at, end < 0 ? at + 60 : end).filter((x) => x.type === 'damage'), 'Mighty Guard emits no damage event').toEqual([]);
       }
       const e2 = newEngine(seed);
       const left = actor(e2, LEFT_ARM); // the Left Arm is down (and stays down: no return armed), as the game's flag says
@@ -323,7 +327,9 @@ describe('Penance falls (RE 5.2, 7)', () => {
     }
     expect(e.state().result?.outcome).toBe('victory');
     expect(ctxOf(e).rt.pendingPartRevivals).toEqual([]);
-    expect(actions(log(e), PENANCE).length).toBeGreaterThanOrEqual(0);
+    expect(actor(e, RIGHT_ARM).alive, 'the arm that was down when Penance fell is still down').toBe(false);
+    expect(actor(e, RIGHT_ARM).removed).toBe(true);
+    expect(actor(e, LEFT_ARM).alive, 'the standing arm went with Penance').toBe(false);
   });
 });
 

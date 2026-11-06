@@ -78,10 +78,11 @@ export const teraGraviton: AbilityDef = row({
 });
 /**
  * 0x412A: no damage, Shell, Protect and Regen at 254 on the script's own group (Penance, the Right Arm itself, and the Left Arm while it stands): `all-allies` with `groupTarget`, so the script names who it reaches
- * and the row's own multi flag never decides it.
+ * and the row's own multi flag never decides it. **`formula: 'none'`, as the party's Shell is** (a status spell: the game's record carries formula byte 3, Magic, which `FORMULA_BYTE_OVERRIDES` in
+ * `battle/ffx/ai/command-formula.ts` keeps for the scripts that read it): a `'magic'` row of power 0 would emit a damage event of 0 on each of the three, and the presenter draws that as a "0" numeral.
  */
 export const mightyGuard: AbilityDef = row({
-  id: PENANCE_ROWS.mightyGuard, name: 'Mighty Guard', power: 0, formula: 'magic', damageType: 'other', targeting: 'all-allies', hits: 1, flags: [],
+  id: PENANCE_ROWS.mightyGuard, name: 'Mighty Guard', power: 0, formula: 'none', damageType: 'other', targeting: 'all-allies', hits: 1, flags: [],
   statusEffects: [apply('shell'), apply('protect'), apply('regen')], extra: { groupTarget: true },
 });
 

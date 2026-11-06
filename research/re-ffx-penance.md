@@ -48,7 +48,7 @@ Offsets are record offsets in the 0x80-byte kernel row (`monster3.bin`, byte-ide
 | STR DEF MAG MDEF | 255 / 240 / 255 / 200 | 200 / 200 / 150 / 200 | [bytes] |
 | AGI LCK EVA ACC | 255 / 10 / 0 / 255 | 150 / 10 / 120 / 255 | [bytes] |
 | Elements (absorb / immune / resist / weak) | absorb Fire, Ice, Thunder, Water, Holy; the rest none | same | [bytes] [W: Game8 lists all five at -150 percent, its sign for absorb] |
-| Status resistance (255 = immune) | Death, Zombie, Petrify, Poison, Power, Magic, Armor, Mental Break, Confuse, Berserk, Provoke, Sleep, Silence, Darkness, Slow: 255. Threaten, Shell, Protect, Reflect, the four Nuls, Regen, Haste: 0 (they land) | same | [bytes] |
+| Status resistance (255 = immune) | Death, Zombie, Petrify, Poison, Power, Magic, Armor, Mental Break, Confuse, Berserk, Provoke, Sleep, Silence, Darkness, Slow: 255. Shell, Protect, Reflect, the four Nuls, Regen, Haste: 0 (they land). Threaten also reads 0 in the record, but the repo gives every boss `threatenChance: 0` (decision C-4 of `src/battle/ffx/ai/evrae-rules.ts`: Threaten defaults to immune), so it does not land here | same | [bytes] |
 | Automatic status | **Protect** (temporary status, from the first turn) | none | [bytes] |
 | Extra-status immunity | Scan, the four Distillers, Eject, Auto-Life, **Doom** | the same **without Doom**: an arm can be Doomed | [bytes] |
 | Flag bytes +0x28 / +0x29 | 0x1E (immune to percentage damage, Life, Sensor, a second Scan) / 0x07 (immune to CTB damage, Slice, Bribe) | same | [bytes] |

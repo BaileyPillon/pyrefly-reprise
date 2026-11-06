@@ -61,6 +61,14 @@ describe('the shipped party against the scripted lines (100 seeds a row, no god 
     if (FULL) console.log(summary('advisor (lock), shipped party', runs));
   }, 180_000);
 
+  it('the sustain line (what the first measurement left untried: Mighty G for Shell, Protect and Haste on everyone, Shell kept up against Tera Graviton, Yuna leading the heals, the arm lock) wins none either, and gets through the change less often than the advisor on the shipped party (it gives up the five Cheers)', () => {
+    const runs = run('sustain');
+    expect(wins(runs)).toBeLessThanOrEqual(10); // measured 0
+    expect(ended(runs)).toBe(true);
+    expect(Math.min(...runs.map((r) => r.hp)), 'the best run took Penance down a good way').toBeLessThan(11_000_000);
+    if (FULL) console.log(summary('sustain (lock), shipped party', runs));
+  }, 180_000);
+
   it('the same seed gives the same battle: a line replayed over a handful of seeds is entry for entry the same run', () => {
     for (const seed of [1000, 1007, 1042]) expect(playPenance(seed, LINES['advisor']!)).toEqual(playPenance(seed, LINES['advisor']!));
   }, 120_000);
@@ -80,6 +88,9 @@ describe.skipIf(!FULL)('the levers (printed only with PENANCE_MEASURE=1): the ar
     console.log(summary('arms-only, shipped party', run('arms-only')));
     console.log(summary('advisor, Ribbon (GamerGuides)', run('advisor', withArmor(['auto-haste', 'auto-protect', 'auto-potion', 'ribbon']))));
     console.log(summary('advisor, Ribbon + Break HP Limit', run('advisor', bhl(['auto-haste', 'auto-protect', 'ribbon', 'break-hp-limit']))));
+    console.log(summary('sustain-left, shipped party', run('sustain-left')));
+    console.log(summary('sustain, Ribbon (GamerGuides)', run('sustain', withArmor(['auto-haste', 'auto-protect', 'auto-potion', 'ribbon']))));
+    console.log(summary('sustain, Ribbon + Break HP Limit', run('sustain', bhl(['auto-haste', 'auto-protect', 'ribbon', 'break-hp-limit']))));
     expect(true).toBe(true);
   }, 3_000_000);
 });

@@ -14,13 +14,14 @@
  * All three **absorb all five elements** (an elemental spell heals them); **immune** (byte 255) to Death, Zombie, Petrify, Poison, the four Breaks, Confuse, Berserk, Provoke, Sleep, Silence, Darkness and Slow; **Threaten never
  * lands** (a success percentage of 0); Shell, Protect, Reflect, the four Nuls, Regen and Haste all **land**; by the extra-immunity word (0x432F for Penance; the arms' 0x032F is the same without Doom) immune to Scan, Eject
  * and Auto-Life, **and to Doom for Penance alone: an arm can be Doomed** (its Doom countdown is 200, Penance's 255); by the flag bytes to Sensor, to percentage damage (Gravity), to Life, to CTB damage, to Slice (**Zanmato
- * byte 5**, `zanmatoLevel: 6`) and to Bribe. **Penance starts with Protect on** (its automatic status; `battle/ffx/ai/penance-setup.ts` puts it on at the battle's start).
+ * byte 5**, `zanmatoLevel: 6`) and to Bribe. **Penance starts with Protect on** (its automatic status; `battle/ffx/ai/penance.ts#applyPenanceSetup` puts it on at the battle's start).
  *
  * ## Rewards (RE 3 and 7, each on its own death)
  *
  * **No gil.** Penance: 60,000 AP (65,000 on an Overkill, threshold 99,999), **Master Sphere x3** (x6 on an Overkill), steals Elixir (rare Megalixir x2). An Arm: 10,000 AP (12,000), one drop slot that always drops and pays Dark Matter x1
  * or, in the same shape as the Dark Aeons' row, a Master Sphere x1 one time in eight in its place (RE 3 gives the pair; the one-in-eight is the Dark Aeons' record shape, which the arms' row text matches: flagged), steals Elixir. **An Arm pays
- * on every death** (RE 7), which `koActor` does. **Not modelled:** Penance's gear drop (chance byte 255, a weapon with Break Damage Limit or an armour with Ribbon: its loot record is not among the 43 in `loot/records.ts`, so
+ * on every death** (RE 7), which `koActor` does. **Two figures are ours, not the note's:** an arm's drop on an Overkill is doubled by the engine's drop rule (RE 3 gives no overkill quantity for the arms; `[derived]`),
+ * and the steal chance of all three is 100 (RE 3 lists the items and no chance byte; the other bosses' shape; `[estimate]`). **Not modelled:** Penance's gear drop (chance byte 255, a weapon with Break Damage Limit or an armour with Ribbon: its loot record is not among the 43 in `loot/records.ts`, so
  * nothing is invented, rule 6), the Pilfer and Nab Gil factors, the Monster Arena price.
  *
  * ## The formation (RE 2)
@@ -103,7 +104,7 @@ export function penance(): EnemyDef {
       gil: 0,
       overkillThreshold: PENANCE_OVERKILL_THRESHOLD,
       drops: [{ itemId: 'master-sphere', count: 3 }], // both items of the one slot are the Master Sphere (RE 3); an Overkill doubles it to six
-      steal: { baseChance: 100, common: { itemId: 'elixir', count: 1 }, rare: { itemId: 'megalixir', count: 2 } }, // the record's chance byte 255, clamped to the contract's 0-100
+      steal: { baseChance: 100, common: { itemId: 'elixir', count: 1 }, rare: { itemId: 'megalixir', count: 2 } }, // RE 3 lists the items and gives no chance byte: 100 is the other bosses' shape (byte 255, clamped to the contract's 0-100) `[estimate]`
     },
     abilityIds: [PENANCE_ROWS.obliteration, PENANCE_ROWS.immolation, PENANCE_ROWS.judgmentDay, PENANCE_ROWS.separation, PENANCE_ROWS.death],
     flags: { isBoss: true },
@@ -137,8 +138,8 @@ function arm(side: 'right' | 'left'): EnemyDef {
       apOverkill: 12_000,
       gil: 0,
       overkillThreshold: PENANCE_OVERKILL_THRESHOLD,
-      drops: [{ itemId: 'dark-matter', count: 1, rare: { itemId: 'master-sphere', count: 1, chance: 12.5 } }],
-      steal: { baseChance: 100, common: { itemId: 'elixir', count: 1 }, rare: { itemId: 'elixir', count: 1 } },
+      drops: [{ itemId: 'dark-matter', count: 1, rare: { itemId: 'master-sphere', count: 1, chance: 12.5 } }], // RE 3 gives the pair and no overkill quantity: the x2 on an Overkill is the engine's own drop rule, not the note's `[derived]`
+      steal: { baseChance: 100, common: { itemId: 'elixir', count: 1 }, rare: { itemId: 'elixir', count: 1 } }, // RE 3 lists the items and gives no chance byte: 100 as Penance's `[estimate]`
     },
     abilityIds: right ? [PENANCE_ROWS.armAttack, PENANCE_ROWS.calamity, PENANCE_ROWS.mightyGuard, PENANCE_ROWS.regeneration, PENANCE_ROWS.atrophy] : [PENANCE_ROWS.dispellingAttack, PENANCE_ROWS.teraGraviton, PENANCE_ROWS.slowga, PENANCE_ROWS.regeneration, PENANCE_ROWS.atrophy],
     flags: { isPart: true, partOf: PENANCE_ID },

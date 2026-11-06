@@ -11,6 +11,8 @@
  * - **no-arms**: the same, but the arms are never struck (what a player does who has not read the guides).
  * - **arms-only**: the same, but only the arms are struck.
  * - **careless**: Attack the first enemy that is standing, heal nobody, cure nothing.
+ * - **sustain**, **sustain-left** (the fix pass): what the first measurement left untried. Rikku opens with Mighty G (Shell, Protect and Haste on everyone), Yuna keeps Shell up (it halves Tera Graviton) and leads the
+ *   heals with Curaga, the others use an Elixir, Mega-Potion or X-Potion on whoever is under 40 percent, and the offense is the arm lock (or the Left Arm only, the caster of Tera Graviton).
  *
  * The build is a parameter (the plan's second lever): the shipped party, the Ribbon variant (GamerGuides' four armour abilities), the Break HP Limit variant (HP 99,999; eip.gg), or a hand-built one.
  */
@@ -25,13 +27,15 @@ export interface PenancePolicy {
   /** Attack the first living enemy and do nothing else: no heals, no cures. */
   readonly careless?: boolean;
   /** Which arm control the offense follows. */
-  readonly arms: 'lock' | 'dance' | 'never' | 'only';
+  readonly arms: 'lock' | 'dance' | 'never' | 'only' | 'left';
   /** Cure Petrify, stand up the fallen, Dispel the Armor-Broken, heal the hurt. */
   readonly care: boolean;
   /** Dispel Penance's Regen (Yuna). */
   readonly dispelRegen: boolean;
   /** Tidus's Cheer until everyone has five. */
   readonly cheer: boolean;
+  /** The sustain play (fix pass): Rikku opens with Mighty G (Shell, Protect and Haste on everyone for the fight), Yuna keeps Shell up and heals first (Curaga), the others use an Elixir, Mega-Potion or X-Potion on whoever is under 40 percent. */
+  readonly sustain?: boolean;
 }
 
 export const LINES: Readonly<Record<string, PenancePolicy>> = {
@@ -41,6 +45,10 @@ export const LINES: Readonly<Record<string, PenancePolicy>> = {
   'body-first': { name: 'body-first', arms: 'dance', care: true, dispelRegen: true, cheer: true },
   'no-arms': { name: 'no-arms', arms: 'never', care: true, dispelRegen: true, cheer: true },
   'arms-only': { name: 'arms-only', arms: 'only', care: true, dispelRegen: true, cheer: true },
+  /** What the first measurement left untried (section 5 of the handoff): the lock with Shell kept up against Tera Graviton (it halves it) and the heals led by Yuna. */
+  sustain: { name: 'sustain', arms: 'lock', care: true, dispelRegen: true, cheer: false, sustain: true },
+  /** The same, striking only the Left Arm (Tera Graviton's caster) and the body: the Right Arm is left to act. */
+  'sustain-left': { name: 'sustain-left', arms: 'left', care: true, dispelRegen: true, cheer: false, sustain: true },
   careless: { name: 'careless', careless: true, arms: 'never', care: false, dispelRegen: false, cheer: false },
 };
 
@@ -61,6 +69,8 @@ export interface PenanceRun {
   readonly shattered: number;
 }
 
+/** The sustain lines heal a member who is under this share of his maximum. */
+const SUSTAIN_HEAL_AT = 0.55;
 const HEAL_ITEMS = ['mega-potion', 'x-potion', 'hi-potion', 'potion'] as const;
 
 const front = (engine: BattleEngine): FFXCombatant[] => engine.state().activeIds.map((id) => actor(engine, id));
@@ -103,6 +113,7 @@ function offenseTarget(engine: BattleEngine, policy: PenancePolicy): string {
   const changed = flags(engine)['pen.phase'] === 1;
   if (policy.arms === 'never') return PENANCE;
   if (policy.arms === 'only') return ARMS.find((a) => actor(engine, a).alive) ?? PENANCE;
+  if (policy.arms === 'left') return actor(engine, LEFT_ARM).alive ? LEFT_ARM : PENANCE;
   if (policy.arms === 'lock') {
     // The Left Arm first (Tera Graviton takes three quarters of everyone's life and Dooms them), then the Right.
     const standing = [LEFT_ARM, RIGHT_ARM].filter((a) => actor(engine, a).alive);
@@ -128,6 +139,8 @@ export function choose(engine: BattleEngine, d: Input, policy: PenancePolicy): C
     const first = [PENANCE, RIGHT_ARM, LEFT_ARM].find((id) => actor(engine, id).alive) ?? PENANCE;
     return row(d, 'attack', undefined, first) ?? defend();
   }
+
+  if (policy.sustain) return sustainTurn(engine, d, policy);
 
   // The opener: Rikku's Hyper NulAll (Lunar Curtain and Mana Spring) when her Overdrive is full: the four Nuls and five Cheers and Focus on everyone, in one action.
   if (policy.cheer && me === 'rikku') {
@@ -195,6 +208,41 @@ export function choose(engine: BattleEngine, d: Input, policy: PenancePolicy): C
     if (hit) return hit;
   }
   return row(d, 'attack', undefined, goal) ?? row(d, 'attack', undefined, PENANCE) ?? defend();
+}
+
+/** The sustain lines' turn: stand up the fallen, Mighty G on a party without Shell, Yuna's Dispel on Penance's Regen then her heals then Shell, the others' potions under 40 percent, then the offense by the line's arm control. */
+function sustainTurn(engine: BattleEngine, d: Input, policy: PenancePolicy): Command {
+  const me = d.actorId;
+  const party = front(engine);
+  const fraction = (c: FFXCombatant): number => c.hp / c.stats.maxHp;
+  const fallen = party.find((c) => !c.alive && !c.removed);
+  const pd = fallen ? row(d, 'item', 'phoenix-down', fallen.id) : null;
+  if (pd) return pd;
+  const shell = party.filter((c) => c.alive && !has(c, 'shell'));
+  const mix = me === 'rikku' ? d.commands.find((c) => c.enabled && c.command.kind === 'overdrive' && c.command.id === 'mix') : undefined;
+  const used = MIXES_USED.get(engine) ?? 0;
+  if (mix && used < MIXES_IN_BAG && shell.length >= 2) {
+    MIXES_USED.set(engine, used + 1);
+    return { kind: 'overdrive', id: 'mix', targets: [], extra: { kind: 'rikku-mix', mix: { ingredients: ['remedy', 'lunar-curtain'], resultAbilityId: 'mix-mighty-g' } } };
+  }
+  const hurt = party.filter((c) => c.alive && fraction(c) < SUSTAIN_HEAL_AT).sort((a, b) => fraction(a) - fraction(b))[0];
+  if (me === 'yuna') {
+    const dispel = has(actor(engine, PENANCE), 'regen') ? row(d, 'ability', 'dispel', PENANCE) : null;
+    if (dispel) return dispel;
+    const cure = hurt ? (row(d, 'ability', 'curaga', hurt.id) ?? row(d, 'ability', 'cura', hurt.id)) : null;
+    if (cure) return cure;
+    const first = shell[0];
+    const ward = first ? row(d, 'ability', 'shell', first.id) : null;
+    if (ward) return ward;
+  } else if (hurt && fraction(hurt) < 0.4) {
+    for (const item of ['elixir', 'mega-potion', 'x-potion'] as const) {
+      const it = row(d, 'item', item, hurt.id);
+      if (it) return it;
+    }
+  }
+  const goal = offenseTarget(engine, policy);
+  const quick = me === 'tidus' ? row(d, 'ability', 'quick-hit', goal) : null;
+  return quick ?? row(d, 'attack', undefined, goal) ?? row(d, 'attack', undefined, PENANCE) ?? defend();
 }
 
 /** Play one battle with the line and no god mode. */

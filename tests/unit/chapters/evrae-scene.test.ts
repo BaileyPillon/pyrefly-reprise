@@ -377,8 +377,7 @@ describe('FFX only [AGENTS.md rule 14]', () => {
   /** The website's version (phase 6: the painted skin with the table camera) and the world both cameras read use the same director's range, shift and actors; FFX only, reached only from the deck above. */
   const FAYTH_TABLE = 'exp-fayth-table.ts';
   const FAYTH_WORLD = 'exp-fayth-world.ts';
-  /** The hidden Penance chapter's scene (2026-11-06, FFX only) is a third consumer of the deck factory: Penance floats over the airship map (RE 2), so it stages on this deck over Chapter VIII's own plate. */
-  const PENANCE_SCENE = 'penance.ts';
+  const PENANCE_SCENE = 'penance.ts'; // the hidden Penance chapter's scene (2026-11-06, FFX only): a third consumer of the deck factory, over Chapter VIII's own plate (RE 2: it floats over the airship map)
   const mine = readdirSync(dir).filter((f) => f.startsWith('evrae-airship') || f === FAYTH_DECK || f === FAYTH_SKIN || f === FAYTH_CAMERA || f === FAYTH_TABLE || f === FAYTH_WORLD || f === PENANCE_SCENE);
 
   it('the scene files import nothing from FFX-2', () => {

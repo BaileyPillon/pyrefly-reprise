@@ -192,7 +192,7 @@ describe('phase 2: Immolation on one living member, the counter, and Judgment Da
     return e;
   }
 
-  it('its turns are Immolations, each on ONE member, and the counter gains 1 for each of them', () => {
+  it('its turns are Immolations, each on ONE member (the counter\'s exact values are `penance-counter.test.ts`)', () => {
     const e = inPhase2(5);
     const before = actions(log(e), PENANCE).length;
     untilPenanceActs(e, 8);
@@ -227,12 +227,9 @@ describe('phase 2: Immolation on one living member, the counter, and Judgment Da
     expect(got).toEqual(expect.arrayContaining(['armor-break', 'mental-break']));
   });
 
-  it('every damaging action that reaches Penance adds 1 to the counter (a Scan adds nothing); the change\'s own hit added nothing', () => {
+  it('the change\'s own hit added nothing to the counter (the exact count of every later hit, turn and multi-hit action is `penance-counter.test.ts`)', () => {
     const e = inPhase2(7);
     expect(counter(e)).toBe(0); // the hit that made the change did not count
-    const c0 = counter(e);
-    oneSwing(e);
-    expect(counter(e) - c0, 'one swing, one point (plus any Penance turn taken meanwhile)').toBeGreaterThanOrEqual(1);
   });
 
   it('Judgment Day: with the counter at 19, the next Penance turn makes it 20 and, both arms up, is Judgment Day on all three: 99,999 HP and 999 MP each, Protect or no Protect; the counter goes to 0', () => {

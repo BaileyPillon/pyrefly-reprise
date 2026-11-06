@@ -7,7 +7,7 @@
  * |---|---|---|
  * | Line-up | **Tidus, Yuna, Rikku** on the field; Auron, Wakka, Kimahri, Lulu on the bench | the guides' actions, not a named trio: Quick Hit (Tidus) for every attack on the body, Dispel after each Immolation (Yuna), Ultra NulAll and Quick Pockets (Rikku): Jegged, Game8, eip.gg `[W]`. Lulu is out of the field because every black spell is elemental and the three absorb all five elements. **A driver's call** (the alternative: Tidus, Auron, Rikku) |
  * | Stats | HP 9,999, MP 999, the seven other stats 255 | Jegged Stat Maxing (`./mirror-aeons.ts` `ENDGAME_CAPS`) `[estimate]` for the whole party at the caps, `[W]` for the cap |
- * | Luck | **85** | Jegged: about 85 in total is enough that plain attacks never miss `[W]` (the arms have Evasion 120) |
+ * | Luck | **85** | Jegged: about 85 in total is enough that plain attacks almost never miss `[W]` (the arms have Evasion 120: the bench saw 5 evades in about 980 party hits on the Right Arm) |
  * | Armour | Auto-Haste, Auto-Protect, Auto-Potion, Defense +20 percent on all seven; **no Ribbon, no Break HP Limit** | Jegged `[W]` (neither Break HP Limit nor Ribbon is needed). Auto-Haste is Slow-proof; with Auto-Protect, Defense +20 percent and five Cheers an Immolation is 7,453 to 8,416 against a 9,999-HP member (RE 4.2) |
  * | Weapons | The seven **Celestial weapons** (formula 0x11 to 0x13, Break Damage Limit built in) | Jegged, Game8, eip.gg, GamerGuides `[W]`; the rows are `[bytes]` (`./celestial-weapons.ts`) |
  * | Aeons | the five story aeons; **Yojimbo, Anima and the Magus Sisters are left out** | the Dream's End default "assume absent". A landed Zanmato ends the fight (it needs no Death roll) at about one Pay in four at 1,000,000 gil, which would make Yojimbo a coin flip around the arms. **A driver's call, his to overturn** |
@@ -22,7 +22,7 @@ import { dreamsEndBuild } from './dreams-end.ts';
 import { ENDGAME_CAPS, mirrorAeonsBuild } from './mirror-aeons.ts';
 import { celestialWeapon } from './celestial-weapons.ts';
 
-/** Luck of the whole party: Jegged says about 85 in total makes plain attacks never miss `[W]`; the number is the guide's, the placement on every member is ours. */
+/** Luck of the whole party: Jegged says about 85 in total makes plain attacks almost never miss `[W]` (about 1 in 200 evaded on an arm in the bench); the number is the guide's, the placement on every member is ours. */
 export const PENANCE_LUCK = 85;
 /** Jegged's four armour abilities. */
 export const PENANCE_ARMOR: readonly AutoAbilityId[] = ['auto-haste', 'auto-protect', 'auto-potion', 'defense-20'];

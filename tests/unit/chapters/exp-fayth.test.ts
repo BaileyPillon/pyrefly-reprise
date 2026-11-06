@@ -157,7 +157,7 @@ describe('its scene', () => {
   });
 
   it('the hidden chapters\' scenes moved to the side table are all still registered, row for row, with the factories they had', () => {
-    const keys = [EXPERIMENT_GROUNDS_PLATE, EXP_LEBLANC_SCENE, MUSHROOM_ROCK_SCENE, EXP_FAYTH_SCENE, TOURIST_TRAP_SCENE, GAGAZET_RONSO_SCENE, ANGRA_MAINYU_SCENE, MIRROR_AEONS_SCENE, LAST_SUMMONING_SCENE, SPECTRAL_KEEPER_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE, PENANCE_SCENE]; // Penance's deck (FFX only, ch-penance 2026-11-06) is the last row;  the 3D Bahamut's chamber (FFX-2, 2026-10-19) is the last row; the Tourist Trap's cavern (FFX-2, 2026-10-14) is the fifth row, the Mountain Gate (FFX, Biran and Yenke, 2026-10-14) the sixth, Angra Mainyu's desert (FFX-2, 2026-10-14) the seventh, Mirror Aeons' two-plate stage (FFX, 2026-10-15) the eighth
+    const keys = [EXPERIMENT_GROUNDS_PLATE, EXP_LEBLANC_SCENE, MUSHROOM_ROCK_SCENE, EXP_FAYTH_SCENE, TOURIST_TRAP_SCENE, GAGAZET_RONSO_SCENE, ANGRA_MAINYU_SCENE, MIRROR_AEONS_SCENE, LAST_SUMMONING_SCENE, SPECTRAL_KEEPER_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE, PENANCE_SCENE]; // Penance's deck (FFX only, ch-penance 2026-11-06) is the last row, the Wind Waker's (2026-10-20) the one before it, the 3D Bahamut's chamber (FFX-2, 2026-10-19) the one before that; the Tourist Trap's cavern (FFX-2, 2026-10-14) is the fifth row, the Mountain Gate (FFX, Biran and Yenke, 2026-10-14) the sixth, Angra Mainyu's desert (FFX-2, 2026-10-14) the seventh, Mirror Aeons' two-plate stage (FFX, 2026-10-15) the eighth
     expect(EXPERIMENT_SCENE_ENTRIES.map((e) => e.key)).toEqual(keys);
     expect(Object.keys(EXPERIMENT_SCENE_FACTORIES).sort()).toEqual([...keys].sort());
     for (const key of keys) {

@@ -7,7 +7,7 @@
  *   PYREFLY_BROWSER=gpu node tools/penance-smoke.mjs [--base http://127.0.0.1:5231/] [--out docs/screenshots/ch-penance] [--tag desk] [--w 1600 --h 900] [--touch] [--seed 7] [--explore]
  *
  * The party is kept alive by editing the battle state through the debug API (`window.__pyrefly.battleState()`: HP, and the fast-forward that puts Penance's HP just over a line); every command the party gives is a
- * real key press (Enter on Attack, the target cursor's arrows, Enter on the target). It takes the review-browser lock (`D:/Tools/pyrefly-scratch/RIG-RECORD`) before it opens a browser and gives it back at the end.
+ * real key press (Enter on Attack, the target cursor's arrows, Enter on the target). It takes the review-browser lock (`tools/rig-record-lock.mjs`, the machine-wide browser lock) before it opens a browser and gives it back at the end.
  * Headless only (`PYREFLY_BROWSER=gpu` for the real GPU); never the Chrome extension or the built-in pane. Exit code 1 on a failed check.
  */
 import { mkdirSync } from 'node:fs';
@@ -93,9 +93,37 @@ const field = () =>
       log: st.log.length,
     };
   });
+/** The engine's event log, compacted, as of the last time the battle was up (the results screen has no battle to ask). */
+let lastLog = null;
+const grabLog = async () => {
+  const lg = await page.evaluate(() => {
+    const st = window.__pyrefly?.battleState?.();
+    return st ? st.log.map((x) => ({ type: x.type, a: x.abilityId, actor: x.actorId, target: x.targetId, amount: x.amount, part: x.partId, overkill: x.overkill })) : null;
+  });
+  if (lg) lastLog = lg;
+};
+/** What the log says about Mighty Guard (no damage event: no "0" numeral) and about each arm death (the killing blow and whether it was an overkill). */
+function analyse(lg) {
+  const out = { mightyGuards: 0, mightyGuardDamageEvents: 0, armDeaths: [], penanceFell: false };
+  let inMightyGuard = false;
+  const lastHit = {};
+  for (const x of lg) {
+    if (x.type === 'action-start') {
+      inMightyGuard = x.a === 'penance-mighty-guard';
+      if (inMightyGuard) out.mightyGuards++;
+    } else if (x.type === 'action-end') inMightyGuard = false;
+    else if (x.type === 'damage') {
+      if (inMightyGuard) out.mightyGuardDamageEvents++;
+      lastHit[x.target] = { amount: x.amount, overkill: x.overkill === true };
+    } else if (x.type === 'ko' && x.target === 'penance') out.penanceFell = true; // its death takes both arms with it: those part-destroyed events are not arm deaths and pay nothing
+    else if (x.type === 'part-destroyed' && !out.penanceFell) out.armDeaths.push({ arm: x.part, killingBlow: lastHit[x.part] ?? null });
+  }
+  return out;
+}
 /** Keep the party up for the smoke (HP, and the statuses that would end a moment about something else); a state edit, said so. */
-const warding = () =>
-  page.evaluate(() => {
+const warding = async () => {
+  await grabLog();
+  await page.evaluate(() => {
     const st = window.__pyrefly.battleState();
     for (const id of st.activeIds) {
       const c = st.combatants[id];
@@ -107,6 +135,7 @@ const warding = () =>
       }
     }
   });
+};
 const setHp = (id, hp) => page.evaluate(([i, h]) => { window.__pyrefly.battleState().combatants[i].hp = h; }, [id, hp]);
 const whoseTurn = () =>
   page.evaluate(() => {
@@ -278,6 +307,12 @@ try {
     end = await screenNow();
   }
   check('the chapter reaches its results', end === 'results', end);
+  if (lastLog) {
+    const seen = analyse(lastLog);
+    log('log.analysis', seen);
+    check('Mighty Guard draws no damage event, so no "0" numerals (vacuous when the Right Arm never cast it this run)', seen.mightyGuardDamageEvents === 0, seen);
+  }
+  log('results.text', (await page.evaluate(() => document.body.innerText)).replace(/\s+/g, " ").slice(0, 700));
   await page.waitForTimeout(7000);
   if ((await screenNow()) === 'results') await shot('8-results');
 } catch (e) {
