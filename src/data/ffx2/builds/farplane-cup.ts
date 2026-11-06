@@ -9,6 +9,8 @@
  * on each, Paine on The End's grid, ten Megalixirs, Light and Lunar Curtains and Remedies, 200,000 gil, no Phoenix Downs), every dressphere owned for a Spherechange. **Paine starts without the Break Damage Limit** (it sits
  * behind The End's red and green gates, as in the Fallen Maesters): every blow of the girls is capped at 9,999 until she has walked the grid.
  *
+ * Confidence: [gap] no source gives a party for the cup (`research/re-ffx2-farplane-cup.md` §10 Q2), so the choice is [derived] from the Lv 99 line of Chapter XIII, which is [verified: 3 sources] (`./via-infinito.ts`).
+ *
  * A deep copy, so no chapter's preset can mutate another's.
  */
 

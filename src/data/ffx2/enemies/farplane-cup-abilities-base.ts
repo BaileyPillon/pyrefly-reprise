@@ -2,7 +2,7 @@
  * The ids and the shared parts of the abilities of the three duelists of the hidden chapter "The Farplane Cup" (Auron, Tidus and Seymour, `monster.bin` rows 311, 317 and 319). **FFX-2 only** [AGENTS.md rule 14].
  *
  * The ability definitions are in `./farplane-cup-abilities.ts` (Auron and Tidus, and the catalog list of all three) and `./farplane-cup-abilities-seymour.ts` (Seymour); the game's own rows are
- * `../command-records/farplane-cup.ts`. This file holds what both halves share, so neither imports the other (the source files stay under 400 lines, house rule 7).
+ * `../command-records/farplane-cup.ts` (`research/re-ffx2-farplane-cup.md` §7; confidence: [verified: the game's own tables, decoded by a script and pinned by `tests/unit/chapters/farplane-cup-data.test.ts`]). This file holds what both halves share, so neither imports the other (the source files stay under 400 lines, house rule 7).
  */
 
 export const base = {

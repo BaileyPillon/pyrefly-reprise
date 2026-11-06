@@ -1,7 +1,7 @@
 /**
  * The eighteen abilities of Seymour in the hidden chapter "The Farplane Cup" (`monster.bin` row 319, script `m319`): Attack, Demi, Curaga, Dispel (and Dispel on himself), Critical Attack, Drain Attack, Black Sky, Absorb,
  * Meteor, Shell, Protect, Break, Magic Up, Strength Up, Confuse, Slowga and Ultima. **FFX-2 only** [AGENTS.md rule 14]. The comment on each is its row (`research/re-ffx2-farplane-cup.md` §7; the numbers are pinned
- * against `tests/fixtures/parity/ffx2/farplane_cup_rows.json` by `tests/unit/chapters/farplane-cup-data.test.ts`); the notes on `./farplane-cup-abilities.ts` (the hit rule, the picks) apply here too.
+ * against `tests/fixtures/parity/ffx2/farplane_cup_rows.json` by `tests/unit/chapters/farplane-cup-data.test.ts`; confidence [verified: the game's own tables]; the single-target rows aimed at the party group are [I], pick DU10); the notes on `./farplane-cup-abilities.ts` (the hit rule, the picks) apply here too.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
