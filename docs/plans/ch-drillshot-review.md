@@ -77,7 +77,7 @@ Poses follow the repo's boss sets (idle, attack, cast, hurt, ko; idle@2x).
 | Baralai (living, Praetor, staff) | 2 new + 4 recoloured | **`baralai-shade` exists (idle, cast, hurt, ko)**; recolour it to a living man (drop the pyrefly treatment) and paint **attack** and **glint/chain** poses (the shade has no attack pose); the staff is painted in (row 298 is a visual prop) |
 | Backdrop | 0 | BG3 |
 | Chapter card, thumbnail, pause plate | 3 | from the chosen look |
-| **Total** | **about 14 to 16** | of which 4 are recolours; ComfyUI wall time serialises through RIG-RECORD |
+| **Total** | **about 14 to 16** | of which 4 are recolours; ComfyUI wall time serialises through the machine-wide render lock |
 
 - Art route is the driver's (the approved pipeline; no Meshy, no 3D). Nobody queues ComfyUI here (rule 12 / NOW.md). Retail references are allowed since 2026-10-18; the painting that ships must match the approved painted look (rule 9, "new art matches the game's art"). Bailey alone approves a painting.
 

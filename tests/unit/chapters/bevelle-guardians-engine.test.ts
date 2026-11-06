@@ -48,7 +48,7 @@ const status = (u: Unit): string => Object.keys(u.statuses).sort().join(',');
 describe('Georapella [RE §6.2, §7]', () => {
   const GA = ['x2-georapella-thundaga', 'x2-georapella-waterga', 'x2-georapella-firaga', 'x2-georapella-blizzaga'] as const;
 
-  it('each Ga spell hits all three girls once for 24 MP: about 90 to 100 on Yuna, 130 to 145 on Rikku and 195 to 215 on Paine (her MDEF is 8), unshelled', () => {
+  it('each Ga spell hits all three girls once for 24 MP: about 89 to 100 on Yuna, 128 to 145 on Rikku and 189 to 213 on Paine (her MDEF is 8; the Enemy Intent card\'s own bands), unshelled', () => {
     for (const ability of GA) {
       for (const seed of [1, 2, 3, 4]) {
         const engine = run(0, [move(ability)], seed);

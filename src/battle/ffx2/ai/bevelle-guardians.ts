@@ -28,7 +28,9 @@
  *
  * **Where this file reads the sources, not the note** (said once, pinned by the AI test): (a) the Precepts Guard's Bio goes to **any living girl without Reflect**, not only a girl who also lacks Poison: the source tests
  * "does some girl lack Poison" with a search whose pick it throws away, then searches the living for a girl lacking Reflect. (b) Every **discarded search** still draws from the search stream when it had two or more candidates
- * ({@link spendSearchDraw}); the Precepts Guard's Death, Osmose and Drain test "does some girl lack Reflect" the same way. These change which numbers come next, never what a move does.
+ * ({@link spendSearchDraw}); the Precepts Guard's Death, Osmose and Drain test "does some girl lack Reflect" the same way. These change which numbers come next, never what a move does. (c) Georapella's Osmose has **no**
+ * discarded first search (the research note's §6.2 says it has; `m262.src` 82 to 86 holds the single `max` search, where `m263.src` 80 to 81 and `m175.src` 213 to 214 have a `searchr` before it): one draw only when two girls tie
+ * for the most MP, none otherwise. The candidate set that lone search runs over is unread (nothing in `m262.src` sets it), so the living girls stand in, `[inferred]`; the branch is dead in play (9,999 MP, 24 a cast).
  *
  * **RNG** [RE §6.6]: `random() mod n` is stream 2 ({@link scriptModCtx}); the searches are stream 4, a draw only with two or more candidates ({@link searchNear}, {@link searchUniform}).
  *
@@ -118,9 +120,13 @@ function use(id: string, targets: string[]): Command {
   return { kind: 'ability', id, targets };
 }
 
-/** The unit with the most of `key` among `pool`: a first near-weighted search whose pick is thrown away, then the units tied for the highest searched near-weighted (`searchr(.., stat, max)`). */
-function highest(ctx: AiContext, pool: readonly Ffx2Unit[], key: (u: Ffx2Unit) => number, scene: Scene): Ffx2Unit | undefined {
-  searchNear(ctx.rng, pool, scene); // the first search makes its draw and the script discards it
+/**
+ * The unit with the most of `key` among `pool`: the units tied for the highest, searched near-weighted (`searchr(.., stat, max)`).
+ * `discardedFirst` is true where the script makes a `searchr` over the living just before and throws its pick away (`m263.src` 80 to 81 and `m175.src` 213 to 214: that first search draws);
+ * it is false for Georapella, whose `m262.src` 82 to 86 holds the single `max` search and nothing before it.
+ */
+function highest(ctx: AiContext, pool: readonly Ffx2Unit[], key: (u: Ffx2Unit) => number, scene: Scene, discardedFirst: boolean): Ffx2Unit | undefined {
+  if (discardedFirst) searchNear(ctx.rng, pool, scene); // the first search makes its draw and the script discards it
   if (pool.length === 0) return undefined;
   const top = Math.max(...pool.map(key));
   return searchNear(ctx.rng, pool.filter((u) => key(u) === top), scene);
@@ -157,7 +163,8 @@ export const x2GeorapellaScript: AiScript = {
       setMem(self, GEORAPELLA_COUNTER, scriptModCtx(ctx, GEORAPELLA_START_MODULUS));
     }
     if (self.mp < GEORAPELLA_OSMOSE_BELOW_MP) {
-      const target = highest(ctx, party, (u) => u.mp, GEORAPELLA_SCENE);
+      // `[inferred]` no discarded first search (m262.src has none), and the candidate set the lone `max` search runs over there is unread: the living girls stand in (the branch is dead in play: 9,999 MP, 24 a cast).
+      const target = highest(ctx, party, (u) => u.mp, GEORAPELLA_SCENE, false);
       return use(GUARDIAN_ABILITY.georapellaOsmose, target ? [target.id] : []);
     }
     // The counter gains 1 first; 1 to 3 are three of the spells, anything else is Blizzaga and the counter goes back to 0.
@@ -186,7 +193,7 @@ export const x2PreceptsGuardScript: AiScript = {
     if (queued !== null) return queued;
 
     if (self.mp < PRECEPTS_OSMOSE_BELOW_MP) {
-      const target = highest(ctx, party, (u) => u.mp, PRECEPTS_GUARD_SCENE);
+      const target = highest(ctx, party, (u) => u.mp, PRECEPTS_GUARD_SCENE, true);
       return use(GUARDIAN_ABILITY.preceptsOsmose, target ? [target.id] : []);
     }
     if (scriptModCtx(ctx, PRECEPTS_DEMI_MODULUS) === PRECEPTS_DEMI_ROLL) return use(GUARDIAN_ABILITY.demi, []);
@@ -280,7 +287,7 @@ function cycleMove(ctx: AiContext, party: readonly Ffx2Unit[]): Command | null {
     case 4:
       return party.length === 1 ? use(GUARDIAN_ABILITY.attack, [party[0]!.id]) : use(GUARDIAN_ABILITY.chainAttack, chainAttackTargets(party));
     case 6: {
-      const target = highest(ctx, lacking(party, 'stop'), (u) => u.mp, BARALAI_SCENE);
+      const target = highest(ctx, lacking(party, 'stop'), (u) => u.mp, BARALAI_SCENE, true);
       return target ? use(GUARDIAN_ABILITY.loomingGlacier, [target.id]) : null; // every girl already stopped: no command
     }
     default:

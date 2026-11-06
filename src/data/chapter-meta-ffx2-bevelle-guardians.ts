@@ -24,7 +24,7 @@ export const BEVELLE_GUARDIANS_META: ChapterMeta = {
   ...BEVELLE_GUARDIANS_TEXT,
   heroArt: 'pause/ch4-ffx2-bahamut', // a flagged stand-in: Chapter IV's pause plate, the same dungeon
   heroArtFallback: 'backdrops/bevelle-underground.png',
-  quote: { text: 'He counts every blow. Mind how many you land.', speaker: 'Paine' },
+  quote: { text: 'He counts every blow. The tenth one brings a drill.', speaker: 'Paine' },
   handwritten: 'the tenth blow calls the drill',
   objectives: [
     { id: 'get-past-georapella', label: 'Get past Georapella', rule: { kind: 'link-reached', link: 2 } },
@@ -36,7 +36,7 @@ export const BEVELLE_GUARDIANS_META: ChapterMeta = {
   snapshots: [
     { image: 'backdrops/bevelle-underground.png', caption: 'the way down' },
     { image: 'characters/baralai-shade/idle.png', caption: 'the man at the stairs' },
-    { image: 'portraits/paine.png', caption: 'count the blows' },
+    { image: 'portraits/paine.png', caption: 'keep Protect up' },
   ],
   focalCharacterId: 'paine',
   musicKeys: ['scene-bevelle-underground', 'boss-bahamut', 'boss-den-of-woe', 'victory-ffx2'],

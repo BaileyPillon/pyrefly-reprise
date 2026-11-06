@@ -69,7 +69,7 @@ const SEAM_2: StoryScript = [
   say('rikku-x2', 'Floor seven. It smells of old metal.', { auto: 1000 }), // ours: Rikku sets up
   say('none', 'A man in the robes of Bevelle waits below, in no hurry at all.', { auto: 1600 }), // ours: Baralai, unnamed until he speaks
   say('baralai', 'Lady Yuna. I will not hurt you more than I must.', { auto: 1700 }), // ours: his register, courteous and exact (writing bible §1.20)
-  say('paine', 'He counts every blow. Mind how many you land.', { auto: 1500 }), // ours: the entrance line (BG4): the counter the game never shows
+  say('paine', 'He counts every blow. The tenth one brings a drill.', { auto: 1500 }), // ours: the entrance line (BG4): the counter the game never shows; it names the rule and does not tell the player to hold back (BG16: counting measured worse than Protect and the Change)
 ];
 
 // --------------------------------------------------------------------------- mid
@@ -97,7 +97,7 @@ const POST: StoryScript = [
   say('yuna-x2', 'You are afraid of what is down there.', { auto: 1700 }), // ours
   say('paine', 'So are we.', { auto: 1100 }), // ours: the one sincere beat (writing bible §2.2: at most three lines)
   beat(700),
-  say('rikku-x2', 'Great. Three guardians and a Praetor. I could use a nap.', { auto: 2300 }), // ours: the joke returns
+  say('rikku-x2', 'Great. Two guardians and a Praetor. I could use a nap.', { auto: 2300 }), // ours: the joke returns (two guardians fought, then Baralai: the count was wrong in the first draft)
   say('none', 'Far below, something large turns over in its sleep.', { auto: 1800 }), // ours: the tease at Limbo (Bahamut, Chapter IV)
   wait(900),
 ];
@@ -113,15 +113,16 @@ const MID_SCRIPTS: Record<string, StoryScript> = {
     say('rikku-x2', 'It hit all of us at once!', { auto: 1300 }),
     say('paine', 'Shell. Then keep healing.', { auto: 1200 }),
   ],
-  // The Precepts Guard's first Death: a girl falls at once. Nothing in the kit guards against it (the engine has no Reflect redirect and the party has no Death-proofing): a Phoenix Down raises her.
+  // The Precepts Guard's first Death: a girl falls at once; a Phoenix Down raises her. The words say only that: the game's script passes Death over only when EVERY girl wears Reflect (`m263.src` 126 to 129), this build learns no Reflect (`builds/bevelle.ts`), and the engine has no Reflect redirect (handoff section 4, finding 5), so no line here claims a way to guard against it.
   [FIRST_DEATH]: [
     say('yuna-x2', 'It reaches for our lives!', { auto: 1200 }),
-    say('paine', 'Nothing guards against it. Raise her fast.', { auto: 1500 }),
+    say('paine', 'Raise her fast.', { auto: 1100 }),
   ],
-  // Baralai's blow count reaches nine (BG4: the one callout; the game shows no counter): the next blow on him calls Drill Shot, and whoever lands it takes it. Emitted by the AI, once.
+  // Baralai's blow count reaches nine (BG4: the one callout; the game shows no counter): the next blow on him calls Drill Shot, and whoever lands it takes it. Emitted by the AI, once. The answer it gives is the measured one (BG16: Protect halves the shot, and holding the blows back costs more than it saves), never "stop at nine".
   [BARALAI_COUNT_NINE_TRIGGER]: [
     say('paine', 'Nine. The next blow calls the drill.', { auto: 1500 }),
     say('rikku-x2', 'Who takes it, then?', { auto: 1000 }),
+    say('paine', 'Whoever lands it. Keep Protect up.', { auto: 1500 }),
   ],
 };
 

@@ -14,6 +14,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { FFX2_BEVELLE_GUARDIANS } from '../../../src/data/chapter-ffx2-bevelle-guardians.ts';
+import { BEVELLE_GUARDIANS_META } from '../../../src/data/chapter-meta-ffx2-bevelle-guardians.ts';
 import { getChapter } from '../../../src/data/encounters.ts';
 import * as ids from '../../../src/data/bevelle-guardians-ids.ts';
 import { MAX_LINE_CHARS, MAX_SAY_CHARS, lintScript, type SpeakerId, type Step, type StoryScript } from '../../../src/story/dsl.ts';
@@ -135,6 +136,24 @@ describe('what the draft says, against the sources (research/re-ffx2-bevelle-und
   it('the entrance line names the counter (BG4: the game shows none), and the one callout says the next blow calls the drill', () => {
     expect(saysOf(S.midScripts[ids.GUARDIANS_SEAM_2]!).map((s) => s.text).join(' ')).toMatch(/counts every blow/i);
     expect(saysOf(S.midScripts[ids.BARALAI_COUNT_NINE_TRIGGER]!).map((s) => s.text).join(' ')).toMatch(/nine.*next blow.*drill/i);
+  });
+
+  it('the words follow the measured answer and claim only what the sources and the engine do (fix pass of 2026-11-06: BG16, the review\'s minors 5 to 7)', () => {
+    const textOf = (script: StoryScript): string => saysOf(script).map((s) => s.text).join(' ');
+    // BG16: Protect and the Change beat counting (bench: changeCount 182 of 200 against change 196), so no line steers toward holding back, in the scripts or on the pause screen.
+    const nine = textOf(S.midScripts[ids.BARALAI_COUNT_NINE_TRIGGER]!);
+    expect(nine).toMatch(/protect/i);
+    expect(nine).toMatch(/whoever lands it/i);
+    const shown = JSON.stringify([S.pre, S.post, S.midScripts, BEVELLE_GUARDIANS_META.quote, BEVELLE_GUARDIANS_META.handwritten, BEVELLE_GUARDIANS_META.snapshots]);
+    expect(shown).not.toMatch(/mind how many|count the blows|stop at nine|hold (it |them )?back/i);
+    expect(BEVELLE_GUARDIANS_META.quote?.text).toMatch(/counts every blow/i);
+    // Death: the words say "raise her" and no more (the game's guard is Reflect on every girl; this build learns none; the engine has no Reflect redirect).
+    const death = textOf(S.midScripts['first-death']!);
+    expect(death).toMatch(/raise her/i);
+    expect(death).not.toMatch(/guards? against|nothing guards/i);
+    // The close counts what was fought: two guardians, then Baralai.
+    expect(textOf(S.post)).toMatch(/two guardians and a praetor/i);
+    expect(textOf(S.post)).not.toMatch(/three guardians/i);
   });
 
   it('Baralai is courteous and says `Lady Yuna` (writing bible section 1.20), he withdraws rather than dies, and the close teases Vegnagun\'s side of the dungeon', () => {

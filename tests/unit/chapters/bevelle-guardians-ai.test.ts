@@ -115,31 +115,31 @@ describe('Georapella [RE §6.2]', () => {
     expect(mem(b.self, GEORAPELLA_COUNTER)).toBe(0);
   });
 
-  it('below 25 MP (never in play: it has 9,999) it Osmoses the girl with the most MP: a first near-weighted search is thrown away, then the girls tied for the highest', () => {
+  it('below 25 MP (never in play: it has 9,999) it Osmoses the girl with the most MP: m262.src holds the single `max` search, with NO discarded first search (the research note\'s section 12 correction 6), so one unique top draws nothing', () => {
     const b = georapella();
     b.self.mp = 24;
     b.girls[0].mp = 10;
     b.girls[1].mp = 80;
     b.girls[2].mp = 50;
-    const c = b.poll(0, 7); // the start draw, then the discarded search's value
+    const c = b.poll(0);
     expect(b.id(c)).toBe(A.georapellaOsmose);
     expect(b.targets(c)).toEqual(['rikku']);
-    expect(b.rng.calls).toEqual([ROLL, SEARCH]); // one unique top: the second search has one candidate and draws nothing
+    expect(b.rng.calls).toEqual([ROLL]); // the start draw only: one unique top is a search with one candidate, and that draws nothing
     b.self.mp = 25;
     expect(b.id(b.poll())).toBe(A.thundaga); // 25 is not below 25; the ring was not advanced by the Osmose
   });
 
-  it('a tie for the most MP draws a second search, and the pick is the near-weighted one of the stand-in scene (Georapella\'s own positions)', () => {
+  it('a tie for the most MP draws ONE search (not two, unlike the Precepts Guard and Baralai), and the pick is the near-weighted one of the stand-in scene (Georapella\'s own positions)', () => {
     for (const raw of [0, 3, 900, 40_000]) {
       const b = georapella();
       b.self.mp = 0;
       b.girls[0].mp = 90;
       b.girls[1].mp = 90;
       b.girls[2].mp = 10;
-      const c = b.poll(0, 1, raw);
+      const c = b.poll(0, raw);
       const weights = sceneWeights(GEORAPELLA_SCENE, [0, 1]);
       expect(b.targets(c), `raw ${raw}`).toEqual([['yuna', 'rikku'][pickIndexByWeights(raw, weights)]!]);
-      expect(b.rng.calls, `raw ${raw}`).toEqual([ROLL, SEARCH, SEARCH]);
+      expect(b.rng.calls, `raw ${raw}`).toEqual([ROLL, SEARCH]);
     }
   });
 
