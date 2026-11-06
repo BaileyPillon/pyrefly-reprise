@@ -197,11 +197,14 @@
     },
     {
       "kind": "deep",
-      "status": "pending",
+      "status": "done",
       "requires": "deep review of every affected chapter and system",
       "carriedFrom": [
         "d5049f686"
-      ]
+      ],
+      "result": "FAIL",
+      "settledBy": "critic/rounds/round-34b.json",
+      "settledAt": "2026-11-04T08:33:24.654Z"
     }
   ]
 }

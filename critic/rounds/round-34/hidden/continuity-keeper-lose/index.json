@@ -1,0 +1,548 @@
+[
+ {
+  "file": "spectral-keeper-lose-r34/00-title.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:09:59.836Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/01-briefing.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:01.309Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/04-prep.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep, first tab",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:05.292Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/05-pre-scene.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pre-battle cutscene, first line",
+  "asserted": "screen=cutscene",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene"
+   ],
+   "titleRoots": 0,
+   "screen": "cutscene"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:10.658Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/05b-scene-esc.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Esc over the pre-battle scene",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "cutscene",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:12.217Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/seq-transition-into-battle/",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 57
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 371
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 669
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 983
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1283
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1584
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1889
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2199
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2502
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2799
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:26.143Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/10-first-menu-coach.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:27.345Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/11-advisor.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": 14.2
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:28.393Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/12-intent-E.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:30.472Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/13-guide-G.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:32.122Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/14-pause-Esc.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:34.189Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/14-pause-tab-next.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab Yuna",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:35.129Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/14-pause-options.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause OPTIONS tab",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:37.571Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/16-target-single.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "target selection after choosing ATTACK",
+  "asserted": "screen=battle targeting=true",
+  "verified": true,
+  "targets": 1,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:41.409Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/16b-after-cancel.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Escape from target selection",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:42.906Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/seq-party-action/",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: a party command resolving (Attack)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 54
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 563
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 812
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 1059
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1312
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1560
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1811
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2044
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2282
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2521
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:53.307Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/seq-action-playing/",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: an action playing out (play:status-add)",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 53
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 295
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 522
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 792
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1018
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1260
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1505
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 1761
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 1992
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2226
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:10:55.991Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/31-results.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a defeat",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:11:21.899Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/32-after-retry.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Enter (RETRY) on the defeat results screen",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:11:25.104Z"
+ },
+ {
+  "file": "spectral-keeper-lose-r34/33-retry-battle.png",
+  "game": "ffx",
+  "chapter": "spectral-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "the retried fight, first menu",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-04T08:11:39.478Z"
+ }
+]

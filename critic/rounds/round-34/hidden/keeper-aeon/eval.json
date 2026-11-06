@@ -1,0 +1,399 @@
+{
+ "events": 131,
+ "moves": [],
+ "tails": 4,
+ "sweeps": [
+  {
+   "seq": 5,
+   "front": 2,
+   "zone": [
+    2,
+    3,
+    1
+   ],
+   "targets": [
+    "tidus",
+    "yuna",
+    "auron"
+   ],
+   "expected": [
+    "tidus",
+    "yuna",
+    "auron"
+   ],
+   "aeon": null,
+   "ok": true
+  },
+  {
+   "seq": 86,
+   "front": 1,
+   "zone": [
+    1,
+    2,
+    6
+   ],
+   "targets": [
+    "tidus",
+    "yuna"
+   ],
+   "expected": [
+    "tidus",
+    "yuna"
+   ],
+   "aeon": null,
+   "ok": true
+  },
+  {
+   "seq": 124,
+   "front": 3,
+   "zone": [
+    3,
+    4,
+    2
+   ],
+   "targets": [
+    "auron"
+   ],
+   "expected": [
+    "auron"
+   ],
+   "aeon": null,
+   "ok": true
+  }
+ ],
+ "sweepsOk": true,
+ "counters": 5,
+ "counterByAbility": {
+  "keeper-attack-all": 3,
+  "keeper-aeon-attack": 2
+ },
+ "lays": [
+  {
+   "seq": 49,
+   "targets": [
+    "spectral-circle-7"
+   ],
+   "cum": 44,
+   "aeon": "bahamut",
+   "countBefore": 4,
+   "ok": true
+  },
+  {
+   "seq": 100,
+   "targets": [
+    "spectral-circle-3",
+    "spectral-circle-5"
+   ],
+   "cum": 107,
+   "aeon": null,
+   "countBefore": 5,
+   "ok": true
+  }
+ ],
+ "mineTurns": [
+  {
+   "seq": 68,
+   "circle": "spectral-circle-7",
+   "platform": 7,
+   "ability": "keeper-mine-blast",
+   "victim": "bahamut",
+   "occupant": null,
+   "aeon": "bahamut",
+   "sinceLay": 40,
+   "ok": true
+  }
+ ],
+ "fuseTicks": [
+  40
+ ],
+ "aeonAttacks": 3,
+ "summons": [
+  {
+   "seq": 36,
+   "aeon": "bahamut"
+  }
+ ],
+ "dismisses": [
+  {
+   "seq": 74,
+   "aeon": "bahamut",
+   "reason": "ko"
+  }
+ ],
+ "problems": [],
+ "countCheck": [
+  {
+   "n": 1,
+   "logLen": 1,
+   "live": 0,
+   "model": 0,
+   "ok": true
+  },
+  {
+   "n": 2,
+   "logLen": 15,
+   "live": 1,
+   "model": 1,
+   "ok": true
+  },
+  {
+   "n": 3,
+   "logLen": 20,
+   "live": 1,
+   "model": 1,
+   "ok": true
+  },
+  {
+   "n": 4,
+   "logLen": 30,
+   "live": 1,
+   "model": 1,
+   "ok": true
+  },
+  {
+   "n": 5,
+   "logLen": 35,
+   "live": 1,
+   "model": 1,
+   "ok": true
+  },
+  {
+   "n": 6,
+   "logLen": 39,
+   "live": 1,
+   "model": 1,
+   "ok": true
+  },
+  {
+   "n": 7,
+   "logLen": 53,
+   "live": 0,
+   "model": 0,
+   "ok": true
+  }
+ ],
+ "countAllOk": true,
+ "snapshots": [
+  {
+   "n": 1,
+   "actor": "tidus",
+   "decision": "Attack the Keeper",
+   "state": {
+    "front": 2,
+    "count": 0,
+    "mines": 0,
+    "armed": [],
+    "at": {
+     "tidus": 1,
+     "yuna": 2,
+     "auron": 3
+    },
+    "aeon": null,
+    "ticks": 0,
+    "logLen": 1
+   },
+   "after": {
+    "front": 2,
+    "count": 1,
+    "mines": 0,
+    "armed": [],
+    "at": {
+     "tidus": 1,
+     "yuna": 2,
+     "auron": 3
+    },
+    "aeon": null,
+    "ticks": 0
+   }
+  },
+  {
+   "n": 2,
+   "actor": "auron",
+   "decision": "Phoenix Down on yuna",
+   "state": {
+    "front": 2,
+    "count": 1,
+    "mines": 0,
+    "armed": [],
+    "at": {
+     "tidus": 1,
+     "yuna": 2,
+     "auron": 3
+    },
+    "aeon": null,
+    "ticks": 0,
+    "logLen": 15
+   },
+   "after": {
+    "front": 2,
+    "count": 1,
+    "mines": 0,
+    "armed": [],
+    "at": {
+     "tidus": 1,
+     "yuna": 2,
+     "auron": 3
+    },
+    "aeon": null,
+    "ticks": 20
+   }
+  },
+  {
+   "n": 3,
+   "actor": "auron",
+   "decision": "a potion on tidus",
+   "state": {
+    "front": 2,
+    "count": 1,
+    "mines": 0,
+    "armed": [],
+    "at": {
+     "tidus": 1,
+     "yuna": 2,
+     "auron": 3
+    },
+    "aeon": null,
+    "ticks": 20,
+    "logLen": 20
+   },
+   "after": {
+    "front": 3,
+    "count": 1,
+    "mines": 0,
+    "armed": [],
+    "at": {
+     "tidus": 1,
+     "yuna": 2,
+     "auron": 3
+    },
+    "aeon": null,
+    "ticks": 24
+   }
+  },
+  {
+   "n": 4,
+   "actor": "tidus",
+   "decision": "a potion on auron",
+   "state": {
+    "front": 3,
+    "count": 1,
+    "mines": 0,
+    "armed": [],
+    "at": {
+     "tidus": 1,
+     "yuna": 2,
+     "auron": 3
+    },
+    "aeon": null,
+    "ticks": 24,
+    "logLen": 30
+   },
+   "after": {
+    "front": 3,
+    "count": 1,
+    "mines": 0,
+    "armed": [],
+    "at": {
+     "tidus": 1,
+     "yuna": 2,
+     "auron": 3
+    },
+    "aeon": null,
+    "ticks": 27
+   }
+  },
+  {
+   "n": 5,
+   "actor": "yuna",
+   "decision": "Yuna summons Bahamut",
+   "state": {
+    "front": 3,
+    "count": 1,
+    "mines": 0,
+    "armed": [],
+    "at": {
+     "tidus": 1,
+     "yuna": 2,
+     "auron": 3
+    },
+    "aeon": null,
+    "ticks": 27,
+    "logLen": 35
+   },
+   "after": {
+    "front": 3,
+    "count": 1,
+    "mines": 0,
+    "armed": [],
+    "at": {
+     "tidus": 1,
+     "yuna": 2,
+     "auron": 3
+    },
+    "aeon": "bahamut",
+    "ticks": 27
+   }
+  },
+  {
+   "n": 6,
+   "actor": "bahamut",
+   "decision": "aeon attacks",
+   "state": {
+    "front": 3,
+    "count": 1,
+    "mines": 0,
+    "armed": [],
+    "at": {
+     "tidus": 1,
+     "yuna": 2,
+     "auron": 3
+    },
+    "aeon": "bahamut",
+    "ticks": 27,
+    "logLen": 39
+   },
+   "after": {
+    "front": 3,
+    "count": 0,
+    "mines": 1,
+    "armed": [
+     7
+    ],
+    "at": {
+     "tidus": 1,
+     "yuna": 2,
+     "auron": 3
+    },
+    "aeon": "bahamut",
+    "ticks": 57
+   }
+  },
+  {
+   "n": 7,
+   "actor": "bahamut",
+   "decision": "aeon attacks",
+   "state": {
+    "front": 3,
+    "count": 0,
+    "mines": 1,
+    "armed": [
+     7
+    ],
+    "at": {
+     "tidus": 1,
+     "yuna": 2,
+     "auron": 3
+    },
+    "aeon": "bahamut",
+    "ticks": 57,
+    "logLen": 53
+   },
+   "after": null
+  }
+ ],
+ "liveVsDry": {
+  "compared": 7,
+  "identical": 7,
+  "firstDivergence": null
+ }
+}
