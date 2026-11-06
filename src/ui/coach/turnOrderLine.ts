@@ -36,6 +36,7 @@ export const TURN_ORDER_LINES: Readonly<Record<string, string>> = {
   'sinspawn-gui': TURN_ORDER_PARTY_FIRST,
   'exp-fayth': TURN_ORDER_PARTY_FIRST,
   'last-summoning': TURN_ORDER_PARTY_FIRST,
+  'sanctuary-keeper': TURN_ORDER_PARTY_FIRST, // the hidden Sanctuary Keeper chapter (2026-11-06): its first counter comes after the party's, and the engine count over 100 seeds is 0 (the test's 20 seeds are the proof)
   'spectral-keeper': TURN_ORDER_PARTY_FIRST, // the formation gives the front line First Strike, so all three act before the Keeper in every seed (the engine count is the test's)
 };
 

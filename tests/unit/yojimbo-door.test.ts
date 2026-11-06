@@ -75,7 +75,7 @@ describe('the word against every other door word', () => {
   const others = CHAPTER_DOORS.map((d) => d.word).filter((w) => w !== WORD);
 
   it('no word begins with, ends with or contains the other, and no end of one is the beginning of the other, in either order', () => {
-    expect(others).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', 'summon', 'keeper', 'infinito', 'yrp', 'waker']); // `waker` is the Wind Waker chapter's (FFX-2, hidden chapter 32); `yrp` is the hidden 3D Bahamut's (FFX-2, chapter 31, ch-yrp 2026-11-02); `infinito` is the Fallen Maesters' (FFX-2, hidden chapter 30); `summon` is The Last Summoning's (FFX, hidden chapter 28); `keeper` is the Spectral Keeper's (FFX, hidden chapter 29)
+    expect(others).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', 'summon', 'keeper', 'infinito', 'yrp', 'waker', 'beast']); // `beast` is the hidden Sanctuary Keeper's (FFX, chapter 39, ch-sanctuary-keeper 2026-11-06); `waker` is the Wind Waker chapter's (FFX-2, hidden chapter 32); `yrp` is the hidden 3D Bahamut's (FFX-2, chapter 31, ch-yrp 2026-11-02); `infinito` is the Fallen Maesters' (FFX-2, hidden chapter 30); `summon` is The Last Summoning's (FFX, hidden chapter 28); `keeper` is the Spectral Keeper's (FFX, hidden chapter 29)
     for (const other of others) {
       for (const [a, b] of [[WORD, other], [other, WORD]] as const) {
         expect(a.startsWith(b), `${a} begins ${b}`).toBe(false);
@@ -375,7 +375,7 @@ describe('the ten doors do not interfere', () => {
       await flush();
       expect(b.picked, `${other.word}${WORD}`).toEqual([other.chapter]);
     }
-  }, 180_000); // fifteen doors at the r74 integration (three real boards per other door, 42 mounts): about 16 s on a quiet machine and over 60 s when the PC is busy, so the pair test gets 180 s; a hang still fails, later
+  }, 240_000); // sixteen doors (the Sanctuary Keeper's `beast` joined at ch-sanctuary-keeper, 2026-11-06; fifteen took 180 s) at the r74 integration (three real boards per other door, 42 mounts): about 16 s on a quiet machine and over 60 s when the PC is busy, so the pair test gets 180 s; a hang still fails, later
 });
 
 const keyDown = (key: string, init: KeyboardEventInit = {}): void => {

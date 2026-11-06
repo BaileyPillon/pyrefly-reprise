@@ -146,8 +146,8 @@ describe("the attached records are the game's table", () => {
     // 512, 509 and 3 in release 52, where both lines meet: Mirror Aeons + RC9 FFX-M read 510, 508 and 2; the Last Summoning adds Kozuka and Wakizashi and
     // moves Daigoro and the Sisters token to "no record" (+2 abilities, +1 record, +1 without).
     // 519 and 516 since the hidden Spectral Keeper chapter (FFX only, 2026-11-02): its seven rows (0x6045 to 0x604e and the party's Move 0x3103), each with its record, all in the game's fixtures.
-    expect(ALL_ABILITIES).toHaveLength(519);
-    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(516);
+    expect(ALL_ABILITIES).toHaveLength(522); // 522 and 519 since the hidden Sanctuary Keeper chapter (FFX only, 2026-11-06): its three rows (0x6042 to 0x6044), each with its record, all in the game's fixtures; the six spells it adds at init are the player's own rows
+    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(519);
     expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(3);
   });
 });

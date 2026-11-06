@@ -35,6 +35,7 @@ import { ANGRA_MAINYU_SCENE } from '../../../src/data/angra-mainyu-ids.ts';
 import { MIRROR_AEONS_SCENE } from '../../../src/data/ffx/mirror-aeons-ids.ts';
 import { LAST_SUMMONING_SCENE } from '../../../src/data/ffx/last-summoning-ids.ts';
 import { SPECTRAL_KEEPER_SCENE } from '../../../src/data/ffx/spectral-keeper-ids.ts';
+import { SANCTUARY_KEEPER_SCENE } from '../../../src/data/ffx/sanctuary-keeper-ids.ts';
 import { EXP_YRP_SCENE } from '../../../src/data/yrp-ids.ts';
 import { EXP_WINDWAKER_SCENE } from '../../../src/data/windwaker-ids.ts';
 import { intendedStrategy } from '../../../src/engine/BattlePresenterStrategies.ts';
@@ -156,7 +157,7 @@ describe('its scene', () => {
   });
 
   it('the hidden chapters\' scenes moved to the side table are all still registered, row for row, with the factories they had', () => {
-    const keys = [EXPERIMENT_GROUNDS_PLATE, EXP_LEBLANC_SCENE, MUSHROOM_ROCK_SCENE, EXP_FAYTH_SCENE, TOURIST_TRAP_SCENE, GAGAZET_RONSO_SCENE, ANGRA_MAINYU_SCENE, MIRROR_AEONS_SCENE, LAST_SUMMONING_SCENE, SPECTRAL_KEEPER_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE]; // the 3D Bahamut's chamber (FFX-2, 2026-10-19) is the last row; the Tourist Trap's cavern (FFX-2, 2026-10-14) is the fifth row, the Mountain Gate (FFX, Biran and Yenke, 2026-10-14) the sixth, Angra Mainyu's desert (FFX-2, 2026-10-14) the seventh, Mirror Aeons' two-plate stage (FFX, 2026-10-15) the eighth
+    const keys = [EXPERIMENT_GROUNDS_PLATE, EXP_LEBLANC_SCENE, MUSHROOM_ROCK_SCENE, EXP_FAYTH_SCENE, TOURIST_TRAP_SCENE, GAGAZET_RONSO_SCENE, ANGRA_MAINYU_SCENE, MIRROR_AEONS_SCENE, LAST_SUMMONING_SCENE, SPECTRAL_KEEPER_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE, SANCTUARY_KEEPER_SCENE]; // the 3D Bahamut's chamber (FFX-2, 2026-10-19) is the last row; the Tourist Trap's cavern (FFX-2, 2026-10-14) is the fifth row, the Mountain Gate (FFX, Biran and Yenke, 2026-10-14) the sixth, Angra Mainyu's desert (FFX-2, 2026-10-14) the seventh, Mirror Aeons' two-plate stage (FFX, 2026-10-15) the eighth
     expect(EXPERIMENT_SCENE_ENTRIES.map((e) => e.key)).toEqual(keys);
     expect(Object.keys(EXPERIMENT_SCENE_FACTORIES).sort()).toEqual([...keys].sort());
     for (const key of keys) {
