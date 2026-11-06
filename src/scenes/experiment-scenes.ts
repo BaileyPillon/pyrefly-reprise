@@ -48,6 +48,8 @@ import { buildExpWindwakerStageScene, EXP_WINDWAKER_SCENE_ENTRY } from './exp-wi
 import { EXP_WINDWAKER_SCENE } from '../data/windwaker-ids.ts';
 import { buildExpAnimeStageScene, EXP_ANIME_SCENE_ENTRY } from './exp-anime-stage.ts'; // the anime chamber (FFX-2 only, hidden chapter): the Wind Waker temple, the Meshy toon girls under a cel shader
 import { EXP_ANIME_SCENE } from '../data/anime-ids.ts';
+import { PENANCE_SCENE_ENTRY, buildPenanceScene } from './penance.ts'; // Penance's deck (FFX only, hidden chapter): Chapter VIII's deck and plate with the giant and its two hands staged
+import { PENANCE_SCENE } from '../data/ffx/penance-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -79,6 +81,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   EXP_WINDWAKER_SCENE_ENTRY,
   // The anime chapter (FFX-2 only, hidden chapter): the same temple under the anime lab's camera, the Meshy toon girls under the cel material with outlines.
   EXP_ANIME_SCENE_ENTRY,
+  // Penance (FFX only, hidden chapter): the Fahrenheit's deck on Chapter VIII's plate, the giant far and high and a hand either side.
+  PENANCE_SCENE_ENTRY,
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -97,4 +101,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [EXP_YRP_SCENE]: buildExpYrp3dStageScene, // the hidden 3D Bahamut chapter (FFX-2 only)
   [EXP_WINDWAKER_SCENE]: buildExpWindwakerStageScene, // the hidden Wind Waker chapter (FFX-2 only)
   [EXP_ANIME_SCENE]: buildExpAnimeStageScene, // the hidden anime chapter (FFX-2 only)
+  [PENANCE_SCENE]: buildPenanceScene, // the hidden Penance chapter (FFX only)
 };

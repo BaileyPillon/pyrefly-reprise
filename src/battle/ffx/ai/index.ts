@@ -49,6 +49,7 @@ import './biran-yenke.ts'; // the hidden Biran and Yenke chapter (FFX only): the
 import './dark-aeons.ts'; // the hidden Mirror Aeons chapter (FFX only): Dark Yojimbo, the three Dark Magus Sisters and the dog
 import './dark-aeons-six.ts'; // the hidden Dark Aeons chapter (FFX only, 2026-11-06): Dark Valefor, Ifrit, Ixion (two scripts), Shiva, Bahamut and Anima
 import './spectral-keeper.ts'; // the hidden Spectral Keeper chapter (FFX only): the Keeper and its Circles (the glyph mines)
+import './penance.ts'; // the hidden Penance chapter (FFX only): Penance and its two Arms
 import { freeCircleIds, moveTo, platformOf, ringActive } from '../platforms.ts';
 
 export * from './types.ts';

@@ -8,9 +8,10 @@ import { BIRAN_YENKE_ABILITIES, BIRAN_YENKE_GROUPS } from './biran-yenke.ts';
 import { DARK_AEONS_ABILITIES, DARK_AEONS_GROUPS } from './dark-aeons-groups.ts';
 import { DARK_SIX_ABILITIES, DARK_SIX_GROUPS } from './dark-aeons-six-groups.ts'; // the hidden Dark Aeons chapter (2026-11-06): the six other Dark Aeons
 import { SPECTRAL_KEEPER_ABILITIES, spectralKeeperGroup } from './spectral-keeper.ts'; // the hidden Spectral Keeper chapter (2026-11-02)
+import { PENANCE_ABILITIES, penanceGroup } from './penance.ts'; // the hidden Penance chapter (2026-11-06)
 
 /** Every ability row of the hidden FFX chapters (Bulldoze, the Breaths, Berserk and the half-HP Rages; the Dark Aeons' fourteen rows). */
-export const HIDDEN_FFX_ABILITIES: readonly AbilityDef[] = [...Object.values(BIRAN_YENKE_ABILITIES), ...Object.values(DARK_AEONS_ABILITIES), ...Object.values(SPECTRAL_KEEPER_ABILITIES), ...Object.values(DARK_SIX_ABILITIES)];
+export const HIDDEN_FFX_ABILITIES: readonly AbilityDef[] = [...Object.values(BIRAN_YENKE_ABILITIES), ...Object.values(DARK_AEONS_ABILITIES), ...Object.values(SPECTRAL_KEEPER_ABILITIES), ...Object.values(DARK_SIX_ABILITIES), ...Object.values(PENANCE_ABILITIES)];
 
 /** Every formation of the hidden FFX chapters (the brothers' duel; the Dark Aeons' eleven). */
-export const HIDDEN_FFX_GROUPS: readonly EnemyGroupDef[] = [...BIRAN_YENKE_GROUPS, ...DARK_AEONS_GROUPS, spectralKeeperGroup, ...DARK_SIX_GROUPS];
+export const HIDDEN_FFX_GROUPS: readonly EnemyGroupDef[] = [...BIRAN_YENKE_GROUPS, ...DARK_AEONS_GROUPS, spectralKeeperGroup, ...DARK_SIX_GROUPS, penanceGroup];

@@ -198,7 +198,7 @@ export function hitInputOf(req: HitRequest, command: ResolvedCommand): HitInput 
       bonusFlag: 0,
       // A weapon command takes its formula and power from the weapon; every one of the 23 such records carries the
       // plain weapon's 1 and 16, which is what the ability data carries too (checked by the data test).
-      weapon: { formula: command.formula, power, element: weaponElement },
+      weapon: { formula: actor.equipment?.weapon.weaponRow?.formula ?? command.formula, power, element: weaponElement }, // a Celestial weapon's row (`EquipmentDef.weaponRow`) names its own formula (0x11 to 0x13); every other weapon is the command's 1
       partyDealt: dealt,
       scale: timer > 0 ? (req.timing?.scale ?? { a: Math.min(req.timing?.timeRemainingMs ?? 0, timer), b: timer }) : null,
     },

@@ -15,6 +15,7 @@ import { CHAPTERS, EXPERIMENT_CHAPTERS, UNLISTED_CHAPTERS } from '../../src/data
 import { MIRROR_ACT_I_PLATE, MIRROR_AEONS_SCENE } from '../../src/data/ffx/mirror-aeons-ids.ts';
 import { SPECTRAL_KEEPER_SCENE } from '../../src/data/ffx/spectral-keeper-ids.ts';
 import { DARK_AEONS_SCENE } from '../../src/data/ffx/dark-aeons-six-ids.ts';
+import { PENANCE_SCENE } from '../../src/data/ffx/penance-ids.ts';
 import { EXP_YRP_SCENE } from '../../src/data/yrp-ids.ts';
 import { DJOSE_CHAMBER_PLATE } from '../../src/data/ixion-plates.ts';
 import { EXP_WINDWAKER_SCENE } from '../../src/data/windwaker-ids.ts';
@@ -31,7 +32,8 @@ describe('a scene key that is a code key names the backdrop file it draws', () =
     expect(backdropFileOf('constructor')).toBe('constructor'); // a key on Object.prototype is not an entry
     expect(backdropFileOf(SPECTRAL_KEEPER_SCENE)).toBe('zanarkand-dome'); // the hidden Spectral Keeper's stage draws Chapter II's Dome plate
     expect(backdropFileOf(DARK_AEONS_SCENE)).toBe('mushroom-rock-road'); // the hidden Dark Aeons' stage is one scene with seven plates: no file is named for it, so it draws the first link's plate
-    expect(Object.keys(SCENE_BACKDROP_FILE)).toEqual([MIRROR_AEONS_SCENE, DARK_AEONS_SCENE, SPECTRAL_KEEPER_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE, EXP_ANIME_SCENE]);
+    expect(backdropFileOf(PENANCE_SCENE)).toBe('evrae-airship-deck'); // the hidden Penance chapter's stage draws Chapter VIII's deck plate (ch-penance, 2026-11-06)
+    expect(Object.keys(SCENE_BACKDROP_FILE)).toEqual([MIRROR_AEONS_SCENE, DARK_AEONS_SCENE, SPECTRAL_KEEPER_SCENE, PENANCE_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE, EXP_ANIME_SCENE]);
     expect(backdropFileOf(EXP_YRP_SCENE)).toBe('bevelle-underground'); // the hidden 3D Bahamut is drawn over Chapter IV's own plate (ch-yrp)
     // the hidden Wind Waker chapter (FFX-2 only, Chapter 32) is the second code key: its stage is 3D with no plate of its own, and the board, the prep wash and the cutscenes show hidden chapter 24's (the Djose chamber's)
     expect(backdropFileOf(EXP_WINDWAKER_SCENE)).toBe(DJOSE_CHAMBER_PLATE);

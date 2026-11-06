@@ -146,9 +146,9 @@ describe("the attached records are the game's table", () => {
     // 512, 509 and 3 in release 52, where both lines meet: Mirror Aeons + RC9 FFX-M read 510, 508 and 2; the Last Summoning adds Kozuka and Wakizashi and
     // moves Daigoro and the Sisters token to "no record" (+2 abilities, +1 record, +1 without).
     // 519 and 516 since the hidden Spectral Keeper chapter (FFX only, 2026-11-02): its seven rows (0x6045 to 0x604e and the party's Move 0x3103), each with its record, all in the game's fixtures.
-    // 539 and 536 since the hidden Dark Aeons chapter (FFX only, 2026-11-06): the six other Dark Aeons' twenty distinct rows (the 24 of RE six 5.1 less the three identical pairs carried once, less Mega Graviton, which the Mirror Aeons carry), each with its record, all in the game's fixtures.
-    expect(ALL_ABILITIES).toHaveLength(539);
-    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(536);
+// 548 and 545 since the hidden Dark Aeons chapter (FFX only, 2026-11-06: the six other Dark Aeons' twenty distinct rows, the 24 of RE six 5.1 less the three identical pairs carried once, less Mega Graviton, which the Mirror Aeons carry) and the hidden Penance chapter (FFX only, 2026-11-06: its nine new rows, 0x411f to 0x4122, 0x4124 to 0x4126, 0x4129, 0x412a; the arms' other four moves are rows that already existed), each with its record, all in the game's fixtures.
+expect(ALL_ABILITIES).toHaveLength(548);
+expect(Object.keys(COMMAND_RECORDS)).toHaveLength(545);
     expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(3);
   });
 });
@@ -342,6 +342,7 @@ const KNOWN_STATUS_DIFFERENCES: readonly string[] = [
   // The Dark Aeons (the hidden Mirror Aeons chapter): the extra-status word (Auto-Life, Curse, Doom) and the cleanse bits live in the record, which is the one the kernel reads; the ability carries only the regular statuses.
   'dark-calamity: extra bits 0x0, record 0x400',
   'dark-mega-graviton: extra bits 0x0, record 0x4000',
+  'penance-tera-graviton: extra bits 0x0, record 0x4000', // the Left Arm's Tera Graviton (hidden Penance chapter, 2026-11-06): Doom in the extra word, as Mega Graviton's; the record is the one the kernel reads
   'keeper-glyph-mine: extra bits 0x0, record 0x4000', // the Spectral Keeper's Glyph Mine: Doom in the extra word, but no hit record, so nothing lands (RE 1.4); ours inflicts nothing
   'dark-razzia: cleanse in the record, ours none',
   'dark-razzia: extra bits 0x0, record 0x200',

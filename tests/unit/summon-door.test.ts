@@ -77,8 +77,8 @@ describe('the word against every other door word', () => {
   const others = registered;
   void DARK_MIRROR_WORD;
 
-  it('the registered neighbours are the fourteen already in the table (the Spectral Keeper’s `keeper`, the Fallen Maesters’ `infinito`, the hidden 3D Bahamut’s `yrp` and, last, the Wind Waker chapter’s `waker`), the Mirror Aeons chapter’s `yojimbo` among them', () => {
-    expect(registered).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', DARK_MIRROR_WORD, 'keeper', 'infinito', 'yrp', 'waker', 'gear', 'darkaeon']); // `darkaeon`: the Dark Aeons' (FFX, chapter 34, 2026-11-06); `gear`: the anime chapter's (FFX-2, chapter 33, 2026-11-06); `yrp`: the hidden 3D Bahamut's (FFX-2, chapter 31, ch-yrp 2026-11-02); `waker`: the Wind Waker chapter's (FFX-2, chapter 32)
+  it('the registered neighbours are the seventeen already in the table (the Spectral Keeper’s `keeper`, the Fallen Maesters’ `infinito`, the hidden 3D Bahamut’s `yrp` and, last, the Wind Waker chapter’s `waker`), the Mirror Aeons chapter’s `yojimbo` among them', () => {
+    expect(registered).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', DARK_MIRROR_WORD, 'keeper', 'infinito', 'yrp', 'waker', 'gear', 'darkaeon', 'judgment']); // `judgment`: the hidden Penance chapter's (FFX, chapter 35, 2026-11-06); `darkaeon`: the Dark Aeons' (FFX, chapter 34, 2026-11-06); `gear`: the anime chapter's (FFX-2, chapter 33, 2026-11-06); `yrp`: the hidden 3D Bahamut's (FFX-2, chapter 31, ch-yrp 2026-11-02); `waker`: the Wind Waker chapter's (FFX-2, chapter 32)
   });
 
   it('no word begins with, ends with or contains the other, and no end of one is the beginning of the other, in either order (the Dark Mirror lane\'s yojimbo included)', () => {
@@ -362,7 +362,7 @@ describe('the ten doors do not interfere', () => {
       await flush();
       expect(b.picked, `${other.word}${WORD}`).toEqual([other.chapter]);
     }
-  }, 180_000); // fifteen doors at the r74 integration (three real boards per other door, 42 mounts): about 16 s on a quiet machine and over 60 s when the PC is busy, so the pair test gets 180 s; a hang still fails, later
+  }, 240_000); // sixteen doors (Penance joined at ch-penance, 2026-11-06; fifteen took 180 s) at the r74 integration (three real boards per other door, 42 mounts): about 16 s on a quiet machine and over 60 s when the PC is busy, so the pair test gets 180 s; a hang still fails, later
 });
 
 const keyDown = (key: string, init: KeyboardEventInit = {}): void => {

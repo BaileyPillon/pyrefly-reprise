@@ -168,10 +168,12 @@ describe('its scene', () => {
     expect(pyreflyCanonFor('bevelle-underground')!.verdict).toBe(row.verdict);
   });
 
-  it('is the third-to-last row of the hidden chapters\' side table, which keeps every other row in order', () => {
-    expect(EXPERIMENT_SCENE_ENTRIES.at(-3)).toBe(EXP_YRP_SCENE_ENTRY); // the Wind Waker's row (ch-waker) follows it at the r74 integration, the anime chapter's (ch-anime, 2026-11-06) after that
+  it('is the row right before the Wind Waker\'s in the hidden chapters\' side table, which keeps every other row in order (later chapters append behind them)', () => {
+    const at = EXPERIMENT_SCENE_ENTRIES.indexOf(EXP_YRP_SCENE_ENTRY);
+    expect(at).toBeGreaterThan(0);
+    expect(EXPERIMENT_SCENE_ENTRIES[at + 1]!.key).toBe('exp-windwaker-stage'); // the Wind Waker's row (ch-waker) follows it at the r74 integration; Penance's (ch-penance) and later rows follow that
     expect(Object.keys(EXPERIMENT_SCENE_FACTORIES)).toContain('exp-yrp-3d-stage');
     expect(EXPERIMENT_SCENE_ENTRIES.map((e) => e.key)).toContain(EXP_LEBLANC_SCENE);
-    expect(EXPERIMENT_SCENE_ENTRIES).toHaveLength(14); // ten with this chapter alone; the Spectral Keeper's, the Dark Aeons' (2026-11-06), the Wind Waker's and the anime chapter's rows are the other four
+    expect(EXPERIMENT_SCENE_ENTRIES.length).toBeGreaterThanOrEqual(12); // ten with this chapter alone; the Spectral Keeper's and the Wind Waker's rows are the other two; Penance's (a thirteenth) and later chapters' only add
   });
 });

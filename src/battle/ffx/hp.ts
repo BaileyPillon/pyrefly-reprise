@@ -16,7 +16,7 @@ import { releaseThreatenLink } from './adapt/threaten.ts';
 import { reviveAutoStatuses } from './adapt/auto-status.ts';
 import { gaugeOnDeath } from './gauge.ts';
 import { cancelReactionsOf, reactToDeath } from './adapt/reactions.ts';
-import { holdsDeathForHook } from './ai/hooks.ts';
+import { holdsDeathForHook, runOnDeath } from './ai/hooks.ts';
 import { overkillReached, overkillStart, overkillStep } from './kernel/death-check.ts';
 import { payKill } from './adapt/loot.ts';
 
@@ -324,6 +324,7 @@ export function koActor(ctx: Ctx, target: FFXCombatant, sourceId?: CombatantId):
     if (target.flags.partOf !== undefined) partEvent.ownerId = target.flags.partOf;
     ctx.emit(partEvent);
   }
+  runOnDeath(ctx, target, sourceId); // the script's own death handler (the hidden Penance chapter's arms; inert for a script with no `onDeath`)
 }
 
 /** Bring a KO'd combatant back with `hp` HP. Fails on anything flagged `noRevive`. */

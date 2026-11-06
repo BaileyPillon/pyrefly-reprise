@@ -29,9 +29,11 @@
  *
  * **`yrp` and `waker` are desktop-only** (driver decision 219q, 2026-11-03; FFX-2 only): their rows carry the `desktopOnly` gate, so on the phone tier the door stays shut as FF7's does while its switch is off (see `desktopOnly` below).
  *
+ * **`judgment`** (FFX, the hidden Penance chapter, `./judgmentDoor.ts`: D is `right`, M is `select`, E is `start`; J, U, G, N and T are unbound) is a plain `WordDoor` too, and is **not** desktop-only (painted 2D, preflight P2).
+ *
  * **`infinito`** (FFX-2, the hidden Fallen Maesters, `./maestersDoor.ts`: only F is a bound key, `l1`, which the board ignores; I, N, T and O are unbound) is a plain `WordDoor` too.
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper` and `darkaeon`.
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon` and `judgment`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -55,6 +57,7 @@ import { PILGRIM_DOOR_CHAPTER, PILGRIM_DOOR_WORD } from './pilgrimDoor.ts';
 import { YRP_DOOR_CHAPTER, YRP_DOOR_WORD } from './yrpDoor.ts';
 import { WINDWAKER_DOOR_CHAPTER, WINDWAKER_DOOR_WORD } from './windwakerDoor.ts';
 import { ANIME_DOOR_CHAPTER, ANIME_DOOR_WORD } from './animeDoor.ts';
+import { JUDGMENT_DOOR_CHAPTER, JUDGMENT_DOOR_WORD } from './judgmentDoor.ts';
 
 /**
  * **The two hidden 3D chapters are desktop-only** (driver decision 219q, 2026-11-03; FFX-2 only: `yrp`, the 3D Bahamut, and `waker`, the Wind Waker Valefor). They are not staged for a phone: the Wind Waker is expected to miss the phone budgets
@@ -98,6 +101,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: WINDWAKER_DOOR_WORD, chapter: WINDWAKER_DOOR_CHAPTER, gate: desktopOnly },
   { word: ANIME_DOOR_WORD, chapter: ANIME_DOOR_CHAPTER, gate: desktopOnly },
   { word: DARKAEON_DOOR_WORD, chapter: DARKAEON_DOOR_CHAPTER },
+  { word: JUDGMENT_DOOR_WORD, chapter: JUDGMENT_DOOR_CHAPTER },
 ];
 
 /**

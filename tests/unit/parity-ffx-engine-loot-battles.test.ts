@@ -25,6 +25,7 @@ import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../src/data/ffx/ind
 import { DARK_CINDY_ID, DARK_DAIGORO_ID, DARK_MINDY_ID, DARK_SANDY_ID, DARK_YOJIMBO_ID } from '../../src/data/ffx/mirror-aeons-ids.ts';
 import { SPECTRAL_CIRCLE_IDS, SPECTRAL_KEEPER_ID } from '../../src/data/ffx/spectral-keeper-ids.ts';
 import { DARK_SIX_LINKS } from '../../src/data/ffx/dark-aeons-six-ids.ts';
+import { PENANCE_ID, PENANCE_LEFT_ARM_ID, PENANCE_RIGHT_ARM_ID } from '../../src/data/ffx/penance-ids.ts';
 import { lootRewards } from '../../src/data/ffx/loot/index.ts';
 import { setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
 import { CHAPTERS, getChapter, type Chapter } from '../../src/data/encounters.ts';
@@ -230,7 +231,7 @@ const WRITES: Readonly<Record<string, Partial<FfxLootRecord>>> = {
  * lane read, and their rewards are the chapter's own rows (`data/ffx/enemies/dark-aeons.ts`; `parity-ffx-loot-data.test.ts` pins that none carries `loot`). Not invented here (rule 6). The lane was built on
  * r49, before the chapter, so the r51 merge names them: every other formation is still fought and checked against the oracle.
  */
-const DARK_AEON_IDS: ReadonlySet<string> = new Set([DARK_CINDY_ID, DARK_SANDY_ID, DARK_MINDY_ID, DARK_YOJIMBO_ID, DARK_DAIGORO_ID, SPECTRAL_KEEPER_ID, ...SPECTRAL_CIRCLE_IDS, ...DARK_SIX_LINKS.map((l) => l.bodyId)]); // and the hidden Dark Aeons' six bodies (m334 to m339, 2026-11-06: their loot records are the enemy file's own rows, pinned by `chapters/dark-aeons-six-data.test.ts`), and the hidden Spectral Keeper's bodies (m129, m146: no record in the table, `parity-ffx-loot-data.test.ts`)
+const DARK_AEON_IDS: ReadonlySet<string> = new Set([DARK_CINDY_ID, DARK_SANDY_ID, DARK_MINDY_ID, DARK_YOJIMBO_ID, DARK_DAIGORO_ID, SPECTRAL_KEEPER_ID, ...SPECTRAL_CIRCLE_IDS, PENANCE_ID, PENANCE_RIGHT_ARM_ID, PENANCE_LEFT_ARM_ID, ...DARK_SIX_LINKS.map((l) => l.bodyId)]); // and Penance's three bodies (m344 to m346, 2026-11-06: no record in the table, `parity-ffx-loot-data.test.ts`), and the hidden Dark Aeons' six bodies (m334 to m339, 2026-11-06: their loot records are the enemy file's own rows, pinned by `chapters/dark-aeons-six-data.test.ts`), and the hidden Spectral Keeper's bodies (m129, m146: no record in the table, `parity-ffx-loot-data.test.ts`)
 const hasNoRecord = (g: EnemyGroupDef): boolean => g.enemies.some((e) => DARK_AEON_IDS.has(e.id));
 
 describe('every shipped formation: kill everything in it, and the result pays the sum of the records', () => {

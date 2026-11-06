@@ -123,6 +123,7 @@ export function statusPool(all: readonly AbilityDef[]): AbilityDef[] {
         a.record !== undefined &&
         (hasPayload(a.record) || a.id === 'attack' || a.record.damageClass === 0) &&
       !a.flags.includes('destroys-user') &&
+      !(a.formula === 'percent-total' && (a.damageType === 'magical' || a.damageType === 'physical')) && // a fraction-of-the-maximum DAMAGE hit (Penance's Tera Graviton, 2026-11-06): the oracle prices the hit from the record's damage class, not the formula byte; its own hit is proved in tests/unit/chapters/penance-arms.test.ts (a revival's or a potion's fraction stays in the pool)
       a.extra?.['script'] === undefined &&
       a.extra?.['statsFrom'] === undefined &&
       a.extra?.['opensSubmenu'] === undefined &&

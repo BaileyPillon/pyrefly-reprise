@@ -11,6 +11,7 @@
  * | `onTargeted` | for each target of a valid command, before any damage | `abilities.ts#resolveAbility`, once per action per target |
  * | `onHit` | **once per action per target, after the last of that action's hit records on the target is applied, and before the death check** (a miss counts: the record is still applied) | `abilities.ts#resolveAbility`, after each target's hits |
  * | `postPoison` | right after the poison damage of that monster's own turn | `ticks.ts#onTurnEnd` |
+ * | `onDeath` | right after a KO and its loot (any cause) | `hp.ts#koActor` |
  *
  * `onHit` before the death check is what lets Mortiorchis, Mortibody and Macalania Seymour put
  * HP back so the death never happens: a hook that {@link ScriptHooks.holdsDeath} makes
@@ -62,6 +63,11 @@ export interface ScriptHooks {
   onTargeted?(ctx: Ctx, self: FFXCombatant, used: UsedCommand): void;
   onHit?(ctx: Ctx, self: FFXCombatant, used: UsedCommand, report: HitReport): void;
   postPoison?(ctx: Ctx, self: FFXCombatant): void;
+  /**
+   * `hp.ts#koActor` just took `self` to KO and paid its loot (the game's death handler of a monster script; the hidden Penance chapter's arms and body, FFX only). Runs for every KO of a script that listens, from a hit or from
+   * Doom or Poison alike, before the end-of-battle check; not for a form change or an Auto-Life revive, which are no death. `sourceId` is whoever's action struck it, absent for a tick.
+   */
+  onDeath?(ctx: Ctx, self: FFXCombatant, sourceId: CombatantId | undefined): void;
 }
 
 /** A pre-turn handler the formation script gives every actor (party, aeons and monsters). */
@@ -126,6 +132,11 @@ export function runOnTargeted(ctx: Ctx, used: UsedCommand, targets: readonly FFX
 /** An action's hit records are all on `target`: its script hears it once. */
 export function runOnHit(ctx: Ctx, used: UsedCommand, target: FFXCombatant, report: HitReport): void {
   hooksOf(target)?.onHit?.(ctx, target, used, report);
+}
+
+/** `self` just died (`hp.ts#koActor`): its script hears it once. */
+export function runOnDeath(ctx: Ctx, self: FFXCombatant, sourceId: CombatantId | undefined): void {
+  hooksOf(self)?.onDeath?.(ctx, self, sourceId);
 }
 
 /** A poison tick just landed on `actor` on its own turn. */
