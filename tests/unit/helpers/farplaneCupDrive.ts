@@ -57,6 +57,8 @@ export interface OpenOptions {
   breakDamageLimit?: boolean;
   flags?: Record<string, string | number | boolean>;
   triggers?: BattleSetup['triggers'];
+  /** A rig the test applies to the opened engine before the first decision (a changed resist byte, a lowered level): an input to a measurement, never game data. */
+  setup?: (engine: FFX2Engine) => void;
 }
 
 /** A fresh engine on duel `duel`, the chapter's party (a copy), one seed. */
@@ -80,6 +82,7 @@ export function openDuel(duel: Duel, seed: number, opts: OpenOptions = {}): FFX2
       girl.aiMemory = { ...(girl.aiMemory ?? {}), bdl: true };
     }
   }
+  opts.setup?.(engine);
   return engine;
 }
 

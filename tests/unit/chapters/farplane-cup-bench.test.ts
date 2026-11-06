@@ -15,7 +15,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import { fight, type Duel, type LineName } from '../helpers/farplaneCupDrive.ts';
+import { fight, girlsOf, type Duel, type LineName, type OpenOptions } from '../helpers/farplaneCupDrive.ts';
 
 const SEEDS = Math.max(12, Number(process.env['PYREFLY_BENCH_SEEDS'] ?? 100));
 const DUEL_NAME = ['Auron', 'the masked duelist', 'Seymour'] as const;
@@ -32,13 +32,13 @@ interface Cell {
 /** Each cell is computed once (the engine is deterministic, so a second run of the same seeds is the same numbers). */
 const CELLS = new Map<string, Cell>();
 
-function cell(duel: Duel, line: LineName): Cell {
-  const key = `${duel}/${line}`;
+function cell(duel: Duel, line: LineName, rig?: { name: string; setup: NonNullable<OpenOptions['setup']> }): Cell {
+  const key = `${duel}/${line}/${rig?.name ?? 'as built'}`;
   const cached = CELLS.get(key);
   if (cached) return cached;
   const out: Cell = { wins: 0, defeats: 0, unresolved: 0, kos: 0, ejects: 0, minutes: 0 };
   for (let seed = 1; seed <= SEEDS; seed++) {
-    const r = fight(duel, seed, line, { maxDecisions: 60_000 });
+    const r = fight(duel, seed, line, { maxDecisions: 60_000, ...(rig ? { setup: rig.setup } : {}) });
     if (r.outcome === 'victory') out.wins++;
     else if (r.outcome === 'defeat') out.defeats++;
     else out.unresolved++;
@@ -110,6 +110,25 @@ describe('the other lines', () => {
       const remedy = cell(duel, 'remedy');
       show(`duel ${duel + 1} ${DUEL_NAME[duel]}, remedy line`, remedy);
       expect(remedy.wins).toBe(cell(duel, 'curtains').wins);
+    }
+  }, 300_000);
+});
+
+describe('the options with numbers (the rows are NOT touched; each is a rig the test applies, standing for a lever the sources do not give)', () => {
+  it('(a) an Eject resist byte of 255 on the girls (what an accessory against Eject would do) takes Shooting Star out of the fight; (b) a Lv 74 party (the level of the duelists) lets their own statuses land: the table the handoff carries', () => {
+    const noEject = { name: 'eject-proof', setup: (e: Parameters<NonNullable<OpenOptions['setup']>>[0]): void => girlsOf(e).forEach((g) => { g.immunities['eject'] = 255; }) };
+    const lv74 = { name: 'lv74', setup: (e: Parameters<NonNullable<OpenOptions['setup']>>[0]): void => girlsOf(e).forEach((g) => { g.level = 74; }) };
+    const asBuilt = cell(0, 'curtains');
+    const a = cell(0, 'curtains', noEject);
+    show('duel 1 Auron, curtains line, the girls Eject-proof (a rig)', a);
+    expect(a.unresolved).toBe(0);
+    expect(a.ejects, 'nobody is ejected').toBe(0);
+    expect(share(a), 'Auron is won far more often once Shooting Star cannot land').toBeGreaterThan(share(asBuilt) + 0.2);
+    for (const duel of [0, 1, 2] as Duel[]) {
+      const b = cell(duel, 'curtains', lv74);
+      show(`duel ${duel + 1} ${DUEL_NAME[duel]}, curtains line, the girls at Lv 74 (a rig)`, b);
+      expect(b.unresolved).toBe(0);
+      expect(b.wins + b.defeats).toBe(SEEDS);
     }
   }, 300_000);
 });

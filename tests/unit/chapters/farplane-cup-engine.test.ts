@@ -189,6 +189,40 @@ describe('Tidus [RE §7]', () => {
   });
 });
 
+describe('the special words and the resist bytes on the engine [RE §4.1]', () => {
+  /** A girl casts an ability on a target in a duel (the duelist's script is the forced empty one); returns the engine once the cast has resolved. */
+  function castAs(duel: Duel, actor: string, abilityId: string, target: string, build = structuredClone(farplaneCupBuild)) {
+    const f = forced(duel);
+    const engine = openDuel(duel, 1, { build, group: f.group });
+    unit(engine, target).hp = Math.floor(unit(engine, target).stats.maxHp / 2);
+    let sent = false;
+    let after = 0; // decisions after the cast: enough game time for it to resolve
+    for (let i = 0; i < 800; i++) {
+      const d = engine.nextDecision();
+      if (d.kind === 'waiting') engine.tick(Math.max(25, d.nextEventMs));
+      else if (d.kind === 'player-input') {
+        const row = !sent && d.actorId === actor ? rowOf(d, 'ability', abilityId, [target]) : null;
+        if (row) {
+          engine.submit(row);
+          sent = true;
+        } else engine.submit({ kind: 'defend', targets: [] });
+      }
+      if (sent && ++after > 120) break;
+    }
+    expect(sent, abilityId).toBe(true);
+    return engine;
+  }
+
+  it("special bit 0 (the percent formulas do nothing): Paine's Demi, 25 percent of current HP, takes nothing from Auron or Tidus", () => {
+    for (const [duel, id] of [[0, 'x2-cup-auron'], [1, 'x2-cup-tidus']] as Array<[Duel, string]>) {
+      const engine = castAs(duel, 'paine', 'x2-dark-knight-demi', id);
+      const before = Math.floor(unit(engine, id).stats.maxHp / 2);
+      expect(unit(engine, id).hp, id).toBe(before);
+      expect(damageOn(engine, id).filter((e) => (e.amount ?? 0) !== 0), id).toEqual([]);
+    }
+  });
+});
+
 describe('Seymour [RE §7]', () => {
   it('Demi takes 25 percent of each girl\'s CURRENT HP (a Gravity move: 2,677, 1,276 and 2,677 of 10,710, 5,106 and 10,710)', () => {
     const engine = run(2, [move(A.demi)]);
