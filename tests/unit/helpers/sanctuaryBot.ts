@@ -14,7 +14,7 @@
  * The line-up is a parameter (the preflight's SK2: Tidus, Yuna, Lulu, or Tidus, Yuna, Auron).
  */
 
-import type { BattleEngine, Command, FFXCombatant, FFXPartyBuild } from '../../../src/battle/common/types.ts';
+import type { AutoAbilityId, BattleEngine, Command, FFXCombatant, FFXPartyBuild } from '../../../src/battle/common/types.ts';
 import { sanctuaryKeeperBuild } from '../../../src/data/ffx/builds/sanctuary-keeper.ts';
 import { KEEPER, actor, defend, flags, has, keeper, newEngine, row, type Input } from './sanctuaryDrive.ts';
 
@@ -202,6 +202,16 @@ export function withBag(party: FFXPartyBuild, counts: Readonly<Record<string, nu
   const bag = new Map(out.inventory.map((e) => [e.itemId, e.count] as const));
   for (const [id, n] of Object.entries(counts)) bag.set(id, n);
   out.inventory = [...bag.entries()].map(([itemId, count]) => ({ itemId, count }));
+  return out;
+}
+
+/** The party with an armour auto-ability on every member who has a free slot (the bench's Confuse Ward lever, the guides' advice against Photon Wings; the preset leaves it out). */
+export function withArmorAbility(party: FFXPartyBuild, ability: AutoAbilityId): FFXPartyBuild {
+  const out = structuredClone(party);
+  for (const m of out.members) {
+    const armor = m.equipment.armor;
+    if (armor.autoAbilities.length < armor.slots && !armor.autoAbilities.includes(ability)) armor.autoAbilities = [...armor.autoAbilities, ability];
+  }
   return out;
 }
 

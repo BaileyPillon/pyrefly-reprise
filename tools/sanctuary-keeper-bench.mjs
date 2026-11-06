@@ -6,18 +6,19 @@
  *
  * Usage (the engine's sources use parameter properties, so Node must transform types):
  *
- *   node --experimental-transform-types tools/sanctuary-keeper-bench.mjs [--seeds 200] [--front tidus,yuna,lulu] [--lines advisor,careless] [--luck 18] [--bag echo-screen=30,remedy=10]
+ *   node --experimental-transform-types tools/sanctuary-keeper-bench.mjs [--seeds 200] [--front tidus,yuna,auron] [--lines advisor,careless] [--luck 18] [--bag echo-screen=30,remedy=10] [--ward confuse-ward]
  *
  *   --seeds   fights a line plays (seeds 1 to N); the committed table used 200
- *   --front   the three in front (the preflight's SK2: tidus,yuna,lulu or tidus,yuna,auron)
+ *   --front   the three in front (the preflight's SK2: tidus,yuna,lulu or tidus,yuna,auron; the chapter ships the second)
  *   --lines   any of careless, plain, advisor, no-reflect, no-poison, no-shell, no-haste, no-dispel (comma-separated); default all
  *   --luck    every member's Luck (a lever; the preset's cells are 13 to 18)
  *   --bag     item=count pairs that replace the bag's counts (the other lever)
+ *   --ward    an armour auto-ability put on every member with a free slot (the guides' Confuse Ward against Photon Wings; the preset leaves it out)
  *
  * It prints one markdown row per line and a JSON line per row. A machine that is not busy takes about 0.03 seconds a fight.
  */
 
-import { LINES, bench, buildWith, winRate, withBag, withLuck } from '../tests/unit/helpers/sanctuaryBot.ts';
+import { LINES, bench, buildWith, winRate, withArmorAbility, withBag, withLuck } from '../tests/unit/helpers/sanctuaryBot.ts';
 
 const args = new Map();
 const argv = process.argv.slice(2);
@@ -32,10 +33,11 @@ for (let i = 0; i < argv.length; i++) {
 }
 
 const seeds = Number(args.get('--seeds') ?? 200);
-const front = (args.get('--front') ?? 'tidus,yuna,lulu').split(',');
+const front = (args.get('--front') ?? 'tidus,yuna,auron').split(',');
 const names = (args.get('--lines') ?? Object.keys(LINES).join(',')).split(',');
 let party = buildWith(front);
 if (args.has('--luck')) party = withLuck(party, Number(args.get('--luck')));
+if (args.has('--ward')) party = withArmorAbility(party, args.get('--ward'));
 if (args.has('--bag')) party = withBag(party, Object.fromEntries(args.get('--bag').split(',').map((p) => p.split('=')).map(([k, v]) => [k, Number(v)])));
 
 console.log(`Front line ${front.join(', ')}; seeds 1 to ${seeds}; no god mode.\n`);
