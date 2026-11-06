@@ -279,3 +279,13 @@ Percent formulas: formula 4 is `P x current / 16`, formula 7 is `P x maximum / 1
 ## 11. Notes cited
 
 In the repo (`research/` on `origin/main`): `re-ffx2-damage.md`, `re-ffx2-hit-status.md`, `re-ffx2-atb-status.md`, `re-ffx2-commands.md`, `re-ffx2-timing-measured.md`, `re-ffx2-ai-bahamut-vegnagun.md`, `re-ffx2-ai-leblanc-den-ixion.md` (sections 4.2 and 8 for the shade), `re-ffx2-ai-fallen-trema.md`, `re-ffx2-fallen-maesters.md` (the template and the Oversoul rule), `ffx2-gippal-den-of-woe.md`, `ffx2-bahamut.md`. Kept outside the repo (the lane's tools folder): `x2read.mjs` (archive reader), `rows.mjs`, `dump-rows.mjs`, `formations.mjs`, `scan-events.mjs`, `ffx2-src-moves.mjs`, `cmp-src-bin.mjs`, `cadence.mjs`, `sha.mjs`, `idnames.mjs`, copies of `x2dis.mjs`, `ev-dis.mjs`, `nin-event.json`; the data files in the lane's data folder (`rows.json`/`rows.tsv` for all 370 rows, `records-block1.txt`, `records-block2.txt`, `ev-stbv0300.txt`).
+
+## 12. Corrections found by the chapter lane (2026-11-06, `docs/handoff/ch-bevelle-guardians.md`)
+
+Added after the build read the three rows and the three shipped sources again; nothing above was changed.
+
+1. **Baralai (row 175) can be poisoned as well as blinded** (section 4.2 and the summary name only Darkness): the row's group-1 byte for Poison (index 5) reads 0 as well. Pinned by `tests/fixtures/parity/ffx2/bevelle_guardians_rows.json` (`resist1` has no index 4 and no index 5 for `x2-baralai`).
+2. **The Precepts Guard's Bio (section 6.3, r = 0)** goes to *any living girl without Reflect*, not to a girl who also lacks Poison: the source tests "does some girl lack Poison" with a search whose pick it throws away, then searches the living for a girl lacking Reflect. The Bio is then followed, in the same poll, by the Drain of the second block (r = 0 is not 1).
+3. **Discarded searches draw.** Every `searchr` whose pick the script throws away (the Poison test, the Reflect test before Death, Osmose and Drain, the first search of the "most MP" pair) still draws from the search stream when it had two or more candidates. This changes which numbers come next, never what a move does.
+4. **The count callout at nine is ours**, not the game's; the game shows no counter (BG4).
+5. **Measured on the engine, not in the game:** Death (254, accuracy formula 4) landed on 30 of 30 seeds on a girl with no protection (the party has no Death-proofing and the engine has no Reflect redirect); Drill Shot is exactly `floor(max HP x 12 / 16)` with no variance (517 on Yuna, 1,379 on Rikku, 1,279 on Paine at the Chapter 2 levels), halved by Protect (the physical-only bit), not by Shell.
