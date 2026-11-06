@@ -33,6 +33,7 @@ import { ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../data/ffx/index.ts';
 import { ENEMY_GROUPS_BY_ID as FFX2_GROUPS } from '../../data/ffx2/index.ts';
 import { lastSummoningGroup } from '../../data/ffx/enemies/last-summoning-chain.ts'; // the hidden Last Summoning's formations, resolved on demand from their ids (FFX only)
 import { carryFfx2Full, carryWornDresspheres, FFX2_DRESSPHERE_CARRIES } from './BattleScreenCarry.ts';
+import { carriedEnemyGroup, returnShattered } from './BattleScreenFloodedCarry.ts'; // the hidden Flooded Ways' area chain (FFX only): the boss's HP and the shattered members ride the seam
 import { demoStartGauges } from '../demo/demoGauge.ts'; // R62 (demo mode only): half-full Overdrive gauges at a demo fight's start
 
 /** What a chain seam carries beyond the defaults: PR-0124's measurement override. */
@@ -107,8 +108,8 @@ export function setupForNextLink(
   const worn = !wholeState && !full && carried.game === 'ffx2' && (seam.dressphereCarries ?? FFX2_DRESSPHERE_CARRIES);
   return {
     game: previous.game,
-    party: worn ? carryWornDresspheres(carried as FFX2PartyBuild, state) : carried,
-    enemies: nextGroup,
+    party: worn ? carryWornDresspheres(carried as FFX2PartyBuild, state) : returnShattered(carried, state, nextGroup),
+    enemies: carriedEnemyGroup(nextGroup, state),
     triggers: previous.triggers,
     seed,
     condition: 'scripted',

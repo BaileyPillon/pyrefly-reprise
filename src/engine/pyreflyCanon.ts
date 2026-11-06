@@ -22,6 +22,7 @@ import { GAGAZET_RONSO_SCENE } from '../data/ffx/biran-yenke-ids.ts';
 import { MIRROR_AEONS_SCENE } from '../data/ffx/mirror-aeons-ids.ts';
 import { LAST_SUMMONING_SCENE } from '../data/ffx/last-summoning-ids.ts';
 import { SPECTRAL_KEEPER_SCENE } from '../data/ffx/spectral-keeper-ids.ts';
+import { FLOODED_WAYS_SCENE } from '../data/ffx/flooded-ways-ids.ts';
 import { ANGRA_MAINYU_SCENE } from '../data/angra-mainyu-ids.ts';
 import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
 import { EXP_WINDWAKER_SCENE } from '../data/windwaker-ids.ts';
@@ -149,6 +150,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   [MIRROR_AEONS_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-mirror-aeons.md section 2 and 3: the guides name no ambient particles on the road or in the cavern; the fiends are summoned aeons and leave as the stage dissolves them' },
   // The Last Summoning (the hidden chapter, FFX only): Dream's End as Chapter III builds it, so Dream's End's row.
   [LAST_SUMMONING_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Dream's End [verified: 2 sources]` },
+  // The Flooded Ways (the hidden chapter, FFX only): the Via Purifico's plate under a chapter-owned stage; the guides name no ambient particles for the flooded tunnels or the Baaj Temple.
+  [FLOODED_WAYS_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/re-ffx-geosgaeno-evrae-altana.md sections 2 and 9: the guides name water and no ambient particles; the plate stands in for four places' },
   // The Spectral Keeper (the hidden chapter, FFX only): the Zanarkand Dome as Chapter II builds it, so the Dome's row.
   [SPECTRAL_KEEPER_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Zanarkand Dome [verified: 2 sources]` },
   // The 3D Bahamut (the hidden chapter, FFX-2 only; `scenes/exp-yrp-3d-stage.ts`): Chapter IV's chamber, so the Bevelle underground's row.

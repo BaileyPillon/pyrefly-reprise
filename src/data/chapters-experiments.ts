@@ -17,6 +17,8 @@
  * - **The Last Summoning** (`'last-summoning'`, number 28, 2026-10-15; FFX only): Dream's End as a gauntlet in the player's order with the full roster of eight aeons, Yojimbo and the Magus Sisters among them; word `summon` (27 is the Dark Mirror lane's).
  * - **The Spectral Keeper** (`'spectral-keeper'`, number 29, 2026-11-02; FFX only): the beast at the foot of the Dome's lift, fought on six glyph platforms; word `keeper` (28 is the Last Summoning lane's).
  *
+ * - **The Flooded Ways** (`'flooded-ways'`, number 36, 2026-11-06; FFX only): Evrae Altana in the Via Purifico's three flooded areas, then Geosgaeno in the Baaj Temple; word `geosgaeno` (34 and 35 are other lanes').
+ *
  * - **The Fallen Maesters** (`'ffx2-fallen-maesters'`, number 30, 2026-11-02; FFX-2 only): the Via Infinito's fixed floor fights 20, 40, 60 and 80 (Aranea, the Black Elemental, Concherer, Chac) as four fresh links; word `infinito`.
  *
  * - **Bahamut in 3D** (`'exp-yrp-3d'`, number 31, 2026-10-19 as 29, renumbered 2026-11-02; FFX-2 only): Chapter IV's Bahamut fight drawn as a real 3D scene with the real FFX-2 models, frame b's camera; word `yrp`.
@@ -42,8 +44,9 @@ import { SPECTRAL_KEEPER } from './chapter-spectral-keeper.ts';
 import { FFX2_FALLEN_MAESTERS } from './chapter-ffx2-fallen-maesters.ts';
 import { experimentalYrp } from './chapter-exp-yrp-3d.ts';
 import { EXP_WINDWAKER } from './chapter-exp-windwaker.ts';
+import { FLOODED_WAYS } from './chapter-flooded-ways.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from, and `ffx2Bahamut` the listed Chapter IV, which the 3D Bahamut is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter, ffx2Bahamut: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, FLOODED_WAYS] as const;
 }
