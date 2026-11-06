@@ -4,8 +4,8 @@
  * `three/src/Three.js` gives it a module per class. Pins:
  *
  * 1. the plugin is build-only (`apply: 'build'`, `enforce: 'pre'`) with `config` and `transform` and nothing else; Vite keeps it for a build and leaves it out of the dev server; `vite.config.ts` registers it once;
- * 2. it adds one alias, the bare `three` (an exact match: `three/addons/*` and `three/src/*` are left alone) to the entry the installed package really has; `PYREFLY_THREE_SRC=off` is the stock build (no alias, no
- *    transform), and nothing else turns it off;
+ * 2. it adds one alias, the bare `three` (an exact match: `three/addons/*` and `three/src/*` are left alone) to the entry the installed package really has; **since release 75 (job INT-3: first input handled
+ *    was slower with it on Fast 3G, in the medians of 10 runs an arm) it is OFF by default**: a build without `PYREFLY_THREE_SRC=on` is the stock build (no alias, no transform), and nothing else turns it on;
  * 3. the shader step is `three`'s own: the comment and blank-line stripping of the `/* glsl *\/` literals, written out, and run only on `three/src/**\/*.glsl.js`;
  * 4. **every shader string the plugin produces from `three/src` equals the string in the stock build (`ShaderChunk`), and the stock build holds no shader the source does not produce**: so a shader is neither
  *    bigger nor different than the one release 73 shipped.
@@ -33,10 +33,12 @@ type Hooked = {
 const hooked = (p: unknown): Hooked => p as Hooked;
 const GLSL = 'export default /* glsl */`\n// a line comment\nvoid main() {\n\n\n\tgl_FragColor = vec4( 1.0 ); /* a block\n comment */\n}\n`;';
 const THREE_SHADER = '/work/node_modules/three/src/renderers/shaders/ShaderChunk/common.glsl.js';
+/** The one environment that turns the plugin on (release 75: off by default). */
+const ON = { [THREE_SRC_ENV]: 'on' };
 
 describe('the plugin', () => {
   it('is build-only: apply build, enforce pre, config and transform, and no other hook', () => {
-    const p = hooked(pyreflyThreeSrc());
+    const p = hooked(pyreflyThreeSrc({ env: ON }));
     expect(p.name).toBe('pyrefly-three-src');
     expect(p.apply).toBe('build');
     expect(p.enforce).toBe('pre');
@@ -47,16 +49,23 @@ describe('the plugin', () => {
 
   it('Vite itself keeps it for a build and leaves it out of the dev server', async () => {
     const names = async (command: 'build' | 'serve'): Promise<string[]> =>
-      (await resolveConfig({ configFile: false, logLevel: 'silent', plugins: [pyreflyThreeSrc()] }, command, 'development', 'development', false)).plugins.map((p) => p.name);
+      (await resolveConfig({ configFile: false, logLevel: 'silent', plugins: [pyreflyThreeSrc({ env: ON })] }, command, 'development', 'development', false)).plugins.map((p) => p.name);
     expect(await names('build')).toContain('pyrefly-three-src');
     expect(await names('serve')).not.toContain('pyrefly-three-src');
   });
 
   it('a build resolves the bare `three` to the source entry through Vite\'s own config merge, and the dev server does not', async () => {
     const aliases = async (command: 'build' | 'serve'): Promise<Array<{ find: unknown; replacement: string }>> =>
-      (await resolveConfig({ configFile: false, logLevel: 'silent', plugins: [pyreflyThreeSrc({ env: {} })] }, command, 'development', 'development', false)).resolve.alias as Array<{ find: unknown; replacement: string }>;
+      (await resolveConfig({ configFile: false, logLevel: 'silent', plugins: [pyreflyThreeSrc({ env: ON })] }, command, 'development', 'development', false)).resolve.alias as Array<{ find: unknown; replacement: string }>;
     expect((await aliases('build')).filter((a) => a.replacement === THREE_SRC_ENTRY)).toHaveLength(1);
     expect((await aliases('serve')).some((a) => a.replacement === THREE_SRC_ENTRY)).toBe(false);
+  });
+
+  it('through Vite\'s own config merge a build adds no alias unless the environment says PYREFLY_THREE_SRC=on: off by default since release 75', async () => {
+    const aliasesOf = async (env: Record<string, string | undefined>): Promise<unknown[]> =>
+      ((await resolveConfig({ configFile: false, logLevel: 'silent', plugins: [pyreflyThreeSrc({ env })] }, 'build', 'development', 'development', false)).resolve.alias as Array<{ find: unknown; replacement: string }>).filter((a) => a.replacement === THREE_SRC_ENTRY);
+    expect(await aliasesOf({})).toHaveLength(0);
+    expect(await aliasesOf(ON)).toHaveLength(1);
   });
 
   it('vite.config.ts registers it once, ahead of the art plugins (a build) and not at all for the dev server', () => {
@@ -69,7 +78,7 @@ describe('the plugin', () => {
 
 describe('the alias', () => {
   it('is one exact-match entry for the bare `three`: `three/addons/*` and `three/src/*` do not match it', () => {
-    const alias = hooked(pyreflyThreeSrc({ env: {} })).config!()!.resolve.alias;
+    const alias = hooked(pyreflyThreeSrc({ env: ON })).config!()!.resolve.alias;
     expect(alias).toHaveLength(1);
     expect(alias[0]!.replacement).toBe(THREE_SRC_ENTRY);
     expect(alias[0]!.find.test('three')).toBe(true);
@@ -82,17 +91,20 @@ describe('the alias', () => {
     expect(readFileSync(file, 'utf8')).toMatch(/export \* from '\.\/Three\.Core\.js'/);
   });
 
-  it('PYREFLY_THREE_SRC=off is the stock build, in any case or with blanks; unset, empty and every other value are on', () => {
+  it('OFF BY DEFAULT since release 75 (INT-3): unset, empty and every word but `on` are the stock build (no alias, no shader step); `on`, in any case or with blanks, turns the plugin on', () => {
     expect(THREE_SRC_ENV).toBe('PYREFLY_THREE_SRC');
-    for (const v of ['off', 'OFF', ' off ']) {
-      expect(threeSrcOn({ [THREE_SRC_ENV]: v }), v).toBe(false);
+    for (const v of [undefined, '', 'off', 'OFF', ' off ', '1', 'true', 'yes', 'onn', 'no']) {
+      expect(threeSrcOn({ [THREE_SRC_ENV]: v }), String(v)).toBe(false);
       const p = hooked(pyreflyThreeSrc({ env: { [THREE_SRC_ENV]: v } }));
-      expect(p.config!()).toBeUndefined();
-      expect(p.transform!(GLSL, THREE_SHADER)).toBeNull();
+      expect(p.config!(), String(v)).toBeUndefined();
+      expect(p.transform!(GLSL, THREE_SHADER), String(v)).toBeNull();
     }
-    for (const v of [undefined, '', 'on', '1', 'false', 'no']) {
-      expect(threeSrcOn({ [THREE_SRC_ENV]: v }), String(v)).toBe(true);
-      expect(hooked(pyreflyThreeSrc({ env: { [THREE_SRC_ENV]: v } })).config!()).toBeDefined();
+    expect(threeSrcOn({}), 'an environment that names nothing').toBe(false);
+    for (const v of ['on', 'ON', ' On ']) {
+      expect(threeSrcOn({ [THREE_SRC_ENV]: v }), v).toBe(true);
+      const p = hooked(pyreflyThreeSrc({ env: { [THREE_SRC_ENV]: v } }));
+      expect(p.config!(), v).toBeDefined();
+      expect(p.transform!(GLSL, THREE_SHADER), v).not.toBeNull();
     }
   });
 });
@@ -108,12 +120,12 @@ describe('the shader step', () => {
 
   it('returns code with no glsl literal unchanged, and the plugin says so with null', () => {
     expect(minifyGlsl('export const a = 1;')).toBe('export const a = 1;');
-    const p = hooked(pyreflyThreeSrc({ env: {} }));
+    const p = hooked(pyreflyThreeSrc({ env: ON }));
     expect(p.transform!('export const a = 1;', THREE_SHADER)).toBeNull();
   });
 
   it('runs on three\'s own shader files only: a `.glsl.js` of ours, a three file that is not a shader and a query on the id are handled as they should be', () => {
-    const p = hooked(pyreflyThreeSrc({ env: {} }));
+    const p = hooked(pyreflyThreeSrc({ env: ON }));
     expect(p.transform!(GLSL, THREE_SHADER)?.code).toContain('export default "void main()');
     expect(p.transform!(GLSL, 'C:\\work\\node_modules\\three\\src\\renderers\\shaders\\ShaderChunk\\common.glsl.js')?.code).toContain('export default "void main()');
     expect(p.transform!(GLSL, `${THREE_SHADER}?v=1`)?.code).toContain('export default "void main()');
@@ -128,7 +140,7 @@ describe('every shader of the source build equals the stock build\'s', () => {
   const files = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? files(join(dir, e.name)) : e.name.endsWith('.glsl.js') ? [join(dir, e.name)] : []));
 
   it('the plugin\'s output for each shader file, run as a module, is exactly a string of the stock build, and each stock chunk has a source', async () => {
-    const plugin = hooked(pyreflyThreeSrc({ env: {} }));
+    const plugin = hooked(pyreflyThreeSrc({ env: ON }));
     const found: Array<{ file: string; name: string; text: string }> = [];
     for (const file of files(root)) {
       const out = plugin.transform!(readFileSync(file, 'utf8'), file)?.code;

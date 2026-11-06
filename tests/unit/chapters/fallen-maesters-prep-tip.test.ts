@@ -5,7 +5,7 @@
  *
  * The read: the prep card's TIP was ten lines in a briefing column that shows about five at 1600 x 900, so the text was cut mid-line until the player scrolled with PgDn; the phone's stacked card (the full height, the page
  * scrolls) was not clipped. The fix is the chapter's short tip (`data/chapter-prep-tips.ts`): a short form the desktop card shows (from 600 px up), while the full `tip` stays for the pause screen's prose and the phone, which have the room. No new
- * screen, no layout change, nothing for any other chapter (their markup is byte for byte what it was).
+ * screen, no layout change, nothing for any other chapter (their markup is byte for byte what it was; since job TIP-1 of release 75 nine more chapters have a short form, pinned in `prep-tip-short-forms.test.ts`).
  *
  * jsdom has no layout, so the budget is a model, and it is the SHARED one (`tests/unit/helpers/prepTipBand.ts`, held to the stylesheets and to the two reads by `prep-tip-band.test.ts`). The first version of this file counted
  * five lines and tested Chapter I against `5 + 1` at 33 characters, which was inconsistent with its own reference: Chapter I's 151-character tip, the card Bailey's screenshots are taken on at 1600 x 900, is six lines at 33
@@ -113,9 +113,11 @@ describe('the markup: both forms in the prep card, one in the pause screen, noth
     expect(pause).not.toContain('--short');
   });
 
-  it('no other chapter has a short form, so every other chapter\'s prep block is byte for byte its pause block (the prep card is shared: both games)', () => {
-    const others = [...CHAPTER_META, ...UNLISTED_CHAPTER_META].filter((m) => m.id !== FALLEN_MAESTERS_ID);
-    expect(Object.keys(PREP_TIPS), 'the table has the Maesters alone').toEqual([FALLEN_MAESTERS_ID]);
+  it('a chapter without a short form has its prep block byte for byte its pause block (the prep card is shared: both games); since job TIP-1 the table holds the Maesters and nine more (`prep-tip-short-forms.test.ts` pins them)', () => {
+    const withForm = Object.keys(PREP_TIPS);
+    expect(withForm, 'the Maesters is in the table, with the nine of TIP-1').toContain(FALLEN_MAESTERS_ID);
+    expect(withForm).toHaveLength(10);
+    const others = [...CHAPTER_META, ...UNLISTED_CHAPTER_META].filter((m) => !withForm.includes(m.id));
     expect(others.length).toBeGreaterThan(20);
     for (const m of others) {
       expect(prepTipFor(m.id), m.id).toBeUndefined();

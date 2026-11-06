@@ -15,8 +15,8 @@
  *   PYREFLY_SOURCEMAP_DIR  set by the deploy (the maps are kept, none ship), removed for a candidate; neither changes a byte that ships (proved on the release 60 tree)
  *
  * Four more variables decide bytes and are NOT pinned, because the deploy honours them on purpose (`PYREFLY_ART_WEBP=off` is its documented way to ship PNGs):
- * `PYREFLY_BUILD_SHA`, `PYREFLY_ART_WEBP`, `PYREFLY_ART_THUMBS`, and since r74 `PYREFLY_THREE_SRC` (`tools/vite-three-src.mjs`: `off` is the stock `three` build, anything else draws `three` from its
- * source modules, which changes the chunk set, 18 static scripts against 10, and the `index-*.js` name: r74-int independent check CHECK-1). {@link bundleInputs} reads all of them as `vite.config.ts`
+ * `PYREFLY_BUILD_SHA`, `PYREFLY_ART_WEBP`, `PYREFLY_ART_THUMBS`, and since r74 `PYREFLY_THREE_SRC` (`tools/vite-three-src.mjs`: since r75 the stock `three` build is the default and `on` draws `three` from its
+ * source modules, which changes the chunk set, 18 static scripts against 10, and the `index-*.js` name: r74-int independent check CHECK-1; release 74 shipped it on, job INT-3 of release 75 turned it off by default). {@link bundleInputs} reads all of them as `vite.config.ts`
  * and the plugins do, so a candidate can print what it built with and say when the shell sets one of the four.
  *
  * Pure: no file, no process, no network. `tests/unit/release-build.test.ts` and `tests/unit/candidate-build.test.ts` hold the contract.
@@ -70,7 +70,7 @@ export function bundleInputs(env = process.env) {
     buildSha: trimmed(BUILD_SHA_ENV) || '(git HEAD of the tree)',
     artWebp: trimmed(ART_WEBP_ENV).toLowerCase() || 'exact',
     artThumbs: trimmed(ART_THUMBS_ENV).toLowerCase() || 'on',
-    threeSrc: threeSrcOn(env) ? 'on' : 'off', // tools/vite-three-src.mjs: `off` (any case, blanks trimmed) is the one word that turns it off
+    threeSrc: threeSrcOn(env) ? 'on' : 'off', // tools/vite-three-src.mjs: off by default since r75; `on` (any case, blanks trimmed) is the one word that turns it on
   };
 }
 

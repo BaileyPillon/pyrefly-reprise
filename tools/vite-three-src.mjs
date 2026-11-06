@@ -14,13 +14,19 @@
  * string in the stock build (`ShaderChunk` and `ShaderLib`), so a shader is neither bigger nor different. `three/addons/*` (examples/jsm) import the bare `three` and follow the alias, so there is ONE copy
  * of three in the bundle (checked on the r74-int build with its source maps: 190 `three/src` modules, none from `three/build`).
  *
- * BUILD ONLY (`apply: 'build'`): the dev server, `vite preview` and vitest keep the stock build, as before. `PYREFLY_THREE_SRC=off` makes the plugin a no-op (the stock build, as release 73 shipped it): the switch for
- * a live problem, as `PYREFLY_ART_WEBP=off` is for the art. Unset or anything else: on.
+ * BUILD ONLY (`apply: 'build'`): the dev server, `vite preview` and vitest keep the stock build, as before.
+ *
+ * OFF BY DEFAULT SINCE RELEASE 75 (the driver's decision 219w, D-1467, job INT-3). Release 74 shipped it on (the lane read first input handled 0.7 percent slower on Fast 3G in a median of 3 and the driver kept it on within noise) and
+ * set the test for release 75: 10 cold runs an arm, HTTP/2 with brotli, Fast 3G with the CPU four times slower, and "the plugin ships off if first input is still slower". It was: first input handled 20,533.5 ms with the plugin
+ * against 20,439 ms for the stock build in the medians (+94.5 ms, 0.46 percent; ON slower in 8 of 10 pairs; inside both arms' spread, and 6.5 ms slower on a 10 Mbit link), while first paint was earlier with it in 10 of 10 pairs
+ * (162 ms on Fast 3G, 36 ms at 10 Mbit) and the wire 18 KB lighter. The rule was written as a comparison of medians, so it holds: a build without `PYREFLY_THREE_SRC=on` is the stock build, as release 73 shipped it
+ * (its title page is 88 KB raw and 19 KB gzip heavier than the plugin's, 6,421,676 B and 1,805,211 B against 6,333,311 B and 1,786,107 B on release 74's tip, over 10 static scripts instead of 18). `PYREFLY_THREE_SRC=on` (any case,
+ * blanks trimmed) is the one word that turns the plugin on, and all of it is kept (the alias, the shader step and their tests) for the day the numbers read the other way.
  *
  * Game case: both (shared build plumbing; no source file, no number and no picture changes).
  */
 
-/** The environment variable that turns the plugin off (`off`). */
+/** The environment variable that turns the plugin on (`on`); since release 75 a build without it is the stock `three` build. */
 export const THREE_SRC_ENV = 'PYREFLY_THREE_SRC';
 
 /** What the bare `three` resolves to in a build (the package's `exports` map has `./src/*`). */
@@ -29,9 +35,9 @@ export const THREE_SRC_ENTRY = 'three/src/Three.js';
 /** The shader files `three`'s own build minifies: `three/src/**\/*.glsl.js`, as a path with forward slashes. */
 const GLSL_FILE = /[\\/]three[\\/]src[\\/].*\.glsl\.js$/;
 
-/** Is the plugin on? (`PYREFLY_THREE_SRC=off` is the one thing that turns it off.) */
+/** Is the plugin on? Off by default since release 75 (INT-3): `PYREFLY_THREE_SRC=on` (any case, blanks trimmed) is the one thing that turns it on; unset, empty and every other word are off. */
 export function threeSrcOn(env = process.env) {
-  return String(env[THREE_SRC_ENV] ?? '').trim().toLowerCase() !== 'off';
+  return String(env[THREE_SRC_ENV] ?? '').trim().toLowerCase() === 'on';
 }
 
 /**
