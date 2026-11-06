@@ -67,8 +67,8 @@ const LANE_C = [
 const poke = (id: string, targeting: AbilityDef['targeting'] = 'single-enemy'): AbilityDef =>
   exactHit(id, 100, { targeting, flags: ['always-break-damage-limit', 'ignores-armored', 'long-range'] });
 
-/** Scripts that register hooks but not `onHit`: the Spectral Keeper's Circles hook `onTargeted` only (the glyph lighting, RE 5.2; they can never be hit). */
-const HOOKS_WITHOUT_ON_HIT: ReadonlySet<string> = new Set(['spectral-circle']);
+/** Scripts that register hooks but not `onHit`: the Spectral Keeper's Circles hook `onTargeted` only (the glyph lighting, RE 5.2; they can never be hit); Penance's two arms hook `onDeath` only (the 12-tick return, RE 5.3). */
+const HOOKS_WITHOUT_ON_HIT: ReadonlySet<string> = new Set(['spectral-circle', 'penance-arm-right', 'penance-arm-left']);
 
 /** The shipped enemies whose script listens to `onHit`: [group id, enemy id, script id]. */
 function hookedEnemies(): Array<[string, string, string]> {

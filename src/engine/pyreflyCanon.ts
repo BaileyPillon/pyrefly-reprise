@@ -22,6 +22,7 @@ import { GAGAZET_RONSO_SCENE } from '../data/ffx/biran-yenke-ids.ts';
 import { MIRROR_AEONS_SCENE } from '../data/ffx/mirror-aeons-ids.ts';
 import { LAST_SUMMONING_SCENE } from '../data/ffx/last-summoning-ids.ts';
 import { SPECTRAL_KEEPER_SCENE } from '../data/ffx/spectral-keeper-ids.ts';
+import { PENANCE_SCENE } from '../data/ffx/penance-ids.ts';
 import { ANGRA_MAINYU_SCENE } from '../data/angra-mainyu-ids.ts';
 import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
 import { EXP_WINDWAKER_SCENE } from '../data/windwaker-ids.ts';
@@ -151,6 +152,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   [LAST_SUMMONING_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Dream's End [verified: 2 sources]` },
   // The Spectral Keeper (the hidden chapter, FFX only): the Zanarkand Dome as Chapter II builds it, so the Dome's row.
   [SPECTRAL_KEEPER_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Zanarkand Dome [verified: 2 sources]` },
+  // Penance (the hidden chapter, FFX only; `scenes/penance.ts`): Chapter VIII's deck over Chapter VIII's own plate, so the deck's row.
+  [PENANCE_SCENE]: { game: 'ffx', verdict: 'absent', cite: `${PRES}, The airship deck [verified: 2 sources]: "Open sky"; the deck is Chapter VIII's, research/ffx-evrae-airship.md §12.3` },
   // The 3D Bahamut (the hidden chapter, FFX-2 only; `scenes/exp-yrp-3d-stage.ts`): Chapter IV's chamber, so the Bevelle underground's row.
   [EXP_YRP_SCENE]: { game: 'ffx2', verdict: 'absent', cite: `${PRES}, Bevelle Underground [single source]: "Machina, not spirits"; the chamber is Chapter IV's` },
   // Valefor at Besaid in Wind Waker style (the hidden chapter, FFX-2 only; `scenes/exp-windwaker-stage.ts`): hidden chapter 24's fight, so its row (the Djose chamber's stand-in for Besaid's); the temple is a stand-in.

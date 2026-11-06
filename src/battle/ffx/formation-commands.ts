@@ -50,6 +50,7 @@ import { type Ctx, abilityOf } from './state.ts';
 import { AEON_SLOT } from './adapt/slots.ts';
 import { aeonRosterRemoved, applyRosterRemoval, rosterEmptied } from './roster-removal.ts';
 
+export { applyPenanceSetup } from './ai/penance.ts'; // the hidden Penance chapter's opening state reaches `setup.ts` the same way
 export { applyPlatformSetup, markFirstStrike } from './platforms.ts'; // the Spectral Keeper's set-up calls reach `setup.ts` through this module (it is at the house 400 lines)
 
 /** The one switch. `false` makes {@link applyFormationCommandDisables} a no-op, so no battle sets a flag and every menu is as before. */

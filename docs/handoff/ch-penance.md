@@ -1,0 +1,155 @@
+# Handoff: the hidden Penance chapter (lane ch-penance; FFX ONLY)
+
+Branch `ch-penance`, from `origin/r75-boss-art` `b98906229` (the paper preflight and the research note on top, `cf304a641`; `origin/main` records merged), built 2026-11-06 in the tree `D:\pyrefly-rig-valefor`. Authority: Bailey, 2026-11-06 ~00:30 EST "implement all unimplemented chapters please"; ~00:55 EST "yes on all these too" (to building Penance, the Dark Aeons and every researched boss he never picked); 2026-10-31 "you make the executive decisions for the next few days. i'll go with all of your recommendations." Every pick below is **"the driver's call, his to overturn"**. Nothing deploys from this branch.
+
+**Game case: FFX only** (rule 14). Penance exists in the International and HD Remaster releases of FFX only (`research/re-ffx-penance.md`). The shared plumbing (one optional contract member in `EquipmentDef`, one optional hook in `ScriptHooks`, registry rows, one door row, one scene row) is "both" in kind (CHK-020) and inert for every other chapter: `penance-absence.test.ts`, `celestial-weapon-rows.test.ts` and the three golden suites are the proof.
+
+Plan: `docs/plans/ch-penance-review.md` (read it with this note). Sources: `research/re-ffx-penance.md` ("RE n"). Contract entry: `docs/CONTRACT-CHANGES.md` (2026-11-06). The shared ledgers (NOW.md, ACTIONS.md, DECISIONS.md) are **not touched here**: the driver adds the rows.
+
+## 0. The headline (read this first)
+
+1. **The chapter is built and plays** behind the typed word **`judgment`**: hidden Chapter 35 on the Fahrenheit's deck, Penance and its two hands, every rule from the game's own files.
+2. **The fight is not winnable by any scripted line I could write: 0 wins in 100 seeds, on every line and on three armour presets** (section 5). The plan's prediction J2 ("the advisor's line wins 45 to 85 percent with the Celestial rows") **was wrong**: it priced the 121 body hits and not the arms' tempo. With an **unkillable** party (only Judgment Day can hurt) the same lines do win (3 of the 6 battles of a 3-seed probe, in 688 to 1,010 ticks; the other three ended in a Judgment Day or the stalemate watch), so the offense is enough and what fails is **survival over a fight of 80 to 110 Penance turns** against two hasted arms. A scripted bot is a floor for a thinking player, not a ceiling (the Keeper's note says the same of its bots). The chapter ships **hidden and disclosed**, as the Keeper did at 3.5 percent; section 5 has the options with numbers and the call is Bailey's.
+3. **Picture first (rule 9) is still owed for the paintings**: nothing is painted. The stage draws its boss-silhouette stand-ins (section 6 lists every image).
+
+## 1. What is playable now
+
+Type **`judgment`** on chapter select (any case; `src/app/screens/frontend/judgmentDoor.ts`): the board opens the hidden **Chapter 35, Penance**: party prep (Tidus, Yuna, Rikku in front; Auron, Wakka, Lulu, Kimahri on the bench), the pre scene (a draft for Bailey to read: `src/story/scripts/penance.ts`, eleven lines), the fight, the results page, the post scene (six lines). The fight is the game's, read from its files:
+
+- **Phase 1:** Penance (12,000,000 HP, Protect on, absorbs all five elements) does only **Obliteration** on the whole front line (physical, power 24, Slow). Its Right Arm and Left Arm (500,000 HP each) take their own turns from the start: the Right Arm Petrifies with a hit, heaps ailments on one member (Calamity), or casts **Mighty Guard** (Shell, Protect, Regen on Penance and the arms: Penance then heals about 46,975 a tick until the Regen is dispelled); the Left Arm strips wards with its hit, takes **three quarters of everyone's maximum HP with Tera Graviton** (and Sleep, Silence, Darkness, Slow, **Doom**), or Slows. Each picks one of three evenly; from its second turn an arm is **Hasted** every turn.
+- **The change:** the first damaging hit that leaves Penance **strictly below 9,000,000** HP: Separation on itself, the lower half falls away (the painting changes), Protect comes off, Haste for **one** turn (4 ticks instead of 9).
+- **Phase 2:** **Immolation** on one random living member (physical, power 32; takes the MP; Armor Break and Mental Break). A hidden counter gains 1 per Penance turn and 1 per damaging action that reaches it; at 20 or more, on a turn where **both arms are up**, **Judgment Day**: 99,999 HP and 999 MP to the whole front line, ignoring Protect, Shell and the HP cap (a member at 99,999 maximum dies too). With an arm down the turn is an Immolation and the counter stays spent-up, so the first turn with both arms up is the Judgment Day.
+- **An arm that falls** acts out Atrophy, is made whole at full HP and statuses, and is **off the field** (off the cursor, off the turn list, out of an all-enemies spell) for **12 ticks**; it acts the turn after it is back. Each death pays its AP (10,000, or 12,000 on an overkill) and its drop.
+- **The win:** Penance reaches 0. Its death takes both arms off the field with it (no return, no second payment). 60,000 AP (65,000 on an overkill), no gil, Master Sphere x3 (x6 on an overkill).
+- **No Escape** (the game allows it; P6). The five story aeons are the only aeons (P10).
+
+It is registered as a **hidden experiment-class chapter** (`experimental: true`, number 35, the experiments' own store, no save change, no board card): `getChapter('penance')`.
+
+## 2. Driver picks, "his to overturn" (P1 to P12 of the plan, as built)
+
+| # | Pick | As built | Alternative |
+|---|---|---|---|
+| P1 | Number 35, id `penance`, word **`judgment`** | built; `penance` would fail the doors table twice (`yrp` ends in P, `experiment` starts with E), pinned by `penance-door.test.ts` | `penance` after an exemption in `chapter-doors.test.ts` |
+| P2 | Hidden, FFX only, **not** desktop-only (painted 2D) | built | list it on the board later on Bailey's word (section 8) |
+| P3 | Arena = Chapter VIII's deck plate | built: scene key `penance`, `SCENE_BACKDROP_FILE` maps it onto `evrae-airship-deck`; the figures are pinned by id on the deck (`src/scenes/penance.ts`, layout A, `[estimate]` positions and heights) | a new plate (nothing sourced) |
+| P4 | Party Tidus, Yuna, Rikku; caps; Luck 85; Jegged's four armour abilities (Auto-Haste, Auto-Protect, Auto-Potion, Defense +20 percent); HP 9,999 | built (`src/data/ffx/builds/penance.ts`). **Two departures, both said:** Rikku's Overdrive starts full and the opening Mix is **Hyper NulAll** (Lunar Curtain and Mana Spring), because the engine has **no Hypello Potion item** (Ultra NulAll, the guides' Mix, cannot be made); the bag is at the item cap for the consumables that matter (99 X-Potions: Auto-Potion spends one on every hit that takes a member under half, three per Obliteration, so the stock is the fight's clock; 99 Phoenix Downs) | GamerGuides' four (Ribbon in place of Defense +20 percent); the Break HP Limit variant (HP 99,999); other trios. All three armour sets are measured (section 5) and none changes the result |
+| P5 | The seven Celestial weapons as an additive field | built: `EquipmentDef.weaponRow`, `data/ffx/builds/celestial-weapons.ts`, `adapt/hit.ts` (one line). Without it the arms would not die in six hits | plain weapons (unwinnable by arithmetic) |
+| P6 | No Escape row | built (`canEscape: false`) | an Escape that ends the chapter as a retreat |
+| P7 | Painted billboards on local ComfyUI, the arm painted once and mirrored | **not painted** (section 6); the keys are fixed (`penance`, `penance-split`, `penance-arm-right`, `penance-arm-left`) so the sets drop in | the real FFX model through the 3D route (desktop-only) |
+| P8 | Music stand-ins: `scene-fahrenheit`, `boss-challenge`, `victory-ffx` | built | `boss-yu-yevon` for phase 2; "A Contest of Aeons" is the guides' name for the sourced track (Bailey's ear, rule 13) |
+| P9 | The arms pay at every death; the results screen never mentions it | built (`koActor` pays each death). **Found while testing:** a Celestial blow is exactly the 99,999 cap, which **is** the overkill threshold, so every killing blow on an arm or on Penance is an **overkill** (arms 12,000 AP, Penance 65,000 AP and six Master Spheres) | pay once |
+| P10 | Yojimbo, Anima and the Sisters out of the roster | built (the build lists the five story aeons only) | in, with the Pay ladder |
+| P11 | The usual retry | nothing to build | a checkpoint at phase 2 |
+| P12 | Difficulty: the preset only; no boss number touched | held: **no boss number was tuned** | none (rule 6) |
+
+## 3. What changed, by area (all FFX only; inert elsewhere)
+
+- **Contracts (additive, `docs/CONTRACT-CHANGES.md`):** `EquipmentDef.weaponRow?` (`battle/common/types.ts`), `ScriptHooks.onDeath?` and `runOnDeath` (`battle/ffx/ai/hooks.ts`, called once from `hp.ts#koActor`). `data/encounters.ts`: `ChapterId` `'penance'`, `ListedChapterId` excludes it, `Chapter.number` 35 (three edits on existing lines; the file stays at 399). **The number union is a merge line shared with the two sibling lanes' 33 and 34.**
+- **New battle files:** `battle/ffx/ai/penance-rules.ts` (every constant with its RE row; the phase and the counter as two battle flags `pen.phase`, `pen.counter`; the Judgment Day gate `bothArmsUp`), `battle/ffx/ai/penance.ts` (Penance's turn, `onHit`, `onDeath`; the arms' turns and `onDeath`; `applyPenanceSetup`). **An arm is "down" exactly while it is not alive**: it dies, `scheduleRevivalAt` arms its return at `ticks + 12` with its full 500,000, and `resolveDuePartRevivals` (the Yu Pagodas' timer) stands it up; the game's two "down" flags are not stored.
+- **Host files, one line each:** `adapt/hit.ts` (the weapon formula), `hp.ts` (the `runOnDeath` call, 397 to 398 lines), `setup.ts` (`applyPenanceSetup` on the existing line of the other per-chapter set-ups, imported through `formation-commands.ts`; still 399), `ai/index.ts` (the script import), `kernel/forced-action-table.ts` (three rows, forced action "none").
+- **Data:** `data/ffx/penance-ids.ts`, `enemies/penance.ts` (the three records and the formation), `enemies/penance-abilities.ts` (**nine new rows, each with its command record word for word from the kernel fixtures**), `builds/celestial-weapons.ts` (the seven rows), `builds/penance.ts` (the party); registered in `hidden-ffx.ts` and `command-records/enemies.ts`. The arms' Attack, Calamity and dispelling Attack are the Dark Aeons' rows (`dark-sandy-attack`, `dark-calamity`, `dark-cindy-attack`: the same game rows); the Left Arm's Slowga is the party's own.
+- **Chapter plumbing:** `data/chapter-penance.ts`, `chapter-meta-penance.ts` (+ `chapter-meta.ts`, `chapters-experiments.ts`), `story/scripts/penance.ts`, `scenes/penance.ts` (+ `experiment-scenes.ts`), `app/screens/frontend/judgmentDoor.ts` (+ `chapterDoors.ts`), `engine/pyreflyCanon.ts`, `engine/tactics/lookup.ts`, `critic/runner/lib/route-pure.mjs` (the route's door word), `data/art/artNamespace.ts` (`SCENE_BACKDROP_FILE`), `ui/coach/turnOrderLine.ts` (Auron's "He moves after you" line is true: 0 of the test's 20 seeds open with an enemy).
+- **Tables and tests that force a decision for every new chapter, each answered:** `chapter-doors` (sixteen doors, the games row), `critic-route-doors`, the neighbour lists of `gagazet-door`, `summon-door`, `yojimbo-door` (and their pair-test timeouts, 180 s to 240 s, one more door), `audio-music-batch2` (the Fahrenheit's bed and `boss-challenge` by reference), `scene-backdrop-file`, `chapters/exp-fayth` (the hidden scenes' list), `party-stature-chapters`, `parity-ffx-loot-data` and `parity-ffx-engine-loot-battles` (Penance and the arms join the Dark Aeons and the Keeper as bodies **without a loot record**: their chunks' digests are not in the repo, rule 6), `data-ffx-command-records` (528 abilities, 525 records; `penance-tera-graviton` has Doom in the extra word as Mega Graviton does), `re-parity-ai-merged-hooks` (the arms hook `onDeath` only), `r62-auron-turn-order-tip`, and the fixture `evrae-gaze-classes.json` (nine rows).
+
+## 4. Tests
+
+New: `chapters/penance-data.test.ts` (29: the records, the nine rows against the fixtures, the chapter's registration), `penance-engine.test.ts` (15: the opening, phase 1, the change at exactly 9,000,000 / 9,000,001 / 8,999,999, Separation, Protect off, the one hasted turn (4 ticks), Immolation, the counter, Judgment Day with and without an arm down), `penance-arms.test.ts` (16: the arms' turn, the rolls over 300 seeds, Mighty Guard's group, Slowga's test, Tera Graviton 7,499 per member, the death, the 12-tick return, every death pays, a Doom death, Penance's fall), `penance-absence.test.ts` (6), `penance-door.test.ts` (6), `penance-board.test.ts` (13: the real `Input`, board, title and party prep), `penance-story.test.ts` (8), `penance-scene.test.ts` (5), `penance-measure.test.ts` (the winnability table, section 5), `celestial-weapon-rows.test.ts` (16); helpers `tests/unit/helpers/penanceDrive.ts` and `penanceBot.ts`.
+
+**Checks run (2026-11-06, this tree):** SUITE_PLACEHOLDER
+
+## 5. Winnability, MEASURED (`penance-measure.test.ts`, `tests/unit/helpers/penanceBot.ts`)
+
+Scripted players on the real engine, **no god mode**, seeds 1000 to 1099, 100 battles a row, **the boss never tuned**. A line shares one skeleton (cure a Petrified member, stand a fallen one up with a Phoenix Down, Dispel an Armor-Broken one, heal the hurt, Dispel Penance's Regen, five Cheers from Rikku's opening Hyper NulAll) and differs in its offense: **advisor** = the arm lock (a standing arm is struck before anything else, the Left Arm first, because an arm that returns does not act for a turn and can be killed again first); **body-first** = the body, and an arm only when the arms standing at Penance's next two turns would be none; **no-arms**; **arms-only**; **careless** = Attack the first enemy, heal nobody.
+
+| Line, party | Wins | Reached the change | Median ticks | Best damage to Penance | Judgment Days |
+|---|---:|---:|---:|---:|---:|
+| careless, shipped | **0 / 100** | 0 | 23 | 1,765,205 | 0 |
+| no-arms, shipped | **0 / 100** | 0 | 25 | 1,869,052 | 0 |
+| body-first, shipped | **0 / 100** | 0 | 25 | 1,869,052 | 0 |
+| **advisor (lock), shipped** | **0 / 100** (80 defeats, 20 wipes by Petrify and shatter) | 33 | 69 | 4,287,575 | 3 |
+| arms-only, shipped | **0 / 100** | 53 | 259 | 5,283,533 | 11 |
+| advisor, Ribbon (GamerGuides' four) | **0 / 100** | 39 | 160 | 3,591,641 | 0 |
+| advisor, Ribbon + Break HP Limit (HP 99,999) | **0 / 100** | 1 | 244 | 4,401,231 | 1 |
+
+**Reading it.** (a) Predictions J1 and J3 hold (no arm control, no change; the deaths are Armor-Broken members killed by the next blow and Tera Graviton, not Judgment Day, until a line gets through the change). **J2 does not: with the Celestial rows the advisor's line wins none.** J4 (Break HP Limit a few points better) is not borne out either. (b) **What kills the party:** the opening is lethal by itself. Penance's first turn is at tick 6 and an arm's at 9, before the party has done more than the Mix; Obliteration takes 5,600 to 7,700 from each member (Cheers, Auto-Protect and Defense +20 percent), so Auto-Potion fires on all three at every turn; a standing arm's blow is 11,500 to 16,000 (a one-shot at 9,999 HP) or Petrifies, and a Petrified member is shattered by the next hit; **Tera Graviton plus Sleep plus Doom**, with nothing in the bag that removes Doom (`research/ffx-combat-core.md` §4.2: "Nothing removes it. Only Ribbon prevents it"), kills a party that is asleep through the next Obliteration. (c) **Keeping the arms down costs the party four fifths of its actions** (30 arm deaths in 320 ticks, about 6.3 hits a kill; a hasted party acts about 0.7 times a tick and the lock needs about 0.5), and the 99 X-Potions are gone at about tick 300. (d) **The offense is enough in principle:** with the party unkillable (only Judgment Day can hurt), the lock line won 1 of 3 seeds (1,010 ticks; one lost to a Judgment Day at tick 937, one to the stalemate watch) and the body-first line 2 of 3 (688 and 763 ticks; one lost to a Judgment Day at tick 181). The fight is a race against survival, as the guides say ("20 to 30 minutes").
+
+(e) **An all-in opening on the Left Arm (no Mix, no Cheers until it falls) is worse** (a 40-seed probe: a median of 8 ticks on the Ribbon build, 40 on the shipped one): Penance's first Obliteration lands at tick 6 and, unbuffed, takes 11,000 from a member who has no Defense +20 percent, so the Mix has to come first. (f) **The roster lever does not help either** (30 seeds a row, advisor and body-first lines): Tidus and Yuna with Auron, Wakka or Kimahri in Rikku's place, or Auron, Yuna and Rikku, all win none and last no longer (median 35 to 72 ticks), because the opening Mix is Rikku's. **What the bot does not try** (so the numbers are a floor for a thinking player, not a ceiling): Defend between blows, a Shell on the party against Tera Graviton, Esuna and Soft ahead of the Right Arm's turn, Quick Hit's rank-2 speed on the arms only, Overdrives beyond Energy Rain, bench swaps (Auron's Celestial formula 0x13 doubles at low HP), Wakka, Kimahri, Lulu, an aeon as a shield, planned timing of the kills to the 12-tick return.
+
+**Options with numbers, for Bailey** (the call is his; none is built):
+
+| Option | Effect | Cost |
+|---|---|---|
+| **A. Keep it as sourced (driver pick)** | the fight as the files describe it; hidden behind a word, nobody is trapped by it; a thinking player does better than the script | 0 percent measured |
+| B. Armour: Ribbon in place of Defense +20 percent (GamerGuides' set) | the fight lasts about 2.3 times longer (median 160 ticks against 69) and Petrify, Doom, Sleep and Slow stop mattering; still 0 wins | none: both sets are the guides' own |
+| C. Ribbon + Break HP Limit (HP 99,999) | median 244 ticks; Tera Graviton then takes 74,999 and two casts kill; still 0 wins | a build of two guides' ideas that no guide names together |
+| D. A "story" mode of the fight (arms that return slower, a gentler counter) | not built, not measured | new gameplay: rule 10 needs his yes |
+| E. A larger roster at once (a fourth fighter, an aeon as a shield) | not built | new gameplay |
+
+The pinned bounds in `penance-measure.test.ts` (careless and the arm-less lines win none; the advisor wins at most 10 of 100 and gets through the change in at least 10) are a **tripwire, not a target**: if a later change moves them, re-measure and update this section, never the bounds alone.
+
+## 6. ART NEEDS (nothing is painted; nobody queued ComfyUI for this lane; Bailey alone approves a painting)
+
+Style reference for every item: the approved paintings in `public/art` (`characters/yunalesca-1` for a boss set: idle with `baselineY`, attack, cast, hurt, ko, `idle@2x`). Retail references are allowed since 2026-10-18, but the painting that ships must match the painted look. The keys are fixed in `PENANCE_SPRITES`; the stage draws its boss-silhouette stand-in until a set is installed (the Keeper's live check logged two console errors per missing idle: expect the same).
+
+| # | Subject | Images | Key and files |
+|---:|---|---:|---|
+| 1 | Penance, whole (phase 1) | 5 | `characters/penance/`: idle, attack (Obliteration), cast (Judgment Day's charge), hurt, `idle@2x` |
+| 2 | Penance, split (phase 2, lower half gone) | 5 | `characters/penance-split/`: idle, attack (Immolation), hurt, ko ("Boss" death: the body stays), `idle@2x`; the swap is a `form-change` event with `spriteKey: 'penance-split'` |
+| 3 | The Separation beat | 1 | one prop sprite of the lower half falling (no code reads it yet: the swap itself carries the beat) |
+| 4 | One arm, painted once | 6 | `characters/penance-arm-right/`: idle, attack, cast (Tera Graviton, Mighty Guard, Calamity), hurt, ko (Atrophy), regen (the return). **The Left Arm is the same set mirrored**, installed as `characters/penance-arm-left/` |
+| 5 | Portrait, pause hero plate, chapter card, thumbnail | 4 | the portrait for the target card and results; `pause/ch35-penance` (the meta's `heroArt`, fallback the deck plate); `chapter-penance` card and thumbnail (`thumbnailKey` is today the stand-in `chapter-evrae-airship`) |
+| 6 | Backdrop | 0 | Chapter VIII's deck plate is reused |
+| 7 | Effects | 0 to 2 | Judgment Day's full-screen effect and Immolation / Obliteration read from the existing FX library; a painted decal only if a frame needs it |
+| | **Total** | **about 21** (plus 2 if the effects want decals) | |
+
+**Stand-ins in this build, all said:** the silhouettes for all three bodies; the deck plate for the arena (the game's room is the airship map `hiku15`, which one guide places in the Calm Lands: `[inferred]`, RE 10 item 1); `boss-challenge` for the music; `chapter-evrae-airship` for the card; the draft story; the figure positions and heights (`[estimate]`, no stature row exists for m344 to m346).
+
+## 7. Where the engine departs from the note, or reads it literally (rule 6: said, not tuned)
+
+1. **The arm's return is 12 ticks `[derived]`** from the CTB kernel (the re-initialised counter, then one Regeneration turn); the live check (RE 10 item 2, whether a hidden arm keeps its turn) is still the RE session's. Tested: the arm is out of the cursor, the turn list and an all-enemies spell, and the clock is the one clock.
+2. **Haste's order (RE 10 item 4) is answered by this engine:** the delay of an action sees the Haste a script wrote before it, so Penance's one hasted turn costs 4 ticks (`penance-engine.test.ts`); the game's order is not run.
+3. **The arms pay on every death and on Penance's death they are taken off the field without a loot roll.** RE 7 says the kill rewards are rolled for each death that is not a silent removal and does not say whether Penance's death-write is one; the engine reads it as silent (no 20,000 AP the guides do not mention). Flagged.
+4. **Overkill (P9 above):** every Celestial killing blow is an overkill. RE 7 gives the overkill AP and items; the engine's overkill rule applies as for every monster.
+5. **Penance's gear drop and the arms' one-in-eight Master Sphere** are not modelled / the Dark Aeons' record shape is assumed for the arms (their loot chunks' digests are not in the repo).
+6. **The Left Arm's "some member not Slowed" test counts living members** (RE 5.3 says "front-line member"; a KO'd member cannot be Slowed). Flagged.
+7. **The stalemate watch** (400 turns without a new minimum of Penance's HP; the arms are parts and do not count) ends a fight whose party never dispels Mighty Guard's Regen with "the battle cannot be won from here". The chapter's tip says to Dispel it.
+8. **Doom has no cure in the engine** (RE: nothing removes it; Ribbon prevents it). The shipped armour has no Ribbon (Jegged's four), so Tera Graviton Dooms the party (Sleep, Silence, Darkness land too; Slow does not, Auto-Haste).
+9. **The Celestial weapons' fixed abilities are live** (they are the weapon rows' own, RE 6.5): Tidus's Evade & Counter and Magic Counter (and Auron's Counterattack on the bench) answer an arm's blow with the wielder's own Attack, which is a 99,999 hit. A 6-seed probe with the party only defending saw an arm fall to Tidus's counters in every seed within 80 decisions. The scripted lines have this help in every number of section 5. Triple Overdrive fills the gauges about three times faster; Double AP and Gillionaire are inert in a fight.
+10. **Mix:** Ultra NulAll cannot be made (no Hypello Potion item); Hyper NulAll is the opener.
+
+## 8. Browser job specs, with predictions written first (headless Chromium, the real GPU, one job under the lock `D:/Tools/pyrefly-scratch/RIG-RECORD`)
+
+`tools/penance-smoke.mjs` (`PYREFLY_BROWSER=gpu node tools/penance-smoke.mjs --base http://127.0.0.1:<port>/`) is the script; it takes the lock itself. The party is kept up by editing the battle state through the debug API (stated in its header); every command is a real key press.
+
+**Predictions (written before the first run):**
+
+- **B1, the door and the opening (1600x900).** Type `judgment`: no card on the board; party prep shows Tidus, Yuna, Rikku and a bench of four; the pre scene plays eleven lines; the battle opens on the Evrae deck plate with three boss silhouettes (Penance upper right, a hand either side), the turn list on the right; **console: 404s for `characters/penance*/` (the unpainted sets) and nothing else**.
+- **B2, the menu with real keys.** Root list Attack ... Escape greyed; Attack opens the target cursor on Penance first; the arrows walk Penance, the Right Arm, the Left Arm.
+- **B3, the change.** One real Attack that leaves Penance under 9,000,000: the Separation banner, the flash, the swap request for `penance-split` (a 404 until it is painted), the Protect pip gone, the split frame **exactly once**.
+- **B4, an arm falls and returns.** A real Attack kills the Right Arm: it fades out, the cursor skips it, the turn list drops it; about two Penance turns later it fades back in whole (500,000 HP).
+- **B5, the win.** Penance at 1 HP and a real Attack: it falls, the arms are taken with it, the post scene (six lines), the results page with 65,000 AP (an overkill) and no gil.
+- **B6, a phone (390x844, touch): not run.** The chapter is not desktop-only; the three silhouettes under the HUD rails are the likeliest layout finding (layout C of the preflight, the two-pip strip, is the fallback).
+
+**Results:** Run 2026-11-06 ~02:40 EST, the dev server on its own port (stopped by PID afterwards), headless Chromium, `PYREFLY_BROWSER=gpu`, 1600x900, seed 7, the lock held for the run. **Every check passed, with no console error and no 4xx or 5xx response** (`tools/penance-smoke.mjs`, exit 0). Screenshots: `docs/screenshots/ch-penance/desk-*.jpg` (board, party prep, the pre scene, the first menu with and without the first-time card, the pause tab, the change, the arm down, the arm back, the results).
+
+- **B1: door and opening, matched except one prediction.** The board has 19 cards and none for the chapter; the word opens party prep and it holds; the pre scene plays; the battle opens with Penance and the two hands as three boss silhouettes on the deck plate (Penance centre, a hand either side, the party in its arc), Tidus, Yuna and Rikku, Penance at 12,000,000 with Protect on. **Wrong: I predicted 404s for the unpainted `characters/penance*/` sets; there were none** (the stage draws its silhouette without asking for the files, as the manifest lists none). The advisor card ("Next best move: Attack to the Right Arm, 99,999") and the Enemy Move strip work on the new combatants; Escape and Flee are greyed.
+- **B2: real keys.** Attack opens the target cursor on Penance first ("TARGET Penance", its sensor line "Immune to sensors."); the arrows walk to the arms; the pause tab reads "Make it split" and shows Protect and Haste as PERMANENT.
+- **B3: the change, matched.** One real Attack across 9,000,000 made `pen.phase` 1; Penance stood at 8,950,001 with the split key and Protect off, Haste for the turn; the Enemy Move strip shows Penance on the clock. The swap request for `penance-split` drew the same silhouette (no painting yet), so the swap itself could not be seen.
+- **B4: an arm falls and returns, matched (and more).** A real Attack killed the Right Arm; both hands were off the field by then (Tidus's Celestial counters, section 7 item 9, had taken the Left Arm too); the stage showed neither, the turn list dropped both; later both stood again at the full 500,000.
+- **B5: the win, matched on the numbers.** Penance at 1 HP and a real Attack: the results screen with **"Victory", "Overkill x1", AP 87,000 (Penance's 65,000 on an overkill and the arms' deaths), no gil, Dark Matter x3 and Master Sphere x6** (three arm deaths and Penance's overkill). The post scene (six lines) was not walked: the results come first, as in the Keeper's script.
+- **B6: a phone: not run.**
+
+## 9. To list it on the board (Bailey's word), the steps
+
+Move `PENANCE` out of `chapters-experiments.ts` into `CHAPTERS`; add `'penance'` to `CHAPTER_IDS`, drop it from `ListedChapterId`'s exclusions, drop `experimental: true`; give it a roman numeral in `ui/common/roman.ts`; a board card (`chapter-penance`) and a guide card, doc and tactic (`data/guides`, `engine/tactics`); change the 19s in `angra-door`, `booth-b3/b4-*`, the e2e tile counts and `critic-route-doors`; run the chapter-generic suites; a deep review follows (class DEEP). Do it only after he has played it, and only after the fight is tuned to a win rate he accepts (section 5).
+
+## 10. CHANGELOG lines (FFX only; for the release note that ships it)
+
+- **FFX only (hidden Chapter 35, the word `judgment`): Penance and its two hands, on the Fahrenheit's deck.** Twelve million HP, two arms of half a million that grow back whole twelve ticks after they fall, a hidden count that ends the fight in a breath unless one arm is always down. The Celestial weapons make every blow the 99,999 cap. The painting, the music and the story are stand-ins and a draft.
+- **FFX only (engine plumbing, no other battle changes): a weapon can carry its own damage formula (`EquipmentDef.weaponRow`), and a script can answer its own death (`ScriptHooks.onDeath`).**
+
+## 11. Owed, and open questions for Bailey
+
+- **Owed (built nowhere):** every painting (section 6); the guide card and page and the advisor's tactic line (a hidden chapter's would teach "keep one hand down; Dispel what Immolation breaks; Dispel the Regen": Jegged's page is the source); the HUD readout of "Judgment Day armed or not" (layout C); the pause hero; the phone check; the Separation prop; the story read-through.
+- **Live checks nobody has made (the RE session's):** how the game launches the battle and the arena (RE 10 item 1); whether a hidden arm keeps its turn (item 2); the initial CTB (item 3); the Regen's duration (item 5); the model heights (item 6); whether a Doom death returns an arm the same way (the plan's check 7).
+- **Questions:** (0) **Is a fight that no scripted line wins acceptable as a hidden chapter, or which option of section 5?** Play it first. (1) Hidden behind `judgment` or listed? (2) The shipped armour: Jegged's four (sourced) or GamerGuides' (Ribbon, about 2.3 times longer in the bot)? (3) Layout A (the giant over the bow) or C (with the two-pip strip) once the job specs are read?

@@ -48,6 +48,7 @@ import './sinspawn-gui.ts'; // the hidden Sinspawn Gui chapter (FFX only): the b
 import './biran-yenke.ts'; // the hidden Biran and Yenke chapter (FFX only): the two Ronso
 import './dark-aeons.ts'; // the hidden Mirror Aeons chapter (FFX only): Dark Yojimbo, the three Dark Magus Sisters and the dog
 import './spectral-keeper.ts'; // the hidden Spectral Keeper chapter (FFX only): the Keeper and its Circles (the glyph mines)
+import './penance.ts'; // the hidden Penance chapter (FFX only): Penance and its two Arms
 import { freeCircleIds, moveTo, platformOf, ringActive } from '../platforms.ts';
 
 export * from './types.ts';

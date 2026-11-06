@@ -173,3 +173,12 @@ Pinned bounds follow the Keeper's rule: a tripwire, not a target; if a change mo
 - **"Haste for one turn"** at the change, not a permanent Haste: the script writes a counter of 1 (RE §5.2); Penance's turn stays 9 ticks except that one.
 - **Judgment Day is neither physical nor magical** (flag word 2 = 0x80): no Protect, Shell or Defense ability touches it, and it is always the 99,999 cap.
 - **No hook runs on the arms' death in the engine**; the revival needs one (row 5).
+
+## Build note (2026-11-06, the build lane `ch-penance`): what the build turned up (details: `docs/handoff/ch-penance.md`)
+
+- **J2 was wrong.** With the Celestial rows in, the advisor's line wins **0 of 100** seeds on the shipped party, and so does every other line and two other armour presets (`tests/unit/chapters/penance-measure.test.ts`). The prediction priced the 121 body hits and not the arms' tempo (hasted from their second turn: two actions for each of Penance's; a standing arm's blow one-shots a 9,999-HP member, and Tera Graviton plus Doom ends a party with nothing that removes Doom). J1 and J3 hold; J4 does not. With an unkillable party the same lines do win (a 3-seed probe), so what fails is survival over 80 to 110 Penance turns.
+- **Row 5 (the arms' revival) needed no poll:** one additive optional `ScriptHooks.onDeath` called from `koActor` (every death, Doom included) plus the Yu Pagodas' existing `pendingPartRevivals` timer (`hp.ts#scheduleRevivalAt`) does it; a hidden arm is simply off the field (`removed`), so the CTB list, the cursor and all-enemies spells never see it. The two "down" flags are not stored: an arm is down exactly while it is not alive.
+- **The form change is a `form-change` event with no second form** (the engine's own form change would hand Penance fresh HP and make its death a transformation).
+- **Overkill:** a Celestial blow is exactly the 99,999 cap, which is the overkill threshold, so every killing blow on an arm or Penance is an overkill (12,000 and 65,000 AP).
+- **Hyper NulAll in place of Ultra NulAll:** the engine has no Hypello Potion item.
+- **Haste's order (RE 10 item 4):** the engine's delay sees the Haste a script wrote before the action, so the one hasted turn costs 4 ticks.

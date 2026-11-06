@@ -847,6 +847,13 @@ export interface EquipmentDef {
    * alone 3. Before RC4 only the weapon carried it and the armour gave 0.
    */
   bonusCrit?: number;
+  /**
+   * **FFX only: the weapon row's own damage formula and power** (the Celestial weapons, `weapon.bin` rows 139 to 145: formulas 0x11, 0x12, 0x13, power 16). A command that takes its formula and power from
+   * the weapon (`Cmd+0x1c` bit 18, the plain Attack and its kin) reads the formula here in place of the command's own 1; absent, the weapon is the plain one (formula 1, power 16) and nothing changes
+   * (the hidden Penance chapter, `docs/CONTRACT-CHANGES.md`). The power is carried for the record: the engine keeps the command's own power byte, which is 16 in every weapon command and in every Celestial row
+   * (`tests/unit/celestial-weapon-rows.test.ts` pins the two equal). Read by `battle/ffx/adapt/hit.ts#hitInputOf`.
+   */
+  weaponRow?: { formula: number; power: number };
 }
 
 // ---------------------------------------------------------------------------

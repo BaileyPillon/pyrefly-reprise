@@ -44,7 +44,7 @@ import { applyOmnisSetup } from './ai/seymour-omnis-rules.ts';
 import { applyIsaaruSetup } from './ai/isaaru-rules.ts';
 import { applyAeonDuelSetup } from './aeon-duel.ts';
 import { applyFormationFlags } from './formation-flags.ts';
-import { applyFormationCommandDisables, applyPlatformSetup, markFirstStrike } from './formation-commands.ts';
+import { applyFormationCommandDisables, applyPenanceSetup, applyPlatformSetup, markFirstStrike } from './formation-commands.ts';
 import { applyPossessionOpening, mirrorPossessedAeon } from './ai/possession-setup.ts';
 import { initYojimbo } from './adapt/yojimbo.ts';
 import { initSisters } from './adapt/sisters.ts';
@@ -394,6 +394,6 @@ export function buildBattle(
   applySinSetups(ctx); // Sin: link 4's clock and pulls, then links 1-3 (the Fins, Genais and the Core) [ffx-sin §5]
   applyGuiSetup(ctx); // Sinspawn Gui: the fight number, the body's acceleration line, the arms without turns, Wakka's reach [re-ffx-ai-gui §3, §5]
   applyBiranYenkeSetup(ctx); // Biran and Yenke: both brothers' HP, STR, MAG, AGI and MDF from Kimahri's, at the battle's start [re-ffx-biran-yenke §3]
-  applyPlatformSetup(ctx, group); applyDarkAeonsSetup(ctx, group); // applyPlatformSetup: the Spectral Keeper's front line on platforms 1 to 3 and its Circles without turns (inert elsewhere; platforms.ts). Mirror Aeons: the sisters' and Yojimbo's starting gauges, the battle id the scripts branch on, the dog without turns [re-ffx-yojimbo-sisters-feasibility §3, §4]
+  applyPlatformSetup(ctx, group); applyDarkAeonsSetup(ctx, group); applyPenanceSetup(ctx, group); // applyPenanceSetup: the hidden Penance chapter's Protect and counters (inert elsewhere; ai/penance.ts). applyPlatformSetup: the Spectral Keeper's front line on platforms 1 to 3 and its Circles without turns (inert elsewhere; platforms.ts). Mirror Aeons: the sisters' and Yojimbo's starting gauges, the battle id the scripts branch on, the dog without turns [re-ffx-yojimbo-sisters-feasibility §3, §4]
   return ctx;
 }
