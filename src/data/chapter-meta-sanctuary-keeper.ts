@@ -31,7 +31,7 @@ export const SANCTUARY_KEEPER_META: ChapterMeta = {
     { id: 'half', label: 'Bring it below half', rule: { kind: 'boss-hp-below', fraction: 0.5 } },
     { id: 'road-open', label: 'Open the road', rule: { kind: 'victory' } },
   ],
-  tip: 'Plain blows will not outrun its healing. Poison it first, then put Reflect on it: its own healing mends you and it cannot cure itself. Shell before the breath; Hastega again after the tail.',
+  tip: 'Plain blows cannot outrun its healing. Poison it, then Reflect it, and its own spell mends you. Shell before the breath.',
   snapshots: [
     { image: 'backdrops/gagazet.png', caption: 'the summit road' },
     { image: 'characters/yuna/idle.png', caption: 'its own spell, back on it' },
