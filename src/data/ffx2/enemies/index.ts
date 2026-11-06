@@ -56,6 +56,9 @@ import { x2AngraMainyuAbilities } from './angra-mainyu-abilities.ts';
 // Aranea, Black Elemental, Concherer and Chac on the Via Infinito's floors 20, 40, 60 and 80 (the hidden chapter "The Fallen Maesters", FFX-2 only): `./fallen-maesters.ts`.
 import { fallenMaestersGroups } from './fallen-maesters.ts';
 import { x2FallenMaestersAbilities } from './fallen-maesters-abilities.ts';
+// Auron, Tidus and Seymour, the three duels of the hidden chapter "The Farplane Cup" (FFX-2 only): `./farplane-cup.ts`.
+import { farplaneCupGroups } from './farplane-cup.ts';
+import { x2FarplaneCupAbilities } from './farplane-cup-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -76,6 +79,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...valeforGroups,
   ...angraMainyuGroups,
   ...fallenMaestersGroups,
+  ...farplaneCupGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -106,6 +110,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...x2ValeforAbilities,
   ...x2AngraMainyuAbilities,
   ...x2FallenMaestersAbilities,
+  ...x2FarplaneCupAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

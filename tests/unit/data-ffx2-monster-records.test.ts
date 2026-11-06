@@ -100,6 +100,8 @@ describe('FFX-2 monster rows are the game\'s rows', () => {
       if (key.startsWith('ffx2-bikanel-angra-mainyu/')) continue;
       // The hidden Fallen Maesters' rows 221, 69, 232 and 239 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/fallen_maesters_rows.json, tests/unit/chapters/fallen-maesters-data.test.ts).
       if (key.startsWith('ffx2-via-infinito-floor-')) continue;
+      // The hidden Farplane Cup's rows 311, 317 and 319 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/farplane_cup_rows.json, tests/unit/chapters/farplane-cup-data.test.ts).
+      if (key.startsWith('ffx2-farplane-cup-')) continue;
       const row = ROWS[key];
       expect(row, `${key}: no fixture row`).toBeDefined();
       if (row === undefined) continue;

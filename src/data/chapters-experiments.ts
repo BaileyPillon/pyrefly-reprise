@@ -40,10 +40,11 @@ import { FFX2_ANGRA_MAINYU } from './chapter-ffx2-angra-mainyu.ts';
 import { LAST_SUMMONING } from './chapter-last-summoning.ts';
 import { SPECTRAL_KEEPER } from './chapter-spectral-keeper.ts';
 import { FFX2_FALLEN_MAESTERS } from './chapter-ffx2-fallen-maesters.ts';
+import { FFX2_FARPLANE_CUP } from './chapter-ffx2-farplane-cup.ts';
 import { experimentalYrp } from './chapter-exp-yrp-3d.ts';
 import { EXP_WINDWAKER } from './chapter-exp-windwaker.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from, and `ffx2Bahamut` the listed Chapter IV, which the 3D Bahamut is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter, ffx2Bahamut: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER] as const;
 }

@@ -28,8 +28,9 @@
  * **`yrp` and `waker` are desktop-only** (driver decision 219q, 2026-11-03; FFX-2 only): their rows carry the `desktopOnly` gate, so on the phone tier the door stays shut as FF7's does while its switch is off (see `desktopOnly` below).
  *
  * **`infinito`** (FFX-2, the hidden Fallen Maesters, `./maestersDoor.ts`: only F is a bound key, `l1`, which the board ignores; I, N, T and O are unbound) is a plain `WordDoor` too.
+ * **`duelist`** (FFX-2, the hidden Farplane Cup, `./duelistDoor.ts`: D is `right`, E is `start`, S is `down`, the others unbound; the first D moves the cursor one step, as `daigoro`'s does) is a plain `WordDoor` too.
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon` and `keeper`.
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `duelist` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon` and `keeper`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -48,6 +49,7 @@ import { YOJIMBO_DOOR_CHAPTER, YOJIMBO_DOOR_WORD } from './yojimboDoor.ts';
 import { SUMMON_DOOR_CHAPTER, SUMMON_DOOR_WORD } from './summonDoor.ts';
 import { KEEPER_DOOR_CHAPTER, KEEPER_DOOR_WORD } from './keeperDoor.ts';
 import { MAESTERS_DOOR_CHAPTER, MAESTERS_DOOR_WORD } from './maestersDoor.ts';
+import { DUELIST_DOOR_CHAPTER, DUELIST_DOOR_WORD } from './duelistDoor.ts';
 import { PILGRIM_DOOR_CHAPTER, PILGRIM_DOOR_WORD } from './pilgrimDoor.ts';
 import { YRP_DOOR_CHAPTER, YRP_DOOR_WORD } from './yrpDoor.ts';
 import { WINDWAKER_DOOR_CHAPTER, WINDWAKER_DOOR_WORD } from './windwakerDoor.ts';
@@ -90,6 +92,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: SUMMON_DOOR_WORD, chapter: SUMMON_DOOR_CHAPTER },
   { word: KEEPER_DOOR_WORD, chapter: KEEPER_DOOR_CHAPTER },
   { word: MAESTERS_DOOR_WORD, chapter: MAESTERS_DOOR_CHAPTER },
+  { word: DUELIST_DOOR_WORD, chapter: DUELIST_DOOR_CHAPTER },
   { word: YRP_DOOR_WORD, chapter: YRP_DOOR_CHAPTER, gate: desktopOnly },
   { word: WINDWAKER_DOOR_WORD, chapter: WINDWAKER_DOOR_CHAPTER, gate: desktopOnly },
 ];

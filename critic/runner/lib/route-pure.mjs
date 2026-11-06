@@ -279,6 +279,7 @@ export const DOOR_WORDS = Object.freeze({
   'last-summoning': 'summon',
   'spectral-keeper': 'keeper',
   'ffx2-fallen-maesters': 'infinito',
+  'ffx2-farplane-cup': 'duelist', // the hidden Farplane Cup (FFX-2, number 38, 2026-11-06)
   'exp-yrp-3d': 'yrp',
   'exp-windwaker': 'waker', // the hidden Wind Waker chapter (FFX-2, number 32, 2026-10-20)
 });
