@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-2039 decisions in all: 1469 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1385 of the written decisions record a blanket yes.
+2050 decisions in all: 1480 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1389 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1913 |
+| adopted | 1924 |
 | proposed | 9 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 94 |
-| **All** | **2039** |
+| **All** | **2050** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 156 |
-| art | 402 |
+| art | 404 |
 | visuals | 176 |
 | camera | 76 |
 | audio | 160 |
-| ui | 224 |
+| ui | 226 |
 | story | 17 |
-| chapters | 308 |
+| chapters | 312 |
 | guide | 34 |
 | release | 114 |
 | hosting | 18 |
-| process | 227 |
+| process | 229 |
 | critic | 45 |
 | data | 17 |
-| tech | 44 |
+| tech | 45 |
 | site | 21 |
-| **All** | **2039** |
+| **All** | **2050** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 1078 |
-| FFX only | 524 |
-| FFX-2 only | 419 |
+| both games | 1087 |
+| FFX only | 525 |
+| FFX-2 only | 420 |
 | FF7 hidden experiment | 18 |
-| **All** | **2039** |
+| **All** | **2050** |
 
 ## Standing rules in force
 
@@ -141,7 +141,7 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27) · [2026-10-28](#2026-10-28) · [2026-10-29](#2026-10-29) · [2026-10-30](#2026-10-30) · [2026-10-31](#2026-10-31) · [2026-11-01](#2026-11-01) · [2026-11-02](#2026-11-02) · [2026-11-03](#2026-11-03)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27) · [2026-10-28](#2026-10-28) · [2026-10-29](#2026-10-29) · [2026-10-30](#2026-10-30) · [2026-10-31](#2026-10-31) · [2026-11-01](#2026-11-01) · [2026-11-02](#2026-11-02) · [2026-11-03](#2026-11-03) · [2026-11-04](#2026-11-04) · [2026-11-06](#2026-11-06)
 
 ## Ledger
 
@@ -7848,7 +7848,7 @@ Tuesday · 57 decisions
   - Source: Bailey, 2026-10-20 23:40 EDT (the DRIVER-STATE line), relayed by the Wind Waker session, his answers after the run-3 look-lab renders. Item 170f of …
 - <a id="d-1163"></a>**D-1163** — The Wind Waker chapter’s Meshy cap rises from 300 to 550 credits (212 spent) (FFX-2 only)
   - Bailey: “550 (Recommended)” (blanket yes)
-  - What changed: Item 170g. Replaces D-1126.
+  - What changed: Item 170g. Replaces D-1126. Update 2026-11-06: the cap is lifted by his words 'you can spend as much meshy credits as you see fit. use your own judgment.' (D-1476).
   - area process · FFX-2 · adopted · delivery in progress · at ~23:40 EDT · replaces [D-1126](#d-1126)
   - Source: Bailey, 2026-10-20 23:40 EDT (the DRIVER-STATE line), relayed by the Wind Waker session, his answers after the run-3 look-lab renders. Item 170g of …
 - **Picture** (chapters) — Approved: Hidden yrp 3D chapter look: “Toon v7 + flat face” (the Dragon Quest XI-style toon-3D Yuna shaded D1; FFX-2 only) - WITHDRAWN
@@ -8468,7 +8468,7 @@ Thursday · 103 decisions
   - Source: Bailey, 2026-10-22 23:39 EDT (the DRIVER-STATE line of 23:39 EDT), picked on the driver’s question cards (phone cards), relayed in the chat. Item …
 - <a id="d-1438"></a>**D-1438** — The Genshin and Guilty Gear version of the FFX-2 3D cast is carried by Meshy toon models (not picked: Codex lifelike pictures, the real FFX-2 models, park it) (FFX-2 only; relayed)
   - Bailey: “Meshy toon (Recommended)” (blanket yes)
-  - What changed: Item 218b (Bailey's answer), about 21:45 EDT on 2026-10-22, relayed on 2026-11-01 by the Wind Waker session. His AskUserQuestion answer to "Which models should carry the Genshin / Guilty Gear version, if any?". It picks only the model source. Next per the option text: taller proportions, a better idle, a real temple, then a hidden chapter like the Wind Waker one. Not built in this release batch: the look target (concept A, B or C) and a Meshy spend cap are asked of Bailey by that session before any spend (hard rule 11), and a rig is judged by him in motion before it goes on (D-1378, D-1401).
+  - What changed: Item 218b (Bailey's answer), about 21:45 EDT on 2026-10-22, relayed on 2026-11-01 by the Wind Waker session. His AskUserQuestion answer to "Which models should carry the Genshin / Guilty Gear version, if any?". It picks only the model source. Next per the option text: taller proportions, a better idle, a real temple, then a hidden chapter like the Wind Waker one. Not built in this release batch: the look target (concept A, B or C) and a Meshy spend cap are asked of Bailey by that session before any spend (hard rule 11), and a rig is judged by him in motion before it goes on (D-1378, D-1401). Update 2026-11-06 (time corrected): the question 'Which models should carry the Genshin / Guilty Gear version, if any?' was asked on 2026-10-22 at 21:32 EDT, and his answer 'Meshy toon (Recommended)' is dated 2026-11-01 at 14:30 EST; the text above gave about 21:45 EDT on 2026-10-22 as the time of the answer. Its two open items are answered: the spend by his words of 2026-11-06 about 00:55 EST (D-1476) and the build by D-1474 to D-1479; the chapter is hidden Chapter 33 (word gear) on origin/ch-anime fa99a4d78, not merged or deployed (A-1207).
   - area art · FFX-2 · adopted · delivery not scheduled · see [D-1115](#d-1115), [D-1118](#d-1118), [D-1098](#d-1098)
   - Source: Bailey, 2026-10-22 about 21:45 EDT, answering the question above in the chat with the option "Meshy toon (Recommended)", relayed to the driver on …
 
@@ -9567,7 +9567,7 @@ Monday · 18 decisions
 
 ### 2026-11-03
 
-Tuesday · 9 decisions
+Tuesday · 11 decisions
 
 - <a id="d-1461"></a>**D-1461** — DRIVER CALL under his blanket yes, his to overturn: the hidden 3D chapters "yrp" and "waker" are desktop-only: on the phone tier their doors refuse with the existing door feedback because they load about 240 MB of textures (FFX-2 only)
   - Bailey: “i'll go with all of your recommendations please implement all the unimplemented chapters that i decided on” (blanket yes)
@@ -9614,3 +9614,68 @@ Tuesday · 9 decisions
   - What changed: Item 219y, about 19:45 EST on 2026-11-03, under "Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship" and the standing deploy words (D-931). The focused review of the production candidate (A-1191) read SHIP with the changed area FAIL on R74-1 to R74-5 (none a regression against release 73; R74-5, the 3D Bahamut's texture leak, is in a brand-new hidden feature) and the polish item R74-6, 0 critical. Release 74 went live at 19:44 EST on 2026-11-03 (main 2342fe666, bundle eSs6-WR_, docs/deploys.log line 91, no owner override; A-1192) and its live check read PASS (7,265 files compared byte for byte; A-1193). What a player gets: Lulu's head holds its size (FFX), a longer even revive cross (both games), Chapter XII's Sensor card off the target flag (FFX), Chapter XVII on the booth treatment with its HUD as before (FFX; 19 of 19 treated), and four hidden chapters on typed words (keeper FFX; infinito, yrp and waker FFX-2, the last two desktop-only). The deep review of the live build (round 34) is owed by releases 73 and 74; the ledger counts two deploys since round 33b, so the third refuses until it settles.
   - area release · both games · adopted · delivery implemented · see [D-1449](#d-1449), [D-931](#d-931), [D-1454](#d-1454), [D-1467](#d-1467), [D-1468](#d-1468) · refines [D-1449](#d-1449)
   - Source: The driver's call of 2026-11-03 about 19:45 EST (the DRIVER-STATE line), made under his delegation (D-1402, D-1423) and the standing deploy words …
+- <a id="d-1470"></a>**D-1470** — DRIVER CALL under his blanket yes, his to overturn: release 75 also fixes the 3D bone-texture leak in the hidden Fayth (FFX) and Wind Waker (FFX-2) chapters the way yrp was fixed, the six held card and thumbnail pins leave the approved list until their files install, and prep tips that may overflow at 1600 x 900 get a browser read first (both games; per chapter by game)
+  - Bailey: “i'll go with all of your recommendations please implement all the unimplemented chapters that i decided on” (blanket yes)
+  - What changed: Item 219z, about 21:50 EST on 2026-11-03. Three parts. (1) The leak the 3D Bahamut (yrp) showed in release 74 (R74-5, about 34 textures a retry) is fixed the same way in the hidden Fayth chapter (FFX, word fayth) and the Wind Waker chapter (FFX-2, word waker): every cloned skinned figure's skeleton is freed when a fight is lost and retried (the shared 3D teardown, engine/skeletons.ts; a shared bug fix, so both games). (2) The six held chapter-card and thumbnail pins leave the approved list (they wait in docs/target/held-pins-r75-boss-art.json) until their files install. (3) Prep tips that may overflow at 1600 x 900 get a browser read first (TIP-1) and are shortened only where the read shows the cut (D-1471). Delivered by the second code pass f8144fde9 (A-1200) and read in the browser jobs (A-1199): yrp textures 100, 103, 103, 103, 103, 103 over five retries (release 74: +34 a retry), the Wind Waker's textures flat (49, 50, 50, 50, 50, 50), the Fayth flat in a production build. Carried, minor: the Wind Waker's geometries still grow by 24 over five retries (release 74's own sequence, heap flat) and the Fayth's dev-only sky texture by 2 a retry. Live in release 75 (main f91ff81d0, A-1203).
+  - area tech · both games · adopted · delivery implemented · see [D-1469](#d-1469), [D-1467](#d-1467), [D-1457](#d-1457), [D-1471](#d-1471) · refines [D-1469](#d-1469)
+  - Source: The driver's call of 2026-11-03 about 21:50 EST (the queue line), made under his word of 2026-11-02 about 16:40 EST (D-1444) and his delegation …
+- <a id="d-1471"></a>**D-1471** — DRIVER CALL under his blanket yes, his to overturn: the party-prep CHAPTER tab holds a chapter's tip from 1600 x 900 up, and a tip is shortened, with only its own words, only where the browser read shows it cut at 1600 x 900 (both games; per chapter by game)
+  - Bailey: “i'll go with all of your recommendations please implement all the unimplemented chapters that i decided on” (blanket yes)
+  - What changed: Item 220a, about 23:45 EST on 2026-11-03. 1440 x 810 is not a target size. The browser read (job TIP-1, 32 chapters at five viewports, A-1199) showed nine tips cut at 1600 x 900, and by this call each got a short form made only of its own words: FFX: Seymour Natus, Seymour Omnis, Isaaru and the Mirror Aeons; FFX-2: the Fallen Aeons, Trema, the Den of Woe, and, hidden, the Experiment and Tourist Trap. The Fallen Maesters' tip (hidden Chapter 30, FFX-2) had its five-line short form from the first code pass. The desktop prep card from 600 px up shows the short form; the phone and the pause screen keep the whole tip. At 1600 x 900 the Maesters' tip reads 5 lines in 5.61, at 2000 x 1012 4 lines in 6.47; at 1440 x 810 it is still cut, as is almost every chapter there. Applied in 2aa42f7a7 (A-1200). Live in release 75 (A-1203).
+  - area ui · both games · adopted · delivery implemented · see [D-1470](#d-1470), [D-1444](#d-1444), [D-1402](#d-1402) · refines [D-1470](#d-1470)
+  - Source: The driver's call of 2026-11-03 about 23:45 EST (the queue line), made under his word of 2026-11-02 about 16:40 EST (D-1444) and his delegation …
+
+### 2026-11-04
+
+Wednesday · 1 decision
+
+- <a id="d-1472"></a>**D-1472** — DRIVER CALL under his blanket yes, his to overturn: the FFX-2 battle menu shows no Mix row at all while Mix is not built, in every FFX-2 chapter, and Chapter XII's Enemy Intent range is fixed at its cause and printed low to high in both games
+  - Bailey: “i'll go with all of your recommendations please implement all the unimplemented chapters that i decided on” (blanket yes)
+  - What changed: Item 220b, about 05:20 EST on 2026-11-04, from round 34b's PR-0619 and PR-0603. (1) FFX-2 only: the menu listed a greyed row, MIX NOT BUILT; by this call no menu of any FFX-2 chapter lists the Mix while MIX_PICKER is off (nothing unbuilt on screen). The engine still accepts a Mix (a test, an AI or a headless run can submit one), and flipping MIX_PICKER on brings the row back. (2) Chapter XII's Enemy Intent card printed a range backwards ('TIDUS 4,132-2,333'): the cause is FFX's (the preview's script-picker draw is a raw 31-bit number the roll policies did not answer with the median, so the low and high estimates priced the fourth spell on different victims), the printer is shared by both games' cards; the card now reads TIDUS 4,132-4,666 and AURON 2,066-2,333 at seed 1. Read in a page (A-1199): Rikku's rows in Trema and the Fallen Maesters are Attack, Item, Change with no Mix. Applied in the third code pass b98906229 (A-1200). Live in release 75 (A-1203).
+  - area ui · both games · adopted · delivery implemented · see [D-1454](#d-1454), [D-1469](#d-1469), [D-1470](#d-1470) · refines [D-1454](#d-1454)
+  - Source: The driver's call of 2026-11-04 about 05:20 EST (the queue line), made under his word of 2026-11-02 about 16:40 EST (D-1444) and his delegation …
+
+### 2026-11-06
+
+Friday · 8 decisions
+
+- <a id="d-1473"></a>**D-1473** — He says "ok continue on please im going to bed" and the delegation stands: release 75 goes on to its candidate, review, deploy and live check (both games, process)
+  - Bailey: “ok continue on please im going to bed”
+  - What changed: Item 220c, about 00:30 EST on 2026-11-06. A confirmation, not a new rule (like D-1443 and D-1450): the delegation of D-1423 and the blanket yes of D-1444 stand. The work under it: the release 75 fix, candidate, focused review, deploy and live check (A-1200 to A-1204; the deploy under the standing deploy words, D-931), and, with the words of 220d to 220h, the chapters program (A-1205 to A-1211).
+  - area process · both games · adopted · delivery implemented · see [D-1423](#d-1423), [D-1450](#d-1450), [D-1444](#d-1444), [D-1474](#d-1474) · refines [D-1423](#d-1423)
+  - Source: Bailey, 2026-11-06 about 00:30 EST, typed in the chat, verbatim: "ok continue on please im going to bed". Item 220c of the driver's list. Game case: …
+- <a id="d-1474"></a>**D-1474** — He asks for every unimplemented chapter to be implemented ("implement all unimplemented chapters please"): the driver first reads it as the chapters he decided on (D-1475), then he widens it to every researched boss (D-1477) (FFX-2 for the one remaining decided chapter; both games for the reading)
+  - Bailey: “implement all unimplemented chapters please”
+  - What changed: Item 220d, about 00:30 EST on 2026-11-06. The same request as D-1444 without the words 'that i decided on'. The survey (A-1205) found every chapter he decided on in words built and live except the Genshin / Guilty Gear version of the Wind Waker chapter (FFX-2 only; D-1225, D-1438), which waited on a look pick and a spend cap. The driver's reading is D-1475 (the decided chapters only); his answer to that reading is D-1477 (build the rest too). The program is D-1479 (A-1206 onward).
+  - area chapters · both games · adopted · delivery in progress · see [D-1444](#d-1444), [D-1445](#d-1445), [D-1475](#d-1475), [D-1477](#d-1477), [D-1479](#d-1479) · refines [D-1444](#d-1444)
+  - Source: Bailey, 2026-11-06 about 00:30 EST, typed in the chat, verbatim: "implement all unimplemented chapters please". Item 220d of the driver's list. Game …
+- <a id="d-1475"></a>**D-1475** — DRIVER CALL under his words, his to overturn: 220d is read as the chapters he has decided on; release 75 completes the Keeper and the Maesters with their painted bosses and the Genshin / Guilty Gear chapter is built next (its second half, candidates he never picked stay unbuilt, is superseded by D-1477) (FFX-2 for the toon chapter; both games for the reading)
+  - Bailey: “implement all unimplemented chapters please”
+  - What changed: Item 220e, about 00:45 EST on 2026-11-06. 220d is read as the chapters he has decided on (the same words as D-1444 without 'that i decided on'): release 75 completes the Spectral Keeper (FFX) and the Fallen Maesters (FFX-2) with their painted bosses, and the Genshin / Guilty Gear version (D-1225, D-1438; FFX-2 only) is built next; the look pick he never made becomes the driver's call, recorded as his to overturn; no Meshy spend beyond what he approved (hard rule 11); candidates he never picked stay unbuilt (hard rule 10, D-1039) and are asked in the morning report as plain chat. Superseded in part: his answer of about 00:55 EST (D-1477) builds the candidates too, and D-1476 lifts the Meshy cap. The painted bosses went live in release 75 (A-1203); the toon chapter is hidden Chapter 33 on origin/ch-anime (A-1207).
+  - area chapters · both games · adopted · delivery in progress · see [D-1474](#d-1474), [D-1444](#d-1444), [D-1477](#d-1477), [D-1476](#d-1476), [D-1225](#d-1225), [D-1438](#d-1438), [D-1039](#d-1039) · refines [D-1474](#d-1474)
+  - Source: The driver's call of 2026-11-06 about 00:45 EST (the queue line), made under his words of 2026-11-06 about 00:30 EST (D-1474) and his delegation …
+- <a id="d-1476"></a>**D-1476** — He lets the driver spend Meshy credits by its own judgment ("you can spend as much meshy credits as you see fit. use your own judgment."): D-1163's cap and D-1438's spend question are lifted (FFX-2 for the toon chapter; any chapter that needs models)
+  - Bailey: “you can spend as much meshy credits as you see fit. use your own judgment.”
+  - What changed: Item 220f, about 00:55 EST on 2026-11-06. Hard rule 11 (ask before spending money) is answered for Meshy credits only: no other spend, and no download, is covered. It lifts the 550-credit cap of D-1163 and the open spend question of D-1438 (the look target and a spend cap were to be asked before any spend). First use: the Genshin / Guilty Gear chapter's Valefor, one Meshy image-to-3D task of 35 credits (balance 4,440 to 4,405), logged in the lane's state file (A-1207).
+  - area art · FFX-2 · adopted · delivery in progress · see [D-1163](#d-1163), [D-1438](#d-1438), [D-1225](#d-1225), [D-1475](#d-1475) · refines [D-1438](#d-1438)
+  - Source: Bailey, 2026-11-06 about 00:55 EST, typed in the chat, verbatim: "you can spend as much meshy credits as you see fit. use your own judgment." Item …
+- <a id="d-1477"></a>**D-1477** — He answers the driver's reading with "and yes on all these too": build Penance, the Dark Aeons and the researched bosses he never picked (FFX and FFX-2 per boss); the second half of D-1475 is superseded
+  - Bailey: “and yes on all these too”
+  - What changed: Item 220g, about 00:55 EST on 2026-11-06. His words answer the driver's sentence, which was: "I read 'all unimplemented chapters' as the ones you decided on. I won't build Penance or the Dark Aeons, because you passed on them when you chose the Keeper and Maesters, and I won't build bosses you never picked. If you want those too, just say so." So 'yes on all these too' = build them too: Penance, the Dark Aeons and the researched bosses he never picked (FFX and FFX-2 per boss). It supersedes the second half of D-1475 and is the hard-rule-10 yes ('ideas need a yes') for these chapters. The program is D-1479; its plan is A-1206.
+  - area chapters · both games · adopted · delivery in progress · see [D-1475](#d-1475), [D-1474](#d-1474), [D-1479](#d-1479), [D-1039](#d-1039) · refines [D-1474](#d-1474)
+  - Source: Bailey, 2026-11-06 about 00:55 EST, typed in the chat, verbatim: "and yes on all these too", quoting the driver's sentence above. Item 220g of the …
+- <a id="d-1478"></a>**D-1478** — He says "keep going please im going to bed" and the delegation stands (both games, process)
+  - Bailey: “keep going please im going to bed”
+  - What changed: Item 220h, about 01:05 EST on 2026-11-06. A confirmation, not a new rule (like D-1443, D-1450 and D-1473): the delegation of D-1423 and the words of D-1474 to D-1477 stand. The work under it while he slept: release 75 live (A-1203, 07:03 EST), the chapters program and its first two waves (A-1206 to A-1211).
+  - area process · both games · adopted · delivery implemented · see [D-1423](#d-1423), [D-1473](#d-1473), [D-1450](#d-1450) · refines [D-1423](#d-1423)
+  - Source: Bailey, 2026-11-06 about 01:05 EST, typed in the chat, verbatim: "keep going please im going to bed". Item 220h of the driver's list. Game case: both …
+- <a id="d-1479"></a>**D-1479** — DRIVER CALL under his words, his to overturn: the chapters program: wave 1 is the Genshin / Guilty Gear chapter 33 (FFX-2), the six other Dark Aeons as chapter 34 (FFX) and Penance as chapter 35 (FFX), then a written plan for every other researched candidate in waves; every new chapter hidden behind a typed word
+  - Bailey: “implement all unimplemented chapters please”
+  - What changed: Item 220i, about 01:20 EST on 2026-11-06, under D-1474, D-1476 and D-1477. Wave 1: (a) the Genshin / Guilty Gear chapter as Chapter 33 (FFX-2 only; branch ch-anime from r75-boss-art; the look default A 'Genshin' with all three looks behind ?look=genshin|gg|blend so he picks by playing; word gear if the door rule passes; desktop only; a Meshy toon cast; a free Blender proportion pilot first, Meshy spend by judgment where it beats it, logged); (b) the six remaining Dark Aeons (Valefor, Ifrit, Ixion, Shiva, Bahamut, Anima; FFX only) as Chapter 34, research first from the game files; (c) Penance with its arms (FFX only) as Chapter 35, research first; (d) a written plan for every other researched candidate in waves. Every new chapter is hidden behind a typed word, uses only sourced numbers (rule 6), gets a paper preflight (rule 15) whose open picks are the driver's recommended options, recorded with the alternative; local art generation (rule 12, PyreflyComfyUI :8188 only) is ON for the program's options rounds and painted sets, one GPU job at a time. The plan (A-1206) lists chapters 34 to 63 in eight waves; wave 1 is A-1207 to A-1210, wave 2 (chapters 36 to 40) is A-1211. Nothing is merged or deployed.
+  - area chapters · both games · adopted · delivery in progress · see [D-1474](#d-1474), [D-1476](#d-1476), [D-1477](#d-1477), [D-1225](#d-1225), [D-1438](#d-1438), [D-1480](#d-1480) · refines [D-1477](#d-1477)
+  - Source: The driver's call of 2026-11-06 about 01:20 EST (the queue line), made under his words of 2026-11-06 (D-1474, D-1476, D-1477) and his delegation …
+- <a id="d-1480"></a>**D-1480** — DRIVER CALL under his words, his to overturn: Penance's look is option A, bronze as the game model, with painted depth added; the six Dark Aeon pose sets are accepted for chapter 34 as made, with their listed faults (FFX only)
+  - Bailey: “you make the executive decisions for the next few days. i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 220j, about 04:05 EST on 2026-11-06. Penance's look is option A 'bronze, as the game model' (the faithful reading of m344 and m345: an iris-shutter disc with a pearl core and two bronze gauntlet arms; the alternatives were B blackened steel and crimson, and C pearl and gilded gold), with painted depth added in the set. The six Dark Aeon pose sets, made from the Dark Yojimbo recipe, are accepted for the chapter-34 build as made (cast = a light state of the dark idle); the faults listed in the kit's MANIFEST: Anima's attack lattice, Ifrit's hidden face, Valefor more raven than peacock, Ixion's red horn glow, Shiva's attack 30 px over the floor. These are the driver's picks of candidates, not Bailey's approval of the pictures. Staged, not installed (A-1210).
+  - area art · FFX · adopted · delivery in progress · see [D-1479](#d-1479), [D-1423](#d-1423), [D-1477](#d-1477) · refines [D-1479](#d-1479)
+  - Source: The driver's call of 2026-11-06 about 04:05 EST (the queue line), made under his word of 2026-10-31 (D-1423, "you make the executive decisions for …
