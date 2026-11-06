@@ -53,3 +53,12 @@ Written 2026-11-06 by the ch-anime lane (code, part 1), before the first GPU job
 ## 5. Stop rule
 
 Two failed attempts on one failure, or "AI slop / uncanny" again, means a written method check (the survey's section 6 milestones M2 and the 250-credit hold) before a third try.
+
+## 6. Addendum, 2026-11-06 (after the first GPU jobs; details in `docs/handoff/ch-anime.md` section 6)
+
+The first GPU smoke by real keys (three looks, the idle, party and enemy rigs; a full fight to a win; a knock-out; a leave and re-enter) ran with console, page and request errors 0 and every material of all four figures `cel`. What the net caught and what it did not:
+
+- **Held:** the word opens prep, the cel and outline patches compile on the GPU, the lens lift is the 0.04 the idle rig was tipped 2.0 degrees to cancel (the hair top lands on the lab's number within .001), the three looks differ as written, the hull follows Valefor's wings, a downed girl lies down by her own `ko` clip, the Wind Waker chapter reads as before (materials `toon`, luma 135.0 against 135.6).
+- **Missed:** one prediction band (Yuna's hair top .406 against a band of .36 +- .04: the band was the idealised box's; the number is the crouched stance's and equals the lab's own still).
+- **Not caught by any unit test, found only in the browser:** the move advisor's NEXT BEST MOVE card overlaps Paine's legs by 48 px with the command menu open (a staging number the lab never measured against the HUD); the cast aura reads strong on a cel girl.
+- **Still owed:** the pixel A/B of the Wind Waker chapter against a build of the base (the seam's one unproven claim), a third re-entry for the memory trend, and the focused review's own jobs.
