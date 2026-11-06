@@ -82,6 +82,31 @@ describe('through the real PaintedActor: the half disc\'s top stays where the wh
     expect(topOf(half)).toBeCloseTo(topOf(disc('penance')), 2);
   });
 
+  it('the lift is for a standing painting: with the KO painting (a lying body, its own floor) shown, the dead half disc lies on the deck and does not hang 1.7 units above it', () => {
+    const lowest = (actor: InstanceType<typeof PaintedActor>): number => {
+      for (let i = 0; i < 3; i++) actor.update(1 / 60);
+      actor.updateMatrixWorld(true);
+      return Math.min(...actor.contentQuad().map((c) => c.y));
+    };
+    const staged = (): InstanceType<typeof PaintedActor> => {
+      const actor = new PaintedActor({ name: 'penance', worldHeight: 5.6, side: 'enemy', breathe: false, sway: false, life: false, interimYaw: false, shadow: false });
+      actor.adoptPoses({ idle: { ...painting('penance-split', 'idle', { baselineY: 633, scale: 0.6933 }), texture: new Texture() }, ko: { ...painting('penance-split', 'ko'), texture: new Texture() } }, 'idle');
+      actor.position.set(2.4, 0, -6.4);
+      return actor;
+    };
+    const lift = formLiftFor(PENANCE_SLOTS, 'penance-split', 5.6);
+    const bare = staged();
+    const perched = staged();
+    perched.setPerch(lift);
+    const standing = lowest(perched);
+    expect(standing - lowest(bare), 'standing: the whole lift').toBeCloseTo(lift, 3);
+    bare.setPose('ko', { immediate: true, force: true });
+    perched.setPose('ko', { immediate: true, force: true });
+    expect(lowest(perched), 'lying: no lift left').toBeCloseTo(lowest(bare), 3);
+    perched.setPose('idle', { immediate: true, force: true });
+    expect(lowest(perched), 'standing again (a revive): the lift is back').toBeCloseTo(standing, 3);
+  });
+
   it('a perch is replaced by the next one, goes back to 0 for a bad number, and a figure never perched is drawn as it always was', () => {
     const plain = topOf(disc('penance-split'));
     const half = disc('penance-split');

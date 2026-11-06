@@ -110,7 +110,7 @@ export abstract class PaintedActorEffects extends PaintedActorSizing {
   /**
    * Stand the painted plane `height` world units over the floor from now on (a form whose painting ends higher than the last one's feet: the Penance chapter's half disc, `data/ffx/penance-ids.ts#PENANCE_SPLIT_LIFT`). Taken at once:
    * the stage calls it under the form change's flash and fade. It rides in the same sum as the hover and the hop, so the shadow shrinks and fades with it and the painted box (`contentQuad`) moves with the plane.
-   * Not finite or negative: 0. The figure's group does not move, so the aim points the HUD reads (head, chest) keep their place on the figure's original height.
+   * The lift is for a standing painting's torn edge: it eases out with the crossfade into a lying (prone) painting such as the KO, which has its own floor, so the dead half settles on the deck. Not finite or negative: 0. The figure's group does not move, so the aim points the HUD reads (head, chest) keep their place on the figure's original height.
    */
   setPerch(height: number): void {
     this.perchHeight = Number.isFinite(height) && height > 0 ? height : 0;

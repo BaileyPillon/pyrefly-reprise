@@ -141,7 +141,7 @@ export class PaintedActor extends PaintedActorReaders {
 
     const hover =
       this.hoverHeight +
-      this.perchHeight + // r76: the half disc that stays where the whole one's top was (0 for every other figure)
+      this.perchHeight * (1 - prone) + // r76: the half disc that stays where the whole one's top was (0 for every other figure); a lying painting has its own floor, so the lift eases out with the KO crossfade
       (this.hoverBobAmp
         ? Math.sin(this.clock * this.hoverBobSpeed * TAU) * this.hoverBobAmp
         : 0);

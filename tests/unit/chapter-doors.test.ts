@@ -28,7 +28,7 @@ function type(doors: BoardDoors, word: string, start = 0, step = 100) {
 }
 
 describe('the table', () => {
-  it('holds the sixteen doors in the order they were added, each word a run of lower-case letters long enough to be typed by hand (three, for `yrp`, as Bailey picked it)', () => {
+  it('holds the eighteen doors in the order they were added, each word a run of lower-case letters long enough to be typed by hand (three, for `yrp`, as Bailey picked it)', () => {
     expect(WORDS).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', 'yojimbo', 'summon', 'keeper', 'infinito', 'yrp', 'waker', 'gear', 'darkaeon', 'judgment']);
     expect(WORDS[0]).toBe(DOOR_WORD);
     expect(new Set(WORDS).size).toBe(WORDS.length);

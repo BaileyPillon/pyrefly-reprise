@@ -2,7 +2,7 @@
 // Free (no credits), pure node. The inputs are the LOD1 files as Meshy made them (kept in the models store, never modified); the outputs are the files the chapter loads
 // (`public/models-exp/windwaker/anime/<id>.glb`, gitignored; `tools/ww-models.mjs record` then lists their size and sha256 in `tools/ww/ww-models.json`).
 //
-//   node tools/anime/cast.mjs --orig <dir with yuna.glb rikku.glb paine.glb> [--ww <public/models-exp/windwaker>] [--out <dir>] [--report]
+//   node tools/anime/cast.mjs --orig <dir with yuna rikku paine, as <id>.glb or <id>-lod1.glb> [--ww <public/models-exp/windwaker>] [--out <dir>] [--report]
 //
 // The recipes are driver picks (Bailey has not chosen the proportions): see docs/handoff/ch-anime.md, "Picks". `--report` prints the measures and writes nothing.
 import { existsSync, mkdirSync } from 'node:fs';
@@ -48,7 +48,8 @@ if (process.argv[1] && process.argv[1].replace(/\\/g, '/').endsWith('cast.mjs'))
   const out = typeof opt.out === 'string' ? opt.out : join(ww, 'anime');
   if (opt.report !== true) mkdirSync(out, { recursive: true });
   for (const id of Object.keys(RECIPES)) {
-    const orig = join(opt.orig, `${id}.glb`);
+    // The models store keeps the files as `<id>-lod1.glb`; a folder of plain `<id>.glb` works too.
+    const orig = [`${id}.glb`, `${id}-lod1.glb`].map((f) => join(opt.orig, f)).find((f) => existsSync(f)) ?? join(opt.orig, `${id}.glb`);
     const wwFile = join(ww, `${id}.glb`);
     if (!existsSync(orig) || !existsSync(wwFile)) { console.error(`missing ${orig} or ${wwFile}`); process.exit(1); }
     const { glb, measure, clips } = makeGirl(id, orig, wwFile);

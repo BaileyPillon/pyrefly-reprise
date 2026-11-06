@@ -378,8 +378,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
   SEYMOUR_FLUX_META, YUNALESCA_META, BRASKAS_FINAL_AEON_META,
   FFX2_BAHAMUT_META, FFX2_VEGNAGUN_SHUYIN_META,
   FFX2_LEBLANC_META, SEYMOUR_ANIMA_MACALANIA_META,
-  EVRAE_META,
-  YOJIMBO_META,
+  EVRAE_META, YOJIMBO_META,
   NATUS_META, // Chapter X (FFX), listed 2026-09-25
   FALLEN_AEONS_META, // Chapter XI (FFX-2), listed 2026-09-26
   SEYMOUR_OMNIS_META, // Chapter XII (FFX), listed 2026-09-25
@@ -393,6 +392,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
 
 /** Metadata for chapters registered but not listed (`./chapters-unlisted.ts`, the hidden experiments): found by id; `CHAPTER_META` stays one-to-one with the listed chapters. Listing one moves its record there. */
 export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [EXP_LEBLANC_META, EXPERIMENT_META, SINSPAWN_GUI_META, EXP_FAYTH_META, TOURIST_TRAP_META, VALEFOR_BESAID_META, BIRAN_YENKE_META, ANGRA_MAINYU_META, LAST_SUMMONING_META, SPECTRAL_KEEPER_META, FALLEN_MAESTERS_META, expYrpMeta(FFX2_BAHAMUT_META), EXP_WINDWAKER_META, EXP_ANIME_META, DARK_AEONS_META, PENANCE_META] as const; // the Leblanc preview (2026-10-06), the Experiment, Sinspawn Gui and Fayth (2026-10-10); Sin's two were listed 2026-09-29
+
 /** Look a chapter's pause-screen metadata up by id. `undefined` for an unknown id. */
 export function getChapterMeta(id: string): ChapterMeta | undefined {
   return CHAPTER_META.find((m) => m.id === id) ?? UNLISTED_CHAPTER_META.find((m) => m.id === id);
