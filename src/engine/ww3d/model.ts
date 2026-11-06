@@ -21,13 +21,10 @@ import { BossMotion, type BossPose } from './bossMotion.ts';
 import { capsuleFigure } from './capsule.ts';
 import { ClipRig, roleClips, windowsOfClips } from './clips.ts';
 import { FileCache, defaultIO, type LoaderIO } from './io.ts';
-import {
-  BODY_OFF_DEG, BOSS_HEIGHT, BOSS_HOVER, BOSS_YAW_DEG, FACE_OFF_DEG, WW_BOSS_ID, WW_CAST, bodyYaw, fitBox, modelUrl, rad,
-  type BoxData, type V3, type WwId,
-} from './layout.ts';
+import { WW_BOSS_ID, WW_CAST, WW_STAGING, bodyYaw, fitBox, modelUrl, rad, type BoxData, type V3, type WwId, type WwStaging } from './layout.ts';
 import { HeadTurn, readAt, stanceFacing, yawOffsetsOf } from './pose.ts';
-import { aimProps, attachProps, disposeProps, type Attached, type PropSwaps } from './props.ts';
-import { disposeToon, driveToon, toonify, type Channels, type ToonSet } from './toonify.ts';
+import { aimProps, attachProps, disposeProps, type Attached, type PropStyle, type PropSwaps } from './props.ts';
+import { disposeToon, driveToon, toonify, type Channels, type ToonSet, type ToonifyOptions } from './toonify.ts';
 import { advanceFlap, createWingUniforms, makeWingDepthMaterial, patchWingVertex, type WingUniforms } from './wing.ts';
 import type { ShaderLike } from './toon.ts';
 
@@ -46,6 +43,16 @@ export const CHEST_LOCAL: V3 = [0.03, 1.9, 0.5];
 /** How far a body lying down is lifted off the floor so it rests on it instead of sinking through (a share of the figure's height). */
 const LIE_LIFT = 0.12;
 
+/**
+ * **How a chapter shades its figures, when it is not the Wind Waker toon** (the hidden anime chapter, `./celify.ts`; FFX-2 only; optional, additive). Omitted, a model is made toon by `toonify` over the context's uniforms,
+ * exactly as before. `figure` receives the loaded scene, the figure it is, and the options the model decided (the wing flap's vertex hook and depth material for Valefor, whether it receives shadows) and returns the set the
+ * model drives; `props` is how its weapons are made and sized (`./props.ts`).
+ */
+export interface ModelShading {
+  readonly figure: (scene: Object3D, id: WwId, opts: ToonifyOptions) => ToonSet;
+  readonly props?: PropStyle;
+}
+
 /** What a model needs from the stage that is not its file. */
 export interface ModelContext {
   /** The toon uniforms (one set per look). */
@@ -54,6 +61,10 @@ export interface ModelContext {
   readonly swaps?: PropSwaps | undefined;
   /** Where the lens is (the idle rig's position): the girls' bodies and faces are turned toward it. */
   readonly camera: V3;
+  /** The chapter's staging numbers (default {@link WW_STAGING}, the Wind Waker chapter's own constants). */
+  readonly staging?: WwStaging;
+  /** How the figures are shaded (default the Wind Waker toon). */
+  readonly shading?: ModelShading;
 }
 
 export class WwModel {
@@ -79,6 +90,7 @@ export class WwModel {
   private headRise = 0;
   private readonly wing: { uniforms: WingUniforms } | null;
   private readonly camera: V3;
+  private readonly staging: WwStaging;
   private figureHeight: number;
   private baseYaw = 0;
   private lieAmount = 0;
@@ -97,6 +109,7 @@ export class WwModel {
     this.scene = scene;
     this.figureHeight = height;
     this.camera = ctx.camera;
+    this.staging = ctx.staging ?? WW_STAGING;
     const boss = id === WW_BOSS_ID;
     const byRole = roleClips(clips);
     const idle = byRole.get('idle');
@@ -113,7 +126,7 @@ export class WwModel {
     // the wing flap (Valefor's file is one static mesh): a vertex patch on every program and on the shadow's depth material
     const wu = boss && source === 'own' && clips.length === 0 ? createWingUniforms() : null;
     this.wing = wu ? { uniforms: wu } : null;
-    this.set = toonify(scene, ctx.uniforms, {
+    const shadeOpts: ToonifyOptions = {
       ...(wu
         ? {
             cacheKey: '-wing',
@@ -125,8 +138,9 @@ export class WwModel {
           }
         : {}),
       receive: !boss,
-    });
-    this.props = boss || source === 'capsule' ? { props: [], swapped: 0 } : attachProps(scene, id, ctx.uniforms, ctx.swaps); // after the box is measured (a sword must not change the fit)
+    };
+    this.set = ctx.shading && source === 'own' ? ctx.shading.figure(scene, id, shadeOpts) : toonify(scene, ctx.uniforms, shadeOpts); // a capsule is always the plain toon
+    this.props = boss || source === 'capsule' ? { props: [], swapped: 0 } : attachProps(scene, id, ctx.uniforms, ctx.swaps, ctx.shading?.props); // after the box is measured (a sword must not change the fit)
 
     this.root.name = `ww-${id}`;
     this.motion = boss ? new BossMotion() : null;
@@ -143,7 +157,7 @@ export class WwModel {
       this.rig = new ClipRig(scene, byRole, id, yawOffsets);
     } else this.rig = null;
     this.head = !boss && source === 'own' ? new HeadTurn(scene) : null;
-    this.baseYaw = boss ? rad(BOSS_YAW_DEG) : 0;
+    this.baseYaw = boss ? rad(this.staging.bossYawDeg) : 0;
     this.applyYaw();
     this.applyHover();
   }
@@ -232,7 +246,7 @@ export class WwModel {
   }
 
   /** The root yaw that points a girl's body `BODY_OFF_DEG` off the direction to the lens from `slot`. A model with no measured stance counts its stance as square (yaw 0). */
-  bodyYawAt(slot: V3, bodyOffDeg: number = BODY_OFF_DEG): number {
+  bodyYawAt(slot: V3, bodyOffDeg: number = this.staging.bodyOffDeg): number {
     return bodyYaw(slot, this.camera, this.stanceYaw ?? 0, bodyOffDeg);
   }
 
@@ -302,9 +316,9 @@ export class WwModel {
   update(dt: number, frozen = false): void {
     this.clock += frozen ? 0 : dt;
     this.rig?.update(dt, frozen);
-    if (this.motion) this.pose = this.motion.update(frozen ? 0 : dt, this.figureHeight / BOSS_HEIGHT);
+    if (this.motion) this.pose = this.motion.update(frozen ? 0 : dt, this.figureHeight / this.staging.bossHeight);
     this.applyYaw();
-    this.head?.apply(this.camera, FACE_OFF_DEG);
+    this.head?.apply(this.camera, this.staging.faceOffDeg, undefined, this.staging.headPitchFix);
     if (this.wing) advanceFlap(this.wing.uniforms, frozen ? 0 : dt, this.activity);
     this.applyHover();
   }
@@ -312,13 +326,14 @@ export class WwModel {
   /** Valefor floats about a metre up, bobs, pitches and rolls about her middle and lunges at her blows (`./bossMotion.ts`), and falls to the ground when she is down; the girls stand. */
   private applyHover(): void {
     if (this.id !== WW_BOSS_ID) return;
-    const k = this.figureHeight / BOSS_HEIGHT;
+    const k = this.figureHeight / this.staging.bossHeight;
+    const hover = this.staging.bossHover;
     const alive = this.aliveShare();
     const { pose } = this;
-    this.hoverGroup.position.y = (BOSS_HOVER * k + pose.bob) * alive;
+    this.hoverGroup.position.y = (hover * k + pose.bob) * alive;
     // the sway group turns about her middle (half her height plus the hover), then the lunge goes along her facing
     this.swayGroup.rotation.set(pose.pitch * alive, 0, pose.roll * alive);
-    this.pivot.set(0, BOSS_HOVER * k * alive + 0.5 * this.figureHeight, 0);
+    this.pivot.set(0, hover * k * alive + 0.5 * this.figureHeight, 0);
     this.swayGroup.position.copy(this.pivot).sub(this.pivot.clone().applyEuler(this.swayGroup.rotation));
     this.swayGroup.position.z += pose.forward * alive;
   }
@@ -362,8 +377,8 @@ export interface WwModels {
 }
 
 /** Start fetching and parsing the four model files now, beside the swappable pieces (the cache keeps the promises; `loadWwModels` then finds them under way). A failure is the cache's null, never a throw. */
-export function prefetchModels(files: FileCache, base: string, dir: string): Promise<unknown>[] {
-  return WW_CAST.map((id) => files.get(modelUrl(base, dir, id)));
+export function prefetchModels(files: FileCache, base: string, dir: string, staging: WwStaging = WW_STAGING): Promise<unknown>[] {
+  return WW_CAST.map((id) => files.get(modelUrl(base, dir, id, staging.files)));
 }
 
 /** Load the four models: each from its own file (`dir`), else the neutral capsule (a file that does not parse counts as missing). Every id has an entry; `capsules` says which are not their own, and each is said once to `log`. */
@@ -374,7 +389,7 @@ export async function loadWwModels(opts: LoadOptions): Promise<WwModels> {
   const capsules: WwId[] = [];
   await Promise.all(
     WW_CAST.map(async (id) => {
-      const own = await files.get(modelUrl(opts.base, opts.dir, id));
+      const own = await files.get(modelUrl(opts.base, opts.dir, id, opts.context.staging?.files));
       if (own) {
         models.set(id, new WwModel(id, await files.io.clone(own.scene), own.animations, opts.heights[id], 'own', opts.context));
         return;

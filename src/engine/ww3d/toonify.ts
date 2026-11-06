@@ -26,6 +26,14 @@ export interface ToonSet {
   readonly glow: IUniform<Vector4>;
   /** The figure's own aura shape cell (`uToonGlowShape`): where the two steps of the rim end on N.V. */
   readonly glowShape: IUniform<Vector2>;
+  /** What a style of shading adds to the set (the anime chapter's outline hulls, `./celify.ts`): driven with the channels and freed with the set. Absent for the Wind Waker toon. */
+  readonly extras?: SetExtras;
+}
+
+/** The parts of a set that are not materials of its entries (optional; additive). */
+export interface SetExtras {
+  drive?(c: Channels): void;
+  dispose?(): void;
 }
 
 export interface ToonifyOptions {
@@ -129,6 +137,7 @@ export function driveToon(set: ToonSet, c: Channels): void {
     if (c.rim.shape) set.glowShape.value.set(c.rim.shape[0], c.rim.shape[1]);
   }
   else set.glow.value.w = 0;
+  set.extras?.drive?.(c);
   const fading = c.opacity < BLEND_ON;
   for (const { material, base } of set.entries) {
     material.color.copy(base).multiply(c.colour);
@@ -152,6 +161,7 @@ export function disposeToon(set: ToonSet, ownGeometry: boolean): void {
   for (const { material } of set.entries) {
     material.dispose(); // the map is the file's, shared with the clones of it, and freed with its cache
   }
+  set.extras?.dispose?.();
   disposeSkeletonsOf(set.meshes);
   if (ownGeometry) for (const m of set.meshes) m.geometry.dispose();
 }

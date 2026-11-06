@@ -17,6 +17,7 @@ import { SPECTRAL_KEEPER_SCENE } from '../../src/data/ffx/spectral-keeper-ids.ts
 import { EXP_YRP_SCENE } from '../../src/data/yrp-ids.ts';
 import { DJOSE_CHAMBER_PLATE } from '../../src/data/ixion-plates.ts';
 import { EXP_WINDWAKER_SCENE } from '../../src/data/windwaker-ids.ts';
+import { EXP_ANIME_SCENE } from '../../src/data/anime-ids.ts';
 
 const BACKDROPS = new URL('../../public/art/backdrops/', import.meta.url);
 
@@ -28,10 +29,11 @@ describe('a scene key that is a code key names the backdrop file it draws', () =
     expect(backdropFileOf(undefined)).toBeUndefined();
     expect(backdropFileOf('constructor')).toBe('constructor'); // a key on Object.prototype is not an entry
     expect(backdropFileOf(SPECTRAL_KEEPER_SCENE)).toBe('zanarkand-dome'); // the hidden Spectral Keeper's stage draws Chapter II's Dome plate
-    expect(Object.keys(SCENE_BACKDROP_FILE)).toEqual([MIRROR_AEONS_SCENE, SPECTRAL_KEEPER_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE]);
+    expect(Object.keys(SCENE_BACKDROP_FILE)).toEqual([MIRROR_AEONS_SCENE, SPECTRAL_KEEPER_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE, EXP_ANIME_SCENE]);
     expect(backdropFileOf(EXP_YRP_SCENE)).toBe('bevelle-underground'); // the hidden 3D Bahamut is drawn over Chapter IV's own plate (ch-yrp)
     // the hidden Wind Waker chapter (FFX-2 only, Chapter 32) is the second code key: its stage is 3D with no plate of its own, and the board, the prep wash and the cutscenes show hidden chapter 24's (the Djose chamber's)
     expect(backdropFileOf(EXP_WINDWAKER_SCENE)).toBe(DJOSE_CHAMBER_PLATE);
+    expect(backdropFileOf(EXP_ANIME_SCENE)).toBe(DJOSE_CHAMBER_PLATE);
   });
 
   it('the battle preload warms the plate the stage opens on, not backdrops/mirror-aeons.png', () => {

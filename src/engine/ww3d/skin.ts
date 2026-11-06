@@ -31,18 +31,7 @@ import { PaintedActor } from '../PaintedActor.ts';
 import { paceRate } from '../pace.ts';
 import type { BeatListener, HitReport } from './beats.ts';
 import { BOSS_RIM, DEFAULT_RIM, RIM_SHAPE_BOSS, RIM_SHAPE_GIRL, fillAmount, flashStrength, glowLevel, rimStrength, spellRim, type Rgb } from './glow.ts';
-import {
-  BOSS_HOVER,
-  BOSS_SPOT,
-  PARTY_SLOTS,
-  WW_BOSS_ID,
-  WW_CAST,
-  WW_PARTY_IDS,
-  NATIVE_HEIGHT,
-  heightFactor,
-  type V3,
-  type WwId,
-} from './layout.ts';
+import { WW_BOSS_ID, WW_CAST, WW_PARTY_IDS, WW_STAGING, heightFactorIn, type WwId, type WwStaging } from './layout.ts';
 import type { HitFx } from './hitFx.ts';
 import { MOUTH_LOCAL, CHEST_LOCAL, type ModelSource, type WwModel, type WwModels } from './model.ts';
 import type { MoveFx } from './moveFx.ts';
@@ -100,11 +89,8 @@ const STONE = new Color(0.6, 0.6, 0.64);
 /** How close to its slot a girl stands before her weapons are aimed (metres), and the height of the girls' chests that her effects aim at. */
 const AT_SLOT = 0.35;
 const CHEST_SHARE = 0.55;
-/** Where a hit lands on a girl: this share of her model's own height (Yuna's 1.2 m gives 0.70 m, the chest the beams were aimed at in polish 1). Valefor's is `CHEST_LOCAL`. */
-const GIRL_CHEST = 0.58;
-
-/** Valefor's chest, the point the girls aim at: her spot at her hover plus 1.3 m (the lab's). */
-const BOSS_CHEST: V3 = [BOSS_SPOT[0], BOSS_HOVER + 1.3, BOSS_SPOT[2]];
+// Where a hit lands on a girl: a share of her model's own height (`WwStaging.girlChest`, 0.58: Yuna's 1.2 m gives 0.70 m, the chest the beams were aimed at in polish 1). Valefor's is `CHEST_LOCAL`.
+// Valefor's chest, the point the girls aim at: her spot at her hover plus 1.3 m (the lab's; `WwStaging.bossAim`).
 
 const approach = (from: number, to: number, tau: number, dt: number): number => from + (to - from) * (dt > 0 ? 1 - Math.exp(-dt / tau) : 1);
 
@@ -141,16 +127,22 @@ export interface WwSkinOptions {
   readonly fx: MoveFx;
   /** The burst a blow draws where it lands (the scene owns the object and advances it; the stage's shared impact effects are off, `SceneStaging.ownImpacts`). Without it a blow draws nothing of its own. */
   readonly hits?: HitFx;
+  /** The chapter's staging numbers (default {@link WW_STAGING}, the Wind Waker chapter's own constants). */
+  readonly staging?: WwStaging;
 }
 
 export class WwSkin {
   private readonly bound = new Map<WwId, Bound>();
   private readonly colour = new Color();
   private readonly emissive = new Color();
-  private readonly chest = new Vector3(...BOSS_CHEST);
+  private readonly staging: WwStaging;
+  private readonly chest: Vector3;
   private clock = 0;
 
-  constructor(private readonly opts: WwSkinOptions) {}
+  constructor(private readonly opts: WwSkinOptions) {
+    this.staging = opts.staging ?? WW_STAGING;
+    this.chest = new Vector3(...this.staging.bossAim);
+  }
 
   /**
    * What the shot director's beats tell the skin (`./beats.ts`, wired by the scene): an attack or a cast opening starts that clip on the figure that does it, a blow landing puts the attack's strike on it, and an
@@ -193,8 +185,8 @@ export class WwSkin {
   private burstAt(hit: HitReport): void {
     const b = this.bound.get(hit.targetId as WwId);
     if (!b || !this.opts.hits) return;
-    const at = b.id === WW_BOSS_ID ? b.model.worldPointOf(CHEST_LOCAL) : b.model.worldPointOf([0, NATIVE_HEIGHT[b.id] * GIRL_CHEST, 0]);
-    this.opts.hits.burst(at, { heavy: hit.heavy, hitIndex: hit.hitIndex }, b.actor.height * heightFactor(b.id));
+    const at = b.id === WW_BOSS_ID ? b.model.worldPointOf(CHEST_LOCAL) : b.model.worldPointOf([0, this.staging.nativeHeight[b.id] * this.staging.girlChest, 0]);
+    this.opts.hits.burst(at, { heavy: hit.heavy, hitIndex: hit.hitIndex }, b.actor.height * heightFactorIn(this.staging, b.id));
   }
 
   /** The ids that carry a model now, and whether it is the id's own file or the neutral capsule (the debug view's and the tests' read). */
@@ -247,15 +239,15 @@ export class WwSkin {
     hidePaintedFigure(actor);
     if (actor.shadow) actor.shadow.visible = false; // the sun's shadow map draws the shadow in this look
     const girl = (WW_PARTY_IDS as readonly string[]).indexOf(id);
-    if (girl >= 0) model.setYaw(model.bodyYawAt(PARTY_SLOTS[girl]!));
-    model.fitTo(actor.height * heightFactor(id));
+    if (girl >= 0) model.setYaw(model.bodyYawAt(this.staging.partySlots[girl]!));
+    model.fitTo(actor.height * heightFactorIn(this.staging, id));
     parts.inner.add(model.root);
     this.bound.set(id, { id, actor, model, parts, lie: actor.lifeState === 'down' ? 1 : 0, glow: 0, glowAge: 0, rim: id === WW_BOSS_ID ? BOSS_RIM : DEFAULT_RIM, castAt: null, act: 0, castHold: false, busy: false, aimed: model.weapons.length === 0 });
   }
 
   private follow(b: Bound, dt: number): void {
     const { actor, model, parts } = b;
-    model.fitTo(actor.height * heightFactor(b.id)); // the stage may re-size a figure after it is staged
+    model.fitTo(actor.height * heightFactorIn(this.staging, b.id)); // the stage may re-size a figure after it is staged
     if (actor.shadow) actor.shadow.visible = false; // the actor may switch its blob back on (it does for a fade); this look has none
 
     // fade: the actor's alpha, and the painted figure's dissolve (a sent fiend comes apart)
@@ -317,7 +309,7 @@ export class WwSkin {
 
   private aim(b: Bound): void {
     const girl = (WW_PARTY_IDS as readonly string[]).indexOf(b.id);
-    const slot = girl >= 0 ? PARTY_SLOTS[girl] : undefined;
+    const slot = girl >= 0 ? this.staging.partySlots[girl] : undefined;
     if (!slot) {
       b.aimed = true;
       return;

@@ -13,9 +13,10 @@
 
 import { AnimationMixer, Quaternion, Vector3, type AnimationClip, type Object3D } from 'three';
 import type { Role, Windows } from './wwSequencer.ts';
-import { headTurn, wrapAngle, FACE_OFF_DEG, HEAD_TURN_MAX_DEG, type V3 } from './layout.ts';
+import { headTurn, wrapAngle, FACE_OFF_DEG, HEAD_TURN_MAX_DEG, type HeadPitchFix, type V3 } from './layout.ts';
 
 const UP = new Vector3(0, 1, 0);
+const IDENTITY = new Quaternion();
 const tmpA = new Vector3();
 const tmpB = new Vector3();
 
@@ -116,8 +117,11 @@ export class HeadTurn {
     return this.head !== null && this.front !== null && this.head.parent !== null;
   }
 
-  /** Yaw the head so the face looks `faceOffDeg` off the direction to `camera`; call after the clip has been applied. Returns the turn applied, radians (0 when unavailable). */
-  apply(camera: V3, faceOffDeg: number = FACE_OFF_DEG, maxDeg: number = HEAD_TURN_MAX_DEG): number {
+  /**
+   * Yaw the head so the face looks `faceOffDeg` off the direction to `camera`; call after the clip has been applied. Returns the turn applied, radians (0 when unavailable). `pitchFix` (the anime chapter's; absent for the
+   * Wind Waker chapter, whose head is only yawed) then raises a head that looks down by more than `pitchFix.minPitchDeg` back to it, by at most `pitchFix.limitDeg`.
+   */
+  apply(camera: V3, faceOffDeg: number = FACE_OFF_DEG, maxDeg: number = HEAD_TURN_MAX_DEG, pitchFix?: HeadPitchFix): number {
     const head = this.head;
     const front = this.front;
     if (!head || !front || !head.parent) return 0;
@@ -131,6 +135,28 @@ export class HeadTurn {
     this.r.setFromAxisAngle(UP, delta);
     head.quaternion.copy(this.pq.invert().multiply(this.r.multiply(this.qw)));
     head.updateMatrixWorld(true);
+    if (pitchFix) this.raise(pitchFix);
     return delta;
+  }
+
+  /** Raise a head that looks down past `fix.minPitchDeg` toward it (the lab's `turnHead` tail): the smallest turn that does it, clipped to `fix.limitDeg`. */
+  private raise(fix: HeadPitchFix): void {
+    const head = this.head;
+    const front = this.front;
+    if (!head || !front || !head.parent) return;
+    const f = front.getWorldPosition(this.d).sub(head.getWorldPosition(this.p)).normalize();
+    const pitch = Math.asin(Math.max(-1, Math.min(1, f.y)));
+    const lo = (fix.minPitchDeg * Math.PI) / 180;
+    if (pitch >= lo) return;
+    const flat = tmpA.set(f.x, 0, f.z).normalize();
+    const want = flat.multiplyScalar(Math.cos(lo)).add(tmpB.set(0, Math.sin(lo), 0));
+    const q = this.r.setFromUnitVectors(f, want);
+    const angle = 2 * Math.acos(Math.min(1, Math.abs(q.w)));
+    const limit = (fix.limitDeg * Math.PI) / 180;
+    if (angle > limit) q.slerp(IDENTITY, 1 - limit / angle);
+    head.getWorldQuaternion(this.qw);
+    head.parent.getWorldQuaternion(this.pq);
+    head.quaternion.copy(this.pq.invert().multiply(q.multiply(this.qw)));
+    head.updateMatrixWorld(true);
   }
 }

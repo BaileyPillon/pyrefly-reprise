@@ -144,13 +144,25 @@ const MAKERS: Readonly<Record<PropName, (u: Uniforms) => Group>> = { pistol: mak
 /** The swapped files found, by prop name (`./swaps.ts`). */
 export type PropSwaps = Readonly<Partial<Record<PropName, Object3D>>>;
 
+/**
+ * How a chapter other than the Wind Waker's makes and sizes its weapons (the anime chapter, `./celify.ts`; FFX-2 only; optional, additive: omitted, every number and every call is as it was).
+ * `specs` are the girls' weapon specs (default {@link PROP_SPECS}); `swapScale` the scale of a weapon from a file (default 1: the files are made for a girl of about 1.2 m, and a 1.6 m girl takes 1.3); `shade`
+ * makes a weapon's object shaded in place of the Wind Waker toon (default `toonify`).
+ */
+export interface PropStyle {
+  readonly specs?: Readonly<Record<string, readonly PropSpec[]>>;
+  readonly swapScale?: number;
+  readonly shade?: (object: Object3D) => void;
+}
+
 /** The prop for `name`: the swapped file's clone (made toon, at scale 1) when there is one, else the procedural one. `swapped` says which. */
-export function chooseProp(name: PropName, uniforms: Uniforms, swaps: PropSwaps | undefined): { object: Object3D; swapped: boolean } {
+export function chooseProp(name: PropName, uniforms: Uniforms, swaps: PropSwaps | undefined, style?: PropStyle): { object: Object3D; swapped: boolean } {
   const file = swaps?.[name];
   if (file) {
     const object = file.clone(true);
     object.name = `prop:${name}`;
-    toonify(object, uniforms, { receive: false });
+    if (style?.shade) style.shade(object);
+    else toonify(object, uniforms, { receive: false });
     return { object, swapped: true };
   }
   return { object: MAKERS[name](uniforms), swapped: false };
@@ -183,19 +195,20 @@ export interface Attached {
 }
 
 /** Parent the girl's weapons to her hand bones (the model must be in its rest pose and not yet scaled by the fit's parents differently from how it will be drawn: the frame is in the bone's own space). */
-export function attachProps(model: Object3D, who: string, uniforms: Uniforms, swaps?: PropSwaps): Attached {
+export function attachProps(model: Object3D, who: string, uniforms: Uniforms, swaps?: PropSwaps, style?: PropStyle): Attached {
   const out: Object3D[] = [];
   let swapped = 0;
-  const specs = (PROP_SPECS as Readonly<Record<string, readonly PropSpec[] | undefined>>)[who] ?? [];
+  const specs = (style?.specs ?? (PROP_SPECS as Readonly<Record<string, readonly PropSpec[] | undefined>>))[who] ?? [];
+  const k = style?.swapScale ?? 1;
   for (const spec of specs) {
     const f = gripFrame(model, spec.hand);
     if (!f) continue;
-    const chosen = chooseProp(spec.name, uniforms, swaps);
+    const chosen = chooseProp(spec.name, uniforms, swaps, style);
     const prop = chosen.object;
     if (chosen.swapped) swapped++;
     const tilt = new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -MathUtils.degToRad(spec.tilt));
     prop.quaternion.copy(f.quat).multiply(tilt);
-    if (chosen.swapped) prop.scale.set(spec.mirrorSwapped ? -1 : 1, 1, 1);
+    if (chosen.swapped) prop.scale.set(spec.mirrorSwapped ? -k : k, k, k);
     else prop.scale.setScalar(spec.scale);
     prop.position.copy(new Vector3(0, 0, spec.grip).applyQuaternion(f.quat));
     prop.userData['spec'] = spec;

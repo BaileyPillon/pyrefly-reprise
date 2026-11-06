@@ -174,9 +174,12 @@ export function fitBox(box: BoxData, height: number, opts: { anchor?: readonly [
 
 const withSlash = (base: string): string => (base.endsWith('/') ? base : `${base}/`);
 
-/** The URL a figure's model is loaded from: `<base><dir>/<file>.glb` (`yuna.glb`, `rikku.glb`, `paine.glb`, `valefor.glb`). `dir` is `WW_MODEL_DIR` (`data/windwaker-ids.ts`). */
-export function modelUrl(base: string, dir: string, id: WwId): string {
-  return `${withSlash(base)}${dir}/${MODEL_FILE[id]}.glb`;
+/**
+ * The URL a figure's model is loaded from: `<base><dir>/<file>.glb` (`yuna.glb`, `rikku.glb`, `paine.glb`, `valefor.glb`). `dir` is `WW_MODEL_DIR` (`data/windwaker-ids.ts`). `files` is another chapter's file table
+ * (the anime chapter's girls are `anime/<id>`, `animeLayout.ts`); omitted, it is this chapter's own.
+ */
+export function modelUrl(base: string, dir: string, id: WwId, files: Readonly<Record<WwId, string>> = MODEL_FILE): string {
+  return `${withSlash(base)}${dir}/${files[id]}.glb`;
 }
 
 /** The weapons a file in the props folder may replace, and the temple pieces a file in the temple folder may replace. */
@@ -203,4 +206,67 @@ export function looksLikeGlb(bytes: ArrayBuffer | Uint8Array): boolean {
 /** The cast glow's strength over time: a swell while a figure holds a `cast` pose (seconds since it began), breathing between 0.35 and 0.75 of the peak. */
 export function castGlow(seconds: number): number {
   return 0.55 + 0.2 * Math.sin(seconds * 6.2) - 0.2 * Math.exp(-seconds * 2.5);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+// The staging as one table (the optional-config seam of the anime chapter)
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/**
+ * **Everything above that a second chapter on this engine needs to change, as one table** (the hidden anime chapter, `animeLayout.ts`, FFX-2 only; shared plumbing, additive). The models (`model.ts`) and the skin (`skin.ts`)
+ * read their numbers from the staging they are handed; **omitted, it is {@link WW_STAGING}, the Wind Waker chapter's own constants, so that chapter reads and draws exactly as it did** (`tests/unit/ww3d/staging.test.ts`
+ * pins every field against the constant it stands for).
+ */
+export interface WwStaging {
+  /** The party's slots (the active three, then the reserves) and Valefor's spot. */
+  readonly partySlots: readonly V3[];
+  readonly bossSpot: V3;
+  /** The models' native heights and the world heights they are fitted to, metres (`NATIVE_HEIGHT`, `WORLD_HEIGHT`). */
+  readonly nativeHeight: Readonly<Record<WwId, number>>;
+  readonly worldHeight: Readonly<Record<WwId, number>>;
+  /** The height the party's actors are staged at (a girl's share of it is her `worldHeight` over this) and Valefor's, metres. */
+  readonly partyHeight: number;
+  readonly bossHeight: number;
+  /** How high Valefor hovers at her staged height, metres. */
+  readonly bossHover: number;
+  /** The world point the girls aim their weapons at (Valefor's chest; the anime chapter aims a little nearer the lens so the weapons read across the picture instead of foreshortening into the depth). */
+  readonly bossAim: V3;
+  /** Which way they turn (degrees): the body off the direction to the lens, the face off it, Valefor's yaw about +Y. */
+  readonly bodyOffDeg: number;
+  readonly faceOffDeg: number;
+  readonly bossYawDeg: number;
+  /** The model file of each figure under the models folder, without `.glb`. */
+  readonly files: Readonly<Record<WwId, string>>;
+  /** Where on a girl a blow lands, as a share of her model's own height. */
+  readonly girlChest: number;
+  /** Raise a head the clip bows (the Meshy toon girls' idle bows the head about 30 degrees): absent, the head is only yawed, as the Wind Waker chapter's is. */
+  readonly headPitchFix?: HeadPitchFix;
+}
+
+/** A head that looks down by more than `minPitchDeg` below the horizon is raised toward it, by at most `limitDeg` (the anime lab's `headPitchMax` and `headPitchFix`). */
+export interface HeadPitchFix {
+  readonly minPitchDeg: number;
+  readonly limitDeg: number;
+}
+
+/** The Wind Waker chapter's staging: the constants above, unchanged. */
+export const WW_STAGING: WwStaging = {
+  partySlots: PARTY_SLOTS,
+  bossSpot: BOSS_SPOT,
+  nativeHeight: NATIVE_HEIGHT,
+  worldHeight: WORLD_HEIGHT,
+  partyHeight: PARTY_HEIGHT,
+  bossHeight: BOSS_HEIGHT,
+  bossHover: BOSS_HOVER,
+  bossAim: [BOSS_SPOT[0], BOSS_HOVER + 1.3, BOSS_SPOT[2]],
+  bodyOffDeg: BODY_OFF_DEG,
+  faceOffDeg: FACE_OFF_DEG,
+  bossYawDeg: BOSS_YAW_DEG,
+  files: MODEL_FILE,
+  girlChest: 0.58,
+};
+
+/** A figure's height as a share of the stage's height for its side, in `staging` ({@link heightFactor} for the Wind Waker chapter's). */
+export function heightFactorIn(staging: WwStaging, id: WwId): number {
+  return staging.worldHeight[id] / (id === WW_BOSS_ID ? staging.bossHeight : staging.partyHeight);
 }

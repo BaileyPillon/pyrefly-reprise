@@ -18,7 +18,8 @@ import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { WW_MODEL_DIR, WW_PROP_DIR, WW_TEMPLE_DIR } from '../../src/data/windwaker-ids.ts';
-import { MODEL_FILE, PROP_NAMES, TEMPLE_NAMES, WW_CAST } from '../../src/engine/ww3d/layout.ts';
+import { MODEL_FILE, PROP_NAMES, TEMPLE_NAMES, WW_CAST, WW_PARTY_IDS } from '../../src/engine/ww3d/layout.ts';
+import { ANIME_FILES } from '../../src/engine/ww3d/animeLayout.ts';
 import { isUnshippedPublicFile } from '../../tools/dist-filter.mjs';
 import { WW_MODELS_SRC, check, copyTree, readList, recordOf } from '../../tools/ww-models.mjs';
 
@@ -51,14 +52,15 @@ const wanted = (): string[] => [
   ...WW_CAST.map((id) => `${MODEL_FILE[id]}.glb`),
   ...PROP_NAMES.map((n) => `props/${n}.glb`),
   ...TEMPLE_NAMES.map((n) => `temple/${n}.glb`),
+  ...WW_PARTY_IDS.map((id) => `${ANIME_FILES[id]}.glb`), // the anime chapter's three girls (the LOD1 files of the Meshy toon cast; ch-anime, 2026-11-06): Valefor, the weapons and the temple are shared
 ].sort();
 
 describe('the committed list', () => {
   const list: Listed[] = readList();
 
-  it('names exactly the eleven files the chapter loads, each once, with a size and a sha256', () => {
+  it('names exactly the fourteen files the two chapters load (the Wind Waker chapter\'s eleven and the anime chapter\'s three girls), each once, with a size and a sha256', () => {
     expect(list.map((f) => f.path).sort()).toEqual(wanted());
-    expect(new Set(list.map((f) => f.path)).size).toBe(11);
+    expect(new Set(list.map((f) => f.path)).size).toBe(14);
     for (const f of list) {
       expect(f.bytes, f.path).toBeGreaterThan(1000);
       expect(f.sha256, f.path).toMatch(/^[0-9a-f]{64}$/);
@@ -73,7 +75,7 @@ describe('the committed list', () => {
   });
 
   it('is a list and nothing more: no model is in git', () => {
-    expect(JSON.parse(readFileSync(join(ROOT, 'tools', 'ww', 'ww-models.json'), 'utf8')).files).toHaveLength(11);
+    expect(JSON.parse(readFileSync(join(ROOT, 'tools', 'ww', 'ww-models.json'), 'utf8')).files).toHaveLength(14);
     const ignore = readFileSync(join(ROOT, '.gitignore'), 'utf8').split(/\r?\n/);
     expect(ignore).toContain('public/models-exp/');
   });
@@ -92,7 +94,7 @@ describe('check, recordOf and copyTree', () => {
     const dir = fakeFolder(files, ['rikku.glb']);
     writeFileSync(join(dir, 'valefor.glb'), Buffer.from('changed on disk'));
     expect(check(dir, files).sort()).toEqual(['differs valefor.glb', 'missing rikku.glb']);
-    expect(check(join(tmpdir(), 'ww-models-not-there'), files)).toHaveLength(11);
+    expect(check(join(tmpdir(), 'ww-models-not-there'), files)).toHaveLength(14);
   });
 
   it('checks the sha256 and not only the size: a copy of the right length with one byte flipped is "differs" (the review of 2026-11-02, mutant M16)', () => {
@@ -136,7 +138,7 @@ describe('the real files, where this disk has them (the review of 2026-11-02, mu
   // The committed list is only as good as the files it was recorded from. `ffx-local-guard` reads the list from git; nothing else checked that the models on a disk with them still match it, so a list recorded from a
   // stale export (or edited by hand) passed every test. A disk without the models (a clean worktree, a review copy) skips this and the tool's `ensure` says so at build time.
   const have = existsSync(WW_MODELS_SRC) && readList().every((f) => existsSync(join(WW_MODELS_SRC, f.path)));
-  it.runIf(have)('match the list: all eleven, with the recorded size and sha256', () => {
+  it.runIf(have)('match the list: all fourteen, with the recorded size and sha256', () => {
     expect(check(WW_MODELS_SRC)).toEqual([]);
   });
 });
@@ -150,7 +152,7 @@ describe('the command line', () => {
     const r = run('verify', '--dir', empty);
     expect(r.status).toBe(1);
     expect(r.stdout).toContain('missing yuna.glb');
-    expect(r.stdout).toContain('FAIL (11)');
+    expect(r.stdout).toContain('FAIL (14)');
   });
 
   it('goes on under --warn and says the chapter will draw capsules', () => {

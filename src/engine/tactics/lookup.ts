@@ -41,6 +41,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'ffx2-tourist-trap': 'ffx2', // the Tourist Trap (hidden chapter, 2026-10-14)
   'ffx2-valefor-besaid': 'ffx2', // Valefor at Besaid (hidden chapter, 2026-10-14)
   'exp-windwaker': 'ffx2', // Valefor at Besaid in Wind Waker style (hidden chapter, 2026-10-20; hidden chapter 24's fight)
+  'exp-anime': 'ffx2', // Valefor at Besaid in an anime style (hidden chapter, 2026-11-06; hidden chapter 24's fight)
   'ffx2-angra-mainyu': 'ffx2', // Angra Mainyu (hidden chapter, 2026-10-14)
   'exp-yrp-3d': 'ffx2', // Bahamut in 3D (hidden chapter, 2026-10-19; Chapter IV's fight)
   'ffx2-fallen-aeons': 'ffx2',
