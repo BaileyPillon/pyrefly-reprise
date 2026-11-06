@@ -508,7 +508,9 @@ describe('A9 — the both-games absence tests (rule 14, CHK-021)', () => {
       .filter((a) => a.statusEffects.some((s) => s.status === 'eject'))
       .map((a) => a.id)
       .sort();
+    // The hidden Farplane Cup's Shooting Star (Auron's Eject at 254, FFX-2 only, 2026-11-06) is a seventh setter: it is an enemy move of a hidden chapter, and every enemy of the two shipped chapters named below is still Eject-immune.
     expect(setters).toEqual([
+      'x2-auron-shooting-star',
       'x2-berserker-eject',
       'x2-logos-russian-roulette',
       'x2-mascot-pupu-platter',

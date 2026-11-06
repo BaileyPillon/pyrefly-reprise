@@ -22,6 +22,8 @@ export const KILL_ITEM_ID: Readonly<Record<number, string>> = {
   0x2001: 'x2-hi-potion',
   0x2002: 'x2-x-potion',
   0x2003: 'x2-mega-potion',
+  0x2005: 'x2-turbo-ether',
+  0x2007: 'x2-mega-phoenix',
   0x2008: 'x2-elixir',
   0x2009: 'x2-megalixir',
   0x2011: 'x2-grenade',

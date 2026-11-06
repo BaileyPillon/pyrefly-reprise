@@ -25,6 +25,7 @@ export const DOORS_IN_ORDER: ReadonlyArray<readonly [word: string, game: 'ff7' |
   ['darkaeon', 'ffx'], // the Dark Aeons' (hidden chapter 34, 2026-11-06)
   ['judgment', 'ffx'], // the hidden Penance chapter's (chapter 35, 2026-11-06)
   ['geosgaeno', 'ffx'], // the hidden Flooded Ways' (chapter 36, 2026-11-06)
+  ['duelist', 'ffx2'], // the hidden Farplane Cup's (chapter 38, 2026-11-06)
   ['beast', 'ffx'], // the hidden Sanctuary Keeper's (chapter 39, 2026-11-06)
 ];
 

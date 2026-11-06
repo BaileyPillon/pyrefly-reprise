@@ -74,5 +74,9 @@ export const KILL_REWARD_ROWS: Readonly<Record<string, FFX2KillReward>> = {
   "ffx2-via-infinito-floor-20-aranea/x2-aranea": row(1, 221, 4000, 1, 800, 255, [0x203b, 1, 0x9002, 1]), // Aranea
   "ffx2-via-infinito-floor-40-black-elemental/x2-black-elemental": row(1, 69, 770, 1, 380, 255, [0x0000, 0, 0x0000, 0]), // Black Elemental
   "ffx2-via-infinito-floor-60-concherer/x2-concherer": row(1, 232, 6000, 1, 1200, 255, [0x0000, 0, 0x900e, 1]), // Concherer
+  // The hidden Farplane Cup (the Fiend Arena fighters, RE note re-ffx2-farplane-cup §4.1): EXP, Gil, AP and the drop byte are the rows'. The common slot is the row's; the rare slot (Bushido Lore 0x9063, Sword Lore 0x9062, Arcane Lore 0x9064) has no item in this repo's tables, so it is 0 (rule 6).
+  "ffx2-farplane-cup-1-auron/x2-cup-auron": row(1, 311, 1600, 1, 900, 255, [0x2007, 2, 0x0000, 0]), // Auron
+  "ffx2-farplane-cup-2-tidus/x2-cup-tidus": row(1, 317, 1500, 1, 750, 255, [0x2002, 2, 0x0000, 0]), // the masked name
+  "ffx2-farplane-cup-3-seymour/x2-cup-seymour": row(1, 319, 1300, 1, 1000, 255, [0x2005, 1, 0x0000, 0]), // Seymour
   "ffx2-via-infinito-floor-80-chac/x2-chac": row(1, 239, 2200, 1, 750, 255, [0x0000, 0, 0x9012, 1]), // Chac
 };

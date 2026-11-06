@@ -26,7 +26,8 @@ describe('the data reaches every unit', () => {
     }
     // The hidden Fallen Maesters' four bodies (motion sets 0x1044, 0x1084, 0x109b and 0x1058 in the RE note) have no damage-clip frame counts in the repo yet (RE Q14: the frame table was not read for them), so the
     // engine keeps today's 2 s / 3 s window on them, as it does on the Bulwarks; this list shrinks when `MONSTER_MOTION_SET` and `MONSTER_CLIP_FRAMES` gain their rows.
-    expect(missing.sort()).toEqual(['bulwark-l', 'bulwark-r', 'x2-aranea', 'x2-black-elemental', 'x2-chac', 'x2-concherer']);
+    // The hidden Farplane Cup's three duelists (rows 311, 317 and 319; FFX-2 only, 2026-11-06) are in the same position: their motion sets are not in the frame table yet.
+    expect(missing.sort()).toEqual(['bulwark-l', 'bulwark-r', 'x2-aranea', 'x2-black-elemental', 'x2-chac', 'x2-concherer', 'x2-cup-auron', 'x2-cup-seymour', 'x2-cup-tidus']);
   });
 });
 

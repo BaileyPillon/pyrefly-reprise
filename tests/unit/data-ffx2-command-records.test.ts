@@ -94,6 +94,9 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   // The hidden Fallen Maesters' fifteen rows (Aranea's three, the Black Elemental's five, Concherer's four, Chac's three: monmagic 0x4003 to 0x41dd and the party rows 0x304b, 0x3170, 0x3171) are the RE note's, pinned
   // against their own numbers-only fixture (tests/fixtures/parity/ffx2/fallen_maesters_rows.json, tests/unit/chapters/fallen-maesters-data.test.ts).
   if (label.startsWith('x2-aranea-') || label.startsWith('x2-black-elemental-') || label.startsWith('x2-concherer-') || label.startsWith('x2-chac-')) return;
+  // The hidden Farplane Cup's thirty-three rows (Auron's seven, Tidus's eight, Seymour's eighteen: monmagic 0x4000 to 0x4221, the party rows 0x3070 to 0x30bc and 0x3177, the item rows 0x2002, 0x2003, 0x2038 and 0x203f) are the RE note's, pinned
+  // against their own numbers-only fixture (tests/fixtures/parity/ffx2/farplane_cup_rows.json, tests/unit/chapters/farplane-cup-data.test.ts).
+  if (label.startsWith('x2-auron-') || label.startsWith('x2-tidus-') || label.startsWith('x2-seymour-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();
   if (!row) return;
