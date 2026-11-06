@@ -20,8 +20,9 @@ export const PENANCE_RIGHT_ARM_ID = 'penance-right-arm' as const;
 export const PENANCE_LEFT_ARM_ID = 'penance-left-arm' as const;
 
 /**
- * The paintings' keys (`public/art/characters/<key>/`): Penance whole (phase 1), Penance with the lower half gone (phase 2), and one arm per side (the left is the right's mirror image, made when the
- * set is installed). **None is painted yet** (the stage draws its boss-silhouette stand-in); the keys are fixed here so the paintings drop in without a code change.
+ * The paintings' keys (`public/art/characters/<key>/`): Penance whole (phase 1), Penance with the lower half gone (phase 2), and one arm per side. **All four are painted** (r76 art install, the driver's picks under
+ * Bailey's delegation: `docs/handoff/r76-art-install.md`): the Left Arm's set is a byte copy of the Right Arm's, not a mirror (the poses lean toward the party in world space, which a mirror would reverse).
+ * The split idle's sidecar carries `scale` 0.6933 (its baseline 633 over the whole disc's 913), so the half disc is drawn at the whole disc's pixel scale; {@link PENANCE_SPLIT_LIFT} keeps its top where the whole disc's was.
  */
 export const PENANCE_SPRITES = {
   whole: 'penance',
@@ -29,6 +30,15 @@ export const PENANCE_SPRITES = {
   rightArm: 'penance-arm-right',
   leftArm: 'penance-arm-left',
 } as const;
+
+/**
+ * The Separation's stage lift, as a fraction of Penance's world height (FFX only; r76 art install; the driver's call under Bailey's delegation, his to overturn). The engine plants a painting's lowest opaque row on
+ * the floor, and the half disc's lowest row (its torn edge, `baselineY` 633) is 280 rows above the whole disc's (the rim's bottom, 913) at the same pixel scale: left alone, the half that stays would settle
+ * 280 / 913 = 30.7 percent of the figure's height lower than the whole disc's centre (about 1.7 world units at the stage's 5.6), which reads as the whole body dropping. The scene's `formLifts` names this under
+ * `PENANCE_SPRITES.split`, and the stage stands the plane that much higher while that painting is up, so the upper half stays exactly where it was and the lower half is what is gone
+ * (`tests/unit/chapters/penance-art-r76.test.ts` re-derives it from the two idles' sidecars where the art is installed). The research gives the lower body as hidden at the Separation and no height for it (RE 5.2).
+ */
+export const PENANCE_SPLIT_LIFT = (913 - 633) / 913;
 
 /** AI script ids (registered by `battle/ffx/ai/penance.ts`). */
 export const PENANCE_SCRIPT = 'penance' as const;

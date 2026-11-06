@@ -10419,6 +10419,381 @@
     "mtime": "2026-11-03T07:25:01.752Z",
     "delegated": "2026-11-03"
    }
+  },
+  "driver:2026-11-06-dark-aeons-penance-art (items 220i and 220j, delegated by Bailey)": {
+   "words": "Bailey, 2026-11-06 ~00:30 EST: \"implement all unimplemented chapters please\"; ~00:55 EST: \"yes on all these too\" (building Penance, the Dark Aeons and every researched boss he never picked); 2026-10-31: \"you make the executive decisions for the next few days. i'll go with all of your recommendations.\"",
+   "decision": "items 220i (local art generation ON for the chapters program) and 220j (Penance, look A \"bronze, as the game model\", the driver's pick) of the driver's list, under the delegation of 2026-10-31 and 2026-11-06; the D-number is owed by the records pass",
+   "note": "DRIVER CALL, delegated by Bailey; not Bailey's own approval of the pictures. The paintings of the hidden FFX Dark Aeons (chapter 34, FFX only: Dark Valefor, Ifrit, Ixion (one set serves both of his fights), Shiva, Bahamut and Anima, each idle attack cast hurt ko and idle@2x; six turn-list faces and a copy of Dark Ixion's for his second fight; the pause plate) and of the hidden FFX Penance (chapter 35, FFX only: the whole disc, the disc with its lower half gone, the Right Arm and the Left Arm, a byte copy of the Right Arm's set, each idle attack cast hurt ko and idle@2x; three turn-list faces; the pause plate), made 2026-11-06 in D:/Tools/pyrefly-scratch/2026-11-06/art-w1 (stage/MANIFEST.md, stage/provenance.json): the Dark Aeons image to image from the player aeon's own painting graded dark and cool (the Dark Yojimbo and Magus Sisters recipe) with an IP-Adapter on the dark idle for the poses and a light-state cast, the Penance disc a lit render of the game model painted over, the arm painted once; the plates are composites of existing backdrops and the idles. Each pin is the sha256 of the staged file, which is the candidate byte for byte. New files, nothing replaced, so nothing was archived. The chapter cards and thumbnails are not made (read by no code until the board lists the chapters).",
+   "public/art/characters/dark-anima/attack.png": {
+    "sha256": "29de04eeec0797b635e142f405fc0a483ea2094a2a67b8e68e782395468dd3aa",
+    "mtime": "2026-11-06T08:59:08.074Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-anima/cast.png": {
+    "sha256": "04ca9c2113fde78818020b751376f606c6693f8c7046907adfb3b3945ba9327a",
+    "mtime": "2026-11-06T08:51:24.713Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-anima/hurt.png": {
+    "sha256": "43afd133786978b1abe7da3adff07b6ca4479ab4116845596fd1e6bc7f736b8b",
+    "mtime": "2026-11-06T09:09:38.172Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-anima/idle.png": {
+    "sha256": "aa3ab08322285ad203b1582639bbaaa72eb4760287d3f9bc9404cc8f8cefe527",
+    "mtime": "2026-11-06T08:54:41.302Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-anima/idle@2x.png": {
+    "sha256": "85cd95a89bc0c623c2e84301947c7af9a9edf1b4854d8fc2baad71c7f04831dc",
+    "mtime": "2026-11-06T09:10:30.374Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-anima/ko.png": {
+    "sha256": "447ae3d59b9e51b369e4b2ab50ab321bb8a10dc219cc65a299b651b3ca006b9e",
+    "mtime": "2026-11-06T09:09:41.522Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-bahamut/attack.png": {
+    "sha256": "1f81d58048d536ffb50373f9150ccb54d6cb3f90c7c2ab7d639ed57af1453766",
+    "mtime": "2026-11-06T09:06:47.944Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-bahamut/cast.png": {
+    "sha256": "4eb93ddd22acffc7a8f54972ee1a6cf70de52780a7888809c31ccb78dadfb13d",
+    "mtime": "2026-11-06T09:06:55.922Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-bahamut/hurt.png": {
+    "sha256": "4e32839546c73664d2c52da4c2f8d4604b06d354d33b39039f0f8ea6b4e25312",
+    "mtime": "2026-11-06T09:06:51.510Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-bahamut/idle.png": {
+    "sha256": "faaf132f6eb575da6048b8e410934bb0f2b3cd5fb29d3936116aef62817f28f7",
+    "mtime": "2026-11-06T09:06:44.246Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-bahamut/idle@2x.png": {
+    "sha256": "45d3ea4ca5c5e7e2b0ba147b882a746d7d789b5af81ecd6f82358e8b42a543b1",
+    "mtime": "2026-11-06T09:10:23.787Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-bahamut/ko.png": {
+    "sha256": "243ae9fe6db50ed94acb333a6f223cf51bc5ecc24af8e4b4f15a9e2f4dc673a6",
+    "mtime": "2026-11-06T09:06:54.855Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-ifrit/attack.png": {
+    "sha256": "3d0d1dba054c84ab2642c74b823ce6d638b9a051f82e6df2b0e8e7c0432dc802",
+    "mtime": "2026-11-06T08:53:51.618Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-ifrit/cast.png": {
+    "sha256": "a5b6449fc99748e6e771e3459b49735b8602db4eafcc9c80e060c503bb201c1d",
+    "mtime": "2026-11-06T08:38:59.814Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-ifrit/hurt.png": {
+    "sha256": "141230a2ecbb3f44e83fb5e6b513d93742d9d5bb3a2a21891f2fc2067cbdbe6a",
+    "mtime": "2026-11-06T08:55:22.872Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-ifrit/idle.png": {
+    "sha256": "baab93427bf3ac178d75ccec1337d75c7e75601574798045f7ce550a93e93aa1",
+    "mtime": "2026-11-06T08:53:46.148Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-ifrit/idle@2x.png": {
+    "sha256": "e405db6904f56b72b095c6099eb3cd97afc6b473d02792a1c0b4f60ac1e96434",
+    "mtime": "2026-11-06T09:09:56.608Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-ifrit/ko.png": {
+    "sha256": "3e32b327b98c2b0f62cce0f939be60bbbfb98b11329f83fd7574a669f05f7a9e",
+    "mtime": "2026-11-06T08:54:01.925Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-ixion/attack.png": {
+    "sha256": "fcecbcf72c1da53c5f749a020052b111d043e8cc06f440a14526a6fd5ff15c40",
+    "mtime": "2026-11-06T09:09:24.738Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-ixion/cast.png": {
+    "sha256": "e300d3f4b8bf44c3a60fa4a42f409f324cf6da25470abad87946535fd49fa130",
+    "mtime": "2026-11-06T08:51:20.768Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-ixion/hurt.png": {
+    "sha256": "9ca80eb06e82a678d35d3f34ed0cc4b63a938422a191b9105d41a90b7d1cd9b8",
+    "mtime": "2026-11-06T08:58:50.076Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-ixion/idle.png": {
+    "sha256": "5a9b36b4f0e34b916be757b179cc2bcbe4686b803f472ce818b8d2294e0e24da",
+    "mtime": "2026-11-06T08:54:26.260Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-ixion/idle@2x.png": {
+    "sha256": "f4e4f39573abd5dc90918e34d122e13d982be172a774d73a7fe7aec08d3c7e92",
+    "mtime": "2026-11-06T09:10:10.064Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-ixion/ko.png": {
+    "sha256": "dff80b0de525a824c597be3449e20b475450eb6d30588b2b87bdccd04f90307a",
+    "mtime": "2026-11-06T09:09:27.947Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-shiva/attack.png": {
+    "sha256": "5512b5e9b6d504b4394ad72e78411c48e6c3e7edcfeeed0a735c685cce315d7d",
+    "mtime": "2026-11-06T09:07:19.420Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-shiva/cast.png": {
+    "sha256": "9348eeb3194e9938f889aa9acde9a2f0dab3d5f566d917c8ec901d069fc2eca1",
+    "mtime": "2026-11-06T09:07:27.078Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-shiva/hurt.png": {
+    "sha256": "404ebbedfb07f37fb0b61d6b6c23f39f12737902e668b57c7f1a5cc75f1f2673",
+    "mtime": "2026-11-06T09:07:22.786Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-shiva/idle.png": {
+    "sha256": "cbd9e33e777416cff787131eab439ccce613b57e9a8805cc9439398baa790229",
+    "mtime": "2026-11-06T09:07:15.819Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-shiva/idle@2x.png": {
+    "sha256": "6499474815c75dc7be4b9574433a2420d7c19d4f3d6e90317c5f712a20debe7c",
+    "mtime": "2026-11-06T09:10:16.213Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-shiva/ko.png": {
+    "sha256": "ac4f83f23a7ccb382009157433534d5841b2bf2045c0de7e98a105366c05510d",
+    "mtime": "2026-11-06T09:07:26.111Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-valefor/attack.png": {
+    "sha256": "e111de01359a60b9c0044f92846c4f716ab3623b9d114fc89619116aa27da3ca",
+    "mtime": "2026-11-06T09:11:56.105Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-valefor/cast.png": {
+    "sha256": "0aa7544fbd4a9055cfdc1c2579ffdcf378dec396d042c2920726ce2012f20c5e",
+    "mtime": "2026-11-06T08:51:22.097Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-valefor/hurt.png": {
+    "sha256": "bb1855ba20405f2fbe7cfe0ee1d702673ca2785fff86464f0b554ae7970fc776",
+    "mtime": "2026-11-06T09:11:55.007Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-valefor/idle.png": {
+    "sha256": "e34b3f695b841547325258d919e4a67f9c5832c2f79eb3051dce0c247eedfb3b",
+    "mtime": "2026-11-06T08:54:31.501Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-valefor/idle@2x.png": {
+    "sha256": "2d5b69dfcd033c98cad79c84ecc1290c4e06eb5a7867aa7f904b62c6d02559b0",
+    "mtime": "2026-11-06T09:10:03.377Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/dark-valefor/ko.png": {
+    "sha256": "0a664ca97e7d9f3ce80c918bd5fd9ec84a56f8d8ceca06a48aaa914de4fab604",
+    "mtime": "2026-11-06T09:11:55.486Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-arm-left/attack.png": {
+    "sha256": "53e70efc39f2f01b231e2fa92712d6822304ebf0d5135dbf295d1faf65762b4a",
+    "mtime": "2026-11-06T09:43:39.927Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-arm-left/cast.png": {
+    "sha256": "2b8d644c0e4f11628fbd4b7fd549b3f1a00a3fc47b41edb06b30ded4850b7cb0",
+    "mtime": "2026-11-06T09:43:41.586Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-arm-left/hurt.png": {
+    "sha256": "520362f5d4592e98a9dbc7a661e0fc81365c816e8a550fa958a30f4503140989",
+    "mtime": "2026-11-06T09:43:40.160Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-arm-left/idle.png": {
+    "sha256": "2f484706270175bef48be815a7d656593c535446b879f31da3a7dcd5c31079c8",
+    "mtime": "2026-11-06T09:43:39.698Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-arm-left/idle@2x.png": {
+    "sha256": "bd260c149fda17ec44822fe95a7968df6ea037a8a8ecda3556efec1c6c981bd7",
+    "mtime": "2026-11-06T09:45:51.601Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-arm-left/ko.png": {
+    "sha256": "84e184424a92d55d4a156b225e1a32555ddad0d374197f6153e3a01ccd8494fb",
+    "mtime": "2026-11-06T09:43:40.410Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-arm-right/attack.png": {
+    "sha256": "53e70efc39f2f01b231e2fa92712d6822304ebf0d5135dbf295d1faf65762b4a",
+    "mtime": "2026-11-06T09:43:39.927Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-arm-right/cast.png": {
+    "sha256": "2b8d644c0e4f11628fbd4b7fd549b3f1a00a3fc47b41edb06b30ded4850b7cb0",
+    "mtime": "2026-11-06T09:43:41.586Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-arm-right/hurt.png": {
+    "sha256": "520362f5d4592e98a9dbc7a661e0fc81365c816e8a550fa958a30f4503140989",
+    "mtime": "2026-11-06T09:43:40.160Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-arm-right/idle.png": {
+    "sha256": "2f484706270175bef48be815a7d656593c535446b879f31da3a7dcd5c31079c8",
+    "mtime": "2026-11-06T09:43:39.698Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-arm-right/idle@2x.png": {
+    "sha256": "bd260c149fda17ec44822fe95a7968df6ea037a8a8ecda3556efec1c6c981bd7",
+    "mtime": "2026-11-06T09:45:51.601Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-arm-right/ko.png": {
+    "sha256": "84e184424a92d55d4a156b225e1a32555ddad0d374197f6153e3a01ccd8494fb",
+    "mtime": "2026-11-06T09:43:40.410Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-split/attack.png": {
+    "sha256": "24f72b398dd3b8cb976553228a141356cda0e6104ff73cfd2e6339820926b399",
+    "mtime": "2026-11-06T09:58:58.498Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-split/cast.png": {
+    "sha256": "c1fac8d1c436c2f650bc6d239d70096a2e0a459d7101f139a3366f3a6dedc715",
+    "mtime": "2026-11-06T09:59:07.333Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-split/hurt.png": {
+    "sha256": "43d12baa0d87f28df133154b467a38ebb9e808af86b85ff7d513100aa4033685",
+    "mtime": "2026-11-06T09:58:58.906Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-split/idle.png": {
+    "sha256": "8a1f86a0c087510e7b9c17101520299ab77b89e52d5157ca0d963176a4f5b7bd",
+    "mtime": "2026-11-06T09:58:58.036Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-split/idle@2x.png": {
+    "sha256": "daaeb8dbb4fa9a3404beafd1b25491a087d71ad1e9de28979d4499e8e8a78a83",
+    "mtime": "2026-11-06T09:59:23.264Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance-split/ko.png": {
+    "sha256": "118fd2159fef25000bede827acce1e7cf07c3257a8f8d0e606c1d33841ee71b0",
+    "mtime": "2026-11-06T09:58:59.399Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance/attack.png": {
+    "sha256": "1897b981a2b8428be224a761faa26fd5b3f098389129ba9108a3dc79fa2186c5",
+    "mtime": "2026-11-06T09:58:55.429Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance/cast.png": {
+    "sha256": "486ff65c9ca05cc813c95c3f3f5d54fb57dcc7238b07d862b58726b15f28d078",
+    "mtime": "2026-11-06T09:59:06.408Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance/hurt.png": {
+    "sha256": "b6a0acbeff804a01e8d7b92d54291b11562498740b65a42dc78af78807b3dd27",
+    "mtime": "2026-11-06T09:58:56.161Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance/idle.png": {
+    "sha256": "01537a7b728eed4f139b206fff818fa923bcb36f19a4a6aa0356fa4a8a24d796",
+    "mtime": "2026-11-06T09:58:54.804Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance/idle@2x.png": {
+    "sha256": "f7a085d264e0e34742088a1990d11b4a66877b4c46e7865e1e5f25c613f9ae82",
+    "mtime": "2026-11-06T09:59:17.589Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/characters/penance/ko.png": {
+    "sha256": "ebcb08aef8c9c16776bff148c7af8035c280d24561318be1e6907dc99b31dde6",
+    "mtime": "2026-11-06T09:58:56.912Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/pause/ch34-dark-aeons.2x.webp": {
+    "sha256": "b09454a53f79523f30f54c2b22a5b98b46ffc0d0f4a4a484b947e562cee83440",
+    "mtime": "2026-11-06T09:46:32.749Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/pause/ch34-dark-aeons.png": {
+    "sha256": "f031db6875682472d25153198295288a63b3f17e399d56a7e92c14879ba0d609",
+    "mtime": "2026-11-06T09:46:31.119Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/pause/ch35-penance.2x.webp": {
+    "sha256": "64ee379ff5ee682f8940b7dd5ba5fa38c2e324b866f867f8f3a26958b4701dd3",
+    "mtime": "2026-11-06T09:59:43.467Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/pause/ch35-penance.png": {
+    "sha256": "96af9dd3ce095417c292d17595421b7690043ea21e2a425f9da1cb6e6a1a94cf",
+    "mtime": "2026-11-06T09:59:42.128Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/portraits/dark-anima.png": {
+    "sha256": "42fb072c0cb47549563a9a57806c0717bdb53a643e3bca573f54210380626263",
+    "mtime": "2026-11-06T09:40:35.807Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/portraits/dark-bahamut.png": {
+    "sha256": "555d827b01fe570c90bc8fdf6d85e9dbf7833ee4a505c5a8e3e30fecce67338a",
+    "mtime": "2026-11-06T09:40:35.438Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/portraits/dark-ifrit.png": {
+    "sha256": "364137e2e4e6476b72a6bc31a89fccbeb447635612ac5c0c9223621614688849",
+    "mtime": "2026-11-06T09:40:34.340Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/portraits/dark-ixion-2.png": {
+    "sha256": "f4a6c79b099127ed57f9b8c086527aee86921e5bd30f7285440ddbc5d3ef2e36",
+    "mtime": "2026-11-06T09:40:34.703Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/portraits/dark-ixion.png": {
+    "sha256": "f4a6c79b099127ed57f9b8c086527aee86921e5bd30f7285440ddbc5d3ef2e36",
+    "mtime": "2026-11-06T09:40:34.703Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/portraits/dark-shiva.png": {
+    "sha256": "280d259051a776446fec076132bfe9c561fa0f0c76dc4716b0bf8932ffe487dc",
+    "mtime": "2026-11-06T09:40:35.072Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/portraits/dark-valefor.png": {
+    "sha256": "dff0ff900f6ffd7559bbf33ddac5b27c5b82419100fe9b3368ba86f71cfb4753",
+    "mtime": "2026-11-06T09:40:33.973Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/portraits/penance-left-arm.png": {
+    "sha256": "39bf28a6ccf4c6eab59c5c74ce15b7b90bd623ce7497f88dd76baeeeabf35e35",
+    "mtime": "2026-11-06T09:43:52.887Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/portraits/penance-right-arm.png": {
+    "sha256": "39bf28a6ccf4c6eab59c5c74ce15b7b90bd623ce7497f88dd76baeeeabf35e35",
+    "mtime": "2026-11-06T09:43:52.887Z",
+    "delegated": "2026-11-06"
+   },
+   "public/art/portraits/penance.png": {
+    "sha256": "a23e00300c72acb7e17b9f2cbc1337a6795e8c4d2682a38323a5e2e27f41bc36",
+    "mtime": "2026-11-06T09:59:38.688Z",
+    "delegated": "2026-11-06"
+   }
   }
  }
 }

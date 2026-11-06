@@ -221,7 +221,7 @@ export const EVRAE_DECK_PLATE = 'evrae-airship-deck';
 export interface DeckPlate {
   readonly key: string;
   readonly roll?: number;
-  readonly staging?: { readonly figureHeights?: Readonly<Record<string, number>>; readonly enemySpots?: Readonly<Record<string, [number, number, number]>>; readonly shotDirector?: SceneStaging['shotDirector'] }; // `SceneStaging` heights and spots added to the deck's pins by combatant id (XVII's Genais and Core, evrae-airship-sin.ts), and a camera director (the hidden Fayth chapter, exp-fayth-deck.ts); omitted: the deck as it was
+  readonly staging?: { readonly figureHeights?: Readonly<Record<string, number>>; readonly enemySpots?: Readonly<Record<string, [number, number, number]>>; readonly shotDirector?: SceneStaging['shotDirector']; readonly formLifts?: SceneStaging['formLifts'] }; // `SceneStaging` heights and spots added to the deck's pins by combatant id (XVII's Genais and Core, evrae-airship-sin.ts), and a camera director (the hidden Fayth chapter, exp-fayth-deck.ts); omitted: the deck as it was
 }
 
 /**

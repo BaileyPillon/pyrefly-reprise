@@ -88,7 +88,7 @@ export function penance(): EnemyDef {
   return {
     id: PENANCE_ID,
     name: 'Penance',
-    spriteKey: PENANCE_SPRITES.whole, // `characters/penance/` (not painted yet: the stage draws its boss-silhouette stand-in); the split painting is swapped in at the change
+    spriteKey: PENANCE_SPRITES.whole, // `characters/penance/` (painted, r76 art install); the half disc `characters/penance-split/` is swapped in at the change and the scene lifts it (`SceneStaging.formLifts`)
     slot: 0,
     stats,
     hp: stats.hp,
@@ -123,7 +123,7 @@ function arm(side: 'right' | 'left'): EnemyDef {
   return {
     id: right ? PENANCE_RIGHT_ARM_ID : PENANCE_LEFT_ARM_ID,
     name: right ? 'Right Arm' : 'Left Arm',
-    spriteKey: right ? PENANCE_SPRITES.rightArm : PENANCE_SPRITES.leftArm, // `characters/penance-arm-right/`; the left is the right set mirrored (made when the paintings are installed)
+    spriteKey: right ? PENANCE_SPRITES.rightArm : PENANCE_SPRITES.leftArm, // `characters/penance-arm-right/`; the Left Arm's set is a byte copy of the Right Arm's (r76 art install; not a mirror: the poses lean toward the party)
     slot: right ? 1 : 2,
     stats,
     hp: stats.hp,

@@ -141,6 +141,7 @@ export class PaintedActor extends PaintedActorReaders {
 
     const hover =
       this.hoverHeight +
+      this.perchHeight + // r76: the half disc that stays where the whole one's top was (0 for every other figure)
       (this.hoverBobAmp
         ? Math.sin(this.clock * this.hoverBobSpeed * TAU) * this.hoverBobAmp
         : 0);

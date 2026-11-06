@@ -4,7 +4,7 @@
  * Bailey, 2026-11-06 ~00:30 EST: "implement all unimplemented chapters please"; ~00:55 EST: "yes on all these too" (to building Penance, the Dark Aeons and every researched boss he never picked); and, 2026-10-31, "you make the
  * executive decisions for the next few days. i'll go with all of your recommendations." The driver's decisions under those words are in `docs/handoff/ch-penance.md` ("driver's call, his to overturn"): the chapter ships
  * **hidden behind the typed word `judgment`** (P1), hidden chapter **number 35**, FFX only and not desktop-only (painted 2D, P2), Chapter VIII's deck plate as the stage (P3), the party Tidus, Yuna and Rikku at the stat caps
- * with the seven Celestial weapons (P4, P5), no Escape (P6), painted billboards with the arm set painted once and mirrored (P7, **not painted yet: stand-ins**), stand-in music (P8), the arms paying at every death (P9), the
+ * with the seven Celestial weapons (P4, P5), no Escape (P6), painted billboards with the arm set painted once and copied to the other hand (P7, painted at the r76 art install: `docs/handoff/r76-art-install.md`), stand-in music (P8), the arms paying at every death (P9), the
  * five story aeons only (P10), the usual retry (P11), no boss number touched (P12). The paper preflight is `docs/plans/ch-penance-review.md`; the game's rules are `research/re-ffx-penance.md`.
  *
  * **Game case: FFX only** [AGENTS.md rule 14]: Penance exists in the International and HD Remaster releases of FFX only; CTB, aeons and the FFX status set. FFX-2 has nothing like it and nothing here reads it.

@@ -201,6 +201,13 @@ export interface SceneStaging {
    */
   readonly formHeights?: Readonly<Record<string, number>>;
   /**
+   * A standing lift for one **form** of a figure, keyed by the art id the stage draws (`penance-split`, as `formHeights` is) and given as a **fraction of the figure's world height**: while that painting is up the
+   * stage stands the painted plane that much higher over the floor (`PaintedActor.setPerch`), taken under the form change's flash. For a form whose painting ends higher than the last one's feet: the engine plants a
+   * painting's lowest opaque row on the floor, so the Penance chapter's half disc (the lower part gone) would drop by the part that fell away; the lift keeps its top where the whole disc's was (FFX only:
+   * `data/ffx/penance-ids.ts#PENANCE_SPLIT_LIFT`). A form with no entry, and every scene that names none, stands exactly as before. Release 76; additive.
+   */
+  readonly formLifts?: Readonly<Record<string, number>>;
+  /**
    * This scene's fights start with the strategy guide **folded** to its chip, and `G` opens it (FFX only: Chapters I and III; Bailey's pick "A2" of 2026-10-09: the full NEXT BEST MOVE card stands in the
    * guide's place, and while the guide is open the card is the one-row tip). A starting state for the fight, not a setting: nothing is written to `Settings.guideVisible`, so the player's saved preference
    * is never overwritten by the chapter and a player who has the guide off sees no difference. Not on the upright phone, which keeps its own guide sheet. Omitted everywhere else.
@@ -309,6 +316,7 @@ export function stagingOf(build: SceneStaging): SceneStaging {
   if (build.enemySpots) out.enemySpots = build.enemySpots;
   if (build.figureHeights) out.figureHeights = build.figureHeights;
   if (build.formHeights) out.formHeights = build.formHeights;
+  if (build.formLifts) out.formLifts = build.formLifts;
   if (build.guideFolded === true) out.guideFolded = true;
   if (build.sideFacing) out.sideFacing = build.sideFacing;
   if (build.fixedCamera) out.fixedCamera = true;

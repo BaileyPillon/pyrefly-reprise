@@ -784,5 +784,55 @@
   "game": "foe",
   "rowFromBaseline": true,
   "note": "the hidden FFX-2 Fallen Maesters floor 80 (r75-boss-art)"
+ },
+ "dark-valefor": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Dark Aeons chapter 34, Dark Valefor (r76 art install): a creature like the player aeon, so no face box and no head reading"
+ },
+ "dark-ifrit": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Dark Aeons chapter 34, Dark Ifrit (r76 art install): a creature like the player aeon, so no face box and no head reading"
+ },
+ "dark-ixion": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Dark Aeons chapter 34, Dark Ixion, both fights (r76 art install): a creature like the player aeon, so no face box and no head reading"
+ },
+ "dark-shiva": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Dark Aeons chapter 34, Dark Shiva (r76 art install): registered like the player aeon, no face box and no head reading"
+ },
+ "dark-bahamut": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Dark Aeons chapter 34, Dark Bahamut (r76 art install): a creature like the player aeon, so no face box and no head reading"
+ },
+ "dark-anima": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Dark Aeons chapter 34, Dark Anima (r76 art install): a creature like the player aeon, so no face box and no head reading"
+ },
+ "penance": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Penance chapter 35, the whole disc (r76 art install): an object, so no face box and no head reading; the soles are the alpha baseline (the bottom of the rim)"
+ },
+ "penance-split": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Penance chapter 35, the disc with its lower half gone (r76 art install): no face box; its idle sidecar carries scale 0.6933 (633 over the whole disc idle 913) so the pixel scale is the whole disc; the registration row of the idle must not carry a scale"
+ },
+ "penance-arm-right": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Penance chapter 35, the Right Arm (r76 art install): no face box and no head reading"
+ },
+ "penance-arm-left": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Penance chapter 35, the Left Arm, a byte copy of the Right Arm set (r76 art install): no face box and no head reading"
  }
 }

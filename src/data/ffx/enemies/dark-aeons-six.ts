@@ -156,7 +156,7 @@ function body(opts: BodyOpts): EnemyDef {
   return {
     id: opts.id,
     name: opts.display,
-    spriteKey: sprite, // the Dark painting `characters/<id>/` (a Dark recolour of the player's aeon, art list in the handoff); never the aeon's own
+    spriteKey: sprite, // the Dark painting `characters/<id>/` (a Dark recolour of the player's aeon, painted at the r76 art install); never the aeon's own
     slot: opts.slot ?? 0,
     stats,
     hp: stats.hp,

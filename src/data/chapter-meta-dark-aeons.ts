@@ -7,8 +7,8 @@
  * - `quote` is Yuna's one line in the pre scene (`src/story/scripts/dark-aeons.ts`, a draft for Bailey to read), our own words.
  * - `objectives` are ours, each a rule `src/ui/common/chapterObjectives.ts` already answers, and none a number of the fights': send Dark Ifrit home (the second stop), reach the road to Gagazet (the sixth link), send the last of them home.
  * - `tip` and `handwritten` are our own words over the research's sourced rules (RE six 3, 4 and 9): the gauge counts hit events, so fewer, heavier blows serve better, and an aeon sent in ahead of the Overdrive is the game's own answer.
- * - `heroArt` is the pause plate `pause/ch34-dark-aeons` (not made yet: the art list in the handoff); `heroArtFallback`, an existing approved plate of Mt. Gagazet, shows meanwhile. `snapshots` are existing assets only:
- *   the mountain's plate and the player's own Anima and Bahamut paintings, which the Dark ones will be recolours of.
+ * - `heroArt` is the pause plate `pause/ch34-dark-aeons` (painted for this chapter, r76 art install: the six Dark Aeons gathered over the Gagazet plate by night; the driver's pick under Bailey's delegation, `docs/handoff/r76-art-install.md`); `heroArtFallback`, an existing approved plate of Mt. Gagazet, shows while a tree has not got it. `snapshots`:
+ *   the mountain's plate and the chapter's own Dark Anima and Dark Bahamut idles (they replaced the player's Anima and Bahamut, which the Dark ones are recolours of).
  * - `musicKeys` are the cues the chapter plays: the mountain's bed, the stand-in boss cues and the FFX fanfare.
  */
 
@@ -38,8 +38,8 @@ export const DARK_AEONS_META: ChapterMeta = {
   tip: 'Every blow fills their fury, and a full fury kills. Strike few and hard, keep Auto-Life on everyone, and send an aeon in ahead of the worst.',
   snapshots: [
     { image: 'backdrops/gagazet.png', caption: 'the road' },
-    { image: 'characters/anima/idle.png', caption: 'what waits at the foot of the mountain' },
-    { image: 'characters/bahamut/idle.png', caption: 'and the last of them' },
+    { image: 'characters/dark-anima/idle.png', caption: 'what waits at the foot of the mountain' },
+    { image: 'characters/dark-bahamut/idle.png', caption: 'and the last of them' },
   ],
   focalCharacterId: 'yuna',
   musicKeys: ['scene-gagazet', 'boss-challenge', 'boss-yojimbo', 'victory-ffx'],

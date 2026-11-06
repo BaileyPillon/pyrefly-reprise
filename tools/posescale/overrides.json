@@ -419,5 +419,47 @@
    ],
    "why": "r75-boss-art: the pose is the idle's own pixels warped and painted at the idle's pixel scale; its sidecar registration (idle top-left at 115,-24 in this file) puts the idle's stance x (624) at 739; the silhouette reading differs by 7 to 14 px (the lashed tongue and the head turn), so this passes the gate either way and is closer to the painting"
   }
+ },
+ "dark-valefor": {
+  "idle": {
+   "standing": true
+  },
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  }
+ },
+ "dark-ixion": {
+  "idle": {
+   "standing": true
+  },
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  }
+ },
+ "penance-split": {
+  "idle": {
+   "standing": true
+  },
+  "attack": {
+   "standing": true
+  },
+  "cast": {
+   "standing": true
+  },
+  "hurt": {
+   "standing": true
+  }
  }
 }

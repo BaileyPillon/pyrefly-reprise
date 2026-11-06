@@ -6,6 +6,8 @@ Branch `ch-penance`, from `origin/r75-boss-art` `b98906229` (the paper preflight
 
 Plan: `docs/plans/ch-penance-review.md` (read it with this note). Sources: `research/re-ffx-penance.md` ("RE n"). Contract entry: `docs/CONTRACT-CHANGES.md` (2026-11-06). The shared ledgers (NOW.md, ACTIONS.md, DECISIONS.md) are **not touched here**: the driver adds the rows.
 
+**UPDATE 2026-11-06 (r76 art install): the paintings of section 6 are made, registered and wired** (the whole disc, the half disc, the Right Arm, the Left Arm as a byte copy of the Right Arm's set rather than a mirror, three turn-list faces and the pause plate; the driver's picks under Bailey's delegation, his to overturn), **and the Separation's drop is lifted in code** (`SceneStaging.formLifts`, Penance's scene only): `docs/handoff/r76-art-install.md`. Held: the chapter card and thumbnail, the falling-half prop and the arm's `regen` painting. The "stand-in" lines below describe the branch before the install. FFX only.
+
 ## 0. The headline (read this first)
 
 1. **The chapter is built and plays** behind the typed word **`judgment`**: hidden Chapter 35 on the Fahrenheit's deck, Penance and its two hands, every rule from the game's own files.

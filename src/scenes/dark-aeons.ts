@@ -19,7 +19,7 @@ import { DARK_ANIMA_ID, DARK_BAHAMUT_ID, DARK_IFRIT_ID, DARK_IXION_2_ID, DARK_IX
 // grade is a presentation pick for Bailey's eye, not a number to guess here.
 //
 // THE STAGING IS AN ESTIMATE for the framing: the party stands on the Mushroom slots; every Dark aeon stands on the one boss spot (the formations give start positions only: RE six 2.3, a different coordinate system) at a
-// height read off the player's aeon painting it is a recolour of (a winged Valefor and a tall Ixion, the great Bahamut and the chained Anima the largest), `[estimate]`; the heights wait for the paintings.
+// height read off the player's aeon painting it is a recolour of (a winged Valefor and a tall Ixion, the great Bahamut and the chained Anima the largest), `[estimate]`; the paintings are installed (r76 art install) and the heights still wait for a look at them on the stage (`docs/handoff/r76-art-install.md`, held).
 
 /** The one boss spot every Dark aeon stands on (the Mirror Aeons' Dark Yojimbo's: as far from the party as the arena allows). */
 const BOSS_SPOT: [number, number, number] = [3.0, 0, -2.8];

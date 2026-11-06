@@ -106,6 +106,9 @@ export abstract class PaintedActorState extends Group {
 
   protected hopHeight = 0;
 
+  /** A standing lift of the painted plane over the floor, in world units, that stays until it is set again (`setPerch`; the Penance chapter's split half disc, r76). 0 for every other figure. */
+  protected perchHeight = 0;
+
   protected squashAmount = 0;
 
   /** The new curves' channels (strike, cast lift, leap), summed; all at rest unless started. */

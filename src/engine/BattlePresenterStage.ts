@@ -12,6 +12,7 @@ import { Vector3, type PerspectiveCamera, type Scene } from 'three';
 import type { AnyCombatant, BattleState, CombatantId, Side } from '../battle/common/types.ts';
 import { ART_KEY, artCandidatesFor, characterUrl, resolveArt, resolvePoseMap, summonArtId, worldHeightFor } from './BattlePresenterArt.ts';
 import { figureHeight, formPlanScale, partyStature, sceneOwnHeight, STATURE_KEY } from './PartyStature.ts';
+import { formLiftFor } from './FormLift.ts'; // a scene's lift for one form's painting (`SceneStaging.formLifts`: Penance's half disc, FFX only)
 import { backToShared, statureOf } from './SharedHeight.ts';
 import { inArtNamespace } from '../data/art/artNamespace.ts';
 import { artUrl, tryLoadTexture } from './PaintedArt.ts';
@@ -399,6 +400,8 @@ export class PaintedStage implements BattleStage {
     const pin = kind === 'enemy' ? this.opts.slots.enemySpots?.[c.id] : undefined;
     const spot = pin ?? spots[Math.min(c.slot, spots.length - 1)] ?? spots[0] ?? [0, 0, 0];
     actor.position.set(spot[0], spot[1], spot[2]);
+    const perch = formLiftFor(this.opts.slots, artId, actor.height); // a figure staged already in a lifted form (a re-stage mid-fight); 0 for every other, which is not touched
+    if (perch > 0) actor.setPerch(perch);
     // The poses with a painting of their own (a rigged figure: its keys), which `paints` answers from.
     const painted = built.rig ? new Set(built.rig.rigKeys) : paintedPoses(artId, poses, characterUrl);
     // Already down when staged: snap to it (`immediate`: no topple on frame one). Seymour's
@@ -693,6 +696,8 @@ export class PaintedStage implements BattleStage {
     const poses = await resolvePoseMap(artId, staged.kind);
     staged.painted = paintedPoses(artId, poses, characterUrl);
     this.fitFormHeight(id, staged, before, artId); // before the poses load, so their scale is solved at the new height
+    const lift = formLiftFor(this.opts.slots, artId, staged.actor.height); // the scene's lift for this form: 0 for every figure but Penance's half disc, and the actor is touched only on the way into or out of a lifted form
+    if (lift > 0 || formLiftFor(this.opts.slots, before, staged.actor.height) > 0) staged.actor.setPerch(lift);
     await staged.actor.loadPoses(poses, 'idle');
   }
 

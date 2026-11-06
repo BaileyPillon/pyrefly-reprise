@@ -17,7 +17,7 @@ import type { SceneEntry, SceneSlots } from './index.ts';
 import type { SceneFactory } from './types.ts';
 import { buildDemoScene } from './demo.ts';
 import { EVRAE_AIRSHIP_DECK_SLOTS, EVRAE_DECK_PLATE, makeAirshipDeckScene } from './evrae-airship-deck.ts';
-import { PENANCE_ID, PENANCE_LEFT_ARM_ID, PENANCE_RIGHT_ARM_ID, PENANCE_SCENE } from '../data/ffx/penance-ids.ts';
+import { PENANCE_ID, PENANCE_LEFT_ARM_ID, PENANCE_RIGHT_ARM_ID, PENANCE_SCENE, PENANCE_SPLIT_LIFT, PENANCE_SPRITES } from '../data/ffx/penance-ids.ts';
 
 type Spot = [number, number, number];
 
@@ -35,6 +35,11 @@ export const PENANCE_FIGURE_HEIGHTS: Readonly<Record<string, number>> = {
   [PENANCE_LEFT_ARM_ID]: 2.6,
 };
 
+/** The Separation's lift (FFX only; r76 art install): while the half disc's painting is up the stage stands it `PENANCE_SPLIT_LIFT` of the figure's height higher, so its top stays where the whole disc's was (`SceneStaging.formLifts`). */
+export const PENANCE_FORM_LIFTS: Readonly<Record<string, number>> = {
+  [PENANCE_SPRITES.split]: PENANCE_SPLIT_LIFT,
+};
+
 /** The published slots, same shape every other scene exports: the deck's party arc, the three enemy marks in formation order. */
 export const PENANCE_SLOTS: SceneSlots = {
   ...EVRAE_AIRSHIP_DECK_SLOTS,
@@ -42,12 +47,13 @@ export const PENANCE_SLOTS: SceneSlots = {
   enemyHeight: PENANCE_FIGURE_HEIGHTS[PENANCE_ID] as number,
   enemySpots: PENANCE_ENEMY_SPOTS,
   figureHeights: PENANCE_FIGURE_HEIGHTS,
+  formLifts: PENANCE_FORM_LIFTS,
 };
 
 /** The deck over Chapter VIII's plate with this chapter's three figures pinned. */
 export const buildPenanceScene: SceneFactory = makeAirshipDeckScene({
   key: EVRAE_DECK_PLATE,
-  staging: { enemySpots: PENANCE_ENEMY_SPOTS as Record<string, Spot>, figureHeights: PENANCE_FIGURE_HEIGHTS },
+  staging: { enemySpots: PENANCE_ENEMY_SPOTS as Record<string, Spot>, figureHeights: PENANCE_FIGURE_HEIGHTS, formLifts: PENANCE_FORM_LIFTS },
 });
 
 /** The scene-table row: real (the factory wins); `build` is the unreachable demo diorama, as for the deck itself. */

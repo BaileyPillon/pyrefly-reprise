@@ -7,8 +7,8 @@
  * - `quote` is a line Auron speaks in the pre scene (`src/story/scripts/penance.ts`, a draft for Bailey to read), our own words in his register (writing bible section 1.4: laconic, dry).
  * - `objectives` are ours, each a rule `src/ui/common/chapterObjectives.ts` already answers: take it past the change (a quarter of its life), bring it below half, and the win.
  * - `tip` and `handwritten` are our own words over the research's sourced rules (RE sections 4 to 6).
- * - `heroArt` is the pause plate `pause/ch35-penance` (**not painted yet**); `heroArtFallback`, Chapter VIII's deck plate, shows in its place. `snapshots`: the deck's plate and Tidus's idle (stand-ins until the chapter's
- *   own paintings exist).
+ * - `heroArt` is the pause plate `pause/ch35-penance` (painted for this chapter, r76 art install: Chapter VIII's deck plate graded, with the disc and the two arms over the sky and the hull; the driver's pick under Bailey's delegation, `docs/handoff/r76-art-install.md`);
+ *   `heroArtFallback`, Chapter VIII's deck plate, shows while a tree has not got it. `snapshots`: the deck's plate, the disc itself and the Right Arm (the chapter's own idles; Tidus's idle stood in for "one hand down" until they existed).
  * - `musicKeys` are the cues the chapter plays: the Fahrenheit's bed, the stand-in boss cue and the FFX fanfare.
  */
 
@@ -34,8 +34,8 @@ export const PENANCE_META: ChapterMeta = {
   tip: 'Never let both hands stand on its turn: it ends the fight in a breath. Cure what its blows break before the next one lands.',
   snapshots: [
     { image: 'backdrops/evrae-airship-deck.png', caption: 'the deck' },
-    { image: 'characters/tidus/idle.png', caption: 'one hand down' },
-    { image: 'characters/auron/idle.png', caption: 'keep walking' },
+    { image: 'characters/penance/idle.png', caption: 'what hangs over the bow' },
+    { image: 'characters/penance-arm-right/idle.png', caption: 'one hand down' },
   ],
   focalCharacterId: 'auron',
   musicKeys: ['scene-fahrenheit', 'boss-challenge', 'victory-ffx'],

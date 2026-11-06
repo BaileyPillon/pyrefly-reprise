@@ -107,6 +107,15 @@ export abstract class PaintedActorEffects extends PaintedActorSizing {
     this.curves.cast.rise(height, ms);
   }
 
+  /**
+   * Stand the painted plane `height` world units over the floor from now on (a form whose painting ends higher than the last one's feet: the Penance chapter's half disc, `data/ffx/penance-ids.ts#PENANCE_SPLIT_LIFT`). Taken at once:
+   * the stage calls it under the form change's flash and fade. It rides in the same sum as the hover and the hop, so the shadow shrinks and fades with it and the painted box (`contentQuad`) moves with the plane.
+   * Not finite or negative: 0. The figure's group does not move, so the aim points the HUD reads (head, chest) keep their place on the figure's original height.
+   */
+  setPerch(height: number): void {
+    this.perchHeight = Number.isFinite(height) && height > 0 ? height : 0;
+  }
+
   /** The cast is away: come down over `ms` and ring a small landing squash. */
   liftRelease(ms = 260): void {
     this.curves.cast.release(ms);

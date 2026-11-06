@@ -159,7 +159,7 @@ describe('the advisor and the texts agree with the data (review minors 2, 3 and 
 
   it("the last pause snapshot is Bahamut's, the last link, and says so", () => {
     const last = DARK_AEONS_META.snapshots.at(-1)!;
-    expect(last.image).toBe('characters/bahamut/idle.png');
+    expect(last.image).toBe('characters/dark-bahamut/idle.png'); // the chapter's own Dark Bahamut since the r76 art install (the player's Bahamut stood in before)
     expect(last.caption).toBe('and the last of them');
   });
 });
