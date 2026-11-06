@@ -345,7 +345,9 @@ describe('the camera glue and the skin are reached only through a dev-gated dyna
     expect(importersOf('beatTap').sort()).toEqual(['src/scenes/exp-fayth-camera.ts', SKIN]);
     expect(importersOf('clipSequencer')).toEqual(['src/engine/ffx3d/ffxAnimator.ts']);
     expect(importersOf('clipMap').sort()).toEqual(['src/engine/ffx3d/clipSequencer.ts', 'src/engine/ffx3d/ffxAnimator.ts', 'src/engine/ffx3d/ffxClips.ts']);
-    expect(importersOf('passState')).toEqual(['src/engine/ffx3d/models.ts']);
+    // (the unlit material moved from models.ts into unlitParts.ts in the release 75 second code pass, 392 of 400 lines; models.ts is its only importer, so the chain is still models <- the skin glue)
+    expect(importersOf('passState')).toEqual(['src/engine/ffx3d/unlitParts.ts']);
+    expect(importersOf('unlitParts')).toEqual(['src/engine/ffx3d/models.ts']);
     // and what loads a file takes the probe's manifest, so it cannot be called without the probe having found the folder
     expect(read('src', 'engine', 'ffx3d', 'ffxClips.ts')).toContain('export async function loadFfxClips(manifest: FfxLocalManifest');
     expect(read('src', 'engine', 'ffx3d', 'ffxSky.ts')).toContain('export async function loadSkyAssets(manifest: FfxLocalManifest');

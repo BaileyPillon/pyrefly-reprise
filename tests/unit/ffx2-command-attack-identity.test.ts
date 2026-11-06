@@ -38,6 +38,8 @@ import type { AvailableCommand } from '../../src/battle/common/types.ts';
 import { aiUnit } from '../../src/battle/ffx2/fixtures.ts';
 import { registerBattleContent, ffx2EngineOptions } from '../../src/app/screens/BattleScreenContent.ts';
 import { buildCommands } from '../../src/battle/ffx2/menu.ts';
+import { MIX_PICKER } from '../../src/battle/ffx2/constants.ts';
+import { MIX_COMMAND_ID } from '../../src/battle/ffx2/adapt/mix.ts';
 import { gameIdOf } from '../../src/battle/ffx2/adapt/game-ids.ts';
 import { chainRegistries, defaultAbilities } from '../../src/battle/ffx2/abilities.ts';
 import * as ffx2data from '../../src/data/ffx2/index.ts';
@@ -117,8 +119,10 @@ describe('no other attack-category ability is dropped (PR-0024)', () => {
         rows.filter((c) => c.command.kind === 'ability').map((c) => (c.command as { id: string }).id),
       );
       const missing = offeredIds(sphereId, girl).filter(
-        (id) => id !== `x2-${sphereId}-attack` && !offeredAsAbility.has(id) && !KEY_ITEM_ONLY.has(id),
+        (id) => id !== `x2-${sphereId}-attack` && !offeredAsAbility.has(id) && !KEY_ITEM_ONLY.has(id) && !(id === MIX_COMMAND_ID && !MIX_PICKER),
       );
+      // The Mix is the one row the table has and the menu leaves out, and only while its picker is not built (PR-0619): nothing else may hide behind that.
+      if (sphereId === 'alchemist') expect(offeredAsAbility.has(MIX_COMMAND_ID), `${girl}: the Mix row is ${MIX_PICKER ? 'listed' : 'not listed'}`).toBe(MIX_PICKER);
       expect(missing, `${sphereId} lost rows from its ability table for ${girl}`).toEqual([]);
     }
   });

@@ -28,12 +28,12 @@
  * Game case: FFX only (the files are FFX's).
  */
 
-import { Box3, Color, DoubleSide, Group, Mesh, MeshBasicMaterial, NoColorSpace, SkinnedMesh, Vector3, type BufferGeometry, type Material, type Object3D, type Texture } from 'three';
+import { Box3, Group, Mesh, Vector3, type Object3D } from 'three';
 import { FFX_MODEL_LIFT } from './ffxStaging.ts';
 import { FFX_UNIT } from './ffxWorld.ts';
 import { ffxLocalUrl, type FfxLocalManifest } from './localAssets.ts';
 import { liveBoxOf, type WorldBox } from './modelBox.ts';
-import { applyPassState, passStateOf } from './passState.ts';
+import { freeAll, unlit, unlitMaterial } from './unlitParts.ts';
 
 /** One model: a root in world units that an actor can carry, and what the skin needs to fade and free it. */
 export interface FfxModel {
@@ -158,68 +158,8 @@ export function stageBackgroundOf(userData: unknown): readonly [number, number, 
 // Materials and disposal
 // ---------------------------------------------------------------------------
 
-/**
- * The unlit material for a loaded one: the diffuse map and tint, vertex colours when the mesh has them, the file's own cut-out threshold, no fog. Sidedness, blending and depth are the **game's own state for
- * the material** when the file carries it (`extras.ffx.pass`, `./passState.ts`: an alpha-enabled variant is a cut-out whose survivors are blended, which is Evrae's see-through wing; every actor and most of the
- * stage are single sided); a file without it keeps the glTF material's own sidedness and blending (a blended one does not write depth). Reads only the fields a glTF material has, so it takes the loader's
- * `MeshStandardMaterial` and nothing else is needed. The state is kept in `userData.ffxPass` for the stage's mirrored meshes (`shapeStage`).
- */
-export function unlitMaterial(src: Material): MeshBasicMaterial {
-  const s = src as Material & { map?: Texture | null; color?: Color };
-  const material = new MeshBasicMaterial({
-    name: src.name,
-    map: s.map ?? null,
-    color: s.color ? s.color.clone() : new Color(0xffffff),
-    vertexColors: src.vertexColors,
-    side: src.side === DoubleSide ? DoubleSide : src.side,
-    alphaTest: src.alphaTest,
-    transparent: src.transparent,
-    opacity: src.opacity,
-    depthWrite: src.depthWrite,
-    fog: false,
-  });
-  const state = passStateOf(src.userData);
-  applyPassState(material, state);
-  material.userData['ffxPass'] = state;
-  material.userData['baseTransparent'] = material.transparent;
-  if (material.map) {
-    material.map.anisotropy = 8; // the renderer clamps it to what the card has
-    material.map.colorSpace = NoColorSpace; // the game's textures are display values (its shader writes `tone(texture * colour)` as it is): not decoded, so the chain shows them as authored
-  }
-  return material;
-}
-
-/** Every mesh below `root` takes the unlit material; returns what the caller must free later. Skinned meshes are never culled (their box is the bind pose's). */
-function unlit(root: Object3D): { materials: MeshBasicMaterial[]; geometries: BufferGeometry[]; textures: Texture[] } {
-  const swapped = new Map<Material, MeshBasicMaterial>();
-  const geometries = new Set<BufferGeometry>();
-  const textures = new Set<Texture>();
-  const swap = (m: Material): MeshBasicMaterial => {
-    let made = swapped.get(m);
-    if (!made) {
-      made = unlitMaterial(m);
-      swapped.set(m, made);
-      if (made.map) textures.add(made.map);
-      m.dispose(); // the loader's material only; its texture lives on in the new one
-    }
-    return made;
-  };
-  root.traverse((o) => {
-    if (!(o instanceof Mesh)) return;
-    o.material = Array.isArray(o.material) ? o.material.map(swap) : swap(o.material as Material);
-    o.castShadow = false;
-    o.receiveShadow = false;
-    if (o instanceof SkinnedMesh) o.frustumCulled = false;
-    geometries.add(o.geometry);
-  });
-  return { materials: [...new Set(swapped.values())], geometries: [...geometries], textures: [...textures] };
-}
-
-const freeAll = (parts: { materials: MeshBasicMaterial[]; geometries: BufferGeometry[]; textures: Texture[] }): void => {
-  for (const g of parts.geometries) g.dispose();
-  for (const m of parts.materials) m.dispose();
-  for (const t of parts.textures) t.dispose();
-};
+// The unlit material (`unlitMaterial`), what a model made (`UnlitParts`, `unlit`) and how it is freed (`freeAll`, which now frees the skeletons too) live in `./unlitParts.ts`; `unlitMaterial` is re-exported here.
+export { unlitMaterial };
 
 /** What {@link shapeStage} is told: which meshes to draw, which of them to mirror in y, and which are the sky. Each is tested against a mesh's own name. */
 export interface StageParts {
@@ -311,6 +251,7 @@ async function loadActor(loader: Loader, id: string, file: string, heights: Reco
       parts.materials.push(...more.materials);
       parts.geometries.push(...more.geometries);
       parts.textures.push(...more.textures);
+      parts.skeletons.push(...more.skeletons);
     } catch (e) {
       problems.push(`${id}: weapon not attached (${e instanceof Error ? e.message : String(e)})`);
     }

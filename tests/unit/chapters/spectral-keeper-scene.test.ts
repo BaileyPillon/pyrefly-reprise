@@ -73,6 +73,7 @@ describe('the glyph platforms are drawn', () => {
     const { rings, root } = build({ ...SPECTRAL_KEEPER_PART_ANCHORS });
     const colourOf = (id: string): number => ((root.children.find((m) => m.name === `part-ring:${id}`) as Mesh).material as MeshBasicMaterial).color.getHex();
     const state = (armed: string[]): Parameters<PartRings['sync']>[1] => ({
+      activeIds: [], // the glyph's occupied picture reads the front line (r75-boss-art, M1); this test is about the mines
       combatants: Object.fromEntries(SPECTRAL_CIRCLE_IDS.map((id) => [id, { alive: true }])) as never,
       flags: Object.fromEntries(armed.map((id) => [`plat.armed.${id}`, true])),
     });
@@ -108,7 +109,7 @@ describe('the glyph platforms are drawn', () => {
     expect(src, 'the state the stage reads is the one it was staged with (the engine mutates it in place)').toMatch(/async stage\(state: BattleState\): Promise<void> \{\n\s+this\.lastState = state;/);
     // and the ring the callback reaches is the one PartRings lights: a flag set on the live state lights the ring, the same object read a frame later
     const { rings, root } = build({ ...SPECTRAL_KEEPER_PART_ANCHORS });
-    const live = { combatants: Object.fromEntries(SPECTRAL_CIRCLE_IDS.map((id) => [id, { alive: true }])), flags: {} as Record<string, boolean> };
+    const live = { activeIds: [] as string[], combatants: Object.fromEntries(SPECTRAL_CIRCLE_IDS.map((id) => [id, { alive: true }])), flags: {} as Record<string, boolean> }; // `activeIds`: the occupied picture reads the front line (r75-boss-art, M1)
     const id = SPECTRAL_CIRCLE_IDS[1]!;
     const colour = (): number => ((root.children.find((m) => m.name === `part-ring:${id}`) as Mesh).material as MeshBasicMaterial).color.getHex();
     for (let i = 0; i < 20; i++) {

@@ -7,6 +7,7 @@
  */
 
 import { Color, Vector2, Vector4, type IUniform, type Material, type Mesh, type MeshToonMaterial, type Object3D, type Texture } from 'three';
+import { disposeSkeletonsOf } from '../skeletons.ts';
 import { toonFrom, withUniforms, type ShaderLike, type ToonUniforms } from './toon.ts';
 
 /** One toon material and the colour it started with. */
@@ -140,10 +141,17 @@ export function driveToon(set: ToonSet, c: Channels): void {
   }
 }
 
-/** Free the materials this set made (the geometry and the maps belong to the file and are freed with its cache, except a capsule's, which is its own: pass `ownGeometry`). */
+/**
+ * Free the materials this set made (the geometry and the maps belong to the file and are freed with its cache, except a capsule's, which is its own: pass `ownGeometry`).
+ *
+ * **The skeletons are always freed (release 75 second code pass, the driver's decision 1; FFX-2 only, the hidden Wind Waker chapter).** `SkeletonUtils.clone` (the loader's default `clone`, `./io.ts`) gives each clone of a
+ * file a `Skeleton` of its own for every skinned mesh, and the first draw gives each a bone texture that only `Skeleton.dispose()` frees (`../skeletons.ts`): the geometry, the materials and the file's maps going leaves it on
+ * the GPU, one texture per skinned mesh every time the scene is entered again. A capsule has no skinned mesh, so for it this does nothing.
+ */
 export function disposeToon(set: ToonSet, ownGeometry: boolean): void {
   for (const { material } of set.entries) {
     material.dispose(); // the map is the file's, shared with the clones of it, and freed with its cache
   }
+  disposeSkeletonsOf(set.meshes);
   if (ownGeometry) for (const m of set.meshes) m.geometry.dispose();
 }

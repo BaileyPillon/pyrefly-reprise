@@ -760,5 +760,29 @@
    286
   ],
   "note": "the face box is the skull under the hat (the hat's brim changes with every pose); read by eye 2026-10-17"
+ },
+ "spectral-keeper": {
+  "game": "foe",
+  "note": "the hidden FFX Spectral Keeper (chapter 29): a creature, so no face box and no head reading. No rowFromBaseline: its thin talon tips hang below the claws in some poses, so the soles are read from the silhouette (r75-boss-art)"
+ },
+ "x2-aranea": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Fallen Maesters floor 20 (r75-boss-art)"
+ },
+ "x2-black-elemental": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Fallen Maesters floor 40 (r75-boss-art)"
+ },
+ "x2-concherer": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Fallen Maesters floor 60 (r75-boss-art)"
+ },
+ "x2-chac": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Fallen Maesters floor 80 (r75-boss-art)"
  }
 }

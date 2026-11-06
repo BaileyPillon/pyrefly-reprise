@@ -18,6 +18,8 @@ import { applyStatus } from '../../src/battle/ffx2/index.ts';
 import { chainRegistries, defaultAbilities } from '../../src/battle/ffx2/abilities.ts';
 import { ABILITY_GAME_ID, DRESSPHERE_JOB, abilityOfGameId, gameIdOf } from '../../src/battle/ffx2/adapt/game-ids.ts';
 import { effectiveMpCost, buildCommands, type MenuContext } from '../../src/battle/ffx2/menu.ts';
+import { MIX_PICKER } from '../../src/battle/ffx2/constants.ts';
+import { MIX_COMMAND_ID } from '../../src/battle/ffx2/adapt/mix.ts';
 import { menuRow } from '../../src/battle/ffx2/kernel/command-menu-rows.ts';
 import { abilityRow } from '../../src/battle/ffx2/kernel/dressphere-rows.ts';
 import { FFX2_JOB_ABILITIES } from '../../src/battle/ffx2/kernel/dressphere-grids.ts';
@@ -186,13 +188,21 @@ function engineSet(girl: string, sphere: string, mode: 'none' | 'all'): Set<numb
   return out;
 }
 
-/** What the game lists, kept to the commands the engine has an ability for. */
-function gameSet(v: World): Set<number> {
+/**
+ * The one command the game lists and the engine's menu leaves out on purpose: the Alchemist's Mix, while its two-item picker is not built (`constants.ts#MIX_PICKER`; PR-0619, the driver's decision of
+ * 2026-11-04: show nothing that is not built; until then the row was listed greyed). The deviation is pinned by its own test below, so nothing else can hide behind it; with the picker built the exemption is empty.
+ */
+const MIX_GAME_ID = ABILITY_GAME_ID[MIX_COMMAND_ID] as number;
+const UNBUILT = new Set<number>(MIX_PICKER ? [] : [MIX_GAME_ID]);
+
+/** What the game lists, kept to the commands the engine has an ability for and has built a way to use. */
+function gameSet(v: World, keepUnbuilt = false): Set<number> {
   const ours = new Set(Object.values(ABILITY_GAME_ID));
   const out = new Set<number>();
   for (const list of Object.values(v.lists)) {
     for (const id of list) {
       if (id <= 0x3002) continue;
+      if (UNBUILT.has(id) && !keepUnbuilt) continue;
       if (ATTACKS.has(id)) out.add(0x302c);
       else if (ours.has(id)) out.add(id);
     }
@@ -223,6 +233,25 @@ describe('the engine\'s menu against the real game, dressphere by dressphere, gi
       expect(compared).toBe(3 * dresses.length);
     });
   }
+
+  it('the Mix is the ONLY command the game lists that the engine leaves out, and only for the Alchemist, while its picker is not built (PR-0619)', () => {
+    const missing: string[] = [];
+    let mixInGame = 0;
+    for (const mode of ['none', 'all'] as const) {
+      for (const [g, girl] of GIRLS.entries()) {
+        for (const sphere of dresses) {
+          const v = sweep.find((x) => x.cls === `sweep-${mode}` && x.idx === g && x.records[String(g)]?.job === DRESSPHERE_JOB[sphere]);
+          const game = gameSet(v!, true);
+          const engine = engineSet(girl, sphere, mode);
+          for (const id of game) if (!engine.has(id)) missing.push(`${girl}/${sphere}/${mode}: ${id.toString(16)}`);
+          for (const id of engine) expect(game.has(id), `${girl}/${sphere}/${mode}: the engine lists ${id.toString(16)}, which the game does not`).toBe(true);
+          if (game.has(MIX_GAME_ID)) mixInGame += 1;
+        }
+      }
+    }
+    expect(mixInGame, 'the game lists the Mix for the Alchemist, every girl, both modes').toBe(6);
+    expect(missing.sort()).toEqual(MIX_PICKER ? [] : GIRLS.flatMap((girl) => ['none', 'all'].map((mode) => `${girl}/alchemist/${mode}: ${MIX_GAME_ID.toString(16)}`)).sort());
+  });
 });
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------

@@ -18,7 +18,7 @@ import { adjacentNodes } from './garment-grids.ts';
 import { aimer } from './aim.ts';
 import { commandMpCost } from './kernel/auto-ability.ts';
 import { STATUS_SPELLSPRING } from './kernel/command-usable.ts';
-import { MIX_PICKER, MIX_PICKER_REASON } from './constants.ts';
+import { MIX_PICKER } from './constants.ts';
 import { MIX_COMMAND_ID } from './adapt/mix.ts';
 import { isSilenceable, isSpecialWearer, menuCategoryOf, offeredAbilityIds } from './adapt/menu.ts';
 import { validTargetIds } from './targeting.ts';
@@ -52,8 +52,6 @@ export function hpCostFor(actor: Ffx2Unit, ability: AbilityDef): number {
 /** Why a command row is greyed out, or `null` when it is offered. The game's order: Itch, then Silence, then the cost. */
 function disabledReason(actor: Ffx2Unit, ability: AbilityDef, mpCost: number): string | null {
   if (actor.statuses.itchy) return ITCHY_REASON;
-  // The Alchemist's Mix is listed but greyed until a screen can ask for its two items (`constants.ts#MIX_PICKER`; the driver's item 88e).
-  if (!MIX_PICKER && ability.id === MIX_COMMAND_ID) return MIX_PICKER_REASON;
   if (actor.statuses.silence && isSilenceable(ability)) return 'Silenced';
   if (actor.mp < mpCost && !actor.statuses.spellspring) return 'Not enough MP';
   // "…fails if the user cannot pay it" — an HP-cost ability is greyed out, not
@@ -162,6 +160,9 @@ export function buildCommands(actor: Ffx2Unit, ctx: MenuContext): AvailableComma
       // FFX-2 only: this is the ATB engine's command builder. FFX's CTB menu
       // is built in `src/battle/ffx/commands.ts` and never had this row.
       if (id === `x2-${sphereId}-attack`) continue;
+      // The Alchemist's Mix is not listed at all until a screen can ask for its two items (`constants.ts#MIX_PICKER`; PR-0619, the driver's decision of 2026-11-04: show nothing that is not built).
+      // It was listed and greyed ("Not built", the driver's item 88e); a row nobody can pick still read as a promise. The engine is unchanged: a test, an AI or a headless run can still submit a Mix directly.
+      if (!MIX_PICKER && id === MIX_COMMAND_ID) continue;
       const mpCost = effectiveMpCost(actor, ability);
       const reason = disabledReason(actor, ability, mpCost);
       out.push(aim(ability, {

@@ -1,5 +1,6 @@
 import './phone-enemy-line.css';
 import { escapeHtml } from './html.ts';
+import { bandOf } from './enemy-intent-damage.ts';
 import type { IntentTargetView, IntentView } from './EnemyIntent.ts';
 
 /**
@@ -82,8 +83,8 @@ export function phoneFigures(view: Pick<IntentView, 'estimate' | 'randomTarget'>
     const heals = t.amount < 0;
     const kind = !harms ? 'candidate' : t.lethal ? 'lethal' : heals ? 'heal' : 'damage';
     const amount = kind === 'candidate' ? '' : kind === 'lethal' ? 'KO' : `${heals ? '+' : ''}${num(t.amount)}`;
-    const [lo = 0, hi = 0] = [Math.abs(t.min), Math.abs(t.max)].sort((x, y) => x - y); // a heal's bounds may be negative: the smaller magnitude first
-    const band = (kind === 'damage' || kind === 'heal') && t.min !== t.max ? `${heals ? '+' : ''}${num(lo)}–${num(hi)}` : '';
+    const range = bandOf(t); // the same sort the desktop slab prints (PR-0603): a heal's bounds may be negative, and the smaller magnitude comes first
+    const band = (kind === 'damage' || kind === 'heal') && range ? `${heals ? '+' : ''}${num(range.lo)}–${num(range.hi)}` : '';
     return { name: t.targetName, short: shorts[i]!, amount, band, kind };
   });
   const amounts = source.map((t) => Math.abs(t.amount)).filter((n) => n > 0);

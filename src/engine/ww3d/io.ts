@@ -7,6 +7,7 @@
  */
 
 import type { AnimationClip, Object3D } from 'three';
+import { disposeSkeletonsUnder } from '../skeletons.ts';
 import { looksLikeGlb } from './layout.ts';
 
 /** A parsed file: its scene (never drawn itself; each use draws a clone) and its clips. */
@@ -79,20 +80,32 @@ export class FileCache {
     return p;
   }
 
-  /** Free the geometry, maps and materials of every file this cache parsed (once nothing draws from them). */
+  /**
+   * Free the geometry, **every** texture and the materials of every file this cache parsed (once nothing draws from them), and the skeletons of its skinned meshes.
+   *
+   * Release 75 second code pass, the driver's decision 1 (FFX-2 only, the hidden Wind Waker chapter; the same two holes the 3D Bahamut chapter had, YR-11): the colour map alone was freed, so a file that kept its normal,
+   * roughness, metalness or occlusion map left it behind; and a skinned mesh's skeleton keeps a bone texture that only `Skeleton.dispose()` frees (`../skeletons.ts`). The skeletons here are the file's own and the ones its
+   * plain clones (`Object3D.clone`, a swapped prop or a temple piece) share; a `SkeletonUtils.clone` has skeletons of its own, freed with its model (`./toonify.ts`).
+   */
   dispose(): void {
     void Promise.all(this.parsed.values()).then((files) => {
       for (const f of files) {
-        f?.scene.traverse((o) => {
+        if (!f) continue;
+        f.scene.traverse((o) => {
           const mesh = o as { isMesh?: boolean; geometry?: { dispose(): void }; material?: unknown };
           if (!mesh.isMesh) return;
           mesh.geometry?.dispose();
           for (const m of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
-            const mat = m as { map?: { dispose(): void } | null; dispose?(): void } | undefined;
-            mat?.map?.dispose();
-            mat?.dispose?.();
+            const mat = m as ({ dispose?(): void } & Record<string, unknown>) | undefined;
+            if (!mat) continue;
+            for (const value of Object.values(mat)) {
+              const texture = value as { isTexture?: boolean; dispose?(): void } | null;
+              if (texture?.isTexture === true) texture.dispose?.();
+            }
+            mat.dispose?.();
           }
         });
+        disposeSkeletonsUnder(f.scene);
       }
     });
     this.parsed.clear();

@@ -293,15 +293,8 @@ export const GRID_AUTO_STATUS = true;
 
 /**
  * Whether a screen exists that lets a player choose the Alchemist's Mix's two items (re-parity RC9 lane X2-G left it for a mockup; the driver's item 88e; FFX-2 only). The engine takes a Mix with two items in
- * `extra` and makes the game's result (`adapt/mix.ts`), but the menu has no way to ask for them, so a Mix picked from the menu is the bare Mix of before: nothing happens and nothing is spent. Off, the Mix row stays
- * listed and is greyed with {@link MIX_PICKER_REASON}, so a player never picks it and an unattended Alchemist (the line the benches and the advisor play) never Mixes; the engine itself is unchanged and a test, an AI or
- * a headless run can still submit a Mix directly. Turn it on when the picker lands.
+ * `extra` and makes the game's result (`adapt/mix.ts`), but the menu has no way to ask for them, so a Mix picked from the menu is the bare Mix of before: nothing happens and nothing is spent. Off, the Mix row is not listed
+ * at all (`menu.ts`; PR-0619, the driver's decision of 2026-11-04: show nothing that is not built; from the r51 merge until then it was listed greyed with the reason "Not built"), so a player never sees it and an unattended
+ * Alchemist (the line the benches and the advisor play) never Mixes; the engine itself is unchanged and a test, an AI or a headless run can still submit a Mix directly. Turn it on when the picker lands.
  */
 export const MIX_PICKER = false;
-
-/**
- * The reason the Mix row is greyed while {@link MIX_PICKER} is off. Short on purpose: the desktop row gives the reason about 70 px beside the name (the phone about 120 px) and cuts it with an ellipsis, and the
- * first wording, "needs the item picker" (21 letters), showed as "NEEDS THE ITE..." / "NEEDS THE ITEM ...", which reads as a missing item (r51 merge review, defect 2); "Not built yet" (13 letters) still
- * came out "NOT BUILT Y..." on desktop, so the reason is nine letters. The help line carries the reason before the Mix's effect, so the player still reads what the row does. "Not built" is the wording FFX's aeon order rows already use for a command that is listed but has no code behind it (`ffx/aeon-commands.ts`).
- */
-export const MIX_PICKER_REASON = 'Not built';

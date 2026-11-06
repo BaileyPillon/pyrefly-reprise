@@ -31,6 +31,14 @@ export const SPECTRAL_CIRCLE_IDS = [
 /** The battle-state flag that says a Circle is armed (a lit mine); the stage lights that glyph's ring by it. The battle layer keeps its own copy of the prefix (`ARMED_PREFIX`). */
 export const SPECTRAL_ARMED_FLAG_PREFIX = 'plat.armed.' as const;
 
+/** The glyph painting in its three states and the aeon rock (ground decals, square, `public/art/decals/`; r75-boss-art, the driver's picks under Bailey's delegation, item 219m). One painting serves all six platforms; the rock has one picture. */
+export const SPECTRAL_GLYPH_DECALS = {
+  unlit: 'art/decals/spectral-glyph-unlit.png',
+  occupied: 'art/decals/spectral-glyph-occupied.png',
+  mined: 'art/decals/spectral-glyph-mined.png',
+} as const;
+export const SPECTRAL_ROCK_DECAL = 'art/decals/spectral-aeon-rock.png' as const;
+
 /** AI script ids (registered by `battle/ffx/ai/spectral-keeper.ts`). */
 export const SPECTRAL_KEEPER_SCRIPT = 'spectral-keeper' as const;
 export const SPECTRAL_CIRCLE_SCRIPT = 'spectral-circle' as const;

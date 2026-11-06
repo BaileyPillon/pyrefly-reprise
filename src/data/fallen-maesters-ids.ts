@@ -36,7 +36,7 @@ export const MAESTERS_SEAM_20 = 'floor-20-fallen';
 export const MAESTERS_SEAM_40 = 'floor-40-fallen';
 export const MAESTERS_SEAM_60 = 'floor-60-fallen';
 
-/** The paintings (none exist yet: the art needs list in `docs/handoff/ch-maesters.md`; until they are installed the presenter draws its fallback). */
+/** The paintings (`public/art/characters/<key>/`, staged by r75-boss-art, `docs/handoff/r75-boss-art.md`; a tree that has not got them draws the presenter's fallback). */
 export const ARANEA_SPRITE = 'x2-aranea';
 export const BLACK_ELEMENTAL_SPRITE = 'x2-black-elemental';
 export const CONCHERER_SPRITE = 'x2-concherer';

@@ -1,0 +1,38 @@
+{
+ "about": "The six pins HELD OUT of docs/target/approved-hashes.json for the first install of the r75-boss-art paintings (the driver's decision for the release 75 second code pass, 2026-11-03, under Bailey's delegation; the first pass, 219v item 3, held the six files back but left their pins in, which made verify-approved report 6 missing after the install). They are the chapter cards and thumbnails that no code reads yet (6 images, 4,481,396 bytes of masters, about 3.6 MB shipped). Each entry below is the exact ledger entry, so it goes back verbatim.",
+ "set": "driver:2026-11-03-boss-art (item 219m, delegated by Bailey)",
+ "returnsWith": "the second install: the build whose board lists the chapters and loads the cards. Copy the six files from D:/Tools/pyrefly-scratch/2026-11-03/boss-art-install/stage/art (and their sidecars) into the art mirror, add the six entries below to the set's entries in docs/target/approved-hashes.json, take the six paths out of the HELD list in boss-art-install/make-mirror.mjs, and put the six pin tests back in tests/unit/chapters/boss-art-r75.test.ts (git log -p on this file and that test shows the previous pass's version).",
+ "doNotPinUntil": "the files are in the tree: a pin with no file is a missing in verify-approved.mjs.",
+ "pins": {
+  "public/art/pause/ch29-spectral-keeper-card.png": {
+   "sha256": "edcbf06263470d8c934dee2795c4d13916e7d76ac14f606a23ebb73b8b02b490",
+   "mtime": "2026-11-03T06:12:00.294Z",
+   "delegated": "2026-11-03"
+  },
+  "public/art/pause/ch29-spectral-keeper-card.2x.webp": {
+   "sha256": "d39bda815e8494aa685ba528e69e0c12d9be264acaf4ecee032384eb22af8c97",
+   "mtime": "2026-11-03T06:19:06.291Z",
+   "delegated": "2026-11-03"
+  },
+  "public/art/pause/ch29-spectral-keeper-thumb.png": {
+   "sha256": "67a023ceb185e71f0af6a4354baf53b5a33e0e3fc2db93f755d1158faf41a364",
+   "mtime": "2026-11-03T06:18:57.953Z",
+   "delegated": "2026-11-03"
+  },
+  "public/art/pause/ffx2-fallen-maesters-card.png": {
+   "sha256": "4d48e8c25841a4a3d377d059589f155db8caf8a1025b66daea76eb6eef4cfd6c",
+   "mtime": "2026-11-03T07:25:39.125Z",
+   "delegated": "2026-11-03"
+  },
+  "public/art/pause/ffx2-fallen-maesters-card.2x.webp": {
+   "sha256": "c261709a82ac05ebd781c334222f5c5e6e132b97e73c469a62c2f9d9e667d8bc",
+   "mtime": "2026-11-03T07:25:40.041Z",
+   "delegated": "2026-11-03"
+  },
+  "public/art/pause/ffx2-fallen-maesters-thumb.png": {
+   "sha256": "6d3f38b767eed40c7c725c0de05a07701374f14d371e7615f7e445bb1320130c",
+   "mtime": "2026-11-03T07:25:40.091Z",
+   "delegated": "2026-11-03"
+  }
+ }
+}

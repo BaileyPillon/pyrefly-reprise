@@ -17,6 +17,7 @@
  */
 
 import { Color, MeshStandardMaterial, SRGBColorSpace, type BufferGeometry, type Material, type Mesh, type Object3D, type Texture } from 'three';
+import { disposeSkeletonsOf } from '../skeletons.ts';
 import { patchFlap, type FlapUniforms } from './flap.ts';
 import { SHADE, type Look } from './layout.ts';
 import { LAYER, LOOK } from './look.ts';
@@ -137,9 +138,18 @@ export function drive(set: ShadeSet, channels: { colour: Color; emissive: Color;
   }
 }
 
-/** Free what a set made. The file's own geometry and textures are freed too when `geometries` is set (a capsule's are its own; a file's are shared with the clones of it and freed with the loader). */
+/**
+ * Free what a set made. The file's own geometry and textures are freed too when `geometries` is set (a capsule's are its own; a file's are shared with the clones of it and freed with the loader).
+ *
+ * **The skeletons are always freed (r75 fix pass, decision 219v item 4; FFX-2 only, the hidden 3D Bahamut chapter, review finding YR-11).** Every clone of a file carries skeletons of its own (`SkeletonUtils.clone` builds a new
+ * `Skeleton` for each skinned mesh), and the first draw of a skinned mesh gives its skeleton a bone texture (a `DataTexture` of the bone matrices) that nothing else ever frees: freeing the geometry and the materials
+ * leaves it on the GPU, because three.js has no way to know the skeleton is gone. The loader frees the file's own geometry and maps; these textures were never the file's. A lose-and-retry loaded every figure again and left
+ * one bone texture per skinned mesh behind (34 a retry in the browser read, with the JS heap flat); a dressphere swap left the old model's behind the same way. `Skeleton.dispose` only drops the bone texture, so a skeleton
+ * that is still in use makes a new one on its next draw: freeing is always safe.
+ */
 export function disposeShade(set: ShadeSet, geometries = false): void {
   for (const m of set.materials) m.dispose();
+  disposeSkeletonsOf(set.meshes);
   if (geometries) {
     for (const g of set.geometries) g.dispose();
     for (const t of set.textures) t.dispose();

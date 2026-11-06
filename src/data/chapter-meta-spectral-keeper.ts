@@ -7,7 +7,8 @@
  * - `quote` is a line Auron speaks in the pre scene (`src/story/scripts/spectral-keeper.ts`, a draft for Bailey to read), our own words in his register (writing bible section 1.2: laconic, dry).
  * - `objectives` are ours, each a rule `src/ui/common/chapterObjectives.ts` already answers: wear it down by a third, bring it below a third, and the win.
  * - `tip` and `handwritten` are our own words over the research's sourced rules (RE sections 3 to 5).
- * - `heroArt` is not made yet (`pause/ch29-spectral-keeper`, so the pause screen shows the fallback): `heroArtFallback` is an existing approved plate of the Dome. `snapshots` are existing assets only.
+ * - `heroArt` is the pause plate `pause/ch29-spectral-keeper` (painted for this chapter, r75-boss-art: the Keeper close and low over the Dome water; the driver picked it under Bailey's delegation, item 219m);
+ *   `heroArtFallback`, an existing approved plate of the Dome, shows while a tree has not got it. `snapshots`: the Dome's plate, the Keeper's own idle (it replaced Yunalesca's as the stand-in for "what waits behind the door") and Auron's idle.
  * - `musicKeys` are the cues the chapter plays: the Dome's bed, the stand-in boss cue and the FFX fanfare.
  */
 
@@ -33,7 +34,7 @@ export const SPECTRAL_KEEPER_META: ChapterMeta = {
   tip: 'Every blow draws a sweep on three glyphs. Stand outside them, and step off a lit glyph before its turn comes up.',
   snapshots: [
     { image: 'backdrops/zanarkand-dome.png', caption: 'the dome' },
-    { image: 'characters/yunalesca-1/idle.png', caption: 'what waits behind the door' },
+    { image: 'characters/spectral-keeper/idle.png', caption: 'what waits behind the door' },
     { image: 'characters/auron/idle.png', caption: 'keep walking' },
   ],
   focalCharacterId: 'auron',

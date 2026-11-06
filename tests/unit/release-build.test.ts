@@ -127,17 +127,17 @@ describe('bundleInputs: what vite.config.ts and the art plugin will read', () =>
       buildSha: '(git HEAD of the tree)',
       artWebp: 'exact',
       artThumbs: 'on',
-      threeSrc: 'on',
+      threeSrc: 'off', // off by default since release 75 (job INT-3)
     });
     expect(read('vite.config.ts')).toContain(`process.env.BASE_PATH ?? '${HOSTS.github.base}'`);
   });
 
   it('reads set values, trimmed and lower-cased where the tools do', () => {
-    expect(bundleInputs({ BASE_PATH: '/', PYREFLY_RELEASE: ' 60 ', PYREFLY_BUILD_SHA: ' 1cea6e93 ', PYREFLY_ART_WEBP: ' OFF ', PYREFLY_ART_THUMBS: 'Off', PYREFLY_THREE_SRC: ' OFF ' })).toEqual({
-      base: '/', release: '60', buildSha: '1cea6e93', artWebp: 'off', artThumbs: 'off', threeSrc: 'off',
+    expect(bundleInputs({ BASE_PATH: '/', PYREFLY_RELEASE: ' 60 ', PYREFLY_BUILD_SHA: ' 1cea6e93 ', PYREFLY_ART_WEBP: ' OFF ', PYREFLY_ART_THUMBS: 'Off', PYREFLY_THREE_SRC: ' ON ' })).toEqual({
+      base: '/', release: '60', buildSha: '1cea6e93', artWebp: 'off', artThumbs: 'off', threeSrc: 'on',
     });
-    // the switch is on for unset, empty and every other word (tools/vite-three-src.mjs threeSrcOn)
-    for (const v of [undefined, '', 'on', 'yes', '0']) expect(bundleInputs({ PYREFLY_THREE_SRC: v }).threeSrc, String(v)).toBe('on');
+    // the switch is off for unset, empty and every other word; `on` is the one word that turns it on (tools/vite-three-src.mjs threeSrcOn; since release 75, job INT-3)
+    for (const v of [undefined, '', 'off', 'yes', '0']) expect(bundleInputs({ PYREFLY_THREE_SRC: v }).threeSrc, String(v)).toBe('off');
     // an empty BASE_PATH is a value, as `??` reads it
     expect(bundleInputs({ BASE_PATH: '' }).base).toBe('');
   });
@@ -156,7 +156,7 @@ describe('bundleInputs: what vite.config.ts and the art plugin will read', () =>
 
   it('prints one line per input', () => {
     expect(formatBundleInputs(bundleInputs({ BASE_PATH: '/', PYREFLY_RELEASE: '60' }))).toEqual([
-      'base /', 'release 60', 'build sha (git HEAD of the tree)', 'art WebP scope exact', 'strip thumbnails on', 'three from source on',
+      'base /', 'release 60', 'build sha (git HEAD of the tree)', 'art WebP scope exact', 'strip thumbnails on', 'three from source off',
     ]);
     expect(formatBundleInputs(bundleInputs({}))[1]).toBe('release (none)');
   });

@@ -39,7 +39,7 @@
  * | Draw | `'min'` | `'mid'` | `'max'` |
  * |---|---|---|---|
  * | Magnitude (`int(0,31)`, a hit count, a swept angle) | low end | midpoint | high end |
- * | Branch (`int(0,100)`, `int(0,99)`, `int(0,255)`) | median | median | median |
+ * | Branch (`int(0,100)`, `int(0,99)`, `int(0,255)`, the raw 31-bit picker draw `int(0,0x7fffffff)`) | median | median | median |
  *
  * A branch roll at its median is the **likely** outcome: an action whose hit
  * chance is over 50 lands in all three rolls, and a critical whose chance is
@@ -125,9 +125,12 @@ export class RollPolicyRng extends SeededRng {
   }
 }
 
-/** `[0, 100]`, `[0, 99]` and `[0, 255]`: hit, crit, status application, escape. */
+/**
+ * `[0, 100]`, `[0, 99]` and `[0, 255]` (hit, crit, status application, escape) and the raw 31-bit draw `[0, 0x7fffffff]` (the script picker `findMatchingChr`, the Magus Sisters, Yojimbo, the drops): each chooses WHICH
+ * outcome, never how hard. As a magnitude the `min` run drew 0 and the `max` run 2147483647, so a band's two ends priced different victims ("TIDUS 4,132-2,333", round 33 PR-0603). FFX only: FFX-2 has no such draw.
+ */
 function isBranchRange(lo: number, hi: number): boolean {
-  return lo === 0 && (hi === 100 || hi === 99 || hi === 255);
+  return lo === 0 && (hi === 100 || hi === 99 || hi === 255 || hi === 0x7fffffff);
 }
 
 // --------------------------------------------------------------- the result

@@ -287,3 +287,23 @@
     line-height: 1.32;
   }
 }
+
+/*
+ * The short tip (r75 fix pass, decision 219v item 5; review read MA-10; since job TIP-1 ten chapters have an entry in PREP_TIPS (data/chapter-prep-tips.ts): the Fallen Maesters and the nine whose tip the browser read cut at 1600 x 900), see "tipHtml(meta, { prep: true })").
+ *
+ * This band is a fixed 120 grid px and shows about five lines of the tip at 1600 x 900; the Fallen Maesters' tip is ten lines there and was cut mid-line until the player scrolled (the others, six to eight). A chapter's block carries the full tip
+ * and the short one; from 600 px up (the desktop and tablet card, in this file's scaled stage) the short one shows, and under 600 px the phone's stacked card ("chapter-panel-phone.css", which has the room and
+ * is not changed) keeps the full one. A chapter with no entry in PREP_TIPS has neither class in its markup and none of this applies. At 2000 x 1012 the band is taller in screen pixels and the type at its floor the
+ * same size, so the card holds more there than at 1600 x 900, which is the binding case.
+ */
+.prepchap__cols .cpanel__tip-text--short {
+  display: none;
+}
+@media (min-width: 600px) {
+  .prepchap__cols .cpanel__tip-text--full {
+    display: none;
+  }
+  .prepchap__cols .cpanel__tip-text--short {
+    display: block;
+  }
+}

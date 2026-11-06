@@ -67,7 +67,7 @@ export function spectralKeeper(): EnemyDef {
   return {
     id: SPECTRAL_KEEPER_ID,
     name: 'Spectral Keeper',
-    spriteKey: SPECTRAL_KEEPER_ID, // `characters/spectral-keeper/` (art owed: docs/handoff/ch-keeper.md "ART NEEDS"); until it is painted the stage draws its fallback figure
+    spriteKey: SPECTRAL_KEEPER_ID, // `characters/spectral-keeper/` (idle attack cast hurt ko and idle@2x, staged by r75-boss-art, docs/handoff/r75-boss-art.md); a tree without them draws the stage's fallback figure
     slot: 0,
     stats,
     hp: stats.hp,
@@ -105,7 +105,7 @@ export function spectralCircle(platform: number): EnemyDef {
   return {
     id,
     name,
-    spriteKey: 'spectral-glyph', // the platform glyph painting (art owed: docs/handoff/ch-keeper.md "ART NEEDS")
+    spriteKey: 'spectral-glyph', // a key only: the Circle is figure-less and the scene's part anchor draws the glyph (`art/decals/spectral-glyph-*.png`, `FloorDecal`, r75-boss-art)
     slot: platform,
     stats,
     hp: stats.hp,

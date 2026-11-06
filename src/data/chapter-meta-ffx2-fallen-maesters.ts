@@ -9,8 +9,9 @@
  *   and magic); the Black Elemental has almost no HP and a Reflect, and its Magic climbs every third action; Concherer's shell breaks on one hit of about twenty thousand; Chac petrifies and a blow on stone destroys a girl.
  * - `quote` is Paine's line from the first seam (`../story/scripts/ffx2-fallen-maesters.ts`), our own.
  * - `objectives`: get past Aranea (floor 40 reached), get past Concherer (floor 80 reached), the win.
- * - `heroArt` has no painting of its own yet: the card shows the Via Infinito's plate as `heroArtFallback` (the four fiends have no paintings yet; the art needs list is in the handoff).
- * - `snapshots`: the Via Infinito's plate, Paragon's idle (the hall's other boss; approved) and Paine's FFX-2 portrait (approved). No snapshot of the four fiends exists yet.
+ * - `heroArt` is the pause plate `pause/ffx2-fallen-maesters` (painted for this chapter, r75-boss-art: the four fiends in the Via Infinito's hall; the driver picked it under Bailey's delegation, item 219m);
+ *   the Via Infinito's plate is the `heroArtFallback` while a tree has not got it.
+ * - `snapshots`: the Via Infinito's plate, Aranea's idle (the first fiend; it replaced Paragon's, the hall's other boss, as the middle snapshot) and Paine's FFX-2 portrait (approved).
  * - `musicKeys`: the field bed, the aeon cue (a flagged stand-in), the fanfare, as the record's.
  */
 
@@ -22,7 +23,7 @@ export const FALLEN_MAESTERS_META: ChapterMeta = {
   gameLabel: 'FFX-2',
   numeral: 'EXP',
   ...FALLEN_MAESTERS_TEXT,
-  heroArt: 'pause/ffx2-fallen-maesters', // no painting yet: the fallback below shows
+  heroArt: 'pause/ffx2-fallen-maesters', // the chapter's pause plate; the fallback below shows in a tree that has not got it
   heroArtFallback: 'backdrops/via-infinito.png',
   quote: { text: 'Then we stop it before the fifth bite.', speaker: 'Paine' },
   handwritten: 'the glyph heals. nothing else does',
@@ -31,14 +32,15 @@ export const FALLEN_MAESTERS_META: ChapterMeta = {
     { id: 'get-past-concherer', label: 'Get past Concherer', rule: { kind: 'link-reached', link: 4 } },
     { id: 'defeat-chac', label: 'Defeat Chac', rule: { kind: 'victory' } },
   ],
-  // Short enough for the prep card's tip box (about five lines at 1600 x 900): the guide card in battle carries the rest.
+  // The full tip: the pause screen's prose and the phone's stacked card show all of it. The desktop prep band shows about five lines of it at 1600 x 900 and this is ten, so that card shows the short form in
+  // `./chapter-prep-tips.ts` (r75 fix pass, decision 219v item 5; review read MA-10).
   tip:
     'Each floor is a fresh fight, and the glyph between them mends you. Concherer’s shell breaks on one hit of about twenty thousand, ' +
     'which only Paine’s Break Damage Limit reaches: Change her across The End’s red and green gates and back to the Dark Knight first. ' +
     'Chac turns girls to stone, and a blow on stone destroys them.',
   snapshots: [
     { image: 'backdrops/via-infinito.png', caption: 'the Great Cloisters' },
-    { image: 'characters/paragon/idle.png', caption: 'the hall below' },
+    { image: 'characters/x2-aranea/idle.png', caption: 'the hall below' },
     { image: 'portraits/paine.png', caption: 'count the bites' },
   ],
   focalCharacterId: 'paine',
