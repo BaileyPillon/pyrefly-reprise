@@ -20,7 +20,7 @@ import type { ChapterScripts, SpeakerFallback, SpeakerId, StoryScript } from '..
 import { backdrop, battleStart, beat, camera, fade, flash, fx, hideActor, music, narrate, results, say, shake, wait } from '../dsl.ts';
 
 /** The foes' ids (mirrored from `src/data/ffx/flooded-ways-ids.ts`: the story layer does not reach into the data layer). */
-const FOE = { evrae: 'evrae-altana', lock2: 'gate-lock-2', geosgaeno: 'geosgaeno' } as const;
+const FOE = { evrae: 'evrae-altana', lock1: 'gate-lock-1', geosgaeno: 'geosgaeno' } as const;
 
 /** The seams' and callouts' ids (the engine's `script-trigger` name is the id). */
 export const FLOODED_SEAMS = { evrae: 'evrae-falls' } as const;
@@ -78,9 +78,9 @@ export const floodedWaysScripts: ChapterScripts = {
     say('tidus', 'Two down. Neither one was fair.'), // 1
     say('wakka', "Fair's for blitzball, ya."), // 2
     beat(1400),
-    say('rikku', 'Tidus, you went all quiet in there. Were you scared? Be honest!'), // 3
-    say('tidus', 'A bit. I was inside it. I still do not know how I got out.'), // 4
-    say('wakka', 'You hit it from the inside, brudda. That is how.'), // 5
+    say('rikku', 'Okay okay okay: is everybody still in one piece? Be honest!'), // 3 (no line here names who the temple beast swallowed: it is any of the three, and a win may come before it swallows anyone)
+    say('tidus', 'More or less. Ask me again when I am dry.'), // 4
+    say('wakka', 'You kept your heads down and hit it hard, brudda. That is how.'), // 5
     say('rikku', 'Okay okay okay: next time we bring a bigger plan!'), // 6
     results(),
   ],
@@ -89,7 +89,8 @@ export const floodedWaysScripts: ChapterScripts = {
 
   mid: [
     { id: FLOODED_CALLOUTS.gaze, when: { type: 'ability-used', who: FOE.evrae, ability: 'evrae-altana-stone-gaze' }, once: true, script: FLOODED_CALLOUTS.gaze },
-    { id: FLOODED_CALLOUTS.lock, when: { type: 'ko', who: FOE.lock2 }, once: true, script: FLOODED_CALLOUTS.lock },
+    // The first lock in the cursor's order (a trigger names one combatant, so one lock has to stand for "a lock opened"; the line is true whichever lock goes first and whether or not the other is open already).
+    { id: FLOODED_CALLOUTS.lock, when: { type: 'ko', who: FOE.lock1 }, once: true, script: FLOODED_CALLOUTS.lock },
     { id: FLOODED_SEAMS.evrae, when: { type: 'ko', who: FOE.evrae }, once: true, script: FLOODED_SEAMS.evrae },
     { id: FLOODED_CALLOUTS.swallow, when: { type: 'ability-used', who: FOE.geosgaeno, ability: 'geosgaeno-swallow' }, once: true, script: FLOODED_CALLOUTS.swallow },
   ] satisfies MidBattleTrigger[],
@@ -97,7 +98,7 @@ export const floodedWaysScripts: ChapterScripts = {
   midScripts: {
     [FLOODED_SEAMS.evrae]: seam(FOE.evrae, ['tidus', 'It was already dead. It just would not lie down.'], ['wakka', 'Next stop is a temple under the sea, ya.'], 'The Baaj Temple, deep under the water.'),
     [FLOODED_CALLOUTS.gaze]: callout('wakka', 'Its eyes, brudda! Whoever it looks at turns to stone!'),
-    [FLOODED_CALLOUTS.lock]: callout('rikku', 'A gate gives! Open the other and the water carries us on!'),
+    [FLOODED_CALLOUTS.lock]: callout('rikku', 'A gate gives! With both open, the water carries us on!'),
     [FLOODED_CALLOUTS.swallow]: callout('rikku', 'It swallowed one of us! Strike it from the inside, or brace for the spit!'),
   },
 };

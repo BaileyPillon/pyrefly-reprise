@@ -82,7 +82,7 @@ describe('the monsters equal the note (RE 1.2 and 1.3)', () => {
       expect(l.affinities).toEqual({ fire: 'immune', ice: 'immune', lightning: 'immune', water: 'immune', holy: 'immune' });
       expect(l.immunityFlags).toContain('immune-to-magical-damage');
       expect(l.immunityFlags).not.toContain('immune-to-physical-damage'); // an ordinary blade should kill it (RE 4.4, inferred from the flags)
-      expect(l.rewards).toEqual({ ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 500, drops: [] });
+      expect(l.rewards).toEqual({ ap: 0, apOverkill: 0, gil: 0, overkillThreshold: 2_000, drops: [] }); // RE 1.2: the threshold is 2,000 on both locks, not their HP
       expect(l.immunities).toMatchObject({ ko: 255, petrify: 255, poison: 255, sleep: 255, slow: 255, haste: 255, shell: 255, protect: 255 });
       expect(l.flags.untargetable).toBeUndefined(); // "Targetable stays at its default" (RE 4.4)
       expect(l.threatenChance).toBe(0);

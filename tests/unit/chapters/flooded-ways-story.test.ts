@@ -54,10 +54,10 @@ describe("the triggers and the scripts agree (the registry's audits, repeated fo
     expect(triggers).toHaveLength(4);
   });
 
-  it("the seam fires on the KO of Evrae Altana, whichever area it falls in; the callouts on the first Stone Gaze, on a lock opened (the second lock's KO) and on the Swallow, with abilities that exist", () => {
+  it("the seam fires on the KO of Evrae Altana, whichever area it falls in; the callouts on the first Stone Gaze, on a lock opened (the first lock's KO; its line holds whichever lock goes first) and on the Swallow, with abilities that exist", () => {
     const seam = triggers.find((t) => t.script === FLOODED_SEAMS.evrae)!;
     expect(seam.when).toEqual({ type: 'ko', who: EVRAE_ALTANA_ID });
-    expect(triggers.find((t) => t.script === FLOODED_CALLOUTS.lock)!.when).toEqual({ type: 'ko', who: GATE_LOCK_IDS[1] });
+    expect(triggers.find((t) => t.script === FLOODED_CALLOUTS.lock)!.when).toEqual({ type: 'ko', who: GATE_LOCK_IDS[0] });
     const gaze = triggers.find((t) => t.script === FLOODED_CALLOUTS.gaze)!.when;
     const swallow = triggers.find((t) => t.script === FLOODED_CALLOUTS.swallow)!.when;
     expect(gaze).toMatchObject({ type: 'ability-used', who: EVRAE_ALTANA_ID });

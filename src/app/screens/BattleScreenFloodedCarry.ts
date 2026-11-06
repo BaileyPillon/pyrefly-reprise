@@ -34,13 +34,17 @@ export function returnShattered<T extends FFXPartyBuild | FFX2PartyBuild>(party:
   return { ...build, members } as T;
 }
 
-/** Skip the links whose carried boss is already dead (`carriesBossHp`): the chain goes on from the first link after them. */
-export async function skipSpentLinks(
+/**
+ * Skip the links whose carried boss is already dead (`carriesBossHp`): the chain goes on from the first link after them. `skipped` is how many it passed over, so the chain can count them as passed (they are formations
+ * of the chain even though they were never fought): the pause screen's "battle n of m", the objectives' `link-reached` rule, the seeds and a retry checkpoint all read the chain position, not the number of fights played.
+ */
+export async function skipSpentLinksCounted(
   group: EnemyGroupDef,
   state: BattleState,
   find: (id: string) => Promise<EnemyGroupDef | null>,
-): Promise<EnemyGroupDef> {
+): Promise<{ group: EnemyGroupDef; skipped: number }> {
   let current = group;
+  let skipped = 0;
   for (let guard = 0; guard < 8 && current.carriesBossHp === true && current.nextGroupId !== undefined; guard++) {
     const boss = current.enemies[0];
     const live = boss === undefined ? undefined : (state.combatants[boss.id] as FFXCombatant | undefined);
@@ -48,6 +52,16 @@ export async function skipSpentLinks(
     const next = await find(current.nextGroupId);
     if (next === null) break;
     current = next;
+    skipped++;
   }
-  return current;
+  return { group: current, skipped };
+}
+
+/** The group the chain goes on with after the skip (see {@link skipSpentLinksCounted}, which also counts the links passed over). */
+export async function skipSpentLinks(
+  group: EnemyGroupDef,
+  state: BattleState,
+  find: (id: string) => Promise<EnemyGroupDef | null>,
+): Promise<EnemyGroupDef> {
+  return (await skipSpentLinksCounted(group, state, find)).group;
 }

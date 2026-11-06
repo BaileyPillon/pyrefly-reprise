@@ -5,8 +5,10 @@
  *
  * - `title`, `subtitle`, `blurb` and `location` are the chapter record's own (`FLOODED_WAYS_TEXT`), the pause tab's tagline and blurb shorter.
  * - `quote` is Wakka's one line in the pre scene (`src/story/scripts/flooded-ways.ts`, a draft for Bailey to read), our own words.
- * - `objectives` are ours, each a rule `src/ui/common/chapterObjectives.ts` already answers, and none a number of the fights': carry on to the second area (the second link), reach the Baaj Temple (the fourth link), end the
- *   chapter on a victory.
+ * - `objectives` are ours, each a rule `src/ui/common/chapterObjectives.ts` already answers, and none a number of the fights': get past the first gate (the chain has gone on to its second position or beyond), reach the
+ *   Baaj Temple (the fourth position), end the chapter on a victory. `link-reached` reads the chain **position**, which a skipped area counts as passed (`BattleEncounterChain.ts` moves `links` over it, `skipSpentLinksCounted`):
+ *   on the two-Phoenix-Down route, where Evrae Altana falls in the first area and the chain goes straight on to Geosgaeno, the Baaj row ticks and so does the first gate (the first area is over, its gate passed), and
+ *   the label says only that, not that a second gate was played.
  * - `tip` and `handwritten` are our own words over the research's sourced rules (RE 2.2, 4.1, 4.3): stone breaks in the water, the dead take damage from healing, and the swallowed one can strike back from inside.
  * - `heroArt` is the pause plate `pause/ch36-flooded-ways` (not made yet: the art list in the handoff); `heroArtFallback`, an existing approved plate of the Via Purifico, shows meanwhile.
  * - `musicKeys` are the cues the chapter plays: the bed, the stand-in boss cue and the FFX fanfare.
@@ -30,7 +32,7 @@ export const FLOODED_WAYS_META: ChapterMeta = {
   quote: { text: "Don't let it look at you, brudda. Stone and water do not mix, ya.", speaker: 'Wakka' },
   handwritten: 'two Phoenix Downs end the dead one',
   objectives: [
-    { id: 'second-area', label: 'Carry on to the second gate', rule: { kind: 'link-reached', link: 2 } },
+    { id: 'first-gate', label: 'Get past the first gate', rule: { kind: 'link-reached', link: 2 } },
     { id: 'baaj-temple', label: 'Reach the Baaj Temple', rule: { kind: 'link-reached', link: 4 } },
     { id: 'last-home', label: 'Send Geosgaeno home', rule: { kind: 'victory' } },
   ],

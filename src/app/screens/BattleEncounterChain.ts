@@ -33,7 +33,7 @@ import type {
 import type { Chapter } from '../../data/encounters.ts';
 import type { BattleOutcome, BattlePresenter } from '../../engine/BattlePresenter.ts';
 import { setupForNextLink } from './BattleScreenSetup.ts';
-import { skipSpentLinks } from './BattleScreenFloodedCarry.ts';
+import { skipSpentLinksCounted } from './BattleScreenFloodedCarry.ts';
 import { setHeadlineBoss } from '../../engine/HeadlineBoss.ts';
 import { fadeMsToSec } from '../../audio/AudioManager.ts';
 import { checkpointAt, type ChainCheckpoint } from './BattleChainCheckpoint.ts';
@@ -258,7 +258,10 @@ export async function runEncounterChain(opts: EncounterChainOptions): Promise<En
       console.warn(`[battle] chapter chains to "${nextId}" but no formation exports that id`);
       break;
     }
-    const nextGroup = await skipSpentLinks(found, engine.state(), opts.findGroup); // the hidden Flooded Ways (FFX only): an area whose boss already fell is skipped; every other link is returned as it is
+    // The hidden Flooded Ways (FFX only): an area whose boss already fell is skipped; every other link is returned as it is, with none skipped. A skipped area is a formation of the chain that was passed, so the position
+    // moves on over it (`links` is the chain position that `link-reached` objectives, "battle n of m", the seeds and a retry checkpoint read).
+    const { group: nextGroup, skipped } = await skipSpentLinksCounted(found, engine.state(), opts.findGroup);
+    links += skipped;
 
     // Next link: same party, carried state, no results screen in between.
     won.push(outcome.result);

@@ -22,7 +22,7 @@ export const FLOODED_WAYS_SPOTS: Readonly<Record<string, [number, number, number
   [EVRAE_ALTANA_ID]: [3.7, 0, -0.6],
   [GEOSGAENO_ID]: [3.7, 0, -0.6],
   [GATE_LOCK_IDS[0]]: [1.2, 0, -3.4],
-  [GATE_LOCK_IDS[1]]: [6.4, 0, -3.6],
+  [GATE_LOCK_IDS[1]]: [5.4, 0, -5.0],
 };
 
 /** World heights, metres. Estimates for the framing, `[estimate]`: the airship Evrae is about 4 m; the locks are door-sized props. */

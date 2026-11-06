@@ -6,7 +6,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { BattleEngine, FFXCombatant } from '../../../src/battle/common/types.ts';
-import { ejectActor } from '../../../src/battle/ffx/hp.ts';
+import { dealDamage, ejectActor } from '../../../src/battle/ffx/hp.ts';
 import { aiContextFor } from '../../../src/battle/ffx/ai/types.ts';
 import { geosgaenoTurn } from '../../../src/battle/ffx/ai/geosgaeno.ts';
 import { swallowVictim } from '../../../src/battle/ffx/ai/geosgaeno-hold.ts';
@@ -215,6 +215,24 @@ describe('the Gate Locks and Open lock (RE 4.4)', () => {
     expect(actor(e, 'gate-lock-1').hp).toBe(0);
     expect(actor(e, 'evrae-altana').hp).toBe(16_384); // nothing counters a hit on a lock
     expect(log(e).some((x) => x.type === 'counter')).toBe(false);
+  });
+
+  it('a lock killed by one blow under 2,000 is no Overkill: the threshold is 2,000 on both locks, not their 500 HP (RE 1.2)', () => {
+    for (const [dmg, overkill] of [[600, false], [1_999, false], [2_000, true]] as const) {
+      for (const id of ['gate-lock-1', 'gate-lock-2']) {
+        const e = newEngine(1, 'area-1');
+        const ctx = ctxOf(e);
+        const events: Array<{ type: string; overkill?: boolean }> = [];
+        const emit = ctx.emit;
+        ctx.emit = (ev: { type: string; overkill?: boolean }): void => {
+          events.push(ev);
+          return emit.call(ctx, ev as never);
+        };
+        dealDamage(ctx, actor(e, id), dmg, { sourceId: 'tidus', element: 'none', crit: false, hitIndex: 0, hitCount: 1 });
+        expect(actor(e, id).hp, `${id} ${dmg}`).toBe(0);
+        expect(events.find((x) => x.type === 'damage')?.overkill === true, `${id} ${dmg}`).toBe(overkill);
+      }
+    }
   });
 
   it('with both locks gone the area ends as a win with Evrae Altana standing and the next area named; with one it goes on', () => {

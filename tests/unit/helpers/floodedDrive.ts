@@ -152,8 +152,10 @@ export async function playChain(seed: number, play: (engine: BattleEngine, key: 
     if (found === null) return { steps, outcome: 'victory' };
     const next = await skipSpentLinks(found, engine.state(), find);
     if (stopBefore !== undefined && next.id === groupIdOf(stopBefore)) return { steps, outcome: 'victory' };
-    current = setupForNextLink(current, next, engine.state(), seed + guard + 1) as BattleSetup;
-    key = FLOODED_LINKS.find((l) => l.groupId === next.id)!.key;
+    // The chain seeds link n with `seed + n - 1`, n the chain position (`runEncounterChain` moves `links` over a skipped area): the seed here is the position of the link reached, the number of fights played only when none is skipped.
+    const position = FLOODED_LINKS.findIndex((l) => l.groupId === next.id);
+    current = setupForNextLink(current, next, engine.state(), seed + position) as BattleSetup;
+    key = FLOODED_LINKS[position]!.key;
     engine = createFFXEngine({ content, autoResolveMinigames: true });
     engine.init(current);
   }

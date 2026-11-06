@@ -213,6 +213,18 @@ try {
     const ok = await pickRow(/Open lock/i);
     check(`Open lock reached by the menu (${which})`, ok, await selectedRow());
     if (which === 1) await shot('5-open-lock-target-cursor');
+    if (which === 1 && STOP === 'lock') {
+      // --stop lock: only the staging read (both locks under the Open lock target cursor), for a spot change; nothing is played further.
+      const target = await targetName();
+      check('the Open lock cursor rests on a Gate Lock', /Gate Lock/i.test(target), target);
+      await page.keyboard.press('ArrowRight'); // the cursor steps to the other lock: its framing is the second photograph
+      await page.waitForTimeout(500);
+      await shot('5b-open-lock-second-lock');
+      await browser.close();
+      release();
+      console.log(failures.length > 0 ? `FAILED ${JSON.stringify(failures)}` : 'OK (stopped at the lock cursor)');
+      process.exit(failures.length > 0 ? 1 : 0);
+    }
     await page.keyboard.press('Enter'); // the first lock the cursor rests on
     await page.waitForTimeout(3000);
     const f = await field();
@@ -247,6 +259,24 @@ try {
     // A fresh fight (`restoresPartyOnEntry`, tested on the engine); by the first menu Geosgaeno may already have punched, and the water takes whoever its Stone Punch petrifies (Tidus wears no Ward): shattered members are off the field, nobody is knocked out and still on it.
     check('the party entered the Baaj Temple whole: anyone missing was shattered by the water, nobody is knocked out', f4.party.every((p) => (p.alive && p.hp > 0) || p.removed), f4.party);
     await shot('7-baaj-first-menu');
+
+    // --- the chain position after a skipped area (the review's M2): the pause screen reads battle 4 of 4 and the Baaj row is ticked -----------------
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(1500);
+    const pauseText = await page.evaluate(() => document.body.innerText);
+    check('the pause screen in the Baaj Temple reads "battle 4 of 4" after area 3 was skipped', /BATTLE 4 OF 4/i.test(pauseText), (/BATTLE \d OF \d/i.exec(pauseText) ?? [''])[0]);
+    for (let i = 0; i < 6 && !/Reach the Baaj Temple/i.test(await page.evaluate(() => document.body.innerText)); i++) {
+      await page.keyboard.press('e'); // R1: the next tab, up to the CHAPTER tab
+      await page.waitForTimeout(500);
+    }
+    const chapterTab = await page.evaluate(() => document.body.innerText);
+    const rowOf = (label) => new RegExp(`\\d\\.\\s*${label}[\\s\\S]{0,40}?(Done|—)`, 'i').exec(chapterTab)?.[1]?.toLowerCase() ?? null;
+    log('chapter tab rows', { first: rowOf('Get past the first gate'), baaj: rowOf('Reach the Baaj Temple'), last: rowOf('Send Geosgaeno home') });
+    check('the CHAPTER tab ticks "Get past the first gate" and "Reach the Baaj Temple" and not yet the last row', rowOf('Get past the first gate') === 'done' && rowOf('Reach the Baaj Temple') === 'done' && rowOf('Send Geosgaeno home') === '—', chapterTab.slice(0, 600));
+    await shot('7a-pause-chapter-tab-baaj');
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(900);
+    await waitBattleMenu(page, 60000);
 
     if (STOP === 'hold') {
       // --- a debug write (named): the next turn Geosgaeno takes is the swallow; the swallowed character's menu is Struggle and Defend ---------------------

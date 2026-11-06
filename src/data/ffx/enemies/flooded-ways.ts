@@ -41,6 +41,8 @@ export const FLOODED_ZANMATO_BYTE = 3;
 /** Damage in a single killing blow that counts as an Overkill (RE 1.2). */
 export const GEOSGAENO_OVERKILL = 32_767;
 export const ALTANA_OVERKILL = 2_000;
+/** Both Gate Locks' threshold: 2,000, not their 500 HP (RE 1.2: "Overkill threshold | 32,767 | 2,000 | 2,000 | 2,000"). Their rewards are all 0, so it only decides the mark on the damage event. */
+export const GATE_LOCK_OVERKILL = 2_000;
 
 const statsOf = ([hp, mp, str, def, mag, mdef, agi, luck, eva, acc]: FloodedRecord10): StatBlock => ({ hp, mp, str, def, mag, mdef, agi, luck, eva, acc, maxHp: hp, maxMp: mp });
 const at = (list: readonly StatusId[], byte = 255): StatusImmunities => Object.fromEntries(list.map((s) => [s, byte])) as StatusImmunities;
@@ -146,7 +148,7 @@ export function gateLock(index: 0 | 1): EnemyDef {
     immunityFlags: flags,
     forms: [{ name: GATE_LOCK_NAME, spriteKey: 'gate-lock', hp: stats.hp }],
     aiScriptId: FLOODED_SCRIPTS.lock,
-    rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: stats.hp, drops: [] },
+    rewards: { ap: 0, apOverkill: 0, gil: 0, overkillThreshold: GATE_LOCK_OVERKILL, drops: [] },
     abilityIds: [],
     flags: { hideHpBar: true }, // no bar of its own; it stays a legal target and a legal random pick (RE 4.4: "Targetable stays at its default")
     sensorText: 'A gate lock. Spells and spirits do nothing to it; a key or a blade will.',

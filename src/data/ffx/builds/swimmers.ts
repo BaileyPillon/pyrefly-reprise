@@ -13,9 +13,9 @@
  *   and none is tuned toward a result (rule 15).
  * - **Equipment is Highbridge's, carried forward, unchanged: Rikku's Stone Ward alone** (pick GV4, **the driver's call against the preflight's recommendation, "driver's call, his to overturn"**). The preflight recommended
  *   a Stone Ward added on Tidus and Wakka too, "the guides' standing advice". A Stone Ward takes 50 off a Petrify chance, so against Stone Punch and Stone Gaze (both 50) it makes the Petrify never land: **with three Wards the
- *   shatter rule, the chapter's sharpest rule, is real in the engine and never met** (Geosgaeno 95 percent for the elemental line, 200 seeds), and it adds an armour no source gives to two members. The bench measured both
- *   (`docs/handoff/ch-flooded-ways.md` section 5): Rikku's Ward alone keeps the water rule alive (about 0.6 members shattered a fight) and puts Geosgaeno at 82 percent, nearer the plan's 60 to 80 band, with nothing
- *   added to anyone's gear. The preflight's three Wards are the one list `WARDED` below: add the two ids and the build is the preflight's.
+ *   shatter rule, the chapter's sharpest rule, is real in the engine and never met** (Geosgaeno 84 percent for the elemental line, 200 seeds, nobody shattered), and it adds an armour no source gives to two members. The bench measured both
+ *   (`docs/handoff/ch-flooded-ways.md` section 5, re-run on the final code): Rikku's Ward alone keeps the water rule alive (about 0.6 members shattered a fight) and puts Geosgaeno at 72 percent, inside the plan's 60 to 80 band,
+ *   with nothing added to anyone's gear. The preflight's three Wards are the one list `WARDED` below: add the two ids and the build is the preflight's.
  * - **The bag is Highbridge's** (Chapter VIII's, carried forward) **plus the preflight's kit** ({@link SWIMMERS_KIT}: the four gems, Poison Fang, X-Potions, and 30 Phoenix Downs). The preflight said the preset's bag already
  *   held these; it does not (12 Phoenix Downs, no gems, no X-Potion), so the list is added, exactly as written, as an `[estimate]`. **Against Evrae Altana the bag is a two-item fight** (two Phoenix Downs or two X-Potions kill a Zombie
  *   that cannot be healed past its 16,384): the chapter does not hide it and does not nerf the boss; the bag's stock is the preset lever (pick GV10), measured by the bench, never the monster.

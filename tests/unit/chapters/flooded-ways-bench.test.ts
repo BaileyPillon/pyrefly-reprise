@@ -2,7 +2,7 @@
  * **The Flooded Ways chapter's winnability, measured on the real engine** (FFX only; `docs/handoff/ch-flooded-ways.md` section 5; the harness is `tests/unit/helpers/floodedBench.ts`, the table's tool `tools/flooded-ways-bench.mjs`).
  * The plan's target was about 70 percent per fight for the informed line, 60 to 80 accepted, and a careless line that "mostly loses" (under 20 percent), **measured, never tuned by editing a boss row**.
  * What the bench found is pinned here, honestly: **Evrae Altana is won by every line that thinks** (two Phoenix Downs kill it, and so does opening the locks and striking: the Gagazet-cell party outlives it) and lost by the plain
- * Attack; **Geosgaeno is won about four times in five by the elemental line and never by the plain Attack, and never at all without the gems and the Poison Fang the preflight's kit adds** (the Highbridge bag has no elemental answer).
+ * Attack; **Geosgaeno is won about seven times in ten by the elemental line (200 seeds, final code: 66 to 73 percent by the three holds; inside the plan's band) and never by the plain Attack, and never at all without the gems and the Poison Fang the preflight's kit adds** (the Highbridge bag has no elemental answer).
  * The two levers the bench moved (the Stone Wards, the kit) are the party's estimates, not the monsters'.
  *
  * Always on: 120 seeds for the shipped party's cells and 60 for the ablations (seeds 1 up, deterministic). **The table of record** (200 seeds a cell) is the tool's output; `FLOODED_WAYS_BENCH=1` prints it from here.
@@ -44,7 +44,7 @@ describe(`the shipped party, ${SEEDS} seeds a cell`, () => {
     expect((await evraeRate(SEEDS, evraePhoenix)).shatterAvg).toBeLessThan(0.05);
   }, TIMEOUT);
 
-  it('Geosgaeno: the elemental line wins about four in five (0.65 to 0.95) whatever the held character does; the plain Attack never wins', () => {
+  it('Geosgaeno: the elemental line wins about seven in ten (the always-on band is 0.65 to 0.95 on 120 seeds; the 200-seed table of record reads 66 to 73 percent) whatever the held character does; the plain Attack never wins', () => {
     for (const policy of ['smart', 'struggle', 'wait'] as const) {
       const r = geosgaenoRate(SEEDS, geosgaenoLine(policy));
       expect(share(r), policy).toBeGreaterThanOrEqual(0.65);

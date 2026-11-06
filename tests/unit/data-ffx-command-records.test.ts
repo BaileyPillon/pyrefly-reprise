@@ -310,7 +310,7 @@ function statusDifferences(): string[] {
 }
 
 const KNOWN_STATUS_DIFFERENCES: readonly string[] = [
-  // The hidden Flooded Ways chapter (FFX only, 2026-11-06): KO Punch's Curse bit (an extra-status word with no engine status id) is in the record alone, as Dark Anima's Attack's is.
+  // The hidden Flooded Ways chapter (FFX only, 2026-11-06): KO Punch's Curse bit (0x400) is in the record's extra-status word alone, as Dark Anima's Attack's is: the ability row carries only the regular statuses, and the kernel reads the record and applies Curse from that word (`curse` is an engine status: a member is cursed after a KO Punch lands, probed in the review of 2026-11-06), so the effect is right and only this comparison's two sides differ.
   'geosgaeno-ko-punch: extra bits 0x0, record 0x400',
   // The wiring takes the record's byte; Provoke 254 and Threaten 255 were ours. The Threaten command byte is only "non-zero":
   // the roll reads the TARGET's Threaten byte (research/re-ffx-ctb-status.md section 6).
