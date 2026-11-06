@@ -18,7 +18,7 @@
  */
 
 import type { ChapterScripts } from '../dsl.ts';
-import { battleStart, beat, camera, fade, flash, fx, hideActor, music, results, say, shake, wait } from '../dsl.ts';
+import { battleStart, beat, camera, fade, flash, hideActor, music, results, say, shake, wait } from '../dsl.ts';
 
 /** The seams' ids: the script refs the `mid` triggers name. */
 export const ULTIMA_FALLS = 'ultima-falls';
@@ -77,8 +77,7 @@ export const omegaRuinsScripts: ChapterScripts = {
     [ULTIMA_FALLS]: [
       music(null, 900),
       camera('idle', 700),
-      fx('pyreflies-rising', ULTIMA),
-      hideActor(ULTIMA, 700), // the machine goes dark where it stood
+      hideActor(ULTIMA, 700), // the machine goes dark where it stood: no pyreflies rise (the chapter's canon row, `pyreflyCanon.ts`)
       wait(900),
       say('lulu', 'One down. The next will not be so gentle.', { auto: 2000, fallback: [{ who: 'yuna' }, { who: 'tidus' }] }),
       say('tidus', 'The next?', { auto: 900, fallback: [{ who: 'yuna' }, { who: 'lulu' }] }),
@@ -89,8 +88,7 @@ export const omegaRuinsScripts: ChapterScripts = {
     [OMEGA_FALLS]: [
       music(null, 900),
       camera('idle', 700),
-      fx('pyreflies-rising', OMEGA),
-      hideActor(OMEGA, 700),
+      hideActor(OMEGA, 700), // dark where it stood, as Ultima Weapon's body was
       wait(900),
       say('lulu', 'It was gathering the whole time. Be glad it never finished.', { auto: 2300, fallback: [{ who: 'yuna' }, { who: 'tidus' }] }),
       say('tidus', 'Is that all of them?', { auto: 900, fallback: [{ who: 'yuna' }, { who: 'lulu' }] }),

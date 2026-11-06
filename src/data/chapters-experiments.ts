@@ -16,7 +16,6 @@
  * - **Valefor at Besaid, Wind Waker** (`'exp-windwaker'`, number 32, 2026-10-20; FFX-2 only): hidden chapter 24's Valefor fight drawn as a Wind Waker HD style 3D scene; word `waker` (31 is the 3D Bahamut's, 29 the Spectral Keeper's and 30 the Fallen Maesters').
  * - **The Last Summoning** (`'last-summoning'`, number 28, 2026-10-15; FFX only): Dream's End as a gauntlet in the player's order with the full roster of eight aeons, Yojimbo and the Magus Sisters among them; word `summon` (27 is the Dark Mirror lane's).
  * - **The Omega Ruins** (`'omega-ruins'`, number 43, 2026-11-06; FFX only): Ultima Weapon, Omega Weapon and Nemesis as one three-act chain on the Cavern's plate; word `weapon`.
- *
  * - **The Spectral Keeper** (`'spectral-keeper'`, number 29, 2026-11-02; FFX only): the beast at the foot of the Dome's lift, fought on six glyph platforms; word `keeper` (28 is the Last Summoning lane's).
  *
  * - **The Fallen Maesters** (`'ffx2-fallen-maesters'`, number 30, 2026-11-02; FFX-2 only): the Via Infinito's fixed floor fights 20, 40, 60 and 80 (Aranea, the Black Elemental, Concherer, Chac) as four fresh links; word `infinito`.

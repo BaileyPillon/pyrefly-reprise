@@ -66,7 +66,7 @@ export const OMEGA_RUINS_DOC: GuideDoc = {
       t: 'ol',
       items: [
         'Do not feed it: no fire, ice, lightning, water or holy. A plain blow or a non-elemental spell.',
-        'An aeon with Shield takes the Nova for you; so does a party that has been hit little by what came before.',
+        'Keep every member near full before the count nears thirty: the Nova strikes all three at once, a few hundred at the caps and over five thousand each on a lighter party (an estimate).',
         'Cure Petrify and Confuse as they land.',
       ],
     },
@@ -77,7 +77,7 @@ export const OMEGA_RUINS_DOC: GuideDoc = {
     { t: 'field', label: 'HP', value: '10,000,000' },
     {
       t: 'p',
-      text: 'The last of the old creations, and the only fight of the three against a party at the caps. It acts about every nine ticks, as often as a hasted member of yours does every four.',
+      text: 'The last of the old creations, and the only fight of the three against a party at the caps. It acts every nine ticks; a hasted member of yours acts every four.',
     },
     {
       t: 'p',
@@ -106,7 +106,7 @@ export const OMEGA_RUINS_DOC: GuideDoc = {
       t: 'ol',
       items: [
         'Wear Auto-Haste, Auto-Phoenix, Auto-Protect and Ribbon, put Piercing on the weapons, and take Break Damage Limit: it takes about a hundred full blows.',
-        'Keep Auto-Life on all three, Yuna first. It costs more MP than she carries, so drink a Turbo Ether or an Elixir when she is short.',
+        'Keep Auto-Life on all three, Yuna first. Each cast takes her MP and a long fight drains it, so drink a Turbo Ether or an Elixir when she is short.',
         "Never let all three fall at once without a second life among them: a Phoenix Down cannot stand a party that is all down together.",
         'Swing, Quick Hit with Tidus, and cast. Never an Overdrive, a Mix or an item thrown at it.',
         'Count the Phoenix Downs and the MP: they are the clock. Expect thirty or so of its turns.',

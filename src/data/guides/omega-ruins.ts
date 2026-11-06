@@ -42,7 +42,7 @@ export const OMEGA_RUINS_GUIDE: ChapterGuide = {
       cite: 'ffx-combat-core §2.10; re-ffx-omega-ultima-nemesis §1.2, §6',
     },
     {
-      text: "Auto-Life costs Yuna more MP than she carries. Drink a Turbo Ether, an Elixir or an Ether when she cannot pay for the cast, and count the Phoenix Downs: they are the clock.",
+      text: "Every cast of Auto-Life takes Yuna's MP, and a long fight drains it. Drink a Turbo Ether, an Elixir or an Ether when she cannot pay for the cast, and count the Phoenix Downs: they are the clock.",
       short: 'Drink an Ether when Yuna cannot cast',
       cite: 'ffx-combat-core §7.5; re-ffx-omega-ultima-nemesis §6',
     },

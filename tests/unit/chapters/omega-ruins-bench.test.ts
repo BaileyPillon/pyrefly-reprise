@@ -4,6 +4,9 @@
  * under 20**. Ultima Weapon and Omega Weapon are expected to be formalities against the endgame preset (above 99 percent for the advisor and for a plain-Attack line alike), and the bench reports that honestly rather than
  * tuning anything. **No boss row is ever touched**: the only lever is the party preset (`data/ffx/builds/omega-ruins.ts`: Piercing on the weapons, the Phoenix Downs, the Turbo Ethers).
  *
+ * The always-on 100-seed samples are held to a wider band than the table's (`SAMPLE_BAND`, 55 to 85): one hundred seeds carry a standard error of about 5 points and seeds 1 to 100 measure 62 and 61 where the 200 and 400 seed cells
+ * measure 66.5 and 68.5, so the table's 60 to 80 would fail on a harmless engine change; the table of record keeps the real band.
+ *
  * What this file holds: the harness (always on); **100 seeds of each fight and of the whole chain** with the advisor's line and a careless one (always on: the engine is deterministic and a fight takes about a tenth of a
  * second); and the **table of record's relations** (the shared preset without the levers, each lever alone, the ablations, the Yojimbo line), on with `OMEGA_RUINS_BENCH=1` (200 seeds a cell: about ten minutes).
  */
@@ -14,6 +17,9 @@ import { OMEGA_RUINS_PHOENIX_DOWNS, OMEGA_RUINS_TURBO_ETHERS, SHARED_PRESET_PHOE
 import {
   BAND, CARELESS_AT_MOST, SHARED_PRESET, TARGET, ablatedLine, advisorLine, carelessLine, inBand, rateOfAct, rateOfChain, share, withBag, withPhoenixDowns, withPiercing, withYojimbo,
 } from '../helpers/omegaRuinsBench.ts';
+
+/** The band the always-on 100-seed samples are held to (see the header): wider than `BAND` by one sample's noise. */
+const SAMPLE_BAND: readonly [number, number] = [0.55, 0.85];
 
 /** The table-of-record relations run only when the driver re-runs the bench (see the header); the rest of the file always runs. */
 const BENCH = process.env['OMEGA_RUINS_BENCH'] === '1';
@@ -64,11 +70,11 @@ describe('100 seeds of each fight and of the whole chain (always on; the table o
     }
   }, 120_000);
 
-  it('Nemesis: the advisor\'s line wins inside the 60 to 80 percent band (about 70) and a careless line loses (under 20 percent), 100 seeds each', () => {
+  it('Nemesis: the advisor\'s line wins inside the 55 to 85 percent sample band (about 66 to 70 at 200 and 400 seeds) and a careless line loses (under 20 percent), 100 seeds each', () => {
     const advisor = rateOfAct(100, 2, advisorLine);
     expect(advisor.unfinished).toBe(0);
-    expect(share(advisor), `${advisor.wins} of ${advisor.seeds}`).toBeGreaterThanOrEqual(BAND[0]);
-    expect(share(advisor), `${advisor.wins} of ${advisor.seeds}`).toBeLessThanOrEqual(BAND[1]);
+    expect(share(advisor), `${advisor.wins} of ${advisor.seeds}`).toBeGreaterThanOrEqual(SAMPLE_BAND[0]);
+    expect(share(advisor), `${advisor.wins} of ${advisor.seeds}`).toBeLessThanOrEqual(SAMPLE_BAND[1]);
     const careless = rateOfAct(100, 2, carelessLine);
     expect(careless.unfinished).toBe(0);
     expect(share(careless), `${careless.wins} of ${careless.seeds}`).toBeLessThanOrEqual(CARELESS_AT_MOST);
@@ -80,8 +86,8 @@ describe('100 seeds of each fight and of the whole chain (always on; the table o
     const advisor = rateOfChain(100, advisorLine);
     expect(advisor.unfinished).toBe(0);
     expect(advisor.lostIn.slice(0, 2), 'Acts I and II are never lost').toEqual([0, 0]);
-    expect(share(advisor), `${advisor.wins} of ${advisor.seeds}`).toBeGreaterThanOrEqual(BAND[0]);
-    expect(share(advisor), `${advisor.wins} of ${advisor.seeds}`).toBeLessThanOrEqual(BAND[1]);
+    expect(share(advisor), `${advisor.wins} of ${advisor.seeds}`).toBeGreaterThanOrEqual(SAMPLE_BAND[0]);
+    expect(share(advisor), `${advisor.wins} of ${advisor.seeds}`).toBeLessThanOrEqual(SAMPLE_BAND[1]);
     const careless = rateOfChain(100, carelessLine);
     expect(careless.lostIn.slice(0, 2)).toEqual([0, 0]);
     expect(share(careless)).toBeLessThanOrEqual(CARELESS_AT_MOST);
