@@ -188,3 +188,63 @@ export function worldMatrices(g) {
   n.forEach((_, i) => calc(i));
   return { world, parent };
 }
+
+/**
+ * Repack the glTF: drop the accessors nothing refers to and keep only the bufferViews something still refers to (an accessor or an image), in their order, 4-byte aligned, and renumber every reference. Drops the bytes a rewrite left behind (a replaced index
+ * accessor, a replaced image). Returns the number of bytes freed.
+ */
+export function compactGlb(g) {
+  const j = g.json;
+  // 1. drop the accessors nothing refers to (a replaced index list leaves its old accessor behind), renumbering the references
+  const refd = new Set();
+  const note = (i) => { if (i !== undefined) refd.add(i); };
+  for (const m of j.meshes || []) for (const p of m.primitives || []) { Object.values(p.attributes || {}).forEach(note); note(p.indices); for (const t of p.targets || []) Object.values(t).forEach(note); }
+  for (const sk of j.skins || []) note(sk.inverseBindMatrices);
+  for (const an of j.animations || []) for (const sm of an.samplers || []) { note(sm.input); note(sm.output); }
+  const amap = new Map();
+  const accs = [];
+  (j.accessors || []).forEach((a, i) => { if (refd.has(i)) { amap.set(i, accs.length); accs.push(a); } });
+  const re = (i) => (i === undefined ? i : amap.get(i));
+  for (const m of j.meshes || []) for (const p of m.primitives || []) {
+    for (const k of Object.keys(p.attributes || {})) p.attributes[k] = re(p.attributes[k]);
+    if (p.indices !== undefined) p.indices = re(p.indices);
+    for (const t of p.targets || []) for (const k of Object.keys(t)) t[k] = re(t[k]);
+  }
+  for (const sk of j.skins || []) if (sk.inverseBindMatrices !== undefined) sk.inverseBindMatrices = re(sk.inverseBindMatrices);
+  for (const an of j.animations || []) for (const sm of an.samplers || []) { sm.input = re(sm.input); sm.output = re(sm.output); }
+  if (j.accessors) j.accessors = accs;
+  // 2. repack the bufferViews something still refers to
+  const used = new Set();
+  for (const a of j.accessors || []) if (a.bufferView !== undefined) used.add(a.bufferView);
+  for (const im of j.images || []) if (im.bufferView !== undefined) used.add(im.bufferView);
+  const map = new Map();
+  const views = [];
+  const pieces = [];
+  let off = 0;
+  (j.bufferViews || []).forEach((bv, i) => {
+    if (!used.has(i)) return;
+    const pad = (4 - (off % 4)) % 4;
+    if (pad) { pieces.push(Buffer.alloc(pad)); off += pad; }
+    const start = bv.byteOffset || 0;
+    pieces.push(g.bin.subarray(start, start + bv.byteLength));
+    map.set(i, views.length);
+    views.push({ ...bv, byteOffset: off });
+    off += bv.byteLength;
+  });
+  const before = g.bin.length;
+  for (const a of j.accessors || []) if (a.bufferView !== undefined) a.bufferView = map.get(a.bufferView);
+  for (const im of j.images || []) if (im.bufferView !== undefined) im.bufferView = map.get(im.bufferView);
+  j.bufferViews = views;
+  g.bin = Buffer.concat(pieces);
+  return before - g.bin.length;
+}
+
+/** Replace image `index`'s bytes (an embedded image) with `bytes`: a new bufferView at the end of the BIN (call {@link compactGlb} after to drop the old bytes). */
+export function replaceImage(g, index, bytes, mimeType) {
+  const pad = (4 - (g.bin.length % 4)) % 4;
+  const start = g.bin.length + pad;
+  g.bin = Buffer.concat([g.bin, Buffer.alloc(pad), bytes]);
+  g.json.bufferViews.push({ buffer: 0, byteOffset: start, byteLength: bytes.length });
+  g.json.images[index].bufferView = g.json.bufferViews.length - 1;
+  if (mimeType) g.json.images[index].mimeType = mimeType;
+}

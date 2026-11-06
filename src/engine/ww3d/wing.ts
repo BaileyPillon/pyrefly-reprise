@@ -21,7 +21,18 @@ import type { ShaderLike } from './toon.ts';
  * from that line at every height; the wings begin at y 1.25, are widest (x -3.28 to 3.34) at y 2.25 and are gone by y 3.0, where the head and its crest (|x| under 0.35) stand to y 3.5. The shoulder pivot is at the wings' mid
  * height, 2.1.
  */
-export const WING = { cx: 0.03, start: 0.6, full: 2.2, yLo: 1.0, pivotY: 2.1, ampDeg: 25, hz: 0.6 } as const;
+export const WING: WingShape = { cx: 0.03, start: 0.6, full: 2.2, yLo: 1.0, pivotY: 2.1, ampDeg: 25, hz: 0.6 };
+
+/** The shape numbers of a Valefor file (its own units): the body's centre line, where the bend starts and is full (distance from it), the height under which nothing bends, the shoulder pivot's height, the flap's amplitude (degrees) and rate (Hz). */
+export interface WingShape {
+  readonly cx: number;
+  readonly start: number;
+  readonly full: number;
+  readonly yLo: number;
+  readonly pivotY: number;
+  readonly ampDeg: number;
+  readonly hz: number;
+}
 
 /** How much faster and how much wider the flap goes at full activity (an action of hers), as multiples of the rest values. */
 export const RATE_ACTIVE = 2.4;
@@ -35,7 +46,7 @@ export interface WingUniforms {
   [name: string]: IUniform;
 }
 
-export function createWingUniforms(w: typeof WING = WING): WingUniforms {
+export function createWingUniforms(w: WingShape = WING): WingUniforms {
   return {
     uBoss: { value: new Vector4(w.cx, w.start, w.full, w.yLo) },
     uWing: { value: new Vector4(MathUtils.degToRad(w.ampDeg), 0, w.pivotY, 0) },
@@ -43,7 +54,7 @@ export function createWingUniforms(w: typeof WING = WING): WingUniforms {
 }
 
 /** The flap's phase and amplitude at activity `a` (0 at rest to 1 in an action), advanced by `dt`: returns the new phase. */
-export function advanceFlap(wu: WingUniforms, dt: number, activity: number, w: typeof WING = WING): number {
+export function advanceFlap(wu: WingUniforms, dt: number, activity: number, w: WingShape = WING): number {
   const a = Math.min(1, Math.max(0, activity));
   const phase = wu.uWing.value.y + dt * Math.PI * 2 * w.hz * (1 + (RATE_ACTIVE - 1) * a);
   wu.uWing.value.y = phase % (Math.PI * 2);

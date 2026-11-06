@@ -11,6 +11,10 @@ import {
   ANIME_BODY_OFF_DEG,
   ANIME_CAMERA_POSITION,
   ANIME_FILES,
+  ANIME_VALEFOR_V2,
+  ANIME_NATIVE_HEIGHT,
+  ANIME_WING,
+  ANIME_BOSS_POINTS,
   ANIME_FOV,
   ANIME_HEAD_PITCH_FIX,
   ANIME_PARTY_SLOTS,
@@ -65,9 +69,10 @@ describe('the staging table', () => {
     }
   });
 
-  it('finds the girls in anime/ and Valefor in the Wind Waker chapter\'s own file; every figure has one', () => {
-    expect(ANIME_FILES).toEqual({ yuna: 'anime/yuna', rikku: 'anime/rikku', paine: 'anime/paine', 'x2-valefor': 'valefor' });
-    expect(ANIME_FILES['x2-valefor']).toBe(MODEL_FILE['x2-valefor']);
+  it('finds the girls and Valefor in anime/ (part 2: her own feathered file; the Wind Waker chapter\'s flat v2 stays the comparison); every figure has one', () => {
+    expect(ANIME_FILES).toEqual({ yuna: 'anime/yuna', rikku: 'anime/rikku', paine: 'anime/paine', 'x2-valefor': 'anime/valefor' });
+    expect(ANIME_VALEFOR_V2).toBe(MODEL_FILE['x2-valefor']);
+    expect(ANIME_FILES['x2-valefor']).not.toBe(ANIME_VALEFOR_V2);
     expect(ANIME_STAGING.files).toBe(ANIME_FILES);
   });
 
@@ -168,5 +173,35 @@ describe('every rig', () => {
   it('is low and tipped up at the three fight shots (every one of them looks up at Valefor)', () => {
     for (const name of ['idle', 'action', 'enemy']) expect(pitchOf(ANIME_RIGS[name]!), name).toBeGreaterThan(10);
     for (const name of ['idle', 'action', 'party', 'enemy', 'reveal', 'victory']) expect(ANIME_RIGS[name]!.position[1], name).toBeLessThan(1.2);
+  });
+});
+
+describe('Valefor\'s file of part 2: her wing numbers and her points', () => {
+  it('hands the staging a wing shape and boss points of her own (the Wind Waker chapter\'s staging has none)', () => {
+    expect(ANIME_STAGING.wing).toBe(ANIME_WING);
+    expect(ANIME_STAGING.bossPoints).toBe(ANIME_BOSS_POINTS);
+  });
+
+  it('the wing numbers are a bend that starts outside the body, is full before the tips, leaves the legs and plumes alone and pivots at the shoulders', () => {
+    expect(ANIME_WING.start).toBeGreaterThan(0.3);
+    expect(ANIME_WING.full).toBeGreaterThan(ANIME_WING.start);
+    expect(ANIME_WING.full).toBeLessThan(3.3); // inside her half span (3.3 m of the 3.5 m file)
+    expect(ANIME_WING.yLo).toBeLessThan(ANIME_WING.pivotY);
+    expect(ANIME_WING.pivotY).toBeLessThan(ANIME_NATIVE_HEIGHT['x2-valefor']);
+    expect(ANIME_WING.cx).toBe(0);
+    expect(ANIME_WING.ampDeg).toBeGreaterThan(5);
+    expect(ANIME_WING.ampDeg).toBeLessThan(45);
+  });
+
+  it('her mouth is up at the head and forward of her claws, her chest between her legs and her head', () => {
+    const [mx, my, mz] = ANIME_BOSS_POINTS.mouth;
+    const [cx, cy, cz] = ANIME_BOSS_POINTS.chest;
+    expect(my).toBeGreaterThan(cy);
+    expect(cy).toBeGreaterThan(ANIME_NATIVE_HEIGHT['x2-valefor'] * 0.3);
+    expect(my).toBeLessThan(ANIME_NATIVE_HEIGHT['x2-valefor']);
+    expect(mz).toBeGreaterThan(0);
+    expect(cz).toBeGreaterThan(0);
+    expect(Math.abs(mx)).toBeLessThan(0.3);
+    expect(Math.abs(cx)).toBeLessThan(0.3);
   });
 });

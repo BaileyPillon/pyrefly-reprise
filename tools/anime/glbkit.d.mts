@@ -23,3 +23,7 @@ export declare function mat4FromTRS(t: number[], q: number[], s: number[]): numb
 export declare function mat4Inv(m: number[]): number[];
 /** Node world matrices from the local TRS in the JSON (the bind pose), and each node's parent (-1 for a root). */
 export declare function worldMatrices(g: Glb): { world: number[][]; parent: number[] };
+/** Repack the BIN keeping only referenced bufferViews; returns the bytes freed. */
+export declare function compactGlb(g: Glb): number;
+/** Replace an embedded image's bytes (a new bufferView at the end of the BIN). */
+export declare function replaceImage(g: Glb, index: number, bytes: Buffer, mimeType?: string): void;

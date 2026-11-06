@@ -14,6 +14,8 @@
  * (so Yuna, Rikku and Paine keep the relative heights their models were made with), Valefor a little smaller than her native size against them. Game case: FFX-2 only.
  */
 
+import type { WingShape } from './wing.ts';
+
 export type V3 = readonly [number, number, number];
 
 /** The combatant ids of the chapter (chapter 24's: `data/ffx2/builds/bevelle.ts`, `data/ffx2/enemies/valefor.ts`). */
@@ -241,6 +243,9 @@ export interface WwStaging {
   readonly girlChest: number;
   /** Raise a head the clip bows (the Meshy toon girls' idle bows the head about 30 degrees): absent, the head is only yawed, as the Wind Waker chapter's is. */
   readonly headPitchFix?: HeadPitchFix;
+  /** A Valefor file of other proportions (the anime chapter's): the numbers of her wing flap and where her mouth and chest are, in the file's own units. Absent, the Wind Waker file's (`./wing.ts` `WING`, `./model.ts` `MOUTH_LOCAL`, `CHEST_LOCAL`). */
+  readonly wing?: WingShape;
+  readonly bossPoints?: { readonly mouth: V3; readonly chest: V3 };
 }
 
 /** A head that looks down by more than `minPitchDeg` below the horizon is raised toward it, by at most `limitDeg` (the anime lab's `headPitchMax` and `headPitchFix`). */

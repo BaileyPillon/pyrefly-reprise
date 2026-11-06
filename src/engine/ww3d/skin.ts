@@ -166,7 +166,7 @@ export class WwSkin {
       const named = info.targetIds.length > 0 ? info.targetIds : defaultTargets(move); // the party-wide moves open with nobody named
       const targets = named.map((t) => this.chestOf(t)).filter((p): p is Vector3 => p !== null);
       if (targets.length === 0 && move !== 'blast') return;
-      const from = b.model.worldPointOf(move === 'blast' ? CHEST_LOCAL : MOUTH_LOCAL);
+      const from = b.model.worldPointOf(move === 'blast' ? (this.staging.bossPoints?.chest ?? CHEST_LOCAL) : (this.staging.bossPoints?.mouth ?? MOUTH_LOCAL));
       this.opts.fx.start(move, from, targets, lead);
     },
     impact: (actorId, hit) => {
@@ -185,7 +185,7 @@ export class WwSkin {
   private burstAt(hit: HitReport): void {
     const b = this.bound.get(hit.targetId as WwId);
     if (!b || !this.opts.hits) return;
-    const at = b.id === WW_BOSS_ID ? b.model.worldPointOf(CHEST_LOCAL) : b.model.worldPointOf([0, this.staging.nativeHeight[b.id] * this.staging.girlChest, 0]);
+    const at = b.id === WW_BOSS_ID ? b.model.worldPointOf(this.staging.bossPoints?.chest ?? CHEST_LOCAL) : b.model.worldPointOf([0, this.staging.nativeHeight[b.id] * this.staging.girlChest, 0]);
     this.opts.hits.burst(at, { heavy: hit.heavy, hitIndex: hit.hitIndex }, b.actor.height * heightFactorIn(this.staging, b.id));
   }
 

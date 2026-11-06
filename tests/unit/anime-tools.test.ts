@@ -6,16 +6,18 @@
  *    inverse-bind matrices are the inverses of the new bind-pose world matrices (so the bind pose draws the stored mesh), the bones' offsets and the clips' translation tracks follow the lengthening, the hips' track follows the hips' rise;
  * 2. **The retarget** copies a clip by bone name onto another skeleton of other lengths: the rotations as they are, the root's track by the ratio of the leg lengths, a constant lift so the feet stand where the target's rest feet stand,
  *    a clip of the same name is replaced, and a source whose constant tracks hold two keys is resampled onto the union of the key times;
- * 3. **The file round-trips** (`writeGlb` then `readGlb`).
+ * 3. **The file round-trips** (`writeGlb` then `readGlb`), and the BIN repacks (`compactGlb`) when a rewrite left bytes behind;
+ * 4. **The Valefor fit** (`tools/anime/valefor-fit.mjs`) stands a static Meshy mesh in the Wind Waker chapter's file convention: 3.5 m tall, the claws on y 0 and z 0, the body's centre line on x 0, the specks dropped, nothing else of the mesh changed.
  */
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { mat4Inv, readAccessor, readGlb, worldMatrices, writeGlb, type Glb } from '../../tools/anime/glbkit.mjs';
+import { compactGlb, mat4Inv, readAccessor, readGlb, replaceImage, worldMatrices, writeGlb, type Glb } from '../../tools/anime/glbkit.mjs';
 import { apply, proportion, type ProportionParams } from '../../tools/anime/proportion.mjs';
 import { retargetClips, sample } from '../../tools/anime/retarget.mjs';
+import { fitValefor } from '../../tools/anime/valefor-fit.mjs';
 
 type V3 = [number, number, number];
 interface JointDef { name: string; parent: string | null; t: V3 }
@@ -309,5 +311,96 @@ describe('the retarget', () => {
 
   it('refuses a source with no such clip', () => {
     expect(() => retargetClips(buildRig({ k: 1 }), buildRig({ k: 0.5 }), [['nothing', 'x']])).toThrow(/no source clip/);
+  });
+});
+
+/** A static mesh of two islands: a body strip of 14 triangles (a 2 x 8 grid, the lower row the claws at z 0.5, the upper row the head at z 0.9, x -1 to 1, y 0 to 2) and one stray triangle far away; one image. */
+function staticMesh(): Glb {
+  const pieces: Buffer[] = [];
+  const bufferViews: Array<Record<string, number>> = [];
+  const accessors: Array<Record<string, unknown>> = [];
+  const push = (data: Buffer, componentType: number, count: number, type: string, extra: Record<string, unknown> = {}): number => {
+    const pad = (4 - (pieces.reduce((n, b) => n + b.length, 0) % 4)) % 4;
+    if (pad) pieces.push(Buffer.alloc(pad));
+    const off = pieces.reduce((n, b) => n + b.length, 0);
+    pieces.push(data);
+    bufferViews.push({ buffer: 0, byteOffset: off, byteLength: data.length });
+    accessors.push({ bufferView: bufferViews.length - 1, componentType, count, type, ...extra });
+    return accessors.length - 1;
+  };
+  const p: number[] = [];
+  for (let row = 0; row < 2; row++) for (let i = 0; i < 8; i++) p.push(-1 + (i * 2) / 7, row * 2, row === 0 ? 0.5 : 0.9);
+  p.push(5, 9, 0, 6, 9, 0, 5, 10, 0); // the stray triangle
+  const f32 = (a: number[]): Buffer => { const b = Buffer.alloc(a.length * 4); a.forEach((v, i) => b.writeFloatLE(v, i * 4)); return b; };
+  const idx: number[] = [];
+  for (let i = 0; i < 7; i++) idx.push(i, i + 1, 8 + i, i + 1, 9 + i, 8 + i);
+  idx.push(16, 17, 18);
+  const ib = Buffer.alloc(idx.length * 4);
+  idx.forEach((v, i) => ib.writeUInt32LE(v, i * 4));
+  const aPos = push(f32(p), 5126, p.length / 3, 'VEC3', { min: [-1, 0, 0], max: [6, 10, 0.9] });
+  const aNor = push(f32(p.map((_, i) => (i % 3 === 2 ? 1 : 0))), 5126, p.length / 3, 'VEC3');
+  const aIdx = push(ib, 5125, idx.length, 'SCALAR');
+  const image = Buffer.from([0xff, 0xd8, 0xff, 0xd9]);
+  bufferViews.push({ buffer: 0, byteOffset: pieces.reduce((n, b) => n + b.length, 0), byteLength: image.length });
+  pieces.push(image);
+  const json = {
+    asset: { version: '2.0' },
+    scenes: [{ nodes: [0] }],
+    nodes: [{ mesh: 0 }],
+    meshes: [{ primitives: [{ attributes: { POSITION: aPos, NORMAL: aNor }, indices: aIdx, mode: 4 }] }],
+    images: [{ mimeType: 'image/jpeg', bufferView: bufferViews.length - 1 }],
+    accessors,
+    bufferViews,
+    buffers: [{ byteLength: 0 }],
+  };
+  return { json, bin: Buffer.concat(pieces) } as Glb;
+}
+
+describe('the Valefor fit', () => {
+  it('stands the mesh 3.5 m tall with the claws on y 0 and z 0 and the body centred on x 0, drops the stray triangle and leaves the shape alone', async () => {
+    const g = staticMesh();
+    const r = await fitValefor(g, { height: 3.5, minTris: 12 });
+    expect(r.height).toBe(3.5);
+    expect(r.scale).toBeCloseTo(1.75, 9);
+    expect(r.droppedIslands).toBe(1);
+    expect(r.droppedTris).toBe(1);
+    const prim = g.json.meshes[0].primitives[0];
+    const pos = readAccessor(g, prim.attributes.POSITION).data;
+    const xs = [...Array(24).keys()].map((i) => pos[i * 3]!).slice(0, 16);
+    const ys = [...Array(24).keys()].map((i) => pos[i * 3 + 1]!).slice(0, 16);
+    expect(Math.min(...ys)).toBeCloseTo(0, 6);
+    expect(Math.max(...ys)).toBeCloseTo(3.5, 6);
+    expect(Math.min(...xs)).toBeCloseTo(-1.75, 6);
+    expect(Math.max(...xs)).toBeCloseTo(1.75, 6);
+    expect(pos[2], 'the claws\' z').toBeCloseTo(0, 6);
+    expect(pos[8 * 3 + 2], 'the head\'s z (0.4 forward of the claws, scaled)').toBeCloseTo(0.7, 6);
+    expect(readAccessor(g, prim.indices).count, 'the 14 triangles of the body').toBe(42);
+    expect(g.json.accessors[prim.attributes.POSITION].min[1]).toBeCloseTo(0, 6);
+    expect(r.beak![2], 'the beak is the most forward vertex of the top fifth').toBeCloseTo(0.7, 6);
+    expect(r.beak![1]).toBeCloseTo(3.5, 6);
+  });
+
+  it('repacks the BIN: the replaced index list and the replaced image leave no bytes behind, every reference still points at its own data', async () => {
+    const g = staticMesh();
+    const before = g.bin.length;
+    await fitValefor(g, { height: 3.5, minTris: 12 });
+    const prim = g.json.meshes[0].primitives[0];
+    // the old index accessor's view is unreferenced now: gone; the BIN is shorter than the old one plus the new index list
+    expect(g.json.bufferViews.length).toBe(4);
+    expect(g.bin.length).toBeLessThan(before);
+    expect(Array.from(readAccessor(g, prim.indices).data.slice(0, 6))).toEqual([0, 1, 8, 1, 9, 8]);
+    const im = g.json.images[0];
+    expect(Array.from(g.bin.subarray(g.json.bufferViews[im.bufferView].byteOffset, g.json.bufferViews[im.bufferView].byteOffset + 4))).toEqual([0xff, 0xd8, 0xff, 0xd9]);
+  });
+
+  it('replaceImage then compactGlb swaps an image\'s bytes and frees the old ones', () => {
+    const g = staticMesh();
+    replaceImage(g, 0, Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]), 'image/png');
+    const freed = compactGlb(g);
+    expect(freed).toBe(4);
+    const im = g.json.images[0];
+    expect(im.mimeType).toBe('image/png');
+    const bv = g.json.bufferViews[im.bufferView];
+    expect(Array.from(g.bin.subarray(bv.byteOffset, bv.byteOffset + bv.byteLength))).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
   });
 });

@@ -112,7 +112,7 @@ export class WwModel {
     this.groundY = idle ? readAt(scene, idle, 0, () => new Box3().setFromObject(scene, true).min.y) : null;
 
     // the wing flap (Valefor's file is one static mesh): a vertex patch on every program and on the shadow's depth material
-    const wu = boss && source === 'own' && clips.length === 0 ? createWingUniforms() : null;
+    const wu = boss && source === 'own' && clips.length === 0 ? createWingUniforms(this.staging.wing) : null;
     this.wing = wu ? { uniforms: wu } : null;
     const shadeOpts: ToonifyOptions = {
       ...(wu
@@ -307,7 +307,7 @@ export class WwModel {
     if (this.motion) this.pose = this.motion.update(frozen ? 0 : dt, this.figureHeight / this.staging.bossHeight);
     this.applyYaw();
     this.head?.apply(this.camera, this.staging.faceOffDeg, undefined, this.staging.headPitchFix);
-    if (this.wing) advanceFlap(this.wing.uniforms, frozen ? 0 : dt, this.activity);
+    if (this.wing) advanceFlap(this.wing.uniforms, frozen ? 0 : dt, this.activity, this.staging.wing);
     this.applyHover();
   }
 

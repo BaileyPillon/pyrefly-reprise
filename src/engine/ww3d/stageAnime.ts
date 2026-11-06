@@ -8,15 +8,17 @@
  *   its opacity follows the view's grazing angle ({@link reflectionAlpha}, a Fresnel-like curve capped at {@link ANIME_FLOOR}.strength) and a few taps of blur and a slow ripple keep it from reading as a perfect
  *   mirror. **It draws the scene once per game frame**, not once per render: the game may render the scene several times a frame (supersampling, post passes) and each would draw the whole room again, so the mirror's
  *   `onBeforeRender` is wrapped to run only when {@link AnimeFloor.update} has advanced the frame. A `low` quality build, and `?reflect=0`, leave the mirror out and keep the stone.
- * - **Nothing else of the stage changes**: the walls, the door, the torches, the waterfalls, the shaft and the light are the Wind Waker chapter's. Game case: FFX-2 only.
+ * - **The air** ({@link addAtmosphere}): the waterfalls' thin ribbons are widened into curtains, a soft mist lies at the foot of each, and a few dust motes drift in the light shaft (the concept frames' haze and sparkle).
+ * - **Nothing else of the stage changes**: the walls, the door, the torches and the light are the Wind Waker chapter's. Game case: FFX-2 only.
  *
  * Needs three.js (and a DOM for the stone's canvas; a test hands none and builds no stone). The maths ({@link reflectionAlpha}) are pure and pinned by `tests/unit/ww3d/stage-anime.test.ts`.
  */
 
-import { CircleGeometry, Color, Mesh, Vector4, type MeshToonMaterial, type ShaderMaterial, type Texture, type WebGLRenderer } from 'three';
+import { AdditiveBlending, BufferGeometry, CircleGeometry, Color, Float32BufferAttribute, Mesh, PlaneGeometry, Points, PointsMaterial, RepeatWrapping, Sprite, SpriteMaterial, Vector3, Vector4, type MeshBasicMaterial, type MeshToonMaterial, type ShaderMaterial, type Texture, type WebGLRenderer } from 'three';
 import { Reflector } from 'three/addons/objects/Reflector.js';
 import { canvas, rgb, rng, tex } from './stageTextures.ts';
-import type { BuiltStage } from './stage.ts';
+import { STAGE, type BuiltStage } from './stage.ts';
+import { polarPos } from './stageParts.ts';
 
 /** The mirror's numbers (staging, ours: not game data). `y` is how far over the floor it lies; `strength` the most it covers (0 to 1); `size` its picture's size in pixels; `blur` the tap spacing in picture units. */
 export const ANIME_FLOOR = { y: 0.01, strength: 0.55, size: [1280, 720] as const, blur: 0.0022, ripple: 0.0016, tint: 0xdfe9ff } as const;
@@ -195,3 +197,147 @@ export function addAnimeFloor(stage: BuiltStage, opts: AnimeFloorOptions = {}): 
   };
 }
 
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+// The air: wide waterfalls, mist at their feet, dust in the shaft
+// ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/** The waterfalls' azimuths (degrees, `./stage.ts`'s own list) and the width the Wind Waker stage draws them at; the anime chapter draws them {@link AIR}.waterfallWidth times as wide. */
+export const WATERFALL_AZ: readonly number[] = [-38, -7, 46];
+export const WATERFALL_WIDTH = 0.62;
+export const AIR = { waterfallWidth: 2.6, waterfallTone: 0.82, mist: { count: 3, size: [3.2, 1.7] as const, opacity: 0.32, y: 0.55 }, motes: { count: 140, radius: 1.5, size: 0.07, opacity: 0.55 } } as const;
+
+/** A soft white dot (a radial falloff), for the mist and the motes. Needs a DOM. */
+export function softDotTexture(): Texture {
+  const S = 128;
+  const { c, g } = canvas(S, S);
+  const grad = g.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
+  grad.addColorStop(0, 'rgba(255,255,255,1)');
+  grad.addColorStop(0.35, 'rgba(255,255,255,0.45)');
+  grad.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = grad;
+  g.fillRect(0, 0, S, S);
+  return tex(c);
+}
+
+/**
+ * The dust motes' places (x y z per mote) inside the light shaft's cone: `count` points scattered along the axis from `bottom` to `top` within `radius` of it (the cone narrows toward the floor), from a seeded
+ * generator. Pure.
+ */
+export function moteField(top: readonly [number, number, number], bottom: readonly [number, number, number], count: number, radius: number, seed = 31): Float32Array {
+  const r = rng(seed);
+  const out = new Float32Array(count * 3);
+  const axis = new Vector3(top[0] - bottom[0], top[1] - bottom[1], top[2] - bottom[2]);
+  const len = axis.length();
+  const dir = axis.clone().normalize();
+  const u = new Vector3(1, 0, 0).cross(dir).normalize();
+  const v = dir.clone().cross(u).normalize();
+  for (let i = 0; i < count; i++) {
+    const t = r();
+    const rad = radius * (0.35 + 0.65 * t) * Math.sqrt(r());
+    const ang = r() * Math.PI * 2;
+    const p = new Vector3(bottom[0], bottom[1], bottom[2]).addScaledVector(dir, t * len).addScaledVector(u, Math.cos(ang) * rad).addScaledVector(v, Math.sin(ang) * rad);
+    out[i * 3] = p.x;
+    out[i * 3 + 1] = p.y;
+    out[i * 3 + 2] = p.z;
+  }
+  return out;
+}
+
+export interface Atmosphere {
+  /** The mist sprites and the motes, for a test and the debug handle. */
+  readonly mist: readonly Sprite[];
+  readonly motes: Points | null;
+  /** The waterfalls that were widened. */
+  readonly widened: number;
+  update(t: number): void;
+  dispose(): void;
+}
+
+export interface AtmosphereOptions {
+  /** The soft dot (default: drawn on a canvas); a test hands a blank texture. */
+  dot?: Texture;
+  /** `false` leaves the mist and the motes out (a low-quality build): the waterfalls are still widened. */
+  extras?: boolean;
+}
+
+/**
+ * Widen the stage's waterfalls (the planes {@link WATERFALL_WIDTH} wide), lay a mist at the foot of each and scatter dust motes in the light shaft. The motes sit inside the shaft's cone (the same ends as
+ * `./stage.ts`'s cards), drift slowly and twinkle; additive, no fog, below the bloom's threshold.
+ */
+export function addAtmosphere(stage: BuiltStage, opts: AtmosphereOptions = {}): Atmosphere {
+  let widened = 0;
+  for (const o of stage.group.children) {
+    const m = o as Mesh;
+    const geo = m.geometry as PlaneGeometry | undefined;
+    if (geo && geo.type === 'PlaneGeometry' && Math.abs((geo.parameters?.width ?? 0) - WATERFALL_WIDTH) < 1e-6) {
+      m.scale.x = AIR.waterfallWidth;
+      // the streaks keep their own size (the picture repeats across the wider ribbon instead of stretching) and the curtain is a little dimmer: a wide white sheet would be the brightest thing in the room
+      const mat = m.material as MeshBasicMaterial;
+      if (mat.map) {
+        mat.map.wrapS = RepeatWrapping;
+        mat.map.repeat.x = AIR.waterfallWidth;
+        mat.map.needsUpdate = true;
+      }
+      mat.color.setScalar(AIR.waterfallTone);
+      widened++;
+    }
+  }
+  const owned: Array<{ dispose(): void }> = [];
+  const mist: Sprite[] = [];
+  let motes: Points | null = null;
+  let base: Float32Array | null = null;
+  if (opts.extras !== false) {
+    const dot = opts.dot ?? softDotTexture();
+    owned.push(dot);
+    for (const az of WATERFALL_AZ) {
+      const mat = new SpriteMaterial({ map: dot, color: 0xd8ecff, transparent: true, opacity: AIR.mist.opacity, depthWrite: false, fog: false });
+      owned.push(mat);
+      for (let k = 0; k < AIR.mist.count; k++) {
+        const s = new Sprite(mat);
+        s.position.copy(polarPos(az + (k - 1) * 2.2, STAGE.R - 1.2, AIR.mist.y + 0.12 * k));
+        s.scale.set(AIR.mist.size[0], AIR.mist.size[1], 1);
+        s.userData['phase'] = az * 0.13 + k * 1.7;
+        stage.group.add(s);
+        mist.push(s);
+      }
+    }
+    // the shaft's ends, the same as `./stage.ts`: the roof opening's side and the floor
+    const hole = STAGE.hole;
+    base = moteField([hole.x - 1.5, STAGE.H - 1.6, hole.z + 1.5], [-1.2, 0, -2.4], AIR.motes.count, AIR.motes.radius);
+    const g = new BufferGeometry();
+    g.setAttribute('position', new Float32BufferAttribute(base.slice(), 3));
+    const pm = new PointsMaterial({ map: dot, color: 0xfff4d6, size: AIR.motes.size, sizeAttenuation: true, transparent: true, opacity: AIR.motes.opacity, depthWrite: false, blending: AdditiveBlending, fog: false, toneMapped: false });
+    owned.push(g, pm);
+    motes = new Points(g, pm);
+    motes.name = 'ww-motes';
+    motes.frustumCulled = false;
+    stage.group.add(motes);
+  }
+  return {
+    mist,
+    motes,
+    widened,
+    update(t: number): void {
+      for (const s of mist) {
+        const ph = s.userData['phase'] as number;
+        s.scale.set(AIR.mist.size[0] * (1 + 0.08 * Math.sin(t * 0.7 + ph)), AIR.mist.size[1] * (1 + 0.1 * Math.sin(t * 0.9 + ph * 1.3)), 1);
+        s.material.opacity = AIR.mist.opacity * (0.85 + 0.15 * Math.sin(t * 0.5 + ph));
+      }
+      if (motes && base) {
+        const a = motes.geometry.getAttribute('position') as Float32BufferAttribute;
+        for (let i = 0; i < a.count; i++) {
+          const ph = i * 1.37;
+          a.setXYZ(i, base[i * 3]! + 0.12 * Math.sin(t * 0.3 + ph), base[i * 3 + 1]! + 0.18 * Math.sin(t * 0.22 + ph * 0.7), base[i * 3 + 2]! + 0.12 * Math.cos(t * 0.27 + ph));
+        }
+        a.needsUpdate = true;
+        (motes.material as PointsMaterial).opacity = AIR.motes.opacity * (0.8 + 0.2 * Math.sin(t * 1.3));
+      }
+    },
+    dispose(): void {
+      for (const s of mist) s.removeFromParent();
+      motes?.removeFromParent();
+      for (const o of owned) o.dispose();
+    },
+  };
+}

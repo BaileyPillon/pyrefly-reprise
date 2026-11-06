@@ -21,6 +21,7 @@
 import { boxOf, pitchedLook, type RigData, type ScreenBox } from './camera.ts';
 import { MODEL_FILE, PARTY_SLOTS as WW_PARTY_SLOTS, WW_BOSS_ID, WW_PARTY_IDS, type V3, type WwId, type WwStaging } from './layout.ts';
 import type { PropSpec } from './props.ts';
+import type { WingShape } from './wing.ts';
 
 /**
  * The girls' own heights as exported (metres: the files of the proportion pass, about 7 heads: `tools/anime/proportion.mjs`; the files before it stood 1.60 / 1.55 / 1.70), and Valefor's file's 3.5 m (times
@@ -50,7 +51,18 @@ export const ANIME_BOSS_YAW_DEG = -38;
 export const ANIME_HEAD_PITCH_FIX = { minPitchDeg: -4, limitDeg: 40 } as const;
 
 /** The model file of each figure under `WW_MODEL_DIR`: the girls' LOD1 files in `anime/` (2048 px, 20k triangles), Valefor's is the Wind Waker chapter's own (`valefor.glb`, the v2 Meshy file). */
-export const ANIME_FILES: Readonly<Record<WwId, string>> = { yuna: 'anime/yuna', rikku: 'anime/rikku', paine: 'anime/paine', 'x2-valefor': MODEL_FILE['x2-valefor'] };
+export const ANIME_FILES: Readonly<Record<WwId, string>> = { yuna: 'anime/yuna', rikku: 'anime/rikku', paine: 'anime/paine', 'x2-valefor': 'anime/valefor' };
+
+/** The Wind Waker chapter's own Valefor file (`valefor.glb`, the flat v2): what the anime chapter stood before part 2's feathered one, kept as the comparison and the fallback (`ANIME_FILES` names the new one). */
+export const ANIME_VALEFOR_V2 = MODEL_FILE['x2-valefor'];
+
+/**
+ * **Valefor's file of part 2** (`anime/valefor.glb`: Meshy image-to-3D from a Flux 2 klein front view of concept frame A's Valefor, 25 thousand triangles, a 2048 px map; fitted by `tools/anime/valefor-fit.mjs` to 3.5 m, the claws on y 0,
+ * the body's centre line on x 0, facing +Z): where her wings bend and where her mouth and chest are, in the file's own metres. The wings begin at the shoulders about 2.2 m up and sweep out to 3.3 m either side; below 1.4 m there is
+ * the body, the legs and the tail plumes, which do not flap. Measured on the file by `tools/anime/valefor-fit.mjs` (its report: the beak, the chest, the body's half width by height; the handoff has them); staging, ours.
+ */
+export const ANIME_WING: WingShape = { cx: 0, start: 0.7, full: 2.4, yLo: 1.4, pivotY: 2.2, ampDeg: 22, hz: 0.6 };
+export const ANIME_BOSS_POINTS = { mouth: [0, 2.86, 0.98] as V3, chest: [0, 1.9, 0.55] as V3 } as const;
 
 /** The anime chapter's staging table. */
 export const ANIME_STAGING: WwStaging = {
@@ -68,6 +80,8 @@ export const ANIME_STAGING: WwStaging = {
   files: ANIME_FILES,
   girlChest: 0.58,
   headPitchFix: ANIME_HEAD_PITCH_FIX,
+  wing: ANIME_WING,
+  bossPoints: ANIME_BOSS_POINTS,
 };
 
 /** Half the width each figure stands, metres (arms in; Valefor's wings out: 6.6 m of span times {@link BOSS_SCALE}), for the frame's boxes. */

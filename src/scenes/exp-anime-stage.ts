@@ -10,7 +10,7 @@
  *
  * - **The look.** Three looks of one shader, `?look=genshin` (the default: the survey's recommendation, **Bailey has not chosen**), `?look=gg` (Guilty Gear: a razor terminator, one flat violet shadow, a thick near-black
  *   line) and `?look=blend` (Guilty Gear's lines and shadows on Genshin's light); `?look=painted` plays chapter 24's own scene, the comparison. `?outline=0` draws no lines. He picks by playing.
- * - **The wet floor** (`../engine/ww3d/stageAnime.ts`): the temple's sand floor becomes a polished blue-grey stone and a planar mirror lies over it (drawn once per game frame; `?reflect=0` leaves it out, a low-quality build has none).
+ * - **The wet floor and the air** (`../engine/ww3d/stageAnime.ts`): the temple's sand floor becomes a polished blue-grey stone and a planar mirror lies over it (drawn once per game frame; `?reflect=0` leaves it out, a low-quality build has none); the waterfalls are widened, a mist lies at their feet and dust motes drift in the light shaft.
  * - **Loaded on use.** Everything under `../engine/ww3d/` is imported dynamically, so no other chapter carries it. The girls' files are kept out of git but SHIP in a production build (`tools/dist-filter.mjs`;
  *   `tools/vite-ww-models.mjs` fails a release build that lacks them).
  *
@@ -141,6 +141,7 @@ export const buildExpAnimeStageScene: SceneFactory = async (opts: SceneBuildOpti
   const stage = buildStage(stageUniforms, { swaps: swaps.temple, ...(opts.quality ? { quality: opts.quality } : {}) });
   group.add(stage.group);
   const floor = floorMod.addAnimeFloor(stage, { ...(opts.quality ? { quality: opts.quality } : {}), reflect: floorMod.reflectWanted(search) }); // the wet stone and its mirror
+  const air = floorMod.addAtmosphere(stage, { extras: opts.quality !== 'low' }); // the wide waterfalls, the mist at their feet, the motes in the shaft
   mark('stage');
   const models = await loadWwModels({
     base,
@@ -160,7 +161,7 @@ export const buildExpAnimeStageScene: SceneFactory = async (opts: SceneBuildOpti
   group.add(hits.group);
   const skin = new WwSkin({ host: group, models, fx, hits, staging: ANIME_STAGING });
   const directed = tapDirector(undefined, skin.listener); // the beats start the models' clips (attack and cast), the move effects and the wings' flap
-  if (import.meta.env.DEV) (globalThis as { __ww3d?: unknown }).__ww3d = { skin, models, stage, floor, fx, hits, uniforms, variant: look.stage, look: lookName, cel: celRig, swaps, timings }; // the debug handle (a dev server only)
+  if (import.meta.env.DEV) (globalThis as { __ww3d?: unknown }).__ww3d = { skin, models, stage, floor, air, fx, hits, uniforms, variant: look.stage, look: lookName, cel: celRig, swaps, timings }; // the debug handle (a dev server only)
 
   mark('ready');
   let clock = 0;
@@ -183,6 +184,7 @@ export const buildExpAnimeStageScene: SceneFactory = async (opts: SceneBuildOpti
       lights.update(dt);
       stage.update(clock);
       floor.update(dt);
+      air.update(clock);
       skin.update(dt);
       fx.update(dt);
       hits.update(dt);
@@ -194,6 +196,7 @@ export const buildExpAnimeStageScene: SceneFactory = async (opts: SceneBuildOpti
       hits.dispose();
       skin.dispose(); // frees the models and their hulls
       files.dispose();
+      air.dispose();
       floor.dispose();
       stage.dispose();
       celRig.dispose();
