@@ -1035,7 +1035,10 @@ export class PaintedStage implements BattleStage {
   dispose(): void {
     for (const undo of this.arrivalCleanups.values()) undo();
     this.arrivalCleanups.clear();
-    for (const { actor } of this.actors.values()) actor.dispose();
+    for (const { actor } of this.actors.values()) {
+      disposeFootOcclusion(actor.shadow); // the ellipse's material is a clone nobody else frees; `removeCombatant` always did this, the full teardown did not (four materials a battle entry)
+      actor.dispose();
+    }
     this.actors.clear();
     this.motion.dispose();
     this.partRings.dispose();
