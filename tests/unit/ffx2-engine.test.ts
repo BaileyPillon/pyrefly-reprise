@@ -282,7 +282,7 @@ describe('battle end', () => {
     // the carried numbers must not outlive its lower maximum the way the live
     // build's "123/106" row did.
     const party = bevelleParty(50);
-    party.members[1] = { ...party.members[1], currentDressphere: 'thief', hp: 2600, mp: 219 };
+    party.members[1] = { ...party.members[1]!, currentDressphere: 'thief', hp: 2600, mp: 219 };
     const engine = new FFX2Engine({ minigames: false });
     engine.init({ ...bahamutSetup(1), party });
 

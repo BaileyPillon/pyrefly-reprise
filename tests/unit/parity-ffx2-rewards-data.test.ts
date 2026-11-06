@@ -53,7 +53,7 @@ for (const group of GROUPS) for (const enemy of [...group.enemies, ...(group.par
 const NAMES: Readonly<Record<number, string>> = {
   0x2000: 'Potion', 0x2001: 'Hi-Potion', 0x2002: 'X-Potion', 0x2003: 'Mega-Potion', 0x2008: 'Elixir', 0x2009: 'Megalixir', 0x2011: 'Grenade',
   0x2028: 'Supreme Gem', 0x202e: 'Dark Matter', 0x203b: 'Stamina Tonic', 0x203f: 'Hero Drink', 0x7029: 'Reassembled Sphere', 0x7046: 'Magical Dances Vol 1',
-  0x9002: 'Mythril Bangle', 0x900b: 'Kaiser Knuckles', 0x900e: 'Crystal Gloves', 0x9012: 'Pixie Dust', 0x9013: 'Crystal Ball', 0x9014: 'Defense Veil',
+  0x9002: 'Mythril Bangle', 0x900b: 'Kaiser Knuckles', 0x900e: 'Crystal Gloves', 0x9012: 'Pixie Dust', 0x9013: 'Crystal Ball', 0x9014: 'Defense Veil', 0x901a: 'Champion Belt',
   0x901e: 'Regal Crown', 0x9039: 'Tetra Band', 0x9047: 'Twist Headband', 0x904b: 'Black Choker', 0x904d: 'Gris Gris Bag', 0x9053: 'Faerie Earrings',
   0x9056: 'Ribbon', 0x9058: 'Favorite Outfit', 0x905c: 'Moon Bracer', 0x9060: 'Recovery Bracer', 0x9072: 'Charm Bangle', 0x9074: 'Soul of Thamasa',
 };

@@ -43,7 +43,7 @@ const SPINNER = 'yuna';
 /** Chapter 5's own build, with Yuna spherechanged into the Lady Luck she owns. */
 function ladyLuckParty(): FFX2PartyBuild {
   const [yuna, rikku, paine] = farplaneBuild.members;
-  return { ...farplaneBuild, members: [{ ...yuna, currentDressphere: 'lady-luck' }, rikku, paine] };
+  return { ...farplaneBuild, members: [{ ...yuna, currentDressphere: 'lady-luck' }, rikku!, paine!] };
 }
 
 function newEngine(seed: number, groupId = 'vegnagun-tail'): FFX2Engine {

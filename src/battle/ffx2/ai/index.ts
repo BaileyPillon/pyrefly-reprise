@@ -46,6 +46,8 @@ import { angraMainyuScripts } from './angra-mainyu.ts';
 // Aranea, the Black Elemental, Concherer and Chac on the Via Infinito's floors 20, 40, 60 and 80 (the hidden chapter "The Fallen Maesters", FFX-2 only): the game's own four scripts, poll by poll.
 import { fallenMaestersAScripts } from './fallen-maesters-a.ts';
 import { fallenMaestersBScripts } from './fallen-maesters-b.ts';
+// The possessed Rikku and the possessed Paine in the Den of Woe (the hidden chapter "Yuna's Ballad", FFX-2 only): the game's own two scripts, poll by poll.
+import { yunasBalladScripts } from './yunas-ballad.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -89,6 +91,7 @@ const SCRIPTS: readonly AiScript[] = [
   ...angraMainyuScripts,
   ...fallenMaestersAScripts,
   ...fallenMaestersBScripts,
+  ...yunasBalladScripts,
   idleScript,
   basicAttackScript,
 ];

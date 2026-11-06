@@ -100,6 +100,8 @@ describe('FFX-2 monster rows are the game\'s rows', () => {
       if (key.startsWith('ffx2-bikanel-angra-mainyu/')) continue;
       // The hidden Fallen Maesters' rows 221, 69, 232 and 239 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/fallen_maesters_rows.json, tests/unit/chapters/fallen-maesters-data.test.ts).
       if (key.startsWith('ffx2-via-infinito-floor-')) continue;
+      // The hidden Yuna's Ballad's rows 254 and 256 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/yunas_ballad_rows.json, tests/unit/chapters/yunas-ballad-data.test.ts).
+      if (key.startsWith('ffx2-den-of-woe-possessed-')) continue;
       const row = ROWS[key];
       expect(row, `${key}: no fixture row`).toBeDefined();
       if (row === undefined) continue;

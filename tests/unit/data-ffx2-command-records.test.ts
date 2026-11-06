@@ -94,6 +94,9 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   // The hidden Fallen Maesters' fifteen rows (Aranea's three, the Black Elemental's five, Concherer's four, Chac's three: monmagic 0x4003 to 0x41dd and the party rows 0x304b, 0x3170, 0x3171) are the RE note's, pinned
   // against their own numbers-only fixture (tests/fixtures/parity/ffx2/fallen_maesters_rows.json, tests/unit/chapters/fallen-maesters-data.test.ts).
   if (label.startsWith('x2-aranea-') || label.startsWith('x2-black-elemental-') || label.startsWith('x2-concherer-') || label.startsWith('x2-chac-')) return;
+  // The hidden Yuna's Ballad's seven rows (the possessed Rikku's Spider Attack 0x40c7 and five throws 0x2011, 0x201a, 0x201d, 0x2020, 0x2023, the possessed Paine's Attack 0x41da) are the RE note's, pinned against their own
+  // numbers-only fixture (tests/fixtures/parity/ffx2/yunas_ballad_rows.json, tests/unit/chapters/yunas-ballad-data.test.ts).
+  if (label.startsWith('x2-possessed-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();
   if (!row) return;

@@ -75,4 +75,8 @@ export const KILL_REWARD_ROWS: Readonly<Record<string, FFX2KillReward>> = {
   "ffx2-via-infinito-floor-40-black-elemental/x2-black-elemental": row(1, 69, 770, 1, 380, 255, [0x0000, 0, 0x0000, 0]), // Black Elemental
   "ffx2-via-infinito-floor-60-concherer/x2-concherer": row(1, 232, 6000, 1, 1200, 255, [0x0000, 0, 0x900e, 1]), // Concherer
   "ffx2-via-infinito-floor-80-chac/x2-chac": row(1, 239, 2200, 1, 750, 255, [0x0000, 0, 0x9012, 1]), // Chac
+  // The hidden Yuna's Ballad (the Den of Woe's first two fights; RE note re-ffx2-yunas-ballad §4.1): EXP, Gil, AP and the drop byte are the rows'. Paine's Champion Belt (0x901a) is the one drop whose item this repo already has (the
+  // accessory table); Rikku's Black Lore (0x9066) has none, so its slots are 0 (rule 6).
+  "ffx2-den-of-woe-possessed-rikku/x2-possessed-rikku": row(1, 254, 800, 3, 200, 255, [0x0000, 0, 0x0000, 0]), // Rikku
+  "ffx2-den-of-woe-possessed-paine/x2-possessed-paine": row(1, 256, 800, 3, 200, 255, [0x901a, 1, 0x901a, 1]), // Paine
 };

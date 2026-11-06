@@ -249,6 +249,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
     'exp-windwaker': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Wind Waker chapter (FFX-2 only, 2026-10-20): chapter 24's record by reference, so the same field bed and the same aeon cue
     'ffx2-angra-mainyu': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Angra Mainyu (FFX-2 only, 2026-10-14): the same "Aeons" cue, by reference
     'ffx2-fallen-maesters': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons'] }, // the hidden Fallen Maesters (FFX-2 only, 2026-11-02): the Via Infinito's four floors play the same "Aeons" cue, a flagged stand-in (FM10), by reference
+    'ffx2-yunas-ballad': { scene: 'scene-bevelle-underground', links: ['boss-den-of-woe', 'boss-den-of-woe'] }, // the hidden Yuna's Ballad (FFX-2 only, 2026-11-06): the Den of Woe's own bed and cue for both duels, by reference (YB8, a flagged stand-in; no new cue)
     'mirror-aeons': { scene: 'scene-gagazet', links: ['boss-challenge', 'boss-yojimbo'] }, // the hidden Mirror Aeons chapter (FFX only, 2026-10-15): the mountain's bed as the stand-in, the generic "Challenge" boss cue for the Sisters and Yojimbo's own cue for Dark Yojimbo, both by reference
     'spectral-keeper': { scene: 'scene-zanarkand-dome', links: ['boss-challenge'] }, // the hidden Spectral Keeper (FFX only, 2026-11-02): the Dome's own bed and Yunalesca's "Challenge" cue as a flagged stand-in (preflight SK10), by reference (no new cue)
     'exp-yrp-3d': { scene: 'scene-bevelle-underground', links: ['boss-bahamut'] }, // the hidden 3D Bahamut (FFX-2 only, ch-yrp 2026-11-02): Chapter IV's fight by reference, so Chapter IV's bed and its "Yuna's Ballad" cue (no new cue)
@@ -276,7 +277,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
       'boss-challenge': ['yunalesca', 'sinspawn-gui', 'biran-yenke', 'mirror-aeons', 'spectral-keeper'],
       'boss-gui': ['sinspawn-gui'],
       'boss-seymour-omnis': ['seymour-omnis'],
-      'boss-den-of-woe': ['ffx2-den-of-woe'],
+      'boss-den-of-woe': ['ffx2-den-of-woe', 'ffx2-yunas-ballad'], // the hidden Yuna's Ballad plays the Den's cue for both duels (YB8)
       'boss-experiment': ['ffx2-masterpiece-theatre'],
       'scene-chateau-leblanc': ['ffx2-leblanc', 'exp-leblanc'],
       'victory-bahamut': ['ffx2-bahamut', 'exp-yrp-3d'], // the hidden 3D Bahamut is Chapter IV's record by reference, so it ends on Chapter IV's quiet resolve too

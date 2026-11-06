@@ -281,6 +281,7 @@ export const DOOR_WORDS = Object.freeze({
   'ffx2-fallen-maesters': 'infinito',
   'exp-yrp-3d': 'yrp',
   'exp-windwaker': 'waker', // the hidden Wind Waker chapter (FFX-2, number 32, 2026-10-20)
+  'ffx2-yunas-ballad': 'wraith', // the hidden Yuna's Ballad chapter (FFX-2, number 40, 2026-11-06)
 });
 
 /** The word that opens a chapter the board has no card for, or null for a chapter with a card (the arrow-key walk finds it). */

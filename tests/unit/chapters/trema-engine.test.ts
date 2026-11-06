@@ -270,7 +270,7 @@ describe('the link: carried state and the TR5 checkpoint', () => {
     expect(p.hp).toBe(carriedHp);
     expect(p.dresspheres.garmentGrid.passedGates).toEqual([]); // a new battle: gate effects are lost
     // The preset build is untouched, and a chain without the flag still reverts to it (every other chapter).
-    expect(viaInfinitoBuild.members[2].currentDressphere).toBe('dark-knight');
+    expect(viaInfinitoBuild.members[2]!.currentDressphere).toBe('dark-knight');
     const plain = setupForNextLink(setup, { ...cloisterTremaGroup, carriesPartyState: undefined }, engine.state() as BattleState, 2);
     expect((plain.party.members[2] as { currentDressphere: string }).currentDressphere).toBe('dark-knight');
   });

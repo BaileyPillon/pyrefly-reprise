@@ -10,6 +10,7 @@ import type { SceneBuild, SceneBuildOptions, SceneFactory, SceneRigName } from '
 import { addPlateWings, paintPlateWings } from './plateWings.ts';
 import type { SceneSlots } from './index.ts';
 import { ffx2FiendFigureHeights } from '../data/ffx2/fiend-stature.ts';
+import { X2_POSSESSED_PAINE_ID, X2_POSSESSED_RIKKU_ID } from '../data/yunas-ballad-ids.ts';
 
 // ---------------------------------------------------------------------------
 // The Den of Woe (FFX-2)
@@ -108,7 +109,21 @@ export const DEN_FIGURE_HEIGHTS: Readonly<Record<string, number>> = ffx2FiendFig
 
 const ENEMY_SLOTS: Array<[number, number, number]> = [DEN_SPOTS[DEN_IDS.baralai]!, [2.3, 0, -8.0], [-0.5, 0, -6.6]];
 
-const DEN_STAGING = { holdParty: true, enemySpots: DEN_SPOTS, figureHeights: DEN_FIGURE_HEIGHTS } as const;
+/**
+ * **Yuna's Ballad** (the hidden chapter, FFX-2 only; branch `ch-yunas-ballad`, 2026-11-06): the possessed Rikku and the possessed Paine fight Yuna in this room (`kino13_228` and `kino13_229` share the shades' map).
+ * They are girls, so they stand at the party's own world height ({@link DEN_PARTY_HEIGHT}) where the shades stand at the models' ratio over it, and a little nearer than the shades' spot (a girl-sized figure at the
+ * shades' z of -5 reads about nine tenths of Yuna). Staging, ours; the shades' own entries above are untouched (`tests/unit/chapters/den-of-woe-ship-scene.test.ts` pins them).
+ */
+export const WRAITH_SPOTS: Readonly<Record<string, [number, number, number]>> = {
+  [X2_POSSESSED_RIKKU_ID]: [1.12, 0, -3.6],
+  [X2_POSSESSED_PAINE_ID]: [1.12, 0, -3.6],
+};
+export const WRAITH_FIGURE_HEIGHTS: Readonly<Record<string, number>> = {
+  [X2_POSSESSED_RIKKU_ID]: DEN_PARTY_HEIGHT,
+  [X2_POSSESSED_PAINE_ID]: DEN_PARTY_HEIGHT,
+};
+
+const DEN_STAGING = { holdParty: true, enemySpots: { ...DEN_SPOTS, ...WRAITH_SPOTS }, figureHeights: { ...DEN_FIGURE_HEIGHTS, ...WRAITH_FIGURE_HEIGHTS } } as const;
 
 /** The published slots, the same shape every other scene exports. */
 export const DEN_OF_WOE_SLOTS: SceneSlots = {

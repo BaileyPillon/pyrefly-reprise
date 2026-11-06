@@ -28,6 +28,7 @@ import { BIRAN_YENKE_META } from './chapter-meta-biran-yenke.ts';
 import { MIRROR_AEONS_META } from './chapter-meta-mirror-aeons.ts';
 import { ANGRA_MAINYU_META } from './chapter-meta-ffx2-angra-mainyu.ts';
 import { FALLEN_MAESTERS_META } from './chapter-meta-ffx2-fallen-maesters.ts';
+import { YUNAS_BALLAD_META } from './chapter-meta-ffx2-yunas-ballad.ts';
 import { LAST_SUMMONING_META } from './chapter-meta-last-summoning.ts';
 import { SPECTRAL_KEEPER_META } from './chapter-meta-spectral-keeper.ts';
 import { expYrpMeta } from './chapter-meta-exp-yrp-3d.ts';
@@ -40,8 +41,7 @@ import { FALLEN_AEONS_META } from './chapter-meta-fallen-aeons.ts';
 import { SEYMOUR_OMNIS_META } from './chapter-meta-seymour-omnis.ts';
 import { DEN_OF_WOE_META } from './chapter-meta-den-of-woe.ts';
 import { IXION_DJOSE_META } from './chapter-meta-ixion-djose.ts';
-import { NATUS_META } from './chapter-meta-natus.ts';
-import { ISAARU_META } from './chapter-meta-isaaru.ts';
+import { NATUS_META } from './chapter-meta-natus.ts'; import { ISAARU_META } from './chapter-meta-isaaru.ts';
 import { SIN_CHAPTER_META } from './chapter-meta-sin.ts';
 
 /**
@@ -391,7 +391,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
 ] as const;
 
 /** Metadata for chapters registered but not listed (`./chapters-unlisted.ts`, the hidden experiments): found by id; `CHAPTER_META` stays one-to-one with the listed chapters. Listing one moves its record there. */
-export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [EXP_LEBLANC_META, EXPERIMENT_META, SINSPAWN_GUI_META, EXP_FAYTH_META, TOURIST_TRAP_META, VALEFOR_BESAID_META, BIRAN_YENKE_META, ANGRA_MAINYU_META, LAST_SUMMONING_META, SPECTRAL_KEEPER_META, FALLEN_MAESTERS_META, expYrpMeta(FFX2_BAHAMUT_META), EXP_WINDWAKER_META] as const; // the Leblanc preview (2026-10-06), the Experiment, Sinspawn Gui and Fayth (2026-10-10); Sin's two were listed 2026-09-29
+export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [EXP_LEBLANC_META, EXPERIMENT_META, SINSPAWN_GUI_META, EXP_FAYTH_META, TOURIST_TRAP_META, VALEFOR_BESAID_META, BIRAN_YENKE_META, ANGRA_MAINYU_META, LAST_SUMMONING_META, SPECTRAL_KEEPER_META, FALLEN_MAESTERS_META, expYrpMeta(FFX2_BAHAMUT_META), EXP_WINDWAKER_META, YUNAS_BALLAD_META] as const; // the Leblanc preview (2026-10-06), the Experiment, Sinspawn Gui and Fayth (2026-10-10); Sin's two were listed 2026-09-29
 
 /** Look a chapter's pause-screen metadata up by id. `undefined` for an unknown id. */
 export function getChapterMeta(id: string): ChapterMeta | undefined {

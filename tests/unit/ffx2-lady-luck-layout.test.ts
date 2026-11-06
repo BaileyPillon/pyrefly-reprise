@@ -35,7 +35,7 @@ type Request = Extract<BattleEvent, { type: 'minigame-request' }>;
 
 function party(): FFX2PartyBuild {
   const [yuna, rikku, paine] = farplaneBuild.members;
-  return { ...farplaneBuild, members: [{ ...yuna, currentDressphere: 'lady-luck' }, rikku, paine] };
+  return { ...farplaneBuild, members: [{ ...yuna, currentDressphere: 'lady-luck' }, rikku!, paine!] };
 }
 
 function newEngine(seed: number, minigames: boolean): FFX2Engine {

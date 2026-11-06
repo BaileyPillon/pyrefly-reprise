@@ -27,7 +27,7 @@ const MAGIC_REELS = 'x2-lady-luck-magic-reels';
 
 function ladyLuckParty(): FFX2PartyBuild {
   const [yuna, rikku, paine] = farplaneBuild.members;
-  return { ...farplaneBuild, members: [{ ...yuna, currentDressphere: 'lady-luck' }, rikku, paine] };
+  return { ...farplaneBuild, members: [{ ...yuna, currentDressphere: 'lady-luck' }, rikku!, paine!] };
 }
 
 /** Yuna spins first; every later menu of the other two girls stays open until the overlay has opened. */

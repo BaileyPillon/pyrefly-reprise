@@ -37,6 +37,7 @@ export const KILL_ITEM_ID: Readonly<Record<number, string>> = {
   0x9012: 'pixie-dust',
   0x9013: 'crystal-ball',
   0x9014: 'defense-veil',
+  0x901a: 'champion-belt',
   0x901e: 'regal-crown',
   0x9039: 'tetra-band',
   0x9047: 'twist-headband',

@@ -80,7 +80,7 @@ describe('GP3 a: everything carries from Baralai to Gippal to Nooj, with no resu
 
   it('the carried stats are the worn dressphere\'s own (derived again, accessories kept)', () => {
     const { engine, setup } = baralaiEngine();
-    const layout = gridNodeContents(farplaneBuild.members[1], nodesOf(farplaneBuild.members[1]));
+    const layout = gridNodeContents(farplaneBuild.members[1]!, nodesOf(farplaneBuild.members[1]!));
     const rikku = girl(engine, 'rikku');
     const other = layout.findIndex((d, i) => i > 0 && d !== null && d !== 'dark-knight');
     rikku.dresspheres!.current = layout[other]!;
