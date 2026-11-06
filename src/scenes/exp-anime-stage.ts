@@ -5,11 +5,12 @@
  *
  * Game case: FFX-2 only [AGENTS.md rule 14; research/ffx2-fallen-aeons.md section 7.1]. It is the same encounter as `ffx2-valefor-besaid` (the party, the formation, its AI, the scripts and the music are chapter 24's by
  * reference); what this scene replaces is the picture, wholly: no painted plate, the engine's own light rig hidden, the camera rigs (`../engine/ww3d/animeLayout.ts`, the anime lab's), the grade (`../engine/ww3d/post.ts`) and the
- * figures: the Meshy toon girls (`public/models-exp/windwaker/anime/<id>.glb`, about five heads tall, 1.55 to 1.70 m) and Valefor (the Wind Waker chapter's `valefor.glb`, scaled to 5 m) under the cel material with
+ * figures: the Meshy toon girls (`public/models-exp/windwaker/anime/<id>.glb`, about seven heads tall after the part-2 proportion pass, 1.55 to 1.72 m, with the Wind Waker cast's upright idle and victory) and Valefor (the Wind Waker chapter's `valefor.glb`, scaled to 5 m) under the cel material with
  * outlines (`../engine/ww3d/cel.ts`, `outline.ts`, `faceMask.ts`, `celify.ts`), the painted planes switched off. A slot with no file stands on a neutral capsule, so the chapter always plays.
  *
  * - **The look.** Three looks of one shader, `?look=genshin` (the default: the survey's recommendation, **Bailey has not chosen**), `?look=gg` (Guilty Gear: a razor terminator, one flat violet shadow, a thick near-black
  *   line) and `?look=blend` (Guilty Gear's lines and shadows on Genshin's light); `?look=painted` plays chapter 24's own scene, the comparison. `?outline=0` draws no lines. He picks by playing.
+ * - **The wet floor** (`../engine/ww3d/stageAnime.ts`): the temple's sand floor becomes a polished blue-grey stone and a planar mirror lies over it (drawn once per game frame; `?reflect=0` leaves it out, a low-quality build has none).
  * - **Loaded on use.** Everything under `../engine/ww3d/` is imported dynamically, so no other chapter carries it. The girls' files are kept out of git but SHIP in a production build (`tools/dist-filter.mjs`;
  *   `tools/vite-ww-models.mjs` fails a release build that lacks them).
  *
@@ -93,7 +94,7 @@ export const buildExpAnimeStageScene: SceneFactory = async (opts: SceneBuildOpti
   const mark = (name: string): void => {
     if (typeof performance !== 'undefined') timings[name] = Math.round(performance.now() - t0);
   };
-  const [{ STAGE, buildStage }, { loadSwaps, swapNames }, { loadWwModels, prefetchModels }, { WwSkin }, { MoveFx }, { HitFx }, { tapDirector }, { FileCache, defaultIO }, { paletteFor }, toon, cel, { createCelRig }] = await Promise.all([
+  const [{ STAGE, buildStage }, { loadSwaps, swapNames }, { loadWwModels, prefetchModels }, { WwSkin }, { MoveFx }, { HitFx }, { tapDirector }, { FileCache, defaultIO }, { paletteFor }, toon, cel, { createCelRig }, floorMod] = await Promise.all([
     import('../engine/ww3d/stage.ts'),
     import('../engine/ww3d/swaps.ts'),
     import('../engine/ww3d/model.ts'),
@@ -106,6 +107,7 @@ export const buildExpAnimeStageScene: SceneFactory = async (opts: SceneBuildOpti
     import('../engine/ww3d/toon.ts'),
     import('../engine/ww3d/cel.ts'),
     import('../engine/ww3d/celify.ts'),
+    import('../engine/ww3d/stageAnime.ts'),
   ]);
 
   mark('imports');
@@ -138,6 +140,7 @@ export const buildExpAnimeStageScene: SceneFactory = async (opts: SceneBuildOpti
   if (found.length > 0) console.info(`[ww3d] swapped in: ${found.join(', ')}`);
   const stage = buildStage(stageUniforms, { swaps: swaps.temple, ...(opts.quality ? { quality: opts.quality } : {}) });
   group.add(stage.group);
+  const floor = floorMod.addAnimeFloor(stage, { ...(opts.quality ? { quality: opts.quality } : {}), reflect: floorMod.reflectWanted(search) }); // the wet stone and its mirror
   mark('stage');
   const models = await loadWwModels({
     base,
@@ -157,7 +160,7 @@ export const buildExpAnimeStageScene: SceneFactory = async (opts: SceneBuildOpti
   group.add(hits.group);
   const skin = new WwSkin({ host: group, models, fx, hits, staging: ANIME_STAGING });
   const directed = tapDirector(undefined, skin.listener); // the beats start the models' clips (attack and cast), the move effects and the wings' flap
-  if (import.meta.env.DEV) (globalThis as { __ww3d?: unknown }).__ww3d = { skin, models, stage, fx, hits, uniforms, variant: look.stage, look: lookName, cel: celRig, swaps, timings }; // the debug handle (a dev server only)
+  if (import.meta.env.DEV) (globalThis as { __ww3d?: unknown }).__ww3d = { skin, models, stage, floor, fx, hits, uniforms, variant: look.stage, look: lookName, cel: celRig, swaps, timings }; // the debug handle (a dev server only)
 
   mark('ready');
   let clock = 0;
@@ -179,6 +182,7 @@ export const buildExpAnimeStageScene: SceneFactory = async (opts: SceneBuildOpti
       clock += dt;
       lights.update(dt);
       stage.update(clock);
+      floor.update(dt);
       skin.update(dt);
       fx.update(dt);
       hits.update(dt);
@@ -190,6 +194,7 @@ export const buildExpAnimeStageScene: SceneFactory = async (opts: SceneBuildOpti
       hits.dispose();
       skin.dispose(); // frees the models and their hulls
       files.dispose();
+      floor.dispose();
       stage.dispose();
       celRig.dispose();
       lights.dispose();

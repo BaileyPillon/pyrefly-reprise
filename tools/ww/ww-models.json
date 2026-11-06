@@ -4,18 +4,18 @@
  "files": [
   {
    "path": "anime/paine.glb",
-   "bytes": 2463368,
-   "sha256": "7a430629414a4da1521dcc6542b7775e62bc2fe5d1558f14ec0dcd59dfae06d1"
+   "bytes": 2509980,
+   "sha256": "7126bdf370f3724ba8d99bce3346eda3ed0ca3bfb95609ffdc2600490724d26e"
   },
   {
    "path": "anime/rikku.glb",
-   "bytes": 2747804,
-   "sha256": "8b0d10697a3a8bb0c1d6a930f1e9312358c91d582309f7d77cca1bd97b23b675"
+   "bytes": 2888444,
+   "sha256": "79c796b80cc1c8c7cb6229e734bef49a42aa3653c8f0554473035043186126c0"
   },
   {
    "path": "anime/yuna.glb",
-   "bytes": 2607168,
-   "sha256": "0ed0beeb7720064981438f474a09a599442c7b197487a0d169670cde10a1923f"
+   "bytes": 2738200,
+   "sha256": "f1018db9b67e0064eebb4bc8b1179138fa67cab426eeeb60a3eb6c8e44c55833"
   },
   {
    "path": "paine.glb",

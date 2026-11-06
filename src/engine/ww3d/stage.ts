@@ -145,7 +145,8 @@ export function buildStage(uniforms: ToonUniforms, opts: StageOptions = {}): Bui
   const swaps = opts.swaps ?? {};
   const ctx: StageCtx = { group, R, H, tex, uniforms: stageU, swaps, used: new Set<TempleName>(), templates: new Map(), toon, add };
 
-  add(new CircleGeometry(R + 0.5, 64).rotateX(-Math.PI / 2), toon({ map: tex.sand(7, [2.8, 2.8]), color: 0xf2eefc }, floorU), { receive: true });
+  const floor = add(new CircleGeometry(R + 0.5, 64).rotateX(-Math.PI / 2), toon({ map: tex.sand(7, [2.8, 2.8]), color: 0xf2eefc }, floorU), { receive: true });
+  floor.name = 'ww-floor'; // the anime chapter finds it (`./stageAnime.ts`)
   lap('floor');
   const swappedFace = tileWall(ctx, STAGE.doorAz); // the radius of the tiled wall's inner face, or null with no wall file
   const wallSwapped = swappedFace !== null;

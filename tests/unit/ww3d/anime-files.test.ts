@@ -1,10 +1,12 @@
 /**
- * **The anime chapter's real girls, when they are on disk** (`public/models-exp/windwaker/anime/{yuna,rikku,paine}.glb`: the LOD1 files of the Meshy toon cast, 2048 px, about 20k triangles; the hidden anime chapter, FFX-2 only).
+ * **The anime chapter's real girls, when they are on disk** (`public/models-exp/windwaker/anime/{yuna,rikku,paine}.glb`: the LOD1 files of the Meshy toon cast, 2048 px, about 20k triangles, **after the part-2 proportion pass**: a smaller head and longer legs
+ * baked in by `tools/anime/proportion.mjs`, and the Wind Waker cast's upright idle and victory retargeted by `tools/anime/retarget.mjs`; the hidden anime chapter, FFX-2 only).
  * The files are kept out of git (they do ship in a production build), so every test here is skipped on a machine without them. Where they are, each is read in Node with no renderer (three's own `GLTFLoader`, pictures stripped,
  * through the chapter's own loaders, `../helpers/wwRealFiles.ts`), and the chapter's code is run over the REAL geometry, skeleton and clips:
  *
  * 1. **Each file is what the survey says**: one skinned mesh on the 24-joint Meshy rig, the bones every module reads (the head turn, the weapons, the facing, the face mask's `head_end`), the right height, the feet on y 0, and clips
- *    `idle`, `attack`, `hit`, `cast` and `ko` by name (and `walk` and `run`, which no role plays), no `victory` and no `idle_combat`;
+ *    `idle` (the upright one), `attack`, `hit`, `cast`, `ko` and `victory` by name (and `walk` and `run`, which no role plays) and no `idle_combat`; **the proportion pass shows**: the height over the head's length (Head to `head_end`) is in the
+ *    band of a taller-bodied, smaller-headed girl (before the pass: Yuna 6.1, Rikku 7.2, Paine 5.8);
  * 2. **The role map**: the idle is `idle`, a knock-out clip exists (so the skin lets it play instead of tipping her over), the strike windows are found;
  * 3. **The face is found**: the face mask on the real head covers a plausible part of the head's vertices, none of the body's, and the hull is made with no width inside it;
  * 4. **The real loader and the real material**: `loadWwModels` with the anime staging stands the three girls on their own files, cel, at their own heights, the head raised and turned, with the weapons from files on the hand bones.
@@ -30,6 +32,8 @@ import { boxOf, modelsDir, readGltf, realIo, trianglesOf } from '../helpers/wwRe
 
 const path = (id: WwId): string => join(modelsDir, `${ANIME_FILES[id]}.glb`);
 const have = WW_PARTY_IDS.every((id) => existsSync(path(id)));
+/** The height over the head's length (Head to head_end) of the files of the proportion pass, as a band (measured 2026-11-06: Yuna 7.90, Rikku 9.02, Paine 7.01; the files before it: 6.08, 7.20, 5.82). */
+const PASS_RATIO: Readonly<Record<'yuna' | 'rikku' | 'paine', readonly [number, number]>> = { yuna: [7.5, 8.3], rikku: [8.5, 9.5], paine: [6.6, 7.4] };
 const NEEDED = ['Hips', 'Spine', 'Head', 'head_end', 'headfront', 'LeftShoulder', 'RightShoulder', 'LeftForeArm', 'RightForeArm', 'LeftHand', 'RightHand', 'LeftUpLeg', 'RightUpLeg'];
 
 describe.skipIf(!have)('the three girls\' LOD1 files', () => {
@@ -49,12 +53,22 @@ describe.skipIf(!have)('the three girls\' LOD1 files', () => {
       expect(trianglesOf(g)).toBeLessThan(25_000);
     });
 
-    it(`${id}: clips idle, attack, hit, cast and ko (and the walk and the run no role plays), no victory and no combat stance; the roles are found and the strike has a window`, () => {
+    it(`${id}: the proportion pass is in the file (the height is ${PASS_RATIO[id][0]} to ${PASS_RATIO[id][1]} lengths of her head, Head to head_end; the pass's own bounding box is her native height)`, () => {
+      const g = readGltf(path(id));
+      const head = g.nodes.find((n) => n.name === 'head_end')!;
+      const len = Math.hypot(...(head as unknown as { translation: [number, number, number] }).translation);
+      const box = boxOf(g);
+      const ratio = (box.max[1]! - box.min[1]!) / len;
+      expect(ratio, `${id}'s height over her head's length`).toBeGreaterThan(PASS_RATIO[id][0]);
+      expect(ratio).toBeLessThan(PASS_RATIO[id][1]);
+    });
+
+    it(`${id}: clips idle, attack, hit, cast, ko and victory (and the walk and the run no role plays), no combat stance; the roles are found and the strike has a window`, () => {
       const g = readGltf(path(id));
       const names = (g.animations ?? []).map((a) => a.name ?? '');
-      expect([...names].sort()).toEqual(['attack', 'cast', 'hit', 'idle', 'ko', 'run', 'walk']);
+      expect([...names].sort()).toEqual(['attack', 'cast', 'hit', 'idle', 'ko', 'run', 'victory', 'walk']);
       const by = roleClips(names.map((n) => new AnimationClip(n, 1, [])));
-      expect([...by.keys()].sort()).toEqual(['attack', 'cast', 'hit', 'idle', 'ko']);
+      expect([...by.keys()].sort()).toEqual(['attack', 'cast', 'hit', 'idle', 'ko', 'victory']);
       expect(by.get('idle')?.name).toBe('idle');
       for (const n of names.filter((x) => UNUSED_CLIPS.test(x))) expect([...by.values()].map((c) => c.name)).not.toContain(n);
     });
@@ -84,6 +98,14 @@ describe.skipIf(!have)('the chapter\'s code over the real girls', () => {
       expect(windows.attack, 'the attack window').toBeDefined();
       expect(windows.attack!.end).toBeGreaterThan(windows.attack!.start);
       expect(windows.ko).toEqual({ start: 0, end: by.get('ko')!.duration });
+      expect(windows.victory, 'the victory window').toBeDefined();
+      // the upright idle: the hips stand within a tenth of their rest height (the file's own combat stance sat at 0.86) and the clip loops a few seconds
+      const idle = by.get('idle')!;
+      const hips = idle.tracks.find((t) => t.name === 'Hips.position')!;
+      const rest = (await files.io.clone(parsed!.scene)).getObjectByName('Hips')!.position.y;
+      expect(hips.values[1]! / rest, `${id}'s idle hips over their rest height`).toBeGreaterThan(0.9);
+      expect(hips.values[1]! / rest).toBeLessThan(1.05);
+      expect(idle.duration).toBeGreaterThan(1.5);
       const scene = await files.io.clone(parsed!.scene);
       const mesh = scene.getObjectByProperty('isSkinnedMesh', true) as SkinnedMesh;
       scene.updateMatrixWorld(true);

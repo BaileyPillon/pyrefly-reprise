@@ -228,7 +228,7 @@ void RE_IndirectDiffuse_Toon( const in vec3 irradiance, const in vec3 geometryPo
 	float glowW = max( 0.02, fwidth( glowNdV ) );
 	float glowInner = 1.0 - smoothstep( uToonGlowShape.x - glowW, uToonGlowShape.x + glowW, glowNdV );
 	float glowOuter = 1.0 - smoothstep( uToonGlowShape.y - glowW, uToonGlowShape.y + glowW, glowNdV );
-	float glowBand = max( glowInner, 0.4 * glowOuter );
+	float glowBand = max( glowInner, 0.2 * glowOuter ); // the cel girl: the outer step is half the Wind Waker toon's (0.4): at 0.4 the whole white top of a cast Yuna washed yellow (part 1 stills)
 	reflectedLight.indirectDiffuse += mix( min( col, vec3( uToonCeil ) ), uToonGlow.rgb * 1.15, glowBand * uToonGlow.a );
 
 }

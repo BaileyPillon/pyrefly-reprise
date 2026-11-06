@@ -1,7 +1,7 @@
 /**
  * **Where the anime chapter's figures stand and how the camera sees them** (the hidden anime chapter, `data/chapter-exp-anime.ts`; FFX-2 only). Pure: arrays and numbers, no `three`, no DOM, so
  * `tests/unit/ww3d/anime-layout.test.ts` pins the picture without a browser. It is the Wind Waker chapter's staging table (`./layout.ts` `WwStaging`) filled in for a different cast: **the Meshy toon girls at their own
- * heights** (Yuna 1.60 m, Rikku 1.55, Paine 1.70: adults of about 5 heads, not the Wind Waker chapter's 3-head 1.2 m cast) and **Valefor at 5 m** (her file is 3.5 m: scaled by 1.43, the concept frames' size against the girls).
+ * heights** (Yuna 1.60 m, Rikku 1.55, Paine 1.70: adults of about 7 heads after the part-2 proportion pass (`tools/anime/cast.mjs`), not the Wind Waker chapter's 3-head 1.2 m cast) and **Valefor at 5 m** (her file is 3.5 m: scaled by 1.43, the concept frames' size against the girls).
  *
  * ## The target
  *
@@ -22,8 +22,11 @@ import { boxOf, pitchedLook, type RigData, type ScreenBox } from './camera.ts';
 import { MODEL_FILE, PARTY_SLOTS as WW_PARTY_SLOTS, WW_BOSS_ID, WW_PARTY_IDS, type V3, type WwId, type WwStaging } from './layout.ts';
 import type { PropSpec } from './props.ts';
 
-/** The girls' own heights as exported (metres), Valefor's height here (her file's 3.5 m times {@link BOSS_SCALE}), and the shared hover. */
-export const ANIME_NATIVE_HEIGHT: Readonly<Record<WwId, number>> = { yuna: 1.6, rikku: 1.55, paine: 1.7, 'x2-valefor': 3.5 };
+/**
+ * The girls' own heights as exported (metres: the files of the proportion pass, about 7 heads: `tools/anime/proportion.mjs`; the files before it stood 1.60 / 1.55 / 1.70), and Valefor's file's 3.5 m (times
+ * {@link BOSS_SCALE} for her height here). The engine fits each figure to its world height below, so these only place the hit burst's chest.
+ */
+export const ANIME_NATIVE_HEIGHT: Readonly<Record<WwId, number>> = { yuna: 1.623, rikku: 1.554, paine: 1.719, 'x2-valefor': 3.5 };
 export const BOSS_SCALE = 5.0 / 3.5;
 export const ANIME_WORLD_HEIGHT: Readonly<Record<WwId, number>> = { yuna: 1.6, rikku: 1.55, paine: 1.7, 'x2-valefor': 5.0 };
 
