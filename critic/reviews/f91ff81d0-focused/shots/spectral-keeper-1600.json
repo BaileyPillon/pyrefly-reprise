@@ -1,0 +1,174 @@
+{
+ "chapter": "spectral-keeper",
+ "W": "1600",
+ "H": "900",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5871/assets/index-CrrbwEak.js"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 7
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "rows",
+   "stackPresent": true,
+   "rows": [
+    {
+     "i": 0,
+     "text": "Move",
+     "selected": true,
+     "disabled": false,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 1,
+     "text": "Attack",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 2,
+     "text": "Special",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 3,
+     "text": "White Magic",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 4,
+     "text": "Items",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 5,
+     "text": "Flee",
+     "selected": false,
+     "disabled": true,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    }
+   ]
+  },
+  {
+   "s": "hud",
+   "intent": [
+    ""
+   ],
+   "body": ""
+  },
+  {
+   "s": "after-turns",
+   "screen": "battle"
+  },
+  {
+   "s": "end",
+   "screen": "results",
+   "ms": 23559
+  },
+  {
+   "s": "end-text",
+   "text": "ZANARKAND DOME — THE FOOT OF THE LIFT\n · FELL\nRESULTS · 1:05\nDefeat\nTURNS\n32\nATTEMPTS\n1\nBEST\n—\nNEVER CLEARED\nT\nTidus\nS.LV 46 · 0/2,181 AP\nY\nYuna\nS.LV 44 · 0/1,928 AP\nA\nAuron\nS.LV 48 · 0/2,456 AP\nRETRY\nCHAPTER SELECT"
+  },
+  {
+   "s": "after",
+   "screen": "battle"
+  }
+ ],
+ "rows": {
+  "stackPresent": true,
+  "rows": [
+   {
+    "i": 0,
+    "text": "Move",
+    "selected": true,
+    "disabled": false,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 1,
+    "text": "Attack",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 2,
+    "text": "Special",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 3,
+    "text": "White Magic",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 4,
+    "text": "Items",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 5,
+    "text": "Flee",
+    "selected": false,
+    "disabled": true,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   }
+  ]
+ },
+ "hud": {
+  "intent": [
+   ""
+  ],
+  "body": ""
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "artRequested": 12
+}

@@ -1,0 +1,91 @@
+[
+ {
+  "chapter": "spectral-keeper",
+  "W": 390,
+  "H": 844,
+  "screen": "battle",
+  "menu": true,
+  "overflowX": false,
+  "rows": [
+   "Move",
+   "Attack",
+   "Special",
+   "White Magic",
+   "Items",
+   "Flee"
+  ],
+  "intentCards": [],
+  "consoleErrors": [],
+  "notFound": []
+ },
+ {
+  "chapter": "ffx2-fallen-maesters",
+  "W": 390,
+  "H": 844,
+  "screen": "battle",
+  "menu": true,
+  "overflowX": false,
+  "rows": [
+   "Attack",
+   "Item",
+   "Change"
+  ],
+  "intentCards": [],
+  "consoleErrors": [],
+  "notFound": []
+ },
+ {
+  "chapter": "spectral-keeper",
+  "W": 2000,
+  "H": 1012,
+  "screen": "battle",
+  "menu": true,
+  "overflowX": false,
+  "rows": [
+   "Move",
+   "Attack",
+   "Special",
+   "White Magic",
+   "Items",
+   "Flee"
+  ],
+  "intentCards": [],
+  "consoleErrors": [],
+  "notFound": []
+ },
+ {
+  "chapter": "ffx2-fallen-maesters",
+  "W": 2000,
+  "H": 1012,
+  "screen": "battle",
+  "menu": true,
+  "overflowX": false,
+  "rows": [
+   "Attack",
+   "Item",
+   "Change"
+  ],
+  "intentCards": [],
+  "consoleErrors": [],
+  "notFound": []
+ },
+ {
+  "chapter": "seymour-omnis",
+  "W": 1600,
+  "H": 900,
+  "screen": "battle",
+  "menu": true,
+  "overflowX": false,
+  "rows": [
+   "Attack",
+   "Special",
+   "White Magic",
+   "Items",
+   "Flee",
+   "Escape"
+  ],
+  "intentCards": [],
+  "consoleErrors": [],
+  "notFound": []
+ }
+]

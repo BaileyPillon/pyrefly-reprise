@@ -4,5 +4,11 @@
     "date": "2026-11-04T08:33:24.654Z",
     "source": "critic/rounds/round-34b.json"
   },
-  "deploysSinceDeep": []
+  "deploysSinceDeep": [
+    {
+      "sha": "f91ff81d0",
+      "date": "2026-11-06T12:03:55.678Z",
+      "substantial": true
+    }
+  ]
 }
