@@ -23,6 +23,7 @@ import { DARK_AEONS_GROUPS } from '../../src/data/ffx/enemies/dark-aeons-groups.
 import { OFFERING_KEYS, openerGroup, possessionGroup, yuYevonLink } from '../../src/data/ffx/enemies/last-summoning-chain.ts';
 import { GAME_COMMAND } from '../../src/battle/ffx/formation-commands.ts';
 import { BIRAN_YENKE_GROUP_ID } from '../../src/data/ffx/biran-yenke-ids.ts';
+import { FLOODED_LINKS } from '../../src/data/ffx/flooded-ways-ids.ts';
 
 // ---------------------------------------------------------------------------------------------------------------------- the fixture
 
@@ -186,7 +187,8 @@ describe('the model of the game against the scan', () => {
 describe('the data carries the list on exactly the groups the model says, and it is the model\'s list', () => {
   it('the three Isaaru groups, Biran and Yenke (Kimahri\'s Switch, RC11) and the hidden Spectral Keeper (Escape, Flee, Guard and Sentinel for everyone: RE 2.2), and no other group of the game, carry commandDisables', () => {
     const marked = Object.values(ENEMY_GROUPS_BY_ID).filter((g) => g.commandDisables !== undefined).map((g) => g.id).sort();
-    expect(marked).toEqual([...Object.values(ISAARU_FORMATIONS), BIRAN_YENKE_GROUP_ID, 'spectral-keeper'].sort());
+    // + the hidden Flooded Ways' four formations (2026-11-06): Escape and Flee for everyone, Switch for the three swimmers (RE 2.3).
+    expect(marked).toEqual([...Object.values(ISAARU_FORMATIONS), BIRAN_YENKE_GROUP_ID, 'spectral-keeper', ...FLOODED_LINKS.map((l) => l.groupId)].sort());
     expect(ISAARU_GROUPS.map((g) => g.commandDisables)).toEqual([ISAARU_COMMAND_DISABLES, ISAARU_COMMAND_DISABLES, ISAARU_COMMAND_DISABLES]);
   });
 

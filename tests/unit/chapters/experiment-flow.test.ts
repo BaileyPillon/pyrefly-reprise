@@ -181,7 +181,9 @@ describe('the data behind it', () => {
     const mirrorTiers = ['70', '71', '72', '73', '74'].map((n) => `mirror-yojimbo-nagi05_${n}`);
     // The hidden Fallen Maesters (FFX-2, 2026-11-02) sets it on floors 40, 60 and 80 of the Via Infinito: the glyph between the floors heals the party, which is no Save Sphere (`data/ffx2/enemies/fallen-maesters.ts`).
     const maesters = ['40-black-elemental', '60-concherer', '80-chac'].map((n) => `ffx2-via-infinito-floor-${n}`);
-    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-') && !id.startsWith('ffx2-via-infinito-floor-'))).toEqual([DJOSE_EXPERIMENT_2]);
+    // The hidden Flooded Ways (FFX, 2026-11-06) sets it on its Baaj Temple link: a fresh fight that restores the party on entry, its own retry checkpoint, no Save Sphere (`data/ffx/enemies/flooded-ways-groups.ts`).
+    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-') && !id.startsWith('ffx2-via-infinito-floor-') && id !== 'flooded-geosgaeno')).toEqual([DJOSE_EXPERIMENT_2]);
+    expect(flagged.filter((id) => id === 'flooded-geosgaeno')).toEqual(['flooded-geosgaeno']);
     expect(flagged.filter((id) => id.startsWith('ffx2-via-infinito-floor-')).sort()).toEqual(maesters);
     expect(flagged.filter((id) => id.startsWith('mirror-yojimbo-')).sort()).toEqual(mirrorTiers);
   });

@@ -149,7 +149,8 @@ describe('17. Cutscene flashes (both games)', () => {
     // a script is exported twice (named and default), so its steps are walked twice: count each once
     const longest = [...new Set(steps.filter((s) => s.ms >= 900).map((s) => `${s.file}:${s.ms}`))].sort();
     // Mirror Aeons' seam (the sisters go with the light, listed 2026-10-16) is a 1200 ms white-out like the Gui's: a cover, softened by the loop above like the others.
-    expect(longest).toEqual(['ffx2-vegnagun-shuyin.ts:900', 'mirror-aeons.ts:1200', 'sinspawn-gui.ts:1200']);
+    // The hidden Flooded Ways' one seam (2026-11-06) ends on a 1000 ms white-out that covers the cut to the Baaj Temple: a cover too.
+    expect(longest).toEqual(['ffx2-vegnagun-shuyin.ts:900', 'flooded-ways.ts:1000', 'mirror-aeons.ts:1200', 'sinspawn-gui.ts:1200']);
     expect(IVORY.toLowerCase()).toBe('#fff1d6');
   });
 });

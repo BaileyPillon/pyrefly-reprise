@@ -89,7 +89,7 @@ describe('the table: the nine of TIP-1 and the Maesters, and nothing else', () =
 
   it('every chapter without a short form renders the same block in the prep card as in the pause screen (the prep card is shared by both games)', () => {
     const without = [...CHAPTER_META, ...UNLISTED_CHAPTER_META].filter((m) => prepTipFor(m.id) === undefined);
-    expect(without).toHaveLength(32 - 10);
+    expect(without).toHaveLength(33 - 10); // 33 chapters since the hidden Flooded Ways (2026-11-06)
     for (const m of without) expect(tipHtml(m, { prep: true }), m.id).toBe(tipHtml(m));
   });
 });

@@ -34,7 +34,7 @@ export const FLOODED_WAYS_META: ChapterMeta = {
     { id: 'baaj-temple', label: 'Reach the Baaj Temple', rule: { kind: 'link-reached', link: 4 } },
     { id: 'last-home', label: 'Send Geosgaeno home', rule: { kind: 'victory' } },
   ],
-  tip: 'In the water a gaze that lands shatters its victim: only Rikku wears a ward. Healing hurts the dead one. Swallowed? Strike from inside, or the spit-out falls on all three.',
+  tip: 'A gaze that lands shatters its victim in the water. Healing hurts the dead one. Swallowed? Strike from inside.',
   snapshots: [
     { image: 'backdrops/via-purifico.png', caption: 'the flooded way' },
     { image: 'characters/evrae/idle.png', caption: 'what guards the gates' },
