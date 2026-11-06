@@ -9,7 +9,7 @@
  * is held by Shuyin's despair and takes Yuna for a guard with a gun at her head): Yuna alone against Rikku, then Paine; the two are freed and rejoin her; the three shades of the Den are still to come.
  *
  * 1. **pre**: the sealed cave, two figures who do not see her, Yuna's two lines; then the battle.
- * 2. **one seam** (a mid-battle script that plays at a link's fall: Rikku's), hands off, about 10 seconds: Rikku is released, the pyreflies move on to Paine.
+ * 2. **one seam** (a mid-battle script that plays at a link's fall: Rikku's), hands off, 15 seconds at the worst (`scriptDurationMs` reads 14.95 s: the typewriter time plus the `auto` holds, which alone sum to 8.8 s, plus a flash): Rikku is released, the pyreflies move on to Paine.
  * 3. **two mid-battle callouts** (each a short interrupt): Rikku's first Grenade and Paine's first Attack.
  * 4. **post**: the tally first, then Paine's one sincere exchange, the joke returning, and the Den still ahead (the three shades are the Den of Woe's own chapter).
  *

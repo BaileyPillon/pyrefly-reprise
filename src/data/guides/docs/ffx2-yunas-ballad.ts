@@ -3,7 +3,7 @@
  *
  * **Game case: FFX-2 only** (AGENTS.md rule 14). Layout: `../doc-types.ts`. The document follows the FFX-2 encounter guides' shape (a header, the Enemy / HP / Steal / Drop table, the advice in the order a player meets it)
  * in our own words. **No written walkthrough of these two duels is in the repository's corpus**, so every sentence stands on the game's own rows and scripts (`research/re-ffx2-yunas-ballad.md` §4, §6 and §7) and on the
- * wiki-level Den of Woe note (`research/ffx2-gippal-den-of-woe.md` §2 to §5). Enemy, HP and Drop are the numbers this game uses; neither fighter has a Steal in this game (the rows' Lore items have no item here). Nothing here names
+ * wiki-level Den of Woe note (`research/ffx2-gippal-den-of-woe.md` §2 to §5). Enemy, HP and Drop are the numbers this game uses; neither fighter has a Steal in this game (the rows' Lore items have no item here), and Rikku's own drop, a Lore item too, has none either, so her cell reads None (`kill-rewards.ts`; the row's true value is in `yunas_ballad_rows.json`). Nothing here names
  * where the advice came from (`tests/unit/guide-doc-words.test.ts`), and nothing in a document is a move recommendation of ours.
  */
 
@@ -37,16 +37,16 @@ export const FFX2_YUNAS_BALLAD_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'She acts about every four seconds. She can be put to Sleep, slowed, blinded, confused or enraged, but not Stopped, Silenced or poisoned.',
+      text: 'She acts about every six seconds. She can be put to Sleep, slowed, blinded or enraged, but not Stopped, Silenced or poisoned.',
     },
     { t: 'head', at: ['x2-possessed-paine'], title: 'Paine', tag: 'Boss Battle' },
     {
       t: 'p',
-      text: 'Paine has 9,200 HP and one move: a sword stroke at whoever has the most HP, about every seven seconds. There is time to heal between strokes and time to hit.',
+      text: 'Paine has 9,200 HP and one move: a sword stroke at whoever has the most HP, every seven or eight seconds. There is time to heal between strokes and time to hit.',
     },
     {
       t: 'p',
-      text: 'Her Defense is 70, so a blade scrapes, but her Magic Defense is only 7, so anything magical goes straight through. She takes the same ailments as Rikku: Sleep, Slow, Darkness, Confuse and Berserk all land.',
+      text: 'Her Defense is 70, but a Warrior’s blade still lands hard: about ten blows bring her down. Her Magic Defense is only 7, so anything magical goes straight through. She takes the same ailments as Rikku: Sleep, Slow, Darkness and Berserk all land.',
     },
     {
       t: 'p',

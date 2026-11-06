@@ -186,6 +186,50 @@ describe('the moves, with the rows\' numbers [RE §7]', () => {
     expect(endsOf(paine, bossOf(1))).toBeGreaterThanOrEqual(6);
     expect(rikku.state().ticks).toBeLessThan(paine.state().ticks);
   });
+
+  it('the blade the guide page describes: a Warrior Yuna hits Paine (DEF 70) for 800 to 950 a blow, so her 9,200 HP is about ten blows (not a scrape)', () => {
+    const amounts: number[] = [];
+    let blows = 0;
+    for (const seed of [1, 2, 3, 4, 5, 6]) {
+      const engine = openDuel(1, seed);
+      expect(runDuel(engine, 1, turnOf(LINES.warrior)).outcome, `seed ${seed}`).toBe('victory');
+      for (const e of logOf(engine)) if (e.type === 'damage' && e.sourceId === 'yuna' && e.targetId === bossOf(1) && e.crit !== true) amounts.push(e.amount as number);
+      blows += logOf(engine).filter((e) => e.type === 'damage' && e.sourceId === 'yuna' && e.targetId === bossOf(1)).length;
+    }
+    expect(Math.min(...amounts)).toBeGreaterThanOrEqual(800);
+    expect(Math.max(...amounts)).toBeLessThanOrEqual(950);
+    // A duel is won in the neighbourhood of ten blows (9,200 HP over about 880 a blow); the page says "about ten".
+    expect(blows / 6).toBeGreaterThanOrEqual(9);
+    expect(blows / 6).toBeLessThanOrEqual(12);
+  });
+
+  it('the pace the guide prints: with Yuna defending, Rikku acts about every six seconds and Paine every seven or eight (30 ticks a second)', () => {
+    const PACE_SEEDS = [31, 32, 33, 34, 35, 36, 37, 38];
+    const ACTIONS = 8;
+    const secondsPerAction = (duel: Duel): number => {
+      let ticks = 0;
+      let actions = 0;
+      for (const seed of PACE_SEEDS) {
+        // Yuna defends and Paine/Rikku act on the engine's own clock. The first action also waits out the opening charge, so the span counted starts at the first action's end.
+        const engine = openDuel(duel, seed);
+        playUntilBossActed(engine, bossOf(duel), 1);
+        const from = engine.state().ticks;
+        const before = endsOf(engine, bossOf(duel));
+        playUntilBossActed(engine, bossOf(duel), before + ACTIONS);
+        ticks += engine.state().ticks - from;
+        actions += endsOf(engine, bossOf(duel)) - before;
+      }
+      return ticks / actions / 30;
+    };
+    // The strategy-guide card and page print "about every six seconds" (Rikku) and "every seven or eight seconds" (Paine). The note's recovery-and-charge steps (3.4 s and 4.2 s; 6.8 s) leave out the animation the engine
+    // spends on each action, so the printed pace is the engine's, measured here (6.0 s and 7.5 s on these seeds), not the note's.
+    const rikkuPace = secondsPerAction(0);
+    const painePace = secondsPerAction(1);
+    expect(rikkuPace).toBeGreaterThan(5);
+    expect(rikkuPace).toBeLessThan(7);
+    expect(painePace).toBeGreaterThan(6.5);
+    expect(painePace).toBeLessThan(8.5);
+  });
 });
 
 describe('status [RE §4.2]', () => {

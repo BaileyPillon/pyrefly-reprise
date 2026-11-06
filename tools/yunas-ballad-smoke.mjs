@@ -338,18 +338,37 @@ try {
     await waitFor('the post scene or the results', async () => ['results', 'cutscene'].includes(await screenNow()), { ms: 90_000, pollMs: 500 }).catch(() => null);
     const end = await screenNow();
     check('Paine falls and the chapter reaches its post scene or results', end === 'results' || end === 'cutscene', end);
-    if (end === 'cutscene') {
+    if (end === 'cutscene' || end === 'results') {
+      // The post script opens with the results tally (`results()`): the first thing on screen is the tally (the app's own results screen, played inside the script), and the lines come after its Confirm, on their own
+      // `auto` timings. Take the tally, take the results screen once it has settled, then press Enter to Confirm and take the screen at each line's first appearance (the script's own words, searched in the page text).
+      // If nothing new shows for five seconds, Enter nudges the scene on.
       await page.waitForTimeout(1500);
-      await shot('10-post-scene');
-      for (let guard = 0; (await screenNow()) === 'cutscene' && guard < 200; guard++) {
-        await page.keyboard.press('Enter');
-        await page.waitForTimeout(350);
+      await shot('10-tally');
+      log('results.text', (await page.evaluate(() => document.body.innerText)).replace(/\s+/g, ' ').slice(0, 700));
+      await page.waitForTimeout(5500);
+      if ((await screenNow()) === 'results' || (await screenNow()) === 'cutscene') await shot('11-results');
+      const KEYS = ['What did I do', 'Nothing you meant', 'not quiet', 'my everything hurt', 'three more lights'];
+      const seen = [];
+      let lastChange = Date.now();
+      let lastPress = 0;
+      for (let guard = 0; guard < 240 && seen.length < KEYS.length; guard++) {
+        const text = await page.evaluate(() => document.body.innerText.replace(/\s+/g, ' '));
+        for (const k of KEYS.filter((x) => text.includes(x) && !seen.includes(x))) {
+          seen.push(k);
+          lastChange = Date.now();
+          await shot(`12-post-${seen.length}`);
+        }
+        const confirmUp = /CONFIRM/.test(text);
+        if ((confirmUp && Date.now() - lastPress > 1500) || Date.now() - lastChange > 5000) {
+          await page.keyboard.press('Enter');
+          lastPress = Date.now();
+          if (!confirmUp) lastChange = Date.now();
+        }
+        await page.waitForTimeout(250);
       }
+      log('post.lines', seen);
+      check('the post scene shows its lines after the results are confirmed', seen.length >= 3, seen);
     }
-    await waitFor('the results', async () => (await screenNow()) === 'results', { ms: 60_000, pollMs: 500 }).catch(() => null);
-    log('results.text', (await page.evaluate(() => document.body.innerText)).replace(/\s+/g, ' ').slice(0, 700));
-    await page.waitForTimeout(7000);
-    if ((await screenNow()) === 'results') await shot('11-results');
   }
 } catch (e) {
   failures.push(`threw: ${String(e).slice(0, 300)}`);

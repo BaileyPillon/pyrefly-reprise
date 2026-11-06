@@ -137,7 +137,7 @@ describe('the chain to a victory, both links', () => {
   }, 120_000);
 });
 
-describe('the shipped auto-battler plays the chain (the chapter has a tactic and no guide page yet)', () => {
+describe('the shipped auto-battler plays the chain (the chapter has a tactic, a guide card and a guide page)', () => {
   it('through the app path it neither throws nor wedges: it reaches a verdict on every seed', async () => {
     await registerBattleContent();
     for (const seed of [1, 2, 3]) {

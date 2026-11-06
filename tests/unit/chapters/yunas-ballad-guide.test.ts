@@ -84,7 +84,31 @@ describe('the numbers the player reads are the data\'s', () => {
       for (const s of ['sleep', 'slow', 'darkness', 'confuse', 'berserk']) expect(resisted(s), `${enemy.id} ${s}`).toBe(0);
       for (const s of ['stop', 'silence', 'poison']) expect(resisted(s), `${enemy.id} ${s}`).toBe(255);
     }
-    expect(docText()).toMatch(/Sleep, slowed, blinded, confused or enraged/);
+    expect(docText()).toMatch(/Sleep, slowed, blinded or enraged/);
     expect(docText()).toMatch(/not Stopped, Silenced or poisoned/);
+  });
+
+  it('Confuse is not offered as an answer: the byte reads 0 (it lands) but the engine leaves a Confused monster to its script (pick YB9), so neither the card nor the page prints it', () => {
+    expect((x2PossessedRikku.immunities as Record<string, number | undefined>)['confuse'] ?? 0).toBe(0);
+    expect(cardText()).not.toMatch(/confus/i);
+    expect(docText()).not.toMatch(/confus/i);
+    expect(FFX2_YUNAS_BALLAD_GUIDE.rules.map((r) => r.short).join(' ')).not.toMatch(/confus/i);
+  });
+
+  it('the cadence the card and the page print is the engine\'s measured pace (yunas-ballad-engine.test.ts: Rikku 6 s, Paine 7.5 s with Yuna defending), not the note\'s recovery steps', () => {
+    expect(cardText()).toContain('She acts about every six seconds');
+    expect(docText()).toContain('She acts about every six seconds');
+    expect(cardText()).toContain('every seven or eight seconds');
+    expect(docText()).toContain('every seven or eight seconds');
+    expect(cardText()).not.toMatch(/every four seconds/);
+    expect(docText()).not.toMatch(/every four seconds/);
+  });
+
+  it('"a White Mage has no attack" cites the combat-core note\'s White Mage section (3.5), not the Den note, and the page says a Warrior needs about ten blows (the engine test measures them)', () => {
+    const whiteMage = FFX2_YUNAS_BALLAD_GUIDE.rules.find((r) => /no attack/.test(r.text))!;
+    expect(whiteMage.cite).toBe('ffx2-combat-core §3.5');
+    for (const h of FFX2_YUNAS_BALLAD_GUIDE.hints) if (/no attack|cannot attack/.test(h.text)) expect(h.cite, h.text).toBe('ffx2-combat-core §3.5');
+    expect(docText()).toContain('about ten blows');
+    expect(docText()).not.toMatch(/scrape/);
   });
 });
