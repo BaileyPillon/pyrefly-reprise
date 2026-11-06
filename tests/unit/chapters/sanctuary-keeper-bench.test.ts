@@ -5,13 +5,25 @@
  * cell so the suite stays quick, and prints the 200-seed table when `SANCTUARY_BENCH=200` is set. If a later change moves a bound, re-measure and update that section, never the bounds alone.
  */
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { LINES, bench, buildWith, play, winRate } from '../helpers/sanctuaryBot.ts';
 import { sanctuaryKeeperBuild } from '../../../src/data/ffx/builds/sanctuary-keeper.ts';
 
+// A cell is 60 seeds on the real engine and a test plays up to three cells: on the loaded machine of a full-suite run (three workers beside other work) one test ran past the 15 s default, so the budget is explicit.
+vi.setConfig({ testTimeout: 240_000 });
+
 const SEEDS = 60;
-const wins = (name: string, party = sanctuaryKeeperBuild): number => bench(LINES[name]!, SEEDS, party).filter((r) => r.outcome === 'victory').length;
+const cells = new Map<string, number>();
+/** Wins of a line over seeds 1 to 60 (each cell is played once per file: the runs are deterministic, so a repeat would only repeat the cost). */
+const wins = (name: string, party = sanctuaryKeeperBuild): number => {
+  const key = `${name}|${party.activeSlots.join(',')}`;
+  const known = cells.get(key);
+  if (known !== undefined) return known;
+  const n = bench(LINES[name]!, SEEDS, party).filter((r) => r.outcome === 'victory').length;
+  cells.set(key, n);
+  return n;
+};
 
 describe('every fight reaches a result: seeds 1 to 3, twice over', () => {
   it('the advisor\'s line plays to a victory or a defeat, never a stall, and plays the same twice', () => {
