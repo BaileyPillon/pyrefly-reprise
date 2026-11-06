@@ -12,8 +12,7 @@
  * §5.4 victory quips) and each chapter's own research document — the beat
  * sheet and player-strategies sections cited chapter-by-chapter below. All
  * `quote.text` values are original lines written for this screen, in the
- * focal character's documented voice; they are not transcriptions of any
- * script line.
+ * focal character's documented voice; they are not transcriptions of any script line.
  */
 import type { GameId } from '../battle/common/types.ts';
 import type { ChapterId } from './encounters.ts';

@@ -8,6 +8,8 @@
 
 import { Color, Vector2, Vector4, type IUniform, type Material, type Mesh, type MeshToonMaterial, type Object3D, type Texture } from 'three';
 import { disposeSkeletonsOf } from '../skeletons.ts';
+import type { WwId } from './layout.ts';
+import type { PropStyle } from './props.ts';
 import { toonFrom, withUniforms, type ShaderLike, type ToonUniforms } from './toon.ts';
 
 /** One toon material and the colour it started with. */
@@ -49,6 +51,16 @@ export interface ToonifyOptions {
   depthMaterial?: Material;
   /** Keep three's frustum culling (default false: a skinned mesh's bounds are its bind pose's, and a bent wing leaves them; a static temple piece keeps its culling, which is what lets a wall of many tiles draw only the ones in view). */
   cull?: boolean;
+}
+
+/**
+ * **How a chapter shades its figures, when it is not the Wind Waker toon** (the hidden anime chapter, `./celify.ts`; FFX-2 only; optional, additive). Omitted, a model is made toon by `toonify` over the context's uniforms,
+ * exactly as before. `figure` receives the loaded scene, the figure it is, and the options the model decided (the wing flap's vertex hook and depth material for Valefor, whether it receives shadows) and returns the set the
+ * model drives; `props` is how its weapons are made and sized (`./props.ts`).
+ */
+export interface ModelShading {
+  readonly figure: (scene: Object3D, id: WwId, opts: ToonifyOptions) => ToonSet;
+  readonly props?: PropStyle;
 }
 
 type MapKey = 'normalMap' | 'roughnessMap' | 'metalnessMap' | 'aoMap' | 'emissiveMap' | 'bumpMap' | 'displacementMap';

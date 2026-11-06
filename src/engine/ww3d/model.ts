@@ -23,12 +23,12 @@ import { ClipRig, roleClips, windowsOfClips } from './clips.ts';
 import { FileCache, defaultIO, type LoaderIO } from './io.ts';
 import { WW_BOSS_ID, WW_CAST, WW_STAGING, bodyYaw, fitBox, modelUrl, rad, type BoxData, type V3, type WwId, type WwStaging } from './layout.ts';
 import { HeadTurn, readAt, stanceFacing, yawOffsetsOf } from './pose.ts';
-import { aimProps, attachProps, disposeProps, type Attached, type PropStyle, type PropSwaps } from './props.ts';
-import { disposeToon, driveToon, toonify, type Channels, type ToonSet, type ToonifyOptions } from './toonify.ts';
+import { aimProps, attachProps, disposeProps, type Attached, type PropSwaps } from './props.ts';
+import { disposeToon, driveToon, toonify, type Channels, type ModelShading, type ToonSet, type ToonifyOptions } from './toonify.ts';
 import { advanceFlap, createWingUniforms, makeWingDepthMaterial, patchWingVertex, type WingUniforms } from './wing.ts';
 import type { ShaderLike } from './toon.ts';
 
-export type { Channels };
+export type { Channels, ModelShading };
 
 /** Where a model came from: its own file or the neutral capsule that stands in for a missing one. */
 export type ModelSource = 'own' | 'capsule';
@@ -43,16 +43,6 @@ export const CHEST_LOCAL: V3 = [0.03, 1.9, 0.5];
 /** How far a body lying down is lifted off the floor so it rests on it instead of sinking through (a share of the figure's height). */
 const LIE_LIFT = 0.12;
 
-/**
- * **How a chapter shades its figures, when it is not the Wind Waker toon** (the hidden anime chapter, `./celify.ts`; FFX-2 only; optional, additive). Omitted, a model is made toon by `toonify` over the context's uniforms,
- * exactly as before. `figure` receives the loaded scene, the figure it is, and the options the model decided (the wing flap's vertex hook and depth material for Valefor, whether it receives shadows) and returns the set the
- * model drives; `props` is how its weapons are made and sized (`./props.ts`).
- */
-export interface ModelShading {
-  readonly figure: (scene: Object3D, id: WwId, opts: ToonifyOptions) => ToonSet;
-  readonly props?: PropStyle;
-}
-
 /** What a model needs from the stage that is not its file. */
 export interface ModelContext {
   /** The toon uniforms (one set per look). */
@@ -61,10 +51,8 @@ export interface ModelContext {
   readonly swaps?: PropSwaps | undefined;
   /** Where the lens is (the idle rig's position): the girls' bodies and faces are turned toward it. */
   readonly camera: V3;
-  /** The chapter's staging numbers (default {@link WW_STAGING}, the Wind Waker chapter's own constants). */
-  readonly staging?: WwStaging;
-  /** How the figures are shaded (default the Wind Waker toon). */
-  readonly shading?: ModelShading;
+  readonly staging?: WwStaging; // the chapter's staging numbers (default WW_STAGING, the Wind Waker chapter's own constants)
+  readonly shading?: ModelShading; // how the figures are shaded (default the Wind Waker toon)
 }
 
 export class WwModel {
