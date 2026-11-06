@@ -29,7 +29,7 @@ import {
   type StatusRecord,
 } from '../../../src/battle/ffx/kernel/status-inflict.ts';
 import { applyDoubleHpMp } from '../../../src/battle/ffx/kernel/status-pool.ts';
-import { type Situation, type SideSpec, combatantOf, oracleInputs, randomSituation } from './ffxEngineWiring.ts';
+import { SANCTUARY_OWN_ROWS, type Situation, type SideSpec, combatantOf, oracleInputs, randomSituation } from './ffxEngineWiring.ts';
 
 // --------------------------------------------------------------------------------------------------- the tables, typed again
 
@@ -123,6 +123,7 @@ export function statusPool(all: readonly AbilityDef[]): AbilityDef[] {
         a.record !== undefined &&
         (hasPayload(a.record) || a.id === 'attack' || a.record.damageClass === 0) &&
       !a.flags.includes('destroys-user') &&
+      !SANCTUARY_OWN_ROWS.has(a.id) && // the Sanctuary Keeper's rows stay out of the seeded sample (see `SANCTUARY_OWN_ROWS`)
       a.extra?.['script'] === undefined &&
       a.extra?.['statsFrom'] === undefined &&
       a.extra?.['opensSubmenu'] === undefined &&

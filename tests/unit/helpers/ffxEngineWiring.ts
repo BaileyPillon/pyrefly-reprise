@@ -23,6 +23,7 @@ import type {
 } from '../../../src/battle/common/types.ts';
 import { FFXContentRegistry } from '../../../src/battle/ffx/index.ts';
 import { SPECTRAL_ROWS } from '../../../src/data/ffx/spectral-keeper-ids.ts';
+import { SANCTUARY_ROWS } from '../../../src/data/ffx/sanctuary-keeper-ids.ts';
 import { tickSpeed as baseCtb } from '../../../src/battle/ffx/kernel/ctb.ts';
 import { makeActorRuntime, type Ctx, type FFXRuntime } from '../../../src/battle/ffx/state.ts';
 import type { CritCheckInput } from '../../../src/battle/ffx/kernel/crit.ts';
@@ -334,7 +335,9 @@ export function oracleInputs(sit: Situation, live: Live): { hit: HitCheckInput; 
  * Rows only a chapter's script queues, whose target, count and draws are the script's and are tested with it: the hidden Spectral Keeper's (`tests/unit/chapters/spectral-keeper-*.test.ts`). They stay out of the
  * generic wiring sample, so adding the chapter moves none of this file's seeded picks (the Keeper's three single-target rows had pushed the CTB-class count from 6 to 5 and the floor was loosened to follow; it is back at "more than 5").
  */
-const SCRIPT_ONLY_ROWS: ReadonlySet<string> = new Set(Object.values(SPECTRAL_ROWS));
+/** The hidden Sanctuary Keeper's three rows (2026-11-06): tested with it (`tests/unit/chapters/sanctuary-keeper-*.test.ts`) and kept out of both seeded samples, because in the status oracle's they moved the seeded picks onto a situation of an older Mix (`mix-dark-rain`, number 448) whose engine and oracle words differ. The Spectral Keeper's rows stay in the status sample, as at base. */
+export const SANCTUARY_OWN_ROWS: ReadonlySet<string> = new Set([SANCTUARY_ROWS.photonWings, SANCTUARY_ROWS.manaBreath, SANCTUARY_ROWS.tailSweep]);
+const SCRIPT_ONLY_ROWS: ReadonlySet<string> = new Set([...Object.values(SPECTRAL_ROWS), ...SANCTUARY_OWN_ROWS]);
 
 /**
  * The abilities a random situation may use: recorded, damaging, single-target, nothing scripted, no revival.
