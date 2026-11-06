@@ -175,8 +175,8 @@ describe('the tips the model says overflow at 1600 x 900 are the ones job TIP-1 
   const end = handoff.indexOf('\n### ', start + 5);
   const section = start < 0 ? '' : handoff.slice(start, end < 0 ? undefined : end);
 
-  it('every listed and hidden chapter is put through the model: 32 of them at the release, more with each hidden chapter added after it, each with three objectives', () => {
-    expect(all.length).toBeGreaterThanOrEqual(32);
+  it('every listed and hidden chapter is put through the model: 32 of them at the release plus the Sanctuary Keeper\'s (33; each hidden chapter added after it raises this pin by one), each with three objectives', () => {
+    expect(all).toHaveLength(33);
     for (const meta of all) expect(meta.objectives, meta.id).toHaveLength(3);
   });
 

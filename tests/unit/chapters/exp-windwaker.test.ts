@@ -214,10 +214,8 @@ describe('its scene', () => {
     expect(row.cite).toMatch(/no source describes Besaid/);
   });
 
-  it('is the row right after the 3D Bahamut\'s in the hidden chapters\' side table, which keeps every other row in order (later chapters append behind it)', () => {
-    const at = EXPERIMENT_SCENE_ENTRIES.indexOf(EXP_WINDWAKER_SCENE_ENTRY);
-    expect(at).toBeGreaterThan(0);
-    expect(EXPERIMENT_SCENE_ENTRIES[at - 1]!.key).toBe('exp-yrp-3d-stage');
+  it('is the second-to-last row of the hidden chapters\' side table, which keeps every other row in order (the Sanctuary Keeper\'s follows it)', () => {
+    expect(EXPERIMENT_SCENE_ENTRIES.at(-2)).toBe(EXP_WINDWAKER_SCENE_ENTRY);
     expect(Object.keys(EXPERIMENT_SCENE_FACTORIES)).toContain('exp-windwaker-stage');
   });
 

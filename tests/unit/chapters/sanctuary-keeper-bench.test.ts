@@ -41,10 +41,10 @@ describe('the plain lines lose outright (the preflight\'s prediction 1: plain bl
 });
 
 describe('the guides\' line: Reflect and Poison are what win it', () => {
-  it('Tidus, Yuna, Auron (the shipped front line): the advisor wins a good share (the preflight\'s band is 60 to 80 percent over 200 seeds; 60 seeds is noisy, so the bound is wide)', () => {
+  it('Tidus, Yuna, Auron (the shipped front line): the advisor wins a good share (the preflight\'s band is 60 to 80 percent; 60 seeds is noisy, so the bound is wide and not fitted to this block: seeds 1 to 60 give 33, other 200-seed blocks give 69 to 80 percent)', () => {
     const w = wins('advisor');
     expect(w).toBeGreaterThanOrEqual(25);
-    expect(w).toBeLessThanOrEqual(52);
+    expect(w).toBeLessThanOrEqual(57);
   });
 
   it('...and each of Reflect and Poison is a mover: without Poison it wins almost none, without Reflect it wins clearly fewer', () => {

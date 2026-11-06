@@ -36,7 +36,7 @@ export const TURN_ORDER_LINES: Readonly<Record<string, string>> = {
   'sinspawn-gui': TURN_ORDER_PARTY_FIRST,
   'exp-fayth': TURN_ORDER_PARTY_FIRST,
   'last-summoning': TURN_ORDER_PARTY_FIRST,
-  'sanctuary-keeper': TURN_ORDER_PARTY_FIRST, // the hidden Sanctuary Keeper chapter (2026-11-06): its first counter comes after the party's, and the engine count over 100 seeds is 0 (the test's 20 seeds are the proof)
+  'sanctuary-keeper': TURN_ORDER_PARTY_FIRST, // the hidden Sanctuary Keeper chapter (2026-11-06): its first counter comes after the party's, and the engine count over 100 seeds is 0 (the test's 20 seeds are the proof). True for the shipped front line only (Tidus, Yuna, Auron; also Tidus, Yuna, Lulu and Wakka, Rikku, Kimahri: 0 of 300 seeds); a front line without Tidus, such as Lulu, Yuna, Auron, has the Keeper act before the first menu in 300 of 300, so party prep must not change the front line without this line being re-measured
   'spectral-keeper': TURN_ORDER_PARTY_FIRST, // the formation gives the front line First Strike, so all three act before the Keeper in every seed (the engine count is the test's)
 };
 
