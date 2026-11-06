@@ -299,7 +299,7 @@ describe('the word opens it on chapter select', () => {
 
   it('a wrong letter resets: every typo, half of each other door\'s word, an unrelated word', async () => {
     const others = CHAPTER_DOORS.filter((d) => d.word !== WORD).map((d) => d.word.slice(0, -1));
-    for (const wrong of ['drillsho', 'drillshou', 'crillshot', 'rillshot', WORD.slice(0, -1), ...others, 'drizzle']) {
+    for (const wrong of ['drillsho', 'drillshou', 'crillshot', 'rillshot', WORD.slice(0, -1), ...others, 'drift']) {
       const rig = mount();
       rig.typeWord(wrong);
       await flush();

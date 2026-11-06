@@ -17,6 +17,8 @@
  * **Music (BG5, a flagged stand-in, Bailey's ears for the final):** `boss-bahamut` (the piano lament that already plays in this dungeon) for Georapella and the Precepts Guard, `boss-den-of-woe` for Baralai ("old
  * comrades in the dark").
  *
+ * Confidence: [verified: the game's own table, read byte by byte by the RE lane and pinned by `tests/unit/chapters/bevelle-guardians-data.test.ts`; the party, the music and the art are stand-ins and estimates, each said where it is set].
+ *
  * **Art:** Georapella and the Precepts Guard have no painting yet: the presenter draws its procedural placeholder for `x2-georapella` and `x2-precepts-guard`. Baralai stands in with the Den of Woe shade's painting
  * (`baralai-shade`) until the living Baralai is painted. The art list is in the handoff.
  */

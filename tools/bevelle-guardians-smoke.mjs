@@ -161,6 +161,7 @@ try {
   const acted = [];
   let shotMid = false;
   let georapellaDown = false;
+  let act1Log = []; // the engine's log of act 1: the log is per link, so it is kept here while Georapella is the enemy (the next link starts a fresh one)
   for (let round = 0; round < 80 && !georapellaDown; round++) {
     const sNow = await screenNow();
     if (sNow !== 'battle') break;
@@ -173,6 +174,7 @@ try {
     const now = await partyActions();
     if (now.length > had) acted.push(now.at(-1));
     const lg = await battleLog();
+    if (lg.length >= act1Log.length && lg.some((e) => e.type === 'action-start' && e.actor === 'x2-georapella' || e.type === 'turn-start')) act1Log = lg;
     if (!shotMid && lg.some((e) => e.type === 'action-start' && e.actor === 'x2-georapella')) {
       await page.waitForTimeout(500);
       await shot('4-first-ga');
@@ -184,7 +186,15 @@ try {
   }
   log('actions', { count: acted.length, byActor: GIRLS.map((g) => [g, acted.filter((a) => a.actor === g).length]) });
   check('every girl acted by real keys', GIRLS.every((g) => acted.some((a) => a.actor === g)), acted.slice(0, 12));
-  const lgAll = await battleLog();
+  // The seam plays at her fall, before the next link opens: follow the log until the link changes, keeping the fullest one (the seam's script-trigger is in it).
+  for (let i = 0; i < 160; i++) {
+    const lg = await battleLog();
+    if (lg.some((e) => e.type === 'ko' && e.target === 'x2-georapella') && lg.length >= act1Log.length) act1Log = lg;
+    const en = ((await field())?.enemies ?? []).map((e) => e.id);
+    if (!en.includes('x2-georapella')) break;
+    await page.waitForTimeout(250);
+  }
+  const lgAll = act1Log;
   const gaCasts = lgAll.filter((e) => e.type === 'action-start' && e.actor === 'x2-georapella').map((e) => e.ability);
   log('georapella.casts', gaCasts);
   check('Georapella cast only Ga spells, in a ring', gaCasts.length >= 3 && gaCasts.every((a) => /^x2-georapella-(thundaga|waterga|firaga|blizzaga)$/.test(String(a))), gaCasts);
@@ -200,7 +210,7 @@ try {
   log('field.2', f2);
   check('the seam played and the chain opened act 2: the Precepts Guard stands on the field', f2?.enemies.some((e) => e.id === 'x2-precepts-guard') === true, f2?.enemies);
   check('the party opens act 2 whole (the corridor mended it)', f2?.party.every((p) => p.alive && p.hp === p.maxHp), f2?.party);
-  const seams = (await battleLog()).filter((e) => e.type === 'script-trigger').map((e) => e.name);
+  const seams = act1Log.filter((e) => e.type === 'script-trigger').map((e) => e.name);
   log('script-triggers', seams);
   check('the seam fired once (georapella-fallen)', seams.filter((n) => n === 'georapella-fallen').length === 1, seams);
   await waitBattleMenu(page, 60000).catch(() => null);

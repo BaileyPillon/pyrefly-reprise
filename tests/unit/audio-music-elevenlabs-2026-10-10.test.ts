@@ -134,7 +134,7 @@ describe('ElevenLabs music of 2026-10-10: the engine routes three FFX-2 encounte
   it('leaves every other chapter on its own cue: the Fallen Aeons and Ixion took the batch-1 aeon cue on the same day (audio-music-batch1-2026-10-10.test.ts); no FFX chapter names a new cue', async () => {
     for (const id of ['ffx2-fallen-aeons', 'ffx2-ixion-djose']) expect((await resolved(id)).every((cue) => cue === 'boss-ffx2-fallen-aeons'), id).toBe(true);
     for (const chapter of [...CHAPTERS, ...EXPERIMENT_CHAPTERS]) {
-      if (['ffx2-bahamut', 'ffx2-leblanc', 'exp-leblanc', 'exp-yrp-3d'].includes(chapter.id)) continue;
+      if (['ffx2-bahamut', 'ffx2-leblanc', 'exp-leblanc', 'exp-yrp-3d', 'ffx2-bevelle-guardians'].includes(chapter.id)) continue; // the hidden Bevelle Guardians (2026-11-06) play Chapter IV's cue on acts 1 and 2 by reference (a flagged stand-in, BG5)
       expect((await resolved(chapter.id)).filter((cue) => NEW.includes(cue)), chapter.id).toEqual([]);
       expect([chapter.music.battle, chapter.music.phase2, chapter.music.scene].filter((cue) => cue && NEW.includes(cue)), chapter.id).toEqual([]);
     }

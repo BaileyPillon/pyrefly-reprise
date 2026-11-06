@@ -100,6 +100,8 @@ describe('FFX-2 monster rows are the game\'s rows', () => {
       if (key.startsWith('ffx2-bikanel-angra-mainyu/')) continue;
       // The hidden Fallen Maesters' rows 221, 69, 232 and 239 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/fallen_maesters_rows.json, tests/unit/chapters/fallen-maesters-data.test.ts).
       if (key.startsWith('ffx2-via-infinito-floor-')) continue;
+      // The hidden Bevelle Guardians' rows 262, 263 and 175 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/bevelle_guardians_rows.json, tests/unit/chapters/bevelle-guardians-data.test.ts).
+      if (key.startsWith('ffx2-bevelle-underground-floor-')) continue;
       const row = ROWS[key];
       expect(row, `${key}: no fixture row`).toBeDefined();
       if (row === undefined) continue;
