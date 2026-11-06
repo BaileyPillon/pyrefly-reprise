@@ -23,6 +23,9 @@
  * | `power-wrist` | Power Wrist | Yojimbo (both slots; the hidden Tourist Trap, 2026-10-14) | `ffx2-combat-core.md` §5.4, verified: 2 sources; the steal is `monster.bin` row 170 |
  * | `moon-bracer` | Moon Bracer | Valefor's drop (Besaid, the hidden Valefor chapter) | `ffx2-fallen-aeons.md` §7.1, verified: 2 sources; effect `ffx2-combat-core.md` §5.4 (no stats, Auto-Shell) |
  * | `ribbon` | Ribbon | Angra Mainyu's drop (both slots; the hidden Angra Mainyu chapter, 2026-10-14) | `monster.bin` row 268 + wiki + Jegged, verified: 3 sources; effect `ffx2-combat-core.md` §3, verified: 2 sources; no price |
+ * | `x2-water-gem` | Water Gem | Georapella (the steal, both slots; the hidden Bevelle Guardians, 2026-11-06) | `monster.bin` row 262 (item 0x2024), `research/re-ffx2-bevelle-underground.md` §4.1; a thrown item the Mix table names, held-only here |
+ * | `x2-mana-tablet` | Mana Tablet | the Precepts Guard (the steal, both slots) | `monster.bin` row 263 (item 0x203a), the same note §4.1; a recovery item, held-only here: its effect is not wired |
+ * | `charm-bangle` | Charm Bangle | Baralai (the steal, both slots; also Logos' drop) | `monster.bin` row 175 (accessory 0x9072), the same note §4.1; no stats read, no price |
  * | `x2-healing-spring` | Healing Spring | Valefor (both slots) | `ffx2-fallen-aeons.md` §7.1, verified: 2 sources; a recovery item (`ffx2-combat-core.md` §5.5, Regen), held-only here: its effect is not wired |
  *
  * What is **not** sourced, and so not written: an effect or description for
@@ -68,7 +71,7 @@ export const heldItemEffect: AbilityDef = {
 
 /** Held rows whose shop price the research does not give; each carries `price: 0`. */
 export const UNSOURCED_PRICE_IDS: ReadonlySet<string> = new Set([
-  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon',
+  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle',
 ]);
 
 function held(id: string, name: string, price: number | 'unsourced', description?: string): ItemDef {
@@ -113,6 +116,10 @@ export const heldItems: ItemDef[] = [
   // `research/ffx2-combat-core.md` §3 (immune to Petrification, Sleep, Silence, Darkness, Poison, Confusion, Berserk, Curse, Pointless, Itchy, Slow and Stop; `[verified: 2 sources]`), which the engine already wears (`battle/ffx2/kit.ts`); no shop price.
   held('ribbon', 'Ribbon', 'unsourced', 'Accessory. Guards against Petrification, Sleep, Silence, Darkness, Poison, Confusion, Berserk, Curse, Pointless, Itchy, Slow and Stop.'),
   // Healing Spring is a recovery item (ffx2-combat-core §5.5: Regen on the target party, ~3 % max HP a tick, not sold, sells for 150); the research names no effect row of ours, so it is held-only until one is built.
+  // The hidden Bevelle Guardians' steals (FFX-2 only, 2026-11-06; `monster.bin` rows 262, 263 and 175, `research/re-ffx2-bevelle-underground.md` §4.1, the names from the US item and accessory tables [verified: the game's own table]): no effect and no price is read, so each is held-only with price 0 (unsourced).
+  held('x2-water-gem', 'Water Gem', 'unsourced'),
+  held('x2-mana-tablet', 'Mana Tablet', 'unsourced'),
+  held('charm-bangle', 'Charm Bangle', 'unsourced'),
   held('x2-healing-spring', 'Healing Spring', 0, 'Recovery item (Regen); its effect is not wired yet.'),
 ];
 

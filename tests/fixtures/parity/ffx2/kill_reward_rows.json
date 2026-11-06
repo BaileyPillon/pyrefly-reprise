@@ -45,6 +45,9 @@
   "ffx2-via-infinito-floor-40-black-elemental/x2-black-elemental": {"table":1,"row":69,"name":"Black Elemental","exp":770,"ap":1,"gil":380,"dropByte":255,"drop":[0,0,0,0]},
   "ffx2-via-infinito-floor-60-concherer/x2-concherer": {"table":1,"row":232,"name":"Concherer","exp":6000,"ap":1,"gil":1200,"dropByte":255,"drop":[0,0,36878,1]},
   "ffx2-via-infinito-floor-80-chac/x2-chac": {"table":1,"row":239,"name":"Chac","exp":2200,"ap":1,"gil":750,"dropByte":255,"drop":[0,0,36882,1]},
+  "ffx2-bevelle-underground-floor-3-georapella/x2-georapella": {"table":1,"row":262,"name":"Georapella","exp":800,"ap":1,"gil":1000,"dropByte":255,"drop":[36910,1,36910,1]},
+  "ffx2-bevelle-underground-floor-3-precepts-guard/x2-precepts-guard": {"table":1,"row":263,"name":"Precepts Guard","exp":700,"ap":1,"gil":800,"dropByte":255,"drop":[36954,1,36954,1]},
+  "ffx2-bevelle-underground-floor-7-baralai/x2-baralai": {"table":1,"row":175,"name":"Baralai","exp":1000,"ap":10,"gil":1300,"dropByte":255,"drop":[36942,1,36942,1]},
   "ffx2-farplane-cup-1-auron/x2-cup-auron": {"table":1,"row":311,"name":"Auron","exp":1600,"ap":1,"gil":900,"dropByte":255,"drop":[8199,2,0,0]},
   "ffx2-farplane-cup-2-tidus/x2-cup-tidus": {"table":1,"row":317,"name":"????","exp":1500,"ap":1,"gil":750,"dropByte":255,"drop":[8194,2,0,0]},
   "ffx2-farplane-cup-3-seymour/x2-cup-seymour": {"table":1,"row":319,"name":"Seymour","exp":1300,"ap":1,"gil":1000,"dropByte":255,"drop":[8197,1,0,0]}

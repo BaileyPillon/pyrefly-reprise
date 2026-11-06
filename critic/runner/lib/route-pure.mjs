@@ -262,7 +262,7 @@ export const continuityBudgetFor = (chapterId, explicit) => (explicit !== undefi
  * ("ASSERT-FAIL card sinspawn-gui got yunalesca": the walk went right over every tile and found nothing). The board opens a hidden chapter when its word is typed on it
  * (`src/app/screens/frontend/chapterDoors.ts#CHAPTER_DOORS`, one row per door), and the route now types the word. This is that table as data the harness can read without importing the app
  * (`tests/unit/critic-route-harness.test.ts` runs the app's own table beside this copy, so the two cannot drift). The FF7 door (`limit`) also needs the FF7 switch on.
- * Game case: both (shared critic plumbing); each row's game is its chapter's: FFX-2 for `exp-leblanc`, `ffx2-masterpiece-theatre`, `ffx2-tourist-trap`, `ffx2-valefor-besaid`, `ffx2-angra-mainyu`, `ffx2-fallen-maesters` and `exp-yrp-3d` (the hidden 3D Bahamut, word `yrp`, ch-yrp 2026-11-02), FF7 for
+ * Game case: both (shared critic plumbing); each row's game is its chapter's: FFX-2 for `exp-leblanc`, `ffx2-masterpiece-theatre`, `ffx2-tourist-trap`, `ffx2-valefor-besaid`, `ffx2-angra-mainyu`, `ffx2-fallen-maesters`, `ffx2-bevelle-guardians` and `exp-yrp-3d` (the hidden 3D Bahamut, word `yrp`, ch-yrp 2026-11-02), FF7 for
  * `ff7-guard-scorpion`, FFX for the others.
  */
 export const DOOR_WORDS = Object.freeze({
@@ -281,6 +281,7 @@ export const DOOR_WORDS = Object.freeze({
   'dark-aeons': 'darkaeon',
   'flooded-ways': 'geosgaeno',
   'ffx2-fallen-maesters': 'infinito',
+  'ffx2-bevelle-guardians': 'drillshot', // the hidden Bevelle Guardians (FFX-2, number 37, 2026-11-06)
   'ffx2-farplane-cup': 'duelist', // the hidden Farplane Cup (FFX-2, number 38, 2026-11-06)
   'exp-yrp-3d': 'yrp',
   'exp-windwaker': 'waker', // the hidden Wind Waker chapter (FFX-2, number 32, 2026-10-20)

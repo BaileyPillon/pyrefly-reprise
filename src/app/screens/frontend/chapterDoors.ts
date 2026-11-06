@@ -36,9 +36,10 @@
  * **`beast`** (FFX, the hidden Sanctuary Keeper, `./beastDoor.ts`) is a plain `WordDoor` too, and is **not** desktop-only (painted 2D).
  *
  * **`infinito`** (FFX-2, the hidden Fallen Maesters, `./maestersDoor.ts`: only F is a bound key, `l1`, which the board ignores; I, N, T and O are unbound) is a plain `WordDoor` too.
+ * **`drillshot`** (FFX-2, the hidden Bevelle Guardians, `./drillshotDoor.ts`: D is `right`, R is `r1`, S is `down`; I, L, H, O and T are unbound) is a plain `WordDoor` too.
  * **`duelist`** (FFX-2, the hidden Farplane Cup, `./duelistDoor.ts`: D is `right`, E is `start`, S is `down`, the others unbound; the first D moves the cursor one step, as `daigoro`'s does) is a plain `WordDoor` too.
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `duelist` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno` and `beast`.
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno` and `beast`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -64,6 +65,7 @@ import { YRP_DOOR_CHAPTER, YRP_DOOR_WORD } from './yrpDoor.ts';
 import { WINDWAKER_DOOR_CHAPTER, WINDWAKER_DOOR_WORD } from './windwakerDoor.ts';
 import { ANIME_DOOR_CHAPTER, ANIME_DOOR_WORD } from './animeDoor.ts';
 import { JUDGMENT_DOOR_CHAPTER, JUDGMENT_DOOR_WORD } from './judgmentDoor.ts';
+import { DRILLSHOT_DOOR_CHAPTER, DRILLSHOT_DOOR_WORD } from './drillshotDoor.ts';
 import { DUELIST_DOOR_CHAPTER, DUELIST_DOOR_WORD } from './duelistDoor.ts';
 import { BEAST_DOOR_CHAPTER, BEAST_DOOR_WORD } from './beastDoor.ts';
 
@@ -111,6 +113,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: DARKAEON_DOOR_WORD, chapter: DARKAEON_DOOR_CHAPTER },
   { word: JUDGMENT_DOOR_WORD, chapter: JUDGMENT_DOOR_CHAPTER },
   { word: GEOSGAENO_DOOR_WORD, chapter: GEOSGAENO_DOOR_CHAPTER },
+  { word: DRILLSHOT_DOOR_WORD, chapter: DRILLSHOT_DOOR_CHAPTER },
   { word: DUELIST_DOOR_WORD, chapter: DUELIST_DOOR_CHAPTER },
   { word: BEAST_DOOR_WORD, chapter: BEAST_DOOR_CHAPTER },
 ];

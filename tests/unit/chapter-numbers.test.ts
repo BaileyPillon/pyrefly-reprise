@@ -7,6 +7,7 @@
  *
  * - the listed chapters are 1 to 18, in `CHAPTERS` order, one each, and then Mirror Aeons, **27**, listed 2026-10-15 on Bailey's word (the hidden experiments hold 19 to 26, so the board's nineteenth card reads XXVII);
  * - the hidden Wind Waker chapter (FFX-2, 2026-10-20) takes **32** (assigned 2026-11-02; 29 to 31 are the Spectral Keeper, the Fallen Maesters and the 3D Bahamut, each on its own branch);
+ * - the hidden Bevelle Guardians chapter (FFX-2, 2026-11-06) takes **37** (the program plan's row 37; 33 to 36 belong to the other new chapters' lanes);
  * - 0 means "no place on the board" and only the unlisted FF7 experiment wears it;
  * - the hidden experiments are above the eighteen and each has its own: 19 the Leblanc preview, 20 the FFX-2 Experiment, 21 Sinspawn Gui, 22 Fayth (Evrae with FFX's camera), 23 the Tourist Trap, 24 Valefor at Besaid, 25 Biran and Yenke, 26 Angra Mainyu;
  * - every number is within the type's union (`Chapter.number`), so a typo fails `tsc` before it fails here.
@@ -44,6 +45,11 @@ describe('chapter numbers', () => {
   it('the hidden Wind Waker chapter holds the number 32, and is an experiment of its own', () => {
     const c = EXPERIMENT_CHAPTERS.find((x) => x.id === 'exp-windwaker');
     expect(c).toMatchObject({ game: 'ffx2', experimental: true, number: 32 });
+  });
+
+  it('the hidden Bevelle Guardians chapter holds the number 37 (row 37 of the program plan), and is an experiment of its own', () => {
+    const c = EXPERIMENT_CHAPTERS.find((x) => x.id === 'ffx2-bevelle-guardians');
+    expect(c).toMatchObject({ game: 'ffx2', experimental: true, number: 37 });
   });
 
   it('the known experiments keep their numbers: Leblanc 19, the FFX-2 Experiment 20, Sinspawn Gui 21, Fayth 22, Tourist Trap 23, Valefor at Besaid 24, Biran and Yenke 25, Angra Mainyu 26', () => {

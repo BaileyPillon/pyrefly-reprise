@@ -250,6 +250,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
     'exp-anime': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden anime chapter (FFX-2 only, 2026-11-06): chapter 24's record by reference, so the same field bed and the same aeon cue
     'ffx2-angra-mainyu': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Angra Mainyu (FFX-2 only, 2026-10-14): the same "Aeons" cue, by reference
     'ffx2-fallen-maesters': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons', 'boss-ffx2-fallen-aeons'] }, // the hidden Fallen Maesters (FFX-2 only, 2026-11-02): the Via Infinito's four floors play the same "Aeons" cue, a flagged stand-in (FM10), by reference
+    'ffx2-bevelle-guardians': { scene: 'scene-bevelle-underground', links: ['boss-bahamut', 'boss-bahamut', 'boss-den-of-woe'] }, // the hidden Bevelle Guardians (FFX-2 only, 2026-11-06): the Bahamut chapter's bed and its cue for the two floor-3 guardians, the Den of Woe's cue for Baralai, flagged stand-ins (BG5), by reference (no new cue)
     'ffx2-farplane-cup': { scene: 'scene-bevelle-underground', links: ['boss-trema', 'boss-trema', 'boss-trema'] }, // the hidden Farplane Cup (FFX-2 only, 2026-11-06): the Fiend Arena's three duels play the superboss cue of Chapter XIII, a flagged stand-in (DU6), by reference (no new cue)
     'mirror-aeons': { scene: 'scene-gagazet', links: ['boss-challenge', 'boss-yojimbo'] }, // the hidden Mirror Aeons chapter (FFX only, 2026-10-15): the mountain's bed as the stand-in, the generic "Challenge" boss cue for the Sisters and Yojimbo's own cue for Dark Yojimbo, both by reference
     'dark-aeons': { scene: 'scene-gagazet', links: ['boss-challenge', 'boss-challenge', 'boss-challenge', 'boss-challenge', 'boss-challenge', 'boss-challenge', 'boss-yojimbo'] }, // the hidden Dark Aeons (FFX only, 2026-11-06): the mountain's bed as the stand-in, the generic "Challenge" cue for the first six links and Yojimbo's own cue for the last, both by reference (no new cue)
@@ -282,7 +283,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
       'boss-challenge': ['yunalesca', 'sinspawn-gui', 'biran-yenke', 'mirror-aeons', 'spectral-keeper', 'dark-aeons', 'penance'],
       'boss-gui': ['sinspawn-gui'],
       'boss-seymour-omnis': ['seymour-omnis'],
-      'boss-den-of-woe': ['ffx2-den-of-woe'],
+      'boss-den-of-woe': ['ffx2-den-of-woe', 'ffx2-bevelle-guardians'], // Baralai's act of the hidden Bevelle Guardians borrows it (a flagged stand-in, BG5)
       'boss-experiment': ['ffx2-masterpiece-theatre'],
       'scene-chateau-leblanc': ['ffx2-leblanc', 'exp-leblanc'],
       'victory-bahamut': ['ffx2-bahamut', 'exp-yrp-3d'], // the hidden 3D Bahamut is Chapter IV's record by reference, so it ends on Chapter IV's quiet resolve too

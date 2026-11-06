@@ -186,10 +186,13 @@ describe('the data behind it', () => {
     // The hidden Flooded Ways (FFX, 2026-11-06) sets it on its Baaj Temple link: a fresh fight that restores the party on entry, its own retry checkpoint, no Save Sphere (`data/ffx/enemies/flooded-ways-groups.ts`).
     // The hidden Farplane Cup (FFX-2, 2026-11-06) sets it on duels 2 and 3 (the Tidus and Seymour links): the arena's seam heals the party, which is no Save Sphere (`data/ffx2/enemies/farplane-cup.ts`).
     const cup = ['2-tidus', '3-seymour'].map((n) => `ffx2-farplane-cup-${n}`);
-    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-') && !id.startsWith('ffx2-via-infinito-floor-') && !id.startsWith('dark-aeons-') && id !== 'flooded-geosgaeno' && !id.startsWith('ffx2-farplane-cup-'))).toEqual([DJOSE_EXPERIMENT_2]);
+    // The hidden Bevelle Guardians (FFX-2, 2026-11-06) sets it on act 2 (the Precepts Guard) and act 3 (Baralai): the corridor's pyreflies between the acts mend the party, which is no Save Sphere (`data/ffx2/enemies/bevelle-guardians.ts`).
+    const guardians = ['floor-3-precepts-guard', 'floor-7-baralai'].map((n) => `ffx2-bevelle-underground-${n}`);
+    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-') && !id.startsWith('ffx2-via-infinito-floor-') && !id.startsWith('dark-aeons-') && id !== 'flooded-geosgaeno' && !id.startsWith('ffx2-farplane-cup-') && !id.startsWith('ffx2-bevelle-underground-'))).toEqual([DJOSE_EXPERIMENT_2]);
     expect(flagged.filter((id) => id === 'flooded-geosgaeno')).toEqual(['flooded-geosgaeno']);
     expect(flagged.filter((id) => id.startsWith('dark-aeons-')).sort()).toEqual([...darkAeons].sort());
     expect(flagged.filter((id) => id.startsWith('ffx2-farplane-cup-')).sort()).toEqual(cup);
+    expect(flagged.filter((id) => id.startsWith('ffx2-bevelle-underground-')).sort()).toEqual(guardians);
     expect(flagged.filter((id) => id.startsWith('ffx2-via-infinito-floor-')).sort()).toEqual(maesters);
     expect(flagged.filter((id) => id.startsWith('mirror-yojimbo-')).sort()).toEqual(mirrorTiers);
   });
