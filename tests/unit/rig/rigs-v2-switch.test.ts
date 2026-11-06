@@ -62,14 +62,15 @@ afterEach(() => {
 });
 
 describe('?partyrigs=v2', () => {
-  it('is asked by the address only; off by default; on and v2 are two different words', () => {
-    expect(partyRigsModeFromSearch(undefined)).toBe('off');
-    expect(partyRigsModeFromSearch('?pack=demo')).toBe('off');
+  it('is asked by the address only; on is the default since the pilots went on (2026-11-06); on, v2 and off are three different words', () => {
+    expect(partyRigsModeFromSearch(undefined)).toBe('on');
+    expect(partyRigsModeFromSearch('?pack=demo')).toBe('on');
     expect(partyRigsModeFromSearch('?partyrigs=on')).toBe('on');
+    expect(partyRigsModeFromSearch('?partyrigs=off')).toBe('off');
     expect(partyRigsModeFromSearch('?partyrigs=v2')).toBe('v2');
     expect(partyRigsModeFromSearch('?pack=demo&partyrigs=V2')).toBe('v2');
-    expect(partyRigsModeFromSearch('?partyrigs=v3')).toBe('off');
-    expect(partyRigsModeFromSearch('?partyrigs=2')).toBe('off');
+    expect(partyRigsModeFromSearch('?partyrigs=v3')).toBe('on'); // a word the switch does not know reads the default, which is on
+    expect(partyRigsModeFromSearch('?partyrigs=2')).toBe('on');
   });
 
   it('lets a pilot draw in its own chapter only, exactly as `on` does; nothing else is this switch\'s', () => {

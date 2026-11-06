@@ -400,14 +400,15 @@ describe('the curve under it', () => {
 });
 
 describe('the party rig pilots\' switch', () => {
-  it('is off by default and with ?pack=demo alone; ?partyrigs=on turns it on', () => {
-    expect(partyRigsModeFromSearch(undefined)).toBe('off');
-    expect(partyRigsModeFromSearch('')).toBe('off');
-    expect(partyRigsModeFromSearch('?pack=demo')).toBe('off');
+  it('is ON by default since the pilots went on (2026-11-06), with ?pack=demo alone too; ?partyrigs=off gives the paintings back', () => {
+    expect(partyRigsModeFromSearch(undefined)).toBe('on');
+    expect(partyRigsModeFromSearch('')).toBe('on');
+    expect(partyRigsModeFromSearch('?pack=demo')).toBe('on');
     expect(partyRigsModeFromSearch('?pack=demo&partyrigs=on')).toBe('on');
     expect(partyRigsModeFromSearch('?partyrigs=ON')).toBe('on');
     expect(partyRigsModeFromSearch('?partyrigs=off')).toBe('off');
-    expect(partyRigsModeFromSearch('?partyrigs=1')).toBe('off');
+    expect(partyRigsModeFromSearch('?pack=demo&partyrigs=OFF')).toBe('off');
+    expect(partyRigsModeFromSearch('?partyrigs=1')).toBe('on'); // a word the switch does not know reads the default
   });
   it('lets a pilot draw only when on, and only in its own chapter; every other figure is not this switch\'s', () => {
     expect(Object.keys(PARTY_RIG_SUBJECTS).sort()).toEqual(['rikku-dark-knight', 'tidus']);
