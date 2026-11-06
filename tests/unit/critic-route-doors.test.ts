@@ -18,6 +18,7 @@ describe('the route\'s table of door words is the board\'s', () => {
     expect({ ...DOOR_WORDS }).toEqual(app);
     expect(Object.keys(DOOR_WORDS)).toHaveLength(CHAPTER_DOORS.length); // one word per door of the table (it was a literal that every new chapter moved)
     expect(doorWordFor('flooded-ways')).toBe('geosgaeno');
+    expect(doorWordFor('sanctuary-keeper')).toBe('beast');
   });
 
   it('answers null for a chapter that has a card on the board (the arrow-key walk finds it)', () => {

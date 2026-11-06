@@ -57,6 +57,7 @@ import { BIRAN_YENKE_BOSS_IDS, biranYenke } from './biran-yenke.ts';
 import { MIRROR_AEONS_BOSS_IDS, mirrorAeons } from './mirror-aeons.ts';
 import { DARK_AEONS_BOSS_IDS, darkAeons } from './dark-aeons.ts';
 import { LAST_SUMMONING_BOSS_IDS, lastSummoning } from './last-summoning.ts';
+import { SANCTUARY_KEEPER_BOSS_IDS, sanctuaryKeeper } from './sanctuary-keeper.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -102,6 +103,7 @@ export { biranYenke, BIRAN_YENKE_BOSS_IDS } from './biran-yenke.ts'; // the hidd
 export { mirrorAeons, MIRROR_AEONS_BOSS_IDS } from './mirror-aeons.ts'; // the hidden Mirror Aeons chapter (FFX only)
 export { darkAeons, DARK_AEONS_BOSS_IDS } from './dark-aeons.ts'; // the hidden Dark Aeons chapter (FFX only, 2026-11-06)
 export { lastSummoning, LAST_SUMMONING_BOSS_IDS } from './last-summoning.ts'; // the hidden Last Summoning chapter (FFX only)
+export { sanctuaryKeeper, SANCTUARY_KEEPER_BOSS_IDS } from './sanctuary-keeper.ts'; // the hidden Sanctuary Keeper chapter (FFX only)
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -184,6 +186,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...MIRROR_AEONS_BOSS_IDS.map((bossId) => ({ chapterId: 'mirror-aeons', bossId, tactic: mirrorAeons })),
   // The hidden Dark Aeons chapter (FFX only): the six other Dark Aeons; the line is Yojimbo's Zanmato against the two long fights, an aeon as fodder for the Overdrive, Auto-Life on everyone.
   ...DARK_AEONS_BOSS_IDS.map((bossId) => ({ chapterId: 'dark-aeons', bossId, tactic: darkAeons })),
+  // The hidden Sanctuary Keeper chapter (FFX only): the beast on the summit; the line is Poison, then Reflect, Shell before the breath (plain blows win 0 of 200).
+  ...SANCTUARY_KEEPER_BOSS_IDS.map((bossId) => ({ chapterId: 'sanctuary-keeper', bossId, tactic: sanctuaryKeeper })),
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

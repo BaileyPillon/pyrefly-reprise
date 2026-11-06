@@ -25,6 +25,7 @@ import { SPECTRAL_KEEPER_SCENE } from '../data/ffx/spectral-keeper-ids.ts';
 import { DARK_AEONS_SCENE } from '../data/ffx/dark-aeons-six-ids.ts';
 import { PENANCE_SCENE } from '../data/ffx/penance-ids.ts';
 import { FLOODED_WAYS_SCENE } from '../data/ffx/flooded-ways-ids.ts';
+import { SANCTUARY_KEEPER_SCENE } from '../data/ffx/sanctuary-keeper-ids.ts';
 import { ANGRA_MAINYU_SCENE } from '../data/angra-mainyu-ids.ts';
 import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
 import { EXP_WINDWAKER_SCENE } from '../data/windwaker-ids.ts';
@@ -155,6 +156,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   [LAST_SUMMONING_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Dream's End [verified: 2 sources]` },
   // The Dark Aeons (the hidden chapter, FFX only): seven existing plates under one stage; the guides name no ambient particles for these places and the aeons leave as the stage dissolves them.
   [DARK_AEONS_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/re-ffx-dark-aeons-six.md section 2.4 and 9: the guides name where each Dark Aeon stands and no ambient particles; the aeons are summoned shapes and leave as the stage dissolves them' },
+  // The Sanctuary Keeper (the hidden chapter, FFX only; `scenes/sanctuary-keeper.ts`): Chapter I's Mt. Gagazet plate and scene, so the mountain's row.
+  [SANCTUARY_KEEPER_SCENE]: { game: 'ffx', verdict: 'unattested', cite: `${PRES}, Mt. Gagazet [single source]: "No pyreflies are attested on the trail" (an absence, not a contradiction); the stage is Chapter I's`, treatment: "As Gagazet: snow and glitter, nothing added" },
   // The Spectral Keeper (the hidden chapter, FFX only): the Zanarkand Dome as Chapter II builds it, so the Dome's row.
   [SPECTRAL_KEEPER_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Zanarkand Dome [verified: 2 sources]` },
   // Penance (the hidden chapter, FFX only; `scenes/penance.ts`): Chapter VIII's deck over Chapter VIII's own plate, so the deck's row.

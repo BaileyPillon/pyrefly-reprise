@@ -59,6 +59,8 @@ const ROWS: ReadonlyArray<readonly [string, number]> = [
   ['spectral-keeper', 0x0000], // m129
   // The hidden Flooded Ways chapter (2026-11-06): Evrae Altana (m120) carries the Critical Strike word 0x6066 and Geosgaeno (m109) the Attack word 0x6000 as their forced actions (`research/re-ffx-geosgaeno-evrae-altana.md` 1.1, 1.2: both words never fire, Berserk, Confuse and Provoke being immune); the Gate Locks (m162, m171) carry none.
   ['evrae-altana', 0x6066], ['geosgaeno', 0x6000], ['gate-lock-1', 0x0000], ['gate-lock-2', 0x0000],
+  // The hidden Sanctuary Keeper chapter (2026-11-06): m128's forced-action byte is Tail Sweep 0x6044 (`research/re-ffx-sanctuary-keeper.md` 1.1: a Provoke-forced move; Provoke is immune, and a Berserk or Confuse that lands takes it).
+  ['sanctuary-keeper', 0x6044], // m128
   ...[1, 2, 3, 4, 5, 6, 7].map((n): readonly [string, number] => [`spectral-circle-${n}`, 0x0000]), // m146
   // The hidden Penance chapter (2026-11-06): Penance (m344) and its two arms (m345, m346) carry no forced action (`research/re-ffx-penance.md` 3: "none"), so Berserk, Confuse and Provoke drop their turns (all three are immune anyway).
   ['penance', 0x0000], // m344

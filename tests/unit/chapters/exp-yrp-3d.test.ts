@@ -174,6 +174,6 @@ describe('its scene', () => {
     expect(EXPERIMENT_SCENE_ENTRIES[at + 1]!.key).toBe('exp-windwaker-stage'); // the Wind Waker's row (ch-waker) follows it at the r74 integration; Penance's (ch-penance) and later rows follow that
     expect(Object.keys(EXPERIMENT_SCENE_FACTORIES)).toContain('exp-yrp-3d-stage');
     expect(EXPERIMENT_SCENE_ENTRIES.map((e) => e.key)).toContain(EXP_LEBLANC_SCENE);
-    expect(EXPERIMENT_SCENE_ENTRIES.length).toBeGreaterThanOrEqual(14); // ten with this chapter alone; the Spectral Keeper's and the Wind Waker's rows are the other two; Penance's (a thirteenth), the Flooded Ways' (a fourteenth) and later chapters' only add
+    expect(EXPERIMENT_SCENE_ENTRIES.length).toBeGreaterThanOrEqual(15); // ten with this chapter alone; the Spectral Keeper's and the Wind Waker's rows are the other two; Penance's (a thirteenth), the Flooded Ways' (a fourteenth), the Sanctuary Keeper's (a fifteenth) and later chapters' only add
   });
 });

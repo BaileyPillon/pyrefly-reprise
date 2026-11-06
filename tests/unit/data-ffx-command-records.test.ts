@@ -150,11 +150,13 @@ describe("the attached records are the game's table", () => {
     // The hidden Dark Aeons chapter (FFX only, 2026-11-06): the six other Dark Aeons' twenty distinct rows, the 24 of RE six 5.1 less the three identical pairs carried once, less Mega Graviton, which the Mirror Aeons carry.
     // The hidden Penance chapter (FFX only, 2026-11-06): its nine new rows, 0x411f to 0x4122, 0x4124 to 0x4126, 0x4129, 0x412a; the arms' other four moves are rows that already existed.
     // The hidden Flooded Ways chapter (FFX only, 2026-11-06): its nine rows (Geosgaeno's four, Evrae Altana's three, the held character's Struggle 0x3109 and the party's Open lock 0x312f).
+    // The hidden Sanctuary Keeper chapter (FFX only, 2026-11-06): its three rows (0x6042 to 0x6044); the six spells it adds at init are the player's own rows.
     // Each row has its record, all in the game's fixtures.
     const ROWS_SINCE_KEEPER: ReadonlyArray<readonly [chapter: string, abilities: number, records: number]> = [
       ['dark-aeons', 20, 20],
       ['penance', 9, 9],
       ['flooded-ways', 9, 9],
+      ['sanctuary-keeper', 3, 3],
     ];
     expect(ALL_ABILITIES).toHaveLength(519 + ROWS_SINCE_KEEPER.reduce((n, [, a]) => n + a, 0));
     expect(Object.keys(COMMAND_RECORDS)).toHaveLength(516 + ROWS_SINCE_KEEPER.reduce((n, [, , r]) => n + r, 0));

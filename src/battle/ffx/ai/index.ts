@@ -52,6 +52,7 @@ import './spectral-keeper.ts'; // the hidden Spectral Keeper chapter (FFX only):
 import './penance.ts'; // the hidden Penance chapter (FFX only): Penance and its two Arms
 import './flooded-ways.ts'; // the hidden Flooded Ways chapter (FFX only, 2026-11-06): Evrae Altana, the Gate Locks and Geosgaeno
 import { FLOODED_ROWS, applyOpenLock, openLockAvailable, openLockOffered } from './flooded-ways.ts';
+import './sanctuary-keeper.ts'; // the hidden Sanctuary Keeper chapter (FFX only): the Mt. Gagazet summit's beast
 import { freeCircleIds, moveTo, platformOf, ringActive } from '../platforms.ts';
 
 export * from './types.ts';

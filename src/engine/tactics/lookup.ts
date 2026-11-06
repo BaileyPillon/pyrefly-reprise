@@ -56,6 +56,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'dark-aeons': 'ffx', // the hidden Dark Aeons chapter (FFX only, 2026-11-06)
   penance: 'ffx', // the hidden Penance chapter (FFX only, 2026-11-06)
   'flooded-ways': 'ffx', // the hidden Flooded Ways chapter (FFX only, 2026-11-06)
+  'sanctuary-keeper': 'ffx', // the hidden Sanctuary Keeper chapter (FFX only, 2026-11-06)
 };
 
 /** `state.flags` key prefix of an aeon lock's reason (`battle/ffx/aeon-duel.ts#AEON_LOCK_REASON_PREFIX`, restated so this module stays out of the battle layer's import graph; the Last Summoning's guide test pins the copy). */
