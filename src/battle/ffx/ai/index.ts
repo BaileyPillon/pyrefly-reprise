@@ -47,6 +47,7 @@ import './sin-scripts.ts';
 import './sinspawn-gui.ts'; // the hidden Sinspawn Gui chapter (FFX only): the body, the head and the arms
 import './biran-yenke.ts'; // the hidden Biran and Yenke chapter (FFX only): the two Ronso
 import './dark-aeons.ts'; // the hidden Mirror Aeons chapter (FFX only): Dark Yojimbo, the three Dark Magus Sisters and the dog
+import './dark-aeons-six.ts'; // the hidden Dark Aeons chapter (FFX only, 2026-11-06): Dark Valefor, Ifrit, Ixion (two scripts), Shiva, Bahamut and Anima
 import './spectral-keeper.ts'; // the hidden Spectral Keeper chapter (FFX only): the Keeper and its Circles (the glyph mines)
 import { freeCircleIds, moveTo, platformOf, ringActive } from '../platforms.ts';
 

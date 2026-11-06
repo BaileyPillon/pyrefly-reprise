@@ -278,6 +278,7 @@ export const DOOR_WORDS = Object.freeze({
   'mirror-aeons': 'yojimbo',
   'last-summoning': 'summon',
   'spectral-keeper': 'keeper',
+  'dark-aeons': 'darkaeon',
   'ffx2-fallen-maesters': 'infinito',
   'exp-yrp-3d': 'yrp',
   'exp-windwaker': 'waker', // the hidden Wind Waker chapter (FFX-2, number 32, 2026-10-20)

@@ -53,6 +53,8 @@ const ROWS: ReadonlyArray<readonly [string, number]> = [
   ['dark-sandy', 0x0000], // m342
   ['dark-mindy', 0x0000], // m343
   ['dark-daigoro', 0x0000], // m116, the Sinscale file used as the dog's stand-in
+  // The hidden Dark Aeons chapter (2026-11-06): the six other Dark Aeons (m334 to m339; Dark Ixion's two fights are two ids over m336): the stat record's forced action word is "none" in all six (`research/re-ffx-dark-aeons-six.md` 1.2, [bytes]).
+  ...['dark-valefor', 'dark-ifrit', 'dark-ixion', 'dark-ixion-2', 'dark-shiva', 'dark-bahamut', 'dark-anima'].map((id): readonly [string, number] => [id, 0x0000]),
   // The hidden Spectral Keeper chapter (2026-11-02): the Keeper (m129) and its seven Circles (m146) carry no forced action (`research/re-ffx-spectral-keeper.md` 1.2: forced action word "none"), so Berserk, Confuse and Provoke drop their turns.
   ['spectral-keeper', 0x0000], // m129
   ...[1, 2, 3, 4, 5, 6, 7].map((n): readonly [string, number] => [`spectral-circle-${n}`, 0x0000]), // m146
