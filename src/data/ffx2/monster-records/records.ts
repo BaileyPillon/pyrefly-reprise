@@ -20,6 +20,7 @@ import { MONSTER_RECORDS_ANGRA_MAINYU } from './records-angra-mainyu.ts';
 import { MONSTER_RECORDS_FALLEN_MAESTERS } from './records-fallen-maesters.ts';
 import { MONSTER_RECORDS_BEVELLE_GUARDIANS } from './records-bevelle-guardians.ts';
 import { MONSTER_RECORDS_FARPLANE_CUP } from './records-farplane-cup.ts';
+import { MONSTER_RECORDS_YUNAS_BALLAD } from './records-yunas-ballad.ts';
 
 export const MONSTER_RECORDS: Readonly<Record<string, FFX2MonsterRecord>> = {
   'ffx2-bahamut/bahamut': { row: 168, table: 1, acc: 95, resist1: { 0: 255, 1: 255, 2: 255, 3: 255, 4: 255, 5: 255, 6: 255, 7: 255, 8: 255, 10: 255, 17: 255, 18: 255 }, resist2: { 6: 255, 14: 255 }, special: 0x3c3, species: 0x0, zantetsu: 100, stealByte: 128, stealGil: 2200, steal: [0x903e, 0x1, 0x903e, 0x1], bribe: [0x0, 0x0, 0x0, 0x0], plainAttack: { id: 0x41da, costAtb: 100, costCast: 0, category: 0, flagsTarget: 0x33, flagsMisc: 0x60000052, flagsDamage: 0xd, damageClass: 1, formula: 0, critByte: 5, accuracy: 95, power: 16, hits: 1, shatter: 10, element: 0, killer: 0 } }, // Bahamut
@@ -59,6 +60,7 @@ export const MONSTER_RECORDS: Readonly<Record<string, FFX2MonsterRecord>> = {
   ...MONSTER_RECORDS_VALEFOR, // Valefor at Besaid, the hidden chapter (monster.bin row 164; RE note re-ffx2-yojimbo-valefor, 2026-10-14)
   ...MONSTER_RECORDS_ANGRA_MAINYU, // Angra Mainyu, Zarich and Tawrich of the hidden Angra Mainyu chapter (monster.bin rows 268 to 270; RE note re-ffx2-angra-mainyu, 2026-10-14)
   ...MONSTER_RECORDS_FARPLANE_CUP, // Auron, Tidus and Seymour of the hidden Farplane Cup chapter (monster.bin rows 311, 317 and 319; RE note re-ffx2-farplane-cup, 2026-11-06)
+  ...MONSTER_RECORDS_YUNAS_BALLAD, // The possessed Rikku and Paine of the hidden Yuna's Ballad chapter (monster.bin rows 254 and 256; RE note re-ffx2-yunas-ballad, 2026-11-06)
   ...MONSTER_RECORDS_FALLEN_MAESTERS, // Aranea, Black Elemental, Concherer and Chac of the hidden Fallen Maesters chapter (monster.bin rows 221, 69, 232 and 239; RE note re-ffx2-fallen-maesters, 2026-10-19)
   ...MONSTER_RECORDS_BEVELLE_GUARDIANS, // Georapella, the Precepts Guard and Baralai of the hidden Bevelle guardians chapter (monster.bin rows 262, 263 and 175; RE note re-ffx2-bevelle-underground, 2026-11-06)
   'ffx2-djose-ixion/x2-ixion': { row: 166, table: 1, acc: 95, resist1: { 0: 255, 1: 255, 2: 255, 3: 255, 4: 255, 5: 255, 6: 255, 7: 255, 8: 255, 10: 255, 17: 255, 18: 255 }, resist2: { 6: 255, 14: 255 }, special: 0x3c3, species: 0x0, zantetsu: 80, stealByte: 128, stealGil: 3000, steal: [0x906e, 0x1, 0x906e, 0x1], bribe: [0x0, 0x0, 0x0, 0x0], plainAttack: { id: 0x41da, costAtb: 100, costCast: 0, category: 0, flagsTarget: 0x33, flagsMisc: 0x60000052, flagsDamage: 0xd, damageClass: 1, formula: 0, critByte: 5, accuracy: 95, power: 16, hits: 1, shatter: 10, element: 0, killer: 0 } }, // Ixion

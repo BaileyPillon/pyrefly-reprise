@@ -37,6 +37,7 @@ import { FFX2_VALEFOR_BESAID_GUIDE } from './ffx2-valefor-besaid.ts';
 import { FFX2_ANGRA_MAINYU_GUIDE } from './ffx2-angra-mainyu.ts';
 import { SANCTUARY_KEEPER_GUIDE } from './sanctuary-keeper.ts';
 import { PENANCE_GUIDE } from './penance.ts';
+import { FFX2_YUNAS_BALLAD_GUIDE } from './ffx2-yunas-ballad.ts';
 
 export type {
   ChapterGuide,
@@ -130,6 +131,8 @@ export const GUIDES: readonly ChapterGuide[] = [
   SANCTUARY_KEEPER_GUIDE,
   // The hidden Penance chapter (FFX only, the colossus and its two hands on the Fahrenheit's deck; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel finds it by boss id. No tactic is registered for it: the NEXT line is the generic ladder's.
   PENANCE_GUIDE,
+  // The hidden Yuna Ballad chapter (FFX-2 only, the possessed Rikku and Paine; EXPERIMENT_CHAPTERS, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  FFX2_YUNAS_BALLAD_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */

@@ -77,7 +77,7 @@ function board(stock: Record<string, number>, seed = 1, minigames = false): Boar
   const s = setup(group('zz-mix', [foe]), { seed });
   const base = s.party as FFX2PartyBuild;
   const [yuna, rikku, paine] = base.members;
-  const party: FFX2PartyBuild = { ...base, members: [yuna, { ...rikku, currentDressphere: 'alchemist', owned: ['alchemist', 'thief'] }, paine], inventory: Object.entries(stock).map(([itemId, count]) => ({ itemId, count })) };
+  const party: FFX2PartyBuild = { ...base, members: [yuna!, { ...rikku!, currentDressphere: 'alchemist', owned: ['alchemist', 'thief'] }, paine!], inventory: Object.entries(stock).map(([itemId, count]) => ({ itemId, count })) };
   engine.init({ ...s, party });
   const state = engine.state();
   return { engine, units: state.combatants as Record<string, Ffx2Unit>, flags: state.flags as Record<string, unknown> };

@@ -288,6 +288,7 @@ export const DOOR_WORDS = Object.freeze({
   'exp-anime': 'gear', // the hidden anime chapter (FFX-2, number 33, 2026-11-06)
   penance: 'judgment', // the hidden Penance chapter (FFX, number 35, 2026-11-06)
   'sanctuary-keeper': 'beast', // the hidden Sanctuary Keeper chapter (FFX, number 39, 2026-11-06)
+  'ffx2-yunas-ballad': 'wraith', // the hidden Yuna's Ballad chapter (FFX-2, number 40, 2026-11-06)
 });
 
 /** The word that opens a chapter the board has no card for, or null for a chapter with a card (the arrow-key walk finds it). */

@@ -30,6 +30,7 @@
  * - **Bahamut in 3D** (`'exp-yrp-3d'`, number 31, 2026-10-19 as 29, renumbered 2026-11-02; FFX-2 only): Chapter IV's Bahamut fight drawn as a real 3D scene with the real FFX-2 models, frame b's camera; word `yrp`.
  *
  * - **Penance** (`'penance'`, number 35, 2026-11-06; FFX only): the colossus and its two hands on the Fahrenheit's deck; word `judgment` (33 and 34 are the sibling chapter lanes').
+ * - **Yuna's Ballad** (`'ffx2-yunas-ballad'`, number 40, 2026-11-06; FFX-2 only): Yuna alone against the possessed Rikku and then the possessed Paine, the Den of Woe's first two fights, as two linked duels with HP and MP carried; word `wraith`.
  *
  * A further hidden chapter registers here, by adding its record to the list below, not by editing `./encounters.ts`.
  *
@@ -52,6 +53,7 @@ import { SPECTRAL_KEEPER } from './chapter-spectral-keeper.ts';
 import { FFX2_FALLEN_MAESTERS } from './chapter-ffx2-fallen-maesters.ts';
 import { FFX2_BEVELLE_GUARDIANS } from './chapter-ffx2-bevelle-guardians.ts';
 import { FFX2_FARPLANE_CUP } from './chapter-ffx2-farplane-cup.ts';
+import { FFX2_YUNAS_BALLAD } from './chapter-ffx2-yunas-ballad.ts';
 import { experimentalYrp } from './chapter-exp-yrp-3d.ts';
 import { EXP_WINDWAKER } from './chapter-exp-windwaker.ts';
 import { EXP_ANIME } from './chapter-exp-anime.ts';
@@ -62,5 +64,5 @@ import { SANCTUARY_KEEPER } from './chapter-sanctuary-keeper.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from, and `ffx2Bahamut` the listed Chapter IV, which the 3D Bahamut is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter, ffx2Bahamut: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD] as const;
 }

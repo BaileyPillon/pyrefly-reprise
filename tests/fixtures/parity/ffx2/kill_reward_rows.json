@@ -50,5 +50,7 @@
   "ffx2-bevelle-underground-floor-7-baralai/x2-baralai": {"table":1,"row":175,"name":"Baralai","exp":1000,"ap":10,"gil":1300,"dropByte":255,"drop":[36942,1,36942,1]},
   "ffx2-farplane-cup-1-auron/x2-cup-auron": {"table":1,"row":311,"name":"Auron","exp":1600,"ap":1,"gil":900,"dropByte":255,"drop":[8199,2,0,0]},
   "ffx2-farplane-cup-2-tidus/x2-cup-tidus": {"table":1,"row":317,"name":"????","exp":1500,"ap":1,"gil":750,"dropByte":255,"drop":[8194,2,0,0]},
-  "ffx2-farplane-cup-3-seymour/x2-cup-seymour": {"table":1,"row":319,"name":"Seymour","exp":1300,"ap":1,"gil":1000,"dropByte":255,"drop":[8197,1,0,0]}
+  "ffx2-farplane-cup-3-seymour/x2-cup-seymour": {"table":1,"row":319,"name":"Seymour","exp":1300,"ap":1,"gil":1000,"dropByte":255,"drop":[8197,1,0,0]},
+  "ffx2-den-of-woe-possessed-rikku/x2-possessed-rikku": {"table":1,"row":254,"name":"Rikku","exp":800,"ap":3,"gil":200,"dropByte":255,"drop":[0,0,0,0]},
+  "ffx2-den-of-woe-possessed-paine/x2-possessed-paine": {"table":1,"row":256,"name":"Paine","exp":800,"ap":3,"gil":200,"dropByte":255,"drop":[36890,1,36890,1]}
 }

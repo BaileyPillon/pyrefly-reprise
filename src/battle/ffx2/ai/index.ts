@@ -50,6 +50,8 @@ import { fallenMaestersBScripts } from './fallen-maesters-b.ts';
 import { bevelleGuardiansScripts } from './bevelle-guardians.ts';
 // Auron, Tidus and Seymour, the three duels of the hidden chapter "The Farplane Cup" (FFX-2 only): the game's own three scripts, poll by poll.
 import { farplaneCupScripts } from './farplane-cup.ts';
+// The possessed Rikku and the possessed Paine in the Den of Woe (the hidden chapter "Yuna's Ballad", FFX-2 only): the game's own two scripts, poll by poll.
+import { yunasBalladScripts } from './yunas-ballad.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -95,6 +97,7 @@ const SCRIPTS: readonly AiScript[] = [
   ...fallenMaestersBScripts,
   ...bevelleGuardiansScripts,
   ...farplaneCupScripts,
+  ...yunasBalladScripts,
   idleScript,
   basicAttackScript,
 ];

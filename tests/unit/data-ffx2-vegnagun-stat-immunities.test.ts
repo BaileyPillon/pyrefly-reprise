@@ -109,7 +109,7 @@ describe('on the real engine, Power Break lands Str Down on a Bulwark [§3.3]', 
   const asWarrior = (m: FFX2MemberBuild): FFX2MemberBuild =>
     m.id === 'paine' ? { ...m, currentDressphere: 'warrior' } : m;
   const [first, second, third] = farplaneBuild.members;
-  const party: FFX2PartyBuild = { ...farplaneBuild, members: [asWarrior(first), asWarrior(second), asWarrior(third)] };
+  const party: FFX2PartyBuild = { ...farplaneBuild, members: [asWarrior(first), asWarrior(second!), asWarrior(third!)] };
 
   function engineOnBody(): FFX2Engine {
     const engine = new FFX2Engine({

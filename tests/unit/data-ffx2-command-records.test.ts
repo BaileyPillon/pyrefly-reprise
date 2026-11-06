@@ -97,6 +97,9 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   // The hidden Farplane Cup's thirty-three rows (Auron's seven, Tidus's eight, Seymour's eighteen: monmagic 0x4000 to 0x4221, the party rows 0x3070 to 0x30bc and 0x3177, the item rows 0x2002, 0x2003, 0x2038 and 0x203f) are the RE note's, pinned
   // against their own numbers-only fixture (tests/fixtures/parity/ffx2/farplane_cup_rows.json, tests/unit/chapters/farplane-cup-data.test.ts).
   if (label.startsWith('x2-auron-') || label.startsWith('x2-tidus-') || label.startsWith('x2-seymour-')) return;
+  // The hidden Yuna's Ballad's seven rows (the possessed Rikku's Spider Attack 0x40c7 and five throws 0x2011, 0x201a, 0x201d, 0x2020, 0x2023, the possessed Paine's Attack 0x41da) are the RE note's, pinned against their own
+  // numbers-only fixture (tests/fixtures/parity/ffx2/yunas_ballad_rows.json, tests/unit/chapters/yunas-ballad-data.test.ts).
+  if (label.startsWith('x2-possessed-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();
   if (!row) return;

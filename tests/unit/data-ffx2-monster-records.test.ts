@@ -104,6 +104,8 @@ describe('FFX-2 monster rows are the game\'s rows', () => {
       if (key.startsWith('ffx2-bevelle-underground-floor-')) continue;
       // The hidden Farplane Cup's rows 311, 317 and 319 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/farplane_cup_rows.json, tests/unit/chapters/farplane-cup-data.test.ts).
       if (key.startsWith('ffx2-farplane-cup-')) continue;
+      // The hidden Yuna's Ballad's rows 254 and 256 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/yunas_ballad_rows.json, tests/unit/chapters/yunas-ballad-data.test.ts).
+      if (key.startsWith('ffx2-den-of-woe-possessed-')) continue;
       const row = ROWS[key];
       expect(row, `${key}: no fixture row`).toBeDefined();
       if (row === undefined) continue;

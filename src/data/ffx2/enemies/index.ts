@@ -62,6 +62,9 @@ import { x2BevelleGuardiansAbilities } from './bevelle-guardians-abilities.ts';
 // Auron, Tidus and Seymour, the three duels of the hidden chapter "The Farplane Cup" (FFX-2 only): `./farplane-cup.ts`.
 import { farplaneCupGroups } from './farplane-cup.ts';
 import { x2FarplaneCupAbilities } from './farplane-cup-abilities.ts';
+// The possessed Rikku and Paine, the Den of Woe's first two fights (the hidden chapter "Yuna's Ballad", FFX-2 only): `./yunas-ballad.ts`.
+import { yunasBalladGroups } from './yunas-ballad.ts';
+import { x2YunasBalladAbilities } from './yunas-ballad-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -84,6 +87,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...fallenMaestersGroups,
   ...bevelleGuardiansGroups,
   ...farplaneCupGroups,
+  ...yunasBalladGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -116,6 +120,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...x2FallenMaestersAbilities,
   ...x2BevelleGuardiansAbilities,
   ...x2FarplaneCupAbilities,
+  ...x2YunasBalladAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

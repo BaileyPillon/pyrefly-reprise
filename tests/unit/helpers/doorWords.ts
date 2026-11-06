@@ -28,6 +28,7 @@ export const DOORS_IN_ORDER: ReadonlyArray<readonly [word: string, game: 'ff7' |
   ['drillshot', 'ffx2'], // the hidden Bevelle Guardians' (chapter 37, 2026-11-06)
   ['duelist', 'ffx2'], // the hidden Farplane Cup's (chapter 38, 2026-11-06)
   ['beast', 'ffx'], // the hidden Sanctuary Keeper's (chapter 39, 2026-11-06)
+  ['wraith', 'ffx2'], // the hidden Yuna's Ballad's (chapter 40, 2026-11-06)
 ];
 
 /** The words alone, in the table's order. */

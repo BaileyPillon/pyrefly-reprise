@@ -2971,10 +2971,14 @@ export interface FFX2MemberBuild {
   statuses?: Partial<Record<StatusId, StatusInstance>>;
 }
 
-/** The FFX-2 party at a chapter's build point. Always exactly three girls. */
+/**
+ * The FFX-2 party at a chapter's build point: **three girls everywhere but a forced solo line-up**. One or two girls is legal (additive, 2026-11-06, the same widening
+ * `FFXPartyBuild.activeSlots` took on 2026-09-25): "Yuna's Ballad" fields Yuna alone against the possessed Rikku and then the possessed Paine (wiki-level, 3 sources;
+ * `research/re-ffx2-yunas-ballad.md` section 1). The engine has always built the line-up from this list's length (`battle/ffx2/setup.ts`), so a shorter one needs no engine change.
+ */
 export interface FFX2PartyBuild {
   game: 'ffx2';
-  members: [FFX2MemberBuild, FFX2MemberBuild, FFX2MemberBuild];
+  members: [FFX2MemberBuild, FFX2MemberBuild, FFX2MemberBuild] | [FFX2MemberBuild, FFX2MemberBuild] | [FFX2MemberBuild];
   inventory: InventoryEntry[];
   /** Range 0–9 999 999. */
   gil: number;

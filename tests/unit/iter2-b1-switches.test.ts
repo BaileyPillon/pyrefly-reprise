@@ -95,7 +95,7 @@ describe('PR-0124: the worn dressphere carries across a plain chain seam, an OFF
     const setup: BattleSetup = { game: 'ffx2', party: chateauBuild, enemies: ENEMY_GROUPS_BY_ID[LEBLANC_ACT_I]!, triggers: [], seed: 4, condition: 'normal', canEscape: false };
     engine.setSeed(4);
     engine.init(setup);
-    const build = chateauBuild.members[1];
+    const build = chateauBuild.members[1]!;
     const layout = gridNodeContents(build, nodesOf(build));
     const node = layout.findIndex((d, i) => i > 0 && d !== null);
     const rikku = engine.state().combatants['rikku'] as FFX2Combatant;
@@ -113,21 +113,21 @@ describe('PR-0124: the worn dressphere carries across a plain chain seam, an OFF
   it('OFF: the next Act reverts her to the dressphere set before the fight, as today', () => {
     const { setup, state } = actOneEnd();
     const next = setupForNextLink(setup, ENEMY_GROUPS_BY_ID[LEBLANC_ACT_II]!, state, 5);
-    const rikku = (next.party as FFX2PartyBuild).members[1];
-    expect(rikku.currentDressphere).toBe(chateauBuild.members[1].currentDressphere);
+    const rikku = (next.party as FFX2PartyBuild).members[1]!;
+    expect(rikku.currentDressphere).toBe(chateauBuild.members[1]!.currentDressphere);
     expect(rikku.garmentGrid.passedGates).toEqual([]);
   });
 
   it('ON: she starts the next Act in what she wore, on the same grid layout; gates and the worn list do not carry', () => {
     const { setup, state, worn, node } = actOneEnd();
     const next = setupForNextLink(setup, ENEMY_GROUPS_BY_ID[LEBLANC_ACT_II]!, state, 5, { dressphereCarries: true });
-    const rikku = (next.party as FFX2PartyBuild).members[1];
+    const rikku = (next.party as FFX2PartyBuild).members[1]!;
     expect(rikku.currentDressphere).toBe(worn);
     expect(rikku.garmentGrid.nodePosition).toBe(node);
     expect(rikku.garmentGrid.passedGates).toEqual([]);
     expect(rikku.garmentGrid.wornThisBattle).toEqual([]);
     const built = buildState(next, {}, new SeededRng(5));
-    expect(built.gridNodes['rikku']).toEqual(gridNodeContents(chateauBuild.members[1], nodesOf(chateauBuild.members[1])));
+    expect(built.gridNodes['rikku']).toEqual(gridNodeContents(chateauBuild.members[1]!, nodesOf(chateauBuild.members[1]!)));
     expect((built.state.combatants['rikku'] as FFX2Combatant).dresspheres?.current).toBe(worn);
     // Her statuses do not ride along on a plain seam (only XIII and XV carry them, each its own approved rule).
     expect(rikku.statuses).toBeUndefined();
@@ -138,7 +138,7 @@ describe('PR-0124: the worn dressphere carries across a plain chain seam, an OFF
     const rikku = state.combatants['rikku'] as FFX2Combatant;
     rikku.dresspheres!.special = true as never;
     const next = setupForNextLink(setup, ENEMY_GROUPS_BY_ID[LEBLANC_ACT_II]!, state, 5, { dressphereCarries: true });
-    expect((next.party as FFX2PartyBuild).members[1].currentDressphere).toBe(chateauBuild.members[1].currentDressphere);
+    expect((next.party as FFX2PartyBuild).members[1]!.currentDressphere).toBe(chateauBuild.members[1]!.currentDressphere);
   });
 
   it('XIII and XV keep their own approved carries whether the switch is on or off', () => {

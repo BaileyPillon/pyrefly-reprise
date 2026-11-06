@@ -19,6 +19,7 @@ import { COMMAND_RECORDS_ANGRA_MAINYU } from './angra-mainyu.ts';
 import { COMMAND_RECORDS_FALLEN_MAESTERS } from './fallen-maesters.ts';
 import { COMMAND_RECORDS_BEVELLE_GUARDIANS } from './bevelle-guardians.ts';
 import { COMMAND_RECORDS_FARPLANE_CUP } from './farplane-cup.ts';
+import { COMMAND_RECORDS_YUNAS_BALLAD } from './yunas-ballad.ts';
 import { COMMAND_RECORDS_ITEMS } from './items.ts';
 import { COMMAND_RECORDS_LADY_LUCK } from './lady-luck.ts';
 import { COMMAND_RECORDS_MIX } from './mix.ts';
@@ -36,6 +37,7 @@ export const FFX2_COMMAND_RECORDS: Readonly<Record<string, FFX2CommandRecord>> =
   ...COMMAND_RECORDS_FALLEN_MAESTERS, // the hidden Fallen Maesters chapter: the four floor fiends' moves (RE note re-ffx2-fallen-maesters, 2026-10-19)
   ...COMMAND_RECORDS_BEVELLE_GUARDIANS, // the hidden Bevelle guardians chapter: Georapella's, the Precepts Guard's and Baralai's moves (RE note re-ffx2-bevelle-underground, 2026-11-06)
   ...COMMAND_RECORDS_FARPLANE_CUP, // the hidden Farplane Cup chapter: the three duelists' moves (RE note re-ffx2-farplane-cup, 2026-11-06)
+  ...COMMAND_RECORDS_YUNAS_BALLAD, // the hidden Yuna's Ballad chapter: the possessed Rikku's Spider Attack and five throws, the possessed Paine's Attack (RE note re-ffx2-yunas-ballad, 2026-11-06)
   ...COMMAND_RECORDS_MIX, // the Alchemist's Mix: the 53 result rows (re-parity RC9, lane X2-G; FFX2-G06 section 4.4)
   ...COMMAND_RECORDS_LADY_LUCK, // Lady Luck's Two Dice and the two rows its dice swap to (re-parity RC10; FFX2-H04 section 4.3)
 };

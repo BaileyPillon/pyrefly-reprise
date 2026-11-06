@@ -28,7 +28,8 @@ describe('the data reaches every unit', () => {
     // engine keeps today's 2 s / 3 s window on them, as it does on the Bulwarks; this list shrinks when `MONSTER_MOTION_SET` and `MONSTER_CLIP_FRAMES` gain their rows.
     // The hidden Farplane Cup's three duelists (rows 311, 317 and 319; FFX-2 only, 2026-11-06) are in the same position: their motion sets are not in the frame table yet.
     // The hidden Bevelle Guardians' three bodies (motion sets 0x1106, 0x1107 and 0x10af in the RE note) are in the same state (the frame table was not read for them).
-    expect(missing.sort()).toEqual(['bulwark-l', 'bulwark-r', 'x2-aranea', 'x2-baralai', 'x2-black-elemental', 'x2-chac', 'x2-concherer', 'x2-cup-auron', 'x2-cup-seymour', 'x2-cup-tidus', 'x2-georapella', 'x2-precepts-guard']);
+    // The hidden Yuna's Ballad's two bodies (motion sets 0x10fe and 0x1100 in the RE note) have no damage-clip frame counts in the repo either (the frame table was not read for them), so they keep today's window too.
+    expect(missing.sort()).toEqual(['bulwark-l', 'bulwark-r', 'x2-aranea', 'x2-baralai', 'x2-black-elemental', 'x2-chac', 'x2-concherer', 'x2-cup-auron', 'x2-cup-seymour', 'x2-cup-tidus', 'x2-georapella', 'x2-possessed-paine', 'x2-possessed-rikku', 'x2-precepts-guard']);
   });
 });
 
