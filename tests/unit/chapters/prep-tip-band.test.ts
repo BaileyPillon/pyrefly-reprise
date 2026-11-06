@@ -175,8 +175,8 @@ describe('the tips the model says overflow at 1600 x 900 are the ones job TIP-1 
   const end = handoff.indexOf('\n### ', start + 5);
   const section = start < 0 ? '' : handoff.slice(start, end < 0 ? undefined : end);
 
-  it('every listed and hidden chapter is put through the model: 32 of them, each with three objectives', () => {
-    expect(all).toHaveLength(32);
+  it('every listed and hidden chapter is put through the model: 33 of them (the anime chapter, 2026-11-06, is the thirty-third), each with three objectives', () => {
+    expect(all).toHaveLength(33);
     for (const meta of all) expect(meta.objectives, meta.id).toHaveLength(3);
   });
 
