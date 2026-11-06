@@ -174,11 +174,11 @@ export const SWITCHES: readonly SwitchDef[] = [
     plain: 'The animated party figures, Tidus in Chapter I and Rikku in Chapter IV (a flip plays from the next fight)',
     read: () => partyRigsMode(),
     flip: () => {
-      const next = partyRigsMode() === 'on' ? 'off' : 'on';
+      const next = partyRigsMode() === 'off' ? 'on' : 'off'; // `?partyrigs=v2` (the new pilots) is asked by the address only; the key's flip from it goes to `off`
       setPartyRigsMode(next);
       return next;
     },
-    isNew: () => partyRigsMode() === 'on',
+    isNew: () => partyRigsMode() !== 'off',
   },
   // key 8: Tidus T1 or T2 (the page's: it reloads)
   { code: 'Digit8', key: '8', name: 'Tidus', plain: "Tidus's art, T1 or T2 (reloads the page, so press it between fights)", read: () => 't1', isNew: () => false },
