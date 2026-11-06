@@ -44,6 +44,8 @@ import { buildExpYrp3dStageScene, EXP_YRP_SCENE_ENTRY } from './exp-yrp-3d-stage
 import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
 import { buildExpWindwakerStageScene, EXP_WINDWAKER_SCENE_ENTRY } from './exp-windwaker-stage.ts'; // the Wind Waker chamber (FFX-2 only, hidden chapter): a toon temple, toon models on its actors
 import { EXP_WINDWAKER_SCENE } from '../data/windwaker-ids.ts';
+import { buildSpherimorphScene, SPHERIMORPH_SLOTS } from './spherimorph.ts'; // Spherimorph's spring (FFX only, hidden chapter): the Macalania Temple's plate and scene with the guardian staged
+import { SPHERIMORPH_SCENE } from '../data/ffx/spherimorph-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -71,6 +73,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   EXP_YRP_SCENE_ENTRY,
   // The Wind Waker chapter (FFX-2 only, hidden chapter): a toon temple chamber under the target shot's camera, with toon-shaded models on the actors.
   EXP_WINDWAKER_SCENE_ENTRY,
+  // Spherimorph (FFX only, hidden chapter): the Macalania Temple's plate and scene, with the guardian alone on the boss spot.
+  { key: SPHERIMORPH_SCENE, title: 'Macalania Woods — the spring (Spherimorph)', build: buildDemoScene, slots: SPHERIMORPH_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -87,4 +91,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [SPECTRAL_KEEPER_SCENE]: buildSpectralKeeperScene, // the hidden Spectral Keeper chapter (FFX only)
   [EXP_YRP_SCENE]: buildExpYrp3dStageScene, // the hidden 3D Bahamut chapter (FFX-2 only)
   [EXP_WINDWAKER_SCENE]: buildExpWindwakerStageScene, // the hidden Wind Waker chapter (FFX-2 only)
+  [SPHERIMORPH_SCENE]: buildSpherimorphScene, // the hidden Spherimorph chapter (FFX only)
 };

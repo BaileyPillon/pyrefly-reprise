@@ -37,6 +37,7 @@ export const TURN_ORDER_LINES: Readonly<Record<string, string>> = {
   'exp-fayth': TURN_ORDER_PARTY_FIRST,
   'last-summoning': TURN_ORDER_PARTY_FIRST,
   'spectral-keeper': TURN_ORDER_PARTY_FIRST, // the formation gives the front line First Strike, so all three act before the Keeper in every seed (the engine count is the test's)
+  spherimorph: TURN_ORDER_PARTY_FIRST, // the hidden Spherimorph chapter (2026-11-06): Tidus opens in 100 of 100 seeds and nothing acts before the first menu (the engine count is the test's). Measured for the shipped front line (Tidus, Yuna, Lulu) only; Tidus, Auron, Lulu also has Tidus in front
 };
 
 /** The line Auron says at `chapterId`'s first command menu, or null when the chapter shows none. */

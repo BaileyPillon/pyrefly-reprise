@@ -34,6 +34,7 @@ import { FFX2_EXPERIMENT_GUIDE } from './ffx2-experiment.ts';
 import { FFX2_TOURIST_TRAP_GUIDE } from './ffx2-tourist-trap.ts';
 import { FFX2_VALEFOR_BESAID_GUIDE } from './ffx2-valefor-besaid.ts';
 import { FFX2_ANGRA_MAINYU_GUIDE } from './ffx2-angra-mainyu.ts';
+import { SPHERIMORPH_GUIDE } from './spherimorph.ts';
 
 export type {
   ChapterGuide,
@@ -120,6 +121,8 @@ export const GUIDES: readonly ChapterGuide[] = [
   MIRROR_AEONS_GUIDE,
   // The hidden Angra Mainyu (FFX-2 only, Chapter 5; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here too.
   FFX2_ANGRA_MAINYU_GUIDE,
+  // The hidden Spherimorph chapter (FFX only, the guardian of the spring in the Macalania Woods; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  SPHERIMORPH_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */
