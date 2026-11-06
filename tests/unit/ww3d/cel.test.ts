@@ -75,6 +75,11 @@ describe('the three looks are one table', () => {
     expect(DEFAULT_CEL_LOOK).toBe('genshin');
   });
 
+  it('names no brand in a look\'s label (the labels ship in the public bundle; the title test of exp-anime.test.ts covers the chapter\'s title, this the table\'s strings)', () => {
+    for (const look of Object.values(CEL_LOOKS)) expect(look.label).not.toMatch(/genshin|guilty|gear|strive|arc system|mihoyo|hoyoverse/i);
+    expect(Object.values(CEL_LOOKS).map((l) => l.label)).toEqual(['Soft cel', 'Hard cel', 'Blend: soft light, hard shadows and lines']);
+  });
+
   it('reads the look from ?look=, and anything else (or nothing) is the default', () => {
     expect(lookFromSearch('')).toBe('genshin');
     expect(lookFromSearch('?look=gg')).toBe('gg');

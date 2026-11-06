@@ -86,7 +86,7 @@ const LIT = (k: number): readonly [number, number, number] => [0.864 * k, 0.945 
 
 export const CEL_LOOKS: Readonly<Record<CelLookName, CelLook>> = {
   genshin: {
-    label: 'Genshin manner',
+    label: 'Soft cel', // the labels ship in the bundle: no brand name in them (the look keys are the dev query words)
     at: [0.2, 0.06, 0.12, 0],
     shade: [1.22, 0.45, 0.4, 0.3],
     rim: '#ffe3c2',
@@ -99,7 +99,7 @@ export const CEL_LOOKS: Readonly<Record<CelLookName, CelLook>> = {
     faceThin: 0.55,
   },
   gg: {
-    label: 'Guilty Gear manner',
+    label: 'Hard cel',
     at: [0.12, 0.004, 0.02, 0],
     shade: [1.5, 0.6, 0.07, 0.6],
     rim: '#e6f0ff',
@@ -113,7 +113,7 @@ export const CEL_LOOKS: Readonly<Record<CelLookName, CelLook>> = {
     faceThin: 0.4,
   },
   blend: {
-    label: 'Blend: Genshin light, Guilty Gear shadows and lines',
+    label: 'Blend: soft light, hard shadows and lines',
     at: [0.14, 0.006, 0.03, 0],
     shade: [1.35, 0.5, 0.2, 0.6],
     rim: '#ffe9cf',

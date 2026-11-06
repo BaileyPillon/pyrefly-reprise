@@ -7,8 +7,9 @@
  * - **Outline weights** (`./outline.ts`): zero inside the face, full elsewhere, a thin contour round its edge by `faceThin`.
  *
  * The maths are pure functions on arrays ({@link faceMaskOf}, {@link smoothHeadNormals}, {@link hullWeights}), pinned by `tests/unit/ww3d/face-mask.test.ts` without a renderer; {@link measureFace} is the three.js adapter
- * that reads a loaded girl. The per-girl ellipse ({@link FACE_FIT}) was read off point-cloud previews of the skin disc of each face with a margin for the falloff; **it is for the girls as exported and must be re-fitted if
- * a proportion pass changes the head** (the anime chapter's M2). Game case: FFX-2 only.
+ * that reads a loaded girl. The per-girl ellipse ({@link FACE_FIT}) was read off point-cloud previews of the skin disc of each face with a margin for the falloff; **it is for the girls as exported, and a pass that changes the head's
+ * SHAPE must re-fit it**. The anime chapter's part-2 proportion pass (`tools/anime/proportion.mjs`) scales the head UNIFORMLY about its joint, which keeps the face in the same head-relative box: the vertices under the ellipse
+ * read 132 / 193 / 204 (Yuna, Rikku, Paine) before it and 130 / 193 / 204 after it, so the fit stands (`anime-files.test.ts` pins the counts). Game case: FFX-2 only.
  */
 
 import { BufferAttribute, Vector3, type Bone, type BufferGeometry, type Object3D, type SkinnedMesh } from 'three';

@@ -49,10 +49,27 @@ const joints = (k: number): JointDef[] => {
       { name: side + 'ToeBase', parent: side + 'Foot', t: s([0, -0.06, 0.1]) },
     );
   }
-  // Meshy names the toes LeftToeBase / RightToeBase
-  for (const d of j) d.name = d.name.replace('ToeBase', 'ToeBase').replace(/^(Left|Right)ToeBase$/, '$1ToeBase');
-  return j;
+  return j; // (Meshy names the toes LeftToeBase and RightToeBase, which `side + 'ToeBase'` already makes)
 };
+
+const f32 = (a: number[]): Buffer => { const b = Buffer.alloc(a.length * 4); a.forEach((v, i) => b.writeFloatLE(v, i * 4)); return b; };
+
+/** A BIN under construction: `push` pads to four bytes, adds a buffer view and an accessor for the data and returns the accessor's index. */
+function packer(): { pieces: Buffer[]; bufferViews: Array<Record<string, number>>; accessors: Array<Record<string, unknown>>; push: (data: Buffer, componentType: number, count: number, type: string, extra?: Record<string, unknown>) => number } {
+  const pieces: Buffer[] = [];
+  const bufferViews: Array<Record<string, number>> = [];
+  const accessors: Array<Record<string, unknown>> = [];
+  const push = (data: Buffer, componentType: number, count: number, type: string, extra: Record<string, unknown> = {}): number => {
+    const pad = (4 - (pieces.reduce((n, b) => n + b.length, 0) % 4)) % 4;
+    if (pad) pieces.push(Buffer.alloc(pad));
+    const off = pieces.reduce((n, b) => n + b.length, 0);
+    pieces.push(data);
+    bufferViews.push({ buffer: 0, byteOffset: off, byteLength: data.length });
+    accessors.push({ bufferView: bufferViews.length - 1, componentType, count, type, ...extra });
+    return accessors.length - 1;
+  };
+  return { pieces, bufferViews, accessors, push };
+}
 
 interface RigOpts { k: number; hipsY?: number[]; armWave?: boolean }
 
@@ -74,19 +91,7 @@ function buildRig({ k, hipsY = [1.0, 0.95, 1.0], armWave = false }: RigOpts): Gl
   nodes[idx.get('char1')!]!['mesh'] = 0;
   nodes[idx.get('char1')!]!['skin'] = 0;
   const jointIdx = defs.map((d) => idx.get(d.name)!);
-  const pieces: Buffer[] = [];
-  const bufferViews: Array<Record<string, number>> = [];
-  const accessors: Array<Record<string, unknown>> = [];
-  const push = (data: Buffer, componentType: number, count: number, type: string, extra: Record<string, unknown> = {}): number => {
-    const pad = (4 - (pieces.reduce((n, b) => n + b.length, 0) % 4)) % 4;
-    if (pad) pieces.push(Buffer.alloc(pad));
-    const off = pieces.reduce((n, b) => n + b.length, 0);
-    pieces.push(data);
-    bufferViews.push({ buffer: 0, byteOffset: off, byteLength: data.length });
-    accessors.push({ bufferView: bufferViews.length - 1, componentType, count, type, ...extra });
-    return accessors.length - 1;
-  };
-  const f32 = (a: number[]): Buffer => { const b = Buffer.alloc(a.length * 4); a.forEach((v, i) => b.writeFloatLE(v, i * 4)); return b; };
+  const { pieces, bufferViews, accessors, push } = packer();
   const { world } = worldMatrices({ json: { nodes }, bin: Buffer.alloc(0) } as unknown as Glb);
   const at = (name: string): V3 => { const m = world[idx.get(name)!]!; return [m[12]!, m[13]!, m[14]!]; };
   const head = at('Head');
@@ -316,22 +321,10 @@ describe('the retarget', () => {
 
 /** A static mesh of two islands: a body strip of 14 triangles (a 2 x 8 grid, the lower row the claws at z 0.5, the upper row the head at z 0.9, x -1 to 1, y 0 to 2) and one stray triangle far away; one image. */
 function staticMesh(): Glb {
-  const pieces: Buffer[] = [];
-  const bufferViews: Array<Record<string, number>> = [];
-  const accessors: Array<Record<string, unknown>> = [];
-  const push = (data: Buffer, componentType: number, count: number, type: string, extra: Record<string, unknown> = {}): number => {
-    const pad = (4 - (pieces.reduce((n, b) => n + b.length, 0) % 4)) % 4;
-    if (pad) pieces.push(Buffer.alloc(pad));
-    const off = pieces.reduce((n, b) => n + b.length, 0);
-    pieces.push(data);
-    bufferViews.push({ buffer: 0, byteOffset: off, byteLength: data.length });
-    accessors.push({ bufferView: bufferViews.length - 1, componentType, count, type, ...extra });
-    return accessors.length - 1;
-  };
+  const { pieces, bufferViews, accessors, push } = packer();
   const p: number[] = [];
   for (let row = 0; row < 2; row++) for (let i = 0; i < 8; i++) p.push(-1 + (i * 2) / 7, row * 2, row === 0 ? 0.5 : 0.9);
   p.push(5, 9, 0, 6, 9, 0, 5, 10, 0); // the stray triangle
-  const f32 = (a: number[]): Buffer => { const b = Buffer.alloc(a.length * 4); a.forEach((v, i) => b.writeFloatLE(v, i * 4)); return b; };
   const idx: number[] = [];
   for (let i = 0; i < 7; i++) idx.push(i, i + 1, 8 + i, i + 1, 9 + i, 8 + i);
   idx.push(16, 17, 18);

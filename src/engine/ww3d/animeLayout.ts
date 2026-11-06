@@ -50,10 +50,13 @@ export const ANIME_BOSS_YAW_DEG = -38;
 /** The Meshy idle bows the head about 30 degrees: a head that looks more than 4 degrees below the horizon is raised toward it, by at most 40 degrees (the lab's `headPitchMax` and `headPitchFix`). */
 export const ANIME_HEAD_PITCH_FIX = { minPitchDeg: -4, limitDeg: 40 } as const;
 
-/** The model file of each figure under `WW_MODEL_DIR`: the girls' LOD1 files in `anime/` (2048 px, 20k triangles), Valefor's is the Wind Waker chapter's own (`valefor.glb`, the v2 Meshy file). */
+/** The model file of each figure under `WW_MODEL_DIR`: the girls' LOD1 files in `anime/` (2048 px, 20k triangles, then the part-2 proportion pass) and Valefor's own feathered file in `anime/` (part 2; the Wind Waker chapter keeps `valefor.glb`). */
 export const ANIME_FILES: Readonly<Record<WwId, string>> = { yuna: 'anime/yuna', rikku: 'anime/rikku', paine: 'anime/paine', 'x2-valefor': 'anime/valefor' };
 
-/** The Wind Waker chapter's own Valefor file (`valefor.glb`, the flat v2): what the anime chapter stood before part 2's feathered one, kept as the comparison and the fallback (`ANIME_FILES` names the new one). */
+/**
+ * The Wind Waker chapter's own Valefor file (`valefor.glb`, the flat v2): what the anime chapter stood before part 2's feathered one. It is a name for the comparison only (a test pins it as the Wind Waker chapter's file and
+ * not the anime chapter's); nothing falls back to it: `ANIME_FILES` names the new file, and a missing file draws the capsule, as for every figure. To put v2 back, change the one `x2-valefor` entry of `ANIME_FILES`.
+ */
 export const ANIME_VALEFOR_V2 = MODEL_FILE['x2-valefor'];
 
 /**

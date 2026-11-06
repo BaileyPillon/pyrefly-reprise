@@ -85,6 +85,8 @@ describe.skipIf(!have)('the three girls\' LOD1 files', () => {
   });
 });
 
+const FACE_VERTS_AFTER_PASS: Readonly<Record<'yuna' | 'rikku' | 'paine', number>> = { yuna: 130, rikku: 193, paine: 204 };
+
 describe.skipIf(!have)('the chapter\'s code over the real girls', () => {
   const style = (): CelStyle => ({ look: CEL_LOOKS.genshin, uniforms: createCelUniforms(CEL_LOOKS.genshin), outline: createOutlineUniforms(CEL_LOOKS.genshin.outline) });
 
@@ -118,6 +120,9 @@ describe.skipIf(!have)('the chapter\'s code over the real girls', () => {
       expect(f.headVerts / verts, 'the head, hair included, is a quarter to a half of the vertices').toBeGreaterThan(0.2);
       expect(f.headVerts / verts).toBeLessThan(0.5);
       expect(f.faceVerts, 'the face is a hundred vertices or more').toBeGreaterThan(80);
+      // the part-2 proportion pass scales the head uniformly about its joint, so the head-relative ellipse of FACE_FIT still finds the same face: 132 / 193 / 204 before the pass (above), 130 / 193 / 204 after it
+      // (the review of 2026-11-06); a pass that changed the head's shape would move these and send FACE_FIT back to be re-fitted
+      expect(Math.abs(f.faceVerts - FACE_VERTS_AFTER_PASS[id]), `${id}'s face vertices under FACE_FIT (${f.faceVerts})`).toBeLessThanOrEqual(6);
       expect(f.faceVerts / f.headVerts, 'and a small share of the head').toBeLessThan(0.2);
       const mask = (mesh.geometry.attributes['aFace'] as BufferAttribute).array as Float32Array;
       let bodyFace = 0;
