@@ -352,6 +352,28 @@ describe('the temple', () => {
     expect(() => swapped.dispose()).not.toThrow();
   });
 
+  it('frees everything it draws when it is disposed (the pools, the flames\' materials and the vines\' leaves too: the review of 2026-11-06 found each entry leaving them behind)', () => {
+    const built = buildStage(u, { textures: blank });
+    const freed = new Set<unknown>();
+    const watched = new Set<{ addEventListener(t: 'dispose', f: () => void): void }>();
+    const watch = (x: { addEventListener(t: 'dispose', f: () => void): void }): void => {
+      if (watched.has(x)) return;
+      watched.add(x);
+      x.addEventListener('dispose', () => freed.add(x));
+    };
+    built.group.traverse((o) => {
+      const m = o as Mesh;
+      if (!(m.isMesh || (o as { isSprite?: boolean }).isSprite || (o as { isInstancedMesh?: boolean }).isInstancedMesh)) return;
+      if (!(o as { isSprite?: boolean }).isSprite) watch(m.geometry); // a sprite's quad is three's one shared geometry
+      for (const x of Array.isArray(m.material) ? m.material : [m.material]) watch(x);
+      if ((o as { isInstancedMesh?: boolean }).isInstancedMesh) watch(o as never); // frees its matrix and colour buffers
+    });
+    expect(watched.size).toBeGreaterThan(40);
+    built.dispose();
+    const missed = [...watched].filter((x) => !freed.has(x)).map((x) => (x as { type?: string }).type ?? 'object');
+    expect(missed).toEqual([]);
+  });
+
   it('moves the flames, the clouds and the waterfalls with time and leaves the geometry alone', () => {
     const built = buildStage(u, { textures: blank });
     const f0 = built.flames[0]!.sprite.scale.y;

@@ -28,8 +28,8 @@ function type(doors: BoardDoors, word: string, start = 0, step = 100) {
 }
 
 describe('the table', () => {
-  it('holds the fifteen doors in the order they were added, each word a run of lower-case letters long enough to be typed by hand (three, for `yrp`, as Bailey picked it)', () => {
-    expect(WORDS).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', 'yojimbo', 'summon', 'keeper', 'infinito', 'yrp', 'waker']);
+  it('holds the sixteen doors in the order they were added, each word a run of lower-case letters long enough to be typed by hand (three, for `yrp`, as Bailey picked it)', () => {
+    expect(WORDS).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', 'yojimbo', 'summon', 'keeper', 'infinito', 'yrp', 'waker', 'gear']);
     expect(WORDS[0]).toBe(DOOR_WORD);
     expect(new Set(WORDS).size).toBe(WORDS.length);
     for (const w of WORDS) expect(w, w).toMatch(/^[a-z]{3,}$/);
@@ -60,15 +60,15 @@ describe('the table', () => {
     }
     for (const id of LISTED_DOOR_CHAPTERS) expect((CHAPTER_IDS as readonly string[]).includes(id), id).toBe(true);
     expect(CHAPTER_DOORS.filter((d) => d.secret === true).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion']);
-    // Three gated rows: FF7's switch, and (driver decision 219q, 2026-11-03; FFX-2 only) the two hidden 3D chapters, desktop-only (`tests/unit/r74-hidden-3d-phone-doors.test.ts`)
-    expect(CHAPTER_DOORS.filter((d) => d.gate !== undefined).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion', 'exp-yrp-3d', 'exp-windwaker']);
+    // Four gated rows: FF7's switch, and (driver decision 219q, 2026-11-03; FFX-2 only) the three hidden 3D chapters, desktop-only (`tests/unit/r74-hidden-3d-phone-doors.test.ts`; the anime chapter, 2026-11-06, is the third)
+    expect(CHAPTER_DOORS.filter((d) => d.gate !== undefined).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion', 'exp-yrp-3d', 'exp-windwaker', 'exp-anime']);
     for (const d of CHAPTER_DOORS.filter((x) => x.secret !== true && x.chapter !== 'mirror-aeons')) expect(getChapter(d.chapter), d.chapter).toMatchObject({ experimental: true });
     expect(getChapter('mirror-aeons')?.experimental).toBeUndefined();
   });
 
   it('leads the FFX words to FFX chapters and the FFX-2 words to FFX-2 chapters (the game of the row is the chapter\'s)', () => {
     const game = (word: string): string | undefined => getChapter(CHAPTER_DOORS.find((d) => d.word === word)!.chapter)?.game;
-    expect([game('limit'), game('leblanc'), game('experiment'), game('mushroom'), game('fayth'), game('daigoro'), game('valefor'), game('gagazet'), game('angra'), game('yojimbo'), game('summon'), game('keeper'), game('infinito'), game('yrp'), game('waker')]).toEqual(['ff7', 'ffx2', 'ffx2', 'ffx', 'ffx', 'ffx2', 'ffx2', 'ffx', 'ffx2', 'ffx', 'ffx', 'ffx', 'ffx2', 'ffx2', 'ffx2']);
+    expect([game('limit'), game('leblanc'), game('experiment'), game('mushroom'), game('fayth'), game('daigoro'), game('valefor'), game('gagazet'), game('angra'), game('yojimbo'), game('summon'), game('keeper'), game('infinito'), game('yrp'), game('waker'), game('gear')]).toEqual(['ff7', 'ffx2', 'ffx2', 'ffx', 'ffx', 'ffx2', 'ffx2', 'ffx', 'ffx2', 'ffx', 'ffx', 'ffx', 'ffx2', 'ffx2', 'ffx2', 'ffx2']);
   });
 });
 

@@ -89,7 +89,8 @@ describe('the table: the nine of TIP-1 and the Maesters, and nothing else', () =
 
   it('every chapter without a short form renders the same block in the prep card as in the pause screen (the prep card is shared by both games)', () => {
     const without = [...CHAPTER_META, ...UNLISTED_CHAPTER_META].filter((m) => prepTipFor(m.id) === undefined);
-    expect(without).toHaveLength(32 - 10);
+    // the count follows the chapter list (it was a literal 32 - 10 and broke on the first hidden chapter added after release 75: 33 metas with the anime chapter, 35 with the Dark Aeons and Penance); the ten short forms are pinned by the table test above
+    expect(without).toHaveLength([...CHAPTER_META, ...UNLISTED_CHAPTER_META].length - Object.keys(PREP_TIPS).length);
     for (const m of without) expect(tipHtml(m, { prep: true }), m.id).toBe(tipHtml(m));
   });
 });

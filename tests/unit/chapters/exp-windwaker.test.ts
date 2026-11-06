@@ -214,8 +214,8 @@ describe('its scene', () => {
     expect(row.cite).toMatch(/no source describes Besaid/);
   });
 
-  it('is the last row of the hidden chapters\' side table, which keeps every other row in order', () => {
-    expect(EXPERIMENT_SCENE_ENTRIES.at(-1)).toBe(EXP_WINDWAKER_SCENE_ENTRY);
+  it('is the row of the hidden chapters\' side table just before the anime chapter\'s (the last since 2026-11-06), which keeps every other row in order', () => {
+    expect(EXPERIMENT_SCENE_ENTRIES.at(-2)).toBe(EXP_WINDWAKER_SCENE_ENTRY);
     expect(Object.keys(EXPERIMENT_SCENE_FACTORIES)).toContain('exp-windwaker-stage');
   });
 

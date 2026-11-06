@@ -8,6 +8,8 @@
 
 import { Color, Vector2, Vector4, type IUniform, type Material, type Mesh, type MeshToonMaterial, type Object3D, type Texture } from 'three';
 import { disposeSkeletonsOf } from '../skeletons.ts';
+import type { WwId } from './layout.ts';
+import type { PropStyle } from './props.ts';
 import { toonFrom, withUniforms, type ShaderLike, type ToonUniforms } from './toon.ts';
 
 /** One toon material and the colour it started with. */
@@ -26,6 +28,14 @@ export interface ToonSet {
   readonly glow: IUniform<Vector4>;
   /** The figure's own aura shape cell (`uToonGlowShape`): where the two steps of the rim end on N.V. */
   readonly glowShape: IUniform<Vector2>;
+  /** What a style of shading adds to the set (the anime chapter's outline hulls, `./celify.ts`): driven with the channels and freed with the set. Absent for the Wind Waker toon. */
+  readonly extras?: SetExtras;
+}
+
+/** The parts of a set that are not materials of its entries (optional; additive). */
+export interface SetExtras {
+  drive?(c: Channels): void;
+  dispose?(): void;
 }
 
 export interface ToonifyOptions {
@@ -41,6 +51,16 @@ export interface ToonifyOptions {
   depthMaterial?: Material;
   /** Keep three's frustum culling (default false: a skinned mesh's bounds are its bind pose's, and a bent wing leaves them; a static temple piece keeps its culling, which is what lets a wall of many tiles draw only the ones in view). */
   cull?: boolean;
+}
+
+/**
+ * **How a chapter shades its figures, when it is not the Wind Waker toon** (the hidden anime chapter, `./celify.ts`; FFX-2 only; optional, additive). Omitted, a model is made toon by `toonify` over the context's uniforms,
+ * exactly as before. `figure` receives the loaded scene, the figure it is, and the options the model decided (the wing flap's vertex hook and depth material for Valefor, whether it receives shadows) and returns the set the
+ * model drives; `props` is how its weapons are made and sized (`./props.ts`).
+ */
+export interface ModelShading {
+  readonly figure: (scene: Object3D, id: WwId, opts: ToonifyOptions) => ToonSet;
+  readonly props?: PropStyle;
 }
 
 type MapKey = 'normalMap' | 'roughnessMap' | 'metalnessMap' | 'aoMap' | 'emissiveMap' | 'bumpMap' | 'displacementMap';
@@ -129,6 +149,7 @@ export function driveToon(set: ToonSet, c: Channels): void {
     if (c.rim.shape) set.glowShape.value.set(c.rim.shape[0], c.rim.shape[1]);
   }
   else set.glow.value.w = 0;
+  set.extras?.drive?.(c);
   const fading = c.opacity < BLEND_ON;
   for (const { material, base } of set.entries) {
     material.color.copy(base).multiply(c.colour);
@@ -152,6 +173,7 @@ export function disposeToon(set: ToonSet, ownGeometry: boolean): void {
   for (const { material } of set.entries) {
     material.dispose(); // the map is the file's, shared with the clones of it, and freed with its cache
   }
+  set.extras?.dispose?.();
   disposeSkeletonsOf(set.meshes);
   if (ownGeometry) for (const m of set.meshes) m.geometry.dispose();
 }

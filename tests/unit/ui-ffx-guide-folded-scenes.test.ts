@@ -58,7 +58,7 @@ describe('SceneStaging.guideFolded', () => {
       .filter((f) => f.endsWith('.ts'))
       .filter((f) => /\bguideFolded\b/.test(readFileSync(join(dir, f), 'utf8')))
       .sort();
-    expect(users).toEqual(['dreams-end-giants.ts', 'exp-windwaker-stage.ts', 'gagazet-giants.ts', 'types.ts']);
+    expect(users).toEqual(['dreams-end-giants.ts', 'exp-anime-stage.ts', 'exp-windwaker-stage.ts', 'gagazet-giants.ts', 'types.ts']);
   });
 
   it('reaches the engine\'s scene slots by the one spread every scene goes through (`scenes/index.ts`: `...stagingOf(build)`)', () => {

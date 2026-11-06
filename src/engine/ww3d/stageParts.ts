@@ -66,6 +66,8 @@ export interface StageCtx {
   readonly templates: Map<TempleName, Object3D>;
   toon(opts: ToonOptions, uniforms?: Record<string, IUniform>): MeshToonMaterial;
   add(geo: BufferGeometry, mat: MeshToonMaterial | MeshBasicMaterial, o?: { cast?: boolean; receive?: boolean; at?: Vector3 }): Mesh;
+  /** Hand over what a builder put in the group itself (not through `add`) so the stage frees it with the rest. */
+  own(...items: ReadonlyArray<{ dispose(): void }>): void;
 }
 
 /** The point at azimuth `deg` (0 = the far wall straight ahead, -z; positive toward +x, the right of the frame), radius `r`, height `y`. */
@@ -233,7 +235,7 @@ export function addDoor(ctx: StageCtx, az: number, face: number = ctx.R): void {
 
 /** Thin waterfalls: a stone spout, a flat plane with a scrolling stripe texture, a small basin. Returns the textures to scroll. */
 export function addWaterfalls(ctx: StageCtx, list: ReadonlyArray<readonly [number, number]>): Texture[] {
-  const { R, toon, add, group, tex } = ctx;
+  const { R, toon, add, group, tex, own } = ctx;
   const scrolls: Texture[] = [];
   const stone = toon({ color: 0x7f9ad0 });
   for (const [az, top] of list) {
@@ -248,6 +250,7 @@ export function addWaterfalls(ctx: StageCtx, list: ReadonlyArray<readonly [numbe
     const pool = new Mesh(new CircleGeometry(0.8, 16).rotateX(-Math.PI / 2), new MeshBasicMaterial({ color: 0x9edcf7 }));
     pool.position.copy(polarPos(az, R - 0.85, 0.36));
     group.add(pool);
+    own(pool.geometry, pool.material as MeshBasicMaterial);
     scrolls.push(t);
   }
   return scrolls;
@@ -268,7 +271,7 @@ const FLAME_LIFT = 0.1;
  * {@link WALL_BRAZIER_SCALE}); the flame sits just above its top.
  */
 export function addTorches(ctx: StageCtx, floorAz: readonly number[], wall: ReadonlyArray<readonly [number, number]>): Flame[] {
-  const { R, toon, add, group, tex } = ctx;
+  const { R, toon, add, group, tex, own } = ctx;
   const stone = toon({ color: 0x8aa2d8 });
   const flameMap = tex.flame();
   const flames: Flame[] = [];
@@ -279,6 +282,7 @@ export function addTorches(ctx: StageCtx, floorAz: readonly number[], wall: Read
     s.position.copy(pos);
     s.scale.set(0.85, 1.3, 1);
     group.add(s);
+    own(mat); // a sprite's geometry is three's one shared quad: not ours to free
     flames.push({ sprite: s, base: pos.clone(), phase: i * 1.7 });
   };
   const brazier = swapSize(ctx, 'brazier');
@@ -310,7 +314,7 @@ export function addTorches(ctx: StageCtx, floorAz: readonly number[], wall: Read
 
 /** Hanging vines: [azimuth, top y, drop length]. A tube per strand and instanced leaves along it. */
 export function addVines(ctx: StageCtx, list: ReadonlyArray<readonly [number, number, number]>): void {
-  const { R, toon, add, group, tex } = ctx;
+  const { R, toon, add, group, tex, own } = ctx;
   const r = rng(21);
   const vineMat = toon({ color: 0x2f8f3a });
   const per = 14;
@@ -337,4 +341,5 @@ export function addVines(ctx: StageCtx, list: ReadonlyArray<readonly [number, nu
     }
   });
   group.add(leaves);
+  own(leaves.geometry, leaves.material as MeshToonMaterial, leaves); // the instanced mesh frees its matrix and colour buffers
 }

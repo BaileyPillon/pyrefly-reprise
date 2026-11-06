@@ -53,11 +53,17 @@ export function trianglesOf(g: Gltf): number {
 /** The file with its pictures taken out of the JSON (no decoder in Node): the geometry, the skeleton and the clips are the real ones. */
 export function stripImages(bytes: Buffer): ArrayBuffer {
   const jsonLength = bytes.readUInt32LE(12);
-  const json = JSON.parse(bytes.toString('utf8', 20, 20 + jsonLength)) as Record<string, unknown> & { materials?: Array<{ pbrMetallicRoughness?: Record<string, unknown> }> };
+  const json = JSON.parse(bytes.toString('utf8', 20, 20 + jsonLength)) as Record<string, unknown> & { materials?: Array<Record<string, unknown> & { pbrMetallicRoughness?: Record<string, unknown> }> };
   delete json['images'];
   delete json['textures'];
   delete json['samplers'];
-  for (const m of json.materials ?? []) if (m.pbrMetallicRoughness) delete m.pbrMetallicRoughness['baseColorTexture'];
+  for (const m of json.materials ?? []) {
+    if (m.pbrMetallicRoughness) {
+      delete m.pbrMetallicRoughness['baseColorTexture'];
+      delete m.pbrMetallicRoughness['metallicRoughnessTexture'];
+    }
+    for (const key of ['normalTexture', 'occlusionTexture', 'emissiveTexture']) delete m[key]; // the anime girls' files carry a normal map too (the cel never reads it)
+  }
   const text = Buffer.from(JSON.stringify(json), 'utf8');
   const padded = Buffer.concat([text, Buffer.alloc((4 - (text.length % 4)) % 4, 0x20)]);
   const rest = bytes.subarray(20 + jsonLength); // the BIN chunk, untouched

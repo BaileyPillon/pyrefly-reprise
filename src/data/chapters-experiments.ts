@@ -14,6 +14,7 @@
  * - **Biran and Yenke** (`'biran-yenke'`, number 25, 2026-10-14; FFX only): Kimahri alone against the two Ronso at the Mountain Gate of Mt. Gagazet, where Lancet teaches him Ronso Rages; word `gagazet`.
  * - **Angra Mainyu** (`'ffx2-angra-mainyu'`, number 26, 2026-10-14; FFX-2 only): the Chapter 5 mission "Showdown in the Sands", the Bikanel Desert fiend and its arms Zarich and Tawrich; word `angra` (25 is the Biran and Yenke lane's).
  * - **Valefor at Besaid, Wind Waker** (`'exp-windwaker'`, number 32, 2026-10-20; FFX-2 only): hidden chapter 24's Valefor fight drawn as a Wind Waker HD style 3D scene; word `waker` (31 is the 3D Bahamut's, 29 the Spectral Keeper's and 30 the Fallen Maesters').
+ * - **Valefor at Besaid, anime style** (`'exp-anime'`, number 33, 2026-11-06; FFX-2 only): the same fight again with the Meshy toon girls under an anime cel shader; word `gear`.
  * - **The Last Summoning** (`'last-summoning'`, number 28, 2026-10-15; FFX only): Dream's End as a gauntlet in the player's order with the full roster of eight aeons, Yojimbo and the Magus Sisters among them; word `summon` (27 is the Dark Mirror lane's).
  * - **The Spectral Keeper** (`'spectral-keeper'`, number 29, 2026-11-02; FFX only): the beast at the foot of the Dome's lift, fought on six glyph platforms; word `keeper` (28 is the Last Summoning lane's).
  *
@@ -42,8 +43,9 @@ import { SPECTRAL_KEEPER } from './chapter-spectral-keeper.ts';
 import { FFX2_FALLEN_MAESTERS } from './chapter-ffx2-fallen-maesters.ts';
 import { experimentalYrp } from './chapter-exp-yrp-3d.ts';
 import { EXP_WINDWAKER } from './chapter-exp-windwaker.ts';
+import { EXP_ANIME } from './chapter-exp-anime.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from, and `ffx2Bahamut` the listed Chapter IV, which the 3D Bahamut is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter, ffx2Bahamut: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME] as const;
 }

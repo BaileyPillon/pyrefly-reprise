@@ -3,6 +3,26 @@
  "backup": "D:/Tools/pyrefly-models-backup/windwaker",
  "files": [
   {
+   "path": "anime/paine.glb",
+   "bytes": 2509980,
+   "sha256": "7126bdf370f3724ba8d99bce3346eda3ed0ca3bfb95609ffdc2600490724d26e"
+  },
+  {
+   "path": "anime/rikku.glb",
+   "bytes": 2888444,
+   "sha256": "79c796b80cc1c8c7cb6229e734bef49a42aa3653c8f0554473035043186126c0"
+  },
+  {
+   "path": "anime/valefor.glb",
+   "bytes": 2957584,
+   "sha256": "a841489d6cdc0f9e8caa3c76696fe59e959480944775a3c5249d7fba40feb836"
+  },
+  {
+   "path": "anime/yuna.glb",
+   "bytes": 2738200,
+   "sha256": "f1018db9b67e0064eebb4bc8b1179138fa67cab426eeeb60a3eb6c8e44c55833"
+  },
+  {
    "path": "paine.glb",
    "bytes": 4138384,
    "sha256": "abbae17d9605ea1f205e5b2505db509fa44e31386bfee1c820478ca2bfc4d7ab"

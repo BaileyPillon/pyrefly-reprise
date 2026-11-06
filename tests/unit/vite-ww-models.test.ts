@@ -159,16 +159,16 @@ describe('vite.config.ts and package.json', () => {
   });
 });
 
-describe('against a real folder: the check the plugin makes is the tool\'s own, size and sha256 of the eleven listed files', () => {
+describe('against a real folder: the check the plugin makes is the tool\'s own, size and sha256 of the fifteen listed files', () => {
   const list = readList();
   const SRC = join(REPO, 'public', 'models-exp', 'windwaker');
   const have = existsSync(SRC) && check(SRC).length === 0;
 
-  it('lists eleven files, and a folder that is not there is eleven problems', () => {
-    expect(list).toHaveLength(11);
+  it('lists fifteen files (the Wind Waker chapter\'s eleven and the anime chapter\'s three girls and its Valefor), and a folder that is not there is fifteen problems', () => {
+    expect(list).toHaveLength(15);
     const none = mkdtempSync(join(tmpdir(), 'ww-none-'));
     try {
-      expect(check(join(none, 'models-exp', 'windwaker'))).toHaveLength(11);
+      expect(check(join(none, 'models-exp', 'windwaker'))).toHaveLength(15);
     } finally {
       rmSync(none, { recursive: true, force: true });
     }
