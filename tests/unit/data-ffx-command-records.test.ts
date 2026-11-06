@@ -146,8 +146,9 @@ describe("the attached records are the game's table", () => {
     // 512, 509 and 3 in release 52, where both lines meet: Mirror Aeons + RC9 FFX-M read 510, 508 and 2; the Last Summoning adds Kozuka and Wakizashi and
     // moves Daigoro and the Sisters token to "no record" (+2 abilities, +1 record, +1 without).
     // 519 and 516 since the hidden Spectral Keeper chapter (FFX only, 2026-11-02): its seven rows (0x6045 to 0x604e and the party's Move 0x3103), each with its record, all in the game's fixtures.
-    expect(ALL_ABILITIES).toHaveLength(519);
-    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(516);
+    // 539 and 536 since the hidden Dark Aeons chapter (FFX only, 2026-11-06): the six other Dark Aeons' twenty distinct rows (the 24 of RE six 5.1 less the three identical pairs carried once, less Mega Graviton, which the Mirror Aeons carry), each with its record, all in the game's fixtures.
+    expect(ALL_ABILITIES).toHaveLength(539);
+    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(536);
     expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(3);
   });
 });
@@ -351,6 +352,15 @@ const KNOWN_STATUS_DIFFERENCES: readonly string[] = [
   'dark-cindy-attack: cleanse in the record, ours none',
   'dark-cindy-attack: extra bits 0x0, record 0x200',
   ...['haste', 'nulblaze', 'nulfrost', 'nulshock', 'nultide', 'protect', 'reflect', 'regen', 'shell'].map((s) => `dark-cindy-attack: the record has a byte 254 for ${s} (a cleanse), ours none`),
+  // The hidden Dark Aeons chapter (FFX only, 2026-11-06): the same two shapes as the Mirror Aeons' rows. Four cleanse rows (Aerospark and Dark Shiva's Attack also take Auto-Life; Mega Flare and Oblivion leave it) list none of the buffs they
+  // remove, and Dark Anima's Attack carries the Curse bit (an extra-status word with no engine status id) in the record alone.
+  ...['dark6-aerospark', 'dark6-mega-flare', 'dark6-oblivion', 'dark6-shiva-attack'].flatMap((id) => [
+    `${id}: cleanse in the record, ours none`,
+    ...['haste', 'nulblaze', 'nulfrost', 'nulshock', 'nultide', 'protect', 'reflect', 'regen', 'shell'].map((s) => `${id}: the record has a byte 254 for ${s} (a cleanse), ours none`),
+  ]),
+  'dark6-aerospark: extra bits 0x0, record 0x200',
+  'dark6-shiva-attack: extra bits 0x0, record 0x200',
+  'dark6-anima-attack: extra bits 0x0, record 0x400',
 ];
 
 describe("the status bytes of the attached records are the game's table (re-parity W2)", () => {

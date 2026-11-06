@@ -46,7 +46,8 @@ describe('the word (pure)', () => {
     expect(getChapter(ANIME)).toMatchObject({ id: ANIME, game: 'ffx2', experimental: true, number: 33 });
     expect(EXPERIMENT_CHAPTERS.map((c) => c.id)).toContain(ANIME);
     expect(CHAPTER_DOORS.find((d) => d.word === WORD)?.chapter).toBe(ANIME);
-    expect(CHAPTER_DOORS.at(-1)?.word, 'the last row of the table').toBe(WORD);
+    const words = CHAPTER_DOORS.map((d) => d.word); // the rows follow chapter number: 33 comes right after the Wind Waker's and the later hidden chapters' rows follow it (it was the last row until the Dark Aeons joined)
+    expect(words[words.indexOf(WORD) - 1], "the row before it is the Wind Waker's").toBe('waker');
   });
 
   it('opens on the last letter only, in either case; a wrong letter resets, a wrong first letter starts it again, a pause over the gap ends the match', () => {

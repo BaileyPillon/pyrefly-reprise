@@ -36,6 +36,12 @@ export const MUSHROOM_PLATE_LOOK: Readonly<Record<string, { floorRow: number; ba
   [MUSHROOM_ROCK_SCENE]: { floorRow: 0.5, bands: { sky: [0.0, 0.14], horizon: [0.3, 0.4], ground: [0.56, 0.9], key: [0.38, 0.5] }, layer: { from: 0.3, to: 0.5 } },
   [MUSHROOM_ROCK_RUINED_PLATE]: { floorRow: 0.72, bands: { sky: [0.0, 0.14], horizon: [0.3, 0.4], ground: [0.74, 0.95], key: [0.42, 0.58] }, layer: { from: 0.42, to: 0.7 } },
   // The hidden Mirror Aeons chapter's second act (`./mirror-aeons.ts`) swaps in the Cavern of the Stolen Fayth's plate (same 2688 x 1536 size): the Cavern scene's own floor row and sampled bands (`CAVERN_PLATE`, `./cavern-stolen-fayth.ts`).
+  // The hidden Dark Aeons chapter (`./dark-aeons.ts`, FFX only, 2026-11-06) swaps in four more existing plates of the same 2688 x 1536 size, each link on its own. **Provisional floor rows and bands** (an estimate read off each plate by eye: the horizon band for the fog, the
+  // painted ground for the 3D floor's tint), to be judged in a browser and corrected by Bailey's eye; the ruined road above is the Thunder Plains' stand-in.
+  'bikanel-desert-provisional': { floorRow: 0.8, bands: { sky: [0.0, 0.14], horizon: [0.2, 0.32], ground: [0.82, 0.97], key: [0.3, 0.5] } },
+  'macalania-temple': { floorRow: 0.9, bands: { sky: [0.0, 0.12], horizon: [0.5, 0.7], ground: [0.9, 0.99], key: [0.72, 0.8] } },
+  gagazet: { floorRow: 0.9, bands: { sky: [0.01, 0.12], horizon: [0.6, 0.74], ground: [0.9, 1.0], key: [0.03, 0.13] } },
+  'zanarkand-dome': { floorRow: 0.85, bands: { sky: [0.0, 0.14], horizon: [0.52, 0.72], ground: [0.87, 1.0], key: [0.66, 0.86] } },
   'cavern-stolen-fayth': { floorRow: 0.95, bands: { sky: [0.02, 0.2], horizon: [0.62, 0.78], ground: [0.84, 0.97], key: [0.3, 0.55] } }, // no masked band: the floor band carries the pad (the Cavern scene's own choice)
 };
 

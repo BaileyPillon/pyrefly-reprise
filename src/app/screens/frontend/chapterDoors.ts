@@ -23,13 +23,15 @@
  *
  * **`summon`** (FFX, the hidden Last Summoning, `./summonDoor.ts`: S is `down`, M is `select`; U, O and N are unbound) is a plain `WordDoor` too, and so is **`yrp`** (FFX-2, the hidden 3D Bahamut, `./yrpDoor.ts`: R is `r1`; Y and P are unbound; three letters, the shortest word on the table), and so is **`waker`** (FFX-2, the hidden Wind Waker chapter, `./windwakerDoor.ts`: W is `up`, A is `left`, E is `start`, R is `r1`; K is unbound).
  *
+ * **`darkaeon`** (FFX, the hidden Dark Aeons, `./darkaeonDoor.ts`: D is `right`, A `left`, R `r1`, E `start`; K, O and N are unbound) is a plain `WordDoor` too.
+ *
  * **`keeper`** (FFX, the hidden Spectral Keeper, `./keeperDoor.ts`: K and P are unbound, E is `start`, R is `r1`) is a plain `WordDoor` too.
  *
  * **`yrp` and `waker` are desktop-only** (driver decision 219q, 2026-11-03; FFX-2 only): their rows carry the `desktopOnly` gate, so on the phone tier the door stays shut as FF7's does while its switch is off (see `desktopOnly` below).
  *
  * **`infinito`** (FFX-2, the hidden Fallen Maesters, `./maestersDoor.ts`: only F is a bound key, `l1`, which the board ignores; I, N, T and O are unbound) is a plain `WordDoor` too.
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon` and `keeper`.
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper` and `darkaeon`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -47,6 +49,7 @@ import { ANGRA_DOOR_CHAPTER, ANGRA_DOOR_WORD } from './angraDoor.ts';
 import { YOJIMBO_DOOR_CHAPTER, YOJIMBO_DOOR_WORD } from './yojimboDoor.ts';
 import { SUMMON_DOOR_CHAPTER, SUMMON_DOOR_WORD } from './summonDoor.ts';
 import { KEEPER_DOOR_CHAPTER, KEEPER_DOOR_WORD } from './keeperDoor.ts';
+import { DARKAEON_DOOR_CHAPTER, DARKAEON_DOOR_WORD } from './darkaeonDoor.ts';
 import { MAESTERS_DOOR_CHAPTER, MAESTERS_DOOR_WORD } from './maestersDoor.ts';
 import { PILGRIM_DOOR_CHAPTER, PILGRIM_DOOR_WORD } from './pilgrimDoor.ts';
 import { YRP_DOOR_CHAPTER, YRP_DOOR_WORD } from './yrpDoor.ts';
@@ -94,6 +97,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: YRP_DOOR_WORD, chapter: YRP_DOOR_CHAPTER, gate: desktopOnly },
   { word: WINDWAKER_DOOR_WORD, chapter: WINDWAKER_DOOR_CHAPTER, gate: desktopOnly },
   { word: ANIME_DOOR_WORD, chapter: ANIME_DOOR_CHAPTER, gate: desktopOnly },
+  { word: DARKAEON_DOOR_WORD, chapter: DARKAEON_DOOR_CHAPTER },
 ];
 
 /**

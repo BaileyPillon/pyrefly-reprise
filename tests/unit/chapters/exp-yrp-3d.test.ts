@@ -172,6 +172,6 @@ describe('its scene', () => {
     expect(EXPERIMENT_SCENE_ENTRIES.at(-3)).toBe(EXP_YRP_SCENE_ENTRY); // the Wind Waker's row (ch-waker) follows it at the r74 integration, the anime chapter's (ch-anime, 2026-11-06) after that
     expect(Object.keys(EXPERIMENT_SCENE_FACTORIES)).toContain('exp-yrp-3d-stage');
     expect(EXPERIMENT_SCENE_ENTRIES.map((e) => e.key)).toContain(EXP_LEBLANC_SCENE);
-    expect(EXPERIMENT_SCENE_ENTRIES).toHaveLength(13); // ten with this chapter alone; the Spectral Keeper's, the Wind Waker's and the anime chapter's rows are the other three
+    expect(EXPERIMENT_SCENE_ENTRIES).toHaveLength(14); // ten with this chapter alone; the Spectral Keeper's, the Dark Aeons' (2026-11-06), the Wind Waker's and the anime chapter's rows are the other four
   });
 });

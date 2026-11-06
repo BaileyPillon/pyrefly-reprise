@@ -181,7 +181,10 @@ describe('the data behind it', () => {
     const mirrorTiers = ['70', '71', '72', '73', '74'].map((n) => `mirror-yojimbo-nagi05_${n}`);
     // The hidden Fallen Maesters (FFX-2, 2026-11-02) sets it on floors 40, 60 and 80 of the Via Infinito: the glyph between the floors heals the party, which is no Save Sphere (`data/ffx2/enemies/fallen-maesters.ts`).
     const maesters = ['40-black-elemental', '60-concherer', '80-chac'].map((n) => `ffx2-via-infinito-floor-${n}`);
-    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-') && !id.startsWith('ffx2-via-infinito-floor-'))).toEqual([DJOSE_EXPERIMENT_2]);
+    // The hidden Dark Aeons (FFX, 2026-11-06) sets it on links 2 to 7: each is a fresh fight that restores the party and the aeons on entry and is its own retry checkpoint, with no Save Sphere between the stops (`data/ffx/enemies/dark-aeons-six-groups.ts`).
+    const darkAeons = ['ifrit', 'ixion-1', 'ixion-2', 'shiva', 'anima', 'bahamut'].map((n) => `dark-aeons-${n}`);
+    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-') && !id.startsWith('ffx2-via-infinito-floor-') && !id.startsWith('dark-aeons-'))).toEqual([DJOSE_EXPERIMENT_2]);
+    expect(flagged.filter((id) => id.startsWith('dark-aeons-')).sort()).toEqual([...darkAeons].sort());
     expect(flagged.filter((id) => id.startsWith('ffx2-via-infinito-floor-')).sort()).toEqual(maesters);
     expect(flagged.filter((id) => id.startsWith('mirror-yojimbo-')).sort()).toEqual(mirrorTiers);
   });

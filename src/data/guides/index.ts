@@ -28,6 +28,7 @@ import { ISAARU_GUIDE } from './ffx-isaaru.ts';
 import { SINSPAWN_GUI_GUIDE } from './sinspawn-gui.ts';
 import { BIRAN_YENKE_GUIDE } from './biran-yenke.ts';
 import { MIRROR_AEONS_GUIDE } from './mirror-aeons.ts';
+import { DARK_AEONS_GUIDE } from './dark-aeons.ts';
 import { SIN_FINS_CORE_GUIDE } from './sin-fins-core.ts';
 import { SIN_FACE_GUIDE } from './sin-face.ts';
 import { FFX2_EXPERIMENT_GUIDE } from './ffx2-experiment.ts';
@@ -67,6 +68,7 @@ export {
   SINSPAWN_GUI_GUIDE,
   BIRAN_YENKE_GUIDE,
   MIRROR_AEONS_GUIDE,
+  DARK_AEONS_GUIDE,
   SIN_FINS_CORE_GUIDE,
   SIN_FACE_GUIDE,
   FFX2_EXPERIMENT_GUIDE,
@@ -118,6 +120,8 @@ export const GUIDES: readonly ChapterGuide[] = [
   // The hidden Biran and Yenke chapter (FFX only, Kimahri's solo trial; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
   BIRAN_YENKE_GUIDE,
   MIRROR_AEONS_GUIDE,
+  // The hidden Dark Aeons (FFX only, 2026-11-06; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  DARK_AEONS_GUIDE,
   // The hidden Angra Mainyu (FFX-2 only, Chapter 5; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here too.
   FFX2_ANGRA_MAINYU_GUIDE,
 ];

@@ -22,6 +22,7 @@ import { GAGAZET_RONSO_SCENE } from '../data/ffx/biran-yenke-ids.ts';
 import { MIRROR_AEONS_SCENE } from '../data/ffx/mirror-aeons-ids.ts';
 import { LAST_SUMMONING_SCENE } from '../data/ffx/last-summoning-ids.ts';
 import { SPECTRAL_KEEPER_SCENE } from '../data/ffx/spectral-keeper-ids.ts';
+import { DARK_AEONS_SCENE } from '../data/ffx/dark-aeons-six-ids.ts';
 import { ANGRA_MAINYU_SCENE } from '../data/angra-mainyu-ids.ts';
 import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
 import { EXP_WINDWAKER_SCENE } from '../data/windwaker-ids.ts';
@@ -150,6 +151,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   [MIRROR_AEONS_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-mirror-aeons.md section 2 and 3: the guides name no ambient particles on the road or in the cavern; the fiends are summoned aeons and leave as the stage dissolves them' },
   // The Last Summoning (the hidden chapter, FFX only): Dream's End as Chapter III builds it, so Dream's End's row.
   [LAST_SUMMONING_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Dream's End [verified: 2 sources]` },
+  // The Dark Aeons (the hidden chapter, FFX only): seven existing plates under one stage; the guides name no ambient particles for these places and the aeons leave as the stage dissolves them.
+  [DARK_AEONS_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/re-ffx-dark-aeons-six.md section 2.4 and 9: the guides name where each Dark Aeon stands and no ambient particles; the aeons are summoned shapes and leave as the stage dissolves them' },
   // The Spectral Keeper (the hidden chapter, FFX only): the Zanarkand Dome as Chapter II builds it, so the Dome's row.
   [SPECTRAL_KEEPER_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Zanarkand Dome [verified: 2 sources]` },
   // The 3D Bahamut (the hidden chapter, FFX-2 only; `scenes/exp-yrp-3d-stage.ts`): Chapter IV's chamber, so the Bevelle underground's row.
