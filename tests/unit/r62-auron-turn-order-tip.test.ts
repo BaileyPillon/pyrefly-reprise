@@ -28,8 +28,8 @@ const everyChapter = [...CHAPTERS, ...UNLISTED_CHAPTERS, ...EXPERIMENT_CHAPTERS]
 const ffxChapters = everyChapter.filter((c) => c.game === 'ffx');
 
 /** The chapters that show no line: neither line is true in every seed, or the brief leaves them without one (see `turnOrderLine.ts`). */
-const NO_LINE = ['yunalesca', 'braskas-final-aeon', 'seymour-anima-macalania', 'yojimbo-cavern', 'isaaru-via-purifico', 'sin-face', 'biran-yenke'];
-const PARTY_FIRST = ['evrae-airship', 'seymour-natus', 'seymour-omnis', 'sin-fins-core', 'mirror-aeons', 'sinspawn-gui', 'exp-fayth', 'last-summoning', 'spectral-keeper', 'spherimorph'];
+const NO_LINE = ['yunalesca', 'braskas-final-aeon', 'seymour-anima-macalania', 'yojimbo-cavern', 'isaaru-via-purifico', 'sin-face', 'biran-yenke', 'spherimorph'];
+const PARTY_FIRST = ['evrae-airship', 'seymour-natus', 'seymour-omnis', 'sin-fins-core', 'mirror-aeons', 'sinspawn-gui', 'exp-fayth', 'last-summoning', 'spectral-keeper'];
 
 describe('which chapter shows which line', () => {
   it('Chapter I (seymour-flux) has the new line, Bailey\'s pick', () => {

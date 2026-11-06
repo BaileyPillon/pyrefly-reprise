@@ -19,11 +19,14 @@ describe('the spring stage', () => {
     expect(entry?.slots).toBe(SPHERIMORPH_SLOTS);
   });
 
-  it('holds the party on the Temple\'s three slots and puts the guardian where the Temple\'s layout B pins Seymour, inside the HUD\'s right rail', () => {
+  it('holds the party on the Temple\'s three slots and puts the guardian back and right of the whole line (the review\'s m2: on the spot layout B pins Seymour to, [2.5, 0, -5.8], it stood directly behind Lulu), checked in the browser at 1600x900 and 390x844', () => {
     expect(SPHERIMORPH_STAGING.holdParty).toBe(true);
     expect(SPHERIMORPH_SLOTS.party).toEqual(MACALANIA_TEMPLE_SLOTS.party);
-    expect(SPHERIMORPH_STAGING.enemySpots[SPHERIMORPH_ID]).toEqual([2.5, 0, -5.8]);
-    expect(SPHERIMORPH_SLOTS.enemy).toEqual([[2.5, 0, -5.8]]);
+    expect(SPHERIMORPH_STAGING.enemySpots[SPHERIMORPH_ID]).toEqual([4.2, 0, -6.4]);
+    expect(SPHERIMORPH_SLOTS.enemy).toEqual([[4.2, 0, -6.4]]);
+    const [x, , z] = SPHERIMORPH_SLOTS.enemy[0]!;
+    expect(x, 'right of every member of the line, by more than a body\'s width').toBeGreaterThan(Math.max(...SPHERIMORPH_SLOTS.party.map((s) => s[0])) + 2);
+    expect(z, 'behind every member of the line').toBeLessThan(Math.min(...SPHERIMORPH_SLOTS.party.map((s) => s[2])) - 5);
     expect(SPHERIMORPH_STAGING.figureHeights[SPHERIMORPH_ID]).toBe(SPHERIMORPH_HEIGHT);
     expect(SPHERIMORPH_HEIGHT).toBeGreaterThan(SPHERIMORPH_SLOTS.partyHeight! * 1.5); // an orb carrying its spheres, not a person
     expect(SPHERIMORPH_HEIGHT).toBeLessThanOrEqual(SPHERIMORPH_SLOTS.enemyHeight! + 1e-9);

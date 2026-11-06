@@ -31,6 +31,9 @@ const W = Number(arg('--w', '1600'));
 const H = Number(arg('--h', '900'));
 const TOUCH = flag('--touch');
 const SEED = Number(arg('--seed', '7'));
+/** `--until first-menu` stops after the first menu's pictures (the staging check of the fix pass: where the guardian stands against the party); the default plays on to the results. */
+const UNTIL = arg('--until', 'results');
+class StopEarly extends Error {}
 mkdirSync(OUT, { recursive: true });
 
 const { takeRigRecord } = await import(pathToFileURL(join(REPO, 'tools', 'rig-record-lock.mjs')).href);
@@ -266,6 +269,7 @@ try {
   log('menu.tidus', menu1.rows.map((r) => ({ t: r.text, d: r.disabled })));
   const escapeRows = menu1.rows.filter((r) => /^(escape|flee)/i.test(r.text));
   check('the first menu is Tidus\'s; Escape and Flee are not usable (disabled for everyone); Special, White Magic and Items are', menu1.rows.length > 3 && escapeRows.length >= 1 && escapeRows.every((r) => r.disabled) && menu1.rows.filter((r) => /^(special|white magic|items)/i.test(r.text)).every((r) => !r.disabled), menu1.rows.map((r) => [r.text, r.disabled]));
+  if (UNTIL === 'first-menu') throw new StopEarly();
   await page.keyboard.press('Escape');
   await page.waitForTimeout(1500);
   await shot('3c-pause');
@@ -367,12 +371,15 @@ try {
   await page.waitForTimeout(7000);
   if ((await screenNow()) === 'results') await shot('8-results');
 } catch (e) {
-  failures.push(`threw: ${String(e).slice(0, 300)}`);
-  log('threw', String(e).slice(0, 600));
-  try {
-    await shot('zz-failure');
-  } catch {
-    /* the page may be gone */
+  if (e instanceof StopEarly) log('stopped', 'after the first menu (--until first-menu)');
+  else {
+    failures.push(`threw: ${String(e).slice(0, 300)}`);
+    log('threw', String(e).slice(0, 600));
+    try {
+      await shot('zz-failure');
+    } catch {
+      /* the page may be gone */
+    }
   }
 }
 

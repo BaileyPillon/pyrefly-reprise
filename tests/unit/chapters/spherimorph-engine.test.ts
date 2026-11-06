@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest';
 import type { Command } from '../../../src/battle/common/types.ts';
 import { SM_ROWS, SM_STATES } from '../../../src/battle/ffx/ai/spherimorph-rules.ts';
 import { buildWith } from '../helpers/spherimorphBot.ts';
-import { SM, actor, damageInActions, give, has, inputFor, log, newEngine, nextInput, row, runDefending, runIdling, setState, sm, smActions, smStarts, spell, stateOf, swing } from '../helpers/spherimorphDrive.ts';
+import { SM, actor, damageInActions, give, has, inputFor, log, newEngine, nextInput, row, runDefending, runIdling, setState, sm, smActions, smStarts, spell, stateOf, swing, withTempleBag } from '../helpers/spherimorphDrive.ts';
 
 type Ev = { type: string; abilityId?: string; actorId?: string; targetId?: string; amount?: number; sourceId?: string; status?: string; targets?: string[]; name?: string; affinity?: string; crit?: boolean };
 const events = (engine: ReturnType<typeof newEngine>): readonly Ev[] => log(engine) as unknown as readonly Ev[];
@@ -206,8 +206,8 @@ describe('what it answers with, end to end (RE 4.3)', () => {
     }
   });
 
-  it('a Poison Fang lands (the byte is 90, the move 254), costs 600 a tick, and is answered like a plain blow (a damaging item with no element): the player-side spell on the thrower', () => {
-    const engine = newEngine(5);
+  it("a Poison Fang (not in the Woods' bag; the Temple's bag has two, `withTempleBag`) lands (the byte is 90, the move 254), costs 600 a tick, and is answered like a plain blow (a damaging item with no element): the player-side spell on the thrower", () => {
+    const engine = newEngine(5, withTempleBag());
     setState(engine, 1);
     const d = inputFor(engine, 'tidus');
     const fang = row(d, 'item', 'poison-fang', SM);

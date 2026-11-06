@@ -58,7 +58,7 @@ describe('no other formation gets Spherimorph\'s script', () => {
     expect(looked).toBeGreaterThan(30);
   });
 
-  it('the Doublecast flag is raised for the two casts and down again after (an additive runtime field, read by this script only)', async () => {
+  it("the Doublecast field is not set at all until a Doublecast resolves (an additive runtime field, read by this script only; the engine's own pair, raised for the two casts and down again after, is pinned in spherimorph-doublecast.test.ts)", async () => {
     const { newEngine, ctxOf, nextInput } = await import('../helpers/spherimorphDrive.ts');
     const engine = newEngine(3);
     expect(ctxOf(engine).rt.doublecasting).toBeUndefined();

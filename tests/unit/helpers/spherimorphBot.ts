@@ -9,18 +9,21 @@
  * - **blind**: the skeleton's care, Tidus Attacks, Lulu casts the highest tier of an element drawn at random every turn (no clue read): the player who guesses.
  * - **advisor**: the shipped tactic (`src/engine/tactics/spherimorph.ts`): probe with a plain blow, read the answer, cast its opposite, probe again after every hit that lands.
  * - **ablations** of the advisor: **no-reprobe** reads the clue once and trusts it for the whole fight (the shift makes it stale), **no-care** (nobody heals or stands up), **no-protect** (Yuna never casts Protect).
+ * - **the two lines that never read the clue** (the review of 2026-11-06, M1; both are the game's own rules and are measured, not tuned): **poison** (one Poison Fang, which lands on it and ticks 600 a turn, then the
+ *   skeleton's care and Defend: wins on the Temple's bag, which has the Fangs, and has nothing to throw on the Woods' bag, which does not) and **brute** (Auron's Armor Break once, then plain Attacks: a plain blow never
+ *   shifts it and is only ever answered on the attacker; on the shipped front Lulu's first turn is a Switch for Auron).
  *
- * The line-up is a parameter (the preflight's SP2: Tidus, Yuna, Lulu, or Tidus, Auron, Lulu).
+ * The line-up is a parameter (the preflight's SP2: Tidus, Yuna, Lulu, or Tidus, Auron, Lulu), and so is the bag (`woods`, the shipped one, or `temple`, the Temple's with its two Poison Fangs).
  */
 
 import type { AvailableCommand, BattleEngine, BattleEvent, Command, FFXCombatant, FFXPartyBuild } from '../../../src/battle/common/types.ts';
 import { spherimorph as shippedTactic, clueOf } from '../../../src/engine/tactics/spherimorph.ts';
 import { spherimorphBuild } from '../../../src/data/ffx/builds/spherimorph.ts';
-import { SM, actor, defend, newEngine, row, type Input } from './spherimorphDrive.ts';
+import { SM, actor, defend, has, newEngine, row, withTempleBag, type Input } from './spherimorphDrive.ts';
 
 export interface Line {
   readonly name: string;
-  readonly kind: 'careless' | 'blind' | 'advisor';
+  readonly kind: 'careless' | 'blind' | 'advisor' | 'poison' | 'brute';
   readonly care: boolean;
   readonly protect: boolean;
   readonly reprobe: boolean;
@@ -33,12 +36,19 @@ export const LINES: Readonly<Record<string, Line>> = {
   'no-reprobe': { name: 'no-reprobe', kind: 'advisor', care: true, protect: true, reprobe: false },
   'no-care': { name: 'no-care', kind: 'advisor', care: false, protect: true, reprobe: true },
   'no-protect': { name: 'no-protect', kind: 'advisor', care: true, protect: false, reprobe: true },
+  poison: { name: 'poison', kind: 'poison', care: true, protect: false, reprobe: false },
+  'poison-no-care': { name: 'poison-no-care', kind: 'poison', care: false, protect: false, reprobe: false },
+  brute: { name: 'brute', kind: 'brute', care: true, protect: false, reprobe: false },
 };
 
-/** A build with another front line (the bench is the other four of the seven, in the preset's order). */
-export function buildWith(front: readonly [string, string, string]): FFXPartyBuild {
+/** Which bag a fight is played with: the Woods' (the shipped one) or the Temple's as it is, with its two Poison Fangs. */
+export type Bag = 'woods' | 'temple';
+
+/** A build with another front line (the bench is the other four of the seven, in the preset's order) and, when asked, the Temple's bag. */
+export function buildWith(front: readonly [string, string, string], bag: Bag = 'woods'): FFXPartyBuild {
   const seven = ['tidus', 'yuna', 'auron', 'kimahri', 'wakka', 'lulu', 'rikku'];
-  return { ...spherimorphBuild, activeSlots: [...front], reserve: seven.filter((id) => !front.includes(id)) };
+  const base = bag === 'temple' ? withTempleBag() : spherimorphBuild;
+  return { ...base, activeSlots: [...front], reserve: seven.filter((id) => !front.includes(id)) };
 }
 
 export type Outcome = 'victory' | 'defeat' | 'stalled';
@@ -96,6 +106,20 @@ function decide(engine: BattleEngine, d: Input, line: Line, rand: () => number, 
   if (line.kind === 'careless') return fallback();
 
   const party = front(engine).filter(alive);
+  if (line.kind === 'poison' || line.kind === 'brute') {
+    // the lines that never read the clue: the skeleton's care (when the line has it), then the line's own plan, and Defend for the rest
+    const tended = line.care ? care(d, party) : null;
+    if (tended) return tended;
+    const boss = actor(engine, SM);
+    if (line.kind === 'poison') return has(boss, 'poison') ? defend() : (row(d, 'item', 'poison-fang', SM) ?? defend());
+    if (me === 'auron') return (has(boss, 'armor-break') ? null : row(d, 'ability', 'armor-break', SM)) ?? swing ?? defend();
+    if (me === 'lulu' && !engine.state().activeIds.includes('auron')) {
+      // the shipped front has no Auron: the caster's turn is a Switch for him (Switch is legal in this fight, as in the game)
+      const sw = d.commands.find((c) => c.enabled && c.command.kind === 'switch' && (c.command as { extra?: { outId?: string; inId?: string } }).extra?.inId === 'auron');
+      if (sw) return { ...sw.command, targets: [] } as Command;
+    }
+    return defend();
+  }
   if (line.kind === 'blind') {
     const tended = care(d, party); // the blind line has no tactic to bring its own care
     if (tended) return tended;
@@ -135,10 +159,10 @@ function decide(engine: BattleEngine, d: Input, line: Line, rand: () => number, 
 }
 
 /** Play one fight to an outcome. */
-export function play(seed: number, lineName: string, frontLine: readonly [string, string, string] = ['tidus', 'yuna', 'lulu'], maxDecisions = 4_000): Run {
+export function play(seed: number, lineName: string, frontLine: readonly [string, string, string] = ['tidus', 'yuna', 'lulu'], maxDecisions = 4_000, bag: Bag = 'woods'): Run {
   const line = LINES[lineName];
   if (!line) throw new Error(`no line ${lineName}`);
-  const engine = newEngine(seed, buildWith(frontLine));
+  const engine = newEngine(seed, buildWith(frontLine, bag));
   const rand = rng(seed * 7919 + 13);
   const memo: { clue: unknown } = { clue: null };
   let decisions = 0;
@@ -166,8 +190,8 @@ export function play(seed: number, lineName: string, frontLine: readonly [string
 }
 
 /** Wins, as a count, over `seeds` (1-based, `from` up). */
-export function wins(lineName: string, frontLine: readonly [string, string, string], seeds: number, from = 1): { won: number; runs: Run[] } {
+export function wins(lineName: string, frontLine: readonly [string, string, string], seeds: number, from = 1, bag: Bag = 'woods'): { won: number; runs: Run[] } {
   const runs: Run[] = [];
-  for (let seed = from; seed < from + seeds; seed++) runs.push(play(seed, lineName, frontLine));
+  for (let seed = from; seed < from + seeds; seed++) runs.push(play(seed, lineName, frontLine, 4_000, bag));
   return { won: runs.filter((r) => r.outcome === 'victory').length, runs };
 }

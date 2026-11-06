@@ -9,12 +9,18 @@ import { FFXContentRegistry, createFFXEngine } from '../../../src/battle/ffx/ind
 import { applyState } from '../../../src/battle/ffx/ai/spherimorph-rules.ts';
 import { ALL_ABILITIES, ENEMY_GROUPS_BY_ID, ITEMS } from '../../../src/data/ffx/index.ts';
 import { spherimorphBuild } from '../../../src/data/ffx/builds/spherimorph.ts';
+import { macalaniaBuild } from '../../../src/data/ffx/builds/macalania.ts';
 
 export const content = new FFXContentRegistry();
 content.addAbilities([...ALL_ABILITIES]);
 content.addItems(Object.values(ITEMS));
 
 export const SM = 'spherimorph';
+
+/** The Woods' party with the Temple's bag as it is (its two Poison Fangs back in): the alternative the bag lever is measured against (`builds/spherimorph.ts`). Test-only. */
+export function withTempleBag(party: FFXPartyBuild = spherimorphBuild): FFXPartyBuild {
+  return { ...party, inventory: structuredClone(macalaniaBuild.inventory) };
+}
 
 export type Input = Extract<Decision, { kind: 'player-input' }>;
 

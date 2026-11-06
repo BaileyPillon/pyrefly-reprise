@@ -96,7 +96,7 @@ describe('each rule, on the real engine\'s first menus', () => {
     expect(command(engine, d)?.kind).toBe('defend');
   });
 
-  it('Lulu: no clue, Focus up to two stacks then wait; a clue, the opposite element at the highest tier (Fira for an Ice answer, Blizzara for Fire, Thundara for Water, Watera for Thunder)', () => {
+  it('Lulu: no clue, Focus (no cap); a clue, the opposite element at the highest tier (Fira for an Ice answer, Blizzara for Fire, Thundara for Water, Watera for Thunder)', () => {
     const engine = newEngine(2);
     clean(engine);
     const d = inputFor(engine, 'lulu');
@@ -119,12 +119,15 @@ describe('each rule, on the real engine\'s first menus', () => {
     expect(idOf(command(stale, menu))).toBe('focus');
   });
 
-  it('Lulu never casts without a clue, and never probes: with Focus at two stacks she waits', () => {
-    const engine = newEngine(2);
-    clean(engine);
-    const d = inputFor(engine, 'lulu');
-    (actor(engine, 'lulu').statuses as Record<string, unknown>)['focus'] = { id: 'focus', turnsRemaining: 254, ticksRemaining: null, charges: null, stacks: 2, permanent: false };
-    expect(command(engine, d)?.kind).toBe('defend');
+  it('Lulu never casts without a clue, and never probes, and never WAITS: Focus at two stacks, or five, she builds another (FFX has no Defend row, so a wait would hand the card to the ranking, which reads the hidden weakness)', () => {
+    for (const stacks of [2, 5, 9]) {
+      const engine = newEngine(2);
+      clean(engine);
+      const d = inputFor(engine, 'lulu');
+      (actor(engine, 'lulu').statuses as Record<string, unknown>)['focus'] = { id: 'focus', turnsRemaining: 254, ticksRemaining: null, charges: null, stacks, permanent: false };
+      const pick = command(engine, d);
+      expect([pick?.kind, idOf(pick), targetOf(pick)], `${stacks} stacks`).toEqual(['ability', 'focus', 'lulu']);
+    }
   });
 
   it('Yuna: Cure for one hurt, Cura for two; Protect on the bare once it is under half; otherwise she waits', () => {

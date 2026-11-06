@@ -95,8 +95,6 @@ export function spherimorph(): EnemyDef {
     },
     abilityIds: [SPHERIMORPH_ROWS.fire, SPHERIMORPH_ROWS.blizzard, SPHERIMORPH_ROWS.thunder, SPHERIMORPH_ROWS.water, SPHERIMORPH_ROWS.shift, SPHERIMORPH_ROWS.press, SPHERIMORPH_ROWS.playerFire, SPHERIMORPH_ROWS.playerBlizzard, SPHERIMORPH_ROWS.playerThunder, SPHERIMORPH_ROWS.playerWater],
     flags: { isBoss: true },
-    sensorText: 'It takes hurt from one element only and drinks the rest. Strike it plainly: what answers shows which.',
-    scanText: 'The guardian of the spring. It takes damage from a single element and takes in the others, and the element it takes damage from changes when you strike it there. A plain blow shows which, by the spell it answers with.',
     threatenChance: 25, // RE 1.2: the byte is a success percentage and it is 25
     zanmatoLevel: SPHERIMORPH_ZANMATO_BYTE + 1, // RE 1.3: the loot record's Zanmato level byte is 3; `zanmatoLevel` is the byte plus 1
     poisonTickPercent: SPHERIMORPH_POISON_PERCENT,

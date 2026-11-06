@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { AbilityDef, FFXCombatant } from '../../../src/battle/common/types.ts';
 import { resolveAbility } from '../../../src/battle/ffx/abilities.ts';
-import { peekReactions, takeReaction } from '../../../src/battle/ffx/ai/hooks.ts';
+import { peekReactions } from '../../../src/battle/ffx/ai/hooks.ts';
 import {
   PRESS_CHANCE_BELOW,
   SM_ELEMENTS,
@@ -24,46 +24,8 @@ import {
 } from '../../../src/battle/ffx/ai/spherimorph-rules.ts';
 import { spherimorph } from '../../../src/data/ffx/enemies/spherimorph.ts';
 import { SM, actor, ctxOf, flags, give, newEngine, setState, sm, stateOf } from '../helpers/spherimorphDrive.ts';
-
-type Engine = ReturnType<typeof newEngine>;
-
-/** What the script queued after one action on it: the row, who it is aimed at, and the state afterwards. */
-interface Reply {
-  readonly kind: 'none' | 'attacker' | 'front' | 'shift';
-  readonly row?: string;
-  readonly targets?: readonly string[];
-  readonly state: number;
-  readonly shifts: number;
-}
-
-function drain(engine: Engine): void {
-  const ctx = ctxOf(engine);
-  while (takeReaction(ctx) !== undefined);
-}
-
-/** Run one command on Spherimorph through the real damage path and read what the script asked for. */
-function replyTo(engine: Engine, userId: string, def: AbilityDef): Reply {
-  const ctx = ctxOf(engine);
-  drain(engine);
-  resolveAbility(ctx, actor(engine, userId), def, [SM]);
-  const queued = peekReactions(ctx);
-  const state = stateOf(engine);
-  const shifts = (flags(engine)['sm.shifts'] as number) ?? 0;
-  drain(engine);
-  const first = queued.find((r) => r.kind === 'command'); // a hint banner (an 'emit') may be queued before the answer
-  if (first === undefined || first.kind !== 'command') return { kind: 'none', state, shifts };
-  const command = first.command as { id?: string; targets: string[] };
-  const row = command.id;
-  if (row === SM_ROWS.shift) return { kind: 'shift', row, state, shifts };
-  const monsterSide = row !== undefined && row.startsWith('spherimorph-');
-  return { kind: monsterSide ? 'front' : 'attacker', ...(row !== undefined ? { row } : {}), targets: command.targets, state, shifts };
-}
-
-const ability = (engine: Engine, id: string): AbilityDef => {
-  const def = ctxOf(engine).content.ability(id);
-  if (!def) throw new Error(`no ability ${id}`);
-  return def;
-};
+import { MATRIX, MATRIX_COMMANDS } from '../helpers/spherimorphMatrix.ts';
+import { ability, drain, replyTo, type Engine, type Reply } from '../helpers/spherimorphReply.ts';
 
 /** State s: [the weakness element, the answer element]. */
 const OPPOSITE: Readonly<Record<string, string>> = { fire: 'ice', ice: 'fire', lightning: 'water', water: 'lightning' };
@@ -207,18 +169,19 @@ describe('the reply matrix: 17 commands in each of the four states (RE 4.3, the 
     { name: 'Power Shot (Wakka)', user: 'wakka', id: 'power-shot', element: null },
   ];
 
-  /** The note's table, by rule: what the script asks for, from the state's weakness `W` and answer rows. */
-  function expected(c: (typeof CASES)[number], state: number): { kind: Reply['kind']; row?: string } {
-    const s = SM_STATES[state]!;
-    const physical = c.name.startsWith('Attack');
-    if (c.name === 'Scan') return { kind: 'front', row: s.magic };
-    if (c.name === 'Flare (no element)' || c.name === 'Holy') return { kind: 'front', row: s.magic };
-    if (c.name === 'Element Reels (Wakka)' || c.name === 'Power Shot (Wakka)') return { kind: 'attacker', row: s.physical }; // special, damaged, no element
-    const matches = c.element === s.weak;
-    if (matches) return { kind: 'shift' };
-    if (physical) return { kind: 'attacker', row: s.physical }; // none, or an absorbed weapon element (healed): the player-side row on the attacker
-    return { kind: 'front', row: s.magic };
+  /** The spell's name as the interpreter prints it: the player-side row and the monster-side row of an element share one. */
+  const SPELL: Readonly<Record<string, string>> = { blizzard: 'Blizzard', fire: 'Fire', thunder: 'Thunder', water: 'Water' };
+  /** What the engine asked for, in the interpreter's notation (`spherimorphMatrix.ts`): `Blizzard(p)->attacker`, `Water(m)->frontline`, `ElementalShift->self`. */
+  function notation(got: Reply): string {
+    if (got.kind === 'shift') return 'ElementalShift->self';
+    const name = SPELL[(got.row ?? '').replace('spherimorph-', '')] ?? String(got.row);
+    return got.kind === 'front' ? `${name}(m)->frontline` : `${name}(p)->attacker`;
   }
+
+  it("the cases are the interpreter's 17 commands in its order, and the literal table has 17 rows in each of the four states", () => {
+    expect(CASES.map((c) => c.name)).toEqual([...MATRIX_COMMANDS]);
+    expect(MATRIX.map((rows) => rows.length)).toEqual([17, 17, 17, 17]);
+  });
 
   for (const c of CASES) {
     it(`${c.name}: the same answer in all four states as the interpreter gave`, () => {
@@ -235,9 +198,11 @@ describe('the reply matrix: 17 commands in each of the four states (RE 4.3, the 
         // Element Reels is a minigame shell in this engine (no hit record of its own); its reading is tested below.
         if (c.name === 'Element Reels (Wakka)') continue;
         const got = replyTo(engine, user, def);
-        const want = expected(c, state);
-        expect(got.kind, `${c.name} / state ${state}`).toBe(want.kind);
-        if (want.row !== undefined) expect(got.row, `${c.name} / state ${state}`).toBe(want.row);
+        const [sign, reply] = MATRIX[state]![MATRIX_COMMANDS.indexOf(c.name as never)]!;
+        expect(notation(got), `${c.name} / state ${state}`).toBe(reply);
+        // the sign of the HP change is the kernel's: a weakness hit and a plain blow take HP, an absorbed element gives it (Scan takes none in the engine: the interpreter's "dmg 100" is the script's input record, so only its reply is pinned)
+        if (c.name !== 'Scan') expect(got.sign, `${c.name} / state ${state}: the HP change`).toBe(sign);
+        const want = { kind: reply.endsWith('->attacker') ? 'attacker' : reply.endsWith('->frontline') ? 'front' : 'shift' };
         if (want.kind === 'attacker') expect(got.targets, `${c.name} / state ${state}`).toEqual([user]);
         if (want.kind === 'front') expect([...(got.targets ?? [])].sort(), `${c.name} / state ${state}`).toEqual(['lulu', 'tidus', 'yuna']);
         if (want.kind === 'shift') {
@@ -357,7 +322,7 @@ describe('the gates (RE 4.3 items 1 to 3)', () => {
     expect(peekReactions(ctx).filter((r) => r.kind === 'command')).toHaveLength(0);
   });
 
-  it('Doublecast: the first spell of a pair is ignored (the gate is armed), the second is handled normally', () => {
+  it("Doublecast gate, with the runtime field set by hand: the first spell of a pair is ignored (the gate is armed), the second is handled normally (the engine's own pair is in spherimorph-doublecast.test.ts)", () => {
     const engine = newEngine(6);
     setState(engine, 0);
     const ctx = ctxOf(engine);

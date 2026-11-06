@@ -192,7 +192,7 @@ describe('the party: the Macalania preset without Shiva, with the front line thi
     expect(spherimorphBuild.aeons).toEqual(macalaniaBuild.aeons.filter((a) => a.id !== 'shiva'));
   });
 
-  it('Auron\'s Shooting Star is taken out (defeating Spherimorph unlocks it); everything else is the preset\'s: no stat, no ability, no item, no gauge added', () => {
+  it('Auron\'s Shooting Star is taken out (defeating Spherimorph unlocks it); everything else is the preset\'s: no stat, no ability, no item, no gauge added, and one item taken out of the bag (the Poison Fangs)', () => {
     const auron = spherimorphBuild.members.find((m) => m.id === 'auron')!;
     const temple = macalaniaBuild.members.find((m) => m.id === 'auron')!;
     expect(auron.overdrive.unlockedOverdriveIds).toEqual(temple.overdrive.unlockedOverdriveIds.filter((o) => o !== 'shooting-star'));
@@ -203,7 +203,8 @@ describe('the party: the Macalania preset without Shiva, with the front line thi
       expect(m.learnedAbilityIds).toEqual(t.learnedAbilityIds);
       expect(m.equipment).toEqual(t.equipment);
     }
-    expect(spherimorphBuild.inventory).toEqual(macalaniaBuild.inventory);
+    // the one thing the Woods' bag takes out: the Temple's two Poison Fangs (the review of 2026-11-06, M1; the bench's reason is in spherimorph-bench.test.ts)
+    expect(spherimorphBuild.inventory).toEqual(macalaniaBuild.inventory.filter((s) => s.itemId !== 'poison-fang'));
     expect(spherimorphBuild.gil).toBe(macalaniaBuild.gil);
   });
 

@@ -18,7 +18,9 @@
  * 3. **Probe when the clue is stale or missing.** The first fighter in the line who can strike plain (Tidus; any non-caster) attacks with an unelemented weapon: it is divided by three, but it is always answered with the
  *    clue (RE 4.3 item 6). Lulu never probes.
  * 4. **Nuke when the clue is known.** Lulu casts the opposite of the clue, at the highest tier she has (RE 6: Fira 1,822 to 2,056 on the weakness against a wrong-element -ra cast that heals it about 1,300). The hit
- *    shifts the state, so the next turn probes again (one time in four it draws the same state; the line probes anyway, because a guess costs a heal). While the clue is stale she builds Focus (up to two stacks).
+ *    shifts the state, so the next turn probes again (one time in four it draws the same state; the line probes anyway, because a guess costs a heal). While the clue is stale she builds Focus, **with no cap** (review of 2026-11-06, a leak found in the fix pass): FFX's command window has no Defend row, so a line that says "wait" is not printable and the card then falls back
+ *    to its own ranking, which simulates each row on the live board and so reads the hidden weakness (Lulu's top row was then the very element it is weak to). A Focus row is always printable, costs no MP and never leaks. The
+ *    waits of Tidus and Yuna fall back the same way and show a harmless row (Cheer, a Nul spell), which reads nothing of the weakness; `spherimorph-tactic.test.ts` pins that no card of the three changes with the weakness.
  * 5. **Tidus, clue known:** Haste on Lulu, once; otherwise Defend (a second plain blow would only draw another answer). **Yuna:** Protect on the line once Spherimorph is under half and Press has begun (RE 4.2).
  * 6. **Auron, when he is in front:** Armor Break once (RE 1.2: it lands, and takes the Armored division away, RE 6: his plain blow 382 to 431 becomes 900 to 1,016); then he strikes. Wakka, Kimahri and Rikku swing.
  * 7. Anything else swings (`null`), as the generic ladder does after a tactic that has no opinion.
@@ -56,7 +58,6 @@ const CAST_LADDER: Readonly<Record<Element, readonly string[]>> = {
 const HEAL_UNDER = 0.55;
 const HEAL_UNDER_OTHERS = 0.33;
 const HEAL_ITEMS = ['mega-potion', 'x-potion', 'hi-potion'] as const;
-const FOCUS_UP_TO = 2;
 
 const alive = (c: FFXCombatant): boolean => c.alive && c.hp > 0 && !c.removed;
 
@@ -130,11 +131,8 @@ export const spherimorph: Tactic = (actorId, commands, engine: BattleEngine) => 
       }
       return null;
     }
-    const stacks = (me.statuses as Record<string, { stacks?: number } | undefined>)['focus']?.stacks ?? 0;
-    if (stacks < FOCUS_UP_TO) {
-      const focus = pick(commands, 'ability', 'focus', me.id);
-      if (focus) return focus;
-    }
+    const focus = pick(commands, 'ability', 'focus', me.id);
+    if (focus) return focus;
     return pick(commands, 'defend', undefined);
   }
 
