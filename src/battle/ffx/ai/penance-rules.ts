@@ -114,11 +114,6 @@ export function bothArmsUp(ctx: Pick<Ctx, 'state'>): boolean {
   return PENANCE_ARM_IDS.every((id) => !armDown(ctx, id));
 }
 
-/** True when this battle is the Penance formation at all (the set-up and the hooks test it). */
-export function isPenanceBattle(ctx: Pick<Ctx, 'state'>): boolean {
-  return penanceBody(ctx)?.enemy?.aiScriptId === PENANCE_SCRIPT;
-}
-
 /** The HP below which the change comes (integer division, as the script does it). */
 export function changeLine(maxHp: number): number {
   return Math.floor((maxHp * PHASE2_NUMERATOR) / PHASE2_DENOMINATOR);
