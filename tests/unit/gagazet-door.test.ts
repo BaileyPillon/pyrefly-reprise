@@ -16,7 +16,7 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useDoorClock } from './helpers/doorClock.ts';
-import { DOOR_WORDS_IN_ORDER } from './helpers/doorWords.ts';
+import { DOOR_WORDS_IN_ORDER, DOOR_PAIR_TEST_TIMEOUT_MS } from './helpers/doorWords.ts';
 
 import { PartyPrepScreen } from '../../src/app/screens/PartyPrepScreen.ts';
 import { TitleScreen } from '../../src/app/screens/TitleScreen.ts';
@@ -380,7 +380,7 @@ describe('the nine doors do not interfere', () => {
       await flush();
       expect(b.picked, `${other.word}${WORD}`).toEqual([other.chapter]);
     }
-  }, 240_000); // sixteen doors (Penance joined at ch-penance, 2026-11-06; fifteen took 180 s) at the r74 integration (three real boards per other door, 42 mounts): about 16 s on a quiet machine and over 60 s when the PC is busy, so the pair test gets 180 s; a hang still fails, later
+  }, DOOR_PAIR_TEST_TIMEOUT_MS); // the allowance follows the number of doors (`helpers/doorWords.ts`): three real boards per other door
 });
 
 const keyDown = (key: string, init: KeyboardEventInit = {}): void => {

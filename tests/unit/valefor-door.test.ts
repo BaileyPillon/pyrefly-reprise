@@ -17,6 +17,7 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useDoorClock } from './helpers/doorClock.ts';
+import { DOOR_PAIR_TEST_TIMEOUT_MS } from './helpers/doorWords.ts';
 
 import { PartyPrepScreen } from '../../src/app/screens/PartyPrepScreen.ts';
 import { TitleScreen } from '../../src/app/screens/TitleScreen.ts';
@@ -393,7 +394,7 @@ describe('the six doors do not interfere', () => {
       await flush();
       expect(c.picked, `${other.word.slice(0, -1)}${WORD}`).toEqual([VALEFOR]);
     }
-  }, 180_000); // fifteen doors at the r74 integration (three real boards per other door, 42 mounts): about 16 s on a quiet machine and over 60 s when the PC is busy, so the pair test gets 180 s; a hang still fails, later (earlier note: about 10 s alone (it types the door words one pair at a time with real timers), so the 15 s default failed it in two full runs under load (2026-10-30); a hang still fails, later)
+  }, DOOR_PAIR_TEST_TIMEOUT_MS); // the allowance follows the number of doors (`helpers/doorWords.ts`): three real boards per other door
 });
 
 const keyDown = (key: string, init: KeyboardEventInit = {}): void => {
