@@ -35,6 +35,7 @@ import { FFX2_EXPERIMENT_DOC } from './ffx2-experiment.ts';
 import { FFX2_TOURIST_TRAP_DOC } from './ffx2-tourist-trap.ts';
 import { FFX2_VALEFOR_BESAID_DOC } from './ffx2-valefor-besaid.ts';
 import { FFX2_ANGRA_MAINYU_DOC } from './ffx2-angra-mainyu.ts';
+import { FFX2_YUNAS_BALLAD_DOC } from './ffx2-yunas-ballad.ts';
 
 export const GUIDE_DOCS: readonly GuideDoc[] = [
   SEYMOUR_FLUX_DOC,
@@ -64,6 +65,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   FFX2_TOURIST_TRAP_DOC, // the hidden Tourist Trap (FFX-2 only)
   FFX2_VALEFOR_BESAID_DOC, // the hidden Valefor at Besaid (FFX-2 only)
   FFX2_ANGRA_MAINYU_DOC, // the hidden Angra Mainyu (FFX-2 only)
+  FFX2_YUNAS_BALLAD_DOC, // the hidden Yuna Ballad (FFX-2 only)
 ];
 
 /** The document for one chapter id, if it has one. */
