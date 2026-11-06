@@ -50,6 +50,9 @@ import { type Ctx, abilityOf } from './state.ts';
 import { AEON_SLOT } from './adapt/slots.ts';
 import { aeonRosterRemoved, applyRosterRemoval, rosterEmptied } from './roster-removal.ts';
 
+import { heldRefuses } from './ai/geosgaeno-hold.ts';
+import { applyFloodedWaysSetup } from './ai/flooded-ways-setup.ts';
+
 export { applyPenanceSetup } from './ai/penance.ts'; // the hidden Penance chapter's opening state reaches `setup.ts` the same way
 export { applyPlatformSetup, markFirstStrike } from './platforms.ts'; // the Spectral Keeper's set-up calls reach `setup.ts` through this module (it is at the house 400 lines)
 
@@ -128,6 +131,7 @@ export function applyFormationCommandDisables(ctx: Ctx, group: EnemyGroupDef): v
   }
   // Chapter III's roster removal (`./roster-removal.ts`, switch off): the aeons the field event took out of the party before this link; the Grand Summon row is checked for "nothing left".
   if (applyRosterRemoval(ctx, group)) ctx.state.flags[COMMAND_OFF_ANY] = true;
+  applyFloodedWaysSetup(ctx, group); // the hidden Flooded Ways' opening state (the water flag, Evrae Altana's Zombie, the Gate Locks without turns): a no-op for every other formation
   if (!SCRIPT_COMMAND_DISABLES.on) return;
   for (const off of group.scriptCommandDisables ?? []) {
     if (off.command < MENU_COMMAND_FLOOR) {
@@ -185,6 +189,7 @@ function isGrandSummon(ctx: Ctx, command: Command): boolean {
 
 /** Does this submitted command belong to a command the formation switched off for this actor? `submit()`'s half of the rule. */
 export function commandRefused(ctx: Ctx, user: FFXCombatant, command: Command): boolean {
+  if (heldRefuses(ctx, user, command)) return true; // Geosgaeno's swallowed character may Struggle or Defend and nothing else (the hidden Flooded Ways, FFX only)
   if (command.kind === 'summon') return aeonScriptOff(ctx, command.id) || aeonRosterRemoved(ctx, command.id);
   if (command.kind === 'overdrive' && isGrandSummon(ctx, command)) {
     if (rosterEmptied(ctx)) return true; // the field event took every aeon out of the party: the list is empty, the game draws the opener greyed (-3) and refuses it

@@ -67,7 +67,9 @@ describe('the target word table (the game\'s command table, by record id)', () =
     // monster command is never asked of the set. Everything else must agree, id for id.
     // Four commands are menu markers or airship orders (Grand Summon, the Fury and Mix menu rows, Pull back): not attacks, never aimed at a distant foe, absent from the set.
     // The hidden Spectral Keeper's Move (0x3103) is a trigger row like the airship orders: its aim is a Circle (no BattleDistance), the menu lists the legal ones itself, and the hand-written set stays the 48 attacks.
-    const markers = new Set(['grand-summon', 'fury', 'mix', 'pull-back', 'move']);
+    // The hidden Flooded Ways' Open lock (0x312F, 2026-11-06) is a trigger row too: its aim is a Gate Lock (no BattleDistance), the menu lists the standing locks itself.
+    // And its Struggle (0x3109): the table says reach 0 like an Attack, but its one aim is the monster holding the swallowed character (BattleDistance 0), so the hand-written set (which `re-parity-ai-sin-face` keeps to the 0x30xx ids) is not widened for it.
+    const markers = new Set(['grand-summon', 'fury', 'mix', 'pull-back', 'move', 'open-lock', 'struggle']);
     const disagree: string[] = [];
     let checked = 0;
     for (const a of [...CORE_ABILITIES, ...ALL_ABILITIES]) {

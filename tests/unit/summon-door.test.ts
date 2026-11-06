@@ -16,6 +16,7 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useDoorClock } from './helpers/doorClock.ts';
+import { DOOR_WORDS_IN_ORDER } from './helpers/doorWords.ts';
 
 import { PartyPrepScreen } from '../../src/app/screens/PartyPrepScreen.ts';
 import { TitleScreen } from '../../src/app/screens/TitleScreen.ts';
@@ -77,8 +78,8 @@ describe('the word against every other door word', () => {
   const others = registered;
   void DARK_MIRROR_WORD;
 
-  it('the registered neighbours are the seventeen already in the table (the Spectral Keeper’s `keeper`, the Fallen Maesters’ `infinito`, the hidden 3D Bahamut’s `yrp` and, last, the Wind Waker chapter’s `waker`), the Mirror Aeons chapter’s `yojimbo` among them', () => {
-    expect(registered).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', DARK_MIRROR_WORD, 'keeper', 'infinito', 'yrp', 'waker', 'gear', 'darkaeon', 'judgment']); // `judgment`: the hidden Penance chapter's (FFX, chapter 35, 2026-11-06); `darkaeon`: the Dark Aeons' (FFX, chapter 34, 2026-11-06); `gear`: the anime chapter's (FFX-2, chapter 33, 2026-11-06); `yrp`: the hidden 3D Bahamut's (FFX-2, chapter 31, ch-yrp 2026-11-02); `waker`: the Wind Waker chapter's (FFX-2, chapter 32)
+  it('the registered neighbours are every other word already in the table (the list is `helpers/doorWords.ts`, one line per door with its chapter), the Mirror Aeons chapter’s `yojimbo` among them', () => {
+    expect(registered).toEqual(DOOR_WORDS_IN_ORDER.filter((w) => w !== WORD).map((w) => (w === 'yojimbo' ? DARK_MIRROR_WORD : w)));
   });
 
   it('no word begins with, ends with or contains the other, and no end of one is the beginning of the other, in either order (the Dark Mirror lane\'s yojimbo included)', () => {

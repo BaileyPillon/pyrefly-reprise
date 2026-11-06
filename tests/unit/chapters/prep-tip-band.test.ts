@@ -13,6 +13,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { CHAPTER_META, UNLISTED_CHAPTER_META, getChapterMeta } from '../../../src/data/chapter-meta.ts';
+import { CHAPTERS, EXPERIMENT_CHAPTERS, UNLISTED_CHAPTERS } from '../../../src/data/encounters.ts';
 import { prepTipFor } from '../../../src/data/chapter-prep-tips.ts';
 import {
   BAND,
@@ -175,8 +176,10 @@ describe('the tips the model says overflow at 1600 x 900 are the ones job TIP-1 
   const end = handoff.indexOf('\n### ', start + 5);
   const section = start < 0 ? '' : handoff.slice(start, end < 0 ? undefined : end);
 
-  it('every listed and hidden chapter is put through the model: 35 of them (the anime chapter, 2026-11-06, is the thirty-third; the hidden Dark Aeons and Penance joined it the same day, their tips short enough to fit), each with three objectives', () => {
-    expect(all).toHaveLength(35);
+  it('every listed and hidden chapter is put through the model (as many as the chapter registries hold: the count follows them, it was a literal that every new hidden chapter moved), each with three objectives', () => {
+    // every chapter the registries hold has its record in the model, the FF7 Guard Scorpion (no pause-screen record) alone excepted: the ids are compared, so the count follows the registries
+    const registered = [...CHAPTERS, ...UNLISTED_CHAPTERS, ...EXPERIMENT_CHAPTERS].map((c) => c.id).filter((id) => id !== 'ff7-guard-scorpion');
+    expect(all.map((m) => m.id).sort()).toEqual(registered.sort());
     for (const meta of all) expect(meta.objectives, meta.id).toHaveLength(3);
   });
 

@@ -80,13 +80,15 @@ async function runChapter(chapter: Chapter, entrances: boolean): Promise<CensusR
     seed,
     findGroup: findEnemyGroup,
     audio: new FakeAudio(),
-    onLink: (info) => {
-      link = info.links;
+    // The census counts FIGHTS PLAYED (`stageCall`, the opening's entries, the first menus), not the chain's position: the hidden Flooded Ways skips an area whose boss already fell and the position moves over it
+    // (`info.links` is 4 for its second fight on that route), so the ordinal here is its own count. Without a skipped area the two are the same number, for every other chapter.
+    onLink: () => {
+      link++;
       runStart[link] = clock.now;
     },
   });
   observe.fn = null;
-  return { chapter: chapter.id, game: chapter.game, stage, census, built: [...built], firstMenuAt: firstMenuAt.map((t, i) => t - (runStart[i] ?? 0)), menuAbs: [...firstMenuAt], kinds, outcome: result.outcome.kind, links: result.links };
+  return { chapter: chapter.id, game: chapter.game, stage, census, built: [...built], firstMenuAt: firstMenuAt.map((t, i) => t - (runStart[i] ?? 0)), menuAbs: [...firstMenuAt], kinds, outcome: result.outcome.kind, links: link };
 }
 
 interface Row {

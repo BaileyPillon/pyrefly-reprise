@@ -16,6 +16,7 @@ import { COMMAND_RECORDS_DARK_AEONS } from '../enemies/dark-aeons-abilities.ts';
 import { COMMAND_RECORDS_SPECTRAL_KEEPER } from '../enemies/spectral-keeper-abilities.ts'; // the Spectral Keeper's seven rows (hidden chapter, 2026-11-02)
 import { COMMAND_RECORDS_DARK_SIX } from '../enemies/dark-aeons-six-abilities.ts'; // the six other Dark Aeons' twenty rows (hidden chapter, 2026-11-06)
 import { COMMAND_RECORDS_PENANCE } from '../enemies/penance-abilities.ts'; // Penance's and the arms' nine new rows (hidden chapter, 2026-11-06)
+import { COMMAND_RECORDS_FLOODED_WAYS } from '../enemies/flooded-ways-abilities.ts'; // Geosgaeno's, Evrae Altana's and the two party commands' rows (hidden chapter, 2026-11-06)
 
 /**
  * The possessed aeons' plain Attack: monster-magic-2 record 0x6000 "Attack" (accuracy formula 2 on a byte of 90, formula 1,
@@ -36,6 +37,7 @@ export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>>
   ...COMMAND_RECORDS_SPECTRAL_KEEPER,
   ...COMMAND_RECORDS_DARK_SIX,
   ...COMMAND_RECORDS_PENANCE,
+  ...COMMAND_RECORDS_FLOODED_WAYS,
   'lance-of-atrophy': { id: 0x6078, type: 0, flagsMisc: 0x6, flagsDamage: 0x1, damageClass: 1, shatter: 30, rank: 3, chances: [[1, 100]] }, // Lance of Atrophy (our numbers differ: section 4)
   'full-life': { id: 0x60f5, type: 0, flagsMisc: 0x4800086, flagsDamage: 0x32, damageClass: 1, rank: 3, chances: [[0, 254]] }, // Full Life
   'cross-cleave': { id: 0x6074, type: 0, flagsMisc: 0x4006, flagsDamage: 0x1, damageClass: 1, rank: 3 }, // Cross Cleave (our numbers differ: section 4)

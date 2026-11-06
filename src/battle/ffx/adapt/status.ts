@@ -352,6 +352,7 @@ export function runStatusStep(input: StatusStepInput, draw: (modulus: number) =>
     mask: 0,
     ctbDamage: 0,
     extraMask: mergeExtraStatusWord(status.extra, 0, usesWeapon),
+    ...(ctx.state.flags['battle.inWater'] === true ? { flags: { petrifyShattersParty: true } } : {}), // a water battle (the formation block's byte 3; the hidden Flooded Ways, FFX only): a Petrify that lands on a party member shatters them
   };
   const result = inflictStatuses(kernelInput, draw);
   if (result.doomCounter !== null && doomInitial === undefined) doomStart(target); // a Doom landed with no countdown to start from: throws

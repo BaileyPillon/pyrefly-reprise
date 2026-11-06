@@ -50,6 +50,8 @@ import './dark-aeons.ts'; // the hidden Mirror Aeons chapter (FFX only): Dark Yo
 import './dark-aeons-six.ts'; // the hidden Dark Aeons chapter (FFX only, 2026-11-06): Dark Valefor, Ifrit, Ixion (two scripts), Shiva, Bahamut and Anima
 import './spectral-keeper.ts'; // the hidden Spectral Keeper chapter (FFX only): the Keeper and its Circles (the glyph mines)
 import './penance.ts'; // the hidden Penance chapter (FFX only): Penance and its two Arms
+import './flooded-ways.ts'; // the hidden Flooded Ways chapter (FFX only, 2026-11-06): Evrae Altana, the Gate Locks and Geosgaeno
+import { FLOODED_ROWS, applyOpenLock, openLockAvailable, openLockOffered } from './flooded-ways.ts';
 import { freeCircleIds, moveTo, platformOf, ringActive } from '../platforms.ts';
 
 export * from './types.ts';
@@ -224,6 +226,14 @@ const TRIGGERS: Readonly<Record<string, TriggerHandler>> = {
     apply: (ctx, user, command) => moveTo(ctx, user, command),
     disabledReason: 'No free glyph',
     rejectedMessage: (user) => `${user.name} cannot step there`,
+  },
+  /** **Open lock** (the hidden Flooded Ways chapter, FFX only): the party's key to a Gate Lock of the Via Purifico's first two areas; see `./gate-locks.ts`. */
+  [FLOODED_ROWS.openLock]: {
+    available: (ctx, user) => openLockAvailable(ctx, user),
+    offered: (ctx, user) => openLockOffered(ctx, user),
+    apply: (ctx, user, command) => applyOpenLock(ctx, user, command),
+    disabledReason: 'No lock left',
+    rejectedMessage: (user) => `${user.name} cannot open that`,
   },
   /**
    * **Evrae, on the *Fahrenheit*** — the three orders to Cid

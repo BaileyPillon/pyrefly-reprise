@@ -183,7 +183,9 @@ describe('the data behind it', () => {
     const maesters = ['40-black-elemental', '60-concherer', '80-chac'].map((n) => `ffx2-via-infinito-floor-${n}`);
     // The hidden Dark Aeons (FFX, 2026-11-06) sets it on links 2 to 7: each is a fresh fight that restores the party and the aeons on entry and is its own retry checkpoint, with no Save Sphere between the stops (`data/ffx/enemies/dark-aeons-six-groups.ts`).
     const darkAeons = ['ifrit', 'ixion-1', 'ixion-2', 'shiva', 'anima', 'bahamut'].map((n) => `dark-aeons-${n}`);
-    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-') && !id.startsWith('ffx2-via-infinito-floor-') && !id.startsWith('dark-aeons-'))).toEqual([DJOSE_EXPERIMENT_2]);
+    // The hidden Flooded Ways (FFX, 2026-11-06) sets it on its Baaj Temple link: a fresh fight that restores the party on entry, its own retry checkpoint, no Save Sphere (`data/ffx/enemies/flooded-ways-groups.ts`).
+    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-') && !id.startsWith('ffx2-via-infinito-floor-') && !id.startsWith('dark-aeons-') && id !== 'flooded-geosgaeno')).toEqual([DJOSE_EXPERIMENT_2]);
+    expect(flagged.filter((id) => id === 'flooded-geosgaeno')).toEqual(['flooded-geosgaeno']);
     expect(flagged.filter((id) => id.startsWith('dark-aeons-')).sort()).toEqual([...darkAeons].sort());
     expect(flagged.filter((id) => id.startsWith('ffx2-via-infinito-floor-')).sort()).toEqual(maesters);
     expect(flagged.filter((id) => id.startsWith('mirror-yojimbo-')).sort()).toEqual(mirrorTiers);

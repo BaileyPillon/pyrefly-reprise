@@ -42,6 +42,8 @@ import { buildLastSummoningScene, LAST_SUMMONING_SLOTS } from './last-summoning.
 import { LAST_SUMMONING_SCENE } from '../data/ffx/last-summoning-ids.ts';
 import { buildSpectralKeeperScene, SPECTRAL_KEEPER_SLOTS } from './spectral-keeper.ts'; // the Spectral Keeper's glyph ring (FFX only, hidden chapter): the Dome's scene with the Keeper and the glyphs staged
 import { SPECTRAL_KEEPER_SCENE } from '../data/ffx/spectral-keeper-ids.ts';
+import { buildFloodedWaysScene, FLOODED_WAYS_SLOTS } from './flooded-ways.ts'; // the hidden Flooded Ways chapter (FFX only, 2026-11-06): the Via Purifico's stage with this chapter's staging
+import { FLOODED_WAYS_SCENE } from '../data/ffx/flooded-ways-ids.ts';
 import { buildExpYrp3dStageScene, EXP_YRP_SCENE_ENTRY } from './exp-yrp-3d-stage.ts'; // the 3D Bahamut's chamber (FFX-2 only, hidden chapter): Chapter IV's room under frame b, the real models on its actors
 import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
 import { buildExpWindwakerStageScene, EXP_WINDWAKER_SCENE_ENTRY } from './exp-windwaker-stage.ts'; // the Wind Waker chamber (FFX-2 only, hidden chapter): a toon temple, toon models on its actors
@@ -75,6 +77,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   { key: SPECTRAL_KEEPER_SCENE, title: 'Zanarkand Dome — the Spectral Keeper', build: buildDemoScene, slots: SPECTRAL_KEEPER_SLOTS, placeholder: false },
   // The Dark Aeons (FFX only, hidden chapter): the Mushroom Rock Road stage with this chapter's staging; each link swaps in its own existing plate.
   { key: DARK_AEONS_SCENE, title: 'Besaid to Mt. Gagazet — the Dark Aeons', build: buildDemoScene, slots: DARK_AEONS_SLOTS, placeholder: false },
+  // The Flooded Ways (FFX only, hidden chapter): the Via Purifico's stage, standing in for the flooded tunnels and the Baaj Temple.
+  { key: FLOODED_WAYS_SCENE, title: 'The Via Purifico and the Baaj Temple — the Flooded Ways', build: buildDemoScene, slots: FLOODED_WAYS_SLOTS, placeholder: false },
   // The 3D Bahamut (FFX-2 only, hidden chapter): Chapter IV's chamber under frame b's camera, with the real FFX-2 models on the actors.
   EXP_YRP_SCENE_ENTRY,
   // The Wind Waker chapter (FFX-2 only, hidden chapter): a toon temple chamber under the target shot's camera, with toon-shaded models on the actors.
@@ -98,6 +102,7 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [LAST_SUMMONING_SCENE]: buildLastSummoningScene, // the hidden Last Summoning chapter (FFX only)
   [SPECTRAL_KEEPER_SCENE]: buildSpectralKeeperScene, // the hidden Spectral Keeper chapter (FFX only)
   [DARK_AEONS_SCENE]: buildDarkAeonsScene, // the hidden Dark Aeons chapter (FFX only)
+  [FLOODED_WAYS_SCENE]: buildFloodedWaysScene, // the hidden Flooded Ways chapter (FFX only)
   [EXP_YRP_SCENE]: buildExpYrp3dStageScene, // the hidden 3D Bahamut chapter (FFX-2 only)
   [EXP_WINDWAKER_SCENE]: buildExpWindwakerStageScene, // the hidden Wind Waker chapter (FFX-2 only)
   [EXP_ANIME_SCENE]: buildExpAnimeStageScene, // the hidden anime chapter (FFX-2 only)

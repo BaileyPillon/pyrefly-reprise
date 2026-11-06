@@ -19,6 +19,7 @@ import { BoardDoors, CHAPTER_DOORS } from '../../src/app/screens/frontend/chapte
 import { DOOR_WORD, KEY_GAP_MS, PAD_SEQUENCE, TAP_COUNT } from '../../src/app/screens/frontend/secretDoor.ts';
 import { setFf7ExperimentReadyForTests } from '../../src/app/experiments/ff7Flag.ts';
 import { CHAPTER_IDS, CHAPTERS, getChapter } from '../../src/data/encounters.ts';
+import { DOORS_IN_ORDER } from './helpers/doorWords.ts';
 
 const WORDS = CHAPTER_DOORS.map((d) => d.word);
 
@@ -28,8 +29,8 @@ function type(doors: BoardDoors, word: string, start = 0, step = 100) {
 }
 
 describe('the table', () => {
-  it('holds the eighteen doors in the order they were added, each word a run of lower-case letters long enough to be typed by hand (three, for `yrp`, as Bailey picked it)', () => {
-    expect(WORDS).toEqual(['limit', 'leblanc', 'experiment', 'mushroom', 'fayth', 'daigoro', 'valefor', 'gagazet', 'angra', 'yojimbo', 'summon', 'keeper', 'infinito', 'yrp', 'waker', 'gear', 'darkaeon', 'judgment']);
+  it('holds the doors in the order they were added, each word a run of lower-case letters long enough to be typed by hand (three, for `yrp`, as Bailey picked it)', () => {
+    expect(WORDS).toEqual(DOORS_IN_ORDER.map(([word]) => word));
     expect(WORDS[0]).toBe(DOOR_WORD);
     expect(new Set(WORDS).size).toBe(WORDS.length);
     for (const w of WORDS) expect(w, w).toMatch(/^[a-z]{3,}$/);
@@ -68,7 +69,7 @@ describe('the table', () => {
 
   it('leads the FFX words to FFX chapters and the FFX-2 words to FFX-2 chapters (the game of the row is the chapter\'s)', () => {
     const game = (word: string): string | undefined => getChapter(CHAPTER_DOORS.find((d) => d.word === word)!.chapter)?.game;
-    expect([game('limit'), game('leblanc'), game('experiment'), game('mushroom'), game('fayth'), game('daigoro'), game('valefor'), game('gagazet'), game('angra'), game('yojimbo'), game('summon'), game('keeper'), game('infinito'), game('yrp'), game('waker'), game('gear'), game('darkaeon'), game('judgment')]).toEqual(['ff7', 'ffx2', 'ffx2', 'ffx', 'ffx', 'ffx2', 'ffx2', 'ffx', 'ffx2', 'ffx', 'ffx', 'ffx', 'ffx2', 'ffx2', 'ffx2', 'ffx2', 'ffx', 'ffx']);
+    expect(DOORS_IN_ORDER.map(([word]) => game(word))).toEqual(DOORS_IN_ORDER.map(([, g]) => g));
   });
 });
 

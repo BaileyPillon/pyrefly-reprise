@@ -59,9 +59,8 @@ const MANIFEST = join(REPO_ROOT, 'public', 'audio', 'manifest.json');
  * the hidden Sinspawn Gui chapter plays it, and the walk below now visits the
  * hidden experiments, which are reachable through `getChapter` like the unlisted ones.)
  */
-const KNOWN_UNWIRED = new Set([
-  'battle-ffx',
-]);
+// Empty since the hidden Flooded Ways chapter (FFX only, 2026-11-06) wired `battle-ffx` as its battle cue (the neutral stand-in the preflight recommended, section 7).
+const KNOWN_UNWIRED = new Set<string>([]);
 
 // ---------------------------------------------------------------------------
 // Walking the three places a cue can be named

@@ -28,8 +28,7 @@ import { ANGRA_MAINYU_META } from './chapter-meta-ffx2-angra-mainyu.ts';
 import { FALLEN_MAESTERS_META } from './chapter-meta-ffx2-fallen-maesters.ts';
 import { LAST_SUMMONING_META } from './chapter-meta-last-summoning.ts';
 import { SPECTRAL_KEEPER_META } from './chapter-meta-spectral-keeper.ts';
-import { DARK_AEONS_META } from './chapter-meta-dark-aeons.ts';
-import { PENANCE_META } from './chapter-meta-penance.ts';
+import { HIDDEN_R76_META } from './chapter-meta-hidden-r76.ts'; // the hidden chapters 34 on (2026-11-06): the Dark Aeons, Penance, the Flooded Ways
 import { expYrpMeta } from './chapter-meta-exp-yrp-3d.ts';
 import { EXP_WINDWAKER_META } from './chapter-meta-exp-windwaker.ts';
 import { EXP_ANIME_META } from './chapter-meta-exp-anime.ts';
@@ -391,7 +390,7 @@ export const CHAPTER_META: readonly ChapterMeta[] = [
 ] as const;
 
 /** Metadata for chapters registered but not listed (`./chapters-unlisted.ts`, the hidden experiments): found by id; `CHAPTER_META` stays one-to-one with the listed chapters. Listing one moves its record there. */
-export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [EXP_LEBLANC_META, EXPERIMENT_META, SINSPAWN_GUI_META, EXP_FAYTH_META, TOURIST_TRAP_META, VALEFOR_BESAID_META, BIRAN_YENKE_META, ANGRA_MAINYU_META, LAST_SUMMONING_META, SPECTRAL_KEEPER_META, FALLEN_MAESTERS_META, expYrpMeta(FFX2_BAHAMUT_META), EXP_WINDWAKER_META, EXP_ANIME_META, DARK_AEONS_META, PENANCE_META] as const; // the Leblanc preview (2026-10-06), the Experiment, Sinspawn Gui and Fayth (2026-10-10); Sin's two were listed 2026-09-29
+export const UNLISTED_CHAPTER_META: readonly ChapterMeta[] = [EXP_LEBLANC_META, EXPERIMENT_META, SINSPAWN_GUI_META, EXP_FAYTH_META, TOURIST_TRAP_META, VALEFOR_BESAID_META, BIRAN_YENKE_META, ANGRA_MAINYU_META, LAST_SUMMONING_META, SPECTRAL_KEEPER_META, FALLEN_MAESTERS_META, expYrpMeta(FFX2_BAHAMUT_META), EXP_WINDWAKER_META, EXP_ANIME_META, ...HIDDEN_R76_META] as const; // the Leblanc preview (2026-10-06), the Experiment, Sinspawn Gui and Fayth (2026-10-10); Sin's two were listed 2026-09-29
 
 /** Look a chapter's pause-screen metadata up by id. `undefined` for an unknown id. */
 export function getChapterMeta(id: string): ChapterMeta | undefined {

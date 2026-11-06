@@ -24,6 +24,8 @@ import { ATTACK_ABILITY_ID } from './registry.ts';
 import { aeonDuelLost, aeonsDown, dismissAeon } from './aeons.ts';
 import { settleAeonRecovery } from './adapt/aeon-party.ts';
 import { buildBattleResult, scriptedGameOver } from './results.ts';
+import { floodedWaysOutcome } from './ai/flooded-ways-end.ts'; // the hidden Flooded Ways' own ends: a Via Purifico area cleared by its locks, a death blow that ends the party
+import { settleMaxHp } from './ai/geosgaeno-hold.ts'; // ... and the maximum HP Geosgaeno's Regurgitate rewrote, put back once it has resolved
 
 /** What the end-of-turn helpers need from the facade. */
 export interface EndHooks {
@@ -148,6 +150,7 @@ export function afterAction(
     }
     // The reactions the boss scripts' hooks queued while the action resolved (re-parity, `ai/hooks.ts`), oldest first.
     drainScriptReactions(h);
+    settleMaxHp(ctx); // Geosgaeno's Regurgitate (its own turn, or a Struggle's answer) has resolved: its maximum HP comes back (a no-op in every other battle)
     sweepAutoStatuses(ctx);
   }
 
@@ -188,6 +191,8 @@ export function afterAction(
 export function checkEnd(h: EndHooks): boolean {
   const ctx = h.ctx;
   if (ctx.state.result) return true;
+  const scripted = floodedWaysOutcome(ctx); // the hidden Flooded Ways (FFX only): undefined in every other battle
+  if (scripted !== undefined) { finish(h, scripted); return true; }
 
   const bosses = ctx.state.enemyIds
     .map((id) => tryActor(ctx, id))

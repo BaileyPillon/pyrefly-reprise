@@ -20,6 +20,8 @@
  *
  * - **The Dark Aeons** (`'dark-aeons'`, number 34, 2026-11-06; FFX only): the six other Dark Aeons (Valefor, Ifrit, Ixion twice, Shiva, Anima, Bahamut) as a chain of seven fresh fights; word `darkaeon` (33 is another lane's).
  *
+ * - **The Flooded Ways** (`'flooded-ways'`, number 36, 2026-11-06; FFX only): Evrae Altana in the Via Purifico's three flooded areas, then Geosgaeno in the Baaj Temple; word `geosgaeno` (34 and 35 are other lanes').
+ *
  * - **The Fallen Maesters** (`'ffx2-fallen-maesters'`, number 30, 2026-11-02; FFX-2 only): the Via Infinito's fixed floor fights 20, 40, 60 and 80 (Aranea, the Black Elemental, Concherer, Chac) as four fresh links; word `infinito`.
  *
  * - **Bahamut in 3D** (`'exp-yrp-3d'`, number 31, 2026-10-19 as 29, renumbered 2026-11-02; FFX-2 only): Chapter IV's Bahamut fight drawn as a real 3D scene with the real FFX-2 models, frame b's camera; word `yrp`.
@@ -50,8 +52,9 @@ import { EXP_WINDWAKER } from './chapter-exp-windwaker.ts';
 import { EXP_ANIME } from './chapter-exp-anime.ts';
 import { DARK_AEONS } from './chapter-dark-aeons.ts';
 import { PENANCE } from './chapter-penance.ts';
+import { FLOODED_WAYS } from './chapter-flooded-ways.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from, and `ffx2Bahamut` the listed Chapter IV, which the 3D Bahamut is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter, ffx2Bahamut: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS] as const;
 }

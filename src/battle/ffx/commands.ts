@@ -24,6 +24,8 @@ import { triggerHandler } from './ai/index.ts';
 import { aeonMenuRows } from './aeon-commands.ts';
 import { ATTACK_ABILITY_ID, DEFEND_ABILITY_ID } from './registry.ts';
 import { moveRows } from './platforms.ts'; // the Spectral Keeper's Move (a row only in the formation that runs the glyph platforms)
+import { openLockRows } from './ai/gate-locks.ts'; // the hidden Flooded Ways' Open lock (a row only in the Via Purifico's first two areas)
+import { heldMenuRows } from './ai/geosgaeno-hold.ts'; // ... and the swallowed character's two-row menu
 
 /**
  * The command a **menu marker** row must actually submit.
@@ -132,6 +134,8 @@ function menuRows(ctx: Ctx, user: FFXCombatant): AvailableCommand[] {
   // The player's Yojimbo and the Magus Sisters have menus of their own (re-parity lane FFX-K, `aeon-commands.ts`); `null` for everyone else.
   const own = aeonMenuRows(ctx, user);
   if (own !== null) return own;
+  const held = heldMenuRows(ctx, user); // Geosgaeno's swallowed character has Struggle and Defend and nothing else (the hidden Flooded Ways, FFX only); null for everyone else
+  if (held !== null) return held;
   const rows: AvailableCommand[] = [];
   const attackDef = abilityOf(ctx, ATTACK_ABILITY_ID);
   if (attackDef) rows.push(rowFor(ctx, user, attackDef, { kind: 'attack', targets: [] }));
@@ -268,7 +272,7 @@ function menuRows(ctx: Ctx, user: FFXCombatant): AvailableCommand[] {
   const defendDef = abilityOf(ctx, DEFEND_ABILITY_ID);
   // A formation that switched Defend off (Isaaru's aeon contest; `formation-flags.ts`) has no Defend row for the party or an aeon.
   if (defendDef && !defendTakenFrom(ctx, user)) rows.push(rowFor(ctx, user, defendDef, { kind: 'defend', targets: [] }));
-  rows.push(...moveRows(ctx, user)); // the glyph platforms' Move: no row outside the Spectral Keeper's formation
+  rows.push(...moveRows(ctx, user), ...openLockRows(ctx, user)); // the glyph platforms' Move: no row outside the Spectral Keeper's formation; the Via Purifico's Open lock: none outside its first two areas
 
   // Switch: the incoming member takes the turn happening right now, so the turn
   // is not consumed by the swap [ffx-combat-core §1.7].
