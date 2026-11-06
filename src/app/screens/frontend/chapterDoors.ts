@@ -92,10 +92,10 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: YOJIMBO_DOOR_WORD, chapter: YOJIMBO_DOOR_CHAPTER },
   { word: SUMMON_DOOR_WORD, chapter: SUMMON_DOOR_CHAPTER },
   { word: KEEPER_DOOR_WORD, chapter: KEEPER_DOOR_CHAPTER },
-  { word: GEOSGAENO_DOOR_WORD, chapter: GEOSGAENO_DOOR_CHAPTER },
   { word: MAESTERS_DOOR_WORD, chapter: MAESTERS_DOOR_CHAPTER },
   { word: YRP_DOOR_WORD, chapter: YRP_DOOR_CHAPTER, gate: desktopOnly },
   { word: WINDWAKER_DOOR_WORD, chapter: WINDWAKER_DOOR_CHAPTER, gate: desktopOnly },
+  { word: GEOSGAENO_DOOR_WORD, chapter: GEOSGAENO_DOOR_CHAPTER },
 ];
 
 /**

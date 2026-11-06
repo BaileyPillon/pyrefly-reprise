@@ -146,8 +146,9 @@ describe("the attached records are the game's table", () => {
     // 512, 509 and 3 in release 52, where both lines meet: Mirror Aeons + RC9 FFX-M read 510, 508 and 2; the Last Summoning adds Kozuka and Wakizashi and
     // moves Daigoro and the Sisters token to "no record" (+2 abilities, +1 record, +1 without).
     // 519 and 516 since the hidden Spectral Keeper chapter (FFX only, 2026-11-02): its seven rows (0x6045 to 0x604e and the party's Move 0x3103), each with its record, all in the game's fixtures.
-    expect(ALL_ABILITIES).toHaveLength(519);
-    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(516);
+    // 528 and 525 since the hidden Flooded Ways chapter (FFX only, 2026-11-06): its nine rows (Geosgaeno's four, Evrae Altana's three, the held character's Struggle 0x3109 and the party's Open lock 0x312f), each with its record, all in the game's fixtures.
+    expect(ALL_ABILITIES).toHaveLength(528);
+    expect(Object.keys(COMMAND_RECORDS)).toHaveLength(525);
     expect(Object.keys(NO_COMMAND_RECORD)).toHaveLength(3);
   });
 });
@@ -180,7 +181,8 @@ describe("the numbers an ability carries against the game's record", () => {
 
 describe('what the adapter assumes of the data', () => {
   it('every weapon command (record bit 18) is the plain Strength 16 the kernel substitutes for the weapon', () => {
-    const weapon = ALL_ABILITIES.filter((a) => a.record !== undefined && (a.record.flagsMisc & 0x40000) !== 0);
+    // The hidden Flooded Ways' Struggle (0x3109, 2026-11-06) is the one weapon command whose record says power 17 (the held character's piercing strike): the kernel substitutes the weapon's plain 16 for it like the others', and the data test pins the row.
+    const weapon = ALL_ABILITIES.filter((a) => a.record !== undefined && (a.record.flagsMisc & 0x40000) !== 0 && a.id !== 'struggle');
     expect(weapon.length).toBeGreaterThan(20);
     for (const a of weapon) {
       expect(a.formula, a.id).toBe('strength');
@@ -308,6 +310,8 @@ function statusDifferences(): string[] {
 }
 
 const KNOWN_STATUS_DIFFERENCES: readonly string[] = [
+  // The hidden Flooded Ways chapter (FFX only, 2026-11-06): KO Punch's Curse bit (an extra-status word with no engine status id) is in the record alone, as Dark Anima's Attack's is.
+  'geosgaeno-ko-punch: extra bits 0x0, record 0x400',
   // The wiring takes the record's byte; Provoke 254 and Threaten 255 were ours. The Threaten command byte is only "non-zero":
   // the roll reads the TARGET's Threaten byte (research/re-ffx-ctb-status.md section 6).
   'provoke: provoke chance 254, record 100',

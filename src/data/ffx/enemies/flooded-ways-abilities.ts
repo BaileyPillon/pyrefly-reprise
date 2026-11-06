@@ -46,12 +46,12 @@ const apply = (status: StatusApplication['status'], chance: number, duration = 2
 
 /** 0x6032: formula 1, power 16, accuracy formula 2 on a byte of 100, Petrify 50. The critical bit is not set on the row (flags word 1), so it never crits. */
 export const stonePunch: AbilityDef = row({
-  id: FLOODED_ROWS.stonePunch, name: 'Stone Punch', power: 16, formula: 'strength', damageType: 'physical', targeting: 'single-enemy', hits: 1, accuracy: 100, statusEffects: [apply('petrify', 50)],
+  id: FLOODED_ROWS.stonePunch, name: 'Stone Punch', power: 16, formula: 'strength', damageType: 'physical', targeting: 'single-enemy', hits: 1, accuracy: 100, bonusCrit: 10, statusEffects: [apply('petrify', 50)],
 });
 
 /** 0x6033: as Stone Punch with Death 50 and the Curse bit (the record's extra word 0x400, always). */
 export const koPunch: AbilityDef = row({
-  id: FLOODED_ROWS.koPunch, name: 'KO Punch', power: 16, formula: 'strength', damageType: 'physical', targeting: 'single-enemy', hits: 1, accuracy: 100, statusEffects: [apply('ko', 50)],
+  id: FLOODED_ROWS.koPunch, name: 'KO Punch', power: 16, formula: 'strength', damageType: 'physical', targeting: 'single-enemy', hits: 1, accuracy: 100, bonusCrit: 10, statusEffects: [apply('ko', 50)],
 });
 
 /** 0x602E: no hit record, so nothing lands; the script puts the target in the monster. `groupTarget`: the character the script named, whatever their targetable bit (the hold makes them untargetable). */
@@ -75,7 +75,7 @@ export const altanaAttack: AbilityDef = row({
 
 /** 0x604C: formula 3, power 16, accuracy formula 0; Petrify 50 and Sleep 50. */
 export const stoneGaze: AbilityDef = row({
-  id: FLOODED_ROWS.stoneGaze, name: 'Stone Gaze', power: 16, formula: 'magic', damageType: 'magical', targeting: 'single-enemy', hits: 1, canMiss: false, statusEffects: [apply('petrify', 50), apply('sleep', 50)],
+  id: FLOODED_ROWS.stoneGaze, name: 'Stone Gaze', power: 16, formula: 'magic', damageType: 'magical', targeting: 'single-enemy', hits: 1, canMiss: false, statusEffects: [apply('petrify', 50), apply('sleep', 50, 0)], // the row's Sleep has no duration byte (the record's durations are empty): 0, as the record says
 });
 
 /** 0x604B (and 0x606B): formula 3, power 4, eight hits, accuracy formula 0. `random-enemy`: each hit re-rolls its target among the party (RE 4.3; the guides say so, the target byte only says "random character"). */

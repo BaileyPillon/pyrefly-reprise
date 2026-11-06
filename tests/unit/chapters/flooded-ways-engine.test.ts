@@ -10,6 +10,7 @@ import { ejectActor } from '../../../src/battle/ffx/hp.ts';
 import { aiContextFor } from '../../../src/battle/ffx/ai/types.ts';
 import { geosgaenoTurn } from '../../../src/battle/ffx/ai/geosgaeno.ts';
 import { swallowVictim } from '../../../src/battle/ffx/ai/geosgaeno-hold.ts';
+import { floodedWaysOutcome } from '../../../src/battle/ffx/ai/flooded-ways-end.ts';
 import { GEOSGAENO_HALF_LINE, KO_PUNCH_ABOVE } from '../../../src/battle/ffx/ai/flooded-ways-rules.ts';
 import { ENEMY_GROUPS_BY_ID } from '../../../src/data/ffx/index.ts';
 import {
@@ -452,6 +453,22 @@ describe('the swallow-hold (RE 4.1)', () => {
     if (over.kind === 'battle-over') expect(over.result.outcome).toBe('defeat');
     for (const id of SWIM) expect(actor(e, id).hp, id).toBe(0);
     expect(actor(e, 'geosgaeno').alive).toBe(false);
+  });
+
+  it('a death that is no hit (a Poison tick) with somebody inside deals the same blow, the first time the battle is asked whether it is over; and only once', () => {
+    const e = newEngine(7, 'geosgaeno', WARDED);
+    untilHeld(e);
+    for (const id of SWIM) {
+      actor(e, id).stats.maxHp = 9_000;
+      actor(e, id).hp = 6_000;
+    }
+    const geo = actor(e, 'geosgaeno');
+    geo.hp = 0;
+    geo.alive = false;
+    expect(floodedWaysOutcome(ctxOf(e))).toBe('defeat');
+    for (const id of SWIM) expect(actor(e, id).hp, id).toBe(0);
+    expect(flags(e)['fw.hold']).toBe('');
+    expect(floodedWaysOutcome(ctxOf(e))).toBe('defeat'); // asked again: no second blow, the same answer
   });
 
   it('killing it with nobody inside is the ordinary win and costs the party nothing', () => {

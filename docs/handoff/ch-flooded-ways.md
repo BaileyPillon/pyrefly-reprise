@@ -1,0 +1,126 @@
+# The Flooded Ways: Evrae Altana in the Via Purifico, Geosgaeno in the Baaj Temple (a hidden FFX chapter, number 36)
+
+**Branch `ch-flooded-ways`** (from `origin/r75-boss-art` `2aa42f7a7`, through the research note and the paper preflight, then the build), pushed; **not deployed, not merged into any release candidate.** **Game case: FFX only** (AGENTS.md rule 14): both fights are FFX's; the Trigger-style commands, CTB and the FFX status set. Nothing in `src/battle/ffx2/**`, `src/data/ffx2/**` or the FF7 layers changed behaviour; the registry rows, the door row, the scene row and the engine seams are shared plumbing, "both" in kind (CHK-020), inert for every other chapter (`flooded-ways-engine.test.ts` pins that no other formation raises a flag of this chapter).
+**Status: built, hidden, played in a browser by real keys from the title through the first area, the chain carry, the skip and the swallow (section 8), no paintings.** The chapter opens only by a typed word, **`geosgaeno`**. Listing it waits for Bailey's word. **Geosgaeno, the Gate Lock and Evrae Altana's own look have no painting; the Via Purifico's plate stands in for all four places (section 6).**
+Written 2026-11-06 by a Sonnet sub-agent of the release driver (wave 2, lane 36).
+
+Authority: Bailey, relayed by the driver, verbatim: "implement all unimplemented chapters please" (2026-11-06 about 00:30 EST), "yes on all these too" (about 00:55 EST) and, 2026-10-31, "you make the executive decisions for the next few days. i'll go with all of your recommendations." **Every pick in section 4 is the preflight's recommendation unless the row says otherwise; each is "driver's call, his to overturn", and the alternative is written beside it.**
+
+## 1. Play it
+
+1. From the title, reach the chapter-select board. Type **`geosgaeno`** (any case, letters at most 2 s apart; the board shows no hint). It opens the chapter's party prep itself, with no card and no sound before it. G, O and N are bound to nothing; E is `start`, S `down`, A `left`, and the board leaves those presses alone once the word is under way (`tests/unit/chapters/flooded-ways-board.test.ts`, the real `Input` and the real board).
+2. Enter starts the chapter: a pre scene on the Via Purifico's plate (our draft, section 6), then **area 1** of the flooded tunnels: **Evrae Altana** (16,384 HP, an undead Evrae) and **two Gate Locks**. Everyone's Escape, Flee and Switch are off. Each swimmer has a new command, **Open lock**. Opening **both locks ends the area**; the party and its HP carry into **area 2** (the same fight, new locks), and Evrae Altana opens with the HP it had; **area 3 has no locks and no counter**. In areas 1 and 2 Evrae Altana answers any hit that takes its HP with a plain Attack. Then the seam, and the **Baaj Temple: Geosgaeno** (32,767 HP), a fresh fight at full HP, and the results page.
+3. If Evrae Altana falls early (two Phoenix Downs do it) the areas that are left are skipped and the chapter goes straight on to Geosgaeno.
+4. A clear goes to the experiments' own store (`pyrefly-reprise:experiments:v1`), never the save: no save change, no migration. The party is **Tidus, Wakka and Rikku**, nobody on the bench (the three who can swim).
+
+## 2. What it is
+
+| Link | Foe (formation) | HP | What it does | Notes |
+|---|---|---:|---|---|
+| 1 | **Evrae Altana** + 2 Gate Locks (`stbv00_10`) | 16,384 / 500 each | alternates **Stone Gaze** (Petrify 50 + Sleep 50, one member) and **Photon Spray** (8 hits, each on a random member) while three stand; a Spray every turn once a member is gone | a permanent **Zombie**; **counter**: a plain Attack on whoever dealt HP damage; **in the water a Petrify that lands shatters its victim** |
+| 2 | the same, new locks (`stbv00_11`) | HP carried | as area 1 | the shattered return (1 HP) |
+| 3 | Evrae Altana alone (`stbv00_12`) | HP carried | as area 1 | **no counter**, no locks: it is fought out |
+| 4 | **Geosgaeno** (`bjyt02_02`), the Baaj Temple | 32,767 | three Stone Punches, then **Swallow** (a random living member without Doom), then the spit-out; below half HP 69 percent of the punches are **KO Punch** (Death 50 + Curse) | Armored (physical a third), weak to all five elements, Poison lands; **the swallowed one can only Struggle or Defend**; killing it with someone inside is 9,999 to everyone |
+
+Every number is the game's own, from `research/re-ffx-geosgaeno-evrae-altana.md` ("RE n"): the monster files `m109`, `m120`, `m162`, `m171`, the formations and the move rows, `[bytes]` and `[run]`, with a source note on every line. **The scripted first Geosgaeno (`bjyt02_01`, Tidus alone, three turns, cannot be won) is not built** (GV2).
+
+## 3. The data, the engine rules and their checks (rule 6: nothing invented)
+
+`flooded-ways-data.test.ts` (25) pins the four bodies, the nine rows (each record word for word to `command_records.json` and `command_status.json`), the formations, the chain flags, the party and the registrations. **Where the note and the engine differ or add (the T0 checks, each a test):**
+
+1. **The water Petrify shatter.** The kernel already had the rule (`petrifyShattersParty`, `kernel/status-inflict.ts`); nothing passed it. `adapt/status.ts` now passes it when `state.flags['battle.inWater']` is set (raised by `EnemyGroupDef.inWater`). A landed Petrify is Petrify + Death + Eject in one step: the member is off the field with 0 HP and "shatters" is printed. On dry land (the same group without `inWater`) a Petrified member stays in the fight (tested on 40 seeds).
+2. **Evrae Altana is an automatic Zombie** (permanent, given at the setup: the engine reads no automatic status for a monster). A Phoenix Down thrown at it deals 8,192, half its maximum; a second kills it (a victory in area 1 with both locks standing). **Only the Phoenix Down can be aimed at it from the item menu: the engine aims every other restorative at the party, so the guides' "two X-Potions" route is not on offer** (an existing item-targeting rule; reported, `flooded-ways-engine.test.ts`).
+3. **The rewritten maximum HP (formula 16).** The game sets Geosgaeno's maximum HP to the victim's HP minus 1 for the spit-out and puts it back. So does this (`ai/geosgaeno-hold.ts#rewriteMaxHp`, `settleMaxHp`, which `engine-end.ts#afterAction` calls once the command and its reactions have resolved). Tested: a victim at 2,000 and two members at 5,000 leave the two at 3,001 and the victim at 1; Geosgaeno's maximum is 32,767 again afterwards.
+4. **The swallow-hold.** The victim is untargetable; their menu is Struggle and Defend (the 33 command locks of the RC10 note, Defend not among them); every other command is refused with the turn kept open; the status copy (ailments moved, buffs copied) is tested; Struggle is a piercing weapon strike at Geosgaeno whose hit it answers with a Regurgitate on the victim alone (their own HP: a KO, nobody else hurt); the death blow is 9,999 on each member, the held one included, before the monster's own KO, and a party under that is a **defeat** though the monster died (`checkEnd` would otherwise read the monster first and call it a win).
+5. **Exact tallies.** KO Punch below half HP is a draw modulo 100 above 30: 45,200 of 65,536 (the RE tally, pinned), 69 percent measured on 4,000 turns; the line is strictly below 16,383; 3 punches after an even spit-out draw and 2 after an odd one; the Doomed are not swallowed, and with all three Doomed Geosgaeno throws a KO Punch and swallows nobody.
+6. **The area chain.** Both locks gone is a victory with the boss standing and `nextGroupId` set (`ai/flooded-ways-end.ts`); `app/screens/BattleScreenFloodedCarry.ts` carries the boss's HP and the shattered members across the seam and skips a link whose boss is dead; Link II (`restoresPartyOnEntry`) is a fresh fight; the last link pays every link's spoils (`poolsChainSpoils`: 3,000 + 1,000 gil, tested). `flooded-ways-chain.test.ts` (14) plays it on the real engine, with a seeded run of every fight on three seeds.
+
+**Differences from the game that this engine keeps, said (rule 6):** (a) **after a Struggle the hold ends** (the victim is gone); the game's own next-turn spit-out on an empty stomach was not run in the note (`[inferred]`, live check L2). (b) The death blow is dealt as damage to each member, not as a queued command, because the reaction drain drops a dead monster's commands. (c) **Stone Gaze's Sleep 50 has no duration byte in the row** (RE 5), and the kernel treats a zero duration as not landing, so the gaze is a Petrify in effect; the guides say "Petrify and Sleep". (d) "Exactly three characters" counts a knocked-out member as present and a shattered one as gone. (e) A Phoenix Down thrown at Evrae Altana draws its counter (the script tests the HP lost, not the command; RE open question 2). (f) A counter never triggers another counter (the engine's rule, which the game's `performCommand` queue also applies).
+
+## 4. The picks (the driver's, under Bailey's blanket yes; each with its alternative, his to overturn)
+
+| # | Question | Pick (built) | Alternative |
+|---|---|---|---|
+| GV1 | shape and name | **One chapter, number 36, id `flooded-ways`, word `geosgaeno`, two links in story order** (Evrae Altana's three areas, then Geosgaeno); title "The Flooded Ways" (Bailey names it); not listed | two chapters (an extra number from the planner); Geosgaeno first |
+| GV2 | the scripted first Geosgaeno | **not built** (a three-turn scripted loss; RE 4.2) | a scripted prologue act (about +4 hours) |
+| GV3 | party | **Tidus, Wakka, Rikku fixed, no bench** (sourced) | none: the sources allow no other trio |
+| GV4 | build and Stone Wards | **the Highbridge cells and equipment unchanged: Rikku's Stone Ward alone** (`data/ffx/builds/swimmers.ts`). **Against the preflight, which recommended a Ward added on Tidus and Wakka.** Measured both (section 5): three Wards put Geosgaeno at 95 percent and **make the shatter rule never happen** (a Ward takes 50 off a Petrify of 50); Rikku's alone keeps it alive (about 0.6 members shattered a fight) and puts Geosgaeno at 82 with nothing added to anyone's gear | the preflight's three Wards (`WARDED = ['tidus', 'wakka']` in `swimmers.ts`, one line) |
+| GV4b | the bag | **the Highbridge bag plus exactly the preflight's list** (Fire, Ice, Lightning and Water Gems x10, Poison Fang x5, X-Potion x4) **and 30 Phoenix Downs**. **The preflight said the preset's bag already held these; it does not** (12 Phoenix Downs, no gem, no X-Potion). Without the kit Geosgaeno is **never** won (0 of 200 for every line): the Highbridge bag has no elemental answer | the Highbridge bag as it was (then Geosgaeno needs a bag of Bailey's) |
+| GV5 | Evrae Altana's look | the airship Evrae's painting (`characters/evrae`) stands in, flagged; a bone-and-green recolour is owed | a new skeletal painting (+3 hours of art) |
+| GV6 | Geosgaeno's look | **a new painting, 5 to 6 poses, owed**; the presenter's placeholder meanwhile | none |
+| GV7 | Gate Lock | a hittable prop (500 HP, immune to magic, kills to a blade or to Open lock); one painting, two states, owed | an HUD icon (not faithful) |
+| GV8 | the underwater read | the existing standing poses over the plate; the card says the party swims | swim-pose repaints (+6 sets) |
+| GV9 | the shatter | **faithful**: a Petrify that lands removes the member on the spot; the card says so | a softened version (refused unless Bailey asks) |
+| GV10 | Evrae Altana and the two-item kill | **faithful, disclosed, no nerf**: two Phoenix Downs kill it; the bench says so | a smaller bag |
+| GV11 | music | the neutral `battle-ffx` for every link, the Via Purifico chapter's `scene-gagazet` under the scenes; flagged stand-ins | new takes (a spend note, rule 11) |
+| GV12 | the areas | one chain link per area; **every plate is the Via Purifico's** (three derived water plates and a Baaj plate are owed) | one scene with an area marker |
+| new | the shattered return | **1 HP** at the next area (the files give no number); a member merely knocked out stays knocked out | their full HP; the HP they had when shattered |
+| new | the ended hold | a Struggle ends the hold at once (section 3 (a)) | the game's next-turn spit-out on an empty stomach (it was not run in the note) |
+| new | a counter on a Phoenix Down | yes (section 3 (e)) | none |
+| new | the advisor's line | **not built** (the generic card shows); a tactic and a guide page need Bailey's word on the plate first | the Dark Aeons' line-style tactic (about 3 hours) |
+
+## 5. Difficulty: measured, not tuned (rule 15)
+
+`tests/unit/chapters/flooded-ways-bench.test.ts` (6 always-on, 1 behind `FLOODED_WAYS_BENCH=1`), the harness `tests/unit/helpers/floodedBench.ts` and the tool `node --experimental-transform-types tools/flooded-ways-bench.mjs --seeds 200 --party shipped|wards3|unwarded|nokit`. **The plan's target (about 70 percent per fight for the informed line, 60 to 80 accepted, a careless line under 20) is met by the careless line and is exceeded by the informed ones: reported, not tuned; no monster row was touched.**
+
+**The table of record, 200 seeds a cell (seeds 1 to 200), the party as shipped:**
+
+| Fight | line | wins of 200 | members shattered a fight |
+|---|---|---:|---:|
+| Evrae Altana (areas 1 to 3, one fight) | two Phoenix Downs on it | **200** | 0.00 |
+| | open the locks, strike, mend at 45 percent (never a heal on it) | **200** | 0.77 |
+| | the plain Attack | 0 | 0.63 |
+| Geosgaeno | elemental line, the held character waits while the spit-out leaves everyone standing, else Struggles (`smart`) | **164** (82 percent) | 0.57 |
+| | the same, always Struggles | 152 (76) | 0.57 |
+| | the same, always waits (Defend) | 166 (83) | 0.57 |
+| | the plain Attack | 0 | 1.27 |
+
+**Levers with numbers** (the same lines, 200 seeds; Geosgaeno `smart` / Evrae ordinary): **a Ward on all three (the preflight's GV4): 189 (95) / 200, shattered 0.00 and 0.00**; **no Ward at all: 155 (78) / 200, shattered 0.98 and 0.93** (11 of the Geosgaeno fights end in the 400-turn stalemate rule with too few members left); **without the preflight's kit: 0 / 200** (every line, every Ward option). **What that says, plainly.** (a) **Evrae Altana is easy for any line that thinks**: the Gagazet-cell party outlives it even when it opens the locks and trades blows, and two Phoenix Downs end it; only the plain Attack loses. That is the fight, disclosed (GV10). (b) **Geosgaeno is won about four times in five by the elemental line**, a little above the plan's 80; the held character's choice moves it by 6 points (waiting is best for this party: a swallowed Wakka at full HP spits 2,529 on everyone, but the line kills it within a cycle or two). (c) **The kit is decisive**: gems and Poison Fang are the answer the guides name, and the Highbridge bag had none. (d) The Wards decide whether the water rule is ever met. **Not tried (named):** Hastega, Wakka's Element Reels, Rikku's Mix, Lulu, a thinking stay-out-of-the-gaze line, Stoneproof armour.
+
+## 6. Stand-ins and what is a draft (listed)
+
+| What | State |
+|---|---|
+| **The plate** | `backdrops/via-purifico.png` (Isaaru's red-lit chamber) stands in for the flooded tunnels and for a temple under the sea. The preflight's recommendation (section 5 there): three variants derived from it (a water line, caustics, a blue-green grade) and one new Baaj plate; none is made. The scene is `scenes/flooded-ways.ts`: the Via Purifico's stage with this chapter's enemy staging (`[estimate]` spots and heights) |
+| The paintings | Evrae Altana: the airship Evrae's (`characters/evrae`); Geosgaeno and the Gate Lock: none (the presenter draws its procedural placeholder silently) |
+| The story | a draft for Bailey to read (`story/scripts/flooded-ways.ts`, "THIS IS A DRAFT FOR BAILEY TO READ"): eight lines before, six after, one seam (Evrae Altana's fall, whichever area), three callouts; only Tidus, Wakka and Rikku speak |
+| The music | `battle-ffx` and `scene-gagazet`, by reference (rule 13) |
+| The card and thumbnail (`chapter-flooded-ways`) | a key only; held until Bailey's word to list the chapter |
+| The pause hero `pause/ch36-flooded-ways` | not made; the pause tab falls back to the Via Purifico plate |
+| The guide card and page, the advisor's line | not built (section 4) |
+| The Open lock and Struggle rows' help text, the swallow banners | our words, placeholders (`ai/gate-locks.ts`, `ai/geosgaeno-hold.ts`) |
+
+### ART NEEDS (nothing below exists on disk; no ComfyUI was run, nobody generated art: rule 12, and only Bailey approves a painting)
+
+| Subject (art key) | Poses | Notes |
+|---|---|---|
+| **Evrae Altana** `evrae-altana` | a recolour (bone and green, exposed ribs) of `characters/evrae`: idle, idle near/far, attack, breath-charge, hurt, ko, at 1x to 4x (the airship set's own list) | a flagged compromise: the game's Altana is a skeletal model of its own (RE 1.1); the key `evrae-altana` is free for it |
+| **Geosgaeno** `geosgaeno` | idle, attack (the punch), swallow (cast, jaws open), hurt, ko (the body stays: the death animation is "Boss"), and a closed-mouth "holding" idle | about 5 to 6 images, plus sidecars (`width`, `height`, `baselineY`, `pose`, `facing`); a row each in `tools/posescale/subjects.json` |
+| **Gate Lock** `gate-lock` | closed, opened/broken | one painting serves both locks (one model word) |
+| **Plates** | three derived water variants of `via-purifico` (one per area; the lock layout differs) and one new `baaj-waterway` (pale stone, green light) | `SceneBuild.swapBackdrop` is already the chain's hook (`EnemyGroupDef.plate`) |
+| Effects | the swallow and spit-out, the shatter, the lock opening | may be drawn in code |
+| Chapter card, thumbnail, pause plate | `chapter-flooded-ways`, `-card`, `-thumb`, `pause/ch36-flooded-ways` | from the picks |
+
+**Count: about 12 to 14 images plus the plates.** The twin Photon Spray row (0x606B) needs nothing.
+
+## 7. What changed, by area (all FFX only; inert elsewhere; `docs/CONTRACT-CHANGES.md` has the entry)
+
+- **New engine files:** `battle/ffx/ai/` `evrae-altana.ts`, `gate-locks.ts`, `geosgaeno.ts`, `geosgaeno-hold.ts`, `flooded-ways-rules.ts`, `flooded-ways-setup.ts`, `flooded-ways-end.ts` and the barrel `flooded-ways.ts`; `app/screens/BattleScreenFloodedCarry.ts`; `battle/common/types-flooded-ways.ts`.
+- **Host files, each a small hook (the integrator's list):** `types.ts` (+2: an import and `extends FloodedGroupFields`), `adapt/status.ts` (+1), `engine-end.ts` (+5: the outcome hook and `settleMaxHp`), `commands.ts` (+5: the held menu and the Open lock row), `formation-commands.ts` (+5: the setup call and the refusal), `ai/index.ts` (+10: the import and the `open-lock` trigger), `BattleScreenSetup.ts` (+2), `BattleEncounterChain.ts` (+3).
+- **Data:** `data/ffx/flooded-ways-ids.ts`, `enemies/flooded-ways.ts`, `-abilities.ts`, `-groups.ts`, `builds/swimmers.ts`, registered in `enemies/hidden-ffx.ts` and `command-records/enemies.ts`.
+- **Chapter plumbing:** `data/chapter-flooded-ways.ts`, `chapter-meta-flooded-ways.ts` (+ `chapter-meta.ts`, `chapters-experiments.ts`, `encounters.ts`), `story/scripts/flooded-ways.ts`, `scenes/flooded-ways.ts` (+ `experiment-scenes.ts`), `app/screens/frontend/geosgaenoDoor.ts` (+ `chapterDoors.ts`), `engine/pyreflyCanon.ts`, `engine/tactics/lookup.ts`.
+- **Source tables that force a decision for every new chapter, each answered (FFX only):** `kernel/forced-action-table.ts` (Evrae Altana 0x6066, Geosgaeno 0x6000, the locks none), `data/art/artNamespace.ts` (the scene key draws `via-purifico`), `critic/runner/lib/route-pure.mjs` (the door word).
+
+## 8. Tests, checks run and the browser job
+
+PLACEHOLDER_TESTS
+
+## 8a. CHANGELOG lines (FFX only; for the release note that ships it)
+
+- **FFX only (hidden Chapter 36, the word `geosgaeno`): the flooded Via Purifico and the Baaj Temple.** Tidus, Wakka and Rikku, the three who can swim, fight a dead Evrae in three areas of the flooded tunnels (two Gate Locks to open with a new **Open lock** command, the party and Evrae's HP carried on, a gaze that **shatters** whoever it petrifies in the water, two Phoenix Downs to end it), then Geosgaeno in the Baaj Temple (it **swallows** one of the party, who can only Struggle or Defend; the spit-out falls on all three for the swallowed one's HP minus 1). The paintings, the plates, the music and the story are stand-ins and a draft.
+- **FFX only (engine plumbing, no other battle changes): a water battle flag on a formation** (a Petrify that lands on a party member removes them from the battle, as it always did for a monster), **a chained link that carries its boss's HP and brings back the members the water shattered**, and **a chain that skips a link whose boss already fell**.
+
+## 9. Owed, and open questions for Bailey
+
+- **Owed (built nowhere):** the plates, the three paintings and the chapter card (section 6); the guide card and page and the advisor's line; the pause hero; a visible tell for the held character on screen (the menu is Struggle and Defend, nothing marks the untargetable member on the stage); the live checks of the note (RE 13): **L1** what the shattered return with (the guides say they return; 1 HP is the driver's pick), **L2** what the game does on the turn after a Struggle, **L3** properties 128, 261 and 338, **L5** the first fight's AP, **L6** each formation's stage and camera.
+- **Questions:** (1) Is Geosgaeno at about 82 percent for the elemental line right, or should the kit be thinner (the gems are the preflight's list, an estimate)? (2) The Wards: Rikku's alone (shipped) or the preflight's three? (3) The plates and the paintings: which of the preflight's three plate options for the Via Purifico, and the Baaj Temple's look, before anything is painted (rule 9)? (4) Listed on the board, or hidden behind `geosgaeno`?
