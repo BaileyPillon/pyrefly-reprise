@@ -7,7 +7,7 @@
  *    link ends in `victory`; the last has no next link.
  * 3. **The defeat and the retry**: a Yuna who only defends loses; a defeat in the second duel retries THAT duel from the state she entered it in (the checkpoint, the Den's GP4 b seam); a defeat in the first has no
  *    checkpoint and starts the chapter over.
- * 4. **The shipped auto-battler plays the chain** without throwing or wedging (no tactic or guide is written for this chapter yet).
+ * 4. **The shipped auto-battler plays the chain** without throwing or wedging (it plays the chapter's tactic, `yunas-ballad-tactic.test.ts`; no strategy-guide page is written for this chapter yet).
  * 5. **The triggers**: the seam fires once on the KO of the possessed Rikku and not on Paine's (that is the close), the two callouts fire once after their move.
  * 6. **The stage and the store**: the Den of Woe's registered scene with a factory; an attempt and a clear go to the experiments' store, never the save.
  */
@@ -137,7 +137,7 @@ describe('the chain to a victory, both links', () => {
   }, 120_000);
 });
 
-describe('the shipped auto-battler plays the chain (no tactic or guide is written for this chapter yet)', () => {
+describe('the shipped auto-battler plays the chain (the chapter has a tactic and no guide page yet)', () => {
   it('through the app path it neither throws nor wedges: it reaches a verdict on every seed', async () => {
     await registerBattleContent();
     for (const seed of [1, 2, 3]) {

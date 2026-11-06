@@ -111,12 +111,12 @@ const ENEMY_SLOTS: Array<[number, number, number]> = [DEN_SPOTS[DEN_IDS.baralai]
 
 /**
  * **Yuna's Ballad** (the hidden chapter, FFX-2 only; branch `ch-yunas-ballad`, 2026-11-06): the possessed Rikku and the possessed Paine fight Yuna in this room (`kino13_228` and `kino13_229` share the shades' map).
- * They are girls, so they stand at the party's own world height ({@link DEN_PARTY_HEIGHT}) where the shades stand at the models' ratio over it, and a little nearer than the shades' spot (a girl-sized figure at the
- * shades' z of -5 reads about nine tenths of Yuna). Staging, ours; the shades' own entries above are untouched (`tests/unit/chapters/den-of-woe-ship-scene.test.ts` pins them).
+ * They are girls, so they stand at the party's own world height ({@link DEN_PARTY_HEIGHT}) where the shades stand at the models' ratio over it, and much nearer than the shades' spot: the first browser job found a
+ * girl-sized figure at z -3.6 read about two thirds of Yuna on screen (the shades' z of -5 is for a figure a tenth taller than a girl), so the duel stands at z -1.2, about three quarters of her. Staging, ours; the shades' own entries above are untouched (`tests/unit/chapters/den-of-woe-ship-scene.test.ts` pins them).
  */
 export const WRAITH_SPOTS: Readonly<Record<string, [number, number, number]>> = {
-  [X2_POSSESSED_RIKKU_ID]: [1.12, 0, -3.6],
-  [X2_POSSESSED_PAINE_ID]: [1.12, 0, -3.6],
+  [X2_POSSESSED_RIKKU_ID]: [1.3, 0, -1.2],
+  [X2_POSSESSED_PAINE_ID]: [1.3, 0, -1.2],
 };
 export const WRAITH_FIGURE_HEIGHTS: Readonly<Record<string, number>> = {
   [X2_POSSESSED_RIKKU_ID]: DEN_PARTY_HEIGHT,

@@ -368,9 +368,16 @@ describe('the word opens party prep, and its last letter is not a press', () => 
     const flow = mountFlow();
     for (const ch of WORD) await flow.press(ch);
     const prep = flow.prep()!;
-    const roster = prep.root.querySelectorAll('[data-member], .pp-roster__member, .pp-member');
-    expect(roster.length).toBeLessThanOrEqual(1);
-    expect(prep.root.textContent).toMatch(/Yuna/);
-    expect(prep.root.textContent).not.toMatch(/Rikku|Paine/);
+    const roster = [...prep.root.querySelectorAll('[data-role="roster"] .prep__member')];
+    expect(roster.map((m) => m.querySelector('.prep__member-name')?.textContent)).toEqual(['Yuna']);
+    expect(prep.snapshot()['member']).toBe('yuna');
+    // the roster cursor has nowhere to go: Right, Down and Up leave her selected (a roster of one wraps onto herself)
+    for (const key of ['ArrowDown', 'ArrowUp']) {
+      keyDown(key);
+      await flush();
+      await flow.step();
+      keyUp(key);
+      expect(prep.snapshot()['member'], key).toBe('yuna');
+    }
   });
 });

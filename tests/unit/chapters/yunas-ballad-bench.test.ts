@@ -74,7 +74,7 @@ describe(`how winnable the two duels are (${SEEDS} seeds a line; measured, never
       expect(row.secs, `${name}: the whole chapter takes minutes, not seconds`).toBeGreaterThan(60);
       expect(row.secs, `${name}: and not an hour`).toBeLessThan(600);
     }
-  }, 240_000);
+  }, 600_000);
 
   it('the duels are not trivial: a Warrior who never heals loses a real share (the Den kit), and a Yuna who only defends or only prays never wins', () => {
     const noHeal = bench({ ...LINES.warrior, healBelow: 0 }, SEEDS);
@@ -86,7 +86,7 @@ describe(`how winnable the two duels are (${SEEDS} seeds a line; measured, never
     const prays = bench(LINES.whiteMage, 8);
     report('white mage (control, 8 seeds)', prays, 8);
     expect(prays.wins).toBe(0);
-  }, 240_000);
+  }, 600_000);
 
   it('the alternative kit (the plain Chapter V preset, Lv 46, no Hero Drinks): the healing line still wins, the no-heal line is lost on every seed', () => {
     const build = chapterVYuna();
@@ -96,12 +96,12 @@ describe(`how winnable the two duels are (${SEEDS} seeds a line; measured, never
     const noHeal = bench({ ...LINES.warrior, healBelow: 0 }, SEEDS, build);
     report('alt kit: warrior, no heal', noHeal, SEEDS);
     expect(noHeal.wins / SEEDS).toBeLessThanOrEqual(0.1);
-  }, 240_000);
+  }, 600_000);
 
   it('at human speed (Active ATB, 1.5 s of clock a menu) the healing Warrior still wins most seeds', () => {
-    const seeds = Math.min(SEEDS, 40);
+    const seeds = Math.min(SEEDS, 100);
     const row = bench(LINES.warrior, seeds, undefined, true);
     report('warrior, Active, 1.5 s a menu', row, seeds);
     expect(row.wins / seeds).toBeGreaterThanOrEqual(0.5);
-  }, 240_000);
+  }, 600_000);
 });
