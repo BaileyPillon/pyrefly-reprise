@@ -10,10 +10,12 @@
  * 1. **Georapella is a race the party wins without drama**: both the "everyone strikes" line and the careful line win every seed, in about a minute; a party that only defends loses every seed (it is not a stalemate: the
  *    Ga ring wears it down).
  * 2. **The Precepts Guard is the Death tax**: the careful line (curtains, Phoenix Downs, Cura) wins nearly every seed, the line that never heals wins about four in five; a girl falls in about one fight in one.
- * 3. **Baralai is the real fight**: simple lines win about a quarter (never healing) to six in ten (careful); the line that COUNTS his blows (only Paine strikes at eight or nine, so the Drill Shot is hers) does not beat the
- *    careful one by more than the sampling can show: the Drill Shot (three quarters of a MAXIMUM HP, 1,279 on Paine at 1,706) is survivable at full health, so the threat is the sum of the cycle (Chain Attack, Glint, Demi,
- *    the Attack at the soft girl) on a 690-HP healer, not the shot itself. Yuna, a White Mage, has no Attack row and never makes a result on him, so no line's shot ever lands on her.
- * 4. **No act is unresolved**: every fight ends in a victory or a defeat, never a stalemate.
+ * 3. **Baralai is the real fight**: the lines that keep Yuna a White Mage win about a quarter (never healing) to six in ten (careful); the line that COUNTS his blows (only Paine strikes at eight or nine, so the Drill
+ *    Shot is hers) does not beat the careful one by more than the sampling can show: the Drill Shot (three quarters of a MAXIMUM HP, 1,279 on Paine at 1,706) is survivable at full health, so the threat is the sum of the cycle
+ *    (Chain Attack, Glint, Demi, the Attack at the soft girl) on a 690-HP healer who cannot strike (a White Mage has no Attack row), not the shot itself.
+ * 4. **The kit has the answer, in one menu row**: the `change` line, Yuna's Spherechange to a Gunner on her first turn (a row of her first menu, nothing written to her), wins about 98 in 100; and **holding the blows back
+ *    to count costs more than it saves** (`changeCount` wins fewer than `change`, the fight runs longer), so "stop at nine" is not the advice the words give: they say Protect the girl who lands the tenth and Change Yuna.
+ * 5. **No act is unresolved**: every fight ends in a victory or a defeat, never a stalemate.
  */
 import { describe, expect, it } from 'vitest';
 
@@ -143,6 +145,35 @@ describe('act 3, Baralai: the real fight, and the count', { timeout: 180_000 }, 
     expect(share(counter)).toBeGreaterThanOrEqual(0.4);
     expect(share(counter)).toBeLessThanOrEqual(0.78);
     expect(Math.abs(share(counter) - share(careful))).toBeLessThanOrEqual(0.2);
+  });
+
+  it('the kit has the answer in one menu row: a Yuna who Changes to a Gunner on her first turn wins nearly every seed (a White Mage cannot strike him), and her shots can land on her (she strikes now) and are survived', () => {
+    const change = cell(2, 'change');
+    const careful = cell(2, 'careful');
+    show(2, 'change', change);
+    expect(share(change)).toBeGreaterThanOrEqual(0.9);
+    expect(share(change) - share(careful), 'the Change is worth about thirty points').toBeGreaterThanOrEqual(0.2);
+    expect(change.kos / SEEDS).toBeLessThan(1);
+    expect(change.on.yuna, 'a Gunner Yuna makes results on him, so the shot can fall on her').toBeGreaterThan(0);
+    expect(change.unresolved).toBe(0);
+  });
+
+  it('holding the blows back to count (only Paine strikes from eight on) costs more than the shot it spares: the same player who also counts wins no more, the fight runs longer, and every shot lands on Paine or Rikku', () => {
+    const change = cell(2, 'change');
+    const held = cell(2, 'changeCount');
+    show(2, 'changeCount', held);
+    expect(share(held)).toBeLessThanOrEqual(share(change) + 0.05);
+    expect(share(held)).toBeGreaterThanOrEqual(0.8);
+    expect(held.minutes, 'holding makes the fight longer').toBeGreaterThan(change.minutes);
+    expect(held.on.yuna).toBe(0);
+    expect(held.on.paine + held.on.rikku).toBe(held.shots);
+  });
+
+  it('the Change helps the Precepts Guard a little too (Yuna strikes), and never hurts', () => {
+    const change = cell(1, 'change');
+    show(1, 'change', change);
+    expect(share(change)).toBeGreaterThanOrEqual(0.93);
+    expect(change.unresolved).toBe(0);
   });
 
   it('the acts get harder in order for the careful line: Georapella, then the Precepts Guard, then Baralai', () => {

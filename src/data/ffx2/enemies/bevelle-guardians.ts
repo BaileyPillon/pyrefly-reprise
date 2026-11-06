@@ -238,7 +238,7 @@ export const x2Baralai: EnemyDef = {
     BARALAI_ABSORB_ID,
   ],
   flags: { isBoss: true },
-  sensorText: 'Every tenth blow on him calls Drill Shot, three quarters of a girl\'s life. Count, and let the sturdiest girl take it.',
+  sensorText: 'Every tenth blow on him calls Drill Shot on whoever struck it, three quarters of her life. A White Mage cannot strike him: Change Yuna to a Gunner.',
   scanText: 'The Praetor of Bevelle, still himself. He is fast, he is hard to hit, and he counts the blows.',
 };
 

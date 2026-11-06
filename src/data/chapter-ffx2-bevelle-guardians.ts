@@ -58,6 +58,6 @@ export const FFX2_BEVELLE_GUARDIANS: Chapter = {
   sensorTexts: {
     [X2_GEORAPELLA_ID]: 'Four Ga spells in a ring, one a turn, on all three of you. Slow it, shell yourselves and heal.',
     [X2_PRECEPTS_GUARD_ID]: 'Demi a third of the time, then Slow, Death, Osmose or Drain. Keep Phoenix Downs ready, heal the Demi, and do not bother slowing it.',
-    [X2_BARALAI_ID]: 'Every tenth blow on him calls Drill Shot, three quarters of a girl\'s life. Count, and let the sturdiest girl take it.',
+    [X2_BARALAI_ID]: 'Every tenth blow on him calls Drill Shot on whoever struck it, three quarters of her life. A White Mage cannot strike him: Change Yuna to a Gunner.',
   },
 };

@@ -25,15 +25,14 @@ export const BEVELLE_GUARDIANS_META: ChapterMeta = {
   heroArt: 'pause/ch4-ffx2-bahamut', // a flagged stand-in: Chapter IV's pause plate, the same dungeon
   heroArtFallback: 'backdrops/bevelle-underground.png',
   quote: { text: 'He counts every blow. Mind how many you land.', speaker: 'Paine' },
-  handwritten: 'stop at nine',
+  handwritten: 'the tenth blow calls the drill',
   objectives: [
     { id: 'get-past-georapella', label: 'Get past Georapella', rule: { kind: 'link-reached', link: 2 } },
     { id: 'get-past-the-precepts-guard', label: 'Get past the Precepts Guard', rule: { kind: 'link-reached', link: 3 } },
     { id: 'defeat-baralai', label: 'Defeat Baralai', rule: { kind: 'victory' } },
   ],
   tip:
-    'Shell against Georapella. Phoenix Downs for the Precepts Guard’s Death. ' +
-    'Baralai’s tenth blow calls Drill Shot on whoever lands it: stop at nine.',
+    'Shell against Georapella. Phoenix Downs for Death. Baralai’s tenth blow calls Drill Shot on whoever lands it: Protect her. Change Yuna to a Gunner.',
   snapshots: [
     { image: 'backdrops/bevelle-underground.png', caption: 'the way down' },
     { image: 'characters/baralai-shade/idle.png', caption: 'the man at the stairs' },

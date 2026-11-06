@@ -10,7 +10,7 @@
  *
  *   --seeds  fights a line plays in an act (seeds from to from + N - 1); the committed table used 100 or more
  *   --acts   0 = Georapella, 1 = the Precepts Guard, 2 = Baralai
- *   --lines  any of defend, attack, careful, counter (comma-separated); default: every line that applies to the act
+ *   --lines  any of defend, attack, careful, counter, change, changeCount (comma-separated); default: every line that applies to the act
  *
  * It prints one markdown row per act and line, and a JSON line per row for the document's builder. A machine that is busy takes about 0.1 to 0.3 seconds a fight.
  */
@@ -33,12 +33,12 @@ const SEEDS = Number(args.get('--seeds') ?? 100);
 const FROM = Number(args.get('--from') ?? 1);
 const ACTS = (args.get('--acts') ?? '0,1,2').split(',').map(Number);
 const NAMES = ['Georapella (floor 3)', 'Precepts Guard (floor 3)', 'Baralai (floor 7)'];
-const DEFAULT_LINES = { 0: ['defend', 'attack', 'careful'], 1: ['defend', 'attack', 'careful'], 2: ['defend', 'attack', 'careful', 'counter'] };
+const DEFAULT_LINES = { 0: ['defend', 'attack', 'careful'], 1: ['defend', 'attack', 'careful', 'change'], 2: ['defend', 'attack', 'careful', 'counter', 'change', 'changeCount'] };
 
 console.log('| Act | Line | Seeds | Wins | Defeats | Unresolved | Girl KOs a fight | Minutes a fight | Drill Shots a fight | on Yuna / Rikku / Paine |');
 console.log('|---|---|---:|---:|---:|---:|---:|---:|---:|---|');
 for (const act of ACTS) {
-  const lines = (args.has('--lines') ? args.get('--lines').split(',') : DEFAULT_LINES[act]).filter((l) => l !== 'counter' || act === 2); // the counting line is about Baralai's count alone
+  const lines = (args.has('--lines') ? args.get('--lines').split(',') : DEFAULT_LINES[act]).filter((l) => (l !== 'counter' && l !== 'changeCount') || act === 2); // the counting line is about Baralai's count alone
   for (const line of lines) {
     let wins = 0;
     let defeats = 0;

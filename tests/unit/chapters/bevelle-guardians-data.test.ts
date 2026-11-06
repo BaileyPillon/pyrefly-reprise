@@ -373,6 +373,9 @@ describe('the chapter record and its place in the registry', () => {
     expect(BEVELLE_GUARDIANS_META.tip).toMatch(/Death/);
     expect(BEVELLE_GUARDIANS_META.tip).toMatch(/Phoenix Down/);
     expect(BEVELLE_GUARDIANS_META.tip).not.toMatch(/guard against/i);
+    expect(BEVELLE_GUARDIANS_META.tip, 'the lever the bench measured: a White Mage has no Attack row, a Gunner Yuna wins 98 in 100').toMatch(/Change Yuna to a Gunner/);
+    expect(BEVELLE_GUARDIANS_META.tip, 'the shot is survivable: the tip says protect her, not that the count must be stopped').not.toMatch(/stop at nine/i);
+    expect(x2Baralai.sensorText).toMatch(/Gunner/);
     expect(BEVELLE_GUARDIANS_META.tip).not.toMatch(/Holy|Slow/);
     expect(x2PreceptsGuard.sensorText).toMatch(/do not bother slowing/); // it is immune to Slow [RE §4.2]
     expect(x2PreceptsGuard.sensorText).toMatch(/Phoenix Downs/);

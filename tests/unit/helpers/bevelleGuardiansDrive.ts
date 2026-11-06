@@ -138,7 +138,7 @@ export function outcomeOf(engine: FFX2Engine): string | undefined {
 // Lines (test inputs standing in for a player)
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-export type LineName = 'defend' | 'attack' | 'careful' | 'counter';
+export type LineName = 'defend' | 'attack' | 'careful' | 'counter' | 'change' | 'changeCount';
 
 /** A girl who is down: a Phoenix Down raises her. */
 function fallenGirl(engine: FFX2Engine): FFX2Combatant | undefined {
@@ -201,14 +201,61 @@ export function baralaiHits(engine: FFX2Engine): number {
 /**
  * The lines. `defend` is nobody doing anything useful (the control). `attack` is everyone striking the guardian, with no healing at all (Yuna has no Attack row, so she defends). `careful` opens with Rikku's two curtains, raises the fallen, cures under 45 percent and
  * otherwise strikes (Rikku's Darkness while she has the HP). `counter` is `careful` plus the answer to Baralai's counter: **a player who counts**. At eight or nine blows landed on him, only Paine strikes (Yuna and Rikku tend,
- * defend or wait), so the tenth result, and the Drill Shot with it, is Paine's: the Warrior with the most HP after the curtains, Protect halving the shot.
+ * defend or wait), so the tenth result, and the Drill Shot with it, is Paine's: the Warrior with the most HP after the curtains, Protect halving the shot. `change` is `careful` plus Yuna's Spherechange to a Gunner (below).
  */
 export const LINES: Record<LineName, (act: Act) => Turn> = {
   defend: () => () => null,
   attack: (act) => (d) => attackOf(d, bossOf(act)),
   careful: (act) => carefulLine(bossOf(act)),
   counter: (act) => counterLine(bossOf(act)),
+  change: (act) => changeLine(bossOf(act)),
+  changeCount: (act) => changeCountLine(bossOf(act)),
 };
+
+/**
+ * The change line: `careful` with ONE difference, the one a player makes. Yuna, a White Mage, has no Attack row and a 690-HP body; her first menu offers a Spherechange to a Gunner (one link away on her grid, across the
+ * green gate: a row the menu offers, nothing written to her). On her first turn she takes it, and from then on she strikes (the Gunner's Attack) and heals with Hi-Potions below 40 percent; a fallen girl is raised first.
+ * Rikku and Paine play `careful`.
+ */
+function changeLine(boss: string): Turn {
+  const rest = carefulLine(boss);
+  let yunaTurns = 0;
+  return (d, engine) => {
+    if (d.actorId !== 'yuna') return rest(d, engine);
+    yunaTurns += 1;
+    const fall = fallenGirl(engine);
+    const revive = fall ? rowOf(d, 'item', 'x2-phoenix-down', [fall.id]) : null;
+    if (revive) return revive;
+    if (yunaTurns === 1) {
+      const change = d.commands.find((c) => c.enabled && c.command.kind === 'spherechange' && (c.command.extra as { toDressphere?: string } | undefined)?.toDressphere === 'gunner');
+      if (change) return change.command as Command;
+    }
+    if (unit(engine, 'yuna').dresspheres?.current === 'white-mage') return rest(d, engine); // no Gunner row offered: the careful White Mage
+    const low = lowestFraction(engine);
+    if (low && low.hp < low.stats.maxHp * 0.4) {
+      const heal = rowOf(d, 'item', 'x2-hi-potion', [low.id]);
+      if (heal) return heal;
+    }
+    return attackOf(d, boss);
+  };
+}
+
+/**
+ * The change line AND the count: `counter`'s rule (from eight blows on only Paine strikes) for Rikku and Paine, `change`'s play for Yuna until then; from eight blows on Yuna, a Gunner by then, raises the fallen and otherwise waits.
+ * It is what a player who has both answers does, and the bench measures that holding costs more than the shot it spares (the fight is longer).
+ */
+function changeCountLine(boss: string): Turn {
+  const base = counterLine(boss);
+  const change = changeLine(boss);
+  return (d, engine) => {
+    if (d.actorId !== 'yuna') return base(d, engine);
+    if (baralaiHits(engine) >= HOLD_FROM) {
+      const fall = fallenGirl(engine);
+      return fall ? rowOf(d, 'item', 'x2-phoenix-down', [fall.id]) : null;
+    }
+    return change(d, engine);
+  };
+}
 
 function carefulLine(boss: string): Turn {
   let rikkuTurns = 0;
