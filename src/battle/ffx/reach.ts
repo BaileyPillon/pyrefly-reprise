@@ -35,7 +35,6 @@ export const REACH_ZERO_COMMANDS: ReadonlySet<number> = new Set([
   0x3010, 0x3011, 0x3012, 0x3013, // Power, Magic, Armor, Mental Break
   0x3014, 0x3015, 0x3016, // Mug, Quick Hit, Steal
   0x3025, 0x3026, 0x302a, // Threaten, Provoke, Bribe
-  0x3109, // Struggle (the hidden Flooded Ways' swallowed character's strike at the monster holding them, FFX only, 2026-11-06)
   0x3058, 0x3059, // Pilfer Gil, Full Break
   0x305a, 0x305b, 0x305c, 0x305d, 0x305e, 0x305f, // Extract and Nab moves, Quick Pockets
   0x3060, 0x3061, 0x3062, 0x3063, 0x3064, 0x3065, 0x3066, 0x3067, 0x3068, // Tidus's and Auron's physical Overdrives, Kimahri's Jump
