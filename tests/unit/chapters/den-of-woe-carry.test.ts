@@ -21,6 +21,7 @@ import { LEBLANC_CHAIN_ORDER } from '../../../src/data/ffx2/enemies/leblanc-synd
 import { FALLEN_AEONS_CHAIN_ORDER, roadSistersGroup } from '../../../src/data/ffx2/enemies/fallen-aeons-road.ts';
 import { VEGNAGUN_CHAIN_ORDER } from '../../../src/data/ffx2/ids.ts';
 import { denBaralaiGroup, denGippalGroup, denNoojGroup } from '../../../src/data/ffx2/enemies/den-of-woe.ts';
+import { paineDuelGroup } from '../../../src/data/ffx2/enemies/yunas-ballad.ts';
 import { carryPartyForward, setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { wearing } from '../../../src/app/screens/BattleScreenCarry.ts';
 import { checkpointAt } from '../../../src/app/screens/BattleChainCheckpoint.ts';
@@ -130,7 +131,8 @@ describe('the flag is the only way in: every other chain carries what it always 
     const road = setupForNextLink({ game: 'ffx2', party: farplaneBuild, enemies: denBaralaiGroup, triggers: [], seed: 1, condition: 'normal', canEscape: false }, roadSistersGroup, engine.state(), 2);
     expect((road.party as FFX2PartyBuild).members.map((m) => m.statuses)).toEqual([undefined, undefined, undefined]);
     for (const g of Object.values(data.ENEMY_GROUPS_BY_ID)) {
-      if (g.carriesFullPartyState) expect([denGippalGroup.id, denNoojGroup.id], g.id).toContain(g.id);
+      // the Den's second and third shades, and the hidden Yuna's Ballad's second duel (the same seam, 2026-11-06: HP and MP carried between the Den's fights, `yunas-ballad-flow.test.ts`)
+      if (g.carriesFullPartyState) expect([denGippalGroup.id, denNoojGroup.id, paineDuelGroup.id], g.id).toContain(g.id);
     }
   });
 

@@ -1,10 +1,10 @@
 /**
  * The game's own command rows for the moves of the possessed Rikku and the possessed Paine (the two duels of the hidden chapter "Yuna's Ballad"). Re-parity W3's shape; **FFX-2 only**.
  *
- * Source: `kernel/monmagic.bin` (ids 0x4000 and up) and `kernel/item.bin` (ids 0x2000 and up) of the Steam HD build 25501027, read byte by byte by the RE session (`research/re-ffx2-yunas-ballad.md` sections 4.3 and 7,
+ * Source: `kernel/monmagic.bin` (ids 0x4000 and up) and `kernel/item.bin` (ids 0x2000 and up) of the Steam HD build 25501027, read byte by byte by the RE session (`research/re-ffx2-yunas-ballad.md` §4.3 and §7,
  * 2026-11-06), numbers only, no game text and no game code. Merged into `FFX2_COMMAND_RECORDS` by `./index.ts`.
  *
- * - **Spider Attack 0x40c7** (Rikku): formula 0, two hits of power 16, accuracy formula 2 (the race with ACC, byte 95), crit byte 10, no shatter, 100 recovery, no charge.
+ * - **Spider Attack 0x40c7** (Rikku): formula 0, two hits of power 16, accuracy formula 1 (the race with the row's own byte 95), crit byte 10, no shatter, 100 recovery, no charge.
  * - **Bomb Core 0x201a, Arctic Wind 0x201d, Lightning Marble 0x2020, Dragon Scale 0x2023** (the script's strong throws): formula 8, power 6, one girl, damage flags 0x40 (no type bit), shatter 50, elements 1, 2, 4, 8
  *   (Fire, Ice, Thunder, Water), 40 charge and 40 recovery.
  * - **Grenade 0x2011**: the item row the party's own Grenade is (`./items.ts`, `x2-item-grenade`): formula 8, power 4, the whole party, damage flags 0x41 (physical), shatter 30; repeated here under the enemy ability's own id.

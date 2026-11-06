@@ -2,7 +2,7 @@
  * The game's own monster rows for the possessed Rikku and the possessed Paine (the Den of Woe's first two fights; the hidden chapter "Yuna's Ballad"). Re-parity W3's shape; **FFX-2 only**.
  *
  * Source: `kernel/monster.bin` **rows 254 (Rikku, id 0x10fe) and 256 (Paine, id 0x1100)** of the Steam HD build 25501027, formation rows 1806 and 1805 (`kino13_228`, `kino13_229`), read field by field by the RE session
- * (`research/re-ffx2-yunas-ballad.md` sections 3 and 4, 2026-11-06), numbers only. Merged into `MONSTER_RECORDS` by `./records.ts`. The weapon prop rows 255 and 257 are invisible actors with no action and no
+ * (`research/re-ffx2-yunas-ballad.md` §3 and §4, 2026-11-06), numbers only. Merged into `MONSTER_RECORDS` by `./records.ts`. The weapon prop rows 255 and 257 are invisible actors with no action and no
  * cursor, not in battle (the prop scripts switch those off), and are not authored.
  *
  * What the rows say: Accuracy 95; **Death, Petrify, Silence, Poison, Curse and Eject (group-1 slots 0, 1, 3, 5, 8 and 10) and Itchy and Auto-Life (17 and 18) are immune on both, and Stop (6) and Doom (14) of group 2;

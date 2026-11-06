@@ -26,7 +26,8 @@ describe('the data reaches every unit', () => {
     }
     // The hidden Fallen Maesters' four bodies (motion sets 0x1044, 0x1084, 0x109b and 0x1058 in the RE note) have no damage-clip frame counts in the repo yet (RE Q14: the frame table was not read for them), so the
     // engine keeps today's 2 s / 3 s window on them, as it does on the Bulwarks; this list shrinks when `MONSTER_MOTION_SET` and `MONSTER_CLIP_FRAMES` gain their rows.
-    expect(missing.sort()).toEqual(['bulwark-l', 'bulwark-r', 'x2-aranea', 'x2-black-elemental', 'x2-chac', 'x2-concherer']);
+    // The hidden Yuna's Ballad's two bodies (motion sets 0x10fe and 0x1100 in the RE note) have no damage-clip frame counts in the repo either (the frame table was not read for them), so they keep today's window too.
+    expect(missing.sort()).toEqual(['bulwark-l', 'bulwark-r', 'x2-aranea', 'x2-black-elemental', 'x2-chac', 'x2-concherer', 'x2-possessed-paine', 'x2-possessed-rikku']);
   });
 });
 
