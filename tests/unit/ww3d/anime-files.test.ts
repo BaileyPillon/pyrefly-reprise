@@ -33,7 +33,7 @@ import { boxOf, modelsDir, readGltf, realIo, trianglesOf } from '../helpers/wwRe
 const path = (id: WwId): string => join(modelsDir, `${ANIME_FILES[id]}.glb`);
 const have = WW_PARTY_IDS.every((id) => existsSync(path(id)));
 /** The height over the head's length (Head to head_end) of the files of the proportion pass, as a band (measured 2026-11-06: Yuna 7.90, Rikku 9.02, Paine 7.01; the files before it: 6.08, 7.20, 5.82). */
-const PASS_RATIO: Readonly<Record<'yuna' | 'rikku' | 'paine', readonly [number, number]>> = { yuna: [7.5, 8.3], rikku: [8.5, 9.5], paine: [6.6, 7.4] };
+const PASS_RATIO: Readonly<Record<'yuna' | 'rikku' | 'paine', readonly [number, number]>> = { yuna: [7.5, 8.3], rikku: [12.2, 13.2], paine: [7.3, 8.3] }; // r76 (the heights pass): Rikku 12.69 (head 0.55, legs 1.16) and Paine 7.79 (head 0.75, legs 1.10), were 9.02 and 7.01
 const NEEDED = ['Hips', 'Spine', 'Head', 'head_end', 'headfront', 'LeftShoulder', 'RightShoulder', 'LeftForeArm', 'RightForeArm', 'LeftHand', 'RightHand', 'LeftUpLeg', 'RightUpLeg'];
 
 describe.skipIf(!have)('the three girls\' LOD1 files', () => {
@@ -114,7 +114,7 @@ describe.skipIf(!have)('the chapter\'s code over the real girls', () => {
       const f = measureFace(scene, mesh, id)!;
       expect(f).not.toBeNull();
       const verts = mesh.geometry.attributes['position']!.count;
-      expect(f.H, 'the head is a few tenths of a metre long').toBeGreaterThan(0.12);
+      expect(f.H, 'the head is a tenth to a few tenths of a metre long (Rikku\'s bone is 0.118 m since r76: her head is scaled 0.55 about its joint)').toBeGreaterThan(0.1);
       expect(f.H).toBeLessThan(0.45);
       // measured 2026-11-06 on the LOD1 files: Yuna 6191 head and 132 face of 17847; Rikku 8191 and 193 of 18503; Paine 4859 and 204 of 16788 (the hair is most of the head's vertices; the face is a smooth, sparsely meshed patch)
       expect(f.headVerts / verts, 'the head, hair included, is a quarter to a half of the vertices').toBeGreaterThan(0.2);

@@ -17,8 +17,8 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 /** The proportion recipe of each girl: the head's scale about the Head joint, the legs', spine's and (through the spine's share) arms' lengthening, a slimmer build, a longer neck. */
 export const RECIPES = {
   yuna: { head: 0.78, leg: 1.1, spine: 1.02, arm: 1.5, slim: 0.97, neck: 1.1 },
-  rikku: { head: 0.8, leg: 1.1, spine: 1.02, arm: 1.5, slim: 0.97, neck: 1.1 },
-  paine: { head: 0.84, leg: 1.08, spine: 1.02, arm: 1.5, slim: 0.97, neck: 1.1 },
+  rikku: { head: 0.55, leg: 1.16, spine: 1.02, arm: 1.5, slim: 0.97, neck: 1.1 }, // r76: was head 0.8, leg 1.1 (4.2 heads by the tool's measure, chin to crown, her hair counted); now 5.6 (alternative: head 0.5, leg 1.22 = 6.1, the face smaller still)
+  paine: { head: 0.75, leg: 1.1, spine: 1.02, arm: 1.5, slim: 0.97, neck: 1.1 }, // r76: was head 0.84, leg 1.08 (6.2 heads); now 6.9, Yuna's 7.0 (alternative: head 0.72, leg 1.12 = 7.2)
 };
 
 /** The Wind Waker cast clips copied onto the toon girls (source name: target name): the upright idle (it replaces the file's crouched, head-bowed one) and the victory (the files had none). */

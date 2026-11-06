@@ -27,7 +27,7 @@ import type { WingShape } from './wing.ts';
  * The girls' own heights as exported (metres: the files of the proportion pass, about 7 heads: `tools/anime/proportion.mjs`; the files before it stood 1.60 / 1.55 / 1.70), and Valefor's file's 3.5 m (times
  * {@link BOSS_SCALE} for her height here). The engine fits each figure to its world height below, so these only place the hit burst's chest.
  */
-export const ANIME_NATIVE_HEIGHT: Readonly<Record<WwId, number>> = { yuna: 1.623, rikku: 1.554, paine: 1.719, 'x2-valefor': 3.5 };
+export const ANIME_NATIVE_HEIGHT: Readonly<Record<WwId, number>> = { yuna: 1.623, rikku: 1.502, paine: 1.705, 'x2-valefor': 3.5 }; // r76: Rikku and Paine follow the taller recipes of `tools/anime/cast.mjs` (was 1.554 and 1.719)
 export const BOSS_SCALE = 5.0 / 3.5;
 export const ANIME_WORLD_HEIGHT: Readonly<Record<WwId, number>> = { yuna: 1.6, rikku: 1.55, paine: 1.7, 'x2-valefor': 5.0 };
 
