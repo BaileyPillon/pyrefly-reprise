@@ -36,6 +36,7 @@ export const TURN_ORDER_LINES: Readonly<Record<string, string>> = {
   'sinspawn-gui': TURN_ORDER_PARTY_FIRST,
   'exp-fayth': TURN_ORDER_PARTY_FIRST,
   'last-summoning': TURN_ORDER_PARTY_FIRST,
+  'dark-aeons': TURN_ORDER_PARTY_FIRST, // the hidden Dark Aeons (FFX only, 2026-11-06): Tidus and Yuna wear First Strike, so the party opens in every seed of the first link (the engine count is the test's)
   'spectral-keeper': TURN_ORDER_PARTY_FIRST, // the formation gives the front line First Strike, so all three act before the Keeper in every seed (the engine count is the test's)
 };
 

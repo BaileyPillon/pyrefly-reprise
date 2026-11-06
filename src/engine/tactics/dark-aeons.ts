@@ -27,8 +27,8 @@ import { type Tactic, aim, has, hpFraction, revive, row } from './common.ts';
 /** The six Dark Aeons' ids (`src/data/ffx/dark-aeons-six-ids.ts`); Dark Ixion's two fights are two ids (`dark-ixion`, `dark-ixion-2`) and one painting. */
 export const DARK_AEONS_BOSS_IDS: readonly CombatantId[] = ['dark-valefor', 'dark-ifrit', 'dark-ixion', 'dark-ixion-2', 'dark-shiva', 'dark-bahamut', 'dark-anima'];
 
-/** Gauge gained per own turn and per allowed hit event, per script id (`battle/ffx/ai/dark-aeons-six-rules.ts#SIX_GAINS`, restated: the tactics stay out of the battle layer's graph). */
-const GAINS: Readonly<Record<string, { perTurn: number; perHit: number }>> = {
+/** Gauge gained per own turn and per allowed hit event, per script id (`battle/ffx/ai/dark-aeons-six-rules.ts#SIX_GAINS`, restated: the tactics stay out of the battle layer's graph; `tests/unit/chapters/dark-aeons-six-review.test.ts` pins it equal). */
+export const DARK_AEONS_GAINS: Readonly<Record<string, { perTurn: number; perHit: number }>> = {
   'dark6-valefor': { perTurn: 5, perHit: 15 },
   'dark6-ifrit': { perTurn: 10, perHit: 5 },
   'dark6-ixion-1': { perTurn: 5, perHit: 10 },
@@ -113,7 +113,7 @@ const pickKind = (commands: readonly AvailableCommand[], kind: Command['kind'], 
 
 /** The gauge at which the foe's Overdrive is next in the line's reading (rule 2): `100 - perTurn - margin x perHit`. */
 export function shieldGauge(scriptId: string, marginHits: number): number {
-  const g = GAINS[scriptId] ?? { perTurn: 10, perHit: 10 };
+  const g = DARK_AEONS_GAINS[scriptId] ?? { perTurn: 10, perHit: 10 };
   return 100 - g.perTurn - marginHits * g.perHit;
 }
 

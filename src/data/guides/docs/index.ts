@@ -29,6 +29,7 @@ import { ISAARU_DOC } from './ffx-isaaru.ts';
 import { SINSPAWN_GUI_DOC } from './sinspawn-gui.ts';
 import { BIRAN_YENKE_DOC } from './biran-yenke.ts';
 import { MIRROR_AEONS_DOC } from './mirror-aeons.ts';
+import { DARK_AEONS_DOC } from './dark-aeons.ts';
 import { SIN_FINS_CORE_DOC } from './sin-fins-core.ts';
 import { SIN_FACE_DOC } from './sin-face.ts';
 import { FFX2_EXPERIMENT_DOC } from './ffx2-experiment.ts';
@@ -58,6 +59,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   SINSPAWN_GUI_DOC, // the hidden Sinspawn Gui chapter (FFX only)
   BIRAN_YENKE_DOC, // the hidden Biran and Yenke chapter (FFX only)
   MIRROR_AEONS_DOC, // the hidden Mirror Aeons chapter (FFX only)
+  DARK_AEONS_DOC, // the hidden Dark Aeons chapter (FFX only, 2026-11-06)
   SIN_FINS_CORE_DOC,
   SIN_FACE_DOC,
   FFX2_EXPERIMENT_DOC, // the hidden Experiment (FFX-2 only)

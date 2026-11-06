@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * The real-key smoke of the hidden Dark Aeons chapter (branch `ch-dark-aeons`; FFX only): a headless Playwright run, against a dev or preview server that is already up, under the review-browser lock
- * (`D:/Tools/pyrefly-scratch/RIG-RECORD`, `tools/rig-record-lock.mjs`: one browser job at a time on this PC; the job promises to finish inside ten minutes). It opens the chapter by its typed word, looks at party
+ * (`tools/rig-record-lock.mjs`: one browser job at a time on this PC; the job promises to finish inside ten minutes). It opens the chapter by its typed word, looks at party
  * prep, plays the pre scene by keyboard, takes the first menu of link 1 (Dark Valefor on the road, the plate the scene starts on), plays turns with the real keys (Enter on Attack, Enter on the one target) and watches the
  * Overdrive gauge take its hit events, then hands the rest to the advisor's line (`autoBattle('intended')`) and stops at the first menu of link 2 (Dark Ifrit, the seam played, the desert's plate).
  *

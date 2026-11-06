@@ -35,11 +35,11 @@ export const DARK_AEONS_META: ChapterMeta = {
     { id: 'road-to-gagazet', label: 'Reach the road to Gagazet', rule: { kind: 'link-reached', link: 6 } },
     { id: 'last-home', label: 'Send the last of them home', rule: { kind: 'victory' } },
   ],
-  tip: 'Every blow fills their fury, and a full fury is a blow that kills. Strike with few, heavy hits, put Auto-Life on everyone, and send an aeon in just before the worst of it.',
+  tip: 'Every blow fills their fury, and a full fury kills. Strike few and hard, keep Auto-Life on everyone, and send an aeon in ahead of the worst.',
   snapshots: [
     { image: 'backdrops/gagazet.png', caption: 'the road' },
     { image: 'characters/anima/idle.png', caption: 'what waits at the foot of the mountain' },
-    { image: 'characters/bahamut/idle.png', caption: 'and the one before it' },
+    { image: 'characters/bahamut/idle.png', caption: 'and the last of them' },
   ],
   focalCharacterId: 'yuna',
   musicKeys: ['scene-gagazet', 'boss-challenge', 'boss-yojimbo', 'victory-ffx'],

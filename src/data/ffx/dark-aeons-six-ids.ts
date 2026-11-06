@@ -47,7 +47,7 @@ export interface DarkSixLink {
   readonly link: number;
   /** The game's formation file. */
   readonly file: string;
-  /** The battle id (area key x 65,536 + 70 or 71): the scripts do not read it, the setup publishes it as a flag for the record. */
+  /** The battle id (area key x 65,536 + 70 or 71): recorded from the game's files; nothing in the battle reads it (only `dark-aeons-six-data.test.ts` does, like `stop`, `file`, `stage` and `flagWord`). */
   readonly battleId: number;
   /** The battlefield (stage) id of the area table (RE six 2.1). */
   readonly stage: number;

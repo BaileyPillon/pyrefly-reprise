@@ -110,7 +110,12 @@ const TEXT = {
   },
   ixion: {
     sensor: 'His blade strikes back and can be dodged. Let nothing find you.',
-    scan: 'Ixion, turned dark. In the first fight he answers each blow with a blade that sleeps and breaks; in the second he only waits for the thunder to gather.',
+    scan: 'Ixion, turned dark. He answers each blow with a blade that sleeps and breaks, and Aerospark strips your wards.',
+  },
+  /** The second fight is another script: no answer to a blow, a fury that fills faster (RE six 4.3). */
+  ixion2: {
+    sensor: 'Your blows draw no answer, but the thunder gathers fast. Send something else in for the hammer.',
+    scan: 'Ixion, turned dark, a second time. He strikes at one of you every turn, and his fury fills fast and ends in Thor\'s Hammer.',
   },
   shiva: {
     sensor: 'She is quick. Her cold kiss can kill outright.',
@@ -137,13 +142,15 @@ interface BodyOpts {
   /** False for Dark Ixion: his formations disable neither Escape nor Flee, so the files carry no `boss` flag for him. */
   boss?: boolean;
   slot?: number;
+  /** The scan and sensor lines when they are not the record key's (the second Dark Ixion fight has its own). */
+  text?: keyof typeof TEXT;
   /** The painting's name when it is not the id (Dark Ixion's second fight draws the first fight's painting). */
   sprite?: string;
 }
 
 function body(opts: BodyOpts): EnemyDef {
   const stats = statsOf(SIX_RECORDS[opts.key]);
-  const text = TEXT[opts.key];
+  const text = TEXT[opts.text ?? opts.key];
   const sprite = opts.sprite ?? opts.id;
   const form: EnemyForm = { name: opts.display, spriteKey: sprite, hp: stats.hp, ...(opts.statOverrides !== undefined ? { statOverrides: opts.statOverrides } : {}) };
   return {
@@ -175,7 +182,7 @@ export const darkIfrit = (): EnemyDef => body({ id: DARK_IFRIT_ID, display: 'Dar
 export const darkIxion1 = (): EnemyDef => body({ id: DARK_IXION_ID, display: 'Dark Ixion', key: 'ixion', script: DARK_SIX_SCRIPTS['ixion-1'], abilityIds: [R.ixionAttack1, R.aerospark, R.thundaja], boss: false });
 /** Dark Ixion, second fight (`kami03_71`): STR 182, DEF 222, MAG 146, MDEF 198 on the form (RE six 4.3); the current HP 1,300,000 is written at set-up (`DARK_IXION_2_CURRENT_HP`). */
 export const darkIxion2 = (): EnemyDef =>
-  body({ id: DARK_IXION_2_ID, sprite: DARK_IXION_ID, display: 'Dark Ixion', key: 'ixion', script: DARK_SIX_SCRIPTS['ixion-2'], abilityIds: [R.ixionAttack2, R.aerospark, R.thorsHammer], boss: false, statOverrides: { ...DARK_IXION_2_STATS } });
+  body({ id: DARK_IXION_2_ID, sprite: DARK_IXION_ID, display: 'Dark Ixion', key: 'ixion', text: 'ixion2', script: DARK_SIX_SCRIPTS['ixion-2'], abilityIds: [R.ixionAttack2, R.aerospark, R.thorsHammer], boss: false, statOverrides: { ...DARK_IXION_2_STATS } });
 export const darkShiva = (): EnemyDef => body({ id: DARK_SHIVA_ID, display: 'Dark Shiva', key: 'shiva', script: DARK_SIX_SCRIPTS.shiva, abilityIds: [R.shivaAttack, R.heavenlyStrike, R.diamondDust] });
 export const darkBahamut = (): EnemyDef => body({ id: DARK_BAHAMUT_ID, display: 'Dark Bahamut', key: 'bahamut', script: DARK_SIX_SCRIPTS.bahamut, abilityIds: [R.ifritAttack, R.megaFlare, R.impulse] });
 export const darkAnima = (): EnemyDef => body({ id: DARK_ANIMA_ID, display: 'Dark Anima', key: 'anima', script: DARK_SIX_SCRIPTS.anima, abilityIds: [R.animaAttack, DARK_MEGA_GRAVITON_ID, R.pain, R.oblivion] });

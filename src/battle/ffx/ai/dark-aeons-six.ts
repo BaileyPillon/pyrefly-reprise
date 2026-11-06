@@ -24,8 +24,8 @@ import type { Command, FFXCombatant } from '../../common/types.ts';
 import { type Ctx, rtOf } from '../state.ts';
 import { setGauge } from '../overdrive.ts';
 import { gameMod, randomLiving } from './game-rolls.ts';
-import { counterAllowed, frontIds } from './hit-gates.ts';
-import { type HitEvent, queueCounter, registerHitScript } from './hit-script.ts';
+import { counterAllowed, frontIds, react } from './hit-gates.ts';
+import { type HitEvent, registerHitScript } from './hit-script.ts';
 import { queueReaction } from './hooks.ts';
 import { type AiContext, num, registerAiScript, use } from './types.ts';
 import { IMPULSE_COUNTER, IMPULSE_EVERY, SIX_DRAW_MODULO, SIX_GAINS, SIX_GAUGE_FULL, SIX_ROWS as ROW, SIX_SCRIPTS, type SixGain } from './dark-aeons-six-rules.ts';
@@ -108,11 +108,15 @@ function commandOf(ctx: Ctx, id: string, targets: string[]): Command {
   return ctx.content.ability(id) ? { kind: 'ability', id, targets } : { kind: 'attack', targets };
 }
 
-/** The free Attack at the combatant that hit (`performCommand` from inside `onHit`); nothing when the aeon is down after the hit. */
+/**
+ * The free Attack at the combatant that hit (`performCommand` from inside `onHit`); nothing when the aeon is down after the hit.
+ * Through `./hit-gates.ts#react`, the engine's `performCommand` rule: an aeon with a reaction already waiting drops the second
+ * one, so a Doublecast (two hit events in one action) gets one answer, as the Evrae and Sin scripts do (review finding, 2026-11-06).
+ */
 function answerWith(event: HitEvent, row: string): void {
   const { ctx, target, attacker } = event;
   if (target.hp <= 0) return;
-  queueCounter(ctx, { actorId: target.id, targetId: attacker.id, command: commandOf(ctx, row, [attacker.id]) });
+  react(ctx, target, attacker.id, commandOf(ctx, row, [attacker.id]));
 }
 
 /** Dark Valefor: +15 on an allowed hit. No counter. */

@@ -64,7 +64,7 @@ export const DARK_AEONS: Chapter = {
     'dark-valefor': 'Every blow feeds her fury. End it quickly, or send something else in to take the great blast.',
     'dark-ifrit': 'He answers every blow. Fewer, heavier hits serve better than many light ones.',
     'dark-ixion': 'His blade strikes back and can be dodged. Let nothing find you.',
-    'dark-ixion-2': 'His blade strikes back and can be dodged. Let nothing find you.',
+    'dark-ixion-2': 'Your blows draw no answer, but the thunder gathers fast. Send something else in for the hammer.',
     'dark-shiva': 'She is quick. Her cold kiss can kill outright.',
     'dark-bahamut': 'Fortune favours him. Every fifth blow draws a curse on all of you.',
     'dark-anima': 'No spell touches her, and the elements feed her. Strike with steel.',

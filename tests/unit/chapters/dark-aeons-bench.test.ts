@@ -14,6 +14,10 @@ import { DARK_SIX_LINKS } from '../../../src/data/ffx/dark-aeons-six-ids.ts';
 import { ABLATIONS, BAND, TARGET, ablatedLine, advisorLine, carelessLine, chainRate, inBand, linkRate, share, withAeonGauge, withEvasion, withGil, withLineUp, withLuck, withPhoenixDowns, withStatFraction } from '../helpers/darkAeonsBench.ts';
 
 const SEEDS = 40;
+/** Forty seeds of a heavy cell take 13 s on a quiet machine and 25 s under load: the suite's 15 s default is not enough (review finding 2, 2026-11-06). */
+const BENCH_TIMEOUT = 180_000;
+/** The table of record (`DARK_AEONS_BENCH=1`) is about six minutes of engine time. */
+const TABLE_TIMEOUT = 1_800_000;
 
 describe('the harness levers change one thing each and touch no boss row', () => {
   it('the party levers return a changed copy and leave the preset as it was', () => {
@@ -48,14 +52,14 @@ describe(`the shape, ${SEEDS} seeds a cell (seeds 1 to ${SEEDS}, deterministic)`
       expect(share(rate(key, advisorLine)), `${key} advisor`).toBeGreaterThanOrEqual(0.9);
       expect(share(rate(key, carelessLine)), `${key} careless`).toBeLessThanOrEqual(0.1);
     }
-  });
+  }, BENCH_TIMEOUT);
 
   it('FINDING: the three shorter fights are easy for the preset: a careless line wins Valefor, Ifrit and Ixion\'s first fight (above the 20 percent the plan allows a careless line); the lever is the preset\'s stats, a cliff, not a dial', () => {
     for (const key of ['valefor', 'ifrit', 'ixion-1'] as const) {
       expect(share(rate(key, advisorLine)), `${key} advisor`).toBeGreaterThanOrEqual(0.9);
       expect(share(rate(key, carelessLine)), `${key} careless`).toBeGreaterThanOrEqual(0.9);
     }
-  });
+  }, BENCH_TIMEOUT);
 
   it('Dark Ixion\'s blade never touches the preset (Evasion 255 plus Luck 60 is 315): the first fight is as easy with Evasion 0, so Evasion is not its lever either', () => {
     expect(share(linkRate(SEEDS, 'ixion-1', advisorLine, withEvasion(darkAeonsBuild, 0)))).toBeGreaterThanOrEqual(0.9);
@@ -69,13 +73,13 @@ describe(`the shape, ${SEEDS} seeds a cell (seeds 1 to ${SEEDS}, deterministic)`
       expect(s, `${key} advisor`).toBeGreaterThan(0.2);
       expect(s, `${key} advisor`).toBeLessThan(0.7);
     }
-  });
+  }, BENCH_TIMEOUT);
 
   it('Auto-Life is what keeps Dark Shiva\'s Diamond Dust and Heavenly Strike from ending the fight: without it the advisor wins markedly fewer', () => {
     const with_ = linkRate(SEEDS, 'shiva', advisorLine).wins;
     const without = linkRate(SEEDS, 'shiva', ablatedLine('no-auto-life')).wins;
     expect(without).toBeLessThan(with_ - 5);
-  });
+  }, BENCH_TIMEOUT);
 
   it('the Yojimbo lever: his starting gauge raises the odds of a Zanmato on the two long fights (a full gauge adds 20 to the Pay\'s motivation)', () => {
     for (const key of ['anima', 'bahamut'] as const) {
@@ -83,7 +87,7 @@ describe(`the shape, ${SEEDS} seeds a cell (seeds 1 to ${SEEDS}, deterministic)`
       const full = linkRate(SEEDS, key, advisorLine, withAeonGauge(darkAeonsBuild, 'yojimbo', 100)).wins;
       expect(full, key).toBeGreaterThan(base);
     }
-  });
+  }, BENCH_TIMEOUT);
 });
 
 describe.runIf(process.env['DARK_AEONS_BENCH'] === '1')('the table of record, 200 seeds a cell (DARK_AEONS_BENCH=1)', () => {
@@ -98,7 +102,7 @@ describe.runIf(process.env['DARK_AEONS_BENCH'] === '1')('the table of record, 20
     const care = DARK_SIX_LINKS.map((l) => share(linkRate(N, l.key, carelessLine)));
     expect(care.slice(0, 3).every((s) => s >= 0.97)).toBe(true);
     expect(care.slice(3).every((s) => s <= 0.02)).toBe(true);
-  });
+  }, TABLE_TIMEOUT);
 
   it('the whole chapter on the first try: about one in five (19 percent of 200 seeds), lost at link 6 or 7 almost always; the plan\'s 70 percent (60 to 80) is NOT met and is reported, not tuned', () => {
     const r = chainRate(N, advisorLine);
@@ -107,5 +111,5 @@ describe.runIf(process.env['DARK_AEONS_BENCH'] === '1')('the table of record, 20
     expect(share(r)).toBeLessThan(0.28);
     expect(r.lostAt[6]! + r.lostAt[7]!).toBeGreaterThan(0.9 * r.losses);
     expect([TARGET, BAND]).toEqual([0.7, [0.6, 0.8]]);
-  });
+  }, TABLE_TIMEOUT);
 });

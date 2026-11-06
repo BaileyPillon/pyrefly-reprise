@@ -89,7 +89,8 @@ describe('the chapter is registered and LISTED: the last of the nineteen', () =>
   });
 
   it('the Mushroom Rock Road scene itself is untouched for Sinspawn Gui: its two looks, its slots and its enemy spots', () => {
-    expect(Object.keys(MUSHROOM_PLATE_LOOK).sort()).toEqual(['cavern-stolen-fayth', 'mushroom-rock-road-ruined', 'mushroom-rock-road'].sort());
+    // Its three looks, and the four more the hidden Dark Aeons chapter's plate swaps use (2026-11-06; nothing else reads them: Sinspawn Gui and Mirror Aeons still swap between their own three).
+    expect(Object.keys(MUSHROOM_PLATE_LOOK).sort()).toEqual(['cavern-stolen-fayth', 'mushroom-rock-road-ruined', 'mushroom-rock-road', 'bikanel-desert-provisional', 'macalania-temple', 'gagazet', 'zanarkand-dome'].sort());
     expect(Object.keys(MUSHROOM_SLOTS.enemySpots ?? {}).sort()).toEqual(['sinspawn-gui', 'sinspawn-gui-2', 'sinspawn-gui-arm-left', 'sinspawn-gui-arm-right', 'sinspawn-gui-head']);
   });
 });
