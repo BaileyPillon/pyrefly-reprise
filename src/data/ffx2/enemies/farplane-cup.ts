@@ -119,7 +119,7 @@ export const x2CupAuron: EnemyDef = {
     CUP_ABILITY.auronXPotion,
   ],
   flags: { isBoss: true },
-  sensorText: 'Slow and heavy. A shot through one of you that does not kill but removes, and a blow that strips four stats at once.',
+  sensorText: 'Heavy and steady. His shooting star does not kill: it removes one of you from the fight.',
   scanText: 'A swordsman who walked out of a pilgrimage. Every turn is a blade; the one to fear is the shooting star.',
 };
 
@@ -179,7 +179,7 @@ export const x2CupTidus: EnemyDef = {
   ],
   flags: { isBoss: true },
   sensorText: 'The fastest thing in the arena. He opens with nine blows on one of you, and hastes himself so that he can keep going.',
-  scanText: 'A name the arena keeps hidden. Hasty and quick; he cannot be reflected, but his Haste can be stripped.',
+  scanText: 'A name the arena keeps hidden. Hasty and quick, and he cannot be given Reflect.',
 };
 
 /** Seymour, duel 3: `monster.bin` row 319 (id 0x113f), Lv 67. */
@@ -248,8 +248,8 @@ export const x2CupSeymour: EnemyDef = {
     CUP_ABILITY.ultima,
   ],
   flags: { isBoss: true },
-  sensorText: 'He heals on black magic. Meteor and Black Sky come from the sky, and his Break turns a girl to stone.',
-  scanText: 'A maester who drinks fire, ice, thunder and water. Holy is his one weakness; nothing the three of you cast heals him less than a blade.',
+  sensorText: 'He drinks fire, ice, thunder, water and Gravity. Meteor and Black Sky come down on all three of you.',
+  scanText: 'A maester who drinks fire, ice, thunder and water, and Gravity too. Holy is his one weakness.',
 };
 
 /** The group fields every duel shares: no escape, the stand-in cue. */

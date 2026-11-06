@@ -92,7 +92,7 @@ Every number is the game's own, from `research/re-ffx2-farplane-cup.md`: the thr
 
 | What | State |
 |---|---|
-| The three paintings | `characters/auron`, `characters/tidus`, `characters/seymour-guest`: existing party paintings used as foes, mirrored by the painted actor; **style fit as foes is unverified** (no browser read of them in this lane's unit tests; the GPU smoke, section 10, shows the first fight) |
+| The three paintings | `characters/auron`, `characters/tidus`, `characters/seymour-guest`: existing party paintings used as foes, mirrored by the painted actor. **Seen in the browser for Auron and the masked duelist (the smoke, section 10): both face the party, stand on the Den plate at the girls' height and read well; Seymour's was not reached in the smoke** |
 | The arena | the Den of Woe's stage (DU5), human-sized foes at the default boss spot |
 | The story | a draft for Bailey to read (`story/scripts/ffx2-farplane-cup.ts`, "A DRAFT FOR BAILEY TO READ") |
 | The music | existing cues by reference (DU6); Bailey's ears decide (rule 13) |
@@ -131,7 +131,7 @@ All at 1600x900 and 390x844, `PYREFLY_BROWSER=gpu`, a production build, headless
 | **J7 pause and phone** | pause on each duel; 390x844 | the chapter tab with three objectives ("Get past Auron", "Get past the hidden duelist", "Defeat Seymour"), the three snapshots resolve; on the phone the foe stands clear of the command list |
 | **J8 console** | the whole run | no 404 other than missing optional paintings; no error |
 
-The GPU smoke of this lane (the first fight by real keys to a result, one browser job under the lock) is recorded in section 12.
+**The GPU smoke of this lane (`tools/farplane-cup-smoke.mjs`, headless Chromium on the real GPU, one browser job under the lock, a Vite dev server on port 5231 stopped by its PID afterwards; 1600x900; the phone size was NOT run) passed, 12 checks of 12** (`docs/screenshots/ch-farplane-cup/desk-*.jpg`, 11 images): the board draws nineteen cards and none for the chapter; the typed word `duelist` opens party prep and it holds (the door took the last letter's press); party prep reads "The Farplane Cup", EXP, the three objectives and the tip (five lines, fits the band); the pre scene plays by keys; **duel 1 opens with Auron alone at 187,500 HP, "Auron" on the boss strip, the Den of Woe's plate behind him and the three girls at full HP**; the intent slab reads "Shooting Star, possible 21 percent, Inflicts Eject on one girl"; the pause screen (by eye) reads "Chapter EXP, battle 1 of 3, Get past Auron"; real-key Attacks made the girls act; with Auron's HP written down to 600 (a debug write) the keys carry the fight through its end and the seam into **duel 2: the masked duelist alone at 136,200 HP, "????" on the boss strip and nowhere the real name**, the intent slab reading Hastega "scripted"; no console error and no 4xx but the two keys with no painting. **Prediction versus the run:** J1, J2, J3 and J4 as predicted; **J4 differed in one thing the prediction missed: the masked duelist's opening Blitz Ace lands inside the first 2.4 s of game time (his first gauge is 0.3 to 0.8 s and the charge 1.6 s), before the girls' first menu, so a girl may already be down when duel 2's first menu appears** (Yuna on the first run, Paine on the second); that is the game's own rhythm (AGI 224), not a restore fault (the flow test pins that duel 2 opens whole). J5 to J8 were not run (the phone size, the defeat panel, the later duels).
 
 ## 11. CHANGELOG lines (FFX-2 only unless tagged; for the integrator's release entry)
 
@@ -140,4 +140,9 @@ The GPU smoke of this lane (the first fight by real keys to a result, one browse
 
 ## 12. Tests and checks
 
-(see below, filled in after the runs)
+- `node node_modules/typescript/bin/tsc --noEmit`: clean. `node tools/orphans.mjs`: **24 orphaned of 2,356 modules, the same 24 as before, none of this lane's** (the new files are all reachable: the data and AI through the registries, the door through the door table).
+- **This chapter's tests: AI 23, data 72, engine 17, flow 12, story 17, door 13, bench 8 = 162**, all green, plus the pinned lists of the shared tests named in the CONTRACT-CHANGES entry (`chapter-doors`, `gagazet-door`, `yojimbo-door`, `summon-door`, `critic-route-doors`, `experiment-flow`, `prep-tip-band`, `prep-tip-short-forms`, `data-ffx2-command-records`, `data-ffx2-monster-records`, `parity-ffx2-rewards-data`).
+- **Seeded runs of each fight on 3 seeds** (`farplane-cup-flow.test.ts`): each duel on seeds 1 to 3 ends in a verdict and the same seed gives the same fight twice, and the chain to a victory on seeds 1 to 3 through the app's own path. **Winnability by bots over 100 seeds per fight** (`farplane-cup-bench.test.ts`, section 6): 100 seeds a cell on six lines, every cell resolved.
+- **Edge pins (no mutation run was done in this lane):** the data test pins each row field by field (a changed `power`, `hits`, `costCast` or status byte fails it), the AI test pins every band edge by one HP (23,436 and 23,437, 46,874 and 46,875, 45,399 and 45,400, 13,619 and 13,620, 72,749 and 72,750, 36,374 and 36,375), the engine test pins the T0 numbers.
+- `node --experimental-transform-types` probes (kept outside the repo) produced the first figures of sections 3 and 6; the tests above are what the numbers are now pinned by.
+- **The whole suite:** SUITE_PLACEHOLDER

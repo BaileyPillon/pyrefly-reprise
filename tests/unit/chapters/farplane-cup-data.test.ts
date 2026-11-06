@@ -333,6 +333,19 @@ describe('the kill-reward rows (re-parity RC9) and the party (DU4)', () => {
   });
 });
 
+describe('the player-facing words tell the truth about the kit (the Fallen Maesters review, major 1)', () => {
+  it('the tip and the guide lines name no move the Lv 99 three cannot make: no Dispel (Yuna owns the White Mage and has learned nothing of it), no stat drop or status the duelists cannot land (T0 a)', () => {
+    const learned = farplaneCupBuild.members.flatMap((m) => Object.values(m.abilitiesLearned ?? {}).flatMap((l) => l.learned));
+    expect(learned.filter((id) => /dispel|white-mage/i.test(id)), 'the build has learned no Dispel').toEqual([]);
+    const words = [FARPLANE_CUP_META.tip, x2CupAuron.sensorText, x2CupTidus.sensorText, x2CupSeymour.sensorText].join(' ');
+    expect(words).not.toMatch(/dispel/i);
+    // Full Break's stat drops, Break's Petrify, Confuse and Slowga cannot land on a Lv 99 girl (farplane-cup-engine.test.ts, T0 a): no line promises them.
+    expect(words).not.toMatch(/strips|stone|petrif|confus|slow/i);
+    expect(FARPLANE_CUP_META.tip).toMatch(/Shooting Star ejects/);
+    expect(FARPLANE_CUP_META.tip).toMatch(/nine blows/);
+  });
+});
+
 describe('the chapter record and its place in the registry', () => {
   it('is hidden: found by getChapter, in EXPERIMENT_CHAPTERS, in neither CHAPTERS nor CHAPTER_IDS (the board stays at nineteen)', () => {
     expect(getChapter(ids.FARPLANE_CUP_ID)).toBe(FFX2_FARPLANE_CUP);

@@ -5,8 +5,9 @@
  *
  * - `title`, `subtitle`, `location` and `blurb` are the record's (one premise on the card and the prep).
  * - `numeral` is `EXP` like the other hidden chapters (the board has no card for it; the prep header and the pause screen say so).
- * - `handwritten` and `tip` are our own words over the sourced facts (`research/re-ffx2-farplane-cup.md` §6 and §7, the game's own scripts and move rows): the second duelist keeps himself hasted and Dispel strips it; Seymour
- *   absorbs Fire, Ice, Thunder, Water and Gravity, so the girls' elemental spells heal him, and Darkness is not elemental. The tip is one sentence short enough to need no short form on the desktop card (a line model of the band).
+ * - `handwritten` and `tip` are our own words over the sourced facts (`research/re-ffx2-farplane-cup.md` §6 and §7, the game's own scripts and move rows): Auron's Shooting Star ejects a girl, the second duelist opens with nine blows on
+ *   one girl, and Seymour absorbs Fire, Ice, Thunder, Water and Gravity, so the girls' elemental spells heal him. **The tip promises nothing the Lv 99 kit cannot do** (the review of the Fallen Maesters, major 1): it names no Dispel, because
+ *   the build has learned none (Yuna owns the White Mage but has learned nothing of it). It is short enough to need no short form on the desktop card (a line model of the band, and a browser read).
  * - `quote` is Paine's line from the opening scene (`../story/scripts/ffx2-farplane-cup.ts`), our own.
  * - `objectives`: get past Auron (duel 2 reached), get past the second duelist (duel 3 reached, his name still masked), the win.
  * - `heroArt` is the pause plate `pause/ffx2-farplane-cup` (no painting yet: the Den of Woe's plate is the `heroArtFallback`, which the stage uses too).
@@ -32,7 +33,7 @@ export const FARPLANE_CUP_META: ChapterMeta = {
     { id: 'defeat-seymour', label: 'Defeat Seymour', rule: { kind: 'victory' } },
   ],
   // One short sentence: it needs no short form for the desktop prep card (the Fallen Maesters' ten-line tip did, `./chapter-prep-tips.ts`).
-  tip: 'Each duel is a fresh fight. Dispel strips the Haste the fast one lives on, and Seymour drinks fire, ice, thunder and water, so use Darkness.',
+  tip: 'Each duel is a fresh fight. Shooting Star ejects a girl, the fast one opens with nine blows, and Seymour drinks fire, ice, thunder and water.',
   snapshots: [
     { image: 'backdrops/den-of-woe.png', caption: 'a stand-in stage' },
     { image: 'characters/auron/idle.png', caption: 'the first duel' },

@@ -56,8 +56,8 @@ export const FFX2_FARPLANE_CUP: Chapter = {
     victory: 'victory-ffx2',
   },
   sensorTexts: {
-    [X2_CUP_AURON_ID]: 'Slow and heavy. A shot through one of you that does not kill but removes, and a blow that strips four stats at once.',
+    [X2_CUP_AURON_ID]: 'Heavy and steady. His shooting star does not kill: it removes one of you from the fight.',
     [X2_CUP_TIDUS_ID]: 'The fastest thing in the arena. He opens with nine blows on one of you, and hastes himself so that he can keep going.',
-    [X2_CUP_SEYMOUR_ID]: 'He heals on black magic. Meteor and Black Sky come from the sky, and his Break turns a girl to stone.',
+    [X2_CUP_SEYMOUR_ID]: 'He drinks fire, ice, thunder, water and Gravity. Meteor and Black Sky come down on all three of you.',
   },
 };
