@@ -21,9 +21,12 @@ import type { BattleEngine, BattleEvent, Command, FFXCombatant, FFXMemberBuild, 
 import { predictTurnOrder } from '../../../src/battle/ffx/turnQueue.ts';
 import { penanceBuild } from '../../../src/data/ffx/builds/penance.ts';
 import { ARMS, LEFT_ARM, PENANCE, RIGHT_ARM, actor, ctxOf, defend, flags, log, newEngine, row, type Input } from './penanceDrive.ts';
+import { GUIDE_DEFAULT, guideTurn, type GuideOptions } from './penanceGuide.ts';
 
 export interface PenancePolicy {
   readonly name: string;
+  /** The guide line (fix pass 2, `penanceGuide.ts`): the guides' strategy as the engine allows. When set, every other switch is ignored. */
+  readonly guide?: GuideOptions;
   /** Attack the first living enemy and do nothing else: no heals, no cures. */
   readonly careless?: boolean;
   /** Which arm control the offense follows. */
@@ -50,6 +53,10 @@ export const LINES: Readonly<Record<string, PenancePolicy>> = {
   /** The same, striking only the Left Arm (Tera Graviton's caster) and the body: the Right Arm is left to act. */
   'sustain-left': { name: 'sustain-left', arms: 'left', care: true, dispelRegen: true, cheer: false, sustain: true },
   careless: { name: 'careless', careless: true, arms: 'never', care: false, dispelRegen: false, cheer: false },
+  /** The guides' strategy as the engine allows (fix pass 2): arms never act (the last blow held for just before they act), Quick Hit, Three Stars, Dispel on the Breaks, Haste and Regen, Energy Rain on body and arm; the Left Arm first (GamerGuides, Jegged). */
+  guide: { name: 'guide', arms: 'lock', care: true, dispelRegen: true, cheer: true, guide: GUIDE_DEFAULT },
+  /** The same with the Right Arm first (Game8). */
+  'guide-right': { name: 'guide-right', arms: 'lock', care: true, dispelRegen: true, cheer: true, guide: { ...GUIDE_DEFAULT, name: 'guide-right', first: 'right' } },
 };
 
 export interface PenanceRun {
@@ -139,6 +146,8 @@ export function choose(engine: BattleEngine, d: Input, policy: PenancePolicy): C
     const first = [PENANCE, RIGHT_ARM, LEFT_ARM].find((id) => actor(engine, id).alive) ?? PENANCE;
     return row(d, 'attack', undefined, first) ?? defend();
   }
+
+  if (policy.guide) return guideTurn(engine, d, policy.guide);
 
   if (policy.sustain) return sustainTurn(engine, d, policy);
 
@@ -245,8 +254,8 @@ function sustainTurn(engine: BattleEngine, d: Input, policy: PenancePolicy): Com
   return quick ?? row(d, 'attack', undefined, goal) ?? row(d, 'attack', undefined, PENANCE) ?? defend();
 }
 
-/** Play one battle with the line and no god mode. */
-export function playPenance(seed: number, policy: PenancePolicy, party: FFXPartyBuild = penanceBuild, maxDecisions = 4_000): PenanceRun {
+/** Play one battle with the line and no god mode, and hand back the engine as it ended (a test reads its log and its state; nothing but `submit` ever touched it). */
+export function drivePenance(seed: number, policy: PenancePolicy, party: FFXPartyBuild = penanceBuild, maxDecisions = 4_000, onDecision?: (engine: ReturnType<typeof newEngine>) => void): { engine: ReturnType<typeof newEngine>; opening: string[]; decisions: number; outcome: PenanceRun['outcome'] } {
   const engine = newEngine(seed, party);
   const opening = engine.state().activeIds.slice();
   let decisions = 0;
@@ -259,10 +268,17 @@ export function playPenance(seed: number, policy: PenancePolicy, party: FFXParty
     }
     if (d.kind !== 'player-input') continue;
     decisions++;
+    onDecision?.(engine); // a read-only look at the engine before the line chooses (the accounting test)
     const before = log(engine).length;
     engine.submit(choose(engine, d, policy));
     if (log(engine).length === before) engine.submit(defend()); // a refused command leaves the turn open: always move on
   }
+  return { engine, opening, decisions, outcome };
+}
+
+/** Play one battle with the line and no god mode. */
+export function playPenance(seed: number, policy: PenancePolicy, party: FFXPartyBuild = penanceBuild, maxDecisions = 4_000): PenanceRun {
+  const { engine, opening, decisions, outcome } = drivePenance(seed, policy, party, maxDecisions);
   const events = log(engine) as readonly BattleEvent[];
   const downBy: Record<string, number> = {};
   let last = '';
