@@ -1,0 +1,789 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-11-06T11:38:23.097Z",
+ "build": {
+  "mainSha": "f91ff81d0"
+ },
+ "targetVersion": "1b09ad4e5a0315f4233b38cdaccc5a6ce2c3854fe9d5a6f21db39145ad6ca5b2",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "UNVERIFIED",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "No critical defect and no regression at critical or major severity is established: Chapters I, IV, VIII, XII and XVII play at or near live release 74 on the same harness; the only unknown is a single noisy XII swap jerk, a major, which is disclosed, not a hold.",
+  "Both hidden chapters render their new paintings and decals with 0 console errors and 0 404s at 1600x900, 2000x1012 and 390x844; the approved-art, art-derive and test gates pass on the exact candidate.",
+  "Changed area is UNVERIFIED: 14 of the 19 chapters and the 3D chapters were not run on the candidate (named in coverage), so changedArea cannot be PASS; this is better than live and the deep review is owed on the live build."
+ ],
+ "checks": [
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "The Keeper and Maesters battle HUDs (1600x900, 2000x1012, 390x844) read player words: Glyph 5, Spectral Keeper, Aranea, Berserk, intent ranges low first (1,023 to 1,157). No raw ids seen in the frames read.",
+   "game": "both",
+   "chapter": "spectral-keeper, ffx2-fallen-maesters",
+   "state": "first menu and mid fight",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/shots/spectral-keeper-1600.json",
+    "critic/reviews/f91ff81d0-focused/shots/ffx2-fallen-maesters-1600.json",
+    "critic/reviews/f91ff81d0-focused/shots/spectral-keeper-1600-03-act-t2-3.png",
+    "critic/reviews/f91ff81d0-focused/shots/ffx2-fallen-maesters-1600-03-act-t5-3.png",
+    "critic/reviews/f91ff81d0-focused/shots/layout.json"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 8
+  },
+  {
+   "id": "CHK-010",
+   "result": "UNVERIFIED",
+   "reason": "The targeting tile was not captured against its target frame in this pass (no change to the targeting code in the diff; the Keeper Move target cursor was seen on Glyph 5).",
+   "game": "both",
+   "chapter": "spectral-keeper",
+   "state": "target cursor",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/shots/spectral-keeper-1600-03-act-t2-3.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-013",
+   "result": "PASS",
+   "reason": "The two new paintings (Keeper, Aranea, Black Elemental) read at gameplay size beside the cast; the Keeper overlaps Auron on the stage (composition, polish). Approved art unchanged: verify-approved ROOT=release55 953 ok, 0 mismatched, 0 missing.",
+   "game": "both",
+   "chapter": "spectral-keeper, ffx2-fallen-maesters",
+   "state": "fight",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/shots/spectral-keeper-1600.json",
+    "critic/reviews/f91ff81d0-focused/shots/ffx2-fallen-maesters-1600.json",
+    "critic/reviews/f91ff81d0-focused/shots/spectral-keeper-1600-03-act-t2-3.png",
+    "critic/reviews/f91ff81d0-focused/shots/ffx2-fallen-maesters-1600-03-act-t5-3.png"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 6
+  },
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Real Playwright keys (Enter, Enter) from the first menu through turns to the results screen and Retry, in both hidden chapters; touch tap not exercised (390x844 menu shot only, no horizontal overflow). The chapter was entered through gotoChapter (set-up only) and the end of the fight was handed to autoBattle (set-up only).",
+   "game": "both",
+   "chapter": "spectral-keeper, ffx2-fallen-maesters",
+   "state": "menu to results",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/shots/spectral-keeper-1600.json",
+    "critic/reviews/f91ff81d0-focused/shots/ffx2-fallen-maesters-1600.json",
+    "critic/reviews/f91ff81d0-focused/shots/spectral-keeper-1600-03-act-t2-3.png",
+    "critic/reviews/f91ff81d0-focused/shots/ffx2-fallen-maesters-1600-03-act-t5-3.png"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 12
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every capture asserted screen === battle (waitBattleMenu) before the shot; the continuity harness asserts its own states.",
+   "game": "both",
+   "chapter": "all run",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/runA.log",
+    "critic/reviews/f91ff81d0-focused/runB.log"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "reason": "dist-gate served on 5871 names index-CrrbwEak.js (the expected bundle); art-derive verify PASS (5438 masters, 0 problems), audit PASS (0 dangling), verify-approved 953 ok / 0 / 0 against the release tree; 0 console errors and 0 404s in all browser jobs. Cold-load timing and the deploy-time hash gate were not re-run here (the deploy script owns the file-by-file gate).",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "served candidate",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/serve.log",
+    "critic/reviews/f91ff81d0-focused/shots/layout.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 12
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "reason": "tsc --noEmit clean; 23 changed or new vitest files (460 tests) pass on the candidate tree; orphans: 24 pre-existing modules, none named by this change.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "tree",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/runA.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Parity: the glyph decal plumbing is shared; the intent-range printer fix is shared (both games); Mix row, Maesters art and tips are FFX-2 only; Keeper platforms and the script-picker branch rule are FFX only.",
+   "game": "both",
+   "chapter": "both",
+   "state": "diff read against research",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/shots/layout.json"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 5
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "FFX only: Spectral Keeper art, platformOccupancy, simulate.ts raw 31-bit picker branch (the FFX script picker; FFX-2 has no such draw), Chapter XII intent cause. FFX-2 only: Fallen Maesters art, Mix row hidden. Presence checked in the intended game: Keeper rows (Move, Attack, Special, White Magic, Items, Flee) in FFX; the Maesters menu shows Attack, Item, Change with no Mix row in FFX-2; Chapter XII (FFX) still lists Attack, Special, White Magic, Items, Flee, Escape. The Mix absence in every FFX-2 menu is proved by tests/unit/ffx2-mix-row-hidden.test.ts (passes). Absence of the Keeper decals in the other game: the decal needs the chapter scene, not exercised in an FFX-2 battle by this critic.",
+   "game": "both",
+   "chapter": "both",
+   "state": "menu rows",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/shots/layout.json"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 6
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Both hidden chapters reach the results screen (Defeat under the engine auto-strategy) and Retry returns to a battle. The win path of the two hidden chapters was not reached in this review (the lane evidence covers it).",
+   "game": "both",
+   "chapter": "spectral-keeper, ffx2-fallen-maesters",
+   "state": "results and Retry",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/runA.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 6
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "reason": "Harness on the candidate (normal speed, GPU headless, ?coach=off): Chapter I FAIL (2 swaps over the head tolerance, worst 10.8 percent, 1 height band; live release 74 reads the same, 10.8 / 9.4), IV PASS, VIII PASS, XII PASS, XVII PASS. Chapters II, III, VI, VII, IX to XI, XIII to XVI, XVIII, XIX and the live-comparison of every chapter were not run (about 3 hours at normal speed; named below). Keeper chapter: UNVERIFIED in the lane run (49.8 s of battle, needs 60); Maesters: PASS in the lane run.",
+   "game": "both",
+   "chapter": "seymour-flux, ffx2-bahamut, evrae-airship, seymour-omnis, sin-fins-core",
+   "state": "continuity harness",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/continuity/seymour-flux/continuity-summary.json",
+    "critic/reviews/f91ff81d0-focused/continuity/ffx2-bahamut/continuity-summary.json",
+    "critic/reviews/f91ff81d0-focused/continuity/evrae-airship/continuity-summary.json",
+    "critic/reviews/f91ff81d0-focused/continuity/seymour-omnis/continuity-summary.json",
+    "critic/reviews/f91ff81d0-focused/continuity/sin-fins-core/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 75
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "Chapter I PASS, IV PASS, VIII PASS. Chapter XII FAIL: 1 swap jerk of 206 px, in a long frame (swapJerksSteadyOverFail 0) while the GPU art batch shared the machine; release 74 read PASS on the same chapter (0 over); a live re-run on echoesofspira.com played 0 swaps and settles nothing. Chapter XVII FAIL: 11 swap jerks, worst 171.9 px (live release 74: 13, 172.5): the same defect, not a regression. Maesters (lane evidence on another tree): 2 jerks at a swap, worst 67 px, in a new feature.",
+   "game": "both",
+   "chapter": "seymour-omnis, sin-fins-core, ffx2-fallen-maesters",
+   "state": "continuity harness",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/continuity/seymour-omnis/continuity-summary.json",
+    "critic/reviews/f91ff81d0-focused/continuity/sin-fins-core/continuity-summary.json",
+    "critic/reviews/f91ff81d0-focused/continuity-live/seymour-omnis/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 40
+  },
+  {
+   "id": "CHK-002",
+   "result": "NOT APPLICABLE",
+   "reason": "Audio routing and music were not changed in this release.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-003",
+   "result": "NOT APPLICABLE",
+   "reason": "No audio change in this release.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-004",
+   "result": "UNVERIFIED",
+   "reason": "The prep tip band (Maesters short tip) was read from the unit tests (fallen-maesters-prep-tip, prep-tip-band pass) and not captured in a browser prep screen.",
+   "game": "both",
+   "chapter": "ffx2-fallen-maesters",
+   "state": "prep screen",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-006",
+   "result": "NOT APPLICABLE",
+   "reason": "No save or settings change in this release (the plan does not class it as save-data).",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-008",
+   "result": "UNVERIFIED",
+   "reason": "The three 3D chapters (fayth, yrp, waker) were not opened by this critic; the teardown is read from the lane (YR-11 textures flat, HIT) and the retry-leak unit tests, which pass.",
+   "game": "FFX-2",
+   "chapter": "ffx2 yrp, waker; ffx fayth",
+   "state": "3D teardown",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-009",
+   "result": "UNVERIFIED",
+   "reason": "Not captured by this critic.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-014",
+   "result": "NOT APPLICABLE",
+   "reason": "No portrait or menu pose rule changed.",
+   "game": "both",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "The glyph decal plumbing and the physical-moves-on-idle table were reached through the real presentation path: the Keeper glyphs are painted on the stage in the first menu frame.",
+   "game": "FFX",
+   "chapter": "spectral-keeper",
+   "state": "first menu",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/shots/spectral-keeper-1600-03-act-t2-3.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 2
+  }
+ ],
+ "continuity": {
+  "note": "stamp and numbers of the Chapter XII run embedded verbatim; the other four chapters are in perChapter and their own summaries under critic/reviews/f91ff81d0-focused/continuity/",
+  "chapters": [
+   {
+    "chapter": "seymour-omnis",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "PASS",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 528.4,
+    "swaps": 631,
+    "snapsPerMinute": 0,
+    "ghostMsPerMinute": 1384,
+    "maxHeadJumpPct": 8.7,
+    "maxFeetShiftPx": 1.5,
+    "worstJerkPx": 206.3,
+    "minStature": 0.781,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 206.3,
+    "dashesWorstPx": 79.6,
+    "frameP99Ms": 30.1,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.5,
+    "dedicated": true,
+    "strips": 20,
+    "worstSwapStrips": [
+     "seymour-omnis-win-f91ff81d0/continuity/strips/swap-005-wakka-idle-hurt.jpg",
+     "seymour-omnis-win-f91ff81d0/continuity/strips/swap-009-wakka-hurt-idle.jpg",
+     "seymour-omnis-win-f91ff81d0/continuity/strips/swap-137-yuna-hurt-critical.jpg",
+     "seymour-omnis-win-f91ff81d0/continuity/strips/swap-061-wakka-hurt-critical.jpg",
+     "seymour-omnis-win-f91ff81d0/continuity/strips/swap-056-wakka-critical-hurt.jpg",
+     "seymour-omnis-win-f91ff81d0/continuity/strips/swap-193-yuna-hurt-idle.jpg",
+     "seymour-omnis-win-f91ff81d0/continuity/strips/swap-237-yuna-idle-hurt.jpg",
+     "seymour-omnis-win-f91ff81d0/continuity/strips/swap-499-yuna-idle-item.jpg",
+     "seymour-omnis-win-f91ff81d0/continuity/strips/swap-500-yuna-item-idle.jpg",
+     "seymour-omnis-win-f91ff81d0/continuity/strips/swap-146-auron-critical-idle.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "schema": "continuity-summary/1",
+  "battleSeconds": 528.4,
+  "counted": 631,
+  "swaps": 638,
+  "size": {
+   "judged": 631,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 0,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 8.7,
+   "maxHeadJumpPctRegistration": 0.2,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 1.5,
+   "feetOverTolerance": 0,
+   "feetDesigned": 0,
+   "feetDesignedWorstPx": 0,
+   "headMeasured": 631,
+   "headRegistration": 384,
+   "headRig": 0,
+   "rigSwaps": 0,
+   "headSilhouette": 247,
+   "headUnmeasured": 0,
+   "heightMeasured": 631,
+   "heightOverBand": 0,
+   "heightWaived": 0,
+   "minStature": 0.781,
+   "maxStature": 1.081,
+   "koLengthMeasured": 0,
+   "minKoLength": null,
+   "koLengthReported": 0,
+   "feetSilMeasured": 631,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 3.2,
+   "holdSwaps": 384,
+   "worstRealHeadPct": 28.2,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "variantHeadSwaps": 0,
+   "worstVariantHeadPct": 0,
+   "variantHeadOutsideBand": 0,
+   "unregisteredSwaps": 0
+  },
+  "motion": {
+   "snaps": 0,
+   "snapsPerMinute": 0,
+   "hardCuts": 299,
+   "hardCutsPerMinute": 33.95,
+   "ghostSwaps": 332,
+   "ghostFrames": 727,
+   "worstGhostSeverity": 0.3,
+   "ghostOverFail": 0,
+   "jerks": 49,
+   "worstJerkPx": 206.3,
+   "jerksOverFail": 24,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0.129,
+   "maxCentroidShiftPx": 101.6,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 0,
+   "smearsPlanned": 318,
+   "smearSwaps": 306,
+   "smearSnapsExcused": 304,
+   "jerksSmeared": 155,
+   "worstSmearedJerkPx": 188.4,
+   "swapJerks": 26,
+   "swapJerksWorstPx": 206.3,
+   "swapJerksOverFail": 1,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 23,
+   "dashesWorstPx": 79.6,
+   "dashesOverFail": 23,
+   "jerksLongFrame": 1,
+   "swapJerksLongFrame": 1,
+   "swapJerksSteadyOverFail": 0,
+   "ghostMs": 12186,
+   "ghostMsPerMinute": 1384,
+   "ghostFramesPerMinute": 82.6,
+   "ghostFrames60PerMinute": 83
+  },
+  "frameTime": {
+   "frames": 31433,
+   "longFrames": 189,
+   "longFramePct": 0.6,
+   "worstP99Ms": 30.1,
+   "maxMs": 181.9,
+   "longMs": 34,
+   "source": "continuity-probe",
+   "pacingNumber": false
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "PASS",
+    "reasons": [],
+    "note": "384 of 631 measured swaps had a registered head (tolerance 3 percent); 247 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 631 swap(s) (stature 0.781 to 1.081, 0 out of band but waived), the silhouette's own feet 631 swap(s) (worst 3.2 px, 0 waived), 384 swap(s) across a recorded hold (real head worst 28.2 percent from the idle's), 0 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 206.3 px)"
+    ],
+    "note": "23 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 79.6 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 1 of 49 jerk(s) fell on a frame of more than 34 ms (1 of the 26 at a swap; 0 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them; 306 of 318 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 304 snap(s) not counted, 155 swap jerk(s) (worst 188.4 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 528.4 s of battle, 59.5 to 59.5 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 206.3 px)); 1,384 ms of see-through a minute (83 frames a minute at 60 Hz) Read by harness 683a773fead4 (38 files; tree D:/pyrefly-release55 at f91ff81d0; policy 5ef4a3ed; probe v3 2c2bfe73; pose table 7364eb43 (119 subjects); waivers bc225f20 (83 rows); PYREFLY_QUERY=?coach=off).",
+  "base": "http://127.0.0.1:5871/",
+  "date": "2026-11-06T10:44:51.929Z",
+  "poseMeasure": {
+   "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+   "source": "harness-tree",
+   "subjects": 119,
+   "sha256": "7364eb43772d8b515b1523fcfdce820fef238709fb525f0be3de8dfc7f2a70ae",
+   "staleChapters": []
+  },
+  "harness": {
+   "schema": "continuity-harness/1",
+   "id": "683a773fead43636b1bec907343f31a5feee5e09230cf79b76c569efe9c690b3",
+   "tree": {
+    "root": "D:/pyrefly-release55",
+    "head": "f91ff81d07b6c133605dc76426d1770684156b5d",
+    "dirty": []
+   },
+   "files": {
+    "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+    "critic/runner/lib/continuity-analyze.mjs": "a20e4de301b117cf4a98ecf99f58fe695aaedb18",
+    "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+    "critic/runner/lib/continuity-card.mjs": "2e0208df7bc9a922a27d519fc5ebb49bed3fafd9",
+    "critic/runner/lib/continuity-dissolve.mjs": "4a9a2ebc79b798dc6059312f0b885510f4cd79b3",
+    "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+    "critic/runner/lib/continuity-gaps.mjs": "7337b85eda92c5755d11ccbee84749ee231cfe3d",
+    "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+    "critic/runner/lib/continuity-ghostms.mjs": "d74a048e0c44be69d22b050973ec240fbec3db66",
+    "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+    "critic/runner/lib/continuity-probe.mjs": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25",
+    "critic/runner/lib/continuity-pure.mjs": "c30cf02831efe33d9726d0bae9f9b3e098292090",
+    "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+    "critic/runner/lib/continuity-rig-probe.mjs": "35bf097b7bbfa81abeb4daf8e78f0d9515ff3ab1",
+    "critic/runner/lib/continuity-rig.mjs": "6e1b891a9d237b4b9db52593303df5e1ffc812e4",
+    "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+    "critic/runner/lib/continuity-smear.mjs": "bb6bcae7b35d4d99465f0650e58554cc785af513",
+    "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+    "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+    "critic/runner/lib/continuity-summary.mjs": "c671aa6dbc9e6df72a767ace45e6a57cdb478053",
+    "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+    "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+    "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+    "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+    "critic/runner/lib/continuity-why.mjs": "e2f0063820045e9c5eb5bb2ece203c00bed1fe3d",
+    "critic/runner/lib/continuity.mjs": "d3fd3269395cfa928cd1566a81486359e28210cb",
+    "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+    "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+    "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+    "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+    "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+    "critic/runner/lib/route-pure.mjs": "549d138066cc866d4e17d5eadc2b07b8f794e1ef",
+    "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+    "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+    "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+    "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+    "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+    "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+   },
+   "policy": {
+    "continuitySha256": "5ef4a3ed6fec14518548de8b462466822a3cf3a41f11528f8e8abb143de6fa43",
+    "fileSha256": "9c72460c4bdd463ef02f5e1f01c2baa3aa5334f392c29b114da466ca9c54cc71",
+    "override": false,
+    "overrideSha256": null
+   },
+   "probe": {
+    "version": 3,
+    "blob": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25"
+   },
+   "poseTable": {
+    "path": "D:\\pyrefly-release55\\docs\\target\\pose-measure.json",
+    "sha256": "7364eb43772d8b515b1523fcfdce820fef238709fb525f0be3de8dfc7f2a70ae",
+    "subjects": 119,
+    "source": "harness-tree",
+    "buildSha": "f91ff81d",
+    "isCandidate": true
+   },
+   "waivers": {
+    "path": "D:\\pyrefly-release55\\docs\\target\\pose-waivers.json",
+    "sha256": "bc225f2068b772bcde2a2dcd706f297a30c2ecad43a70bf68797057dd2bb78ab",
+    "rows": 83
+   },
+   "run": {
+    "query": "?coach=off",
+    "setArt": null,
+    "browser": "gpu"
+   },
+   "changedDuringRun": false,
+   "chapterIds": [
+    "683a773fead43636b1bec907343f31a5feee5e09230cf79b76c569efe9c690b3"
+   ],
+   "unstamped": [],
+   "chaptersByOtherHarness": [],
+   "aggregateSha256": "34f302247843765e6711dc5d071f6aaaaca0749ce33306bb51347680b8e60349"
+  },
+  "perChapter": [
+   {
+    "chapter": "seymour-flux",
+    "checks": {
+     "CHK-026": {
+      "result": "FAIL",
+      "reasons": [
+       "2 swap(s) change a head by more than the tolerance (worst 10.8 percent; 9.5 percent where the head is registered)",
+       "1 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.765 to 1.058; the bands are tools/posescale/pose-bands.mjs's)"
+      ],
+      "note": "79 of 202 measured swaps had a registered head (tolerance 3 percent); 102 were read from a rig's own head mesh (tolerance 3 percent; 102 swap(s) were changes of a rig's key); 21 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 202 swap(s) (stature 0.765 to 1.058, 0 out of band but waived), the silhouette's own feet 78 swap(s) (worst 7.3 px, 0 waived), 77 swap(s) across a recorded hold (real head worst 24.1 percent from the idle's), 0 on a painting with no fresh registration record"
+     },
+     "CHK-027": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "4 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 239.4 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 173 of 177 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 62 snap(s) not counted, 48 swap jerk(s) (worst 206.5 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+     }
+    },
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 388.5 s of battle, 59.7 to 59.7 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (2 swap(s) change a head by more than the tolerance (worst 10.8 percent; 9.5 percent where the head is registered); 1 swa"
+   },
+   {
+    "chapter": "ffx2-bahamut",
+    "checks": {
+     "CHK-026": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "173 of 278 measured swaps had a registered head (tolerance 3 percent); 105 were read from a rig's own head mesh (tolerance 3 percent; 105 swap(s) were changes of a rig's key); 0 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 278 swap(s) (stature 0.898 to 1.087, 0 out of band but waived), the silhouette's own feet 173 swap(s) (worst 2 px, 0 waived), 173 swap(s) across a recorded hold (real head worst 26.5 percent from the idle's), 0 on a painting with no fresh registration record"
+     },
+     "CHK-027": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "1 of 2 jerk(s) fell on a frame of more than 34 ms (0 of the 0 at a swap; 0 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them; 186 of 188 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 97 snap(s) not counted, 86 swap jerk(s) (worst 87.6 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+     }
+    },
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 336.3 s of battle, 59.5 to 59.5 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 PASS; 619 ms of see-through a minute (37.2 frames a minute at 60 Hz) Read by harness 683a773fead4 (38 files; tre"
+   },
+   {
+    "chapter": "evrae-airship",
+    "checks": {
+     "CHK-026": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "253 of 278 measured swaps had a registered head (tolerance 3 percent); 25 were read from a rig's own head mesh (tolerance 3 percent; 25 swap(s) were changes of a rig's key); 0 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 278 swap(s) (stature 0.785 to 1.097, 1 out of band but waived), the silhouette's own feet 251 swap(s) (worst 1.8 px, 0 waived), 252 swap(s) across a recorded hold (real head worst 21.7 percent from the idle's), 0 on a painting with no fresh registration record"
+     },
+     "CHK-027": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "4 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 69.1 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 6 of 6 jerk(s) fell on a frame of more than 34 ms (0 of the 0 at a swap; 0 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them; 165 of 166 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 116 snap(s) not counted, 62 swap jerk(s) (worst 179.3 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+     }
+    },
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 372 s of battle, 59 to 59 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 PASS; 1,463 ms of see-through a minute (87.8 frames a minute at 60 Hz) Read by harness 683a773fead4 (38 files; tree D:"
+   },
+   {
+    "chapter": "seymour-omnis",
+    "checks": {
+     "CHK-026": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "384 of 631 measured swaps had a registered head (tolerance 3 percent); 247 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 631 swap(s) (stature 0.781 to 1.081, 0 out of band but waived), the silhouette's own feet 631 swap(s) (worst 3.2 px, 0 waived), 384 swap(s) across a recorded hold (real head worst 28.2 percent from the idle's), 0 on a painting with no fresh registration record"
+     },
+     "CHK-027": {
+      "result": "FAIL",
+      "reasons": [
+       "1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 206.3 px)"
+      ],
+      "note": "23 mid-move dash(es) of 40 px or more are REPORTED, not gated (worst 79.6 px; a recoil, a lunge or a hop is the move's own, not a pose swap's; jerks.dashesFail in the policy gates them); 1 of 49 jerk(s) fell on a frame of more than 34 ms (1 of the 26 at a swap; 0 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them; 306 of 318 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 304 snap(s) not counted, 155 swap jerk(s) (worst 188.4 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+     }
+    },
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 528.4 s of battle, 59.5 to 59.5 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (1 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 206.3 px)); 1,384 ms of see-through a minute"
+   },
+   {
+    "chapter": "sin-fins-core",
+    "checks": {
+     "CHK-026": {
+      "result": "PASS",
+      "reasons": [],
+      "note": "980 of 1281 measured swaps had a registered head (tolerance 3 percent); 178 were read from a rig's own head mesh (tolerance 3 percent; 180 swap(s) were changes of a rig's key); 123 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 2 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 1283 swap(s) (stature 0.779 to 1.1, 0 out of band but waived), the silhouette's own feet 1089 swap(s) (worst 51.8 px, 30 waived), 973 swap(s) across a recorded hold (real head worst 31.4 percent from the idle's), 0 on a painting with no fresh registration record"
+     },
+     "CHK-027": {
+      "result": "FAIL",
+      "reasons": [
+       "11 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 171.9 px)"
+      ],
+      "note": "2 of 11 jerk(s) fell on a frame of more than 34 ms (2 of the 11 at a swap; 9 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them; 801 of 831 cut(s) the engine planned as a smear (a big change on a moving figure, logged) were excused: 565 snap(s) not counted, 320 swap jerk(s) (worst 170.6 px) not counted (continuity.smear in the policy; they stay in the report); every other fast swap is judged as before"
+     }
+    },
+    "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 1246.7 s of battle, 59.5 to 59.5 fps, 1 of 1 run by the dedicated harness; CHK-026 PASS; CHK-027 FAIL (11 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 171.9 px)); 1,442 ms of see-through a minu"
+   }
+  ]
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "inNewFeature": false,
+   "confidence": "high",
+   "requirement": "CHK-026, CHK-027",
+   "fix": "Register the swaps (existing posescale ledger); not part of this release.",
+   "acceptanceCheck": "continuity harness on the chapter reads PASS.",
+   "id": "R75-1",
+   "severity": "major",
+   "title": "Chapter XVII (Sin, fins and core) CHK-027: 11 swap jerks, worst 172 px",
+   "game": "FFX",
+   "chapter": "sin-fins-core",
+   "expected": "no swap jerk of 40 px or more",
+   "observed": "The candidate reads 11 jerks, worst 171.9 px (9 steady, 2 in a long frame). Live release 74 read 13, worst 172.5 px.",
+   "repro": "continuity harness sin-fins-core at normal speed",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/continuity/sin-fins-core/continuity-summary.json",
+    "critic/reviews/2342fe666-focused/continuity/c17-N/continuity-summary.json"
+   ],
+   "where": "pose swaps of the Sin fins (existing)",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "inNewFeature": false,
+   "confidence": "high",
+   "requirement": "CHK-026, CHK-027",
+   "fix": "Register the swaps (existing posescale ledger); not part of this release.",
+   "acceptanceCheck": "continuity harness on the chapter reads PASS.",
+   "id": "R75-2",
+   "severity": "major",
+   "title": "Chapter I (Seymour Flux) CHK-026: head up to 10.8 percent at two swaps",
+   "game": "FFX",
+   "chapter": "seymour-flux",
+   "expected": "head change at most 3 percent at a swap",
+   "observed": "Candidate: 2 swaps over tolerance, worst 10.8 percent, 1 height-band swap. Live release 74: the same (10.8, 9.4).",
+   "repro": "continuity harness seymour-flux at normal speed",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/continuity/seymour-flux/continuity-summary.json",
+    "critic/reviews/2342fe666-focused/continuity/c1-N/continuity-summary.json"
+   ],
+   "where": "pose registration (existing)",
+   "introducedByCandidate": false,
+   "regressionVsLive": false
+  },
+  {
+   "inNewFeature": false,
+   "confidence": "medium",
+   "requirement": "CHK-026, CHK-027",
+   "fix": "Register the swaps (existing posescale ledger); not part of this release.",
+   "acceptanceCheck": "a repeat run on an idle GPU reads 0 swap jerks over 40 px.",
+   "id": "R75-3",
+   "severity": "major",
+   "title": "Chapter XII (Seymour Omnis) CHK-027: one 206 px swap jerk in a long frame on the candidate",
+   "game": "FFX",
+   "chapter": "seymour-omnis",
+   "expected": "no swap jerk of 40 px or more",
+   "observed": "One jerk of 206.3 px at a pose swap, in a long frame (steady-state jerks 0) while the GPU art batch ran; release 74 read 0 over on the same chapter. A live re-run played 0 swaps and does not settle it. Suspected a hitch, not a pose defect.",
+   "repro": "continuity harness seymour-omnis at normal speed, ?coach=off",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/continuity/seymour-omnis/continuity-summary.json",
+    "critic/reviews/2342fe666-focused/continuity/c12-N/continuity-summary.json"
+   ],
+   "where": "unknown",
+   "introducedByCandidate": "unknown",
+   "regressionVsLive": "unknown"
+  },
+  {
+   "inNewFeature": true,
+   "confidence": "medium",
+   "requirement": "CHK-026, CHK-027",
+   "fix": "Register the swaps (existing posescale ledger); not part of this release.",
+   "acceptanceCheck": "continuity harness on the chapter reads PASS.",
+   "id": "R75-4",
+   "severity": "major",
+   "title": "Fallen Maesters CHK-027: two swap jerks (worst 67 px) in the lane run",
+   "game": "FFX-2",
+   "chapter": "ffx2-fallen-maesters",
+   "expected": "no swap jerk over 40 px",
+   "observed": "The art lane harness run (another tree, before this candidate) read 2 jerks, worst 67.2 px; not re-run on the candidate by this critic.",
+   "repro": "continuity harness ffx2-fallen-maesters",
+   "evidence": [
+    "D:/Tools/pyrefly-scratch/2026-11-04/r75/art/continuity-ffx2-fallen-maesters.out"
+   ],
+   "where": "the new Maesters paintings",
+   "introducedByCandidate": true,
+   "regressionVsLive": false
+  },
+  {
+   "id": "R75-5",
+   "severity": "polish",
+   "title": "Spectral Keeper painting overlaps Auron on the stage",
+   "game": "FFX",
+   "chapter": "spectral-keeper",
+   "expected": "the Keeper stands clear of the party",
+   "observed": "At 1600x900 the Keeper wings overlap Auron in the first menu.",
+   "repro": "gotoChapter spectral-keeper, first menu",
+   "evidence": [
+    "critic/reviews/f91ff81d0-focused/shots/spectral-keeper-1600-03-act-t2-3.png"
+   ],
+   "confidence": "medium",
+   "requirement": "CHK-013",
+   "where": "scene staging",
+   "fix": "nudge the Keeper plane",
+   "acceptanceCheck": "no overlap at 1600x900"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "candidate dist-gate bundle index-CrrbwEak.js served on 5871 (stopped by PID 52012, port confirmed closed)",
+   "hidden Spectral Keeper (FFX) and Fallen Maesters (FFX-2) by real keys to results and Retry at 1600x900; layout at 390x844 and 2000x1012",
+   "continuity harness on I, IV, VIII, XII, XVII at normal speed (GPU headless Chromium, PYREFLY_BROWSER=gpu, GPU shared with an art batch: timings noisy)",
+   "verify-approved (ROOT=release tree) 953 ok 0 0; art-derive verify and audit PASS; tsc clean; 23 changed vitest files, 460 tests pass"
+  ],
+  "reused": [
+   {
+    "what": "3D teardown (fayth, yrp, waker) texture counts",
+    "from": "lane D:/Tools/pyrefly-scratch/2026-11-04/r75/misc/results.json (YR-11)",
+    "why": "dependencyArgument: the teardown code is only reached in those chapters and the retry-leak unit tests pass on the candidate tree"
+   },
+   {
+    "what": "Chapter III (Braska) and the other 12 chapters of the plan",
+    "from": "critic/reviews/2342fe666-focused (release 74)",
+    "why": "not re-run: nothing in the diff names them beyond the shared decal and pose tables; carried R74-1 stays open"
+   }
+  ],
+  "notTested": [
+   "Chapters II, III, VI, VII, IX, X, XI, XIII, XIV, XV, XVI, XVIII and XIX and the mirror aeons on the candidate (time: about 3 hours of harness at normal speed)",
+   "the 3D chapters in a browser",
+   "the prep tip band in a browser",
+   "Keeper and Maesters continuity on the candidate (the lane run read 49.8 s and 92.6 s)",
+   "the win path of the hidden chapters on the candidate",
+   "live comparison of Chapter XII (the live run played 0 swaps)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "deep review of the live build (owed after this deploy), including the 14 untested chapters",
+ "elapsedMinutes": 140
+}

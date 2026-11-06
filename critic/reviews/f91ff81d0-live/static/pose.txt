@@ -1,0 +1,7 @@
+  pose-gate: 25 subjects read (exp-leblanc-paine-songstress)
+  pose-gate: 50 subjects read (ffx2-experiment)
+  pose-gate: 75 subjects read (overdrive-sin)
+  pose-gate: 100 subjects read (seymour-guest)
+  pose-gate: 125 subjects read (vegnagun-leg)
+  pose-gate: 150 subjects read (yunalesca-2)
+pose-gate: census of 1127 paintings written to D:/pyrefly-release55/critic/reviews/f91ff81d0-live/static/pose-census.json

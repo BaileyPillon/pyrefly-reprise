@@ -1,0 +1,77 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-11-06T13:10:00Z",
+  "build": {
+    "mainSha": "f91ff81d0",
+    "bundle": "CrrbwEak",
+    "artifactHash": "52bc64c122deaa9b3983c8cf4d6c076866ca36e4eab3889ad8aeb1acdc22168a"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/f91ff81d0.json --url https://echoesofspira.com/ --changed-from critic/artifacts/2342fe666.json -> {result: PASS, liveManifest: match, checked: 159, mismatched: [], missing: [], wrongType: [], errors: []}; index.html identical once the Cloudflare analytics beacon is removed. Output saved at critic/reviews/f91ff81d0-live/verify-live.json.",
+      "reason": "The plan lists the review as deep, so --full was started (7324 files, 10.7 GB, sequential download). It had not finished after more than 40 minutes and was stopped; the changed-from run (changed files, all code, an even sample of the rest, 159 files) is the evidence. The full byte comparison was not completed and is listed under notTested."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright, PYREFLY_BROWSER=gpu, fresh context 1600x900, cache-busting query, real key presses. Screen asserted before each capture: title -> chapter-select -> party-prep (keeper: Zanarkand Dome; infinito: Via Infinito) -> battle with awaitingMenu. Keeper enemies: spectral-keeper plus seven circles; infinito enemy: x2-aranea. A listed chapter (Seymour Flux, FFX) was entered by Enter on the first card. Screenshots in critic/reviews/f91ff81d0-live/shots/.",
+      "reason": "Every capture followed an asserted screen and state. The board lists 19 cards with no Mix row. Pause screen opened by Escape; H hid and restored the pause panels (PAINTING ONLY footer present, absent, present); Escape resumed to battle; P paused and a second P resumed. Prerendered music was fetched from /audio/music/*.mp3 on every run (55 requests in the first run; boss-seymour, boss-challenge, boss-ffx2-fallen-aeons, pause, victory and defeat tracks named). Console errors 0 and HTTP 4xx 0 across all three runs. The painted boss art for both hidden chapters loaded with 0 404s."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Run 3: in the pause menu on the Accessibility tab, Reduce Motion was switched on with real keys (settings diff reduceMotion false -> true); the page was reloaded and the setting was still true. Run 2: after one real attack in Seymour Flux, the save (attempts 1, playTimeMs, chapter entry) was byte-identical across a reload.",
+      "reason": "Lightweight reload smoke only; the full upgrade matrix was not run."
+    }
+  ],
+  "staticChecks": {
+    "pose-census": {
+      "subjects": 151,
+      "paintings": 1127,
+      "pass": 847,
+      "waived": 82,
+      "rigged": 0,
+      "fail": 0,
+      "exempt": 198,
+      "byClass": { "idle": 151, "standing": 580, "ko": 91, "low": 71, "wide": 4, "staged": 176, "part": 54 },
+      "byGame": { "FFX-2": 794, "FFX": 307, "FF7": 22, "unknown": 4 },
+      "byRowStatus": { "ok": 763, "held": 84, "waived": 82, "none": 198 },
+      "note": "Data, not a verdict. File: critic/reviews/f91ff81d0-live/static/pose-census.json."
+    }
+  },
+  "coverage": {
+    "tested": [
+      "artifact identity, 159 files plus the live manifest (changed-from 2342fe666)",
+      "title, chapter select (19 cards, no Mix row), hidden words keeper and infinito by real keys to party prep and the first battle menu with their paintings",
+      "one listed chapter (Seymour Flux) by real keys: prep, battle menu, one attack",
+      "Escape pause and resume, P pause and resume, H hide and restore of the pause panels",
+      "prerendered music fetched",
+      "reload smoke: one setting and one save survived"
+    ],
+    "reused": [],
+    "notTested": [
+      "the full 7324-file byte comparison (--full) did not finish and was stopped",
+      "the full upgrade matrix (CHK-024)",
+      "the 3D teardown in the hidden fayth, yrp and waker chapters",
+      "Chapter XII intent range low-high and the nine prep-tip short forms by reading",
+      "the three-from-source plugin being off",
+      "the FFX-2 Mix row is shown absent from the board only (no other surface checked)",
+      "the procedural audio fallback was not provoked; no AudioManager debug state was read, only the network log",
+      "no cancel path was exercised in the keeper or infinito flows; the only cancel-like path was Escape resume"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 110
+}

@@ -1,0 +1,116 @@
+{
+ "chapter": "ffx2-fallen-maesters",
+ "W": "1600",
+ "H": "900",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5871/assets/index-CrrbwEak.js"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 2
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "rows",
+   "stackPresent": true,
+   "rows": [
+    {
+     "i": 0,
+     "text": "Attack",
+     "selected": true,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 1,
+     "text": "Item",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 2,
+     "text": "Change",
+     "selected": false,
+     "disabled": false,
+     "overdrive": true,
+     "w": 337,
+     "h": 58
+    }
+   ]
+  },
+  {
+   "s": "hud",
+   "intent": [],
+   "body": ""
+  },
+  {
+   "s": "after-turns",
+   "screen": "battle"
+  },
+  {
+   "s": "end",
+   "screen": "results",
+   "ms": 72543
+  },
+  {
+   "s": "end-text",
+   "text": "VIA INFINITO — FLOORS 20, 40, 60 AND 80\n · FELL\nRESULTS · 2:20\nDefeat\nTURNS\n46\nATTEMPTS\n1\nBEST\n—\nNEVER CLEARED\nY\nYuna\nDARK KNIGHT · CONFUSEPROOF 0/30 AP\nR\nRikku\nALCHEMIST · DISPEL TONIC 0/20 AP\nP\nPaine\nDARK KNIGHT · CONFUSEPROOF 0/30 AP\nRETRY\nCHAPTER SELECT"
+  },
+  {
+   "s": "after",
+   "screen": "battle"
+  }
+ ],
+ "rows": {
+  "stackPresent": true,
+  "rows": [
+   {
+    "i": 0,
+    "text": "Attack",
+    "selected": true,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 1,
+    "text": "Item",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 2,
+    "text": "Change",
+    "selected": false,
+    "disabled": false,
+    "overdrive": true,
+    "w": 337,
+    "h": 58
+   }
+  ]
+ },
+ "hud": {
+  "intent": [],
+  "body": ""
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "artRequested": 0
+}
