@@ -56,7 +56,7 @@ New (`tests/unit/chapters/`): `shinryu-data.test.ts` (27: the record field by fi
 
 (b) **`valefor-door`, the pair test ("the first word to finish wins when two are typed in a row"): a load failure, not a defect.** It took 559,849 ms against its allowance of 360,000 ms (24 doors at 15 s a door: `tests/unit/helpers/doorWords.ts`) while the machine ran this suite, two more vitest runs, a dev server and other lanes' GPU jobs. **It passes alone in 193 s (all 22 tests)**, which is 193 s of its 375 s allowance with this chapter's door the 25th. The cost of these pair tests grows with every door (three jsdom boards per other door), so **the next wave's eight doors will push the full-suite run past the allowance again**: the integrator should raise `DOOR_PAIR_TEST_TIMEOUT_MS` (a flat 30 s a door is about right on this PC) or cut the pair loop; nothing of this lane's is slow (`shinryu-door.test.ts` runs in 0.1 s).
 
-__SUITE2__
+**The full suite, run 2, on the committed tree `565135585` (the same command): 2,063 files (2,031 passed, 32 skipped, 0 failed), 32,750 tests (32,127 passed, 622 skipped, 1 todo, 0 failed), 3,113 s.** Green, and `valefor-door`'s pair test passed inside its allowance in it (the machine was less loaded). The 32 skipped files are the ones that open art, models or game files this tree does not hold, as on every release tree.
 
 ## 5. Winnability, MEASURED (`shinryu-bench.test.ts`, `tests/unit/helpers/shinryuBot.ts`)
 
