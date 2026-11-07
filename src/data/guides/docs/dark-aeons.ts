@@ -35,7 +35,8 @@ export const DARK_AEONS_DOC: GuideDoc = {
     { t: 'list', label: 'Steal', items: ['Mega Phoenix x2 (common)', 'Elixir (rare)'] },
     DROPS,
 
-    { t: 'head', at: ['dark-ixion'], title: 'Dark Ixion', tag: 'Boss Battle' },
+    // Both of his fights are this one page: the second is another formation and another combatant id (`dark-ixion-2`), so the head is anchored on both (r35 review PR-0637: with only `dark-ixion` anchored, link 4 opened on block 0, Dark Valefor's page).
+    { t: 'head', at: ['dark-ixion', 'dark-ixion-2'], title: 'Dark Ixion', tag: 'Boss Battle' },
     { t: 'field', label: 'HP', value: '1,200,000' },
     { t: 'field', label: 'Weaknesses', value: 'None. He absorbs Thunder, resists Water and is immune to Fire and Ice. Immune to Sensor.' },
     { t: 'p', text: 'In the first fight he answers every action with a blade that can put you to sleep and break you, and Aerospark strips your wards and Auto-Life. The blade never finds a member whose Evasion and Luck add to 290 or more.' },
