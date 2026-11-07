@@ -79,7 +79,7 @@ New, all passing: `ff7-statuses` (17), `ff7-jenova-life-data` (18), `-ai` (16), 
 **The full suite** (`vitest run --maxWorkers=3`, 2,065 files, 32,760 tests, the machine's CPU at 91 to 100 percent from other work, about 85 minutes): 32,130 passed, 621 skipped, **8 failed in 8 files, every one explained and fixed, and each file re-run green**:
 six were lists that pin "the last row" or "every chapter" and now name the chapter (`audio-music-batch2` the cue table, `voice-chapter-wiring` the games, `wraith-door` and `yunas-ballad-data` "the last door" is now found by chapter, `chapters/exp-fayth` the scene table,
 `ff7-data-cites` wanted a section mark and a tag in `jenova-life-ids.ts`); two (`valefor-door`, `windwaker-door`, the pair test "the first word to finish wins") **ran out at their 360 s allowance under that load**: alone they take 347 s and 357 s, so the
-door allowance in `tests/unit/helpers/doorWords.ts` is now 25 s a door (600 s), not 15; both pass with it. `tsc` is clean for the app and the e2e project. `node tools/orphans.mjs`: 24, the same list as before (no FF7 module).
+door allowance in `tests/unit/helpers/doorWords.ts` is now 25 s a door (600 s), not 15; both pass with it. **A second full run on the pushed state (`405399687`, the fixes and the phone layout in): 2,065 files, 32,760 tests, 32,138 passed, 0 failed, 621 skipped, 1 todo.** `tsc` is clean for the app and the e2e project. `node tools/orphans.mjs`: 24, the same list as before (no FF7 module).
 
 ## 5. Where the engine departs from the note, or reads it literally (rule 6: said, not tuned)
 
