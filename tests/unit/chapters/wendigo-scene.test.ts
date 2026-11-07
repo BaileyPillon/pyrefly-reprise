@@ -5,7 +5,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { backdropFileOf } from '../../../src/data/art/artNamespace.ts';
+import { backdropFileOf, SCENE_BACKDROP_FILE } from '../../../src/data/art/artNamespace.ts';
 import { PYREFLY_CANON } from '../../../src/engine/pyreflyCanon.ts';
 import { getScene } from '../../../src/scenes/index.ts';
 import { MACALANIA_TEMPLE_SLOTS } from '../../../src/scenes/macalania-temple.ts';
@@ -45,8 +45,9 @@ describe('the lake stage', () => {
     expect(WENDIGO_LAKE_SLOTS.enemyHeight).toBe(WENDIGO_HEIGHT);
   });
 
-  it('draws Chapter VII\'s plate: the scene key stands for the `macalania-temple` backdrop file, so no file is written into the art mirror', () => {
-    expect(backdropFileOf(WENDIGO_SCENE)).toBe('macalania-temple');
+  it('draws a plate of its own, rendered from the 3D lake (phase 4): the scene key IS the backdrop file name, with no row in SCENE_BACKDROP_FILE, not Chapter VII\'s macalania-temple', () => {
+    expect(backdropFileOf(WENDIGO_SCENE)).toBe('wendigo-lake');
+    expect(Object.keys(SCENE_BACKDROP_FILE)).not.toContain(WENDIGO_SCENE);
   });
 
   it('has a canon row (FFX; no source was read for the lake, so unattested)', () => {
