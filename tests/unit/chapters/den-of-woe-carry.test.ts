@@ -22,6 +22,7 @@ import { FALLEN_AEONS_CHAIN_ORDER, roadSistersGroup } from '../../../src/data/ff
 import { VEGNAGUN_CHAIN_ORDER } from '../../../src/data/ffx2/ids.ts';
 import { denBaralaiGroup, denGippalGroup, denNoojGroup } from '../../../src/data/ffx2/enemies/den-of-woe.ts';
 import { paineDuelGroup } from '../../../src/data/ffx2/enemies/yunas-ballad.ts';
+import { YOUTH_LEAGUE_GROUP_IDS } from '../../../src/data/youth-league-ids.ts';
 import { carryPartyForward, setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
 import { wearing } from '../../../src/app/screens/BattleScreenCarry.ts';
 import { checkpointAt } from '../../../src/app/screens/BattleChainCheckpoint.ts';
@@ -132,7 +133,8 @@ describe('the flag is the only way in: every other chain carries what it always 
     expect((road.party as FFX2PartyBuild).members.map((m) => m.statuses)).toEqual([undefined, undefined, undefined]);
     for (const g of Object.values(data.ENEMY_GROUPS_BY_ID)) {
       // the Den's second and third shades, and the hidden Yuna's Ballad's second duel (the same seam, 2026-11-06: HP and MP carried between the Den's fights, `yunas-ballad-flow.test.ts`)
-      if (g.carriesFullPartyState) expect([denGippalGroup.id, denNoojGroup.id, paineDuelGroup.id], g.id).toContain(g.id);
+      // and the hidden Youth League Tournament's seven acts (2026-11-07, FFX-2 only: the Chapter V band keeps its HP, MP and statuses between fights)
+      if (g.carriesFullPartyState) expect([denGippalGroup.id, denNoojGroup.id, paineDuelGroup.id, ...YOUTH_LEAGUE_GROUP_IDS], g.id).toContain(g.id);
     }
   });
 

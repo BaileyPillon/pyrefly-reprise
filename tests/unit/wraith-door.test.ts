@@ -174,10 +174,13 @@ afterEach(() => {
 });
 
 describe('the word against the table of doors', () => {
-  it('is wraith, leads to the chapter getChapter finds (number 40, FFX-2, hidden), and is the last row', () => {
+  it('is wraith, leads to the chapter getChapter finds (number 40, FFX-2, hidden), and follows the Beast\'s row', () => {
     expect(WORD).toBe('wraith');
     expect(getChapter(CHAPTER)).toMatchObject({ id: 'ffx2-yunas-ballad', number: 40, game: 'ffx2', experimental: true });
-    expect(CHAPTER_DOORS.at(-1)).toEqual({ word: WORD, chapter: CHAPTER });
+    // the rows follow chapter number: it was the last row until the Youth League Tournament (42) joined (2026-11-07), and the later hidden chapters' rows follow it
+    const words = CHAPTER_DOORS.map((d) => d.word);
+    expect(CHAPTER_DOORS.find((d) => d.word === WORD)).toEqual({ word: WORD, chapter: CHAPTER });
+    expect(words[words.indexOf(WORD) - 1], "the row before it is the Beast's").toBe('beast');
   });
 
   it('typed in time on BoardDoors it opens on the last letter and not before; a wrong letter or a long pause resets it', () => {

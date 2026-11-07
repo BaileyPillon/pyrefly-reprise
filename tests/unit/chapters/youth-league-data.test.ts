@@ -89,7 +89,7 @@ describe('the eight fighter types against the rows [RE §3.1, §3.2]', () => {
         expect([enemy.stats.str, enemy.stats.def, enemy.stats.mag, enemy.stats.mdef], enemy.id).toEqual([row.str, row.def, row.mag, row.mdef]);
         expect([enemy.stats.agi, enemy.stats.acc, enemy.stats.eva, enemy.stats.luck], enemy.id).toEqual([row.agi, row.acc, row.eva, row.luck]);
         expect(enemy.forms.map((f) => f.hp), enemy.id).toEqual([row.hp]);
-        expect(enemy.name).toBe(KINDS[type].name);
+        expect(enemy.name, enemy.id).toMatch(new RegExp('^' + KINDS[type].name + '( [A-D])?$')); // a duplicate in its formation carries a letter (PR-0013)
         expect(enemy.autoStatuses, enemy.id).toBeUndefined(); // no automatic status on any of the eight [RE §3.1]
       }
       expect([row.autoStatus1, row.autoStatus2]).toEqual([0, 0]);
@@ -339,12 +339,12 @@ describe('the chain: seven formations, the road\'s order, the Den of Woe\'s carr
       expect(group.game).toBe('ffx2');
       expect(group.parts, group.id).toBeUndefined(); // the Sword and Weapon props are visual only [RE §3.2]
     }
-    expect(youthLeagueGroups[0]!.enemies.map((e) => e.name)).toEqual(['Yaibal', 'League Warrior', 'League Warrior']);
-    expect(youthLeagueGroups[1]!.enemies.map((e) => e.name)).toEqual(['League Mage', 'League Mage', 'League Veteran']);
-    expect(youthLeagueGroups[2]!.enemies.map((e) => e.name)).toEqual(['League Warrior', 'League Veteran', 'League Veteran']);
-    expect(youthLeagueGroups[3]!.enemies.map((e) => e.name)).toEqual(['League Slasher', 'League Slasher', 'League Master']);
-    expect(youthLeagueGroups[4]!.enemies.map((e) => e.name)).toEqual(['League Veteran', 'League Veteran', 'League Veteran', 'League Veteran']);
-    expect(youthLeagueGroups[5]!.enemies.map((e) => e.name)).toEqual(['Elma', 'League Veteran', 'League Veteran']);
+    expect(youthLeagueGroups[0]!.enemies.map((e) => e.name)).toEqual(['Yaibal', 'League Warrior A', 'League Warrior B']);
+    expect(youthLeagueGroups[1]!.enemies.map((e) => e.name)).toEqual(['League Mage A', 'League Mage B', 'League Veteran']);
+    expect(youthLeagueGroups[2]!.enemies.map((e) => e.name)).toEqual(['League Warrior', 'League Veteran A', 'League Veteran B']);
+    expect(youthLeagueGroups[3]!.enemies.map((e) => e.name)).toEqual(['League Slasher A', 'League Slasher B', 'League Master']);
+    expect(youthLeagueGroups[4]!.enemies.map((e) => e.name)).toEqual(['League Veteran A', 'League Veteran B', 'League Veteran C', 'League Veteran D']);
+    expect(youthLeagueGroups[5]!.enemies.map((e) => e.name)).toEqual(['Elma', 'League Veteran A', 'League Veteran B']);
     expect(youthLeagueGroups[6]!.enemies.map((e) => e.name)).toEqual(['Lucil']);
   });
 

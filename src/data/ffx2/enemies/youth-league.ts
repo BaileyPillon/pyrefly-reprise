@@ -226,12 +226,16 @@ export const KINDS: Readonly<Record<KindKey, Kind>> = {
   },
 };
 
-/** One fighter of one act: the type's row on its own id, in its slot. */
-export function fighter(kind: KindKey, id: string, slot: number): EnemyDef {
+/**
+ * One fighter of one act: the type's row on its own id, in its slot. `letter` names a duplicate in its own formation ("League Veteran C"): a FFX-2 formation never carries two enemies of one name
+ * (PR-0013, `tests/unit/ffx2-enemy-names.test.ts`; the Vegnagun's Node A / B / C are the sourced case), so the League's pairs and the four Veterans of Act 5 are lettered in order of their slots.
+ */
+export function fighter(kind: KindKey, id: string, slot: number, letter = ''): EnemyDef {
   const k = KINDS[kind];
+  const name = letter === '' ? k.name : `${k.name} ${letter}`;
   return {
     id,
-    name: k.name,
+    name,
     spriteKey: k.sprite,
     slot,
     stats: fx(k.stats),
@@ -241,7 +245,7 @@ export function fighter(kind: KindKey, id: string, slot: number): EnemyDef {
     affinities: { ...k.affinities },
     immunities: { ...k.immunities },
     immunityFlags: [...k.immunityFlags],
-    forms: [{ name: k.name, spriteKey: k.sprite, hp: k.stats.hp }],
+    forms: [{ name, spriteKey: k.sprite, hp: k.stats.hp }],
     aiScriptId: k.script,
     rewards: {
       ap: k.ap, // EXP / Gil / AP and Pilfer Gil of the row [RE §3.1, §3.2]
@@ -262,7 +266,14 @@ export function fighter(kind: KindKey, id: string, slot: number): EnemyDef {
 
 function act(n: number): EnemyDef[] {
   const kinds = ACT_TYPES[n]! as readonly KindKey[];
-  return ACT_ENEMY_IDS[n]!.map((id, slot) => fighter(kinds[slot]!, id, slot));
+  const seen = new Map<string, number>();
+  return ACT_ENEMY_IDS[n]!.map((id, slot) => {
+    const kind = kinds[slot]!;
+    const total = kinds.filter((x) => x === kind).length;
+    const nth = seen.get(kind) ?? 0;
+    seen.set(kind, nth + 1);
+    return fighter(kind, id, slot, total > 1 ? String.fromCharCode(65 + nth) : '');
+  });
 }
 
 /** The group fields every act shares: no escape, the stand-in cue. */

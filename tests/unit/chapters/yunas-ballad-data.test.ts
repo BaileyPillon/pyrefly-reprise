@@ -289,9 +289,9 @@ describe('the chapter record and its place in the registry', () => {
     expect(YUNAS_BALLAD_META.musicKeys).toEqual(['scene-bevelle-underground', 'boss-den-of-woe', 'victory-ffx2']);
   });
 
-  it('its door is the word wraith, last in the table, and leads to it', () => {
+  it('its door is the word wraith, in the table in chapter order (the row after the Beast\'s; it was the last row until the Youth League joined), and leads to it', () => {
     expect(WRAITH_DOOR_WORD).toBe('wraith');
     expect(WRAITH_DOOR_CHAPTER).toBe(ids.YUNAS_BALLAD_ID);
-    expect(CHAPTER_DOORS.at(-1)).toEqual({ word: 'wraith', chapter: 'ffx2-yunas-ballad' });
+    expect(CHAPTER_DOORS.find((d) => d.word === 'wraith')).toEqual({ word: 'wraith', chapter: 'ffx2-yunas-ballad' });
   });
 });
