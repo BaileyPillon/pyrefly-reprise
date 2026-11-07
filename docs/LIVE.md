@@ -8,41 +8,41 @@
 | | |
 |---|---|
 | Site | https://echoesofspira.com/ |
-| Commit | `f91ff81d0` (Release 75 (r75)) |
-| Bundle | `CrrbwEak` |
-| Deployed | 2026-11-06T12:03:55.678Z (2026-11-06 07:03 EST) |
-| Deploy log | `docs/deploys.log` line 92: cloudflare, 4884 art files |
-| Artifact (SHA-256) | `52bc64c122deaa9b3983c8cf4d6c076866ca36e4eab3889ad8aeb1acdc22168a` |
-| The deploy's own byte check | PASS (159 files compared with the build) |
-| Marker | `critic/pending/f91ff81d0.json` (pending) |
+| Commit | `36b6e851d` (Release 76 (r76)) |
+| Bundle | `jYm-0mrJ` |
+| Deployed | 2026-11-07T09:53:17.136Z (2026-11-07 04:53 EST) |
+| Deploy log | `docs/deploys.log` line 93: cloudflare, 5144 art files |
+| Artifact (SHA-256) | `31d217a3604086e9c7526548fc459ce210614df44dd596a0239492911bdeeea6` |
+| The deploy's own byte check | PASS (416 files compared with the build) |
+| Marker | `critic/pending/36b6e851d.json` (pending) |
 | Owner override | none |
-| CHANGELOG entry | 2026-11-06 · Release 75 (r75), the two hidden boss chapters are painted (the Spectral Keeper in FFX; Aranea, the Black Elemental, Concherer and Chac in FFX-2), the 3D chapters stop growing their textures on every retry, Chapter XII's Enemy Intent range reads low to high, the FFX-2 Alchemist's Mix is not listed while it cannot be used, nine party-prep tips get a short form, and the title page draws `three` from the stock bundle again; nineteen of the nineteen listed chapters stay treated (each item says which game) |
-| Focused review | critic/reviews/f91ff81d0-focused.json: ship SHIP, changed area UNVERIFIED |
-| Live check | critic/reviews/f91ff81d0-live.json: deployment PASS |
+| CHANGELOG entry | 2026-11-06 · Release 76 (r76), eight new hidden chapters (33 to 40) with their paintings: an anime-style Valefor, the Bevelle Guardians, the Farplane Cup and Yuna's Ballad in FFX-2, and the Dark Aeons, Penance, the Flooded Ways and the Sanctuary Keeper in FFX; the battle stage's teardown frees the foot-shadow memory; nineteen of the nineteen listed chapters stay treated (each item says which game) |
+| Focused review | critic/reviews/36b6e851d-focused.json: ship SHIP, changed area FAIL |
+| Live check | critic/reviews/36b6e851d-live.json: deployment PASS |
 
-Is this commit on main? `git merge-base --is-ancestor f91ff81d0 origin/main` exits 0 when it is.
+Is this commit on main? `git merge-base --is-ancestor 36b6e851d origin/main` exits 0 when it is.
 
 ## Review obligations still open
 
 | Build | Obligation | What it needs |
 |---|---|---|
-| `f91ff81d0` | focused | acceptance of the changed area |
-| `f91ff81d0` | deep | deep review of every affected chapter and system |
+| `36b6e851d` | focused | acceptance of the changed area |
+| `36b6e851d` | deep (carries 1 earlier builds) | deep review of every affected chapter and system |
 
-The ledger counts 1 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 2 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
-From `critic/reviews/f91ff81d0-focused.json` (a major that is not a regression is disclosed and carried into the next batch):
+From `critic/reviews/36b6e851d-focused.json` (a major that is not a regression is disclosed and carried into the next batch):
 
 | Issue | Severity | Introduced by this build | Regression against the previous live build | What |
 |---|---|---|---|---|
-| R75-1 | major | no | no | Chapter XVII (Sin, fins and core) CHK-027: 11 swap jerks, worst 172 px |
-| R75-2 | major | no | no | Chapter I (Seymour Flux) CHK-026: head up to 10.8 percent at two swaps |
-| R75-3 | major | not recorded | not recorded | Chapter XII (Seymour Omnis) CHK-027: one 206 px swap jerk in a long frame on the candidate |
-| R75-4 | major | yes | no | Fallen Maesters CHK-027: two swap jerks (worst 67 px) in the lane run |
+| R76-1 | major | not recorded | not recorded | Seymour Flux: a victory-camera read shows a figure thrown thousands of pixels in one frame on the candidate (2 of 2 runs), 0 of 2 on live |
+| R76-2 | major | yes | no | Six of eight hidden chapters end in Defeat under the intended-route autoplayer; a win was not shown |
+| R76-3 | major | no | no | Braska (final aeon) continuity run: the headless page crashes about 25 minutes in, on the candidate and on live alike |
+| R76-4 | major | no | no | Existing continuity failures in listed chapters are unchanged (disclosed, not new) |
 
-## Branches in flight (as of 2026-11-06, the release 75 records pass (release 75 live: main f91ff81d0, bundle CrrbwEak, deployed 2026-11-06T12:03:55Z; the painted Spectral Keeper and Fallen Maesters bosses, the shared 3D teardown, the Enemy Intent range, no Mix row, nine short prep tips; its deep review is owed and is settled on release 76's live build; release 76 = the chapters program's waves 1 and 2, hidden, below: none merged or deployed))
+## Branches in flight (as of 2026-11-07, the release 76 records pass (release 76 live: main 36b6e851d, bundle jYm-0mrJ, deployed 2026-11-07T09:53:17Z; the eight hidden chapters 33 to 40 and their paintings, the stage-teardown memory fix; its focused review read SHIP with the changed area FAIL, its live check PASS; the deep review round 35, owed by releases 75 and 76, is in flight on the live build; release 77 is queued on the local branch r77-int, not pushed: chapters 41 and 43 with their art, the rig pilots and, as the driver decides, chapter 42))
 
 Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.
 
@@ -58,12 +58,10 @@ Kept by hand by whoever records a pass; tools/live-record.mjs prints it into doc
 | `saves-portable` | `c1852fa05` | both (save-data class) | ChatGPT point 9: export and import a save as a checksummed file behind ?saveport=on, off by default; NOT merged into r68-int or release 68 (D-1379); a browser pass and a deep review are owed before the word comes off (A-1054) |
 | `rigs-v2` | `9f90c3441` | both (Tidus FFX, Rikku Dark Knight FFX-2) | the party rig pilots rebuilt (tidus-v2, rikku-dark-knight-v2 in D:/pyrefly-art-rigs) behind ?partyrigs=v2 with a motion audit; pushed; OUT of release 68 (D-1398): the clips (A-1073) show 0 ghost frames but a cut from standing to lying at the knock-out and four broken frames on Rikku's return (D-1401); nothing installed |
 | `rigs-v3` | `f2dd94f79` | both (Tidus FFX, Rikku Dark Knight FFX-2) | pushed; three rounds done on 2026-10-29 and 10-30 (A-1089): rigs-v2 on r68-final plus the painting’s knock-out topple and rise for a rig, the held pose through each cut, the settle before a KO from a flinch and the harness’s stature reading for rigs (D-1401); behind ?partyrigs=, off by default; not merged, nothing installed; the clips for him come first |
-| `ch-anime` | `fa99a4d78` | FFX-2 only (hidden Chapter 33, the Genshin / Guilty Gear version of the Wind Waker chapter); the registries, the door row and the optional-config seam are shared plumbing (both games, inert elsewhere) | pushed (origin/ch-anime fa99a4d78); wave 1 of the chapters program (A-1207; D-1475, D-1476, D-1479): the word gear (desktop only), the three looks behind ?look=genshin\|gg\|blend, a taller Meshy toon cast with an upright idle and victory, a feathered Valefor of her own (one Meshy task of 35 credits), a wet floor and some air; built in two parts, reviewed and fixed; not merged, not deployed; the look and the cast in motion wait for his eye |
-| `ch-dark-aeons` | `5a74e2a20` | FFX only (hidden Chapter 34, the six other Dark Aeons); shared plumbing is registry rows, a door row and a scene row (both games, inert elsewhere) | pushed (origin/ch-dark-aeons 5a74e2a20); wave 1 (A-1208; D-1477, D-1479): research from the game's own files, a paper preflight, seven fresh links (Dark Ixion twice), the word darkaeon, played in a browser through all seven links, the review's four majors fixed; no paintings (the staged kit is A-1210); not merged, not deployed |
-| `ch-penance` | `1167ddb72` | FFX only (hidden Chapter 35, Penance and its two Arms); shared plumbing is one optional contract member, one hook, registry rows, a door row and a scene row (both games, inert elsewhere) | pushed (origin/ch-penance 1167ddb72); wave 1 (A-1209; D-1477, D-1479, D-1480): research, a paper preflight, the build behind the word judgment, a fix pass after an adversarial review; the fight is not winnable by any scripted line (0 of 100 seeds), recorded as an open issue (rules-changing options need his yes); stand-in art (the staged kit is A-1210); not merged, not deployed |
-| `ch-flooded-ways` | `73bd97caa` | FFX only (hidden Chapter 36, Evrae Altana and Geosgaeno); shared plumbing is registry rows, a door row and engine seams (both games, inert elsewhere) | pushed (origin/ch-flooded-ways 73bd97caa); wave 2 (A-1211; D-1477, D-1479): the word geosgaeno, Tidus, Wakka and Rikku, the Gate Locks and the Open lock command, played by real keys, no paintings; not merged, not deployed |
-| `ch-farplane-cup` | `8c07803fe` | FFX-2 only (hidden Chapter 38, Auron, the masked Tidus and Seymour as three duels); shared plumbing is registry rows, a door row and the kill-reward item table (both games, inert elsewhere) | pushed (origin/ch-farplane-cup 8c07803fe); wave 2 (A-1211; D-1477, D-1479): the word duelist, Chapter XIII's Lv 99 party, winnability measured and reported, not tuned; no new paintings; not merged, not deployed |
-| `ch-sanctuary-keeper` | `3db6cf8e0` | FFX only (hidden Chapter 39, the Gagazet summit beast, not the Spectral Keeper); shared plumbing is registry rows, a door row and pinned lists (both games, inert elsewhere) | pushed (origin/ch-sanctuary-keeper 3db6cf8e0); wave 2 (A-1211; D-1477, D-1479): the word beast, Tidus, Yuna and Auron after a 200-seed bench, no engine file changed, played by real keys, no painting (a procedural silhouette); a fix pass pushed 07:22 EST; not merged, not deployed. Chapters 37 (the Bevelle guardians, word drillshot) and 40 (Yuna's Ballad, word wraith), both FFX-2 only, exist as paper preflights only (the driver's scratch) and have no branch yet |
+| `ch-spherimorph` | `1257c4b61` | FFX only (hidden Chapter 41, Spherimorph); shared plumbing is registry rows, a door row and pinned lists (both games, inert elsewhere) | pushed (origin/ch-spherimorph 1257c4b61); wave 3 (A-1221; D-1477, D-1479): 12,000 HP, four weakness states and counters, the informed line wins 200 of 200 seeds and a guess 5 of 200, the full suite 0 failed after the fix pass; not merged, not deployed; the release 77 queue with the wave-3 paintings (staged, accepted, not installed: D-1493) |
+| `ch-omega-ruins` | `936e6d451` | FFX only (hidden Chapter 43, Omega Ruins: Ultima Weapon, Omega Weapon and Nemesis); shared plumbing is registry rows, a door row and pinned lists (both games, inert elsewhere) | pushed (origin/ch-omega-ruins 936e6d451); wave 3 (A-1221; D-1477, D-1479): review 0 critical and 0 major, seven minors fixed, bench bands 55 to 85 percent on 100 seeds; not merged, not deployed; the release 77 queue with the wave-3 paintings (D-1493) |
+| `ch-wendigo` | `f48c72c0f` | FFX only (hidden Chapter 49, the Meshy tech demo: the Wendigo and two Guado Guardians on frozen Lake Macalania, word wendigo, desktop only); the reaction queue gained an opt-in ownerMayBeDead flag (shared plumbing, inert elsewhere) | pushed (origin/ch-wendigo f48c72c0f); the battle side of the tech demo (A-1225; D-1488, D-1490, D-1494): the fight from the game files, the move-advisor line wins 200 of 200 and 1,000 of 1,000 seeds, real-key smoke on a stand-in stage; the Meshy models, mirror ice, aurora, light and flying camera (phase 3) are in build; not merged, not deployed |
+| `rigs-pilots-on` | `7f03cb417` | both (Tidus FFX Chapter I only, Rikku Dark Knight FFX-2 Chapter IV only; the switch and loader are shared plumbing) | pushed (origin/rigs-pilots-on 7f03cb417); A-1219 (D-1491, D-1492): the two rig pilots draw by default in their own chapters (?partyrigs=off gives the paintings back), 0 see-through frames; open: Rikku's cast key 0.881 against the 0.885 floor and 40 mid-move dashes over 40 px; the second batch of party rigs stopped at the disk floor; not merged, not deployed; the release 77 queue |
 
 Nothing on this list is live. `node tools/live-record.mjs --branches` compares the tips with git.
 
@@ -71,9 +69,9 @@ Nothing on this list is live. `node tools/live-record.mjs --branches` compares t
 
 | Deployed (UTC) | Commit | Bundle | Log line |
 |---|---|---|---|
+| 2026-11-07T09:53:17.136Z | `36b6e851d` | `jYm-0mrJ` | 93 |
 | 2026-11-06T12:03:55.678Z | `f91ff81d0` | `CrrbwEak` | 92 |
 | 2026-11-04T00:44:28.732Z | `2342fe666` | `eSs6-WR_` | 91 |
 | 2026-11-02T23:02:53.337Z | `d5049f686` | `DY38b3Cj` | 90 |
 | 2026-11-02T04:29:26.601Z | `01a767770` | `Cz_6EQVK` | 89 |
 | 2026-11-01T14:14:08.497Z | `6d7ecc8a5` | `BqgCyT8R` | 88 |
-| 2026-10-31T17:29:45.848Z | `e3f51bf18` | `UNVtEttT` | 87 |

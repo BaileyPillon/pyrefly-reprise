@@ -1,0 +1,167 @@
+{
+ "word": "beast",
+ "expectId": "sanctuary-keeper",
+ "W": "2000",
+ "H": "1012",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-jYm-0mrJ.js"
+  },
+  {
+   "s": "after-word",
+   "opened": true,
+   "screen": "party-prep",
+   "state": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":409,\"elapsed\":6.954,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-undergro"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 17258
+  },
+  {
+   "s": "chapter-id",
+   "idNow": null
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "rows",
+   "stackPresent": true,
+   "rows": [
+    {
+     "i": 0,
+     "text": "Attack",
+     "selected": true,
+     "disabled": false,
+     "overdrive": false,
+     "w": 441,
+     "h": 65
+    },
+    {
+     "i": 1,
+     "text": "Special",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 441,
+     "h": 65
+    },
+    {
+     "i": 2,
+     "text": "White Magic",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 441,
+     "h": 65
+    },
+    {
+     "i": 3,
+     "text": "Items",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 441,
+     "h": 65
+    },
+    {
+     "i": 4,
+     "text": "Flee",
+     "selected": false,
+     "disabled": true,
+     "overdrive": false,
+     "w": 441,
+     "h": 65
+    },
+    {
+     "i": 5,
+     "text": "Escape",
+     "selected": false,
+     "disabled": true,
+     "overdrive": false,
+     "w": 441,
+     "h": 65
+    }
+   ]
+  },
+  {
+   "s": "after-turns",
+   "screen": "battle"
+  },
+  {
+   "s": "end",
+   "screen": "results",
+   "ms": 49529
+  },
+  {
+   "s": "end-text",
+   "text": "MT. GAGAZET — THE SUMMIT · FELL RESULTS · 1:06 Defeat TURNS 82 ATTEMPTS 1 BEST — NEVER CLEARED T Tidus S.LV 30 · 0/695 AP Y Yuna S.LV 32 · 0/820 AP A Auron S.LV 35 · 0/1,037 AP RETRY CHAPTER SELECT"
+  }
+ ],
+ "rows": {
+  "stackPresent": true,
+  "rows": [
+   {
+    "i": 0,
+    "text": "Attack",
+    "selected": true,
+    "disabled": false,
+    "overdrive": false,
+    "w": 441,
+    "h": 65
+   },
+   {
+    "i": 1,
+    "text": "Special",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 441,
+    "h": 65
+   },
+   {
+    "i": 2,
+    "text": "White Magic",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 441,
+    "h": 65
+   },
+   {
+    "i": 3,
+    "text": "Items",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 441,
+    "h": 65
+   },
+   {
+    "i": 4,
+    "text": "Flee",
+    "selected": false,
+    "disabled": true,
+    "overdrive": false,
+    "w": 441,
+    "h": 65
+   },
+   {
+    "i": 5,
+    "text": "Escape",
+    "selected": false,
+    "disabled": true,
+    "overdrive": false,
+    "w": 441,
+    "h": 65
+   }
+  ]
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": []
+}

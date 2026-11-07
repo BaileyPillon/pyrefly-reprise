@@ -1,0 +1,167 @@
+{
+ "word": "judgment",
+ "expectId": "penance",
+ "W": "390",
+ "H": "844",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-jYm-0mrJ.js"
+  },
+  {
+   "s": "after-word",
+   "opened": true,
+   "screen": "party-prep",
+   "state": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":423,\"elapsed\":7.153,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-undergro"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 17454
+  },
+  {
+   "s": "chapter-id",
+   "idNow": null
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "rows",
+   "stackPresent": true,
+   "rows": [
+    {
+     "i": 0,
+     "text": "Attack",
+     "selected": true,
+     "disabled": false,
+     "overdrive": false,
+     "w": 183,
+     "h": 56
+    },
+    {
+     "i": 1,
+     "text": "Special",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 183,
+     "h": 56
+    },
+    {
+     "i": 2,
+     "text": "Items",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 183,
+     "h": 56
+    },
+    {
+     "i": 3,
+     "text": "Overdrive",
+     "selected": false,
+     "disabled": false,
+     "overdrive": true,
+     "w": 183,
+     "h": 56
+    },
+    {
+     "i": 4,
+     "text": "Flee",
+     "selected": false,
+     "disabled": true,
+     "overdrive": false,
+     "w": 183,
+     "h": 56
+    },
+    {
+     "i": 5,
+     "text": "Escape",
+     "selected": false,
+     "disabled": true,
+     "overdrive": false,
+     "w": 183,
+     "h": 56
+    }
+   ]
+  },
+  {
+   "s": "after-turns",
+   "screen": "battle"
+  },
+  {
+   "s": "end",
+   "screen": "results",
+   "ms": 58814
+  },
+  {
+   "s": "end-text",
+   "text": "RESULTS · 1:12 THE FAHRENHEIT — THE DECK · FELL Defeat TURNS 46 ATTEMPTS 1 BEST — NEVER CLEARED T Tidus S.LV 180 Y Yuna S.LV 175 R Rikku S.LV 160 RETRY CHAPTER SELECT"
+  }
+ ],
+ "rows": {
+  "stackPresent": true,
+  "rows": [
+   {
+    "i": 0,
+    "text": "Attack",
+    "selected": true,
+    "disabled": false,
+    "overdrive": false,
+    "w": 183,
+    "h": 56
+   },
+   {
+    "i": 1,
+    "text": "Special",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 183,
+    "h": 56
+   },
+   {
+    "i": 2,
+    "text": "Items",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 183,
+    "h": 56
+   },
+   {
+    "i": 3,
+    "text": "Overdrive",
+    "selected": false,
+    "disabled": false,
+    "overdrive": true,
+    "w": 183,
+    "h": 56
+   },
+   {
+    "i": 4,
+    "text": "Flee",
+    "selected": false,
+    "disabled": true,
+    "overdrive": false,
+    "w": 183,
+    "h": 56
+   },
+   {
+    "i": 5,
+    "text": "Escape",
+    "selected": false,
+    "disabled": true,
+    "overdrive": false,
+    "w": 183,
+    "h": 56
+   }
+  ]
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": []
+}

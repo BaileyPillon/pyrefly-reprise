@@ -1,0 +1,40 @@
+{
+ "optionsText": "Mortiorchis Kimahri Yuna Tidus 2420 115 KO Yuna 0 270 Kimahri 2310 130 I SEYMOUR FLUX Full-Life G GUIDE Seymour Flux Enter Select G Intel Q Defend P Pause Seymour Flux VICTORY THE PARTY HAS FALLEN ECHOES OF SPIRA · FINAL FANTASY X Q L1 TIDUS YUNA KIMAHRI CHAPTER GUIDE OPTIONS ACCESSIBILITY CONTROLS MUSIC R1 E SETTINGS MASTER VOLUME 80 MUSIC 70 SOUND EFFECTS 70 VOICE 90 VOICE-OVER ON TEXT SPEED 1x EYE CANDY ALL ON VISUAL STYLE HD-2D STRATEGY GUIDE ON BATTLE HELP ON PRESENTATION THE ECHO · B THIS ENCOUNTER REPLAY BRIEFING ▸ RESTART ENCOUNTER ▸ CHAPTER SELECT ▸ QUIT TO TITLE ▸ ABOUT CREDITS ▸ CHA",
+ "controls": [
+  "BUTTON:ffx-sensor__toggle:",
+  "BUTTON:sgd__toggle:",
+  "BUTTON:sgd__keys:",
+  "BUTTON:mad__toggle:",
+  "BUTTON:eint__toggle:",
+  "BUTTON:phud-guide:",
+  "BUTTON:phud-target__back:",
+  "BUTTON:phud-target__go:",
+  "BUTTON:Pause:",
+  "BUTTON:pause-tab-member:tidus:",
+  "BUTTON:pause-tab-member:yuna:",
+  "BUTTON:pause-tab-member:kimahri:",
+  "BUTTON:pause-tab-chapter:",
+  "BUTTON:pause-tab-guide:",
+  "BUTTON:pause-tab-options:",
+  "BUTTON:pause-tab-accessibility:",
+  "BUTTON:pause-tab-controls:",
+  "BUTTON:pause-tab-music:"
+ ],
+ "changedKeys": [
+  "pyrefly-reprise:save:v1"
+ ],
+ "before": {
+  "pyrefly-reprise:save:v1": "{\"version\":1,\"updatedAt\":1794046647747,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":23199.1}},\"unlocked\":[],\"settings\":{\"masterVolume\":0.8,\"musicVolume\":0.7,\"sfxVolume\":0.7,\"sfxBalanceMigrated\":true,\"voiceOn\":true,\"voice"
+ },
+ "after": {
+  "pyrefly-reprise:save:v1": "{\"version\":1,\"updatedAt\":1794046651030,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour-flux\",\"cleared\":false,\"bestTimeMs\":null,\"bestTurns\":null,\"attempts\":1,\"playTimeMs\":23215.700000000004}},\"unlocked\":[],\"settings\":{\"masterVolume\":1,\"musicVolume\":0.7,\"sfxVolume\":0.7,\"sfxBalanceMigrated\":true,\"voiceOn\":tr"
+ },
+ "reloaded": {
+  "master": 1,
+  "attempts": 1,
+  "screen": "title"
+ },
+ "reloadedAudioVolumes": "{\"master\":1,\"music\":0.7,\"sfx\":0.7}",
+ "consoleErrors": [],
+ "notFound": []
+}

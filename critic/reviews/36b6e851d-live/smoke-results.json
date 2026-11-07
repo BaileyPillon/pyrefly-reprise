@@ -1,0 +1,322 @@
+{
+ "words": [
+  {
+   "word": "gear",
+   "game": "ffx2",
+   "screen": "party-prep",
+   "artRequests": 35,
+   "sample": [
+    "https://echoesofspira.com/art/characters/valefor/idle.png",
+    "https://echoesofspira.com/art/characters/valefor/cast.png",
+    "https://echoesofspira.com/art/backdrops/djose-chamber-provisional.webp",
+    "https://echoesofspira.com/art/characters/valefor/idle.png"
+   ],
+   "info": {
+    "text": "PARTY PREP EXP · VALEFOR AT BESAID (ANIME STYLE) — BESAID TEMPLE — CHAMBER OF THE FAYTH Y Yuna LV 23 R Rikku LV 24 P Paine LV 25 CHAPTER DRESSPHERES STATS ACCESSORIES ITEMS FFX-2 · EXP Valefor at Besaid (Anime Style) The",
+    "snap": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":1959,\"elapsed\":32.853,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-underg"
+   }
+  },
+  {
+   "word": "darkaeon",
+   "game": "ffx",
+   "screen": "party-prep",
+   "artRequests": 13,
+   "sample": [
+    "https://echoesofspira.com/art/backdrops/macalania-temple.webp",
+    "https://echoesofspira.com/art/characters/anima/idle.png",
+    "https://echoesofspira.com/art/portraits/braska.webp",
+    "https://echoesofspira.com/art/characters/anima/idle.png"
+   ],
+   "info": {
+    "text": "PARTY PREP EXP · THE DARK AEONS — BESAID TO MT. GAGAZET T Tidus S.LV 180 Y Yuna S.LV 175 A Auron S.LV 180 W Wakka S.LV 165 L Lulu S.LV 170 R Rikku S.LV 160 K Kimahri S.LV 150 CHAPTER STATS SPHERE GRID EQUIPMENT ITEMS OVE",
+    "snap": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":2495,\"elapsed\":41.786,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-underg"
+   }
+  },
+  {
+   "word": "judgment",
+   "game": "ffx",
+   "screen": "party-prep",
+   "artRequests": 37,
+   "sample": [
+    "https://echoesofspira.com/art/pause/ch35-penance.webp",
+    "https://echoesofspira.com/art/characters/penance/idle.webp",
+    "https://echoesofspira.com/art/characters/penance-arm-right/idle.webp",
+    "https://echoesofspira.com/art/backdrops/evrae-airship-deck.webp"
+   ],
+   "info": {
+    "text": "PARTY PREP EXP · PENANCE — THE FAHRENHEIT — THE DECK T Tidus S.LV 180 Y Yuna S.LV 175 A Auron S.LV 180 W Wakka S.LV 165 L Lulu S.LV 170 R Rikku S.LV 160 K Kimahri S.LV 150 CHAPTER STATS SPHERE GRID EQUIPMENT ITEMS OVERDR",
+    "snap": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":3026,\"elapsed\":50.702,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-underg"
+   }
+  },
+  {
+   "word": "geosgaeno",
+   "game": "ffx",
+   "screen": "party-prep",
+   "artRequests": 11,
+   "sample": [
+    "https://echoesofspira.com/art/backdrops/via-purifico-flooded-1.webp",
+    "https://echoesofspira.com/art/pause/ch36-flooded-ways.webp",
+    "https://echoesofspira.com/art/backdrops/via-purifico.webp",
+    "https://echoesofspira.com/art/characters/evrae-altana/idle.png"
+   ],
+   "info": {
+    "text": "PARTY PREP EXP · THE FLOODED WAYS — THE VIA PURIFICO AND THE BAAJ TEMPLE T Tidus S.LV 24 W Wakka S.LV 24 R Rikku S.LV 41 CHAPTER STATS SPHERE GRID EQUIPMENT ITEMS OVERDRIVE FFX · EXP The Flooded Ways The three who can sw",
+    "snap": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":3564,\"elapsed\":59.769,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-underg"
+   }
+  },
+  {
+   "word": "drillshot",
+   "game": "ffx2",
+   "screen": "party-prep",
+   "artRequests": 14,
+   "sample": [
+    "https://echoesofspira.com/art/backdrops/zanarkand-dome.webp",
+    "https://echoesofspira.com/art/pause/ffx2-bevelle-guardians.webp",
+    "https://echoesofspira.com/art/characters/x2-baralai/idle.webp",
+    "https://echoesofspira.com/art/characters/yuna-white-mage/idle.png"
+   ],
+   "info": {
+    "text": "PARTY PREP EXP · THE BEVELLE GUARDIANS — BEVELLE UNDERGROUND — FLOORS 3 AND 7 Y Yuna LV 23 R Rikku LV 24 P Paine LV 25 CHAPTER DRESSPHERES STATS ACCESSORIES ITEMS FFX-2 · EXP The Bevelle Guardians Two keepers of the corr",
+    "snap": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":4094,\"elapsed\":68.718,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-underg"
+   }
+  },
+  {
+   "word": "duelist",
+   "game": "ffx2",
+   "screen": "party-prep",
+   "artRequests": 24,
+   "sample": [
+    "https://echoesofspira.com/art/backdrops/zanarkand-dome.webp",
+    "https://echoesofspira.com/art/characters/yunalesca-1/idle.png",
+    "https://echoesofspira.com/art/pause/ffx2-farplane-cup.webp",
+    "https://echoesofspira.com/art/backdrops/den-of-woe.webp"
+   ],
+   "info": {
+    "text": "PARTY PREP EXP · THE FARPLANE CUP — THE FIEND ARENA — A STAND-IN STAGE Y Yuna LV 99 R Rikku LV 99 P Paine LV 99 CHAPTER DRESSPHERES STATS ACCESSORIES ITEMS FFX-2 · EXP The Farplane Cup Three duels in the Fiend Arena, and",
+    "snap": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":4613,\"elapsed\":77.468,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-underg"
+   }
+  },
+  {
+   "word": "beast",
+   "game": "ffx",
+   "screen": "party-prep",
+   "artRequests": 55,
+   "sample": [
+    "https://echoesofspira.com/art/pause/ch39-sanctuary-keeper.webp",
+    "https://echoesofspira.com/art/characters/sanctuary-keeper/idle.webp",
+    "https://echoesofspira.com/art/characters/yuna/idle.png",
+    "https://echoesofspira.com/art/characters/sanctuary-keeper/idle.webp"
+   ],
+   "info": {
+    "text": "PARTY PREP EXP · THE SANCTUARY KEEPER — MT. GAGAZET — THE SUMMIT T Tidus S.LV 30 Y Yuna S.LV 32 K Kimahri S.LV 25 A Auron S.LV 35 W Wakka S.LV 30 L Lulu S.LV 30 R Rikku S.LV 42 CHAPTER STATS SPHERE GRID EQUIPMENT ITEMS O",
+    "snap": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":5118,\"elapsed\":85.884,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-underg"
+   }
+  },
+  {
+   "word": "wraith",
+   "game": "ffx2",
+   "screen": "party-prep",
+   "artRequests": 29,
+   "sample": [
+    "https://echoesofspira.com/art/backdrops/bevelle-underground.webp",
+    "https://echoesofspira.com/art/characters/yuna-white-mage/idle.png",
+    "https://echoesofspira.com/art/characters/rikku-dark-knight/idle.png",
+    "https://echoesofspira.com/art/characters/paine-warrior/idle.png"
+   ],
+   "info": {
+    "text": "PARTY PREP EXP · YUNA'S BALLAD — DEN OF WOE — UNDER MUSHROOM ROCK ROAD Y Yuna LV 54 CHAPTER DRESSPHERES STATS ACCESSORIES ITEMS FFX-2 · EXP Yuna's Ballad Two friends who cannot see her, and one girl who will not look awa",
+    "snap": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":5626,\"elapsed\":94.45,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-undergr"
+   }
+  }
+ ],
+ "steps": [
+  {
+   "name": "title reached",
+   "ok": true,
+   "detail": "title"
+  },
+  {
+   "name": "chapter select",
+   "ok": true,
+   "detail": {
+    "cards": 19,
+    "strip": "0of 19 beaten/19"
+   }
+  },
+  {
+   "name": "word \"gear\" opens party prep",
+   "ok": true,
+   "detail": {
+    "screen": "party-prep",
+    "artRequests": 35,
+    "text": "PARTY PREP EXP · VALEFOR AT BESAID (ANIME STYLE) — BESAID TEMPLE — CHAMBER OF THE FAYTH Y Yuna LV 23 R Rikku LV 24 P Pai"
+   }
+  },
+  {
+   "name": "word \"gear\" cancel returns to board",
+   "ok": true,
+   "detail": "chapter-select"
+  },
+  {
+   "name": "word \"darkaeon\" opens party prep",
+   "ok": true,
+   "detail": {
+    "screen": "party-prep",
+    "artRequests": 13,
+    "text": "PARTY PREP EXP · THE DARK AEONS — BESAID TO MT. GAGAZET T Tidus S.LV 180 Y Yuna S.LV 175 A Auron S.LV 180 W Wakka S.LV 1"
+   }
+  },
+  {
+   "name": "word \"darkaeon\" cancel returns to board",
+   "ok": true,
+   "detail": "chapter-select"
+  },
+  {
+   "name": "word \"judgment\" opens party prep",
+   "ok": true,
+   "detail": {
+    "screen": "party-prep",
+    "artRequests": 37,
+    "text": "PARTY PREP EXP · PENANCE — THE FAHRENHEIT — THE DECK T Tidus S.LV 180 Y Yuna S.LV 175 A Auron S.LV 180 W Wakka S.LV 165 "
+   }
+  },
+  {
+   "name": "word \"judgment\" cancel returns to board",
+   "ok": true,
+   "detail": "chapter-select"
+  },
+  {
+   "name": "word \"geosgaeno\" opens party prep",
+   "ok": true,
+   "detail": {
+    "screen": "party-prep",
+    "artRequests": 11,
+    "text": "PARTY PREP EXP · THE FLOODED WAYS — THE VIA PURIFICO AND THE BAAJ TEMPLE T Tidus S.LV 24 W Wakka S.LV 24 R Rikku S.LV 41"
+   }
+  },
+  {
+   "name": "word \"geosgaeno\" cancel returns to board",
+   "ok": true,
+   "detail": "chapter-select"
+  },
+  {
+   "name": "word \"drillshot\" opens party prep",
+   "ok": true,
+   "detail": {
+    "screen": "party-prep",
+    "artRequests": 14,
+    "text": "PARTY PREP EXP · THE BEVELLE GUARDIANS — BEVELLE UNDERGROUND — FLOORS 3 AND 7 Y Yuna LV 23 R Rikku LV 24 P Paine LV 25 C"
+   }
+  },
+  {
+   "name": "word \"drillshot\" cancel returns to board",
+   "ok": true,
+   "detail": "chapter-select"
+  },
+  {
+   "name": "word \"duelist\" opens party prep",
+   "ok": true,
+   "detail": {
+    "screen": "party-prep",
+    "artRequests": 24,
+    "text": "PARTY PREP EXP · THE FARPLANE CUP — THE FIEND ARENA — A STAND-IN STAGE Y Yuna LV 99 R Rikku LV 99 P Paine LV 99 CHAPTER "
+   }
+  },
+  {
+   "name": "word \"duelist\" cancel returns to board",
+   "ok": true,
+   "detail": "chapter-select"
+  },
+  {
+   "name": "word \"beast\" opens party prep",
+   "ok": true,
+   "detail": {
+    "screen": "party-prep",
+    "artRequests": 55,
+    "text": "PARTY PREP EXP · THE SANCTUARY KEEPER — MT. GAGAZET — THE SUMMIT T Tidus S.LV 30 Y Yuna S.LV 32 K Kimahri S.LV 25 A Auro"
+   }
+  },
+  {
+   "name": "word \"beast\" cancel returns to board",
+   "ok": true,
+   "detail": "chapter-select"
+  },
+  {
+   "name": "word \"wraith\" opens party prep",
+   "ok": true,
+   "detail": {
+    "screen": "party-prep",
+    "artRequests": 29,
+    "text": "PARTY PREP EXP · YUNA'S BALLAD — DEN OF WOE — UNDER MUSHROOM ROCK ROAD Y Yuna LV 54 CHAPTER DRESSPHERES STATS ACCESSORIE"
+   }
+  },
+  {
+   "name": "word \"wraith\" cancel returns to board",
+   "ok": true,
+   "detail": "chapter-select"
+  },
+  {
+   "name": "listed chapter (first card) -> next screen",
+   "ok": true,
+   "detail": {
+    "firstCard": "seymour-flux",
+    "screen": "party-prep"
+   }
+  },
+  {
+   "name": "player turn reached",
+   "ok": true,
+   "detail": "battle"
+  },
+  {
+   "name": "Escape pauses and resumes",
+   "ok": true,
+   "detail": {
+    "paused": true
+   }
+  },
+  {
+   "name": "P pauses; H hides and restores panels",
+   "ok": true,
+   "detail": {
+    "p2": true,
+    "panelsBefore": 70,
+    "panelsHidden": 10,
+    "panelsBack": 70
+   }
+  },
+  {
+   "name": "P resumes",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "audio debug + music fetches",
+   "ok": true,
+   "detail": {
+    "audio": "{\"ready\":true,\"sampleRate\":48000,\"playing\":\"boss-seymour\",\"muted\":false,\"volumes\":{\"master\":0.8,\"music\":0.7,\"sfx\":0.7},\"voiceVolume\":0.9,\"voice\":{\"chapter\":\"seymour-flux\",\"enabled\":true,\"contextState\":\"running\",\"ducked\":false,\"paused\":[],\"asked\":10,\"started\":10,\"current\":null,\"cache\":{\"manifests\":[\"seymour-flux\"],\"buffers\":24,\"decodedBytes\":9825760,\"pinned\":16,\"failed\":0,\"requests\":27},\"plays\":[{\"id\":\"seymour-flux.pre.008\",\"at\":109143,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.013\",\"at\":112493,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.014\",\"at\":113410,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.017\",\"at\":115293,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flu",
+    "musicFetches": [
+     "https://echoesofspira.com/audio/music/title.mp3",
+     "https://echoesofspira.com/audio/sfx/sprite.mp3",
+     "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+     "https://echoesofspira.com/audio/music/chapter-select.mp3",
+     "https://echoesofspira.com/audio/sfx/parity-ffx2-core.mp3"
+    ],
+    "n": 47
+   }
+  },
+  {
+   "name": "storage keys before reload",
+   "ok": true,
+   "detail": [
+    "pyrefly-reprise:save:v1"
+   ]
+  }
+ ],
+ "storageBefore": {
+  "pyrefly-reprise:save:v1": "{\"version\":1,\"updatedAt\":1794046326375,\"chapters\":{\"seymour-flux\":{\"id\":\"seymour"
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "musicFetches": 48
+}

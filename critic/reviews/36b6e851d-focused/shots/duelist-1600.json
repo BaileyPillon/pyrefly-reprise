@@ -1,0 +1,113 @@
+{
+ "word": "duelist",
+ "expectId": "ffx2-farplane-cup",
+ "W": "1600",
+ "H": "900",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-jYm-0mrJ.js"
+  },
+  {
+   "s": "after-word",
+   "opened": true,
+   "screen": "party-prep",
+   "state": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":417,\"elapsed\":7.16,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-undergrou"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 13043
+  },
+  {
+   "s": "chapter-id",
+   "idNow": null
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "rows",
+   "stackPresent": true,
+   "rows": [
+    {
+     "i": 0,
+     "text": "Attack",
+     "selected": true,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 1,
+     "text": "Item",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 2,
+     "text": "Change",
+     "selected": false,
+     "disabled": false,
+     "overdrive": true,
+     "w": 337,
+     "h": 58
+    }
+   ]
+  },
+  {
+   "s": "after-turns",
+   "screen": "battle"
+  },
+  {
+   "s": "end",
+   "screen": "results",
+   "ms": 10174
+  },
+  {
+   "s": "end-text",
+   "text": "THE FIEND ARENA — A STAND-IN STAGE · FELL RESULTS · 0:33 Defeat TURNS 15 ATTEMPTS 1 BEST — NEVER CLEARED Y Yuna DARK KNIGHT · CONFUSEPROOF 0/30 AP R Rikku ALCHEMIST · DISPEL TONIC 0/20 AP P Paine DARK KNIGHT · CONFUSEPROOF 0/30 AP RETRY CHAPTER SELECT"
+  }
+ ],
+ "rows": {
+  "stackPresent": true,
+  "rows": [
+   {
+    "i": 0,
+    "text": "Attack",
+    "selected": true,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 1,
+    "text": "Item",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 2,
+    "text": "Change",
+    "selected": false,
+    "disabled": false,
+    "overdrive": true,
+    "w": 337,
+    "h": 58
+   }
+  ]
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": []
+}

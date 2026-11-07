@@ -1,0 +1,167 @@
+{
+ "word": "darkaeon",
+ "expectId": "dark-aeons",
+ "W": "1600",
+ "H": "900",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-jYm-0mrJ.js"
+  },
+  {
+   "s": "after-word",
+   "opened": true,
+   "screen": "party-prep",
+   "state": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":418,\"elapsed\":7.188,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-undergro"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 14521
+  },
+  {
+   "s": "chapter-id",
+   "idNow": null
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "rows",
+   "stackPresent": true,
+   "rows": [
+    {
+     "i": 0,
+     "text": "Attack",
+     "selected": true,
+     "disabled": false,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 1,
+     "text": "Special",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 2,
+     "text": "White Magic",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 3,
+     "text": "Items",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 4,
+     "text": "Flee",
+     "selected": false,
+     "disabled": true,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 5,
+     "text": "Escape",
+     "selected": false,
+     "disabled": true,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    }
+   ]
+  },
+  {
+   "s": "after-turns",
+   "screen": "battle"
+  },
+  {
+   "s": "end",
+   "screen": "results",
+   "ms": 260202
+  },
+  {
+   "s": "end-text",
+   "text": "BESAID TO MT. GAGAZET · FELL RESULTS · 4:43 Defeat TURNS 17 ATTEMPTS 1 BEST — NEVER CLEARED T Tidus S.LV 180 · 0/22,000 AP Y Yuna S.LV 175 · 0/22,000 AP A Auron S.LV 180 · 0/22,000 AP RETRY CHAPTER SELECT"
+  }
+ ],
+ "rows": {
+  "stackPresent": true,
+  "rows": [
+   {
+    "i": 0,
+    "text": "Attack",
+    "selected": true,
+    "disabled": false,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 1,
+    "text": "Special",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 2,
+    "text": "White Magic",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 3,
+    "text": "Items",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 4,
+    "text": "Flee",
+    "selected": false,
+    "disabled": true,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 5,
+    "text": "Escape",
+    "selected": false,
+    "disabled": true,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   }
+  ]
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": []
+}

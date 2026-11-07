@@ -1,0 +1,22 @@
+{
+ "word": "gear",
+ "expectId": "exp-anime",
+ "W": "390",
+ "H": "844",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-jYm-0mrJ.js"
+  },
+  {
+   "s": "after-word",
+   "opened": false,
+   "screen": "chapter-select",
+   "state": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"chapter-select\",\"stack\":[\"chapter-select\"],\"overlayDepth\":0,\"frameCount\":874,\"elapsed\":14.668,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle"
+  }
+ ],
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": []
+}

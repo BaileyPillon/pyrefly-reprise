@@ -1,0 +1,91 @@
+{
+  "rubricVersion": 2,
+  "review": "live",
+  "date": "2026-11-07T10:23:10.993Z",
+  "build": {
+    "mainSha": "36b6e851d",
+    "bundle": "jYm-0mrJ",
+    "artifactHash": "31d217a3604086e9c7526548fc459ce210614df44dd596a0239492911bdeeea6"
+  },
+  "verdicts": {
+    "deployment": "PASS",
+    "changedArea": "NOT APPLICABLE",
+    "milestone": "not assessed"
+  },
+  "checks": [
+    {
+      "id": "CHK-017",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/36b6e851d.json --url https://echoesofspira.com/ --changed-from critic/artifacts/f91ff81d0.json -> {result: PASS, liveManifest: match, checked: 416, mismatched: [], missing: [], wrongType: [], errors: []}; index.html identical once the Cloudflare analytics beacon is removed. Output saved at critic/reviews/36b6e851d-live/verify-live-changed.json.",
+      "reason": "The plan lists the review as deep, so --full was started (7651 files, about 11.5 GB, sequential download). It had not finished after about 50 minutes and was stopped by PID; the changed-from run (all 416 changed files plus the sample of the rest) is the evidence, as for release 75. The full byte comparison was not completed and is listed under notTested."
+    },
+    {
+      "id": "CHK-016",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Headless Playwright, PYREFLY_BROWSER=gpu, fresh context 1600x900, cache-busting query, real key presses. Screen asserted before every capture: title -> chapter-select (19 cards) -> each of the eight typed words opened party-prep (gear (ffx2): party-prep, 35 art requests; darkaeon (ffx): party-prep, 13 art requests; judgment (ffx): party-prep, 37 art requests; geosgaeno (ffx): party-prep, 11 art requests; drillshot (ffx2): party-prep, 14 art requests; duelist (ffx2): party-prep, 24 art requests; beast (ffx): party-prep, 55 art requests; wraith (ffx2): party-prep, 29 art requests) and Escape returned to chapter-select (cancel path) each time; the listed chapter (seymour-flux, first card) went party-prep -> cutscene -> battle with awaitingMenu and one real Attack ran. Escape paused and resumed; P paused and resumed; H hid and restored the pause panels (visible panel elements 70 -> 10 -> 70). Audio debug: playing boss-seymour, context running, voice cache 0 failed; 47 audio fetches (title, chapter-select and sfx mp3s among them), so prerendered music, not the procedural fallback. Screenshots in critic/reviews/36b6e851d-live/shots/.",
+      "reason": "Every capture followed an asserted screen and state. The hidden chapters were opened to party prep only (the smoke is the word, the board and the paintings loading); no hidden chapter battle was played in this pass, which belongs to the owed deep review."
+    },
+    {
+      "id": "CHK-024",
+      "result": "PASS",
+      "mandatory": true,
+      "evidence": "Fresh context: after one real Attack in seymour-flux (save attempts 1), the pause Options panel was opened and Master Volume moved 0.8 -> 1 with real arrow keys (save settings.masterVolume 0.8 -> 1); the page was reloaded: save masterVolume 1, attempts 1, audio debug volumes master 1, screen title. Probe at critic/reviews/36b6e851d-live/reload-probe.json.",
+      "reason": "Lightweight reload smoke only; the full upgrade matrix was not run."
+    }
+  ],
+  "staticChecks": {
+    "pose-census": {
+      "subjects": 170,
+      "paintings": 1223,
+      "pass": 928,
+      "waived": 97,
+      "rigged": 0,
+      "fail": 0,
+      "exempt": 198,
+      "byClass": {
+        "idle": 170,
+        "standing": 637,
+        "ko": 110,
+        "low": 71,
+        "wide": 5,
+        "staged": 176,
+        "part": 54
+      },
+      "byGame": {
+        "FFX-2": 819,
+        "FFX": 314,
+        "unknown": 68,
+        "FF7": 22
+      },
+      "byRowStatus": {
+        "ok": 842,
+        "held": 86,
+        "waived": 97,
+        "none": 198
+      },
+      "note": "Data, not a verdict. File: critic/reviews/36b6e851d-live/static/pose-census.json."
+    }
+  },
+  "coverage": {
+    "tested": [
+      "artifact identity, 416 changed files byte-identical with the right content types, live manifest match",
+      "title, chapter select, all eight new words (gear, darkaeon, judgment, geosgaeno, drillshot, duelist, beast, wraith) opening their chapter prep with its paintings, cancel path each",
+      "one listed chapter to a player turn, real Attack, pause by Escape and P, H hide and restore, music fetched and playing",
+      "reload smoke of one setting and one piece of progress",
+      "pose census"
+    ],
+    "reused": [],
+    "notTested": [
+      "full byte comparison of all 7651 files (--full stopped after about 50 minutes)",
+      "battles of the eight hidden chapters (owed deep review)",
+      "full save and settings upgrade matrix (CHK-024 full)",
+      "touch or phone layouts",
+      "Chapter XXXIII anime on mobile (desktop only by design)"
+    ]
+  },
+  "consoleErrors": 0,
+  "notFound": 0,
+  "elapsedMinutes": 60
+}

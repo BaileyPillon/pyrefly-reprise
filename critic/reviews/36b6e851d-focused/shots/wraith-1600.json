@@ -1,0 +1,113 @@
+{
+ "word": "wraith",
+ "expectId": "ffx2-yunas-ballad",
+ "W": "1600",
+ "H": "900",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-jYm-0mrJ.js"
+  },
+  {
+   "s": "after-word",
+   "opened": true,
+   "screen": "party-prep",
+   "state": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":408,\"elapsed\":7.009,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-undergro"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 7325
+  },
+  {
+   "s": "chapter-id",
+   "idNow": null
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "rows",
+   "stackPresent": true,
+   "rows": [
+    {
+     "i": 0,
+     "text": "White Magic",
+     "selected": true,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 1,
+     "text": "Change",
+     "selected": false,
+     "disabled": false,
+     "overdrive": true,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 2,
+     "text": "Item",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    }
+   ]
+  },
+  {
+   "s": "after-turns",
+   "screen": "battle"
+  },
+  {
+   "s": "end",
+   "screen": "cutscene",
+   "ms": 51517
+  },
+  {
+   "s": "end-text",
+   "text": "DEN OF WOE — UNDER MUSHROOM ROCK ROAD · CLEARED RESULTS · 1:17 Victory EXP 1,600 ×1 PARTY AP 6 PER DRESSPHERE GIL 400 ITEMS Champion Belt Y Yuna WHITE MAGE · MASTERED +1,600EXP CONFIRM ▸"
+  }
+ ],
+ "rows": {
+  "stackPresent": true,
+  "rows": [
+   {
+    "i": 0,
+    "text": "White Magic",
+    "selected": true,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 1,
+    "text": "Change",
+    "selected": false,
+    "disabled": false,
+    "overdrive": true,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 2,
+    "text": "Item",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   }
+  ]
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": []
+}

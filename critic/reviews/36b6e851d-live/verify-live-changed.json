@@ -1,0 +1,20 @@
+{
+ "result": "PASS",
+ "artifactHash": "31d217a3604086e9c7526548fc459ce210614df44dd596a0239492911bdeeea6",
+ "liveManifest": "match",
+ "checked": 416,
+ "mismatched": [],
+ "missing": [],
+ "wrongType": [],
+ "errors": [],
+ "notes": [
+  "_headers is part of this artifact and was not downloaded (no address serves a host-read file); assets/BattlePresenterActors-DzEv0flg.js was served with Cache-Control \"public, max-age=31536000, immutable\""
+ ],
+ "browserPages": {
+  "index.html": "identical to the artifact once Cloudflare's Web Analytics beacon is removed (366 bytes and the line feed after it)"
+ },
+ "assetCacheControl": {
+  "path": "assets/BattlePresenterActors-DzEv0flg.js",
+  "value": "public, max-age=31536000, immutable"
+ }
+}

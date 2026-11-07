@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-2050 decisions in all: 1480 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1389 of the written decisions record a blanket yes.
+2064 decisions in all: 1494 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1391 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1924 |
+| adopted | 1938 |
 | proposed | 9 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 94 |
-| **All** | **2050** |
+| **All** | **2064** |
 
 | Area | Decisions |
 | --- | ---: |
 | combat | 156 |
-| art | 404 |
-| visuals | 176 |
+| art | 407 |
+| visuals | 180 |
 | camera | 76 |
 | audio | 160 |
-| ui | 226 |
+| ui | 227 |
 | story | 17 |
-| chapters | 312 |
+| chapters | 317 |
 | guide | 34 |
 | release | 114 |
 | hosting | 18 |
-| process | 229 |
+| process | 230 |
 | critic | 45 |
 | data | 17 |
 | tech | 45 |
 | site | 21 |
-| **All** | **2050** |
+| **All** | **2064** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 1087 |
-| FFX only | 525 |
+| both games | 1098 |
+| FFX only | 528 |
 | FFX-2 only | 420 |
 | FF7 hidden experiment | 18 |
-| **All** | **2050** |
+| **All** | **2064** |
 
 ## Standing rules in force
 
@@ -9391,7 +9391,7 @@ Saturday · 45 decisions
   - Source: Bailey, 2026-10-31 about 23:40 EDT (DRIVER-STATE logged it at 23:45 EDT), typed in the chat, verbatim: "im going to sleep please keep going. i'll go …
 - <a id="d-1427"></a>**D-1427** — The rigs v3 stay OFF: his standing rule (he judges a rig in motion before it goes on) is not covered by a blanket yes (both games)
   - Bailey: “im going to sleep please keep going. i'll go with all of your recommendations. you make the executive decisions for the next few days.” (blanket yes)
-  - What changed: Item 217d. The comparison clips went to him on 2026-10-30 at about 18:05 EDT (A-1096); his verdict is still open. No rig replaces a painting before he has seen it move.
+  - What changed: Item 217d. The comparison clips went to him on 2026-10-30 at about 18:05 EDT (A-1096); his verdict is still open. No rig replaces a painting before he has seen it move. Update 2026-11-07: his verdict on the v3 clips of the two pilots is in (D-1491, "Those do look really good"); the driver read it as a yes for those two (D-1492), so they are built to draw as rigs by default on origin/rigs-pilots-on (not merged, not live); the rest of the Chapter I and IV parties stay off until his word.
   - area art · both games · adopted · nothing to build · see [D-1423](#d-1423), [D-1409](#d-1409) · refines [D-1423](#d-1423)
   - Source: Bailey, 2026-10-31 about 23:40 EDT (DRIVER-STATE logged it at 23:45 EDT), typed in the chat, verbatim: "im going to sleep please keep going. i'll go …
 - <a id="d-1428"></a>**D-1428** — Release 71 (sixteen of nineteen chapters in the plan, fifteen in the end) deploys on its focused review's SHIP once the deep review round 32 settles releases 69 and 70 (both games)
@@ -9637,7 +9637,7 @@ Wednesday · 1 decision
 
 ### 2026-11-06
 
-Friday · 8 decisions
+Friday · 22 decisions
 
 - <a id="d-1473"></a>**D-1473** — He says "ok continue on please im going to bed" and the delegation stands: release 75 goes on to its candidate, review, deploy and live check (both games, process)
   - Bailey: “ok continue on please im going to bed”
@@ -9679,3 +9679,73 @@ Friday · 8 decisions
   - What changed: Item 220j, about 04:05 EST on 2026-11-06. Penance's look is option A 'bronze, as the game model' (the faithful reading of m344 and m345: an iris-shutter disc with a pearl core and two bronze gauntlet arms; the alternatives were B blackened steel and crimson, and C pearl and gilded gold), with painted depth added in the set. The six Dark Aeon pose sets, made from the Dark Yojimbo recipe, are accepted for the chapter-34 build as made (cast = a light state of the dark idle); the faults listed in the kit's MANIFEST: Anima's attack lattice, Ifrit's hidden face, Valefor more raven than peacock, Ixion's red horn glow, Shiva's attack 30 px over the floor. These are the driver's picks of candidates, not Bailey's approval of the pictures. Staged, not installed (A-1210).
   - area art · FFX · adopted · delivery in progress · see [D-1479](#d-1479), [D-1423](#d-1423), [D-1477](#d-1477) · refines [D-1479](#d-1479)
   - Source: The driver's call of 2026-11-06 about 04:05 EST (the queue line), made under his word of 2026-10-31 (D-1423, "you make the executive decisions for …
+- <a id="d-1481"></a>**D-1481** — DRIVER CALL under his words, his to overturn: the anime chapter's Rikku and Paine are raised toward Yuna's height so the trio reads as one cast (FFX-2 only); the stage teardown frees the contact-shadow memory it leaked (both games, a bug fix); release 76 is the chapters program's waves 1 and 2, all hidden
+  - Bailey: “implement all unimplemented chapters please”
+  - What changed: Item 220k, about 07:45 EST on 2026-11-06. By the face measure the anime chapter's Rikku read 4.3 heads and Paine 6.3 against Yuna's 7.0, so the girls looked like different casts; they were raised (Rikku 5.6, Paine 6.9, Yuna unchanged) so the trio reads as one (FFX-2 only; Chapter 33). The shared BattlePresenterStage dispose now frees the four foot-occlusion contact-shadow materials it leaked on every battle entry (both games; a bug fix; the one change a player of the listed chapters can see, as a lighter graphics memory after every fight). Release 76 is chapters 33 to 40 (waves 1 and 2), every one hidden behind its typed word. Built in the integrations of A-1226 and live in release 76 (A-1233).
+  - area chapters · both games · adopted · delivery implemented · see [D-1479](#d-1479), [D-1474](#d-1474), [D-1423](#d-1423), [D-1480](#d-1480) · refines [D-1479](#d-1479)
+  - Source: The driver's call of 2026-11-06 about 07:45 EST (the queue line), made under his words of 2026-11-06 about 00:30 EST (D-1474) and his delegation …
+- <a id="d-1482"></a>**D-1482** — DRIVER CALL under his words, his to overturn: Penance (FFX only) ships hidden as sourced (option A of the preflight) although no scripted player had won it without a state edit; a guide-strategy bot line measures it first; a gentler story mode and a larger roster wait for his word
+  - Bailey: “implement all unimplemented chapters please”
+  - What changed: Item 220l, about 08:50 EST on 2026-11-06. At that moment about 1,300 scripted battles had produced no win (the bots never tried Quick Hit, Defend, Overdrives or bench swaps). The call: ship it as sourced (option A of the chapter's preflight, section 5, unchanged numbers, rule 6) and play the public guides' own strategy with a 'guide' bot line before release 76. The line (A-1214) then won 55 of 100 seeds on the shipped armour with no state edit, so the fight is winnable as sourced. Options D (a gentler story mode) and E (a larger roster) are new gameplay and wait for his word (AGENTS.md rule 10). Live and hidden behind the word judgment in release 76 (A-1233).
+  - area chapters · FFX · adopted · delivery implemented · see [D-1479](#d-1479), [D-1477](#d-1477), [D-1480](#d-1480), [D-1039](#d-1039) · refines [D-1479](#d-1479)
+  - Source: The driver's call of 2026-11-06 about 08:50 EST (the queue line), made under D-1477 and D-1479, recorded as a driver call and his to overturn. Item …
+- <a id="d-1483"></a>**D-1483** — DRIVER CALL under his words, his to overturn: the new bosses of the chapters program are painted in the faithful reading of the game model, with no options round; recolours follow the approved family recipes; the driver reviews every contact sheet before an install (FFX and FFX-2 per chapter)
+  - Bailey: “implement all unimplemented chapters please”
+  - What changed: Item 220m, about 09:30 EST on 2026-11-06. The same reading as Penance's look A (D-1480): image to image over renders of the real model, so a painting is what the game's model is, not a new design. Recolours follow the approved family recipes (the Dark Yojimbo recipe, the shade method). The driver looks at every contact sheet before an install, and these are its picks of candidates, not Bailey's approval of the pictures. Used for the wave-2 set (A-1216, D-1484) and the wave-3 set (A-1223, D-1493); installed for release 76 in A-1227.
+  - area art · both games · adopted · delivery implemented · see [D-1479](#d-1479), [D-1480](#d-1480), [D-1423](#d-1423), [D-1484](#d-1484) · refines [D-1479](#d-1479)
+  - Source: The driver's call of 2026-11-06 about 09:30 EST (the queue line), made under D-1479 and D-1423, recorded as a driver call and his to overturn. Item …
+- <a id="d-1484"></a>**D-1484** — DRIVER CALL under his words, his to overturn: the wave-2 paintings are accepted for the release 76 install as staged; cards and thumbnails are held until a chapter is listed (FFX for chapters 36 and 39; FFX-2 for 37, 38 and 40)
+  - Bailey: “implement all unimplemented chapters please”
+  - What changed: Item 220n, about 11:25 EST on 2026-11-06. Accepted as staged (108 images, 69 sidecars): Evrae Altana as a bone and green recolour of the approved airship Evrae (a compromise: the game's Altana is a thinner skeletal body), Geosgaeno, the Gate Lock, three flooded Via Purifico plates and the Baaj waterway, the Sanctuary Keeper (FFX); Baralai living, Georapella and the Precepts Guard as the same paintings as Geosgaeno and the Spectral Keeper because the FFX-2 models render identically, the possessed Rikku and Paine as tinted mirrors, five pause heroes (FFX-2). Cards and thumbnails stay out until a chapter is listed. Installed on the release 76 mirror in A-1227 and live in release 76 (A-1233); the driver's picks, not Bailey's approval of the pictures.
+  - area art · both games · adopted · delivery implemented · see [D-1483](#d-1483), [D-1479](#d-1479), [D-1423](#d-1423) · refines [D-1483](#d-1483)
+  - Source: The driver's call of 2026-11-06 about 11:25 EST (the queue line), made under D-1479 and D-1483, recorded as a driver call and his to overturn. Item …
+- <a id="d-1485"></a>**D-1485** — He says the targeting hand "looks weird to me and not very final fantasy like" and that the portraits filling the left half of the screen "just seems kind of random": the driver finds both and shows options first (both games until the sources say otherwise)
+  - Bailey: “the hand finger icon when targeting now looks weird to me and not very final fantasy like please fix...also when character portraits pop in and fill the left half of the screen its not really making sense to make why they pop up when they do it just seems kind of random”
+  - What changed: Item 220o, about 13:10 EST on 2026-11-06. A fix request with a reason for each part. The lane's read (A-1218): the FFX glove is the project's own drawing and grew to 144 px with the target-markers piece (D-1265), where the real FFX cursor is a small white cone with a red collar; the large left-half portrait is the turn cut-in, which fires on each member's first turn of every battle, and the real games show none. Options first (AGENTS.md rule 9): phone cards sent at 14:00 EST: marker A cone (recommended), B Ink and Gold cone, C smaller glove; portraits A big moves only, B slim every turn, C removed (recommended). FFX-2's ring is kept because he named only the hand. Waiting for his pick; nothing is built before it.
+  - area ui · both games · adopted · delivery in progress · see [D-1265](#d-1265), [D-1423](#d-1423) · refines [D-1265](#d-1265)
+  - Source: Bailey, 2026-11-06 about 13:10 EST, typed in the chat, verbatim: "the hand finger icon when targeting now looks weird to me and not very final …
+- <a id="d-1486"></a>**D-1486** — He says to continue with what the driver is doing and asks whether it is using Meshy (both games, process; the delegation stands)
+  - Bailey: “otherwise continue with what you're doing and are you using meshy?”
+  - What changed: Item 220p, about 13:10 EST on 2026-11-06. A confirmation and a question, not a new rule (like D-1443, D-1473 and D-1478): the delegation of D-1423 and the chapters program (D-1474 to D-1479) stand. Meshy is in use under his word of 2026-11-06 about 00:55 EST (D-1476): 35 credits for the anime chapter's Valefor before this question, then the tech-demo chapter's cards and assets (A-1220, A-1224, A-1225).
+  - area process · both games · adopted · delivery implemented · see [D-1423](#d-1423), [D-1476](#d-1476), [D-1479](#d-1479) · refines [D-1423](#d-1423)
+  - Source: Bailey, 2026-11-06 about 13:10 EST, typed in the chat, verbatim: "otherwise continue with what you're doing and are you using meshy?". Item 220p of …
+- <a id="d-1487"></a>**D-1487** — He asks whether all the characters are rigged and what was done about motion and fluidity, and says it is "coming along really well" with "a big improvement especially with pose contunity" (both games; a question and a verdict)
+  - Bailey: “so are all the characters rigged now? what have you done about motion animations and fluidity? its coming along really well ive noticed a big improvement especially with pose contunity”
+  - What changed: Item 220q, about 13:10 EST on 2026-11-06. A question and a verdict. Verdict (reaction): liked, the pose continuity work (the continuity harness, the swap fixes and the pose registrations). Where it stands for his question: only the two pilots exist as rigs (Tidus in FFX Chapter I, Rikku's Dark Knight in FFX-2 Chapter IV; the v3 rigs), they were off by default until D-1492, and every other figure is a painting with the motion pack of D-1322. Nothing to build from the question itself.
+  - area visuals · both games · adopted · nothing to build · see [D-1372](#d-1372), [D-1378](#d-1378), [D-1427](#d-1427), [D-1491](#d-1491) · refines [D-1372](#d-1372)
+  - Source: Bailey, 2026-11-06 about 13:10 EST, typed in the chat, verbatim: "so are all the characters rigged now? what have you done about motion animations …
+- <a id="d-1488"></a>**D-1488** — He asks for one brand new chapter "using meshy extensively": the driver offers four fights as cards, and the default (Wendigo, FFX) is taken when he does not pick (D-1494); game case per the pick
+  - Bailey: “make 1 brand new chapter using meshy extensively please”
+  - What changed: Item 220r, about 13:45 EST on 2026-11-06. One new chapter whose models come mostly from Meshy, on top of the chapters program (D-1479). He had already let the driver spend Meshy credits by its own judgment (D-1476). The meshy-chapter-options lane (A-1220) made four cards: A Chocobo Eater (FFX), B Wendigo (FFX), C Oblitzerator (FFX), D Azi Dahaka (FFX-2). With D-1490 ("like a tech demo") it is a 3D showpiece. No pick came in 3.5 hours, so the driver took B (D-1494). Built as the hidden Chapter 49, word wendigo, FFX only (A-1224, A-1225); the presentation phase is in build.
+  - area chapters · both games · adopted · delivery in progress · see [D-1476](#d-1476), [D-1479](#d-1479), [D-1490](#d-1490), [D-1494](#d-1494) · refines [D-1476](#d-1476)
+  - Source: Bailey, 2026-11-06 about 13:45 EST, typed in the chat, verbatim: "make 1 brand new chapter using meshy extensively please". Item 220r of the driver's …
+- <a id="d-1489"></a>**D-1489** — He asks to see the rig clips again ("i didnt see it"): both clips are re-sent; his verdict on the rigs v3 stays open until D-1491 (both games)
+  - Bailey: “show me the rig clips again please i didnt see it”
+  - What changed: Item 220s, about 13:30 EST on 2026-11-06. A request to see the clips (Tidus in FFX Chapter I and Rikku's Dark Knight in FFX-2 Chapter IV, rig beside painting), because the first send was not seen. Both clips were sent again the same afternoon (A-1219). It does not change the standing rule that he judges a rig in motion before it goes on (D-1378, D-1427); his verdict is D-1491.
+  - area visuals · both games · adopted · delivery implemented · see [D-1427](#d-1427), [D-1378](#d-1378), [D-1491](#d-1491) · refines [D-1427](#d-1427)
+  - Source: Bailey, 2026-11-06 about 13:30 EST, typed in the chat, verbatim: "show me the rig clips again please i didnt see it". Item 220s of the driver's list. …
+- <a id="d-1490"></a>**D-1490** — He says the Meshy chapter should be "like a tech demo": a 3D showpiece of what the models, light and camera can do (game case per the pick)
+  - Bailey: “like a tech demo”
+  - What changed: Item 220t, about 13:50 EST on 2026-11-06. It narrows D-1488: the chapter is a showpiece, so the cards were restarted with a tech-demo brief (full textures, shadows, reflections, volumetric light, particles, a flying camera, 60 fps on this PC) and each card says what its fight shows off, with no recommendation pre-set at first (A-1220). The chapter built is Wendigo on frozen Lake Macalania (D-1494), FFX only, desktop only.
+  - area chapters · both games · adopted · delivery in progress · see [D-1488](#d-1488), [D-1494](#d-1494), [D-1476](#d-1476) · refines [D-1488](#d-1488)
+  - Source: Bailey, 2026-11-06 about 13:50 EST, typed in the chat, verbatim: "like a tech demo". Item 220t of the driver's list. Game case: per the pick (FFX for …
+- <a id="d-1491"></a>**D-1491** — He asks what the benefits of the rigs are and says "Those do look really good" of the v3 clips of Tidus (FFX) and Rikku's Dark Knight (FFX-2): reaction liked; the wait of D-1427 for these two ends
+  - Bailey: “so what are the benefits of the rigs? Those do look really good”
+  - What changed: Item 220u, about 13:30 EST on 2026-11-06. Reaction: liked (the rig v3 clips of Tidus, FFX Chapter I, and Rikku's Dark Knight, FFX-2 Chapter IV). It is the judgment in motion that D-1378 and D-1427 asked for; the question about the benefits was a question, not an instruction. What he did not say: that every rig goes on, or that the rest of those two parties should. The driver's reading of it as a yes for the two pilots is D-1492.
+  - area visuals · both games · adopted · nothing to build · see [D-1427](#d-1427), [D-1378](#d-1378), [D-1401](#d-1401), [D-1489](#d-1489), [D-1492](#d-1492) · refines [D-1427](#d-1427)
+  - Source: Bailey, 2026-11-06 about 13:30 EST, typed in the chat, verbatim: "so what are the benefits of the rigs? Those do look really good". Item 220u of the …
+- <a id="d-1492"></a>**D-1492** — DRIVER CALL under his words, his to overturn (he was told in the reply): D-1491 is read as a yes to the offer made in the same exchange, so Tidus (FFX Chapter I) and Rikku's Dark Knight (FFX-2 Chapter IV) draw as rigs by default in their own chapters; ?partyrigs=off restores the paintings
+  - Bailey: “so what are the benefits of the rigs? Those do look really good”
+  - What changed: Item 220v, about 13:35 EST on 2026-11-06. Read as a yes to the offer the driver made in the same reply; he was told he can take it back. Built on origin/rigs-pilots-on (A-1219): the two rigs draw with no address word in their own chapters, ?partyrigs=off gives the paintings back (the switch and loader are shared plumbing, both games; Tidus FFX only, Rikku Dark Knight FFX-2 only). The rest of those two parties get rigs and clips for his eye and stay off until his word. Found while building: Rikku's cast key reads 0.881 against the 0.885 floor in Chapter IV and she has 40 mid-move dashes over 40 px, both open. Not merged and not live; release 77 queue.
+  - area visuals · both games · adopted · delivery in progress · see [D-1491](#d-1491), [D-1427](#d-1427), [D-1378](#d-1378), [D-1423](#d-1423) · refines [D-1491](#d-1491)
+  - Source: The driver's call of 2026-11-06 about 13:35 EST (the queue line), made on his words of about 13:30 EST (D-1491) and under his delegation (D-1423), …
+- <a id="d-1493"></a>**D-1493** — DRIVER CALL under his words, his to overturn: the wave-3 paintings are accepted for the release 77 install as staged (Ultima Weapon, Omega Weapon, Nemesis, Spherimorph, portraits, pause heroes and the Macalania Woods plate) with their listed faults (FFX only)
+  - Bailey: “you make the executive decisions for the next few days. i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 220w, about 18:25 EST on 2026-11-06. Accepted as staged (73 paths, verify 36 of 36): Nemesis is Ultima's recolour (the models share one mesh); Spherimorph is the model's marbled body with its small hanging bud left out to keep the foot line (a repaint with the bud is open). Faults in the kit's MANIFEST: Nemesis' gold is yellower than the model's olive, the Weapons' faces vary between poses, there is no lying-down KO frame in the bank. For release 77 with chapters 41 and 43; staged, not installed (A-1223).
+  - area art · FFX · adopted · delivery in progress · see [D-1483](#d-1483), [D-1479](#d-1479), [D-1423](#d-1423) · refines [D-1483](#d-1483)
+  - Source: The driver's call of 2026-11-06 about 18:25 EST (the queue line), made under his word of 2026-10-31 (D-1423, "you make the executive decisions for …
+- <a id="d-1494"></a>**D-1494** — DRIVER CALL under his words, his to overturn (the default he was told): the Meshy tech-demo chapter is B, Wendigo on frozen Lake Macalania, hidden Chapter 49 behind the word wendigo, FFX only, desktop only, every model by Meshy
+  - Bailey: “you make the executive decisions for the next few days. i'll go with all of your recommendations” (blanket yes)
+  - What changed: Item 220x, about 18:25 EST on 2026-11-06, the default the driver told him at about 14:45 EST, taken after 3.5 hours without a pick. The fight: the Wendigo (monster m212, 18,000 HP) and two Guado Guardians; the boss with a Meshy rig and clips, the Guardians, the party from the approved paintings and the arena props all Meshy models, the party moved by the real FFX animations retargeted onto the Meshy models. Why B: mirror ice and an aurora to show off, and the one boss Meshy's own rig fits. Phase 1 (research and assets, A-1224) and phase 2 (the battle side and the second assets, A-1225) are done; phase 3 (the presentation) is in build. Not merged, not deployed.
+  - area chapters · FFX · adopted · delivery in progress · see [D-1488](#d-1488), [D-1490](#d-1490), [D-1476](#d-1476), [D-1423](#d-1423) · refines [D-1488](#d-1488)
+  - Source: The driver's call of 2026-11-06 about 18:25 EST (the queue line), made under D-1488, D-1490 and D-1476 and his delegation (D-1423), recorded as a …
