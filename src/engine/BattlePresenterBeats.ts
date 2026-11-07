@@ -53,7 +53,10 @@ export async function actionStart(
   event: Extract<BattleEvent, { type: 'action-start' }>,
 ): Promise<void> {
   const burst = ctx.burst; // before the first await: an overlapping burst (FFX-2's ATB) would swap it (`motion/StrikeReach.ts`)
+  const big = ctx.bigMove ?? null; // the same: this action's big-move portrait (`BigMoveCutIn.ts`), decided by the loop a line before this beat
+  ctx.bigMove = null;
   ctx.actingId = event.actorId;
+  if (big) ctx.moments.bigMoveCutIn(big, event.command.kind === 'overdrive'); // 2026-11-07: the member's portrait names the move; not waited on, but an Overdrive's opening waits on it in place of its name slab
   beginSpellAction(ctx, event);
   stageMark(ctx, event); // pro staging: a boss's big move begins: the small name and the rim (and its name, for the defeat card's cause line)
   await telegraphHold(ctx, event); // r38 keys: Flux's Lance of Atrophy, Braska's Ultimate Jecht Shot (950 ms, only with the painting; else nothing happens)
@@ -83,7 +86,7 @@ export async function actionStart(
   } else {
     await ctx.moments.actionOpen(event.actorId, pose, event.targets ?? [], { abilityId: event.abilityId, commandKind: event.command.kind, lethal: actionKills(burst, (id) => ctx.stage.sideOf(id) === 'enemy') });
   }
-  await fxActionOpen(ctx, event);
+  await fxActionOpen(ctx, event, big !== null); // the C6 splash stands aside when the portrait is the moment (one moment, not a slab and then a painting)
   // RUN-IN (FFX-2 only, r38-motion): the girl runs to her target before the blow; the lunge below then only carries the strike (`lungeFor`).
   if (motion?.strike && motionAllowed(ctx, 'runin')) await settled(ctx, motion.strike(event, motionCtx(ctx), pose), MOTION_GUARD_MS);
 

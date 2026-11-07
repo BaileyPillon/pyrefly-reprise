@@ -187,6 +187,8 @@ export interface MomentsPort {
    * The Ink & Gold turn cut-in (`TurnCutIn.ts`): slam the portrait slab in,
    * hold `holdMs`, slide it out; resolves once it is gone. Optional and
    * additive (PR-0005); `label` is the part after `YOUR TURN · `.
+   * 2026-11-07 (`BigMoveCutIn.ts`, both games, additive): `move` makes it a BIG MOVE's portrait: `tag` is the whole line above the name ("TIDUS · OVERDRIVE", no "YOUR TURN") and `title` the move's name
+   * in the name's place; `quick` is a repeat's flash (a lighter veil, no pause).
    */
   turnCutIn?(opts: {
     actorId: string;
@@ -195,6 +197,8 @@ export interface MomentsPort {
     label: string;
     side: 'left' | 'right';
     holdMs: number;
+    move?: { title: string; tag: string };
+    quick?: boolean;
   }): Promise<void>;
   /**
    * Watch for the player's next Confirm press (Enter, Space, Z) until

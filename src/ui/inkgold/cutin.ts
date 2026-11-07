@@ -35,6 +35,10 @@ export interface TurnCutInOptions {
   ctbLabel: string;
   /** Which edge the slab slams in from. 'right' is the FFX-2 mirror. Default 'left'. */
   side?: CutInSide;
+  /** A big move's slab (2026-11-07, `engine/BigMoveCutIn.ts`): the whole line above the name, in place of "YOUR TURN · ${ctbLabel}" ("TIDUS · OVERDRIVE"). */
+  headline?: string;
+  /** A big move's slab: the move's name, set in the name's place (the ghost behind the slab stays the actor's name), shrunk to fit a long one. */
+  title?: string;
 }
 
 export interface TurnCutInHandle {
@@ -50,6 +54,20 @@ const SLAM_OVERSHOOT_MS = 120;
 const SLAM_SETTLE_MS = SLAM_MS - SLAM_OVERSHOOT_MS;
 /** Not specified by the spec (only the entrance carries a quoted duration); this module's own choice. */
 const DISMISS_MS = 150;
+
+/**
+ * The name's own size (slabs.css `.ig-cutin__name`, 92 spec px at 2.25), how many characters of it the slab holds on one line, and how wide its line may be: a move's name is longer than an actor's, and the slab's right
+ * edge is skewed (-12 degrees) so at the name's height the visible width is about 170 logical px, not the slab's 275. The count is the first guess (all there is where nothing is laid out); the measured width then decides.
+ */
+const NAME_FONT_SIZE = 40.89;
+const NAME_FIT_CHARS = 9;
+const NAME_MAX_W = 160;
+
+/** The factor a move's name is set at so it fits the slab on one line: 1 up to 9 characters, then in proportion, never under half. */
+export function titleFit(title: string): number {
+  const n = [...title].length;
+  return n <= NAME_FIT_CHARS ? 1 : Math.max(0.5, NAME_FIT_CHARS / n);
+}
 
 const REST_SKEW_DEG = -12; // --ig-slab-skew
 const OVERSHOOT_SKEW_DEG = -24; // spec: "overshoots to -24deg skew"
@@ -125,14 +143,20 @@ export function showTurnCutIn(root: HTMLElement, opts: TurnCutInOptions): TurnCu
   positionMirrored(label, side, GEOM.labelLeft, GEOM.labelBottom, 'bottom');
   const ctb = doc.createElement('div');
   ctb.className = 'ig-cutin__ctb';
-  ctb.textContent = `YOUR TURN · ${opts.ctbLabel}`;
+  ctb.textContent = opts.headline ?? `YOUR TURN · ${opts.ctbLabel}`;
   const name = doc.createElement('div');
   name.className = 'ig-cutin__name';
-  name.textContent = opts.name;
+  name.textContent = opts.title ?? opts.name;
+  if (opts.title !== undefined) {
+    name.style.fontSize = `${(NAME_FONT_SIZE * titleFit(opts.title)).toFixed(2)}px`; // a long move name must fit the slab (the actor's name never needed this)
+    name.style.whiteSpace = 'nowrap';
+    ctb.classList.add('ig-cutin__ctb--move'); // the line over a portrait that may be dark there: a paper glow keeps it readable
+  }
   label.append(ctb, name);
 
   el.append(ghost, slab, stripe, label);
   root.appendChild(el);
+  if (opts.title !== undefined) fitMeasured(name);
 
   if (reduced) {
     mirrorSkew(slab, side, REST_SKEW_DEG);
@@ -144,6 +168,14 @@ export function showTurnCutIn(root: HTMLElement, opts: TurnCutInOptions): TurnCu
     el,
     dismiss: () => dismiss(el, slab, side, reduced),
   };
+}
+
+/** Shrink (never grow) a move's name to the width the slab shows at its height, now that it is laid out; 0 where nothing is (jsdom): the character count stands. */
+function fitMeasured(name: HTMLElement): void {
+  const w = name.offsetWidth;
+  if (w <= NAME_MAX_W) return;
+  const size = Number.parseFloat(name.style.fontSize) || NAME_FONT_SIZE;
+  name.style.fontSize = `${Math.max(NAME_FONT_SIZE * 0.5, (size * NAME_MAX_W) / w).toFixed(2)}px`;
 }
 
 function makeFade(doc: Document): HTMLElement {

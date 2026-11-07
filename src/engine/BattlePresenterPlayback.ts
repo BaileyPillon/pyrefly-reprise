@@ -98,6 +98,7 @@ export class BattlePresenterPlayback extends BattlePresenterBase {
       this.ctx.opening = this.callouts.isOpening;
       if (event.type === 'victory' || event.type === 'defeat') this.ctx.stage.camera.hold?.(false); // PR-0150: the end shot always plays
       this.ctx.burst = { events, at: i }; // the action's own later events: a fiend's strike finds its target in them (`motion/StrikeReach.ts`)
+      if (event.type === 'action-start') this.ctx.bigMove = this.bigMoves.decide(event); // 2026-11-07: a big move earns the portrait; `actionStart` takes it (null for every other action)
       await playEvent(this.ctx, event);
       if (held) await revealBlow(this.ctx, event); // the beat shows it itself; this only makes sure a held blow is never lost
       this.trace.push({ seq: event.seq, type: event.type, ms: Date.now() - started });

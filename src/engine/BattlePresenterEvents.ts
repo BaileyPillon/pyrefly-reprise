@@ -15,6 +15,7 @@ import { cuePhase } from './BattlePresenterPhase.ts';
 import type { ActingAction } from './BattlePresenterSpellFx.ts';
 import type { BattleEvent, CombatantId, ElementId, MessageKind } from '../battle/common/types.ts';
 import { BattleMoments } from './BattleMoments.ts';
+import type { BigMoveCut } from './BigMoveCutIn.ts';
 import { noteSfxEvent, playCue } from './BattlePresenterSfx.ts';
 import {
   ELEMENT_SFX,
@@ -158,6 +159,11 @@ export interface EventCtx {
    * FOLLOW the one in hand are the action's own. `motion/StrikeReach.ts` reads them for the target of a fiend's ability, which names none at `action-start`.
    */
   burst?: { readonly events: readonly BattleEvent[]; readonly at: number } | undefined;
+  /**
+   * 2026-11-07 (`BigMoveCutIn.ts`): the portrait this `action-start` earns because the move is a big one (FFX: an Overdrive, an aeon, an aeon's Overdrive; FFX-2: a special dressphere's finisher), decided by the playback loop
+   * just before the beat and taken by `actionStart` in its first synchronous lines (an overlapping burst would swap it, as `burst`). Null or absent: no portrait.
+   */
+  bigMove?: BigMoveCut | null | undefined;
 }
 
 export function createEventCtx(

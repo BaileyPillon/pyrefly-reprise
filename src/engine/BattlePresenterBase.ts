@@ -11,6 +11,7 @@ import type { BattleMoments } from './BattleMoments.ts';
 import { createEventCtx, type EventCtx } from './BattlePresenterEvents.ts';
 import { MenuWaker } from './BattlePresenterActive.ts';
 import { TurnCutInBeat } from './TurnCutIn.ts';
+import { BigMoveBeat } from './BigMoveCutIn.ts'; // 2026-11-07: a party member's big move shows the portrait (the turn start no longer does)
 import { ActingState } from './ActingState.ts';
 import { OpeningCallouts } from './OpeningCallouts.ts';
 import type { AutoStrategy } from './BattlePresenterPorts.ts';
@@ -24,7 +25,8 @@ import { setMenuHold } from './motion/MenuHold.ts'; // motion pass (lane "core")
 export class BattlePresenterBase {
   protected readonly deps: PresenterDeps;
   protected readonly ctx: EventCtx;
-  protected readonly cutIns: TurnCutInBeat; // PR-0005: first turn of each party member
+  protected readonly cutIns: TurnCutInBeat; // PR-0005: first turn of each party member (only under `?portraits=turns` since 2026-11-07)
+  protected readonly bigMoves: BigMoveBeat; // 2026-11-07: the portrait on a party member's big move (`BigMoveCutIn.ts`; the default)
   protected readonly baseSleep: (ms: number) => Promise<void>;
   /** Real elapsed time for the FFX-2 Active pump. Tests inject a fake clock. */
   protected readonly now: () => number;
@@ -105,6 +107,13 @@ export class BattlePresenterBase {
       this.phase = was;
     };
     this.actingState = new ActingState(() => this.deps.hud);
+    this.bigMoves = new BigMoveBeat({
+      moments: deps.moments ?? null,
+      speed: () => this.speed,
+      state: () => this.liveState,
+      sideOf: (id) => deps.stage.sideOf(id),
+      menuOpen: () => menuBlocks(this.ctx), // FFX-2 only: nothing plays over an open command menu (D-357)
+    });
     this.cutIns = new TurnCutInBeat({
       moments: deps.moments ?? null,
       speed: () => this.speed,

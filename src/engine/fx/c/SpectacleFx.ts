@@ -112,9 +112,9 @@ export class SpectacleFx implements FxStagePort {
 
   // ------------------------------------------------------------- the port
 
-  async actionOpen(o: { actorId: CombatantId; name: string; kind: 'overdrive' | 'special' | 'other' }): Promise<void> {
+  async actionOpen(o: { actorId: CombatantId; name: string; kind: 'overdrive' | 'special' | 'other'; splash?: boolean }): Promise<void> {
     this.special = o.kind === 'other' ? null : o.name.trim().toLowerCase();
-    if (o.kind === 'other' || !this.d.splash || !this.d.sub('splash')) return;
+    if (o.kind === 'other' || o.splash === false || !this.d.splash || !this.d.sub('splash')) return; // `splash: false` (2026-11-07): the member's portrait is the moment (`BigMoveCutIn.ts`); the blows' own effects still know which move this is
     const f = this.d.flags();
     const art = this.d.stage.snapshot().find((s) => s.id === o.actorId)?.art ?? '';
     const key = `${o.actorId}:${o.name}`;

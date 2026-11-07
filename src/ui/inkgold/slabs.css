@@ -258,6 +258,7 @@
 .ig-cutin__stripe { position: absolute; background: var(--ig-accent); }
 .ig-cutin__label { position: absolute; display: flex; flex-direction: column; gap: 1.78px; } /* 4 */
 .ig-cutin__ctb { font-family: var(--ig-font-display); font-weight: 700; font-size: 6.22px; letter-spacing: 0.34em; color: var(--ig-gold-on-paper); } /* 14 */
+.ig-cutin__ctb--move { align-self: flex-start; padding: 0.9px 2.7px; margin-left: -2.7px; background: rgba(244, 241, 232, 0.94); } /* a big move's line sits on a paper chip: the portrait may be dark behind it (2026-11-07) */
 .ig-cutin__name { font-family: var(--ig-font-serif); font-size: 40.89px; font-weight: 700; font-style: italic; line-height: 0.9; letter-spacing: -0.02em; color: var(--ig-ink); } /* 92 */
 .ig-cutin__info { position: absolute; padding: 8px 9.78px; background: var(--ig-ink-panel); border-left: 1.78px solid var(--ig-accent); transform: skewX(var(--ig-skew)); } /* 18 22 4 */
 .ig-cutin__info > * { transform: skewX(var(--ig-skew-inverse)); }

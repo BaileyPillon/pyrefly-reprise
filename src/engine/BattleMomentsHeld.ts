@@ -16,8 +16,30 @@ import { stagingGame, stagingPieceOn } from './pro/staging/StagingSwitch.ts';
 import type { ShotAction, ShotActionInfo } from './ShotDirector.ts';
 import { MOMENT_TIMING, MOMENT_PUSH, TELEGRAPH_BPM } from './BattleMomentsConfig.ts';
 import { BattleMomentsActions } from './BattleMomentsActions.ts';
+import type { BigMoveCut } from './BigMoveCutIn.ts';
 
 export class BattleMomentsHeld extends BattleMomentsActions {
+  /** The big move's portrait the beat started for the action now opening (`bigMoveCutIn`), until an Overdrive's opening takes it (`takeCutIn`). */
+  private cutIn: Promise<void> | null = null;
+
+  /**
+   * 2026-11-07 (both games; `BigMoveCutIn.ts`): start the portrait of a big move. The action does not wait for it, except an Overdrive's opening, which waits on it in place of its own name slab: the portrait names
+   * the move, so the move is named once (`overdriveStart`).
+   */
+  bigMoveCutIn(req: BigMoveCut, openingTakesIt = false): void {
+    const show = this.deps.moments?.turnCutIn;
+    if (!show) return;
+    const shown = show.call(this.deps.moments, req).catch(() => undefined); // chrome is never worth losing a turn over
+    this.cutIn = openingTakesIt ? shown : null; // kept only for an Overdrive's opening, so an action that does not take it leaves nothing for the next one
+  }
+
+  /** The portrait `bigMoveCutIn` started for this action, once (an opening that takes it says so to the staging, or waits on it). */
+  protected takeCutIn(): Promise<void> | null {
+    const p = this.cutIn;
+    this.cutIn = null;
+    return p;
+  }
+
   // -------------------------------------------------------------- overdrive
 
   /**
@@ -33,6 +55,7 @@ export class BattleMomentsHeld extends BattleMomentsActions {
     const rig = this.rigFor(actorId);
     const asked = this.ask((d) => d.overdriveStart?.({ ...this.shotCtx(), actor: this.subject(actorId), targets: targets.map((t) => this.subject(t)), action }));
     const directed = asked instanceof Promise ? await asked : asked === true; // the director has the Overdrive's rig and push: the stinger, the letterbox and the slab still play
+    const portrait = this.takeCutIn(); // 2026-11-07: the big move's portrait is playing (names the move, with the member's face); this opening does not name it a second time
     if (this.skipping) {
       if (!directed) this.cut(rig);
       return;
@@ -50,8 +73,12 @@ export class BattleMomentsHeld extends BattleMomentsActions {
     }
     await bars;
     if (staged) {
-      this.deps.staging!.opening({ ...factsFor(this.deps.speed(), this.reducedMotion, this.reducedFlashes), kind: 'overdrive', actor: actorId, name });
+      this.deps.staging!.opening({ ...factsFor(this.deps.speed(), this.reducedMotion, this.reducedFlashes), kind: 'overdrive', actor: actorId, name, ...(portrait ? { named: false } : {}) }); // with the portrait up, its slab names the move: the small name stands aside
       await this.deps.sleep(OD_OPEN_HOLD_MS); // the presenter's own sleep: it scales with the playback speed and freezes under the pause
+      return;
+    }
+    if (portrait) {
+      await portrait; // the portrait slab takes the name slab's place: one moment, not a slab and then a banner
       return;
     }
     await this.deps.moments?.nameSlab({

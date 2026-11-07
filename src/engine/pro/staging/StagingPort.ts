@@ -53,7 +53,7 @@ export type EndingCue =
 
 /** The openings: an Overdrive (FFX) and a dress change (FFX-2). */
 export type OpeningCue =
-  | (StageFacts & { kind: 'overdrive'; actor: string; name: string })
+  | (StageFacts & { kind: 'overdrive'; actor: string; name: string; /** 2026-11-07: false when the member's portrait slab names the move (`BigMoveCutIn.ts`): the small name stands aside, the light, the push and the glint play on. Absent: named, as before. */ named?: boolean })
   | (StageFacts & { kind: 'change'; actor: string; dress: string; gate?: string | undefined });
 
 export interface StagingPort {
