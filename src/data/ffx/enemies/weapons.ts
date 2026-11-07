@@ -118,7 +118,7 @@ export function ultimaWeapon(): EnemyDef {
   return {
     id: ULTIMA_WEAPON_ID,
     name: 'Ultima Weapon',
-    spriteKey: ULTIMA_WEAPON_SPRITE, // `characters/ultima-weapon/` is owed (the art list in docs/handoff/ch-omega-ruins.md); a tree without it draws the stage's fallback figure
+    spriteKey: ULTIMA_WEAPON_SPRITE, // `characters/ultima-weapon/` is installed (r77 art install); a tree without it draws the stage's fallback figure
     slot: 0,
     stats,
     hp: stats.hp,

@@ -7,8 +7,8 @@
  * - `quote` is a line Lulu speaks in the pre scene (`src/story/scripts/spherimorph.ts`, a draft for Bailey to read), our own words in her register (writing bible section 1.6: dry).
  * - `objectives` are ours, each a rule `src/ui/common/chapterObjectives.ts` already answers: bring it below three quarters, below half (where Press begins), and the win.
  * - `tip` and `handwritten` are our own words over the research's sourced rules (RE sections 4 and 6): no number in them.
- * - `heroArt` is the pause plate `pause/ch41-spherimorph` (**not painted yet**); `heroArtFallback`, the Macalania Temple's plate, shows in its place. `snapshots`: that plate and two of the party's idles (stand-ins
- *   until the chapter's own paintings exist).
+ * - `heroArt` is the pause plate `pause/ch41-spherimorph` (painted in the r77 art install: the driver's pick, not Bailey's approval); `heroArtFallback`, the Macalania Temple's plate, shows if it is missing. `snapshots`: the
+ *   stage's plate, Spherimorph's own idle and Lulu's.
  * - `musicKeys` are the cues the chapter plays: the Macalania bed, the stand-in boss cue and the FFX fanfare.
  */
 
@@ -34,8 +34,8 @@ export const SPHERIMORPH_META: ChapterMeta = {
   tip: 'Hit it plain and read the spell it answers with. Cast the opposite. The wrong element only heals it.',
   snapshots: [
     { image: 'backdrops/macalania-temple.png', caption: 'the road to the temple' },
-    { image: 'characters/lulu/idle.png', caption: 'read the answer' },
-    { image: 'characters/tidus/idle.png', caption: 'probe it first' },
+    { image: 'characters/spherimorph/idle.png', caption: 'read the answer' },
+    { image: 'characters/lulu/idle.png', caption: 'cast the opposite' },
   ],
   focalCharacterId: 'lulu',
   musicKeys: ['scene-macalania-temple', 'boss-challenge', 'victory-ffx'],

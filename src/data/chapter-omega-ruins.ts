@@ -5,7 +5,7 @@
  * for the next few days. i'll go with all of your recommendations." The driver's decisions under those words are in `docs/handoff/ch-omega-ruins.md` ("driver's call, his to overturn"): the chapter ships **hidden behind the
  * typed word `weapon`** (WP1), hidden chapter **number 43**, FFX only, **one three-act chain** (WP2) with the party and the aeons restored between the acts, the Mirror Aeons party with the preset levers the bench set (WP3),
  * the Cavern of the Stolen Fayth's plate for all three acts (WP5 (a)), the hidden counters and Nemesis's reply hidden as in the game (WP7), aeons allowed (WP8), Yojimbo and the Sisters on the roster (WP9), stand-in music
- * (WP10), Normal start (WP11), the paintings owed (WP6: **not painted yet, stand-ins**), no boss number touched. The paper preflight is `docs/plans/ch-weapon-review.md`; the game's rules are
+ * (WP10), Normal start (WP11), the paintings (WP6: **painted in the r77 art install, the driver's picks**), no boss number touched. The paper preflight is `docs/plans/ch-weapon-review.md`; the game's rules are
  * `research/re-ffx-omega-ultima-nemesis.md`.
  *
  * **Game case: FFX only** [AGENTS.md rule 14]: the Omega Ruins and the Monster Arena's last creation, CTB, aeons and the FFX status set. FFX-2 has none of these monsters and nothing here applies to it.

@@ -17,7 +17,7 @@ export const SPHERIMORPH_SCENE = 'spherimorph' as const;
 export const SPHERIMORPH_GROUP_ID = 'spherimorph' as const;
 export const SPHERIMORPH_ID = 'spherimorph' as const;
 
-/** The painting's key (`public/art/characters/<key>/`). **Not painted yet** (the stage draws its boss-silhouette stand-in); the key is fixed here so the painting drops in without a code change. */
+/** The painting's key (`public/art/characters/<key>/`). **Painted in the r77 art install** (the driver's pick, not Bailey's approval; a tree without it draws the stage's boss-silhouette stand-in). */
 export const SPHERIMORPH_SPRITE = 'spherimorph' as const;
 
 /** AI script id (registered by `battle/ffx/ai/spherimorph.ts`). */

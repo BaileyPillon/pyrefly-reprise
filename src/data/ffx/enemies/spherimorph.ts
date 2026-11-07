@@ -74,7 +74,7 @@ export function spherimorph(): EnemyDef {
   return {
     id: SPHERIMORPH_ID,
     name: 'Spherimorph',
-    spriteKey: SPHERIMORPH_SPRITE, // `characters/spherimorph/` is owed (the art list in docs/handoff/ch-spherimorph.md); a tree without it draws the stage's fallback figure
+    spriteKey: SPHERIMORPH_SPRITE, // `characters/spherimorph/` is installed (r77 art install); a tree without it draws the stage's fallback figure
     slot: 0,
     stats,
     hp: stats.hp,

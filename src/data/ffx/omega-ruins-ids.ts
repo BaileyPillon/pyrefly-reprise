@@ -31,8 +31,8 @@ export const OMEGA_WEAPON_ID = 'omega-weapon' as const;
 export const NEMESIS_ID = 'nemesis' as const;
 
 /**
- * The paintings' keys (`public/art/characters/<key>/`). **None is painted yet** (the stage draws its boss-silhouette stand-in; the art list is in `docs/handoff/ch-omega-ruins.md`); the keys are fixed here so a
- * painting drops in without a code change. Nemesis's is a flagged stand-in too: preflight WP6 recommends a recolour of Ultima Weapon's painting, so its key may point at that file's colour variant.
+ * The paintings' keys (`public/art/characters/<key>/`). **All three are painted in the r77 art install** (the driver's picks, not Bailey's approval; a tree without them draws the stage's boss-silhouette stand-in). Nemesis's is
+ * the recolour preflight WP6 recommends: a colour map of Ultima Weapon's paintings with the same alpha, under its own key.
  */
 export const ULTIMA_WEAPON_SPRITE = 'ultima-weapon' as const;
 export const OMEGA_WEAPON_SPRITE = 'omega-weapon' as const;

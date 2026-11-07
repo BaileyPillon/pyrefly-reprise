@@ -7,6 +7,8 @@ Written 2026-11-06 by a Sonnet sub-agent of the release driver (wave 3, FFX lane
 
 Authority: Bailey, relayed by the driver, verbatim: "implement all unimplemented chapters please" (2026-11-06 about 00:30 EST), "yes on all these too" (about 00:55 EST) and, 2026-10-31, "you make the executive decisions for the next few days. i'll go with all of your recommendations." **Every pick in section 5 is the paper preflight's own recommendation or the bench's, "driver's call, his to overturn"; the alternative is written beside it.**
 
+**UPDATE 2026-11-07 (r77 art install): the paintings of the art list are made, registered and wired** (idle, attack, cast, hurt, ko and the Press as `characters/spherimorph/`, a face, the pause plate `pause/ch41-spherimorph`, and the optional spring plate `macalania-woods`, installed and pinned but wired to nothing; the driver's picks under Bailey's delegation, his to overturn, FFX only): `docs/handoff/r77-art-install.md`. The sprite key, the face id and the pause key were already the ones the data names; the stage keeps the Macalania Temple's plate.
+
 ## 0a. The fix pass (2026-11-06; game case FFX only for every item, as the chapter)
 
 The review (`eb55429d6`, no critical, **M1**, m1 to m8) and what was done. Every number below is measured on the real engine (`tools/spherimorph-bench.mjs`), none is tuned: **no boss number was touched**.

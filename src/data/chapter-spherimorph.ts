@@ -4,8 +4,8 @@
  * Bailey, 2026-11-06 ~00:30 EST: "implement all unimplemented chapters please"; ~00:55 EST: "yes on all these too" (to building every researched boss he never picked); and, 2026-10-31, "you make the executive decisions
  * for the next few days. i'll go with all of your recommendations." The driver's decisions under those words are in `docs/handoff/ch-spherimorph.md` ("driver's call, his to overturn"): the chapter ships **hidden behind
  * the typed word `spherimorph`** (SP1), hidden chapter **number 41**, FFX only, the Macalania Temple's plate as the stage (SP4), the party Tidus, Yuna and Lulu on the Macalania preset without Shiva, with Auron, Wakka, Kimahri
- * and Rikku on the bench (SP2, SP3), aeons allowed (SP8), the current element hidden as in the game (SP7), three short lines of our own words (SP6), stand-in music (SP9), Normal start (SP10), the painting owed (SP5: **not
- * painted yet, a stand-in**), no boss number touched. The paper preflight is `docs/plans/ch-spherimorph-review.md`; the game's rules are `research/re-ffx-spherimorph.md`.
+ * and Rikku on the bench (SP2, SP3), aeons allowed (SP8), the current element hidden as in the game (SP7), three short lines of our own words (SP6), stand-in music (SP9), Normal start (SP10), the painting (SP5: **painted in the r77 art
+ * install, the driver's pick**), no boss number touched. The paper preflight is `docs/plans/ch-spherimorph-review.md`; the game's rules are `research/re-ffx-spherimorph.md`.
  *
  * **Game case: FFX only** [AGENTS.md rule 14]: Spherimorph exists only in FFX (the fight between the Thunder Plains and Lake Macalania); CTB, aeons and the FFX status set. FFX-2 has no counterpart.
  *

@@ -6,6 +6,8 @@ Written 2026-11-06 by a Sonnet sub-agent of the release driver (wave 3, FFX lane
 
 Authority: Bailey, relayed by the driver, verbatim: "implement all unimplemented chapters please" (2026-11-06 about 00:30 EST), "yes on all these too" (about 00:55 EST), and, 2026-10-31, "you make the executive decisions for the next few days. i'll go with all of your recommendations." **Every pick in section 5 is the paper preflight's own recommendation or the bench's, "driver's call, his to overturn"; the alternative is written beside it.**
 
+**UPDATE 2026-11-07 (r77 art install): the paintings of the art list are made, registered and wired** (Ultima Weapon, Omega Weapon and Nemesis as `characters/ultima-weapon/`, `omega-weapon/` and `nemesis/`, each with its spread-wing special, their faces and the pause plate `pause/ch43-omega-ruins`; Nemesis is a colour map of the Ultima Weapon paintings with the same alpha; the driver's picks under Bailey's delegation, his to overturn, FFX only): `docs/handoff/r77-art-install.md`. The stage keeps the Cavern's plate.
+
 ## 0. What changed against the preflight (read first)
 
 1. **Only the third act is a fight, as predicted, and the shared preset cannot win it.** Against the Mirror Aeons party itself (17 Phoenix Downs, 2 Turbo Ethers, weapons with no Piercing) the advisor's line wins Nemesis **1 time in 200**. Three preset levers bring it to **68.5 percent over 400 seeds** (section 6): Piercing on every weapon, 26 Phoenix Downs, 6 Turbo Ethers. Nothing of the bosses' was touched.

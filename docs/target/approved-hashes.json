@@ -11329,6 +11329,201 @@
     "mtime": "2026-11-06T14:59:18.882Z",
     "delegated": "2026-11-06"
    }
+  },
+  "driver:2026-11-07-wave3-chapters-art (items 220m and 220w, delegated by Bailey)": {
+   "words": "Bailey, 2026-11-06 ~00:30 EST: \"implement all unimplemented chapters please\"; ~00:55 EST: \"yes on all these too\" (building every researched boss he never picked); 2026-10-31: \"you make the executive decisions for the next few days. i'll go with all of your recommendations.\"",
+   "decision": "item 220m (a new boss takes the FAITHFUL reading of the game model: image to image over a render of the real model, no options round) and item 220w (the driver accepted the wave-3 paintings) of the driver's list, under the delegation of 2026-10-31 and 2026-11-06; the D-number is owed by the records pass",
+   "note": "DRIVER CALL, delegated by Bailey; not Bailey's own approval of the pictures. The paintings of the two wave-3 hidden FFX chapters, made 2026-11-06 in the art-w3 batch (the wave-3 art stage folder, kept outside the repo: its MANIFEST.md and provenance.json carry every file's method, seed and sha256): the hidden Spherimorph (chapter 41, FFX only: idle, attack, cast, hurt, ko, overdrive and idle@2x, a marbled teal sphere painted over renders of the game model m121; a face; the pause plate; the optional Macalania Woods spring plate), and the hidden Omega Ruins (chapter 43, FFX only: Ultima Weapon, Omega Weapon and Nemesis, the Weapons painted over renders of the models m99 and m100 and Nemesis a colour map of the Ultima Weapon paintings with the same alpha, each with idle, attack, cast, a spread-wing special (rain, nova, armageddon), hurt, ko and idle@2x; three faces; the pause plate). Each pin is the sha256 of the staged file, which is the candidate byte for byte. New files, nothing replaced, so nothing was archived. The chapter cards and thumbnails are not made (read by no code until the board lists the chapters).",
+   "public/art/backdrops/macalania-woods.png": {
+    "sha256": "0f9176808b5ea32ac03ca070befd8b096a398afde5733c965a64cb40141bbb75",
+    "mtime": "2026-11-06T22:53:23.050Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/backdrops/macalania-woods@2x.png": {
+    "sha256": "af4323e9ef6e626455389d8ca3f142dd3ac80ae2da2fc2e946d947234342b537",
+    "mtime": "2026-11-06T22:54:09.691Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/nemesis/armageddon.png": {
+    "sha256": "3efda0b10f677ce17b01a85a7e67dfb94d54a3b3b1ae0d3834e39d2e65c7ce7f",
+    "mtime": "2026-11-06T22:51:34.225Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/nemesis/attack.png": {
+    "sha256": "ebaf8a90a2a1567e46f94747a858378d06683b5c362d0104bcbe4a3c8b478d49",
+    "mtime": "2026-11-06T22:51:33.460Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/nemesis/cast.png": {
+    "sha256": "a46cf1d945f5b326c8eb11f69bce660371357277f64bf881346a1989d6a7c5d3",
+    "mtime": "2026-11-06T22:51:33.751Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/nemesis/hurt.png": {
+    "sha256": "42d7f8f31c0f136ad8161acff7176bec1b40d1b3957d922532ffa85e9e0ac247",
+    "mtime": "2026-11-06T22:51:34.563Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/nemesis/idle.png": {
+    "sha256": "4ea157be3f2540ca64b008972b34c26ba98368e66a18401cdbe44b84d559b5d5",
+    "mtime": "2026-11-06T22:51:33.146Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/nemesis/idle@2x.png": {
+    "sha256": "fefce593f6fa70d6c1f6bab7d1d47f1185a80e705dad41f402094a56042c243b",
+    "mtime": "2026-11-06T22:42:04.000Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/nemesis/ko.png": {
+    "sha256": "497feda8c365bcfb39437c14313b03491f468d31c2eda1cfa04ec4d37fc3c5b8",
+    "mtime": "2026-11-06T22:51:34.876Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/omega-weapon/attack.png": {
+    "sha256": "98b1da732e48393bfb512fdb98b202c585b311c64cc818eaacfca19bffd62275",
+    "mtime": "2026-11-06T22:34:16.354Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/omega-weapon/cast.png": {
+    "sha256": "2b567ddb3f0d1b59325794b686c4d7148bd6a169dba538479373df80334b9df7",
+    "mtime": "2026-11-06T22:34:23.241Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/omega-weapon/hurt.png": {
+    "sha256": "bb98ceb1dc469007a7bce9e1eec27e5d7112bee27e5d36f4cf9cc94fa7a594c5",
+    "mtime": "2026-11-06T22:34:37.284Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/omega-weapon/idle.png": {
+    "sha256": "ff2ebf793d8e7258ae0f4f0abba8ea7fc1f6e905d3bbc3414828aeb82b295c5d",
+    "mtime": "2026-11-06T22:21:48.662Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/omega-weapon/idle@2x.png": {
+    "sha256": "6e19d6939c525722bfbdd88ba511daa89da24b30aa8470f1f3e00b2c1bcd54b8",
+    "mtime": "2026-11-06T22:39:10.834Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/omega-weapon/ko.png": {
+    "sha256": "c4e47d4326980c6dea2344b4b901ca75d54b2d90bf44d35bab14724531132ae7",
+    "mtime": "2026-11-06T22:34:51.578Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/omega-weapon/nova.png": {
+    "sha256": "41472c214df359d12ceb9afe95979eba06b2cc3a9dbd19334cefee6ecad75bbe",
+    "mtime": "2026-11-06T22:35:16.769Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/spherimorph/attack.png": {
+    "sha256": "40ac865e2d91fd841f0aa82e946b88f21beaa188526b72487df6465d3c40e756",
+    "mtime": "2026-11-06T22:50:05.863Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/spherimorph/cast.png": {
+    "sha256": "38c93d7d97414b8b244c55546f9351652a10d21865ac5576f6d46decbcf914da",
+    "mtime": "2026-11-06T22:50:16.519Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/spherimorph/hurt.png": {
+    "sha256": "8818730b8e88f0c88e5c608343cbbaefc050115d7c0c9bf8b6f7ad573ea1ba3a",
+    "mtime": "2026-11-06T22:50:33.887Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/spherimorph/idle.png": {
+    "sha256": "776cadf3873808b6c8a89774d0013a4909084410893e135aa493b7d06087d396",
+    "mtime": "2026-11-06T22:45:50.625Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/spherimorph/idle@2x.png": {
+    "sha256": "82e3357fd81085ec8b27469e6723d76db16de0e28a8d71e9b95297792efa2730",
+    "mtime": "2026-11-06T22:51:26.669Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/spherimorph/ko.png": {
+    "sha256": "8cc1791e4a90a60d93fdd8eb18aba3bfdc59bb820b6aba797cc531bc1e97f7d6",
+    "mtime": "2026-11-06T22:50:49.475Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/spherimorph/overdrive.png": {
+    "sha256": "fb6cd930177f8e2035a0c38c32c53971acb97549a59353753ad78ca1e1594845",
+    "mtime": "2026-11-06T22:51:05.437Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/ultima-weapon/attack.png": {
+    "sha256": "810e0ecbd07983fb0bdf0c8c34fd0ebad049a7a2d3d647c9ce9daa9d72819622",
+    "mtime": "2026-11-06T22:32:23.340Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/ultima-weapon/cast.png": {
+    "sha256": "d74f3890fae8e6618f9b136fac66152582b74ef75fb8519437029e25666208f7",
+    "mtime": "2026-11-06T22:32:45.393Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/ultima-weapon/hurt.png": {
+    "sha256": "a7445f119c4ca983641b1e68c60bdd3004478c1739c4e0f383426d2a50635de6",
+    "mtime": "2026-11-06T22:33:00.025Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/ultima-weapon/idle.png": {
+    "sha256": "2d4f59d42f3558238bca241ffe9fd56e30afbb722b7521cb4cb2c9dcb346fef2",
+    "mtime": "2026-11-06T22:21:34.053Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/ultima-weapon/idle@2x.png": {
+    "sha256": "5699466b8f791bc222b88a1bb10ea82dcf7442f877ac1f3a1869e5c456a17174",
+    "mtime": "2026-11-06T22:39:01.946Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/ultima-weapon/ko.png": {
+    "sha256": "ff99d5161e10dbe03fab845c3e1855819ce507bde7a802a9ee3bacbbd422babb",
+    "mtime": "2026-11-06T22:45:57.966Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/ultima-weapon/rain.png": {
+    "sha256": "8d1384469570d15743762d974405ca8c813514bea466c008e2cb17d94607f042",
+    "mtime": "2026-11-06T22:33:41.030Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/pause/ch41-spherimorph.2x.webp": {
+    "sha256": "ab7050b3fb10fad31821c8d4256baa19e54bea40807e02d998193975f80675c8",
+    "mtime": "2026-11-06T22:55:04.823Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/pause/ch41-spherimorph.png": {
+    "sha256": "bdd98282a9ff9b1ceaa4d8733f5f557cb1ca34acf094e8dedc575bea3a3bf51a",
+    "mtime": "2026-11-06T22:55:03.621Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/pause/ch43-omega-ruins.2x.webp": {
+    "sha256": "c1e55d835e165cb88c3ff3f027dbb5cb4142fdaf5687bf825afa8b5ccf7f2029",
+    "mtime": "2026-11-06T22:55:06.569Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/pause/ch43-omega-ruins.png": {
+    "sha256": "60408ac2dc7fc367d6872f8627483858b23684ff26822e4edd1b7ed0d226d743",
+    "mtime": "2026-11-06T22:55:05.501Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/portraits/nemesis.png": {
+    "sha256": "5f99a05b33ae5e4c011bf87c320355b2be1358c6660e389158a30ef710a24a4b",
+    "mtime": "2026-11-06T22:39:41.180Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/portraits/omega-weapon.png": {
+    "sha256": "41930ad2fdec495cad58d4bced5f6e0b3d6befe9d4f2a4e0f6240e24ab19831e",
+    "mtime": "2026-11-06T22:39:41.489Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/portraits/spherimorph.png": {
+    "sha256": "9701796dbfc04d9b72b68139d49dc33952d4c5bc4a2f138a23f04440c5808c28",
+    "mtime": "2026-11-06T22:51:35.215Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/portraits/ultima-weapon.png": {
+    "sha256": "0070a6cc1abddff711dffbdc9891987a5a0d41c7fe6c030bb3f128c2318be8ab",
+    "mtime": "2026-11-06T22:39:40.881Z",
+    "delegated": "2026-11-07"
+   }
   }
  }
 }

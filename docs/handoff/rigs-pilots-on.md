@@ -6,6 +6,8 @@ Authority: Bailey, 2026-11-06, on the rigs v3 comparison clips of Tidus and of R
 
 **Game case (AGENTS.md rule 14):** Tidus FFX only (Chapter I, `seymour-flux`); Rikku's Dark Knight FFX-2 only (Chapter IV, `ffx2-bahamut`). The switch and the loader are shared plumbing (both games) and are not asked about any other figure.
 
+**UPDATE 2026-11-07 (r77 integration): merged into `r77-int`, installed in the r77 art mirror, and open question 1 answered** (FFX-2 only: Rikku's Dark Knight's cast key is recut, the head 24.67 rig px higher, so the critic's head-to-soles reading clears the band offline; the rig gate passes all 11 keys; Tidus's hurt stays 0.86, FFX only, no verdict flips; the 40 dashes are read: 28 are the painting run's smeared lunge jerks under another name, 10 are 40 to 45 px key offsets, 2 want one look in motion): `docs/handoff/r77-art-install.md`, `docs/handoff/r77-integration.md`.
+
 ## The short version
 
 1. `PartyRigsSwitch.PARTY_RIGS_DEFAULT` is `'on'` (one line to flip back). With no address word Tidus draws as a rig in Chapter I and Rikku's Dark Knight in Chapter IV; `?partyrigs=off` gives the painting set back, as it was; `?partyrigs=v2` (the dev-only side-by-side) is unchanged; a word the switch does not know reads the default; `?pack=demo` neither turns it on nor off.
