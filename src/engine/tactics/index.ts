@@ -48,6 +48,7 @@ import { TOURIST_TRAP_BOSS_IDS, ffx2TouristTrap } from './ffx2-tourist-trap.ts';
 import { VALEFOR_BESAID_BOSS_IDS, ffx2ValeforBesaid } from './ffx2-valefor-besaid.ts';
 import { ANGRA_MAINYU_BOSS_IDS, ffx2AngraMainyu } from './ffx2-angra-mainyu.ts';
 import { YUNAS_BALLAD_BOSS_IDS, ffx2YunasBallad } from './ffx2-yunas-ballad.ts';
+import { IFRIT_KILIKA_BOSS_IDS, ffx2IfritKilika } from './ffx2-ifrit-kilika.ts';
 import { FALLEN_AEONS_BOSS_IDS, ffx2FallenAeons } from './ffx2-fallen-aeons.ts';
 import { SEYMOUR_OMNIS_BOSS_ID, seymourOmnis } from './seymour-omnis.ts';
 import { SEYMOUR_NATUS_BOSS_IDS, seymourNatus } from './seymour-natus.ts';
@@ -95,6 +96,7 @@ export { ffx2TouristTrap, TOURIST_TRAP_BOSS_IDS } from './ffx2-tourist-trap.ts';
 export { ffx2ValeforBesaid, VALEFOR_BESAID_BOSS_IDS } from './ffx2-valefor-besaid.ts';
 export { ffx2AngraMainyu, ANGRA_MAINYU_BOSS_IDS } from './ffx2-angra-mainyu.ts';
 export { ffx2YunasBallad, YUNAS_BALLAD_BOSS_IDS } from './ffx2-yunas-ballad.ts';
+export { ffx2IfritKilika, IFRIT_KILIKA_BOSS_IDS } from './ffx2-ifrit-kilika.ts';
 export { ffx2FallenAeons, FALLEN_AEONS_BOSS_IDS } from './ffx2-fallen-aeons.ts';
 export { seymourOmnis, SEYMOUR_OMNIS_BOSS_ID } from './seymour-omnis.ts';
 export { seymourNatus, SEYMOUR_NATUS_ID, SEYMOUR_NATUS_BOSS_IDS } from './seymour-natus.ts';
@@ -177,6 +179,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...ANGRA_MAINYU_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-angra-mainyu', bossId, tactic: ffx2AngraMainyu })),
   // Yuna's Ballad (FFX-2 only, hidden chapter, 2026-11-06): the possessed Rikku, then the possessed Paine; the line is a Warrior Yuna who heals at half HP.
   ...YUNAS_BALLAD_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-yunas-ballad', bossId, tactic: ffx2YunasBallad })),
+  // Ifrit at Kilika Temple (FFX-2 only, hidden chapter, 2026-11-07): the possessed fire aeon, one fighter; no Fire, Shell and Protect, Darkness and Breaks.
+  ...IFRIT_KILIKA_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-ifrit-kilika', bossId, tactic: ffx2IfritKilika })),
   // Chapter XII (FFX only, unlisted): Seymour Omnis alone finds it; the discs are his parts.
   { chapterId: 'seymour-omnis', bossId: SEYMOUR_OMNIS_BOSS_ID, tactic: seymourOmnis },
   // Chapter XIV (FFX only, listed 2026-09-25): his three aeons, one a link; Isaaru is an untargetable bystander.

@@ -65,6 +65,9 @@ import { x2FarplaneCupAbilities } from './farplane-cup-abilities.ts';
 // The possessed Rikku and Paine, the Den of Woe's first two fights (the hidden chapter "Yuna's Ballad", FFX-2 only): `./yunas-ballad.ts`.
 import { yunasBalladGroups } from './yunas-ballad.ts';
 import { x2YunasBalladAbilities } from './yunas-ballad-abilities.ts';
+// Ifrit in the Chamber of the Fayth at Kilika Temple (FFX-2 Chapter 3, the mission "Pest Control"; the hidden chapter "Ifrit at Kilika Temple", FFX-2 only): `./ifrit.ts`.
+import { ifritGroups } from './ifrit.ts';
+import { x2IfritAbilities } from './ifrit-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -88,6 +91,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...bevelleGuardiansGroups,
   ...farplaneCupGroups,
   ...yunasBalladGroups,
+  ...ifritGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -121,6 +125,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...x2BevelleGuardiansAbilities,
   ...x2FarplaneCupAbilities,
   ...x2YunasBalladAbilities,
+  ...x2IfritAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

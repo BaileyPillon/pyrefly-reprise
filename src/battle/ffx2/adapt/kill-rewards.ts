@@ -43,6 +43,7 @@ export const KILL_ITEM_ID: Readonly<Record<number, string>> = {
   0x901e: 'regal-crown',
   0x902e: 'nultide-ring',
   0x9039: 'tetra-band',
+  0x9045: 'angel-earrings',
   0x9047: 'twist-headband',
   0x904b: 'black-choker',
   0x904d: 'gris-gris-bag',

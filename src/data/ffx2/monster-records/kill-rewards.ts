@@ -87,4 +87,6 @@ export const KILL_REWARD_ROWS: Readonly<Record<string, FFX2KillReward>> = {
   // accessory table); Rikku's Black Lore (0x9066) has none, so its slots are 0 (rule 6).
   "ffx2-den-of-woe-possessed-rikku/x2-possessed-rikku": row(1, 254, 800, 3, 200, 255, [0x0000, 0, 0x0000, 0]), // Rikku
   "ffx2-den-of-woe-possessed-paine/x2-possessed-paine": row(1, 256, 800, 3, 200, 255, [0x901a, 1, 0x901a, 1]), // Paine
+  // The hidden Ifrit at Kilika Temple (Chapter 3, "Pest Control"; RE note re-ffx2-ifrit-kilika §0): EXP, Gil, AP, the drop byte (255, always) and the item slots are the row's own (Angel Earrings, common and rare).
+  "ffx2-kilika-ifrit/x2-ifrit": row(1, 165, 1800, 15, 1300, 255, [0x9045, 1, 0x9045, 1]), // Ifrit
 };

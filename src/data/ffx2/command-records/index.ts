@@ -20,6 +20,7 @@ import { COMMAND_RECORDS_FALLEN_MAESTERS } from './fallen-maesters.ts';
 import { COMMAND_RECORDS_BEVELLE_GUARDIANS } from './bevelle-guardians.ts';
 import { COMMAND_RECORDS_FARPLANE_CUP } from './farplane-cup.ts';
 import { COMMAND_RECORDS_YUNAS_BALLAD } from './yunas-ballad.ts';
+import { COMMAND_RECORDS_IFRIT } from './ifrit.ts';
 import { COMMAND_RECORDS_ITEMS } from './items.ts';
 import { COMMAND_RECORDS_LADY_LUCK } from './lady-luck.ts';
 import { COMMAND_RECORDS_MIX } from './mix.ts';
@@ -38,6 +39,7 @@ export const FFX2_COMMAND_RECORDS: Readonly<Record<string, FFX2CommandRecord>> =
   ...COMMAND_RECORDS_BEVELLE_GUARDIANS, // the hidden Bevelle guardians chapter: Georapella's, the Precepts Guard's and Baralai's moves (RE note re-ffx2-bevelle-underground, 2026-11-06)
   ...COMMAND_RECORDS_FARPLANE_CUP, // the hidden Farplane Cup chapter: the three duelists' moves (RE note re-ffx2-farplane-cup, 2026-11-06)
   ...COMMAND_RECORDS_YUNAS_BALLAD, // the hidden Yuna's Ballad chapter: the possessed Rikku's Spider Attack and five throws, the possessed Paine's Attack (RE note re-ffx2-yunas-ballad, 2026-11-06)
+  ...COMMAND_RECORDS_IFRIT, // the hidden Ifrit at Kilika Temple chapter: Hellfire, Meteor Strike, Firaga and Time Up Meteor (RE note re-ffx2-ifrit-kilika, 2026-11-07)
   ...COMMAND_RECORDS_MIX, // the Alchemist's Mix: the 53 result rows (re-parity RC9, lane X2-G; FFX2-G06 section 4.4)
   ...COMMAND_RECORDS_LADY_LUCK, // Lady Luck's Two Dice and the two rows its dice swap to (re-parity RC10; FFX2-H04 section 4.3)
 };
@@ -62,6 +64,11 @@ export const NO_COMMAND_RECORD: Readonly<Record<string, string>> = {
   'x2-alchemist-chemist': 'a menu marker, not a command',
   'x2-alchemist-elementalist': 'a menu marker, not a command',
   'x2-bahamut-countdown': 'script state (the AI counts turns); the game has no command by that name',
+  // Ifrit's four "battle too long" announcements (monmagic 0x4232 to 0x4235: damage formula 0, power 0, no hits): scripted flavour turns on himself, derived from the ability like Bahamut's Countdown (RE note re-ffx2-ifrit-kilika §3).
+  'x2-ifrit-angry': 'a scripted announcement (formula 0, power 0, no hits); the engine derives it from the ability',
+  'x2-ifrit-furious': 'a scripted announcement (formula 0, power 0, no hits); the engine derives it from the ability',
+  'x2-ifrit-about-to-blow': 'a scripted announcement (formula 0, power 0, no hits); the engine derives it from the ability',
+  'x2-ifrit-ends-now': 'a scripted announcement (formula 0, power 0, no hits); the engine derives it from the ability',
 };
 
 /**

@@ -58,6 +58,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'flooded-ways': 'ffx', // the hidden Flooded Ways chapter (FFX only, 2026-11-06)
   'sanctuary-keeper': 'ffx', // the hidden Sanctuary Keeper chapter (FFX only, 2026-11-06)
   'ffx2-yunas-ballad': 'ffx2', // the hidden Yuna's Ballad chapter (FFX-2 only, 2026-11-06)
+  'ffx2-ifrit-kilika': 'ffx2', // the hidden Ifrit at Kilika Temple chapter (FFX-2 only, 2026-11-07)
 };
 
 /** `state.flags` key prefix of an aeon lock's reason (`battle/ffx/aeon-duel.ts#AEON_LOCK_REASON_PREFIX`, restated so this module stays out of the battle layer's import graph; the Last Summoning's guide test pins the copy). */
