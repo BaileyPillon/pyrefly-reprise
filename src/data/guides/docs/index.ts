@@ -37,6 +37,7 @@ import { FFX2_TOURIST_TRAP_DOC } from './ffx2-tourist-trap.ts';
 import { FFX2_VALEFOR_BESAID_DOC } from './ffx2-valefor-besaid.ts';
 import { FFX2_ANGRA_MAINYU_DOC } from './ffx2-angra-mainyu.ts';
 import { SANCTUARY_KEEPER_DOC } from './sanctuary-keeper.ts';
+import { WENDIGO_DOC } from './wendigo.ts';
 import { PENANCE_DOC } from './penance.ts';
 import { FFX2_YUNAS_BALLAD_DOC } from './ffx2-yunas-ballad.ts';
 
@@ -72,6 +73,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   SANCTUARY_KEEPER_DOC, // the hidden Sanctuary Keeper (FFX only)
   PENANCE_DOC, // the hidden Penance (FFX only)
   FFX2_YUNAS_BALLAD_DOC, // the hidden Yuna Ballad (FFX-2 only)
+  WENDIGO_DOC, // the hidden Wendigo (FFX only)
 ];
 
 /** The document for one chapter id, if it has one. */

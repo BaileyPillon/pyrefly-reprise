@@ -21,6 +21,7 @@ import { HOLD_MS } from '../../src/app/screens/frontend/doorField.ts';
 import { WINDWAKER_DOOR_CHAPTER, WINDWAKER_DOOR_WORD } from '../../src/app/screens/frontend/windwakerDoor.ts';
 import { YRP_DOOR_CHAPTER, YRP_DOOR_WORD } from '../../src/app/screens/frontend/yrpDoor.ts';
 import { ANIME_DOOR_CHAPTER, ANIME_DOOR_WORD } from '../../src/app/screens/frontend/animeDoor.ts';
+import { WENDIGO_DOOR_CHAPTER, WENDIGO_DOOR_WORD } from '../../src/app/screens/frontend/wendigoDoor.ts';
 import { Input } from '../../src/app/Input.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
 import { setFf7ExperimentReadyForTests } from '../../src/app/experiments/ff7Flag.ts';
@@ -33,6 +34,7 @@ const DESKTOP_ONLY = [
   { word: YRP_DOOR_WORD, chapter: YRP_DOOR_CHAPTER },
   { word: WINDWAKER_DOOR_WORD, chapter: WINDWAKER_DOOR_CHAPTER },
   { word: ANIME_DOOR_WORD, chapter: ANIME_DOOR_CHAPTER }, // the third, 2026-11-06 (the anime chapter's textures are the Wind Waker chapter's and its girls' own)
+  { word: WENDIGO_DOOR_WORD, chapter: WENDIGO_DOOR_CHAPTER }, // the fourth, 2026-11-06 (FFX; the Meshy tech demo: 4k textures on every figure)
 ] as const;
 const DESKTOP_ONLY_IDS: readonly string[] = DESKTOP_ONLY.map((d) => d.chapter);
 /** Every other door of the table, the FF7 secret door aside (its word is matched by the visit's `SecretDoor`, a pad and tap sequence the board suites own). */
@@ -140,7 +142,7 @@ describe('BoardDoors.isOpen: the phone tier shuts the three 3D chapters and noth
       expect(row?.chapter, d.word).toBe(d.chapter);
       expect(typeof row?.gate, `${d.word} has a gate`).toBe('function');
     }
-    expect(DESKTOP_ONLY_IDS).toEqual(['exp-yrp-3d', 'exp-windwaker', 'exp-anime']);
+    expect(DESKTOP_ONLY_IDS).toEqual(['exp-yrp-3d', 'exp-windwaker', 'exp-anime', 'wendigo']);
   });
 
   it('phone tier: both shut; every other tier (low, mid, high, none): both open', () => {
@@ -288,7 +290,7 @@ describe('the record', () => {
   it('the two door notes say the phone refuses, and the door table says why', async () => {
     const { readFileSync } = await import('node:fs');
     const read = (p: string): string => readFileSync(p, 'utf8');
-    for (const [file, label] of [['src/app/screens/frontend/yrpDoor.ts', 'yrp'], ['src/app/screens/frontend/windwakerDoor.ts', 'waker'], ['src/app/screens/frontend/animeDoor.ts', 'gear']] as const) {
+    for (const [file, label] of [['src/app/screens/frontend/yrpDoor.ts', 'yrp'], ['src/app/screens/frontend/windwakerDoor.ts', 'waker'], ['src/app/screens/frontend/animeDoor.ts', 'gear'], ['src/app/screens/frontend/wendigoDoor.ts', 'wendigo']] as const) {
       expect(read(file), label).toMatch(/desktop-only/i);
     }
     expect(read('src/app/screens/frontend/chapterDoors.ts')).toMatch(/219q/);

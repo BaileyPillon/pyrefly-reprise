@@ -12,6 +12,7 @@
  * - the hidden Last Summoning chapter's Dream's End (FFX only): Chapter III's scene with the staging of the aeons Chapter III never fields (`./last-summoning.ts`);
  * - the hidden 3D Bahamut chapter's chamber (FFX-2 only): Chapter IV's Bevelle underground under frame b's camera (the dolly-in; `?frame=a` is the older one), with the real FFX-2 models on the actors, softly lit (`./exp-yrp-3d-stage.ts`).
  * - the hidden Wind Waker chapter's temple (FFX-2 only): a procedural toon chamber under the target shot's low camera, with toon models on the actors (`./exp-windwaker-stage.ts`).
+ * - the hidden Wendigo chapter's lake (FFX only): Chapter VII's Macalania Temple stage standing in for frozen Lake Macalania, with Wendigo and its two Guardians staged (`./wendigo-lake.ts`); the Meshy 3D stage replaces its factory.
  *
  * Each row is real (the factory wins); `build` is the unreachable demo diorama, as for every scene with a factory of its own. Moved here unchanged from `./index.ts`, except Fayth's, which is new.
  * Game case: each row is its own chapter's game's, as tagged; the table is shared plumbing.
@@ -54,6 +55,8 @@ import { PENANCE_SCENE_ENTRY, buildPenanceScene } from './penance.ts'; // Penanc
 import { PENANCE_SCENE } from '../data/ffx/penance-ids.ts';
 import { buildSanctuaryKeeperScene, SANCTUARY_KEEPER_SLOTS } from './sanctuary-keeper.ts'; // the Sanctuary Keeper's summit (FFX only, hidden chapter): Chapter I's Mt. Gagazet with the Keeper staged
 import { SANCTUARY_KEEPER_SCENE } from '../data/ffx/sanctuary-keeper-ids.ts';
+import { buildWendigoLakeScene, WENDIGO_SCENE_ENTRY } from './wendigo-lake.ts'; // frozen Lake Macalania (FFX only, hidden chapter): Chapter VII's Temple stage with Wendigo and its Guardians staged, the stand-in for the Meshy 3D stage
+import { WENDIGO_SCENE } from '../data/ffx/wendigo-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -91,6 +94,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   PENANCE_SCENE_ENTRY,
   // The Sanctuary Keeper (FFX only, hidden chapter): Chapter I's Mt. Gagazet plate and scene, with the Keeper alone on the boss spot.
   { key: SANCTUARY_KEEPER_SCENE, title: 'Mt. Gagazet — the summit (the Sanctuary Keeper)', build: buildDemoScene, slots: SANCTUARY_KEEPER_SLOTS, placeholder: false },
+  // Wendigo (FFX only, hidden chapter): Chapter VII's Macalania Temple stage standing in for frozen Lake Macalania, Guardian, Wendigo and Guardian in the formation's order.
+  WENDIGO_SCENE_ENTRY,
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -112,4 +117,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [EXP_ANIME_SCENE]: buildExpAnimeStageScene, // the hidden anime chapter (FFX-2 only)
   [PENANCE_SCENE]: buildPenanceScene, // the hidden Penance chapter (FFX only)
   [SANCTUARY_KEEPER_SCENE]: buildSanctuaryKeeperScene, // the hidden Sanctuary Keeper chapter (FFX only)
+  [WENDIGO_SCENE]: buildWendigoLakeScene, // the hidden Wendigo chapter (FFX only)
 };

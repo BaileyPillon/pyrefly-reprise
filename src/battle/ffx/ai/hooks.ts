@@ -167,6 +167,11 @@ export type Reaction =
        * reaction without it runs whatever happened to its aim, as Chapter I, VII, X and XII's always did).
        */
       requiresAlive?: CombatantId;
+      /**
+       * A monster's death handler asks for a command **of the dying monster** (the hidden Wendigo chapter's Guado Guardians cast Protect or Shell on Wendigo as they fall, FFX only; RE 4.4 `onDeath`): the drain runs it
+       * though the owner is no longer alive, as the game's death handler does. Absent for every other reaction, whose dead owner still drops it, so no other battle changes.
+       */
+      ownerMayBeDead?: boolean;
     }
   | {
       /** Mortibsorption: the mount's max HP into the host, and the mount comes back (`scripted.ts#mortibsorption`). */
@@ -204,7 +209,7 @@ export function queueReaction(
   ctx: Ctx,
   ownerId: CombatantId,
   command: Command,
-  options: { forced?: boolean; keepsControl?: boolean; byId?: CombatantId; requiresAlive?: CombatantId } = {},
+  options: { forced?: boolean; keepsControl?: boolean; byId?: CombatantId; requiresAlive?: CombatantId; ownerMayBeDead?: boolean } = {},
 ): void {
   queueOf(ctx).push({
     kind: 'command',
@@ -214,6 +219,7 @@ export function queueReaction(
     keepsControl: options.keepsControl === true,
     byId: options.byId ?? ownerId,
     ...(options.requiresAlive !== undefined ? { requiresAlive: options.requiresAlive } : {}),
+    ...(options.ownerMayBeDead === true ? { ownerMayBeDead: true } : {}),
   });
 }
 

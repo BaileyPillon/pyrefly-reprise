@@ -142,6 +142,8 @@ describe('Chapter X: Provoke does not redirect Natus\'s "Counter Self" Protect (
     // Protect, aimed at himself). BFA: only the form-change cue, and the
     // research lists him Provoke-immune [ffx-bfa-yu-yevon §1.2], a data gap
     // reported to the Chapter III owner, not fixed here.
-    expect(reach).toEqual(['braskas-final-aeon:braskas-final-aeon:draws-sword']);
+    // The hidden Wendigo chapter (FFX only, 2026-11-06): Wendigo's Raise Arms and Lower Arms are self rows and it can be Provoked, but a Provoked Wendigo's script does not run at all (the forced default attack
+    // takes its turn, `forced-turn.ts`; it keeps no control), so no self row is ever queued while it is Provoked and nothing is redirected.
+    expect(reach).toEqual(['braskas-final-aeon:braskas-final-aeon:draws-sword', 'wendigo:wendigo:wendigo-raise-arms+wendigo-lower-arms']);
   });
 });

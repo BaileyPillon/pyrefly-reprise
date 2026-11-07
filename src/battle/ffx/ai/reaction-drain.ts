@@ -42,7 +42,7 @@ export function drainScriptReactions(h: ReactionHost): void {
       continue;
     }
     const owner = tryActor(ctx, reaction.ownerId);
-    if (!owner || !isAlive(owner)) continue;
+    if (!owner || (!isAlive(owner) && reaction.ownerMayBeDead !== true)) continue; // a death handler's command (`ownerMayBeDead`) is the dying monster's own
     if (!reaction.forced && !canQueueCommand(owner, reaction.keepsControl)) continue;
     // The game's queue refuses a command aimed at a combatant that is gone (AI lane B's counters aim at the attacker).
     if (reaction.requiresAlive !== undefined) {

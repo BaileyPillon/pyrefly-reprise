@@ -57,6 +57,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   penance: 'ffx', // the hidden Penance chapter (FFX only, 2026-11-06)
   'flooded-ways': 'ffx', // the hidden Flooded Ways chapter (FFX only, 2026-11-06)
   'sanctuary-keeper': 'ffx', // the hidden Sanctuary Keeper chapter (FFX only, 2026-11-06)
+  wendigo: 'ffx', // the hidden Wendigo chapter (FFX only, 2026-11-06)
   'ffx2-yunas-ballad': 'ffx2', // the hidden Yuna's Ballad chapter (FFX-2 only, 2026-11-06)
 };
 

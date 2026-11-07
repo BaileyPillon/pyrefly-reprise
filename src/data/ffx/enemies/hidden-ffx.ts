@@ -11,9 +11,10 @@ import { SPECTRAL_KEEPER_ABILITIES, spectralKeeperGroup } from './spectral-keepe
 import { PENANCE_ABILITIES, penanceGroup } from './penance.ts'; // the hidden Penance chapter (2026-11-06)
 import { FLOODED_GROUPS, FLOODED_WAYS_ABILITIES } from './flooded-ways-groups.ts'; // the hidden Flooded Ways chapter (2026-11-06): Evrae Altana's three areas and Geosgaeno
 import { SANCTUARY_KEEPER_ABILITIES, sanctuaryKeeperGroup } from './sanctuary-keeper.ts'; // the hidden Sanctuary Keeper chapter (2026-11-06)
+import { WENDIGO_ABILITIES, wendigoGroup } from './wendigo.ts'; // the hidden Wendigo chapter (2026-11-06)
 
 /** Every ability row of the hidden FFX chapters (Bulldoze, the Breaths, Berserk and the half-HP Rages; the Dark Aeons' fourteen rows). */
-export const HIDDEN_FFX_ABILITIES: readonly AbilityDef[] = [...Object.values(BIRAN_YENKE_ABILITIES), ...Object.values(DARK_AEONS_ABILITIES), ...Object.values(SPECTRAL_KEEPER_ABILITIES), ...Object.values(DARK_SIX_ABILITIES), ...Object.values(PENANCE_ABILITIES), ...Object.values(FLOODED_WAYS_ABILITIES), ...Object.values(SANCTUARY_KEEPER_ABILITIES)];
+export const HIDDEN_FFX_ABILITIES: readonly AbilityDef[] = [...Object.values(BIRAN_YENKE_ABILITIES), ...Object.values(DARK_AEONS_ABILITIES), ...Object.values(SPECTRAL_KEEPER_ABILITIES), ...Object.values(DARK_SIX_ABILITIES), ...Object.values(PENANCE_ABILITIES), ...Object.values(FLOODED_WAYS_ABILITIES), ...Object.values(SANCTUARY_KEEPER_ABILITIES), ...Object.values(WENDIGO_ABILITIES)];
 
 /** Every formation of the hidden FFX chapters (the brothers' duel; the Dark Aeons' eleven). */
-export const HIDDEN_FFX_GROUPS: readonly EnemyGroupDef[] = [...BIRAN_YENKE_GROUPS, ...DARK_AEONS_GROUPS, spectralKeeperGroup, ...DARK_SIX_GROUPS, penanceGroup, ...FLOODED_GROUPS, sanctuaryKeeperGroup];
+export const HIDDEN_FFX_GROUPS: readonly EnemyGroupDef[] = [...BIRAN_YENKE_GROUPS, ...DARK_AEONS_GROUPS, spectralKeeperGroup, ...DARK_SIX_GROUPS, penanceGroup, ...FLOODED_GROUPS, sanctuaryKeeperGroup, wendigoGroup];
