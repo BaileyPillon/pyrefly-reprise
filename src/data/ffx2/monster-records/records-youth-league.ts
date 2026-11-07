@@ -1,7 +1,7 @@
 /**
  * The game's own monster rows for the fighters of the hidden chapter "The Youth League Tournament" (Yaibal, Lucil, Elma and the five League types). Re-parity W3's shape; **FFX-2 only**.
  *
- * Source: `kernel/monster.bin` **rows 183 (Yaibal, id 0x10b7), 184 (Lucil, 0x10b8), 279 (Elma, 0x1117), 210 (League Warrior), 211 (League Veteran), 193 (League Slasher), 214 (League Mage) and 215 (League Master)** of the
+ * Source (`research/re-ffx2-youth-league-tournament.md` §3): `kernel/monster.bin` **rows 183 (Yaibal, id 0x10b7), 184 (Lucil, 0x10b8), 279 (Elma, 0x1117), 210 (League Warrior), 211 (League Veteran), 193 (League Slasher), 214 (League Mage) and 215 (League Master)** of the
  * Steam HD build, read field by field (`research/re-ffx2-youth-league-tournament.md` section 3), numbers only, by a script (`tests/fixtures/parity/ffx2/youth_league_rows.json`). Merged into `MONSTER_RECORDS` by
  * `./records.ts`. The seven formations of the mission are `kino01_217` to `_223` (formation rows 731 to 737, RE section 4); the chapter's own groups (`../enemies/youth-league.ts`) are ours, one per act, and a row is
  * worn by every fighter of its type (two Warriors in act 1 wear row 210 twice).

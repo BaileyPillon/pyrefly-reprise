@@ -1,7 +1,7 @@
 /**
  * The actions of Yaibal and Lucil in the hidden chapter "The Youth League Tournament" (`monster.bin` rows 183 and 184). **FFX-2 only** [AGENTS.md rule 14].
  *
- * Source: **the game's own rows** (`research/re-ffx2-youth-league-tournament.md` sections 5.1, 5.2 and 6), which `../command-records/youth-league.ts` lays on these abilities by id; the fields here are the ability's
+ * Source: **the game's own rows** (`research/re-ffx2-youth-league-tournament.md` §5.1, §5.2 and §6), which `../command-records/youth-league.ts` lays on these abilities by id; the fields here are the ability's
  * own reading, pinned against the rows by `tests/unit/chapters/youth-league-data.test.ts`. Yaibal's Attack is the League's (`YL_ABILITY.attack`, row 0x4000).
  *
  * - **Yaibal** (`m183`): the "Sorry" grenade (0x40fc: the whole party, 468 to 529 a girl), and two thrown items he aims at the GIRLS: a **Phoenix Down** (0x2006: 25 percent of her maximum HP and the Death cure, on a

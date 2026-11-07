@@ -15,6 +15,8 @@
  * `checkpointOnEntry`, the Den's GP4 b seam); a loss on act 1 starts the chapter over. The props the game links to its fighters (a Sword or a Weapon each, rows 186 and 201: HP 1, no action) are visual and have
  * no place in the formation (RE §3.2). **No time limit** (RE §7): the League rows' "battle too long" ladder applies to the scenes it names, none of which is one of the seven.
  *
+ * Confidence: [verified: the game's own table, decoded by a script and pinned by `tests/unit/chapters/youth-league-data.test.ts`]; the picks YL1 to YL15 are [derived] from the paper preflight (`docs/plans/ch-youth-review.md`).
+ *
  * **Start positions are not in the files** (RE §4: every `pos_kino01_*.psc` is empty), so the aim picks the game weights by closeness are uniform here, as in the Tourist Trap and Leblanc chapters.
  */
 

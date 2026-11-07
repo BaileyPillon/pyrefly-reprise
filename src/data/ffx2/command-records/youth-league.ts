@@ -3,7 +3,7 @@
  * Tournament", `monster.bin` rows 183, 184, 279, 210, 211, 193, 214 and 215). Re-parity W3's shape; **FFX-2 only**.
  *
  * Source: `kernel/monmagic.bin` (ids 0x4000 and up), `kernel/command.bin` (ids 0x3000 and up) and `kernel/item.bin` (ids 0x2000 and up) of the Steam HD build 25501027, decoded by a script from the kernel tables
- * (`research/re-ffx2-youth-league-tournament.md` section 6: the moves each script queues), numbers only, no game text and no game code. Merged into `FFX2_COMMAND_RECORDS` by `./index.ts`. Every row is keyed by the
+ * (`research/re-ffx2-youth-league-tournament.md` §6: the moves each script queues), numbers only, no game text and no game code. Merged into `FFX2_COMMAND_RECORDS` by `./index.ts`. Every row is keyed by the
  * ability's own id (`../enemies/youth-league-abilities.ts`), so the party rows a fighter queues (Demi, Dispel) and the item rows (Hi-Potion, Phoenix Down, the Curtains, the Gems, the Gold Hourglass) are the game's
  * rows on an enemy-side ability, never the player's own ability objects: **an item thrown by an enemy is a data row here, not an engine feature** (the same way `x2-leblanc-flash-bomb` is). The four elemental spells
  * of the League mages and masters are one row each, listed twice: aimed at one girl, or at the whole party (the script flips a coin). `tests/unit/chapters/youth-league-data.test.ts` pins each row to

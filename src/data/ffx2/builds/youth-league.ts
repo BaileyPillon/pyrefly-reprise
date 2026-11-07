@@ -6,7 +6,7 @@
  * Ethers, 25 Phoenix Downs, 15 Remedies, Curtains and Feathers (`./farplane.ts`). **No kit options** (no Hero Drinks, no level bonus): the Den of Woe's raises (`./den-of-woe.ts`) exist because its shades are Lv 52 to 63,
  * and the League's fighters are Lv 23 to 43.
  *
- * Why: it is the repo's one sourced Chapter 5 build point (the band 43 to 52, `research/ffx2-combat-core.md` section 5.1b; the three exact levels are `[estimate]`), the Den of Woe on the same road in the same chapter plays it,
+ * Why: it is the repo's one sourced Chapter 5 build point (the band 43 to 52, `research/ffx2-combat-core.md` §5.1b; the three exact levels are `[estimate]`; the choice is [derived] from the Chapter V preset, which is [verified: 2 sources]), the Den of Woe on the same road in the same chapter plays it,
  * and the sourced line (two Dark Knights and a healer) answers every act. **No source gives a player level for the tournament** (the game sets none; RE section 11 item 3), so the chapter is MEASURED, not tuned
  * (`tests/unit/chapters/youth-league-bench.test.ts`; `docs/handoff/ch-youth-league.md`): **boss numbers are never touched**, difficulty is the party's alone. Alternatives: a Lv 40/42/44 variant, or the Chapter 3 build
  * (`djoseBuild`), as measured what-ifs only.

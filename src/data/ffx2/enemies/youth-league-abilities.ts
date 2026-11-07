@@ -1,7 +1,7 @@
 /**
  * The actions of the League fighters (Warrior, Veteran, Slasher, Mage, Master) and of Elma in the hidden chapter "The Youth League Tournament" (`monster.bin` rows 210, 211, 193, 214, 215 and 279). **FFX-2 only** [AGENTS.md rule 14].
  *
- * Source: **the game's own rows** (`research/re-ffx2-youth-league-tournament.md` section 6), which `../command-records/youth-league.ts` lays on these abilities by id, so the charge, the recovery, the target flags, the damage
+ * Source: **the game's own rows** (`research/re-ffx2-youth-league-tournament.md` §6), which `../command-records/youth-league.ts` lays on these abilities by id, so the charge, the recovery, the target flags, the damage
  * type, the hit rule, the statuses and every other field the engine reads are the rows' own; the fields here are the ability's own reading, kept consistent with them and pinned against them by
  * `tests/unit/chapters/youth-league-data.test.ts` (against `tests/fixtures/parity/ffx2/youth_league_rows.json`, which a script decoded from the kernel tables). Every id here is `x2-`-prefixed so nothing of the FFX data is touched.
  *

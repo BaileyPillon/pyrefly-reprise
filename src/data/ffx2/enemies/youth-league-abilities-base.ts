@@ -3,7 +3,7 @@
  * **FFX-2 only** [AGENTS.md rule 14].
  *
  * The ability definitions are in `./youth-league-abilities.ts` (the League types' and Elma's, and the catalog list of all) and `./youth-league-abilities-named.ts` (Yaibal's and Lucil's); the game's own rows are
- * `../command-records/youth-league.ts` (`research/re-ffx2-youth-league-tournament.md` section 6; confidence: [verified: the game's own tables, decoded by a script and pinned by
+ * `../command-records/youth-league.ts` (`research/re-ffx2-youth-league-tournament.md` §6; confidence: [verified: the game's own tables, decoded by a script and pinned by
  * `tests/unit/chapters/youth-league-data.test.ts`]). This file holds what both halves share, so neither imports the other (the source files stay under 400 lines, house rule 7).
  */
 
