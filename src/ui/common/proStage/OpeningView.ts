@@ -10,6 +10,8 @@ import type { ProStageOptions } from './ProStageLayer.ts';
 export class OpeningView {
   private marks: OdMarks = emptyOd();
   private actor: string | null = null;
+  /** False while the portrait slab names the move: the small name block stays unseen. */
+  private named = true;
   private readonly block: HTMLElement;
   private readonly who: HTMLElement;
   private readonly title: HTMLElement;
@@ -46,6 +48,7 @@ export class OpeningView {
       return;
     }
     this.actor = c.actor;
+    this.named = c.named !== false; // the portrait slab names the move (`engine/BigMoveCutIn.ts`): no second small name beside it
     this.marks = { at: this.now, holdMs: OD_OPEN_HOLD_MS * c.scale, tame: c.tame };
     this.who.textContent = `${this.o.nameOf?.(c.actor) ?? ''} · Overdrive`.replace(/^ · /, '');
     this.title.textContent = c.name;
@@ -82,7 +85,7 @@ export class OpeningView {
       return;
     }
     // the small name sits where the command menu was (the left of the frame, the menu is closed and the HUD sunk): beside the caster it would stand on his neighbours in the party's formation
-    this.block.style.opacity = f.name.toFixed(3);
+    this.block.style.opacity = this.named ? f.name.toFixed(3) : '0';
     this.block.style.transform = `translateY(${((1 - f.name) * 8).toFixed(1)}px)`;
     const r = this.actor ? this.o.rectOf(this.actor) : null;
     if (!r) return;

@@ -26,6 +26,8 @@ import process from 'node:process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const REPO = resolve(fileURLToPath(new URL('..', import.meta.url)));
+/** 2026-11-07: the default has no turn-start portrait (a big move gets one: `?portraits=`, `src/engine/CutInMode.ts`); this smoke checks the experiment's own portrait on the turn slab, so it asks for the old turn-start behaviour. */
+const turnPortraits = (b) => (b.includes('portraits=') ? b : `${b}${b.includes('?') ? '&' : '?'}portraits=turns`);
 const DIST = process.env.EXP_DIST ?? 'D:/Tools/pyrefly-scratch/exp-leblanc/dist-smoke';
 const CONFIG = join(REPO, 'tools', 'exp-leblanc.vite.config.mjs');
 const LINKED = ['art', 'audio', 'fonts', 'fx'];
@@ -130,7 +132,7 @@ async function run() {
     log(`check.${name}`, { ok, detail });
     if (!ok) failures.push(name);
   };
-  const ctx = await open({ base: BASE, fresh: true });
+  const ctx = await open({ base: turnPortraits(BASE), fresh: true });
   const { page, browser } = ctx;
   const shot = async (name) => {
     const p = join(OUT, `${TAG}-${name}.png`);
@@ -252,7 +254,7 @@ async function runShots() {
     log(`check.${name}`, { ok, detail });
     if (!ok) failures.push(name);
   };
-  const ctx = await open({ base: BASE, fresh: true });
+  const ctx = await open({ base: turnPortraits(BASE), fresh: true });
   const { page, browser } = ctx;
   const shot = async (name) => {
     const p = join(OUT, `${TAG}-${name}.jpg`);
