@@ -11,7 +11,7 @@
  * - **`actionClose` of the blow that fells the last foe, and `victory`: the win and the ice break.** The story's post scene is a separate screen over a painted plate and owns no 3D scene, so the epilogue
  *   (`./epilogue.ts`) is played here, in the battle. At the close of the action after which every foe is down (`finished()`, read off the stage's actors by the scene) the party takes its victory poses, the camera flies the
  *   6 s **win flight** (a slow orbit round the party, then up and back over the lake as the ice breaks and the screen goes white) and **the beat's answer is held until the break is over**: the presenter awaits that beat, so
- *   the victory beat and the results follow under the white. A win with no such close (a foe petrified, say) starts it at the `victory` beat instead, which the presenter does not await, so it plays as long as the screen lasts.
+ *   the victory beat and the results follow under the white. **The battle HUD is hidden for the break** (`ShotCtx.setHud`, phase 4; the presenter puts it back when the screen leaves). A win with no such close (a foe petrified, say) starts it at the `victory` beat instead, which the presenter does not await, so it plays as long as the screen lasts.
  *
  * **The seat.** The flight is written into the battle camera as a rig of its own (`fly`) every frame and snapped to, with the roll set (`BattleCamera.setRoll`); the camera's own sway is off in that rig. If anything else
  * moves the camera meanwhile (the presenter, the story), the flight ends at once: the director never fights for it. At `'skip'` speed the camera snaps and no flight runs. Pure but for the `BattleCamera` it is handed.
@@ -63,9 +63,10 @@ export class CameraDirector {
     return this.broke;
   }
 
-  /** Start the win and the break (once): the win flight, if the camera may fly, and the epilogue; the promise answers when the break is over. */
+  /** Start the win and the break (once): the HUD hidden, the win flight, if the camera may fly, and the epilogue; the promise answers when the break is over. */
   private win(ctx: ShotCtx): Promise<void> {
     this.broke = true;
+    ctx.setHud?.(false); // the HUD goes for the ice break (the presenter puts it back when the screen leaves); at reduced motion too: the white fade still plays
     if (ctx.reducedMotion !== true) void this.fly(winFlight(this.eye()), { rate: CameraDirector.rateOf(ctx), release: false });
     return this.ending ? this.ending.start() : Promise.resolve();
   }

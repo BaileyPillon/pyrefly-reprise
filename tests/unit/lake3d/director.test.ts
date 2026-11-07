@@ -284,8 +284,54 @@ describe('the win and the ice break', () => {
   });
 });
 
+describe('the battle HUD during the ice break (phase 4)', () => {
+  /** A director with an end seam that never finishes by itself, and a HUD spy on every context. */
+  function hudRig(): { d: CameraDirector; down: { value: boolean }; hud: boolean[]; ctx: (over?: Partial<ShotCtx>) => ShotCtx } {
+    const down = { value: false };
+    const hud: boolean[] = [];
+    const d = new CameraDirector(() => null, { finished: () => down.value, start: () => new Promise<void>(() => undefined) });
+    d.bind(asCam(new FakeCam()));
+    return { d, down, hud, ctx: (over = {}) => ctxBase({ setHud: (v: boolean) => void hud.push(v), ...over }) };
+  }
+  const closeOf = (ctx: ShotCtx): ActorShot => ({ ...ctx, actor: { id: 'tidus', side: 'party' } }) as ActorShot;
+
+  it('is hidden once, at the close after which every foe is down, and not for an ordinary close', () => {
+    const { d, down, hud, ctx } = hudRig();
+    expect(d.shotDirector.actionClose!(closeOf(ctx()))).toBe(false);
+    expect(hud).toEqual([]);
+    down.value = true;
+    void d.shotDirector.actionClose!(closeOf(ctx()));
+    expect(hud).toEqual([false]);
+    d.shotDirector.actionClose!(closeOf(ctx()));
+    d.shotDirector.victory!(ctx());
+    expect(hud, 'the break plays once, the HUD is hidden once, and nothing here puts it back').toEqual([false]);
+  });
+
+  it('is hidden at the victory beat when no close saw the last foe fall, and with reduced motion too (the white fade still plays)', () => {
+    const late = hudRig();
+    late.d.shotDirector.victory!(late.ctx());
+    expect(late.hud).toEqual([false]);
+    const calm = hudRig();
+    calm.down.value = true;
+    void calm.d.shotDirector.actionClose!(closeOf(calm.ctx({ reducedMotion: true })));
+    expect(calm.hud).toEqual([false]);
+  });
+
+  it('is left alone at skip speed (nothing plays) and for a context that has no HUD hook', () => {
+    const skip = hudRig();
+    skip.down.value = true;
+    skip.d.shotDirector.actionClose!(closeOf(skip.ctx({ skipping: true })));
+    skip.d.shotDirector.victory!(skip.ctx({ skipping: true }));
+    expect(skip.hud).toEqual([]);
+    const plain = hudRig();
+    plain.down.value = true;
+    expect(() => plain.d.shotDirector.actionClose!(closeOf(ctxBase()))).not.toThrow(); // a test's own context: no setHud
+    expect(plain.d.breaking).toBe(true);
+  });
+});
+
 describe('tapDirector', () => {
-  const recorder = (): { events: string[]; listener: BeatListener } => {
+  const recorder =(): { events: string[]; listener: BeatListener } => {
     const events: string[] = [];
     return {
       events,
