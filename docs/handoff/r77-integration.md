@@ -1,0 +1,44 @@
+# r77 integration: chapters 41 and 43 and the party-rig pilots merged into `r77-int` on release 76 (2026-11-07)
+
+**Game case: both for the plumbing; each chapter keeps its own** (41 Spherimorph FFX only, word `spherimorph`; 43 the Omega Ruins FFX only, word `weapon`; the rig pilots: Tidus in Chapter I FFX only, Rikku's Dark Knight in Chapter IV FFX-2 only, the switch and the loader shared). Authority: Bailey 2026-11-06 ~00:30 EST "implement all unimplemented chapters please", ~00:55 EST "yes on all these too", ~13:30 EST on the rigs v3 clips "so what are the benefits of the rigs? Those do look really good", 2026-10-31 "you make the executive decisions for the next few days. i'll go with all of your recommendations"; the integrator's picks below are the driver's, his to overturn. Nothing deploys from this branch. The base is `origin/r76-release` (live release 76); the paintings and rigs are in `docs/handoff/r77-art-install.md`.
+
+## What merged, in order (each `--no-ff`, targeted tests after each)
+
+| Merge | Branch | Chapter | Files conflicted | Targeted tests after it |
+|---|---|---|---:|---|
+| 1 | `ch-spherimorph` | 41 Spherimorph: the four-state weakness machine in the Macalania Woods, FFX only, word `spherimorph` | 37 | 217 files, 3,913 passed, 19 skipped |
+| 2 | `ch-omega-ruins` | 43 the Omega Ruins: Ultima Weapon, Omega Weapon and Nemesis as one chain, FFX only, word `weapon` | 38 | 250 files; one failure, explained below, then all passing |
+| 3 | `rigs-pilots-on` | Tidus (Chapter I, FFX only) and Rikku's Dark Knight (Chapter IV, FFX-2 only) drawn as rigs by default; `?partyrigs=off` restores the paintings | 1 | 89 files, 1,198 passed, 1 skipped |
+
+## How the conflicts were resolved
+
+Every conflict was a registration line that the wave-1 to wave-3 chapters had added at the same place. The rule of waves 2 and 3 held: **keep both sides, in chapter-number order** (33 to 40, 41, 43), by a small three-way resolver (one mode per hunk: ours, theirs, ours then theirs, theirs then ours; a working file, not committed), then read line by line. Counts stayed derived where wave 2 had made them so; where a table needs the chapter, it got its one line.
+
+- **`data/encounters.ts`** (399 lines, edited in place): `ChapterId` gains `'spherimorph'` and `'omega-ruins'`, `ListedChapterId` excludes both, `Chapter.number` reads `... 40 | 41 | 43` (42 is a sibling lane's), and the number comment names 41 and 43.
+- **`data/chapter-meta.ts`** is byte for byte release 76's: both lanes had joined an import onto an existing line to stay under 400; both are undone. The two records join `HIDDEN_R76_META` in `data/chapter-meta-hidden-r76.ts` in number order (`... 40, 41, 43`).
+- **`CHAPTER_DOORS`** order is now `... beast, wraith, spherimorph, weapon`; `tests/unit/helpers/doorWords.ts` gained two lines, and `chapter-doors`, `gagazet-door`, `summon-door` and `yojimbo-door` took ours whole because they already read that list (their lane-written literals and the 240 s allowances lose to `DOOR_PAIR_TEST_TIMEOUT_MS`).
+- **`data/chapters-experiments.ts`**: the hidden list ends `... SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD, SPHERIMORPH, OMEGA_RUINS`. **`battle/ffx/setup.ts`** (399 lines): the two lanes' calls share one line, `applyPenanceSetup(ctx, group); applySpherimorphSetup(ctx);` (the Omega Ruins add none).
+- **Registries, one entry each beside the others**: `battle/ffx/ai/index.ts`, `kernel/forced-action-table.ts` (the Weapons carry 0x4000, Nemesis none, Spherimorph 0x6000), `data/ffx/enemies/hidden-ffx.ts`, `command-records/enemies.ts`, the guides' two indexes, the tactics' index and game lookup, `pyreflyCanon.ts`, `artNamespace.ts`, `experiment-scenes.ts`, `ui/coach/turnOrderLine.ts` (the Omega Ruins only: Spherimorph has no line), `critic/runner/lib/route-pure.mjs`.
+- **Pinned lists**: `evrae-gaze-classes.json` holds both chapters' rows (the Omega Ruins' ten, 525 keys, none twice, sorted); `data-ffx-command-records` gains `['spherimorph', 6, 6]` and `['omega-ruins', 14, 14]` in its rows table; the loot, Isaaru-commands, scene-backdrop, music, turn-order, party-stature, experiment-flow and prep-tip lists each gained the chapters' line (the prep-tip counts keep release 76's derived form; both lanes' literals lose).
+- **`docs/CONTRACT-CHANGES.md`**: all entries kept, this pass's entry first, then the rigs lane's, the Omega Ruins', the Spherimorph's.
+
+## The one test that needed more than a line
+
+`tests/unit/parity-ffx-engine-gauge.test.ts` draws 1,200 seeded situations and asserted that more than 100 of the 200 enemy-hits-aeon draws run and fewer than 100 end in a KO. With both chapters' moves in the enemy pool the same seed leaves 93 and 107 (Nova, Ultima, Armageddon and the Press kill an aeon more often). The floors are a coverage floor of the sample, not a claim of the engine: now 80 and 120, with the reason beside them. Every situation that runs still has to equal the kernels to the gauge. It passed on each lane alone and on release 76; it failed only on the combination.
+
+## The rig fix the driver queued, and the 40 dashes
+
+See `docs/handoff/r77-art-install.md` ("The rigs"). In short (FFX-2 only): Rikku's Dark Knight's cast key read 0.881 to 0.883 because the critic's rig path reads the crown landmark and a head tilted 35 degrees carries it 2.3 percent below the silhouette's top; the rig gate (silhouette, 0.910) passes it. The pose waiver ledger cannot answer a rig swap (`continuity-rig.mjs` does not consult it), so the cast head is recut 24.67 rig px higher (offline reading 0.8873 to 0.8990; the key's overlap with its painting 0.933 to 0.924). The 40 dashes are read: 28 are the painting run's smeared lunge jerks reclassified (the rig blends where a painting cuts), 10 are 40 to 45 px offsets between keys' heads, 2 vertical steps at a turn start want one look in motion. Tidus's hurt (0.86, FFX only) is left: Chapter I's CHK-026 already FAILs on Auron's heads.
+
+## Checks
+
+- `node node_modules/typescript/bin/tsc --noEmit` clean after each merge and after the last edit; `node tools/orphans.mjs`: 24 orphaned of 2,494 modules (the same 24 as before the wave; none of the three branches').
+- `node tools/pose-gate.mjs --check --art <the r77 mirror>`: 1,247 paintings of 174 subjects, 948 pass, 101 waived, 198 exempt, 0 fail, PASS. `verify-approved`: ok 1,171, mismatched 0, missing 0. `tools/rig-gate.mjs --verify` on both rigs: ok. `art-derive` verify and audit on a rehearsal of the 73 files: PASS and PASS (`r77-art-install.md`).
+- **Full unit suite** (`BOSS_ART_ROOT` at the r77 art mirror, `--maxWorkers=3 --testTimeout=60000 --hookTimeout=60000`, 3,673 s, with another lane's full suite running on the same machine): **2,095 files: 2,063 passed, 29 skipped, 3 failed; 33,126 tests passed, 160 skipped, 1 todo, 3 failed.** Each failure explained: (1) `windwaker-door.test.ts` "the first word to finish wins when two are typed in a row": the pair test timed out at its 375 s allowance (15 s a door, 25 doors, `helpers/doorWords.ts`) while two full suites shared the CPU; **it passes alone** (the three files below together: 241 s). (2) and (3) `wraith-door.test.ts` and `chapters/yunas-ballad-data.test.ts` each pinned `wraith` as the LAST row of the door table, true until chapters 41 and 43 added `spherimorph` and `weapon` behind it; **fixed in this pass**: both now pin the row and that only doors of higher-numbered chapters follow it. The three files rerun together: **74 tests passed, 0 failed**. Nothing else failed (no art-mirror failure: `boss-art-r75`, `r76`, `r76b`, `r77` and `scene-backdrop-file` read the r77 mirror and pass). A door suite's pair test grows by about 15 s with every door added (25 now): a later door word is the next place this bites on a loaded machine.
+
+## What is still open (none of it new in this wave)
+
+- **Browser jobs.** Both chapters' own browser jobs (J1 to J8 of each handoff) and the rigs in motion wait for a production build, which this pass did not cut (no browser was run).
+- **Bailey's reads and ears**: the story drafts of 41 and 43, the stand-in music cues, the Zanmato lottery of Nemesis (Omega Ruins handoff, open issue 1), Spherimorph's three ways through (its handoff, question 1).
+- **A later merge** adds its door word to `tests/unit/helpers/doorWords.ts` (one line), its record to `HIDDEN_R76_META`, its row to the command-record rows table, and uses the two door-scaled allowances for any suite that loops over the doors.
+- **Release steps** (the driver's): re-point `public/art` at the r77 mirror at candidate time (the `INSTALL.md` of the pass has the command, the checks and the undo), back the new paintings up, the records pass (a D-number for items 220m and 220w and the four waiver rows' basis, the A-rows, the CHANGELOG lines in `r77-art-install.md`), `docs/handoff/NOW.md`. Review class: DEEP, both games.
