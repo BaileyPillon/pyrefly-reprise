@@ -25,6 +25,8 @@
  *
  * **`darkaeon`** (FFX, the hidden Dark Aeons, `./darkaeonDoor.ts`: D is `right`, A `left`, R `r1`, E `start`; K, O and N are unbound) is a plain `WordDoor` too.
  *
+ * **`weapon`** (FFX, the hidden Omega Ruins, `./weaponDoor.ts`) is a plain `WordDoor` too, and is **not** desktop-only (painted 2D).
+ *
  * **`keeper`** (FFX, the hidden Spectral Keeper, `./keeperDoor.ts`: K and P are unbound, E is `start`, R is `r1`) is a plain `WordDoor` too.
  *
  * **`geosgaeno`** (FFX, the hidden Flooded Ways, `./geosgaenoDoor.ts`: E is `start`, S `down`, A `left`; G, O and N are unbound) is a plain `WordDoor` too.
@@ -73,6 +75,7 @@ import { DUELIST_DOOR_CHAPTER, DUELIST_DOOR_WORD } from './duelistDoor.ts';
 import { BEAST_DOOR_CHAPTER, BEAST_DOOR_WORD } from './beastDoor.ts';
 import { WRAITH_DOOR_CHAPTER, WRAITH_DOOR_WORD } from './wraithDoor.ts';
 import { SPHERIMORPH_DOOR_CHAPTER, SPHERIMORPH_DOOR_WORD } from './spherimorphDoor.ts';
+import { WEAPON_DOOR_CHAPTER, WEAPON_DOOR_WORD } from './weaponDoor.ts';
 
 /**
  * **The two hidden 3D chapters are desktop-only** (driver decision 219q, 2026-11-03; FFX-2 only: `yrp`, the 3D Bahamut, and `waker`, the Wind Waker Valefor). They are not staged for a phone: the Wind Waker is expected to miss the phone budgets
@@ -123,6 +126,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: BEAST_DOOR_WORD, chapter: BEAST_DOOR_CHAPTER },
   { word: WRAITH_DOOR_WORD, chapter: WRAITH_DOOR_CHAPTER },
   { word: SPHERIMORPH_DOOR_WORD, chapter: SPHERIMORPH_DOOR_CHAPTER },
+  { word: WEAPON_DOOR_WORD, chapter: WEAPON_DOOR_CHAPTER },
 ];
 
 /**

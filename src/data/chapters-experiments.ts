@@ -20,6 +20,7 @@
  * - **The Last Summoning** (`'last-summoning'`, number 28, 2026-10-15; FFX only): Dream's End as a gauntlet in the player's order with the full roster of eight aeons, Yojimbo and the Magus Sisters among them; word `summon` (27 is the Dark Mirror lane's).
  * - **The Sanctuary Keeper** (`'sanctuary-keeper'`, number 39, 2026-11-06; FFX only): the beast that keeps the last road up Mt. Gagazet, fought at the summit; word `beast` (the Spectral Keeper's number is 29).
  *
+ * - **The Omega Ruins** (`'omega-ruins'`, number 43, 2026-11-06; FFX only): Ultima Weapon, Omega Weapon and Nemesis as one three-act chain on the Cavern's plate; word `weapon`.
  * - **The Spectral Keeper** (`'spectral-keeper'`, number 29, 2026-11-02; FFX only): the beast at the foot of the Dome's lift, fought on six glyph platforms; word `keeper` (28 is the Last Summoning lane's).
  *
  * - **The Dark Aeons** (`'dark-aeons'`, number 34, 2026-11-06; FFX only): the six other Dark Aeons (Valefor, Ifrit, Ixion twice, Shiva, Anima, Bahamut) as a chain of seven fresh fights; word `darkaeon` (33 is another lane's).
@@ -64,8 +65,9 @@ import { PENANCE } from './chapter-penance.ts';
 import { FLOODED_WAYS } from './chapter-flooded-ways.ts';
 import { SANCTUARY_KEEPER } from './chapter-sanctuary-keeper.ts';
 import { SPHERIMORPH } from './chapter-spherimorph.ts';
+import { OMEGA_RUINS } from './chapter-omega-ruins.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from, and `ffx2Bahamut` the listed Chapter IV, which the 3D Bahamut is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter, ffx2Bahamut: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD, SPHERIMORPH] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD, SPHERIMORPH, OMEGA_RUINS] as const;
 }

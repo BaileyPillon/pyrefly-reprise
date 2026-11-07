@@ -40,6 +40,7 @@ import { SANCTUARY_KEEPER_DOC } from './sanctuary-keeper.ts';
 import { PENANCE_DOC } from './penance.ts';
 import { FFX2_YUNAS_BALLAD_DOC } from './ffx2-yunas-ballad.ts';
 import { SPHERIMORPH_DOC } from './spherimorph.ts';
+import { OMEGA_RUINS_DOC } from './omega-ruins.ts';
 
 export const GUIDE_DOCS: readonly GuideDoc[] = [
   SEYMOUR_FLUX_DOC,
@@ -74,6 +75,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   PENANCE_DOC, // the hidden Penance (FFX only)
   FFX2_YUNAS_BALLAD_DOC, // the hidden Yuna Ballad (FFX-2 only)
   SPHERIMORPH_DOC, // the hidden Spherimorph (FFX only)
+  OMEGA_RUINS_DOC, // the hidden Omega Ruins (FFX only)
 ];
 
 /** The document for one chapter id, if it has one. */

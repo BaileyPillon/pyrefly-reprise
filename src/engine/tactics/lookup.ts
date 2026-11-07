@@ -59,6 +59,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'sanctuary-keeper': 'ffx', // the hidden Sanctuary Keeper chapter (FFX only, 2026-11-06)
   'ffx2-yunas-ballad': 'ffx2', // the hidden Yuna's Ballad chapter (FFX-2 only, 2026-11-06)
   spherimorph: 'ffx', // the hidden Spherimorph chapter (FFX only, 2026-11-06)
+  'omega-ruins': 'ffx', // the hidden Omega Ruins chapter (FFX only, 2026-11-06)
 };
 
 /** `state.flags` key prefix of an aeon lock's reason (`battle/ffx/aeon-duel.ts#AEON_LOCK_REASON_PREFIX`, restated so this module stays out of the battle layer's import graph; the Last Summoning's guide test pins the copy). */

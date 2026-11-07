@@ -39,6 +39,7 @@ import { SANCTUARY_KEEPER_GUIDE } from './sanctuary-keeper.ts';
 import { PENANCE_GUIDE } from './penance.ts';
 import { FFX2_YUNAS_BALLAD_GUIDE } from './ffx2-yunas-ballad.ts';
 import { SPHERIMORPH_GUIDE } from './spherimorph.ts';
+import { OMEGA_RUINS_GUIDE } from './omega-ruins.ts';
 
 export type {
   ChapterGuide,
@@ -136,6 +137,8 @@ export const GUIDES: readonly ChapterGuide[] = [
   FFX2_YUNAS_BALLAD_GUIDE,
   // The hidden Spherimorph chapter (FFX only, the guardian of the spring in the Macalania Woods; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
   SPHERIMORPH_GUIDE,
+  // The hidden Omega Ruins chapter (FFX only; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  OMEGA_RUINS_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */

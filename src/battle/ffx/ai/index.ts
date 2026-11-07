@@ -54,6 +54,7 @@ import './flooded-ways.ts'; // the hidden Flooded Ways chapter (FFX only, 2026-1
 import { FLOODED_ROWS, applyOpenLock, openLockAvailable, openLockOffered } from './flooded-ways.ts';
 import './sanctuary-keeper.ts'; // the hidden Sanctuary Keeper chapter (FFX only): the Mt. Gagazet summit's beast
 import './spherimorph.ts'; // the hidden Spherimorph chapter (FFX only): the guardian of the spring in the Macalania Woods
+import './ultima-weapon.ts'; import './omega-weapon.ts'; import './nemesis.ts'; // the hidden Omega Ruins chapter (FFX only): Ultima Weapon, Omega Weapon and Nemesis
 import { freeCircleIds, moveTo, platformOf, ringActive } from '../platforms.ts';
 
 export * from './types.ts';

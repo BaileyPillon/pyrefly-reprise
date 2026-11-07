@@ -259,6 +259,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
     'flooded-ways': { scene: 'scene-gagazet', links: ['battle-ffx', 'battle-ffx', 'battle-ffx', 'battle-ffx'] }, // the hidden Flooded Ways (FFX only, 2026-11-06): the Via Purifico chapter's bed and the neutral battle theme on each of its four links, both by reference (no new cue)
     'sanctuary-keeper': { scene: 'scene-gagazet', links: ['boss-seymour'] }, // the hidden Sanctuary Keeper (FFX only, 2026-11-06): the mountain's own bed and Chapter I's boss cue as a flagged stand-in (preflight SK9; the game plays the Boss Theme, Bailey's ear decides, rule 13), by reference (no new cue)
     spherimorph: { scene: 'scene-macalania-temple', links: ['boss-challenge'] }, // the hidden Spherimorph (FFX only, 2026-11-06): the Macalania Temple's bed (the next place on the road) and the neutral "Challenge" boss cue as a flagged stand-in (preflight SP9; the game plays the Boss Theme, Bailey's ear decides, rule 13), by reference (no new cue)
+    'omega-ruins': { scene: 'scene-zanarkand-dome', links: ['boss-challenge', 'boss-challenge', 'boss-yu-yevon'] }, // the hidden Omega Ruins (FFX only, 2026-11-06): the Dome's bed (ruins), the generic "Challenge" cue for Ultima Weapon and Omega Weapon and Yu Yevon's theme for Nemesis, flagged stand-ins (preflight section 7; rule 13), by reference (no new cue)
     'spectral-keeper': { scene: 'scene-zanarkand-dome', links: ['boss-challenge'] }, // the hidden Spectral Keeper (FFX only, 2026-11-02): the Dome's own bed and Yunalesca's "Challenge" cue as a flagged stand-in (preflight SK10), by reference (no new cue)
     'exp-yrp-3d': { scene: 'scene-bevelle-underground', links: ['boss-bahamut'] }, // the hidden 3D Bahamut (FFX-2 only, ch-yrp 2026-11-02): Chapter IV's fight by reference, so Chapter IV's bed and its "Yuna's Ballad" cue (no new cue)
     'last-summoning': { scene: 'scene-dreams-end', links: ['boss-yu-yevon'] }, // the hidden Last Summoning (FFX only, 2026-10-15): Dream's End's own bed and Yu Yevon's theme, by reference (no new cue)
@@ -282,7 +283,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
 
   it('plays each new cue in its own chapters only, and only in its own game (an FFX cue in FFX chapters, an FFX-2 cue in FFX-2 chapters)', async () => {
     const owners: Record<string, string[]> = {
-      'boss-challenge': ['yunalesca', 'sinspawn-gui', 'biran-yenke', 'mirror-aeons', 'spectral-keeper', 'dark-aeons', 'penance', 'spherimorph'],
+      'boss-challenge': ['yunalesca', 'sinspawn-gui', 'biran-yenke', 'mirror-aeons', 'spectral-keeper', 'dark-aeons', 'penance', 'spherimorph', 'omega-ruins'],
       'boss-gui': ['sinspawn-gui'],
       'boss-seymour-omnis': ['seymour-omnis'],
       'boss-den-of-woe': ['ffx2-den-of-woe', 'ffx2-bevelle-guardians', 'ffx2-yunas-ballad'], // Baralai's act of the hidden Bevelle Guardians borrows it (a flagged stand-in, BG5), and the hidden Yuna's Ballad plays the Den's cue for both duels (YB8)
