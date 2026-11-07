@@ -29,7 +29,8 @@ import { YL_ABILITY } from '../../data/ffx2/enemies/youth-league-abilities-base.
 
 const PRE: StoryScript = [
   music('scene-bevelle-underground', 1400),
-  say('none', 'Mushroom Rock Road, banners on the cliff, a bracket chalked on a board by the gate. Seven bouts, and a young man with a sword who wants to start.'), // ours: the place and the bracket (RE §0: seven fights)
+  say('none', 'Mushroom Rock Road, banners on the cliff, and a bracket chalked on a board by the gate.'), // ours: the place
+  say('none', 'Seven bouts in all, and a young man with a sword who wants to start the first.'), // ours: the bracket (RE §0: seven fights)
   say('rikku-x2', 'A tournament! With bunting! We are so winning this.'), // ours: Rikku sets up
   say('yuna-x2', 'It is for the Youth League, Rikku. We are guests.'), // ours: Yuna reacts
   say('paine', 'Guests who are in the bracket.'), // ours: Paine kills it
@@ -46,10 +47,9 @@ const PRE: StoryScript = [
 
 /** Act 1 to act 2. Hands off, short: the bracket is unbroken (YL3), so the line says nobody is mended. */
 const BARK_1: StoryScript = [
-  say('none', 'Yaibal bows and steps off the sand. The board chalks a line through his name.', { auto: 1900 }), // ours: act 1 falls
+  say('none', 'Yaibal bows and steps off the sand. Two mages and a veteran file in, chanting.', { auto: 2100 }), // ours: act 1 falls; act 2 (two Mages and a Veteran)
   say('rikku-x2', 'Do we get a heal?', { auto: 900 }), // ours
   say('paine', 'No.', { auto: 600 }), // ours: nothing is mended between the bouts
-  say('none', 'Two mages and a veteran file in, already chanting.', { auto: 1800 }), // ours: act 2 (two Mages and a Veteran)
 ];
 
 const BARK_2: StoryScript = [
@@ -71,16 +71,15 @@ const BARK_4: StoryScript = [
 ];
 
 const BARK_5: StoryScript = [
-  say('none', 'The last veteran sits down on the sand, laughing, and does not get up.', { auto: 1900 }), // ours: act 5 falls
-  say('yuna-x2', 'There is no pause between this and the next.', { auto: 1400 }), // ours: the unbroken run
-  say('none', 'Elma walks out with two veterans and a sack of grenades, already counting the girls with no Reflect.', { auto: 2400 }), // ours: act 6 (Elma 279)
+  say('none', 'The last veteran sits down on the sand, laughing.', { auto: 1500 }), // ours: act 5 falls
+  say('yuna-x2', 'No pause. Here comes the next.', { auto: 1100 }), // ours: the unbroken run
+  say('none', 'Elma walks out with two veterans and a sack of grenades.', { auto: 1700 }), // ours: act 6 (Elma 279)
 ];
 
 const BARK_6: StoryScript = [
-  say('none', 'Elma folds her arms, then her hands, then bows. The board is chalked to the last name.', { auto: 2000 }), // ours: act 6 falls
-  say('rikku-x2', 'Last one! Who is it?', { auto: 900 }), // ours
+  say('none', 'Elma folds her arms, then her hands, then bows. One name is left on the board.', { auto: 1800 }), // ours: act 6 falls
   say('paine', 'Whoever counts to five.', { auto: 800 }), // ours: Lucil's rhythm as a hunch
-  say('none', 'Lucil steps out alone and does not hurry.', { auto: 1500 }), // ours: act 7
+  say('none', 'Lucil steps out alone and does not hurry.', { auto: 1400 }), // ours: act 7
 ];
 
 // --------------------------------------------------------------------------- mid

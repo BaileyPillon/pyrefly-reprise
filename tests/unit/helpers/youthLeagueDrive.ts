@@ -10,6 +10,7 @@
 
 import type { BattleSetup, BattleState, Command, Decision, EnemyGroupDef, FFX2Combatant, FFX2PartyBuild } from '../../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
+import type { Ffx2EngineOptions } from '../../../src/battle/ffx2/internal.ts';
 import { aiScriptFor, registerAiScript } from '../../../src/battle/ffx2/ai/index.ts';
 import { youthLeagueBuild } from '../../../src/data/ffx2/builds/youth-league.ts';
 import { youthLeagueGroups } from '../../../src/data/ffx2/enemies/youth-league.ts';
@@ -66,6 +67,8 @@ export interface OpenOptions {
   /** The girls carry Invincible from the first moment: the scripts run on their own clock for as long as the test wants. */
   immortal?: boolean;
   atbMode?: 'wait' | 'active';
+  /** More engine options (Wait's split for a human pace: `{ waitSplit: true }`). */
+  engine?: Partial<Ffx2EngineOptions>;
   flags?: Record<string, string | number | boolean>;
   triggers?: BattleSetup['triggers'];
   /** A rig the test applies to the opened engine before the first decision (a changed resist byte, a lowered HP): an input to a measurement, never game data. */
@@ -74,7 +77,7 @@ export interface OpenOptions {
 
 /** A fresh engine on act `act`, the chapter's party (a copy), one seed. */
 export function openAct(act: Act, seed: number, opts: OpenOptions = {}): FFX2Engine {
-  const engine = new FFX2Engine(ffx2Options({ atbMode: opts.atbMode ?? 'wait' }));
+  const engine = new FFX2Engine(ffx2Options({ atbMode: opts.atbMode ?? 'wait', ...opts.engine }));
   engine.setSeed(seed);
   engine.init({
     game: 'ffx2',
@@ -165,7 +168,7 @@ export function outcomeOf(engine: FFX2Engine): string | undefined {
 // Lines (test inputs standing in for a player)
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-export type LineName = 'defend' | 'intended' | 'darkness' | 'guarded';
+export type LineName = 'defend' | 'ladder' | 'intended' | 'darkness' | 'guarded';
 
 const living = (engine: FFX2Engine): Unit[] => foesOf(engine).filter((u) => u.alive && !u.removed);
 
@@ -232,11 +235,14 @@ function knightTurn(d: Input, engine: FFX2Engine): Command | null {
 
 /**
  * The lines. `darkness` is the sourced Chapter 5 clear (two Dark Knights on Darkness, a White Mage healing); `guarded` adds Protect and Shell from Yuna's first two turns; `intended` is the SHIPPED autopilot
- * (`intendedStrategy`, what the app's own auto-battler plays); `defend` is nobody doing anything useful.
+ * (`intendedStrategy`, what the app's own auto-battler plays, WITH the chapter's tactic); `ladder` is the same autopilot without the tactic (the generic ladder); `defend` is nobody doing anything useful.
  */
 export const LINES: Record<LineName, () => Turn> = {
   defend: () => () => null,
   intended: () => (d, engine) => intendedStrategy(d.actorId, d.commands, engine as never),
+  // The shipped auto-battler as a chapter with NO tactic of its own would meet it: the same strategy on a board that reads as another game's, so `tacticFor` finds nothing and the generic ladder (revive, cure, heal,
+  // attack) plays. A measurement of what the chapter's tactic is worth, never a thing the app does.
+  ladder: () => (d, engine) => intendedStrategy(d.actorId, d.commands, { state: () => ({ ...engine.state(), game: 'ffx' }) } as never),
   darkness: () => {
     let yunaTurns = 0;
     return (d, engine) => (d.actorId === 'yuna' ? yunaTurn(d, engine, false, ++yunaTurns) : knightTurn(d, engine));
@@ -259,7 +265,7 @@ export interface FightResult {
 }
 
 /** Run `engine` to the end of its battle on `turn`. */
-export function runOut(engine: FFX2Engine, turn: Turn, opts: { immortal?: boolean; maxDecisions?: number; decisionMs?: number } = {}): FightResult {
+export function runOut(engine: FFX2Engine, turn: Turn, opts: { immortal?: boolean; maxDecisions?: number; decisionMs?: number; topMs?: number } = {}): FightResult {
   let outcome: string | undefined;
   let decisions = 0;
   for (let i = 0; i < (opts.maxDecisions ?? 8000); i++) {
@@ -275,7 +281,12 @@ export function runOut(engine: FFX2Engine, turn: Turn, opts: { immortal?: boolea
     if (d.kind !== 'player-input') continue;
     decisions += 1;
     if (opts.decisionMs) {
-      engine.tick(opts.decisionMs, { throughInput: true });
+      // Wait's split (the Den of Woe's bench): the clock runs while the top-level list is open (`topMs`), and holds inside a submenu or on a target; without `topMs` the whole menu time runs.
+      if (opts.topMs) {
+        engine.setMenuLevel('top');
+        engine.tick(Math.min(opts.topMs, opts.decisionMs), { throughInput: true });
+        engine.setMenuLevel('deep');
+      } else engine.tick(opts.decisionMs, { throughInput: true });
       if (!engine.inputValid(d.actorId)) continue;
     }
     if (opts.immortal) topUp(engine);
@@ -294,7 +305,7 @@ export function runOut(engine: FFX2Engine, turn: Turn, opts: { immortal?: boolea
 }
 
 /** One whole fresh act on one line. */
-export function fight(act: Act, seed: number, line: LineName, opts: OpenOptions & { maxDecisions?: number; decisionMs?: number } = {}): FightResult {
+export function fight(act: Act, seed: number, line: LineName, opts: OpenOptions & { maxDecisions?: number; decisionMs?: number; topMs?: number } = {}): FightResult {
   const engine = openAct(act, seed, opts);
   return runOut(engine, LINES[line](), opts);
 }
@@ -320,7 +331,7 @@ export interface ChainRun {
  * Play the chapter from act 1 on `line`, the party carried from act to act by the app's own rule (`setupForNextLink`), until a defeat or the seventh victory. With `retries` above 0 a defeat on act 2 to 7 retries THAT act
  * from the state the party entered it (the checkpoint, `BattleChainCheckpoint.ts`), up to `retries` times in all; a defeat on act 1 starts over.
  */
-export async function driveChain(line: LineName, seed: number, opts: { retries?: number; decisionMs?: number; build?: FFX2PartyBuild } = {}): Promise<ChainRun> {
+export async function driveChain(line: LineName, seed: number, opts: { retries?: number; decisionMs?: number; topMs?: number; engine?: Partial<Ffx2EngineOptions>; build?: FFX2PartyBuild } = {}): Promise<ChainRun> {
   let setup: BattleSetup = setupForChapter(FFX2_YOUTH_LEAGUE, seed);
   if (opts.build) setup = { ...setup, party: structuredClone(opts.build) };
   let group: EnemyGroupDef = setup.enemies;
@@ -329,10 +340,10 @@ export async function driveChain(line: LineName, seed: number, opts: { retries?:
   const run: ChainRun = { outcomes: [], outcome: 'unresolved', kos: 0, seconds: 0, acts: [] };
   let checkpoint = checkpointAt(link, group, setup);
   for (let guard = 0; guard < 40; guard++) {
-    const engine = new FFX2Engine({ ...ffx2EngineOptions(), minigames: false });
+    const engine = new FFX2Engine({ ...ffx2EngineOptions(), minigames: false, ...opts.engine });
     engine.setSeed(setup.seed);
     engine.init(setup);
-    const result = runOut(engine, LINES[line](), { ...(opts.decisionMs ? { decisionMs: opts.decisionMs } : {}), maxDecisions: 12_000 });
+    const result = runOut(engine, LINES[line](), { ...(opts.decisionMs ? { decisionMs: opts.decisionMs } : {}), ...(opts.topMs ? { topMs: opts.topMs } : {}), maxDecisions: 12_000 });
     run.acts.push(result);
     run.kos += result.kos;
     run.seconds += result.ticks / 29.97;
