@@ -15,6 +15,7 @@ import { BEVELLE_GUARDIANS_META } from './chapter-meta-ffx2-bevelle-guardians.ts
 import { FARPLANE_CUP_META } from './chapter-meta-ffx2-farplane-cup.ts';
 import { SANCTUARY_KEEPER_META } from './chapter-meta-sanctuary-keeper.ts';
 import { YUNAS_BALLAD_META } from './chapter-meta-ffx2-yunas-ballad.ts';
+import { SHINRYU_META } from './chapter-meta-shinryu.ts';
 
-/** The hidden chapters' metadata, by chapter number: 34 the Dark Aeons, 35 Penance, 36 the Flooded Ways, 37 the Bevelle Guardians (FFX-2), 38 the Farplane Cup (FFX-2), 39 the Sanctuary Keeper, 40 Yuna's Ballad (FFX-2). */
-export const HIDDEN_R76_META: readonly ChapterMeta[] = [DARK_AEONS_META, PENANCE_META, FLOODED_WAYS_META, BEVELLE_GUARDIANS_META, FARPLANE_CUP_META, SANCTUARY_KEEPER_META, YUNAS_BALLAD_META];
+/** The hidden chapters' metadata, by chapter number: 34 the Dark Aeons, 35 Penance, 36 the Flooded Ways, 37 the Bevelle Guardians (FFX-2), 38 the Farplane Cup (FFX-2), 39 the Sanctuary Keeper, 40 Yuna's Ballad (FFX-2), 48 Shinryu. */
+export const HIDDEN_R76_META: readonly ChapterMeta[] = [DARK_AEONS_META, PENANCE_META, FLOODED_WAYS_META, BEVELLE_GUARDIANS_META, FARPLANE_CUP_META, SANCTUARY_KEEPER_META, YUNAS_BALLAD_META, SHINRYU_META];

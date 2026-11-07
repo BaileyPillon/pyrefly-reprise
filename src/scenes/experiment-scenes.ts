@@ -54,6 +54,8 @@ import { PENANCE_SCENE_ENTRY, buildPenanceScene } from './penance.ts'; // Penanc
 import { PENANCE_SCENE } from '../data/ffx/penance-ids.ts';
 import { buildSanctuaryKeeperScene, SANCTUARY_KEEPER_SLOTS } from './sanctuary-keeper.ts'; // the Sanctuary Keeper's summit (FFX only, hidden chapter): Chapter I's Mt. Gagazet with the Keeper staged
 import { SANCTUARY_KEEPER_SCENE } from '../data/ffx/sanctuary-keeper-ids.ts';
+import { buildShinryuScene, SHINRYU_SLOTS } from './shinryu.ts'; // the hidden Shinryu chapter (FFX only, 2026-11-07): the Via Purifico's stage on the submerged plate with Shinryu staged
+import { SHINRYU_SCENE } from '../data/ffx/shinryu-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -91,6 +93,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   PENANCE_SCENE_ENTRY,
   // The Sanctuary Keeper (FFX only, hidden chapter): Chapter I's Mt. Gagazet plate and scene, with the Keeper alone on the boss spot.
   { key: SANCTUARY_KEEPER_SCENE, title: 'Mt. Gagazet — the summit (the Sanctuary Keeper)', build: buildDemoScene, slots: SANCTUARY_KEEPER_SLOTS, placeholder: false },
+  // Shinryu (FFX only, hidden chapter): the Via Purifico's stage on the Flooded Ways' submerged plate, the dragon alone on the boss spot.
+  { key: SHINRYU_SCENE, title: 'The Monster Arena — Shinryu', build: buildDemoScene, slots: SHINRYU_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -112,4 +116,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [EXP_ANIME_SCENE]: buildExpAnimeStageScene, // the hidden anime chapter (FFX-2 only)
   [PENANCE_SCENE]: buildPenanceScene, // the hidden Penance chapter (FFX only)
   [SANCTUARY_KEEPER_SCENE]: buildSanctuaryKeeperScene, // the hidden Sanctuary Keeper chapter (FFX only)
+  [SHINRYU_SCENE]: buildShinryuScene, // the hidden Shinryu chapter (FFX only)
 };

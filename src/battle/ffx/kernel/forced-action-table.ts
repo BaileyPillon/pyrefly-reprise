@@ -66,6 +66,8 @@ const ROWS: ReadonlyArray<readonly [string, number]> = [
   ['penance', 0x0000], // m344
   ['penance-right-arm', 0x0000], // m345
   ['penance-left-arm', 0x0000], // m346
+  // The hidden Shinryu chapter (2026-11-07): Shinryu (m283) carries no forced action (`research/re-ffx-shinryu.md` 0: forcedAction 0), so Berserk, Confuse and Provoke (all immune) would drop its turn.
+  ['shinryu', 0x0000], // m283
 ];
 
 /** The forced-action word of an enemy by our id, or `undefined` when no monster file is matched to it. */

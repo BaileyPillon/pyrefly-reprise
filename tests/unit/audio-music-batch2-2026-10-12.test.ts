@@ -257,6 +257,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
     'dark-aeons': { scene: 'scene-gagazet', links: ['boss-challenge', 'boss-challenge', 'boss-challenge', 'boss-challenge', 'boss-challenge', 'boss-challenge', 'boss-yojimbo'] }, // the hidden Dark Aeons (FFX only, 2026-11-06): the mountain's bed as the stand-in, the generic "Challenge" cue for the first six links and Yojimbo's own cue for the last, both by reference (no new cue)
     penance: { scene: 'scene-fahrenheit', links: ['boss-challenge'] }, // the hidden Penance (FFX only, 2026-11-06): the Fahrenheit's own bed and Yunalesca's "Challenge" cue as a flagged stand-in (preflight P8; the guides' name for the sourced track is "A Contest of Aeons", Bailey's ear decides, rule 13), by reference (no new cue)
     'flooded-ways': { scene: 'scene-gagazet', links: ['battle-ffx', 'battle-ffx', 'battle-ffx', 'battle-ffx'] }, // the hidden Flooded Ways (FFX only, 2026-11-06): the Via Purifico chapter's bed and the neutral battle theme on each of its four links, both by reference (no new cue)
+    shinryu: { scene: 'scene-gagazet', links: ['boss-challenge'] }, // the hidden Shinryu (FFX only, 2026-11-07): the Via Purifico's bed and the generic boss cue as flagged stand-ins (preflight SH8; the arena plays the Boss Theme, Bailey's ear decides, rule 13), by reference (no new cue)
     'sanctuary-keeper': { scene: 'scene-gagazet', links: ['boss-seymour'] }, // the hidden Sanctuary Keeper (FFX only, 2026-11-06): the mountain's own bed and Chapter I's boss cue as a flagged stand-in (preflight SK9; the game plays the Boss Theme, Bailey's ear decides, rule 13), by reference (no new cue)
     'spectral-keeper': { scene: 'scene-zanarkand-dome', links: ['boss-challenge'] }, // the hidden Spectral Keeper (FFX only, 2026-11-02): the Dome's own bed and Yunalesca's "Challenge" cue as a flagged stand-in (preflight SK10), by reference (no new cue)
     'exp-yrp-3d': { scene: 'scene-bevelle-underground', links: ['boss-bahamut'] }, // the hidden 3D Bahamut (FFX-2 only, ch-yrp 2026-11-02): Chapter IV's fight by reference, so Chapter IV's bed and its "Yuna's Ballad" cue (no new cue)
@@ -281,7 +282,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
 
   it('plays each new cue in its own chapters only, and only in its own game (an FFX cue in FFX chapters, an FFX-2 cue in FFX-2 chapters)', async () => {
     const owners: Record<string, string[]> = {
-      'boss-challenge': ['yunalesca', 'sinspawn-gui', 'biran-yenke', 'mirror-aeons', 'spectral-keeper', 'dark-aeons', 'penance'],
+      'boss-challenge': ['yunalesca', 'sinspawn-gui', 'biran-yenke', 'mirror-aeons', 'spectral-keeper', 'dark-aeons', 'penance', 'shinryu'],
       'boss-gui': ['sinspawn-gui'],
       'boss-seymour-omnis': ['seymour-omnis'],
       'boss-den-of-woe': ['ffx2-den-of-woe', 'ffx2-bevelle-guardians', 'ffx2-yunas-ballad'], // Baralai's act of the hidden Bevelle Guardians borrows it (a flagged stand-in, BG5), and the hidden Yuna's Ballad plays the Den's cue for both duels (YB8)
