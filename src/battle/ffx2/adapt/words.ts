@@ -10,6 +10,7 @@
 import type { ElementId, FFX2Combatant, StatusId } from '../../common/types.ts';
 import type { Ffx2Unit } from '../internal.ts';
 import { statLevel } from '../statuses.ts';
+import { SPECIAL_DRESSPHERE_IDS } from './game-ids.ts';
 import { GROUP1_STATUS, GROUP2_STATUS, STAGE_FIRST, STAGE_LAST, isStageSlot } from './slots.ts';
 
 /** The kernels' bit for each element (`Chr+0x3af`..`+0x3b3`, `Cmd+0x2e`): fire 1, ice 2, thunder 4, water 8, gravity 0x10, holy 0x20. */
@@ -107,9 +108,34 @@ export function protectMask(unit: Ffx2Unit): number {
   return mask >>> 0;
 }
 
-/** The 24 resist bytes of each group (`Chr+0x404`, `Chr+0x41c`): the combatant's `immunities` by slot (a stage's Up and Down share a slot). */
+/**
+ * **A girl in a Special dressphere cannot be Ejected** (Floral Fallal, Machina Maw, Full Throttle; **FFX-2 only**). Sourced twice: `research/ffx2-combat-core.md` section 2.8, the Eject row ("Characters in a special
+ * dressphere cannot be ejected"), and section 3.15, the universal Special rules ("Every SDSP part has Ribbon plus Auto-Life innately, and cannot be Ejected"), both `[verified: 2 sources]`. The engine wears a Special as
+ * the girl's `dresspheres.current` (Special Dress Up, `spherechange.ts`), or as `dresspheres.special` where a caller builds the transformed state; either one makes the girl Eject-proof. Round 35 (PR-0636) found the rule
+ * stated in comments and applied nowhere: a Floral Fallal wearer was ejected by Shooting Star exactly like a girl in a normal dress.
+ */
+export function cannotBeEjected(unit: FFX2Combatant): boolean {
+  const worn = unit.dresspheres;
+  if (worn === undefined) return false;
+  return worn.special !== undefined || SPECIAL_DRESSPHERE_IDS.has(worn.current);
+}
+
+/** Group 1 slot of Eject (`Chr+0x404 + 10`, `Chr+0x40e`). */
+const EJECT_SLOT = GROUP1_STATUS.indexOf('eject');
+
+/**
+ * The resist byte (0 to 255; 255 = immune) the engine reads for one status of one unit: its `immunities` entry, except that a Special-dressphere wearer's Eject byte is 255 ({@link cannotBeEjected}). The odds read by
+ * the previews (`preview.ts`, `intent.ts`) and the engine's own rider rolls (`resolve-status.ts`) go through here, so what the panel shows is what the roll does.
+ */
+export function resistByte(unit: FFX2Combatant, status: StatusId): number {
+  if (status === 'eject' && cannotBeEjected(unit)) return 0xff;
+  return (unit.immunities[status] ?? 0) & 0xff;
+}
+
+/** The 24 resist bytes of each group (`Chr+0x404`, `Chr+0x41c`): the combatant's `immunities` by slot (a stage's Up and Down share a slot), with a Special wearer's Eject byte at 255 ({@link cannotBeEjected}). */
 export function resistTables(unit: FFX2Combatant): { resist1: number[]; resist2: number[] } {
   const resist1 = GROUP1_STATUS.map((status) => (status === null ? 0 : (unit.immunities[status] ?? 0) & 0xff));
+  if (EJECT_SLOT >= 0 && cannotBeEjected(unit)) resist1[EJECT_SLOT] = 0xff;
   const resist2 = GROUP2_STATUS.map((statuses) => statuses.reduce((best, status) => Math.max(best, (unit.immunities[status] ?? 0) & 0xff), 0));
   return { resist1, resist2 };
 }

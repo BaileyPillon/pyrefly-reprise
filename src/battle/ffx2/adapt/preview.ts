@@ -15,7 +15,7 @@ import { critChance } from '../kernel/crit.ts';
 import { resolveCommand } from './command.ts';
 import { hitAttacker, hitTarget, levelOf, statByte } from './inputs.ts';
 import { slotOf } from './slots.ts';
-import { has, luckStage } from './words.ts';
+import { has, luckStage, resistByte } from './words.ts';
 
 const clamp01 = (x: number): number => Math.max(0, Math.min(1, x));
 
@@ -97,7 +97,7 @@ export function statusProbability(chance: number, resist: number, attackerLevel:
 
 /** {@link statusProbability} between two units, the attacker's level and the target's resist byte for `status`. */
 export function statusProbabilityBetween(user: FFX2Combatant, target: FFX2Combatant, status: string, chance: number): number {
-  const resist = (target.immunities as Record<string, number | undefined>)[status] ?? 0;
+  const resist = resistByte(target, status as StatusId);
   return statusProbability(chance, resist, levelOf(user as Ffx2Unit), levelOf(target as Ffx2Unit));
 }
 
