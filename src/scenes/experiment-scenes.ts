@@ -54,6 +54,8 @@ import { PENANCE_SCENE_ENTRY, buildPenanceScene } from './penance.ts'; // Penanc
 import { PENANCE_SCENE } from '../data/ffx/penance-ids.ts';
 import { buildSanctuaryKeeperScene, SANCTUARY_KEEPER_SLOTS } from './sanctuary-keeper.ts'; // the Sanctuary Keeper's summit (FFX only, hidden chapter): Chapter I's Mt. Gagazet with the Keeper staged
 import { SANCTUARY_KEEPER_SCENE } from '../data/ffx/sanctuary-keeper-ids.ts';
+import { buildForgottenCapitalScene, FORGOTTEN_CAPITAL_SLOTS } from './forgotten-capital.ts'; // the altar of the Forgotten Capital (FF7 only, hidden chapter): the Guard Scorpion's field with Jenova LIFE's staging
+import { FORGOTTEN_CAPITAL_SCENE } from '../data/ff7/jenova-life-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -91,6 +93,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   PENANCE_SCENE_ENTRY,
   // The Sanctuary Keeper (FFX only, hidden chapter): Chapter I's Mt. Gagazet plate and scene, with the Keeper alone on the boss spot.
   { key: SANCTUARY_KEEPER_SCENE, title: 'Mt. Gagazet — the summit (the Sanctuary Keeper)', build: buildDemoScene, slots: SANCTUARY_KEEPER_SLOTS, placeholder: false },
+  // Jenova LIFE (FF7 only, hidden chapter): the altar of the Forgotten Capital, on the Guard Scorpion's field as a stand-in, with this fight's staging.
+  { key: FORGOTTEN_CAPITAL_SCENE, title: 'The Forgotten Capital — the altar (Jenova LIFE)', build: buildDemoScene, slots: FORGOTTEN_CAPITAL_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -112,4 +116,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [EXP_ANIME_SCENE]: buildExpAnimeStageScene, // the hidden anime chapter (FFX-2 only)
   [PENANCE_SCENE]: buildPenanceScene, // the hidden Penance chapter (FFX only)
   [SANCTUARY_KEEPER_SCENE]: buildSanctuaryKeeperScene, // the hidden Sanctuary Keeper chapter (FFX only)
+  [FORGOTTEN_CAPITAL_SCENE]: buildForgottenCapitalScene, // the hidden Jenova LIFE chapter (FF7 only)
 };

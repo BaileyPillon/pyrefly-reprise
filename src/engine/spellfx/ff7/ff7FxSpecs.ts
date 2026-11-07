@@ -61,6 +61,21 @@ const BY_ABILITY: Readonly<Record<string, Ff7FxId>> = {
   'scorpion-tail': 'ff7-tail',
   'tail-laser': 'ff7-laser',
   [FF7_BOSS_DOWN]: 'ff7-down',
+  // Chapter 44 (Jenova LIFE): STAND-INS on the existing kit until its own effects are drawn (the list is in docs/handoff/ch-jenova-life.md section 6).
+  // Fire, Quake, Blue Light, Blue Flame, Aqualung and her Reflect fall through to the house bloom.
+  bolt2: 'ff7-bolt',
+  bolt3: 'ff7-bolt',
+  ice2: 'ff7-ice',
+  ice3: 'ff7-ice',
+  cure2: 'ff7-cure',
+  regen: 'ff7-cure',
+  barrier: 'ff7-cure',
+  mbarrier: 'ff7-cure',
+  'blade-beam': 'ff7-braver',
+  climhazzard: 'ff7-braver',
+  'dolphin-blow': 'ff7-slash',
+  'satellite-beam': 'ff7-bigshot',
+  angermax: 'ff7-shot',
 };
 
 /**

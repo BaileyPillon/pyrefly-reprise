@@ -1,0 +1,64 @@
+# ff7-jenova-paper.mjs output (paper arithmetic; no engine run)
+
+## A. Pools after Materia (engine rule: sum the % once, truncate toward zero)
+cloud: maxHp 2435, maxMp 360
+tifa: maxHp 1948, maxMp 308
+barret: maxHp 2368, maxMp 295
+
+## B. Jenova LIFE damage on each member (core 4.2; MAt% 100 hits: 100 + 50 - 19 - 1 = 130 >= 100 so it never misses unless armour MD% exists)
+M = 6*(40+50) = 540
+cloud   blueLight  MP  8  391-418   with MBarrier 195-209   (17.2% of max HP)
+cloud   blueFlame  MP 12  447-477   with MBarrier 223-238   (19.6% of max HP)
+cloud   aqualung   MP 34  969-1034   with MBarrier 484-517   (42.5% of max HP)
+tifa    blueLight  MP  8  395-422   with MBarrier 197-211   (21.7% of max HP)
+tifa    blueFlame  MP 12  452-483   with MBarrier 225-241   (24.8% of max HP)
+tifa    aqualung   MP 34  980-1046   with MBarrier 490-523   (53.7% of max HP)
+barret  blueLight  MP  8  389-415   with MBarrier 194-207   (17.5% of max HP)
+barret  blueFlame  MP 12  444-474   with MBarrier 222-237   (20.0% of max HP)
+barret  aqualung   MP 34  964-1028   with MBarrier 482-514   (43.4% of max HP)
+Aqualung on all three: 3108 at the top of the range, against 6751 party max HP
+Check of formulas.md 5.7 ("two-cast kill" on Cloud): one Aqualung 969-1034; two = 1938-2068; Cloud max HP 2435. Two casts do NOT kill a full-HP Cloud; three do (2907-3102).
+
+## C. Party actions on Jenova LIFE
+cloud   Attack: Base 615, 451-482, critical 902-964
+tifa    Attack: Base 664, 488-521, critical 976-1042
+barret  Attack: Base 538, 395-422, critical 790-844 (Barret back row: Heavy Vulcan is Long Range, so no halving)
+Cloud magic base 6*(78+38) = 696
+Bolt2 (power 20, 22 MP): 353-377
+Bolt3 (power 64, 52 MP): 1131-1207
+Quake2 (power 24, 28 MP): 846-904 (Earth weak, x2 after variation)
+Quake3 (power 70, 68 MP): 2474-2640 (Earth weak, x2 after variation)
+Limit (Cloud, Limit Level 2), Base 615:
+  Blade Beam 3 1/2x: 1584-1690
+  Climhazzard 4 3/8x: 1980-2112
+Limit (Tifa, Limit Level 3), Base 664; the chain Beat Rush, Somersault, Waterkick, Meteodrive, Dolphin Blow (every reel "Hit"):
+  Beat Rush 1 1/4x: 610-651
+  Somersault 1 3/8x: 671-716
+  Waterkick 1 1/2x: 733-782
+  Meteodrive 1 5/8x: 794-847
+  Dolphin Blow 1 3/4x: 855-912
+  chain total 3663-3908
+Limit (Barret, Limit Level 3), Base 538:
+  Satellite Beam 2 3/16x, auto-critical: 1732-1848 (all enemies, one here)
+  Angermax 18 x 1/2x: 3546-3798 if all 18 hit (each 197-211)
+A reflected Bolt2 from Cloud lands on Cloud: 721-769 (Cloud max HP 2435); a reflected Quake2 (Earth, Cloud not weak): 865-923
+
+## D. The clock (core 2.3), Battle Speed 128: V-Timer increase 182 per tick
+NormalSpeed = RU(avg base Dex 37.33) + 50 = 88
+cloud: +177/tick -> full in 371 ticks
+tifa: +192/tick -> full in 342 ticks
+barret: +171/tick -> full in 384 ticks
+Jenova: +289/tick -> full in 227 ticks (no +50 for enemies)
+Jenova acts 1.61x as often as the average member; the three members together act 1.86 times per Jenova turn
+
+## E. Paper Monte Carlo (NOT the bench: no engine, no Active/Recommended/Wait menus, zero player decision time, the heal rules below)
+Policies: physical = Attack/Limit, Cure2 (Cloud, Barret, 24 MP) or Hi-Potion below 45% HP, Phoenix Down on a KO (10 PD, 15 Hi-Potion, both [estimate] stock);
+          quake = the same but Cloud opens with Quake2 until Reflect is up (then physical); mixed = a distracted player: per turn 50% Attack, 30% a 22 MP element spell whatever her Reflect says, 20% Defend, heals only below 25% HP;
+          naive = every member casts a 22 MP element spell every turn into the Reflect, no heals. Limits are used when full in every policy.
+physical  wins 1990/2000 (99.5%), timeouts 0; per win: 100 s at 30 ticks/s, 13.4 Jenova turns, 1.30 Aqualungs, 25.7 party actions, 1.33 Limits, 0.0 reflected casts, 3.00 members standing
+quake     wins 1994/2000 (99.7%), timeouts 0; per win: 96 s at 30 ticks/s, 12.9 Jenova turns, 1.26 Aqualungs, 24.8 party actions, 1.26 Limits, 0.0 reflected casts, 3.00 members standing
+mixed     wins 1450/2000 (72.5%), timeouts 0; per win: 170 s at 30 ticks/s, 22.6 Jenova turns, 1.38 Aqualungs, 39.7 party actions, 2.01 Limits, 6.1 reflected casts, 2.95 members standing
+naive     wins 0/2000 (0.0%), timeouts 0
+
+## F. Door word check for `bluelight` (the rule of tests/unit/chapter-doors.test.ts: no begin/end/contain, no suffix-prefix overlap), against the 15 table words, `pilgrim`, `gear` and the other proposed words of PLAN 8
+no failures against 47 words

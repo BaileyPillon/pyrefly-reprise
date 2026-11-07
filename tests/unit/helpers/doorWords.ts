@@ -29,6 +29,7 @@ export const DOORS_IN_ORDER: ReadonlyArray<readonly [word: string, game: 'ff7' |
   ['duelist', 'ffx2'], // the hidden Farplane Cup's (chapter 38, 2026-11-06)
   ['beast', 'ffx'], // the hidden Sanctuary Keeper's (chapter 39, 2026-11-06)
   ['wraith', 'ffx2'], // the hidden Yuna's Ballad's (chapter 40, 2026-11-06)
+  ['bluelight', 'ff7'], // the hidden Jenova LIFE's (chapter 44, 2026-11-07)
 ];
 
 /** The words alone, in the table's order. */
@@ -38,8 +39,11 @@ export const DOOR_WORDS_IN_ORDER: readonly string[] = DOORS_IN_ORDER.map(([word]
  * The allowance of a door suite's pair test ("the first word to finish wins when two are typed in a row"): it mounts three real boards for every other door, so it grows with the number of doors. 15 s a door,
  * 180 s at the least (315 s at twenty-one doors). Measured at twenty-one doors: 15 to 28 s a suite when three door suites run together, but 180 to 250 s a suite when all twelve run together on three workers (jsdom mounts
  * fight for the CPU), and 193 s for the pair test of one suite in the one full-suite run (3,125 s on three workers, the long benches running beside it): the old 180 s allowance of fifteen doors was not enough. A hang still fails, later.
+ *
+ * 25 s a door since 2026-11-07 (hidden chapter 44, the twenty-fourth door; 600 s). On a machine whose CPU other work held at 91 to 100 percent, the Wind Waker suite's pair test took 347.6 s ALONE at twenty-four doors (14.5 s a
+ * door) and, in the one full run (three workers), the Valefor and Wind Waker suites' pair tests both ran out at 360 s: the cost per door under load had caught up with 15 s a door. Quiet, the same test is a fraction of that.
  */
-export const DOOR_PAIR_TEST_TIMEOUT_MS = Math.max(180_000, DOORS_IN_ORDER.length * 15_000);
+export const DOOR_PAIR_TEST_TIMEOUT_MS = Math.max(180_000, DOORS_IN_ORDER.length * 25_000);
 
 /**
  * The allowance of a door suite's LOOP test (one that mounts a real board for every door: "a wrong letter resets", "each word opens its own chapter and nothing else", the phone-tier suites' "every other door opens"): it grows with the

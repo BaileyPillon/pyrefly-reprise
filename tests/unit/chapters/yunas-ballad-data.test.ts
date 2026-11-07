@@ -292,6 +292,6 @@ describe('the chapter record and its place in the registry', () => {
   it('its door is the word wraith, last in the table, and leads to it', () => {
     expect(WRAITH_DOOR_WORD).toBe('wraith');
     expect(WRAITH_DOOR_CHAPTER).toBe(ids.YUNAS_BALLAD_ID);
-    expect(CHAPTER_DOORS.at(-1)).toEqual({ word: 'wraith', chapter: 'ffx2-yunas-ballad' });
+    expect(CHAPTER_DOORS.find((d) => d.chapter === 'ffx2-yunas-ballad')).toEqual({ word: 'wraith', chapter: 'ffx2-yunas-ballad' }); // a later chapter's row follows it (Jenova LIFE's, 2026-11-07)
   });
 });

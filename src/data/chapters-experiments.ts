@@ -32,6 +32,8 @@
  * - **Penance** (`'penance'`, number 35, 2026-11-06; FFX only): the colossus and its two hands on the Fahrenheit's deck; word `judgment` (33 and 34 are the sibling chapter lanes').
  * - **Yuna's Ballad** (`'ffx2-yunas-ballad'`, number 40, 2026-11-06; FFX-2 only): Yuna alone against the possessed Rikku and then the possessed Paine, the Den of Woe's first two fights, as two linked duels with HP and MP carried; word `wraith`.
  *
+ * - **Jenova LIFE** (`'ff7-jenova-life'`, number 44, 2026-11-07; FF7 only): the boss at the altar of the Forgotten Capital, the end of Disc 1; Cloud, Tifa and Barret; word `bluelight` (43 is the sibling lane's).
+ *
  * A further hidden chapter registers here, by adding its record to the list below, not by editing `./encounters.ts`.
  *
  * Split out of `./encounters.ts` for the house 400-line rule (AGENTS.md hard rule 7); `encounters.ts` still exports `EXPERIMENT_CHAPTERS`
@@ -61,8 +63,9 @@ import { DARK_AEONS } from './chapter-dark-aeons.ts';
 import { PENANCE } from './chapter-penance.ts';
 import { FLOODED_WAYS } from './chapter-flooded-ways.ts';
 import { SANCTUARY_KEEPER } from './chapter-sanctuary-keeper.ts';
+import { FF7_JENOVA_LIFE } from './chapter-ff7-jenova-life.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from, and `ffx2Bahamut` the listed Chapter IV, which the 3D Bahamut is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter, ffx2Bahamut: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD, FF7_JENOVA_LIFE] as const;
 }

@@ -39,6 +39,7 @@ import { FFX2_ANGRA_MAINYU_DOC } from './ffx2-angra-mainyu.ts';
 import { SANCTUARY_KEEPER_DOC } from './sanctuary-keeper.ts';
 import { PENANCE_DOC } from './penance.ts';
 import { FFX2_YUNAS_BALLAD_DOC } from './ffx2-yunas-ballad.ts';
+import { FF7_JENOVA_LIFE_DOC } from './ff7-jenova-life.ts';
 
 export const GUIDE_DOCS: readonly GuideDoc[] = [
   SEYMOUR_FLUX_DOC,
@@ -72,6 +73,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   SANCTUARY_KEEPER_DOC, // the hidden Sanctuary Keeper (FFX only)
   PENANCE_DOC, // the hidden Penance (FFX only)
   FFX2_YUNAS_BALLAD_DOC, // the hidden Yuna Ballad (FFX-2 only)
+  FF7_JENOVA_LIFE_DOC, // the hidden Jenova LIFE (FF7 only)
 ];
 
 /** The document for one chapter id, if it has one. */

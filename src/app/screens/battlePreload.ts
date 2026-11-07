@@ -138,7 +138,7 @@ function rank(c: { side: string; flags: { isPart?: boolean } }): number {
 }
 
 /** Scenes whose painting is not `backdrops/<sceneKey>.png`: the scene module names its own file. */
-const SCENE_PLATES: Readonly<Record<string, string>> = { 'sector1-reactor': SECTOR1_PLATE.url }; // FF7 (r29 PR-0222)
+const SCENE_PLATES: Readonly<Record<string, string>> = { 'sector1-reactor': SECTOR1_PLATE.url, 'forgotten-capital': SECTOR1_PLATE.url }; // FF7 (r29 PR-0222); the altar stands on the reactor's plate until its own is painted
 
 /** The battle backdrop's URL as the scene loads it. */
 export function plateUrlFor(sceneKey: string): string {

@@ -107,7 +107,7 @@ export interface FakeEnemy {
  * A board with only what the guide reads: the game, and enemies keyed by id (side, alive, removed,
  * hp, form). `docForState` and `startBlockIndex` read nothing else.
  */
-export function fakeBoard(game: 'ffx' | 'ffx2', enemies: readonly FakeEnemy[]): BattleState {
+export function fakeBoard(game: 'ffx' | 'ffx2' | 'ff7', enemies: readonly FakeEnemy[]): BattleState {
   const combatants: Record<string, unknown> = {};
   for (const e of enemies) {
     combatants[e.id] = {

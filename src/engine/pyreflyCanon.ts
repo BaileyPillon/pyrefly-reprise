@@ -179,6 +179,13 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
     cite: `research/ffx-vs-ffx2-presentation.md §3.1: pyreflies are Spira's (the life of its fiends and unsent); FF7 is not set in Spira, so nothing attests them in the No. 1 Reactor [derived]`,
     treatment: 'FF7: no lens band and no pyrefly dissolve; the beaten boss keeps the house plain dissolve it had before A-5',
   },
+  // FF7 only (the hidden Jenova LIFE chapter, the altar of the Forgotten Capital): the same reason as the reactor's row.
+  'forgotten-capital': {
+    game: 'ff7',
+    verdict: 'absent',
+    cite: `research/ffx-vs-ffx2-presentation.md §3.1: pyreflies are Spira's; FF7 is not set in Spira, so nothing attests them at the altar of the Forgotten Capital [derived]`,
+    treatment: 'FF7: no lens band and no pyrefly dissolve; the beaten boss keeps the house plain dissolve it had before A-5',
+  },
 });
 
 /** The row for a scene key, or undefined for a key the table does not know. */

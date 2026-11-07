@@ -85,8 +85,8 @@ export type DocBlock =
 export interface GuideDoc {
   /** Chapter id from `src/data/encounters.ts`; the same id the chapter's `ChapterGuide` has. */
   readonly id: string;
-  /** FFX chapters follow the FFX guide, FFX-2 chapters the FFX-2 guide (AGENTS.md rule 14). */
-  readonly game: 'ffx' | 'ffx2';
+  /** FFX chapters follow the FFX guide, FFX-2 chapters the FFX-2 guide (AGENTS.md rule 14); the hidden FF7 chapter 44's page is `'ff7'` (additive: no FF7 panel reads it yet). */
+  readonly game: 'ffx' | 'ffx2' | 'ff7';
   /**
    * Every enemy id the chapter can field, so the panel can tell which chapter is on the board. A
    * chained chapter lists **all** of its links, exactly as `ChapterGuide.bossIds` does.
