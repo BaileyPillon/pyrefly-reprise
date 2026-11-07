@@ -120,6 +120,8 @@ describe('every shipped monster\'s reward numbers carry their row citation', () 
   const OWN_ROW: Readonly<Record<string, number>> = { 'ffx2-cloister-trema-arena/trema': 328 };
   /** The reader spells a name as the game's file does ("Fem,Goon"); ours has a hyphen. */
   const plain = (name: string): string => name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  /** The monster's own name: the Youth League's duplicates carry a formation letter ("League Veteran C", PR-0013), which is not part of the row's name; no other chapter's name is touched. */
+  const species = (e: { id: string; name: string }): string => (e.id.startsWith('x2-yl-') ? e.name.replace(/ [A-D]$/, '') : e.name);
 
   it('each monster wears a reward row that names its table and row, as the reader read them, and the row is that monster\'s', () => {
     expect(ENEMIES.length).toBe(Object.keys(ROWS).length);
@@ -132,7 +134,7 @@ describe('every shipped monster\'s reward numbers carry their row citation', () 
       const fixture = ROWS[key];
       expect(fixture, `${key}: the reader's fixture has no row`).toBeDefined();
       expect([kill.table, kill.row], `${key}: the row the data cites is the row the reader read`).toEqual([fixture?.table, fixture?.row]);
-      expect(plain(fixture?.name ?? ''), `${key}: the cited row is another monster's (${fixture?.name})`).toBe(plain(enemy.name));
+      expect(plain(fixture?.name ?? ''), `${key}: the cited row is another monster's (${fixture?.name})`).toBe(plain(species(enemy)));
       const own = OWN_ROW[key];
       expect([kill.table, kill.row], `${key}: the reward row and the record's row`).toEqual(own !== undefined ? [1, own] : [enemy.ffx2Record?.table, enemy.ffx2Record?.row]);
     }
@@ -144,7 +146,7 @@ describe('every shipped monster\'s reward numbers carry their row citation', () 
       const cited = all.map((e) => `${e.ffx2Record?.kill?.table}/${e.ffx2Record?.kill?.row}`);
       // A repeated row is legitimate only for the same monster: every wearer of it carries one name.
       for (const row of new Set(cited)) {
-        const names = new Set(all.filter((_, i) => cited[i] === row).map((e) => e.name));
+        const names = new Set(all.filter((_, i) => cited[i] === row).map((e) => species(e)));
         expect(names.size, `${group.id}: ${cited.join(', ')}: row ${row} is worn by ${[...names].join(' and ')}`).toBe(1);
       }
     }
