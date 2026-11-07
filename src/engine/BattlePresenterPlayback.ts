@@ -99,6 +99,7 @@ export class BattlePresenterPlayback extends BattlePresenterBase {
       if (event.type === 'victory' || event.type === 'defeat') this.ctx.stage.camera.hold?.(false); // PR-0150: the end shot always plays
       this.ctx.burst = { events, at: i }; // the action's own later events: a fiend's strike finds its target in them (`motion/StrikeReach.ts`)
       if (event.type === 'action-start') this.ctx.bigMove = this.bigMoves.decide(event); // 2026-11-07: a big move earns the portrait; `actionStart` takes it (null for every other action)
+      else if (event.type === 'spherechange') this.ctx.bigMove = this.bigMoves.decideDressUp(event); // FFX-2: the change into a special dressphere (the engine emits no action-start for a dress change)
       await playEvent(this.ctx, event);
       if (held) await revealBlow(this.ctx, event); // the beat shows it itself; this only makes sure a held blow is never lost
       this.trace.push({ seq: event.seq, type: event.type, ms: Date.now() - started });

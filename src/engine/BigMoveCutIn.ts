@@ -14,7 +14,7 @@
 import type { BattleEvent, BattleState } from '../battle/common/types.ts';
 import type { MomentsPort, PlaybackSpeed } from './BattlePresenterPorts.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
-import { bigMoveOf, type BigMove } from './BigMoves.ts';
+import { bigMoveOf, dressUpMoveOf, type BigMove } from './BigMoves.ts';
 import { portraitMode } from './CutInMode.ts';
 import { CUT_IN_HOLD_MS } from './TurnCutIn.ts';
 
@@ -50,14 +50,8 @@ export class BigMoveBeat {
    * The cut-in for this action, or null when it earns none. Records the member as slammed, so the next one of theirs is the flash: call it once per action, and only when the cut-in will be played.
    */
   decide(event: Extract<BattleEvent, { type: 'action-start' }>): BigMoveCut | null {
-    if (portraitMode() !== 'big' || !this.deps.moments?.turnCutIn) return null;
-    const scale = SPEED_SCALE[this.deps.speed()];
-    if (scale <= 0) return null; // 'skip' is e2e and the critic's bots: nobody is watching
-    const state = this.deps.state();
+    const state = this.open(event.actorId);
     if (!state) return null;
-    const side = this.deps.sideOf(event.actorId);
-    if (side === 'enemy') return null; // a fiend's big move has its own banner
-    if (state.game === 'ffx2' && this.deps.menuOpen?.() === true) return null; // D-357: nothing plays over an open FFX-2 command menu
     const who = state.combatants[event.actorId];
     const move = bigMoveOf({
       game: state.game,
@@ -70,6 +64,25 @@ export class BigMoveBeat {
     });
     if (!move) return null;
     return this.request(move, state);
+  }
+
+  /** FFX-2: the change into a special dressphere, which the engine reports as a `spherechange` event carrying `special` (no `action-start` is emitted for a dress change). */
+  decideDressUp(event: Extract<BattleEvent, { type: 'spherechange' }>): BigMoveCut | null {
+    const state = this.open(event.who);
+    if (!state) return null;
+    const move = dressUpMoveOf(state.game, { id: event.who, name: state.combatants[event.who]?.name ?? event.who }, event.to, event.special);
+    return move ? this.request(move, state) : null;
+  }
+
+  /** The live state when a portrait may play for this actor now (the mode, the port, the speed, the actor's side, an open FFX-2 menu), else null. */
+  private open(actorId: string): BattleState | null {
+    if (portraitMode() !== 'big' || !this.deps.moments?.turnCutIn) return null;
+    if (SPEED_SCALE[this.deps.speed()] <= 0) return null; // 'skip' is e2e and the critic's bots: nobody is watching
+    const state = this.deps.state();
+    if (!state) return null;
+    if (this.deps.sideOf(actorId) === 'enemy') return null; // a fiend's big move has its own banner
+    if (state.game === 'ffx2' && this.deps.menuOpen?.() === true) return null; // D-357: nothing plays over an open FFX-2 command menu
+    return state;
   }
 
   private request(move: BigMove, state: BattleState): BigMoveCut {

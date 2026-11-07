@@ -389,6 +389,9 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return;
 
     case 'spherechange': {
+      const big = ctx.bigMove ?? null; // FFX-2: the special dress change's portrait (`BigMoveCutIn.decideDressUp`); the HUD's flourish plays as it always did
+      ctx.bigMove = null;
+      if (big) ctx.moments.bigMoveCutIn(big);
       dressFx(ctx, event.who); // the new effects: the painted burst under the HUD's flourish (Chapter IV)
       stageChange(ctx, event); // pro staging: the HUD's name plate is a readable pearl plate for as long as it shows
       const a = ctx.stage.actor(event.who);

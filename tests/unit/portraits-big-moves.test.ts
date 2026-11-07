@@ -11,7 +11,7 @@ import type { BattleEvent, BattleState, Command } from '../../src/battle/common/
 import { BattlePresenter } from '../../src/engine/BattlePresenter.ts';
 import type { MomentsPort } from '../../src/engine/BattlePresenterPorts.ts';
 import { BigMoveBeat, CUT_IN_QUICK_HOLD_MS, type BigMoveDeps } from '../../src/engine/BigMoveCutIn.ts';
-import { bigMoveOf, type ActionFacts } from '../../src/engine/BigMoves.ts';
+import { bigMoveOf, dressUpMoveOf, type ActionFacts } from '../../src/engine/BigMoves.ts';
 import { portraitMode, portraitModeFromSearch, setPortraitMode } from '../../src/engine/CutInMode.ts';
 import { setPace, setPaceGame } from '../../src/engine/pace.ts';
 import { setDemoChapter } from '../../src/engine/motion/DemoGate.ts';
@@ -180,9 +180,15 @@ describe("FFX-2's big moves: the special dresspheres' change and their three fin
     expect(m).toEqual({ kind: 'special', portraitId: owner, who: ownerName, title: name, tag: `${ownerName.toUpperCase()} · SPECIAL` });
   });
 
-  it('the change into a special dressphere (Special Dress Up) is big, named for the dressphere, over the girl who changed', () => {
+  it('the change into a special dressphere (Special Dress Up) is big, named for the dressphere, over the girl who changed: it rides the spherechange event, which the engine emits with no action-start', () => {
+    expect(dressUpMoveOf('ffx2', { id: 'paine', name: 'Paine' }, 'full-throttle', 'full-throttle')).toEqual({ kind: 'special', portraitId: 'paine', who: 'Paine', title: 'Full Throttle', tag: 'PAINE · SPECIAL DRESS UP' });
+    expect(dressUpMoveOf('ffx2', { id: 'yuna', name: 'Yuna' }, 'floral-fallal', 'floral-fallal')?.title).toBe('Floral Fallal');
+    expect(dressUpMoveOf('ffx2', { id: 'yuna', name: 'Yuna' }, 'gunner', undefined)).toBeNull(); // an ordinary change carries no `special`
+    expect(dressUpMoveOf('ffx', { id: 'yuna', name: 'Yuna' }, 'floral-fallal', 'floral-fallal')).toBeNull(); // FFX has no dress change
+    expect(dressUpMoveOf(undefined, { id: 'yuna', name: 'Yuna' }, 'floral-fallal', 'floral-fallal')).toBeNull();
+    // and an action-start that names a spherechange command (which the engine never emits) is nothing either way
     const c = { kind: 'spherechange', extra: { toDressphere: 'full-throttle', toNode: 3, gatesCrossed: [], specialDressUp: true } } as never;
-    expect(bigMoveOf(facts('ffx2', 'paine', c, undefined, undefined, 'Paine'))).toEqual({ kind: 'special', portraitId: 'paine', who: 'Paine', title: 'Full Throttle', tag: 'PAINE · SPECIAL DRESS UP' });
+    expect(bigMoveOf(facts('ffx2', 'paine', c, undefined, undefined, 'Paine'))).toBeNull();
   });
 
   it('an ordinary dress change, Trigger Happy, Lady Luck, a special part\'s ordinary moves and an enemy\'s Mega Flare are not (the open question, not guesses)', () => {
@@ -269,6 +275,21 @@ describe('BigMoveBeat: the first slam in full, a repeat a flash, per member', ()
     expect(b2.decide(sword)).toBeNull();
     open = false;
     expect(b2.decide(sword)).toMatchObject({ actorId: 'paine', game: 'ffx2', label: 'PAINE · SPECIAL', move: { title: 'Sword Dance' } });
+  });
+
+  it('FFX-2: Special Dress Up is the full slam for the girl, a flash on a second one, nothing for an ordinary change, over an open menu, or in FFX', () => {
+    const change = (who: string, to: string, special?: string): Extract<BattleEvent, { type: 'spherechange' }> =>
+      ({ type: 'spherechange', seq: 1, who, from: 'white-mage', to, gatesCrossed: [], ...(special ? { special } : {}) }) as Extract<BattleEvent, { type: 'spherechange' }>;
+    let open = false;
+    const b = beat([], { state: () => ffx2State(), menuOpen: () => open });
+    expect(b.decideDressUp(change('yuna', 'floral-fallal', 'floral-fallal'))).toMatchObject({ actorId: 'yuna', game: 'ffx2', label: 'YUNA · SPECIAL DRESS UP', quick: false, holdMs: CUT_IN_HOLD_MS, move: { title: 'Floral Fallal' } });
+    expect(b.decideDressUp(change('yuna', 'floral-fallal', 'floral-fallal'))).toMatchObject({ quick: true, holdMs: CUT_IN_QUICK_HOLD_MS });
+    expect(b.decideDressUp(change('rikku', 'gunner'))).toBeNull();
+    open = true;
+    expect(b.decideDressUp(change('paine', 'full-throttle', 'full-throttle'))).toBeNull(); // D-357
+    expect(beat([], { state: () => ffxState() }).decideDressUp(change('yuna', 'floral-fallal', 'floral-fallal'))).toBeNull();
+    setPortraitMode('turns');
+    expect(beat([], { state: () => ffx2State() }).decideDressUp(change('yuna', 'floral-fallal', 'floral-fallal'))).toBeNull();
   });
 
   it('an FFX menu is never a reason to hold it back (that rule is FFX-2\'s)', () => {
@@ -422,6 +443,16 @@ describe('through the real presenter', () => {
     expect(r.cutIns).toHaveLength(1);
     expect(r.cutIns[0]).toMatchObject({ actorId: 'paine', game: 'ffx2', label: 'PAINE · SPECIAL', move: { title: 'Sword Dance', tag: 'PAINE · SPECIAL' } });
     expect(r.slabs).toEqual([]);
+  });
+
+  it("FFX-2: the engine's spherechange event for a special dress shows the girl's portrait and the dress's name; an ordinary change shows none", async () => {
+    setPaceGame('ffx2');
+    const r = rig('ffx2');
+    const change = (to: string, special?: string): Seq<BattleEvent> =>
+      ({ type: 'spherechange', who: 'yuna', from: 'white-mage', to, gatesCrossed: [], ...(special ? { special } : {}) }) as never;
+    await r.play([change('gunner'), change('floral-fallal', 'floral-fallal')]);
+    expect(r.cutIns).toHaveLength(1);
+    expect(r.cutIns[0]).toMatchObject({ actorId: 'yuna', game: 'ffx2', label: 'YUNA · SPECIAL DRESS UP', quick: false, move: { title: 'Floral Fallal', tag: 'YUNA · SPECIAL DRESS UP' } });
   });
 
   it("FFX-2: a girl's ordinary Attack and a Mega Flare from Bahamut bring no portrait", async () => {
