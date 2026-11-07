@@ -7,7 +7,7 @@
  *  1. **Everything the code names is in the set.** Every file a chapter's data, scene and pause metadata reference (sprite poses, the idle masters, the turn-list faces by combatant id, the plates and their 2x masters, the pause
  *     plates, the snapshots that are new art) is pinned in `docs/target/approved-hashes.json`'s set `driver:2026-11-06-wave2-chapters-art`, and every pinned 1x pose has a registration row stamped with the same painting (`sha`).
  *     Reads no art file.
- *  2. **Installed, the files are the pinned ones.** When a tree has the art (`public/art`, or the folder `BOSS_ART_ROOT` names: an art mirror, or the stage `.../art-w2/stage/art`), every pin's file hashes to its sha256, every
+ *  2. **Installed, the files are the pinned ones.** When a tree has the art (`public/art`, or the folder `BOSS_ART_ROOT` names: an art mirror, or the wave-2 stage folder kept outside the repo), every pin's file hashes to its sha256, every
  *     PNG has a house sidecar, the byte copies are byte copies and the possessed sets face the party. Skipped where the art is not installed (`public/art` is gitignored).
  *
  * Game case: the paintings and their rows are **FFX only** for the Flooded Ways (36) and the Sanctuary Keeper (39), **FFX-2 only** for the Bevelle Guardians (37), Yuna's Ballad (40) and the Farplane Cup (38). The shared
@@ -431,6 +431,23 @@ describe('the flooded stage swaps plates by link (FFX only; the Via Purifico sta
     // the staging of the chapter rides on the same build (the getter that follows the plate is kept)
     expect(build.enemySpots).toBeDefined();
     expect(build.backdrop).toBeDefined();
+    build.dispose();
+  });
+
+  it('reports the plate showing (`plateKey`: the opening plate, then each swap\'s) and builds nothing for a swap to the plate already on the plane (r76c MINOR 3)', async () => {
+    const { flooded } = await scenes();
+    const build = await flooded.buildFloodedWaysScene({ watchAssets: false });
+    expect(typeof build.plateKey).toBe('function');
+    expect(build.plateKey!()).toBe(FLOODED_PLATES.area1);
+    await build.swapBackdrop!(FLOODED_PLATES.area1);
+    expect(created, 'the first area opens on its own plate: nothing is built for it').toHaveLength(1);
+    for (const plate of [FLOODED_PLATES.area2, FLOODED_PLATES.area3, FLOODED_PLATES.baaj]) {
+      await build.swapBackdrop!(plate);
+      expect(build.plateKey!()).toBe(plate);
+    }
+    expect(created).toHaveLength(4);
+    await build.swapBackdrop!(FLOODED_PLATES.baaj);
+    expect(created, 'a second ask for the plate showing builds nothing either').toHaveLength(4);
     build.dispose();
   });
 

@@ -25,6 +25,7 @@ import { findEnemyGroup, setupForChapter } from './BattleScreenSetup.ts';
 import { chainLengthOf, runEncounterChain } from './BattleEncounterChain.ts';
 import { resumeSetup } from './BattleChainCheckpoint.ts';
 import { playSaveSphereCard } from './SaveSphereCard.ts';
+import { swapLinkPlate } from './BattleScreenPlate.ts'; // a link fought on another plate: the white pulse and the swap (skipped when the scene already shows that plate)
 import { offeringChooser } from './BattleScreenOffering.ts'; // the hidden Last Summoning's offering seam (FFX only; never asked by any other chapter)
 import { voice } from '../../audio/voice/index.ts';
 import { createEngine, createHud } from './BattleScreenWiring.ts';
@@ -361,15 +362,9 @@ export abstract class BattleScreenEncounter extends BattleScreenCard {
         this.checkpoint = checkpoint ?? this.checkpoint;
         this.group = group;
         this.setup = setup;
-        // A link fought on another plate of the scene (the hidden Sinspawn Gui chapter's ruined camp): a white pulse covers the cut and the plate swaps under it (`EnemyGroupDef.plate`).
-        if (group.plate && this.scene?.swapBackdrop) {
-          this.stage?.screenFlash('#ffffff', 900);
-          // A link that is a fresh fight (the Mirror Aeons chapter's cavern: the party and the aeons are restored on entry) does not show the road's HUD under the cut: it is taken off the screen now and put
-          // back, rebuilt for the new fight, once the plate has swapped under the white pulse. No other chapter sets `restoresAeonsOnEntry`.
-          const hud = group.restoresAeonsOnEntry === true ? this.hud : null;
-          hud?.setVisible(false);
-          void this.scene.swapBackdrop(group.plate).finally(() => hud?.setVisible(true));
-        }
+        // A link fought on another plate of the scene (the hidden Sinspawn Gui chapter's ruined camp): a white pulse covers the cut and the plate swaps under it (`EnemyGroupDef.plate`); a link that names the plate a scene
+        // reports as already showing (`LoadedScene.plateKey`: the Flooded Ways' first area) is neither pulsed nor swapped (`BattleScreenPlate.ts`).
+        swapLinkPlate({ scene: this.scene, stage: this.stage, hud: this.hud, group });
         // A new formation has been staged — Yunalesca's second form, the next
         // Vegnagun part — so its lane owes its own settling window.
         this.formationSettleMs = SETTLE_WINDOW_MS;

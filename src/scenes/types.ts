@@ -41,6 +41,12 @@ export interface SceneBuild extends SceneStaging {
    */
   swapBackdrop?(key: string): Promise<void>;
 
+  /**
+   * Optional: the key of the plate now on the painting plane (the opening plate, then each swap's). A scene that reports it lets the battle screen skip the white pulse and the swap for a link that names the plate already
+   * showing (the hidden Flooded Ways' first area, FFX only). Omitted by every other scene, whose links flash and swap for every plate they name, as before.
+   */
+  plateKey?(): string;
+
   /** Key / fill / rim / ambient plus the flickerable practical. */
   readonly lights: LightRig;
 
