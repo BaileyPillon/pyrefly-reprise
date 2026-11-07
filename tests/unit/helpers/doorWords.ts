@@ -39,8 +39,11 @@ export const DOOR_WORDS_IN_ORDER: readonly string[] = DOORS_IN_ORDER.map(([word]
  * The allowance of a door suite's pair test ("the first word to finish wins when two are typed in a row"): it mounts three real boards for every other door, so it grows with the number of doors. 15 s a door,
  * 180 s at the least (315 s at twenty-one doors). Measured at twenty-one doors: 15 to 28 s a suite when three door suites run together, but 180 to 250 s a suite when all twelve run together on three workers (jsdom mounts
  * fight for the CPU), and 193 s for the pair test of one suite in the one full-suite run (3,125 s on three workers, the long benches running beside it): the old 180 s allowance of fifteen doors was not enough. A hang still fails, later.
+ *
+ * **20 s a door since the Ifrit chapter (2026-11-07, twenty-four doors, 480 s):** in the full run on three workers, with other lanes' browser jobs and rigs on the machine, the pair tests of `windwaker-door` and `angra-door` took 423 s and 400 s against the old 360 s (15 s a door); the same two files
+ * run alone on two workers took 238 s and 206 s and pass. The cost is linear in the doors (each pair test mounts three boards for every other door) and in the load, so the allowance is raised, not the test loosened. A hang still fails, later.
  */
-export const DOOR_PAIR_TEST_TIMEOUT_MS = Math.max(180_000, DOORS_IN_ORDER.length * 15_000);
+export const DOOR_PAIR_TEST_TIMEOUT_MS = Math.max(180_000, DOORS_IN_ORDER.length * 20_000);
 
 /**
  * The allowance of a door suite's LOOP test (one that mounts a real board for every door: "a wrong letter resets", "each word opens its own chapter and nothing else", the phone-tier suites' "every other door opens"): it grows with the
