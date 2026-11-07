@@ -628,6 +628,11 @@ async function main() {
   // (imported here, not at the top: the gate reads pixels with sharp, and the unit tests that import this module for its pure helpers should not load it)
   const { enforceBuiltPaintings, enforcePoseGate } = await import('./pose-gate-lib.mjs');
   const poseGate = await enforcePoseGate({ root: ROOT, baseRef: lastDeployedSha(ROOT), log, fail });
+  // Every painting the pin lists name is in public/art with its recorded hash (r76c review, MINOR 5): the pose gate reads only the paintings that are there, so a public/art that is an older mirror than the code
+  // passes it, and the build would ship 404 plates and placeholder sprites. Never skipped; not covered by --owner-override.
+  log('preflight: every pinned painting (docs/target/approved-hashes.json, judge-locked-hashes.json) is in public/art with its recorded hash');
+  const { enforceApprovedArt } = await import('./approved-art-verify.mjs');
+  enforceApprovedArt({ root: ROOT, log, fail });
 
   // Only paths that can change what `vite build` emits stop the release. The
   // art fleet writes docs/screenshots, docs/handoff and tools/gen/sheet-*.json

@@ -87,8 +87,9 @@ export interface LoadedScene {
   slots: SceneSlots;
   update(dt: number): void;
   setPixelScale(v: number): void;
-  /** Put another plate on the painting plane (`SceneBuild.swapBackdrop`); absent on a scene that cannot. */
+  /** Put another plate on the painting plane (`SceneBuild.swapBackdrop`); absent on a scene that cannot. `plateKey` is the plate now showing (`SceneBuild.plateKey`), absent on a scene that does not report it. */
   swapBackdrop?(key: string): Promise<void>;
+  plateKey?(): string;
   /** Named beat, for the debug API. False when the scene knows no such name. */
   trigger(name: string): boolean;
   /**
@@ -298,8 +299,7 @@ export function sceneReport(): Array<{ key: string; title: string; placeholder: 
  * than throwing, so an unfinished chapter still boots into something.
  */
 export async function loadScene(key: string, camera: PerspectiveCamera): Promise<LoadedScene> {
-  // A real `SceneFactory` always wins: it owns the world and no actors, which
-  // is exactly what the presenter wants.
+  // A real `SceneFactory` always wins: it owns the world and no actors, which is exactly what the presenter wants.
   const factory = SCENE_FACTORIES[key];
   if (factory) return fromSceneBuild(key, await factory(), camera);
 
@@ -346,8 +346,7 @@ function fromSceneBuild(key: string, build: SceneBuild, camera: PerspectiveCamer
     battleCamera,
     palette: build.palette,
     slots: {
-      // `partySlots` publishes seven: the active three, then the reserve
-      // parking spots a switched-in character walks from.
+      // `partySlots` publishes seven: the active three, then the reserve parking spots a switched-in character walks from.
       party: build.partySlots.slice(0, 3).map(toSpot),
       enemy: build.enemySlots.map(toSpot),
       ...resolveSceneHeights(build),
@@ -362,6 +361,7 @@ function fromSceneBuild(key: string, build: SceneBuild, camera: PerspectiveCamer
       for (const p of build.pixelScaled ?? []) p.setPixelScale(v);
     },
     ...(build.swapBackdrop ? { swapBackdrop: (k: string): Promise<void> => build.swapBackdrop!(k) } : {}),
+    ...(build.plateKey ? { plateKey: (): string => build.plateKey!() } : {}),
     trigger: () => false,
     hideOwnActors: () => {},
     showOwnActors: () => {},

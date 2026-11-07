@@ -233,6 +233,7 @@ async function buildViaPurifico(opts: SceneBuildOptions, openingPlate: string, w
   } satisfies BackdropOptions;
 
   let backdrop = await Backdrop.create(backdropOptions);
+  let shownPlate = openingPlate; // the plate on the plane now: the opening one, then each swap's (`plateKey`)
   backdrop.applyTo(group);
   // The plates a chain swaps to next are fetched now, so the swap under the white pulse is a texture already in the browser's cache.
   if (typeof Image !== 'undefined') {
@@ -277,6 +278,7 @@ async function buildViaPurifico(opts: SceneBuildOptions, openingPlate: string, w
         const wasIn = backdrop.group.parent;
         backdrop.dispose();
         backdrop = next;
+        shownPlate = openingPlate; // the rebuild draws the opening plate (dev only: the watcher runs while the opening plate is a placeholder)
         if (wasIn) backdrop.applyTo(wasIn);
       })();
     });
@@ -298,11 +300,17 @@ async function buildViaPurifico(opts: SceneBuildOptions, openingPlate: string, w
     palette: { ...VIA_PURIFICO_PALETTE },
     /** Another plate of the same layout on the painting plane (the flooded chapter's later areas); the caller covers the cut with a white pulse. */
     async swapBackdrop(key: string): Promise<void> {
+      if (key === shownPlate) return; // the plate already showing: nothing to put on the plane
       const next = await Backdrop.create({ ...backdropOptions, url: artUrl(`art/backdrops/${key}.png`) });
       const wasIn = backdrop.group.parent;
       backdrop.dispose();
       backdrop = next;
+      shownPlate = key;
       if (wasIn) backdrop.applyTo(wasIn);
+    },
+    /** The plate on the plane now, so the battle screen skips the pulse and the swap for a link that names it (the flooded chapter's first area opens on its own plate). */
+    plateKey(): string {
+      return shownPlate;
     },
     update(dt: number): void {
       backdrop.update(dt);
