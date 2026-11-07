@@ -8,7 +8,7 @@
  *
  * - **"He strikes first..."** (`TURN_ORDER_ENEMY_FIRST`): Chapter I (`seymour-flux`), as Bailey picked. An enemy acts before the first menu in 75 of 100 seeds there.
  * - **"He moves after you..."** (`TURN_ORDER_PARTY_FIRST`): the chapters where the party opens in every seed: no enemy acts before the first menu in 100 of 100 seeds (the engine, below).
- * - **No line**: every other chapter. Yunalesca (37 of 100) and Braska's Final Aeon (92 of 100) are mixed, so neither line is true; Anima, Yojimbo, Via Purifico, Sin Face and the Biran / Yenke
+ * - **No line**: every other chapter. The hidden Spherimorph chapter (2026-11-06) is left without one on purpose (the review of that day, m1): its party prep lets the player pick any three of the seven, and the line is true only for some fronts. Measured, 300 seeds a front: with Tidus in front (Tidus, Yuna, Lulu; Tidus, Auron, Lulu) nothing acts before the first menu in 300 of 300, but with Auron, Wakka and Kimahri in front Spherimorph acts first in 282 of 300 (the line would be false at that first menu). Yunalesca (37 of 100) and Braska's Final Aeon (92 of 100) are mixed, so neither line is true; Anima, Yojimbo, Via Purifico, Sin Face and the Biran / Yenke
  *   fight open with the enemy in every seed, where the first line would be true, and are left without a line on purpose (the brief for this release: Chapter I gets the new line, the others the
  *   old line where it is true, or none; one entry below flips each of them). The guide's third step is Auron's line (`firstRunGuide.ts`), so a chapter with no line does not run it.
  *

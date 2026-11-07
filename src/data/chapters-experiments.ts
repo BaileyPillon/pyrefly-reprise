@@ -15,6 +15,8 @@
  * - **Angra Mainyu** (`'ffx2-angra-mainyu'`, number 26, 2026-10-14; FFX-2 only): the Chapter 5 mission "Showdown in the Sands", the Bikanel Desert fiend and its arms Zarich and Tawrich; word `angra` (25 is the Biran and Yenke lane's).
  * - **Valefor at Besaid, Wind Waker** (`'exp-windwaker'`, number 32, 2026-10-20; FFX-2 only): hidden chapter 24's Valefor fight drawn as a Wind Waker HD style 3D scene; word `waker` (31 is the 3D Bahamut's, 29 the Spectral Keeper's and 30 the Fallen Maesters').
  * - **Valefor at Besaid, anime style** (`'exp-anime'`, number 33, 2026-11-06; FFX-2 only): the same fight again with the Meshy toon girls under an anime cel shader; word `gear`.
+ * - **Spherimorph** (`'spherimorph'`, number 41, 2026-11-06; FFX only): the guardian of the spring in the Macalania Woods, a four-state weakness machine you read from its answers; word `spherimorph` (33 to 40 and 42 on are the sibling chapter lanes').
+ *
  * - **The Last Summoning** (`'last-summoning'`, number 28, 2026-10-15; FFX only): Dream's End as a gauntlet in the player's order with the full roster of eight aeons, Yojimbo and the Magus Sisters among them; word `summon` (27 is the Dark Mirror lane's).
  * - **The Sanctuary Keeper** (`'sanctuary-keeper'`, number 39, 2026-11-06; FFX only): the beast that keeps the last road up Mt. Gagazet, fought at the summit; word `beast` (the Spectral Keeper's number is 29).
  *
@@ -61,8 +63,9 @@ import { DARK_AEONS } from './chapter-dark-aeons.ts';
 import { PENANCE } from './chapter-penance.ts';
 import { FLOODED_WAYS } from './chapter-flooded-ways.ts';
 import { SANCTUARY_KEEPER } from './chapter-sanctuary-keeper.ts';
+import { SPHERIMORPH } from './chapter-spherimorph.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from, and `ffx2Bahamut` the listed Chapter IV, which the 3D Bahamut is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter, ffx2Bahamut: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD, SPHERIMORPH] as const;
 }

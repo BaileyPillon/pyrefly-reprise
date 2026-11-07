@@ -91,6 +91,7 @@ export function resolveDoublecast(ctx: Ctx, actor: FFXCombatant, def: AbilityDef
   open(firstSpell, mixed ? (first?.aim ?? []) : plan.announce);
   let dealt = 0;
   let last = firstSpell;
+  ctx.rt.doublecasting = true; // the game's `isDoublecasting` of the last attacker, for the two casts (Spherimorph's script ignores the first of a pair)
   for (const [i, cast] of plan.casts.entries()) {
     if (cast === null) continue;
     const { spell, aim } = cast;
@@ -112,6 +113,7 @@ export function resolveDoublecast(ctx: Ctx, actor: FFXCombatant, def: AbilityDef
     // (`pp_BtlSubHp` marks it and `pp_BtlExecuteAction` drops the sub-action; research/re-ffx-ai-yunalesca-bfa.md 2.11).
     if ((ctx.rt.formDiedAtSeq ?? -1) >= seqBefore) break;
   }
+  ctx.rt.doublecasting = false;
   ctx.emit({ type: 'action-end', actorId: actor.id });
   return { rank: rankOf(def), damageDealt: dealt, def: last };
 }

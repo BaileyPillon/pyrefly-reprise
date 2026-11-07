@@ -35,6 +35,8 @@
  *
  * **`beast`** (FFX, the hidden Sanctuary Keeper, `./beastDoor.ts`) is a plain `WordDoor` too, and is **not** desktop-only (painted 2D).
  *
+ * **`spherimorph`** (FFX, the hidden Spherimorph, `./spherimorphDoor.ts`) is a plain `WordDoor` too, and is **not** desktop-only (painted 2D).
+ *
  * **`infinito`** (FFX-2, the hidden Fallen Maesters, `./maestersDoor.ts`: only F is a bound key, `l1`, which the board ignores; I, N, T and O are unbound) is a plain `WordDoor` too.
  * **`drillshot`** (FFX-2, the hidden Bevelle Guardians, `./drillshotDoor.ts`: D is `right`, R is `r1`, S is `down`; I, L, H, O and T are unbound) is a plain `WordDoor` too.
  * **`duelist`** (FFX-2, the hidden Farplane Cup, `./duelistDoor.ts`: D is `right`, E is `start`, S is `down`, the others unbound; the first D moves the cursor one step, as `daigoro`'s does) is a plain `WordDoor` too.
@@ -70,6 +72,7 @@ import { DRILLSHOT_DOOR_CHAPTER, DRILLSHOT_DOOR_WORD } from './drillshotDoor.ts'
 import { DUELIST_DOOR_CHAPTER, DUELIST_DOOR_WORD } from './duelistDoor.ts';
 import { BEAST_DOOR_CHAPTER, BEAST_DOOR_WORD } from './beastDoor.ts';
 import { WRAITH_DOOR_CHAPTER, WRAITH_DOOR_WORD } from './wraithDoor.ts';
+import { SPHERIMORPH_DOOR_CHAPTER, SPHERIMORPH_DOOR_WORD } from './spherimorphDoor.ts';
 
 /**
  * **The two hidden 3D chapters are desktop-only** (driver decision 219q, 2026-11-03; FFX-2 only: `yrp`, the 3D Bahamut, and `waker`, the Wind Waker Valefor). They are not staged for a phone: the Wind Waker is expected to miss the phone budgets
@@ -119,6 +122,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: DUELIST_DOOR_WORD, chapter: DUELIST_DOOR_CHAPTER },
   { word: BEAST_DOOR_WORD, chapter: BEAST_DOOR_CHAPTER },
   { word: WRAITH_DOOR_WORD, chapter: WRAITH_DOOR_CHAPTER },
+  { word: SPHERIMORPH_DOOR_WORD, chapter: SPHERIMORPH_DOOR_CHAPTER },
 ];
 
 /**
