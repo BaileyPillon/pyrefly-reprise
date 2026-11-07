@@ -8,8 +8,9 @@ import os
 import pathlib
 import sys
 
-sys.path.insert(0, 'D:/pyrefly-rig-rikkudk/tools/rig')
-sys.path.insert(0, 'D:/pyrefly-rig-rikkudk/tools/rig/lane')
+_HERE = pathlib.Path(__file__).resolve().parent  # tools/rig/lane/expressive: the kit beside this file, whatever tree it is in
+sys.path.insert(0, str(_HERE.parents[1]))
+sys.path.insert(0, str(_HERE.parent))
 import numpy as np
 from PIL import Image, ImageDraw
 
