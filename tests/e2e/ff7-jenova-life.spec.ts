@@ -5,9 +5,9 @@ import { boardView, EXPERIMENTS_KEY, look, playToEnd, SAVE_KEY, type Look } from
 /**
  * The hidden FF7 Jenova LIFE fight, end to end, by real input (FF7 only; hidden chapter 44, the typed word `bluelight`).
  *
- * **Written 2026-11-07 and NOT RUN in the lane that wrote it** (no free browser lock within the lane's window; the job spec and the prediction
- * are `docs/handoff/ch-jenova-life.md` section 7). Runs against the shared config's preview (`PREVIEW_PORT`; an already-running server is reused)
- * on a production build, headless, one browser at a time, under the review-browser lock.
+ * **Run 2026-11-07 under the review-browser lock, both tests passing** (headless GPU Chromium, one worker, against a Vite dev server on a private port
+ * because no production build was made in the lane; `docs/handoff/ch-jenova-life.md` section 7 has the run and the frames). Runs against the shared
+ * config's server (`PREVIEW_PORT`, and `BASE_PATH=/` for a dev server; an already-running server is reused), one browser at a time, under the lock.
  *
  * What it pins, by real keys: the word on chapter select opens the chapter through FF7's swirl (the board shows no card for it before or after);
  * the FF7 HUD names Cloud, Tifa and Barret in three rows; the party stands on the left in the order Cloud, Tifa, Barret(back) and Jenova on the right,
@@ -78,7 +78,11 @@ function expectPlaced(f: Awaited<ReturnType<typeof field>>): void {
   expect(f.names, 'three rows, in slot order').toEqual(['Cloud', 'Tifa', 'Barret']);
   const { cloud, tifa, barret } = f.rects;
   const boss = f.rects['jenova-life'];
-  for (const [id, r] of Object.entries(f.rects)) expect(r, `${id} is on the field`).not.toBeNull();
+  for (const [id, r] of Object.entries(f.rects)) {
+    expect(r, `${id} is on the field`).not.toBeNull();
+    expect(r!.x, `${id}'s left edge is inside the frame`).toBeGreaterThanOrEqual(-2);
+    expect(r!.x + r!.w, `${id}'s right edge is inside the frame`).toBeLessThanOrEqual(f.W + 2);
+  }
   expect(boss!.x, 'Jenova on the right of Cloud (D-262)').toBeGreaterThan(cloud!.x);
   expect(barret!.x, 'Barret, in the back row, left of Cloud').toBeLessThan(cloud!.x);
   expect(tifa!.x, 'Tifa left of Jenova').toBeLessThan(boss!.x);
@@ -154,7 +158,10 @@ test('390x844: the fight opens on the phone with three rows and the formation dr
   const page = await ctx.newPage();
   await boot(page);
   const before = await snapshotBoard(page);
-  await page.evaluate((id) => window.__pyrefly!.gotoChapter(id as never), ID);
+  // Not awaited: the call resolves when the chapter's whole flow does (the fight, the results), which is the test's own business.
+  await page.evaluate((id) => {
+    void window.__pyrefly!.gotoChapter(id as never);
+  }, ID);
   await waitForScreen(page, 'battle', 90_000);
   await reachFight(page);
   await shoot(page, 'first-turn');

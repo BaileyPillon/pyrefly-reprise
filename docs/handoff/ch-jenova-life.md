@@ -2,8 +2,8 @@
 
 Branch `ch-jenova-life`, from `origin/r76-release` `36b6e851d`, built 2026-11-07 in a clean worktree. Authority: Bailey, 2026-11-06 ~00:30 EST "implement all unimplemented chapters please" and ~00:55 EST "yes on all these too"
 (every researched boss he never picked, FF7 included); 2026-11-07 "ok keep going we have full usage here"; on FF7, 2026-09-27, the art "higher fidelity than the original" with crisp menus and eye candy. Every pick below is the
-driver's recommendation, **his to overturn**, with the alternative named. Nothing deploys from this branch. **Not run in a browser** (the review-browser lock was held by another job for the whole window): the job specs and the
-prediction are section 7; everything else was run, on the real engine and the real HUD and board in jsdom.
+driver's recommendation, **his to overturn**, with the alternative named. Nothing deploys from this branch. **Run in a browser once, late** (the review-browser lock was held by other jobs for the first four hours): the real-key spec of section 7
+passed on both sizes, with frames; the rest was run on the real engine and the real HUD and board in jsdom.
 
 **Game case: FF7 only** (AGENTS.md rule 14): the original 1997 fight at the altar of the Forgotten Capital, the end of Disc 1; ATB, Materia and the Limit gauge. Remake's and Rebirth's Jenova is a different fight and is not used. FFX and
 FFX-2 are untouched: the Guard Scorpion's pin (`ff7-golden`, 40 hashes), `ffx2-atb-golden` and the FFX suites pass unchanged. The research is `research/ff7-jenova-life.md` (the note, "jl"), the paper preflight
@@ -74,7 +74,7 @@ to the tick: Cloud full in 371 ticks, Tifa 342, Barret 384, **Jenova 227** (she 
 
 New, all passing: `ff7-statuses` (17), `ff7-jenova-life-data` (18), `-ai` (16), `-limits` (14), `-bench` (7), `-chapter` (10), `ff7-jenova-golden` (4; seeds 1 to 20 for three players), `ff7-hud-jenova` (6), `bluelight-door` (9),
 `chapters/ff7-jenova-life-guide` (8). Edited for the new chapter: `chapter-doors` (the gated rows), `chapters/prep-tip-band`, `strategy-guide` (the cite form), `helpers/doorWords`, `helpers/guideDocStrings`. **The Guard Scorpion is unchanged to the hash**
-(`ff7-golden.test.ts`, 40 hashes; every FF7 suite). `tests/e2e/ff7-jenova-life.spec.ts` is written and type-checked, **not run** (section 7).
+(`ff7-golden.test.ts`, 40 hashes; every FF7 suite). `tests/e2e/ff7-jenova-life.spec.ts` (real keys, two tests) ran green under the lock (section 7).
 
 **The full suite** (`vitest run --maxWorkers=3`, 2,065 files, 32,760 tests, the machine's CPU at 91 to 100 percent from other work, about 85 minutes): 32,130 passed, 621 skipped, **8 failed in 8 files, every one explained and fixed, and each file re-run green**:
 six were lists that pin "the last row" or "every chapter" and now name the chapter (`audio-music-batch2` the cue table, `voice-chapter-wiring` the games, `wraith-door` and `yunas-ballad-data` "the last door" is now found by chapter, `chapters/exp-fayth` the scene table,
@@ -110,16 +110,17 @@ ships must match the approved Film look. No 3D route (rejected 2026-10-20).
 | **Effects**, on the `FxDrawList` kit (`engine/spellfx/ff7`): Blue Light (nimbus, implosion), Blue Flame (spiral, release), **Aqualung** (the inhale that draws the water in, then the wave across all three), **the Reflect shell and the bounce arc**, the Water-absorb heal, Quake, Fire/Fire2/Fire3, Regen/Barrier/MBarrier glows, Blade Beam and Climhazzard, Tifa's chain, Satellite Beam, Angermax | code | ids in `ff7FxSpecs.ts#BY_ABILITY` (stand-ins today: Bolt, Ice, Cure, Braver, Big Shot, the slash; the rest the house bloom) | stand-ins |
 | Music | an original slow, drumless, solo-instrument take for the altar (an `audition.html` entry; a spend and a download: rule 11) | `music` is `null` | silent |
 
-## 7. Browser job specs, with predictions (nothing was run)
+## 7. The browser run, and what is left to look at
 
-One heavy browser job at a time, headless, under the review-browser lock (`RIG-RECORD` in the scratch folder); a production build (`vite build` to a scratch outDir, `vite preview`), then
-`npx playwright test tests/e2e/ff7-jenova-life.spec.ts` (headless GPU Chromium, one browser). Stop every server by its port afterward.
+**Run 2026-11-07, headless GPU Chromium, one worker, under the review-browser lock** (`RIG-RECORD` in the scratch folder), against a Vite dev server on a private port (no production build was made; the server was stopped by its PID and
+the lock released): `tests/e2e/ff7-jenova-life.spec.ts`, **2 of 2 pass** (1.3 min and 24 s). A first attempt ran against another lane's server that already held the port I had picked and so found no door; the runner now asks the OS for a free port. Two things the run found and this commit fixed: the
+phone spec awaited `gotoChapter`, which resolves when the whole flow does; and on 390x844 the reactor frame's reordered spots cropped Tifa and Barret at the left edge, so the phone formation (`FORGOTTEN_CAPITAL_PHONE`) is its own now and the spec asserts every figure's edges inside the frame.
 
-1. **1600x900, keys.** Type `bluelight` on the board: the swirl, the opening, the first command window. **Prediction:** three rows named Cloud, Tifa, Barret; the three figures are the stage's fallback silhouettes, Cloud and Barret
-   the Film paintings; Barret left of Cloud, Jenova right and taller; the plate is the reactor's, cooler. An attack-only player **loses about 87 percent** (26 wins in 200, the bench), so the run walks G1's pan, GAME OVER and RETRY with the seed +1000;
-   a win shows the two results windows with 4000 EXP, 350 AP, 1500 gil and the Wizard Bracelet. The board and the save are as before either way.
-2. **390x844.** `gotoChapter('ff7-jenova-life')` (the door's phone field takes the word too): three rows in the band, the formation drawn in (Cloud at least 110 px), every window inside the frame.
-3. **A longer look, by hand**, for Bailey: a sensible player (heals under 45%, Limits when full) wins 99.5 percent in about 110 s; cast Bolt2 at her after her Reflect rises and watch it come back. The spell effects are the house bloom until they are drawn.
+1. **1600x900, keys** (`docs/screenshots/ff7-jenova-life/game-1600x900-*.jpg`). `bluelight` typed on the board opened the swirl and the fight; the HUD named Cloud, Tifa, Barret in three rows; Cloud and Barret are the Film paintings, **Tifa is the stage's grey fallback
+   figure and Jenova its dark cloaked one** (the paintings are owed); Barret (back row) stands left of Cloud with Tifa's silhouette in front of his gun arm, Jenova right and taller, every window and figure inside the frame, the plate the reactor's. An attack-only party **lost** (the bench said 87 percent would):
+   G1's pan, GAME OVER with RETRY and CHAPTER SELECT, RETRY reseeded to seed + 1000 and the second fight reached its first command window with Blue Flame in the top window and the numerals on Barret. The board and the main save key were unchanged; the experiments' store held the attempts. A win was not seen (the results path is covered by the flow test and jsdom, not by a frame).
+2. **390x844** (`game-390x844-first-turn.jpg`): three rows in the band, the formation drawn in (Cloud over 110 px), all three figures inside the frame (Barret upstage behind Cloud and Tifa: bunched, a stand-in layout to be solved with the painted plate), every window inside the frame.
+3. **Still to look at, by hand, for Bailey:** the colours (the borrowed plate is green; the cooler grade is faint), the placeholder figures, and a sensible player (heals under 45%, Limits when full), who wins 99.5 percent in about 110 s: cast Bolt2 at her after her Reflect rises and watch it come back (the bounce is a damage number on the caster; its drawing is owed).
 
 ## 8. Winnability, MEASURED (`tools/ff7-jenova-bench.mjs`, seeds 1 to 200, Recommended, zero decision time; the bands were fixed before the first run)
 
@@ -148,6 +149,6 @@ a double Blue Light x3, her Reflect once, no KO), seed 2 in 81 s (9 turns, no Re
 
 1. **The end-state picks** (hard rule 9): the altar's framing (the preflight's options a to c), Jenova's look (A, B or C), the scene format (J10) and the music. No mockups were made in this lane.
 2. **Fergusson's Battle Mechanics**, six questions (note section 11): Reflect's life, the bounce target, the unaffordable pick, the counters on a miss, the armour MD%, the Hi-Potion row. About fifteen minutes with a browser; each is one labelled constant.
-3. **The browser runs** of section 7, and a screenshot set under `docs/screenshots/ff7-jenova-life/`.
+3. **A production-build run** of the spec and a look at a win's results windows by real keys (the run of section 7 was a dev server and a loss), and the colour of the borrowed plate.
 4. **Row 56 (Safer Sephiroth)** reuses this kernel (statuses, Reflect, Limits, the third member); its first slice is the same bench method.
 5. **`NOW.md` and the CHANGELOG were not touched** (parallel lanes; the integrator's commit).

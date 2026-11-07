@@ -26,8 +26,15 @@ function slots(l: Sector1Layout): readonly Spot[] {
 
 /** Jenova stands where the Guard Scorpion's rear foot does, so the shared camera rigs (the F1 opening, D1 and G1) still look at her. */
 export const FORGOTTEN_CAPITAL_DESK: Sector1Layout = { ...SECTOR1_DESK, front: slots(SECTOR1_DESK), bossFront: 1.0 };
-/** The upright phone's drawn-in formation (E1): the same reorder. */
-export const FORGOTTEN_CAPITAL_PHONE: Sector1Layout = { ...SECTOR1_PHONE, front: slots(SECTOR1_PHONE), bossFront: 0.6 };
+/**
+ * The upright phone's drawn-in formation (E1), **our estimate** (the first look at 390x844, 2026-11-07, showed the reactor frame's reordered spots cropping Tifa and Barret at the left edge, so they stand further right and Barret
+ * further upstage; the field is 5.3 world units wide at Cloud's depth, so a figure at the edge needs its centre 0.6 to 0.7 inside it). Cloud keeps his spot; Tifa stands nearest the camera, Barret upstage behind the two.
+ */
+export const FORGOTTEN_CAPITAL_PHONE: Sector1Layout = {
+  ...SECTOR1_PHONE,
+  front: [SECTOR1_PHONE.front[0]!, [-1.65, 0, 1.9], [-1.55, 0, -1.5]],
+  bossFront: 0.6,
+};
 
 /** The layout for a frame of this aspect (a portrait frame is the phone's). */
 export function forgottenCapitalLayout(aspect: number): Sector1Layout {
