@@ -69,11 +69,20 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 75 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 76 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '76',
+    date: '2026-11-06',
+    lines: [
+      { tag: 'Both', text: 'Leaving a fight now frees the graphics memory its fighters’ contact shadows used; before, that memory stayed behind after every battle.' },
+      { tag: 'FFX', text: 'Retrying a Final Fantasy X chapter again and again no longer adds that leftover shadow memory with each try.' },
+      { tag: 'FFX-2', text: 'The same in Final Fantasy X-2: retrying a chapter no longer adds that leftover shadow memory with each try.' },
+    ],
+  },
   {
     release: '75',
     date: '2026-11-06',
