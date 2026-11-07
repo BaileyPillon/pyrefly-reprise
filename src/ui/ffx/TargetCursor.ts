@@ -5,6 +5,7 @@ import { pickTargetAt, sameSide } from './targetHitPick.ts';
 import '../common/pro-markers.css';
 import { proHandSize, proHelpLine, proMarkersOn, proRing, proRingBox } from '../common/proMarkers.ts'; // lane pro-look: the big glove, the quarter-height ring
 import { PRO_FLOWER_SVG, PRO_HAND_SVG } from '../common/proMarkerArt.ts';
+import { CONE_BOB, CONE_SVG, coneFlips, coneSize, markerStyle } from './targetCone.ts'; // 2026-11-07 (FFX only): the aiming marker is the game's own cone in Ink & Gold; `?marker=hand` brings the glove back
 
 export type { PlateDock } from './targetCursorParts.ts';
 
@@ -49,8 +50,9 @@ export interface CursorSelection {
  * Which chrome the cursor wears.
  *
  * GAME-AWARE (AGENTS.md rule 14): **the cursor is game-specific and the two
- * chromes must never be mixed.** FFX uses a pointing hand docked against the
- * target's silhouette; FFX-2 does not — it uses a four-point pink sparkle as
+ * chromes must never be mixed.** FFX uses a marker docked against the
+ * target's silhouette (since 2026-11-07 the game's own cone in Ink & Gold, `targetCone.ts`; the
+ * pointing hand it was, `?marker=hand`, is the way back); FFX-2 does not — it uses a four-point pink sparkle as
  * its menu cursor and a rotating six-petal flower as its field reticle, and it
  * has no Act List at all. Source: `research/visual-bible.md` §4.2 and §4.7 and
  * `research/ffx-vs-ffx2-presentation.md` §9 row 2, which is explicit that the
@@ -131,6 +133,8 @@ export class TargetCursor {
   /** FFX only: the menu row a group command was chosen from (PR-0019). */
   private groupAnchorRow: (() => HTMLElement | null) | null = null;
   private afterLayout: ((cursorEl: HTMLElement) => void) | null = null;
+  /** FFX only (2026-11-07): the command rows on screen now, which the layer is clipped behind (`bracketClip.ts`); the cone docks on the other side of a figure it would be hidden against (`targetCone.coneFlips`). */
+  private stackRows: (() => TargetRect[]) | null = null;
 
   constructor() {
     this.el = document.createElement('div');
@@ -226,6 +230,11 @@ export class TargetCursor {
    */
   setGroupAnchorRow(provider: (() => HTMLElement | null) | null): void {
     this.groupAnchorRow = provider;
+  }
+
+  /** FFX only: where the command rows are, for the cone's choice of side. */
+  setStackRows(provider: (() => TargetRect[]) | null): void {
+    this.stackRows = provider;
   }
 
   /** FFX only: runs after each layout (PR-0193 the ALL label's fit, `groupLabelFit.ts`; PR-0178 the stack clip, `bracketClip.ts`). */
@@ -372,7 +381,12 @@ export class TargetCursor {
     const pro = proMarkersOn();
     this.el.classList.toggle('ffx-targeting--pro', pro);
     const viewMin = typeof window === 'undefined' ? 1080 : Math.min(window.innerWidth, window.innerHeight);
-    const proHand = pro && this.chrome === 'ffx' ? proHandSize(typeof window === 'undefined' ? 1600 : window.innerWidth) : null;
+    const viewW = typeof window === 'undefined' ? 1600 : window.innerWidth;
+    const proHand = pro && this.chrome === 'ffx' ? proHandSize(viewW) : null; // the pro glove's size (only used with `?marker=hand`; the pro FFX flag follows `proHand !== null` through `flagged` below)
+    // 2026-11-07 (FFX only): the marker is the cone in Ink & Gold unless the address asks for the glove back (`?marker=hand`). FFX-2 never reaches it: `cone` is false for its chrome.
+    const cone = this.chrome === 'ffx' && markerStyle() === 'cone';
+    const handSz = cone ? coneSize(viewW) : proHand; // null: the stylesheet sizes today's small glove
+    const flagged = proHand !== null; // the pro look's three-line flag (TARGET, the name, the damage line) is the look's, whichever marker is drawn
 
     // PR-0232: the side being aimed at is drawn last, the active target last of all,
     // so where brackets overlap the in-set one is on top for a tap.
@@ -419,15 +433,21 @@ export class TargetCursor {
       );
 
       if (!active || group) return;
+      let dockSide: 'left' | 'right' = 'left';
 
       // The hand, docked against the silhouette rather than floating between
       // two fiends. FFX only: FFX-2 has no finger cursor, and the two chromes
       // must never be mixed [visual-bible 4.2, ffx-vs-ffx2-presentation 9].
       if (this.chrome === 'ffx') {
-        const size = proHand ? `;width:${px(proHand.w)};height:${px(proHand.h)}` : '';
+        const size = handSz ? `;width:${px(handSz.w)};height:${px(handSz.h)}` : '';
+        const bob = cone ? `;--pro-hand-bob:${CONE_BOB}px` : '';
+        // the cone docks on the figure's right (tip pointing left) when its left box would sit mostly behind the command stack (the leftmost ally), where the layer is clipped (`bracketClip.ts`)
+        const side = cone && handSz && coneFlips(rect, handGap, handSz, this.stackRows ? [...this.panels, ...this.stackRows()] : this.panels) ? 'right' : 'left';
+        const at = side === 'right' ? rect.x + rect.w + handGap : rect.x - handGap;
         parts.push(
-          `<div class="ffx-target__hand" style="left:${px(rect.x - handGap)};top:${px(rect.y + rect.h * 0.55)}${size}">${proHand ? PRO_HAND_SVG : HAND_SVG}</div>`,
+          `<div class="ffx-target__hand${cone ? ' ffx-target__hand--cone' : ''}${side === 'right' ? ' ffx-target__hand--flip' : ''}" style="left:${px(at)};top:${px(rect.y + rect.h * 0.55)}${size}${bob}">${cone ? CONE_SVG : proHand ? PRO_HAND_SVG : HAND_SVG}</div>`,
         );
+        dockSide = side;
       } else {
         // FFX-2's field reticle: a rotating six-petal flower wrapping the
         // target, and the sparkle that marks the menu lives in the command
@@ -450,7 +470,7 @@ export class TargetCursor {
         );
       }
 
-      parts.push(this.plateHtml(entry, proRingGeom ? proRingBox(proRingGeom) : rect, proHand, proRingGeom !== null));
+      parts.push(this.plateHtml(entry, proRingGeom ? proRingBox(proRingGeom) : rect, handSz, flagged, proRingGeom !== null, dockSide));
     });
 
     const parts = chunks.sort((a, b) => a.rank - b.rank).flatMap((c) => c.html);
@@ -465,16 +485,16 @@ export class TargetCursor {
   }
 
   /** The ink name plate: name, letter tag, optional note, docked clear of the HUD. */
-  private plateHtml(entry: TargetEntry, rect: TargetRect, proHand: { w: number; h: number } | null = null, ringed = false): string {
+  private plateHtml(entry: TargetEntry, rect: TargetRect, hand: { w: number; h: number } | null = null, flagged = false, ringed = false, handSide: 'left' | 'right' = 'left'): string {
     const tag = entry.tag
       ? `<span class="ffx-target__tag">${escapeHtml(entry.tag)}</span>`
       : '';
     const note = noteHtml(entry.note); // status display O3: Zombie and Doom as red tags
-    // pro FFX: the name hangs off the glove (the plate docks under the glove's own box), not under the whole figure
-    const anchor = proHand ? handBox(rect, this.handGap(), proHand) : rect;
-    const dock = this.dockFor(entry, anchor, proHand, ringed);
+    // pro FFX: the name hangs off the marker (the plate docks under its own box: the cone's or the glove's), not under the whole figure
+    const anchor = hand && flagged ? handBox(rect, this.handGap(), hand, handSide) : rect;
+    const dock = this.dockFor(entry, anchor, hand, flagged, ringed, handSide);
     // pro (both games): the flag reads "TARGET", the name, and the command's damage line under it; the top TARGET plates of both HUDs stand aside while the piece is on
-    const flag = proHand !== null || ringed;
+    const flag = flagged || ringed;
     const help = flag ? proHelpLine(this.helpLine) : '';
     // pro FFX-2: the name rides beside the ring on a thin leader line (when it docks left or right of the ring)
     const ringRight = rect.x + rect.w;
@@ -496,15 +516,15 @@ export class TargetCursor {
   }
 
   /** Where the plate docks, clear of the HUD's panels when a side allows (`dockPlate`). */
-  private dockFor(entry: TargetEntry, rect: TargetRect, proHand: { w: number; h: number } | null = null, ringed = false): { side: PlateDock; x: number; y: number } {
+  private dockFor(entry: TargetEntry, rect: TargetRect, hand: { w: number; h: number } | null = null, flagged = false, ringed = false, handSide: 'left' | 'right' = 'left'): { side: PlateDock; x: number; y: number } {
     // A rough plate box: ~10px per glyph plus the tag chip and the padding.
-    const flag = proHand !== null || ringed;
+    const flag = flagged || ringed;
     // the pro flag's name is set bigger (pro-markers.css); its damage line and note are at the 14 px floor, so `plateWidth` counts them (PR-0551)
     const w = plateWidth(entry, flag, typeof window === 'undefined' ? 1600 : window.innerWidth, flag ? proHelpLine(this.helpLine) : '');
     // FFX's hand is a thing on the field too (r37-ui-floor): the plate docks off it as off any panel.
-    const hand = this.chrome === 'ffx' ? [handBox(rect, this.handGap(), proHand ?? undefined)] : [];
+    const handPanel = this.chrome === 'ffx' ? [handBox(rect, this.handGap(), hand ?? undefined, handSide)] : [];
     const h = flag ? 78 : 34; // the pro flag is three lines tall (TARGET, the name, the damage line)
-    return dockPlate(rect, w, h, hand.length ? [...this.panels, ...hand] : this.panels, ringed ? ['right', 'left', 'below', 'above'] : undefined); // pro FFX-2: beside the ring first
+    return dockPlate(rect, w, h, handPanel.length ? [...this.panels, ...handPanel] : this.panels, ringed ? ['right', 'left', 'below', 'above'] : undefined); // pro FFX-2: beside the ring first
   }
 
   /** How far the hand cursor is docked clear of the silhouette at this window width. */

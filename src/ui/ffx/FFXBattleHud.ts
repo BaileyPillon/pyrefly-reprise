@@ -41,7 +41,7 @@ import { IntentOpeningHold } from '../ffx2/intentOpeningHold.ts';
 import { AIM_FOLD_CLEAR, AIM_FOLD_FLOOR_TOP, chipLiftDy, foldWhileAiming } from './sensorAimFold.ts';
 import { statusRowIds } from './fieldRows.ts';
 import { fitGroupLabel } from './groupLabelFit.ts';
-import { clipOffStack } from './bracketClip.ts';
+import { clipOffStack, commandRowBoxes } from './bracketClip.ts';
 import { clearHandOfCards } from './handClear.ts';
 import { publishOdHang } from './odHang.ts';
 import { FfxTargetPlate } from './targetPlateFfx.ts';
@@ -387,7 +387,7 @@ export class FFXBattleHud implements HudPort {
     this.overlay.append(this.commandMenu.targetCursor.el, this.proMarks.el, this.damageNumbers.el, this.targetPlate.el);
     // PR-0019 (FFX only): so the "ALL ALLIES"/"ALL ENEMIES" chip can clear
     // the slab instead of painting over it — src/ui/ffx/targetChipClear.ts.
-    this.commandMenu.targetCursor.setCmdInfoElement(this.infoEl);
+    this.commandMenu.targetCursor.setCmdInfoElement(this.infoEl); this.commandMenu.targetCursor.setStackRows(() => commandRowBoxes(this.el.ownerDocument, this.commandMenu.stackEl)); // 2026-11-07: the cone docks away from the command rows it would be hidden behind (`targetCone.coneFlips`)
     // PR-0193 (FFX only): the ALL label steps off the panels and the intent card (`groupLabelFit.ts`);
     // PR-0178: the cursor's layer is clipped off the command rows, so brackets go behind them (`bracketClip.ts`).
     this.commandMenu.targetCursor.setAfterLayout((el) => {

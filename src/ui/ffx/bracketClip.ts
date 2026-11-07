@@ -42,16 +42,29 @@ export function stackClipPath(layer: { left: number; top: number; width: number;
   return `path(evenodd, 'M0 0H${r(layer.width)}V${r(layer.height)}H0Z ${cuts.join(' ')}')`;
 }
 
-/** Clip `layer` off the command stack's rows, or clear the clip when there are none on screen. */
-export function clipOffStack(layer: HTMLElement, stackEl: HTMLElement | null): void {
-  const phone = !!layer.ownerDocument.documentElement.dataset['phoneBattle'];
+/** The command stack's rows on screen now, in viewport px; none on the upright phone (its target card is a tap line, and the layer is not clipped there). */
+function stackRows(doc: Document, stackEl: HTMLElement | null): Box[] {
   const rows: Box[] = [];
-  if (!phone && stackEl) {
+  if (!doc.documentElement.dataset['phoneBattle'] && stackEl) {
     for (const row of stackEl.querySelectorAll<HTMLElement>('.ig-cmd')) {
       const b = row.getBoundingClientRect();
       if (b.width > 0 && b.height > 0) rows.push({ left: b.left, top: b.top, right: b.right, bottom: b.bottom });
     }
   }
+  return rows;
+}
+
+/**
+ * The same rows as boxes (x, y, w, h), for the FFX cone's choice of side (2026-11-07, `targetCone.coneFlips`): a marker docked where these rows are is hidden behind them, so it docks on the other side of the figure.
+ * The rows are the ones the layer is clipped behind; the HUD's panel list does not carry them (a row paints on a child, so `panel-rects.ts` finds no card there).
+ */
+export function commandRowBoxes(doc: Document, stackEl: HTMLElement | null): Array<{ x: number; y: number; w: number; h: number }> {
+  return stackRows(doc, stackEl).map((b) => ({ x: b.left, y: b.top, w: b.right - b.left, h: b.bottom - b.top }));
+}
+
+/** Clip `layer` off the command stack's rows, or clear the clip when there are none on screen. */
+export function clipOffStack(layer: HTMLElement, stackEl: HTMLElement | null): void {
+  const rows = stackRows(layer.ownerDocument, stackEl);
   const lr = layer.getBoundingClientRect();
   const path = stackClipPath({ left: lr.left, top: lr.top, width: lr.width, height: lr.height }, rows);
   if (path) layer.style.clipPath = path;
