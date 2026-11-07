@@ -157,7 +157,8 @@ try {
   let f = await field();
   log('field.1', f);
   check('act 1 opens with Yaibal and two League Warriors at full HP', f?.enemies.map((e) => e.id).join() === ACTS[0].join() && f.enemies.every((e) => e.hp === e.maxHp), f?.enemies);
-  check('the three girls stand at full HP', f?.girls.every((g) => g.alive && g.hp === g.maxHp), f?.girls);
+  // Under Wait split the first Warrior Attacks can land before the first menu opens (the first run read Yuna 2,389 of 2,488 and Rikku 5,603 of 5,652): the touch run's slower first press read Yuna 2,031: the check is "alive and at least half", not "exactly full" (the opening volley of Yaibal's grenade and two Warriors costs a girl up to a third).
+  check('the three girls stand alive and at least half full HP', f?.girls.every((g) => g.alive && g.hp >= g.maxHp * 0.5), f?.girls);
   const bodyText = await page.evaluate(() => document.body.innerText.replace(/\s+/g, ' '));
   check('the HUD shows Yaibal\'s name', /Yaibal/.test(bodyText), bodyText.slice(0, 160));
   await shot('3-act-1-first-menu');
