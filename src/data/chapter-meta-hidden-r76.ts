@@ -5,6 +5,9 @@
  * Game case: shared plumbing (both). Each record is its chapter's: FFX only for the Dark Aeons (34), Penance (35), the Flooded Ways (36), the Sanctuary Keeper (39), Spherimorph (41) and the Omega Ruins (43); FFX-2 only for the Bevelle Guardians (37), the Farplane Cup (38) and Yuna's Ballad (40).
  *
  * `chapter-meta.ts` spreads {@link HIDDEN_R76_META} at the end of `UNLISTED_CHAPTER_META`. The `ChapterMeta` import is type-only, so there is no cycle.
+ *
+ * The name says where the list began (release 76), not what it holds: chapters 41 and 43 (release 77) and every later hidden chapter join it. It is kept on purpose (r77 review m3): the branches still
+ * open add their records to `HIDDEN_R76_META` by that name, and a rename here would break each of them at its merge.
  */
 
 import type { ChapterMeta } from './chapter-meta.ts';

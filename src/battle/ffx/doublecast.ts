@@ -92,28 +92,31 @@ export function resolveDoublecast(ctx: Ctx, actor: FFXCombatant, def: AbilityDef
   let dealt = 0;
   let last = firstSpell;
   ctx.rt.doublecasting = true; // the game's `isDoublecasting` of the last attacker, for the two casts (Spherimorph's script ignores the first of a pair)
-  for (const [i, cast] of plan.casts.entries()) {
-    if (cast === null) continue;
-    const { spell, aim } = cast;
-    // Each cast is a sub-action of its own and starts with its own checks (re-parity RC7 lane L-CMD, `command-start.ts`): Silence and the MP again — the MP that is
-    // left after the cast before it — and the range filter (a target the first cast killed is dropped, and nobody takes its place). A cast that does not start pays
-    // nothing; the next one is checked on its own.
-    if (!costGate(actor, spell, false) || !aimGate(ctx, actor, spell, aim, spell.hits).ok) continue;
-    if (mixed && i === 1) {
-      ctx.emit({ type: 'action-end', actorId: actor.id });
-      open(spell, aim);
+  try {
+    for (const [i, cast] of plan.casts.entries()) {
+      if (cast === null) continue;
+      const { spell, aim } = cast;
+      // Each cast is a sub-action of its own and starts with its own checks (re-parity RC7 lane L-CMD, `command-start.ts`): Silence and the MP again — the MP that is
+      // left after the cast before it — and the range filter (a target the first cast killed is dropped, and nobody takes its place). A cast that does not start pays
+      // nothing; the next one is checked on its own.
+      if (!costGate(actor, spell, false) || !aimGate(ctx, actor, spell, aim, spell.hits).ok) continue;
+      if (mixed && i === 1) {
+        ctx.emit({ type: 'action-end', actorId: actor.id });
+        open(spell, aim);
+      }
+      // Paid at this cast's own cost check, at this spell's own cost, with the caster's modifiers as they stand now.
+      const cost = mpCostFor(actor, spell);
+      if (cost > 0) applyMpDelta(ctx, actor, cost, actor.id);
+      last = spell;
+      const seqBefore = ctx.state.nextSeq;
+      dealt += resolveAbility(ctx, actor, spell, aim);
+      // Yunalesca (FFX only): a form dying in the first cast cancels the second, which would otherwise hit the next form
+      // (`pp_BtlSubHp` marks it and `pp_BtlExecuteAction` drops the sub-action; research/re-ffx-ai-yunalesca-bfa.md 2.11).
+      if ((ctx.rt.formDiedAtSeq ?? -1) >= seqBefore) break;
     }
-    // Paid at this cast's own cost check, at this spell's own cost, with the caster's modifiers as they stand now.
-    const cost = mpCostFor(actor, spell);
-    if (cost > 0) applyMpDelta(ctx, actor, cost, actor.id);
-    last = spell;
-    const seqBefore = ctx.state.nextSeq;
-    dealt += resolveAbility(ctx, actor, spell, aim);
-    // Yunalesca (FFX only): a form dying in the first cast cancels the second, which would otherwise hit the next form
-    // (`pp_BtlSubHp` marks it and `pp_BtlExecuteAction` drops the sub-action; research/re-ffx-ai-yunalesca-bfa.md 2.11).
-    if ((ctx.rt.formDiedAtSeq ?? -1) >= seqBefore) break;
+  } finally {
+    ctx.rt.doublecasting = false; // also when a cast throws: a flag left up would make Spherimorph ignore every later hit
   }
-  ctx.rt.doublecasting = false;
   ctx.emit({ type: 'action-end', actorId: actor.id });
   return { rank: rankOf(def), damageDealt: dealt, def: last };
 }

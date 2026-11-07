@@ -98,4 +98,28 @@ describe('the Doublecast gate on the engine\'s own pair (Lulu, a weakness to Fir
     nextInput(engine, true);
     expect(actionList(log(engine).slice(before))).toContain('spherimorph:spherimorph-elemental-shift');
   });
+
+  it('the flag is down again when a cast of the pair throws (r77 review m4: a flag left up would make Spherimorph ignore every later hit)', () => {
+    const engine = newEngine(5, withDoublecast());
+    setState(engine, 0);
+    inputFor(engine, 'lulu', 60, true);
+    setState(engine, 0);
+    actor(engine, 'lulu').mp = actor(engine, 'lulu').stats.maxMp;
+    const ctx = ctxOf(engine);
+    const emit = ctx.emit;
+    ctx.emit = (event): void => {
+      if (ctx.rt.doublecasting === true) throw new Error('a cast failed');
+      emit(event);
+    };
+    let thrown = false;
+    try {
+      engine.submit({ kind: 'ability', id: 'doublecast', targets: [SM], wrappedId: 'fire' } as unknown as Command);
+      nextInput(engine, true);
+    } catch (e) {
+      thrown = (e as Error).message === 'a cast failed';
+    }
+    ctx.emit = emit;
+    expect(thrown, 'the cast really did throw while the flag was up').toBe(true);
+    expect(ctxOf(engine).rt.doublecasting).toBe(false);
+  });
 });

@@ -37,11 +37,12 @@ export const DOORS_IN_ORDER: ReadonlyArray<readonly [word: string, game: 'ff7' |
 export const DOOR_WORDS_IN_ORDER: readonly string[] = DOORS_IN_ORDER.map(([word]) => word);
 
 /**
- * The allowance of a door suite's pair test ("the first word to finish wins when two are typed in a row"): it mounts three real boards for every other door, so it grows with the number of doors. 15 s a door,
- * 180 s at the least (315 s at twenty-one doors). Measured at twenty-one doors: 15 to 28 s a suite when three door suites run together, but 180 to 250 s a suite when all twelve run together on three workers (jsdom mounts
- * fight for the CPU), and 193 s for the pair test of one suite in the one full-suite run (3,125 s on three workers, the long benches running beside it): the old 180 s allowance of fifteen doors was not enough. A hang still fails, later.
+ * The allowance of a door suite's pair test ("the first word to finish wins when two are typed in a row"): it mounts three real boards for every other door, so it grows with the number of doors. 25 s a door,
+ * 180 s at the least (625 s at twenty-five doors; it was 15 s a door, 315 s at twenty-one). Measured at twenty-one doors: 15 to 28 s a suite when three door suites run together, but 180 to 250 s a suite when all twelve run together on three workers (jsdom mounts
+ * fight for the CPU), and 193 s for the pair test of one suite in the one full-suite run (3,125 s on three workers, the long benches running beside it): the old 180 s allowance of fifteen doors was not enough. At twenty-five doors (release 77 review m5) the cost is about 12.6 s a door when another lane's suite shares the machine (`valefor-door` took 316 s of its 375 s) and
+ * `windwaker-door` timed out in the integrator's run, so the allowance is 25 s a door, twice the measured cost. A hang still fails, later.
  */
-export const DOOR_PAIR_TEST_TIMEOUT_MS = Math.max(180_000, DOORS_IN_ORDER.length * 15_000);
+export const DOOR_PAIR_TEST_TIMEOUT_MS = Math.max(180_000, DOORS_IN_ORDER.length * 25_000);
 
 /**
  * The allowance of a door suite's LOOP test (one that mounts a real board for every door: "a wrong letter resets", "each word opens its own chapter and nothing else", the phone-tier suites' "every other door opens"): it grows with the

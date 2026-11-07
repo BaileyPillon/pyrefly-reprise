@@ -6,6 +6,15 @@ Shared contracts (`src/sprites/format.ts`, `src/engine/SpriteActor.ts`,
 change to one is recorded here, newest first. Additive only unless a note says
 otherwise.
 
+## 2026-11-07 — r77 review fixes: the critic reads a rig's head top as the head's disc (shared critic plumbing, both games), the door pair-test allowance, a try/finally in Doublecast (FFX only) (no contract file changed)
+
+Authority: as the r77 integration entry below. Game cases: the probe change is shared review tooling (the two rigs it reaches are Tidus, FFX only, and Rikku's Dark Knight, FFX-2 only); the Doublecast edit is FFX only; the door allowance is test plumbing, both. No file in the contract list changed.
+
+- **`critic/runner/lib/continuity-rig-probe.mjs` (`RigRecord.tu`, semantics only; the field, its name and its shape are unchanged):** with a head landmark and a crown landmark, `tu` is the head's DISC top (the head landmark carried straight up the idle plane by its posed distance to the crown landmark) instead of the crown landmark itself, so a head turned by a key no longer reads lower than the silhouette's top (r77 review M1: Tidus's hurt 0.8596 and Overdrive 0.8948, Rikku's cast 0.8873, against the 0.885 floor; now 0.937, 0.914 and 0.917). With no head landmark it is the crown as before; a rig with no crown is read by its box as before (only Tidus and Rikku's Dark Knight carry a crown). `policy.continuity.rig.crown: []` still gives the box reading back. Recordings made before this keep their crown readings.
+- **`tests/unit/helpers/doorWords.ts`:** `DOOR_PAIR_TEST_TIMEOUT_MS` is 25 s a door (was 15), 180 s at the least.
+- **`src/battle/ffx/doublecast.ts`:** the two casts run in a `try`, and `ctx.rt.doublecasting` is cleared in a `finally` (before, a cast that threw left it up). No behaviour change on the normal path.
+- **Tests:** `critic-continuity-rig-tilt.test.ts` (new, 10), `chapters/spherimorph-doublecast.test.ts` (+1). Handoff: `docs/handoff/r77-review-fixes.md`.
+
 ## 2026-11-07 — r77 integration of chapters 41 and 43 (Spherimorph and the Omega Ruins, FFX only) and the party-rig pilots, and the r77 art install (additive; no contract file changed beyond the unions the two lanes already carry)
 
 Authority: Bailey 2026-11-06 ~00:30 EST, "implement all unimplemented chapters please"; ~00:55 EST, "yes on all these too"; ~13:30 EST on the rigs v3 clips, "so what are the benefits of the rigs? Those do look really good"; 2026-10-31, "you make the executive decisions for the next few days. i'll go with all of your recommendations." (the integrator's picks and the paintings are the driver's, his to overturn). Game cases: chapters 41 and 43 FFX only; the rig switch and loader shared plumbing (both games), Tidus FFX only and Rikku's Dark Knight FFX-2 only; the registration tables and the pose ledger shared.

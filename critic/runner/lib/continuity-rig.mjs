@@ -41,7 +41,7 @@ export const RIG_DEFAULTS = Object.freeze({
   centroid: ['bodyCenter', 'pelvisCenter', 'chestCenter'],
   feet: ['soleN', 'soleF', 'soleL', 'soleR', 'toeN', 'toeF', 'feet'],
   headPart: 'head',
-  /** The landmark of the top of the head (rigs-v3): with the feet it is the figure's stature head to soles, as a painted figure's is read (`tu` in the probe). A rig with none is read by its painted box, as before. */
+  /** The landmark of the top of the head (rigs-v3): with the head landmark it gives the head's disc, and with the feet the figure's stature head to soles, as a painted figure's is read (`tu` in the probe; a head turned by the key does not lower it, r77 review M1). A rig with none is read by its painted box, as before. */
   crown: ['crown', 'headTop'],
   /** Parts other than the head part that carry a head when a key brings them in (Lulu's front-view upper body: `front` in format v2, `fdef` and `fod` in version 1), and the share of the idle plane's area at which one counts as drawn (a version 1 rig stores such a part as an always-visible speck). */
   headVariants: ['front', 'fdef', 'fod'],
@@ -88,7 +88,7 @@ export function idleBoxOf(list, poses, fi) {
   return median(v);
 }
 
-/** The figure read head to soles in the idle plane's own units: the plane's `t` of its feet over the crown's (rigs-v3), or null with no crown or no feet in the frame. */
+/** The figure read head to soles in the idle plane's own units: the plane's `t` of its feet over the top of its head (`tu`, the head's disc, rigs-v3), or null with no crown or no feet in the frame. */
 export const bodyOf = (rg) => { const f = pair(rg?.fu), t = pair(rg?.tu); return f && t && f[1] > t[1] ? f[1] - t[1] : null; };
 
 /** The idle's stature head to soles in the plane's own units (the median of the frames in which its idle was showing and no move was in flight); null when the rig has no crown reading. */
