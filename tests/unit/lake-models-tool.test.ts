@@ -17,13 +17,13 @@ import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { LAKE_CAST, LAKE_FILES, LAKE_MODEL_DIR, LAKE_PROP_FILES, LAKE_SHIPPED_FILES, LAKE_WEAPON_FILES } from '../../src/data/ffx/lake-models.ts';
 import { CLOUDFLARE_LIMITS } from '../../tools/deploy-host.mjs';
 import { isUnshippedPublicFile } from '../../tools/dist-filter.mjs';
-import { LAKE_BACKUP_DATE, LAKE_MODELS_SRC, backupPlaces, check, copyTree, firstGoodBackup, readList, recordOf } from '../../tools/lake-models.mjs';
+import { LAKE_BACKUP_DATE, LAKE_MODELS_SRC, backupPlaces, backupRoots, check, copyTree, firstGoodBackup, readList, recordOf } from '../../tools/lake-models.mjs';
 
 interface Listed { path: string; bytes: number; sha256: string }
 
@@ -128,15 +128,24 @@ describe('check, recordOf and copyTree', () => {
 });
 
 describe('the backup places', () => {
-  it('are the models store and the second disk, each at the dated folder\'s models-exp/lake, unless the environment names one folder', () => {
-    const places = backupPlaces({}).map((p) => p.replace(/\\/g, '/'));
+  it('are the models store and every drive\'s second-disk folder that exists, each at the dated folder\'s models-exp/lake, unless the environment names them', () => {
+    const norm = (list: string[]): string[] => list.map((p) => p.replace(/\\/g, '/'));
+    // no drive letter is written in the tool: the store is on the tree's own drive, the second disk is found by its folder name (here a stand-in says which drives have one)
+    const onDrives = (letters: string) => (p: string): boolean => new RegExp(`^[${letters}]:/pyrefly-models-backup$`).test(p.replace(/\\/g, '/'));
+    const places = norm(backupPlaces({}, onDrives('F')));
     expect(places).toHaveLength(2);
-    expect(places[0]).toMatch(new RegExp(`pyrefly-models-exp-store/${LAKE_BACKUP_DATE}/models-exp/lake$`));
-    expect(places[1]).toMatch(new RegExp(`pyrefly-models-backup/${LAKE_BACKUP_DATE}/models-exp/lake$`));
-    expect(places[0]).not.toBe(places[1]);
+    expect(places[0]).toMatch(new RegExp(`/Tools/pyrefly-models-exp-store/${LAKE_BACKUP_DATE}/models-exp/lake$`));
+    expect(places[1]).toMatch(new RegExp(`^F:/pyrefly-models-backup/${LAKE_BACKUP_DATE}/models-exp/lake$`));
+    expect(norm(backupPlaces({}, () => false)), 'no second disk').toHaveLength(1);
+    expect(norm(backupPlaces({}, onDrives('EG'))), 'two second disks').toHaveLength(3);
+    // the environment: a store and a second disk, or one backup folder for both
+    const store = join(tmpdir(), 'lake-store');
+    const disk = join(tmpdir(), 'lake-disk');
+    expect(backupRoots({ PYREFLY_MODELS_STORE: store, PYREFLY_MODELS_BACKUP_DISK: disk }, () => false)).toEqual([resolve(store), resolve(disk)]);
+    expect(backupPlaces({ PYREFLY_MODELS_STORE: store }, () => false)).toEqual([join(resolve(store), LAKE_BACKUP_DATE, 'models-exp', 'lake')]);
     const one = join(tmpdir(), 'lake-one-backup');
-    expect(backupPlaces({ PYREFLY_LAKE_BACKUP: one })).toEqual([one]);
-    expect(backupPlaces({ PYREFLY_LAKE_BACKUP: '   ' })).toHaveLength(2);
+    expect(backupPlaces({ PYREFLY_LAKE_BACKUP: one })).toEqual([resolve(one)]);
+    expect(backupPlaces({ PYREFLY_LAKE_BACKUP: '   ' }, onDrives('F'))).toHaveLength(2);
   });
 
   it('firstGoodBackup picks the first place that holds every file whole and skips one that is short, different or not there', () => {

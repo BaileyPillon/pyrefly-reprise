@@ -56,12 +56,23 @@ page.on('request', (r) => {
 });
 if (STAGE) {
   const dir = join(resolve(STAGE), 'backdrops');
+  // the art manifest of a tree whose mirror has not got the plate does not list it, and the cutscene's stage never applies a plate the manifest says is absent (`app/screens/sceneArt.ts` `whenDecoded`): with the plate "installed" the
+  // build's manifest step (`tools/gen/manifest.mjs`, which every prebuild and predev runs) lists it, so the stage's answer for the manifest lists it too
+  await page.route(/\/art\/manifest\.json(\?.*)?$/, async (route) => {
+    const res = await route.fetch();
+    const json = await res.json();
+    if (Array.isArray(json.backdrops) && !json.backdrops.includes('wendigo-lake')) json.backdrops = [...json.backdrops, 'wendigo-lake'].sort();
+    return route.fulfill({ response: res, json });
+  });
   await page.route(/\/art\/backdrops\/wendigo-lake\.(png|json)(\?.*)?$/, (route) => {
     const name = /wendigo-lake\.(png|json)/.exec(route.request().url())[0];
     const file = join(dir, name);
     if (!existsSync(file)) return route.continue();
     return route.fulfill({ status: 200, contentType: name.endsWith('.png') ? 'image/png' : 'application/json', body: readFileSync(file) });
   });
+  // the page read its manifest at load, before the routes existed: load it again (the stored state is kept) so the stage's answers are the ones in force
+  await page.reload();
+  await page.waitForFunction(() => window.__pyreflyReady === true, null, { timeout: 60000 });
 }
 const screenNow = () => page.evaluate(() => window.__pyrefly?.screen?.() ?? null);
 const coachUp = () => page.evaluate(() => /FIRST TIME ONLY/i.test(document.body.innerText));
@@ -77,21 +88,27 @@ try {
     await page.keyboard.press('Escape');
     await page.waitForTimeout(900);
   }
+  const before = [...new Set(backdrops)];
   for (let attempt = 0; attempt < 3 && (await screenNow()) !== 'party-prep'; attempt++) {
     await page.keyboard.type('wendigo', { delay: 150 });
     await page.waitForTimeout(2200);
   }
   await assertScreen(page, 'party-prep');
   await page.waitForTimeout(2500);
+  const asked = [...new Set(backdrops)];
   await page.screenshot({ path: join(OUT, '2-party-prep.jpg'), type: 'jpeg', quality: 90 });
   await page.evaluate(() => window.__pyrefly.setSeed(7));
   await page.keyboard.press('Enter');
   let shots = 0;
-  for (let i = 0; i < 400 && (await screenNow()) !== 'battle'; i++) {
-    const s = await screenNow();
-    if (s === 'cutscene' && shots < 3 && i % 12 === 0) await page.screenshot({ path: join(OUT, `3-pre-scene-${shots++}.jpg`), type: 'jpeg', quality: 90 });
-    await page.waitForTimeout(100);
+  let cutAt = 0;
+  for (let i = 0; i < 1200 && (await screenNow()) !== 'battle'; i++) {
+    if ((await screenNow()) === 'cutscene') {
+      cutAt ||= Date.now();
+      if (shots < 6 && Date.now() - cutAt >= [300, 700, 1100, 1500, 2000, 2600][shots]) await page.screenshot({ path: join(OUT, `3-pre-scene-${shots++}.jpg`), type: 'jpeg', quality: 90 });
+    }
+    await page.waitForTimeout(40);
   }
+  log('pre scene stills', shots);
   await assertScreen(page, 'battle', 180000);
   await waitBattleMenu(page, 180000);
   for (let i = 0; i < 4 && (await coachUp()); i++) {
@@ -103,7 +120,8 @@ try {
   const names = [...new Set(backdrops)];
   log('backdrops asked for', names);
   check('the chapter asked for its own plate', names.some((n) => /^wendigo-lake(\.|$)/.test(n)), names);
-  check('Chapter VII\'s Temple plate was not asked for', !names.some((n) => /^macalania-temple/.test(n)), names);
+  // a hidden chapter has no strip on the board, so its plate is asked for by its own prep and cutscene alone (the board loads every listed chapter's plate, Chapter VII's among them, which is why the Temple plate is not a check here)
+  check('the plate was not asked for before the word was typed (no strip for a hidden chapter), and was by the party prep', !before.some((n) => /^wendigo-lake(\.|$)/.test(n)) && asked.some((n) => /^wendigo-lake(\.|$)/.test(n)), { before: before.length, afterPrep: asked.length });
 } catch (e) {
   failures.push(`threw: ${String(e).slice(0, 300)}`);
   log('threw', String(e).slice(0, 800));

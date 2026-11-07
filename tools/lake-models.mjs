@@ -14,14 +14,15 @@
  *   node tools/lake-models.mjs ensure [--warn]      verify the folder; restore from the backup when it fails; verify again (--warn: print the failure and go on, the chapter draws capsules)
  *
  * The backups (`backupPlaces`): the models store's dated folder and the second disk's copy of it, both shaped like a `public/` folder (`<store>/<date>/models-exp/lake/...`, with `hashes.json` and `SHA256SUMS.txt` beside
- * `models-exp/`, as the earlier chapters' are). `PYREFLY_LAKE_BACKUP` names one folder (already `.../models-exp/lake`-shaped) instead.
+ * `models-exp/`, as the earlier chapters' are). The store is `Tools/pyrefly-models-exp-store` on the drive this tree is on (`PYREFLY_MODELS_STORE` names another), the second disk is found by its folder name on any other drive (`PYREFLY_MODELS_BACKUP_DISK` names it);
+ * `PYREFLY_LAKE_BACKUP` names one folder (already `.../models-exp/lake`-shaped) instead of both.
  * Exit 0 = PASS, 1 = FAIL (the reason is printed). Copies only; this tool never deletes a file.
  * Game case: FFX only (the files are the Wendigo chapter's); the tool is delivery plumbing.
  */
 
 import { createHash } from 'node:crypto';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
-import { dirname, join, relative, resolve } from 'node:path';
+import { dirname, join, parse, relative, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
@@ -30,11 +31,20 @@ export const LAKE_MODELS_SRC = join(ROOT, 'public', 'models-exp', 'lake');
 export const LAKE_MODELS_LIST = join(ROOT, 'tools', 'lake', 'lake-models.json');
 /** The dated folder of the models store and of the second disk's copy of it that hold this chapter's files (`<place>/<date>/models-exp/lake`). */
 export const LAKE_BACKUP_DATE = '2026-11-07';
-export const LAKE_BACKUP_ROOTS = Object.freeze(['D:/Tools/pyrefly-models-exp-store', 'F:/pyrefly-models-backup']);
+/** The folder names of the two backups' roots (no drive or user name is written in this file: the store is found on the drive this tree is on, the second disk by looking for its folder on every drive). */
+export const LAKE_STORE_NAME = 'pyrefly-models-exp-store';
+export const LAKE_SECOND_DISK_NAME = 'pyrefly-models-backup';
+/** The roots the backups live under, in order: the models store (`PYREFLY_MODELS_STORE`, else `Tools/<store>` on this tree's own drive) and every drive's second-disk folder that exists (`PYREFLY_MODELS_BACKUP_DISK` names one). `exists` is injectable for tests. */
+export function backupRoots(env = process.env, exists = existsSync) {
+  const store = (env.PYREFLY_MODELS_STORE ?? '').trim() || join(parse(ROOT).root, 'Tools', LAKE_STORE_NAME);
+  const named = (env.PYREFLY_MODELS_BACKUP_DISK ?? '').trim();
+  const second = named ? [resolve(named)] : [...'DEFGHIJKLMNOPQRSTUVWXYZ'].map((d) => `${d}:/${LAKE_SECOND_DISK_NAME}`).filter((p) => exists(p));
+  return [resolve(store), ...second.map((p) => resolve(p))];
+}
 /** The backup folders `restore` and `ensure` read and `backup` writes, in order (the store first, then the second disk). */
-export function backupPlaces(env = process.env) {
+export function backupPlaces(env = process.env, exists = existsSync) {
   const one = (env.PYREFLY_LAKE_BACKUP ?? '').trim();
-  return one ? [resolve(one)] : LAKE_BACKUP_ROOTS.map((r) => join(r, LAKE_BACKUP_DATE, 'models-exp', 'lake'));
+  return one ? [resolve(one)] : backupRoots(env, exists).map((r) => join(r, LAKE_BACKUP_DATE, 'models-exp', 'lake'));
 }
 
 const sha256 = (p) => createHash('sha256').update(readFileSync(p)).digest('hex');
