@@ -37,10 +37,10 @@ export const DOOR_WORDS_IN_ORDER: readonly string[] = DOORS_IN_ORDER.map(([word]
 
 /**
  * The allowance of a door suite's pair test ("the first word to finish wins when two are typed in a row"): it mounts three real boards for every other door, so it grows with the number of doors. 15 s a door,
- * 180 s at the least (315 s at twenty-one doors). Measured at twenty-one doors: 15 to 28 s a suite when three door suites run together, but 180 to 250 s a suite when all twelve run together on three workers (jsdom mounts
+ * 180 s at the least (315 s at twenty-one doors); **raised to 40 s a door on 2026-11-07 (960 s at twenty-four)**: `valefor-door` timed out once at 15 s a door under load at twenty-four doors; a full run measured about 9 s a door, and eight suites together on a saturated CPU (100 percent, other lanes running) took 501 s for that one pair test, 21 s a door (a 25 s allowance would have cleared that by 16 percent only, and the margin thins with every door). Measured at twenty-one doors: 15 to 28 s a suite when three door suites run together, but 180 to 250 s a suite when all twelve run together on three workers (jsdom mounts
  * fight for the CPU), and 193 s for the pair test of one suite in the one full-suite run (3,125 s on three workers, the long benches running beside it): the old 180 s allowance of fifteen doors was not enough. A hang still fails, later.
  */
-export const DOOR_PAIR_TEST_TIMEOUT_MS = Math.max(180_000, DOORS_IN_ORDER.length * 15_000);
+export const DOOR_PAIR_TEST_TIMEOUT_MS = Math.max(180_000, DOORS_IN_ORDER.length * 40_000);
 
 /**
  * The allowance of a door suite's LOOP test (one that mounts a real board for every door: "a wrong letter resets", "each word opens its own chapter and nothing else", the phone-tier suites' "every other door opens"): it grows with the

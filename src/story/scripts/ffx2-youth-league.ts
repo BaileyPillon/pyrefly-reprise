@@ -144,7 +144,7 @@ const MID_SCRIPTS: Record<string, StoryScript> = {
   // Lucil's first Harbinger: damage and Doom on one girl.
   [FIRST_HARBINGER]: [
     say('rikku-x2', 'That felt like a countdown!', { auto: 1200 }),
-    say('paine', 'It is. Fifth beat. Get it off her.', { auto: 1500 }),
+    say('paine', 'It is. Fifth beat. Finish her, or raise her.', { auto: 1500 }),
   ],
 };
 

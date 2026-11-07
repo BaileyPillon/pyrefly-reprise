@@ -8,7 +8,9 @@
  * **Game case: FFX-2 only** [AGENTS.md rule 14]. ATB, dresspheres and the game's own scripts. Sourced facts only: Yaibal's care for Yuna (a Phoenix Down on her when she is down two turns in three, a Hi-Potion below a
  * quarter, a grenade on a quarter of the other turns), Lucil's fifth-action Harbinger with its Doom, Elma's guard on her whole line and her hunt for the girl with no Reflect, the Veteran's heavy blow on the lowest HP and the
  * Warrior's potion for a friend (`research/re-ffx2-youth-league-tournament.md` §5). **Doom is not cured by anything in the data**: the sources' blanket cures all leave it (`research/ffx2-combat-core.md` §2.8), and the engine
- * measured the KO at 10.5 seconds after it lands, whoever she is (`tests/unit/chapters/youth-league-engine.test.ts`), so the card says "finish her or raise the girl" and promises no cure. **The League's grenades and
+ * measured the KO at 10.5 seconds after it lands, whoever she is (`tests/unit/chapters/youth-league-engine.test.ts`; the research gives no figure, so the card says "about ten seconds"), and it says "finish her or raise the girl" and promises no cure.
+ * **The carry and the retry are the chapter's own picks, not the game's** (YL3 and YL4, `docs/handoff/ch-youth-league.md`): the party's HP, MP and bag go from bout to bout and a loss from the second fight on retries that fight, as the Den of Woe's shades do
+ * (`ffx2-gippal-den-of-woe §2`, the cite of those lines); the research (§8) records defeat, retry and Flee as unmapped, and the card says "in this version". **The League's grenades and
  * Confuse cannot take hold at the Chapter V party's level** (the landing rule, `research/re-ffx2-hit-status.md` §4.1; measured in the same test): the card says what they do (about fifty a girl) and not "blind".
  * **Not promised:** how the real game limits the party to the bracket's seven bouts, and the League's look.
  *
@@ -34,9 +36,9 @@ const LUCIL = 'x2-yl-lucil';
 
 const RULES: GuideRule[] = [
   {
-    text: 'Seven fights in a row and nothing mends you between them: HP, MP and the bag carry on. Lose from the second fight on and you start that fight again, as you entered it.',
+    text: 'Seven fights in a row and nothing mends you between them: HP, MP and the bag carry on. In this version, if you lose from the second fight on, you start that fight again, as you entered it.',
     short: 'Nothing mends you between the bouts',
-    cite: 'ffx2-youth-league-tournament §8',
+    cite: 'ffx2-gippal-den-of-woe §2',
   },
   {
     text: 'Darkness hits every enemy at once and ignores Defense. Rikku and Paine cast it, Yuna heals and raises: the same line that clears the Den of Woe.',
@@ -54,7 +56,7 @@ const RULES: GuideRule[] = [
     cite: 'ffx2-youth-league-tournament §5.3',
   },
   {
-    text: 'Every fifth action of Lucil is Harbinger: a blow and Doom on a girl who has none. Nothing cures Doom; it kills in 10.5 seconds. Finish her first, or raise the girl.',
+    text: 'Every fifth action of Lucil is Harbinger: a blow and Doom on a girl who has none. Nothing cures Doom; it kills about ten seconds after it lands. Finish her first, or raise the girl.',
     short: 'Lucil: every fifth blow is Doom; raise or finish her',
     cite: 'ffx2-youth-league-tournament §5.2',
   },
@@ -62,9 +64,9 @@ const RULES: GuideRule[] = [
 
 const HINTS: GuideHint[] = [
   { when: { labels: ['Darkness'] }, text: 'Darkness hits every enemy at once and ignores Defense, so one cast works on the whole line', cite: 'ffx2-gippal-den-of-woe §5' },
-  { when: { labels: ['Phoenix Down', 'Mega Phoenix', 'Life'], bossId: LUCIL }, text: 'Raise her: Lucil’s Doom kills in 10.5 seconds and nothing cures it, so the raise is the answer', cite: 'ffx2-youth-league-tournament §5.2' },
-  { when: { labels: ['Phoenix Down', 'Mega Phoenix', 'Life'] }, text: 'Raise her: nothing mends the party between the bouts, and a fallen girl stays fallen into the next one', cite: 'ffx2-youth-league-tournament §8' },
-  { when: { labels: ['Mega-Potion', 'Curaga', 'X-Potion', 'Cura'] }, text: 'Heal now: nothing mends the party between the bouts, so what you leave a fight with is what the next one meets', cite: 'ffx2-youth-league-tournament §8' },
+  { when: { labels: ['Phoenix Down', 'Mega Phoenix', 'Life'], bossId: LUCIL }, text: 'Raise her: Lucil’s Doom kills about ten seconds after it lands and nothing cures it, so the raise is the answer', cite: 'ffx2-youth-league-tournament §5.2' },
+  { when: { labels: ['Phoenix Down', 'Mega Phoenix', 'Life'] }, text: 'Raise her: nothing mends the party between the bouts, and a fallen girl stays fallen into the next one', cite: 'ffx2-gippal-den-of-woe §2' },
+  { when: { labels: ['Mega-Potion', 'Curaga', 'X-Potion', 'Cura'] }, text: 'Heal now: nothing mends the party between the bouts, so what you leave a fight with is what the next one meets', cite: 'ffx2-gippal-den-of-woe §2' },
   { when: { labels: ['Pray'] }, text: 'Nobody needs mending: Pray keeps the White Mage busy until the next blow', cite: 'ffx2-combat-core §3.5' },
   { when: { kinds: ['attack'], targetId: LUCIL }, text: 'Attack {target}: finishing her ends the Doom she has put on a girl, and the tournament', cite: 'ffx2-youth-league-tournament §5.2' },
   { when: { kinds: ['attack'], targetId: ELMA }, text: 'Attack {target}: her guard puts Shell and Protect on her line, so a plain blow lands softly', cite: 'ffx2-youth-league-tournament §5.3' },

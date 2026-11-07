@@ -91,7 +91,7 @@ export const FFX2_YOUTH_LEAGUE_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'Nothing in the bag or in the menus cures Doom. It kills in ten and a half seconds, whoever the girl is. Finish Lucil quickly, or raise the girl with a Phoenix Down when it has done its work.',
+      text: 'Nothing in the bag or in the menus cures Doom. It kills about ten seconds after it lands, whoever the girl is. Finish Lucil quickly, or raise the girl with a Phoenix Down when it has done its work.',
     },
     {
       t: 'p',

@@ -161,7 +161,7 @@ export const leagueAbilities: AbilityDef[] = [
     ...base,
     id: YL_ABILITY.osmose,
     name: 'Osmose',
-    power: 8, // row 0x406d: the MP class, formula 4, power 3, taken by the user; always hits
+    power: 8, // the field is copied from Leblanc's Osmose; the row 0x406d is the MP class (formula 4, power 3, absorbed), and the command record wins: 3/16 of the target's max MP, Paine 229 to 187 (a test); always hits
     formula: 'magic',
     damageType: 'magical',
     element: ['none'],

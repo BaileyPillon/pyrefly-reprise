@@ -129,6 +129,9 @@ describe('what the draft says, against the sources (research/re-ffx2-youth-leagu
     expect(textOf(S.midScripts['first-guard']!)).toMatch(/whole line/i);
     expect(textOf(S.midScripts['first-harbinger']!)).toMatch(/countdown/i);
     expect(textOf(S.midScripts['first-harbinger']!)).toMatch(/Fifth beat/i);
+    // Nothing cures Doom (the guide, the tactic and the engine test say so), so Paine never tells the player to take it off.
+    expect(textOf(S.midScripts['first-harbinger']!)).not.toMatch(/get it off|cure|remove/i);
+    expect(textOf(S.midScripts['first-harbinger']!)).toMatch(/Finish her, or raise her/);
   });
 
   it('the tournament ends with Lucil: the post scene says the board is chalked clean and the League has had its day; Yaibal hands Yuna a small potion', () => {

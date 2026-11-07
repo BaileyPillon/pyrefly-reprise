@@ -7,11 +7,13 @@
  * keys, act after act, to the seventh and to the results page and the post scene. At each act's first menu it reads the field: who stands there, and that the party arrived as the last act left it (carried, never
  * restored). The barks of the six falls are read from the battle log as they fire.
  *
- *   PYREFLY_BROWSER=gpu node tools/youth-league-smoke.mjs [--base http://127.0.0.1:5241/] [--out docs/screenshots/ch-youth-league] [--tag desk] [--w 1600 --h 900] [--touch] [--seed 7] [--wait-min 30]
+ *   PYREFLY_BROWSER=gpu node tools/youth-league-smoke.mjs [--base http://127.0.0.1:5241/] [--out docs/screenshots/ch-youth-league] [--tag desk] [--w 1600 --h 900] [--touch] [--seed 7] [--wait-min 30] [--strict-art]
  *
  * Exit code 1 on a failed check, 2 when the lock could not be had in time (nothing was run: the spec stands UNVERIFIED). Headless only (`PYREFLY_BROWSER=gpu` for the real GPU); never the Chrome extension or the
  * built-in pane. **The eight fighter types have no paintings** (`x2-yaibal`, `x2-lucil`, `x2-elma`, `x2-league-warrior`, `-veteran`, `-slasher`, `-mage`, `-master`): the presenter draws its procedural stand-in for
- * each and says so in a console warning, which is accepted here; the pause hero is the Den of Woe's existing plate.
+ * each. The first run (handoff J8) saw **no** procedural-placeholder warning and no 404 for them, and why the loader is silent was not found, so by default a warning or a 404 for those keys is accepted and logged, and the run
+ * cannot tell a missing painting from a present one. **`--strict-art`** is the check for the day the chapter is listed: any placeholder warning or any 4xx or 5xx fails the run (the paintings must then be there). The pause
+ * hero is the Den of Woe's existing plate.
  */
 import { mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -31,6 +33,7 @@ const TAG = arg('--tag', 'smoke');
 const W = Number(arg('--w', '1600'));
 const H = Number(arg('--h', '900'));
 const TOUCH = flag('--touch');
+const STRICT_ART = flag('--strict-art');
 const SEED = Number(arg('--seed', '7'));
 const WAIT_MIN = Number(arg('--wait-min', '30'));
 mkdirSync(OUT, { recursive: true });
@@ -264,10 +267,11 @@ try {
   }
   check('the post scene closes the tournament', /chalked clean|Youth League has had its day/i.test(post), post.slice(0, 200));
 
-  const real404 = missing.filter((m) => !/art\/(characters\/x2-(yaibal|lucil|elma|league-)|pause\/ffx2-youth-league|chapter-ffx2-youth-league)/.test(m));
+  const real404 = missing.filter((m) => STRICT_ART || !/art\/(characters\/x2-(yaibal|lucil|elma|league-)|pause\/ffx2-youth-league|chapter-ffx2-youth-league)/.test(m));
   log('placeholders', [...placeholders]);
   log('missing', missing);
   check('no console error and no 4xx or 5xx but the paintings that do not exist yet', errors.length === 0 && real404.length === 0, { errors: errors.slice(0, 4), real404: real404.slice(0, 4) });
+  if (STRICT_ART) check('strict art: no procedural-placeholder warning', placeholders.size === 0, [...placeholders].slice(0, 4));
   await browser.close();
 } finally {
   release?.();

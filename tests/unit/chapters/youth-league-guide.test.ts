@@ -4,7 +4,7 @@
  *
  * 1. **Registration**: the card, the document and the tactic are the chapter's, under all twenty fighters' ids, FFX-2, and the card carries the Wait split's clock rule like every FFX-2 guide.
  * 2. **The card explains the tactic**: every hint label is a row the tactic asks for or the attack row; the rules and hints cite in the corpus's own form.
- * 3. **The numbers the player reads are the data's**: the fighters' HP, Lucil's ten and a half seconds, the Flash Bomb's fifty, the drops and the steals; and what the sources and the engine say of Doom.
+ * 3. **The numbers the player reads are the data's**: the fighters' HP, Lucil's Doom of about ten seconds, the Flash Bomb's fifty, the drops and the steals; and what the sources and the engine say of Doom.
  * (What the tactic does to the shipped autopilot's results is measured in `youth-league-bench.test.ts`.)
  */
 import { describe, expect, it } from 'vitest';
@@ -42,6 +42,19 @@ describe('registration', () => {
   });
 });
 
+describe('the card says which lines are the chapter\'s own picks', () => {
+  it('the carry and the retry are the chapter\'s picks (YL3, YL4), not the research section that records them as unmapped: they cite the Den of Woe\'s carry and say "in this version"', () => {
+    const carry = FFX2_YOUTH_LEAGUE_GUIDE.rules.find((r) => r.short === 'Nothing mends you between the bouts')!;
+    expect(carry.cite).toBe('ffx2-gippal-den-of-woe §2');
+    expect(carry.text).toMatch(/In this version, if you lose from the second fight on/);
+    for (const h of FFX2_YOUTH_LEAGUE_GUIDE.hints.filter((x) => /nothing mends the party between the bouts/.test(x.text))) {
+      expect(h.cite, h.text).toBe('ffx2-gippal-den-of-woe §2');
+    }
+    // Doom's figure is the engine's measurement (the research gives none): the card says "about ten seconds" and cites only the sourced beat (§5.2).
+    for (const h of FFX2_YOUTH_LEAGUE_GUIDE.hints.filter((x) => /Doom kills/.test(x.text))) expect(h.text).not.toMatch(/10\.5/);
+  });
+});
+
 describe('the card explains the tactic', () => {
   it('every hint explains a row the tactic asks for, and every rule, hint and phase cites in the corpus\'s own form', () => {
     const allowed = new Set(['darkness', 'phoenix down', 'mega phoenix', 'life', 'mega-potion', 'curaga', 'x-potion', 'cura', 'pray']);
@@ -67,9 +80,9 @@ describe('the numbers the player reads are the data\'s', () => {
     expect(text).toContain(`Magic Defense of ${KINDS.elma.stats.mdef}`);
   });
 
-  it('Doom: 10.5 seconds and no cure, as the engine measured (youth-league-engine.test.ts) and the sources say (nothing cures Doom); Harbinger\'s row carries the counter 4', () => {
-    expect(cardText()).toMatch(/10\.5 seconds/);
-    expect(docText()).toMatch(/ten and a half seconds/);
+  it('Doom: about ten seconds (the engine measured 10.5) and no cure, as the engine measured (youth-league-engine.test.ts) and the sources say (nothing cures Doom); Harbinger\'s row carries the counter 4', () => {
+    expect(cardText()).toMatch(/about ten seconds after it lands/);
+    expect(docText()).toMatch(/about ten seconds after it lands/);
     expect(cardText()).toMatch(/Nothing cures Doom/);
     expect(docText()).toMatch(/Nothing in the bag or in the menus cures Doom/);
     expect(COMMAND_RECORDS_YOUTH_LEAGUE['x2-lucil-harbinger']!.statusTime).toEqual({ 14: 4 });
