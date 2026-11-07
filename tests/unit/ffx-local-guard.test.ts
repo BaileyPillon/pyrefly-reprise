@@ -233,7 +233,8 @@ describe('no retail file type reaches the repo', () => {
     // The hidden 3D Bahamut's own two folders (Chapter 31, FFX-2 only, the game's own FFX-2 models; the retail-assets rule was lifted 2026-10-18) are the second let-through, as a release tree holds them (r74 release tree):
     // a build ships exactly the files `tools/yrp-models-verify.mjs` lists (it refuses any other file of `models-exp/`) and `tools/dist-filter.mjs` prunes the rest, so nothing else in these folders can ship;
     // a retail file anywhere else in public/, or in a sibling folder, is still found.
-    const yrpFolders = ['models-exp/yrp/', 'models-exp/yrp-hd/'];
+    // The hidden Wendigo chapter's own folder (Chapter 49, FFX only: Meshy bodies, weapons and props, the party's motion the game's own battle kit retargeted onto them; the retail-assets rule was lifted 2026-10-18) is the third: `models-exp/lake/`.
+    const yrpFolders = ['models-exp/yrp/', 'models-exp/yrp-hd/', 'models-exp/lake/'];
     const found: string[] = [];
     const walk = (dir: string): void => {
       for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -305,7 +306,7 @@ describe('the camera glue and the skin are reached only through a dev-gated dyna
   const importersOf = (stem: string): string[] => {
     const re = new RegExp(`from '[^']*${stem}\\.ts'|import\\('[^']*${stem}\\.ts'\\)`);
     // `src/engine/yrp3d/` has a `clipSequencer.ts` and a `clipMap.ts` of its own (the hidden 3D Bahamut's, FFX-2 only, models shipped with the build): same names as ffx3d's, not ffx3d's modules (r74 integration)
-    return allSources().filter((src) => re.test(src.text) && !src.path.startsWith('src/engine/yrp3d/')).map((src) => src.path);
+    return allSources().filter((src) => re.test(src.text) && !src.path.startsWith('src/engine/yrp3d/') && !src.path.startsWith('src/engine/lake3d/')).map((src) => src.path); // `src/engine/lake3d/` (the hidden Wendigo chapter's, FFX only) imports the Bahamut chapter's pure clip sequencer and plan table and has a `clipMap.ts` of its own: not ffx3d's
   };
 
   it('exp-fayth-camera.ts is imported by the deck scene alone, and exp-fayth-skin.ts by the deck scene and the camera glue', () => {
