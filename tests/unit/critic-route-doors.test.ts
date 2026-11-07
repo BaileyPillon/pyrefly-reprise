@@ -23,6 +23,7 @@ describe('the route\'s table of door words is the board\'s', () => {
     expect(doorWordFor('sanctuary-keeper')).toBe('beast');
     expect(doorWordFor('ffx2-yunas-ballad')).toBe('wraith');
     expect(doorWordFor('spherimorph')).toBe('spherimorph');
+    expect(doorWordFor('ffx2-youth-league')).toBe('youth');
     expect(doorWordFor('omega-ruins')).toBe('weapon');
   });
 

@@ -92,7 +92,8 @@ describe('FFX-2 intent: Osmose is neither physical nor magical on Leblanc\'s row
       const word = d.damageType === 'physical' ? 'Physical' : 'Magical';
       if (!describeAbility(d).startsWith(`${word} `)) lost.push(`${d.id}: ${describeAbility(d)}`);
     }
-    expect(lost.map((l) => l.split(':')[0])).toEqual(['x2-leblanc-osmose']);
+    // Elma's Osmose (the hidden Youth League Tournament, 2026-11-07) is the same row 0x406d on her own ability id, so it names no kind either
+    expect(lost.map((l) => l.split(':')[0])).toEqual(['x2-leblanc-osmose', 'x2-elma-osmose']);
   });
 });
 

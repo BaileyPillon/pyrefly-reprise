@@ -42,9 +42,10 @@
  * **`infinito`** (FFX-2, the hidden Fallen Maesters, `./maestersDoor.ts`: only F is a bound key, `l1`, which the board ignores; I, N, T and O are unbound) is a plain `WordDoor` too.
  * **`drillshot`** (FFX-2, the hidden Bevelle Guardians, `./drillshotDoor.ts`: D is `right`, R is `r1`, S is `down`; I, L, H, O and T are unbound) is a plain `WordDoor` too.
  * **`duelist`** (FFX-2, the hidden Farplane Cup, `./duelistDoor.ts`: D is `right`, E is `start`, S is `down`, the others unbound; the first D moves the cursor one step, as `daigoro`'s does) is a plain `WordDoor` too.
+ * **`youth`** (FFX-2, the hidden Youth League Tournament, `./youthDoor.ts`: Y, O, U, T and H are ALL bound to nothing, the only word on the table with no bound letter; it moves the cursor not at all) is a plain `WordDoor` too.
  * **`wraith`** (FFX-2, the hidden Yuna's Ballad, `./wraithDoor.ts`: W is `up`, R is `r1`, A is `left`; I, T and H are unbound) is a plain `WordDoor` too.
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno` and `beast`.
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith`, `youth` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno` and `beast`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -75,6 +76,7 @@ import { DUELIST_DOOR_CHAPTER, DUELIST_DOOR_WORD } from './duelistDoor.ts';
 import { BEAST_DOOR_CHAPTER, BEAST_DOOR_WORD } from './beastDoor.ts';
 import { WRAITH_DOOR_CHAPTER, WRAITH_DOOR_WORD } from './wraithDoor.ts';
 import { SPHERIMORPH_DOOR_CHAPTER, SPHERIMORPH_DOOR_WORD } from './spherimorphDoor.ts';
+import { YOUTH_DOOR_CHAPTER, YOUTH_DOOR_WORD } from './youthDoor.ts';
 import { WEAPON_DOOR_CHAPTER, WEAPON_DOOR_WORD } from './weaponDoor.ts';
 
 /**
@@ -126,6 +128,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: BEAST_DOOR_WORD, chapter: BEAST_DOOR_CHAPTER },
   { word: WRAITH_DOOR_WORD, chapter: WRAITH_DOOR_CHAPTER },
   { word: SPHERIMORPH_DOOR_WORD, chapter: SPHERIMORPH_DOOR_CHAPTER },
+  { word: YOUTH_DOOR_WORD, chapter: YOUTH_DOOR_CHAPTER },
   { word: WEAPON_DOOR_WORD, chapter: WEAPON_DOOR_CHAPTER },
 ];
 

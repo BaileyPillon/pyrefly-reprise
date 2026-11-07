@@ -52,6 +52,9 @@ import { bevelleGuardiansScripts } from './bevelle-guardians.ts';
 import { farplaneCupScripts } from './farplane-cup.ts';
 // The possessed Rikku and the possessed Paine in the Den of Woe (the hidden chapter "Yuna's Ballad", FFX-2 only): the game's own two scripts, poll by poll.
 import { yunasBalladScripts } from './yunas-ballad.ts';
+// Yaibal, Lucil, Elma and the five League fighter types, the seven fights of the hidden chapter "The Youth League Tournament" (FFX-2 only): the game's own eight scripts, poll by poll.
+import { youthLeagueNamedScripts } from './youth-league.ts';
+import { youthLeagueLeagueScripts } from './youth-league-league.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -98,6 +101,8 @@ const SCRIPTS: readonly AiScript[] = [
   ...bevelleGuardiansScripts,
   ...farplaneCupScripts,
   ...yunasBalladScripts,
+  ...youthLeagueNamedScripts,
+  ...youthLeagueLeagueScripts,
   idleScript,
   basicAttackScript,
 ];

@@ -71,7 +71,7 @@ export const heldItemEffect: AbilityDef = {
 
 /** Held rows whose shop price the research does not give; each carries `price: 0`. */
 export const UNSOURCED_PRICE_IDS: ReadonlySet<string> = new Set([
-  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle',
+  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle', 'x2-m-bomb', 'amulet',
 ]);
 
 function held(id: string, name: string, price: number | 'unsourced', description?: string): ItemDef {
@@ -121,6 +121,9 @@ export const heldItems: ItemDef[] = [
   held('x2-mana-tablet', 'Mana Tablet', 'unsourced'),
   held('charm-bangle', 'Charm Bangle', 'unsourced'),
   held('x2-healing-spring', 'Healing Spring', 0, 'Recovery item (Regen); its effect is not wired yet.'),
+  // The hidden Youth League Tournament's steals (FFX-2 only, 2026-11-07; `monster.bin` rows 211 and 193 (M-Bomb, item 0x2013) and 214 (Amulet, accessory 0x900f), `research/re-ffx2-youth-league-tournament.md` §3.2, the names from the US item and accessory tables [verified: the game's own table]): no effect and no price is read, so each is held-only with price 0 (unsourced).
+  held('x2-m-bomb', 'M-Bomb', 'unsourced'),
+  held('amulet', 'Amulet', 'unsourced'),
 ];
 
 export default heldItems;

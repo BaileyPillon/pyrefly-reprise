@@ -59,6 +59,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'sanctuary-keeper': 'ffx', // the hidden Sanctuary Keeper chapter (FFX only, 2026-11-06)
   'ffx2-yunas-ballad': 'ffx2', // the hidden Yuna's Ballad chapter (FFX-2 only, 2026-11-06)
   spherimorph: 'ffx', // the hidden Spherimorph chapter (FFX only, 2026-11-06)
+  'ffx2-youth-league': 'ffx2', // the hidden Youth League Tournament chapter (FFX-2 only, 2026-11-07)
   'omega-ruins': 'ffx', // the hidden Omega Ruins chapter (FFX only, 2026-11-06)
 };
 
