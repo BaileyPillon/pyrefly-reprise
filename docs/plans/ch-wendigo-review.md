@@ -26,7 +26,7 @@ Paper preflight under `critic/RUBRIC.md` §4 (AGENTS.md rule 15), in the format 
 | RE §4 `[run]` | exact tallies in the Atel interpreter: the turn mix, the seven-turn cycle, the counter table (35 commands), the Guardians' branches | [run] |
 | GameFAQs "Lake Macalania" (read through headless Chromium), Jegged, Gamer Guides, Samurai Gamers | the guides' account: agrees with the files except where RE §7 says (Haste, "weak to fire") | [guide] |
 | `src/data/ffx/builds/macalania.ts`, `macalania-bench.ts` | the repo's stat cells, aeons and bag at the Temple, a few battles before this fight | [estimate], build point sourced |
-| the extraction lane's size table `ffx-monsters-size.tsv`, outside the repo | the game's heights: Wendigo 26.4 (1.55 x Tidus), the Guardian 20.0 (1.08 x Tidus) | [R] |
+| the extraction lane's size table `ffx-monsters-size.tsv`, outside the repo | the game's drawn heights: Wendigo 28.07 (1.55 x Tidus; the design height E is 26.4), the Guardian 19.58 (1.08 x Tidus; E is 20.0) | [R] |
 | The Meshy lane (`REPORT.md`, cards, `cost-log.jsonl`) | the Meshy settings that worked, the prices, the pilot's weak motion, the frame time of the staged frame | [lane] |
 | the extraction lane's converted-assets folder, outside the repo | the real party motions already converted (Tidus, Wakka, Rikku), the clip map's format and open questions | [extract] |
 
@@ -215,7 +215,7 @@ The game's own cue for this fight is **not read** (the field script loads the pu
 4. **Which theme the battle plays; the flags word; what a defeat does** (RE §8): not read.
 5. **The program-to-clip map of Wendigo's bank** (the converter's work, P3), and whether the Guardian's `m213` bank covers a humanoid's idle, hurt, KO.
 6. **The Meshy Wendigo against the game's size and design**: CW5 and CW6 frames.
-7. **The in-game scale of Wendigo in the HD build** (26.4 engine height is the size table's reading).
+7. **The in-game scale of Wendigo in the HD build** (the size table's drawn height is 28.07, its design height 26.4).
 
 ## Corrections and findings (what the mapping turned up)
 

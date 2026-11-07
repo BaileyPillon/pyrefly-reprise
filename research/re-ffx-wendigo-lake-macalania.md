@@ -43,7 +43,7 @@ Offsets are record offsets (chunk 2; layout `re-ffx-dark-aeons.md` 1). Heights f
 | Extra-immunity word | 0x0300: Eject, Auto-Life | [bytes] |
 | Command list | 0x4000 Attack, 0x4080 Attack; **the script adds nothing and calls four more by id (0x407F, 0x4062, 0x403B, 0x4063)** | [bytes] [disasm] |
 | Forced action (a Provoke or Berserk turn) | 0x4000 Attack | [bytes] |
-| Height | engine height 26.4 game units = **1.55 x Tidus** (18.15), i.e. about 2.7 m if Tidus stands 1.75 m; raw mesh 28.07 tall, 50.29 across in the T pose | [bytes: size table] |
+| Height | **drawn height 28.07 game units (raw mesh x engine scale 1 x script scale 1) = 1.55 x Tidus** (18.15), i.e. about 2.7 m if Tidus stands 1.75 m; 50.29 across in the T pose. (The stored design height E is 26.4, 1.45 x; the size table's ratio column is the drawn one, as `data/ffx/fiend-stature.ts` reads it. Corrected 2026-11-06 by the battle lane: the first draft called 26.4 the 1.55.) | [bytes: size table] |
 
 **Status bytes** (255 immune; otherwise the move's chance minus the byte; Threaten's byte is a success percentage [note: ffx-seymour-anima-macalania.md 0.4]): Death 255, Zombie 255, Petrify 255, Poison 255, **Power, Magic, Armor, Mental Break 0**, Confuse 255, **Berserk 0, Provoke 0**, **Threaten 100**, **Sleep 20, Silence 20, Darkness 20**, Shell, Protect, Reflect (255), the four Nul spells, Regen, Haste 0, Slow 255. [bytes]
 
@@ -219,7 +219,7 @@ With **Protect and Power Break together** the weak punch is 408 to 503 and the d
 - **The flags word and what a defeat does; which theme plays in the battle; the field event's pre-battle staging in detail** (twenty scripted requests, not decoded).
 - **Whether the in-game party has Shiva's gauge, or the HP, the bag and the abilities of the preset, at this exact point** (a few chase battles after the Temple): the preset is the Temple's and is an `[estimate]`.
 - **The ability codes of the gear rows** (0x8003, 0x800b, 0x805b, 0x8073).
-- **Wendigo's model scale in play** is the size table's engine height (26.4); the scale the HD build draws it at was not re-measured.
+- **Wendigo's model scale in play** is the size table's drawn height (28.07, the design height E being 26.4); the scale the HD build draws it at was not re-measured.
 - **Ghidra was not asked**; the stored decompile corpus and the earlier lanes' notes supplied every engine read.
 
 ## 9. The fight, for the chapter (facts only; no number proposed)
