@@ -69,11 +69,22 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 76 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 77 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '77',
+    date: '2026-11-07',
+    lines: [
+      { tag: 'FFX', text: 'The aiming marker is now the game’s own cone in the Ink and Gold finish, where a pointing glove used to be.' },
+      { tag: 'Both', text: 'A character’s portrait no longer slams in at the start of every turn; it now shows on a big move (an Overdrive, an aeon, a special dressphere or a finisher) and names it.' },
+      { tag: 'FFX', text: 'In Chapter I, Tidus is now drawn as a cut-out of his painting that bends at the joints, so his poses move into each other instead of cross-fading.' },
+      { tag: 'FFX-2', text: 'In Chapter IV, Rikku’s Dark Knight is drawn the same way, and her casting pose now holds her head a little higher.' },
+      { tag: 'Both', text: 'Add ?marker=hand, ?portraits=turns or ?partyrigs=off to the address to bring back the glove, the turn portraits or the painted figures.' },
+    ],
+  },
   {
     release: '76',
     date: '2026-11-06',

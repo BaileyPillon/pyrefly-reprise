@@ -14,7 +14,7 @@
 | Deploy log | `docs/deploys.log` line 93: cloudflare, 5144 art files |
 | Artifact (SHA-256) | `31d217a3604086e9c7526548fc459ce210614df44dd596a0239492911bdeeea6` |
 | The deploy's own byte check | PASS (416 files compared with the build) |
-| Marker | `critic/pending/36b6e851d.json` (pending) |
+| Marker | `critic/cleared/36b6e851d.json` (cleared) |
 | Owner override | none |
 | CHANGELOG entry | 2026-11-06 · Release 76 (r76), eight new hidden chapters (33 to 40) with their paintings: an anime-style Valefor, the Bevelle Guardians, the Farplane Cup and Yuna's Ballad in FFX-2, and the Dark Aeons, Penance, the Flooded Ways and the Sanctuary Keeper in FFX; the battle stage's teardown frees the foot-shadow memory; nineteen of the nineteen listed chapters stay treated (each item says which game) |
 | Focused review | critic/reviews/36b6e851d-focused.json: ship SHIP, changed area FAIL |
@@ -24,12 +24,9 @@ Is this commit on main? `git merge-base --is-ancestor 36b6e851d origin/main` exi
 
 ## Review obligations still open
 
-| Build | Obligation | What it needs |
-|---|---|---|
-| `36b6e851d` | focused | acceptance of the changed area |
-| `36b6e851d` | deep (carries 1 earlier builds) | deep review of every affected chapter and system |
+None: every marker in `critic/pending` is settled.
 
-The ledger counts 2 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 0 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
