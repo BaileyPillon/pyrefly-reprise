@@ -16,16 +16,16 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-2064 decisions in all: 1494 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1391 of the written decisions record a blanket yes.
+2068 decisions in all: 1498 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1391 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1938 |
+| adopted | 1942 |
 | proposed | 9 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 94 |
-| **All** | **2064** |
+| **All** | **2068** |
 
 | Area | Decisions |
 | --- | ---: |
@@ -34,26 +34,26 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | visuals | 180 |
 | camera | 76 |
 | audio | 160 |
-| ui | 227 |
+| ui | 230 |
 | story | 17 |
 | chapters | 317 |
 | guide | 34 |
 | release | 114 |
 | hosting | 18 |
-| process | 230 |
+| process | 231 |
 | critic | 45 |
 | data | 17 |
 | tech | 45 |
 | site | 21 |
-| **All** | **2064** |
+| **All** | **2068** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 1098 |
-| FFX only | 528 |
-| FFX-2 only | 420 |
+| both games | 1100 |
+| FFX only | 529 |
+| FFX-2 only | 421 |
 | FF7 hidden experiment | 18 |
-| **All** | **2064** |
+| **All** | **2068** |
 
 ## Standing rules in force
 
@@ -141,13 +141,13 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27) · [2026-10-28](#2026-10-28) · [2026-10-29](#2026-10-29) · [2026-10-30](#2026-10-30) · [2026-10-31](#2026-10-31) · [2026-11-01](#2026-11-01) · [2026-11-02](#2026-11-02) · [2026-11-03](#2026-11-03) · [2026-11-04](#2026-11-04) · [2026-11-06](#2026-11-06)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27) · [2026-10-28](#2026-10-28) · [2026-10-29](#2026-10-29) · [2026-10-30](#2026-10-30) · [2026-10-31](#2026-10-31) · [2026-11-01](#2026-11-01) · [2026-11-02](#2026-11-02) · [2026-11-03](#2026-11-03) · [2026-11-04](#2026-11-04) · [2026-11-06](#2026-11-06) · [2026-11-07](#2026-11-07)
 
 ## Ledger
 
 ### 2026-09-15
 
-Tuesday · 23 decisions
+Tuesday · 22 decisions
 
 - <a id="e-001"></a>**E-001** — The game: five boss encounters from Final Fantasy X and X-2 as a fan tribute that runs in a browser and can be shared as a link
   - Bailey: no verbatim quote on record for this decision
@@ -234,11 +234,6 @@ Tuesday · 23 decisions
   - Delivery: Built, and failing its target in critic/rounds/round-04.json at bc2571c.
   - area ui · FFX · adopted · delivery implemented
   - Source: docs/target/targets.json, group presentation, tile "Battle HUD, FFX"
-- **Picture** (presentation) — Approved: Turn cut-in
-  - Bailey: “I really like that style I approve of it.” (his words for the whole group of pictures)
-  - Delivery: Approved and never wired; NOW.md asks Bailey whether the tile still stands.
-  - area ui · FFX · adopted · delivery not scheduled
-  - Source: docs/target/targets.json, group presentation, tile "Turn cut-in"
 - **Picture** (presentation) — Approved: Swordplay Overdrive
   - Bailey: “I really like that style I approve of it.” (his words for the whole group of pictures)
   - Target: Tidus's Swordplay Overdrive timing overlay in chapter 1.
@@ -9749,3 +9744,33 @@ Friday · 22 decisions
   - What changed: Item 220x, about 18:25 EST on 2026-11-06, the default the driver told him at about 14:45 EST, taken after 3.5 hours without a pick. The fight: the Wendigo (monster m212, 18,000 HP) and two Guado Guardians; the boss with a Meshy rig and clips, the Guardians, the party from the approved paintings and the arena props all Meshy models, the party moved by the real FFX animations retargeted onto the Meshy models. Why B: mirror ice and an aurora to show off, and the one boss Meshy's own rig fits. Phase 1 (research and assets, A-1224) and phase 2 (the battle side and the second assets, A-1225) are done; phase 3 (the presentation) is in build. Not merged, not deployed.
   - area chapters · FFX · adopted · delivery in progress · see [D-1488](#d-1488), [D-1490](#d-1490), [D-1476](#d-1476), [D-1423](#d-1423) · refines [D-1488](#d-1488)
   - Source: The driver's call of 2026-11-06 about 18:25 EST (the queue line), made under D-1488, D-1490 and D-1476 and his delegation (D-1423), recorded as a …
+
+### 2026-11-07
+
+Saturday · 5 decisions
+
+- <a id="d-1495"></a>**D-1495** — He says "ok keep going we have full usage here" and the delegation stands: the held lanes resume (both games, process)
+  - Bailey: “ok keep going we have full usage here”
+  - What changed: Item 220y, about 09:30 EST on 2026-11-07, typed in the window of the second account's copy of the driver chat. A confirmation, not a new rule (like D-1443, D-1450, D-1473 and D-1478): the delegation of D-1423 stands, and the driver reads "full usage" as the weekly allowance being fresh on that account (it read 1 to 8 percent that morning). The held lanes resumed under it: release 77's integration passes, candidate, review and deploy (A-1240 to A-1256), the Youth League chapter (A-1241), the Jenova LIFE chapter (A-1247), the Wendigo presentation (A-1245, A-1248), the other wave-4 builds (A-1246, A-1249, A-1259), the artifact republish on that account (A-1239) and the release 78 fixes (A-1257).
+  - area process · both games · adopted · delivery implemented · see [D-1423](#d-1423), [D-1478](#d-1478), [D-1473](#d-1473), [D-1450](#d-1450) · refines [D-1423](#d-1423)
+  - Source: Bailey, 2026-11-07 about 09:30 EST, typed in the chat, verbatim: "ok keep going we have full usage here". Item 220y of the driver's list. Game case: …
+- <a id="d-1496"></a>**D-1496** — He picks "B: cone in Ink and Gold" for the FFX aiming marker: the game's cone in the interface's own finish replaces the pointing glove (FFX only)
+  - Bailey: “B: cone in Ink and Gold”
+  - What changed: Item 220z, about 09:50 EST on 2026-11-07, his answer to the question of D-1485 (a pair of phone cards sent on 2026-11-06 at 14:00 EST: marker A the plain cone, the driver's recommendation; B the cone in the Ink & Gold finish; C a smaller glove). He picked B, not the recommended A: what he approved is the real game's cone shape drawn in the Ink & Gold finish. What he did not say: anything about FFX-2 (the driver's reading is D-1498). Built on ui-marker-portraits (A-1243), merged in A-1244 and live in release 77 (A-1255): the cone docks on the free side of the leftmost ally when its left side is behind the command rows and is 64 px wide on a phone; ?marker=hand brings the glove back. The live check saw the cone draw at 99 by 54 px on a target and Escape return to the command menu (A-1256).
+  - area ui · FFX · adopted · delivery implemented · see [D-1485](#d-1485), [D-1265](#d-1265), [D-1423](#d-1423), [D-1498](#d-1498), [D-1497](#d-1497) · refines [D-1485](#d-1485)
+  - Source: Bailey, 2026-11-07 about 09:50 EST, his answer to the driver's question in the chat, verbatim: "B: cone in Ink and Gold". Item 220z of the driver's …
+- <a id="d-1497"></a>**D-1497** — He picks "A: only on big moves" for the portraits: a portrait shows only on a big move, each game with its own list from the sources, and no longer at the start of a turn (both games)
+  - Bailey: “A: only on big moves”
+  - What changed: Item 221a, about 09:50 EST on 2026-11-07, his answer to the second half of D-1485 (portraits: A big moves only, B a slim slab every turn, C removed, the driver's recommendation). He picked A, not the recommended C: the portrait stays, on big moves only, and the per-turn slab of D-1485 goes. Built on ui-marker-portraits (A-1243), merged in A-1244 and live in release 77: the portrait slams in and names the move, full the first time a member does one in a fight and a 110 ms flash after; no foe shows one. FFX: Overdrives, summons and an aeon's Overdrive. FFX-2: the change into a special dressphere and the three finishers Great Whirl, Vajra and Sword Dance, the narrowest sourced list, so whether to widen it is an open question for him. ?portraits=turns brings the old slab back and ?portraits=off shows none. Not yet seen on a screen: the focused review and the live check (A-1254, A-1256) saw no big-move portrait frame, and the engine refuses the Special command of the Spherechange wheel (found in A-1244), so a Special's portrait cannot fire in play today.
+  - area ui · both games · adopted · delivery implemented · see [D-1485](#d-1485), [D-1423](#d-1423), [D-1496](#d-1496), [D-1498](#d-1498) · refines [D-1485](#d-1485)
+  - Source: Bailey, 2026-11-07 about 09:50 EST, his answer to the driver's question in the chat, verbatim: "A: only on big moves". Item 221a of the driver's …
+- <a id="d-1498"></a>**D-1498** — DRIVER CALL under his words, his to overturn: FFX-2 keeps its flower ring as the aiming marker, because he named only the FFX hand (FFX-2 only)
+  - Bailey: “B: cone in Ink and Gold”
+  - What changed: Item 221b, on 2026-11-07 right after his answer of D-1496. His complaint (D-1485) was about the FFX pointing glove, and the cone he picked is the FFX game's; the FFX-2 flower ring is the option C he picked on 2026-10-22, so nothing in his words reaches it. FFX-2's ring is untouched in release 77 (the focused review saw the ring as intended). If he wants FFX-2's marker changed he says so and options come first (AGENTS.md rule 9).
+  - area ui · FFX-2 · adopted · delivery implemented · see [D-1496](#d-1496), [D-1485](#d-1485), [D-1423](#d-1423) · refines [D-1496](#d-1496)
+  - Source: The driver's call of 2026-11-07, made on his words of about 09:50 EST (D-1496) and under his delegation (D-1423), recorded as a driver call and his …
+- **Picture** (presentation) — Approved: Turn cut-in
+  - Bailey: “A: only on big moves”
+  - Delivery: Live since release 77 (2026-11-08T03:41:51Z, D-1497): the slab shows on a big move only, full the first time a member does one in a fight and a 110 ms flash after; ?portraits=turns brings the old per-turn slab back. Implemented, not verified: the focused review and the live check of release 77 saw no big-move portrait frame.
+  - area ui · FFX · adopted · delivery implemented · see [D-1497](#d-1497)
+  - Source: docs/target/targets.json, group presentation, tile "Turn cut-in"

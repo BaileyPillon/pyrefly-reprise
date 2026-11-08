@@ -117,9 +117,30 @@
           "label": "Turn cut-in",
           "src": "docs/screenshots/mockups/A-turn-cut-in.jpg",
           "state": "approved",
-          "build": "The character cut-in when a party member's turn begins in chapter 1.",
-          "delivery": "not-scheduled",
-          "deliveryNote": "Approved and never wired; NOW.md asks Bailey whether the tile still stands."
+          "build": "The character cut-in slab in chapter 1, shown only on a big move (an Overdrive, a summon or an aeon's Overdrive; FFX-2 has its own shorter list) and no longer when every turn begins (Bailey, 2026-11-07, D-1497).",
+          "delivery": "implemented",
+          "deliveryNote": "Live since release 77 (2026-11-08T03:41:51Z, D-1497): the slab shows on a big move only, full the first time a member does one in a fight and a 110 ms flash after; ?portraits=turns brings the old per-turn slab back. Implemented, not verified: the focused review and the live check of release 77 saw no big-move portrait frame.",
+          "reaction": {
+            "date": "2026-11-07",
+            "words": "A: only on big moves",
+            "how": "Bailey answered the portraits half of the driver's question of 2026-11-06 ~14:00 EST (cards A big moves only, B a slim slab every turn, C removed; the driver recommended C) with option A, in the chat on 2026-11-07 ~09:50 EST.",
+            "liked": [
+              "the portrait itself, on a big move"
+            ],
+            "disliked": [
+              "the portrait slamming in at the start of a turn, which he found random (2026-11-06, D-1485)"
+            ],
+            "mustRemain": [
+              "the approved slab's own geometry and art"
+            ],
+            "mustChange": [
+              "it shows only on a big move, each game with its own list from the sources (FFX: Overdrives, summons and an aeon's Overdrive; FFX-2: the special dress change and Great Whirl, Vajra and Sword Dance), and not at the start of a turn"
+            ],
+            "undecided": [
+              "whether the FFX-2 list of big moves should be widened beyond the narrowest sourced one"
+            ],
+            "inferred": []
+          }
         },
         {
           "label": "Swordplay Overdrive",
