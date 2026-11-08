@@ -6,7 +6,9 @@
  * reported. Each link counted its own levels from its own AP and dropped the remainder (two levels each, 6,000, 16,000 and 11,000 over), so Tidus's six levels leave 33,000 of the printed 165,000 unspent: a bar of
  * 1.5 levels. The fix is in `sphereGridBar.ts` (the levels the printed AP still pays for are counted), with a last guard that holds the bar at its cap. FFX only; FFX-2's dressphere bar is untouched.
  *
- * Inert elsewhere, proven: for every FFX chapter and a sweep of AP, a row whose bar is within its cap prints exactly what the old arithmetic printed (the same levels, the same rest, the same cap).
+ * Inert elsewhere, proven FOR A SINGLE LINK (corrected at the r78 integration: this line first claimed more): for every FFX chapter and a sweep of AP, a row whose bar is within its cap prints exactly what the old arithmetic printed (the same
+ * levels, the same rest, the same cap). **The five pooled chains are not single links**: the Mirror Aeons (LISTED), the Dark Aeons and the Omega Ruins change, the Sinspawn Gui and the Flooded Ways do not; that is pinned, old against new,
+ * by `r78-results-sphere-bar-chains.test.ts`.
  */
 import { describe, expect, it } from 'vitest';
 import { chainSpoils } from '../../src/app/screens/BattleChainSpoils.ts';
@@ -128,7 +130,7 @@ describe('sphereGridBar', () => {
   });
 });
 
-describe('inert on every shipped FFX chapter: the rows of a result whose levels are the engine\'s are the old rows', () => {
+describe('inert on every shipped FFX chapter for a single link (the pooled chains are pinned in r78-results-sphere-bar-chains): the rows of a result whose levels are the engine\'s are the old rows', () => {
   const ffx = [...CHAPTERS, ...UNLISTED_CHAPTERS, ...EXPERIMENT_CHAPTERS].filter((c) => c.game === 'ffx');
 
   it('each FFX chapter, a sweep of single-link AP: the row text and the chip are what the old arithmetic printed', () => {
