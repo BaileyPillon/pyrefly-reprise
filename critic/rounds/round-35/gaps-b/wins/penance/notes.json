@@ -1,0 +1,420 @@
+{
+ "notes": [
+  {
+   "ms": 195400,
+   "k": "live",
+   "v": {
+    "version": "0.1.0",
+    "scripts": [
+     "index-jYm-0mrJ.js"
+    ]
+   }
+  },
+  {
+   "ms": 201777,
+   "k": "door",
+   "v": {
+    "word": "judgment",
+    "typed": "judgment"
+   }
+  },
+  {
+   "ms": 203989,
+   "k": "afterDoor",
+   "v": "party-prep"
+  },
+  {
+   "ms": 212149,
+   "k": "preSceneHolds",
+   "v": 1
+  },
+  {
+   "ms": 213190,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1,
+    "boss": [
+     "penance",
+     "penance-right-arm",
+     "penance-left-arm"
+    ]
+   }
+  },
+  {
+   "ms": 213699,
+   "k": "battleSpeed",
+   "v": "fast"
+  },
+  {
+   "ms": 244613,
+   "k": "ARM FELL",
+   "v": {
+    "arm": "penance-left-arm",
+    "ticks": 8,
+    "decision": 6
+   }
+  },
+  {
+   "ms": 274593,
+   "k": "ARM FELL",
+   "v": {
+    "arm": "penance-right-arm",
+    "ticks": 18,
+    "decision": 14
+   }
+  },
+  {
+   "ms": 279660,
+   "k": "ARM RETURNED",
+   "v": {
+    "arm": "penance-left-arm",
+    "ticks": 20,
+    "decision": 15
+   }
+  },
+  {
+   "ms": 304516,
+   "k": "ARM RETURNED",
+   "v": {
+    "arm": "penance-right-arm",
+    "ticks": 30,
+    "decision": 23
+   }
+  },
+  {
+   "ms": 310556,
+   "k": "ARM FELL",
+   "v": {
+    "arm": "penance-left-arm",
+    "ticks": 31,
+    "decision": 25
+   }
+  },
+  {
+   "ms": 335930,
+   "k": "ARM FELL",
+   "v": {
+    "arm": "penance-right-arm",
+    "ticks": 40,
+    "decision": 33
+   }
+  },
+  {
+   "ms": 345889,
+   "k": "ARM RETURNED",
+   "v": {
+    "arm": "penance-left-arm",
+    "ticks": 44,
+    "decision": 35
+   }
+  },
+  {
+   "ms": 369361,
+   "k": "ARM RETURNED",
+   "v": {
+    "arm": "penance-right-arm",
+    "ticks": 52,
+    "decision": 42
+   }
+  },
+  {
+   "ms": 373627,
+   "k": "ARM FELL",
+   "v": {
+    "arm": "penance-left-arm",
+    "ticks": 54,
+    "decision": 44
+   }
+  },
+  {
+   "ms": 400670,
+   "k": "ARM FELL",
+   "v": {
+    "arm": "penance-right-arm",
+    "ticks": 64,
+    "decision": 52
+   }
+  },
+  {
+   "ms": 403373,
+   "k": "ARM RETURNED",
+   "v": {
+    "arm": "penance-left-arm",
+    "ticks": 66,
+    "decision": 53
+   }
+  },
+  {
+   "ms": 428077,
+   "k": "ARM RETURNED",
+   "v": {
+    "arm": "penance-right-arm",
+    "ticks": 76,
+    "decision": 61
+   }
+  },
+  {
+   "ms": 436303,
+   "k": "ARM FELL",
+   "v": {
+    "arm": "penance-left-arm",
+    "ticks": 78,
+    "decision": 64
+   }
+  },
+  {
+   "ms": 466943,
+   "k": "ARM FELL",
+   "v": {
+    "arm": "penance-right-arm",
+    "ticks": 88,
+    "decision": 72
+   }
+  },
+  {
+   "ms": 469642,
+   "k": "ARM RETURNED",
+   "v": {
+    "arm": "penance-left-arm",
+    "ticks": 90,
+    "decision": 73
+   }
+  },
+  {
+   "ms": 494395,
+   "k": "ARM RETURNED",
+   "v": {
+    "arm": "penance-right-arm",
+    "ticks": 100,
+    "decision": 81
+   }
+  },
+  {
+   "ms": 500401,
+   "k": "ARM FELL",
+   "v": {
+    "arm": "penance-left-arm",
+    "ticks": 100,
+    "decision": 83
+   }
+  },
+  {
+   "ms": 525762,
+   "k": "ARM RETURNED",
+   "v": {
+    "arm": "penance-left-arm",
+    "ticks": 112,
+    "decision": 91
+   }
+  },
+  {
+   "ms": 529728,
+   "k": "ARM FELL",
+   "v": {
+    "arm": "penance-right-arm",
+    "ticks": 112,
+    "decision": 92
+   }
+  },
+  {
+   "ms": 541238,
+   "k": "SEPARATION",
+   "v": {
+    "decision": 95,
+    "ticks": 115,
+    "ms": 541238,
+    "penHp": 8900031,
+    "lastAction": "Tidus Quick Hit on penance (the body: no arm needs this turn)"
+   }
+  },
+  {
+   "ms": 568753,
+   "k": "ARM RETURNED",
+   "v": {
+    "arm": "penance-right-arm",
+    "ticks": 124,
+    "decision": 102
+   }
+  },
+  {
+   "ms": 568753,
+   "k": "ARM FELL",
+   "v": {
+    "arm": "penance-left-arm",
+    "ticks": 124,
+    "decision": 102
+   }
+  },
+  {
+   "ms": 580851,
+   "k": "STATE-WRITE",
+   "v": {
+    "at": 580851,
+    "what": "Penance HP set to 30,000 after the Separation and 10 decisions of phase 2, so a real Quick Hit (99,999) ends the fight (a full win is 385 to 487 decisions)",
+    "result": {
+     "was": 8800032,
+     "now": 30000
+    }
+   }
+  },
+  {
+   "ms": 582917,
+   "k": "ARM FELL",
+   "v": {
+    "arm": "penance-right-arm",
+    "ticks": 128,
+    "decision": 106
+   }
+  },
+  {
+   "ms": 584461,
+   "k": "fight-over",
+   "v": {
+    "attempt": 1,
+    "over": "left:cutscene",
+    "decisions": 107,
+    "ms": 370759,
+    "penHp": null,
+    "separated": true,
+    "wrote": 105
+   }
+  },
+  {
+   "ms": 610142,
+   "k": "afterFight",
+   "v": {
+    "label": "a1",
+    "screens": [
+     "cutscene",
+     "results",
+     "cutscene",
+     "chapter-select"
+    ],
+    "outcome": "victory",
+    "next": "board"
+   }
+  },
+  {
+   "ms": 610143,
+   "k": "RESULT",
+   "v": "WON by real keys (1 recorded state write setting up the last blow)"
+  }
+ ],
+ "shots": [
+  {
+   "file": "00-title.png",
+   "why": "title, fresh profile",
+   "ms": 196766,
+   "screen": "title"
+  },
+  {
+   "file": "01-party-prep.png",
+   "why": "party prep opened by the word (no card)",
+   "ms": 204098,
+   "screen": "party-prep"
+  },
+  {
+   "file": "02-pre-scene.png",
+   "why": "pre-battle scene, first line",
+   "ms": 208131,
+   "screen": "cutscene"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (penance, penance-right-arm, penance-left-arm)",
+   "ms": 214148,
+   "screen": "battle"
+  },
+  {
+   "file": "m-penance-penance-obliteration.jpg",
+   "why": "penance starts penance-obliteration",
+   "ms": 235202,
+   "screen": "battle"
+  },
+  {
+   "file": "arm-fell-left-arm-6.jpg",
+   "why": "penance-left-arm has fallen",
+   "ms": 244658,
+   "screen": "battle"
+  },
+  {
+   "file": "m-penance-right-arm-dark-calamity.jpg",
+   "why": "penance-right-arm starts dark-calamity",
+   "ms": 245224,
+   "screen": "battle"
+  },
+  {
+   "file": "arm-fell-right-arm-14.jpg",
+   "why": "penance-right-arm has fallen",
+   "ms": 274645,
+   "screen": "battle"
+  },
+  {
+   "file": "arm-returned-left-arm-15.jpg",
+   "why": "penance-left-arm is back on the field",
+   "ms": 279722,
+   "screen": "battle"
+  },
+  {
+   "file": "arm-returned-right-arm-23.jpg",
+   "why": "penance-right-arm is back on the field",
+   "ms": 304574,
+   "screen": "battle"
+  },
+  {
+   "file": "mid-040.jpg",
+   "why": "mid-fight, decision 40",
+   "ms": 359790,
+   "screen": "battle"
+  },
+  {
+   "file": "mid-080.jpg",
+   "why": "mid-fight, decision 80",
+   "ms": 492086,
+   "screen": "battle"
+  },
+  {
+   "file": "m-penance-penance-separation.jpg",
+   "why": "penance starts penance-separation",
+   "ms": 540186,
+   "screen": "battle"
+  },
+  {
+   "file": "separation.png",
+   "why": "Penance has separated (phase 2), read after a real blow",
+   "ms": 541683,
+   "screen": "battle"
+  },
+  {
+   "file": "m-penance-penance-immolation.jpg",
+   "why": "penance starts penance-immolation",
+   "ms": 562683,
+   "screen": "battle"
+  },
+  {
+   "file": "a1-scene-1.jpg",
+   "why": "a scene after the fight (a1)",
+   "ms": 585703,
+   "screen": "cutscene"
+  },
+  {
+   "file": "a1-results-victory.png",
+   "why": "the results screen (victory)",
+   "ms": 588648,
+   "screen": "results"
+  },
+  {
+   "file": "a1-scene-3.jpg",
+   "why": "a scene after the fight (a1)",
+   "ms": 592397,
+   "screen": "cutscene"
+  },
+  {
+   "file": "a1-board.png",
+   "why": "the chapter-select board after the chapter",
+   "ms": 610140,
+   "screen": "chapter-select"
+  }
+ ]
+}

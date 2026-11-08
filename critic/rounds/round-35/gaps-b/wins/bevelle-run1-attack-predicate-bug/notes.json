@@ -1,0 +1,364 @@
+{
+ "notes": [
+  {
+   "ms": 219171,
+   "k": "live",
+   "v": {
+    "version": "0.1.0",
+    "scripts": [
+     "index-jYm-0mrJ.js"
+    ]
+   }
+  },
+  {
+   "ms": 224797,
+   "k": "door",
+   "v": {
+    "word": "drillshot",
+    "typed": "drillshot"
+   }
+  },
+  {
+   "ms": 226998,
+   "k": "afterDoor",
+   "v": "party-prep"
+  },
+  {
+   "ms": 235093,
+   "k": "preSceneHolds",
+   "v": 1
+  },
+  {
+   "ms": 237219,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1,
+    "boss": [
+     "x2-georapella"
+    ]
+   }
+  },
+  {
+   "ms": 246328,
+   "k": "fight-over",
+   "v": {
+    "attempt": 1,
+    "over": "stuck: 8 decisions in a row were not taken",
+    "decisions": 8,
+    "ms": 246328
+   }
+  },
+  {
+   "ms": 246329,
+   "k": "afterFight",
+   "v": {
+    "label": "a1",
+    "screens": [
+     "battle"
+    ],
+    "outcome": null,
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 252134,
+   "k": "fight-over",
+   "v": {
+    "attempt": 2,
+    "over": "stuck: 8 decisions in a row were not taken",
+    "decisions": 7,
+    "ms": 252134
+   }
+  },
+  {
+   "ms": 252135,
+   "k": "afterFight",
+   "v": {
+    "label": "a2",
+    "screens": [
+     "battle"
+    ],
+    "outcome": null,
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 257962,
+   "k": "fight-over",
+   "v": {
+    "attempt": 3,
+    "over": "stuck: 8 decisions in a row were not taken",
+    "decisions": 7,
+    "ms": 257962
+   }
+  },
+  {
+   "ms": 257962,
+   "k": "afterFight",
+   "v": {
+    "label": "a3",
+    "screens": [
+     "battle"
+    ],
+    "outcome": null,
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 263797,
+   "k": "fight-over",
+   "v": {
+    "attempt": 4,
+    "over": "stuck: 8 decisions in a row were not taken",
+    "decisions": 7,
+    "ms": 263797
+   }
+  },
+  {
+   "ms": 263797,
+   "k": "afterFight",
+   "v": {
+    "label": "a4",
+    "screens": [
+     "battle"
+    ],
+    "outcome": null,
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 269671,
+   "k": "fight-over",
+   "v": {
+    "attempt": 5,
+    "over": "stuck: 8 decisions in a row were not taken",
+    "decisions": 7,
+    "ms": 269671
+   }
+  },
+  {
+   "ms": 269672,
+   "k": "afterFight",
+   "v": {
+    "label": "a5",
+    "screens": [
+     "battle"
+    ],
+    "outcome": null,
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 275555,
+   "k": "fight-over",
+   "v": {
+    "attempt": 6,
+    "over": "stuck: 8 decisions in a row were not taken",
+    "decisions": 7,
+    "ms": 275555
+   }
+  },
+  {
+   "ms": 275555,
+   "k": "afterFight",
+   "v": {
+    "label": "a6",
+    "screens": [
+     "battle"
+    ],
+    "outcome": null,
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 281433,
+   "k": "fight-over",
+   "v": {
+    "attempt": 7,
+    "over": "stuck: 8 decisions in a row were not taken",
+    "decisions": 7,
+    "ms": 281433
+   }
+  },
+  {
+   "ms": 281434,
+   "k": "afterFight",
+   "v": {
+    "label": "a7",
+    "screens": [
+     "battle"
+    ],
+    "outcome": null,
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 324083,
+   "k": "fight-over",
+   "v": {
+    "attempt": 8,
+    "over": "stuck: 8 decisions in a row were not taken",
+    "decisions": 14,
+    "ms": 324083
+   }
+  },
+  {
+   "ms": 324086,
+   "k": "afterFight",
+   "v": {
+    "label": "a8",
+    "screens": [
+     "battle"
+    ],
+    "outcome": null,
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 324111,
+   "k": "RESULT",
+   "v": "NOT WON"
+  }
+ ],
+ "shots": [
+  {
+   "file": "00-title.png",
+   "why": "title, fresh profile",
+   "ms": 220551,
+   "screen": "title"
+  },
+  {
+   "file": "01-party-prep.png",
+   "why": "party prep opened by the word (no card)",
+   "ms": 227105,
+   "screen": "party-prep"
+  },
+  {
+   "file": "02-pre-scene.png",
+   "why": "pre-battle scene, first line",
+   "ms": 231089,
+   "screen": "cutscene"
+  },
+  {
+   "file": "m-x2-georapella-x2-georapella-blizzaga.jpg",
+   "why": "x2-georapella starts x2-georapella-blizzaga",
+   "ms": 237808,
+   "screen": "battle"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-georapella)",
+   "ms": 238190,
+   "screen": "battle"
+  },
+  {
+   "file": "stuck.png",
+   "why": "a menu nothing could be chosen from",
+   "ms": 246328,
+   "screen": "battle"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-georapella)",
+   "ms": 246738,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-georapella-x2-georapella-thundaga.jpg",
+   "why": "x2-georapella starts x2-georapella-thundaga",
+   "ms": 246793,
+   "screen": "battle"
+  },
+  {
+   "file": "stuck.png",
+   "why": "a menu nothing could be chosen from",
+   "ms": 252134,
+   "screen": "battle"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-georapella)",
+   "ms": 252532,
+   "screen": "battle"
+  },
+  {
+   "file": "stuck.png",
+   "why": "a menu nothing could be chosen from",
+   "ms": 257962,
+   "screen": "battle"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-georapella)",
+   "ms": 258360,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-georapella-x2-georapella-waterga.jpg",
+   "why": "x2-georapella starts x2-georapella-waterga",
+   "ms": 259258,
+   "screen": "battle"
+  },
+  {
+   "file": "stuck.png",
+   "why": "a menu nothing could be chosen from",
+   "ms": 263797,
+   "screen": "battle"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-georapella)",
+   "ms": 264208,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-georapella-x2-georapella-firaga.jpg",
+   "why": "x2-georapella starts x2-georapella-firaga",
+   "ms": 268550,
+   "screen": "battle"
+  },
+  {
+   "file": "stuck.png",
+   "why": "a menu nothing could be chosen from",
+   "ms": 269671,
+   "screen": "battle"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-georapella)",
+   "ms": 270070,
+   "screen": "battle"
+  },
+  {
+   "file": "stuck.png",
+   "why": "a menu nothing could be chosen from",
+   "ms": 275555,
+   "screen": "battle"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-georapella)",
+   "ms": 275978,
+   "screen": "battle"
+  },
+  {
+   "file": "stuck.png",
+   "why": "a menu nothing could be chosen from",
+   "ms": 281433,
+   "screen": "battle"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-georapella)",
+   "ms": 281837,
+   "screen": "battle"
+  },
+  {
+   "file": "stuck.png",
+   "why": "a menu nothing could be chosen from",
+   "ms": 324083,
+   "screen": "battle"
+  }
+ ]
+}

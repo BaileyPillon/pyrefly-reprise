@@ -1,0 +1,127 @@
+{
+ "notes": [
+  {
+   "ms": 683214,
+   "k": "live",
+   "v": {
+    "version": "0.1.0",
+    "scripts": [
+     "index-jYm-0mrJ.js"
+    ]
+   }
+  },
+  {
+   "ms": 688801,
+   "k": "door",
+   "v": {
+    "word": "gear",
+    "typed": "gear"
+   }
+  },
+  {
+   "ms": 691002,
+   "k": "afterDoor",
+   "v": "party-prep"
+  },
+  {
+   "ms": 699196,
+   "k": "preSceneHolds",
+   "v": 1
+  },
+  {
+   "ms": 704436,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1,
+    "boss": [
+     "x2-valefor"
+    ]
+   }
+  },
+  {
+   "ms": 704961,
+   "k": "build",
+   "v": null
+  },
+  {
+   "ms": 704961,
+   "k": "screen",
+   "v": "battle"
+  },
+  {
+   "ms": 704963,
+   "k": "sampler",
+   "v": {
+    "installed": true,
+    "canvas": [
+     1600,
+     900
+    ],
+    "gl": true
+   }
+  },
+  {
+   "ms": 707477,
+   "k": "sampler-frames-after-2.5s",
+   "v": 148
+  },
+  {
+   "ms": 766407,
+   "k": "capture-progress",
+   "v": {
+    "round": 0,
+    "sampledSeconds": 61.4,
+    "over": null,
+    "decisions": 10
+   }
+  },
+  {
+   "ms": 766844,
+   "k": "captured",
+   "v": {
+    "frames": 3688,
+    "wallSeconds": 59.4,
+    "screenAtEnd": "battle",
+    "fightOver": null
+   }
+  },
+  {
+   "ms": 771206,
+   "k": "RESULT",
+   "v": "captured 3688 frames; raw written"
+  }
+ ],
+ "shots": [
+  {
+   "file": "00-title.png",
+   "why": "title, fresh profile",
+   "ms": 684592,
+   "screen": "title"
+  },
+  {
+   "file": "01-party-prep.png",
+   "why": "party prep opened by the word (no card)",
+   "ms": 691100,
+   "screen": "party-prep"
+  },
+  {
+   "file": "02-pre-scene.png",
+   "why": "pre-battle scene, first line",
+   "ms": 695185,
+   "screen": "cutscene"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-valefor)",
+   "ms": 707944,
+   "screen": "battle"
+  },
+  {
+   "file": "90-end-of-capture.png",
+   "why": "screen at the end of the capture",
+   "ms": 766843,
+   "screen": "battle"
+  }
+ ]
+}

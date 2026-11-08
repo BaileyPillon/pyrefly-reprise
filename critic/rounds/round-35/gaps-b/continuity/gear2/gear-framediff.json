@@ -1,0 +1,365 @@
+{
+ "schema": "gear-framediff/1",
+ "chapter": "exp-anime",
+ "door": "gear",
+ "base": "https://echoesofspira.com/",
+ "capturedAt": "2026-11-07T18:07:03.315Z",
+ "instrument": "frame difference of the game canvas, 192x108 luma, every presented frame (not the painted-plane harness)",
+ "summary": {
+  "timing": {
+   "frames": 3579,
+   "seconds": 60,
+   "fps": 59.6,
+   "dtMedianMs": 16.7,
+   "dtP99Ms": 16.8,
+   "over33ms": 5,
+   "over50ms": 2,
+   "over100ms": 1,
+   "worstMs": 216.6
+  },
+  "stillFrames": 0,
+  "stallsOf4OrMoreStillFrames": 0,
+  "longestStillRun": 0,
+  "movingFrames": 3578,
+  "movingShare": 1,
+  "meanOfMeans": 2.99,
+  "p99Mean": 9.12,
+  "decisionsPlayed": 10,
+  "pops": 2,
+  "globals": 0
+ },
+ "events": [
+  {
+   "kind": "pop",
+   "i": 280,
+   "mean": 10.806,
+   "frac": 0.1797,
+   "wide": 1,
+   "bbox": [
+    0,
+    5,
+    191,
+    107
+   ],
+   "ratio": 4.4,
+   "before": 1.865,
+   "after": 2.199,
+   "tMs": 4733,
+   "strip": "strips/pop-01-frame280.jpg"
+  },
+  {
+   "kind": "pop",
+   "i": 1024,
+   "mean": 23.286,
+   "frac": 0.4518,
+   "wide": 1,
+   "bbox": [
+    0,
+    0,
+    191,
+    107
+   ],
+   "ratio": 4.7,
+   "before": 4.685,
+   "after": 6.616,
+   "tMs": 17183,
+   "strip": "strips/pop-00-frame1024.jpg"
+  }
+ ],
+ "marks": [
+  {
+   "n": 0,
+   "actor": "paine",
+   "cmd": {
+    "label": "Power Break",
+    "id": "x2-warrior-power-break",
+    "kind": "ability"
+   },
+   "wall": 29997.6,
+   "events": [
+    "x2-valefor:x2-valefor-attack->rikku",
+    "paine:x2-warrior-power-break->x2-valefor"
+   ]
+  },
+  {
+   "n": 1,
+   "actor": "yuna",
+   "cmd": {
+    "label": "Protect",
+    "id": "x2-white-mage-protect",
+    "kind": "ability"
+   },
+   "wall": 33128.6,
+   "events": [
+    "yuna:x2-white-mage-protect->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 2,
+   "actor": "rikku",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "wall": 36110.8,
+   "events": [
+    "rikku:x2-dark-knight-darkness->x2-valefor",
+    "x2-valefor:x2-valefor-attack->yuna",
+    "  dmg yuna 301"
+   ]
+  },
+  {
+   "n": 3,
+   "actor": "yuna",
+   "cmd": {
+    "label": "Shell",
+    "id": "x2-white-mage-shell",
+    "kind": "ability"
+   },
+   "wall": 43946.7,
+   "events": [
+    "  boss takes 284",
+    "  dmg rikku 229",
+    "  boss takes 542",
+    "x2-valefor:x2-valefor-sonic-wings->yuna",
+    "yuna:x2-white-mage-shell->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 4,
+   "actor": "paine",
+   "cmd": {
+    "label": "Armor Break",
+    "id": "x2-warrior-armor-break",
+    "kind": "ability"
+   },
+   "wall": 47043.9,
+   "events": [
+    "paine:x2-warrior-armor-break->x2-valefor"
+   ]
+  },
+  {
+   "n": 5,
+   "actor": "rikku",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "wall": 49980.5,
+   "events": [
+    "rikku:x2-dark-knight-darkness->x2-valefor"
+   ]
+  },
+  {
+   "n": 6,
+   "actor": "yuna",
+   "cmd": {
+    "label": "Cura",
+    "id": "x2-white-mage-cura",
+    "kind": "ability"
+   },
+   "wall": 60345.6,
+   "events": [
+    "  dmg rikku 229",
+    "  boss takes 343",
+    "yuna:x2-white-mage-cura->yuna"
+   ]
+  },
+  {
+   "n": 7,
+   "actor": "paine",
+   "cmd": {
+    "label": "Armor Break",
+    "id": "x2-warrior-armor-break",
+    "kind": "ability"
+   },
+   "wall": 64526.9,
+   "events": [
+    "paine:x2-warrior-armor-break->x2-valefor"
+   ]
+  },
+  {
+   "n": 8,
+   "actor": "rikku",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "wall": 67475.8,
+   "events": [
+    "rikku:x2-dark-knight-darkness->x2-valefor",
+    "x2-valefor:x2-valefor-energy-ray->"
+   ]
+  },
+  {
+   "n": 9,
+   "actor": "yuna",
+   "cmd": {
+    "label": "Cura",
+    "id": "x2-white-mage-cura",
+    "kind": "ability"
+   },
+   "wall": 83663.9,
+   "events": [
+    "  dmg yuna 79",
+    "  dmg rikku 114",
+    "  dmg paine 183",
+    "  dmg rikku 229",
+    "  boss takes 357",
+    "  boss takes 414",
+    "yuna:x2-white-mage-cura->rikku"
+   ]
+  }
+ ],
+ "decisions": [
+  {
+   "n": 0,
+   "actor": "paine",
+   "cmd": {
+    "label": "Power Break",
+    "id": "x2-warrior-power-break",
+    "kind": "ability"
+   },
+   "why": "advisor card: Power Break -> Valefor",
+   "events": [
+    "x2-valefor:x2-valefor-attack->rikku",
+    "paine:x2-warrior-power-break->x2-valefor"
+   ]
+  },
+  {
+   "n": 1,
+   "actor": "yuna",
+   "cmd": {
+    "label": "Protect",
+    "id": "x2-white-mage-protect",
+    "kind": "ability"
+   },
+   "why": "advisor card: Protect -> the party",
+   "events": [
+    "yuna:x2-white-mage-protect->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 2,
+   "actor": "rikku",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "why": "advisor card: Darkness -> all enemies",
+   "events": [
+    "rikku:x2-dark-knight-darkness->x2-valefor",
+    "x2-valefor:x2-valefor-attack->yuna",
+    "  dmg yuna 301"
+   ]
+  },
+  {
+   "n": 3,
+   "actor": "yuna",
+   "cmd": {
+    "label": "Shell",
+    "id": "x2-white-mage-shell",
+    "kind": "ability"
+   },
+   "why": "advisor card: Shell -> the party",
+   "events": [
+    "  boss takes 284",
+    "  dmg rikku 229",
+    "  boss takes 542",
+    "x2-valefor:x2-valefor-sonic-wings->yuna",
+    "yuna:x2-white-mage-shell->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 4,
+   "actor": "paine",
+   "cmd": {
+    "label": "Armor Break",
+    "id": "x2-warrior-armor-break",
+    "kind": "ability"
+   },
+   "why": "advisor card: Armor Break -> Valefor",
+   "events": [
+    "paine:x2-warrior-armor-break->x2-valefor"
+   ]
+  },
+  {
+   "n": 5,
+   "actor": "rikku",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "why": "advisor card: Darkness -> all enemies",
+   "events": [
+    "rikku:x2-dark-knight-darkness->x2-valefor"
+   ]
+  },
+  {
+   "n": 6,
+   "actor": "yuna",
+   "cmd": {
+    "label": "Cura",
+    "id": "x2-white-mage-cura",
+    "kind": "ability"
+   },
+   "why": "advisor card: Cura -> Yuna",
+   "events": [
+    "  dmg rikku 229",
+    "  boss takes 343",
+    "yuna:x2-white-mage-cura->yuna"
+   ]
+  },
+  {
+   "n": 7,
+   "actor": "paine",
+   "cmd": {
+    "label": "Armor Break",
+    "id": "x2-warrior-armor-break",
+    "kind": "ability"
+   },
+   "why": "advisor card: Armor Break -> Valefor",
+   "events": [
+    "paine:x2-warrior-armor-break->x2-valefor"
+   ]
+  },
+  {
+   "n": 8,
+   "actor": "rikku",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "why": "advisor card: Darkness -> all enemies",
+   "events": [
+    "rikku:x2-dark-knight-darkness->x2-valefor",
+    "x2-valefor:x2-valefor-energy-ray->"
+   ]
+  },
+  {
+   "n": 9,
+   "actor": "yuna",
+   "cmd": {
+    "label": "Cura",
+    "id": "x2-white-mage-cura",
+    "kind": "ability"
+   },
+   "why": "advisor card: Cura -> Rikku",
+   "events": [
+    "  dmg yuna 79",
+    "  dmg rikku 114",
+    "  dmg paine 183",
+    "  dmg rikku 229",
+    "  boss takes 357",
+    "  boss takes 414",
+    "yuna:x2-white-mage-cura->rikku"
+   ]
+  }
+ ]
+}

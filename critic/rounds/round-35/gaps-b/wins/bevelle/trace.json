@@ -1,0 +1,2215 @@
+{
+ "chapter": "bevelle",
+ "door": "drillshot",
+ "game": "ffx2",
+ "base": "https://echoesofspira.com/",
+ "seed": 1,
+ "startedAt": "2026-11-07T14:36:01.161Z",
+ "stateWrites": [],
+ "decisions": [
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 68,
+   "turn": 1,
+   "ms": 92500,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-blizzaga->",
+    "paine:attack->x2-georapella",
+    "  boss takes 303"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Yuna casts Protect on paine",
+   "did": true,
+   "how": "path=White Magic > Protect; aim paine=true; ",
+   "cmd": {
+    "label": "Protect",
+    "id": "x2-white-mage-protect",
+    "kind": "ability"
+   },
+   "ticks": 82,
+   "turn": 2,
+   "ms": 96255,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-white-mage-protect->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain (the careful line's opening)",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 86,
+   "turn": 3,
+   "ms": 101437,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-item-lunar-curtain->yuna+rikku+paine",
+    "  dmg yuna 91",
+    "  dmg rikku 145",
+    "  dmg paine 213"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on yuna",
+   "did": true,
+   "how": "path=White Magic > Cure; aim yuna=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 298,
+   "turn": 5,
+   "ms": 114259,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-thundaga->",
+    "yuna:x2-white-mage-cure->yuna"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 301,
+   "turn": 6,
+   "ms": 117646,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-georapella",
+    "  boss takes 305"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain (the careful line's opening)",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 425,
+   "turn": 8,
+   "ms": 130054,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 45",
+    "  dmg rikku 65",
+    "  dmg paine 105",
+    "x2-georapella:x2-georapella-waterga->",
+    "rikku:x2-item-light-curtain->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on paine",
+   "did": true,
+   "how": "path=White Magic > Cure; aim paine=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 532,
+   "turn": 9,
+   "ms": 138865,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 46",
+    "  dmg rikku 69",
+    "  dmg paine 95",
+    "yuna:x2-white-mage-cure->paine"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 540,
+   "turn": 10,
+   "ms": 142529,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-georapella",
+    "  boss takes 276"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on rikku",
+   "did": true,
+   "how": "path=White Magic > Cure; aim rikku=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 735,
+   "turn": 12,
+   "ms": 156642,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-firaga->",
+    "  dmg yuna 46",
+    "  dmg rikku 65",
+    "  dmg paine 96",
+    "yuna:x2-white-mage-cure->rikku"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 753,
+   "turn": 13,
+   "ms": 160429,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->x2-georapella",
+    "  boss takes 257"
+   ]
+  },
+  {
+   "n": 10,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 780,
+   "turn": 14,
+   "ms": 164132,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-georapella",
+    "  boss takes 397"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on paine",
+   "did": true,
+   "how": "path=White Magic > Cure; aim paine=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 934,
+   "turn": 16,
+   "ms": 175591,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-blizzaga->",
+    "yuna:x2-white-mage-cure->paine",
+    "  dmg yuna 47",
+    "  dmg rikku 69",
+    "  dmg paine 105"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1021,
+   "turn": 17,
+   "ms": 181900,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->x2-georapella",
+    "  boss takes 245"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1026,
+   "turn": 18,
+   "ms": 184527,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-georapella",
+    "  boss takes 411"
+   ]
+  },
+  {
+   "n": 14,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on yuna",
+   "did": true,
+   "how": "path=White Magic > Cure; aim yuna=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 1151,
+   "turn": 20,
+   "ms": 195236,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-thundaga->",
+    "yuna:x2-white-mage-cure->yuna",
+    "  dmg yuna 45",
+    "  dmg rikku 64",
+    "  dmg paine 105"
+   ]
+  },
+  {
+   "n": 15,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1268,
+   "turn": 21,
+   "ms": 202941,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-georapella",
+    "  boss takes 293"
+   ]
+  },
+  {
+   "n": 16,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1287,
+   "turn": 22,
+   "ms": 206051,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->x2-georapella",
+    "  boss takes 333"
+   ]
+  },
+  {
+   "n": 17,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on paine",
+   "did": true,
+   "how": "path=White Magic > Cure; aim paine=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 1368,
+   "turn": 24,
+   "ms": 215905,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-waterga->",
+    "yuna:x2-white-mage-cure->paine",
+    "  dmg yuna 50",
+    "  dmg rikku 64",
+    "  dmg paine 104"
+   ]
+  },
+  {
+   "n": 18,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1510,
+   "turn": 25,
+   "ms": 225901,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-georapella",
+    "  boss takes 274"
+   ]
+  },
+  {
+   "n": 19,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1554,
+   "turn": 26,
+   "ms": 230176,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->x2-georapella",
+    "  boss takes 366"
+   ]
+  },
+  {
+   "n": 20,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on rikku",
+   "did": true,
+   "how": "path=White Magic > Cure; aim rikku=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 1587,
+   "turn": 27,
+   "ms": 234960,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-white-mage-cure->rikku",
+    "x2-georapella:x2-georapella-firaga->"
+   ]
+  },
+  {
+   "n": 21,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1752,
+   "turn": 29,
+   "ms": 246326,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 50",
+    "  dmg rikku 72",
+    "  dmg paine 97",
+    "paine:attack->x2-georapella",
+    "  boss takes 280"
+   ]
+  },
+  {
+   "n": 22,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on yuna",
+   "did": true,
+   "how": "path=White Magic > Cure; aim yuna=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 1784,
+   "turn": 30,
+   "ms": 250534,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-white-mage-cure->yuna"
+   ]
+  },
+  {
+   "n": 23,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1822,
+   "turn": 32,
+   "ms": 255641,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-blizzaga->",
+    "rikku:attack->x2-georapella",
+    "  boss takes 230"
+   ]
+  },
+  {
+   "n": 24,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Yuna casts Protect on paine",
+   "did": true,
+   "how": "path=White Magic > Protect; aim paine=true; ",
+   "cmd": {
+    "label": "Protect",
+    "id": "x2-white-mage-protect",
+    "kind": "ability"
+   },
+   "ticks": 1986,
+   "turn": 33,
+   "ms": 264582,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 95",
+    "  dmg rikku 130",
+    "  dmg paine 198",
+    "yuna:x2-white-mage-protect->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 25,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1997,
+   "turn": 34,
+   "ms": 267874,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-georapella",
+    "  boss takes 276"
+   ]
+  },
+  {
+   "n": 26,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2095,
+   "turn": 36,
+   "ms": 272843,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-thundaga->",
+    "rikku:attack->x2-georapella",
+    "  boss takes 254",
+    "  KO x2-georapella (by attack)"
+   ]
+  },
+  {
+   "n": 27,
+   "link": 2,
+   "actor": "yuna",
+   "why": "Yuna casts Protect on paine",
+   "did": true,
+   "how": "path=White Magic > Protect; aim paine=true; ",
+   "cmd": {
+    "label": "Protect",
+    "id": "x2-white-mage-protect",
+    "kind": "ability"
+   },
+   "ticks": 143,
+   "turn": 1,
+   "ms": 305105,
+   "rowsBefore": null,
+   "events": [
+    "x2-precepts-guard:x2-precepts-guard-demi->",
+    "yuna:x2-white-mage-protect->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 28,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine attacks x2-precepts-guard",
+   "did": true,
+   "how": "path=top; aim x2-precepts-guard=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 157,
+   "turn": 2,
+   "ms": 308308,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-precepts-guard",
+    "  boss takes 520"
+   ]
+  },
+  {
+   "n": 29,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain (the careful line's opening)",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 189,
+   "turn": 3,
+   "ms": 312838,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-item-lunar-curtain->yuna+rikku+paine",
+    "  dmg yuna 172",
+    "  dmg rikku 459",
+    "  dmg paine 426"
+   ]
+  },
+  {
+   "n": 30,
+   "link": 2,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on paine",
+   "did": true,
+   "how": "path=White Magic > Cure; aim paine=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 369,
+   "turn": 5,
+   "ms": 322289,
+   "rowsBefore": null,
+   "events": [
+    "x2-precepts-guard:x2-precepts-guard-slow->",
+    "yuna:x2-white-mage-cure->paine"
+   ]
+  },
+  {
+   "n": 31,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine attacks x2-precepts-guard",
+   "did": true,
+   "how": "path=top; aim x2-precepts-guard=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 396,
+   "turn": 6,
+   "ms": 326512,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-precepts-guard",
+    "  boss takes 261"
+   ]
+  },
+  {
+   "n": 32,
+   "link": 2,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on rikku",
+   "did": true,
+   "how": "path=White Magic > Cure; aim rikku=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 565,
+   "turn": 7,
+   "ms": 337778,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-white-mage-cure->rikku"
+   ]
+  },
+  {
+   "n": 33,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain (the careful line's opening)",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 569,
+   "turn": 8,
+   "ms": 342980,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-item-light-curtain->yuna+rikku+paine",
+    "x2-precepts-guard:x2-precepts-guard-demi->"
+   ]
+  },
+  {
+   "n": 34,
+   "link": 2,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on yuna",
+   "did": true,
+   "how": "path=White Magic > Cure; aim yuna=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 903,
+   "turn": 11,
+   "ms": 357989,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 64",
+    "  dmg rikku 172",
+    "  dmg paine 190",
+    "x2-precepts-guard:x2-precepts-guard-osmose->yuna",
+    "yuna:x2-white-mage-cure->yuna"
+   ]
+  },
+  {
+   "n": 35,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine attacks x2-precepts-guard",
+   "did": true,
+   "how": "path=top; aim x2-precepts-guard=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 978,
+   "turn": 12,
+   "ms": 362672,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-precepts-guard",
+    "  boss takes 514"
+   ]
+  },
+  {
+   "n": 36,
+   "link": 2,
+   "actor": "rikku",
+   "why": "rikku attacks x2-precepts-guard",
+   "did": true,
+   "how": "path=top; aim x2-precepts-guard=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1116,
+   "turn": 14,
+   "ms": 371671,
+   "rowsBefore": null,
+   "events": [
+    "x2-precepts-guard:x2-precepts-guard-slow->",
+    "rikku:attack->x2-precepts-guard",
+    "  boss takes 422"
+   ]
+  },
+  {
+   "n": 37,
+   "link": 2,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on paine",
+   "did": true,
+   "how": "path=White Magic > Cure; aim paine=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 1220,
+   "turn": 15,
+   "ms": 379239,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-white-mage-cure->paine"
+   ]
+  },
+  {
+   "n": 38,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine attacks x2-precepts-guard",
+   "did": true,
+   "how": "path=top; aim x2-precepts-guard=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1368,
+   "turn": 17,
+   "ms": 387842,
+   "rowsBefore": null,
+   "events": [
+    "x2-precepts-guard:x2-precepts-guard-demi->",
+    "paine:attack->x2-precepts-guard",
+    "  boss takes 273"
+   ]
+  },
+  {
+   "n": 39,
+   "link": 2,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on rikku",
+   "did": true,
+   "how": "path=White Magic > Cure; aim rikku=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 1562,
+   "turn": 19,
+   "ms": 400789,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 86",
+    "  dmg rikku 181",
+    "  dmg paine 166",
+    "x2-precepts-guard:x2-precepts-guard-demi->",
+    "yuna:x2-white-mage-cure->rikku"
+   ]
+  },
+  {
+   "n": 40,
+   "link": 2,
+   "actor": "rikku",
+   "why": "rikku attacks x2-precepts-guard",
+   "did": true,
+   "how": "path=top; aim x2-precepts-guard=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1591,
+   "turn": 20,
+   "ms": 404891,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->x2-precepts-guard",
+    "  boss takes 228"
+   ]
+  },
+  {
+   "n": 41,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine attacks x2-precepts-guard",
+   "did": true,
+   "how": "path=top; aim x2-precepts-guard=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1786,
+   "turn": 22,
+   "ms": 415834,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 75",
+    "  dmg rikku 158",
+    "  dmg paine 176",
+    "x2-precepts-guard:x2-precepts-guard-bio->yuna",
+    "paine:attack->x2-precepts-guard",
+    "  boss takes 273"
+   ]
+  },
+  {
+   "n": 42,
+   "link": 2,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on paine",
+   "did": true,
+   "how": "path=White Magic > Cure; aim paine=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 1905,
+   "turn": 23,
+   "ms": 423979,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-white-mage-cure->paine"
+   ]
+  },
+  {
+   "n": 43,
+   "link": 2,
+   "actor": "rikku",
+   "why": "rikku attacks x2-precepts-guard",
+   "did": true,
+   "how": "path=top; aim x2-precepts-guard=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2065,
+   "turn": 25,
+   "ms": 431943,
+   "rowsBefore": null,
+   "events": [
+    "x2-precepts-guard:x2-precepts-guard-drain->yuna",
+    "rikku:attack->x2-precepts-guard",
+    "  boss takes 207"
+   ]
+  },
+  {
+   "n": 44,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine attacks x2-precepts-guard",
+   "did": true,
+   "how": "path=top; aim x2-precepts-guard=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2177,
+   "turn": 26,
+   "ms": 439267,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 12",
+    "paine:attack->x2-precepts-guard",
+    "  boss takes 542"
+   ]
+  },
+  {
+   "n": 45,
+   "link": 2,
+   "actor": "yuna",
+   "why": "Yuna casts Cure on yuna",
+   "did": true,
+   "how": "path=White Magic > Cure; aim yuna=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 2246,
+   "turn": 27,
+   "ms": 446103,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 21",
+    "yuna:x2-white-mage-cure->yuna",
+    "x2-precepts-guard:x2-precepts-guard-demi->"
+   ]
+  },
+  {
+   "n": 46,
+   "link": 2,
+   "actor": "rikku",
+   "why": "rikku attacks x2-precepts-guard",
+   "did": true,
+   "how": "path=top; aim x2-precepts-guard=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2541,
+   "turn": 30,
+   "ms": 459821,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 62",
+    "  dmg rikku 168",
+    "  dmg paine 183",
+    "x2-precepts-guard:x2-precepts-guard-osmose->paine",
+    "rikku:attack->x2-precepts-guard",
+    "  boss takes 220"
+   ]
+  },
+  {
+   "n": 47,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine attacks x2-precepts-guard",
+   "did": true,
+   "how": "path=top; aim x2-precepts-guard=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2585,
+   "turn": 31,
+   "ms": 465483,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 21",
+    "paine:attack->x2-precepts-guard",
+    "  boss takes 374",
+    "  KO x2-precepts-guard (by attack)"
+   ]
+  },
+  {
+   "n": 48,
+   "link": 3,
+   "actor": "paine",
+   "why": "paine attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 146,
+   "turn": 1,
+   "ms": 497885,
+   "rowsBefore": null,
+   "events": [
+    "x2-baralai:x2-baralai-attack->yuna",
+    "  dmg yuna 221",
+    "x2-baralai:x2-baralai-attack->paine",
+    "  dmg paine 148",
+    "paine:attack->x2-baralai"
+   ]
+  },
+  {
+   "n": 49,
+   "link": 3,
+   "actor": "yuna",
+   "why": "Yuna Changes to a Gunner (the change line's one row)",
+   "did": true,
+   "how": "path=Change > Gunner; ",
+   "cmd": {
+    "path": [
+     "Change",
+     "Gunner"
+    ]
+   },
+   "ticks": 189,
+   "turn": 3,
+   "ms": 500789,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 50,
+   "link": 3,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain (the careful line's opening)",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 209,
+   "turn": 4,
+   "ms": 505335,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-item-lunar-curtain->yuna+rikku+paine",
+    "x2-baralai:x2-baralai-glint->"
+   ]
+  },
+  {
+   "n": 51,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 330,
+   "turn": 6,
+   "ms": 508420,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->x2-baralai",
+    "  boss takes 126"
+   ]
+  },
+  {
+   "n": 52,
+   "link": 3,
+   "actor": "paine",
+   "why": "Hi-Potion on yuna (under 45 percent)",
+   "did": true,
+   "how": "path=Item > Hi-Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "x2-hi-potion",
+    "kind": "item"
+   },
+   "ticks": 445,
+   "turn": 7,
+   "ms": 514833,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 237",
+    "  dmg rikku 141",
+    "  dmg paine 182",
+    "paine:x2-item-hi-potion->yuna",
+    "x2-baralai:x2-baralai-chain-attack->yuna+rikku+paine",
+    "  dmg yuna 136",
+    "  dmg rikku 81",
+    "  dmg paine 107"
+   ]
+  },
+  {
+   "n": 53,
+   "link": 3,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain (the careful line's opening)",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 547,
+   "turn": 10,
+   "ms": 522790,
+   "rowsBefore": null,
+   "events": [
+    "x2-baralai:x2-baralai-attack->yuna",
+    "  dmg yuna 282",
+    "rikku:x2-item-light-curtain->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 54,
+   "link": 3,
+   "actor": "yuna",
+   "why": "Hi-Potion on yuna (under 45 percent)",
+   "did": true,
+   "how": "path=Item > Hi-Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "x2-hi-potion",
+    "kind": "item"
+   },
+   "ticks": 556,
+   "turn": 11,
+   "ms": 526803,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-item-hi-potion->yuna",
+    "x2-baralai:x2-baralai-looming-glacier->rikku"
+   ]
+  },
+  {
+   "n": 55,
+   "link": 3,
+   "actor": "paine",
+   "why": "paine attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 722,
+   "turn": 13,
+   "ms": 534387,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-baralai"
+   ]
+  },
+  {
+   "n": 56,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 798,
+   "turn": 14,
+   "ms": 540115,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->x2-baralai",
+    "  boss takes 118"
+   ]
+  },
+  {
+   "n": 57,
+   "link": 3,
+   "actor": "paine",
+   "why": "paine attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 964,
+   "turn": 16,
+   "ms": 549214,
+   "rowsBefore": null,
+   "events": [
+    "x2-baralai:x2-baralai-demi->",
+    "  dmg yuna 121",
+    "  dmg rikku 202",
+    "  dmg paine 158",
+    "paine:attack->x2-baralai",
+    "  boss takes 283"
+   ]
+  },
+  {
+   "n": 58,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 979,
+   "turn": 17,
+   "ms": 552186,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->x2-baralai",
+    "  boss takes 163"
+   ]
+  },
+  {
+   "n": 59,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1144,
+   "turn": 20,
+   "ms": 560809,
+   "rowsBefore": null,
+   "events": [
+    "x2-baralai:x2-baralai-attack->yuna",
+    "x2-baralai:x2-baralai-attack->yuna",
+    "yuna:attack->x2-baralai",
+    "  boss takes 246"
+   ]
+  },
+  {
+   "n": 60,
+   "link": 3,
+   "actor": "paine",
+   "why": "paine attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1186,
+   "turn": 21,
+   "ms": 564242,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-baralai",
+    "  boss takes 872"
+   ]
+  },
+  {
+   "n": 61,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1313,
+   "turn": 23,
+   "ms": 572304,
+   "rowsBefore": null,
+   "events": [
+    "x2-baralai:x2-baralai-glint->",
+    "yuna:attack->x2-baralai",
+    "  boss takes 232"
+   ]
+  },
+  {
+   "n": 62,
+   "link": 3,
+   "actor": "paine",
+   "why": "paine attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1411,
+   "turn": 24,
+   "ms": 584164,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-baralai",
+    "  boss takes 291"
+   ]
+  },
+  {
+   "n": 63,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1495,
+   "turn": 25,
+   "ms": 590133,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 124",
+    "  dmg rikku 68",
+    "  dmg paine 93",
+    "yuna:attack->x2-baralai",
+    "  boss takes 246"
+   ]
+  },
+  {
+   "n": 64,
+   "link": 3,
+   "actor": "paine",
+   "why": "paine attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1635,
+   "turn": 27,
+   "ms": 598136,
+   "rowsBefore": null,
+   "events": [
+    "x2-baralai:x2-baralai-drill-shot->yuna",
+    "paine:attack->x2-baralai"
+   ]
+  },
+  {
+   "n": 65,
+   "link": 3,
+   "actor": "yuna",
+   "why": "Hi-Potion on yuna (under 45 percent)",
+   "did": true,
+   "how": "path=Item > Hi-Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "x2-hi-potion",
+    "kind": "item"
+   },
+   "ticks": 1663,
+   "turn": 28,
+   "ms": 602985,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 363",
+    "yuna:x2-item-hi-potion->yuna"
+   ]
+  },
+  {
+   "n": 66,
+   "link": 3,
+   "actor": "paine",
+   "why": "paine attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1857,
+   "turn": 30,
+   "ms": 612706,
+   "rowsBefore": null,
+   "events": [
+    "x2-baralai:x2-baralai-absorb->rikku",
+    "  dmg rikku 252",
+    "paine:attack->x2-baralai",
+    "  boss takes 278"
+   ]
+  },
+  {
+   "n": 67,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1937,
+   "turn": 31,
+   "ms": 617615,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->x2-baralai",
+    "  boss takes 115"
+   ]
+  },
+  {
+   "n": 68,
+   "link": 3,
+   "actor": "paine",
+   "why": "paine attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2097,
+   "turn": 34,
+   "ms": 625546,
+   "rowsBefore": null,
+   "events": [
+    "x2-baralai:x2-baralai-chain-attack->yuna+rikku+paine",
+    "  dmg yuna 72",
+    "  dmg rikku 41",
+    "  dmg paine 53",
+    "x2-baralai:x2-baralai-attack->yuna",
+    "  dmg yuna 279",
+    "paine:attack->x2-baralai",
+    "  boss takes 279"
+   ]
+  },
+  {
+   "n": 69,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2132,
+   "turn": 35,
+   "ms": 628751,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->x2-baralai",
+    "  boss takes 168"
+   ]
+  },
+  {
+   "n": 70,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2300,
+   "turn": 37,
+   "ms": 635395,
+   "rowsBefore": null,
+   "events": [
+    "x2-baralai:x2-baralai-looming-glacier->paine",
+    "yuna:attack->x2-baralai",
+    "  boss takes 126"
+   ]
+  },
+  {
+   "n": 71,
+   "link": 3,
+   "actor": "yuna",
+   "why": "Hi-Potion on paine (under 45 percent)",
+   "did": true,
+   "how": "path=Item > Hi-Potion; aim paine=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "x2-hi-potion",
+    "kind": "item"
+   },
+   "ticks": 2492,
+   "turn": 39,
+   "ms": 644147,
+   "rowsBefore": null,
+   "events": [
+    "x2-baralai:x2-baralai-demi->",
+    "  dmg yuna 154",
+    "  dmg rikku 131",
+    "  dmg paine 241",
+    "yuna:x2-item-hi-potion->paine",
+    "x2-baralai:x2-baralai-attack->paine",
+    "  dmg paine 145"
+   ]
+  },
+  {
+   "n": 72,
+   "link": 3,
+   "actor": "yuna",
+   "why": "Hi-Potion on yuna (under 45 percent)",
+   "did": true,
+   "how": "path=Item > Hi-Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "x2-hi-potion",
+    "kind": "item"
+   },
+   "ticks": 2754,
+   "turn": 43,
+   "ms": 655061,
+   "rowsBefore": null,
+   "events": [
+    "x2-baralai:x2-baralai-attack->yuna",
+    "  dmg yuna 197",
+    "x2-baralai:x2-baralai-absorb->yuna",
+    "yuna:x2-item-hi-potion->yuna"
+   ]
+  },
+  {
+   "n": 73,
+   "link": 3,
+   "actor": "rikku",
+   "why": "Hi-Potion on yuna (under 45 percent)",
+   "did": true,
+   "how": "path=Item > Hi-Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "x2-hi-potion",
+    "kind": "item"
+   },
+   "ticks": 2816,
+   "turn": 44,
+   "ms": 660160,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-item-hi-potion->yuna",
+    "  dmg yuna 50"
+   ]
+  },
+  {
+   "n": 74,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 3013,
+   "turn": 46,
+   "ms": 669129,
+   "rowsBefore": null,
+   "events": [
+    "x2-baralai:x2-baralai-glint->",
+    "yuna:attack->x2-baralai",
+    "  boss takes 116"
+   ]
+  },
+  {
+   "n": 75,
+   "link": 3,
+   "actor": "rikku",
+   "why": "rikku attacks x2-baralai",
+   "did": true,
+   "how": "path=top; aim x2-baralai=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 3137,
+   "turn": 47,
+   "ms": 674483,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 234",
+    "  dmg rikku 74",
+    "  dmg paine 184",
+    "rikku:attack->x2-baralai",
+    "  boss takes 240",
+    "  KO x2-baralai (by attack)"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "n": 1,
+   "key": "x2-georapella#1",
+   "foes": [
+    "x2-georapella"
+   ],
+   "seed": 1,
+   "ms": 90772,
+   "ticks": 68
+  },
+  {
+   "at": "after seam (decision 27)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 302374
+  },
+  {
+   "n": 2,
+   "key": "x2-precepts-guard#2",
+   "foes": [
+    "x2-precepts-guard"
+   ],
+   "seed": 2,
+   "ms": 302377,
+   "ticks": 143
+  },
+  {
+   "at": "after seam (decision 48)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 495523
+  },
+  {
+   "n": 3,
+   "key": "x2-baralai#3",
+   "foes": [
+    "x2-baralai"
+   ],
+   "seed": 3,
+   "ms": 495529,
+   "ticks": 146
+  },
+  {
+   "at": "after seam (decision 76)",
+   "screenWas": "battle",
+   "next": "left:cutscene",
+   "ms": 680258
+  }
+ ],
+ "attempts": [
+  {
+   "attempt": 1,
+   "over": "left:cutscene",
+   "decisions": 76,
+   "ms": 680258
+  }
+ ],
+ "mechanics": [
+  {
+   "ms": 90768,
+   "seq": 3,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-blizzaga",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 103169,
+   "seq": 34,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-thundaga",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 123785,
+   "seq": 138,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-waterga",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 145821,
+   "seq": 252,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-firaga",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 166419,
+   "seq": 379,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-blizzaga",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 188495,
+   "seq": 509,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-thundaga",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 210580,
+   "seq": 648,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-waterga",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 235557,
+   "seq": 791,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-firaga",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 251799,
+   "seq": 893,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-blizzaga",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 269165,
+   "seq": 961,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-thundaga",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 300028,
+   "seq": 3,
+   "actor": "x2-precepts-guard",
+   "ability": "x2-precepts-guard-demi",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 317090,
+   "seq": 56,
+   "actor": "x2-precepts-guard",
+   "ability": "x2-precepts-guard-slow",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 343496,
+   "seq": 169,
+   "actor": "x2-precepts-guard",
+   "ability": "x2-precepts-guard-demi",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 351733,
+   "seq": 249,
+   "actor": "x2-precepts-guard",
+   "ability": "x2-precepts-guard-osmose",
+   "targets": [
+    "yuna"
+   ],
+   "first": true
+  },
+  {
+   "ms": 366286,
+   "seq": 344,
+   "actor": "x2-precepts-guard",
+   "ability": "x2-precepts-guard-slow",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 382370,
+   "seq": 434,
+   "actor": "x2-precepts-guard",
+   "ability": "x2-precepts-guard-demi",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 395320,
+   "seq": 523,
+   "actor": "x2-precepts-guard",
+   "ability": "x2-precepts-guard-demi",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 411440,
+   "seq": 613,
+   "actor": "x2-precepts-guard",
+   "ability": "x2-precepts-guard-bio",
+   "targets": [
+    "yuna"
+   ],
+   "first": true
+  },
+  {
+   "ms": 426555,
+   "seq": 701,
+   "actor": "x2-precepts-guard",
+   "ability": "x2-precepts-guard-drain",
+   "targets": [
+    "yuna"
+   ],
+   "first": true
+  },
+  {
+   "ms": 446876,
+   "seq": 813,
+   "actor": "x2-precepts-guard",
+   "ability": "x2-precepts-guard-demi",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 455400,
+   "seq": 891,
+   "actor": "x2-precepts-guard",
+   "ability": "x2-precepts-guard-osmose",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 494417,
+   "seq": 3,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": true
+  },
+  {
+   "ms": 495922,
+   "seq": 12,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 505555,
+   "seq": 34,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-glint",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 515605,
+   "seq": 96,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-chain-attack",
+   "targets": [
+    "yuna",
+    "rikku",
+    "paine"
+   ],
+   "first": true
+  },
+  {
+   "ms": 518016,
+   "seq": 114,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 527020,
+   "seq": 152,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-looming-glacier",
+   "targets": [
+    "rikku"
+   ],
+   "first": true
+  },
+  {
+   "ms": 541665,
+   "seq": 255,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-demi",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 553819,
+   "seq": 341,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 556188,
+   "seq": 379,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 567959,
+   "seq": 443,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-glint",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 591914,
+   "seq": 580,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-drill-shot",
+   "targets": [
+    "yuna"
+   ],
+   "first": true
+  },
+  {
+   "ms": 605982,
+   "seq": 654,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-absorb",
+   "targets": [
+    "rikku"
+   ],
+   "first": true
+  },
+  {
+   "ms": 618914,
+   "seq": 747,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-chain-attack",
+   "targets": [
+    "yuna",
+    "rikku",
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 621733,
+   "seq": 763,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 630052,
+   "seq": 820,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-looming-glacier",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 637848,
+   "seq": 861,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-demi",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 644998,
+   "seq": 898,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 646796,
+   "seq": 920,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 649412,
+   "seq": 944,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-absorb",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 664813,
+   "seq": 1009,
+   "actor": "x2-baralai",
+   "ability": "x2-baralai-glint",
+   "targets": [],
+   "first": false
+  }
+ ],
+ "screens": [
+  {
+   "label": "a1",
+   "screens": [
+    "cutscene",
+    "results",
+    "cutscene",
+    "chapter-select"
+   ],
+   "results": {
+    "text": "BEVELLE UNDERGROUND — FLOORS 3 AND 7 · CLEARED RESULTS · 9:55 Victory EXP 2,500 ×3 PARTY AP 12 PER DRESSPHERE GIL 3,100 ITEMS Nultide Ring, Regen Bangle, Pearl Necklace Y Yuna WHITE MAGE · CURAGA 52/80 AP +2,500EXP R Rikku DARK KNIGHT · CONFUSE 30/30 AP +2,500EXP P Paine WARRIOR · FLAMETONGUE 20/20 AP +2,500EXP CONFIRM ▸",
+    "outcome": "victory"
+   },
+   "outcome": "victory",
+   "scenes": [
+    {
+     "watch": {
+      "ms": 0,
+      "shows": 0,
+      "advancedWithoutInput": false,
+      "firstLine": null,
+      "screenAfterWatch": "results"
+     },
+     "taps": 0,
+     "holds": 0,
+     "ended": true,
+     "lines": []
+    },
+    {
+     "watch": {
+      "ms": 6058,
+      "shows": 3,
+      "advancedWithoutInput": true,
+      "firstLine": "Baralai lowers the staff. He bows his head, and steps back into the dark.",
+      "screenAfterWatch": "cutscene"
+     },
+     "taps": 4,
+     "holds": 0,
+     "ended": true,
+     "lines": [
+      "So are we.",
+      "Great. Two guardians and a Praetor. I could use a nap.",
+      "Far below, something large turns over in its sleep."
+     ]
+    }
+   ],
+   "next": "board",
+   "board": {
+    "selectedIndex": 0,
+    "selectedId": "seymour-flux",
+    "tiles": 19,
+    "coming": [],
+    "cleared": [],
+    "order": [
+     "seymour-flux",
+     "yunalesca",
+     "braskas-final-aeon",
+     "seymour-anima-macalania",
+     "evrae-airship",
+     "yojimbo-cavern",
+     "seymour-natus",
+     "seymour-omnis",
+     "isaaru-via-purifico",
+     "sin-fins-core",
+     "sin-face",
+     "mirror-aeons",
+     "ffx2-bahamut",
+     "ffx2-vegnagun-shuyin",
+     "ffx2-leblanc",
+     "ffx2-fallen-aeons",
+     "ffx2-trema",
+     "ffx2-den-of-woe",
+     "ffx2-ixion-djose"
+    ],
+    "beaten": 0,
+    "total": 19
+   },
+   "boardText": "CHAPTER SELECT CHAPTER I Seymour Flux 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVII XVIII XXVII X-2 IV V VI XI XIII XV XVI The mountain of the Ronso, and what was done to them The Ronso held the gate so the summoner could pass. Seymour calls it mercy. He is still unsent, he is waiting on the trail, and everything he says about Jecht is true. CTB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima VIII Evrae IX Yojimbo X Seymour Natus XII Seymour Omnis XIV Isaaru XVII Sin: the Fins and the Core XVIII Sin: the Face XXVII Mirror Aeons FINAL FANTAS"
+  }
+ ],
+ "speed": "normal",
+ "line": "careful (acts 1-2); change: Yuna to Gunner then strike (act 3)",
+ "live": {
+  "version": "0.1.0",
+  "scripts": [
+   "index-jYm-0mrJ.js"
+  ]
+ },
+ "battleSeed": 1,
+ "result": "WON: three acts by real keys (no state write)",
+ "consoleErrors": [],
+ "notFound": [],
+ "errors": [],
+ "minutes": 11.71
+}

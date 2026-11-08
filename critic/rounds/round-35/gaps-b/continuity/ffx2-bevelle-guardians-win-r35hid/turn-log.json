@@ -1,0 +1,1991 @@
+[
+ {
+  "turn": 0,
+  "ms": 42,
+  "actor": "script:first-ga",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:599/690",
+   "rikku:1694/1839",
+   "paine:1493/1706",
+   "x2-georapella:4420/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 25,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 3291,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:599/690",
+   "rikku:1694/1839",
+   "paine:1493/1706",
+   "x2-georapella:4117/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 31,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 15035,
+  "actor": "idle",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1122/1411",
+   "paine:1283/1706",
+   "x2-georapella:4117/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 60,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 17227,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1122/1411",
+   "paine:1283/1706",
+   "x2-georapella:3884/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 66,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 19530,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Lunar Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Lunar Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1122/1411",
+   "paine:1283/1706",
+   "x2-georapella:3442/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 72,
+    "actor": "yuna",
+    "did": "Lunar Curtain",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 27685,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:598/690",
+   "rikku:934/1411",
+   "paine:1093/1706",
+   "x2-georapella:3442/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 118,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 31933,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:552/690",
+   "rikku:846/1411",
+   "paine:997/1706",
+   "x2-georapella:3166/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 140,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 34824,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:552/690",
+   "rikku:846/1411",
+   "paine:997/1706",
+   "x2-georapella:2845/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 155,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 43569,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:643/690",
+   "rikku:752/1411",
+   "paine:892/1706",
+   "x2-georapella:2845/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 211,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 46419,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:643/690",
+   "rikku:752/1411",
+   "paine:892/1706",
+   "x2-georapella:2571/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 224,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 50047,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:643/690",
+   "rikku:752/1411",
+   "paine:892/1706",
+   "x2-georapella:2571/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 235,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 59108,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:645/690",
+   "rikku:665/1411",
+   "paine:787/1706",
+   "x2-georapella:2270/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 296,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 61470,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:645/690",
+   "rikku:665/1411",
+   "paine:787/1706",
+   "x2-georapella:1986/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 305,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 65740,
+  "actor": "play:action-start",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:645/690",
+   "rikku:665/1411",
+   "paine:787/1706",
+   "x2-georapella:1986/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 323,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 73353,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Paine",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:640/690",
+   "rikku:578/1411",
+   "paine:683/1706",
+   "x2-georapella:1757/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 372,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 77556,
+  "actor": "command:paine",
+  "want": {
+   "label": "Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:640/690",
+   "rikku:578/1411",
+   "paine:683/1706",
+   "x2-georapella:1757/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 385,
+    "actor": "paine",
+    "did": "Potion",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 83366,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:640/690",
+   "rikku:578/1411",
+   "paine:683/1706",
+   "x2-georapella:1757/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 408,
+    "actor": "rikku",
+    "did": "Potion",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 89997,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:590/690",
+   "rikku:480/1411",
+   "paine:1021/1706",
+   "x2-georapella:1757/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 444,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 95193,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:590/690",
+   "rikku:680/1411",
+   "paine:1021/1706",
+   "x2-georapella:1757/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 473,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 101537,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:643/690",
+   "rikku:592/1411",
+   "paine:922/1706",
+   "x2-georapella:1482/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 517,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 105015,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:643/690",
+   "rikku:592/1411",
+   "paine:922/1706",
+   "x2-georapella:1482/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 520,
+    "actor": "rikku",
+    "did": "Potion",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 110858,
+  "actor": "play:damage",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:643/690",
+   "rikku:1026/1411",
+   "paine:922/1706",
+   "x2-georapella:1482/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 555,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 116109,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:597/690",
+   "rikku:928/1411",
+   "paine:823/1706",
+   "x2-georapella:1199/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 589,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 24,
+  "ms": 120419,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:597/690",
+   "rikku:928/1411",
+   "paine:823/1706",
+   "x2-georapella:1199/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 609,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 25,
+  "ms": 127622,
+  "actor": "command:paine",
+  "want": {
+   "label": "Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:643/690",
+   "rikku:834/1411",
+   "paine:726/1706",
+   "x2-georapella:969/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 652,
+    "actor": "paine",
+    "did": "Potion",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 26,
+  "ms": 131373,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Paine",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:643/690",
+   "rikku:834/1411",
+   "paine:726/1706",
+   "x2-georapella:969/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 656,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 27,
+  "ms": 135414,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:643/690",
+   "rikku:834/1411",
+   "paine:926/1706",
+   "x2-georapella:969/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 667,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 28,
+  "ms": 140402,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:543/690",
+   "rikku:642/1411",
+   "paine:1216/1706",
+   "x2-georapella:741/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 689,
+    "actor": "yuna",
+    "did": "Cure",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 29,
+  "ms": 143500,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:543/690",
+   "rikku:642/1411",
+   "paine:1216/1706",
+   "x2-georapella:741/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 697,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 30,
+  "ms": 148271,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:456/1411",
+   "paine:1008/1706",
+   "x2-georapella:465/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 719,
+    "actor": "rikku",
+    "did": "Potion",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 31,
+  "ms": 151698,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Lunar Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Lunar Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:456/1411",
+   "paine:1008/1706",
+   "x2-georapella:465/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 727,
+    "actor": "yuna",
+    "did": "Lunar Curtain",
+    "targets": [
+     "yuna",
+     "rikku",
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 32,
+  "ms": 154819,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Georapella",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:656/1411",
+   "paine:1008/1706",
+   "x2-georapella:465/4420"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 734,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 33,
+  "ms": 162073,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:594/690",
+   "rikku:466/1411",
+   "paine:809/1706",
+   "x2-georapella:170/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 780,
+    "actor": "rikku",
+    "did": "Potion",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 34,
+  "ms": 166765,
+  "actor": "play:damage",
+  "want": {
+   "label": "Power Break",
+   "target": "Georapella",
+   "menu": "Skill"
+  },
+  "took": "Power Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:548/690",
+   "rikku:376/1411",
+   "paine:707/1706",
+   "x2-georapella:170/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "x2-georapella",
+   "wanted": "x2-georapella",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 814,
+    "actor": "paine",
+    "did": "Power Break",
+    "targets": [
+     "x2-georapella"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 35,
+  "ms": 171095,
+  "actor": "play:action-end",
+  "want": {
+   "label": "Cure",
+   "target": "Rikku",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:548/690",
+   "rikku:576/1411",
+   "paine:707/1706",
+   "x2-georapella:170/4420"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 36,
+  "ms": 207455,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Lunar Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Lunar Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1839/1839",
+   "paine:1706/1706",
+   "x2-precepts-guard:3680/3680"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 37,
+  "ms": 211452,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Precepts Guard",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1839/1839",
+   "paine:1706/1706",
+   "x2-precepts-guard:3680/3680"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 38,
+  "ms": 213661,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Precepts Guard",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1839/1839",
+   "paine:1706/1706",
+   "x2-precepts-guard:3160/3680"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 39,
+  "ms": 222530,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Precepts Guard",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:518/690",
+   "rikku:1380/1839",
+   "paine:1280/1706",
+   "x2-precepts-guard:2549/3680"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 40,
+  "ms": 225425,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:518/690",
+   "rikku:1380/1839",
+   "paine:1280/1706",
+   "x2-precepts-guard:2288/3680"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 41,
+  "ms": 228697,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Precepts Guard",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:518/690",
+   "rikku:1380/1839",
+   "paine:1280/1706",
+   "x2-precepts-guard:2288/3680"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 42,
+  "ms": 240528,
+  "actor": "play:turn-start",
+  "want": {
+   "label": "Attack",
+   "target": "Precepts Guard",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:454/690",
+   "rikku:1208/1839",
+   "paine:1120/1706",
+   "x2-precepts-guard:1958/3680"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 43,
+  "ms": 245665,
+  "actor": "idle",
+  "want": {
+   "label": "Attack",
+   "target": "Precepts Guard",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1208/1839",
+   "paine:1120/1706",
+   "x2-precepts-guard:1444/3680"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 44,
+  "ms": 247950,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Light Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Light Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1208/1839",
+   "paine:1120/1706",
+   "x2-precepts-guard:1237/3680"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 45,
+  "ms": 259461,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Precepts Guard",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1208/1839",
+   "paine:1120/1706",
+   "x2-precepts-guard:1237/3680"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 46,
+  "ms": 267567,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Dispel",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Dispel",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1208/1839",
+   "paine:1120/1706",
+   "x2-precepts-guard:964/3680"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 47,
+  "ms": 272747,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Precepts Guard",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1208/1839",
+   "paine:1120/1706",
+   "x2-precepts-guard:964/3680"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 48,
+  "ms": 283635,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Attack",
+   "target": "Precepts Guard",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:604/690",
+   "rikku:1057/1839",
+   "paine:980/1706",
+   "x2-precepts-guard:744/3680"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 49,
+  "ms": 288731,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:453/690",
+   "rikku:925/1839",
+   "paine:858/1706",
+   "x2-precepts-guard:471/3680"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 50,
+  "ms": 296534,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Precepts Guard",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:453/690",
+   "rikku:925/1839",
+   "paine:858/1706",
+   "x2-precepts-guard:471/3680"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 51,
+  "ms": 305830,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Precepts Guard",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:925/1839",
+   "paine:858/1706",
+   "x2-precepts-guard:266/3680"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 52,
+  "ms": 337928,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Baralai",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:469/690",
+   "rikku:1839/1839",
+   "paine:1706/1706",
+   "x2-baralai:3380/3380"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 53,
+  "ms": 339067,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:469/690",
+   "rikku:1839/1839",
+   "paine:1558/1706",
+   "x2-baralai:3380/3380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 54,
+  "ms": 342629,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Baralai",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:469/690",
+   "rikku:1839/1839",
+   "paine:1558/1706",
+   "x2-baralai:3380/3380"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 55,
+  "ms": 346296,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Lunar Curtain",
+   "target": "the party",
+   "menu": "Item"
+  },
+  "took": "Lunar Curtain",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:690/690",
+   "rikku:1839/1839",
+   "paine:1558/1706",
+   "x2-baralai:3149/3380"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 56,
+  "ms": 350114,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Baralai",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:431/690",
+   "rikku:1698/1839",
+   "paine:1376/1706",
+   "x2-baralai:3149/3380"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 57,
+  "ms": 352448,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Baralai",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:431/690",
+   "rikku:1698/1839",
+   "paine:1376/1706",
+   "x2-baralai:3149/3380"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 58,
+  "ms": 363940,
+  "actor": "command:paine",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:0/690",
+   "rikku:1617/1839",
+   "paine:1269/1706",
+   "x2-baralai:2924/3380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 59,
+  "ms": 367756,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Baralai",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:0/690",
+   "rikku:1617/1839",
+   "paine:1269/1706",
+   "x2-baralai:2924/3380"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 60,
+  "ms": 376957,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:172/690",
+   "rikku:1617/1839",
+   "paine:1269/1706",
+   "x2-baralai:2458/3380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 61,
+  "ms": 380630,
+  "actor": "play:damage",
+  "want": {
+   "label": "Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:151/690",
+   "rikku:1415/1839",
+   "paine:1111/1706",
+   "x2-baralai:2458/3380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 62,
+  "ms": 388661,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:584/690",
+   "rikku:1415/1839",
+   "paine:1111/1706",
+   "x2-baralai:2458/3380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 63,
+  "ms": 393524,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Baralai",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:367/690",
+   "rikku:1415/1839",
+   "paine:1111/1706",
+   "x2-baralai:2458/3380"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 64,
+  "ms": 399663,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:599/690",
+   "rikku:1415/1839",
+   "paine:1111/1706",
+   "x2-baralai:2167/3380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 65,
+  "ms": 404738,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Baralai",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:325/690",
+   "rikku:1281/1839",
+   "paine:929/1706",
+   "x2-baralai:2167/3380"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 66,
+  "ms": 412795,
+  "actor": "play:status-tick",
+  "want": {
+   "label": "Cure",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Cure",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "yuna:408/690",
+   "rikku:1080/1839",
+   "paine:827/1706",
+   "x2-baralai:1879/3380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 67,
+  "ms": 419124,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Baralai",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:632/690",
+   "rikku:1080/1839",
+   "paine:827/1706",
+   "x2-baralai:1879/3380"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 68,
+  "ms": 429975,
+  "actor": "command:paine",
+  "want": {
+   "label": "Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:553/690",
+   "rikku:945/1839",
+   "paine:724/1706",
+   "x2-baralai:1606/3380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 69,
+  "ms": 442421,
+  "actor": "idle",
+  "want": {
+   "label": "Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:553/690",
+   "rikku:945/1839",
+   "paine:643/1706",
+   "x2-baralai:1606/3380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 70,
+  "ms": 454994,
+  "actor": "command:paine",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:0/690",
+   "rikku:715/1839",
+   "paine:562/1706",
+   "x2-baralai:1606/3380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 71,
+  "ms": 468142,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:151/690",
+   "rikku:626/1839",
+   "paine:422/1706",
+   "x2-baralai:1606/3380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 72,
+  "ms": 478803,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:0/690",
+   "rikku:626/1839",
+   "paine:472/1706",
+   "x2-baralai:1606/3380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 828,
+    "actor": "rikku",
+    "did": "Phoenix Down",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 73,
+  "ms": 491189,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:0/690",
+   "rikku:401/1839",
+   "paine:192/1706",
+   "x2-baralai:1606/3380"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  }
+ }
+]

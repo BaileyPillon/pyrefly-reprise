@@ -1,0 +1,178 @@
+[
+ {
+  "file": "dark-aeons/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "dark-aeons",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 11485,
+  "state": "battle command menu dark-aeons 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T20:28:27.834Z"
+ },
+ {
+  "file": "penance/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "penance",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 8369,
+  "state": "battle command menu penance 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T20:29:15.735Z"
+ },
+ {
+  "file": "flooded-ways/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "flooded-ways",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 10053,
+  "state": "battle command menu flooded-ways 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T20:30:04.452Z"
+ },
+ {
+  "file": "sanctuary-keeper/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "sanctuary-keeper",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 9546,
+  "state": "battle command menu sanctuary-keeper 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T20:30:52.127Z"
+ },
+ {
+  "file": "exp-anime/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "exp-anime",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 16952,
+  "state": "battle command menu exp-anime 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T20:31:48.195Z"
+ },
+ {
+  "file": "ffx2-bevelle-guardians/01-battle-menu.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bevelle-guardians",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 10238,
+  "state": "battle command menu ffx2-bevelle-guardians 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T20:32:32.313Z"
+ },
+ {
+  "file": "ffx2-farplane-cup/01-battle-menu.png",
+  "game": "ffx2",
+  "chapter": "ffx2-farplane-cup",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 9195,
+  "state": "battle command menu ffx2-farplane-cup 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T20:33:19.218Z"
+ },
+ {
+  "file": "ffx2-yunas-ballad/01-battle-menu.png",
+  "game": "ffx2",
+  "chapter": "ffx2-yunas-ballad",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 9535,
+  "state": "battle command menu ffx2-yunas-ballad 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T20:33:56.553Z"
+ }
+]

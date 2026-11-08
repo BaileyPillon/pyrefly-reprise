@@ -1,0 +1,571 @@
+{
+ "chapter": "keeper",
+ "door": "keeper",
+ "game": "ffx",
+ "base": "https://echoesofspira.com/",
+ "seed": 1,
+ "startedAt": "2026-11-07T14:47:59.042Z",
+ "stateWrites": [
+  {
+   "at": 49199,
+   "what": "Keeper HP set to 400 after two real Moves and an Attack All sweep were read, so a real Attack ends the fight (a full win is 3.5 in 100 for the best line)",
+   "result": {
+    "was": 49393,
+    "now": 400
+   }
+  }
+ ],
+ "decisions": [
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "tidus",
+   "why": "Move tidus from glyph 1 to glyph 5 (the demonstration)",
+   "did": true,
+   "how": "path=top; aim spectral-circle-5=true; ",
+   "cmd": {
+    "label": "Move",
+    "id": "move",
+    "kind": "trigger"
+   },
+   "ticks": 0,
+   "turn": 1,
+   "ms": 24977,
+   "rowsBefore": null,
+   "events": [
+    "tidus:move->spectral-circle-5",
+    "  PLATFORM tidus 1->5",
+    "  MSG \"Tidus steps to glyph 5\""
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Move yuna from glyph 2 to glyph 4 (the demonstration)",
+   "did": true,
+   "how": "path=top; aim spectral-circle-4=true; ",
+   "cmd": {
+    "label": "Move",
+    "id": "move",
+    "kind": "trigger"
+   },
+   "ticks": 0,
+   "turn": 2,
+   "ms": 28430,
+   "rowsBefore": null,
+   "events": [
+    "yuna:move->spectral-circle-4",
+    "  PLATFORM yuna 2->4",
+    "  MSG \"Yuna steps to glyph 4\""
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "auron",
+   "why": "Move auron from glyph 3 to glyph 6 (out of the sweep zone)",
+   "did": true,
+   "how": "path=top; aim spectral-circle-6=true; ",
+   "cmd": {
+    "label": "Move",
+    "id": "move",
+    "kind": "trigger"
+   },
+   "ticks": 0,
+   "turn": 3,
+   "ms": 31182,
+   "rowsBefore": null,
+   "events": [
+    "auron:move->spectral-circle-6",
+    "  PLATFORM auron 3->6",
+    "  MSG \"Auron steps to glyph 6\""
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "tidus",
+   "why": "Move tidus from glyph 5 to glyph 2 (out of the sweep zone)",
+   "did": true,
+   "how": "path=top; aim spectral-circle-2=true; ",
+   "cmd": {
+    "label": "Move",
+    "id": "move",
+    "kind": "trigger"
+   },
+   "ticks": 24,
+   "turn": 5,
+   "ms": 35912,
+   "rowsBefore": null,
+   "events": [
+    "spectral-keeper:keeper-berserk-tail->auron",
+    "  dmg auron 1143",
+    "tidus:move->spectral-circle-2",
+    "  PLATFORM tidus 5->2",
+    "  MSG \"Tidus steps to glyph 2\""
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks the Keeper",
+   "did": true,
+   "how": "path=top; aim spectral-keeper=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 27,
+   "turn": 6,
+   "ms": 38760,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->spectral-keeper",
+    "  boss takes 65",
+    "  COUNTER keeper-attack-all (script)",
+    "spectral-keeper:keeper-attack-all->auron",
+    "  dmg auron 2480"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Phoenix Down on tidus",
+   "did": true,
+   "how": "path=Items > Phoenix Down; aim tidus=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "phoenix-down",
+    "kind": "item"
+   },
+   "ticks": 54,
+   "turn": 10,
+   "ms": 51969,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->spectral-keeper",
+    "  boss takes 1665",
+    "  COUNTER keeper-attack-all (script)",
+    "spectral-keeper:keeper-attack-all->auron",
+    "  dmg auron 2416",
+    "  KO auron (by keeper-attack-all)",
+    "spectral-keeper:keeper-berserk-tail->tidus",
+    "  dmg tidus 1292",
+    "tidus:attack->spectral-keeper",
+    "  boss takes 877",
+    "  COUNTER keeper-attack-all (script)",
+    "spectral-keeper:keeper-attack-all->tidus",
+    "  dmg tidus 2449",
+    "  KO tidus (by keeper-attack-all)"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Phoenix Down on auron",
+   "did": true,
+   "how": "path=Items > Phoenix Down; aim auron=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "phoenix-down",
+    "kind": "item"
+   },
+   "ticks": 72,
+   "turn": 12,
+   "ms": 58017,
+   "rowsBefore": null,
+   "events": [
+    "spectral-keeper:keeper-berserk-tail->tidus",
+    "  dmg tidus 1278",
+    "yuna:phoenix-down->auron",
+    "  revive auron"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "tidus",
+   "why": "Hi-Potion on tidus",
+   "did": true,
+   "how": "path=Items > Hi-Potion; aim tidus=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "hi-potion",
+    "kind": "item"
+   },
+   "ticks": 78,
+   "turn": 13,
+   "ms": 62647,
+   "rowsBefore": null,
+   "events": [
+    "tidus:hi-potion->tidus"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Hi-Potion on auron",
+   "did": true,
+   "how": "path=Items > Hi-Potion; aim auron=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "hi-potion",
+    "kind": "item"
+   },
+   "ticks": 90,
+   "turn": 15,
+   "ms": 69203,
+   "rowsBefore": null,
+   "events": [
+    "spectral-keeper:keeper-berserk-tail->auron",
+    "  dmg auron 1107",
+    "yuna:hi-potion->auron"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 1,
+   "actor": "tidus",
+   "why": "Hi-Potion on tidus",
+   "did": true,
+   "how": "path=Items > Hi-Potion; aim tidus=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "hi-potion",
+    "kind": "item"
+   },
+   "ticks": 94,
+   "turn": 16,
+   "ms": 73859,
+   "rowsBefore": null,
+   "events": [
+    "tidus:hi-potion->tidus"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "n": 1,
+   "key": "spectral-keeper,spectral-circle-1,spectral-circle-2,spectral-circle-3,spectral-circle-4,spectral-circle-5,spectral-circle-6,spectral-circle-7#1",
+   "foes": [
+    "spectral-keeper",
+    "spectral-circle-1",
+    "spectral-circle-2",
+    "spectral-circle-3",
+    "spectral-circle-4",
+    "spectral-circle-5",
+    "spectral-circle-6",
+    "spectral-circle-7"
+   ],
+   "seed": 1,
+   "ms": 23016,
+   "ticks": 0
+  },
+  {
+   "at": "after seam (decision 10)",
+   "screenWas": "battle",
+   "next": "left:cutscene",
+   "ms": 80796
+  }
+ ],
+ "attempts": [
+  {
+   "attempt": 1,
+   "over": "left:cutscene",
+   "decisions": 10,
+   "ms": 80796
+  }
+ ],
+ "mechanics": [
+  {
+   "ms": 32506,
+   "seq": 16,
+   "actor": "spectral-keeper",
+   "ability": "keeper-berserk-tail",
+   "targets": [
+    "auron"
+   ],
+   "first": true
+  },
+  {
+   "ms": 38437,
+   "seq": 30,
+   "actor": "spectral-keeper",
+   "ability": "keeper-attack-all",
+   "targets": [
+    "auron"
+   ],
+   "first": true
+  },
+  {
+   "ms": 40884,
+   "seq": 40,
+   "actor": "spectral-keeper",
+   "ability": "keeper-attack-all",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 44288,
+   "seq": 47,
+   "actor": "spectral-keeper",
+   "ability": "keeper-berserk-tail",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 45787,
+   "seq": 57,
+   "actor": "spectral-keeper",
+   "ability": "keeper-attack-all",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 53497,
+   "seq": 71,
+   "actor": "spectral-keeper",
+   "ability": "keeper-berserk-tail",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 64067,
+   "seq": 87,
+   "actor": "spectral-keeper",
+   "ability": "keeper-berserk-tail",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  }
+ ],
+ "screens": [
+  {
+   "label": "a1",
+   "screens": [
+    "cutscene",
+    "results",
+    "cutscene",
+    "chapter-select"
+   ],
+   "results": {
+    "text": "ZANARKAND DOME — THE FOOT OF THE LIFT · CLEARED RESULTS · 1:05 Victory AP 12,000 ×3 PARTY GIL 7,000 ITEMS Lv. 4 Key Sphere T Tidus +4 S.Lv S.LV 50 · 2,445/2,755 AP +12,000AP Y Yuna +5 S.Lv S.LV 49 · 1,067/2,602 AP +12,000AP A Auron +4 S.Lv S.LV 52 · 1,274/3,077 AP +12,000AP CONFIRM ▸",
+    "outcome": "victory"
+   },
+   "outcome": "victory",
+   "scenes": [
+    {
+     "watch": {
+      "ms": 268,
+      "shows": 0,
+      "advancedWithoutInput": false,
+      "firstLine": null,
+      "screenAfterWatch": "results"
+     },
+     "taps": 0,
+     "holds": 0,
+     "ended": true,
+     "lines": []
+    },
+    {
+     "watch": {
+      "ms": 6026,
+      "shows": 1,
+      "advancedWithoutInput": false,
+      "firstLine": "It just stopped. Like it was waiting to be told.",
+      "screenAfterWatch": "cutscene"
+     },
+     "taps": 7,
+     "holds": 0,
+     "ended": true,
+     "lines": [
+      "It just stopped. Like it was waiting to be told.",
+      "It was only ever a door.",
+      "And we have opened it.",
+      "Ya. Let's not keep her waitin'.",
+      "Keep walking."
+     ]
+    }
+   ],
+   "next": "board",
+   "board": {
+    "selectedIndex": 0,
+    "selectedId": "seymour-flux",
+    "tiles": 19,
+    "coming": [],
+    "cleared": [],
+    "order": [
+     "seymour-flux",
+     "yunalesca",
+     "braskas-final-aeon",
+     "seymour-anima-macalania",
+     "evrae-airship",
+     "yojimbo-cavern",
+     "seymour-natus",
+     "seymour-omnis",
+     "isaaru-via-purifico",
+     "sin-fins-core",
+     "sin-face",
+     "mirror-aeons",
+     "ffx2-bahamut",
+     "ffx2-vegnagun-shuyin",
+     "ffx2-leblanc",
+     "ffx2-fallen-aeons",
+     "ffx2-trema",
+     "ffx2-den-of-woe",
+     "ffx2-ixion-djose"
+    ],
+    "beaten": 0,
+    "total": 19
+   },
+   "boardText": "CHAPTER SELECT CHAPTER I Seymour Flux 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVII XVIII XXVII X-2 IV V VI XI XIII XV XVI The mountain of the Ronso, and what was done to them The Ronso held the gate so the summoner could pass. Seymour calls it mercy. He is still unsent, he is waiting on the trail, and everything he says about Jecht is true. CTB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima VIII Evrae IX Yojimbo X Seymour Natus XII Seymour Omnis XIV Isaaru XVII Sin: the Fins and the Core XVIII Sin: the Face XXVII Mirror Aeons FINAL FANTAS"
+  }
+ ],
+ "speed": "normal",
+ "line": "ring plan: Phoenix/potion upkeep, two demonstration Moves, step out of the sweep zone, attack; one HP write after the mechanics were read",
+ "live": {
+  "version": "0.1.0",
+  "scripts": [
+   "index-jYm-0mrJ.js"
+  ]
+ },
+ "battleSeed": 1,
+ "ringsOpening": {
+  "scene": true,
+  "rings": [
+   {
+    "id": "spectral-circle-1",
+    "visible": false,
+    "opacity": 0.62,
+    "hex": 13148415,
+    "at": [
+     1.55,
+     0.03,
+     -2.6
+    ]
+   },
+   {
+    "id": "spectral-circle-2",
+    "visible": false,
+    "opacity": 0.62,
+    "hex": 13148415,
+    "at": [
+     3.6,
+     0.03,
+     -3.6
+    ]
+   },
+   {
+    "id": "spectral-circle-3",
+    "visible": false,
+    "opacity": 0.62,
+    "hex": 13148415,
+    "at": [
+     3.6,
+     0.03,
+     -5.6
+    ]
+   },
+   {
+    "id": "spectral-circle-4",
+    "visible": false,
+    "opacity": 0.62,
+    "hex": 13148415,
+    "at": [
+     1.55,
+     0.03,
+     -6.6
+    ]
+   },
+   {
+    "id": "spectral-circle-5",
+    "visible": false,
+    "opacity": 0.62,
+    "hex": 13148415,
+    "at": [
+     -0.5,
+     0.03,
+     -5.6
+    ]
+   },
+   {
+    "id": "spectral-circle-6",
+    "visible": false,
+    "opacity": 0.62,
+    "hex": 13148415,
+    "at": [
+     -0.5,
+     0.03,
+     -3.6
+    ]
+   },
+   {
+    "id": "spectral-circle-7",
+    "visible": false,
+    "opacity": 0.62,
+    "hex": 13148415,
+    "at": [
+     5.34,
+     0.03,
+     -4.6
+    ]
+   }
+  ]
+ },
+ "moveReads": [
+  {
+   "n": 0,
+   "why": "Move tidus from glyph 1 to glyph 5 (the demonstration)",
+   "platformAfter": 5,
+   "did": true,
+   "how": "path=top; aim spectral-circle-5=true; "
+  },
+  {
+   "n": 1,
+   "why": "Move yuna from glyph 2 to glyph 4 (the demonstration)",
+   "platformAfter": 4,
+   "did": true,
+   "how": "path=top; aim spectral-circle-4=true; "
+  },
+  {
+   "n": 2,
+   "why": "Move auron from glyph 3 to glyph 6 (out of the sweep zone)",
+   "platformAfter": 6,
+   "did": true,
+   "how": "path=top; aim spectral-circle-6=true; "
+  },
+  {
+   "n": 3,
+   "why": "Move tidus from glyph 5 to glyph 2 (out of the sweep zone)",
+   "platformAfter": 2,
+   "did": true,
+   "how": "path=top; aim spectral-circle-2=true; "
+  }
+ ],
+ "hitCounter": {
+  "count": 3,
+  "front": 6,
+  "mines": 0,
+  "armed": []
+ },
+ "result": "WON by real keys (one recorded state write set up the last blow)",
+ "consoleErrors": [],
+ "notFound": [],
+ "errors": [],
+ "minutes": 1.79
+}

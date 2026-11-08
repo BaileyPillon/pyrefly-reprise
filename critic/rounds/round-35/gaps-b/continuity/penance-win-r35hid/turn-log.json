@@ -1,0 +1,487 @@
+[
+ {
+  "turn": 0,
+  "ms": 51,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Right Arm",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:9999/9999",
+   "auron:9999/9999",
+   "wakka:9999/9999",
+   "lulu:9999/9999",
+   "rikku:9999/9999",
+   "kimahri:9999/9999",
+   "valefor:13897/13897",
+   "ifrit:16914/16914",
+   "ixion:17397/17397",
+   "shiva:15897/15897",
+   "bahamut:23880/23880",
+   "penance:12000000/12000000",
+   "penance-right-arm:500000/500000",
+   "penance-left-arm:500000/500000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "penance-right-arm",
+   "wanted": "penance-right-arm",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "penance-right-arm"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 3747,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Right Arm",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:9999/9999",
+   "auron:9999/9999",
+   "wakka:9999/9999",
+   "lulu:9999/9999",
+   "rikku:9999/9999",
+   "kimahri:9999/9999",
+   "valefor:13897/13897",
+   "ifrit:16914/16914",
+   "ixion:17397/17397",
+   "shiva:15897/15897",
+   "bahamut:23880/23880",
+   "penance:12000000/12000000",
+   "penance-right-arm:400001/500000",
+   "penance-left-arm:500000/500000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "penance-right-arm",
+   "wanted": "penance-right-arm",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 5,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "penance-right-arm"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 2,
+  "ms": 7972,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Penance",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:9999/9999",
+   "auron:9999/9999",
+   "wakka:9999/9999",
+   "lulu:9999/9999",
+   "rikku:9999/9999",
+   "kimahri:9999/9999",
+   "valefor:13897/13897",
+   "ifrit:16914/16914",
+   "ixion:17397/17397",
+   "shiva:15897/15897",
+   "bahamut:23880/23880",
+   "penance:12000000/12000000",
+   "penance-right-arm:300002/500000",
+   "penance-left-arm:500000/500000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 3,
+  "ms": 9558,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Penance",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:9999/9999",
+   "auron:9999/9999",
+   "wakka:9999/9999",
+   "lulu:9999/9999",
+   "rikku:9999/9999",
+   "kimahri:9999/9999",
+   "valefor:13897/13897",
+   "ifrit:16914/16914",
+   "ixion:17397/17397",
+   "shiva:15897/15897",
+   "bahamut:23880/23880",
+   "penance:12000000/12000000",
+   "penance-right-arm:300002/500000",
+   "penance-left-arm:500000/500000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "penance",
+   "wanted": "penance",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 9,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "penance"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 11486,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Right Arm",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:9999/9999",
+   "auron:9999/9999",
+   "wakka:9999/9999",
+   "lulu:9999/9999",
+   "rikku:9999/9999",
+   "kimahri:9999/9999",
+   "valefor:13897/13897",
+   "ifrit:16914/16914",
+   "ixion:17397/17397",
+   "shiva:15897/15897",
+   "bahamut:23880/23880",
+   "penance:11900001/12000000",
+   "penance-right-arm:300002/500000",
+   "penance-left-arm:500000/500000"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 5,
+  "ms": 12635,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Right Arm",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:9999/9999",
+   "auron:9999/9999",
+   "wakka:9999/9999",
+   "lulu:9999/9999",
+   "rikku:9999/9999",
+   "kimahri:9999/9999",
+   "valefor:13897/13897",
+   "ifrit:16914/16914",
+   "ixion:17397/17397",
+   "shiva:15897/15897",
+   "bahamut:23880/23880",
+   "penance:11900001/12000000",
+   "penance-right-arm:300002/500000",
+   "penance-left-arm:500000/500000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "penance-right-arm",
+   "wanted": "penance-right-arm",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 13,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "penance-right-arm"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 15237,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Right Arm",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:9999/9999",
+   "auron:9999/9999",
+   "wakka:9999/9999",
+   "lulu:9999/9999",
+   "rikku:9999/9999",
+   "kimahri:9999/9999",
+   "valefor:13897/13897",
+   "ifrit:16914/16914",
+   "ixion:17397/17397",
+   "shiva:15897/15897",
+   "bahamut:23880/23880",
+   "penance:11900001/12000000",
+   "penance-right-arm:200003/500000",
+   "penance-left-arm:500000/500000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "penance-right-arm",
+   "wanted": "penance-right-arm",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 18,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "penance-right-arm"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 17573,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Penance",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:9999/9999",
+   "auron:9999/9999",
+   "wakka:9999/9999",
+   "lulu:9999/9999",
+   "rikku:9999/9999",
+   "kimahri:9999/9999",
+   "valefor:13897/13897",
+   "ifrit:16914/16914",
+   "ixion:17397/17397",
+   "shiva:15897/15897",
+   "bahamut:23880/23880",
+   "penance:11900001/12000000",
+   "penance-right-arm:100004/500000",
+   "penance-left-arm:500000/500000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "penance",
+   "wanted": "penance",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 22,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "penance"
+    ]
+   },
+   {
+    "seq": 36,
+    "actor": "tidus",
+    "did": "X-Potion",
+    "targets": [
+     "tidus"
+    ]
+   },
+   {
+    "seq": 41,
+    "actor": "yuna",
+    "did": "X-Potion",
+    "targets": [
+     "yuna"
+    ]
+   },
+   {
+    "seq": 46,
+    "actor": "rikku",
+    "did": "X-Potion",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 28286,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Right Arm",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:9999/9999",
+   "auron:9999/9999",
+   "wakka:9999/9999",
+   "lulu:9999/9999",
+   "rikku:9999/9999",
+   "kimahri:9999/9999",
+   "valefor:13897/13897",
+   "ifrit:16914/16914",
+   "ixion:17397/17397",
+   "shiva:15897/15897",
+   "bahamut:23880/23880",
+   "penance:11800002/12000000",
+   "penance-right-arm:100004/500000",
+   "penance-left-arm:500000/500000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "penance-right-arm",
+   "wanted": "penance-right-arm",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 51,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "penance-right-arm"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 30627,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Spiral Cut",
+   "target": "Right Arm",
+   "menu": "Overdrive"
+  },
+  "took": "Spiral Cut",
+  "viaMenu": "Overdrive",
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:9999/9999",
+   "auron:9999/9999",
+   "wakka:9999/9999",
+   "lulu:9999/9999",
+   "rikku:9999/9999",
+   "kimahri:9999/9999",
+   "valefor:13897/13897",
+   "ifrit:16914/16914",
+   "ixion:17397/17397",
+   "shiva:15897/15897",
+   "bahamut:23880/23880",
+   "penance:11800002/12000000",
+   "penance-right-arm:5/500000",
+   "penance-left-arm:500000/500000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "penance-right-arm",
+   "wanted": "penance-right-arm",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 56,
+    "actor": "tidus",
+    "did": "Spiral Cut",
+    "targets": [
+     "penance-right-arm"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 44688,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Penance",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:9999/9999",
+   "yuna:9999/9999",
+   "auron:9999/9999",
+   "wakka:9999/9999",
+   "lulu:9999/9999",
+   "rikku:9999/9999",
+   "kimahri:9999/9999",
+   "valefor:13897/13897",
+   "ifrit:16914/16914",
+   "ixion:17397/17397",
+   "shiva:15897/15897",
+   "bahamut:23880/23880",
+   "penance:11800002/12000000",
+   "penance-right-arm:0/500000",
+   "penance-left-arm:500000/500000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "penance",
+   "wanted": "penance",
+   "mismatch": false
+  }
+ }
+]

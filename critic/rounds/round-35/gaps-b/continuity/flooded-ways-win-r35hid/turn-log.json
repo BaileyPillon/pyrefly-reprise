@@ -1,0 +1,1453 @@
+[
+ {
+  "turn": 0,
+  "ms": 37,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae Altana",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2530/2530",
+   "rikku:1400/1400",
+   "evrae-altana:16384/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 1,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 3727,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2530/2530",
+   "rikku:479/1400",
+   "evrae-altana:16064/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 10,
+    "actor": "tidus",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "wakka",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 2,
+  "ms": 14212,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae Altana",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2530/2530",
+   "rikku:882/1400",
+   "evrae-altana:16064/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 22,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 17579,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae Altana",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:1594/2530",
+   "rikku:882/1400",
+   "evrae-altana:15223/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 32,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 20925,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae Altana",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1476/2420",
+   "wakka:1594/2530",
+   "rikku:882/1400",
+   "evrae-altana:14177/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 42,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 28344,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Rikku",
+   "menu": "Items"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:953/2420",
+   "wakka:1270/2530",
+   "rikku:0/1400",
+   "evrae-altana:13852/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 63,
+    "actor": "tidus",
+    "did": "Phoenix Down",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 32382,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:953/2420",
+   "wakka:1270/2530",
+   "rikku:700/1400",
+   "evrae-altana:13852/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 68,
+    "actor": "wakka",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "wakka",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 36593,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae Altana",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1953/2420",
+   "wakka:2270/2530",
+   "rikku:1400/1400",
+   "evrae-altana:13852/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 75,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 41862,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1088/2420",
+   "wakka:1803/2530",
+   "rikku:1400/1400",
+   "evrae-altana:12892/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 91,
+    "actor": "rikku",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "wakka",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 46327,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae Altana",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2088/2420",
+   "wakka:2530/2530",
+   "rikku:1400/1400",
+   "evrae-altana:12892/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 98,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 49641,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae Altana",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2088/2420",
+   "wakka:1586/2530",
+   "rikku:1400/1400",
+   "evrae-altana:12042/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 108,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 53014,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2088/2420",
+   "wakka:1586/2530",
+   "rikku:435/1400",
+   "evrae-altana:11698/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 117,
+    "actor": "tidus",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "wakka",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 60677,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae Altana",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2314/2420",
+   "wakka:2192/2530",
+   "rikku:961/1400",
+   "evrae-altana:11698/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 139,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 63773,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae Altana",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2314/2420",
+   "wakka:2192/2530",
+   "rikku:961/1400",
+   "evrae-altana:10675/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 148,
+    "actor": "wakka",
+    "did": "Attack",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 66805,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae Altana",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2314/2420",
+   "wakka:2192/2530",
+   "rikku:961/1400",
+   "evrae-altana:9796/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 157,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 74216,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2314/2420",
+   "wakka:0/2530",
+   "rikku:59/1400",
+   "evrae-altana:9467/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 173,
+    "actor": "tidus",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 78461,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae Altana",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:0/2530",
+   "rikku:1059/1400",
+   "evrae-altana:9467/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 179,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 81480,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae Altana",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:0/2530",
+   "rikku:1059/1400",
+   "evrae-altana:9138/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 187,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 88689,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1401/2420",
+   "wakka:0/2530",
+   "rikku:280/1400",
+   "evrae-altana:8099/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 211,
+    "actor": "rikku",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 92677,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae Altana",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2401/2420",
+   "wakka:0/2530",
+   "rikku:1280/1400",
+   "evrae-altana:8099/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 217,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 99478,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1241/2420",
+   "wakka:0/2530",
+   "rikku:621/1400",
+   "evrae-altana:7033/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 241,
+    "actor": "rikku",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 103691,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Attack",
+   "target": "Evrae Altana",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2241/2420",
+   "wakka:0/2530",
+   "rikku:1400/1400",
+   "evrae-altana:7033/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 247,
+    "actor": "rikku",
+    "did": "Attack",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 107225,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2241/2420",
+   "wakka:0/2530",
+   "rikku:402/1400",
+   "evrae-altana:6686/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 256,
+    "actor": "tidus",
+    "did": "Al Bhed Potion",
+    "targets": [
+     "tidus",
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 114444,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Spiral Cut",
+   "target": "Evrae Altana",
+   "menu": "Overdrive"
+  },
+  "took": "Spiral Cut",
+  "viaMenu": "Overdrive",
+  "engineHp": [
+   "tidus:2083/2420",
+   "wakka:0/2530",
+   "rikku:838/1400",
+   "evrae-altana:6686/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 275,
+    "actor": "tidus",
+    "did": "Spiral Cut",
+    "targets": [
+     "evrae-altana"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 24,
+  "ms": 128604,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Evrae Altana",
+   "menu": "Items"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1136/2420",
+   "wakka:0/2530",
+   "rikku:838/1400",
+   "evrae-altana:5325/16384",
+   "gate-lock-1:500/500",
+   "gate-lock-2:500/500"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "evrae-altana",
+   "wanted": "evrae-altana",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 25,
+  "ms": 161854,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2530/2530",
+   "rikku:100/1400",
+   "geosgaeno:32767/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 26,
+  "ms": 165925,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2530/2530",
+   "rikku:1100/1400",
+   "geosgaeno:32767/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 27,
+  "ms": 170074,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Geosgaeno",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2530/2530",
+   "rikku:1400/1400",
+   "geosgaeno:32767/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 28,
+  "ms": 173052,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Geosgaeno",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1127/2420",
+   "wakka:2530/2530",
+   "rikku:1400/1400",
+   "geosgaeno:32578/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 29,
+  "ms": 179245,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Geosgaeno",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1127/2420",
+   "wakka:2530/2530",
+   "rikku:1400/1400",
+   "geosgaeno:28131/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 30,
+  "ms": 180888,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Geosgaeno",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1127/2420",
+   "wakka:2530/2530",
+   "rikku:1400/1400",
+   "geosgaeno:27907/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 31,
+  "ms": 188403,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Geosgaeno",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1127/2420",
+   "wakka:1182/2530",
+   "rikku:1400/1400",
+   "geosgaeno:23454/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 32,
+  "ms": 190052,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Geosgaeno",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1127/2420",
+   "wakka:1182/2530",
+   "rikku:1400/1400",
+   "geosgaeno:23231/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 33,
+  "ms": 191685,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Geosgaeno",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1127/2420",
+   "wakka:1182/2530",
+   "rikku:1400/1400",
+   "geosgaeno:23053/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 34,
+  "ms": 204572,
+  "actor": "command:rikku",
+  "want": {
+   "label": "X-Potion",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1127/2420",
+   "wakka:1182/2530",
+   "rikku:1400/1400",
+   "geosgaeno:18530/32767"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 35,
+  "ms": 210671,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Geosgaeno",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:1182/2530",
+   "rikku:1400/1400",
+   "geosgaeno:18530/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 36,
+  "ms": 215184,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1239/2420",
+   "wakka:1/2530",
+   "rikku:219/1400",
+   "geosgaeno:18309/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 37,
+  "ms": 219261,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2239/2420",
+   "wakka:1001/2530",
+   "rikku:1219/1400",
+   "geosgaeno:18309/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 38,
+  "ms": 224838,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2001/2530",
+   "rikku:90/1400",
+   "geosgaeno:18309/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 39,
+  "ms": 229103,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2530/2530",
+   "rikku:1090/1400",
+   "geosgaeno:18309/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 40,
+  "ms": 233053,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Geosgaeno",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2530/2530",
+   "rikku:1400/1400",
+   "geosgaeno:18309/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 41,
+  "ms": 236075,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2530/2530",
+   "rikku:121/1400",
+   "geosgaeno:18113/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 42,
+  "ms": 240306,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Geosgaeno",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2530/2530",
+   "rikku:1121/1400",
+   "geosgaeno:18113/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 43,
+  "ms": 246606,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Geosgaeno",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2530/2530",
+   "rikku:1121/1400",
+   "geosgaeno:13557/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 44,
+  "ms": 250553,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Struggle",
+   "target": "Geosgaeno",
+   "menu": "Special"
+  },
+  "took": "Struggle",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2530/2530",
+   "rikku:1121/1400",
+   "geosgaeno:13337/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 45,
+  "ms": 256300,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Rikku",
+   "menu": "Items"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2530/2530",
+   "rikku:0/1400",
+   "geosgaeno:13103/32767"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  }
+ },
+ {
+  "turn": 46,
+  "ms": 261359,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:1212/2530",
+   "rikku:700/1400",
+   "geosgaeno:13103/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 47,
+  "ms": 265400,
+  "actor": "command:wakka",
+  "want": {
+   "label": "Attack",
+   "target": "Geosgaeno",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2212/2530",
+   "rikku:1400/1400",
+   "geosgaeno:13103/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 48,
+  "ms": 267071,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Geosgaeno",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:2212/2530",
+   "rikku:1400/1400",
+   "geosgaeno:12924/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 49,
+  "ms": 274685,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Al Bhed Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Al Bhed Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:965/2530",
+   "rikku:1400/1400",
+   "geosgaeno:8444/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 50,
+  "ms": 278999,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Geosgaeno",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:1965/2530",
+   "rikku:1400/1400",
+   "geosgaeno:8444/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 51,
+  "ms": 286066,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Fire Gem",
+   "target": "Geosgaeno",
+   "menu": "Items"
+  },
+  "took": "Fire Gem",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "wakka:1965/2530",
+   "rikku:1400/1400",
+   "geosgaeno:4191/32767"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

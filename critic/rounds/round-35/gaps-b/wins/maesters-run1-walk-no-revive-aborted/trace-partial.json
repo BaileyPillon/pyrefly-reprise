@@ -1,0 +1,879 @@
+{
+ "chapter": "maesters",
+ "door": "infinito",
+ "game": "ffx2",
+ "base": "https://echoesofspira.com/",
+ "seed": 1,
+ "startedAt": "2026-11-07T15:14:07.278Z",
+ "stateWrites": [],
+ "decisions": [
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku attacks",
+   "did": true,
+   "how": "path=top; aim x2-aranea=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 61,
+   "turn": 1,
+   "ms": 25174,
+   "rowsBefore": null,
+   "events": [
+    "x2-aranea:x2-aranea-attack->paine",
+    "rikku:attack->x2-aranea",
+    "  boss takes 5292"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-aranea=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 77,
+   "turn": 2,
+   "ms": 28367,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-aranea"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-aranea=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 98,
+   "turn": 3,
+   "ms": 32534,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-aranea",
+    "x2-aranea:x2-aranea-attack->yuna"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Rikku attacks",
+   "did": true,
+   "how": "path=top; aim x2-black-elemental=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 125,
+   "turn": 1,
+   "ms": 64991,
+   "rowsBefore": null,
+   "events": [
+    "x2-black-elemental:x2-black-elemental-berserk->yuna",
+    "rikku:attack->x2-black-elemental",
+    "  boss takes 428",
+    "yuna:attack->x2-black-elemental",
+    "  boss takes 1413"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-black-elemental=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 175,
+   "turn": 3,
+   "ms": 69789,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-black-elemental",
+    "x2-black-elemental:x2-black-elemental-berserk->rikku"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Rikku attacks",
+   "did": true,
+   "how": "path=top; aim x2-black-elemental=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 328,
+   "turn": 5,
+   "ms": 74022,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6365",
+    "rikku:attack->x2-black-elemental",
+    "  boss takes 669"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-black-elemental=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 388,
+   "turn": 6,
+   "ms": 76998,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-black-elemental",
+    "yuna:attack->x2-black-elemental",
+    "  boss takes 1488",
+    "  KO x2-black-elemental (by attack)"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 3,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 128,
+   "turn": 1,
+   "ms": 109765,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->rikku",
+    "x2-concherer:x2-concherer-gunk->rikku",
+    "rikku:x2-item-light-curtain->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 177,
+   "turn": 3,
+   "ms": 113532,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 3,
+   "actor": "paine",
+   "why": "Paine changes dark-knight to Warrior (the walk across The End's gates; crossed so far: none)",
+   "did": true,
+   "how": "path=Change > Warrior; ",
+   "cmd": {
+    "path": [
+     "Change",
+     "Warrior"
+    ]
+   },
+   "ticks": 185,
+   "turn": 4,
+   "ms": 117843,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 10,
+   "link": 3,
+   "actor": "paine",
+   "why": "Paine changes warrior to Gunner (the walk across The End's gates; crossed so far: blue)",
+   "did": true,
+   "how": "path=Change > Gunner; ",
+   "cmd": {
+    "path": [
+     "Change",
+     "Gunner"
+    ]
+   },
+   "ticks": 332,
+   "turn": 5,
+   "ms": 125704,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6688"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 3,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 363,
+   "turn": 6,
+   "ms": 130238,
+   "rowsBefore": null,
+   "events": [
+    "  dmg rikku 159",
+    "x2-concherer:x2-concherer-attack->paine",
+    "rikku:x2-item-lunar-curtain->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 389,
+   "turn": 8,
+   "ms": 134131,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 3,
+   "actor": "paine",
+   "why": "Paine changes gunner to Thief (the walk across The End's gates; crossed so far: blue+yellow)",
+   "did": true,
+   "how": "path=Change > Thief; ",
+   "cmd": {
+    "path": [
+     "Change",
+     "Thief"
+    ]
+   },
+   "ticks": 464,
+   "turn": 10,
+   "ms": 146180,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-megaton-press->rikku",
+    "  dmg rikku 30609",
+    "  KO rikku (by x2-concherer-megaton-press)"
+   ]
+  },
+  {
+   "n": 14,
+   "link": 3,
+   "actor": "paine",
+   "why": "Paine changes thief to Dark Knight (the walk across The End's gates; crossed so far: blue+yellow+green)",
+   "did": true,
+   "how": "path=Change > Dark Knight; ",
+   "cmd": {
+    "path": [
+     "Change",
+     "Dark Knight"
+    ]
+   },
+   "ticks": 572,
+   "turn": 11,
+   "ms": 154283,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6539"
+   ]
+  },
+  {
+   "n": 15,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 603,
+   "turn": 12,
+   "ms": 157810,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 16,
+   "link": 3,
+   "actor": "paine",
+   "why": "Paine casts Charon (gates blue+yellow+green+red; the shell stands)",
+   "did": true,
+   "how": "path=Skill > Charon; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Charon",
+    "id": "x2-dark-knight-charon",
+    "kind": "ability"
+   },
+   "ticks": 751,
+   "turn": 14,
+   "ms": 166286,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->paine",
+    "  dmg yuna 1338",
+    "  boss takes 6290",
+    "paine:x2-dark-knight-charon->x2-concherer"
+   ]
+  },
+  {
+   "n": 17,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 820,
+   "turn": 16,
+   "ms": 171737,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->paine",
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 18,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1034,
+   "turn": 18,
+   "ms": 182947,
+   "rowsBefore": null,
+   "events": [
+    "  boss takes 21420",
+    "  MSG \"Concherer's shell breaks!\"",
+    "  dmg paine 10710",
+    "  KO paine (by null)",
+    "  dmg yuna 1338",
+    "  boss takes 9084",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 19,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1246,
+   "turn": 20,
+   "ms": 190374,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "  dmg yuna 1338",
+    "  boss takes 6464",
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 20,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1462,
+   "turn": 23,
+   "ms": 198753,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "  dmg yuna 1338",
+    "  boss takes 6041",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 21,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1673,
+   "turn": 25,
+   "ms": 206337,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6365",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 22,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-concherer",
+   "did": true,
+   "how": "path=top; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1889,
+   "turn": 27,
+   "ms": 212418,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "  dmg yuna 1338",
+    "  boss takes 6563",
+    "yuna:attack->x2-concherer",
+    "  boss takes 4895"
+   ]
+  },
+  {
+   "n": 23,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-concherer",
+   "did": true,
+   "how": "path=top; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2127,
+   "turn": 30,
+   "ms": 216899,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:attack->x2-concherer",
+    "  boss takes 4955"
+   ]
+  },
+  {
+   "n": 24,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-concherer",
+   "did": true,
+   "how": "path=top; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2365,
+   "turn": 32,
+   "ms": 220527,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:attack->x2-concherer",
+    "  boss takes 4935"
+   ]
+  },
+  {
+   "n": 25,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-concherer",
+   "did": true,
+   "how": "path=top; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2603,
+   "turn": 35,
+   "ms": 224195,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:attack->x2-concherer",
+    "  boss takes 4895"
+   ]
+  },
+  {
+   "n": 26,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-concherer",
+   "did": true,
+   "how": "path=top; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2841,
+   "turn": 37,
+   "ms": 227845,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:attack->x2-concherer",
+    "  boss takes 4935"
+   ]
+  },
+  {
+   "n": 27,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-concherer",
+   "did": true,
+   "how": "path=top; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 3079,
+   "turn": 40,
+   "ms": 231773,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:attack->x2-concherer",
+    "  boss takes 5351"
+   ]
+  },
+  {
+   "n": 28,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-concherer",
+   "did": true,
+   "how": "path=top; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 3317,
+   "turn": 42,
+   "ms": 235520,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:attack->x2-concherer",
+    "  boss takes 5331"
+   ]
+  },
+  {
+   "n": 29,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-concherer",
+   "did": true,
+   "how": "path=top; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 3557,
+   "turn": 45,
+   "ms": 239329,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:attack->x2-concherer",
+    "  boss takes 4915"
+   ]
+  },
+  {
+   "n": 30,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-concherer",
+   "did": true,
+   "how": "path=top; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 3797,
+   "turn": 47,
+   "ms": 243157,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:attack->x2-concherer",
+    "  boss takes 5232"
+   ]
+  },
+  {
+   "n": 31,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-concherer",
+   "did": true,
+   "how": "path=top; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 4035,
+   "turn": 50,
+   "ms": 246924,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:attack->x2-concherer",
+    "  boss takes 5093"
+   ]
+  },
+  {
+   "n": 32,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-concherer",
+   "did": true,
+   "how": "path=top; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 4275,
+   "turn": 52,
+   "ms": 250622,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:attack->x2-concherer",
+    "  boss takes 5034"
+   ]
+  },
+  {
+   "n": 33,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-concherer",
+   "did": true,
+   "how": "path=top; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 4513,
+   "turn": 55,
+   "ms": 254473,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:attack->x2-concherer",
+    "  boss takes 5232"
+   ]
+  },
+  {
+   "n": 34,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna attacks x2-concherer",
+   "did": true,
+   "how": "path=top; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 4762,
+   "turn": 57,
+   "ms": 258478,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:attack->x2-concherer",
+    "  boss takes 4974"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "n": 1,
+   "key": "x2-aranea#1",
+   "foes": [
+    "x2-aranea"
+   ],
+   "seed": 1,
+   "ms": 23200,
+   "ticks": 61
+  },
+  {
+   "at": "after seam (decision 3)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 63201
+  },
+  {
+   "n": 2,
+   "key": "x2-black-elemental#2",
+   "foes": [
+    "x2-black-elemental"
+   ],
+   "seed": 2,
+   "ms": 63224,
+   "ticks": 125
+  },
+  {
+   "at": "after seam (decision 7)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 105782
+  },
+  {
+   "n": 3,
+   "key": "x2-concherer#3",
+   "foes": [
+    "x2-concherer"
+   ],
+   "seed": 3,
+   "ms": 105787,
+   "ticks": 128
+  }
+ ],
+ "attempts": [],
+ "mechanics": [
+  {
+   "ms": 106211,
+   "seq": 10,
+   "actor": "x2-concherer",
+   "ability": "x2-concherer-gunk",
+   "targets": [
+    "rikku"
+   ],
+   "first": true
+  },
+  {
+   "ms": 136498,
+   "seq": 113,
+   "actor": "x2-concherer",
+   "ability": "x2-concherer-megaton-press",
+   "targets": [
+    "rikku"
+   ],
+   "first": true
+  },
+  {
+   "ms": 183699,
+   "mech": "shell-break",
+   "seq": 288,
+   "text": "Concherer's shell breaks!"
+  }
+ ],
+ "screens": [],
+ "speed": "normal",
+ "line": "plain (20, 40); the walk then Charon (60); one HP write on floor 80",
+ "live": {
+  "version": "0.1.0",
+  "scripts": [
+   "index-jYm-0mrJ.js"
+  ]
+ },
+ "battleSeed": 1,
+ "shellBreak": {
+  "seq": 288,
+  "text": "Concherer's shell breaks!",
+  "decision": 18,
+  "why": "yuna Darkness"
+ }
+}

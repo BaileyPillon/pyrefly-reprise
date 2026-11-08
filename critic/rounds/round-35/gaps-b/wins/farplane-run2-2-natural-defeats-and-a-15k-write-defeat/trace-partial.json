@@ -1,0 +1,1492 @@
+{
+ "chapter": "farplane",
+ "door": "duelist",
+ "game": "ffx2",
+ "base": "https://echoesofspira.com/",
+ "seed": 1,
+ "startedAt": "2026-11-07T15:49:25.497Z",
+ "stateWrites": [
+  {
+   "at": 337757,
+   "what": "FALLBACK after 2 real duel-1 defeats: Auron's HP set to 15,000 at the first menu, so a real Darkness ends duel 1 (PR-0636: the sourced Eject immunity is not applied)",
+   "result": {
+    "id": "x2-cup-auron",
+    "was": 187500,
+    "now": 15000
+   }
+  }
+ ],
+ "decisions": [
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain -> NOT TAKEN, Attack -> Potion",
+   "did": false,
+   "how": "path=null; ERR Error: could not open Potion; not-taken",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 73,
+   "turn": 1,
+   "ms": 138880,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-dragon-fang->",
+    "  dmg yuna 1617",
+    "  dmg rikku 2963",
+    "  dmg paine 1630",
+    "x2-cup-auron:x2-auron-dragon-fang->",
+    "paine:attack->x2-cup-auron",
+    "  boss takes 2842",
+    "  dmg yuna 1643",
+    "  dmg rikku 3084",
+    "  KO rikku (by attack)",
+    "  dmg paine 1617",
+    "x2-cup-auron:x2-auron-attack->yuna",
+    "x2-cup-auron:x2-auron-attack->yuna",
+    "x2-cup-auron:x2-auron-attack->paine"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 808,
+   "turn": 7,
+   "ms": 141843,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 808,
+   "turn": 8,
+   "ms": 145960,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-auron",
+    "x2-cup-auron:x2-auron-attack->paine"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1021,
+   "turn": 11,
+   "ms": 153038,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6215",
+    "  dmg paine 1338",
+    "  boss takes 9733",
+    "x2-cup-auron:x2-auron-attack->paine",
+    "yuna:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1033,
+   "turn": 12,
+   "ms": 157299,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-auron",
+    "x2-cup-auron:x2-auron-attack->paine"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1237,
+   "turn": 14,
+   "ms": 163405,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6663",
+    "  dmg paine 1338",
+    "  boss takes 8975",
+    "yuna:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1248,
+   "turn": 15,
+   "ms": 167629,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-full-break->paine",
+    "paine:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1451,
+   "turn": 18,
+   "ms": 179698,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6514",
+    "  dmg paine 1338",
+    "  boss takes 8795",
+    "x2-cup-auron:x2-auron-shooting-star->paine",
+    "yuna:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1460,
+   "turn": 19,
+   "ms": 183838,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1669,
+   "turn": 21,
+   "ms": 189345,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6340",
+    "x2-cup-auron:x2-auron-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-cup-auron",
+    "x2-cup-auron:x2-auron-attack->yuna"
+   ]
+  },
+  {
+   "n": 10,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-auron",
+   "did": true,
+   "how": "path=top; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1889,
+   "turn": 24,
+   "ms": 194034,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6340",
+    "x2-cup-auron:x2-auron-attack->yuna",
+    "yuna:attack->x2-cup-auron",
+    "  boss takes 2874"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-auron",
+   "did": true,
+   "how": "path=top; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2133,
+   "turn": 26,
+   "ms": 197781,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-attack->yuna",
+    "yuna:attack->x2-cup-auron",
+    "  boss takes 2768"
+   ]
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 33,
+   "turn": 1,
+   "ms": 221107,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-dragon-fang->",
+    "paine:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 60,
+   "turn": 2,
+   "ms": 226589,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-item-light-curtain->yuna+rikku+paine",
+    "  dmg yuna 3378",
+    "  dmg rikku 2999",
+    "  dmg paine 3430"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 160,
+   "turn": 3,
+   "ms": 230447,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-auron",
+    "x2-cup-auron:x2-auron-dragon-fang->"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 364,
+   "turn": 5,
+   "ms": 241002,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6166",
+    "  dmg yuna 788",
+    "  dmg rikku 1620",
+    "  dmg paine 811",
+    "  dmg yuna 1338",
+    "  boss takes 6464",
+    "paine:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 396,
+   "turn": 6,
+   "ms": 246831,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-item-lunar-curtain->yuna+rikku+paine",
+    "x2-cup-auron:x2-auron-attack->rikku"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 431,
+   "turn": 8,
+   "ms": 250612,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 576,
+   "turn": 10,
+   "ms": 262094,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6091",
+    "x2-cup-auron:x2-auron-attack->yuna",
+    "  dmg yuna 969",
+    "  dmg yuna 1338",
+    "  boss takes 6190",
+    "paine:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on rikku",
+   "did": true,
+   "how": "path=Item > Potion; aim rikku=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 626,
+   "turn": 11,
+   "ms": 266714,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-alchemist-stash-potion->rikku"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 645,
+   "turn": 12,
+   "ms": 270090,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-auron",
+    "x2-cup-auron:x2-auron-attack->rikku"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 795,
+   "turn": 15,
+   "ms": 281882,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6588",
+    "x2-cup-auron:x2-auron-dragon-fang->",
+    "  dmg yuna 1338",
+    "  boss takes 5992",
+    "paine:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 10,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-auron",
+   "did": true,
+   "how": "path=top; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 905,
+   "turn": 16,
+   "ms": 289709,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 841",
+    "  dmg rikku 1608",
+    "  KO rikku (by null)",
+    "  dmg paine 795",
+    "yuna:attack->x2-cup-auron",
+    "  boss takes 2652"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-auron",
+   "did": true,
+   "how": "path=top; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1064,
+   "turn": 18,
+   "ms": 302382,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 9625",
+    "x2-cup-auron:x2-auron-shooting-star->yuna",
+    "paine:attack->x2-cup-auron",
+    "  boss takes 2556"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-auron",
+   "did": true,
+   "how": "path=top; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1306,
+   "turn": 20,
+   "ms": 309878,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-attack->paine",
+    "paine:attack->x2-cup-auron",
+    "  boss takes 2672"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-auron",
+   "did": true,
+   "how": "path=top; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1550,
+   "turn": 23,
+   "ms": 317349,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-attack->paine",
+    "x2-cup-auron:x2-auron-shooting-star->paine",
+    "paine:attack->x2-cup-auron",
+    "  boss takes 2608"
+   ]
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 30,
+   "turn": 1,
+   "ms": 341382,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-shooting-star->yuna",
+    "rikku:x2-item-light-curtain->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 56,
+   "turn": 2,
+   "ms": 345072,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron -> NOT TAKEN, Attack -> Darkness",
+   "did": false,
+   "how": "path=null; ERR Error: could not open Darkness; not-taken",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 64,
+   "turn": 3,
+   "ms": 398779,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-x-potion->x2-cup-auron",
+    "  dmg paine 1338",
+    "  boss takes 6688",
+    "  boss takes -9999",
+    "x2-cup-auron:x2-auron-full-break->rikku",
+    "  dmg rikku 2254",
+    "x2-cup-auron:x2-auron-shooting-star->paine",
+    "paine:attack->x2-cup-auron",
+    "  boss takes 2662",
+    "x2-cup-auron:x2-auron-attack->rikku",
+    "x2-cup-auron:x2-auron-full-break->rikku",
+    "x2-cup-auron:x2-auron-attack->rikku",
+    "x2-cup-auron:x2-auron-attack->rikku"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 970,
+   "turn": 11,
+   "ms": 403000,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-item-lunar-curtain->rikku+paine"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku attacks",
+   "did": true,
+   "how": "path=top; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1197,
+   "turn": 13,
+   "ms": 408143,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-full-break->rikku",
+    "rikku:attack->x2-cup-auron",
+    "  boss takes 1590"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku attacks",
+   "did": true,
+   "how": "path=top; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1389,
+   "turn": 15,
+   "ms": 414510,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-mega-potion->",
+    "  boss takes -2000",
+    "rikku:attack->x2-cup-auron",
+    "  boss takes 1672"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku attacks",
+   "did": true,
+   "how": "path=top; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1577,
+   "turn": 17,
+   "ms": 420796,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-mega-potion->",
+    "  boss takes -2000",
+    "rikku:attack->x2-cup-auron",
+    "  boss takes 1504"
+   ]
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 66,
+   "turn": 1,
+   "ms": 445802,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-shooting-star->paine",
+    "rikku:x2-item-light-curtain->yuna+rikku"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 90,
+   "turn": 2,
+   "ms": 449579,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 303,
+   "turn": 5,
+   "ms": 457857,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-attack->yuna",
+    "  dmg yuna 1338",
+    "  boss takes 6091",
+    "x2-cup-auron:x2-auron-attack->rikku",
+    "yuna:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 309,
+   "turn": 6,
+   "ms": 463324,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-item-lunar-curtain->yuna+rikku",
+    "x2-cup-auron:x2-auron-attack->yuna"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 516,
+   "turn": 9,
+   "ms": 473256,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6091",
+    "x2-cup-auron:x2-auron-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "n": 1,
+   "key": "x2-cup-auron#1",
+   "foes": [
+    "x2-cup-auron"
+   ],
+   "seed": 1,
+   "ms": 88738,
+   "ticks": 73
+  },
+  {
+   "at": "after seam (decision 12)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 202612
+  },
+  {
+   "n": 1,
+   "key": "x2-cup-auron#1001",
+   "foes": [
+    "x2-cup-auron"
+   ],
+   "seed": 1001,
+   "ms": 218267,
+   "ticks": 33
+  },
+  {
+   "at": "after seam (decision 14)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 320970
+  },
+  {
+   "n": 1,
+   "key": "x2-cup-auron#2001",
+   "foes": [
+    "x2-cup-auron"
+   ],
+   "seed": 2001,
+   "ms": 337174,
+   "ticks": 30
+  },
+  {
+   "at": "after seam (decision 7)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 426374
+  },
+  {
+   "n": 1,
+   "key": "x2-cup-auron#3001",
+   "foes": [
+    "x2-cup-auron"
+   ],
+   "seed": 3001,
+   "ms": 441852,
+   "ticks": 66
+  }
+ ],
+ "attempts": [
+  {
+   "attempt": 1,
+   "over": "left:results",
+   "decisions": 12,
+   "ms": 202612,
+   "lastFoe": "x2-cup-auron"
+  },
+  {
+   "attempt": 2,
+   "over": "left:results",
+   "decisions": 14,
+   "ms": 320970,
+   "lastFoe": "x2-cup-auron"
+  },
+  {
+   "attempt": 3,
+   "over": "left:results",
+   "decisions": 7,
+   "ms": 426374,
+   "lastFoe": "x2-cup-auron"
+  }
+ ],
+ "mechanics": [
+  {
+   "ms": 88667,
+   "seq": 3,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-dragon-fang",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 91735,
+   "seq": 24,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-dragon-fang",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 112143,
+   "seq": 49,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": true
+  },
+  {
+   "ms": 117083,
+   "seq": 55,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 132018,
+   "seq": 62,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 136951,
+   "seq": 68,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 146586,
+   "seq": 80,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 149682,
+   "seq": 97,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 157952,
+   "seq": 111,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 165540,
+   "seq": 133,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-full-break",
+   "targets": [
+    "paine"
+   ],
+   "first": true
+  },
+  {
+   "ms": 170977,
+   "seq": 154,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-shooting-star",
+   "targets": [
+    "paine"
+   ],
+   "first": true
+  },
+  {
+   "ms": 186057,
+   "seq": 176,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 190085,
+   "seq": 186,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 192598,
+   "seq": 199,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 195443,
+   "seq": 212,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 199148,
+   "seq": 226,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-dragon-fang",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 216697,
+   "seq": 3,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-dragon-fang",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 230965,
+   "seq": 30,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-dragon-fang",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 246887,
+   "seq": 109,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 254762,
+   "seq": 172,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 270744,
+   "seq": 234,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 276111,
+   "seq": 291,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-dragon-fang",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 294014,
+   "seq": 410,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-shooting-star",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 306728,
+   "seq": 458,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 312109,
+   "seq": 494,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 314729,
+   "seq": 516,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-shooting-star",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 335024,
+   "seq": 3,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-shooting-star",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 349146,
+   "seq": 29,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-x-potion",
+   "targets": [
+    "x2-cup-auron"
+   ],
+   "first": true
+  },
+  {
+   "ms": 359322,
+   "seq": 64,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-full-break",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 367576,
+   "seq": 91,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-shooting-star",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 378054,
+   "seq": 119,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 382665,
+   "seq": 131,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-full-break",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 394636,
+   "seq": 148,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 399213,
+   "seq": 160,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 404177,
+   "seq": 179,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-full-break",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 409548,
+   "seq": 222,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-mega-potion",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 416024,
+   "seq": 261,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-mega-potion",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 422358,
+   "seq": 300,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-shooting-star",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 440534,
+   "seq": 3,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-shooting-star",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 450872,
+   "seq": 23,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 454076,
+   "seq": 49,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 463588,
+   "seq": 75,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 468938,
+   "seq": 119,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  }
+ ],
+ "screens": [
+  {
+   "label": "a1",
+   "screens": [
+    "results",
+    "party-prep",
+    "battle"
+   ],
+   "results": {
+    "text": "THE FIEND ARENA — A STAND-IN STAGE · FELL RESULTS · 1:58 Defeat TURNS 28 ATTEMPTS 1 BEST — NEVER CLEARED Y Yuna DARK KNIGHT · CONFUSEPROOF 0/30 AP R Rikku ALCHEMIST · DISPEL TONIC 0/20 AP P Paine DARK KNIGHT · CONFUSEPROOF 0/30 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  },
+  {
+   "label": "a2",
+   "screens": [
+    "results",
+    "party-prep",
+    "battle"
+   ],
+   "results": {
+    "text": "THE FIEND ARENA — A STAND-IN STAGE · FELL RESULTS · 1:52 Defeat TURNS 24 ATTEMPTS 2 BEST — NEVER CLEARED Y Yuna DARK KNIGHT · CONFUSEPROOF 0/30 AP R Rikku ALCHEMIST · DISPEL TONIC 0/20 AP P Paine DARK KNIGHT · CONFUSEPROOF 0/30 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  },
+  {
+   "label": "a3",
+   "screens": [
+    "results",
+    "party-prep",
+    "battle"
+   ],
+   "results": {
+    "text": "THE FIEND ARENA — A STAND-IN STAGE · FELL RESULTS · 1:39 Defeat TURNS 19 ATTEMPTS 3 BEST — NEVER CLEARED Y Yuna DARK KNIGHT · CONFUSEPROOF 0/30 AP R Rikku ALCHEMIST · DISPEL TONIC 0/20 AP P Paine DARK KNIGHT · CONFUSEPROOF 0/30 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  }
+ ],
+ "speed": "normal",
+ "line": "curtains: Rikku Light+Lunar Curtain then mends/attacks; Yuna and Paine Darkness",
+ "duel1Fails": 3,
+ "live": {
+  "version": "0.1.0",
+  "scripts": [
+   "index-jYm-0mrJ.js"
+  ]
+ },
+ "battleSeed": 1,
+ "openFailures": [
+  {
+   "ms": 93921,
+   "actor": "rikku",
+   "want": "Light Curtain",
+   "category": "item",
+   "rowsNow": [
+    "Attack",
+    "Skill",
+    "Change",
+    "Item"
+   ]
+  },
+  {
+   "ms": 128642,
+   "actor": "rikku",
+   "want": "Potion",
+   "category": "item",
+   "rowsNow": [
+    "Attack",
+    "Skill",
+    "Change",
+    "Item"
+   ]
+  },
+  {
+   "ms": 358313,
+   "actor": "yuna",
+   "want": "Darkness",
+   "category": "skill",
+   "rowsNow": [
+    "Attack",
+    "Skill",
+    "Change",
+    "Item"
+   ]
+  },
+  {
+   "ms": 388429,
+   "actor": "yuna",
+   "want": "Darkness",
+   "category": "skill",
+   "rowsNow": [
+    "Attack",
+    "Item",
+    "Change"
+   ]
+  }
+ ]
+}

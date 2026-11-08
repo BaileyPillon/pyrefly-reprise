@@ -1,0 +1,2680 @@
+{
+ "chapter": "flooded-ways",
+ "game": "ffx",
+ "goal": "win",
+ "size": "1600x900",
+ "base": "https://echoesofspira.com/",
+ "mode": "gpu",
+ "hooks": [
+  "window.__pyrefly.setSeed(1) before the first key (CHK-015 labelled setup hook, PR-0202)"
+ ],
+ "seedPinned": 1,
+ "seed": 1,
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1,
+   "links": 1,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "link 4",
+   "engineSeed": 4,
+   "links": 4,
+   "firstEnemyAction": null
+  }
+ ],
+ "firstEnemyAction": {
+  "seq": 5,
+  "actor": "evrae-altana",
+  "ability": "Attack",
+  "targets": [
+   "rikku"
+  ]
+ },
+ "steps": [
+  {
+   "ms": 7111,
+   "k": "door",
+   "v": "geosgaeno"
+  },
+  {
+   "ms": 12129,
+   "k": "prepEscGoesTo",
+   "v": "party-prep"
+  },
+  {
+   "ms": 32425,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1
+   }
+  },
+  {
+   "ms": 51981,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 5,
+    "actor": "evrae-altana",
+    "ability": "Attack",
+    "targets": [
+     "rikku"
+    ]
+   }
+  },
+  {
+   "ms": 344912,
+   "k": "fight",
+   "v": {
+    "outcome": "victory",
+    "turns": 52,
+    "ms": 296372,
+    "seams": 1,
+    "orders": 0
+   }
+  },
+  {
+   "ms": 371683,
+   "k": "continuity",
+   "v": "[continuity] flooded-ways: 308.677 s of battle, 18358 frames recorded, 399 swaps, 536 strips, 59.5 fps, 0 probe errors"
+  },
+  {
+   "ms": 371761,
+   "k": "continuity",
+   "v": "[continuity] flooded-ways: pose-measure D:\\pyrefly-release55\\docs\\target\\pose-measure.json (138 subjects, sha256 70bb5a50ae9f, source harness-tree); build 36b6e851; the candidate's own table"
+  },
+  {
+   "ms": 387349,
+   "k": "continuity",
+   "v": "[continuity] flooded-ways: CHK-026 FAIL, CHK-027 FAIL; max head jump 6.3% (0.2% registered, a control), stature 0.787 to 1.104 (0 out of band), max feet shift 2.1px (27.9px from the pixels), 0 snaps/min, worst swap jerk 136.9px (worst dash 126.8px), frame p99 24.2ms, 20 strips"
+  },
+  {
+   "ms": 405792,
+   "k": "postScene",
+   "v": {
+    "watch": {
+     "ms": 6179,
+     "shows": 1,
+     "advancedWithoutInput": false,
+     "firstLine": "Two down. Neither one was fair.",
+     "screenAfterWatch": "cutscene"
+    },
+    "taps": 7,
+    "holds": 0,
+    "ended": true
+   }
+  }
+ ],
+ "picks": [
+  {
+   "turn": 0,
+   "ms": 37,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Evrae Altana",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2530/2530",
+    "rikku:1400/1400",
+    "evrae-altana:16384/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 1,
+   "ms": 3727,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2530/2530",
+    "rikku:479/1400",
+    "evrae-altana:16064/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 10,
+     "actor": "tidus",
+     "did": "Al Bhed Potion",
+     "targets": [
+      "tidus",
+      "wakka",
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 2,
+   "ms": 14212,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Evrae Altana",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2530/2530",
+    "rikku:882/1400",
+    "evrae-altana:16064/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 22,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 3,
+   "ms": 17579,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Evrae Altana",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:1594/2530",
+    "rikku:882/1400",
+    "evrae-altana:15223/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 32,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 4,
+   "ms": 20925,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Evrae Altana",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1476/2420",
+    "wakka:1594/2530",
+    "rikku:882/1400",
+    "evrae-altana:14177/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 42,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 5,
+   "ms": 28344,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Phoenix Down",
+    "target": "Rikku",
+    "menu": "Items"
+   },
+   "took": "Phoenix Down",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:953/2420",
+    "wakka:1270/2530",
+    "rikku:0/1400",
+    "evrae-altana:13852/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "rikku",
+    "wanted": "rikku",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 63,
+     "actor": "tidus",
+     "did": "Phoenix Down",
+     "targets": [
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 6,
+   "ms": 32382,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:953/2420",
+    "wakka:1270/2530",
+    "rikku:700/1400",
+    "evrae-altana:13852/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 68,
+     "actor": "wakka",
+     "did": "Al Bhed Potion",
+     "targets": [
+      "tidus",
+      "wakka",
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 7,
+   "ms": 36593,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Evrae Altana",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1953/2420",
+    "wakka:2270/2530",
+    "rikku:1400/1400",
+    "evrae-altana:13852/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 75,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 8,
+   "ms": 41862,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:1088/2420",
+    "wakka:1803/2530",
+    "rikku:1400/1400",
+    "evrae-altana:12892/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 91,
+     "actor": "rikku",
+     "did": "Al Bhed Potion",
+     "targets": [
+      "tidus",
+      "wakka",
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 9,
+   "ms": 46327,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Evrae Altana",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2088/2420",
+    "wakka:2530/2530",
+    "rikku:1400/1400",
+    "evrae-altana:12892/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 98,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 10,
+   "ms": 49641,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Evrae Altana",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2088/2420",
+    "wakka:1586/2530",
+    "rikku:1400/1400",
+    "evrae-altana:12042/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 108,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 11,
+   "ms": 53014,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2088/2420",
+    "wakka:1586/2530",
+    "rikku:435/1400",
+    "evrae-altana:11698/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 117,
+     "actor": "tidus",
+     "did": "Al Bhed Potion",
+     "targets": [
+      "tidus",
+      "wakka",
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 12,
+   "ms": 60677,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Evrae Altana",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2314/2420",
+    "wakka:2192/2530",
+    "rikku:961/1400",
+    "evrae-altana:11698/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 139,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 13,
+   "ms": 63773,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Evrae Altana",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2314/2420",
+    "wakka:2192/2530",
+    "rikku:961/1400",
+    "evrae-altana:10675/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 148,
+     "actor": "wakka",
+     "did": "Attack",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 14,
+   "ms": 66805,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Evrae Altana",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2314/2420",
+    "wakka:2192/2530",
+    "rikku:961/1400",
+    "evrae-altana:9796/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 157,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 15,
+   "ms": 74216,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2314/2420",
+    "wakka:0/2530",
+    "rikku:59/1400",
+    "evrae-altana:9467/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 173,
+     "actor": "tidus",
+     "did": "Al Bhed Potion",
+     "targets": [
+      "tidus",
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 16,
+   "ms": 78461,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Evrae Altana",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:0/2530",
+    "rikku:1059/1400",
+    "evrae-altana:9467/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 179,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 17,
+   "ms": 81480,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Evrae Altana",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:0/2530",
+    "rikku:1059/1400",
+    "evrae-altana:9138/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 187,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 18,
+   "ms": 88689,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:1401/2420",
+    "wakka:0/2530",
+    "rikku:280/1400",
+    "evrae-altana:8099/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 211,
+     "actor": "rikku",
+     "did": "Al Bhed Potion",
+     "targets": [
+      "tidus",
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 19,
+   "ms": 92677,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Evrae Altana",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2401/2420",
+    "wakka:0/2530",
+    "rikku:1280/1400",
+    "evrae-altana:8099/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 217,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 20,
+   "ms": 99478,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:1241/2420",
+    "wakka:0/2530",
+    "rikku:621/1400",
+    "evrae-altana:7033/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 241,
+     "actor": "rikku",
+     "did": "Al Bhed Potion",
+     "targets": [
+      "tidus",
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 21,
+   "ms": 103691,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Evrae Altana",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2241/2420",
+    "wakka:0/2530",
+    "rikku:1400/1400",
+    "evrae-altana:7033/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 247,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 22,
+   "ms": 107225,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2241/2420",
+    "wakka:0/2530",
+    "rikku:402/1400",
+    "evrae-altana:6686/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 256,
+     "actor": "tidus",
+     "did": "Al Bhed Potion",
+     "targets": [
+      "tidus",
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 23,
+   "ms": 114444,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Spiral Cut",
+    "target": "Evrae Altana",
+    "menu": "Overdrive"
+   },
+   "took": "Spiral Cut",
+   "viaMenu": "Overdrive",
+   "engineHp": [
+    "tidus:2083/2420",
+    "wakka:0/2530",
+    "rikku:838/1400",
+    "evrae-altana:6686/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 275,
+     "actor": "tidus",
+     "did": "Spiral Cut",
+     "targets": [
+      "evrae-altana"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 24,
+   "ms": 128604,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Phoenix Down",
+    "target": "Evrae Altana",
+    "menu": "Items"
+   },
+   "took": "Phoenix Down",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:1136/2420",
+    "wakka:0/2530",
+    "rikku:838/1400",
+    "evrae-altana:5325/16384",
+    "gate-lock-1:500/500",
+    "gate-lock-2:500/500"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "evrae-altana",
+    "wanted": "evrae-altana",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 25,
+   "ms": 161854,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2530/2530",
+    "rikku:100/1400",
+    "geosgaeno:32767/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 26,
+   "ms": 165925,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2530/2530",
+    "rikku:1100/1400",
+    "geosgaeno:32767/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 27,
+   "ms": 170074,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Geosgaeno",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2530/2530",
+    "rikku:1400/1400",
+    "geosgaeno:32767/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 28,
+   "ms": 173052,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Geosgaeno",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:1127/2420",
+    "wakka:2530/2530",
+    "rikku:1400/1400",
+    "geosgaeno:32578/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 29,
+   "ms": 179245,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Geosgaeno",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1127/2420",
+    "wakka:2530/2530",
+    "rikku:1400/1400",
+    "geosgaeno:28131/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 30,
+   "ms": 180888,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Geosgaeno",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:1127/2420",
+    "wakka:2530/2530",
+    "rikku:1400/1400",
+    "geosgaeno:27907/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 31,
+   "ms": 188403,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Geosgaeno",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1127/2420",
+    "wakka:1182/2530",
+    "rikku:1400/1400",
+    "geosgaeno:23454/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 32,
+   "ms": 190052,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Geosgaeno",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:1127/2420",
+    "wakka:1182/2530",
+    "rikku:1400/1400",
+    "geosgaeno:23231/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 33,
+   "ms": 191685,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Geosgaeno",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:1127/2420",
+    "wakka:1182/2530",
+    "rikku:1400/1400",
+    "geosgaeno:23053/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 34,
+   "ms": 204572,
+   "actor": "command:rikku",
+   "want": {
+    "label": "X-Potion",
+    "target": "Tidus",
+    "menu": "Items"
+   },
+   "took": "X-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:1127/2420",
+    "wakka:1182/2530",
+    "rikku:1400/1400",
+    "geosgaeno:18530/32767"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 35,
+   "ms": 210671,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Geosgaeno",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:1182/2530",
+    "rikku:1400/1400",
+    "geosgaeno:18530/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 36,
+   "ms": 215184,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:1239/2420",
+    "wakka:1/2530",
+    "rikku:219/1400",
+    "geosgaeno:18309/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 37,
+   "ms": 219261,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2239/2420",
+    "wakka:1001/2530",
+    "rikku:1219/1400",
+    "geosgaeno:18309/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 38,
+   "ms": 224838,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2001/2530",
+    "rikku:90/1400",
+    "geosgaeno:18309/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 39,
+   "ms": 229103,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2530/2530",
+    "rikku:1090/1400",
+    "geosgaeno:18309/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 40,
+   "ms": 233053,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Geosgaeno",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2530/2530",
+    "rikku:1400/1400",
+    "geosgaeno:18309/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 41,
+   "ms": 236075,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2530/2530",
+    "rikku:121/1400",
+    "geosgaeno:18113/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 42,
+   "ms": 240306,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Geosgaeno",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2530/2530",
+    "rikku:1121/1400",
+    "geosgaeno:18113/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 43,
+   "ms": 246606,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Geosgaeno",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2530/2530",
+    "rikku:1121/1400",
+    "geosgaeno:13557/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 44,
+   "ms": 250553,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Struggle",
+    "target": "Geosgaeno",
+    "menu": "Special"
+   },
+   "took": "Struggle",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2530/2530",
+    "rikku:1121/1400",
+    "geosgaeno:13337/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 45,
+   "ms": 256300,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Phoenix Down",
+    "target": "Rikku",
+    "menu": "Items"
+   },
+   "took": "Phoenix Down",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2530/2530",
+    "rikku:0/1400",
+    "geosgaeno:13103/32767"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "rikku",
+    "wanted": "rikku",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 46,
+   "ms": 261359,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:1212/2530",
+    "rikku:700/1400",
+    "geosgaeno:13103/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 47,
+   "ms": 265400,
+   "actor": "command:wakka",
+   "want": {
+    "label": "Attack",
+    "target": "Geosgaeno",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2212/2530",
+    "rikku:1400/1400",
+    "geosgaeno:13103/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 48,
+   "ms": 267071,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Geosgaeno",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:2212/2530",
+    "rikku:1400/1400",
+    "geosgaeno:12924/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 49,
+   "ms": 274685,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:965/2530",
+    "rikku:1400/1400",
+    "geosgaeno:8444/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 50,
+   "ms": 278999,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Geosgaeno",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:1965/2530",
+    "rikku:1400/1400",
+    "geosgaeno:8444/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 51,
+   "ms": 286066,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Fire Gem",
+    "target": "Geosgaeno",
+    "menu": "Items"
+   },
+   "took": "Fire Gem",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2420/2420",
+    "wakka:1965/2530",
+    "rikku:1400/1400",
+    "geosgaeno:4191/32767"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  }
+ ],
+ "seams": [
+  {
+   "from": 1,
+   "to": 4,
+   "ms": 150813,
+   "phase": "moment:battle-start"
+  }
+ ],
+ "fails": [],
+ "contexts": {
+  "viewport": "1600x900",
+  "query": null,
+  "touch": null,
+  "gamepad": null,
+  "reduceMotion": null
+ },
+ "scriptedChange": "not applicable",
+ "budgetMs": 660000,
+ "briefingText": "AURON “Nineteen fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.” ENTER / ESC SKIP — 20 SECONDS, ONCE D NEVER SHOW THIS AGAIN",
+ "boardAtEntry": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 19
+ },
+ "boardWalk": [],
+ "door": {
+  "word": "geosgaeno",
+  "how": "typed on the chapter board, one key at a time (no card; the board opens party prep itself)"
+ },
+ "prepText": "AURON · 2 OF 3 “Your party is ready.” The tabs are for later. Start the battle. ESC SKIP THE GUIDE PARTY PREP EXP · THE FLOODED WAYS — THE VIA PURIFICO AND THE BAAJ TEMPLE T Tidus S.LV 24 W Wakka S.LV 24 R Rikku S.LV 41 CHAPTER STATS SPHERE GRID EQUIPMENT ITEMS OVERDRIVE FFX · EXP The Flooded Ways The three who can swim A dead Evrae guards the flooded gates of the Via Purifico, and something in a temple under the sea swallows one of you whole. Stone breaks in the water. the flooded way what guards the gates and what waits in the temple OBJECTIVES Get past the first gate Reach the Baaj Temple Send Geosgaeno home TIP A gaze that lands shatters its victim in the water. Healing hurts the dead one. Swallowed? Strike from inside. START BATTLE T Tidus HP 2420/2420 · MP 115/115 WARRIOR W Wakka HP 2530/2530 · MP 90/90 RANGER R Rikku HP 1400/1400 · MP 130/130 THIEF",
+ "prepEsc": "party-prep",
+ "preScene": {
+  "lines": [
+   "Under Bevelle, the flooded tunnels of the Via Purifico. Only three of them can swim. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "Tidus GUARDIAN Water to the ceiling. Where does this even lead? AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "Rikku GUARDIAN Okay okay okay: we find the gate locks, we open them, we keep AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "Rikku GUARDIAN Okay okay okay: we find the gate locks, we open them, we keep swimming! AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU"
+  ],
+  "escOpens": "pause",
+  "holdsToSkip": 1
+ },
+ "firstState": {
+  "chapter": "flooded-ways",
+  "game": "ffx",
+  "scene": "flooded-ways",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 4,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": true,
+  "exitIntent": null,
+  "playTimeMs": 0,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "evrae-altana",
+    "side": "enemy",
+    "art": "evrae-altana",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "gate-lock-1",
+    "side": "enemy",
+    "art": "gate-lock",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "gate-lock-2",
+    "side": "enemy",
+    "art": "gate-lock",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "tidus",
+    "side": "party",
+    "art": "tidus",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "wakka",
+    "side": "party",
+    "art": "wakka",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "rikku",
+    "side": "party",
+    "art": "rikku",
+    "pose": "ready",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   }
+  ],
+  "spellFx": {
+   "fx": {
+    "new": false,
+    "guard": {
+     "level": 0,
+     "scaleStep": 0,
+     "calmMs": 16.8,
+     "budgetMs": 21,
+     "busyMs": 0,
+     "steps": 0
+    }
+   },
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0,
+   "cpuMeanMs": 0,
+   "flights": {
+    "launched": 0,
+    "landed": 0,
+    "live": 0,
+    "lastLaunchAt": 0,
+    "lastLandAt": 0
+   }
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "command:rikku",
+   "awaitingMenu": true,
+   "played": 1,
+   "lastEvents": [
+    {
+     "seq": 0,
+     "type": "turn-start",
+     "ms": 114
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 1,
+   "ticks": 0,
+   "events": 1,
+   "result": null,
+   "combatants": [
+    {
+     "id": "tidus",
+     "hp": 2420,
+     "maxHp": 2420,
+     "mp": 115,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "wakka",
+     "hp": 2530,
+     "maxHp": 2530,
+     "mp": 90,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "rikku",
+     "hp": 1400,
+     "maxHp": 1400,
+     "mp": 130,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "evrae-altana",
+     "hp": 16384,
+     "maxHp": 16384,
+     "mp": 200,
+     "alive": true,
+     "side": "enemy",
+     "statuses": [
+      "zombie"
+     ]
+    },
+    {
+     "id": "gate-lock-1",
+     "hp": 500,
+     "maxHp": 500,
+     "mp": 1,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    },
+    {
+     "id": "gate-lock-2",
+     "hp": 500,
+     "maxHp": 500,
+     "mp": 1,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "turn-start",
+    "actorId": "rikku",
+    "turn": 1,
+    "elapsedTicks": 0,
+    "seq": 0
+   }
+  ]
+ },
+ "cardFirst": {
+  "viewport": "1600x900",
+  "card": {
+   "x": 511,
+   "y": 170,
+   "w": 398,
+   "h": 205
+  },
+  "rows": 4,
+  "overlapPx2": 0,
+  "cardText": "NEXT BEST MOVE Rikku Attack → Evrae Altana 313–353 NO MP 100% TO HIT 9% CRIT Physical damage Most damage on the board — 334 to Evrae Altana."
+ },
+ "focFirst": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 511,
+    "y": 170,
+    "w": 398,
+    "h": 205
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 445,
+    "w": 469,
+    "h": 391
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Next best move",
+    "eff": 14.2
+   },
+   {
+    "t": "Rikku",
+    "eff": 17.5
+   },
+   {
+    "t": "Attack",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "Evrae Altana",
+    "eff": 21
+   },
+   {
+    "t": "313–353",
+    "eff": 14.2
+   },
+   {
+    "t": "no MP",
+    "eff": 14.2
+   },
+   {
+    "t": "100% to hit",
+    "eff": 14.2
+   },
+   {
+    "t": "9% crit",
+    "eff": 14.2
+   },
+   {
+    "t": "Physical damage",
+    "eff": 14.2
+   },
+   {
+    "t": "Most damage on the board — 334 to Evrae ",
+    "eff": 14.2
+   }
+  ]
+ },
+ "focAfterCoach": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 511,
+    "y": 170,
+    "w": 398,
+    "h": 205
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 445,
+    "w": 469,
+    "h": 391
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Next best move",
+    "eff": 14.2
+   },
+   {
+    "t": "Rikku",
+    "eff": 17.5
+   },
+   {
+    "t": "Attack",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "Evrae Altana",
+    "eff": 21
+   },
+   {
+    "t": "313–353",
+    "eff": 14.2
+   },
+   {
+    "t": "no MP",
+    "eff": 14.2
+   },
+   {
+    "t": "100% to hit",
+    "eff": 14.2
+   },
+   {
+    "t": "9% crit",
+    "eff": 14.2
+   },
+   {
+    "t": "Physical damage",
+    "eff": 14.2
+   },
+   {
+    "t": "Most damage on the board — 334 to Evrae ",
+    "eff": 14.2
+   }
+  ]
+ },
+ "advisorText": "NEXT BEST MOVE Rikku Attack → Evrae Altana 313–353 NO MP 100% TO HIT 9% CRIT Physical damage Most damage on the board — 334 to Evrae Altana.",
+ "advisorHiddenByN": true,
+ "intentText": " | EVRAE ALTANA 3RD IN QUEUE Stone Gaze SCRIPTED PETRIFY 50% Magical non-elemental damage to one character - never misses. DAMAGE · RANDOM TARGET TIDUS 450–509 20% HP WAKKA 457–516 19% HP RIKKU 461–520 35% HP Lands on one of these, picked when it acts.",
+ "pause": {
+  "esc": {
+   "paused": true,
+   "text": "Rikku Tidus Evrae Altana Wakka Rikku Tidus OPEN LOCK ATTACK SPECIAL ▸ ×1 WHITE MAGIC ▸ ×1 ITEMS ▸ ×17 FLEE ▼ Q △ DEFEND Open one of the gate locks. It costs the turn. When both are open the party is carried on, and Evrae Altana keeps the HP it had. Tidus 2420 /2420 115 /115 OD Wakka 2530 /2530 90 /90 OD Rikku 1400 /1400 130 /130 OD NEXT BEST MOVE Rikku Attack → Evrae Altana 313–353 NO MP 100% TO HIT 9% CRIT Physical damage Most damage on the board — 334 to Evrae Altana. N HIDE MOVES PAUSE ECHOES OF SPIRA · FINAL FANTASY X Q L1 TIDUS WAKKA RIKKU CHAPTER GUIDE OPTIONS ACCESSIBILITY CONTROLS MUSIC R1 E BATTLE STATS HP 2420/2420 MP 115/115 STRENGTH 31 MAGIC 16 DEFENCE 20 MAGIC DEF 18 AGILITY 30 IN THIS FIGHT OVERDRIVE 45% MODE WARRIOR TURN ORDER 2ND OF 4 CHAPTER EXP · THE VIA PURIFICO AND THE BAAJ TEMPLE — THE THREE WHO CAN SWIM · BATTLE 1 OF 4 GET PAST THE FIRST GATE ESC RESUME H PAINTING O"
+  },
+  "optionsText": "Rikku Tidus Evrae Altana Wakka Rikku Tidus OPEN LOCK ATTACK SPECIAL ▸ ×1 WHITE MAGIC ▸ ×1 ITEMS ▸ ×17 FLEE ▼ Q △ DEFEND Open one of the gate locks. It costs the turn. When both are open the party is carried on, and Evrae Altana keeps the HP it had. Tidus 2420 /2420 115 /115 OD Wakka 2530 /2530 90 /90 OD Rikku 1400 /1400 130 /130 OD NEXT BEST MOVE Rikku Attack → Evrae Altana 313–353 NO MP 100% TO HIT 9% CRIT Physical damage Most damage on the board — 334 to Evrae Altana. N HIDE MOVES PAUSE ECHOES OF SPIRA · FINAL FANTASY X Q L1 TIDUS WAKKA RIKKU CHAPTER GUIDE OPTIONS ACCESSIBILITY CONTROLS MUSIC R1 E SETTINGS MASTER VOLUME 80 MUSIC 70 SOUND EFFECTS 70 VOICE 90 VOICE-OVER ON TEXT SPEED 1x EYE CANDY ALL ON VISUAL STYLE HD-2D STRATEGY GUIDE ON BATTLE HELP ON PRESENTATION THE ECHO · B THIS ENCOUNTER REPLAY BRIEFING ▸ RESTART ENCOUNTER ▸ CHAPTER SELECT ▸ QUIT TO TITLE ▸ ABOUT CREDITS ▸ CHAPTER EXP · THE VIA PURIFICO AND THE BAAJ TEMPLE — THE THREE WHO CAN SWIM · BATTLE 1 OF 4 GET PAST THE FIRST GATE ESC RESUME H PAINTING ONLY",
+  "tabs": [
+   "Tidus",
+   "Wakka",
+   "Rikku",
+   "Chapter",
+   "Guide",
+   "Options"
+  ],
+  "resumedByEsc": true,
+  "pOpens": true,
+  "pCloses": true
+ },
+ "firstRows": [
+  "Open lock",
+  "Attack",
+  "Special",
+  "White Magic",
+  "Items",
+  "Flee"
+ ],
+ "targetsShown": [
+  "gate-lock-1",
+  "gate-lock-2",
+  "evrae-altana"
+ ],
+ "afterTargetCancel": {
+  "screen": "battle",
+  "targets": 0,
+  "rows": 6
+ },
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "victory",
+   "seed": 1,
+   "turns": 52,
+   "firstEnemyAction": {
+    "seq": 5,
+    "actor": "evrae-altana",
+    "ability": "Attack",
+    "targets": [
+     "rikku"
+    ]
+   },
+   "final": true,
+   "stalledAt": null
+  }
+ ],
+ "seamCard": [
+  {
+   "link": 4,
+   "actor": "command:rikku",
+   "viewport": "1600x900",
+   "card": {
+    "x": 516,
+    "y": 261,
+    "w": 518,
+    "h": 154
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Rikku Al Bhed Potion → the party IN ITEMS +1,000 3 HITS NO MP Restores HP and cures Petrify, Poison and Silence for the whole party. Rikku lives through Stone Punch."
+  }
+ ],
+ "pauseRecoveries": 0,
+ "misses": [],
+ "orders": [],
+ "escapes": [],
+ "targetMismatches": [],
+ "pickerPlays": [],
+ "stallRecoveries": 0,
+ "lastChain": {
+  "links": 4,
+  "chainLength": 4,
+  "phase": "play:victory",
+  "turn": 52,
+  "ms": 296114
+ },
+ "mgSince": null,
+ "emptyPicks": 0,
+ "lastPartySeq": 275,
+ "minigames": [
+  {
+   "turn": 24,
+   "kind": "swordplay",
+   "title": "Spiral Cut",
+   "subtitle": "SWORDPLAY · PRESS ENTER IN THE GOLD ZONE",
+   "attempts": [
+    {
+     "seenAt": 56,
+     "zone": [
+      45.5,
+      54.2
+     ]
+    },
+    {
+     "seenAt": 40,
+     "zone": [
+      45.5,
+      54.2
+     ]
+    },
+    {
+     "seenAt": 44,
+     "zone": [
+      45.5,
+      54.2
+     ]
+    },
+    {
+     "seenAt": 44,
+     "zone": [
+      45.5,
+      54.2
+     ]
+    },
+    {
+     "seenAt": 40,
+     "zone": [
+      45.5,
+      54.2
+     ]
+    },
+    {
+     "seenAt": 40,
+     "zone": [
+      45.5,
+      54.2
+     ]
+    },
+    "overlay closed"
+   ],
+   "pressLog": [
+    {
+     "key": "Enter",
+     "pos": 56,
+     "zoneStart": 45.45,
+     "zoneWidth": 8.73,
+     "inZone": false
+    },
+    {
+     "key": "Enter",
+     "pos": 40,
+     "zoneStart": 45.45,
+     "zoneWidth": 8.73,
+     "inZone": false
+    },
+    {
+     "key": "Enter",
+     "pos": 44,
+     "zoneStart": 45.45,
+     "zoneWidth": 8.73,
+     "inZone": false
+    },
+    {
+     "key": "Enter",
+     "pos": 44,
+     "zoneStart": 45.45,
+     "zoneWidth": 8.73,
+     "inZone": false
+    },
+    {
+     "key": "Enter",
+     "pos": 40,
+     "zoneStart": 45.45,
+     "zoneWidth": 8.73,
+     "inZone": false
+    },
+    {
+     "key": "Enter",
+     "pos": 40,
+     "zoneStart": 45.45,
+     "zoneWidth": 8.73,
+     "inZone": false
+    }
+   ],
+   "closed": true,
+   "ms": 2363,
+   "engine": {
+    "actor": "tidus",
+    "ability": "Spiral Cut",
+    "extra": {
+     "kind": "tidus-timing",
+     "timing": {
+      "success": false,
+      "timeRemainingMs": 0,
+      "timerMs": 3000,
+      "frame": 91
+     }
+    }
+   }
+  }
+ ],
+ "minigameShots": {
+  "swordplay": true
+ },
+ "turns": 52,
+ "fightMs": 296372,
+ "afterFight": "cutscene",
+ "outcome": "victory",
+ "outcomeFrom": "results screen text",
+ "stalledAt": null,
+ "logKinds": {
+  "turn-start": 33,
+  "action-start": 48,
+  "damage": 91,
+  "action-end": 48,
+  "counter": 15,
+  "status-add": 12,
+  "status-remove": 11,
+  "script-trigger": 2,
+  "overdrive-gauge": 24,
+  "ko": 2,
+  "revive": 1,
+  "miss": 3,
+  "message": 1,
+  "minigame-request": 1,
+  "victory": 1
+ },
+ "continuity": {
+  "file": "continuity/continuity.json",
+  "checks": {
+   "CHK-026": "FAIL",
+   "CHK-027": "FAIL"
+  },
+  "reasons": {
+   "CHK-026": [
+    "1 swap(s) of a standing figure move its feet more than the tolerance (worst 2.1 px at 1600 wide)",
+    "1 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 27.9 px at 1600 wide), whatever stance the registration claims"
+   ],
+   "CHK-027": [
+    "2 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 136.9 px)"
+   ]
+  },
+  "error": null
+ },
+ "post": {
+  "screen": "cutscene",
+  "lines": [
+   "Two down. Neither one was fair.",
+   "Fair's for blitzball, ya.",
+   "Okay okay okay: is everybody still in one piece? Be honest!",
+   "More or less. Ask me again when I am dry.",
+   "You kept your heads down and hit it hard, brudda. That is how.",
+   "Okay okay okay: next time we bring a bigger plan!"
+  ],
+  "scene": {
+   "watch": {
+    "ms": 6179,
+    "shows": 1,
+    "advancedWithoutInput": false,
+    "firstLine": "Two down. Neither one was fair.",
+    "screenAfterWatch": "cutscene"
+   },
+   "taps": 7,
+   "holds": 0,
+   "ended": true,
+   "lines": [
+    "Two down. Neither one was fair.",
+    "Fair's for blitzball, ya.",
+    "Okay okay okay: is everybody still in one piece? Be honest!",
+    "More or less. Ask me again when I am dry.",
+    "You kept your heads down and hit it hard, brudda. That is how.",
+    "Okay okay okay: next time we bring a bigger plan!"
+   ]
+  }
+ },
+ "resultsScreen": "results",
+ "resultsText": "THE VIA PURIFICO AND THE BAAJ TEMPLE · CLEARED RESULTS · 5:19 Victory AP 12,900 ×3 PARTY GIL 4,000 ITEMS Blk Magic Sphere ×2, Power Sphere ×2 T Tidus +19 S.Lv S.LV 43 · 0/1,810 AP +12,900AP W Wakka +7 S.Lv S.LV 31 · 9,122/755 AP +12,900AP R Rikku +6 S.Lv S.LV 47 · 1,645/2,316 AP +12,900AP CONFIRM ▸",
+ "afterConfirm": [],
+ "afterResults": "chapter-select",
+ "boardAfter": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 19
+ },
+ "boardAfterReload": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 19
+ },
+ "dboxTimeline": [
+  {
+   "ms": 12520,
+   "lastMs": 17351,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "Under Bevelle, the flooded tunnels of the Via Purifico. Only three of them can swim.",
+   "portrait": null,
+   "narrate": true,
+   "show": 1
+  },
+  {
+   "ms": 17386,
+   "lastMs": 18867,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Water to the ceiling. Where does this even lead?",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 2
+  },
+  {
+   "ms": 18901,
+   "lastMs": 21884,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "Okay okay okay: we find the gate locks, we open them, we keep swimming!",
+   "portrait": "rikku.webp",
+   "narrate": false,
+   "show": 3
+  },
+  {
+   "ms": 21918,
+   "lastMs": 23400,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "You make it sound easy, ya.",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 4
+  },
+  {
+   "ms": 23434,
+   "lastMs": 23934,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "Eep! Something is moving down there. Something big. And, um, dead.",
+   "portrait": "rikku.webp",
+   "narrate": false,
+   "show": 5
+  },
+  {
+   "ms": 23951,
+   "lastMs": 23951,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Dead things I can hit.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 6
+  },
+  {
+   "ms": 23968,
+   "lastMs": 23984,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "Don't let it look at you, brudda. Stone and water do not mix, ya.",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 7
+  },
+  {
+   "ms": 24001,
+   "lastMs": 24100,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "It breaks. Whoever it catches just breaks. So nobody gets caught!",
+   "portrait": "rikku.webp",
+   "narrate": false,
+   "show": 8,
+   "endMs": 24100
+  },
+  {
+   "ms": 57486,
+   "lastMs": 60937,
+   "screen": "battle",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "Its eyes, brudda! Whoever it looks at turns to stone!",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 9,
+   "endMs": 60938
+  },
+  {
+   "ms": 183546,
+   "lastMs": 186663,
+   "screen": "battle",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "It was already dead. It just would not lie down.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 10
+  },
+  {
+   "ms": 186696,
+   "lastMs": 189647,
+   "screen": "battle",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "Next stop is a temple under the sea, ya.",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 11
+  },
+  {
+   "ms": 189681,
+   "lastMs": 193580,
+   "screen": "battle",
+   "speaker": "",
+   "role": "",
+   "text": "The Baaj Temple, deep under the water.",
+   "portrait": null,
+   "narrate": true,
+   "show": 12,
+   "endMs": 193581
+  },
+  {
+   "ms": 247528,
+   "lastMs": 251460,
+   "screen": "battle",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "It swallowed one of us! Strike it from the inside, or brace for the spit!",
+   "portrait": "rikku.webp",
+   "narrate": false,
+   "show": 13,
+   "endMs": 251460
+  },
+  {
+   "ms": 345671,
+   "lastMs": 393719,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Two down. Neither one was fair.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 14
+  },
+  {
+   "ms": 393752,
+   "lastMs": 396636,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "Fair's for blitzball, ya.",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 15
+  },
+  {
+   "ms": 396685,
+   "lastMs": 398286,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "Okay okay okay: is everybody still in one piece? Be honest!",
+   "portrait": "rikku.webp",
+   "narrate": false,
+   "show": 16
+  },
+  {
+   "ms": 398319,
+   "lastMs": 399803,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "More or less. Ask me again when I am dry.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 17
+  },
+  {
+   "ms": 399836,
+   "lastMs": 401318,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "You kept your heads down and hit it hard, brudda. That is how.",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 18
+  },
+  {
+   "ms": 401352,
+   "lastMs": 403129,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "Okay okay okay: next time we bring a bigger plan!",
+   "portrait": "rikku.webp",
+   "narrate": false,
+   "show": 19,
+   "endMs": 403130
+  }
+ ],
+ "audioDebugFile": {
+  "file": "flooded-ways-win-r35hid/audio-debug.jsonl",
+  "samples": 7,
+  "note": "one whole audioDebug() per line; nothing cut"
+ },
+ "minutes": 6.91,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "media": [
+  "art/title/echo.webp",
+  "art/characters/auron/idle.png",
+  "art/backdrops/dreams-end.webp",
+  "art/backdrops/gagazet.webp",
+  "art/characters/mortiorchis/idle.png",
+  "art/characters/seymour-flux-body/idle.png",
+  "art/portraits/tidus.webp",
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "audio/sfx/sprite-v2.mp3",
+  "art/portraits/yuna.webp",
+  "art/portraits/kimahri.png",
+  "audio/music/chapter-select.mp3",
+  "art/backdrops/gagazet.thumb.webp",
+  "art/characters/seymour-flux-body/idle.thumb.png",
+  "art/portraits/wakka.webp",
+  "art/portraits/lulu.webp",
+  "art/portraits/auron.webp",
+  "art/portraits/seymour.webp",
+  "audio/sfx/parity-ffx-core.mp3",
+  "audio/music/scene-gagazet.mp3",
+  "art/backdrops/via-purifico-flooded-1.webp",
+  "art/pause/ch36-flooded-ways.webp",
+  "art/backdrops/via-purifico.webp",
+  "art/characters/evrae-altana/idle.png",
+  "art/characters/geosgaeno/idle.webp",
+  "art/portraits/rikku.webp",
+  "audio/music/battle-ffx.mp3",
+  "art/characters/gate-lock/idle.webp",
+  "art/characters/tidus/idle.png",
+  "audio/music/victory-ffx.mp3",
+  "art/characters/wakka/idle.png",
+  "art/characters/rikku/idle.png",
+  "audio/music/defeat-ffx.mp3",
+  "art/characters/tidus/ready.png",
+  "art/characters/wakka/ready.png",
+  "art/characters/rikku/ready.png",
+  "art/characters/evrae-altana/attack.png",
+  "art/characters/evrae-altana/hurt.png",
+  "art/characters/evrae-altana/ko.png",
+  "art/characters/gate-lock/ko.webp",
+  "art/characters/tidus/attack.png",
+  "art/characters/tidus/cast.png",
+  "art/characters/tidus/item.png",
+  "art/characters/tidus/hurt.png",
+  "art/characters/tidus/ko.png",
+  "art/characters/tidus/defend.webp",
+  "art/characters/wakka/attack.png",
+  "art/characters/wakka/cast.png",
+  "art/characters/wakka/item.png",
+  "art/characters/wakka/hurt.webp",
+  "audio/music/pause.mp3",
+  "art/pause/ch36-flooded-ways.2x.webp",
+  "art/characters/wakka/ko.png",
+  "art/characters/wakka/defend.webp",
+  "art/characters/rikku/attack.png",
+  "art/characters/rikku/cast.png",
+  "art/characters/rikku/item.png",
+  "art/characters/rikku/hurt.png",
+  "art/characters/rikku/ko.png",
+  "art/characters/tidus/victory.png",
+  "art/characters/tidus/sleep.png",
+  "art/characters/tidus/critical.png",
+  "art/characters/tidus/follow.png",
+  "art/characters/tidus/od-energy-rain.png",
+  "art/characters/tidus/od-slice-and-dice.png",
+  "art/characters/wakka/victory.png",
+  "art/characters/wakka/sleep.png",
+  "art/characters/wakka/critical.png",
+  "art/characters/wakka/follow.png",
+  "art/characters/rikku/victory.png",
+  "art/characters/rikku/sleep.png",
+  "art/characters/rikku/critical.png",
+  "art/characters/rikku/follow.png",
+  "art/pause/tidus.2x.webp",
+  "art/pause/wakka.2x.webp",
+  "art/pause/rikku.2x.webp",
+  "art/backdrops/via-purifico-flooded-2.webp",
+  "art/backdrops/via-purifico-flooded-3.webp",
+  "art/backdrops/baaj-waterway.webp",
+  "art/portraits/evrae-altana.webp",
+  "art/pause/tidus.webp",
+  "art/portrait-parts/tidus/2x/mouth-open-smile.png",
+  "art/portrait-parts/tidus/2x/mouth-concerned-press.png",
+  "art/portrait-parts/tidus/2x/lidR-closed.png",
+  "art/portrait-parts/tidus/2x/lidL-closed.png",
+  "art/portrait-parts/tidus/2x/eyeR-socket.webp",
+  "art/portrait-parts/tidus/2x/eyeR-iris.webp",
+  "art/portrait-parts/tidus/2x/eyeR-catch.png",
+  "art/portrait-parts/tidus/2x/eyeR-window.png",
+  "art/portrait-parts/tidus/2x/eyeL-socket.webp",
+  "art/portrait-parts/tidus/2x/eyeL-iris.webp",
+  "art/portrait-parts/tidus/2x/eyeL-catch.png",
+  "art/portrait-parts/tidus/2x/eyeL-window.png",
+  "art/pause/wakka.webp",
+  "art/portrait-parts/wakka/2x/mouth-open-smile.png",
+  "art/portrait-parts/wakka/2x/mouth-concerned-press.png",
+  "art/portrait-parts/wakka/2x/lidR-closed.png",
+  "art/portrait-parts/wakka/2x/lidL-closed.png",
+  "art/portrait-parts/wakka/2x/eyeR-socket.webp",
+  "art/portrait-parts/wakka/2x/eyeR-iris.webp",
+  "art/portrait-parts/wakka/2x/eyeR-catch.png",
+  "art/portrait-parts/wakka/2x/eyeR-window.png",
+  "art/portrait-parts/wakka/2x/eyeL-socket.webp",
+  "art/portrait-parts/wakka/2x/eyeL-iris.webp",
+  "art/portrait-parts/wakka/2x/eyeL-catch.png",
+  "art/portrait-parts/wakka/2x/eyeL-window.png",
+  "art/pause/rikku.webp",
+  "art/portrait-parts/rikku/2x/mouth-open-smile.png",
+  "art/portrait-parts/rikku/2x/mouth-concerned-press.png",
+  "art/portrait-parts/rikku/2x/lidL-closed.png",
+  "art/portrait-parts/rikku/2x/eyeL-socket.webp",
+  "art/portrait-parts/rikku/2x/eyeL-iris.webp",
+  "art/portrait-parts/rikku/2x/eyeL-catch.png",
+  "art/portrait-parts/rikku/2x/eyeL-window.png",
+  "art/characters/evrae-altana/idle%402x.png",
+  "art/characters/evrae-altana/attack%402x.png",
+  "art/characters/evrae-altana/hurt%402x.png",
+  "art/characters/evrae-altana/ko%402x.png",
+  "art/characters/geosgaeno/attack.webp",
+  "art/characters/geosgaeno/cast.webp",
+  "art/characters/geosgaeno/hurt.webp",
+  "art/characters/geosgaeno/ko.webp",
+  "art/portraits/geosgaeno.webp",
+  "art/characters/geosgaeno/idle%402x.png",
+  "art/backdrops/zanarkand-dome.thumb.webp",
+  "art/characters/yunalesca-1/idle.thumb.png",
+  "art/backdrops/bevelle-underground.thumb.webp",
+  "art/characters/ffx2-bahamut/idle.thumb.png",
+  "art/backdrops/djose-chamber-provisional.thumb.webp",
+  "art/characters/x2-ixion/idle.thumb.png",
+  "art/backdrops/dreams-end.thumb.webp",
+  "art/characters/braskas-final-aeon-1/idle.thumb.png",
+  "art/backdrops/den-of-woe.thumb.webp",
+  "art/characters/baralai-shade/idle.thumb.png",
+  "art/backdrops/macalania-temple.thumb.webp",
+  "art/characters/anima/idle.thumb.png",
+  "art/backdrops/via-infinito.thumb.webp",
+  "art/characters/trema/idle.thumb.png",
+  "art/backdrops/evrae-airship-deck.thumb.webp",
+  "art/characters/evrae/idle.thumb.png",
+  "art/backdrops/road-to-the-farplane.thumb.webp"
+ ]
+}

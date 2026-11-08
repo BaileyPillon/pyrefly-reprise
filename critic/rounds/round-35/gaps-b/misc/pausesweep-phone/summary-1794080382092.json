@@ -1,0 +1,30 @@
+[
+ {
+  "scene": "pause-ffx",
+  "w": 390,
+  "h": 844,
+  "error": "ASSERT-FAIL screen expected=pause after 15240ms",
+  "steps": []
+ },
+ {
+  "scene": "pause-ffx2",
+  "w": 390,
+  "h": 844,
+  "error": "ASSERT-FAIL screen expected=pause after 15083ms",
+  "steps": []
+ },
+ {
+  "scene": "battle-ch1",
+  "w": 390,
+  "h": 844,
+  "error": null,
+  "steps": [
+   {
+    "label": "first-menu",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 0
+   }
+  ]
+ }
+]

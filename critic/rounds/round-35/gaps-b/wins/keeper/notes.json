@@ -1,0 +1,166 @@
+{
+ "notes": [
+  {
+   "ms": 2271,
+   "k": "live",
+   "v": {
+    "version": "0.1.0",
+    "scripts": [
+     "index-jYm-0mrJ.js"
+    ]
+   }
+  },
+  {
+   "ms": 7922,
+   "k": "door",
+   "v": {
+    "word": "keeper",
+    "typed": "keeper"
+   }
+  },
+  {
+   "ms": 10124,
+   "k": "afterDoor",
+   "v": "party-prep"
+  },
+  {
+   "ms": 18333,
+   "k": "preSceneHolds",
+   "v": 1
+  },
+  {
+   "ms": 22475,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1,
+    "boss": [
+     "spectral-keeper",
+     "spectral-circle-1",
+     "spectral-circle-2",
+     "spectral-circle-3",
+     "spectral-circle-4",
+     "spectral-circle-5",
+     "spectral-circle-6",
+     "spectral-circle-7"
+    ]
+   }
+  },
+  {
+   "ms": 49199,
+   "k": "STATE-WRITE",
+   "v": {
+    "at": 49199,
+    "what": "Keeper HP set to 400 after two real Moves and an Attack All sweep were read, so a real Attack ends the fight (a full win is 3.5 in 100 for the best line)",
+    "result": {
+     "was": 49393,
+     "now": 400
+    }
+   }
+  },
+  {
+   "ms": 80796,
+   "k": "fight-over",
+   "v": {
+    "attempt": 1,
+    "over": "left:cutscene",
+    "decisions": 10,
+    "ms": 80796
+   }
+  },
+  {
+   "ms": 106481,
+   "k": "afterFight",
+   "v": {
+    "label": "a1",
+    "screens": [
+     "cutscene",
+     "results",
+     "cutscene",
+     "chapter-select"
+    ],
+    "outcome": "victory",
+    "next": "board"
+   }
+  },
+  {
+   "ms": 106482,
+   "k": "RESULT",
+   "v": "WON by real keys (one recorded state write set up the last blow)"
+  }
+ ],
+ "shots": [
+  {
+   "file": "00-title.png",
+   "why": "title, fresh profile",
+   "ms": 3601,
+   "screen": "title"
+  },
+  {
+   "file": "01-party-prep.png",
+   "why": "party prep opened by the word (no card)",
+   "ms": 10257,
+   "screen": "party-prep"
+  },
+  {
+   "file": "02-pre-scene.png",
+   "why": "pre-battle scene, first line",
+   "ms": 14307,
+   "screen": "cutscene"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (spectral-keeper, spectral-circle-1, spectral-circle-2, spectral-circle-3, spectral-circle-4, spectral-circle-5, spectral-circle-6, spectral-circle-7)",
+   "ms": 23463,
+   "screen": "battle"
+  },
+  {
+   "file": "move-1.jpg",
+   "why": "Move tidus from glyph 1 to glyph 5 (the demonstration)",
+   "ms": 25748,
+   "screen": "battle"
+  },
+  {
+   "file": "move-2.jpg",
+   "why": "Move yuna from glyph 2 to glyph 4 (the demonstration)",
+   "ms": 29197,
+   "screen": "battle"
+  },
+  {
+   "file": "m-spectral-keeper-keeper-berserk-tail.jpg",
+   "why": "spectral-keeper starts keeper-berserk-tail",
+   "ms": 32566,
+   "screen": "battle"
+  },
+  {
+   "file": "m-spectral-keeper-keeper-attack-all.jpg",
+   "why": "spectral-keeper starts keeper-attack-all",
+   "ms": 38501,
+   "screen": "battle"
+  },
+  {
+   "file": "a1-scene-1.jpg",
+   "why": "a scene after the fight (a1)",
+   "ms": 82051,
+   "screen": "cutscene"
+  },
+  {
+   "file": "a1-results-victory.png",
+   "why": "the results screen (victory)",
+   "ms": 85023,
+   "screen": "results"
+  },
+  {
+   "file": "a1-scene-3.jpg",
+   "why": "a scene after the fight (a1)",
+   "ms": 88779,
+   "screen": "cutscene"
+  },
+  {
+   "file": "a1-board.png",
+   "why": "the chapter-select board after the chapter",
+   "ms": 106479,
+   "screen": "chapter-select"
+  }
+ ]
+}

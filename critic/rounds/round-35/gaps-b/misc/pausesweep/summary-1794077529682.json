@@ -1,0 +1,622 @@
+[
+ {
+  "scene": "pause-ffx",
+  "w": 1280,
+  "h": 720,
+  "error": null,
+  "steps": [
+   {
+    "label": "tab1-Tidus",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 14
+   },
+   {
+    "label": "tab2-Yuna",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 15
+   },
+   {
+    "label": "tab3-Kimahri",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 15
+   },
+   {
+    "label": "tab4-Chapter",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 14
+   },
+   {
+    "label": "tab5-Guide",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 15
+   },
+   {
+    "label": "tab6-Options",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 15
+   },
+   {
+    "label": "tab7-Accessibility",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 15
+   },
+   {
+    "label": "tab8-Controls",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 22
+   },
+   {
+    "label": "tab9-Music",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 16
+   }
+  ]
+ },
+ {
+  "scene": "pause-ffx2",
+  "w": 1280,
+  "h": 720,
+  "error": null,
+  "steps": [
+   {
+    "label": "tab1-Yuna",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 2
+   },
+   {
+    "label": "tab2-Rikku",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 2
+   },
+   {
+    "label": "tab3-Paine",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 27
+   },
+   {
+    "label": "tab4-Chapter",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 6
+   },
+   {
+    "label": "tab5-Guide",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 25
+   },
+   {
+    "label": "tab6-Options",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 21
+   },
+   {
+    "label": "tab7-Accessibility",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 20
+   },
+   {
+    "label": "tab8-Controls",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 21
+   },
+   {
+    "label": "tab9-Music",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 25
+   }
+  ]
+ },
+ {
+  "scene": "pause-ffx",
+  "w": 1600,
+  "h": 900,
+  "error": null,
+  "steps": [
+   {
+    "label": "tab1-Tidus",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 10
+   },
+   {
+    "label": "tab2-Yuna",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 16
+   },
+   {
+    "label": "tab3-Kimahri",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 16
+   },
+   {
+    "label": "tab4-Chapter",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 13
+   },
+   {
+    "label": "tab5-Guide",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 16
+   },
+   {
+    "label": "tab6-Options",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 16
+   },
+   {
+    "label": "tab7-Accessibility",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 16
+   },
+   {
+    "label": "tab8-Controls",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 17
+   },
+   {
+    "label": "tab9-Music",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 18
+   }
+  ]
+ },
+ {
+  "scene": "pause-ffx2",
+  "w": 1600,
+  "h": 900,
+  "error": null,
+  "steps": [
+   {
+    "label": "tab1-Yuna",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 2
+   },
+   {
+    "label": "tab2-Rikku",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 2
+   },
+   {
+    "label": "tab3-Paine",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 18
+   },
+   {
+    "label": "tab4-Chapter",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 4
+   },
+   {
+    "label": "tab5-Guide",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 19
+   },
+   {
+    "label": "tab6-Options",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 25
+   },
+   {
+    "label": "tab7-Accessibility",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 17
+   },
+   {
+    "label": "tab8-Controls",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 18
+   },
+   {
+    "label": "tab9-Music",
+    "minEff": 14,
+    "under": 0,
+    "overlaps": 17
+   }
+  ]
+ },
+ {
+  "scene": "pause-ffx",
+  "w": 2000,
+  "h": 1012,
+  "error": null,
+  "steps": [
+   {
+    "label": "tab1-Tidus",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 10
+   },
+   {
+    "label": "tab2-Yuna",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 15
+   },
+   {
+    "label": "tab3-Kimahri",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 15
+   },
+   {
+    "label": "tab4-Chapter",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 9
+   },
+   {
+    "label": "tab5-Guide",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 15
+   },
+   {
+    "label": "tab6-Options",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 15
+   },
+   {
+    "label": "tab7-Accessibility",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 15
+   },
+   {
+    "label": "tab8-Controls",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 17
+   },
+   {
+    "label": "tab9-Music",
+    "minEff": 16,
+    "under": 0,
+    "overlaps": 16
+   }
+  ]
+ },
+ {
+  "scene": "pause-ffx2",
+  "w": 2000,
+  "h": 1012,
+  "error": null,
+  "steps": [
+   {
+    "label": "tab1-Yuna",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 2
+   },
+   {
+    "label": "tab2-Rikku",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 2
+   },
+   {
+    "label": "tab3-Paine",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 13
+   },
+   {
+    "label": "tab4-Chapter",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 4
+   },
+   {
+    "label": "tab5-Guide",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 15
+   },
+   {
+    "label": "tab6-Options",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 21
+   },
+   {
+    "label": "tab7-Accessibility",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 14
+   },
+   {
+    "label": "tab8-Controls",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 14
+   },
+   {
+    "label": "tab9-Music",
+    "minEff": 16,
+    "under": 0,
+    "overlaps": 17
+   }
+  ]
+ },
+ {
+  "scene": "pause-ffx",
+  "w": 2560,
+  "h": 1080,
+  "error": null,
+  "steps": [
+   {
+    "label": "tab1-Tidus",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 7
+   },
+   {
+    "label": "tab2-Yuna",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 13
+   },
+   {
+    "label": "tab3-Kimahri",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 13
+   },
+   {
+    "label": "tab4-Chapter",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 9
+   },
+   {
+    "label": "tab5-Guide",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 12
+   },
+   {
+    "label": "tab6-Options",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 12
+   },
+   {
+    "label": "tab7-Accessibility",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 12
+   },
+   {
+    "label": "tab8-Controls",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 12
+   },
+   {
+    "label": "tab9-Music",
+    "minEff": 16,
+    "under": 0,
+    "overlaps": 12
+   }
+  ]
+ },
+ {
+  "scene": "pause-ffx2",
+  "w": 2560,
+  "h": 1080,
+  "error": null,
+  "steps": [
+   {
+    "label": "tab1-Yuna",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 2
+   },
+   {
+    "label": "tab2-Rikku",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 2
+   },
+   {
+    "label": "tab3-Paine",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 8
+   },
+   {
+    "label": "tab4-Chapter",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 2
+   },
+   {
+    "label": "tab5-Guide",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 12
+   },
+   {
+    "label": "tab6-Options",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 13
+   },
+   {
+    "label": "tab7-Accessibility",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 7
+   },
+   {
+    "label": "tab8-Controls",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 11
+   },
+   {
+    "label": "tab9-Music",
+    "minEff": 16,
+    "under": 0,
+    "overlaps": 6
+   }
+  ]
+ },
+ {
+  "scene": "pause-ffx",
+  "w": 3840,
+  "h": 2160,
+  "error": null,
+  "steps": [
+   {
+    "label": "tab1-Tidus",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 6
+   },
+   {
+    "label": "tab2-Yuna",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 7
+   },
+   {
+    "label": "tab3-Kimahri",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 7
+   },
+   {
+    "label": "tab4-Chapter",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 6
+   },
+   {
+    "label": "tab5-Guide",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 7
+   },
+   {
+    "label": "tab6-Options",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 7
+   },
+   {
+    "label": "tab7-Accessibility",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 7
+   },
+   {
+    "label": "tab8-Controls",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 7
+   },
+   {
+    "label": "tab9-Music",
+    "minEff": 16,
+    "under": 0,
+    "overlaps": 7
+   }
+  ]
+ },
+ {
+  "scene": "pause-ffx2",
+  "w": 3840,
+  "h": 2160,
+  "error": null,
+  "steps": [
+   {
+    "label": "tab1-Yuna",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 2
+   },
+   {
+    "label": "tab2-Rikku",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 2
+   },
+   {
+    "label": "tab3-Paine",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 8
+   },
+   {
+    "label": "tab4-Chapter",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 2
+   },
+   {
+    "label": "tab5-Guide",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 6
+   },
+   {
+    "label": "tab6-Options",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 11
+   },
+   {
+    "label": "tab7-Accessibility",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 6
+   },
+   {
+    "label": "tab8-Controls",
+    "minEff": 17,
+    "under": 0,
+    "overlaps": 6
+   },
+   {
+    "label": "tab9-Music",
+    "minEff": 16,
+    "under": 0,
+    "overlaps": 7
+   }
+  ]
+ }
+]

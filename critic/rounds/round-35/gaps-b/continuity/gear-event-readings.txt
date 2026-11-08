@@ -1,0 +1,45 @@
+== capture 1 (gear), events 284 and 1037
+event 284
+ pair 281 -> 282 {"yuna":"0.99 @(0,0px) [0-shift 0.99]","rikku":"0.99 @(0,0px) [0-shift 0.99]","paine":"0.97 @(0,0px) [0-shift 0.97]","boss":"0.87 @(0,0px) [0-shift 0.87]"}
+ pair 282 -> 283 {"yuna":"0.99 @(0,0px) [0-shift 0.99]","rikku":"0.99 @(0,0px) [0-shift 0.99]","paine":"0.97 @(0,0px) [0-shift 0.97]","boss":"0.88 @(0,0px) [0-shift 0.88]"}
+ pair 283 -> 284 {"yuna":"0.28 @(-92,8px) [0-shift 0.25]","rikku":"0.47 @(-92,0px) [0-shift 0.13]","paine":"0.47 @(-67,0px) [0-shift 0.35]","boss":"0.86 @(0,0px) [0-shift 0.86]"}
+ pair 284 -> 285 {"yuna":"0.98 @(0,0px) [0-shift 0.98]","rikku":"0.98 @(0,0px) [0-shift 0.98]","paine":"0.96 @(0,0px) [0-shift 0.96]","boss":"0.86 @(0,0px) [0-shift 0.86]"}
+event 1037
+ pair 1034 -> 1035 {"yuna":"0.98 @(0,0px) [0-shift 0.98]","rikku":"0.98 @(0,0px) [0-shift 0.98]","paine":"0.85 @(0,0px) [0-shift 0.85]","boss":"0.62 @(0,0px) [0-shift 0.62]"}
+ pair 1035 -> 1036 {"yuna":"0.99 @(0,0px) [0-shift 0.99]","rikku":"0.99 @(0,0px) [0-shift 0.99]","paine":"0.86 @(0,0px) [0-shift 0.86]","boss":"0.60 @(0,0px) [0-shift 0.60]"}
+ pair 1036 -> 1037 {"yuna":"0.38 @(-58,8px) [0-shift 0.14]","rikku":"0.34 @(-17,8px) [0-shift 0.13]","paine":"0.56 @(0,8px) [0-shift 0.45]","boss":"0.39 @(8,0px) [0-shift 0.30]"}
+ pair 1037 -> 1038 {"yuna":"0.97 @(0,0px) [0-shift 0.97]","rikku":"0.99 @(0,0px) [0-shift 0.99]","paine":"0.94 @(0,0px) [0-shift 0.94]","boss":"0.58 @(0,0px) [0-shift 0.58]"}
+
+== capture 2 (gear2), events 280 and 1024
+event 280
+ pair 277 -> 278 {"yuna":"0.99 @(0,0px) [0-shift 0.99]","rikku":"0.99 @(0,0px) [0-shift 0.99]","paine":"0.99 @(0,0px) [0-shift 0.99]","boss":"0.92 @(0,0px) [0-shift 0.92]"}
+ pair 278 -> 279 {"yuna":"0.99 @(0,0px) [0-shift 0.99]","rikku":"0.99 @(0,0px) [0-shift 0.99]","paine":"0.98 @(0,0px) [0-shift 0.98]","boss":"0.91 @(0,0px) [0-shift 0.91]"}
+ pair 279 -> 280 {"yuna":"0.26 @(0,0px) [0-shift 0.26]","rikku":"0.47 @(-92,0px) [0-shift 0.17]","paine":"0.52 @(-67,0px) [0-shift 0.33]","boss":"0.91 @(0,0px) [0-shift 0.91]"}
+ pair 280 -> 281 {"yuna":"0.98 @(0,0px) [0-shift 0.98]","rikku":"0.99 @(0,0px) [0-shift 0.99]","paine":"0.96 @(0,0px) [0-shift 0.96]","boss":"0.88 @(0,0px) [0-shift 0.88]"}
+event 1024
+ pair 1021 -> 1022 {"yuna":"0.83 @(0,0px) [0-shift 0.83]","rikku":"0.98 @(0,0px) [0-shift 0.98]","paine":"0.97 @(0,0px) [0-shift 0.97]","boss":"0.79 @(0,0px) [0-shift 0.79]"}
+ pair 1022 -> 1023 {"yuna":"0.84 @(0,0px) [0-shift 0.84]","rikku":"0.95 @(0,0px) [0-shift 0.95]","paine":"0.97 @(0,0px) [0-shift 0.97]","boss":"0.78 @(0,0px) [0-shift 0.78]"}
+ pair 1023 -> 1024 {"yuna":"0.42 @(-33,0px) [0-shift 0.18]","rikku":"0.48 @(-8,8px) [0-shift 0.26]","paine":"0.58 @(0,8px) [0-shift 0.57]","boss":"0.53 @(8,0px) [0-shift 0.46]"}
+ pair 1024 -> 1025 {"yuna":"0.88 @(0,0px) [0-shift 0.88]","rikku":"0.90 @(0,0px) [0-shift 0.90]","paine":"0.97 @(0,0px) [0-shift 0.97]","boss":"0.74 @(0,0px) [0-shift 0.74]"}
+
+== luma, capture 1
+event 284
+  -4 whole 129.2 | party 128.3 | boss 124.3 | floor 126.8 | top 127.4
+  -3 whole 129.2 | party 128.2 | boss 124.4 | floor 126.8 | top 127.6
+  -2 whole 129.2 | party 128.2 | boss 124.3 | floor 126.8 | top 127.7
+  -1 whole 129.1 | party 128.2 | boss 124.2 | floor 126.9 | top 127.8
+  0 whole 129.6 | party 130.0 | boss 124.0 | floor 129.2 | top 127.9
+  1 whole 129.5 | party 130.0 | boss 123.7 | floor 128.9 | top 127.7
+  2 whole 129.5 | party 130.0 | boss 123.6 | floor 128.5 | top 128.3
+  3 whole 129.5 | party 130.0 | boss 123.6 | floor 128.3 | top 128.3
+  4 whole 129.4 | party 129.9 | boss 123.5 | floor 128.1 | top 128.8
+event 1037
+  -4 whole 131.0 | party 132.3 | boss 127.5 | floor 128.4 | top 129.4
+  -3 whole 130.8 | party 132.0 | boss 127.4 | floor 128.1 | top 129.1
+  -2 whole 130.9 | party 131.9 | boss 127.9 | floor 128.0 | top 128.7
+  -1 whole 131.0 | party 131.7 | boss 128.4 | floor 128.0 | top 128.5
+  0 whole 132.8 | party 135.1 | boss 129.3 | floor 128.5 | top 129.8
+  1 whole 132.5 | party 134.7 | boss 128.8 | floor 128.8 | top 129.5
+  2 whole 132.1 | party 134.2 | boss 128.4 | floor 128.9 | top 129.6
+  3 whole 132.0 | party 133.9 | boss 128.7 | floor 129.0 | top 129.7
+  4 whole 131.6 | party 133.4 | boss 128.3 | floor 129.0 | top 129.8

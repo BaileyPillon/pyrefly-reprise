@@ -1,0 +1,254 @@
+{
+ "chapter": "gear",
+ "door": "gear",
+ "game": "ffx2",
+ "base": "https://echoesofspira.com/",
+ "seed": 1,
+ "startedAt": "2026-11-07T18:01:22.199Z",
+ "stateWrites": [],
+ "decisions": [
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "paine",
+   "why": "advisor card: Power Break -> Valefor",
+   "did": true,
+   "how": "path=Skill > Power Break; aim x2-valefor=true; ",
+   "cmd": {
+    "label": "Power Break",
+    "id": "x2-warrior-power-break",
+    "kind": "ability"
+   },
+   "ticks": 148,
+   "turn": 1,
+   "ms": 284477,
+   "rowsBefore": null,
+   "events": [
+    "x2-valefor:x2-valefor-attack->rikku",
+    "paine:x2-warrior-power-break->x2-valefor"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "advisor card: Protect -> the party",
+   "did": true,
+   "how": "path=White Magic > Protect; ",
+   "cmd": {
+    "label": "Protect",
+    "id": "x2-white-mage-protect",
+    "kind": "ability"
+   },
+   "ticks": 170,
+   "turn": 2,
+   "ms": 287611,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-white-mage-protect->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "rikku",
+   "why": "advisor card: Darkness -> all enemies",
+   "did": true,
+   "how": "path=Skill > Darkness; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 175,
+   "turn": 3,
+   "ms": 290591,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-dark-knight-darkness->x2-valefor",
+    "x2-valefor:x2-valefor-attack->yuna",
+    "  dmg yuna 301"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yuna",
+   "why": "advisor card: Shell -> the party",
+   "did": true,
+   "how": "path=White Magic > Shell; ",
+   "cmd": {
+    "label": "Shell",
+    "id": "x2-white-mage-shell",
+    "kind": "ability"
+   },
+   "ticks": 385,
+   "turn": 6,
+   "ms": 298425,
+   "rowsBefore": null,
+   "events": [
+    "  boss takes 284",
+    "  dmg rikku 229",
+    "  boss takes 542",
+    "x2-valefor:x2-valefor-sonic-wings->yuna",
+    "yuna:x2-white-mage-shell->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "paine",
+   "why": "advisor card: Armor Break -> Valefor",
+   "did": true,
+   "how": "path=Skill > Armor Break; aim x2-valefor=true; ",
+   "cmd": {
+    "label": "Armor Break",
+    "id": "x2-warrior-armor-break",
+    "kind": "ability"
+   },
+   "ticks": 387,
+   "turn": 7,
+   "ms": 301524,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-warrior-armor-break->x2-valefor"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "rikku",
+   "why": "advisor card: Darkness -> all enemies",
+   "did": true,
+   "how": "path=Skill > Darkness; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 402,
+   "turn": 8,
+   "ms": 304474,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-dark-knight-darkness->x2-valefor"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "yuna",
+   "why": "advisor card: Cura -> Yuna",
+   "did": true,
+   "how": "path=White Magic > Cura; aim yuna=true; ",
+   "cmd": {
+    "label": "Cura",
+    "id": "x2-white-mage-cura",
+    "kind": "ability"
+   },
+   "ticks": 581,
+   "turn": 9,
+   "ms": 314824,
+   "rowsBefore": null,
+   "events": [
+    "  dmg rikku 229",
+    "  boss takes 343",
+    "yuna:x2-white-mage-cura->yuna"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "paine",
+   "why": "advisor card: Armor Break -> Valefor",
+   "did": true,
+   "how": "path=Skill > Armor Break; aim x2-valefor=true; ",
+   "cmd": {
+    "label": "Armor Break",
+    "id": "x2-warrior-armor-break",
+    "kind": "ability"
+   },
+   "ticks": 611,
+   "turn": 10,
+   "ms": 319008,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-warrior-armor-break->x2-valefor"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "rikku",
+   "why": "advisor card: Darkness -> all enemies",
+   "did": true,
+   "how": "path=Skill > Darkness; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 624,
+   "turn": 11,
+   "ms": 321964,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-dark-knight-darkness->x2-valefor",
+    "x2-valefor:x2-valefor-energy-ray->"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 1,
+   "actor": "yuna",
+   "why": "advisor card: Cura -> Rikku",
+   "did": true,
+   "how": "path=White Magic > Cura; aim rikku=true; ",
+   "cmd": {
+    "label": "Cura",
+    "id": "x2-white-mage-cura",
+    "kind": "ability"
+   },
+   "ticks": 779,
+   "turn": 13,
+   "ms": 338143,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 79",
+    "  dmg rikku 114",
+    "  dmg paine 183",
+    "  dmg rikku 229",
+    "  boss takes 357",
+    "  boss takes 414",
+    "yuna:x2-white-mage-cura->rikku"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "n": 1,
+   "key": "x2-valefor#1",
+   "foes": [
+    "x2-valefor"
+   ],
+   "seed": 1,
+   "ms": 281793,
+   "ticks": 148
+  }
+ ],
+ "attempts": [],
+ "mechanics": [],
+ "screens": [],
+ "speed": "normal",
+ "live": {
+  "version": "0.1.0",
+  "scripts": [
+   "index-jYm-0mrJ.js"
+  ]
+ },
+ "battleSeed": 1,
+ "consoleErrors": [],
+ "notFound": [],
+ "errors": [],
+ "minutes": 5.73
+}

@@ -1,0 +1,200 @@
+[
+ {
+  "file": "sweep-battle-seymour-flux/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 20050,
+  "state": "battle command menu seymour-flux 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T20:58:00.152Z"
+ },
+ {
+  "file": "sweep-battle-yunalesca/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "yunalesca",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 9501,
+  "state": "battle command menu yunalesca 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T20:59:29.183Z"
+ },
+ {
+  "file": "sweep-battle-braskas-final-aeon/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 9909,
+  "state": "battle command menu braskas-final-aeon 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T21:00:31.283Z"
+ },
+ {
+  "file": "sweep-battle-ffx2-bahamut/01-battle-menu.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13918,
+  "state": "battle command menu ffx2-bahamut 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T21:01:29.363Z"
+ },
+ {
+  "file": "sweep-battle-ffx2-vegnagun-shuyin/01-battle-menu.png",
+  "game": "ffx2",
+  "chapter": "ffx2-vegnagun-shuyin",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 10702,
+  "state": "battle command menu ffx2-vegnagun-shuyin 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T21:02:41.535Z"
+ },
+ {
+  "file": "sweep-battle-ffx2-leblanc/01-battle-menu.png",
+  "game": "ffx2",
+  "chapter": "ffx2-leblanc",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 10747,
+  "state": "battle command menu ffx2-leblanc 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T21:04:06.863Z"
+ },
+ {
+  "file": "sweep-battle-seymour-anima-macalania/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "seymour-anima-macalania",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13970,
+  "state": "battle command menu seymour-anima-macalania 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T21:05:42.387Z"
+ },
+ {
+  "file": "sweep-battle-evrae-airship/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "evrae-airship",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 8350,
+  "state": "battle command menu evrae-airship 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T21:07:02.239Z"
+ },
+ {
+  "file": "sweep-battle-yojimbo-cavern/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "yojimbo-cavern",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 11969,
+  "state": "battle command menu yojimbo-cavern 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T21:08:07.934Z"
+ }
+]

@@ -1,0 +1,159 @@
+{
+ "tag": "braska",
+ "chapter": "braskas-final-aeon",
+ "size": "1600x900",
+ "base": "https://echoesofspira.com/",
+ "startedAt": "2026-11-07T20:07:06.549Z",
+ "setupAids": [
+  "window.__pyrefly.setSeed(1) before the first key",
+  "window.__pyrefly.autoBattle('intended') + setBattleSpeed('fast') between first menus, switched off with presenter.setAutoPlay(null) when a link begins"
+ ],
+ "links": [
+  {
+   "link": 1,
+   "chainLength": 7,
+   "label": "link 1 first menu",
+   "ribbon": "Braska's Final Aeon",
+   "bossNames": [],
+   "hudF1": true,
+   "strip": {
+    "opacity": 1,
+    "visible": true,
+    "text": "EnterSelectGIntelQDefendPPause",
+    "box": [
+     66,
+     841,
+     484,
+     41
+    ]
+   },
+   "stripAt2": {
+    "opacity": 1,
+    "visible": true,
+    "text": "EnterSelectGIntelQDefendPPause",
+    "box": [
+     66,
+     841,
+     484,
+     41
+    ]
+   },
+   "f1OverOnHudRoot": false,
+   "f1OverAnywhere": false,
+   "rootClass": "ffxhud ig hud-f1 f1-finish f1-cmd-open",
+   "awaitingMenu": true,
+   "residue": {
+    "slab": {
+     "n": 0,
+     "vis": 0
+    },
+    "banner": {
+     "n": 1,
+     "vis": 0
+    },
+    "mbar": {
+     "n": 0,
+     "vis": 0
+    },
+    "intent": {
+     "n": 1,
+     "vis": 0
+    },
+    "guide": {
+     "n": 0,
+     "vis": 0
+    },
+    "ffxTarget": {
+     "n": 1,
+     "vis": 1
+    },
+    "ffx2Plates": {
+     "n": 0,
+     "vis": 0
+    },
+    "dataTarget": {
+     "n": 0,
+     "vis": 0
+    },
+    "bstart": {
+     "n": 0,
+     "vis": 0
+    },
+    "cutin": {
+     "n": 0,
+     "vis": 0
+    },
+    "defeatBtns": {
+     "n": 0,
+     "vis": 0
+    },
+    "resultsBtns": {
+     "n": 0,
+     "vis": 0
+    },
+    "f1Cue": {
+     "n": 1,
+     "vis": 1
+    },
+    "f1Hero": {
+     "n": 1,
+     "vis": 1
+    },
+    "cmdStack": {
+     "n": 3,
+     "vis": 1
+    },
+    "cmdRows": {
+     "n": 5,
+     "vis": 5
+    }
+   },
+   "tSec": 3,
+   "stripVisible": true,
+   "pass": true,
+   "leftoverOverlays": [
+    "f1Cue:1",
+    "f1Hero:1"
+   ],
+   "shot": "braska/link01-first-menu.png"
+  }
+ ],
+ "steps": [
+  {
+   "at": "20:08:06",
+   "k": "booted",
+   "v": {
+    "bundle": "https://echoesofspira.com/assets/index-jYm-0mrJ.js",
+    "ms": 11619
+   }
+  },
+  {
+   "at": "20:08:10",
+   "k": "link 1/7 first menu: strip={\"o\":1,\"vis\":true,\"t\":\"EnterSelectGIntelQDefendPPause\"} f1-over(root)=false anywhere=false leftovers=f1Cue:1,f1Hero:1 => PASS",
+   "v": ""
+  },
+  {
+   "at": "20:12:12",
+   "k": "no further link inside the window",
+   "v": {
+    "from": 1
+   }
+  }
+ ],
+ "seed": 1,
+ "bundle": "https://echoesofspira.com/assets/index-jYm-0mrJ.js",
+ "watch": [],
+ "finishedAt": "2026-11-07T20:12:12.397Z",
+ "chainLengthSeen": 7,
+ "summary": {
+  "linksRead": 1,
+  "chainLength": 7,
+  "perLink": [
+   "1:PASS"
+  ],
+  "failedLinks": [],
+  "ended": null
+ },
+ "consoleErrors": [],
+ "notFound": []
+}

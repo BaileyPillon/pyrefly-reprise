@@ -1,0 +1,402 @@
+{
+ "284": [
+  {
+   "i": 280,
+   "rel": -4,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 2.01,
+    "errNoShift": 2.01
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 1.25,
+    "errNoShift": 1.25
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 3.24,
+    "errNoShift": 3.24
+   }
+  },
+  {
+   "i": 281,
+   "rel": -3,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 2.14,
+    "errNoShift": 2.14
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 1.35,
+    "errNoShift": 1.35
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 3.43,
+    "errNoShift": 3.43
+   }
+  },
+  {
+   "i": 282,
+   "rel": -2,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 2.29,
+    "errNoShift": 2.29
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 1.41,
+    "errNoShift": 1.41
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 3.7,
+    "errNoShift": 3.7
+   }
+  },
+  {
+   "i": 283,
+   "rel": -1,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 2.33,
+    "errNoShift": 2.33
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 1.58,
+    "errNoShift": 1.58
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 3.67,
+    "errNoShift": 3.67
+   }
+  },
+  {
+   "i": 284,
+   "rel": 0,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 11.73,
+    "errNoShift": 11.73
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 28.2,
+    "errNoShift": 28.2
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 4.06,
+    "errNoShift": 4.06
+   }
+  },
+  {
+   "i": 285,
+   "rel": 1,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 2.45,
+    "errNoShift": 2.45
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 1.68,
+    "errNoShift": 1.68
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 3.83,
+    "errNoShift": 3.83
+   }
+  },
+  {
+   "i": 286,
+   "rel": 2,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 2.39,
+    "errNoShift": 2.39
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 1.42,
+    "errNoShift": 1.42
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 3.89,
+    "errNoShift": 3.89
+   }
+  },
+  {
+   "i": 287,
+   "rel": 3,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 2.49,
+    "errNoShift": 2.49
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 1.55,
+    "errNoShift": 1.55
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 4.02,
+    "errNoShift": 4.02
+   }
+  },
+  {
+   "i": 288,
+   "rel": 4,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 2.49,
+    "errNoShift": 2.49
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 1.46,
+    "errNoShift": 1.46
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 4.05,
+    "errNoShift": 4.05
+   }
+  }
+ ],
+ "1037": [
+  {
+   "i": 1033,
+   "rel": -4,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 8.16,
+    "errNoShift": 8.16
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 5.86,
+    "errNoShift": 5.86
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 12.18,
+    "errNoShift": 12.18
+   }
+  },
+  {
+   "i": 1034,
+   "rel": -3,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 8.34,
+    "errNoShift": 8.34
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 4.88,
+    "errNoShift": 4.88
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 13.34,
+    "errNoShift": 13.34
+   }
+  },
+  {
+   "i": 1035,
+   "rel": -2,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 8.18,
+    "errNoShift": 8.18
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 3.96,
+    "errNoShift": 3.96
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 13.82,
+    "errNoShift": 13.82
+   }
+  },
+  {
+   "i": 1036,
+   "rel": -1,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 7.83,
+    "errNoShift": 7.83
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 3.19,
+    "errNoShift": 3.19
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 13.75,
+    "errNoShift": 13.75
+   }
+  },
+  {
+   "i": 1037,
+   "rel": 0,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 28.55,
+    "errNoShift": 28.55
+   },
+   "party": {
+    "dxPx1600": -8,
+    "dyPx1600": 0,
+    "err": 33.7,
+    "errNoShift": 36.81
+   },
+   "boss": {
+    "dxPx1600": 8,
+    "dyPx1600": 0,
+    "err": 22.6,
+    "errNoShift": 25.62
+   }
+  },
+  {
+   "i": 1038,
+   "rel": 1,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 7.75,
+    "errNoShift": 7.75
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 3,
+    "errNoShift": 3
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 13.6,
+    "errNoShift": 13.6
+   }
+  },
+  {
+   "i": 1039,
+   "rel": 2,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 7.43,
+    "errNoShift": 7.43
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 2.78,
+    "errNoShift": 2.78
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 13.12,
+    "errNoShift": 13.12
+   }
+  },
+  {
+   "i": 1040,
+   "rel": 3,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 6.92,
+    "errNoShift": 6.92
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 2.37,
+    "errNoShift": 2.37
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 12.31,
+    "errNoShift": 12.31
+   }
+  },
+  {
+   "i": 1041,
+   "rel": 4,
+   "whole": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 6.66,
+    "errNoShift": 6.66
+   },
+   "party": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 2.29,
+    "errNoShift": 2.29
+   },
+   "boss": {
+    "dxPx1600": 0,
+    "dyPx1600": 0,
+    "err": 11.79,
+    "errNoShift": 11.79
+   }
+  }
+ ]
+}

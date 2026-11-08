@@ -1,0 +1,249 @@
+{
+ "notes": [
+  {
+   "ms": 71578,
+   "k": "live",
+   "v": {
+    "version": "0.1.0",
+    "scripts": [
+     "index-jYm-0mrJ.js"
+    ]
+   }
+  },
+  {
+   "ms": 77749,
+   "k": "door",
+   "v": {
+    "word": "drillshot",
+    "typed": "drillshot"
+   }
+  },
+  {
+   "ms": 79951,
+   "k": "afterDoor",
+   "v": "party-prep"
+  },
+  {
+   "ms": 88078,
+   "k": "preSceneHolds",
+   "v": 1
+  },
+  {
+   "ms": 90252,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1,
+    "boss": [
+     "x2-georapella"
+    ]
+   }
+  },
+  {
+   "ms": 680258,
+   "k": "fight-over",
+   "v": {
+    "attempt": 1,
+    "over": "left:cutscene",
+    "decisions": 76,
+    "ms": 680258
+   }
+  },
+  {
+   "ms": 701174,
+   "k": "afterFight",
+   "v": {
+    "label": "a1",
+    "screens": [
+     "cutscene",
+     "results",
+     "cutscene",
+     "chapter-select"
+    ],
+    "outcome": "victory",
+    "next": "board"
+   }
+  },
+  {
+   "ms": 701175,
+   "k": "RESULT",
+   "v": "WON: three acts by real keys (no state write)"
+  }
+ ],
+ "shots": [
+  {
+   "file": "00-title.png",
+   "why": "title, fresh profile",
+   "ms": 72941,
+   "screen": "title"
+  },
+  {
+   "file": "01-party-prep.png",
+   "why": "party prep opened by the word (no card)",
+   "ms": 80059,
+   "screen": "party-prep"
+  },
+  {
+   "file": "02-pre-scene.png",
+   "why": "pre-battle scene, first line",
+   "ms": 84060,
+   "screen": "cutscene"
+  },
+  {
+   "file": "m-x2-georapella-x2-georapella-blizzaga.jpg",
+   "why": "x2-georapella starts x2-georapella-blizzaga",
+   "ms": 90813,
+   "screen": "battle"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-georapella)",
+   "ms": 91190,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-georapella-x2-georapella-thundaga.jpg",
+   "why": "x2-georapella starts x2-georapella-thundaga",
+   "ms": 103215,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-georapella-x2-georapella-waterga.jpg",
+   "why": "x2-georapella starts x2-georapella-waterga",
+   "ms": 123841,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-georapella-x2-georapella-firaga.jpg",
+   "why": "x2-georapella starts x2-georapella-firaga",
+   "ms": 145913,
+   "screen": "battle"
+  },
+  {
+   "file": "mid-025.jpg",
+   "why": "mid-fight, decision 25",
+   "ms": 268625,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-precepts-guard-x2-precepts-guard-demi.jpg",
+   "why": "x2-precepts-guard starts x2-precepts-guard-demi",
+   "ms": 300075,
+   "screen": "battle"
+  },
+  {
+   "file": "link02-first-menu.png",
+   "why": "link 2: first command menu (x2-precepts-guard)",
+   "ms": 302755,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-precepts-guard-x2-precepts-guard-slow.jpg",
+   "why": "x2-precepts-guard starts x2-precepts-guard-slow",
+   "ms": 317142,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-precepts-guard-x2-precepts-guard-osmose.jpg",
+   "why": "x2-precepts-guard starts x2-precepts-guard-osmose",
+   "ms": 351820,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-precepts-guard-x2-precepts-guard-bio.jpg",
+   "why": "x2-precepts-guard starts x2-precepts-guard-bio",
+   "ms": 411489,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-precepts-guard-x2-precepts-guard-drain.jpg",
+   "why": "x2-precepts-guard starts x2-precepts-guard-drain",
+   "ms": 426604,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-baralai-x2-baralai-attack.jpg",
+   "why": "x2-baralai starts x2-baralai-attack",
+   "ms": 494472,
+   "screen": "battle"
+  },
+  {
+   "file": "link03-first-menu.png",
+   "why": "link 3: first command menu (x2-baralai)",
+   "ms": 495925,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-baralai-x2-baralai-glint.jpg",
+   "why": "x2-baralai starts x2-baralai-glint",
+   "ms": 505602,
+   "screen": "battle"
+  },
+  {
+   "file": "mid-050.jpg",
+   "why": "mid-fight, decision 50",
+   "ms": 506101,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-baralai-x2-baralai-chain-attack.jpg",
+   "why": "x2-baralai starts x2-baralai-chain-attack",
+   "ms": 515651,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-baralai-x2-baralai-looming-glacier.jpg",
+   "why": "x2-baralai starts x2-baralai-looming-glacier",
+   "ms": 527068,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-baralai-x2-baralai-demi.jpg",
+   "why": "x2-baralai starts x2-baralai-demi",
+   "ms": 541743,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-baralai-x2-baralai-drill-shot.jpg",
+   "why": "x2-baralai starts x2-baralai-drill-shot",
+   "ms": 591966,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-baralai-x2-baralai-absorb.jpg",
+   "why": "x2-baralai starts x2-baralai-absorb",
+   "ms": 606033,
+   "screen": "battle"
+  },
+  {
+   "file": "mid-075.jpg",
+   "why": "mid-fight, decision 75",
+   "ms": 675244,
+   "screen": "battle"
+  },
+  {
+   "file": "a1-scene-1.jpg",
+   "why": "a scene after the fight (a1)",
+   "ms": 681528,
+   "screen": "results"
+  },
+  {
+   "file": "a1-results-victory.png",
+   "why": "the results screen (victory)",
+   "ms": 684227,
+   "screen": "results"
+  },
+  {
+   "file": "a1-scene-3.jpg",
+   "why": "a scene after the fight (a1)",
+   "ms": 687980,
+   "screen": "cutscene"
+  },
+  {
+   "file": "a1-board.png",
+   "why": "the chapter-select board after the chapter",
+   "ms": 701172,
+   "screen": "chapter-select"
+  }
+ ]
+}

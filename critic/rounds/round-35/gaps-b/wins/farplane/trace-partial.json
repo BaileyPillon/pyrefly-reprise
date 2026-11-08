@@ -1,0 +1,2363 @@
+{
+ "chapter": "farplane",
+ "door": "duelist",
+ "game": "ffx2",
+ "base": "https://echoesofspira.com/",
+ "seed": 1,
+ "startedAt": "2026-11-07T16:23:50.133Z",
+ "stateWrites": [
+  {
+   "at": 407365,
+   "what": "FALLBACK after 0 real defeats in duel auron: its HP set to 3,000 at the first menu, so one real blow ends it (duel 1: PR-0636, the sourced Eject immunity is not applied; a first try at 15,000 lost because Auron heals under an eighth of his HP)",
+   "result": {
+    "id": "x2-cup-auron",
+    "was": 187500,
+    "now": 3000
+   }
+  },
+  {
+   "at": 603017,
+   "what": "FALLBACK after 1 real defeats in duel tidus: its HP set to 3,000 at the first menu, so one real blow ends it (duel 1: PR-0636, the sourced Eject immunity is not applied; a first try at 15,000 lost because Auron heals under an eighth of his HP)",
+   "result": {
+    "id": "x2-cup-tidus",
+    "was": 136200,
+    "now": 3000
+   }
+  },
+  {
+   "at": 1005821,
+   "what": "FALLBACK after 3 real defeats in duel seymour: its HP set to 3,000 at the first menu, so one real blow ends it (duel 1: PR-0636, the sourced Eject immunity is not applied; a first try at 15,000 lost because Auron heals under an eighth of his HP)",
+   "result": {
+    "id": "x2-cup-seymour",
+    "was": 145500,
+    "now": 3000
+   }
+  }
+ ],
+ "decisions": [
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain -> NOT TAKEN, Attack -> Potion",
+   "did": true,
+   "how": "path=Item > Potion; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 67,
+   "turn": 1,
+   "ms": 435539,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-dragon-fang->",
+    "  dmg yuna 1617",
+    "  dmg rikku 2963",
+    "  dmg paine 1630",
+    "x2-cup-auron:x2-auron-x-potion->x2-cup-auron",
+    "  boss takes -9999",
+    "paine:attack->x2-cup-auron",
+    "  boss takes 2842",
+    "x2-cup-auron:x2-auron-mega-potion->",
+    "  boss takes -2000",
+    "rikku:x2-alchemist-stash-potion->yuna"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 407,
+   "turn": 5,
+   "ms": 439631,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 450,
+   "turn": 6,
+   "ms": 443894,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-auron",
+    "x2-cup-auron:x2-auron-mega-potion->"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 147,
+   "turn": 1,
+   "ms": 485606,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-blitz-ace->yuna",
+    "  dmg yuna 1133",
+    "  dmg yuna 1521",
+    "  dmg yuna 1642",
+    "  dmg yuna 1560",
+    "  dmg yuna 1819",
+    "  dmg yuna 1704",
+    "  dmg yuna 1762",
+    "  KO yuna (by x2-tidus-blitz-ace)",
+    "rikku:x2-item-light-curtain->rikku+paine"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 175,
+   "turn": 2,
+   "ms": 489244,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus",
+    "x2-cup-tidus:x2-tidus-hastega->"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 387,
+   "turn": 5,
+   "ms": 499402,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6365",
+    "x2-cup-tidus:x2-tidus-delay-buster->rikku",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 389,
+   "turn": 6,
+   "ms": 504856,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-item-lunar-curtain->rikku+paine",
+    "  dmg rikku 1855"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 607,
+   "turn": 8,
+   "ms": 515052,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6290",
+    "x2-cup-tidus:x2-tidus-attack->paine",
+    "  dmg paine 907",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Phoenix Down on yuna",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim yuna=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 722,
+   "turn": 10,
+   "ms": 523058,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->paine",
+    "  dmg paine 836",
+    "rikku:x2-alchemist-stash-phoenix-down->yuna"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 842,
+   "turn": 12,
+   "ms": 532171,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-spiral-cut->rikku",
+    "  dmg paine 1338",
+    "  boss takes 6389",
+    "  dmg rikku 3151",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 10,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Potion on rikku",
+   "did": true,
+   "how": "path=Item > Potion; aim rikku=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 998,
+   "turn": 14,
+   "ms": 542767,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-hastega->",
+    "  revive yuna",
+    "  dmg paine 1338",
+    "  boss takes 6539",
+    "rikku:x2-alchemist-stash-potion->rikku"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1058,
+   "turn": 16,
+   "ms": 548793,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->yuna",
+    "  dmg yuna 1820",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 2,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1110,
+   "turn": 18,
+   "ms": 552694,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-spiral-cut->paine",
+    "yuna:attack->x2-cup-tidus",
+    "  boss takes 3728"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Potion on rikku",
+   "did": true,
+   "how": "path=Item > Potion; aim rikku=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 1259,
+   "turn": 19,
+   "ms": 563826,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1612",
+    "  dmg paine 1338",
+    "  boss takes 9156",
+    "x2-cup-tidus:x2-tidus-delay-buster->yuna",
+    "rikku:x2-alchemist-stash-potion->rikku"
+   ]
+  },
+  {
+   "n": 14,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1288,
+   "turn": 21,
+   "ms": 567971,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-cup-tidus",
+    "  boss takes 1829"
+   ]
+  },
+  {
+   "n": 15,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1529,
+   "turn": 23,
+   "ms": 581267,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1912",
+    "  KO yuna (by null)",
+    "x2-cup-tidus:x2-tidus-blitz-ace->rikku",
+    "  dmg rikku 938",
+    "  KO rikku (by x2-tidus-blitz-ace)",
+    "paine:attack->x2-cup-tidus",
+    "  boss takes 3586"
+   ]
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 128,
+   "turn": 1,
+   "ms": 606549,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-blitz-ace->yuna",
+    "  dmg yuna 1079",
+    "  dmg yuna 1479",
+    "  dmg yuna 1549",
+    "  dmg yuna 1601",
+    "  dmg yuna 1672",
+    "  dmg yuna 1793",
+    "  dmg yuna 1734",
+    "  KO yuna (by x2-tidus-blitz-ace)",
+    "rikku:x2-item-light-curtain->rikku+paine"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 172,
+   "turn": 2,
+   "ms": 610125,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus",
+    "x2-cup-tidus:x2-tidus-hastega->"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 125,
+   "turn": 1,
+   "ms": 642855,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-slowga->",
+    "rikku:x2-item-light-curtain->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 2,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 175,
+   "turn": 2,
+   "ms": 646518,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 181,
+   "turn": 3,
+   "ms": 650636,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 367,
+   "turn": 5,
+   "ms": 661849,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-slowga->",
+    "  dmg yuna 1338",
+    "  boss takes 6091",
+    "  dmg paine 1338",
+    "  boss takes 9264",
+    "rikku:x2-item-lunar-curtain->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 2,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 388,
+   "turn": 6,
+   "ms": 665674,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 397,
+   "turn": 7,
+   "ms": 669778,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 2,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 595,
+   "turn": 9,
+   "ms": 685768,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-black-sky->",
+    "  dmg yuna 1338",
+    "  boss takes 6514",
+    "  dmg paine 1338",
+    "  boss takes 9481",
+    "  dmg yuna 205",
+    "  dmg rikku 371",
+    "  dmg paine 219",
+    "  dmg yuna 293",
+    "  dmg rikku 540",
+    "  dmg paine 290",
+    "  dmg yuna 304",
+    "  dmg rikku 574",
+    "  dmg yuna 316"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 610,
+   "turn": 10,
+   "ms": 690465,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 10,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Rikku attacks",
+   "did": true,
+   "how": "path=top; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 615,
+   "turn": 11,
+   "ms": 693605,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->x2-cup-seymour",
+    "  boss takes 3874"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Rikku attacks",
+   "did": true,
+   "how": "path=top; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 807,
+   "turn": 13,
+   "ms": 706670,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-shell->x2-cup-seymour",
+    "  dmg yuna 1338",
+    "  boss takes 6414",
+    "  dmg paine 1338",
+    "  boss takes 9516",
+    "rikku:attack->x2-cup-seymour",
+    "  boss takes 3496"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 2,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 808,
+   "turn": 14,
+   "ms": 709759,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 823,
+   "turn": 15,
+   "ms": 714280,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 14,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Potion on yuna",
+   "did": true,
+   "how": "path=Item > Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 1013,
+   "turn": 17,
+   "ms": 729120,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-demi->",
+    "  dmg yuna 1338",
+    "  boss takes 6588",
+    "  dmg paine 1338",
+    "  boss takes 9768",
+    "  dmg yuna 530",
+    "  dmg rikku 374",
+    "  dmg paine 606",
+    "rikku:x2-alchemist-stash-potion->yuna"
+   ]
+  },
+  {
+   "n": 15,
+   "link": 2,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1020,
+   "turn": 18,
+   "ms": 733339,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 16,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1031,
+   "turn": 19,
+   "ms": 737929,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 17,
+   "link": 2,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1233,
+   "turn": 22,
+   "ms": 749677,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-dispel->",
+    "  dmg yuna 1338",
+    "  boss takes 6414",
+    "  dmg paine 1338",
+    "  boss takes 8652",
+    "x2-cup-seymour:x2-seymour-drain-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 18,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1249,
+   "turn": 23,
+   "ms": 753918,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 19,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Potion on yuna",
+   "did": true,
+   "how": "path=Item > Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 1269,
+   "turn": 24,
+   "ms": 758188,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-alchemist-stash-potion->yuna",
+    "x2-cup-seymour:x2-seymour-demi->"
+   ]
+  },
+  {
+   "n": 20,
+   "link": 2,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-seymour",
+   "did": true,
+   "how": "path=top; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1461,
+   "turn": 27,
+   "ms": 767825,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 643",
+    "  dmg rikku 656",
+    "  dmg paine 726",
+    "  dmg yuna 1338",
+    "  boss takes 6389",
+    "  dmg paine 1338",
+    "  boss takes 9372",
+    "x2-cup-seymour:x2-seymour-demi->",
+    "yuna:attack->x2-cup-seymour",
+    "  boss takes 6088"
+   ]
+  },
+  {
+   "n": 21,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-seymour",
+   "did": true,
+   "how": "path=top; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1482,
+   "turn": 28,
+   "ms": 771745,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-cup-seymour",
+    "  boss takes 8862"
+   ]
+  },
+  {
+   "n": 22,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Potion on yuna",
+   "did": true,
+   "how": "path=Item > Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 1555,
+   "turn": 29,
+   "ms": 777064,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 197",
+    "  dmg rikku 492",
+    "  dmg paine 210",
+    "rikku:x2-alchemist-stash-potion->yuna"
+   ]
+  },
+  {
+   "n": 23,
+   "link": 2,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-seymour",
+   "did": true,
+   "how": "path=top; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1708,
+   "turn": 32,
+   "ms": 781545,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-magic-up->x2-cup-seymour",
+    "x2-cup-seymour:x2-seymour-drain-attack->rikku",
+    "yuna:attack->x2-cup-seymour",
+    "  boss takes 6632"
+   ]
+  },
+  {
+   "n": 24,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-seymour",
+   "did": true,
+   "how": "path=top; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1725,
+   "turn": 33,
+   "ms": 784471,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-cup-seymour",
+    "  boss takes 8969"
+   ]
+  },
+  {
+   "n": 25,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Potion on paine",
+   "did": true,
+   "how": "path=Item > Potion; aim paine=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 1818,
+   "turn": 35,
+   "ms": 791019,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-drain-attack->yuna",
+    "rikku:x2-alchemist-stash-potion->paine",
+    "x2-cup-seymour:x2-seymour-ultima->"
+   ]
+  },
+  {
+   "n": 26,
+   "link": 2,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-seymour",
+   "did": true,
+   "how": "path=top; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1952,
+   "turn": 37,
+   "ms": 794885,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->x2-cup-seymour",
+    "  boss takes 5964"
+   ]
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 143,
+   "turn": 2,
+   "ms": 820429,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-critical-attack->rikku",
+    "  dmg rikku 4124",
+    "x2-cup-seymour:x2-seymour-magic-up->x2-cup-seymour",
+    "rikku:x2-item-light-curtain->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 175,
+   "turn": 3,
+   "ms": 824093,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 181,
+   "turn": 4,
+   "ms": 828238,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 374,
+   "turn": 7,
+   "ms": 842038,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-magic-up->x2-cup-seymour",
+    "  dmg yuna 1338",
+    "  boss takes 6066",
+    "  dmg paine 1338",
+    "  boss takes 9588",
+    "x2-cup-seymour:x2-seymour-slowga->",
+    "rikku:x2-item-lunar-curtain->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 393,
+   "turn": 8,
+   "ms": 845802,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 395,
+   "turn": 9,
+   "ms": 849901,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on rikku",
+   "did": true,
+   "how": "path=Item > Potion; aim rikku=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 603,
+   "turn": 11,
+   "ms": 864984,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6315",
+    "  dmg paine 1338",
+    "  boss takes 9264",
+    "x2-cup-seymour:x2-seymour-dispel->",
+    "rikku:x2-alchemist-stash-potion->rikku"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 612,
+   "turn": 12,
+   "ms": 869124,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 621,
+   "turn": 13,
+   "ms": 873363,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-seymour",
+    "x2-cup-seymour:x2-seymour-shell->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 825,
+   "turn": 15,
+   "ms": 881279,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6737",
+    "  dmg paine 1338",
+    "  boss takes 9048",
+    "yuna:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 10,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 831,
+   "turn": 16,
+   "ms": 885278,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1040,
+   "turn": 19,
+   "ms": 895648,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-critical-attack->rikku",
+    "  dmg rikku 4206",
+    "  KO rikku (by x2-seymour-critical-attack)",
+    "  dmg yuna 1338",
+    "  boss takes 6414",
+    "  dmg paine 1338",
+    "  boss takes 9733",
+    "x2-cup-seymour:x2-seymour-slowga->",
+    "yuna:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1045,
+   "turn": 20,
+   "ms": 899740,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1254,
+   "turn": 21,
+   "ms": 906399,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 5967",
+    "  dmg paine 1338",
+    "  boss takes 9264",
+    "yuna:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 14,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1262,
+   "turn": 23,
+   "ms": 910627,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-curaga->x2-cup-seymour",
+    "paine:x2-dark-knight-darkness->x2-cup-seymour",
+    "  boss takes -2658"
+   ]
+  },
+  {
+   "n": 15,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1471,
+   "turn": 25,
+   "ms": 920307,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6688",
+    "  dmg paine 1338",
+    "  boss takes 8940",
+    "x2-cup-seymour:x2-seymour-absorb->paine",
+    "yuna:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 16,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1480,
+   "turn": 26,
+   "ms": 924474,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-seymour",
+    "  dmg paine 502"
+   ]
+  },
+  {
+   "n": 17,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1683,
+   "turn": 28,
+   "ms": 932149,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6514",
+    "  dmg paine 1338",
+    "  boss takes 9193",
+    "x2-cup-seymour:x2-seymour-protect->x2-cup-seymour",
+    "yuna:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 18,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-seymour",
+   "did": true,
+   "how": "path=top; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1708,
+   "turn": 29,
+   "ms": 935464,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-cup-seymour",
+    "  boss takes 6112"
+   ]
+  },
+  {
+   "n": 19,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-seymour",
+   "did": true,
+   "how": "path=top; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1893,
+   "turn": 31,
+   "ms": 942769,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 5992",
+    "x2-cup-seymour:x2-seymour-drain-attack->yuna",
+    "yuna:attack->x2-cup-seymour",
+    "  boss takes 3106"
+   ]
+  },
+  {
+   "n": 20,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-seymour",
+   "did": true,
+   "how": "path=top; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1953,
+   "turn": 32,
+   "ms": 946372,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-cup-seymour",
+    "  boss takes 4647"
+   ]
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain -> NOT TAKEN, Attack",
+   "did": true,
+   "how": "path=top; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 126,
+   "turn": 1,
+   "ms": 991105,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-meteor->",
+    "  dmg yuna 1418",
+    "  dmg rikku 1988",
+    "  dmg paine 1334",
+    "  dmg yuna 1950",
+    "  dmg rikku 2917",
+    "  dmg paine 2127",
+    "  dmg yuna 2085",
+    "  dmg rikku 2911",
+    "  KO rikku (by x2-seymour-meteor)",
+    "  dmg paine 2235",
+    "  dmg yuna 2197",
+    "  dmg yuna 2286",
+    "x2-cup-seymour:x2-seymour-dispel->"
+   ]
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 125,
+   "turn": 1,
+   "ms": 1009379,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-dispel->",
+    "rikku:x2-item-light-curtain->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 177,
+   "turn": 2,
+   "ms": 1013155,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-seymour:x2-seymour-drain-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-seymour",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-seymour=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 182,
+   "turn": 4,
+   "ms": 1017200,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-seymour"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "n": 1,
+   "key": "x2-cup-auron#1",
+   "foes": [
+    "x2-cup-auron"
+   ],
+   "seed": 1,
+   "ms": 406696,
+   "ticks": 67
+  },
+  {
+   "at": "after seam (decision 3)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 481120
+  },
+  {
+   "n": 2,
+   "key": "x2-cup-tidus#2",
+   "foes": [
+    "x2-cup-tidus"
+   ],
+   "seed": 2,
+   "ms": 481653,
+   "ticks": 147
+  },
+  {
+   "at": "after seam (decision 16)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 588072
+  },
+  {
+   "n": 1,
+   "key": "x2-cup-tidus#1002",
+   "foes": [
+    "x2-cup-tidus"
+   ],
+   "seed": 1002,
+   "ms": 602481,
+   "ticks": 128
+  },
+  {
+   "at": "after seam (decision 2)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 638851
+  },
+  {
+   "n": 2,
+   "key": "x2-cup-seymour#1003",
+   "foes": [
+    "x2-cup-seymour"
+   ],
+   "seed": 1003,
+   "ms": 638869,
+   "ticks": 125
+  },
+  {
+   "at": "after seam (decision 27)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 801687
+  },
+  {
+   "n": 1,
+   "key": "x2-cup-seymour#2003",
+   "foes": [
+    "x2-cup-seymour"
+   ],
+   "seed": 2003,
+   "ms": 816415,
+   "ticks": 143
+  },
+  {
+   "at": "after seam (decision 21)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 955500
+  },
+  {
+   "n": 1,
+   "key": "x2-cup-seymour#3003",
+   "foes": [
+    "x2-cup-seymour"
+   ],
+   "seed": 3003,
+   "ms": 969272,
+   "ticks": 126
+  },
+  {
+   "at": "after seam (decision 1)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 992667
+  },
+  {
+   "n": 1,
+   "key": "x2-cup-seymour#4003",
+   "foes": [
+    "x2-cup-seymour"
+   ],
+   "seed": 4003,
+   "ms": 1005361,
+   "ticks": 125
+  },
+  {
+   "at": "after seam (decision 3)",
+   "screenWas": "battle",
+   "next": "left:cutscene",
+   "ms": 1027545
+  }
+ ],
+ "attempts": [
+  {
+   "attempt": 1,
+   "over": "left:results",
+   "decisions": 16,
+   "ms": 588072,
+   "lastFoe": "x2-cup-tidus"
+  },
+  {
+   "attempt": 2,
+   "over": "left:results",
+   "decisions": 27,
+   "ms": 801687,
+   "lastFoe": "x2-cup-seymour"
+  },
+  {
+   "attempt": 3,
+   "over": "left:results",
+   "decisions": 21,
+   "ms": 955500,
+   "lastFoe": "x2-cup-seymour"
+  },
+  {
+   "attempt": 4,
+   "over": "left:results",
+   "decisions": 1,
+   "ms": 992667,
+   "lastFoe": "x2-cup-seymour"
+  },
+  {
+   "attempt": 5,
+   "over": "left:cutscene",
+   "decisions": 3,
+   "ms": 1027545,
+   "lastFoe": "x2-cup-seymour"
+  }
+ ],
+ "mechanics": [
+  {
+   "ms": 406686,
+   "seq": 3,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-dragon-fang",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 409786,
+   "seq": 24,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-x-potion",
+   "targets": [
+    "x2-cup-auron"
+   ],
+   "first": true
+  },
+  {
+   "ms": 428873,
+   "seq": 38,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-mega-potion",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 444548,
+   "seq": 55,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-mega-potion",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 473006,
+   "seq": 3,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "yuna"
+   ],
+   "first": true
+  },
+  {
+   "ms": 489896,
+   "seq": 34,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 495456,
+   "seq": 75,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "rikku"
+   ],
+   "first": true
+  },
+  {
+   "ms": 510557,
+   "seq": 141,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": true
+  },
+  {
+   "ms": 517175,
+   "seq": 178,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 524343,
+   "seq": 218,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "rikku"
+   ],
+   "first": true
+  },
+  {
+   "ms": 534445,
+   "seq": 287,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 544901,
+   "seq": 349,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 549859,
+   "seq": 378,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 561534,
+   "seq": 453,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 574958,
+   "seq": 529,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 584068,
+   "seq": 591,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 599619,
+   "seq": 3,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 610807,
+   "seq": 34,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 637740,
+   "seq": 3,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-slowga",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 652153,
+   "seq": 31,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-slowga",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 672304,
+   "seq": 110,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-black-sky",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 696766,
+   "seq": 256,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-shell",
+   "targets": [
+    "x2-cup-seymour"
+   ],
+   "first": true
+  },
+  {
+   "ms": 716618,
+   "seq": 371,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-demi",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 738955,
+   "seq": 476,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-dispel",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 746300,
+   "seq": 528,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-drain-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": true
+  },
+  {
+   "ms": 758783,
+   "seq": 550,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-demi",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 763888,
+   "seq": 586,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-demi",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 777964,
+   "seq": 633,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-magic-up",
+   "targets": [
+    "x2-cup-seymour"
+   ],
+   "first": true
+  },
+  {
+   "ms": 780233,
+   "seq": 648,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-drain-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 787309,
+   "seq": 678,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-drain-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 791704,
+   "seq": 692,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-ultima",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 813243,
+   "seq": 3,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-critical-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": true
+  },
+  {
+   "ms": 814186,
+   "seq": 11,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-magic-up",
+   "targets": [
+    "x2-cup-seymour"
+   ],
+   "first": false
+  },
+  {
+   "ms": 830142,
+   "seq": 37,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-magic-up",
+   "targets": [
+    "x2-cup-seymour"
+   ],
+   "first": false
+  },
+  {
+   "ms": 835902,
+   "seq": 79,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-slowga",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 859414,
+   "seq": 179,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-dispel",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 874044,
+   "seq": 217,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-shell",
+   "targets": [
+    "x2-cup-seymour"
+   ],
+   "first": false
+  },
+  {
+   "ms": 886193,
+   "seq": 252,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-critical-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 890749,
+   "seq": 282,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-slowga",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 908425,
+   "seq": 327,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-curaga",
+   "targets": [
+    "x2-cup-seymour"
+   ],
+   "first": true
+  },
+  {
+   "ms": 915591,
+   "seq": 360,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-absorb",
+   "targets": [
+    "paine"
+   ],
+   "first": true
+  },
+  {
+   "ms": 929914,
+   "seq": 406,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-protect",
+   "targets": [
+    "x2-cup-seymour"
+   ],
+   "first": true
+  },
+  {
+   "ms": 940125,
+   "seq": 451,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-drain-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 948426,
+   "seq": 494,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-ultima",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 966930,
+   "seq": 3,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-meteor",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 974888,
+   "seq": 40,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-dispel",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 981533,
+   "seq": 46,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-black-sky",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1004270,
+   "seq": 3,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-dispel",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1011027,
+   "seq": 14,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-drain-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1018840,
+   "seq": 37,
+   "actor": "x2-cup-seymour",
+   "ability": "x2-seymour-drain-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  }
+ ],
+ "screens": [
+  {
+   "label": "a1",
+   "screens": [
+    "results",
+    "battle"
+   ],
+   "results": {
+    "text": "THE FIEND ARENA — A STAND-IN STAGE · FELL RESULTS · 3:06 Defeat TURNS 25 ATTEMPTS 1 BEST — NEVER CLEARED Y Yuna DARK KNIGHT · CONFUSEPROOF 0/30 AP R Rikku ALCHEMIST · DISPEL TONIC 0/20 AP P Paine DARK KNIGHT · CONFUSEPROOF 0/30 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  },
+  {
+   "label": "a2",
+   "screens": [
+    "results",
+    "battle"
+   ],
+   "results": {
+    "text": "THE FIEND ARENA — A STAND-IN STAGE · FELL RESULTS · 6:36 Defeat TURNS 38 ATTEMPTS 2 BEST — NEVER CLEARED Y Yuna DARK KNIGHT · CONFUSEPROOF 0/30 AP R Rikku ALCHEMIST · DISPEL TONIC 0/20 AP P Paine DARK KNIGHT · CONFUSEPROOF 0/30 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  },
+  {
+   "label": "a3",
+   "screens": [
+    "results",
+    "battle"
+   ],
+   "results": {
+    "text": "THE FIEND ARENA — A STAND-IN STAGE · FELL RESULTS · 9:07 Defeat TURNS 34 ATTEMPTS 3 BEST — NEVER CLEARED Y Yuna DARK KNIGHT · CONFUSEPROOF 0/30 AP R Rikku ALCHEMIST · DISPEL TONIC 0/20 AP P Paine DARK KNIGHT · CONFUSEPROOF 0/30 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  },
+  {
+   "label": "a4",
+   "screens": [
+    "results",
+    "battle"
+   ],
+   "results": {
+    "text": "THE FIEND ARENA — A STAND-IN STAGE · FELL RESULTS · 9:41 Defeat TURNS 4 ATTEMPTS 4 BEST — NEVER CLEARED Y Yuna DARK KNIGHT · CONFUSEPROOF 0/30 AP R Rikku ALCHEMIST · DISPEL TONIC 0/20 AP P Paine DARK KNIGHT · CONFUSEPROOF 0/30 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  },
+  {
+   "label": "a5",
+   "screens": [
+    "cutscene",
+    "results",
+    "cutscene",
+    "chapter-select"
+   ],
+   "results": {
+    "text": "THE FIEND ARENA — A STAND-IN STAGE · CLEARED RESULTS · 10:13 Victory EXP 4,400 ×3 PARTY AP 3 PER DRESSPHERE GIL 2,650 ITEMS Mega Phoenix ×2, X-Potion ×2, Turbo Ether Y Yuna DARK KNIGHT · CONFUSEPROOF 3/30 AP +4,400EXP R Rikku ALCHEMIST · DISPEL TONIC 3/20 AP +4,400EXP P Paine DARK KNIGHT · CONFUSEPROOF 3/30 AP +4,400EXP CONFIRM ▸",
+    "outcome": "victory"
+   },
+   "outcome": "victory",
+   "scenes": [
+    {
+     "watch": {
+      "ms": 2,
+      "shows": 0,
+      "advancedWithoutInput": false,
+      "firstLine": null,
+      "screenAfterWatch": "results"
+     },
+     "taps": 0,
+     "holds": 0,
+     "ended": true,
+     "lines": []
+    },
+    {
+     "watch": {
+      "ms": 6072,
+      "shows": 2,
+      "advancedWithoutInput": true,
+      "firstLine": "On the board by the door, the hidden name finally prints: Tidus.",
+      "screenAfterWatch": "cutscene"
+     },
+     "taps": 6,
+     "holds": 0,
+     "ended": true,
+     "lines": [
+      "He fought like someone who was told to.",
+      "Then he was told well.",
+      "And the third one just left. Rude! No tip, no bow, nothing.",
+      "Three names on a door, and the door is still open."
+     ]
+    }
+   ],
+   "next": "board",
+   "board": {
+    "selectedIndex": 0,
+    "selectedId": "seymour-flux",
+    "tiles": 19,
+    "coming": [],
+    "cleared": [],
+    "order": [
+     "seymour-flux",
+     "yunalesca",
+     "braskas-final-aeon",
+     "seymour-anima-macalania",
+     "evrae-airship",
+     "yojimbo-cavern",
+     "seymour-natus",
+     "seymour-omnis",
+     "isaaru-via-purifico",
+     "sin-fins-core",
+     "sin-face",
+     "mirror-aeons",
+     "ffx2-bahamut",
+     "ffx2-vegnagun-shuyin",
+     "ffx2-leblanc",
+     "ffx2-fallen-aeons",
+     "ffx2-trema",
+     "ffx2-den-of-woe",
+     "ffx2-ixion-djose"
+    ],
+    "beaten": 0,
+    "total": 19
+   },
+   "boardText": "CHAPTER SELECT CHAPTER I Seymour Flux 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVII XVIII XXVII X-2 IV V VI XI XIII XV XVI The mountain of the Ronso, and what was done to them The Ronso held the gate so the summoner could pass. Seymour calls it mercy. He is still unsent, he is waiting on the trail, and everything he says about Jecht is true. CTB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima VIII Evrae IX Yojimbo X Seymour Natus XII Seymour Omnis XIV Isaaru XVII Sin: the Fins and the Core XVIII Sin: the Face XXVII Mirror Aeons FINAL FANTAS"
+  }
+ ],
+ "speed": "normal",
+ "line": "curtains: Rikku Light+Lunar Curtain then mends/attacks; Yuna and Paine Darkness",
+ "fails": {
+  "tidus": 1,
+  "seymour": 3
+ },
+ "wroteFor": {
+  "auron": true,
+  "tidus": true,
+  "seymour": true
+ },
+ "live": {
+  "version": "0.1.0",
+  "scripts": [
+   "index-jYm-0mrJ.js"
+  ]
+ },
+ "battleSeed": 1,
+ "openFailures": [
+  {
+   "ms": 411443,
+   "actor": "rikku",
+   "want": "Light Curtain",
+   "category": "item",
+   "rowsNow": [
+    "Attack",
+    "Skill",
+    "Change",
+    "Item"
+   ]
+  }
+ ]
+}

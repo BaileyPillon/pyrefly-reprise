@@ -1,0 +1,90 @@
+[
+ {
+  "file": "sweep-phone-seymour-flux/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "390x844",
+  "input": "touch + keyboard",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 12510,
+  "state": "battle command menu seymour-flux 390x844",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T19:41:03.302Z"
+ },
+ {
+  "file": "sweep-phone-ffx2-bahamut/01-battle-menu.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "390x844",
+  "input": "touch + keyboard",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 10744,
+  "state": "battle command menu ffx2-bahamut 390x844",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T19:41:59.238Z"
+ },
+ {
+  "file": "sweep-phone-braskas-final-aeon/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "braskas-final-aeon",
+  "size": "390x844",
+  "input": "touch + keyboard",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 9885,
+  "state": "battle command menu braskas-final-aeon 390x844",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T19:43:04.286Z"
+ },
+ {
+  "file": "sweep-phone-ffx2-fallen-aeons/01-battle-menu.png",
+  "game": "ffx2",
+  "chapter": "ffx2-fallen-aeons",
+  "size": "390x844",
+  "input": "touch + keyboard",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 8554,
+  "state": "battle command menu ffx2-fallen-aeons 390x844",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T19:43:47.777Z"
+ }
+]

@@ -1,0 +1,223 @@
+{
+ "tag": "phone-ffx2-ch4",
+ "chapter": "ffx2-bahamut",
+ "size": "390x844",
+ "touch": true,
+ "taps": 9,
+ "keyboardFallbacks": 0,
+ "tabs": [
+  {
+   "i": 0,
+   "tab": "Yuna",
+   "via": "opened on it",
+   "active": "Yuna",
+   "activeMatches": true,
+   "nText": 37,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "cut": [],
+   "overlaps": 0,
+   "scrollW": [
+    390,
+    390
+   ],
+   "shot": "phone-ffx2-ch4/tab1-Yuna.png"
+  },
+  {
+   "i": 1,
+   "tab": "Rikku",
+   "via": "tap",
+   "active": "Rikku",
+   "activeMatches": true,
+   "nText": 37,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "cut": [],
+   "overlaps": 0,
+   "scrollW": [
+    390,
+    390
+   ],
+   "shot": "phone-ffx2-ch4/tab2-Rikku.png"
+  },
+  {
+   "i": 2,
+   "tab": "Paine",
+   "via": "tap",
+   "active": "Paine",
+   "activeMatches": true,
+   "nText": 37,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "cut": [],
+   "overlaps": 0,
+   "scrollW": [
+    390,
+    390
+   ],
+   "shot": "phone-ffx2-ch4/tab3-Paine.png"
+  },
+  {
+   "i": 3,
+   "tab": "Chapter",
+   "via": "tap",
+   "active": "Chapter",
+   "activeMatches": true,
+   "nText": 35,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "cut": [],
+   "overlaps": 0,
+   "scrollW": [
+    390,
+    390
+   ],
+   "shot": "phone-ffx2-ch4/tab4-Chapter.png"
+  },
+  {
+   "i": 4,
+   "tab": "Guide",
+   "via": "tap",
+   "active": "Guide",
+   "activeMatches": true,
+   "nText": 16,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "cut": [],
+   "overlaps": 0,
+   "scrollW": [
+    390,
+    390
+   ],
+   "shot": "phone-ffx2-ch4/tab5-Guide.png"
+  },
+  {
+   "i": 5,
+   "tab": "Options",
+   "via": "tap",
+   "active": "Options",
+   "activeMatches": true,
+   "nText": 46,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "cut": [],
+   "overlaps": 0,
+   "scrollW": [
+    390,
+    390
+   ],
+   "shot": "phone-ffx2-ch4/tab6-Options.png"
+  },
+  {
+   "i": 6,
+   "tab": "Accessibility",
+   "via": "tap",
+   "active": "Accessibility",
+   "activeMatches": true,
+   "nText": 21,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "cut": [],
+   "overlaps": 0,
+   "scrollW": [
+    390,
+    390
+   ],
+   "shot": "phone-ffx2-ch4/tab7-Accessibility.png"
+  },
+  {
+   "i": 7,
+   "tab": "Controls",
+   "via": "tap",
+   "active": "Controls",
+   "activeMatches": true,
+   "nText": 39,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "cut": [],
+   "overlaps": 0,
+   "scrollW": [
+    390,
+    390
+   ],
+   "shot": "phone-ffx2-ch4/tab8-Controls.png"
+  },
+  {
+   "i": 8,
+   "tab": "Music",
+   "via": "tap",
+   "active": "Music",
+   "activeMatches": true,
+   "nText": 31,
+   "minEff": 14,
+   "underCount": 0,
+   "under": [],
+   "cut": [],
+   "overlaps": 0,
+   "scrollW": [
+    390,
+    390
+   ],
+   "shot": "phone-ffx2-ch4/tab9-Music.png"
+  }
+ ],
+ "startedAt": "2026-11-07T20:25:16.416Z",
+ "openAttempts": 1,
+ "opened": true,
+ "tabIds": [
+  {
+   "id": "member:yuna",
+   "label": "Yuna"
+  },
+  {
+   "id": "member:rikku",
+   "label": "Rikku"
+  },
+  {
+   "id": "member:paine",
+   "label": "Paine"
+  },
+  {
+   "id": "chapter",
+   "label": "Chapter"
+  },
+  {
+   "id": "guide",
+   "label": "Guide"
+  },
+  {
+   "id": "options",
+   "label": "Options"
+  },
+  {
+   "id": "accessibility",
+   "label": "Accessibility"
+  },
+  {
+   "id": "controls",
+   "label": "Controls"
+  },
+  {
+   "id": "music",
+   "label": "Music"
+  }
+ ],
+ "consoleErrors": [],
+ "notFound": [],
+ "summary": {
+  "tabs": 9,
+  "minEff": 14,
+  "under14": 0,
+  "cut": 0,
+  "activeMismatches": []
+ },
+ "finishedAt": "2026-11-07T20:26:21.587Z"
+}

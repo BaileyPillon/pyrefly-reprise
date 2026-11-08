@@ -1,0 +1,196 @@
+{
+ "at": "2026-11-07T20:27:43.581Z",
+ "size": "1600x900",
+ "floor": 14,
+ "results": {
+  "dark-aeons": {
+   "game": "ffx",
+   "firstMenuAsShown": {
+    "min": 14,
+    "under": 0,
+    "cut": 0,
+    "underItems": [],
+    "cutItems": []
+   },
+   "battle": {
+    "min": 14,
+    "under": 0,
+    "cut": 0,
+    "underItems": []
+   },
+   "battleMenuVerified": true,
+   "pause": {
+    "min": 14,
+    "under": 0,
+    "cut": 0
+   }
+  },
+  "penance": {
+   "game": "ffx",
+   "firstMenuAsShown": {
+    "min": 14,
+    "under": 0,
+    "cut": 0,
+    "underItems": [],
+    "cutItems": []
+   },
+   "battle": {
+    "min": 14,
+    "under": 0,
+    "cut": 0,
+    "underItems": []
+   },
+   "battleMenuVerified": true,
+   "pause": {
+    "min": 14,
+    "under": 0,
+    "cut": 0
+   }
+  },
+  "flooded-ways": {
+   "game": "ffx",
+   "firstMenuAsShown": {
+    "min": 14,
+    "under": 0,
+    "cut": 0,
+    "underItems": [],
+    "cutItems": []
+   },
+   "battle": {
+    "min": 14,
+    "under": 0,
+    "cut": 0,
+    "underItems": []
+   },
+   "battleMenuVerified": true,
+   "pause": {
+    "min": 14,
+    "under": 0,
+    "cut": 0
+   }
+  },
+  "sanctuary-keeper": {
+   "game": "ffx",
+   "firstMenuAsShown": {
+    "min": 14,
+    "under": 0,
+    "cut": 0,
+    "underItems": [],
+    "cutItems": []
+   },
+   "battle": {
+    "min": 14,
+    "under": 0,
+    "cut": 0,
+    "underItems": []
+   },
+   "battleMenuVerified": true,
+   "pause": {
+    "min": 14,
+    "under": 0,
+    "cut": 0
+   }
+  },
+  "exp-anime": {
+   "game": "ffx2",
+   "firstMenuAsShown": {
+    "min": 14,
+    "under": 0,
+    "cut": 0,
+    "underItems": [],
+    "cutItems": []
+   },
+   "battle": {
+    "min": 14,
+    "under": 0,
+    "cut": 0,
+    "underItems": []
+   },
+   "battleMenuVerified": true,
+   "pause": {
+    "min": 14,
+    "under": 0,
+    "cut": 0
+   }
+  },
+  "ffx2-bevelle-guardians": {
+   "game": "ffx2",
+   "firstMenuAsShown": {
+    "min": 14,
+    "under": 0,
+    "cut": 0,
+    "underItems": [],
+    "cutItems": []
+   },
+   "battle": {
+    "min": 14,
+    "under": 0,
+    "cut": 0,
+    "underItems": []
+   },
+   "battleMenuVerified": true,
+   "pause": {
+    "min": 14,
+    "under": 0,
+    "cut": 0
+   }
+  },
+  "ffx2-farplane-cup": {
+   "game": "ffx2",
+   "firstMenuAsShown": {
+    "min": 12,
+    "under": 1,
+    "cut": 0,
+    "underItems": [
+     {
+      "text": "STATUS",
+      "px": 12,
+      "cls": "ststab__label"
+     }
+    ],
+    "cutItems": []
+   },
+   "battle": {
+    "min": 12,
+    "under": 1,
+    "cut": 0,
+    "underItems": [
+     {
+      "text": "STATUS",
+      "px": 12,
+      "cls": "ststab__label"
+     }
+    ]
+   },
+   "battleMenuVerified": true,
+   "pause": {
+    "min": 12,
+    "under": 1,
+    "cut": 0
+   }
+  },
+  "ffx2-yunas-ballad": {
+   "game": "ffx2",
+   "firstMenuAsShown": {
+    "min": 14,
+    "under": 0,
+    "cut": 0,
+    "underItems": [],
+    "cutItems": []
+   },
+   "battle": {
+    "min": 14,
+    "under": 0,
+    "cut": 0,
+    "underItems": []
+   },
+   "battleMenuVerified": true,
+   "pause": {
+    "min": 14,
+    "under": 0,
+    "cut": 0
+   }
+  }
+ },
+ "finishedAt": "2026-11-07T20:33:59.366Z"
+}

@@ -1,0 +1,272 @@
+[
+ {
+  "file": "sweep-matrix-390x844/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "390x844",
+  "input": "touch + keyboard",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13244,
+  "state": "battle command menu 390x844",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T18:17:53.630Z"
+ },
+ {
+  "file": "sweep-matrix-390x844/02-pause.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "390x844",
+  "input": "touch + keyboard",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 13244,
+  "state": "pause from the command menu by Esc 390x844",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T18:17:55.624Z"
+ },
+ {
+  "file": "sweep-matrix-1280x720/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1280x720",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 18997,
+  "state": "battle command menu 1280x720",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T18:19:56.441Z"
+ },
+ {
+  "file": "sweep-matrix-1280x720/02-pause.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1280x720",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 18997,
+  "state": "pause from the command menu by Esc 1280x720",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T18:19:58.672Z"
+ },
+ {
+  "file": "sweep-matrix-1600x900/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 20216,
+  "state": "battle command menu 1600x900",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T18:21:52.374Z"
+ },
+ {
+  "file": "sweep-matrix-1600x900/02-pause.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 20216,
+  "state": "pause from the command menu by Esc 1600x900",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T18:21:54.684Z"
+ },
+ {
+  "file": "sweep-matrix-2000x1012/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "2000x1012",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 19060,
+  "state": "battle command menu 2000x1012",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T18:23:23.118Z"
+ },
+ {
+  "file": "sweep-matrix-2000x1012/02-pause.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "2000x1012",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 19060,
+  "state": "pause from the command menu by Esc 2000x1012",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T18:23:25.658Z"
+ },
+ {
+  "file": "sweep-matrix-2560x1080/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "2560x1080",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 21202,
+  "state": "battle command menu 2560x1080",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T18:25:42.760Z"
+ },
+ {
+  "file": "sweep-matrix-2560x1080/02-pause.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "2560x1080",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 21202,
+  "state": "pause from the command menu by Esc 2560x1080",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T18:25:45.586Z"
+ },
+ {
+  "file": "sweep-matrix-3840x2160/01-battle-menu.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "3840x2160",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 21138,
+  "state": "battle command menu 3840x2160",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T18:27:53.317Z"
+ },
+ {
+  "file": "sweep-matrix-3840x2160/02-pause.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "3840x2160",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "slateToMenuMs": 21138,
+  "state": "pause from the command menu by Esc 3840x2160",
+  "asserted": "screen=pause",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T18:27:57.890Z"
+ }
+]

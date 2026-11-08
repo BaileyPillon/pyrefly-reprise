@@ -1,0 +1,457 @@
+{
+ "notes": [
+  {
+   "ms": 388817,
+   "k": "live",
+   "v": {
+    "version": "0.1.0",
+    "scripts": [
+     "index-jYm-0mrJ.js"
+    ]
+   }
+  },
+  {
+   "ms": 394322,
+   "k": "door",
+   "v": {
+    "word": "duelist",
+    "typed": "duelist"
+   }
+  },
+  {
+   "ms": 396528,
+   "k": "afterDoor",
+   "v": "party-prep"
+  },
+  {
+   "ms": 404727,
+   "k": "preSceneHolds",
+   "v": 1
+  },
+  {
+   "ms": 406147,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1,
+    "boss": [
+     "x2-cup-auron"
+    ]
+   }
+  },
+  {
+   "ms": 407365,
+   "k": "STATE-WRITE",
+   "v": {
+    "at": 407365,
+    "what": "FALLBACK after 0 real defeats in duel auron: its HP set to 3,000 at the first menu, so one real blow ends it (duel 1: PR-0636, the sourced Eject immunity is not applied; a first try at 15,000 lost because Auron heals under an eighth of his HP)",
+    "result": {
+     "id": "x2-cup-auron",
+     "was": 187500,
+     "now": 3000
+    }
+   }
+  },
+  {
+   "ms": 588073,
+   "k": "fight-over",
+   "v": {
+    "attempt": 1,
+    "over": "left:results",
+    "decisions": 16,
+    "ms": 588072,
+    "lastFoe": "x2-cup-tidus"
+   }
+  },
+  {
+   "ms": 593178,
+   "k": "afterFight",
+   "v": {
+    "label": "a1",
+    "screens": [
+     "results",
+     "battle"
+    ],
+    "outcome": "defeat",
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 603017,
+   "k": "STATE-WRITE",
+   "v": {
+    "at": 603017,
+    "what": "FALLBACK after 1 real defeats in duel tidus: its HP set to 3,000 at the first menu, so one real blow ends it (duel 1: PR-0636, the sourced Eject immunity is not applied; a first try at 15,000 lost because Auron heals under an eighth of his HP)",
+    "result": {
+     "id": "x2-cup-tidus",
+     "was": 136200,
+     "now": 3000
+    }
+   }
+  },
+  {
+   "ms": 801687,
+   "k": "fight-over",
+   "v": {
+    "attempt": 2,
+    "over": "left:results",
+    "decisions": 27,
+    "ms": 801687,
+    "lastFoe": "x2-cup-seymour"
+   }
+  },
+  {
+   "ms": 806798,
+   "k": "afterFight",
+   "v": {
+    "label": "a2",
+    "screens": [
+     "results",
+     "battle"
+    ],
+    "outcome": "defeat",
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 955500,
+   "k": "fight-over",
+   "v": {
+    "attempt": 3,
+    "over": "left:results",
+    "decisions": 21,
+    "ms": 955500,
+    "lastFoe": "x2-cup-seymour"
+   }
+  },
+  {
+   "ms": 960640,
+   "k": "afterFight",
+   "v": {
+    "label": "a3",
+    "screens": [
+     "results",
+     "battle"
+    ],
+    "outcome": "defeat",
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 992667,
+   "k": "fight-over",
+   "v": {
+    "attempt": 4,
+    "over": "left:results",
+    "decisions": 1,
+    "ms": 992667,
+    "lastFoe": "x2-cup-seymour"
+   }
+  },
+  {
+   "ms": 997770,
+   "k": "afterFight",
+   "v": {
+    "label": "a4",
+    "screens": [
+     "results",
+     "battle"
+    ],
+    "outcome": "defeat",
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 1005821,
+   "k": "STATE-WRITE",
+   "v": {
+    "at": 1005821,
+    "what": "FALLBACK after 3 real defeats in duel seymour: its HP set to 3,000 at the first menu, so one real blow ends it (duel 1: PR-0636, the sourced Eject immunity is not applied; a first try at 15,000 lost because Auron heals under an eighth of his HP)",
+    "result": {
+     "id": "x2-cup-seymour",
+     "was": 145500,
+     "now": 3000
+    }
+   }
+  },
+  {
+   "ms": 1027545,
+   "k": "fight-over",
+   "v": {
+    "attempt": 5,
+    "over": "left:cutscene",
+    "decisions": 3,
+    "ms": 1027545,
+    "lastFoe": "x2-cup-seymour"
+   }
+  },
+  {
+   "ms": 1051680,
+   "k": "afterFight",
+   "v": {
+    "label": "a5",
+    "screens": [
+     "cutscene",
+     "results",
+     "cutscene",
+     "chapter-select"
+    ],
+    "outcome": "victory",
+    "next": "board"
+   }
+  },
+  {
+   "ms": 1051680,
+   "k": "RESULT",
+   "v": "WON: three duels by real keys (3 state write)"
+  }
+ ],
+ "shots": [
+  {
+   "file": "00-title.png",
+   "why": "title, fresh profile",
+   "ms": 390162,
+   "screen": "title"
+  },
+  {
+   "file": "01-party-prep.png",
+   "why": "party prep opened by the word (no card)",
+   "ms": 396650,
+   "screen": "party-prep"
+  },
+  {
+   "file": "02-pre-scene.png",
+   "why": "pre-battle scene, first line",
+   "ms": 400713,
+   "screen": "cutscene"
+  },
+  {
+   "file": "m-x2-cup-auron-x2-auron-dragon-fang.jpg",
+   "why": "x2-cup-auron starts x2-auron-dragon-fang",
+   "ms": 406756,
+   "screen": "battle"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-cup-auron)",
+   "ms": 407329,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-auron-x2-auron-x-potion.jpg",
+   "why": "x2-cup-auron starts x2-auron-x-potion",
+   "ms": 409868,
+   "screen": "battle"
+  },
+  {
+   "file": "open-failure-1.jpg",
+   "why": "could not open Light Curtain (item) for rikku",
+   "ms": 411522,
+   "screen": "pause"
+  },
+  {
+   "file": "m-x2-cup-auron-x2-auron-mega-potion.jpg",
+   "why": "x2-cup-auron starts x2-auron-mega-potion",
+   "ms": 428926,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-tidus-x2-tidus-blitz-ace.jpg",
+   "why": "x2-cup-tidus starts x2-tidus-blitz-ace",
+   "ms": 473080,
+   "screen": "battle"
+  },
+  {
+   "file": "link02-first-menu.png",
+   "why": "link 2: first command menu (x2-cup-tidus)",
+   "ms": 482079,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-tidus-x2-tidus-hastega.jpg",
+   "why": "x2-cup-tidus starts x2-tidus-hastega",
+   "ms": 489973,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-tidus-x2-tidus-delay-buster.jpg",
+   "why": "x2-cup-tidus starts x2-tidus-delay-buster",
+   "ms": 495519,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-tidus-x2-tidus-attack.jpg",
+   "why": "x2-cup-tidus starts x2-tidus-attack",
+   "ms": 510657,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-tidus-x2-tidus-spiral-cut.jpg",
+   "why": "x2-cup-tidus starts x2-tidus-spiral-cut",
+   "ms": 524452,
+   "screen": "battle"
+  },
+  {
+   "file": "a1-results-defeat.png",
+   "why": "the results screen (defeat)",
+   "ms": 590668,
+   "screen": "results"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-cup-tidus)",
+   "ms": 602976,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-seymour-x2-seymour-slowga.jpg",
+   "why": "x2-cup-seymour starts x2-seymour-slowga",
+   "ms": 637820,
+   "screen": "battle"
+  },
+  {
+   "file": "link02-first-menu.png",
+   "why": "link 2: first command menu (x2-cup-seymour)",
+   "ms": 639306,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-seymour-x2-seymour-black-sky.jpg",
+   "why": "x2-cup-seymour starts x2-seymour-black-sky",
+   "ms": 672355,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-seymour-x2-seymour-shell.jpg",
+   "why": "x2-cup-seymour starts x2-seymour-shell",
+   "ms": 696831,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-seymour-x2-seymour-demi.jpg",
+   "why": "x2-cup-seymour starts x2-seymour-demi",
+   "ms": 716689,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-seymour-x2-seymour-dispel.jpg",
+   "why": "x2-cup-seymour starts x2-seymour-dispel",
+   "ms": 739017,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-seymour-x2-seymour-drain-attack.jpg",
+   "why": "x2-cup-seymour starts x2-seymour-drain-attack",
+   "ms": 746351,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-seymour-x2-seymour-magic-up.jpg",
+   "why": "x2-cup-seymour starts x2-seymour-magic-up",
+   "ms": 778018,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-seymour-x2-seymour-ultima.jpg",
+   "why": "x2-cup-seymour starts x2-seymour-ultima",
+   "ms": 791778,
+   "screen": "battle"
+  },
+  {
+   "file": "mid-025.jpg",
+   "why": "mid-fight, decision 25",
+   "ms": 791841,
+   "screen": "battle"
+  },
+  {
+   "file": "a2-results-defeat.png",
+   "why": "the results screen (defeat)",
+   "ms": 804279,
+   "screen": "results"
+  },
+  {
+   "file": "m-x2-cup-seymour-x2-seymour-critical-attack.jpg",
+   "why": "x2-cup-seymour starts x2-seymour-critical-attack",
+   "ms": 813298,
+   "screen": "battle"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-cup-seymour)",
+   "ms": 816875,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-seymour-x2-seymour-curaga.jpg",
+   "why": "x2-cup-seymour starts x2-seymour-curaga",
+   "ms": 908484,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-seymour-x2-seymour-absorb.jpg",
+   "why": "x2-cup-seymour starts x2-seymour-absorb",
+   "ms": 915646,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-seymour-x2-seymour-protect.jpg",
+   "why": "x2-cup-seymour starts x2-seymour-protect",
+   "ms": 930000,
+   "screen": "battle"
+  },
+  {
+   "file": "a3-results-defeat.png",
+   "why": "the results screen (defeat)",
+   "ms": 958117,
+   "screen": "results"
+  },
+  {
+   "file": "m-x2-cup-seymour-x2-seymour-meteor.jpg",
+   "why": "x2-cup-seymour starts x2-seymour-meteor",
+   "ms": 967007,
+   "screen": "battle"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-cup-seymour)",
+   "ms": 969827,
+   "screen": "battle"
+  },
+  {
+   "file": "a4-results-defeat.png",
+   "why": "the results screen (defeat)",
+   "ms": 995261,
+   "screen": "results"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-cup-seymour)",
+   "ms": 1005820,
+   "screen": "battle"
+  },
+  {
+   "file": "a5-scene-1.jpg",
+   "why": "a scene after the fight (a5)",
+   "ms": 1028820,
+   "screen": "results"
+  },
+  {
+   "file": "a5-results-victory.png",
+   "why": "the results screen (victory)",
+   "ms": 1031595,
+   "screen": "results"
+  },
+  {
+   "file": "a5-scene-3.jpg",
+   "why": "a scene after the fight (a5)",
+   "ms": 1035359,
+   "screen": "cutscene"
+  },
+  {
+   "file": "a5-board.png",
+   "why": "the chapter-select board after the chapter",
+   "ms": 1051677,
+   "screen": "chapter-select"
+  }
+ ]
+}

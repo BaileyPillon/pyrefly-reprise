@@ -1,0 +1,6198 @@
+{
+ "chapter": "dark-aeons",
+ "game": "ffx",
+ "goal": "win",
+ "size": "1600x900",
+ "base": "https://echoesofspira.com/",
+ "mode": "gpu",
+ "hooks": [
+  "window.__pyrefly.setSeed(1) before the first key (CHK-015 labelled setup hook, PR-0202)"
+ ],
+ "seedPinned": 1,
+ "seed": 1,
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1,
+   "links": 1,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "link 2",
+   "engineSeed": 2,
+   "links": 2,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "link 3",
+   "engineSeed": 3,
+   "links": 3,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "link 4",
+   "engineSeed": 4,
+   "links": 4,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "link 5",
+   "engineSeed": 5,
+   "links": 5,
+   "firstEnemyAction": null
+  }
+ ],
+ "firstEnemyAction": {
+  "seq": 53,
+  "actor": "dark-valefor",
+  "ability": "Attack",
+  "targets": [
+   "valefor"
+  ]
+ },
+ "steps": [
+  {
+   "ms": 6850,
+   "k": "door",
+   "v": "darkaeon"
+  },
+  {
+   "ms": 11764,
+   "k": "prepEscGoesTo",
+   "v": "party-prep"
+  },
+  {
+   "ms": 34711,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1
+   }
+  },
+  {
+   "ms": 88106,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 53,
+    "actor": "dark-valefor",
+    "ability": "Attack",
+    "targets": [
+     "valefor"
+    ]
+   }
+  },
+  {
+   "ms": 712034,
+   "k": "fight",
+   "v": {
+    "outcome": "stalled",
+    "turns": 119,
+    "ms": 660140,
+    "seams": 4,
+    "orders": 0
+   }
+  },
+  {
+   "ms": 769639,
+   "k": "continuity",
+   "v": "[continuity] dark-aeons: 690.675 s of battle, 41029 frames recorded, 777 swaps, 1011 strips, 59.4 fps, 0 probe errors"
+  },
+  {
+   "ms": 769743,
+   "k": "continuity",
+   "v": "[continuity] dark-aeons: pose-measure D:\\pyrefly-release55\\docs\\target\\pose-measure.json (138 subjects, sha256 70bb5a50ae9f, source harness-tree); build 36b6e851; the candidate's own table"
+  },
+  {
+   "ms": 790203,
+   "k": "continuity",
+   "v": "[continuity] dark-aeons: CHK-026 FAIL, CHK-027 FAIL; max head jump 26.8% (0.2% registered, a control), stature 0.768 to 1.122 (0 out of band), max feet shift 4px (10.1px from the pixels), 0 snaps/min, worst swap jerk 103.1px (worst dash 97px), frame p99 26.5ms, 20 strips"
+  },
+  {
+   "ms": 810714,
+   "k": "STALLED",
+   "v": "stalled at link 5, play:action-start"
+  }
+ ],
+ "picks": [
+  {
+   "turn": 0,
+   "ms": 14,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Valefor",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-valefor:800000/800000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 2,
+     "actor": "tidus",
+     "did": "Quick Hit",
+     "targets": [
+      "dark-valefor"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 1,
+   "ms": 4493,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Auto-Life",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Auto-Life",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-valefor:700001/800000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 8,
+     "actor": "yuna",
+     "did": "Auto-Life",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 2,
+   "ms": 11641,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Valefor",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-valefor:700001/800000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 13,
+     "actor": "tidus",
+     "did": "Quick Hit",
+     "targets": [
+      "dark-valefor"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 3,
+   "ms": 15776,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Valefor",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-valefor:600002/800000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 18,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "dark-valefor"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 4,
+   "ms": 17563,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Auto-Life",
+    "target": "Yuna",
+    "menu": "White Magic"
+   },
+   "took": "Auto-Life",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-valefor:500003/800000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 25,
+     "actor": "yuna",
+     "did": "Auto-Life",
+     "targets": [
+      "yuna"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 5,
+   "ms": 22949,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Valefor",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-valefor:500003/800000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 30,
+     "actor": "tidus",
+     "did": "Quick Hit",
+     "targets": [
+      "dark-valefor"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 6,
+   "ms": 27209,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Valefor",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-valefor:400004/800000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 35,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "dark-valefor"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 7,
+   "ms": 29478,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Valefor",
+    "target": null,
+    "menu": "Summon"
+   },
+   "took": "Valefor",
+   "viaMenu": "Summon",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-valefor:300005/800000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   },
+   "engineDid": [
+    {
+     "seq": 42,
+     "actor": "yuna",
+     "did": "Summon",
+     "targets": []
+    }
+   ]
+  },
+  {
+   "turn": 8,
+   "ms": 34475,
+   "actor": "command:valefor",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Valefor",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-valefor:300005/800000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 46,
+     "actor": "valefor",
+     "did": "Attack",
+     "targets": [
+      "dark-valefor"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 9,
+   "ms": 37499,
+   "actor": "command:valefor",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Valefor",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:10354/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-valefor:290006/800000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 58,
+     "actor": "valefor",
+     "did": "Attack",
+     "targets": [
+      "dark-valefor"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 10,
+   "ms": 46696,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Valefor",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-valefor:280007/800000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 75,
+     "actor": "tidus",
+     "did": "Quick Hit",
+     "targets": [
+      "dark-valefor"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 11,
+   "ms": 50763,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Valefor",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-valefor:180008/800000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 80,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "dark-valefor"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 12,
+   "ms": 52828,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Valefor",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-valefor:80009/800000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 13,
+   "ms": 83880,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ifrit",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:1400000/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 14,
+   "ms": 89427,
+   "actor": "command:yuna",
+   "want": {
+    "label": "X-Potion",
+    "target": "Tidus",
+    "menu": "Items"
+   },
+   "took": "X-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:5045/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:1300001/1400000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 15,
+   "ms": 93789,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ifrit",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:1300001/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 16,
+   "ms": 99091,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Auto-Life",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Auto-Life",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:5063/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:1200002/1400000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 17,
+   "ms": 104912,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ifrit",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:5063/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:1200002/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 18,
+   "ms": 108194,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ifrit",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:5063/9999",
+    "yuna:9999/9999",
+    "auron:5082/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:1100003/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 19,
+   "ms": 113923,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Pray",
+    "target": "the party",
+    "menu": "Special"
+   },
+   "took": "Pray",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:127/9999",
+    "yuna:9999/9999",
+    "auron:5082/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:1000004/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 20,
+   "ms": 117820,
+   "actor": "command:auron",
+   "want": {
+    "label": "Al Bhed Potion",
+    "target": "the party",
+    "menu": "Items"
+   },
+   "took": "Al Bhed Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:1195/9999",
+    "yuna:9999/9999",
+    "auron:6134/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:1000004/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 21,
+   "ms": 122141,
+   "actor": "command:tidus",
+   "want": {
+    "label": "X-Potion",
+    "target": "Tidus",
+    "menu": "Items"
+   },
+   "took": "X-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:2195/9999",
+    "yuna:9999/9999",
+    "auron:7134/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:1000004/1400000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 22,
+   "ms": 125650,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ifrit",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:7134/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:1000004/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 23,
+   "ms": 128991,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Curaga",
+    "target": "Auron",
+    "menu": "White Magic"
+   },
+   "took": "Curaga",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:2498/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:900005/1400000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 86,
+     "actor": "yuna",
+     "did": "Curaga",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 24,
+   "ms": 133280,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ifrit",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:900005/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 93,
+     "actor": "tidus",
+     "did": "Quick Hit",
+     "targets": [
+      "dark-ifrit"
+     ]
+    },
+    {
+     "seq": 111,
+     "actor": "tidus",
+     "did": "Phoenix Down",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 25,
+   "ms": 144474,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Slice & Dice",
+    "target": "Dark Ifrit",
+    "menu": "Overdrive"
+   },
+   "took": "Slice & Dice",
+   "viaMenu": "Overdrive",
+   "engineHp": [
+    "tidus:5026/9999",
+    "yuna:9999/9999",
+    "auron:4999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:800006/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 120,
+     "actor": "tidus",
+     "did": "Slice & Dice",
+     "targets": [
+      "dark-ifrit"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 26,
+   "ms": 158074,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Pray",
+    "target": "the party",
+    "menu": "Special"
+   },
+   "took": "Pray",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:2499/9999",
+    "yuna:9999/9999",
+    "auron:4999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:468341/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 144,
+     "actor": "yuna",
+     "did": "Pray",
+     "targets": [
+      "tidus",
+      "yuna",
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 27,
+   "ms": 162243,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Auto-Life",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Auto-Life",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3592/9999",
+    "yuna:9999/9999",
+    "auron:6087/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:468341/1400000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 154,
+     "actor": "yuna",
+     "did": "Auto-Life",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 28,
+   "ms": 167852,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ifrit",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:3592/9999",
+    "yuna:9999/9999",
+    "auron:6087/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:468341/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 158,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "dark-ifrit"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 29,
+   "ms": 171221,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Curaga",
+    "target": "Auron",
+    "menu": "White Magic"
+   },
+   "took": "Curaga",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:3592/9999",
+    "yuna:9999/9999",
+    "auron:1600/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:368342/1400000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 170,
+     "actor": "yuna",
+     "did": "Curaga",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 30,
+   "ms": 175540,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ifrit",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:3592/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:368342/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 177,
+     "actor": "tidus",
+     "did": "Quick Hit",
+     "targets": [
+      "dark-ifrit"
+     ]
+    },
+    {
+     "seq": 205,
+     "actor": "yuna",
+     "did": "Phoenix Down",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 31,
+   "ms": 188693,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ifrit",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:4999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:268343/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 214,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "dark-ifrit"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 32,
+   "ms": 191853,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Pray",
+    "target": "the party",
+    "menu": "Special"
+   },
+   "took": "Pray",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:4999/9999",
+    "yuna:9999/9999",
+    "auron:5063/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:168344/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 224,
+     "actor": "yuna",
+     "did": "Pray",
+     "targets": [
+      "tidus",
+      "yuna",
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 33,
+   "ms": 196089,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ifrit",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:6100/9999",
+    "yuna:9999/9999",
+    "auron:6094/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:168344/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 231,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "dark-ifrit"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 34,
+   "ms": 199475,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Pray",
+    "target": "the party",
+    "menu": "Special"
+   },
+   "took": "Pray",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:6100/9999",
+    "yuna:9999/9999",
+    "auron:1065/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:68345/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 242,
+     "actor": "yuna",
+     "did": "Pray",
+     "targets": [
+      "tidus",
+      "yuna",
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 35,
+   "ms": 203340,
+   "actor": "command:tidus",
+   "want": {
+    "label": "X-Potion",
+    "target": "Auron",
+    "menu": "Items"
+   },
+   "took": "X-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:7201/9999",
+    "yuna:9999/9999",
+    "auron:2100/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:68345/1400000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 248,
+     "actor": "tidus",
+     "did": "X-Potion",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 36,
+   "ms": 207592,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ifrit",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:7201/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ifrit:68345/1400000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 37,
+   "ms": 235683,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:1200000/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 38,
+   "ms": 240821,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Auto-Life",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Auto-Life",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:1155706/1200000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 39,
+   "ms": 246437,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:1155706/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 40,
+   "ms": 249517,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:1112583/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 41,
+   "ms": 254534,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Auto-Life",
+    "target": "Yuna",
+    "menu": "White Magic"
+   },
+   "took": "Auto-Life",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:1067424/1200000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 42,
+   "ms": 259824,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:1067424/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 43,
+   "ms": 262702,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:1021966/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 44,
+   "ms": 267902,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Auto-Life",
+    "target": "Auron",
+    "menu": "White Magic"
+   },
+   "took": "Auto-Life",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:979056/1200000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 45,
+   "ms": 273324,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:979056/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 46,
+   "ms": 278402,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:934762/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 47,
+   "ms": 283168,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Valefor",
+    "target": null,
+    "menu": "Summon"
+   },
+   "took": "Valefor",
+   "viaMenu": "Summon",
+   "engineHp": [
+    "tidus:5720/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:887148/1200000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 48,
+   "ms": 287148,
+   "actor": "command:valefor",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:5720/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:887148/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 49,
+   "ms": 303786,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:5720/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:877149/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 50,
+   "ms": 306691,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Cura",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Cura",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:5720/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:833488/1200000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 51,
+   "ms": 310948,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:833488/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 52,
+   "ms": 313890,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:788928/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 53,
+   "ms": 316973,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Slice & Dice",
+    "target": "Dark Ixion",
+    "menu": "Overdrive"
+   },
+   "took": "Slice & Dice",
+   "viaMenu": "Overdrive",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:752859/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 54,
+   "ms": 328138,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:635431/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 55,
+   "ms": 333488,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Cura",
+    "target": "Auron",
+    "menu": "White Magic"
+   },
+   "took": "Cura",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:5490/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:544873/1200000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 56,
+   "ms": 337773,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:544873/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 57,
+   "ms": 342866,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Ifrit",
+    "target": null,
+    "menu": "Summon"
+   },
+   "took": "Ifrit",
+   "viaMenu": "Summon",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:499541/1200000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 58,
+   "ms": 347890,
+   "actor": "command:ifrit",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:499541/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 59,
+   "ms": 358645,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:489542/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 253,
+     "actor": "tidus",
+     "did": "Quick Hit",
+     "targets": [
+      "dark-ixion"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 60,
+   "ms": 363785,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Ixion",
+    "target": null,
+    "menu": "Summon"
+   },
+   "took": "Ixion",
+   "viaMenu": "Summon",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:446805/1200000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   },
+   "engineDid": [
+    {
+     "seq": 262,
+     "actor": "yuna",
+     "did": "Summon",
+     "targets": []
+    }
+   ]
+  },
+  {
+   "turn": 61,
+   "ms": 368855,
+   "actor": "command:ixion",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:446805/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 266,
+     "actor": "ixion",
+     "did": "Attack",
+     "targets": [
+      "dark-ixion"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 62,
+   "ms": 373994,
+   "actor": "command:ixion",
+   "want": {
+    "label": "Dismiss",
+    "target": null,
+    "menu": null
+   },
+   "took": "Dismiss",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:580/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:436806/1200000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   },
+   "engineDid": [
+    {
+     "seq": 283,
+     "actor": "ixion",
+     "did": "Dismiss",
+     "targets": []
+    }
+   ]
+  },
+  {
+   "turn": 63,
+   "ms": 376217,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:580/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:436806/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 288,
+     "actor": "tidus",
+     "did": "Quick Hit",
+     "targets": [
+      "dark-ixion"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 64,
+   "ms": 381433,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:580/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:393204/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 297,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "dark-ixion"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 65,
+   "ms": 384453,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:580/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:347566/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 308,
+     "actor": "tidus",
+     "did": "Quick Hit",
+     "targets": [
+      "dark-ixion"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 66,
+   "ms": 389654,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:580/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:300677/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 317,
+     "actor": "yuna",
+     "did": "Attack",
+     "targets": [
+      "dark-ixion"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 67,
+   "ms": 394538,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:5508/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:580/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:235193/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 332,
+     "actor": "tidus",
+     "did": "Quick Hit",
+     "targets": [
+      "dark-ixion"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 68,
+   "ms": 399670,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Cura",
+    "target": "Auron",
+    "menu": "White Magic"
+   },
+   "took": "Cura",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:5508/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:580/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:191764/1200000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 342,
+     "actor": "yuna",
+     "did": "Cura",
+     "targets": [
+      "auron"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 69,
+   "ms": 403879,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:580/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:191764/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 347,
+     "actor": "tidus",
+     "did": "Quick Hit",
+     "targets": [
+      "dark-ixion"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 70,
+   "ms": 408998,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Ixion",
+    "target": null,
+    "menu": "Summon"
+   },
+   "took": "Ixion",
+   "viaMenu": "Summon",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:580/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:148854/1200000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   },
+   "engineDid": [
+    {
+     "seq": 356,
+     "actor": "yuna",
+     "did": "Summon",
+     "targets": []
+    }
+   ]
+  },
+  {
+   "turn": 71,
+   "ms": 412909,
+   "actor": "command:ixion",
+   "want": {
+    "label": "Thor's Hammer",
+    "target": "Dark Ixion",
+    "menu": "Overdrive"
+   },
+   "took": "Thor's Hammer (one-item group, direct)",
+   "viaMenu": "Overdrive",
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 360,
+     "actor": "ixion",
+     "did": "Thor's Hammer",
+     "targets": [
+      "dark-ixion"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 72,
+   "ms": 422563,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:0/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:158853/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 376,
+     "actor": "tidus",
+     "did": "Quick Hit",
+     "targets": [
+      "dark-ixion"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 73,
+   "ms": 429682,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:5738/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:0/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:70958/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 391,
+     "actor": "auron",
+     "did": "Attack",
+     "targets": [
+      "dark-ixion"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 74,
+   "ms": 432700,
+   "actor": "command:yuna",
+   "want": {
+    "label": "X-Potion",
+    "target": "Tidus",
+    "menu": "Items"
+   },
+   "took": "X-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:5738/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:0/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:27656/1200000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 401,
+     "actor": "yuna",
+     "did": "X-Potion",
+     "targets": [
+      "tidus"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 75,
+   "ms": 436903,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Shiva",
+    "target": null,
+    "menu": "Summon"
+   },
+   "took": "Shiva",
+   "viaMenu": "Summon",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:0/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:27656/1200000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   },
+   "engineDid": [
+    {
+     "seq": 405,
+     "actor": "yuna",
+     "did": "Summon",
+     "targets": []
+    }
+   ]
+  },
+  {
+   "turn": 76,
+   "ms": 441986,
+   "actor": "command:shiva",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:0/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:27656/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   },
+   "engineDid": [
+    {
+     "seq": 409,
+     "actor": "shiva",
+     "did": "Attack",
+     "targets": [
+      "dark-ixion"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 77,
+   "ms": 446853,
+   "actor": "command:shiva",
+   "want": {
+    "label": "Dismiss",
+    "target": null,
+    "menu": null
+   },
+   "took": "Dismiss",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:0/17397",
+    "shiva:3215/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:17657/1200000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   },
+   "engineDid": [
+    {
+     "seq": 426,
+     "actor": "shiva",
+     "did": "Dismiss",
+     "targets": []
+    }
+   ]
+  },
+  {
+   "turn": 78,
+   "ms": 449064,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:0/17397",
+    "shiva:3215/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion:17657/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 79,
+   "ms": 476187,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:1300000/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 80,
+   "ms": 480048,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Auto-Life",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Auto-Life",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:1200000/1200000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 81,
+   "ms": 485525,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:1200000/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 82,
+   "ms": 489403,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Auto-Life",
+    "target": "Yuna",
+    "menu": "White Magic"
+   },
+   "took": "Auto-Life",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:1158216/1200000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 83,
+   "ms": 494595,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:1158216/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 84,
+   "ms": 496269,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:1114308/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 85,
+   "ms": 500217,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Auto-Life",
+    "target": "Auron",
+    "menu": "White Magic"
+   },
+   "took": "Auto-Life",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:1069539/1200000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 86,
+   "ms": 505612,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:1069539/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 87,
+   "ms": 507648,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:981376/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 88,
+   "ms": 512526,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:936939/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 89,
+   "ms": 516597,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Valefor",
+    "target": null,
+    "menu": "Summon"
+   },
+   "took": "Valefor",
+   "viaMenu": "Summon",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:896647/1200000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 90,
+   "ms": 520696,
+   "actor": "command:valefor",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:896647/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 91,
+   "ms": 527178,
+   "actor": "command:valefor",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:886648/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 92,
+   "ms": 532346,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:876649/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 93,
+   "ms": 534060,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:832914/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 94,
+   "ms": 538081,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:790632/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 95,
+   "ms": 539760,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:759765/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 96,
+   "ms": 541777,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:672982/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 97,
+   "ms": 545750,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:629539/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 98,
+   "ms": 547758,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:596886/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 99,
+   "ms": 549561,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:513891/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 100,
+   "ms": 556147,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:3198/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:429989/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 101,
+   "ms": 560017,
+   "actor": "command:yuna",
+   "want": {
+    "label": "X-Potion",
+    "target": "Tidus",
+    "menu": "Items"
+   },
+   "took": "X-Potion",
+   "viaMenu": "Items",
+   "engineHp": [
+    "tidus:3198/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:388205/1200000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 102,
+   "ms": 564347,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:388205/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 103,
+   "ms": 566068,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:346879/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 104,
+   "ms": 569912,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Ifrit",
+    "target": null,
+    "menu": "Summon"
+   },
+   "took": "Ifrit",
+   "viaMenu": "Summon",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:305758/1200000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 105,
+   "ms": 573965,
+   "actor": "command:ifrit",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:305758/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 106,
+   "ms": 579260,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:295759/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 107,
+   "ms": 581059,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:250645/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 108,
+   "ms": 584931,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Auto-Life",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Auto-Life",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:206208/1200000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 109,
+   "ms": 590660,
+   "actor": "command:auron",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:206208/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 110,
+   "ms": 592463,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Ixion",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:116325/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 111,
+   "ms": 596596,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Dark Ixion",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:0/13897",
+    "ifrit:0/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-ixion-2:31428/1200000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 112,
+   "ms": 623892,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Shiva",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-shiva:1100000/1100000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 113,
+   "ms": 627807,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Auto-Life",
+    "target": "Tidus",
+    "menu": "White Magic"
+   },
+   "took": "Auto-Life",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-shiva:1000001/1100000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "tidus",
+    "wanted": "tidus",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 114,
+   "ms": 633294,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Shiva",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-shiva:1000001/1100000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 115,
+   "ms": 637211,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Auto-Life",
+    "target": "Yuna",
+    "menu": "White Magic"
+   },
+   "took": "Auto-Life",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-shiva:900002/1100000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "yuna",
+    "wanted": "yuna",
+    "mismatch": false
+   }
+  },
+  {
+   "turn": 116,
+   "ms": 642542,
+   "actor": "command:auron",
+   "want": {
+    "label": "Shooting Star",
+    "target": "Dark Shiva",
+    "menu": "Overdrive"
+   },
+   "took": "Shooting Star",
+   "viaMenu": "Overdrive",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-shiva:900002/1100000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 117,
+   "ms": 651597,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Quick Hit",
+    "target": "Dark Shiva",
+    "menu": "Special"
+   },
+   "took": "Quick Hit",
+   "viaMenu": "Special",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-shiva:800003/1100000"
+   ],
+   "target": {
+    "confirmed": true
+   }
+  },
+  {
+   "turn": 118,
+   "ms": 655572,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Auto-Life",
+    "target": "Auron",
+    "menu": "White Magic"
+   },
+   "took": "Auto-Life",
+   "viaMenu": "White Magic",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "yojimbo:19646/19646",
+    "cindy:43827/43827",
+    "sandy:35862/35862",
+    "mindy:24913/24913",
+    "anima:27862/27862",
+    "dark-shiva:700004/1100000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "auron",
+    "wanted": "auron",
+    "mismatch": false
+   }
+  }
+ ],
+ "seams": [
+  {
+   "from": 1,
+   "to": 2,
+   "ms": 73827,
+   "phase": "moment:battle-start"
+  },
+  {
+   "from": 2,
+   "to": 3,
+   "ms": 225898,
+   "phase": "moment:battle-start"
+  },
+  {
+   "from": 3,
+   "to": 4,
+   "ms": 466644,
+   "phase": "moment:battle-start"
+  },
+  {
+   "from": 4,
+   "to": 5,
+   "ms": 614531,
+   "phase": "moment:battle-start"
+  }
+ ],
+ "fails": [
+  {
+   "stalled": "stalled at link 5, play:action-start",
+   "from": "the battle screen was still up when the route stopped playing"
+  }
+ ],
+ "contexts": {
+  "viewport": "1600x900",
+  "query": null,
+  "touch": null,
+  "gamepad": null,
+  "reduceMotion": null
+ },
+ "scriptedChange": "not applicable",
+ "budgetMs": 660000,
+ "briefingText": "AURON “Nineteen fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.” ENTER / ESC SKIP — 20 SECONDS, ONCE D NEVER SHOW THIS AGAIN",
+ "boardAtEntry": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 19
+ },
+ "boardWalk": [],
+ "door": {
+  "word": "darkaeon",
+  "how": "typed on the chapter board, one key at a time (no card; the board opens party prep itself)"
+ },
+ "prepText": "AURON · 2 OF 3 “Your party is ready.” The tabs are for later. Start the battle. ESC SKIP THE GUIDE PARTY PREP EXP · THE DARK AEONS — BESAID TO MT. GAGAZET T Tidus S.LV 180 Y Yuna S.LV 175 A Auron S.LV 180 W Wakka S.LV 165 L Lulu S.LV 170 R Rikku S.LV 160 K Kimahri S.LV 150 CHAPTER STATS SPHERE GRID EQUIPMENT ITEMS OVERDRIVE FFX · EXP The Dark Aeons The wrong colours Yevon has dressed six aeons in the wrong colours and set one at every place the pilgrimage touched. Send each of them home. the road what waits at the foot of the mountain and the last of them OBJECTIVES Send Dark Ifrit home Reach the road to Gagazet Send the last of them home TIP Every blow fills their fury, and a full fury kills. Strike few and hard, keep Auto-Life on everyone, and send an aeon in ahead of the worst. START BATTLE T Tidus HP 9999/9999 · MP 999/999 WARRIOR Y Yuna HP 9999/9999 · MP 999/999 SUMMONER A Auron HP 9999/9999 · MP 999/999 SENTINEL",
+ "prepEsc": "party-prep",
+ "preScene": {
+  "lines": [
+   "The airship, high over Spira. Below AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "The airship, high over Spira. Below, six places the pilgrimage touched have gone dark at once. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "Yuna SUMMONER Someone is calling them. All of them, all at once. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "Auron GUARDIAN Calling. Forcing. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU"
+  ],
+  "escOpens": "pause",
+  "holdsToSkip": 1
+ },
+ "firstState": {
+  "chapter": "dark-aeons",
+  "game": "ffx",
+  "scene": "dark-aeons",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 7,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": false,
+  "exitIntent": null,
+  "playTimeMs": 0,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "dark-valefor",
+    "side": "enemy",
+    "art": "dark-valefor",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "tidus",
+    "side": "party",
+    "art": "tidus",
+    "pose": "ready",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "yuna",
+    "side": "party",
+    "art": "yuna",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "auron",
+    "side": "party",
+    "art": "auron",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   }
+  ],
+  "spellFx": {
+   "fx": {
+    "new": false,
+    "guard": {
+     "level": 0,
+     "scaleStep": 0,
+     "calmMs": 16.85,
+     "budgetMs": 21.06,
+     "busyMs": 0,
+     "steps": 0
+    }
+   },
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0,
+   "cpuMeanMs": 0,
+   "flights": {
+    "launched": 0,
+    "landed": 0,
+    "live": 0,
+    "lastLaunchAt": 0,
+    "lastLandAt": 0
+   }
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "command:tidus",
+   "awaitingMenu": true,
+   "played": 1,
+   "lastEvents": [
+    {
+     "seq": 0,
+     "type": "turn-start",
+     "ms": 2093
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 1,
+   "ticks": 0,
+   "events": 1,
+   "result": null,
+   "combatants": [
+    {
+     "id": "tidus",
+     "hp": 9999,
+     "maxHp": 9999,
+     "mp": 999,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "haste"
+     ]
+    },
+    {
+     "id": "yuna",
+     "hp": 9999,
+     "maxHp": 9999,
+     "mp": 999,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "haste"
+     ]
+    },
+    {
+     "id": "auron",
+     "hp": 9999,
+     "maxHp": 9999,
+     "mp": 999,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "haste"
+     ]
+    },
+    {
+     "id": "wakka",
+     "hp": 9999,
+     "maxHp": 9999,
+     "mp": 999,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "haste"
+     ]
+    },
+    {
+     "id": "lulu",
+     "hp": 9999,
+     "maxHp": 9999,
+     "mp": 999,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "haste"
+     ]
+    },
+    {
+     "id": "rikku",
+     "hp": 9999,
+     "maxHp": 9999,
+     "mp": 999,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "haste"
+     ]
+    },
+    {
+     "id": "kimahri",
+     "hp": 9999,
+     "maxHp": 9999,
+     "mp": 999,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "haste"
+     ]
+    },
+    {
+     "id": "valefor",
+     "hp": 13897,
+     "maxHp": 13897,
+     "mp": 435,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ifrit",
+     "hp": 16914,
+     "maxHp": 16914,
+     "mp": 425,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ixion",
+     "hp": 17397,
+     "maxHp": 17397,
+     "mp": 445,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "shiva",
+     "hp": 15897,
+     "maxHp": 15897,
+     "mp": 465,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "bahamut",
+     "hp": 23880,
+     "maxHp": 23880,
+     "mp": 643,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "yojimbo",
+     "hp": 19646,
+     "maxHp": 19646,
+     "mp": 0,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "cindy",
+     "hp": 43827,
+     "maxHp": 43827,
+     "mp": 773,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "sandy",
+     "hp": 35862,
+     "maxHp": 35862,
+     "mp": 643,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "mindy",
+     "hp": 24913,
+     "maxHp": 24913,
+     "mp": 992,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "anima",
+     "hp": 27862,
+     "maxHp": 27862,
+     "mp": 832,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "dark-valefor",
+     "hp": 800000,
+     "maxHp": 800000,
+     "mp": 999,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "turn-start",
+    "actorId": "tidus",
+    "turn": 1,
+    "elapsedTicks": 0,
+    "seq": 0
+   }
+  ]
+ },
+ "cardFirst": {
+  "viewport": "1600x900",
+  "card": {
+   "x": 404,
+   "y": 81,
+   "w": 598,
+   "h": 154
+  },
+  "rows": 4,
+  "overlapPx2": 0,
+  "cardText": "NEXT BEST MOVE Tidus Quick Hit → Dark Valefor IN SPECIAL 99,999 36 MP 100% TO HIT 18% CRIT Physical damage Most damage on the board — 99999 to Dark Valefor."
+ },
+ "focFirst": {
+  "viewport": "1600x900",
+  "coach": [
+   {
+    "x": 554,
+    "y": 744,
+    "w": 400,
+    "h": 146
+   }
+  ],
+  "adv": [
+   {
+    "x": 404,
+    "y": 81,
+    "w": 598,
+    "h": 154
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 445,
+    "w": 469,
+    "h": 391
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Next best move",
+    "eff": 14.2
+   },
+   {
+    "t": "Tidus",
+    "eff": 17.5
+   },
+   {
+    "t": "Quick Hit",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "Dark Valefor",
+    "eff": 21
+   },
+   {
+    "t": "in Special",
+    "eff": 14.2
+   },
+   {
+    "t": "99,999",
+    "eff": 14.2
+   },
+   {
+    "t": "36 MP",
+    "eff": 14.2
+   },
+   {
+    "t": "100% to hit",
+    "eff": 14.2
+   },
+   {
+    "t": "18% crit",
+    "eff": 14.2
+   },
+   {
+    "t": "Physical damage",
+    "eff": 14.2
+   },
+   {
+    "t": "Most damage on the board — 99999 to Dark",
+    "eff": 14.2
+   }
+  ]
+ },
+ "focAfterCoach": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 404,
+    "y": 81,
+    "w": 598,
+    "h": 154
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 445,
+    "w": 469,
+    "h": 391
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Next best move",
+    "eff": 14.2
+   },
+   {
+    "t": "Tidus",
+    "eff": 17.5
+   },
+   {
+    "t": "Quick Hit",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "Dark Valefor",
+    "eff": 21
+   },
+   {
+    "t": "in Special",
+    "eff": 14.2
+   },
+   {
+    "t": "99,999",
+    "eff": 14.2
+   },
+   {
+    "t": "36 MP",
+    "eff": 14.2
+   },
+   {
+    "t": "100% to hit",
+    "eff": 14.2
+   },
+   {
+    "t": "18% crit",
+    "eff": 14.2
+   },
+   {
+    "t": "Physical damage",
+    "eff": 14.2
+   },
+   {
+    "t": "Most damage on the board — 99999 to Dark",
+    "eff": 14.2
+   }
+  ]
+ },
+ "advisorText": "NEXT BEST MOVE Tidus Quick Hit → Dark Valefor IN SPECIAL 99,999 36 MP 100% TO HIT 18% CRIT Physical damage Most damage on the board — 99999 to Dark Valefor.",
+ "advisorHiddenByN": true,
+ "intentText": " | ",
+ "pause": {
+  "esc": {
+   "paused": true,
+   "text": "Tidus Yuna Auron Tidus Yuna Auron ATTACK SPECIAL ▸ ×5 WHITE MAGIC ▸ ×3 ITEMS ▸ ×14 FLEE ESCAPE ▼ Q △ DEFEND Physical damage Tidus 9999 /9999 999 /999 OD Yuna 9999 /9999 999 /999 OD Auron 9999 /9999 999 /999 OD Dark Valefor BOSS BATTLE HP: 800,000 WEAKNESSES: None. She resists every element. Immune to Sensor. Every blow you land fills her fury, and a full fury is Energy Blast on the whole party. She is quick, but a few heavy blows end her first. THE STRATEGY: Wear Auto-Haste, Auto-Phoenix, Auto-Protect and Ribbon; put Auto-Life on everyone. Strike with the heaviest actions you have and keep the count low. If the fury nears full, send an aeon in to take the blast. STEAL: X-Potion x2 (common) Elixir (rare) DROPS: Dark Matter (common) Master Sphere (rare) Dark Ifrit BOSS BATTLE HP: 1,400,000 WEAKNESSES: None. He absorbs Fire, resists Ice and is immune to Thunder and Water. Immune to Sensor. "
+  },
+  "optionsText": "Tidus Yuna Auron Tidus Yuna Auron ATTACK SPECIAL ▸ ×5 WHITE MAGIC ▸ ×3 ITEMS ▸ ×14 FLEE ESCAPE ▼ Q △ DEFEND Physical damage Tidus 9999 /9999 999 /999 OD Yuna 9999 /9999 999 /999 OD Auron 9999 /9999 999 /999 OD Dark Valefor BOSS BATTLE HP: 800,000 WEAKNESSES: None. She resists every element. Immune to Sensor. Every blow you land fills her fury, and a full fury is Energy Blast on the whole party. She is quick, but a few heavy blows end her first. THE STRATEGY: Wear Auto-Haste, Auto-Phoenix, Auto-Protect and Ribbon; put Auto-Life on everyone. Strike with the heaviest actions you have and keep the count low. If the fury nears full, send an aeon in to take the blast. STEAL: X-Potion x2 (common) Elixir (rare) DROPS: Dark Matter (common) Master Sphere (rare) Dark Ifrit BOSS BATTLE HP: 1,400,000 WEAKNESSES: None. He absorbs Fire, resists Ice and is immune to Thunder and Water. Immune to Sensor. He answers every action with a blow of his own, and a meteor falls on one of you each turn. Hellfire comes when his fury is full. THE STRATEGY: Protect, Shell and Auto-Life on everyone before the first swing. Use fewer, heavier actions: each one draws one answer, however many blows it has. Send an aeon in for Hellfire. STEAL: Mega Phoenix x2 (common) Elixir (rare) DROPS: Dark Matter (common) Master Sphere (rare) Dark Ixion BOSS BATTLE HP: 1,200,000 WEAKNESSES: None. He absorbs Thunder, resists W",
+  "tabs": [
+   "Tidus",
+   "Yuna",
+   "Auron",
+   "Chapter",
+   "Guide",
+   "Options"
+  ],
+  "resumedByEsc": true,
+  "pOpens": true,
+  "pCloses": true
+ },
+ "firstRows": [
+  "Attack",
+  "Special",
+  "White Magic",
+  "Items",
+  "Flee",
+  "Escape"
+ ],
+ "targetsShown": [
+  "dark-valefor"
+ ],
+ "afterTargetCancel": {
+  "screen": "battle",
+  "targets": 0,
+  "rows": 6
+ },
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "stalled",
+   "seed": 1,
+   "turns": 119,
+   "firstEnemyAction": {
+    "seq": 53,
+    "actor": "dark-valefor",
+    "ability": "Attack",
+    "targets": [
+     "valefor"
+    ]
+   },
+   "final": true,
+   "stalledAt": {
+    "link": 5,
+    "phase": "play:action-start"
+   }
+  }
+ ],
+ "seamCard": [
+  {
+   "link": 2,
+   "actor": "command:tidus",
+   "viewport": "1600x900",
+   "card": {
+    "x": 406,
+    "y": 103,
+    "w": 422,
+    "h": 184
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Tidus Quick Hit → Dark Ifrit IN SPECIAL 99,999 36 MP 100% TO HIT 39% CRIT Physical damage Most damage on the board — 99999 to Dark Ifrit."
+  },
+  {
+   "link": 3,
+   "actor": "command:tidus",
+   "viewport": "1600x900",
+   "card": {
+    "x": 404,
+    "y": 81,
+    "w": 598,
+    "h": 154
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Tidus Quick Hit → Dark Ixion IN SPECIAL 41,525–46,889 36 MP 100% TO HIT 30% CRIT Physical damage Most damage on the board — 44294 to Dark Ixion."
+  },
+  {
+   "link": 4,
+   "actor": "command:tidus",
+   "viewport": "1600x900",
+   "card": {
+    "x": 404,
+    "y": 81,
+    "w": 598,
+    "h": 154
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Tidus Quick Hit → Dark Ixion IN SPECIAL 39,795–44,935 36 MP 100% TO HIT 30% CRIT Physical damage Most damage on the board — 42448 to Dark Ixion."
+  },
+  {
+   "link": 5,
+   "actor": "command:tidus",
+   "viewport": "1600x900",
+   "card": {
+    "x": 410,
+    "y": 133,
+    "w": 446,
+    "h": 154
+   },
+   "rows": 4,
+   "overlapPx2": 0,
+   "cardText": "NEXT BEST MOVE Tidus Quick Hit → Dark Shiva IN SPECIAL 99,999 36 MP 87% TO HIT Physical damage Most damage on the board — 99999 to Dark Shiva."
+  }
+ ],
+ "pauseRecoveries": 0,
+ "misses": [],
+ "orders": [],
+ "escapes": [],
+ "targetMismatches": [],
+ "pickerPlays": [],
+ "stallRecoveries": 0,
+ "lastChain": {
+  "links": 5,
+  "chainLength": 7,
+  "phase": "play:action-start",
+  "turn": 119,
+  "ms": 659883
+ },
+ "mgSince": null,
+ "emptyPicks": 0,
+ "lastPartySeq": 426,
+ "minigames": [
+  {
+   "turn": 26,
+   "kind": "swordplay",
+   "title": "Slice & Dice",
+   "subtitle": "SWORDPLAY · PRESS ENTER IN THE GOLD ZONE",
+   "attempts": [
+    {
+     "seenAt": 51.6,
+     "zone": [
+      46.2,
+      53.5
+     ]
+    },
+    {
+     "seenAt": 51.6,
+     "zone": [
+      46.2,
+      53.5
+     ]
+    }
+   ],
+   "pressLog": [
+    {
+     "key": "Enter",
+     "pos": 51.64,
+     "zoneStart": 46.18,
+     "zoneWidth": 7.27,
+     "inZone": true
+    },
+    {
+     "key": "Enter",
+     "pos": 51.64,
+     "zoneStart": 46.18,
+     "zoneWidth": 7.27,
+     "inZone": true
+    }
+   ],
+   "closed": true,
+   "ms": 616,
+   "engine": {
+    "actor": "tidus",
+    "ability": "Slice & Dice",
+    "extra": {
+     "kind": "tidus-timing",
+     "timing": {
+      "success": true,
+      "timeRemainingMs": 1833.3333730697632,
+      "timerMs": 3000,
+      "frame": 35
+     }
+    }
+   }
+  },
+  {
+   "turn": 54,
+   "kind": "swordplay",
+   "title": "Slice & Dice",
+   "subtitle": "SWORDPLAY · PRESS ENTER IN THE GOLD ZONE",
+   "attempts": [
+    {
+     "seenAt": 60.4,
+     "zone": [
+      46.2,
+      53.5
+     ]
+    },
+    {
+     "seenAt": 43.6,
+     "zone": [
+      46.2,
+      53.5
+     ]
+    },
+    {
+     "seenAt": 39.3,
+     "zone": [
+      46.2,
+      53.5
+     ]
+    },
+    {
+     "seenAt": 48,
+     "zone": [
+      46.2,
+      53.5
+     ]
+    },
+    {
+     "seenAt": 48,
+     "zone": [
+      46.2,
+      53.5
+     ]
+    }
+   ],
+   "pressLog": [
+    {
+     "key": "Enter",
+     "pos": 60.36,
+     "zoneStart": 46.18,
+     "zoneWidth": 7.27,
+     "inZone": false
+    },
+    {
+     "key": "Enter",
+     "pos": 43.64,
+     "zoneStart": 46.18,
+     "zoneWidth": 7.27,
+     "inZone": false
+    },
+    {
+     "key": "Enter",
+     "pos": 39.27,
+     "zoneStart": 46.18,
+     "zoneWidth": 7.27,
+     "inZone": false
+    },
+    {
+     "key": "Enter",
+     "pos": 48,
+     "zoneStart": 46.18,
+     "zoneWidth": 7.27,
+     "inZone": true
+    },
+    {
+     "key": "Enter",
+     "pos": 48,
+     "zoneStart": 46.18,
+     "zoneWidth": 7.27,
+     "inZone": true
+    }
+   ],
+   "closed": true,
+   "ms": 1998,
+   "engine": {
+    "actor": "tidus",
+    "ability": "Slice & Dice",
+    "extra": {
+     "kind": "tidus-timing",
+     "timing": {
+      "success": true,
+      "timeRemainingMs": 899.9999761581421,
+      "timerMs": 3000,
+      "frame": 63
+     }
+    }
+   }
+  },
+  {
+   "turn": 117,
+   "kind": "bushido",
+   "title": "Shooting Star",
+   "subtitle": "BUSHIDO · ENTER THE SEQUENCE",
+   "chips": [
+    "Q△",
+    "Enter✕",
+    "K□",
+    "Esc○",
+    "←",
+    "→",
+    "Esc○"
+   ],
+   "buttons": [
+    "triangle",
+    "confirm",
+    "square",
+    "cancel",
+    "left",
+    "right",
+    "cancel"
+   ],
+   "keys": [
+    "q",
+    "Enter",
+    "k",
+    "x",
+    "ArrowLeft",
+    "ArrowRight",
+    "x"
+   ],
+   "unknownGlyphs": [],
+   "closed": true,
+   "ms": 1225,
+   "engine": {
+    "actor": "auron",
+    "ability": "Shooting Star",
+    "extra": {
+     "kind": "auron-sequence",
+     "sequence": {
+      "success": true,
+      "correctInputs": 7,
+      "timeRemainingMs": 2133.333444595337,
+      "frame": 56
+     }
+    }
+   }
+  }
+ ],
+ "minigameShots": {
+  "swordplay": true,
+  "bushido": true
+ },
+ "turns": 119,
+ "fightMs": 660140,
+ "afterFight": "battle",
+ "outcome": "stalled",
+ "outcomeFrom": "the battle screen was still up when the route stopped playing",
+ "stalledAt": {
+  "link": 5,
+  "phase": "play:action-start"
+ },
+ "logKinds": {
+  "turn-start": 55,
+  "mp-damage": 17,
+  "action-start": 82,
+  "damage": 53,
+  "overdrive-gauge": 69,
+  "action-end": 82,
+  "counter": 27,
+  "miss": 24,
+  "status-add": 8,
+  "summon": 5,
+  "script-trigger": 2,
+  "status-remove": 4,
+  "ko": 4,
+  "dismiss": 5,
+  "minigame-request": 1,
+  "victory": 1
+ },
+ "continuity": {
+  "file": "continuity/continuity.json",
+  "checks": {
+   "CHK-026": "FAIL",
+   "CHK-027": "FAIL"
+  },
+  "reasons": {
+   "CHK-026": [
+    "20 swap(s) of a standing figure move its feet more than the tolerance (worst 4 px at 1600 wide)",
+    "3 swap(s) of a standing figure move the silhouette's own stance more than the tolerance (worst 10.1 px at 1600 wide), whatever stance the registration claims"
+   ],
+   "CHK-027": [
+    "12 jerk(s) of 40 px or more in one frame AT A POSE SWAP (worst 103.1 px)"
+   ]
+  },
+  "error": null
+ },
+ "post": {
+  "screen": "battle",
+  "lines": []
+ },
+ "resultsScreen": "battle",
+ "dboxTimeline": [
+  {
+   "ms": 14804,
+   "lastMs": 18936,
+   "screen": "cutscene",
+   "speaker": "",
+   "role": "",
+   "text": "The airship, high over Spira. Below, six places the pilgrimage touched have gone dark at once.",
+   "portrait": null,
+   "narrate": true,
+   "show": 1
+  },
+  {
+   "ms": 18969,
+   "lastMs": 20452,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "Someone is calling them. All of them, all at once.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 2
+  },
+  {
+   "ms": 20485,
+   "lastMs": 21969,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Calling. Forcing.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 3
+  },
+  {
+   "ms": 22002,
+   "lastMs": 23487,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "The same shapes as yours, Yuna. Wrong colours.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 4
+  },
+  {
+   "ms": 23518,
+   "lastMs": 24019,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "Yevon has kept its acolytes. They need no temple for this.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 5
+  },
+  {
+   "ms": 24035,
+   "lastMs": 24052,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "Six of them, ya? One for every road we walked",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 6
+  },
+  {
+   "ms": 24069,
+   "lastMs": 24069,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "Then we walk them again, and send each one home.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 7
+  },
+  {
+   "ms": 24086,
+   "lastMs": 24086,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Start where it started. Besaid",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 8
+  },
+  {
+   "ms": 24103,
+   "lastMs": 24200,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Alright. An old friend, then. A bad one.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 9,
+   "endMs": 24201
+  },
+  {
+   "ms": 90186,
+   "lastMs": 93418,
+   "screen": "battle",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Her fury is full. Send someone ahead of you.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 10,
+   "endMs": 93419
+  },
+  {
+   "ms": 110154,
+   "lastMs": 112219,
+   "screen": "battle",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "One.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 11
+  },
+  {
+   "ms": 112251,
+   "lastMs": 115268,
+   "screen": "battle",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "The next is in the desert, where Home stood.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 12
+  },
+  {
+   "ms": 115301,
+   "lastMs": 119267,
+   "screen": "battle",
+   "speaker": "",
+   "role": "",
+   "text": "The Sanubia desert, by the ruins of Home.",
+   "portrait": null,
+   "narrate": true,
+   "show": 13,
+   "endMs": 119271
+  },
+  {
+   "ms": 262778,
+   "lastMs": 265544,
+   "screen": "battle",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "He hit me back every single time.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 14
+  },
+  {
+   "ms": 265577,
+   "lastMs": 267979,
+   "screen": "battle",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Then you learned.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 15
+  },
+  {
+   "ms": 268012,
+   "lastMs": 272194,
+   "screen": "battle",
+   "speaker": "",
+   "role": "",
+   "text": "The Thunder Plains. The lightning has not stopped.",
+   "portrait": null,
+   "narrate": true,
+   "show": 16,
+   "endMs": 272201
+  },
+  {
+   "ms": 346860,
+   "lastMs": 349943,
+   "screen": "battle",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Thunder is coming. Do not stand in it.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 17,
+   "endMs": 349943
+  },
+  {
+   "ms": 504119,
+   "lastMs": 506736,
+   "screen": "battle",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "That's not all of him, ya.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 18
+  },
+  {
+   "ms": 506769,
+   "lastMs": 509553,
+   "screen": "battle",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "No. The storm has a second strike.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 19
+  },
+  {
+   "ms": 509586,
+   "lastMs": 513353,
+   "screen": "battle",
+   "speaker": "",
+   "role": "",
+   "text": "The same plains, one flash later.",
+   "portrait": null,
+   "narrate": true,
+   "show": 20,
+   "endMs": 513365
+  },
+  {
+   "ms": 574282,
+   "lastMs": 577302,
+   "screen": "battle",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "He is winding up, ya! Call an aeon!",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 21,
+   "endMs": 577302
+  },
+  {
+   "ms": 651680,
+   "lastMs": 654262,
+   "screen": "battle",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "He is going home at last.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 22
+  },
+  {
+   "ms": 654321,
+   "lastMs": 656445,
+   "screen": "battle",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Slowly.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 23
+  },
+  {
+   "ms": 656479,
+   "lastMs": 660646,
+   "screen": "battle",
+   "speaker": "",
+   "role": "",
+   "text": "The road to the Macalania temple, white and quiet.",
+   "portrait": null,
+   "narrate": true,
+   "show": 24,
+   "endMs": 660648
+  }
+ ],
+ "audioDebugFile": {
+  "file": "dark-aeons-win-r35hid/audio-debug.jsonl",
+  "samples": 15,
+  "note": "one whole audioDebug() per line; nothing cut"
+ },
+ "minutes": 13.51,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "media": [
+  "art/title/echo.webp",
+  "art/characters/auron/idle.png",
+  "art/backdrops/dreams-end.webp",
+  "art/backdrops/gagazet.webp",
+  "art/characters/mortiorchis/idle.png",
+  "art/characters/seymour-flux-body/idle.png",
+  "art/portraits/tidus.webp",
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "audio/sfx/sprite-v2.mp3",
+  "art/portraits/yuna.webp",
+  "art/portraits/kimahri.png",
+  "audio/music/chapter-select.mp3",
+  "art/backdrops/gagazet.thumb.webp",
+  "art/characters/seymour-flux-body/idle.thumb.png",
+  "art/backdrops/zanarkand-dome.thumb.webp",
+  "art/characters/yunalesca-1/idle.thumb.png",
+  "art/backdrops/zanarkand-dome.webp",
+  "art/characters/yunalesca-1/idle.png",
+  "art/portraits/auron.webp",
+  "audio/sfx/parity-ffx-core.mp3",
+  "audio/music/scene-gagazet.mp3",
+  "art/characters/braskas-final-aeon-1/idle.png",
+  "art/backdrops/mushroom-rock-road.webp",
+  "art/pause/ch34-dark-aeons.webp",
+  "art/characters/dark-anima/idle.webp",
+  "art/characters/dark-bahamut/idle.webp",
+  "art/portraits/wakka.webp",
+  "art/portraits/lulu.webp",
+  "art/portraits/rikku.webp",
+  "art/backdrops/evrae-airship-deck.webp",
+  "audio/music/boss-challenge.mp3",
+  "art/characters/dark-valefor/idle.webp",
+  "audio/music/victory-ffx.mp3",
+  "art/characters/tidus/idle.png",
+  "art/characters/yuna/idle.png",
+  "audio/music/pause.mp3",
+  "art/pause/ch34-dark-aeons.2x.webp",
+  "audio/music/defeat-ffx.mp3",
+  "art/characters/tidus/ready.png",
+  "art/characters/yuna/ready.png",
+  "art/characters/auron/ready.png",
+  "art/characters/dark-valefor/attack.webp",
+  "art/characters/dark-valefor/cast.webp",
+  "art/characters/dark-valefor/hurt.webp",
+  "art/characters/dark-valefor/ko.webp",
+  "art/characters/tidus/attack.png",
+  "art/characters/tidus/cast.png",
+  "art/characters/tidus/item.png",
+  "art/characters/tidus/hurt.png",
+  "art/characters/tidus/ko.png",
+  "art/characters/tidus/defend.webp",
+  "art/characters/yuna/attack.png",
+  "art/characters/yuna/cast.png",
+  "art/characters/yuna/item.png",
+  "art/characters/yuna/hurt.png",
+  "art/characters/yuna/ko.png",
+  "art/characters/auron/attack.png",
+  "art/characters/auron/cast.png",
+  "art/characters/auron/item.png",
+  "art/characters/auron/hurt.png",
+  "art/characters/auron/ko.png",
+  "art/characters/tidus/victory.png",
+  "art/characters/tidus/sleep.png",
+  "art/characters/tidus/critical.png",
+  "art/characters/tidus/follow.png",
+  "art/characters/tidus/od-energy-rain.png",
+  "art/characters/tidus/od-slice-and-dice.png",
+  "art/characters/yuna/victory.png",
+  "art/characters/yuna/sleep.png",
+  "art/characters/yuna/critical.png",
+  "art/characters/yuna/follow.png",
+  "art/characters/auron/victory.png",
+  "art/characters/auron/sleep.png",
+  "art/characters/auron/critical.png",
+  "art/characters/auron/follow.webp",
+  "art/pause/tidus.2x.webp",
+  "art/pause/yuna.2x.webp",
+  "art/pause/auron.2x.webp",
+  "art/backdrops/mushroom-rock-road-ruined.webp",
+  "art/pause/tidus.webp",
+  "art/portrait-parts/tidus/2x/mouth-open-smile.png",
+  "art/portrait-parts/tidus/2x/mouth-concerned-press.png",
+  "art/portrait-parts/tidus/2x/lidR-closed.png",
+  "art/portrait-parts/tidus/2x/lidL-closed.png",
+  "art/portrait-parts/tidus/2x/eyeR-socket.webp",
+  "art/portrait-parts/tidus/2x/eyeR-iris.webp",
+  "art/portrait-parts/tidus/2x/eyeR-catch.png",
+  "art/portrait-parts/tidus/2x/eyeR-window.png",
+  "art/portrait-parts/tidus/2x/eyeL-socket.webp",
+  "art/portrait-parts/tidus/2x/eyeL-iris.webp",
+  "art/portrait-parts/tidus/2x/eyeL-catch.png",
+  "art/portrait-parts/tidus/2x/eyeL-window.png",
+  "art/pause/yuna.webp",
+  "art/portrait-parts/yuna/2x/mouth-open-smile.png",
+  "art/portrait-parts/yuna/2x/mouth-concerned-press.png",
+  "art/portrait-parts/yuna/2x/lidR-closed.png",
+  "art/portrait-parts/yuna/2x/lidL-closed.png",
+  "art/portrait-parts/yuna/2x/eyeR-socket.webp",
+  "art/portrait-parts/yuna/2x/eyeR-iris.webp",
+  "art/portrait-parts/yuna/2x/eyeR-catch.png",
+  "art/portrait-parts/yuna/2x/eyeR-window.png",
+  "art/portrait-parts/yuna/2x/eyeL-socket.webp",
+  "art/portrait-parts/yuna/2x/eyeL-iris.webp",
+  "art/portrait-parts/yuna/2x/eyeL-catch.png",
+  "art/portrait-parts/yuna/2x/eyeL-window.png",
+  "art/pause/auron.webp",
+  "art/portrait-parts/auron/2x/mouth-open-smile.png",
+  "art/portrait-parts/auron/2x/mouth-concerned-press.png",
+  "art/portrait-parts/auron/2x/lidL-closed.png",
+  "art/portraits/dark-valefor.webp",
+  "art/characters/valefor/idle.png",
+  "art/rigs/valefor/1x/tail.png",
+  "art/rigs/valefor/1x/wing.png",
+  "art/rigs/valefor/1x/plume.png",
+  "art/rigs/valefor/1x/legF.png",
+  "art/rigs/valefor/1x/legN.png",
+  "art/rigs/valefor/1x/neck.png",
+  "art/rigs/valefor/1x/body.png",
+  "art/rigs/valefor/1x/head.png",
+  "art/rigs/valefor/1x/legN.rim.webp",
+  "art/rigs/valefor/1x/legF.rim.webp",
+  "art/rigs/valefor/1x/head.rim.webp",
+  "art/rigs/valefor/1x/neck.rim.webp",
+  "art/rigs/valefor/1x/tail.rim.webp",
+  "art/rigs/valefor/1x/plume.rim.webp",
+  "art/rigs/valefor/1x/body.rim.webp",
+  "art/rigs/valefor/1x/wing.rim.webp",
+  "art/portraits/valefor.webp",
+  "art/characters/dark-ifrit/idle.webp",
+  "art/characters/dark-ifrit/attack.webp",
+  "art/characters/dark-ifrit/cast.webp",
+  "art/characters/dark-ifrit/hurt.webp",
+  "art/characters/dark-ifrit/ko.webp",
+  "art/backdrops/bikanel-desert-provisional.webp",
+  "art/portraits/dark-ifrit.webp",
+  "art/characters/dark-ixion/idle.webp",
+  "art/characters/dark-ixion/attack.webp",
+  "art/characters/dark-ixion/cast.webp",
+  "art/characters/dark-ixion/hurt.webp",
+  "art/characters/dark-ixion/ko.webp",
+  "art/portraits/dark-ixion.webp",
+  "art/characters/ifrit/idle.png",
+  "art/rigs/ifrit/1x/tailU.png",
+  "art/rigs/ifrit/1x/tailL.png",
+  "art/rigs/ifrit/1x/armF.png",
+  "art/rigs/ifrit/1x/legF.png",
+  "art/rigs/ifrit/1x/legN.png",
+  "art/rigs/ifrit/1x/body.png",
+  "art/rigs/ifrit/1x/head.png",
+  "art/rigs/ifrit/1x/legF.rim.webp",
+  "art/rigs/ifrit/1x/tailU.rim.webp",
+  "art/rigs/ifrit/1x/tailL.rim.webp",
+  "art/rigs/ifrit/1x/armF.rim.webp",
+  "art/rigs/ifrit/1x/legN.rim.webp",
+  "art/rigs/ifrit/1x/head.rim.webp",
+  "art/rigs/ifrit/1x/body.rim.webp",
+  "art/portraits/ifrit.webp",
+  "art/characters/ixion/idle.png",
+  "art/characters/ixion/attack.png",
+  "art/characters/ixion/cast.png",
+  "art/characters/ixion/hurt.png",
+  "art/characters/ixion/ko.png",
+  "art/portraits/ixion.webp",
+  "art/characters/ixion/overdrive.png",
+  "art/characters/shiva/idle.png",
+  "art/characters/shiva/attack.png",
+  "art/characters/shiva/cast.png",
+  "art/characters/shiva/hurt.png",
+  "art/characters/shiva/ko.png",
+  "art/portraits/shiva.webp",
+  "art/portraits/dark-ixion-2.webp",
+  "art/characters/dark-shiva/idle.webp",
+  "art/characters/dark-shiva/attack.webp",
+  "art/characters/dark-shiva/cast.webp",
+  "art/characters/dark-shiva/hurt.webp",
+  "art/characters/dark-shiva/ko.webp",
+  "art/backdrops/macalania-temple.webp",
+  "art/portraits/dark-shiva.webp"
+ ]
+}

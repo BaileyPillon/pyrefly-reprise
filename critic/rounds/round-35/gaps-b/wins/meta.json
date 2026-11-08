@@ -1,0 +1,78 @@
+{
+  "penance": {
+    "label": "Penance (hidden Chapter 35, word judgment, FFX only)",
+    "verdict": "PASS (a real-key win with ONE recorded state write that set up the last blow)",
+    "chk022": "PASS: Victory results page (THE FAHRENHEIT - THE DECK, CLEARED, AP 192,000 x3, Dark Matter x20, Master Sphere x5), the post scene (5 lines, 'It stopped. The hands, too.' to 'Keep walking.'), then the chapter-select board (19 tiles, 0 of 19 beaten: a hidden chapter leaves the board unchanged, as designed)",
+    "chk023": "PASS: the Separation (read at decision 95, tick 115, Penance at 8,900,031 after a real Tidus Quick Hit; banner 'Separation / Penance was hasted' on screen) and an arm returning (arm-fell 12 times and arm-returned 10 times, each read from the engine, the Left Arm back 12 ticks after its fall); also Obliteration x13, the Right Arm's Dark Calamity and Penance's Immolation (the first phase-2 action) played out after real key presses",
+    "line": "docs/handoff/ch-penance.md 5.1 (the guide line) ported to the page (penance-guide.mjs, from tests/unit/helpers/penanceGuide.ts): Rikku's Hyper NulAll Mix (picker by keys), Three Stars, an arm struck only when the turn list says it would act before the party can spare a turn, the last blow on an arm held, Dispel on Penance's Regen and Haste, Curaga / X-Potion / Phoenix Down / Soft / Esuna / Remedy, the body with every turn the arms spare. Energy Rain not played. Battle speed FAST (the player setting, set with setBattleSpeed) to keep it near 10 minutes.",
+    "stateWrite": "ONE: at decision 105 (10 decisions after the Separation) Penance's HP 8,800,032 -> 30,000 through the debug API; the last blow was Yuna's real Attack (94,016: 'Penance falls', the Right Arm falls with it). A full win is 385 to 487 decisions (30 minutes and more by hand).",
+    "notes": [
+      "Run 1 (penance-run1-arms-first-aborted, kept): a plain 'arms first' line with no schedule lost in 7 decisions (the Left Arm's Tera Graviton then Obliteration wiped the party before the sixth blow), and a second attempt of it survived 47 decisions but only ever dealt 500,000 to Penance (11.5M left) because every turn went to an arm that came back 12 ticks later. Only the turn-list schedule of the handoff's line reached the change: this agrees with the auditors' reading that Penance's winning line needs turn-list-exact play (PR-0635 round 35).",
+      "0 console errors, 0 not-found"
+    ]
+  },
+  "darkaeons": {
+    "label": "The Dark Aeons (hidden Chapter 34, word darkaeon, FFX only)",
+    "verdict": "PASS (all seven links won by real keys, NO state write)",
+    "chk022": "PASS: Victory results page (BESAID TO MT. GAGAZET, CLEARED, AP 175,000 x3, Dark Matter x9, Master Sphere) after the post scene, then the board (19 tiles, 0 of 19 beaten)",
+    "chk023": "PASS: Dark Aeon Overdrives played out in a page after real key presses on every link that has one (Dark Valefor's Energy Blast, Dark Ifrit's Meteor Strike, Dark Ixion's Aerospark and Thor's Hammer, Dark Shiva's Diamond Dust and Heavenly Strike, Dark Anima's Pain, Mega Graviton and Oblivion, Dark Bahamut's Impulse and Mega Flare); Yojimbo's Pay and Zanmato on links 6 and 7: 'yojimbo:zanmato -> dark-anima' KO'd Dark Anima and 'yojimbo:zanmato -> dark-bahamut' KO'd Dark Bahamut",
+    "line": "docs/handoff/ch-dark-aeons.md section 5 (the advisor line, src/engine/tactics/dark-aeons.ts): links 1 to 5 follow the advisor card's move mapped onto the menu rows; on links 6 and 7 Yuna's card calls Yojimbo in and every Yojimbo turn is Aeon > Pay 100,000 by the keys (the HUD shows a ladder of Pay rows). A defeat retries that link, by the chapter's rule.",
+    "stateWrite": "NONE",
+    "notes": [
+      "Attempts: link 6 lost once (Yojimbo's two Pays rolled plain Wakizashi strokes and Pain killed him; seed 6) then won on the retry (seed 1006, Zanmato on the first Pay after the summon); link 7 lost once (seed 1007: Wakizashi, Wakizashi, Wakizashi) then won on the retry (seed 2007: Zanmato on the first Pay). 24.2 minutes, 3 attempts of the route, 9 link fights.",
+      "Round 35's route stalled at link 6 because it had no handler for Yojimbo's Aeon > Pay ladder (PR-0635); this job adds it and it works with real keys.",
+      "One finding: on a fodder aeon's turn the card named an Overdrive row (Ixion's Thor's Hammer) that the job's generic opener could not reach, so the aeon was dismissed instead; the HUD row path for an aeon's Overdrive was not mapped (minor, job-side; it did not change the result)",
+      "0 console errors, 0 not-found"
+    ]
+  },
+  "bevelle": {
+    "label": "The Bevelle Guardians (hidden Chapter 37, word drillshot, FFX-2 only)",
+    "verdict": "PASS (all three acts won by real keys, NO state write)",
+    "chk022": "PASS: Victory results page (BEVELLE UNDERGROUND - FLOORS 3 AND 7, CLEARED, EXP 2,500 x3, GIL 3,100, Nultide Ring, Regen Bangle, Pearl Necklace), the post scene, the board (19 tiles, 0 of 19 beaten)",
+    "chk023": "PASS: Baralai's Drill Shot (x2-baralai-drill-shot on Yuna, the girl who landed the tenth result; 9 damage results on him before it) plus Glint, Chain Attack, Looming Glacier and Absorb; Georapella's Ga ring (Blizzaga, Thundaga, Waterga, Firaga) and the Precepts Guard's Demi, Slow, Osmose, Bio and Drain were read from the log",
+    "line": "docs/handoff/ch-bevelle-guardians.md section 6: the 'careful' line for acts 1 and 2 (Rikku's Lunar then Light Curtain, Phoenix Down, Cura or Hi-Potion under 45 percent, Attack; Yuna the White Mage has no Attack row and casts Protect, Shell and Cure) and the 'change' line for act 3 (Yuna Changes to a Gunner by Change > Gunner on her first turn, then attacks). FFX-2's ATB is the shipped Wait.",
+    "stateWrite": "NONE",
+    "notes": [
+      "11.7 minutes, 76 decisions, one attempt (3 acts, 2 seams)",
+      "0 console errors, 0 not-found"
+    ]
+  },
+  "keeper": {
+    "label": "The Spectral Keeper (hidden Chapter 29, word keeper, FFX only)",
+    "verdict": "PASS (a real-key win with ONE recorded state write that set up the last blow)",
+    "chk022": "PASS: Victory results page (ZANARKAND DOME - THE FOOT OF THE LIFT, CLEARED, AP 12,000 x3, GIL 7,000, Lv. 4 Key Sphere), the post scene, the board (19 tiles, 0 of 19 beaten)",
+    "chk023": "PASS: the Keeper's Move: four real Move commands (Tidus glyph 1 to 5, Yuna 2 to 4, Auron 3 to 6, Tidus 5 to 2), each an action-start 'move' with a 'platform' event and the message 'X steps to glyph N', the cursor aimed at the Circle by arrow keys; the Keeper's Attack All sweeps (keeper-attack-all on the front platform and its neighbours) and Berserk Tail answered the party's blows; the hit counter read 3 with the front on platform 6",
+    "line": "docs/handoff/ch-keeper.md 5a (round 34's ring plan): Phoenix Down on a fallen member, a potion under 45 percent, two demonstration Moves then out of the sweep zone or off a lit glyph, otherwise Attack. The best scripted line wins 3.5 in 100, so the win is set up by one write.",
+    "stateWrite": "ONE: at about 49 s, after two real Moves and an Attack All sweep had been read, the Keeper's HP 49,393 -> 400; the last blow was a real Attack ('Victory' 1:05).",
+    "notes": [
+      "1.8 minutes, 10 decisions",
+      "0 console errors, 0 not-found"
+    ]
+  },
+  "maesters": {
+    "label": "The Fallen Maesters (hidden Chapter 30, word infinito, FFX-2 only)",
+    "verdict": "PASS for floors 20, 40 and 60 (real keys, no write); floor 80 is a real-key finish after ONE recorded state write (floor 80 stays UNPROVEN as winnable by a line: PR-0613)",
+    "chk022": "PASS: Victory results page (VIA INFINITO - FLOORS 20, 40, 60 AND 80, CLEARED, EXP 12,970 x3, GIL 3,130, Stamina Tonic, Pixie Dust), the post scene, the board (19 tiles, 0 of 19 beaten)",
+    "chk023": "PASS: Concherer's shell: Paine walked The End's gates by four real Change rows (Warrior, Gunner, Thief, Dark Knight; gates blue, yellow, green, red), her real Charon landed 21,420 and the message 'Concherer's shell breaks!' was read from the log and shown on screen; Concherer then only attacked and fell to Yuna's Darkness and Megalixirs alone (Rikku and Paine were KO'd by Megaton Press and Charon's HP cost; this build has no Phoenix Down). Chac's Stony Glare and Attack were seen on floor 80.",
+    "line": "docs/handoff/ch-maesters.md sections 6 and 14 (round 34b's walk): floors 20 and 40 a plain line, floor 60 the walk then Charon, floor 80 the plain line after the write.",
+    "stateWrite": "ONE: at floor 80's first menu Chac's HP 437,850 -> 2,000; the last blow was Rikku's real Attack (2,456: 'KO x2-chac'). Floors 20, 40 and 60 were played with no write.",
+    "notes": [
+      "9.5 minutes, 73 decisions",
+      "Two earlier runs (maesters-run1-walk-no-revive-aborted, maesters-run2-no-revive-diag, kept) showed the same floor 60 and found this build's items are only Megalixir, Light Curtain, Lunar Curtain and Remedy: nobody can raise a fallen girl, so floor 60 is a one-girl finish after Charon, which is why the job mends the caster with a Megalixir under 30 percent",
+      "0 console errors, 0 not-found"
+    ]
+  },
+  "farplane": {
+    "label": "The Farplane Cup (hidden Chapter 38, word duelist, FFX-2 only)",
+    "verdict": "PASS for the flow only: all three duels finished by REAL KEYS to the results page and the board, but each duel needed ONE recorded state write (three writes); NO duel was won without one in 17 real-key fights, so the win itself is UNVERIFIED as reachable (PR-0636 stands)",
+    "chk022": "PASS (flow): Victory results page (THE FIEND ARENA - A STAND-IN STAGE, CLEARED, EXP 4,400 x3, GIL 2,650, Mega Phoenix x2, X-Potion x2, Turbo Ether), the post scene (4 lines: \"He fought like someone who was told to.\" ... \"Three names on a door, and the door is still open.\"), the board (19 tiles, 0 of 19 beaten); loss to retry was shown on every defeat",
+    "chk023": "PASS (enemy mechanics read from the log after real key presses): Tidus (the masked duelist) opened with Blitz Ace (nine hits on Yuna, KO), then Hastega, Delay Buster and Spiral Cut; Seymour cast Black Sky, Meteor, Ultima, Demi, Slowga, Shell, Protect, Dispel, Drain Attack, Magic Up, Curaga and Absorb; Auron cast Dragon Fang, Full Break and Shooting Star (the Eject; farplane-run1 and farplane-run2 folders) and healed with X-Potion and Mega-Potion under an eighth of his HP. A Special dressphere was NOT attempted (four to five Changes a girl; the engine does not grant the Eject immunity, PR-0636), so the sourced answer to duel 1 stays unshown.",
+    "line": "docs/handoff/ch-farplane-cup.md section 6 (the curtains line): Rikku Light then Lunar Curtain then Phoenix Down / Potion / Attack; Yuna and Paine Darkness on the duelist. FFX-2 ATB is the shipped Wait.",
+    "stateWrite": "THREE (one per duel, each at that duel's first menu after real defeats): Auron 187,500 -> 3,000 (after 7 real duel-1 defeats and one with a 15,000 write that lost because Auron heals under an eighth of his HP); Tidus 136,200 -> 3,000 (after 6 real duel-2 defeats); Seymour 145,500 -> 3,000 (after 3 real duel-3 defeats). The last blow of each duel was a real key (Darkness or Attack). 17 real-key fights without a write: 0 wins (duel 1: 5 + 2 defeats, duel 2: 6, duel 3: 3).",
+    "notes": [
+      "Final run 17.6 minutes (5 route attempts, 7 duel fights); earlier runs kept as farplane-run1 (5 natural duel-1 defeats; the 5th ended on the title screen because the job pressed Escape on a defeat results screen: a job bug, fixed with safeRoot, nothing in the game), farplane-run2 (2 natural duel-1 defeats and a defeat after the 15,000 write), farplane-run3 (duel 1 by write, then 5 natural duel-2 defeats)",
+      "The write sets a state up; it proves nothing about winnability (PR-0636 for duel 1: the build has no Eject guard; the bench rates were 11, 45 and 54 percent for this line)",
+      "0 console errors, 0 not-found"
+    ]
+  }
+}

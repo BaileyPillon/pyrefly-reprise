@@ -1,0 +1,286 @@
+{
+ "notes": [
+  {
+   "ms": 1753,
+   "k": "live",
+   "v": {
+    "version": "0.1.0",
+    "scripts": [
+     "index-jYm-0mrJ.js"
+    ]
+   }
+  },
+  {
+   "ms": 7794,
+   "k": "door",
+   "v": {
+    "word": "duelist",
+    "typed": "duelist"
+   }
+  },
+  {
+   "ms": 10077,
+   "k": "afterDoor",
+   "v": "party-prep"
+  },
+  {
+   "ms": 18242,
+   "k": "preSceneHolds",
+   "v": 1
+  },
+  {
+   "ms": 19448,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1,
+    "boss": [
+     "x2-cup-auron"
+    ]
+   }
+  },
+  {
+   "ms": 139229,
+   "k": "fight-over",
+   "v": {
+    "attempt": 1,
+    "over": "left:results",
+    "decisions": 14,
+    "ms": 139229,
+    "lastFoe": "x2-cup-auron"
+   }
+  },
+  {
+   "ms": 145870,
+   "k": "afterFight",
+   "v": {
+    "label": "a1",
+    "screens": [
+     "results",
+     "party-prep",
+     "battle"
+    ],
+    "outcome": "defeat",
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 256846,
+   "k": "fight-over",
+   "v": {
+    "attempt": 2,
+    "over": "left:results",
+    "decisions": 14,
+    "ms": 256846,
+    "lastFoe": "x2-cup-auron"
+   }
+  },
+  {
+   "ms": 263479,
+   "k": "afterFight",
+   "v": {
+    "label": "a2",
+    "screens": [
+     "results",
+     "party-prep",
+     "battle"
+    ],
+    "outcome": "defeat",
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 310677,
+   "k": "fight-over",
+   "v": {
+    "attempt": 3,
+    "over": "left:results",
+    "decisions": 6,
+    "ms": 310677,
+    "lastFoe": "x2-cup-auron"
+   }
+  },
+  {
+   "ms": 317322,
+   "k": "afterFight",
+   "v": {
+    "label": "a3",
+    "screens": [
+     "results",
+     "party-prep",
+     "battle"
+    ],
+    "outcome": "defeat",
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 441834,
+   "k": "fight-over",
+   "v": {
+    "attempt": 4,
+    "over": "left:results",
+    "decisions": 16,
+    "ms": 441834,
+    "lastFoe": "x2-cup-auron"
+   }
+  },
+  {
+   "ms": 448442,
+   "k": "afterFight",
+   "v": {
+    "label": "a4",
+    "screens": [
+     "results",
+     "party-prep",
+     "battle"
+    ],
+    "outcome": "defeat",
+    "next": "battle"
+   }
+  },
+  {
+   "ms": 625212,
+   "k": "fight-over",
+   "v": {
+    "attempt": 5,
+    "over": "left:title",
+    "decisions": 18,
+    "ms": 625212,
+    "lastFoe": "x2-cup-auron"
+   }
+  },
+  {
+   "ms": 747708,
+   "k": "afterFight",
+   "v": {
+    "label": "a5",
+    "screens": [
+     "title"
+    ],
+    "outcome": null
+   }
+  },
+  {
+   "ms": 747710,
+   "k": "RESULT",
+   "v": "NOT WON"
+  }
+ ],
+ "shots": [
+  {
+   "file": "00-title.png",
+   "why": "title, fresh profile",
+   "ms": 3170,
+   "screen": "title"
+  },
+  {
+   "file": "01-party-prep.png",
+   "why": "party prep opened by the word (no card)",
+   "ms": 10203,
+   "screen": "party-prep"
+  },
+  {
+   "file": "02-pre-scene.png",
+   "why": "pre-battle scene, first line",
+   "ms": 14232,
+   "screen": "cutscene"
+  },
+  {
+   "file": "m-x2-cup-auron-x2-auron-dragon-fang.jpg",
+   "why": "x2-cup-auron starts x2-auron-dragon-fang",
+   "ms": 20117,
+   "screen": "battle"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-cup-auron)",
+   "ms": 20822,
+   "screen": "battle"
+  },
+  {
+   "file": "open-failure-1.jpg",
+   "why": "could not open Light Curtain (item) for rikku",
+   "ms": 24819,
+   "screen": "pause"
+  },
+  {
+   "file": "m-x2-cup-auron-x2-auron-attack.jpg",
+   "why": "x2-cup-auron starts x2-auron-attack",
+   "ms": 43192,
+   "screen": "battle"
+  },
+  {
+   "file": "open-failure-2.jpg",
+   "why": "could not open Potion (item) for rikku",
+   "ms": 57577,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-auron-x2-auron-full-break.jpg",
+   "why": "x2-cup-auron starts x2-auron-full-break",
+   "ms": 97861,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-cup-auron-x2-auron-shooting-star.jpg",
+   "why": "x2-cup-auron starts x2-auron-shooting-star",
+   "ms": 109093,
+   "screen": "battle"
+  },
+  {
+   "file": "a1-results-defeat.png",
+   "why": "the results screen (defeat)",
+   "ms": 141840,
+   "screen": "results"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-cup-auron)",
+   "ms": 155134,
+   "screen": "battle"
+  },
+  {
+   "file": "a2-results-defeat.png",
+   "why": "the results screen (defeat)",
+   "ms": 259459,
+   "screen": "results"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-cup-auron)",
+   "ms": 273567,
+   "screen": "battle"
+  },
+  {
+   "file": "a3-results-defeat.png",
+   "why": "the results screen (defeat)",
+   "ms": 313292,
+   "screen": "results"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-cup-auron)",
+   "ms": 326506,
+   "screen": "battle"
+  },
+  {
+   "file": "a4-results-defeat.png",
+   "why": "the results screen (defeat)",
+   "ms": 444432,
+   "screen": "results"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-cup-auron)",
+   "ms": 457828,
+   "screen": "battle"
+  },
+  {
+   "file": "open-failure-3.jpg",
+   "why": "could not open Attack (attack) for yuna",
+   "ms": 600610,
+   "screen": "title"
+  }
+ ]
+}

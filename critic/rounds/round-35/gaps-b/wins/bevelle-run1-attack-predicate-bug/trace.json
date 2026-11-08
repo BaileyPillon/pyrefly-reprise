@@ -1,0 +1,1457 @@
+{
+ "chapter": "bevelle",
+ "door": "drillshot",
+ "game": "ffx2",
+ "base": "https://echoesofspira.com/",
+ "seed": 1,
+ "startedAt": "2026-11-07T14:21:52.286Z",
+ "stateWrites": [],
+ "decisions": [
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 67,
+   "turn": 1,
+   "ms": 239496,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-blizzaga->",
+    "paine:attack->x2-georapella",
+    "  boss takes 303"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 83,
+   "turn": 2,
+   "ms": 240885,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 103,
+   "turn": 2,
+   "ms": 241601,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 91",
+    "  dmg rikku 145",
+    "  dmg paine 213"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 108,
+   "turn": 2,
+   "ms": 242317,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 108,
+   "turn": 2,
+   "ms": 243047,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 123,
+   "turn": 2,
+   "ms": 243775,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 145,
+   "turn": 2,
+   "ms": 244500,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 167,
+   "turn": 2,
+   "ms": 245216,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 188,
+   "turn": 2,
+   "ms": 245943,
+   "rowsBefore": null
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 201,
+   "turn": 2,
+   "ms": 246739,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-blizzaga->",
+    "paine:attack->x2-georapella",
+    "  boss takes 303",
+    "  dmg yuna 91",
+    "  dmg rikku 145",
+    "  dmg paine 213",
+    "x2-georapella:x2-georapella-thundaga->"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 203,
+   "turn": 3,
+   "ms": 247456,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 203,
+   "turn": 3,
+   "ms": 248177,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 203,
+   "turn": 3,
+   "ms": 248892,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 203,
+   "turn": 3,
+   "ms": 249611,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 203,
+   "turn": 3,
+   "ms": 250334,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 203,
+   "turn": 3,
+   "ms": 251051,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 219,
+   "turn": 3,
+   "ms": 251765,
+   "rowsBefore": null
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 230,
+   "turn": 3,
+   "ms": 252534,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-blizzaga->",
+    "paine:attack->x2-georapella",
+    "  boss takes 303",
+    "  dmg yuna 91",
+    "  dmg rikku 145",
+    "  dmg paine 213",
+    "x2-georapella:x2-georapella-thundaga->"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 263,
+   "turn": 3,
+   "ms": 253259,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 284,
+   "turn": 3,
+   "ms": 253973,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 91",
+    "  dmg rikku 131",
+    "  dmg paine 210"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 302,
+   "turn": 3,
+   "ms": 254693,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 302,
+   "turn": 3,
+   "ms": 255422,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 305,
+   "turn": 3,
+   "ms": 256139,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 327,
+   "turn": 3,
+   "ms": 256849,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 348,
+   "turn": 3,
+   "ms": 257572,
+   "rowsBefore": null
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 360,
+   "turn": 3,
+   "ms": 258361,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-blizzaga->",
+    "paine:attack->x2-georapella",
+    "  boss takes 303",
+    "  dmg yuna 91",
+    "  dmg rikku 145",
+    "  dmg paine 213",
+    "x2-georapella:x2-georapella-thundaga->",
+    "  dmg yuna 91",
+    "  dmg rikku 131",
+    "  dmg paine 210"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 393,
+   "turn": 3,
+   "ms": 259089,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-waterga->"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 397,
+   "turn": 4,
+   "ms": 259809,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 407,
+   "turn": 4,
+   "ms": 260533,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 429,
+   "turn": 4,
+   "ms": 261248,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 450,
+   "turn": 4,
+   "ms": 261975,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 472,
+   "turn": 4,
+   "ms": 262694,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 492,
+   "turn": 4,
+   "ms": 263408,
+   "rowsBefore": null
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 496,
+   "turn": 4,
+   "ms": 264209,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-blizzaga->",
+    "paine:attack->x2-georapella",
+    "  boss takes 303",
+    "  dmg yuna 91",
+    "  dmg rikku 145",
+    "  dmg paine 213",
+    "x2-georapella:x2-georapella-thundaga->",
+    "  dmg yuna 91",
+    "  dmg rikku 131",
+    "  dmg paine 210",
+    "x2-georapella:x2-georapella-waterga->",
+    "  dmg yuna 92",
+    "  dmg rikku 138",
+    "  dmg paine 190"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 496,
+   "turn": 4,
+   "ms": 264938,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 506,
+   "turn": 4,
+   "ms": 265656,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 528,
+   "turn": 4,
+   "ms": 266374,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 550,
+   "turn": 4,
+   "ms": 267097,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 572,
+   "turn": 4,
+   "ms": 267825,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-firaga->"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 591,
+   "turn": 5,
+   "ms": 268557,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 591,
+   "turn": 5,
+   "ms": 269288,
+   "rowsBefore": null
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 598,
+   "turn": 5,
+   "ms": 270072,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-blizzaga->",
+    "paine:attack->x2-georapella",
+    "  boss takes 303",
+    "  dmg yuna 91",
+    "  dmg rikku 145",
+    "  dmg paine 213",
+    "x2-georapella:x2-georapella-thundaga->",
+    "  dmg yuna 91",
+    "  dmg rikku 131",
+    "  dmg paine 210",
+    "x2-georapella:x2-georapella-waterga->",
+    "  dmg yuna 92",
+    "  dmg rikku 138",
+    "  dmg paine 190"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 632,
+   "turn": 5,
+   "ms": 270805,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 654,
+   "turn": 5,
+   "ms": 271528,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 674,
+   "turn": 5,
+   "ms": 272258,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 92",
+    "  dmg rikku 130",
+    "  dmg paine 192"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 691,
+   "turn": 5,
+   "ms": 272990,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 691,
+   "turn": 5,
+   "ms": 273708,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 694,
+   "turn": 5,
+   "ms": 274441,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 716,
+   "turn": 5,
+   "ms": 275170,
+   "rowsBefore": null
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 729,
+   "turn": 5,
+   "ms": 275979,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-blizzaga->",
+    "paine:attack->x2-georapella",
+    "  boss takes 303",
+    "  dmg yuna 91",
+    "  dmg rikku 145",
+    "  dmg paine 213",
+    "x2-georapella:x2-georapella-thundaga->",
+    "  dmg yuna 91",
+    "  dmg rikku 131",
+    "  dmg paine 210",
+    "x2-georapella:x2-georapella-waterga->",
+    "  dmg yuna 92",
+    "  dmg rikku 138",
+    "  dmg paine 190"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 763,
+   "turn": 5,
+   "ms": 276707,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 784,
+   "turn": 5,
+   "ms": 277427,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-blizzaga->"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 785,
+   "turn": 6,
+   "ms": 278150,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 798,
+   "turn": 6,
+   "ms": 278877,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 819,
+   "turn": 6,
+   "ms": 279604,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 841,
+   "turn": 6,
+   "ms": 280329,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 864,
+   "turn": 6,
+   "ms": 281058,
+   "rowsBefore": null
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 876,
+   "turn": 6,
+   "ms": 281838,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-blizzaga->",
+    "paine:attack->x2-georapella",
+    "  boss takes 303",
+    "  dmg yuna 91",
+    "  dmg rikku 145",
+    "  dmg paine 213",
+    "x2-georapella:x2-georapella-thundaga->",
+    "  dmg yuna 91",
+    "  dmg rikku 131",
+    "  dmg paine 210",
+    "x2-georapella:x2-georapella-waterga->",
+    "  dmg yuna 92",
+    "  dmg rikku 138",
+    "  dmg paine 190"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Cure on yuna (under 45 percent)",
+   "did": true,
+   "how": "path=White Magic > Cure; aim yuna=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 884,
+   "turn": 6,
+   "ms": 284688,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-white-mage-cure->yuna"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain (the careful line's opening)",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 920,
+   "turn": 7,
+   "ms": 288692,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-item-lunar-curtain->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "paine",
+   "why": "Hi-Potion on yuna (under 45 percent)",
+   "did": true,
+   "how": "path=Item > Hi-Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "x2-hi-potion",
+    "kind": "item"
+   },
+   "ticks": 932,
+   "turn": 8,
+   "ms": 292715,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-item-hi-potion->yuna",
+    "x2-georapella:x2-georapella-thundaga->"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Cure on paine (under 45 percent)",
+   "did": true,
+   "how": "path=White Magic > Cure; aim paine=true; ",
+   "cmd": {
+    "label": "Cure",
+    "id": "x2-white-mage-cure",
+    "kind": "ability"
+   },
+   "ticks": 1116,
+   "turn": 10,
+   "ms": 301444,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 45",
+    "  dmg rikku 64",
+    "  dmg paine 105",
+    "yuna:x2-white-mage-cure->paine"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "paine",
+   "why": "Hi-Potion on paine (under 45 percent)",
+   "did": true,
+   "how": "path=Item > Hi-Potion; aim paine=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "x2-hi-potion",
+    "kind": "item"
+   },
+   "ticks": 1195,
+   "turn": 12,
+   "ms": 308679,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-waterga->",
+    "paine:x2-item-hi-potion->paine"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain (the careful line's opening)",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 1225,
+   "turn": 13,
+   "ms": 313738,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-item-light-curtain->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 1312,
+   "turn": 14,
+   "ms": 318526,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 50",
+    "  dmg rikku 64",
+    "  dmg paine 104"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 1325,
+   "turn": 14,
+   "ms": 319259,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 9,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 1338,
+   "turn": 14,
+   "ms": 319990,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 10,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 1350,
+   "turn": 14,
+   "ms": 320719,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 11,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 1352,
+   "turn": 14,
+   "ms": 321460,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 12,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 1366,
+   "turn": 14,
+   "ms": 322220,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-firaga->"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 1367,
+   "turn": 15,
+   "ms": 322960,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 14,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 1369,
+   "turn": 15,
+   "ms": 323703,
+   "rowsBefore": null
+  }
+ ],
+ "links": [
+  {
+   "n": 1,
+   "key": "x2-georapella#1",
+   "foes": [
+    "x2-georapella"
+   ],
+   "seed": 1,
+   "ms": 237757,
+   "ticks": 67
+  },
+  {
+   "n": 1,
+   "key": "x2-georapella#1",
+   "foes": [
+    "x2-georapella"
+   ],
+   "seed": 1,
+   "ms": 246349,
+   "ticks": 201
+  },
+  {
+   "n": 1,
+   "key": "x2-georapella#1",
+   "foes": [
+    "x2-georapella"
+   ],
+   "seed": 1,
+   "ms": 252153,
+   "ticks": 230
+  },
+  {
+   "n": 1,
+   "key": "x2-georapella#1",
+   "foes": [
+    "x2-georapella"
+   ],
+   "seed": 1,
+   "ms": 257982,
+   "ticks": 360
+  },
+  {
+   "n": 1,
+   "key": "x2-georapella#1",
+   "foes": [
+    "x2-georapella"
+   ],
+   "seed": 1,
+   "ms": 263823,
+   "ticks": 496
+  },
+  {
+   "n": 1,
+   "key": "x2-georapella#1",
+   "foes": [
+    "x2-georapella"
+   ],
+   "seed": 1,
+   "ms": 269694,
+   "ticks": 598
+  },
+  {
+   "n": 1,
+   "key": "x2-georapella#1",
+   "foes": [
+    "x2-georapella"
+   ],
+   "seed": 1,
+   "ms": 275585,
+   "ticks": 729
+  },
+  {
+   "n": 1,
+   "key": "x2-georapella#1",
+   "foes": [
+    "x2-georapella"
+   ],
+   "seed": 1,
+   "ms": 281459,
+   "ticks": 876
+  }
+ ],
+ "attempts": [
+  {
+   "attempt": 1,
+   "over": "stuck: 8 decisions in a row were not taken",
+   "decisions": 8,
+   "ms": 246328
+  },
+  {
+   "attempt": 2,
+   "over": "stuck: 8 decisions in a row were not taken",
+   "decisions": 7,
+   "ms": 252134
+  },
+  {
+   "attempt": 3,
+   "over": "stuck: 8 decisions in a row were not taken",
+   "decisions": 7,
+   "ms": 257962
+  },
+  {
+   "attempt": 4,
+   "over": "stuck: 8 decisions in a row were not taken",
+   "decisions": 7,
+   "ms": 263797
+  },
+  {
+   "attempt": 5,
+   "over": "stuck: 8 decisions in a row were not taken",
+   "decisions": 7,
+   "ms": 269671
+  },
+  {
+   "attempt": 6,
+   "over": "stuck: 8 decisions in a row were not taken",
+   "decisions": 7,
+   "ms": 275555
+  },
+  {
+   "attempt": 7,
+   "over": "stuck: 8 decisions in a row were not taken",
+   "decisions": 7,
+   "ms": 281433
+  },
+  {
+   "attempt": 8,
+   "over": "stuck: 8 decisions in a row were not taken",
+   "decisions": 14,
+   "ms": 324083
+  }
+ ],
+ "mechanics": [
+  {
+   "ms": 237748,
+   "seq": 3,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-blizzaga",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 246734,
+   "seq": 28,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-thundaga",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 259210,
+   "seq": 45,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-waterga",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 268498,
+   "seq": 60,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-firaga",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 277648,
+   "seq": 75,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-blizzaga",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 292890,
+   "seq": 99,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-thundaga",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 302947,
+   "seq": 153,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-waterga",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 322533,
+   "seq": 227,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-firaga",
+   "targets": [],
+   "first": false
+  }
+ ],
+ "screens": [
+  {
+   "label": "a1",
+   "screens": [
+    "battle"
+   ],
+   "results": null,
+   "outcome": null,
+   "next": "battle"
+  },
+  {
+   "label": "a2",
+   "screens": [
+    "battle"
+   ],
+   "results": null,
+   "outcome": null,
+   "next": "battle"
+  },
+  {
+   "label": "a3",
+   "screens": [
+    "battle"
+   ],
+   "results": null,
+   "outcome": null,
+   "next": "battle"
+  },
+  {
+   "label": "a4",
+   "screens": [
+    "battle"
+   ],
+   "results": null,
+   "outcome": null,
+   "next": "battle"
+  },
+  {
+   "label": "a5",
+   "screens": [
+    "battle"
+   ],
+   "results": null,
+   "outcome": null,
+   "next": "battle"
+  },
+  {
+   "label": "a6",
+   "screens": [
+    "battle"
+   ],
+   "results": null,
+   "outcome": null,
+   "next": "battle"
+  },
+  {
+   "label": "a7",
+   "screens": [
+    "battle"
+   ],
+   "results": null,
+   "outcome": null,
+   "next": "battle"
+  },
+  {
+   "label": "a8",
+   "screens": [
+    "battle"
+   ],
+   "results": null,
+   "outcome": null,
+   "next": "battle"
+  }
+ ],
+ "speed": "normal",
+ "line": "careful (acts 1-2); change: Yuna to Gunner then strike (act 3)",
+ "live": {
+  "version": "0.1.0",
+  "scripts": [
+   "index-jYm-0mrJ.js"
+  ]
+ },
+ "battleSeed": 1,
+ "result": "NOT WON",
+ "consoleErrors": [],
+ "notFound": [],
+ "errors": [],
+ "minutes": 5.42
+}

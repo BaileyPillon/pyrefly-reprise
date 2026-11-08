@@ -1,0 +1,1543 @@
+{
+ "chapter": "penance",
+ "game": "ffx",
+ "goal": "win",
+ "size": "1600x900",
+ "base": "https://echoesofspira.com/",
+ "mode": "gpu",
+ "hooks": [
+  "window.__pyrefly.setSeed(1) before the first key (CHK-015 labelled setup hook, PR-0202)"
+ ],
+ "seedPinned": 1,
+ "seed": 1,
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1,
+   "links": 1,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "retry after attempt 1",
+   "engineSeed": 1001,
+   "links": 1,
+   "firstEnemyAction": null
+  }
+ ],
+ "firstEnemyAction": {
+  "seq": 26,
+  "actor": "penance",
+  "ability": "Obliteration",
+  "targets": []
+ },
+ "steps": [
+  {
+   "ms": 5786,
+   "k": "door",
+   "v": "judgment"
+  },
+  {
+   "ms": 10766,
+   "k": "prepEscGoesTo",
+   "v": "party-prep"
+  },
+  {
+   "ms": 30574,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1
+   }
+  },
+  {
+   "ms": 66281,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 26,
+    "actor": "penance",
+    "ability": "Obliteration",
+    "targets": []
+   }
+  },
+  {
+   "ms": 109093,
+   "k": "fight",
+   "v": {
+    "outcome": "defeat",
+    "turns": 11,
+    "ms": 62161,
+    "seams": 0,
+    "orders": 0
+   }
+  },
+  {
+   "ms": 116471,
+   "k": "continuity",
+   "v": "[continuity] penance: 76.766 s of battle, 4504 frames recorded, 96 swaps, 121 strips, 58.6 fps, 0 probe errors"
+  },
+  {
+   "ms": 116613,
+   "k": "continuity",
+   "v": "[continuity] penance: pose-measure D:\\pyrefly-release55\\docs\\target\\pose-measure.json (138 subjects, sha256 70bb5a50ae9f, source harness-tree); build 36b6e851; the candidate's own table"
+  },
+  {
+   "ms": 132003,
+   "k": "continuity",
+   "v": "[continuity] penance: CHK-026 PASS, CHK-027 PASS; max head jump 1.6% (0.1% registered, a control), stature 0.785 to 1.072 (0 out of band), max feet shift 0.6px (1.8px from the pixels), 0 snaps/min, worst swap jerk 0px (worst dash 60.2px), frame p99 32.2ms, 20 strips"
+  },
+  {
+   "ms": 139362,
+   "k": "retryReachedBattle",
+   "v": true
+  }
+ ],
+ "picks": [
+  {
+   "turn": 0,
+   "ms": 51,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Right Arm",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "penance:12000000/12000000",
+    "penance-right-arm:500000/500000",
+    "penance-left-arm:500000/500000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "penance-right-arm",
+    "wanted": "penance-right-arm",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 1,
+     "actor": "yuna",
+     "did": "Attack",
+     "targets": [
+      "penance-right-arm"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 1,
+   "ms": 3747,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Right Arm",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "penance:12000000/12000000",
+    "penance-right-arm:400001/500000",
+    "penance-left-arm:500000/500000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "penance-right-arm",
+    "wanted": "penance-right-arm",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 5,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "penance-right-arm"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 2,
+   "ms": 7972,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Penance",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "penance:12000000/12000000",
+    "penance-right-arm:300002/500000",
+    "penance-left-arm:500000/500000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 3,
+   "ms": 9558,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Penance",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "penance:12000000/12000000",
+    "penance-right-arm:300002/500000",
+    "penance-left-arm:500000/500000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "penance",
+    "wanted": "penance",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 9,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "penance"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 4,
+   "ms": 11486,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Right Arm",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "penance:11900001/12000000",
+    "penance-right-arm:300002/500000",
+    "penance-left-arm:500000/500000"
+   ],
+   "target": {
+    "confirmed": false,
+    "reason": "no target cursor"
+   }
+  },
+  {
+   "turn": 5,
+   "ms": 12635,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Right Arm",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "penance:11900001/12000000",
+    "penance-right-arm:300002/500000",
+    "penance-left-arm:500000/500000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "penance-right-arm",
+    "wanted": "penance-right-arm",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 13,
+     "actor": "yuna",
+     "did": "Attack",
+     "targets": [
+      "penance-right-arm"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 6,
+   "ms": 15237,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Attack",
+    "target": "Right Arm",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "penance:11900001/12000000",
+    "penance-right-arm:200003/500000",
+    "penance-left-arm:500000/500000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "penance-right-arm",
+    "wanted": "penance-right-arm",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 18,
+     "actor": "tidus",
+     "did": "Attack",
+     "targets": [
+      "penance-right-arm"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 7,
+   "ms": 17573,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Penance",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "penance:11900001/12000000",
+    "penance-right-arm:100004/500000",
+    "penance-left-arm:500000/500000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "penance",
+    "wanted": "penance",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 22,
+     "actor": "rikku",
+     "did": "Attack",
+     "targets": [
+      "penance"
+     ]
+    },
+    {
+     "seq": 36,
+     "actor": "tidus",
+     "did": "X-Potion",
+     "targets": [
+      "tidus"
+     ]
+    },
+    {
+     "seq": 41,
+     "actor": "yuna",
+     "did": "X-Potion",
+     "targets": [
+      "yuna"
+     ]
+    },
+    {
+     "seq": 46,
+     "actor": "rikku",
+     "did": "X-Potion",
+     "targets": [
+      "rikku"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 8,
+   "ms": 28286,
+   "actor": "command:yuna",
+   "want": {
+    "label": "Attack",
+    "target": "Right Arm",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "penance:11800002/12000000",
+    "penance-right-arm:100004/500000",
+    "penance-left-arm:500000/500000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "penance-right-arm",
+    "wanted": "penance-right-arm",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 51,
+     "actor": "yuna",
+     "did": "Attack",
+     "targets": [
+      "penance-right-arm"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 9,
+   "ms": 30627,
+   "actor": "command:tidus",
+   "want": {
+    "label": "Spiral Cut",
+    "target": "Right Arm",
+    "menu": "Overdrive"
+   },
+   "took": "Spiral Cut",
+   "viaMenu": "Overdrive",
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "penance:11800002/12000000",
+    "penance-right-arm:5/500000",
+    "penance-left-arm:500000/500000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "penance-right-arm",
+    "wanted": "penance-right-arm",
+    "mismatch": false
+   },
+   "engineDid": [
+    {
+     "seq": 56,
+     "actor": "tidus",
+     "did": "Spiral Cut",
+     "targets": [
+      "penance-right-arm"
+     ]
+    }
+   ]
+  },
+  {
+   "turn": 10,
+   "ms": 44688,
+   "actor": "command:rikku",
+   "want": {
+    "label": "Attack",
+    "target": "Penance",
+    "menu": null
+   },
+   "took": "Attack",
+   "viaMenu": null,
+   "engineHp": [
+    "tidus:9999/9999",
+    "yuna:9999/9999",
+    "auron:9999/9999",
+    "wakka:9999/9999",
+    "lulu:9999/9999",
+    "rikku:9999/9999",
+    "kimahri:9999/9999",
+    "valefor:13897/13897",
+    "ifrit:16914/16914",
+    "ixion:17397/17397",
+    "shiva:15897/15897",
+    "bahamut:23880/23880",
+    "penance:11800002/12000000",
+    "penance-right-arm:0/500000",
+    "penance-left-arm:500000/500000"
+   ],
+   "target": {
+    "confirmed": true,
+    "target": "penance",
+    "wanted": "penance",
+    "mismatch": false
+   }
+  }
+ ],
+ "seams": [],
+ "fails": [],
+ "contexts": {
+  "viewport": "1600x900",
+  "query": null,
+  "touch": null,
+  "gamepad": null,
+  "reduceMotion": null
+ },
+ "scriptedChange": "not applicable",
+ "budgetMs": 660000,
+ "briefingText": "AURON “Nineteen fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.” ENTER / ESC SKIP — 20 SECONDS, ONCE D NEVER SHOW THIS AGAIN",
+ "boardAtEntry": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 19
+ },
+ "boardWalk": [],
+ "door": {
+  "word": "judgment",
+  "how": "typed on the chapter board, one key at a time (no card; the board opens party prep itself)"
+ },
+ "prepText": "AURON · 2 OF 3 “Your party is ready.” The tabs are for later. Start the battle. ESC SKIP THE GUIDE PARTY PREP EXP · PENANCE — THE FAHRENHEIT — THE DECK T Tidus S.LV 180 Y Yuna S.LV 175 A Auron S.LV 180 W Wakka S.LV 165 L Lulu S.LV 170 R Rikku S.LV 160 K Kimahri S.LV 150 CHAPTER STATS SPHERE GRID EQUIPMENT ITEMS OVERDRIVE FFX · EXP Penance Keep one hand down The last of the old defenders waits above the deck, two hands at its sides that grow back whole. Strike the hands, break its stride, and never let both stand at once. the deck what hangs over the bow one hand down OBJECTIVES Make it split Bring it below half Lay it to rest TIP Nul-All Mix, Three Stars, Quick Hit. Keep a hand down each Penance turn: hold its last blow till just before it acts. Dispel its Regen and anyone Immolation breaks. START BATTLE T Tidus HP 9999/9999 · MP 999/999 WARRIOR Y Yuna HP 9999/9999 · MP 999/999 SUMMONER R Rikku HP 9999/9999 · MP 999/999 THIEF",
+ "prepEsc": "party-prep",
+ "preScene": {
+  "lines": [
+   "EXPERIMENTAL · THE FAHRENHEIT — THE DECK Tidus GUARDIAN Okay. That is bigger than anything we have fought. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "EXPERIMENTAL · THE FAHRENHEIT — THE DECK Wakka GUARDIAN It's got hands, ya? Two of 'em, floatin' on their own. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "EXPERIMENTAL · THE FAHRENHEIT — THE DECK Lulu GUARDIAN They are part of it. They are only slower to die. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+   "EXPERIMENTAL · THE FAHRENHEIT — THE DECK Auron GUARDIAN Cut a hand down and it grows back. AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU"
+  ],
+  "escOpens": "pause",
+  "holdsToSkip": 1
+ },
+ "firstState": {
+  "chapter": "penance",
+  "game": "ffx",
+  "scene": "penance",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 1,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": false,
+  "exitIntent": null,
+  "playTimeMs": 0,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "penance",
+    "side": "enemy",
+    "art": "penance",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "penance-right-arm",
+    "side": "enemy",
+    "art": "penance-arm-right",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "penance-left-arm",
+    "side": "enemy",
+    "art": "penance-arm-left",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "tidus",
+    "side": "party",
+    "art": "tidus",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "yuna",
+    "side": "party",
+    "art": "yuna",
+    "pose": "ready",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "rikku",
+    "side": "party",
+    "art": "rikku",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   }
+  ],
+  "spellFx": {
+   "fx": {
+    "new": false,
+    "guard": {
+     "level": 0,
+     "scaleStep": 0,
+     "calmMs": 16.8,
+     "budgetMs": 21,
+     "busyMs": 0,
+     "steps": 0
+    }
+   },
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0,
+   "cpuMeanMs": 0,
+   "flights": {
+    "launched": 0,
+    "landed": 0,
+    "live": 0,
+    "lastLaunchAt": 0,
+    "lastLandAt": 0
+   }
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "command:yuna",
+   "awaitingMenu": true,
+   "played": 1,
+   "lastEvents": [
+    {
+     "seq": 0,
+     "type": "turn-start",
+     "ms": 217
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 1,
+   "ticks": 0,
+   "events": 1,
+   "result": null,
+   "combatants": [
+    {
+     "id": "tidus",
+     "hp": 9999,
+     "maxHp": 9999,
+     "mp": 999,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "haste"
+     ]
+    },
+    {
+     "id": "yuna",
+     "hp": 9999,
+     "maxHp": 9999,
+     "mp": 999,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "haste"
+     ]
+    },
+    {
+     "id": "auron",
+     "hp": 9999,
+     "maxHp": 9999,
+     "mp": 999,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "haste"
+     ]
+    },
+    {
+     "id": "wakka",
+     "hp": 9999,
+     "maxHp": 9999,
+     "mp": 999,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "haste"
+     ]
+    },
+    {
+     "id": "lulu",
+     "hp": 9999,
+     "maxHp": 9999,
+     "mp": 999,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "haste"
+     ]
+    },
+    {
+     "id": "rikku",
+     "hp": 9999,
+     "maxHp": 9999,
+     "mp": 999,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "haste"
+     ]
+    },
+    {
+     "id": "kimahri",
+     "hp": 9999,
+     "maxHp": 9999,
+     "mp": 999,
+     "alive": true,
+     "side": "party",
+     "statuses": [
+      "protect",
+      "haste"
+     ]
+    },
+    {
+     "id": "valefor",
+     "hp": 13897,
+     "maxHp": 13897,
+     "mp": 435,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ifrit",
+     "hp": 16914,
+     "maxHp": 16914,
+     "mp": 425,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "ixion",
+     "hp": 17397,
+     "maxHp": 17397,
+     "mp": 445,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "shiva",
+     "hp": 15897,
+     "maxHp": 15897,
+     "mp": 465,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "bahamut",
+     "hp": 23880,
+     "maxHp": 23880,
+     "mp": 643,
+     "alive": true,
+     "side": "aeon",
+     "statuses": []
+    },
+    {
+     "id": "penance",
+     "hp": 12000000,
+     "maxHp": 12000000,
+     "mp": 999,
+     "alive": true,
+     "side": "enemy",
+     "statuses": [
+      "protect"
+     ]
+    },
+    {
+     "id": "penance-right-arm",
+     "hp": 500000,
+     "maxHp": 500000,
+     "mp": 999,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    },
+    {
+     "id": "penance-left-arm",
+     "hp": 500000,
+     "maxHp": 500000,
+     "mp": 999,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "turn-start",
+    "actorId": "yuna",
+    "turn": 1,
+    "elapsedTicks": 0,
+    "seq": 0
+   }
+  ]
+ },
+ "cardFirst": {
+  "viewport": "1600x900",
+  "card": {
+   "x": 204,
+   "y": 35,
+   "w": 572,
+   "h": 33
+  },
+  "rows": 4,
+  "overlapPx2": 0,
+  "cardText": "Yuna Attack → Right Arm NO MP"
+ },
+ "focFirst": {
+  "viewport": "1600x900",
+  "coach": [
+   {
+    "x": 554,
+    "y": 732,
+    "w": 400,
+    "h": 146
+   }
+  ],
+  "adv": [
+   {
+    "x": 204,
+    "y": 35,
+    "w": 572,
+    "h": 33
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 445,
+    "w": 469,
+    "h": 391
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Yuna",
+    "eff": 17.5
+   },
+   {
+    "t": "Attack",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "Right Arm",
+    "eff": 21
+   },
+   {
+    "t": "no MP",
+    "eff": 14.2
+   }
+  ]
+ },
+ "focAfterCoach": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [
+   {
+    "x": 204,
+    "y": 35,
+    "w": 572,
+    "h": 33
+   }
+  ],
+  "cmd": [
+   {
+    "x": 76,
+    "y": 445,
+    "w": 469,
+    "h": 391
+   }
+  ],
+  "overlaps": [],
+  "advisorMinEffPx": 14.2,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": [
+   {
+    "t": "Yuna",
+    "eff": 17.5
+   },
+   {
+    "t": "Attack",
+    "eff": 21
+   },
+   {
+    "t": "→",
+    "eff": 14.2
+   },
+   {
+    "t": "Right Arm",
+    "eff": 21
+   },
+   {
+    "t": "no MP",
+    "eff": 14.2
+   }
+  ]
+ },
+ "advisorText": "Yuna Attack → Right Arm NO MP",
+ "advisorHiddenByN": true,
+ "intentText": " | PENANCE 7TH IN QUEUE Obliteration SCRIPTED SLOW 100% Physical non-elemental damage to the whole party - cap 99 999 - never misses. DAMAGE TIDUS 8,385–9,468 89% HP YUNA 8,385–9,468 89% HP RIKKU 8,385–9,468 89% HP",
+ "pause": {
+  "esc": {
+   "paused": true,
+   "text": "Yuna Tidus Rikku Yuna Tidus Rikku ATTACK SPECIAL ▸ ×2 WHITE MAGIC ▸ ×14 ITEMS ▸ ×13 SUMMON ▸ ×5 ESCAPE ▼ Q △ DEFEND Physical damage Tidus 9999 /9999 999 /999 OD Yuna 9999 /9999 999 /999 OD Rikku 9999 /9999 999 /999 OVERDRIVE Penance BOSS BATTLE HP: 12,000,000 ARM HP: 500,000 Penance hangs over the Fahrenheit's deck with a hand on either side. Every element heals all three of them, so this is a fight of physical blows, and a long one. You do not win it by out-damaging Penance: you win it by never letting the hands act. Before it moves Open with Rikku's Nul-All Mix, which puts the four Nul spells and five Cheers on everyone in one turn. Then use Three Stars on the first calm turn. Immolation and Judgment Day drain everyone's MP, and with Three Stars on, Quick Hit, Dispel and Esuna cost nothing for the rest of the fight. Its turns While it is above three quarters of its life, every turn is "
+  },
+  "optionsText": "Yuna Tidus Rikku Yuna Tidus Rikku ATTACK SPECIAL ▸ ×2 WHITE MAGIC ▸ ×14 ITEMS ▸ ×13 SUMMON ▸ ×5 ESCAPE ▼ Q △ DEFEND Physical damage Tidus 9999 /9999 999 /999 OD Yuna 9999 /9999 999 /999 OD Rikku 9999 /9999 999 /999 OVERDRIVE Penance BOSS BATTLE HP: 12,000,000 ARM HP: 500,000 Penance hangs over the Fahrenheit's deck with a hand on either side. Every element heals all three of them, so this is a fight of physical blows, and a long one. You do not win it by out-damaging Penance: you win it by never letting the hands act. Before it moves Open with Rikku's Nul-All Mix, which puts the four Nul spells and five Cheers on everyone in one turn. Then use Three Stars on the first calm turn. Immolation and Judgment Day drain everyone's MP, and with Three Stars on, Quick Hit, Dispel and Esuna cost nothing for the rest of the fight. Its turns While it is above three quarters of its life, every turn is Obliteration on all three of you. Heal before it moves. The first hit that takes it under three quarters splits it. It loses its Protect, takes Haste for a turn, and from then on strikes one of you at a time with Immolation, which breaks armour and mind and empties MP. Dispel the Haste at once, and Dispel whoever Immolation hits. A member with his armour broken falls to the next physical blow, whatever his HP. The hands The Right Arm Petrifies with its Attack, spreads Poison, the Breaks and Sile",
+  "tabs": [
+   "Tidus",
+   "Yuna",
+   "Rikku",
+   "Chapter",
+   "Guide",
+   "Options"
+  ],
+  "resumedByEsc": true,
+  "pOpens": true,
+  "pCloses": true
+ },
+ "firstRows": [
+  "Attack",
+  "Special",
+  "White Magic",
+  "Items",
+  "Summon",
+  "Escape"
+ ],
+ "targetsShown": [
+  "penance-right-arm",
+  "penance-left-arm",
+  "penance"
+ ],
+ "afterTargetCancel": {
+  "screen": "battle",
+  "targets": 0,
+  "rows": 6
+ },
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "defeat",
+   "seed": 1,
+   "turns": 11,
+   "firstEnemyAction": {
+    "seq": 26,
+    "actor": "penance",
+    "ability": "Obliteration",
+    "targets": []
+   },
+   "final": true,
+   "stalledAt": null
+  }
+ ],
+ "seamCard": [],
+ "pauseRecoveries": 0,
+ "misses": [],
+ "orders": [],
+ "escapes": [],
+ "targetMismatches": [],
+ "pickerPlays": [],
+ "stallRecoveries": 0,
+ "lastChain": {
+  "links": 1,
+  "chainLength": 1,
+  "phase": "play:defeat",
+  "turn": 11,
+  "ms": 61893
+ },
+ "mgSince": null,
+ "emptyPicks": 0,
+ "lastPartySeq": 56,
+ "minigames": [
+  {
+   "turn": 10,
+   "kind": "swordplay",
+   "title": "Spiral Cut",
+   "subtitle": "SWORDPLAY · PRESS ENTER IN THE GOLD ZONE",
+   "attempts": [
+    {
+     "seenAt": 60,
+     "zone": [
+      45.5,
+      54.2
+     ]
+    },
+    {
+     "seenAt": 44,
+     "zone": [
+      45.5,
+      54.2
+     ]
+    },
+    {
+     "seenAt": 40,
+     "zone": [
+      45.5,
+      54.2
+     ]
+    },
+    {
+     "seenAt": 40,
+     "zone": [
+      45.5,
+      54.2
+     ]
+    },
+    {
+     "seenAt": 40,
+     "zone": [
+      45.5,
+      54.2
+     ]
+    },
+    {
+     "seenAt": 40,
+     "zone": [
+      45.5,
+      54.2
+     ]
+    },
+    "overlay closed"
+   ],
+   "pressLog": [
+    {
+     "key": "Enter",
+     "pos": 60,
+     "zoneStart": 45.45,
+     "zoneWidth": 8.73,
+     "inZone": false
+    },
+    {
+     "key": "Enter",
+     "pos": 44,
+     "zoneStart": 45.45,
+     "zoneWidth": 8.73,
+     "inZone": false
+    },
+    {
+     "key": "Enter",
+     "pos": 40,
+     "zoneStart": 45.45,
+     "zoneWidth": 8.73,
+     "inZone": false
+    },
+    {
+     "key": "Enter",
+     "pos": 40,
+     "zoneStart": 45.45,
+     "zoneWidth": 8.73,
+     "inZone": false
+    },
+    {
+     "key": "Enter",
+     "pos": 40,
+     "zoneStart": 45.45,
+     "zoneWidth": 8.73,
+     "inZone": false
+    },
+    {
+     "key": "Enter",
+     "pos": 40,
+     "zoneStart": 45.45,
+     "zoneWidth": 8.73,
+     "inZone": false
+    }
+   ],
+   "closed": true,
+   "ms": 2356,
+   "engine": {
+    "actor": "tidus",
+    "ability": "Spiral Cut",
+    "extra": {
+     "kind": "tidus-timing",
+     "timing": {
+      "success": false,
+      "timeRemainingMs": 0,
+      "timerMs": 3000,
+      "frame": 91
+     }
+    }
+   }
+  }
+ ],
+ "minigameShots": {
+  "swordplay": true
+ },
+ "turns": 11,
+ "fightMs": 62161,
+ "afterFight": "results",
+ "outcome": "defeat",
+ "outcomeFrom": "results screen text",
+ "stalledAt": null,
+ "logKinds": {
+  "turn-start": 15,
+  "action-start": 15,
+  "damage": 21,
+  "action-end": 15,
+  "status-add": 19,
+  "overdrive-gauge": 4,
+  "counter": 3,
+  "status-remove": 25,
+  "minigame-request": 1,
+  "ko": 4,
+  "part-destroyed": 1,
+  "message": 1,
+  "status-tick": 12,
+  "defeat": 1
+ },
+ "continuity": {
+  "file": "continuity/continuity.json",
+  "checks": {
+   "CHK-026": "PASS",
+   "CHK-027": "PASS"
+  },
+  "reasons": {
+   "CHK-026": [],
+   "CHK-027": []
+  },
+  "error": null
+ },
+ "post": {
+  "screen": "results",
+  "lines": []
+ },
+ "resultsScreen": "results",
+ "resultsText": "THE FAHRENHEIT — THE DECK · FELL RESULTS · 1:24 Defeat TURNS 15 ATTEMPTS 1 BEST — NEVER CLEARED T Tidus S.LV 180 · 0/22,000 AP Y Yuna S.LV 175 · 0/22,000 AP R Rikku S.LV 160 · 0/22,000 AP RETRY CHAPTER SELECT",
+ "afterRetry": "party-prep",
+ "retryReachedBattle": true,
+ "retrySeed": 1001,
+ "dboxTimeline": [
+  {
+   "ms": 11032,
+   "lastMs": 15915,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "Okay. That is bigger than anything we have fought.",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 1
+  },
+  {
+   "ms": 15947,
+   "lastMs": 17448,
+   "screen": "cutscene",
+   "speaker": "Wakka",
+   "role": "Guardian",
+   "text": "It's got hands, ya? Two of 'em, floatin' on their own.",
+   "portrait": "wakka.webp",
+   "narrate": false,
+   "show": 2
+  },
+  {
+   "ms": 17480,
+   "lastMs": 18947,
+   "screen": "cutscene",
+   "speaker": "Lulu",
+   "role": "Guardian",
+   "text": "They are part of it. They are only slower to die.",
+   "portrait": "lulu.webp",
+   "narrate": false,
+   "show": 3
+  },
+  {
+   "ms": 18980,
+   "lastMs": 20465,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Cut a hand down and it grows back.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 4
+  },
+  {
+   "ms": 20497,
+   "lastMs": 22476,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Let both stand when it turns, and it ends us.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 5
+  },
+  {
+   "ms": 22547,
+   "lastMs": 22547,
+   "screen": "cutscene",
+   "speaker": "Yuna",
+   "role": "Summoner",
+   "text": "Then one hand always stays down.",
+   "portrait": "yuna.webp",
+   "narrate": false,
+   "show": 6
+  },
+  {
+   "ms": 22564,
+   "lastMs": 22564,
+   "screen": "cutscene",
+   "speaker": "Tidus",
+   "role": "Guardian",
+   "text": "One hand down. Got it. And the big one?",
+   "portrait": "tidus.webp",
+   "narrate": false,
+   "show": 7
+  },
+  {
+   "ms": 22581,
+   "lastMs": 22581,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "It breaks what it touches. Mend the breaking.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 8
+  },
+  {
+   "ms": 22598,
+   "lastMs": 22616,
+   "screen": "cutscene",
+   "speaker": "Rikku",
+   "role": "Guardian",
+   "text": "Mend, hit the hands, do not die. Easy!",
+   "portrait": "rikku.webp",
+   "narrate": false,
+   "show": 9
+  },
+  {
+   "ms": 22630,
+   "lastMs": 22630,
+   "screen": "cutscene",
+   "speaker": "Kimahri",
+   "role": "Guardian",
+   "text": "Kimahri holds the deck",
+   "portrait": "kimahri.png",
+   "narrate": false,
+   "show": 10
+  },
+  {
+   "ms": 22647,
+   "lastMs": 22650,
+   "screen": "cutscene",
+   "speaker": "Auron",
+   "role": "Guardian",
+   "text": "Then fight.",
+   "portrait": "auron.webp",
+   "narrate": false,
+   "show": 11,
+   "endMs": 22651
+  }
+ ],
+ "audioDebugFile": {
+  "file": "penance-win-r35hid/audio-debug.jsonl",
+  "samples": 4,
+  "note": "one whole audioDebug() per line; nothing cut"
+ },
+ "minutes": 2.47,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "media": [
+  "art/title/echo.webp",
+  "art/characters/auron/idle.png",
+  "art/backdrops/dreams-end.webp",
+  "art/backdrops/gagazet.webp",
+  "art/characters/mortiorchis/idle.png",
+  "art/characters/seymour-flux-body/idle.png",
+  "art/portraits/tidus.webp",
+  "art/portraits/yuna.webp",
+  "art/portraits/kimahri.png",
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "audio/sfx/sprite-v2.mp3",
+  "art/backdrops/gagazet.thumb.webp",
+  "art/characters/seymour-flux-body/idle.thumb.png",
+  "art/backdrops/zanarkand-dome.thumb.webp",
+  "art/characters/yunalesca-1/idle.thumb.png",
+  "art/backdrops/bevelle-underground.thumb.webp",
+  "art/characters/ffx2-bahamut/idle.thumb.png",
+  "audio/music/chapter-select.mp3",
+  "art/backdrops/djose-chamber-provisional.thumb.webp",
+  "art/characters/x2-ixion/idle.thumb.png",
+  "art/portraits/wakka.webp",
+  "art/portraits/lulu.webp",
+  "art/portraits/auron.webp",
+  "art/portraits/seymour.webp",
+  "art/backdrops/dreams-end.thumb.webp",
+  "art/characters/braskas-final-aeon-1/idle.thumb.png",
+  "art/backdrops/den-of-woe.thumb.webp",
+  "art/characters/baralai-shade/idle.thumb.png",
+  "audio/sfx/parity-ffx-core.mp3",
+  "audio/music/scene-fahrenheit.mp3",
+  "art/backdrops/evrae-airship-deck.webp",
+  "art/pause/ch35-penance.webp",
+  "art/characters/penance/idle.webp",
+  "art/characters/penance-arm-right/idle.webp",
+  "art/portraits/rikku.webp",
+  "audio/music/boss-challenge.mp3",
+  "art/characters/penance-arm-left/idle.webp",
+  "art/characters/tidus/idle.png",
+  "art/characters/yuna/idle.png",
+  "audio/music/victory-ffx.mp3",
+  "art/characters/rikku/idle.png",
+  "art/characters/tidus/ready.png",
+  "art/characters/yuna/ready.png",
+  "art/characters/rikku/ready.png",
+  "audio/music/defeat-ffx.mp3",
+  "art/characters/penance/attack.webp",
+  "art/characters/penance/cast.webp",
+  "art/characters/penance/hurt.webp",
+  "art/characters/penance/ko.webp",
+  "art/characters/penance-arm-right/attack.webp",
+  "art/characters/penance-arm-right/cast.webp",
+  "art/characters/penance-arm-right/hurt.webp",
+  "art/characters/penance-arm-right/ko.webp",
+  "art/characters/penance-arm-left/attack.webp",
+  "art/characters/penance-arm-left/cast.webp",
+  "art/characters/penance-arm-left/hurt.webp",
+  "art/characters/penance-arm-left/ko.webp",
+  "art/characters/tidus/attack.png",
+  "art/characters/tidus/cast.png",
+  "art/characters/tidus/item.png",
+  "art/characters/tidus/hurt.png",
+  "art/characters/tidus/ko.png",
+  "art/characters/tidus/defend.webp",
+  "art/characters/yuna/attack.png",
+  "art/characters/yuna/cast.png",
+  "art/characters/yuna/item.png",
+  "art/characters/yuna/hurt.png",
+  "art/characters/yuna/ko.png",
+  "art/characters/rikku/attack.png",
+  "art/characters/rikku/cast.png",
+  "art/characters/rikku/item.png",
+  "art/characters/rikku/hurt.png",
+  "art/characters/rikku/ko.png",
+  "art/characters/tidus/victory.png",
+  "art/characters/tidus/sleep.png",
+  "art/characters/tidus/critical.png",
+  "art/characters/tidus/follow.png",
+  "art/characters/tidus/od-energy-rain.png",
+  "art/characters/tidus/od-slice-and-dice.png",
+  "art/characters/yuna/victory.png",
+  "art/characters/yuna/sleep.png",
+  "art/characters/yuna/critical.png",
+  "art/characters/yuna/follow.png",
+  "art/characters/rikku/victory.png",
+  "art/characters/rikku/sleep.png",
+  "art/characters/rikku/critical.png",
+  "art/characters/rikku/follow.png",
+  "audio/music/pause.mp3",
+  "art/pause/ch35-penance.2x.webp",
+  "art/pause/tidus.2x.webp",
+  "art/pause/yuna.2x.webp",
+  "art/pause/rikku.2x.webp",
+  "art/pause/tidus.webp",
+  "art/portrait-parts/tidus/2x/mouth-open-smile.png",
+  "art/portrait-parts/tidus/2x/mouth-concerned-press.png",
+  "art/portrait-parts/tidus/2x/lidR-closed.png",
+  "art/portrait-parts/tidus/2x/lidL-closed.png",
+  "art/portrait-parts/tidus/2x/eyeR-socket.webp",
+  "art/portrait-parts/tidus/2x/eyeR-iris.webp",
+  "art/portrait-parts/tidus/2x/eyeR-catch.png",
+  "art/portrait-parts/tidus/2x/eyeR-window.png",
+  "art/portrait-parts/tidus/2x/eyeL-socket.webp",
+  "art/portrait-parts/tidus/2x/eyeL-iris.webp",
+  "art/portrait-parts/tidus/2x/eyeL-catch.png",
+  "art/portrait-parts/tidus/2x/eyeL-window.png",
+  "art/pause/yuna.webp",
+  "art/portrait-parts/yuna/2x/mouth-open-smile.png",
+  "art/portrait-parts/yuna/2x/mouth-concerned-press.png",
+  "art/portrait-parts/yuna/2x/lidR-closed.png",
+  "art/portrait-parts/yuna/2x/lidL-closed.png",
+  "art/portrait-parts/yuna/2x/eyeR-socket.webp",
+  "art/portrait-parts/yuna/2x/eyeR-iris.webp",
+  "art/portrait-parts/yuna/2x/eyeR-catch.png",
+  "art/portrait-parts/yuna/2x/eyeR-window.png",
+  "art/portrait-parts/yuna/2x/eyeL-socket.webp",
+  "art/portrait-parts/yuna/2x/eyeL-iris.webp",
+  "art/portrait-parts/yuna/2x/eyeL-catch.png",
+  "art/portrait-parts/yuna/2x/eyeL-window.png",
+  "art/pause/rikku.webp",
+  "art/portrait-parts/rikku/2x/mouth-open-smile.png",
+  "art/portrait-parts/rikku/2x/mouth-concerned-press.png",
+  "art/portrait-parts/rikku/2x/lidL-closed.png",
+  "art/portrait-parts/rikku/2x/eyeL-socket.webp",
+  "art/portrait-parts/rikku/2x/eyeL-iris.webp",
+  "art/portrait-parts/rikku/2x/eyeL-catch.png",
+  "art/portrait-parts/rikku/2x/eyeL-window.png",
+  "art/portraits/penance.webp",
+  "art/portraits/penance-right-arm.webp",
+  "art/portraits/penance-left-arm.webp",
+  "art/characters/tidus/follow%402x.png",
+  "art/characters/tidus/attack%402x.png",
+  "art/characters/tidus/cast%402x.png"
+ ]
+}

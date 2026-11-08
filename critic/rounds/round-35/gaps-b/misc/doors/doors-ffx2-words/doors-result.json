@@ -1,0 +1,307 @@
+{
+ "tag": "doors-ffx2-words",
+ "mode": "words",
+ "game": "ffx2",
+ "base": "https://echoesofspira.com/",
+ "startedAt": "2026-11-07T19:35:01.321Z",
+ "setupAids": [
+  "window.__pyrefly.setSeed(1) before the first key"
+ ],
+ "cases": [
+  {
+   "word": "gear",
+   "expectChapter": "exp-anime",
+   "case": "FFX-2 only, Chapter 33 Valefor at Besaid (anime)",
+   "steps": [],
+   "boardAtStart": {
+    "selectedId": "seymour-flux",
+    "game": null,
+    "keys": [
+     "selectedIndex",
+     "selectedId",
+     "tiles",
+     "coming",
+     "cleared",
+     "order",
+     "beaten",
+     "total"
+    ]
+   },
+   "boardMovedTo": "seymour-flux",
+   "boardCheck": {
+    "startedOn": "seymour-flux",
+    "movedTo": "seymour-flux",
+    "onOtherGame": true
+   },
+   "boardText": "AURON · 1 OF 3 “Start with the first one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER I Seymour Flux 0 OF 19 BEATEN X I II III VII VIII IX X XI",
+   "afterWordScreen": "party-prep",
+   "read": {
+    "screen": "battle",
+    "chapter": {
+     "id": "exp-anime",
+     "game": "ffx2",
+     "title": "Valefor at Besaid (Anime Style)"
+    },
+    "rows": [
+     "Attack",
+     "Skill",
+     "Change",
+     "Item"
+    ],
+    "party": [
+     "Yuna",
+     "Rikku",
+     "Paine"
+    ],
+    "foes": [
+     "Valefor"
+    ],
+    "awaitingMenu": true,
+    "links": 1,
+    "ffxLabels": 0,
+    "ffx2Labels": 4,
+    "classCounts": {
+     "ffxDash": 1,
+     "ffx2": 67,
+     "ctb": 0,
+     "atb": 1,
+     "f1": 28
+    },
+    "hasOpenLock": false,
+    "hasSummon": false,
+    "hasSkill": true,
+    "hasChange": true,
+    "body": "Valefor SCAN WM WM Yuna 690 /690 130 /130 DK DK Rikku 1839 /1839 158 /158 WR WR Paine 1706 /1706 67 /67 ATTACK SKILL ◂ CHANGE ◂ ITEM ◂ ATTACK Physical damage G "
+   },
+   "opened": true,
+   "chapterOpened": "exp-anime",
+   "chapterGame": "ffx2",
+   "hudGame": "ffx2",
+   "pass": true,
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "word": "drillshot",
+   "expectChapter": "ffx2-bevelle-guardians",
+   "case": "FFX-2 only, Chapter 37 The Bevelle Guardians",
+   "steps": [],
+   "boardAtStart": {
+    "selectedId": "seymour-flux",
+    "game": null,
+    "keys": [
+     "selectedIndex",
+     "selectedId",
+     "tiles",
+     "coming",
+     "cleared",
+     "order",
+     "beaten",
+     "total"
+    ]
+   },
+   "boardMovedTo": "seymour-flux",
+   "boardCheck": {
+    "startedOn": "seymour-flux",
+    "movedTo": "seymour-flux",
+    "onOtherGame": true
+   },
+   "boardText": "AURON · 1 OF 3 “Start with the first one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER I Seymour Flux 0 OF 19 BEATEN X I II III VII VIII IX X XI",
+   "afterWordScreen": "party-prep",
+   "read": {
+    "screen": "battle",
+    "chapter": {
+     "id": "ffx2-bevelle-guardians",
+     "game": "ffx2",
+     "title": "The Bevelle Guardians"
+    },
+    "rows": [
+     "Attack",
+     "Skill",
+     "Change",
+     "Item"
+    ],
+    "party": [
+     "Yuna",
+     "Rikku",
+     "Paine"
+    ],
+    "foes": [
+     "Georapella"
+    ],
+    "awaitingMenu": true,
+    "links": 1,
+    "ffxLabels": 0,
+    "ffx2Labels": 4,
+    "classCounts": {
+     "ffxDash": 1,
+     "ffx2": 67,
+     "ctb": 0,
+     "atb": 1,
+     "f1": 28
+    },
+    "hasOpenLock": false,
+    "hasSummon": false,
+    "hasSkill": true,
+    "hasChange": true,
+    "body": "Georapella SCAN WM WM Yuna 599 /690 130 /130 DK DK Rikku 1839 /1839 158 /158 WR WR Paine 1706 /1706 67 /67 ATTACK SKILL ◂ CHANGE ◂ ITEM ◂ ATTACK Physical damage"
+   },
+   "opened": true,
+   "chapterOpened": "ffx2-bevelle-guardians",
+   "chapterGame": "ffx2",
+   "hudGame": "ffx2",
+   "pass": true,
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "word": "duelist",
+   "expectChapter": "ffx2-farplane-cup",
+   "case": "FFX-2 only, Chapter 38 The Farplane Cup",
+   "steps": [],
+   "boardAtStart": {
+    "selectedId": "seymour-flux",
+    "game": null,
+    "keys": [
+     "selectedIndex",
+     "selectedId",
+     "tiles",
+     "coming",
+     "cleared",
+     "order",
+     "beaten",
+     "total"
+    ]
+   },
+   "boardMovedTo": "seymour-flux",
+   "boardCheck": {
+    "startedOn": "seymour-flux",
+    "movedTo": "seymour-flux",
+    "onOtherGame": true
+   },
+   "boardText": "AURON · 1 OF 3 “Start with the first one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER I Seymour Flux 0 OF 19 BEATEN X I II III VII VIII IX X XI",
+   "afterWordScreen": "party-prep",
+   "read": {
+    "screen": "battle",
+    "chapter": {
+     "id": "ffx2-farplane-cup",
+     "game": "ffx2",
+     "title": "The Farplane Cup"
+    },
+    "rows": [
+     "Attack",
+     "Skill",
+     "Change",
+     "Item"
+    ],
+    "party": [
+     "Yuna",
+     "Rikku",
+     "Paine"
+    ],
+    "foes": [
+     "Auron"
+    ],
+    "awaitingMenu": true,
+    "links": 1,
+    "ffxLabels": 0,
+    "ffx2Labels": 4,
+    "classCounts": {
+     "ffxDash": 1,
+     "ffx2": 67,
+     "ctb": 0,
+     "atb": 1,
+     "f1": 28
+    },
+    "hasOpenLock": false,
+    "hasSummon": false,
+    "hasSkill": true,
+    "hasChange": true,
+    "body": "Auron SCAN STATUS MP =0 DK DK Yuna 9093 /10710 338 /338 AL AL Rikku 2143 /5106 107 /107 DK DK Paine 9080 /10710 338 /338 ATTACK SKILL ◂ CHANGE ◂ ITEM ◂ ATTACK P"
+   },
+   "opened": true,
+   "chapterOpened": "ffx2-farplane-cup",
+   "chapterGame": "ffx2",
+   "hudGame": "ffx2",
+   "pass": true,
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "word": "wraith",
+   "expectChapter": "ffx2-yunas-ballad",
+   "case": "FFX-2 only, Chapter 40 Yuna's Ballad",
+   "steps": [],
+   "boardAtStart": {
+    "selectedId": "seymour-flux",
+    "game": null,
+    "keys": [
+     "selectedIndex",
+     "selectedId",
+     "tiles",
+     "coming",
+     "cleared",
+     "order",
+     "beaten",
+     "total"
+    ]
+   },
+   "boardMovedTo": "seymour-flux",
+   "boardCheck": {
+    "startedOn": "seymour-flux",
+    "movedTo": "seymour-flux",
+    "onOtherGame": true
+   },
+   "boardText": "AURON · 1 OF 3 “Start with the first one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER I Seymour Flux 0 OF 19 BEATEN X I II III VII VIII IX X XI",
+   "afterWordScreen": "party-prep",
+   "read": {
+    "screen": "battle",
+    "chapter": {
+     "id": "ffx2-yunas-ballad",
+     "game": "ffx2",
+     "title": "Yuna's Ballad"
+    },
+    "rows": [
+     "White Magic",
+     "Change",
+     "Item"
+    ],
+    "party": [
+     "Yuna"
+    ],
+    "foes": [
+     "Rikku"
+    ],
+    "awaitingMenu": true,
+    "links": 1,
+    "ffxLabels": 0,
+    "ffx2Labels": 3,
+    "classCounts": {
+     "ffxDash": 1,
+     "ffx2": 46,
+     "ctb": 0,
+     "atb": 1,
+     "f1": 28
+    },
+    "hasOpenLock": false,
+    "hasSummon": false,
+    "hasSkill": false,
+    "hasChange": true,
+    "body": "Rikku SCAN WM WM Yuna 2536 /2824 230 /230 WHITE MAGIC ◂ CHANGE ◂ ITEM ◂ WHITE MAGIC Open the White Magic menu. In the cave under Mushroom Rock Road the pyreflie"
+   },
+   "opened": true,
+   "chapterOpened": "ffx2-yunas-ballad",
+   "chapterGame": "ffx2",
+   "hudGame": "ffx2",
+   "pass": true,
+   "consoleErrors": [],
+   "notFound": []
+  }
+ ],
+ "finishedAt": "2026-11-07T19:38:00.665Z",
+ "summary": {
+  "cases": 4,
+  "passed": 4,
+  "failed": []
+ }
+}

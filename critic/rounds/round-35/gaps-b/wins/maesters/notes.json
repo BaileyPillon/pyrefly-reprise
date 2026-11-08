@@ -1,0 +1,207 @@
+{
+ "notes": [
+  {
+   "ms": 2665,
+   "k": "live",
+   "v": {
+    "version": "0.1.0",
+    "scripts": [
+     "index-jYm-0mrJ.js"
+    ]
+   }
+  },
+  {
+   "ms": 9901,
+   "k": "door",
+   "v": {
+    "word": "infinito",
+    "typed": "infinito"
+   }
+  },
+  {
+   "ms": 12126,
+   "k": "afterDoor",
+   "v": "party-prep"
+  },
+  {
+   "ms": 20948,
+   "k": "preSceneHolds",
+   "v": 1
+  },
+  {
+   "ms": 24104,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1,
+    "boss": [
+     "x2-aranea"
+    ]
+   }
+  },
+  {
+   "ms": 540305,
+   "k": "STATE-WRITE",
+   "v": {
+    "at": 540305,
+    "what": "Chac's HP set to 2,000 at floor 80's first menu (write 1), so a real Attack ends the floor (PR-0613: no winning line is known for floor 80)",
+    "result": {
+     "was": 437850,
+     "now": 2000
+    }
+   }
+  },
+  {
+   "ms": 545907,
+   "k": "fight-over",
+   "v": {
+    "attempt": 1,
+    "over": "left:cutscene",
+    "decisions": 73,
+    "ms": 545907,
+    "floorsSeen": [
+     "x2-aranea",
+     "x2-black-elemental",
+     "x2-concherer",
+     "x2-chac"
+    ]
+   }
+  },
+  {
+   "ms": 568433,
+   "k": "afterFight",
+   "v": {
+    "label": "a1",
+    "screens": [
+     "cutscene",
+     "results",
+     "cutscene",
+     "chapter-select"
+    ],
+    "outcome": "victory",
+    "next": "board"
+   }
+  },
+  {
+   "ms": 568434,
+   "k": "RESULT",
+   "v": "WON: four floors by real keys (1 state write on floor 80)"
+  }
+ ],
+ "shots": [
+  {
+   "file": "00-title.png",
+   "why": "title, fresh profile",
+   "ms": 4286,
+   "screen": "title"
+  },
+  {
+   "file": "01-party-prep.png",
+   "why": "party prep opened by the word (no card)",
+   "ms": 12282,
+   "screen": "party-prep"
+  },
+  {
+   "file": "02-pre-scene.png",
+   "why": "pre-battle scene, first line",
+   "ms": 16617,
+   "screen": "cutscene"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-aranea)",
+   "ms": 25700,
+   "screen": "battle"
+  },
+  {
+   "file": "link02-first-menu.png",
+   "why": "link 2: first command menu (x2-black-elemental)",
+   "ms": 67557,
+   "screen": "battle"
+  },
+  {
+   "file": "open-failure-1.jpg",
+   "why": "could not open Darkness (skill) for paine",
+   "ms": 88787,
+   "screen": "battle"
+  },
+  {
+   "file": "open-failure-2.jpg",
+   "why": "could not open Attack (attack) for paine",
+   "ms": 103145,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-concherer-x2-concherer-gunk.jpg",
+   "why": "x2-concherer starts x2-concherer-gunk",
+   "ms": 111039,
+   "screen": "battle"
+  },
+  {
+   "file": "link03-first-menu.png",
+   "why": "link 3: first command menu (x2-concherer)",
+   "ms": 111659,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-concherer-x2-concherer-megaton-press.jpg",
+   "why": "x2-concherer starts x2-concherer-megaton-press",
+   "ms": 146448,
+   "screen": "battle"
+  },
+  {
+   "file": "shell-broken.png",
+   "why": "Concherer's shell has broken",
+   "ms": 196762,
+   "screen": "battle"
+  },
+  {
+   "file": "mid-030.jpg",
+   "why": "mid-fight, decision 30",
+   "ms": 271308,
+   "screen": "battle"
+  },
+  {
+   "file": "mid-060.jpg",
+   "why": "mid-fight, decision 60",
+   "ms": 445477,
+   "screen": "battle"
+  },
+  {
+   "file": "m-x2-chac-x2-chac-stony-glare.jpg",
+   "why": "x2-chac starts x2-chac-stony-glare",
+   "ms": 539842,
+   "screen": "battle"
+  },
+  {
+   "file": "link04-first-menu.png",
+   "why": "link 4: first command menu (x2-chac)",
+   "ms": 540304,
+   "screen": "battle"
+  },
+  {
+   "file": "a1-scene-1.jpg",
+   "why": "a scene after the fight (a1)",
+   "ms": 547182,
+   "screen": "results"
+  },
+  {
+   "file": "a1-results-victory.png",
+   "why": "the results screen (victory)",
+   "ms": 549920,
+   "screen": "results"
+  },
+  {
+   "file": "a1-scene-3.jpg",
+   "why": "a scene after the fight (a1)",
+   "ms": 553687,
+   "screen": "cutscene"
+  },
+  {
+   "file": "a1-board.png",
+   "why": "the chapter-select board after the chapter",
+   "ms": 568429,
+   "screen": "chapter-select"
+  }
+ ]
+}

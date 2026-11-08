@@ -1,0 +1,6546 @@
+{
+ "tag": "phone-ffx2-ch4",
+ "chapter": "ffx2-bahamut",
+ "size": "390x844",
+ "touch": true,
+ "base": "https://echoesofspira.com/",
+ "startedAt": "2026-11-07T19:26:33.941Z",
+ "steps": [
+  {
+   "at": "19:27:25",
+   "k": "booted",
+   "v": {
+    "bundle": "https://echoesofspira.com/assets/index-jYm-0mrJ.js",
+    "screen": "battle",
+    "ms": 10473
+   }
+  },
+  {
+   "at": "19:27:27",
+   "k": "OK   first menu up (battle, awaiting a command)",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:27:27",
+   "k": "pause button candidates in the HUD",
+   "v": [
+    "BUTTON.battle-pause-chip ig ig--ffx2|pause:open"
+   ]
+  },
+  {
+   "at": "19:27:28",
+   "k": "noise baseline",
+   "v": {
+    "noisyClassProps": 0
+   }
+  },
+  {
+   "at": "19:27:28",
+   "k": "OK   TEXT SIZE 115%: Esc opens the pause",
+   "v": "screen=pause"
+  },
+  {
+   "at": "19:27:29",
+   "k": "OK   TEXT SIZE 115%: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:27:33",
+   "k": "OK   TEXT SIZE 115%: back to the battle",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:27:36",
+   "k": "OK   TEXT SIZE 115%: the row says 115% (was 100%)",
+   "v": "after=115%"
+  },
+  {
+   "at": "19:27:36",
+   "k": "OK   TEXT SIZE 115%: <html> carries it",
+   "v": "{\"textSize\":\"115\",\"textSizeWide\":\"115\"}"
+  },
+  {
+   "at": "19:27:36",
+   "k": "OK   TEXT SIZE 115%: something measured changes on the live HUD, vars, animations or fx",
+   "v": "styleDiffs=10 varsDiff=1 anims 3->3 fx=3"
+  },
+  {
+   "at": "19:27:36",
+   "k": "OK   TEXT SIZE 115%: HUD type scaled by the setting (classes whose largest font is 1.15 x the 100% one)",
+   "v": "{\"n\":72,\"atTarget\":10,\"notAt\":62}"
+  },
+  {
+   "at": "19:27:36",
+   "k": "FAIL TEXT SIZE 115%: pause tab strip stays inside the window",
+   "v": "[\"Yuna\",\"Rikku\",\"Paine\",\"Chapter\",\"Guide\",\"Controls\",\"Music\"]"
+  },
+  {
+   "at": "19:27:36",
+   "k": "OK   TEXT SIZE 130%: Esc opens the pause",
+   "v": "screen=pause"
+  },
+  {
+   "at": "19:27:37",
+   "k": "OK   TEXT SIZE 130%: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:27:41",
+   "k": "OK   TEXT SIZE 130%: back to the battle",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:27:44",
+   "k": "OK   TEXT SIZE 130%: the row says 130% (was 115%)",
+   "v": "after=130%"
+  },
+  {
+   "at": "19:27:44",
+   "k": "OK   TEXT SIZE 130%: <html> carries it",
+   "v": "{\"textSize\":\"130\",\"textSizeWide\":\"130\"}"
+  },
+  {
+   "at": "19:27:44",
+   "k": "OK   TEXT SIZE 130%: something measured changes on the live HUD, vars, animations or fx",
+   "v": "styleDiffs=12 varsDiff=1 anims 3->3 fx=3"
+  },
+  {
+   "at": "19:27:44",
+   "k": "OK   TEXT SIZE 130%: HUD type scaled by the setting (classes whose largest font is 1.30 x the 100% one)",
+   "v": "{\"n\":72,\"atTarget\":8,\"notAt\":64}"
+  },
+  {
+   "at": "19:27:44",
+   "k": "FAIL TEXT SIZE 130%: pause tab strip stays inside the window",
+   "v": "[\"Yuna\",\"Rikku\",\"Paine\",\"Chapter\",\"Guide\",\"Options\",\"Controls\",\"Music\"]"
+  },
+  {
+   "at": "19:27:44",
+   "k": "OK   REDUCE MOTION ON: Esc opens the pause",
+   "v": "screen=pause"
+  },
+  {
+   "at": "19:27:45",
+   "k": "OK   REDUCE MOTION ON: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:27:49",
+   "k": "OK   REDUCE MOTION ON: back to the battle",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:27:52",
+   "k": "OK   REDUCE MOTION ON: the row says ON (was OFF)",
+   "v": "after=ON"
+  },
+  {
+   "at": "19:27:52",
+   "k": "OK   REDUCE MOTION ON: <html> carries it",
+   "v": "\"reduceMotion\""
+  },
+  {
+   "at": "19:27:52",
+   "k": "OK   REDUCE MOTION ON: something measured changes on the live HUD, vars, animations or fx",
+   "v": "styleDiffs=6 varsDiff=0 anims 3->1 fx=5"
+  },
+  {
+   "at": "19:27:52",
+   "k": "OK   REDUCE FLASHES ON: Esc opens the pause",
+   "v": "screen=pause"
+  },
+  {
+   "at": "19:27:53",
+   "k": "OK   REDUCE FLASHES ON: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:27:57",
+   "k": "OK   REDUCE FLASHES ON: back to the battle",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:28:00",
+   "k": "OK   REDUCE FLASHES ON: the row says ON (was OFF)",
+   "v": "after=ON"
+  },
+  {
+   "at": "19:28:00",
+   "k": "OK   REDUCE FLASHES ON: <html> carries it",
+   "v": "\"reduceFlashes\""
+  },
+  {
+   "at": "19:28:00",
+   "k": "OK   REDUCE FLASHES ON: something measured changes on the live HUD, vars, animations or fx",
+   "v": "styleDiffs=0 varsDiff=0 anims 1->0 fx=5"
+  },
+  {
+   "at": "19:28:00",
+   "k": "OK   LOW EFFECTS ON: Esc opens the pause",
+   "v": "screen=pause"
+  },
+  {
+   "at": "19:28:01",
+   "k": "OK   LOW EFFECTS ON: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:28:05",
+   "k": "OK   LOW EFFECTS ON: back to the battle",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:28:08",
+   "k": "OK   LOW EFFECTS ON: the row says ON (was OFF)",
+   "v": "after=ON"
+  },
+  {
+   "at": "19:28:08",
+   "k": "OK   LOW EFFECTS ON: <html> carries it",
+   "v": "\"lowEffects\""
+  },
+  {
+   "at": "19:28:08",
+   "k": "OK   LOW EFFECTS ON: something measured changes on the live HUD, vars, animations or fx",
+   "v": "styleDiffs=0 varsDiff=0 anims 0->0 fx=7"
+  },
+  {
+   "at": "19:28:08",
+   "k": "OK   COLOUR VISION RED-GREEN: Esc opens the pause",
+   "v": "screen=pause"
+  },
+  {
+   "at": "19:28:09",
+   "k": "OK   COLOUR VISION RED-GREEN: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:28:13",
+   "k": "OK   COLOUR VISION RED-GREEN: back to the battle",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:28:16",
+   "k": "OK   COLOUR VISION RED-GREEN: the row says RED-GREEN (was OFF)",
+   "v": "after=RED-GREEN"
+  },
+  {
+   "at": "19:28:16",
+   "k": "OK   COLOUR VISION RED-GREEN: <html> carries it",
+   "v": "{\"colourVision\":\"red-green\"}"
+  },
+  {
+   "at": "19:28:16",
+   "k": "OK   COLOUR VISION RED-GREEN: something measured changes on the live HUD, vars, animations or fx",
+   "v": "styleDiffs=0 varsDiff=9 anims 0->0 fx=4"
+  },
+  {
+   "at": "19:28:16",
+   "k": "OK   COLOUR VISION BLUE-YELLOW: Esc opens the pause",
+   "v": "screen=pause"
+  },
+  {
+   "at": "19:28:17",
+   "k": "OK   COLOUR VISION BLUE-YELLOW: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:28:21",
+   "k": "OK   COLOUR VISION BLUE-YELLOW: back to the battle",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:28:24",
+   "k": "OK   COLOUR VISION BLUE-YELLOW: the row says BLUE-YELLOW (was RED-GREEN)",
+   "v": "after=BLUE-YELLOW"
+  },
+  {
+   "at": "19:28:24",
+   "k": "OK   COLOUR VISION BLUE-YELLOW: <html> carries it",
+   "v": "{\"colourVision\":\"blue-yellow\"}"
+  },
+  {
+   "at": "19:28:24",
+   "k": "OK   COLOUR VISION BLUE-YELLOW: something measured changes on the live HUD, vars, animations or fx",
+   "v": "styleDiffs=0 varsDiff=7 anims 0->3 fx=4"
+  },
+  {
+   "at": "19:28:24",
+   "k": "saved settings before reload",
+   "v": {
+    "textSize": 1.3,
+    "reduceMotion": true,
+    "reduceFlashes": true,
+    "lowEffects": true,
+    "colourVision": "blue-yellow"
+   }
+  },
+  {
+   "at": "19:28:25",
+   "k": "after reload at the title",
+   "v": {
+    "screen": "title",
+    "ds": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "130",
+     "textSizeWide": "130",
+     "reduceMotion": "",
+     "lowEffects": "",
+     "reduceFlashes": "",
+     "colourVision": "blue-yellow"
+    },
+    "saved": {
+     "textSize": 1.3,
+     "reduceMotion": true,
+     "reduceFlashes": true,
+     "lowEffects": true,
+     "colourVision": "blue-yellow"
+    }
+   }
+  },
+  {
+   "at": "19:28:25",
+   "k": "OK   reload: saved settings equal the pre-reload ones",
+   "v": "{\"textSize\":1.3,\"reduceMotion\":true,\"reduceFlashes\":true,\"lowEffects\":true,\"colourVision\":\"blue-yellow\"}"
+  },
+  {
+   "at": "19:28:25",
+   "k": "OK   reload: <html> carries the comfort flags on the first frames, before any pause",
+   "v": "{\"input\":\"keyboard\",\"pad\":\"xbox\",\"textSize\":\"130\",\"textSizeWide\":\"130\",\"reduceMotion\":\"\",\"lowEffects\":\"\",\"reduceFlashes\":\"\",\"colourVision\":\"blue-yellow\"}"
+  },
+  {
+   "at": "19:28:27",
+   "k": "OK   reload: the chapter card is found again",
+   "v": "ffx2-bahamut"
+  },
+  {
+   "at": "19:29:06",
+   "k": "OK   reload: first menu again",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:29:07",
+   "k": "OK   reload: the HUD type is still 130% on the same classes at the first menu",
+   "v": "{\"n\":72,\"atTarget\":8,\"notAt\":64}"
+  },
+  {
+   "at": "19:29:07",
+   "k": "OK   reload: the comfort flags are on <html> at the first menu",
+   "v": "{\"input\":\"keyboard\",\"pad\":\"xbox\",\"textSize\":\"130\",\"textSizeWide\":\"130\",\"reduceMotion\":\"\",\"lowEffects\":\"\",\"reduceFlashes\":\"\",\"colourVision\":\"blue-yellow\",\"phoneBattle\":\"ffx2\"}"
+  },
+  {
+   "at": "19:29:09",
+   "k": "OK   reload: COLOUR VISION colours reach the target step (some element draws a --cvd-target-* colour)",
+   "v": "{\"hits\":{\"enemy\":0,\"ally\":0,\"self\":78},\"targeting\":true,\"samples\":[\"ig-bosshp__name.color=self\",\"ig-bosshp__name.borderTopColor=self\",\"ig-bosshp__name.outlineColor=self\",\"ffx2stat__mono.color=self\",\"ffx2stat__mono.borderTopColor=self\",\"ffx2stat__mono.outlineColor=self\",\"ig-stat__value.color=self\",\"ig-stat__value.borderTopColor=self\"]}"
+  },
+  {
+   "at": "19:29:09",
+   "k": "OK   reload: Escape cancels the target step back to the same menu",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:29:10",
+   "k": "OK   reload: Esc opens the pause",
+   "v": ""
+  },
+  {
+   "at": "19:29:10",
+   "k": "OK   reload: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:29:11",
+   "k": "OK   reload: the ACCESSIBILITY rows still say 130% / ON / ON / ON / BLUE-YELLOW",
+   "v": "[\"TEXT SIZE=130%\",\"REDUCE MOTION=ON\",\"REDUCE FLASHES=ON\",\"LOW EFFECTS=ON\",\"COLOUR VISION=BLUE-YELLOW\"]"
+  }
+ ],
+ "checks": [
+  {
+   "name": "first menu up (battle, awaiting a command)",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "TEXT SIZE 115%: Esc opens the pause",
+   "ok": true,
+   "why": "screen=pause"
+  },
+  {
+   "name": "TEXT SIZE 115%: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "TEXT SIZE 115%: back to the battle",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "TEXT SIZE 115%: the row says 115% (was 100%)",
+   "ok": true,
+   "why": "after=115%"
+  },
+  {
+   "name": "TEXT SIZE 115%: <html> carries it",
+   "ok": true,
+   "why": "{\"textSize\":\"115\",\"textSizeWide\":\"115\"}"
+  },
+  {
+   "name": "TEXT SIZE 115%: something measured changes on the live HUD, vars, animations or fx",
+   "ok": true,
+   "why": "styleDiffs=10 varsDiff=1 anims 3->3 fx=3"
+  },
+  {
+   "name": "TEXT SIZE 115%: HUD type scaled by the setting (classes whose largest font is 1.15 x the 100% one)",
+   "ok": true,
+   "why": "{\"n\":72,\"atTarget\":10,\"notAt\":62}"
+  },
+  {
+   "name": "TEXT SIZE 115%: pause tab strip stays inside the window",
+   "ok": false,
+   "why": "[\"Yuna\",\"Rikku\",\"Paine\",\"Chapter\",\"Guide\",\"Controls\",\"Music\"]"
+  },
+  {
+   "name": "TEXT SIZE 130%: Esc opens the pause",
+   "ok": true,
+   "why": "screen=pause"
+  },
+  {
+   "name": "TEXT SIZE 130%: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "TEXT SIZE 130%: back to the battle",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "TEXT SIZE 130%: the row says 130% (was 115%)",
+   "ok": true,
+   "why": "after=130%"
+  },
+  {
+   "name": "TEXT SIZE 130%: <html> carries it",
+   "ok": true,
+   "why": "{\"textSize\":\"130\",\"textSizeWide\":\"130\"}"
+  },
+  {
+   "name": "TEXT SIZE 130%: something measured changes on the live HUD, vars, animations or fx",
+   "ok": true,
+   "why": "styleDiffs=12 varsDiff=1 anims 3->3 fx=3"
+  },
+  {
+   "name": "TEXT SIZE 130%: HUD type scaled by the setting (classes whose largest font is 1.30 x the 100% one)",
+   "ok": true,
+   "why": "{\"n\":72,\"atTarget\":8,\"notAt\":64}"
+  },
+  {
+   "name": "TEXT SIZE 130%: pause tab strip stays inside the window",
+   "ok": false,
+   "why": "[\"Yuna\",\"Rikku\",\"Paine\",\"Chapter\",\"Guide\",\"Options\",\"Controls\",\"Music\"]"
+  },
+  {
+   "name": "REDUCE MOTION ON: Esc opens the pause",
+   "ok": true,
+   "why": "screen=pause"
+  },
+  {
+   "name": "REDUCE MOTION ON: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "REDUCE MOTION ON: back to the battle",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "REDUCE MOTION ON: the row says ON (was OFF)",
+   "ok": true,
+   "why": "after=ON"
+  },
+  {
+   "name": "REDUCE MOTION ON: <html> carries it",
+   "ok": true,
+   "why": "\"reduceMotion\""
+  },
+  {
+   "name": "REDUCE MOTION ON: something measured changes on the live HUD, vars, animations or fx",
+   "ok": true,
+   "why": "styleDiffs=6 varsDiff=0 anims 3->1 fx=5"
+  },
+  {
+   "name": "REDUCE FLASHES ON: Esc opens the pause",
+   "ok": true,
+   "why": "screen=pause"
+  },
+  {
+   "name": "REDUCE FLASHES ON: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "REDUCE FLASHES ON: back to the battle",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "REDUCE FLASHES ON: the row says ON (was OFF)",
+   "ok": true,
+   "why": "after=ON"
+  },
+  {
+   "name": "REDUCE FLASHES ON: <html> carries it",
+   "ok": true,
+   "why": "\"reduceFlashes\""
+  },
+  {
+   "name": "REDUCE FLASHES ON: something measured changes on the live HUD, vars, animations or fx",
+   "ok": true,
+   "why": "styleDiffs=0 varsDiff=0 anims 1->0 fx=5"
+  },
+  {
+   "name": "LOW EFFECTS ON: Esc opens the pause",
+   "ok": true,
+   "why": "screen=pause"
+  },
+  {
+   "name": "LOW EFFECTS ON: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "LOW EFFECTS ON: back to the battle",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "LOW EFFECTS ON: the row says ON (was OFF)",
+   "ok": true,
+   "why": "after=ON"
+  },
+  {
+   "name": "LOW EFFECTS ON: <html> carries it",
+   "ok": true,
+   "why": "\"lowEffects\""
+  },
+  {
+   "name": "LOW EFFECTS ON: something measured changes on the live HUD, vars, animations or fx",
+   "ok": true,
+   "why": "styleDiffs=0 varsDiff=0 anims 0->0 fx=7"
+  },
+  {
+   "name": "COLOUR VISION RED-GREEN: Esc opens the pause",
+   "ok": true,
+   "why": "screen=pause"
+  },
+  {
+   "name": "COLOUR VISION RED-GREEN: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "COLOUR VISION RED-GREEN: back to the battle",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "COLOUR VISION RED-GREEN: the row says RED-GREEN (was OFF)",
+   "ok": true,
+   "why": "after=RED-GREEN"
+  },
+  {
+   "name": "COLOUR VISION RED-GREEN: <html> carries it",
+   "ok": true,
+   "why": "{\"colourVision\":\"red-green\"}"
+  },
+  {
+   "name": "COLOUR VISION RED-GREEN: something measured changes on the live HUD, vars, animations or fx",
+   "ok": true,
+   "why": "styleDiffs=0 varsDiff=9 anims 0->0 fx=4"
+  },
+  {
+   "name": "COLOUR VISION BLUE-YELLOW: Esc opens the pause",
+   "ok": true,
+   "why": "screen=pause"
+  },
+  {
+   "name": "COLOUR VISION BLUE-YELLOW: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "COLOUR VISION BLUE-YELLOW: back to the battle",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "COLOUR VISION BLUE-YELLOW: the row says BLUE-YELLOW (was RED-GREEN)",
+   "ok": true,
+   "why": "after=BLUE-YELLOW"
+  },
+  {
+   "name": "COLOUR VISION BLUE-YELLOW: <html> carries it",
+   "ok": true,
+   "why": "{\"colourVision\":\"blue-yellow\"}"
+  },
+  {
+   "name": "COLOUR VISION BLUE-YELLOW: something measured changes on the live HUD, vars, animations or fx",
+   "ok": true,
+   "why": "styleDiffs=0 varsDiff=7 anims 0->3 fx=4"
+  },
+  {
+   "name": "reload: saved settings equal the pre-reload ones",
+   "ok": true,
+   "why": "{\"textSize\":1.3,\"reduceMotion\":true,\"reduceFlashes\":true,\"lowEffects\":true,\"colourVision\":\"blue-yellow\"}"
+  },
+  {
+   "name": "reload: <html> carries the comfort flags on the first frames, before any pause",
+   "ok": true,
+   "why": "{\"input\":\"keyboard\",\"pad\":\"xbox\",\"textSize\":\"130\",\"textSizeWide\":\"130\",\"reduceMotion\":\"\",\"lowEffects\":\"\",\"reduceFlashes\":\"\",\"colourVision\":\"blue-yellow\"}"
+  },
+  {
+   "name": "reload: the chapter card is found again",
+   "ok": true,
+   "why": "ffx2-bahamut"
+  },
+  {
+   "name": "reload: first menu again",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "reload: the HUD type is still 130% on the same classes at the first menu",
+   "ok": true,
+   "why": "{\"n\":72,\"atTarget\":8,\"notAt\":64}"
+  },
+  {
+   "name": "reload: the comfort flags are on <html> at the first menu",
+   "ok": true,
+   "why": "{\"input\":\"keyboard\",\"pad\":\"xbox\",\"textSize\":\"130\",\"textSizeWide\":\"130\",\"reduceMotion\":\"\",\"lowEffects\":\"\",\"reduceFlashes\":\"\",\"colourVision\":\"blue-yellow\",\"phoneBattle\":\"ffx2\"}"
+  },
+  {
+   "name": "reload: COLOUR VISION colours reach the target step (some element draws a --cvd-target-* colour)",
+   "ok": true,
+   "why": "{\"hits\":{\"enemy\":0,\"ally\":0,\"self\":78},\"targeting\":true,\"samples\":[\"ig-bosshp__name.color=self\",\"ig-bosshp__name.borderTopColor=self\",\"ig-bosshp__name.outlineColor=self\",\"ffx2stat__mono.color=self\",\"ffx2stat__mono.borderTopColor=self\",\"ffx2stat__mono.outlineColor=self\",\"ig-stat__value.color=self\",\"ig-stat__value.borderTopColor=self\"]}"
+  },
+  {
+   "name": "reload: Escape cancels the target step back to the same menu",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "reload: Esc opens the pause",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "reload: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "reload: the ACCESSIBILITY rows still say 130% / ON / ON / ON / BLUE-YELLOW",
+   "ok": true,
+   "why": "[\"TEXT SIZE=130%\",\"REDUCE MOTION=ON\",\"REDUCE FLASHES=ON\",\"LOW EFFECTS=ON\",\"COLOUR VISION=BLUE-YELLOW\"]"
+  }
+ ],
+ "keyboardFallbacks": 8,
+ "taps": 15,
+ "setupAids": [
+  "window.__pyrefly.setSeed(1) before the first key (bootChapter)"
+ ],
+ "pauseButtonCandidates": [
+  "BUTTON.battle-pause-chip ig ig--ffx2|pause:open"
+ ],
+ "baseline": {
+  "ds": {
+   "input": "keyboard",
+   "pad": "xbox",
+   "textSize": "100",
+   "textSizeWide": "100",
+   "phoneBattle": "ffx2"
+  },
+  "vars": {
+   "--pyr-ts": "1"
+  },
+  "nAnims": 3,
+  "animSummary": {
+   "ffx2-shimmer|250|Infinity": 3
+  },
+  "shot": "phone-ffx2-ch4/00-baseline-first-menu.png"
+ },
+ "settingResults": [
+  {
+   "n": 1,
+   "name": "TEXT SIZE 115%",
+   "label": "TEXT SIZE",
+   "rowBefore": "100%",
+   "tabsAtPause": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Accessibility",
+    "Controls",
+    "Music"
+   ],
+   "tabsOffViewport": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Controls",
+    "Music"
+   ],
+   "via": "tap",
+   "rowAfter": "115%",
+   "pauseShot": "phone-ffx2-ch4/01-TEXT_SIZE_115_-pause.png",
+   "dsInPause": {
+    "input": "pointer",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "phoneBattle": "ffx2"
+   },
+   "menuBehind": true,
+   "menuShot": "phone-ffx2-ch4/01-TEXT_SIZE_115_-first-menu.png",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "phoneBattle": "ffx2"
+   },
+   "vars": {
+    "--pyr-ts": "1.15"
+   },
+   "dsDiff": {
+    "textSize": [
+     "100",
+     "115"
+    ],
+    "textSizeWide": [
+     "100",
+     "115"
+    ]
+   },
+   "varsDiff": {
+    "--pyr-ts": [
+     "1",
+     "1.15"
+    ]
+   },
+   "styleDiffCount": 10,
+   "styleDiffClasses": 10,
+   "styleDiffByProp": {
+    "fontSize": 10
+   },
+   "styleDiffSample": [
+    {
+     "cls": "ig-bosshp__name",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "18px",
+     "after": "20.7px"
+    },
+    {
+     "cls": "ffx2boss__hint",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "14px",
+     "after": "16.1px"
+    },
+    {
+     "cls": "ig-stat__name",
+     "prop": "fontSize",
+     "n": [
+      3,
+      3
+     ],
+     "before": "17px",
+     "after": "19.55px"
+    },
+    {
+     "cls": "ig-stat__value",
+     "prop": "fontSize",
+     "n": [
+      6,
+      6
+     ],
+     "before": "14px ; 16px",
+     "after": "16.1px ; 18.4px"
+    },
+    {
+     "cls": "ig-cmd",
+     "prop": "fontSize",
+     "n": [
+      4,
+      4
+     ],
+     "before": "16px",
+     "after": "18.4px"
+    },
+    {
+     "cls": "ffx2cmd__label",
+     "prop": "fontSize",
+     "n": [
+      4,
+      4
+     ],
+     "before": "16px",
+     "after": "18.4px"
+    },
+    {
+     "cls": "phud-foot",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "14px",
+     "after": "16.1px"
+    },
+    {
+     "cls": "phud-foot__who",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "14px",
+     "after": "16.1px"
+    },
+    {
+     "cls": "phud-foot__help",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "14px",
+     "after": "16.1px"
+    },
+    {
+     "cls": "phud-guide",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "14px",
+     "after": "16.1px"
+    }
+   ],
+   "animsBefore": 3,
+   "animsAfter": 3,
+   "animSummaryDiff": {},
+   "fxDiff": {
+    "b": [
+     {
+      "room": "bevelle-underground",
+      "game": "ffx2",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.427
+       ],
+       "buildMs": 266,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 170,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "plume:31"
+      ],
+      "haze": 2,
+      "arcs": false,
+      "reflection": false,
+      "figures": 8,
+      "drift": 0.6,
+      "calm": 0,
+      "driftX": -0.139,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0.16570944501898463,
+       "extent": 0.36790616981826185,
+       "biases": [
+        0.15908106721822526,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 10.72
+     },
+     {
+      "room": "bevelle-underground",
+      "game": "ffx2",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.427
+       ],
+       "buildMs": 266,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 170,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "plume:31"
+      ],
+      "haze": 2,
+      "arcs": false,
+      "reflection": false,
+      "figures": 8,
+      "drift": 0.6,
+      "calm": 0,
+      "driftX": -0.197,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0.3043164845220303,
+       "extent": 0.43813538012245573,
+       "biases": [
+        0.29214382514114917,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 15.18
+     }
+    ],
+    "mix": [
+     {
+      "game": "ffx2",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": true,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": false,
+       "dressphereShot": true,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": false,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": true
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "chapterFraming": {
+        "limit": "less",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "colossus",
+       "colossus": false,
+       "colossusFight": true,
+       "plans": 1,
+       "replans": 0,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 106,
+        "overlap": 0.17,
+        "bossCover": 0.35,
+        "blend": 0,
+        "back": 1,
+        "lens": [
+         0,
+         0
+        ],
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0.01
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0,
+        "today": 0,
+        "corners": 0,
+        "todayCorners": 0,
+        "restGap": -55
+       },
+       "live": null,
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 256,
+       "planMs": 35,
+       "tries": [
+        "rule floor95 ov0.20 bc0.37 ffx2-bahamut:0.97/0.10",
+        "-1:ok w0.00 px106 ov0.17 bc0.35 "
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         0.36,
+         3.45,
+         15.34
+        ],
+        "look": [
+         0.53,
+         3.01,
+         5.35
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        0
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 4,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        0.248,
+        3.478,
+        15.422
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.4656724673874322,
+        "width": 0.33956539590208773
+       }
+      },
+      "living": [
+       {
+        "name": "rikku",
+        "breath": 0.0122,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0.0044,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "paine",
+        "breath": 0.0223,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "bahamut",
+        "breath": 0.0038,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 8,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.2738
+     },
+     {
+      "game": "ffx2",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": true,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": false,
+       "dressphereShot": true,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": false,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": true
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "chapterFraming": {
+        "limit": "less",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "colossus",
+       "colossus": false,
+       "colossusFight": true,
+       "plans": 1,
+       "replans": 0,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 106,
+        "overlap": 0.17,
+        "bossCover": 0.35,
+        "blend": 0,
+        "back": 1,
+        "lens": [
+         0,
+         0
+        ],
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0.01
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0,
+        "today": 0,
+        "corners": 0,
+        "todayCorners": 0,
+        "restGap": -55
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 108,
+        "overlap": 0.23,
+        "bossCover": 0.31,
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0.06
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0.19,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 256,
+       "planMs": 35,
+       "tries": [
+        "rule floor95 ov0.20 bc0.37 ffx2-bahamut:0.97/0.10",
+        "-1:ok w0.00 px106 ov0.17 bc0.35 "
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         0.36,
+         3.45,
+         15.34
+        ],
+        "look": [
+         0.53,
+         3.01,
+         5.35
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        0
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 4,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        0.178,
+        3.519,
+        15.351
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.4656724673874322,
+        "width": 0.33956539590208773
+       }
+      },
+      "living": [
+       {
+        "name": "rikku",
+        "breath": 0.002,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0.0095,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "paine",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "bahamut",
+        "breath": 0.0124,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 8,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.2792
+     }
+    ],
+    "c": [
+     {
+      "hits": 0,
+      "impactFrames": 0,
+      "freezes": 0,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": -1,
+      "lastKind": "",
+      "clock": 10.5,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     },
+     {
+      "hits": 0,
+      "impactFrames": 0,
+      "freezes": 0,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": -1,
+      "lastKind": "",
+      "clock": 14.958,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     }
+    ]
+   },
+   "fontRatioVs100": {
+    "target": 1.15,
+    "classesCompared": 72,
+    "scaledAtTarget": 10,
+    "notAtTarget": 62,
+    "grownClasses": 10,
+    "medianOfGrown": 1.15,
+    "maxRatio": 1.15,
+    "notAtTargetSample": [
+     "screen:16->16",
+     "fxc-splash:16->16",
+     "fxc-splash__lines:16->16",
+     "fxc-splash__slab:16->16",
+     "fxc-splash__rule:16->16",
+     "stm-layer:16->16",
+     "ig:16->16",
+     "phud-panel:16->16",
+     "phud-shade:16->16",
+     "ig-surface:16->16",
+     "ig-surface__grain:16->16",
+     "ffx2hud__stage:16->16",
+     "ffx2hud__enemies:16->16",
+     "ig-bosshp:16->16"
+    ]
+   },
+   "verdict": {
+    "says": true,
+    "html": true,
+    "measuredEffect": true,
+    "rowChangedFrom": "100% -> 115%"
+   }
+  },
+  {
+   "n": 2,
+   "name": "TEXT SIZE 130%",
+   "label": "TEXT SIZE",
+   "rowBefore": "115%",
+   "tabsAtPause": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Accessibility",
+    "Controls",
+    "Music"
+   ],
+   "tabsOffViewport": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Controls",
+    "Music"
+   ],
+   "via": "tap",
+   "rowAfter": "130%",
+   "pauseShot": "phone-ffx2-ch4/02-TEXT_SIZE_130_-pause.png",
+   "dsInPause": {
+    "input": "pointer",
+    "pad": "xbox",
+    "textSize": "130",
+    "textSizeWide": "130",
+    "phoneBattle": "ffx2"
+   },
+   "menuBehind": true,
+   "menuShot": "phone-ffx2-ch4/02-TEXT_SIZE_130_-first-menu.png",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "130",
+    "textSizeWide": "130",
+    "phoneBattle": "ffx2"
+   },
+   "vars": {
+    "--pyr-ts": "1.3"
+   },
+   "dsDiff": {
+    "textSize": [
+     "115",
+     "130"
+    ],
+    "textSizeWide": [
+     "115",
+     "130"
+    ]
+   },
+   "varsDiff": {
+    "--pyr-ts": [
+     "1.15",
+     "1.3"
+    ]
+   },
+   "styleDiffCount": 12,
+   "styleDiffClasses": 12,
+   "styleDiffByProp": {
+    "fontSize": 11,
+    "filter": 1
+   },
+   "styleDiffSample": [
+    {
+     "cls": "ig-bosshp__name",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "20.7px",
+     "after": "23.4px"
+    },
+    {
+     "cls": "ffx2boss__hint",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "16.1px",
+     "after": "18.2px"
+    },
+    {
+     "cls": "ig-stat__od",
+     "prop": "filter",
+     "n": [
+      3,
+      3
+     ],
+     "before": "brightness(1.2)",
+     "after": "brightness(1)"
+    },
+    {
+     "cls": "ig-cmd",
+     "prop": "fontSize",
+     "n": [
+      4,
+      4
+     ],
+     "before": "18.4px",
+     "after": "20.8px"
+    },
+    {
+     "cls": "ffx2cmd__label",
+     "prop": "fontSize",
+     "n": [
+      4,
+      4
+     ],
+     "before": "18.4px",
+     "after": "20.8px"
+    },
+    {
+     "cls": "phud-foot",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "16.1px",
+     "after": "18.2px"
+    },
+    {
+     "cls": "phud-foot__who",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "16.1px",
+     "after": "18.2px"
+    },
+    {
+     "cls": "phud-foot__help",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "16.1px",
+     "after": "18.2px"
+    },
+    {
+     "cls": "phud-guide",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "16.1px",
+     "after": "18.2px"
+    },
+    {
+     "cls": "sthint",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "16.33px",
+     "after": "18.46px"
+    },
+    {
+     "cls": "sthint__head",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "16.33px",
+     "after": "18.46px"
+    },
+    {
+     "cls": "sthint__body",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "16.33px",
+     "after": "18.46px"
+    }
+   ],
+   "animsBefore": 3,
+   "animsAfter": 3,
+   "animSummaryDiff": {},
+   "fxDiff": {
+    "b": [
+     {
+      "room": "bevelle-underground",
+      "game": "ffx2",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.427
+       ],
+       "buildMs": 266,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 170,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "plume:31"
+      ],
+      "haze": 2,
+      "arcs": false,
+      "reflection": false,
+      "figures": 8,
+      "drift": 0.6,
+      "calm": 0,
+      "driftX": -0.197,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0.3043164845220303,
+       "extent": 0.43813538012245573,
+       "biases": [
+        0.29214382514114917,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 15.18
+     },
+     {
+      "room": "bevelle-underground",
+      "game": "ffx2",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.427
+       ],
+       "buildMs": 266,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 170,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "plume:31"
+      ],
+      "haze": 2,
+      "arcs": false,
+      "reflection": false,
+      "figures": 8,
+      "drift": 0.6,
+      "calm": 0,
+      "driftX": 0.054,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0.07494160863891801,
+       "extent": 0.3090083297510595,
+       "biases": [
+        0.0719439442933613,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 19.46
+     }
+    ],
+    "mix": [
+     {
+      "game": "ffx2",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": true,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": false,
+       "dressphereShot": true,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": false,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": true
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "chapterFraming": {
+        "limit": "less",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "colossus",
+       "colossus": false,
+       "colossusFight": true,
+       "plans": 1,
+       "replans": 0,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 106,
+        "overlap": 0.17,
+        "bossCover": 0.35,
+        "blend": 0,
+        "back": 1,
+        "lens": [
+         0,
+         0
+        ],
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0.01
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0,
+        "today": 0,
+        "corners": 0,
+        "todayCorners": 0,
+        "restGap": -55
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 108,
+        "overlap": 0.23,
+        "bossCover": 0.31,
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0.06
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0.19,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 256,
+       "planMs": 35,
+       "tries": [
+        "rule floor95 ov0.20 bc0.37 ffx2-bahamut:0.97/0.10",
+        "-1:ok w0.00 px106 ov0.17 bc0.35 "
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         0.36,
+         3.45,
+         15.34
+        ],
+        "look": [
+         0.53,
+         3.01,
+         5.35
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        0
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 4,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        0.178,
+        3.519,
+        15.351
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.4656724673874322,
+        "width": 0.33956539590208773
+       }
+      },
+      "living": [
+       {
+        "name": "rikku",
+        "breath": 0.002,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0.0095,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "paine",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "bahamut",
+        "breath": 0.0124,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 8,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.2792
+     },
+     {
+      "game": "ffx2",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": true,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": false,
+       "dressphereShot": true,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": false,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": true
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "chapterFraming": {
+        "limit": "less",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "colossus",
+       "colossus": false,
+       "colossusFight": true,
+       "plans": 1,
+       "replans": 0,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 106,
+        "overlap": 0.17,
+        "bossCover": 0.35,
+        "blend": 0,
+        "back": 1,
+        "lens": [
+         0,
+         0
+        ],
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0.01
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0,
+        "today": 0,
+        "corners": 0,
+        "todayCorners": 0,
+        "restGap": -55
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 108,
+        "overlap": 0.23,
+        "bossCover": 0.31,
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0.06
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0.19,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 256,
+       "planMs": 35,
+       "tries": [
+        "rule floor95 ov0.20 bc0.37 ffx2-bahamut:0.97/0.10",
+        "-1:ok w0.00 px106 ov0.17 bc0.35 "
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         0.36,
+         3.45,
+         15.34
+        ],
+        "look": [
+         0.53,
+         3.01,
+         5.35
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        0
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 4,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        0.348,
+        3.356,
+        15.272
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.4656724673874322,
+        "width": 0.33956539590208773
+       }
+      },
+      "living": [
+       {
+        "name": "rikku",
+        "breath": 0.0002,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0.0188,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "paine",
+        "breath": 0.025,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "bahamut",
+        "breath": 0.0075,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 8,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.3116
+     }
+    ],
+    "c": [
+     {
+      "hits": 0,
+      "impactFrames": 0,
+      "freezes": 0,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": -1,
+      "lastKind": "",
+      "clock": 14.958,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     },
+     {
+      "hits": 0,
+      "impactFrames": 0,
+      "freezes": 0,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": -1,
+      "lastKind": "",
+      "clock": 19.233,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     }
+    ]
+   },
+   "fontRatioVs100": {
+    "target": 1.3,
+    "classesCompared": 72,
+    "scaledAtTarget": 8,
+    "notAtTarget": 64,
+    "grownClasses": 10,
+    "medianOfGrown": 1.3,
+    "maxRatio": 1.3,
+    "notAtTargetSample": [
+     "screen:16->16",
+     "fxc-splash:16->16",
+     "fxc-splash__lines:16->16",
+     "fxc-splash__slab:16->16",
+     "fxc-splash__rule:16->16",
+     "stm-layer:16->16",
+     "ig:16->16",
+     "phud-panel:16->16",
+     "phud-shade:16->16",
+     "ig-surface:16->16",
+     "ig-surface__grain:16->16",
+     "ffx2hud__stage:16->16",
+     "ffx2hud__enemies:16->16",
+     "ig-bosshp:16->16"
+    ]
+   },
+   "verdict": {
+    "says": true,
+    "html": true,
+    "measuredEffect": true,
+    "rowChangedFrom": "115% -> 130%"
+   }
+  },
+  {
+   "n": 3,
+   "name": "REDUCE MOTION ON",
+   "label": "REDUCE MOTION",
+   "rowBefore": "OFF",
+   "tabsAtPause": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Accessibility",
+    "Controls",
+    "Music"
+   ],
+   "tabsOffViewport": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Controls",
+    "Music"
+   ],
+   "via": "tap",
+   "rowAfter": "ON",
+   "pauseShot": "phone-ffx2-ch4/03-REDUCE_MOTION_ON-pause.png",
+   "dsInPause": {
+    "input": "pointer",
+    "pad": "xbox",
+    "textSize": "130",
+    "textSizeWide": "130",
+    "phoneBattle": "ffx2",
+    "reduceMotion": ""
+   },
+   "menuBehind": true,
+   "menuShot": "phone-ffx2-ch4/03-REDUCE_MOTION_ON-first-menu.png",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "130",
+    "textSizeWide": "130",
+    "phoneBattle": "ffx2",
+    "reduceMotion": ""
+   },
+   "vars": {
+    "--pyr-ts": "1.3"
+   },
+   "dsDiff": {
+    "reduceMotion": [
+     null,
+     ""
+    ]
+   },
+   "varsDiff": {},
+   "styleDiffCount": 6,
+   "styleDiffClasses": 3,
+   "styleDiffByProp": {
+    "animationName": 1,
+    "animationDuration": 1,
+    "animationIterationCount": 1,
+    "filter": 1,
+    "transitionDuration": 2
+   },
+   "styleDiffSample": [
+    {
+     "cls": "ig-stat__od",
+     "prop": "animationName",
+     "n": [
+      3,
+      3
+     ],
+     "before": "ffx2-shimmer",
+     "after": "none"
+    },
+    {
+     "cls": "ig-stat__od",
+     "prop": "animationDuration",
+     "n": [
+      3,
+      3
+     ],
+     "before": "0.25s",
+     "after": "0s"
+    },
+    {
+     "cls": "ig-stat__od",
+     "prop": "animationIterationCount",
+     "n": [
+      3,
+      3
+     ],
+     "before": "infinite",
+     "after": "1"
+    },
+    {
+     "cls": "ig-stat__od",
+     "prop": "filter",
+     "n": [
+      3,
+      3
+     ],
+     "before": "brightness(1)",
+     "after": "none"
+    },
+    {
+     "cls": "pf-mom__bar",
+     "prop": "transitionDuration",
+     "n": [
+      2,
+      2
+     ],
+     "before": "0.26s",
+     "after": "0.001s"
+    },
+    {
+     "cls": "pf-mom__slab",
+     "prop": "transitionDuration",
+     "n": [
+      1,
+      1
+     ],
+     "before": "0.26s, 0.26s",
+     "after": "0.001s"
+    }
+   ],
+   "animsBefore": 3,
+   "animsAfter": 1,
+   "animSummaryDiff": {
+    "ffx2-shimmer|250|Infinity": [
+     3,
+     null
+    ],
+    "fxc-sheen|360|1": [
+     null,
+     1
+    ]
+   },
+   "fxDiff": {
+    "reduceMotion": [
+     false,
+     true
+    ],
+    "b": [
+     {
+      "room": "bevelle-underground",
+      "game": "ffx2",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.427
+       ],
+       "buildMs": 266,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 170,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "plume:31"
+      ],
+      "haze": 2,
+      "arcs": false,
+      "reflection": false,
+      "figures": 8,
+      "drift": 0.6,
+      "calm": 0,
+      "driftX": 0.054,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0.07494160863891801,
+       "extent": 0.3090083297510595,
+       "biases": [
+        0.0719439442933613,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 19.46
+     },
+     {
+      "room": "bevelle-underground",
+      "game": "ffx2",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.427
+       ],
+       "buildMs": 266,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 170,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "plume:31"
+      ],
+      "haze": 2,
+      "arcs": false,
+      "reflection": false,
+      "figures": 8,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 23.67
+     }
+    ],
+    "shared": [
+     {
+      "cEnergy": 0
+     },
+     {
+      "cEnergy": 0.1214179463119281
+     }
+    ],
+    "mix": [
+     {
+      "game": "ffx2",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": true,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": false,
+       "dressphereShot": true,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": false,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": true
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "chapterFraming": {
+        "limit": "less",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "colossus",
+       "colossus": false,
+       "colossusFight": true,
+       "plans": 1,
+       "replans": 0,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 106,
+        "overlap": 0.17,
+        "bossCover": 0.35,
+        "blend": 0,
+        "back": 1,
+        "lens": [
+         0,
+         0
+        ],
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0.01
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0,
+        "today": 0,
+        "corners": 0,
+        "todayCorners": 0,
+        "restGap": -55
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 108,
+        "overlap": 0.23,
+        "bossCover": 0.31,
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0.06
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0.19,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 256,
+       "planMs": 35,
+       "tries": [
+        "rule floor95 ov0.20 bc0.37 ffx2-bahamut:0.97/0.10",
+        "-1:ok w0.00 px106 ov0.17 bc0.35 "
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         0.36,
+         3.45,
+         15.34
+        ],
+        "look": [
+         0.53,
+         3.01,
+         5.35
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        0
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 4,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        0.348,
+        3.356,
+        15.272
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.4656724673874322,
+        "width": 0.33956539590208773
+       }
+      },
+      "living": [
+       {
+        "name": "rikku",
+        "breath": 0.0002,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0.0188,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "paine",
+        "breath": 0.025,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "bahamut",
+        "breath": 0.0075,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 8,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.3116
+     },
+     {
+      "game": "ffx2",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": false,
+       "dressphereShot": true,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": true,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": true
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "chapterFraming": {
+        "limit": "less",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "colossus",
+       "colossus": false,
+       "colossusFight": true,
+       "plans": 1,
+       "replans": 0,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 106,
+        "overlap": 0.17,
+        "bossCover": 0.35,
+        "blend": 0,
+        "back": 1,
+        "lens": [
+         0,
+         0
+        ],
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0.01
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0,
+        "today": 0,
+        "corners": 0,
+        "todayCorners": 0,
+        "restGap": -55
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 108,
+        "overlap": 0.23,
+        "bossCover": 0.31,
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0.06
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0.19,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 256,
+       "planMs": 35,
+       "tries": [
+        "rule floor95 ov0.20 bc0.37 ffx2-bahamut:0.97/0.10",
+        "-1:ok w0.00 px106 ov0.17 bc0.35 "
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         0.36,
+         3.45,
+         15.34
+        ],
+        "look": [
+         0.53,
+         3.01,
+         5.35
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        0
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 4,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        0.365,
+        3.446,
+        15.341
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.4656724673874322,
+        "width": 0.33956539590208773
+       }
+      },
+      "living": [
+       {
+        "name": "rikku",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "paine",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "bahamut",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 8,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.2857
+     }
+    ],
+    "c": [
+     {
+      "hits": 0,
+      "impactFrames": 0,
+      "freezes": 0,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": -1,
+      "lastKind": "",
+      "clock": 19.233,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     },
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 0,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 22.774099999999844,
+      "lastKind": "hit",
+      "clock": 23.441,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     }
+    ]
+   },
+   "verdict": {
+    "says": true,
+    "html": true,
+    "measuredEffect": true,
+    "rowChangedFrom": "OFF -> ON"
+   }
+  },
+  {
+   "n": 4,
+   "name": "REDUCE FLASHES ON",
+   "label": "REDUCE FLASHES",
+   "rowBefore": "OFF",
+   "tabsAtPause": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Accessibility",
+    "Controls",
+    "Music"
+   ],
+   "tabsOffViewport": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Controls",
+    "Music"
+   ],
+   "via": "tap",
+   "rowAfter": "ON",
+   "pauseShot": "phone-ffx2-ch4/04-REDUCE_FLASHES_ON-pause.png",
+   "dsInPause": {
+    "input": "pointer",
+    "pad": "xbox",
+    "textSize": "130",
+    "textSizeWide": "130",
+    "phoneBattle": "ffx2",
+    "reduceMotion": "",
+    "reduceFlashes": ""
+   },
+   "menuBehind": true,
+   "menuShot": "phone-ffx2-ch4/04-REDUCE_FLASHES_ON-first-menu.png",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "130",
+    "textSizeWide": "130",
+    "phoneBattle": "ffx2",
+    "reduceMotion": "",
+    "reduceFlashes": ""
+   },
+   "vars": {
+    "--pyr-ts": "1.3"
+   },
+   "dsDiff": {
+    "reduceFlashes": [
+     null,
+     ""
+    ]
+   },
+   "varsDiff": {},
+   "styleDiffCount": 0,
+   "styleDiffClasses": 0,
+   "styleDiffByProp": {},
+   "styleDiffSample": [],
+   "animsBefore": 1,
+   "animsAfter": 0,
+   "animSummaryDiff": {
+    "fxc-sheen|360|1": [
+     1,
+     null
+    ]
+   },
+   "fxDiff": {
+    "reduceFlashes": [
+     false,
+     true
+    ],
+    "b": [
+     {
+      "room": "bevelle-underground",
+      "game": "ffx2",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.427
+       ],
+       "buildMs": 266,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 170,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "plume:31"
+      ],
+      "haze": 2,
+      "arcs": false,
+      "reflection": false,
+      "figures": 8,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 23.67
+     },
+     {
+      "room": "bevelle-underground",
+      "game": "ffx2",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.427
+       ],
+       "buildMs": 266,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 170,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "plume:31"
+      ],
+      "haze": 2,
+      "arcs": false,
+      "reflection": false,
+      "figures": 8,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 27.93
+     }
+    ],
+    "shared": [
+     {
+      "cEnergy": 0.1214179463119281
+     },
+     {
+      "cEnergy": 0.0010604391768323862
+     }
+    ],
+    "mix": [
+     {
+      "game": "ffx2",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": false,
+       "dressphereShot": true,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": true,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": true
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "chapterFraming": {
+        "limit": "less",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "colossus",
+       "colossus": false,
+       "colossusFight": true,
+       "plans": 1,
+       "replans": 0,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 106,
+        "overlap": 0.17,
+        "bossCover": 0.35,
+        "blend": 0,
+        "back": 1,
+        "lens": [
+         0,
+         0
+        ],
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0.01
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0,
+        "today": 0,
+        "corners": 0,
+        "todayCorners": 0,
+        "restGap": -55
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 108,
+        "overlap": 0.23,
+        "bossCover": 0.31,
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0.06
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0.19,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 256,
+       "planMs": 35,
+       "tries": [
+        "rule floor95 ov0.20 bc0.37 ffx2-bahamut:0.97/0.10",
+        "-1:ok w0.00 px106 ov0.17 bc0.35 "
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         0.36,
+         3.45,
+         15.34
+        ],
+        "look": [
+         0.53,
+         3.01,
+         5.35
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        0
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 4,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        0.365,
+        3.446,
+        15.341
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.4656724673874322,
+        "width": 0.33956539590208773
+       }
+      },
+      "living": [
+       {
+        "name": "rikku",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "paine",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "bahamut",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 8,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.2857
+     },
+     {
+      "game": "ffx2",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": false,
+       "dressphereShot": true,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": true,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": true
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "chapterFraming": {
+        "limit": "less",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "colossus",
+       "colossus": false,
+       "colossusFight": true,
+       "plans": 1,
+       "replans": 0,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 106,
+        "overlap": 0.17,
+        "bossCover": 0.35,
+        "blend": 0,
+        "back": 1,
+        "lens": [
+         0,
+         0
+        ],
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0.01
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0,
+        "today": 0,
+        "corners": 0,
+        "todayCorners": 0,
+        "restGap": -55
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 108,
+        "overlap": 0.23,
+        "bossCover": 0.31,
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0.06
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0.19,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 256,
+       "planMs": 35,
+       "tries": [
+        "rule floor95 ov0.20 bc0.37 ffx2-bahamut:0.97/0.10",
+        "-1:ok w0.00 px106 ov0.17 bc0.35 "
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         0.36,
+         3.45,
+         15.34
+        ],
+        "look": [
+         0.53,
+         3.01,
+         5.35
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        0
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 4,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        0.365,
+        3.446,
+        15.341
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.4656724673874322,
+        "width": 0.33956539590208773
+       }
+      },
+      "living": [
+       {
+        "name": "rikku",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "paine",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "bahamut",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 8,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.2675
+     }
+    ],
+    "c": [
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 0,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 22.774099999999844,
+      "lastKind": "hit",
+      "clock": 23.441,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     },
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 0,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 22.774099999999844,
+      "lastKind": "hit",
+      "clock": 27.707,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     }
+    ]
+   },
+   "verdict": {
+    "says": true,
+    "html": true,
+    "measuredEffect": true,
+    "rowChangedFrom": "OFF -> ON"
+   }
+  },
+  {
+   "n": 5,
+   "name": "LOW EFFECTS ON",
+   "label": "LOW EFFECTS",
+   "rowBefore": "OFF",
+   "tabsAtPause": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Accessibility",
+    "Controls",
+    "Music"
+   ],
+   "tabsOffViewport": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Controls",
+    "Music"
+   ],
+   "via": "tap",
+   "rowAfter": "ON",
+   "pauseShot": "phone-ffx2-ch4/05-LOW_EFFECTS_ON-pause.png",
+   "dsInPause": {
+    "input": "pointer",
+    "pad": "xbox",
+    "textSize": "130",
+    "textSizeWide": "130",
+    "phoneBattle": "ffx2",
+    "reduceMotion": "",
+    "reduceFlashes": "",
+    "lowEffects": ""
+   },
+   "menuBehind": true,
+   "menuShot": "phone-ffx2-ch4/05-LOW_EFFECTS_ON-first-menu.png",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "130",
+    "textSizeWide": "130",
+    "phoneBattle": "ffx2",
+    "reduceMotion": "",
+    "reduceFlashes": "",
+    "lowEffects": ""
+   },
+   "vars": {
+    "--pyr-ts": "1.3"
+   },
+   "dsDiff": {
+    "lowEffects": [
+     null,
+     ""
+    ]
+   },
+   "varsDiff": {},
+   "styleDiffCount": 0,
+   "styleDiffClasses": 0,
+   "styleDiffByProp": {},
+   "styleDiffSample": [],
+   "animsBefore": 0,
+   "animsAfter": 0,
+   "animSummaryDiff": {},
+   "fxDiff": {
+    "tier": [
+     "phone",
+     "low"
+    ],
+    "lowEffects": [
+     false,
+     true
+    ],
+    "a": [
+     {
+      "active": true,
+      "tier": "phone",
+      "sources": [],
+      "menu": false,
+      "drama": 0
+     },
+     {
+      "active": true,
+      "tier": "low",
+      "sources": [],
+      "menu": false,
+      "drama": 0
+     }
+    ],
+    "b": [
+     {
+      "room": "bevelle-underground",
+      "game": "ffx2",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.427
+       ],
+       "buildMs": 266,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 170,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "plume:31"
+      ],
+      "haze": 2,
+      "arcs": false,
+      "reflection": false,
+      "figures": 8,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 27.93
+     },
+     {
+      "room": "bevelle-underground",
+      "game": "ffx2",
+      "tier": "low",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.427
+       ],
+       "buildMs": 290,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 140,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "plume:17"
+      ],
+      "haze": 0,
+      "arcs": false,
+      "reflection": false,
+      "figures": 8,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 32.15
+     }
+    ],
+    "shared": [
+     {
+      "cEnergy": 0.0010604391768323862
+     },
+     {
+      "cEnergy": 0.010354354379699485
+     }
+    ],
+    "mix": [
+     {
+      "game": "ffx2",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": false,
+       "dressphereShot": true,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": true,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": true
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "chapterFraming": {
+        "limit": "less",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "colossus",
+       "colossus": false,
+       "colossusFight": true,
+       "plans": 1,
+       "replans": 0,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 106,
+        "overlap": 0.17,
+        "bossCover": 0.35,
+        "blend": 0,
+        "back": 1,
+        "lens": [
+         0,
+         0
+        ],
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0.01
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0,
+        "today": 0,
+        "corners": 0,
+        "todayCorners": 0,
+        "restGap": -55
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 108,
+        "overlap": 0.23,
+        "bossCover": 0.31,
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0.06
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0.19,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 256,
+       "planMs": 35,
+       "tries": [
+        "rule floor95 ov0.20 bc0.37 ffx2-bahamut:0.97/0.10",
+        "-1:ok w0.00 px106 ov0.17 bc0.35 "
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         0.36,
+         3.45,
+         15.34
+        ],
+        "look": [
+         0.53,
+         3.01,
+         5.35
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        0
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 4,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        0.365,
+        3.446,
+        15.341
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.4656724673874322,
+        "width": 0.33956539590208773
+       }
+      },
+      "living": [
+       {
+        "name": "rikku",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "paine",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "bahamut",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 8,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.2675
+     },
+     {
+      "game": "ffx2",
+      "parts": {
+       "depthOfField": false,
+       "fog": false,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": false,
+       "dressphereShot": true,
+       "splashArt": true
+      },
+      "tier": "low",
+      "reduceMotion": true,
+      "device": {
+       "tier": "low",
+       "phone": true,
+       "colossus": true
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "low"
+       },
+       "fog": {
+        "limit": "off",
+        "why": "low"
+       },
+       "smoothEdges": {
+        "limit": "less",
+        "why": "low"
+       },
+       "chapterFraming": {
+        "limit": "less",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "colossus",
+       "colossus": false,
+       "colossusFight": true,
+       "plans": 1,
+       "replans": 0,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 106,
+        "overlap": 0.17,
+        "bossCover": 0.35,
+        "blend": 0,
+        "back": 1,
+        "lens": [
+         0,
+         0
+        ],
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0.01
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0,
+        "today": 0,
+        "corners": 0,
+        "todayCorners": 0,
+        "restGap": -55
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 108,
+        "overlap": 0.23,
+        "bossCover": 0.31,
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0.06
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0.19,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 256,
+       "planMs": 35,
+       "tries": [
+        "rule floor95 ov0.20 bc0.37 ffx2-bahamut:0.97/0.10",
+        "-1:ok w0.00 px106 ov0.17 bc0.35 "
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         0.36,
+         3.45,
+         15.34
+        ],
+        "look": [
+         0.53,
+         3.01,
+         5.35
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        0
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 4,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        0.365,
+        3.446,
+        15.341
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "none",
+       "dof": null,
+       "band": {
+        "focus": 0.4656724673874322,
+        "width": 0.33956539590208773
+       }
+      },
+      "living": [
+       {
+        "name": "rikku",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "paine",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "bahamut",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 8,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.2553
+     }
+    ],
+    "c": [
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 0,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 22.774099999999844,
+      "lastKind": "hit",
+      "clock": 27.707,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     },
+     {
+      "hits": 2,
+      "impactFrames": 0,
+      "freezes": 0,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 29.0404999999998,
+      "lastKind": "hit",
+      "clock": 31.924,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     }
+    ]
+   },
+   "verdict": {
+    "says": true,
+    "html": true,
+    "measuredEffect": true,
+    "rowChangedFrom": "OFF -> ON"
+   }
+  },
+  {
+   "n": 6,
+   "name": "COLOUR VISION RED-GREEN",
+   "label": "COLOUR VISION",
+   "rowBefore": "OFF",
+   "tabsAtPause": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Accessibility",
+    "Controls",
+    "Music"
+   ],
+   "tabsOffViewport": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Controls",
+    "Music"
+   ],
+   "via": "tap",
+   "rowAfter": "RED-GREEN",
+   "pauseShot": "phone-ffx2-ch4/06-COLOUR_VISION_RED_GREEN-pause.png",
+   "dsInPause": {
+    "input": "pointer",
+    "pad": "xbox",
+    "textSize": "130",
+    "textSizeWide": "130",
+    "phoneBattle": "ffx2",
+    "reduceMotion": "",
+    "reduceFlashes": "",
+    "lowEffects": "",
+    "colourVision": "red-green"
+   },
+   "menuBehind": true,
+   "menuShot": "phone-ffx2-ch4/06-COLOUR_VISION_RED_GREEN-first-menu.png",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "130",
+    "textSizeWide": "130",
+    "phoneBattle": "ffx2",
+    "reduceMotion": "",
+    "reduceFlashes": "",
+    "lowEffects": "",
+    "colourVision": "red-green"
+   },
+   "vars": {
+    "--pyr-ts": "1.3",
+    "--cvd-target-enemy": "#f2c21e",
+    "--cvd-target-ally": "#56b4e9",
+    "--cvd-target-self": "#f4f1e8",
+    "--cvd-mp-hi": "#8fd0f0",
+    "--cvd-mp-lo": "#3a8fd0",
+    "--cvd-gate-r": "#d55e00",
+    "--cvd-gate-g": "#009e73",
+    "--cvd-gate-b": "#0072b2",
+    "--cvd-gate-y": "#f0e442"
+   },
+   "dsDiff": {
+    "colourVision": [
+     null,
+     "red-green"
+    ]
+   },
+   "varsDiff": {
+    "--cvd-target-enemy": [
+     null,
+     "#f2c21e"
+    ],
+    "--cvd-target-ally": [
+     null,
+     "#56b4e9"
+    ],
+    "--cvd-target-self": [
+     null,
+     "#f4f1e8"
+    ],
+    "--cvd-mp-hi": [
+     null,
+     "#8fd0f0"
+    ],
+    "--cvd-mp-lo": [
+     null,
+     "#3a8fd0"
+    ],
+    "--cvd-gate-r": [
+     null,
+     "#d55e00"
+    ],
+    "--cvd-gate-g": [
+     null,
+     "#009e73"
+    ],
+    "--cvd-gate-b": [
+     null,
+     "#0072b2"
+    ],
+    "--cvd-gate-y": [
+     null,
+     "#f0e442"
+    ]
+   },
+   "styleDiffCount": 0,
+   "styleDiffClasses": 0,
+   "styleDiffByProp": {},
+   "styleDiffSample": [],
+   "animsBefore": 0,
+   "animsAfter": 0,
+   "animSummaryDiff": {},
+   "fxDiff": {
+    "b": [
+     {
+      "room": "bevelle-underground",
+      "game": "ffx2",
+      "tier": "low",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.427
+       ],
+       "buildMs": 290,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 140,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "plume:17"
+      ],
+      "haze": 0,
+      "arcs": false,
+      "reflection": false,
+      "figures": 8,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 32.15
+     },
+     {
+      "room": "bevelle-underground",
+      "game": "ffx2",
+      "tier": "low",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.427
+       ],
+       "buildMs": 290,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 140,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "plume:17"
+      ],
+      "haze": 0,
+      "arcs": false,
+      "reflection": false,
+      "figures": 8,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 36.45
+     }
+    ],
+    "shared": [
+     {
+      "cEnergy": 0.010354354379699485
+     },
+     {
+      "cEnergy": 0.00008712855271407042
+     }
+    ],
+    "mix": [
+     {
+      "game": "ffx2",
+      "parts": {
+       "depthOfField": false,
+       "fog": false,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": false,
+       "dressphereShot": true,
+       "splashArt": true
+      },
+      "tier": "low",
+      "reduceMotion": true,
+      "device": {
+       "tier": "low",
+       "phone": true,
+       "colossus": true
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "low"
+       },
+       "fog": {
+        "limit": "off",
+        "why": "low"
+       },
+       "smoothEdges": {
+        "limit": "less",
+        "why": "low"
+       },
+       "chapterFraming": {
+        "limit": "less",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "colossus",
+       "colossus": false,
+       "colossusFight": true,
+       "plans": 1,
+       "replans": 0,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 106,
+        "overlap": 0.17,
+        "bossCover": 0.35,
+        "blend": 0,
+        "back": 1,
+        "lens": [
+         0,
+         0
+        ],
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0.01
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0,
+        "today": 0,
+        "corners": 0,
+        "todayCorners": 0,
+        "restGap": -55
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 108,
+        "overlap": 0.23,
+        "bossCover": 0.31,
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0.06
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0.19,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 256,
+       "planMs": 35,
+       "tries": [
+        "rule floor95 ov0.20 bc0.37 ffx2-bahamut:0.97/0.10",
+        "-1:ok w0.00 px106 ov0.17 bc0.35 "
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         0.36,
+         3.45,
+         15.34
+        ],
+        "look": [
+         0.53,
+         3.01,
+         5.35
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        0
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 4,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        0.365,
+        3.446,
+        15.341
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "none",
+       "dof": null,
+       "band": {
+        "focus": 0.4656724673874322,
+        "width": 0.33956539590208773
+       }
+      },
+      "living": [
+       {
+        "name": "rikku",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "paine",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "bahamut",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 8,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.2553
+     },
+     {
+      "game": "ffx2",
+      "parts": {
+       "depthOfField": false,
+       "fog": false,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": false,
+       "dressphereShot": true,
+       "splashArt": true
+      },
+      "tier": "low",
+      "reduceMotion": true,
+      "device": {
+       "tier": "low",
+       "phone": true,
+       "colossus": true
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "low"
+       },
+       "fog": {
+        "limit": "off",
+        "why": "low"
+       },
+       "smoothEdges": {
+        "limit": "less",
+        "why": "low"
+       },
+       "chapterFraming": {
+        "limit": "less",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "colossus",
+       "colossus": false,
+       "colossusFight": true,
+       "plans": 1,
+       "replans": 0,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 106,
+        "overlap": 0.17,
+        "bossCover": 0.35,
+        "blend": 0,
+        "back": 1,
+        "lens": [
+         0,
+         0
+        ],
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0.01
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0,
+        "today": 0,
+        "corners": 0,
+        "todayCorners": 0,
+        "restGap": -55
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 108,
+        "overlap": 0.23,
+        "bossCover": 0.31,
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0.06
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0.19,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 256,
+       "planMs": 35,
+       "tries": [
+        "rule floor95 ov0.20 bc0.37 ffx2-bahamut:0.97/0.10",
+        "-1:ok w0.00 px106 ov0.17 bc0.35 "
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         0.36,
+         3.45,
+         15.34
+        ],
+        "look": [
+         0.53,
+         3.01,
+         5.35
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        0
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 4,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        0.365,
+        3.446,
+        15.341
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "none",
+       "dof": null,
+       "band": {
+        "focus": 0.4656724673874322,
+        "width": 0.33956539590208773
+       }
+      },
+      "living": [
+       {
+        "name": "rikku",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "paine",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "bahamut",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 8,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.2471
+     }
+    ],
+    "c": [
+     {
+      "hits": 2,
+      "impactFrames": 0,
+      "freezes": 0,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 29.0404999999998,
+      "lastKind": "hit",
+      "clock": 31.924,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     },
+     {
+      "hits": 2,
+      "impactFrames": 0,
+      "freezes": 0,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 29.0404999999998,
+      "lastKind": "hit",
+      "clock": 36.224,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     }
+    ]
+   },
+   "verdict": {
+    "says": true,
+    "html": true,
+    "measuredEffect": true,
+    "rowChangedFrom": "OFF -> RED-GREEN"
+   }
+  },
+  {
+   "n": 7,
+   "name": "COLOUR VISION BLUE-YELLOW",
+   "label": "COLOUR VISION",
+   "rowBefore": "RED-GREEN",
+   "tabsAtPause": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Accessibility",
+    "Controls",
+    "Music"
+   ],
+   "tabsOffViewport": [
+    "Yuna",
+    "Rikku",
+    "Paine",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Controls",
+    "Music"
+   ],
+   "via": "tap",
+   "rowAfter": "BLUE-YELLOW",
+   "pauseShot": "phone-ffx2-ch4/07-COLOUR_VISION_BLUE_YELLOW-pause.png",
+   "dsInPause": {
+    "input": "pointer",
+    "pad": "xbox",
+    "textSize": "130",
+    "textSizeWide": "130",
+    "phoneBattle": "ffx2",
+    "reduceMotion": "",
+    "reduceFlashes": "",
+    "lowEffects": "",
+    "colourVision": "blue-yellow"
+   },
+   "menuBehind": true,
+   "menuShot": "phone-ffx2-ch4/07-COLOUR_VISION_BLUE_YELLOW-first-menu.png",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "130",
+    "textSizeWide": "130",
+    "phoneBattle": "ffx2",
+    "reduceMotion": "",
+    "reduceFlashes": "",
+    "lowEffects": "",
+    "colourVision": "blue-yellow"
+   },
+   "vars": {
+    "--pyr-ts": "1.3",
+    "--cvd-target-enemy": "#f2c21e",
+    "--cvd-target-ally": "#7ee8b0",
+    "--cvd-target-self": "#f4f1e8",
+    "--cvd-mp-hi": "#d9c6f8",
+    "--cvd-mp-lo": "#b48cf0",
+    "--cvd-gate-r": "#d0343c",
+    "--cvd-gate-g": "#00a6a6",
+    "--cvd-gate-b": "#7a4fd0",
+    "--cvd-gate-y": "#e3b94a"
+   },
+   "dsDiff": {
+    "colourVision": [
+     "red-green",
+     "blue-yellow"
+    ]
+   },
+   "varsDiff": {
+    "--cvd-target-ally": [
+     "#56b4e9",
+     "#7ee8b0"
+    ],
+    "--cvd-mp-hi": [
+     "#8fd0f0",
+     "#d9c6f8"
+    ],
+    "--cvd-mp-lo": [
+     "#3a8fd0",
+     "#b48cf0"
+    ],
+    "--cvd-gate-r": [
+     "#d55e00",
+     "#d0343c"
+    ],
+    "--cvd-gate-g": [
+     "#009e73",
+     "#00a6a6"
+    ],
+    "--cvd-gate-b": [
+     "#0072b2",
+     "#7a4fd0"
+    ],
+    "--cvd-gate-y": [
+     "#f0e442",
+     "#e3b94a"
+    ]
+   },
+   "styleDiffCount": 0,
+   "styleDiffClasses": 0,
+   "styleDiffByProp": {},
+   "styleDiffSample": [],
+   "animsBefore": 0,
+   "animsAfter": 3,
+   "animSummaryDiff": {
+    "fxc-sheen|360|1": [
+     null,
+     3
+    ]
+   },
+   "fxDiff": {
+    "b": [
+     {
+      "room": "bevelle-underground",
+      "game": "ffx2",
+      "tier": "low",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.427
+       ],
+       "buildMs": 290,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 140,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "plume:17"
+      ],
+      "haze": 0,
+      "arcs": false,
+      "reflection": false,
+      "figures": 8,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 36.45
+     },
+     {
+      "room": "bevelle-underground",
+      "game": "ffx2",
+      "tier": "low",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.427
+       ],
+       "buildMs": 290,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 140,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "plume:17"
+      ],
+      "haze": 0,
+      "arcs": false,
+      "reflection": false,
+      "figures": 8,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 40.77
+     }
+    ],
+    "shared": [
+     {
+      "cEnergy": 0.00008712855271407042
+     },
+     {
+      "cEnergy": 0.5279693256545147
+     }
+    ],
+    "mix": [
+     {
+      "game": "ffx2",
+      "parts": {
+       "depthOfField": false,
+       "fog": false,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": false,
+       "dressphereShot": true,
+       "splashArt": true
+      },
+      "tier": "low",
+      "reduceMotion": true,
+      "device": {
+       "tier": "low",
+       "phone": true,
+       "colossus": true
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "low"
+       },
+       "fog": {
+        "limit": "off",
+        "why": "low"
+       },
+       "smoothEdges": {
+        "limit": "less",
+        "why": "low"
+       },
+       "chapterFraming": {
+        "limit": "less",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "colossus",
+       "colossus": false,
+       "colossusFight": true,
+       "plans": 1,
+       "replans": 0,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 106,
+        "overlap": 0.17,
+        "bossCover": 0.35,
+        "blend": 0,
+        "back": 1,
+        "lens": [
+         0,
+         0
+        ],
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0.01
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0,
+        "today": 0,
+        "corners": 0,
+        "todayCorners": 0,
+        "restGap": -55
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 108,
+        "overlap": 0.23,
+        "bossCover": 0.31,
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0.06
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0.19,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 256,
+       "planMs": 35,
+       "tries": [
+        "rule floor95 ov0.20 bc0.37 ffx2-bahamut:0.97/0.10",
+        "-1:ok w0.00 px106 ov0.17 bc0.35 "
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         0.36,
+         3.45,
+         15.34
+        ],
+        "look": [
+         0.53,
+         3.01,
+         5.35
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        0
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 4,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        0.365,
+        3.446,
+        15.341
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "none",
+       "dof": null,
+       "band": {
+        "focus": 0.4656724673874322,
+        "width": 0.33956539590208773
+       }
+      },
+      "living": [
+       {
+        "name": "rikku",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "paine",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "bahamut",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 8,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.2471
+     },
+     {
+      "game": "ffx2",
+      "parts": {
+       "depthOfField": false,
+       "fog": false,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": false,
+       "dressphereShot": true,
+       "splashArt": true
+      },
+      "tier": "low",
+      "reduceMotion": true,
+      "device": {
+       "tier": "low",
+       "phone": true,
+       "colossus": true
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "low"
+       },
+       "fog": {
+        "limit": "off",
+        "why": "low"
+       },
+       "smoothEdges": {
+        "limit": "less",
+        "why": "low"
+       },
+       "chapterFraming": {
+        "limit": "less",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "colossus",
+       "colossus": false,
+       "colossusFight": true,
+       "plans": 1,
+       "replans": 0,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 106,
+        "overlap": 0.17,
+        "bossCover": 0.35,
+        "blend": 0,
+        "back": 1,
+        "lens": [
+         0,
+         0
+        ],
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0.01
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0,
+        "today": 0,
+        "corners": 0,
+        "todayCorners": 0,
+        "restGap": -55
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 108,
+        "overlap": 0.23,
+        "bossCover": 0.31,
+        "figs": [
+         {
+          "id": "rikku-dark-knight",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0.06
+         },
+         {
+          "id": "yuna-white-mage",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "paine-warrior",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "ffx2-bahamut",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "rikku-dark-knight",
+         "under": 0.19,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 256,
+       "planMs": 35,
+       "tries": [
+        "rule floor95 ov0.20 bc0.37 ffx2-bahamut:0.97/0.10",
+        "-1:ok w0.00 px106 ov0.17 bc0.35 "
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         0.36,
+         3.45,
+         15.34
+        ],
+        "look": [
+         0.53,
+         3.01,
+         5.35
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        0
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 4,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        0.365,
+        3.446,
+        15.341
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "none",
+       "dof": null,
+       "band": {
+        "focus": 0.4656724673874322,
+        "width": 0.33956539590208773
+       }
+      },
+      "living": [
+       {
+        "name": "rikku",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "paine",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "bahamut",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 8,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.2403
+     }
+    ],
+    "c": [
+     {
+      "hits": 2,
+      "impactFrames": 0,
+      "freezes": 0,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 29.0404999999998,
+      "lastKind": "hit",
+      "clock": 36.224,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     },
+     {
+      "hits": 5,
+      "impactFrames": 0,
+      "freezes": 0,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 40.40680000000031,
+      "lastKind": "hit",
+      "clock": 40.54,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     }
+    ]
+   },
+   "verdict": {
+    "says": true,
+    "html": true,
+    "measuredEffect": true,
+    "rowChangedFrom": "RED-GREEN -> BLUE-YELLOW"
+   }
+  }
+ ],
+ "allOn": {
+  "ds": {
+   "input": "keyboard",
+   "pad": "xbox",
+   "textSize": "130",
+   "textSizeWide": "130",
+   "phoneBattle": "ffx2",
+   "reduceMotion": "",
+   "reduceFlashes": "",
+   "lowEffects": "",
+   "colourVision": "blue-yellow"
+  },
+  "vars": {
+   "--pyr-ts": "1.3",
+   "--cvd-target-enemy": "#f2c21e",
+   "--cvd-target-ally": "#7ee8b0",
+   "--cvd-target-self": "#f4f1e8",
+   "--cvd-mp-hi": "#d9c6f8",
+   "--cvd-mp-lo": "#b48cf0",
+   "--cvd-gate-r": "#d0343c",
+   "--cvd-gate-g": "#00a6a6",
+   "--cvd-gate-b": "#7a4fd0",
+   "--cvd-gate-y": "#e3b94a"
+  },
+  "shot": "phone-ffx2-ch4/90-all-on-first-menu.png"
+ },
+ "savedBeforeReload": {
+  "textSize": 1.3,
+  "reduceMotion": true,
+  "reduceFlashes": true,
+  "lowEffects": true,
+  "colourVision": "blue-yellow"
+ },
+ "reload": {
+  "atTitle": {
+   "screen": "title",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "130",
+    "textSizeWide": "130",
+    "reduceMotion": "",
+    "lowEffects": "",
+    "reduceFlashes": "",
+    "colourVision": "blue-yellow"
+   },
+   "saved": {
+    "textSize": 1.3,
+    "reduceMotion": true,
+    "reduceFlashes": true,
+    "lowEffects": true,
+    "colourVision": "blue-yellow"
+   }
+  },
+  "titleShot": "phone-ffx2-ch4/91-after-reload-title.png",
+  "atMenu": {
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "130",
+    "textSizeWide": "130",
+    "reduceMotion": "",
+    "lowEffects": "",
+    "reduceFlashes": "",
+    "colourVision": "blue-yellow",
+    "phoneBattle": "ffx2"
+   },
+   "vars": {
+    "--pyr-ts": "1.3",
+    "--cvd-target-enemy": "#f2c21e",
+    "--cvd-target-ally": "#7ee8b0",
+    "--cvd-target-self": "#f4f1e8",
+    "--cvd-mp-hi": "#d9c6f8",
+    "--cvd-mp-lo": "#b48cf0",
+    "--cvd-gate-r": "#d0343c",
+    "--cvd-gate-g": "#00a6a6",
+    "--cvd-gate-b": "#7a4fd0",
+    "--cvd-gate-y": "#e3b94a"
+   },
+   "shot": "phone-ffx2-ch4/92-after-reload-first-menu.png"
+  },
+  "fontRatioVs100": {
+   "target": 1.3,
+   "classesCompared": 72,
+   "scaledAtTarget": 8,
+   "notAtTarget": 64,
+   "grownClasses": 10,
+   "medianOfGrown": 1.3,
+   "maxRatio": 1.3,
+   "notAtTargetSample": [
+    "screen:16->16",
+    "fxc-splash:16->16",
+    "fxc-splash__lines:16->16",
+    "fxc-splash__slab:16->16",
+    "fxc-splash__rule:16->16",
+    "stm-layer:16->16",
+    "ig:16->16",
+    "phud-panel:16->16",
+    "phud-shade:16->16",
+    "ig-surface:16->16",
+    "ig-surface__grain:16->16",
+    "ffx2hud__stage:16->16",
+    "ffx2hud__enemies:16->16",
+    "ig-bosshp:16->16"
+   ]
+  },
+  "cvdTarget": {
+   "want": {
+    "enemy": "rgb(242, 194, 30)",
+    "ally": "rgb(126, 232, 176)",
+    "self": "rgb(244, 241, 232)"
+   },
+   "hits": {
+    "enemy": 0,
+    "ally": 0,
+    "self": 78
+   },
+   "samples": [
+    "ig-bosshp__name.color=self",
+    "ig-bosshp__name.borderTopColor=self",
+    "ig-bosshp__name.outlineColor=self",
+    "ffx2stat__mono.color=self",
+    "ffx2stat__mono.borderTopColor=self",
+    "ffx2stat__mono.outlineColor=self",
+    "ig-stat__value.color=self",
+    "ig-stat__value.borderTopColor=self"
+   ],
+   "targeting": true,
+   "screenState": {
+    "speed": "normal",
+    "timeScale": 1,
+    "auto": false,
+    "aborted": false,
+    "phase": "idle",
+    "awaitingMenu": true,
+    "played": 5,
+    "lastEvents": [
+     {
+      "seq": 1,
+      "type": "atb",
+      "ms": 0
+     },
+     {
+      "seq": 2,
+      "type": "atb",
+      "ms": 0
+     },
+     {
+      "seq": 3,
+      "type": "turn-start",
+      "ms": 85
+     },
+     {
+      "seq": 4,
+      "type": "action-start",
+      "ms": 886
+     },
+     {
+      "seq": 5,
+      "type": "atb",
+      "ms": 0
+     }
+    ],
+    "lastCommand": null
+   }
+  },
+  "cvdTargetShot": "phone-ffx2-ch4/92b-after-reload-target-step.png",
+  "animsNote": "animations running: 3 before the reload at the first menu, 0 after (informational)",
+  "pauseRows": [
+   {
+    "id": "textSize",
+    "k": "TEXT SIZE",
+    "v": "130%",
+    "sel": false
+   },
+   {
+    "id": "reduceMotion",
+    "k": "REDUCE MOTION",
+    "v": "ON",
+    "sel": false
+   },
+   {
+    "id": "reduceFlashes",
+    "k": "REDUCE FLASHES",
+    "v": "ON",
+    "sel": false
+   },
+   {
+    "id": "lowEffects",
+    "k": "LOW EFFECTS",
+    "v": "ON",
+    "sel": false
+   },
+   {
+    "id": "colourVision",
+    "k": "COLOUR VISION",
+    "v": "BLUE-YELLOW",
+    "sel": false
+   }
+  ],
+  "pauseShot": "phone-ffx2-ch4/93-after-reload-pause-accessibility.png"
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "finishedAt": "2026-11-07T19:29:12.537Z",
+ "summary": {
+  "checks": 58,
+  "failed": [
+   "TEXT SIZE 115%: pause tab strip stays inside the window",
+   "TEXT SIZE 130%: pause tab strip stays inside the window"
+  ]
+ }
+}

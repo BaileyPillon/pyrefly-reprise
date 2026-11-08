@@ -1,0 +1,382 @@
+{
+ "schema": "sweep/1",
+ "job": "matrix",
+ "base": "https://echoesofspira.com/",
+ "floor": 14,
+ "date": "2026-11-07T18:28:04.840Z",
+ "results": {
+  "390x844": {
+   "size": "390x844",
+   "battleSweep": {
+    "floor": 14,
+    "count": 35,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 1,
+    "truncated": [
+     {
+      "text": "PAUSE",
+      "sw": 124,
+      "cw": 44,
+      "cls": "battle-pause-chip ig"
+     }
+    ],
+    "scrollW": 390,
+    "clientW": 390,
+    "vw": 390,
+    "vh": 844,
+    "hScroll": false
+   },
+   "screen": "pause",
+   "pauseOpened": true,
+   "plate": {
+    "rect": [
+     -489,
+     -2.4,
+     1486.5,
+     849.5
+    ],
+    "vp": [
+     390,
+     844
+    ],
+    "currentSrc": "pause/tidus.2x.webp",
+    "natural": [
+     1477,
+     844
+    ],
+    "slid": false,
+    "ownTransform": "matrix(1.00646, 0, 0, 1.00646, 0, 0)",
+    "ancestorTransforms": [],
+    "dpr": 1,
+    "scrollW": 390,
+    "clientW": 390
+   },
+   "pauseSweep": {
+    "floor": 14,
+    "count": 62,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 1,
+    "truncated": [
+     {
+      "text": "PAUSE",
+      "sw": 124,
+      "cw": 44,
+      "cls": "battle-pause-chip ig"
+     }
+    ],
+    "scrollW": 390,
+    "clientW": 390,
+    "vw": 390,
+    "vh": 844,
+    "hScroll": false
+   },
+   "afterEsc": "battle"
+  },
+  "1280x720": {
+   "size": "1280x720",
+   "battleSweep": {
+    "floor": 14,
+    "count": 62,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 0,
+    "truncated": [],
+    "scrollW": 1280,
+    "clientW": 1280,
+    "vw": 1280,
+    "vh": 720,
+    "hScroll": false
+   },
+   "screen": "pause",
+   "pauseOpened": true,
+   "plate": {
+    "rect": [
+     141.2,
+     -31.8,
+     1595.1,
+     911.5
+    ],
+    "vp": [
+     1280,
+     720
+    ],
+    "currentSrc": "pause/tidus.2x.webp",
+    "natural": [
+     1586,
+     906
+    ],
+    "slid": true,
+    "ownTransform": "matrix(1.00628, 0, 0, 1.00628, 0, 0)",
+    "ancestorTransforms": [],
+    "dpr": 1,
+    "scrollW": 1280,
+    "clientW": 1280
+   },
+   "pauseSweep": {
+    "floor": 14,
+    "count": 105,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 0,
+    "truncated": [],
+    "scrollW": 1280,
+    "clientW": 1280,
+    "vw": 1280,
+    "vh": 720,
+    "hScroll": false
+   },
+   "afterEsc": "battle"
+  },
+  "1600x900": {
+   "size": "1600x900",
+   "battleSweep": {
+    "floor": 14,
+    "count": 67,
+    "min": 14.1,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 0,
+    "truncated": [],
+    "scrollW": 1600,
+    "clientW": 1600,
+    "vw": 1600,
+    "vh": 900,
+    "hScroll": false
+   },
+   "screen": "pause",
+   "pauseOpened": true,
+   "plate": {
+    "rect": [
+     103.7,
+     -39.8,
+     1994.3,
+     1139.6
+    ],
+    "vp": [
+     1600,
+     900
+    ],
+    "currentSrc": "pause/tidus.2x.webp",
+    "natural": [
+     1982,
+     1132
+    ],
+    "slid": true,
+    "ownTransform": "matrix(1.00646, 0, 0, 1.00646, 0, 0)",
+    "ancestorTransforms": [],
+    "dpr": 1,
+    "scrollW": 1600,
+    "clientW": 1600
+   },
+   "pauseSweep": {
+    "floor": 14,
+    "count": 110,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 0,
+    "truncated": [],
+    "scrollW": 1600,
+    "clientW": 1600,
+    "vw": 1600,
+    "vh": 900,
+    "hScroll": false
+   },
+   "afterEsc": "battle"
+  },
+  "2000x1012": {
+   "size": "2000x1012",
+   "battleSweep": {
+    "floor": 14,
+    "count": 68,
+    "min": 14.1,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 0,
+    "truncated": [],
+    "scrollW": 2000,
+    "clientW": 2000,
+    "vw": 2000,
+    "vh": 1012,
+    "hScroll": false
+   },
+   "screen": "pause",
+   "pauseOpened": true,
+   "plate": {
+    "rect": [
+     175.1,
+     -44.5,
+     2241.6,
+     1281
+    ],
+    "vp": [
+     2000,
+     1012
+    ],
+    "currentSrc": "pause/tidus.2x.webp",
+    "natural": [
+     2229,
+     1273
+    ],
+    "slid": true,
+    "ownTransform": "matrix(1.0061, 0, 0, 1.0061, 0, 0)",
+    "ancestorTransforms": [],
+    "dpr": 1,
+    "scrollW": 2000,
+    "clientW": 2000
+   },
+   "pauseSweep": {
+    "floor": 14,
+    "count": 111,
+    "min": 14.1,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 0,
+    "truncated": [],
+    "scrollW": 2000,
+    "clientW": 2000,
+    "vw": 2000,
+    "vh": 1012,
+    "hScroll": false
+   },
+   "afterEsc": "battle"
+  },
+  "2560x1080": {
+   "size": "2560x1080",
+   "battleSweep": {
+    "floor": 14,
+    "count": 67,
+    "min": 14.2,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 0,
+    "truncated": [],
+    "scrollW": 2560,
+    "clientW": 2560,
+    "vw": 2560,
+    "vh": 1080,
+    "hScroll": false
+   },
+   "screen": "pause",
+   "pauseOpened": true,
+   "plate": {
+    "rect": [
+     54.2,
+     -88.7,
+     2576.5,
+     1472.3
+    ],
+    "vp": [
+     2560,
+     1080
+    ],
+    "currentSrc": "pause/tidus.2x.webp",
+    "natural": [
+     2561,
+     1463
+    ],
+    "slid": true,
+    "ownTransform": "matrix(1.00646, 0, 0, 1.00646, 0, 0)",
+    "ancestorTransforms": [],
+    "dpr": 1,
+    "scrollW": 2560,
+    "clientW": 2560
+   },
+   "pauseSweep": {
+    "floor": 14,
+    "count": 110,
+    "min": 14.2,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 0,
+    "truncated": [],
+    "scrollW": 2560,
+    "clientW": 2560,
+    "vw": 2560,
+    "vh": 1080,
+    "hScroll": false
+   },
+   "afterEsc": "battle"
+  },
+  "3840x2160": {
+   "size": "3840x2160",
+   "battleSweep": {
+    "floor": 14,
+    "count": 68,
+    "min": 25.2,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 0,
+    "truncated": [],
+    "scrollW": 3840,
+    "clientW": 3840,
+    "vw": 3840,
+    "vh": 2160,
+    "hScroll": false
+   },
+   "screen": "pause",
+   "pauseOpened": true,
+   "plate": {
+    "rect": [
+     -10.6,
+     -5.6,
+     3382.1,
+     1932.6
+    ],
+    "vp": [
+     3840,
+     2160
+    ],
+    "currentSrc": "pause/tidus.2x.webp",
+    "natural": [
+     3360,
+     1920
+    ],
+    "slid": false,
+    "ownTransform": "matrix(1.00658, 0, 0, 1.00658, 0, 0)",
+    "ancestorTransforms": [],
+    "dpr": 1,
+    "scrollW": 3840,
+    "clientW": 3840
+   },
+   "pauseSweep": {
+    "floor": 14,
+    "count": 111,
+    "min": 17,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 0,
+    "truncated": [],
+    "scrollW": 3840,
+    "clientW": 3840,
+    "vw": 3840,
+    "vh": 2160,
+    "hScroll": false
+   },
+   "afterEsc": "battle"
+  }
+ },
+ "summary": {
+  "floor": 14,
+  "surfaces": 12,
+  "measured": 12,
+  "unverified": [],
+  "elements": 976,
+  "min": 14,
+  "underCount": 0,
+  "surfacesUnder": [],
+  "truncatedCount": 2,
+  "surfacesTruncated": [
+   "seymour-flux 390x844 battle menu",
+   "seymour-flux 390x844 pause"
+  ],
+  "hScroll": []
+ },
+ "reportLine": "legibility sweep, matrix (CHK-003/CHK-009, floor 14 css px): 12 of 12 surfaces measured, 976 text elements, smallest 14 px, none under 14 px, 2 clipped or ellipsised on 2 surface(s)"
+}

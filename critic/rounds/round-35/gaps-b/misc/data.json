@@ -1,0 +1,2780 @@
+{
+ "generatedAt": "2026-11-07T21:09:16.129Z",
+ "matrix": {
+  "reportLine": "legibility sweep, matrix (CHK-003/CHK-009, floor 14 css px): 12 of 12 surfaces measured, 976 text elements, smallest 14 px, none under 14 px, 2 clipped or ellipsised on 2 surface(s)",
+  "summary": {
+   "floor": 14,
+   "surfaces": 12,
+   "measured": 12,
+   "unverified": [],
+   "elements": 976,
+   "min": 14,
+   "underCount": 0,
+   "surfacesUnder": [],
+   "truncatedCount": 2,
+   "surfacesTruncated": [
+    "seymour-flux 390x844 battle menu",
+    "seymour-flux 390x844 pause"
+   ],
+   "hScroll": []
+  },
+  "sizes": {
+   "390x844": {
+    "pauseOpened": true,
+    "afterEsc": "battle",
+    "plate": {
+     "rect": [
+      -489,
+      -2.4,
+      1486.5,
+      849.5
+     ],
+     "currentSrc": "pause/tidus.2x.webp",
+     "slid": false,
+     "scrollW": 390,
+     "clientW": 390,
+     "ancestorTransforms": 0
+    },
+    "battle": {
+     "min": 14,
+     "under": 0,
+     "cut": 1,
+     "cutNames": [
+      "battle-pause-chip ig:PAUSE 124/44"
+     ]
+    },
+    "pause": {
+     "min": 14,
+     "under": 0,
+     "cut": 1
+    }
+   },
+   "1280x720": {
+    "pauseOpened": true,
+    "afterEsc": "battle",
+    "plate": {
+     "rect": [
+      141.2,
+      -31.8,
+      1595.1,
+      911.5
+     ],
+     "currentSrc": "pause/tidus.2x.webp",
+     "slid": true,
+     "scrollW": 1280,
+     "clientW": 1280,
+     "ancestorTransforms": 0
+    },
+    "battle": {
+     "min": 14,
+     "under": 0,
+     "cut": 0,
+     "cutNames": []
+    },
+    "pause": {
+     "min": 14,
+     "under": 0,
+     "cut": 0
+    }
+   },
+   "1600x900": {
+    "pauseOpened": true,
+    "afterEsc": "battle",
+    "plate": {
+     "rect": [
+      103.7,
+      -39.8,
+      1994.3,
+      1139.6
+     ],
+     "currentSrc": "pause/tidus.2x.webp",
+     "slid": true,
+     "scrollW": 1600,
+     "clientW": 1600,
+     "ancestorTransforms": 0
+    },
+    "battle": {
+     "min": 14.1,
+     "under": 0,
+     "cut": 0,
+     "cutNames": []
+    },
+    "pause": {
+     "min": 14,
+     "under": 0,
+     "cut": 0
+    }
+   },
+   "2000x1012": {
+    "pauseOpened": true,
+    "afterEsc": "battle",
+    "plate": {
+     "rect": [
+      175.1,
+      -44.5,
+      2241.6,
+      1281
+     ],
+     "currentSrc": "pause/tidus.2x.webp",
+     "slid": true,
+     "scrollW": 2000,
+     "clientW": 2000,
+     "ancestorTransforms": 0
+    },
+    "battle": {
+     "min": 14.1,
+     "under": 0,
+     "cut": 0,
+     "cutNames": []
+    },
+    "pause": {
+     "min": 14.1,
+     "under": 0,
+     "cut": 0
+    }
+   },
+   "2560x1080": {
+    "pauseOpened": true,
+    "afterEsc": "battle",
+    "plate": {
+     "rect": [
+      54.2,
+      -88.7,
+      2576.5,
+      1472.3
+     ],
+     "currentSrc": "pause/tidus.2x.webp",
+     "slid": true,
+     "scrollW": 2560,
+     "clientW": 2560,
+     "ancestorTransforms": 0
+    },
+    "battle": {
+     "min": 14.2,
+     "under": 0,
+     "cut": 0,
+     "cutNames": []
+    },
+    "pause": {
+     "min": 14.2,
+     "under": 0,
+     "cut": 0
+    }
+   },
+   "3840x2160": {
+    "pauseOpened": true,
+    "afterEsc": "battle",
+    "plate": {
+     "rect": [
+      -10.6,
+      -5.6,
+      3382.1,
+      1932.6
+     ],
+     "currentSrc": "pause/tidus.2x.webp",
+     "slid": false,
+     "scrollW": 3840,
+     "clientW": 3840,
+     "ancestorTransforms": 0
+    },
+    "battle": {
+     "min": 25.2,
+     "under": 0,
+     "cut": 0,
+     "cutNames": []
+    },
+    "pause": {
+     "min": 17,
+     "under": 0,
+     "cut": 0
+    }
+   }
+  }
+ },
+ "pausesweep": {
+  "pause-ffx-1280x720": {
+   "tabs": 9,
+   "minEff": 14,
+   "under14": 0,
+   "cut": 0,
+   "plate": {
+    "x": 139,
+    "y": -33,
+    "w": 1600,
+    "h": 915,
+    "classes": "pause__plate pause__plate--slid",
+    "src": "tidus.2x.webp"
+   },
+   "art": {
+    "classes": "pause__art",
+    "w": 1280,
+    "h": 720
+   },
+   "extension": null,
+   "scrollW": [
+    1280,
+    1280
+   ],
+   "error": null,
+   "consoleErrors": 0
+  },
+  "pause-ffx-1600x900": {
+   "tabs": 9,
+   "minEff": 14,
+   "under14": 0,
+   "cut": 0,
+   "plate": {
+    "x": 101,
+    "y": -41,
+    "w": 2001,
+    "h": 1143,
+    "classes": "pause__plate pause__plate--slid",
+    "src": "tidus.2x.webp"
+   },
+   "art": {
+    "classes": "pause__art",
+    "w": 1600,
+    "h": 900
+   },
+   "extension": null,
+   "scrollW": [
+    1600,
+    1600
+   ],
+   "error": null,
+   "consoleErrors": 0
+  },
+  "pause-ffx-2000x1012": {
+   "tabs": 9,
+   "minEff": 16,
+   "under14": 0,
+   "cut": 0,
+   "plate": {
+    "x": 171,
+    "y": -47,
+    "w": 2250,
+    "h": 1286,
+    "classes": "pause__plate pause__plate--slid",
+    "src": "tidus.2x.webp"
+   },
+   "art": {
+    "classes": "pause__art",
+    "w": 2000,
+    "h": 1012
+   },
+   "extension": null,
+   "scrollW": [
+    2000,
+    2000
+   ],
+   "error": null,
+   "consoleErrors": 0
+  },
+  "pause-ffx-2560x1080": {
+   "tabs": 9,
+   "minEff": 16,
+   "under14": 0,
+   "cut": 0,
+   "plate": {
+    "x": 50,
+    "y": -91,
+    "w": 2585,
+    "h": 1477,
+    "classes": "pause__plate pause__plate--slid",
+    "src": "tidus.2x.webp"
+   },
+   "art": {
+    "classes": "pause__art",
+    "w": 2560,
+    "h": 1080
+   },
+   "extension": null,
+   "scrollW": [
+    2560,
+    2560
+   ],
+   "error": null,
+   "consoleErrors": 0
+  },
+  "pause-ffx-3840x2160": {
+   "tabs": 9,
+   "minEff": 16,
+   "under14": 0,
+   "cut": 0,
+   "plate": {
+    "x": -16,
+    "y": -8,
+    "w": 3394,
+    "h": 1939,
+    "classes": "pause__plate pause__plate--capped",
+    "src": "tidus.2x.webp"
+   },
+   "art": {
+    "classes": "pause__art pause__art--extended",
+    "w": 3840,
+    "h": 2160
+   },
+   "extension": {
+    "w": "4070.38px",
+    "h": "2289.59px",
+    "filter": "saturate(0.58) contrast(1.05) brightness(0.4) blur(51.84px)"
+   },
+   "scrollW": [
+    3840,
+    3840
+   ],
+   "error": null,
+   "consoleErrors": 0
+  },
+  "pause-ffx2-1280x720": {
+   "tabs": 9,
+   "minEff": 14,
+   "under14": 0,
+   "cut": 0,
+   "plate": {
+    "x": -188,
+    "y": -212,
+    "w": 2835,
+    "h": 1620,
+    "classes": "pause__plate",
+    "src": "yuna-ffx2.2x.webp"
+   },
+   "art": {
+    "classes": "pause__art",
+    "w": 1280,
+    "h": 720
+   },
+   "extension": null,
+   "scrollW": [
+    1280,
+    1280
+   ],
+   "error": null,
+   "consoleErrors": 0
+  },
+  "pause-ffx2-1600x900": {
+   "tabs": 9,
+   "minEff": 14,
+   "under14": 0,
+   "cut": 0,
+   "plate": {
+    "x": -272,
+    "y": -237,
+    "w": 3392,
+    "h": 1938,
+    "classes": "pause__plate",
+    "src": "yuna-ffx2.2x.webp"
+   },
+   "art": {
+    "classes": "pause__art",
+    "w": 1600,
+    "h": 900
+   },
+   "extension": null,
+   "scrollW": [
+    1600,
+    1600
+   ],
+   "error": null,
+   "consoleErrors": 0
+  },
+  "pause-ffx2-2000x1012": {
+   "tabs": 9,
+   "minEff": 16,
+   "under14": 0,
+   "cut": 0,
+   "plate": {
+    "x": -115,
+    "y": -186,
+    "w": 3393,
+    "h": 1939,
+    "classes": "pause__plate",
+    "src": "yuna-ffx2.2x.webp"
+   },
+   "art": {
+    "classes": "pause__art",
+    "w": 2000,
+    "h": 1012
+   },
+   "extension": null,
+   "scrollW": [
+    2000,
+    2000
+   ],
+   "error": null,
+   "consoleErrors": 0
+  },
+  "pause-ffx2-2560x1080": {
+   "tabs": 9,
+   "minEff": 16,
+   "under14": 0,
+   "cut": 0,
+   "plate": {
+    "x": -16,
+    "y": -156,
+    "w": 3393,
+    "h": 1939,
+    "classes": "pause__plate",
+    "src": "yuna-ffx2.2x.webp"
+   },
+   "art": {
+    "classes": "pause__art",
+    "w": 2560,
+    "h": 1080
+   },
+   "extension": null,
+   "scrollW": [
+    2560,
+    2560
+   ],
+   "error": null,
+   "consoleErrors": 0
+  },
+  "pause-ffx2-3840x2160": {
+   "tabs": 9,
+   "minEff": 16,
+   "under14": 0,
+   "cut": 0,
+   "plate": {
+    "x": -17,
+    "y": -9,
+    "w": 3395,
+    "h": 1940,
+    "classes": "pause__plate pause__plate--capped",
+    "src": "yuna-ffx2.2x.webp"
+   },
+   "art": {
+    "classes": "pause__art pause__art--extended",
+    "w": 3840,
+    "h": 2160
+   },
+   "extension": {
+    "w": "4070.38px",
+    "h": "2289.59px",
+    "filter": "saturate(0.58) contrast(1.05) brightness(0.4) blur(51.84px)"
+   },
+   "scrollW": [
+    3840,
+    3840
+   ],
+   "error": null,
+   "consoleErrors": 0
+  }
+ },
+ "pausesweep-phone": {
+  "battle-ch1-390x844": {
+   "tabs": 1,
+   "minEff": 14,
+   "under14": 0,
+   "cut": 0,
+   "error": null,
+   "consoleErrors": 0
+  },
+  "pause-ffx-390x844": {
+   "tabs": 0,
+   "minEff": null,
+   "under14": 0,
+   "cut": 0,
+   "error": "ASSERT-FAIL screen expected=pause after 15240ms",
+   "consoleErrors": 0
+  },
+  "pause-ffx2-390x844": {
+   "tabs": 0,
+   "minEff": null,
+   "under14": 0,
+   "cut": 0,
+   "error": "ASSERT-FAIL screen expected=pause after 15083ms",
+   "consoleErrors": 0
+  }
+ },
+ "sweepPhone": {
+  "job": "phone",
+  "reportLine": "legibility sweep, phone (CHK-003/CHK-009, floor 14 css px): 11 of 12 surfaces measured, 490 text elements, smallest 14 px, none under 14 px, 11 clipped or ellipsised on 11 surface(s); UNVERIFIED: seymour-flux pause (the pause did not open from the command menu (screen=battle))",
+  "summary": {
+   "floor": 14,
+   "surfaces": 12,
+   "measured": 11,
+   "unverified": [
+    {
+     "label": "seymour-flux pause",
+     "size": "390x844",
+     "why": "the pause did not open from the command menu (screen=battle)"
+    }
+   ],
+   "elements": 490,
+   "min": 14,
+   "underCount": 0,
+   "surfacesUnder": [],
+   "truncatedCount": 11,
+   "surfacesTruncated": [
+    "seymour-flux first menu as shown",
+    "seymour-flux battle menu",
+    "ffx2-bahamut first menu as shown",
+    "ffx2-bahamut battle menu",
+    "ffx2-bahamut pause",
+    "braskas-final-aeon first menu as shown",
+    "braskas-final-aeon battle menu",
+    "braskas-final-aeon pause",
+    "ffx2-fallen-aeons first menu as shown",
+    "ffx2-fallen-aeons battle menu",
+    "ffx2-fallen-aeons pause"
+   ],
+   "hScroll": []
+  }
+ },
+ "sweepPrep": {
+  "job": "prep",
+  "reportLine": "legibility sweep, prep (CHK-003/CHK-009, floor 14 css px): 28 of 28 surfaces measured, 1,958 text elements, smallest 14 px, 12 under 14 px on 6 surface(s) (seymour-flux 1600x900 prep tab 0, ffx2-bahamut 1600x900 prep tab 0, ffx2-bahamut 1600x900 prep tab 5, seymour-flux 390x844 prep tab 0, ...), none clipped or ellipsised",
+  "summary": {
+   "floor": 14,
+   "surfaces": 28,
+   "measured": 28,
+   "unverified": [],
+   "elements": 1958,
+   "min": 14,
+   "underCount": 12,
+   "surfacesUnder": [
+    "seymour-flux 1600x900 prep tab 0",
+    "ffx2-bahamut 1600x900 prep tab 0",
+    "ffx2-bahamut 1600x900 prep tab 5",
+    "seymour-flux 390x844 prep tab 0",
+    "ffx2-bahamut 390x844 prep tab 0",
+    "ffx2-bahamut 390x844 prep tab 5"
+   ],
+   "truncatedCount": 0,
+   "surfacesTruncated": [],
+   "hScroll": []
+  }
+ },
+ "sweepBattle1": {
+  "job": "battle"
+ },
+ "a11y": {
+  "desk-ffx-ch1": {
+   "chapter": "seymour-flux",
+   "size": "1600x900",
+   "touch": false,
+   "taps": 0,
+   "keyboardFallbacks": 0,
+   "checks": 57,
+   "failed": [
+    "TEXT SIZE 115%: the row says 115% (was null)",
+    "TEXT SIZE 115%: HUD type scaled (median ratio vs 100%)",
+    "TEXT SIZE 130%: the row says 130% (was null)",
+    "TEXT SIZE 130%: HUD type scaled (median ratio vs 100%)",
+    "REDUCE MOTION ON: the row says ON (was null)",
+    "REDUCE MOTION ON: <html> carries it",
+    "REDUCE FLASHES ON: the row says ON (was null)",
+    "REDUCE FLASHES ON: <html> carries it",
+    "LOW EFFECTS ON: the row says ON (was null)",
+    "LOW EFFECTS ON: <html> carries it",
+    "COLOUR VISION RED-GREEN: the row says RED-GREEN (was null)",
+    "COLOUR VISION RED-GREEN: <html> carries it",
+    "COLOUR VISION BLUE-YELLOW: the row says BLUE-YELLOW (was null)",
+    "COLOUR VISION BLUE-YELLOW: <html> carries it",
+    "reload: <html> carries the comfort flags on the first frames, before any pause",
+    "reload: the HUD type is still ~130% of the baseline at the first menu",
+    "reload: the comfort flags are on <html> at the first menu",
+    "reload: the ACCESSIBILITY rows still say 130% / ON / ON / ON / BLUE-YELLOW"
+   ],
+   "settings": [
+    {
+     "step": "TEXT SIZE 115%",
+     "via": "key",
+     "row": "null -> null",
+     "says": false,
+     "html": true,
+     "styleDiffs": 10,
+     "styleDiffByProp": {
+      "fontSize": 8,
+      "color": 1,
+      "borderTopColor": 1
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "fontRatio": {
+      "n": 87
+     },
+     "menuShot": "desk-ffx-ch1/01-TEXT_SIZE_115_-first-menu.png",
+     "pauseShot": "desk-ffx-ch1/01-TEXT_SIZE_115_-pause.png"
+    },
+    {
+     "step": "TEXT SIZE 130%",
+     "via": "key",
+     "row": "null -> null",
+     "says": false,
+     "html": true,
+     "styleDiffs": 9,
+     "styleDiffByProp": {
+      "fontSize": 9
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "fontRatio": {
+      "n": 87
+     },
+     "menuShot": "desk-ffx-ch1/02-TEXT_SIZE_130_-first-menu.png",
+     "pauseShot": "desk-ffx-ch1/02-TEXT_SIZE_130_-pause.png"
+    },
+    {
+     "step": "REDUCE MOTION ON",
+     "via": "key",
+     "row": "null -> null",
+     "says": false,
+     "html": false,
+     "styleDiffs": 9,
+     "styleDiffByProp": {
+      "fontSize": 9
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "menuShot": "desk-ffx-ch1/03-REDUCE_MOTION_ON-first-menu.png",
+     "pauseShot": "desk-ffx-ch1/03-REDUCE_MOTION_ON-pause.png"
+    },
+    {
+     "step": "REDUCE FLASHES ON",
+     "via": "key",
+     "row": "null -> null",
+     "says": false,
+     "html": false,
+     "styleDiffs": 8,
+     "styleDiffByProp": {
+      "fontSize": 8
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "menuShot": "desk-ffx-ch1/04-REDUCE_FLASHES_ON-first-menu.png",
+     "pauseShot": "desk-ffx-ch1/04-REDUCE_FLASHES_ON-pause.png"
+    },
+    {
+     "step": "LOW EFFECTS ON",
+     "via": "key",
+     "row": "null -> null",
+     "says": false,
+     "html": false,
+     "styleDiffs": 9,
+     "styleDiffByProp": {
+      "fontSize": 9
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "menuShot": "desk-ffx-ch1/05-LOW_EFFECTS_ON-first-menu.png",
+     "pauseShot": "desk-ffx-ch1/05-LOW_EFFECTS_ON-pause.png"
+    },
+    {
+     "step": "COLOUR VISION RED-GREEN",
+     "via": "key",
+     "row": "null -> null",
+     "says": false,
+     "html": false,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {},
+     "menuShot": "desk-ffx-ch1/06-COLOUR_VISION_RED_GREEN-first-menu.png",
+     "pauseShot": "desk-ffx-ch1/06-COLOUR_VISION_RED_GREEN-pause.png"
+    },
+    {
+     "step": "COLOUR VISION BLUE-YELLOW",
+     "via": "key",
+     "row": "null -> null",
+     "says": false,
+     "html": false,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {},
+     "menuShot": "desk-ffx-ch1/07-COLOUR_VISION_BLUE_YELLOW-first-menu.png",
+     "pauseShot": "desk-ffx-ch1/07-COLOUR_VISION_BLUE_YELLOW-pause.png"
+    }
+   ],
+   "reload": {
+    "atTitleDs": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "130",
+     "textSizeWide": "130"
+    },
+    "savedAfter": {
+     "textSize": 1.3,
+     "reduceMotion": false,
+     "reduceFlashes": false,
+     "lowEffects": false,
+     "colourVision": "off"
+    },
+    "atMenuDs": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "130",
+     "textSizeWide": "130"
+    },
+    "pauseRows": [],
+    "shots": [
+     "desk-ffx-ch1/91-after-reload-title.png",
+     "desk-ffx-ch1/92-after-reload-first-menu.png",
+     "desk-ffx-ch1/93-after-reload-pause-accessibility.png"
+    ]
+   }
+  },
+  "desk-ffx-ch1-v2": {
+   "chapter": "seymour-flux",
+   "size": "1600x900",
+   "touch": false,
+   "taps": 0,
+   "keyboardFallbacks": 0,
+   "checks": 56,
+   "failed": [],
+   "settings": [
+    {
+     "step": "TEXT SIZE 115%",
+     "via": "key",
+     "row": "100% -> 115%",
+     "says": true,
+     "html": true,
+     "styleDiffs": 10,
+     "styleDiffByProp": {
+      "fontSize": 8,
+      "color": 1,
+      "borderTopColor": 1
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "fontRatio": {
+      "n": 98
+     },
+     "menuShot": "desk-ffx-ch1-v2/01-TEXT_SIZE_115_-first-menu.png",
+     "pauseShot": "desk-ffx-ch1-v2/01-TEXT_SIZE_115_-pause.png"
+    },
+    {
+     "step": "TEXT SIZE 130%",
+     "via": "key",
+     "row": "115% -> 130%",
+     "says": true,
+     "html": true,
+     "styleDiffs": 9,
+     "styleDiffByProp": {
+      "fontSize": 9
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "fontRatio": {
+      "n": 98
+     },
+     "menuShot": "desk-ffx-ch1-v2/02-TEXT_SIZE_130_-first-menu.png",
+     "pauseShot": "desk-ffx-ch1-v2/02-TEXT_SIZE_130_-pause.png"
+    },
+    {
+     "step": "REDUCE MOTION ON",
+     "via": "key",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 5,
+     "styleDiffByProp": {
+      "transitionDuration": 5
+     },
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "reduceMotion": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "desk-ffx-ch1-v2/03-REDUCE_MOTION_ON-first-menu.png",
+     "pauseShot": "desk-ffx-ch1-v2/03-REDUCE_MOTION_ON-pause.png"
+    },
+    {
+     "step": "REDUCE FLASHES ON",
+     "via": "key",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "reduceFlashes": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "desk-ffx-ch1-v2/04-REDUCE_FLASHES_ON-first-menu.png",
+     "pauseShot": "desk-ffx-ch1-v2/04-REDUCE_FLASHES_ON-pause.png"
+    },
+    {
+     "step": "LOW EFFECTS ON",
+     "via": "key",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "tier": [
+       "full",
+       "low"
+      ],
+      "lowEffects": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "desk-ffx-ch1-v2/05-LOW_EFFECTS_ON-first-menu.png",
+     "pauseShot": "desk-ffx-ch1-v2/05-LOW_EFFECTS_ON-pause.png"
+    },
+    {
+     "step": "COLOUR VISION RED-GREEN",
+     "via": "key",
+     "row": "OFF -> RED-GREEN",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 9,
+     "fxFlagDiff": {},
+     "menuShot": "desk-ffx-ch1-v2/06-COLOUR_VISION_RED_GREEN-first-menu.png",
+     "pauseShot": "desk-ffx-ch1-v2/06-COLOUR_VISION_RED_GREEN-pause.png"
+    },
+    {
+     "step": "COLOUR VISION BLUE-YELLOW",
+     "via": "key",
+     "row": "RED-GREEN -> BLUE-YELLOW",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 7,
+     "fxFlagDiff": {},
+     "menuShot": "desk-ffx-ch1-v2/07-COLOUR_VISION_BLUE_YELLOW-first-menu.png",
+     "pauseShot": "desk-ffx-ch1-v2/07-COLOUR_VISION_BLUE_YELLOW-pause.png"
+    }
+   ],
+   "reload": {
+    "atTitleDs": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "130",
+     "textSizeWide": "130",
+     "reduceMotion": "",
+     "lowEffects": "",
+     "reduceFlashes": "",
+     "colourVision": "blue-yellow"
+    },
+    "savedAfter": {
+     "textSize": 1.3,
+     "reduceMotion": true,
+     "reduceFlashes": true,
+     "lowEffects": true,
+     "colourVision": "blue-yellow"
+    },
+    "atMenuDs": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "130",
+     "textSizeWide": "130",
+     "reduceMotion": "",
+     "lowEffects": "",
+     "reduceFlashes": "",
+     "colourVision": "blue-yellow"
+    },
+    "pauseRows": [
+     "TEXT SIZE=130%",
+     "REDUCE MOTION=ON",
+     "REDUCE FLASHES=ON",
+     "LOW EFFECTS=ON",
+     "COLOUR VISION=BLUE-YELLOW"
+    ],
+    "shots": [
+     "desk-ffx-ch1-v2/91-after-reload-title.png",
+     "desk-ffx-ch1-v2/92-after-reload-first-menu.png",
+     "desk-ffx-ch1-v2/93-after-reload-pause-accessibility.png"
+    ]
+   }
+  },
+  "desk-ffx2-ch4": {
+   "chapter": "ffx2-bahamut",
+   "size": "1600x900",
+   "touch": false,
+   "taps": 0,
+   "keyboardFallbacks": 0,
+   "checks": 56,
+   "failed": [
+    "TEXT SIZE 130%: HUD type scaled by the setting (classes whose largest font is 1.30 x the 100% one)",
+    "reload: the HUD type is still 130% on the same classes at the first menu"
+   ],
+   "settings": [
+    {
+     "step": "TEXT SIZE 115%",
+     "via": "key",
+     "row": "100% -> 115%",
+     "says": true,
+     "html": true,
+     "styleDiffs": 8,
+     "styleDiffByProp": {
+      "fontSize": 8
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "fontRatio": {
+      "target": 1.15,
+      "n": 98,
+      "atTarget": 7
+     },
+     "menuShot": "desk-ffx2-ch4/01-TEXT_SIZE_115_-first-menu.png",
+     "pauseShot": "desk-ffx2-ch4/01-TEXT_SIZE_115_-pause.png"
+    },
+    {
+     "step": "TEXT SIZE 130%",
+     "via": "key",
+     "row": "115% -> 130%",
+     "says": true,
+     "html": true,
+     "styleDiffs": 1,
+     "styleDiffByProp": {
+      "fontSize": 1
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "fontRatio": {
+      "target": 1.3,
+      "n": 87,
+      "atTarget": 0
+     },
+     "menuShot": "desk-ffx2-ch4/02-TEXT_SIZE_130_-first-menu.png",
+     "pauseShot": "desk-ffx2-ch4/02-TEXT_SIZE_130_-pause.png"
+    },
+    {
+     "step": "REDUCE MOTION ON",
+     "via": "key",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 9,
+     "styleDiffByProp": {
+      "transitionDuration": 5,
+      "animationName": 1,
+      "animationDuration": 1,
+      "animationIterationCount": 1,
+      "filter": 1
+     },
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "reduceMotion": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "desk-ffx2-ch4/03-REDUCE_MOTION_ON-first-menu.png",
+     "pauseShot": "desk-ffx2-ch4/03-REDUCE_MOTION_ON-pause.png"
+    },
+    {
+     "step": "REDUCE FLASHES ON",
+     "via": "key",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "reduceFlashes": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "desk-ffx2-ch4/04-REDUCE_FLASHES_ON-first-menu.png",
+     "pauseShot": "desk-ffx2-ch4/04-REDUCE_FLASHES_ON-pause.png"
+    },
+    {
+     "step": "LOW EFFECTS ON",
+     "via": "key",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "tier": [
+       "full",
+       "low"
+      ],
+      "lowEffects": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "desk-ffx2-ch4/05-LOW_EFFECTS_ON-first-menu.png",
+     "pauseShot": "desk-ffx2-ch4/05-LOW_EFFECTS_ON-pause.png"
+    },
+    {
+     "step": "COLOUR VISION RED-GREEN",
+     "via": "key",
+     "row": "OFF -> RED-GREEN",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 9,
+     "fxFlagDiff": {},
+     "menuShot": "desk-ffx2-ch4/06-COLOUR_VISION_RED_GREEN-first-menu.png",
+     "pauseShot": "desk-ffx2-ch4/06-COLOUR_VISION_RED_GREEN-pause.png"
+    },
+    {
+     "step": "COLOUR VISION BLUE-YELLOW",
+     "via": "key",
+     "row": "RED-GREEN -> BLUE-YELLOW",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 7,
+     "fxFlagDiff": {},
+     "menuShot": "desk-ffx2-ch4/07-COLOUR_VISION_BLUE_YELLOW-first-menu.png",
+     "pauseShot": "desk-ffx2-ch4/07-COLOUR_VISION_BLUE_YELLOW-pause.png"
+    }
+   ],
+   "reload": {
+    "atTitleDs": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "130",
+     "textSizeWide": "130",
+     "reduceMotion": "",
+     "lowEffects": "",
+     "reduceFlashes": "",
+     "colourVision": "blue-yellow"
+    },
+    "savedAfter": {
+     "textSize": 1.3,
+     "reduceMotion": true,
+     "reduceFlashes": true,
+     "lowEffects": true,
+     "colourVision": "blue-yellow"
+    },
+    "atMenuDs": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "130",
+     "textSizeWide": "130",
+     "reduceMotion": "",
+     "lowEffects": "",
+     "reduceFlashes": "",
+     "colourVision": "blue-yellow"
+    },
+    "fontRatio": {
+     "n": 87,
+     "atTarget": 0
+    },
+    "pauseRows": [
+     "TEXT SIZE=130%",
+     "REDUCE MOTION=ON",
+     "REDUCE FLASHES=ON",
+     "LOW EFFECTS=ON",
+     "COLOUR VISION=BLUE-YELLOW"
+    ],
+    "shots": [
+     "desk-ffx2-ch4/91-after-reload-title.png",
+     "desk-ffx2-ch4/92-after-reload-first-menu.png",
+     "desk-ffx2-ch4/93-after-reload-pause-accessibility.png"
+    ]
+   }
+  },
+  "desk-ffx2-ch4-v2": {
+   "chapter": "ffx2-bahamut",
+   "size": "1600x900",
+   "touch": false,
+   "taps": 0,
+   "keyboardFallbacks": 0,
+   "pauseAttempts": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "checks": 58,
+   "failed": [],
+   "settings": [
+    {
+     "step": "TEXT SIZE 115%",
+     "via": "key",
+     "row": "100% -> 115%",
+     "says": true,
+     "html": true,
+     "styleDiffs": 8,
+     "styleDiffByProp": {
+      "fontSize": 8
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "fontRatio": {
+      "target": 1.15,
+      "n": 98,
+      "atTarget": 51,
+      "grown": 51,
+      "medianOfGrown": 1.15
+     },
+     "menuShot": "desk-ffx2-ch4-v2/01-TEXT_SIZE_115_-first-menu.png",
+     "pauseShot": "desk-ffx2-ch4-v2/01-TEXT_SIZE_115_-pause.png"
+    },
+    {
+     "step": "TEXT SIZE 130%",
+     "via": "key",
+     "row": "115% -> 130%",
+     "says": true,
+     "html": true,
+     "styleDiffs": 1,
+     "styleDiffByProp": {
+      "fontSize": 1
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "fontRatio": {
+      "target": 1.3,
+      "n": 87,
+      "atTarget": 44,
+      "grown": 44,
+      "medianOfGrown": 1.3
+     },
+     "menuShot": "desk-ffx2-ch4-v2/02-TEXT_SIZE_130_-first-menu.png",
+     "pauseShot": "desk-ffx2-ch4-v2/02-TEXT_SIZE_130_-pause.png"
+    },
+    {
+     "step": "REDUCE MOTION ON",
+     "via": "key",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 8,
+     "styleDiffByProp": {
+      "transitionDuration": 5,
+      "animationName": 1,
+      "animationDuration": 1,
+      "animationIterationCount": 1
+     },
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "reduceMotion": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "desk-ffx2-ch4-v2/03-REDUCE_MOTION_ON-first-menu.png",
+     "pauseShot": "desk-ffx2-ch4-v2/03-REDUCE_MOTION_ON-pause.png"
+    },
+    {
+     "step": "REDUCE FLASHES ON",
+     "via": "key",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "reduceFlashes": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "desk-ffx2-ch4-v2/04-REDUCE_FLASHES_ON-first-menu.png",
+     "pauseShot": "desk-ffx2-ch4-v2/04-REDUCE_FLASHES_ON-pause.png"
+    },
+    {
+     "step": "LOW EFFECTS ON",
+     "via": "key",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "tier": [
+       "full",
+       "low"
+      ],
+      "lowEffects": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "desk-ffx2-ch4-v2/05-LOW_EFFECTS_ON-first-menu.png",
+     "pauseShot": "desk-ffx2-ch4-v2/05-LOW_EFFECTS_ON-pause.png"
+    },
+    {
+     "step": "COLOUR VISION RED-GREEN",
+     "via": "key",
+     "row": "OFF -> RED-GREEN",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 9,
+     "fxFlagDiff": {},
+     "menuShot": "desk-ffx2-ch4-v2/06-COLOUR_VISION_RED_GREEN-first-menu.png",
+     "pauseShot": "desk-ffx2-ch4-v2/06-COLOUR_VISION_RED_GREEN-pause.png"
+    },
+    {
+     "step": "COLOUR VISION BLUE-YELLOW",
+     "via": "key",
+     "row": "RED-GREEN -> BLUE-YELLOW",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 7,
+     "fxFlagDiff": {},
+     "menuShot": "desk-ffx2-ch4-v2/07-COLOUR_VISION_BLUE_YELLOW-first-menu.png",
+     "pauseShot": "desk-ffx2-ch4-v2/07-COLOUR_VISION_BLUE_YELLOW-pause.png"
+    }
+   ],
+   "reload": {
+    "atTitleDs": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "130",
+     "textSizeWide": "130",
+     "reduceMotion": "",
+     "lowEffects": "",
+     "reduceFlashes": "",
+     "colourVision": "blue-yellow"
+    },
+    "savedAfter": {
+     "textSize": 1.3,
+     "reduceMotion": true,
+     "reduceFlashes": true,
+     "lowEffects": true,
+     "colourVision": "blue-yellow"
+    },
+    "atMenuDs": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "130",
+     "textSizeWide": "130",
+     "reduceMotion": "",
+     "lowEffects": "",
+     "reduceFlashes": "",
+     "colourVision": "blue-yellow"
+    },
+    "fontRatio": {
+     "n": 88,
+     "atTarget": 44
+    },
+    "cvdTarget": {
+     "hits": {
+      "enemy": 4,
+      "ally": 0,
+      "self": 72
+     },
+     "targeting": true
+    },
+    "pauseRows": [
+     "TEXT SIZE=130%",
+     "REDUCE MOTION=ON",
+     "REDUCE FLASHES=ON",
+     "LOW EFFECTS=ON",
+     "COLOUR VISION=BLUE-YELLOW"
+    ],
+    "shots": [
+     "desk-ffx2-ch4-v2/91-after-reload-title.png",
+     "desk-ffx2-ch4-v2/92-after-reload-first-menu.png",
+     "desk-ffx2-ch4-v2/93-after-reload-pause-accessibility.png"
+    ]
+   }
+  },
+  "phone-ffx-ch1": {
+   "chapter": "seymour-flux",
+   "size": "390x844",
+   "touch": true,
+   "taps": 13,
+   "keyboardFallbacks": 23,
+   "checks": 58,
+   "failed": [
+    "TEXT SIZE 115%: Esc opens the pause",
+    "TEXT SIZE 115%: ACCESSIBILITY reached",
+    "TEXT SIZE 115%: the row says 115% (was null)",
+    "TEXT SIZE 115%: <html> carries it",
+    "TEXT SIZE 115%: HUD type scaled by the setting (classes whose largest font is 1.15 x the 100% one)",
+    "TEXT SIZE 130%: the row says 130% (was 100%)",
+    "TEXT SIZE 130%: <html> carries it",
+    "TEXT SIZE 130%: HUD type scaled by the setting (classes whose largest font is 1.30 x the 100% one)",
+    "TEXT SIZE 130%: pause tab strip stays inside the window",
+    "reload: <html> carries the comfort flags on the first frames, before any pause",
+    "reload: the HUD type is still 130% on the same classes at the first menu",
+    "reload: the comfort flags are on <html> at the first menu",
+    "reload: the ACCESSIBILITY rows still say 130% / ON / ON / ON / BLUE-YELLOW"
+   ],
+   "settings": [
+    {
+     "step": "TEXT SIZE 115%",
+     "via": "key",
+     "row": "null -> null",
+     "says": false,
+     "html": false,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {},
+     "fontRatio": {
+      "target": 1.15,
+      "n": 72,
+      "atTarget": 0,
+      "grown": 0,
+      "medianOfGrown": null
+     },
+     "menuShot": "phone-ffx-ch1/01-TEXT_SIZE_115_-first-menu.png",
+     "pauseShot": "phone-ffx-ch1/01-TEXT_SIZE_115_-pause.png"
+    },
+    {
+     "step": "TEXT SIZE 130%",
+     "via": "tap",
+     "row": "100% -> 115%",
+     "says": false,
+     "html": false,
+     "styleDiffs": 7,
+     "styleDiffByProp": {
+      "fontSize": 7
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "fontRatio": {
+      "target": 1.3,
+      "n": 72,
+      "atTarget": 0,
+      "grown": 7,
+      "medianOfGrown": 1.15
+     },
+     "menuShot": "phone-ffx-ch1/02-TEXT_SIZE_130_-first-menu.png",
+     "pauseShot": "phone-ffx-ch1/02-TEXT_SIZE_130_-pause.png"
+    },
+    {
+     "step": "REDUCE MOTION ON",
+     "via": "tap",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 2,
+     "styleDiffByProp": {
+      "transitionDuration": 2
+     },
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "reduceMotion": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "phone-ffx-ch1/03-REDUCE_MOTION_ON-first-menu.png",
+     "pauseShot": "phone-ffx-ch1/03-REDUCE_MOTION_ON-pause.png"
+    },
+    {
+     "step": "REDUCE FLASHES ON",
+     "via": "tap",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "reduceFlashes": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "phone-ffx-ch1/04-REDUCE_FLASHES_ON-first-menu.png",
+     "pauseShot": "phone-ffx-ch1/04-REDUCE_FLASHES_ON-pause.png"
+    },
+    {
+     "step": "LOW EFFECTS ON",
+     "via": "tap",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "tier": [
+       "phone",
+       "low"
+      ],
+      "lowEffects": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "phone-ffx-ch1/05-LOW_EFFECTS_ON-first-menu.png",
+     "pauseShot": "phone-ffx-ch1/05-LOW_EFFECTS_ON-pause.png"
+    },
+    {
+     "step": "COLOUR VISION RED-GREEN",
+     "via": "tap",
+     "row": "OFF -> RED-GREEN",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 9,
+     "fxFlagDiff": {},
+     "menuShot": "phone-ffx-ch1/06-COLOUR_VISION_RED_GREEN-first-menu.png",
+     "pauseShot": "phone-ffx-ch1/06-COLOUR_VISION_RED_GREEN-pause.png"
+    },
+    {
+     "step": "COLOUR VISION BLUE-YELLOW",
+     "via": "tap",
+     "row": "RED-GREEN -> BLUE-YELLOW",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 7,
+     "fxFlagDiff": {},
+     "menuShot": "phone-ffx-ch1/07-COLOUR_VISION_BLUE_YELLOW-first-menu.png",
+     "pauseShot": "phone-ffx-ch1/07-COLOUR_VISION_BLUE_YELLOW-pause.png"
+    }
+   ],
+   "reload": {
+    "atTitleDs": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "115",
+     "textSizeWide": "115",
+     "reduceMotion": "",
+     "lowEffects": "",
+     "reduceFlashes": "",
+     "colourVision": "blue-yellow"
+    },
+    "savedAfter": {
+     "textSize": 1.15,
+     "reduceMotion": true,
+     "reduceFlashes": true,
+     "lowEffects": true,
+     "colourVision": "blue-yellow"
+    },
+    "atMenuDs": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "115",
+     "textSizeWide": "115",
+     "reduceMotion": "",
+     "lowEffects": "",
+     "reduceFlashes": "",
+     "colourVision": "blue-yellow",
+     "phoneBattle": "ffx"
+    },
+    "fontRatio": {
+     "n": 70,
+     "atTarget": 0
+    },
+    "cvdTarget": {
+     "hits": {
+      "enemy": 10,
+      "ally": 0,
+      "self": 87
+     },
+     "targeting": true
+    },
+    "pauseRows": [
+     "TEXT SIZE=115%",
+     "REDUCE MOTION=ON",
+     "REDUCE FLASHES=ON",
+     "LOW EFFECTS=ON",
+     "COLOUR VISION=BLUE-YELLOW"
+    ],
+    "shots": [
+     "phone-ffx-ch1/91-after-reload-title.png",
+     "phone-ffx-ch1/92-after-reload-first-menu.png",
+     "phone-ffx-ch1/93-after-reload-pause-accessibility.png"
+    ]
+   }
+  },
+  "phone-ffx-ch1-v2": {
+   "chapter": "seymour-flux",
+   "size": "390x844",
+   "touch": true,
+   "taps": 23,
+   "keyboardFallbacks": 0,
+   "pauseAttempts": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "checks": 58,
+   "failed": [],
+   "settings": [
+    {
+     "step": "TEXT SIZE 115%",
+     "via": "tap",
+     "row": "100% -> 115%",
+     "says": true,
+     "html": true,
+     "styleDiffs": 7,
+     "styleDiffByProp": {
+      "fontSize": 7
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "fontRatio": {
+      "target": 1.15,
+      "n": 72,
+      "atTarget": 7,
+      "grown": 7,
+      "medianOfGrown": 1.15
+     },
+     "menuShot": "phone-ffx-ch1-v2/01-TEXT_SIZE_115_-first-menu.png",
+     "pauseShot": "phone-ffx-ch1-v2/01-TEXT_SIZE_115_-pause.png"
+    },
+    {
+     "step": "TEXT SIZE 130%",
+     "via": "tap",
+     "row": "115% -> 130%",
+     "says": true,
+     "html": true,
+     "styleDiffs": 5,
+     "styleDiffByProp": {
+      "fontSize": 5
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "fontRatio": {
+      "target": 1.3,
+      "n": 72,
+      "atTarget": 5,
+      "grown": 7,
+      "medianOfGrown": 1.3
+     },
+     "menuShot": "phone-ffx-ch1-v2/02-TEXT_SIZE_130_-first-menu.png",
+     "pauseShot": "phone-ffx-ch1-v2/02-TEXT_SIZE_130_-pause.png"
+    },
+    {
+     "step": "REDUCE MOTION ON",
+     "via": "tap",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 2,
+     "styleDiffByProp": {
+      "transitionDuration": 2
+     },
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "reduceMotion": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "phone-ffx-ch1-v2/03-REDUCE_MOTION_ON-first-menu.png",
+     "pauseShot": "phone-ffx-ch1-v2/03-REDUCE_MOTION_ON-pause.png"
+    },
+    {
+     "step": "REDUCE FLASHES ON",
+     "via": "tap",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "reduceFlashes": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "phone-ffx-ch1-v2/04-REDUCE_FLASHES_ON-first-menu.png",
+     "pauseShot": "phone-ffx-ch1-v2/04-REDUCE_FLASHES_ON-pause.png"
+    },
+    {
+     "step": "LOW EFFECTS ON",
+     "via": "tap",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "tier": [
+       "phone",
+       "low"
+      ],
+      "lowEffects": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "phone-ffx-ch1-v2/05-LOW_EFFECTS_ON-first-menu.png",
+     "pauseShot": "phone-ffx-ch1-v2/05-LOW_EFFECTS_ON-pause.png"
+    },
+    {
+     "step": "COLOUR VISION RED-GREEN",
+     "via": "tap",
+     "row": "OFF -> RED-GREEN",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 9,
+     "fxFlagDiff": {},
+     "menuShot": "phone-ffx-ch1-v2/06-COLOUR_VISION_RED_GREEN-first-menu.png",
+     "pauseShot": "phone-ffx-ch1-v2/06-COLOUR_VISION_RED_GREEN-pause.png"
+    },
+    {
+     "step": "COLOUR VISION BLUE-YELLOW",
+     "via": "tap",
+     "row": "RED-GREEN -> BLUE-YELLOW",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 7,
+     "fxFlagDiff": {},
+     "menuShot": "phone-ffx-ch1-v2/07-COLOUR_VISION_BLUE_YELLOW-first-menu.png",
+     "pauseShot": "phone-ffx-ch1-v2/07-COLOUR_VISION_BLUE_YELLOW-pause.png"
+    }
+   ],
+   "reload": {
+    "atTitleDs": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "130",
+     "textSizeWide": "130",
+     "reduceMotion": "",
+     "lowEffects": "",
+     "reduceFlashes": "",
+     "colourVision": "blue-yellow"
+    },
+    "savedAfter": {
+     "textSize": 1.3,
+     "reduceMotion": true,
+     "reduceFlashes": true,
+     "lowEffects": true,
+     "colourVision": "blue-yellow"
+    },
+    "atMenuDs": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "130",
+     "textSizeWide": "130",
+     "reduceMotion": "",
+     "lowEffects": "",
+     "reduceFlashes": "",
+     "colourVision": "blue-yellow",
+     "phoneBattle": "ffx"
+    },
+    "fontRatio": {
+     "n": 66,
+     "atTarget": 5
+    },
+    "cvdTarget": {
+     "hits": {
+      "enemy": 9,
+      "ally": 0,
+      "self": 54
+     },
+     "targeting": true
+    },
+    "pauseRows": [
+     "TEXT SIZE=130%",
+     "REDUCE MOTION=ON",
+     "REDUCE FLASHES=ON",
+     "LOW EFFECTS=ON",
+     "COLOUR VISION=BLUE-YELLOW"
+    ],
+    "shots": [
+     "phone-ffx-ch1-v2/91-after-reload-title.png",
+     "phone-ffx-ch1-v2/92-after-reload-first-menu.png",
+     "phone-ffx-ch1-v2/93-after-reload-pause-accessibility.png"
+    ]
+   }
+  },
+  "phone-ffx2-ch4": {
+   "chapter": "ffx2-bahamut",
+   "size": "390x844",
+   "touch": true,
+   "taps": 15,
+   "keyboardFallbacks": 8,
+   "checks": 58,
+   "failed": [
+    "TEXT SIZE 115%: pause tab strip stays inside the window",
+    "TEXT SIZE 130%: pause tab strip stays inside the window"
+   ],
+   "settings": [
+    {
+     "step": "TEXT SIZE 115%",
+     "via": "tap",
+     "row": "100% -> 115%",
+     "says": true,
+     "html": true,
+     "styleDiffs": 10,
+     "styleDiffByProp": {
+      "fontSize": 10
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "fontRatio": {
+      "target": 1.15,
+      "n": 72,
+      "atTarget": 10,
+      "grown": 10,
+      "medianOfGrown": 1.15
+     },
+     "menuShot": "phone-ffx2-ch4/01-TEXT_SIZE_115_-first-menu.png",
+     "pauseShot": "phone-ffx2-ch4/01-TEXT_SIZE_115_-pause.png"
+    },
+    {
+     "step": "TEXT SIZE 130%",
+     "via": "tap",
+     "row": "115% -> 130%",
+     "says": true,
+     "html": true,
+     "styleDiffs": 12,
+     "styleDiffByProp": {
+      "fontSize": 11,
+      "filter": 1
+     },
+     "varsChanged": 1,
+     "fxFlagDiff": {},
+     "fontRatio": {
+      "target": 1.3,
+      "n": 72,
+      "atTarget": 8,
+      "grown": 10,
+      "medianOfGrown": 1.3
+     },
+     "menuShot": "phone-ffx2-ch4/02-TEXT_SIZE_130_-first-menu.png",
+     "pauseShot": "phone-ffx2-ch4/02-TEXT_SIZE_130_-pause.png"
+    },
+    {
+     "step": "REDUCE MOTION ON",
+     "via": "tap",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 6,
+     "styleDiffByProp": {
+      "animationName": 1,
+      "animationDuration": 1,
+      "animationIterationCount": 1,
+      "filter": 1,
+      "transitionDuration": 2
+     },
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "reduceMotion": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "phone-ffx2-ch4/03-REDUCE_MOTION_ON-first-menu.png",
+     "pauseShot": "phone-ffx2-ch4/03-REDUCE_MOTION_ON-pause.png"
+    },
+    {
+     "step": "REDUCE FLASHES ON",
+     "via": "tap",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "reduceFlashes": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "phone-ffx2-ch4/04-REDUCE_FLASHES_ON-first-menu.png",
+     "pauseShot": "phone-ffx2-ch4/04-REDUCE_FLASHES_ON-pause.png"
+    },
+    {
+     "step": "LOW EFFECTS ON",
+     "via": "tap",
+     "row": "OFF -> ON",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 0,
+     "fxFlagDiff": {
+      "tier": [
+       "phone",
+       "low"
+      ],
+      "lowEffects": [
+       false,
+       true
+      ]
+     },
+     "menuShot": "phone-ffx2-ch4/05-LOW_EFFECTS_ON-first-menu.png",
+     "pauseShot": "phone-ffx2-ch4/05-LOW_EFFECTS_ON-pause.png"
+    },
+    {
+     "step": "COLOUR VISION RED-GREEN",
+     "via": "tap",
+     "row": "OFF -> RED-GREEN",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 9,
+     "fxFlagDiff": {},
+     "menuShot": "phone-ffx2-ch4/06-COLOUR_VISION_RED_GREEN-first-menu.png",
+     "pauseShot": "phone-ffx2-ch4/06-COLOUR_VISION_RED_GREEN-pause.png"
+    },
+    {
+     "step": "COLOUR VISION BLUE-YELLOW",
+     "via": "tap",
+     "row": "RED-GREEN -> BLUE-YELLOW",
+     "says": true,
+     "html": true,
+     "styleDiffs": 0,
+     "styleDiffByProp": {},
+     "varsChanged": 7,
+     "fxFlagDiff": {},
+     "menuShot": "phone-ffx2-ch4/07-COLOUR_VISION_BLUE_YELLOW-first-menu.png",
+     "pauseShot": "phone-ffx2-ch4/07-COLOUR_VISION_BLUE_YELLOW-pause.png"
+    }
+   ],
+   "reload": {
+    "atTitleDs": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "130",
+     "textSizeWide": "130",
+     "reduceMotion": "",
+     "lowEffects": "",
+     "reduceFlashes": "",
+     "colourVision": "blue-yellow"
+    },
+    "savedAfter": {
+     "textSize": 1.3,
+     "reduceMotion": true,
+     "reduceFlashes": true,
+     "lowEffects": true,
+     "colourVision": "blue-yellow"
+    },
+    "atMenuDs": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "130",
+     "textSizeWide": "130",
+     "reduceMotion": "",
+     "lowEffects": "",
+     "reduceFlashes": "",
+     "colourVision": "blue-yellow",
+     "phoneBattle": "ffx2"
+    },
+    "fontRatio": {
+     "n": 72,
+     "atTarget": 8
+    },
+    "cvdTarget": {
+     "hits": {
+      "enemy": 0,
+      "ally": 0,
+      "self": 78
+     },
+     "targeting": true
+    },
+    "pauseRows": [
+     "TEXT SIZE=130%",
+     "REDUCE MOTION=ON",
+     "REDUCE FLASHES=ON",
+     "LOW EFFECTS=ON",
+     "COLOUR VISION=BLUE-YELLOW"
+    ],
+    "shots": [
+     "phone-ffx2-ch4/91-after-reload-title.png",
+     "phone-ffx2-ch4/92-after-reload-first-menu.png",
+     "phone-ffx2-ch4/93-after-reload-pause-accessibility.png"
+    ]
+   }
+  }
+ },
+ "seam": {
+  "braska": {
+   "chapter": "braskas-final-aeon",
+   "seed": 1,
+   "chainLength": 7,
+   "links": [
+    {
+     "link": 1,
+     "of": 7,
+     "pass": true,
+     "stripOpacity": 1,
+     "stripVisible": true,
+     "f1OverOnHudRoot": false,
+     "f1OverAnywhere": false,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Braska's Final Aeon",
+     "shot": "braska/link01-first-menu.png"
+    }
+   ]
+  },
+  "braska-s2": {
+   "chapter": "braskas-final-aeon",
+   "seed": 2,
+   "chainLength": 7,
+   "ended": "cutscene",
+   "links": [
+    {
+     "link": 1,
+     "of": 7,
+     "pass": true,
+     "stripOpacity": 1,
+     "stripVisible": true,
+     "f1OverOnHudRoot": false,
+     "f1OverAnywhere": false,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Braska's Final Aeon",
+     "shot": "braska-s2/link01-first-menu.png"
+    },
+    {
+     "link": 2,
+     "of": 7,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Possessed Valefor",
+     "shot": "braska-s2/link02-first-menu.png"
+    },
+    {
+     "link": 3,
+     "of": 7,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Possessed Ifrit",
+     "shot": "braska-s2/link03-first-menu.png"
+    },
+    {
+     "link": 4,
+     "of": 7,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Possessed Ixion",
+     "shot": "braska-s2/link04-first-menu.png"
+    },
+    {
+     "link": 5,
+     "of": 7,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Possessed Shiva",
+     "shot": "braska-s2/link05-first-menu.png"
+    },
+    {
+     "link": 6,
+     "of": 7,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Possessed Bahamut",
+     "shot": "braska-s2/link06-first-menu.png"
+    },
+    {
+     "link": 7,
+     "of": 7,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Yu Yevon",
+     "shot": "braska-s2/link07-first-menu.png"
+    }
+   ]
+  },
+  "den-of-woe": {
+   "chapter": "ffx2-den-of-woe",
+   "chainLength": 3,
+   "ended": "cutscene",
+   "links": [
+    {
+     "link": 1,
+     "of": 3,
+     "pass": true,
+     "stripOpacity": 1,
+     "stripVisible": true,
+     "f1OverOnHudRoot": false,
+     "f1OverAnywhere": false,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Baralai",
+     "shot": "den-of-woe/link01-first-menu.png"
+    },
+    {
+     "link": 2,
+     "of": 3,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Gippal",
+     "shot": "den-of-woe/link02-first-menu.png"
+    },
+    {
+     "link": 3,
+     "of": 3,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Nooj",
+     "shot": "den-of-woe/link03-first-menu.png"
+    }
+   ]
+  },
+  "fallen-aeons": {
+   "chapter": "ffx2-fallen-aeons",
+   "seed": 1,
+   "chainLength": 3,
+   "ended": "cutscene",
+   "links": [
+    {
+     "link": 1,
+     "of": 3,
+     "pass": true,
+     "stripOpacity": 1,
+     "stripVisible": true,
+     "f1OverOnHudRoot": false,
+     "f1OverAnywhere": false,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Shiva",
+     "shot": "fallen-aeons/link01-first-menu.png"
+    },
+    {
+     "link": 2,
+     "of": 3,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Sandy",
+     "shot": "fallen-aeons/link02-first-menu.png"
+    },
+    {
+     "link": 3,
+     "of": 3,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Anima",
+     "shot": "fallen-aeons/link03-first-menu.png"
+    }
+   ]
+  },
+  "isaaru": {
+   "chapter": "isaaru-via-purifico",
+   "chainLength": 3,
+   "ended": "cutscene",
+   "links": [
+    {
+     "link": 1,
+     "of": 3,
+     "pass": true,
+     "stripOpacity": 1,
+     "stripVisible": true,
+     "f1OverOnHudRoot": false,
+     "f1OverAnywhere": false,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Isaaru",
+     "shot": "isaaru/link01-first-menu.png"
+    },
+    {
+     "link": 2,
+     "of": 3,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Isaaru",
+     "shot": "isaaru/link02-first-menu.png"
+    },
+    {
+     "link": 3,
+     "of": 3,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Isaaru",
+     "shot": "isaaru/link03-first-menu.png"
+    }
+   ]
+  },
+  "leblanc": {
+   "chapter": "ffx2-leblanc",
+   "chainLength": 3,
+   "ended": "cutscene",
+   "links": [
+    {
+     "link": 1,
+     "of": 3,
+     "pass": true,
+     "stripOpacity": 1,
+     "stripVisible": true,
+     "f1OverOnHudRoot": false,
+     "f1OverAnywhere": false,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Ormi",
+     "shot": "leblanc/link01-first-menu.png"
+    },
+    {
+     "link": 2,
+     "of": 3,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Logos",
+     "shot": "leblanc/link02-first-menu.png"
+    },
+    {
+     "link": 3,
+     "of": 3,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Leblanc",
+     "shot": "leblanc/link03-first-menu.png"
+    }
+   ]
+  },
+  "trema": {
+   "chapter": "ffx2-trema",
+   "chainLength": 2,
+   "ended": "pro-defeat",
+   "links": [
+    {
+     "link": 1,
+     "of": 2,
+     "pass": true,
+     "stripOpacity": 1,
+     "stripVisible": true,
+     "f1OverOnHudRoot": false,
+     "f1OverAnywhere": false,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Paragon",
+     "shot": "trema/link01-first-menu.png"
+    }
+   ]
+  },
+  "trema-s2": {
+   "chapter": "ffx2-trema",
+   "seed": 2,
+   "chainLength": 2,
+   "links": [
+    {
+     "link": 1,
+     "of": 2,
+     "pass": true,
+     "stripOpacity": 1,
+     "stripVisible": true,
+     "f1OverOnHudRoot": false,
+     "f1OverAnywhere": false,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Paragon",
+     "shot": "trema-s2/link01-first-menu.png"
+    },
+    {
+     "link": 2,
+     "of": 2,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Trema",
+     "shot": "trema-s2/link02-first-menu.png"
+    }
+   ]
+  },
+  "trema-s3": {
+   "chapter": "ffx2-trema",
+   "seed": 3,
+   "chainLength": 2,
+   "links": [
+    {
+     "link": 1,
+     "of": 2,
+     "pass": true,
+     "stripOpacity": 1,
+     "stripVisible": true,
+     "f1OverOnHudRoot": false,
+     "f1OverAnywhere": false,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Paragon",
+     "shot": "trema-s3/link01-first-menu.png"
+    },
+    {
+     "link": 2,
+     "of": 2,
+     "pass": false,
+     "stripOpacity": 0,
+     "stripVisible": false,
+     "f1OverOnHudRoot": true,
+     "f1OverAnywhere": true,
+     "leftovers": [
+      "f1Cue:1",
+      "f1Hero:1"
+     ],
+     "ribbon": "Trema",
+     "shot": "trema-s3/link02-first-menu.png"
+    }
+   ]
+  }
+ },
+ "doors": {
+  "doors-ffx-words": [
+   {
+    "word": "darkaeon",
+    "boardMovedTo": "ffx2-bahamut",
+    "opened": true,
+    "chapter": "dark-aeons",
+    "game": "ffx",
+    "hud": "ffx",
+    "rows": [
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items",
+     "Flee",
+     "Escape"
+    ],
+    "party": [
+     "Tidus",
+     "Yuna",
+     "Auron"
+    ],
+    "foes": [
+     "Dark Valefor"
+    ],
+    "ffxLabels": 6,
+    "ffx2Labels": 0,
+    "ffx2Classes": 0,
+    "ffxClasses": 63,
+    "openLock": false,
+    "pass": true,
+    "consoleErrors": 0,
+    "notFound": 0
+   },
+   {
+    "word": "judgment",
+    "boardMovedTo": "ffx2-bahamut",
+    "opened": true,
+    "chapter": "penance",
+    "game": "ffx",
+    "hud": "ffx",
+    "rows": [
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items",
+     "Summon",
+     "Escape"
+    ],
+    "party": [
+     "Tidus",
+     "Yuna",
+     "Rikku"
+    ],
+    "foes": [
+     "Penance",
+     "Right Arm",
+     "Left Arm"
+    ],
+    "ffxLabels": 6,
+    "ffx2Labels": 0,
+    "ffx2Classes": 0,
+    "ffxClasses": 67,
+    "openLock": false,
+    "pass": true,
+    "consoleErrors": 0,
+    "notFound": 0
+   },
+   {
+    "word": "geosgaeno",
+    "boardMovedTo": "ffx2-bahamut",
+    "opened": true,
+    "chapter": "flooded-ways",
+    "game": "ffx",
+    "hud": "ffx",
+    "rows": [
+     "Open lock",
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items",
+     "Flee"
+    ],
+    "party": [
+     "Tidus",
+     "Wakka",
+     "Rikku"
+    ],
+    "foes": [
+     "Evrae Altana",
+     "Gate Lock",
+     "Gate Lock"
+    ],
+    "ffxLabels": 6,
+    "ffx2Labels": 0,
+    "ffx2Classes": 0,
+    "ffxClasses": 59,
+    "openLock": true,
+    "pass": true,
+    "consoleErrors": 0,
+    "notFound": 0
+   },
+   {
+    "word": "beast",
+    "boardMovedTo": "ffx2-bahamut",
+    "opened": true,
+    "chapter": "sanctuary-keeper",
+    "game": "ffx",
+    "hud": "ffx",
+    "rows": [
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items",
+     "Flee",
+     "Escape"
+    ],
+    "party": [
+     "Tidus",
+     "Yuna",
+     "Auron"
+    ],
+    "foes": [
+     "Sanctuary Keeper"
+    ],
+    "ffxLabels": 6,
+    "ffx2Labels": 0,
+    "ffx2Classes": 0,
+    "ffxClasses": 57,
+    "openLock": false,
+    "pass": true,
+    "consoleErrors": 0,
+    "notFound": 0
+   }
+  ],
+  "doors-ffx2-words": [
+   {
+    "word": "gear",
+    "boardMovedTo": "seymour-flux",
+    "opened": true,
+    "chapter": "exp-anime",
+    "game": "ffx2",
+    "hud": "ffx2",
+    "rows": [
+     "Attack",
+     "Skill",
+     "Change",
+     "Item"
+    ],
+    "party": [
+     "Yuna",
+     "Rikku",
+     "Paine"
+    ],
+    "foes": [
+     "Valefor"
+    ],
+    "ffxLabels": 0,
+    "ffx2Labels": 4,
+    "ffx2Classes": 67,
+    "ffxClasses": 1,
+    "openLock": false,
+    "pass": true,
+    "consoleErrors": 0,
+    "notFound": 0
+   },
+   {
+    "word": "drillshot",
+    "boardMovedTo": "seymour-flux",
+    "opened": true,
+    "chapter": "ffx2-bevelle-guardians",
+    "game": "ffx2",
+    "hud": "ffx2",
+    "rows": [
+     "Attack",
+     "Skill",
+     "Change",
+     "Item"
+    ],
+    "party": [
+     "Yuna",
+     "Rikku",
+     "Paine"
+    ],
+    "foes": [
+     "Georapella"
+    ],
+    "ffxLabels": 0,
+    "ffx2Labels": 4,
+    "ffx2Classes": 67,
+    "ffxClasses": 1,
+    "openLock": false,
+    "pass": true,
+    "consoleErrors": 0,
+    "notFound": 0
+   },
+   {
+    "word": "duelist",
+    "boardMovedTo": "seymour-flux",
+    "opened": true,
+    "chapter": "ffx2-farplane-cup",
+    "game": "ffx2",
+    "hud": "ffx2",
+    "rows": [
+     "Attack",
+     "Skill",
+     "Change",
+     "Item"
+    ],
+    "party": [
+     "Yuna",
+     "Rikku",
+     "Paine"
+    ],
+    "foes": [
+     "Auron"
+    ],
+    "ffxLabels": 0,
+    "ffx2Labels": 4,
+    "ffx2Classes": 67,
+    "ffxClasses": 1,
+    "openLock": false,
+    "pass": true,
+    "consoleErrors": 0,
+    "notFound": 0
+   },
+   {
+    "word": "wraith",
+    "boardMovedTo": "seymour-flux",
+    "opened": true,
+    "chapter": "ffx2-yunas-ballad",
+    "game": "ffx2",
+    "hud": "ffx2",
+    "rows": [
+     "White Magic",
+     "Change",
+     "Item"
+    ],
+    "party": [
+     "Yuna"
+    ],
+    "foes": [
+     "Rikku"
+    ],
+    "ffxLabels": 0,
+    "ffx2Labels": 3,
+    "ffx2Classes": 46,
+    "ffxClasses": 1,
+    "openLock": false,
+    "pass": true,
+    "consoleErrors": 0,
+    "notFound": 0
+   }
+  ],
+  "doors-listed": [
+   {
+    "id": "seymour-flux",
+    "opened": true,
+    "chapter": "seymour-flux",
+    "game": "ffx",
+    "hud": "ffx",
+    "rows": [
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items",
+     "Flee"
+    ],
+    "party": [
+     "Tidus",
+     "Yuna",
+     "Kimahri"
+    ],
+    "foes": [
+     "Seymour Flux",
+     "Mortiorchis"
+    ],
+    "ffxLabels": 5,
+    "ffx2Labels": 0,
+    "ffx2Classes": 0,
+    "ffxClasses": 76,
+    "openLock": false,
+    "pass": true,
+    "consoleErrors": 0,
+    "notFound": 0
+   },
+   {
+    "id": "yunalesca",
+    "opened": true,
+    "chapter": "yunalesca",
+    "game": "ffx",
+    "hud": "ffx",
+    "rows": [
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items",
+     "Flee"
+    ],
+    "party": [
+     "Tidus",
+     "Yuna",
+     "Auron"
+    ],
+    "foes": [
+     "Yunalesca"
+    ],
+    "ffxLabels": 5,
+    "ffx2Labels": 0,
+    "ffx2Classes": 0,
+    "ffxClasses": 57,
+    "openLock": false,
+    "pass": true,
+    "consoleErrors": 0,
+    "notFound": 0
+   },
+   {
+    "id": "braskas-final-aeon",
+    "opened": true,
+    "chapter": "braskas-final-aeon",
+    "game": "ffx",
+    "hud": "ffx",
+    "rows": [
+     "Talk",
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items"
+    ],
+    "party": [
+     "Tidus",
+     "Yuna",
+     "Auron"
+    ],
+    "foes": [
+     "Braska's Final Aeon",
+     "Yu Pagoda",
+     "Yu Pagoda"
+    ],
+    "ffxLabels": 5,
+    "ffx2Labels": 0,
+    "ffx2Classes": 0,
+    "ffxClasses": 58,
+    "openLock": false,
+    "pass": true,
+    "consoleErrors": 0,
+    "notFound": 0
+   },
+   {
+    "id": "ffx2-bahamut",
+    "opened": true,
+    "chapter": "ffx2-bahamut",
+    "game": "ffx2",
+    "hud": "ffx2",
+    "rows": [
+     "Attack",
+     "Skill",
+     "Change",
+     "Item"
+    ],
+    "party": [
+     "Yuna",
+     "Rikku",
+     "Paine"
+    ],
+    "foes": [
+     "Bahamut"
+    ],
+    "ffxLabels": 0,
+    "ffx2Labels": 4,
+    "ffx2Classes": 72,
+    "ffxClasses": 1,
+    "openLock": false,
+    "pass": true,
+    "consoleErrors": 0,
+    "notFound": 0
+   },
+   {
+    "id": "ffx2-vegnagun-shuyin",
+    "opened": true,
+    "chapter": "ffx2-vegnagun-shuyin",
+    "game": "ffx2",
+    "hud": "ffx2",
+    "rows": [
+     "Attack",
+     "Skill",
+     "Change",
+     "Item"
+    ],
+    "party": [
+     "Yuna",
+     "Rikku",
+     "Paine"
+    ],
+    "foes": [
+     "Vegnagun"
+    ],
+    "ffxLabels": 0,
+    "ffx2Labels": 4,
+    "ffx2Classes": 71,
+    "ffxClasses": 1,
+    "openLock": false,
+    "pass": true,
+    "consoleErrors": 0,
+    "notFound": 0
+   }
+  ]
+ },
+ "titleNote": {
+  "at": "2026-11-07T20:56:29.027Z",
+  "screen": "title",
+  "bundle": "https://echoesofspira.com/assets/index-jYm-0mrJ.js",
+  "panelOpen": true,
+  "text": "CHANGELOG Latest releases ESC CLOSE Release 76 2026-11-06 BOTH Leaving a fight now frees the graphics memory its fighters’ contact shadows used; before, that memory stayed behind after every battle. FFX Retrying a Final Fantasy X chapter again and again no longer adds that leftover shadow memory with each try. FFX-2 The same in Final Fantasy X-2: retrying a chapter no longer adds that leftover shadow memory with each try. Release 75 2026-11-06 FFX Chapter XII’s enemy-move card no longer prints a damage range backwards (it showed 4,132-2,333 for Seymour Omnis’s spells); it now reads low to high and keeps one target across the range. FFX-2 Rikku as an Alchemist no longer shows a greyed-out Mix in the command menu while Mix cannot be used. FFX On a desktop-sized window the party prep card’s tip is a shorter form of the same words for Seymour Natus, Seymour Omnis, Isaaru and the Mirror Aeons, so it is not cut off mid-line at 1600 x 900. FFX-2 The same shorter tip on the prep card for the Fallen Aeons, Trema and the Den of Woe. Release 74 2026-11-03 FFX Sin’s Fins and Core (Chapter XVII) gets the presentation of Chapter I: the new hit look, glass numbers, fighter motion, effects and sound. Its battle screen stays as it was. FFX Lulu’s head now stays the same size from pose to pose; it no longer swells when she casts or shrinks when she is knocked out. FFX Chapter XII’s Sensor card now steps off the target flag at more cursor positions than before. BOTH A revived fighter now rises through a longer, even blend from the lying figure to the standing one, so it no longer jumps. Release 73 2026-11-02 BOTH Fast-forward now keeps each attacker’s run-up and walk back at normal length, so fighters glide instead of jumping across the stage; a fast attack is about twice as quick as norm",
+  "has76": true,
+  "lines76": [
+   "CHANGELOG Latest releases ESC CLOSE Release 76 2026-11-06 BOTH Leaving a fight now frees the graphics memory its fighters’ contact shadows used; before, that memory stayed behind after every battle. FFX Retrying a Final Fantasy X chapter again and again no longer adds that leftover shadow memory with each try. FFX-2 The same in Final Fantasy X-2: retrying a chapter no longer adds that leftover shadow memory with each try. Release 75 2026-11-06 FFX Chapter XII’s enemy-move card no longer prints a damage range backwards (it showed 4,132-2,333 for Seymour Omnis’s spells); it now reads low to high and keeps one target across the range. FFX-2 Rikku as an Alchemist no longer shows a greyed-out Mix in the command menu while Mix cannot be used. FFX On a desktop-sized window the party prep card’s tip is a shorter form of the same words for Seymour Natus, Seymour Omnis, Isaaru and the Mirror Aeons, so it is not cut off mid-line at 1600 x 900. FFX-2 The same shorter tip on the prep card for the Fallen Aeons, Trema and the Den of Woe. Release 74 2026-11-03 FFX Sin’s Fins and Core (Chapter XVII) gets the presentation of Chapter I: the new hit look, glass numbers, fighter motion, effects and sound. Its battle screen stays as it was. FFX Lulu’s head now stays the same size from pose to pose; it no longer swells when she casts or shrinks when she is knocked out. FFX Chapter XII’s Sensor card now steps off the target flag at more cursor positions than before. BOTH A revived fighter now rises through a longer, even blend from the lying figure to the standing one, so it no longer jumps. Release 73 2026-11-02 BOTH Fast-forward now keeps each attacker’s run-up and walk back at normal length, so fighters glide instead of jumping across the stage; a fast attack is about twice as quick as normal, not three times. FFX Sin’s face (Chapter XVIII) gets the presentation of Chapter I: the new hit look and the lighter battle screen. Its boss card and camera stay as before. FFX Wakka’s and Lulu’s walk back after an attack is spread over more frames, so they no longer snap home. BOTH On a phone the wait before a fight is shorter again: on a slow connection Chapter I now waits about 5 seconds and Chapter IV about 12. FFX-2 On a slow phone connection, Bahamut’s first moves in Chapter IV can show his resting pose for a few seconds. Release 72 2026-11-01 FFX Yojimbo (Chapter IX) and Seymour Omnis (Chapter XII) get the presentation of Chapter I again: the new hit look, the boss card and the quiet ending, and Yojimbo also the lighter battle screen. FFX Omnis keeps the older battle screen for now, because the target flag can still sit over the advice card. FFX Braska’s Final Aeon (Chapter III) plays the real attack motion again, with Tidus’s leap home sized to how big he is drawn. FFX-2 The Road to the Farplane (Chapter XI) plays a darker night sky, so the spire’s burst of light shines instead of washing out the screen. BOTH A knocked-out figure now slides to where it lies instead of jumping there. Release 71 2026-11-01 FFX Chapter VIII and the Mirror Aeons chapter get the presentation of Chapter I: the lighter battle screen, the new hit look and the quiet ending. FFX-2 Chapters V, XI and XVI get the presentation of Chapter IV: the lighter battle screen, the new hit look, the boss card and the quiet ending. BOTH Evrae in FFX and Chapters V and XI in FFX-2 keep their older sky for now, until a lighter look is picked. FFX Chapters III, VIII and the Mirror Aeons chapter keep the older attack motion for now, because the new one made figures hop too far there. FFX Chapters IX, XII, XVII and XVIII (Sin’s face) keep the older look for now; in Sin’s face figures still hopped too far after a hit. Release 70 2026-10-31 FFX Chapters II, III, VII, X and XIV get the presentation of Chapter I: the lighter battle screen, the new hit look, the boss card and the quiet ending. FFX-2 Chapters XIII and XV get the presentation of Chapter IV: the lighter battle screen, the new hit look, the boss card and the quiet ending. FFX Each of those five rooms is lit on its own, from the dome’s lavender cone of light to the red lamps of the Via Purifico. BOTH Chapters IX and XII in FFX and V and XI in FFX-2 keep the older look for now. Release 69 2026-10-30 FFX A revived figure no longer pops sideways as it stands back up. BOTH On a phone the wait before a fight is shorter: on a slow connection about 7 seconds in Chapter I and 19 in Chapter IV. FFX Evrae’s fight changes pose more cleanly, like the other fights: hits and spells cut instead of blending see-through. FFX-2 Chapter VI gets the presentation of Chapters I and IV: the lighter battle screen, the new hit look, the boss card and the quiet ending. Release 68 2026-10-29 BOTH Figures change pose more cleanly: 13 more chapters now cut on a hit, a spell or a toss instead of blending see-through, and a revived figure no longer jumps sideways on its first frame. FFX-2 Paine and Rikku in the Warrior dress keep their standing painting through a strike’s wind-up, the run-in flows into the dash, and the ATB bars and Trigger Happy move smoothly. FFX The turn-order list slides each name to its new place, and an aeon now arrives with a crouch, a leap and a landing. BOTH Tab, Shift+Tab and Enter work on the title, the chapter list and the party screen like on any page, battle text grows with TEXT SIZE, and the first fight’s menu waits for less to load. FFX-2 Leaving a battle now frees its screen, so memory no longer climbs a little more on every visit. Release 67 2026-10-28 BOTH In Chapters I and IV a turn now starts on the figure’s standing painting, and ready shows only as an attack winds up; a change of painting with a cause on screen now cuts inside the smear. BOTH Strikes and spells in Chapters I and IV follow the real game’s own animation, a struck figure in any chapter is knocked back and springs home, and Seymour Flux and Bahamut fall in one motion. FFX-2 In Chapter IV the girls now run in at an even speed and start the strike as they brake, so there is no stand before the lunge and each attack is a little shorter. FFX After a lost fight in Chapter I, the second and later attempts open hurried, with a short boss card and no long camera sweep or boss reveal. BOTH The defeat card now names what felled you at any battle speed, its second button says CHAPTER SELECT, and on a phone the enemy’s move line is at most two lines. Release 66 2026-10-28 BOTH The first time a figure shows a pose, such as an aeon arriving, an item throw or a party swap, the picture no longer stops for a moment while its painting is read. BOTH Every wait in a fight now counts in the screen’s own frames, so a fight keeps the same time at 60, 120 and 144 Hz and stops cleanly when you pause or hide the window. BOTH A knocked-out figure’s thud, squash and ground shake now land on the very frame its body reaches the ground, not a beat later. BOTH The tails, manes and sashes on Seymour Flux and Bahamut now move the same on a 60, 120 or 144 Hz screen. FFX-2 A girl who casts a spell or uses an item from her menu now goes straight from ready to the spell, without a see-through blink to idle in between. Release 65 2026-10-27 BOTH On a 120 or 144 Hz screen the camera shake and the ink-and-paper flash on a big hit now keep the same time as on a 60 Hz one, in every chapter. BOTH Starting a fight is smoother: the boss card no longer waits out a second full hold after a long load, and the party and bars go down under it instead of vanishing as it fades. FFX-2 A girl who attacks from her menu now holds her ready stance into the attack instead of dropping to idle for a blink and coming back. Release 64 2026-10-25 BOTH The first battle menu opens on less: the strategy guide and the enemy-move read-out wait behind Intel (G, or X on a pad), and the first-time teaching cards no longer cover the fight. BOTH While someone acts, what Intel opened slides away, so only the boss bar, the party and the damage number stay on screen. FFX-2 In Chapter IV the second boss bar is gone: one bar over Bahamut, with its numbers and Scan hint behind Intel. BOTH The dark wash behind a spell now covers the whole screen, so Curse, Mega Flare’s charge and Chapter I’s bigger spells no longer leave a hard dark edge across the picture. Release 63 2026-10-24 BOTH Chapters I and IV now open with the whole new battle look on their own: a cleaner screen whose text steps aside while someone acts, a directed camera, and a staged moment for the big finishers. BOTH Moves have wind-up, a quick smear and a settle, big hits hold the screen for a beat, damage numbers are gold and never print over each other, and every blow sounds layered. BOTH The music ducks just before a big blow, menus have a new family of sounds, and the fight prepares itself behind the title so it starts with fewer hitches. FFX In Chapter I the party speaks in battle, Total Annihilation holds its breath, Overdrives open with their own camera, Seymour Flux has a cleaner edge, and Yuna and Kimahri have repainted poses. FFX-2 In Chapter IV Mega Flare holds its breath, a Change gets a readable name plate, the camera follows the girls, Bahamut has a cleaner edge, and Rikku and Paine have repainted poses. BOTH In the booth demo the end card says Press any button, the attract card waits for a controller, and a picker nobody touches for a minute goes back to the title. Release 62 2026-10-22 BOTH A gamepad’s A or Start now ends the opening camera sweep before a fight, the way Enter does; the booth demo prepares both fights while you choose. FFX-2 In Chapter IV the Bevelle cathedral comes alive (drifting dust, flickering lamps, ripples on the floor when someone is hit) and Mega Flare lands harder. FFX Auron’s first tip now matches the fight: Chapter I keeps its warning, the chapters where your party moves first say so, and the others show none. Release 61 2026-10-21 BOTH The title screen opens on The Echo, and T (or Y on a pad) switches to the Farplane painting; your choice is kept. BOTH OPTIONS has a Visual Style row: HD-2D for the new look in Chapters I and IV, or Classic for the plain paintings. BOTH Gamepad play is smoother: menus step one way at a time, and the key hints show your own pad’s buttons. FFX Chapter I’s mountain has gusts of wind, moonlight glittering on the ice and low mist; Seymour Flux is lit by the room, and Auron’s first tip is corrected. FFX-2 Bahamut is lit by the room too, and the results after his fight are calmer. Release 60 2026-10-20 FFX Chapter I has a new look: a soft backdrop with shafts of light and drifting motes, and fighters lit and grounded by the room. FFX-2 Chapter IV has the same look, with a gleaming floor that reflects the fighters and embers rising from the lamps. BOTH Poses blend more smoothly, figures breathe while they wait, and every hit holds and shakes the harder it lands. FFX-2 Bahamut is now drawn as a jointed figure, and a skill aimed at a foe who falls first now picks another foe, never one of the girls. FFX Seymour Flux is now drawn as a jointed figure, and in Chapter XIV the move advisor follows the chapter’s own plan. Release 59 2026-10-19 FFX Kimahri is back to his hand-painted poses while we rework his animation. FFX Using an item on an ally now tosses a glowing green orb to them, and on yourself shows a green glow, as the game draws it. FFX-2 Items now show a quick white-blue sparkle. BOTH The other jointed figures are unchanged: Lulu, Ifrit and Pterya in FFX, and Valefor in both games. Release 58 2026-10-19 FFX Ifrit now animates as one jointed figure, in Braska’s last fight and wherever you summon him. FFX Pterya, Isaaru’s aeon in Chapter XIV, is drawn the same way. FFX Neither shrinks when knocked out any more. Release 57 2026-10-19 BOTH Valefor now animates as one jointed figure and no longer shrinks when knocked out. FFX IMMUNE now shows when a status move is resisted completely, as with Slow on Seymour Flux or Shell on a Yu Pagoda. FFX Releases 55 and 56 said this already worked; it showed MISS until now. Release 56 2026-10-19 FFX-2 Actions now take the time their own animation takes, so bosses act less often between your turns and several fights, Trema and Angra Mainyu among them, get easier. FFX-2 The Den of Woe guide and tip now have you start the Hero Drinks once Nooj is down to about half his health, so a girl is Invincible when his Lightfall lands. FFX Yuna’s Grand Summon works with a finger on a phone: tap an aeon to choose it, tap the title to go back, and a greyed aeon shakes. FFX An aeon’s Defend no longer prints IMMUNE over your own aeon; a status move a foe resists completely still says IMMUNE. FFX Yuna’s Overdrive row now reads “Open the Overdrive menu.” where it used to say “Timed input”. Release 55 2026-10-18 BOTH A second title screen, The Echo, can be chosen on the PRESENTATION page in OPTIONS, with two more chapter select tracks; the Farplane screen and track B stay the defaults. BOTH The title screen has a CHANGELOG entry (key L) with a note for each release, and it shows the build number. FFX Tidus, Yuna and Auron speak in the FFX chapters, with VOICE and VOICE-OVER rows in OPTIONS. FFX Kimahri and Lulu are drawn as jointed figures that move from pose to pose, instead of swapping between paintings. FFX The command menu follows the game more closely: rows grey where the game greys them, one-entry lists open, and a cure starts on the caster. FFX Chapter III’s later fights lose the aeons Yu Yevon has taken, and Grand Summon no longer lets you pick a knocked-out aeon. Release 54 2026-10-18 FFX Bosses use the game’s own records: Seymour Flux cannot be Slowed, Evrae can be Doomed, and the Yu Pagodas are immune to Shell, Protect, Reflect and the Nul spells. FFX Lulu’s Doublecast is two separate choices at the menu, a spell and its target each time, and each cast pays its own cost. FFX Chapter XIV: in Isaaru’s three aeon duels Defend is off and Yuna’s menu is Summon and Grand Summon only, as in the game. FFX The Isaaru strategy guide says what Yuna’s menu is in those duels. Release 53 2026-10-17 BOTH One rule now sizes every standing pose, so a figure keeps its size when it changes pose; FFX-2’s dresspheres change most. BOTH A strike starts more gently, and a slow frame is a slow frame, so a pose swap jerks the figure less. BOTH The battle-start card waits for the camera’s framing, so the first menu no longer opens over a figure still being resized. FFX An action that hits several targets lands hit by hit in the game’s own order. FFX-2 A chain lasts as long as the target’s own flinch, so the window differs from body to body. FFX-2 Chapter VI: the later acts open like fresh fights, as in the game. Release 52 2026-10-17 BOTH A painting nobody checked is no longer drawn: the figure shows the next pose down instead of swapping to one the engine cannot place. BOTH A pose change in the middle of a fade no longer drops a painting that still shows, which had left a hole in the figure and a step of the head. BOTH 36 painted figures, among them Valefor, Ixion, Paragon, Sin and its fins, now carry the measurements the pose checks need. FFX-2 Five Lady Luck poses stand on the floor at their true height. Release 51 2026-10-17 FFX The Overdrive minigames are the game’s own: Swordplay’s marker moves in whole steps and its gold zone is the game’s narrower one. FFX Counterattack, Evade and Counter and Magic Counter answer a hit the way the game decides it. FFX What a boss leaves behind (gil, AP and loot) is the game’s own roll, paid the moment it falls. FFX-2 Rewards arrive the moment a monster falls, not when the battle is won. FFX-2 A Confused girl acts on her own, picking from what a Confused girl may do. FFX-2 The 44 Garment Grids follow the game, and the Alchemist’s Mix row is greyed until its item picker exists. Release 50.1 2026-10-16 FFX A hurt Lulu is no longer drawn at two thirds of her height in any chapter. FFX Lulu’s low-HP slouch is drawn at her true height too. BOTH Nothing else changed in the regular chapters: the fights play exactly as they did. Release 50 2026-10-16 FFX Battles start the way the game’s do: every battle spends the game’s start-up roll, and the opening shuffle in Chapters VII and XII follows the game. FFX-2 An item leaves the bag the moment a girl picks it, so two girls can no longer both take the last Phoenix Down. FFX-2 While the last spells of a fight finish, the screen says so and the command window closes on the last blow. FFX-2 The greyed White Magic row under Itchy says why, and Osmose reads “MP damage”. FFX-2 At phone width the enemy header no longer prints names over each other, as Vegnagun’s Bulwarks and Redoubts did. Release 48 2026-10-14 FFX Rikku’s Mix works the way the game’s does: any two items make something. FFX-2 The girls’ automatic abilities work the way the game’s do, and the battle menu follows the game’s own rules. FFX-2 The Silence card says no spells, Dances or Songs, and the move text reads the game’s own rows (MP damage, Osmose, Delta Attack). FFX-2 While a girl is Itchy on a desktop, the greyed Attack, Skill and Item keep their names. Release 47 2026-10-14 BOTH A new ACCESSIBILITY tab in the pause menu, right after OPTIONS, holds TEXT SIZE and four more rows. BOTH REDUCE FLASHES softens 22 flashing effects to about a third of their strength. BOTH COLOUR VISION (red-green or blue-yellow) changes only the four things that blur together. FFX The command rules follow the game’s own checks: Silence cuts off White and Black Magic, and a Silenced Yuna can still summon. FFX-2 Rikku’s eight brighter dresspheres are brought down to Yuna’s colour level, her hair kept golden. BOTH The small files that sit beside the paintings on the site are cut to what the game reads, so pages load less. Release 46 2026-10-14 BOTH 29 more of the games’ everyday sounds are recorded originals, each within 1.5 dB of the sound it replaces. FFX-2 Chapter IV’s quiet victory tune stops when you press Continue after the tally. BOTH The victory tunes of both games and of Chapter IV loop without a breath. FFX-2 An ordinary enemy’s defeat plays the recorded sound it has. BOTH On a phone, the party prep page’s small coloured text uses four approved shades. Release 45 2026-10-13 BOTH 27 more music tracks made with ElevenLabs join or replace the score, and the results screen has its own victory intro and loop. BOTH 18 more of the games’ everyday sounds are recorded originals. BOTH On a phone, the first-run guide’s arrow no longer prints over the MORE BELOW cue. FFX-2 Chapter XIII: Paragon’s size step lands before the figure is on screen. Release 44 2026-10-13 BOTH Bosses and aeons arrive as pyreflies gathering, instead of appearing whole in one frame. BOTH On a phone, party prep is one long page with a pinned tab bar and sections that fold. FFX-2 Chapter XIII: the move advisor puts the chapter’s own line on top. BOTH The chapter board loads small copies of the pictures in its strips first, so it opens with far less to download. Release 43 2026-10-13 BOTH A chapter’s scene, boss and victory music is fetched when you confirm its card and held until it plays. BOTH Text on party prep, results and the Sensor chips is never smaller than 14 pixels. FFX Evrae and Sin’s fins no longer snap between pictures when they charge. FFX A status that the knock-out wipes in the same action that landed it plays no flash, cue or message of its own. Release 42 2026-10-12 FFX-2 Fights keep time the way the game does: its clock, the three ATB speeds, each command’s own recovery and the game’s cast times. FFX-2 Bahamut, Vegnagun and Shuyin fight by the game’s own scripts, and Bahamut’s Mega Flare counts 5 to 1 whatever Slow or Haste do. FFX-2 Chapters VI, XV and XVI follow the game’s scripts for the Syndicate, the Den of Woe and Ixion. BOTH Battles draw their luck the way each game does, from its own separate random streams, so every fight is a different but fair deal. FFX Gear bonuses of one kind add up, and a spell aimed at Reflect comes back at whoever cast it, Hastega and the Nul spells included. Release 41 2026-10-11 FFX-2 Chapter IV: the opening shot no longer shows two dark slabs down its sides, and Bahamut stays whole in every frame of the move. BOTH The hooks for the games’ own sound effects at each moment are in, and silent: nothing sounds different yet. BOTH Nothing else changed: the fights play exactly as they did. Release 40 2026-10-11 BOTH A knocked-out party member now falls: the figure buckles, tips over and lands, and a revive plays it back. REDUCE MOTION keeps a plain cut. BOTH A hit pushes the figure back over a moment, instead of throwing it the whole way on the hit’s first frame. BOTH Pose changes run on the real clock, so a hit-stop or the pace option no longer freezes or stretches a blend. FFX Four new battle themes: Seymour Natus, Isaaru, Sin’s fins and core, and Sin’s face; the Evrae theme’s loop no longer clicks. FFX-2 Two new battle themes: one for the Fallen Aeons and Ixion, one for Trema’s second phase. BOTH Sound effect levels follow the games’ measured balance. Release 39.4.5 2026-10-11 FFX Chapter XVIII: Sin’s last attack comes on his twelfth turn, as in the game. FFX Chapter X: Natus’s Flare comes every third turn or so, as in the game. FFX Overdrive bars follow the game’s rules: every hit adds at least a point, Shield stops a bar filling and Boost doubles it. FFX Chapter IX: Yuna now pays for her Summon, so the fight plays differently; call the aeon late, when Yojimbo’s gauge reaches 96. FFX The strategy guide cards for Evrae, Yojimbo, the Seymours and others are rewritten from the game’s own scripts. FFX On the airship, Cid is offered one order at a time: Pull back, Close in, or Cancel. Release 39.4.4 2026-10-11 FFX-2 Chapter IV: Bahamut is drawn at his in-battle size, about 3.3 times the girls, and the girls are back near their old height. FFX-2 Two new battle themes: a slow piano lament for Bahamut and a brass parade into a funk groove for the Syndicate. BOTH The “two soundtracks at once” bug is fixed: only the last link of a chained fight plays the victory fanfare. FFX-2 Yuna’s White Mage hurt and knocked-out paintings are the old approved ones again, hood up. FFX Who acts next and what a status does follow the game’s own program; Chapter X is harder. Release 39.4.3 2026-10-09 BOTH The party stands at the real games’ heights, measured from the games themselves. FFX-2 The giants, Bahamut and Paragon with Oversoul, are drawn at their in-game size. FFX Lady Yunalesca’s first form is drawn at her model’s full height, and Seymour Omnis’s discs turn through the game’s own ring. FFX Every attack, spell, item and Overdrive decides whether it hits, crits or inflicts by the game’s own rows, and the bosses follow their scripts. FFX-2 The same for every attack and enemy move: Chapters V and XV are harder, Chapter XI is easier and Chapter XIII is much easier. Release 39.4.2 2026-10-08 FFX-2 Chapter VI: the fiends stand back where they stood in 39.4, because standing right beside the party looked wrong. FFX-2 They keep the true sizes that 39.4.1 gave them, so each fiend is bigger than it was in 39.4. FFX-2 The move advisor’s card is back to its full size in this chapter, and the card that shows what a fiend does next still covers no fiend’s head. BOTH Nothing else changed: the fights play exactly as they did. Release 39.4.1 2026-10-07 FFX-2 Chapter VI: every fiend is drawn at the size the game’s own models give it, so the bosses no longer look tiny beside the three girls. FFX-2 The fiends stand closer to the party with their heads level, so a taller fiend stands nearer instead of further back. FFX-2 The card that shows what a fiend does next no longer covers Ormi’s head. FFX-2 The move advisor’s card is cut to three lines in this chapter so it clears the bigger fiends’ feet. BOTH Nothing else changed: the fights play exactly as they did. Release 39.4 2026-10-07 BOTH 586 character and boss poses were cleaned up: the jagged white fringe on hair and cloth is gone, and where a figure ran off its painting’s edge a hard cut is now a soft fade. BOTH A figure’s head keeps its size when it changes pose, a knock-out included. FFX-2 Paine’s Black Mage dress matches her idle colours in five poses. FFX Yuna’s skirt matches her idle colours in four poses. BOTH New music: a new title-screen track and a new track for the chapter select board. FFX New battle music for Seymour Flux in Chapter I and Seymour Omnis in Chapter XII. ↑ ↓ SCROLL ESC OR ENTER CLOSE",
+   "Release 76 2026-11-06 BOTH Leaving a fight now frees the graphics memory its fighters’ contact shadows used; before, that memory stayed behind after every battle. FFX Retrying a Final Fantasy X chapter again and again no longer adds that leftover shadow memory with each try. FFX-2 The same in Final Fantasy X-2: retrying a chapter no longer adds that leftover shadow memory with each try.",
+   "BOTH Leaving a fight now frees the graphics memory its fighters’ contact shadows used; before, that memory stayed behind after every battle.",
+   "FFX Retrying a Final Fantasy X chapter again and again no longer adds that leftover shadow memory with each try.",
+   "FFX-2 The same in Final Fantasy X-2: retrying a chapter no longer adds that leftover shadow memory with each try.",
+   "Release 75 2026-11-06 FFX Chapter XII’s enemy-move card no longer prints a damage range backwards (it showed 4,132-2,333 for Seymour Omnis’s spells); it now reads low to high and keeps one target across the range. FFX-2 Rikku as an Alchemist no longer shows a greyed-out Mix in the command menu while Mix cannot be used. FFX On a desktop-sized window the party prep card’s tip is a shorter form of the same words for Seymour Natus, Seymour Omnis, Isaaru and the Mirror Aeons, so it is not cut off mid-line at 1600 x 900. FFX-2 The same shorter tip on the prep card for the Fallen Aeons, Trema and the Den of Woe.",
+   "FFX Chapter XII’s enemy-move card no longer prints a damage range backwards (it showed 4,132-2,333 for Seymour Omnis’s spells); it now reads low to high and keeps one target across the range.",
+   "FFX-2 Rikku as an Alchemist no longer shows a greyed-out Mix in the command menu while Mix cannot be used.",
+   "FFX On a desktop-sized window the party prep card’s tip is a shorter form of the same words for Seymour Natus, Seymour Omnis, Isaaru and the Mirror Aeons, so it is not cut off mid-line at 1600 x 900.",
+   "FFX-2 The same shorter tip on the prep card for the Fallen Aeons, Trema and the Den of Woe.",
+   "Release 74 2026-11-03 FFX Sin’s Fins and Core (Chapter XVII) gets the presentation of Chapter I: the new hit look, glass numbers, fighter motion, effects and sound. Its battle screen stays as it was. FFX Lulu’s head now stays the same size from pose to pose; it no longer swells when she casts or shrinks when she is knocked out. FFX Chapter XII’s Sensor card now steps off the target flag at more cursor positions than before. BOTH A revived fighter now rises through a longer, even blend from the lying figure to the standing one, so it no longer jumps.",
+   "FFX Sin’s Fins and Core (Chapter XVII) gets the presentation of Chapter I: the new hit look, glass numbers, fighter motion, effects and sound. Its battle screen stays as it was."
+  ],
+  "consoleErrors": []
+ }
+}

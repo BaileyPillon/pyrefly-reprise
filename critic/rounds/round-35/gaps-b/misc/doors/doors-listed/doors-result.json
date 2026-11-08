@@ -1,0 +1,274 @@
+{
+ "tag": "doors-listed",
+ "mode": "listed",
+ "game": "all",
+ "base": "https://echoesofspira.com/",
+ "startedAt": "2026-11-07T19:08:26.717Z",
+ "setupAids": [
+  "window.__pyrefly.setSeed(1) before the first key"
+ ],
+ "cases": [
+  {
+   "id": "seymour-flux",
+   "game": "ffx",
+   "steps": [],
+   "cardFound": true,
+   "read": {
+    "screen": "battle",
+    "chapter": {
+     "id": "seymour-flux",
+     "game": "ffx",
+     "title": "Seymour Flux"
+    },
+    "rows": [
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items",
+     "Flee"
+    ],
+    "party": [
+     "Tidus",
+     "Yuna",
+     "Kimahri"
+    ],
+    "foes": [
+     "Seymour Flux",
+     "Mortiorchis"
+    ],
+    "awaitingMenu": true,
+    "links": 1,
+    "ffxLabels": 5,
+    "ffx2Labels": 0,
+    "classCounts": {
+     "ffxDash": 76,
+     "ffx2": 0,
+     "ctb": 0,
+     "atb": 0,
+     "f1": 33
+    },
+    "hasOpenLock": false,
+    "hasSummon": false,
+    "hasSkill": false,
+    "hasChange": false,
+    "body": "Tidus Yuna Seymour Flux ATTACK SPECIAL ×4 WHITE MAGIC ×3 ITEMS ×27 FLEE ▼ Tidus 2420 /2420 115 /115 OD Yuna 1500 /1500 270 /270 OD KO Kimahri 0 /2310 130 /130 O"
+   },
+   "chapterOpened": "seymour-flux",
+   "chapterGame": "ffx",
+   "hudGame": "ffx",
+   "pass": true,
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "id": "yunalesca",
+   "game": "ffx",
+   "steps": [],
+   "cardFound": true,
+   "read": {
+    "screen": "battle",
+    "chapter": {
+     "id": "yunalesca",
+     "game": "ffx",
+     "title": "Lady Yunalesca"
+    },
+    "rows": [
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items",
+     "Flee"
+    ],
+    "party": [
+     "Tidus",
+     "Yuna",
+     "Auron"
+    ],
+    "foes": [
+     "Yunalesca"
+    ],
+    "awaitingMenu": true,
+    "links": 1,
+    "ffxLabels": 5,
+    "ffx2Labels": 0,
+    "classCounts": {
+     "ffxDash": 57,
+     "ffx2": 0,
+     "ctb": 0,
+     "atb": 0,
+     "f1": 33
+    },
+    "hasOpenLock": false,
+    "hasSummon": false,
+    "hasSkill": false,
+    "hasChange": false,
+    "body": "Tidus Yuna Auron ATTACK SPECIAL ×4 WHITE MAGIC ×3 ITEMS ×17 FLEE ▼ Tidus 3410 /3410 170 /170 OD Yuna 2450 /2450 290 /290 OD Auron 3972 /4400 110 /110 OD G GUIDE"
+   },
+   "chapterOpened": "yunalesca",
+   "chapterGame": "ffx",
+   "hudGame": "ffx",
+   "pass": true,
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "id": "braskas-final-aeon",
+   "game": "ffx",
+   "steps": [],
+   "cardFound": true,
+   "read": {
+    "screen": "battle",
+    "chapter": {
+     "id": "braskas-final-aeon",
+     "game": "ffx",
+     "title": "Braska's Final Aeon"
+    },
+    "rows": [
+     "Talk",
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items"
+    ],
+    "party": [
+     "Tidus",
+     "Yuna",
+     "Auron"
+    ],
+    "foes": [
+     "Braska's Final Aeon",
+     "Yu Pagoda",
+     "Yu Pagoda"
+    ],
+    "awaitingMenu": true,
+    "links": 1,
+    "ffxLabels": 5,
+    "ffx2Labels": 0,
+    "classCounts": {
+     "ffxDash": 58,
+     "ffx2": 0,
+     "ctb": 0,
+     "atb": 0,
+     "f1": 33
+    },
+    "hasOpenLock": false,
+    "hasSummon": false,
+    "hasSkill": false,
+    "hasChange": false,
+    "body": "Tidus Yu Pagoda A Yu Pagoda B TALK ATTACK SPECIAL ×4 WHITE MAGIC ×3 ITEMS ×15 ▼ Tidus 6492 /6492 140 /140 OD Yuna 5130 /5130 320 /320 OD Auron 4281 /6492 100 /1"
+   },
+   "chapterOpened": "braskas-final-aeon",
+   "chapterGame": "ffx",
+   "hudGame": "ffx",
+   "pass": true,
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "id": "ffx2-bahamut",
+   "game": "ffx2",
+   "steps": [],
+   "cardFound": true,
+   "read": {
+    "screen": "battle",
+    "chapter": {
+     "id": "ffx2-bahamut",
+     "game": "ffx2",
+     "title": "Bahamut"
+    },
+    "rows": [
+     "Attack",
+     "Skill",
+     "Change",
+     "Item"
+    ],
+    "party": [
+     "Yuna",
+     "Rikku",
+     "Paine"
+    ],
+    "foes": [
+     "Bahamut"
+    ],
+    "awaitingMenu": true,
+    "links": 1,
+    "ffxLabels": 0,
+    "ffx2Labels": 4,
+    "classCounts": {
+     "ffxDash": 1,
+     "ffx2": 72,
+     "ctb": 0,
+     "atb": 1,
+     "f1": 31
+    },
+    "hasOpenLock": false,
+    "hasSummon": false,
+    "hasSkill": true,
+    "hasChange": true,
+    "body": "SCAN WM WM Yuna 690 /690 130 /130 DK DK Rikku 1839 /1839 158 /158 WR WR Paine 1706 /1706 67 /67 ATTACK SKILL ◂ CHANGE ◂ ITEM ◂ G GUIDE Paine Magic Break → Baham"
+   },
+   "chapterOpened": "ffx2-bahamut",
+   "chapterGame": "ffx2",
+   "hudGame": "ffx2",
+   "pass": true,
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "id": "ffx2-vegnagun-shuyin",
+   "game": "ffx2",
+   "steps": [],
+   "cardFound": true,
+   "read": {
+    "screen": "battle",
+    "chapter": {
+     "id": "ffx2-vegnagun-shuyin",
+     "game": "ffx2",
+     "title": "Vegnagun"
+    },
+    "rows": [
+     "Attack",
+     "Skill",
+     "Change",
+     "Item"
+    ],
+    "party": [
+     "Yuna",
+     "Rikku",
+     "Paine"
+    ],
+    "foes": [
+     "Vegnagun"
+    ],
+    "awaitingMenu": true,
+    "links": 1,
+    "ffxLabels": 0,
+    "ffx2Labels": 4,
+    "classCounts": {
+     "ffxDash": 1,
+     "ffx2": 71,
+     "ctb": 0,
+     "atb": 1,
+     "f1": 31
+    },
+    "hasOpenLock": false,
+    "hasSummon": false,
+    "hasSkill": true,
+    "hasChange": true,
+    "body": "SCAN WM WM Yuna 1238 /2488 206 /206 DK DK Rikku 4402 /5652 224 /224 DK DK Paine 4612 /5862 229 /229 ATTACK SKILL ◂ CHANGE ◂ ITEM ◂ G GUIDE Rikku Black Sky → all"
+   },
+   "chapterOpened": "ffx2-vegnagun-shuyin",
+   "chapterGame": "ffx2",
+   "hudGame": "ffx2",
+   "pass": true,
+   "consoleErrors": [],
+   "notFound": []
+  }
+ ],
+ "finishedAt": "2026-11-07T19:14:35.368Z",
+ "summary": {
+  "cases": 5,
+  "passed": 5,
+  "failed": []
+ }
+}

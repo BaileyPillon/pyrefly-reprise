@@ -1,0 +1,86 @@
+[
+ {
+  "file": "sweep-prep-seymour-flux-1600x900/prep-tab0.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep seymour-flux 1600x900 tab 0",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T19:44:00.620Z"
+ },
+ {
+  "file": "sweep-prep-ffx2-bahamut-1600x900/prep-tab0.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep ffx2-bahamut 1600x900 tab 0",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T19:44:18.211Z"
+ },
+ {
+  "file": "sweep-prep-seymour-flux-390x844/prep-tab0.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "size": "390x844",
+  "input": "touch + keyboard",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep seymour-flux 390x844 tab 0",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T19:44:33.354Z"
+ },
+ {
+  "file": "sweep-prep-ffx2-bahamut-390x844/prep-tab0.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "size": "390x844",
+  "input": "touch + keyboard",
+  "injected": false,
+  "seed": 1,
+  "state": "party prep ffx2-bahamut 390x844 tab 0",
+  "asserted": "screen=party-prep",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "party-prep"
+   ],
+   "titleRoots": 0,
+   "screen": "party-prep"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-07T19:44:50.810Z"
+ }
+]

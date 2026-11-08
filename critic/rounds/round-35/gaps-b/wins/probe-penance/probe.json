@@ -1,0 +1,875 @@
+{
+ "E": {
+  "actor": "yuna",
+  "active": [
+   "tidus",
+   "yuna",
+   "rikku"
+  ],
+  "reserve": [
+   "auron",
+   "wakka",
+   "lulu",
+   "kimahri"
+  ],
+  "foes": [
+   "penance",
+   "penance-right-arm",
+   "penance-left-arm"
+  ],
+  "units": {
+   "tidus": {
+    "name": "Tidus",
+    "side": "party",
+    "hp": 9999,
+    "mp": 999,
+    "maxHp": 9999,
+    "alive": true,
+    "removed": false,
+    "od": 40,
+    "st": {
+     "protect": 0,
+     "haste": 0
+    }
+   },
+   "yuna": {
+    "name": "Yuna",
+    "side": "party",
+    "hp": 9999,
+    "mp": 999,
+    "maxHp": 9999,
+    "alive": true,
+    "removed": false,
+    "od": 50,
+    "st": {
+     "protect": 0,
+     "haste": 0
+    }
+   },
+   "auron": {
+    "name": "Auron",
+    "side": "party",
+    "hp": 9999,
+    "mp": 999,
+    "maxHp": 9999,
+    "alive": true,
+    "removed": true,
+    "od": 60,
+    "st": {
+     "protect": 0,
+     "haste": 0
+    }
+   },
+   "wakka": {
+    "name": "Wakka",
+    "side": "party",
+    "hp": 9999,
+    "mp": 999,
+    "maxHp": 9999,
+    "alive": true,
+    "removed": true,
+    "od": 35,
+    "st": {
+     "protect": 0,
+     "haste": 0
+    }
+   },
+   "lulu": {
+    "name": "Lulu",
+    "side": "party",
+    "hp": 9999,
+    "mp": 999,
+    "maxHp": 9999,
+    "alive": true,
+    "removed": true,
+    "od": 45,
+    "st": {
+     "protect": 0,
+     "haste": 0
+    }
+   },
+   "rikku": {
+    "name": "Rikku",
+    "side": "party",
+    "hp": 9999,
+    "mp": 999,
+    "maxHp": 9999,
+    "alive": true,
+    "removed": false,
+    "od": 100,
+    "st": {
+     "protect": 0,
+     "haste": 0
+    }
+   },
+   "kimahri": {
+    "name": "Kimahri",
+    "side": "party",
+    "hp": 9999,
+    "mp": 999,
+    "maxHp": 9999,
+    "alive": true,
+    "removed": true,
+    "od": 40,
+    "st": {
+     "protect": 0,
+     "haste": 0
+    }
+   },
+   "valefor": {
+    "name": "Valefor",
+    "side": "aeon",
+    "hp": 13897,
+    "mp": 435,
+    "maxHp": 13897,
+    "alive": true,
+    "removed": true,
+    "od": 60,
+    "st": {}
+   },
+   "ifrit": {
+    "name": "Ifrit",
+    "side": "aeon",
+    "hp": 16914,
+    "mp": 425,
+    "maxHp": 16914,
+    "alive": true,
+    "removed": true,
+    "od": 55,
+    "st": {}
+   },
+   "ixion": {
+    "name": "Ixion",
+    "side": "aeon",
+    "hp": 17397,
+    "mp": 445,
+    "maxHp": 17397,
+    "alive": true,
+    "removed": true,
+    "od": 50,
+    "st": {}
+   },
+   "shiva": {
+    "name": "Shiva",
+    "side": "aeon",
+    "hp": 15897,
+    "mp": 465,
+    "maxHp": 15897,
+    "alive": true,
+    "removed": true,
+    "od": 55,
+    "st": {}
+   },
+   "bahamut": {
+    "name": "Bahamut",
+    "side": "aeon",
+    "hp": 23880,
+    "mp": 643,
+    "maxHp": 23880,
+    "alive": true,
+    "removed": true,
+    "od": 70,
+    "st": {}
+   },
+   "penance": {
+    "name": "Penance",
+    "side": "enemy",
+    "hp": 12000000,
+    "mp": 999,
+    "maxHp": 12000000,
+    "alive": true,
+    "removed": false,
+    "od": null,
+    "st": {
+     "protect": 0
+    }
+   },
+   "penance-right-arm": {
+    "name": "Right Arm",
+    "side": "enemy",
+    "hp": 500000,
+    "mp": 999,
+    "maxHp": 500000,
+    "alive": true,
+    "removed": false,
+    "od": null,
+    "st": {}
+   },
+   "penance-left-arm": {
+    "name": "Left Arm",
+    "side": "enemy",
+    "hp": 500000,
+    "mp": 999,
+    "maxHp": 500000,
+    "alive": true,
+    "removed": false,
+    "od": null,
+    "st": {}
+   }
+  },
+  "flags": {
+   "pen.phase": 0,
+   "pen.counter": 0
+  }
+ },
+ "M": {
+  "actorId": "yuna",
+  "commands": [
+   {
+    "label": "Attack",
+    "category": "attack",
+    "enabled": true,
+    "why": null,
+    "kind": "attack",
+    "id": null,
+    "targets": [
+     "penance",
+     "penance-right-arm",
+     "penance-left-arm"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Cure",
+    "category": "whitemagic",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "cure",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "Cura",
+    "category": "whitemagic",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "cura",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "Curaga",
+    "category": "whitemagic",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "curaga",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "Esuna",
+    "category": "whitemagic",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "esuna",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "Life",
+    "category": "whitemagic",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "life",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "NulBlaze",
+    "category": "whitemagic",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "nulblaze",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "NulFrost",
+    "category": "whitemagic",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "nulfrost",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "NulShock",
+    "category": "whitemagic",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "nulshock",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "NulTide",
+    "category": "whitemagic",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "nultide",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "Scan",
+    "category": "special",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "scan",
+    "targets": [
+     "penance",
+     "penance-right-arm",
+     "penance-left-arm"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "Protect",
+    "category": "whitemagic",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "protect",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "Shell",
+    "category": "whitemagic",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "shell",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "Reflect",
+    "category": "whitemagic",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "reflect",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku",
+     "penance",
+     "penance-right-arm",
+     "penance-left-arm"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "Dispel",
+    "category": "whitemagic",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "dispel",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku",
+     "penance",
+     "penance-right-arm",
+     "penance-left-arm"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "Regen",
+    "category": "whitemagic",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "regen",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 1
+   },
+   {
+    "label": "Pray",
+    "category": "special",
+    "enabled": true,
+    "why": null,
+    "kind": "ability",
+    "id": "pray",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Valefor",
+    "category": "summon",
+    "enabled": true,
+    "why": null,
+    "kind": "summon",
+    "id": "valefor",
+    "targets": [],
+    "mp": 0
+   },
+   {
+    "label": "Ifrit",
+    "category": "summon",
+    "enabled": true,
+    "why": null,
+    "kind": "summon",
+    "id": "ifrit",
+    "targets": [],
+    "mp": 0
+   },
+   {
+    "label": "Ixion",
+    "category": "summon",
+    "enabled": true,
+    "why": null,
+    "kind": "summon",
+    "id": "ixion",
+    "targets": [],
+    "mp": 0
+   },
+   {
+    "label": "Shiva",
+    "category": "summon",
+    "enabled": true,
+    "why": null,
+    "kind": "summon",
+    "id": "shiva",
+    "targets": [],
+    "mp": 0
+   },
+   {
+    "label": "Bahamut",
+    "category": "summon",
+    "enabled": true,
+    "why": null,
+    "kind": "summon",
+    "id": "bahamut",
+    "targets": [],
+    "mp": 0
+   },
+   {
+    "label": "X-Potion",
+    "category": "item",
+    "enabled": true,
+    "why": null,
+    "kind": "item",
+    "id": "x-potion",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Phoenix Down",
+    "category": "item",
+    "enabled": true,
+    "why": null,
+    "kind": "item",
+    "id": "phoenix-down",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku",
+     "penance",
+     "penance-right-arm",
+     "penance-left-arm"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Mega Phoenix",
+    "category": "item",
+    "enabled": true,
+    "why": null,
+    "kind": "item",
+    "id": "mega-phoenix",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Remedy",
+    "category": "item",
+    "enabled": true,
+    "why": null,
+    "kind": "item",
+    "id": "remedy",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Soft",
+    "category": "item",
+    "enabled": true,
+    "why": null,
+    "kind": "item",
+    "id": "soft",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Holy Water",
+    "category": "item",
+    "enabled": true,
+    "why": null,
+    "kind": "item",
+    "id": "holy-water",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Ether",
+    "category": "item",
+    "enabled": true,
+    "why": null,
+    "kind": "item",
+    "id": "ether",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Turbo Ether",
+    "category": "item",
+    "enabled": true,
+    "why": null,
+    "kind": "item",
+    "id": "turbo-ether",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Elixir",
+    "category": "item",
+    "enabled": true,
+    "why": null,
+    "kind": "item",
+    "id": "elixir",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Stamina Tonic",
+    "category": "item",
+    "enabled": true,
+    "why": null,
+    "kind": "item",
+    "id": "stamina-tonic",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Three Stars",
+    "category": "item",
+    "enabled": true,
+    "why": null,
+    "kind": "item",
+    "id": "three-stars",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Lunar Curtain",
+    "category": "item",
+    "enabled": true,
+    "why": null,
+    "kind": "item",
+    "id": "lunar-curtain",
+    "targets": [
+     "tidus",
+     "yuna",
+     "rikku"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Mana Spring",
+    "category": "item",
+    "enabled": true,
+    "why": null,
+    "kind": "item",
+    "id": "mana-spring",
+    "targets": [
+     "penance",
+     "penance-right-arm",
+     "penance-left-arm"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Defend",
+    "category": "special",
+    "enabled": true,
+    "why": null,
+    "kind": "defend",
+    "id": null,
+    "targets": [
+     "yuna"
+    ],
+    "mp": 0
+   },
+   {
+    "label": "Auron",
+    "category": "special",
+    "enabled": true,
+    "why": null,
+    "kind": "switch",
+    "id": null,
+    "targets": [],
+    "mp": 0
+   },
+   {
+    "label": "Wakka",
+    "category": "special",
+    "enabled": true,
+    "why": null,
+    "kind": "switch",
+    "id": null,
+    "targets": [],
+    "mp": 0
+   },
+   {
+    "label": "Lulu",
+    "category": "special",
+    "enabled": true,
+    "why": null,
+    "kind": "switch",
+    "id": null,
+    "targets": [],
+    "mp": 0
+   },
+   {
+    "label": "Kimahri",
+    "category": "special",
+    "enabled": true,
+    "why": null,
+    "kind": "switch",
+    "id": null,
+    "targets": [],
+    "mp": 0
+   },
+   {
+    "label": "Escape",
+    "category": "special",
+    "enabled": false,
+    "why": null,
+    "kind": "escape",
+    "id": null,
+    "targets": [],
+    "mp": 0
+   }
+  ]
+ },
+ "groups": {
+  "Special": {
+   "rows": [
+    "Scan",
+    "Pray"
+   ],
+   "picker": [],
+   "cursor": false
+  },
+  "White Magic": {
+   "rows": [
+    "Cure",
+    "Cura",
+    "Curaga",
+    "Esuna",
+    "Life",
+    "NulBlaze"
+   ],
+   "picker": [],
+   "cursor": false
+  },
+  "Items": {
+   "rows": [
+    "X-Potion",
+    "Phoenix Down",
+    "Mega Phoenix",
+    "Remedy",
+    "Soft",
+    "Holy Water"
+   ],
+   "picker": [],
+   "cursor": false
+  },
+  "Summon": {
+   "rows": [
+    "Valefor",
+    "Ifrit",
+    "Ixion",
+    "Shiva",
+    "Bahamut"
+   ],
+   "picker": [],
+   "cursor": false
+  }
+ },
+ "settings": {
+  "save": {
+   "masterVolume": 0.8,
+   "musicVolume": 0.7,
+   "sfxVolume": 0.7,
+   "sfxBalanceMigrated": true,
+   "voiceOn": true,
+   "voiceVolume": 0.9,
+   "textSpeed": 1,
+   "skipSeenCutscenes": false,
+   "lowEffects": false,
+   "fxLight": true,
+   "fxLiving": true,
+   "fxSpectacle": true,
+   "fxDof": true,
+   "fxFog": true,
+   "fxEdges": true,
+   "fxBreath": true,
+   "fxKo": true,
+   "fxFraming": true,
+   "fxHero": true,
+   "fxSphere": true,
+   "fxSplash": true,
+   "textSize": 1,
+   "reduceFlashes": false,
+   "colourVision": "off",
+   "guideVisible": true,
+   "advisorVisible": true,
+   "intentVisible": true,
+   "ffx2Atb": "wait",
+   "ffx2AtbMigrated": true,
+   "pausePanelsHidden": false,
+   "battleHelp": true,
+   "titleArt": "echo",
+   "titleArtPicked": false,
+   "chapterSelectMusic": "b",
+   "visualStyle": "hd2d",
+   "reduceMotion": false
+  },
+  "screenKeys": [
+   "chapter",
+   "game",
+   "scene",
+   "scenePlaceholder",
+   "preview",
+   "links",
+   "chainLength",
+   "paused",
+   "canPause",
+   "canPauseOnCancel",
+   "exitIntent",
+   "playTimeMs",
+   "hud",
+   "rig",
+   "actors",
+   "spellFx",
+   "playback",
+   "battle",
+   "log"
+  ]
+ },
+ "top": [
+  "Attack *",
+  "Special",
+  "White Magic",
+  "Items",
+  "Summon",
+  "Escape (disabled)"
+ ]
+}

@@ -1,0 +1,1414 @@
+{
+ "chapter": "penance",
+ "door": "judgment",
+ "game": "ffx",
+ "base": "https://echoesofspira.com/",
+ "seed": 1,
+ "startedAt": "2026-11-07T13:57:37.787Z",
+ "stateWrites": [],
+ "decisions": [
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Three Stars (MP cost 0 for Quick Hit, Dispel, Esuna)",
+   "did": true,
+   "how": "path=Items > Three Stars; ",
+   "cmd": {
+    "label": "Three Stars",
+    "id": "three-stars",
+    "kind": "item"
+   },
+   "ticks": 0,
+   "turn": 1,
+   "ms": 384369,
+   "rowsBefore": null,
+   "events": [
+    "yuna:three-stars->tidus+yuna+rikku"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-left-arm (500000 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 1,
+   "turn": 2,
+   "ms": 388052,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Hyper NulAll (the guides' opening Mix)",
+   "did": true,
+   "how": "path=Overdrive (picker); picker; ",
+   "cmd": {
+    "label": "Mix",
+    "id": "mix",
+    "kind": "overdrive"
+   },
+   "ticks": 1,
+   "turn": 3,
+   "ms": 394611,
+   "rowsBefore": null,
+   "events": [
+    "rikku:mix-hyper-nul-all->tidus+yuna+rikku"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes penance-left-arm (400001 left)",
+   "did": true,
+   "how": "path=top; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 3,
+   "turn": 4,
+   "ms": 399914,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-left-arm (300002 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 4,
+   "turn": 5,
+   "ms": 403617,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance-left-arm",
+    "  dmg penance-left-arm 99999",
+    "penance:penance-obliteration->",
+    "  dmg tidus 5800",
+    "  dmg yuna 6289",
+    "  dmg rikku 6126",
+    "  COUNTER x-potion (auto-potion)",
+    "tidus:x-potion->tidus",
+    "  COUNTER x-potion (auto-potion)",
+    "yuna:x-potion->yuna",
+    "  COUNTER x-potion (auto-potion)",
+    "rikku:x-potion->rikku"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-left-arm (200003 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 7,
+   "turn": 7,
+   "ms": 410376,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes penance-left-arm (100004 left)",
+   "did": true,
+   "how": "path=top; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 7,
+   "turn": 8,
+   "ms": 412599,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance-left-arm",
+    "  dmg penance-left-arm 99999",
+    "penance-right-arm:dark-calamity->rikku"
+   ]
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Hyper NulAll (the guides' opening Mix)",
+   "did": true,
+   "how": "path=Overdrive (picker); picker; ",
+   "cmd": {
+    "label": "Mix",
+    "id": "mix",
+    "kind": "overdrive"
+   },
+   "ticks": 0,
+   "turn": 1,
+   "ms": 440864,
+   "rowsBefore": null,
+   "events": [
+    "rikku:mix-hyper-nul-all->tidus+yuna+rikku"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "tidus",
+   "why": "Three Stars (MP cost 0 for Quick Hit, Dispel, Esuna)",
+   "did": true,
+   "how": "path=Items > Three Stars; ",
+   "cmd": {
+    "label": "Three Stars",
+    "id": "three-stars",
+    "kind": "item"
+   },
+   "ticks": 3,
+   "turn": 2,
+   "ms": 453613,
+   "rowsBefore": null,
+   "events": [
+    "tidus:three-stars->tidus+yuna+rikku"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes penance-left-arm (500000 left)",
+   "did": true,
+   "how": "path=top; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 3,
+   "turn": 3,
+   "ms": 456695,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-left-arm (400001 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 6,
+   "turn": 4,
+   "ms": 460547,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes penance-left-arm (300002 left)",
+   "did": true,
+   "how": "path=top; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 7,
+   "turn": 5,
+   "ms": 463616,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-left-arm (200003 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 9,
+   "turn": 7,
+   "ms": 476499,
+   "rowsBefore": null,
+   "events": [
+    "penance:penance-obliteration->",
+    "  dmg tidus 6172",
+    "  dmg yuna 6289",
+    "  dmg rikku 5940",
+    "  COUNTER x-potion (auto-potion)",
+    "tidus:x-potion->tidus",
+    "  COUNTER x-potion (auto-potion)",
+    "yuna:x-potion->yuna",
+    "  COUNTER x-potion (auto-potion)",
+    "rikku:x-potion->rikku",
+    "tidus:quick-hit->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku strikes penance-left-arm (100004 left)",
+   "did": true,
+   "how": "path=top; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 9,
+   "turn": 8,
+   "ms": 479562,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes penance-left-arm (5 left)",
+   "did": true,
+   "how": "path=top; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 11,
+   "turn": 9,
+   "ms": 481979,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance-left-arm",
+    "  dmg penance-left-arm 99999",
+    "  KO penance-left-arm (by attack)",
+    "  MSG \"Left Arm withers\""
+   ]
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-right-arm (500000 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 12,
+   "turn": 10,
+   "ms": 487597,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance-right-arm",
+    "  dmg penance-right-arm 99999"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku strikes penance-right-arm (402054 left)",
+   "did": true,
+   "how": "path=top; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 13,
+   "turn": 12,
+   "ms": 494108,
+   "rowsBefore": null,
+   "events": [
+    "penance-right-arm:penance-mighty-guard->penance+penance-right-arm",
+    "rikku:attack->penance-right-arm",
+    "  dmg penance-right-arm 99999"
+   ]
+  },
+  {
+   "n": 10,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-right-arm (306061 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 15,
+   "turn": 13,
+   "ms": 498643,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance-right-arm",
+    "  dmg penance-right-arm 99999"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 1,
+   "actor": "yuna",
+   "why": "Dispel on Penance (Mighty Guard's Regen or the phase-2 Haste)",
+   "did": true,
+   "how": "path=White Magic > Dispel; aim penance=true; ",
+   "cmd": {
+    "label": "Dispel",
+    "id": "dispel",
+    "kind": "ability"
+   },
+   "ticks": 15,
+   "turn": 14,
+   "ms": 505276,
+   "rowsBefore": null,
+   "events": [
+    "yuna:dispel->penance"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku strikes penance-right-arm (210168 left)",
+   "did": true,
+   "how": "path=top; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 17,
+   "turn": 15,
+   "ms": 508429,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->penance-right-arm",
+    "  dmg penance-right-arm 99999",
+    "penance:penance-obliteration->",
+    "  dmg tidus 5916",
+    "  dmg yuna 6312",
+    "  dmg rikku 5776",
+    "  COUNTER x-potion (auto-potion)",
+    "tidus:x-potion->tidus",
+    "  COUNTER x-potion (auto-potion)",
+    "yuna:x-potion->yuna",
+    "  COUNTER x-potion (auto-potion)",
+    "rikku:x-potion->rikku"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-right-arm (112322 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 18,
+   "turn": 17,
+   "ms": 521830,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance-right-arm",
+    "  dmg penance-right-arm 99999"
+   ]
+  },
+  {
+   "n": 14,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes penance-right-arm (14376 left)",
+   "did": true,
+   "how": "path=top; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 19,
+   "turn": 18,
+   "ms": 525255,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance-right-arm",
+    "  dmg penance-right-arm 99999",
+    "  KO penance-right-arm (by attack)",
+    "  MSG \"Right Arm withers\""
+   ]
+  },
+  {
+   "n": 15,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes Penance (12000000 left; no arm stands)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 21,
+   "turn": 19,
+   "ms": 531038,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 16,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku strikes Penance (11900001 left; no arm stands)",
+   "did": true,
+   "how": "path=top; aim penance=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 21,
+   "turn": 20,
+   "ms": 533922,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->penance",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 17,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes penance-left-arm (500000 left)",
+   "did": true,
+   "how": "path=top; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 23,
+   "turn": 21,
+   "ms": 537089,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 18,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-left-arm (400001 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 24,
+   "turn": 22,
+   "ms": 540919,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 19,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku strikes penance-left-arm (300002 left)",
+   "did": true,
+   "how": "path=top; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 25,
+   "turn": 23,
+   "ms": 543998,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 20,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-left-arm (200003 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 27,
+   "turn": 25,
+   "ms": 556873,
+   "rowsBefore": null,
+   "events": [
+    "penance:penance-obliteration->",
+    "  dmg tidus 5707",
+    "  dmg yuna 5823",
+    "  dmg rikku 6056",
+    "  COUNTER x-potion (auto-potion)",
+    "tidus:x-potion->tidus",
+    "  COUNTER x-potion (auto-potion)",
+    "yuna:x-potion->yuna",
+    "  COUNTER x-potion (auto-potion)",
+    "rikku:x-potion->rikku",
+    "tidus:quick-hit->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 21,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes penance-left-arm (100004 left)",
+   "did": true,
+   "how": "path=top; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 27,
+   "turn": 26,
+   "ms": 559993,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 22,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku strikes penance-left-arm (5 left)",
+   "did": true,
+   "how": "path=top; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 29,
+   "turn": 27,
+   "ms": 562382,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->penance-left-arm",
+    "  dmg penance-left-arm 99999",
+    "  KO penance-left-arm (by attack)",
+    "  MSG \"Left Arm withers\""
+   ]
+  },
+  {
+   "n": 23,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes Penance (11800002 left; no arm stands)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 30,
+   "turn": 28,
+   "ms": 567821,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 24,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes penance-right-arm (500000 left)",
+   "did": true,
+   "how": "path=top; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 31,
+   "turn": 29,
+   "ms": 571614,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance-right-arm",
+    "  dmg penance-right-arm 99999"
+   ]
+  },
+  {
+   "n": 25,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-right-arm (400001 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 33,
+   "turn": 30,
+   "ms": 575343,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance-right-arm",
+    "  dmg penance-right-arm 99999"
+   ]
+  },
+  {
+   "n": 26,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku strikes penance-right-arm (300002 left)",
+   "did": true,
+   "how": "path=top; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 33,
+   "turn": 31,
+   "ms": 578438,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->penance-right-arm",
+    "  dmg penance-right-arm 99999"
+   ]
+  },
+  {
+   "n": 27,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes penance-right-arm (200003 left)",
+   "did": true,
+   "how": "path=top; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 35,
+   "turn": 32,
+   "ms": 581007,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance-right-arm",
+    "  dmg penance-right-arm 99999",
+    "penance:penance-obliteration->",
+    "  dmg tidus 5684",
+    "  dmg yuna 5730",
+    "  dmg rikku 6009",
+    "  COUNTER x-potion (auto-potion)",
+    "tidus:x-potion->tidus",
+    "  COUNTER x-potion (auto-potion)",
+    "yuna:x-potion->yuna",
+    "  COUNTER x-potion (auto-potion)",
+    "rikku:x-potion->rikku"
+   ]
+  },
+  {
+   "n": 28,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-right-arm (100004 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 36,
+   "turn": 34,
+   "ms": 593656,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance-right-arm",
+    "  dmg penance-right-arm 99999"
+   ]
+  },
+  {
+   "n": 29,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku strikes penance-right-arm (5 left)",
+   "did": true,
+   "how": "path=top; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 37,
+   "turn": 35,
+   "ms": 596587,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->penance-right-arm",
+    "  dmg penance-right-arm 99999",
+    "  KO penance-right-arm (by attack)",
+    "  MSG \"Right Arm withers\""
+   ]
+  },
+  {
+   "n": 30,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes Penance (11700003 left; no arm stands)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 39,
+   "turn": 36,
+   "ms": 602059,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 31,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes Penance (11600004 left; no arm stands)",
+   "did": true,
+   "how": "path=top; aim penance=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 39,
+   "turn": 37,
+   "ms": 604824,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 32,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku strikes penance-left-arm (500000 left)",
+   "did": true,
+   "how": "path=top; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 41,
+   "turn": 38,
+   "ms": 607848,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 33,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-left-arm (400001 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 42,
+   "turn": 39,
+   "ms": 611696,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 34,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes penance-left-arm (300002 left)",
+   "did": true,
+   "how": "path=top; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 43,
+   "turn": 40,
+   "ms": 614854,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 35,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-left-arm (200003 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 45,
+   "turn": 42,
+   "ms": 627803,
+   "rowsBefore": null,
+   "events": [
+    "penance:penance-obliteration->",
+    "  dmg tidus 5730",
+    "  dmg yuna 5940",
+    "  dmg rikku 5870",
+    "  COUNTER x-potion (auto-potion)",
+    "tidus:x-potion->tidus",
+    "  COUNTER x-potion (auto-potion)",
+    "yuna:x-potion->yuna",
+    "  COUNTER x-potion (auto-potion)",
+    "rikku:x-potion->rikku",
+    "tidus:quick-hit->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 36,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku strikes penance-left-arm (100004 left)",
+   "did": true,
+   "how": "path=top; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 45,
+   "turn": 43,
+   "ms": 630731,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->penance-left-arm",
+    "  dmg penance-left-arm 99999"
+   ]
+  },
+  {
+   "n": 37,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes penance-left-arm (5 left)",
+   "did": true,
+   "how": "path=top; aim penance-left-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 47,
+   "turn": 44,
+   "ms": 633152,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance-left-arm",
+    "  dmg penance-left-arm 99999",
+    "  KO penance-left-arm (by attack)",
+    "  MSG \"Left Arm withers\""
+   ]
+  },
+  {
+   "n": 38,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes Penance (11500005 left; no arm stands)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 48,
+   "turn": 45,
+   "ms": 638738,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 39,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku strikes penance-right-arm (500000 left)",
+   "did": true,
+   "how": "path=top; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 49,
+   "turn": 46,
+   "ms": 642461,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->penance-right-arm",
+    "  dmg penance-right-arm 99999"
+   ]
+  },
+  {
+   "n": 40,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-right-arm (400001 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 51,
+   "turn": 47,
+   "ms": 646191,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->penance-right-arm",
+    "  dmg penance-right-arm 99999"
+   ]
+  },
+  {
+   "n": 41,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes penance-right-arm (300002 left)",
+   "did": true,
+   "how": "path=top; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 51,
+   "turn": 48,
+   "ms": 649187,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance-right-arm"
+   ]
+  },
+  {
+   "n": 42,
+   "link": 1,
+   "actor": "rikku",
+   "why": "rikku strikes penance-right-arm (300002 left)",
+   "did": true,
+   "how": "path=top; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 53,
+   "turn": 49,
+   "ms": 651403,
+   "rowsBefore": null,
+   "events": [
+    "rikku:attack->penance-right-arm",
+    "  dmg penance-right-arm 99999"
+   ]
+  },
+  {
+   "n": 43,
+   "link": 1,
+   "actor": "tidus",
+   "why": "tidus strikes penance-right-arm (200003 left)",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 54,
+   "turn": 51,
+   "ms": 664387,
+   "rowsBefore": null,
+   "events": [
+    "penance:penance-obliteration->",
+    "  dmg tidus 5707",
+    "  dmg yuna 5684",
+    "  dmg rikku 5730",
+    "  COUNTER x-potion (auto-potion)",
+    "tidus:x-potion->tidus",
+    "  COUNTER x-potion (auto-potion)",
+    "yuna:x-potion->yuna",
+    "  COUNTER x-potion (auto-potion)",
+    "rikku:x-potion->rikku",
+    "tidus:quick-hit->penance-right-arm",
+    "  dmg penance-right-arm 99999"
+   ]
+  },
+  {
+   "n": 44,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna strikes penance-right-arm (100004 left)",
+   "did": true,
+   "how": "path=top; aim penance-right-arm=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 55,
+   "turn": 52,
+   "ms": 667389,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->penance-right-arm",
+    "  dmg penance-right-arm 99999"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "n": 1,
+   "key": "penance,penance-right-arm,penance-left-arm#1",
+   "foes": [
+    "penance",
+    "penance-right-arm",
+    "penance-left-arm"
+   ],
+   "seed": 1,
+   "ms": 379988,
+   "ticks": 0
+  },
+  {
+   "at": "after seam (decision 7)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 420192
+  },
+  {
+   "n": 1,
+   "key": "penance,penance-right-arm,penance-left-arm#1001",
+   "foes": [
+    "penance",
+    "penance-right-arm",
+    "penance-left-arm"
+   ],
+   "seed": 1001,
+   "ms": 435022,
+   "ticks": 0
+  }
+ ],
+ "attempts": [
+  {
+   "attempt": 1,
+   "over": "left:results",
+   "decisions": 7,
+   "ms": 40219,
+   "penHp": null
+  }
+ ],
+ "mechanics": [
+  {
+   "ms": 403763,
+   "seq": 43,
+   "actor": "penance",
+   "ability": "penance-obliteration",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 412648,
+   "seq": 77,
+   "actor": "penance-right-arm",
+   "ability": "dark-calamity",
+   "targets": [
+    "rikku"
+   ],
+   "first": true
+  },
+  {
+   "ms": 413983,
+   "seq": 89,
+   "actor": "penance-left-arm",
+   "ability": "penance-tera-graviton",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 416617,
+   "seq": 135,
+   "actor": "penance",
+   "ability": "penance-obliteration",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 464680,
+   "seq": 43,
+   "actor": "penance",
+   "ability": "penance-obliteration",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 482693,
+   "mech": "arm-fell",
+   "arm": "penance-left-arm",
+   "ticks": 11,
+   "hp": 0,
+   "decision": 7
+  },
+  {
+   "ms": 489129,
+   "seq": 89,
+   "actor": "penance-right-arm",
+   "ability": "penance-mighty-guard",
+   "targets": [
+    "penance",
+    "penance-right-arm"
+   ],
+   "first": true
+  },
+  {
+   "ms": 509159,
+   "seq": 124,
+   "actor": "penance",
+   "ability": "penance-obliteration",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 525968,
+   "mech": "arm-fell",
+   "arm": "penance-right-arm",
+   "ticks": 19,
+   "hp": 0,
+   "decision": 14
+  },
+  {
+   "ms": 534630,
+   "mech": "arm-returned",
+   "arm": "penance-left-arm",
+   "ticks": 23,
+   "hp": 500000,
+   "decision": 16
+  },
+  {
+   "ms": 545066,
+   "seq": 190,
+   "actor": "penance",
+   "ability": "penance-obliteration",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 563095,
+   "mech": "arm-fell",
+   "arm": "penance-left-arm",
+   "ticks": 29,
+   "hp": 0,
+   "decision": 22
+  },
+  {
+   "ms": 572323,
+   "mech": "arm-returned",
+   "arm": "penance-right-arm",
+   "ticks": 33,
+   "hp": 400001,
+   "decision": 24
+  },
+  {
+   "ms": 581744,
+   "seq": 253,
+   "actor": "penance",
+   "ability": "penance-obliteration",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 597304,
+   "mech": "arm-fell",
+   "arm": "penance-right-arm",
+   "ticks": 37,
+   "hp": 0,
+   "decision": 29
+  },
+  {
+   "ms": 605540,
+   "mech": "arm-returned",
+   "arm": "penance-left-arm",
+   "ticks": 41,
+   "hp": 500000,
+   "decision": 31
+  },
+  {
+   "ms": 615888,
+   "seq": 312,
+   "actor": "penance",
+   "ability": "penance-obliteration",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 633859,
+   "mech": "arm-fell",
+   "arm": "penance-left-arm",
+   "ticks": 47,
+   "hp": 0,
+   "decision": 37
+  },
+  {
+   "ms": 643177,
+   "mech": "arm-returned",
+   "arm": "penance-right-arm",
+   "ticks": 51,
+   "hp": 400001,
+   "decision": 39
+  },
+  {
+   "ms": 652534,
+   "seq": 375,
+   "actor": "penance",
+   "ability": "penance-obliteration",
+   "targets": [],
+   "first": false
+  }
+ ],
+ "screens": [
+  {
+   "label": "a1",
+   "screens": [
+    "results",
+    "party-prep",
+    "battle"
+   ],
+   "results": {
+    "text": "THE FAHRENHEIT — THE DECK · FELL RESULTS · 0:43 Defeat TURNS 17 ATTEMPTS 1 BEST — NEVER CLEARED T Tidus S.LV 180 · 0/22,000 AP Y Yuna S.LV 175 · 0/22,000 AP R Rikku S.LV 160 · 0/22,000 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  }
+ ],
+ "speed": "fast",
+ "line": "guide-by-hand (Mix, Three Stars, arms first, support, body)",
+ "live": {
+  "version": "0.1.0",
+  "scripts": [
+   "index-jYm-0mrJ.js"
+  ]
+ },
+ "battleSeed": 1,
+ "mixDone": true,
+ "starsDone": true
+}

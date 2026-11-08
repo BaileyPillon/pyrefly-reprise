@@ -1,0 +1,3887 @@
+{
+ "chapter": "farplane",
+ "door": "duelist",
+ "game": "ffx2",
+ "base": "https://echoesofspira.com/",
+ "seed": 1,
+ "startedAt": "2026-11-07T15:57:34.075Z",
+ "stateWrites": [
+  {
+   "at": 583758,
+   "what": "FALLBACK after 0 real duel-1 defeats: Auron's HP set to 3,000 at the first menu (15,000 was tried first and lost: Auron heals under an eighth of his HP), so one real blow ends duel 1 (PR-0636: the sourced Eject immunity is not applied)",
+   "result": {
+    "id": "x2-cup-auron",
+    "was": 187500,
+    "now": 3000
+   }
+  }
+ ],
+ "decisions": [
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain -> NOT TAKEN, Attack -> Potion",
+   "did": true,
+   "how": "path=Item > Potion; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 69,
+   "turn": 1,
+   "ms": 611704,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-auron:x2-auron-dragon-fang->",
+    "  dmg yuna 1617",
+    "  dmg rikku 2963",
+    "  dmg paine 1630",
+    "x2-cup-auron:x2-auron-x-potion->x2-cup-auron",
+    "paine:attack->x2-cup-auron",
+    "  boss takes 2842",
+    "  boss takes -9999",
+    "x2-cup-auron:x2-auron-mega-potion->",
+    "  boss takes -2000",
+    "rikku:x2-alchemist-stash-potion->yuna"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 375,
+   "turn": 5,
+   "ms": 615927,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 441,
+   "turn": 6,
+   "ms": 620010,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-auron",
+    "x2-cup-auron:x2-auron-mega-potion->"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 588,
+   "turn": 8,
+   "ms": 628631,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6215",
+    "  boss takes -2000",
+    "  dmg paine 1338",
+    "  boss takes 6713",
+    "yuna:x2-dark-knight-darkness->x2-cup-auron"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 629,
+   "turn": 9,
+   "ms": 634228,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-item-lunar-curtain->yuna+rikku+paine",
+    "x2-cup-auron:x2-auron-mega-potion->"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-auron",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-auron=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 655,
+   "turn": 11,
+   "ms": 639027,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-auron",
+    "  boss takes -2000"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 146,
+   "turn": 1,
+   "ms": 682035,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-blitz-ace->yuna",
+    "  dmg yuna 1133",
+    "  dmg yuna 1521",
+    "  dmg yuna 1642",
+    "  dmg yuna 1560",
+    "  dmg yuna 1819",
+    "  dmg yuna 1704",
+    "  dmg yuna 1762",
+    "  KO yuna (by x2-tidus-blitz-ace)",
+    "rikku:x2-item-light-curtain->rikku+paine"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 175,
+   "turn": 2,
+   "ms": 685786,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus",
+    "x2-cup-tidus:x2-tidus-hastega->"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 388,
+   "turn": 5,
+   "ms": 696074,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6365",
+    "x2-cup-tidus:x2-tidus-delay-buster->rikku",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 393,
+   "turn": 6,
+   "ms": 701639,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-item-lunar-curtain->rikku+paine",
+    "  dmg rikku 1855"
+   ]
+  },
+  {
+   "n": 10,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 609,
+   "turn": 8,
+   "ms": 711858,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6290",
+    "x2-cup-tidus:x2-tidus-attack->paine",
+    "  dmg paine 907",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Phoenix Down on yuna",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim yuna=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 723,
+   "turn": 10,
+   "ms": 719855,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->paine",
+    "  dmg paine 836",
+    "rikku:x2-alchemist-stash-phoenix-down->yuna"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 841,
+   "turn": 12,
+   "ms": 728409,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-spiral-cut->rikku",
+    "  dmg paine 1338",
+    "  boss takes 6389",
+    "  dmg rikku 3151",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Potion on rikku",
+   "did": true,
+   "how": "path=Item > Potion; aim rikku=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 1001,
+   "turn": 14,
+   "ms": 739038,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-hastega->",
+    "  revive yuna",
+    "  dmg paine 1338",
+    "  boss takes 6539",
+    "rikku:x2-alchemist-stash-potion->rikku"
+   ]
+  },
+  {
+   "n": 14,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1053,
+   "turn": 16,
+   "ms": 744649,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->yuna",
+    "  dmg yuna 1820",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 15,
+   "link": 2,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1117,
+   "turn": 18,
+   "ms": 749064,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-spiral-cut->paine",
+    "yuna:attack->x2-cup-tidus",
+    "  boss takes 3728"
+   ]
+  },
+  {
+   "n": 16,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Potion on rikku",
+   "did": true,
+   "how": "path=Item > Potion; aim rikku=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 1262,
+   "turn": 20,
+   "ms": 760505,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1612",
+    "  dmg paine 1338",
+    "  boss takes 9156",
+    "x2-cup-tidus:x2-tidus-delay-buster->yuna",
+    "rikku:x2-alchemist-stash-potion->rikku"
+   ]
+  },
+  {
+   "n": 17,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1280,
+   "turn": 21,
+   "ms": 764187,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-cup-tidus",
+    "  boss takes 1829"
+   ]
+  },
+  {
+   "n": 18,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1522,
+   "turn": 23,
+   "ms": 777498,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1912",
+    "  KO yuna (by null)",
+    "x2-cup-tidus:x2-tidus-blitz-ace->rikku",
+    "  dmg rikku 938",
+    "  KO rikku (by x2-tidus-blitz-ace)",
+    "paine:attack->x2-cup-tidus",
+    "  boss takes 3586"
+   ]
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 130,
+   "turn": 1,
+   "ms": 802824,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-blitz-ace->yuna",
+    "  dmg yuna 1079",
+    "  dmg yuna 1479",
+    "  dmg yuna 1549",
+    "  dmg yuna 1601",
+    "  dmg yuna 1672",
+    "  dmg yuna 1793",
+    "  dmg yuna 1734",
+    "  KO yuna (by x2-tidus-blitz-ace)",
+    "rikku:x2-item-light-curtain->rikku+paine"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 172,
+   "turn": 2,
+   "ms": 806410,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus",
+    "x2-cup-tidus:x2-tidus-hastega->"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 374,
+   "turn": 4,
+   "ms": 816336,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6613",
+    "x2-cup-tidus:x2-tidus-attack->paine",
+    "rikku:x2-item-lunar-curtain->rikku+paine"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 387,
+   "turn": 6,
+   "ms": 820199,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 599,
+   "turn": 9,
+   "ms": 833012,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->rikku",
+    "  dmg rikku 1637",
+    "  dmg paine 1338",
+    "  boss takes 6713",
+    "x2-cup-tidus:x2-tidus-delay-buster->rikku",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on yuna",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim yuna=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 606,
+   "turn": 10,
+   "ms": 837946,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-alchemist-stash-phoenix-down->yuna",
+    "  dmg rikku 1855"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 820,
+   "turn": 12,
+   "ms": 850068,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6041",
+    "x2-cup-tidus:x2-tidus-attack->paine",
+    "  dmg paine 870",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on yuna",
+   "did": true,
+   "how": "path=Item > Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 965,
+   "turn": 14,
+   "ms": 860226,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-hastega->",
+    "  revive yuna",
+    "  dmg paine 1338",
+    "  boss takes 6340",
+    "rikku:x2-alchemist-stash-potion->yuna"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1034,
+   "turn": 16,
+   "ms": 866136,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->yuna",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1061,
+   "turn": 17,
+   "ms": 869848,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus",
+    "x2-cup-tidus:x2-tidus-attack->paine"
+   ]
+  },
+  {
+   "n": 10,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on paine",
+   "did": true,
+   "how": "path=Item > Potion; aim paine=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 1221,
+   "turn": 20,
+   "ms": 882993,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-spiral-cut->paine",
+    "  dmg paine 1338",
+    "  boss takes 6613",
+    "  dmg paine 1625",
+    "  dmg yuna 1338",
+    "  boss takes 9481",
+    "rikku:x2-alchemist-stash-potion->paine"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1247,
+   "turn": 21,
+   "ms": 887731,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus",
+    "x2-cup-tidus:x2-tidus-attack->yuna"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1272,
+   "turn": 23,
+   "ms": 892193,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus",
+    "x2-cup-tidus:x2-tidus-attack->yuna"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1457,
+   "turn": 26,
+   "ms": 904730,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->yuna",
+    "  dmg paine 1338",
+    "  boss takes 6688",
+    "  dmg yuna 1338",
+    "  boss takes 8652",
+    "paine:attack->x2-cup-tidus",
+    "  boss takes 5463"
+   ]
+  },
+  {
+   "n": 14,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on yuna",
+   "did": true,
+   "how": "path=Item > Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 1483,
+   "turn": 27,
+   "ms": 909278,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-alchemist-stash-potion->yuna"
+   ]
+  },
+  {
+   "n": 15,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1490,
+   "turn": 28,
+   "ms": 912569,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->x2-cup-tidus",
+    "  boss takes 5933"
+   ]
+  },
+  {
+   "n": 16,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1697,
+   "turn": 30,
+   "ms": 923563,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-hastega->",
+    "paine:attack->x2-cup-tidus",
+    "  boss takes 3800"
+   ]
+  },
+  {
+   "n": 17,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1728,
+   "turn": 31,
+   "ms": 927219,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->x2-cup-tidus",
+    "  boss takes 5550"
+   ]
+  },
+  {
+   "n": 18,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on paine",
+   "did": true,
+   "how": "path=Item > Potion; aim paine=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 1745,
+   "turn": 32,
+   "ms": 931771,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-alchemist-stash-potion->paine"
+   ]
+  },
+  {
+   "n": 19,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on yuna",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim yuna=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 2005,
+   "turn": 36,
+   "ms": 945300,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->yuna",
+    "x2-cup-tidus:x2-tidus-attack->paine",
+    "  dmg paine 1780",
+    "  KO paine (by x2-tidus-attack)",
+    "x2-cup-tidus:x2-tidus-attack->yuna",
+    "  dmg yuna 1672",
+    "  KO yuna (by x2-tidus-attack)",
+    "rikku:x2-alchemist-stash-phoenix-down->yuna"
+   ]
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 126,
+   "turn": 1,
+   "ms": 968727,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-blitz-ace->yuna",
+    "  dmg yuna 1104",
+    "  dmg yuna 1515",
+    "  dmg yuna 1674",
+    "  dmg yuna 1666",
+    "  dmg yuna 3318",
+    "  dmg yuna 1869",
+    "  KO yuna (by x2-tidus-blitz-ace)",
+    "rikku:x2-item-light-curtain->rikku+paine"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 177,
+   "turn": 2,
+   "ms": 972485,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus",
+    "x2-cup-tidus:x2-tidus-hastega->"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 371,
+   "turn": 4,
+   "ms": 982483,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6041",
+    "rikku:x2-item-lunar-curtain->rikku+paine",
+    "x2-cup-tidus:x2-tidus-delay-buster->rikku"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 394,
+   "turn": 6,
+   "ms": 986894,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus",
+    "  dmg rikku 1848"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 608,
+   "turn": 8,
+   "ms": 997632,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6588",
+    "x2-cup-tidus:x2-tidus-attack->rikku",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on yuna",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim yuna=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 702,
+   "turn": 10,
+   "ms": 1005440,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-delay-buster->rikku",
+    "rikku:x2-alchemist-stash-phoenix-down->yuna",
+    "  dmg rikku 1827"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 820,
+   "turn": 11,
+   "ms": 1013647,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6141",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1052,
+   "turn": 14,
+   "ms": 1026328,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-spiral-cut->paine",
+    "  dmg paine 3601",
+    "  dmg paine 1338",
+    "  boss takes 6638",
+    "  revive yuna",
+    "x2-cup-tidus:x2-tidus-hastega->",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on paine",
+   "did": true,
+   "how": "path=Item > Potion; aim paine=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 1068,
+   "turn": 15,
+   "ms": 1030999,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-alchemist-stash-potion->paine"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1162,
+   "turn": 16,
+   "ms": 1036941,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 10,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on paine",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim paine=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 1325,
+   "turn": 18,
+   "ms": 1049297,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-delay-buster->paine",
+    "  dmg paine 1338",
+    "  boss takes 6439",
+    "  dmg paine 922",
+    "  KO paine (by x2-tidus-delay-buster)",
+    "  dmg yuna 1338",
+    "  boss takes 6588",
+    "rikku:x2-alchemist-stash-phoenix-down->paine",
+    "x2-cup-tidus:x2-tidus-attack->yuna"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1372,
+   "turn": 20,
+   "ms": 1053964,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1587,
+   "turn": 23,
+   "ms": 1064641,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->yuna",
+    "  dmg yuna 1338",
+    "  boss takes 5992",
+    "  revive paine",
+    "x2-cup-tidus:x2-tidus-attack->paine",
+    "  dmg paine 886",
+    "yuna:attack->x2-cup-tidus",
+    "  boss takes 1743"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on yuna",
+   "did": true,
+   "how": "path=Item > Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 1588,
+   "turn": 24,
+   "ms": 1068178,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-alchemist-stash-potion->yuna"
+   ]
+  },
+  {
+   "n": 14,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1829,
+   "turn": 27,
+   "ms": 1078191,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-blitz-ace->paine",
+    "  dmg paine 512",
+    "  dmg paine 815",
+    "  dmg paine 809",
+    "  KO paine (by x2-tidus-blitz-ace)",
+    "x2-cup-tidus:x2-tidus-blitz-ace->yuna",
+    "yuna:attack->x2-cup-tidus",
+    "  boss takes 3514"
+   ]
+  },
+  {
+   "n": 15,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on paine",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim paine=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 1853,
+   "turn": 28,
+   "ms": 1082905,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-alchemist-stash-phoenix-down->paine",
+    "  dmg yuna 1028",
+    "  KO yuna (by x2-alchemist-stash-phoenix-down)"
+   ]
+  },
+  {
+   "n": 16,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on yuna",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim yuna=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 2119,
+   "turn": 30,
+   "ms": 1093082,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-hastega->",
+    "  revive paine",
+    "rikku:x2-alchemist-stash-phoenix-down->yuna"
+   ]
+  },
+  {
+   "n": 17,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 2213,
+   "turn": 32,
+   "ms": 1098643,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->rikku",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 18,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on paine",
+   "did": true,
+   "how": "path=Item > Potion; aim paine=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 2379,
+   "turn": 34,
+   "ms": 1108007,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->paine",
+    "  dmg paine 896",
+    "  revive yuna",
+    "  dmg paine 1338",
+    "  boss takes 6489",
+    "rikku:x2-alchemist-stash-potion->paine",
+    "x2-cup-tidus:x2-tidus-attack->rikku",
+    "  dmg rikku 3237",
+    "  KO rikku (by x2-tidus-attack)"
+   ]
+  },
+  {
+   "n": 19,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2445,
+   "turn": 36,
+   "ms": 1113202,
+   "rowsBefore": null,
+   "events": [
+    "paine:attack->x2-cup-tidus",
+    "  boss takes 3586"
+   ]
+  },
+  {
+   "n": 20,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 2476,
+   "turn": 37,
+   "ms": 1117209,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 21,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2689,
+   "turn": 39,
+   "ms": 1123125,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-delay-buster->yuna",
+    "  dmg yuna 1912",
+    "paine:attack->x2-cup-tidus",
+    "  boss takes 3828"
+   ]
+  },
+  {
+   "n": 22,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2788,
+   "turn": 41,
+   "ms": 1129730,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 9733",
+    "x2-cup-tidus:x2-tidus-hastega->",
+    "yuna:attack->x2-cup-tidus",
+    "  boss takes 3686"
+   ]
+  },
+  {
+   "n": 23,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2932,
+   "turn": 43,
+   "ms": 1133790,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-delay-buster->yuna",
+    "paine:attack->x2-cup-tidus",
+    "  boss takes 1793"
+   ]
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 128,
+   "turn": 1,
+   "ms": 1159746,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-blitz-ace->yuna",
+    "  dmg yuna 1083",
+    "  dmg yuna 1648",
+    "  dmg yuna 1668",
+    "  dmg yuna 1711",
+    "  dmg yuna 1692",
+    "  dmg yuna 1765",
+    "  dmg yuna 1834",
+    "  KO yuna (by x2-tidus-blitz-ace)",
+    "rikku:x2-item-light-curtain->rikku+paine"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 173,
+   "turn": 2,
+   "ms": 1163393,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus",
+    "x2-cup-tidus:x2-tidus-hastega->"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 371,
+   "turn": 4,
+   "ms": 1173336,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6588",
+    "rikku:x2-item-lunar-curtain->rikku+paine",
+    "x2-cup-tidus:x2-tidus-delay-buster->rikku"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 385,
+   "turn": 6,
+   "ms": 1177426,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 596,
+   "turn": 8,
+   "ms": 1189680,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6091",
+    "x2-cup-tidus:x2-tidus-delay-buster->paine",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on yuna",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim yuna=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 600,
+   "turn": 9,
+   "ms": 1194510,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-alchemist-stash-phoenix-down->yuna"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 817,
+   "turn": 11,
+   "ms": 1207420,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6389",
+    "x2-cup-tidus:x2-tidus-attack->paine",
+    "  dmg paine 823",
+    "  revive yuna",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus",
+    "x2-cup-tidus:x2-tidus-delay-buster->yuna"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on yuna",
+   "did": true,
+   "how": "path=Item > Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 859,
+   "turn": 13,
+   "ms": 1211940,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-alchemist-stash-potion->yuna"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 953,
+   "turn": 14,
+   "ms": 1218744,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6737",
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1024,
+   "turn": 16,
+   "ms": 1225485,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-hastega->",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 10,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on yuna",
+   "did": true,
+   "how": "path=Item > Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 1122,
+   "turn": 17,
+   "ms": 1233538,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6066",
+    "rikku:x2-alchemist-stash-potion->yuna"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1166,
+   "turn": 19,
+   "ms": 1239166,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-spiral-cut->yuna",
+    "  dmg paine 1338",
+    "  boss takes 6489",
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus",
+    "  dmg yuna 3641",
+    "  KO yuna (by x2-dark-knight-darkness)"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1242,
+   "turn": 20,
+   "ms": 1245506,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on yuna",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim yuna=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 1382,
+   "turn": 22,
+   "ms": 1256331,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->paine",
+    "  dmg paine 1338",
+    "  boss takes 6638",
+    "rikku:x2-alchemist-stash-phoenix-down->yuna",
+    "x2-cup-tidus:x2-tidus-attack->paine"
+   ]
+  },
+  {
+   "n": 14,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1454,
+   "turn": 24,
+   "ms": 1262178,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 15,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on paine",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim paine=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 1644,
+   "turn": 26,
+   "ms": 1273350,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-blitz-ace->paine",
+    "  dmg paine 527",
+    "  dmg paine 818",
+    "  dmg paine 790",
+    "  KO paine (by x2-tidus-blitz-ace)",
+    "  revive yuna",
+    "rikku:x2-alchemist-stash-phoenix-down->paine"
+   ]
+  },
+  {
+   "n": 16,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on yuna",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim yuna=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 1907,
+   "turn": 29,
+   "ms": 1285769,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-blitz-ace->yuna",
+    "  dmg yuna 1075",
+    "  dmg yuna 1460",
+    "  dmg yuna 1656",
+    "  KO yuna (by x2-tidus-blitz-ace)",
+    "  revive paine",
+    "x2-cup-tidus:x2-tidus-hastega->",
+    "rikku:x2-alchemist-stash-phoenix-down->yuna"
+   ]
+  },
+  {
+   "n": 17,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 2006,
+   "turn": 30,
+   "ms": 1291331,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 18,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on paine",
+   "did": true,
+   "how": "path=Item > Potion; aim paine=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 2168,
+   "turn": 32,
+   "ms": 1300100,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-delay-buster->paine",
+    "  revive yuna",
+    "  dmg paine 1338",
+    "  boss takes 6688",
+    "rikku:x2-alchemist-stash-potion->paine",
+    "x2-cup-tidus:x2-tidus-attack->rikku"
+   ]
+  },
+  {
+   "n": 19,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 2215,
+   "turn": 34,
+   "ms": 1304334,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus",
+    "x2-cup-tidus:x2-tidus-attack->yuna",
+    "  dmg yuna 1612"
+   ]
+  },
+  {
+   "n": 20,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2293,
+   "turn": 36,
+   "ms": 1308524,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->x2-cup-tidus",
+    "  boss takes 3642"
+   ]
+  },
+  {
+   "n": 21,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2430,
+   "turn": 38,
+   "ms": 1314902,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 9661",
+    "x2-cup-tidus:x2-tidus-delay-buster->yuna",
+    "paine:attack->x2-cup-tidus",
+    "  boss takes 1871"
+   ]
+  },
+  {
+   "n": 22,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on paine",
+   "did": true,
+   "how": "path=Item > Potion; aim paine=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 2436,
+   "turn": 39,
+   "ms": 1318909,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-alchemist-stash-potion->paine",
+    "  dmg yuna 1851",
+    "  KO yuna (by x2-alchemist-stash-potion)"
+   ]
+  },
+  {
+   "n": 23,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2677,
+   "turn": 41,
+   "ms": 1325947,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-hastega->",
+    "paine:attack->x2-cup-tidus",
+    "  boss takes 3858"
+   ]
+  },
+  {
+   "n": 24,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on yuna",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim yuna=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 2702,
+   "turn": 42,
+   "ms": 1330539,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-alchemist-stash-phoenix-down->yuna"
+   ]
+  },
+  {
+   "n": 25,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on paine",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim paine=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 2966,
+   "turn": 45,
+   "ms": 1339560,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->paine",
+    "x2-cup-tidus:x2-tidus-spiral-cut->paine",
+    "  revive yuna",
+    "  dmg paine 3480",
+    "  KO paine (by x2-tidus-spiral-cut)",
+    "rikku:x2-alchemist-stash-phoenix-down->paine"
+   ]
+  },
+  {
+   "n": 26,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 3078,
+   "turn": 47,
+   "ms": 1343444,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->yuna",
+    "  dmg yuna 1639",
+    "yuna:attack->x2-cup-tidus",
+    "  boss takes 3858"
+   ]
+  },
+  {
+   "n": 27,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on yuna",
+   "did": true,
+   "how": "path=Item > Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 3231,
+   "turn": 50,
+   "ms": 1351063,
+   "rowsBefore": null,
+   "events": [
+    "  revive paine",
+    "x2-cup-tidus:x2-tidus-attack->rikku",
+    "x2-cup-tidus:x2-tidus-hastega->",
+    "rikku:x2-alchemist-stash-potion->yuna"
+   ]
+  },
+  {
+   "n": 28,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 3320,
+   "turn": 51,
+   "ms": 1353851,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->x2-cup-tidus",
+    "  boss takes 1764"
+   ]
+  },
+  {
+   "n": 29,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 3327,
+   "turn": 52,
+   "ms": 1357769,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus",
+    "x2-cup-tidus:x2-tidus-spiral-cut->paine"
+   ]
+  },
+  {
+   "n": 30,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on paine",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim paine=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 3497,
+   "turn": 54,
+   "ms": 1365448,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 3413",
+    "  KO paine (by null)",
+    "rikku:x2-alchemist-stash-phoenix-down->paine"
+   ]
+  },
+  {
+   "n": 31,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 3560,
+   "turn": 56,
+   "ms": 1368205,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-spiral-cut->yuna",
+    "yuna:attack->x2-cup-tidus",
+    "  boss takes 1836"
+   ]
+  },
+  {
+   "n": 32,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on yuna",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim yuna=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 3785,
+   "turn": 58,
+   "ms": 1377550,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 3560",
+    "  KO yuna (by null)",
+    "  revive paine",
+    "x2-cup-tidus:x2-tidus-attack->rikku",
+    "  dmg rikku 3151",
+    "rikku:x2-alchemist-stash-phoenix-down->yuna"
+   ]
+  },
+  {
+   "n": 33,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 3861,
+   "turn": 60,
+   "ms": 1382562,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-spiral-cut->paine",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus",
+    "  dmg paine 3426",
+    "  KO paine (by x2-dark-knight-darkness)"
+   ]
+  },
+  {
+   "n": 34,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on paine",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim paine=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 4052,
+   "turn": 62,
+   "ms": 1389663,
+   "rowsBefore": null,
+   "events": [
+    "  revive yuna",
+    "x2-cup-tidus:x2-tidus-hastega->",
+    "rikku:x2-alchemist-stash-phoenix-down->paine"
+   ]
+  },
+  {
+   "n": 35,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 4148,
+   "turn": 63,
+   "ms": 1393799,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 36,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 4361,
+   "turn": 66,
+   "ms": 1401997,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-spiral-cut->rikku",
+    "  revive paine",
+    "  dmg rikku 6498",
+    "  KO rikku (by x2-tidus-spiral-cut)",
+    "  dmg yuna 1338",
+    "  boss takes 6166",
+    "x2-cup-tidus:x2-tidus-blitz-ace->paine",
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus",
+    "  dmg paine 1028",
+    "  dmg paine 1515",
+    "  dmg paine 1630",
+    "  KO paine (by x2-dark-knight-darkness)"
+   ]
+  },
+  {
+   "n": 37,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 4575,
+   "turn": 68,
+   "ms": 1408822,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6563",
+    "x2-cup-tidus:x2-tidus-blitz-ace->yuna",
+    "yuna:attack->x2-cup-tidus",
+    "  boss takes 3700"
+   ]
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 126,
+   "turn": 1,
+   "ms": 1432235,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-blitz-ace->paine",
+    "  dmg paine 1108",
+    "  dmg paine 1564",
+    "  dmg paine 1699",
+    "  dmg paine 1633",
+    "  dmg paine 1812",
+    "  dmg paine 1745",
+    "  dmg paine 1805",
+    "  KO paine (by x2-tidus-blitz-ace)",
+    "rikku:x2-item-light-curtain->yuna+rikku"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 172,
+   "turn": 2,
+   "ms": 1435769,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus",
+    "x2-cup-tidus:x2-tidus-hastega->"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 372,
+   "turn": 4,
+   "ms": 1445870,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6016",
+    "rikku:x2-item-lunar-curtain->yuna+rikku",
+    "x2-cup-tidus:x2-tidus-delay-buster->rikku"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 383,
+   "turn": 6,
+   "ms": 1449860,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 598,
+   "turn": 8,
+   "ms": 1462430,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6539",
+    "x2-cup-tidus:x2-tidus-delay-buster->rikku",
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on paine",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim paine=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 601,
+   "turn": 9,
+   "ms": 1467204,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-alchemist-stash-phoenix-down->paine",
+    "  dmg rikku 1737"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 808,
+   "turn": 11,
+   "ms": 1479525,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6514",
+    "x2-cup-tidus:x2-tidus-delay-buster->rikku",
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus",
+    "  dmg rikku 1716"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1020,
+   "turn": 13,
+   "ms": 1492643,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6439",
+    "  revive paine",
+    "x2-cup-tidus:x2-tidus-hastega->",
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Potion on paine",
+   "did": true,
+   "how": "path=Item > Potion; aim paine=true; ",
+   "cmd": {
+    "label": "Potion",
+    "id": "x2-alchemist-stash-potion",
+    "kind": "ability"
+   },
+   "ticks": 1063,
+   "turn": 14,
+   "ms": 1497475,
+   "rowsBefore": null,
+   "events": [
+    "rikku:x2-alchemist-stash-potion->paine"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1165,
+   "turn": 16,
+   "ms": 1505051,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-spiral-cut->yuna",
+    "  dmg yuna 1338",
+    "  boss takes 6116",
+    "paine:x2-dark-knight-darkness->x2-cup-tidus",
+    "  dmg yuna 1746"
+   ]
+  },
+  {
+   "n": 10,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1235,
+   "turn": 17,
+   "ms": 1510769,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Phoenix Down on yuna",
+   "did": true,
+   "how": "path=Item > Phoenix Down; aim yuna=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "x2-alchemist-stash-phoenix-down",
+    "kind": "ability"
+   },
+   "ticks": 1323,
+   "turn": 19,
+   "ms": 1521442,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-blitz-ace->yuna",
+    "  dmg paine 1338",
+    "  boss takes 6116",
+    "  dmg yuna 558",
+    "  dmg yuna 806",
+    "  dmg yuna 812",
+    "  dmg yuna 816",
+    "  KO yuna (by x2-tidus-blitz-ace)",
+    "rikku:x2-alchemist-stash-phoenix-down->yuna"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness on x2-cup-tidus",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1373,
+   "turn": 20,
+   "ms": 1526316,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-cup-tidus"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1587,
+   "turn": 22,
+   "ms": 1534088,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-blitz-ace->rikku",
+    "  dmg rikku 1011",
+    "  dmg rikku 1388",
+    "  KO rikku (by x2-tidus-blitz-ace)",
+    "  dmg paine 1338",
+    "  boss takes 5967",
+    "paine:attack->x2-cup-tidus",
+    "  boss takes 3456"
+   ]
+  },
+  {
+   "n": 14,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1831,
+   "turn": 24,
+   "ms": 1539396,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-hastega->",
+    "paine:attack->x2-cup-tidus",
+    "  boss takes 3428"
+   ]
+  },
+  {
+   "n": 15,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-cup-tidus",
+   "did": true,
+   "how": "path=top; aim x2-cup-tidus=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 2073,
+   "turn": 27,
+   "ms": 1545460,
+   "rowsBefore": null,
+   "events": [
+    "x2-cup-tidus:x2-tidus-attack->paine",
+    "x2-cup-tidus:x2-tidus-attack->paine",
+    "paine:attack->x2-cup-tidus",
+    "  boss takes 3600"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "n": 1,
+   "key": "x2-cup-auron#1",
+   "foes": [
+    "x2-cup-auron"
+   ],
+   "seed": 1,
+   "ms": 583150,
+   "ticks": 69
+  },
+  {
+   "at": "after seam (decision 6)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 677523
+  },
+  {
+   "n": 2,
+   "key": "x2-cup-tidus#2",
+   "foes": [
+    "x2-cup-tidus"
+   ],
+   "seed": 2,
+   "ms": 678062,
+   "ticks": 146
+  },
+  {
+   "at": "after seam (decision 19)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 784140
+  },
+  {
+   "n": 1,
+   "key": "x2-cup-tidus#1002",
+   "foes": [
+    "x2-cup-tidus"
+   ],
+   "seed": 1002,
+   "ms": 798841,
+   "ticks": 130
+  },
+  {
+   "at": "after seam (decision 20)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 950545
+  },
+  {
+   "n": 1,
+   "key": "x2-cup-tidus#2002",
+   "foes": [
+    "x2-cup-tidus"
+   ],
+   "seed": 2002,
+   "ms": 964697,
+   "ticks": 126
+  },
+  {
+   "at": "after seam (decision 24)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 1141389
+  },
+  {
+   "n": 1,
+   "key": "x2-cup-tidus#3002",
+   "foes": [
+    "x2-cup-tidus"
+   ],
+   "seed": 3002,
+   "ms": 1155774,
+   "ticks": 128
+  },
+  {
+   "at": "after seam (decision 38)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 1413808
+  },
+  {
+   "n": 1,
+   "key": "x2-cup-tidus#4002",
+   "foes": [
+    "x2-cup-tidus"
+   ],
+   "seed": 4002,
+   "ms": 1428216,
+   "ticks": 126
+  },
+  {
+   "at": "after seam (decision 16)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 1551483
+  }
+ ],
+ "attempts": [
+  {
+   "attempt": 1,
+   "over": "left:results",
+   "decisions": 19,
+   "ms": 784140,
+   "lastFoe": "x2-cup-tidus"
+  },
+  {
+   "attempt": 2,
+   "over": "left:results",
+   "decisions": 20,
+   "ms": 950545,
+   "lastFoe": "x2-cup-tidus"
+  },
+  {
+   "attempt": 3,
+   "over": "left:results",
+   "decisions": 24,
+   "ms": 1141389,
+   "lastFoe": "x2-cup-tidus"
+  },
+  {
+   "attempt": 4,
+   "over": "left:results",
+   "decisions": 38,
+   "ms": 1413808,
+   "lastFoe": "x2-cup-tidus"
+  },
+  {
+   "attempt": 5,
+   "over": "left:results",
+   "decisions": 16,
+   "ms": 1551483,
+   "lastFoe": "x2-cup-tidus"
+  }
+ ],
+ "mechanics": [
+  {
+   "ms": 583116,
+   "seq": 3,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-dragon-fang",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 586167,
+   "seq": 24,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-x-potion",
+   "targets": [
+    "x2-cup-auron"
+   ],
+   "first": true
+  },
+  {
+   "ms": 606233,
+   "seq": 38,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-mega-potion",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 620599,
+   "seq": 55,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-mega-potion",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 634506,
+   "seq": 85,
+   "actor": "x2-cup-auron",
+   "ability": "x2-auron-mega-potion",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 669422,
+   "seq": 3,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "yuna"
+   ],
+   "first": true
+  },
+  {
+   "ms": 686479,
+   "seq": 34,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 692078,
+   "seq": 75,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "rikku"
+   ],
+   "first": true
+  },
+  {
+   "ms": 707702,
+   "seq": 141,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": true
+  },
+  {
+   "ms": 713954,
+   "seq": 178,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 721020,
+   "seq": 220,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "rikku"
+   ],
+   "first": true
+  },
+  {
+   "ms": 730650,
+   "seq": 287,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 742360,
+   "seq": 350,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 746149,
+   "seq": 380,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 757084,
+   "seq": 451,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 771153,
+   "seq": 528,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 780494,
+   "seq": 587,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 795801,
+   "seq": 3,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 806931,
+   "seq": 34,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 813029,
+   "seq": 78,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 822992,
+   "seq": 112,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 827622,
+   "seq": 162,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 844299,
+   "seq": 253,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 851932,
+   "seq": 292,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 862020,
+   "seq": 354,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 870445,
+   "seq": 385,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 871597,
+   "seq": 409,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 888564,
+   "seq": 483,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 892825,
+   "seq": 511,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 895151,
+   "seq": 534,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 916029,
+   "seq": 637,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 934051,
+   "seq": 736,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 935403,
+   "seq": 754,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 940187,
+   "seq": 777,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 946626,
+   "seq": 802,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 962108,
+   "seq": 3,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 973063,
+   "seq": 32,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 982623,
+   "seq": 81,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 992849,
+   "seq": 147,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 999725,
+   "seq": 183,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1014697,
+   "seq": 261,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1022309,
+   "seq": 329,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1037714,
+   "seq": 390,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1050135,
+   "seq": 459,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1055472,
+   "seq": 484,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1060229,
+   "seq": 532,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1069335,
+   "seq": 578,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1076239,
+   "seq": 624,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1085681,
+   "seq": 659,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1095079,
+   "seq": 708,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1100314,
+   "seq": 735,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1108693,
+   "seq": 781,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1118180,
+   "seq": 820,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1126073,
+   "seq": 866,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1132453,
+   "seq": 891,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1137887,
+   "seq": 921,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1152946,
+   "seq": 3,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1164048,
+   "seq": 34,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1173638,
+   "seq": 83,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1184403,
+   "seq": 157,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1201007,
+   "seq": 243,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1208054,
+   "seq": 276,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1220065,
+   "seq": 341,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1234598,
+   "seq": 407,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1249117,
+   "seq": 487,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1257173,
+   "seq": 541,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1264238,
+   "seq": 578,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1274591,
+   "seq": 635,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1280228,
+   "seq": 681,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1292967,
+   "seq": 734,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1301000,
+   "seq": 773,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1304974,
+   "seq": 791,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1312657,
+   "seq": 828,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1321520,
+   "seq": 859,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1331608,
+   "seq": 890,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1333236,
+   "seq": 902,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1340458,
+   "seq": 930,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1346133,
+   "seq": 959,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1347552,
+   "seq": 969,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1358447,
+   "seq": 999,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1366580,
+   "seq": 1027,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1372875,
+   "seq": 1061,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1378406,
+   "seq": 1078,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1385736,
+   "seq": 1099,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1394802,
+   "seq": 1122,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1399684,
+   "seq": 1153,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1406899,
+   "seq": 1189,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1425487,
+   "seq": 3,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1436312,
+   "seq": 34,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1445943,
+   "seq": 83,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1456918,
+   "seq": 155,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1473805,
+   "seq": 246,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-delay-buster",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1487427,
+   "seq": 327,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1500267,
+   "seq": 384,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1513265,
+   "seq": 453,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1528143,
+   "seq": 522,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-blitz-ace",
+   "targets": [
+    "rikku"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1535981,
+   "seq": 567,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-hastega",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1541166,
+   "seq": 595,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1542900,
+   "seq": 608,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-attack",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1547184,
+   "seq": 631,
+   "actor": "x2-cup-tidus",
+   "ability": "x2-tidus-spiral-cut",
+   "targets": [
+    "paine"
+   ],
+   "first": false
+  }
+ ],
+ "screens": [
+  {
+   "label": "a1",
+   "screens": [
+    "results",
+    "battle"
+   ],
+   "results": {
+    "text": "THE FIEND ARENA — A STAND-IN STAGE · FELL RESULTS · 3:29 Defeat TURNS 25 ATTEMPTS 1 BEST — NEVER CLEARED Y Yuna DARK KNIGHT · CONFUSEPROOF 0/30 AP R Rikku ALCHEMIST · DISPEL TONIC 0/20 AP P Paine DARK KNIGHT · CONFUSEPROOF 0/30 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  },
+  {
+   "label": "a2",
+   "screens": [
+    "results",
+    "battle"
+   ],
+   "results": {
+    "text": "THE FIEND ARENA — A STAND-IN STAGE · FELL RESULTS · 6:12 Defeat TURNS 38 ATTEMPTS 2 BEST — NEVER CLEARED Y Yuna DARK KNIGHT · CONFUSEPROOF 0/30 AP R Rikku ALCHEMIST · DISPEL TONIC 0/20 AP P Paine DARK KNIGHT · CONFUSEPROOF 0/30 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  },
+  {
+   "label": "a3",
+   "screens": [
+    "results",
+    "battle"
+   ],
+   "results": {
+    "text": "THE FIEND ARENA — A STAND-IN STAGE · FELL RESULTS · 9:20 Defeat TURNS 45 ATTEMPTS 3 BEST — NEVER CLEARED Y Yuna DARK KNIGHT · CONFUSEPROOF 0/30 AP R Rikku ALCHEMIST · DISPEL TONIC 0/20 AP P Paine DARK KNIGHT · CONFUSEPROOF 0/30 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  },
+  {
+   "label": "a4",
+   "screens": [
+    "results",
+    "battle"
+   ],
+   "results": {
+    "text": "THE FIEND ARENA — A STAND-IN STAGE · FELL RESULTS · 13:49 Defeat TURNS 69 ATTEMPTS 4 BEST — NEVER CLEARED Y Yuna DARK KNIGHT · CONFUSEPROOF 0/30 AP R Rikku ALCHEMIST · DISPEL TONIC 0/20 AP P Paine DARK KNIGHT · CONFUSEPROOF 0/30 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  },
+  {
+   "label": "a5",
+   "screens": [
+    "results",
+    "battle"
+   ],
+   "results": {
+    "text": "THE FIEND ARENA — A STAND-IN STAGE · FELL RESULTS · 16:03 Defeat TURNS 29 ATTEMPTS 5 BEST — NEVER CLEARED Y Yuna DARK KNIGHT · CONFUSEPROOF 0/30 AP R Rikku ALCHEMIST · DISPEL TONIC 0/20 AP P Paine DARK KNIGHT · CONFUSEPROOF 0/30 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  }
+ ],
+ "speed": "normal",
+ "line": "curtains: Rikku Light+Lunar Curtain then mends/attacks; Yuna and Paine Darkness",
+ "duel1Fails": 0,
+ "live": {
+  "version": "0.1.0",
+  "scripts": [
+   "index-jYm-0mrJ.js"
+  ]
+ },
+ "battleSeed": 1,
+ "openFailures": [
+  {
+   "ms": 587580,
+   "actor": "rikku",
+   "want": "Light Curtain",
+   "category": "item",
+   "rowsNow": [
+    "Attack",
+    "Skill",
+    "Change",
+    "Item"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,502 @@
+[
+ {
+  "turn": 0,
+  "ms": 41,
+  "actor": "play:damage",
+  "want": {
+   "label": "Warrior",
+   "target": null,
+   "menu": "Change"
+  },
+  "took": "Warrior",
+  "viaMenu": "Change",
+  "engineHp": [
+   "yuna:1934/2824",
+   "x2-possessed-rikku:7800/7800"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 1,
+  "ms": 6141,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Rikku",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:3312/4836",
+   "x2-possessed-rikku:7800/7800"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 38,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-possessed-rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 14991,
+  "actor": "idle",
+  "want": {
+   "label": "Warrior",
+   "target": null,
+   "menu": "Change"
+  },
+  "took": "Warrior",
+  "viaMenu": "Change",
+  "engineHp": [
+   "yuna:4776/8208",
+   "x2-possessed-rikku:6773/7800"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 4,
+  "ms": 18839,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Rikku",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:5426/9672",
+   "x2-possessed-rikku:6773/7800"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 80,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-possessed-rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 22178,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Rikku",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:5085/9672",
+   "x2-possessed-rikku:5697/7800"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 98,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-possessed-rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 26392,
+  "actor": "command:yuna",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:4785/9672",
+   "x2-possessed-rikku:4650/7800"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 115,
+    "actor": "yuna",
+    "did": "X-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 32368,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Rikku",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:9469/9672",
+   "x2-possessed-rikku:4650/7800"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 135,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-possessed-rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 36890,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Rikku",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:9157/9672",
+   "x2-possessed-rikku:3578/7800"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 152,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-possessed-rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 41422,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Rikku",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:8869/9672",
+   "x2-possessed-rikku:2576/7800"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 169,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-possessed-rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 45132,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Rikku",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:8587/9672",
+   "x2-possessed-rikku:1504/7800"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 186,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-possessed-rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 49005,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Rikku",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:8379/9672",
+   "x2-possessed-rikku:420/7800"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 12,
+  "ms": 78360,
+  "actor": "play:damage",
+  "want": {
+   "label": "Attack",
+   "target": "Paine",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:8118/9672",
+   "x2-possessed-paine:9200/9200"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 13,
+  "ms": 80541,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Paine",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:8118/9672",
+   "x2-possessed-paine:8290/9200"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 14,
+  "ms": 83839,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Paine",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:7876/9672",
+   "x2-possessed-paine:7362/9200"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 15,
+  "ms": 87154,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Paine",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:7624/9672",
+   "x2-possessed-paine:6465/9200"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 16,
+  "ms": 90471,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Paine",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:7392/9672",
+   "x2-possessed-paine:5606/9200"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 17,
+  "ms": 93704,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Paine",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:7130/9672",
+   "x2-possessed-paine:4723/9200"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 18,
+  "ms": 96791,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Paine",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:7130/9672",
+   "x2-possessed-paine:3806/9200"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 19,
+  "ms": 99957,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Paine",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:6892/9672",
+   "x2-possessed-paine:2892/9200"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 20,
+  "ms": 103188,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Paine",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:6653/9672",
+   "x2-possessed-paine:2033/9200"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 21,
+  "ms": 106354,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Paine",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:6394/9672",
+   "x2-possessed-paine:1191/9200"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ },
+ {
+  "turn": 22,
+  "ms": 108609,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Paine",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:6394/9672",
+   "x2-possessed-paine:267/9200"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

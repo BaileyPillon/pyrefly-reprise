@@ -1,0 +1,2681 @@
+{
+ "chapter": "maesters",
+ "door": "infinito",
+ "game": "ffx2",
+ "base": "https://echoesofspira.com/",
+ "seed": 1,
+ "startedAt": "2026-11-07T15:24:53.658Z",
+ "stateWrites": [
+  {
+   "at": 540305,
+   "what": "Chac's HP set to 2,000 at floor 80's first menu (write 1), so a real Attack ends the floor (PR-0613: no winning line is known for floor 80)",
+   "result": {
+    "was": 437850,
+    "now": 2000
+   }
+  }
+ ],
+ "decisions": [
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "rikku",
+   "why": "Rikku attacks",
+   "did": true,
+   "how": "path=top; aim x2-aranea=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 84,
+   "turn": 1,
+   "ms": 27830,
+   "rowsBefore": null,
+   "events": [
+    "x2-aranea:x2-aranea-attack->paine",
+    "rikku:attack->x2-aranea",
+    "  boss takes 5292"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-aranea=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 125,
+   "turn": 2,
+   "ms": 31718,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-aranea"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-aranea=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 134,
+   "turn": 3,
+   "ms": 36008,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-aranea",
+    "x2-aranea:x2-aranea-attack->yuna"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Rikku attacks",
+   "did": true,
+   "how": "path=top; aim x2-black-elemental=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 131,
+   "turn": 1,
+   "ms": 69375,
+   "rowsBefore": null,
+   "events": [
+    "x2-black-elemental:x2-black-elemental-berserk->yuna",
+    "rikku:attack->x2-black-elemental",
+    "  boss takes 428",
+    "yuna:attack->x2-black-elemental",
+    "  boss takes 1413"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-black-elemental=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 180,
+   "turn": 3,
+   "ms": 74550,
+   "rowsBefore": null,
+   "events": [
+    "paine:x2-dark-knight-darkness->x2-black-elemental",
+    "x2-black-elemental:x2-black-elemental-berserk->rikku"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 2,
+   "actor": "rikku",
+   "why": "Rikku attacks",
+   "did": true,
+   "how": "path=top; aim x2-black-elemental=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 355,
+   "turn": 5,
+   "ms": 79270,
+   "rowsBefore": null,
+   "events": [
+    "  dmg paine 1338",
+    "  boss takes 6365",
+    "rikku:attack->x2-black-elemental",
+    "  boss takes 669"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 2,
+   "actor": "paine",
+   "why": "paine Darkness -> NOT TAKEN, Attack",
+   "did": true,
+   "how": "path=null; ERR Error: could not open Attack; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 407,
+   "turn": 6,
+   "ms": 110174,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 7,
+   "link": 3,
+   "actor": "rikku",
+   "why": "Rikku's Light Curtain",
+   "did": true,
+   "how": "path=Item > Light Curtain; ",
+   "cmd": {
+    "label": "Light Curtain",
+    "id": "x2-light-curtain",
+    "kind": "item"
+   },
+   "ticks": 136,
+   "turn": 2,
+   "ms": 115654,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->rikku",
+    "x2-concherer:x2-concherer-gunk->rikku",
+    "rikku:x2-item-light-curtain->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 173,
+   "turn": 3,
+   "ms": 119547,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 3,
+   "actor": "paine",
+   "why": "Paine changes dark-knight to Warrior (the walk across The End's gates; crossed so far: none)",
+   "did": true,
+   "how": "path=Change > Warrior; ",
+   "cmd": {
+    "path": [
+     "Change",
+     "Warrior"
+    ]
+   },
+   "ticks": 180,
+   "turn": 4,
+   "ms": 123821,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 10,
+   "link": 3,
+   "actor": "paine",
+   "why": "Paine changes warrior to Gunner (the walk across The End's gates; crossed so far: blue)",
+   "did": true,
+   "how": "path=Change > Gunner; ",
+   "cmd": {
+    "path": [
+     "Change",
+     "Gunner"
+    ]
+   },
+   "ticks": 327,
+   "turn": 5,
+   "ms": 132538,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6688"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 3,
+   "actor": "rikku",
+   "why": "Rikku's Lunar Curtain",
+   "did": true,
+   "how": "path=Item > Lunar Curtain; ",
+   "cmd": {
+    "label": "Lunar Curtain",
+    "id": "x2-lunar-curtain",
+    "kind": "item"
+   },
+   "ticks": 365,
+   "turn": 7,
+   "ms": 139444,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->paine",
+    "  dmg rikku 159",
+    "rikku:x2-item-lunar-curtain->yuna+rikku+paine"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 393,
+   "turn": 8,
+   "ms": 143886,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 3,
+   "actor": "paine",
+   "why": "Paine changes gunner to Thief (the walk across The End's gates; crossed so far: blue+yellow)",
+   "did": true,
+   "how": "path=Change > Thief; ",
+   "cmd": {
+    "path": [
+     "Change",
+     "Thief"
+    ]
+   },
+   "ticks": 468,
+   "turn": 10,
+   "ms": 156681,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-megaton-press->rikku"
+   ]
+  },
+  {
+   "n": 14,
+   "link": 3,
+   "actor": "paine",
+   "why": "Paine changes thief to Dark Knight (the walk across The End's gates; crossed so far: blue+yellow+green)",
+   "did": true,
+   "how": "path=Change > Dark Knight; ",
+   "cmd": {
+    "path": [
+     "Change",
+     "Dark Knight"
+    ]
+   },
+   "ticks": 581,
+   "turn": 11,
+   "ms": 165267,
+   "rowsBefore": null,
+   "events": [
+    "  dmg rikku 30609",
+    "  KO rikku (by null)",
+    "  dmg yuna 1338",
+    "  boss takes 6539"
+   ]
+  },
+  {
+   "n": 15,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 610,
+   "turn": 12,
+   "ms": 169296,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 16,
+   "link": 3,
+   "actor": "paine",
+   "why": "Paine casts Charon (gates blue+yellow+green+red; the shell stands)",
+   "did": true,
+   "how": "path=Skill > Charon; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Charon",
+    "id": "x2-dark-knight-charon",
+    "kind": "ability"
+   },
+   "ticks": 765,
+   "turn": 14,
+   "ms": 177914,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->paine",
+    "  dmg yuna 1338",
+    "  boss takes 6290",
+    "paine:x2-dark-knight-charon->x2-concherer"
+   ]
+  },
+  {
+   "n": 17,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 827,
+   "turn": 16,
+   "ms": 183418,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->paine",
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 18,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1035,
+   "turn": 18,
+   "ms": 195338,
+   "rowsBefore": null,
+   "events": [
+    "  boss takes 21420",
+    "  MSG \"Concherer's shell breaks!\"",
+    "  dmg paine 10710",
+    "  KO paine (by null)",
+    "  dmg yuna 1338",
+    "  boss takes 9084",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 19,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1254,
+   "turn": 20,
+   "ms": 202890,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "  dmg yuna 1338",
+    "  boss takes 6464",
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 20,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna mends herself with Megalixir (under 30 percent; Darkness and Charon cost HP)",
+   "did": true,
+   "how": "path=Item > Megalixir; aim yuna=true; ",
+   "cmd": {
+    "label": "Megalixir",
+    "id": "x2-megalixir",
+    "kind": "item"
+   },
+   "ticks": 1465,
+   "turn": 23,
+   "ms": 211505,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "  dmg yuna 1338",
+    "  boss takes 6041",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-item-megalixir->yuna"
+   ]
+  },
+  {
+   "n": 21,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1757,
+   "turn": 26,
+   "ms": 219643,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 22,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 1970,
+   "turn": 28,
+   "ms": 226340,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6141",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer"
+   ]
+  },
+  {
+   "n": 23,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 2187,
+   "turn": 30,
+   "ms": 231595,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "  dmg yuna 1338",
+    "  boss takes 6166",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 24,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 2400,
+   "turn": 33,
+   "ms": 237512,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6215",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "  dmg yuna 1338",
+    "  boss takes 6539"
+   ]
+  },
+  {
+   "n": 25,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 2619,
+   "turn": 35,
+   "ms": 242849,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 26,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 2840,
+   "turn": 37,
+   "ms": 248007,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6190",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 27,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna mends herself with Megalixir (under 30 percent; Darkness and Charon cost HP)",
+   "did": true,
+   "how": "path=Item > Megalixir; aim yuna=true; ",
+   "cmd": {
+    "label": "Megalixir",
+    "id": "x2-megalixir",
+    "kind": "item"
+   },
+   "ticks": 3055,
+   "turn": 40,
+   "ms": 254229,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6240",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-item-megalixir->yuna",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 28,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 3353,
+   "turn": 43,
+   "ms": 259084,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 29,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 3568,
+   "turn": 45,
+   "ms": 264086,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6190",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 30,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 3787,
+   "turn": 48,
+   "ms": 270385,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6290",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "  dmg yuna 1338",
+    "  boss takes 6713"
+   ]
+  },
+  {
+   "n": 31,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 4012,
+   "turn": 50,
+   "ms": 275814,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 32,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 4228,
+   "turn": 52,
+   "ms": 280946,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6240",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 33,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 4448,
+   "turn": 55,
+   "ms": 287076,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6688",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 34,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna mends herself with Megalixir (under 30 percent; Darkness and Charon cost HP)",
+   "did": true,
+   "how": "path=Item > Megalixir; aim yuna=true; ",
+   "cmd": {
+    "label": "Megalixir",
+    "id": "x2-megalixir",
+    "kind": "item"
+   },
+   "ticks": 4668,
+   "turn": 57,
+   "ms": 292464,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6638",
+    "yuna:x2-item-megalixir->yuna",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 35,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 4962,
+   "turn": 60,
+   "ms": 297444,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 36,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 5187,
+   "turn": 63,
+   "ms": 303596,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6563",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 37,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 5404,
+   "turn": 65,
+   "ms": 308759,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6190",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 38,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 5620,
+   "turn": 68,
+   "ms": 314867,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6389",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "  dmg yuna 1338",
+    "  boss takes 6141"
+   ]
+  },
+  {
+   "n": 39,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 5860,
+   "turn": 70,
+   "ms": 320859,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 40,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 6094,
+   "turn": 72,
+   "ms": 326645,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6315",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 41,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna mends herself with Megalixir (under 30 percent; Darkness and Charon cost HP)",
+   "did": true,
+   "how": "path=Item > Megalixir; aim yuna=true; ",
+   "cmd": {
+    "label": "Megalixir",
+    "id": "x2-megalixir",
+    "kind": "item"
+   },
+   "ticks": 6326,
+   "turn": 75,
+   "ms": 333749,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6713",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-item-megalixir->yuna",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 42,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 6631,
+   "turn": 78,
+   "ms": 338842,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 43,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 6860,
+   "turn": 80,
+   "ms": 344236,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6240",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 44,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 7073,
+   "turn": 83,
+   "ms": 350365,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6265",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 45,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 7295,
+   "turn": 85,
+   "ms": 355731,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6638",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 46,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 7521,
+   "turn": 88,
+   "ms": 362176,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6663",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 47,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 7736,
+   "turn": 90,
+   "ms": 367398,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6414",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 48,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna mends herself with Megalixir (under 30 percent; Darkness and Charon cost HP)",
+   "did": true,
+   "how": "path=Item > Megalixir; aim yuna=true; ",
+   "cmd": {
+    "label": "Megalixir",
+    "id": "x2-megalixir",
+    "kind": "item"
+   },
+   "ticks": 7958,
+   "turn": 93,
+   "ms": 374096,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6389",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-item-megalixir->yuna",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 49,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 8261,
+   "turn": 96,
+   "ms": 379208,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 50,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 8483,
+   "turn": 98,
+   "ms": 384738,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6414",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 51,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 8705,
+   "turn": 101,
+   "ms": 391080,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6240",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 52,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 8925,
+   "turn": 103,
+   "ms": 396423,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6713",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 53,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 9148,
+   "turn": 106,
+   "ms": 402766,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6713",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 54,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 9367,
+   "turn": 108,
+   "ms": 407970,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6539",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 55,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna mends herself with Megalixir (under 30 percent; Darkness and Charon cost HP)",
+   "did": true,
+   "how": "path=Item > Megalixir; aim yuna=true; ",
+   "cmd": {
+    "label": "Megalixir",
+    "id": "x2-megalixir",
+    "kind": "item"
+   },
+   "ticks": 9591,
+   "turn": 111,
+   "ms": 414628,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6116",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-item-megalixir->yuna",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 56,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 9900,
+   "turn": 114,
+   "ms": 420143,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 57,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 10120,
+   "turn": 116,
+   "ms": 425719,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6091",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 58,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 10349,
+   "turn": 119,
+   "ms": 432067,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6190",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 59,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 10575,
+   "turn": 121,
+   "ms": 437645,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6613",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 60,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 10802,
+   "turn": 124,
+   "ms": 444323,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6539",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 61,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 11023,
+   "turn": 126,
+   "ms": 450070,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6539",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 62,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna mends herself with Megalixir (under 30 percent; Darkness and Charon cost HP)",
+   "did": true,
+   "how": "path=Item > Megalixir; aim yuna=true; ",
+   "cmd": {
+    "label": "Megalixir",
+    "id": "x2-megalixir",
+    "kind": "item"
+   },
+   "ticks": 11256,
+   "turn": 129,
+   "ms": 456810,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6539",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-item-megalixir->yuna",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 63,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 11552,
+   "turn": 132,
+   "ms": 461926,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 64,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 11773,
+   "turn": 134,
+   "ms": 467187,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6389",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 65,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 11992,
+   "turn": 137,
+   "ms": 473422,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6588",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 66,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 12211,
+   "turn": 139,
+   "ms": 478867,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6215",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 67,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 12436,
+   "turn": 142,
+   "ms": 485577,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6141",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 68,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 12657,
+   "turn": 144,
+   "ms": 491064,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6663",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 69,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna mends herself with Megalixir (under 30 percent; Darkness and Charon cost HP)",
+   "did": true,
+   "how": "path=Item > Megalixir; aim yuna=true; ",
+   "cmd": {
+    "label": "Megalixir",
+    "id": "x2-megalixir",
+    "kind": "item"
+   },
+   "ticks": 12887,
+   "turn": 147,
+   "ms": 497877,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6340",
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-item-megalixir->yuna",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 70,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 13190,
+   "turn": 150,
+   "ms": 503714,
+   "rowsBefore": null,
+   "events": [
+    "x2-concherer:x2-concherer-attack->yuna",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 71,
+   "link": 3,
+   "actor": "yuna",
+   "why": "yuna Darkness",
+   "did": true,
+   "how": "path=Skill > Darkness; aim x2-concherer=true; ",
+   "cmd": {
+    "label": "Darkness",
+    "id": "x2-dark-knight-darkness",
+    "kind": "ability"
+   },
+   "ticks": 13434,
+   "turn": 152,
+   "ms": 509354,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 1338",
+    "  boss takes 6489",
+    "yuna:x2-dark-knight-darkness->x2-concherer",
+    "x2-concherer:x2-concherer-attack->yuna"
+   ]
+  },
+  {
+   "n": 72,
+   "link": 4,
+   "actor": "rikku",
+   "why": "rikku attacks Chac (the last blow, real key)",
+   "did": true,
+   "how": "path=top; aim x2-chac=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 129,
+   "turn": 2,
+   "ms": 541601,
+   "rowsBefore": null,
+   "events": [
+    "x2-chac:x2-chac-attack->rikku",
+    "x2-chac:x2-chac-stony-glare->paine",
+    "rikku:attack->x2-chac",
+    "  boss takes 2456",
+    "  KO x2-chac (by attack)"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "n": 1,
+   "key": "x2-aranea#1",
+   "foes": [
+    "x2-aranea"
+   ],
+   "seed": 1,
+   "ms": 25133,
+   "ticks": 84
+  },
+  {
+   "at": "after seam (decision 3)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 66972
+  },
+  {
+   "n": 2,
+   "key": "x2-black-elemental#2",
+   "foes": [
+    "x2-black-elemental"
+   ],
+   "seed": 2,
+   "ms": 66989,
+   "ticks": 131
+  },
+  {
+   "n": 3,
+   "key": "x2-concherer#3",
+   "foes": [
+    "x2-concherer"
+   ],
+   "seed": 3,
+   "ms": 111047,
+   "ticks": 136
+  },
+  {
+   "at": "after seam (decision 72)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 539734
+  },
+  {
+   "n": 4,
+   "key": "x2-chac#4",
+   "foes": [
+    "x2-chac"
+   ],
+   "seed": 4,
+   "ms": 539749,
+   "ticks": 129
+  },
+  {
+   "at": "after seam (decision 73)",
+   "screenWas": "battle",
+   "next": "left:cutscene",
+   "ms": 545907
+  }
+ ],
+ "attempts": [
+  {
+   "attempt": 1,
+   "over": "left:cutscene",
+   "decisions": 73,
+   "ms": 545907,
+   "floorsSeen": [
+    "x2-aranea",
+    "x2-black-elemental",
+    "x2-concherer",
+    "x2-chac"
+   ]
+  }
+ ],
+ "mechanics": [
+  {
+   "ms": 110849,
+   "seq": 10,
+   "actor": "x2-concherer",
+   "ability": "x2-concherer-gunk",
+   "targets": [
+    "rikku"
+   ],
+   "first": true
+  },
+  {
+   "ms": 146321,
+   "seq": 110,
+   "actor": "x2-concherer",
+   "ability": "x2-concherer-megaton-press",
+   "targets": [
+    "rikku"
+   ],
+   "first": true
+  },
+  {
+   "ms": 196164,
+   "mech": "shell-break",
+   "seq": 292,
+   "text": "Concherer's shell breaks!"
+  },
+  {
+   "ms": 539746,
+   "seq": 10,
+   "actor": "x2-chac",
+   "ability": "x2-chac-stony-glare",
+   "targets": [
+    "paine"
+   ],
+   "first": true
+  }
+ ],
+ "screens": [
+  {
+   "label": "a1",
+   "screens": [
+    "cutscene",
+    "results",
+    "cutscene",
+    "chapter-select"
+   ],
+   "results": {
+    "text": "VIA INFINITO — FLOORS 20, 40, 60 AND 80 · CLEARED RESULTS · 8:48 Victory EXP 12,970 ×3 PARTY AP 4 PER DRESSPHERE GIL 3,130 ITEMS Stamina Tonic, Pixie Dust Y Yuna DARK KNIGHT · CONFUSEPROOF 4/30 AP +12,970EXP R Rikku ALCHEMIST · DISPEL TONIC 4/20 AP +12,970EXP P Paine DARK KNIGHT · CONFUSEPROOF 4/30 AP +12,970EXP CONFIRM ▸",
+    "outcome": "victory"
+   },
+   "outcome": "victory",
+   "scenes": [
+    {
+     "watch": {
+      "ms": 1,
+      "shows": 0,
+      "advancedWithoutInput": false,
+      "firstLine": null,
+      "screenAfterWatch": "results"
+     },
+     "taps": 0,
+     "holds": 0,
+     "ended": true,
+     "lines": []
+    },
+    {
+     "watch": {
+      "ms": 6034,
+      "shows": 3,
+      "advancedWithoutInput": true,
+      "firstLine": "She looked like someone I once had to refuse.",
+      "screenAfterWatch": "cutscene"
+     },
+     "taps": 5,
+     "holds": 0,
+     "ended": true,
+     "lines": [
+      "And never found it.",
+      "So we keep it short.",
+      "Great. That was eighty floors. We have twenty left",
+      "Far below, the hundredth floor is still waiting."
+     ]
+    }
+   ],
+   "next": "board",
+   "board": {
+    "selectedIndex": 0,
+    "selectedId": "seymour-flux",
+    "tiles": 19,
+    "coming": [],
+    "cleared": [],
+    "order": [
+     "seymour-flux",
+     "yunalesca",
+     "braskas-final-aeon",
+     "seymour-anima-macalania",
+     "evrae-airship",
+     "yojimbo-cavern",
+     "seymour-natus",
+     "seymour-omnis",
+     "isaaru-via-purifico",
+     "sin-fins-core",
+     "sin-face",
+     "mirror-aeons",
+     "ffx2-bahamut",
+     "ffx2-vegnagun-shuyin",
+     "ffx2-leblanc",
+     "ffx2-fallen-aeons",
+     "ffx2-trema",
+     "ffx2-den-of-woe",
+     "ffx2-ixion-djose"
+    ],
+    "beaten": 0,
+    "total": 19
+   },
+   "boardText": "CHAPTER SELECT CHAPTER I Seymour Flux 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVII XVIII XXVII X-2 IV V VI XI XIII XV XVI The mountain of the Ronso, and what was done to them The Ronso held the gate so the summoner could pass. Seymour calls it mercy. He is still unsent, he is waiting on the trail, and everything he says about Jecht is true. CTB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima VIII Evrae IX Yojimbo X Seymour Natus XII Seymour Omnis XIV Isaaru XVII Sin: the Fins and the Core XVIII Sin: the Face XXVII Mirror Aeons FINAL FANTAS"
+  }
+ ],
+ "speed": "normal",
+ "line": "plain (20, 40); the walk then Charon (60); one HP write on floor 80",
+ "live": {
+  "version": "0.1.0",
+  "scripts": [
+   "index-jYm-0mrJ.js"
+  ]
+ },
+ "battleSeed": 1,
+ "openFailures": [
+  {
+   "ms": 88615,
+   "actor": "paine",
+   "want": "Darkness",
+   "category": "skill",
+   "rowsNow": []
+  },
+  {
+   "ms": 103020,
+   "actor": "paine",
+   "want": "Attack",
+   "category": "attack",
+   "rowsNow": []
+  }
+ ],
+ "diag": [
+  {
+   "n": 8,
+   "me": "paine",
+   "floor": 2,
+   "girls": [
+    {
+     "g": "yuna",
+     "hp": 8034,
+     "alive": true,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell"
+     ]
+    },
+    {
+     "g": "rikku",
+     "hp": 0,
+     "alive": false,
+     "removed": false,
+     "st": [
+      "protect",
+      "poison",
+      "shell",
+      "ko"
+     ]
+    },
+    {
+     "g": "paine",
+     "hp": 6894,
+     "alive": true,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "l": "Megalixir",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    },
+    {
+     "l": "Light Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    },
+    {
+     "l": "Lunar Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    },
+    {
+     "l": "Remedy",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    }
+   ],
+   "all": [
+    "attack:Attack",
+    "skill:Steal",
+    "skill:Pilfer Gil",
+    "skill:Borrowed Time",
+    "skill:Pilfer HP",
+    "skill:Pilfer MP",
+    "skill:Sticky Fingers",
+    "skill:Master Thief",
+    "skill:Soul Swipe",
+    "skill:Steal Will",
+    "skill:Flee",
+    "dressphere:dark-knight",
+    "dressphere:gunner",
+    "dressphere:lady-luck",
+    "item:Megalixir",
+    "item:Light Curtain",
+    "item:Lunar Curtain",
+    "item:Remedy"
+   ]
+  },
+  {
+   "n": 9,
+   "me": "yuna",
+   "floor": 2,
+   "girls": [
+    {
+     "g": "yuna",
+     "hp": 8034,
+     "alive": true,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell"
+     ]
+    },
+    {
+     "g": "rikku",
+     "hp": 0,
+     "alive": false,
+     "removed": false,
+     "st": [
+      "protect",
+      "poison",
+      "shell",
+      "ko"
+     ]
+    },
+    {
+     "g": "paine",
+     "hp": 10710,
+     "alive": true,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "l": "Megalixir",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    },
+    {
+     "l": "Light Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    },
+    {
+     "l": "Lunar Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    },
+    {
+     "l": "Remedy",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    }
+   ],
+   "all": [
+    "attack:Attack",
+    "skill:Darkness",
+    "skill:Charon",
+    "skill:Drain",
+    "skill:Demi",
+    "skill:Confuse",
+    "skill:Break",
+    "skill:Bio",
+    "skill:Doom",
+    "skill:Death",
+    "skill:Black Sky",
+    "dressphere:white-mage",
+    "dressphere:thief",
+    "dressphere:lady-luck",
+    "item:Megalixir",
+    "item:Light Curtain",
+    "item:Lunar Curtain",
+    "item:Remedy"
+   ]
+  },
+  {
+   "n": 10,
+   "me": "paine",
+   "floor": 2,
+   "girls": [
+    {
+     "g": "yuna",
+     "hp": 6696,
+     "alive": true,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell"
+     ]
+    },
+    {
+     "g": "rikku",
+     "hp": 0,
+     "alive": false,
+     "removed": false,
+     "st": [
+      "protect",
+      "poison",
+      "shell",
+      "ko"
+     ]
+    },
+    {
+     "g": "paine",
+     "hp": 10710,
+     "alive": true,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "l": "Megalixir",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    },
+    {
+     "l": "Light Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    },
+    {
+     "l": "Lunar Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    },
+    {
+     "l": "Remedy",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    }
+   ],
+   "all": [
+    "attack:Attack",
+    "skill:Darkness",
+    "skill:Charon",
+    "skill:Drain",
+    "skill:Demi",
+    "skill:Confuse",
+    "skill:Break",
+    "skill:Bio",
+    "skill:Doom",
+    "skill:Death",
+    "skill:Black Sky",
+    "dressphere:warrior",
+    "dressphere:thief",
+    "dressphere:lady-luck",
+    "item:Megalixir",
+    "item:Light Curtain",
+    "item:Lunar Curtain",
+    "item:Remedy"
+   ]
+  },
+  {
+   "n": 11,
+   "me": "yuna",
+   "floor": 2,
+   "girls": [
+    {
+     "g": "yuna",
+     "hp": 6696,
+     "alive": true,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell"
+     ]
+    },
+    {
+     "g": "rikku",
+     "hp": 0,
+     "alive": false,
+     "removed": false,
+     "st": [
+      "protect",
+      "poison",
+      "shell",
+      "ko"
+     ]
+    },
+    {
+     "g": "paine",
+     "hp": 10710,
+     "alive": true,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "l": "Megalixir",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    },
+    {
+     "l": "Light Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    },
+    {
+     "l": "Lunar Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    },
+    {
+     "l": "Remedy",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna",
+      "paine"
+     ]
+    }
+   ],
+   "all": [
+    "attack:Attack",
+    "skill:Darkness",
+    "skill:Charon",
+    "skill:Drain",
+    "skill:Demi",
+    "skill:Confuse",
+    "skill:Break",
+    "skill:Bio",
+    "skill:Doom",
+    "skill:Death",
+    "skill:Black Sky",
+    "dressphere:white-mage",
+    "dressphere:thief",
+    "dressphere:lady-luck",
+    "item:Megalixir",
+    "item:Light Curtain",
+    "item:Lunar Curtain",
+    "item:Remedy"
+   ]
+  },
+  {
+   "n": 12,
+   "me": "yuna",
+   "floor": 2,
+   "girls": [
+    {
+     "g": "yuna",
+     "hp": 5358,
+     "alive": true,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell"
+     ]
+    },
+    {
+     "g": "rikku",
+     "hp": 0,
+     "alive": false,
+     "removed": false,
+     "st": [
+      "protect",
+      "poison",
+      "shell",
+      "ko"
+     ]
+    },
+    {
+     "g": "paine",
+     "hp": 0,
+     "alive": false,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell",
+      "ko"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "l": "Megalixir",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    },
+    {
+     "l": "Light Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    },
+    {
+     "l": "Lunar Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    },
+    {
+     "l": "Remedy",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    }
+   ],
+   "all": [
+    "attack:Attack",
+    "skill:Darkness",
+    "skill:Charon",
+    "skill:Drain",
+    "skill:Demi",
+    "skill:Confuse",
+    "skill:Break",
+    "skill:Bio",
+    "skill:Doom",
+    "skill:Death",
+    "skill:Black Sky",
+    "dressphere:white-mage",
+    "dressphere:thief",
+    "dressphere:lady-luck",
+    "item:Megalixir",
+    "item:Light Curtain",
+    "item:Lunar Curtain",
+    "item:Remedy"
+   ]
+  },
+  {
+   "n": 13,
+   "me": "yuna",
+   "floor": 2,
+   "girls": [
+    {
+     "g": "yuna",
+     "hp": 4020,
+     "alive": true,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell"
+     ]
+    },
+    {
+     "g": "rikku",
+     "hp": 0,
+     "alive": false,
+     "removed": false,
+     "st": [
+      "protect",
+      "poison",
+      "shell",
+      "ko"
+     ]
+    },
+    {
+     "g": "paine",
+     "hp": 0,
+     "alive": false,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell",
+      "ko"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "l": "Megalixir",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    },
+    {
+     "l": "Light Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    },
+    {
+     "l": "Lunar Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    },
+    {
+     "l": "Remedy",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    }
+   ],
+   "all": [
+    "attack:Attack",
+    "skill:Darkness",
+    "skill:Charon",
+    "skill:Drain",
+    "skill:Demi",
+    "skill:Confuse",
+    "skill:Break",
+    "skill:Bio",
+    "skill:Doom",
+    "skill:Death",
+    "skill:Black Sky",
+    "dressphere:white-mage",
+    "dressphere:thief",
+    "dressphere:lady-luck",
+    "item:Megalixir",
+    "item:Light Curtain",
+    "item:Lunar Curtain",
+    "item:Remedy"
+   ]
+  },
+  {
+   "n": 14,
+   "me": "yuna",
+   "floor": 2,
+   "girls": [
+    {
+     "g": "yuna",
+     "hp": 2682,
+     "alive": true,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell"
+     ]
+    },
+    {
+     "g": "rikku",
+     "hp": 0,
+     "alive": false,
+     "removed": false,
+     "st": [
+      "protect",
+      "poison",
+      "shell",
+      "ko"
+     ]
+    },
+    {
+     "g": "paine",
+     "hp": 0,
+     "alive": false,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell",
+      "ko"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "l": "Megalixir",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    },
+    {
+     "l": "Light Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    },
+    {
+     "l": "Lunar Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    },
+    {
+     "l": "Remedy",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    }
+   ],
+   "all": [
+    "attack:Attack",
+    "skill:Darkness",
+    "skill:Charon",
+    "skill:Drain",
+    "skill:Demi",
+    "skill:Confuse",
+    "skill:Break",
+    "skill:Bio",
+    "skill:Doom",
+    "skill:Death",
+    "skill:Black Sky",
+    "dressphere:white-mage",
+    "dressphere:thief",
+    "dressphere:lady-luck",
+    "item:Megalixir",
+    "item:Light Curtain",
+    "item:Lunar Curtain",
+    "item:Remedy"
+   ]
+  },
+  {
+   "n": 15,
+   "me": "yuna",
+   "floor": 2,
+   "girls": [
+    {
+     "g": "yuna",
+     "hp": 10710,
+     "alive": true,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell"
+     ]
+    },
+    {
+     "g": "rikku",
+     "hp": 0,
+     "alive": false,
+     "removed": false,
+     "st": [
+      "protect",
+      "poison",
+      "shell",
+      "ko"
+     ]
+    },
+    {
+     "g": "paine",
+     "hp": 0,
+     "alive": false,
+     "removed": false,
+     "st": [
+      "protect",
+      "shell",
+      "ko"
+     ]
+    }
+   ],
+   "items": [
+    {
+     "l": "Megalixir",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    },
+    {
+     "l": "Light Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    },
+    {
+     "l": "Lunar Curtain",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    },
+    {
+     "l": "Remedy",
+     "en": true,
+     "why": null,
+     "t": [
+      "yuna"
+     ]
+    }
+   ],
+   "all": [
+    "attack:Attack",
+    "skill:Darkness",
+    "skill:Charon",
+    "skill:Drain",
+    "skill:Demi",
+    "skill:Confuse",
+    "skill:Break",
+    "skill:Bio",
+    "skill:Doom",
+    "skill:Death",
+    "skill:Black Sky",
+    "dressphere:white-mage",
+    "dressphere:thief",
+    "dressphere:lady-luck",
+    "item:Megalixir",
+    "item:Light Curtain",
+    "item:Lunar Curtain",
+    "item:Remedy"
+   ]
+  }
+ ],
+ "shellBreak": {
+  "seq": 292,
+  "text": "Concherer's shell breaks!",
+  "decision": 18,
+  "why": "yuna Darkness"
+ },
+ "result": "WON: four floors by real keys (1 state write on floor 80)",
+ "consoleErrors": [],
+ "notFound": [],
+ "errors": [],
+ "minutes": 9.49
+}

@@ -1,0 +1,96 @@
+{
+ "notes": [
+  {
+   "ms": 341066,
+   "k": "live",
+   "v": {
+    "version": "0.1.0",
+    "scripts": [
+     "index-jYm-0mrJ.js"
+    ]
+   }
+  },
+  {
+   "ms": 347245,
+   "k": "door",
+   "v": {
+    "word": "drillshot",
+    "typed": "drillshot"
+   }
+  },
+  {
+   "ms": 349490,
+   "k": "afterDoor",
+   "v": "party-prep"
+  },
+  {
+   "ms": 357647,
+   "k": "preSceneHolds",
+   "v": 1
+  },
+  {
+   "ms": 359636,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1,
+    "boss": [
+     "x2-georapella"
+    ]
+   }
+  },
+  {
+   "ms": 368724,
+   "k": "fight-over",
+   "v": {
+    "attempt": 1,
+    "over": "stuck: 8 decisions in a row were not taken",
+    "decisions": 8,
+    "ms": 368724
+   }
+  },
+  {
+   "ms": 368724,
+   "k": "RESULT",
+   "v": "NOT WON"
+  }
+ ],
+ "shots": [
+  {
+   "file": "00-title.png",
+   "why": "title, fresh profile",
+   "ms": 342459,
+   "screen": "title"
+  },
+  {
+   "file": "01-party-prep.png",
+   "why": "party prep opened by the word (no card)",
+   "ms": 349621,
+   "screen": "party-prep"
+  },
+  {
+   "file": "02-pre-scene.png",
+   "why": "pre-battle scene, first line",
+   "ms": 353638,
+   "screen": "cutscene"
+  },
+  {
+   "file": "m-x2-georapella-x2-georapella-blizzaga.jpg",
+   "why": "x2-georapella starts x2-georapella-blizzaga",
+   "ms": 360218,
+   "screen": "battle"
+  },
+  {
+   "file": "link01-first-menu.png",
+   "why": "link 1: first command menu (x2-georapella)",
+   "ms": 360583,
+   "screen": "battle"
+  },
+  {
+   "file": "stuck.png",
+   "why": "a menu nothing could be chosen from",
+   "ms": 368724,
+   "screen": "battle"
+  }
+ ]
+}

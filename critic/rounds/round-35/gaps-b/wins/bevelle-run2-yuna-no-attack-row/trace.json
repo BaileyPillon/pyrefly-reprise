@@ -1,0 +1,193 @@
+{
+ "chapter": "bevelle",
+ "door": "drillshot",
+ "game": "ffx2",
+ "base": "https://echoesofspira.com/",
+ "seed": 1,
+ "startedAt": "2026-11-07T14:27:41.531Z",
+ "stateWrites": [],
+ "decisions": [
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "paine",
+   "why": "paine attacks x2-georapella",
+   "did": true,
+   "how": "path=top; aim x2-georapella=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 65,
+   "turn": 1,
+   "ms": 361889,
+   "rowsBefore": null,
+   "events": [
+    "x2-georapella:x2-georapella-blizzaga->",
+    "paine:attack->x2-georapella",
+    "  boss takes 303"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 80,
+   "turn": 2,
+   "ms": 363292,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 101,
+   "turn": 2,
+   "ms": 364006,
+   "rowsBefore": null,
+   "events": [
+    "  dmg yuna 91",
+    "  dmg rikku 145",
+    "  dmg paine 213"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 108,
+   "turn": 2,
+   "ms": 364724,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 108,
+   "turn": 2,
+   "ms": 365449,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 120,
+   "turn": 2,
+   "ms": 366174,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 142,
+   "turn": 2,
+   "ms": 366886,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 164,
+   "turn": 2,
+   "ms": 367614,
+   "rowsBefore": null,
+   "events": []
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "yuna",
+   "why": "yuna attacks x2-georapella -> NOT TAKEN, Attack",
+   "did": false,
+   "how": "not offered",
+   "cmd": null,
+   "ticks": 185,
+   "turn": 2,
+   "ms": 368341,
+   "rowsBefore": null
+  }
+ ],
+ "links": [
+  {
+   "n": 1,
+   "key": "x2-georapella#1",
+   "foes": [
+    "x2-georapella"
+   ],
+   "seed": 1,
+   "ms": 360170,
+   "ticks": 65
+  }
+ ],
+ "attempts": [
+  {
+   "attempt": 1,
+   "over": "stuck: 8 decisions in a row were not taken",
+   "decisions": 8,
+   "ms": 368724
+  }
+ ],
+ "mechanics": [
+  {
+   "ms": 360162,
+   "seq": 3,
+   "actor": "x2-georapella",
+   "ability": "x2-georapella-blizzaga",
+   "targets": [],
+   "first": true
+  }
+ ],
+ "screens": [],
+ "speed": "normal",
+ "line": "careful (acts 1-2); change: Yuna to Gunner then strike (act 3)",
+ "live": {
+  "version": "0.1.0",
+  "scripts": [
+   "index-jYm-0mrJ.js"
+  ]
+ },
+ "battleSeed": 1,
+ "result": "NOT WON",
+ "consoleErrors": [],
+ "notFound": [],
+ "errors": [],
+ "minutes": 6.17
+}

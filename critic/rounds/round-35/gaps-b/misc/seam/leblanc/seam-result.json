@@ -1,0 +1,401 @@
+{
+ "tag": "leblanc",
+ "chapter": "ffx2-leblanc",
+ "size": "1600x900",
+ "base": "https://echoesofspira.com/",
+ "startedAt": "2026-11-07T19:29:13.588Z",
+ "setupAids": [
+  "window.__pyrefly.setSeed(1) before the first key",
+  "window.__pyrefly.autoBattle('intended') + setBattleSpeed('fast') between first menus, switched off with presenter.setAutoPlay(null) when a link begins"
+ ],
+ "links": [
+  {
+   "link": 1,
+   "chainLength": 3,
+   "label": "link 1 first menu",
+   "ribbon": "Ormi",
+   "bossNames": [],
+   "hudF1": true,
+   "strip": {
+    "opacity": 1,
+    "visible": true,
+    "text": "EnterSelectGIntelPPause",
+    "box": [
+     66,
+     841,
+     384,
+     41
+    ]
+   },
+   "stripAt2": {
+    "opacity": 1,
+    "visible": true,
+    "text": "EnterSelectGIntelPPause",
+    "box": [
+     66,
+     841,
+     384,
+     41
+    ]
+   },
+   "f1OverOnHudRoot": false,
+   "f1OverAnywhere": false,
+   "rootClass": "ig ig--ffx2 ffx2hud hud-f1 f1-finish f1-cmd-open",
+   "awaitingMenu": true,
+   "residue": {
+    "slab": {
+     "n": 0,
+     "vis": 0
+    },
+    "banner": {
+     "n": 2,
+     "vis": 0
+    },
+    "mbar": {
+     "n": 0,
+     "vis": 0
+    },
+    "intent": {
+     "n": 1,
+     "vis": 0
+    },
+    "guide": {
+     "n": 0,
+     "vis": 0
+    },
+    "ffxTarget": {
+     "n": 1,
+     "vis": 1
+    },
+    "ffx2Plates": {
+     "n": 2,
+     "vis": 0
+    },
+    "dataTarget": {
+     "n": 0,
+     "vis": 0
+    },
+    "bstart": {
+     "n": 0,
+     "vis": 0
+    },
+    "cutin": {
+     "n": 0,
+     "vis": 0
+    },
+    "defeatBtns": {
+     "n": 0,
+     "vis": 0
+    },
+    "resultsBtns": {
+     "n": 0,
+     "vis": 0
+    },
+    "f1Cue": {
+     "n": 1,
+     "vis": 1
+    },
+    "f1Hero": {
+     "n": 1,
+     "vis": 1
+    },
+    "cmdStack": {
+     "n": 1,
+     "vis": 1
+    },
+    "cmdRows": {
+     "n": 4,
+     "vis": 4
+    }
+   },
+   "tSec": 3,
+   "stripVisible": true,
+   "pass": true,
+   "leftoverOverlays": [
+    "f1Cue:1",
+    "f1Hero:1"
+   ],
+   "shot": "leblanc/link01-first-menu.png"
+  },
+  {
+   "link": 2,
+   "chainLength": 3,
+   "label": "link 2 first menu",
+   "ribbon": "Logos",
+   "bossNames": [],
+   "hudF1": true,
+   "strip": {
+    "opacity": 0,
+    "visible": false,
+    "text": "EnterSelectGIntelPPause",
+    "box": [
+     66,
+     841,
+     384,
+     41
+    ]
+   },
+   "stripAt2": {
+    "opacity": 0,
+    "visible": false,
+    "text": "EnterSelectGIntelPPause",
+    "box": [
+     66,
+     841,
+     384,
+     41
+    ]
+   },
+   "f1OverOnHudRoot": true,
+   "f1OverAnywhere": true,
+   "rootClass": "ig ig--ffx2 ffx2hud hud-f1 f1-finish f1-over f1-cmd-open",
+   "awaitingMenu": true,
+   "residue": {
+    "slab": {
+     "n": 0,
+     "vis": 0
+    },
+    "banner": {
+     "n": 2,
+     "vis": 0
+    },
+    "mbar": {
+     "n": 0,
+     "vis": 0
+    },
+    "intent": {
+     "n": 1,
+     "vis": 0
+    },
+    "guide": {
+     "n": 0,
+     "vis": 0
+    },
+    "ffxTarget": {
+     "n": 1,
+     "vis": 1
+    },
+    "ffx2Plates": {
+     "n": 2,
+     "vis": 0
+    },
+    "dataTarget": {
+     "n": 0,
+     "vis": 0
+    },
+    "bstart": {
+     "n": 0,
+     "vis": 0
+    },
+    "cutin": {
+     "n": 0,
+     "vis": 0
+    },
+    "defeatBtns": {
+     "n": 0,
+     "vis": 0
+    },
+    "resultsBtns": {
+     "n": 0,
+     "vis": 0
+    },
+    "f1Cue": {
+     "n": 1,
+     "vis": 1
+    },
+    "f1Hero": {
+     "n": 1,
+     "vis": 1
+    },
+    "cmdStack": {
+     "n": 1,
+     "vis": 1
+    },
+    "cmdRows": {
+     "n": 4,
+     "vis": 4
+    }
+   },
+   "tSec": 40,
+   "stripVisible": false,
+   "pass": false,
+   "leftoverOverlays": [
+    "f1Cue:1",
+    "f1Hero:1"
+   ],
+   "shot": "leblanc/link02-first-menu.png"
+  },
+  {
+   "link": 3,
+   "chainLength": 3,
+   "label": "link 3 first menu",
+   "ribbon": "Leblanc",
+   "bossNames": [],
+   "hudF1": true,
+   "strip": {
+    "opacity": 0,
+    "visible": false,
+    "text": "EnterSelectGIntelPPause",
+    "box": [
+     66,
+     841,
+     384,
+     41
+    ]
+   },
+   "stripAt2": {
+    "opacity": 0,
+    "visible": false,
+    "text": "EnterSelectGIntelPPause",
+    "box": [
+     66,
+     841,
+     384,
+     41
+    ]
+   },
+   "f1OverOnHudRoot": true,
+   "f1OverAnywhere": true,
+   "rootClass": "ig ig--ffx2 ffx2hud hud-f1 f1-finish f1-over f1-cmd-open",
+   "awaitingMenu": true,
+   "residue": {
+    "slab": {
+     "n": 0,
+     "vis": 0
+    },
+    "banner": {
+     "n": 2,
+     "vis": 0
+    },
+    "mbar": {
+     "n": 0,
+     "vis": 0
+    },
+    "intent": {
+     "n": 1,
+     "vis": 0
+    },
+    "guide": {
+     "n": 0,
+     "vis": 0
+    },
+    "ffxTarget": {
+     "n": 1,
+     "vis": 1
+    },
+    "ffx2Plates": {
+     "n": 2,
+     "vis": 0
+    },
+    "dataTarget": {
+     "n": 0,
+     "vis": 0
+    },
+    "bstart": {
+     "n": 0,
+     "vis": 0
+    },
+    "cutin": {
+     "n": 0,
+     "vis": 0
+    },
+    "defeatBtns": {
+     "n": 0,
+     "vis": 0
+    },
+    "resultsBtns": {
+     "n": 0,
+     "vis": 0
+    },
+    "f1Cue": {
+     "n": 1,
+     "vis": 1
+    },
+    "f1Hero": {
+     "n": 1,
+     "vis": 1
+    },
+    "cmdStack": {
+     "n": 1,
+     "vis": 1
+    },
+    "cmdRows": {
+     "n": 4,
+     "vis": 4
+    }
+   },
+   "tSec": 95,
+   "stripVisible": false,
+   "pass": false,
+   "leftoverOverlays": [
+    "f1Cue:1",
+    "f1Hero:1"
+   ],
+   "shot": "leblanc/link03-first-menu.png"
+  }
+ ],
+ "steps": [
+  {
+   "at": "19:30:35",
+   "k": "booted",
+   "v": {
+    "bundle": "https://echoesofspira.com/assets/index-jYm-0mrJ.js",
+    "ms": 11279
+   }
+  },
+  {
+   "at": "19:30:38",
+   "k": "link 1/3 first menu: strip={\"o\":1,\"vis\":true,\"t\":\"EnterSelectGIntelPPause\"} f1-over(root)=false anywhere=false leftovers=f1Cue:1,f1Hero:1 => PASS",
+   "v": ""
+  },
+  {
+   "at": "19:31:16",
+   "k": "link 2/3 first menu: strip={\"o\":0,\"vis\":false,\"t\":\"EnterSelectGIntelPPause\"} f1-over(root)=true anywhere=true leftovers=f1Cue:1,f1Hero:1 => FAIL",
+   "v": ""
+  },
+  {
+   "at": "19:32:10",
+   "k": "link 3/3 first menu: strip={\"o\":0,\"vis\":false,\"t\":\"EnterSelectGIntelPPause\"} f1-over(root)=true anywhere=true leftovers=f1Cue:1,f1Hero:1 => FAIL",
+   "v": ""
+  },
+  {
+   "at": "19:33:44",
+   "k": "battle ended",
+   "v": {
+    "screen": "cutscene"
+   }
+  }
+ ],
+ "bundle": "https://echoesofspira.com/assets/index-jYm-0mrJ.js",
+ "endScreen": "cutscene",
+ "watch": [
+  {
+   "from": 1,
+   "to": 2,
+   "at": 114625
+  },
+  {
+   "from": 2,
+   "to": 3,
+   "at": 160107
+  }
+ ],
+ "finishedAt": "2026-11-07T19:33:44.590Z",
+ "chainLengthSeen": 3,
+ "summary": {
+  "linksRead": 3,
+  "chainLength": 3,
+  "perLink": [
+   "1:PASS",
+   "2:FAIL",
+   "3:FAIL"
+  ],
+  "failedLinks": [
+   2,
+   3
+  ],
+  "ended": "cutscene"
+ },
+ "consoleErrors": [],
+ "notFound": []
+}

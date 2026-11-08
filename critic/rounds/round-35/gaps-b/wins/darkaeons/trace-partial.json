@@ -1,0 +1,6150 @@
+{
+ "chapter": "darkaeons",
+ "door": "darkaeon",
+ "game": "ffx",
+ "base": "https://echoesofspira.com/",
+ "seed": 1,
+ "startedAt": "2026-11-07T14:49:47.377Z",
+ "stateWrites": [],
+ "decisions": [
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Valefor",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-valefor=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 1,
+   "ms": 23198,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-valefor",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Tidus",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim tidus=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 2,
+   "ms": 30346,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->tidus"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Valefor",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-valefor=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 3,
+   "turn": 3,
+   "ms": 34504,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-valefor",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Valefor",
+   "did": true,
+   "how": "path=top; aim dark-valefor=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 3,
+   "turn": 4,
+   "ms": 37547,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-valefor",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 1,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Yuna",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim yuna=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 4,
+   "turn": 5,
+   "ms": 42740,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->yuna"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 1,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Valefor",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-valefor=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 6,
+   "turn": 6,
+   "ms": 46910,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-valefor",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 1,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Valefor",
+   "did": true,
+   "how": "path=top; aim dark-valefor=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 7,
+   "turn": 7,
+   "ms": 49955,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-valefor",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 1,
+   "actor": "yuna",
+   "why": "advisor card: Valefor",
+   "did": true,
+   "how": "path=Summon > Valefor; ",
+   "cmd": {
+    "label": "Valefor",
+    "id": "valefor",
+    "kind": "summon"
+   },
+   "ticks": 8,
+   "turn": 8,
+   "ms": 53169,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 1,
+   "actor": "valefor",
+   "why": "advisor card: Attack -> Dark Valefor",
+   "did": true,
+   "how": "path=top; aim dark-valefor=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 8,
+   "turn": 9,
+   "ms": 57226,
+   "rowsBefore": null,
+   "events": [
+    "valefor:attack->dark-valefor",
+    "  boss takes 9999",
+    "dark-valefor:dark6-valefor-attack->valefor",
+    "  dmg valefor 3543"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 1,
+   "actor": "valefor",
+   "why": "advisor card: Attack -> Dark Valefor",
+   "did": true,
+   "how": "path=top; aim dark-valefor=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 17,
+   "turn": 11,
+   "ms": 60506,
+   "rowsBefore": null,
+   "events": [
+    "valefor:attack->dark-valefor",
+    "  boss takes 9999"
+   ]
+  },
+  {
+   "n": 10,
+   "link": 1,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Valefor",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-valefor=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 25,
+   "turn": 13,
+   "ms": 71323,
+   "rowsBefore": null,
+   "events": [
+    "dark-valefor:dark6-energy-blast->",
+    "  dmg valefor 51653",
+    "  KO valefor (by dark6-energy-blast)",
+    "tidus:quick-hit->dark-valefor",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 1,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Valefor",
+   "did": true,
+   "how": "path=top; aim dark-valefor=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 27,
+   "turn": 14,
+   "ms": 74376,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-valefor",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 1,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Valefor",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-valefor=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 28,
+   "turn": 15,
+   "ms": 78054,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-valefor",
+    "  boss takes 99999",
+    "  KO dark-valefor (by quick-hit)"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 2,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ifrit",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ifrit=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 1,
+   "ms": 107341,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ifrit",
+    "  boss takes 99999",
+    "  COUNTER dark6-ifrit-attack (script)",
+    "dark-ifrit:dark6-ifrit-attack->tidus",
+    "  dmg tidus 4954"
+   ]
+  },
+  {
+   "n": 14,
+   "link": 2,
+   "actor": "yuna",
+   "why": "advisor card: X-Potion -> Tidus",
+   "did": true,
+   "how": "path=Items > X-Potion; aim tidus=true; ",
+   "cmd": {
+    "label": "X-Potion",
+    "id": "x-potion",
+    "kind": "item"
+   },
+   "ticks": 0,
+   "turn": 2,
+   "ms": 113451,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x-potion->tidus"
+   ]
+  },
+  {
+   "n": 15,
+   "link": 2,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ifrit",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ifrit=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 3,
+   "turn": 3,
+   "ms": 117791,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ifrit",
+    "  boss takes 99999",
+    "  COUNTER dark6-ifrit-attack (script)",
+    "dark-ifrit:dark6-ifrit-attack->tidus",
+    "  dmg tidus 4936"
+   ]
+  },
+  {
+   "n": 16,
+   "link": 2,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Tidus",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim tidus=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 3,
+   "turn": 4,
+   "ms": 125553,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->tidus"
+   ]
+  },
+  {
+   "n": 17,
+   "link": 2,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ifrit",
+   "did": true,
+   "how": "path=top; aim dark-ifrit=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 3,
+   "turn": 5,
+   "ms": 128276,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ifrit",
+    "  boss takes 99999",
+    "  COUNTER dark6-ifrit-attack (script)",
+    "dark-ifrit:dark6-ifrit-attack->auron",
+    "  dmg auron 4917"
+   ]
+  },
+  {
+   "n": 18,
+   "link": 2,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ifrit",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ifrit=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 6,
+   "turn": 6,
+   "ms": 133305,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ifrit",
+    "  boss takes 99999",
+    "  COUNTER dark6-ifrit-attack (script)",
+    "dark-ifrit:dark6-ifrit-attack->tidus",
+    "  dmg tidus 4936"
+   ]
+  },
+  {
+   "n": 19,
+   "link": 2,
+   "actor": "yuna",
+   "why": "advisor card: Pray -> the party",
+   "did": true,
+   "how": "path=Special > Pray; ",
+   "cmd": {
+    "label": "Pray",
+    "id": "pray",
+    "kind": "ability"
+   },
+   "ticks": 7,
+   "turn": 7,
+   "ms": 139100,
+   "rowsBefore": null,
+   "events": [
+    "yuna:pray->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 20,
+   "link": 2,
+   "actor": "auron",
+   "why": "advisor card: Al Bhed Potion -> the party",
+   "did": true,
+   "how": "path=Items > Al Bhed Potion; ",
+   "cmd": {
+    "label": "Al Bhed Potion",
+    "id": "al-bhed-potion",
+    "kind": "item"
+   },
+   "ticks": 7,
+   "turn": 8,
+   "ms": 144004,
+   "rowsBefore": null,
+   "events": [
+    "auron:al-bhed-potion->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 21,
+   "link": 2,
+   "actor": "tidus",
+   "why": "advisor card: X-Potion -> Tidus",
+   "did": true,
+   "how": "path=Items > X-Potion; aim tidus=true; ",
+   "cmd": {
+    "label": "X-Potion",
+    "id": "x-potion",
+    "kind": "item"
+   },
+   "ticks": 9,
+   "turn": 9,
+   "ms": 148723,
+   "rowsBefore": null,
+   "events": [
+    "tidus:x-potion->tidus"
+   ]
+  },
+  {
+   "n": 22,
+   "link": 2,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ifrit",
+   "did": true,
+   "how": "path=top; aim dark-ifrit=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 10,
+   "turn": 10,
+   "ms": 151588,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ifrit",
+    "  boss takes 99999",
+    "  COUNTER dark6-ifrit-attack (script)",
+    "dark-ifrit:dark6-ifrit-attack->auron",
+    "  dmg auron 4636"
+   ]
+  },
+  {
+   "n": 23,
+   "link": 2,
+   "actor": "yuna",
+   "why": "advisor card: Curaga -> Auron",
+   "did": true,
+   "how": "path=White Magic > Curaga; aim auron=true; ",
+   "cmd": {
+    "label": "Curaga",
+    "id": "curaga",
+    "kind": "ability"
+   },
+   "ticks": 11,
+   "turn": 11,
+   "ms": 156807,
+   "rowsBefore": null,
+   "events": [
+    "yuna:curaga->auron"
+   ]
+  },
+  {
+   "n": 24,
+   "link": 2,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ifrit",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ifrit=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 12,
+   "turn": 12,
+   "ms": 161662,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ifrit",
+    "  boss takes 99999",
+    "  COUNTER dark6-ifrit-attack (script)",
+    "dark-ifrit:dark6-ifrit-attack->tidus",
+    "  dmg tidus 4973"
+   ]
+  },
+  {
+   "n": 25,
+   "link": 2,
+   "actor": "tidus",
+   "why": "advisor card: Slice & Dice -> Dark Ifrit",
+   "did": true,
+   "how": "path=Overdrive > Slice & Dice; aim dark-ifrit=true; ",
+   "cmd": {
+    "label": "Slice & Dice",
+    "id": "slice-and-dice",
+    "kind": "overdrive"
+   },
+   "ticks": 15,
+   "turn": 14,
+   "ms": 177108,
+   "rowsBefore": null,
+   "events": [
+    "dark-ifrit:dark6-meteor-strike->auron",
+    "  dmg auron 20394",
+    "  KO auron (by dark6-meteor-strike)",
+    "  COUNTER phoenix-down (auto-phoenix)",
+    "tidus:phoenix-down->auron",
+    "  revive auron",
+    "tidus:slice-and-dice->dark-ifrit",
+    "  boss takes 41093",
+    "  boss takes 88508",
+    "  boss takes 83518",
+    "  COUNTER dark6-ifrit-attack (script)",
+    "dark-ifrit:dark6-ifrit-attack->tidus",
+    "  dmg tidus 5048",
+    "  revive tidus"
+   ]
+  },
+  {
+   "n": 26,
+   "link": 2,
+   "actor": "yuna",
+   "why": "advisor card: Pray -> the party",
+   "did": true,
+   "how": "path=Special > Pray; ",
+   "cmd": {
+    "label": "Pray",
+    "id": "pray",
+    "kind": "ability"
+   },
+   "ticks": 15,
+   "turn": 15,
+   "ms": 188894,
+   "rowsBefore": null,
+   "events": [
+    "yuna:pray->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 27,
+   "link": 2,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Tidus",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim tidus=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 19,
+   "turn": 16,
+   "ms": 195903,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->tidus"
+   ]
+  },
+  {
+   "n": 28,
+   "link": 2,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ifrit",
+   "did": true,
+   "how": "path=top; aim dark-ifrit=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 22,
+   "turn": 17,
+   "ms": 198643,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ifrit",
+    "  boss takes 99999",
+    "  COUNTER dark6-ifrit-attack (script)",
+    "dark-ifrit:dark6-ifrit-attack->auron",
+    "  dmg auron 4487"
+   ]
+  },
+  {
+   "n": 29,
+   "link": 2,
+   "actor": "yuna",
+   "why": "advisor card: Curaga -> Auron",
+   "did": true,
+   "how": "path=White Magic > Curaga; aim auron=true; ",
+   "cmd": {
+    "label": "Curaga",
+    "id": "curaga",
+    "kind": "ability"
+   },
+   "ticks": 23,
+   "turn": 18,
+   "ms": 204034,
+   "rowsBefore": null,
+   "events": [
+    "yuna:curaga->auron"
+   ]
+  },
+  {
+   "n": 30,
+   "link": 2,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ifrit",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ifrit=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 24,
+   "turn": 19,
+   "ms": 208967,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ifrit",
+    "  boss takes 99999",
+    "  COUNTER dark6-ifrit-attack (script)",
+    "dark-ifrit:dark6-ifrit-attack->tidus",
+    "  dmg tidus 4767",
+    "  revive tidus"
+   ]
+  },
+  {
+   "n": 31,
+   "link": 2,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ifrit",
+   "did": true,
+   "how": "path=top; aim dark-ifrit=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 26,
+   "turn": 21,
+   "ms": 221106,
+   "rowsBefore": null,
+   "events": [
+    "dark-ifrit:dark6-meteor-strike->tidus",
+    "  dmg tidus 22594",
+    "  KO tidus (by dark6-meteor-strike)",
+    "  COUNTER phoenix-down (auto-phoenix)",
+    "yuna:phoenix-down->tidus",
+    "  revive tidus",
+    "auron:attack->dark-ifrit",
+    "  boss takes 99999",
+    "  COUNTER dark6-ifrit-attack (script)",
+    "dark-ifrit:dark6-ifrit-attack->auron",
+    "  dmg auron 4936"
+   ]
+  },
+  {
+   "n": 32,
+   "link": 2,
+   "actor": "yuna",
+   "why": "advisor card: Pray -> the party",
+   "did": true,
+   "how": "path=Special > Pray; ",
+   "cmd": {
+    "label": "Pray",
+    "id": "pray",
+    "kind": "ability"
+   },
+   "ticks": 27,
+   "turn": 22,
+   "ms": 225666,
+   "rowsBefore": null,
+   "events": [
+    "yuna:pray->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 33,
+   "link": 2,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ifrit",
+   "did": true,
+   "how": "path=top; aim dark-ifrit=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 30,
+   "turn": 23,
+   "ms": 229331,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ifrit",
+    "  boss takes 99999",
+    "  COUNTER dark6-ifrit-attack (script)",
+    "dark-ifrit:dark6-ifrit-attack->auron",
+    "  dmg auron 5029"
+   ]
+  },
+  {
+   "n": 34,
+   "link": 2,
+   "actor": "yuna",
+   "why": "advisor card: Pray -> the party",
+   "did": true,
+   "how": "path=Special > Pray; ",
+   "cmd": {
+    "label": "Pray",
+    "id": "pray",
+    "kind": "ability"
+   },
+   "ticks": 31,
+   "turn": 24,
+   "ms": 234272,
+   "rowsBefore": null,
+   "events": [
+    "yuna:pray->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 35,
+   "link": 2,
+   "actor": "tidus",
+   "why": "advisor card: X-Potion -> Auron",
+   "did": true,
+   "how": "path=Items > X-Potion; aim auron=true; ",
+   "cmd": {
+    "label": "X-Potion",
+    "id": "x-potion",
+    "kind": "item"
+   },
+   "ticks": 34,
+   "turn": 25,
+   "ms": 239517,
+   "rowsBefore": null,
+   "events": [
+    "tidus:x-potion->auron"
+   ]
+  },
+  {
+   "n": 36,
+   "link": 2,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ifrit",
+   "did": true,
+   "how": "path=top; aim dark-ifrit=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 34,
+   "turn": 26,
+   "ms": 242650,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ifrit",
+    "  boss takes 99999",
+    "  COUNTER dark6-ifrit-attack (script)",
+    "dark-ifrit:dark6-ifrit-attack->auron",
+    "  dmg auron 4898"
+   ]
+  },
+  {
+   "n": 37,
+   "link": 2,
+   "actor": "yuna",
+   "why": "advisor card: Valefor",
+   "did": true,
+   "how": "path=Summon > Valefor; ",
+   "cmd": {
+    "label": "Valefor",
+    "id": "valefor",
+    "kind": "summon"
+   },
+   "ticks": 35,
+   "turn": 27,
+   "ms": 247164,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 38,
+   "link": 2,
+   "actor": "valefor",
+   "why": "advisor card: Attack -> Dark Ifrit",
+   "did": true,
+   "how": "path=top; aim dark-ifrit=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 35,
+   "turn": 28,
+   "ms": 250514,
+   "rowsBefore": null,
+   "events": [
+    "valefor:attack->dark-ifrit",
+    "  boss takes 9999",
+    "  COUNTER dark6-ifrit-attack (script)",
+    "dark-ifrit:dark6-ifrit-attack->valefor",
+    "  dmg valefor 9124"
+   ]
+  },
+  {
+   "n": 39,
+   "link": 2,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ifrit",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ifrit=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 39,
+   "turn": 30,
+   "ms": 259401,
+   "rowsBefore": null,
+   "events": [
+    "dark-ifrit:dark6-meteor-strike->valefor",
+    "  dmg valefor 20902",
+    "  KO valefor (by dark6-meteor-strike)",
+    "tidus:quick-hit->dark-ifrit",
+    "  boss takes 99999",
+    "  KO dark-ifrit (by quick-hit)"
+   ]
+  },
+  {
+   "n": 40,
+   "link": 3,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 1,
+   "ms": 293025,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion",
+    "  boss takes 44294",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->tidus"
+   ]
+  },
+  {
+   "n": 41,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Tidus",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim tidus=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 2,
+   "ms": 300632,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->tidus"
+   ]
+  },
+  {
+   "n": 42,
+   "link": 3,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 1,
+   "turn": 3,
+   "ms": 303356,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion",
+    "  boss takes 43123",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->auron"
+   ]
+  },
+  {
+   "n": 43,
+   "link": 3,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 3,
+   "turn": 4,
+   "ms": 307993,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion",
+    "  boss takes 45159",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->tidus"
+   ]
+  },
+  {
+   "n": 44,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Yuna",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim yuna=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 4,
+   "turn": 5,
+   "ms": 315271,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->yuna"
+   ]
+  },
+  {
+   "n": 45,
+   "link": 3,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 5,
+   "turn": 6,
+   "ms": 318004,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion",
+    "  boss takes 45458",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->auron"
+   ]
+  },
+  {
+   "n": 46,
+   "link": 3,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 6,
+   "turn": 7,
+   "ms": 322664,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion",
+    "  boss takes 42910",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->tidus"
+   ]
+  },
+  {
+   "n": 47,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Auron",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim auron=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 8,
+   "turn": 8,
+   "ms": 330095,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->auron"
+   ]
+  },
+  {
+   "n": 48,
+   "link": 3,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 9,
+   "turn": 9,
+   "ms": 334275,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion",
+    "  boss takes 44294",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->tidus"
+   ]
+  },
+  {
+   "n": 49,
+   "link": 3,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 9,
+   "turn": 10,
+   "ms": 338552,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion",
+    "  boss takes 47614",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->auron"
+   ]
+  },
+  {
+   "n": 50,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: Valefor",
+   "did": true,
+   "how": "path=Summon > Valefor; ",
+   "cmd": {
+    "label": "Valefor",
+    "id": "valefor",
+    "kind": "summon"
+   },
+   "ticks": 12,
+   "turn": 12,
+   "ms": 344789,
+   "rowsBefore": null,
+   "events": [
+    "dark-ixion:dark6-thundaja->tidus",
+    "  dmg tidus 4279",
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 51,
+   "link": 3,
+   "actor": "valefor",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 12,
+   "turn": 13,
+   "ms": 348101,
+   "rowsBefore": null,
+   "events": [
+    "valefor:attack->dark-ixion",
+    "  boss takes 9999",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->valefor"
+   ]
+  },
+  {
+   "n": 52,
+   "link": 3,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 46,
+   "turn": 18,
+   "ms": 365237,
+   "rowsBefore": null,
+   "events": [
+    "dark-ixion:dark6-thundaja->valefor",
+    "  dmg valefor 4473",
+    "dark-ixion:dark6-thundaja->valefor",
+    "  dmg valefor 4350",
+    "dark-ixion:dark6-thundaja->valefor",
+    "  dmg valefor 4261",
+    "dark-ixion:dark6-aerospark->valefor",
+    "  dmg valefor 12299",
+    "  KO valefor (by dark6-aerospark)",
+    "auron:attack->dark-ixion",
+    "  boss takes 43661",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->auron"
+   ]
+  },
+  {
+   "n": 53,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: Cura -> Tidus",
+   "did": true,
+   "how": "path=White Magic > Cura; aim tidus=true; ",
+   "cmd": {
+    "label": "Cura",
+    "id": "cura",
+    "kind": "ability"
+   },
+   "ticks": 49,
+   "turn": 19,
+   "ms": 370131,
+   "rowsBefore": null,
+   "events": [
+    "yuna:cura->tidus"
+   ]
+  },
+  {
+   "n": 54,
+   "link": 3,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 50,
+   "turn": 20,
+   "ms": 373435,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion",
+    "  boss takes 44560",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->auron"
+   ]
+  },
+  {
+   "n": 55,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 53,
+   "turn": 21,
+   "ms": 376765,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->dark-ixion",
+    "  boss takes 36069",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->yuna"
+   ]
+  },
+  {
+   "n": 56,
+   "link": 3,
+   "actor": "tidus",
+   "why": "advisor card: Slice & Dice -> Dark Ixion",
+   "did": true,
+   "how": "path=Overdrive > Slice & Dice; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Slice & Dice",
+    "id": "slice-and-dice",
+    "kind": "overdrive"
+   },
+   "ticks": 54,
+   "turn": 22,
+   "ms": 384511,
+   "rowsBefore": null,
+   "events": [
+    "tidus:slice-and-dice->dark-ixion",
+    "  boss takes 35402",
+    "  boss takes 16769",
+    "  boss takes 17036",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->tidus"
+   ]
+  },
+  {
+   "n": 57,
+   "link": 3,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 54,
+   "turn": 23,
+   "ms": 391850,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion",
+    "  boss takes 90558",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->auron"
+   ]
+  },
+  {
+   "n": 58,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: Cura -> Auron",
+   "did": true,
+   "how": "path=White Magic > Cura; aim auron=true; ",
+   "cmd": {
+    "label": "Cura",
+    "id": "cura",
+    "kind": "ability"
+   },
+   "ticks": 57,
+   "turn": 25,
+   "ms": 398778,
+   "rowsBefore": null,
+   "events": [
+    "dark-ixion:dark6-thundaja->auron",
+    "  dmg auron 4509",
+    "yuna:cura->auron"
+   ]
+  },
+  {
+   "n": 59,
+   "link": 3,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 60,
+   "turn": 26,
+   "ms": 403620,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion",
+    "  boss takes 45332",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->tidus"
+   ]
+  },
+  {
+   "n": 60,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: Ifrit",
+   "did": true,
+   "how": "path=Summon > Ifrit; ",
+   "cmd": {
+    "label": "Ifrit",
+    "id": "ifrit",
+    "kind": "summon"
+   },
+   "ticks": 61,
+   "turn": 27,
+   "ms": 408850,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 61,
+   "link": 3,
+   "actor": "ifrit",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 61,
+   "turn": 28,
+   "ms": 412979,
+   "rowsBefore": null,
+   "events": [
+    "ifrit:attack->dark-ixion",
+    "  boss takes 9999",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->ifrit",
+    "  dmg ifrit 4843"
+   ]
+  },
+  {
+   "n": 62,
+   "link": 3,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 83,
+   "turn": 32,
+   "ms": 425579,
+   "rowsBefore": null,
+   "events": [
+    "dark-ixion:dark6-thundaja->ifrit",
+    "  dmg ifrit 4491",
+    "dark-ixion:dark6-thundaja->ifrit",
+    "  dmg ifrit 4739",
+    "dark-ixion:dark6-thundaja->ifrit",
+    "  dmg ifrit 4650",
+    "  KO ifrit (by dark6-thundaja)",
+    "tidus:quick-hit->dark-ixion",
+    "  boss takes 86858",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->tidus"
+   ]
+  },
+  {
+   "n": 63,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: Ixion",
+   "did": true,
+   "how": "path=Summon > Ixion; ",
+   "cmd": {
+    "label": "Ixion",
+    "id": "ixion",
+    "kind": "summon"
+   },
+   "ticks": 85,
+   "turn": 33,
+   "ms": 430863,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 64,
+   "link": 3,
+   "actor": "ixion",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 85,
+   "turn": 34,
+   "ms": 435138,
+   "rowsBefore": null,
+   "events": [
+    "ixion:attack->dark-ixion",
+    "  boss takes 9999",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->ixion",
+    "  dmg ixion 4709"
+   ]
+  },
+  {
+   "n": 65,
+   "link": 3,
+   "actor": "ixion",
+   "why": "advisor card: Dismiss",
+   "did": true,
+   "how": "path=top; ",
+   "cmd": {
+    "label": "Dismiss",
+    "id": null,
+    "kind": "dismiss"
+   },
+   "ticks": 94,
+   "turn": 36,
+   "ms": 440321,
+   "rowsBefore": null,
+   "events": [
+    "dark-ixion:dark6-aerospark->ixion",
+    "  dmg ixion 12108",
+    "ixion:dismiss->"
+   ]
+  },
+  {
+   "n": 66,
+   "link": 3,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 95,
+   "turn": 37,
+   "ms": 444062,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion",
+    "  boss takes 41871",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->tidus"
+   ]
+  },
+  {
+   "n": 67,
+   "link": 3,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 96,
+   "turn": 38,
+   "ms": 448328,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion",
+    "  boss takes 45638",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->auron"
+   ]
+  },
+  {
+   "n": 68,
+   "link": 3,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 98,
+   "turn": 39,
+   "ms": 453162,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion",
+    "  boss takes 45332",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->tidus"
+   ]
+  },
+  {
+   "n": 69,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 98,
+   "turn": 40,
+   "ms": 457477,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->dark-ixion",
+    "  boss takes 65484",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->yuna"
+   ]
+  },
+  {
+   "n": 70,
+   "link": 3,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 101,
+   "turn": 42,
+   "ms": 464212,
+   "rowsBefore": null,
+   "events": [
+    "dark-ixion:dark6-thundaja->auron",
+    "  dmg auron 4491",
+    "tidus:quick-hit->dark-ixion",
+    "  boss takes 42737",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->tidus"
+   ]
+  },
+  {
+   "n": 71,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: Cura -> Auron",
+   "did": true,
+   "how": "path=White Magic > Cura; aim auron=true; ",
+   "cmd": {
+    "label": "Cura",
+    "id": "cura",
+    "kind": "ability"
+   },
+   "ticks": 102,
+   "turn": 43,
+   "ms": 469760,
+   "rowsBefore": null,
+   "events": [
+    "yuna:cura->auron"
+   ]
+  },
+  {
+   "n": 72,
+   "link": 3,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 104,
+   "turn": 44,
+   "ms": 474618,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion",
+    "  boss takes 43602",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->tidus"
+   ]
+  },
+  {
+   "n": 73,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: Ixion",
+   "did": true,
+   "how": "path=Summon > Ixion; ",
+   "cmd": {
+    "label": "Ixion",
+    "id": "ixion",
+    "kind": "summon"
+   },
+   "ticks": 106,
+   "turn": 45,
+   "ms": 479908,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 74,
+   "link": 3,
+   "actor": "ixion",
+   "why": "advisor card: Thor's Hammer -> Dark Ixion",
+   "did": true,
+   "how": "path=null; ERR Error: could not open Thor's Hammer; ",
+   "cmd": {
+    "label": "Thor's Hammer",
+    "id": "thors-hammer",
+    "kind": "overdrive"
+   },
+   "ticks": 106,
+   "turn": 46,
+   "ms": 489398,
+   "rowsBefore": null,
+   "events": [
+    "ixion:dismiss->"
+   ]
+  },
+  {
+   "n": 75,
+   "link": 3,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 107,
+   "turn": 47,
+   "ms": 492911,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion",
+    "  boss takes 46889",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->tidus"
+   ]
+  },
+  {
+   "n": 76,
+   "link": 3,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 109,
+   "turn": 49,
+   "ms": 499015,
+   "rowsBefore": null,
+   "events": [
+    "dark-ixion:dark6-thundaja->tidus",
+    "  dmg tidus 4456",
+    "auron:attack->dark-ixion",
+    "  boss takes 43302",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->auron"
+   ]
+  },
+  {
+   "n": 77,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: Ixion",
+   "did": true,
+   "how": "path=Summon > Ixion; ",
+   "cmd": {
+    "label": "Ixion",
+    "id": "ixion",
+    "kind": "summon"
+   },
+   "ticks": 110,
+   "turn": 50,
+   "ms": 503245,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 78,
+   "link": 3,
+   "actor": "ixion",
+   "why": "advisor card: Thor's Hammer -> Dark Ixion",
+   "did": true,
+   "how": "path=null; ERR Error: could not open Thor's Hammer; ",
+   "cmd": {
+    "label": "Thor's Hammer",
+    "id": "thors-hammer",
+    "kind": "overdrive"
+   },
+   "ticks": 110,
+   "turn": 51,
+   "ms": 512831,
+   "rowsBefore": null,
+   "events": [
+    "ixion:dismiss->"
+   ]
+  },
+  {
+   "n": 79,
+   "link": 3,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 113,
+   "turn": 52,
+   "ms": 514874,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion",
+    "  boss takes 47255",
+    "  COUNTER dark6-ixion-attack-1 (script)",
+    "dark-ixion:dark6-ixion-attack-1->auron"
+   ]
+  },
+  {
+   "n": 80,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: X-Potion -> Tidus",
+   "did": true,
+   "how": "path=Items > X-Potion; aim tidus=true; ",
+   "cmd": {
+    "label": "X-Potion",
+    "id": "x-potion",
+    "kind": "item"
+   },
+   "ticks": 114,
+   "turn": 53,
+   "ms": 519817,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x-potion->tidus"
+   ]
+  },
+  {
+   "n": 81,
+   "link": 3,
+   "actor": "yuna",
+   "why": "advisor card: Ixion",
+   "did": true,
+   "how": "path=Summon > Ixion; ",
+   "cmd": {
+    "label": "Ixion",
+    "id": "ixion",
+    "kind": "summon"
+   },
+   "ticks": 117,
+   "turn": 54,
+   "ms": 523843,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 82,
+   "link": 3,
+   "actor": "ixion",
+   "why": "advisor card: Thor's Hammer -> Dark Ixion",
+   "did": true,
+   "how": "path=null; ERR Error: could not open Thor's Hammer; ",
+   "cmd": {
+    "label": "Thor's Hammer",
+    "id": "thors-hammer",
+    "kind": "overdrive"
+   },
+   "ticks": 117,
+   "turn": 55,
+   "ms": 533413,
+   "rowsBefore": null,
+   "events": [
+    "ixion:dismiss->"
+   ]
+  },
+  {
+   "n": 83,
+   "link": 3,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 117,
+   "turn": 56,
+   "ms": 535465,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion",
+    "  boss takes 44740",
+    "  KO dark-ixion (by attack)"
+   ]
+  },
+  {
+   "n": 84,
+   "link": 4,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 1,
+   "ms": 563493,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion-2",
+    "  boss takes 43111"
+   ]
+  },
+  {
+   "n": 85,
+   "link": 4,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Tidus",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim tidus=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 2,
+   "ms": 569905,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->tidus"
+   ]
+  },
+  {
+   "n": 86,
+   "link": 4,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 3,
+   "turn": 3,
+   "ms": 574089,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion-2",
+    "  boss takes 41784"
+   ]
+  },
+  {
+   "n": 87,
+   "link": 4,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Yuna",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim yuna=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 4,
+   "turn": 4,
+   "ms": 580116,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->yuna"
+   ]
+  },
+  {
+   "n": 88,
+   "link": 4,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 4,
+   "turn": 5,
+   "ms": 582824,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion-2",
+    "  boss takes 43908"
+   ]
+  },
+  {
+   "n": 89,
+   "link": 4,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 6,
+   "turn": 6,
+   "ms": 586321,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion-2",
+    "  boss takes 44769"
+   ]
+  },
+  {
+   "n": 90,
+   "link": 4,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Auron",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim auron=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 8,
+   "turn": 7,
+   "ms": 592606,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->auron"
+   ]
+  },
+  {
+   "n": 91,
+   "link": 4,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 8,
+   "turn": 8,
+   "ms": 595322,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion-2",
+    "  boss takes 88163"
+   ]
+  },
+  {
+   "n": 92,
+   "link": 4,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 9,
+   "turn": 9,
+   "ms": 598989,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion-2",
+    "  boss takes 44437"
+   ]
+  },
+  {
+   "n": 93,
+   "link": 4,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 12,
+   "turn": 11,
+   "ms": 604398,
+   "rowsBefore": null,
+   "events": [
+    "dark-ixion-2:dark6-ixion-attack-2->auron",
+    "tidus:quick-hit->dark-ixion-2",
+    "  boss takes 40292"
+   ]
+  },
+  {
+   "n": 94,
+   "link": 4,
+   "actor": "yuna",
+   "why": "advisor card: Valefor",
+   "did": true,
+   "how": "path=Summon > Valefor; ",
+   "cmd": {
+    "label": "Valefor",
+    "id": "valefor",
+    "kind": "summon"
+   },
+   "ticks": 12,
+   "turn": 12,
+   "ms": 608441,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 95,
+   "link": 4,
+   "actor": "valefor",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 12,
+   "turn": 13,
+   "ms": 611655,
+   "rowsBefore": null,
+   "events": [
+    "valefor:attack->dark-ixion-2",
+    "  boss takes 9999",
+    "dark-ixion-2:dark6-ixion-attack-2->valefor"
+   ]
+  },
+  {
+   "n": 96,
+   "link": 4,
+   "actor": "valefor",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 21,
+   "turn": 15,
+   "ms": 618448,
+   "rowsBefore": null,
+   "events": [
+    "valefor:attack->dark-ixion-2",
+    "  boss takes 9999",
+    "dark-ixion-2:dark6-thors-hammer->",
+    "  dmg valefor 17741",
+    "  KO valefor (by dark6-thors-hammer)"
+   ]
+  },
+  {
+   "n": 97,
+   "link": 4,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 27,
+   "turn": 17,
+   "ms": 623881,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion-2",
+    "  boss takes 43735"
+   ]
+  },
+  {
+   "n": 98,
+   "link": 4,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 30,
+   "turn": 18,
+   "ms": 627410,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion-2",
+    "  boss takes 42282"
+   ]
+  },
+  {
+   "n": 99,
+   "link": 4,
+   "actor": "yuna",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 31,
+   "turn": 19,
+   "ms": 630489,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->dark-ixion-2",
+    "  boss takes 30867"
+   ]
+  },
+  {
+   "n": 100,
+   "link": 4,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 31,
+   "turn": 20,
+   "ms": 632527,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion-2",
+    "  boss takes 86783"
+   ]
+  },
+  {
+   "n": 101,
+   "link": 4,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 33,
+   "turn": 21,
+   "ms": 636087,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion-2",
+    "  boss takes 43443"
+   ]
+  },
+  {
+   "n": 102,
+   "link": 4,
+   "actor": "yuna",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 35,
+   "turn": 22,
+   "ms": 639171,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->dark-ixion-2",
+    "  boss takes 32653"
+   ]
+  },
+  {
+   "n": 103,
+   "link": 4,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 35,
+   "turn": 23,
+   "ms": 641537,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion-2",
+    "  boss takes 82995"
+   ]
+  },
+  {
+   "n": 104,
+   "link": 4,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 36,
+   "turn": 24,
+   "ms": 645254,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion-2",
+    "  boss takes 83902"
+   ]
+  },
+  {
+   "n": 105,
+   "link": 4,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 39,
+   "turn": 26,
+   "ms": 652505,
+   "rowsBefore": null,
+   "events": [
+    "dark-ixion-2:dark6-aerospark->tidus",
+    "  dmg tidus 6801",
+    "tidus:quick-hit->dark-ixion-2",
+    "  boss takes 41784"
+   ]
+  },
+  {
+   "n": 106,
+   "link": 4,
+   "actor": "yuna",
+   "why": "advisor card: X-Potion -> Tidus",
+   "did": true,
+   "how": "path=Items > X-Potion; aim tidus=true; ",
+   "cmd": {
+    "label": "X-Potion",
+    "id": "x-potion",
+    "kind": "item"
+   },
+   "ticks": 39,
+   "turn": 27,
+   "ms": 657303,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x-potion->tidus"
+   ]
+  },
+  {
+   "n": 107,
+   "link": 4,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 39,
+   "turn": 28,
+   "ms": 660403,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion-2",
+    "  boss takes 41326"
+   ]
+  },
+  {
+   "n": 108,
+   "link": 4,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 42,
+   "turn": 29,
+   "ms": 663928,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion-2",
+    "  boss takes 41121"
+   ]
+  },
+  {
+   "n": 109,
+   "link": 4,
+   "actor": "yuna",
+   "why": "advisor card: Ifrit",
+   "did": true,
+   "how": "path=Summon > Ifrit; ",
+   "cmd": {
+    "label": "Ifrit",
+    "id": "ifrit",
+    "kind": "summon"
+   },
+   "ticks": 42,
+   "turn": 30,
+   "ms": 667874,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 110,
+   "link": 4,
+   "actor": "ifrit",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 42,
+   "turn": 31,
+   "ms": 671158,
+   "rowsBefore": null,
+   "events": [
+    "ifrit:attack->dark-ixion-2",
+    "  boss takes 9999",
+    "dark-ixion-2:dark6-thors-hammer->",
+    "  dmg ifrit 19095",
+    "  KO ifrit (by dark6-thors-hammer)"
+   ]
+  },
+  {
+   "n": 111,
+   "link": 4,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 46,
+   "turn": 33,
+   "ms": 676640,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion-2",
+    "  boss takes 45114"
+   ]
+  },
+  {
+   "n": 112,
+   "link": 4,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 48,
+   "turn": 34,
+   "ms": 680135,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion-2",
+    "  boss takes 44437"
+   ]
+  },
+  {
+   "n": 113,
+   "link": 4,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Tidus",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim tidus=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 49,
+   "turn": 35,
+   "ms": 686592,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->tidus"
+   ]
+  },
+  {
+   "n": 114,
+   "link": 4,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 50,
+   "turn": 36,
+   "ms": 689346,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-ixion-2",
+    "  boss takes 89883"
+   ]
+  },
+  {
+   "n": 115,
+   "link": 4,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Ixion",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 51,
+   "turn": 37,
+   "ms": 693594,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-ixion-2",
+    "  boss takes 84897"
+   ]
+  },
+  {
+   "n": 116,
+   "link": 4,
+   "actor": "yuna",
+   "why": "advisor card: Attack -> Dark Ixion",
+   "did": true,
+   "how": "path=top; aim dark-ixion-2=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 53,
+   "turn": 38,
+   "ms": 696751,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->dark-ixion-2",
+    "  boss takes 32015",
+    "  KO dark-ixion-2 (by attack)"
+   ]
+  },
+  {
+   "n": 117,
+   "link": 5,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Shiva",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-shiva=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 1,
+   "ms": 725066,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-shiva",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 118,
+   "link": 5,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Tidus",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim tidus=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 2,
+   "ms": 731466,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->tidus"
+   ]
+  },
+  {
+   "n": 119,
+   "link": 5,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Shiva",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-shiva=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 3,
+   "turn": 3,
+   "ms": 735652,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-shiva",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 120,
+   "link": 5,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Yuna",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim yuna=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 4,
+   "turn": 4,
+   "ms": 741721,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->yuna"
+   ]
+  },
+  {
+   "n": 121,
+   "link": 5,
+   "actor": "auron",
+   "why": "advisor card: Shooting Star -> Dark Shiva",
+   "did": true,
+   "how": "path=Overdrive > Shooting Star; aim dark-shiva=true; ",
+   "cmd": {
+    "label": "Shooting Star",
+    "id": "shooting-star",
+    "kind": "overdrive"
+   },
+   "ticks": 4,
+   "turn": 5,
+   "ms": 749873,
+   "rowsBefore": null,
+   "events": [
+    "auron:shooting-star->dark-shiva",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 122,
+   "link": 5,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Shiva",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-shiva=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 6,
+   "turn": 6,
+   "ms": 757595,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-shiva",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 123,
+   "link": 5,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Auron",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim auron=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 8,
+   "turn": 7,
+   "ms": 763811,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->auron"
+   ]
+  },
+  {
+   "n": 124,
+   "link": 5,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Shiva",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-shiva=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 9,
+   "turn": 8,
+   "ms": 768020,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-shiva",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 125,
+   "link": 5,
+   "actor": "auron",
+   "why": "advisor card: X-Potion -> Yuna",
+   "did": true,
+   "how": "path=Items > X-Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "X-Potion",
+    "id": "x-potion",
+    "kind": "item"
+   },
+   "ticks": 11,
+   "turn": 10,
+   "ms": 775417,
+   "rowsBefore": null,
+   "events": [
+    "dark-shiva:dark6-heavenly-strike->yuna",
+    "  revive yuna",
+    "auron:x-potion->yuna"
+   ]
+  },
+  {
+   "n": 126,
+   "link": 5,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Shiva",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-shiva=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 12,
+   "turn": 11,
+   "ms": 779933,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-shiva",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 127,
+   "link": 5,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Shiva",
+   "did": true,
+   "how": "path=top; aim dark-shiva=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 14,
+   "turn": 12,
+   "ms": 783334,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-shiva",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 128,
+   "link": 5,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Shiva",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-shiva=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 15,
+   "turn": 13,
+   "ms": 787015,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-shiva",
+    "  boss takes 99999"
+   ]
+  },
+  {
+   "n": 129,
+   "link": 5,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Shiva",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-shiva=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 18,
+   "turn": 15,
+   "ms": 796639,
+   "rowsBefore": null,
+   "events": [
+    "dark-shiva:dark6-shiva-attack->tidus",
+    "  dmg tidus 2272",
+    "tidus:quick-hit->dark-shiva"
+   ]
+  },
+  {
+   "n": 130,
+   "link": 5,
+   "actor": "yuna",
+   "why": "advisor card: X-Potion -> Tidus",
+   "did": true,
+   "how": "path=Items > X-Potion; aim tidus=true; ",
+   "cmd": {
+    "label": "X-Potion",
+    "id": "x-potion",
+    "kind": "item"
+   },
+   "ticks": 18,
+   "turn": 16,
+   "ms": 801241,
+   "rowsBefore": null,
+   "events": [
+    "yuna:x-potion->tidus"
+   ]
+  },
+  {
+   "n": 131,
+   "link": 5,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Shiva",
+   "did": true,
+   "how": "path=top; aim dark-shiva=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 18,
+   "turn": 17,
+   "ms": 804298,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-shiva",
+    "  boss takes 99999",
+    "dark-shiva:dark6-diamond-dust->",
+    "  dmg tidus 82130",
+    "  KO tidus (by dark6-diamond-dust)",
+    "  dmg yuna 86453",
+    "  KO yuna (by dark6-diamond-dust)",
+    "  dmg auron 86120",
+    "  revive auron"
+   ]
+  },
+  {
+   "n": 132,
+   "link": 5,
+   "actor": "auron",
+   "why": "advisor card: Phoenix Down -> Tidus",
+   "did": true,
+   "how": "path=Items > Phoenix Down; aim tidus=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "phoenix-down",
+    "kind": "item"
+   },
+   "ticks": 27,
+   "turn": 19,
+   "ms": 813766,
+   "rowsBefore": null,
+   "events": [
+    "auron:phoenix-down->tidus",
+    "  revive tidus"
+   ]
+  },
+  {
+   "n": 133,
+   "link": 5,
+   "actor": "auron",
+   "why": "advisor card: Phoenix Down -> Yuna",
+   "did": true,
+   "how": "path=Items > Phoenix Down; aim yuna=true; ",
+   "cmd": {
+    "label": "Phoenix Down",
+    "id": "phoenix-down",
+    "kind": "item"
+   },
+   "ticks": 30,
+   "turn": 21,
+   "ms": 820084,
+   "rowsBefore": null,
+   "events": [
+    "dark-shiva:dark6-shiva-attack->tidus",
+    "  dmg tidus 2436",
+    "auron:phoenix-down->yuna",
+    "  revive yuna"
+   ]
+  },
+  {
+   "n": 134,
+   "link": 5,
+   "actor": "auron",
+   "why": "advisor card: Al Bhed Potion -> the party",
+   "did": true,
+   "how": "path=Items > Al Bhed Potion; ",
+   "cmd": {
+    "label": "Al Bhed Potion",
+    "id": "al-bhed-potion",
+    "kind": "item"
+   },
+   "ticks": 33,
+   "turn": 23,
+   "ms": 830218,
+   "rowsBefore": null,
+   "events": [
+    "dark-shiva:dark6-heavenly-strike->yuna",
+    "  KO yuna (by dark6-heavenly-strike)",
+    "  COUNTER phoenix-down (auto-phoenix)",
+    "tidus:phoenix-down->yuna",
+    "  revive yuna",
+    "auron:al-bhed-potion->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 135,
+   "link": 5,
+   "actor": "tidus",
+   "why": "advisor card: Slice & Dice -> Dark Shiva",
+   "did": true,
+   "how": "path=Overdrive > Slice & Dice; aim dark-shiva=true; ",
+   "cmd": {
+    "label": "Slice & Dice",
+    "id": "slice-and-dice",
+    "kind": "overdrive"
+   },
+   "ticks": 36,
+   "turn": 24,
+   "ms": 838179,
+   "rowsBefore": null,
+   "events": [
+    "tidus:slice-and-dice->dark-shiva",
+    "  boss takes 47699",
+    "  boss takes 52390",
+    "  boss takes 52586"
+   ]
+  },
+  {
+   "n": 136,
+   "link": 5,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Shiva",
+   "did": true,
+   "how": "path=top; aim dark-shiva=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 36,
+   "turn": 25,
+   "ms": 844994,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-shiva",
+    "  boss takes 99999",
+    "  KO dark-shiva (by attack)"
+   ]
+  },
+  {
+   "n": 137,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 1,
+   "ms": 874324,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-anima",
+    "  boss takes 35066"
+   ]
+  },
+  {
+   "n": 138,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Yojimbo",
+   "did": true,
+   "how": "path=Summon > Yojimbo; ",
+   "cmd": {
+    "label": "Yojimbo",
+    "id": "yojimbo",
+    "kind": "summon"
+   },
+   "ticks": 0,
+   "turn": 2,
+   "ms": 879079,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 139,
+   "link": 6,
+   "actor": "yojimbo",
+   "why": "Yojimbo's turn: Pay 100,000 (purse 1500000) for the Zanmato roll",
+   "did": true,
+   "how": "path=Aeon > Pay 100,000; ",
+   "cmd": {
+    "label": "Pay",
+    "id": "yojimbo-pay",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 3,
+   "ms": 884146,
+   "rowsBefore": null,
+   "events": [
+    "yojimbo:ability->",
+    "yojimbo:wakizashi-multi->dark-anima",
+    "  boss takes 9999"
+   ]
+  },
+  {
+   "n": 140,
+   "link": 6,
+   "actor": "yojimbo",
+   "why": "Yojimbo's turn: Pay 100,000 (purse 1400000) for the Zanmato roll",
+   "did": true,
+   "how": "path=Aeon > Pay 100,000; ",
+   "cmd": {
+    "label": "Pay",
+    "id": "yojimbo-pay",
+    "kind": "ability"
+   },
+   "ticks": 9,
+   "turn": 4,
+   "ms": 888505,
+   "rowsBefore": null,
+   "events": [
+    "yojimbo:ability->",
+    "yojimbo:wakizashi-multi->dark-anima",
+    "  boss takes 9999"
+   ]
+  },
+  {
+   "n": 141,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 12,
+   "turn": 6,
+   "ms": 896910,
+   "rowsBefore": null,
+   "events": [
+    "dark-anima:dark6-pain->yojimbo",
+    "  KO yojimbo (by dark6-pain)",
+    "tidus:quick-hit->dark-anima",
+    "  boss takes 34791"
+   ]
+  },
+  {
+   "n": 142,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Tidus",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim tidus=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 13,
+   "turn": 7,
+   "ms": 903381,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->tidus"
+   ]
+  },
+  {
+   "n": 143,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 13,
+   "turn": 8,
+   "ms": 906095,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima"
+   ]
+  },
+  {
+   "n": 144,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 15,
+   "turn": 9,
+   "ms": 909635,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-anima",
+    "  boss takes 36160"
+   ]
+  },
+  {
+   "n": 145,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Yuna",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim yuna=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 17,
+   "turn": 10,
+   "ms": 915930,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->yuna"
+   ]
+  },
+  {
+   "n": 146,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 17,
+   "turn": 11,
+   "ms": 918721,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima"
+   ]
+  },
+  {
+   "n": 147,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 18,
+   "turn": 12,
+   "ms": 922247,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-anima"
+   ]
+  },
+  {
+   "n": 148,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 21,
+   "turn": 14,
+   "ms": 928021,
+   "rowsBefore": null,
+   "events": [
+    "dark-anima:dark6-anima-attack->yuna",
+    "  dmg yuna 1713",
+    "tidus:quick-hit->dark-anima"
+   ]
+  },
+  {
+   "n": 149,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Auto-Life -> Auron",
+   "did": true,
+   "how": "path=White Magic > Auto-Life; aim auron=true; ",
+   "cmd": {
+    "label": "Auto-Life",
+    "id": "auto-life",
+    "kind": "ability"
+   },
+   "ticks": 21,
+   "turn": 15,
+   "ms": 934166,
+   "rowsBefore": null,
+   "events": [
+    "yuna:auto-life->auron"
+   ]
+  },
+  {
+   "n": 150,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 21,
+   "turn": 16,
+   "ms": 936949,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima",
+    "  boss takes 35560"
+   ]
+  },
+  {
+   "n": 151,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 24,
+   "turn": 17,
+   "ms": 940618,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-anima",
+    "  boss takes 33696"
+   ]
+  },
+  {
+   "n": 152,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Valefor",
+   "did": true,
+   "how": "path=Summon > Valefor; ",
+   "cmd": {
+    "label": "Valefor",
+    "id": "valefor",
+    "kind": "summon"
+   },
+   "ticks": 25,
+   "turn": 18,
+   "ms": 944603,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 153,
+   "link": 6,
+   "actor": "valefor",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 25,
+   "turn": 19,
+   "ms": 947814,
+   "rowsBefore": null,
+   "events": [
+    "valefor:attack->dark-anima",
+    "  boss takes 9999",
+    "dark-anima:dark6-pain->valefor",
+    "  KO valefor (by dark6-pain)"
+   ]
+  },
+  {
+   "n": 154,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 27,
+   "turn": 21,
+   "ms": 953446,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima"
+   ]
+  },
+  {
+   "n": 155,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 29,
+   "turn": 22,
+   "ms": 957055,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-anima",
+    "  boss takes 33147"
+   ]
+  },
+  {
+   "n": 156,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Ifrit",
+   "did": true,
+   "how": "path=Summon > Ifrit; ",
+   "cmd": {
+    "label": "Ifrit",
+    "id": "ifrit",
+    "kind": "summon"
+   },
+   "ticks": 31,
+   "turn": 23,
+   "ms": 964980,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 157,
+   "link": 6,
+   "actor": "ifrit",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 31,
+   "turn": 24,
+   "ms": 968335,
+   "rowsBefore": null,
+   "events": [
+    "ifrit:attack->dark-anima",
+    "  boss takes 9999",
+    "dark-anima:dark6-oblivion->",
+    "  dmg ifrit 5186",
+    "  dmg ifrit 5461",
+    "  dmg ifrit 5186",
+    "  dmg ifrit 5376",
+    "  dmg ifrit 5651",
+    "  dmg ifrit 5291",
+    "  dmg ifrit 5630",
+    "  dmg ifrit 5101",
+    "  dmg ifrit 5419",
+    "  dmg ifrit 5651",
+    "  dmg ifrit 5673"
+   ]
+  },
+  {
+   "n": 158,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 36,
+   "turn": 26,
+   "ms": 977967,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima"
+   ]
+  },
+  {
+   "n": 159,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 37,
+   "turn": 27,
+   "ms": 981632,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-anima"
+   ]
+  },
+  {
+   "n": 160,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 40,
+   "turn": 28,
+   "ms": 985961,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-anima",
+    "  boss takes 36160"
+   ]
+  },
+  {
+   "n": 161,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 40,
+   "turn": 29,
+   "ms": 989139,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->dark-anima",
+    "  boss takes 26447"
+   ]
+  },
+  {
+   "n": 162,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 40,
+   "turn": 30,
+   "ms": 991266,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima"
+   ]
+  },
+  {
+   "n": 163,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 43,
+   "turn": 31,
+   "ms": 994850,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-anima",
+    "  boss takes 35477"
+   ]
+  },
+  {
+   "n": 164,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 44,
+   "turn": 32,
+   "ms": 997852,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->dark-anima",
+    "  boss takes 26763"
+   ]
+  },
+  {
+   "n": 165,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 44,
+   "turn": 33,
+   "ms": 999984,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima",
+    "  boss takes 37409",
+    "dark-anima:dark-mega-graviton->",
+    "  dmg tidus 4374",
+    "  dmg yuna 4374",
+    "  dmg auron 4374"
+   ]
+  },
+  {
+   "n": 166,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 46,
+   "turn": 35,
+   "ms": 1006061,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-anima",
+    "  boss takes 34928"
+   ]
+  },
+  {
+   "n": 167,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Curaga -> Yuna",
+   "did": true,
+   "how": "path=White Magic > Curaga; aim yuna=true; ",
+   "cmd": {
+    "label": "Curaga",
+    "id": "curaga",
+    "kind": "ability"
+   },
+   "ticks": 48,
+   "turn": 36,
+   "ms": 1010605,
+   "rowsBefore": null,
+   "events": [
+    "yuna:curaga->yuna"
+   ]
+  },
+  {
+   "n": 168,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 48,
+   "turn": 37,
+   "ms": 1014212,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima"
+   ]
+  },
+  {
+   "n": 169,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 49,
+   "turn": 38,
+   "ms": 1017795,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-anima",
+    "  boss takes 34791"
+   ]
+  },
+  {
+   "n": 170,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 52,
+   "turn": 39,
+   "ms": 1022366,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-anima"
+   ]
+  },
+  {
+   "n": 171,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Cura -> Tidus",
+   "did": true,
+   "how": "path=White Magic > Cura; aim tidus=true; ",
+   "cmd": {
+    "label": "Cura",
+    "id": "cura",
+    "kind": "ability"
+   },
+   "ticks": 52,
+   "turn": 40,
+   "ms": 1026837,
+   "rowsBefore": null,
+   "events": [
+    "yuna:cura->tidus"
+   ]
+  },
+  {
+   "n": 172,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 52,
+   "turn": 41,
+   "ms": 1030299,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima",
+    "  boss takes 37694",
+    "dark-anima:dark-mega-graviton->",
+    "  dmg tidus 4374",
+    "  dmg yuna 4374",
+    "  dmg auron 4374"
+   ]
+  },
+  {
+   "n": 173,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: X-Potion -> Auron",
+   "did": true,
+   "how": "path=Items > X-Potion; aim auron=true; ",
+   "cmd": {
+    "label": "X-Potion",
+    "id": "x-potion",
+    "kind": "item"
+   },
+   "ticks": 55,
+   "turn": 43,
+   "ms": 1036631,
+   "rowsBefore": null,
+   "events": [
+    "tidus:x-potion->auron"
+   ]
+  },
+  {
+   "n": 174,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Ixion",
+   "did": true,
+   "how": "path=Summon > Ixion; ",
+   "cmd": {
+    "label": "Ixion",
+    "id": "ixion",
+    "kind": "summon"
+   },
+   "ticks": 56,
+   "turn": 44,
+   "ms": 1040815,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 175,
+   "link": 6,
+   "actor": "ixion",
+   "why": "advisor card: Thor's Hammer -> Dark Anima",
+   "did": true,
+   "how": "path=null; ERR Error: could not open Thor's Hammer; ",
+   "cmd": {
+    "label": "Thor's Hammer",
+    "id": "thors-hammer",
+    "kind": "overdrive"
+   },
+   "ticks": 56,
+   "turn": 45,
+   "ms": 1050635,
+   "rowsBefore": null,
+   "events": [
+    "ixion:dismiss->"
+   ]
+  },
+  {
+   "n": 176,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 56,
+   "turn": 46,
+   "ms": 1052698,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima"
+   ]
+  },
+  {
+   "n": 177,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 58,
+   "turn": 47,
+   "ms": 1056295,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-anima",
+    "  boss takes 33421"
+   ]
+  },
+  {
+   "n": 178,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Ixion",
+   "did": true,
+   "how": "path=Summon > Ixion; ",
+   "cmd": {
+    "label": "Ixion",
+    "id": "ixion",
+    "kind": "summon"
+   },
+   "ticks": 60,
+   "turn": 48,
+   "ms": 1060317,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 179,
+   "link": 6,
+   "actor": "ixion",
+   "why": "advisor card: Thor's Hammer -> Dark Anima",
+   "did": true,
+   "how": "path=null; ERR Error: could not open Thor's Hammer; ",
+   "cmd": {
+    "label": "Thor's Hammer",
+    "id": "thors-hammer",
+    "kind": "overdrive"
+   },
+   "ticks": 60,
+   "turn": 49,
+   "ms": 1070016,
+   "rowsBefore": null,
+   "events": [
+    "ixion:dismiss->"
+   ]
+  },
+  {
+   "n": 180,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 60,
+   "turn": 50,
+   "ms": 1072146,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima",
+    "  boss takes 34992"
+   ]
+  },
+  {
+   "n": 181,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 61,
+   "turn": 51,
+   "ms": 1075780,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-anima",
+    "  boss takes 36845"
+   ]
+  },
+  {
+   "n": 182,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: X-Potion -> Tidus",
+   "did": true,
+   "how": "path=Items > X-Potion; aim tidus=true; ",
+   "cmd": {
+    "label": "X-Potion",
+    "id": "x-potion",
+    "kind": "item"
+   },
+   "ticks": 72,
+   "turn": 53,
+   "ms": 1099453,
+   "rowsBefore": null,
+   "events": [
+    "dark-anima:dark6-oblivion->",
+    "  dmg tidus 5101",
+    "  dmg yuna 5694",
+    "  dmg auron 5461",
+    "  dmg tidus 5567",
+    "  dmg yuna 5609",
+    "  dmg auron 5334",
+    "  dmg tidus 5588",
+    "  dmg yuna 5419",
+    "  dmg auron 5694",
+    "  dmg tidus 5651",
+    "  dmg yuna 5122",
+    "  dmg auron 5291",
+    "  dmg tidus 5101"
+   ]
+  },
+  {
+   "n": 183,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 72,
+   "turn": 54,
+   "ms": 1102271,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->dark-anima",
+    "  boss takes 26341"
+   ]
+  },
+  {
+   "n": 184,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: X-Potion -> Yuna",
+   "did": true,
+   "how": "path=Items > X-Potion; aim yuna=true; ",
+   "cmd": {
+    "label": "X-Potion",
+    "id": "x-potion",
+    "kind": "item"
+   },
+   "ticks": 72,
+   "turn": 55,
+   "ms": 1105923,
+   "rowsBefore": null,
+   "events": [
+    "auron:x-potion->yuna"
+   ]
+  },
+  {
+   "n": 185,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Hi-Potion -> Auron",
+   "did": true,
+   "how": "path=Items > Hi-Potion; aim auron=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "hi-potion",
+    "kind": "item"
+   },
+   "ticks": 75,
+   "turn": 57,
+   "ms": 1112082,
+   "rowsBefore": null,
+   "events": [
+    "dark-anima:dark6-anima-attack->yuna",
+    "  dmg yuna 1739",
+    "tidus:hi-potion->auron"
+   ]
+  },
+  {
+   "n": 186,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 75,
+   "turn": 58,
+   "ms": 1115173,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima"
+   ]
+  },
+  {
+   "n": 187,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 76,
+   "turn": 59,
+   "ms": 1117238,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->dark-anima",
+    "  boss takes 28343"
+   ]
+  },
+  {
+   "n": 188,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Slice & Dice -> Dark Anima",
+   "did": true,
+   "how": "path=Overdrive > Slice & Dice; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Slice & Dice",
+    "id": "slice-and-dice",
+    "kind": "overdrive"
+   },
+   "ticks": 78,
+   "turn": 60,
+   "ms": 1123861,
+   "rowsBefore": null,
+   "events": [
+    "tidus:slice-and-dice->dark-anima",
+    "  boss takes 14224",
+    "  boss takes 12696",
+    "  boss takes 13855"
+   ]
+  },
+  {
+   "n": 189,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 79,
+   "turn": 61,
+   "ms": 1130538,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima",
+    "  boss takes 37268"
+   ]
+  },
+  {
+   "n": 190,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 80,
+   "turn": 62,
+   "ms": 1132606,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->dark-anima",
+    "  boss takes 26236",
+    "dark-anima:dark-mega-graviton->",
+    "  dmg tidus 4374",
+    "  dmg yuna 4374",
+    "  dmg auron 4374",
+    "  KO auron (by dark-mega-graviton)",
+    "  COUNTER phoenix-down (auto-phoenix)",
+    "tidus:phoenix-down->auron",
+    "  revive auron"
+   ]
+  },
+  {
+   "n": 191,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 84,
+   "turn": 64,
+   "ms": 1141262,
+   "rowsBefore": null,
+   "events": [
+    "tidus:attack->dark-anima",
+    "  boss takes 34517"
+   ]
+  },
+  {
+   "n": 192,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 84,
+   "turn": 65,
+   "ms": 1143362,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->dark-anima",
+    "  boss takes 27184"
+   ]
+  },
+  {
+   "n": 193,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 88,
+   "turn": 66,
+   "ms": 1145506,
+   "rowsBefore": null,
+   "events": [
+    "tidus:attack->dark-anima"
+   ]
+  },
+  {
+   "n": 194,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 88,
+   "turn": 67,
+   "ms": 1147608,
+   "rowsBefore": null,
+   "events": [
+    "yuna:attack->dark-anima"
+   ]
+  },
+  {
+   "n": 195,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 90,
+   "turn": 68,
+   "ms": 1149727,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima",
+    "  boss takes 34280",
+    "dark-anima:dark-mega-graviton->",
+    "  dmg tidus 4374",
+    "  dmg yuna 4374",
+    "  KO yuna (by dark-mega-graviton)",
+    "  dmg auron 4374",
+    "  COUNTER phoenix-down (auto-phoenix)",
+    "tidus:phoenix-down->yuna",
+    "  revive yuna"
+   ]
+  },
+  {
+   "n": 196,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Hi-Potion -> Auron",
+   "did": true,
+   "how": "path=Items > Hi-Potion; aim auron=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "hi-potion",
+    "kind": "item"
+   },
+   "ticks": 92,
+   "turn": 70,
+   "ms": 1159968,
+   "rowsBefore": null,
+   "events": [
+    "tidus:hi-potion->auron"
+   ]
+  },
+  {
+   "n": 197,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Hi-Potion -> Tidus",
+   "did": true,
+   "how": "path=Items > Hi-Potion; aim tidus=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "hi-potion",
+    "kind": "item"
+   },
+   "ticks": 94,
+   "turn": 71,
+   "ms": 1164291,
+   "rowsBefore": null,
+   "events": [
+    "auron:hi-potion->tidus"
+   ]
+  },
+  {
+   "n": 198,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Hi-Potion -> Auron",
+   "did": true,
+   "how": "path=Items > Hi-Potion; aim auron=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "hi-potion",
+    "kind": "item"
+   },
+   "ticks": 95,
+   "turn": 72,
+   "ms": 1168892,
+   "rowsBefore": null,
+   "events": [
+    "tidus:hi-potion->auron"
+   ]
+  },
+  {
+   "n": 199,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Hi-Potion -> Tidus",
+   "did": true,
+   "how": "path=Items > Hi-Potion; aim tidus=true; ",
+   "cmd": {
+    "label": "Hi-Potion",
+    "id": "hi-potion",
+    "kind": "item"
+   },
+   "ticks": 97,
+   "turn": 73,
+   "ms": 1173270,
+   "rowsBefore": null,
+   "events": [
+    "auron:hi-potion->tidus"
+   ]
+  },
+  {
+   "n": 200,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 98,
+   "turn": 74,
+   "ms": 1176296,
+   "rowsBefore": null,
+   "events": [
+    "tidus:attack->dark-anima"
+   ]
+  },
+  {
+   "n": 201,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Pray -> the party",
+   "did": true,
+   "how": "path=Special > Pray; ",
+   "cmd": {
+    "label": "Pray",
+    "id": "pray",
+    "kind": "ability"
+   },
+   "ticks": 99,
+   "turn": 75,
+   "ms": 1179459,
+   "rowsBefore": null,
+   "events": [
+    "yuna:pray->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 202,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Al Bhed Potion -> the party",
+   "did": true,
+   "how": "path=Items > Al Bhed Potion; ",
+   "cmd": {
+    "label": "Al Bhed Potion",
+    "id": "al-bhed-potion",
+    "kind": "item"
+   },
+   "ticks": 102,
+   "turn": 77,
+   "ms": 1190336,
+   "rowsBefore": null,
+   "events": [
+    "dark-anima:dark6-pain->auron",
+    "  KO auron (by dark6-pain)",
+    "  COUNTER phoenix-down (auto-phoenix)",
+    "tidus:phoenix-down->auron",
+    "  revive auron",
+    "tidus:al-bhed-potion->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 203,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Pray -> the party",
+   "did": true,
+   "how": "path=Special > Pray; ",
+   "cmd": {
+    "label": "Pray",
+    "id": "pray",
+    "kind": "ability"
+   },
+   "ticks": 103,
+   "turn": 78,
+   "ms": 1194990,
+   "rowsBefore": null,
+   "events": [
+    "yuna:pray->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 204,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Al Bhed Potion -> the party",
+   "did": true,
+   "how": "path=Items > Al Bhed Potion; ",
+   "cmd": {
+    "label": "Al Bhed Potion",
+    "id": "al-bhed-potion",
+    "kind": "item"
+   },
+   "ticks": 105,
+   "turn": 79,
+   "ms": 1200000,
+   "rowsBefore": null,
+   "events": [
+    "tidus:al-bhed-potion->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 205,
+   "link": 6,
+   "actor": "yuna",
+   "why": "advisor card: Pray -> the party",
+   "did": true,
+   "how": "path=Special > Pray; ",
+   "cmd": {
+    "label": "Pray",
+    "id": "pray",
+    "kind": "ability"
+   },
+   "ticks": 107,
+   "turn": 80,
+   "ms": 1204608,
+   "rowsBefore": null,
+   "events": [
+    "yuna:pray->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 206,
+   "link": 6,
+   "actor": "tidus",
+   "why": "advisor card: Al Bhed Potion -> the party",
+   "did": true,
+   "how": "path=Items > Al Bhed Potion; ",
+   "cmd": {
+    "label": "Al Bhed Potion",
+    "id": "al-bhed-potion",
+    "kind": "item"
+   },
+   "ticks": 108,
+   "turn": 81,
+   "ms": 1209660,
+   "rowsBefore": null,
+   "events": [
+    "tidus:al-bhed-potion->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 207,
+   "link": 6,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Anima",
+   "did": true,
+   "how": "path=top; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 108,
+   "turn": 82,
+   "ms": 1213156,
+   "rowsBefore": null,
+   "events": [
+    "auron:attack->dark-anima",
+    "dark-anima:dark6-oblivion->",
+    "  dmg tidus 5461",
+    "  dmg yuna 5249",
+    "  dmg auron 5588",
+    "  dmg tidus 5546",
+    "  dmg yuna 5122",
+    "  dmg auron 5651",
+    "  dmg tidus 5715",
+    "  dmg yuna 5080",
+    "  dmg auron 5694",
+    "  dmg tidus 5355",
+    "  dmg yuna 5228",
+    "  dmg auron 5651"
+   ]
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Anima",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-anima=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 1,
+   "ms": 1250102,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-anima",
+    "  boss takes 36298"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "advisor card: Yojimbo",
+   "did": true,
+   "how": "path=Summon > Yojimbo; ",
+   "cmd": {
+    "label": "Yojimbo",
+    "id": "yojimbo",
+    "kind": "summon"
+   },
+   "ticks": 0,
+   "turn": 2,
+   "ms": 1254939,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yojimbo",
+   "why": "Yojimbo's turn: Pay 100,000 (purse 1500000) for the Zanmato roll",
+   "did": true,
+   "how": "path=Aeon > Pay 100,000; ",
+   "cmd": {
+    "label": "Pay",
+    "id": "yojimbo-pay",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 3,
+   "ms": 1259272,
+   "rowsBefore": null,
+   "events": [
+    "yojimbo:ability->",
+    "yojimbo:wakizashi-multi->dark-anima",
+    "  boss takes 9999"
+   ]
+  },
+  {
+   "n": 3,
+   "link": 1,
+   "actor": "yojimbo",
+   "why": "Yojimbo's turn: Pay 100,000 (purse 1400000) for the Zanmato roll",
+   "did": true,
+   "how": "path=Aeon > Pay 100,000; ",
+   "cmd": {
+    "label": "Pay",
+    "id": "yojimbo-pay",
+    "kind": "ability"
+   },
+   "ticks": 9,
+   "turn": 4,
+   "ms": 1263697,
+   "rowsBefore": null,
+   "events": [
+    "yojimbo:ability->",
+    "yojimbo:zanmato->dark-anima",
+    "  KO dark-anima (by zanmato)"
+   ]
+  },
+  {
+   "n": 4,
+   "link": 2,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Bahamut",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-bahamut=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 1,
+   "ms": 1292549,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-bahamut",
+    "  boss takes 32676"
+   ]
+  },
+  {
+   "n": 5,
+   "link": 2,
+   "actor": "yuna",
+   "why": "advisor card: Yojimbo",
+   "did": true,
+   "how": "path=Summon > Yojimbo; ",
+   "cmd": {
+    "label": "Yojimbo",
+    "id": "yojimbo",
+    "kind": "summon"
+   },
+   "ticks": 0,
+   "turn": 2,
+   "ms": 1297290,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 6,
+   "link": 2,
+   "actor": "yojimbo",
+   "why": "Yojimbo's turn: Pay 100,000 (purse 1300000) for the Zanmato roll",
+   "did": true,
+   "how": "path=Aeon > Pay 100,000; ",
+   "cmd": {
+    "label": "Pay",
+    "id": "yojimbo-pay",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 3,
+   "ms": 1301503,
+   "rowsBefore": null,
+   "events": [
+    "yojimbo:ability->",
+    "yojimbo:wakizashi-multi->dark-bahamut",
+    "  boss takes 9999"
+   ]
+  },
+  {
+   "n": 7,
+   "link": 2,
+   "actor": "yojimbo",
+   "why": "Yojimbo's turn: Pay 100,000 (purse 1200000) for the Zanmato roll",
+   "did": true,
+   "how": "path=Aeon > Pay 100,000; ",
+   "cmd": {
+    "label": "Pay",
+    "id": "yojimbo-pay",
+    "kind": "ability"
+   },
+   "ticks": 9,
+   "turn": 4,
+   "ms": 1305844,
+   "rowsBefore": null,
+   "events": [
+    "yojimbo:ability->",
+    "yojimbo:wakizashi-multi->dark-bahamut",
+    "  boss takes 9999"
+   ]
+  },
+  {
+   "n": 8,
+   "link": 2,
+   "actor": "yojimbo",
+   "why": "Yojimbo's turn: Pay 100,000 (purse 1100000) for the Zanmato roll",
+   "did": true,
+   "how": "path=Aeon > Pay 100,000; ",
+   "cmd": {
+    "label": "Pay",
+    "id": "yojimbo-pay",
+    "kind": "ability"
+   },
+   "ticks": 18,
+   "turn": 6,
+   "ms": 1311592,
+   "rowsBefore": null,
+   "events": [
+    "dark-bahamut:dark6-ifrit-attack->yojimbo",
+    "  dmg yojimbo 13324",
+    "yojimbo:ability->",
+    "yojimbo:wakizashi-single->dark-bahamut",
+    "  boss takes 9999"
+   ]
+  },
+  {
+   "n": 9,
+   "link": 2,
+   "actor": "auron",
+   "why": "advisor card: Attack -> Dark Bahamut",
+   "did": true,
+   "how": "path=top; aim dark-bahamut=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 20,
+   "turn": 8,
+   "ms": 1318016,
+   "rowsBefore": null,
+   "events": [
+    "dark-bahamut:dark6-ifrit-attack->yojimbo",
+    "  dmg yojimbo 27888",
+    "  KO yojimbo (by dark6-ifrit-attack)",
+    "auron:attack->dark-bahamut",
+    "  COUNTER dark6-impulse (script)",
+    "dark-bahamut:dark6-impulse->tidus+yuna+auron",
+    "  dmg tidus 6480",
+    "  dmg yuna 6480",
+    "  dmg auron 6868"
+   ]
+  },
+  {
+   "n": 10,
+   "link": 2,
+   "actor": "tidus",
+   "why": "advisor card: X-Potion -> Auron",
+   "did": true,
+   "how": "path=Items > X-Potion; aim auron=true; ",
+   "cmd": {
+    "label": "X-Potion",
+    "id": "x-potion",
+    "kind": "item"
+   },
+   "ticks": 21,
+   "turn": 9,
+   "ms": 1327707,
+   "rowsBefore": null,
+   "events": [
+    "tidus:x-potion->auron"
+   ]
+  },
+  {
+   "n": 11,
+   "link": 2,
+   "actor": "yuna",
+   "why": "advisor card: Valefor",
+   "did": true,
+   "how": "path=Summon > Valefor; ",
+   "cmd": {
+    "label": "Valefor",
+    "id": "valefor",
+    "kind": "summon"
+   },
+   "ticks": 22,
+   "turn": 10,
+   "ms": 1331927,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 12,
+   "link": 2,
+   "actor": "valefor",
+   "why": "advisor card: Attack -> Dark Bahamut",
+   "did": true,
+   "how": "path=top; aim dark-bahamut=true; ",
+   "cmd": {
+    "label": "Attack",
+    "id": null,
+    "kind": "attack"
+   },
+   "ticks": 22,
+   "turn": 11,
+   "ms": 1335477,
+   "rowsBefore": null,
+   "events": [
+    "valefor:attack->dark-bahamut",
+    "  boss takes 9999",
+    "dark-bahamut:dark6-ifrit-attack->valefor",
+    "  dmg valefor 27578",
+    "  KO valefor (by dark6-ifrit-attack)"
+   ]
+  },
+  {
+   "n": 13,
+   "link": 2,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Bahamut",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-bahamut=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 29,
+   "turn": 13,
+   "ms": 1341900,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-bahamut"
+   ]
+  },
+  {
+   "n": 14,
+   "link": 2,
+   "actor": "auron",
+   "why": "advisor card: Al Bhed Potion -> the party",
+   "did": true,
+   "how": "path=Items > Al Bhed Potion; ",
+   "cmd": {
+    "label": "Al Bhed Potion",
+    "id": "al-bhed-potion",
+    "kind": "item"
+   },
+   "ticks": 29,
+   "turn": 14,
+   "ms": 1350354,
+   "rowsBefore": null,
+   "events": [
+    "auron:al-bhed-potion->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 15,
+   "link": 2,
+   "actor": "yuna",
+   "why": "advisor card: Pray -> the party",
+   "did": true,
+   "how": "path=Special > Pray; ",
+   "cmd": {
+    "label": "Pray",
+    "id": "pray",
+    "kind": "ability"
+   },
+   "ticks": 31,
+   "turn": 15,
+   "ms": 1354917,
+   "rowsBefore": null,
+   "events": [
+    "yuna:pray->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 16,
+   "link": 2,
+   "actor": "tidus",
+   "why": "advisor card: Al Bhed Potion -> the party",
+   "did": true,
+   "how": "path=Items > Al Bhed Potion; ",
+   "cmd": {
+    "label": "Al Bhed Potion",
+    "id": "al-bhed-potion",
+    "kind": "item"
+   },
+   "ticks": 32,
+   "turn": 16,
+   "ms": 1360584,
+   "rowsBefore": null,
+   "events": [
+    "tidus:al-bhed-potion->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 17,
+   "link": 2,
+   "actor": "auron",
+   "why": "advisor card: Al Bhed Potion -> the party",
+   "did": true,
+   "how": "path=Items > Al Bhed Potion; ",
+   "cmd": {
+    "label": "Al Bhed Potion",
+    "id": "al-bhed-potion",
+    "kind": "item"
+   },
+   "ticks": 32,
+   "turn": 17,
+   "ms": 1365321,
+   "rowsBefore": null,
+   "events": [
+    "auron:al-bhed-potion->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 18,
+   "link": 2,
+   "actor": "tidus",
+   "why": "advisor card: Al Bhed Potion -> the party",
+   "did": true,
+   "how": "path=Items > Al Bhed Potion; ",
+   "cmd": {
+    "label": "Al Bhed Potion",
+    "id": "al-bhed-potion",
+    "kind": "item"
+   },
+   "ticks": 35,
+   "turn": 18,
+   "ms": 1370619,
+   "rowsBefore": null,
+   "events": [
+    "tidus:al-bhed-potion->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 19,
+   "link": 2,
+   "actor": "yuna",
+   "why": "advisor card: Pray -> the party",
+   "did": true,
+   "how": "path=Special > Pray; ",
+   "cmd": {
+    "label": "Pray",
+    "id": "pray",
+    "kind": "ability"
+   },
+   "ticks": 35,
+   "turn": 19,
+   "ms": 1375250,
+   "rowsBefore": null,
+   "events": [
+    "yuna:pray->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 20,
+   "link": 2,
+   "actor": "auron",
+   "why": "advisor card: Al Bhed Potion -> the party",
+   "did": true,
+   "how": "path=Items > Al Bhed Potion; ",
+   "cmd": {
+    "label": "Al Bhed Potion",
+    "id": "al-bhed-potion",
+    "kind": "item"
+   },
+   "ticks": 35,
+   "turn": 20,
+   "ms": 1380300,
+   "rowsBefore": null,
+   "events": [
+    "auron:al-bhed-potion->tidus+yuna+auron"
+   ]
+  },
+  {
+   "n": 0,
+   "link": 1,
+   "actor": "tidus",
+   "why": "advisor card: Quick Hit -> Dark Bahamut",
+   "did": true,
+   "how": "path=Special > Quick Hit; aim dark-bahamut=true; ",
+   "cmd": {
+    "label": "Quick Hit",
+    "id": "quick-hit",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 1,
+   "ms": 1408986,
+   "rowsBefore": null,
+   "events": [
+    "tidus:quick-hit->dark-bahamut",
+    "  boss takes 33811"
+   ]
+  },
+  {
+   "n": 1,
+   "link": 1,
+   "actor": "yuna",
+   "why": "advisor card: Yojimbo",
+   "did": true,
+   "how": "path=Summon > Yojimbo; ",
+   "cmd": {
+    "label": "Yojimbo",
+    "id": "yojimbo",
+    "kind": "summon"
+   },
+   "ticks": 0,
+   "turn": 2,
+   "ms": 1413705,
+   "rowsBefore": null,
+   "events": [
+    "yuna:summon->"
+   ]
+  },
+  {
+   "n": 2,
+   "link": 1,
+   "actor": "yojimbo",
+   "why": "Yojimbo's turn: Pay 100,000 (purse 1300000) for the Zanmato roll",
+   "did": true,
+   "how": "path=Aeon > Pay 100,000; ",
+   "cmd": {
+    "label": "Pay",
+    "id": "yojimbo-pay",
+    "kind": "ability"
+   },
+   "ticks": 0,
+   "turn": 3,
+   "ms": 1417901,
+   "rowsBefore": null,
+   "events": [
+    "yojimbo:ability->",
+    "yojimbo:zanmato->dark-bahamut",
+    "  KO dark-bahamut (by zanmato)"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "n": 1,
+   "key": "dark-valefor#1",
+   "foes": [
+    "dark-valefor"
+   ],
+   "seed": 1,
+   "ms": 19964,
+   "ticks": 0,
+   "gil": 1500000
+  },
+  {
+   "at": "after seam (decision 13)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 104125
+  },
+  {
+   "n": 2,
+   "key": "dark-ifrit#2",
+   "foes": [
+    "dark-ifrit"
+   ],
+   "seed": 2,
+   "ms": 104131,
+   "ticks": 0,
+   "gil": 1500000
+  },
+  {
+   "at": "after seam (decision 40)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 289769
+  },
+  {
+   "n": 3,
+   "key": "dark-ixion#3",
+   "foes": [
+    "dark-ixion"
+   ],
+   "seed": 3,
+   "ms": 289776,
+   "ticks": 0,
+   "gil": 1500000
+  },
+  {
+   "at": "after seam (decision 84)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 560242
+  },
+  {
+   "n": 4,
+   "key": "dark-ixion-2#4",
+   "foes": [
+    "dark-ixion-2"
+   ],
+   "seed": 4,
+   "ms": 560248,
+   "ticks": 0,
+   "gil": 1500000
+  },
+  {
+   "at": "after seam (decision 117)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 721865
+  },
+  {
+   "n": 5,
+   "key": "dark-shiva#5",
+   "foes": [
+    "dark-shiva"
+   ],
+   "seed": 5,
+   "ms": 721873,
+   "ticks": 0,
+   "gil": 1500000
+  },
+  {
+   "at": "after seam (decision 137)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 870886
+  },
+  {
+   "n": 6,
+   "key": "dark-anima#6",
+   "foes": [
+    "dark-anima"
+   ],
+   "seed": 6,
+   "ms": 870899,
+   "ticks": 0,
+   "gil": 1500000
+  },
+  {
+   "at": "after seam (decision 208)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 1231878
+  },
+  {
+   "n": 1,
+   "key": "dark-anima#1006",
+   "foes": [
+    "dark-anima"
+   ],
+   "seed": 1006,
+   "ms": 1246697,
+   "ticks": 0,
+   "gil": 1500000
+  },
+  {
+   "at": "after seam (decision 4)",
+   "screenWas": "battle",
+   "next": "menu",
+   "ms": 1289254
+  },
+  {
+   "n": 2,
+   "key": "dark-bahamut#1007",
+   "foes": [
+    "dark-bahamut"
+   ],
+   "seed": 1007,
+   "ms": 1289263,
+   "ticks": 0,
+   "gil": 1300000
+  },
+  {
+   "at": "after seam (decision 21)",
+   "screenWas": "battle",
+   "next": "left:results",
+   "ms": 1391523
+  },
+  {
+   "n": 1,
+   "key": "dark-bahamut#2007",
+   "foes": [
+    "dark-bahamut"
+   ],
+   "seed": 2007,
+   "ms": 1405584,
+   "ticks": 0,
+   "gil": 1300000
+  },
+  {
+   "at": "after seam (decision 3)",
+   "screenWas": "battle",
+   "next": "left:cutscene",
+   "ms": 1423589
+  }
+ ],
+ "attempts": [
+  {
+   "attempt": 1,
+   "over": "left:results",
+   "decisions": 208,
+   "ms": 1231878,
+   "links": 12
+  },
+  {
+   "attempt": 2,
+   "over": "left:results",
+   "decisions": 21,
+   "ms": 1391523,
+   "links": 16
+  },
+  {
+   "attempt": 3,
+   "over": "left:cutscene",
+   "decisions": 3,
+   "ms": 1423589,
+   "links": 18
+  }
+ ],
+ "mechanics": [
+  {
+   "ms": 58035,
+   "seq": 53,
+   "actor": "dark-valefor",
+   "ability": "dark6-valefor-attack",
+   "targets": [
+    "valefor"
+   ],
+   "first": true
+  },
+  {
+   "ms": 65061,
+   "seq": 66,
+   "actor": "dark-valefor",
+   "ability": "dark6-energy-blast",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 106926,
+   "seq": 7,
+   "actor": "dark-ifrit",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "tidus"
+   ],
+   "first": true
+  },
+  {
+   "ms": 117543,
+   "seq": 23,
+   "actor": "dark-ifrit",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 127844,
+   "seq": 39,
+   "actor": "dark-ifrit",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 133027,
+   "seq": 49,
+   "actor": "dark-ifrit",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 151323,
+   "seq": 80,
+   "actor": "dark-ifrit",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 161389,
+   "seq": 98,
+   "actor": "dark-ifrit",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 164627,
+   "seq": 104,
+   "actor": "dark-ifrit",
+   "ability": "dark6-meteor-strike",
+   "targets": [
+    "auron"
+   ],
+   "first": true
+  },
+  {
+   "ms": 176954,
+   "seq": 129,
+   "actor": "dark-ifrit",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 198275,
+   "seq": 161,
+   "actor": "dark-ifrit",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 208703,
+   "seq": 179,
+   "actor": "dark-ifrit",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 213901,
+   "seq": 193,
+   "actor": "dark-ifrit",
+   "ability": "dark6-meteor-strike",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 220673,
+   "seq": 217,
+   "actor": "dark-ifrit",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 229088,
+   "seq": 234,
+   "actor": "dark-ifrit",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 242309,
+   "seq": 256,
+   "actor": "dark-ifrit",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 250104,
+   "seq": 270,
+   "actor": "dark-ifrit",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "valefor"
+   ],
+   "first": false
+  },
+  {
+   "ms": 252923,
+   "seq": 277,
+   "actor": "dark-ifrit",
+   "ability": "dark6-meteor-strike",
+   "targets": [
+    "valefor"
+   ],
+   "first": false
+  },
+  {
+   "ms": 292608,
+   "seq": 7,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "tidus"
+   ],
+   "first": true
+  },
+  {
+   "ms": 302922,
+   "seq": 22,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 307639,
+   "seq": 32,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 317567,
+   "seq": 47,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 322313,
+   "seq": 57,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 333967,
+   "seq": 72,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 338273,
+   "seq": 82,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 340447,
+   "seq": 87,
+   "actor": "dark-ixion",
+   "ability": "dark6-thundaja",
+   "targets": [
+    "tidus"
+   ],
+   "first": true
+  },
+  {
+   "ms": 347686,
+   "seq": 102,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "valefor"
+   ],
+   "first": false
+  },
+  {
+   "ms": 350042,
+   "seq": 108,
+   "actor": "dark-ixion",
+   "ability": "dark6-thundaja",
+   "targets": [
+    "valefor"
+   ],
+   "first": false
+  },
+  {
+   "ms": 351993,
+   "seq": 114,
+   "actor": "dark-ixion",
+   "ability": "dark6-thundaja",
+   "targets": [
+    "valefor"
+   ],
+   "first": false
+  },
+  {
+   "ms": 354152,
+   "seq": 121,
+   "actor": "dark-ixion",
+   "ability": "dark6-thundaja",
+   "targets": [
+    "valefor"
+   ],
+   "first": false
+  },
+  {
+   "ms": 359598,
+   "seq": 127,
+   "actor": "dark-ixion",
+   "ability": "dark6-aerospark",
+   "targets": [
+    "valefor"
+   ],
+   "first": true
+  },
+  {
+   "ms": 364964,
+   "seq": 141,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 372974,
+   "seq": 156,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 376430,
+   "seq": 165,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 384682,
+   "seq": 178,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 391468,
+   "seq": 189,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 394101,
+   "seq": 194,
+   "actor": "dark-ixion",
+   "ability": "dark6-thundaja",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 403234,
+   "seq": 209,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 412703,
+   "seq": 223,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "ifrit"
+   ],
+   "first": false
+  },
+  {
+   "ms": 415069,
+   "seq": 229,
+   "actor": "dark-ixion",
+   "ability": "dark6-thundaja",
+   "targets": [
+    "ifrit"
+   ],
+   "first": false
+  },
+  {
+   "ms": 417253,
+   "seq": 236,
+   "actor": "dark-ixion",
+   "ability": "dark6-thundaja",
+   "targets": [
+    "ifrit"
+   ],
+   "first": false
+  },
+  {
+   "ms": 419195,
+   "seq": 241,
+   "actor": "dark-ixion",
+   "ability": "dark6-thundaja",
+   "targets": [
+    "ifrit"
+   ],
+   "first": false
+  },
+  {
+   "ms": 425272,
+   "seq": 255,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 434832,
+   "seq": 268,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "ixion"
+   ],
+   "first": false
+  },
+  {
+   "ms": 437218,
+   "seq": 274,
+   "actor": "dark-ixion",
+   "ability": "dark6-aerospark",
+   "targets": [
+    "ixion"
+   ],
+   "first": false
+  },
+  {
+   "ms": 443742,
+   "seq": 290,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 448067,
+   "seq": 300,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 452825,
+   "seq": 310,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 457182,
+   "seq": 319,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 459355,
+   "seq": 324,
+   "actor": "dark-ixion",
+   "ability": "dark6-thundaja",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 463925,
+   "seq": 334,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 474233,
+   "seq": 349,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 492649,
+   "seq": 367,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 495740,
+   "seq": 372,
+   "actor": "dark-ixion",
+   "ability": "dark6-thundaja",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 498582,
+   "seq": 383,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 514533,
+   "seq": 401,
+   "actor": "dark-ixion",
+   "ability": "dark6-ixion-attack-1",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 600693,
+   "seq": 53,
+   "actor": "dark-ixion-2",
+   "ability": "dark6-ixion-attack-2",
+   "targets": [
+    "auron"
+   ],
+   "first": true
+  },
+  {
+   "ms": 612376,
+   "seq": 74,
+   "actor": "dark-ixion-2",
+   "ability": "dark6-ixion-attack-2",
+   "targets": [
+    "valefor"
+   ],
+   "first": false
+  },
+  {
+   "ms": 619210,
+   "seq": 86,
+   "actor": "dark-ixion-2",
+   "ability": "dark6-thors-hammer",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 647059,
+   "seq": 142,
+   "actor": "dark-ixion-2",
+   "ability": "dark6-aerospark",
+   "targets": [
+    "tidus"
+   ],
+   "first": true
+  },
+  {
+   "ms": 671845,
+   "seq": 180,
+   "actor": "dark-ixion-2",
+   "ability": "dark6-thors-hammer",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 769638,
+   "seq": 48,
+   "actor": "dark-shiva",
+   "ability": "dark6-heavenly-strike",
+   "targets": [
+    "yuna"
+   ],
+   "first": true
+  },
+  {
+   "ms": 788670,
+   "seq": 84,
+   "actor": "dark-shiva",
+   "ability": "dark6-shiva-attack",
+   "targets": [
+    "tidus"
+   ],
+   "first": true
+  },
+  {
+   "ms": 805061,
+   "seq": 106,
+   "actor": "dark-shiva",
+   "ability": "dark6-diamond-dust",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 816122,
+   "seq": 135,
+   "actor": "dark-shiva",
+   "ability": "dark6-shiva-attack",
+   "targets": [
+    "tidus"
+   ],
+   "first": false
+  },
+  {
+   "ms": 822376,
+   "seq": 148,
+   "actor": "dark-shiva",
+   "ability": "dark6-heavenly-strike",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 890460,
+   "seq": 26,
+   "actor": "dark-anima",
+   "ability": "dark6-pain",
+   "targets": [
+    "yojimbo"
+   ],
+   "first": true
+  },
+  {
+   "ms": 923713,
+   "seq": 73,
+   "actor": "dark-anima",
+   "ability": "dark6-anima-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": true
+  },
+  {
+   "ms": 948667,
+   "seq": 112,
+   "actor": "dark-anima",
+   "ability": "dark6-pain",
+   "targets": [
+    "valefor"
+   ],
+   "first": false
+  },
+  {
+   "ms": 969137,
+   "seq": 142,
+   "actor": "dark-anima",
+   "ability": "dark6-oblivion",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 1000680,
+   "seq": 216,
+   "actor": "dark-anima",
+   "ability": "dark-mega-graviton",
+   "targets": [],
+   "first": true
+  },
+  {
+   "ms": 1030952,
+   "seq": 265,
+   "actor": "dark-anima",
+   "ability": "dark-mega-graviton",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1077419,
+   "seq": 317,
+   "actor": "dark-anima",
+   "ability": "dark6-oblivion",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1107675,
+   "seq": 418,
+   "actor": "dark-anima",
+   "ability": "dark6-anima-attack",
+   "targets": [
+    "yuna"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1133173,
+   "seq": 458,
+   "actor": "dark-anima",
+   "ability": "dark-mega-graviton",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1150392,
+   "seq": 505,
+   "actor": "dark-anima",
+   "ability": "dark-mega-graviton",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1181592,
+   "seq": 555,
+   "actor": "dark-anima",
+   "ability": "dark6-pain",
+   "targets": [
+    "auron"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1213665,
+   "seq": 608,
+   "actor": "dark-anima",
+   "ability": "dark6-oblivion",
+   "targets": [],
+   "first": false
+  },
+  {
+   "ms": 1307862,
+   "seq": 26,
+   "actor": "dark-bahamut",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "yojimbo"
+   ],
+   "first": true
+  },
+  {
+   "ms": 1313532,
+   "seq": 40,
+   "actor": "dark-bahamut",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "yojimbo"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1317577,
+   "seq": 54,
+   "actor": "dark-bahamut",
+   "ability": "dark6-impulse",
+   "targets": [
+    "tidus",
+    "yuna",
+    "auron"
+   ],
+   "first": true
+  },
+  {
+   "ms": 1336102,
+   "seq": 92,
+   "actor": "dark-bahamut",
+   "ability": "dark6-ifrit-attack",
+   "targets": [
+    "valefor"
+   ],
+   "first": false
+  },
+  {
+   "ms": 1382282,
+   "seq": 152,
+   "actor": "dark-bahamut",
+   "ability": "dark6-mega-flare",
+   "targets": [],
+   "first": true
+  }
+ ],
+ "screens": [
+  {
+   "label": "a1",
+   "screens": [
+    "results",
+    "battle"
+   ],
+   "results": {
+    "text": "BESAID TO MT. GAGAZET · FELL RESULTS · 20:17 Defeat TURNS 83 ATTEMPTS 1 BEST — NEVER CLEARED T Tidus S.LV 180 · 0/22,000 AP Y Yuna S.LV 175 · 0/22,000 AP A Auron S.LV 180 · 0/22,000 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  },
+  {
+   "label": "a2",
+   "screens": [
+    "results",
+    "battle"
+   ],
+   "results": {
+    "text": "BESAID TO MT. GAGAZET · FELL RESULTS · 22:53 Defeat TURNS 21 ATTEMPTS 2 BEST — NEVER CLEARED T Tidus S.LV 180 · 0/22,000 AP Y Yuna S.LV 175 · 0/22,000 AP A Auron S.LV 180 · 0/22,000 AP RETRY CHAPTER SELECT",
+    "outcome": "defeat"
+   },
+   "outcome": "defeat",
+   "next": "battle"
+  },
+  {
+   "label": "a3",
+   "screens": [
+    "cutscene",
+    "results",
+    "chapter-select"
+   ],
+   "results": {
+    "text": "BESAID TO MT. GAGAZET · CLEARED RESULTS · 23:22 Victory AP 175,000 ×3 PARTY GIL 0 ITEMS Dark Matter ×9, Master Sphere T Tidus +4 S.Lv S.LV 184 · 87,000/22,000 AP +175,000AP Y Yuna +4 S.Lv S.LV 179 · 87,000/22,000 AP +175,000AP A Auron +2 S.Lv S.LV 182 · 131,000/22,000 AP +175,000AP CONFIRM ▸",
+    "outcome": "victory"
+   },
+   "outcome": "victory",
+   "scenes": [
+    {
+     "watch": {
+      "ms": 6037,
+      "shows": 1,
+      "advancedWithoutInput": false,
+      "firstLine": "That was the last of the six.",
+      "screenAfterWatch": "cutscene"
+     },
+     "taps": 7,
+     "holds": 0,
+     "ended": true,
+     "lines": [
+      "That was the last of the six.",
+      "Six roads, six goodbyes. We're getting good at them.",
+      "Do not get good at them.",
+      "They'll keep coming if somebody keeps calling, ya.",
+      "Then I will keep answering.",
+      "Rest first. Then answer."
+     ]
+    }
+   ],
+   "next": "board",
+   "board": {
+    "selectedIndex": 0,
+    "selectedId": "seymour-flux",
+    "tiles": 19,
+    "coming": [],
+    "cleared": [],
+    "order": [
+     "seymour-flux",
+     "yunalesca",
+     "braskas-final-aeon",
+     "seymour-anima-macalania",
+     "evrae-airship",
+     "yojimbo-cavern",
+     "seymour-natus",
+     "seymour-omnis",
+     "isaaru-via-purifico",
+     "sin-fins-core",
+     "sin-face",
+     "mirror-aeons",
+     "ffx2-bahamut",
+     "ffx2-vegnagun-shuyin",
+     "ffx2-leblanc",
+     "ffx2-fallen-aeons",
+     "ffx2-trema",
+     "ffx2-den-of-woe",
+     "ffx2-ixion-djose"
+    ],
+    "beaten": 0,
+    "total": 19
+   },
+   "boardText": "CHAPTER SELECT CHAPTER I Seymour Flux 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVII XVIII XXVII X-2 IV V VI XI XIII XV XVI The mountain of the Ronso, and what was done to them The Ronso held the gate so the summoner could pass. Seymour calls it mercy. He is still unsent, he is waiting on the trail, and everything he says about Jecht is true. CTB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima VIII Evrae IX Yojimbo X Seymour Natus XII Seymour Omnis XIV Isaaru XVII Sin: the Fins and the Core XVIII Sin: the Face XXVII Mirror Aeons FINAL FANTAS"
+  }
+ ],
+ "speed": "normal",
+ "line": "advisor card for links 1-5; Yojimbo summoned and paid 100,000 per turn on links 6-7",
+ "live": {
+  "version": "0.1.0",
+  "scripts": [
+   "index-jYm-0mrJ.js"
+  ]
+ },
+ "battleSeed": 1
+}

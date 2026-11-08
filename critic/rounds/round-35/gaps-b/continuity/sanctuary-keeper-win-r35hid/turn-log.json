@@ -1,0 +1,1472 @@
+[
+ {
+  "turn": 0,
+  "ms": 28,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Hastega",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Hastega",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:40000/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 2,
+    "actor": "tidus",
+    "did": "Hastega",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 9110,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Echo Screen",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "Echo Screen",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1448/2420",
+   "yuna:446/1500",
+   "kimahri:2310/2310",
+   "auron:2383/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:40000/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 24,
+    "actor": "yuna",
+    "did": "Echo Screen",
+    "targets": [
+     "yuna"
+    ]
+   },
+   {
+    "seq": 28,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 2,
+  "ms": 14844,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Esuna",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Esuna",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1448/2420",
+   "yuna:446/1500",
+   "kimahri:2310/2310",
+   "auron:781/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:40000/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 35,
+    "actor": "yuna",
+    "did": "Esuna",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 19373,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Echo Screen",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Echo Screen",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1448/2420",
+   "yuna:446/1500",
+   "kimahri:2310/2310",
+   "auron:781/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:40000/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 40,
+    "actor": "tidus",
+    "did": "Echo Screen",
+    "targets": [
+     "auron"
+    ]
+   },
+   {
+    "seq": 44,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 25982,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Remedy",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Remedy",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1448/2420",
+   "yuna:446/1500",
+   "kimahri:2310/2310",
+   "auron:781/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:40000/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 52,
+    "actor": "tidus",
+    "did": "Remedy",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 30091,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1448/2420",
+   "yuna:446/1500",
+   "kimahri:2310/2310",
+   "auron:781/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:40000/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 56,
+    "actor": "yuna",
+    "did": "Mega-Potion",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 34807,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Cheer",
+   "target": "the party",
+   "menu": "Special"
+  },
+  "took": "Cheer",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:2781/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:40000/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 64,
+    "actor": "tidus",
+    "did": "Cheer",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 38344,
+  "actor": "command:auron",
+  "want": {
+   "label": "Armor Break",
+   "target": "Sanctuary Keeper",
+   "menu": "Special"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Special",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:2781/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:40000/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 71,
+    "actor": "auron",
+    "did": "Armor Break",
+    "targets": [
+     "sanctuary-keeper"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 42242,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Poison Fang",
+   "target": "Sanctuary Keeper",
+   "menu": "Items"
+  },
+  "took": "Poison Fang",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:2781/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:39034/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 76,
+    "actor": "tidus",
+    "did": "Poison Fang",
+    "targets": [
+     "sanctuary-keeper"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 49010,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Reflect",
+   "target": "Sanctuary Keeper",
+   "menu": "White Magic"
+  },
+  "took": "Reflect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:2781/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:36956/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "sanctuary-keeper",
+   "wanted": "sanctuary-keeper",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 82,
+    "actor": "yuna",
+    "did": "Reflect",
+    "targets": [
+     "sanctuary-keeper"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 55792,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:80/1500",
+   "kimahri:2310/2310",
+   "auron:2781/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:34956/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 92,
+    "actor": "tidus",
+    "did": "Mega-Potion",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 60405,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Sanctuary Keeper",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:34956/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 99,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "sanctuary-keeper"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 62144,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Shell",
+   "target": "Tidus",
+   "menu": "White Magic"
+  },
+  "took": "Shell",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:33766/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 104,
+    "actor": "yuna",
+    "did": "Shell",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 67010,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Sanctuary Keeper",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:33766/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 108,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "sanctuary-keeper"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 76213,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Phoenix Down",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Phoenix Down",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1464/2420",
+   "yuna:447/1500",
+   "kimahri:2310/2310",
+   "auron:0/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:27660/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 135,
+    "actor": "tidus",
+    "did": "Phoenix Down",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 80496,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1464/2420",
+   "yuna:447/1500",
+   "kimahri:2310/2310",
+   "auron:1705/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:27660/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 140,
+    "actor": "tidus",
+    "did": "Mega-Potion",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 85259,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Shell",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Shell",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:27660/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 148,
+    "actor": "yuna",
+    "did": "Shell",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 91521,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Hastega",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Hastega",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:25660/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 157,
+    "actor": "tidus",
+    "did": "Hastega",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 95375,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Sanctuary Keeper",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:25660/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 163,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "sanctuary-keeper"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 97073,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Shell",
+   "target": "Auron",
+   "menu": "White Magic"
+  },
+  "took": "Shell",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:23519/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 168,
+    "actor": "yuna",
+    "did": "Shell",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 105895,
+  "actor": "command:auron",
+  "want": {
+   "label": "Eye Drops",
+   "target": "Tidus",
+   "menu": "Items"
+  },
+  "took": "Eye Drops",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1471/2420",
+   "yuna:559/1500",
+   "kimahri:2310/2310",
+   "auron:2430/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:21519/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "tidus",
+   "wanted": "tidus",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 185,
+    "actor": "auron",
+    "did": "Eye Drops",
+    "targets": [
+     "tidus"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 110711,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Eye Drops",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "Eye Drops",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1471/2420",
+   "yuna:559/1500",
+   "kimahri:2310/2310",
+   "auron:2430/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:21519/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 190,
+    "actor": "tidus",
+    "did": "Eye Drops",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 115625,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Mega-Potion",
+   "target": "the party",
+   "menu": "Items"
+  },
+  "took": "Mega-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1471/2420",
+   "yuna:559/1500",
+   "kimahri:2310/2310",
+   "auron:2430/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:21519/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 196,
+    "actor": "tidus",
+    "did": "Mega-Potion",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 120546,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Sanctuary Keeper",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:21519/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 203,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "sanctuary-keeper"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 24,
+  "ms": 124258,
+  "actor": "command:tidus",
+  "want": {
+   "label": "X-Potion",
+   "target": "Auron",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:2154/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:17458/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "auron",
+   "wanted": "auron",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 213,
+    "actor": "tidus",
+    "did": "X-Potion",
+    "targets": [
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 25,
+  "ms": 128696,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Sanctuary Keeper",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:2420/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:3410/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:17458/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 217,
+    "actor": "tidus",
+    "did": "Attack",
+    "targets": [
+     "sanctuary-keeper"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 26,
+  "ms": 135620,
+  "actor": "command:tidus",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1936/2420",
+   "yuna:524/1500",
+   "kimahri:2310/2310",
+   "auron:2469/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:14286/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 237,
+    "actor": "tidus",
+    "did": "X-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 27,
+  "ms": 139994,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Protect",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Protect",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1936/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:2469/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:14286/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 243,
+    "actor": "yuna",
+    "did": "Protect",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 28,
+  "ms": 144977,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Sanctuary Keeper",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1936/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:2469/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:14286/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 247,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "sanctuary-keeper"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 29,
+  "ms": 149409,
+  "actor": "command:tidus",
+  "want": {
+   "label": "X-Potion",
+   "target": "Yuna",
+   "menu": "Items"
+  },
+  "took": "X-Potion",
+  "viaMenu": "Items",
+  "engineHp": [
+   "tidus:1936/2420",
+   "yuna:263/1500",
+   "kimahri:2310/2310",
+   "auron:2469/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:10217/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 257,
+    "actor": "tidus",
+    "did": "X-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 30,
+  "ms": 155783,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Hastega",
+   "target": "the party",
+   "menu": "White Magic"
+  },
+  "took": "Hastega",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1936/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:2469/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:8217/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 268,
+    "actor": "tidus",
+    "did": "Hastega",
+    "targets": [
+     "tidus",
+     "yuna",
+     "auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 31,
+  "ms": 159737,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Sanctuary Keeper",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1936/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:2469/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:8217/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 274,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "sanctuary-keeper"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 32,
+  "ms": 161505,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Dispel",
+   "target": "Yuna",
+   "menu": "White Magic"
+  },
+  "took": "Dispel",
+  "viaMenu": "White Magic",
+  "engineHp": [
+   "tidus:1936/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:2469/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:6306/40000"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 279,
+    "actor": "yuna",
+    "did": "Dispel",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 33,
+  "ms": 168704,
+  "actor": "command:auron",
+  "want": {
+   "label": "Attack",
+   "target": "Sanctuary Keeper",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1936/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:2469/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:4306/40000"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 291,
+    "actor": "auron",
+    "did": "Attack",
+    "targets": [
+     "sanctuary-keeper"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 34,
+  "ms": 170508,
+  "actor": "command:tidus",
+  "want": {
+   "label": "Attack",
+   "target": "Sanctuary Keeper",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "tidus:1936/2420",
+   "yuna:1500/1500",
+   "kimahri:2310/2310",
+   "auron:2469/3410",
+   "wakka:2530/2530",
+   "lulu:1375/1375",
+   "rikku:1540/1540",
+   "valefor:1530/1530",
+   "ifrit:2075/2075",
+   "ixion:2055/2055",
+   "shiva:1830/1830",
+   "bahamut:2935/2935",
+   "sanctuary-keeper:2253/40000"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

@@ -1,0 +1,299 @@
+{
+ "schema": "sweep/1",
+ "job": "phone",
+ "base": "https://echoesofspira.com/",
+ "floor": 14,
+ "date": "2026-11-07T19:43:50.729Z",
+ "results": {
+  "seymour-flux": {
+   "id": "seymour-flux",
+   "size": "390x844",
+   "firstMenuAsShown": {
+    "floor": 14,
+    "count": 40,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 1,
+    "truncated": [
+     {
+      "text": "PAUSE",
+      "sw": 124,
+      "cw": 44,
+      "cls": "battle-pause-chip ig"
+     }
+    ],
+    "scrollW": 390,
+    "clientW": 390,
+    "vw": 390,
+    "vh": 844,
+    "hScroll": false
+   },
+   "battle": {
+    "floor": 14,
+    "count": 38,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 1,
+    "truncated": [
+     {
+      "text": "PAUSE",
+      "sw": 124,
+      "cw": 44,
+      "cls": "battle-pause-chip ig"
+     }
+    ],
+    "scrollW": 390,
+    "clientW": 390,
+    "vw": 390,
+    "vh": 844,
+    "hScroll": false
+   },
+   "battleMenuVerified": true,
+   "screen": "battle",
+   "pause": {
+    "unverified": "the pause did not open from the command menu (screen=battle)"
+   }
+  },
+  "ffx2-bahamut": {
+   "id": "ffx2-bahamut",
+   "size": "390x844",
+   "firstMenuAsShown": {
+    "floor": 14,
+    "count": 37,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 1,
+    "truncated": [
+     {
+      "text": "PAUSE",
+      "sw": 124,
+      "cw": 44,
+      "cls": "battle-pause-chip ig ig--ffx2"
+     }
+    ],
+    "scrollW": 390,
+    "clientW": 390,
+    "vw": 390,
+    "vh": 844,
+    "hScroll": false
+   },
+   "battle": {
+    "floor": 14,
+    "count": 30,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 1,
+    "truncated": [
+     {
+      "text": "PAUSE",
+      "sw": 124,
+      "cw": 44,
+      "cls": "battle-pause-chip ig ig--ffx2"
+     }
+    ],
+    "scrollW": 390,
+    "clientW": 390,
+    "vw": 390,
+    "vh": 844,
+    "hScroll": false
+   },
+   "battleMenuVerified": true,
+   "screen": "pause",
+   "pause": {
+    "floor": 14,
+    "count": 63,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 1,
+    "truncated": [
+     {
+      "text": "PAUSE",
+      "sw": 124,
+      "cw": 44,
+      "cls": "battle-pause-chip ig ig--ffx2"
+     }
+    ],
+    "scrollW": 390,
+    "clientW": 390,
+    "vw": 390,
+    "vh": 844,
+    "hScroll": false
+   }
+  },
+  "braskas-final-aeon": {
+   "id": "braskas-final-aeon",
+   "size": "390x844",
+   "firstMenuAsShown": {
+    "floor": 14,
+    "count": 37,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 1,
+    "truncated": [
+     {
+      "text": "PAUSE",
+      "sw": 124,
+      "cw": 44,
+      "cls": "battle-pause-chip ig"
+     }
+    ],
+    "scrollW": 390,
+    "clientW": 390,
+    "vw": 390,
+    "vh": 844,
+    "hScroll": false
+   },
+   "battle": {
+    "floor": 14,
+    "count": 34,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 1,
+    "truncated": [
+     {
+      "text": "PAUSE",
+      "sw": 124,
+      "cw": 44,
+      "cls": "battle-pause-chip ig"
+     }
+    ],
+    "scrollW": 390,
+    "clientW": 390,
+    "vw": 390,
+    "vh": 844,
+    "hScroll": false
+   },
+   "battleMenuVerified": true,
+   "screen": "pause",
+   "pause": {
+    "floor": 14,
+    "count": 65,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 1,
+    "truncated": [
+     {
+      "text": "PAUSE",
+      "sw": 124,
+      "cw": 44,
+      "cls": "battle-pause-chip ig"
+     }
+    ],
+    "scrollW": 390,
+    "clientW": 390,
+    "vw": 390,
+    "vh": 844,
+    "hScroll": false
+   }
+  },
+  "ffx2-fallen-aeons": {
+   "id": "ffx2-fallen-aeons",
+   "size": "390x844",
+   "firstMenuAsShown": {
+    "floor": 14,
+    "count": 41,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 1,
+    "truncated": [
+     {
+      "text": "PAUSE",
+      "sw": 124,
+      "cw": 44,
+      "cls": "battle-pause-chip ig ig--ffx2"
+     }
+    ],
+    "scrollW": 390,
+    "clientW": 390,
+    "vw": 390,
+    "vh": 844,
+    "hScroll": false
+   },
+   "battle": {
+    "floor": 14,
+    "count": 39,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 1,
+    "truncated": [
+     {
+      "text": "PAUSE",
+      "sw": 124,
+      "cw": 44,
+      "cls": "battle-pause-chip ig ig--ffx2"
+     }
+    ],
+    "scrollW": 390,
+    "clientW": 390,
+    "vw": 390,
+    "vh": 844,
+    "hScroll": false
+   },
+   "battleMenuVerified": true,
+   "screen": "pause",
+   "pause": {
+    "floor": 14,
+    "count": 66,
+    "min": 14,
+    "underCount": 0,
+    "under": [],
+    "truncatedCount": 1,
+    "truncated": [
+     {
+      "text": "PAUSE",
+      "sw": 124,
+      "cw": 44,
+      "cls": "battle-pause-chip ig ig--ffx2"
+     }
+    ],
+    "scrollW": 390,
+    "clientW": 390,
+    "vw": 390,
+    "vh": 844,
+    "hScroll": false
+   }
+  }
+ },
+ "summary": {
+  "floor": 14,
+  "surfaces": 12,
+  "measured": 11,
+  "unverified": [
+   {
+    "label": "seymour-flux pause",
+    "size": "390x844",
+    "why": "the pause did not open from the command menu (screen=battle)"
+   }
+  ],
+  "elements": 490,
+  "min": 14,
+  "underCount": 0,
+  "surfacesUnder": [],
+  "truncatedCount": 11,
+  "surfacesTruncated": [
+   "seymour-flux first menu as shown",
+   "seymour-flux battle menu",
+   "ffx2-bahamut first menu as shown",
+   "ffx2-bahamut battle menu",
+   "ffx2-bahamut pause",
+   "braskas-final-aeon first menu as shown",
+   "braskas-final-aeon battle menu",
+   "braskas-final-aeon pause",
+   "ffx2-fallen-aeons first menu as shown",
+   "ffx2-fallen-aeons battle menu",
+   "ffx2-fallen-aeons pause"
+  ],
+  "hScroll": []
+ },
+ "reportLine": "legibility sweep, phone (CHK-003/CHK-009, floor 14 css px): 11 of 12 surfaces measured, 490 text elements, smallest 14 px, none under 14 px, 11 clipped or ellipsised on 11 surface(s); UNVERIFIED: seymour-flux pause (the pause did not open from the command menu (screen=battle))"
+}

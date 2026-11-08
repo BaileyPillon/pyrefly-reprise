@@ -1,0 +1,929 @@
+{
+ "round": 35,
+ "lane": "gaps-b wins",
+ "generatedAt": "2026-11-07T16:42:35.237Z",
+ "site": "https://echoesofspira.com/ (release 76, main 36b6e851d, bundle index-jYm-0mrJ.js)",
+ "viewport": "1600x900",
+ "input": "real Playwright key presses only; the engine, the battle log and the command list were READ through window.__pyrefly; the only writes are the recorded stateWrites",
+ "chapters": {
+  "penance": {
+   "label": "Penance (hidden Chapter 35, word judgment, FFX only)",
+   "verdict": "PASS (a real-key win with ONE recorded state write that set up the last blow)",
+   "chk022": "PASS: Victory results page (THE FAHRENHEIT - THE DECK, CLEARED, AP 192,000 x3, Dark Matter x20, Master Sphere x5), the post scene (5 lines, 'It stopped. The hands, too.' to 'Keep walking.'), then the chapter-select board (19 tiles, 0 of 19 beaten: a hidden chapter leaves the board unchanged, as designed)",
+   "chk023": "PASS: the Separation (read at decision 95, tick 115, Penance at 8,900,031 after a real Tidus Quick Hit; banner 'Separation / Penance was hasted' on screen) and an arm returning (arm-fell 12 times and arm-returned 10 times, each read from the engine, the Left Arm back 12 ticks after its fall); also Obliteration x13, the Right Arm's Dark Calamity and Penance's Immolation (the first phase-2 action) played out after real key presses",
+   "line": "docs/handoff/ch-penance.md 5.1 (the guide line) ported to the page (penance-guide.mjs, from tests/unit/helpers/penanceGuide.ts): Rikku's Hyper NulAll Mix (picker by keys), Three Stars, an arm struck only when the turn list says it would act before the party can spare a turn, the last blow on an arm held, Dispel on Penance's Regen and Haste, Curaga / X-Potion / Phoenix Down / Soft / Esuna / Remedy, the body with every turn the arms spare. Energy Rain not played. Battle speed FAST (the player setting, set with setBattleSpeed) to keep it near 10 minutes.",
+   "stateWrite": "ONE: at decision 105 (10 decisions after the Separation) Penance's HP 8,800,032 -> 30,000 through the debug API; the last blow was Yuna's real Attack (94,016: 'Penance falls', the Right Arm falls with it). A full win is 385 to 487 decisions (30 minutes and more by hand).",
+   "notes": [
+    "Run 1 (penance-run1-arms-first-aborted, kept): a plain 'arms first' line with no schedule lost in 7 decisions (the Left Arm's Tera Graviton then Obliteration wiped the party before the sixth blow), and a second attempt of it survived 47 decisions but only ever dealt 500,000 to Penance (11.5M left) because every turn went to an arm that came back 12 ticks later. Only the turn-list schedule of the handoff's line reached the change: this agrees with the auditors' reading that Penance's winning line needs turn-list-exact play (PR-0635 round 35).",
+    "0 console errors, 0 not-found"
+   ],
+   "ran": {
+    "minutes": 10.19,
+    "seed": 1,
+    "battleSeed": 1,
+    "speedSetting": "fast",
+    "live": {
+     "version": "0.1.0",
+     "scripts": [
+      "index-jYm-0mrJ.js"
+     ]
+    },
+    "attempts": [
+     {
+      "attempt": 1,
+      "over": "left:cutscene",
+      "decisions": 107,
+      "ms": 370759,
+      "penHp": null,
+      "separated": true,
+      "wrote": 105
+     }
+    ],
+    "links": [
+     {
+      "n": 1,
+      "foes": [
+       "penance",
+       "penance-right-arm",
+       "penance-left-arm"
+      ],
+      "seed": 1,
+      "atSec": 214
+     }
+    ],
+    "stateWrites": [
+     {
+      "at": 580851,
+      "what": "Penance HP set to 30,000 after the Separation and 10 decisions of phase 2, so a real Quick Hit (99,999) ends the fight (a full win is 385 to 487 decisions)",
+      "result": {
+       "was": 8800032,
+       "now": 30000
+      }
+     }
+    ],
+    "decisions": 107,
+    "consoleErrors": 0,
+    "notFound": 0,
+    "openFailures": []
+   },
+   "destination": {
+    "screens": [
+     "cutscene",
+     "results",
+     "cutscene",
+     "chapter-select"
+    ],
+    "outcome": "victory",
+    "next": "board",
+    "resultsText": "THE FAHRENHEIT — THE DECK · CLEARED RESULTS · 6:15 Victory AP 192,000 ×3 PARTY GIL 0 ITEMS Dark Matter ×20, Master Sphere ×5 T Tidus +8 S.Lv S.LV 188 · 16,000/22,000 AP +192,000AP Y Yuna +17 S.Lv S.LV 192 · 0/22,000 AP +192,000AP R Rikku +17 S.Lv S.LV 177 · 0/22,000 AP +192,000AP CONFIRM ▸",
+    "scenes": [
+     [
+      "It stopped. The hands, too.",
+      "It held its post as long as it was asked.",
+      "And now it is only stone.",
+      "Ya. We did good, all of us.",
+      "Keep walking."
+     ]
+    ],
+    "boardTiles": 19,
+    "boardBeaten": 0
+   },
+   "screenshots": [
+    "00-title.png",
+    "01-party-prep.png",
+    "02-pre-scene.png",
+    "a1-board.png",
+    "a1-results-victory.png",
+    "a1-scene-1.jpg",
+    "a1-scene-3.jpg",
+    "arm-fell-left-arm-6.jpg",
+    "arm-fell-right-arm-14.jpg",
+    "arm-returned-left-arm-15.jpg",
+    "arm-returned-right-arm-23.jpg",
+    "link01-first-menu.png",
+    "m-penance-penance-immolation.jpg",
+    "m-penance-penance-obliteration.jpg",
+    "m-penance-penance-separation.jpg",
+    "m-penance-right-arm-dark-calamity.jpg",
+    "mid-040.jpg",
+    "mid-080.jpg",
+    "separation.png"
+   ],
+   "battleLogs": [
+    "battle-log-penance#1.json"
+   ],
+   "evidenceDir": "critic/rounds/round-35/gaps-b/wins/penance/"
+  },
+  "darkaeons": {
+   "label": "The Dark Aeons (hidden Chapter 34, word darkaeon, FFX only)",
+   "verdict": "PASS (all seven links won by real keys, NO state write)",
+   "chk022": "PASS: Victory results page (BESAID TO MT. GAGAZET, CLEARED, AP 175,000 x3, Dark Matter x9, Master Sphere) after the post scene, then the board (19 tiles, 0 of 19 beaten)",
+   "chk023": "PASS: Dark Aeon Overdrives played out in a page after real key presses on every link that has one (Dark Valefor's Energy Blast, Dark Ifrit's Meteor Strike, Dark Ixion's Aerospark and Thor's Hammer, Dark Shiva's Diamond Dust and Heavenly Strike, Dark Anima's Pain, Mega Graviton and Oblivion, Dark Bahamut's Impulse and Mega Flare); Yojimbo's Pay and Zanmato on links 6 and 7: 'yojimbo:zanmato -> dark-anima' KO'd Dark Anima and 'yojimbo:zanmato -> dark-bahamut' KO'd Dark Bahamut",
+   "line": "docs/handoff/ch-dark-aeons.md section 5 (the advisor line, src/engine/tactics/dark-aeons.ts): links 1 to 5 follow the advisor card's move mapped onto the menu rows; on links 6 and 7 Yuna's card calls Yojimbo in and every Yojimbo turn is Aeon > Pay 100,000 by the keys (the HUD shows a ladder of Pay rows). A defeat retries that link, by the chapter's rule.",
+   "stateWrite": "NONE",
+   "notes": [
+    "Attempts: link 6 lost once (Yojimbo's two Pays rolled plain Wakizashi strokes and Pain killed him; seed 6) then won on the retry (seed 1006, Zanmato on the first Pay after the summon); link 7 lost once (seed 1007: Wakizashi, Wakizashi, Wakizashi) then won on the retry (seed 2007: Zanmato on the first Pay). 24.2 minutes, 3 attempts of the route, 9 link fights.",
+    "Round 35's route stalled at link 6 because it had no handler for Yojimbo's Aeon > Pay ladder (PR-0635); this job adds it and it works with real keys.",
+    "One finding: on a fodder aeon's turn the card named an Overdrive row (Ixion's Thor's Hammer) that the job's generic opener could not reach, so the aeon was dismissed instead; the HUD row path for an aeon's Overdrive was not mapped (minor, job-side; it did not change the result)",
+    "0 console errors, 0 not-found"
+   ],
+   "ran": {
+    "minutes": 24.16,
+    "seed": 1,
+    "battleSeed": 1,
+    "speedSetting": "normal",
+    "live": {
+     "version": "0.1.0",
+     "scripts": [
+      "index-jYm-0mrJ.js"
+     ]
+    },
+    "attempts": [
+     {
+      "attempt": 1,
+      "over": "left:results",
+      "decisions": 208,
+      "ms": 1231878,
+      "links": 12
+     },
+     {
+      "attempt": 2,
+      "over": "left:results",
+      "decisions": 21,
+      "ms": 1391523,
+      "links": 16
+     },
+     {
+      "attempt": 3,
+      "over": "left:cutscene",
+      "decisions": 3,
+      "ms": 1423589,
+      "links": 18
+     }
+    ],
+    "links": [
+     {
+      "n": 1,
+      "foes": [
+       "dark-valefor"
+      ],
+      "seed": 1,
+      "atSec": 20
+     },
+     {
+      "n": 2,
+      "foes": [
+       "dark-ifrit"
+      ],
+      "seed": 2,
+      "atSec": 104
+     },
+     {
+      "n": 3,
+      "foes": [
+       "dark-ixion"
+      ],
+      "seed": 3,
+      "atSec": 290
+     },
+     {
+      "n": 4,
+      "foes": [
+       "dark-ixion-2"
+      ],
+      "seed": 4,
+      "atSec": 560
+     },
+     {
+      "n": 5,
+      "foes": [
+       "dark-shiva"
+      ],
+      "seed": 5,
+      "atSec": 722
+     },
+     {
+      "n": 6,
+      "foes": [
+       "dark-anima"
+      ],
+      "seed": 6,
+      "atSec": 871
+     },
+     {
+      "n": 1,
+      "foes": [
+       "dark-anima"
+      ],
+      "seed": 1006,
+      "atSec": 1247
+     },
+     {
+      "n": 2,
+      "foes": [
+       "dark-bahamut"
+      ],
+      "seed": 1007,
+      "atSec": 1289
+     },
+     {
+      "n": 1,
+      "foes": [
+       "dark-bahamut"
+      ],
+      "seed": 2007,
+      "atSec": 1406
+     }
+    ],
+    "stateWrites": [],
+    "decisions": 232,
+    "consoleErrors": 0,
+    "notFound": 0,
+    "openFailures": []
+   },
+   "destination": {
+    "screens": [
+     "cutscene",
+     "results",
+     "chapter-select"
+    ],
+    "outcome": "victory",
+    "next": "board",
+    "resultsText": "BESAID TO MT. GAGAZET · CLEARED RESULTS · 23:22 Victory AP 175,000 ×3 PARTY GIL 0 ITEMS Dark Matter ×9, Master Sphere T Tidus +4 S.Lv S.LV 184 · 87,000/22,000 AP +175,000AP Y Yuna +4 S.Lv S.LV 179 · 87,000/22,000 AP +175,000AP A Auron +2 S.Lv S.LV 182 · 131,000/22,000 AP +175,000AP CONFIRM ▸",
+    "scenes": [
+     [
+      "That was the last of the six.",
+      "Six roads, six goodbyes. We're getting good at them.",
+      "Do not get good at them.",
+      "They'll keep coming if somebody keeps calling, ya.",
+      "Then I will keep answering.",
+      "Rest first. Then answer."
+     ]
+    ],
+    "boardTiles": 19,
+    "boardBeaten": 0
+   },
+   "screenshots": [
+    "00-title.png",
+    "01-party-prep.png",
+    "02-pre-scene.png",
+    "a1-results-defeat.png",
+    "a2-results-defeat.png",
+    "a3-board.png",
+    "a3-results-victory.png",
+    "a3-scene-1.jpg",
+    "link01-first-menu.png",
+    "link02-first-menu.png",
+    "link03-first-menu.png",
+    "link04-first-menu.png",
+    "link05-first-menu.png",
+    "link06-first-menu.png",
+    "m-dark-anima-dark-mega-graviton.jpg",
+    "m-dark-anima-dark6-anima-attack.jpg",
+    "m-dark-anima-dark6-oblivion.jpg",
+    "m-dark-anima-dark6-pain.jpg",
+    "m-dark-bahamut-dark6-ifrit-attack.jpg",
+    "m-dark-bahamut-dark6-impulse.jpg",
+    "m-dark-bahamut-dark6-mega-flare.jpg",
+    "m-dark-ifrit-dark6-ifrit-attack.jpg",
+    "m-dark-ifrit-dark6-meteor-strike.jpg",
+    "m-dark-ixion-2-dark6-aerospark.jpg",
+    "m-dark-ixion-2-dark6-ixion-attack-2.jpg",
+    "m-dark-ixion-2-dark6-thors-hammer.jpg",
+    "m-dark-ixion-dark6-aerospark.jpg",
+    "m-dark-ixion-dark6-ixion-attack-1.jpg",
+    "m-dark-ixion-dark6-thundaja.jpg",
+    "m-dark-shiva-dark6-diamond-dust.jpg",
+    "m-dark-shiva-dark6-heavenly-strike.jpg",
+    "m-dark-shiva-dark6-shiva-attack.jpg",
+    "m-dark-valefor-dark6-energy-blast.jpg",
+    "m-dark-valefor-dark6-valefor-attack.jpg",
+    "mid-050.jpg",
+    "mid-100.jpg",
+    "mid-150.jpg",
+    "mid-200.jpg"
+   ],
+   "battleLogs": [
+    "battle-log-dark-anima#1006.json",
+    "battle-log-dark-anima#6.json",
+    "battle-log-dark-bahamut#1007.json",
+    "battle-log-dark-bahamut#2007.json",
+    "battle-log-dark-ifrit#2.json",
+    "battle-log-dark-ixion#3.json",
+    "battle-log-dark-ixion-2#4.json",
+    "battle-log-dark-shiva#5.json",
+    "battle-log-dark-valefor#1.json"
+   ],
+   "evidenceDir": "critic/rounds/round-35/gaps-b/wins/darkaeons/"
+  },
+  "bevelle": {
+   "label": "The Bevelle Guardians (hidden Chapter 37, word drillshot, FFX-2 only)",
+   "verdict": "PASS (all three acts won by real keys, NO state write)",
+   "chk022": "PASS: Victory results page (BEVELLE UNDERGROUND - FLOORS 3 AND 7, CLEARED, EXP 2,500 x3, GIL 3,100, Nultide Ring, Regen Bangle, Pearl Necklace), the post scene, the board (19 tiles, 0 of 19 beaten)",
+   "chk023": "PASS: Baralai's Drill Shot (x2-baralai-drill-shot on Yuna, the girl who landed the tenth result; 9 damage results on him before it) plus Glint, Chain Attack, Looming Glacier and Absorb; Georapella's Ga ring (Blizzaga, Thundaga, Waterga, Firaga) and the Precepts Guard's Demi, Slow, Osmose, Bio and Drain were read from the log",
+   "line": "docs/handoff/ch-bevelle-guardians.md section 6: the 'careful' line for acts 1 and 2 (Rikku's Lunar then Light Curtain, Phoenix Down, Cura or Hi-Potion under 45 percent, Attack; Yuna the White Mage has no Attack row and casts Protect, Shell and Cure) and the 'change' line for act 3 (Yuna Changes to a Gunner by Change > Gunner on her first turn, then attacks). FFX-2's ATB is the shipped Wait.",
+   "stateWrite": "NONE",
+   "notes": [
+    "11.7 minutes, 76 decisions, one attempt (3 acts, 2 seams)",
+    "0 console errors, 0 not-found"
+   ],
+   "ran": {
+    "minutes": 11.71,
+    "seed": 1,
+    "battleSeed": 1,
+    "speedSetting": "normal",
+    "live": {
+     "version": "0.1.0",
+     "scripts": [
+      "index-jYm-0mrJ.js"
+     ]
+    },
+    "attempts": [
+     {
+      "attempt": 1,
+      "over": "left:cutscene",
+      "decisions": 76,
+      "ms": 680258
+     }
+    ],
+    "links": [
+     {
+      "n": 1,
+      "foes": [
+       "x2-georapella"
+      ],
+      "seed": 1,
+      "atSec": 91
+     },
+     {
+      "n": 2,
+      "foes": [
+       "x2-precepts-guard"
+      ],
+      "seed": 2,
+      "atSec": 302
+     },
+     {
+      "n": 3,
+      "foes": [
+       "x2-baralai"
+      ],
+      "seed": 3,
+      "atSec": 496
+     }
+    ],
+    "stateWrites": [],
+    "decisions": 76,
+    "consoleErrors": 0,
+    "notFound": 0,
+    "openFailures": []
+   },
+   "destination": {
+    "screens": [
+     "cutscene",
+     "results",
+     "cutscene",
+     "chapter-select"
+    ],
+    "outcome": "victory",
+    "next": "board",
+    "resultsText": "BEVELLE UNDERGROUND — FLOORS 3 AND 7 · CLEARED RESULTS · 9:55 Victory EXP 2,500 ×3 PARTY AP 12 PER DRESSPHERE GIL 3,100 ITEMS Nultide Ring, Regen Bangle, Pearl Necklace Y Yuna WHITE MAGE · CURAGA 52/80 AP +2,500EXP R Rikku DARK KNIGHT · CONFUSE 30/30 AP +2,500EXP P Paine WARRIOR · FLAMETONGUE 20/20 AP +2,500EXP CONFIRM ▸",
+    "scenes": [
+     [
+      "So are we.",
+      "Great. Two guardians and a Praetor. I could use a nap.",
+      "Far below, something large turns over in its sleep."
+     ]
+    ],
+    "boardTiles": 19,
+    "boardBeaten": 0
+   },
+   "screenshots": [
+    "00-title.png",
+    "01-party-prep.png",
+    "02-pre-scene.png",
+    "a1-board.png",
+    "a1-results-victory.png",
+    "a1-scene-1.jpg",
+    "a1-scene-3.jpg",
+    "link01-first-menu.png",
+    "link02-first-menu.png",
+    "link03-first-menu.png",
+    "m-x2-baralai-x2-baralai-absorb.jpg",
+    "m-x2-baralai-x2-baralai-attack.jpg",
+    "m-x2-baralai-x2-baralai-chain-attack.jpg",
+    "m-x2-baralai-x2-baralai-demi.jpg",
+    "m-x2-baralai-x2-baralai-drill-shot.jpg",
+    "m-x2-baralai-x2-baralai-glint.jpg",
+    "m-x2-baralai-x2-baralai-looming-glacier.jpg",
+    "m-x2-georapella-x2-georapella-blizzaga.jpg",
+    "m-x2-georapella-x2-georapella-firaga.jpg",
+    "m-x2-georapella-x2-georapella-thundaga.jpg",
+    "m-x2-georapella-x2-georapella-waterga.jpg",
+    "m-x2-precepts-guard-x2-precepts-guard-bio.jpg",
+    "m-x2-precepts-guard-x2-precepts-guard-demi.jpg",
+    "m-x2-precepts-guard-x2-precepts-guard-drain.jpg",
+    "m-x2-precepts-guard-x2-precepts-guard-osmose.jpg",
+    "m-x2-precepts-guard-x2-precepts-guard-slow.jpg",
+    "mid-025.jpg",
+    "mid-050.jpg",
+    "mid-075.jpg"
+   ],
+   "battleLogs": [
+    "battle-log-x2-baralai#3.json",
+    "battle-log-x2-georapella#1.json",
+    "battle-log-x2-precepts-guard#2.json"
+   ],
+   "evidenceDir": "critic/rounds/round-35/gaps-b/wins/bevelle/"
+  },
+  "keeper": {
+   "label": "The Spectral Keeper (hidden Chapter 29, word keeper, FFX only)",
+   "verdict": "PASS (a real-key win with ONE recorded state write that set up the last blow)",
+   "chk022": "PASS: Victory results page (ZANARKAND DOME - THE FOOT OF THE LIFT, CLEARED, AP 12,000 x3, GIL 7,000, Lv. 4 Key Sphere), the post scene, the board (19 tiles, 0 of 19 beaten)",
+   "chk023": "PASS: the Keeper's Move: four real Move commands (Tidus glyph 1 to 5, Yuna 2 to 4, Auron 3 to 6, Tidus 5 to 2), each an action-start 'move' with a 'platform' event and the message 'X steps to glyph N', the cursor aimed at the Circle by arrow keys; the Keeper's Attack All sweeps (keeper-attack-all on the front platform and its neighbours) and Berserk Tail answered the party's blows; the hit counter read 3 with the front on platform 6",
+   "line": "docs/handoff/ch-keeper.md 5a (round 34's ring plan): Phoenix Down on a fallen member, a potion under 45 percent, two demonstration Moves then out of the sweep zone or off a lit glyph, otherwise Attack. The best scripted line wins 3.5 in 100, so the win is set up by one write.",
+   "stateWrite": "ONE: at about 49 s, after two real Moves and an Attack All sweep had been read, the Keeper's HP 49,393 -> 400; the last blow was a real Attack ('Victory' 1:05).",
+   "notes": [
+    "1.8 minutes, 10 decisions",
+    "0 console errors, 0 not-found"
+   ],
+   "ran": {
+    "minutes": 1.79,
+    "seed": 1,
+    "battleSeed": 1,
+    "speedSetting": "normal",
+    "live": {
+     "version": "0.1.0",
+     "scripts": [
+      "index-jYm-0mrJ.js"
+     ]
+    },
+    "attempts": [
+     {
+      "attempt": 1,
+      "over": "left:cutscene",
+      "decisions": 10,
+      "ms": 80796
+     }
+    ],
+    "links": [
+     {
+      "n": 1,
+      "foes": [
+       "spectral-keeper",
+       "spectral-circle-1",
+       "spectral-circle-2",
+       "spectral-circle-3",
+       "spectral-circle-4",
+       "spectral-circle-5",
+       "spectral-circle-6",
+       "spectral-circle-7"
+      ],
+      "seed": 1,
+      "atSec": 23
+     }
+    ],
+    "stateWrites": [
+     {
+      "at": 49199,
+      "what": "Keeper HP set to 400 after two real Moves and an Attack All sweep were read, so a real Attack ends the fight (a full win is 3.5 in 100 for the best line)",
+      "result": {
+       "was": 49393,
+       "now": 400
+      }
+     }
+    ],
+    "decisions": 10,
+    "consoleErrors": 0,
+    "notFound": 0,
+    "openFailures": []
+   },
+   "destination": {
+    "screens": [
+     "cutscene",
+     "results",
+     "cutscene",
+     "chapter-select"
+    ],
+    "outcome": "victory",
+    "next": "board",
+    "resultsText": "ZANARKAND DOME — THE FOOT OF THE LIFT · CLEARED RESULTS · 1:05 Victory AP 12,000 ×3 PARTY GIL 7,000 ITEMS Lv. 4 Key Sphere T Tidus +4 S.Lv S.LV 50 · 2,445/2,755 AP +12,000AP Y Yuna +5 S.Lv S.LV 49 · 1,067/2,602 AP +12,000AP A Auron +4 S.Lv S.LV 52 · 1,274/3,077 AP +12,000AP CONFIRM ▸",
+    "scenes": [
+     [
+      "It just stopped. Like it was waiting to be told.",
+      "It was only ever a door.",
+      "And we have opened it.",
+      "Ya. Let's not keep her waitin'.",
+      "Keep walking."
+     ]
+    ],
+    "boardTiles": 19,
+    "boardBeaten": 0
+   },
+   "screenshots": [
+    "00-title.png",
+    "01-party-prep.png",
+    "02-pre-scene.png",
+    "a1-board.png",
+    "a1-results-victory.png",
+    "a1-scene-1.jpg",
+    "a1-scene-3.jpg",
+    "link01-first-menu.png",
+    "m-spectral-keeper-keeper-attack-all.jpg",
+    "m-spectral-keeper-keeper-berserk-tail.jpg",
+    "move-1.jpg",
+    "move-2.jpg"
+   ],
+   "battleLogs": [
+    "battle-log-spectral-keeper#1.json"
+   ],
+   "evidenceDir": "critic/rounds/round-35/gaps-b/wins/keeper/"
+  },
+  "maesters": {
+   "label": "The Fallen Maesters (hidden Chapter 30, word infinito, FFX-2 only)",
+   "verdict": "PASS for floors 20, 40 and 60 (real keys, no write); floor 80 is a real-key finish after ONE recorded state write (floor 80 stays UNPROVEN as winnable by a line: PR-0613)",
+   "chk022": "PASS: Victory results page (VIA INFINITO - FLOORS 20, 40, 60 AND 80, CLEARED, EXP 12,970 x3, GIL 3,130, Stamina Tonic, Pixie Dust), the post scene, the board (19 tiles, 0 of 19 beaten)",
+   "chk023": "PASS: Concherer's shell: Paine walked The End's gates by four real Change rows (Warrior, Gunner, Thief, Dark Knight; gates blue, yellow, green, red), her real Charon landed 21,420 and the message 'Concherer's shell breaks!' was read from the log and shown on screen; Concherer then only attacked and fell to Yuna's Darkness and Megalixirs alone (Rikku and Paine were KO'd by Megaton Press and Charon's HP cost; this build has no Phoenix Down). Chac's Stony Glare and Attack were seen on floor 80.",
+   "line": "docs/handoff/ch-maesters.md sections 6 and 14 (round 34b's walk): floors 20 and 40 a plain line, floor 60 the walk then Charon, floor 80 the plain line after the write.",
+   "stateWrite": "ONE: at floor 80's first menu Chac's HP 437,850 -> 2,000; the last blow was Rikku's real Attack (2,456: 'KO x2-chac'). Floors 20, 40 and 60 were played with no write.",
+   "notes": [
+    "9.5 minutes, 73 decisions",
+    "Two earlier runs (maesters-run1-walk-no-revive-aborted, maesters-run2-no-revive-diag, kept) showed the same floor 60 and found this build's items are only Megalixir, Light Curtain, Lunar Curtain and Remedy: nobody can raise a fallen girl, so floor 60 is a one-girl finish after Charon, which is why the job mends the caster with a Megalixir under 30 percent",
+    "0 console errors, 0 not-found"
+   ],
+   "ran": {
+    "minutes": 9.49,
+    "seed": 1,
+    "battleSeed": 1,
+    "speedSetting": "normal",
+    "live": {
+     "version": "0.1.0",
+     "scripts": [
+      "index-jYm-0mrJ.js"
+     ]
+    },
+    "attempts": [
+     {
+      "attempt": 1,
+      "over": "left:cutscene",
+      "decisions": 73,
+      "ms": 545907,
+      "floorsSeen": [
+       "x2-aranea",
+       "x2-black-elemental",
+       "x2-concherer",
+       "x2-chac"
+      ]
+     }
+    ],
+    "links": [
+     {
+      "n": 1,
+      "foes": [
+       "x2-aranea"
+      ],
+      "seed": 1,
+      "atSec": 25
+     },
+     {
+      "n": 2,
+      "foes": [
+       "x2-black-elemental"
+      ],
+      "seed": 2,
+      "atSec": 67
+     },
+     {
+      "n": 3,
+      "foes": [
+       "x2-concherer"
+      ],
+      "seed": 3,
+      "atSec": 111
+     },
+     {
+      "n": 4,
+      "foes": [
+       "x2-chac"
+      ],
+      "seed": 4,
+      "atSec": 540
+     }
+    ],
+    "stateWrites": [
+     {
+      "at": 540305,
+      "what": "Chac's HP set to 2,000 at floor 80's first menu (write 1), so a real Attack ends the floor (PR-0613: no winning line is known for floor 80)",
+      "result": {
+       "was": 437850,
+       "now": 2000
+      }
+     }
+    ],
+    "decisions": 73,
+    "consoleErrors": 0,
+    "notFound": 0,
+    "openFailures": [
+     {
+      "ms": 88615,
+      "actor": "paine",
+      "want": "Darkness",
+      "category": "skill",
+      "rowsNow": []
+     },
+     {
+      "ms": 103020,
+      "actor": "paine",
+      "want": "Attack",
+      "category": "attack",
+      "rowsNow": []
+     }
+    ]
+   },
+   "destination": {
+    "screens": [
+     "cutscene",
+     "results",
+     "cutscene",
+     "chapter-select"
+    ],
+    "outcome": "victory",
+    "next": "board",
+    "resultsText": "VIA INFINITO — FLOORS 20, 40, 60 AND 80 · CLEARED RESULTS · 8:48 Victory EXP 12,970 ×3 PARTY AP 4 PER DRESSPHERE GIL 3,130 ITEMS Stamina Tonic, Pixie Dust Y Yuna DARK KNIGHT · CONFUSEPROOF 4/30 AP +12,970EXP R Rikku ALCHEMIST · DISPEL TONIC 4/20 AP +12,970EXP P Paine DARK KNIGHT · CONFUSEPROOF 4/30 AP +12,970EXP CONFIRM ▸",
+    "scenes": [
+     [
+      "And never found it.",
+      "So we keep it short.",
+      "Great. That was eighty floors. We have twenty left",
+      "Far below, the hundredth floor is still waiting."
+     ]
+    ],
+    "boardTiles": 19,
+    "boardBeaten": 0
+   },
+   "screenshots": [
+    "00-title.png",
+    "01-party-prep.png",
+    "02-pre-scene.png",
+    "a1-board.png",
+    "a1-results-victory.png",
+    "a1-scene-1.jpg",
+    "a1-scene-3.jpg",
+    "link01-first-menu.png",
+    "link02-first-menu.png",
+    "link03-first-menu.png",
+    "link04-first-menu.png",
+    "m-x2-chac-x2-chac-stony-glare.jpg",
+    "m-x2-concherer-x2-concherer-gunk.jpg",
+    "m-x2-concherer-x2-concherer-megaton-press.jpg",
+    "mid-030.jpg",
+    "mid-060.jpg",
+    "open-failure-1.jpg",
+    "open-failure-2.jpg",
+    "shell-broken.png"
+   ],
+   "battleLogs": [
+    "battle-log-x2-aranea#1.json",
+    "battle-log-x2-black-elemental#2.json",
+    "battle-log-x2-chac#4.json",
+    "battle-log-x2-concherer#3.json"
+   ],
+   "evidenceDir": "critic/rounds/round-35/gaps-b/wins/maesters/"
+  },
+  "farplane": {
+   "label": "The Farplane Cup (hidden Chapter 38, word duelist, FFX-2 only)",
+   "verdict": "PASS for the flow only: all three duels finished by REAL KEYS to the results page and the board, but each duel needed ONE recorded state write (three writes); NO duel was won without one in 17 real-key fights, so the win itself is UNVERIFIED as reachable (PR-0636 stands)",
+   "chk022": "PASS (flow): Victory results page (THE FIEND ARENA - A STAND-IN STAGE, CLEARED, EXP 4,400 x3, GIL 2,650, Mega Phoenix x2, X-Potion x2, Turbo Ether), the post scene (4 lines: \"He fought like someone who was told to.\" ... \"Three names on a door, and the door is still open.\"), the board (19 tiles, 0 of 19 beaten); loss to retry was shown on every defeat",
+   "chk023": "PASS (enemy mechanics read from the log after real key presses): Tidus (the masked duelist) opened with Blitz Ace (nine hits on Yuna, KO), then Hastega, Delay Buster and Spiral Cut; Seymour cast Black Sky, Meteor, Ultima, Demi, Slowga, Shell, Protect, Dispel, Drain Attack, Magic Up, Curaga and Absorb; Auron cast Dragon Fang, Full Break and Shooting Star (the Eject; farplane-run1 and farplane-run2 folders) and healed with X-Potion and Mega-Potion under an eighth of his HP. A Special dressphere was NOT attempted (four to five Changes a girl; the engine does not grant the Eject immunity, PR-0636), so the sourced answer to duel 1 stays unshown.",
+   "line": "docs/handoff/ch-farplane-cup.md section 6 (the curtains line): Rikku Light then Lunar Curtain then Phoenix Down / Potion / Attack; Yuna and Paine Darkness on the duelist. FFX-2 ATB is the shipped Wait.",
+   "stateWrite": "THREE (one per duel, each at that duel's first menu after real defeats): Auron 187,500 -> 3,000 (after 7 real duel-1 defeats and one with a 15,000 write that lost because Auron heals under an eighth of his HP); Tidus 136,200 -> 3,000 (after 6 real duel-2 defeats); Seymour 145,500 -> 3,000 (after 3 real duel-3 defeats). The last blow of each duel was a real key (Darkness or Attack). 17 real-key fights without a write: 0 wins (duel 1: 5 + 2 defeats, duel 2: 6, duel 3: 3).",
+   "notes": [
+    "Final run 17.6 minutes (5 route attempts, 7 duel fights); earlier runs kept as farplane-run1 (5 natural duel-1 defeats; the 5th ended on the title screen because the job pressed Escape on a defeat results screen: a job bug, fixed with safeRoot, nothing in the game), farplane-run2 (2 natural duel-1 defeats and a defeat after the 15,000 write), farplane-run3 (duel 1 by write, then 5 natural duel-2 defeats)",
+    "The write sets a state up; it proves nothing about winnability (PR-0636 for duel 1: the build has no Eject guard; the bench rates were 11, 45 and 54 percent for this line)",
+    "0 console errors, 0 not-found"
+   ],
+   "ran": {
+    "minutes": 17.55,
+    "seed": 1,
+    "battleSeed": 1,
+    "speedSetting": "normal",
+    "live": {
+     "version": "0.1.0",
+     "scripts": [
+      "index-jYm-0mrJ.js"
+     ]
+    },
+    "attempts": [
+     {
+      "attempt": 1,
+      "over": "left:results",
+      "decisions": 16,
+      "ms": 588072,
+      "lastFoe": "x2-cup-tidus"
+     },
+     {
+      "attempt": 2,
+      "over": "left:results",
+      "decisions": 27,
+      "ms": 801687,
+      "lastFoe": "x2-cup-seymour"
+     },
+     {
+      "attempt": 3,
+      "over": "left:results",
+      "decisions": 21,
+      "ms": 955500,
+      "lastFoe": "x2-cup-seymour"
+     },
+     {
+      "attempt": 4,
+      "over": "left:results",
+      "decisions": 1,
+      "ms": 992667,
+      "lastFoe": "x2-cup-seymour"
+     },
+     {
+      "attempt": 5,
+      "over": "left:cutscene",
+      "decisions": 3,
+      "ms": 1027545,
+      "lastFoe": "x2-cup-seymour"
+     }
+    ],
+    "links": [
+     {
+      "n": 1,
+      "foes": [
+       "x2-cup-auron"
+      ],
+      "seed": 1,
+      "atSec": 407
+     },
+     {
+      "n": 2,
+      "foes": [
+       "x2-cup-tidus"
+      ],
+      "seed": 2,
+      "atSec": 482
+     },
+     {
+      "n": 1,
+      "foes": [
+       "x2-cup-tidus"
+      ],
+      "seed": 1002,
+      "atSec": 602
+     },
+     {
+      "n": 2,
+      "foes": [
+       "x2-cup-seymour"
+      ],
+      "seed": 1003,
+      "atSec": 639
+     },
+     {
+      "n": 1,
+      "foes": [
+       "x2-cup-seymour"
+      ],
+      "seed": 2003,
+      "atSec": 816
+     },
+     {
+      "n": 1,
+      "foes": [
+       "x2-cup-seymour"
+      ],
+      "seed": 3003,
+      "atSec": 969
+     },
+     {
+      "n": 1,
+      "foes": [
+       "x2-cup-seymour"
+      ],
+      "seed": 4003,
+      "atSec": 1005
+     }
+    ],
+    "stateWrites": [
+     {
+      "at": 407365,
+      "what": "FALLBACK after 0 real defeats in duel auron: its HP set to 3,000 at the first menu, so one real blow ends it (duel 1: PR-0636, the sourced Eject immunity is not applied; a first try at 15,000 lost because Auron heals under an eighth of his HP)",
+      "result": {
+       "id": "x2-cup-auron",
+       "was": 187500,
+       "now": 3000
+      }
+     },
+     {
+      "at": 603017,
+      "what": "FALLBACK after 1 real defeats in duel tidus: its HP set to 3,000 at the first menu, so one real blow ends it (duel 1: PR-0636, the sourced Eject immunity is not applied; a first try at 15,000 lost because Auron heals under an eighth of his HP)",
+      "result": {
+       "id": "x2-cup-tidus",
+       "was": 136200,
+       "now": 3000
+      }
+     },
+     {
+      "at": 1005821,
+      "what": "FALLBACK after 3 real defeats in duel seymour: its HP set to 3,000 at the first menu, so one real blow ends it (duel 1: PR-0636, the sourced Eject immunity is not applied; a first try at 15,000 lost because Auron heals under an eighth of his HP)",
+      "result": {
+       "id": "x2-cup-seymour",
+       "was": 145500,
+       "now": 3000
+      }
+     }
+    ],
+    "decisions": 68,
+    "consoleErrors": 0,
+    "notFound": 0,
+    "openFailures": [
+     {
+      "ms": 411443,
+      "actor": "rikku",
+      "want": "Light Curtain",
+      "category": "item",
+      "rowsNow": [
+       "Attack",
+       "Skill",
+       "Change",
+       "Item"
+      ]
+     }
+    ]
+   },
+   "destination": {
+    "screens": [
+     "cutscene",
+     "results",
+     "cutscene",
+     "chapter-select"
+    ],
+    "outcome": "victory",
+    "next": "board",
+    "resultsText": "THE FIEND ARENA — A STAND-IN STAGE · CLEARED RESULTS · 10:13 Victory EXP 4,400 ×3 PARTY AP 3 PER DRESSPHERE GIL 2,650 ITEMS Mega Phoenix ×2, X-Potion ×2, Turbo Ether Y Yuna DARK KNIGHT · CONFUSEPROOF 3/30 AP +4,400EXP R Rikku ALCHEMIST · DISPEL TONIC 3/20 AP +4,400EXP P Paine DARK KNIGHT · CONFUSEPROOF 3/30 AP +4,400EXP CONFIRM ▸",
+    "scenes": [
+     [
+      "He fought like someone who was told to.",
+      "Then he was told well.",
+      "And the third one just left. Rude! No tip, no bow, nothing.",
+      "Three names on a door, and the door is still open."
+     ]
+    ],
+    "boardTiles": 19,
+    "boardBeaten": 0
+   },
+   "screenshots": [
+    "00-title.png",
+    "01-party-prep.png",
+    "02-pre-scene.png",
+    "a1-results-defeat.png",
+    "a2-results-defeat.png",
+    "a3-results-defeat.png",
+    "a4-results-defeat.png",
+    "a5-board.png",
+    "a5-results-victory.png",
+    "a5-scene-1.jpg",
+    "a5-scene-3.jpg",
+    "link01-first-menu.png",
+    "link02-first-menu.png",
+    "m-x2-cup-auron-x2-auron-dragon-fang.jpg",
+    "m-x2-cup-auron-x2-auron-mega-potion.jpg",
+    "m-x2-cup-auron-x2-auron-x-potion.jpg",
+    "m-x2-cup-seymour-x2-seymour-absorb.jpg",
+    "m-x2-cup-seymour-x2-seymour-black-sky.jpg",
+    "m-x2-cup-seymour-x2-seymour-critical-attack.jpg",
+    "m-x2-cup-seymour-x2-seymour-curaga.jpg",
+    "m-x2-cup-seymour-x2-seymour-demi.jpg",
+    "m-x2-cup-seymour-x2-seymour-dispel.jpg",
+    "m-x2-cup-seymour-x2-seymour-drain-attack.jpg",
+    "m-x2-cup-seymour-x2-seymour-magic-up.jpg",
+    "m-x2-cup-seymour-x2-seymour-meteor.jpg",
+    "m-x2-cup-seymour-x2-seymour-protect.jpg",
+    "m-x2-cup-seymour-x2-seymour-shell.jpg",
+    "m-x2-cup-seymour-x2-seymour-slowga.jpg",
+    "m-x2-cup-seymour-x2-seymour-ultima.jpg",
+    "m-x2-cup-tidus-x2-tidus-attack.jpg",
+    "m-x2-cup-tidus-x2-tidus-blitz-ace.jpg",
+    "m-x2-cup-tidus-x2-tidus-delay-buster.jpg",
+    "m-x2-cup-tidus-x2-tidus-hastega.jpg",
+    "m-x2-cup-tidus-x2-tidus-spiral-cut.jpg",
+    "mid-025.jpg",
+    "open-failure-1.jpg"
+   ],
+   "battleLogs": [
+    "battle-log-x2-cup-auron#1.json",
+    "battle-log-x2-cup-seymour#1003.json",
+    "battle-log-x2-cup-seymour#2003.json",
+    "battle-log-x2-cup-seymour#3003.json",
+    "battle-log-x2-cup-seymour#4003.json",
+    "battle-log-x2-cup-tidus#1002.json",
+    "battle-log-x2-cup-tidus#2.json"
+   ],
+   "evidenceDir": "critic/rounds/round-35/gaps-b/wins/farplane/"
+  }
+ }
+}

@@ -1,0 +1,322 @@
+{
+ "tag": "doors-ffx-words",
+ "mode": "words",
+ "game": "ffx",
+ "base": "https://echoesofspira.com/",
+ "startedAt": "2026-11-07T19:05:14.025Z",
+ "setupAids": [
+  "window.__pyrefly.setSeed(1) before the first key"
+ ],
+ "cases": [
+  {
+   "word": "darkaeon",
+   "expectChapter": "dark-aeons",
+   "case": "FFX only, Chapter 34 The Dark Aeons",
+   "steps": [],
+   "boardAtStart": {
+    "selectedId": "seymour-flux",
+    "game": null,
+    "keys": [
+     "selectedIndex",
+     "selectedId",
+     "tiles",
+     "coming",
+     "cleared",
+     "order",
+     "beaten",
+     "total"
+    ]
+   },
+   "boardMovedTo": "ffx2-bahamut",
+   "boardCheck": {
+    "startedOn": "seymour-flux",
+    "movedTo": "ffx2-bahamut",
+    "onOtherGame": true
+   },
+   "boardText": "AURON · 1 OF 3 “Start with this one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER IV Bahamut 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVI",
+   "afterWordScreen": "party-prep",
+   "read": {
+    "screen": "battle",
+    "chapter": {
+     "id": "dark-aeons",
+     "game": "ffx",
+     "title": "The Dark Aeons"
+    },
+    "rows": [
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items",
+     "Flee",
+     "Escape"
+    ],
+    "party": [
+     "Tidus",
+     "Yuna",
+     "Auron"
+    ],
+    "foes": [
+     "Dark Valefor"
+    ],
+    "awaitingMenu": true,
+    "links": 1,
+    "ffxLabels": 6,
+    "ffx2Labels": 0,
+    "classCounts": {
+     "ffxDash": 63,
+     "ffx2": 0,
+     "ctb": 0,
+     "atb": 0,
+     "f1": 30
+    },
+    "hasOpenLock": false,
+    "hasSummon": false,
+    "hasSkill": false,
+    "hasChange": false,
+    "body": "Tidus Yuna Auron Tidus Yuna Auron ATTACK SPECIAL ▸ ×5 WHITE MAGIC ▸ ×3 ITEMS ▸ ×14 FLEE ESCAPE ▼ Q △ DEFEND Physical damage Tidus 9999 /9999 999 /999 OD Yuna 99"
+   },
+   "opened": true,
+   "chapterOpened": "dark-aeons",
+   "chapterGame": "ffx",
+   "hudGame": "ffx",
+   "pass": true,
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "word": "judgment",
+   "expectChapter": "penance",
+   "case": "FFX only, Chapter 35 Penance",
+   "steps": [],
+   "boardAtStart": {
+    "selectedId": "seymour-flux",
+    "game": null,
+    "keys": [
+     "selectedIndex",
+     "selectedId",
+     "tiles",
+     "coming",
+     "cleared",
+     "order",
+     "beaten",
+     "total"
+    ]
+   },
+   "boardMovedTo": "ffx2-bahamut",
+   "boardCheck": {
+    "startedOn": "seymour-flux",
+    "movedTo": "ffx2-bahamut",
+    "onOtherGame": true
+   },
+   "boardText": "AURON · 1 OF 3 “Start with this one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER IV Bahamut 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVI",
+   "afterWordScreen": "party-prep",
+   "read": {
+    "screen": "battle",
+    "chapter": {
+     "id": "penance",
+     "game": "ffx",
+     "title": "Penance"
+    },
+    "rows": [
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items",
+     "Summon",
+     "Escape"
+    ],
+    "party": [
+     "Tidus",
+     "Yuna",
+     "Rikku"
+    ],
+    "foes": [
+     "Penance",
+     "Right Arm",
+     "Left Arm"
+    ],
+    "awaitingMenu": true,
+    "links": 1,
+    "ffxLabels": 6,
+    "ffx2Labels": 0,
+    "classCounts": {
+     "ffxDash": 67,
+     "ffx2": 0,
+     "ctb": 0,
+     "atb": 0,
+     "f1": 30
+    },
+    "hasOpenLock": false,
+    "hasSummon": true,
+    "hasSkill": false,
+    "hasChange": false,
+    "body": "Yuna Tidus Rikku Yuna Tidus Rikku ATTACK SPECIAL ▸ ×2 WHITE MAGIC ▸ ×14 ITEMS ▸ ×13 SUMMON ▸ ×5 ESCAPE ▼ Q △ DEFEND Physical damage Tidus 9999 /9999 999 /999 OD"
+   },
+   "opened": true,
+   "chapterOpened": "penance",
+   "chapterGame": "ffx",
+   "hudGame": "ffx",
+   "pass": true,
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "word": "geosgaeno",
+   "expectChapter": "flooded-ways",
+   "case": "FFX only, Chapter 36 The Flooded Ways",
+   "steps": [],
+   "boardAtStart": {
+    "selectedId": "seymour-flux",
+    "game": null,
+    "keys": [
+     "selectedIndex",
+     "selectedId",
+     "tiles",
+     "coming",
+     "cleared",
+     "order",
+     "beaten",
+     "total"
+    ]
+   },
+   "boardMovedTo": "ffx2-bahamut",
+   "boardCheck": {
+    "startedOn": "seymour-flux",
+    "movedTo": "ffx2-bahamut",
+    "onOtherGame": true
+   },
+   "boardText": "AURON · 1 OF 3 “Start with this one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER IV Bahamut 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVI",
+   "afterWordScreen": "party-prep",
+   "read": {
+    "screen": "battle",
+    "chapter": {
+     "id": "flooded-ways",
+     "game": "ffx",
+     "title": "The Flooded Ways"
+    },
+    "rows": [
+     "Open lock",
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items",
+     "Flee"
+    ],
+    "party": [
+     "Tidus",
+     "Wakka",
+     "Rikku"
+    ],
+    "foes": [
+     "Evrae Altana",
+     "Gate Lock",
+     "Gate Lock"
+    ],
+    "awaitingMenu": true,
+    "links": 1,
+    "ffxLabels": 6,
+    "ffx2Labels": 0,
+    "classCounts": {
+     "ffxDash": 59,
+     "ffx2": 0,
+     "ctb": 0,
+     "atb": 0,
+     "f1": 30
+    },
+    "hasOpenLock": true,
+    "hasSummon": false,
+    "hasSkill": false,
+    "hasChange": false,
+    "body": "Rikku Tidus Evrae Altana Wakka Rikku Tidus OPEN LOCK ATTACK SPECIAL ▸ ×1 WHITE MAGIC ▸ ×1 ITEMS ▸ ×17 FLEE ▼ Q △ DEFEND Open one of the gate locks. It costs the"
+   },
+   "opened": true,
+   "chapterOpened": "flooded-ways",
+   "chapterGame": "ffx",
+   "hudGame": "ffx",
+   "pass": true,
+   "consoleErrors": [],
+   "notFound": []
+  },
+  {
+   "word": "beast",
+   "expectChapter": "sanctuary-keeper",
+   "case": "FFX only, Chapter 39 The Sanctuary Keeper",
+   "steps": [],
+   "boardAtStart": {
+    "selectedId": "seymour-flux",
+    "game": null,
+    "keys": [
+     "selectedIndex",
+     "selectedId",
+     "tiles",
+     "coming",
+     "cleared",
+     "order",
+     "beaten",
+     "total"
+    ]
+   },
+   "boardMovedTo": "ffx2-bahamut",
+   "boardCheck": {
+    "startedOn": "seymour-flux",
+    "movedTo": "ffx2-bahamut",
+    "onOtherGame": true
+   },
+   "boardText": "AURON · 1 OF 3 “Start with this one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER IV Bahamut 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVI",
+   "afterWordScreen": "party-prep",
+   "read": {
+    "screen": "battle",
+    "chapter": {
+     "id": "sanctuary-keeper",
+     "game": "ffx",
+     "title": "The Sanctuary Keeper"
+    },
+    "rows": [
+     "Attack",
+     "Special",
+     "White Magic",
+     "Items",
+     "Flee",
+     "Escape"
+    ],
+    "party": [
+     "Tidus",
+     "Yuna",
+     "Auron"
+    ],
+    "foes": [
+     "Sanctuary Keeper"
+    ],
+    "awaitingMenu": true,
+    "links": 1,
+    "ffxLabels": 6,
+    "ffx2Labels": 0,
+    "classCounts": {
+     "ffxDash": 57,
+     "ffx2": 0,
+     "ctb": 0,
+     "atb": 0,
+     "f1": 30
+    },
+    "hasOpenLock": false,
+    "hasSummon": false,
+    "hasSkill": false,
+    "hasChange": false,
+    "body": "Tidus Sanctuary Keeper Yuna Auron Tidus Sanctuary Keeper ATTACK SPECIAL ▸ ×4 WHITE MAGIC ▸ ×3 ITEMS ▸ ×27 FLEE ESCAPE ▼ Q △ DEFEND Physical damage Tidus 2420 /2"
+   },
+   "opened": true,
+   "chapterOpened": "sanctuary-keeper",
+   "chapterGame": "ffx",
+   "hudGame": "ffx",
+   "pass": true,
+   "consoleErrors": [],
+   "notFound": []
+  }
+ ],
+ "finishedAt": "2026-11-07T19:08:26.288Z",
+ "summary": {
+  "cases": 4,
+  "passed": 4,
+  "failed": []
+ }
+}

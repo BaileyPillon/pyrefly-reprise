@@ -1,0 +1,6106 @@
+{
+ "tag": "phone-ffx-ch1",
+ "chapter": "seymour-flux",
+ "size": "390x844",
+ "touch": true,
+ "base": "https://echoesofspira.com/",
+ "startedAt": "2026-11-07T19:22:02.806Z",
+ "steps": [
+  {
+   "at": "19:23:23",
+   "k": "booted",
+   "v": {
+    "bundle": "https://echoesofspira.com/assets/index-jYm-0mrJ.js",
+    "screen": "battle",
+    "ms": 13158
+   }
+  },
+  {
+   "at": "19:23:24",
+   "k": "OK   first menu up (battle, awaiting a command)",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:23:24",
+   "k": "pause button candidates in the HUD",
+   "v": [
+    "BUTTON.battle-pause-chip ig|pause:open"
+   ]
+  },
+  {
+   "at": "19:23:25",
+   "k": "noise baseline",
+   "v": {
+    "noisyClassProps": 1
+   }
+  },
+  {
+   "at": "19:23:31",
+   "k": "FAIL TEXT SIZE 115%: Esc opens the pause",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:24:16",
+   "k": "FAIL TEXT SIZE 115%: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:24:23",
+   "k": "OK   TEXT SIZE 115%: back to the battle",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:24:26",
+   "k": "FAIL TEXT SIZE 115%: the row says 115% (was null)",
+   "v": "after=null"
+  },
+  {
+   "at": "19:24:26",
+   "k": "FAIL TEXT SIZE 115%: <html> carries it",
+   "v": "{\"textSize\":\"115\",\"textSizeWide\":\"115\"}"
+  },
+  {
+   "at": "19:24:26",
+   "k": "OK   TEXT SIZE 115%: something measured changes on the live HUD, vars, animations or fx",
+   "v": "styleDiffs=0 varsDiff=0 anims 0->0 fx=4"
+  },
+  {
+   "at": "19:24:26",
+   "k": "FAIL TEXT SIZE 115%: HUD type scaled by the setting (classes whose largest font is 1.15 x the 100% one)",
+   "v": "{\"n\":72,\"atTarget\":0,\"notAt\":72}"
+  },
+  {
+   "at": "19:24:26",
+   "k": "OK   TEXT SIZE 115%: pause tab strip stays inside the window",
+   "v": "[]"
+  },
+  {
+   "at": "19:24:26",
+   "k": "OK   TEXT SIZE 130%: Esc opens the pause",
+   "v": "screen=pause"
+  },
+  {
+   "at": "19:24:27",
+   "k": "OK   TEXT SIZE 130%: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:24:31",
+   "k": "OK   TEXT SIZE 130%: back to the battle",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:24:34",
+   "k": "FAIL TEXT SIZE 130%: the row says 130% (was 100%)",
+   "v": "after=115%"
+  },
+  {
+   "at": "19:24:34",
+   "k": "FAIL TEXT SIZE 130%: <html> carries it",
+   "v": "{\"textSize\":\"130\",\"textSizeWide\":\"130\"}"
+  },
+  {
+   "at": "19:24:34",
+   "k": "OK   TEXT SIZE 130%: something measured changes on the live HUD, vars, animations or fx",
+   "v": "styleDiffs=7 varsDiff=1 anims 0->0 fx=4"
+  },
+  {
+   "at": "19:24:34",
+   "k": "FAIL TEXT SIZE 130%: HUD type scaled by the setting (classes whose largest font is 1.30 x the 100% one)",
+   "v": "{\"n\":72,\"atTarget\":0,\"notAt\":72}"
+  },
+  {
+   "at": "19:24:34",
+   "k": "FAIL TEXT SIZE 130%: pause tab strip stays inside the window",
+   "v": "[\"Tidus\",\"Yuna\",\"Kimahri\",\"Chapter\",\"Guide\",\"Controls\",\"Music\"]"
+  },
+  {
+   "at": "19:24:35",
+   "k": "OK   REDUCE MOTION ON: Esc opens the pause",
+   "v": "screen=pause"
+  },
+  {
+   "at": "19:24:35",
+   "k": "OK   REDUCE MOTION ON: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:24:40",
+   "k": "OK   REDUCE MOTION ON: back to the battle",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:24:43",
+   "k": "OK   REDUCE MOTION ON: the row says ON (was OFF)",
+   "v": "after=ON"
+  },
+  {
+   "at": "19:24:43",
+   "k": "OK   REDUCE MOTION ON: <html> carries it",
+   "v": "\"reduceMotion\""
+  },
+  {
+   "at": "19:24:43",
+   "k": "OK   REDUCE MOTION ON: something measured changes on the live HUD, vars, animations or fx",
+   "v": "styleDiffs=2 varsDiff=0 anims 0->0 fx=5"
+  },
+  {
+   "at": "19:24:43",
+   "k": "OK   REDUCE FLASHES ON: Esc opens the pause",
+   "v": "screen=pause"
+  },
+  {
+   "at": "19:24:44",
+   "k": "OK   REDUCE FLASHES ON: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:24:48",
+   "k": "OK   REDUCE FLASHES ON: back to the battle",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:24:51",
+   "k": "OK   REDUCE FLASHES ON: the row says ON (was OFF)",
+   "v": "after=ON"
+  },
+  {
+   "at": "19:24:51",
+   "k": "OK   REDUCE FLASHES ON: <html> carries it",
+   "v": "\"reduceFlashes\""
+  },
+  {
+   "at": "19:24:51",
+   "k": "OK   REDUCE FLASHES ON: something measured changes on the live HUD, vars, animations or fx",
+   "v": "styleDiffs=0 varsDiff=0 anims 0->0 fx=5"
+  },
+  {
+   "at": "19:24:51",
+   "k": "OK   LOW EFFECTS ON: Esc opens the pause",
+   "v": "screen=pause"
+  },
+  {
+   "at": "19:24:52",
+   "k": "OK   LOW EFFECTS ON: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:24:56",
+   "k": "OK   LOW EFFECTS ON: back to the battle",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:24:59",
+   "k": "OK   LOW EFFECTS ON: the row says ON (was OFF)",
+   "v": "after=ON"
+  },
+  {
+   "at": "19:24:59",
+   "k": "OK   LOW EFFECTS ON: <html> carries it",
+   "v": "\"lowEffects\""
+  },
+  {
+   "at": "19:24:59",
+   "k": "OK   LOW EFFECTS ON: something measured changes on the live HUD, vars, animations or fx",
+   "v": "styleDiffs=0 varsDiff=0 anims 0->0 fx=7"
+  },
+  {
+   "at": "19:24:59",
+   "k": "OK   COLOUR VISION RED-GREEN: Esc opens the pause",
+   "v": "screen=pause"
+  },
+  {
+   "at": "19:25:00",
+   "k": "OK   COLOUR VISION RED-GREEN: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:25:04",
+   "k": "OK   COLOUR VISION RED-GREEN: back to the battle",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:25:07",
+   "k": "OK   COLOUR VISION RED-GREEN: the row says RED-GREEN (was OFF)",
+   "v": "after=RED-GREEN"
+  },
+  {
+   "at": "19:25:07",
+   "k": "OK   COLOUR VISION RED-GREEN: <html> carries it",
+   "v": "{\"colourVision\":\"red-green\"}"
+  },
+  {
+   "at": "19:25:07",
+   "k": "OK   COLOUR VISION RED-GREEN: something measured changes on the live HUD, vars, animations or fx",
+   "v": "styleDiffs=0 varsDiff=9 anims 0->0 fx=4"
+  },
+  {
+   "at": "19:25:07",
+   "k": "OK   COLOUR VISION BLUE-YELLOW: Esc opens the pause",
+   "v": "screen=pause"
+  },
+  {
+   "at": "19:25:08",
+   "k": "OK   COLOUR VISION BLUE-YELLOW: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:25:12",
+   "k": "OK   COLOUR VISION BLUE-YELLOW: back to the battle",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:25:15",
+   "k": "OK   COLOUR VISION BLUE-YELLOW: the row says BLUE-YELLOW (was RED-GREEN)",
+   "v": "after=BLUE-YELLOW"
+  },
+  {
+   "at": "19:25:15",
+   "k": "OK   COLOUR VISION BLUE-YELLOW: <html> carries it",
+   "v": "{\"colourVision\":\"blue-yellow\"}"
+  },
+  {
+   "at": "19:25:15",
+   "k": "OK   COLOUR VISION BLUE-YELLOW: something measured changes on the live HUD, vars, animations or fx",
+   "v": "styleDiffs=0 varsDiff=7 anims 0->0 fx=3"
+  },
+  {
+   "at": "19:25:15",
+   "k": "saved settings before reload",
+   "v": {
+    "textSize": 1.15,
+    "reduceMotion": true,
+    "reduceFlashes": true,
+    "lowEffects": true,
+    "colourVision": "blue-yellow"
+   }
+  },
+  {
+   "at": "19:25:16",
+   "k": "after reload at the title",
+   "v": {
+    "screen": "title",
+    "ds": {
+     "input": "keyboard",
+     "pad": "xbox",
+     "textSize": "115",
+     "textSizeWide": "115",
+     "reduceMotion": "",
+     "lowEffects": "",
+     "reduceFlashes": "",
+     "colourVision": "blue-yellow"
+    },
+    "saved": {
+     "textSize": 1.15,
+     "reduceMotion": true,
+     "reduceFlashes": true,
+     "lowEffects": true,
+     "colourVision": "blue-yellow"
+    }
+   }
+  },
+  {
+   "at": "19:25:16",
+   "k": "OK   reload: saved settings equal the pre-reload ones",
+   "v": "{\"textSize\":1.15,\"reduceMotion\":true,\"reduceFlashes\":true,\"lowEffects\":true,\"colourVision\":\"blue-yellow\"}"
+  },
+  {
+   "at": "19:25:16",
+   "k": "FAIL reload: <html> carries the comfort flags on the first frames, before any pause",
+   "v": "{\"input\":\"keyboard\",\"pad\":\"xbox\",\"textSize\":\"115\",\"textSizeWide\":\"115\",\"reduceMotion\":\"\",\"lowEffects\":\"\",\"reduceFlashes\":\"\",\"colourVision\":\"blue-yellow\"}"
+  },
+  {
+   "at": "19:25:17",
+   "k": "OK   reload: the chapter card is found again",
+   "v": "seymour-flux"
+  },
+  {
+   "at": "19:26:26",
+   "k": "OK   reload: first menu again",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:26:28",
+   "k": "FAIL reload: the HUD type is still 130% on the same classes at the first menu",
+   "v": "{\"n\":70,\"atTarget\":0,\"notAt\":70}"
+  },
+  {
+   "at": "19:26:28",
+   "k": "FAIL reload: the comfort flags are on <html> at the first menu",
+   "v": "{\"input\":\"keyboard\",\"pad\":\"xbox\",\"textSize\":\"115\",\"textSizeWide\":\"115\",\"reduceMotion\":\"\",\"lowEffects\":\"\",\"reduceFlashes\":\"\",\"colourVision\":\"blue-yellow\",\"phoneBattle\":\"ffx\"}"
+  },
+  {
+   "at": "19:26:30",
+   "k": "OK   reload: COLOUR VISION colours reach the target step (some element draws a --cvd-target-* colour)",
+   "v": "{\"hits\":{\"enemy\":10,\"ally\":0,\"self\":87},\"targeting\":true,\"samples\":[\"ig-ctb__tile.outlineColor=self\",\"ig-ctb__tile.boxShadow=enemy\",\"ig-ctb__tile.outlineColor=self\",\"ig-ctb__tile.boxShadow=enemy\",\"ig-cmd.backgroundColor=self\",\"ig-cmd.backgroundColor=self\",\"ig-cmd.backgroundColor=self\",\"ig-stat__value.color=self\"]}"
+  },
+  {
+   "at": "19:26:30",
+   "k": "OK   reload: Escape cancels the target step back to the same menu",
+   "v": "screen=battle"
+  },
+  {
+   "at": "19:26:30",
+   "k": "OK   reload: Esc opens the pause",
+   "v": ""
+  },
+  {
+   "at": "19:26:31",
+   "k": "OK   reload: ACCESSIBILITY reached",
+   "v": ""
+  },
+  {
+   "at": "19:26:32",
+   "k": "FAIL reload: the ACCESSIBILITY rows still say 130% / ON / ON / ON / BLUE-YELLOW",
+   "v": "[\"TEXT SIZE=115%\",\"REDUCE MOTION=ON\",\"REDUCE FLASHES=ON\",\"LOW EFFECTS=ON\",\"COLOUR VISION=BLUE-YELLOW\"]"
+  }
+ ],
+ "checks": [
+  {
+   "name": "first menu up (battle, awaiting a command)",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "TEXT SIZE 115%: Esc opens the pause",
+   "ok": false,
+   "why": "screen=battle"
+  },
+  {
+   "name": "TEXT SIZE 115%: ACCESSIBILITY reached",
+   "ok": false,
+   "why": ""
+  },
+  {
+   "name": "TEXT SIZE 115%: back to the battle",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "TEXT SIZE 115%: the row says 115% (was null)",
+   "ok": false,
+   "why": "after=null"
+  },
+  {
+   "name": "TEXT SIZE 115%: <html> carries it",
+   "ok": false,
+   "why": "{\"textSize\":\"115\",\"textSizeWide\":\"115\"}"
+  },
+  {
+   "name": "TEXT SIZE 115%: something measured changes on the live HUD, vars, animations or fx",
+   "ok": true,
+   "why": "styleDiffs=0 varsDiff=0 anims 0->0 fx=4"
+  },
+  {
+   "name": "TEXT SIZE 115%: HUD type scaled by the setting (classes whose largest font is 1.15 x the 100% one)",
+   "ok": false,
+   "why": "{\"n\":72,\"atTarget\":0,\"notAt\":72}"
+  },
+  {
+   "name": "TEXT SIZE 115%: pause tab strip stays inside the window",
+   "ok": true,
+   "why": "[]"
+  },
+  {
+   "name": "TEXT SIZE 130%: Esc opens the pause",
+   "ok": true,
+   "why": "screen=pause"
+  },
+  {
+   "name": "TEXT SIZE 130%: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "TEXT SIZE 130%: back to the battle",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "TEXT SIZE 130%: the row says 130% (was 100%)",
+   "ok": false,
+   "why": "after=115%"
+  },
+  {
+   "name": "TEXT SIZE 130%: <html> carries it",
+   "ok": false,
+   "why": "{\"textSize\":\"130\",\"textSizeWide\":\"130\"}"
+  },
+  {
+   "name": "TEXT SIZE 130%: something measured changes on the live HUD, vars, animations or fx",
+   "ok": true,
+   "why": "styleDiffs=7 varsDiff=1 anims 0->0 fx=4"
+  },
+  {
+   "name": "TEXT SIZE 130%: HUD type scaled by the setting (classes whose largest font is 1.30 x the 100% one)",
+   "ok": false,
+   "why": "{\"n\":72,\"atTarget\":0,\"notAt\":72}"
+  },
+  {
+   "name": "TEXT SIZE 130%: pause tab strip stays inside the window",
+   "ok": false,
+   "why": "[\"Tidus\",\"Yuna\",\"Kimahri\",\"Chapter\",\"Guide\",\"Controls\",\"Music\"]"
+  },
+  {
+   "name": "REDUCE MOTION ON: Esc opens the pause",
+   "ok": true,
+   "why": "screen=pause"
+  },
+  {
+   "name": "REDUCE MOTION ON: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "REDUCE MOTION ON: back to the battle",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "REDUCE MOTION ON: the row says ON (was OFF)",
+   "ok": true,
+   "why": "after=ON"
+  },
+  {
+   "name": "REDUCE MOTION ON: <html> carries it",
+   "ok": true,
+   "why": "\"reduceMotion\""
+  },
+  {
+   "name": "REDUCE MOTION ON: something measured changes on the live HUD, vars, animations or fx",
+   "ok": true,
+   "why": "styleDiffs=2 varsDiff=0 anims 0->0 fx=5"
+  },
+  {
+   "name": "REDUCE FLASHES ON: Esc opens the pause",
+   "ok": true,
+   "why": "screen=pause"
+  },
+  {
+   "name": "REDUCE FLASHES ON: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "REDUCE FLASHES ON: back to the battle",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "REDUCE FLASHES ON: the row says ON (was OFF)",
+   "ok": true,
+   "why": "after=ON"
+  },
+  {
+   "name": "REDUCE FLASHES ON: <html> carries it",
+   "ok": true,
+   "why": "\"reduceFlashes\""
+  },
+  {
+   "name": "REDUCE FLASHES ON: something measured changes on the live HUD, vars, animations or fx",
+   "ok": true,
+   "why": "styleDiffs=0 varsDiff=0 anims 0->0 fx=5"
+  },
+  {
+   "name": "LOW EFFECTS ON: Esc opens the pause",
+   "ok": true,
+   "why": "screen=pause"
+  },
+  {
+   "name": "LOW EFFECTS ON: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "LOW EFFECTS ON: back to the battle",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "LOW EFFECTS ON: the row says ON (was OFF)",
+   "ok": true,
+   "why": "after=ON"
+  },
+  {
+   "name": "LOW EFFECTS ON: <html> carries it",
+   "ok": true,
+   "why": "\"lowEffects\""
+  },
+  {
+   "name": "LOW EFFECTS ON: something measured changes on the live HUD, vars, animations or fx",
+   "ok": true,
+   "why": "styleDiffs=0 varsDiff=0 anims 0->0 fx=7"
+  },
+  {
+   "name": "COLOUR VISION RED-GREEN: Esc opens the pause",
+   "ok": true,
+   "why": "screen=pause"
+  },
+  {
+   "name": "COLOUR VISION RED-GREEN: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "COLOUR VISION RED-GREEN: back to the battle",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "COLOUR VISION RED-GREEN: the row says RED-GREEN (was OFF)",
+   "ok": true,
+   "why": "after=RED-GREEN"
+  },
+  {
+   "name": "COLOUR VISION RED-GREEN: <html> carries it",
+   "ok": true,
+   "why": "{\"colourVision\":\"red-green\"}"
+  },
+  {
+   "name": "COLOUR VISION RED-GREEN: something measured changes on the live HUD, vars, animations or fx",
+   "ok": true,
+   "why": "styleDiffs=0 varsDiff=9 anims 0->0 fx=4"
+  },
+  {
+   "name": "COLOUR VISION BLUE-YELLOW: Esc opens the pause",
+   "ok": true,
+   "why": "screen=pause"
+  },
+  {
+   "name": "COLOUR VISION BLUE-YELLOW: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "COLOUR VISION BLUE-YELLOW: back to the battle",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "COLOUR VISION BLUE-YELLOW: the row says BLUE-YELLOW (was RED-GREEN)",
+   "ok": true,
+   "why": "after=BLUE-YELLOW"
+  },
+  {
+   "name": "COLOUR VISION BLUE-YELLOW: <html> carries it",
+   "ok": true,
+   "why": "{\"colourVision\":\"blue-yellow\"}"
+  },
+  {
+   "name": "COLOUR VISION BLUE-YELLOW: something measured changes on the live HUD, vars, animations or fx",
+   "ok": true,
+   "why": "styleDiffs=0 varsDiff=7 anims 0->0 fx=3"
+  },
+  {
+   "name": "reload: saved settings equal the pre-reload ones",
+   "ok": true,
+   "why": "{\"textSize\":1.15,\"reduceMotion\":true,\"reduceFlashes\":true,\"lowEffects\":true,\"colourVision\":\"blue-yellow\"}"
+  },
+  {
+   "name": "reload: <html> carries the comfort flags on the first frames, before any pause",
+   "ok": false,
+   "why": "{\"input\":\"keyboard\",\"pad\":\"xbox\",\"textSize\":\"115\",\"textSizeWide\":\"115\",\"reduceMotion\":\"\",\"lowEffects\":\"\",\"reduceFlashes\":\"\",\"colourVision\":\"blue-yellow\"}"
+  },
+  {
+   "name": "reload: the chapter card is found again",
+   "ok": true,
+   "why": "seymour-flux"
+  },
+  {
+   "name": "reload: first menu again",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "reload: the HUD type is still 130% on the same classes at the first menu",
+   "ok": false,
+   "why": "{\"n\":70,\"atTarget\":0,\"notAt\":70}"
+  },
+  {
+   "name": "reload: the comfort flags are on <html> at the first menu",
+   "ok": false,
+   "why": "{\"input\":\"keyboard\",\"pad\":\"xbox\",\"textSize\":\"115\",\"textSizeWide\":\"115\",\"reduceMotion\":\"\",\"lowEffects\":\"\",\"reduceFlashes\":\"\",\"colourVision\":\"blue-yellow\",\"phoneBattle\":\"ffx\"}"
+  },
+  {
+   "name": "reload: COLOUR VISION colours reach the target step (some element draws a --cvd-target-* colour)",
+   "ok": true,
+   "why": "{\"hits\":{\"enemy\":10,\"ally\":0,\"self\":87},\"targeting\":true,\"samples\":[\"ig-ctb__tile.outlineColor=self\",\"ig-ctb__tile.boxShadow=enemy\",\"ig-ctb__tile.outlineColor=self\",\"ig-ctb__tile.boxShadow=enemy\",\"ig-cmd.backgroundColor=self\",\"ig-cmd.backgroundColor=self\",\"ig-cmd.backgroundColor=self\",\"ig-stat__value.color=self\"]}"
+  },
+  {
+   "name": "reload: Escape cancels the target step back to the same menu",
+   "ok": true,
+   "why": "screen=battle"
+  },
+  {
+   "name": "reload: Esc opens the pause",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "reload: ACCESSIBILITY reached",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "reload: the ACCESSIBILITY rows still say 130% / ON / ON / ON / BLUE-YELLOW",
+   "ok": false,
+   "why": "[\"TEXT SIZE=115%\",\"REDUCE MOTION=ON\",\"REDUCE FLASHES=ON\",\"LOW EFFECTS=ON\",\"COLOUR VISION=BLUE-YELLOW\"]"
+  }
+ ],
+ "keyboardFallbacks": 23,
+ "taps": 13,
+ "setupAids": [
+  "window.__pyrefly.setSeed(1) before the first key (bootChapter)"
+ ],
+ "pauseButtonCandidates": [
+  "BUTTON.battle-pause-chip ig|pause:open"
+ ],
+ "baseline": {
+  "ds": {
+   "input": "keyboard",
+   "pad": "xbox",
+   "textSize": "100",
+   "textSizeWide": "100",
+   "phoneBattle": "ffx",
+   "coachMark": "1",
+   "coachMarkGame": "ffx"
+  },
+  "vars": {
+   "--pyr-ts": "1"
+  },
+  "nAnims": 0,
+  "animSummary": {},
+  "shot": "phone-ffx-ch1/00-baseline-first-menu.png"
+ },
+ "settingResults": [
+  {
+   "n": 1,
+   "name": "TEXT SIZE 115%",
+   "label": "TEXT SIZE",
+   "rowBefore": null,
+   "tabsAtPause": [],
+   "tabsOffViewport": [],
+   "via": "key",
+   "rowAfter": null,
+   "pauseShot": "phone-ffx-ch1/01-TEXT_SIZE_115_-pause.png",
+   "dsInPause": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "100",
+    "textSizeWide": "100",
+    "phoneBattle": "ffx"
+   },
+   "menuBehind": true,
+   "menuShot": "phone-ffx-ch1/01-TEXT_SIZE_115_-first-menu.png",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "100",
+    "textSizeWide": "100",
+    "phoneBattle": "ffx"
+   },
+   "vars": {
+    "--pyr-ts": "1"
+   },
+   "dsDiff": {
+    "coachMark": [
+     "1",
+     null
+    ],
+    "coachMarkGame": [
+     "ffx",
+     null
+    ]
+   },
+   "varsDiff": {},
+   "styleDiffCount": 0,
+   "styleDiffClasses": 0,
+   "styleDiffByProp": {},
+   "styleDiffSample": [],
+   "animsBefore": 0,
+   "animsAfter": 0,
+   "animSummaryDiff": {},
+   "fxDiff": {
+    "b": [
+     {
+      "room": "gagazet",
+      "game": "ffx",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.44
+       ],
+       "buildMs": 1027,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 872,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "flake:143",
+       "streak:9",
+       "flake:39"
+      ],
+      "haze": 4,
+      "arcs": false,
+      "reflection": false,
+      "figures": 10,
+      "drift": 0.6,
+      "calm": 0,
+      "driftX": -0.241,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0.5656869462050326,
+       "extent": 0.5535376879952582,
+       "biases": [
+        0.5430594683568314,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 14.84
+     },
+     {
+      "room": "gagazet",
+      "game": "ffx",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.44
+       ],
+       "buildMs": 1027,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 872,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "flake:143",
+       "streak:9",
+       "flake:39"
+      ],
+      "haze": 4,
+      "arcs": false,
+      "reflection": false,
+      "figures": 10,
+      "drift": 0.6,
+      "calm": 0,
+      "driftX": 0.197,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0.45865888651683806,
+       "extent": 0.5070673184820416,
+       "biases": [
+        0.44031253105616464,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 75.81
+     }
+    ],
+    "shared": [
+     {
+      "cEnergy": 0.0010705018792444162
+     },
+     {
+      "cEnergy": 4.04850242453814e-33
+     }
+    ],
+    "mix": [
+     {
+      "game": "ffx",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": true,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": true,
+       "dressphereShot": false,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": false,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": false
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "field",
+       "colossus": false,
+       "colossusFight": false,
+       "plans": 3,
+       "replans": 1,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 101,
+        "overlap": 0.26,
+        "bossCover": 0,
+        "blend": 0,
+        "back": 1.04,
+        "lens": [
+         0,
+         -21
+        ],
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 0.55,
+          "underHud": 0
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0.111,
+        "today": 0.111,
+        "corners": 2,
+        "todayCorners": 2,
+        "restGap": 23
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 81,
+        "overlap": 1,
+        "bossCover": 0,
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 228,
+       "planMs": 14,
+       "tries": [
+        "rule floor95 ov0.29 bc0.08 mortiorchis:0.97/0.10,seymour-flux-body:0.53/0.10",
+        "-1:ok w0.00 px101 ov0.26 bc0.00 seymour-flux-body:0.55/0"
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         -1,
+         5.94,
+         15.62
+        ],
+        "look": [
+         -1.01,
+         3.7,
+         -1.2
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        -21
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 9,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        -1.18,
+        5.971,
+        15.692
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.3770650859248963,
+        "width": 0.3846328078579182
+       }
+      },
+      "living": [
+       {
+        "name": "tidus",
+        "breath": 0.0251,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0.0033,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "kimahri",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 1,
+        "cuts": 0,
+        "crosses": 1,
+        "topples": 1,
+        "rises": 0
+       },
+       {
+        "name": "mortiorchis",
+        "breath": 0.0164,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "seymour-flux",
+        "breath": 0.0107,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 10,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.2797
+     },
+     {
+      "game": "ffx",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": true,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": true,
+       "dressphereShot": false,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": false,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": false
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "field",
+       "colossus": false,
+       "colossusFight": false,
+       "plans": 3,
+       "replans": 1,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 101,
+        "overlap": 0.26,
+        "bossCover": 0,
+        "blend": 0,
+        "back": 1.04,
+        "lens": [
+         0,
+         -21
+        ],
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 0.55,
+          "underHud": 0
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0.111,
+        "today": 0.111,
+        "corners": 2,
+        "todayCorners": 2,
+        "restGap": 23
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 81,
+        "overlap": 1,
+        "bossCover": 0,
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 228,
+       "planMs": 14,
+       "tries": [
+        "rule floor95 ov0.29 bc0.08 mortiorchis:0.97/0.10,seymour-flux-body:0.53/0.10",
+        "-1:ok w0.00 px101 ov0.26 bc0.00 seymour-flux-body:0.55/0"
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         -1,
+         5.94,
+         15.62
+        ],
+        "look": [
+         -1.01,
+         3.7,
+         -1.2
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        -21
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 9,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        -0.765,
+        5.994,
+        15.691
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.3770650859248963,
+        "width": 0.3846328078579182
+       }
+      },
+      "living": [
+       {
+        "name": "tidus",
+        "breath": 0.0009,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0.0087,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "kimahri",
+        "breath": 0.0005,
+        "buckle": 0,
+        "collapses": 1,
+        "cuts": 0,
+        "crosses": 1,
+        "topples": 1,
+        "rises": 0
+       },
+       {
+        "name": "mortiorchis",
+        "breath": 0.0069,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "seymour-flux",
+        "breath": 0.0115,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 10,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.191
+     }
+    ],
+    "c": [
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 1,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 9.074700000000034,
+      "lastKind": "hit",
+      "clock": 13.919,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     },
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 1,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 9.074700000000034,
+      "lastKind": "hit",
+      "clock": 74.892,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     }
+    ]
+   },
+   "fontRatioVs100": {
+    "target": 1.15,
+    "classesCompared": 72,
+    "scaledAtTarget": 0,
+    "notAtTarget": 72,
+    "grownClasses": 0,
+    "medianOfGrown": null,
+    "maxRatio": null,
+    "notAtTargetSample": [
+     "screen:16->16",
+     "fxc-splash:16->16",
+     "fxc-splash__lines:16->16",
+     "fxc-splash__slab:16->16",
+     "fxc-splash__rule:16->16",
+     "stm-layer:16->16",
+     "ffxhud:16->16",
+     "phud-panel:16->16",
+     "phud-shade:16->16",
+     "ffxhud__stage:16->16",
+     "ig-ctb:16->16",
+     "ig-ctb__row:16->16",
+     "ig-ctb__tile:16->16",
+     "ffx-portrait-fallback:16->16"
+    ]
+   },
+   "verdict": {
+    "says": false,
+    "html": false,
+    "measuredEffect": true,
+    "rowChangedFrom": "null -> null"
+   }
+  },
+  {
+   "n": 2,
+   "name": "TEXT SIZE 130%",
+   "label": "TEXT SIZE",
+   "rowBefore": "100%",
+   "tabsAtPause": [
+    "Tidus",
+    "Yuna",
+    "Kimahri",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Accessibility",
+    "Controls",
+    "Music"
+   ],
+   "tabsOffViewport": [
+    "Tidus",
+    "Yuna",
+    "Kimahri",
+    "Chapter",
+    "Guide",
+    "Controls",
+    "Music"
+   ],
+   "via": "tap",
+   "rowAfter": "115%",
+   "pauseShot": "phone-ffx-ch1/02-TEXT_SIZE_130_-pause.png",
+   "dsInPause": {
+    "input": "pointer",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "phoneBattle": "ffx"
+   },
+   "menuBehind": true,
+   "menuShot": "phone-ffx-ch1/02-TEXT_SIZE_130_-first-menu.png",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "phoneBattle": "ffx"
+   },
+   "vars": {
+    "--pyr-ts": "1.15"
+   },
+   "dsDiff": {
+    "textSize": [
+     "100",
+     "115"
+    ],
+    "textSizeWide": [
+     "100",
+     "115"
+    ]
+   },
+   "varsDiff": {
+    "--pyr-ts": [
+     "1",
+     "1.15"
+    ]
+   },
+   "styleDiffCount": 7,
+   "styleDiffClasses": 7,
+   "styleDiffByProp": {
+    "fontSize": 7
+   },
+   "styleDiffSample": [
+    {
+     "cls": "ffx-cmd__label",
+     "prop": "fontSize",
+     "n": [
+      6,
+      6
+     ],
+     "before": "16px",
+     "after": "18.4px"
+    },
+    {
+     "cls": "ig-cmd__ready",
+     "prop": "fontSize",
+     "n": [
+      3,
+      3
+     ],
+     "before": "14px",
+     "after": "16.1px"
+    },
+    {
+     "cls": "ig-stat__name",
+     "prop": "fontSize",
+     "n": [
+      3,
+      3
+     ],
+     "before": "17px",
+     "after": "19.55px"
+    },
+    {
+     "cls": "ig-stat__value",
+     "prop": "fontSize",
+     "n": [
+      6,
+      6
+     ],
+     "before": "14px ; 16px",
+     "after": "16.1px ; 18.4px"
+    },
+    {
+     "cls": "phud-foot__who",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "14px",
+     "after": "16.1px"
+    },
+    {
+     "cls": "phud-foot__help",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "14px",
+     "after": "16.1px"
+    },
+    {
+     "cls": "phud-guide",
+     "prop": "fontSize",
+     "n": [
+      1,
+      1
+     ],
+     "before": "14px",
+     "after": "16.1px"
+    }
+   ],
+   "animsBefore": 0,
+   "animsAfter": 0,
+   "animSummaryDiff": {},
+   "fxDiff": {
+    "b": [
+     {
+      "room": "gagazet",
+      "game": "ffx",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.44
+       ],
+       "buildMs": 1027,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 872,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "flake:143",
+       "streak:9",
+       "flake:39"
+      ],
+      "haze": 4,
+      "arcs": false,
+      "reflection": false,
+      "figures": 10,
+      "drift": 0.6,
+      "calm": 0,
+      "driftX": 0.197,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0.45865888651683806,
+       "extent": 0.5070673184820416,
+       "biases": [
+        0.44031253105616464,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 75.81
+     },
+     {
+      "room": "gagazet",
+      "game": "ffx",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.44
+       ],
+       "buildMs": 1027,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 872,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "flake:143",
+       "streak:9",
+       "flake:39"
+      ],
+      "haze": 4,
+      "arcs": false,
+      "reflection": false,
+      "figures": 10,
+      "drift": 0.6,
+      "calm": 0,
+      "driftX": 0.071,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0.19916532936645245,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 80.11
+     }
+    ],
+    "shared": [
+     {
+      "cEnergy": 4.04850242453814e-33
+     },
+     {
+      "cEnergy": 3.407441346733728e-35
+     }
+    ],
+    "mix": [
+     {
+      "game": "ffx",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": true,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": true,
+       "dressphereShot": false,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": false,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": false
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "field",
+       "colossus": false,
+       "colossusFight": false,
+       "plans": 3,
+       "replans": 1,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 101,
+        "overlap": 0.26,
+        "bossCover": 0,
+        "blend": 0,
+        "back": 1.04,
+        "lens": [
+         0,
+         -21
+        ],
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 0.55,
+          "underHud": 0
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0.111,
+        "today": 0.111,
+        "corners": 2,
+        "todayCorners": 2,
+        "restGap": 23
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 81,
+        "overlap": 1,
+        "bossCover": 0,
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 228,
+       "planMs": 14,
+       "tries": [
+        "rule floor95 ov0.29 bc0.08 mortiorchis:0.97/0.10,seymour-flux-body:0.53/0.10",
+        "-1:ok w0.00 px101 ov0.26 bc0.00 seymour-flux-body:0.55/0"
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         -1,
+         5.94,
+         15.62
+        ],
+        "look": [
+         -1.01,
+         3.7,
+         -1.2
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        -21
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 9,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        -0.765,
+        5.994,
+        15.691
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.3770650859248963,
+        "width": 0.3846328078579182
+       }
+      },
+      "living": [
+       {
+        "name": "tidus",
+        "breath": 0.0009,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0.0087,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "kimahri",
+        "breath": 0.0005,
+        "buckle": 0,
+        "collapses": 1,
+        "cuts": 0,
+        "crosses": 1,
+        "topples": 1,
+        "rises": 0
+       },
+       {
+        "name": "mortiorchis",
+        "breath": 0.0069,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "seymour-flux",
+        "breath": 0.0115,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 10,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.191
+     },
+     {
+      "game": "ffx",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": true,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": true,
+       "dressphereShot": false,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": false,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": false
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "field",
+       "colossus": false,
+       "colossusFight": false,
+       "plans": 3,
+       "replans": 1,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 101,
+        "overlap": 0.26,
+        "bossCover": 0,
+        "blend": 0,
+        "back": 1.04,
+        "lens": [
+         0,
+         -21
+        ],
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 0.55,
+          "underHud": 0
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0.111,
+        "today": 0.111,
+        "corners": 2,
+        "todayCorners": 2,
+        "restGap": 23
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 81,
+        "overlap": 1,
+        "bossCover": 0,
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 228,
+       "planMs": 14,
+       "tries": [
+        "rule floor95 ov0.29 bc0.08 mortiorchis:0.97/0.10,seymour-flux-body:0.53/0.10",
+        "-1:ok w0.00 px101 ov0.26 bc0.00 seymour-flux-body:0.55/0"
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         -1,
+         5.94,
+         15.62
+        ],
+        "look": [
+         -1.01,
+         3.7,
+         -1.2
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        -21
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 9,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        -0.928,
+        5.939,
+        15.656
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.3770650859248963,
+        "width": 0.3846328078579182
+       }
+      },
+      "living": [
+       {
+        "name": "tidus",
+        "breath": 0.0157,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0.0189,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "kimahri",
+        "breath": 0.0022,
+        "buckle": 0,
+        "collapses": 1,
+        "cuts": 0,
+        "crosses": 1,
+        "topples": 1,
+        "rises": 0
+       },
+       {
+        "name": "mortiorchis",
+        "breath": 0.0197,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "seymour-flux",
+        "breath": 0.0164,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 10,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.1956
+     }
+    ],
+    "c": [
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 1,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 9.074700000000034,
+      "lastKind": "hit",
+      "clock": 74.892,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     },
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 1,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 9.074700000000034,
+      "lastKind": "hit",
+      "clock": 79.192,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     }
+    ]
+   },
+   "fontRatioVs100": {
+    "target": 1.3,
+    "classesCompared": 72,
+    "scaledAtTarget": 0,
+    "notAtTarget": 72,
+    "grownClasses": 7,
+    "medianOfGrown": 1.15,
+    "maxRatio": 1.15,
+    "notAtTargetSample": [
+     "screen:16->16",
+     "fxc-splash:16->16",
+     "fxc-splash__lines:16->16",
+     "fxc-splash__slab:16->16",
+     "fxc-splash__rule:16->16",
+     "stm-layer:16->16",
+     "ffxhud:16->16",
+     "phud-panel:16->16",
+     "phud-shade:16->16",
+     "ffxhud__stage:16->16",
+     "ig-ctb:16->16",
+     "ig-ctb__row:16->16",
+     "ig-ctb__tile:16->16",
+     "ffx-portrait-fallback:16->16"
+    ]
+   },
+   "verdict": {
+    "says": false,
+    "html": false,
+    "measuredEffect": true,
+    "rowChangedFrom": "100% -> 115%"
+   }
+  },
+  {
+   "n": 3,
+   "name": "REDUCE MOTION ON",
+   "label": "REDUCE MOTION",
+   "rowBefore": "OFF",
+   "tabsAtPause": [
+    "Tidus",
+    "Yuna",
+    "Kimahri",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Accessibility",
+    "Controls",
+    "Music"
+   ],
+   "tabsOffViewport": [
+    "Tidus",
+    "Yuna",
+    "Kimahri",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Controls",
+    "Music"
+   ],
+   "via": "tap",
+   "rowAfter": "ON",
+   "pauseShot": "phone-ffx-ch1/03-REDUCE_MOTION_ON-pause.png",
+   "dsInPause": {
+    "input": "pointer",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "phoneBattle": "ffx",
+    "reduceMotion": ""
+   },
+   "menuBehind": true,
+   "menuShot": "phone-ffx-ch1/03-REDUCE_MOTION_ON-first-menu.png",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "phoneBattle": "ffx",
+    "reduceMotion": ""
+   },
+   "vars": {
+    "--pyr-ts": "1.15"
+   },
+   "dsDiff": {
+    "reduceMotion": [
+     null,
+     ""
+    ]
+   },
+   "varsDiff": {},
+   "styleDiffCount": 2,
+   "styleDiffClasses": 2,
+   "styleDiffByProp": {
+    "transitionDuration": 2
+   },
+   "styleDiffSample": [
+    {
+     "cls": "pf-mom__bar",
+     "prop": "transitionDuration",
+     "n": [
+      2,
+      2
+     ],
+     "before": "0.26s",
+     "after": "0.001s"
+    },
+    {
+     "cls": "pf-mom__slab",
+     "prop": "transitionDuration",
+     "n": [
+      1,
+      1
+     ],
+     "before": "0.26s, 0.26s",
+     "after": "0.001s"
+    }
+   ],
+   "animsBefore": 0,
+   "animsAfter": 0,
+   "animSummaryDiff": {},
+   "fxDiff": {
+    "reduceMotion": [
+     false,
+     true
+    ],
+    "b": [
+     {
+      "room": "gagazet",
+      "game": "ffx",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.44
+       ],
+       "buildMs": 1027,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 872,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "flake:143",
+       "streak:9",
+       "flake:39"
+      ],
+      "haze": 4,
+      "arcs": false,
+      "reflection": false,
+      "figures": 10,
+      "drift": 0.6,
+      "calm": 0,
+      "driftX": 0.071,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0.19916532936645245,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 80.11
+     },
+     {
+      "room": "gagazet",
+      "game": "ffx",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.44
+       ],
+       "buildMs": 1027,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 872,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "flake:143",
+       "streak:9",
+       "flake:39"
+      ],
+      "haze": 4,
+      "arcs": false,
+      "reflection": false,
+      "figures": 10,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 84.37
+     }
+    ],
+    "shared": [
+     {
+      "cEnergy": 3.407441346733728e-35
+     },
+     {
+      "cEnergy": 3.0038945653962137e-37
+     }
+    ],
+    "mix": [
+     {
+      "game": "ffx",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": true,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": true,
+       "dressphereShot": false,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": false,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": false
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "field",
+       "colossus": false,
+       "colossusFight": false,
+       "plans": 3,
+       "replans": 1,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 101,
+        "overlap": 0.26,
+        "bossCover": 0,
+        "blend": 0,
+        "back": 1.04,
+        "lens": [
+         0,
+         -21
+        ],
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 0.55,
+          "underHud": 0
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0.111,
+        "today": 0.111,
+        "corners": 2,
+        "todayCorners": 2,
+        "restGap": 23
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 81,
+        "overlap": 1,
+        "bossCover": 0,
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 228,
+       "planMs": 14,
+       "tries": [
+        "rule floor95 ov0.29 bc0.08 mortiorchis:0.97/0.10,seymour-flux-body:0.53/0.10",
+        "-1:ok w0.00 px101 ov0.26 bc0.00 seymour-flux-body:0.55/0"
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         -1,
+         5.94,
+         15.62
+        ],
+        "look": [
+         -1.01,
+         3.7,
+         -1.2
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        -21
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 9,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        -0.928,
+        5.939,
+        15.656
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.3770650859248963,
+        "width": 0.3846328078579182
+       }
+      },
+      "living": [
+       {
+        "name": "tidus",
+        "breath": 0.0157,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0.0189,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "kimahri",
+        "breath": 0.0022,
+        "buckle": 0,
+        "collapses": 1,
+        "cuts": 0,
+        "crosses": 1,
+        "topples": 1,
+        "rises": 0
+       },
+       {
+        "name": "mortiorchis",
+        "breath": 0.0197,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "seymour-flux",
+        "breath": 0.0164,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 10,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.1956
+     },
+     {
+      "game": "ffx",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": true,
+       "dressphereShot": false,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": true,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": false
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "field",
+       "colossus": false,
+       "colossusFight": false,
+       "plans": 3,
+       "replans": 1,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 101,
+        "overlap": 0.26,
+        "bossCover": 0,
+        "blend": 0,
+        "back": 1.04,
+        "lens": [
+         0,
+         -21
+        ],
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 0.55,
+          "underHud": 0
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0.111,
+        "today": 0.111,
+        "corners": 2,
+        "todayCorners": 2,
+        "restGap": 23
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 81,
+        "overlap": 1,
+        "bossCover": 0,
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 228,
+       "planMs": 14,
+       "tries": [
+        "rule floor95 ov0.29 bc0.08 mortiorchis:0.97/0.10,seymour-flux-body:0.53/0.10",
+        "-1:ok w0.00 px101 ov0.26 bc0.00 seymour-flux-body:0.55/0"
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         -1,
+         5.94,
+         15.62
+        ],
+        "look": [
+         -1.01,
+         3.7,
+         -1.2
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        -21
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 9,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        -0.996,
+        5.939,
+        15.623
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.3770650859248963,
+        "width": 0.3846328078579182
+       }
+      },
+      "living": [
+       {
+        "name": "tidus",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "kimahri",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 1,
+        "cuts": 0,
+        "crosses": 1,
+        "topples": 1,
+        "rises": 0
+       },
+       {
+        "name": "mortiorchis",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "seymour-flux",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 10,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.195
+     }
+    ],
+    "c": [
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 1,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 9.074700000000034,
+      "lastKind": "hit",
+      "clock": 79.192,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     },
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 1,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 9.074700000000034,
+      "lastKind": "hit",
+      "clock": 83.45,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     }
+    ]
+   },
+   "verdict": {
+    "says": true,
+    "html": true,
+    "measuredEffect": true,
+    "rowChangedFrom": "OFF -> ON"
+   }
+  },
+  {
+   "n": 4,
+   "name": "REDUCE FLASHES ON",
+   "label": "REDUCE FLASHES",
+   "rowBefore": "OFF",
+   "tabsAtPause": [
+    "Tidus",
+    "Yuna",
+    "Kimahri",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Accessibility",
+    "Controls",
+    "Music"
+   ],
+   "tabsOffViewport": [
+    "Tidus",
+    "Yuna",
+    "Kimahri",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Controls",
+    "Music"
+   ],
+   "via": "tap",
+   "rowAfter": "ON",
+   "pauseShot": "phone-ffx-ch1/04-REDUCE_FLASHES_ON-pause.png",
+   "dsInPause": {
+    "input": "pointer",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "phoneBattle": "ffx",
+    "reduceMotion": "",
+    "reduceFlashes": ""
+   },
+   "menuBehind": true,
+   "menuShot": "phone-ffx-ch1/04-REDUCE_FLASHES_ON-first-menu.png",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "phoneBattle": "ffx",
+    "reduceMotion": "",
+    "reduceFlashes": ""
+   },
+   "vars": {
+    "--pyr-ts": "1.15"
+   },
+   "dsDiff": {
+    "reduceFlashes": [
+     null,
+     ""
+    ]
+   },
+   "varsDiff": {},
+   "styleDiffCount": 0,
+   "styleDiffClasses": 0,
+   "styleDiffByProp": {},
+   "styleDiffSample": [],
+   "animsBefore": 0,
+   "animsAfter": 0,
+   "animSummaryDiff": {},
+   "fxDiff": {
+    "reduceFlashes": [
+     false,
+     true
+    ],
+    "b": [
+     {
+      "room": "gagazet",
+      "game": "ffx",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.44
+       ],
+       "buildMs": 1027,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 872,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "flake:143",
+       "streak:9",
+       "flake:39"
+      ],
+      "haze": 4,
+      "arcs": false,
+      "reflection": false,
+      "figures": 10,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 84.37
+     },
+     {
+      "room": "gagazet",
+      "game": "ffx",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.44
+       ],
+       "buildMs": 1027,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 872,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "flake:143",
+       "streak:9",
+       "flake:39"
+      ],
+      "haze": 4,
+      "arcs": false,
+      "reflection": false,
+      "figures": 10,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 88.72
+     }
+    ],
+    "shared": [
+     {
+      "cEnergy": 3.0038945653962137e-37
+     },
+     {
+      "cEnergy": 2.3916146176660717e-39
+     }
+    ],
+    "mix": [
+     {
+      "game": "ffx",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": true,
+       "dressphereShot": false,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": true,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": false
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "field",
+       "colossus": false,
+       "colossusFight": false,
+       "plans": 3,
+       "replans": 1,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 101,
+        "overlap": 0.26,
+        "bossCover": 0,
+        "blend": 0,
+        "back": 1.04,
+        "lens": [
+         0,
+         -21
+        ],
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 0.55,
+          "underHud": 0
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0.111,
+        "today": 0.111,
+        "corners": 2,
+        "todayCorners": 2,
+        "restGap": 23
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 81,
+        "overlap": 1,
+        "bossCover": 0,
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 228,
+       "planMs": 14,
+       "tries": [
+        "rule floor95 ov0.29 bc0.08 mortiorchis:0.97/0.10,seymour-flux-body:0.53/0.10",
+        "-1:ok w0.00 px101 ov0.26 bc0.00 seymour-flux-body:0.55/0"
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         -1,
+         5.94,
+         15.62
+        ],
+        "look": [
+         -1.01,
+         3.7,
+         -1.2
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        -21
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 9,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        -0.996,
+        5.939,
+        15.623
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.3770650859248963,
+        "width": 0.3846328078579182
+       }
+      },
+      "living": [
+       {
+        "name": "tidus",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "kimahri",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 1,
+        "cuts": 0,
+        "crosses": 1,
+        "topples": 1,
+        "rises": 0
+       },
+       {
+        "name": "mortiorchis",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "seymour-flux",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 10,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.195
+     },
+     {
+      "game": "ffx",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": true,
+       "dressphereShot": false,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": true,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": false
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "field",
+       "colossus": false,
+       "colossusFight": false,
+       "plans": 3,
+       "replans": 1,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 101,
+        "overlap": 0.26,
+        "bossCover": 0,
+        "blend": 0,
+        "back": 1.04,
+        "lens": [
+         0,
+         -21
+        ],
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 0.55,
+          "underHud": 0
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0.111,
+        "today": 0.111,
+        "corners": 2,
+        "todayCorners": 2,
+        "restGap": 23
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 81,
+        "overlap": 1,
+        "bossCover": 0,
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 228,
+       "planMs": 14,
+       "tries": [
+        "rule floor95 ov0.29 bc0.08 mortiorchis:0.97/0.10,seymour-flux-body:0.53/0.10",
+        "-1:ok w0.00 px101 ov0.26 bc0.00 seymour-flux-body:0.55/0"
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         -1,
+         5.94,
+         15.62
+        ],
+        "look": [
+         -1.01,
+         3.7,
+         -1.2
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        -21
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 9,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        -0.996,
+        5.939,
+        15.623
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.3770650859248963,
+        "width": 0.3846328078579182
+       }
+      },
+      "living": [
+       {
+        "name": "tidus",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "kimahri",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 1,
+        "cuts": 0,
+        "crosses": 1,
+        "topples": 1,
+        "rises": 0
+       },
+       {
+        "name": "mortiorchis",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "seymour-flux",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 10,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.1978
+     }
+    ],
+    "c": [
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 1,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 9.074700000000034,
+      "lastKind": "hit",
+      "clock": 83.45,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     },
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 1,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 9.074700000000034,
+      "lastKind": "hit",
+      "clock": 87.8,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     }
+    ]
+   },
+   "verdict": {
+    "says": true,
+    "html": true,
+    "measuredEffect": true,
+    "rowChangedFrom": "OFF -> ON"
+   }
+  },
+  {
+   "n": 5,
+   "name": "LOW EFFECTS ON",
+   "label": "LOW EFFECTS",
+   "rowBefore": "OFF",
+   "tabsAtPause": [
+    "Tidus",
+    "Yuna",
+    "Kimahri",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Accessibility",
+    "Controls",
+    "Music"
+   ],
+   "tabsOffViewport": [
+    "Tidus",
+    "Yuna",
+    "Kimahri",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Controls",
+    "Music"
+   ],
+   "via": "tap",
+   "rowAfter": "ON",
+   "pauseShot": "phone-ffx-ch1/05-LOW_EFFECTS_ON-pause.png",
+   "dsInPause": {
+    "input": "pointer",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "phoneBattle": "ffx",
+    "reduceMotion": "",
+    "reduceFlashes": "",
+    "lowEffects": ""
+   },
+   "menuBehind": true,
+   "menuShot": "phone-ffx-ch1/05-LOW_EFFECTS_ON-first-menu.png",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "phoneBattle": "ffx",
+    "reduceMotion": "",
+    "reduceFlashes": "",
+    "lowEffects": ""
+   },
+   "vars": {
+    "--pyr-ts": "1.15"
+   },
+   "dsDiff": {
+    "lowEffects": [
+     null,
+     ""
+    ]
+   },
+   "varsDiff": {},
+   "styleDiffCount": 0,
+   "styleDiffClasses": 0,
+   "styleDiffByProp": {},
+   "styleDiffSample": [],
+   "animsBefore": 0,
+   "animsAfter": 0,
+   "animSummaryDiff": {},
+   "fxDiff": {
+    "tier": [
+     "phone",
+     "low"
+    ],
+    "lowEffects": [
+     false,
+     true
+    ],
+    "a": [
+     {
+      "active": true,
+      "tier": "phone",
+      "sources": [],
+      "menu": false,
+      "drama": 0
+     },
+     {
+      "active": true,
+      "tier": "low",
+      "sources": [],
+      "menu": false,
+      "drama": 0
+     }
+    ],
+    "b": [
+     {
+      "room": "gagazet",
+      "game": "ffx",
+      "tier": "phone",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.44
+       ],
+       "buildMs": 1027,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 872,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "flake:143",
+       "streak:9",
+       "flake:39"
+      ],
+      "haze": 4,
+      "arcs": false,
+      "reflection": false,
+      "figures": 10,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 88.72
+     },
+     {
+      "room": "gagazet",
+      "game": "ffx",
+      "tier": "low",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.44
+       ],
+       "buildMs": 338,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 166,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "flake:78",
+       "streak:5",
+       "flake:21"
+      ],
+      "haze": 0,
+      "arcs": false,
+      "reflection": false,
+      "figures": 10,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 92.97
+     }
+    ],
+    "shared": [
+     {
+      "cEnergy": 2.3916146176660717e-39
+     },
+     {
+      "cEnergy": 2.1279070607807567e-41
+     }
+    ],
+    "mix": [
+     {
+      "game": "ffx",
+      "parts": {
+       "depthOfField": false,
+       "fog": true,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": true,
+       "dressphereShot": false,
+       "splashArt": true
+      },
+      "tier": "phone",
+      "reduceMotion": true,
+      "device": {
+       "tier": "phone",
+       "phone": true,
+       "colossus": false
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "field",
+       "colossus": false,
+       "colossusFight": false,
+       "plans": 3,
+       "replans": 1,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 101,
+        "overlap": 0.26,
+        "bossCover": 0,
+        "blend": 0,
+        "back": 1.04,
+        "lens": [
+         0,
+         -21
+        ],
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 0.55,
+          "underHud": 0
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0.111,
+        "today": 0.111,
+        "corners": 2,
+        "todayCorners": 2,
+        "restGap": 23
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 81,
+        "overlap": 1,
+        "bossCover": 0,
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 228,
+       "planMs": 14,
+       "tries": [
+        "rule floor95 ov0.29 bc0.08 mortiorchis:0.97/0.10,seymour-flux-body:0.53/0.10",
+        "-1:ok w0.00 px101 ov0.26 bc0.00 seymour-flux-body:0.55/0"
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         -1,
+         5.94,
+         15.62
+        ],
+        "look": [
+         -1.01,
+         3.7,
+         -1.2
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        -21
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 9,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        -0.996,
+        5.939,
+        15.623
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "fxaa",
+       "dof": null,
+       "band": {
+        "focus": 0.3770650859248963,
+        "width": 0.3846328078579182
+       }
+      },
+      "living": [
+       {
+        "name": "tidus",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "kimahri",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 1,
+        "cuts": 0,
+        "crosses": 1,
+        "topples": 1,
+        "rises": 0
+       },
+       {
+        "name": "mortiorchis",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "seymour-flux",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 10,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.1978
+     },
+     {
+      "game": "ffx",
+      "parts": {
+       "depthOfField": false,
+       "fog": false,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": true,
+       "dressphereShot": false,
+       "splashArt": true
+      },
+      "tier": "low",
+      "reduceMotion": true,
+      "device": {
+       "tier": "low",
+       "phone": true,
+       "colossus": false
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "low"
+       },
+       "fog": {
+        "limit": "off",
+        "why": "low"
+       },
+       "smoothEdges": {
+        "limit": "less",
+        "why": "low"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "field",
+       "colossus": false,
+       "colossusFight": false,
+       "plans": 3,
+       "replans": 1,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 101,
+        "overlap": 0.26,
+        "bossCover": 0,
+        "blend": 0,
+        "back": 1.04,
+        "lens": [
+         0,
+         -21
+        ],
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 0.55,
+          "underHud": 0
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0.111,
+        "today": 0.111,
+        "corners": 2,
+        "todayCorners": 2,
+        "restGap": 23
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 81,
+        "overlap": 1,
+        "bossCover": 0,
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 228,
+       "planMs": 14,
+       "tries": [
+        "rule floor95 ov0.29 bc0.08 mortiorchis:0.97/0.10,seymour-flux-body:0.53/0.10",
+        "-1:ok w0.00 px101 ov0.26 bc0.00 seymour-flux-body:0.55/0"
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         -1,
+         5.94,
+         15.62
+        ],
+        "look": [
+         -1.01,
+         3.7,
+         -1.2
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        -21
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 9,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        -0.996,
+        5.939,
+        15.623
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "none",
+       "dof": null,
+       "band": {
+        "focus": 0.3770650859248963,
+        "width": 0.3846328078579182
+       }
+      },
+      "living": [
+       {
+        "name": "tidus",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "kimahri",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 1,
+        "cuts": 0,
+        "crosses": 1,
+        "topples": 1,
+        "rises": 0
+       },
+       {
+        "name": "mortiorchis",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "seymour-flux",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 10,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.1984
+     }
+    ],
+    "c": [
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 1,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 9.074700000000034,
+      "lastKind": "hit",
+      "clock": 87.8,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     },
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 1,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 9.074700000000034,
+      "lastKind": "hit",
+      "clock": 92.05,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     }
+    ]
+   },
+   "verdict": {
+    "says": true,
+    "html": true,
+    "measuredEffect": true,
+    "rowChangedFrom": "OFF -> ON"
+   }
+  },
+  {
+   "n": 6,
+   "name": "COLOUR VISION RED-GREEN",
+   "label": "COLOUR VISION",
+   "rowBefore": "OFF",
+   "tabsAtPause": [
+    "Tidus",
+    "Yuna",
+    "Kimahri",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Accessibility",
+    "Controls",
+    "Music"
+   ],
+   "tabsOffViewport": [
+    "Tidus",
+    "Yuna",
+    "Kimahri",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Controls",
+    "Music"
+   ],
+   "via": "tap",
+   "rowAfter": "RED-GREEN",
+   "pauseShot": "phone-ffx-ch1/06-COLOUR_VISION_RED_GREEN-pause.png",
+   "dsInPause": {
+    "input": "pointer",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "phoneBattle": "ffx",
+    "reduceMotion": "",
+    "reduceFlashes": "",
+    "lowEffects": "",
+    "colourVision": "red-green"
+   },
+   "menuBehind": true,
+   "menuShot": "phone-ffx-ch1/06-COLOUR_VISION_RED_GREEN-first-menu.png",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "phoneBattle": "ffx",
+    "reduceMotion": "",
+    "reduceFlashes": "",
+    "lowEffects": "",
+    "colourVision": "red-green"
+   },
+   "vars": {
+    "--pyr-ts": "1.15",
+    "--cvd-target-enemy": "#f2c21e",
+    "--cvd-target-ally": "#56b4e9",
+    "--cvd-target-self": "#f4f1e8",
+    "--cvd-mp-hi": "#8fd0f0",
+    "--cvd-mp-lo": "#3a8fd0",
+    "--cvd-gate-r": "#d55e00",
+    "--cvd-gate-g": "#009e73",
+    "--cvd-gate-b": "#0072b2",
+    "--cvd-gate-y": "#f0e442"
+   },
+   "dsDiff": {
+    "colourVision": [
+     null,
+     "red-green"
+    ]
+   },
+   "varsDiff": {
+    "--cvd-target-enemy": [
+     null,
+     "#f2c21e"
+    ],
+    "--cvd-target-ally": [
+     null,
+     "#56b4e9"
+    ],
+    "--cvd-target-self": [
+     null,
+     "#f4f1e8"
+    ],
+    "--cvd-mp-hi": [
+     null,
+     "#8fd0f0"
+    ],
+    "--cvd-mp-lo": [
+     null,
+     "#3a8fd0"
+    ],
+    "--cvd-gate-r": [
+     null,
+     "#d55e00"
+    ],
+    "--cvd-gate-g": [
+     null,
+     "#009e73"
+    ],
+    "--cvd-gate-b": [
+     null,
+     "#0072b2"
+    ],
+    "--cvd-gate-y": [
+     null,
+     "#f0e442"
+    ]
+   },
+   "styleDiffCount": 0,
+   "styleDiffClasses": 0,
+   "styleDiffByProp": {},
+   "styleDiffSample": [],
+   "animsBefore": 0,
+   "animsAfter": 0,
+   "animSummaryDiff": {},
+   "fxDiff": {
+    "b": [
+     {
+      "room": "gagazet",
+      "game": "ffx",
+      "tier": "low",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.44
+       ],
+       "buildMs": 338,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 166,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "flake:78",
+       "streak:5",
+       "flake:21"
+      ],
+      "haze": 0,
+      "arcs": false,
+      "reflection": false,
+      "figures": 10,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 92.97
+     },
+     {
+      "room": "gagazet",
+      "game": "ffx",
+      "tier": "low",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.44
+       ],
+       "buildMs": 338,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 166,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "flake:78",
+       "streak:5",
+       "flake:21"
+      ],
+      "haze": 0,
+      "arcs": false,
+      "reflection": false,
+      "figures": 10,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 97.33
+     }
+    ],
+    "shared": [
+     {
+      "cEnergy": 2.1279070607807567e-41
+     },
+     {
+      "cEnergy": 1.6632167467642636e-43
+     }
+    ],
+    "mix": [
+     {
+      "game": "ffx",
+      "parts": {
+       "depthOfField": false,
+       "fog": false,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": true,
+       "dressphereShot": false,
+       "splashArt": true
+      },
+      "tier": "low",
+      "reduceMotion": true,
+      "device": {
+       "tier": "low",
+       "phone": true,
+       "colossus": false
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "low"
+       },
+       "fog": {
+        "limit": "off",
+        "why": "low"
+       },
+       "smoothEdges": {
+        "limit": "less",
+        "why": "low"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "field",
+       "colossus": false,
+       "colossusFight": false,
+       "plans": 3,
+       "replans": 1,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 101,
+        "overlap": 0.26,
+        "bossCover": 0,
+        "blend": 0,
+        "back": 1.04,
+        "lens": [
+         0,
+         -21
+        ],
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 0.55,
+          "underHud": 0
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0.111,
+        "today": 0.111,
+        "corners": 2,
+        "todayCorners": 2,
+        "restGap": 23
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 81,
+        "overlap": 1,
+        "bossCover": 0,
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 228,
+       "planMs": 14,
+       "tries": [
+        "rule floor95 ov0.29 bc0.08 mortiorchis:0.97/0.10,seymour-flux-body:0.53/0.10",
+        "-1:ok w0.00 px101 ov0.26 bc0.00 seymour-flux-body:0.55/0"
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         -1,
+         5.94,
+         15.62
+        ],
+        "look": [
+         -1.01,
+         3.7,
+         -1.2
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        -21
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 9,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        -0.996,
+        5.939,
+        15.623
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "none",
+       "dof": null,
+       "band": {
+        "focus": 0.3770650859248963,
+        "width": 0.3846328078579182
+       }
+      },
+      "living": [
+       {
+        "name": "tidus",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "kimahri",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 1,
+        "cuts": 0,
+        "crosses": 1,
+        "topples": 1,
+        "rises": 0
+       },
+       {
+        "name": "mortiorchis",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "seymour-flux",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 10,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.1984
+     },
+     {
+      "game": "ffx",
+      "parts": {
+       "depthOfField": false,
+       "fog": false,
+       "smoothEdges": true,
+       "breathing": false,
+       "koCollapse": true,
+       "chapterFraming": true,
+       "overdriveShot": true,
+       "dressphereShot": false,
+       "splashArt": true
+      },
+      "tier": "low",
+      "reduceMotion": true,
+      "device": {
+       "tier": "low",
+       "phone": true,
+       "colossus": false
+      },
+      "limits": {
+       "depthOfField": {
+        "limit": "off",
+        "why": "low"
+       },
+       "fog": {
+        "limit": "off",
+        "why": "low"
+       },
+       "smoothEdges": {
+        "limit": "less",
+        "why": "low"
+       },
+       "overdriveShot": {
+        "limit": "off",
+        "why": "phone"
+       },
+       "dressphereShot": {
+        "limit": "less",
+        "why": "phone"
+       }
+      },
+      "framing": {
+       "cls": "field",
+       "colossus": false,
+       "colossusFight": false,
+       "plans": 3,
+       "replans": 1,
+       "todayPx": 106,
+       "floorPx": 95,
+       "scale": -1,
+       "fit": {
+        "ok": true,
+        "partyPx": 101,
+        "overlap": 0.26,
+        "bossCover": 0,
+        "blend": 0,
+        "back": 1.04,
+        "lens": [
+         0,
+         -21
+        ],
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 0.55,
+          "underHud": 0
+         }
+        ],
+        "gate": 0,
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "plate": {
+        "chosen": 0.111,
+        "today": 0.111,
+        "corners": 2,
+        "todayCorners": 2,
+        "restGap": 23
+       },
+       "live": {
+        "ok": false,
+        "partyPx": 81,
+        "overlap": 1,
+        "bossCover": 0,
+        "figs": [
+         {
+          "id": "tidus",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "yuna",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "kimahri",
+          "enemy": false,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "mortiorchis",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         },
+         {
+          "id": "seymour-flux-body",
+          "enemy": true,
+          "inView": 1,
+          "underHud": 0
+         }
+        ],
+        "down": {
+         "id": "tidus",
+         "under": 0,
+         "inView": 1
+        }
+       },
+       "staging": {},
+       "stand": null,
+       "pin": null,
+       "bossPx": 228,
+       "planMs": 14,
+       "tries": [
+        "rule floor95 ov0.29 bc0.08 mortiorchis:0.97/0.10,seymour-flux-body:0.53/0.10",
+        "-1:ok w0.00 px101 ov0.26 bc0.00 seymour-flux-body:0.55/0"
+       ],
+       "giant": null,
+       "master": {
+        "pos": [
+         -1,
+         5.94,
+         15.62
+        ],
+        "look": [
+         -1.01,
+         3.7,
+         -1.2
+        ],
+        "fov": 32
+       },
+       "lens": [
+        0,
+        -21
+       ],
+       "rig": {
+        "rig": "idle",
+        "last": "idle",
+        "resting": true,
+        "onMaster": true,
+        "moves": 9,
+        "snaps": 1,
+        "writes": 0
+       }
+      },
+      "shot": "master",
+      "push": false,
+      "camera": {
+       "pos": [
+        -0.996,
+        5.939,
+        15.623
+       ],
+       "fov": 32
+      },
+      "shots": {
+       "od": 0,
+       "sc": 0,
+       "push": 0,
+       "slideBacks": 0,
+       "skipped": 0,
+       "handBacks": 0,
+       "actionBacks": 0,
+       "writes": 0,
+       "searchMs": 0,
+       "lastTry": "",
+       "decisions": []
+      },
+      "cinema": {
+       "fogBands": 2,
+       "aa": "none",
+       "dof": null,
+       "band": {
+        "focus": 0.3770650859248963,
+        "width": 0.3846328078579182
+       }
+      },
+      "living": [
+       {
+        "name": "tidus",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "yuna",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "kimahri",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 1,
+        "cuts": 0,
+        "crosses": 1,
+        "topples": 1,
+        "rises": 0
+       },
+       {
+        "name": "mortiorchis",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       },
+       {
+        "name": "seymour-flux",
+        "breath": 0,
+        "buckle": 0,
+        "collapses": 0,
+        "cuts": 0,
+        "crosses": 0,
+        "topples": 0,
+        "rises": 0
+       }
+      ],
+      "defringed": 10,
+      "twirl": {
+       "changes": 0,
+       "played": 0,
+       "keysFound": 0,
+       "late": 0,
+       "prewarmed": 0,
+       "ghost": 0,
+       "ghostNow": 0,
+       "lastPlan": []
+      },
+      "banner": {
+       "moved": 0,
+       "lastTop": null
+      },
+      "updateMs": 0.198
+     }
+    ],
+    "c": [
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 1,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 9.074700000000034,
+      "lastKind": "hit",
+      "clock": 92.05,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     },
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 1,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 9.074700000000034,
+      "lastKind": "hit",
+      "clock": 96.416,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     }
+    ]
+   },
+   "verdict": {
+    "says": true,
+    "html": true,
+    "measuredEffect": true,
+    "rowChangedFrom": "OFF -> RED-GREEN"
+   }
+  },
+  {
+   "n": 7,
+   "name": "COLOUR VISION BLUE-YELLOW",
+   "label": "COLOUR VISION",
+   "rowBefore": "RED-GREEN",
+   "tabsAtPause": [
+    "Tidus",
+    "Yuna",
+    "Kimahri",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Accessibility",
+    "Controls",
+    "Music"
+   ],
+   "tabsOffViewport": [
+    "Tidus",
+    "Yuna",
+    "Kimahri",
+    "Chapter",
+    "Guide",
+    "Options",
+    "Controls",
+    "Music"
+   ],
+   "via": "tap",
+   "rowAfter": "BLUE-YELLOW",
+   "pauseShot": "phone-ffx-ch1/07-COLOUR_VISION_BLUE_YELLOW-pause.png",
+   "dsInPause": {
+    "input": "pointer",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "phoneBattle": "ffx",
+    "reduceMotion": "",
+    "reduceFlashes": "",
+    "lowEffects": "",
+    "colourVision": "blue-yellow"
+   },
+   "menuBehind": true,
+   "menuShot": "phone-ffx-ch1/07-COLOUR_VISION_BLUE_YELLOW-first-menu.png",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "phoneBattle": "ffx",
+    "reduceMotion": "",
+    "reduceFlashes": "",
+    "lowEffects": "",
+    "colourVision": "blue-yellow"
+   },
+   "vars": {
+    "--pyr-ts": "1.15",
+    "--cvd-target-enemy": "#f2c21e",
+    "--cvd-target-ally": "#7ee8b0",
+    "--cvd-target-self": "#f4f1e8",
+    "--cvd-mp-hi": "#d9c6f8",
+    "--cvd-mp-lo": "#b48cf0",
+    "--cvd-gate-r": "#d0343c",
+    "--cvd-gate-g": "#00a6a6",
+    "--cvd-gate-b": "#7a4fd0",
+    "--cvd-gate-y": "#e3b94a"
+   },
+   "dsDiff": {
+    "colourVision": [
+     "red-green",
+     "blue-yellow"
+    ]
+   },
+   "varsDiff": {
+    "--cvd-target-ally": [
+     "#56b4e9",
+     "#7ee8b0"
+    ],
+    "--cvd-mp-hi": [
+     "#8fd0f0",
+     "#d9c6f8"
+    ],
+    "--cvd-mp-lo": [
+     "#3a8fd0",
+     "#b48cf0"
+    ],
+    "--cvd-gate-r": [
+     "#d55e00",
+     "#d0343c"
+    ],
+    "--cvd-gate-g": [
+     "#009e73",
+     "#00a6a6"
+    ],
+    "--cvd-gate-b": [
+     "#0072b2",
+     "#7a4fd0"
+    ],
+    "--cvd-gate-y": [
+     "#f0e442",
+     "#e3b94a"
+    ]
+   },
+   "styleDiffCount": 0,
+   "styleDiffClasses": 0,
+   "styleDiffByProp": {},
+   "styleDiffSample": [],
+   "animsBefore": 0,
+   "animsAfter": 0,
+   "animSummaryDiff": {},
+   "fxDiff": {
+    "b": [
+     {
+      "room": "gagazet",
+      "game": "ffx",
+      "tier": "low",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.44
+       ],
+       "buildMs": 338,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 166,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "flake:78",
+       "streak:5",
+       "flake:21"
+      ],
+      "haze": 0,
+      "arcs": false,
+      "reflection": false,
+      "figures": 10,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 97.33
+     },
+     {
+      "room": "gagazet",
+      "game": "ffx",
+      "tier": "low",
+      "plates": {
+       "count": 2,
+       "coverage": [
+        1,
+        0.44
+       ],
+       "buildMs": 338,
+       "floored": false,
+       "pixelWidth": 1024,
+       "workWidth": 1024,
+       "cutMs": 166,
+       "composeMs": 0
+      },
+      "lamps": 2,
+      "fields": [
+       "flake:78",
+       "streak:5",
+       "flake:21"
+      ],
+      "haze": 0,
+      "arcs": false,
+      "reflection": false,
+      "figures": 10,
+      "drift": 0,
+      "calm": 0,
+      "driftX": null,
+      "focus": {
+       "plate": 1,
+       "amounts": [
+        1,
+        0
+       ],
+       "weight": 0,
+       "extent": 0,
+       "biases": [
+        0,
+        0
+       ]
+      },
+      "strikes": 0,
+      "time": 101.65
+     }
+    ],
+    "shared": [
+     {
+      "cEnergy": 1.6632167467642636e-43
+     },
+     {
+      "cEnergy": 1.3741187291579752e-45
+     }
+    ],
+    "c": [
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 1,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 9.074700000000034,
+      "lastKind": "hit",
+      "clock": 96.416,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     },
+     {
+      "hits": 1,
+      "impactFrames": 0,
+      "freezes": 1,
+      "spells": 0,
+      "splashes": 0,
+      "sends": 0,
+      "lastHitAt": 9.074700000000034,
+      "lastKind": "hit",
+      "clock": 100.732,
+      "frozen": false,
+      "trauma": 0,
+      "impact": 0,
+      "fire": 0,
+      "ice": 0,
+      "orbit": null,
+      "pass": false
+     }
+    ]
+   },
+   "verdict": {
+    "says": true,
+    "html": true,
+    "measuredEffect": true,
+    "rowChangedFrom": "RED-GREEN -> BLUE-YELLOW"
+   }
+  }
+ ],
+ "tabTapFailed": "TimeoutError: locator.tap: Timeout 2500ms exceeded.",
+ "rowTapFailed": "TimeoutError: locator.tap: Timeout 3000ms exceeded.",
+ "lastRowCursor": [],
+ "allOn": {
+  "ds": {
+   "input": "keyboard",
+   "pad": "xbox",
+   "textSize": "115",
+   "textSizeWide": "115",
+   "phoneBattle": "ffx",
+   "reduceMotion": "",
+   "reduceFlashes": "",
+   "lowEffects": "",
+   "colourVision": "blue-yellow"
+  },
+  "vars": {
+   "--pyr-ts": "1.15",
+   "--cvd-target-enemy": "#f2c21e",
+   "--cvd-target-ally": "#7ee8b0",
+   "--cvd-target-self": "#f4f1e8",
+   "--cvd-mp-hi": "#d9c6f8",
+   "--cvd-mp-lo": "#b48cf0",
+   "--cvd-gate-r": "#d0343c",
+   "--cvd-gate-g": "#00a6a6",
+   "--cvd-gate-b": "#7a4fd0",
+   "--cvd-gate-y": "#e3b94a"
+  },
+  "shot": "phone-ffx-ch1/90-all-on-first-menu.png"
+ },
+ "savedBeforeReload": {
+  "textSize": 1.15,
+  "reduceMotion": true,
+  "reduceFlashes": true,
+  "lowEffects": true,
+  "colourVision": "blue-yellow"
+ },
+ "reload": {
+  "atTitle": {
+   "screen": "title",
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "reduceMotion": "",
+    "lowEffects": "",
+    "reduceFlashes": "",
+    "colourVision": "blue-yellow"
+   },
+   "saved": {
+    "textSize": 1.15,
+    "reduceMotion": true,
+    "reduceFlashes": true,
+    "lowEffects": true,
+    "colourVision": "blue-yellow"
+   }
+  },
+  "titleShot": "phone-ffx-ch1/91-after-reload-title.png",
+  "atMenu": {
+   "ds": {
+    "input": "keyboard",
+    "pad": "xbox",
+    "textSize": "115",
+    "textSizeWide": "115",
+    "reduceMotion": "",
+    "lowEffects": "",
+    "reduceFlashes": "",
+    "colourVision": "blue-yellow",
+    "phoneBattle": "ffx"
+   },
+   "vars": {
+    "--pyr-ts": "1.15",
+    "--cvd-target-enemy": "#f2c21e",
+    "--cvd-target-ally": "#7ee8b0",
+    "--cvd-target-self": "#f4f1e8",
+    "--cvd-mp-hi": "#d9c6f8",
+    "--cvd-mp-lo": "#b48cf0",
+    "--cvd-gate-r": "#d0343c",
+    "--cvd-gate-g": "#00a6a6",
+    "--cvd-gate-b": "#7a4fd0",
+    "--cvd-gate-y": "#e3b94a"
+   },
+   "shot": "phone-ffx-ch1/92-after-reload-first-menu.png"
+  },
+  "fontRatioVs100": {
+   "target": 1.3,
+   "classesCompared": 70,
+   "scaledAtTarget": 0,
+   "notAtTarget": 70,
+   "grownClasses": 7,
+   "medianOfGrown": 1.15,
+   "maxRatio": 1.15,
+   "notAtTargetSample": [
+    "screen:16->16",
+    "fxc-splash:16->16",
+    "fxc-splash__lines:16->16",
+    "fxc-splash__slab:16->16",
+    "fxc-splash__rule:16->16",
+    "stm-layer:16->16",
+    "ffxhud:16->16",
+    "phud-panel:16->16",
+    "phud-shade:16->16",
+    "ffxhud__stage:16->16",
+    "ig-ctb:16->16",
+    "ig-ctb__row:16->16",
+    "ig-ctb__tile:16->16",
+    "ffx-portrait-fallback:16->16"
+   ]
+  },
+  "cvdTarget": {
+   "want": {
+    "enemy": "rgb(242, 194, 30)",
+    "ally": "rgb(126, 232, 176)",
+    "self": "rgb(244, 241, 232)"
+   },
+   "hits": {
+    "enemy": 10,
+    "ally": 0,
+    "self": 87
+   },
+   "samples": [
+    "ig-ctb__tile.outlineColor=self",
+    "ig-ctb__tile.boxShadow=enemy",
+    "ig-ctb__tile.outlineColor=self",
+    "ig-ctb__tile.boxShadow=enemy",
+    "ig-cmd.backgroundColor=self",
+    "ig-cmd.backgroundColor=self",
+    "ig-cmd.backgroundColor=self",
+    "ig-stat__value.color=self"
+   ],
+   "targeting": true,
+   "screenState": {
+    "speed": "normal",
+    "timeScale": 1,
+    "auto": false,
+    "aborted": false,
+    "phase": "command:tidus",
+    "awaitingMenu": true,
+    "played": 12,
+    "lastEvents": [
+     {
+      "seq": 0,
+      "type": "sensor",
+      "ms": 0
+     },
+     {
+      "seq": 1,
+      "type": "sensor",
+      "ms": 0
+     },
+     {
+      "seq": 2,
+      "type": "turn-start",
+      "ms": 97
+     },
+     {
+      "seq": 3,
+      "type": "action-start",
+      "ms": 1399
+     },
+     {
+      "seq": 4,
+      "type": "damage",
+      "ms": 331
+     },
+     {
+      "seq": 5,
+      "type": "action-end",
+      "ms": 251
+     },
+     {
+      "seq": 6,
+      "type": "script-trigger",
+      "ms": 0
+     },
+     {
+      "seq": 7,
+      "type": "turn-start",
+      "ms": 86
+     },
+     {
+      "seq": 8,
+      "type": "action-start",
+      "ms": 964
+     },
+     {
+      "seq": 9,
+      "type": "miss",
+      "ms": 317
+     },
+     {
+      "seq": 10,
+      "type": "action-end",
+      "ms": 234
+     },
+     {
+      "seq": 11,
+      "type": "turn-start",
+      "ms": 100
+     }
+    ],
+    "lastCommand": null
+   }
+  },
+  "cvdTargetShot": "phone-ffx-ch1/92b-after-reload-target-step.png",
+  "animsNote": "animations running: 0 before the reload at the first menu, 0 after (informational)",
+  "pauseRows": [
+   {
+    "id": "textSize",
+    "k": "TEXT SIZE",
+    "v": "115%",
+    "sel": false
+   },
+   {
+    "id": "reduceMotion",
+    "k": "REDUCE MOTION",
+    "v": "ON",
+    "sel": false
+   },
+   {
+    "id": "reduceFlashes",
+    "k": "REDUCE FLASHES",
+    "v": "ON",
+    "sel": false
+   },
+   {
+    "id": "lowEffects",
+    "k": "LOW EFFECTS",
+    "v": "ON",
+    "sel": false
+   },
+   {
+    "id": "colourVision",
+    "k": "COLOUR VISION",
+    "v": "BLUE-YELLOW",
+    "sel": false
+   }
+  ],
+  "pauseShot": "phone-ffx-ch1/93-after-reload-pause-accessibility.png"
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "finishedAt": "2026-11-07T19:26:33.007Z",
+ "summary": {
+  "checks": 58,
+  "failed": [
+   "TEXT SIZE 115%: Esc opens the pause",
+   "TEXT SIZE 115%: ACCESSIBILITY reached",
+   "TEXT SIZE 115%: the row says 115% (was null)",
+   "TEXT SIZE 115%: <html> carries it",
+   "TEXT SIZE 115%: HUD type scaled by the setting (classes whose largest font is 1.15 x the 100% one)",
+   "TEXT SIZE 130%: the row says 130% (was 100%)",
+   "TEXT SIZE 130%: <html> carries it",
+   "TEXT SIZE 130%: HUD type scaled by the setting (classes whose largest font is 1.30 x the 100% one)",
+   "TEXT SIZE 130%: pause tab strip stays inside the window",
+   "reload: <html> carries the comfort flags on the first frames, before any pause",
+   "reload: the HUD type is still 130% on the same classes at the first menu",
+   "reload: the comfort flags are on <html> at the first menu",
+   "reload: the ACCESSIBILITY rows still say 130% / ON / ON / ON / BLUE-YELLOW"
+  ]
+ }
+}

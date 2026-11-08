@@ -1,0 +1,568 @@
+{
+ "schema": "sweep/1",
+ "job": "prep",
+ "base": "https://echoesofspira.com/",
+ "floor": 14,
+ "date": "2026-11-07T19:44:56.305Z",
+ "results": {
+  "seymour-flux-1600x900": {
+   "id": "seymour-flux",
+   "size": "1600x900",
+   "tabs": [
+    {
+     "i": 0,
+     "tab": null,
+     "floor": 14,
+     "count": 62,
+     "min": 14,
+     "underCount": 2,
+     "under": [
+      {
+       "text": "unhurried, always unhurried",
+       "px": 14,
+       "cls": "cpanel__snap-cap"
+      },
+      {
+       "text": "the Prominence, at last",
+       "px": 14,
+       "cls": "cpanel__snap-cap"
+      }
+     ],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 1600,
+     "clientW": 1600,
+     "vw": 1600,
+     "vh": 900,
+     "hScroll": false
+    },
+    {
+     "i": 1,
+     "tab": null,
+     "floor": 14,
+     "count": 71,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 1600,
+     "clientW": 1600,
+     "vw": 1600,
+     "vh": 900,
+     "hScroll": false
+    },
+    {
+     "i": 2,
+     "tab": null,
+     "floor": 14,
+     "count": 108,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 1600,
+     "clientW": 1600,
+     "vw": 1600,
+     "vh": 900,
+     "hScroll": false
+    },
+    {
+     "i": 3,
+     "tab": null,
+     "floor": 14,
+     "count": 108,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 1600,
+     "clientW": 1600,
+     "vw": 1600,
+     "vh": 900,
+     "hScroll": false
+    },
+    {
+     "i": 4,
+     "tab": null,
+     "floor": 14,
+     "count": 108,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 1600,
+     "clientW": 1600,
+     "vw": 1600,
+     "vh": 900,
+     "hScroll": false
+    },
+    {
+     "i": 5,
+     "tab": null,
+     "floor": 14,
+     "count": 108,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 1600,
+     "clientW": 1600,
+     "vw": 1600,
+     "vh": 900,
+     "hScroll": false
+    },
+    {
+     "i": 6,
+     "tab": null,
+     "floor": 14,
+     "count": 108,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 1600,
+     "clientW": 1600,
+     "vw": 1600,
+     "vh": 900,
+     "hScroll": false
+    }
+   ]
+  },
+  "ffx2-bahamut-1600x900": {
+   "id": "ffx2-bahamut",
+   "size": "1600x900",
+   "tabs": [
+    {
+     "i": 0,
+     "tab": null,
+     "floor": 14,
+     "count": 49,
+     "min": 14,
+     "underCount": 2,
+     "under": [
+      {
+       "text": "nobody is home",
+       "px": 14,
+       "cls": "cpanel__snap-cap"
+      },
+      {
+       "text": "Limbo, a thousand years dark",
+       "px": 14,
+       "cls": "cpanel__snap-cap"
+      }
+     ],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 1600,
+     "clientW": 1600,
+     "vw": 1600,
+     "vh": 900,
+     "hScroll": false
+    },
+    {
+     "i": 1,
+     "tab": null,
+     "floor": 14,
+     "count": 61,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 1600,
+     "clientW": 1600,
+     "vw": 1600,
+     "vh": 900,
+     "hScroll": false
+    },
+    {
+     "i": 2,
+     "tab": null,
+     "floor": 14,
+     "count": 175,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 1600,
+     "clientW": 1600,
+     "vw": 1600,
+     "vh": 900,
+     "hScroll": false
+    },
+    {
+     "i": 3,
+     "tab": null,
+     "floor": 14,
+     "count": 41,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 1600,
+     "clientW": 1600,
+     "vw": 1600,
+     "vh": 900,
+     "hScroll": false
+    },
+    {
+     "i": 4,
+     "tab": null,
+     "floor": 14,
+     "count": 52,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 1600,
+     "clientW": 1600,
+     "vw": 1600,
+     "vh": 900,
+     "hScroll": false
+    },
+    {
+     "i": 5,
+     "tab": null,
+     "floor": 14,
+     "count": 49,
+     "min": 14,
+     "underCount": 2,
+     "under": [
+      {
+       "text": "nobody is home",
+       "px": 14,
+       "cls": "cpanel__snap-cap"
+      },
+      {
+       "text": "Limbo, a thousand years dark",
+       "px": 14,
+       "cls": "cpanel__snap-cap"
+      }
+     ],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 1600,
+     "clientW": 1600,
+     "vw": 1600,
+     "vh": 900,
+     "hScroll": false
+    },
+    {
+     "i": 6,
+     "tab": null,
+     "floor": 14,
+     "count": 61,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 1600,
+     "clientW": 1600,
+     "vw": 1600,
+     "vh": 900,
+     "hScroll": false
+    }
+   ]
+  },
+  "seymour-flux-390x844": {
+   "id": "seymour-flux",
+   "size": "390x844",
+   "tabs": [
+    {
+     "i": 0,
+     "tab": null,
+     "floor": 14,
+     "count": 41,
+     "min": 14,
+     "underCount": 2,
+     "under": [
+      {
+       "text": "unhurried, always unhurried",
+       "px": 14,
+       "cls": "cpanel__snap-cap"
+      },
+      {
+       "text": "the Prominence, at last",
+       "px": 14,
+       "cls": "cpanel__snap-cap"
+      }
+     ],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 390,
+     "clientW": 390,
+     "vw": 390,
+     "vh": 844,
+     "hScroll": false
+    },
+    {
+     "i": 1,
+     "tab": null,
+     "floor": 14,
+     "count": 41,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 390,
+     "clientW": 390,
+     "vw": 390,
+     "vh": 844,
+     "hScroll": false
+    },
+    {
+     "i": 2,
+     "tab": null,
+     "floor": 14,
+     "count": 79,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 390,
+     "clientW": 390,
+     "vw": 390,
+     "vh": 844,
+     "hScroll": false
+    },
+    {
+     "i": 3,
+     "tab": null,
+     "floor": 14,
+     "count": 79,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 390,
+     "clientW": 390,
+     "vw": 390,
+     "vh": 844,
+     "hScroll": false
+    },
+    {
+     "i": 4,
+     "tab": null,
+     "floor": 14,
+     "count": 79,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 390,
+     "clientW": 390,
+     "vw": 390,
+     "vh": 844,
+     "hScroll": false
+    },
+    {
+     "i": 5,
+     "tab": null,
+     "floor": 14,
+     "count": 79,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 390,
+     "clientW": 390,
+     "vw": 390,
+     "vh": 844,
+     "hScroll": false
+    },
+    {
+     "i": 6,
+     "tab": null,
+     "floor": 14,
+     "count": 79,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 390,
+     "clientW": 390,
+     "vw": 390,
+     "vh": 844,
+     "hScroll": false
+    }
+   ]
+  },
+  "ffx2-bahamut-390x844": {
+   "id": "ffx2-bahamut",
+   "size": "390x844",
+   "tabs": [
+    {
+     "i": 0,
+     "tab": null,
+     "floor": 14,
+     "count": 41,
+     "min": 14,
+     "underCount": 2,
+     "under": [
+      {
+       "text": "nobody is home",
+       "px": 14,
+       "cls": "cpanel__snap-cap"
+      },
+      {
+       "text": "Limbo, a thousand years dark",
+       "px": 14,
+       "cls": "cpanel__snap-cap"
+      }
+     ],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 390,
+     "clientW": 390,
+     "vw": 390,
+     "vh": 844,
+     "hScroll": false
+    },
+    {
+     "i": 1,
+     "tab": null,
+     "floor": 14,
+     "count": 46,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 390,
+     "clientW": 390,
+     "vw": 390,
+     "vh": 844,
+     "hScroll": false
+    },
+    {
+     "i": 2,
+     "tab": null,
+     "floor": 14,
+     "count": 72,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 390,
+     "clientW": 390,
+     "vw": 390,
+     "vh": 844,
+     "hScroll": false
+    },
+    {
+     "i": 3,
+     "tab": null,
+     "floor": 14,
+     "count": 35,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 390,
+     "clientW": 390,
+     "vw": 390,
+     "vh": 844,
+     "hScroll": false
+    },
+    {
+     "i": 4,
+     "tab": null,
+     "floor": 14,
+     "count": 39,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 390,
+     "clientW": 390,
+     "vw": 390,
+     "vh": 844,
+     "hScroll": false
+    },
+    {
+     "i": 5,
+     "tab": null,
+     "floor": 14,
+     "count": 41,
+     "min": 14,
+     "underCount": 2,
+     "under": [
+      {
+       "text": "nobody is home",
+       "px": 14,
+       "cls": "cpanel__snap-cap"
+      },
+      {
+       "text": "Limbo, a thousand years dark",
+       "px": 14,
+       "cls": "cpanel__snap-cap"
+      }
+     ],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 390,
+     "clientW": 390,
+     "vw": 390,
+     "vh": 844,
+     "hScroll": false
+    },
+    {
+     "i": 6,
+     "tab": null,
+     "floor": 14,
+     "count": 46,
+     "min": 14,
+     "underCount": 0,
+     "under": [],
+     "truncatedCount": 0,
+     "truncated": [],
+     "scrollW": 390,
+     "clientW": 390,
+     "vw": 390,
+     "vh": 844,
+     "hScroll": false
+    }
+   ]
+  }
+ },
+ "summary": {
+  "floor": 14,
+  "surfaces": 28,
+  "measured": 28,
+  "unverified": [],
+  "elements": 1958,
+  "min": 14,
+  "underCount": 12,
+  "surfacesUnder": [
+   "seymour-flux 1600x900 prep tab 0",
+   "ffx2-bahamut 1600x900 prep tab 0",
+   "ffx2-bahamut 1600x900 prep tab 5",
+   "seymour-flux 390x844 prep tab 0",
+   "ffx2-bahamut 390x844 prep tab 0",
+   "ffx2-bahamut 390x844 prep tab 5"
+  ],
+  "truncatedCount": 0,
+  "surfacesTruncated": [],
+  "hScroll": []
+ },
+ "reportLine": "legibility sweep, prep (CHK-003/CHK-009, floor 14 css px): 28 of 28 surfaces measured, 1,958 text elements, smallest 14 px, 12 under 14 px on 6 surface(s) (seymour-flux 1600x900 prep tab 0, ffx2-bahamut 1600x900 prep tab 0, ffx2-bahamut 1600x900 prep tab 5, seymour-flux 390x844 prep tab 0, ...), none clipped or ellipsised"
+}

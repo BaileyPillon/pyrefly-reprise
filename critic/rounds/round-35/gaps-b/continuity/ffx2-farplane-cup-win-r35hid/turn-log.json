@@ -1,0 +1,665 @@
+[
+ {
+  "turn": 0,
+  "ms": 32,
+  "actor": "play:miss",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:7450/10710",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:187500/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 48,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 2993,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:7450/10710",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:184848/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 54,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 12253,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:180728/187500"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 4,
+  "ms": 13826,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:180728/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 79,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 16115,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:177864/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 86,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 19838,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:175127/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 102,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 22453,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:172815/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 112,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 8,
+  "ms": 24757,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:168933/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 119,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 28210,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:166017/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 134,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 30782,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:163717/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 143,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 34163,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:159868/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 157,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 37661,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:157549/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 173,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 40002,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:154887/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 180,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 42958,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:152143/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 194,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 46169,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:149832/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 206,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 48512,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:145713/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 214,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 56314,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:142870/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 228,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 60245,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:140577/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 247,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 63811,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:138369/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 263,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 67429,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:136213/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 279,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 71080,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:133894/187500"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 295,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-cup-auron"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 74153,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Auron",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:4796/6894",
+   "rikku:0/5106",
+   "paine:7463/10710",
+   "x2-cup-auron:131634/187500"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

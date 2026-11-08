@@ -162,16 +162,22 @@
     },
     {
       "kind": "focused",
-      "status": "pending",
-      "requires": "acceptance of the changed area"
+      "status": "done",
+      "requires": "acceptance of the changed area",
+      "result": "FAIL",
+      "settledBy": "critic/rounds/round-35b.json",
+      "settledAt": "2026-11-07T21:23:22.661Z"
     },
     {
       "kind": "deep",
-      "status": "pending",
+      "status": "done",
       "requires": "deep review of every affected chapter and system",
       "carriedFrom": [
         "f91ff81d0"
-      ]
+      ],
+      "result": "FAIL",
+      "settledBy": "critic/rounds/round-35b.json",
+      "settledAt": "2026-11-07T21:23:22.661Z"
     }
   ]
 }
