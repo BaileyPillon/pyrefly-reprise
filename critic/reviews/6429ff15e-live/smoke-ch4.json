@@ -1,0 +1,37 @@
+{
+ "out": [
+  {
+   "s": "Chapter IV cursor",
+   "o": true
+  },
+  {
+   "s": "Chapter IV at player turn",
+   "o": true
+  },
+  {
+   "s": "[rig] rikku-dark-knight on",
+   "o": true,
+   "d": "[rig] yuna-white-mage off (no rig listed in the art manifest) | [rig] paine-warrior off (no rig listed in the art manifest) | [rig] rikku-dark-knight on (gate ok, 8 parts, 13 bones, 11 keys, 1x maps, lit) | [rig] ffx2-bahamut on (gate ok, 5 parts, 22 bones, 6 keys, 1x maps, lit)"
+  }
+ ],
+ "errs": [],
+ "nf": [],
+ "logs": [
+  "[rig] yuna-white-mage off (no rig listed in the art manifest)",
+  "[rig] paine-warrior off (no rig listed in the art manifest)",
+  "[rig] rikku-dark-knight on (gate ok, 8 parts, 13 bones, 11 keys, 1x maps, lit)",
+  "[rig] ffx2-bahamut on (gate ok, 5 parts, 22 bones, 6 keys, 1x maps, lit)"
+ ],
+ "aud": [
+  "200 manifest.json",
+  "200 music/title.mp3",
+  "200 sfx/sprite.mp3",
+  "200 sfx/sprite-v2.mp3",
+  "200 music/chapter-select.mp3",
+  "200 sfx/parity-ffx2-bahamut.mp3",
+  "200 sfx/parity-ffx2-core.mp3",
+  "200 music/scene-bevelle-underground.mp3",
+  "200 music/boss-bahamut.mp3",
+  "200 music/defeat-ffx2.mp3"
+ ]
+}

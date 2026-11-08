@@ -1,0 +1,194 @@
+{
+ "chapterId": "ffx2-bahamut",
+ "tag": "layout",
+ "query": "",
+ "W": "2000",
+ "H": "1012",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-DQzgTgdc.js"
+  },
+  {
+   "s": "selected",
+   "id": "ffx2-bahamut"
+  },
+  {
+   "s": "prep",
+   "screen": "party-prep"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 16458
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "rigs-err",
+   "e": "TypeError: (out.rigs || []).map is not a function"
+  },
+  {
+   "s": "modes",
+   "marker": "cone",
+   "portraits": "big"
+  },
+  {
+   "s": "act",
+   "t": 0,
+   "bigPortraits": []
+  },
+  {
+   "s": "act",
+   "t": 1,
+   "bigPortraits": []
+  },
+  {
+   "s": "act",
+   "t": 2,
+   "bigPortraits": []
+  },
+  {
+   "s": "end",
+   "screen": "battle"
+  }
+ ],
+ "rigs": {
+  "switch": {
+   "on": true,
+   "reason": "default"
+  },
+  "figures": [
+   {
+    "subject": "ffx2-bahamut",
+    "on": true,
+    "reason": "gate ok, 5 parts, 22 bones, 6 keys, 1x maps, lit",
+    "ids": [
+     "bahamut"
+    ],
+    "info": {
+     "name": "ffx2-bahamut",
+     "key": "cast",
+     "keys": [
+      "idle",
+      "attack",
+      "cast",
+      "hurt",
+      "ko",
+      "telegraph"
+     ],
+     "parts": 5,
+     "vertices": 2522,
+     "bones": 22,
+     "chains": 0,
+     "idle": true,
+     "textures": {
+      "map": 1,
+      "rim": 1
+     },
+     "textureMB": 42.8,
+     "relight": {
+      "lit": true,
+      "pieces": 30
+     }
+    }
+   },
+   {
+    "subject": "paine-warrior",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   },
+   {
+    "subject": "rikku-dark-knight",
+    "on": true,
+    "reason": "gate ok, 8 parts, 13 bones, 11 keys, 1x maps, lit",
+    "ids": [
+     "rikku"
+    ],
+    "info": {
+     "name": "rikku-dark-knight",
+     "key": "idle",
+     "keys": [
+      "idle",
+      "ready",
+      "attack",
+      "follow",
+      "victory",
+      "cast",
+      "item",
+      "hurt",
+      "critical",
+      "sleep",
+      "ko"
+     ],
+     "parts": 8,
+     "vertices": 694,
+     "bones": 13,
+     "chains": 0,
+     "idle": true,
+     "textures": {
+      "map": 1,
+      "rim": 1
+     },
+     "textureMB": 32.7,
+     "relight": {
+      "lit": true,
+      "pieces": 77
+     }
+    }
+   },
+   {
+    "subject": "yuna-white-mage",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   }
+  ]
+ },
+ "aimDom0": [
+  "DIV.ig ig--ffx2 ffx2hud hud-f1 f1-finish f1-cmd-open ffx2hud--ta 2000x1012",
+  "DIV.ig-bosshp ffx2--targeted 143x37",
+  "svg.[object SVGAnimatedString] 0x0",
+  "SPAN.mad__target 101x27",
+  "SPAN.f1-cue__target 90x21",
+  "DIV.ffx-targeting ffx-targeting--ffx2 ffx-targeting--pro 2000x1012",
+  "DIV.ffx-target ffx-target--enemy ffx-target--clickable 203x203",
+  "SPAN.ffx-target__c ffx-target__c--tl 53x53",
+  "SPAN.ffx-target__c ffx-target__c--tr 53x53",
+  "SPAN.ffx-target__c ffx-target__c--bl 53x53",
+  "SPAN.ffx-target__c ffx-target__c--br 53x53",
+  "DIV.ffx-target__flower 167x167"
+ ],
+ "bigPortrait0": [],
+ "aimDom1": [
+  "svg.[object SVGAnimatedString] 0x0",
+  "SPAN.mad__target 105x27",
+  "SPAN.f1-cue__target 94x21",
+  "DIV.ffx-targeting ffx-targeting--ffx2 2000x1012",
+  "DIV.phud-target 0x0",
+  "P.phud-target__hint 0x0",
+  "DIV.phud-target__bar 0x0",
+  "BUTTON.phud-target__back 0x0",
+  "BUTTON.phud-target__go 0x0"
+ ],
+ "bigPortrait1": [],
+ "aimDom2": [
+  "svg.[object SVGAnimatedString] 0x0",
+  "SPAN.mad__target 127x27",
+  "SPAN.f1-cue__target 113x21",
+  "DIV.ffx-targeting ffx-targeting--ffx2 2000x1012",
+  "DIV.phud-target 0x0",
+  "P.phud-target__hint 0x0",
+  "DIV.phud-target__bar 0x0",
+  "BUTTON.phud-target__back 0x0",
+  "BUTTON.phud-target__go 0x0"
+ ],
+ "bigPortrait2": [],
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": []
+}

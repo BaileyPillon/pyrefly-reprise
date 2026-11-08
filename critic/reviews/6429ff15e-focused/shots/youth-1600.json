@@ -1,0 +1,320 @@
+{
+ "word": "youth",
+ "expectId": "x",
+ "W": "1600",
+ "H": "900",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-DQzgTgdc.js"
+  },
+  {
+   "s": "after-word",
+   "opened": true,
+   "screen": "party-prep",
+   "state": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":404,\"elapsed\":6.893,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-undergro"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 12730
+  },
+  {
+   "s": "chapter-id",
+   "idNow": null
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "rows",
+   "stackPresent": true,
+   "rows": [
+    {
+     "i": 0,
+     "text": "Pray",
+     "selected": true,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 1,
+     "text": "Vigor",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 2,
+     "text": "Shell",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 3,
+     "text": "Protect",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 4,
+     "text": "Cure",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 5,
+     "text": "Cura",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 6,
+     "text": "Curaga",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 7,
+     "text": "Esuna",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 8,
+     "text": "Dispel",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 9,
+     "text": "Life",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 10,
+     "text": "Full-Life",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 11,
+     "text": "Reflect",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 12,
+     "text": "Regen",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 13,
+     "text": "Full-Cure",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    }
+   ]
+  },
+  {
+   "s": "after-turns",
+   "screen": "battle"
+  },
+  {
+   "s": "end",
+   "screen": "results",
+   "ms": 128349
+  },
+  {
+   "s": "end-text",
+   "text": "MUSHROOM ROCK ROAD — A STAND-IN STAGE · CLEARED RESULTS · 2:37 Victory EXP 5,370 ×3 PARTY AP 22 PER DRESSPHERE GIL 2,760 ITEMS Hi-Potion ×9, Muscle Belt, Ether, Chocobo Feather ×2, Circlet Y Yuna WHITE MAGE · MASTERED +5,370EXP R Rikku DARK KNIGHT · CONFUSEPROOF 22/30 AP +5,370EXP P Paine DARK KNIGH"
+  }
+ ],
+ "rows": {
+  "stackPresent": true,
+  "rows": [
+   {
+    "i": 0,
+    "text": "Pray",
+    "selected": true,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 1,
+    "text": "Vigor",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 2,
+    "text": "Shell",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 3,
+    "text": "Protect",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 4,
+    "text": "Cure",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 5,
+    "text": "Cura",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 6,
+    "text": "Curaga",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 7,
+    "text": "Esuna",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 8,
+    "text": "Dispel",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 9,
+    "text": "Life",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 10,
+    "text": "Full-Life",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 11,
+    "text": "Reflect",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 12,
+    "text": "Regen",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 13,
+    "text": "Full-Cure",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   }
+  ]
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [
+  {
+   "url": "http://127.0.0.1:5471/art/characters/x2-yaibal/idle.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/x2-yaibal/idle.png",
+   "ct": "text/html"
+  }
+ ]
+}

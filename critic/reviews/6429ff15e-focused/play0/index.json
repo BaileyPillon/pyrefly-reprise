@@ -1,0 +1,62 @@
+[
+ {
+  "file": "ch1/00-title-fresh.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "state": "fresh profile, first boot, title",
+  "size": "1600x900",
+  "input": "none (boot)",
+  "injected": false,
+  "asserted": "screen=title",
+  "mode": "gpu",
+  "ts": "2026-11-08T02:25:20.232Z"
+ },
+ {
+  "file": "ch1/01-chapter-select.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "state": "chapter select, row highlighted",
+  "size": "1600x900",
+  "input": "keyboard ArrowRight",
+  "injected": false,
+  "asserted": "screen=chapter-select",
+  "mode": "gpu",
+  "ts": "2026-11-08T02:25:40.996Z"
+ },
+ {
+  "file": "ch1/02-prep.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "state": "party prep, second tab",
+  "size": "1600x900",
+  "input": "keyboard ArrowRight",
+  "injected": false,
+  "asserted": "screen=party-prep",
+  "mode": "gpu",
+  "ts": "2026-11-08T02:25:43.398Z"
+ },
+ {
+  "file": "ch1/03-pre-scene.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "state": "pre-battle cutscene",
+  "size": "1600x900",
+  "input": "keyboard",
+  "injected": false,
+  "asserted": "screen=cutscene",
+  "mode": "gpu",
+  "ts": "2026-11-08T02:25:46.348Z"
+ },
+ {
+  "file": "ch1/03b-scene-pause.png",
+  "game": "ffx",
+  "chapter": "seymour-flux",
+  "state": "pause over the pre-battle scene (Esc)",
+  "size": "1600x900",
+  "input": "keyboard Escape",
+  "injected": false,
+  "asserted": "screen=pause",
+  "mode": "gpu",
+  "ts": "2026-11-08T02:25:48.621Z"
+ }
+]

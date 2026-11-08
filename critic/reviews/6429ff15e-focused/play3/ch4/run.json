@@ -1,0 +1,1055 @@
+{
+ "chapter": "ffx2-bahamut",
+ "game": "ffx2",
+ "mode": "gpu",
+ "steps": [
+  {
+   "t": 1794104827469,
+   "k": "freshBoot",
+   "v": {
+    "screen": "title",
+    "briefingNodes": 0,
+    "coachNodes": 0,
+    "bodyText": "AN UNOFFICIAL FAN TRIBUTE PRESS ENTER FINAL FANTASY X AND X-2 ARROWS / WASD MOVE ENTER CONFIRM ESC CANCEL B BRIEFING L CHANGELOG T TITLE ART RELEASE 77 · 6429ff15"
+   }
+  },
+  {
+   "t": 1794104848942,
+   "k": "chapter-select",
+   "v": {
+    "selectedIndex": 3,
+    "selectedId": "seymour-anima-macalania",
+    "tiles": 19,
+    "coming": [],
+    "cleared": [],
+    "order": [
+     "seymour-flux",
+     "yunalesca",
+     "braskas-final-aeon",
+     "seymour-anima-macalania",
+     "evrae-airship",
+     "yojimbo-cavern",
+     "seymour-natus",
+     "seymour-omnis",
+     "isaaru-via-purifico",
+     "sin-fins-core",
+     "sin-face",
+     "mirror-aeons",
+     "ffx2-bahamut",
+     "ffx2-vegnagun-shuyin",
+     "ffx2-leblanc",
+     "ffx2-fallen-aeons",
+     "ffx2-trema",
+     "ffx2-den-of-woe",
+     "ffx2-ixion-djose"
+    ],
+    "beaten": 0,
+    "total": 19
+   }
+  },
+  {
+   "t": 1794104851408,
+   "k": "prep.portraits",
+   "v": 1
+  },
+  {
+   "t": 1794104852316,
+   "k": "prep.afterEsc",
+   "v": "party-prep"
+  },
+  {
+   "t": 1794104854327,
+   "k": "afterPrepConfirm",
+   "v": "cutscene"
+  },
+  {
+   "t": 1794104856284,
+   "k": "scene.afterEsc",
+   "v": "pause"
+  },
+  {
+   "t": 1794104872933,
+   "k": "scene.speakers",
+   "v": [
+    "Rikku/null",
+    "Rikku/null",
+    "Kimahri/kimahri.png",
+    "Kimahri/kimahri.png",
+    "Kimahri/kimahri.png",
+    "Wakka/null",
+    "Wakka/null",
+    "Wakka/null",
+    "Wakka/null",
+    "Lulu/null",
+    "Lulu/null",
+    "Lulu/null",
+    "Tidus/null",
+    "Tidus/null",
+    "Lulu/null",
+    "Lulu/null",
+    "Rikku/null",
+    "Rikku/null",
+    "Rikku/null",
+    "Seymour/null",
+    "Seymour/null",
+    "Seymour/null",
+    "Seymour/null",
+    "Tidus/null",
+    "Tidus/null",
+    "Tidus/null",
+    "Seymour/null",
+    "Seymour/null",
+    "Seymour/null",
+    "Seymour/null"
+   ]
+  }
+ ],
+ "shots": [],
+ "freshBoot": {
+  "screen": "title",
+  "briefingNodes": 0,
+  "coachNodes": 0,
+  "bodyText": "AN UNOFFICIAL FAN TRIBUTE PRESS ENTER FINAL FANTASY X AND X-2 ARROWS / WASD MOVE ENTER CONFIRM ESC CANCEL B BRIEFING L CHANGELOG T TITLE ART RELEASE 77 · 6429ff15"
+ },
+ "prepPortraits": [
+  {
+   "src": "portraits/kimahri.png",
+   "w": 832,
+   "h": 1216,
+   "vis": true
+  }
+ ],
+ "prepChapterConfirmed": {
+  "chapter": "seymour-anima-macalania",
+  "game": "ffx",
+  "tabs": [
+   "chapter",
+   "stats",
+   "sphere-grid",
+   "equipment",
+   "items",
+   "overdrive"
+  ],
+  "tab": "stats",
+  "member": "tidus",
+  "outcome": null,
+  "panelsRegistered": 6
+ },
+ "sceneSpeakers": [
+  {
+   "who": "Rikku",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Rikku",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Kimahri",
+   "img": "kimahri.png",
+   "nw": 832
+  },
+  {
+   "who": "Kimahri",
+   "img": "kimahri.png",
+   "nw": 832
+  },
+  {
+   "who": "Kimahri",
+   "img": "kimahri.png",
+   "nw": 832
+  },
+  {
+   "who": "Wakka",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Wakka",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Wakka",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Wakka",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Lulu",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Lulu",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Lulu",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Tidus",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Tidus",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Lulu",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Lulu",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Rikku",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Rikku",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Rikku",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Seymour",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Seymour",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Seymour",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Seymour",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Tidus",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Tidus",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Tidus",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Seymour",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Seymour",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Seymour",
+   "img": null,
+   "nw": 0
+  },
+  {
+   "who": "Seymour",
+   "img": null,
+   "nw": 0
+  }
+ ],
+ "error": "Error: ASSERT-FAIL screen expected=battle after 60037ms",
+ "errorScreen": "cutscene",
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [
+  {
+   "url": "http://127.0.0.1:5471/art/title/echo.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/gagazet.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/dreams-end.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/tidus.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/yuna.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/title/echo.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/dreams-end.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/gagazet.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/tidus.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/yuna.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/gagazet.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/seymour-flux-body/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/zanarkand-dome.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/yunalesca-1/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/bevelle-underground.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/ffx2-bahamut/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/x2-ixion/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/djose-chamber-provisional.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/dreams-end.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/braskas-final-aeon-1/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/den-of-woe.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/baralai-shade/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/anima/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/macalania-temple.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/via-infinito.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/trema/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/evrae-airship-deck.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/evrae/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/road-to-the-farplane.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/x2-shiva/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/cavern-stolen-fayth.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/yojimbo-cavern/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/leblanc-last-room.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/leblanc/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/bevelle-highbridge.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/seymour-natus/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/farplane.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/vegnagun-body/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/garden-of-pain.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/seymour-omnis/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/via-purifico.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/isaaru/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/mushroom-rock-road.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/dark-mindy/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/sin-fahrenheit-flight.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/sin-left-fin/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/overdrive-sin/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/auron.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/zanarkand-dome.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/yuna-x2.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/rikku-x2.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/paine.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/bevelle-underground.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/djose-chamber-provisional.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/den-of-woe.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/rikku.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/wakka.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/lulu.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/dreams-end.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/gagazet.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/seymour-flux-body/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/gagazet.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/tidus.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/yuna.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/zanarkand-dome.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/dreams-end.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/bevelle-underground.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/den-of-woe.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/djose-chamber-provisional.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/macalania-temple.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/macalania-temple.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/evrae-airship-deck.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/evrae-airship-deck.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/cavern-stolen-fayth.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/cavern-stolen-fayth.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/bevelle-highbridge.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/bevelle-highbridge.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/garden-of-pain.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/garden-of-pain.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/seymour-omnis/idle.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/seymour-omnis/idle.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/via-purifico.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/via-purifico.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/sin-fahrenheit-flight.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/sin-fahrenheit-flight.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/sin-fahrenheit-bevelle.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/sin-fahrenheit-bevelle.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/mushroom-rock-road.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/mushroom-rock-road.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/farplane.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/farplane.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/leblanc-last-room.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/leblanc-last-room.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/road-to-the-farplane.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/road-to-the-farplane.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/via-infinito.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/via-infinito.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/zanarkand-dome.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/yunalesca-1/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/zanarkand-dome.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/tidus.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/yuna.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/auron.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/dreams-end.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/braskas-final-aeon-1/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/dreams-end.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/tidus.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/yuna.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/auron.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/macalania-temple.thumb.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/anima/idle.thumb.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/macalania-temple.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/tidus.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/yuna.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/rikku.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/macalania-temple.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/pause/macalania.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/seymour-macalania.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/tidus.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/yuna.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/rikku.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/wakka.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/auron.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/lulu.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/macalania-temple.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/macalania-temple.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/tidus/defend.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/tidus/defend.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/tidus/defend.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/macalania-temple.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/rikku.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/pause/macalania.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/backdrops/macalania-temple.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/wakka.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/wakka.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/lulu.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/tidus.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/lulu.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/rikku.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/seymour-macalania.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/seymour-macalania.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/tidus.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/seymour-macalania.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/seymour-macalania.webp",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/portraits/seymour-macalania.webp",
+   "ct": "text/html"
+  }
+ ],
+ "mediaRequests": [
+  "art/title/echo.png",
+  "art/title/echo.webp",
+  "art/characters/auron/idle.png",
+  "art/backdrops/dreams-end.webp",
+  "art/backdrops/gagazet.webp",
+  "art/characters/mortiorchis/idle.png",
+  "art/characters/seymour-flux-body/idle.png",
+  "art/portraits/tidus.webp",
+  "art/portraits/yuna.webp",
+  "art/portraits/kimahri.png",
+  "art/backdrops/gagazet.thumb.webp",
+  "art/characters/seymour-flux-body/idle.thumb.png",
+  "art/backdrops/zanarkand-dome.thumb.webp",
+  "art/characters/yunalesca-1/idle.thumb.png",
+  "art/backdrops/bevelle-underground.thumb.webp",
+  "art/characters/ffx2-bahamut/idle.thumb.png",
+  "art/backdrops/djose-chamber-provisional.thumb.webp",
+  "art/characters/x2-ixion/idle.thumb.png",
+  "art/backdrops/dreams-end.thumb.webp",
+  "art/characters/braskas-final-aeon-1/idle.thumb.png",
+  "art/backdrops/den-of-woe.thumb.webp",
+  "art/characters/baralai-shade/idle.thumb.png",
+  "art/backdrops/macalania-temple.thumb.webp",
+  "art/characters/anima/idle.thumb.png",
+  "art/backdrops/via-infinito.thumb.webp",
+  "art/characters/trema/idle.thumb.png",
+  "art/backdrops/evrae-airship-deck.thumb.webp",
+  "art/characters/evrae/idle.thumb.png",
+  "art/backdrops/road-to-the-farplane.thumb.webp",
+  "art/characters/x2-shiva/idle.thumb.png",
+  "art/backdrops/cavern-stolen-fayth.thumb.webp",
+  "art/characters/yojimbo-cavern/idle.thumb.png",
+  "art/backdrops/leblanc-last-room.thumb.webp",
+  "art/characters/leblanc/idle.thumb.png",
+  "art/backdrops/bevelle-highbridge.thumb.webp",
+  "art/characters/seymour-natus/idle.thumb.png",
+  "art/backdrops/farplane.thumb.webp",
+  "art/characters/vegnagun-body/idle.thumb.png",
+  "art/backdrops/garden-of-pain.thumb.webp",
+  "art/characters/seymour-omnis/idle.thumb.png",
+  "art/backdrops/via-purifico.thumb.webp",
+  "art/characters/isaaru/idle.thumb.png",
+  "art/backdrops/mushroom-rock-road.thumb.webp",
+  "art/characters/dark-mindy/idle.thumb.png",
+  "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+  "art/characters/sin-left-fin/idle.thumb.png",
+  "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+  "art/characters/overdrive-sin/idle.thumb.png",
+  "art/portraits/auron.webp",
+  "art/backdrops/zanarkand-dome.webp",
+  "art/characters/yunalesca-1/idle.png",
+  "art/portraits/yuna-x2.webp",
+  "art/portraits/rikku-x2.webp",
+  "art/portraits/paine.webp",
+  "art/backdrops/bevelle-underground.webp",
+  "art/characters/ffx2-bahamut/idle.png",
+  "art/backdrops/djose-chamber-provisional.webp",
+  "art/characters/x2-ixion/idle.png",
+  "art/characters/braskas-final-aeon-1/idle.png",
+  "art/backdrops/den-of-woe.webp",
+  "art/characters/nooj-shade/idle.png",
+  "art/characters/gippal-shade/idle.png",
+  "art/characters/baralai-shade/idle.png",
+  "art/portraits/rikku.webp",
+  "art/portraits/wakka.webp",
+  "art/portraits/lulu.webp",
+  "art/characters/yuna-white-mage/idle.png",
+  "art/characters/rikku-dark-knight/idle.png",
+  "art/characters/paine-warrior/idle.png",
+  "art/characters/paine-dark-knight/idle.png",
+  "art/characters/yuna-dark-knight/idle.png",
+  "art/characters/rikku-alchemist/idle.png",
+  "art/characters/yuna-gunner/idle.png",
+  "art/characters/rikku-thief/idle.png",
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "audio/sfx/sprite-v2.mp3",
+  "audio/music/chapter-select.mp3",
+  "art/backdrops/macalania-temple.webp",
+  "art/characters/anima/idle.png",
+  "art/backdrops/evrae-airship-deck.webp",
+  "art/characters/evrae/idle.png",
+  "art/backdrops/cavern-stolen-fayth.webp",
+  "art/characters/yojimbo-cavern/idle.png",
+  "art/backdrops/bevelle-highbridge.webp",
+  "art/characters/seymour-natus/idle.png",
+  "art/backdrops/garden-of-pain.webp",
+  "art/characters/seymour-omnis/idle.webp",
+  "art/backdrops/via-purifico.webp",
+  "art/characters/isaaru/idle.png",
+  "art/backdrops/sin-fahrenheit-flight.webp",
+  "art/characters/sin-left-fin/idle.png",
+  "art/backdrops/sin-fahrenheit-bevelle.webp",
+  "art/characters/overdrive-sin/idle.png",
+  "art/backdrops/mushroom-rock-road.webp",
+  "art/characters/dark-mindy/idle.png",
+  "art/backdrops/farplane.webp",
+  "art/characters/vegnagun-body/idle.png",
+  "art/backdrops/leblanc-last-room.webp",
+  "art/characters/leblanc/idle.png",
+  "art/backdrops/road-to-the-farplane.webp",
+  "art/characters/x2-shiva/idle.png",
+  "art/backdrops/via-infinito.webp",
+  "art/characters/trema/idle.png",
+  "audio/sfx/parity-ffx-core.mp3",
+  "audio/music/scene-macalania-temple.mp3",
+  "art/pause/macalania.webp",
+  "art/portraits/seymour-macalania.webp",
+  "art/characters/seymour-macalania/idle.png",
+  "audio/voice/seymour-anima-macalania/seymour-anima-macalania.mid-mac-anima-summon.001.mp3",
+  "audio/voice/seymour-anima-macalania/seymour-anima-macalania.mid-mac-first-boost.002.fb1.mp3",
+  "audio/voice/seymour-anima-macalania/seymour-anima-macalania.mid-mac-seymour-restored.001.fb1.mp3",
+  "audio/voice/seymour-anima-macalania/seymour-anima-macalania.mid-mac-seymour-restored.002.mp3",
+  "audio/voice/seymour-anima-macalania/seymour-anima-macalania.mid-mac-seymour-restored.002.fb1.mp3",
+  "audio/voice/seymour-anima-macalania/seymour-anima-macalania.quip-tidus.001.mp3",
+  "audio/voice/seymour-anima-macalania/seymour-anima-macalania.quip-yuna.001.mp3",
+  "audio/voice/seymour-anima-macalania/seymour-anima-macalania.quip-auron.001.mp3",
+  "audio/music/boss-seymour-macalania.mp3",
+  "audio/music/victory-ffx.mp3",
+  "art/characters/guado-guardian/idle.png",
+  "art/characters/tidus/idle.png",
+  "art/characters/yuna/idle.png",
+  "audio/music/defeat-ffx.mp3",
+  "art/characters/rikku/idle.png",
+  "art/characters/tidus/ready.png",
+  "art/characters/yuna/ready.png",
+  "art/characters/rikku/ready.png",
+  "art/characters/seymour-macalania/cast.png",
+  "art/characters/seymour-macalania/hurt.png",
+  "art/characters/seymour-macalania/ko.png",
+  "art/characters/guado-guardian/cast.png",
+  "art/characters/guado-guardian/hurt.png",
+  "art/characters/tidus/attack.png",
+  "art/characters/tidus/cast.png",
+  "art/characters/tidus/item.png",
+  "art/characters/tidus/hurt.png",
+  "art/characters/tidus/ko.png",
+  "art/characters/tidus/defend.webp",
+  "art/characters/yuna/attack.png",
+  "art/characters/yuna/cast.png",
+  "art/characters/yuna/item.png",
+  "art/characters/yuna/hurt.png",
+  "art/characters/yuna/ko.png",
+  "art/characters/rikku/attack.png",
+  "art/characters/rikku/cast.png",
+  "art/characters/rikku/item.png",
+  "art/characters/rikku/hurt.png",
+  "art/characters/rikku/ko.png",
+  "art/characters/tidus/victory.png",
+  "art/characters/tidus/sleep.png",
+  "art/characters/tidus/critical.png",
+  "art/characters/tidus/follow.png",
+  "art/characters/tidus/od-energy-rain.png",
+  "art/characters/tidus/od-slice-and-dice.png",
+  "art/characters/yuna/victory.png",
+  "art/characters/yuna/sleep.png",
+  "art/characters/yuna/critical.png",
+  "art/characters/yuna/follow.png",
+  "art/characters/rikku/victory.png",
+  "art/characters/rikku/sleep.png",
+  "art/characters/rikku/critical.png",
+  "art/characters/rikku/follow.png",
+  "art/pause/tidus.2x.webp",
+  "art/pause/yuna.2x.webp",
+  "art/pause/rikku.2x.webp",
+  "audio/voice/seymour-anima-macalania/seymour-anima-macalania.pre.006.mp3",
+  "audio/voice/seymour-anima-macalania/seymour-anima-macalania.pre.011.mp3",
+  "audio/voice/seymour-anima-macalania/seymour-anima-macalania.pre.016.mp3",
+  "audio/voice/seymour-anima-macalania/seymour-anima-macalania.pre.023.mp3",
+  "audio/voice/seymour-anima-macalania/seymour-anima-macalania.pre.027.mp3",
+  "audio/music/pause.mp3",
+  "art/pause/macalania.2x.webp",
+  "audio/voice/seymour-anima-macalania/seymour-anima-macalania.pre.029.mp3"
+ ]
+}
