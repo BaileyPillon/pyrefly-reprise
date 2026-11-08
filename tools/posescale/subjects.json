@@ -892,5 +892,25 @@
    191
   ],
   "note": "the hidden FFX-2 Yuna's Ballad chapter 40, the possessed Paine (r76b art install): the approved FFX-2 Paine Warrior set mirrored to face the party and tinted; the face box is hers mirrored across the idle (408 wide); the readings and anchors are hers mirrored"
+ },
+ "spherimorph": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Spherimorph chapter 41 (r77 art install): a marbled sphere that morphs, so no face box and no head reading and no feet; the soles are the alpha baseline (the bottom of the body)"
+ },
+ "ultima-weapon": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Omega Ruins chapter 43, Ultima Weapon (r77 art install): an armoured quadruped, so no face box and no head reading; the soles are the alpha baseline"
+ },
+ "omega-weapon": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Omega Ruins chapter 43, Omega Weapon (r77 art install): the same skeleton and poses as Ultima Weapon with its own mesh; no face box and no head reading; the soles are the alpha baseline"
+ },
+ "nemesis": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Omega Ruins chapter 43, Nemesis (r77 art install): a recolour of the Ultima Weapon paintings with the same alpha pixel for pixel, so the pose, size and feet are Ultima Weapon's; no face box and no head reading; the soles are the alpha baseline"
  }
 }

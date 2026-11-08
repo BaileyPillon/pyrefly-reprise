@@ -22,6 +22,9 @@ describe('the route\'s table of door words is the board\'s', () => {
     expect(doorWordFor('ffx2-farplane-cup')).toBe('duelist');
     expect(doorWordFor('sanctuary-keeper')).toBe('beast');
     expect(doorWordFor('ffx2-yunas-ballad')).toBe('wraith');
+    expect(doorWordFor('spherimorph')).toBe('spherimorph');
+    expect(doorWordFor('ffx2-youth-league')).toBe('youth');
+    expect(doorWordFor('omega-ruins')).toBe('weapon');
   });
 
   it('answers null for a chapter that has a card on the board (the arrow-key walk finds it)', () => {

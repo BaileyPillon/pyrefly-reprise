@@ -8,6 +8,10 @@
  * plays and hands the DOM half (`MomentsPort.turnCutIn`, implemented by
  * `ui/common/transitions/TurnCutInLayer.ts`) what to draw.
  *
+ * **2026-11-07: this beat is now the OLD behaviour, behind `?portraits=turns`** (`CutInMode.ts`). Bailey: "when character portraits pop in and fill the left half of the screen its not really making sense to me why
+ * they pop up when they do it just seems kind of random"; his pick, "A: only on big moves". By default no portrait plays at a turn's start (`wants` answers false); a party member's big move gets the same slab
+ * with the move's name (`BigMoveCutIn.ts`, the lists in `BigMoves.ts`). The rest of this header is how the turn-start beat was built and still plays under `?portraits=turns`.
+ *
  * How often: the tile does not say, and Bailey never named a frequency. Every
  * turn would put ~0.8 s in front of every command menu, which is exactly the
  * wait PR-0061 complains about, so it plays **on the first turn of each party
@@ -41,6 +45,7 @@
 import type { BattleState, CombatantId } from '../battle/common/types.ts';
 import type { MomentsPort, PlaybackSpeed } from './BattlePresenterPorts.ts';
 import { SPEED_SCALE } from './BattlePresenterUtil.ts';
+import { portraitMode } from './CutInMode.ts';
 
 /** How long the settled slab stays up, at normal speed. Not in the spec; see the header. */
 export const CUT_IN_HOLD_MS = 450;
@@ -119,6 +124,7 @@ export class TurnCutInBeat {
 
   /** Whether `actorId` would get a cut-in if their turn began now. */
   wants(state: BattleState, actorId: CombatantId): boolean {
+    if (portraitMode() !== 'turns') return false; // 2026-11-07 (Bailey, "A: only on big moves"): no portrait at a turn's start unless `?portraits=turns` brings it back (`CutInMode.ts`); a big move's is `BigMoveCutIn.ts`
     if (this.shown.has(actorId)) return false;
     if (!state.activeIds.includes(actorId)) return false;
     if (state.game === 'ff7') return false; // FF7: no cut-in until its options round (audit)

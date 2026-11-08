@@ -43,6 +43,9 @@ def build_rig(sub: Subject, build: dict, keys: dict) -> dict:
             all_keys[name] = k
     for name, k in (sub.cfg.get("keys_extra") or {}).items():  # hand-authored keys (a pose with no painting): the gate judges them without an overlap
         all_keys[name] = {"source": "authored", **k}
+    for k, v in (sub.cfg.get("idle_key") or {}).items():  # how the figure moves INTO the rest pose (`ms`, `fadeMs`): the idle is a key like any other, and a return to it can cut or fade like an entry to another
+        if k in ("ms", "fadeMs"):
+            all_keys["idle"][k] = v
     for name, marks in (sub.cfg.get("landmarks") or {}).items():  # the approved painting's landmarks, marked once per pose: the gate's `expect`
         if name in all_keys and name != sub.costume_pose and not name.startswith("_"):
             all_keys[name]["expect"] = marks

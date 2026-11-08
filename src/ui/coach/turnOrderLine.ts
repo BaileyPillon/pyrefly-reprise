@@ -8,7 +8,7 @@
  *
  * - **"He strikes first..."** (`TURN_ORDER_ENEMY_FIRST`): Chapter I (`seymour-flux`), as Bailey picked. An enemy acts before the first menu in 75 of 100 seeds there.
  * - **"He moves after you..."** (`TURN_ORDER_PARTY_FIRST`): the chapters where the party opens in every seed: no enemy acts before the first menu in 100 of 100 seeds (the engine, below).
- * - **No line**: every other chapter. Yunalesca (37 of 100) and Braska's Final Aeon (92 of 100) are mixed, so neither line is true; Anima, Yojimbo, Via Purifico, Sin Face and the Biran / Yenke
+ * - **No line**: every other chapter. The hidden Spherimorph chapter (2026-11-06) is left without one on purpose (the review of that day, m1): its party prep lets the player pick any three of the seven, and the line is true only for some fronts. Measured, 300 seeds a front: with Tidus in front (Tidus, Yuna, Lulu; Tidus, Auron, Lulu) nothing acts before the first menu in 300 of 300, but with Auron, Wakka and Kimahri in front Spherimorph acts first in 282 of 300 (the line would be false at that first menu). Yunalesca (37 of 100) and Braska's Final Aeon (92 of 100) are mixed, so neither line is true; Anima, Yojimbo, Via Purifico, Sin Face and the Biran / Yenke
  *   fight open with the enemy in every seed, where the first line would be true, and are left without a line on purpose (the brief for this release: Chapter I gets the new line, the others the
  *   old line where it is true, or none; one entry below flips each of them). The guide's third step is Auron's line (`firstRunGuide.ts`), so a chapter with no line does not run it.
  *
@@ -39,6 +39,7 @@ export const TURN_ORDER_LINES: Readonly<Record<string, string>> = {
   'dark-aeons': TURN_ORDER_PARTY_FIRST, // the hidden Dark Aeons (FFX only, 2026-11-06): Tidus and Yuna wear First Strike, so the party opens in every seed of the first link (the engine count is the test's)
   penance: TURN_ORDER_PARTY_FIRST, // the hidden Penance chapter (2026-11-06): Penance's first counter is 6 and an arm's 9 against the party's hasted opening, and the engine count over the test's 20 seeds is 0
   'sanctuary-keeper': TURN_ORDER_PARTY_FIRST, // the hidden Sanctuary Keeper chapter (2026-11-06): its first counter comes after the party's, and the engine count over 100 seeds is 0 (the test's 20 seeds are the proof). True for the shipped front line only (Tidus, Yuna, Auron; also Tidus, Yuna, Lulu and Wakka, Rikku, Kimahri: 0 of 300 seeds); a front line without Tidus, such as Lulu, Yuna, Auron, has the Keeper act before the first menu in 300 of 300, so party prep must not change the front line without this line being re-measured
+  'omega-ruins': TURN_ORDER_PARTY_FIRST, // the hidden Omega Ruins chapter (2026-11-06): the front line's First Strike and Haste open all three fights of the chain before the Weapon or Nemesis acts (the test's engine count over 20 seeds and all three acts)
   'spectral-keeper': TURN_ORDER_PARTY_FIRST, // the formation gives the front line First Strike, so all three act before the Keeper in every seed (the engine count is the test's)
 };
 

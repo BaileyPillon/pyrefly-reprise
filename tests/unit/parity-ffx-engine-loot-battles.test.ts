@@ -28,6 +28,8 @@ import { DARK_SIX_LINKS } from '../../src/data/ffx/dark-aeons-six-ids.ts';
 import { PENANCE_ID, PENANCE_LEFT_ARM_ID, PENANCE_RIGHT_ARM_ID } from '../../src/data/ffx/penance-ids.ts';
 import { EVRAE_ALTANA_ID, GATE_LOCK_IDS, GEOSGAENO_ID } from '../../src/data/ffx/flooded-ways-ids.ts';
 import { SANCTUARY_KEEPER_ID } from '../../src/data/ffx/sanctuary-keeper-ids.ts';
+import { SPHERIMORPH_ID } from '../../src/data/ffx/spherimorph-ids.ts';
+import { NEMESIS_ID, OMEGA_WEAPON_ID, ULTIMA_WEAPON_ID } from '../../src/data/ffx/omega-ruins-ids.ts';
 import { lootRewards } from '../../src/data/ffx/loot/index.ts';
 import { setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
 import { CHAPTERS, getChapter, type Chapter } from '../../src/data/encounters.ts';
@@ -233,7 +235,7 @@ const WRITES: Readonly<Record<string, Partial<FfxLootRecord>>> = {
  * lane read, and their rewards are the chapter's own rows (`data/ffx/enemies/dark-aeons.ts`; `parity-ffx-loot-data.test.ts` pins that none carries `loot`). Not invented here (rule 6). The lane was built on
  * r49, before the chapter, so the r51 merge names them: every other formation is still fought and checked against the oracle.
  */
-const DARK_AEON_IDS: ReadonlySet<string> = new Set([DARK_CINDY_ID, DARK_SANDY_ID, DARK_MINDY_ID, DARK_YOJIMBO_ID, DARK_DAIGORO_ID, SPECTRAL_KEEPER_ID, ...SPECTRAL_CIRCLE_IDS, PENANCE_ID, PENANCE_RIGHT_ARM_ID, PENANCE_LEFT_ARM_ID, ...DARK_SIX_LINKS.map((l) => l.bodyId), EVRAE_ALTANA_ID, GEOSGAENO_ID, ...GATE_LOCK_IDS, SANCTUARY_KEEPER_ID]); // the hidden Flooded Ways' four bodies (m120, m109, m162, m171, 2026-11-06: no record in the table, `parity-ffx-loot-data.test.ts`), and Penance's three bodies (m344 to m346, 2026-11-06: no record in the table, `parity-ffx-loot-data.test.ts`), and the hidden Dark Aeons' six bodies (m334 to m339, 2026-11-06: their loot records are the enemy file's own rows, pinned by `chapters/dark-aeons-six-data.test.ts`), and the hidden Spectral Keeper's bodies (m129, m146: no record in the table, `parity-ffx-loot-data.test.ts`)
+const DARK_AEON_IDS: ReadonlySet<string> = new Set([DARK_CINDY_ID, DARK_SANDY_ID, DARK_MINDY_ID, DARK_YOJIMBO_ID, DARK_DAIGORO_ID, SPECTRAL_KEEPER_ID, ...SPECTRAL_CIRCLE_IDS, PENANCE_ID, PENANCE_RIGHT_ARM_ID, PENANCE_LEFT_ARM_ID, ...DARK_SIX_LINKS.map((l) => l.bodyId), EVRAE_ALTANA_ID, GEOSGAENO_ID, ...GATE_LOCK_IDS, SANCTUARY_KEEPER_ID, SPHERIMORPH_ID, ULTIMA_WEAPON_ID, OMEGA_WEAPON_ID, NEMESIS_ID]); // the hidden Flooded Ways' four bodies (m120, m109, m162, m171, 2026-11-06: no record in the table, `parity-ffx-loot-data.test.ts`), and Penance's three bodies (m344 to m346, 2026-11-06: no record in the table, `parity-ffx-loot-data.test.ts`), and the hidden Dark Aeons' six bodies (m334 to m339, 2026-11-06: their loot records are the enemy file's own rows, pinned by `chapters/dark-aeons-six-data.test.ts`), and the hidden Spectral Keeper's bodies (m129, m146: no record in the table, `parity-ffx-loot-data.test.ts`)
 const hasNoRecord = (g: EnemyGroupDef): boolean => g.enemies.some((e) => DARK_AEON_IDS.has(e.id));
 
 describe('every shipped formation: kill everything in it, and the result pays the sum of the records', () => {

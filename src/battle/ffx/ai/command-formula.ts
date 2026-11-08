@@ -81,6 +81,7 @@ export const FORMULA_BYTE_OVERRIDES: Readonly<Record<number, number>> = {
   0x606e: 3, // Silence
   0x6070: 3, // Blind
   0x6071: 3, // Sleep
+  0x6072: 3, // Confuse (the Omega Ruins' own row, a status word with no formula of ours)
   0x6082: 3, // Mega Death
   0x60df: 1, // Oblivion
 };

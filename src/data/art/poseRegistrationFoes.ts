@@ -261,10 +261,26 @@ export const POSE_REGISTRATION_FOES: PoseRegistrationTable = {
   'mortiphasm-facing': {
     idle: { stanceX: 555.5, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '0f5445a99dc8e30b' },
   },
+  nemesis: {
+    armageddon: { status: 'ok', class: 'wide', stature: 1.353, lengthRatio: 2.203, iou: 0.377, sha: '3efda0b10f677ce1' },
+    attack: { status: 'ok', class: 'wide', stature: 0.997, lengthRatio: 1.497, iou: 0.728, sha: 'ebaf8a90a2a1567e' },
+    cast: { status: 'ok', class: 'wide', stature: 0.965, lengthRatio: 1.193, iou: 0.443, sha: 'a46cf1d945f5b326' },
+    hurt: { status: 'ok', class: 'wide', stature: 1.005, lengthRatio: 1.621, iou: 0.616, sha: '42d7f8f31c0f136a' },
+    idle: { status: 'ok', class: 'idle', stature: 1, lengthRatio: 1.541, iou: 1, sha: '4ea157be3f2540ca' },
+    ko: { status: 'ok', class: 'ko', stature: 1.016, lengthRatio: 1.52, iou: 0.671, sha: '497feda8c365bcfb' },
+  },
   'nooj-shade': {
     hurt: { stanceX: 283.0, status: 'ok', class: 'standing', stature: 1.015, iou: 0.422, sha: '7f98e313af0db50c' },
     idle: { stanceX: 254.5, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '869f9ae5b1d8079f' },
     ko: { status: 'ok', class: 'ko', stature: 0.393, lengthRatio: 0.993, iou: 0.081, sha: 'bb8e6bd1642b948a' },
+  },
+  'omega-weapon': {
+    attack: { status: 'ok', class: 'wide', stature: 1, lengthRatio: 1.374, iou: 0.721, sha: '98b1da732e48393b' },
+    cast: { status: 'waived', class: 'standing', stature: 0.973, iou: 0.442, sha: '2b567ddb3f0d1b59' },
+    hurt: { status: 'ok', class: 'wide', stature: 0.962, lengthRatio: 1.526, iou: 0.658, sha: 'bb98ceb1dc469007' },
+    idle: { status: 'ok', class: 'idle', stature: 1, lengthRatio: 1.448, iou: 1, sha: 'ff2ebf793d8e7258' },
+    ko: { status: 'ok', class: 'ko', stature: 0.977, lengthRatio: 1.437, iou: 0.633, sha: 'c4e47d4326980c6d' },
+    nova: { status: 'ok', class: 'wide', stature: 1.322, lengthRatio: 2.128, iou: 0.412, sha: '41472c214df359d1' },
   },
   ormi: {
     attack: { stanceX: 166.0, status: 'ok', class: 'standing', stature: 0.965, iou: 0.6, sha: '6dfcc932984ef273' },
@@ -464,11 +480,27 @@ export const POSE_REGISTRATION_FOES: PoseRegistrationTable = {
     idle: { stanceX: 376.5, feetRow: 1014.0, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '52caec9b7365e46a' },
     ko: { status: 'ok', class: 'ko', stature: 0.497, lengthRatio: 1.148, iou: 0.094, sha: 'b2abccaff03382d8' },
   },
+  spherimorph: {
+    attack: { stanceX: 253.5, status: 'waived', class: 'standing', stature: 1.165, iou: 0.838, sha: '40ac865e2d91fd84' },
+    cast: { stanceX: 285.0, upright: true, status: 'waived', class: 'standing', stature: 0.764, iou: 0.677, sha: '38c93d7d97414b8b' },
+    hurt: { stanceX: 215.5, status: 'ok', class: 'standing', stature: 1.054, iou: 0.851, sha: '8818730b8e88f0c8' },
+    idle: { stanceX: 259.5, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '776cadf3873808b6' },
+    ko: { status: 'ok', class: 'ko', stature: 0.701, lengthRatio: 2.216, iou: 0.443, sha: '8cc1791e4a90a60d' },
+    overdrive: { stanceX: 250.5, status: 'waived', class: 'standing', stature: 1.714, iou: 0.46, sha: 'fb6cd930177f8e20' },
+  },
   trema: {
     attack: { stanceX: 460.0, status: 'waived', class: 'standing', stature: 1.016, iou: 0.456, sha: '82ef14f66ccbc889' },
     cast: { stanceX: 402.5, status: 'ok', class: 'standing', stature: 1, iou: 0.96, sha: '14d21a7cfdcc710b' },
     hurt: { stanceX: 657.5, status: 'ok', class: 'standing', stature: 1.01, iou: 0.259, sha: 'e61895a35fcc1205' },
     idle: { stanceX: 402.5, status: 'ok', class: 'idle', stature: 1, iou: 1, sha: '3896c07b8d64c97d' },
+  },
+  'ultima-weapon': {
+    attack: { status: 'ok', class: 'wide', stature: 0.997, lengthRatio: 1.497, iou: 0.728, sha: '810e0ecbd07983fb' },
+    cast: { status: 'ok', class: 'wide', stature: 0.965, lengthRatio: 1.193, iou: 0.443, sha: 'd74f3890fae8e661' },
+    hurt: { status: 'ok', class: 'wide', stature: 1.005, lengthRatio: 1.621, iou: 0.616, sha: 'a7445f119c4ca983' },
+    idle: { status: 'ok', class: 'idle', stature: 1, lengthRatio: 1.541, iou: 1, sha: '2d4f59d42f355823' },
+    ko: { status: 'ok', class: 'ko', stature: 1.016, lengthRatio: 1.52, iou: 0.671, sha: 'ff99d5161e10dbe0' },
+    rain: { status: 'ok', class: 'wide', stature: 1.353, lengthRatio: 2.203, iou: 0.377, sha: '8d1384469570d157' },
   },
   valefor: {
     attack: { stanceX: 577.0, upright: true, status: 'ok', class: 'standing', stature: 0.977, iou: 0.855, sha: '8d98a668c7ca4d09' },

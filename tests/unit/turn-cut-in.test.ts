@@ -1,8 +1,13 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import type { BattleState } from '../../src/battle/common/types.ts';
 import type { MomentsPort } from '../../src/engine/BattlePresenterPorts.ts';
+import { setPortraitMode } from '../../src/engine/CutInMode.ts';
 import { CUT_IN_HOLD_MS, TurnCutInBeat } from '../../src/engine/TurnCutIn.ts';
+
+// 2026-11-07: the turn-start portrait is the OLD behaviour now, behind `?portraits=turns` (Bailey picked "A: only on big moves"); these tests pin that old beat. The default plays none: `portraits-big-moves.test.ts`.
+beforeEach(() => setPortraitMode('turns'));
+afterEach(() => setPortraitMode(null));
 
 /** PR-0005: the approved turn cut-in plays on each party member's first turn of a battle, once. */
 type Req = Parameters<NonNullable<MomentsPort['turnCutIn']>>[0];

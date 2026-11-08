@@ -14,6 +14,12 @@
 //   rg.h, f, c      the head, the feet and the centroid; rg.cs how far the camera alone moved each of them since the last frame (only while the camera moves)
 //   rg.hu, fu, cu   the same three in the idle plane's own coordinates (u across from the left, t down from the top, 0..1: the master's pixels over its size), where neither the stage's
 //                   motion (a lunge, a recoil, a hop) nor the camera is: what the pose itself moved, as a painted swap reads its two planes in one frame
+//   rg.tu           (only when the rig has a crown landmark: `crown`, `headTop`) the top of the head in the idle plane's own coordinates, as `hu` is the head's: with `fu` (the feet) it is the figure read head to soles, the
+//                   reading a painted figure's stature takes (`bodyHeightPx`: from the top of the real head to the ground line), which the key's whole painted box is not where a raised weapon makes the box taller than the figure (rigs-v3).
+//                   The top is read as the head's DISC (r77 review, M1): the head landmark's height plus the posed distance from it to the crown landmark, straight up the plane. The crown landmark itself is one
+//                   point of the head that turns with the head bone, so a head tilted 35 degrees (Rikku's cast) carried it 2.3 percent of the body below the top of the silhouette and one tilted 64 degrees
+//                   (Tidus's hurt) 7 percent, readings the rig gate (which reads the silhouette) and the painting never gave; the disc's top does not move when the head turns, only when the head itself is carried
+//                   down or up (a bow, a crouch, a fall), which is what a stature is. Untilted it is the crown landmark. With no head landmark the crown is read as it was.
 //   rg.ha, ma       the area of the `head` part's mesh and of every drawn part, in the plane's own units (a head the rig resizes shows in `ha`; the rig's gate keeps it at 1.0000)
 //   rg.hv           (only when present) the name of a head VARIANT part drawn at a real size in this key: another part that carries a head, which the key brings in over the head part (Lulu's front-view
 //                   upper body: `front` in format v2; `fdef` and `fod` in version 1, where the part is stored as a speck that is always visible and is told apart by its area, `variantMinArea` of the plane)
@@ -81,10 +87,10 @@ export function createRigReader(cfg) {
     let names = found.get(name);
     if (!names) {
       const first = (list) => (list || []).find((n) => lm(n) !== null) ?? null;
-      names = { head: first(cfg.head), centroid: first(cfg.centroid) };
+      names = { head: first(cfg.head), centroid: first(cfg.centroid), crown: first(cfg.crown) };
       found.set(name, names);
     }
-    const head = names.head ? lm(names.head) : null, cen = names.centroid ? lm(names.centroid) : null;
+    const head = names.head ? lm(names.head) : null, cen = names.centroid ? lm(names.centroid) : null, crown = names.crown ? lm(names.crown) : null;
     let feet = null;
     try { const f = a.feetPoint(); if (f) feet = [f.x, f.y, f.z]; } catch { feet = null; }
     if (!feet) {
@@ -102,6 +108,12 @@ export function createRigReader(cfg) {
     const r1 = (xy) => (xy ? [R1(xy[0]), R1(xy[1])] : null);
     const q = box ? box.flatMap((p) => { const s = P(p); return [R1(s[0]), R1(s[1])]; }) : null;
     const planeH = Math.hypot(M[4], M[5], M[6]) || 1;
+    // the top of the head as the head's disc (see `rg.tu` above): the head landmark carried straight up the plane by its posed distance to the crown landmark, which a turn of the head does not change
+    const topOfHead = (c, h) => {
+      if (!c || !h) return c;
+      const r = dist2(c, h);
+      return [h[0] + (M[4] / planeH) * r, h[1] + (M[5] / planeH) * r, h[2] + (M[6] / planeH) * r];
+    };
     let ha = null, ma = null, hv = null;
     try {
       const kids = a.figure.plane.children;
@@ -119,7 +131,7 @@ export function createRigReader(cfg) {
     } catch { ha = null; ma = null; hv = null; }
     const rg = {
       b: a.blending ? 1 : 0, h: r1(scr(head)), f: r1(scr(feet)), c: r1(scr(cen)),
-      hu: uv(head), fu: uv(feet), cu: uv(cen),
+      hu: uv(head), fu: uv(feet), cu: uv(cen), ...(crown ? { tu: uv(topOfHead(crown, head)) } : {}),
       ha: ha === null ? null : R7(ha), ma: ma === null ? null : R7(ma), ...(hv === null ? {} : { hv }),
       bh: box ? R4(dist2(box[0], box[3]) / planeH) : null, bw: box ? R4(dist2(box[0], box[1]) / planeH) : null,
       pw: R1(dist(pp[0], pp[1])), ph: R1(dist(pp[0], pp[3])),

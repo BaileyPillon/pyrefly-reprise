@@ -15,6 +15,9 @@
  */
 import { describe, expect, it } from 'vitest';
 
+import { refreshDerivedStats } from '../../../src/battle/ffx2/index.ts';
+import type { Ffx2Unit } from '../../../src/battle/ffx2/internal.ts';
+import { ffx2Options } from '../helpers/ffx2ChapterDrive.ts';
 import { fight, girlsOf, type Duel, type LineName, type OpenOptions } from '../helpers/farplaneCupDrive.ts';
 
 const SEEDS = Math.max(12, Number(process.env['PYREFLY_BENCH_SEEDS'] ?? 100));
@@ -114,8 +117,8 @@ describe('the other lines', () => {
   }, 300_000);
 });
 
-describe('the options with numbers (the rows are NOT touched; each is a rig the test applies: (a) stands for the sourced rule that a Special-dressphere wearer cannot be Ejected, which the engine does not yet apply (handoff section 6); (b) for a lever no source gives)', () => {
-  it('(a) an Eject resist byte of 255 on the girls (what a Special dressphere would do if the engine applied the rule of research/ffx2-combat-core.md 2.8 and 3.15) takes Shooting Star out of the fight; (b) a Lv 74 party (the level of the duelists) lets their own statuses land: the table the handoff carries', () => {
+describe('the options with numbers (the rows are NOT touched; each is a rig the test applies: (a) is the resist byte the sourced rule that a Special-dressphere wearer cannot be Ejected gives, set by hand; (c) is the rule itself, the girls worn in their Specials (the engine applies it since round 35, PR-0636); (b) is a lever no source gives)', () => {
+  it('(a) an Eject resist byte of 255 on the girls (what a Special dressphere gives under the rule of research/ffx2-combat-core.md 2.8 and 3.15, set by hand) takes Shooting Star out of the fight; (b) a Lv 74 party (the level of the duelists) lets their own statuses land: the table the handoff carries', () => {
     const noEject = { name: 'eject-proof', setup: (e: Parameters<NonNullable<OpenOptions['setup']>>[0]): void => girlsOf(e).forEach((g) => { g.immunities['eject'] = 255; }) };
     const lv74 = { name: 'lv74', setup: (e: Parameters<NonNullable<OpenOptions['setup']>>[0]): void => girlsOf(e).forEach((g) => { g.level = 74; }) };
     const asBuilt = cell(0, 'curtains');
@@ -130,6 +133,36 @@ describe('the options with numbers (the rows are NOT touched; each is a rig the 
       expect(b.unresolved).toBe(0);
       expect(b.wins + b.defeats).toBe(SEEDS);
     }
+  }, 300_000);
+
+  it('(c) the girls WORN in their Specials (Floral Fallal, Machina Maw, Full Throttle; stats re-derived for the form, no resist rig at all): the engine rule keeps Shooting Star from landing, and the table of duel 1 is the one the handoff prints (PR-0636)', () => {
+    const options = ffx2Options();
+    const special = {
+      name: 'special-forms',
+      setup: (e: Parameters<NonNullable<OpenOptions['setup']>>[0]): void => {
+        const forms: Record<string, string> = { yuna: 'floral-fallal', rikku: 'machina-maw', paine: 'full-throttle' };
+        for (const g of girlsOf(e)) {
+          g.dresspheres!.current = forms[g.id]!;
+          refreshDerivedStats(g as unknown as Ffx2Unit, { dresspheres: options.dresspheres!, grids: options.garmentGrids!, gridNodes: {} });
+        }
+      },
+    };
+    const asBuilt = cell(0, 'curtains');
+    const upper = cell(0, 'curtains', { name: 'eject-proof', setup: (e: Parameters<NonNullable<OpenOptions['setup']>>[0]): void => girlsOf(e).forEach((g) => { g.immunities['eject'] = 255; }) }); // row (a), cached
+    const c = cell(0, 'curtains', special);
+    show('duel 1 Auron, curtains line, the girls worn in their Specials (the rule, no resist rig)', c);
+    expect(c.unresolved).toBe(0);
+    expect(c.ejects, 'nobody is ejected: a Special wearer cannot be (research/ffx2-combat-core.md 2.8 and 3.15)').toBe(0);
+    expect(asBuilt.ejects, 'the control: in the normal dress Shooting Star still ejects').toBeGreaterThan(0);
+    // The same girls with the numbers of their normal dress (the critic's probe wore the Specials this way): Eject-proof, with the attack-only menu a Special form has in the engine.
+    const nameOnly = { name: 'special-names', setup: (e: Parameters<NonNullable<OpenOptions['setup']>>[0]): void => girlsOf(e).forEach((g) => { g.dresspheres!.current = { yuna: 'floral-fallal', rikku: 'machina-maw', paine: 'full-throttle' }[g.id]!; }) };
+    const d = cell(0, 'curtains', nameOnly);
+    show('duel 1 Auron, curtains line, the girls worn in their Specials but with the numbers of their normal dress (a rig)', d);
+    expect(d.unresolved).toBe(0);
+    expect(d.ejects).toBe(0);
+    // Neither Special row reaches the hand-set byte's row (a): that row keeps the Dark Knight's Darkness and Rikku's curtains, which a Special form does not offer (research/ffx2-combat-core.md 3.15: a Special's main unit lists only its own commands, no Item).
+    expect(share(c)).toBeLessThan(share(upper) - 0.3);
+    expect(share(d)).toBeLessThan(share(upper) - 0.3);
   }, 300_000);
 });
 

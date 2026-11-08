@@ -44,6 +44,8 @@ import { buildSpectralKeeperScene, SPECTRAL_KEEPER_SLOTS } from './spectral-keep
 import { SPECTRAL_KEEPER_SCENE } from '../data/ffx/spectral-keeper-ids.ts';
 import { buildFloodedWaysScene, FLOODED_WAYS_SLOTS } from './flooded-ways.ts'; // the hidden Flooded Ways chapter (FFX only, 2026-11-06): the Via Purifico's stage with this chapter's staging
 import { FLOODED_WAYS_SCENE } from '../data/ffx/flooded-ways-ids.ts';
+import { buildOmegaRuinsScene, OMEGA_RUINS_SLOTS } from './omega-ruins.ts'; // the Omega Ruins (FFX only, hidden chapter): the Cavern's plate with the three Weapons' staging
+import { OMEGA_RUINS_SCENE } from '../data/ffx/omega-ruins-ids.ts';
 import { buildExpYrp3dStageScene, EXP_YRP_SCENE_ENTRY } from './exp-yrp-3d-stage.ts'; // the 3D Bahamut's chamber (FFX-2 only, hidden chapter): Chapter IV's room under frame b, the real models on its actors
 import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
 import { buildExpWindwakerStageScene, EXP_WINDWAKER_SCENE_ENTRY } from './exp-windwaker-stage.ts'; // the Wind Waker chamber (FFX-2 only, hidden chapter): a toon temple, toon models on its actors
@@ -54,6 +56,8 @@ import { PENANCE_SCENE_ENTRY, buildPenanceScene } from './penance.ts'; // Penanc
 import { PENANCE_SCENE } from '../data/ffx/penance-ids.ts';
 import { buildSanctuaryKeeperScene, SANCTUARY_KEEPER_SLOTS } from './sanctuary-keeper.ts'; // the Sanctuary Keeper's summit (FFX only, hidden chapter): Chapter I's Mt. Gagazet with the Keeper staged
 import { SANCTUARY_KEEPER_SCENE } from '../data/ffx/sanctuary-keeper-ids.ts';
+import { buildSpherimorphScene, SPHERIMORPH_SLOTS } from './spherimorph.ts'; // Spherimorph's spring (FFX only, hidden chapter): the Macalania Temple's plate and scene with the guardian staged
+import { SPHERIMORPH_SCENE } from '../data/ffx/spherimorph-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -91,6 +95,10 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   PENANCE_SCENE_ENTRY,
   // The Sanctuary Keeper (FFX only, hidden chapter): Chapter I's Mt. Gagazet plate and scene, with the Keeper alone on the boss spot.
   { key: SANCTUARY_KEEPER_SCENE, title: 'Mt. Gagazet — the summit (the Sanctuary Keeper)', build: buildDemoScene, slots: SANCTUARY_KEEPER_SLOTS, placeholder: false },
+  // Spherimorph (FFX only, hidden chapter): the Macalania Temple's plate and scene, with the guardian alone on the boss spot.
+  { key: SPHERIMORPH_SCENE, title: 'Macalania Woods — the spring (Spherimorph)', build: buildDemoScene, slots: SPHERIMORPH_SLOTS, placeholder: false },
+  // The Omega Ruins (FFX only, hidden chapter): the Cavern of the Stolen Fayth's plate and scene, with the Weapons and Nemesis alone on the boss spot.
+  { key: OMEGA_RUINS_SCENE, title: 'The Omega Ruins', build: buildDemoScene, slots: OMEGA_RUINS_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -112,4 +120,6 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [EXP_ANIME_SCENE]: buildExpAnimeStageScene, // the hidden anime chapter (FFX-2 only)
   [PENANCE_SCENE]: buildPenanceScene, // the hidden Penance chapter (FFX only)
   [SANCTUARY_KEEPER_SCENE]: buildSanctuaryKeeperScene, // the hidden Sanctuary Keeper chapter (FFX only)
+  [SPHERIMORPH_SCENE]: buildSpherimorphScene, // the hidden Spherimorph chapter (FFX only)
+  [OMEGA_RUINS_SCENE]: buildOmegaRuinsScene, // the hidden Omega Ruins chapter (FFX only)
 };

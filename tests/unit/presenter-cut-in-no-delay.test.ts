@@ -8,8 +8,9 @@
  * Presenter plumbing, so both games (CHK-020).
  */
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { BattlePresenter } from '../../src/engine/BattlePresenter.ts';
+import { setPortraitMode } from '../../src/engine/CutInMode.ts';
 import type { MomentsPort } from '../../src/engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../src/engine/HudPort.ts';
 import type { AvailableCommand, Command, CombatantId } from '../../src/battle/common/types.ts';
@@ -40,6 +41,10 @@ class SilentMenuHud implements HudPort {
 async function settle(turns = 2000): Promise<void> {
   for (let i = 0; i < turns; i++) await Promise.resolve();
 }
+
+// 2026-11-07: the turn-start slab is `?portraits=turns` now (the old behaviour; the default shows a portrait on big moves only). The rule pinned here, that no portrait delays a menu, holds for the old beat.
+beforeEach(() => setPortraitMode('turns'));
+afterEach(() => setPortraitMode(null));
 
 describe('turn cut-in vs the first usable menu (PR-0061, PR-0005)', () => {
   it('opens the command menu while the cut-in slab is still up', async () => {

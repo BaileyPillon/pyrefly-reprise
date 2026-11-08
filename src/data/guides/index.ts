@@ -38,6 +38,9 @@ import { FFX2_ANGRA_MAINYU_GUIDE } from './ffx2-angra-mainyu.ts';
 import { SANCTUARY_KEEPER_GUIDE } from './sanctuary-keeper.ts';
 import { PENANCE_GUIDE } from './penance.ts';
 import { FFX2_YUNAS_BALLAD_GUIDE } from './ffx2-yunas-ballad.ts';
+import { SPHERIMORPH_GUIDE } from './spherimorph.ts';
+import { FFX2_YOUTH_LEAGUE_GUIDE } from './ffx2-youth-league.ts';
+import { OMEGA_RUINS_GUIDE } from './omega-ruins.ts';
 
 export type {
   ChapterGuide,
@@ -133,6 +136,11 @@ export const GUIDES: readonly ChapterGuide[] = [
   PENANCE_GUIDE,
   // The hidden Yuna Ballad chapter (FFX-2 only, the possessed Rikku and Paine; EXPERIMENT_CHAPTERS, not listed): its guide rides here so the panel and the tactic find it by boss id.
   FFX2_YUNAS_BALLAD_GUIDE,
+  // The hidden Spherimorph chapter (FFX only, the guardian of the spring in the Macalania Woods; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  SPHERIMORPH_GUIDE,
+  FFX2_YOUTH_LEAGUE_GUIDE,
+  // The hidden Omega Ruins chapter (FFX only; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  OMEGA_RUINS_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */

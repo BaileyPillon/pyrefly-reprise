@@ -10,10 +10,15 @@
  * FFX's CTB has no charge: its cut-in plays at once, as before.
  */
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { BattleState } from '../../src/battle/common/types.ts';
 import type { MomentsPort } from '../../src/engine/BattlePresenterPorts.ts';
+import { setPortraitMode } from '../../src/engine/CutInMode.ts';
 import { CUT_IN_WAIT_CAP_MS, TurnCutInBeat } from '../../src/engine/TurnCutIn.ts';
+
+// 2026-11-07: the turn-start portrait is the OLD behaviour now (`?portraits=turns`); the default plays none (`tests/unit/portraits-big-moves.test.ts`). This file pins how that old beat waits.
+beforeEach(() => setPortraitMode('turns'));
+afterEach(() => setPortraitMode(null));
 
 type Req = Parameters<NonNullable<MomentsPort['turnCutIn']>>[0];
 

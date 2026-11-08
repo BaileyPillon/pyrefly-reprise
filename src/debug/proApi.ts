@@ -11,6 +11,8 @@ import { SKY_CHAPTERS, SKY_CHANGES, SKY_DEFAULTS, SKY_OPTIONS, setSkyOption, sky
 import { lookState } from '../engine/look/LookState.ts';
 import { bossCleanMode, bossCleanOn, setBossClean, type BossCleanMode } from '../engine/look/pro/BossClean.ts';
 import { partyRimMode, partyRimOff, setPartyRim, type PartyRimMode } from '../engine/look/pro/PartyRimSwitch.ts';
+import { markerStyle, setMarkerStyle, type MarkerStyle } from '../ui/ffx/targetCone.ts';
+import { portraitMode, setPortraitMode, type PortraitMode } from '../engine/CutInMode.ts';
 import { PRO_PIECES, dangerPulseFromSearch, proLookOn, proMode, proPieceOn, setProMode, setProPiece, type ProMode, type ProPiece } from '../engine/look/pro/ProSwitch.ts';
 
 /** The Danger pulse's off switch on the page (`html[data-danger-pulse='off']`, read by `ui/common/pro-markers.css`): true while the low-HP row pulses. */
@@ -67,5 +69,15 @@ export function installProDebug(api: Record<string, unknown>): void {
     if (!PRO_PIECES.includes(piece)) return false;
     if (typeof on === 'boolean') setProPiece(piece, on);
     return proPieceOn(piece);
+  };
+  /** 2026-11-07 (FFX only; `ui/ffx/targetCone.ts`): `marker()` reads FFX's aiming marker (`'cone'`, the default, or `'hand'`, the glove: `?marker=hand`), `marker('cone' | 'hand' | null)` sets it for the cursor's next draw (`null` reads the address again). FFX-2's ring is not affected. */
+  api['marker'] = (m?: MarkerStyle | null): MarkerStyle => {
+    if (m === 'cone' || m === 'hand' || m === null) setMarkerStyle(m);
+    return markerStyle();
+  };
+  /** 2026-11-07 (both games; `engine/CutInMode.ts`): `portraits()` reads when a portrait fills the left of the screen (`'big'`, the default: a big move only; `'turns'`: each member's first turn, the old behaviour: `?portraits=turns`; `'off'`: never), `portraits('big' | 'turns' | 'off' | null)` sets it for the next turn or action (`null` reads the address again). */
+  api['portraits'] = (m?: PortraitMode | null): PortraitMode => {
+    if (m === 'big' || m === 'turns' || m === 'off' || m === null) setPortraitMode(m);
+    return portraitMode();
   };
 }

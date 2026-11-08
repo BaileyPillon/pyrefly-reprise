@@ -11,6 +11,7 @@ import { bodyOf, inHitReaction, OLD_REACTION, reactionSpan, reactionWindow, with
 import { aiUnit } from '../../src/battle/ffx2/fixtures.ts';
 import type { Ffx2Unit } from '../../src/battle/ffx2/internal.ts';
 import * as data from '../../src/data/ffx2/index.ts';
+import { ACT_ENEMY_IDS } from '../../src/data/youth-league-ids.ts';
 import { withActionSpanKnobsAsync } from '../../src/battle/ffx2/action-span.ts';
 
 describe('the data reaches every unit', () => {
@@ -29,7 +30,11 @@ describe('the data reaches every unit', () => {
     // The hidden Farplane Cup's three duelists (rows 311, 317 and 319; FFX-2 only, 2026-11-06) are in the same position: their motion sets are not in the frame table yet.
     // The hidden Bevelle Guardians' three bodies (motion sets 0x1106, 0x1107 and 0x10af in the RE note) are in the same state (the frame table was not read for them).
     // The hidden Yuna's Ballad's two bodies (motion sets 0x10fe and 0x1100 in the RE note) have no damage-clip frame counts in the repo either (the frame table was not read for them), so they keep today's window too.
-    expect(missing.sort()).toEqual(['bulwark-l', 'bulwark-r', 'x2-aranea', 'x2-baralai', 'x2-black-elemental', 'x2-chac', 'x2-concherer', 'x2-cup-auron', 'x2-cup-seymour', 'x2-cup-tidus', 'x2-georapella', 'x2-possessed-paine', 'x2-possessed-rikku', 'x2-precepts-guard']);
+    // The hidden Youth League Tournament's twenty fighters (rows 183, 184, 279, 210, 211, 193, 214 and 215; FFX-2 only, 2026-11-07; motion sets 0x10b7 to 0x10b9, 0x10c1, 0x10d2, 0x10d3, 0x10d6 and 0x10d7) are in the same state.
+    expect(missing.sort()).toEqual([
+      'bulwark-l', 'bulwark-r', 'x2-aranea', 'x2-baralai', 'x2-black-elemental', 'x2-chac', 'x2-concherer', 'x2-cup-auron', 'x2-cup-seymour', 'x2-cup-tidus', 'x2-georapella', 'x2-possessed-paine', 'x2-possessed-rikku', 'x2-precepts-guard',
+      ...ACT_ENEMY_IDS.flat(),
+    ].sort());
   });
 });
 

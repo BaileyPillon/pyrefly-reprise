@@ -1,7 +1,7 @@
 /** Types for `critic/runner/lib/continuity-rig-probe.mjs` (the page-side reader of a rigged figure, R57-002), so the unit tests can import it. */
 import type { RigRecord } from './continuity-rig.mjs';
 
-export interface RigReaderConfig { head: string[]; centroid: string[]; feet: string[]; headPart: string; headVariants?: string[]; variantMinArea?: number }
+export interface RigReaderConfig { head: string[]; centroid: string[]; feet: string[]; crown?: string[]; headPart: string; headVariants?: string[]; variantMinArea?: number }
 export interface RigSample {
   name: string; key: string; busy: boolean;
   /** the key's painted box on the screen: top-left, top-right, bottom-right, bottom-left (8 numbers, CSS px), or null with no stamped shape */

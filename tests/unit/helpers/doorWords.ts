@@ -29,17 +29,20 @@ export const DOORS_IN_ORDER: ReadonlyArray<readonly [word: string, game: 'ff7' |
   ['duelist', 'ffx2'], // the hidden Farplane Cup's (chapter 38, 2026-11-06)
   ['beast', 'ffx'], // the hidden Sanctuary Keeper's (chapter 39, 2026-11-06)
   ['wraith', 'ffx2'], // the hidden Yuna's Ballad's (chapter 40, 2026-11-06)
+  ['spherimorph', 'ffx'], // the hidden Spherimorph's (chapter 41, 2026-11-06)
+  ['youth', 'ffx2'], // the hidden Youth League Tournament's (chapter 42, 2026-11-07)
+  ['weapon', 'ffx'], // the hidden Omega Ruins' (chapter 43, 2026-11-06)
 ];
 
 /** The words alone, in the table's order. */
 export const DOOR_WORDS_IN_ORDER: readonly string[] = DOORS_IN_ORDER.map(([word]) => word);
 
 /**
- * The allowance of a door suite's pair test ("the first word to finish wins when two are typed in a row"): it mounts three real boards for every other door, so it grows with the number of doors. 15 s a door,
- * 180 s at the least (315 s at twenty-one doors). Measured at twenty-one doors: 15 to 28 s a suite when three door suites run together, but 180 to 250 s a suite when all twelve run together on three workers (jsdom mounts
+ * The allowance of a door suite's pair test ("the first word to finish wins when two are typed in a row"): it mounts three real boards for every other door, so it grows with the number of doors. 40 s a door,
+ * 180 s at the least (1,040 s at twenty-six doors; it was 15 s a door, 315 s at twenty-one, then 25 s a door at twenty-five). **Raised to 40 s a door on 2026-11-07 (youth lane, 960 s at twenty-four; kept at the r77 integration):** `valefor-door` timed out once at 15 s a door under load at twenty-four doors; a full run measured about 9 s a door, and eight suites together on a saturated CPU (100 percent, other lanes running) took 501 s for that one pair test, 21 s a door (a 25 s allowance would have cleared that by 16 percent only, and the margin thins with every door). At twenty-five doors (release 77 review m5) the cost was about 12.6 s a door when another lane's suite shares the machine (`valefor-door` took 316 s of its 375 s) and `windwaker-door` timed out in the integrator's run at 25 s a door. Measured at twenty-one doors: 15 to 28 s a suite when three door suites run together, but 180 to 250 s a suite when all twelve run together on three workers (jsdom mounts
  * fight for the CPU), and 193 s for the pair test of one suite in the one full-suite run (3,125 s on three workers, the long benches running beside it): the old 180 s allowance of fifteen doors was not enough. A hang still fails, later.
  */
-export const DOOR_PAIR_TEST_TIMEOUT_MS = Math.max(180_000, DOORS_IN_ORDER.length * 15_000);
+export const DOOR_PAIR_TEST_TIMEOUT_MS = Math.max(180_000, DOORS_IN_ORDER.length * 40_000);
 
 /**
  * The allowance of a door suite's LOOP test (one that mounts a real board for every door: "a wrong letter resets", "each word opens its own chapter and nothing else", the phone-tier suites' "every other door opens"): it grows with the
