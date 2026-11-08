@@ -42,6 +42,7 @@ import { FFX2_YUNAS_BALLAD_DOC } from './ffx2-yunas-ballad.ts';
 import { SPHERIMORPH_DOC } from './spherimorph.ts';
 import { FFX2_YOUTH_LEAGUE_DOC } from './ffx2-youth-league.ts';
 import { OMEGA_RUINS_DOC } from './omega-ruins.ts';
+import { FF7_JENOVA_LIFE_DOC } from './ff7-jenova-life.ts';
 import { FFX2_IFRIT_KILIKA_DOC } from './ffx2-ifrit-kilika.ts';
 
 export const GUIDE_DOCS: readonly GuideDoc[] = [
@@ -79,6 +80,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   SPHERIMORPH_DOC, // the hidden Spherimorph (FFX only)
   FFX2_YOUTH_LEAGUE_DOC, // the hidden Youth League Tournament (FFX-2 only)
   OMEGA_RUINS_DOC, // the hidden Omega Ruins (FFX only)
+  FF7_JENOVA_LIFE_DOC, // the hidden Jenova LIFE (FF7 only)
   FFX2_IFRIT_KILIKA_DOC, // the hidden Ifrit at Kilika Temple (FFX-2 only)
 ];
 

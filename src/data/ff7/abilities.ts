@@ -10,6 +10,7 @@
  */
 
 import type { Ff7AbilityDef } from '../../battle/ff7/defs.ts';
+import { FF7_CH44_LIMITS, FF7_CH44_SPELLS, FF7_JENOVA_ABILITIES, HI_POTION_EFFECT } from './abilities-ch44.ts';
 import type { Ff7EnemyAbilityId, Ff7LimitId, Ff7SpellId } from './ids.ts';
 
 // ---------------------------------------------------------------------------
@@ -86,7 +87,7 @@ const CURE: Ff7AbilityDef = {
   cite: 'core §8.4 [single source: Fergusson PM §2.6]',
 };
 
-export const FF7_SPELLS: Readonly<Record<Ff7SpellId, Ff7AbilityDef>> = { bolt: BOLT, ice: ICE, cure: CURE };
+export const FF7_SPELLS: Readonly<Record<Ff7SpellId, Ff7AbilityDef>> = { bolt: BOLT, ice: ICE, cure: CURE, ...FF7_CH44_SPELLS };
 
 // ---------------------------------------------------------------------------
 // Limit Level 1 [core §7.3, single source: Fergusson PM §3.3.1, §3.3.2]
@@ -122,7 +123,7 @@ const BIG_SHOT: Ff7AbilityDef = {
   cite: 'core §7.3 [single source: Fergusson PM §3.3.2]',
 };
 
-export const FF7_LIMITS: Readonly<Record<Ff7LimitId, Ff7AbilityDef>> = { braver: BRAVER, 'big-shot': BIG_SHOT };
+export const FF7_LIMITS: Readonly<Record<Ff7LimitId, Ff7AbilityDef>> = { braver: BRAVER, 'big-shot': BIG_SHOT, ...FF7_CH44_LIMITS };
 
 // ---------------------------------------------------------------------------
 // Item effects [core §8.6, single source: Fergusson PM §5]
@@ -165,6 +166,7 @@ const PHOENIX_DOWN_EFFECT: Ff7AbilityDef = {
 export const FF7_ITEM_EFFECTS: Readonly<Record<string, Ff7AbilityDef>> = {
   [POTION_EFFECT.id]: POTION_EFFECT,
   [PHOENIX_DOWN_EFFECT.id]: PHOENIX_DOWN_EFFECT,
+  [HI_POTION_EFFECT.id]: HI_POTION_EFFECT,
 };
 
 // ---------------------------------------------------------------------------
@@ -177,6 +179,7 @@ function enemy(def: Omit<Ff7AbilityDef, 'kind' | 'mpCost'> & { id: Ff7EnemyAbili
 }
 
 export const FF7_ENEMY_ABILITIES: Readonly<Record<Ff7EnemyAbilityId, Ff7AbilityDef>> = {
+  ...FF7_JENOVA_ABILITIES, // chapter 44: Jenova LIFE's four actions (`./abilities-ch44.ts`)
   // No damage, no effect; always hits; picks the next target [gs §4, verified: 3 sources].
   'search-scope': enemy({
     id: 'search-scope', name: 'Search Scope', formula: 'none', power: 0, canMiss: false,

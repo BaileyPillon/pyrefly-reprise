@@ -32,6 +32,7 @@ export const DOORS_IN_ORDER: ReadonlyArray<readonly [word: string, game: 'ff7' |
   ['spherimorph', 'ffx'], // the hidden Spherimorph's (chapter 41, 2026-11-06)
   ['youth', 'ffx2'], // the hidden Youth League Tournament's (chapter 42, 2026-11-07)
   ['weapon', 'ffx'], // the hidden Omega Ruins' (chapter 43, 2026-11-06)
+  ['bluelight', 'ff7'], // the hidden Jenova LIFE's (chapter 44, 2026-11-07)
   ['ifrit', 'ffx2'], // the hidden Ifrit at Kilika Temple's (chapter 46, 2026-11-07)
 ];
 

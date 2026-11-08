@@ -107,14 +107,35 @@ export function baseDex(base: Pick<Ff7BaseStats, 'dex'>): number {
   return base.dex;
 }
 
-/** Spells a member's equipped Materia grants, in slot order, without duplicates [core §8.4]. */
+/**
+ * The Materia level an orb has reached, 1-based: the highest level whose AP is banked (an orb with no `ap` is at
+ * level 1). A Materia with no `levels` is always level 1 [LE party 3.5; chapter 44].
+ */
+export function materiaLevel(def: Ff7MateriaDef, ap: number | undefined): number {
+  const levels = def.levels;
+  if (!levels) return 1;
+  let level = 1;
+  levels.forEach((l, i) => {
+    if ((ap ?? 0) >= l.ap) level = i + 1;
+  });
+  return level;
+}
+
+/** The spells one orb grants at its level, cumulatively (Restore at level 2: Cure, Cure2). */
+export function spellsOfOrb(def: Ff7MateriaDef, ap: number | undefined): readonly string[] {
+  const levels = def.levels;
+  if (!levels || levels.length === 0) return def.spells;
+  return levels[materiaLevel(def, ap) - 1]?.spells ?? def.spells;
+}
+
+/** Spells a member's equipped Materia grants, in slot order, without duplicates [core §8.4]; levels follow the orb's AP. */
 export function spellsFromMateria(
   member: Pick<Ff7MemberBuild, 'materia'>,
   materia: Readonly<Record<string, Ff7MateriaDef>>,
 ): string[] {
   const out: string[] = [];
   for (const m of equippedMateria(member)) {
-    for (const s of materiaDef(materia, m.id).spells) if (!out.includes(s)) out.push(s);
+    for (const s of spellsOfOrb(materiaDef(materia, m.id), m.ap)) if (!out.includes(s)) out.push(s);
   }
   return out;
 }

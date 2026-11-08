@@ -9,7 +9,8 @@
 import type { Ff7ItemDef } from '../../battle/ff7/defs.ts';
 import type { Ff7ItemId } from './ids.ts';
 
-type Consumable = Exclude<Ff7ItemId, 'assault-gun'>;
+/** The drops (`assault-gun`, `wizard-bracelet`) are equipment, not consumables. */
+type Consumable = Exclude<Ff7ItemId, 'assault-gun' | 'wizard-bracelet'>;
 
 export const FF7_ITEMS: Readonly<Record<Consumable, Ff7ItemDef>> = {
   potion: {
@@ -25,5 +26,13 @@ export const FF7_ITEMS: Readonly<Record<Consumable, Ff7ItemDef>> = {
     effect: 'item:phoenix-down',
     usableInBattle: true,
     cite: 'core §8.6 [single source: Fergusson PM §5]',
+  },
+  // Chapter 44: Hi-Potion, 500 HP (jl §9; the row is Fergusson PM §5, unread). Ether (100 MP) is not built: the engine has no MP-restoring item path.
+  'hi-potion': {
+    id: 'hi-potion',
+    name: 'Hi-Potion',
+    effect: 'item:hi-potion',
+    usableInBattle: true,
+    cite: 'LE party §7 [single source: Fergusson PM §5 unread]',
   },
 };

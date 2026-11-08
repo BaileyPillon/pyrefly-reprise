@@ -20,7 +20,13 @@ import type { EventDraft } from '../internal.ts';
 
 /** What a script section asks the engine to do. */
 export type Ff7AiPlan =
-  | { kind: 'ability'; abilityId: string; targets: CombatantId[] }
+  | {
+      kind: 'ability';
+      abilityId: string;
+      targets: CombatantId[];
+      /** More uses in the same turn, in order (Jenova LIFE's second Blue Light, chapter 44); each pays its own MP and picks no new target. */
+      followUps?: ReadonlyArray<{ abilityId: string; targets: CombatantId[] }>;
+    }
   /** The turn passes with no action (Guard Scorpion's waits, gs §5.2). */
   | { kind: 'pass' };
 
@@ -51,6 +57,11 @@ export interface Ff7AiScript {
   counterGeneral?(api: Ff7AiApi, attackerId: CombatantId): Ff7AiPlan | null;
   /** "Counter - Death": an opponent's action killed it. */
   counterDeath?(api: Ff7AiApi, attackerId: CombatantId): Ff7AiPlan | null;
+  /**
+   * "Counter - Magical": a magical attack of an opponent hit it and it survived (Jenova LIFE's Reflect, chapter 44)
+   * [core §12 shape; the section name and the Reflect behaviour from the Speedrun wiki and Lifestream Encore, 2 sources].
+   */
+  counterMagical?(api: Ff7AiApi, attackerId: CombatantId): Ff7AiPlan | null;
 }
 
 /** The script's variables, keyed per enemy in `BattleState.flags`. */

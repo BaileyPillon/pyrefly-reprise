@@ -46,7 +46,9 @@
  * **`wraith`** (FFX-2, the hidden Yuna's Ballad, `./wraithDoor.ts`: W is `up`, R is `r1`, A is `left`; I, T and H are unbound) is a plain `WordDoor` too.
  * **`ifrit`** (FFX-2, the hidden Ifrit at Kilika Temple, `./ifritDoor.ts`: F is `l1`, R is `r1`, which the board ignores; I and T are unbound) is a plain `WordDoor` too.
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith`, `youth`, `ifrit` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno` and `beast`.
+ * **`bluelight`** (FF7, the hidden Jenova LIFE, `./bluelightDoor.ts`: B, L, U, I, G, H and T; E is `start`; see `tests/unit/bluelight-door.test.ts` for what the real key map binds) is a plain `WordDoor` behind the same FF7 switch as `limit` (`gate: ff7ExperimentReady`), and is **not** desktop-only.
+ *
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit` and `bluelight`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith`, `youth`, `ifrit` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno` and `beast`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -79,6 +81,7 @@ import { WRAITH_DOOR_CHAPTER, WRAITH_DOOR_WORD } from './wraithDoor.ts';
 import { SPHERIMORPH_DOOR_CHAPTER, SPHERIMORPH_DOOR_WORD } from './spherimorphDoor.ts';
 import { YOUTH_DOOR_CHAPTER, YOUTH_DOOR_WORD } from './youthDoor.ts';
 import { WEAPON_DOOR_CHAPTER, WEAPON_DOOR_WORD } from './weaponDoor.ts';
+import { BLUELIGHT_DOOR_CHAPTER, BLUELIGHT_DOOR_WORD } from './bluelightDoor.ts';
 import { IFRIT_DOOR_CHAPTER, IFRIT_DOOR_WORD } from './ifritDoor.ts';
 
 /**
@@ -132,6 +135,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: SPHERIMORPH_DOOR_WORD, chapter: SPHERIMORPH_DOOR_CHAPTER },
   { word: YOUTH_DOOR_WORD, chapter: YOUTH_DOOR_CHAPTER },
   { word: WEAPON_DOOR_WORD, chapter: WEAPON_DOOR_CHAPTER },
+  { word: BLUELIGHT_DOOR_WORD, chapter: BLUELIGHT_DOOR_CHAPTER, gate: ff7ExperimentReady }, // FF7's second door: a plain typed word behind the same switch as `limit`
   { word: IFRIT_DOOR_WORD, chapter: IFRIT_DOOR_CHAPTER },
 ];
 

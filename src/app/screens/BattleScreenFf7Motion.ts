@@ -39,6 +39,8 @@ import { motionMs, type ActionMotionPort, type ActionStartEvent, type MotionCtx 
 import { FF7_ABILITIES } from '../../data/ff7/abilities.ts';
 import { viewportAspect } from '../../scenes/cavern-stolen-fayth-rigs.ts';
 import { SECTOR1_HEIGHTS, sector1Layout, strikeSpot, type Sector1Layout } from '../../scenes/sector1-reactor-staging.ts';
+import { ff7LayoutFor, FORGOTTEN_CAPITAL_HEIGHTS } from '../../scenes/forgotten-capital-staging.ts';
+import { JENOVA_LIFE_ID } from '../../data/ff7/jenova-life-ids.ts';
 import { FF7_BOSS_DOWN } from '../../engine/spellfx/ff7/ff7FxSpecs.ts';
 import { ff7Calm } from './battleFf7Fx.ts';
 
@@ -79,8 +81,8 @@ export function ff7PhysicalAction(abilityId: string | undefined): boolean {
   return abilityId !== undefined && FF7_ABILITIES[abilityId]?.formula === 'physical';
 }
 
-/** The pose a caster raises: Cloud's sword, Barret's free hand (his right arm is the gun). */
-const CAST_POSE: Readonly<Record<string, string>> = { cloud: 'windup', barret: 'punch' };
+/** The pose a caster raises: Cloud's sword, Barret's free hand (his right arm is the gun), Tifa's chambered fist (her wind-up; an owed painting, so the stand-in shows her idle). */
+const CAST_POSE: Readonly<Record<string, string>> = { cloud: 'windup', barret: 'punch', tifa: 'windup' };
 
 type Wait = (ms: number) => Promise<void>;
 
@@ -103,7 +105,9 @@ export class Ff7ActionMotion implements ActionMotionPort {
   /** Members of `build` whose weapon is not Long Range. */
   static forBuild(build: Ff7PartyBuild, state?: () => BattleState | null): Ff7ActionMotion {
     const runners = new Set(build.members.filter((m) => m.weapon.longRange !== true).map((m) => m.id));
-    return new Ff7ActionMotion(runners, undefined, state);
+    // The layout follows the fight's boss (Jenova LIFE's field for chapter 44, the reactor's otherwise); with no state it is the reactor's, as always.
+    const layoutOf = state ? (): Sector1Layout => ff7LayoutFor(state()?.enemyIds?.[0], viewportAspect()) : undefined;
+    return new Ff7ActionMotion(runners, layoutOf, state);
   }
 
   ownsWindUp(event: ActionStartEvent): boolean {
@@ -213,8 +217,12 @@ export class Ff7ActionMotion implements ActionMotionPort {
     return this.home.has(id);
   }
 
-  /** D1: the win poses, then a hold in silence. */
+  /** D1: the win poses, then a hold in silence. Jenova LIFE's win has no poses: the original fight ends with no victory pose (`research/ff7-jenova-life.md` section 2), so only the hold. */
   async victory(ctx: MotionCtx): Promise<void> {
+    if (this.state()?.enemyIds?.[0] === JENOVA_LIFE_ID) {
+      await ctx.sleep(FF7_VICTORY_HOLD_MS / 2);
+      return;
+    }
     const up = (id: CombatantId): boolean => {
       const c = this.state()?.combatants[id];
       return c ? c.alive && !c.removed : true;
@@ -280,5 +288,5 @@ async function barretWins(a: ActorHandle, ctx: MotionCtx, loop: { on: boolean })
 
 /** The target's world height (the scene's own heights), for the tests. */
 export function ff7HeightOf(id: CombatantId): number {
-  return (SECTOR1_HEIGHTS as Record<string, number>)[id] ?? 2;
+  return (SECTOR1_HEIGHTS as Record<string, number>)[id] ?? (FORGOTTEN_CAPITAL_HEIGHTS as Record<string, number>)[id] ?? 2;
 }

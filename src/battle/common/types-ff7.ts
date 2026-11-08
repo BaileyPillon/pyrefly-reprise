@@ -147,6 +147,8 @@ export interface Ff7EquipmentDef {
   statBonus?: Partial<Pick<Ff7BaseStats, 'str' | 'vit' | 'mag' | 'spr' | 'dex' | 'lck'>>;
   /** Weapons only: Long Range ignores the row check [core §5.1]. */
   longRange?: boolean;
+  /** Weapons only: added to the critical chance of the Attack command, in percent (Diamond Knuckle +2) [core §3.3, PM §4.1]. */
+  critBonus?: number;
   /** Weapons only: the attack's element for the affinity check, e.g. `'cut'`, `'shoot'`. */
   element?: string;
   slots: MateriaSlotLayout;
@@ -168,6 +170,25 @@ export interface Ff7AtbState {
 // ---------------------------------------------------------------------------
 // Combatant
 // ---------------------------------------------------------------------------
+
+/**
+ * The FF7 statuses the engine models (hidden chapter 44, Jenova LIFE; `battle/ff7/statuses.ts`). Reflect, Barrier,
+ * MBarrier and Regen only: no Stop, Sleep or Confusion is built [LE formulas 7.2, single source for the durations].
+ */
+export type Ff7StatusId = 'reflect' | 'barrier' | 'mbarrier' | 'regen';
+
+/** One status on a fighter, timed on its own V-Timer [core §2.2]. */
+export interface Ff7StatusEntry {
+  /** The V-Timer value at which it ends; `null` = until removed (Reflect). */
+  until: number | null;
+  /** The whole duration in V-Timer points when it landed, for the HUD's bar (`null` with `until`). */
+  span: number | null;
+  /** Regen only: the V-Timer value of the next heal tick. */
+  nextTick?: number;
+}
+
+/** The statuses a fighter holds now; absent or empty = none (every Guard Scorpion fighter). */
+export type Ff7StatusState = Partial<Record<Ff7StatusId, Ff7StatusEntry>>;
 
 /** An enemy's listed stats, already final: no At% and no MD% [core §1.3]. */
 export type Ff7EnemyStats = Omit<Ff7DerivedStats, 'atPct' | 'mdPct'>;
@@ -215,6 +236,8 @@ export interface Ff7Combatant extends Combatant {
      * taken is halved until the next action [core §5.2, §4.5 step 4]. Absent = false.
      */
     defending?: boolean;
+    /** Reflect, Barrier, MBarrier, Regen now on the fighter (`battle/ff7/statuses.ts`); absent = none. */
+    status?: Ff7StatusState;
   };
 }
 

@@ -11,7 +11,9 @@ import { FF7_LIMIT_TABLES } from './limits.ts';
 import { FF7_MATERIA } from './materia.ts';
 
 export { sector1ReactorBuild } from './builds/sector1-reactor.ts';
+export { forgottenCapitalBuild } from './builds/forgotten-capital.ts';
 export { guardScorpion, guardScorpionGroup } from './enemies/guard-scorpion.ts';
+export { jenovaLife, jenovaLifeGroup } from './enemies/jenova-life.ts';
 
 /** Build the registry. A fresh object each call; the records are shared read-only data. */
 export function ff7Registry(): Ff7Registry {

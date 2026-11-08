@@ -58,6 +58,8 @@ import { buildSanctuaryKeeperScene, SANCTUARY_KEEPER_SLOTS } from './sanctuary-k
 import { SANCTUARY_KEEPER_SCENE } from '../data/ffx/sanctuary-keeper-ids.ts';
 import { buildSpherimorphScene, SPHERIMORPH_SLOTS } from './spherimorph.ts'; // Spherimorph's spring (FFX only, hidden chapter): the Macalania Temple's plate and scene with the guardian staged
 import { SPHERIMORPH_SCENE } from '../data/ffx/spherimorph-ids.ts';
+import { buildForgottenCapitalScene, FORGOTTEN_CAPITAL_SLOTS } from './forgotten-capital.ts'; // the altar of the Forgotten Capital (FF7 only, hidden chapter): the Guard Scorpion's field with Jenova LIFE's staging
+import { FORGOTTEN_CAPITAL_SCENE } from '../data/ff7/jenova-life-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -99,6 +101,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   { key: SPHERIMORPH_SCENE, title: 'Macalania Woods — the spring (Spherimorph)', build: buildDemoScene, slots: SPHERIMORPH_SLOTS, placeholder: false },
   // The Omega Ruins (FFX only, hidden chapter): the Cavern of the Stolen Fayth's plate and scene, with the Weapons and Nemesis alone on the boss spot.
   { key: OMEGA_RUINS_SCENE, title: 'The Omega Ruins', build: buildDemoScene, slots: OMEGA_RUINS_SLOTS, placeholder: false },
+  // Jenova LIFE (FF7 only, hidden chapter): the altar of the Forgotten Capital, on the Guard Scorpion's field as a stand-in, with this fight's staging.
+  { key: FORGOTTEN_CAPITAL_SCENE, title: 'The Forgotten Capital — the altar (Jenova LIFE)', build: buildDemoScene, slots: FORGOTTEN_CAPITAL_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -122,4 +126,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [SANCTUARY_KEEPER_SCENE]: buildSanctuaryKeeperScene, // the hidden Sanctuary Keeper chapter (FFX only)
   [SPHERIMORPH_SCENE]: buildSpherimorphScene, // the hidden Spherimorph chapter (FFX only)
   [OMEGA_RUINS_SCENE]: buildOmegaRuinsScene, // the hidden Omega Ruins chapter (FFX only)
+  [FORGOTTEN_CAPITAL_SCENE]: buildForgottenCapitalScene, // the hidden Jenova LIFE chapter (FF7 only)
 };
