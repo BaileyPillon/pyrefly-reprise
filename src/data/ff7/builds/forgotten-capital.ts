@@ -49,7 +49,7 @@ const CLOUD: Ff7MemberBuild = {
 const TIFA: Ff7MemberBuild = {
   id: 'tifa',
   name: 'Tifa',
-  spriteKey: 'ff7-film-tifa', // art owed (docs/handoff/ch-jenova-life.md section 6): the painted loader stands in until it is installed
+  spriteKey: 'ff7-film-tifa', // painted (the art-ff7 kit, installed in the release 78 art mirror; docs/handoff/r78-integration.md); a tree whose art mirror predates it draws the stage's fallback figure
   portraitKey: 'tifa',
   base: { level: 38, hp: 2072, mp: 291, str: 58, vit: 52, mag: 53, spr: 54, dex: 43, lck: 23 },
   row: 'front',

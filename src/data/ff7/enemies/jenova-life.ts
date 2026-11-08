@@ -33,7 +33,7 @@ const LCK = 40;
 export const jenovaLife: EnemyDef = {
   id: ID,
   name: 'Jenova LIFE',
-  spriteKey: 'ff7-film-jenova-life', // art owed (docs/handoff/ch-jenova-life.md section 6); the painted loader stands in until it is installed
+  spriteKey: 'ff7-film-jenova-life', // painted (the art-ff7 kit, installed in the release 78 art mirror; docs/handoff/r78-integration.md); a tree whose art mirror predates it draws the stage's fallback figure
   slot: 0,
   // Mirrors (display only): str = Att, def, mag = MAt, mdef = MDf, agi = Dex, luck, eva = Df%. FF7 enemies have no accuracy stat: acc 0.
   stats: {
