@@ -12,6 +12,7 @@
  * - the hidden Last Summoning chapter's Dream's End (FFX only): Chapter III's scene with the staging of the aeons Chapter III never fields (`./last-summoning.ts`);
  * - the hidden 3D Bahamut chapter's chamber (FFX-2 only): Chapter IV's Bevelle underground under frame b's camera (the dolly-in; `?frame=a` is the older one), with the real FFX-2 models on the actors, softly lit (`./exp-yrp-3d-stage.ts`).
  * - the hidden Wind Waker chapter's temple (FFX-2 only): a procedural toon chamber under the target shot's low camera, with toon models on the actors (`./exp-windwaker-stage.ts`).
+ * - the hidden Wendigo chapter's lake (FFX only): Chapter VII's Macalania Temple stage standing in for frozen Lake Macalania, with Wendigo and its two Guardians staged (`./wendigo-lake.ts`); the Meshy 3D stage replaces its factory.
  *
  * Each row is real (the factory wins); `build` is the unreachable demo diorama, as for every scene with a factory of its own. Moved here unchanged from `./index.ts`, except Fayth's, which is new.
  * Game case: each row is its own chapter's game's, as tagged; the table is shared plumbing.
@@ -60,6 +61,8 @@ import { buildSpherimorphScene, SPHERIMORPH_SLOTS } from './spherimorph.ts'; // 
 import { SPHERIMORPH_SCENE } from '../data/ffx/spherimorph-ids.ts';
 import { buildForgottenCapitalScene, FORGOTTEN_CAPITAL_SLOTS } from './forgotten-capital.ts'; // the altar of the Forgotten Capital (FF7 only, hidden chapter): the Guard Scorpion's field with Jenova LIFE's staging
 import { FORGOTTEN_CAPITAL_SCENE } from '../data/ff7/jenova-life-ids.ts';
+import { buildWendigoLakeScene, WENDIGO_SCENE_ENTRY } from './wendigo-lake.ts'; // frozen Lake Macalania (FFX only, hidden chapter): Chapter VII's Temple stage with Wendigo and its Guardians staged, the stand-in for the Meshy 3D stage
+import { WENDIGO_SCENE } from '../data/ffx/wendigo-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -103,6 +106,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   { key: OMEGA_RUINS_SCENE, title: 'The Omega Ruins', build: buildDemoScene, slots: OMEGA_RUINS_SLOTS, placeholder: false },
   // Jenova LIFE (FF7 only, hidden chapter): the altar of the Forgotten Capital, on the Guard Scorpion's field as a stand-in, with this fight's staging.
   { key: FORGOTTEN_CAPITAL_SCENE, title: 'The Forgotten Capital — the altar (Jenova LIFE)', build: buildDemoScene, slots: FORGOTTEN_CAPITAL_SLOTS, placeholder: false },
+  // Wendigo (FFX only, hidden chapter): Chapter VII's Macalania Temple stage standing in for frozen Lake Macalania, Guardian, Wendigo and Guardian in the formation's order.
+  WENDIGO_SCENE_ENTRY,
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -127,4 +132,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [SPHERIMORPH_SCENE]: buildSpherimorphScene, // the hidden Spherimorph chapter (FFX only)
   [OMEGA_RUINS_SCENE]: buildOmegaRuinsScene, // the hidden Omega Ruins chapter (FFX only)
   [FORGOTTEN_CAPITAL_SCENE]: buildForgottenCapitalScene, // the hidden Jenova LIFE chapter (FF7 only)
+  [WENDIGO_SCENE]: buildWendigoLakeScene, // the hidden Wendigo chapter (FFX only)
 };

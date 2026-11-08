@@ -36,6 +36,7 @@ import { FFX2_TOURIST_TRAP_GUIDE } from './ffx2-tourist-trap.ts';
 import { FFX2_VALEFOR_BESAID_GUIDE } from './ffx2-valefor-besaid.ts';
 import { FFX2_ANGRA_MAINYU_GUIDE } from './ffx2-angra-mainyu.ts';
 import { SANCTUARY_KEEPER_GUIDE } from './sanctuary-keeper.ts';
+import { WENDIGO_GUIDE } from './wendigo.ts';
 import { PENANCE_GUIDE } from './penance.ts';
 import { FFX2_YUNAS_BALLAD_GUIDE } from './ffx2-yunas-ballad.ts';
 import { SPHERIMORPH_GUIDE } from './spherimorph.ts';
@@ -147,6 +148,8 @@ export const GUIDES: readonly ChapterGuide[] = [
   FF7_JENOVA_LIFE_GUIDE,
   // The hidden Ifrit at Kilika Temple chapter (FFX-2 only, the possessed fire aeon; EXPERIMENT_CHAPTERS, not listed): its guide rides here so the panel and the tactic find it by boss id.
   FFX2_IFRIT_KILIKA_GUIDE,
+  // The hidden Wendigo chapter (FFX only, Wendigo and its two Guado Guardians on frozen Lake Macalania; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  WENDIGO_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */

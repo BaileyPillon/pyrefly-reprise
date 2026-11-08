@@ -61,8 +61,8 @@ describe('the table', () => {
     }
     for (const id of LISTED_DOOR_CHAPTERS) expect((CHAPTER_IDS as readonly string[]).includes(id), id).toBe(true);
     expect(CHAPTER_DOORS.filter((d) => d.secret === true).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion']);
-    // Five gated rows: FF7's switch (the Guard Scorpion's secret door, and the Jenova LIFE chapter's typed word, 2026-11-07), and (driver decision 219q, 2026-11-03; FFX-2 only) the three hidden 3D chapters, desktop-only (`tests/unit/r74-hidden-3d-phone-doors.test.ts`; the anime chapter, 2026-11-06, is the third)
-    expect(CHAPTER_DOORS.filter((d) => d.gate !== undefined).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion', 'exp-yrp-3d', 'exp-windwaker', 'exp-anime', 'ff7-jenova-life']);
+    // Six gated rows: FF7's switch (the Guard Scorpion's secret door, and the Jenova LIFE chapter's typed word, 2026-11-07), the Meshy Wendigo chapter's desktop-only word (FFX, 2026-11-06), and (driver decision 219q, 2026-11-03; FFX-2 only) the three hidden 3D chapters, desktop-only (`tests/unit/r74-hidden-3d-phone-doors.test.ts`; the anime chapter, 2026-11-06, is the third)
+    expect(CHAPTER_DOORS.filter((d) => d.gate !== undefined).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion', 'exp-yrp-3d', 'exp-windwaker', 'exp-anime', 'ff7-jenova-life', 'wendigo']);
     for (const d of CHAPTER_DOORS.filter((x) => x.secret !== true && x.chapter !== 'mirror-aeons')) expect(getChapter(d.chapter), d.chapter).toMatchObject({ experimental: true });
     expect(getChapter('mirror-aeons')?.experimental).toBeUndefined();
   });

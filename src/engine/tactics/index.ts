@@ -63,6 +63,7 @@ import { LAST_SUMMONING_BOSS_IDS, lastSummoning } from './last-summoning.ts';
 import { SANCTUARY_KEEPER_BOSS_IDS, sanctuaryKeeper } from './sanctuary-keeper.ts';
 import { SPHERIMORPH_BOSS_IDS, spherimorph } from './spherimorph.ts';
 import { OMEGA_RUINS_BOSS_IDS, omegaRuins } from './omega-ruins.ts';
+import { WENDIGO_BOSS_IDS, wendigoLine } from './wendigo.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -114,6 +115,7 @@ export { lastSummoning, LAST_SUMMONING_BOSS_IDS } from './last-summoning.ts'; //
 export { sanctuaryKeeper, SANCTUARY_KEEPER_BOSS_IDS } from './sanctuary-keeper.ts'; // the hidden Sanctuary Keeper chapter (FFX only)
 export { spherimorph, SPHERIMORPH_BOSS_IDS } from './spherimorph.ts'; // the hidden Spherimorph chapter (FFX only)
 export { omegaRuins, OMEGA_RUINS_BOSS_IDS } from './omega-ruins.ts'; // the hidden Omega Ruins chapter (FFX only)
+export { wendigoLine, WENDIGO_BOSS_IDS } from './wendigo.ts'; // the hidden Wendigo chapter (FFX only)
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -208,6 +210,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...SPHERIMORPH_BOSS_IDS.map((bossId) => ({ chapterId: 'spherimorph', bossId, tactic: spherimorph })),
   // The hidden Omega Ruins chapter (FFX only): Auto-Life on the line against Nemesis, never an Overdrive, a swing for the two Weapons (plain blows from Nemesis's side lose to nothing but its count).
   ...OMEGA_RUINS_BOSS_IDS.map((bossId) => ({ chapterId: 'omega-ruins', bossId, tactic: omegaRuins })),
+  // The hidden Wendigo chapter (FFX only): the brute on the frozen lake; the line is a Petrify Grenade for the Guardians, Power Break and Dark Attack on Wendigo, Protect on the party, and no swing while its arms are up (plain blows win 0 of 100).
+  ...WENDIGO_BOSS_IDS.map((bossId) => ({ chapterId: 'wendigo', bossId, tactic: wendigoLine })),
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

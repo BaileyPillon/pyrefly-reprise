@@ -11524,6 +11524,16 @@
     "mtime": "2026-11-06T22:39:40.881Z",
     "delegated": "2026-11-07"
    }
+  },
+  "driver:2026-11-07-wendigo-lake-plate (the Wendigo chapter, delegated by Bailey)": {
+   "words": "Bailey, 2026-11-06: \"make 1 brand new chapter using meshy extensively please\", \"like a tech demo\"; 2026-11-07: \"ok keep going we have full usage here\"; 2026-10-31: \"you make the executive decisions for the next few days. i'll go with all of your recommendations.\"",
+   "decision": "ch-wendigo phase 4 (the driver's brief of 2026-11-07, item 4): the hidden FFX Wendigo chapter (number 49, the word wendigo) draws its own plate on the board, in the party prep's wash, the cutscene stage, the start card and the pause tab, instead of Chapter VII's Macalania Temple; the D-number is owed by the records pass",
+   "note": "DRIVER CALL, delegated by Bailey; not Bailey's own approval of the picture. The plate is a still of the running 3D lake (src/engine/lake3d), rendered by tools/lake-plate.mjs (view v-ice-low-wide: a low camera over the mirror ice, the moon and the aurora above, the Macalania Temple on its hill, nobody on the ice; headless Chromium on the GPU at 2688 x 1536, 8-bit RGB): an engine render, not a painting. It is kept outside every art mirror (the lane never writes one) in the models store (2026-11-07-plate) and its second-disk copy; the driver installs it into the release tree's art mirror (public/art/backdrops/wendigo-lake.png and .json) and the deploy refuses a tree that lacks it. No 2x master (the painted plates have one; this one is a first plate), no depth map.",
+   "public/art/backdrops/wendigo-lake.png": {
+    "sha256": "2cc4235ed0d0afe9a858d3a16aea59c284fcfb3f647cd1ca189e6eca30a0e460",
+    "mtime": "2026-11-07T20:27:26.404Z",
+    "delegated": "2026-11-07"
+   }
   }
  }
 }
