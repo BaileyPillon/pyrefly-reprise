@@ -125,7 +125,8 @@ async function run(release) {
       }
       return false;
     };
-    const targetName = () => page.evaluate(() => /TARGET\s+([^\n]+)/.exec(document.body.innerText)?.[1]?.trim() ?? '');
+    // Desktop draws "TARGET <name>"; the phone layout has no such line and confirms with a button "ATTACK -> <NAME>" (found on the first phone run, seed 11: the failed check was this reader, the cursor was on Shinryu).
+    const targetName = () => page.evaluate(() => /TARGET\s+([^\n]+)/.exec(document.body.innerText)?.[1]?.trim() ?? /ATTACK\s*(?:→|->)\s*([^\n]+)/i.exec(document.body.innerText)?.[1]?.trim() ?? '');
 
     // --- title and the board ----------------------------------------------------------------------------------------------------------------
     await assertScreen(page, 'title');
@@ -286,4 +287,5 @@ async function run(release) {
     process.exit(1);
   }
   console.log('OK');
+  process.exit(0); // the lock's timer would otherwise hold the process open after a pass (found on the phone run: it printed OK and stayed up)
 }
