@@ -103,6 +103,9 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   // The hidden Yuna's Ballad's seven rows (the possessed Rikku's Spider Attack 0x40c7 and five throws 0x2011, 0x201a, 0x201d, 0x2020, 0x2023, the possessed Paine's Attack 0x41da) are the RE note's, pinned against their own
   // numbers-only fixture (tests/fixtures/parity/ffx2/yunas_ballad_rows.json, tests/unit/chapters/yunas-ballad-data.test.ts).
   if (label.startsWith('x2-possessed-')) return;
+  // The hidden Ifrit at Kilika Temple's four rows (Hellfire 0x4094, Meteor Strike 0x4095, Firaga 0x41f1, Time Up Meteor 0x4236) are the RE note's, pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/ifrit_kilika_rows.json,
+  // tests/unit/chapters/ifrit-kilika-data.test.ts).
+  if (label.startsWith('x2-ifrit-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();
   if (!row) return;

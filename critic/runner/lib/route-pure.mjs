@@ -292,6 +292,7 @@ export const DOOR_WORDS = Object.freeze({
   spherimorph: 'spherimorph', // the hidden Spherimorph chapter (FFX, number 41, 2026-11-06)
   'ffx2-youth-league': 'youth', // the hidden Youth League Tournament chapter (FFX-2, number 42, 2026-11-07)
   'omega-ruins': 'weapon', // the hidden Omega Ruins chapter (FFX, number 43, 2026-11-06)
+  'ffx2-ifrit-kilika': 'ifrit', // the hidden Ifrit at Kilika Temple chapter (FFX-2, number 46, 2026-11-07)
 });
 
 /** The word that opens a chapter the board has no card for, or null for a chapter with a card (the arrow-key walk finds it). */

@@ -55,6 +55,8 @@ import { yunasBalladScripts } from './yunas-ballad.ts';
 // Yaibal, Lucil, Elma and the five League fighter types, the seven fights of the hidden chapter "The Youth League Tournament" (FFX-2 only): the game's own eight scripts, poll by poll.
 import { youthLeagueNamedScripts } from './youth-league.ts';
 import { youthLeagueLeagueScripts } from './youth-league-league.ts';
+// Ifrit at Kilika Temple (FFX-2 Chapter 3; the hidden chapter "Ifrit at Kilika Temple"): the action counter with its own numbers and the live "battle too long" block.
+import { x2IfritScript } from './ifrit.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -103,6 +105,7 @@ const SCRIPTS: readonly AiScript[] = [
   ...yunasBalladScripts,
   ...youthLeagueNamedScripts,
   ...youthLeagueLeagueScripts,
+  x2IfritScript,
   idleScript,
   basicAttackScript,
 ];

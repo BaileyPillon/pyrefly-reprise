@@ -68,6 +68,9 @@ import { x2YunasBalladAbilities } from './yunas-ballad-abilities.ts';
 // Yaibal, Lucil, Elma and the League fighters, the seven fights of the hidden chapter "The Youth League Tournament" (FFX-2 only): `./youth-league.ts`.
 import { youthLeagueGroups } from './youth-league.ts';
 import { x2YouthLeagueAbilities } from './youth-league-abilities.ts';
+// Ifrit in the Chamber of the Fayth at Kilika Temple (FFX-2 Chapter 3, the mission "Pest Control"; the hidden chapter "Ifrit at Kilika Temple", FFX-2 only): `./ifrit.ts`.
+import { ifritGroups } from './ifrit.ts';
+import { x2IfritAbilities } from './ifrit-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -92,6 +95,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...farplaneCupGroups,
   ...yunasBalladGroups,
   ...youthLeagueGroups,
+  ...ifritGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -126,6 +130,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...x2FarplaneCupAbilities,
   ...x2YunasBalladAbilities,
   ...x2YouthLeagueAbilities,
+  ...x2IfritAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

@@ -41,6 +41,7 @@ import { FFX2_YUNAS_BALLAD_GUIDE } from './ffx2-yunas-ballad.ts';
 import { SPHERIMORPH_GUIDE } from './spherimorph.ts';
 import { FFX2_YOUTH_LEAGUE_GUIDE } from './ffx2-youth-league.ts';
 import { OMEGA_RUINS_GUIDE } from './omega-ruins.ts';
+import { FFX2_IFRIT_KILIKA_GUIDE } from './ffx2-ifrit-kilika.ts';
 
 export type {
   ChapterGuide,
@@ -141,6 +142,8 @@ export const GUIDES: readonly ChapterGuide[] = [
   FFX2_YOUTH_LEAGUE_GUIDE,
   // The hidden Omega Ruins chapter (FFX only; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
   OMEGA_RUINS_GUIDE,
+  // The hidden Ifrit at Kilika Temple chapter (FFX-2 only, the possessed fire aeon; EXPERIMENT_CHAPTERS, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  FFX2_IFRIT_KILIKA_GUIDE,
 ];
 
 /** The guide for one chapter id, if it has one. */
