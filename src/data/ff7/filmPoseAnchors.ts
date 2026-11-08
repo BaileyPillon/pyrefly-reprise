@@ -23,6 +23,9 @@
 export const FF7_FILM_POSE_SHIFT_PX: Readonly<Record<string, Readonly<Record<string, number>>>> = Object.freeze({
   'ff7-film-cloud': Object.freeze({ idle: 0, windup: -46, attack: 219, follow: 72, victory: 2, spin: -48, back: -52, hurt: -26 }),
   'ff7-film-barret': Object.freeze({ idle: 0, aim: -213, attack: -203, victory: -7, punch: 10, hurt: 6 }),
+  // Tifa (the hidden Jenova LIFE chapter, FF7 only; the art-ff7 kit, r78): measured by the same boot-blob rule on the installed 1x files (`anchors.py`'s `stance`, scale 1: every pose is at the idle's pixel scale).
+  // The planted foot decides the follow and the kick (a stepping follow-through and a high kick, one boot off the ground).
+  'ff7-film-tifa': Object.freeze({ idle: 0, windup: -20, attack: -27, follow: -37, hurt: -28, kick: -29 }),
 });
 
 /**
