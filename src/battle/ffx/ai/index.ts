@@ -57,6 +57,7 @@ import './spherimorph.ts'; // the hidden Spherimorph chapter (FFX only): the gua
 import './ultima-weapon.ts'; import './omega-weapon.ts'; import './nemesis.ts'; // the hidden Omega Ruins chapter (FFX only): Ultima Weapon, Omega Weapon and Nemesis
 import './wendigo.ts'; // the hidden Wendigo chapter (FFX only): Wendigo and its stance on frozen Lake Macalania
 import './lake-guardian.ts'; // the hidden Wendigo chapter (FFX only): the two Guado Guardians of that fight
+import './belgemine.ts'; // the hidden Belgemine's Challenge chapter (FFX only, 2026-11-09): her eight aeons at the Remiem Temple (the Bahamut, Yojimbo, Anima and Sisters scripts ride on its imports)
 import { freeCircleIds, moveTo, platformOf, ringActive } from '../platforms.ts';
 
 export * from './types.ts';

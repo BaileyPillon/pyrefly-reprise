@@ -72,6 +72,7 @@ export const FORMULA_BYTE_OVERRIDES: Readonly<Record<number, number>> = {
   0x30e2: 1, // Zanmato
   0x312d: 3, // NulAll
   0x4038: 3, // Stone Gaze
+  0x40de: 3, // Mighty Guard (the hidden Belgemine's Challenge's Cindy, FFX only: a status row with no damage event, the game's formula byte 3)
   0x412a: 3, // Mighty Guard (Penance's Right Arm; a status row with no damage event, as Shell is)
   0x6040: 3, // Remedy
   0x6041: 3, // Shremedy

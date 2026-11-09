@@ -29,7 +29,8 @@ describe('the forced-action word table', () => {
     for (const g of Object.values(ENEMY_GROUPS_BY_ID)) for (const e of g.enemies) ids.add(e.id);
     const unmatched = [...ids].filter((id) => !FORCED_ACTION_WORD.has(id)).sort();
     // The four possessed aeons other than Valefor, and Isaaru's Pterya: no monster file matched in the private census yet (they keep the generic Attack).
-    expect(unmatched).toEqual(['possessed-bahamut', 'possessed-ifrit', 'possessed-ixion', 'possessed-shiva', 'pterya']);
+    // + the hidden Belgemine's Challenge (2026-11-09): her Ixion, Shiva, Anima and the three Sisters (m285, m286, m265, m289 to m291) and Belgemine herself (m250) have no matched monster file either (the other five of her bodies share a matched file and carry its word); all are immune to Berserk, Confuse and Provoke, which are what read the word.
+    expect(unmatched).toEqual(['belg-anima', 'belg-cindy', 'belg-ixion', 'belg-mindy', 'belg-sandy', 'belg-shiva', 'belgemine', 'possessed-bahamut', 'possessed-ifrit', 'possessed-ixion', 'possessed-shiva', 'pterya']);
     for (const id of FORCED_ACTION_WORD.keys()) expect(ids.has(id), `${id} is not a shipped enemy`).toBe(true);
   });
 

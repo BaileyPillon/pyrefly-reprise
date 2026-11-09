@@ -161,6 +161,7 @@ describe("the attached records are the game's table", () => {
       ['sanctuary-keeper', 3, 3],
       ['spherimorph', 6, 6],
       ['omega-ruins', 14, 14],
+      ['belgemine', 21, 21], // the hidden Belgemine's Challenge chapter (FFX only, 2026-11-09): its twenty-one new rows (four summons, the aeons' own moves, the Sisters' spells); the reused rows add none
       ['wendigo', 8, 8], // the hidden Wendigo chapter (FFX only, 2026-11-06): its eight rows, 0x407f, 0x4080, 0x4062, 0x403b, 0x4063, 0x400f, 0x4010 and the item row 0x200c
     ];
     expect(ALL_ABILITIES).toHaveLength(519 + ROWS_SINCE_KEEPER.reduce((n, [, a]) => n + a, 0));

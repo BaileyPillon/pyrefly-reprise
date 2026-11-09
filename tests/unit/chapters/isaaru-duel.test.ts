@@ -270,7 +270,8 @@ describe('registration: Chapter XIV, listed 2026-09-25', () => {
 
 describe('absence (rule 14, CHK-021): no other formation carries a duel rule', () => {
   it('every other FFX formation leaves the flags off, and a battle of it publishes none', () => {
-    const others = Object.values(ENEMY_GROUPS_BY_ID).filter((g: EnemyGroupDef) => !g.id.startsWith('isaaru-'));
+    // + the hidden Belgemine's Challenge (FFX, 2026-11-09): its eight Remiem duels are aeon duels with the mirror lock too (`data/ffx/enemies/belgemine.ts`); `chapters/belgemine-absence.test.ts` pins that nothing else gets its machinery.
+    const others = Object.values(ENEMY_GROUPS_BY_ID).filter((g: EnemyGroupDef) => !g.id.startsWith('isaaru-') && !g.id.startsWith('belgemine-'));
     expect(others.length).toBeGreaterThan(8);
     for (const g of others) {
       expect(g.aeonsOnly, g.id).toBeUndefined();
