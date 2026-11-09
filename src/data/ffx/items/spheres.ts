@@ -131,6 +131,10 @@ export const ITEMS: Record<string, ItemDef> = {
   // The hidden Shinryu chapter's drop and steal (research/re-ffx-shinryu.md section 0): the name only, like the rows above but not Sphere Grid items (see `rewardItem`).
   'wings-to-discovery': rewardItem('wings-to-discovery', 'Wings to Discovery'),
   'gamblers-spirit': rewardItem('gamblers-spirit', "Gambler's Spirit"),
+  // The hidden Omega Ruins chapter's steal, bribe and drop (research/re-ffx-omega-ultima-nemesis.md section 3, the reward table; FFX only): Door to Tomorrow (Ultima Weapon's steal), Pendulum (its bribe) and Warp Sphere (Nemesis's drop and rare steal). The release 79 integration found them: the reward-resolve test now walks the hidden FFX chapters (Shinryu lane), and these three printed their raw ids. The name only, like the two rows above (no class, help text or price is in our sources, rule 6).
+  'door-to-tomorrow': rewardItem('door-to-tomorrow', 'Door to Tomorrow'),
+  'pendulum': rewardItem('pendulum', 'Pendulum'),
+  'warp-sphere': rewardItem('warp-sphere', 'Warp Sphere'),
   'ability-sphere': {
     id: 'ability-sphere',
     name: 'Ability Sphere',

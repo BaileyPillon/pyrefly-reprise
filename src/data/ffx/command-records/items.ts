@@ -104,4 +104,8 @@ export const COMMAND_RECORDS_ITEMS: Readonly<Record<string, FFXCommandRecord>> =
   // `ITEM_RENAME_CARD`, so the list's index is the id less 0x2000). Both rows are in both fixtures as the blank item row (type 0, no flags, damage class 0, rank 2, no status bytes), like every other reward item here.
   'wings-to-discovery': { id: 0x206c, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Wings to Discovery
   'gamblers-spirit': { id: 0x206d, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Gambler's Spirit
+  // The hidden Omega Ruins chapter's steal, bribe and drop (FFX only; release 79 integration, the reward-resolve test now walks the hidden FFX chapters): Warp Sphere, Pendulum and Door to Tomorrow, each the blank item row the game's table holds for them (`tests/fixtures/parity/ffx/command_records.json` rows 0x2063, 0x2069 and 0x206b: type 0, no flags, damage class 0), at the ids the Mix table's item order gives (the list's index is the id less 0x2000: 99, 105 and 107).
+  'warp-sphere': { id: 0x2063, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Warp Sphere
+  'pendulum': { id: 0x2069, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Pendulum
+  'door-to-tomorrow': { id: 0x206b, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Door to Tomorrow
 };

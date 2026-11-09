@@ -166,6 +166,7 @@ describe("the attached records are the game's table", () => {
       ['belgemine', 21, 21], // the hidden Belgemine's Challenge chapter (FFX only, 2026-11-09): its twenty-one new rows (four summons, the aeons' own moves, the Sisters' spells); the reused rows add none
       ['wendigo', 8, 8], // the hidden Wendigo chapter (FFX only, 2026-11-06): its eight rows, 0x407f, 0x4080, 0x4062, 0x403b, 0x4063, 0x400f, 0x4010 and the item row 0x200c
       ['shinryu', 5, 5],
+      ['omega-ruins-items', 3, 3], // the hidden Omega Ruins chapter's reward items (FFX only; release 79 integration): Warp Sphere 0x2063, Pendulum 0x2069 and Door to Tomorrow 0x206b, name-only item rows with the blank item record, the rows the game's table holds for them (both in the fixture); the reward-resolve test, now walking the hidden FFX chapters, found their raw ids
     ];
     expect(ALL_ABILITIES).toHaveLength(519 + ROWS_SINCE_KEEPER.reduce((n, [, a]) => n + a, 0));
     expect(Object.keys(COMMAND_RECORDS)).toHaveLength(516 + ROWS_SINCE_KEEPER.reduce((n, [, , r]) => n + r, 0));
