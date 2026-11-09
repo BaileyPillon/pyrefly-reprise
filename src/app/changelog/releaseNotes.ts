@@ -69,11 +69,20 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 77 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 78 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '78',
+    date: '2026-11-08',
+    lines: [
+      { tag: 'FFX', text: 'After the Mirror Aeons, the results page now shows the Sphere Level the combined AP buys, with the leftover on the bar, instead of a bar filled past its end.' },
+      { tag: 'Both', text: 'The results page’s gil, AP and EXP counts roll up as before; each now also keeps the amount it settles on, so a count caught mid-roll can be checked against what was paid.' },
+      { tag: 'FFX', text: 'A rare rule fix for moves that hit several times (a repeated Threaten, a Nul spent and landed again); no move in the chapters today reaches it, so nothing plays differently.' },
+    ],
+  },
   {
     release: '77',
     date: '2026-11-07',
