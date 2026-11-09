@@ -57,6 +57,8 @@ import { youthLeagueNamedScripts } from './youth-league.ts';
 import { youthLeagueLeagueScripts } from './youth-league-league.ts';
 // Ifrit at Kilika Temple (FFX-2 Chapter 3; the hidden chapter "Ifrit at Kilika Temple"): the action counter with its own numbers and the live "battle too long" block.
 import { x2IfritScript } from './ifrit.ts';
+// Boris, the Flame Dragon, the Guardian Beast and YSLS-Zero (FFX-2 Chapter 1's hotspot missions; the hidden chapter "Gullwings, Chapter 1"): the game's own four scripts, poll by poll, with the live "battle too long" blocks.
+import { gullwingsCh1Scripts } from './gullwings-ch1.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -106,6 +108,7 @@ const SCRIPTS: readonly AiScript[] = [
   ...youthLeagueNamedScripts,
   ...youthLeagueLeagueScripts,
   x2IfritScript,
+  ...gullwingsCh1Scripts,
   idleScript,
   basicAttackScript,
 ];

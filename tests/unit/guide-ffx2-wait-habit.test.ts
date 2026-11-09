@@ -53,7 +53,7 @@ describe('the rule itself', () => {
 
   it('only Chapters V and VI (and XI, XV and XVI, the ship briefs, and the hidden Experiment, Tourist Trap, Valefor at Besaid, Angra Mainyu, Yuna\'s Ballad and the Youth League Tournament) carry it; no FFX guide carries a clock rule', () => {
     const carriers = GUIDES.filter((g) => g.clockRules).map((g) => g.id);
-    expect(carriers.sort()).toEqual([FFX2_LEBLANC_GUIDE.id, FFX2_VEGNAGUN_SHUYIN_GUIDE.id, 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'ffx2-ixion-djose', 'ffx2-masterpiece-theatre', 'ffx2-tourist-trap', 'ffx2-valefor-besaid', 'ffx2-angra-mainyu', 'ffx2-yunas-ballad', 'ffx2-youth-league', 'ffx2-ifrit-kilika'].sort());
+    expect(carriers.sort()).toEqual([FFX2_LEBLANC_GUIDE.id, FFX2_VEGNAGUN_SHUYIN_GUIDE.id, 'ffx2-fallen-aeons', 'ffx2-den-of-woe', 'ffx2-ixion-djose', 'ffx2-masterpiece-theatre', 'ffx2-tourist-trap', 'ffx2-valefor-besaid', 'ffx2-angra-mainyu', 'ffx2-yunas-ballad', 'ffx2-youth-league', 'ffx2-ifrit-kilika', 'ffx2-gullwings-ch1'].sort());
   });
 });
 

@@ -107,6 +107,9 @@ export const SCENES = {
   // Ifrit's room, Kilika Temple's trial room (formation 483 `klyt11_229`; the research lane of 2026-11-07, `pos_klyt11_229.psc`): the same four places as Besaid's and Ixion's (the boss at (0, 26), Yuna (0, -27), Rikku (-12, -25), Paine (12, -25)).
   // His Meteor Strike takes the greatest ground distance (Yuna at the start) and his Attack the near-weighted pick, `./ifrit.ts`.
   kilika: { boss: { x: 0, z: 26 }, girls: [{ x: 0, z: -27 }, { x: -12, z: -25 }, { x: 12, z: -25 }] },
+  // Boris's room, the Floating Ruins' summit (formation 1696 `mtgz17_229`; the research lane of 2026-11-09, `pos_mtgz17_229.psc`, FFX-2 Chapter 1's first hotspot mission): Yuna (0, -45), Rikku (15, -45), Paine (-15, -45), Boris at (0, 25).
+  // His Spider Attack and Spider Bite take the near-weighted pick, `./gullwings-ch1.ts`. The other three Chapter 1 bosses' scenes ship EMPTY position files, so they have no row here and their picks are uniform.
+  boris: { boss: { x: 0, z: 25 }, girls: [{ x: 0, z: -45 }, { x: 15, z: -45 }, { x: -15, z: -45 }] },
   // Angra Mainyu's room (the five Bikanel desert scenes `bika07_229`, `bika08_229`, `bika09_229`, `bika13_229`, `bika14_229`, whose `pos_*.psc` is byte for byte the same; the RE note of 2026-10-14, §8.2): the body at
   // (-45, -13), Yuna (23, 29), Rikku (33, 11), Paine (32, -9); ground distances 79.93, 81.61 and 77.10. The arms' own spots are unknown (both read (0, 0) and the body's script links them to its model): `./angra-mainyu.ts`.
   angra: { boss: { x: -45, z: -13 }, girls: [{ x: 23, z: 29 }, { x: 33, z: 11 }, { x: 32, z: -9 }] },

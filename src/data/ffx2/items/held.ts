@@ -29,6 +29,11 @@
  * | `x2-healing-spring` | Healing Spring | Valefor (both slots) | `ffx2-fallen-aeons.md` §7.1, verified: 2 sources; a recovery item (`ffx2-combat-core.md` §5.5, Regen), held-only here: its effect is not wired |
  * | `angel-earrings` | Angel Earrings | Ifrit's drop (both slots; the hidden Ifrit at Kilika Temple, 2026-11-07) | `monster.bin` row 165 (accessory 0x9045), `ffx2-fallen-aeons.md` §7.1, verified: 2 sources; effect `ffx2-combat-core.md` §5.4 (Def +5, MDef +5, Deathproof); no price |
  * | `fiery-gleam` | Fiery Gleam | Ifrit (the steal, both slots) | `monster.bin` row 165 (accessory 0x9020), `ffx2-fallen-aeons.md` §7.1, verified: 2 sources; no effect and no price read |
+ * | `star-pendant` | Star Pendant | Boris's drop (both slots; the hidden Gullwings, Chapter 1, 2026-11-09) | `monster.bin` row 132 (accessory 0x904a); effect and price `ffx2-combat-core.md` §5.4 and `ffx2-bahamut.md` (Poisonproof, Def +4, MDef +4; 4,000 gil), verified: 2 sources |
+ * | `red-ring` | Red Ring | the Flame Dragon's drop (both slots) | `monster.bin` row 122 (accessory 0x9021); the research names it and nothing more: no effect and no price |
+ * | `wristband` | Wristband | YSLS-Zero's drop (both slots) | `monster.bin` row 47 (accessory 0x9007); `ffx2-combat-core.md` §5.4 (Str +10, 1,000 gil to buy) |
+ * | `defense-veil` | Defense Veil | the Guardian Beast (the steal, both slots) | `monster.bin` row 162 (accessory 0x9014); `ffx2-combat-core.md` §5.4 (MDef +20, 1,000 gil to buy); also the Leblanc Syndicate's Ormi's drop |
+ * | `mythril-gloves` | Mythril Gloves | YSLS-Zero (the steal, both slots) | `monster.bin` row 47 (accessory 0x900c); `ffx2-combat-core.md` §5.4 and `ffx2-bahamut.md` (Def +20, 1,000 gil to buy), verified: 2 sources |
  *
  * What is **not** sourced, and so not written: an effect or description for
  * Snow Ring, Potpourri, Chaos Shock and Fury Shock (the research names them and
@@ -73,7 +78,7 @@ export const heldItemEffect: AbilityDef = {
 
 /** Held rows whose shop price the research does not give; each carries `price: 0`. */
 export const UNSOURCED_PRICE_IDS: ReadonlySet<string> = new Set([
-  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle', 'x2-m-bomb', 'amulet', 'angel-earrings', 'fiery-gleam',
+  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle', 'x2-m-bomb', 'amulet', 'angel-earrings', 'fiery-gleam', 'red-ring',
 ]);
 
 function held(id: string, name: string, price: number | 'unsourced', description?: string): ItemDef {
@@ -129,6 +134,12 @@ export const heldItems: ItemDef[] = [
   // Ifrit at Kilika Temple (FFX-2 only, the hidden chapter; `monster.bin` row 165): his drop and his steal. Angel Earrings: ffx2-combat-core §5.4 "DEF +5, MDEF +5, Deathproof" (the shop it names is not this fight's); no price in the research. Fiery Gleam: the research names it and nothing more.
   held('angel-earrings', 'Angel Earrings', 'unsourced', 'Accessory. Guards against Death; Def +5, MDef +5.'),
   held('fiery-gleam', 'Fiery Gleam', 'unsourced'),
+  // The hidden Gullwings, Chapter 1 (FFX-2 only, 2026-11-09; `monster.bin` rows 132, 122, 162 and 47, `research/re-ffx2-gullwings-chapter1.md` §0): two drops that carry an effect and a price in the research, one that does not, and two steals.
+  held('star-pendant', 'Star Pendant', 4000, 'Accessory. Guards against Poison; Def +4, MDef +4.'), // ffx2-combat-core §5.4, ffx2-bahamut accessories (4,000 gil)
+  held('red-ring', 'Red Ring', 'unsourced'), // the research names it (Flame Dragon's drop) and nothing more
+  held('wristband', 'Wristband', 1000, 'Accessory. Str +10.'), // ffx2-combat-core §5.4 (250 / 1,000 sell / buy)
+  held('defense-veil', 'Defense Veil', 1000, 'Accessory. MDef +20.'), // ffx2-combat-core §5.4 (250 / 1,000 sell / buy); the stat table already carries it (battle/ffx2/accessories.ts)
+  held('mythril-gloves', 'Mythril Gloves', 1000, 'Accessory. Def +20.'), // ffx2-combat-core §5.4, ffx2-bahamut (1,000 gil); the stat table already carries it (battle/ffx2/accessories.ts)
 ];
 
 export default heldItems;

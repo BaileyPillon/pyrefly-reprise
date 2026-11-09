@@ -71,6 +71,9 @@ import { x2YouthLeagueAbilities } from './youth-league-abilities.ts';
 // Ifrit in the Chamber of the Fayth at Kilika Temple (FFX-2 Chapter 3, the mission "Pest Control"; the hidden chapter "Ifrit at Kilika Temple", FFX-2 only): `./ifrit.ts`.
 import { ifritGroups } from './ifrit.ts';
 import { x2IfritAbilities } from './ifrit-abilities.ts';
+// Boris, the Flame Dragon, the Guardian Beast and YSLS-Zero (FFX-2 Chapter 1's hotspot missions; the hidden chapter "Gullwings, Chapter 1", FFX-2 only): `./gullwings-ch1.ts`.
+import { gullwingsCh1Groups } from './gullwings-ch1.ts';
+import { x2GullwingsCh1Abilities } from './gullwings-ch1-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -96,6 +99,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...yunasBalladGroups,
   ...youthLeagueGroups,
   ...ifritGroups,
+  ...gullwingsCh1Groups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -131,6 +135,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...x2YunasBalladAbilities,
   ...x2YouthLeagueAbilities,
   ...x2IfritAbilities,
+  ...x2GullwingsCh1Abilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

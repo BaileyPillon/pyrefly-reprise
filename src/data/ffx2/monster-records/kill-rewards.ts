@@ -111,4 +111,9 @@ export const KILL_REWARD_ROWS: Readonly<Record<string, FFX2KillReward>> = {
   "ffx2-youth-league-7-lucil/x2-yl-lucil": row(1, 184, 800, 2, 220, 255, [0x901c, 1, 0x901c, 1]), // Lucil
   // The hidden Ifrit at Kilika Temple (Chapter 3, "Pest Control"; RE note re-ffx2-ifrit-kilika §0): EXP, Gil, AP, the drop byte (255, always) and the item slots are the row's own (Angel Earrings, common and rare).
   "ffx2-kilika-ifrit/x2-ifrit": row(1, 165, 1800, 15, 1300, 255, [0x9045, 1, 0x9045, 1]), // Ifrit
+  // The hidden Gullwings, Chapter 1 (the four hotspot missions of Chapter 1; RE note re-ffx2-gullwings-chapter1 §0): EXP, Gil, AP, the drop byte (255, always) and the item slots are the rows' own (common and rare the same item).
+  "ffx2-gagazet-floating-ruins-boris/x2-boris": row(1, 132, 26, 1, 300, 255, [0x904a, 1, 0x904a, 1]), // Boris: Star Pendant
+  "ffx2-besaid-cave-flame-dragon/x2-flame-dragon": row(1, 122, 60, 1, 300, 255, [0x9021, 1, 0x9021, 1]), // Flame Dragon: Red Ring
+  "ffx2-zanarkand-ruins-guardian-beast/x2-guardian-beast": row(1, 162, 170, 1, 200, 255, [0x900f, 1, 0x900f, 1]), // Guardian Beast: Amulet
+  "ffx2-kilika-approach-ysls-zero/x2-ysls-zero": row(1, 47, 350, 1, 1000, 255, [0x9007, 1, 0x9007, 1]), // YSLS-Zero: Wristband
 };

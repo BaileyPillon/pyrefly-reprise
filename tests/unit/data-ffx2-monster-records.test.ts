@@ -110,6 +110,8 @@ describe('FFX-2 monster rows are the game\'s rows', () => {
       if (key.startsWith('ffx2-den-of-woe-possessed-')) continue;
       // The hidden Ifrit at Kilika Temple's row 165 is pinned against its own numbers-only fixture (tests/fixtures/parity/ffx2/ifrit_kilika_rows.json, tests/unit/chapters/ifrit-kilika-data.test.ts).
       if (key.startsWith('ffx2-kilika-ifrit/')) continue;
+      // The hidden Gullwings, Chapter 1's rows 132, 122, 162 and 47 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/gullwings_ch1_rows.json, tests/unit/chapters/gullwings-ch1-data.test.ts).
+      if (/^ffx2-(gagazet-floating-ruins|besaid-cave|zanarkand-ruins|kilika-approach)-/.test(key)) continue;
       const row = ROWS[key];
       expect(row, `${key}: no fixture row`).toBeDefined();
       if (row === undefined) continue;
