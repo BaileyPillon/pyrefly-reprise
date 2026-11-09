@@ -34,7 +34,6 @@
  *
  * - **Penance** (`'penance'`, number 35, 2026-11-06; FFX only): the colossus and its two hands on the Fahrenheit's deck; word `judgment` (33 and 34 are the sibling chapter lanes').
  * - **Yuna's Ballad** (`'ffx2-yunas-ballad'`, number 40, 2026-11-06; FFX-2 only): Yuna alone against the possessed Rikku and then the possessed Paine, the Den of Woe's first two fights, as two linked duels with HP and MP carried; word `wraith`.
- * - **Shinryu** (`'shinryu'`, number 48, 2026-11-07; FFX only): the Monster Arena's deep-water dragon, fought by Tidus, Wakka and Rikku in the water (a Petrify that lands shatters its victim); word `shinryu`.
  *
  * - **The Youth League Tournament** (`'ffx2-youth-league'`, number 42, 2026-11-07; FFX-2 only): Mushroom Rock Road's seven fights in a row (Yaibal, four mobs, Elma, Lucil) with the party carried whole; word `youth` (41 is Spherimorph's and 43 the Omega Ruins').
  *
@@ -45,6 +44,8 @@
  * - **Ifrit at Kilika Temple** (`'ffx2-ifrit-kilika'`, number 46, 2026-11-07; FFX-2 only): the possessed fire aeon in the Chamber of the Fayth, Chapter 3's mission "Pest Control"; word `ifrit`.
  *
  * - **Garik Ronso** (`'ffx2-garik-ronso'`, number 47, 2026-11-08; FFX-2 only): Garik and the Ronso Youths at the top of Mt. Gagazet, the Chapter 3 mission "Battle Blockade", as the hostile fight or the friendly bout by the Ronso trust setting; word `braveheart`.
+ *
+ * - **Shinryu** (`'shinryu'`, number 48, 2026-11-07; FFX only): the Monster Arena's deep-water dragon, fought by Tidus, Wakka and Rikku in the water (a Petrify that lands shatters its victim); word `shinryu`.
  *
  * - **Wendigo** (`'wendigo'`, number 49, 2026-11-06; FFX only): Wendigo and its two Guado Guardians on frozen Lake Macalania, the Meshy 3D tech demo (battle side first); word `wendigo`, desktop only.
  *

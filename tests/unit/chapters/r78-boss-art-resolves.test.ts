@@ -30,7 +30,17 @@ afterEach(() => resetArtManifest());
 
 const ART_ROOT = resolve(process.env['BOSS_ART_ROOT'] ?? join(import.meta.dirname, '..', '..', '..', 'public', 'art'));
 const MANIFEST_FILE = join(ART_ROOT, 'manifest.json');
-const INSTALLED = existsSync(MANIFEST_FILE);
+/** The four subjects of the two FFX chapters; a mirror that lacks any of them (r64 and older have a manifest and not these paintings) is NOT an install of this art, so the tests below skip there, as they do with no manifest (r79 review, minor 6). */
+const FFX_BOSS_SUBJECTS = ['spherimorph', 'ultima-weapon', 'omega-weapon', 'nemesis'];
+const hasSubjects = (): boolean => {
+  try {
+    const subjects = (JSON.parse(readFileSync(MANIFEST_FILE, 'utf8')) as { subjects?: Record<string, unknown> }).subjects ?? {};
+    return FFX_BOSS_SUBJECTS.every((key) => subjects[key] !== undefined);
+  } catch {
+    return false;
+  }
+};
+const INSTALLED = existsSync(MANIFEST_FILE) && hasSubjects();
 const manifestOfMirror = (): ArtManifest => {
   const parsed = parseArtManifest(JSON.parse(readFileSync(MANIFEST_FILE, 'utf8')));
   if (!parsed) throw new Error('the mirror manifest did not parse');
