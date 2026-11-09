@@ -39,7 +39,13 @@
  *
  * - **Jenova LIFE** (`'ff7-jenova-life'`, number 44, 2026-11-07; FF7 only): the boss at the altar of the Forgotten Capital, the end of Disc 1; Cloud, Tifa and Barret; word `bluelight` (43 is the sibling lane's).
  *
+ * - **Belgemine's Challenge** (`'belgemine'`, number 45, 2026-11-09; FFX only): the eight aeon duels of the Remiem Temple, Belgemine's Valefor to the Magus Sisters, as one chain; word `sidequest`.
+ *
  * - **Ifrit at Kilika Temple** (`'ffx2-ifrit-kilika'`, number 46, 2026-11-07; FFX-2 only): the possessed fire aeon in the Chamber of the Fayth, Chapter 3's mission "Pest Control"; word `ifrit`.
+ *
+ * - **Garik Ronso** (`'ffx2-garik-ronso'`, number 47, 2026-11-08; FFX-2 only): Garik and the Ronso Youths at the top of Mt. Gagazet, the Chapter 3 mission "Battle Blockade", as the hostile fight or the friendly bout by the Ronso trust setting; word `braveheart`.
+ *
+ * - **Shinryu** (`'shinryu'`, number 48, 2026-11-07; FFX only): the Monster Arena's deep-water dragon, fought by Tidus, Wakka and Rikku in the water (a Petrify that lands shatters its victim); word `shinryu`.
  *
  * - **Wendigo** (`'wendigo'`, number 49, 2026-11-06; FFX only): Wendigo and its two Guado Guardians on frozen Lake Macalania, the Meshy 3D tech demo (battle side first); word `wendigo`, desktop only.
  *
@@ -67,6 +73,7 @@ import { FFX2_FARPLANE_CUP } from './chapter-ffx2-farplane-cup.ts';
 import { FFX2_YUNAS_BALLAD } from './chapter-ffx2-yunas-ballad.ts';
 import { FFX2_YOUTH_LEAGUE } from './chapter-ffx2-youth-league.ts';
 import { FFX2_IFRIT_KILIKA } from './chapter-ffx2-ifrit-kilika.ts';
+import { FFX2_GARIK_RONSO } from './chapter-ffx2-garik-ronso.ts';
 import { experimentalYrp } from './chapter-exp-yrp-3d.ts';
 import { EXP_WINDWAKER } from './chapter-exp-windwaker.ts';
 import { EXP_ANIME } from './chapter-exp-anime.ts';
@@ -78,8 +85,10 @@ import { SPHERIMORPH } from './chapter-spherimorph.ts';
 import { OMEGA_RUINS } from './chapter-omega-ruins.ts';
 import { FF7_JENOVA_LIFE } from './chapter-ff7-jenova-life.ts';
 import { WENDIGO } from './chapter-wendigo.ts';
+import { BELGEMINE } from './chapter-belgemine.ts';
+import { SHINRYU } from './chapter-shinryu.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from, and `ffx2Bahamut` the listed Chapter IV, which the 3D Bahamut is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter, ffx2Bahamut: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD, SPHERIMORPH, FFX2_YOUTH_LEAGUE, OMEGA_RUINS, FF7_JENOVA_LIFE, FFX2_IFRIT_KILIKA, WENDIGO] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD, SPHERIMORPH, FFX2_YOUTH_LEAGUE, OMEGA_RUINS, FF7_JENOVA_LIFE, BELGEMINE, FFX2_IFRIT_KILIKA, FFX2_GARIK_RONSO, SHINRYU, WENDIGO] as const;
 }

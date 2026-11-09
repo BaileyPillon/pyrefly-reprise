@@ -73,7 +73,7 @@ export const heldItemEffect: AbilityDef = {
 
 /** Held rows whose shop price the research does not give; each carries `price: 0`. */
 export const UNSOURCED_PRICE_IDS: ReadonlySet<string> = new Set([
-  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle', 'x2-m-bomb', 'amulet', 'angel-earrings', 'fiery-gleam',
+  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle', 'x2-m-bomb', 'amulet', 'angel-earrings', 'fiery-gleam', 'shining-bracer', 'icy-gleam',
 ]);
 
 function held(id: string, name: string, price: number | 'unsourced', description?: string): ItemDef {
@@ -129,6 +129,15 @@ export const heldItems: ItemDef[] = [
   // Ifrit at Kilika Temple (FFX-2 only, the hidden chapter; `monster.bin` row 165): his drop and his steal. Angel Earrings: ffx2-combat-core §5.4 "DEF +5, MDEF +5, Deathproof" (the shop it names is not this fight's); no price in the research. Fiery Gleam: the research names it and nothing more.
   held('angel-earrings', 'Angel Earrings', 'unsourced', 'Accessory. Guards against Death; Def +5, MDef +5.'),
   held('fiery-gleam', 'Fiery Gleam', 'unsourced'),
+  // The hidden Garik Ronso (FFX-2 only, 2026-11-07; `monster.bin` rows 182 and 181, `research/re-ffx2-garik-ronso.md` §0, the names from the US accessory table [verified: the game's own table]): Garik's drop (Shining Bracer, accessory 0x905d: Auto-Protect,
+  // `ffx2-vegnagun-shuyin.md` §6.7 and `ffx2-combat-core.md` §5.4 [verified: 2 sources]; no stats and no price read), his steal (Icy Gleam, 0x9024: the research names it and nothing more) and the Youth's steal (Mythril Bangle, 0x9002: the accessory
+  // table already carries its HP effect, `battle/ffx2/accessories.ts`; no price read).
+  held('shining-bracer', 'Shining Bracer', 'unsourced', 'Accessory. Auto-Protect.'),
+  held('icy-gleam', 'Icy Gleam', 'unsourced'),
+  // Mythril Bangle's price is SOURCED as 0: `ffx2-combat-core.md` §5.4 (line 3005) gives "1500 / —" under the columns 'Sell / Buy', so 1,500 is the SELL price and the Buy column is "—" (never sold in a shop), which is
+  // `ItemDef.price`'s own 0 (the Healing Spring's way; `ItemDef` carries no sell price). It is also the id Vegnagun's Leg already drops (`enemies/vegnagun-leg.ts`): this row gives that drop an `ItemDef` it had none of, with the label
+  // it already showed ("Mythril Bangle"; the drop id and the Leg's logged events are unchanged).
+  held('mythril-bangle', 'Mythril Bangle', 0),
 ];
 
 export default heldItems;

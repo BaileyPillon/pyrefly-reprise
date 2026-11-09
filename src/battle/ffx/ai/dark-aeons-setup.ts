@@ -15,6 +15,7 @@ import type { EnemyGroupDef } from '../../common/types.ts';
 import { type Ctx, rtOf, tryActor } from '../state.ts';
 import { DARK_BATTLE_ID_FLAG, DARK_FORMATIONS, DARK_GAUGE_PER_TURN_FLAG, DARK_IDS } from './dark-aeons-seams.ts';
 import { applyDarkAeonsSixSetup } from './dark-aeons-six-setup.ts';
+import { applyBelgemineSetup } from './belgemine-rules.ts';
 
 /** The Overdrive row each Dark enemy owns (the ids of `data/ffx/enemies/dark-aeons-abilities.ts`): the sisters' joint attack, Yojimbo's Zanmato. */
 const OVERDRIVE_OF: Readonly<Record<string, string>> = {
@@ -28,6 +29,7 @@ const OVERDRIVE_OF: Readonly<Record<string, string>> = {
 export const DARK_GAUGE_RULES = 'dark-aeons';
 
 export function applyDarkAeonsSetup(ctx: Ctx, group: EnemyGroupDef): void {
+  applyBelgemineSetup(ctx, group); // the hidden Belgemine's Challenge chapter's eight formations (FFX only, 2026-11-09): the gauges, Belgemine and the dog without turns, the start hook's counters; a no-op for every other group
   applyDarkAeonsSixSetup(ctx, group); // the hidden Dark Aeons chapter's seven formations (FFX only, 2026-11-06): the gauges, and Dark Ixion's second fight's HP; a no-op for every other group
   const formation = DARK_FORMATIONS[group.id];
   if (formation === undefined) return;

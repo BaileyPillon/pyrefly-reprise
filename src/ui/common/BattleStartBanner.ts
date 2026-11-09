@@ -32,6 +32,7 @@ import { escapeHtml } from './html.ts';
 import { faceImgHtml, faceLayersHtml } from './portrait.ts';
 import { chapterLabel } from './roman.ts';
 import { artUrl } from '../../engine/PaintedArt.ts';
+import { manifestKnowsAssetNow } from '../../engine/ArtManifest.ts';
 import { bossCleanCard } from '../../engine/look/pro/BossClean.ts'; // lane boss-matte
 
 export interface BattleStartBannerMember {
@@ -196,8 +197,14 @@ export class BattleStartBanner {
     if (opts.artKey) {
       const art = el.querySelector('.bstart__art') as HTMLElement | null;
       // The same painting the diorama stages (`BattlePresenterArt.artUrlFor`),
-      // so the boss on the card is the boss on the field.
-      if (art) art.style.backgroundImage = `url(${artUrl(`art/characters/${opts.artKey}/idle.png`)})`;
+      // so the boss on the card is the boss on the field. A boss with no painting in the build (the hidden
+      // Wendigo chapter's is a 3D model, FFX only) is not asked for: the art manifest says so, and an
+      // unconditional `url()` there was a 404 on each card, the loading card's and the battle's (LIVE-78-1).
+      // `null` (no manifest yet, or none) keeps the old behaviour: ask, as every other loader does.
+      if (art) {
+        const bossArt = artUrl(`art/characters/${opts.artKey}/idle.png`);
+        if (manifestKnowsAssetNow(bossArt) !== false) art.style.backgroundImage = `url(${bossArt})`;
+      }
       if (art && bossCleanCard(opts.artKey)) art.classList.add('bstart__art--clean'); // lane boss-matte: a re-cut boss is a clean cut-out, so the gold glow that read as a pale halo gives way to a tight ink edge and a floor shadow (`?boss=clean` / `?pack=demo`, Chapters I and IV)
     }
     if (opts.backdropKey) {

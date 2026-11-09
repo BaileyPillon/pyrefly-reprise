@@ -516,7 +516,7 @@ describe('determinism and the other chapters', () => {
   it('no other formation raises the water flag, the hold, the link key or an Open lock row (the chapter is inert everywhere else)', () => {
     let checked = 0;
     for (const [id, group] of Object.entries(ENEMY_GROUPS_BY_ID)) {
-      if (id.startsWith('flooded-') || group.game !== 'ffx') continue;
+      if (id.startsWith('flooded-') || id === 'shinryu' || group.game !== 'ffx') continue; // 'shinryu' (hidden chapter 48, 2026-11-07) is the second water battle: it reuses the water flag on purpose (`shinryu-engine.test.ts`) and none of this chapter's other keys
       let engine: ReturnType<typeof createFFXEngine>;
       try {
         engine = engineOnGroup(id, 1);

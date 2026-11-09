@@ -66,7 +66,7 @@ export const YL_ROWS = { yaibal: 183, lucil: 184, elma: 279, warrior: 210, veter
  */
 export const YL_SEAM_IDS = ['act-1-fallen', 'act-2-fallen', 'act-3-fallen', 'act-4-fallen', 'act-5-fallen', 'act-6-fallen'] as const;
 
-/** The paintings. None exists yet (the art list in `docs/handoff/ch-youth-league.md`): each key draws the presenter's procedural stand-in until a set is installed. */
+/** The paintings, installed in release 79 (the art-w4 kit, `docs/handoff/r79-art-install.md`): one set per fighter kind, each painted over its own game model (m183, m184, m279, m210, m211, m193, m214, m215). */
 export const YL_SPRITES = {
   yaibal: 'x2-yaibal',
   lucil: 'x2-lucil',

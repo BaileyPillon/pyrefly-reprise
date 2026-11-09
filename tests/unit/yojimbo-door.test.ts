@@ -223,6 +223,16 @@ beforeEach(() => {
   setFf7ExperimentReadyForTests(true);
 });
 
+/** Takes down every board mounted so far. The pair test calls it once per other door: a live board hears every key on the window, so boards left up until afterEach made that loop cost the square of the doors (r79 review, the full-suite timeout of valefor-door). */
+function releaseRigs(): void {
+  for (const { screen, input, root } of rigs) {
+    screen.exit();
+    input.detach();
+    root.remove();
+  }
+  rigs = [];
+}
+
 afterEach(() => {
   for (const { screen, input, root } of rigs) {
     screen.exit();
@@ -375,6 +385,7 @@ describe('the ten doors do not interfere', () => {
       b.typeWord(other.word + WORD);
       await flush();
       expect(b.picked, `${other.word}${WORD}`).toEqual([other.chapter]);
+      releaseRigs(); // the three boards of this door are done: take them down before the next door's
     }
   }, DOOR_PAIR_TEST_TIMEOUT_MS); // the allowance follows the number of doors (`helpers/doorWords.ts`): three real boards per other door
 });

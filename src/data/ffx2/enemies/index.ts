@@ -71,6 +71,9 @@ import { x2YouthLeagueAbilities } from './youth-league-abilities.ts';
 // Ifrit in the Chamber of the Fayth at Kilika Temple (FFX-2 Chapter 3, the mission "Pest Control"; the hidden chapter "Ifrit at Kilika Temple", FFX-2 only): `./ifrit.ts`.
 import { ifritGroups } from './ifrit.ts';
 import { x2IfritAbilities } from './ifrit-abilities.ts';
+// Garik Ronso and the Ronso Youths at the top of Mt. Gagazet (the hidden chapter "Garik Ronso", FFX-2 only): `./garik-ronso.ts`.
+import { garikRonsoGroups } from './garik-ronso.ts';
+import { x2GarikRonsoAbilities } from './garik-ronso-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -96,6 +99,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...yunasBalladGroups,
   ...youthLeagueGroups,
   ...ifritGroups,
+  ...garikRonsoGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -131,6 +135,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...x2YunasBalladAbilities,
   ...x2YouthLeagueAbilities,
   ...x2IfritAbilities,
+  ...x2GarikRonsoAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

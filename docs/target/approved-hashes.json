@@ -11749,6 +11749,501 @@
     "mtime": "2026-11-07T21:53:21.339Z",
     "delegated": "2026-11-08"
    }
+  },
+  "driver:2026-11-09-wave4-chapters-art (items 220i and 220m, delegated by Bailey)": {
+   "words": "Bailey, 2026-11-06 ~00:30 EST: \"implement all unimplemented chapters please\"; ~00:55 EST: \"yes on all these too\" (building every researched boss he never picked); 2026-11-07: \"ok keep going we have full usage here\"; 2026-10-31: \"you make the executive decisions for the next few days. i'll go with all of your recommendations.\"",
+   "decision": "item 220i (local art generation on for the chapters program) and item 220m (a new boss takes the FAITHFUL reading of the game model: image to image over a render of the real model, no options round) of the driver's list, and the driver's acceptance of the wave-4 paintings for release 79, under the delegation of 2026-10-31 and 2026-11-06; the D-number is owed by the records pass",
+   "note": "DRIVER CALL, delegated by Bailey; not Bailey's own approval of the pictures. The paintings of five hidden chapters, made 2026-11-09 in the art-w4 batch (the wave-4 art stage folder, kept outside the repo: its MANIFEST.md and provenance.json carry every file's method, seed and sha256): the Youth League (chapter 42, FFX-2 only: Yaibal, Lucil, Elma and the five League fighters, each idle, attack, hurt, ko and idle@2x, Lucil with a cast; three faces; the pause plate; the Mushroom Rock Road league plate), Belgemine (chapter 45, FFX only: idle, cast, hurt and idle@2x, the bind pose of the model with the arms turned because the model ships no motion bank; a face; the pause plate; the Remiem Temple plate), Ifrit at Kilika Temple (chapter 46, FFX-2 only: the approved ifrit paintings through the possession grade, with cast and overdrive; the pause plate; the Kilika chamber plate, a warm grade of the Djose chamber plate), Garik Ronso and the two Ronso Youths (chapter 47, FFX-2 only: the lance a drawn prop; a face; the pause plate; the Gagazet summit plate) and Shinryu (chapter 48, FFX only: posed by the airship Evrae's motion bank on a thickened body; a face; the pause plate). Each pin is the sha256 of the staged file, which is the candidate byte for byte. New files, nothing replaced, so nothing was archived. The four new plates are installed and pinned and wired to nothing (a new battle plate is perceivable: rule 9). The chapter cards and thumbnails are not made. The kit's own list of faults stands (stage MANIFEST.md): the set is the smoother airbrushed finish, not the approved sets' hand-inked linework.",
+   "public/art/backdrops/ffx2-kilika-chamber.png": {
+    "sha256": "24ea00c762960f3dbeb753a6f4a7d5b5cc353be15a4f967ffe4231bbcab80947",
+    "mtime": "2026-11-09T15:41:50.311Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/backdrops/ffx2-kilika-chamber@2x.png": {
+    "sha256": "413527af6d327893055ea3e6e502ed5f89fbce1206ac2581b0798201f09a650c",
+    "mtime": "2026-11-09T15:42:06.219Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/backdrops/gagazet-summit.png": {
+    "sha256": "39791d6d7b6017a1834c26dbcbbc9cd5fb2e8418576f36e281d4677af218d3d6",
+    "mtime": "2026-11-09T15:24:42.639Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/backdrops/gagazet-summit@2x.png": {
+    "sha256": "2816e5b0baa6a646c845abaf27b8313be1fb7e0d2eea3f67f187cd0fd30e2e24",
+    "mtime": "2026-11-09T15:33:46.569Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/backdrops/mushroom-rock-road-league.png": {
+    "sha256": "7ef90d999455a0af2620c90122b5339fbf8785719b6e4041fbbbd1e702fde8a5",
+    "mtime": "2026-11-09T15:24:46.953Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/backdrops/mushroom-rock-road-league@2x.png": {
+    "sha256": "3921441fab3e52af21930c3f32928e57cfa6a1079d8bba373c393ad7f8c540ad",
+    "mtime": "2026-11-09T15:34:04.250Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/backdrops/remiem-temple.png": {
+    "sha256": "743d136bb9147f638ea3230b2a5228b508b878b2f859f83852a30335a96fc3d8",
+    "mtime": "2026-11-09T15:24:38.368Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/backdrops/remiem-temple@2x.png": {
+    "sha256": "324b79e1f1cc9d2b79e134a3048e72847250cd165f96d33c67bd0c2422136e68",
+    "mtime": "2026-11-09T15:33:28.840Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/belgemine/cast.png": {
+    "sha256": "5c0c4b2314b36a99a5fe9d5fc24acf9a04993a86010c9daf084aa51df983570c",
+    "mtime": "2026-11-09T15:05:27.441Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/belgemine/hurt.png": {
+    "sha256": "ba69090d444623c0e90ed83893b9342714ac78e7fe48d20713834f4187f389ed",
+    "mtime": "2026-11-09T15:05:43.468Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/belgemine/idle.png": {
+    "sha256": "8a78d4370c3a375b3034826f9e046ce3f802b072de493fc714105803dbcda3e9",
+    "mtime": "2026-11-09T14:55:17.977Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/belgemine/idle@2x.png": {
+    "sha256": "9e88788ff0db6d659a47237fa1e0bdee2352ed8904596cf487effc1b1a0bc02f",
+    "mtime": "2026-11-09T14:58:05.247Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/shinryu/attack.png": {
+    "sha256": "90752b5815843c6cd021d371247037195f211c5008f6d13e6964b2847ae15e5b",
+    "mtime": "2026-11-09T15:22:03.727Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/shinryu/cast.png": {
+    "sha256": "ef0a4044fd969530183148c976eb3a0adde8ea29fbcd112257dcaa0374ca508b",
+    "mtime": "2026-11-09T15:22:26.812Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/shinryu/hurt.png": {
+    "sha256": "a491f940655820f6913c06ae669298f56a03b18cd3dc7c64aff5cbd33c861b4f",
+    "mtime": "2026-11-09T15:23:00.108Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/shinryu/idle.png": {
+    "sha256": "fedd1a285c8f513676fe2028e79dc5a8986dbf43a2e5f4e01ac6efd9602aaab3",
+    "mtime": "2026-11-09T15:02:49.509Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/shinryu/idle@2x.png": {
+    "sha256": "5cc374b5c5c6b87a0d23037d3b76926c2541115c4a559f40bd17c22d4e3878a0",
+    "mtime": "2026-11-09T15:31:14.400Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/shinryu/ko.png": {
+    "sha256": "1c2dc88e3a6f25ea986e05673ef5d9b1cdecdecb111ca9a0d4da5c9dcd0108c7",
+    "mtime": "2026-11-09T15:23:10.949Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-elma/attack.png": {
+    "sha256": "fc1e1560543a72deaf6bd392f891cb6e6e31630126be4ecce03a8f0e7ab4f79f",
+    "mtime": "2026-11-09T14:44:59.482Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-elma/hurt.png": {
+    "sha256": "4f495a24a588a5e277fe0343fee9a465051e5f580bab0ffdb5c50889a8e3cc54",
+    "mtime": "2026-11-09T14:45:20.886Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-elma/idle.png": {
+    "sha256": "a82c14ab7aecff513199a7830205e6ae28190a6776dc2753a6b2ff926542cf05",
+    "mtime": "2026-11-09T14:36:15.274Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-elma/idle@2x.png": {
+    "sha256": "b62ef9df41bb93c6ea3281166dfdcdf9501f25cbe972fd4e70234ef3e2f9a810",
+    "mtime": "2026-11-09T14:57:38.427Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-elma/ko.png": {
+    "sha256": "a1c113a0d07ccfbb1ec2a32c9101fafad122af3e1f91d600675996b7e7d0d128",
+    "mtime": "2026-11-09T14:45:37.571Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-garik-ronso/attack.png": {
+    "sha256": "3347720dae869121cba8eda23c2cd47ff4162e869db13c278fa452c522a2dae5",
+    "mtime": "2026-11-09T15:35:31.199Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-garik-ronso/cast.png": {
+    "sha256": "438ae1b76a5cfb2cc999925dd2384f2376787703e8308e698395d216f0e14784",
+    "mtime": "2026-11-09T15:35:39.695Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-garik-ronso/hurt.png": {
+    "sha256": "698cfb77db75541d952333d53cdb05d87e5dabdf2faa66655aebe31a1a804f15",
+    "mtime": "2026-11-09T15:35:56.689Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-garik-ronso/idle.png": {
+    "sha256": "10ab2b915aaad9ad7ce3efae49a805cade668028ee82cf0d199986b276e93cb4",
+    "mtime": "2026-11-09T15:23:56.008Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-garik-ronso/idle@2x.png": {
+    "sha256": "aeba149b074bb264b9ec78b3a878e1081bafed6d217f9182a55af0ff4edb8bb8",
+    "mtime": "2026-11-09T15:31:08.759Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-garik-ronso/ko.png": {
+    "sha256": "3f40da318b93b0412d2a176e5f08ab53dbbf66cfa4c17a9bc35cfd401af9eeed",
+    "mtime": "2026-11-09T15:36:22.376Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ifrit/attack.png": {
+    "sha256": "8e4f4481096461a7486a9477b4c556a78ab8fae3845141ac1cf7daca537326f9",
+    "mtime": "2026-11-09T15:02:01.993Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ifrit/cast.png": {
+    "sha256": "5764a9fd644a5840b4f31b89f8bfb16c27a47ea66635330bc427be6a7e40d31e",
+    "mtime": "2026-11-09T15:02:02.474Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ifrit/hurt.png": {
+    "sha256": "ef6b0e11c238f6a1c8f8356d29369c8cae7baaa9f78e718cdaa15cd031149be5",
+    "mtime": "2026-11-09T15:02:02.998Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ifrit/idle.png": {
+    "sha256": "d2604fea2d18451b8febebd606ef6c9eb6527950dc9224fb8c9555a740b4e00e",
+    "mtime": "2026-11-09T15:02:01.529Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ifrit/idle@2x.png": {
+    "sha256": "a658a6a0fcd4c32491268796e4f21bdc4722101122d5ffe689b5bff71bdb3cf3",
+    "mtime": "2026-11-09T15:02:06.053Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ifrit/ko.png": {
+    "sha256": "11e87ead9311ee294c94e9448dc8374062d88c7488b5cf1328234c4ca1c3bbad",
+    "mtime": "2026-11-09T15:02:03.381Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ifrit/overdrive.png": {
+    "sha256": "c88a1e360556824272c08a39e7dc746d01ca44081ecb53891eaecb70d7df1c9e",
+    "mtime": "2026-11-09T15:02:03.887Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-mage/attack.png": {
+    "sha256": "113f3122c08bfe6a607dc807e8001c7f6e6d8c06e34e11ee67d8cf27cf13f034",
+    "mtime": "2026-11-09T15:13:22.921Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-mage/hurt.png": {
+    "sha256": "935f41df450873aef9613272ce9bed8f172845238efcb2a1c669c3cc25856cda",
+    "mtime": "2026-11-09T15:13:47.029Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-mage/idle.png": {
+    "sha256": "a9086f458d9947760f1fc3713ee46cd7618d72c7aab7eeaf2af87fadfcd42798",
+    "mtime": "2026-11-09T14:51:50.939Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-mage/idle@2x.png": {
+    "sha256": "6834b59af9c5cc2f19a121f7af31c84aaa09e0f31868b7ad696f2b4baf1ac073",
+    "mtime": "2026-11-09T14:57:57.956Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-mage/ko.png": {
+    "sha256": "17e060e9180f385e4f3b47648ecfa416bd5cb5a3c318efe9de5338ab4f1e34df",
+    "mtime": "2026-11-09T15:14:06.409Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-master/attack.png": {
+    "sha256": "09de45a1b30f6c49ccfb4b54e14ca7c29dc8f4197ff632235b3c31b97e255d52",
+    "mtime": "2026-11-09T15:17:25.809Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-master/hurt.png": {
+    "sha256": "41a64bd362ac1c38abe75bb889cf3631c44e7e596488a6c4bc4a1a04a46ecbb2",
+    "mtime": "2026-11-09T15:17:47.021Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-master/idle.png": {
+    "sha256": "8bd57558a3e701a16575b8f381052ddd0f5352f7f638baedbdc45e48c4e0bfe8",
+    "mtime": "2026-11-09T15:02:44.314Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-master/idle@2x.png": {
+    "sha256": "959fa71c922418e2d8a326ec6f5c68dc8cf3af5fec8e36a880aed315cb62ff78",
+    "mtime": "2026-11-09T15:30:48.289Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-master/ko.png": {
+    "sha256": "be7f6e3434c2b3c27efcdb105ac89d9fc0893d597a5c9873c159d6997511289b",
+    "mtime": "2026-11-09T15:18:07.145Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-slasher/attack.png": {
+    "sha256": "14ea0e4d3af9745a051bbf24376a1bfd6b6b6ad344beaf380c42b14776ad6dbd",
+    "mtime": "2026-11-09T15:37:10.387Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-slasher/hurt.png": {
+    "sha256": "13178d8881b45065f3dd6acd02629c103bc197353ec8c73e35bcc754e72e77cf",
+    "mtime": "2026-11-09T15:03:09.375Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-slasher/idle.png": {
+    "sha256": "1e00196c1b52bc6517a5445916c364fb7d3f5e5e18c4746fff5e2e80d928bb1d",
+    "mtime": "2026-11-09T14:51:55.394Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-slasher/idle@2x.png": {
+    "sha256": "319985a7d54a71d3d594d2be8722acb81b90dfe664e4dad3e7a03db823ebd42c",
+    "mtime": "2026-11-09T14:58:01.315Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-slasher/ko.png": {
+    "sha256": "855814611fcc05967826ab6e0502ce7722d780aea42b46a3bf426c3847588d17",
+    "mtime": "2026-11-09T15:03:26.665Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-veteran/attack.png": {
+    "sha256": "5f2321f257cc1a81d43f4a4b2a58bfb993a8bd42c31ef16e44b9a5a25aa1e290",
+    "mtime": "2026-11-09T14:53:09.127Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-veteran/hurt.png": {
+    "sha256": "b160d79ad64415bdb9ef27bd7ab685a6b941b8eccb614537839077a9fefd3c86",
+    "mtime": "2026-11-09T14:53:27.776Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-veteran/idle.png": {
+    "sha256": "c5d11e68ba15628714057d8cb6e83e872beaea7885ce978873ec7b71ea148e4a",
+    "mtime": "2026-11-09T14:46:32.180Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-veteran/idle@2x.png": {
+    "sha256": "9d46ff6fcc9ad0262c1dce65d26e9aea79501c4aefc2a3fa0bd8ca9057607871",
+    "mtime": "2026-11-09T14:57:53.231Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-veteran/ko.png": {
+    "sha256": "30ff079816f5d775acf4478feb46e6d66d4210e06106767c86f49b2143e9fbb9",
+    "mtime": "2026-11-09T14:53:45.088Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-warrior/attack.png": {
+    "sha256": "6a5a7aad7fc44c589f309bece376f9d52e3027239a1351666c934cd014cfe745",
+    "mtime": "2026-11-09T14:52:28.249Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-warrior/hurt.png": {
+    "sha256": "6e0034265bfba5be1e07ace3ec22faa45cd32e23a3c36877d7ba6769c513404e",
+    "mtime": "2026-11-09T14:52:37.817Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-warrior/idle.png": {
+    "sha256": "9f8c824cb4491f49fceee996878941fc9f5c15405b09f8fcb9b368686dffb407",
+    "mtime": "2026-11-09T14:46:27.933Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-warrior/idle@2x.png": {
+    "sha256": "baee753780006697920aaeb3d5be76783646fb7c00a99dba766e8316705cbe80",
+    "mtime": "2026-11-09T14:57:45.365Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-league-warrior/ko.png": {
+    "sha256": "98a2018f5e4a4e987fd35621422fe2d01941cbdc7aaf726ab4397545e605b2ec",
+    "mtime": "2026-11-09T14:52:51.292Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-lucil/attack.png": {
+    "sha256": "eb58fa38f237f1ae464c971798a29ebd991eed42d9138b03437cd37a9f30f82c",
+    "mtime": "2026-11-09T14:43:49.918Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-lucil/cast.png": {
+    "sha256": "71f2ff1e37b58a8e94e7ab2d083368e4bdbf6eae32fec9c69e4f453a0ce36f7d",
+    "mtime": "2026-11-09T14:43:59.236Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-lucil/hurt.png": {
+    "sha256": "5396bb1b75ffbb0769108149586813945258a15a9d4e5674d4b1229cd23562c4",
+    "mtime": "2026-11-09T14:44:14.577Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-lucil/idle.png": {
+    "sha256": "04785beb78e24ccbad3d20e91a54ed254731a290d86f7cd681d83c350cd5b48b",
+    "mtime": "2026-11-09T14:36:11.236Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-lucil/idle@2x.png": {
+    "sha256": "08878149a8b857d58e23c61f43bc9d69ca98bf0f1a85945117bd8c5fc4bdc0af",
+    "mtime": "2026-11-09T14:57:34.403Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-lucil/ko.png": {
+    "sha256": "046927407a96d91c7b2db451a61fab04fd816849547ab94c5d36b2ad74141e2c",
+    "mtime": "2026-11-09T14:44:25.125Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ronso-youth-a/attack.png": {
+    "sha256": "a463ebffe0efdfa803b084419e58942ad18a6d61a3dc2bc7e3192c05a754c995",
+    "mtime": "2026-11-09T15:40:40.769Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ronso-youth-a/hurt.png": {
+    "sha256": "0827e10ca9830e2e0d0234afd3ed3a8a4bce3fe45ee4a4a068c83af46a278c22",
+    "mtime": "2026-11-09T15:40:41.333Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ronso-youth-a/idle.png": {
+    "sha256": "5a3bbd985eeeb76a9a6c2d6154346edb2a25805978a7483957ad31f1d3c86408",
+    "mtime": "2026-11-09T15:15:06.097Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ronso-youth-a/idle@2x.png": {
+    "sha256": "7dc1752e20d013c8978120b1402d5f743cc737681b7a03a9a5aed7d5cec23167",
+    "mtime": "2026-11-09T15:30:54.995Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ronso-youth-a/ko.png": {
+    "sha256": "4aafb41ce82d836c243b16770a0547fa133786f65155b2653b7322afa63e9904",
+    "mtime": "2026-11-09T15:40:41.875Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ronso-youth-b/attack.png": {
+    "sha256": "4cb19905e00d8d5fbc09e6dee257ff68a4f93f894103427e0f9a5143a2d1340a",
+    "mtime": "2026-11-09T15:08:56.464Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ronso-youth-b/hurt.png": {
+    "sha256": "6d4bd76ec9cf8e535842e18f39d9b60c30455bc47a7f6f44af1518481ea52e8f",
+    "mtime": "2026-11-09T15:09:21.015Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ronso-youth-b/idle.png": {
+    "sha256": "1208d68f058964a6b58e3daf8697436227f75e18c27ccaa58c9fb989bbe1c237",
+    "mtime": "2026-11-09T14:59:43.672Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ronso-youth-b/idle@2x.png": {
+    "sha256": "e3e2be871c1f90e5bc4b25be9110ceef952274310271731b53db9e68f2f07109",
+    "mtime": "2026-11-09T15:31:02.539Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-ronso-youth-b/ko.png": {
+    "sha256": "06e75413de4d0e2b6a90489b12457e67e96c2cadf343dedad5ffeb9969c1359b",
+    "mtime": "2026-11-09T15:09:32.013Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-yaibal/attack.png": {
+    "sha256": "eea0bc6087aae3b013104564cdcb2e0d49d20d31e80fdd43053a46850cfa6a83",
+    "mtime": "2026-11-09T14:40:10.692Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-yaibal/hurt.png": {
+    "sha256": "e8af9eccb7df05214b5699b452674d08018e2b6e9d59cac1d7d4656785db748e",
+    "mtime": "2026-11-09T14:40:22.083Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-yaibal/idle.png": {
+    "sha256": "ba8bfe1c8d81f7f3304de308117db79d398626352cca608272e784b71bd4cd55",
+    "mtime": "2026-11-09T14:36:07.380Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-yaibal/idle@2x.png": {
+    "sha256": "596c0b9d6ec3c00a20dc627a18c7838c2eddd2956cb150f5abc1a4cf6cdbbcc2",
+    "mtime": "2026-11-09T14:57:30.657Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/characters/x2-yaibal/ko.png": {
+    "sha256": "2be4740476572afa1f65e256d27e9ca5ef53fb3e9dc7e792e77006c8e29e11b5",
+    "mtime": "2026-11-09T14:40:51.636Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/pause/ch45-belgemine.2x.webp": {
+    "sha256": "008ff472f67b6f7a7224a0defc42a47ee5c108bc4c4122684f6257b5a4dc3391",
+    "mtime": "2026-11-09T15:43:07.497Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/pause/ch45-belgemine.png": {
+    "sha256": "1e180df1c46a5f370fdf5d35e99520a93e1e96ed975017794a94263992be1a83",
+    "mtime": "2026-11-09T15:43:06.477Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/pause/ch48-shinryu.2x.webp": {
+    "sha256": "6f36c1945301eff6651bd738fc5fad133106c2c9308de64a5d0ad8c965faf3b6",
+    "mtime": "2026-11-09T15:43:10.974Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/pause/ch48-shinryu.png": {
+    "sha256": "70bd72ac98625892ba3d065e3a2d623a5e4b5d5b30027fd58dd068388967a4b3",
+    "mtime": "2026-11-09T15:43:09.967Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/pause/ffx2-garik-ronso.2x.webp": {
+    "sha256": "ca3c4838a48e1a11a243cc5d97b3349bbb10afdcdc41b20d8e55cae808dfb9f3",
+    "mtime": "2026-11-09T15:43:09.274Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/pause/ffx2-garik-ronso.png": {
+    "sha256": "4f7d8368d1876c99d18229acd9c0edba7bbbdf1dedceb8dbfa75d24bb2698ef9",
+    "mtime": "2026-11-09T15:43:08.217Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/pause/ffx2-ifrit-kilika.2x.webp": {
+    "sha256": "78ab00d8632b53333e7df1094721070e8d775d931e31169400f3ed89ab7c949e",
+    "mtime": "2026-11-09T15:43:12.837Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/pause/ffx2-ifrit-kilika.png": {
+    "sha256": "b306e7f223650448af174c0c26af41e17ae16f19e691b83f9fe9a8cd9efa773e",
+    "mtime": "2026-11-09T15:43:11.609Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/pause/ffx2-youth-league.2x.webp": {
+    "sha256": "b94bdfd9d6bd8a394becf7f79603f99310920dfa1d2e8d8b083f8750b99f8f81",
+    "mtime": "2026-11-09T15:43:05.787Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/pause/ffx2-youth-league.png": {
+    "sha256": "851ef7604ed5cc8978b0a759681f9e5ad52223db7c6ac633b42bdc980b9c0c16",
+    "mtime": "2026-11-09T15:43:04.693Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/portraits/belgemine.png": {
+    "sha256": "dc517c00d27e800ddbf23780cd9350505ac35e3c0289bc831866fb4f2fdbb0e6",
+    "mtime": "2026-11-09T15:07:22.604Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/portraits/elma.png": {
+    "sha256": "2cd77faa4d1c21104cbeb207f2ad76a26765999a2b79fce10e8cc69ee567c120",
+    "mtime": "2026-11-09T15:07:12.500Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/portraits/garik-ronso.png": {
+    "sha256": "b552ea5492738f59d5c9f1eeec23c56851bff2fe9e74b7466f0c3c45b4447154",
+    "mtime": "2026-11-09T15:41:00.120Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/portraits/lucil.png": {
+    "sha256": "9cf2336156d13e94389ee2cd58642d092e6ec6b69dfbd38381faf2712e4a0e10",
+    "mtime": "2026-11-09T15:07:12.045Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/portraits/shinryu.png": {
+    "sha256": "71e6e52ede7e8be4f2525a57d63ee0df37c26449186bc0db69330889a633fab6",
+    "mtime": "2026-11-09T15:40:59.795Z",
+    "delegated": "2026-11-09"
+   },
+   "public/art/portraits/yaibal.png": {
+    "sha256": "907fcaffbdaba54302f8458abad0620164ea4bbe8ff3337cedc7899b0472bf77",
+    "mtime": "2026-11-09T15:07:11.280Z",
+    "delegated": "2026-11-09"
+   }
   }
  }
 }

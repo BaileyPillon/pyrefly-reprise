@@ -41,7 +41,7 @@
 
 import type { Chapter } from '../../data/encounters.ts';
 import { artCandidatesFor, backdropUrl, portraitUrl, resolveArt } from '../../engine/BattlePresenterArt.ts';
-import { manifestKnowsAsset, pause2xUrlFor } from '../../engine/ArtManifest.ts';
+import { loadArtManifest, manifestKnowsAsset, pause2xUrlFor } from '../../engine/ArtManifest.ts';
 import { artUrl, prewarmPainted } from '../../engine/PaintedArt.ts';
 import { figureState, pixelUrlFor } from '../../engine/ArtTier.ts';
 import { loadDiet, orderByNeed, poseNeed } from '../../engine/LoadDiet.ts';
@@ -221,6 +221,7 @@ async function runPreload(chapter: Chapter, seed: number, run: Run, chosenYet: P
       .map((id) => state.combatants[id])
       .filter((c): c is NonNullable<typeof c> => Boolean(c));
     if (boss) {
+      await loadArtManifest(); // the card reads the manifest when it draws the boss (`BattleStartBanner`): have it in before the first card goes up, so a boss with no painting is never asked for (LIVE-78-1)
       cardInfo.set(chapter.id, {
         bossName: boss.name,
         artKey: inArtNamespace(ns, boss.spriteKey || boss.id),

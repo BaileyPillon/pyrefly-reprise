@@ -292,7 +292,8 @@ describe('the group, the party and the chapter', () => {
     expect(kilikaIfritGroup.musicCues).toEqual([{ at: 'start', track: 'boss-ffx2-fallen-aeons', fadeMs: 800 }]);
     expect(kilikaIfritGroup.actionTimeSeconds).toBeUndefined();
     expect(x2Ifrit.spriteKey).toBe(IFRIT_SPRITE);
-    expect(IFRIT_SPRITE).toBe('ifrit'); // the FFX aeon's approved painting, reused as provisional
+    expect(IFRIT_SPRITE).toBe('x2-ifrit'); // the possessed restyle of the FFX aeon's approved set (release 79); the FFX `ifrit` set is untouched
+    expect(x2Ifrit.forms?.[0]?.spriteKey).toBe(IFRIT_SPRITE);
     expect(x2Ifrit.flags).toMatchObject({ isBoss: true });
   });
 

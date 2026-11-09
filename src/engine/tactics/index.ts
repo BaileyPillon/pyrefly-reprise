@@ -50,6 +50,7 @@ import { ANGRA_MAINYU_BOSS_IDS, ffx2AngraMainyu } from './ffx2-angra-mainyu.ts';
 import { YUNAS_BALLAD_BOSS_IDS, ffx2YunasBallad } from './ffx2-yunas-ballad.ts';
 import { YOUTH_LEAGUE_BOSS_IDS, ffx2YouthLeague } from './ffx2-youth-league.ts';
 import { IFRIT_KILIKA_BOSS_IDS, ffx2IfritKilika } from './ffx2-ifrit-kilika.ts';
+import { GARIK_RONSO_BOSS_IDS, ffx2GarikRonso } from './ffx2-garik-ronso.ts';
 import { FALLEN_AEONS_BOSS_IDS, ffx2FallenAeons } from './ffx2-fallen-aeons.ts';
 import { SEYMOUR_OMNIS_BOSS_ID, seymourOmnis } from './seymour-omnis.ts';
 import { SEYMOUR_NATUS_BOSS_IDS, seymourNatus } from './seymour-natus.ts';
@@ -64,6 +65,8 @@ import { SANCTUARY_KEEPER_BOSS_IDS, sanctuaryKeeper } from './sanctuary-keeper.t
 import { SPHERIMORPH_BOSS_IDS, spherimorph } from './spherimorph.ts';
 import { OMEGA_RUINS_BOSS_IDS, omegaRuins } from './omega-ruins.ts';
 import { WENDIGO_BOSS_IDS, wendigoLine } from './wendigo.ts';
+import { BELGEMINE_CHAPTER_BOSS_IDS, belgemineLine } from './belgemine.ts';
+import { SHINRYU_BOSS_IDS, shinryu } from './shinryu.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -102,6 +105,7 @@ export { ffx2AngraMainyu, ANGRA_MAINYU_BOSS_IDS } from './ffx2-angra-mainyu.ts';
 export { ffx2YunasBallad, YUNAS_BALLAD_BOSS_IDS } from './ffx2-yunas-ballad.ts';
 export { ffx2YouthLeague, YOUTH_LEAGUE_BOSS_IDS } from './ffx2-youth-league.ts';
 export { ffx2IfritKilika, IFRIT_KILIKA_BOSS_IDS } from './ffx2-ifrit-kilika.ts';
+export { ffx2GarikRonso, GARIK_RONSO_BOSS_IDS } from './ffx2-garik-ronso.ts';
 export { ffx2FallenAeons, FALLEN_AEONS_BOSS_IDS } from './ffx2-fallen-aeons.ts';
 export { seymourOmnis, SEYMOUR_OMNIS_BOSS_ID } from './seymour-omnis.ts';
 export { seymourNatus, SEYMOUR_NATUS_ID, SEYMOUR_NATUS_BOSS_IDS } from './seymour-natus.ts';
@@ -116,6 +120,8 @@ export { sanctuaryKeeper, SANCTUARY_KEEPER_BOSS_IDS } from './sanctuary-keeper.t
 export { spherimorph, SPHERIMORPH_BOSS_IDS } from './spherimorph.ts'; // the hidden Spherimorph chapter (FFX only)
 export { omegaRuins, OMEGA_RUINS_BOSS_IDS } from './omega-ruins.ts'; // the hidden Omega Ruins chapter (FFX only)
 export { wendigoLine, WENDIGO_BOSS_IDS } from './wendigo.ts'; // the hidden Wendigo chapter (FFX only)
+export { belgemineLine, BELGEMINE_CHAPTER_BOSS_IDS } from './belgemine.ts'; // the hidden Belgemine's Challenge chapter (FFX only)
+export { shinryu, SHINRYU_BOSS_IDS } from './shinryu.ts'; // the hidden Shinryu chapter (FFX only, 2026-11-07)
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -191,6 +197,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...YOUTH_LEAGUE_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-youth-league', bossId, tactic: ffx2YouthLeague })),
   // Ifrit at Kilika Temple (FFX-2 only, hidden chapter, 2026-11-07): the possessed fire aeon, one fighter; no Fire, Shell and Protect, Darkness and Breaks.
   ...IFRIT_KILIKA_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-ifrit-kilika', bossId, tactic: ffx2IfritKilika })),
+  // Garik Ronso and the Ronso Youths (FFX-2 only, hidden chapter, 2026-11-08): five bodies for the two fights; Protect, Darkness, never Black Mage.
+  ...GARIK_RONSO_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-garik-ronso', bossId, tactic: ffx2GarikRonso })),
   // Chapter XII (FFX only, unlisted): Seymour Omnis alone finds it; the discs are his parts.
   { chapterId: 'seymour-omnis', bossId: SEYMOUR_OMNIS_BOSS_ID, tactic: seymourOmnis },
   // Chapter XIV (FFX only, listed 2026-09-25): his three aeons, one a link; Isaaru is an untargetable bystander.
@@ -212,6 +220,10 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...OMEGA_RUINS_BOSS_IDS.map((bossId) => ({ chapterId: 'omega-ruins', bossId, tactic: omegaRuins })),
   // The hidden Wendigo chapter (FFX only): the brute on the frozen lake; the line is a Petrify Grenade for the Guardians, Power Break and Dark Attack on Wendigo, Protect on the party, and no swing while its arms are up (plain blows win 0 of 100).
   ...WENDIGO_BOSS_IDS.map((bossId) => ({ chapterId: 'wendigo', bossId, tactic: wendigoLine })),
+  // The hidden Belgemine's Challenge chapter (FFX only): her eight aeons; the line is Shield before the foe's big move, the heaviest aeon first (Shiva or Ixion against Ifrit), the Overdrive when it is full, and no Dismiss (the bench measured it counterproductive).
+  ...BELGEMINE_CHAPTER_BOSS_IDS.map((bossId) => ({ chapterId: 'belgemine', bossId, tactic: belgemineLine })),
+  // The hidden Shinryu chapter (FFX only): the Monster Arena's deep-water dragon; the line is a Phoenix Down or a potion first, then Tidus's Quick Hit and the plain Celestial blow (the shipped party wins every battle; the line is the fastest).
+  ...SHINRYU_BOSS_IDS.map((bossId) => ({ chapterId: 'shinryu', bossId, tactic: shinryu })),
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

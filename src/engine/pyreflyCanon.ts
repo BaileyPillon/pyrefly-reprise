@@ -25,10 +25,13 @@ import { SPECTRAL_KEEPER_SCENE } from '../data/ffx/spectral-keeper-ids.ts';
 import { DARK_AEONS_SCENE } from '../data/ffx/dark-aeons-six-ids.ts';
 import { PENANCE_SCENE } from '../data/ffx/penance-ids.ts';
 import { FLOODED_WAYS_SCENE } from '../data/ffx/flooded-ways-ids.ts';
+import { SHINRYU_SCENE } from '../data/ffx/shinryu-ids.ts';
 import { SANCTUARY_KEEPER_SCENE } from '../data/ffx/sanctuary-keeper-ids.ts';
 import { SPHERIMORPH_SCENE } from '../data/ffx/spherimorph-ids.ts';
 import { OMEGA_RUINS_SCENE } from '../data/ffx/omega-ruins-ids.ts';
 import { WENDIGO_SCENE } from '../data/ffx/wendigo-ids.ts';
+import { BELGEMINE_SCENE } from '../data/ffx/belgemine-ids.ts';
+import { GARIK_RONSO_SCENE } from '../data/garik-ronso-ids.ts';
 import { ANGRA_MAINYU_SCENE } from '../data/angra-mainyu-ids.ts';
 import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
 import { EXP_WINDWAKER_SCENE } from '../data/windwaker-ids.ts';
@@ -161,6 +164,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   [DARK_AEONS_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/re-ffx-dark-aeons-six.md section 2.4 and 9: the guides name where each Dark Aeon stands and no ambient particles; the aeons are summoned shapes and leave as the stage dissolves them' },
   // The Sanctuary Keeper (the hidden chapter, FFX only; `scenes/sanctuary-keeper.ts`): Chapter I's Mt. Gagazet plate and scene, so the mountain's row.
   [SANCTUARY_KEEPER_SCENE]: { game: 'ffx', verdict: 'unattested', cite: `${PRES}, Mt. Gagazet [single source]: "No pyreflies are attested on the trail" (an absence, not a contradiction); the stage is Chapter I's`, treatment: "As Gagazet: snow and glitter, nothing added" },
+  // Garik Ronso (the hidden chapter, FFX-2 only; `scenes/gagazet-summit.ts`): Chapter I's Mt. Gagazet plate under a snow grade of its own, so the mountain's row; no FFX-2 note names particles at the summit (`research/re-ffx2-garik-ronso.md`).
+  [GARIK_RONSO_SCENE]: { game: 'ffx2', verdict: 'unattested', cite: `${PRES}, Mt. Gagazet [single source]: "No pyreflies are attested on the trail" (an absence, not a contradiction); the stage borrows Chapter I's plate (research/re-ffx2-garik-ronso.md)`, treatment: 'As Gagazet: snow and glitter, nothing added' },
   // The Spectral Keeper (the hidden chapter, FFX only): the Zanarkand Dome as Chapter II builds it, so the Dome's row.
   [SPECTRAL_KEEPER_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Zanarkand Dome [verified: 2 sources]` },
   // Penance (the hidden chapter, FFX only; `scenes/penance.ts`): Chapter VIII's deck over Chapter VIII's own plate, so the deck's row.
@@ -173,6 +178,10 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   [OMEGA_RUINS_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-yojimbo.md §6.2 beat 3 (the Cavern, whose plate the Ruins stand on): nothing on the room; research/re-ffx-omega-ultima-nemesis.md §2: the formations name no particles', treatment: 'As the Cavern: cold light and mist, nothing added; the guardians go dark where they stood' },
   // Wendigo (the hidden chapter, FFX only; `scenes/wendigo-lake.ts`): Chapter VII's Macalania Temple stage standing in for frozen Lake Macalania; no source was read for the lake itself, so the lake is unattested and the stage keeps the Temple's own treatment.
   [WENDIGO_SCENE]: { game: 'ffx', verdict: 'unattested', cite: `${PRES}, Lake Macalania [no source read]: the stage is Chapter VII's Macalania Temple`, treatment: 'As the Temple: ice glitter, the Chamber-door motes held, nothing added' },
+  // Belgemine's Challenge (the hidden chapter, FFX only; `scenes/belgemine.ts`): the Remiem court has no plate; the stage is the Cavern of the Stolen Fayth's plate on the Mushroom Rock Road stage, so the Cavern's row (no source names particles at Remiem: research/re-ffx-belgemine-aeon-duels.md).
+  [BELGEMINE_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-yojimbo.md §6.2 beat 3 (the Cavern, whose plate the Remiem court stands on): nothing on the room; research/re-ffx-belgemine-aeon-duels.md: the formations name no particles', treatment: 'As the Cavern: cold light and mist, nothing added' },
+  // Shinryu (the hidden chapter, FFX only; `scenes/shinryu.ts`): the Via Purifico's stage on the submerged plate, standing in for the Monster Arena's sea stage; the guides name an underwater arena and no ambient particles.
+  [SHINRYU_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/re-ffx-shinryu.md sections 1 and 5: the guides name an underwater arena and no ambient particles; the Flooded Ways plate stands in for the game\'s sea stage' },
   // The 3D Bahamut (the hidden chapter, FFX-2 only; `scenes/exp-yrp-3d-stage.ts`): Chapter IV's chamber, so the Bevelle underground's row.
   [EXP_YRP_SCENE]: { game: 'ffx2', verdict: 'absent', cite: `${PRES}, Bevelle Underground [single source]: "Machina, not spirits"; the chamber is Chapter IV's` },
   // Valefor at Besaid in Wind Waker style (the hidden chapter, FFX-2 only; `scenes/exp-windwaker-stage.ts`): hidden chapter 24's fight, so its row (the Djose chamber's stand-in for Besaid's); the temple is a stand-in.

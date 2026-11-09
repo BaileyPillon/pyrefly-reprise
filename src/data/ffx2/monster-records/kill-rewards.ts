@@ -111,4 +111,11 @@ export const KILL_REWARD_ROWS: Readonly<Record<string, FFX2KillReward>> = {
   "ffx2-youth-league-7-lucil/x2-yl-lucil": row(1, 184, 800, 2, 220, 255, [0x901c, 1, 0x901c, 1]), // Lucil
   // The hidden Ifrit at Kilika Temple (Chapter 3, "Pest Control"; RE note re-ffx2-ifrit-kilika §0): EXP, Gil, AP, the drop byte (255, always) and the item slots are the row's own (Angel Earrings, common and rare).
   "ffx2-kilika-ifrit/x2-ifrit": row(1, 165, 1800, 15, 1300, 255, [0x9045, 1, 0x9045, 1]), // Ifrit
+  // The hidden Garik Ronso (the Mt. Gagazet summit, Chapter 3's "Battle Blockade"; RE note re-ffx2-garik-ronso §0): EXP, Gil, AP, the drop byte and the item slots are the rows'. Garik drops a Shining Bracer on a byte of 128 (50.2 percent);
+  // the Youth drops a Remedy on 255, one common and two rare. The hostile fight pays 820 EXP, 130 Gil and 7 AP in all (two Youths and Garik), the friendly bout 600, 110 and 5.
+  "ffx2-gagazet-garik-hostile/x2-ronso-youth-a": row(1, 181, 220, 2, 20, 255, [0x200f, 1, 0x200f, 2]), // Ronso Youth
+  "ffx2-gagazet-garik-hostile/x2-ronso-youth-b": row(1, 181, 220, 2, 20, 255, [0x200f, 1, 0x200f, 2]), // Ronso Youth
+  "ffx2-gagazet-garik-hostile/x2-garik-ronso": row(1, 182, 380, 3, 90, 128, [0x905d, 1, 0x905d, 1]), // Garik Ronso
+  "ffx2-gagazet-garik-friendly/x2-ronso-youth-bout": row(1, 181, 220, 2, 20, 255, [0x200f, 1, 0x200f, 2]), // Ronso Youth
+  "ffx2-gagazet-garik-friendly/x2-garik-ronso-bout": row(1, 182, 380, 3, 90, 128, [0x905d, 1, 0x905d, 1]), // Garik Ronso
 };

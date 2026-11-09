@@ -44,6 +44,11 @@
  * items like the five above (the same class, the same no-op effect, not battle- or menu-usable). **Their in-game
  * help text is not in our sources and is not transcribed**: each `description` states only the class, which the
  * item menu never shows for a row that is not usable in battle (`ui/ffx/commandHelp.ts` reads it for battle items).
+ *
+ * **Two that are not Sphere Grid items** (the hidden Shinryu chapter, FFX only, 2026-11-08): Wings to Discovery (its drop) and Gambler's Spirit (its steal), named in `research/re-ffx-shinryu.md` section 0. They sit
+ * here because this is the file the reward-resolve test's fix lives in, but they are NOT Sphere Grid items and are not described as such: `rewardItem` below gives the name and nothing else (no help text, no class, no
+ * effect, no price: none of these is in our sources, rule 6), so the Steal banner and the Results screen print the name instead of the raw id. They are the game's mix-table items already (`battle/ffx/kernel/mix-table.ts`),
+ * which is the one thing the repo knows of them.
  */
 
 import type { AbilityDef, ItemDef } from '../../../battle/common/types.ts';
@@ -90,6 +95,22 @@ function gridItem(id: string, name: string): ItemDef {
   };
 }
 
+/** A reward item that is not a Sphere Grid item and whose help text, class and price are unsourced: the name only (see the header). Not usable in battle or in the menu, so no behaviour is modelled. */
+function rewardItem(id: string, name: string): ItemDef {
+  return {
+    id,
+    name,
+    game: 'ffx',
+    effect: sphereGridEffect(id, name), // the required no-op `AbilityDef`: never run, the row is not usable in battle
+    targeting: 'self',
+    usableInBattle: false,
+    usableInMenu: false,
+    price: 0, // no source lists a shop price
+    iconKey: `icon-${id}`,
+    description: 'Reward item.', // the name and nothing else: the in-game help text is not in our sources
+  };
+}
+
 /** Ability Sphere, Blk Magic Sphere, Special Sphere, Lv. 3/4 Key Sphere, and Sin's three, keyed by id. */
 export const ITEMS: Record<string, ItemDef> = {
   // research/ffx-sin.md §2.4 [decompiled]: the Left Fin, Genais and the Core drop these (Chapter XVII).
@@ -107,6 +128,13 @@ export const ITEMS: Record<string, ItemDef> = {
   'power-sphere': gridItem('power-sphere', 'Power Sphere'),
   'mana-sphere': gridItem('mana-sphere', 'Mana Sphere'),
   'speed-sphere': gridItem('speed-sphere', 'Speed Sphere'),
+  // The hidden Shinryu chapter's drop and steal (research/re-ffx-shinryu.md section 0): the name only, like the rows above but not Sphere Grid items (see `rewardItem`).
+  'wings-to-discovery': rewardItem('wings-to-discovery', 'Wings to Discovery'),
+  'gamblers-spirit': rewardItem('gamblers-spirit', "Gambler's Spirit"),
+  // The hidden Omega Ruins chapter's steal, bribe and drop (research/re-ffx-omega-ultima-nemesis.md section 3, the reward table; FFX only): Door to Tomorrow (Ultima Weapon's steal), Pendulum (its bribe) and Warp Sphere (Nemesis's drop and rare steal). The release 79 integration found them: the reward-resolve test now walks the hidden FFX chapters (Shinryu lane), and these three printed their raw ids. The name only, like the two rows above (no class, help text or price is in our sources, rule 6).
+  'door-to-tomorrow': rewardItem('door-to-tomorrow', 'Door to Tomorrow'),
+  'pendulum': rewardItem('pendulum', 'Pendulum'),
+  'warp-sphere': rewardItem('warp-sphere', 'Warp Sphere'),
   'ability-sphere': {
     id: 'ability-sphere',
     name: 'Ability Sphere',

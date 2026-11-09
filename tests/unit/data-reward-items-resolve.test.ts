@@ -22,7 +22,7 @@
 
 import { describe, expect, it } from 'vitest';
 import type { EnemyDef, EnemyGroupDef, ItemDef } from '../../src/battle/common/types.ts';
-import { CHAPTERS } from '../../src/data/encounters.ts';
+import { CHAPTERS, EXPERIMENT_CHAPTERS } from '../../src/data/encounters.ts';
 import { FFX_ITEMS, ENEMY_GROUPS_BY_ID as FFX_GROUPS } from '../../src/data/ffx/index.ts';
 import { FFX2_ITEMS, ENEMY_GROUPS_BY_ID as FFX2_GROUPS } from '../../src/data/ffx2/index.ts';
 
@@ -56,6 +56,8 @@ function rewardItemIds(enemy: EnemyDef): string[] {
 }
 
 const FFX_CHAPTERS = CHAPTERS.filter((c) => c.game === 'ffx');
+/** The hidden FFX chapters (`EXPERIMENT_CHAPTERS`, reached by a typed word): they are in neither `CHAPTERS` nor `CHAPTER_IDS`, so the loop above never walked them, and the Shinryu chapter's Wings to Discovery and Gambler's Spirit shipped with no row (review of 2026-11-08: the Steal banner read "Stole gamblers-spirit!"). FFX only; the hidden FFX-2 chapters are the FFX-2 lanes' to report. */
+const FFX_HIDDEN_CHAPTERS = EXPERIMENT_CHAPTERS.filter((c) => c.game === 'ffx');
 const FFX2_CHAPTERS = CHAPTERS.filter((c) => c.game === 'ffx2');
 
 describe('FFX chapter reward items resolve to an ItemDef row (Q3 fix)', () => {
@@ -72,6 +74,35 @@ describe('FFX chapter reward items resolve to an ItemDef row (Q3 fix)', () => {
       expect(unresolved, `${chapter.id} has reward ids with no ItemDef row`).toEqual([]);
     });
   }
+
+  it('the hidden FFX chapters are walked at all (the loop below is not vacuous): the Shinryu chain resolves to its dragon', () => {
+    expect(FFX_HIDDEN_CHAPTERS.some((c) => c.id === 'shinryu')).toBe(true);
+    const shinryu = FFX_HIDDEN_CHAPTERS.find((c) => c.id === 'shinryu')!;
+    expect(collectChainEnemies(shinryu.enemyGroupRef.id, FFX_GROUPS as Record<string, EnemyGroupDef>).map((e) => e.id)).toEqual(['shinryu']);
+  });
+
+  for (const chapter of FFX_HIDDEN_CHAPTERS) {
+    it(`hidden ${chapter.id}: every reward itemId is in FFX_ITEMS`, () => {
+      const enemies = collectChainEnemies(chapter.enemyGroupRef.id, FFX_GROUPS as Record<string, EnemyGroupDef>);
+      // A hidden chapter whose formations are built at run time (the Last Summoning's gauntlet, in the player's order) has no static chain here: nothing to walk, and the loop passes it.
+      const unresolved: string[] = [];
+      for (const enemy of enemies) {
+        for (const itemId of rewardItemIds(enemy)) {
+          if (!(FFX_ITEMS as Record<string, ItemDef>)[itemId]) unresolved.push(`${enemy.id}:${itemId}`);
+        }
+      }
+      expect(unresolved, `${chapter.id} has reward ids with no ItemDef row`).toEqual([]);
+    });
+  }
+
+  it('the two Shinryu reward rows exist, carry the real names and are not battle-usable', () => {
+    expect(FFX_ITEMS['wings-to-discovery']!.name).toBe('Wings to Discovery');
+    expect(FFX_ITEMS['gamblers-spirit']!.name).toBe("Gambler's Spirit");
+    for (const id of ['wings-to-discovery', 'gamblers-spirit']) {
+      expect(FFX_ITEMS[id]!.usableInBattle, id).toBe(false);
+      expect(FFX_ITEMS[id]!.usableInMenu, id).toBe(false);
+    }
+  });
 
   it('the five sphere rows exist and are not battle-usable', () => {
     for (const id of ['ability-sphere', 'blk-magic-sphere', 'special-sphere', 'lv-3-key-sphere', 'lv-4-key-sphere']) {

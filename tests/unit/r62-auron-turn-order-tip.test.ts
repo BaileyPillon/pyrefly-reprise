@@ -28,8 +28,8 @@ const everyChapter = [...CHAPTERS, ...UNLISTED_CHAPTERS, ...EXPERIMENT_CHAPTERS]
 const ffxChapters = everyChapter.filter((c) => c.game === 'ffx');
 
 /** The chapters that show no line: neither line is true in every seed, or the brief leaves them without one (see `turnOrderLine.ts`). */
-const NO_LINE = ['yunalesca', 'braskas-final-aeon', 'seymour-anima-macalania', 'yojimbo-cavern', 'isaaru-via-purifico', 'sin-face', 'biran-yenke', 'flooded-ways', 'spherimorph']; // the hidden Flooded Ways (2026-11-06): Evrae Altana (AGI 25) and Geosgaeno (AGI 48) act before the party in some seeds, so neither line is true in every seed
-const PARTY_FIRST = ['evrae-airship', 'seymour-natus', 'seymour-omnis', 'sin-fins-core', 'mirror-aeons', 'sinspawn-gui', 'exp-fayth', 'last-summoning', 'spectral-keeper', 'dark-aeons', 'penance', 'sanctuary-keeper', 'omega-ruins', 'wendigo'];
+const NO_LINE = ['yunalesca', 'braskas-final-aeon', 'seymour-anima-macalania', 'yojimbo-cavern', 'isaaru-via-purifico', 'sin-face', 'biran-yenke', 'flooded-ways', 'spherimorph', 'belgemine']; // the hidden Flooded Ways (2026-11-06): Evrae Altana (AGI 25) and Geosgaeno (AGI 48) act before the party in some seeds, so neither line is true in every seed
+const PARTY_FIRST = ['evrae-airship', 'seymour-natus', 'seymour-omnis', 'sin-fins-core', 'mirror-aeons', 'sinspawn-gui', 'exp-fayth', 'last-summoning', 'spectral-keeper', 'dark-aeons', 'penance', 'sanctuary-keeper', 'omega-ruins', 'wendigo', 'shinryu'];
 
 describe('which chapter shows which line', () => {
   it('Chapter I (seymour-flux) has the new line, Bailey\'s pick', () => {

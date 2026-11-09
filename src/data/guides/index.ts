@@ -37,6 +37,7 @@ import { FFX2_VALEFOR_BESAID_GUIDE } from './ffx2-valefor-besaid.ts';
 import { FFX2_ANGRA_MAINYU_GUIDE } from './ffx2-angra-mainyu.ts';
 import { SANCTUARY_KEEPER_GUIDE } from './sanctuary-keeper.ts';
 import { WENDIGO_GUIDE } from './wendigo.ts';
+import { BELGEMINE_GUIDE } from './belgemine.ts';
 import { PENANCE_GUIDE } from './penance.ts';
 import { FFX2_YUNAS_BALLAD_GUIDE } from './ffx2-yunas-ballad.ts';
 import { SPHERIMORPH_GUIDE } from './spherimorph.ts';
@@ -44,6 +45,8 @@ import { FFX2_YOUTH_LEAGUE_GUIDE } from './ffx2-youth-league.ts';
 import { OMEGA_RUINS_GUIDE } from './omega-ruins.ts';
 import { FF7_JENOVA_LIFE_GUIDE } from './ff7-jenova-life.ts';
 import { FFX2_IFRIT_KILIKA_GUIDE } from './ffx2-ifrit-kilika.ts';
+import { FFX2_GARIK_RONSO_GUIDE } from './ffx2-garik-ronso.ts';
+import { SHINRYU_GUIDE } from './shinryu.ts';
 
 export type {
   ChapterGuide,
@@ -146,8 +149,13 @@ export const GUIDES: readonly ChapterGuide[] = [
   OMEGA_RUINS_GUIDE,
   // The hidden Jenova LIFE chapter (FF7 only, the altar of the Forgotten Capital; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel finds it by boss id the day FF7 has one. No tactic (the advisor is off for FF7).
   FF7_JENOVA_LIFE_GUIDE,
+  BELGEMINE_GUIDE, // the hidden Belgemine's Challenge (FFX only)
   // The hidden Ifrit at Kilika Temple chapter (FFX-2 only, the possessed fire aeon; EXPERIMENT_CHAPTERS, not listed): its guide rides here so the panel and the tactic find it by boss id.
   FFX2_IFRIT_KILIKA_GUIDE,
+  // The hidden Garik Ronso chapter (FFX-2 only, Garik and the Ronso Youths at the summit; EXPERIMENT_CHAPTERS, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  FFX2_GARIK_RONSO_GUIDE,
+  // The hidden Shinryu chapter (FFX only, the Monster Arena's deep-water dragon; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  SHINRYU_GUIDE,
   // The hidden Wendigo chapter (FFX only, Wendigo and its two Guado Guardians on frozen Lake Macalania; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
   WENDIGO_GUIDE,
 ];

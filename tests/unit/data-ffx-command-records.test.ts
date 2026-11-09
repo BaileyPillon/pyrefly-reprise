@@ -153,6 +153,8 @@ describe("the attached records are the game's table", () => {
     // The hidden Sanctuary Keeper chapter (FFX only, 2026-11-06): its three rows (0x6042 to 0x6044); the six spells it adds at init are the player's own rows.
     // The hidden Spherimorph chapter (FFX only, 2026-11-06): its six rows (0x6036, 0x6039 to 0x603C and 0x603F), each with its record; the four spells it adds at init are the player's own rows.
     // The hidden Omega Ruins chapter (FFX only, 2026-11-06): the three Weapons' fourteen rows (0x407f, 0x4022, 0x4023, 0x604f, 0x606e, 0x6072, 0x6071, 0x410f, 0x4067, 0x40f0, 0x40d8, 0x40d9, 0x40f4, 0x40f3), each with its record; Holy, Ultima and Demi are the player's own rows.
+    // The hidden Shinryu chapter (FFX only, 2026-11-07): its three rows (0x40bf, 0x40f0, 0x40f6), each with its record in both fixtures.
+    // ... and its two reward items (2026-11-08 fix pass): Wings to Discovery (0x206c, the drop) and Gambler's Spirit (0x206d, the steal), name-only item rows with the blank item record, both in both fixtures; 3 + 2 = 5.
     // Each row has its record, all in the game's fixtures.
     const ROWS_SINCE_KEEPER: ReadonlyArray<readonly [chapter: string, abilities: number, records: number]> = [
       ['dark-aeons', 20, 20],
@@ -161,7 +163,10 @@ describe("the attached records are the game's table", () => {
       ['sanctuary-keeper', 3, 3],
       ['spherimorph', 6, 6],
       ['omega-ruins', 14, 14],
+      ['belgemine', 21, 21], // the hidden Belgemine's Challenge chapter (FFX only, 2026-11-09): its twenty-one new rows (four summons, the aeons' own moves, the Sisters' spells); the reused rows add none
       ['wendigo', 8, 8], // the hidden Wendigo chapter (FFX only, 2026-11-06): its eight rows, 0x407f, 0x4080, 0x4062, 0x403b, 0x4063, 0x400f, 0x4010 and the item row 0x200c
+      ['shinryu', 5, 5],
+      ['omega-ruins-items', 3, 3], // the hidden Omega Ruins chapter's reward items (FFX only; release 79 integration): Warp Sphere 0x2063, Pendulum 0x2069 and Door to Tomorrow 0x206b, name-only item rows with the blank item record, the rows the game's table holds for them (both in the fixture); the reward-resolve test, now walking the hidden FFX chapters, found their raw ids
     ];
     expect(ALL_ABILITIES).toHaveLength(519 + ROWS_SINCE_KEEPER.reduce((n, [, a]) => n + a, 0));
     expect(Object.keys(COMMAND_RECORDS)).toHaveLength(516 + ROWS_SINCE_KEEPER.reduce((n, [, , r]) => n + r, 0));

@@ -51,11 +51,11 @@ for (const group of GROUPS) for (const enemy of [...group.enemies, ...(group.par
 
 /** The game's item names as the engine's labels read them: the English copies of `item.bin`, `accessory.bin` and `important.bin` spell them, but the engine's ids have no hyphen in Gris Gris Bag and Magical Dances Vol 1 (earlier builds'), so those two labels read without one. */
 const NAMES: Readonly<Record<number, string>> = {
-  0x2000: 'Potion', 0x2001: 'Hi-Potion', 0x2002: 'X-Potion', 0x2003: 'Mega-Potion', 0x2004: 'Ether', 0x2005: 'Turbo Ether', 0x2006: 'Phoenix Down', 0x2007: 'Mega Phoenix', 0x2008: 'Elixir', 0x2009: 'Megalixir', 0x2011: 'Grenade',
+  0x2000: 'Potion', 0x2001: 'Hi-Potion', 0x2002: 'X-Potion', 0x2003: 'Mega-Potion', 0x2004: 'Ether', 0x2005: 'Turbo Ether', 0x2006: 'Phoenix Down', 0x2007: 'Mega Phoenix', 0x2008: 'Elixir', 0x2009: 'Megalixir', 0x200f: 'Remedy', 0x2011: 'Grenade',
   0x2028: 'Supreme Gem', 0x202f: 'Chocobo Feather', 0x202e: 'Dark Matter', 0x203b: 'Stamina Tonic', 0x203f: 'Hero Drink', 0x7029: 'Reassembled Sphere', 0x7046: 'Magical Dances Vol 1',
   0x9002: 'Mythril Bangle', 0x9018: 'Muscle Belt', 0x901c: 'Circlet', 0x900b: 'Kaiser Knuckles', 0x900e: 'Crystal Gloves', 0x9012: 'Pixie Dust', 0x9013: 'Crystal Ball', 0x9014: 'Defense Veil', 0x901a: 'Champion Belt', 0x9045: 'Angel Earrings',
   0x901e: 'Regal Crown', 0x902e: 'Nultide Ring', 0x9039: 'Tetra Band', 0x9047: 'Twist Headband', 0x904b: 'Black Choker', 0x904d: 'Gris Gris Bag', 0x904e: 'Pearl Necklace', 0x9053: 'Faerie Earrings',
-  0x9056: 'Ribbon', 0x9058: 'Favorite Outfit', 0x905a: 'Regen Bangle', 0x905c: 'Moon Bracer', 0x9060: 'Recovery Bracer', 0x9072: 'Charm Bangle', 0x9074: 'Soul of Thamasa',
+  0x9056: 'Ribbon', 0x9058: 'Favorite Outfit', 0x905a: 'Regen Bangle', 0x905c: 'Moon Bracer', 0x905d: 'Shining Bracer', 0x9060: 'Recovery Bracer', 0x9072: 'Charm Bangle', 0x9074: 'Soul of Thamasa',
 };
 
 describe('the kill-reward rows are the game\'s', () => {
@@ -118,10 +118,12 @@ describe('every shipped monster\'s reward numbers carry their row citation', () 
    * Fiend Arena's Trema, built from the story Trema's record (row 295) and paid by its own row of the game (328, note FFX2-G03 table 5.1).
    */
   const OWN_ROW: Readonly<Record<string, number>> = { 'ffx2-cloister-trema-arena/trema': 328 };
+  /** The two Ronso Youths of the hostile Garik formation: one row (181), two bodies, told apart by a letter in our data as FFX-2 names its duplicates (Node A/B/C); the game's row names both "Ronso Youth". */
+  const LETTERED_TWIN_IDS: ReadonlySet<string> = new Set(['x2-ronso-youth-a', 'x2-ronso-youth-b']);
   /** The reader spells a name as the game's file does ("Fem,Goon"); ours has a hyphen. */
   const plain = (name: string): string => name.toLowerCase().replace(/[^a-z0-9]/g, '');
-  /** The monster's own name: the Youth League's duplicates carry a formation letter ("League Veteran C", PR-0013), which is not part of the row's name; no other chapter's name is touched. */
-  const species = (e: { id: string; name: string }): string => (e.id.startsWith('x2-yl-') ? e.name.replace(/ [A-D]$/, '') : e.name);
+  /** The monster's own name: the Youth League's duplicates carry a formation letter ("League Veteran C", PR-0013), which is not part of the row's name (so too the hostile Garik formation's two Ronso Youths, A and B); no other chapter's name is touched. */
+  const species = (e: { id: string; name: string }): string => (e.id.startsWith('x2-yl-') || LETTERED_TWIN_IDS.has(e.id) ? e.name.replace(/ [A-D]$/, '') : e.name);
 
   it('each monster wears a reward row that names its table and row, as the reader read them, and the row is that monster\'s', () => {
     expect(ENEMIES.length).toBe(Object.keys(ROWS).length);
@@ -140,7 +142,7 @@ describe('every shipped monster\'s reward numbers carry their row citation', () 
     }
   });
 
-  it('no formation cites one row for two of its monsters, unless the two are the same monster (the hidden Youth League Tournament stands two Warriors, two Mages and four Veterans on the field, each wearing its one row)', () => {
+  it('no formation cites one row for two of its monsters, unless the two are the same monster (the hidden Youth League Tournament stands two Warriors, two Mages and four Veterans on the field, and the hostile Garik formation two Ronso Youths, each wearing its one row)', () => {
     for (const group of GROUPS) {
       const all = [...group.enemies, ...(group.parts ?? [])];
       const cited = all.map((e) => `${e.ffx2Record?.kill?.table}/${e.ffx2Record?.kill?.row}`);
@@ -150,9 +152,9 @@ describe('every shipped monster\'s reward numbers carry their row citation', () 
         expect(names.size, `${group.id}: ${cited.join(', ')}: row ${row} is worn by ${[...names].join(' and ')}`).toBe(1);
       }
     }
-    // ...and a formation that does repeat a row repeats it only in the Youth League's chapter.
+    // ...and a formation that does repeat a row repeats it only in the Youth League's chapter and in the hostile Garik formation (game formation 1622 fields the Ronso Youth's row twice, on purpose: two bodies, one row).
     const repeating = GROUPS.filter((g) => new Set([...g.enemies, ...(g.parts ?? [])].map((e) => `${e.ffx2Record?.kill?.table}/${e.ffx2Record?.kill?.row}`)).size < g.enemies.length + (g.parts?.length ?? 0)).map((g) => g.id);
-    expect(repeating.every((id) => id.startsWith('ffx2-youth-league-')), repeating.join(', ')).toBe(true);
+    expect(repeating.every((id) => id.startsWith('ffx2-youth-league-') || id === 'ffx2-gagazet-garik-hostile'), repeating.join(', ')).toBe(true);
   });
 
   it('the data file says where its rows come from: the game file, the reader, the note and a confidence tag', () => {

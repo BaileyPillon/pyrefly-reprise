@@ -14,8 +14,8 @@
  * Auto-Life, Stop, Doom), the **steal chance byte 128**, the Zantetsu byte 80, the **special word 0x3c3**, and the **automatic status "uses no MP"**. The row is laid on this enemy by `../monster-records/records-ifrit.ts`
  * (`attachMonsterRecords`, called at the foot of this file). `tests/unit/chapters/ifrit-kilika-data.test.ts` pins this file and the record against the fixture.
  *
- * **Art: provisional.** `spriteKey: 'ifrit'` is the FFX aeon's approved painting set (`public/art/characters/ifrit/{idle,attack,cast,hurt,ko,overdrive}`), reused as is. The possessed-aeon treatments `x2-ixion`, `x2-shiva` and
- * `x2-anima` exist; an `x2-ifrit` restyle (idle, attack, hurt, ko; `docs/handoff/ch-ifrit-kilika.md` "Art needs") is a new art step held for Bailey.
+ * **Art (release 79, `docs/handoff/r79-art-install.md`).** `spriteKey: 'x2-ifrit'` is the possessed-aeon restyle of the FFX aeon's approved set (`public/art/characters/x2-ifrit/{idle,attack,cast,hurt,ko,overdrive}`: the approved
+ * paintings' own pixels through the possession grade, as `x2-ixion`, `x2-shiva` and `x2-anima` are). The FFX `ifrit` set is untouched.
  *
  * **Action time.** No flat window: the per-command span (`ACTION_TIME_PER_COMMAND`, `action-span.ts`, on since r56) supersedes the formation's old flat 3 s, as for the chapters made after it. His body (motion set 0x10a5) has no frame
  * table in the repo yet, so the engine keeps today's hit-reaction window on him (the Bevelle guardians' and the Farplane Cup's bodies are in the same position).
@@ -28,8 +28,8 @@ import { IFRIT_ATTACK_ID, IFRIT_ANNOUNCEMENT_IDS, IFRIT_FIRAGA_ID, IFRIT_HELLFIR
 /** The formation (`Kilika Temple - Fayth - BOSS 229 Ifrit 1`, Chapter 3 `[SinirothX]`; the game's `klyt11_229`, formation 483 [RE row 165]). The chapter's own id is `ffx2-ifrit-kilika`, the order `ffx2-valefor-besaid` uses. */
 export const KILIKA_IFRIT = 'ffx2-kilika-ifrit';
 export const IFRIT_ID = 'x2-ifrit';
-/** Ifrit's painting: the FFX aeon's approved set, provisional here (see the file header). */
-export const IFRIT_SPRITE = 'ifrit';
+/** Ifrit's painting: the possessed restyle of the FFX aeon's approved set (see the file header). */
+export const IFRIT_SPRITE = 'x2-ifrit';
 /** The AI script id (`../../../battle/ffx2/ai/ifrit.ts`). */
 export const IFRIT_SCRIPT_ID = 'x2-ifrit';
 
@@ -63,7 +63,7 @@ const AEON_CUE = [{ at: 'start' as const, track: 'boss-ffx2-fallen-aeons' as con
 export const x2Ifrit: EnemyDef = {
   id: IFRIT_ID,
   name: 'Ifrit',
-  spriteKey: IFRIT_SPRITE, // provisional: the FFX aeon's approved painting (see the file header)
+  spriteKey: IFRIT_SPRITE, // the possessed restyle (see the file header)
   slot: 0,
   stats: {
     hp: 8820, // [RE row 165] = §7.1 [verified: 5 sources: SinirothX, wiki, FFExodus, GamerGuides, Split_Infinity]

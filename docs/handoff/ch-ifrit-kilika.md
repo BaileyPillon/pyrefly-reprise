@@ -6,6 +6,8 @@ Written 2026-11-07 by a Sonnet sub-agent of the release driver. Research: `resea
 
 Authority (relayed by the driver, verbatim): "implement all unimplemented chapters please" (2026-11-06) and "yes on all these too" (building every researched boss he never picked); 2026-11-07 "ok keep going we have full usage here"; 2026-10-31 "you make the executive decisions for the next few days. i'll go with all of your recommendations." **Every pick in section 5 is the paper preflight's own recommendation or the bench's, "driver's call, his to overturn".**
 
+**UPDATE 2026-11-09 (r79 art install; FFX-2 only): the paintings of the art list are made, registered and wired** (the possessed Ifrit as `characters/x2-ifrit/`: the approved `ifrit` paintings through the possession grade, with cast and overdrive too; the pause plate `pause/ffx2-ifrit-kilika`; the warm Kilika chamber plate `ffx2-kilika-chamber` installed and pinned but wired to nothing; the driver's picks, his to overturn): `docs/handoff/r79-art-install.md`. `IFRIT_SPRITE` is `x2-ifrit` now; the FFX `ifrit` set is untouched.
+
 ## 0. What changed against the preflight (read first)
 
 1. **The preflight's eight picks stood** (IF1 to IF8) with two refinements: the art is the zero-art route (the `ifrit` master as it is, IF5's alternative) with the four-pose restyle listed in section 7, because the brief asked for the reuse; and Samurai is **owned and not worn** (IF2), measured both ways.

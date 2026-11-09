@@ -116,8 +116,8 @@ describe('every heavy prep tab draws a phone page beside its desktop markup (bot
         document.body.innerHTML = '';
       }
     }
-    // The six ids cover the eight panels: `stats` and `items` are in both games.
-    expect([...PHONE_PAGE_TABS].sort()).toEqual(['accessories', 'dresspheres', 'equipment', 'items', 'overdrive', 'stats']);
+    // The seven ids cover the nine panels: `stats` and `items` are in both games, and `ronso-trust` is the hidden Garik Ronso chapter's tab (FFX-2 only).
+    expect([...PHONE_PAGE_TABS].sort()).toEqual(['accessories', 'dresspheres', 'equipment', 'items', 'overdrive', 'ronso-trust', 'stats']);
   });
 });
 

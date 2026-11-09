@@ -533,7 +533,7 @@ describe('The Cavern build and the chapter registration', () => {
 describe('FFX only: nothing here reaches another chapter or FFX-2', () => {
   it('no other formation, FFX or FFX-2, carries an ordering row or a Yojimbo script', () => {
     const ordering = ALL_ABILITIES.filter((a) => a.extra?.['ordersActor'] !== undefined).map((a) => a.id);
-    expect(ordering).toEqual(['yojimbo-daigoro', 'dark-daigoro-order']); // the second is Mirror Aeons' Dark Yojimbo's own order row (the dog's bite)
+    expect(ordering).toEqual(['yojimbo-daigoro', 'dark-daigoro-order', 'belg-daigoro-order']); // the second is Mirror Aeons' Dark Yojimbo's own order row (the dog's bite); the third is the hidden Belgemine's Challenge's Yojimbo's (FFX only, 2026-11-09; the same bite, aimed by the game's pick)
     expect(FFX2_ABILITIES.some((a) => a.extra?.['ordersActor'] !== undefined)).toBe(false);
     for (const [id, group] of Object.entries(ENEMY_GROUPS_BY_ID)) {
       if (id === GROUP_ID) continue;

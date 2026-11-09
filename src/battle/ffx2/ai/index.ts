@@ -57,6 +57,8 @@ import { youthLeagueNamedScripts } from './youth-league.ts';
 import { youthLeagueLeagueScripts } from './youth-league-league.ts';
 // Ifrit at Kilika Temple (FFX-2 Chapter 3; the hidden chapter "Ifrit at Kilika Temple"): the action counter with its own numbers and the live "battle too long" block.
 import { x2IfritScript } from './ifrit.ts';
+// Garik Ronso and the Ronso Youths at the top of Mt. Gagazet (the hidden chapter "Garik Ronso", FFX-2 only): the game's own two scripts, hostile and friendly, poll by poll.
+import { garikRonsoScripts } from './garik-ronso.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -106,6 +108,7 @@ const SCRIPTS: readonly AiScript[] = [
   ...youthLeagueNamedScripts,
   ...youthLeagueLeagueScripts,
   x2IfritScript,
+  ...garikRonsoScripts,
   idleScript,
   basicAttackScript,
 ];

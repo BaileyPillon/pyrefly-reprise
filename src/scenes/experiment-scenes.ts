@@ -10,6 +10,7 @@
  * - the hidden Biran and Yenke chapter's Mountain Gate (FFX only): Chapter I's Mt. Gagazet scene with this fight's staging (`./gagazet-ronso.ts`);
  * - the hidden Angra Mainyu chapter's desert (FFX-2 only): the Bikanel Desert under the FFX-2 camera, on a provisional new plate (`./angra-mainyu-desert.ts`);
  * - the hidden Last Summoning chapter's Dream's End (FFX only): Chapter III's scene with the staging of the aeons Chapter III never fields (`./last-summoning.ts`);
+ * - the hidden Garik Ronso chapter's summit (FFX-2 only): Chapter I's Mt. Gagazet plate under the FFX-2 camera with a snow-and-wind grade (`./gagazet-summit.ts`);
  * - the hidden 3D Bahamut chapter's chamber (FFX-2 only): Chapter IV's Bevelle underground under frame b's camera (the dolly-in; `?frame=a` is the older one), with the real FFX-2 models on the actors, softly lit (`./exp-yrp-3d-stage.ts`).
  * - the hidden Wind Waker chapter's temple (FFX-2 only): a procedural toon chamber under the target shot's low camera, with toon models on the actors (`./exp-windwaker-stage.ts`).
  * - the hidden Wendigo chapter's lake (FFX only): Chapter VII's Macalania Temple stage standing in for frozen Lake Macalania, with Wendigo and its two Guardians staged (`./wendigo-lake.ts`); the Meshy 3D stage replaces its factory.
@@ -63,6 +64,12 @@ import { buildForgottenCapitalScene, FORGOTTEN_CAPITAL_SLOTS } from './forgotten
 import { FORGOTTEN_CAPITAL_SCENE } from '../data/ff7/jenova-life-ids.ts';
 import { buildWendigoLakeScene, WENDIGO_SCENE_ENTRY } from './wendigo-lake.ts'; // frozen Lake Macalania (FFX only, hidden chapter): Chapter VII's Temple stage with Wendigo and its Guardians staged, the stand-in for the Meshy 3D stage
 import { WENDIGO_SCENE } from '../data/ffx/wendigo-ids.ts';
+import { buildBelgemineScene, BELGEMINE_SLOTS } from './belgemine.ts'; // the Remiem Temple (FFX only, hidden chapter): the Mushroom Rock Road stage on the Cavern plate, with Belgemine and her aeons staged
+import { BELGEMINE_SCENE } from '../data/ffx/belgemine-ids.ts';
+import { buildGagazetSummitScene, GARIK_SUMMIT_SLOTS } from './gagazet-summit.ts'; // the hidden Garik Ronso chapter's summit (FFX-2 only): Chapter I's Gagazet plate under the FFX-2 camera, a snow-and-wind grade, three Ronso staged
+import { GARIK_RONSO_SCENE } from '../data/garik-ronso-ids.ts';
+import { buildShinryuScene, SHINRYU_SLOTS } from './shinryu.ts'; // the hidden Shinryu chapter (FFX only, 2026-11-07): the Via Purifico's stage on the submerged plate with Shinryu staged
+import { SHINRYU_SCENE } from '../data/ffx/shinryu-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -108,6 +115,12 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   { key: FORGOTTEN_CAPITAL_SCENE, title: 'The Forgotten Capital — the altar (Jenova LIFE)', build: buildDemoScene, slots: FORGOTTEN_CAPITAL_SLOTS, placeholder: false },
   // Wendigo (FFX only, hidden chapter): Chapter VII's Macalania Temple stage standing in for frozen Lake Macalania, Guardian, Wendigo and Guardian in the formation's order.
   WENDIGO_SCENE_ENTRY,
+  // Belgemine's Challenge (FFX only, hidden chapter): the Mushroom Rock Road stage on the Cavern of the Stolen Fayth's plate, Belgemine behind the aeon she calls.
+  { key: BELGEMINE_SCENE, title: "Remiem Temple — Belgemine's Challenge", build: buildDemoScene, slots: BELGEMINE_SLOTS, placeholder: false },
+  // Garik Ronso (FFX-2 only, hidden chapter): Chapter I's Mt. Gagazet plate under the FFX-2 camera, the Ronso Youths and Garik on the right of the party.
+  { key: GARIK_RONSO_SCENE, title: 'Mt. Gagazet — the summit (Garik Ronso)', build: buildDemoScene, slots: GARIK_SUMMIT_SLOTS, placeholder: false },
+  // Shinryu (FFX only, hidden chapter): the Via Purifico's stage on the Flooded Ways' submerged plate, the dragon alone on the boss spot.
+  { key: SHINRYU_SCENE, title: 'The Monster Arena — Shinryu', build: buildDemoScene, slots: SHINRYU_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -133,4 +146,7 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [OMEGA_RUINS_SCENE]: buildOmegaRuinsScene, // the hidden Omega Ruins chapter (FFX only)
   [FORGOTTEN_CAPITAL_SCENE]: buildForgottenCapitalScene, // the hidden Jenova LIFE chapter (FF7 only)
   [WENDIGO_SCENE]: buildWendigoLakeScene, // the hidden Wendigo chapter (FFX only)
+  [BELGEMINE_SCENE]: buildBelgemineScene, // the hidden Belgemine's Challenge chapter (FFX only)
+  [GARIK_RONSO_SCENE]: buildGagazetSummitScene, // the hidden Garik Ronso chapter (FFX-2 only)
+  [SHINRYU_SCENE]: buildShinryuScene, // the hidden Shinryu chapter (FFX only)
 };
