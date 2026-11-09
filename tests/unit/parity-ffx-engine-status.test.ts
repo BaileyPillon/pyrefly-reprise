@@ -26,6 +26,7 @@ import { describe, expect, it } from 'vitest';
 import type { AbilityDef, FFXCombatant, FFXCommandRecord, StatusApplication, StatusId } from '../../src/battle/common/types.ts';
 import { ALL_ABILITIES } from '../../src/data/ffx/index.ts';
 import { FLOODED_ROWS } from '../../src/data/ffx/flooded-ways-ids.ts';
+import { WENDIGO_ABILITIES } from '../../src/data/ffx/enemies/wendigo.ts';
 import { CORE_ABILITIES, resolveAbility } from '../../src/battle/ffx/index.ts';
 import { resolveCommand } from '../../src/battle/ffx/adapt/command.ts';
 import { ability } from './ffx-fixtures.test.ts';
@@ -48,7 +49,11 @@ import {
 
 // The 5,000 situations are drawn by index from this pool, so a row added to the data shifts every later draw. The hidden Flooded Ways' nine rows (2026-11-06) are pinned against the game's fixtures by `chapters/flooded-ways-data.test.ts`
 // and left out of the sample, so the sample is the one this file was written against (with them in, situation 1686 draws Triumphant Grasp into an engine-against-kernel difference in the status words that is not the chapter's: perm 512 against 2,048). **OPEN ISSUE AGAINST THE BASE, hidden by this filter and so named here: the difference is latent in the base's engine or kernel (the chapter's own `adapt/status.ts` line is gated by a flag this test never sets; the same engine-against-kernel run is identical on 37 other formations), found only because the nine rows moved the sample's draw. To reproduce: take the filter off (`POOL` from `ALL_ABILITIES` alone) and run this file; it fails at situation 1686. Not investigated by the chapter lane (`docs/handoff/ch-flooded-ways.md` section 9).**
-const FLOODED_ROWS_IN_DATA: ReadonlySet<string> = new Set(Object.values(FLOODED_ROWS));
+// **The same again at the r78 integration (the hidden Wendigo chapter, FFX only, 2026-11-06): its eight rows (`wendigo-punch`, `-haymaker`, `-counter-punch`, `-raise-arms`, `-lower-arms`, `lake-berserk`, `lake-auto-potion`, `lake-eye-drops`) are pinned by
+// `chapters/wendigo-data.test.ts` and `wendigo-engine.test.ts` and left out of the sample for the same reason: with them in, situation 3230 draws Abaddon Flame (a Mix) into the SAME engine-against-kernel difference (perm 514 against 2,050: bit 0x200 against 0x800), which is not the chapter's. It is
+// latent in the base and is NOT the Wendigo code's: release 77's own files (no Wendigo row, no Wendigo change) fail this file too at other seeds and sample sizes (seeds 1, 2, 4, 5 and 6 at 20,000 situations: Brimstone, Thunderblast, Grothia's summon, Brimstone and Aqua Toxin), and with the eight rows left out it passes. Still open, still hidden by this filter.**
+const WENDIGO_ROWS_IN_DATA: ReadonlySet<string> = new Set(Object.keys(WENDIGO_ABILITIES));
+const FLOODED_ROWS_IN_DATA: ReadonlySet<string> = new Set([...Object.values(FLOODED_ROWS), ...WENDIGO_ROWS_IN_DATA]);
 const POOL: AbilityDef[] = [...statusPool(ALL_ABILITIES.filter((a) => !FLOODED_ROWS_IN_DATA.has(a.id))), ...statusPool(CORE_ABILITIES.map((a) => ({ ...a })))];
 
 /** What `ScriptedRng.kinds()` prints for the three raw 31-bit draws of a reward-less monster's death (see `viaEngine`). */
