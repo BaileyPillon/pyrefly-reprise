@@ -18,40 +18,127 @@ Rows group sensible units of work, never one row per commit: a feature lane, a f
 
 ## Summary
 
-- **Rows:** 1260, from 2026-09-15 to 2026-11-08 (ids A-0001 to A-1260), 993 of them linked to at least one decision (1313 distinct decision ids).
+- **Rows:** 1274, from 2026-09-15 to 2026-11-09 (ids A-0001 to A-1274), 1005 of them linked to at least one decision (1318 distinct decision ids).
 
 | Kind | Rows |
 |---|---|
-| implementation | 450 |
-| art | 112 |
-| deploy | 105 |
-| review | 272 |
-| records | 71 |
+| implementation | 454 |
+| art | 113 |
+| deploy | 106 |
+| review | 276 |
+| records | 72 |
 | infrastructure | 34 |
-| account | 29 |
+| account | 30 |
 | download | 15 |
-| maintenance | 46 |
-| process | 126 |
+| maintenance | 47 |
+| process | 127 |
 
 | Month | Rows |
 |---|---|
 | September 2026 | 297 |
 | October 2026 | 836 |
-| November 2026 | 127 |
+| November 2026 | 141 |
 
-- **By game:** 913 both, 125 FFX, 121 n/a, 101 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
-- **Deploys and releases:** 105 deploy rows: 92 lines of docs/deploys.log (67 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 4 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to 04:53 EST (2026-11-07).
-- **Reviews:** 272 rows: 70 focused reviews (66 SHIP, 3 HOLD, 1 no verdict), 74 live checks (71 PASS, 1 FAIL, 1 UNVERIFIED, 1 no verdict), 29 deep rounds with a report (14 SHIP, 9 no verdict, 6 HOLD) and 99 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
+- **By game:** 921 both, 127 FFX, 124 n/a, 102 FFX-2 (rule 14: FFX and FFX-2 are separate games; "n/a" is the hidden FF7 experiment and work that touches neither).
+- **Deploys and releases:** 106 deploy rows: 92 lines of docs/deploys.log (67 of them under Bailey's owner override of the deep-review gate), 2 early alphas that predate the log, 4 Cloudflare preview and 1 legacy deploy to the old GitHub address (docs/legacy-deploys.log). The log runs from round 2 checkpoint (2026-09-17) to 04:53 EST (2026-11-07).
+- **Reviews:** 276 rows: 71 focused reviews (67 SHIP, 3 HOLD, 1 no verdict), 75 live checks (72 PASS, 1 FAIL, 1 UNVERIFIED, 1 no verdict), 30 deep rounds with a report (14 SHIP, 10 no verdict, 6 HOLD) and 100 other reviews (critic rounds 02, 03 and 14, paper preflights, visual passes, real-game checks, the round 21 capture hand-off and independent fidelity checks of a build).
 - **Not finished or not shipped:** 80 rows end as built on a branch and not merged, parked, pending, in progress or failed; the result line says which.
 
 ## Days
 
-[11-08](#2026-11-08) (3) · [11-07](#2026-11-07) (27) · [11-06](#2026-11-06) (32) · [11-04](#2026-11-04) (3) · [11-03](#2026-11-03) (16) · [11-02](#2026-11-02) (27) · [11-01](#2026-11-01) (19) · [10-31](#2026-10-31) (30) · [10-30](#2026-10-30) (15) · [10-29](#2026-10-29) (22) · [10-28](#2026-10-28) (31) · [10-27](#2026-10-27) (10) · [10-26](#2026-10-26) (3) · [10-25](#2026-10-25) (21) · [10-24](#2026-10-24) (20) · [10-23](#2026-10-23) (16) · [10-22](#2026-10-22) (26) · [10-21](#2026-10-21) (17) · [10-20](#2026-10-20) (25) · [10-19](#2026-10-19) (43) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
+[11-09](#2026-11-09) (5) · [11-08](#2026-11-08) (12) · [11-07](#2026-11-07) (27) · [11-06](#2026-11-06) (32) · [11-04](#2026-11-04) (3) · [11-03](#2026-11-03) (16) · [11-02](#2026-11-02) (27) · [11-01](#2026-11-01) (19) · [10-31](#2026-10-31) (30) · [10-30](#2026-10-30) (15) · [10-29](#2026-10-29) (22) · [10-28](#2026-10-28) (31) · [10-27](#2026-10-27) (10) · [10-26](#2026-10-26) (3) · [10-25](#2026-10-25) (21) · [10-24](#2026-10-24) (20) · [10-23](#2026-10-23) (16) · [10-22](#2026-10-22) (26) · [10-21](#2026-10-21) (17) · [10-20](#2026-10-20) (25) · [10-19](#2026-10-19) (43) · [10-18](#2026-10-18) (31) · [10-17](#2026-10-17) (18) · [10-16](#2026-10-16) (14) · [10-15](#2026-10-15) (27) · [10-14](#2026-10-14) (28) · [10-13](#2026-10-13) (42) · [10-12](#2026-10-12) (17) · [10-11](#2026-10-11) (26) · [10-10](#2026-10-10) (32) · [10-09](#2026-10-09) (22) · [10-08](#2026-10-08) (53) · [10-07](#2026-10-07) (56) · [10-06](#2026-10-06) (29) · [10-05](#2026-10-05) (34) · [10-04](#2026-10-04) (78) · [10-03](#2026-10-03) (26) · [10-02](#2026-10-02) (12) · [10-01](#2026-10-01) (12) · [09-30](#2026-09-30) (16) · [09-29](#2026-09-29) (24) · [09-28](#2026-09-28) (17) · [09-27](#2026-09-27) (31) · [09-26](#2026-09-26) (30) · [09-25](#2026-09-25) (30) · [09-24](#2026-09-24) (31) · [09-23](#2026-09-23) (16) · [09-22](#2026-09-22) (9) · [09-21](#2026-09-21) (28) · [09-20](#2026-09-20) (9) · [09-19](#2026-09-19) (12) · [09-18](#2026-09-18) (19) · [09-17](#2026-09-17) (5) · [09-16](#2026-09-16) (9) · [09-15](#2026-09-15) (11)
 
 ## Ledger (newest first)
 
+### 2026-11-09
+
+- **A-1274** · `records` · both · **Recorded release 78 on main: A-1261 to A-1274, D-1499 to D-1503, the deploy records, the CHANGELOG address, LIVE.md, the in-flight list, the promises check, the deploy build removed and NOW.md (records only)**
+  - What: Two fast-forward pushes of origin/main from d52da59d0 (release 77's records): release 78's own commits (the merge of r78-int and the release notes, cc0fea14a) with the deploy records (docs/deploys.log line 95, the ledger, the artifact manifest, the pending marker for cc0fea14a with live done PASS and focused and deep pending, release 77's marker moved to cleared, the focused and live reports with their scripts, summaries and small JSON evidence and two cited strips under 200 KB; the pictures over 200 KB, the logs and the film stay in the release tree and local tree paths are scrubbed from what was committed, the CHANGELOG address with what the reviews read, docs/LIVE.md and the in-flight list: r78-fix, ch-jenova-life, ch-ifrit-kilika and ch-wendigo left; ch-shinryu and ch-garik-ronso moved to their built tips), then these ledgers and NOW.md. The promises were refreshed (1,508: 975 done, 385 open, 127 rules, 18 superseded, 3 dropped) and the release check read: 3 promises ship in the range (D-1488, D-1490, D-1494, the Meshy Wendigo chapter), none recorded done here because the live pass did not test the 3D look and speed and he has not seen it. The deploy build dist-release was removed after a check of 0 links.
+  - Who: records sub-agent for the release driver · Decisions: D-1499, D-1500, D-1501, D-1502, D-1503
+  - Result: done: on main; node tools/critic-status.mjs lists the focused and deep obligations of cc0fea14a as pending
+  - Evidence: `the commits on origin/main that name release 78` · `docs/handoff/NOW.md`
+  - Reversible: yes, records only; the ledgers are data files that regenerate their rendered pages
+- **A-1273** · `account` · n/a · **Account #1's copy has driven since 16:20 EST on 2026-11-08 (weekly 0 percent then, 8 percent at the records pass); account #4 still has no Claude Code access; account #2's copy still waits on its question**
+  - What: After A-1258 no switch was due: the weekly reading on account #1 was 8 percent at about 02:30 EST on 2026-11-09 (resets 2026-11-15 16:00 EST), far under the 97 percent line of the switch rule. Account #4 (disabled at 00:00 EST on 2026-11-08) was not used. Account #2's copy kept its open question (D-1499) and its crons stayed blocked; its background agents had finished. The idle copies of the chat on the other accounts only logged hourly stand-downs. Usage mode: NORMAL by his word and by the numbers.
+  - Who: release driver session (account #1's copy) · Decisions: D-1499
+  - Result: done: one driver; no work lost
+  - Evidence: `the driver's state log, 2026-11-08 16:20 to 2026-11-09 01:20 EST (outside the repository)`
+  - Reversible: yes, a process record; no data changed
+- **A-1272** · `review` · both · **Deep review round 36 of the live build cc0fea14a launched (owed by releases 77 and 78); running when this row was written**
+  - What: Launched by the driver at 01:20 EST as the last step of the release 78 follow-up workflow (live check, then records and the removal of the deploy build, then the deep round). It takes the one browser lock and reads the live site; it is the review both releases owe, so release 79 cannot deploy until it settles. Its result is its own record in critic/rounds.
+  - Who: deep review workflow (Sonnet sub-agents) for the release driver · Decisions: D-1503
+  - Result: started: in flight; not finished when this row was written
+  - Evidence: `critic/pending/cc0fea14a.json (deep pending, carried from 6429ff15e)`
+  - Reversible: yes, a review; nothing changed by it
+- **A-1271** · `review` · both · **Live check of release 78: deployment PASS, 199 changed files byte for byte, 2 console errors and 2 not found (one Wendigo billboard URL); the three new words, both rigs and the cone play on the live site**
+  - What: About 60 minutes of headless Chromium on the real GPU against both addresses. The words bluelight, ifrit and wendigo each reached a player turn and took a command; Chapters I and IV reached a player turn with the Tidus and Rikku Dark Knight rigs on, the cone marker drew and Escape cancelled; pause, resume and H worked; settings survived a reload. The full byte comparison was started and stopped after about 40 minutes, as in releases 75 to 77 (not tested). LIVE-78-1 (minor, FFX): art/characters/wendigo/idle.png answers 404 twice when the Wendigo chapter loads. Not tested: results counts on a won battle, 44/46/49 beyond one command, the 3D look and speed, touch.
+  - Who: live check (Sonnet sub-agent) for the release driver
+  - Result: done: PASS; the live obligation settled by critic-clear; LIVE-78-1 disclosed
+  - Evidence: `critic/reviews/cc0fea14a-live.json` · `critic/reviews/cc0fea14a-live.md`
+  - Reversible: yes, a review; nothing changed by it
+- **A-1270** · `deploy` · both · **Release 78 deployed: main cc0fea14a, bundle BAH\_qvc7, 2026-11-09T05:54:49Z (00:54 EST), Cloudflare; hidden chapters 44 (bluelight), 46 (ifrit) and 49 (wendigo) live**
+  - What: Under the standing deploy words (D-931). The host's asset upload failed twice and retried inside the tool's five attempts (140 files uploaded, 7,690 already there, 514.7 s of 572 s); the tool's own check read PASS on both addresses (199 files, manifest match) and www forwards to the apex. docs/deploys.log line 95, no owner override; release 77's marker moved to cleared (its focused obligation superseded, its deep obligation carried). The second deploy while a deep review is owed; the ledger counts 2, so a third refuses until round 36 settles. Live now: Jenova LIFE (FF7, behind the FF7 switch), Ifrit at Kilika (FFX-2), the Wendigo on frozen Lake Macalania (FFX, desktop only; +127.8 MiB on the site, fetched only when it opens), the Mirror Aeons' corrected Sphere Level line, the results page's settled counts and the FFX multi-hit status fix.
+  - Who: release driver session (the deploy tool) · Decisions: D-931, D-1503, D-1502
+  - Result: done: live; the marker critic/pending/cc0fea14a.json owes focused and deep (live done)
+  - Evidence: `docs/deploys.log (line 95)` · `critic/pending/cc0fea14a.json` · `critic/artifacts/cc0fea14a.json`
+  - Reversible: yes, redeploy release 77 (6429ff15e) from its commit; the chapters close by removing their door rows
+
 ### 2026-11-08
 
+- **A-1269** · `review` · both · **Focused review of the release 78 candidate cc0fea14a (bundle BAH\_qvc7): SHIP, changed area FAIL; R78-1 disclosed as a major, R78-2 and R78-4 polish, R78-3 a tooling suggestion; about 135 minutes**
+  - What: Headless Chromium on the real GPU (shared, so no timing finding), real keys at 1600 x 900, 2000 x 1012 and 390 x 844. The three new words played to a result with 0 console errors and 0 404s; the Guard Scorpion is identical on live and the candidate; Chapters I and IV settle on their data-final amounts with every Sphere Level bar inside its cap; the Wendigo held 59.7 fps over 1,810 frames and its five-retry teardown was flat. CHK-026 and CHK-027 fail inside the new Jenova LIFE chapter (R78-1, major: 27.6 hard cuts a minute, feet up to 48.4 px; FF7) and Ifrit (R78-2, five of 275 swaps outside the height band; FFX-2). R78-3: the harness cannot read the Wendigo 3D stage. R78-4: the first coach card covers the advisor numbers in Ifrit. 16 of the 19 listed chapters were not run in a browser. Targets 2 of 2.
+  - Who: focused review (Sonnet sub-agent workflow) for the release driver · Decisions: D-1503
+  - Result: done: SHIP, changed area FAIL (the live class of failure in brand-new chapters; no regression); R78-1 to R78-4 disclosed
+  - Evidence: `critic/reviews/cc0fea14a-focused.json` · `critic/reviews/cc0fea14a-focused.md`
+  - Reversible: yes, a review; nothing changed by it
+- **A-1268** · `implementation` · both · **Release 78 candidate: r78-release cc0fea14a (bundle BAH\_qvc7) cut from main plus r78-int, with the CHANGELOG entry, the player note 78, the newest-release pins, the install proofs and the full suite**
+  - What: Branch r78-release from origin/main d52da59d0 (release 77 live plus its records) with origin/r78-int bc30966a7 merged --no-ff (merge commit 8a96d4d5c, no textual conflict). The release tree's public/art was re-pointed from r77 to r78 and the 24 Wendigo models (127.8 MiB) were copied into public/models-exp/lake and byte-checked. tsc clean, orphans the same 24 as release 77, SaveData.ts unchanged, critic-plan DEEP (live + focused + deep, not save-data class). The full unit suite in one unbroken run: 2,161 files, 34,500 tests, 0 failed.
+  - Who: release candidate agent (Sonnet sub-agent) for the release driver · Decisions: D-1503
+  - Result: done: pushed cc0fea14a; candidate dist-gate built
+  - Evidence: `CHANGELOG.md (the release 78 entry, checks)` · `docs/handoff/r78-integration.md`
+  - Reversible: yes, a branch; nothing deployed by this row
+- **A-1267** · `maintenance` · n/a · **Disk pressure on D: on 2026-11-08 (down to 10.9 GB): the approved Vitest cleaner twice, then the candidate's dist-gate removed**
+  - What: D: fell with the lanes' suites and the candidate build: 21.5 GB at 20:20 EST (the lanes stop under 20); the approved Vitest cleaner on the scratch temp folder brought it to 25.2 GB at 20:30; the candidate's dist-gate (about 11 GB) and the suites took it to 10.9 GB by 22:25, and the cleaner (88 finished folders, 2.5 GB) brought it to 15.1 GB. The dist-gate (0 links inside) was removed at 00:50 EST on 2026-11-09 before the deploy. C: stayed near 10.8 to 11.4 GB. The Belgemine relaunch was held for space (A-1264).
+  - Who: release driver session; the approved Vitest cleaner
+  - Result: done: D: 15.0 GB after the cleaner, back over 25 GB once the deploy build is removed in the records pass
+  - Evidence: `the driver's state log, 2026-11-08 18:19 to 2026-11-09 00:19 EST (outside the repository)`
+  - Reversible: yes, the removed folders were test scratch and a build that can be remade
+- **A-1266** · `art` · n/a · **Art mirror r78: release 77's mirror plus the FF7 Tifa, Jenova LIFE and Water Altar kit and the Wendigo plate (66 files), proved and pinned**
+  - What: The mirror is a new folder of hard links to r77 (7,455 files) plus 66 staged files copied as real files: Tifa (idle, windup, attack, follow, hurt, kick at four sizes), Jenova LIFE (idle, hurt, cast, inhale), the Water Altar plate and its 2x (all FF7 only) and the Wendigo lake plate (FFX only). 7,522 files; the manifest adds 2 subjects, 10 poses and 2 backdrops and removes or changes no key. Proofs: pose gate 1,257 paintings of 176 subjects (948 pass, 101 waived, 208 exempt, 0 fail), 1,214 pins ok with 0 missing, both rigs verified. Held out: the chapter card and a second altar plate. Every painting is a candidate chosen by the driver.
+  - Who: integration agent (Sonnet sub-agent) for the release driver; the art lane's kit of 2026-11-07 · Decisions: D-1423
+  - Result: done: mirror D:/pyrefly-art-r78; the release tree's public/art points at it (r77 intact; undo: point back)
+  - Evidence: `docs/handoff/r78-integration.md (the art mirror section)`
+  - Reversible: yes, point public/art back at the r77 mirror; the paintings are removed with their registration rows and pins
+- **A-1265** · `implementation` · both · **Release 78 integration (origin/r78-int bc30966a7): r78-fix, 46 Ifrit at Kilika, 44 Jenova LIFE and 49 Wendigo merged onto release 77, with the review's fix and the art install**
+  - What: Merged in the driver's order (r78-fix with no conflict; the three chapters with 25, 13 and 31 conflicted files, all two lanes adding to the same table or pinned list, kept in chapter-number order; ui-marker-portraits was already in release 77). The adversarial review found 0 critical and one major that release 77 already carried (a Mix writes a different status word than the kernel does); it was traced by running it and fixed at its cause in the engine (a landed Threaten decays the live percent every time; a Nul-nullified hit ticks the hit record; inert for every shipped record: 1,725 event-log hash lines identical). The Sphere Level correction was declared and pinned (D-1502). The Guard Scorpion ran 5,400 battles identical and 43 chapters x 25 seeds were identical.
+  - Who: integration agent (Sonnet sub-agent) for the release driver · Decisions: D-1502, D-1503
+  - Result: done: pushed bc30966a7; merged into the release 78 candidate
+  - Evidence: `docs/handoff/r78-integration.md` · `docs/handoff/r78-fix2.md`
+  - Reversible: yes, a branch; the candidate is a separate merge commit
+- **A-1264** · `process` · FFX · **The Belgemine build hung on a permission prompt for six hours and was stopped; the relaunch is held until space is freed**
+  - What: Wave 4's Chapter 45 build (Belgemine's Challenge, FFX only) stopped writing at 16:27 EST when its agent redirected a scratch file to a drive-root path and then ran a delete, which asks for a permission nobody answers in a background run. The driver saw it at the 17:20 EST check, let the other two wave-4 builds finish, and stopped the workflow at 22:25 EST. Only the research note and paper preflight (d56053b5d, a local branch) exist. The relaunch waits until the release 78 records free space on D:.
+  - Who: release driver session · Decisions: D-1503
+  - Result: done: the hung run stopped; Chapter 45 is to be rebuilt from the note
+  - Evidence: `the driver's state log, 2026-11-08 16:25 to 22:25 EST (outside the repository)`
+  - Reversible: yes, a process record; no data changed
+- **A-1263** · `implementation` · FFX · **Hidden Chapter 48, Shinryu (FFX only): the phone read, a read-only review and its fix pass on origin/ch-shinryu 14b481c66**
+  - What: The build of 11-07 (A-1249) was carried through a phone-sized real-key smoke (14 checks at 390 x 844), a read-only review of 07a47087a (two major, no critical) and a fix pass: Wings to Discovery and Gambler's Spirit got name-only item rows so the Steal banner stops printing a raw id, the reward-resolve test now walks the hidden FFX chapters, and the post scene no longer claims all three swimmers lived. Still a measurement: the Penance preset's swimmers win 200 of 200 and no boss number was touched. Full suite 2,065 files and 32,770 tests, 0 failed.
+  - Who: chapter build agent (Sonnet sub-agent) for the release driver · Decisions: D-1474
+  - Result: done: pushed 14b481c66; not merged, not deployed; its handoff notes 27 files conflicting against release 77; queued for release 79
+  - Evidence: `docs/handoff/ch-shinryu.md on origin/ch-shinryu`
+  - Reversible: yes, a branch; nothing merged
+- **A-1262** · `implementation` · FFX-2 · **Hidden Chapter 47, Garik Ronso (FFX-2 only, word braveheart), built and reviewed: origin/ch-garik-ronso ed81c7532**
+  - What: Garik and the Ronso Youths at the top of Mt. Gagazet, the game's two fights (monster rows 181 and 182: a hostile fight of 15,000 HP and a friendly bout of 10,940 HP) behind a TRUST row on party prep, the move advisor line and a guide card; stand-in paintings. Measured, not tuned: the advisor line wins 100 of 100 in about 36 game seconds, 16 one-line mutants all killed. The fix pass after the adversarial review made the "battle too long" Meteor block inert as in the game (a weak line stalls and does not lose), modelled Bane Lance's branch on Paine, sourced the Mythril Bangle's 0 as never sold, and saw the TRUST row's touch tap on a phone-sized window.
+  - Who: chapter build agent (Sonnet sub-agent) for the release driver · Decisions: D-1501, D-1474
+  - Result: done: pushed (research note and preflight 9be98a09b, build 7690a4fd5, fix 037347d3e, picture ed81c7532); not merged, not deployed; queued for release 79
+  - Evidence: `docs/handoff/ch-garik-ronso.md on origin/ch-garik-ronso`
+  - Reversible: yes, a branch; nothing merged
+- **A-1261** · `review` · both · **Adversarial review of r78-fix (d8c661789): 0 critical; Spherimorph pays in full on 16 honest wins; a false claim and an undeclared results-page change in a listed chapter found**
+  - What: The review that release 77's workflow left unfinished (the stalled account's run) was resumed by account #1's copy at 16:25 EST and reported by 17:20 EST. It re-ran the engine and found Spherimorph paying the data's amount on every honest win (the earlier reading was the results page mid-roll). It also found two things to settle at the candidate: the handoff's claim that the Sphere Level bar change was inert elsewhere (false for a pooled chain) and the resulting change to the Mirror Aeons' results page, a listed chapter. Both were settled in the release 78 integration (A-1265).
+  - Who: review agent (Sonnet sub-agent) for the release driver · Decisions: D-1502
+  - Result: done: 0 critical; the two notes settled in the integration
+  - Evidence: `docs/handoff/r78-fix.md (corrected paragraph)` · `docs/handoff/r78-integration.md (notes 1 and 2)`
+  - Reversible: yes, a review; nothing changed by it
 - **A-1260** · `records` · both · **Recorded release 77 on main: A-1236 to A-1260, D-1495 to D-1498, the deploy records, the CHANGELOG address, LIVE.md, the in-flight list, the Turn cut-in tile, the promises check and NOW.md (records only)**
   - What: Fast-forward push of origin/main from 34cf83ad5 (round 35b's records) to the commits that name release 77: release 77's own commits (the merge of the r77-int lanes and the release notes, 6429ff15e) and then the records: docs/deploys.log line 94, the ledger, the artifact manifest, the pending marker for 6429ff15e (live done PASS; focused and deep pending), the focused and live reports with their scripts, summaries and the one cited strip under 200 KB (the pictures over 200 KB, the film, the raw dumps and the logs, the cited doors.log files among them, stay in the release tree), the CHANGELOG address with what the reviews read (R77-1 to R77-5), the deploy note and the release 78 trace, docs/LIVE.md, the in-flight list (ch-spherimorph, ch-omega-ruins and rigs-pilots-on leave; r78-fix, ch-jenova-life, ch-ifrit-kilika, ch-shinryu, ch-belgemine and ch-garik-ronso join; ch-wendigo moves to its phase 4 tip), D-1495 to D-1498 (his word of about 09:30 EST, his two picks of about 09:50 EST on 2026-11-07, each its own row, and the driver's FFX-2 ring call), the Turn cut-in tile of docs/target/targets.json (its reaction and its delivery now that the portraits show on big moves only), A-1236 to A-1260 and NOW.md. The promises were refreshed (1,504: 972 done, 384 open, 127 rules, 18 superseded, 3 dropped) and the release check read: 8 promises ship in the range (the rig rows D-1178, D-1183, D-1207, D-1220, D-1378, D-1398, D-1401 and D-1492), none recorded done here. The deep review of release 77 is owed.
   - Who: records sub-agent for the release driver · Decisions: D-1495, D-1496, D-1497, D-1498

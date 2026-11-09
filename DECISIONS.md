@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-2068 decisions in all: 1498 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1391 of the written decisions record a blanket yes.
+2073 decisions in all: 1503 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1391 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1942 |
-| proposed | 9 |
+| adopted | 1946 |
+| proposed | 10 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 94 |
-| **All** | **2068** |
+| **All** | **2073** |
 
 | Area | Decisions |
 | --- | ---: |
-| combat | 156 |
+| combat | 157 |
 | art | 407 |
 | visuals | 180 |
 | camera | 76 |
 | audio | 160 |
-| ui | 230 |
+| ui | 231 |
 | story | 17 |
-| chapters | 317 |
+| chapters | 318 |
 | guide | 34 |
-| release | 114 |
+| release | 116 |
 | hosting | 18 |
 | process | 231 |
 | critic | 45 |
 | data | 17 |
 | tech | 45 |
 | site | 21 |
-| **All** | **2068** |
+| **All** | **2073** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 1100 |
-| FFX only | 529 |
-| FFX-2 only | 421 |
+| both games | 1102 |
+| FFX only | 530 |
+| FFX-2 only | 423 |
 | FF7 hidden experiment | 18 |
-| **All** | **2068** |
+| **All** | **2073** |
 
 ## Standing rules in force
 
@@ -136,12 +136,13 @@ Proposed, asked or drafted, with no yes on record. Nothing here is built.
 - [D-1049](#d-1049) — Still his own, not decidable by the driver (ear, eye or presence): the open music picks (D-253), the Behind the Scenes page (D-633, D-639) and the time of the Steam session (D-258)
 - [D-1293](#d-1293) — OPEN, not covered by his yes (no recommendation was stated to him first): the HUD’s open details of 193d (D-1286), Bahamut kept whole in frame during attacks (the party then fills 28 to 31 percent of …
 - [D-1371](#d-1371) — The owner listening verdict (CHK-B1) cannot be delegated because agents cannot hear: a short audition session stays on his list, asked as a plain line, with no deadline (both games)
+- [D-1499](#d-1499) — OPEN question, asked and not answered: should the FFX-2 engine model the Special dresspheres' own abilities (Floral Fallal, Machina Maw, Full Throttle)? The driver recommends building them (FFX-2 …
 
 Pictures with no target yet (nothing to look at, so no decision): Move advisor card (fight); Defeat screen (fight); Enemy next-move panel (fight); Every screen except pause (phone); One finished minute of play (whole).
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27) · [2026-10-28](#2026-10-28) · [2026-10-29](#2026-10-29) · [2026-10-30](#2026-10-30) · [2026-10-31](#2026-10-31) · [2026-11-01](#2026-11-01) · [2026-11-02](#2026-11-02) · [2026-11-03](#2026-11-03) · [2026-11-04](#2026-11-04) · [2026-11-06](#2026-11-06) · [2026-11-07](#2026-11-07)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27) · [2026-10-28](#2026-10-28) · [2026-10-29](#2026-10-29) · [2026-10-30](#2026-10-30) · [2026-10-31](#2026-10-31) · [2026-11-01](#2026-11-01) · [2026-11-02](#2026-11-02) · [2026-11-03](#2026-11-03) · [2026-11-04](#2026-11-04) · [2026-11-06](#2026-11-06) · [2026-11-07](#2026-11-07) · [2026-11-08](#2026-11-08) · [2026-11-09](#2026-11-09)
 
 ## Ledger
 
@@ -9747,7 +9748,7 @@ Friday · 22 decisions
 
 ### 2026-11-07
 
-Saturday · 5 decisions
+Saturday · 7 decisions
 
 - <a id="d-1495"></a>**D-1495** — He says "ok keep going we have full usage here" and the delegation stands: the held lanes resume (both games, process)
   - Bailey: “ok keep going we have full usage here”
@@ -9769,8 +9770,43 @@ Saturday · 5 decisions
   - What changed: Item 221b, on 2026-11-07 right after his answer of D-1496. His complaint (D-1485) was about the FFX pointing glove, and the cone he picked is the FFX game's; the FFX-2 flower ring is the option C he picked on 2026-10-22, so nothing in his words reaches it. FFX-2's ring is untouched in release 77 (the focused review saw the ring as intended). If he wants FFX-2's marker changed he says so and options come first (AGENTS.md rule 9).
   - area ui · FFX-2 · adopted · delivery implemented · see [D-1496](#d-1496), [D-1485](#d-1485), [D-1423](#d-1423) · refines [D-1496](#d-1496)
   - Source: The driver's call of 2026-11-07, made on his words of about 09:50 EST (D-1496) and under his delegation (D-1423), recorded as a driver call and his …
+- <a id="d-1499"></a>**D-1499** — OPEN question, asked and not answered: should the FFX-2 engine model the Special dresspheres' own abilities (Floral Fallal, Machina Maw, Full Throttle)? The driver recommends building them (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. Stands as asked, not answered. Today a Special form is a plain attacker in the engine (the garment is registered; its own abilities are not modelled), so the Farplane Cup's first duel is won about 1 time in 9 as built (11 of 100 seeds; PR-0636). It is new gameplay, so nothing is built before his yes (AGENTS.md rule 10). The question was left open from 2026-11-07 about 15:50 EST; it blocked the scheduled checks of the copy that asked it and was part of the stall of A-1258.
+  - area combat · FFX-2 · proposed · nothing to build · see [D-1498](#d-1498), [D-1423](#d-1423)
+  - Source: The driver's question to Bailey of 2026-11-07 about 15:50 EST, put as a question with a recommendation (build them). Game case: FFX-2 only (the …
+- <a id="d-1500"></a>**D-1500** — DRIVER CALL under the standing deploy words, his to overturn: release 77 deploys on its focused review's SHIP (6429ff15e / DQzgTgdc; changed area UNVERIFIED, 0 critical; R77-1 and R77-2 disclosed) (both games)
+  - Bailey: “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.”
+  - What changed: Made by account #4's copy of the driver on 2026-11-07 about 22:00 EST, under D-931. The first deploy attempt stopped at the tool's login check before anything was uploaded; the retry deployed at 22:41 EST (A-1255). The deploy was the first since the deep review round 35b, so the ledger counted one deploy; the live check read PASS (A-1256). The deep review of this build is owed.
+  - area release · both games · adopted · delivery implemented · see [D-931](#d-931), [D-1423](#d-1423), A-1254, A-1255
+  - Source: The driver's state log of 2026-11-07 (22:20 and 22:50 EST lines), under his standing words of 2026-10-17 (D-931) and his delegation (D-1423). Game …
 - **Picture** (presentation) — Approved: Turn cut-in
   - Bailey: “A: only on big moves”
   - Delivery: Live since release 77 (2026-11-08T03:41:51Z, D-1497): the slab shows on a big move only, full the first time a member does one in a fight and a 110 ms flash after; ?portraits=turns brings the old per-turn slab back. Implemented, not verified: the focused review and the live check of release 77 saw no big-move portrait frame.
   - area ui · FFX · adopted · delivery implemented · see [D-1497](#d-1497)
   - Source: docs/target/targets.json, group presentation, tile "Turn cut-in"
+
+### 2026-11-08
+
+Sunday · 2 decisions
+
+- <a id="d-1501"></a>**D-1501** — DRIVER CALL under his words, his to overturn: the hidden Garik Ronso chapter (47, FFX-2 only) opens on the word braveheart, not the plan's lionheart, and its fight is chosen by a TRUST row on party prep
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221d. lionheart claims a later letter of the FF7 secret-word limit, which tests/unit/chapter-doors.test.ts forbids, so the lane took braveheart. The game's dialogue score (a saved value) decides a hostile or a friendly Garik; here a TRUST row on party prep picks it (Low is the hostile fight, the default; Q flips it). Built on origin/ch-garik-ronso (ed81c7532), hidden, stand-in paintings, not merged and not deployed. Alternative: another word, or a fixed fight with no row.
+  - area chapters · FFX-2 · adopted · delivery implemented · see [D-1474](#d-1474), [D-1423](#d-1423), A-1262
+  - Source: docs/handoff/ch-garik-ronso.md
+- <a id="d-1502"></a>**D-1502** — DRIVER CALL under his delegation, his to overturn: the Sphere Level bar on a pooled chain counts the levels the pooled AP buys, so the Mirror Aeons' results line (a listed chapter) changes (FFX only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221e. Release 77's Omega Ruins results printed a bar past its cap (33,000/22,000 AP). The fix counts the unpaid whole levels (src/ui/common/sphereGridBar.ts). On the other pooled chains it changes what prints: the Mirror Aeons read S.LV 180 with 28,000/22,000 AP (no level gained) and now read S.LV 181 with 6,000/22,000 AP (+1); the Dark Aeons' +2 becomes +6; the Omega Ruins' S.LV 185 with 35,000/22,000 AP becomes S.LV 186 with 13,000/22,000 AP. No fight, number, drop or reward changes. The first note called the change inert elsewhere; that was corrected by the review and pinned by a test. Alternative: carry = false in sphereGridBar(...) holds the engine's own level count (one word).
+  - area ui · FFX · adopted · delivery implemented · see [D-1423](#d-1423), A-1257, A-1265
+  - Source: docs/handoff/r78-integration.md
+
+### 2026-11-09
+
+Monday · 1 decision
+
+- <a id="d-1503"></a>**D-1503** — DRIVER CALL under the standing deploy words, his to overturn: release 78 (r78-fix, 44 Jenova LIFE, 46 Ifrit at Kilika, 49 Wendigo) deploys on its focused review's SHIP (cc0fea14a / BAH_qvc7; changed area FAIL on a carried class, no regression); wave 4 waits for release 79
+  - Bailey: “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.”
+  - What changed: Made by account #1's copy of the driver on 2026-11-09 about 00:50 EST, under D-931. The review read SHIP with 0 critical: R78-1 (major, in the new FF7 Jenova LIFE chapter, candidate-introduced, no regression) is disclosed. It was the second deploy while release 77's deep review is owed (allowed; the ledger counts 2), so release 79 waits for round 36. The Wendigo chapter adds 127.8 MiB of models to the site, fetched only when that hidden desktop chapter opens. Wave 4 (47 Garik Ronso, 48 Shinryu) was still being built and reviewed when the integration started, so it waits for release 79; the rebuild of 45 Belgemine (its first build hung on a permission prompt) is held until the records free space on D:. Deployed 05:54 UTC (00:54 EST).
+  - area release · both games · adopted · delivery implemented · at ~01:20 EST · see [D-931](#d-931), [D-1494](#d-1494), A-1269, A-1270
+  - Source: The driver's state log of 2026-11-08 17:55 to 2026-11-09 01:20 EST, under his standing words of 2026-10-17 (D-931) and the chapters program (D-1474 …
