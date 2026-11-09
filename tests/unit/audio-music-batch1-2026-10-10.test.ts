@@ -84,7 +84,7 @@ const EXPECTED: Record<string, { game: string; replaces: string | null; fallback
   },
   'boss-trema': { game: 'FFX-2', replaces: 'boss-ffx2-aeon', fallback: 'boss-ffx2-aeon', chapters: { 'ffx2-trema': ['scene-bevelle-underground', 'boss-trema'], 'ffx2-farplane-cup': ['boss-trema', 'boss-trema', 'boss-trema'] } }, // the hidden Farplane Cup (FFX-2 only, 2026-11-06) plays it on its three duels, by reference: a flagged stand-in (DU6)
   'boss-seymour-natus': { game: 'FFX', replaces: 'boss-seymour-macalania', fallback: 'boss-seymour-macalania', chapters: { 'seymour-natus': ['boss-seymour-natus'] } },
-  'boss-isaaru': { game: 'FFX', replaces: 'boss-yojimbo', fallback: 'boss-yojimbo', chapters: { 'isaaru-via-purifico': ['boss-isaaru', 'boss-isaaru', 'boss-isaaru'] } },
+  'boss-isaaru': { game: 'FFX', replaces: 'boss-yojimbo', fallback: 'boss-yojimbo', chapters: { 'isaaru-via-purifico': ['boss-isaaru', 'boss-isaaru', 'boss-isaaru'], belgemine: Array<string>(8).fill('boss-isaaru') } }, // + the hidden Belgemine's Challenge (FFX only, 2026-11-09): the aeon contest's cue on all eight duels, a flagged stand-in (BD8; rule 13)
   'boss-sin-assault': { game: 'FFX', replaces: 'boss-evrae', fallback: 'boss-evrae', chapters: { 'sin-fins-core': ['boss-sin-assault', 'boss-sin-assault', 'boss-sin-assault'] } },
   'boss-sin-countdown': { game: 'FFX', replaces: 'boss-evrae', fallback: 'boss-evrae', chapters: { 'sin-face': ['boss-sin-countdown'] } },
   // FF7 only: the hidden 'limit' chapter was silent; no FF7 score exists, so the synth fallback is the generic FFX battle bed (named in tracks/index.ts).

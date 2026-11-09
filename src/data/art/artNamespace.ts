@@ -27,6 +27,7 @@ import { FLOODED_PLATE, FLOODED_WAYS_SCENE } from '../ffx/flooded-ways-ids.ts';
 import { SANCTUARY_KEEPER_SCENE } from '../ffx/sanctuary-keeper-ids.ts';
 import { SPHERIMORPH_SCENE } from '../ffx/spherimorph-ids.ts';
 import { OMEGA_RUINS_PLATE, OMEGA_RUINS_SCENE } from '../ffx/omega-ruins-ids.ts';
+import { BELGEMINE_SCENE, BELG_PLATE } from '../ffx/belgemine-ids.ts';
 import { EXP_YRP_SCENE } from '../yrp-ids.ts';
 import { EXP_WINDWAKER_SCENE } from '../windwaker-ids.ts';
 import { EXP_ANIME_SCENE } from '../anime-ids.ts';
@@ -61,6 +62,7 @@ export const SCENE_BACKDROP_FILE: Readonly<Record<string, string>> = {
   [SPECTRAL_KEEPER_SCENE]: 'zanarkand-dome', // the hidden Spectral Keeper's stage is Chapter II's Dome plate (2026-11-02, FFX only): no file of its own, and the art mirror is not written into
   [PENANCE_SCENE]: 'evrae-airship-deck', // the hidden Penance chapter's stage is Chapter VIII's deck plate (2026-11-06, FFX only): no file of its own, and the art mirror is not written into
   // The hidden Wendigo chapter (FFX only) has a plate of its own, `art/backdrops/wendigo-lake.png`, rendered from its 3D lake (ch-wendigo phase 4, 2026-11-07; `tools/lake-plate.mjs`): its scene key is its file name, so it needs no row here (until then it drew Chapter VII's `macalania-temple`).
+  [BELGEMINE_SCENE]: BELG_PLATE, // the hidden Belgemine's Challenge's stage is the Mushroom Rock Road stage on the Cavern of the Stolen Fayth's plate (2026-11-09, FFX only): no file is named `belgemine`, so the card and the results strip show the plate's file
   [SANCTUARY_KEEPER_SCENE]: 'gagazet', // the hidden Sanctuary Keeper's stage is Chapter I's Mt. Gagazet plate (2026-11-06, FFX only): no file of its own, and the art mirror is not written into
   [SPHERIMORPH_SCENE]: 'macalania-temple', // the hidden Spherimorph's stage is the Macalania Temple's plate (2026-11-06, FFX only): no file of its own, and the art mirror is not written into
   [OMEGA_RUINS_SCENE]: OMEGA_RUINS_PLATE, // the hidden Omega Ruins chapter's stage is the Cavern of the Stolen Fayth's plate (2026-11-06, FFX only): no file of its own, and the art mirror is not written into

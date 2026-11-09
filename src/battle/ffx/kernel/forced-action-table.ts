@@ -74,6 +74,8 @@ const ROWS: ReadonlyArray<readonly [string, number]> = [
   ['ultima-weapon', 0x4000], // m99
   ['omega-weapon', 0x4000], // m100
   ['nemesis', 0x0000], // m276
+  // The hidden Belgemine's Challenge chapter (2026-11-09): the five bodies whose monster files the table already holds under other ids carry those files' word (m254 Valefor, m284 Ifrit, m287 Bahamut, m288 Yojimbo, m266 the dog: all 0x0000, rows above). The other six (m285 Ixion, m286 Shiva, m265 Anima, m289 to m291 the Sisters) and Belgemine herself (m250) are not matched in the census, so they keep the generic Attack (all of them are immune to Berserk, Confuse and Provoke, which are what read this word): not invented (rule 6).
+  ...['belg-valefor', 'belg-ifrit', 'belg-bahamut', 'belg-yojimbo', 'belg-daigoro'].map((id): readonly [string, number] => [id, 0x0000]),
 ];
 
 /** The forced-action word of an enemy by our id, or `undefined` when no monster file is matched to it. */

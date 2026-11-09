@@ -3223,6 +3223,12 @@ export interface EnemyGroupDef extends PlatformGroupFields, FloodedGroupFields {
    */
   defendOff?: boolean;
   /**
+   * **FFX only, "counters are off in this formation"** (the Belgemine's Challenge chapter, `docs/handoff/ch-belgemine.md`; the RC10 handoff's section 3 named this field for the day a chapter fought these formations): the game's formation script
+   * calls `btlSetCounterFlag(0)` and the counter decider answers "no counter" for every hit of the battle. Only Belgemine's eight Remiem duels (`lmyt01_00` to `_07`) do it among the formations of our chapters. While set, the counter
+   * kind of every hit is 0 (`battle/ffx/adapt/counter.ts#kindInput` reads the flag where `switchOn: 1` stood). Read by `battle/ffx/formation-flags.ts` and the counter adapter and nothing else; absent everywhere else, so no other battle changes.
+   */
+  counterOff?: boolean;
+  /**
    * **FFX only, "these menu commands are switched off in this formation"** (re-parity RC10, `docs/handoff/re-parity-rc10-ffx-isaaru-commands.md`): the game's
    * formation script calls `setCommandDisabled(who, command, 1)` once per command, before the first turn, and the menu gate treats that command as unusable for
    * that actor for the whole battle. Numbers only: `command` is the game's own command id. Only Isaaru's three aeon-contest formations (Chapter XIV) do it among the

@@ -63,6 +63,8 @@ import { buildForgottenCapitalScene, FORGOTTEN_CAPITAL_SLOTS } from './forgotten
 import { FORGOTTEN_CAPITAL_SCENE } from '../data/ff7/jenova-life-ids.ts';
 import { buildWendigoLakeScene, WENDIGO_SCENE_ENTRY } from './wendigo-lake.ts'; // frozen Lake Macalania (FFX only, hidden chapter): Chapter VII's Temple stage with Wendigo and its Guardians staged, the stand-in for the Meshy 3D stage
 import { WENDIGO_SCENE } from '../data/ffx/wendigo-ids.ts';
+import { buildBelgemineScene, BELGEMINE_SLOTS } from './belgemine.ts'; // the Remiem Temple (FFX only, hidden chapter): the Mushroom Rock Road stage on the Cavern plate, with Belgemine and her aeons staged
+import { BELGEMINE_SCENE } from '../data/ffx/belgemine-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -108,6 +110,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   { key: FORGOTTEN_CAPITAL_SCENE, title: 'The Forgotten Capital — the altar (Jenova LIFE)', build: buildDemoScene, slots: FORGOTTEN_CAPITAL_SLOTS, placeholder: false },
   // Wendigo (FFX only, hidden chapter): Chapter VII's Macalania Temple stage standing in for frozen Lake Macalania, Guardian, Wendigo and Guardian in the formation's order.
   WENDIGO_SCENE_ENTRY,
+  // Belgemine's Challenge (FFX only, hidden chapter): the Mushroom Rock Road stage on the Cavern of the Stolen Fayth's plate, Belgemine behind the aeon she calls.
+  { key: BELGEMINE_SCENE, title: "Remiem Temple — Belgemine's Challenge", build: buildDemoScene, slots: BELGEMINE_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -133,4 +137,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [OMEGA_RUINS_SCENE]: buildOmegaRuinsScene, // the hidden Omega Ruins chapter (FFX only)
   [FORGOTTEN_CAPITAL_SCENE]: buildForgottenCapitalScene, // the hidden Jenova LIFE chapter (FF7 only)
   [WENDIGO_SCENE]: buildWendigoLakeScene, // the hidden Wendigo chapter (FFX only)
+  [BELGEMINE_SCENE]: buildBelgemineScene, // the hidden Belgemine's Challenge chapter (FFX only)
 };

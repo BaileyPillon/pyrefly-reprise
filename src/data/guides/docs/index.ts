@@ -38,6 +38,7 @@ import { FFX2_VALEFOR_BESAID_DOC } from './ffx2-valefor-besaid.ts';
 import { FFX2_ANGRA_MAINYU_DOC } from './ffx2-angra-mainyu.ts';
 import { SANCTUARY_KEEPER_DOC } from './sanctuary-keeper.ts';
 import { WENDIGO_DOC } from './wendigo.ts';
+import { BELGEMINE_DOC } from './belgemine.ts';
 import { PENANCE_DOC } from './penance.ts';
 import { FFX2_YUNAS_BALLAD_DOC } from './ffx2-yunas-ballad.ts';
 import { SPHERIMORPH_DOC } from './spherimorph.ts';
@@ -84,6 +85,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   FF7_JENOVA_LIFE_DOC, // the hidden Jenova LIFE (FF7 only)
   FFX2_IFRIT_KILIKA_DOC, // the hidden Ifrit at Kilika Temple (FFX-2 only)
   WENDIGO_DOC, // the hidden Wendigo (FFX only)
+  BELGEMINE_DOC, // the hidden Belgemine's Challenge (FFX only)
 ];
 
 /** The document for one chapter id, if it has one. */
