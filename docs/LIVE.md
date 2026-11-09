@@ -14,7 +14,7 @@
 | Deploy log | `docs/deploys.log` line 95: cloudflare, 5260 art files |
 | Artifact (SHA-256) | `8c31cde9e3e986fc5e4e3f593c25d6668e4922c5d99bbca62242831ea053446d` |
 | The deploy's own byte check | PASS (199 files compared with the build) |
-| Marker | `critic/pending/cc0fea14a.json` (pending) |
+| Marker | `critic/cleared/cc0fea14a.json` (cleared) |
 | Owner override | none |
 | CHANGELOG entry | 2026-11-08 · Release 78 (r78), three more hidden chapters (44 Jenova LIFE in FF7, 46 Ifrit at Kilika Temple in FFX-2, 49 Wendigo on frozen Lake Macalania in FFX), the results page's Sphere Level bar can no longer pass its cap (the Mirror Aeons, a listed chapter, changes), Spherimorph's pay is shown to be right, and an FFX status bookkeeping fix; nineteen of the nineteen listed chapters stay treated (each item says which game) |
 | Focused review | critic/reviews/cc0fea14a-focused.json: ship SHIP, changed area FAIL |
@@ -24,12 +24,9 @@ Is this commit on main? `git merge-base --is-ancestor cc0fea14a origin/main` exi
 
 ## Review obligations still open
 
-| Build | Obligation | What it needs |
-|---|---|---|
-| `cc0fea14a` | focused | acceptance of the changed area |
-| `cc0fea14a` | deep (carries 1 earlier builds) | deep review of every affected chapter and system |
+None: every marker in `critic/pending` is settled.
 
-The ledger counts 2 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 0 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
