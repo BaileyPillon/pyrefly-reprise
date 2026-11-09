@@ -102,8 +102,8 @@ export interface Walk {
 /**
  * Play until `girl` is offered her Special Dress Up. On her turns she makes the next Change toward a dressphere she has not worn; every other girl defends; `immortal` tops the party up before each answer.
  */
-export function walkTo(engine: FFX2Engine, girlId: string, opts: { immortal?: boolean; maxDecisions?: number; other?: (d: Input, engine: FFX2Engine) => Command | null } = {}): Walk {
-  const nodes = nodesOf(engine, girlId);
+export function walkTo(engine: FFX2Engine, girlId: string, opts: { immortal?: boolean; maxDecisions?: number; other?: (d: Input, engine: FFX2Engine) => Command | null; nodes?: Array<string | null> } = {}): Walk {
+  const nodes = opts.nodes ?? nodesOf(engine, girlId); // `nodes`: the layout read at the start, for a second walk (`nodesOf` lays out from the dress she wears NOW)
   let changes = 0;
   for (let i = 0; i < (opts.maxDecisions ?? 3000); i++) {
     const d = nextInput(engine);

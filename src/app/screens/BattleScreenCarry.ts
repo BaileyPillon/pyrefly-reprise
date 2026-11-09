@@ -28,6 +28,7 @@
 import type { BattleState, FFX2Combatant, FFX2MemberBuild, FFX2PartyBuild } from '../../battle/common/types.ts';
 import { cloneData } from '../../battle/common/clone.ts';
 import { gridNodeContents } from '../../battle/ffx2/setup.ts';
+import { SPECIAL_DRESS_UP } from '../../battle/ffx2/constants.ts';
 import { GARMENT_GRIDS } from '../../data/ffx2/index.ts';
 
 type Worn = NonNullable<FFX2Combatant['dresspheres']>;
@@ -89,7 +90,7 @@ export function wearing(member: FFX2MemberBuild, worn: Worn): FFX2MemberBuild | 
   }
   if (!member.owned.includes(worn.current) || worn.garmentGrid.id !== member.garmentGrid.id) return null;
   const nodes = nodeCount(member.garmentGrid.id);
-  const layout = gridNodeContents(member, nodes);
+  const layout = gridNodeContents(member, nodes, SPECIAL_DRESS_UP); // the engine lays the grid out the same way (a Special takes no node when the Special Dress Up switch is on)
   const at = worn.garmentGrid.nodePosition;
   if (at < 0 || at >= nodes || layout[at] !== worn.current) return null;
   // The engine fills nodes in `[worn, ...owned]` order, then swaps the worn one
@@ -106,6 +107,6 @@ export function wearing(member: FFX2MemberBuild, worn: Worn): FFX2MemberBuild | 
     owned,
     garmentGrid: cloneData(worn.garmentGrid),
   };
-  const same = gridNodeContents(candidate, nodes).every((d, i) => d === layout[i]);
+  const same = gridNodeContents(candidate, nodes, SPECIAL_DRESS_UP).every((d, i) => d === layout[i]);
   return same ? candidate : null;
 }

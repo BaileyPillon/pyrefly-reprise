@@ -14,7 +14,6 @@ export const SPECIAL_DRESSPHERES: Record<SpecialDressphereId, SpecialDressphereD
 };
 
 export { floralFallal, machinaMaw, fullThrottle };
-export { nodeScale } from './types.ts';
-export type { SpecialDressphereDef, SpecialPartGrowth } from './types.ts';
+export type { SpecialDressphereDef } from './types.ts';
 
 export default SPECIAL_DRESSPHERES;

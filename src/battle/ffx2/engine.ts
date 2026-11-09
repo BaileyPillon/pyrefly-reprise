@@ -31,6 +31,7 @@
 import type {
   BattleEngine,
   BattleEvent,
+  BattleResult,
   BattleSetup,
   BattleState,
   CombatantId,
@@ -40,7 +41,8 @@ import type {
 } from '../common/types.ts';
 import type { RngSnapshot } from '../common/streams.ts';
 import { makeFfx2Rng } from './adapt/streams.ts';
-import type { Ffx2EngineOptions, Ffx2Unit } from './internal.ts';
+import type { EventDraft, Ffx2EngineOptions, Ffx2Unit } from './internal.ts';
+import { rebuildAutoLayer } from './auto-layer.ts';
 import { defaultDresspheres } from './dresspheres.ts';
 import { withSpecialForms } from './special/forms.ts';
 import { settleForms, specialOn } from './special/enter.ts';
@@ -96,24 +98,26 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     this.flush();
   }
 
-  // Special Dress Up (`special/`; the `specialDressUp` switch, OFF by default: with it off these three overrides and `settleSpecials` do nothing). A main body that has fallen ends the form after the action
-  // or the step that knocked her out, before the end of the battle is judged (`special/enter.ts#settleForms`); the menu knows the switch (the Special Dress Up row and the way out).
-  protected override afterAction(actor: Ffx2Unit, startedAt: number): void {
-    this.settleSpecials();
-    super.afterAction(actor, startedAt);
-  }
+  // Special Dress Up (`special/`; the `specialDressUp` switch, OFF by default: with it off these overrides and `settleSpecials` do nothing). A main body that has fallen ends the form after the action or the
+  // step that knocked her out, before the end of the battle is judged; every form still on ends with the battle, once its result is built (`special/enter.ts#settleForms`); the menu knows the switch.
+  protected override afterAction(actor: Ffx2Unit, startedAt: number): void { this.settleSpecials(); super.afterAction(actor, startedAt); }
+  protected override runLogicStep(): void { super.runLogicStep(); this.settleSpecials(); }
 
-  protected override runLogicStep(): void {
-    super.runLogicStep();
-    this.settleSpecials();
+  protected override checkBattleEnd(): BattleResult | null {
+    const over = this.battleState.result != null, result = super.checkBattleEnd();
+    if (result && !over) this.settleSpecials(true);
+    return result;
   }
 
   protected override menuContext(actor: Ffx2Unit): MenuContext {
     return specialOn(this.battleState) ? { ...super.menuContext(actor), specialDressUp: true } : super.menuContext(actor);
   }
 
-  private settleSpecials(): void {
-    if (specialOn(this.battleState)) settleForms({ units: this.units, state: this.battleState, grids: this.grids, emit: (e) => this.emit(e) }, { grids: this.grids, dresspheres: this.dresspheres, gridNodes: this.gridNodes });
+  private settleSpecials(atEnd = false): void {
+    if (!specialOn(this.battleState)) return;
+    const emit = (e: EventDraft): void => this.emit(e);
+    const host = { units: this.units, state: this.battleState, grids: this.grids, emit, rebuild: (g: Ffx2Unit) => rebuildAutoLayer({ emit, rng: this.rng, grids: this.grids }, g) };
+    settleForms(host, { grids: this.grids, dresspheres: this.dresspheres, gridNodes: this.gridNodes }, atEnd);
   }
 
   /**
