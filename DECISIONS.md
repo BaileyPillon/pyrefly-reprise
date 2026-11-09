@@ -16,20 +16,20 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-2073 decisions in all: 1503 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1391 of the written decisions record a blanket yes.
+2081 decisions in all: 1511 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1393 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1946 |
-| proposed | 10 |
+| adopted | 1955 |
+| proposed | 9 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 94 |
-| **All** | **2073** |
+| **All** | **2081** |
 
 | Area | Decisions |
 | --- | ---: |
-| combat | 157 |
+| combat | 165 |
 | art | 407 |
 | visuals | 180 |
 | camera | 76 |
@@ -45,15 +45,15 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 | data | 17 |
 | tech | 45 |
 | site | 21 |
-| **All** | **2073** |
+| **All** | **2081** |
 
 | Game case | Decisions |
 | --- | ---: |
 | both games | 1102 |
 | FFX only | 530 |
-| FFX-2 only | 423 |
+| FFX-2 only | 431 |
 | FF7 hidden experiment | 18 |
-| **All** | **2073** |
+| **All** | **2081** |
 
 ## Standing rules in force
 
@@ -136,7 +136,6 @@ Proposed, asked or drafted, with no yes on record. Nothing here is built.
 - [D-1049](#d-1049) — Still his own, not decidable by the driver (ear, eye or presence): the open music picks (D-253), the Behind the Scenes page (D-633, D-639) and the time of the Steam session (D-258)
 - [D-1293](#d-1293) — OPEN, not covered by his yes (no recommendation was stated to him first): the HUD’s open details of 193d (D-1286), Bahamut kept whole in frame during attacks (the party then fills 28 to 31 percent of …
 - [D-1371](#d-1371) — The owner listening verdict (CHK-B1) cannot be delegated because agents cannot hear: a short audition session stays on his list, asked as a plain line, with no deadline (both games)
-- [D-1499](#d-1499) — OPEN question, asked and not answered: should the FFX-2 engine model the Special dresspheres' own abilities (Floral Fallal, Machina Maw, Full Throttle)? The driver recommends building them (FFX-2 …
 
 Pictures with no target yet (nothing to look at, so no decision): Move advisor card (fight); Defeat screen (fight); Enemy next-move panel (fight); Every screen except pause (phone); One finished minute of play (whole).
 
@@ -9748,7 +9747,7 @@ Friday · 22 decisions
 
 ### 2026-11-07
 
-Saturday · 7 decisions
+Saturday · 8 decisions
 
 - <a id="d-1495"></a>**D-1495** — He says "ok keep going we have full usage here" and the delegation stands: the held lanes resume (both games, process)
   - Bailey: “ok keep going we have full usage here”
@@ -9770,16 +9769,21 @@ Saturday · 7 decisions
   - What changed: Item 221b, on 2026-11-07 right after his answer of D-1496. His complaint (D-1485) was about the FFX pointing glove, and the cone he picked is the FFX game's; the FFX-2 flower ring is the option C he picked on 2026-10-22, so nothing in his words reaches it. FFX-2's ring is untouched in release 77 (the focused review saw the ring as intended). If he wants FFX-2's marker changed he says so and options come first (AGENTS.md rule 9).
   - area ui · FFX-2 · adopted · delivery implemented · see [D-1496](#d-1496), [D-1485](#d-1485), [D-1423](#d-1423) · refines [D-1496](#d-1496)
   - Source: The driver's call of 2026-11-07, made on his words of about 09:50 EST (D-1496) and under his delegation (D-1423), recorded as a driver call and his …
-- <a id="d-1499"></a>**D-1499** — OPEN question, asked and not answered: should the FFX-2 engine model the Special dresspheres' own abilities (Floral Fallal, Machina Maw, Full Throttle)? The driver recommends building them (FFX-2 only)
-  - Bailey: no verbatim quote on record for this decision
-  - What changed: Item 221c. Stands as asked, not answered. Today a Special form is a plain attacker in the engine (the garment is registered; its own abilities are not modelled), so the Farplane Cup's first duel is won about 1 time in 9 as built (11 of 100 seeds; PR-0636). It is new gameplay, so nothing is built before his yes (AGENTS.md rule 10). The question was left open from 2026-11-07 about 15:50 EST; it blocked the scheduled checks of the copy that asked it and was part of the stall of A-1258.
-  - area combat · FFX-2 · proposed · nothing to build · see [D-1498](#d-1498), [D-1423](#d-1423)
+- <a id="d-1499"></a>**D-1499** — ANSWERED 2026-11-07 (reached the log 2026-11-09 about 12:27 EST): should the FFX-2 engine model the Special dresspheres' own abilities (Floral Fallal, Machina Maw, Full Throttle)? Bailey: "Build them (Recommended)" (FFX-2 only)
+  - Bailey: “Build them (Recommended)” (blanket yes)
+  - What changed: Item 221c, closed by D-1504. Item 221c. Today a Special form is a plain attacker in the engine (the garment is registered; its own abilities are not modelled), so the Farplane Cup's first duel is won about 1 time in 9 as built (11 of 100 seeds; PR-0636). It is new gameplay, so nothing is built before his yes (AGENTS.md rule 10). The question was left open from 2026-11-07 about 15:50 EST; it blocked the scheduled checks of the copy that asked it and was part of the stall of A-1258. Answered: his answer to the question was "Build them (Recommended)", given on 2026-11-07 in the window of account #2's copy; the AskUserQuestion result is in the driver's chat, logged 2026-11-09 about 12:27 EST, which the review of the Specials branch (2026-11-09) asked to be put on record. Built since, behind a switch that is OFF (branch ffx2-specials, not merged, not deployed); decision 92d (D-937) stays in force: the three-part look waits for his pick.
+  - area combat · FFX-2 · adopted · delivery in progress · see [D-1498](#d-1498), [D-1423](#d-1423), [D-1504](#d-1504), [D-937](#d-937)
   - Source: The driver's question to Bailey of 2026-11-07 about 15:50 EST, put as a question with a recommendation (build them). Game case: FFX-2 only (the …
 - <a id="d-1500"></a>**D-1500** — DRIVER CALL under the standing deploy words, his to overturn: release 77 deploys on its focused review's SHIP (6429ff15e / DQzgTgdc; changed area UNVERIFIED, 0 critical; R77-1 and R77-2 disclosed) (both games)
   - Bailey: “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.”
   - What changed: Made by account #4's copy of the driver on 2026-11-07 about 22:00 EST, under D-931. The first deploy attempt stopped at the tool's login check before anything was uploaded; the retry deployed at 22:41 EST (A-1255). The deploy was the first since the deep review round 35b, so the ledger counted one deploy; the live check read PASS (A-1256). The deep review of this build is owed.
   - area release · both games · adopted · delivery implemented · see [D-931](#d-931), [D-1423](#d-1423), A-1254, A-1255
   - Source: The driver's state log of 2026-11-07 (22:20 and 22:50 EST lines), under his standing words of 2026-10-17 (D-931) and his delegation (D-1423). Game …
+- <a id="d-1504"></a>**D-1504** — ANSWER to D-1499: the FFX-2 engine models the three Special dresspheres (Floral Fallal, Machina Maw, Full Throttle): "Build them (Recommended)" (FFX-2 only)
+  - Bailey: “Build them (Recommended)” (blanket yes)
+  - What changed: Item 221c. Built on branch ffx2-specials (FFX-2 only): the Special Dress Up through the real Garment Grid walk, the three parts as separate party units with the game's own growth rows, all 99 commands of the nine parts as the game's rows, the Ribbon wards, the form's end, the 92d look cards (three options); behind the Ffx2EngineOptions.specialDressUp switch, OFF in every build, so no shipped chapter reaches any of it (a 210-run census, branch against main, identical). Not built: the presenter, the HUD block, the wheel wiring and the three sprites a Special, which wait for his pick of the look (D-937, 92d); which chapters turn the switch on is not decided. Not merged, not deployed.
+  - area combat · FFX-2 · adopted · delivery in progress · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423) · answers [D-1499](#d-1499)
+  - Source: His answer to the driver's AskUserQuestion of 2026-11-07 about 15:50 EST, answered in the window of account #2's copy and logged in the driver's chat …
 - **Picture** (presentation) — Approved: Turn cut-in
   - Bailey: “A: only on big moves”
   - Delivery: Live since release 77 (2026-11-08T03:41:51Z, D-1497): the slab shows on a big move only, full the first time a member does one in a fight and a 110 ms flash after; ?portraits=turns brings the old per-turn slab back. Implemented, not verified: the focused review and the live check of release 77 saw no big-move portrait frame.
@@ -9803,10 +9807,45 @@ Sunday · 2 decisions
 
 ### 2026-11-09
 
-Monday · 1 decision
+Monday · 8 decisions
 
 - <a id="d-1503"></a>**D-1503** — DRIVER CALL under the standing deploy words, his to overturn: release 78 (r78-fix, 44 Jenova LIFE, 46 Ifrit at Kilika, 49 Wendigo) deploys on its focused review's SHIP (cc0fea14a / BAH_qvc7; changed area FAIL on a carried class, no regression); wave 4 waits for release 79
   - Bailey: “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.”
   - What changed: Made by account #1's copy of the driver on 2026-11-09 about 00:50 EST, under D-931. The review read SHIP with 0 critical: R78-1 (major, in the new FF7 Jenova LIFE chapter, candidate-introduced, no regression) is disclosed. It was the second deploy while release 77's deep review is owed (allowed; the ledger counts 2), so release 79 waits for round 36. The Wendigo chapter adds 127.8 MiB of models to the site, fetched only when that hidden desktop chapter opens. Wave 4 (47 Garik Ronso, 48 Shinryu) was still being built and reviewed when the integration started, so it waits for release 79; the rebuild of 45 Belgemine (its first build hung on a permission prompt) is held until the records free space on D:. Deployed 05:54 UTC (00:54 EST).
   - area release · both games · adopted · delivery implemented · at ~01:20 EST · see [D-931](#d-931), [D-1494](#d-1494), A-1269, A-1270
   - Source: The driver's state log of 2026-11-08 17:55 to 2026-11-09 01:20 EST, under his standing words of 2026-10-17 (D-931) and the chapters program (D-1474 …
+- <a id="d-1505"></a>**D-1505** — DRIVER CALL under his delegation, his to overturn: a Special part whose build names no learned list has only the commands the game lists from the start and no HP passive (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. Floral Fallal: Attack, the four Whirls, each pistil's free commands. forms.ts#masteredLearned gives a part its whole ladder with Double and Triple HP for a build or a test that names it (the Farplane Cup measurement). Alternative: the whole ladder and x3 HP for every part, far stronger than any early chapter's party and unlike the game.
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
+  - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
+- <a id="d-1506"></a>**D-1506** — DRIVER CALL under his delegation, his to overturn: a Special part's stats are the game's own growth rows times (nodes + 25) / 25, the main body on her grid's node count and a pod always on 6 nodes (x1.24) (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. The exe's final stage, emulated; the community's published blocks equal the unscaled rows, so the live game is the open question (research note section 5). One constant (POD_SCALE_NODES and the node count passed to specialPartStats) moves it. Alternative: the unscaled growth rows.
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
+  - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
+- <a id="d-1507"></a>**D-1507** — DRIVER CALL under his delegation, his to overturn: a fallen main body ends the form when a pod still stands (she returns knocked out in her old dress, the pods go, the others return); all three parts down is a defeat (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. Pick 8 of the research note: one fan thread says she reverts and the others return, another says "it's over"; the exe was not read (no Ghidra instance ran in the build pass or the fix pass). Alternative: the form persists while a pod stands.
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
+  - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
+- <a id="d-1508"></a>**D-1508** — DRIVER CALL under his delegation, his to overturn: Auto-Life once on each part at entry; the main body's comes off with the form, and one she held before is swept at entry by the Special's own Ribbon ward and not given back (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. The grant is the community's rule (two sources; the game's Ribbon row keeps no status). The adversarial review found the grant never came off, a free revive after the form; the fix marks it with the form as its source and removes it on the way out, on a fall and at the battle's end. Alternatives: keep it after the form; give the swept one back (neither sourced).
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
+  - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
+- <a id="d-1509"></a>**D-1509** — DRIVER CALL under his delegation, his to overturn: a girl who was Ejected before another girl's Special stays Ejected (not parked, not brought back, no rewards); a girl parked by the form is out of the field but not Ejected (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. The review found the form returned every other girl, an Ejected one too. Alternative: the form returns everyone, or a parked girl earns nothing that battle.
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
+  - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
+- <a id="d-1510"></a>**D-1510** — DRIVER CALL under his delegation, his to overturn: the pods start at full HP and MP with their gauge one standard bar behind, a second Special Dress Up makes them new in place, and they stand in the reward roll's owner slots 3 to 8 (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. The pods' start is unsourced (the game was not observed); the gauge wait is the girl's own after a Change. The second entry swapped the pod objects, which the engine's slot order (kept by object, checked by length) never stepped again: fixed by making them new in place. Alternatives: an empty gauge with no wait; pools from before; the three girls only in the reward map.
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
+  - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
+- <a id="d-1511"></a>**D-1511** — DRIVER CALL under his delegation, his to overturn: every Special form still on ends, silently, when the battle's result is built, so a chain's seam carries a girl in her dress with her pools by the ratio rule (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221c. The game puts a girl back in her dress at the next battle's start (verified in the exe); doing it at the end of this one means the carry never sees a Special's absolute HP. The rewards were built before it. Alternative: leave the form on and let the next link's setup put her back.
+  - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
+  - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
