@@ -41,6 +41,8 @@
  *
  * - **Ifrit at Kilika Temple** (`'ffx2-ifrit-kilika'`, number 46, 2026-11-07; FFX-2 only): the possessed fire aeon in the Chamber of the Fayth, Chapter 3's mission "Pest Control"; word `ifrit`.
  *
+ * - **The Luca Opener** (`'ffx2-luca-opener'`, number 52, 2026-11-09; FFX-2 only): Logos and Ormi, then Leblanc, on the docks of Luca, the first fights of Chapter 1; Yuna the Songstress in the second link; word `debut`.
+ *
  * - **Wendigo** (`'wendigo'`, number 49, 2026-11-06; FFX only): Wendigo and its two Guado Guardians on frozen Lake Macalania, the Meshy 3D tech demo (battle side first); word `wendigo`, desktop only.
  *
  * A further hidden chapter registers here, by adding its record to the list below, not by editing `./encounters.ts`.
@@ -67,6 +69,7 @@ import { FFX2_FARPLANE_CUP } from './chapter-ffx2-farplane-cup.ts';
 import { FFX2_YUNAS_BALLAD } from './chapter-ffx2-yunas-ballad.ts';
 import { FFX2_YOUTH_LEAGUE } from './chapter-ffx2-youth-league.ts';
 import { FFX2_IFRIT_KILIKA } from './chapter-ffx2-ifrit-kilika.ts';
+import { FFX2_LUCA_OPENER } from './chapter-ffx2-luca-opener.ts';
 import { experimentalYrp } from './chapter-exp-yrp-3d.ts';
 import { EXP_WINDWAKER } from './chapter-exp-windwaker.ts';
 import { EXP_ANIME } from './chapter-exp-anime.ts';
@@ -81,5 +84,5 @@ import { WENDIGO } from './chapter-wendigo.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from, and `ffx2Bahamut` the listed Chapter IV, which the 3D Bahamut is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter, ffx2Bahamut: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD, SPHERIMORPH, FFX2_YOUTH_LEAGUE, OMEGA_RUINS, FF7_JENOVA_LIFE, FFX2_IFRIT_KILIKA, WENDIGO] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD, SPHERIMORPH, FFX2_YOUTH_LEAGUE, OMEGA_RUINS, FF7_JENOVA_LIFE, FFX2_IFRIT_KILIKA, WENDIGO, FFX2_LUCA_OPENER] as const;
 }

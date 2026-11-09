@@ -73,7 +73,7 @@ export const heldItemEffect: AbilityDef = {
 
 /** Held rows whose shop price the research does not give; each carries `price: 0`. */
 export const UNSOURCED_PRICE_IDS: ReadonlySet<string> = new Set([
-  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle', 'x2-m-bomb', 'amulet', 'angel-earrings', 'fiery-gleam',
+  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle', 'x2-m-bomb', 'amulet', 'angel-earrings', 'fiery-gleam', 'iron-bangle', 'silver-glasses', 'silver-bracer',
 ]);
 
 function held(id: string, name: string, price: number | 'unsourced', description?: string): ItemDef {
@@ -129,6 +129,11 @@ export const heldItems: ItemDef[] = [
   // Ifrit at Kilika Temple (FFX-2 only, the hidden chapter; `monster.bin` row 165): his drop and his steal. Angel Earrings: ffx2-combat-core §5.4 "DEF +5, MDEF +5, Deathproof" (the shop it names is not this fight's); no price in the research. Fiery Gleam: the research names it and nothing more.
   held('angel-earrings', 'Angel Earrings', 'unsourced', 'Accessory. Guards against Death; Def +5, MDef +5.'),
   held('fiery-gleam', 'Fiery Gleam', 'unsourced'),
+  // The hidden Luca Opener's steals (FFX-2 only, 2026-11-09; `monster.bin` rows 129 to 131, accessories 0x9000, 0x9049 and 0x9004, `research/re-ffx2-luca-opener.md` §0, the names from the US accessory table [verified: the game's own table]).
+  // Iron Bangle's +20 percent max HP and Silver Bracer's +40 percent max MP are the accessory table's (`battle/ffx2/accessories.ts` already wears them for the shipped builds); Silver Glasses guards against Darkness (`research/ffx2-leblanc-syndicate.md` §7.5). No shop price in the research.
+  held('iron-bangle', 'Iron Bangle', 'unsourced', 'Accessory. Max HP +20 percent.'),
+  held('silver-glasses', 'Silver Glasses', 'unsourced', 'Accessory. Guards against Darkness.'),
+  held('silver-bracer', 'Silver Bracer', 'unsourced', 'Accessory. Max MP +40 percent.'),
 ];
 
 export default heldItems;

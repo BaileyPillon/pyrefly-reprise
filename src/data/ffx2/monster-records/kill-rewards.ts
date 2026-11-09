@@ -111,4 +111,8 @@ export const KILL_REWARD_ROWS: Readonly<Record<string, FFX2KillReward>> = {
   "ffx2-youth-league-7-lucil/x2-yl-lucil": row(1, 184, 800, 2, 220, 255, [0x901c, 1, 0x901c, 1]), // Lucil
   // The hidden Ifrit at Kilika Temple (Chapter 3, "Pest Control"; RE note re-ffx2-ifrit-kilika §0): EXP, Gil, AP, the drop byte (255, always) and the item slots are the row's own (Angel Earrings, common and rare).
   "ffx2-kilika-ifrit/x2-ifrit": row(1, 165, 1800, 15, 1300, 255, [0x9045, 1, 0x9045, 1]), // Ifrit
+  // The hidden Luca Opener (Chapter 1, the docks of Luca; RE note re-ffx2-luca-opener §0): EXP, Gil, AP, the drop byte (128, about one in two) and the two item slots are the rows' own (Ormi and Logos: Potion common, Phoenix Down rare; Leblanc: Hi-Potion common, Phoenix Down rare).
+  "ffx2-luca-dock-logos-ormi/x2-luca-ormi": row(1, 129, 3, 1, 60, 128, [0x2000, 1, 0x2006, 1]), // Ormi
+  "ffx2-luca-dock-logos-ormi/x2-luca-logos": row(1, 130, 3, 1, 60, 128, [0x2000, 1, 0x2006, 1]), // Logos
+  "ffx2-luca-dock-leblanc/x2-luca-leblanc": row(1, 131, 8, 2, 180, 128, [0x2001, 1, 0x2006, 1]), // Leblanc
 };

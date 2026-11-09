@@ -23,6 +23,7 @@ import { YOUTH_LEAGUE_META } from './chapter-meta-ffx2-youth-league.ts';
 import { OMEGA_RUINS_META } from './chapter-meta-omega-ruins.ts';
 import { IFRIT_KILIKA_META } from './chapter-meta-ffx2-ifrit-kilika.ts';
 import { WENDIGO_META } from './chapter-meta-wendigo.ts';
+import { LUCA_OPENER_META } from './chapter-meta-ffx2-luca-opener.ts';
 
-/** The hidden chapters' metadata, by chapter number: 34 the Dark Aeons, 35 Penance, 36 the Flooded Ways, 37 the Bevelle Guardians (FFX-2), 38 the Farplane Cup (FFX-2), 39 the Sanctuary Keeper, 40 Yuna's Ballad (FFX-2), 41 Spherimorph (FFX), 42 the Youth League Tournament (FFX-2), 43 the Omega Ruins (FFX), 46 Ifrit at Kilika Temple (FFX-2), 49 Wendigo (FFX). */
-export const HIDDEN_R76_META: readonly ChapterMeta[] = [DARK_AEONS_META, PENANCE_META, FLOODED_WAYS_META, BEVELLE_GUARDIANS_META, FARPLANE_CUP_META, SANCTUARY_KEEPER_META, YUNAS_BALLAD_META, SPHERIMORPH_META, YOUTH_LEAGUE_META, OMEGA_RUINS_META, IFRIT_KILIKA_META, WENDIGO_META];
+/** The hidden chapters' metadata, by chapter number: 34 the Dark Aeons, 35 Penance, 36 the Flooded Ways, 37 the Bevelle Guardians (FFX-2), 38 the Farplane Cup (FFX-2), 39 the Sanctuary Keeper, 40 Yuna's Ballad (FFX-2), 41 Spherimorph (FFX), 42 the Youth League Tournament (FFX-2), 43 the Omega Ruins (FFX), 46 Ifrit at Kilika Temple (FFX-2), 49 Wendigo (FFX), 52 the Luca Opener (FFX-2, 2026-11-09). */
+export const HIDDEN_R76_META: readonly ChapterMeta[] = [DARK_AEONS_META, PENANCE_META, FLOODED_WAYS_META, BEVELLE_GUARDIANS_META, FARPLANE_CUP_META, SANCTUARY_KEEPER_META, YUNAS_BALLAD_META, SPHERIMORPH_META, YOUTH_LEAGUE_META, OMEGA_RUINS_META, IFRIT_KILIKA_META, WENDIGO_META, LUCA_OPENER_META];

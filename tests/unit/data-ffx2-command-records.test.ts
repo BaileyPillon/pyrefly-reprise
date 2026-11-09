@@ -106,6 +106,9 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   // The hidden Ifrit at Kilika Temple's four rows (Hellfire 0x4094, Meteor Strike 0x4095, Firaga 0x41f1, Time Up Meteor 0x4236) are the RE note's, pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/ifrit_kilika_rows.json,
   // tests/unit/chapters/ifrit-kilika-data.test.ts).
   if (label.startsWith('x2-ifrit-')) return;
+  // The hidden Luca Opener's four rows (Pirouette Pitch 0x40e4, 1H Pistol 0x40e7, Potion 0x40f1, Thunder 0x41eb) are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/luca_opener_rows.json,
+  // tests/unit/chapters/luca-opener-data.test.ts).
+  if (label.startsWith('x2-luca-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();
   if (!row) return;

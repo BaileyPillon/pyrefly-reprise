@@ -103,7 +103,9 @@ export function setupForNextLink(
 ): BattleSetup {
   const wholeState = nextGroup.carriesPartyState === true;
   const full = nextGroup.carriesFullPartyState === true;
-  const carried = carryPartyForward(previous.party, state, wholeState, full);
+  // The link's own party template (`EnemyGroupDef.partyBuildRef`, FFX-2 only; the Luca opener's Songstress act), else the previous link's build: HP, MP, the fallen and the bag carry from the live state by member id either way.
+  const template = nextGroup.partyBuildRef !== undefined && previous.party.game === 'ffx2' ? nextGroup.partyBuildRef : previous.party;
+  const carried = carryPartyForward(template, state, wholeState, full);
   // PR-0124 (OFF): a plain FFX-2 seam may carry the worn dressphere too; XIII and XV carry their own way.
   const worn = !wholeState && !full && carried.game === 'ffx2' && (seam.dressphereCarries ?? FFX2_DRESSPHERE_CARRIES);
   return {

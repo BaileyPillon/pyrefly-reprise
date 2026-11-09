@@ -247,6 +247,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
     'ffx2-tourist-trap': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Tourist Trap (FFX-2 only, 2026-10-14): the field bed and the "Aeons" cue the Road and Ixion play, by reference
     'ffx2-valefor-besaid': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Valefor at Besaid (FFX-2 only): the aeon cue Chapter XI and Ixion play, our own take
     'ffx2-ifrit-kilika': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Ifrit at Kilika Temple (FFX-2 only, 2026-11-07): the same aeon cue, Valefor's twin chapter
+    'ffx2-luca-opener': { scene: 'scene-chateau-leblanc', links: ['boss-leblanc', 'boss-leblanc'] }, // the hidden Luca Opener (FFX-2 only, 2026-11-09): the Syndicate's own bed and boss cue on both links, by reference (flagged stand-ins; no new cue)
     'exp-windwaker': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Wind Waker chapter (FFX-2 only, 2026-10-20): chapter 24's record by reference, so the same field bed and the same aeon cue
     'exp-anime': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden anime chapter (FFX-2 only, 2026-11-06): chapter 24's record by reference, so the same field bed and the same aeon cue
     'ffx2-angra-mainyu': { scene: 'scene-bevelle-underground', links: ['boss-ffx2-fallen-aeons'] }, // the hidden Angra Mainyu (FFX-2 only, 2026-10-14): the same "Aeons" cue, by reference
@@ -280,7 +281,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
   it('starts the chateau bed in Chapter VI\'s and the hidden Leblanc preview\'s pre scene, and in no other chapter\'s', () => {
     for (const chapter of allChapters()) {
       const beds = pre(chapter);
-      expect(beds.includes('scene-chateau-leblanc'), chapter.id).toBe(chapter.id === 'ffx2-leblanc' || chapter.id === 'exp-leblanc');
+      expect(beds.includes('scene-chateau-leblanc'), chapter.id).toBe(chapter.id === 'ffx2-leblanc' || chapter.id === 'exp-leblanc' || chapter.id === 'ffx2-luca-opener');
       if (chapter.id === 'ffx2-leblanc' || chapter.id === 'exp-leblanc') expect(beds, chapter.id).not.toContain('scene-bevelle-underground');
     }
   });
@@ -292,7 +293,7 @@ describe('batch 2: the engine routes each chapter to its cues (rule 14: which ga
       'boss-seymour-omnis': ['seymour-omnis'],
       'boss-den-of-woe': ['ffx2-den-of-woe', 'ffx2-bevelle-guardians', 'ffx2-yunas-ballad'], // Baralai's act of the hidden Bevelle Guardians borrows it (a flagged stand-in, BG5), and the hidden Yuna's Ballad plays the Den's cue for both duels (YB8)
       'boss-experiment': ['ffx2-masterpiece-theatre'],
-      'scene-chateau-leblanc': ['ffx2-leblanc', 'exp-leblanc'],
+      'scene-chateau-leblanc': ['ffx2-leblanc', 'exp-leblanc', 'ffx2-luca-opener'], // the hidden Luca Opener is the same three people: the Syndicate's bed, by reference
       'victory-bahamut': ['ffx2-bahamut', 'exp-yrp-3d'], // the hidden 3D Bahamut is Chapter IV's record by reference, so it ends on Chapter IV's quiet resolve too
     };
     for (const c of batch2.cues.filter((x) => x.mode === 'new' && owners[x.cue])) {

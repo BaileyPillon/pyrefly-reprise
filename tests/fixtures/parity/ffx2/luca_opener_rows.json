@@ -1,0 +1,437 @@
+{
+ "source": "FFX2_Data.vbf (Steam HD Remaster, build 25501027), kernel monster.bin rows 129, 130 and 131 and monmagic.bin 0x4000, 0x405f, 0x40e4, 0x40e7, 0x40f1, 0x41da and 0x41eb; the two scenes lchb03_229 and lchb03_228; read-only, numbers only (research/re-ffx2-luca-opener.md sections 0 to 4)",
+ "monsters": {
+  "x2-luca-ormi": {
+   "row": 129,
+   "id": 4225,
+   "offset": 25832,
+   "level": 2,
+   "hp": 97,
+   "mp": 0,
+   "str": 11,
+   "def": 60,
+   "mag": 1,
+   "mdef": 1,
+   "agi": 40,
+   "acc": 95,
+   "eva": 0,
+   "luck": 4,
+   "thinking": 30,
+   "special": 411,
+   "absorb": 0,
+   "null": 16,
+   "half": 0,
+   "weak": 0,
+   "autoStatus1": 0,
+   "autoStatus2": 0,
+   "exp": 3,
+   "gil": 60,
+   "pilfer": 200,
+   "ap": 1,
+   "dropByte": 128,
+   "stealByte": 192,
+   "zantetsu": 50,
+   "dropItems": [
+    8192,
+    1,
+    8198,
+    1
+   ],
+   "stealItems": [
+    36864,
+    1,
+    36864,
+    1
+   ],
+   "bribeItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "waza": [
+    16858,
+    16612,
+    16479
+   ],
+   "model": 4225,
+   "motion": 4225,
+   "sound": 4225,
+   "resist1": {
+    "3": 255,
+    "7": 255,
+    "8": 255,
+    "10": 255,
+    "17": 255,
+    "18": 255
+   },
+   "resist2": {
+    "6": 255,
+    "14": 255
+   }
+  },
+  "x2-luca-logos": {
+   "row": 130,
+   "id": 4226,
+   "offset": 26032,
+   "level": 2,
+   "hp": 86,
+   "mp": 18,
+   "str": 6,
+   "def": 2,
+   "mag": 5,
+   "mdef": 1,
+   "agi": 70,
+   "acc": 95,
+   "eva": 18,
+   "luck": 5,
+   "thinking": 30,
+   "special": 411,
+   "absorb": 0,
+   "null": 16,
+   "half": 0,
+   "weak": 0,
+   "autoStatus1": 0,
+   "autoStatus2": 0,
+   "exp": 3,
+   "gil": 60,
+   "pilfer": 200,
+   "ap": 1,
+   "dropByte": 128,
+   "stealByte": 192,
+   "zantetsu": 50,
+   "dropItems": [
+    8192,
+    1,
+    8198,
+    1
+   ],
+   "stealItems": [
+    36937,
+    1,
+    36937,
+    1
+   ],
+   "bribeItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "waza": [
+    16615,
+    16625,
+    16479
+   ],
+   "model": 4226,
+   "motion": 4226,
+   "sound": 4226,
+   "resist1": {
+    "3": 255,
+    "7": 255,
+    "8": 255,
+    "10": 255,
+    "17": 255,
+    "18": 255
+   },
+   "resist2": {
+    "6": 255,
+    "14": 255
+   }
+  },
+  "x2-luca-leblanc": {
+   "row": 131,
+   "id": 4227,
+   "offset": 26232,
+   "level": 5,
+   "hp": 130,
+   "mp": 101,
+   "str": 14,
+   "def": 2,
+   "mag": 8,
+   "mdef": 37,
+   "agi": 88,
+   "acc": 95,
+   "eva": 12,
+   "luck": 10,
+   "thinking": 30,
+   "special": 411,
+   "absorb": 0,
+   "null": 16,
+   "half": 0,
+   "weak": 0,
+   "autoStatus1": 0,
+   "autoStatus2": 0,
+   "exp": 8,
+   "gil": 180,
+   "pilfer": 500,
+   "ap": 2,
+   "dropByte": 128,
+   "stealByte": 192,
+   "zantetsu": 60,
+   "dropItems": [
+    8193,
+    1,
+    8198,
+    1
+   ],
+   "stealItems": [
+    36868,
+    1,
+    36868,
+    1
+   ],
+   "bribeItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "waza": [
+    16384,
+    16875
+   ],
+   "model": 4227,
+   "motion": 4227,
+   "sound": 4227,
+   "resist1": {
+    "7": 255,
+    "8": 255,
+    "10": 255,
+    "17": 255,
+    "18": 255
+   },
+   "resist2": {
+    "6": 255,
+    "14": 255
+   }
+  }
+ },
+ "moves": {
+  "x2-luca-ormi-attack": {
+   "id": 16858,
+   "offset": 64496,
+   "category": 0,
+   "costAtb": 100,
+   "costCast": 0,
+   "costMp": 0,
+   "flagsTarget": 51,
+   "flagsMisc": 1610612818,
+   "flagsDamage": 13,
+   "damageClass": 1,
+   "formula": 0,
+   "crit": 5,
+   "accuracy": 95,
+   "power": 16,
+   "hits": 1,
+   "shatter": 10,
+   "element": 0,
+   "status1": {},
+   "status2": {},
+   "statusTime": {}
+  },
+  "x2-luca-ormi-pirouette-pitch": {
+   "id": 16612,
+   "offset": 31040,
+   "category": 0,
+   "costAtb": 0,
+   "costCast": 180,
+   "costMp": 0,
+   "flagsTarget": 19,
+   "flagsMisc": 1073741830,
+   "flagsDamage": 1,
+   "damageClass": 1,
+   "formula": 0,
+   "crit": 40,
+   "accuracy": 0,
+   "power": 26,
+   "hits": 1,
+   "shatter": 100,
+   "element": 0,
+   "status1": {},
+   "status2": {},
+   "statusTime": {}
+  },
+  "x2-luca-logos-pistol": {
+   "id": 16615,
+   "offset": 31448,
+   "category": 0,
+   "costAtb": 40,
+   "costCast": 0,
+   "costMp": 0,
+   "flagsTarget": 19,
+   "flagsMisc": 1610613834,
+   "flagsDamage": 13,
+   "damageClass": 1,
+   "formula": 0,
+   "crit": 20,
+   "accuracy": 140,
+   "power": 8,
+   "hits": 2,
+   "shatter": 0,
+   "element": 0,
+   "status1": {},
+   "status2": {},
+   "statusTime": {}
+  },
+  "x2-luca-logos-potion": {
+   "id": 16625,
+   "offset": 32808,
+   "category": 0,
+   "costAtb": 100,
+   "costCast": 0,
+   "costMp": 0,
+   "flagsTarget": 49,
+   "flagsMisc": 1073741830,
+   "flagsDamage": 16,
+   "damageClass": 1,
+   "formula": 15,
+   "crit": 0,
+   "accuracy": 0,
+   "power": 20,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "status1": {},
+   "status2": {},
+   "statusTime": {}
+  },
+  "x2-luca-leblanc-attack": {
+   "id": 16384,
+   "offset": 32,
+   "category": 0,
+   "costAtb": 100,
+   "costCast": 0,
+   "costMp": 0,
+   "flagsTarget": 51,
+   "flagsMisc": 536936530,
+   "flagsDamage": 13,
+   "damageClass": 1,
+   "formula": 0,
+   "crit": 5,
+   "accuracy": 95,
+   "power": 16,
+   "hits": 1,
+   "shatter": 10,
+   "element": 0,
+   "status1": {},
+   "status2": {},
+   "statusTime": {}
+  },
+  "x2-luca-leblanc-thunder": {
+   "id": 16875,
+   "offset": 66808,
+   "category": 1,
+   "costAtb": 0,
+   "costCast": 70,
+   "costMp": 4,
+   "flagsTarget": 1203,
+   "flagsMisc": 539000966,
+   "flagsDamage": 2,
+   "damageClass": 1,
+   "formula": 2,
+   "crit": 0,
+   "accuracy": 0,
+   "power": 7,
+   "hits": 1,
+   "shatter": 20,
+   "element": 4,
+   "status1": {},
+   "status2": {},
+   "statusTime": {}
+  },
+  "x2-luca-die": {
+   "id": 16479,
+   "offset": 12952,
+   "category": 0,
+   "costAtb": 0,
+   "costCast": 0,
+   "costMp": 0,
+   "flagsTarget": 65,
+   "flagsMisc": 16777218,
+   "flagsDamage": 2,
+   "damageClass": 0,
+   "formula": 0,
+   "crit": 0,
+   "accuracy": 0,
+   "power": 0,
+   "hits": 0,
+   "shatter": 0,
+   "element": 0,
+   "status1": {},
+   "status2": {
+    "23": 126
+   },
+   "statusTime": {}
+  }
+ },
+ "scenes": {
+  "lchb03_229": {
+   "formation": 487,
+   "girls": [
+    [
+     21,
+     0
+    ],
+    [
+     24,
+     12
+    ],
+    [
+     24,
+     -12
+    ]
+   ],
+   "enemies": {
+    "x2-luca-logos": [
+     -27,
+     9
+    ],
+    "x2-luca-ormi": [
+     -27,
+     -12
+    ]
+   }
+  },
+  "lchb03_228": {
+   "formation": 488,
+   "girls": [
+    [
+     21,
+     0
+    ],
+    [
+     24,
+     12
+    ],
+    [
+     24,
+     -12
+    ]
+   ],
+   "enemies": {
+    "x2-luca-leblanc": [
+     -27,
+     0
+    ]
+   }
+  }
+ },
+ "script": {
+  "ormi": {
+   "cycleLength": 3,
+   "shieldThrowAtCount": 2,
+   "aloneHp": 45,
+   "deathReaction": true
+  },
+  "logos": {
+   "potionBelowFractionDenominator": 5,
+   "potionOnce": true
+  },
+  "leblanc": {
+   "attacksBeforeThunder": 3,
+   "thunderBelowMp": 8,
+   "thunderMp": 4
+  }
+ }
+}

@@ -57,6 +57,8 @@ import { youthLeagueNamedScripts } from './youth-league.ts';
 import { youthLeagueLeagueScripts } from './youth-league-league.ts';
 // Ifrit at Kilika Temple (FFX-2 Chapter 3; the hidden chapter "Ifrit at Kilika Temple"): the action counter with its own numbers and the live "battle too long" block.
 import { x2IfritScript } from './ifrit.ts';
+// Ormi, Logos and Leblanc on the docks of Luca, the first fights of FFX-2's Chapter 1 (the hidden chapter "The Luca Opener", FFX-2 only): the game's own three scripts, poll by poll.
+import { lucaOpenerScripts } from './luca-opener.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -106,6 +108,7 @@ const SCRIPTS: readonly AiScript[] = [
   ...youthLeagueNamedScripts,
   ...youthLeagueLeagueScripts,
   x2IfritScript,
+  ...lucaOpenerScripts,
   idleScript,
   basicAttackScript,
 ];

@@ -22,6 +22,7 @@ import { COMMAND_RECORDS_FARPLANE_CUP } from './farplane-cup.ts';
 import { COMMAND_RECORDS_YOUTH_LEAGUE } from './youth-league.ts';
 import { COMMAND_RECORDS_YUNAS_BALLAD } from './yunas-ballad.ts';
 import { COMMAND_RECORDS_IFRIT } from './ifrit.ts';
+import { COMMAND_RECORDS_LUCA_OPENER } from './luca-opener.ts';
 import { COMMAND_RECORDS_ITEMS } from './items.ts';
 import { COMMAND_RECORDS_LADY_LUCK } from './lady-luck.ts';
 import { COMMAND_RECORDS_MIX } from './mix.ts';
@@ -42,6 +43,7 @@ export const FFX2_COMMAND_RECORDS: Readonly<Record<string, FFX2CommandRecord>> =
   ...COMMAND_RECORDS_YUNAS_BALLAD, // the hidden Yuna's Ballad chapter: the possessed Rikku's Spider Attack and five throws, the possessed Paine's Attack (RE note re-ffx2-yunas-ballad, 2026-11-06)
   ...COMMAND_RECORDS_YOUTH_LEAGUE, // the hidden Youth League Tournament chapter: the eight fighters' moves, the thrown items among them (RE note re-ffx2-youth-league-tournament, 2026-11-06)
   ...COMMAND_RECORDS_IFRIT, // the hidden Ifrit at Kilika Temple chapter: Hellfire, Meteor Strike, Firaga and Time Up Meteor (RE note re-ffx2-ifrit-kilika, 2026-11-07)
+  ...COMMAND_RECORDS_LUCA_OPENER, // the hidden Luca Opener chapter: Ormi's shield throw, Logos' pistol and Potion, Leblanc's Thunder (RE note re-ffx2-luca-opener, 2026-11-09)
   ...COMMAND_RECORDS_MIX, // the Alchemist's Mix: the 53 result rows (re-parity RC9, lane X2-G; FFX2-G06 section 4.4)
   ...COMMAND_RECORDS_LADY_LUCK, // Lady Luck's Two Dice and the two rows its dice swap to (re-parity RC10; FFX2-H04 section 4.3)
 };
