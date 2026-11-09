@@ -72,7 +72,7 @@ describe('the model set', () => {
   it('names a file for every combatant and a weapon file for every weapon a row uses', () => {
     for (const id of LAKE_CAST) expect(LAKE_FILES[id], id).toMatch(/\.glb$/);
     for (const rows of Object.values(LAKE_WEAPONS)) for (const r of rows!) expect(LAKE_WEAPON_FILES, r.weapon).toContain(r.weapon);
-    expect(LAKE_SHIPPED_FILES).toHaveLength(10 + 9 + 5);
+    expect(LAKE_SHIPPED_FILES).toHaveLength(14 + 9 + 5);
     expect(new Set(LAKE_SHIPPED_FILES).size).toBe(LAKE_SHIPPED_FILES.length);
   });
 
@@ -93,10 +93,10 @@ describe('loadLakeModels', () => {
     const said: string[] = [];
     const lake = await loadLakeModels({ base: BASE, heights: {}, io: fakeIO(() => false), warn: (m) => said.push(m) });
     await lake.background;
-    expect(lake.models.size).toBe(10);
+    expect(lake.models.size).toBe(LAKE_CAST.length);
     expect(lake.capsules.sort()).toEqual([...LAKE_CAST].sort());
     for (const id of LAKE_CAST) expect(lake.sources.get(id)).toBe('capsule');
-    expect(said.filter((m) => /capsule/.test(m))).toHaveLength(10);
+    expect(said.filter((m) => /capsule/.test(m))).toHaveLength(LAKE_CAST.length);
     for (const m of lake.models.values()) {
       expect(m.animated).toBe(false);
       expect(m.height).toBeCloseTo(LAKE_NATIVE_HEIGHT[m.id], 1);
@@ -109,7 +109,7 @@ describe('loadLakeModels', () => {
     const lake = await loadLakeModels({ base: BASE, heights: {}, io: fakeIO(() => true) });
     expect([...lake.models.keys()].sort()).toEqual([...EAGER].sort());
     await lake.background;
-    expect(lake.models.size).toBe(10);
+    expect(lake.models.size).toBe(LAKE_CAST.length);
     expect(lake.capsules).toEqual([]);
     lake.dispose();
   });
@@ -198,8 +198,8 @@ describe('loadLakeModels', () => {
     await lake.background;
     const skeletons: Array<{ freed: number }> = [];
     for (const m of lake.models.values()) m.root.traverse((o) => { if (o instanceof FakeSkinned) skeletons.push(o.skeleton); });
-    expect(skeletons).toHaveLength(10);
-    expect(new Set(skeletons).size).toBe(10);
+    expect(skeletons).toHaveLength(LAKE_CAST.length);
+    expect(new Set(skeletons).size).toBe(LAKE_CAST.length);
     lake.dispose();
     for (const sk of skeletons) expect(sk.freed).toBe(1);
   });
@@ -210,7 +210,7 @@ describe('loadLakeModels', () => {
     const broken: LoaderIO = { ...io, parse: async (bytes) => { if (new TextDecoder().decode(bytes).includes('yuna')) throw new Error('bad glTF'); return io.parse(bytes); } };
     const lake = await loadLakeModels({ base: BASE, heights: {}, io: broken, warn: (m) => said.push(m), skip: ['wakka', 'auron', 'lulu', 'kimahri'] });
     await lake.background;
-    expect(lake.models.size).toBe(6);
+    expect(lake.models.size).toBe(10);
     expect(lake.sources.get('yuna')).toBe('capsule');
     expect(said.some((m) => /yuna.*could not be read/.test(m))).toBe(true);
     lake.dispose();

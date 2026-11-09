@@ -96,6 +96,7 @@ const stoneIds = new WeakMap<EventCtx, Set<CombatantId>>();
 /** `status-add`: the generic flash, plus the two statuses that change the field. */
 export async function statusAdded(ctx: EventCtx, event: StatusAdd): Promise<void> {
   const a = ctx.stage.actor(event.targetId);
+  a?.noteStatus?.(event.status, true);
   if (event.status === 'eject' && a && ctx.stage.sideOf(event.targetId) === 'enemy') {
     const stone = stoneIds.get(ctx)?.has(event.targetId) === true;
     cue(ctx, stone ? 'petrify-shatter' : 'status', { volume: 0.7 });

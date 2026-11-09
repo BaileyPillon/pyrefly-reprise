@@ -118,14 +118,18 @@ export function raiseFlight(from: V3, wendigo: V3): Flight {
   };
 }
 
-/** The shot an Overdrive gets: round the caster in a half circle and up, 2.4 s, the first 0.9 awaited. */
-export function overdriveFlight(from: V3, caster: V3): Flight {
+/** The height the Overdrive flight is drawn for, metres: the party's (Tidus's 1.75). A taller caster (an aeon) is orbited from further out and looked at higher up, in step with its height. */
+export const OVERDRIVE_FLIGHT_HEIGHT = 1.75;
+
+/** The shot an Overdrive gets: round the caster in a half circle and up, 2.4 s, the first 0.9 awaited. `height` is the caster's (an aeon of 3.4 m is orbited at about twice the distance, so its wings stay in frame). */
+export function overdriveFlight(from: V3, caster: V3, height = OVERDRIVE_FLIGHT_HEIGHT): Flight {
+  const s = Math.max(1, height / OVERDRIVE_FLIGHT_HEIGHT);
   return {
     name: 'overdrive',
     keys: [
-      { t: 0.0, pos: from, look: [caster[0], 1.4, caster[2]], fov: 32 },
-      { t: 0.9, pos: [caster[0] + 2.6, 1.2, caster[2] + 3.6], look: [caster[0], 1.5, caster[2]], fov: 28, roll: -2 },
-      { t: 2.4, pos: [caster[0] - 3.8, 3.2, caster[2] + 5.8], look: [caster[0] + 1.5, 1.6, caster[2] - 3], fov: 34, roll: 0 },
+      { t: 0.0, pos: from, look: [caster[0], 1.4 * s, caster[2]], fov: 32 },
+      { t: 0.9, pos: [caster[0] + 2.6 * s, 1.2 * s, caster[2] + 3.6 * s], look: [caster[0], 1.5 * s, caster[2]], fov: 28, roll: -2 },
+      { t: 2.4, pos: [caster[0] - 3.8 * s, 3.2 * s, caster[2] + 5.8 * s], look: [caster[0] + 1.5, 1.6 * s, caster[2] - 3], fov: 34, roll: 0 },
     ],
   };
 }

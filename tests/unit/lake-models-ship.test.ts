@@ -1,12 +1,12 @@
 /**
  * **What a production build ships of the hidden Wendigo chapter's models, and the gate that proves it** (ch-wendigo phase 4, 2026-11-07; Chapter 49, FFX only; `tools/dist-filter.mjs` `isLakeModelFile`,
- * `tools/lake-models-verify.mjs`, the deploy's step in `tools/deploy-pages.mjs`). The 24 models are local files (gitignored), so a release cut from a tree without them would ship the chapter on grey capsules with every
+ * `tools/lake-models-verify.mjs`, the deploy's step in `tools/deploy-pages.mjs`). The 28 models are local files (gitignored), so a release cut from a tree without them would ship the chapter on grey capsules with every
  * other gate green. Pins:
  *
- * 1. the filter ships exactly the 24 files of `LAKE_SHIPPED_FILES` and no other file of `models-exp/lake/` (an allow-list, not the whole folder), beside the 3D Bahamut's set and the Wind Waker folder, and prunes a stray;
- * 2. the verifier passes a build that carries the 24 whole, and names a missing file, an empty one, one cut short, one over the host's limit, one with a local path in its JSON chunk, one that differs from the recorded
+ * 1. the filter ships exactly the 28 files of `LAKE_SHIPPED_FILES` and no other file of `models-exp/lake/` (an allow-list, not the whole folder), beside the 3D Bahamut's set and the Wind Waker folder, and prunes a stray;
+ * 2. the verifier passes a build that carries the 28 whole, and names a missing file, an empty one, one cut short, one over the host's limit, one with a local path in its JSON chunk, one that differs from the recorded
  *    sha256, an extra file, and a record that disagrees with the code's list;
- * 3. the 3D Bahamut's verifier lets the 24 stand beside its set (they are not an "extra file" there) and still names any other;
+ * 3. the 3D Bahamut's verifier lets the 28 stand beside its set (they are not an "extra file" there) and still names any other;
  * 4. on the command line: a build without the folder is refused with one explanation and let through only on the capsules word; the deploy runs the check; the real source files, where this disk has them, pass.
  */
 import { spawnSync } from 'node:child_process';
@@ -58,7 +58,7 @@ const model = (rel: string): Buffer => glb(CLEAN, rel);
 
 interface Built { root: string; list: Array<{ path: string; bytes: number; sha256: string }> }
 
-/** A build root holding the 24 whole files (distinct bytes each) and the record that goes with them. */
+/** A build root holding the 28 whole files (distinct bytes each) and the record that goes with them. */
 function build(): Built {
   const root = scratch();
   const list = LAKE_SHIPPED_FILES.map((path) => {
@@ -70,9 +70,9 @@ function build(): Built {
   return { root, list };
 }
 
-describe('the filter ships exactly the 24 files', () => {
+describe('the filter ships exactly the 28 files', () => {
   it('names each of them, in the folder the page reads, and nothing else of that folder', () => {
-    expect(LAKE_SHIPPED_FILES).toHaveLength(24);
+    expect(LAKE_SHIPPED_FILES).toHaveLength(28);
     for (const f of LAKE_SHIPPED_FILES) {
       expect(isLakeModelFile(`models-exp/lake/${f}`), f).toBe(true);
       expect(isShippedModelFile(`models-exp/lake/${f}`), f).toBe(true);
@@ -91,7 +91,7 @@ describe('the filter ships exactly the 24 files', () => {
     expect(isUnshippedPublicFile(`${BASE}/bahamut-ai.glb`)).toBe(true);
   });
 
-  it('prunes a build with the 24, a stray file in their folder and the other sets: the strays go, the 24 stay, and a second prune finds nothing', () => {
+  it('prunes a build with the 28, a stray file in their folder and the other sets: the strays go, the 28 stay, and a second prune finds nothing', () => {
     const { root, list } = build();
     for (const rel of ['models-exp/lake/scratch.glb', 'models-exp/lake/props/old-temple.glb', 'models-exp/some-new-experiment/x.glb']) {
       mkdirSync(dirname(join(root, rel)), { recursive: true });
@@ -106,10 +106,10 @@ describe('the filter ships exactly the 24 files', () => {
 });
 
 describe('the verifier', () => {
-  it('passes a build that carries the 24 whole, as recorded, and nothing else of the folder', () => {
+  it('passes a build that carries the 28 whole, as recorded, and nothing else of the folder', () => {
     const { root, list } = build();
-    expect(verifyLakeModels(root, { list })).toMatchObject({ ok: true, problems: [], files: 24 });
-    expect(expectedLakeFiles()).toHaveLength(24);
+    expect(verifyLakeModels(root, { list })).toMatchObject({ ok: true, problems: [], files: 28 });
+    expect(expectedLakeFiles()).toHaveLength(28);
     expect(expectedLakeFiles().every((f) => f.startsWith('models-exp/lake/'))).toBe(true);
   });
 
@@ -159,13 +159,13 @@ describe('the verifier', () => {
     expect(text).toMatch(/models-exp\/lake\/ghost\.glb: recorded but not in LAKE_SHIPPED_FILES/);
   });
 
-  it('reads the real record by default: the 24 files, whose names are the code\'s', () => {
+  it('reads the real record by default: the 28 files, whose names are the code\'s', () => {
     expect(readList().map((f) => f.path).sort()).toEqual([...LAKE_SHIPPED_FILES].sort());
   });
 });
 
-describe('the 3D Bahamut\'s verifier beside the 24', () => {
-  /** A whole build of the 3D Bahamut's set, with the 24 beside it when asked. */
+describe('the 3D Bahamut\'s verifier beside the 28', () => {
+  /** A whole build of the 3D Bahamut's set, with the 28 beside it when asked. */
   function both(withLake: boolean): string {
     const root = scratch();
     for (const rel of expectedYrpFiles()) {
@@ -182,7 +182,7 @@ describe('the 3D Bahamut\'s verifier beside the 24', () => {
     return root;
   }
 
-  it('passes a build that carries both sets (the 24 are not an extra file) and still names any other extra file', () => {
+  it('passes a build that carries both sets (the 28 are not an extra file) and still names any other extra file', () => {
     expect(verifyYrpModels(both(true))).toMatchObject({ ok: true, problems: [], files: 43 });
     const root = both(true);
     writeFileSync(join(root, 'models-exp', 'lake', 'stray.glb'), tinyGlb());
@@ -201,7 +201,7 @@ describe('on the command line', () => {
     return { status: r.status, out: `${r.stdout}${r.stderr}` };
   };
 
-  it('refuses a build with no models-exp/lake folder with one explanation (not 24 "missing" lines), and lets it through only on the capsules word', () => {
+  it('refuses a build with no models-exp/lake folder with one explanation (not 28 "missing" lines), and lets it through only on the capsules word', () => {
     const empty = scratch();
     const refused = cli(['--dir', empty]);
     expect(refused.status).toBe(1);
@@ -223,9 +223,9 @@ describe('on the command line', () => {
   });
 
   const haveSource = existsSync(join(ROOT, 'public', 'models-exp', 'lake')) && check(join(ROOT, 'public', 'models-exp', 'lake')).length === 0;
-  it.runIf(haveSource)('passes the real source files of this disk (24 files, as recorded, whole)', () => {
+  it.runIf(haveSource)('passes the real source files of this disk (28 files, as recorded, whole)', () => {
     const r = cli(['--source', join(ROOT, 'public')]);
-    expect(r.out).toContain('PASS, 24 files');
+    expect(r.out).toContain('PASS, 28 files');
     expect(r.status).toBe(0);
   });
 });

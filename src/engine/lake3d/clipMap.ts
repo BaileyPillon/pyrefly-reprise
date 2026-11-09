@@ -40,6 +40,8 @@ export function partyPlans(names: readonly string[]): PlanTable {
 export interface MonsterRow {
   readonly clip: string;
   readonly kind: 'blow' | 'cast';
+  /** The clip to play when the file has none by that name (a Guardian's potion plays its cast when the file has no `item`). */
+  readonly alt?: string;
 }
 
 /** The ability ids of the Wendigo's rows (`../../data/ffx/wendigo-ids.ts` `WENDIGO_ABILITY`; a test pins that the copies agree). */
@@ -52,6 +54,9 @@ export const WENDIGO_ROWS = {
   lowerArms: 'wendigo-lower-arms',
 } as const;
 
+/** The Guardians' two item moves (their caster animation is the game's item motion, byte 2 of the command row: Auto-Potion 0x4010 and the Eye Drops item 0x200C; their other moves are spells, byte 3). */
+const GUARDIAN_ITEM_MOVES: readonly string[] = ['lake-auto-potion', 'lake-eye-drops'];
+
 /** What a Wendigo or Guardian action plays: by the ability when one is named, else by the painted pose the presenter picked (`attack`, `cast`, `item`). Null for an action with no clip (a defend, an Overdrive). */
 export function monsterRowFor(id: string, abilityId: string | undefined, kind: string | undefined): MonsterRow | null {
   if (id === 'wendigo') {
@@ -59,8 +64,10 @@ export function monsterRowFor(id: string, abilityId: string | undefined, kind: s
     if (abilityId === WENDIGO_ROWS.punch || abilityId === WENDIGO_ROWS.counterPunch || abilityId === WENDIGO_ROWS.attack) return { clip: 'attack', kind: 'blow' };
     if (abilityId === WENDIGO_ROWS.raiseArms || abilityId === WENDIGO_ROWS.lowerArms) return null; // the stance has its own state (`./monsterRig.ts`)
   }
+  if (abilityId !== undefined && GUARDIAN_ITEM_MOVES.includes(abilityId) && id.startsWith('lake-guardian')) return { clip: 'item', kind: 'cast', alt: 'cast' };
   if (kind === 'attack') return { clip: 'attack', kind: 'blow' };
-  if (kind === 'cast' || kind === 'item') return { clip: 'cast', kind: 'cast' };
+  if (kind === 'item') return { clip: 'item', kind: 'cast', alt: 'cast' };
+  if (kind === 'cast') return { clip: 'cast', kind: 'cast' };
   return abilityId === undefined ? null : { clip: 'cast', kind: 'cast' };
 }
 

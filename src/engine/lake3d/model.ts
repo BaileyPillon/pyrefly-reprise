@@ -17,7 +17,7 @@ import { disposeSkeletonsUnder } from '../skeletons.ts';
 import { ClipRig } from '../yrp3d/clips.ts';
 import { ACCENT, patchRim } from '../yrp3d/rim.ts';
 import type { PlanTable } from '../yrp3d/clipMap.ts';
-import { LAKE_FIT_RANGE, LAKE_NATIVE_HEIGHT, type LakeId } from '../../data/ffx/lake-models.ts';
+import { LAKE_FIT_RANGE, LAKE_NATIVE_HEIGHT, LAKE_STRIKES, type LakeId } from '../../data/ffx/lake-models.ts';
 import { MonsterRig } from './monsterRig.ts';
 
 export { ACCENT }; // the caps of the flash and the glow (the Bahamut chapter's: a rim accent, never a flat tint of the body)
@@ -116,7 +116,7 @@ export class LakeModel {
     this.root.add(this.lie);
     this.place();
     this.party = plans && plans.idle?.hold && clips.some((c) => c.name === plans.idle!.hold) ? new ClipRig(scene, clips, plans, id) : null;
-    this.monster = !this.party && clips.some((c) => c.name === 'idle') ? new MonsterRig(scene, clips, id) : null;
+    this.monster = !this.party && clips.some((c) => c.name === 'idle') ? new MonsterRig(scene, clips, id, LAKE_STRIKES[id] ?? {}) : null;
   }
 
   /** The height this model stands at for a stage height: the stage's own when it is near the native one (so the HUD's anchors land on the figure), else the native size. */
@@ -253,6 +253,16 @@ export class LakeModel {
   /** The action is over. */
   noteClose(): void {
     this.party?.close();
+  }
+
+  /** Sleep lands or ends: a sleeper's arms are down (the Wendigo's stance ends on the spot), and it plays the game's sleep clips. */
+  noteSleep(on: boolean): void {
+    this.monster?.noteSleep(on);
+  }
+
+  /** True while a monster model is asleep. */
+  get sleeping(): boolean {
+    return this.monster?.sleeping ?? false;
   }
 
   /** The Wendigo's arms go up or down. */

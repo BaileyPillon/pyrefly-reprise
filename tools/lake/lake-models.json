@@ -8,13 +8,23 @@
   },
   {
    "path": "guardian.glb",
-   "bytes": 9704364,
-   "sha256": "fd17b4de11215318eda287703bc8c933fc748de6dd22e5ed92784cdd986b53ff"
+   "bytes": 9790388,
+   "sha256": "2ed27bd83593ee092b8cb93e5d4bc131ffcd68469c2e515616b14633c6343b3f"
   },
   {
    "path": "guardianb.glb",
-   "bytes": 10048900,
-   "sha256": "27fedc13c053072578b669cc1da44c7e31bcaedc53c44785636bfe4e71e378a5"
+   "bytes": 10134924,
+   "sha256": "0fff857fbb06660ea26eee1bdd70c8a600a53971b959c0b40d7c4a2b6f034756"
+  },
+  {
+   "path": "ifrit.glb",
+   "bytes": 8605244,
+   "sha256": "e26340a15c15346c39c5832503c2fddbdd4a36aeeedc298555c725d279a412f2"
+  },
+  {
+   "path": "ixion.glb",
+   "bytes": 10317628,
+   "sha256": "1d06e8031dfc058b0f0458d6692b7e5d6beda0b963228b81e4b7244285bcdf92"
   },
   {
    "path": "kimahri.glb",
@@ -57,9 +67,19 @@
    "sha256": "0578c6aa14c0f15291fb7e4facf7bf7c5fc3c0448f67a12c64e72cff5dd93758"
   },
   {
+   "path": "shiva.glb",
+   "bytes": 10042892,
+   "sha256": "4ebaad710d7b535725e1fe17f429aabb8c98ec1bfd6dc3f94f6a6ed5cc027b65"
+  },
+  {
    "path": "tidus.glb",
    "bytes": 9971500,
    "sha256": "a521be04cfad00464a8d0887a85af6b0ebc3687beb8f3e1903959adbde812b77"
+  },
+  {
+   "path": "valefor.glb",
+   "bytes": 8723256,
+   "sha256": "9f6886fc42a8e31727efee83550847f7733f3adac1dfc6ab419a018a195246c0"
   },
   {
    "path": "wakka.glb",
@@ -113,8 +133,8 @@
   },
   {
    "path": "wendigo.glb",
-   "bytes": 13869580,
-   "sha256": "977bddfb9ece39896cb863e2b4d9a20a3475897db5b59cb39645257b6c87658e"
+   "bytes": 14010704,
+   "sha256": "01fe0dda7501d58d14862ab3ae818c3d47ec946ed73852326c7bb561a9ba6b7d"
   },
   {
    "path": "yuna.glb",

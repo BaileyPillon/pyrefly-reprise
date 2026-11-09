@@ -118,3 +118,18 @@ describe('the epilogue\'s clock', () => {
     expect(EPILOGUE.shakes[1]!).toBeLessThan(EPILOGUE.length);
   });
 });
+
+
+describe("the Overdrive flight and the caster's height (the aeons, 2026-11-09)", () => {
+  it("is the hero's flight for a hero and orbits a taller caster from further out and looks higher up, in step with its height", () => {
+    const hero = overdriveFlight([0, 2, 10], [1, 0, 2]);
+    expect(overdriveFlight([0, 2, 10], [1, 0, 2], 1.75)).toEqual(hero); // the default
+    expect(overdriveFlight([0, 2, 10], [1, 0, 2], 1.2)).toEqual(hero); // never closer than the hero's
+    const aeon = overdriveFlight([0, 2, 10], [1, 0, 2], 3.5);
+    const dist = (f: Flight, k: number): number => Math.hypot(f.keys[k]!.pos[0] - 1, f.keys[k]!.pos[2] - 2);
+    expect(dist(aeon, 1)).toBeCloseTo(dist(hero, 1) * 2, 6);
+    expect(dist(aeon, 2)).toBeGreaterThan(dist(hero, 2) * 1.8);
+    expect(aeon.keys[1]!.look[1]).toBeCloseTo(hero.keys[1]!.look[1] * 2, 6);
+    expect(aeon.keys[0]!.pos).toEqual(hero.keys[0]!.pos); // it still starts where the camera is
+  });
+});

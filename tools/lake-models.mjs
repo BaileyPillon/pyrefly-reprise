@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * The hidden Wendigo chapter's models (Chapter 49, FFX only): `public/models-exp/lake/` (ten bodies, nine weapons, five props: 24 Meshy files).
+ * The hidden Wendigo chapter's models (Chapter 49, FFX only): `public/models-exp/lake/` (fourteen bodies: the party, the Wendigo and the Guardians, the four aeons; nine weapons, five props: 28 Meshy files).
  *
  * They are made outside the repo (a picture, then Meshy, then Blender and the retarget job), large (about 128 MiB) and the repo is public, so they are gitignored like `public/art`, `public/fx` and the Wind Waker
  * folder: only their names, sizes and sha256 are in git, in `tools/lake/lake-models.json`. The production build SHIPS them (`tools/dist-filter.mjs` `isLakeModelFile`, an allow-list of exactly these files); a build
@@ -30,7 +30,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const LAKE_MODELS_SRC = join(ROOT, 'public', 'models-exp', 'lake');
 export const LAKE_MODELS_LIST = join(ROOT, 'tools', 'lake', 'lake-models.json');
 /** The dated folder of the models store and of the second disk's copy of it that hold this chapter's files (`<place>/<date>/models-exp/lake`). */
-export const LAKE_BACKUP_DATE = '2026-11-07';
+export const LAKE_BACKUP_DATE = '2026-11-09'; // the finishing lane's set (28 files: the monsters on their own motion, the four aeons); the earlier dated folder (2026-11-07, 24 files) stays as it was
 /** The folder names of the two backups' roots (no drive or user name is written in this file: the store is found on the drive this tree is on, the second disk by looking for its folder on every drive). */
 export const LAKE_STORE_NAME = 'pyrefly-models-exp-store';
 export const LAKE_SECOND_DISK_NAME = 'pyrefly-models-backup';

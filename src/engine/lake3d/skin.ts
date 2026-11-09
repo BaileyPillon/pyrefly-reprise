@@ -1,7 +1,7 @@
 /**
  * **The Meshy models on the battle's actors** (the hidden Wendigo chapter's 3D stage; FFX only): the stage (`PaintedStage`) owns the actors and plays every `BattleEvent` onto them through the presenter, exactly as it does in
  * every chapter; this skin finds them where the stage puts them and carries a model on each, with the painted planes switched off. It is the house habit of `../yrp3d/skin.ts` (the hidden 3D Bahamut chapter's models) for the
- * lake's cast: ten bodies, the aeons keeping their paintings (an actor the skin has no model for is left as the stage made it).
+ * lake's cast: ten bodies and the four aeons of the roster (an actor the skin has no model for, such as an aeon whose file has not come in yet, is left as the stage made it: the painting).
  *
  * ## How a model rides an actor
  *
@@ -11,7 +11,8 @@
  *
  * - **Facing.** The house rule (the party turned toward +x, the enemies toward -x: the lunge runs along x) turned a little toward the lens so faces show (`facingYaw`).
  * - **Motion.** The beats (`./beats.ts`) and the pose the actor shows start the clips (`./model.ts`): an action as it opens, the blow landing, a hit, a fall and a rise, the victory and the low-HP kneel. The Wendigo's arms
- *   go up and down on their two moves' beats (`./clipMap.ts` `stanceChange`).
+ *   go up and down on their two moves' beats (`./clipMap.ts` `stanceChange`). **Sleep** is read from the actor (`PaintedActor.hasStatus`, told by the presenter's status events): a sleeper's arms come down on the spot and it
+ *   plays the game's sleep clips, whatever the engine's flag says until the next hit.
  * - **Flash, glow, tint and stone.** The actor's own flash (a hit's white, a heal's green) and its cast glow ride a capped emissive accent; its hurt tint and brightness multiply the colour; a petrified figure goes grey.
  * - **Fade.** The actor's alpha and dissolve fade the model (a defeated Guardian's body fades; the Wendigo's stays).
  * - **The epilogue's fall.** `sinkOf` (set by the stage) drops the party through the breaking ice.
@@ -22,7 +23,7 @@
 import { Color, Group, type Object3D } from 'three';
 import { PaintedActor } from '../PaintedActor.ts';
 import { paceRate } from '../pace.ts';
-import { LAKE_CAST, LAKE_ENEMIES, type LakeId } from '../../data/ffx/lake-models.ts';
+import { LAKE_AEONS, LAKE_CAST, LAKE_ENEMIES, type LakeId } from '../../data/ffx/lake-models.ts';
 import type { BeatListener } from './beats.ts';
 import type { LakeModels } from './load.ts';
 import { ACCENT, type LakeModel } from './model.ts';
@@ -75,18 +76,20 @@ export function hidePaintedFigure(actor: PaintedActor): boolean {
 }
 
 /** How far each side's bodies turn toward the lens from side-on, radians: the party's faces and the Wendigo's must show. */
-export const TURN_TO_LENS: Readonly<Record<string, number>> = { party: 0.55, wendigo: 0.8, guardian: 0.6 };
+export const TURN_TO_LENS: Readonly<Record<string, number>> = { party: 0.55, wendigo: 0.8, guardian: 0.6, aeon: 0.45 };
 
 /** The yaw a model of `id` is turned to (radians about +Y, 0 facing +Z): the party toward +x, the enemies toward -x, each a little toward the lens. */
 export function facingYaw(id: LakeId): number {
   if (id === 'wendigo') return -Math.PI / 2 + TURN_TO_LENS['wendigo']!;
   if ((LAKE_ENEMIES as readonly string[]).includes(id)) return -Math.PI / 2 + TURN_TO_LENS['guardian']!;
+  if ((LAKE_AEONS as readonly string[]).includes(id)) return Math.PI / 2 - TURN_TO_LENS['aeon']!; // an aeon fights on the party's side
   return Math.PI / 2 - TURN_TO_LENS['party']!;
 }
 
-/** A cast's glow colour by who casts: the party's cold white, the Wendigo's ice blue, the Guardians' old gold. */
-const GLOW_COLOUR: Readonly<Record<'party' | 'wendigo' | 'guardian', number>> = { party: 0xdcefff, wendigo: 0x8fd0ff, guardian: 0xffe2a6 };
-const whoOf = (id: LakeId): 'party' | 'wendigo' | 'guardian' => (id === 'wendigo' ? 'wendigo' : (LAKE_ENEMIES as readonly string[]).includes(id) ? 'guardian' : 'party');
+/** A cast's glow colour by who casts: the party's cold white, the Wendigo's ice blue, the Guardians' old gold, an aeon's pale light. */
+const GLOW_COLOUR: Readonly<Record<'party' | 'wendigo' | 'guardian' | 'aeon', number>> = { party: 0xdcefff, wendigo: 0x8fd0ff, guardian: 0xffe2a6, aeon: 0xeaf4ff };
+const whoOf = (id: LakeId): 'party' | 'wendigo' | 'guardian' | 'aeon' =>
+  id === 'wendigo' ? 'wendigo' : (LAKE_ENEMIES as readonly string[]).includes(id) ? 'guardian' : (LAKE_AEONS as readonly string[]).includes(id) ? 'aeon' : 'party';
 
 /** How many opened actions the skin remembers. */
 export const BEAT_LOG = 200;
@@ -238,6 +241,7 @@ export class LakeSkin {
     }
     model.setChannels({ colour: this.colour, emissive: this.emissive, amount, opacity: alpha });
 
+    model.noteSleep((actor as unknown as { hasStatus?: (s: string) => boolean }).hasStatus?.('sleep') === true); // Sleep brings the arms down on the spot and plays the sleep clips
     const still = (actor as unknown as { still?: () => boolean }).still?.() === true; // REDUCE MOTION stills the idle
     const down = actor.lifeState === 'down';
     const low = !down && (requestedPose(actor) === 'critical' || actor.pose === 'critical');

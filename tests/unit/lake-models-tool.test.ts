@@ -1,10 +1,10 @@
 /**
  * **The Wendigo chapter's models travel with the build** (Chapter 49, FFX only; `tools/lake-models.mjs`, `tools/lake/lake-models.json`, ch-wendigo phase 4, 2026-11-07).
  *
- * The 24 `.glb` files in `public/models-exp/lake/` are gitignored (the repo is public, the files are 128 MiB), so a build from a clean worktree has none and the chapter would stand a capsule in every slot with nothing to say
+ * The 28 `.glb` files in `public/models-exp/lake/` are gitignored (the repo is public, the files are 128 MiB), so a build from a clean worktree has none and the chapter would stand a capsule in every slot with nothing to say
  * so. Like the Wind Waker chapter's, the files are listed by name, size and sha256 in git, backed up (the models store and the second disk), restored and verified. This file pins:
  *
- * 1. the committed list names exactly the 24 files the chapter loads (`LAKE_SHIPPED_FILES`: ten bodies, nine weapons, five props), each under the host's 25 MiB, each shipped by the dist filter, none in git, and no local path in
+ * 1. the committed list names exactly the 28 files the chapter loads (`LAKE_SHIPPED_FILES`: fourteen bodies, nine weapons, five props), each under the host's 25 MiB, each shipped by the dist filter, none in git, and no local path in
  *    the list;
  * 2. `check` finds a missing file and a changed one (a same-length flip too), `copyTree` restores what is missing or different and nothing else, `backupPlaces` names the store and the second disk (or the one folder an
  *    environment value gives) and `firstGoodBackup` picks the first that holds every file whole;
@@ -53,11 +53,11 @@ const wanted = (): string[] => [...LAKE_SHIPPED_FILES].sort();
 describe('the committed list', () => {
   const list: Listed[] = readList();
 
-  it('names exactly the 24 files the chapter loads (ten bodies, nine weapons, five props), each once, with a size and a sha256', () => {
+  it('names exactly the 28 files the chapter loads (fourteen bodies, nine weapons, five props), each once, with a size and a sha256', () => {
     expect(list.map((f) => f.path).sort()).toEqual(wanted());
-    expect(new Set(list.map((f) => f.path)).size).toBe(24);
+    expect(new Set(list.map((f) => f.path)).size).toBe(28);
     expect(LAKE_SHIPPED_FILES).toHaveLength(LAKE_CAST.length + LAKE_WEAPON_FILES.length + LAKE_PROP_FILES.length);
-    expect(Object.values(LAKE_FILES)).toHaveLength(10);
+    expect(Object.values(LAKE_FILES)).toHaveLength(14);
     for (const f of list) {
       expect(f.bytes, f.path).toBeGreaterThan(1000);
       expect(f.sha256, f.path).toMatch(/^[0-9a-f]{64}$/);
@@ -76,7 +76,7 @@ describe('the committed list', () => {
 
   it('is a list and nothing more: no model is in git, no place on this PC is in the list, and the models folder is ignored', () => {
     const text = readFileSync(join(ROOT, 'tools', 'lake', 'lake-models.json'), 'utf8');
-    expect(JSON.parse(text).files).toHaveLength(24);
+    expect(JSON.parse(text).files).toHaveLength(28);
     expect(text, 'no drive path, no user folder').not.toMatch(/[A-Za-z]:[\\/]|Users[\\/]|pyrefly-scratch/);
     expect(readFileSync(join(ROOT, '.gitignore'), 'utf8').split(/\r?\n/)).toContain('public/models-exp/');
   });
@@ -95,7 +95,7 @@ describe('check, recordOf and copyTree', () => {
     const dir = fakeFolder(files, ['tidus.glb']);
     writeFileSync(join(dir, 'wendigo.glb'), Buffer.from('changed on disk'));
     expect(check(dir, files).sort()).toEqual(['differs wendigo.glb', 'missing tidus.glb']);
-    expect(check(join(tmpdir(), 'lake-models-not-there'), files)).toHaveLength(24);
+    expect(check(join(tmpdir(), 'lake-models-not-there'), files)).toHaveLength(28);
   });
 
   it('checks the sha256 and not only the size: a copy of the right length with one byte flipped is "differs"', () => {
@@ -162,7 +162,7 @@ describe('the backup places', () => {
 describe('the real files, where this disk has them', () => {
   // The committed list is only as good as the files it was recorded from; a disk without the models (a clean worktree, a review copy) skips this and the tool's `ensure` says so at build time.
   const have = existsSync(LAKE_MODELS_SRC) && readList().every((f) => existsSync(join(LAKE_MODELS_SRC, f.path)));
-  it.runIf(have)('match the list: all 24, with the recorded size and sha256', () => {
+  it.runIf(have)('match the list: all 28, with the recorded size and sha256', () => {
     expect(check(LAKE_MODELS_SRC)).toEqual([]);
   });
 });
@@ -177,7 +177,7 @@ describe('the command line', () => {
     const r = run(NO_BACKUP, 'verify', '--dir', empty);
     expect(r.status).toBe(1);
     expect(r.stdout).toContain('missing tidus.glb');
-    expect(r.stdout).toContain('FAIL (24)');
+    expect(r.stdout).toContain('FAIL (28)');
   });
 
   it('goes on under --warn and says the chapter will draw capsules', () => {
@@ -191,7 +191,7 @@ describe('the command line', () => {
   it('fails a restore when no backup holds the files, and writes nothing', () => {
     const r = run(NO_BACKUP, 'restore');
     expect(r.status).toBe(1);
-    expect(r.stdout).toContain('no backup holds all 24 files');
+    expect(r.stdout).toContain('no backup holds all 28 files');
     expect(existsSync(join(tmpdir(), 'lake-models-no-backup-here'))).toBe(false);
   });
 
