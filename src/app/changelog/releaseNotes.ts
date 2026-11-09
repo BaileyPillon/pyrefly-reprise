@@ -69,11 +69,20 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 78 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 79 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '79',
+    date: '2026-11-09',
+    lines: [
+      { tag: 'Both', text: 'A boss card no longer asks for a painting the game does not have; before, a boss without one made the page request a missing file each time its card came up.' },
+      { tag: 'FFX-2', text: 'Mythril Bangle, the item Vegnagun’s Leg drops in Chapter V, now has an item entry of its own behind it; what drops and what the results page shows are unchanged.' },
+      { tag: 'FFX', text: 'A battle script can now switch counter-attacks off for its own fight; no fight on the chapter board does, so nothing plays differently there.' },
+    ],
+  },
   {
     release: '78',
     date: '2026-11-08',
