@@ -53,6 +53,12 @@ function matches(
     case 'overdrive':
       // X-2 has no Overdrive gauge; the condition can never fire here.
       return false;
+    case 'all-ko': {
+      // Additive (the hidden Youth League Tournament, 2026-11-07; FFX-2 only in use): every unit of `ids` that is IN this battle is down, and at least one is. A formation of several fighters has no single "last" one for a
+      // `ko` to name; a list that names fighters of another act (the chain's earlier or later formations) is false until some of them stand in this battle. No shipped FFX-2 trigger used it before (it answered false).
+      const present = when.ids.map((id) => units.find((u) => u.id === id)).filter((u): u is Ffx2Unit => u !== undefined);
+      return present.length > 0 && present.every((u) => !u.alive || u.removed === true);
+    }
     case 'charge-started':
       return when.who
         ? (signal.chargeStarted ?? []).includes(when.who)

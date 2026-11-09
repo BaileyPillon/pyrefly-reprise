@@ -1,0 +1,96 @@
+{
+ "rubricVersion": 2,
+ "review": "live",
+ "date": "2026-11-08T21:39:40.706Z",
+ "build": {
+  "mainSha": "6429ff15e",
+  "bundle": "DQzgTgdc",
+  "artifactHash": "74832395e7b649f13a949b38d0f16ad506ec5a1ae09f3bfed3aae2f1c88698cf"
+ },
+ "verdicts": {
+  "deployment": "PASS",
+  "changedArea": "NOT APPLICABLE",
+  "milestone": "not assessed"
+ },
+ "checks": [
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/6429ff15e.json --url https://echoesofspira.com/ --changed-from critic/artifacts/36b6e851d.json -> {result: PASS, liveManifest: match, checked: 974, mismatched: [], missing: [], wrongType: [], errors: []}; index.html identical once the Cloudflare analytics beacon is removed. Saved at critic/reviews/6429ff15e-live/verify-live-changed.json.",
+   "reason": "The plan is deep so --full was started; it had not finished after more than 10 minutes (7651+ files, sequential) and was stopped by PID; the changed-from run over all 974 changed files plus a sample is the evidence, as in releases 75 and 76. The full byte comparison is listed under notTested."
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "Headless Playwright, PYREFLY_BROWSER=gpu, fresh context 1600x900, cache-busting query, real key presses, screen asserted before each capture: title -> chapter-select (19 tiles) -> words spherimorph, youth, weapon each open party-prep (Macalania Woods Spherimorph, The Youth League Tournament, The Omega Ruins) and Escape returns to chapter-select; Chapter I (seymour-flux) to a player turn with [rig] tidus on (gate ok, 9 parts); FFX cone marker .ffx-cone drawn 99x54 on target select, Escape returns to the command menu; Escape and P pause and resume, H hides (10 panels visible) and restores (70); Chapter IV (ffx2-bahamut) to a player turn with [rig] rikku-dark-knight on (gate ok, 8 parts), a real command issued, battle running. Music: 46 audio fetches, audioDebug playing boss-seymour, not the procedural fallback. Screenshots in critic/reviews/6429ff15e-live/shots and shots2.",
+   "reason": "All intended states were asserted before capture."
+  },
+  {
+   "id": "CHK-024",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "reload.mjs: Master volume changed 0.8 -> 1 by Options arrows, one real attack (seymour-flux attempts 1); after page reload save v1 shows master 1 and attempts 1, audio volumes master 1 music 0.7 sfx 0.7. 0 console errors, 0 404s.",
+   "reason": "Lightweight reload smoke only; the full upgrade matrix was not run."
+  }
+ ],
+ "staticChecks": {
+  "pose-census": {
+   "subjects": 174,
+   "paintings": 1247,
+   "pass": 948,
+   "waived": 101,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 198,
+   "byClass": {
+    "idle": 174,
+    "standing": 642,
+    "ko": 114,
+    "low": 71,
+    "wide": 16,
+    "staged": 176,
+    "part": 54
+   },
+   "byGame": {
+    "FFX-2": 819,
+    "FFX": 314,
+    "unknown": 92,
+    "FF7": 22
+   },
+   "byRowStatus": {
+    "ok": 862,
+    "held": 86,
+    "waived": 101,
+    "none": 198
+   }
+  }
+ },
+ "coverage": {
+  "tested": [
+   "artifact identity (974 changed files)",
+   "title and board",
+   "words spherimorph, youth, weapon with cancel path",
+   "Chapter I and Chapter IV to a player turn with rigs on",
+   "FFX cone marker",
+   "Escape/P pause, H hide",
+   "music playing",
+   "reload smoke",
+   "pose census"
+  ],
+  "reused": [],
+  "notTested": [
+   "full byte comparison of every file (--full stopped)",
+   "battles of hidden chapters 41, 42, 43",
+   "?partyrigs=off, ?marker=hand, ?portraits=turns variants",
+   "FFX-2 Special Eject rule",
+   "Dark Aeons link-4 guide anchor",
+   "full upgrade matrix",
+   "touch"
+  ]
+ },
+ "consoleErrors": 0,
+ "notFound": 0,
+ "elapsedMinutes": 35
+}

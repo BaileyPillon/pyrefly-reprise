@@ -10,6 +10,7 @@
  */
 
 import type { Ff7EquipmentDef } from '../../battle/common/types.ts';
+import { FF7_CH44_EQUIPMENT } from './equipment-ch44.ts';
 import type { Ff7EquipmentId, Ff7ItemId } from './ids.ts';
 
 /** gs §8.3 [verified: 2 sources]: Att 18, At% 96, Mag +2, slots O=O, Cut, melee (not Long Range, core §5.1). */
@@ -73,4 +74,5 @@ export const FF7_EQUIPMENT: Readonly<Record<string, Ff7EquipmentDef>> = {
   [GATLING_GUN.id]: GATLING_GUN,
   [BRONZE_BANGLE.id]: BRONZE_BANGLE,
   [ASSAULT_GUN.id]: ASSAULT_GUN,
+  ...FF7_CH44_EQUIPMENT, // chapter 44's party and drop (`./equipment-ch44.ts`)
 };

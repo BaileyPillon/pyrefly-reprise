@@ -1,0 +1,97 @@
+{
+ "out": [
+  {
+   "s": "word spherimorph settles on spherimorph",
+   "o": false
+  },
+  {
+   "s": "word spherimorph opens party-prep",
+   "o": true,
+   "d": "party-prep"
+  },
+  {
+   "s": "spherimorph reaches player turn",
+   "o": true
+  },
+  {
+   "s": "word youth settles on ffx2-youth-league",
+   "o": false
+  },
+  {
+   "s": "word youth opens party-prep",
+   "o": false,
+   "d": "cutscene"
+  },
+  {
+   "s": "youth reaches player turn",
+   "o": true
+  },
+  {
+   "s": "word weapon settles on omega-ruins",
+   "o": false
+  },
+  {
+   "s": "word weapon opens party-prep",
+   "o": true,
+   "d": "party-prep"
+  },
+  {
+   "s": "weapon reaches player turn",
+   "o": true
+  }
+ ],
+ "errs": [
+  "Failed to load resource: the server responded with a status of 404 ()",
+  "Failed to load resource: the server responded with a status of 404 ()"
+ ],
+ "nf": [
+  "https://echoesofspira.com/art/characters/x2-yaibal/idle.png",
+  "https://echoesofspira.com/art/characters/x2-yaibal/idle.png"
+ ],
+ "logs": [
+  "[rig] yuna off (no rig listed in the art manifest)",
+  "[rig] spherimorph off (no rig listed in the art manifest)",
+  "[rig] lulu on (gate ok, 11 parts, 25 bones, 13 keys, 1x maps)",
+  "[rig] yuna-white-mage off (no rig listed in the art manifest)",
+  "[rig] paine-dark-knight off (no rig listed in the art manifest)",
+  "[rig] x2-yaibal off (no rig listed in the art manifest)",
+  "[rig] x2-league-warrior off (no rig listed in the art manifest)",
+  "[rig] yuna off (no rig listed in the art manifest)",
+  "[rig] ultima-weapon off (no rig listed in the art manifest)",
+  "[rig] lulu on (gate ok, 11 parts, 25 bones, 13 keys, 1x maps)"
+ ],
+ "aud": [
+  "200 manifest.json",
+  "200 music/title.mp3",
+  "200 sfx/sprite.mp3",
+  "200 sfx/sprite-v2.mp3",
+  "200 music/chapter-select.mp3",
+  "200 voice/index.json",
+  "200 sfx/parity-ffx-core.mp3",
+  "200 music/scene-macalania-temple.mp3",
+  "200 music/boss-challenge.mp3",
+  "200 music/victory-ffx.mp3",
+  "200 music/defeat-ffx.mp3",
+  "200 manifest.json",
+  "200 music/title.mp3",
+  "200 sfx/sprite.mp3",
+  "200 sfx/sprite-v2.mp3",
+  "200 music/chapter-select.mp3",
+  "200 sfx/parity-ffx2-core.mp3",
+  "200 music/scene-bevelle-underground.mp3",
+  "200 music/boss-ffx2-fallen-aeons.mp3",
+  "200 music/victory-ffx2.mp3",
+  "200 music/defeat-ffx2.mp3",
+  "200 manifest.json",
+  "200 music/title.mp3",
+  "200 sfx/sprite.mp3",
+  "200 sfx/sprite-v2.mp3",
+  "200 music/chapter-select.mp3",
+  "200 voice/index.json",
+  "200 sfx/parity-ffx-core.mp3",
+  "200 music/scene-zanarkand-dome.mp3",
+  "200 music/boss-challenge.mp3",
+  "200 music/victory-ffx.mp3",
+  "200 music/defeat-ffx.mp3"
+ ]
+}

@@ -48,6 +48,8 @@ import { TOURIST_TRAP_BOSS_IDS, ffx2TouristTrap } from './ffx2-tourist-trap.ts';
 import { VALEFOR_BESAID_BOSS_IDS, ffx2ValeforBesaid } from './ffx2-valefor-besaid.ts';
 import { ANGRA_MAINYU_BOSS_IDS, ffx2AngraMainyu } from './ffx2-angra-mainyu.ts';
 import { YUNAS_BALLAD_BOSS_IDS, ffx2YunasBallad } from './ffx2-yunas-ballad.ts';
+import { YOUTH_LEAGUE_BOSS_IDS, ffx2YouthLeague } from './ffx2-youth-league.ts';
+import { IFRIT_KILIKA_BOSS_IDS, ffx2IfritKilika } from './ffx2-ifrit-kilika.ts';
 import { FALLEN_AEONS_BOSS_IDS, ffx2FallenAeons } from './ffx2-fallen-aeons.ts';
 import { SEYMOUR_OMNIS_BOSS_ID, seymourOmnis } from './seymour-omnis.ts';
 import { SEYMOUR_NATUS_BOSS_IDS, seymourNatus } from './seymour-natus.ts';
@@ -59,6 +61,9 @@ import { MIRROR_AEONS_BOSS_IDS, mirrorAeons } from './mirror-aeons.ts';
 import { DARK_AEONS_BOSS_IDS, darkAeons } from './dark-aeons.ts';
 import { LAST_SUMMONING_BOSS_IDS, lastSummoning } from './last-summoning.ts';
 import { SANCTUARY_KEEPER_BOSS_IDS, sanctuaryKeeper } from './sanctuary-keeper.ts';
+import { SPHERIMORPH_BOSS_IDS, spherimorph } from './spherimorph.ts';
+import { OMEGA_RUINS_BOSS_IDS, omegaRuins } from './omega-ruins.ts';
+import { WENDIGO_BOSS_IDS, wendigoLine } from './wendigo.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -95,6 +100,8 @@ export { ffx2TouristTrap, TOURIST_TRAP_BOSS_IDS } from './ffx2-tourist-trap.ts';
 export { ffx2ValeforBesaid, VALEFOR_BESAID_BOSS_IDS } from './ffx2-valefor-besaid.ts';
 export { ffx2AngraMainyu, ANGRA_MAINYU_BOSS_IDS } from './ffx2-angra-mainyu.ts';
 export { ffx2YunasBallad, YUNAS_BALLAD_BOSS_IDS } from './ffx2-yunas-ballad.ts';
+export { ffx2YouthLeague, YOUTH_LEAGUE_BOSS_IDS } from './ffx2-youth-league.ts';
+export { ffx2IfritKilika, IFRIT_KILIKA_BOSS_IDS } from './ffx2-ifrit-kilika.ts';
 export { ffx2FallenAeons, FALLEN_AEONS_BOSS_IDS } from './ffx2-fallen-aeons.ts';
 export { seymourOmnis, SEYMOUR_OMNIS_BOSS_ID } from './seymour-omnis.ts';
 export { seymourNatus, SEYMOUR_NATUS_ID, SEYMOUR_NATUS_BOSS_IDS } from './seymour-natus.ts';
@@ -106,6 +113,9 @@ export { mirrorAeons, MIRROR_AEONS_BOSS_IDS } from './mirror-aeons.ts'; // the h
 export { darkAeons, DARK_AEONS_BOSS_IDS } from './dark-aeons.ts'; // the hidden Dark Aeons chapter (FFX only, 2026-11-06)
 export { lastSummoning, LAST_SUMMONING_BOSS_IDS } from './last-summoning.ts'; // the hidden Last Summoning chapter (FFX only)
 export { sanctuaryKeeper, SANCTUARY_KEEPER_BOSS_IDS } from './sanctuary-keeper.ts'; // the hidden Sanctuary Keeper chapter (FFX only)
+export { spherimorph, SPHERIMORPH_BOSS_IDS } from './spherimorph.ts'; // the hidden Spherimorph chapter (FFX only)
+export { omegaRuins, OMEGA_RUINS_BOSS_IDS } from './omega-ruins.ts'; // the hidden Omega Ruins chapter (FFX only)
+export { wendigoLine, WENDIGO_BOSS_IDS } from './wendigo.ts'; // the hidden Wendigo chapter (FFX only)
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -177,6 +187,10 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...ANGRA_MAINYU_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-angra-mainyu', bossId, tactic: ffx2AngraMainyu })),
   // Yuna's Ballad (FFX-2 only, hidden chapter, 2026-11-06): the possessed Rikku, then the possessed Paine; the line is a Warrior Yuna who heals at half HP.
   ...YUNAS_BALLAD_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-yunas-ballad', bossId, tactic: ffx2YunasBallad })),
+  // The Youth League Tournament (FFX-2 only, hidden chapter, 2026-11-07): twenty fighters in seven acts, one tactic under all of them; the line is Darkness from both Dark Knights and Yuna healing and raising.
+  ...YOUTH_LEAGUE_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-youth-league', bossId, tactic: ffx2YouthLeague })),
+  // Ifrit at Kilika Temple (FFX-2 only, hidden chapter, 2026-11-07): the possessed fire aeon, one fighter; no Fire, Shell and Protect, Darkness and Breaks.
+  ...IFRIT_KILIKA_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-ifrit-kilika', bossId, tactic: ffx2IfritKilika })),
   // Chapter XII (FFX only, unlisted): Seymour Omnis alone finds it; the discs are his parts.
   { chapterId: 'seymour-omnis', bossId: SEYMOUR_OMNIS_BOSS_ID, tactic: seymourOmnis },
   // Chapter XIV (FFX only, listed 2026-09-25): his three aeons, one a link; Isaaru is an untargetable bystander.
@@ -192,6 +206,12 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...DARK_AEONS_BOSS_IDS.map((bossId) => ({ chapterId: 'dark-aeons', bossId, tactic: darkAeons })),
   // The hidden Sanctuary Keeper chapter (FFX only): the beast on the summit; the line is Poison, then Reflect, Shell before the breath (plain blows win 0 of 200).
   ...SANCTUARY_KEEPER_BOSS_IDS.map((bossId) => ({ chapterId: 'sanctuary-keeper', bossId, tactic: sanctuaryKeeper })),
+  // The hidden Spherimorph chapter (FFX only): the guardian of the spring; the line probes with a plain blow, reads the spell that answers and casts its opposite (a blind caster feeds it).
+  ...SPHERIMORPH_BOSS_IDS.map((bossId) => ({ chapterId: 'spherimorph', bossId, tactic: spherimorph })),
+  // The hidden Omega Ruins chapter (FFX only): Auto-Life on the line against Nemesis, never an Overdrive, a swing for the two Weapons (plain blows from Nemesis's side lose to nothing but its count).
+  ...OMEGA_RUINS_BOSS_IDS.map((bossId) => ({ chapterId: 'omega-ruins', bossId, tactic: omegaRuins })),
+  // The hidden Wendigo chapter (FFX only): the brute on the frozen lake; the line is a Petrify Grenade for the Guardians, Power Break and Dark Attack on Wendigo, Protect on the party, and no swing while its arms are up (plain blows win 0 of 100).
+  ...WENDIGO_BOSS_IDS.map((bossId) => ({ chapterId: 'wendigo', bossId, tactic: wendigoLine })),
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

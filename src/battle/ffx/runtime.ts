@@ -214,6 +214,11 @@ export interface FFXRuntime {
    * nothing while it is set; `engine-end.ts#afterAction` sets and clears it. Absent until first needed.
    */
   inReaction?: boolean;
+  /**
+   * True while the two casts of a Doublecast resolve (`doublecast.ts#resolveDoublecast`): the game's `isDoublecasting` property of the last attacker (property 313), which Spherimorph's script reads to ignore the first
+   * spell of a pair (`ai/spherimorph.ts`, `research/re-ffx-spherimorph.md` 4.3). **FFX only**, additive, read by that one script; absent until a Doublecast resolves.
+   */
+  doublecasting?: boolean;
   /** `state.nextSeq` when Yunalesca last changed form: a Doublecast whose first cast did it cancels the second (row Y6). */
   formDiedAtSeq?: number;
   /**

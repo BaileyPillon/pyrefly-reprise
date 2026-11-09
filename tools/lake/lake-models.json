@@ -1,0 +1,125 @@
+{
+ "what": "The hidden Wendigo chapter's models (public/models-exp/lake, gitignored): name, size and sha256 only. tools/lake-models.mjs verifies, backs up and restores them.",
+ "files": [
+  {
+   "path": "auron.glb",
+   "bytes": 7324556,
+   "sha256": "957abb8ca0dd4c721ac1ca1a0b0506910941ecae1ba72bb84e2a85e7d8a922c1"
+  },
+  {
+   "path": "guardian.glb",
+   "bytes": 9704364,
+   "sha256": "fd17b4de11215318eda287703bc8c933fc748de6dd22e5ed92784cdd986b53ff"
+  },
+  {
+   "path": "guardianb.glb",
+   "bytes": 10048900,
+   "sha256": "27fedc13c053072578b669cc1da44c7e31bcaedc53c44785636bfe4e71e378a5"
+  },
+  {
+   "path": "kimahri.glb",
+   "bytes": 8690328,
+   "sha256": "9f0bd5d87e5fe06a650798479d9fa85b1f5398033428fc76397c4828fa9129de"
+  },
+  {
+   "path": "lulu.glb",
+   "bytes": 8032444,
+   "sha256": "afa872cac5fa5e4f0a7dcdbc6eaba5fbc0d753e6ab4c0beff779c2b35071c3f9"
+  },
+  {
+   "path": "props/crystals.glb",
+   "bytes": 4651460,
+   "sha256": "6820184365592a29ff09111c18d3ebf56e0eb46fb080e77ee71b2d59e3bc631e"
+  },
+  {
+   "path": "props/drift.glb",
+   "bytes": 1865152,
+   "sha256": "6542e29b4a12f744e159942162145902f70ba46c5ed429c448083b8efb6b2f45"
+  },
+  {
+   "path": "props/reeds.glb",
+   "bytes": 3508356,
+   "sha256": "167975ac72e01b9f93dee73535afd816cdc8a1dfb52f2d34c6aac377bbf22511"
+  },
+  {
+   "path": "props/slabs.glb",
+   "bytes": 2982432,
+   "sha256": "72039adfce31c52bf37f1604f2210fc57e34e8a9596fe0b2033941dcb13c68c5"
+  },
+  {
+   "path": "props/temple.glb",
+   "bytes": 5967076,
+   "sha256": "c994524e8964c450c70ecd2511e74c08bc0a9892d1bc90ee3af84a01c47b01e4"
+  },
+  {
+   "path": "rikku.glb",
+   "bytes": 11780696,
+   "sha256": "0578c6aa14c0f15291fb7e4facf7bf7c5fc3c0448f67a12c64e72cff5dd93758"
+  },
+  {
+   "path": "tidus.glb",
+   "bytes": 9971500,
+   "sha256": "a521be04cfad00464a8d0887a85af6b0ebc3687beb8f3e1903959adbde812b77"
+  },
+  {
+   "path": "wakka.glb",
+   "bytes": 8354736,
+   "sha256": "2de2b15e6a2bc1109fa86773f51ca224fc2a67063d5c444911077da8c9019288"
+  },
+  {
+   "path": "weapons/ball.glb",
+   "bytes": 1868720,
+   "sha256": "f64e3e02f2e1b790cbeb48c4473014674bb4e4c47ecf2ed416c7b87cf99b1f3e"
+  },
+  {
+   "path": "weapons/brotherhood.glb",
+   "bytes": 2357588,
+   "sha256": "b14606bcbecb5083df5b9cd52a7d26f327e34fd023e301686f1b156e95f35c9c"
+  },
+  {
+   "path": "weapons/claw.glb",
+   "bytes": 2549536,
+   "sha256": "d23317f8c987949652a45d983c9223cbfb686708d2526aa7bbfe18dcf8747374"
+  },
+  {
+   "path": "weapons/doll.glb",
+   "bytes": 1292340,
+   "sha256": "223a4df6f9221458c20ada0a30d8de8dcd71ce7507ba711446ec939ca21cf657"
+  },
+  {
+   "path": "weapons/gclaw.glb",
+   "bytes": 2206696,
+   "sha256": "cfb53eb68d396f81238e9daef00ee0ee17762132352a63a8fd20b0075a11e2e4"
+  },
+  {
+   "path": "weapons/jug.glb",
+   "bytes": 1381844,
+   "sha256": "80180baba5a99e6827bd82bb79fe7bf7e7a03454509c8f4e6ed52bb73a10eb72"
+  },
+  {
+   "path": "weapons/katana.glb",
+   "bytes": 2199944,
+   "sha256": "beb8ce73aeb6560c2b8dc412282104f530055cc900d2ef8ac17846aaa7e444c7"
+  },
+  {
+   "path": "weapons/lance.glb",
+   "bytes": 1668160,
+   "sha256": "0301a5a32bf98798639b647864775837a5982a3a5e2702f63d40b080a4453fb1"
+  },
+  {
+   "path": "weapons/staff.glb",
+   "bytes": 1962332,
+   "sha256": "30ee173cb5311f152084d8e09ab9dd3ee84d0e072d2155d4e7f989f81ef6121a"
+  },
+  {
+   "path": "wendigo.glb",
+   "bytes": 13869580,
+   "sha256": "977bddfb9ece39896cb863e2b4d9a20a3475897db5b59cb39645257b6c87658e"
+  },
+  {
+   "path": "yuna.glb",
+   "bytes": 9815548,
+   "sha256": "734a334f572603340b6728cc275f0ca7255c3fefb104fb3d7bc9d81bd2bda208"
+  }
+ ]
+}

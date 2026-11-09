@@ -1,0 +1,74 @@
+{
+ "tag": "mirror-aeons",
+ "how": "sel:mirror-aeons",
+ "W": "1600",
+ "H": "900",
+ "hp": "",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-BAH_qvc7.js"
+  },
+  {
+   "s": "selected",
+   "id": "mirror-aeons"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 9731
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "real-attack"
+  },
+  {
+   "s": "battle-ended",
+   "screen": "pro-defeat",
+   "ms": 139140
+  },
+  {
+   "s": "at",
+   "screen": "battle",
+   "ms": 120587
+  },
+  {
+   "s": "early",
+   "finals": [],
+   "text": "Dark Sandy Lulu Yuna KO Tidus 0 999 Yuna 4999 999 Lulu 5625 999 I DARK MINDY G GUIDE Dark Mindy Enter Select G Intel Q Defend P Pause 6660 E ENEMY MOVE VICTORY THE PARTY HAS FALLEN"
+  },
+  {
+   "s": "settled",
+   "finals": [],
+   "text": "Lulu Yuna Lulu ATTACK SPECIAL ×3 BLACK MAGIC ×15 ITEMS ×14 ESCAPE ▼ Tidus 4999 /9999 999 /999 OVERDRIVE Yuna 4999 /9999 999 /999 OD Lulu 5625 /9999 999 /999 OD I DARK MINDY G GUIDE NEXT BEST MOVE Lulu Ultima → all enemies IN BLACK MAGIC 152,660–164,764 2 HITS 2 MP ALWAYS HITS Magic damage to all enemies Most damage on the board — 161181 to Dark Mindy. N HIDE MOVES Dark Mindy Lulu Ultima → all enemies · 2 MP Enter Select G Intel Q Defend P Pause E ENEMY MOVE VICTORY THE PARTY HAS FALLEN"
+  },
+  {
+   "s": "final-vs-shown-mismatch",
+   "count": 0,
+   "mism": []
+  },
+  {
+   "s": "bar-within-cap",
+   "ok": true
+  },
+  {
+   "s": "after-confirm",
+   "screen": "battle"
+  }
+ ],
+ "early": {
+  "finals": [],
+  "text": "Dark Sandy Lulu Yuna KO Tidus 0 999 Yuna 4999 999 Lulu 5625 999 I DARK MINDY G GUIDE Dark Mindy Enter Select G Intel Q Defend P Pause 6660 E ENEMY MOVE VICTORY THE PARTY HAS FALLEN"
+ },
+ "settled": {
+  "finals": [],
+  "text": "Lulu Yuna Lulu ATTACK SPECIAL ×3 BLACK MAGIC ×15 ITEMS ×14 ESCAPE ▼ Tidus 4999 /9999 999 /999 OVERDRIVE Yuna 4999 /9999 999 /999 OD Lulu 5625 /9999 999 /999 OD I DARK MINDY G GUIDE NEXT BEST MOVE Lulu Ultima → all enemies IN BLACK MAGIC 152,660–164,764 2 HITS 2 MP ALWAYS HITS Magic damage to all enemies Most damage on the board — 161181 to Dark Mindy. N HIDE MOVES Dark Mindy Lulu Ultima → all enemies · 2 MP Enter Select G Intel Q Defend P Pause E ENEMY MOVE VICTORY THE PARTY HAS FALLEN"
+ },
+ "noBadBar": true,
+ "consoleErrors": [],
+ "notFound": []
+}

@@ -41,7 +41,7 @@ const allChapters = [...CHAPTERS, ...EXPERIMENT_CHAPTERS];
 describe('which chapters ask for voice', () => {
   it('covers the eighteen chapters, the experimental one, and both games', () => {
     expect(allChapters.length).toBeGreaterThanOrEqual(19);
-    expect(new Set(allChapters.map((c) => c.game))).toEqual(new Set(['ffx', 'ffx2']));
+    expect(new Set(allChapters.map((c) => c.game))).toEqual(new Set(['ffx', 'ffx2', 'ff7'])); // the hidden Jenova LIFE chapter (2026-11-07) is FF7's; an FF7 chapter requests no voice file, as an FFX-2 one does not
   });
 
   it.each(allChapters.map((c) => [c.id, c.game] as const))('%s (%s) asks for exactly what its game allows', async (id, game) => {

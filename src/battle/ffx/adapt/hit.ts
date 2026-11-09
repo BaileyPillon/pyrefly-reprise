@@ -25,7 +25,7 @@ import type { ScaleOverride } from '../kernel/modifiers.ts';
 import { equipmentCrit, hasAuto, weaponElements } from '../equipment.ts';
 import { stacks } from '../predicates.ts';
 import { affinityLabel } from './affinity.ts';
-import { DEFAULT_ATTACK_COMMAND, accuracyByteOf, resolveCommand, type ResolvedCommand } from './command.ts';
+import { accuracyByteOf, defaultAttackIdOf, resolveCommand, type ResolvedCommand } from './command.ts';
 import type { HitDraws } from './draws.ts';
 import {
   affinityMasks,
@@ -192,7 +192,7 @@ export function hitInputOf(req: HitRequest, command: ResolvedCommand): HitInput 
       autoA: autoWordA(u),
       autoB: autoWordB(u),
       buffFlags: buffFlags(u),
-      defaultAttack: DEFAULT_ATTACK_COMMAND,
+      defaultAttack: defaultAttackIdOf(actor), // the user's own default attack: the party's Attack, or a monster's recorded plain Attack when that is its forced action
       currentCommand: command.currentCommand,
       // Only command 0x311f (the game's own Auto-Life revival) consumes it, and no ability of ours is that record.
       bonusFlag: 0,

@@ -284,8 +284,9 @@ describe('every hit record of a real action runs the gauge hooks in the game\'s 
     }
     for (const f of FLAVORS) {
       const tl = tally[f]!;
-      expect(tl.run, `${f} ran`).toBeGreaterThan(100);
-      expect(tl.skipped, `${f} skipped by a KO`).toBeLessThan(100);
+      // The floor is a coverage floor of the sample (200 draws a flavor), not a claim of the engine: it was 100 until the hidden Spherimorph's and the Omega Ruins' rows joined the enemy move pool (2026-11-06), whose Nova, Ultima, Armageddon and Press kill the aeon more often, so the seeded draw leaves 93 of 200 enemy-hits-aeon situations standing and ends 107 in a KO. Every situation that runs still has to equal the kernels, to the gauge.
+      expect(tl.run, `${f} ran`).toBeGreaterThan(80);
+      expect(tl.skipped, `${f} skipped by a KO`).toBeLessThan(120); // the other side of the same floor (it was 100: 107 of 200 enemy-hits-aeon draws end in a KO now)
     }
     // The sample reached the gains: a hit taken, a hit dealt, a heal and an aeon's gains all moved a gauge in many situations.
     expect(tally['party-hits-enemy']!.moved).toBeGreaterThan(10);

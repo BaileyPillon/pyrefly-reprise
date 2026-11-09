@@ -324,6 +324,7 @@ export class ResultsScreen extends Screen {
       choice: this.choice,
       actionIndex: this.actionIndex,
       members: this.rows.map((r) => r.id),
+      paid: { ap: this.opts.result.ap, exp: this.opts.result.exp, gil: this.opts.result.gil, countProgress: this.countProgress() }, // R77-1: what the fight paid, and how far the rolling counts on the page are (the page's own text is mid-roll for the first seconds)
     };
   }
 

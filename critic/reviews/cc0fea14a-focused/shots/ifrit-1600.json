@@ -1,0 +1,113 @@
+{
+ "word": "ifrit",
+ "expectId": "ffx2-ifrit-kilika",
+ "W": "1600",
+ "H": "900",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-BAH_qvc7.js"
+  },
+  {
+   "s": "after-word",
+   "opened": true,
+   "screen": "party-prep",
+   "state": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":405,\"elapsed\":6.915,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-undergro"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 13991
+  },
+  {
+   "s": "chapter-id",
+   "idNow": null
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "rows",
+   "stackPresent": true,
+   "rows": [
+    {
+     "i": 0,
+     "text": "White Magic",
+     "selected": true,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 1,
+     "text": "Change",
+     "selected": false,
+     "disabled": false,
+     "overdrive": true,
+     "w": 337,
+     "h": 58
+    },
+    {
+     "i": 2,
+     "text": "Item",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 337,
+     "h": 58
+    }
+   ]
+  },
+  {
+   "s": "after-turns",
+   "screen": "battle"
+  },
+  {
+   "s": "end",
+   "screen": "results",
+   "ms": 58677
+  },
+  {
+   "s": "end-text",
+   "text": "KILIKA TEMPLE — CHAMBER OF THE FAYTH · CLEARED RESULTS · 1:22 Victory EXP 1,800 ×3 PARTY AP 15 PER DRESSPHERE GIL 1,300 ITEMS Angel Earrings Y Yuna WHITE MAGE · CURAGA 55/80 AP +1,800EXP R Rikku DARK KNIGHT · CONFUSE 30/30 AP +1,800EXP P Paine WARRIOR · FLAMETONGUE 20/20 AP +1,800EXP CONFIRM ▸"
+  }
+ ],
+ "rows": {
+  "stackPresent": true,
+  "rows": [
+   {
+    "i": 0,
+    "text": "White Magic",
+    "selected": true,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 1,
+    "text": "Change",
+    "selected": false,
+    "disabled": false,
+    "overdrive": true,
+    "w": 337,
+    "h": 58
+   },
+   {
+    "i": 2,
+    "text": "Item",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 337,
+    "h": 58
+   }
+  ]
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": []
+}

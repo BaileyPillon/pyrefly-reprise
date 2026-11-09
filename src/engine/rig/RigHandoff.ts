@@ -13,6 +13,10 @@
  * idle once the strike is over, so the key move starts from a finished slide. Any other request cancels a held idle. A figure with no `ko` key (a dressphere falls straight to idle) is left alone.
  *
  * Presentation only: no engine state, no RNG, no timing the presenter waits on (the key move is the same 140 or 150 ms, only started later).
+ *
+ * **Not for a figure drawn by pose (rigs-v3, 2026-10-29).** The hold is for a boss, whose body is one painting bent and whose key move overlays the slide home. A party rig whose keys are the pose paintings' pieces
+ * (`RigActor.poseDrawnParty`) takes the painting set as its model: the painting set changes to the idle painting at the action's end while the figure is still sliding home, and the held return came 0.3 s later
+ * (the clips of 2026-10-29: Rikku's follow key lasted 36 frames in the rig run and 18 in the painting run). Such a figure gets its idle key at the action's end, as it was asked for; the KO half is unchanged.
  */
 import { moveWord } from '../motion/MoveSwitch.ts';
 
@@ -27,6 +31,8 @@ export interface RigLike {
   fallGain: number;
   landFall(): void;
   readonly rigKeys: ReadonlySet<string>;
+  /** True for a party rig drawn by pose (`RigActor`): its idle request is not held (see the header). Absent on a fake: false. */
+  readonly poseDrawnParty?: boolean;
   /** The life layer's half of `setPose` (the pose request without the key move): `PaintedActor`'s. */
   poseLife(name: string, opts?: { immediate?: boolean; force?: boolean }): void;
 }
@@ -45,7 +51,7 @@ export function attachRigHandoff(actor: RigLike): void {
   actor.setPose = (name, opts) => {
     held = null; // any request ends a held idle
     if (rigKoWhole()) {
-      if (name === 'idle' && actor.striking && !opts?.immediate) {
+      if (name === 'idle' && actor.striking && !opts?.immediate && actor.poseDrawnParty !== true) {
         actor.poseLife(name, opts); // the life layer goes to idle now; the key waits for the strike to finish
         held = { opts };
         return;

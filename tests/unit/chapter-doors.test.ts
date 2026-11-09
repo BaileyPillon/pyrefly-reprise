@@ -61,8 +61,8 @@ describe('the table', () => {
     }
     for (const id of LISTED_DOOR_CHAPTERS) expect((CHAPTER_IDS as readonly string[]).includes(id), id).toBe(true);
     expect(CHAPTER_DOORS.filter((d) => d.secret === true).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion']);
-    // Four gated rows: FF7's switch, and (driver decision 219q, 2026-11-03; FFX-2 only) the three hidden 3D chapters, desktop-only (`tests/unit/r74-hidden-3d-phone-doors.test.ts`; the anime chapter, 2026-11-06, is the third)
-    expect(CHAPTER_DOORS.filter((d) => d.gate !== undefined).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion', 'exp-yrp-3d', 'exp-windwaker', 'exp-anime']);
+    // Six gated rows: FF7's switch (the Guard Scorpion's secret door, and the Jenova LIFE chapter's typed word, 2026-11-07), the Meshy Wendigo chapter's desktop-only word (FFX, 2026-11-06), and (driver decision 219q, 2026-11-03; FFX-2 only) the three hidden 3D chapters, desktop-only (`tests/unit/r74-hidden-3d-phone-doors.test.ts`; the anime chapter, 2026-11-06, is the third)
+    expect(CHAPTER_DOORS.filter((d) => d.gate !== undefined).map((d) => d.chapter)).toEqual(['ff7-guard-scorpion', 'exp-yrp-3d', 'exp-windwaker', 'exp-anime', 'ff7-jenova-life', 'wendigo']);
     for (const d of CHAPTER_DOORS.filter((x) => x.secret !== true && x.chapter !== 'mirror-aeons')) expect(getChapter(d.chapter), d.chapter).toMatchObject({ experimental: true });
     expect(getChapter('mirror-aeons')?.experimental).toBeUndefined();
   });
@@ -116,14 +116,15 @@ describe('BoardDoors feeds the table', () => {
     expect(['l1', 'r1', 'left', 'l1', 'r1', 'select'].map((b, i) => broken.feedButton(b, i * 100))).not.toContain('ff7-guard-scorpion');
   });
 
-  it('the gate shuts FF7\'s chapter alone: with the switch off isOpen is false for it and true for every other door', () => {
+  it('the gate shuts FF7\'s two chapters alone: with the switch off isOpen is false for them and true for every other door', () => {
     const doors = new BoardDoors();
+    const FF7_CHAPTERS = ['ff7-guard-scorpion', 'ff7-jenova-life'];
     try {
       setFf7ExperimentReadyForTests(false);
-      expect(doors.isOpen('ff7-guard-scorpion')).toBe(false);
-      for (const d of CHAPTER_DOORS.filter((x) => x.secret !== true)) expect(doors.isOpen(d.chapter), d.chapter).toBe(true);
+      for (const id of FF7_CHAPTERS) expect(doors.isOpen(id as never), id).toBe(false);
+      for (const d of CHAPTER_DOORS.filter((x) => !FF7_CHAPTERS.includes(x.chapter))) expect(doors.isOpen(d.chapter), d.chapter).toBe(true);
       setFf7ExperimentReadyForTests(true);
-      expect(doors.isOpen('ff7-guard-scorpion')).toBe(true);
+      for (const id of FF7_CHAPTERS) expect(doors.isOpen(id as never), id).toBe(true);
     } finally {
       setFf7ExperimentReadyForTests(null);
     }

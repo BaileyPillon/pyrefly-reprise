@@ -11,6 +11,7 @@ import { PRO_FLOWER_SVG, PRO_HAND_SVG } from '../../src/ui/common/proMarkerArt.t
 import { PartyStatusWindow } from '../../src/ui/ffx/PartyStatusWindow.ts';
 import { FfxTargetPlate } from '../../src/ui/ffx/targetPlateFfx.ts';
 import { TargetCursor, type TargetEntry } from '../../src/ui/ffx/TargetCursor.ts';
+import { CONE_SVG, setMarkerStyle } from '../../src/ui/ffx/targetCone.ts';
 
 /**
  * The review fixes of lane "pro-look" (adversarial review of 165bfd50d, 2026-10-23): M1 (the KO wash and mark hold under an open FFX-2 command menu, D-357), M2 (the redrawn glove and ring, the flag that
@@ -31,6 +32,7 @@ afterEach(() => {
   setProPiece(null);
   setDemoChapter(undefined);
   setMenuHold(null);
+  setMarkerStyle(null);
 });
 
 const state = (alive: Record<string, boolean>): BattleState =>
@@ -157,7 +159,7 @@ describe('M2: the flag, the redrawn drawings and the plates that stand aside', (
     expect(proHelpLine('A very long description of an unusually wordy command goes here').length).toBeLessThanOrEqual(30);
   });
 
-  it('on: the flag reads TARGET, the name and the damage line, in both games; the pro drawings are the ones drawn', () => {
+  it('on: the flag reads TARGET, the name and the damage line, in both games; the pro drawings are the ones drawn (FFX: the cone since 2026-11-07, the glove with ?marker=hand)', () => {
     setProMode('pro');
     setDemoChapter('seymour-flux');
     const f = cursor('ffx');
@@ -167,9 +169,15 @@ describe('M2: the flag, the redrawn drawings and the plates that stand aside', (
     expect(plate.querySelector('.ffx-target__lbl')!.textContent).toBe('TARGET');
     expect(plate.querySelector('.ffx-target__line .ffx-target__name')!.textContent).toBe('Seymour Flux');
     expect(plate.querySelector('.ffx-target__help')!.textContent).toBe('PHYSICAL DAMAGE');
-    expect(f.el.querySelector('.ffx-target__hand svg')!.classList.contains('pro-glove')).toBe(true);
+    expect(f.el.querySelector('.ffx-target__hand svg')!.classList.contains('ffx-cone')).toBe(true); // the default FFX marker: the cone
+    expect(f.el.querySelector('.ffx-target__hand svg')!.classList.contains('pro-glove')).toBe(false);
     f.setHelpLine('Fire damage · Hits one enemy'); // the help arrives after the cursor opens: the flag is drawn again
     expect(f.el.querySelector('.ffx-target__help')!.textContent).toBe('FIRE DAMAGE');
+    setMarkerStyle('hand'); // `?marker=hand`: the glove comes back, redrawn at the next draw
+    f.reposition();
+    expect(f.el.querySelector('.ffx-target__hand svg')!.classList.contains('pro-glove')).toBe(true);
+    expect(f.el.querySelector('.ffx-target__hand--cone')).toBeNull();
+    setMarkerStyle(null);
 
     setDemoChapter('ffx2-bahamut');
     const x = cursor('ffx2');
@@ -188,6 +196,7 @@ describe('M2: the flag, the redrawn drawings and the plates that stand aside', (
     expect(plate.querySelector('.ffx-target__lbl')).toBeNull();
     expect(plate.querySelector('.ffx-target__help')).toBeNull();
     expect(f.el.querySelector('.ffx-target__hand svg')!.classList.contains('pro-glove')).toBe(false);
+    expect(f.el.querySelector('.ffx-target__hand svg')!.classList.contains('ffx-cone')).toBe(true); // the cone replaces today's glove (2026-11-07); `?marker=hand` keeps the old one (pro-look-markers.test.ts)
     const x = cursor('ffx2');
     x.showSingle([ENTRY]);
     expect(x.el.querySelector('.ffx-target__flower svg')!.classList.contains('pro-ring')).toBe(false);
@@ -212,6 +221,9 @@ describe('M2: the flag, the redrawn drawings and the plates that stand aside', (
     expect(PRO_FLOWER_SVG).toContain('viewBox="0 0 100 100"');
     expect((PRO_FLOWER_SVG.match(/<path /g) ?? []).length).toBe(12); // six petals, each an ink under-stroke and a light edge
     expect(PRO_FLOWER_SVG).toContain('rgba(8,4,22,0.46)'); // the dark backing disc
+    expect(CONE_SVG).toContain('viewBox="0 0 128 70"'); // FFX's cone (2026-11-07): ivory body, gold rim, gold collar, red jewel
+    expect(CONE_SVG).toContain('ffxConeGold');
+    expect(CONE_SVG).toContain('ffxConeJewel');
   });
 });
 
@@ -231,6 +243,16 @@ describe("M4 and m3: the game's own settings reach the new motion (the styleshee
     expect(css).toContain('html[data-reduce-motion] .ffx-targeting--pro .ffx-target__hand');
     expect(css).toContain('html[data-low-effects] .ffx-targeting--pro .ffx-target__flower');
     expect(numbers).toContain('html[data-reduce-motion] .dnum-glint, html[data-low-effects] .dnum-glint, html[data-reduce-flashes] .dnum-glint');
+  });
+
+  it("the cone's bob stops under the OS preference, REDUCE MOTION and LOW EFFECTS (its own rules, so the pro glove's rule cannot leave it moving)", () => {
+    const cone = readFileSync('src/ui/ffx/target-cone.css', 'utf8');
+    expect(cone).toContain('prefers-reduced-motion: reduce');
+    expect(cone).toContain('html[data-reduce-motion] .ffx-targeting .ffx-target__hand--cone');
+    expect(cone).toContain('html[data-low-effects] .ffx-targeting .ffx-target__hand--cone');
+    expect(cone).toMatch(/\.ffx-targeting \.ffx-target__hand--cone, \.ffx-targeting \.ffx-target__hand\.ffx-target__hand--flip \{ animation: none; \}/);
+    expect(cone).toContain('html[data-reduce-motion] .ffx-targeting .ffx-target__hand.ffx-target__hand--flip'); // the flipped cone's bob stops too (its own rule is more specific than the plain cone's)
+    expect(cone).not.toMatch(/border-width|[^-]border:/); // the guard of ui-target-css.test.ts: no shorthand on a bracket
   });
 
   it("the pulse and FFX's own hurt flash run together on one row (the flash used to outrank the glow)", () => {

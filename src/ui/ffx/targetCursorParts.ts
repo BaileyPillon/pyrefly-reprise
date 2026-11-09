@@ -168,6 +168,9 @@ const HAND_BOB = 6;
  * (r37-ui-floor, third attempt, phone Chapter I target step: the plate docked left of a high enemy, the hand was
  * under it and the player saw no hand).
  */
-export function handBox(rect: TargetRect, gap: number, size: { w: number; h: number } = { w: HAND_W, h: HAND_H }): TargetRect {
-  return { x: rect.x - gap - size.w, y: rect.y + rect.h * 0.55 - size.h / 2, w: size.w + HAND_BOB, h: size.h };
+export function handBox(rect: TargetRect, gap: number, size: { w: number; h: number } = { w: HAND_W, h: HAND_H }, side: 'left' | 'right' = 'left'): TargetRect {
+  const y = rect.y + rect.h * 0.55 - size.h / 2;
+  // `right` (2026-11-07, the cone only: `targetCone.coneFlips`): the marker docked on the figure's right, tip pointing left, its bob carrying it back towards the figure
+  if (side === 'right') return { x: rect.x + rect.w + gap - HAND_BOB, y, w: size.w + HAND_BOB, h: size.h };
+  return { x: rect.x - gap - size.w, y, w: size.w + HAND_BOB, h: size.h };
 }

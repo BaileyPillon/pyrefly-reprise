@@ -97,9 +97,15 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   // The hidden Farplane Cup's thirty-three rows (Auron's seven, Tidus's eight, Seymour's eighteen: monmagic 0x4000 to 0x4221, the party rows 0x3070 to 0x30bc and 0x3177, the item rows 0x2002, 0x2003, 0x2038 and 0x203f) are the RE note's, pinned
   // against their own numbers-only fixture (tests/fixtures/parity/ffx2/farplane_cup_rows.json, tests/unit/chapters/farplane-cup-data.test.ts).
   if (label.startsWith('x2-auron-') || label.startsWith('x2-tidus-') || label.startsWith('x2-seymour-')) return;
+  // The hidden Youth League Tournament's thirty-three rows (Yaibal's three, Lucil's ten, Elma's six, the League's fourteen: monmagic 0x4000 to 0x41f0, the party rows 0x3082 and 0x30b8, the item rows 0x2001 to 0x2032) are the RE note's, pinned
+  // against their own numbers-only fixture (tests/fixtures/parity/ffx2/youth_league_rows.json, tests/unit/chapters/youth-league-data.test.ts).
+  if (label.startsWith('x2-yaibal-') || label.startsWith('x2-lucil-') || label.startsWith('x2-elma-') || label.startsWith('x2-league-')) return;
   // The hidden Yuna's Ballad's seven rows (the possessed Rikku's Spider Attack 0x40c7 and five throws 0x2011, 0x201a, 0x201d, 0x2020, 0x2023, the possessed Paine's Attack 0x41da) are the RE note's, pinned against their own
   // numbers-only fixture (tests/fixtures/parity/ffx2/yunas_ballad_rows.json, tests/unit/chapters/yunas-ballad-data.test.ts).
   if (label.startsWith('x2-possessed-')) return;
+  // The hidden Ifrit at Kilika Temple's four rows (Hellfire 0x4094, Meteor Strike 0x4095, Firaga 0x41f1, Time Up Meteor 0x4236) are the RE note's, pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/ifrit_kilika_rows.json,
+  // tests/unit/chapters/ifrit-kilika-data.test.ts).
+  if (label.startsWith('x2-ifrit-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();
   if (!row) return;

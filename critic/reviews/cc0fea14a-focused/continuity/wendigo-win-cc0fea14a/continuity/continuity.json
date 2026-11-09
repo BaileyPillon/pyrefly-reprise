@@ -1,0 +1,25 @@
+{
+ "schema": "continuity/1",
+ "chapter": "wendigo",
+ "game": "ffx",
+ "base": "http://127.0.0.1:5471/",
+ "mode": "gpu",
+ "unverified": [
+  "the probe saw no battle (15265 frames, 8 figures): no battle screen with its field shown"
+ ],
+ "summary": null,
+ "checks": {
+  "CHK-026": {
+   "result": "UNVERIFIED",
+   "reasons": [
+    "the probe saw no battle (15265 frames, 8 figures): no battle screen with its field shown"
+   ]
+  },
+  "CHK-027": {
+   "result": "UNVERIFIED",
+   "reasons": [
+    "the probe saw no battle (15265 frames, 8 figures): no battle screen with its field shown"
+   ]
+  }
+ }
+}

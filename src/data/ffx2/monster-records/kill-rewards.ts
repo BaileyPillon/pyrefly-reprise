@@ -87,4 +87,28 @@ export const KILL_REWARD_ROWS: Readonly<Record<string, FFX2KillReward>> = {
   // accessory table); Rikku's Black Lore (0x9066) has none, so its slots are 0 (rule 6).
   "ffx2-den-of-woe-possessed-rikku/x2-possessed-rikku": row(1, 254, 800, 3, 200, 255, [0x0000, 0, 0x0000, 0]), // Rikku
   "ffx2-den-of-woe-possessed-paine/x2-possessed-paine": row(1, 256, 800, 3, 200, 255, [0x901a, 1, 0x901a, 1]), // Paine
+  // The hidden Youth League Tournament (the seven fights of Mushroom Rock Road, Chapter 5; RE note re-ffx2-youth-league-tournament §3): EXP, Gil, AP, the drop byte and both item slots are the rows' own (Muscle Belt, Circlet,
+  // Chocobo Feather, Hi-Potion, Grenade, Ether and Phoenix Down). A fighter of one type wears the same row in every act it stands in, so the keys repeat a row.
+  "ffx2-youth-league-1-yaibal/x2-yl-yaibal": row(1, 183, 500, 1, 100, 255, [0x9018, 1, 0x9018, 1]), // Yaibal
+  "ffx2-youth-league-1-yaibal/x2-yl-warrior-1a": row(1, 210, 70, 1, 120, 128, [0x2001, 1, 0x2011, 2]), // League Warrior
+  "ffx2-youth-league-1-yaibal/x2-yl-warrior-1b": row(1, 210, 70, 1, 120, 128, [0x2001, 1, 0x2011, 2]), // League Warrior
+  "ffx2-youth-league-2-mages/x2-yl-mage-2a": row(1, 214, 70, 1, 130, 128, [0x2001, 1, 0x2006, 1]), // League Mage
+  "ffx2-youth-league-2-mages/x2-yl-mage-2b": row(1, 214, 70, 1, 130, 128, [0x2001, 1, 0x2006, 1]), // League Mage
+  "ffx2-youth-league-2-mages/x2-yl-veteran-2": row(1, 211, 160, 1, 100, 128, [0x2001, 1, 0x2001, 2]), // League Veteran
+  "ffx2-youth-league-3-veterans/x2-yl-warrior-3": row(1, 210, 70, 1, 120, 128, [0x2001, 1, 0x2011, 2]), // League Warrior
+  "ffx2-youth-league-3-veterans/x2-yl-veteran-3a": row(1, 211, 160, 1, 100, 128, [0x2001, 1, 0x2001, 2]), // League Veteran
+  "ffx2-youth-league-3-veterans/x2-yl-veteran-3b": row(1, 211, 160, 1, 100, 128, [0x2001, 1, 0x2001, 2]), // League Veteran
+  "ffx2-youth-league-4-slashers/x2-yl-slasher-4a": row(1, 193, 160, 1, 140, 128, [0x2001, 1, 0x2001, 2]), // League Slasher
+  "ffx2-youth-league-4-slashers/x2-yl-slasher-4b": row(1, 193, 160, 1, 140, 128, [0x2001, 1, 0x2001, 2]), // League Slasher
+  "ffx2-youth-league-4-slashers/x2-yl-master-4": row(1, 215, 160, 1, 140, 64, [0x2004, 1, 0x2004, 1]), // League Master
+  "ffx2-youth-league-5-four-veterans/x2-yl-veteran-5a": row(1, 211, 160, 1, 100, 128, [0x2001, 1, 0x2001, 2]), // League Veteran
+  "ffx2-youth-league-5-four-veterans/x2-yl-veteran-5b": row(1, 211, 160, 1, 100, 128, [0x2001, 1, 0x2001, 2]), // League Veteran
+  "ffx2-youth-league-5-four-veterans/x2-yl-veteran-5c": row(1, 211, 160, 1, 100, 128, [0x2001, 1, 0x2001, 2]), // League Veteran
+  "ffx2-youth-league-5-four-veterans/x2-yl-veteran-5d": row(1, 211, 160, 1, 100, 128, [0x2001, 1, 0x2001, 2]), // League Veteran
+  "ffx2-youth-league-6-elma/x2-yl-elma": row(1, 279, 1800, 2, 500, 255, [0x202f, 2, 0x202f, 3]), // Elma
+  "ffx2-youth-league-6-elma/x2-yl-veteran-6a": row(1, 211, 160, 1, 100, 128, [0x2001, 1, 0x2001, 2]), // League Veteran
+  "ffx2-youth-league-6-elma/x2-yl-veteran-6b": row(1, 211, 160, 1, 100, 128, [0x2001, 1, 0x2001, 2]), // League Veteran
+  "ffx2-youth-league-7-lucil/x2-yl-lucil": row(1, 184, 800, 2, 220, 255, [0x901c, 1, 0x901c, 1]), // Lucil
+  // The hidden Ifrit at Kilika Temple (Chapter 3, "Pest Control"; RE note re-ffx2-ifrit-kilika §0): EXP, Gil, AP, the drop byte (255, always) and the item slots are the row's own (Angel Earrings, common and rare).
+  "ffx2-kilika-ifrit/x2-ifrit": row(1, 165, 1800, 15, 1300, 255, [0x9045, 1, 0x9045, 1]), // Ifrit
 };

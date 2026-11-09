@@ -43,7 +43,7 @@ export interface BuiltFigure {
  * before the figure exists, never after (the entrance census counts the ticks between a built figure and the presenter's first fade of it, `tests/unit/entrance-census.test.ts`).
  */
 export async function tryRigFigure(r: FigureRequest): Promise<BuiltFigure | null> {
-  // a figure-less part (Vegnagun's rings) has no painting to replace; the two party pilots (Tidus, Rikku's Dark Knight) draw as a rig only behind `?partyrigs=on`, in their own chapter (`motion/PartyRigsSwitch.ts`)
+  // a figure-less part (Vegnagun's rings) has no painting to replace; the two party pilots (Tidus, Rikku's Dark Knight) draw as a rig by default since 2026-11-06 (`?partyrigs=off` gives the paintings back), in their own chapter only (`motion/PartyRigsSwitch.ts`)
   if (r.opts.figure !== false && partyRigAllowed(r.artId)) {
     const choice = await chooseRig(r.artId, r.poses['idle'], rigSwitch(r.setting, r.search), isDresspherePainting(r.artId), r.listed, { painted: [...paintedPoses(r.artId, r.poses, characterUrl)], ...r.choose });
     if (choice.asset) {

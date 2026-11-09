@@ -25,7 +25,6 @@
 import { describe, expect, it } from 'vitest';
 import type { AbilityDef, FFXCombatant, FFXCommandRecord, StatusApplication, StatusId } from '../../src/battle/common/types.ts';
 import { ALL_ABILITIES } from '../../src/data/ffx/index.ts';
-import { FLOODED_ROWS } from '../../src/data/ffx/flooded-ways-ids.ts';
 import { CORE_ABILITIES, resolveAbility } from '../../src/battle/ffx/index.ts';
 import { resolveCommand } from '../../src/battle/ffx/adapt/command.ts';
 import { ability } from './ffx-fixtures.test.ts';
@@ -46,10 +45,14 @@ import {
   wordsOf,
 } from './helpers/ffxEngineStatus.ts';
 
-// The 5,000 situations are drawn by index from this pool, so a row added to the data shifts every later draw. The hidden Flooded Ways' nine rows (2026-11-06) are pinned against the game's fixtures by `chapters/flooded-ways-data.test.ts`
-// and left out of the sample, so the sample is the one this file was written against (with them in, situation 1686 draws Triumphant Grasp into an engine-against-kernel difference in the status words that is not the chapter's: perm 512 against 2,048). **OPEN ISSUE AGAINST THE BASE, hidden by this filter and so named here: the difference is latent in the base's engine or kernel (the chapter's own `adapt/status.ts` line is gated by a flag this test never sets; the same engine-against-kernel run is identical on 37 other formations), found only because the nine rows moved the sample's draw. To reproduce: take the filter off (`POOL` from `ALL_ABILITIES` alone) and run this file; it fails at situation 1686. Not investigated by the chapter lane (`docs/handoff/ch-flooded-ways.md` section 9).**
-const FLOODED_ROWS_IN_DATA: ReadonlySet<string> = new Set(Object.values(FLOODED_ROWS));
-const POOL: AbilityDef[] = [...statusPool(ALL_ABILITIES.filter((a) => !FLOODED_ROWS_IN_DATA.has(a.id))), ...statusPool(CORE_ABILITIES.map((a) => ({ ...a })))];
+// The 5,000 situations are drawn by index from this pool, so a row added to the data shifts every later draw. **The whole catalog is sampled again (2026-11-08, `docs/handoff/r78-fix2.md`).** From the hidden Flooded Ways (2026-11-06) to the hidden Wendigo
+// (the r78 integration) this file left those chapters' rows (`FLOODED_ROWS`, `WENDIGO_ABILITIES`) out of the sample, because with them in the seeded draw reached an engine-against-kernel difference in the status words (perm 512 against 2,048, then 514 against 2,050: bit 0x200
+// against 0x800) that was not theirs; it was latent in release 77 and showed at other seeds there (1, 2, 4, 5 and 6 at 20,000 situations: Brimstone, Thunderblast, Grothia's summon, Brimstone, Aqua Toxin). It was two bookkeeping gaps of the engine between the hits of ONE action (the
+// kernels, proved against the game's code, did their part) and one omission of this file's oracle, all reached only by the multi-hit Mixes and summons under the generator's fuzzed records: (1) a landed Threaten's decay of the monster's live percent was written only when the Threaten bit went from clear to set in the hit
+// record, so a later hit that lands it again (the step reads the target as the action began) or a hit in which Berserk, Confuse or Provoke cleared the bit before Threaten set it back left the percent undecayed and the next roll met 70 where the kernels had 49 (`adapt/status-apply.ts`);
+// (2) a hit nullified by a Nul ticked the target's status but not the hit record, so a Nul landed by a later hit of the action was compared with the unticked counter and a spent one was never given back (`hit-apply.ts#withNulCounters`); (3) the oracle priced a fraction-of-the-maximum
+// hit from the starting maxima after an earlier hit had turned Double HP or Double MP on (`helpers/ffxEngineStatus.ts`). All three are pinned by hand in `parity-ffx-status-chain.test.ts`; 21 seeds of 20,000 situations over the whole catalog, the two chapters' rows in, now agree.
+const POOL: AbilityDef[] = [...statusPool(ALL_ABILITIES), ...statusPool(CORE_ABILITIES.map((a) => ({ ...a })))];
 
 /** What `ScriptedRng.kinds()` prints for the three raw 31-bit draws of a reward-less monster's death (see `viaEngine`). */
 const KILL_REWARD_DRAWS = '?0-2147483647'.repeat(3);
@@ -150,6 +153,27 @@ describe('the engine rolls statuses and writes them back as the kernels do, on g
     expect(seen.regenLanded).toBeGreaterThan(8);
     expect(seen.kinds.size).toBeGreaterThan(10);
   });
+
+  // The seeds on which release 77's own files (and then this tree's, with the Flooded Ways' and Wendigo's rows in the pool) disagreed with the kernels, each at 20,000 situations, so that the multi-hit Mixes and summons under
+  // fuzzed records are reached many times over: 140,000 situations in about half a minute (r78-fix2; `parity-ffx-status-chain.test.ts` pins the two engine rules by hand).
+  const WIDE_SEEDS = [20261009, 1, 2, 4, 5, 6, 8];
+  it(`the whole catalog again over ${WIDE_SEEDS.length} seeds of 20,000 situations: the same draws and words in every one`, () => {
+    let compared = 0;
+    for (const seed of WIDE_SEEDS) {
+      const rng = makeRng(seed);
+      for (let i = 0; i < 20_000; i++) {
+        const sit = randomStatusSituation(rng, POOL);
+        const kernels = oracleRun(sit, sit.hits);
+        if (kernels.early) continue;
+        const engine = viaEngine(sit, sit.hits);
+        const note = `seed ${seed}, situation ${i}: ${sit.def.id}`;
+        expect(engine.kinds, `${note}: draws`).toBe(kernels.kinds);
+        expect(engine, note).toEqual(kernels);
+        compared++;
+      }
+    }
+    expect(compared).toBeGreaterThan(WIDE_SEEDS.length * 15_000);
+  }, 600_000);
 });
 
 describe('an ability with no game record derives its status bytes from its own statuses', () => {

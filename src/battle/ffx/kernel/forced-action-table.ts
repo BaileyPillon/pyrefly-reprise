@@ -61,11 +61,19 @@ const ROWS: ReadonlyArray<readonly [string, number]> = [
   ['evrae-altana', 0x6066], ['geosgaeno', 0x6000], ['gate-lock-1', 0x0000], ['gate-lock-2', 0x0000],
   // The hidden Sanctuary Keeper chapter (2026-11-06): m128's forced-action byte is Tail Sweep 0x6044 (`research/re-ffx-sanctuary-keeper.md` 1.1: a Provoke-forced move; Provoke is immune, and a Berserk or Confuse that lands takes it).
   ['sanctuary-keeper', 0x6044], // m128
+  // The hidden Spherimorph chapter (2026-11-06): m121's forced-action byte is Attack 0x6000 (`research/re-ffx-spherimorph.md` 1.1: a Provoke-forced move that never fires, because Provoke, Berserk and Confuse are all immune).
+  ['spherimorph', 0x6000], // m121
+  // The hidden Wendigo chapter (2026-11-06): Wendigo (m212) carries the Attack word 0x4000 (its default punch, x3/2 under Berserk) and the Guado Guardians (m213) the Thundara word 0x3047 (`research/re-ffx-wendigo-lake-macalania.md` 1.1, 1.3; the Guardians are Berserk- and Confuse-immune, and a Provoked one throws the engine's generic Attack, not Thundara).
+  ['wendigo', 0x4000], ['lake-guardian-a', 0x3047], ['lake-guardian-b', 0x3047], // m212, m213 twice
   ...[1, 2, 3, 4, 5, 6, 7].map((n): readonly [string, number] => [`spectral-circle-${n}`, 0x0000]), // m146
   // The hidden Penance chapter (2026-11-06): Penance (m344) and its two arms (m345, m346) carry no forced action (`research/re-ffx-penance.md` 3: "none"), so Berserk, Confuse and Provoke drop their turns (all three are immune anyway).
   ['penance', 0x0000], // m344
   ['penance-right-arm', 0x0000], // m345
   ['penance-left-arm', 0x0000], // m346
+  // The hidden Omega Ruins chapter (2026-11-06): Ultima Weapon (m99) and Omega Weapon (m100) carry the monster Attack 0x4000 as their forced action; Nemesis (m276) none (`research/re-ffx-omega-ultima-nemesis.md` 1.1). All three are immune to Berserk, Confuse and Provoke, so the word is never read.
+  ['ultima-weapon', 0x4000], // m99
+  ['omega-weapon', 0x4000], // m100
+  ['nemesis', 0x0000], // m276
 ];
 
 /** The forced-action word of an enemy by our id, or `undefined` when no monster file is matched to it. */

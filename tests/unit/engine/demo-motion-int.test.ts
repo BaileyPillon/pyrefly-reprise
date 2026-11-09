@@ -275,7 +275,7 @@ describe('the playtest switchboard', () => {
     expect(name('fx')!.flip!()).toBe('today');
     expect(name('curves')!.flip!()).toBe('today');
     expect(name('shadow')!.flip!()).toBe('today');
-    expect(boardState().filter((s) => s.isNew).map((s) => s.name)).toEqual(['smear', 'punch']);
+    expect(boardState().filter((s) => s.isNew).map((s) => s.name)).toEqual(['smear', 'punch', 'party rigs']); // the party rigs row is on by default since 2026-11-06 (rigs-pilots-on) and the keys above never touch it
   });
   it('the master key: all new goes to all today\'s and back; blur survives a trip through "all new" only if it was blur', () => {
     setFeelPack(true);
@@ -289,7 +289,8 @@ describe('the playtest switchboard', () => {
     expect(allNew()).toBe(true);
     expect(boardState().find((s) => s.name === 'smear')!.value).toBe('blur');
     expect(flipAll()).toBe(false);
-    expect(boardState().every((s) => !s.isNew)).toBe(true);
+    expect(boardState().filter((s) => s.name !== 'party rigs').every((s) => !s.isNew)).toBe(true); // the party rigs row is judged on its own: the master key never flips it, and it is on by default (rigs-pilots-on)
+    expect(boardState().find((s) => s.name === 'party rigs')!.isNew).toBe(true);
     expect(flipAll()).toBe(true);
     expect(boardState().find((s) => s.name === 'smear')!.value).toBe('paint');
   });

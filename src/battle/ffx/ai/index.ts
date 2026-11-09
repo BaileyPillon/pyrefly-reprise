@@ -53,6 +53,10 @@ import './penance.ts'; // the hidden Penance chapter (FFX only): Penance and its
 import './flooded-ways.ts'; // the hidden Flooded Ways chapter (FFX only, 2026-11-06): Evrae Altana, the Gate Locks and Geosgaeno
 import { FLOODED_ROWS, applyOpenLock, openLockAvailable, openLockOffered } from './flooded-ways.ts';
 import './sanctuary-keeper.ts'; // the hidden Sanctuary Keeper chapter (FFX only): the Mt. Gagazet summit's beast
+import './spherimorph.ts'; // the hidden Spherimorph chapter (FFX only): the guardian of the spring in the Macalania Woods
+import './ultima-weapon.ts'; import './omega-weapon.ts'; import './nemesis.ts'; // the hidden Omega Ruins chapter (FFX only): Ultima Weapon, Omega Weapon and Nemesis
+import './wendigo.ts'; // the hidden Wendigo chapter (FFX only): Wendigo and its stance on frozen Lake Macalania
+import './lake-guardian.ts'; // the hidden Wendigo chapter (FFX only): the two Guado Guardians of that fight
 import { freeCircleIds, moveTo, platformOf, ringActive } from '../platforms.ts';
 
 export * from './types.ts';

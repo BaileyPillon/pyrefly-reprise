@@ -104,6 +104,9 @@ export const SCENES = {
   leg: { boss: { x: -70.83, z: 50.85 }, girls: [{ x: -7, z: -34 }, { x: 13, z: -29 }, { x: 28, z: -14 }] },
   shuyin: { boss: { x: 0, z: 0 }, girls: [{ x: -30, z: 27.6 }, { x: -11, z: 35 }, { x: -40, z: 10.6 }] },
   besaid: { boss: { x: 0, z: 26 }, girls: [{ x: 0, z: -27 }, { x: -12, z: -25 }, { x: 12, z: -25 }] },
+  // Ifrit's room, Kilika Temple's trial room (formation 483 `klyt11_229`; the research lane of 2026-11-07, `pos_klyt11_229.psc`): the same four places as Besaid's and Ixion's (the boss at (0, 26), Yuna (0, -27), Rikku (-12, -25), Paine (12, -25)).
+  // His Meteor Strike takes the greatest ground distance (Yuna at the start) and his Attack the near-weighted pick, `./ifrit.ts`.
+  kilika: { boss: { x: 0, z: 26 }, girls: [{ x: 0, z: -27 }, { x: -12, z: -25 }, { x: 12, z: -25 }] },
   // Angra Mainyu's room (the five Bikanel desert scenes `bika07_229`, `bika08_229`, `bika09_229`, `bika13_229`, `bika14_229`, whose `pos_*.psc` is byte for byte the same; the RE note of 2026-10-14, §8.2): the body at
   // (-45, -13), Yuna (23, 29), Rikku (33, 11), Paine (32, -9); ground distances 79.93, 81.61 and 77.10. The arms' own spots are unknown (both read (0, 0) and the body's script links them to its model): `./angra-mainyu.ts`.
   angra: { boss: { x: -45, z: -13 }, girls: [{ x: 23, z: 29 }, { x: 33, z: 11 }, { x: 32, z: -9 }] },

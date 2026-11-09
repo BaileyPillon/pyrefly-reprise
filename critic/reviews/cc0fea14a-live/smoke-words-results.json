@@ -1,0 +1,123 @@
+{
+ "steps": [
+  {
+   "name": "title reached",
+   "ok": true,
+   "detail": "title"
+  },
+  {
+   "name": "chapter select",
+   "ok": true,
+   "detail": {
+    "selectedIndex": 0,
+    "selectedId": "seymour-flux",
+    "tiles": 19,
+    "coming": [],
+    "cleared": [],
+    "order": [
+     "seymour-flux",
+     "yunalesca",
+     "braskas-final-aeon",
+     "seymour-anima-macalania",
+     "evrae-airship",
+     "yojimbo-cavern",
+     "seymour-natus",
+     "seymour-omnis",
+     "isaaru-via-purifico",
+     "sin-fins-core",
+     "sin-face",
+     "mirror-aeons",
+     "ffx2-bahamut",
+     "ffx2-vegnagun-shuyin",
+     "ffx2-leblanc",
+     "ffx2-fallen-aeons",
+     "ffx2-trema",
+     "ffx2-den-of-woe",
+     "ffx2-ixion-djose"
+    ],
+    "beaten": 0,
+    "total": 19
+   }
+  },
+  {
+   "name": "word \"bluelight\" opens its chapter",
+   "ok": true,
+   "detail": {
+    "screen": "battle"
+   }
+  },
+  {
+   "name": "word \"bluelight\" reaches a player turn and acts",
+   "ok": true,
+   "detail": "battle"
+  },
+  {
+   "name": "word \"ifrit\" opens its chapter",
+   "ok": true,
+   "detail": {
+    "screen": "party-prep"
+   }
+  },
+  {
+   "name": "word \"ifrit\" prep cancel returns to board",
+   "ok": true,
+   "detail": "chapter-select"
+  },
+  {
+   "name": "word \"ifrit\" reaches a player turn and acts",
+   "ok": true,
+   "detail": "battle"
+  },
+  {
+   "name": "word \"wendigo\" opens its chapter",
+   "ok": true,
+   "detail": {
+    "screen": "party-prep"
+   }
+  },
+  {
+   "name": "word \"wendigo\" prep cancel returns to board",
+   "ok": true,
+   "detail": "chapter-select"
+  },
+  {
+   "name": "word \"wendigo\" reaches a player turn and acts",
+   "ok": true,
+   "detail": "battle"
+  },
+  {
+   "name": "HARNESS ERROR",
+   "ok": false,
+   "detail": "Error: ASSERT-FAIL screen expected=chapter-select after 15139ms"
+  }
+ ],
+ "rig": [
+  "[rig] ff7-film-cloud off (no rig listed in the art manifest)",
+  "[rig] ff7-film-tifa off (no rig listed in the art manifest)",
+  "[rig] ff7-film-barret off (no rig listed in the art manifest)",
+  "[rig] ff7-film-jenova-life off (no rig listed in the art manifest)",
+  "[rig] yuna-white-mage off (no rig listed in the art manifest)",
+  "[rig] paine-warrior off (no rig listed in the art manifest)",
+  "[rig] ifrit on (gate ok, 7 parts, 19 bones, 6 keys, 1x maps)",
+  "[rig] wendigo off (switch off (the fxRig setting is off))",
+  "[rig] yuna off (switch off (the fxRig setting is off))",
+  "[rig] rikku off (switch off (the fxRig setting is off))",
+  "[rig] guado-guardian off (switch off (the fxRig setting is off))"
+ ],
+ "words": [],
+ "consoleErrors": [
+  "Failed to load resource: the server responded with a status of 404 ()",
+  "Failed to load resource: the server responded with a status of 404 ()"
+ ],
+ "notFound": [
+  {
+   "url": "https://echoesofspira.com/art/characters/wendigo/idle.png",
+   "status": 404
+  },
+  {
+   "url": "https://echoesofspira.com/art/characters/wendigo/idle.png",
+   "status": 404
+  }
+ ],
+ "musicFetches": 34
+}

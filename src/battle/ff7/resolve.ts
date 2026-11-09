@@ -108,21 +108,38 @@ function useAbility(env: Ff7Env, actor: Ff7Combatant, ability: Ff7AbilityDef, ta
   return out;
 }
 
-/** Run an enemy's counter plan: it jumps the queue and leaves the gauge alone [core §12, estimate]. */
+/**
+ * Run an enemy's counter plan: it jumps the queue and leaves the gauge alone [core §12, estimate]. A counter
+ * that costs MP pays it first, and does nothing when the pool cannot (Jenova LIFE's Reflect, 30 MP; the
+ * Guard Scorpion's counters cost nothing, so this is inert there).
+ */
 function runCounter(env: Ff7Env, enemy: Ff7Combatant, plan: Ff7AiPlan, attackerId: CombatantId): void {
   if (plan.kind !== 'ability') return;
   const ability = abilityDef(env, plan.abilityId);
+  if (ability.mpCost > 0) {
+    if (!canPayMp(enemy.mp, ability.mpCost)) return;
+    enemy.mp = payMp(enemy.mp, ability.mpCost);
+  }
   env.emit({ type: 'counter', actorId: enemy.id, targetId: attackerId, abilityId: ability.id, cause: 'script' });
   const targets = plan.targets.map((id) => unit(env.state, id));
   useAbility(env, enemy, ability, targets, { kind: 'ability', id: ability.id, targets: [...plan.targets] });
 }
 
 /**
+ * Is a party action "magical" for Counter - Magical? Its formula is Magical, or it is flagged
+ * `countersAsMagical` (Cloud's Blade Beam) and one enemy is on screen [LE party 9.1 from PM: single source].
+ */
+function isMagicalAttack(env: Ff7Env, ability: Ff7AbilityDef): boolean {
+  return ability.formula === 'magical' || (ability.countersAsMagical === true && living(env.state, 'enemy').length === 1);
+}
+
+/**
  * The counters a party action sets off: every enemy it targeted, hit or miss
  * (gs §5.5 G6, **our estimate**: unreachable with the canon party), runs its
- * Counter - Death section if the action killed it, else Counter - General.
+ * Counter - Death section if the action killed it, else Counter - General; then, if the
+ * action was magical and **hit** (it was not turned by a Reflect), Counter - Magical.
  */
-function runCounters(env: Ff7Env, attacker: Ff7Combatant, targets: Ff7Combatant[], outcomes: Ff7TargetOutcome[]): void {
+function runCounters(env: Ff7Env, attacker: Ff7Combatant, targets: Ff7Combatant[], outcomes: Ff7TargetOutcome[], ability: Ff7AbilityDef): void {
   if (!isParty(attacker)) return;
   const seen = new Set<CombatantId>();
   for (const t of targets) {
@@ -135,6 +152,10 @@ function runCounters(env: Ff7Env, attacker: Ff7Combatant, targets: Ff7Combatant[
     const plan = killed ? script.counterDeath?.(api, attacker.id) : t.alive ? script.counterGeneral?.(api, attacker.id) : null;
     if (plan) runCounter(env, t, plan, attacker.id);
     if (living(env.state, 'party').length === 0) return;
+    if (t.alive && !killed && isMagicalAttack(env, ability) && outcomes.some((o) => o.targetId === t.id && o.hit)) {
+      const magical = script.counterMagical?.(aiApi(env, t), attacker.id);
+      if (magical) runCounter(env, t, magical, attacker.id);
+    }
   }
 }
 
@@ -148,7 +169,8 @@ function payFor(env: Ff7Env, actor: Ff7Combatant, action: Ff7QueuedAction, abili
   const cmd = action.command;
   if (ability.mpCost > 0) {
     if (!canPayMp(actor.mp, ability.mpCost)) {
-      env.emit({ type: 'message', text: 'Not enough MP', kind: 'system' });
+      // The line is the party menu's; an enemy that cannot pay just does not act (what the game does is open, note Q2).
+      if (isParty(actor)) env.emit({ type: 'message', text: 'Not enough MP', kind: 'system' });
       return false;
     }
     actor.mp = payMp(actor.mp, ability.mpCost);
@@ -195,8 +217,18 @@ export function executeAction(env: Ff7Env, action: Ff7QueuedAction): void {
   }
   const targets = executionTargets(env, actor, ability, action.command?.targets ?? []);
   const outcomes = useAbility(env, actor, ability, targets, action.command);
+  // More uses in the same turn (Jenova LIFE's second Blue Light): each pays its own MP and re-targets if its mark fell.
+  if (action.plan?.kind === 'ability') {
+    for (const more of action.plan.followUps ?? []) {
+      if (env.state.result || !actor.alive || living(env.state, 'party').length === 0) break;
+      const next = abilityDef(env, more.abilityId);
+      const asked: Ff7QueuedAction = { actorId: actor.id, command: { kind: 'ability', id: next.id, targets: [...more.targets] }, abilityId: next.id };
+      if (!payFor(env, actor, asked, next)) break;
+      useAbility(env, actor, next, executionTargets(env, actor, next, more.targets), asked.command);
+    }
+  }
   if (action.plan) scriptFor(actor)?.afterAction?.(aiApi(env, actor), action.plan);
-  runCounters(env, actor, targets, outcomes);
+  runCounters(env, actor, targets, outcomes, ability);
   settleBattle(env);
 }
 

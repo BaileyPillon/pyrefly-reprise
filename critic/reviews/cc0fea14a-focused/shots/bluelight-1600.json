@@ -1,0 +1,57 @@
+{
+ "word": "bluelight",
+ "expectId": "ff7-jenova-life",
+ "W": "1600",
+ "H": "900",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-BAH_qvc7.js"
+  },
+  {
+   "s": "after-word",
+   "opened": true,
+   "screen": "battle",
+   "state": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"battle\",\"stack\":[\"battle\"],\"overlayDepth\":0,\"frameCount\":482,\"elapsed\":8.705,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-underground\",\"sc"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 9
+  },
+  {
+   "s": "chapter-id",
+   "idNow": null
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "rows",
+   "stackPresent": false,
+   "rows": []
+  },
+  {
+   "s": "after-turns",
+   "screen": "battle"
+  },
+  {
+   "s": "end",
+   "screen": "results",
+   "ms": 19898
+  },
+  {
+   "s": "end-text",
+   "text": "GAME OVER RETRY CHAPTER SELECT"
+  }
+ ],
+ "rows": {
+  "stackPresent": false,
+  "rows": []
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": []
+}

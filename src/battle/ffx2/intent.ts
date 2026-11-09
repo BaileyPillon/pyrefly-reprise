@@ -54,6 +54,7 @@ import type { RandomTarget } from '../common/intentTargets.ts';
 import { ffx2RandomTarget } from './intentRandom.ts';
 import { damagesMp, emptiesMpLead, inertLead, kindWord, setToLead } from './intentLead.ts';
 import { rolledChance, rollsStatus, statusProbability, statusProbabilityBetween } from './adapt/preview.ts';
+import { resistByte } from './adapt/words.ts';
 
 /** See the FFX twin: enough samples to catch a real branch, few enough to cache. */
 export const SAMPLE_COUNT = 24;
@@ -411,7 +412,7 @@ export function statusOddsFFX2(
   user?: FFX2Combatant,
   ability?: AbilityDef,
 ): StatusOdds {
-  const resistance = (target.immunities as Record<string, number | undefined>)[app.status] ?? 0;
+  const resistance = resistByte(target, app.status as StatusId);
   // With the ability in hand the chance byte is the one the engine rolls (the game's command row, which a pick-one
   // command shares between its rows), not the ability's authored list.
   const rolled = user && ability ? rolledChance(ability, user, app.status as StatusId) : undefined;

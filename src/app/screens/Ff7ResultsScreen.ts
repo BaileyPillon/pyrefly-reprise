@@ -37,6 +37,7 @@ export const FF7_GAME_OVER_FADE_MS = 900;
 const HEADS: Readonly<Record<string, { x: number; y: number; w: number }>> = {
   cloud: { x: 0.14, y: 0.0, w: 0.4 },
   barret: { x: 0.2, y: 0.0, w: 0.42 },
+  tifa: { x: 0.31, y: 0.0, w: 0.42 }, // the hidden Jenova LIFE chapter's third member (FF7 only); measured on the art-ff7 kit's idle beside the Cloud and Barret boxes
 };
 
 function itemRow(id: string, count: number, build: Ff7PartyBuild): { name: string; count: number; line: string } {

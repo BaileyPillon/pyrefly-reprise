@@ -130,10 +130,17 @@ export const DJOSE_IXION_ID = 'x2-ixion';
  */
 export const DJOSE_VALEFOR_ID = 'x2-valefor';
 
+/**
+ * Ifrit's combatant id (`src/data/ffx2/enemies/ifrit.ts`): the hidden Ifrit at Kilika Temple chapter (FFX-2 only, 2026-11-07) stages in this Chamber too, on the same plate, as the **provisional stand-in for Kilika's own chamber**
+ * (no Kilika backdrop exists; the plate is Bailey's approved Djose pick, D-273), exactly as Valefor does: Ixion's spot, and the scene's boss height (no HD-model stature is measured for him: staging, ours).
+ */
+export const DJOSE_IFRIT_ID = 'x2-ifrit';
+
 /** Ixion's spot on the plate shown: the plate's own row, else the default (staging, ours); Valefor's is the same spot. */
 export const DJOSE_SPOTS: Readonly<Record<string, [number, number, number]>> = {
   [DJOSE_IXION_ID]: DJOSE_BACKDROP.ixion ?? DJOSE_IXION_SPOT,
   [DJOSE_VALEFOR_ID]: DJOSE_BACKDROP.ixion ?? DJOSE_IXION_SPOT,
+  [DJOSE_IFRIT_ID]: DJOSE_BACKDROP.ixion ?? DJOSE_IXION_SPOT,
 };
 
 /** The girls' world height (the FFX-2 chapters' 1.78). */
@@ -239,7 +246,7 @@ export const buildDjoseChamberScene: SceneFactory = async (opts: SceneBuildOptio
   // No live motes: the research names no particles here (§6.1; `engine/pyreflyCanon.ts` row 'unattested').
 
   const phoneCamera = onPhone
-    ? new RoadPhoneCamera(DJOSE_RIGS.idle, { shiva: [DJOSE_IXION_ID, DJOSE_VALEFOR_ID], sisters: [], anima: [] })
+    ? new RoadPhoneCamera(DJOSE_RIGS.idle, { shiva: [DJOSE_IXION_ID, DJOSE_VALEFOR_ID, DJOSE_IFRIT_ID], sisters: [], anima: [] })
     : null;
 
   const watchEnabled = opts.watchAssets ?? Boolean(import.meta.env.DEV);

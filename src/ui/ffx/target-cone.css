@@ -1,0 +1,34 @@
+/*
+ * FFX's aiming marker, the cone in Ink & Gold (`targetCone.ts`; Bailey's pick "B: cone in Ink and Gold", 2026-11-07). FFX ONLY: FFX-2's ring is a different element and no rule here can reach it.
+ * The element is still `.ffx-target__hand` (its docking, `handClear.ts` and the plate's dock read that class); `--cone` adds the cone's own glow and its gentle bob. TargetCursor writes the size inline, and
+ * `--pro-hand-bob:8px` inline, so the pro look's glove rule (16 px, `pro-markers.css`) and this file move the cone the same 8 px whichever of them the cascade picks.
+ */
+
+.ffx-targeting .ffx-target__hand--cone {
+  filter: drop-shadow(0 0 10px rgba(242, 194, 30, 0.5)) drop-shadow(0 3px 6px rgba(5, 8, 20, 0.72));
+  animation: ffx-cone-bob 1.5s ease-in-out infinite;
+}
+@keyframes ffx-cone-bob {
+  0%, 100% { transform: translate(-100%, -50%); }
+  50% { transform: translate(calc(-100% + var(--pro-hand-bob, 8px)), -50%); }
+}
+
+/* Docked on the figure's RIGHT (`targetCone.coneFlips`: the left side is behind the command stack): the left edge is the anchor, the drawing is mirrored (tip left) and the bob carries it back towards the figure. */
+.ffx-targeting .ffx-target__hand.ffx-target__hand--flip {
+  transform: translate(0, -50%);
+  animation-name: ffx-cone-bob-flip;
+}
+.ffx-target__hand--flip svg { transform: scaleX(-1); }
+@keyframes ffx-cone-bob-flip {
+  0%, 100% { transform: translate(0, -50%); }
+  50% { transform: translate(calc(-1 * var(--pro-hand-bob, 8px)), -50%); }
+}
+
+/* REDUCE MOTION and LOW EFFECTS (the game's own rows, mirrored on <html> by `app/applyComfort.ts`) and the OS preference: the cone holds still; the glow stays. */
+@media (prefers-reduced-motion: reduce) {
+  .ffx-targeting .ffx-target__hand--cone, .ffx-targeting .ffx-target__hand.ffx-target__hand--flip { animation: none; }
+}
+html[data-reduce-motion] .ffx-targeting .ffx-target__hand--cone,
+html[data-low-effects] .ffx-targeting .ffx-target__hand--cone,
+html[data-reduce-motion] .ffx-targeting .ffx-target__hand.ffx-target__hand--flip,
+html[data-low-effects] .ffx-targeting .ffx-target__hand.ffx-target__hand--flip { animation: none; }

@@ -87,6 +87,11 @@ export function applyStatusStep(
 ): Applied {
   const after = step.result.record;
   const out: Applied = { added: [], removed: [], killed: false, ejected: false };
+  // The kernel decays a monster's live Threaten byte (to 70 percent, never below 1) every time a Threaten LANDS, and the block is written back whole, so the decay is kept here and not only when the bit
+  // goes from clear to set. A hit of a multi-hit action whose record already carries Threaten (an earlier hit landed it; the step reads the target as the action began, so it lands again), or one in which an
+  // earlier status of the same hit (Berserk, Confuse, Provoke) cleared the bit before Threaten set it back, left the byte undecayed in the engine and decayed in the kernels: the next hit's roll then met a
+  // different percentage (found by the seeded status sweep at the Wendigo and Flooded Ways rows, `docs/handoff/r78-fix2.md`). FFX only (the Threaten step is the FFX kernel's).
+  if (step.result.threatenedBy !== null) rtOf(ctx, target.id).threatenChance = step.result.resist[11] as number;
   const source = { sourceId: user.id, sourceAbilityId: def.id };
   const cleanse = (step.status.cmd.flagsDamage & 0x20) !== 0;
   const cleanseReason = def.category === 'item' ? 'cured' : 'dispelled';
@@ -105,7 +110,6 @@ export function applyStatusStep(
       if (quiet(id)) continue;
       add(ctx, target, id, instanceOf(id, {}, source), false);
       out.added.push(id);
-      if (id === 'threaten') rtOf(ctx, target.id).threatenChance = step.result.resist[11] as number;
     } else if (was && !now) {
       lose(id, cleanse);
     }

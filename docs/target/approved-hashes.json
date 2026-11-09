@@ -11329,6 +11329,426 @@
     "mtime": "2026-11-06T14:59:18.882Z",
     "delegated": "2026-11-06"
    }
+  },
+  "driver:2026-11-07-wave3-chapters-art (items 220m and 220w, delegated by Bailey)": {
+   "words": "Bailey, 2026-11-06 ~00:30 EST: \"implement all unimplemented chapters please\"; ~00:55 EST: \"yes on all these too\" (building every researched boss he never picked); 2026-10-31: \"you make the executive decisions for the next few days. i'll go with all of your recommendations.\"",
+   "decision": "item 220m (a new boss takes the FAITHFUL reading of the game model: image to image over a render of the real model, no options round) and item 220w (the driver accepted the wave-3 paintings) of the driver's list, under the delegation of 2026-10-31 and 2026-11-06; the D-number is owed by the records pass",
+   "note": "DRIVER CALL, delegated by Bailey; not Bailey's own approval of the pictures. The paintings of the two wave-3 hidden FFX chapters, made 2026-11-06 in the art-w3 batch (the wave-3 art stage folder, kept outside the repo: its MANIFEST.md and provenance.json carry every file's method, seed and sha256): the hidden Spherimorph (chapter 41, FFX only: idle, attack, cast, hurt, ko, overdrive and idle@2x, a marbled teal sphere painted over renders of the game model m121; a face; the pause plate; the optional Macalania Woods spring plate), and the hidden Omega Ruins (chapter 43, FFX only: Ultima Weapon, Omega Weapon and Nemesis, the Weapons painted over renders of the models m99 and m100 and Nemesis a colour map of the Ultima Weapon paintings with the same alpha, each with idle, attack, cast, a spread-wing special (rain, nova, armageddon), hurt, ko and idle@2x; three faces; the pause plate). Each pin is the sha256 of the staged file, which is the candidate byte for byte. New files, nothing replaced, so nothing was archived. The chapter cards and thumbnails are not made (read by no code until the board lists the chapters).",
+   "public/art/backdrops/macalania-woods.png": {
+    "sha256": "0f9176808b5ea32ac03ca070befd8b096a398afde5733c965a64cb40141bbb75",
+    "mtime": "2026-11-06T22:53:23.050Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/backdrops/macalania-woods@2x.png": {
+    "sha256": "af4323e9ef6e626455389d8ca3f142dd3ac80ae2da2fc2e946d947234342b537",
+    "mtime": "2026-11-06T22:54:09.691Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/nemesis/armageddon.png": {
+    "sha256": "3efda0b10f677ce17b01a85a7e67dfb94d54a3b3b1ae0d3834e39d2e65c7ce7f",
+    "mtime": "2026-11-06T22:51:34.225Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/nemesis/attack.png": {
+    "sha256": "ebaf8a90a2a1567e46f94747a858378d06683b5c362d0104bcbe4a3c8b478d49",
+    "mtime": "2026-11-06T22:51:33.460Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/nemesis/cast.png": {
+    "sha256": "a46cf1d945f5b326c8eb11f69bce660371357277f64bf881346a1989d6a7c5d3",
+    "mtime": "2026-11-06T22:51:33.751Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/nemesis/hurt.png": {
+    "sha256": "42d7f8f31c0f136ad8161acff7176bec1b40d1b3957d922532ffa85e9e0ac247",
+    "mtime": "2026-11-06T22:51:34.563Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/nemesis/idle.png": {
+    "sha256": "4ea157be3f2540ca64b008972b34c26ba98368e66a18401cdbe44b84d559b5d5",
+    "mtime": "2026-11-06T22:51:33.146Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/nemesis/idle@2x.png": {
+    "sha256": "fefce593f6fa70d6c1f6bab7d1d47f1185a80e705dad41f402094a56042c243b",
+    "mtime": "2026-11-06T22:42:04.000Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/nemesis/ko.png": {
+    "sha256": "497feda8c365bcfb39437c14313b03491f468d31c2eda1cfa04ec4d37fc3c5b8",
+    "mtime": "2026-11-06T22:51:34.876Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/omega-weapon/attack.png": {
+    "sha256": "98b1da732e48393bfb512fdb98b202c585b311c64cc818eaacfca19bffd62275",
+    "mtime": "2026-11-06T22:34:16.354Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/omega-weapon/cast.png": {
+    "sha256": "2b567ddb3f0d1b59325794b686c4d7148bd6a169dba538479373df80334b9df7",
+    "mtime": "2026-11-06T22:34:23.241Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/omega-weapon/hurt.png": {
+    "sha256": "bb98ceb1dc469007a7bce9e1eec27e5d7112bee27e5d36f4cf9cc94fa7a594c5",
+    "mtime": "2026-11-06T22:34:37.284Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/omega-weapon/idle.png": {
+    "sha256": "ff2ebf793d8e7258ae0f4f0abba8ea7fc1f6e905d3bbc3414828aeb82b295c5d",
+    "mtime": "2026-11-06T22:21:48.662Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/omega-weapon/idle@2x.png": {
+    "sha256": "6e19d6939c525722bfbdd88ba511daa89da24b30aa8470f1f3e00b2c1bcd54b8",
+    "mtime": "2026-11-06T22:39:10.834Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/omega-weapon/ko.png": {
+    "sha256": "c4e47d4326980c6dea2344b4b901ca75d54b2d90bf44d35bab14724531132ae7",
+    "mtime": "2026-11-06T22:34:51.578Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/omega-weapon/nova.png": {
+    "sha256": "41472c214df359d12ceb9afe95979eba06b2cc3a9dbd19334cefee6ecad75bbe",
+    "mtime": "2026-11-06T22:35:16.769Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/spherimorph/attack.png": {
+    "sha256": "40ac865e2d91fd841f0aa82e946b88f21beaa188526b72487df6465d3c40e756",
+    "mtime": "2026-11-06T22:50:05.863Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/spherimorph/cast.png": {
+    "sha256": "38c93d7d97414b8b244c55546f9351652a10d21865ac5576f6d46decbcf914da",
+    "mtime": "2026-11-06T22:50:16.519Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/spherimorph/hurt.png": {
+    "sha256": "8818730b8e88f0c88e5c608343cbbaefc050115d7c0c9bf8b6f7ad573ea1ba3a",
+    "mtime": "2026-11-06T22:50:33.887Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/spherimorph/idle.png": {
+    "sha256": "776cadf3873808b6c8a89774d0013a4909084410893e135aa493b7d06087d396",
+    "mtime": "2026-11-06T22:45:50.625Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/spherimorph/idle@2x.png": {
+    "sha256": "82e3357fd81085ec8b27469e6723d76db16de0e28a8d71e9b95297792efa2730",
+    "mtime": "2026-11-06T22:51:26.669Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/spherimorph/ko.png": {
+    "sha256": "8cc1791e4a90a60d93fdd8eb18aba3bfdc59bb820b6aba797cc531bc1e97f7d6",
+    "mtime": "2026-11-06T22:50:49.475Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/spherimorph/overdrive.png": {
+    "sha256": "fb6cd930177f8e2035a0c38c32c53971acb97549a59353753ad78ca1e1594845",
+    "mtime": "2026-11-06T22:51:05.437Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/ultima-weapon/attack.png": {
+    "sha256": "810e0ecbd07983fb0bdf0c8c34fd0ebad049a7a2d3d647c9ce9daa9d72819622",
+    "mtime": "2026-11-06T22:32:23.340Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/ultima-weapon/cast.png": {
+    "sha256": "d74f3890fae8e6618f9b136fac66152582b74ef75fb8519437029e25666208f7",
+    "mtime": "2026-11-06T22:32:45.393Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/ultima-weapon/hurt.png": {
+    "sha256": "a7445f119c4ca983641b1e68c60bdd3004478c1739c4e0f383426d2a50635de6",
+    "mtime": "2026-11-06T22:33:00.025Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/ultima-weapon/idle.png": {
+    "sha256": "2d4f59d42f3558238bca241ffe9fd56e30afbb722b7521cb4cb2c9dcb346fef2",
+    "mtime": "2026-11-06T22:21:34.053Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/ultima-weapon/idle@2x.png": {
+    "sha256": "5699466b8f791bc222b88a1bb10ea82dcf7442f877ac1f3a1869e5c456a17174",
+    "mtime": "2026-11-06T22:39:01.946Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/ultima-weapon/ko.png": {
+    "sha256": "ff99d5161e10dbe03fab845c3e1855819ce507bde7a802a9ee3bacbbd422babb",
+    "mtime": "2026-11-06T22:45:57.966Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/characters/ultima-weapon/rain.png": {
+    "sha256": "8d1384469570d15743762d974405ca8c813514bea466c008e2cb17d94607f042",
+    "mtime": "2026-11-06T22:33:41.030Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/pause/ch41-spherimorph.2x.webp": {
+    "sha256": "ab7050b3fb10fad31821c8d4256baa19e54bea40807e02d998193975f80675c8",
+    "mtime": "2026-11-06T22:55:04.823Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/pause/ch41-spherimorph.png": {
+    "sha256": "bdd98282a9ff9b1ceaa4d8733f5f557cb1ca34acf094e8dedc575bea3a3bf51a",
+    "mtime": "2026-11-06T22:55:03.621Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/pause/ch43-omega-ruins.2x.webp": {
+    "sha256": "c1e55d835e165cb88c3ff3f027dbb5cb4142fdaf5687bf825afa8b5ccf7f2029",
+    "mtime": "2026-11-06T22:55:06.569Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/pause/ch43-omega-ruins.png": {
+    "sha256": "60408ac2dc7fc367d6872f8627483858b23684ff26822e4edd1b7ed0d226d743",
+    "mtime": "2026-11-06T22:55:05.501Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/portraits/nemesis.png": {
+    "sha256": "5f99a05b33ae5e4c011bf87c320355b2be1358c6660e389158a30ef710a24a4b",
+    "mtime": "2026-11-06T22:39:41.180Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/portraits/omega-weapon.png": {
+    "sha256": "41930ad2fdec495cad58d4bced5f6e0b3d6befe9d4f2a4e0f6240e24ab19831e",
+    "mtime": "2026-11-06T22:39:41.489Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/portraits/spherimorph.png": {
+    "sha256": "9701796dbfc04d9b72b68139d49dc33952d4c5bc4a2f138a23f04440c5808c28",
+    "mtime": "2026-11-06T22:51:35.215Z",
+    "delegated": "2026-11-07"
+   },
+   "public/art/portraits/ultima-weapon.png": {
+    "sha256": "0070a6cc1abddff711dffbdc9891987a5a0d41c7fe6c030bb3f128c2318be8ab",
+    "mtime": "2026-11-06T22:39:40.881Z",
+    "delegated": "2026-11-07"
+   }
+  },
+  "driver:2026-11-07-wendigo-lake-plate (the Wendigo chapter, delegated by Bailey)": {
+   "words": "Bailey, 2026-11-06: \"make 1 brand new chapter using meshy extensively please\", \"like a tech demo\"; 2026-11-07: \"ok keep going we have full usage here\"; 2026-10-31: \"you make the executive decisions for the next few days. i'll go with all of your recommendations.\"",
+   "decision": "ch-wendigo phase 4 (the driver's brief of 2026-11-07, item 4): the hidden FFX Wendigo chapter (number 49, the word wendigo) draws its own plate on the board, in the party prep's wash, the cutscene stage, the start card and the pause tab, instead of Chapter VII's Macalania Temple; the D-number is owed by the records pass",
+   "note": "DRIVER CALL, delegated by Bailey; not Bailey's own approval of the picture. The plate is a still of the running 3D lake (src/engine/lake3d), rendered by tools/lake-plate.mjs (view v-ice-low-wide: a low camera over the mirror ice, the moon and the aurora above, the Macalania Temple on its hill, nobody on the ice; headless Chromium on the GPU at 2688 x 1536, 8-bit RGB): an engine render, not a painting. It is kept outside every art mirror (the lane never writes one) in the models store (2026-11-07-plate) and its second-disk copy; the driver installs it into the release tree's art mirror (public/art/backdrops/wendigo-lake.png and .json) and the deploy refuses a tree that lacks it. No 2x master (the painted plates have one; this one is a first plate), no depth map.",
+   "public/art/backdrops/wendigo-lake.png": {
+    "sha256": "2cc4235ed0d0afe9a858d3a16aea59c284fcfb3f647cd1ca189e6eca30a0e460",
+    "mtime": "2026-11-07T20:27:26.404Z",
+    "delegated": "2026-11-07"
+   }
+  },
+  "driver:2026-11-08-ff7-jenova-life-art (the art-ff7 batch, delegated by Bailey)": {
+   "words": "Bailey, 2026-11-06 ~00:30 EST: \"implement all unimplemented chapters please\"; ~00:55 EST: \"yes on all these too\" (building every researched boss he never picked, FF7 included); 2026-11-07: \"ok keep going we have full usage here\"; on FF7, 2026-09-27: \"wow the character models look terrible and the menus are nowhere near crisp enough. i need tons of eye candy it needs to be higher fidelity than the original\"; 2026-10-31: \"you make the executive decisions for the next few days. i'll go with all of your recommendations.\"",
+   "decision": "the driver's pick of the art-ff7 batch (the chapter's art follows the approved FF7 Film set with the faithful reading of the original designs; no options round) and the driver's acceptance of its paintings for release 78, under the delegation of 2026-10-31 and 2026-11-06; the D-number is owed by the records pass",
+   "note": "DRIVER CALL, delegated by Bailey; not Bailey's own approval of the pictures. The paintings of the hidden FF7 Jenova LIFE chapter (chapter 44, FF7 only), made 2026-11-07 in the art-ff7 batch (FLUX.2 Klein edit mode over the approved Film Cloud and Barret idles; stage folder kept outside the repo: stage/MANIFEST.md, stage/provenance.json): Tifa (idle, windup, attack, follow, hurt, kick, each at 1x, @2x, @3x and @4x), Jenova LIFE (idle, hurt, cast, inhale, the same tiers) and the Water Altar plate (2304x1296 and its @2x). Candidates: Tifa's boots had a clipped sole completed by 12 rows (kit section 5, fault 1), Jenova is not translucent and has no legs (a tapering bundle of tentacle ribbons, the faithful-reading choices in kit section 2), the hurt head of Tifa is not proven by the head fit. The chapter card and the second plate (alternatives/) are held out of the mirror. The plate is installed and pinned and wired to nothing: the stage keeps the Guard Scorpion's reactor plate until the altar's staging is looked at.",
+   "public/art/backdrops/ff7-film-forgotten-capital.png": {
+    "sha256": "ada714b78970e7f48acf9fd294365c4b4f33e8c7866c2e69d0a98adfd39cbd6a",
+    "mtime": "2026-11-07T21:53:43.519Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/backdrops/ff7-film-forgotten-capital@2x.png": {
+    "sha256": "6d8c42f695e2a261045b0fb5fb570645f5871a8c643916f030b5a602ccabd5cb",
+    "mtime": "2026-11-07T21:58:54.304Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/cast.png": {
+    "sha256": "344569a2e96f2da26a9cdfe4d49003310d39808222d3d7c8538cdcbaaf20ffa5",
+    "mtime": "2026-11-07T21:52:16.501Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/cast@2x.png": {
+    "sha256": "e12844951741d49852c2be4a8d128bd320a3549aa1e51fb6d3d4d410f5f1e76a",
+    "mtime": "2026-11-07T21:52:16.186Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/cast@3x.png": {
+    "sha256": "0cb008fab71edb2872db9d39f81eff32aad7f80e141da18bd423232a59c92f09",
+    "mtime": "2026-11-07T21:58:25.087Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/cast@4x.png": {
+    "sha256": "fe4cb28d282877fced7c07bfd0b641c05a2967b339b8ae3b7df9fb81679e624b",
+    "mtime": "2026-11-07T21:56:46.570Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/hurt.png": {
+    "sha256": "1dd0a5e3d83dc70bdbb0707be1dae69d23d321249a347763730f85688d3b7ee6",
+    "mtime": "2026-11-07T21:52:12.647Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/hurt@2x.png": {
+    "sha256": "7e5ef9382f5cc70725e1170c63b1a07b263acf03a1b62c11e26d632444c018f2",
+    "mtime": "2026-11-07T21:52:12.375Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/hurt@3x.png": {
+    "sha256": "cd9bb1c70fa3b2a3521901891e19be32c6de122cc26ac6f00c5bf8c7a0a473f9",
+    "mtime": "2026-11-07T21:58:27.713Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/hurt@4x.png": {
+    "sha256": "5db535ad8f7a189ae6276de21433b3e79eb1406fe9cafd850b6dadece9e723d5",
+    "mtime": "2026-11-07T21:56:21.403Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/idle.png": {
+    "sha256": "14bdd48b55d5c2ff367a007fb0624bab0c1ab7d9b561daddb7ee71ead0119326",
+    "mtime": "2026-11-07T21:52:08.851Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/idle@2x.png": {
+    "sha256": "8cc7bf90bdda182286da378987066b91178490c1d230e223650b8fbd00fbf66e",
+    "mtime": "2026-11-07T21:52:08.610Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/idle@3x.png": {
+    "sha256": "3822e30d180722d1fa3572782203f234e49a8f62f661b50991c81fe99e368716",
+    "mtime": "2026-11-07T21:56:13.299Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/idle@4x.png": {
+    "sha256": "ba8c257748e49b97862090f72113b970de623413f5335824467bdb7af6f970b9",
+    "mtime": "2026-11-07T21:55:59.805Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/inhale.png": {
+    "sha256": "eb974ca2f939a9b55e5f6f2929987dafbb9bc9dbcc16e2fcb2226e050d60e9ce",
+    "mtime": "2026-11-07T21:52:20.042Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/inhale@2x.png": {
+    "sha256": "bd92e1d8f46ee6ad511262ddacfed9b3615b155a303dfe2c5e45f8a5ad6111a1",
+    "mtime": "2026-11-07T21:52:19.767Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/inhale@3x.png": {
+    "sha256": "2329e1540996b03e41bae9a4d542a5eb9236c7284341f49c468507fbb8d9bf67",
+    "mtime": "2026-11-07T21:58:30.340Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-jenova-life/inhale@4x.png": {
+    "sha256": "c605be1c2ed6b9655d439719ace9ae9e11345a4578daa2ea1d1203dc8c441579",
+    "mtime": "2026-11-07T21:57:10.057Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/attack.png": {
+    "sha256": "df45d1b72283f48e92b8eac1e6fe9fe2d575d2d366af82e1a3841dafbb28cc69",
+    "mtime": "2026-11-07T21:51:51.782Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/attack@2x.png": {
+    "sha256": "e5a5b0b8249eb43c31a3e607b6935864f61658ca217ced845211aaae830a2327",
+    "mtime": "2026-11-07T21:51:51.479Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/attack@3x.png": {
+    "sha256": "ba57399458c6bac1af2af9026752190963d3dc58342460c14bcb0915091c440a",
+    "mtime": "2026-11-07T21:55:55.684Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/attack@4x.png": {
+    "sha256": "d1acc38fdbc936ef8bd400375f237cb537529501aaf3f1327a25d20948b200e4",
+    "mtime": "2026-11-07T21:53:47.591Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/follow.png": {
+    "sha256": "4b80a8918d66a1b48872ebf94c82f6118453f6c570678348ea0595642c63ad4c",
+    "mtime": "2026-11-07T21:51:56.290Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/follow@2x.png": {
+    "sha256": "4719300465a1b998d2710ae06c0eda47f8461c63ccb20b3875e94fa87b8bfa39",
+    "mtime": "2026-11-07T21:51:55.940Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/follow@3x.png": {
+    "sha256": "cf78b2324bcf932a0a12e3a1c749d7e4cacb0ee27fe9d40d42642654febb9448",
+    "mtime": "2026-11-07T21:55:58.518Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/follow@4x.png": {
+    "sha256": "0b683521fa4b3bf892b25f1d7475db5682219313afa19caac06eaf214dcb1b81",
+    "mtime": "2026-11-07T21:54:26.138Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/hurt.png": {
+    "sha256": "3d12c0702a228f7ee55b561b35c293ac27e00c90b401b069cd0f6fc2a805a73e",
+    "mtime": "2026-11-07T21:52:01.261Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/hurt@2x.png": {
+    "sha256": "040fd9fce9fb69f0d7b7e4a0d23c7b4681eb824205ea0bbda1d8fa1382c585c7",
+    "mtime": "2026-11-07T21:52:00.931Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/hurt@3x.png": {
+    "sha256": "eac7940d182633c6830b8008fbe561867b585ffea43d9bd33839783ca2002bf9",
+    "mtime": "2026-11-07T21:56:01.818Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/hurt@4x.png": {
+    "sha256": "ba6b246361e45303466b28736881a8ef801df38b5542ebb3f8ff065575f83b9a",
+    "mtime": "2026-11-07T21:54:54.498Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/idle.png": {
+    "sha256": "36d90ddb8a6276e7b5f73b50dda7076e2401bfb26d4dd9c5a1d9bcb7649d5753",
+    "mtime": "2026-11-07T21:51:42.112Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/idle@2x.png": {
+    "sha256": "0db151b9267f3aa08481d104283308e3b28eb1a7b7365513800b8bdc401e47af",
+    "mtime": "2026-11-07T21:51:41.855Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/idle@3x.png": {
+    "sha256": "35b1907b102587ffb8b5fc54f3899bb3e542aa9bf28ce7a2d550da5423ffb67f",
+    "mtime": "2026-11-07T21:56:04.374Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/idle@4x.png": {
+    "sha256": "e1fa8505cce97f0defbd696a26bf3b1b6a722437be21fc099cb8bcea73fddeb5",
+    "mtime": "2026-11-07T21:52:57.278Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/kick.png": {
+    "sha256": "b18bd43032754971cb19cf1b6300e863424920af80a2ee21ab7412d35a4d6856",
+    "mtime": "2026-11-07T21:52:06.081Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/kick@2x.png": {
+    "sha256": "412e17df110984a260478a4f5d42decfb245eb63d2eae6cd5a9d7f01b3ee2ebb",
+    "mtime": "2026-11-07T21:52:05.729Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/kick@3x.png": {
+    "sha256": "c00d898588ba023edb558c7d7e84716806f0f03789750a038e26e3e62b4d9816",
+    "mtime": "2026-11-07T21:56:07.349Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/kick@4x.png": {
+    "sha256": "e63f0859d55c0b2a330cbb35bee026fbd3f7eb9de26d5a431a6907f0f6833a1c",
+    "mtime": "2026-11-07T21:55:33.785Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/windup.png": {
+    "sha256": "b95871ca0b75895cd0250e2a6a678b430f35f304ffc1e68626800df7cb0db51d",
+    "mtime": "2026-11-07T21:51:47.179Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/windup@2x.png": {
+    "sha256": "df27b7fa7ba68ac25d6f6260407d526ba6ccad98d6fdec7e0443e199b56de153",
+    "mtime": "2026-11-07T21:51:46.873Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/windup@3x.png": {
+    "sha256": "29c39d28945c02dd9c6c64907a183daf01001d0ac0089a2b20d88a6e4e494210",
+    "mtime": "2026-11-07T21:56:10.307Z",
+    "delegated": "2026-11-08"
+   },
+   "public/art/characters/ff7-film-tifa/windup@4x.png": {
+    "sha256": "b53d81bf67b85b549271197856843e04877929c270e32c6095c4a979edba428e",
+    "mtime": "2026-11-07T21:53:21.339Z",
+    "delegated": "2026-11-08"
+   }
   }
  }
 }

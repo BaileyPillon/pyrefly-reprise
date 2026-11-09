@@ -1,0 +1,62 @@
+[
+ {
+  "file": "ch4/00-title-fresh.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "state": "fresh profile, first boot, title",
+  "size": "1600x900",
+  "input": "none (boot)",
+  "injected": false,
+  "asserted": "screen=title",
+  "mode": "gpu",
+  "ts": "2026-11-08T02:27:07.579Z"
+ },
+ {
+  "file": "ch4/01-chapter-select.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "state": "chapter select, row highlighted",
+  "size": "1600x900",
+  "input": "keyboard ArrowRight",
+  "injected": false,
+  "asserted": "screen=chapter-select",
+  "mode": "gpu",
+  "ts": "2026-11-08T02:27:29.042Z"
+ },
+ {
+  "file": "ch4/02-prep.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "state": "party prep, second tab",
+  "size": "1600x900",
+  "input": "keyboard ArrowRight",
+  "injected": false,
+  "asserted": "screen=party-prep",
+  "mode": "gpu",
+  "ts": "2026-11-08T02:27:31.407Z"
+ },
+ {
+  "file": "ch4/03-pre-scene.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "state": "pre-battle cutscene",
+  "size": "1600x900",
+  "input": "keyboard",
+  "injected": false,
+  "asserted": "screen=cutscene",
+  "mode": "gpu",
+  "ts": "2026-11-08T02:27:34.367Z"
+ },
+ {
+  "file": "ch4/03b-scene-pause.png",
+  "game": "ffx2",
+  "chapter": "ffx2-bahamut",
+  "state": "pause over the pre-battle scene (Esc)",
+  "size": "1600x900",
+  "input": "keyboard Escape",
+  "injected": false,
+  "asserted": "screen=pause",
+  "mode": "gpu",
+  "ts": "2026-11-08T02:27:36.648Z"
+ }
+]

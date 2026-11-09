@@ -171,7 +171,7 @@ describe('what a director is told', () => {
     expect(of('overdriveEnd')).toMatchObject({ actor: tidus, action: { kind: 'overdrive', name: 'Blitz Ace' } });
     expect(of('telegraph')).toMatchObject({ enemy: boss, stage: 2, name: 'Mega Flare' });
     expect(of('formChange')).toMatchObject({ enemy: boss });
-    expect(Object.keys(of('victory')).sort()).toEqual(['camera', 'ms', 'ms100', 'skipping', 'speed']);
+    expect(Object.keys(of('victory')).sort()).toEqual(['camera', 'ms', 'ms100', 'setHud', 'skipping', 'speed']); // `setHud` (ch-wendigo phase 4, additive): the HUD switch every context carries; no existing director reads it
   });
 
   it('at skip speed it says so, and its durations collapse with the speed', async () => {

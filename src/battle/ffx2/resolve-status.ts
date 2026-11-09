@@ -19,7 +19,7 @@ import type { Ffx2Unit } from './internal.ts';
 import type { ResolvedCommand } from './adapt/command.ts';
 import { levelOf } from './adapt/inputs.ts';
 import { GROUP1_STATUS, GROUP2_STATUS, isStageSlot } from './adapt/slots.ts';
-import { protectMask, stage } from './adapt/words.ts';
+import { cannotBeEjected, protectMask, resistByte, stage } from './adapt/words.ts';
 import { statusLands, type StatusResult } from './kernel/statusTypes.ts';
 import { s8 } from './kernel/intops.ts';
 import { applyHpDelta, type ResolveContext } from './resolve-hp.ts';
@@ -37,6 +37,8 @@ function applicationFor(ability: AbilityDef, command: ResolvedCommand, status: S
 }
 
 function addStatus(ctx: ResolveContext, user: Ffx2Unit, target: Ffx2Unit, application: StatusApplication, abilityId: string): void {
+  // A girl in a Special dressphere cannot be Ejected (`adapt/words.ts#cannotBeEjected`; combat-core 2.8 and 3.15). The hit and status kernels already read her Eject byte as 255 (`resistTables`); this is the last door, for a rider or a script that applies the status itself.
+  if (application.status === 'eject' && cannotBeEjected(target)) return;
   const instance = applyStatus(target, application, user.id, abilityId);
   if (!instance) return;
   // `MsSetStatus` (exe 0x00636c70): a Poison or Regen that has just appeared starts its accumulator at a random phase, `draw % (16000 / 4 + 1)`.
@@ -138,7 +140,7 @@ export function rollEngineRiders(ctx: ResolveContext, user: Ffx2Unit, target: Ff
   for (const application of command.engineRiders) {
     const chance = Math.max(0, Math.min(255, Math.round(application.chance)));
     if (chance === 0) continue;
-    const resist = target.immunities[application.status] ?? 0;
+    const resist = resistByte(target, application.status);
     // A rider with no slot in the game's 24-entry tables has no game roll: the engine's own, on the engine-side stream.
     const roll = ctx.rng.aux.int(0, 100);
     if (!statusLands(chance, resist, roll, levelOf(user), levelOf(target))) continue;

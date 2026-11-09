@@ -1,0 +1,190 @@
+{
+ "tag": "wendigo",
+ "how": "word:wendigo",
+ "W": "1600",
+ "H": "900",
+ "hp": "",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-BAH_qvc7.js"
+  },
+  {
+   "s": "word",
+   "opened": true
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 1319
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "real-attack"
+  },
+  {
+   "s": "battle-ended",
+   "screen": "cutscene",
+   "ms": 75013
+  },
+  {
+   "s": "at",
+   "screen": "results",
+   "ms": 819
+  },
+  {
+   "s": "early",
+   "finals": [
+    {
+     "shown": "2,281",
+     "final": "2580"
+    },
+    {
+     "shown": "3,501",
+     "final": "3960"
+    },
+    {
+     "shown": "+0AP",
+     "final": "0"
+    },
+    {
+     "shown": "+2,281AP",
+     "final": "2580"
+    },
+    {
+     "shown": "+2,281AP",
+     "final": "2580"
+    },
+    {
+     "shown": "+2,281AP",
+     "final": "2580"
+    },
+    {
+     "shown": "+2,281AP",
+     "final": "2580"
+    }
+   ],
+   "text": "LAKE MACALANIA — THE FROZEN LAKE · CLEARED RESULTS · 1:32 Victory AP 2,281 ×5 PARTY GIL 3,501 ITEMS Ability Sphere ×2, Power Sphere T Tidus S.LV 18 · 0/211 AP · no full turn taken · no AP +0AP Y Yuna S.LV 26 · 39/486 AP +2,281AP R Rikku S.LV 41 · 1,095/1,588 AP +2,281AP W Wakka S.LV 26 · 39/486 AP +2,281AP A Auron S.LV 26 · 39/486 AP +2,281AP CONFIRM ▸"
+  },
+  {
+   "s": "settled",
+   "finals": [
+    {
+     "shown": "2,580",
+     "final": "2580"
+    },
+    {
+     "shown": "3,960",
+     "final": "3960"
+    },
+    {
+     "shown": "+0AP",
+     "final": "0"
+    },
+    {
+     "shown": "+2,580AP",
+     "final": "2580"
+    },
+    {
+     "shown": "+2,580AP",
+     "final": "2580"
+    },
+    {
+     "shown": "+2,580AP",
+     "final": "2580"
+    },
+    {
+     "shown": "+2,580AP",
+     "final": "2580"
+    }
+   ],
+   "text": "LAKE MACALANIA — THE FROZEN LAKE · CLEARED RESULTS · 1:32 Victory AP 2,580 ×5 PARTY GIL 3,960 ITEMS Ability Sphere ×2, Power Sphere T Tidus S.LV 18 · 0/211 AP · no full turn taken · no AP +0AP Y Yuna +8 S.Lv S.LV 26 · 39/486 AP +2,580AP R Rikku +1 S.Lv S.LV 41 · 1,095/1,588 AP +2,580AP W Wakka +8 S.Lv S.LV 26 · 39/486 AP +2,580AP A Auron +8 S.Lv S.LV 26 · 39/486 AP +2,580AP CONFIRM ▸"
+  },
+  {
+   "s": "final-vs-shown-mismatch",
+   "count": 0,
+   "mism": []
+  },
+  {
+   "s": "bar-within-cap",
+   "ok": true
+  },
+  {
+   "s": "after-confirm",
+   "screen": "chapter-select"
+  }
+ ],
+ "early": {
+  "finals": [
+   {
+    "shown": "2,281",
+    "final": "2580"
+   },
+   {
+    "shown": "3,501",
+    "final": "3960"
+   },
+   {
+    "shown": "+0AP",
+    "final": "0"
+   },
+   {
+    "shown": "+2,281AP",
+    "final": "2580"
+   },
+   {
+    "shown": "+2,281AP",
+    "final": "2580"
+   },
+   {
+    "shown": "+2,281AP",
+    "final": "2580"
+   },
+   {
+    "shown": "+2,281AP",
+    "final": "2580"
+   }
+  ],
+  "text": "LAKE MACALANIA — THE FROZEN LAKE · CLEARED RESULTS · 1:32 Victory AP 2,281 ×5 PARTY GIL 3,501 ITEMS Ability Sphere ×2, Power Sphere T Tidus S.LV 18 · 0/211 AP · no full turn taken · no AP +0AP Y Yuna S.LV 26 · 39/486 AP +2,281AP R Rikku S.LV 41 · 1,095/1,588 AP +2,281AP W Wakka S.LV 26 · 39/486 AP +2,281AP A Auron S.LV 26 · 39/486 AP +2,281AP CONFIRM ▸"
+ },
+ "settled": {
+  "finals": [
+   {
+    "shown": "2,580",
+    "final": "2580"
+   },
+   {
+    "shown": "3,960",
+    "final": "3960"
+   },
+   {
+    "shown": "+0AP",
+    "final": "0"
+   },
+   {
+    "shown": "+2,580AP",
+    "final": "2580"
+   },
+   {
+    "shown": "+2,580AP",
+    "final": "2580"
+   },
+   {
+    "shown": "+2,580AP",
+    "final": "2580"
+   },
+   {
+    "shown": "+2,580AP",
+    "final": "2580"
+   }
+  ],
+  "text": "LAKE MACALANIA — THE FROZEN LAKE · CLEARED RESULTS · 1:32 Victory AP 2,580 ×5 PARTY GIL 3,960 ITEMS Ability Sphere ×2, Power Sphere T Tidus S.LV 18 · 0/211 AP · no full turn taken · no AP +0AP Y Yuna +8 S.Lv S.LV 26 · 39/486 AP +2,580AP R Rikku +1 S.Lv S.LV 41 · 1,095/1,588 AP +2,580AP W Wakka +8 S.Lv S.LV 26 · 39/486 AP +2,580AP A Auron +8 S.Lv S.LV 26 · 39/486 AP +2,580AP CONFIRM ▸"
+ },
+ "noBadBar": true,
+ "consoleErrors": [],
+ "notFound": []
+}

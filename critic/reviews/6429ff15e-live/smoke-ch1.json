@@ -1,0 +1,130 @@
+{
+ "out": [
+  {
+   "s": "title -> chapter select",
+   "o": true
+  },
+  {
+   "s": "cursor on Chapter I (seymour-flux)",
+   "o": true
+  },
+  {
+   "s": "Chapter I at player turn",
+   "o": true,
+   "d": "awaitingMenu=true"
+  },
+  {
+   "s": "[rig] tidus on",
+   "o": true,
+   "d": "[rig] yuna off (no rig listed in the art manifest) | [rig] kimahri off (no rig listed in the art manifest) | [rig] mortiorchis off (no rig listed in the art manifest) | [rig] tidus on (gate ok, 9 parts, 13 bones, 14 keys, 1x maps, lit) | [rig] seymour-flux-body on (gate ok, 6 parts, 12 bones, 6 keys, 1x maps, lit)"
+  },
+  {
+   "s": "targeting active",
+   "o": true,
+   "d": "{\"sel\":[\"seymour-flux\"],\"has\":true}"
+  },
+  {
+   "s": "cancel leaves targeting, stays in battle",
+   "o": true,
+   "d": "sel=0 screen=battle"
+  },
+  {
+   "s": "P pauses",
+   "o": true,
+   "d": "pause"
+  },
+  {
+   "s": "H hides and restores pause panels",
+   "o": true,
+   "d": "false -> true -> false"
+  },
+  {
+   "s": "Escape/P resumes to battle",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "Escape pauses",
+   "o": true,
+   "d": "pause"
+  },
+  {
+   "s": "Escape resumes",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "audio debug",
+   "o": true,
+   "d": "{\"ready\":true,\"sampleRate\":48000,\"playing\":\"boss-seymour\",\"muted\":false,\"volumes\":{\"master\":0.8,\"music\":0.7,\"sfx\":0.7},\"voiceVolume\":0.9,\"voice\":{\"chapter\":\"seymour-flux\",\"enabled\":true,\"contextState\":\"running\",\"ducked\":false,\"paused\":[],\"asked\":10,\"started\":10,\"current\":null,\"cache\":{\"manifests\":[\"seymour-flux\"],\"buffers\":24,\"decodedBytes\":9825760,\"pinned\":16,\"failed\":0,\"requests\":27},\"plays\":[{\"id\":\"seymour-flux.pre.008\",\"at\":17018,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.013\",\"at\":21603,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.014\",\"at\":23135,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.017\",\"at\":26201,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pr"
+  },
+  {
+   "s": "prerendered music fetched",
+   "o": true,
+   "d": "200 manifest.json | 200 sfx/sprite.mp3 | 200 music/title.mp3 | 200 sfx/sprite-v2.mp3 | 200 music/chapter-select.mp3 | 200 voice/index.json"
+  },
+  {
+   "s": "setting change written to save",
+   "o": true,
+   "d": "945->944"
+  },
+  {
+   "s": "reload keeps save",
+   "o": true,
+   "d": "944 vs 944"
+  }
+ ],
+ "errs": [],
+ "nf": [],
+ "logs": [
+  "[rig] yuna off (no rig listed in the art manifest)",
+  "[rig] kimahri off (no rig listed in the art manifest)",
+  "[rig] mortiorchis off (no rig listed in the art manifest)",
+  "[rig] tidus on (gate ok, 9 parts, 13 bones, 14 keys, 1x maps, lit)",
+  "[rig] seymour-flux-body on (gate ok, 6 parts, 12 bones, 6 keys, 1x maps, lit)"
+ ],
+ "aud": [
+  "200 manifest.json",
+  "200 sfx/sprite.mp3",
+  "200 music/title.mp3",
+  "200 sfx/sprite-v2.mp3",
+  "200 music/chapter-select.mp3",
+  "200 voice/index.json",
+  "200 sfx/parity-ffx-core.mp3",
+  "200 music/scene-gagazet.mp3",
+  "200 sfx/parity-ffx-flux.mp3",
+  "200 voice/seymour-flux.json",
+  "200 voice-pass/seymour-flux.json",
+  "200 voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.mp3",
+  "200 voice/seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.fb2.mp3",
+  "200 voice/seymour-flux/seymour-flux.mid-first-zombie.001.fb2.mp3",
+  "200 voice/seymour-flux/seymour-flux.mid-first-zombie.002.fb1.mp3",
+  "200 voice/seymour-flux/seymour-flux.quip-tidus.001.mp3",
+  "200 voice/seymour-flux/seymour-flux.quip-yuna.001.mp3",
+  "200 voice/seymour-flux/seymour-flux.quip-auron.001.mp3",
+  "200 voice-pass/seymour-flux/seymour-flux.mid-seymour-half.001.mp3",
+  "200 voice-pass/seymour-flux/seymour-flux.mid-seymour-half.002.mp3",
+  "200 voice-pass/seymour-flux/seymour-flux.mid-seymour-lance.001.mp3",
+  "200 voice-pass/seymour-flux/seymour-flux.mid-seymour-lance.002.mp3",
+  "200 voice-pass/seymour-flux/seymour-flux.mid-talk-yuna.001.mp3",
+  "200 voice-pass/seymour-flux/seymour-flux.mid-talk-yuna.002.mp3",
+  "200 voice-pass/seymour-flux/seymour-flux.mid-talk-yuna.003.mp3",
+  "200 voice-pass/seymour-flux/seymour-flux.mid-talk-kimahri.001.mp3",
+  "200 voice-pass/seymour-flux/seymour-flux.mid-talk-kimahri.002.mp3",
+  "200 voice/seymour-flux/seymour-flux.pre.008.mp3",
+  "200 voice/seymour-flux/seymour-flux.pre.013.mp3",
+  "200 voice/seymour-flux/seymour-flux.pre.014.mp3",
+  "200 voice/seymour-flux/seymour-flux.pre.017.mp3",
+  "200 voice/seymour-flux/seymour-flux.pre.018.mp3",
+  "200 music/boss-seymour.mp3",
+  "200 music/victory-ffx.mp3",
+  "200 music/defeat-ffx.mp3",
+  "200 voice/seymour-flux/seymour-flux.pre.019.mp3",
+  "200 voice/seymour-flux/seymour-flux.pre.024.mp3",
+  "200 voice/seymour-flux/seymour-flux.pre.026.mp3",
+  "200 music/pause.mp3",
+  "200 music/boss-seymour.mp3",
+  "200 music/pause.mp3",
+  "200 music/boss-seymour.mp3"
+ ]
+}

@@ -50,10 +50,11 @@ function plainAbilities(): AbilityDef[] {
 describe('the MP a cast costs and the Silence gate, over the whole catalog', () => {
   const pool = plainAbilities();
 
-  it('3,000 casts: the engine pays what the oracle says, and a refused cast starts nothing and pays nothing', () => {
+  // 4,000 draws since the r78 integration (3,000 before): the catalog's eight Wendigo rows moved the seeded sample's count of casts refused for want of MP to 90, under its floor of 100 (100 is not over it either at 3,500; 4,000 and 5,000 pass, every cast still compared with the oracle). The floors are unchanged.
+  it('4,000 casts: the engine pays what the oracle says, and a refused cast starts nothing and pays nothing', () => {
     const r = lcg(20261013);
     const seen = { started: 0, silenced: 0, broke: 0, cheaper: 0, summonLikeFree: 0, scanGated: 0, enemySilenced: 0, boosterScan: 0 };
-    for (let i = 0; i < 3000; i++) {
+    for (let i = 0; i < 4000; i++) {
       const def = r.pick(pool);
       const enemySide = def.category === 'enemy' || r.chance(0.12);
       const autos: AutoAbilityId[] = [];

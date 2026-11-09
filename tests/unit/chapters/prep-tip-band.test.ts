@@ -178,7 +178,7 @@ describe('the tips the model says overflow at 1600 x 900 are the ones job TIP-1 
 
   it('every listed and hidden chapter is put through the model (as many as the chapter registries hold: the count follows them, it was a literal that every new hidden chapter moved), each with three objectives', () => {
     // every chapter the registries hold has its record in the model, the FF7 Guard Scorpion (no pause-screen record) alone excepted: the ids are compared, so the count follows the registries
-    const registered = [...CHAPTERS, ...UNLISTED_CHAPTERS, ...EXPERIMENT_CHAPTERS].map((c) => c.id).filter((id) => id !== 'ff7-guard-scorpion');
+    const registered = [...CHAPTERS, ...UNLISTED_CHAPTERS, ...EXPERIMENT_CHAPTERS].map((c) => c.id).filter((id) => id !== 'ff7-guard-scorpion' && id !== 'ff7-jenova-life'); // the two FF7 chapters have no pause record (FF7 has no pause metadata)
     expect(all.map((m) => m.id).sort()).toEqual(registered.sort());
     for (const meta of all) expect(meta.objectives, meta.id).toHaveLength(3);
   });

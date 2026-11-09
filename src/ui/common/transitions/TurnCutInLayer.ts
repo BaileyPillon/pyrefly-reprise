@@ -41,6 +41,10 @@ export interface TurnCutInRequest {
   label: string;
   side: 'left' | 'right';
   holdMs: number;
+  /** 2026-11-07 (`engine/BigMoveCutIn.ts`): a BIG MOVE's portrait: the move's name and the line above it (the whole of it, with no "YOUR TURN"). Absent: the turn's own cut-in, as before. */
+  move?: { title: string; tag: string };
+  /** A repeat's flash (a big move the member has already shown in this fight): a lighter veil that comes and goes at once. */
+  quick?: boolean;
   /** The scene's art namespace, set by the overlay (`MomentOverlay`), never by the presenter: a portrait the namespace has repainted wins. */
   artNamespace?: string;
 }
@@ -79,7 +83,7 @@ export async function playTurnCutIn(host: HTMLElement, req: TurnCutInRequest): P
 
   const veil = doc.createElement('div');
   veil.style.cssText =
-    'position:absolute;inset:0;background:rgba(11,10,18,0.55);opacity:0;transition:opacity 140ms ease-out;';
+    `position:absolute;inset:0;background:rgba(11,10,18,${req.quick ? 0.4 : 0.55});opacity:0;transition:opacity ${req.quick ? 70 : 140}ms ease-out;`;
   const frame = doc.createElement('div');
   frame.className = req.game === 'ffx2' ? 'ig ig--ffx2' : 'ig';
   const w = host.clientWidth || FRAME_W;
@@ -100,6 +104,7 @@ export async function playTurnCutIn(host: HTMLElement, req: TurnCutInRequest): P
       portraitUrl: portraitFor(req.actorId, req.game, req.artNamespace),
       ctbLabel: req.label,
       side: req.side,
+      ...(req.move ? { headline: req.move.tag, title: req.move.title } : {}),
     });
 
     // 180 ms entrance (cutin.ts SLAM_MS) plus the hold, or a Confirm press.

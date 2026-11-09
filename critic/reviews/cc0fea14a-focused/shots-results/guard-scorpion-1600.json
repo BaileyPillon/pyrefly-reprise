@@ -1,0 +1,101 @@
+{
+ "tag": "guard-scorpion",
+ "how": "word:limit",
+ "W": "1600",
+ "H": "900",
+ "hp": "300",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-BAH_qvc7.js"
+  },
+  {
+   "s": "word",
+   "opened": true
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 2
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "hp-edit",
+   "id": "guard-scorpion",
+   "before": 800,
+   "after": 300,
+   "keys": [
+    "id",
+    "name",
+    "side",
+    "spriteKey",
+    "stats",
+    "hp",
+    "mp",
+    "statuses",
+    "affinities",
+    "immunities",
+    "immunityFlags",
+    "controller"
+   ]
+  },
+  {
+   "s": "keys-ended",
+   "screen": "results",
+   "ms": 48611
+  },
+  {
+   "s": "at",
+   "screen": "results",
+   "ms": 2
+  },
+  {
+   "s": "early",
+   "finals": [],
+   "text": "EXP 100 AP 10 Cloud LV 7 EXP +74 Barret LV 6 EXP +74"
+  },
+  {
+   "s": "settled",
+   "finals": [],
+   "text": "EXP 100 AP 10 Cloud LV 7 EXP +100 Barret LV 6 EXP +100"
+  },
+  {
+   "s": "final-vs-shown-mismatch",
+   "count": 0,
+   "mism": []
+  },
+  {
+   "s": "bar-within-cap",
+   "ok": true
+  },
+  {
+   "s": "confirm-press",
+   "k": 0,
+   "screen": "results"
+  },
+  {
+   "s": "confirm-press",
+   "k": 1,
+   "screen": "chapter-select"
+  },
+  {
+   "s": "after-confirm",
+   "screen": "chapter-select"
+  }
+ ],
+ "early": {
+  "finals": [],
+  "text": "EXP 100 AP 10 Cloud LV 7 EXP +74 Barret LV 6 EXP +74"
+ },
+ "settled": {
+  "finals": [],
+  "text": "EXP 100 AP 10 Cloud LV 7 EXP +100 Barret LV 6 EXP +100"
+ },
+ "noBadBar": true,
+ "consoleErrors": [],
+ "notFound": []
+}

@@ -15,9 +15,12 @@
  * - **Angra Mainyu** (`'ffx2-angra-mainyu'`, number 26, 2026-10-14; FFX-2 only): the Chapter 5 mission "Showdown in the Sands", the Bikanel Desert fiend and its arms Zarich and Tawrich; word `angra` (25 is the Biran and Yenke lane's).
  * - **Valefor at Besaid, Wind Waker** (`'exp-windwaker'`, number 32, 2026-10-20; FFX-2 only): hidden chapter 24's Valefor fight drawn as a Wind Waker HD style 3D scene; word `waker` (31 is the 3D Bahamut's, 29 the Spectral Keeper's and 30 the Fallen Maesters').
  * - **Valefor at Besaid, anime style** (`'exp-anime'`, number 33, 2026-11-06; FFX-2 only): the same fight again with the Meshy toon girls under an anime cel shader; word `gear`.
+ * - **Spherimorph** (`'spherimorph'`, number 41, 2026-11-06; FFX only): the guardian of the spring in the Macalania Woods, a four-state weakness machine you read from its answers; word `spherimorph` (33 to 40 and 42 on are the sibling chapter lanes').
+ *
  * - **The Last Summoning** (`'last-summoning'`, number 28, 2026-10-15; FFX only): Dream's End as a gauntlet in the player's order with the full roster of eight aeons, Yojimbo and the Magus Sisters among them; word `summon` (27 is the Dark Mirror lane's).
  * - **The Sanctuary Keeper** (`'sanctuary-keeper'`, number 39, 2026-11-06; FFX only): the beast that keeps the last road up Mt. Gagazet, fought at the summit; word `beast` (the Spectral Keeper's number is 29).
  *
+ * - **The Omega Ruins** (`'omega-ruins'`, number 43, 2026-11-06; FFX only): Ultima Weapon, Omega Weapon and Nemesis as one three-act chain on the Cavern's plate; word `weapon`.
  * - **The Spectral Keeper** (`'spectral-keeper'`, number 29, 2026-11-02; FFX only): the beast at the foot of the Dome's lift, fought on six glyph platforms; word `keeper` (28 is the Last Summoning lane's).
  *
  * - **The Dark Aeons** (`'dark-aeons'`, number 34, 2026-11-06; FFX only): the six other Dark Aeons (Valefor, Ifrit, Ixion twice, Shiva, Anima, Bahamut) as a chain of seven fresh fights; word `darkaeon` (33 is another lane's).
@@ -31,6 +34,14 @@
  *
  * - **Penance** (`'penance'`, number 35, 2026-11-06; FFX only): the colossus and its two hands on the Fahrenheit's deck; word `judgment` (33 and 34 are the sibling chapter lanes').
  * - **Yuna's Ballad** (`'ffx2-yunas-ballad'`, number 40, 2026-11-06; FFX-2 only): Yuna alone against the possessed Rikku and then the possessed Paine, the Den of Woe's first two fights, as two linked duels with HP and MP carried; word `wraith`.
+ *
+ * - **The Youth League Tournament** (`'ffx2-youth-league'`, number 42, 2026-11-07; FFX-2 only): Mushroom Rock Road's seven fights in a row (Yaibal, four mobs, Elma, Lucil) with the party carried whole; word `youth` (41 is Spherimorph's and 43 the Omega Ruins').
+ *
+ * - **Jenova LIFE** (`'ff7-jenova-life'`, number 44, 2026-11-07; FF7 only): the boss at the altar of the Forgotten Capital, the end of Disc 1; Cloud, Tifa and Barret; word `bluelight` (43 is the sibling lane's).
+ *
+ * - **Ifrit at Kilika Temple** (`'ffx2-ifrit-kilika'`, number 46, 2026-11-07; FFX-2 only): the possessed fire aeon in the Chamber of the Fayth, Chapter 3's mission "Pest Control"; word `ifrit`.
+ *
+ * - **Wendigo** (`'wendigo'`, number 49, 2026-11-06; FFX only): Wendigo and its two Guado Guardians on frozen Lake Macalania, the Meshy 3D tech demo (battle side first); word `wendigo`, desktop only.
  *
  * A further hidden chapter registers here, by adding its record to the list below, not by editing `./encounters.ts`.
  *
@@ -54,6 +65,8 @@ import { FFX2_FALLEN_MAESTERS } from './chapter-ffx2-fallen-maesters.ts';
 import { FFX2_BEVELLE_GUARDIANS } from './chapter-ffx2-bevelle-guardians.ts';
 import { FFX2_FARPLANE_CUP } from './chapter-ffx2-farplane-cup.ts';
 import { FFX2_YUNAS_BALLAD } from './chapter-ffx2-yunas-ballad.ts';
+import { FFX2_YOUTH_LEAGUE } from './chapter-ffx2-youth-league.ts';
+import { FFX2_IFRIT_KILIKA } from './chapter-ffx2-ifrit-kilika.ts';
 import { experimentalYrp } from './chapter-exp-yrp-3d.ts';
 import { EXP_WINDWAKER } from './chapter-exp-windwaker.ts';
 import { EXP_ANIME } from './chapter-exp-anime.ts';
@@ -61,8 +74,12 @@ import { DARK_AEONS } from './chapter-dark-aeons.ts';
 import { PENANCE } from './chapter-penance.ts';
 import { FLOODED_WAYS } from './chapter-flooded-ways.ts';
 import { SANCTUARY_KEEPER } from './chapter-sanctuary-keeper.ts';
+import { SPHERIMORPH } from './chapter-spherimorph.ts';
+import { OMEGA_RUINS } from './chapter-omega-ruins.ts';
+import { FF7_JENOVA_LIFE } from './chapter-ff7-jenova-life.ts';
+import { WENDIGO } from './chapter-wendigo.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from, and `ffx2Bahamut` the listed Chapter IV, which the 3D Bahamut is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter, ffx2Bahamut: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD, SPHERIMORPH, FFX2_YOUTH_LEAGUE, OMEGA_RUINS, FF7_JENOVA_LIFE, FFX2_IFRIT_KILIKA, WENDIGO] as const;
 }

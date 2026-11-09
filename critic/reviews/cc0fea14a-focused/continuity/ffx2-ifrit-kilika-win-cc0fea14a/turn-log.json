@@ -1,0 +1,1228 @@
+[
+ {
+  "turn": 0,
+  "ms": 17,
+  "actor": "idle",
+  "want": {
+   "label": "Armor Break",
+   "target": "Ifrit",
+   "menu": "Skill"
+  },
+  "took": "Armor Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:253/690",
+   "rikku:1583/1839",
+   "paine:1330/1706",
+   "x2-ifrit:8820/8820"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "x2-ifrit",
+   "wanted": "x2-ifrit",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 34,
+    "actor": "paine",
+    "did": "Armor Break",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 1,
+  "ms": 3800,
+  "actor": "idle",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:253/690",
+   "rikku:1583/1839",
+   "paine:1330/1706",
+   "x2-ifrit:8820/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 37,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 3,
+  "ms": 14296,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:37/1133",
+   "rikku:1096/1839",
+   "paine:933/1706",
+   "x2-ifrit:7938/8820"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 71,
+    "actor": "yuna",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 4,
+  "ms": 17638,
+  "actor": "command:paine",
+  "want": {
+   "label": "Power Break",
+   "target": "Ifrit",
+   "menu": "Skill"
+  },
+  "took": "Power Break",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:37/1133",
+   "rikku:1096/1839",
+   "paine:933/1706",
+   "x2-ifrit:7938/8820"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "x2-ifrit",
+   "wanted": "x2-ifrit",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 75,
+    "actor": "paine",
+    "did": "Power Break",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 5,
+  "ms": 26610,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:37/1133",
+   "rikku:1096/1839",
+   "paine:933/1706",
+   "x2-ifrit:7938/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 84,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 6,
+  "ms": 31870,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:444/1133",
+   "rikku:867/1839",
+   "paine:933/1706",
+   "x2-ifrit:7062/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 106,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 7,
+  "ms": 34114,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:444/1133",
+   "rikku:867/1839",
+   "paine:933/1706",
+   "x2-ifrit:6705/8820"
+  ],
+  "target": {
+   "confirmed": false,
+   "reason": "no target cursor"
+  }
+ },
+ {
+  "turn": 8,
+  "ms": 35210,
+  "actor": "idle",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:444/1133",
+   "rikku:867/1839",
+   "paine:933/1706",
+   "x2-ifrit:6705/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 115,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 9,
+  "ms": 37436,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:444/1133",
+   "rikku:867/1839",
+   "paine:933/1706",
+   "x2-ifrit:6478/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 121,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 10,
+  "ms": 41644,
+  "actor": "command:paine",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:444/1133",
+   "rikku:638/1839",
+   "paine:794/1706",
+   "x2-ifrit:6062/8820"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 144,
+    "actor": "paine",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 11,
+  "ms": 43760,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:444/1133",
+   "rikku:638/1839",
+   "paine:794/1706",
+   "x2-ifrit:6062/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 147,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 12,
+  "ms": 45995,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:444/1133",
+   "rikku:638/1839",
+   "paine:794/1706",
+   "x2-ifrit:5922/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 154,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 13,
+  "ms": 50496,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:533/1133",
+   "rikku:409/1839",
+   "paine:794/1706",
+   "x2-ifrit:5503/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 172,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 14,
+  "ms": 52745,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:533/1133",
+   "rikku:409/1839",
+   "paine:794/1706",
+   "x2-ifrit:5287/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 179,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 15,
+  "ms": 54997,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:533/1133",
+   "rikku:409/1839",
+   "paine:794/1706",
+   "x2-ifrit:4924/8820"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 187,
+    "actor": "rikku",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 16,
+  "ms": 59368,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:503/1133",
+   "rikku:409/1839",
+   "paine:794/1706",
+   "x2-ifrit:4924/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 203,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 17,
+  "ms": 61630,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:503/1133",
+   "rikku:409/1839",
+   "paine:794/1706",
+   "x2-ifrit:4781/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 210,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 18,
+  "ms": 63882,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:503/1133",
+   "rikku:409/1839",
+   "paine:794/1706",
+   "x2-ifrit:4416/8820"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 223,
+    "actor": "rikku",
+    "did": "Hi-Potion",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 19,
+  "ms": 66159,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:503/1133",
+   "rikku:409/1839",
+   "paine:794/1706",
+   "x2-ifrit:4416/8820"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 227,
+    "actor": "yuna",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 20,
+  "ms": 68877,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:503/1133",
+   "rikku:1409/1839",
+   "paine:794/1706",
+   "x2-ifrit:4416/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 234,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 21,
+  "ms": 73161,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:544/1133",
+   "rikku:964/1839",
+   "paine:191/1706",
+   "x2-ifrit:4179/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 256,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 22,
+  "ms": 75444,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Paine",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:544/1133",
+   "rikku:964/1839",
+   "paine:191/1706",
+   "x2-ifrit:4179/8820"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "paine",
+   "wanted": "paine",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 260,
+    "actor": "yuna",
+    "did": "Hi-Potion",
+    "targets": [
+     "paine"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 23,
+  "ms": 78813,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:421/1133",
+   "rikku:964/1839",
+   "paine:191/1706",
+   "x2-ifrit:4179/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 271,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 24,
+  "ms": 84912,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:421/1133",
+   "rikku:735/1839",
+   "paine:1191/1706",
+   "x2-ifrit:3506/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 293,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 25,
+  "ms": 88728,
+  "actor": "command:paine",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:39/1133",
+   "rikku:485/1839",
+   "paine:783/1706",
+   "x2-ifrit:3506/8820"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 309,
+    "actor": "paine",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 26,
+  "ms": 92057,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:39/1133",
+   "rikku:485/1839",
+   "paine:783/1706",
+   "x2-ifrit:3506/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 312,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 27,
+  "ms": 96734,
+  "actor": "play:damage",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Rikku",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:375/1133",
+   "rikku:256/1839",
+   "paine:783/1706",
+   "x2-ifrit:2949/8820"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "rikku",
+   "wanted": "rikku",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 337,
+    "actor": "rikku",
+    "did": "Hi-Potion",
+    "targets": [
+     "rikku"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 28,
+  "ms": 99092,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:375/1133",
+   "rikku:256/1839",
+   "paine:783/1706",
+   "x2-ifrit:2949/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 342,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 29,
+  "ms": 101398,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:375/1133",
+   "rikku:256/1839",
+   "paine:783/1706",
+   "x2-ifrit:2804/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 349,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 30,
+  "ms": 105244,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:375/1133",
+   "rikku:1135/1839",
+   "paine:783/1706",
+   "x2-ifrit:2459/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 368,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 31,
+  "ms": 107594,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:375/1133",
+   "rikku:1135/1839",
+   "paine:783/1706",
+   "x2-ifrit:2325/8820"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 377,
+    "actor": "rikku",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 32,
+  "ms": 109715,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:375/1133",
+   "rikku:1135/1839",
+   "paine:783/1706",
+   "x2-ifrit:2325/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 380,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 33,
+  "ms": 113590,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:1133/1133",
+   "rikku:1135/1839",
+   "paine:783/1706",
+   "x2-ifrit:1957/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 399,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 34,
+  "ms": 115993,
+  "actor": "command:paine",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:501/1133",
+   "rikku:1135/1839",
+   "paine:783/1706",
+   "x2-ifrit:1820/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 406,
+    "actor": "paine",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 35,
+  "ms": 118326,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:501/1133",
+   "rikku:1135/1839",
+   "paine:783/1706",
+   "x2-ifrit:1438/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 414,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 36,
+  "ms": 121627,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:377/1133",
+   "rikku:1135/1839",
+   "paine:783/1706",
+   "x2-ifrit:1438/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 426,
+    "actor": "yuna",
+    "did": "Attack",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 37,
+  "ms": 124959,
+  "actor": "command:paine",
+  "want": {
+   "label": "Hi-Potion",
+   "target": "Yuna",
+   "menu": "Item"
+  },
+  "took": "Hi-Potion",
+  "viaMenu": "Item",
+  "engineHp": [
+   "yuna:377/1133",
+   "rikku:906/1839",
+   "paine:783/1706",
+   "x2-ifrit:672/8820"
+  ],
+  "target": {
+   "confirmed": true,
+   "target": "yuna",
+   "wanted": "yuna",
+   "mismatch": false
+  },
+  "engineDid": [
+   {
+    "seq": 439,
+    "actor": "paine",
+    "did": "Hi-Potion",
+    "targets": [
+     "yuna"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 38,
+  "ms": 128008,
+  "actor": "command:rikku",
+  "want": {
+   "label": "Darkness",
+   "target": "all enemies",
+   "menu": "Skill"
+  },
+  "took": "Darkness",
+  "viaMenu": "Skill",
+  "engineHp": [
+   "yuna:377/1133",
+   "rikku:906/1839",
+   "paine:783/1706",
+   "x2-ifrit:672/8820"
+  ],
+  "target": {
+   "confirmed": true
+  },
+  "engineDid": [
+   {
+    "seq": 447,
+    "actor": "rikku",
+    "did": "Darkness",
+    "targets": [
+     "x2-ifrit"
+    ]
+   }
+  ]
+ },
+ {
+  "turn": 39,
+  "ms": 131347,
+  "actor": "command:yuna",
+  "want": {
+   "label": "Attack",
+   "target": "Ifrit",
+   "menu": null
+  },
+  "took": "Attack",
+  "viaMenu": null,
+  "engineHp": [
+   "yuna:516/1133",
+   "rikku:906/1839",
+   "paine:783/1706",
+   "x2-ifrit:672/8820"
+  ],
+  "target": {
+   "confirmed": true
+  }
+ }
+]

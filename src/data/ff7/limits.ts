@@ -12,4 +12,6 @@ import type { Ff7CharacterId } from './ids.ts';
 export const FF7_LIMIT_TABLES: Readonly<Record<Ff7CharacterId, Ff7LimitTable>> = {
   cloud: { lnum: [140, 324, 435, 506], cite: 'core §7.1 [verified: 2 sources]' },
   barret: { lnum: [129, 240, 374, 450], cite: 'core §7.1 [verified: 2 sources]' },
+  // Chapter 44: Tifa's row [LE formulas §8.2, single source: Fergusson PM §3.2]; 39.8% of Max HP to fill at Level 1, the lowest in the game.
+  tifa: { lnum: [120, 334, 509, 566], cite: 'LE formulas §8.2 [single source: Fergusson PM §3.2]' },
 };

@@ -1,0 +1,179 @@
+{
+ "tag": "ffx2-bahamut",
+ "how": "sel:ffx2-bahamut",
+ "W": "1600",
+ "H": "900",
+ "hp": "",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-BAH_qvc7.js"
+  },
+  {
+   "s": "selected",
+   "id": "ffx2-bahamut"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 16427
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "real-attack"
+  },
+  {
+   "s": "battle-ended",
+   "screen": "cutscene",
+   "ms": 82770
+  },
+  {
+   "s": "at",
+   "screen": "results",
+   "ms": 2434
+  },
+  {
+   "s": "early",
+   "finals": [
+    {
+     "shown": "1,300",
+     "final": "1300"
+    },
+    {
+     "shown": "15",
+     "final": "15"
+    },
+    {
+     "shown": "1,000",
+     "final": "1000"
+    },
+    {
+     "shown": "+1,300EXP",
+     "final": "1300"
+    },
+    {
+     "shown": "+1,300EXP",
+     "final": "1300"
+    },
+    {
+     "shown": "+1,300EXP",
+     "final": "1300"
+    }
+   ],
+   "text": "BEVELLE UNDERGROUND — LIMBO · CLEARED RESULTS · 1:35 Results NEW BEST EXP 1,300 ×3 PARTY AP 15 PER DRESSPHERE GIL 1,000 ITEMS Gris Gris Bag Y Yuna WHITE MAGE · CURAGA 55/80 AP +1,300EXP R Rikku DARK KNIGHT · CONFUSE 30/30 AP +1,300EXP P Paine WARRIOR · FLAMETONGUE 20/20 AP +1,300EXP CONFIRM ▸"
+  },
+  {
+   "s": "settled",
+   "finals": [
+    {
+     "shown": "1,300",
+     "final": "1300"
+    },
+    {
+     "shown": "15",
+     "final": "15"
+    },
+    {
+     "shown": "1,000",
+     "final": "1000"
+    },
+    {
+     "shown": "+1,300EXP",
+     "final": "1300"
+    },
+    {
+     "shown": "+1,300EXP",
+     "final": "1300"
+    },
+    {
+     "shown": "+1,300EXP",
+     "final": "1300"
+    }
+   ],
+   "text": "BEVELLE UNDERGROUND — LIMBO · CLEARED RESULTS · 1:35 Results NEW BEST EXP 1,300 ×3 PARTY AP 15 PER DRESSPHERE GIL 1,000 ITEMS Gris Gris Bag Y Yuna WHITE MAGE · CURAGA 55/80 AP +1,300EXP R Rikku DARK KNIGHT · CONFUSE 30/30 AP +1,300EXP P Paine WARRIOR · FLAMETONGUE 20/20 AP +1,300EXP CONFIRM ▸"
+  },
+  {
+   "s": "final-vs-shown-mismatch",
+   "count": 0,
+   "mism": []
+  },
+  {
+   "s": "bar-within-cap",
+   "ok": true
+  },
+  {
+   "s": "confirm-press",
+   "k": 0,
+   "screen": "cutscene"
+  },
+  {
+   "s": "after-confirm",
+   "screen": "cutscene"
+  }
+ ],
+ "early": {
+  "finals": [
+   {
+    "shown": "1,300",
+    "final": "1300"
+   },
+   {
+    "shown": "15",
+    "final": "15"
+   },
+   {
+    "shown": "1,000",
+    "final": "1000"
+   },
+   {
+    "shown": "+1,300EXP",
+    "final": "1300"
+   },
+   {
+    "shown": "+1,300EXP",
+    "final": "1300"
+   },
+   {
+    "shown": "+1,300EXP",
+    "final": "1300"
+   }
+  ],
+  "text": "BEVELLE UNDERGROUND — LIMBO · CLEARED RESULTS · 1:35 Results NEW BEST EXP 1,300 ×3 PARTY AP 15 PER DRESSPHERE GIL 1,000 ITEMS Gris Gris Bag Y Yuna WHITE MAGE · CURAGA 55/80 AP +1,300EXP R Rikku DARK KNIGHT · CONFUSE 30/30 AP +1,300EXP P Paine WARRIOR · FLAMETONGUE 20/20 AP +1,300EXP CONFIRM ▸"
+ },
+ "settled": {
+  "finals": [
+   {
+    "shown": "1,300",
+    "final": "1300"
+   },
+   {
+    "shown": "15",
+    "final": "15"
+   },
+   {
+    "shown": "1,000",
+    "final": "1000"
+   },
+   {
+    "shown": "+1,300EXP",
+    "final": "1300"
+   },
+   {
+    "shown": "+1,300EXP",
+    "final": "1300"
+   },
+   {
+    "shown": "+1,300EXP",
+    "final": "1300"
+   }
+  ],
+  "text": "BEVELLE UNDERGROUND — LIMBO · CLEARED RESULTS · 1:35 Results NEW BEST EXP 1,300 ×3 PARTY AP 15 PER DRESSPHERE GIL 1,000 ITEMS Gris Gris Bag Y Yuna WHITE MAGE · CURAGA 55/80 AP +1,300EXP R Rikku DARK KNIGHT · CONFUSE 30/30 AP +1,300EXP P Paine WARRIOR · FLAMETONGUE 20/20 AP +1,300EXP CONFIRM ▸"
+ },
+ "noBadBar": true,
+ "consoleErrors": [],
+ "notFound": []
+}

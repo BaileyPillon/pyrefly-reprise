@@ -25,7 +25,7 @@ import { stagingTakesSplash } from '../../BattlePresenterStaging.ts';
 export interface FxStagePort {
   enabled(): boolean;
   /** An action opens: Overdrives and Specials get the splash cut-in (C6). Resolves when it clears. */
-  actionOpen?(o: { actorId: CombatantId; name: string; kind: 'overdrive' | 'special' | 'other' }): Promise<void>;
+  actionOpen?(o: { actorId: CombatantId; name: string; kind: 'overdrive' | 'special' | 'other'; splash?: boolean }): Promise<void>;
   /**
    * One blow lands. Returns how long (ms) the presentation holds (C2); the beat awaits that in
    * place of its own hit-stop sleep on a heavy blow, and never waits on a light one.
@@ -89,7 +89,7 @@ function port(ctx: EventCtx): FxStagePort | null {
 }
 
 /** `action-start`, after the Overdrive rig or the punch-in: the splash, when there is one. */
-export async function fxActionOpen(ctx: EventCtx, event: Extract<BattleEvent, { type: 'action-start' }>): Promise<void> {
+export async function fxActionOpen(ctx: EventCtx, event: Extract<BattleEvent, { type: 'action-start' }>, portraitPlays = false): Promise<void> {
   const prev = marks.get(ctx);
   const name = event.abilityName ?? '';
   const kind: ActionMark['kind'] =
@@ -104,7 +104,8 @@ export async function fxActionOpen(ctx: EventCtx, event: Extract<BattleEvent, { 
   const fx = port(ctx);
   if (!fx?.actionOpen || kind === 'other' || ctx.speed() === 'skip') return;
   if (stagingTakesSplash(ctx, event, kind)) return; // lane "pro-staging": the staged opening or held breath replaces the splash cut-in (its big banner), only while it is on
-  await fx.actionOpen({ actorId: event.actorId, name, kind });
+  // 2026-11-07: a party member's big move already shows the member's portrait and the move's name (`BigMoveCutIn.ts`): the splash would be a second slab from the same side. The port still hears of the move (it keeps which big move is on for the blows' own effects); `?portraits=turns` or `off` leaves the splash as it was
+  await fx.actionOpen({ actorId: event.actorId, name, kind, ...(portraitPlays ? { splash: false } : {}) });
 }
 
 /** A damage event the presenter shows as a blow (`BattlePresenterBeats.damage` hands it to `fxHit`): it hurts, and it is not an IMMUNE or a zero. */

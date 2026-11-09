@@ -34,6 +34,9 @@ function fakeRoot(mutate?: (rig: string, root: string) => void): { root: string;
     // `tools/dist-filter.mjs` reads the hidden 3D Bahamut's shipped-model lists from `src/data/yrp-ids.ts` (ch-yrp, 2026-11-02): a third import-free leaf, which the fixture lacked (the whole file failed to start the deploy).
     mkdirSync(join(base, 'src', 'data'), { recursive: true });
     cpSync(join(ROOT, 'src', 'data', 'yrp-ids.ts'), join(base, 'src', 'data', 'yrp-ids.ts'));
+    // and the hidden Wendigo chapter's shipped-model list from `src/data/ffx/lake-models.ts` (ch-wendigo phase 4, 2026-11-07): a fourth import-free leaf (the dist filter and `tools/lake-models-verify.mjs` read it).
+    mkdirSync(join(base, 'src', 'data', 'ffx'), { recursive: true });
+    cpSync(join(ROOT, 'src', 'data', 'ffx', 'lake-models.ts'), join(base, 'src', 'data', 'ffx', 'lake-models.ts'));
     symlinkSync(join(ROOT, 'node_modules'), join(base, 'node_modules'), 'junction');
     writeFileSync(join(base, 'package.json'), JSON.stringify({ name: 'fake', type: 'module' }));
     mkdirSync(join(base, 'public'), { recursive: true });

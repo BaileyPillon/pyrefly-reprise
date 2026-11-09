@@ -6,8 +6,10 @@ import { setDemoChapter } from '../../src/engine/motion/DemoGate.ts';
 import { ProFieldMarks } from '../../src/ui/common/ProFieldMarks.ts';
 import { KO_FLOOR_MS, PRO_HAND_VIEW, isLowRow, koPlan, proHandSize, proRing, proRingBox, rowMark, rowMarkClass, rowMarkHtml } from '../../src/ui/common/proMarkers.ts';
 import { TargetCursor, type TargetEntry } from '../../src/ui/ffx/TargetCursor.ts';
+import { CONE_VIEW, coneFlips, coneSize, markerStyle, markerStyleFromSearch, setMarkerStyle } from '../../src/ui/ffx/targetCone.ts';
 import { PartyStatusWindow } from '../../src/ui/ffx/PartyStatusWindow.ts';
-import { dockPlate } from '../../src/ui/ffx/targetCursorParts.ts';
+import { dockPlate, handBox } from '../../src/ui/ffx/targetCursorParts.ts';
+import { commandRowBoxes } from '../../src/ui/ffx/bracketClip.ts';
 
 /**
  * The pro markers (lane "pro-look"; markers "Classic, calm, clear"; Chapter I and Chapter IV only, off by default): the big FFX glove, the FFX-2 ring with the name beside it, the low-HP pulse on a row, the KO
@@ -34,6 +36,7 @@ afterEach(() => {
   setProMode(null);
   setProPiece(null);
   setDemoChapter(undefined);
+  setMarkerStyle(null);
 });
 
 describe('the pure pieces', () => {
@@ -102,7 +105,8 @@ describe('the pure pieces', () => {
 });
 
 describe("the target cursor: today's with the piece off, the pro marker with it on", () => {
-  it('off (the default): FFX has its 44 px glove with the figure bracket; FFX-2 its big flower at the figure', () => {
+  it('off (the default), with ?marker=hand: FFX has its 44 px glove with the figure bracket; FFX-2 its big flower at the figure', () => {
+    setMarkerStyle('hand'); // the glove is one address word away (2026-11-07: the default FFX marker is the cone)
     const f = cursor('ffx');
     f.showSingle([ENTRY]);
     expect(f.el.classList.contains('ffx-targeting--pro')).toBe(false);
@@ -116,7 +120,8 @@ describe("the target cursor: today's with the piece off, the pro marker with it 
     expect(x.el.querySelector('.ffx-target__leader')).toBeNull();
   });
 
-  it('on: FFX gets the big glove; FFX-2 the quarter-height ring with short corners round it and the name beside it on a leader', () => {
+  it('on, with ?marker=hand: FFX gets the big glove; FFX-2 the quarter-height ring with short corners round it and the name beside it on a leader', () => {
+    setMarkerStyle('hand');
     setProMode('pro');
     setDemoChapter('seymour-flux');
     const f = cursor('ffx');
@@ -145,12 +150,135 @@ describe("the target cursor: today's with the piece off, the pro marker with it 
   });
 
   it('the glove\'s plate docks off the bigger glove', () => {
+    setMarkerStyle('hand');
     setProMode('pro');
     setDemoChapter('seymour-flux');
     const f = cursor('ffx');
     f.showSingle([ENTRY]);
     const plate = f.el.querySelector<HTMLElement>('.ffx-target__plate')!;
     expect(plate).not.toBeNull();
+  });
+});
+
+describe("FFX's marker is the cone in Ink & Gold (Bailey 2026-11-07, 'B: cone in Ink and Gold'; FFX only; ?marker=hand brings the glove back)", () => {
+  it('the cone is the default; ?marker=hand (and only that) asks for the glove', () => {
+    expect(markerStyle()).toBe('cone');
+    expect(markerStyleFromSearch(undefined)).toBe('cone');
+    expect(markerStyleFromSearch('')).toBe('cone');
+    expect(markerStyleFromSearch('?marker=hand')).toBe('hand');
+    expect(markerStyleFromSearch('?marker=HAND&look=pro')).toBe('hand');
+    expect(markerStyleFromSearch('?marker=cone')).toBe('cone');
+    expect(markerStyleFromSearch('?marker=ring')).toBe('cone');
+  });
+
+  it('its size is 6.2 percent of the window, 64 px at the least and 168 at the most, in the drawing\'s own shape', () => {
+    expect(coneSize(1600).w).toBeCloseTo(99.2, 1);
+    expect(coneSize(300).w).toBe(64);
+    expect(coneSize(9000).w).toBe(168);
+    const s = coneSize(1920);
+    expect(s.h / s.w).toBeCloseTo(CONE_VIEW.h / CONE_VIEW.w, 3);
+    expect(coneSize(1600).w).toBeLessThan(proHandSize(1600).w); // smaller than the glove it replaces (the real cone is small)
+  });
+
+  it('off (the default look): FFX draws the cone at the figure, sized inline, with the glove\'s hooks and no glove', () => {
+    const f = cursor('ffx');
+    f.showSingle([ENTRY]);
+    expect(f.el.classList.contains('ffx-targeting--pro')).toBe(false);
+    const hand = f.el.querySelector<HTMLElement>('.ffx-target__hand')!;
+    expect(hand.classList.contains('ffx-target__hand--cone')).toBe(true);
+    expect(hand.querySelector('svg')!.classList.contains('ffx-cone')).toBe(true);
+    expect(hand.querySelector('.ffx-hand__palm')).toBeNull(); // no glove
+    expect(hand.querySelector('.pro-glove')).toBeNull();
+    expect(Number.parseFloat(hand.style.width)).toBeCloseTo(coneSize(2560).w, 0);
+    expect(Number.parseFloat(hand.style.height)).toBeCloseTo(coneSize(2560).h, 0);
+    expect(hand.style.getPropertyValue('--pro-hand-bob')).toBe('8px');
+    expect(f.el.querySelector<HTMLElement>('.ffx-target')!.style.width).toBe('520px'); // the bracket is still the figure's own box
+    const plate = f.el.querySelector<HTMLElement>('.ffx-target__plate')!;
+    expect(plate.querySelector('.ffx-target__lbl')).toBeNull(); // the three-line flag is the pro look's, not the cone's
+  });
+
+  it('on (the pro look): the cone, and the three-line flag that docks off the cone\'s own box', () => {
+    setProMode('pro');
+    setDemoChapter('seymour-flux');
+    const f = cursor('ffx');
+    f.showSingle([ENTRY]);
+    expect(f.el.classList.contains('ffx-targeting--pro')).toBe(true);
+    const hand = f.el.querySelector<HTMLElement>('.ffx-target__hand')!;
+    expect(hand.classList.contains('ffx-target__hand--cone')).toBe(true);
+    expect(Number.parseFloat(hand.style.width)).toBeCloseTo(coneSize(2560).w, 0); // not the glove's 230 px
+    expect(f.el.querySelector('.pro-glove')).toBeNull();
+    expect(f.el.querySelector('.ffx-target__plate .ffx-target__lbl')!.textContent).toBe('TARGET');
+    expect(f.el.querySelector('.ffx-target__flower')).toBeNull(); // the two chromes are never mixed
+  });
+
+  it('FFX-2 never gets the cone: its marker is the ring, the same with either word (the ring stays byte-identical)', () => {
+    const draw = (style: 'cone' | 'hand'): string => {
+      setMarkerStyle(style);
+      document.body.innerHTML = '';
+      const x = cursor('ffx2');
+      x.showSingle([ENTRY]);
+      return x.el.innerHTML;
+    };
+    const withCone = draw('cone');
+    const withHand = draw('hand');
+    expect(withCone).toBe(withHand);
+    expect(withCone).toContain('ffx-target__flower');
+    expect(withCone).not.toContain('ffx-target__hand');
+    expect(withCone).not.toContain('ffx-cone');
+  });
+
+  it('the cone docks on the figure\'s right when its left side is behind the command stack (the leftmost ally), and nowhere else', () => {
+    const GAP = (2560 / 1920) * 21;
+    const size = coneSize(2560);
+    const ally = { x: 300, y: 500, w: 150, h: 260 }; // stands against the command list at the left
+    const stack = { x: 0, y: 300, w: 330, h: 500 };
+    expect(coneFlips(ally, GAP, size, [stack])).toBe(true);
+    expect(coneFlips(ally, GAP, size, [])).toBe(false); // no panels: a fixture, the phone
+    expect(coneFlips({ ...ally, x: 900 }, GAP, size, [stack])).toBe(false); // clear of the stack
+    expect(coneFlips(ally, GAP, size, [stack, { x: 440, y: 300, w: 400, h: 600 }])).toBe(false); // the right side is covered as much: no flip
+    expect(handBox(ally, GAP, size, 'right').x).toBeGreaterThan(ally.x + ally.w); // the right box stands beside the figure
+    expect(handBox(ally, GAP, size).x + size.w).toBeLessThanOrEqual(ally.x); // the left box, as it always was
+  });
+
+  it('a flipped cone is drawn on the right with the mirrored class; the glove never flips', () => {
+    const f = cursor('ffx');
+    f.setPanels([{ x: 0, y: 0, w: 2560, h: 1440 }]); // a panel that covers the whole left of the figure and its right too: no flip
+    f.showSingle([ENTRY]);
+    expect(f.el.querySelector('.ffx-target__hand--flip')).toBeNull();
+    f.setPanels([{ x: BOSS.x - 600, y: 0, w: 640, h: 1440 }]); // the stack stands over the boss's left side only
+    f.reposition();
+    const hand = f.el.querySelector<HTMLElement>('.ffx-target__hand')!;
+    expect(hand.classList.contains('ffx-target__hand--flip')).toBe(true);
+    expect(Number.parseFloat(hand.style.left)).toBeGreaterThan(BOSS.x + BOSS.w); // docked on the right of the figure
+    setMarkerStyle('hand');
+    f.reposition();
+    expect(f.el.querySelector('.ffx-target__hand--flip')).toBeNull(); // the glove keeps its left dock whatever the panels are
+  });
+
+  it("the command rows count as what hides a left dock (the HUD's panel list does not carry them: a row paints on a child), and the upright phone has none", () => {
+    const f = cursor('ffx');
+    f.setStackRows(() => [{ x: BOSS.x - 600, y: 0, w: 640, h: 1440 }]);
+    f.showSingle([ENTRY]);
+    expect(f.el.querySelector('.ffx-target__hand--flip')).not.toBeNull();
+    f.setStackRows(() => []);
+    f.reposition();
+    expect(f.el.querySelector('.ffx-target__hand--flip')).toBeNull();
+
+    const stack = document.createElement('div');
+    const row = document.createElement('div');
+    row.className = 'ig-cmd';
+    row.getBoundingClientRect = () => ({ left: 70, top: 600, right: 500, bottom: 660, width: 430, height: 60, x: 70, y: 600, toJSON: () => ({}) }) as DOMRect;
+    stack.append(row);
+    expect(commandRowBoxes(document, stack)).toEqual([{ x: 70, y: 600, w: 430, h: 60 }]);
+    document.documentElement.dataset['phoneBattle'] = '1';
+    expect(commandRowBoxes(document, stack)).toEqual([]); // the upright phone: the layer is not clipped there, so nothing hides a left dock
+    delete document.documentElement.dataset['phoneBattle'];
+  });
+
+  it('the cone leaves a group cast alone: no marker between three allies, as before', () => {
+    const f = cursor('ffx');
+    f.showGroup([{ id: 'a', name: 'Tidus', kind: 'ally' }, { id: 'b', name: 'Yuna', kind: 'ally' }]);
+    expect(f.el.querySelector('.ffx-target__hand')).toBeNull();
   });
 });
 

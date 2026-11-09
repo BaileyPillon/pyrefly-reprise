@@ -39,6 +39,10 @@ import { DARK_AEONS_SCENE } from '../../../src/data/ffx/dark-aeons-six-ids.ts';
 import { PENANCE_SCENE } from '../../../src/data/ffx/penance-ids.ts';
 import { FLOODED_WAYS_SCENE } from '../../../src/data/ffx/flooded-ways-ids.ts';
 import { SANCTUARY_KEEPER_SCENE } from '../../../src/data/ffx/sanctuary-keeper-ids.ts';
+import { SPHERIMORPH_SCENE } from '../../../src/data/ffx/spherimorph-ids.ts';
+import { OMEGA_RUINS_SCENE } from '../../../src/data/ffx/omega-ruins-ids.ts';
+import { FORGOTTEN_CAPITAL_SCENE } from '../../../src/data/ff7/jenova-life-ids.ts';
+import { WENDIGO_SCENE } from '../../../src/data/ffx/wendigo-ids.ts';
 import { EXP_YRP_SCENE } from '../../../src/data/yrp-ids.ts';
 import { EXP_WINDWAKER_SCENE } from '../../../src/data/windwaker-ids.ts';
 import { EXP_ANIME_SCENE } from '../../../src/data/anime-ids.ts';
@@ -161,7 +165,7 @@ describe('its scene', () => {
   });
 
   it('the hidden chapters\' scenes moved to the side table are all still registered, row for row, with the factories they had', () => {
-    const keys = [EXPERIMENT_GROUNDS_PLATE, EXP_LEBLANC_SCENE, MUSHROOM_ROCK_SCENE, EXP_FAYTH_SCENE, TOURIST_TRAP_SCENE, GAGAZET_RONSO_SCENE, ANGRA_MAINYU_SCENE, MIRROR_AEONS_SCENE, LAST_SUMMONING_SCENE, SPECTRAL_KEEPER_SCENE, DARK_AEONS_SCENE, FLOODED_WAYS_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE, EXP_ANIME_SCENE, PENANCE_SCENE, SANCTUARY_KEEPER_SCENE]; // the Sanctuary Keeper's summit (FFX only, 2026-11-06) is the last row, Penance's deck (FFX only, 2026-11-06) the one before it, the anime chapter's temple (FFX-2, 2026-11-06) the one before it; the Dark Aeons' stage (FFX, 2026-11-06) sits after the Spectral Keeper's; the 3D Bahamut's chamber (FFX-2, 2026-10-19) is the last row; the Tourist Trap's cavern (FFX-2, 2026-10-14) is the fifth row, the Mountain Gate (FFX, Biran and Yenke, 2026-10-14) the sixth, Angra Mainyu's desert (FFX-2, 2026-10-14) the seventh, Mirror Aeons' two-plate stage (FFX, 2026-10-15) the eighth
+    const keys = [EXPERIMENT_GROUNDS_PLATE, EXP_LEBLANC_SCENE, MUSHROOM_ROCK_SCENE, EXP_FAYTH_SCENE, TOURIST_TRAP_SCENE, GAGAZET_RONSO_SCENE, ANGRA_MAINYU_SCENE, MIRROR_AEONS_SCENE, LAST_SUMMONING_SCENE, SPECTRAL_KEEPER_SCENE, DARK_AEONS_SCENE, FLOODED_WAYS_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE, EXP_ANIME_SCENE, PENANCE_SCENE, SANCTUARY_KEEPER_SCENE, SPHERIMORPH_SCENE, OMEGA_RUINS_SCENE, FORGOTTEN_CAPITAL_SCENE, WENDIGO_SCENE]; // Wendigo's lake (FFX only, 2026-11-06) is the last row, then Jenova LIFE's altar (FF7 only, 2026-11-07) is the last row, then the Omega Ruins' Cavern (FFX only, 2026-11-06) is the last row, then the Spherimorph's spring (FFX only, 2026-11-06) the one before it, then the Sanctuary Keeper's summit (FFX only, 2026-11-06) is the last row, Penance's deck (FFX only, 2026-11-06) the one before it, the anime chapter's temple (FFX-2, 2026-11-06) the one before it; the Dark Aeons' stage (FFX, 2026-11-06) sits after the Spectral Keeper's; the 3D Bahamut's chamber (FFX-2, 2026-10-19) is the last row; the Tourist Trap's cavern (FFX-2, 2026-10-14) is the fifth row, the Mountain Gate (FFX, Biran and Yenke, 2026-10-14) the sixth, Angra Mainyu's desert (FFX-2, 2026-10-14) the seventh, Mirror Aeons' two-plate stage (FFX, 2026-10-15) the eighth
     expect(EXPERIMENT_SCENE_ENTRIES.map((e) => e.key)).toEqual(keys);
     expect(Object.keys(EXPERIMENT_SCENE_FACTORIES).sort()).toEqual([...keys].sort());
     for (const key of keys) {

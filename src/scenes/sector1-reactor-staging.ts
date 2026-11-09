@@ -82,6 +82,11 @@ export interface Sector1Layout {
   readonly plateZoom: number;
   /** How far in front of the rifles' tips a melee attacker stops, world units. */
   readonly strikeGap: number;
+  /**
+   * How far in front of the boss's spot its nearest point stands, world units; absent = the Guard Scorpion's rifles ({@link SECTOR1_BOSS_FRONT}).
+   * Another FF7 fight on this field names its own (`forgotten-capital-staging.ts`). Additive.
+   */
+  readonly bossFront?: number;
 }
 
 /** 16:9 and wider (and every landscape window): the approved Film frame. */
@@ -126,7 +131,7 @@ export const SECTOR1_BOSS_FRONT = (892 / 1060) * 2.35;
 /** Where a melee attacker stops to strike Guard Scorpion in `layout`: just in front of its rifles, a little nearer the camera. Our estimate. */
 export function strikeSpot(layout: Sector1Layout = SECTOR1_DESK): [number, number, number] {
   const [bx, by, bz] = layout.boss;
-  return [bx - SECTOR1_BOSS_FRONT - layout.strikeGap, by, bz + 0.5];
+  return [bx - (layout.bossFront ?? SECTOR1_BOSS_FRONT) - layout.strikeGap, by, bz + 0.5];
 }
 
 /** The boss's combatant id (`src/data/ff7/enemies/guard-scorpion.ts`). */

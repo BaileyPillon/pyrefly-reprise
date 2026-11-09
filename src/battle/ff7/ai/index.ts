@@ -3,11 +3,14 @@
  */
 
 import { guardScorpionScript } from './guard-scorpion.ts';
+import { jenovaLifeScript } from './jenova-life.ts';
 import type { Ff7AiScript } from './script.ts';
 
 export const FF7_AI_SCRIPTS: Readonly<Record<string, Ff7AiScript>> = {
   'guard-scorpion': guardScorpionScript,
+  'jenova-life': jenovaLifeScript, // chapter 44
 };
 
 export { guardScorpionScript, GUARD_SCORPION_HINTS, hintCase } from './guard-scorpion.ts';
+export { jenovaLifeScript, JENOVA_REFLECT_MP, spclChanceFor } from './jenova-life.ts';
 export { makeAiApi, randomOpponent, type Ff7AiApi, type Ff7AiPlan, type Ff7AiScript } from './script.ts';

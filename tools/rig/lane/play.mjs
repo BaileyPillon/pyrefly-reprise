@@ -11,7 +11,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { MODES, parseArgs, resolvePoses, subjectSpec } from './lane-pure.mjs';
 import { openGame, waitForGuards } from './play-common.mjs';
-import * as modes from './play-modes.mjs';
+import * as base from './play-modes.mjs';
+import { menuprobe, motion } from './play-motion.mjs';
+
+const modes = { ...base, motion, menuprobe };
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const a = parseArgs(process.argv.slice(2));
@@ -30,7 +33,7 @@ async function main() {
   };
   fs.mkdirSync(o.out, { recursive: true });
   await waitForGuards(log);
-  const g = await openGame({ repo: o.repo, base: o.base, rig: o.rig, log });
+  const g = await openGame({ repo: o.repo, base: o.base, rig: o.rig, log, query: spec.query ?? '' });
   try {
     await modes[mode](g, spec, o);
   } catch (e) {

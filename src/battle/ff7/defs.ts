@@ -21,7 +21,7 @@
  * Game case (AGENTS.md rule 14): **FF7 only.**
  */
 
-import type { Ff7EquipmentDef, Ff7EnemyFields } from '../common/types-ff7.ts';
+import type { Ff7EquipmentDef, Ff7EnemyFields, Ff7StatusId } from '../common/types-ff7.ts';
 
 /** FF7's damage formulas [core §4.1 to §4.4]. `none` = no damage (Search Scope, Raise Tail). */
 export type Ff7Formula = 'physical' | 'magical' | 'cure' | 'item' | 'fixed' | 'hp-percent' | 'max-hp-percent' | 'none';
@@ -84,6 +84,19 @@ export interface Ff7AbilityDef {
   revive?: { hpDivisor: number };
   /** Only ever used as a counter (Tail Laser) [gs §4]. */
   counterOnly?: boolean;
+  /** Statuses a hit adds to or takes from its target (Reflect, Barrier, MBarrier, Regen; `statuses.ts`). Absent = none (chapter 44). */
+  status?: { add?: readonly Ff7StatusId[]; remove?: readonly Ff7StatusId[] };
+  /**
+   * A chain of separate hits, one Power each (sixteenths of Base, in order); each hit rolls its own hit, critical and
+   * variance and prints its own number. Absent = the one hit at `power` (chapter 44: Tifa's chain, Angermax).
+   */
+  hits?: readonly number[];
+  /** `'auto'`: every hit is a critical (Satellite Beam) [core §3.3, PM §3.3]. */
+  crit?: 'auto';
+  /** A Magical hit on several targets splits (x 2/3) although the action cannot toggle (Aqualung: Gamer Corner's 850 includes the split). */
+  splitsOnMulti?: boolean;
+  /** Counts as a magical attack for "Counter - Magical" when it is the only enemy on screen (Blade Beam, LE party 9.1 from PM). */
+  countersAsMagical?: boolean;
   /** The line it prints as it locks on to its target (Search Scope: "Locked On Target", gs §4). */
   lockOn?: string;
   /** Research section and tag, e.g. `"core §8.4 [single source: Fergusson PM §2.6]"`. */
@@ -113,6 +126,11 @@ export interface Ff7MateriaDef {
   stat: Partial<Record<'str' | 'vit' | 'mag' | 'spr' | 'dex' | 'lck', number>>;
   /** AP needed for level 2. */
   apToLevel2: number;
+  /**
+   * Levels from AP, each with the spells it gives **in all** (cumulative), lowest first: `ap` is the AP at which the level is
+   * reached. Absent = the flat `spells` at every AP (the Guard Scorpion slice's three Materia, unchanged) [LE party 3.5].
+   */
+  levels?: ReadonlyArray<{ ap: number; spells: readonly string[] }>;
   cite: string;
 }
 
