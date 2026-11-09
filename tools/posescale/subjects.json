@@ -912,5 +912,75 @@
   "game": "foe",
   "rowFromBaseline": true,
   "note": "the hidden FFX Omega Ruins chapter 43, Nemesis (r77 art install): a recolour of the Ultima Weapon paintings with the same alpha pixel for pixel, so the pose, size and feet are Ultima Weapon's; no face box and no head reading; the soles are the alpha baseline"
+ },
+ "x2-yaibal": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Youth League chapter 42, Yaibal (m183) (r79 art install): painted over renders of the game model at one pixel scale for all its poses; no face box and no head reading; the soles are the alpha baseline"
+ },
+ "x2-lucil": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Youth League chapter 42, Lucil (m184) (r79 art install): painted over renders of the game model at one pixel scale for all its poses; no face box and no head reading; the soles are the alpha baseline"
+ },
+ "x2-elma": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Youth League chapter 42, Elma (m279) (r79 art install): painted over renders of the game model at one pixel scale for all its poses; no face box and no head reading; the soles are the alpha baseline"
+ },
+ "x2-league-warrior": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Youth League chapter 42, the League Warrior (m210) (r79 art install): painted over renders of the game model at one pixel scale for all its poses; no face box and no head reading; the soles are the alpha baseline"
+ },
+ "x2-league-veteran": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Youth League chapter 42, the League Veteran (m211) (r79 art install): painted over renders of the game model at one pixel scale for all its poses; no face box and no head reading; the soles are the alpha baseline"
+ },
+ "x2-league-slasher": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Youth League chapter 42, the League Slasher (m193) (r79 art install): painted over renders of the game model at one pixel scale for all its poses; no face box and no head reading; the soles are the alpha baseline"
+ },
+ "x2-league-mage": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Youth League chapter 42, the League Mage (m214) (r79 art install): painted over renders of the game model at one pixel scale for all its poses; no face box and no head reading; the soles are the alpha baseline"
+ },
+ "x2-league-master": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Youth League chapter 42, the League Master (m215) (r79 art install): painted over renders of the game model at one pixel scale for all its poses; no face box and no head reading; the soles are the alpha baseline"
+ },
+ "belgemine": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Belgemine chapter 45, Belgemine (m250) (r79 art install): painted over renders of the game model at one pixel scale for all its poses; no face box and no head reading; the soles are the alpha baseline; the poses are the bind pose with the arms turned (the model ships no motion bank)"
+ },
+ "x2-ifrit": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Ifrit at Kilika Temple chapter 46, the possessed Ifrit (r79 art install): the approved FFX ifrit paintings through the possession grade (a violet rim and aura, a 70 px pad), so the figure, the pose scale and the feet are the aeon's; no face box and no head reading; the soles are the alpha baseline"
+ },
+ "x2-garik-ronso": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Garik Ronso chapter 47, Garik Ronso (m182) (r79 art install): painted over renders of the game model at one pixel scale for all its poses; no face box and no head reading; the soles are the alpha baseline; his lance is a drawn prop, so the box of his poses carries the lance"
+ },
+ "x2-ronso-youth-a": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Garik Ronso chapter 47, the Ronso Youth, first palette (m181) (r79 art install): painted over renders of the game model at one pixel scale for all its poses; no face box and no head reading; the soles are the alpha baseline"
+ },
+ "x2-ronso-youth-b": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX-2 Garik Ronso chapter 47, the Ronso Youth, second palette (m181, the same four renders as the first) (r79 art install): painted over renders of the game model at one pixel scale for all its poses; no face box and no head reading; the soles are the alpha baseline"
+ },
+ "shinryu": {
+  "game": "foe",
+  "rowFromBaseline": true,
+  "note": "the hidden FFX Shinryu chapter 48, Shinryu (m283) (r79 art install): a long dragon posed by the airship Evrae's motion bank (the same 250 bones) on a body thickened 11 px; no face box and no head reading; the soles are the alpha baseline (the bottom of the coil)"
  }
 }
