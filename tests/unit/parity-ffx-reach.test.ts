@@ -69,7 +69,8 @@ describe('the target word table (the game\'s command table, by record id)', () =
     // The hidden Spectral Keeper's Move (0x3103) is a trigger row like the airship orders: its aim is a Circle (no BattleDistance), the menu lists the legal ones itself, and the hand-written set stays the 48 attacks.
     // The hidden Flooded Ways' Open lock (0x312F, 2026-11-06) is a trigger row too: its aim is a Gate Lock (no BattleDistance), the menu lists the standing locks itself.
     // And its Struggle (0x3109): the table says reach 0 like an Attack, but its one aim is the monster holding the swallowed character (BattleDistance 0), so the hand-written set (which `re-parity-ai-sin-face` keeps to the 0x30xx ids) is not widened for it.
-    const markers = new Set(['grand-summon', 'fury', 'mix', 'pull-back', 'move', 'open-lock', 'struggle']);
+    // The hidden Oblitzerator's Use crane (0x3102, 2026-11-09) is a trigger row too: its aim is the dock crane (no BattleDistance), the menu lists it itself, and the hand-written set stays the attacks.
+    const markers = new Set(['grand-summon', 'fury', 'mix', 'pull-back', 'move', 'open-lock', 'use-crane', 'struggle']);
     const disagree: string[] = [];
     let checked = 0;
     for (const a of [...CORE_ABILITIES, ...ALL_ABILITIES]) {
