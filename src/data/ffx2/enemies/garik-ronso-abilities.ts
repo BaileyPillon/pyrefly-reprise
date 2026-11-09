@@ -11,7 +11,7 @@
  *   **Mighty Guard** (0x4084: Shell and Protect 126 units, Regen and Haste 90, Defense and Magic Defense up two stages, Evasion up one, on every monster; MP 18) and, on himself, **Shell** and **Protect** (0x30bb, 0x30bc: 110
  *   units; MP 10 and 12).
  * - **The Ronso Youth** (`m181`): **Attack** (0x4000) and **MP Blowout** (0x411d: the MP class, formula 7, power 16: all of one girl's maximum MP, after the race against accuracy 120; MP 10).
- * - **The "battle too long" block** (both scripts): four announcements (0x4232 to 0x4235: damage formula 0, power 0, no hits; scripted flavour turns on himself, in our own words) and **Time Up Meteor** (0x4236, formula 5, power
+ * - **The "battle too long" block** (both scripts; **inert in play**, the rows are carried and no script queues them, `ai/garik-ronso.ts`): four announcements (0x4232 to 0x4235: damage formula 0, power 0, no hits; scripted flavour turns on himself, in our own words) and **Time Up Meteor** (0x4236, formula 5, power
  *   200, 12 hits, everyone, neither physical nor magical).
  *
  * **Hit rule** (hard rule 5): the two Attacks, Bane Lance and MP Blowout roll (the race against the row's accuracy byte, formula 1 or 2: `canMiss: true`); Blind, Mighty Guard, Shell, Protect and Time Up Meteor have accuracy
@@ -198,7 +198,7 @@ export const x2GarikRonsoAbilities: AbilityDef[] = [
     id: RONSO_TIME_UP_METEOR_ID,
     name: 'Time Up Meteor',
     hits: 12, // the row: 12 hits [RE §3]
-    power: 200, // formula 5 (fixed, power x 50 = 10,000 a hit), power 200 [row 0x4236]
+    power: 200, // formula 5 (fixed, power x 50 = 10,000 a hit before the 9,999 cap), power 200 [row 0x4236]
     formula: 'fixed-no-variance',
     damageType: 'other', // flags 0x0: neither Shell nor Protect reduces it
     element: ['none'],

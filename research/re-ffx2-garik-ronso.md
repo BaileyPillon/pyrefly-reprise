@@ -14,7 +14,7 @@ Written 2026-11-07 by a Sonnet sub-agent of the release driver (program plan row
 3. **Guides agree:** "With high Ronso trust, Garik brings one Ronso Youth and has a much smaller list of attacks, but with low trust he brings two Youths and some much tougher attacks" (Jegged Chapter 3). The guide also says the easy Garik "never uses Mighty Guard on his own ... only after being Confused": Confuse lands on him, and a confused monster chooses from its whole move list (the Gun Mage's way to learn Mighty Guard). [G, R consistent]
 4. **The plan's "default answer and a three-way switch" becomes a two-way switch with the game's own rule.** The honest build is *two values of one setting*, "Ronso trust: low (the hostile fight, the default) / high (the friendly bout)". The game has no neutral third value; a first-time player must answer all eight conversations well to see the friendly bout, so the hostile fight is the likely result. [R for the rule; I for "likely"]
 5. **Numbers:** Garik Lv 33, **6,880 HP**, MP 444, AGI 102; Ronso Youth Lv 24, **4,060 HP**, MP 170, AGI 78; pools **15,000 HP hostile, 10,940 friendly**; EXP/Gil/AP 820/130/7 and 600/110/5. [R]
-6. **A "battle too long" block is live in both scenes** (Garik after 180 polls, a Youth after 140), unreachable in play. [R]
+6. **A "battle too long" block is present in both scripts (Garik after 180 polls, a Youth after 140) and never runs.** Its guard is `countchr_player(chr_all_ply3, chr_friend_player) == 0`, the same call as in about twenty other boss scripts, and the sibling notes ran it on the live exe: the count is 3 for a full party and 0 only when no girl can act, and the ATB clock does not step then. (**Corrected 2026-11-08:** this note first read the guard as "no friendly guest", tagged [R] with no run behind it, and the build ported the block live; a review caught it against five sibling notes.) [R for the text; the behaviour is `re-ffx2-ai-bahamut-vegnagun.md` 1.6, a live-exe run]
 7. **Cost:** research is done; about 19 h against the plan's 28 (preflight section 10).
 
 ## 0. Result in one screen
@@ -65,6 +65,8 @@ Each poll increments his turn counter (**starts at 0**) and tests, in this order
 3. else a draw `% 4`: **0 = Blind** on a girl who is not Darkened (if all are Darkened, Attack), **1 to 3 = Attack** on a living girl.
 So at rest: Attack three polls in four, Blind one in four (until all are dark), **Mighty Guard on his 7th, 14th, 21st poll**, Bane Lance whenever a Black Mage without Curse is present (Curse in FFX-2 is "cannot change dressphere", `abilities-core.ts`). [R, I]
 
+**One branch has no Curse test** (`m182.src:405-410`): when neither Yuna nor Rikku wears Black Mage and **Paine** does, the script casts Bane Lance on Paine on every poll without testing Curse (every other branch tests `searchr(chr_<girl>, stat_curse, not)` first). So a cursed Paine, alone in Black Mage, is lanced again every poll, and Garik never reaches the guard, the Blind or the Attack. The build models it (`baneLanceTarget`); the shipped preset does not reach it (Paine's ring has no Black Mage). [R]
+
 ### 2.2 Garik, friendly scene `_229`
 
 His counter **starts at 3**; each poll: counter +1, then: **counter 8 or more: counter 0 and Shell on himself; counter exactly 4: Protect on himself; otherwise Attack** on a living girl. The cycle is eight polls: **Protect, Attack x3, Shell, Attack x3**, from his first poll. No Bane Lance, no Blind, no Mighty Guard, no draw. [R]
@@ -73,9 +75,13 @@ His counter **starts at 3**; each poll: counter +1, then: **counter 8 or more: c
 
 Hostile: a draw `% 8`: **0 = MP Blowout** on the girl with the most MP (the script's group "own target" is unmapped; the guide says it empties one character's MP), else **Attack**. Friendly: **Attack** only. MP Blowout: row 0x411d, formula 7, power 16, accuracy formula 1 (acc 120), MP cost 10, class 2. [R, G]
 
-### 2.4 The "battle too long" block (both scenes, no friendly guest)
+### 2.4 The "battle too long" block (both scenes): present in the scripts, INERT in play
 
-Polls counted from the first: **Garik** at > 180 "Angry", > 190 "Furious", > 195 "About to Blow", > 200 "This Battle Ends Now", then **Time Up Meteor (power 200, 12 hits, everyone) each poll**; **each Youth** the same at > 140, > 150, > 155, > 160. The test is "no friendly guest". Unreachable in a normal fight (Garik acts about every other beat of the girls); port it with one test, as in the Ifrit note. [R]
+Polls counted from the first: **Garik** at > 180 "Angry", > 190 "Furious", > 195 "About to Blow", > 200 "This Battle Ends Now", then **Time Up Meteor (power 200, 12 hits, everyone, 9,999 a hit) each poll**; **each Youth** the same at > 140, > 150, > 155, > 160. [R]
+
+**The guard is `countchr_player(chr_all_ply3, chr_friend_player) == 0`** (`m182.src:63`, `m181.src:59`), and the counter's own increment is inside it. This note first read it as "no friendly guest" and ported the block live. **That reading was wrong.** The identical call opens the block in twenty other boss scripts (m165, m175 to m179, m185, m189, m191 to m193, m210, m211, m214, m215, m254, m256, m258, m262, m263; counted by a text scan of the extracted sources), and `re-ffx2-ai-bahamut-vegnagun.md` 1.6 ran it on the live exe: the count is 3 for a full party, 2 with one girl down and 0 only when every girl is dead or petrified, and **the ATB clock does not step in that state, so the action entry is not polled and the block never runs.** The Leblanc, Valefor, Angra Mainyu and Yuna's Ballad notes (and the scripts built from them) treat it the same way. [R for the text, a sibling lane's live-exe run for the behaviour]
+
+**Consequence for the build:** nothing implements it in play (`RONSO_TOO_LONG_BLOCK_ON` is false; the thresholds stay behind the switch, pinned by a test). **A long fight has no clock**: a line that cannot out-damage Mighty Guard's Regen and Haste does not meet a Meteor, the fight goes on until the girls fall or the party wins (measured in the handoff, section 6).
 
 ## 3. The moves (the game's rows; `src-moves-46-47.out.txt`)
 
@@ -106,7 +112,7 @@ The mission "Battle Blockade", FFX-2 Chapter 3 (Mt. Gagazet and the Zanarkand Ru
 | U1 | Which answer is which at each site | not needed (the chapter offers the outcomes); the guide's tables name them |
 | U2 | Whether Chapters 1 and 2 add (max 16, rule "net at least 8") or the second visit starts from zero | not needed; flagged on the setting's tooltip |
 | U3 | The script group "own target" (MP Blowout's target set) | read as the girl with the most MP (the guide's wording) |
-| U4 | Whether "friendly guest" ever applies here | no (the mission has none) |
+| U4 | What the "battle too long" guard `countchr_player(chr_all_ply3, chr_friend_player) == 0` tests | **resolved 2026-11-08: not "no friendly guest"**; it is true only when no girl can act, and the clock does not step then, so the block never runs (section 2.4; `re-ffx2-ai-bahamut-vegnagun.md` 1.6) |
 
 ## Files and tools
 

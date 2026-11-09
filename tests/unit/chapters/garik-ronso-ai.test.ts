@@ -7,7 +7,8 @@
  *    counter back to 0; else `random() % 4`: 0 is Blind on a girl without Darkness (an Attack when all are dark), 1 to 3 an Attack on a living girl.
  * 2. **Garik, friendly** [RE §2.2]: the counter starts at 3; Protect, Attack x3, Shell, Attack x3, on himself; no roll at all.
  * 3. **The Youth** [RE §2.3]: hostile, `random() % 8`: 0 is MP Blowout on the girl with the most MP, else an Attack; friendly: an Attack.
- * 4. **The "battle too long" block** [RE §2.4]: past 180 / 190 / 195 / 200 polls of Garik (140 / 150 / 155 / 160 of a Youth) the four announcements, then Time Up Meteor every poll; a friendly guest switches it off.
+ * 4. **The "battle too long" block** [RE §2.4]: **inert** (its guard is true only when no girl can act, and the ATB clock does not step then: `research/re-ffx2-ai-bahamut-vegnagun.md` 1.6, run on the live exe). The scripts never
+ *    queue it; the ported thresholds (180 / 190 / 195 / 200 polls of Garik, 140 / 150 / 155 / 160 of a Youth, then Time Up Meteor every poll) are pinned through `tooLong`'s `enabled` argument.
  * 5. **The draws**: `random() % n` is stream 2 (0 to 0xFFFF), a target search is stream 4 and draws only with two or more candidates.
  */
 import { describe, expect, it } from 'vitest';
@@ -23,10 +24,12 @@ import {
   GARIK_TOO_LONG_POLLS,
   RONSO_POLLS,
   RONSO_STAGE,
+  RONSO_TOO_LONG_BLOCK_ON,
   RONSO_TURN,
   YOUTH_DRAW_MODULUS,
   YOUTH_TOO_LONG_POLLS,
   garikRonsoScripts,
+  tooLong,
 } from '../../../src/battle/ffx2/ai/garik-ronso.ts';
 import { mem } from '../../../src/battle/ffx2/internal.ts';
 import {
@@ -43,7 +46,6 @@ import {
 } from '../../../src/data/ffx2/enemies/garik-ronso-abilities.ts';
 import { x2GarikRonso, x2GarikRonsoBout, x2RonsoYouthA, x2RonsoYouthBout } from '../../../src/data/ffx2/enemies/garik-ronso.ts';
 import { GARIK_FRIENDLY_SCRIPT_ID, GARIK_HOSTILE_SCRIPT_ID, YOUTH_FRIENDLY_SCRIPT_ID, YOUTH_HOSTILE_SCRIPT_ID } from '../../../src/data/garik-ronso-ids.ts';
-import { aiUnit } from '../../../src/battle/ffx2/fixtures.ts';
 import { bench, enemy, type Bench } from '../helpers/ffx2ScriptRig.ts';
 
 const garikHostile = (): Bench => bench(enemy('x2-garik-ronso', 6_880, { mp: 444 }), GARIK_HOSTILE_SCRIPT_ID);
@@ -194,6 +196,34 @@ describe('Garik, the hostile fight [RE §2.1]', () => {
     expect(mem(b.self, RONSO_TURN)).toBe(0);
   });
 
+  it('the one branch with no Curse test [m182.src:405-410]: Paine alone in Black Mage is lanced on every poll, cursed or not, and he never reaches the guard, the Blind or the Attack', () => {
+    const b = garikHostile();
+    wear(b, 2, 'black-mage');
+    afflict(b, 2, 'curse');
+    for (let poll = 1; poll <= 9; poll++) {
+      const c = b.poll();
+      expect([b.id(c), b.targets(c)], `poll ${poll}`).toEqual([LANCE, ['paine']]);
+    }
+    expect(mem(b.self, RONSO_TURN)).toBe(9); // the counter rose on every lance and was never reset (no Mighty Guard)
+    expect(b.rng.calls).toEqual([]); // no roll, no search
+
+    // Every other branch tests the Curse: Yuna or Rikku in Black Mage as well (even cursed, even fallen) puts Paine back behind the test.
+    for (const other of [0, 1] as const) {
+      const c = garikHostile();
+      wear(c, other, 'black-mage');
+      wear(c, 2, 'black-mage');
+      afflict(c, other, 'curse');
+      afflict(c, 2, 'curse');
+      expect(c.id(c.poll(1, 0)), `girl ${other} in Black Mage, both cursed`).toBe(ATTACK);
+    }
+    const fallen = garikHostile();
+    wear(fallen, 0, 'black-mage');
+    wear(fallen, 2, 'black-mage');
+    afflict(fallen, 2, 'curse');
+    fallen.girls[0].alive = false; // Yuna still wears it, so the script's job test sends it down the Paine-tests-Curse branch
+    expect(fallen.id(fallen.poll(1, 0)), 'fallen Yuna in Black Mage, Paine cursed').toBe(ATTACK);
+  });
+
   it('with no girl alive he does nothing', () => {
     const b = garikHostile();
     b.girls.forEach((g) => (g.alive = false));
@@ -287,7 +317,9 @@ describe('the Ronso Youth [RE §2.3]', () => {
   });
 });
 
-describe('the "battle too long" block [RE §2.4]', () => {
+
+describe('the generic "battle too long" block is inert [RE §2.4; m182.src:63, m181.src:59; research/re-ffx2-ai-bahamut-vegnagun.md 1.6]', () => {
+  const NOT_THE_BLOCK = (id: string | null): boolean => id !== null && !RONSO_ANNOUNCEMENT_IDS.includes(id as never) && id !== METEOR;
   /** Poll `n` times with a harmless roll (1) and the first candidate; return the ids in order. */
   function run(b: Bench, n: number): Array<string | null> {
     const out: Array<string | null> = [];
@@ -297,54 +329,65 @@ describe('the "battle too long" block [RE §2.4]', () => {
     }
     return out;
   }
-  const stageOf = (ids: Array<string | null>): number[] => ids.flatMap((id, i) => (RONSO_ANNOUNCEMENT_IDS.includes(id as never) ? [i + 1] : []));
 
-  it('Garik (both scenes): polls 181, 191, 196 and 201 are the four announcements in order, Time Up Meteor on 202 and every poll after, and nothing before 181', () => {
-    for (const make of [garikHostile, garikBout]) {
-      const b = make();
-      const ids = run(b, 206);
-      expect(stageOf(ids)).toEqual([181, 191, 196, 201]);
-      expect(ids.slice(180, 181)).toEqual([RONSO_ANNOUNCEMENT_IDS[0]]);
-      expect(ids.slice(190, 191)).toEqual([RONSO_ANNOUNCEMENT_IDS[1]]);
-      expect(ids.slice(195, 196)).toEqual([RONSO_ANNOUNCEMENT_IDS[2]]);
-      expect(ids.slice(200, 201)).toEqual([RONSO_ANNOUNCEMENT_IDS[3]]);
-      expect(ids.slice(201)).toEqual([METEOR, METEOR, METEOR, METEOR, METEOR]);
-      expect(ids.slice(0, 180).every((id) => id !== null && !RONSO_ANNOUNCEMENT_IDS.includes(id as never) && id !== METEOR)).toBe(true);
-      expect([mem(b.self, RONSO_POLLS), mem(b.self, RONSO_STAGE)]).toEqual([206, 4]);
+  it('the switch is off: the guard is true only when no girl can act, and the ATB clock does not step then', () => {
+    expect(RONSO_TOO_LONG_BLOCK_ON).toBe(false);
+  });
+
+  it('in play none of the four scripts ever queues an announcement or Time Up Meteor, however long the fight runs (400 polls, a full party and a lone girl)', () => {
+    for (const make of [garikHostile, garikBout, youthHostile, youthBout]) {
+      const full = make();
+      expect(run(full, 400).every(NOT_THE_BLOCK)).toBe(true);
+      expect([mem(full.self, RONSO_POLLS), mem(full.self, RONSO_STAGE)]).toEqual([0, 0]);
+      const lone = alone(make());
+      expect(run(lone, 400).every(NOT_THE_BLOCK)).toBe(true);
+      expect([mem(lone.self, RONSO_POLLS), mem(lone.self, RONSO_STAGE)]).toEqual([0, 0]);
     }
   });
 
-  it('a Youth (both scenes): 141, 151, 156 and 161 are the announcements, Time Up Meteor from 162', () => {
-    for (const make of [youthHostile, youthBout]) {
-      const b = make();
-      const ids = run(b, 165);
+  it('Garik\'s turn counter just keeps cycling past the old thresholds: after 400 hostile polls it is 400 mod 7 = 1', () => {
+    const b = garikHostile();
+    run(b, 400);
+    expect(mem(b.self, RONSO_TURN)).toBe(400 % 7);
+  });
+
+  it('with the switch passed off (the shipped default) tooLong counts nothing and queues nothing', () => {
+    const b = garikHostile();
+    for (let i = 0; i < 300; i++) expect(tooLong(b.ctx, GARIK_TOO_LONG_POLLS)).toBeNull();
+    expect([mem(b.self, RONSO_POLLS), mem(b.self, RONSO_STAGE)]).toEqual([0, 0]);
+  });
+
+  describe('the ported thresholds, driven through the switch (`enabled` true), pinned in case a run of the exe ever says the guard can be true', () => {
+    /** Call the block `n` times with it enabled; return the ids it queued (null where it queued nothing). */
+    function block(b: Bench, polls: readonly [number, number, number, number], n: number): Array<string | null> {
+      const out: Array<string | null> = [];
+      for (let i = 0; i < n; i++) out.push(b.id(tooLong(b.ctx, polls, true)));
+      return out;
+    }
+    const stageOf = (ids: Array<string | null>): number[] => ids.flatMap((id, i) => (RONSO_ANNOUNCEMENT_IDS.includes(id as never) ? [i + 1] : []));
+
+    it('Garik: polls 181, 191, 196 and 201 are the four announcements in order, Time Up Meteor on 202 and every poll after, and nothing before 181', () => {
+      const b = garikHostile();
+      const ids = block(b, GARIK_TOO_LONG_POLLS, 206);
+      expect(stageOf(ids)).toEqual([181, 191, 196, 201]);
+      expect([ids[180], ids[190], ids[195], ids[200]]).toEqual([...RONSO_ANNOUNCEMENT_IDS]);
+      expect(ids.slice(201)).toEqual([METEOR, METEOR, METEOR, METEOR, METEOR]);
+      expect(ids.slice(0, 180).every((id) => id === null)).toBe(true);
+      expect([mem(b.self, RONSO_POLLS), mem(b.self, RONSO_STAGE)]).toEqual([206, 4]);
+    });
+
+    it('a Youth: 141, 151, 156 and 161 are the announcements, Time Up Meteor from 162', () => {
+      const b = youthHostile();
+      const ids = block(b, YOUTH_TOO_LONG_POLLS, 165);
       expect(stageOf(ids)).toEqual([141, 151, 156, 161]);
       expect(ids.slice(161)).toEqual([METEOR, METEOR, METEOR, METEOR]);
-    }
-  });
+    });
 
-  it('the announcements are on himself and the Meteor is on everyone: no targets', () => {
-    const b = garikHostile();
-    for (const id of run(b, 202).slice(180)) {
-      void id;
-    }
-    const last = b.poll();
-    expect([b.id(last), b.targets(last)]).toEqual([METEOR, []]);
-  });
-
-  it('Garik\'s turn counter does not rise on the announcement polls: after 180 ordinary polls it is 180 mod 7 = 5, and it is still 5 after poll 181', () => {
-    const b = garikHostile();
-    run(b, 180);
-    expect(mem(b.self, RONSO_TURN)).toBe(180 % 7);
-    run(b, 1);
-    expect(mem(b.self, RONSO_TURN)).toBe(180 % 7);
-  });
-
-  it('a friendly guest (a party unit that is not Yuna, Rikku or Paine) keeps the counter from rising: poll 300 is an ordinary poll', () => {
-    const b = garikHostile();
-    b.ctx.units.push(aiUnit('guest', 'party', 1000, 3));
-    const ids = run(b, 300);
-    expect(ids.every((id) => id !== null && !RONSO_ANNOUNCEMENT_IDS.includes(id as never) && id !== METEOR)).toBe(true);
-    expect(mem(b.self, RONSO_POLLS)).toBe(0);
+    it('the announcements are on himself and the Meteor is on everyone: no targets', () => {
+      const b = garikHostile();
+      block(b, GARIK_TOO_LONG_POLLS, 201);
+      const last = tooLong(b.ctx, GARIK_TOO_LONG_POLLS, true);
+      expect([b.id(last), b.targets(last)]).toEqual([METEOR, []]);
+    });
   });
 });

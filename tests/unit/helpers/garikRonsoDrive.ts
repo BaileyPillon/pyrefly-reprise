@@ -10,6 +10,7 @@
  */
 
 import type { BattleEvent, BattleSetup, Command, Decision, EnemyGroupDef, FFX2PartyBuild } from '../../../src/battle/common/types.ts';
+import { STEPS_PER_SECOND } from '../../../src/battle/ffx2/clock.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import type { Ffx2EngineOptions } from '../../../src/battle/ffx2/internal.ts';
 import { besaidBuild } from '../../../src/data/ffx2/builds/besaid.ts';
@@ -98,6 +99,11 @@ export interface GarikDriveOptions {
   build?: FFX2PartyBuild;
   /** `state.flags` set after init. */
   flags?: Record<string, number | string | boolean>;
+  /**
+   * Stop a fight that has run this many game minutes without an outcome and report it unfinished (a stall). The game has no clock on these fights (the "battle too long" block is inert, `ai/garik-ronso.ts`), so a line
+   * that cannot out-damage Mighty Guard's Regen and Haste simply goes on; the cap keeps a measurement finite. Unset, only the decision cap below applies.
+   */
+  stallMinutes?: number;
 }
 
 const MAX_DECISIONS = 40_000;
@@ -150,7 +156,9 @@ export function driveGarik(fight: GarikFight, line: GarikLine, seed: number, opt
   engine.init(setup);
   Object.assign(engine.state().flags, opts.flags ?? {});
   const decisionMs = opts.decisionMs ?? 0;
+  const stallTicks = opts.stallMinutes === undefined ? Infinity : opts.stallMinutes * 60 * STEPS_PER_SECOND;
   for (let i = 0; i < MAX_DECISIONS; i++) {
+    if (engine.state().ticks >= stallTicks) break;
     const d = engine.nextDecision();
     if (d.kind === 'battle-over') return summariseGarik(engine, d.result.outcome);
     if (d.kind === 'waiting') {

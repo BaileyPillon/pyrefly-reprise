@@ -109,7 +109,7 @@ const YOUTH_BOUT_TEXT = {
   scan: 'A Ronso Youth, standing with Garik in a sparring bout.',
 };
 
-/** The announcements and Time Up Meteor are the "battle too long" block, the same on every body (both scripts). */
+/** The announcements and Time Up Meteor are the "battle too long" block, the same on every body (both scripts). The block is inert in play (`ai/garik-ronso.ts`): the rows are the game's and are carried, no script queues them. */
 const TOO_LONG_ABILITIES = [...RONSO_ANNOUNCEMENT_IDS, RONSO_TIME_UP_METEOR_ID];
 
 /** Garik Ronso, `monster.bin` row 182 (id 0x10b6), Lv 33, formation slot 3 (hostile) or 2 (friendly). */
@@ -150,7 +150,7 @@ function garik(id: string, scriptId: string, slot: number, text: { sensor: strin
       overkillThreshold: 0,
       drops: [{ itemId: 'shining-bracer', count: 1 }], // Shining Bracer x1, drop byte 128 [RE §0, accessory 0x905d]
       steal: {
-        baseChance: 25, // [model] the house default, the legacy field; the engine's steal reads `stealRate`
+        baseChance: 50, // [model] the legacy field's house default (30 of the 37 other rows carry 50); inert: the engine's steal reads `stealRate`
         stealRate: 64, // [RE §0] steal byte 64 (25.1 %); the monster record lays the same byte
         common: { itemId: 'icy-gleam', count: 1 }, // Icy Gleam x1 [RE §0, accessory 0x9024]
         rare: { itemId: 'icy-gleam', count: 1 },
@@ -201,7 +201,7 @@ function youth(id: string, name: string, spriteKey: string, scriptId: string, sl
       overkillThreshold: 0,
       drops: [{ itemId: 'x2-remedy', count: 1 }], // Remedy x1 (common) or x2 (rare), drop byte 255 [RE §0, item 0x200f]
       steal: {
-        baseChance: 25, // [model] the house default; the engine's steal reads `stealRate`
+        baseChance: 50, // [model] the legacy field's house default (30 of the 37 other rows carry 50); inert: the engine's steal reads `stealRate`
         stealRate: 64, // [RE §0] steal byte 64; the monster record lays the same byte
         common: { itemId: 'mythril-bangle', count: 1 }, // Mythril Bangle x1 [RE §0, accessory 0x9002]
         rare: { itemId: 'mythril-bangle', count: 1 },

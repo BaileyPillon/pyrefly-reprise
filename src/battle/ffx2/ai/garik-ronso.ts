@@ -6,8 +6,10 @@
  * monster and scene** (the engine's AI context carries no scene flag; each group's enemies name their script): the data picks the script and the script is the game's branch for that scene. A poll is one call of the action entry;
  * `random() % n` is stream 2, a target search stream 4 (nothing is drawn below two candidates); the scenes ship no start positions, so the near-weighted `searchr` is the uniform pick, as in every other script of this kind.
  *
- * - **Garik, hostile** [m182.src, scene 228]: each poll first counts the poll for the "battle too long" block (below), then raises his turn counter (it starts at **0**; Bane Lance polls count too) and tests, in this order:
- *   1. **Bane Lance** on the first of Yuna, Rikku and Paine, in that order, **whose current dressphere is Black Mage and who does not already carry Curse**;
+ * - **Garik, hostile** [m182.src, scene 228]: each poll raises his turn counter (it starts at **0**; Bane Lance polls count too) and tests, in this order:
+ *   1. **Bane Lance** on the first of Yuna, Rikku and Paine, in that order, **whose current dressphere is Black Mage and who does not already carry Curse**. **One branch has no Curse test** [m182.src:405-410]: when neither
+ *      Yuna nor Rikku wears Black Mage and Paine does, he lances Paine on every poll, cursed or not (every other branch tests it), so a cursed Paine alone keeps being lanced and he never reaches the guard, the Blind or the
+ *      Attack. It is modelled (`baneLanceTarget`); the shipped preset never reaches it (Paine's ring has no Black Mage);
  *   2. else, with the counter at **7 or more**: counter 0 and **Mighty Guard on every monster** (Garik and both Youths);
  *   3. else a draw `random() % 4`: **0** is **Blind** on a girl without Darkness (if every living girl is already dark, a plain **Attack** on a living girl); **1 to 3** are a plain **Attack** on a living girl.
  *   So at rest he attacks three polls in four and blinds one in four until every girl is dark, guards on his 7th, 14th and 21st poll, and curses a Black Mage the moment one is without Curse. (Curse in FFX-2 is "cannot change
@@ -17,11 +19,13 @@
  * - **The Ronso Youth, hostile** [m181.src, scene 228]: a draw `random() % 8`: **0** is **MP Blowout** on the girl with the most MP (the script's group "own target" is unmapped, research U3: read as every living girl, the
  *   one with the greatest MP, ties broken by a search), else a plain **Attack** on a living girl. **Friendly**: **Attack** only.
  *
- * **The "battle too long" block** [both scripts, no friendly guest]. A counter rises by one each poll, **only while no friendly guest stands with the girls** (the script tests the count of "friend player" characters; none appears
- * in this mission, so the test is modelled as "no party unit other than Yuna, Rikku and Paine", `[estimate]` on the exact test, research U4). On the poll that takes it past **180** (Garik) or **140** (a Youth) he shows the
- * first announcement, past **190** / **150** the second, past **195** / **155** the third and past **200** / **160** the fourth; then **Time Up Meteor** (power 200, 12 hits, everyone) on every poll. Each announcement is its own
- * poll (nothing else happens on it and his turn counter does not rise), so Garik's stages come on polls 181, 191, 196 and 201 and the Meteor on 202 and every one after, a Youth's on 141, 151, 156 and 161 and 162. A normal fight is
- * a few dozen of his actions; no play reaches it (the bench pins that) and a test drives the script alone to pin the thresholds. `RONSO_TOO_LONG_BLOCK_ON` turns it off again.
+ * **The generic "battle too long" block is inert** [`m182.src:63`, `m181.src:59`; `research/re-ffx2-ai-bahamut-vegnagun.md` 1.6, run on the live exe; the fix pass of 2026-11-08]. Each script opens its action entry with a counter and,
+ * past **180 / 190 / 195 / 200** polls of Garik (**140 / 150 / 155 / 160** of a Youth), four announcements and then **Time Up Meteor** (power 200, 12 hits, everyone, 9,999 a hit) on every poll, behind the guard
+ * `countchr_player(chr_all_ply3, chr_friend_player) == 0`, the identical call in twenty other boss scripts. Run on the live exe, that count is 3 for a full party, 2 with one down and 0 only when every girl is dead or
+ * petrified, and the ATB clock does not step in that state, so the action entry is not polled: **the block never runs in play** (the Bahamut, Leblanc, Valefor, Angra Mainyu and Yuna's Ballad notes all treat it so, and so do
+ * `./valefor.ts`, `./yunas-ballad.ts` and `./experiment.ts`). The first reading of this lane (the guard as "no friendly guest", `[R]` with no run behind it) was wrong and is retired: it made a slow line lose to a wipe the game
+ * never delivers. `RONSO_TOO_LONG_BLOCK_ON` is therefore **false**; a long fight has no clock and ends by HP or by the party. The thresholds and the Meteor stay in `tooLong` behind the flag (its `enabled` argument lets a test
+ * drive them) in case a run of the exe ever says otherwise; Garik's stages would be polls 181, 191, 196 and 201 and the Meteor 202 on, a Youth's 141, 151, 156 and 161 and 162.
  *
  * **Not built** (picks GA4, GA10): the Gun Mage's Mighty Guard learning beat of the guides (Confuse on Garik) is a strategy and not a script, and the engine leaves a Confused monster to its script (`adapt/confusion.ts`), so the
  * easy Garik's "only after being Confused" is not reachable here either way.
@@ -61,17 +65,16 @@ export const YOUTH_DRAW_MODULUS = 8;
 /** The polls past which each stage of the "battle too long" block shows (`>` each, in the order of the announcements) and past which Time Up Meteor repeats, `[script]`: Garik, then a Youth. */
 export const GARIK_TOO_LONG_POLLS: readonly [number, number, number, number] = [180, 190, 195, 200];
 export const YOUTH_TOO_LONG_POLLS: readonly [number, number, number, number] = [140, 150, 155, 160];
-/** The block is live in these scenes; false turns it off. */
-export const RONSO_TOO_LONG_BLOCK_ON = true;
+/** The block is OFF: its guard is true only when no girl can act, and the ATB clock does not step then (live-exe evidence, see the header). `tooLong`'s `enabled` argument lets a test drive the thresholds. */
+export const RONSO_TOO_LONG_BLOCK_ON = false;
 
 /** AI memory: the turn counter of Garik (`mf_turn`), the "battle too long" poll counter (`n_action`) and stage (`keikoku`, 0 to 4). */
 export const RONSO_TURN = 'ronsoTurn';
 export const RONSO_POLLS = 'ronsoPolls';
 export const RONSO_STAGE = 'ronsoStage';
 
-/** The girls (the party's three ids), in the order the script checks them for a Black Mage; any other party unit counts as a friendly guest for the block's counter. */
+/** The girls (the party's three ids), in the order the script checks them for a Black Mage. */
 export const GIRL_ORDER = ['yuna', 'rikku', 'paine'] as const;
-const GIRL_IDS: ReadonlySet<string> = new Set(GIRL_ORDER);
 
 /** The dressphere whose wearer Bane Lance hunts. */
 export const BANE_LANCE_DRESSPHERE = 'black-mage';
@@ -80,17 +83,12 @@ function use(id: string, targets: string[] = []): Command {
   return { kind: 'ability', id, targets };
 }
 
-/** True while a friendly guest stands with the girls (a party unit that is not Yuna, Rikku or Paine): the block's counter does not rise then. */
-function guestPresent(ctx: AiContext): boolean {
-  return ctx.units.some((u) => u.side === 'party' && !GIRL_IDS.has(u.id));
-}
-
 /**
- * The "battle too long" block for this poll: the command it queues, or null when it queues none. Counts the poll, then (in the script's own order) Time Up Meteor once the last stage has shown, else the next stage's
- * announcement when its poll count has been passed.
+ * The "battle too long" block for this poll: the command it queues, or null when it queues none. **Inert in play** (`enabled` is {@link RONSO_TOO_LONG_BLOCK_ON}, false: nothing is counted, nothing is queued). With `enabled`
+ * true, as a test passes it: counts the poll, then (in the script's own order) Time Up Meteor once the last stage has shown, else the next stage's announcement when its poll count has been passed.
  */
-export function tooLong(ctx: AiContext, polls: readonly [number, number, number, number]): Command | null {
-  if (!RONSO_TOO_LONG_BLOCK_ON || guestPresent(ctx)) return null;
+export function tooLong(ctx: AiContext, polls: readonly [number, number, number, number], enabled: boolean = RONSO_TOO_LONG_BLOCK_ON): Command | null {
+  if (!enabled) return null;
   const self = ctx.self;
   const count = mem(self, RONSO_POLLS) + 1;
   setMem(self, RONSO_POLLS, count);
@@ -105,12 +103,20 @@ export function tooLong(ctx: AiContext, polls: readonly [number, number, number,
   return null;
 }
 
-/** The first of Yuna, Rikku and Paine, in that order, who is alive, wears Black Mage and carries no Curse: the one Bane Lance goes to (`searchr(chr_<girl>, stat_curse, not)`, girl by girl). */
-export function baneLanceTarget(party: readonly Ffx2Unit[]): Ffx2Unit | undefined {
+const wearsBlackMage = (u: Ffx2Unit | undefined): boolean => u?.dresspheres?.current === BANE_LANCE_DRESSPHERE;
+
+/**
+ * The one Bane Lance goes to. `party` is the living girls; `everyone` is every girl, fallen ones too (the script reads `stat_after_job` of each girl whether she stands or not).
+ * Girl by girl, in the order Yuna, Rikku, Paine: a living girl in Black Mage with no Curse is the target (`searchr(chr_<girl>, stat_curse, not)`). **The one branch with no Curse test** [m182.src:405-410]: when neither
+ * Yuna nor Rikku wears Black Mage and Paine does, Paine is the target on every poll, cursed or not.
+ */
+export function baneLanceTarget(party: readonly Ffx2Unit[], everyone: readonly Ffx2Unit[] = party): Ffx2Unit | undefined {
   for (const id of GIRL_ORDER) {
     const girl = party.find((u) => u.id === id);
-    if (girl !== undefined && girl.dresspheres?.current === BANE_LANCE_DRESSPHERE && girl.statuses['curse'] === undefined) return girl;
+    if (girl !== undefined && wearsBlackMage(girl) && girl.statuses['curse'] === undefined) return girl;
   }
+  const paine = party.find((u) => u.id === 'paine');
+  if (paine !== undefined && wearsBlackMage(paine) && !wearsBlackMage(everyone.find((u) => u.id === 'yuna')) && !wearsBlackMage(everyone.find((u) => u.id === 'rikku'))) return paine;
   return undefined;
 }
 
@@ -128,7 +134,7 @@ export const garikHostileScript: AiScript = {
     const self = ctx.self;
     const turn = mem(self, RONSO_TURN) + 1;
     setMem(self, RONSO_TURN, turn);
-    const wizard = baneLanceTarget(party);
+    const wizard = baneLanceTarget(party, ctx.units.filter((u) => u.side === 'party'));
     if (wizard !== undefined) return use(GARIK_BANE_LANCE_ID, [wizard.id]);
     if (turn >= GARIK_GUARD_AT) {
       setMem(self, RONSO_TURN, 0);

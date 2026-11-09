@@ -366,7 +366,7 @@ describe('src/data/guides', () => {
    * a research slug plus at least one section number.
    */
   it('cites every sentence it prints, in the corpus’s own citation form', () => {
-    const cite = /^(re-)?(ffx|ffx2)-[a-z0-9-]+ §/; // an RE note (`research/re-ffx2-*.md`) is a research slug too: the hidden Garik Ronso chapter has no wiki-level note, only its RE note
+    const cite = /^(?:(?:ffx|ffx2)-[a-z0-9-]+|re-ffx2-garik-ronso) §/; // one RE note is a research slug too and no other: the hidden Garik Ronso chapter has no wiki-level note, only `research/re-ffx2-garik-ronso.md`
     for (const g of GUIDES) {
       for (const r of g.rules) expect(r.cite, `${g.id} rule: ${r.text.slice(0, 40)}`).toMatch(cite);
       for (const h of g.hints) expect(h.cite, `${g.id} hint: ${h.text.slice(0, 40)}`).toMatch(cite);

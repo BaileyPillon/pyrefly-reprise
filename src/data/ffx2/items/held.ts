@@ -71,7 +71,7 @@ export const heldItemEffect: AbilityDef = {
 
 /** Held rows whose shop price the research does not give; each carries `price: 0`. */
 export const UNSOURCED_PRICE_IDS: ReadonlySet<string> = new Set([
-  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle', 'shining-bracer', 'icy-gleam', 'mythril-bangle',
+  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle', 'shining-bracer', 'icy-gleam',
 ]);
 
 function held(id: string, name: string, price: number | 'unsourced', description?: string): ItemDef {
@@ -126,7 +126,10 @@ export const heldItems: ItemDef[] = [
   // table already carries its HP effect, `battle/ffx2/accessories.ts`; no price read).
   held('shining-bracer', 'Shining Bracer', 'unsourced', 'Accessory. Auto-Protect.'),
   held('icy-gleam', 'Icy Gleam', 'unsourced'),
-  held('mythril-bangle', 'Mythril Bangle', 'unsourced'),
+  // Mythril Bangle's price is SOURCED as 0: `ffx2-combat-core.md` §5.4 (line 3005) gives "1500 / —" under the columns 'Sell / Buy', so 1,500 is the SELL price and the Buy column is "—" (never sold in a shop), which is
+  // `ItemDef.price`'s own 0 (the Healing Spring's way; `ItemDef` carries no sell price). It is also the id Vegnagun's Leg already drops (`enemies/vegnagun-leg.ts`): this row gives that drop an `ItemDef` it had none of, with the label
+  // it already showed ("Mythril Bangle"; the drop id and the Leg's logged events are unchanged).
+  held('mythril-bangle', 'Mythril Bangle', 0),
 ];
 
 export default heldItems;

@@ -263,6 +263,16 @@ try {
     await page.waitForTimeout(500);
     check('Q again returns it to low and removes the key', JSON.stringify(await checkedRows()) === JSON.stringify(['true', 'false']) && (await stored()) === null, { rows: await checkedRows(), stored: await stored() });
   }
+  if (TOUCH) { // a real touch tap on the phone page's rows (fix pass 2026-11-08; the first run used Q only): the row carries the same data-action as the desktop row
+    const phoneRows = () => page.evaluate(() => [...document.querySelectorAll('.prph-mode')].map((r) => r.getAttribute('aria-checked')));
+    const tapRow = async (value) => { await page.locator(`.prph-mode[data-trust="${value}"]`).first().tap(); await page.waitForTimeout(500); };
+    await tapRow('high');
+    check('a touch tap on the High row chooses it and stores it', JSON.stringify(await phoneRows()) === JSON.stringify(['false', 'true']) && (await stored()) === 'high', { rows: await phoneRows(), stored: await stored() });
+    await shot('1d-trust-tap-high');
+    await tapRow('low');
+    check('a touch tap on the Low row returns it and removes the key', JSON.stringify(await phoneRows()) === JSON.stringify(['true', 'false']) && (await stored()) === null, { rows: await phoneRows(), stored: await stored() });
+    if (TRUST === 'high') await tapRow('high'); // leave the run's own setting in place
+  }
 
   // --- prep to the first menu ---------------------------------------------------------------------------------------------------------------
   await page.evaluate((seed) => window.__pyrefly.setSeed(seed), SEED);
