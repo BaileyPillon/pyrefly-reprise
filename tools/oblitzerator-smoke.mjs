@@ -1,15 +1,13 @@
 #!/usr/bin/env node
 /**
- * The real-key smoke of the hidden Oblitzerator chapter (branch `ch-oblitzerator`; FFX only): a headless Playwright run, against a dev server that is already up, that opens the chapter by its typed word (`blitz`), looks at
- * party prep, plays the pre scene by keyboard, takes the first menu (the machine and the crane on the coast road's plate, Tidus, Lulu and Kimahri in front, Use crane the first row), and then plays the CRANE LINE with REAL
- * KEYS to a result: Tidus's Use crane before the crane has power (a line, nothing else), Lulu's Black Magic menu with Thunder aimed at the Crane three times (the target cursor walked to the Crane), Tidus's Use crane on the
- * powered crane (the machine falls to 375), and the finishing blows (the post scene and the results).
+ * The real-key smoke of the hidden Oblitzerator chapter (branch `ch-oblitzerator`; FFX only): a headless Playwright run against a dev server that is already up. It opens the chapter by its typed word (`blitz`), plays the
+ * pre scene by keyboard, takes the first menu (Use crane the first row), then plays the CRANE LINE with REAL KEYS to the results: Use crane while the crane is dark (a line, nothing else), Lulu's Black Magic with Thunder
+ * aimed at the Crane three times (the target cursor walked to it), Use crane on the powered crane (the machine falls to 375), the finishing blows.
  *
  *   PYREFLY_BROWSER=gpu node tools/oblitzerator-smoke.mjs [--base http://127.0.0.1:5452/] [--out docs/screenshots/ch-oblitzerator] [--tag desk] [--w 1600 --h 900] [--touch] [--seed 7] [--until first-menu]
  *
- * The party is kept alive by editing the battle state through the debug API (`window.__pyrefly.battleState()`: everybody's HP to 99,999 between turns, said so); the crane's state is READ through the same API to check
- * that the lines on screen agree with it (the checks only). Every command the party gives is a real key press. It takes the review-browser lock (`tools/rig-record-lock.mjs`, the machine-wide browser lock) before it opens a
- * browser and gives it back at the end. Headless only (`PYREFLY_BROWSER=gpu` for the real GPU); never the Chrome extension or the built-in pane. Exit code 1 on a failed check.
+ * The party is kept alive by a state edit through the debug API (everybody's HP to 99,999 between turns, said so); the crane's state is READ through it to check the lines on screen (the checks only). Every command the party
+ * gives is a real key press. It takes the review-browser lock (`tools/rig-record-lock.mjs`) first and gives it back at the end. Headless only; never the Chrome extension or the built-in pane. Exit code 1 on a failed check.
  */
 import { mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -112,19 +110,11 @@ const bossActions = async () => {
   if (got) lastActions = got;
   return lastActions;
 };
-/** The `script-trigger` names raised so far (the banners). */
 const callouts = () => page.evaluate(() => { const st = window.__pyrefly?.battleState?.(); return st ? st.log.filter((x) => x.type === 'script-trigger').map((x) => x.name) : []; });
 /** Keep the party up for the smoke (HP): a state edit, said so. */
 const warding = async () => {
   await bossActions();
-  await page.evaluate(() => {
-    const st = window.__pyrefly.battleState();
-    for (const id of st.activeIds) {
-      const c = st.combatants[id];
-      c.stats.maxHp = 99999;
-      c.hp = 99999;
-    }
-  });
+  await page.evaluate(() => { const st = window.__pyrefly.battleState(); for (const id of st.activeIds) { st.combatants[id].stats.maxHp = 99999; st.combatants[id].hp = 99999; } });
 };
 const ready = async (ms = 60000) => {
   await dismissCoach();
@@ -165,9 +155,7 @@ async function confirmTarget(wanted) {
   log('confirmTarget.notFound', { wanted, last: await targetName() });
   return null;
 }
-/**
- * Real keys: walk the open list with the arrow keys until a row whose text starts with one of `names` is the cursor, then Enter. Returns the name it pressed, or null when the whole list was walked and none was there.
- */
+/** Real keys: walk the open list with the arrow keys until a row starting with one of `names` is the cursor, then Enter; the name it pressed, or null when none was there. */
 async function pickFrom(names) {
   const seen = new Set();
   for (let guard = 0; guard < 40; guard++) {
@@ -222,7 +210,6 @@ async function attackWithKeys() {
   const target = await confirmTarget('Oblitzerator');
   return target !== null;
 }
-/** Wait until it is somebody's turn again after an action: the party is kept up and the engine is given a moment. */
 const settle = async (ms = 1800) => {
   await page.waitForTimeout(ms);
   await warding();
@@ -392,11 +379,7 @@ try {
   else {
     failures.push(`threw: ${String(e).slice(0, 300)}`);
     log('threw', String(e).slice(0, 600));
-    try {
-      await shot('zz-failure');
-    } catch {
-      /* the page may be gone */
-    }
+    await shot('zz-failure').catch(() => {}); // the page may be gone
   }
 }
 

@@ -140,5 +140,5 @@ export const COMMAND_RECORDS_OBLITZERATOR: Readonly<Record<string, FFXCommandRec
   [OBLITZERATOR_ROWS.blind]: { id: 0x600e, type: 0, flagsMisc: 6, flagsDamage: 0, damageClass: 1, rank: 3, chances: [[14, 254]], durations: [[2, 1]] },
   [OBLITZERATOR_ROWS.mute]: { id: 0x600f, type: 0, flagsMisc: 6, flagsDamage: 0, damageClass: 1, rank: 3, chances: [[13, 254]], durations: [[1, 1]] },
   [OBLITZERATOR_ROWS.lift]: { id: 0x6012, type: 0, flagsMisc: 2, flagsDamage: 1, damageClass: 1, rank: 3 },
-  [OBLITZERATOR_ROWS.useCrane]: { id: 0x3102, type: 0, flagsMisc: 528390, flagsDamage: 0, damageClass: 0 }, // no rank byte in the table (0): the game then uses 3, which is the ability row's own
+  [OBLITZERATOR_ROWS.useCrane]: { id: 0x3102, type: 0, flagsMisc: 528390, flagsDamage: 0, damageClass: 0, rank: 0 }, // no rank byte in the table (0): the game then uses 3 (`rankOf` reads 0 as 3)
 };

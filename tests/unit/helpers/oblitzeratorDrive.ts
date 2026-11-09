@@ -121,3 +121,18 @@ export function lulusThunder(engine: BattleEngine, target: string): readonly Bat
   engine.submit(cmd);
   return log(engine).slice(from);
 }
+
+/** A `damage` event, as the tests read it. */
+export type Dmg = { type: 'damage'; targetId: string; sourceId?: string; amount: number; hitIndex?: number; hitCount?: number; affinity?: string };
+/** The damage events whose source is `source`. */
+export const damages = (events: readonly BattleEvent[], source: string): Dmg[] => events.filter((e): e is BattleEvent & Dmg => e.type === 'damage' && (e as Dmg).sourceId === source) as Dmg[];
+
+/** Spend every turn on a Potion for oneself (harmless, and not a Defend) until `stop` holds; the front line is topped up each step. */
+export function passUntil(engine: ReturnType<typeof newEngine>, stop: (e: ReturnType<typeof newEngine>) => boolean, max = 400): void {
+  for (let i = 0; i < max * 12; i++) {
+    if (stop(engine)) return;
+    const d = nextInput(engine, true);
+    engine.submit(row(d, 'item', 'potion', d.actorId) ?? defend());
+  }
+  throw new Error('passUntil: the stop condition never held');
+}
