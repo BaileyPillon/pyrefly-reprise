@@ -15,7 +15,10 @@
  * a hit that took HP adds 5 to the Sister hit, while she can counter; a Sister who falls has her gauge written 0 (so the Delta Attack is over for good)
  * ```
  *
- * Cindy's picks over "the Sisters" are `findMatchingChr` over the living, targetable monsters (Belgemine is neither the first nor the second), a draw only with two or more. A Sister who falls while another stands is, in the game,
+ * Cindy's picks over "the Sisters" are `findMatchingChr` over the living, targetable monsters (Belgemine is neither the first nor the second), a draw only with two or more.
+ * **An assumption, flagged:** her group moves exclude Belgemine by `removeFromMatchingGroup(4346)` (`m290` @0x0317, @0x03c3), but her single picks (Shell @0x0526, Protect @0x0542, Cura @0x0572, Regen @0x0590) read
+ * `findMatchingChr(AllMonsters, ...)` with no such removal. The build treats Belgemine (untargetable, not on the turn list) as never a candidate; if the game's pick can land on her, Cindy would spend some buffs on the
+ * summoner and the Sisters' duel would be slightly easier than the build's. Unverified. A Sister who falls while another stands is, in the game,
  * hidden from the gauge row (flag 295); that is presentation only here. The battle ends when all three are down.
  */
 

@@ -10,7 +10,8 @@
  *    8 bits, a bit the lowest), and the one reader of the defending flag returns the character's Defend command id (0x3021) while the flag is non-zero and 0
  *    while it is zero (decompile of 0x0078fb80; the character init that fills the field is 0x0079b4f0). Replaying each formation's writes on that model says
  *    which chapter formations end with Defend off: exactly Isaaru's three.
- * 2. **The data** carries `defendOff` on exactly those three groups, and on no other group of the game.
+ * 2. **The data** carries `defendOff` on exactly those three groups and on Belgemine's eight Remiem duels (added with chapter 45; their formation files `lmyt01_00` to `_07` are not in the fixture's
+ *    38 chapter formations, which predate the chapter, so the scan's whole-game lists vouch for them), and on no other group of the game; `counterOff` on Belgemine's eight and nothing else.
  * 3. **The engine** offers no Defend row to Yuna or an aeon in those three battles, refuses a submitted Defend with the turn kept open, and leaves every
  *    other FFX chapter's menus alone.
  * 4. **The flags not wired** are not wired for a reason the fixture shows: no formation of our chapters sets them to anything but the default, or does not
@@ -27,9 +28,12 @@ import { setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
 import { getChapter } from '../../src/data/encounters.ts';
 import { ENEMY_GROUPS_BY_ID } from '../../src/data/ffx/index.ts';
 import { ISAARU_GROUPS } from '../../src/data/ffx/enemies/isaaru.ts';
+import { BELGEMINE_GROUPS } from '../../src/data/ffx/enemies/belgemine.ts';
+import { BELG_ACTS } from '../../src/data/ffx/belgemine-ids.ts';
 import { DARK_AEONS_GROUPS } from '../../src/data/ffx/enemies/dark-aeons-groups.ts';
 import { OFFERING_KEYS, openerGroup, possessionGroup, yuYevonLink } from '../../src/data/ffx/enemies/last-summoning-chain.ts';
-import { DEFEND_OFF_FLAG, FORMATION_DEFEND_OFF, applyFormationFlags, defendOff, defendRefused, defendTakenFrom } from '../../src/battle/ffx/formation-flags.ts';
+import { DEFEND_OFF_FLAG, FORMATION_COUNTER_OFF, FORMATION_DEFEND_OFF, applyFormationFlags, counterSwitchOn, defendOff, defendRefused, defendTakenFrom } from '../../src/battle/ffx/formation-flags.ts';
+import { counterKind } from '../../src/battle/ffx/kernel/counter.ts';
 import { actor, content, grandSummon, newEngine, nextInput, row, summon, setupFor, type Input } from './helpers/isaaruUnits.ts';
 import { createFFXEngine } from '../../src/battle/ffx/index.ts';
 
@@ -94,6 +98,9 @@ function defendIdOf(w: World): number {
 }
 
 const FORMATIONS = Object.keys(FX.chapterFormations);
+
+/** The eight Remiem duel formation files (Belgemine's Challenge, chapter 45): each calls setDefendingEnabled(0) and btlSetCounterFlag(0) (the scan's corpus names them under both). */
+const BELGEMINE_FORMATIONS = ['lmyt01_00', 'lmyt01_01', 'lmyt01_02', 'lmyt01_03', 'lmyt01_04', 'lmyt01_05', 'lmyt01_06', 'lmyt01_07'];
 
 describe('the model of the game against the scan', () => {
   it('the set-up defaults and the setters are the ones the note and the set-up routine show', () => {
@@ -160,10 +167,22 @@ function allGroups(): EnemyGroupDef[] {
 }
 
 describe('the data carries the flag on exactly the groups the model says', () => {
-  it('the three Isaaru groups, and no other group of the game, carry defendOff', () => {
+  it('the three Isaaru groups and Belgemine\'s eight, and no other group of the game, carry defendOff', () => {
     const marked = allGroups().filter((g) => g.defendOff === true).map((g) => g.id).sort();
-    expect(marked).toEqual(Object.values(ISAARU_FORMATIONS).sort());
+    expect(marked).toEqual([...Object.values(ISAARU_FORMATIONS), ...BELGEMINE_GROUPS.map((g) => g.id)].sort());
     expect(ISAARU_GROUPS.map((g) => g.defendOff)).toEqual([true, true, true]);
+    expect(BELGEMINE_GROUPS).toHaveLength(8);
+    expect(BELGEMINE_GROUPS.map((g) => g.defendOff)).toEqual(Array(8).fill(true));
+  });
+
+  it('Belgemine\'s eight groups, and no other group of the game, carry counterOff; the scan names lmyt01_00 to _07 under both flag calls', () => {
+    const marked = allGroups().filter((g) => g.counterOff === true).map((g) => g.id).sort();
+    expect(marked).toEqual(BELGEMINE_GROUPS.map((g) => g.id).sort());
+    const files = BELGEMINE_FORMATIONS;
+    expect(BELG_ACTS.map((a) => a.file)).toEqual(files);
+    expect(FX.corpus['btlSetCounterFlag']!['0']!.names.filter((n) => n.startsWith('lmyt01_')).sort()).toEqual(files);
+    expect(FX.corpus['setDefendingEnabled']!['0']!.names.filter((n) => n.startsWith('lmyt01_')).sort()).toEqual(files);
+    expect(BELGEMINE_GROUPS.map((g) => g.id)).toEqual(BELG_ACTS.map((a) => a.groupId)); // the eight files are the eight acts, in order
   });
 
   it('the groups the data builds on demand (the Dark Aeons pool, the Last Summoning chain: opener, every possession link, Yu Yevon) carry none either', () => {
@@ -261,6 +280,20 @@ describe('the engine: Defend is off for the party and the aeons in Isaaru\'s thr
     expect(defendOff(ctx)).toBe(false);
     applyFormationFlags(ctx, { id: 'x', game: 'ffx', enemies: [], defendOff: true } as unknown as EnemyGroupDef);
     expect(defendOff(ctx)).toBe(true);
+  });
+
+  it('the counter switch: 1 unless the formation called btlSetCounterFlag(0), and it is the kernel\'s byte (a 0 returns "no counter")', () => {
+    expect(FORMATION_COUNTER_OFF).toBe(true);
+    const ctx = { state: { flags: {} as Record<string, unknown> } } as never;
+    expect(counterSwitchOn(ctx)).toBe(1);
+    applyFormationFlags(ctx, { id: 'x', game: 'ffx', enemies: [], defendOff: true } as unknown as EnemyGroupDef);
+    expect(counterSwitchOn(ctx)).toBe(1); // Defend off alone leaves counters on
+    applyFormationFlags(ctx, { id: 'x', game: 'ffx', enemies: [], counterOff: true } as unknown as EnemyGroupDef);
+    expect(counterSwitchOn(ctx)).toBe(0);
+    // The kernel with the byte at 0 answers 0 for a hit that would otherwise be answered (a Counterattack target word, a plain physical hit).
+    const base = { b1a: 0, b20: 1, auto: 0x08, attackerKind: 0, attackerId: 1, targetId: 2 };
+    expect(counterKind({ ...base, switchOn: 1 })).toBe(1);
+    expect(counterKind({ ...base, switchOn: counterSwitchOn(ctx) })).toBe(0);
   });
 });
 

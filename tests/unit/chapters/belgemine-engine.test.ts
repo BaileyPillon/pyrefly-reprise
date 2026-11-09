@@ -10,7 +10,8 @@ import { ENEMY_GROUPS_BY_ID } from '../../../src/data/ffx/index.ts';
 import { BELG_ACTS, type BelgActKey } from '../../../src/data/ffx/belgemine-ids.ts';
 import { belgemineBuild, belgemineBuildOf } from '../../../src/data/ffx/builds/belgemine.ts';
 import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts';
-import { ACT_KEYS, actions, actor, advisor, careless, engineOn, foesOf, log, newEngine, nextInput, playChain, playDuel, playEngine, setup } from '../helpers/belgemineDrive.ts';
+import { COUNTER_OFF_FLAG, DEFEND_OFF_FLAG } from '../../../src/battle/ffx/formation-flags.ts';
+import { ACT_KEYS, actions, actor, advisor, careless, defend, defendOrAttack, engineOn, row, foesOf, log, newEngine, nextInput, playChain, playDuel, playEngine, setup } from '../helpers/belgemineDrive.ts';
 
 const FIRST_ROW: Record<BelgActKey, string> = {
   valefor: 'pterya-summon', ifrit: 'grothia-summon', ixion: 'belg-summon-ixion', shiva: 'belg-summon-shiva', bahamut: 'spathi-summon', yojimbo: 'yojimbo-summon', anima: 'belg-summon-anima', sisters: 'belg-summon-sisters',
@@ -40,16 +41,37 @@ describe('each duel, seeds 1 to 3, played by the shipped line to an end', () => 
 });
 
 describe('the menu Yuna sees on the first turn of an aeon duel', () => {
-  it('Summon and Grand Summon (and Defend, which no source switches off here) are all that is on: every other command is greyed; the aeon the enemy holds is greyed "Mirror of ..."', () => {
+  it('Summon and Grand Summon are all that is on (the formation script switches Defend off and greys the rest): every other command is greyed; the aeon the enemy holds is greyed "Mirror of ..."', () => {
     const engine = newEngine('ixion', 1);
     const d = nextInput(engine);
     expect(d.actorId).toBe('yuna');
     const on = d.commands.filter((c) => c.enabled).map((c) => (c.command.kind === 'summon' ? `summon:${c.command.id}` : c.command.kind === 'overdrive' ? `overdrive:${c.command.id}` : c.command.kind));
-    expect(on.filter((x) => !x.startsWith('summon:')).sort()).toEqual(['defend', 'overdrive:grand-summon']); // Defend stays on: the Isaaru formations' setDefendingEnabled(0) has no Remiem source (the formation scripts are camera only)
+    expect(on.filter((x) => !x.startsWith('summon:')).sort()).toEqual(['overdrive:grand-summon']); // no Defend row: the formation script calls setDefendingEnabled(0) (`lmyt01_0n`, as Chapter XIV's)
     expect(on.filter((x) => x.startsWith('summon:')).sort()).toEqual(['summon:anima', 'summon:bahamut', 'summon:cindy', 'summon:ifrit', 'summon:shiva', 'summon:valefor', 'summon:yojimbo']);
     const mirror = d.commands.find((c) => c.command.kind === 'summon' && c.command.id === 'ixion')!;
     expect([mirror.enabled, mirror.disabledReason]).toEqual([false, 'Mirror of Ixion']);
     expect(d.commands.some((c) => c.command.kind === 'switch' && c.enabled)).toBe(false);
+  });
+
+  it('all eight duels: the formation script\'s Defend-off and counter-off flags are in the state, Yuna has no Defend row, a submitted Defend is refused with the turn kept open, and a summoned aeon has none either', () => {
+    for (const key of ACT_KEYS) {
+      const engine = newEngine(key, 3);
+      expect(engine.state().flags[DEFEND_OFF_FLAG], key).toBe(true);
+      expect(engine.state().flags[COUNTER_OFF_FLAG], key).toBe(true);
+      const d = nextInput(engine);
+      expect(d.actorId, key).toBe('yuna');
+      expect(d.commands.map((c) => c.command.kind), key).not.toContain('defend');
+      const before = engine.state().log.length;
+      expect(engine.submit(defend()), key).toEqual([]); // refused with no event
+      expect(engine.state().log.length, key).toBe(before);
+      expect(nextInput(engine).actorId, key).toBe('yuna'); // the turn is still hers
+    }
+    // An aeon of hers on the field has no Defend row either (Valefor is free in the Ifrit act).
+    const engine = newEngine('ifrit', 3);
+    engine.submit(row(nextInput(engine), 'summon', 'valefor')!);
+    const a = nextInput(engine);
+    expect(a.actorId).toBe('valefor');
+    expect(a.commands.map((c) => c.command.kind)).not.toContain('defend');
   });
 
   it('the Sisters\' duel locks all three of hers (one Summon entry, greyed); every other aeon is on offer', () => {
@@ -71,7 +93,7 @@ describe('the menu Yuna sees on the first turn of an aeon duel', () => {
         expect(c.validTargets, `${d.actorId} ${c.label}`).not.toContain('belg-daigoro');
       }
       const pick = careless(d, engine);
-      engine.submit(pick ?? { kind: 'defend', targets: [] });
+      engine.submit(pick ?? defendOrAttack(d, engine));
     }
   });
 });
@@ -171,7 +193,7 @@ describe('Ixion\'s guard in a real run', () => {
           expect([ixion.stats.def, ixion.stats.mdef]).toEqual([255, 255]);
           break;
         }
-        engine.submit(careless(d, engine) ?? { kind: 'defend', targets: [] });
+        engine.submit(careless(d, engine) ?? defendOrAttack(d, engine));
       }
     }
     expect(braced, 'in twelve seeds he braces at least once').toBeGreaterThan(0);

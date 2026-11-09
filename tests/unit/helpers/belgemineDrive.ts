@@ -97,7 +97,7 @@ export interface DuelResult {
 
 const BIG_MOVES = new Set(['belg-energy-blast', 'grothia-hellfire', 'belg-thors-hammer', 'belg-diamond-dust', 'spathi-mega-flare', 'yojimbo-zanmato', 'belg-oblivion', 'belg-delta-attack']);
 
-/** Play an engine to its end with `choose` (null means Defend); `maxInputs` guards a stalemate. */
+/** Play an engine to its end with `choose` (null means a command the menu allows, `defendOrAttack`; Defend itself is off in these duels, as the game's formation scripts have it); `maxInputs` guards a stalemate. */
 export function playEngine(engine: BattleEngine, choose: Line, maxInputs = 800): DuelResult {
   let inputs = 0;
   for (let i = 0; i < maxInputs * 6; i++) {
@@ -116,8 +116,8 @@ export function playEngine(engine: BattleEngine, choose: Line, maxInputs = 800):
   return finish(engine, 'unfinished', inputs);
 }
 
-/** A turn that is spent by a command the menu allows: an aeon Attacks, Yuna calls the first aeon offered. */
-function defendOrAttack(d: Input, engine: BattleEngine): Command {
+/** A turn that is spent by a command the menu allows: an aeon Attacks, Yuna calls the first aeon offered (never Defend: the formation scripts switch it off, so a submitted Defend is refused and the same turn comes back). */
+export function defendOrAttack(d: Input, engine: BattleEngine): Command {
   const any = careless(d, engine);
   if (any !== null) return any;
   const first = d.commands.find((c) => c.enabled && c.validTargets.length > 0);

@@ -23,6 +23,7 @@ import type { HitOutcome } from '../kernel/hittypes.ts';
 import type { Ctx } from '../state.ts';
 import { hasFlag } from '../state.ts';
 import { actorNumber } from '../ai/script-random.ts';
+import { counterSwitchOn } from '../formation-flags.ts';
 import { chainCommand } from './target-world.ts';
 import { resolveCommand } from './command.ts';
 
@@ -57,7 +58,7 @@ function kindInput(ctx: Ctx, user: FFXCombatant, def: AbilityDef, target: FFXCom
     attackerKind: inReaction ? 1 : 0,
     attackerId: actorNumber(ctx, user),
     targetId: actorNumber(ctx, target),
-    switchOn: 1, // 0 only in the eleven Belgemine duel scenes, none of which is a chapter of the project (FFX-G04 section 5.5)
+    switchOn: counterSwitchOn(ctx), // 0 in the Belgemine duel scenes (`btlSetCounterFlag(0)`: `EnemyGroupDef.counterOff`, `formation-flags.ts`), 1 everywhere else (FFX-G04 section 5.5)
   };
 }
 

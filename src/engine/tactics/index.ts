@@ -214,7 +214,7 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...OMEGA_RUINS_BOSS_IDS.map((bossId) => ({ chapterId: 'omega-ruins', bossId, tactic: omegaRuins })),
   // The hidden Wendigo chapter (FFX only): the brute on the frozen lake; the line is a Petrify Grenade for the Guardians, Power Break and Dark Attack on Wendigo, Protect on the party, and no swing while its arms are up (plain blows win 0 of 100).
   ...WENDIGO_BOSS_IDS.map((bossId) => ({ chapterId: 'wendigo', bossId, tactic: wendigoLine })),
-  // The hidden Belgemine's Challenge chapter (FFX only): her eight aeons; the line is Shield before the foe's big move, the heaviest aeon first (Shiva or Ixion against Ifrit), the Overdrive when it is full, Dismiss a failing aeon.
+  // The hidden Belgemine's Challenge chapter (FFX only): her eight aeons; the line is Shield before the foe's big move, the heaviest aeon first (Shiva or Ixion against Ifrit), the Overdrive when it is full, and no Dismiss (the bench measured it counterproductive).
   ...BELGEMINE_CHAPTER_BOSS_IDS.map((bossId) => ({ chapterId: 'belgemine', bossId, tactic: belgemineLine })),
 ];
 

@@ -16,7 +16,7 @@ import { RULE_SHORT_MAX } from '../../../src/data/guides/types.ts';
 import { intendedStrategy } from '../../../src/engine/BattlePresenterStrategies.ts';
 import { buildGuideView, guideForState } from '../../../src/engine/tactics/guide.ts';
 import { BELGEMINE_CHAPTER_BOSS_IDS } from '../../../src/engine/tactics/belgemine.ts';
-import { ACT_KEYS, newEngine } from '../helpers/belgemineDrive.ts';
+import { ACT_KEYS, defendOrAttack, newEngine } from '../helpers/belgemineDrive.ts';
 
 const cite = /^ffx-[a-z0-9-]+ §/;
 
@@ -109,7 +109,7 @@ describe('the panel on a real fight: the NEXT line is the line\'s own pick, and 
             if (view?.next?.reason) reasoned += 1;
             else unexplained.push(`${d.actorId}: ${view?.next?.label}`);
           }
-          engine.submit(pick ?? { kind: 'defend', targets: [] });
+          engine.submit(pick ?? defendOrAttack(d, engine));
         }
       }
     }

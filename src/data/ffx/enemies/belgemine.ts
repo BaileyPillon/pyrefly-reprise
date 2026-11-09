@@ -12,8 +12,9 @@
  * ## What every aeon carries (RE 0, the records)
  *
  * Immune (255) to Death, Zombie, Petrify, Poison, the four Breaks, Confuse, Berserk, Provoke, Sleep, Silence, Darkness, Slow, Scan, Eject and Auto-Life; Threaten's byte is 0 (`threatenChance: 0`, immune in this contract, as Chapter XIV's);
- * Doom, Shell, Protect, Reflect, the Nuls, Regen and Haste land. Flags: Sensor, Scan, CTB damage (Delay), Slice and Bribe immune, and "fractional damage" (Demi, Gravity) immune on the five aeons, Anima, Yojimbo and the dog but **not**
- * on the Sisters (RE 0). Ixion's record also carries Reflect 255. **No gil, no AP, no drops by record**: every reward is script (RE 8 C3, U4), and the chapter's results page pays none.
+ * Doom, Shell, Protect, Reflect, the Nuls, Regen and Haste land. Flags: Sensor, Scan, CTB damage (Delay), Slice and Bribe immune, and "fractional damage" (Demi, Gravity) immune on Valefor, Ifrit, Ixion, Shiva, Anima, Yojimbo and the dog but **not**
+ * on the Sisters (RE 0) and **not on Remiem Bahamut** (his script writes ImmuneToFractionalDmg = 0 in the Remiem branch, `m287` @0x0214; the Isaaru branch leaves it). Ixion's record also carries Reflect 255.
+ * The dog's record (`m266`) is the exception to the 255 list: it resists only Sleep, Silence and Darkness (20) and nothing else. **No gil, no AP, no drops by record**: every reward is script (RE 8 C3, U4), and the chapter's results page pays none.
  *
  * ## Belgemine and the dog
  *
@@ -23,7 +24,7 @@
  *
  * ## The chain (BD1, BD3, BD5)
  *
- * The eight acts run in the game's order with no menu between: every act is an **aeon duel** (`aeonsOnly`: the duel rule greys Yuna's foe-aimed rows, "Only an aeon can fight an aeon", and `commandDisables` greys the rest, so her menu is Summon and Grand Summon; **that list is an estimate** (the note's source block says the `lmyt01` formation scripts are camera only, see {@link BELGEMINE_COMMAND_DISABLES}), and **no `defendOff` is set**, rule 6), the aeon the enemy
+ * The eight acts run in the game's order with no menu between: every act is an **aeon duel** (`aeonsOnly`: the duel rule greys Yuna's foe-aimed rows, "Only an aeon can fight an aeon", and `commandDisables` greys the rest, so her menu is Summon and Grand Summon; **that list is read from the formation scripts** `lmyt01_00` to `_07` (see {@link BELGEMINE_COMMAND_DISABLES}), which also call `setDefendingEnabled(0)` (`defendOff`, so she has no Defend row) and `btlSetCounterFlag(0)` (`counterOff`)), the aeon the enemy
  * holds is **locked** (the mirror, `lockedAeons`; the Sisters lock all three of Yuna's), a defeat retries that act (`checkpointOnEntry`), and every act from the second on is a fresh fight (`restoresPartyOnEntry`,
  * `restoresAeonsOnEntry`: Yuna and every aeon whole; the bag and the Overdrive gauges carry, as a Save Sphere does not touch a gauge). No act is a game over in the game (it ends "player escaped", RE 3.1); here the chain's ordinary loss
  * and retry stand in for it, and the chapter's card says "a lost duel costs nothing".
@@ -109,6 +110,8 @@ interface AeonSpec {
   abilityIds: readonly string[];
   affinities?: EnemyDef['affinities'];
   extra255?: readonly StatusId[];
+  /** True for a body whose "fractional damage" immunity is off: the Sisters' records, and Remiem Bahamut (his script writes ImmuneToFractionalDmg = 0 in the Remiem branch, `m287` @0x0214). */
+  fractional?: boolean;
   sisters?: boolean;
 }
 
@@ -124,7 +127,7 @@ function aeon(spec: AeonSpec): EnemyDef {
     mp: stats.mp,
     affinities: spec.affinities ?? {},
     immunities: aeonImmunities(spec.extra255),
-    immunityFlags: spec.sisters === true ? SISTER_FLAGS : AEON_FLAGS,
+    immunityFlags: spec.sisters === true || spec.fractional === true ? SISTER_FLAGS : AEON_FLAGS,
     forms: [{ name: spec.name, spriteKey: spec.sprite, hp: stats.hp }],
     aiScriptId: spec.script,
     rewards: noRewards(stats.hp),
@@ -152,7 +155,7 @@ export const belgShiva = (): EnemyDef =>
     id: BELG_IDS.shiva, name: 'Shiva', sprite: 'shiva', slot: 1, block: REMIEM_BLOCKS.shiva, script: BELG_SCRIPTS.shiva,
     abilityIds: [R.summonShiva, R.attackB, R.heavenlyStrike, R.diamondDust, S.blizzara, S.blizzaga], affinities: { ice: 'absorb' },
   });
-export const belgBahamut = (): EnemyDef => aeon({ id: BELG_IDS.bahamut, name: 'Bahamut', sprite: 'bahamut', slot: 1, block: REMIEM_BLOCKS.bahamut, script: BELG_SCRIPTS.bahamut, abilityIds: [R.summonBahamut, R.attackB, R.impulse, R.megaFlare] });
+export const belgBahamut = (): EnemyDef => aeon({ id: BELG_IDS.bahamut, name: 'Bahamut', sprite: 'bahamut', slot: 1, block: REMIEM_BLOCKS.bahamut, script: BELG_SCRIPTS.bahamut, abilityIds: [R.summonBahamut, R.attackB, R.impulse, R.megaFlare], fractional: true });
 export const belgYojimbo = (): EnemyDef =>
   aeon({ id: BELG_IDS.yojimbo, name: 'Yojimbo', sprite: 'yojimbo-cavern', slot: 1, block: REMIEM_BLOCKS.yojimbo, script: BELG_SCRIPTS.yojimbo, abilityIds: [R.summonYojimbo, R.kozuka, R.wakizashi, R.zanmato, R.daigoroOrder] });
 export const belgAnima = (): EnemyDef =>
@@ -162,6 +165,8 @@ export const belgAnima = (): EnemyDef =>
 export function belgDog(): EnemyDef {
   return {
     ...aeon({ id: BELG_IDS.dog, name: 'Daigoro', sprite: 'daigoro', slot: 2, block: DOG_BLOCK, script: BELG_SCRIPTS.dog, abilityIds: [R.daigoroBite] }),
+    // The record (`m266`) resists almost nothing: Sleep, Silence and Darkness 20, every other status byte 0 (it is untargetable, so no status reaches it either way).
+    immunities: { sleep: 20, silence: 20, darkness: 20 } satisfies StatusImmunities,
     flags: { untargetable: true, hideHpBar: true },
     rewards: noRewards(1),
   };
@@ -181,10 +186,11 @@ export const belgCindy = (): EnemyDef =>
   });
 
 /**
- * **An estimate, not read from the Remiem files.** The menu commands switched off in these duels: Switch for everyone and, for Yuna, Attack, Item, Weapon, Armor, Skill, Special, Black Magic and White Magic, so her menu is
- * Summon and Grand Summon (and Dismiss, which the list never touches). The research note's source block says the `lmyt01` formation scripts are **camera only**, so this list is **not** in them: its basis is the guides' statement
- * that Yuna can only summon in an aeon duel, written with Chapter XIV's contest list as the pattern (those three formation scripts do switch these off, `battle/ffx/aeon-duel.ts`'s header, re-parity RC10), less Escape and Flee, which the chain's
- * `canEscape: false` closes. **No `defendOff` is set** (the Isaaru formations' `setDefendingEnabled(0)` has no Remiem source). If a read of the Remiem event package shows another gate, change this one list.
+ * **Read from the formation scripts** `lmyt01_00` to `_07` (`_00` and `_07` were dumped and read line by line; the repo's formation-flag fixture lists all eight under the same flag calls). Each script's first function calls
+ * `setCommandDisabled(all characters and aeons, Switch, 1)` and `setCommandDisabled(1, <command>, 1)` for Yuna's Attack, Item, Weapon, Armor, Black Magic, White Magic, Skill and Special, so her menu is Summon and Grand Summon
+ * (Dismiss, the list never touches; the tactic never plays it). The same function calls `setDefendingEnabled(0)` (the groups' `defendOff`) and `btlSetCounterFlag(0)` (`counterOff`). Escape and Flee are not in the list: the chain's
+ * `canEscape: false` closes them. The scripts also call `setCommandDisabled(1, 8, 0)` (Valefor's act) and `(1, 15 to 17, 0)` (the Sisters' act), the aeon-availability byte set to "available"; the build expresses the aeon the enemy holds
+ * as the mirror lock (`lockedAeons`), so those writes are not copied.
  */
 export const BELGEMINE_COMMAND_DISABLES: readonly FormationCommandOff[] = [
   { who: 'everyone', command: 0x3002 }, // Switch
@@ -241,6 +247,8 @@ export function belgemineGroup(index: number): EnemyGroupDef {
     plate: BELG_PLATE, // the Cavern plate as the Remiem court's stand-in (`src/scenes/belgemine.ts`)
     ...(next !== undefined ? { nextGroupId: next.groupId } : {}),
     aeonsOnly: true,
+    defendOff: true, // `lmyt01_0n`: setDefendingEnabled(0), so Yuna has no Defend row (`battle/ffx/formation-flags.ts`, RC10)
+    counterOff: true, // `lmyt01_0n`: btlSetCounterFlag(0), so no counter answers a hit (`battle/ffx/formation-flags.ts`)
     commandDisables: BELGEMINE_COMMAND_DISABLES,
     lockedAeons: act.locks.map((aeonId) => ({ aeonId, mirrorOf: MIRROR[aeonId]! })),
     ...(first ? {} : { checkpointOnEntry: true, restoresPartyOnEntry: true, restoresAeonsOnEntry: true, noSaveSphereCard: true }),

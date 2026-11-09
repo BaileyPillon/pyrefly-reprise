@@ -7,7 +7,7 @@
  * - the tier below it (`'zanarkand'`, the preflight's recommendation) is a wall in the last two acts, the tier above it (`'endgame'`) a walkover: the lever works in both directions;
  * - the line's pieces earn their keep: Cindy first (without it the Sisters' duel stalls), Anima in the party (without her the Sisters are not beaten).
  *
- * The mirror precedent's band (the advisor's line 60 to 80 percent for the chain, a careless line under 20) is printed beside the figures; the shipped tier is above it on both (98 and 50 at the time of writing: the advisor here is a
+ * The mirror precedent's band (the advisor's line 60 to 80 percent for the chain, a careless line under 20) is printed beside the figures; the shipped tier is above it on both (98 and 42 at the time of writing, with the formation's Defend-off applied, which takes the careless line's fallback away: the advisor here is a
  * near-perfect player and the careless line one that thinks of nothing, so a real player falls between them), and the handoff says so. Seeds 1 to 100 are the low block; the pins have room for the spread over other blocks.
  */
 

@@ -6,7 +6,7 @@
 
 **Game case: FFX only** (AGENTS.md rule 14). Belgemine, the Remiem Temple, the eight aeons and CTB are FFX's (`research/re-ffx-belgemine-aeon-duels.md`, from the game's own files). Nothing here applies to FFX-2 or FF7. The shared plumbing (one row in each registry, one door row, one scene row, one setup call) is "both" in kind, additive and inert for every other chapter (CHK-020); `tests/unit/chapters/belgemine-absence.test.ts` pins that no other formation gets the chapter's scripts, flags or gauges.
 
-**Sources:** the paper preflight `docs/plans/ch-belgemine-review.md` (committed `d56053b5d`) and the research note `research/re-ffx-belgemine-aeon-duels.md` (the stat block each script writes, the turn scripts, the rows). **Rule 6:** every enemy number is the note's, `[R]`/`[H]`; the party's numbers are `[estimate]` (the sources give none), declared as such in `data/ffx/builds/belgemine.ts`. **No enemy number was ever tuned.** Two behaviours are estimates and are labelled so in the code and in section 3 (Yuna's command list in a duel; the forced-action word of seven bodies left unmatched): see section 7, item 1b.
+**Sources:** the paper preflight `docs/plans/ch-belgemine-review.md` (committed `d56053b5d`) and the research note `research/re-ffx-belgemine-aeon-duels.md` (the stat block each script writes, the turn scripts, the rows). **Rule 6:** every enemy number is the note's, `[R]`/`[H]`; the party's numbers are `[estimate]` (the sources give none), declared as such in `data/ffx/builds/belgemine.ts`. **No enemy number was ever tuned.** Two things are estimates and are labelled so in the code and in section 3 (the party preset; the forced-action word of seven bodies left unmatched): see section 7, item 1b. **Yuna's command list, Defend off and counters off are NOT estimates: they are read from the formation scripts `lmyt01_0n` (section 10).**
 
 ## 1. What the chapter is
 
@@ -39,7 +39,7 @@ Belgemine stands on the field untargetable, off the turn list and no part of the
 | Registrations (shared, additive) | `docs/CONTRACT-CHANGES.md` (the 2026-11-09 entry lists every one) |
 | Tools | `tools/belgemine-bench.mjs` (prints the bench table, the same harness the test pins) |
 
-**Layering held** (hard rule 1): the scripts import no DOM and no `three`; the draws are the seeded streams. **No engine kernel file changed** (the duel machinery, the mirror lock and the restores were already in the tree); the one battle-layer edit is a call in `dark-aeons-setup.ts` that returns at once for any other group.
+**Layering held** (hard rule 1): the scripts import no DOM and no `three`; the draws are the seeded streams. **No engine kernel logic changed** (the duel machinery, the mirror lock and the restores were already in the tree; the one kernel file touched, `kernel/forced-action-table.ts`, gained five data rows); the battle-layer edits are a call in `dark-aeons-setup.ts` that returns at once for any other group and, since the review's fix pass, the counter switch (`formation-flags.ts` and `adapt/counter.ts`, section 10).
 
 ## 3. The picks (BD1 to BD10 of the preflight, as built; each is the driver's call, his to overturn)
 
@@ -55,7 +55,7 @@ Belgemine stands on the field untargetable, off the turn list and no part of the
 | BD8 Music | stand-ins: battle `boss-isaaru`, victory `victory-ffx` (rule 13: Bailey judges from the audition page) | `boss-challenge` |
 | BD9 Id, number, word | `belgemine`, **45**, **`sidequest`** (the door rule checked in the plan's pool; the natural word `belgemine` fails it) | `contest` |
 | BD10 "Send her" | a closing line in the post scene, no mechanic | a yes/no choice with a mock reward |
-| Yuna's menu in a duel (**an estimate, not in the note**) | Summon and Grand Summon (and Dismiss, Defend): `aeonsOnly` greys her foe-aimed rows, and `commandDisables` (`BELGEMINE_COMMAND_DISABLES`: Switch for everyone; her Attack, Item, Weapon, Armor, Skill, Special, Black Magic, White Magic) greys the rest. **The note's source block says the `lmyt01` formation scripts are camera only, so the list is not read from them**: its basis is the guides' "Yuna can only summon" and Chapter XIV's contest list as the pattern. **No `defendOff`** (the Isaaru formations' `setDefendingEnabled(0)` has no Remiem source), so Defend stays on offer | change the one list in `data/ffx/enemies/belgemine.ts` after a read of the Remiem event package |
+| Yuna's menu in a duel (**read from the formation scripts `lmyt01_0n`**, not an estimate; corrected in the review's fix pass, section 10) | Summon and Grand Summon (and Dismiss): `aeonsOnly` greys her foe-aimed rows, `commandDisables` (`BELGEMINE_COMMAND_DISABLES`: Switch for everyone; her Attack, Item, Weapon, Armor, Skill, Special, Black Magic, White Magic) greys the rest, and **`defendOff`** takes the Defend row away: the scripts' first function calls `setCommandDisabled` for exactly that list and `setDefendingEnabled(0)` (and `btlSetCounterFlag(0)`, the groups' `counterOff`). **The research note's claim that the `lmyt01` scripts are "camera only" was wrong** (it read the monster files, not these calls); `_00` and `_07` were dumped and read line by line, and the repo's formation-flag fixture lists all eight under both flag calls. `_01` to `_06` were not dumped: that their command lists equal `_00`'s and `_07`'s is inferred, not read | none: it is the game's list |
 | Forced-action word (rule 6) | five bodies carry 0x0000 because their monster files (m254, m284, m287, m288, m266) are already matched in `forced-action-table.ts`; **Ixion, Shiva, Anima, the three Sisters and Belgemine are unmatched** and keep the generic Attack (all are immune to Berserk, Confuse and Provoke, the only readers of the word) | match the files in the private census |
 
 **The tactic's options, each measured** (section 4): Cindy first (shipped), a Grand Summon when the gauge is full (shipped), Shield before a big move (shipped), wait out a guard (shipped), prefer a charged Overdrive (shipped), **no Dismiss** (shipped: measured counterproductive), **a plain Summon, not a Grand Summon, against Anima** (shipped: the Grand Summon there is the worse opening, 88 of 100 against 100). Two options were measured and left OFF: Dismiss (87 percent of the chain) and holding every Overdrive against Anima (63 percent).
@@ -71,19 +71,21 @@ The harness is `tests/unit/helpers/belgemineDrive.ts`; `tests/unit/chapters/belg
 | Valefor | 100 / 100 | 100 / 100 | 0.0 |
 | Ifrit | 100 / 100 | 100 / 100 | 0.1 |
 | Ixion | 100 / 100 | 100 / 100 | 0.0 |
-| Shiva | 100 / 100 | 97 / 100 | 0.0 |
+| Shiva | 100 / 100 | 96 / 100 | 0.0 |
 | Bahamut | 100 / 100 | 100 / 100 | 0.0 |
 | Yojimbo | 100 / 100 | 90 / 100 | 0.0 |
 | Anima | 100 / 100 | 100 / 100 | 0.9 |
-| The Sisters | 100 / 100 | 55 / 100 | 2.9 |
-| **the chain** | **98 / 100** (lost in act 8: 2) | 50 / 100 (lost in act 4: 3, act 6: 9, act 8: 38) | |
+| The Sisters | 100 / 100 | 49 / 100 | 2.9 |
+| **the chain** | **98 / 100** (lost in act 8: 2) | 42 / 100 (lost in act 4: 4, act 6: 9, act 8: 45) | |
+
+(The careless column moved with the Defend-off fix of section 10: its fallback when it has nothing to Attack with was Defend, and the menu no longer has one. The shipped line's column did not move. Before the fix the careless figures were 97, 55 and 50 of 100.)
 
 **The party is the lever (the chain, 100 seeds)**
 
 | Tier | Shipped line | Careless |
 |---|---:|---:|
 | `zanarkand` (the preflight's recommendation) | 8 % | 1 % |
-| `sin` (**shipped**) | 98 % | 50 % |
+| `sin` (**shipped**) | 98 % | 42 % |
 | `endgame` | 100 % | 100 % |
 
 **What each piece of the line is worth (the chain, shipped tier)**
@@ -92,7 +94,7 @@ The harness is `tests/unit/helpers/belgemineDrive.ts`; `tests/unit/chapters/belg
 |---|---:|
 | Cindy first (shipped) | 98 % |
 | the weakest Sister first | 79 % |
-| no Grand Summon at all | 99 % |
+| no Grand Summon at all | 98 % |
 | no Shield before the big move | 98 % |
 | Dismiss an aeon under a third of its HP | 87 % |
 | Anima not owned | 0 % |
@@ -102,10 +104,10 @@ The harness is `tests/unit/helpers/belgemineDrive.ts`; `tests/unit/chapters/belg
 **Reading it, honestly:**
 
 1. **Neither of the Mirror Aeons precedent's bands is met exactly** (the advisor's line 60 to 80 percent for the chain, a careless line under 20). The shipped tier is above the band on both: the advisor here is a near-perfect player and the careless line one that thinks of nothing, so a real player falls between the two. The three tiers are the only lever the sources allow (the guides' one statement is that the difficulty "depends solely on how well you built Yuna"); the tier below is a wall and the one above a walkover, so the shipped tier is the nearest sourced block to the band, not a tuned one.
-2. **The first six duels are trivial for any line** on the shipped tier (the careless line wins them nearly all); the chain's difficulty is the **Sisters** (the careless line loses about half of them) and, for the advisor, two runs in a hundred there too. **Anima's duel is won on every seed by both lines**, but it kills about one aeon a duel (Pain kills outright, her gauge is fed by every hit).
+2. **The first six duels are trivial for any line** on the shipped tier (the careless line wins them nearly all); the chain's difficulty is the **Sisters** (the careless line loses about half of them: 51 of 100) and, for the advisor, two runs in a hundred there too. **Anima's duel is won on every seed by both lines**, but it kills about one aeon a duel (Pain kills outright, her gauge is fed by every hit).
 3. **A finding that changed the line:** the first draft of the shipped line opened every duel with a Grand Summon. Against Anima that was worse than doing nothing clever: 88 of 100 for the line against 100 for a line that only Attacks, because the Grand Summon's ready Overdrive pours many hits into her hit-fed gauge (+5 a hit, RE 3.11). The line now opens Anima's duel with a plain Summon (`noGrandSummonVs`, measured: 100 of 100, the chain unchanged). Holding every Overdrive against her too (`holdOverdriveVs`) was measured and rejected: her duel is no better and the chain falls to 63 percent.
 4. **Cindy first is the line's one big piece:** the weakest-first line loses nineteen points of the chain. **Anima in the party is the other:** without her the Sisters are not beaten (0 percent).
-5. **Dismiss is counterproductive** (87 against 98), so the tactic never plays it; **the Grand Summon matters little elsewhere** (99 percent without it).
+5. **Dismiss is counterproductive** (87 against 98), so the tactic never plays it; **the Grand Summon matters little elsewhere** (98 percent without it, the same as with it).
 6. `unfinished` is zero in every duel cell: no duel stalls on any seed.
 
 ## 5. Art list (what is a stand-in, what is owed; nothing was written into `public/art/` or the mirror)
@@ -149,7 +151,7 @@ The door pair test took 460 s under the suite's load against its 1,120 s allowan
 ## 7. Open issues (none blocks the hidden build; each is for the driver or Bailey)
 
 1. **Belgemine's painting and the Remiem plate are owed** (section 5), and the **ladder HUD chip** needs a mockup and Bailey's yes first.
-1b. **Two things in the data are estimates, not the files' numbers** (section 3's last two rows): Yuna's command-disable list in these duels, and the party preset (`[estimate]` by the project's rule). A first draft of this lane cited the research note for the disable list and for a Defend-off flag; **neither is in the note** (it says the formation scripts are camera only), so the Defend-off flag was removed and the list was relabelled as an estimate before this was committed.
+1b. **Two things in the data are estimates, not the files' numbers** (section 3): the party preset (`[estimate]` by the project's rule) and the forced-action word of seven bodies (left unmatched, not invented). **Yuna's command-disable list and the Defend-off flag were wrongly listed here as estimates in the first build** (it trusted the research note's "formation scripts are camera only"); the review read `lmyt01_00` and `_07` and found both calls, and the fix pass of section 10 corrected the data, the tests and every document that repeated the claim.
 2. **Difficulty is not in the Mirror Aeons band** (section 4). The honest figures are printed; the lever is `BELGEMINE_TIER`; no enemy row moved. A different band is Bailey's call, and the options are measured above.
 3. **Anima's Pain is a kill risk** (about one aeon lost a duel, though every seed is won), faithful to the script (RE 3.11); the guide card names it. A softer Anima would be a boss-side change and needs a measured option and Bailey's yes.
 4. **Unmodelled, flagged in the note:** the first-win and retry reward items (U4); the formation flag words that make a loss "player escaped" instead of a game over (U2; the chain's ordinary loss stands in); the stage ids (U3; the plate stand-in); Remiem Ixion's second call queues two commands in the game's script (U1; one command is run and flagged in the AI test); a dormant Sister flag.
@@ -160,7 +162,7 @@ The door pair test took 460 s under the suite's load against its 1,120 s allowan
 
 ## 8. The browser smoke (run: PASS, desktop and phone landscape)
 
-`tools/belgemine-smoke.mjs`, headless Chromium on the real GPU (`PYREFLY_BROWSER=gpu`), one job under the review-browser lock, against a dev server this lane started on port 5190 and stopped by its PID afterwards. On the software renderer the battle never reached its first menu in 120 s (a control run of the Penance chapter, same environment, did not either); on the GPU both sizes pass every check: the board has no card for the chapter; the word `sidequest` opens party prep (`EXP · BELGEMINE'S CHALLENGE — REMIEM TEMPLE`, Yuna alone at S.LV 175, three objectives and the tip); the pre scene plays on the Cavern plate; the first menu shows Belgemine's figure (the engine's placeholder, a lantern shape), Valefor on the Cavern plate and Yuna alone; the guide card (the **AEON DUEL** tag, HP 20,000, our words) and the NEXT BEST MOVE panel read Grand Summon; the Summon list opens with VALEFOR dimmed above IFRIT; no page errors and no 4xx. Screenshots: `docs/screenshots/ch-belgemine/desk-0` to `desk-4` (1600 by 900) and `phone-3-first-menu.jpg` (844 by 390, touch).
+`tools/belgemine-smoke.mjs`, headless Chromium on the real GPU (`PYREFLY_BROWSER=gpu`), one job under the review-browser lock, against a dev server this lane started on port 5190 and stopped by its PID afterwards. On the software renderer the battle never reached its first menu in 120 s (a control run of the Penance chapter, same environment, did not either); on the GPU both sizes pass every check: the board has no card for the chapter; the word `sidequest` opens party prep (`EXP · BELGEMINE'S CHALLENGE — REMIEM TEMPLE`, Yuna alone at S.LV 175, three objectives and the tip); the pre scene plays on the Cavern plate; the first menu shows Belgemine's figure (the engine's placeholder, a lantern shape), Valefor on the Cavern plate and Yuna alone; the guide card (the **AEON DUEL** tag, HP 20,000, our words) and the NEXT BEST MOVE panel read Grand Summon; the Summon list opens with VALEFOR dimmed above IFRIT; no page errors and no 4xx. Screenshots: `docs/screenshots/ch-belgemine/desk-0` to `desk-4` (1600 by 900) and `phone-0` to `phone-4` (844 by 390, touch). **Re-run after the fix pass of section 10 (both sizes PASS, GPU, a dev server on port 5190 stopped by its PID): the smoke gained a check, "Defend is off: the flag is up and no Defend tab is drawn", and all screenshots were retaken, so `desk-3-first-menu.jpg` and `phone-3-first-menu.jpg` show the first menu with no Defend tab** (the first build's showed one).
 
 **Not covered:** playing a duel by keys, the pause plate, the results page, audio (Bailey's ear). The duels and the chain are proved on the real engine by the tests and the bench instead.
 
@@ -169,3 +171,21 @@ The door pair test took 460 s under the suite's load against its 1,120 s allowan
 ## 9. Resume
 
 `git log ch-belgemine`; `npx vitest run tests/unit/chapters/belgemine-*.test.ts`; `node --experimental-transform-types tools/belgemine-bench.mjs --seeds 100 --tiers`. To change the difficulty, change `BELGEMINE_TIER` in `src/data/ffx/builds/belgemine.ts` (never an enemy row) and re-run the bench; to list the chapter on the board, Bailey's word is needed (BD9).
+
+## 10. The review's fix pass (2026-11-09; FFX only: Belgemine, the Remiem Temple and the `lmyt01` formations are FFX's)
+
+A read-only review of the first build (HEAD `e88b6b864`) found no critical defect and two majors, both from one false premise in the research note: **the `lmyt01_00` to `_07` formation scripts are not "camera only".** Their first function calls `setDefendingEnabled(0)`, `setCommandDisabled` (Switch for everyone; Yuna's Attack, Item, Weapon, Armor, Black Magic, White Magic, Skill, Special: exactly the list the build already shipped), `setCommandDisabled(1, <aeon byte>, 0)` and `btlSetCounterFlag(0)`. The first build had guessed the command list by Chapter XIV's pattern and then left `defendOff` off on the note's word.
+
+| Finding | What changed | Where |
+|---|---|---|
+| **M1: Defend was on offer and the handoff said it was unsourced** | `defendOff: true` on all eight groups; `BELGEMINE_COMMAND_DISABLES` relabelled "read from the formation scripts"; the claim removed from `belgemine.ts`, `belgemine-engine.test.ts` (it pinned Defend on; now `['overdrive:grand-summon']`), `belgemine-data.test.ts`, this handoff (sections 3 and 7), the research note's source row (a dated correction) and the paper preflight. A new test plays all eight first menus: no Defend row, a submitted Defend is refused and the turn stays Yuna's, a summoned aeon has none either | `src/data/ffx/enemies/belgemine.ts`, the three test files |
+| **M1 consequence on the bench** | the careless line's last-resort fallback was Defend; with it gone the careless chain is **42 of 100 (was 50)**, the Sisters 49 (was 55), Shiva 96 (was 97). **The shipped line is unchanged: 98 of 100** (Anima 100, Sisters 100). The harness's last resort is now `defendOrAttack` (an allowed command, never Defend). Nothing about a boss was touched | the bench test header, `data/ffx/builds/belgemine.ts`, section 4 |
+| **M2: four untracked phone screenshots** | committed (they show the chapter's phone-landscape flow; `phone-3-first-menu.jpg` is the first menu, see the art list) | `docs/screenshots/ch-belgemine/` |
+| Minor 1: the counter flag was not modelled | **wired** (the RC10 handoff's own plan): `EnemyGroupDef.counterOff` (additive, `CONTRACT-CHANGES.md`), `formation-flags.ts#counterSwitchOn` (switch `FORMATION_COUNTER_OFF`), read by `adapt/counter.ts#kindInput` where `switchOn: 1` stood; set on the eight groups. **Inert in play** (no counter ability in these fights; Bahamut's counter is a script reaction), proved at the kernel's byte in `parity-ffx-formation-flags.test.ts` | `types.ts`, `formation-flags.ts`, `adapt/counter.ts` |
+| Minor 2: Remiem Bahamut was immune to fractional damage | not any more: his script writes ImmuneToFractionalDmg = 0 in the Remiem branch (`m287` @0x0214), so he carries the Sisters' flag set. Unreachable (Yuna's aeons have no percent-damage move), pinned in the data test | `belgemine.ts` (`fractional: true`) |
+| Minor 3: Cindy's single buff picks may include Belgemine in the game | **flagged as an assumption, not changed**: `m290`'s group moves remove her (`removeFromMatchingGroup(4346)`), the single picks (Shell @0x0526, Protect @0x0542, Cura @0x0572, Regen @0x0590) do not. The build never picks her. If the game can, Cindy wastes some buffs and the Sisters' duel is slightly easier than the build's. Unverified | `belgemine-sisters.ts` header, the research note |
+| Minor 4: stale comments | the tactic's "weakest foe, Mindy first" (now "Cindy first, then the lowest HP"), the registry's "Dismiss a failing aeon" (no Dismiss), "no engine kernel file changed" (`kernel/forced-action-table.ts` gained five data rows: now "no kernel logic"), the harness's "null means Defend" | `tactics/belgemine.ts`, `tactics/index.ts`, here, `CONTRACT-CHANGES.md`, `belgemineDrive.ts` |
+| Minor 5: a local path in a committed string | removed from the paper preflight | `docs/plans/ch-belgemine-review.md` |
+| Minor 6: the dog's record was not copied | `belgDog()` now resists only Sleep, Silence and Darkness at 20 (`m266`); unreachable (it is untargetable), pinned | `belgemine.ts`, the data test |
+
+**Still inferred, not read:** `lmyt01_01` to `_06` were not dumped. That their command lists and the aeon-availability writes equal `_00`'s and `_07`'s is inferred from the fixture's flag lists and the one builder. The aeon-availability writes (`setCommandDisabled(1, 8, 0)` in `_00`; 15 to 17 in `_07`) set the byte to "available" and are not copied: the build expresses the aeon the enemy holds as the mirror lock.

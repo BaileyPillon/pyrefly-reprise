@@ -141,6 +141,15 @@ try {
   await shot('3-first-menu');
   const text = await page.evaluate(() => document.body.innerText);
   check('the menu names Summon', /summon/i.test(text), text.slice(0, 200));
+  // The formation scripts call setDefendingEnabled(0) (`lmyt01_0n`): the battle carries the flag and the HUD draws no Defend tab.
+  const defendState = await page.evaluate(() => ({
+    flag: window.__pyrefly?.battleState?.()?.flags?.['formation.defendOff'] ?? null,
+    counterFlag: window.__pyrefly?.battleState?.()?.flags?.['formation.counterOff'] ?? null,
+    tabs: document.querySelectorAll('.ffx-cmd-defend:not([hidden])').length, // the tab always exists; it is hidden while no Defend command is offered
+    tabsInDom: document.querySelectorAll('.ffx-cmd-defend').length,
+  }));
+  log('defend.state', defendState);
+  check('Defend is off: the flag is up and no Defend tab is drawn', defendState.flag === true && defendState.counterFlag === true && defendState.tabs === 0, defendState);
 
   // --- the Summon list (real keys): the cursor starts on Special, whose rows are greyed; three Downs reach Summon (the greyed rows are skipped) ----------
   for (let i = 0; i < 3; i++) {

@@ -163,12 +163,13 @@ describe('the bodies equal the note (RE 0, the stat block each script writes at 
     for (const b of [belgValefor(), belgBahamut(), belgYojimbo(), belgAnima(), belgMindy(), belgSandy(), belgCindy()]) expect(b.affinities, b.id).toEqual({});
   });
 
-  it('the flag bytes: percentage damage (Demi, Gravity) is immune on the aeons and NOT on the Sisters; Sensor, Scan, Delay and Bribe are immune on all ten', () => {
+  it('the flag bytes: percentage damage (Demi, Gravity) is immune on the aeons and NOT on the Sisters or on Remiem Bahamut (his script writes ImmuneToFractionalDmg = 0, m287 @0x0214); Sensor, Scan, Delay and Bribe are immune on all ten', () => {
     for (const b of bodies) {
       expect(b.immunityFlags, b.id).toEqual(expect.arrayContaining(['immune-to-delay', 'immune-to-bribe', 'immune-to-scan', 'immune-to-sensor']));
-      const sister = ['belg-mindy', 'belg-sandy', 'belg-cindy'].includes(b.id);
-      expect(b.immunityFlags.includes('immune-to-percentage-damage'), b.id).toBe(!sister);
+      const open = ['belg-mindy', 'belg-sandy', 'belg-cindy', 'belg-bahamut'].includes(b.id);
+      expect(b.immunityFlags.includes('immune-to-percentage-damage'), b.id).toBe(!open);
     }
+    expect(belgDog().immunityFlags).toContain('immune-to-percentage-damage'); // the dog's record (m266) is ImmuneFractional
   });
 
   it('no gil, no AP, no drops (RE 0: every reward is the script\'s, not modelled); every body is a boss', () => {
@@ -182,6 +183,7 @@ describe('the bodies equal the note (RE 0, the stat block each script writes at 
     for (const b of [belgemine(), belgDog()]) expect(b.flags).toMatchObject({ untargetable: true, hideHpBar: true });
     expect(DOG_BLOCK).toEqual([1, 1, 25, 0, 0, 0, 0, 0, 0]);
     expect(belgDog().stats).toMatchObject({ hp: 1, str: 25 });
+    expect(belgDog().immunities).toEqual({ sleep: 20, silence: 20, darkness: 20 }); // the record resists only these three, at 20 (rec-aeons m266), not the aeons' 255 list
     expect(belgemine().stats.hp).toBe(10);
     expect(belgemine().aiScriptId).toBe(ids.BELGEMINE_BYSTANDER_SCRIPT);
   });
@@ -212,16 +214,17 @@ describe('the eight formations are one chain of aeon duels', () => {
     for (const g of BELGEMINE_GROUPS) expect(g.bossId && g.enemies.some((e) => e.id === g.bossId), g.id).toBe(true);
   });
 
-  it('aeons only, the estimated command-disable list (not from the Remiem files, which are camera only), no Defend-off, no escape, the Cavern plate, the stand-in cue', () => {
+  it('aeons only, the command-disable list read from the formation scripts, Defend off and counters off (the same scripts), no escape, the Cavern plate, the stand-in cue', () => {
     for (const g of BELGEMINE_GROUPS) {
       expect(g.aeonsOnly, g.id).toBe(true);
-      expect(g.defendOff, g.id).toBeUndefined();
+      expect(g.defendOff, g.id).toBe(true);
+      expect(g.counterOff, g.id).toBe(true);
       expect(g.canEscape, g.id).toBe(false);
       expect(g.commandDisables, g.id).toEqual(BELGEMINE_COMMAND_DISABLES);
       expect(g.plate, g.id).toBe(ids.BELG_PLATE);
       expect(g.musicCues, g.id).toEqual([{ at: 'start', track: 'boss-isaaru', fadeMs: 1200 }]);
     }
-    // Switch for everyone, and Yuna's Attack, Item, Weapon, Armor, Skill, Special, Black Magic and White Magic (an estimate by the Isaaru contest's pattern)
+    // Switch for everyone, and Yuna's Attack, Item, Weapon, Armor, Skill, Special, Black Magic and White Magic: the setCommandDisabled calls of lmyt01_00 and lmyt01_07 (12290; 12288, 12289, 12292, 12293, 12565, 12566, 12563, 12564)
     expect(BELGEMINE_COMMAND_DISABLES.map((d) => `${d.who}:${d.command.toString(16)}`)).toEqual([
       'everyone:3002', 'yuna:3000', 'yuna:3001', 'yuna:3004', 'yuna:3005', 'yuna:3113', 'yuna:3114', 'yuna:3115', 'yuna:3116',
     ]);

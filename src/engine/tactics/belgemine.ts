@@ -19,7 +19,7 @@
  * 2. **Shield while Ixion guards**: he braces (Defense and Magic Defense 255) or evades (Evasion 255) one turn in two (RE 3.7); a blow into the guard is wasted and charges him by 25, so the line waits behind Shield for the turn he is open.
  * 3. (**Dismiss** an aeon under a third of its HP when another can still be called is an option the bench measured and the line leaves OFF: the call costs Yuna a turn, and it wins the chain 87 percent against 98 without it.)
  * 4. **Its Overdrive** at the foe when the gauge is full (one Overdrive is worth several turns of Attacks).
- * 5. Otherwise **Attack** the weakest foe standing (Mindy before Sandy and Cindy: with any one of the three down, the Delta Attack is over for good, RE 3.12).
+ * 5. Otherwise **Attack** the foe standing that the line names: **Cindy first** in the Sisters' duel (shipped; the bench measured the weakest-first line at 79 percent of the chain against 98), otherwise the lowest HP. With any one of the three down the Delta Attack is over for good (RE 3.12).
  */
 
 import type { AnyCombatant, AvailableCommand, BattleEngine, Command, CombatantId, FFXCombatant } from '../../battle/common/types.ts';
@@ -109,7 +109,7 @@ function offered(commands: AvailableCommand[], kind: string, id?: string): Avail
   return commands.find((c) => c.enabled && c.command.kind === kind && (id === undefined || ('id' in c.command && (c.command as { id: string }).id === id)));
 }
 
-/** The foes standing, weakest first (Mindy before Sandy and Cindy). */
+/** The foes standing in the order the line strikes them: Cindy first when `sistersTarget` is `'cindy'` (shipped), then the lowest HP. */
 function standing(engine: BattleEngine, line: BelgemineLine): AnyCombatant[] {
   const state = engine.state();
   return BELGEMINE_CHAPTER_BOSS_IDS.map((id) => state.combatants[id])
