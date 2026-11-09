@@ -21,6 +21,7 @@ import { COMMAND_RECORDS_SANCTUARY_KEEPER } from '../enemies/sanctuary-keeper-ab
 import { COMMAND_RECORDS_SPHERIMORPH } from '../enemies/spherimorph-abilities.ts'; // Spherimorph's six rows (hidden chapter, 2026-11-06)
 import { COMMAND_RECORDS_WEAPONS } from '../enemies/weapons-abilities.ts'; // the three Weapons' fourteen rows (hidden Omega Ruins chapter, 2026-11-06)
 import { COMMAND_RECORDS_WENDIGO } from '../enemies/wendigo-abilities.ts'; // Wendigo's and the Lake Guardians' eight rows (hidden chapter, 2026-11-06)
+import { COMMAND_RECORDS_OBLITZERATOR } from '../enemies/oblitzerator-abilities.ts'; // the Oblitzerator's, the crane's and Tidus's Use crane's six rows (hidden chapter, 2026-11-09)
 
 /**
  * The possessed aeons' plain Attack: monster-magic-2 record 0x6000 "Attack" (accuracy formula 2 on a byte of 90, formula 1,
@@ -46,6 +47,7 @@ export const COMMAND_RECORDS_ENEMIES: Readonly<Record<string, FFXCommandRecord>>
   ...COMMAND_RECORDS_SPHERIMORPH,
   ...COMMAND_RECORDS_WEAPONS,
   ...COMMAND_RECORDS_WENDIGO,
+  ...COMMAND_RECORDS_OBLITZERATOR,
   'lance-of-atrophy': { id: 0x6078, type: 0, flagsMisc: 0x6, flagsDamage: 0x1, damageClass: 1, shatter: 30, rank: 3, chances: [[1, 100]] }, // Lance of Atrophy (our numbers differ: section 4)
   'full-life': { id: 0x60f5, type: 0, flagsMisc: 0x4800086, flagsDamage: 0x32, damageClass: 1, rank: 3, chances: [[0, 254]] }, // Full Life
   'cross-cleave': { id: 0x6074, type: 0, flagsMisc: 0x4006, flagsDamage: 0x1, damageClass: 1, rank: 3 }, // Cross Cleave (our numbers differ: section 4)

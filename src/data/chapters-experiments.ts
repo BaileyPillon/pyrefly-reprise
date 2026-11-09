@@ -42,6 +42,7 @@
  * - **Ifrit at Kilika Temple** (`'ffx2-ifrit-kilika'`, number 46, 2026-11-07; FFX-2 only): the possessed fire aeon in the Chamber of the Fayth, Chapter 3's mission "Pest Control"; word `ifrit`.
  *
  * - **Wendigo** (`'wendigo'`, number 49, 2026-11-06; FFX only): Wendigo and its two Guado Guardians on frozen Lake Macalania, the Meshy 3D tech demo (battle side first); word `wendigo`, desktop only.
+ * - **The Oblitzerator** (`'oblitzerator'`, number 50, 2026-11-09; FFX only): the blitzball machine and the dock crane at Luca; word `blitz`.
  *
  * A further hidden chapter registers here, by adding its record to the list below, not by editing `./encounters.ts`.
  *
@@ -78,8 +79,9 @@ import { SPHERIMORPH } from './chapter-spherimorph.ts';
 import { OMEGA_RUINS } from './chapter-omega-ruins.ts';
 import { FF7_JENOVA_LIFE } from './chapter-ff7-jenova-life.ts';
 import { WENDIGO } from './chapter-wendigo.ts';
+import { OBLITZERATOR } from './chapter-oblitzerator.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from, and `ffx2Bahamut` the listed Chapter IV, which the 3D Bahamut is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter, ffx2Bahamut: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD, SPHERIMORPH, FFX2_YOUTH_LEAGUE, OMEGA_RUINS, FF7_JENOVA_LIFE, FFX2_IFRIT_KILIKA, WENDIGO] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD, SPHERIMORPH, FFX2_YOUTH_LEAGUE, OMEGA_RUINS, FF7_JENOVA_LIFE, FFX2_IFRIT_KILIKA, WENDIGO, OBLITZERATOR] as const;
 }

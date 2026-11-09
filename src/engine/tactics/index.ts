@@ -64,6 +64,7 @@ import { SANCTUARY_KEEPER_BOSS_IDS, sanctuaryKeeper } from './sanctuary-keeper.t
 import { SPHERIMORPH_BOSS_IDS, spherimorph } from './spherimorph.ts';
 import { OMEGA_RUINS_BOSS_IDS, omegaRuins } from './omega-ruins.ts';
 import { WENDIGO_BOSS_IDS, wendigoLine } from './wendigo.ts';
+import { OBLITZERATOR_BOSS_IDS, oblitzeratorLine } from './oblitzerator.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -116,6 +117,7 @@ export { sanctuaryKeeper, SANCTUARY_KEEPER_BOSS_IDS } from './sanctuary-keeper.t
 export { spherimorph, SPHERIMORPH_BOSS_IDS } from './spherimorph.ts'; // the hidden Spherimorph chapter (FFX only)
 export { omegaRuins, OMEGA_RUINS_BOSS_IDS } from './omega-ruins.ts'; // the hidden Omega Ruins chapter (FFX only)
 export { wendigoLine, WENDIGO_BOSS_IDS } from './wendigo.ts'; // the hidden Wendigo chapter (FFX only)
+export { oblitzeratorLine, OBLITZERATOR_BOSS_IDS } from './oblitzerator.ts'; // the hidden Oblitzerator chapter (FFX only)
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -212,6 +214,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...OMEGA_RUINS_BOSS_IDS.map((bossId) => ({ chapterId: 'omega-ruins', bossId, tactic: omegaRuins })),
   // The hidden Wendigo chapter (FFX only): the brute on the frozen lake; the line is a Petrify Grenade for the Guardians, Power Break and Dark Attack on Wendigo, Protect on the party, and no swing while its arms are up (plain blows win 0 of 100).
   ...WENDIGO_BOSS_IDS.map((bossId) => ({ chapterId: 'wendigo', bossId, tactic: wendigoLine })),
+  // The hidden Oblitzerator chapter (FFX only): the blitzball machine at the Luca dock; the line is Thunder at the crane three times, Use crane, then a swing (a blow or a spell at the machine draws a ball back).
+  ...OBLITZERATOR_BOSS_IDS.map((bossId) => ({ chapterId: 'oblitzerator', bossId, tactic: oblitzeratorLine })),
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

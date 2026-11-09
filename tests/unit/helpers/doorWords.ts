@@ -35,6 +35,7 @@ export const DOORS_IN_ORDER: ReadonlyArray<readonly [word: string, game: 'ff7' |
   ['bluelight', 'ff7'], // the hidden Jenova LIFE's (chapter 44, 2026-11-07)
   ['ifrit', 'ffx2'], // the hidden Ifrit at Kilika Temple's (chapter 46, 2026-11-07)
   ['wendigo', 'ffx'], // the hidden Wendigo's (chapter 49, 2026-11-06; desktop only)
+  ['blitz', 'ffx'], // the hidden Oblitzerator's (chapter 50, 2026-11-09)
 ];
 
 /** The words alone, in the table's order. */

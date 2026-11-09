@@ -52,6 +52,7 @@ import { aeonRosterRemoved, applyRosterRemoval, rosterEmptied } from './roster-r
 
 import { heldRefuses } from './ai/geosgaeno-hold.ts';
 import { applyFloodedWaysSetup } from './ai/flooded-ways-setup.ts';
+import { applyLucaSetup } from './ai/luca-crane.ts';
 
 export { applyPenanceSetup } from './ai/penance.ts'; // the hidden Penance chapter's opening state reaches `setup.ts` the same way
 export { applyPlatformSetup, markFirstStrike } from './platforms.ts'; // the Spectral Keeper's set-up calls reach `setup.ts` through this module (it is at the house 400 lines)
@@ -132,6 +133,7 @@ export function applyFormationCommandDisables(ctx: Ctx, group: EnemyGroupDef): v
   // Chapter III's roster removal (`./roster-removal.ts`, switch off): the aeons the field event took out of the party before this link; the Grand Summon row is checked for "nothing left".
   if (applyRosterRemoval(ctx, group)) ctx.state.flags[COMMAND_OFF_ANY] = true;
   applyFloodedWaysSetup(ctx, group); // the hidden Flooded Ways' opening state (the water flag, Evrae Altana's Zombie, the Gate Locks without turns): a no-op for every other formation
+  applyLucaSetup(ctx, group); // the hidden Oblitzerator's opening state (the crane without turns, the counters at zero): a no-op for every other formation
   if (!SCRIPT_COMMAND_DISABLES.on) return;
   for (const off of group.scriptCommandDisables ?? []) {
     if (off.command < MENU_COMMAND_FLOOR) {

@@ -63,6 +63,8 @@ import { buildForgottenCapitalScene, FORGOTTEN_CAPITAL_SLOTS } from './forgotten
 import { FORGOTTEN_CAPITAL_SCENE } from '../data/ff7/jenova-life-ids.ts';
 import { buildWendigoLakeScene, WENDIGO_SCENE_ENTRY } from './wendigo-lake.ts'; // frozen Lake Macalania (FFX only, hidden chapter): Chapter VII's Temple stage with Wendigo and its Guardians staged, the stand-in for the Meshy 3D stage
 import { WENDIGO_SCENE } from '../data/ffx/wendigo-ids.ts';
+import { buildLucaDockScene, LUCA_DOCK_SLOTS } from './luca-dock.ts'; // the Luca dock (FFX only, hidden chapter): the Mushroom Rock Road's plate and scene with the Oblitzerator and the crane staged
+import { OBLITZERATOR_SCENE } from '../data/ffx/oblitzerator-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -108,6 +110,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   { key: FORGOTTEN_CAPITAL_SCENE, title: 'The Forgotten Capital — the altar (Jenova LIFE)', build: buildDemoScene, slots: FORGOTTEN_CAPITAL_SLOTS, placeholder: false },
   // Wendigo (FFX only, hidden chapter): Chapter VII's Macalania Temple stage standing in for frozen Lake Macalania, Guardian, Wendigo and Guardian in the formation's order.
   WENDIGO_SCENE_ENTRY,
+  // The Oblitzerator (FFX only, hidden chapter): the Mushroom Rock Road's plate and scene standing in for the Luca dock, the machine in front and the crane at the right.
+  { key: OBLITZERATOR_SCENE, title: 'Luca — the Number 4 Dock (the Oblitzerator)', build: buildDemoScene, slots: LUCA_DOCK_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -133,4 +137,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [OMEGA_RUINS_SCENE]: buildOmegaRuinsScene, // the hidden Omega Ruins chapter (FFX only)
   [FORGOTTEN_CAPITAL_SCENE]: buildForgottenCapitalScene, // the hidden Jenova LIFE chapter (FF7 only)
   [WENDIGO_SCENE]: buildWendigoLakeScene, // the hidden Wendigo chapter (FFX only)
+  [OBLITZERATOR_SCENE]: buildLucaDockScene, // the hidden Oblitzerator chapter (FFX only)
 };

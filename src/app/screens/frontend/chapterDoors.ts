@@ -48,6 +48,7 @@
  *
  * **`bluelight`** (FF7, the hidden Jenova LIFE, `./bluelightDoor.ts`: B, L, U, I, G, H and T; E is `start`; see `tests/unit/bluelight-door.test.ts` for what the real key map binds) is a plain `WordDoor` behind the same FF7 switch as `limit` (`gate: ff7ExperimentReady`), and is **not** desktop-only.
  * **`wendigo`** (FFX, the hidden Wendigo, `./wendigoDoor.ts`: W is `up`, E is `start`, D is `right`; N, I, G and O are unbound) is a plain `WordDoor` too, and is **desktop-only** like `yrp`, `waker` and `gear` (the Meshy 3D tech demo): its row carries the `desktopOnly` gate.
+ * **`blitz`** (FFX, the hidden Oblitzerator, `./blitzDoor.ts`: B, L, I and T are unbound, **Z is `confirm`, the last letter**, which the word claims) is a plain `WordDoor` too, and is **not** desktop-only (painted 2D).
  *
  * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit` and `bluelight`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith`, `youth`, `ifrit` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno`, `beast` and `wendigo`.
  */
@@ -85,6 +86,7 @@ import { WEAPON_DOOR_CHAPTER, WEAPON_DOOR_WORD } from './weaponDoor.ts';
 import { BLUELIGHT_DOOR_CHAPTER, BLUELIGHT_DOOR_WORD } from './bluelightDoor.ts';
 import { IFRIT_DOOR_CHAPTER, IFRIT_DOOR_WORD } from './ifritDoor.ts';
 import { WENDIGO_DOOR_CHAPTER, WENDIGO_DOOR_WORD } from './wendigoDoor.ts';
+import { BLITZ_DOOR_CHAPTER, BLITZ_DOOR_WORD } from './blitzDoor.ts';
 
 /**
  * **The two hidden 3D chapters are desktop-only** (driver decision 219q, 2026-11-03; FFX-2 only: `yrp`, the 3D Bahamut, and `waker`, the Wind Waker Valefor). They are not staged for a phone: the Wind Waker is expected to miss the phone budgets
@@ -140,6 +142,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: BLUELIGHT_DOOR_WORD, chapter: BLUELIGHT_DOOR_CHAPTER, gate: ff7ExperimentReady }, // FF7's second door: a plain typed word behind the same switch as `limit`
   { word: IFRIT_DOOR_WORD, chapter: IFRIT_DOOR_CHAPTER },
   { word: WENDIGO_DOOR_WORD, chapter: WENDIGO_DOOR_CHAPTER, gate: desktopOnly },
+  { word: BLITZ_DOOR_WORD, chapter: BLITZ_DOOR_CHAPTER },
 ];
 
 /**

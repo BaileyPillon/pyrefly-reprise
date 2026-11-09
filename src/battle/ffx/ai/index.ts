@@ -57,6 +57,9 @@ import './spherimorph.ts'; // the hidden Spherimorph chapter (FFX only): the gua
 import './ultima-weapon.ts'; import './omega-weapon.ts'; import './nemesis.ts'; // the hidden Omega Ruins chapter (FFX only): Ultima Weapon, Omega Weapon and Nemesis
 import './wendigo.ts'; // the hidden Wendigo chapter (FFX only): Wendigo and its stance on frozen Lake Macalania
 import './lake-guardian.ts'; // the hidden Wendigo chapter (FFX only): the two Guado Guardians of that fight
+import './oblitzerator.ts'; // the hidden Oblitzerator chapter (FFX only, 2026-11-09): the blitzball machine at the Luca dock
+import { applyUseCrane, useCraneAvailable, useCraneOffered } from './luca-crane.ts'; // ... and the dock crane, with Tidus's Use crane
+import { OB_ROWS } from './oblitzerator-rules.ts';
 import { freeCircleIds, moveTo, platformOf, ringActive } from '../platforms.ts';
 
 export * from './types.ts';
@@ -231,6 +234,14 @@ const TRIGGERS: Readonly<Record<string, TriggerHandler>> = {
     apply: (ctx, user, command) => moveTo(ctx, user, command),
     disabledReason: 'No free glyph',
     rejectedMessage: (user) => `${user.name} cannot step there`,
+  },
+  /** **Use crane** (the hidden Oblitzerator chapter, FFX only): Tidus's key to the Luca dock's crane; see `./luca-crane.ts`. */
+  [OB_ROWS.useCrane]: {
+    available: (ctx, user) => useCraneAvailable(ctx, user),
+    offered: (ctx, user) => useCraneOffered(ctx, user),
+    apply: (ctx, user, command) => applyUseCrane(ctx, user, command),
+    disabledReason: 'The crane is spent',
+    rejectedMessage: (user) => `${user.name} cannot use that`,
   },
   /** **Open lock** (the hidden Flooded Ways chapter, FFX only): the party's key to a Gate Lock of the Via Purifico's first two areas; see `./gate-locks.ts`. */
   [FLOODED_ROWS.openLock]: {
