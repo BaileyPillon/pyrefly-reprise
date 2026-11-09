@@ -106,6 +106,20 @@ function recordFor(scope: HitScope, target: FFXCombatant): ActionRecord {
   return book;
 }
 
+/**
+ * The hit record after a nullified hit. The Nul check reads and edits the record's four Nul counters (slots 6 to 9 of the thirteen: Tide, Blaze, Shock, Frost), so the target's later hits of the action start from the
+ * ticked counters, and a Nul that a later hit lands compares itself with them, not with the counters the action began with. Without this the record kept the unticked counter while the target's status had ticked (or spent) it,
+ * and a landing in a later hit of the same action saw no change to write (found by the seeded status sweep, `docs/handoff/r78-fix2.md`).
+ */
+function withNulCounters(record: StatusRecord, nul: { tide: number; blaze: number; shock: number; frost: number }): StatusRecord {
+  const counters = [...record.counters];
+  counters[6] = nul.tide;
+  counters[7] = nul.blaze;
+  counters[8] = nul.shock;
+  counters[9] = nul.frost;
+  return { ...record, counters };
+}
+
 /** Write the Nul counters the hit's Nul check ticked back onto the target's statuses, dropping a spent one. */
 function writeBackNul(ctx: Ctx, target: FFXCombatant, nul: { tide: number; blaze: number; shock: number; frost: number }): void {
   const pairs: Array<[StatusId, number]> = [
@@ -188,6 +202,7 @@ function applyOneHit(scope: HitScope, target: FFXCombatant): HitOutcome {
   // The Nul check: the game ticks the counters of a nullified hit, and only of that.
   if (report.outcome === 'nullified') {
     writeBackNul(ctx, target, report.nul);
+    book.record = withNulCounters(book.record, report.nul);
     ctx.emit({ type: 'miss', targetId: target.id, sourceId: user.id, reason: 'nullified' });
     gaugeOnOutcome(ctx, user, target, 0, report.outcomeByte); // Rook (byte 3, bit 1)
     scope.hitIndex++;
