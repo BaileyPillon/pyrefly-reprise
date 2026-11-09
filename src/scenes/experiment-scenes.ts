@@ -68,6 +68,8 @@ import { buildBelgemineScene, BELGEMINE_SLOTS } from './belgemine.ts'; // the Re
 import { BELGEMINE_SCENE } from '../data/ffx/belgemine-ids.ts';
 import { buildGagazetSummitScene, GARIK_SUMMIT_SLOTS } from './gagazet-summit.ts'; // the hidden Garik Ronso chapter's summit (FFX-2 only): Chapter I's Gagazet plate under the FFX-2 camera, a snow-and-wind grade, three Ronso staged
 import { GARIK_RONSO_SCENE } from '../data/garik-ronso-ids.ts';
+import { buildShinryuScene, SHINRYU_SLOTS } from './shinryu.ts'; // the hidden Shinryu chapter (FFX only, 2026-11-07): the Via Purifico's stage on the submerged plate with Shinryu staged
+import { SHINRYU_SCENE } from '../data/ffx/shinryu-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -117,6 +119,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   { key: BELGEMINE_SCENE, title: "Remiem Temple — Belgemine's Challenge", build: buildDemoScene, slots: BELGEMINE_SLOTS, placeholder: false },
   // Garik Ronso (FFX-2 only, hidden chapter): Chapter I's Mt. Gagazet plate under the FFX-2 camera, the Ronso Youths and Garik on the right of the party.
   { key: GARIK_RONSO_SCENE, title: 'Mt. Gagazet — the summit (Garik Ronso)', build: buildDemoScene, slots: GARIK_SUMMIT_SLOTS, placeholder: false },
+  // Shinryu (FFX only, hidden chapter): the Via Purifico's stage on the Flooded Ways' submerged plate, the dragon alone on the boss spot.
+  { key: SHINRYU_SCENE, title: 'The Monster Arena — Shinryu', build: buildDemoScene, slots: SHINRYU_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -144,4 +148,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [WENDIGO_SCENE]: buildWendigoLakeScene, // the hidden Wendigo chapter (FFX only)
   [BELGEMINE_SCENE]: buildBelgemineScene, // the hidden Belgemine's Challenge chapter (FFX only)
   [GARIK_RONSO_SCENE]: buildGagazetSummitScene, // the hidden Garik Ronso chapter (FFX-2 only)
+  [SHINRYU_SCENE]: buildShinryuScene, // the hidden Shinryu chapter (FFX only)
 };

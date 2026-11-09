@@ -66,6 +66,7 @@ import { SPHERIMORPH_BOSS_IDS, spherimorph } from './spherimorph.ts';
 import { OMEGA_RUINS_BOSS_IDS, omegaRuins } from './omega-ruins.ts';
 import { WENDIGO_BOSS_IDS, wendigoLine } from './wendigo.ts';
 import { BELGEMINE_CHAPTER_BOSS_IDS, belgemineLine } from './belgemine.ts';
+import { SHINRYU_BOSS_IDS, shinryu } from './shinryu.ts';
 import { chapterOnBoard } from './lookup.ts';
 
 export type { Tactic } from './common.ts';
@@ -120,6 +121,7 @@ export { spherimorph, SPHERIMORPH_BOSS_IDS } from './spherimorph.ts'; // the hid
 export { omegaRuins, OMEGA_RUINS_BOSS_IDS } from './omega-ruins.ts'; // the hidden Omega Ruins chapter (FFX only)
 export { wendigoLine, WENDIGO_BOSS_IDS } from './wendigo.ts'; // the hidden Wendigo chapter (FFX only)
 export { belgemineLine, BELGEMINE_CHAPTER_BOSS_IDS } from './belgemine.ts'; // the hidden Belgemine's Challenge chapter (FFX only)
+export { shinryu, SHINRYU_BOSS_IDS } from './shinryu.ts'; // the hidden Shinryu chapter (FFX only, 2026-11-07)
 
 /** One registered boss id: the chapter it belongs to (`./lookup.ts` knows its game) and its line. */
 export interface TacticEntry<T extends Tactic | null = Tactic> {
@@ -220,6 +222,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...WENDIGO_BOSS_IDS.map((bossId) => ({ chapterId: 'wendigo', bossId, tactic: wendigoLine })),
   // The hidden Belgemine's Challenge chapter (FFX only): her eight aeons; the line is Shield before the foe's big move, the heaviest aeon first (Shiva or Ixion against Ifrit), the Overdrive when it is full, and no Dismiss (the bench measured it counterproductive).
   ...BELGEMINE_CHAPTER_BOSS_IDS.map((bossId) => ({ chapterId: 'belgemine', bossId, tactic: belgemineLine })),
+  // The hidden Shinryu chapter (FFX only): the Monster Arena's deep-water dragon; the line is a Phoenix Down or a potion first, then Tidus's Quick Hit and the plain Celestial blow (the shipped party wins every battle; the line is the fastest).
+  ...SHINRYU_BOSS_IDS.map((bossId) => ({ chapterId: 'shinryu', bossId, tactic: shinryu })),
 ];
 
 /** Keyed by the chapter's game, then by a boss combatant id that only that encounter fields. */

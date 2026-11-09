@@ -36,6 +36,7 @@ export const DOORS_IN_ORDER: ReadonlyArray<readonly [word: string, game: 'ff7' |
   ['sidequest', 'ffx'], // the hidden Belgemine's Challenge's (chapter 45, 2026-11-09)
   ['ifrit', 'ffx2'], // the hidden Ifrit at Kilika Temple's (chapter 46, 2026-11-07)
   ['braveheart', 'ffx2'], // the hidden Garik Ronso's (chapter 47, 2026-11-08)
+  ['shinryu', 'ffx'], // the hidden Shinryu's (chapter 48, 2026-11-07)
   ['wendigo', 'ffx'], // the hidden Wendigo's (chapter 49, 2026-11-06; desktop only)
 ];
 

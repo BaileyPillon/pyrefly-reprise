@@ -34,6 +34,7 @@
  *
  * - **Penance** (`'penance'`, number 35, 2026-11-06; FFX only): the colossus and its two hands on the Fahrenheit's deck; word `judgment` (33 and 34 are the sibling chapter lanes').
  * - **Yuna's Ballad** (`'ffx2-yunas-ballad'`, number 40, 2026-11-06; FFX-2 only): Yuna alone against the possessed Rikku and then the possessed Paine, the Den of Woe's first two fights, as two linked duels with HP and MP carried; word `wraith`.
+ * - **Shinryu** (`'shinryu'`, number 48, 2026-11-07; FFX only): the Monster Arena's deep-water dragon, fought by Tidus, Wakka and Rikku in the water (a Petrify that lands shatters its victim); word `shinryu`.
  *
  * - **The Youth League Tournament** (`'ffx2-youth-league'`, number 42, 2026-11-07; FFX-2 only): Mushroom Rock Road's seven fights in a row (Yaibal, four mobs, Elma, Lucil) with the party carried whole; word `youth` (41 is Spherimorph's and 43 the Omega Ruins').
  *
@@ -84,8 +85,9 @@ import { OMEGA_RUINS } from './chapter-omega-ruins.ts';
 import { FF7_JENOVA_LIFE } from './chapter-ff7-jenova-life.ts';
 import { WENDIGO } from './chapter-wendigo.ts';
 import { BELGEMINE } from './chapter-belgemine.ts';
+import { SHINRYU } from './chapter-shinryu.ts';
 
 /** The hidden experiments in registration order; `ffx2Leblanc` is the listed Chapter VI, which the Leblanc preview is derived from, and `ffx2Bahamut` the listed Chapter IV, which the 3D Bahamut is derived from (Fayth derives from Chapter VIII's record, which it may import directly). */
 export function experimentChapters(ffx2Leblanc: Chapter, ffx2Bahamut: Chapter): readonly Chapter[] {
-  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD, SPHERIMORPH, FFX2_YOUTH_LEAGUE, OMEGA_RUINS, FF7_JENOVA_LIFE, BELGEMINE, FFX2_IFRIT_KILIKA, FFX2_GARIK_RONSO, WENDIGO] as const;
+  return [experimentalLeblanc(ffx2Leblanc), FFX2_EXPERIMENT, SINSPAWN_GUI, EXP_FAYTH, FFX2_TOURIST_TRAP, FFX2_VALEFOR_BESAID, BIRAN_YENKE, FFX2_ANGRA_MAINYU, LAST_SUMMONING, SPECTRAL_KEEPER, FFX2_FALLEN_MAESTERS, FFX2_FARPLANE_CUP, experimentalYrp(ffx2Bahamut), EXP_WINDWAKER, EXP_ANIME, DARK_AEONS, PENANCE, FLOODED_WAYS, FFX2_BEVELLE_GUARDIANS, SANCTUARY_KEEPER, FFX2_YUNAS_BALLAD, SPHERIMORPH, FFX2_YOUTH_LEAGUE, OMEGA_RUINS, FF7_JENOVA_LIFE, BELGEMINE, FFX2_IFRIT_KILIKA, FFX2_GARIK_RONSO, SHINRYU, WENDIGO] as const;
 }

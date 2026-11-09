@@ -25,6 +25,7 @@ import { SPECTRAL_KEEPER_SCENE } from '../data/ffx/spectral-keeper-ids.ts';
 import { DARK_AEONS_SCENE } from '../data/ffx/dark-aeons-six-ids.ts';
 import { PENANCE_SCENE } from '../data/ffx/penance-ids.ts';
 import { FLOODED_WAYS_SCENE } from '../data/ffx/flooded-ways-ids.ts';
+import { SHINRYU_SCENE } from '../data/ffx/shinryu-ids.ts';
 import { SANCTUARY_KEEPER_SCENE } from '../data/ffx/sanctuary-keeper-ids.ts';
 import { SPHERIMORPH_SCENE } from '../data/ffx/spherimorph-ids.ts';
 import { OMEGA_RUINS_SCENE } from '../data/ffx/omega-ruins-ids.ts';
@@ -179,6 +180,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   [WENDIGO_SCENE]: { game: 'ffx', verdict: 'unattested', cite: `${PRES}, Lake Macalania [no source read]: the stage is Chapter VII's Macalania Temple`, treatment: 'As the Temple: ice glitter, the Chamber-door motes held, nothing added' },
   // Belgemine's Challenge (the hidden chapter, FFX only; `scenes/belgemine.ts`): the Remiem court has no plate; the stage is the Cavern of the Stolen Fayth's plate on the Mushroom Rock Road stage, so the Cavern's row (no source names particles at Remiem: research/re-ffx-belgemine-aeon-duels.md).
   [BELGEMINE_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/ffx-yojimbo.md §6.2 beat 3 (the Cavern, whose plate the Remiem court stands on): nothing on the room; research/re-ffx-belgemine-aeon-duels.md: the formations name no particles', treatment: 'As the Cavern: cold light and mist, nothing added' },
+  // Shinryu (the hidden chapter, FFX only; `scenes/shinryu.ts`): the Via Purifico's stage on the submerged plate, standing in for the Monster Arena's sea stage; the guides name an underwater arena and no ambient particles.
+  [SHINRYU_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/re-ffx-shinryu.md sections 1 and 5: the guides name an underwater arena and no ambient particles; the Flooded Ways plate stands in for the game\'s sea stage' },
   // The 3D Bahamut (the hidden chapter, FFX-2 only; `scenes/exp-yrp-3d-stage.ts`): Chapter IV's chamber, so the Bevelle underground's row.
   [EXP_YRP_SCENE]: { game: 'ffx2', verdict: 'absent', cite: `${PRES}, Bevelle Underground [single source]: "Machina, not spirits"; the chamber is Chapter IV's` },
   // Valefor at Besaid in Wind Waker style (the hidden chapter, FFX-2 only; `scenes/exp-windwaker-stage.ts`): hidden chapter 24's fight, so its row (the Djose chamber's stand-in for Besaid's); the temple is a stand-in.
