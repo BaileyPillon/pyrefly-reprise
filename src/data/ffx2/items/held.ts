@@ -71,7 +71,7 @@ export const heldItemEffect: AbilityDef = {
 
 /** Held rows whose shop price the research does not give; each carries `price: 0`. */
 export const UNSOURCED_PRICE_IDS: ReadonlySet<string> = new Set([
-  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle',
+  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle', 'shining-bracer', 'icy-gleam', 'mythril-bangle',
 ]);
 
 function held(id: string, name: string, price: number | 'unsourced', description?: string): ItemDef {
@@ -121,6 +121,12 @@ export const heldItems: ItemDef[] = [
   held('x2-mana-tablet', 'Mana Tablet', 'unsourced'),
   held('charm-bangle', 'Charm Bangle', 'unsourced'),
   held('x2-healing-spring', 'Healing Spring', 0, 'Recovery item (Regen); its effect is not wired yet.'),
+  // The hidden Garik Ronso (FFX-2 only, 2026-11-07; `monster.bin` rows 182 and 181, `research/re-ffx2-garik-ronso.md` §0, the names from the US accessory table [verified: the game's own table]): Garik's drop (Shining Bracer, accessory 0x905d: Auto-Protect,
+  // `ffx2-vegnagun-shuyin.md` §6.7 and `ffx2-combat-core.md` §5.4 [verified: 2 sources]; no stats and no price read), his steal (Icy Gleam, 0x9024: the research names it and nothing more) and the Youth's steal (Mythril Bangle, 0x9002: the accessory
+  // table already carries its HP effect, `battle/ffx2/accessories.ts`; no price read).
+  held('shining-bracer', 'Shining Bracer', 'unsourced', 'Accessory. Auto-Protect.'),
+  held('icy-gleam', 'Icy Gleam', 'unsourced'),
+  held('mythril-bangle', 'Mythril Bangle', 'unsourced'),
 ];
 
 export default heldItems;

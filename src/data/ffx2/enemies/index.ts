@@ -65,6 +65,9 @@ import { x2FarplaneCupAbilities } from './farplane-cup-abilities.ts';
 // The possessed Rikku and Paine, the Den of Woe's first two fights (the hidden chapter "Yuna's Ballad", FFX-2 only): `./yunas-ballad.ts`.
 import { yunasBalladGroups } from './yunas-ballad.ts';
 import { x2YunasBalladAbilities } from './yunas-ballad-abilities.ts';
+// Garik Ronso and the Ronso Youths at the top of Mt. Gagazet (the hidden chapter "Garik Ronso", FFX-2 only): `./garik-ronso.ts`.
+import { garikRonsoGroups } from './garik-ronso.ts';
+import { x2GarikRonsoAbilities } from './garik-ronso-abilities.ts';
 
 /** Every enemy formation this project ships, in chapter order. */
 export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
@@ -88,6 +91,7 @@ export const ENEMY_GROUPS: readonly EnemyGroupDef[] = [
   ...bevelleGuardiansGroups,
   ...farplaneCupGroups,
   ...yunasBalladGroups,
+  ...garikRonsoGroups,
 ];
 
 export const ENEMY_GROUPS_BY_ID: Record<string, EnemyGroupDef> = Object.fromEntries(
@@ -121,6 +125,7 @@ export const ALL_BOSS_ABILITIES: readonly AbilityDef[] = [
   ...x2BevelleGuardiansAbilities,
   ...x2FarplaneCupAbilities,
   ...x2YunasBalladAbilities,
+  ...x2GarikRonsoAbilities,
 ];
 
 export { leblancSyndicateGroups, ormiAbilities, logosAbilities, leblancAbilities, goonAbilities };

@@ -106,6 +106,8 @@ describe('FFX-2 monster rows are the game\'s rows', () => {
       if (key.startsWith('ffx2-farplane-cup-')) continue;
       // The hidden Yuna's Ballad's rows 254 and 256 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/yunas_ballad_rows.json, tests/unit/chapters/yunas-ballad-data.test.ts).
       if (key.startsWith('ffx2-den-of-woe-possessed-')) continue;
+      // The hidden Garik Ronso's rows 181 and 182 are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/garik_ronso_rows.json, tests/unit/chapters/garik-ronso-data.test.ts).
+      if (key.startsWith('ffx2-gagazet-garik-')) continue;
       const row = ROWS[key];
       expect(row, `${key}: no fixture row`).toBeDefined();
       if (row === undefined) continue;

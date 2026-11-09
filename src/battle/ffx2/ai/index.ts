@@ -52,6 +52,8 @@ import { bevelleGuardiansScripts } from './bevelle-guardians.ts';
 import { farplaneCupScripts } from './farplane-cup.ts';
 // The possessed Rikku and the possessed Paine in the Den of Woe (the hidden chapter "Yuna's Ballad", FFX-2 only): the game's own two scripts, poll by poll.
 import { yunasBalladScripts } from './yunas-ballad.ts';
+// Garik Ronso and the Ronso Youths at the top of Mt. Gagazet (the hidden chapter "Garik Ronso", FFX-2 only): the game's own two scripts, hostile and friendly, poll by poll.
+import { garikRonsoScripts } from './garik-ronso.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -98,6 +100,7 @@ const SCRIPTS: readonly AiScript[] = [
   ...bevelleGuardiansScripts,
   ...farplaneCupScripts,
   ...yunasBalladScripts,
+  ...garikRonsoScripts,
   idleScript,
   basicAttackScript,
 ];

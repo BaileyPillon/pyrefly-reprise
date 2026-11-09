@@ -10,6 +10,7 @@
  * - the hidden Biran and Yenke chapter's Mountain Gate (FFX only): Chapter I's Mt. Gagazet scene with this fight's staging (`./gagazet-ronso.ts`);
  * - the hidden Angra Mainyu chapter's desert (FFX-2 only): the Bikanel Desert under the FFX-2 camera, on a provisional new plate (`./angra-mainyu-desert.ts`);
  * - the hidden Last Summoning chapter's Dream's End (FFX only): Chapter III's scene with the staging of the aeons Chapter III never fields (`./last-summoning.ts`);
+ * - the hidden Garik Ronso chapter's summit (FFX-2 only): Chapter I's Mt. Gagazet plate under the FFX-2 camera with a snow-and-wind grade (`./gagazet-summit.ts`);
  * - the hidden 3D Bahamut chapter's chamber (FFX-2 only): Chapter IV's Bevelle underground under frame b's camera (the dolly-in; `?frame=a` is the older one), with the real FFX-2 models on the actors, softly lit (`./exp-yrp-3d-stage.ts`).
  * - the hidden Wind Waker chapter's temple (FFX-2 only): a procedural toon chamber under the target shot's low camera, with toon models on the actors (`./exp-windwaker-stage.ts`).
  *
@@ -54,6 +55,8 @@ import { PENANCE_SCENE_ENTRY, buildPenanceScene } from './penance.ts'; // Penanc
 import { PENANCE_SCENE } from '../data/ffx/penance-ids.ts';
 import { buildSanctuaryKeeperScene, SANCTUARY_KEEPER_SLOTS } from './sanctuary-keeper.ts'; // the Sanctuary Keeper's summit (FFX only, hidden chapter): Chapter I's Mt. Gagazet with the Keeper staged
 import { SANCTUARY_KEEPER_SCENE } from '../data/ffx/sanctuary-keeper-ids.ts';
+import { buildGagazetSummitScene, GARIK_SUMMIT_SLOTS } from './gagazet-summit.ts'; // the hidden Garik Ronso chapter's summit (FFX-2 only): Chapter I's Gagazet plate under the FFX-2 camera, a snow-and-wind grade, three Ronso staged
+import { GARIK_RONSO_SCENE } from '../data/garik-ronso-ids.ts';
 
 /** The scene-table rows (`SCENES` in `./index.ts`), in the order the chapters were added. */
 export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
@@ -91,6 +94,8 @@ export const EXPERIMENT_SCENE_ENTRIES: readonly SceneEntry[] = [
   PENANCE_SCENE_ENTRY,
   // The Sanctuary Keeper (FFX only, hidden chapter): Chapter I's Mt. Gagazet plate and scene, with the Keeper alone on the boss spot.
   { key: SANCTUARY_KEEPER_SCENE, title: 'Mt. Gagazet — the summit (the Sanctuary Keeper)', build: buildDemoScene, slots: SANCTUARY_KEEPER_SLOTS, placeholder: false },
+  // Garik Ronso (FFX-2 only, hidden chapter): Chapter I's Mt. Gagazet plate under the FFX-2 camera, the Ronso Youths and Garik on the right of the party.
+  { key: GARIK_RONSO_SCENE, title: 'Mt. Gagazet — the summit (Garik Ronso)', build: buildDemoScene, slots: GARIK_SUMMIT_SLOTS, placeholder: false },
 ];
 
 /** The factories (`SCENE_FACTORIES` in `./index.ts`). */
@@ -112,4 +117,5 @@ export const EXPERIMENT_SCENE_FACTORIES: Readonly<Record<string, SceneFactory>> 
   [EXP_ANIME_SCENE]: buildExpAnimeStageScene, // the hidden anime chapter (FFX-2 only)
   [PENANCE_SCENE]: buildPenanceScene, // the hidden Penance chapter (FFX only)
   [SANCTUARY_KEEPER_SCENE]: buildSanctuaryKeeperScene, // the hidden Sanctuary Keeper chapter (FFX only)
+  [GARIK_RONSO_SCENE]: buildGagazetSummitScene, // the hidden Garik Ronso chapter (FFX-2 only)
 };

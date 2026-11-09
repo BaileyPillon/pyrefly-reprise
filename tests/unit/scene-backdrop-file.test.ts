@@ -20,6 +20,7 @@ import { DARK_AEONS_SCENE } from '../../src/data/ffx/dark-aeons-six-ids.ts';
 import { PENANCE_SCENE } from '../../src/data/ffx/penance-ids.ts';
 import { FLOODED_PLATES, FLOODED_WAYS_SCENE } from '../../src/data/ffx/flooded-ways-ids.ts';
 import { SANCTUARY_KEEPER_SCENE } from '../../src/data/ffx/sanctuary-keeper-ids.ts';
+import { GARIK_RONSO_SCENE } from '../../src/data/garik-ronso-ids.ts';
 import { EXP_YRP_SCENE } from '../../src/data/yrp-ids.ts';
 import { DJOSE_CHAMBER_PLATE } from '../../src/data/ixion-plates.ts';
 import { EXP_WINDWAKER_SCENE } from '../../src/data/windwaker-ids.ts';
@@ -44,7 +45,8 @@ describe('a scene key that is a code key names the backdrop file it draws', () =
     expect(backdropFileOf(PENANCE_SCENE)).toBe('evrae-airship-deck'); // the hidden Penance chapter's stage draws Chapter VIII's deck plate (ch-penance, 2026-11-06)
     expect(backdropFileOf(FLOODED_WAYS_SCENE)).toBe('via-purifico-flooded-1'); // the hidden Flooded Ways' stage is the Via Purifico's stage on four plates of its own (r76b art install): no file is named for it, so the board draws the first area's
     expect(backdropFileOf(SANCTUARY_KEEPER_SCENE)).toBe('gagazet'); // the hidden Sanctuary Keeper's stage draws Chapter I's Mt. Gagazet plate (ch-sanctuary-keeper, 2026-11-06)
-    expect([...Object.keys(SCENE_BACKDROP_FILE)].sort()).toEqual([MIRROR_AEONS_SCENE, DARK_AEONS_SCENE, FLOODED_WAYS_SCENE, SPECTRAL_KEEPER_SCENE, PENANCE_SCENE, SANCTUARY_KEEPER_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE, EXP_ANIME_SCENE].sort()); // the set of code-keyed scenes, whatever order a merge lists them in
+    expect(backdropFileOf(GARIK_RONSO_SCENE)).toBe('gagazet'); // the hidden Garik Ronso chapter's summit (FFX-2 only, 2026-11-08) borrows Chapter I's Mt. Gagazet plate under its own snow grade
+    expect([...Object.keys(SCENE_BACKDROP_FILE)].sort()).toEqual([MIRROR_AEONS_SCENE, DARK_AEONS_SCENE, FLOODED_WAYS_SCENE, SPECTRAL_KEEPER_SCENE, PENANCE_SCENE, SANCTUARY_KEEPER_SCENE, GARIK_RONSO_SCENE, EXP_YRP_SCENE, EXP_WINDWAKER_SCENE, EXP_ANIME_SCENE].sort()); // the set of code-keyed scenes, whatever order a merge lists them in
     expect(backdropFileOf(EXP_YRP_SCENE)).toBe('bevelle-underground'); // the hidden 3D Bahamut is drawn over Chapter IV's own plate (ch-yrp)
     // the hidden Wind Waker chapter (FFX-2 only, Chapter 32) is the second code key: its stage is 3D with no plate of its own, and the board, the prep wash and the cutscenes show hidden chapter 24's (the Djose chamber's)
     expect(backdropFileOf(EXP_WINDWAKER_SCENE)).toBe(DJOSE_CHAMBER_PLATE);

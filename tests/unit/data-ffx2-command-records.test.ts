@@ -100,6 +100,9 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   // The hidden Yuna's Ballad's seven rows (the possessed Rikku's Spider Attack 0x40c7 and five throws 0x2011, 0x201a, 0x201d, 0x2020, 0x2023, the possessed Paine's Attack 0x41da) are the RE note's, pinned against their own
   // numbers-only fixture (tests/fixtures/parity/ffx2/yunas_ballad_rows.json, tests/unit/chapters/yunas-ballad-data.test.ts).
   if (label.startsWith('x2-possessed-')) return;
+  // The hidden Garik Ronso's nine rows (Garik's Attack 0x41da, Bane Lance 0x411c, Blind 0x406f, Mighty Guard 0x4084, Shell 0x30bb and Protect 0x30bc, the Youth's Attack 0x4000 and MP Blowout 0x411d, Time Up Meteor 0x4236) are the RE note's,
+  // pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/garik_ronso_rows.json, tests/unit/chapters/garik-ronso-data.test.ts).
+  if (label.startsWith('x2-garik-') || label.startsWith('x2-ronso-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();
   if (!row) return;

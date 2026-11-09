@@ -51,11 +51,11 @@ for (const group of GROUPS) for (const enemy of [...group.enemies, ...(group.par
 
 /** The game's item names as the engine's labels read them: the English copies of `item.bin`, `accessory.bin` and `important.bin` spell them, but the engine's ids have no hyphen in Gris Gris Bag and Magical Dances Vol 1 (earlier builds'), so those two labels read without one. */
 const NAMES: Readonly<Record<number, string>> = {
-  0x2000: 'Potion', 0x2001: 'Hi-Potion', 0x2002: 'X-Potion', 0x2003: 'Mega-Potion', 0x2005: 'Turbo Ether', 0x2007: 'Mega Phoenix', 0x2008: 'Elixir', 0x2009: 'Megalixir', 0x2011: 'Grenade',
+  0x2000: 'Potion', 0x2001: 'Hi-Potion', 0x2002: 'X-Potion', 0x2003: 'Mega-Potion', 0x2005: 'Turbo Ether', 0x2007: 'Mega Phoenix', 0x2008: 'Elixir', 0x2009: 'Megalixir', 0x200f: 'Remedy', 0x2011: 'Grenade',
   0x2028: 'Supreme Gem', 0x202e: 'Dark Matter', 0x203b: 'Stamina Tonic', 0x203f: 'Hero Drink', 0x7029: 'Reassembled Sphere', 0x7046: 'Magical Dances Vol 1',
   0x9002: 'Mythril Bangle', 0x900b: 'Kaiser Knuckles', 0x900e: 'Crystal Gloves', 0x9012: 'Pixie Dust', 0x9013: 'Crystal Ball', 0x9014: 'Defense Veil', 0x901a: 'Champion Belt',
   0x901e: 'Regal Crown', 0x902e: 'Nultide Ring', 0x9039: 'Tetra Band', 0x9047: 'Twist Headband', 0x904b: 'Black Choker', 0x904d: 'Gris Gris Bag', 0x904e: 'Pearl Necklace', 0x9053: 'Faerie Earrings',
-  0x9056: 'Ribbon', 0x9058: 'Favorite Outfit', 0x905a: 'Regen Bangle', 0x905c: 'Moon Bracer', 0x9060: 'Recovery Bracer', 0x9072: 'Charm Bangle', 0x9074: 'Soul of Thamasa',
+  0x9056: 'Ribbon', 0x9058: 'Favorite Outfit', 0x905a: 'Regen Bangle', 0x905c: 'Moon Bracer', 0x905d: 'Shining Bracer', 0x9060: 'Recovery Bracer', 0x9072: 'Charm Bangle', 0x9074: 'Soul of Thamasa',
 };
 
 describe('the kill-reward rows are the game\'s', () => {
@@ -118,6 +118,8 @@ describe('every shipped monster\'s reward numbers carry their row citation', () 
    * Fiend Arena's Trema, built from the story Trema's record (row 295) and paid by its own row of the game (328, note FFX2-G03 table 5.1).
    */
   const OWN_ROW: Readonly<Record<string, number>> = { 'ffx2-cloister-trema-arena/trema': 328 };
+  /** The two Ronso Youths of the hostile Garik formation: one row (181), two bodies, told apart by a letter in our data. */
+  const LETTERED_TWINS: ReadonlySet<string> = new Set(['ffx2-gagazet-garik-hostile/x2-ronso-youth-a', 'ffx2-gagazet-garik-hostile/x2-ronso-youth-b']);
   /** The reader spells a name as the game's file does ("Fem,Goon"); ours has a hyphen. */
   const plain = (name: string): string => name.toLowerCase().replace(/[^a-z0-9]/g, '');
 
@@ -132,7 +134,9 @@ describe('every shipped monster\'s reward numbers carry their row citation', () 
       const fixture = ROWS[key];
       expect(fixture, `${key}: the reader's fixture has no row`).toBeDefined();
       expect([kill.table, kill.row], `${key}: the row the data cites is the row the reader read`).toEqual([fixture?.table, fixture?.row]);
-      expect(plain(fixture?.name ?? ''), `${key}: the cited row is another monster's (${fixture?.name})`).toBe(plain(enemy.name));
+      // The hostile Garik formation fields two Ronso Youths from one row, lettered A and B in our data as FFX-2 names its duplicates (Node A/B/C); the game's row names both "Ronso Youth".
+      const lettered = LETTERED_TWINS.has(key) ? key.slice(-1) : '';
+      expect(plain(fixture?.name ?? '') + lettered, `${key}: the cited row is another monster's (${fixture?.name})`).toBe(plain(enemy.name));
       const own = OWN_ROW[key];
       expect([kill.table, kill.row], `${key}: the reward row and the record's row`).toEqual(own !== undefined ? [1, own] : [enemy.ffx2Record?.table, enemy.ffx2Record?.row]);
     }
@@ -141,7 +145,9 @@ describe('every shipped monster\'s reward numbers carry their row citation', () 
   it('no formation cites one row for two of its monsters', () => {
     for (const group of GROUPS) {
       const cited = [...group.enemies, ...(group.parts ?? [])].map((e) => `${e.ffx2Record?.kill?.table}/${e.ffx2Record?.kill?.row}`);
-      expect(new Set(cited).size, `${group.id}: ${cited.join(', ')}`).toBe(cited.length);
+      // The hostile Garik formation (game formation 1622) fields the Ronso Youth's row twice, on purpose: two bodies, one row.
+      const twins = group.id === 'ffx2-gagazet-garik-hostile' ? 1 : 0;
+      expect(new Set(cited).size + twins, `${group.id}: ${cited.join(', ')}`).toBe(cited.length);
     }
   });
 

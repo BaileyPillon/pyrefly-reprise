@@ -18,10 +18,10 @@ import { escapeHtml } from './html.ts';
 
 /**
  * The tabs that become the stacked page on a phone. CHAPTER and SPHERE GRID ship their own phone pages
- * (PR-0127 / D-295, keyed on `data-tab`); these six ids cover the eight panels of the two games
- * (`stats` and `items` exist in both).
+ * (PR-0127 / D-295, keyed on `data-tab`); these seven ids cover the nine panels of the two games
+ * (`stats` and `items` exist in both; `ronso-trust` is the hidden Garik Ronso chapter's one-row TRUST tab, FFX-2 only).
  */
-export const PHONE_PAGE_TABS: readonly string[] = ['stats', 'equipment', 'items', 'overdrive', 'dresspheres', 'accessories'];
+export const PHONE_PAGE_TABS: readonly string[] = ['stats', 'equipment', 'items', 'overdrive', 'dresspheres', 'accessories', 'ronso-trust'];
 
 /** True for a tab id that gets the stacked page. */
 export function isPhonePageTab(id: string | null | undefined): boolean {

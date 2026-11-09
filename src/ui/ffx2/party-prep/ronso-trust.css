@@ -1,0 +1,68 @@
+/*
+ * The TRUST tab of the hidden Garik Ronso chapter's party prep (FFX-2 only; `ronsoTrustPanel.ts`): two rows to choose between, on the ivory sheet. Scoped under `.rtrust-*`, reads the shared layer through
+ * `var(--ig-*)` only [CONTRACT-CHANGES decision 10]. The sheet is short (about 118 units between its top and the hint line, `party-prep.css`), so the panel is a header and two rows and clips rather than grow
+ * past the hint line.
+ */
+.rtrust {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 113.3px;
+  overflow: hidden;
+  font-family: var(--ig-font-text);
+  font-size: 9px;
+}
+.rtrust__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 3px;
+  border-bottom: 0.89px solid var(--ig-ink);
+}
+.rtrust__head b {
+  font-family: var(--ig-font-display);
+  font-size: max(6px, var(--stage-floor, 0px));
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+}
+.rtrust__tip {
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  min-width: 0;
+}
+.rtrust__opt {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 1px 6px;
+  align-items: baseline;
+  padding: 3px 5px;
+  border: 0.89px solid transparent;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.rtrust__opt:hover,
+.rtrust__opt:focus-visible {
+  border-color: var(--ig-ink);
+}
+.rtrust__opt[aria-checked='true'] {
+  border-color: var(--ig-ink);
+  background: color-mix(in srgb, var(--ig-accent, #b8924a) 16%, transparent);
+}
+.rtrust__name {
+  grid-row: 1 / span 2;
+  font-family: var(--ig-font-display);
+  font-size: max(7px, var(--stage-floor, 0px));
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--ig-accent-on-paper, var(--ig-gold-on-paper));
+}
+.rtrust__fight {
+  font-family: var(--ig-font-serif);
+  font-style: italic;
+  font-size: 11px;
+}
+.rtrust__detail {
+  min-width: 0;
+}
