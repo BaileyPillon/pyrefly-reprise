@@ -143,12 +143,8 @@ export function performSpherechange(
 }
 
 /**
- * Special Dress Up (R1) — the girl leaves the field and fights as **three
- * independently-commanded parts**, each its own combatant with its own ATB
- * gauge and command menu, with `activeIds` swapped to the parts
- * (CONTRACT-CHANGES §4: the engine owns the swap; there is no dedicated state
- * field). Every accessory stops working, every part has Ribbon plus Auto-Life
- * and cannot be Ejected, and there is no Item and no Escape command. §3.15
+ * Special Dress Up (R1): the part ids of the original sketch (a pinned test reads them). **The engine's form is `special/`** (2026-11-09, the `specialDressUp` switch, OFF by default): the main body is the
+ * girl's own unit and the two pods are `special/forms.ts#FORMS[..].pods`, which is what `activeIds` is swapped to; `special/enter.ts` has the rules (`research/re-ffx2-special-dresspheres.md`). §3.15
  */
 export function specialDressUpPartIds(specialId: string): [string, string, string] {
   switch (specialId) {

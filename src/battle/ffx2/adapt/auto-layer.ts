@@ -10,6 +10,7 @@
 
 import type { FFX2MemberBuild, GateColour, StatusId } from '../../common/types.ts';
 import { GRID_AUTO_STATUS } from '../constants.ts';
+import { isSpecialDress } from '../special/forms.ts';
 import type { Ffx2Unit, GarmentGridRegistry } from '../internal.ts';
 import { applyAbilityEffects, emptyChrTables } from '../kernel/ability-effects.ts';
 import { abilityWords, jobAbilityGroup, type Ffx2AbilityEnv } from '../kernel/dressphere-abilities.ts';
@@ -116,7 +117,8 @@ export function autoRowsOf(l: AutoLoadout, grids?: GarmentGridRegistry): number[
     };
     for (const id of jobAbilityGroup(girlJob(chrNumber(l.id), job), env)) if (id >> 12 === 8) add(id);
   }
-  const plate = GRID_AUTO_STATUS && l.gridId !== undefined ? grids?.get(l.gridId)?.gateRows : undefined;
+  // a Special's form takes nothing from the grid's rows (the main body reads only its own list and the gate slots, which a Special form wipes; `re-ffx2-dressphere.md` 1.4)
+  const plate = GRID_AUTO_STATUS && l.gridId !== undefined && !isSpecialDress(l.dress) ? grids?.get(l.gridId)?.gateRows : undefined;
   if (plate !== undefined) {
     for (const id of gateRows(plate, l.passed)) add(id);
     for (const id of plateRows(plate)) add(id);

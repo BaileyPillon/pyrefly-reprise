@@ -32,6 +32,7 @@ import type {
 } from './internal.ts';
 import { resolveAbility, type ResolveContext } from './resolve.ts';
 import { performSpherechange } from './spherechange.ts';
+import { performSpecialChange } from './special/change.ts';
 import { attachedResult, hitsFromOutcome, requestLayout, rollDefault } from './minigames.ts';
 import { rollDice } from './dice.ts';
 import { shapeLadyLuckSpin } from './reels.ts';
@@ -229,6 +230,13 @@ export function performCommand(
   // L1 spherechange consumes the whole turn and has no charge bar. §4.2
   if (command.kind === 'spherechange') {
     performed.delete(actor);
+    // A Special Dress Up and a girl's way out of her Special (the `specialDressUp` switch, OFF by default): settled before the ordinary change, which this answers false to when the switch is off.
+    const deps = { grids: env.grids, dresspheres: env.dresspheres, gridNodes: env.gridNodes };
+    if (performSpecialChange({ units: env.units, state: env.state, grids: env.grids, gridNodes: env.gridNodes, deps, emit: (e) => env.emit(e) }, actor, command)) {
+      rebuildAutoLayer({ emit: (e) => env.emit(e), rng: env.rng, grids: env.grids }, actor);
+      finishAction(env, actor, before, ATB_BASE_VALUE, false);
+      return;
+    }
     const changed = performSpherechange(
       actor,
       command,

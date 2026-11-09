@@ -26,6 +26,7 @@ import { COMMAND_RECORDS_ITEMS } from './items.ts';
 import { COMMAND_RECORDS_LADY_LUCK } from './lady-luck.ts';
 import { COMMAND_RECORDS_MIX } from './mix.ts';
 import { COMMAND_RECORDS_PARTY } from './party.ts';
+import { COMMAND_RECORDS_SPECIAL } from './special.ts';
 
 /** Every ability id with a game row, mapped to that row. */
 export const FFX2_COMMAND_RECORDS: Readonly<Record<string, FFX2CommandRecord>> = {
@@ -43,6 +44,7 @@ export const FFX2_COMMAND_RECORDS: Readonly<Record<string, FFX2CommandRecord>> =
   ...COMMAND_RECORDS_YOUTH_LEAGUE, // the hidden Youth League Tournament chapter: the eight fighters' moves, the thrown items among them (RE note re-ffx2-youth-league-tournament, 2026-11-06)
   ...COMMAND_RECORDS_IFRIT, // the hidden Ifrit at Kilika Temple chapter: Hellfire, Meteor Strike, Firaga and Time Up Meteor (RE note re-ffx2-ifrit-kilika, 2026-11-07)
   ...COMMAND_RECORDS_MIX, // the Alchemist's Mix: the 53 result rows (re-parity RC9, lane X2-G; FFX2-G06 section 4.4)
+  ...COMMAND_RECORDS_SPECIAL, // the three Special dresspheres' parts: ninety-nine commands (RE note re-ffx2-special-dresspheres, 2026-11-09)
   ...COMMAND_RECORDS_LADY_LUCK, // Lady Luck's Two Dice and the two rows its dice swap to (re-parity RC10; FFX2-H04 section 4.3)
 };
 

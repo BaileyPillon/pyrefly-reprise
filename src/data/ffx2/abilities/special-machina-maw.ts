@@ -1,285 +1,46 @@
 /**
- * Machina Maw — Rikku's special dressphere [ffx2-combat-core §2.9.2, §3.15, verified: 2 sources].
+ * Machina Maw — Rikku's special dressphere: every command of its three parts, from the game's own rows [research/re-ffx2-special-dresspheres.md §4; verified: the game's tables].
  *
- * Three parts: main body (Machinations / Revival / Vajra), Smasher-R
- * (offence + buffs), Crusher-L (offence + debuffs). A trimmed subset per
- * part; full lists run ~11 entries each.
+ * Generated from the kernel tables (the part, the MP, the status chances and the targets are read off each row); the numbers the damage kernels run on are the rows themselves
+ * (`../command-records/special.ts`, attached by id), so the fields below are the menu's: the name, the MP, who it can target, the statuses it carries, the flags. Parts, in order: the main body,
+ * then machina-maw-smasher-r and machina-maw-crusher-l.
  */
 
 import type { AbilityDef } from '../../../battle/common/types.ts';
-import { CT_MEDIUM, RT_NORMAL } from './helpers.ts';
+import { special } from './special-build.ts';
 
 export const machinaMawAbilities: AbilityDef[] = [
-  // --- main body -------------------------------------------------------------
-  {
-    id: 'x2-machina-maw-attack',
-    name: 'Attack',
-    game: 'ffx2',
-    category: 'attack',
-    mpCost: 0,
-    chargeTicks: 0,
-    recoveryTicks: RT_NORMAL,
-    power: 16,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'single-any',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['crit-eligible'],
-    messageTemplate: '{user} attacks {target}',
-  },
-  {
-    id: 'x2-machina-maw-death-missile',
-    name: 'Death Missile',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 12,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 18,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'single-any',
-    hits: 1,
-    statusEffects: [{ status: 'ko', chance: 254, duration: 0 }],
-    removesStatuses: [],
-    flags: ['crit-eligible', 'long-range'],
-    messageTemplate: '{user} uses Death Missile',
-  },
-  {
-    id: 'x2-machina-maw-revival',
-    name: 'Revival',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 0.5, // revives a KO'd part at 50% max HP
-    formula: 'percent-total',
-    damageType: 'magical',
-    element: ['none'],
-    targeting: 'single-ally',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['heals', 'can-target-dead', 'misses-if-target-alive'],
-    messageTemplate: '{user} uses Revival',
-  },
-  {
-    id: 'x2-machina-maw-shockwave',
-    name: 'Shockwave',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 36,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 28,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'all-enemies',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['crit-eligible', 'long-range'],
-    messageTemplate: '{user} uses Shockwave',
-  },
-  {
-    id: 'x2-machina-maw-shockstorm',
-    name: 'Shockstorm',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 36,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 24,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'all-enemies',
-    hits: 1,
-    statusEffects: [{ status: 'delay-effect', chance: 254, duration: 0 }],
-    removesStatuses: [],
-    flags: ['crit-eligible', 'long-range', 'strong-delay'],
-    messageTemplate: '{user} uses Shockstorm',
-  },
-  {
-    id: 'x2-machina-maw-vajra',
-    name: 'Vajra',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 80,
-    formula: 'special-magic',
-    damageType: 'other',
-    element: ['none'],
-    targeting: 'all-enemies',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['long-range'],
-    messageTemplate: '{user} uses Vajra',
-  },
-  // --- Smasher-R (offence + buffs) ---------------------------------------------
-  {
-    id: 'x2-machina-maw-howitzer',
-    name: 'Howitzer',
-    game: 'ffx2',
-    category: 'attack',
-    mpCost: 12,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 16,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'single-any',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['crit-eligible', 'long-range'],
-    messageTemplate: '{user} uses Howitzer',
-  },
-  {
-    id: 'x2-machina-maw-anti-power-shell',
-    name: 'Anti-Power Shell',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 12,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 28,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'single-any',
-    hits: 1,
-    statusEffects: [{ status: 'str-down', chance: 254, duration: 255, stacks: 3 }],
-    removesStatuses: [],
-    flags: ['crit-eligible', 'long-range'],
-    messageTemplate: '{user} uses Anti-Power Shell',
-  },
-  {
-    id: 'x2-machina-maw-shellter',
-    name: 'Shellter',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 10,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 0,
-    formula: 'none',
-    damageType: 'other',
-    element: ['none'],
-    targeting: 'all-allies',
-    hits: 1,
-    statusEffects: [{ status: 'shell', chance: 254, duration: 255 }],
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Shellter',
-  },
-  {
-    id: 'x2-machina-maw-hp-repair',
-    name: 'HP Repair',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 0.25,
-    formula: 'percent-total',
-    damageType: 'magical',
-    element: ['none'],
-    targeting: 'single-ally',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: ['heals'],
-    messageTemplate: '{user} uses HP Repair',
-  },
-  // --- Crusher-L (offence + debuffs) -------------------------------------------
-  {
-    id: 'x2-machina-maw-blind-shell',
-    name: 'Blind Shell',
-    game: 'ffx2',
-    category: 'attack',
-    mpCost: 12,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 16,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'single-any',
-    hits: 1,
-    statusEffects: [{ status: 'darkness', chance: 100, duration: 255 }],
-    removesStatuses: [],
-    flags: ['crit-eligible', 'long-range'],
-    messageTemplate: '{user} uses Blind Shell',
-  },
-  {
-    id: 'x2-machina-maw-anti-magic-shell',
-    name: 'Anti-Magic Shell',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 12,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 16,
-    formula: 'strength',
-    damageType: 'physical',
-    element: ['none'],
-    targeting: 'single-any',
-    hits: 1,
-    statusEffects: [{ status: 'mag-down', chance: 254, duration: 255, stacks: 3 }],
-    removesStatuses: [],
-    flags: ['crit-eligible', 'long-range'],
-    messageTemplate: '{user} uses Anti-Magic Shell',
-  },
-  {
-    id: 'x2-machina-maw-booster',
-    name: 'Booster',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 30,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 0,
-    formula: 'none',
-    damageType: 'other',
-    element: ['none'],
-    targeting: 'all-allies',
-    hits: 1,
-    statusEffects: [{ status: 'haste', chance: 254, duration: 50 }],
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses Booster',
-  },
-  {
-    id: 'x2-machina-maw-mp-repair',
-    name: 'MP Repair',
-    game: 'ffx2',
-    category: 'skill',
-    mpCost: 0,
-    chargeTicks: CT_MEDIUM,
-    recoveryTicks: RT_NORMAL,
-    power: 30,
-    formula: 'healing',
-    damageType: 'other',
-    element: ['none'],
-    targeting: 'single-ally',
-    hits: 1,
-    statusEffects: [],
-    removesStatuses: [],
-    flags: [],
-    messageTemplate: '{user} uses MP Repair',
-    extra: { restoresPool: 'mp' },
-  },
+  special("x2-machina-maw-attack", "Attack", 0, [], ['crit-eligible'], 'single-enemy', [], 'attack'), // main
+  special("x2-machina-maw-revival", "Revival", 0, [{ status: 'ko', chance: 254, duration: 255 }], ['heals', 'can-target-dead', 'misses-if-target-alive', 'removes-statuses'], 'single-ally', [], 'skill'), // main
+  special("x2-machina-maw-death-missile", "Death Missile", 12, [{ status: 'ko', chance: 80, duration: 255 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // main
+  special("x2-machina-maw-bio-missile", "Bio Missile", 12, [{ status: 'poison', chance: 90, duration: 255 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // main
+  special("x2-machina-maw-break-missile", "Break Missile", 12, [{ status: 'petrify', chance: 80, duration: 255 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // main
+  special("x2-machina-maw-berserk-missile", "Berserk Missile", 12, [{ status: 'berserk', chance: 90, duration: 255 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // main
+  special("x2-machina-maw-stop-missile", "Stop Missile", 12, [{ status: 'stop', chance: 100, duration: 100 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // main
+  special("x2-machina-maw-confuse-missile", "Confuse Missile", 12, [{ status: 'confuse', chance: 90, duration: 255 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // main
+  special("x2-machina-maw-shockwave", "Shockwave", 36, [], ['crit-eligible'], 'all-enemies', [], 'skill'), // main
+  special("x2-machina-maw-shockstorm", "Shockstorm", 36, [], ['crit-eligible'], 'all-enemies', [], 'skill'), // main
+  special("x2-machina-maw-vajra", "Vajra", 0, [], ['crit-eligible'], 'all-enemies', [], 'skill'), // main
+  special("x2-machina-maw-howitzer-smasher", "Howitzer", 12, [], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-smasher-r
+  special("x2-machina-maw-sleep-shell", "Sleep Shell", 12, [{ status: 'sleep', chance: 100, duration: 255 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-smasher-r
+  special("x2-machina-maw-slow-shell", "Slow Shell", 12, [{ status: 'slow', chance: 100, duration: 100 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-smasher-r
+  special("x2-machina-maw-anti-power-shell", "Anti-Power Shell", 12, [{ status: 'str-down', chance: 254, duration: 255, stacks: 3 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-smasher-r
+  special("x2-machina-maw-anti-armor-shell", "Anti-Armor Shell", 12, [{ status: 'def-down', chance: 254, duration: 255, stacks: 3 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-smasher-r
+  special("x2-machina-maw-scan", "Scan", 0, [], [], 'single-enemy', [], 'skill'), // machina-maw-smasher-r
+  special("x2-machina-maw-shellter", "Shellter", 10, [{ status: 'shell', chance: 254, duration: 100 }], [], 'all-allies', [], 'skill'), // machina-maw-smasher-r
+  special("x2-machina-maw-protector", "Protector", 10, [{ status: 'protect', chance: 254, duration: 100 }], [], 'all-allies', [], 'skill'), // machina-maw-smasher-r
+  special("x2-machina-maw-hp-repair-smasher", "HP Repair", 0, [], ['heals'], 'single-ally', [], 'skill'), // machina-maw-smasher-r
+  special("x2-machina-maw-mp-repair-smasher", "MP Repair", 0, [], ['heals'], 'single-ally', [], 'skill'), // machina-maw-smasher-r
+  special("x2-machina-maw-homing-ray-smasher", "Homing Ray", 0, [], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-smasher-r
+  special("x2-machina-maw-howitzer-crusher", "Howitzer", 12, [], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-crusher-l
+  special("x2-machina-maw-blind-shell", "Blind Shell", 12, [{ status: 'darkness', chance: 254, duration: 255 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-crusher-l
+  special("x2-machina-maw-silence-shell", "Silence Shell", 12, [{ status: 'silence', chance: 254, duration: 255 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-crusher-l
+  special("x2-machina-maw-anti-magic-shell", "Anti-Magic Shell", 12, [{ status: 'mag-down', chance: 254, duration: 255, stacks: 3 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-crusher-l
+  special("x2-machina-maw-anti-mental-shell", "Anti-Mental Shell", 12, [{ status: 'mdef-down', chance: 254, duration: 255, stacks: 3 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-crusher-l
+  special("x2-machina-maw-booster", "Booster", 30, [{ status: 'haste', chance: 254, duration: 50 }], [], 'all-allies', [], 'skill'), // machina-maw-crusher-l
+  special("x2-machina-maw-offense", "Offense", 10, [{ status: 'str-up', chance: 254, duration: 255, stacks: 3 }], [], 'single-ally', [], 'skill'), // machina-maw-crusher-l
+  special("x2-machina-maw-defense", "Defense", 10, [{ status: 'def-up', chance: 254, duration: 255, stacks: 3 }], [], 'single-ally', [], 'skill'), // machina-maw-crusher-l
+  special("x2-machina-maw-hp-repair-crusher", "HP Repair", 0, [], ['heals'], 'single-ally', [], 'skill'), // machina-maw-crusher-l
+  special("x2-machina-maw-mp-repair-crusher", "MP Repair", 0, [], ['heals'], 'single-ally', [], 'skill'), // machina-maw-crusher-l
+  special("x2-machina-maw-homing-ray-crusher", "Homing Ray", 0, [], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-crusher-l
 ];
-
-export default machinaMawAbilities;

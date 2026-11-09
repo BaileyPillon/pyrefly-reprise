@@ -40,13 +40,16 @@ import type {
 } from '../common/types.ts';
 import type { RngSnapshot } from '../common/streams.ts';
 import { makeFfx2Rng } from './adapt/streams.ts';
-import type { Ffx2EngineOptions } from './internal.ts';
+import type { Ffx2EngineOptions, Ffx2Unit } from './internal.ts';
+import { defaultDresspheres } from './dresspheres.ts';
+import { withSpecialForms } from './special/forms.ts';
+import { settleForms, specialOn } from './special/enter.ts';
 import { msToSteps, stepsToMs, type AtbSpeed } from './clock.ts';
 import { isActionLocked } from './chain.ts';
 import { isReady } from './gauges.ts';
 import { isConfusedGirl } from './statuses.ts';
 import { stepsUntilNextEvent } from './lookahead.ts';
-import { buildCommands } from './menu.ts';
+import { buildCommands, type MenuContext } from './menu.ts';
 import { buildState } from './setup.ts';
 import { type EnemyIntent, predictNextFFX2EnemyIntent } from './intent.ts';
 import { abilityFor, performCommand, suspendedActor } from './execute.ts';
@@ -75,6 +78,9 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     this.battleState = built.state;
     this.units = built.units;
     this.gridNodes = built.gridNodes;
+    // Special Dress Up (`special/`, the `specialDressUp` switch, OFF): the registry also lists the Specials and their pods; with the switch off it is the caller's, untouched.
+    const given = this.options.dresspheres ?? defaultDresspheres;
+    this.dresspheres = specialOn(built.state) ? withSpecialForms(given) : given;
     this.drafts = [];
     this.elapsedMs = this.options.carriedParty?.elapsedMs ?? 0;
     this.awaitingMinigame = null;
@@ -88,6 +94,26 @@ export class FFX2Engine extends Ffx2EngineCore implements FFX2BattleEngine, Batt
     this.ordered = [];
     this.emit({ type: 'atb', snapshot: this.gaugeSnapshot() });
     this.flush();
+  }
+
+  // Special Dress Up (`special/`; the `specialDressUp` switch, OFF by default: with it off these three overrides and `settleSpecials` do nothing). A main body that has fallen ends the form after the action
+  // or the step that knocked her out, before the end of the battle is judged (`special/enter.ts#settleForms`); the menu knows the switch (the Special Dress Up row and the way out).
+  protected override afterAction(actor: Ffx2Unit, startedAt: number): void {
+    this.settleSpecials();
+    super.afterAction(actor, startedAt);
+  }
+
+  protected override runLogicStep(): void {
+    super.runLogicStep();
+    this.settleSpecials();
+  }
+
+  protected override menuContext(actor: Ffx2Unit): MenuContext {
+    return specialOn(this.battleState) ? { ...super.menuContext(actor), specialDressUp: true } : super.menuContext(actor);
+  }
+
+  private settleSpecials(): void {
+    if (specialOn(this.battleState)) settleForms({ units: this.units, state: this.battleState, grids: this.grids, emit: (e) => this.emit(e) }, { grids: this.grids, dresspheres: this.dresspheres, gridNodes: this.gridNodes });
   }
 
   /**

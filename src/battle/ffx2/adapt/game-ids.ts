@@ -8,6 +8,8 @@
  * `parity-ffx2-menu-engine.test.ts` pins every entry against the game's pairs and the data's ladders.
  */
 
+import { SPECIAL_GAME_ID } from './game-ids-special.ts';
+
 /** Dressphere id to the job id the save record stores. The Trainer and the Mascot are stored under Yuna's id and mapped to Rikku's and Paine's own (`girlJob`). */
 export const DRESSPHERE_JOB: Readonly<Record<string, number>> = { 'gunner': 0x5001, 'gun-mage': 0x5002, 'alchemist': 0x5003, 'warrior': 0x5004, 'samurai': 0x5005, 'dark-knight': 0x5006, 'berserker': 0x5007, 'songstress': 0x5008, 'black-mage': 0x5009, 'white-mage': 0x500a, 'thief': 0x500b, 'trainer': 0x500c, 'lady-luck': 0x500d, 'mascot': 0x500e, 'floral-fallal': 0x500f, 'machina-maw': 0x5012, 'full-throttle': 0x5015 };
 
@@ -15,7 +17,7 @@ export const DRESSPHERE_JOB: Readonly<Record<string, number>> = { 'gunner': 0x50
 export const SPECIAL_DRESSPHERE_IDS: ReadonlySet<string> = new Set(['floral-fallal', 'machina-maw', 'full-throttle']);
 
 /** Our ability id to the game's id. */
-export const ABILITY_GAME_ID: Readonly<Record<string, number>> = {
+const BASE_GAME_ID: Readonly<Record<string, number>> = {
   // gunner
   'x2-gunner-attack': 0x302c,
   'x2-gunner-trigger-happy': 0x3032,
@@ -251,6 +253,9 @@ export const ABILITY_GAME_ID: Readonly<Record<string, number>> = {
   'x2-full-throttle-fright': 0x3158,
   'x2-full-throttle-sword-dance': 0x3159,
 };
+
+/** Our ability id to the game's id: the ladders above, and the nine Special parts' commands (`./game-ids-special.ts`). */
+export const ABILITY_GAME_ID: Readonly<Record<string, number>> = { ...BASE_GAME_ID, ...SPECIAL_GAME_ID };
 
 /** The game id of one of our abilities, if it is on a ladder. */
 export function gameIdOf(abilityId: string): number | undefined {
