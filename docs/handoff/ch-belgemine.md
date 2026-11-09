@@ -8,6 +8,8 @@
 
 **Sources:** the paper preflight `docs/plans/ch-belgemine-review.md` (committed `d56053b5d`) and the research note `research/re-ffx-belgemine-aeon-duels.md` (the stat block each script writes, the turn scripts, the rows). **Rule 6:** every enemy number is the note's, `[R]`/`[H]`; the party's numbers are `[estimate]` (the sources give none), declared as such in `data/ffx/builds/belgemine.ts`. **No enemy number was ever tuned.** Two things are estimates and are labelled so in the code and in section 3 (the party preset; the forced-action word of seven bodies left unmatched): see section 7, item 1b. **Yuna's command list, Defend off and counters off are NOT estimates: they are read from the formation scripts `lmyt01_0n` (section 10).**
 
+**UPDATE 2026-11-09 (r79 art install; FFX only): the paintings of the art list are made, registered and wired** (Belgemine herself as `characters/belgemine/`: idle, cast, hurt, the model's bind pose with the arms turned because it ships no motion bank; a face; the pause plate `pause/ch45-belgemine`; the Remiem court plate `remiem-temple` installed and pinned but wired to nothing, the stage is still the Cavern's plate; the driver's picks, his to overturn): `docs/handoff/r79-art-install.md`.
+
 ## 1. What the chapter is
 
 Yuna alone, with all ten aeons, against Belgemine's eight aeons one after the other, in the game's order, with no menu between. In each act the aeon the enemy holds is **locked** on Yuna's menu (the mirror; the Sisters lock all three of hers), her menu is Summon and Grand Summon only (an aeon duel, `aeonsOnly`), a loss retries the act (`checkpointOnEntry`), and every act after the first opens on Yuna and every aeon whole (the bag and the Overdrive gauges carry).

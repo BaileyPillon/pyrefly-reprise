@@ -9,7 +9,7 @@
  *   whoever has no Reflect. The tip promises nothing the Chapter V kit cannot do (the review of the Fallen Maesters, major 1).
  * - `quote` is Paine's line from the opening scene (`../story/scripts/ffx2-youth-league.ts`), our own.
  * - `objectives`: get past Yaibal (act 2 reached), get past Elma (act 7 reached), and the win (Lucil's fall ends the tournament).
- * - `heroArt` is the Den of Woe's pause plate (the stand-in stage); `pause/ffx2-youth-league` is on the art list. The fallback is the stage's own plate.
+ * - `heroArt` is the pause plate `pause/ffx2-youth-league` (release 79: the league road with all eight fighters, a composite). The fallback is the stand-in stage's own plate.
  * - `snapshots`: the Den of Woe's plate (the stand-in stage) and the two girls' FFX-2 portraits (approved).
  * - `musicKeys`: the field bed, the stand-in duel cue, the fanfare, as the record's.
  */
@@ -22,7 +22,7 @@ export const YOUTH_LEAGUE_META: ChapterMeta = {
   gameLabel: 'FFX-2',
   numeral: 'EXP',
   ...YOUTH_LEAGUE_TEXT,
-  heroArt: 'pause/ch15-ffx2-den-of-woe', // the stand-in stage's plate; a painted `pause/ffx2-youth-league` is on the art list
+  heroArt: 'pause/ffx2-youth-league',
   heroArtFallback: 'backdrops/den-of-woe.png',
   quote: { text: 'Guests who are in the bracket.', speaker: 'Paine' },
   handwritten: 'seven names on a board. nobody refills',

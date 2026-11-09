@@ -31,7 +31,7 @@
  */
 
 import type { EnemyDef, EnemyGroupDef, FormationCommandOff, StatBlock, StatusId, StatusImmunities } from '../../../battle/common/types.ts';
-import { SHINRYU_GROUP_ID, SHINRYU_ID, SHINRYU_ROWS, SHINRYU_SCRIPT, SHINRYU_STAND_IN } from '../shinryu-ids.ts';
+import { SHINRYU_GROUP_ID, SHINRYU_ID, SHINRYU_ROWS, SHINRYU_SCRIPT, SHINRYU_SPRITE } from '../shinryu-ids.ts';
 import { SHINRYU_ABILITIES } from './shinryu-abilities.ts';
 
 export { SHINRYU_ABILITIES };
@@ -62,7 +62,7 @@ const at255 = (list: readonly StatusId[]): StatusImmunities => Object.fromEntrie
 const FLAGS: EnemyDef['immunityFlags'] = ['boss', 'immune-to-percentage-damage', 'immune-to-life', 'immune-to-sensor', 'immune-to-scan', 'immune-to-delay', 'immune-to-bribe'];
 
 /**
- * Shinryu (m283), formation slot 0 (the game's actor 20). **The painting is the airship Evrae's until `characters/shinryu/` is painted** (`../shinryu-ids.ts#SHINRYU_STAND_IN`): the figure's height is the scene's
+ * Shinryu (m283), formation slot 0 (the game's actor 20). **The painting is `characters/shinryu/`** (`../shinryu-ids.ts#SHINRYU_SPRITE`, release 79): the figure's height is the scene's
  * (`scenes/shinryu.ts`).
  */
 export function shinryu(): EnemyDef {
@@ -70,7 +70,7 @@ export function shinryu(): EnemyDef {
   return {
     id: SHINRYU_ID,
     name: 'Shinryu',
-    spriteKey: SHINRYU_STAND_IN,
+    spriteKey: SHINRYU_SPRITE,
     slot: 0,
     stats,
     hp: stats.hp,
@@ -78,7 +78,7 @@ export function shinryu(): EnemyDef {
     affinities: {}, // no element absorbed, immune, resisted or weak (RE 0)
     immunities: at255(IMMUNE_255),
     immunityFlags: [...FLAGS],
-    forms: [{ name: 'Shinryu', spriteKey: SHINRYU_STAND_IN, hp: stats.hp }],
+    forms: [{ name: 'Shinryu', spriteKey: SHINRYU_SPRITE, hp: stats.hp }],
     aiScriptId: SHINRYU_SCRIPT,
     rewards: {
       ap: 50_000,

@@ -9,8 +9,8 @@
  *   Change command); Mighty Guard lights his whole side every seventh turn in the hostile fight; a Youth can be delayed, Garik cannot. The tip is the hostile fight's, the harder and the default; the TRUST tab says which fight is up.
  * - `quote` is Yuna's plea from the pre scene (`../story/scripts/ffx2-garik-ronso.ts`), our own.
  * - `objectives` hold for either fight: bring Garik below half (he has the most HP on the field), chain three hits, win.
- * - `heroArt` has no painting of its own yet: the card shows the Ronso stand-in as `heroArtFallback` (PROVISIONAL: Kimahri's approved party painting until Garik's own is made).
- * - `snapshots`: the Gagazet plate (the summit's stand-in), Kimahri's idle (Garik's stand-in) and Biran's (the Youths').
+ * - `heroArt` is the pause plate `pause/ffx2-garik-ronso` (release 79: the summit under Garik and the two Youths, a composite); `heroArtFallback` is Garik's own idle.
+ * - `snapshots`: the Gagazet plate (the summit's stand-in), Garik's idle and the first Youth's.
  * - `musicKeys`: the field bed, the duel cue, the fanfare, as the record's.
  */
 
@@ -23,8 +23,8 @@ export const GARIK_RONSO_META: ChapterMeta = {
   numeral: 'EXP',
   ...GARIK_RONSO_TEXT,
   bossLine: 'Garik Ronso',
-  heroArt: 'pause/ffx2-garik-ronso', // no painting yet: the fallback below shows
-  heroArtFallback: 'characters/kimahri/idle.png',
+  heroArt: 'pause/ffx2-garik-ronso',
+  heroArtFallback: 'characters/x2-garik-ronso/idle.png',
   quote: { text: 'No one here is your enemy.', speaker: 'Yuna' },
   handwritten: 'a lance, a curse, a mountain that remembers',
   objectives: [
@@ -37,8 +37,8 @@ export const GARIK_RONSO_META: ChapterMeta = {
     'Do not wear Black Mage: his lance curses it and the dress stays on. Every seventh turn he guards his whole side, and a Dispel takes the guard off.',
   snapshots: [
     { image: 'backdrops/gagazet.png', caption: 'the summit, and the wind' },
-    { image: 'characters/kimahri/idle.png', caption: 'a lance across the path' },
-    { image: 'characters/biran-ronso/idle.png', caption: 'the Youths of his clan' },
+    { image: 'characters/x2-garik-ronso/idle.png', caption: 'a lance across the path' },
+    { image: 'characters/x2-ronso-youth-a/idle.png', caption: 'the Youths of his clan' },
   ],
   focalCharacterId: 'yuna',
   musicKeys: ['scene-bevelle-underground', 'boss-ffx2-fallen-aeons', 'victory-ffx2'],

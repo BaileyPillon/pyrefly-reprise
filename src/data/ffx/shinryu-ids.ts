@@ -21,12 +21,10 @@ export const SHINRYU_ID = 'shinryu' as const;
 export const SHINRYU_SCRIPT = 'shinryu' as const;
 
 /**
- * Shinryu's painting: **owed**. The key the art lane will paint is `shinryu` (`public/art/characters/shinryu/<pose>.png`, the five poses of {@link SHINRYU_POSES}). Until it exists the figure is drawn with
- * {@link SHINRYU_STAND_IN}, the airship Evrae's approved painting (a large sea serpent: the nearest approved body to a deep-water dragon), flagged; the swap is this one constant.
+ * Shinryu's painting (`public/art/characters/shinryu/<pose>.png`, the five poses of {@link SHINRYU_POSES}), installed in release 79 (the art-w4 kit, `docs/handoff/r79-art-install.md`): painted over the game's own model (m283),
+ * posed by the airship Evrae's motion bank (the same 250 bones). It replaces the stand-in the chapter was built with, the airship Evrae's approved painting (`characters/evrae/`).
  */
 export const SHINRYU_SPRITE = 'shinryu' as const;
-/** The approved painting that stands in for Shinryu until {@link SHINRYU_SPRITE} is painted (`characters/evrae/`, Chapter VIII's Evrae). */
-export const SHINRYU_STAND_IN = 'evrae' as const;
 /** The five poses the art lane owes, each a file `characters/shinryu/<pose>.png` (with its sidecar: `width`, `height`, `baselineY`, `pose`, `facing`): the presenter picks by the action's kind. */
 export const SHINRYU_POSES = ['idle', 'attack', 'cast', 'hurt', 'ko'] as const;
 

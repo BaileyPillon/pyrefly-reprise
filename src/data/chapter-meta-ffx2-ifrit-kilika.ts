@@ -10,8 +10,8 @@
  *   **Fire heals him and Ice does not** (he absorbs Fire and is weak to Ice); Shell halves Firaga, the Meteors and Hellfire (all three are magic).
  * - `quote` is Yuna's dismay at the aeon, from the chapter's pre scene (`../story/scripts/ffx2-ifrit-kilika.ts`), our own line.
  * - `objectives`: survive Hellfire (the lesson), bring him below half, the win.
- * - `heroArt` has no painting of its own yet: the card shows Ifrit's idle as `heroArtFallback` (PROVISIONAL: the FFX aeon's approved painting, reused).
- * - `snapshots`: the Chamber's plate (Bailey's approved Djose pick, the provisional stand-in for Kilika), Ifrit's cast pose, Yuna's FFX-2 portrait (approved).
+ * - `heroArt` is the pause plate `pause/ffx2-ifrit-kilika` (release 79: the possessed Ifrit over the warm-graded Chamber plate, a composite); `heroArtFallback` is his own idle.
+ * - `snapshots`: the Chamber's plate (Bailey's approved Djose pick, the provisional stand-in for Kilika), the possessed Ifrit's cast pose, Yuna's FFX-2 portrait (approved).
  * - `musicKeys`: the field bed, the aeon cue, the fanfare, as the record's.
  */
 
@@ -23,8 +23,8 @@ export const IFRIT_KILIKA_META: ChapterMeta = {
   gameLabel: 'FFX-2',
   numeral: 'EXP',
   ...IFRIT_KILIKA_TEXT,
-  heroArt: 'pause/ffx2-ifrit-kilika', // no painting yet: the fallback below shows
-  heroArtFallback: 'characters/ifrit/idle.png',
+  heroArt: 'pause/ffx2-ifrit-kilika',
+  heroArtFallback: 'characters/x2-ifrit/idle.png',
   quote: { text: 'Ifrit... It is us. Please, listen.', speaker: 'Yuna' },
   handwritten: 'no fire. ice. heal before the hundred',
   objectives: [
@@ -37,7 +37,7 @@ export const IFRIT_KILIKA_META: ChapterMeta = {
     'Fire heals him, so bring Ice. A hidden count fills with every action and blow: Meteors at the girl farthest back at 30, 60 and 90, then Hellfire. Shell it.',
   snapshots: [
     { image: `backdrops/${IFRIT_KILIKA_SCENE_KEY}.png`, caption: 'the chamber at Kilika' },
-    { image: 'characters/ifrit/cast.png', caption: 'the pyreflies gather' },
+    { image: 'characters/x2-ifrit/cast.png', caption: 'the pyreflies gather' },
     { image: 'portraits/yuna-x2.png', caption: 'please, listen' },
   ],
   focalCharacterId: 'yuna',

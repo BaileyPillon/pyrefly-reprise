@@ -6,6 +6,8 @@ Branch `ch-shinryu`, from `origin/r76-release` `36b6e851d` (the research note an
 
 Plan: `docs/plans/ch-shinryu-review.md` (read it with this note). Sources: `research/re-ffx-shinryu.md` ("RE n"). The shared ledgers (NOW.md, ACTIONS.md, DECISIONS.md) are **not touched here**: the driver adds the rows.
 
+**UPDATE 2026-11-09 (r79 art install; FFX only): the paintings of the art list are made, registered and wired** (Shinryu as `characters/shinryu/`: a jade and violet eastern dragon posed by the airship Evrae's motion bank on a body thickened 11 px; a face; the pause plate `pause/ch48-shinryu`; the driver's picks, his to overturn): `docs/handoff/r79-art-install.md`. The airship Evrae stand-in is retired (`SHINRYU_STAND_IN` removed).
+
 ## 0a. FIX PASS of 2026-11-08 (after the read-only review of `07a47087a`; FFX only; nothing deploys)
 
 The review found **no critical**, **two major** and a minor list; every number held (each field of `enemies/shinryu.ts` equals the m283 dump, the three rows equal the two kernel fixtures, 5,000 Eraser situations match the kernel oracle, 200/200 on fresh seeds). What this pass changed, by finding (**game case: FFX only** for all of it; the one shared-file edit, `tests/unit/helpers/doorWords.ts`, is test plumbing and both-games in kind):

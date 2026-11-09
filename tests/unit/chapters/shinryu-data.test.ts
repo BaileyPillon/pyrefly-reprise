@@ -91,9 +91,9 @@ describe('Shinryu equals the note (RE 0)', () => {
     expect(shinryu().abilityIds).toEqual([ids.SHINRYU_ROWS.shining, ids.SHINRYU_ROWS.eraser, ids.SHINRYU_ROWS.attack]);
   });
 
-  it('the painting is the stand-in until `characters/shinryu/` is painted: the key the art lane owes is fixed', () => {
-    expect(shinryu().spriteKey).toBe(ids.SHINRYU_STAND_IN);
-    expect(ids.SHINRYU_STAND_IN).toBe('evrae');
+  it('the painting is `characters/shinryu/` (installed in release 79: the airship Evrae\'s stand-in is retired): the body and its form name the key', () => {
+    expect(shinryu().spriteKey).toBe(ids.SHINRYU_SPRITE);
+    expect(shinryu().forms?.[0]?.spriteKey).toBe(ids.SHINRYU_SPRITE);
     expect(ids.SHINRYU_SPRITE).toBe('shinryu');
     expect([...ids.SHINRYU_POSES]).toEqual(['idle', 'attack', 'cast', 'hurt', 'ko']);
   });

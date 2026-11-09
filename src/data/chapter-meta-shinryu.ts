@@ -7,8 +7,8 @@
  * - `quote` is Wakka's callout line at the first Eraser (`src/story/scripts/shinryu.ts`, a draft for Bailey to read), our own words.
  * - `objectives` are ours, each a rule `src/ui/common/chapterObjectives.ts` already answers: take a quarter off it, bring it below half, and the win. The preflight's segmented boss bar (SH7, option A) is an owed option, not built.
  * - `tip` and `handwritten` are our own words over the research's sourced rules (RE 0 and 2): the Eraser's Petrify is a shatter in this water, and every wound it feels is answered.
- * - `heroArt` is the pause plate `pause/ch48-shinryu`, **owed** (a key only; the art lane's list is `docs/handoff/ch-shinryu.md`); `heroArtFallback`, an existing approved plate of the Via Purifico, shows meanwhile.
- * - `snapshots` are the plate, the stand-in painting (the airship Evrae's, until Shinryu's own set exists) and Tidus's idle.
+ * - `heroArt` is the pause plate `pause/ch48-shinryu` (release 79: Shinryu over the flooded Via Purifico plate, a composite); `heroArtFallback`, an existing approved plate of the Via Purifico, shows if it is missing.
+ * - `snapshots` are the plate, Shinryu's idle and Tidus's idle.
  * - `musicKeys` are the cues the chapter plays: the bed, the stand-in boss cue and the FFX fanfare.
  */
 
@@ -34,7 +34,7 @@ export const SHINRYU_META: ChapterMeta = {
   tip: 'Strike fast. Its Eraser turns a swimmer to stone, and in this water stone shatters. It claws back at every wound, so keep the party healed.',
   snapshots: [
     { image: 'backdrops/via-purifico-flooded-3.png', caption: 'the water above the arena' },
-    { image: 'characters/evrae/idle.png', caption: 'what waits below' },
+    { image: 'characters/shinryu/idle.png', caption: 'what waits below' },
     { image: 'characters/tidus/idle.png', caption: 'one of three who can swim' },
   ],
   focalCharacterId: 'tidus',

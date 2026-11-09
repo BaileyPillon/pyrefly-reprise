@@ -81,7 +81,7 @@ export function belgemine(): EnemyDef {
   return {
     id: BELGEMINE_ID,
     name: 'Belgemine',
-    spriteKey: 'belgemine', // owed: no painting yet; the stage draws the stand-in figure
+    spriteKey: 'belgemine', // her own painting (release 79: idle, cast, hurt; the bind pose of the model with the arms turned)
     slot: 0,
     stats: statsOf([10, 1, 1, 0, 0, 0, 0, 0, 0]),
     hp: 10,

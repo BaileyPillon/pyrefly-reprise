@@ -117,7 +117,7 @@ function garik(id: string, scriptId: string, slot: number, text: { sensor: strin
   return {
     id,
     name: 'Garik Ronso',
-    spriteKey: GARIK_SPRITE, // a stand-in: Kimahri's party set, mirrored by the presenter (the art list in the handoff)
+    spriteKey: GARIK_SPRITE, // his own painting (`x2-garik-ronso`, release 79), mirrored by the presenter
     slot,
     stats: {
       hp: 6880, // [RE §0 row 182]

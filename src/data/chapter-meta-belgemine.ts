@@ -7,7 +7,7 @@
  * - `quote` is Belgemine's one line in the pre scene (`src/story/scripts/belgemine.ts`, a draft for Bailey to read), our own words in her register (a teasing old summoner), quoting nothing of the game's script.
  * - `objectives` are ours, each a rule `src/ui/common/chapterObjectives.ts` already answers and none a number of the fights': win the first duel, reach the fifth, win the last.
  * - `tip` and `handwritten` are our own words over the research's sourced rules (RE 3): each duel has a habit worth learning, and the card names the habit and not the numbers.
- * - `heroArt` is the Remiem stand-in (the Cavern of the Stolen Fayth's approved plate; the pause plate `pause/ch45-belgemine` is on the art list, owed); `snapshots`: the plate, Valefor's idle (the first duel) and Yuna's.
+ * - `heroArt` is the pause plate `pause/ch45-belgemine` (release 79: Belgemine in the Remiem court, a composite); `heroArtFallback` is the Cavern of the Stolen Fayth's approved plate, the stage's stand-in; `snapshots`: that plate, Belgemine's idle and Yuna's.
  * - `musicKeys` are the cues the chapter plays: the temple bed, the aeon contest's cue as a stand-in, the FFX fanfare.
  */
 
@@ -25,8 +25,8 @@ export const BELGEMINE_META: ChapterMeta = {
   blurb: 'Belgemine calls her aeons one at a time at the Remiem Temple. Answer each with one of yours, and learn what it will not forgive.',
   location: 'Remiem Temple',
   bossLine: 'Valefor, Ifrit, Ixion, Shiva, Bahamut, Yojimbo, Anima and the Magus Sisters', // the first formation is only the first duel
-  heroArt: 'backdrops/cavern-stolen-fayth.png',
-  heroArtFallback: 'backdrops/via-purifico.png',
+  heroArt: 'pause/ch45-belgemine',
+  heroArtFallback: 'backdrops/cavern-stolen-fayth.png',
   quote: { text: 'Come, child. Show me what you have learned.', speaker: 'Belgemine' },
   handwritten: 'every aeon has a habit',
   objectives: [
@@ -37,7 +37,7 @@ export const BELGEMINE_META: ChapterMeta = {
   tip: 'You cannot call the aeon she holds. Read each one: some punish a spell, some a blow, and one only wakes when it is struck. Shield before the great blows.',
   snapshots: [
     { image: 'backdrops/cavern-stolen-fayth.png', caption: 'the temple at Remiem' },
-    { image: 'characters/valefor/idle.png', caption: 'she begins with the first' },
+    { image: 'characters/belgemine/idle.png', caption: 'the summoner, and her first aeon to come' },
     { image: 'characters/yuna/idle.png', caption: 'and Yuna answers' },
   ],
   focalCharacterId: 'yuna',

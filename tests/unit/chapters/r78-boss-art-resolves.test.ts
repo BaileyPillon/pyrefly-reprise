@@ -10,7 +10,8 @@
  *  1. Every enemy body of the two hidden FFX chapters (every link of the Omega Ruins chain) resolves, against the manifest of the art mirror (`BOSS_ART_ROOT`, else `public/art`), to its own painting under its own
  *     key, with every pose the presenter asks for pointing at that subject's own files (no pose falls to another subject), and every one of those files is on disk. Skipped where the art is not installed.
  *  2. Every one of those keys has registration rows (the pose tables the stage reads) for every pose the manifest lists. Needs no art.
- *  3. The Youth League's eight fighter kinds resolve to NOTHING (a stand-in) and are the only foes of the three chapters that do: the list the handoff carries. Needs a manifest.
+ *  3. The Youth League's eight fighter kinds are the only foes of the three chapters that can resolve to NOTHING (a stand-in), and they resolve to their own paintings in a mirror that holds them (the r79 mirror, the art-w4 kit):
+ *     the stand-ins are exactly the kinds the mirror does not hold (the eight in the r78 mirror, none in the r79 one). Needs a manifest.
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
@@ -104,13 +105,14 @@ describe.skipIf(!INSTALLED)('R77-3: against the installed art (the mirror `BOSS_
     }
   });
 
-  it('the Youth League is the only stand-in: its eight fighter kinds have no painting yet (listed in the handoff), and every foe of the three chapters that does not resolve is one of them (FFX-2 only)', async () => {
+  it('the Youth League is the only possible stand-in: every foe of the three chapters that does not resolve is one of its eight fighter kinds, and exactly the kinds this mirror does not hold (none in the r79 mirror) (FFX-2 only)', async () => {
     setArtManifest(manifestOfMirror());
     const standIns = new Set<string>();
     for (const e of [...bodiesOf(spherimorphGroups()), ...bodiesOf(omegaGroups()), ...bodiesOf(youthLeagueGroups)]) {
       const { artId } = await resolveArt(artCandidatesFor(asCombatant(e)), 'enemy');
       if (artId !== e.spriteKey || manifestOfMirror().subjects[e.spriteKey!] === undefined) standIns.add(e.spriteKey!);
     }
-    expect([...standIns].sort()).toEqual(Object.values(YL_SPRITES).sort());
+    const manifest = manifestOfMirror();
+    expect([...standIns].sort()).toEqual(Object.values(YL_SPRITES).filter((key) => manifest.subjects[key] === undefined).sort());
   });
 });

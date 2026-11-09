@@ -44,9 +44,10 @@ export const YOUTH_HOSTILE_SCRIPT_ID = 'x2-ronso-youth-hostile';
 export const YOUTH_FRIENDLY_SCRIPT_ID = 'x2-ronso-youth-friendly';
 
 /**
- * The paintings (`public/art/characters/<key>/`). **Stand-ins, flagged**: the Ronso brothers' paintings of the FFX Biran and Yenke chapter (`biran-ronso`, `yenke-ronso`: one idle pose each, painted facing the party) stand for the
- * Youths, and Kimahri's party set (every pose, painted facing right and mirrored by the presenter) for Garik until his own painting is made (`x2-garik-ronso`, the art list in `docs/handoff/ch-garik-ronso.md`).
+ * The paintings (`public/art/characters/<key>/`), installed in release 79 (the art-w4 kit, `docs/handoff/r79-art-install.md`): Garik's own set (`x2-garik-ronso`: idle, attack, cast, hurt, ko) and the two Youths' palettes
+ * (`x2-ronso-youth-a` and `-b`: idle, attack, hurt, ko), painted over the game's own models. Every foe is painted facing left and the presenter mirrors it to face the girls. They replace the stand-ins the chapter was built
+ * with (Kimahri's party set for Garik, the FFX Biran and Yenke idles for the Youths).
  */
-export const GARIK_SPRITE = 'kimahri';
-export const YOUTH_A_SPRITE = 'biran-ronso';
-export const YOUTH_B_SPRITE = 'yenke-ronso';
+export const GARIK_SPRITE = 'x2-garik-ronso';
+export const YOUTH_A_SPRITE = 'x2-ronso-youth-a';
+export const YOUTH_B_SPRITE = 'x2-ronso-youth-b';

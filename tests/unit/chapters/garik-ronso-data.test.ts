@@ -167,7 +167,7 @@ describe('the formations: pools and rewards [RE §0, formations 1622 and 1621]',
       ids.GARIK_HOSTILE_SCRIPT_ID, ids.GARIK_FRIENDLY_SCRIPT_ID, ids.YOUTH_HOSTILE_SCRIPT_ID, ids.YOUTH_HOSTILE_SCRIPT_ID, ids.YOUTH_FRIENDLY_SCRIPT_ID,
     ]);
     expect([...ids.GARIK_BODY_IDS]).toEqual([ids.X2_YOUTH_A_ID, ids.X2_YOUTH_B_ID, ids.X2_GARIK_ID, ids.X2_YOUTH_BOUT_ID, ids.X2_GARIK_BOUT_ID]);
-    expect([x2GarikRonso.spriteKey, x2RonsoYouthA.spriteKey, x2RonsoYouthB.spriteKey]).toEqual(['kimahri', 'biran-ronso', 'yenke-ronso']);
+    expect([x2GarikRonso.spriteKey, x2RonsoYouthA.spriteKey, x2RonsoYouthB.spriteKey]).toEqual(['x2-garik-ronso', 'x2-ronso-youth-a', 'x2-ronso-youth-b']); // their own paintings (release 79), no longer Kimahri's and the FFX Ronso idles
     expect([x2RonsoYouthA.name, x2RonsoYouthB.name, x2RonsoYouthBout.name, x2GarikRonso.name]).toEqual(['Ronso Youth A', 'Ronso Youth B', 'Ronso Youth', 'Garik Ronso']);
   });
 });
