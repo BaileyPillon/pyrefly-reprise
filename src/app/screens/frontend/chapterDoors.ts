@@ -51,7 +51,9 @@
  *
  * **`sidequest`** (FFX, the hidden Belgemine's Challenge, `./sidequestDoor.ts`: S is `down`, D `right`, E `start`, Q `triangle`; I, U and T are unbound) is a plain `WordDoor` too, and is **not** desktop-only (painted 2D).
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit` and `bluelight`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith`, `youth`, `ifrit` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno`, `beast`, `wendigo` and `sidequest`.
+ * **`braveheart`** (FFX-2, the hidden Garik Ronso, `./braveheartDoor.ts`: R is `r1`, A is `left`, V is `select`, E is `start`; B, H and T are unbound, so the first letter moves nothing; the plan's `lionheart` failed the table's `limit` rule, see that file) is a plain `WordDoor` too.
+ *
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit` and `bluelight`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith`, `youth`, `ifrit`, `braveheart` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno`, `beast`, `wendigo` and `sidequest`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -88,6 +90,7 @@ import { BLUELIGHT_DOOR_CHAPTER, BLUELIGHT_DOOR_WORD } from './bluelightDoor.ts'
 import { IFRIT_DOOR_CHAPTER, IFRIT_DOOR_WORD } from './ifritDoor.ts';
 import { WENDIGO_DOOR_CHAPTER, WENDIGO_DOOR_WORD } from './wendigoDoor.ts';
 import { SIDEQUEST_DOOR_CHAPTER, SIDEQUEST_DOOR_WORD } from './sidequestDoor.ts';
+import { BRAVEHEART_DOOR_CHAPTER, BRAVEHEART_DOOR_WORD } from './braveheartDoor.ts';
 
 /**
  * **The two hidden 3D chapters are desktop-only** (driver decision 219q, 2026-11-03; FFX-2 only: `yrp`, the 3D Bahamut, and `waker`, the Wind Waker Valefor). They are not staged for a phone: the Wind Waker is expected to miss the phone budgets
@@ -141,9 +144,10 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: YOUTH_DOOR_WORD, chapter: YOUTH_DOOR_CHAPTER },
   { word: WEAPON_DOOR_WORD, chapter: WEAPON_DOOR_CHAPTER },
   { word: BLUELIGHT_DOOR_WORD, chapter: BLUELIGHT_DOOR_CHAPTER, gate: ff7ExperimentReady }, // FF7's second door: a plain typed word behind the same switch as `limit`
-  { word: IFRIT_DOOR_WORD, chapter: IFRIT_DOOR_CHAPTER },
-  { word: WENDIGO_DOOR_WORD, chapter: WENDIGO_DOOR_CHAPTER, gate: desktopOnly },
   { word: SIDEQUEST_DOOR_WORD, chapter: SIDEQUEST_DOOR_CHAPTER },
+  { word: IFRIT_DOOR_WORD, chapter: IFRIT_DOOR_CHAPTER },
+  { word: BRAVEHEART_DOOR_WORD, chapter: BRAVEHEART_DOOR_CHAPTER },
+  { word: WENDIGO_DOOR_WORD, chapter: WENDIGO_DOOR_CHAPTER, gate: desktopOnly },
 ];
 
 /**

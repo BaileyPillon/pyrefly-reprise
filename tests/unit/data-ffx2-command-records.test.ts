@@ -106,6 +106,9 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   // The hidden Ifrit at Kilika Temple's four rows (Hellfire 0x4094, Meteor Strike 0x4095, Firaga 0x41f1, Time Up Meteor 0x4236) are the RE note's, pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/ifrit_kilika_rows.json,
   // tests/unit/chapters/ifrit-kilika-data.test.ts).
   if (label.startsWith('x2-ifrit-')) return;
+  // The hidden Garik Ronso's nine rows (Garik's Attack 0x41da, Bane Lance 0x411c, Blind 0x406f, Mighty Guard 0x4084, Shell 0x30bb and Protect 0x30bc, the Youth's Attack 0x4000 and MP Blowout 0x411d, Time Up Meteor 0x4236) are the RE note's,
+  // pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/garik_ronso_rows.json, tests/unit/chapters/garik-ronso-data.test.ts).
+  if (label.startsWith('x2-garik-') || label.startsWith('x2-ronso-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();
   if (!row) return;

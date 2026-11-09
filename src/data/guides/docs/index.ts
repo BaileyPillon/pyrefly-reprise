@@ -46,6 +46,7 @@ import { FFX2_YOUTH_LEAGUE_DOC } from './ffx2-youth-league.ts';
 import { OMEGA_RUINS_DOC } from './omega-ruins.ts';
 import { FF7_JENOVA_LIFE_DOC } from './ff7-jenova-life.ts';
 import { FFX2_IFRIT_KILIKA_DOC } from './ffx2-ifrit-kilika.ts';
+import { FFX2_GARIK_RONSO_DOC } from './ffx2-garik-ronso.ts';
 
 export const GUIDE_DOCS: readonly GuideDoc[] = [
   SEYMOUR_FLUX_DOC,
@@ -83,9 +84,10 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   FFX2_YOUTH_LEAGUE_DOC, // the hidden Youth League Tournament (FFX-2 only)
   OMEGA_RUINS_DOC, // the hidden Omega Ruins (FFX only)
   FF7_JENOVA_LIFE_DOC, // the hidden Jenova LIFE (FF7 only)
-  FFX2_IFRIT_KILIKA_DOC, // the hidden Ifrit at Kilika Temple (FFX-2 only)
-  WENDIGO_DOC, // the hidden Wendigo (FFX only)
   BELGEMINE_DOC, // the hidden Belgemine's Challenge (FFX only)
+  FFX2_IFRIT_KILIKA_DOC, // the hidden Ifrit at Kilika Temple (FFX-2 only)
+  FFX2_GARIK_RONSO_DOC, // the hidden Garik Ronso (FFX-2 only)
+  WENDIGO_DOC, // the hidden Wendigo (FFX only)
 ];
 
 /** The document for one chapter id, if it has one. */

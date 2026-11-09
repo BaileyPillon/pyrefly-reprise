@@ -1,0 +1,510 @@
+{
+ "source": "research/re-ffx2-garik-ronso.md (the Garik Ronso lane, 2026-11-07 and 08): monster.bin rows 181 (Ronso Youth) and 182 (Garik Ronso) and the move rows their two scripts queue (sections 0, 2 and 3) of FFX2_Data.vbf, Steam build 25501027, decoded from the kernel tables by a script (nothing typed by hand). Numbers only; ids and offsets are decimal here (the note prints them in hex).",
+ "monsters": {
+  "x2-garik-ronso": {
+   "row": 182,
+   "id": 4278,
+   "offset": 36432,
+   "level": 33,
+   "hp": 6880,
+   "mp": 444,
+   "str": 43,
+   "def": 34,
+   "mag": 56,
+   "mdef": 3,
+   "agi": 102,
+   "acc": 95,
+   "eva": 0,
+   "luck": 2,
+   "thinking": 0,
+   "special": 963,
+   "absorb": 0,
+   "null": 16,
+   "half": 0,
+   "weak": 0,
+   "autoStatus1": 0,
+   "autoStatus2": 0,
+   "exp": 380,
+   "gil": 90,
+   "pilfer": 130,
+   "ap": 3,
+   "dropByte": 128,
+   "stealByte": 64,
+   "zantetsu": 20,
+   "resist1": {
+    "0": 255,
+    "1": 255,
+    "2": 255,
+    "3": 255,
+    "4": 20,
+    "5": 20,
+    "7": 255,
+    "8": 255,
+    "10": 255,
+    "17": 255,
+    "18": 255
+   },
+   "resist2": {
+    "5": 255,
+    "6": 255,
+    "14": 255
+   },
+   "waza": [
+    16858,
+    16668,
+    16516,
+    16495,
+    12475,
+    12476
+   ],
+   "dropItems": [
+    36957,
+    1,
+    36957,
+    1
+   ],
+   "stealItems": [
+    36900,
+    1,
+    36900,
+    1
+   ],
+   "bribeItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "name": "Garik Ronso"
+  },
+  "x2-ronso-youth": {
+   "row": 181,
+   "id": 4277,
+   "offset": 36232,
+   "level": 24,
+   "hp": 4060,
+   "mp": 170,
+   "str": 51,
+   "def": 23,
+   "mag": 48,
+   "mdef": 3,
+   "agi": 78,
+   "acc": 95,
+   "eva": 0,
+   "luck": 2,
+   "thinking": 30,
+   "special": 385,
+   "absorb": 0,
+   "null": 16,
+   "half": 0,
+   "weak": 0,
+   "autoStatus1": 0,
+   "autoStatus2": 0,
+   "exp": 220,
+   "gil": 20,
+   "pilfer": 80,
+   "ap": 2,
+   "dropByte": 255,
+   "stealByte": 64,
+   "zantetsu": 0,
+   "resist1": {
+    "0": 255,
+    "1": 255,
+    "2": 255,
+    "3": 255,
+    "4": 20,
+    "8": 255,
+    "17": 255,
+    "18": 255
+   },
+   "resist2": {
+    "14": 255
+   },
+   "waza": [
+    16384,
+    16669
+   ],
+   "dropItems": [
+    8207,
+    1,
+    8207,
+    2
+   ],
+   "stealItems": [
+    36866,
+    1,
+    36866,
+    1
+   ],
+   "bribeItems": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "name": "Ronso Youth"
+  }
+ },
+ "moves": {
+  "x2-garik-attack": {
+   "id": 16858,
+   "offset": 64496,
+   "costAtb": 100,
+   "costCast": 0,
+   "costMp": 0,
+   "flagsTarget": 51,
+   "flagsMisc": 1610612818,
+   "flagsDamage": 13,
+   "damageClass": 1,
+   "formula": 0,
+   "crit": 5,
+   "accuracy": 95,
+   "power": 16,
+   "hits": 1,
+   "shatter": 10,
+   "element": 0,
+   "category": 0,
+   "name": "Attack"
+  },
+  "x2-garik-bane-lance": {
+   "id": 16668,
+   "offset": 38656,
+   "costAtb": 100,
+   "costCast": 0,
+   "costMp": 8,
+   "flagsTarget": 51,
+   "flagsMisc": 1610612814,
+   "flagsDamage": 13,
+   "damageClass": 1,
+   "formula": 0,
+   "crit": 5,
+   "accuracy": 110,
+   "power": 16,
+   "hits": 1,
+   "shatter": 10,
+   "element": 0,
+   "category": 0,
+   "name": "Bane Lance"
+  },
+  "x2-garik-blind": {
+   "id": 16495,
+   "offset": 15128,
+   "costAtb": 60,
+   "costCast": 60,
+   "costMp": 8,
+   "flagsTarget": 1075,
+   "flagsMisc": 539000966,
+   "flagsDamage": 0,
+   "damageClass": 0,
+   "formula": 0,
+   "crit": 0,
+   "accuracy": 0,
+   "power": 0,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "category": 0,
+   "name": "Blind"
+  },
+  "x2-garik-mighty-guard": {
+   "id": 16516,
+   "offset": 17984,
+   "costAtb": 80,
+   "costCast": 120,
+   "costMp": 18,
+   "flagsTarget": 53,
+   "flagsMisc": 536870918,
+   "flagsDamage": 2,
+   "damageClass": 0,
+   "formula": 2,
+   "crit": 0,
+   "accuracy": 0,
+   "power": 0,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "category": 0,
+   "name": "Mighty Guard"
+  },
+  "x2-garik-shell": {
+   "id": 12475,
+   "offset": 26212,
+   "costAtb": 0,
+   "costCast": 60,
+   "costMp": 10,
+   "flagsTarget": 1077,
+   "flagsMisc": 539000966,
+   "flagsDamage": 2,
+   "damageClass": 0,
+   "formula": 0,
+   "crit": 0,
+   "accuracy": 0,
+   "power": 0,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "category": 2,
+   "name": "Shell"
+  },
+  "x2-garik-protect": {
+   "id": 12476,
+   "offset": 26352,
+   "costAtb": 0,
+   "costCast": 60,
+   "costMp": 12,
+   "flagsTarget": 1077,
+   "flagsMisc": 539000966,
+   "flagsDamage": 2,
+   "damageClass": 0,
+   "formula": 0,
+   "crit": 0,
+   "accuracy": 0,
+   "power": 0,
+   "hits": 1,
+   "shatter": 0,
+   "element": 0,
+   "category": 2,
+   "name": "Protect"
+  },
+  "x2-ronso-youth-attack": {
+   "id": 16384,
+   "offset": 32,
+   "costAtb": 100,
+   "costCast": 0,
+   "costMp": 0,
+   "flagsTarget": 51,
+   "flagsMisc": 536936530,
+   "flagsDamage": 13,
+   "damageClass": 1,
+   "formula": 0,
+   "crit": 5,
+   "accuracy": 95,
+   "power": 16,
+   "hits": 1,
+   "shatter": 10,
+   "element": 0,
+   "category": 0,
+   "name": "Attack"
+  },
+  "x2-ronso-youth-mp-blowout": {
+   "id": 16669,
+   "offset": 38792,
+   "costAtb": 100,
+   "costCast": 0,
+   "costMp": 10,
+   "flagsTarget": 51,
+   "flagsMisc": 1610612814,
+   "flagsDamage": 13,
+   "damageClass": 2,
+   "formula": 7,
+   "crit": 255,
+   "accuracy": 120,
+   "power": 16,
+   "hits": 1,
+   "shatter": 10,
+   "element": 0,
+   "category": 0,
+   "name": "MP Blowout"
+  },
+  "x2-ronso-angry": {
+   "id": 16946,
+   "offset": 76464,
+   "costAtb": 50,
+   "costCast": 0,
+   "costMp": 0,
+   "flagsTarget": 19,
+   "flagsMisc": 70,
+   "flagsDamage": 1,
+   "damageClass": 0,
+   "formula": 0,
+   "crit": 0,
+   "accuracy": 0,
+   "power": 0,
+   "hits": 0,
+   "shatter": 0,
+   "element": 0,
+   "category": 0,
+   "name": "Battle too long<4a> Angry"
+  },
+  "x2-ronso-furious": {
+   "id": 16947,
+   "offset": 76600,
+   "costAtb": 50,
+   "costCast": 0,
+   "costMp": 0,
+   "flagsTarget": 19,
+   "flagsMisc": 70,
+   "flagsDamage": 1,
+   "damageClass": 0,
+   "formula": 0,
+   "crit": 0,
+   "accuracy": 0,
+   "power": 0,
+   "hits": 0,
+   "shatter": 0,
+   "element": 0,
+   "category": 0,
+   "name": "Battle too long<4a> Furious"
+  },
+  "x2-ronso-about-to-blow": {
+   "id": 16948,
+   "offset": 76736,
+   "costAtb": 50,
+   "costCast": 0,
+   "costMp": 0,
+   "flagsTarget": 19,
+   "flagsMisc": 70,
+   "flagsDamage": 1,
+   "damageClass": 0,
+   "formula": 0,
+   "crit": 0,
+   "accuracy": 0,
+   "power": 0,
+   "hits": 0,
+   "shatter": 0,
+   "element": 0,
+   "category": 0,
+   "name": "Battle too long<4a> About to Blow"
+  },
+  "x2-ronso-ends-now": {
+   "id": 16949,
+   "offset": 76872,
+   "costAtb": 50,
+   "costCast": 0,
+   "costMp": 0,
+   "flagsTarget": 19,
+   "flagsMisc": 70,
+   "flagsDamage": 1,
+   "damageClass": 0,
+   "formula": 0,
+   "crit": 0,
+   "accuracy": 0,
+   "power": 0,
+   "hits": 0,
+   "shatter": 0,
+   "element": 0,
+   "category": 0,
+   "name": "This Battle Ends Now<3b>"
+  },
+  "x2-ronso-time-up-meteor": {
+   "id": 16950,
+   "offset": 77008,
+   "costAtb": 0,
+   "costCast": 0,
+   "costMp": 0,
+   "flagsTarget": 23,
+   "flagsMisc": 1092632582,
+   "flagsDamage": 0,
+   "damageClass": 1,
+   "formula": 5,
+   "crit": 0,
+   "accuracy": 0,
+   "power": 200,
+   "hits": 12,
+   "shatter": 0,
+   "element": 0,
+   "category": 0,
+   "name": "Time Up<4a> Meteor"
+  }
+ },
+ "statuses": {
+  "x2-garik-bane-lance": {
+   "status1": {
+    "8": 254
+   }
+  },
+  "x2-garik-blind": {
+   "status1": {
+    "4": 75
+   }
+  },
+  "x2-garik-mighty-guard": {
+   "status2": {
+    "0": 254,
+    "1": 254,
+    "3": 254,
+    "4": 254,
+    "9": 254,
+    "10": 254,
+    "12": 254
+   },
+   "statusTime": {
+    "0": 126,
+    "1": 126,
+    "3": 90,
+    "4": 90,
+    "9": 2,
+    "10": 2,
+    "12": 1
+   }
+  },
+  "x2-garik-shell": {
+   "status2": {
+    "0": 254
+   },
+   "statusTime": {
+    "0": 110
+   }
+  },
+  "x2-garik-protect": {
+   "status2": {
+    "1": 254
+   },
+   "statusTime": {
+    "1": 110
+   }
+  }
+ },
+ "formations": {
+  "note": "monster.bin rows per formation slot (formations 1621 and 1622, the Mt. Gagazet summit; research note section 0); numbers only",
+  "friendly": {
+   "formation": 1621,
+   "scene": "mtgz10_229",
+   "slots": [
+    "x2-ronso-youth",
+    "x2-garik-ronso"
+   ],
+   "props": 2
+  },
+  "hostile": {
+   "formation": 1622,
+   "scene": "mtgz10_228",
+   "slots": [
+    "x2-ronso-youth",
+    "x2-ronso-youth",
+    "x2-garik-ronso"
+   ],
+   "props": 3
+  }
+ },
+ "script": {
+  "note": "The constants of the two workers (m181, m182), read from their disassembly and equal to the plain-text sources: numbers only, no script text (research note section 2)",
+  "garikHostile": {
+   "turnStart": 0,
+   "guardAt": 7,
+   "drawModulus": 4
+  },
+  "garikFriendly": {
+   "turnStart": 3,
+   "shellAt": 8,
+   "protectAt": 4
+  },
+  "youthHostile": {
+   "drawModulus": 8
+  },
+  "tooLongPolls": {
+   "garik": {
+    "angry": 180,
+    "furious": 190,
+    "aboutToBlow": 195,
+    "endsNow": 200
+   },
+   "youth": {
+    "angry": 140,
+    "furious": 150,
+    "aboutToBlow": 155,
+    "endsNow": 160
+   }
+  }
+ }
+}

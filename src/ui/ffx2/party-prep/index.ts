@@ -23,9 +23,11 @@ import { registerPrepPanel } from '../../../app/screens/PartyPrepScreen.ts';
 import { makeChapterPanel } from '../../ffx/party-prep/ChapterPanel.ts';
 import { makeAccessoryPanel, makeDresspherePanel, makeItemsPanel } from './panels.ts';
 import { makeStatsPanel } from './StatsPanel.ts';
+import { makeRonsoTrustPanel } from './ronsoTrustPanel.ts'; // the hidden Garik Ronso chapter's TRUST tab (visible for that chapter only)
 
 registerPrepPanel(makeChapterPanel('ffx2'));
 registerPrepPanel(makeDresspherePanel());
 registerPrepPanel(makeStatsPanel());
 registerPrepPanel(makeAccessoryPanel());
 registerPrepPanel(makeItemsPanel());
+registerPrepPanel(makeRonsoTrustPanel());

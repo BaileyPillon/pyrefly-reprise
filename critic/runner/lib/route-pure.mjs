@@ -293,9 +293,10 @@ export const DOOR_WORDS = Object.freeze({
   'ffx2-youth-league': 'youth', // the hidden Youth League Tournament chapter (FFX-2, number 42, 2026-11-07)
   'omega-ruins': 'weapon', // the hidden Omega Ruins chapter (FFX, number 43, 2026-11-06)
   'ff7-jenova-life': 'bluelight', // the hidden Jenova LIFE chapter (FF7, number 44, 2026-11-07)
-  'ffx2-ifrit-kilika': 'ifrit', // the hidden Ifrit at Kilika Temple chapter (FFX-2, number 46, 2026-11-07)
-  wendigo: 'wendigo', // the hidden Wendigo chapter (FFX, number 49, 2026-11-06; desktop only)
   belgemine: 'sidequest', // the hidden Belgemine's Challenge chapter (FFX, number 45, 2026-11-09)
+  'ffx2-ifrit-kilika': 'ifrit', // the hidden Ifrit at Kilika Temple chapter (FFX-2, number 46, 2026-11-07)
+  'ffx2-garik-ronso': 'braveheart', // the hidden Garik Ronso chapter (FFX-2, number 47, 2026-11-08)
+  wendigo: 'wendigo', // the hidden Wendigo chapter (FFX, number 49, 2026-11-06; desktop only)
 });
 
 /** The word that opens a chapter the board has no card for, or null for a chapter with a card (the arrow-key walk finds it). */

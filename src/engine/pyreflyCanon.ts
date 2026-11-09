@@ -30,6 +30,7 @@ import { SPHERIMORPH_SCENE } from '../data/ffx/spherimorph-ids.ts';
 import { OMEGA_RUINS_SCENE } from '../data/ffx/omega-ruins-ids.ts';
 import { WENDIGO_SCENE } from '../data/ffx/wendigo-ids.ts';
 import { BELGEMINE_SCENE } from '../data/ffx/belgemine-ids.ts';
+import { GARIK_RONSO_SCENE } from '../data/garik-ronso-ids.ts';
 import { ANGRA_MAINYU_SCENE } from '../data/angra-mainyu-ids.ts';
 import { EXP_YRP_SCENE } from '../data/yrp-ids.ts';
 import { EXP_WINDWAKER_SCENE } from '../data/windwaker-ids.ts';
@@ -162,6 +163,8 @@ export const PYREFLY_CANON: Readonly<Record<string, PyreflyCanonRow>> = Object.f
   [DARK_AEONS_SCENE]: { game: 'ffx', verdict: 'unattested', cite: 'research/re-ffx-dark-aeons-six.md section 2.4 and 9: the guides name where each Dark Aeon stands and no ambient particles; the aeons are summoned shapes and leave as the stage dissolves them' },
   // The Sanctuary Keeper (the hidden chapter, FFX only; `scenes/sanctuary-keeper.ts`): Chapter I's Mt. Gagazet plate and scene, so the mountain's row.
   [SANCTUARY_KEEPER_SCENE]: { game: 'ffx', verdict: 'unattested', cite: `${PRES}, Mt. Gagazet [single source]: "No pyreflies are attested on the trail" (an absence, not a contradiction); the stage is Chapter I's`, treatment: "As Gagazet: snow and glitter, nothing added" },
+  // Garik Ronso (the hidden chapter, FFX-2 only; `scenes/gagazet-summit.ts`): Chapter I's Mt. Gagazet plate under a snow grade of its own, so the mountain's row; no FFX-2 note names particles at the summit (`research/re-ffx2-garik-ronso.md`).
+  [GARIK_RONSO_SCENE]: { game: 'ffx2', verdict: 'unattested', cite: `${PRES}, Mt. Gagazet [single source]: "No pyreflies are attested on the trail" (an absence, not a contradiction); the stage borrows Chapter I's plate (research/re-ffx2-garik-ronso.md)`, treatment: 'As Gagazet: snow and glitter, nothing added' },
   // The Spectral Keeper (the hidden chapter, FFX only): the Zanarkand Dome as Chapter II builds it, so the Dome's row.
   [SPECTRAL_KEEPER_SCENE]: { game: 'ffx', verdict: 'attested', cite: `${PRES}, Zanarkand Dome [verified: 2 sources]` },
   // Penance (the hidden chapter, FFX only; `scenes/penance.ts`): Chapter VIII's deck over Chapter VIII's own plate, so the deck's row.
