@@ -1,0 +1,478 @@
+{
+ "chapter": "ff7-guard-scorpion",
+ "game": "ffx",
+ "goal": "win",
+ "size": "1600x900",
+ "base": "https://echoesofspira.com/",
+ "mode": "gpu",
+ "hooks": [
+  "window.__pyrefly.setSeed(1) before the first key (CHK-015 labelled setup hook, PR-0202)"
+ ],
+ "seedPinned": 1,
+ "seed": 1,
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1,
+   "links": 1,
+   "firstEnemyAction": null
+  },
+  {
+   "at": "retry after attempt 1",
+   "engineSeed": 1001,
+   "links": 1,
+   "firstEnemyAction": null
+  }
+ ],
+ "firstEnemyAction": {
+  "seq": 1,
+  "actor": "guard-scorpion",
+  "ability": "Search Scope",
+  "targets": [
+   "barret"
+  ]
+ },
+ "steps": [
+  {
+   "ms": 6182,
+   "k": "door",
+   "v": "limit"
+  },
+  {
+   "ms": 9195,
+   "k": "noPrep",
+   "v": "chapter-select"
+  },
+  {
+   "ms": 15547,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1
+   }
+  },
+  {
+   "ms": 26587,
+   "k": "targetProbe",
+   "v": "no target cursor opened: 16 and 16b not shot (PR-0213)"
+  },
+  {
+   "ms": 26591,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 1,
+    "actor": "guard-scorpion",
+    "ability": "Search Scope",
+    "targets": [
+     "barret"
+    ]
+   }
+  },
+  {
+   "ms": 869458,
+   "k": "fight",
+   "v": {
+    "outcome": "defeat",
+    "turns": 0,
+    "ms": 842867,
+    "seams": 0,
+    "orders": 0
+   }
+  },
+  {
+   "ms": 888092,
+   "k": "continuity",
+   "v": "[continuity] ff7-guard-scorpion: 853.299 s of battle, 51200 frames recorded, 44 swaps, 54 strips, 60 fps, 0 probe errors"
+  },
+  {
+   "ms": 888133,
+   "k": "continuity",
+   "v": "[continuity] ff7-guard-scorpion: pose-measure docs\\target\\pose-measure.json (142 subjects, sha256 e38d3f0d10ed, source harness-tree); build 6429ff15; the candidate's own table"
+  },
+  {
+   "ms": 893361,
+   "k": "continuity",
+   "v": "[continuity] ff7-guard-scorpion: CHK-026 FAIL, CHK-027 FAIL; max head jump 5.6% (0% registered, a control), stature null to null (0 out of band), max feet shift 47.5px (0px from the pixels), 2.11 snaps/min, worst swap jerk 36.4px (worst dash 31.4px), frame p99 18.9ms, 15 strips"
+  },
+  {
+   "ms": 899362,
+   "k": "retryReachedBattle",
+   "v": true
+  }
+ ],
+ "picks": [],
+ "seams": [],
+ "fails": [
+  {
+   "file": "12-intent-E.png",
+   "unverified": [
+    "screen wanted battle got pause",
+    "awaitingMenu wanted true got false"
+   ]
+  },
+  {
+   "file": "13-guide-G.png",
+   "unverified": [
+    "screen wanted battle got pause",
+    "awaitingMenu wanted true got false"
+   ]
+  },
+  {
+   "file": "14-pause-Esc.png",
+   "unverified": [
+    "screen wanted pause got battle"
+   ]
+  },
+  {
+   "file": "14-pause-tab-next.png",
+   "unverified": [
+    "screen wanted pause got battle"
+   ]
+  },
+  {
+   "resultsTextUnreadable": "GAME OVER RETRY CHAPTER SELECT"
+  }
+ ],
+ "contexts": {
+  "viewport": "1600x900",
+  "query": null,
+  "touch": null,
+  "gamepad": null,
+  "reduceMotion": null
+ },
+ "scriptedChange": "not applicable",
+ "budgetMs": 1800000,
+ "briefingText": "AURON “Nineteen fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.” ENTER / ESC SKIP — 20 SECONDS, ONCE D NEVER SHOW THIS AGAIN",
+ "boardAtEntry": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 19
+ },
+ "boardWalk": [],
+ "door": {
+  "word": "limit",
+  "how": "typed on the chapter board, one key at a time (no card; the board opens party prep itself)"
+ },
+ "preScene": {
+  "lines": []
+ },
+ "firstState": {
+  "chapter": "ff7-guard-scorpion",
+  "game": "ff7",
+  "scene": "sector1-reactor",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 1,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": true,
+  "exitIntent": null,
+  "playTimeMs": 0,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "cloud",
+    "side": "party",
+    "art": "ff7-film-cloud",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "barret",
+    "side": "party",
+    "art": "ff7-film-barret",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "guard-scorpion",
+    "side": "enemy",
+    "art": "ff7-film-guard-scorpion",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   }
+  ],
+  "spellFx": {
+   "fx": {
+    "new": false,
+    "guard": {
+     "level": 0,
+     "scaleStep": 0,
+     "calmMs": 16.6,
+     "budgetMs": 20.75,
+     "busyMs": 0,
+     "steps": 0
+    }
+   },
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0,
+   "cpuMeanMs": 0,
+   "flights": {
+    "launched": 0,
+    "landed": 0,
+    "live": 0,
+    "lastLaunchAt": 0,
+    "lastLandAt": 0
+   }
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "command:cloud",
+   "awaitingMenu": true,
+   "played": 0,
+   "lastEvents": [],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 0,
+   "ticks": 50,
+   "events": 0,
+   "result": null,
+   "combatants": [
+    {
+     "id": "cloud",
+     "hp": 316,
+     "maxHp": 316,
+     "mp": 57,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "barret",
+     "hp": 317,
+     "maxHp": 317,
+     "mp": 43,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "guard-scorpion",
+     "hp": 800,
+     "maxHp": 800,
+     "mp": 0,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": []
+ },
+ "cardFirst": {
+  "viewport": "1600x900",
+  "card": null,
+  "rows": 0,
+  "overlapPx2": 0,
+  "cardText": ""
+ },
+ "focFirst": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [],
+  "cmd": [],
+  "overlaps": [],
+  "advisorMinEffPx": null,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": []
+ },
+ "focAfterCoach": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [],
+  "cmd": [],
+  "overlaps": [],
+  "advisorMinEffPx": null,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": []
+ },
+ "advisorText": "",
+ "advisorHiddenByN": true,
+ "intentText": "",
+ "pause": {
+  "esc": {
+   "paused": false,
+   "text": "NAME BARRIER Cloud Barret HP MP LIMIT TIME 316 / 316 57 317 / 317 43 Attack Magic Item Search Scope PAUSE"
+  },
+  "tabs": [
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  "resumedByEsc": true,
+  "pOpens": true,
+  "pCloses": true
+ },
+ "firstRows": [],
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "defeat",
+   "seed": 1,
+   "turns": 0,
+   "firstEnemyAction": {
+    "seq": 1,
+    "actor": "guard-scorpion",
+    "ability": "Search Scope",
+    "targets": [
+     "barret"
+    ]
+   },
+   "final": true,
+   "stalledAt": null
+  }
+ ],
+ "seamCard": [],
+ "pauseRecoveries": 0,
+ "misses": [],
+ "orders": [],
+ "escapes": [],
+ "targetMismatches": [],
+ "pickerPlays": [],
+ "stallRecoveries": 0,
+ "lastChain": {
+  "links": 1,
+  "chainLength": 1,
+  "phase": "play:defeat",
+  "turn": 0,
+  "ms": 842554
+ },
+ "mgSince": null,
+ "emptyMenuPolls": 2645,
+ "turns": 0,
+ "fightMs": 842867,
+ "afterFight": "results",
+ "outcome": "defeat",
+ "outcomeFrom": "engine log, screen left the battle (the results text names neither Victory nor Defeat)",
+ "stalledAt": null,
+ "logKinds": {
+  "turn-start": 60,
+  "action-start": 46,
+  "message": 19,
+  "action-end": 46,
+  "damage": 16,
+  "limit-gauge": 10,
+  "form-change": 14,
+  "ko": 2,
+  "defeat": 1
+ },
+ "continuity": {
+  "file": "continuity/continuity.json",
+  "checks": {
+   "CHK-026": "FAIL",
+   "CHK-027": "FAIL"
+  },
+  "reasons": {
+   "CHK-026": [
+    "15 swap(s) of a standing figure move its feet more than the tolerance (worst 47.5 px at 1600 wide)"
+   ],
+   "CHK-027": [
+    "2.11 snaps per minute is over 0.25"
+   ]
+  },
+  "error": null
+ },
+ "post": {
+  "screen": "results",
+  "lines": []
+ },
+ "resultsScreen": "results",
+ "resultsText": "GAME OVER RETRY CHAPTER SELECT",
+ "afterRetry": "battle",
+ "retryReachedBattle": true,
+ "retrySeed": 1001,
+ "dboxTimeline": [],
+ "audioDebugFile": {
+  "file": "ff7-guard-scorpion-win-live77/audio-debug.jsonl",
+  "samples": 3,
+  "note": "one whole audioDebug() per line; nothing cut"
+ },
+ "minutes": 15.01,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "media": [
+  "art/title/echo.webp",
+  "art/characters/auron/idle.png",
+  "art/backdrops/dreams-end.webp",
+  "art/backdrops/gagazet.webp",
+  "art/characters/mortiorchis/idle.png",
+  "art/characters/seymour-flux-body/idle.png",
+  "art/portraits/tidus.webp",
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "audio/sfx/sprite-v2.mp3",
+  "art/portraits/yuna.webp",
+  "art/portraits/kimahri.png",
+  "audio/music/chapter-select.mp3",
+  "art/backdrops/gagazet.thumb.webp",
+  "art/characters/seymour-flux-body/idle.thumb.png",
+  "audio/music/boss-ff7-guard.mp3",
+  "art/backdrops/ff7-film-reactor.webp",
+  "art/characters/ff7-film-cloud/idle.png",
+  "art/characters/ff7-film-barret/idle.png",
+  "art/characters/ff7-film-guard-scorpion/idle.png",
+  "art/characters/ff7-film-guard-scorpion/hurt.png",
+  "art/characters/ff7-film-cloud/attack.png",
+  "art/characters/ff7-film-cloud/hurt.png",
+  "art/characters/ff7-film-barret/attack.png",
+  "art/characters/ff7-film-barret/hurt.png",
+  "art/characters/ff7-film-cloud/back.png",
+  "art/characters/ff7-film-cloud/spin.png",
+  "art/characters/ff7-film-cloud/windup.png",
+  "art/characters/ff7-film-barret/aim.png",
+  "art/characters/ff7-film-barret/punch.png",
+  "art/characters/ff7-film-cloud/follow.png",
+  "art/characters/ff7-film-cloud/victory.png",
+  "art/characters/ff7-film-barret/victory.png",
+  "audio/music/pause.mp3",
+  "art/characters/ff7-film-guard-scorpion-tail-up/hurt.png",
+  "art/characters/ff7-film-guard-scorpion-tail-up/idle.png"
+ ]
+}

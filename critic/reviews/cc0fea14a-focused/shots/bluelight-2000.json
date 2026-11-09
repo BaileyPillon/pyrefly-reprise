@@ -1,0 +1,57 @@
+{
+ "word": "bluelight",
+ "expectId": "ff7-jenova-life",
+ "W": "2000",
+ "H": "1012",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-BAH_qvc7.js"
+  },
+  {
+   "s": "after-word",
+   "opened": true,
+   "screen": "battle",
+   "state": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"battle\",\"stack\":[\"battle\"],\"overlayDepth\":0,\"frameCount\":486,\"elapsed\":8.8,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-underground\",\"scen"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 37
+  },
+  {
+   "s": "chapter-id",
+   "idNow": null
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "rows",
+   "stackPresent": false,
+   "rows": []
+  },
+  {
+   "s": "after-turns",
+   "screen": "battle"
+  },
+  {
+   "s": "end",
+   "screen": "results",
+   "ms": 24484
+  },
+  {
+   "s": "end-text",
+   "text": "EXP 4000 AP 350 Cloud LV 38 EXP +4000 Tifa LV 38 EXP +4000 Barret LV 38 EXP +4000"
+  }
+ ],
+ "rows": {
+  "stackPresent": false,
+  "rows": []
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": []
+}

@@ -1,0 +1,816 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-11-09T05:31:47.767Z",
+ "build": {
+  "mainSha": "cc0fea14a",
+  "bundle": "BAH_qvc7"
+ },
+ "targetVersion": "1d05c392cb7a763b5ebc74fc1814694f06c4e3b6c610470efa866d23640e047d",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "FAIL",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "The three new hidden chapters (44 Jenova LIFE, 46 Ifrit at Kilika, 49 Wendigo) open by their typed words, play to a result with real input and write only to the experiments' store; 0 console errors and 0 404s in every run; the data equals the research.",
+  "No regression against live: the Guard Scorpion is identical on live and on the candidate (continuity numbers equal, golden hashes pass); FFX Chapter 1 and FFX-2 Chapter 4 reach their results with the count lines settling on their data-final amounts and every Sphere Level bar inside its cap (the Omega Ruins past-cap defect of release 77 is fixed in the arithmetic and pinned by tests).",
+  "Wendigo holds 59.7 fps in the fight on a shared GPU (a noisy reading, no live comparison since the chapter is new) and its lose-and-retry teardown is flat over five retries (39 geometries, 74 textures, 52 programs from retry 1 to 5; heap 34.0 to 35.4 MB, warm-up not a per-retry cost).",
+  "The only FAIL checks (CHK-026, CHK-027) are the live class of continuity failure inside brand-new chapters (R78-1 major, R78-2 polish), so they are disclosed and do not hold the build; no critical defect was found."
+ ],
+ "checks": [
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Words ifrit, bluelight and wendigo typed with real keys on the chapter-select board each opened their chapter; prep and scenes advanced with Enter; real Attack presses played turns; 1600x900 and 2000x1012 (all three) and 390x844 (ifrit and bluelight open, wendigo stays shut: desktop only by design). Jenova LIFE and Guard Scorpion were won with real keys only (the foe HP set to 300 first: a named setup aid) and left to the chapter board with Enter.",
+   "game": "FFX: wendigo; FFX-2: ifrit; FF7: bluelight, limit",
+   "chapter": "44, 46, 49 and the Guard Scorpion",
+   "state": "board to results to board",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/doors.log",
+    "critic/reviews/cc0fea14a-focused/doors2.log",
+    "critic/reviews/cc0fea14a-focused/results.log",
+    "critic/reviews/cc0fea14a-focused/results2.log",
+    "critic/reviews/cc0fea14a-focused/shots"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 40
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every script waits for title, chapter-select, party-prep or battle, and results, before a capture; a failed wait writes FAILED and stops (none did).",
+   "game": "all",
+   "chapter": "all run",
+   "state": "every capture",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/shots",
+    "critic/reviews/cc0fea14a-focused/shots-results"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "ifrit: real attacks then autoBattle(\"intended\") reached the FFX-2 results (EXP 1,800, Angel Earrings) and the post scene. wendigo: a Victory results page (AP 2,580, gil 3,960, Ability Sphere x2, Power Sphere: the data and the research), then the board. bluelight: a real-key win to the FF7 results windows (EXP 4000, AP 350) and the board, and a real-key GAME OVER with RETRY and CHAPTER SELECT. Guard Scorpion: a real-key win to its results and the board. Seymour Flux and FFX-2 Bahamut reached results. Mirror Aeons was NOT won (see CHK-002).",
+   "game": "all",
+   "chapter": "44, 46, 49, 1, 4, Guard Scorpion",
+   "state": "results",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/results.log",
+    "critic/reviews/cc0fea14a-focused/results2.log",
+    "critic/reviews/cc0fea14a-focused/doors.log",
+    "critic/reviews/cc0fea14a-focused/shots-results/wendigo-1600-03-results-settled.png",
+    "critic/reviews/cc0fea14a-focused/shots-results/jenova-win2-1600-03-results-settled.png"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 30
+  },
+  {
+   "id": "CHK-025",
+   "result": "PASS",
+   "reason": "A fresh browser context, board snapshot, word, a real-key win, snapshot again: for bluelight, ifrit and wendigo the only localStorage key that changed was the experiments' store (pyrefly-reprise:experiments:v1: attempts, clears, best time); the main save key was not touched; the board showed no card for any of them before the word.",
+   "game": "all three",
+   "chapter": "44, 46, 49",
+   "state": "after a win",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/shots-save/bluelight.json",
+    "critic/reviews/cc0fea14a-focused/shots-save/ifrit.json",
+    "critic/reviews/cc0fea14a-focused/shots-save/wendigo.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 8
+  },
+  {
+   "id": "CHK-013",
+   "result": "PASS",
+   "reason": "On the dist-gate: art-derive verify PASS (5,690 masters, 1,503 WebP, 5,281 pixel-compared), art-derive audit PASS (0 dangling), lake-models-verify PASS (24 files, 127.8 MiB), art-browser-load PASS (5,799 images in Chromium and WebKit, 0 failed), pose-gate census 1,257 paintings 0 fail. The FF7 Tifa and Jenova paintings, the Water Altar plate and the Wendigo plate draw in the running game; Wendigo draws real Meshy models (no capsule in any capture). The painting of Ifrit is the declared FFX stand-in. The tool's own \"no capsule\" check cannot run on a production build (its handle is dev only): read from pictures.",
+   "game": "all",
+   "chapter": "new chapters",
+   "state": "install proofs and running game",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/art-verify.log",
+    "critic/reviews/cc0fea14a-focused/art-audit.log",
+    "critic/reviews/cc0fea14a-focused/misc.log",
+    "critic/reviews/cc0fea14a-focused/static/pose-census.json",
+    "critic/reviews/cc0fea14a-focused/wendigo/stills"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 12
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Data sampled against research and pinned by tests: Ifrit Lv 23, HP 8,820, MP 9,999, STR 82 (research/re-ffx2-ifrit-kilika.md, row 165); Wendigo 18,000 HP, no element, 3,000 gil / 2,000 AP, Guardians 1,200 HP and 290 AP (research/re-ffx-wendigo-lake-macalania.md; results page 2,580 AP and 3,960 gil = 2,000+2x290 and 3,000+2x480); Jenova LIFE 10,000 HP / 300 MP (research/ff7-jenova-life.md); 84 test files, 1,057 tests pass (jenova, ifrit, wendigo, r78, results, ff7-golden, ffx2-atb-golden, chapter-doors, berserk, status sweep, sphere, lake); tsc clean.",
+   "game": "all",
+   "chapter": "44, 46, 49",
+   "state": "data",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/vitest.log",
+    "critic/reviews/cc0fea14a-focused/tsc.log",
+    "critic/reviews/cc0fea14a-focused/shots/ifrit-1600-06-act.png",
+    "critic/reviews/cc0fea14a-focused/shots/wendigo-1600-05-menu.png"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 10
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Case from research/: Jenova LIFE FF7 only, Ifrit FFX-2 only, Wendigo FFX only; the Berserk default-attack and the status-decay fixes FFX only; the results counts and the Sphere Level bar FFX only (the FFX-2 rows read a dressphere bar, untouched). Present in the intended game: FF7 HUD with Tifa as third member in 44; FFX-2 HUD and ATB gauges in 46; FFX CTB HUD with Tidus, Yuna, Rikku in 49. Absent in the others: the FF7 Guard Scorpion is unchanged (ff7-golden 40 hashes pass; its continuity numbers are identical on live and on the candidate: 30 swaps, 2.11 snaps a minute, 47.5 px); FFX-2 Bahamut results read EXP, AP per dressphere, no Sphere Level rows; FFX Flux shows S.LV bars within their caps.",
+   "game": "both and FF7",
+   "chapter": "44, 46, 49, 1, 4, Guard Scorpion",
+   "state": "running game",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/results.log",
+    "critic/reviews/cc0fea14a-focused/results2.log",
+    "critic/reviews/cc0fea14a-focused/continuity/continuity-summary-ff7-guard-scorpion.json",
+    "critic/reviews/cc0fea14a-focused/continuity-live/continuity-summary-ff7-guard-scorpion.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 10
+  },
+  {
+   "id": "CHK-023",
+   "result": "PASS",
+   "reason": "Layout at 1600x900, 2000x1012 and 390x844 for the three new chapters (menus, results; wendigo shut at 390) and at 1600 and 390 for FFX Chapter 1 results (full-bleed painting with ink sheet, the approved phone option B): numbers and CONFIRM readable, no horizontal scroll, the count lines settle on their data-final amounts (0 mismatches in seven runs), the Sphere Level rows within their caps, 0 console errors and 0 404s in every run.",
+   "game": "all",
+   "chapter": "44, 46, 49, 1, 4",
+   "state": "menu and results",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/A-results.jpg",
+    "critic/reviews/cc0fea14a-focused/phone-results.jpg",
+    "critic/reviews/cc0fea14a-focused/shots/ifrit-2000-05-menu.png",
+    "critic/reviews/cc0fea14a-focused/shots/wendigo-2000-05-menu.png",
+    "critic/reviews/cc0fea14a-focused/shots/ifrit-390-05-menu.png"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 15
+  },
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "reason": "The candidate's index.html names index-BAH_qvc7.js, the bundle every page loaded (boot step of each run); tools/art-derive verify and audit, lake-models-verify and art-browser-load all ran on this dist-gate. The live-site smoke is the post-deploy live review's.",
+   "game": "all",
+   "chapter": "candidate",
+   "state": "artifact",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/doors.log",
+    "critic/reviews/cc0fea14a-focused/art-verify.log",
+    "critic/reviews/cc0fea14a-focused/misc.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 3
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "reason": "Harness on the candidate: Jenova LIFE FAIL (38 standing swaps move the feet more than the tolerance, worst 48.4 px, head up to 11.9 percent, read by the figure mass: FF7 painted frames are unregistered); Ifrit FAIL (5 of 275 swaps of the girls' arms-up poses outside the height band, stature 0.879 to 1.079; live FFX-2 Ixion at Djose, the same stage and the same girls, fails the same way: 1 swap, 0.877 to 1.108); Guard Scorpion FAIL identically on live and on the candidate (15 swaps, 47.5 px); Wendigo UNVERIFIED (the 3D stage has no painted pose swaps: 0 s read). Static pose census 0 fail. Nothing the change added to an old chapter; the new chapters carry the live class of failure.",
+   "game": "FF7, FFX-2",
+   "chapter": "44, 46, 49, Guard Scorpion",
+   "state": "continuity harness",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/continuity/continuity-summary.json",
+    "critic/reviews/cc0fea14a-focused/continuity-live/continuity-summary-ffx2-ixion-djose.json",
+    "critic/reviews/cc0fea14a-focused/continuity-live/continuity-summary-ff7-guard-scorpion.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 55
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "Jenova LIFE FAIL: 45 hard cuts in 98 s (27.58 snaps a minute against a tolerance of 0.25), every one an idle to hurt or hurt to idle swap of an FF7 painted figure; the live Guard Scorpion has the same kind at 2.11 a minute (identical on the candidate). Ifrit PASS (0 snaps, worst jerk 0 px, ghosting 3,455 ms a minute against 4,949 on live Djose); Wendigo UNVERIFIED (not a painted stage). Frame rate 59.7 to 60 fps in every chapter read.",
+   "game": "FF7, FFX-2",
+   "chapter": "44, 46, 49, Guard Scorpion",
+   "state": "continuity harness",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-002",
+   "result": "UNVERIFIED",
+   "reason": "Of the 19 listed chapters only Seymour Flux (1), FFX-2 Bahamut (4) and the FF7 Guard Scorpion were played through in a browser; Mirror Aeons was reached but the party fell (autoBattle and a real-key attack loop do not beat the Dark Aeons even with their HP at 1), so its Sphere Level bar (declared different) was not seen; the other 16 were covered by the unit suite only (the focused set of 84 files passes; the builders ran the full suite: 2,161 files, 34,500 tests, 0 failed).",
+   "game": "both",
+   "chapter": "19 listed chapters",
+   "state": "regression",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/vitest.log",
+    "critic/reviews/cc0fea14a-focused/results3.log"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-003",
+   "result": "NOT APPLICABLE",
+   "reason": "No legibility change to existing HUD text; the new chapters reuse the existing HUDs (read in the menu captures).",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-004",
+   "result": "NOT APPLICABLE",
+   "reason": "No panel that names an action was changed.",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-005",
+   "result": "NOT APPLICABLE",
+   "reason": "The move advisor was not changed beyond the new chapters' rows; its cards read correctly in the captures (Ifrit: Attack 58 percent, Firaga 37 percent).",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/shots/ifrit-1600-06-act.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "No raw id or debug text in the HUDs read in the three new chapters at 1600, 2000 and 390; the first-time coach card is player copy.",
+   "game": "all",
+   "chapter": "44, 46, 49",
+   "state": "menu",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/shots/ifrit-2000-05-menu.png",
+    "critic/reviews/cc0fea14a-focused/shots/wendigo-2000-05-menu.png",
+    "critic/reviews/cc0fea14a-focused/shots/bluelight-1600-05-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 3
+  },
+  {
+   "id": "CHK-008",
+   "result": "NOT APPLICABLE",
+   "reason": "Panel placement against actors was not changed; one overlap (the coach card over the advisor numbers in Ifrit) is recorded as R78-4.",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-009",
+   "result": "NOT APPLICABLE",
+   "reason": "No name display was changed.",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "reason": "Every foe is visible and listed in the turn order in Wendigo (Wendigo, Guado Guardian A and B), Ifrit and Jenova LIFE.",
+   "game": "all",
+   "chapter": "44, 46, 49",
+   "state": "menu",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/shots/wendigo-2000-05-menu.png",
+    "critic/reviews/cc0fea14a-focused/shots/bluelight-1600-05-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 2
+  },
+  {
+   "id": "CHK-018",
+   "result": "PASS",
+   "reason": "art-derive audit: every literal art name is a shipped file or a derived master, 0 dangling; art-browser-load loaded all 5,799 images; lake-models-verify: the 24 model files whole.",
+   "game": "all",
+   "chapter": "candidate",
+   "state": "artifact",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/art-audit.log",
+    "critic/reviews/cc0fea14a-focused/misc.log"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 2
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "ffx2-ifrit-kilika",
+    "game": "ffx2",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "PASS"
+    },
+    "battleSeconds": 152.5,
+    "swaps": 275,
+    "snapsPerMinute": 0,
+    "ghostMsPerMinute": 3456,
+    "maxHeadJumpPct": 0.1,
+    "maxFeetShiftPx": 0.7,
+    "worstJerkPx": 0,
+    "minStature": 0.879,
+    "heightOverBand": 5,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 0,
+    "dashesWorstPx": 0,
+    "frameP99Ms": 25.4,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.7,
+    "dedicated": true,
+    "strips": 15,
+    "worstSwapStrips": [
+     "ffx2-ifrit-kilika-win-cc0fea14a/continuity/strips/swap-106-paine-item-ready.jpg",
+     "ffx2-ifrit-kilika-win-cc0fea14a/continuity/strips/swap-180-paine-ready-item.jpg",
+     "ffx2-ifrit-kilika-win-cc0fea14a/continuity/strips/swap-128-paine-attack-follow.jpg",
+     "ffx2-ifrit-kilika-win-cc0fea14a/continuity/strips/swap-280-paine-item-victory.jpg",
+     "ffx2-ifrit-kilika-win-cc0fea14a/continuity/strips/swap-122-yuna-attack-follow.jpg",
+     "ffx2-ifrit-kilika-win-cc0fea14a/continuity/strips/swap-233-yuna-ready-attack.jpg",
+     "ffx2-ifrit-kilika-win-cc0fea14a/continuity/strips/swap-205-paine-ready-attack.jpg",
+     "ffx2-ifrit-kilika-win-cc0fea14a/continuity/strips/swap-110-paine-follow-idle.jpg",
+     "ffx2-ifrit-kilika-win-cc0fea14a/continuity/strips/swap-158-paine-critical-ready.jpg",
+     "ffx2-ifrit-kilika-win-cc0fea14a/continuity/strips/swap-059-paine-od-x2-warrior-power-break-ready.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "ff7-jenova-life",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 97.9,
+    "swaps": 45,
+    "snapsPerMinute": 27.59,
+    "ghostMsPerMinute": 0,
+    "maxHeadJumpPct": 11.9,
+    "maxFeetShiftPx": 48.4,
+    "worstJerkPx": 0,
+    "minStature": null,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 0,
+    "dashesWorstPx": 0,
+    "frameP99Ms": 19,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.9,
+    "dedicated": true,
+    "strips": 10,
+    "worstSwapStrips": [
+     "ff7-jenova-life-win-cc0fea14a/continuity/strips/swap-004-barret-idle-hurt.jpg",
+     "ff7-jenova-life-win-cc0fea14a/continuity/strips/swap-033-barret-hurt-idle.jpg",
+     "ff7-jenova-life-win-cc0fea14a/continuity/strips/swap-005-tifa-hurt-idle.jpg",
+     "ff7-jenova-life-win-cc0fea14a/continuity/strips/swap-021-tifa-idle-hurt.jpg",
+     "ff7-jenova-life-win-cc0fea14a/continuity/strips/swap-009-cloud-idle-hurt.jpg",
+     "ff7-jenova-life-win-cc0fea14a/continuity/strips/swap-003-cloud-hurt-idle.jpg",
+     "ff7-jenova-life-win-cc0fea14a/continuity/strips/swap-014-jenova-life-cast-idle.jpg",
+     "ff7-jenova-life-win-cc0fea14a/continuity/strips/swap-023-jenova-life-idle-cast.jpg",
+     "ff7-jenova-life-win-cc0fea14a/continuity/strips/swap-031-barret-idle-hurt.jpg",
+     "ff7-jenova-life-win-cc0fea14a/continuity/strips/swap-043-barret-idle-hurt.jpg"
+    ],
+    "unverified": null
+   },
+   {
+    "chapter": "wendigo",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "UNVERIFIED",
+     "CHK-027": "UNVERIFIED"
+    },
+    "battleSeconds": null,
+    "swaps": null,
+    "snapsPerMinute": null,
+    "ghostMsPerMinute": null,
+    "maxHeadJumpPct": null,
+    "maxFeetShiftPx": null,
+    "worstJerkPx": null,
+    "minStature": null,
+    "heightOverBand": null,
+    "feetSilOver": null,
+    "swapJerksWorstPx": null,
+    "dashesWorstPx": null,
+    "frameP99Ms": null,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": null,
+    "dedicated": null,
+    "strips": 0,
+    "worstSwapStrips": [],
+    "unverified": [
+     "the probe saw no battle (15265 frames, 8 figures): no battle screen with its field shown"
+    ]
+   },
+   {
+    "chapter": "ff7-guard-scorpion",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 852.7,
+    "swaps": 30,
+    "snapsPerMinute": 2.11,
+    "ghostMsPerMinute": 0,
+    "maxHeadJumpPct": 5.6,
+    "maxFeetShiftPx": 47.5,
+    "worstJerkPx": 36.5,
+    "minStature": null,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 36.5,
+    "dashesWorstPx": 31.3,
+    "frameP99Ms": 18.9,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 60,
+    "dedicated": true,
+    "strips": 15,
+    "worstSwapStrips": [
+     "ff7-guard-scorpion-win-cc0fea14a/continuity/strips/swap-032-barret-idle-hurt.jpg",
+     "ff7-guard-scorpion-win-cc0fea14a/continuity/strips/swap-003-barret-hurt-idle.jpg",
+     "ff7-guard-scorpion-win-cc0fea14a/continuity/strips/swap-007-cloud-hurt-idle.jpg",
+     "ff7-guard-scorpion-win-cc0fea14a/continuity/strips/swap-008-cloud-idle-hurt.jpg",
+     "ff7-guard-scorpion-win-cc0fea14a/continuity/strips/swap-043-barret-idle-hurt.jpg",
+     "ff7-guard-scorpion-win-cc0fea14a/continuity/strips/swap-041-barret-idle-hurt.jpg",
+     "ff7-guard-scorpion-win-cc0fea14a/continuity/strips/swap-002-barret-idle-hurt.jpg",
+     "ff7-guard-scorpion-win-cc0fea14a/continuity/strips/swap-024-barret-idle-hurt.jpg",
+     "ff7-guard-scorpion-win-cc0fea14a/continuity/strips/swap-026-barret-idle-hurt.jpg",
+     "ff7-guard-scorpion-win-cc0fea14a/continuity/strips/swap-000-barret-idle-hurt.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 1103.1,
+  "counted": 350,
+  "swaps": 370,
+  "size": {
+   "judged": 350,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 0,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 11.9,
+   "maxHeadJumpPctRegistration": 0.1,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 48.4,
+   "feetOverTolerance": 53,
+   "feetDesigned": 0,
+   "feetDesignedWorstPx": 0,
+   "headMeasured": 350,
+   "headRegistration": 189,
+   "headRig": 86,
+   "rigSwaps": 86,
+   "headSilhouette": 75,
+   "headUnmeasured": 0,
+   "heightMeasured": 275,
+   "heightOverBand": 5,
+   "heightWaived": 0,
+   "minStature": 0.879,
+   "maxStature": 1.079,
+   "koLengthMeasured": 0,
+   "minKoLength": null,
+   "koLengthReported": 0,
+   "feetSilMeasured": 189,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 2.8,
+   "holdSwaps": 189,
+   "worstRealHeadPct": 30.9,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "variantHeadSwaps": 0,
+   "worstVariantHeadPct": 0,
+   "variantHeadOutsideBand": 0,
+   "unregisteredSwaps": 75
+  },
+  "motion": {
+   "snaps": 75,
+   "snapsPerMinute": 4.08,
+   "hardCuts": 75,
+   "hardCutsPerMinute": 4.08,
+   "ghostSwaps": 189,
+   "ghostFrames": 545,
+   "worstGhostSeverity": 0.292,
+   "ghostOverFail": 0,
+   "jerks": 19,
+   "worstJerkPx": 36.5,
+   "jerksOverFail": 0,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0.057,
+   "maxCentroidShiftPx": 108.3,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 2,
+   "smearsPlanned": 0,
+   "smearSwaps": 0,
+   "smearSnapsExcused": 0,
+   "jerksSmeared": 0,
+   "worstSmearedJerkPx": 0,
+   "swapJerks": 14,
+   "swapJerksWorstPx": 36.5,
+   "swapJerksOverFail": 0,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 5,
+   "dashesWorstPx": 31.3,
+   "dashesOverFail": 0,
+   "jerksLongFrame": 1,
+   "swapJerksLongFrame": 1,
+   "swapJerksSteadyOverFail": 0,
+   "ghostMs": 8782,
+   "ghostMsPerMinute": 478,
+   "ghostFramesPerMinute": 29.6,
+   "ghostFrames60PerMinute": 28.7
+  },
+  "frameTime": {
+   "frames": 66123,
+   "longFrames": 31,
+   "longFramePct": 0,
+   "worstP99Ms": 25.4,
+   "maxMs": 193.9,
+   "longMs": 34,
+   "source": "continuity-probe",
+   "pacingNumber": false
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "53 swap(s) of a standing figure move its feet more than the tolerance (worst 48.4 px at 1600 wide)",
+     "5 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.879 to 1.079; the bands are tools/posescale/pose-bands.mjs's)"
+    ],
+    "note": "189 of 350 measured swaps had a registered head (tolerance 3 percent); 86 were read from a rig's own head mesh (tolerance 3 percent; 86 swap(s) were changes of a rig's key); 75 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 275 swap(s) (stature 0.879 to 1.079, 0 out of band but waived), the silhouette's own feet 189 swap(s) (worst 2.8 px, 0 waived), 189 swap(s) across a recorded hold (real head worst 30.9 percent from the idle's), 75 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "4.08 snaps per minute is over 0.25"
+    ],
+    "note": "1 of 19 jerk(s) fell on a frame of more than 34 ms (1 of the 14 at a swap; 0 of the swap jerks over the line on a steady frame): the frame clock multiplies every move, so read summary.frameTime beside them"
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 4 chapter(s), 1103.1 s of battle, 59.7 to 60 fps, 3 of 4 run by the dedicated harness; CHK-026 FAIL (53 swap(s) of a standing figure move its feet more than the tolerance (worst 48.4 px at 1600 wide); 5 swap(s) draw a pose outside its height band against the idle, read from the pixels (stature 0.879 to 1.079; the bands are tools/posescale/pose-bands.mjs's)); CHK-027 FAIL (4.08 snaps per minute is over 0.25); 478 ms of see-through a minute (28.7 frames a minute at 60 Hz); 1 chapter(s) were not run by the dedicated harness (no marker: an older file or a failed run), so their numbers are not scored Read by harness 73dc8de38682 (38 files; tree . at cc0fea14a; policy 5ef4a3ed; probe v3 2c2bfe73; pose table e38d3f0d (142 subjects); waivers a6c1b317 (102 rows)).",
+  "base": "http://127.0.0.1:5471/",
+  "date": "2026-11-09T05:25:41.673Z",
+  "poseMeasure": {
+   "path": "docs\\target\\pose-measure.json",
+   "source": "harness-tree",
+   "subjects": 142,
+   "sha256": "e38d3f0d10edd097b88342237fab8dfe777676d98abe5657d0b7f015d550c487",
+   "staleChapters": []
+  },
+  "harness": {
+   "schema": "continuity-harness/1",
+   "id": "73dc8de38682d2e93190e8b295770aea1ec593e710a727bb49e2bb25dfd51a87",
+   "tree": {
+    "root": ".",
+    "head": "cc0fea14a741d7dacf3d2d5841c4c1330e70cd43",
+    "dirty": []
+   },
+   "files": {
+    "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+    "critic/runner/lib/continuity-analyze.mjs": "4b7874e7dde6a9c25ce8df3a174021f99f552f43",
+    "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+    "critic/runner/lib/continuity-card.mjs": "2e0208df7bc9a922a27d519fc5ebb49bed3fafd9",
+    "critic/runner/lib/continuity-dissolve.mjs": "4a9a2ebc79b798dc6059312f0b885510f4cd79b3",
+    "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+    "critic/runner/lib/continuity-gaps.mjs": "7337b85eda92c5755d11ccbee84749ee231cfe3d",
+    "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+    "critic/runner/lib/continuity-ghostms.mjs": "d74a048e0c44be69d22b050973ec240fbec3db66",
+    "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+    "critic/runner/lib/continuity-probe.mjs": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25",
+    "critic/runner/lib/continuity-pure.mjs": "c30cf02831efe33d9726d0bae9f9b3e098292090",
+    "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+    "critic/runner/lib/continuity-rig-probe.mjs": "69f5933a74bb3f88d6e2bfbec336c51b602c25a5",
+    "critic/runner/lib/continuity-rig.mjs": "53b59d5a73f29dbcae1d67c3bf3ed8695498d045",
+    "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+    "critic/runner/lib/continuity-smear.mjs": "bb6bcae7b35d4d99465f0650e58554cc785af513",
+    "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+    "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+    "critic/runner/lib/continuity-summary.mjs": "c671aa6dbc9e6df72a767ace45e6a57cdb478053",
+    "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+    "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+    "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+    "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+    "critic/runner/lib/continuity-why.mjs": "e2f0063820045e9c5eb5bb2ece203c00bed1fe3d",
+    "critic/runner/lib/continuity.mjs": "d3fd3269395cfa928cd1566a81486359e28210cb",
+    "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+    "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+    "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+    "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+    "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+    "critic/runner/lib/route-pure.mjs": "9140964d011b587115ed6852f2967ad697115724",
+    "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+    "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+    "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+    "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+    "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+    "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+   },
+   "policy": {
+    "continuitySha256": "5ef4a3ed6fec14518548de8b462466822a3cf3a41f11528f8e8abb143de6fa43",
+    "fileSha256": "9c72460c4bdd463ef02f5e1f01c2baa3aa5334f392c29b114da466ca9c54cc71",
+    "override": false,
+    "overrideSha256": null
+   },
+   "probe": {
+    "version": 3,
+    "blob": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25"
+   },
+   "poseTable": {
+    "path": "docs\\target\\pose-measure.json",
+    "sha256": "e38d3f0d10edd097b88342237fab8dfe777676d98abe5657d0b7f015d550c487",
+    "subjects": 142,
+    "source": "harness-tree",
+    "buildSha": "cc0fea14",
+    "isCandidate": true
+   },
+   "waivers": {
+    "path": "docs\\target\\pose-waivers.json",
+    "sha256": "a6c1b31717f845002ca51b5340447e428495d7589041e40f9c50fabbee3490a6",
+    "rows": 102
+   },
+   "run": {
+    "query": null,
+    "setArt": null,
+    "browser": null
+   },
+   "changedDuringRun": false,
+   "chapterIds": [
+    "73dc8de38682d2e93190e8b295770aea1ec593e710a727bb49e2bb25dfd51a87"
+   ],
+   "unstamped": [],
+   "chaptersByOtherHarness": [],
+   "aggregateSha256": "333da1ab1f522203ecf10ce7723131e5f42ed24e3e29bf8948f4a26dfbc4f521"
+  }
+ },
+ "targets": {
+  "required": 2,
+  "matched": 2,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "R78-1",
+   "severity": "major",
+   "title": "Jenova LIFE (FF7): the painted figures cut between idle and hurt frames with a visible foot shift, 27.6 hard cuts a minute",
+   "game": "FF7",
+   "chapter": "ff7-jenova-life",
+   "expected": "no worse than the live FF7 chapter (Guard Scorpion: 2.11 snaps a minute, 47.5 px)",
+   "observed": "CHK-027 FAIL 27.58 snaps a minute (45 swaps in 98 s), CHK-026 FAIL (38 swaps, feet up to 48.4 px, head up to 11.9 percent). The same kind and size of shift as live; a hit-heavy fight makes it frequent.",
+   "repro": "continuity harness --chapters=ff7-jenova-life on the candidate",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/continuity/ff7-jenova-life-win-cc0fea14a/continuity/strips/swap-004-barret-idle-hurt.jpg",
+    "critic/reviews/cc0fea14a-focused/continuity/continuity-summary-ff7-jenova-life.json"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-026, CHK-027",
+   "where": "the FF7 film frames of the hurt pose (suspected: unregistered paintings, as the Guard Scorpion's)",
+   "fix": "register the FF7 hurt frames to the idle feet, or hold the idle frame under the hurt flash",
+   "acceptanceCheck": "the harness reads 0.25 snaps a minute or a documented waiver",
+   "introducedByCandidate": true,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "R78-2",
+   "severity": "polish",
+   "title": "Ifrit at Kilika: five swaps of the girls' arms-up poses draw outside the height band (stature up to 1.079; Paine item to ready x1.152 on the swap)",
+   "game": "FFX-2",
+   "chapter": "ffx2-ifrit-kilika",
+   "expected": "no swap outside the band",
+   "observed": "CHK-026 FAIL on 5 of 275 swaps (Paine and Yuna); the live Djose chapter (same stage, same girls) reads 1 swap outside, stature 0.877 to 1.108; CHK-027 PASS",
+   "repro": "continuity harness --chapters=ffx2-ifrit-kilika on the candidate and ffx2-ixion-djose on live",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/continuity/ffx2-ifrit-kilika-win-cc0fea14a/continuity/strips/swap-106-paine-item-ready.jpg",
+    "critic/reviews/cc0fea14a-focused/continuity-live/continuity-summary-ffx2-ixion-djose.json"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-026",
+   "where": "the shared FFX-2 party paintings on the Djose plate",
+   "fix": "a pose-band waiver or the measured painting repair already owed for the live chapters",
+   "acceptanceCheck": "heightOverBand 0 on the harness",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "R78-3",
+   "severity": "suggestion",
+   "title": "The continuity harness cannot read the Wendigo 3D stage, and the lake tool's \"no capsule\" check needs a dev server",
+   "game": "FFX",
+   "chapter": "wendigo",
+   "expected": "CHK-026 and CHK-027 read for a 3D chapter, the capsule check on a production build",
+   "observed": "harness: 0 s of battle read, both checks UNVERIFIED; tools/lake-capture.mjs reports \"the lake is a 3D stage with no capsule\" as failed on a production candidate because globalThis.__lake3d is dev only (the pictures show the real models)",
+   "repro": "node critic/runner/lib/continuity.mjs ... --chapters=wendigo; node tools/lake-capture.mjs --stills against the preview",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/continuity/continuity-summary-wendigo.json",
+    "critic/reviews/cc0fea14a-focused/wendigo-stills.log"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-026, CHK-027, CHK-013",
+   "where": "critic tooling",
+   "fix": "a motion read for rigged stages; read the model count from the renderer stats on a production build",
+   "acceptanceCheck": "both checks return PASS or FAIL for wendigo",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": true
+  },
+  {
+   "id": "R78-4",
+   "severity": "polish",
+   "title": "Ifrit: the first-time coach card (\"Gauges running\") covers the advisor's damage numbers at 2000x1012 and sits over the scene at 390x844",
+   "game": "FFX-2",
+   "chapter": "ffx2-ifrit-kilika",
+   "expected": "a coach card that leaves the advisor numbers readable",
+   "observed": "the card overlaps the Firaga damage rows for the girls; it fades on its own and shows once",
+   "repro": "type ifrit at 2000x1012, first menu",
+   "evidence": [
+    "critic/reviews/cc0fea14a-focused/shots/ifrit-2000-05-menu.png",
+    "critic/reviews/cc0fea14a-focused/shots/ifrit-390-05-menu.png"
+   ],
+   "confidence": "medium",
+   "requirement": "CHK-008",
+   "where": "coach card placement (shared with the other FFX-2 chapters; not compared with live)",
+   "fix": "place the card clear of the advisor card",
+   "acceptanceCheck": "no overlap at 1600, 2000 and 390",
+   "introducedByCandidate": "unknown",
+   "regressionVsLive": "unknown",
+   "inNewFeature": true
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "candidate dist-gate bundle index-BAH_qvc7.js served on 5471 by tools/candidate-build.mjs --serve, stopped by PID 62512, port confirmed closed",
+   "plan: depth deep, deepBeforeDeploy false, dataAudit true, approvedArtCheck false",
+   "three new chapters by word with real keys at 1600x900, 2000x1012 and 390x844",
+   "Jenova LIFE and Guard Scorpion real-key wins, Jenova LIFE real-key loss with RETRY card",
+   "Seymour Flux (1600 and 390) and FFX-2 Bahamut results with data-final and Sphere Level bars",
+   "Wendigo 1,810-frame fps, five-retry teardown, stills, results; CHK-025 save writes for the three words",
+   "continuity harness on ifrit, jenova, wendigo, guard-scorpion on the candidate and ixion-djose and guard-scorpion on live (reused as comparison)",
+   "art-derive verify and audit, lake-models-verify, art-browser-load, pose-gate census, tsc, 84 vitest files",
+   "target tiles: the chapter-1 results page (A-results.jpg) and the phone results (phone-results.jpg) compared with their approved targets"
+  ],
+  "reused": [
+   {
+    "what": "the full unit suite (2,161 files, 34,500 tests, 0 failed)",
+    "from": "the release 78 CHANGELOG checks line, run by the builders on this commit",
+    "why": "only the 84 files of the touched areas were re-run here"
+   }
+  ],
+  "notTested": [
+   "16 of the 19 listed chapters in a browser (unit suite only)",
+   "Mirror Aeons results and its Sphere Level bar (not won)",
+   "the Wendigo ice-break epilogue frames (the event log shows the win, the break and the results; no still of the break was captured)",
+   "Wendigo frame rate against a quiet GPU",
+   "live-site smoke (the live review owes it)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "deep review on the live build after the deploy (plan depth deep); it also owes the live smoke",
+ "elapsedMinutes": 135
+}

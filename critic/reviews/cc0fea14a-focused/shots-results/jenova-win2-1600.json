@@ -1,0 +1,101 @@
+{
+ "tag": "jenova-win2",
+ "how": "word:bluelight",
+ "W": "1600",
+ "H": "900",
+ "hp": "300",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-BAH_qvc7.js"
+  },
+  {
+   "s": "word",
+   "opened": true
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 1
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "hp-edit",
+   "id": "jenova-life",
+   "before": 10000,
+   "after": 300,
+   "keys": [
+    "id",
+    "name",
+    "side",
+    "spriteKey",
+    "stats",
+    "hp",
+    "mp",
+    "statuses",
+    "affinities",
+    "immunities",
+    "immunityFlags",
+    "controller"
+   ]
+  },
+  {
+   "s": "keys-ended",
+   "screen": "results",
+   "ms": 5103
+  },
+  {
+   "s": "at",
+   "screen": "results",
+   "ms": 1
+  },
+  {
+   "s": "early",
+   "finals": [],
+   "text": "EXP 4000 AP 350 Cloud LV 38 EXP +2963 Tifa LV 38 EXP +2963 Barret LV 38 EXP +2963"
+  },
+  {
+   "s": "settled",
+   "finals": [],
+   "text": "EXP 4000 AP 350 Cloud LV 38 EXP +4000 Tifa LV 38 EXP +4000 Barret LV 38 EXP +4000"
+  },
+  {
+   "s": "final-vs-shown-mismatch",
+   "count": 0,
+   "mism": []
+  },
+  {
+   "s": "bar-within-cap",
+   "ok": true
+  },
+  {
+   "s": "confirm-press",
+   "k": 0,
+   "screen": "results"
+  },
+  {
+   "s": "confirm-press",
+   "k": 1,
+   "screen": "chapter-select"
+  },
+  {
+   "s": "after-confirm",
+   "screen": "chapter-select"
+  }
+ ],
+ "early": {
+  "finals": [],
+  "text": "EXP 4000 AP 350 Cloud LV 38 EXP +2963 Tifa LV 38 EXP +2963 Barret LV 38 EXP +2963"
+ },
+ "settled": {
+  "finals": [],
+  "text": "EXP 4000 AP 350 Cloud LV 38 EXP +4000 Tifa LV 38 EXP +4000 Barret LV 38 EXP +4000"
+ },
+ "noBadBar": true,
+ "consoleErrors": [],
+ "notFound": []
+}

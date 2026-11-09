@@ -1,0 +1,179 @@
+{
+ "tag": "ffx-flux-phone",
+ "how": "sel:seymour-flux",
+ "W": "390",
+ "H": "844",
+ "hp": "",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-BAH_qvc7.js"
+  },
+  {
+   "s": "selected",
+   "id": "seymour-flux"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 33185
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "real-attack"
+  },
+  {
+   "s": "battle-ended",
+   "screen": "cutscene",
+   "ms": 86801
+  },
+  {
+   "s": "at",
+   "screen": "results",
+   "ms": 810
+  },
+  {
+   "s": "early",
+   "finals": [
+    {
+     "shown": "8,839",
+     "final": "10000"
+    },
+    {
+     "shown": "5,303",
+     "final": "6000"
+    },
+    {
+     "shown": "+8,839 AP",
+     "final": "10000"
+    },
+    {
+     "shown": "+8,839 AP",
+     "final": "10000"
+    },
+    {
+     "shown": "+8,839 AP",
+     "final": "10000"
+    },
+    {
+     "shown": "+8,839 AP",
+     "final": "10000"
+    }
+   ],
+   "text": "RESULTS · 1:42 MT. GAGAZET — THE PROMINENCE · CLEARED Victory NEW BEST ...Okay. Next one. AP 8,839 ×4 PARTY GIL 5,303 ITEMS Lv. 4 Key Sphere T Tidus +8,839 AP Y Yuna +8,839 AP K Kimahri +8,839 AP A Auron +8,839 AP CONFIRM ▸"
+  },
+  {
+   "s": "settled",
+   "finals": [
+    {
+     "shown": "10,000",
+     "final": "10000"
+    },
+    {
+     "shown": "6,000",
+     "final": "6000"
+    },
+    {
+     "shown": "+10,000 AP",
+     "final": "10000"
+    },
+    {
+     "shown": "+10,000 AP",
+     "final": "10000"
+    },
+    {
+     "shown": "+10,000 AP",
+     "final": "10000"
+    },
+    {
+     "shown": "+10,000 AP",
+     "final": "10000"
+    }
+   ],
+   "text": "RESULTS · 1:42 MT. GAGAZET — THE PROMINENCE · CLEARED Victory NEW BEST ...Okay. Next one. AP 10,000 ×4 PARTY GIL 6,000 ITEMS Lv. 4 Key Sphere T Tidus +10,000 AP +9 S.LV Y Yuna +10,000 AP +8 S.LV K Kimahri +10,000 AP +12 S.LV A Auron +10,000 AP +7 S.LV CONFIRM ▸"
+  },
+  {
+   "s": "final-vs-shown-mismatch",
+   "count": 0,
+   "mism": []
+  },
+  {
+   "s": "bar-within-cap",
+   "ok": true
+  },
+  {
+   "s": "confirm-press",
+   "k": 0,
+   "screen": "cutscene"
+  },
+  {
+   "s": "after-confirm",
+   "screen": "cutscene"
+  }
+ ],
+ "early": {
+  "finals": [
+   {
+    "shown": "8,839",
+    "final": "10000"
+   },
+   {
+    "shown": "5,303",
+    "final": "6000"
+   },
+   {
+    "shown": "+8,839 AP",
+    "final": "10000"
+   },
+   {
+    "shown": "+8,839 AP",
+    "final": "10000"
+   },
+   {
+    "shown": "+8,839 AP",
+    "final": "10000"
+   },
+   {
+    "shown": "+8,839 AP",
+    "final": "10000"
+   }
+  ],
+  "text": "RESULTS · 1:42 MT. GAGAZET — THE PROMINENCE · CLEARED Victory NEW BEST ...Okay. Next one. AP 8,839 ×4 PARTY GIL 5,303 ITEMS Lv. 4 Key Sphere T Tidus +8,839 AP Y Yuna +8,839 AP K Kimahri +8,839 AP A Auron +8,839 AP CONFIRM ▸"
+ },
+ "settled": {
+  "finals": [
+   {
+    "shown": "10,000",
+    "final": "10000"
+   },
+   {
+    "shown": "6,000",
+    "final": "6000"
+   },
+   {
+    "shown": "+10,000 AP",
+    "final": "10000"
+   },
+   {
+    "shown": "+10,000 AP",
+    "final": "10000"
+   },
+   {
+    "shown": "+10,000 AP",
+    "final": "10000"
+   },
+   {
+    "shown": "+10,000 AP",
+    "final": "10000"
+   }
+  ],
+  "text": "RESULTS · 1:42 MT. GAGAZET — THE PROMINENCE · CLEARED Victory NEW BEST ...Okay. Next one. AP 10,000 ×4 PARTY GIL 6,000 ITEMS Lv. 4 Key Sphere T Tidus +10,000 AP +9 S.LV Y Yuna +10,000 AP +8 S.LV K Kimahri +10,000 AP +12 S.LV A Auron +10,000 AP +7 S.LV CONFIRM ▸"
+ },
+ "noBadBar": true,
+ "consoleErrors": [],
+ "notFound": []
+}

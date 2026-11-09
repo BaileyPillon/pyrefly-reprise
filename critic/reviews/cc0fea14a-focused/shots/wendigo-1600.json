@@ -1,0 +1,176 @@
+{
+ "word": "wendigo",
+ "expectId": "wendigo",
+ "W": "1600",
+ "H": "900",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-BAH_qvc7.js"
+  },
+  {
+   "s": "after-word",
+   "opened": true,
+   "screen": "party-prep",
+   "state": "{\"version\":\"0.1.0\",\"seed\":1,\"screen\":\"party-prep\",\"stack\":[\"party-prep\"],\"overlayDepth\":0,\"frameCount\":417,\"elapsed\":7.162,\"registered\":[\"hud2-mock\",\"title\",\"demo\",\"booth-end\",\"booth-attract\",\"ffx-hud-demo\",\"chapter-select\",\"party-prep\",\"battle\",\"party-prep-ffx2\",\"cutscene\",\"results\",\"results-silent\",\"scene-gagazet\",\"scene-farplane\",\"scene-zanarkand-dome\",\"scene-dreams-end\",\"scene-bevelle-undergro"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 1601
+  },
+  {
+   "s": "chapter-id",
+   "idNow": null
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "rows",
+   "stackPresent": true,
+   "rows": [
+    {
+     "i": 0,
+     "text": "Attack",
+     "selected": true,
+     "disabled": false,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 1,
+     "text": "Special",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 2,
+     "text": "Items",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 3,
+     "text": "Flee",
+     "selected": false,
+     "disabled": true,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 4,
+     "text": "Escape",
+     "selected": false,
+     "disabled": true,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    },
+    {
+     "i": 5,
+     "text": "Switch",
+     "selected": false,
+     "disabled": false,
+     "overdrive": false,
+     "w": 392,
+     "h": 58
+    }
+   ]
+  },
+  {
+   "s": "after-turns",
+   "screen": "battle"
+  },
+  {
+   "s": "end",
+   "screen": "cutscene",
+   "ms": 50154
+  },
+  {
+   "s": "end-text",
+   "text": "LAKE MACALANIA — THE FROZEN LAKE · CLEARED RESULTS · 1:20 Victory AP 1,234 ×5 PARTY GIL 1,894 ITEMS Ability Sphere ×2, Power Sphere T Tidus S.LV 26 · 39/486 AP +1,234AP Y Yuna S.LV 26 · 39/486 AP +1,234AP R Rikku S.LV 41 · 1,095/1,588 AP +1,234AP W Wakka S.LV 26 · 39/486 AP +1,234AP A Auron S.LV 26 "
+  }
+ ],
+ "rows": {
+  "stackPresent": true,
+  "rows": [
+   {
+    "i": 0,
+    "text": "Attack",
+    "selected": true,
+    "disabled": false,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 1,
+    "text": "Special",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 2,
+    "text": "Items",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 3,
+    "text": "Flee",
+    "selected": false,
+    "disabled": true,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 4,
+    "text": "Escape",
+    "selected": false,
+    "disabled": true,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   },
+   {
+    "i": 5,
+    "text": "Switch",
+    "selected": false,
+    "disabled": false,
+    "overdrive": false,
+    "w": 392,
+    "h": 58
+   }
+  ]
+ },
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [
+  {
+   "url": "http://127.0.0.1:5471/art/characters/wendigo/idle.png",
+   "ct": "text/html"
+  },
+  {
+   "url": "http://127.0.0.1:5471/art/characters/wendigo/idle.png",
+   "ct": "text/html"
+  }
+ ]
+}

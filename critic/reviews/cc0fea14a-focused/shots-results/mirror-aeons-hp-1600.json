@@ -1,0 +1,78 @@
+{
+ "tag": "mirror-aeons-hp",
+ "how": "sel:mirror-aeons",
+ "W": "1600",
+ "H": "900",
+ "hp": "1",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5471/assets/index-BAH_qvc7.js"
+  },
+  {
+   "s": "selected",
+   "id": "mirror-aeons"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 9756
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "hp-edit",
+   "id": "dark-mindy",
+   "before": 2000000,
+   "after": 1,
+   "n": 2
+  },
+  {
+   "s": "keys-ended",
+   "screen": "pro-defeat",
+   "ms": 124817
+  },
+  {
+   "s": "at",
+   "screen": "battle",
+   "ms": 120605
+  },
+  {
+   "s": "early",
+   "finals": [],
+   "text": "Yuna +4 Lulu Tidus ATTACK SPECIAL ×2 WHITE MAGIC ×15 ITEMS ×14 SUMMON ×7 ▼ Tidus 4999 /9999 999 /999 OVERDRIVE Yuna 4999 /9999 999 /999 OD Lulu 4999 /9999 999 /999 OD STR MAG +2 I DARK MINDY G GUIDE NEXT BEST MOVE Yuna Curaga → Tidus IN WHITE MAGIC +5,000 20 MP Restores HP Puts 5000 HP back. N HIDE MOVES Dark Mindy Yuna Curaga → Tidus · 20 MP Enter Select G Intel Q Defend P Pause GUIDE CURSE Lulu is cursed: her Overdrive gauge cannot fill. Holy Water or Dispel cures it; Esuna and Remedy do not. E ENEMY MOVE VICTORY THE PARTY HAS FALLEN"
+  },
+  {
+   "s": "settled",
+   "finals": [],
+   "text": "Yuna +4 Lulu Tidus ATTACK SPECIAL ×2 WHITE MAGIC ×15 ITEMS ×14 SUMMON ×7 ▼ Tidus 4999 /9999 999 /999 OVERDRIVE Yuna 4999 /9999 999 /999 OD Lulu 4999 /9999 999 /999 OD STR MAG +2 I DARK MINDY G GUIDE NEXT BEST MOVE Yuna Curaga → Tidus IN WHITE MAGIC +5,000 20 MP Restores HP Puts 5000 HP back. N HIDE MOVES Dark Mindy Yuna Curaga → Tidus · 20 MP Enter Select G Intel Q Defend P Pause GUIDE CURSE Lulu is cursed: her Overdrive gauge cannot fill. Holy Water or Dispel cures it; Esuna and Remedy do not. E ENEMY MOVE VICTORY THE PARTY HAS FALLEN"
+  },
+  {
+   "s": "final-vs-shown-mismatch",
+   "count": 0,
+   "mism": []
+  },
+  {
+   "s": "bar-within-cap",
+   "ok": true
+  },
+  {
+   "s": "after-confirm",
+   "screen": "battle"
+  }
+ ],
+ "early": {
+  "finals": [],
+  "text": "Yuna +4 Lulu Tidus ATTACK SPECIAL ×2 WHITE MAGIC ×15 ITEMS ×14 SUMMON ×7 ▼ Tidus 4999 /9999 999 /999 OVERDRIVE Yuna 4999 /9999 999 /999 OD Lulu 4999 /9999 999 /999 OD STR MAG +2 I DARK MINDY G GUIDE NEXT BEST MOVE Yuna Curaga → Tidus IN WHITE MAGIC +5,000 20 MP Restores HP Puts 5000 HP back. N HIDE MOVES Dark Mindy Yuna Curaga → Tidus · 20 MP Enter Select G Intel Q Defend P Pause GUIDE CURSE Lulu is cursed: her Overdrive gauge cannot fill. Holy Water or Dispel cures it; Esuna and Remedy do not. E ENEMY MOVE VICTORY THE PARTY HAS FALLEN"
+ },
+ "settled": {
+  "finals": [],
+  "text": "Yuna +4 Lulu Tidus ATTACK SPECIAL ×2 WHITE MAGIC ×15 ITEMS ×14 SUMMON ×7 ▼ Tidus 4999 /9999 999 /999 OVERDRIVE Yuna 4999 /9999 999 /999 OD Lulu 4999 /9999 999 /999 OD STR MAG +2 I DARK MINDY G GUIDE NEXT BEST MOVE Yuna Curaga → Tidus IN WHITE MAGIC +5,000 20 MP Restores HP Puts 5000 HP back. N HIDE MOVES Dark Mindy Yuna Curaga → Tidus · 20 MP Enter Select G Intel Q Defend P Pause GUIDE CURSE Lulu is cursed: her Overdrive gauge cannot fill. Holy Water or Dispel cures it; Esuna and Remedy do not. E ENEMY MOVE VICTORY THE PARTY HAS FALLEN"
+ },
+ "noBadBar": true,
+ "consoleErrors": [],
+ "notFound": []
+}

@@ -1,0 +1,136 @@
+{
+ "steps": [
+  {
+   "name": "title reached",
+   "ok": true,
+   "detail": "title"
+  },
+  {
+   "name": "chapter select",
+   "ok": true,
+   "detail": {
+    "selectedIndex": 0,
+    "selectedId": "seymour-flux",
+    "tiles": 19,
+    "coming": [],
+    "cleared": [],
+    "order": [
+     "seymour-flux",
+     "yunalesca",
+     "braskas-final-aeon",
+     "seymour-anima-macalania",
+     "evrae-airship",
+     "yojimbo-cavern",
+     "seymour-natus",
+     "seymour-omnis",
+     "isaaru-via-purifico",
+     "sin-fins-core",
+     "sin-face",
+     "mirror-aeons",
+     "ffx2-bahamut",
+     "ffx2-vegnagun-shuyin",
+     "ffx2-leblanc",
+     "ffx2-fallen-aeons",
+     "ffx2-trema",
+     "ffx2-den-of-woe",
+     "ffx2-ixion-djose"
+    ],
+    "beaten": 0,
+    "total": 19
+   }
+  },
+  {
+   "name": "ch1: board cursor on seymour-flux",
+   "ok": true,
+   "detail": [
+    "seymour-flux",
+    "yunalesca",
+    "braskas-final-aeon",
+    "seymour-anima-macalania",
+    "evrae-airship",
+    "yojimbo-cavern",
+    "seymour-natus",
+    "seymour-omnis"
+   ]
+  },
+  {
+   "name": "ch1: player turn reached",
+   "ok": true,
+   "detail": {
+    "id": "seymour-flux",
+    "screen": "battle"
+   }
+  },
+  {
+   "name": "console: [rig] tidus on",
+   "ok": true,
+   "detail": [
+    "[rig] yuna off (no rig listed in the art manifest)",
+    "[rig] kimahri off (no rig listed in the art manifest)",
+    "[rig] mortiorchis off (no rig listed in the art manifest)",
+    "[rig] tidus on (gate ok, 9 parts, 13 bones, 14 keys, 1x maps, lit)",
+    "[rig] seymour-flux-body on (gate ok, 6 parts, 12 bones, 6 keys, 1x maps, lit)"
+   ]
+  },
+  {
+   "name": "FFX cone marker on target",
+   "ok": true,
+   "detail": {
+    "w": 99,
+    "h": 54
+   }
+  },
+  {
+   "name": "cancel target returns to command menu",
+   "ok": true
+  },
+  {
+   "name": "Escape pauses and resumes",
+   "ok": true,
+   "detail": {
+    "paused": "pause",
+    "after": "battle"
+   }
+  },
+  {
+   "name": "P pauses; H hides and restores",
+   "ok": true,
+   "detail": {
+    "p2": "pause",
+    "v0": 70,
+    "v1": 10,
+    "v2": 70
+   }
+  },
+  {
+   "name": "P resumes",
+   "ok": true,
+   "detail": "battle"
+  },
+  {
+   "name": "audio debug + music fetches",
+   "ok": true,
+   "detail": {
+    "audio": "{\"ready\":true,\"sampleRate\":48000,\"playing\":\"boss-seymour\",\"muted\":false,\"volumes\":{\"master\":0.8,\"music\":0.7,\"sfx\":0.7},\"voiceVolume\":0.9,\"voice\":{\"chapter\":\"seymour-flux\",\"enabled\":true,\"contextState\":\"running\",\"ducked\":true,\"paused\":[],\"asked\":10,\"started\":11,\"current\":{\"id\":\"seymour-flux.mid-seymour-lance.002\",\"state\":\"playing\",\"holdMs\":2128},\"cache\":{\"manifests\":[\"seymour-flux\"],\"buffers\":24,\"decodedBytes\":9825760,\"pinned\":16,\"failed\":0,\"requests\":27},\"plays\":[{\"id\":\"seymour-flux.pre.008\",\"at\":39810,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.013\",\"at\":43177,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pre.014\",\"at\":44110,\"heard\":true,\"why\":\"stopped\"},{\"id\":\"seymour-flux.pr",
+    "n": 36,
+    "sample": [
+     "https://echoesofspira.com/audio/music/title.mp3",
+     "https://echoesofspira.com/audio/sfx/sprite.mp3",
+     "https://echoesofspira.com/audio/sfx/sprite-v2.mp3",
+     "https://echoesofspira.com/audio/music/chapter-select.mp3"
+    ]
+   }
+  }
+ ],
+ "rig": [
+  "[rig] yuna off (no rig listed in the art manifest)",
+  "[rig] kimahri off (no rig listed in the art manifest)",
+  "[rig] mortiorchis off (no rig listed in the art manifest)",
+  "[rig] tidus on (gate ok, 9 parts, 13 bones, 14 keys, 1x maps, lit)",
+  "[rig] seymour-flux-body on (gate ok, 6 parts, 12 bones, 6 keys, 1x maps, lit)"
+ ],
+ "words": [],
+ "consoleErrors": [],
+ "notFound": [],
+ "musicFetches": 36
+}

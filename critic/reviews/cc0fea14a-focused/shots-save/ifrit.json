@@ -1,0 +1,25 @@
+{
+ "word": "ifrit",
+ "boardOk": true,
+ "boardText": "AURON · 1 OF 3 “Start with the first one.” Click its picture to begin. The others wait on the board. ESC SKIP THE GUIDE CHAPTER SELECT CHAPTER I Seymour Flux 0 OF 19 BEATEN X I II III VII VIII IX X XII XIV XVII XVIII XXVII X-2 IV V VI XI XIII XV XVI The mountain of the Ronso, and what was done to them The Ronso held the gate so the summoner could pass. Seymour calls it mercy. He is still unsent, he is waiting on the trail, and everything he says about Jecht is true. CTB FINAL FANTASY X I Seymour Flux II Lady Yunalesca III Braska's Final Aeon VII Seymour and Anima VIII Evrae IX Yojimbo X Seymou",
+ "before": {
+  "pyrefly-reprise:save:v1": "780:(long)"
+ },
+ "idbBefore": [],
+ "opened": true,
+ "afterFight": "cutscene",
+ "end": "cutscene",
+ "boardTextAfter": "EXPERIMENTAL · KILIKA TEMPLE — CHAMBER OF THE FAYTH Yuna SPHERE HUNTER Ifrit... are you all right? AUTO ENTER ADVANCE · HOLD ENTER SKIP · ESC MENU",
+ "after": {
+  "pyrefly-reprise:experiments:v1": "116:{\"ffx2-ifrit-kilika\":{\"attempts\":1,\"clears\":1,\"bestTimeMs\":18549,\"playTimeMs\":17749.1,\"lastPlayedAt\":1794201757622}}",
+  "pyrefly-reprise:save:v1": "780:(long)"
+ },
+ "idbAfter": [],
+ "changed": [
+  {
+   "k": "pyrefly-reprise:experiments:v1",
+   "after": "116:{\"ffx2-ifrit-kilika\":{\"attempts\":1,\"clears\":1,\"bestTimeMs\":18549,\"playTimeMs\":17749.1,\"lastPlayedAt\":1794201757622}}"
+  }
+ ],
+ "consoleErrors": []
+}

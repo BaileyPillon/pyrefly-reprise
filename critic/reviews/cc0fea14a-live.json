@@ -1,0 +1,102 @@
+{
+ "rubricVersion": 2,
+ "review": "live",
+ "date": "2026-11-09T06:40:18.263Z",
+ "build": {
+  "mainSha": "cc0fea14a",
+  "bundle": "BAH_qvc7",
+  "artifactHash": "8c31cde9e3e986fc5e4e3f593c25d6668e4922c5d99bbca62242831ea053446d"
+ },
+ "verdicts": {
+  "deployment": "PASS",
+  "changedArea": "NOT APPLICABLE",
+  "milestone": "not assessed"
+ },
+ "checks": [
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "verify-live --changed-from 6429ff15e: result PASS, liveManifest match, 199 changed files checked, 0 mismatched/missing/wrongType/errors; index.html identical once the Cloudflare beacon is removed (critic/reviews/cc0fea14a-live/verify-live-changed.txt). --full was started and stopped by PID after ~40 minutes (5260 art files), as in releases 75 to 77."
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "Headless Playwright, PYREFLY_BROWSER=gpu, 1600x900, fresh context, ?cb= query, real keys. Title to board; words bluelight (battle directly, FF7), ifrit (party-prep, Escape back to board, again to battle) and wendigo (party-prep, cancel, battle) each reached a player turn and acted, screen asserted before each capture; Chapter I (seymour-flux) player turn with [rig] tidus on, FFX cone marker 99x54 on target, Escape cancel back to command menu; Chapter IV (ffx2-bahamut) turn with [rig] rikku-dark-knight on and a command; Escape and P pause/resume, H hide (70 to 10 visible) and restore (70); music boss-seymour playing, mp3 fetched, not procedural. Shots in critic/reviews/cc0fea14a-live/shots, shots2."
+  },
+  {
+   "id": "CHK-024",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "Lightweight: in Chapter IV pause Options, musicVolume 0.7 to 0.5 and ffx2-bahamut attempts 0 to 1 persisted across page reload (smoke2-results.json). Full upgrade matrix not part of this pass."
+  }
+ ],
+ "staticChecks": {
+  "pose-census": {
+   "subjects": 176,
+   "paintings": 1257,
+   "pass": 948,
+   "waived": 101,
+   "rigged": 0,
+   "fail": 0,
+   "exempt": 208,
+   "byClass": {
+    "idle": 176,
+    "standing": 642,
+    "ko": 114,
+    "low": 71,
+    "wide": 16,
+    "staged": 176,
+    "part": 62
+   },
+   "byGame": {
+    "FFX-2": 819,
+    "FFX": 314,
+    "unknown": 92,
+    "FF7": 32
+   },
+   "byRowStatus": {
+    "ok": 862,
+    "held": 86,
+    "waived": 101,
+    "none": 208
+   }
+  }
+ },
+ "issues": [
+  {
+   "id": "LIVE-78-1",
+   "severity": "minor",
+   "summary": "GET /art/characters/wendigo/idle.png returns 404 (twice) when the wendigo chapter loads; the battle still reached a player turn and ran. Likely a billboard fallback texture for the 3D Meshy demo that is not in the build. Not a regression; in a brand-new feature; needs a driver look.",
+   "evidence": "critic/reviews/cc0fea14a-live/smoke-words-results.json"
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "artifact identity (199 changed files vs 6429ff15e)",
+   "title/board",
+   "words bluelight, ifrit, wendigo to player turn plus an action, prep cancel for ifrit and wendigo",
+   "Chapter I and IV player turns, rigs on, cone marker and cancel",
+   "pause, resume, H hide/restore",
+   "prerendered music playing",
+   "reload smoke",
+   "pose census"
+  ],
+  "reused": [],
+  "notTested": [
+   "full byte comparison of all files (--full stopped after ~40 min)",
+   "chapter 49 desktop-only 3D look and performance",
+   "results counts (data-final) and Sphere Level bar cap (needs a won battle)",
+   "Jenova LIFE, Ifrit and Wendigo battles beyond one command",
+   "multi-hit status bookkeeping fix",
+   "hidden 41 to 43 battles",
+   "Farplane Special Eject guard and Dark Aeons link-4 anchor",
+   "full upgrade matrix",
+   "touch"
+  ]
+ },
+ "consoleErrors": 2,
+ "notFound": 2,
+ "elapsedMinutes": 60
+}

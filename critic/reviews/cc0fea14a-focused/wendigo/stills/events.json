@@ -1,0 +1,134 @@
+{
+ "events": [
+  {
+   "t": 28.54,
+   "what": "prep-enter"
+  },
+  {
+   "t": 28.6,
+   "what": "pre-scene",
+   "screen": "cutscene"
+  },
+  {
+   "t": 30.17,
+   "what": "battle-screen"
+  },
+  {
+   "t": 50.56,
+   "what": "first-menu"
+  },
+  {
+   "t": 52.86,
+   "what": "party-attack"
+  },
+  {
+   "t": 58.72,
+   "what": "action",
+   "id": "rikku:attack"
+  },
+  {
+   "t": 58.72,
+   "what": "action",
+   "id": "lake-guardian-a:lake-auto-potion"
+  },
+  {
+   "t": 58.72,
+   "what": "action",
+   "id": "tidus:attack"
+  },
+  {
+   "t": 58.72,
+   "what": "action",
+   "id": "lake-guardian-a:lake-auto-potion"
+  },
+  {
+   "t": 68.9,
+   "what": "action",
+   "id": "lake-guardian-a:lake-berserk"
+  },
+  {
+   "t": 68.9,
+   "what": "action",
+   "id": "lake-guardian-b:thundara"
+  },
+  {
+   "t": 68.9,
+   "what": "action",
+   "id": "wendigo:attack"
+  },
+  {
+   "t": 68.9,
+   "what": "action",
+   "id": "yuna:attack"
+  },
+  {
+   "t": 68.9,
+   "what": "action",
+   "id": "lake-guardian-a:lake-auto-potion"
+  },
+  {
+   "t": 69.01,
+   "what": "guardians-to-1"
+  },
+  {
+   "t": 72.99,
+   "what": "action",
+   "id": "rikku:attack"
+  },
+  {
+   "t": 72.99,
+   "what": "action",
+   "id": "lake-guardian-a:protect"
+  },
+  {
+   "t": 77.04,
+   "what": "action",
+   "id": "tidus:attack"
+  },
+  {
+   "t": 77.04,
+   "what": "action",
+   "id": "lake-guardian-b:lake-berserk"
+  },
+  {
+   "t": 83.14,
+   "what": "action",
+   "id": "wendigo:wendigo-raise-arms"
+  },
+  {
+   "t": 83.14,
+   "what": "action",
+   "id": "yuna:attack"
+  },
+  {
+   "t": 83.14,
+   "what": "action",
+   "id": "wendigo:wendigo-counter-punch"
+  },
+  {
+   "t": 83.19,
+   "what": "finishing"
+  },
+  {
+   "t": 86.56,
+   "what": "action",
+   "id": "rikku:attack"
+  },
+  {
+   "t": 89.13,
+   "what": "action",
+   "id": "tidus:attack"
+  },
+  {
+   "t": 101.88,
+   "what": "won",
+   "screen": "results"
+  },
+  {
+   "t": 101.88,
+   "what": "results",
+   "screen": "results"
+  }
+ ],
+ "fps": {}
+}

@@ -1,0 +1,151 @@
+{
+ "events": [
+  {
+   "t": 28.47,
+   "what": "prep-enter"
+  },
+  {
+   "t": 28.53,
+   "what": "pre-scene",
+   "screen": "cutscene"
+  },
+  {
+   "t": 30.18,
+   "what": "battle-screen"
+  },
+  {
+   "t": 50.52,
+   "what": "first-menu"
+  },
+  {
+   "t": 52.44,
+   "what": "party-attack"
+  },
+  {
+   "t": 58.62,
+   "what": "action",
+   "id": "rikku:attack"
+  },
+  {
+   "t": 58.62,
+   "what": "action",
+   "id": "lake-guardian-a:lake-auto-potion"
+  },
+  {
+   "t": 58.62,
+   "what": "action",
+   "id": "tidus:attack"
+  },
+  {
+   "t": 58.62,
+   "what": "action",
+   "id": "lake-guardian-a:lake-auto-potion"
+  },
+  {
+   "t": 68.72,
+   "what": "action",
+   "id": "lake-guardian-a:lake-berserk"
+  },
+  {
+   "t": 68.72,
+   "what": "action",
+   "id": "lake-guardian-b:thundara"
+  },
+  {
+   "t": 68.72,
+   "what": "action",
+   "id": "wendigo:attack"
+  },
+  {
+   "t": 68.72,
+   "what": "action",
+   "id": "yuna:attack"
+  },
+  {
+   "t": 68.72,
+   "what": "action",
+   "id": "lake-guardian-a:lake-auto-potion"
+  },
+  {
+   "t": 68.72,
+   "what": "guardians-to-1"
+  },
+  {
+   "t": 72.7,
+   "what": "action",
+   "id": "rikku:attack"
+  },
+  {
+   "t": 72.7,
+   "what": "action",
+   "id": "lake-guardian-a:protect"
+  },
+  {
+   "t": 76.7,
+   "what": "action",
+   "id": "tidus:attack"
+  },
+  {
+   "t": 76.7,
+   "what": "action",
+   "id": "lake-guardian-b:lake-berserk"
+  },
+  {
+   "t": 82.77,
+   "what": "action",
+   "id": "wendigo:wendigo-raise-arms"
+  },
+  {
+   "t": 82.77,
+   "what": "action",
+   "id": "yuna:attack"
+  },
+  {
+   "t": 82.77,
+   "what": "action",
+   "id": "wendigo:wendigo-counter-punch"
+  },
+  {
+   "t": 82.77,
+   "what": "finishing"
+  },
+  {
+   "t": 86.59,
+   "what": "action",
+   "id": "rikku:attack"
+  },
+  {
+   "t": 89.14,
+   "what": "action",
+   "id": "tidus:attack"
+  },
+  {
+   "t": 101.93,
+   "what": "won",
+   "screen": "results"
+  },
+  {
+   "t": 101.94,
+   "what": "results",
+   "screen": "results"
+  }
+ ],
+ "fps": {
+  "fight": {
+   "frames": 1810,
+   "meanMs": 16.75,
+   "fps": 59.7,
+   "p99Ms": 16.8,
+   "worst1PctFps": 40.5,
+   "over20ms": 0.003
+  },
+  "win-and-ice-break": {
+   "frames": 1810,
+   "meanMs": 16.75,
+   "fps": 59.7,
+   "p99Ms": 16.8,
+   "worst1PctFps": 40.5,
+   "over20ms": 0.003
+  }
+ }
+}

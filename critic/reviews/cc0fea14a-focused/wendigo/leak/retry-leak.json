@@ -1,0 +1,83 @@
+{
+ "base": "dev server",
+ "retries": 5,
+ "seed": 7,
+ "rows": [
+  {
+   "label": "first fight",
+   "geometries": 39,
+   "textures": 72,
+   "programs": 47,
+   "heapMB": 30.2,
+   "lake": null
+  },
+  {
+   "label": "retry 1",
+   "geometries": 39,
+   "textures": 74,
+   "programs": 52,
+   "heapMB": 34,
+   "lake": null
+  },
+  {
+   "label": "retry 2",
+   "geometries": 39,
+   "textures": 74,
+   "programs": 52,
+   "heapMB": 34.8,
+   "lake": null
+  },
+  {
+   "label": "retry 3",
+   "geometries": 39,
+   "textures": 74,
+   "programs": 52,
+   "heapMB": 34.9,
+   "lake": null
+  },
+  {
+   "label": "retry 4",
+   "geometries": 39,
+   "textures": 74,
+   "programs": 52,
+   "heapMB": 35.3,
+   "lake": null
+  },
+  {
+   "label": "retry 5",
+   "geometries": 39,
+   "textures": 74,
+   "programs": 52,
+   "heapMB": 35.4,
+   "lake": null
+  }
+ ],
+ "extras": [
+  {
+   "label": "chapter select (before the word)",
+   "geometries": 0,
+   "textures": 0,
+   "programs": 0,
+   "heapMB": 17.2,
+   "lake": null
+  },
+  {
+   "label": "party prep (before the first fight)",
+   "geometries": 0,
+   "textures": 0,
+   "programs": 0,
+   "heapMB": 17.8,
+   "lake": null
+  },
+  {
+   "label": "chapter select (after the last fight)",
+   "geometries": 0,
+   "textures": 21,
+   "programs": 22,
+   "heapMB": 31.1,
+   "lake": null
+  }
+ ],
+ "errors": [],
+ "failures": []
+}
