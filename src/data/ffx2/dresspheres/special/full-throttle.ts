@@ -108,9 +108,9 @@ export const fullThrottle: SpecialDressphereDef = {
       { abilityId: 'x2-full-throttle-pointed-feather', apCost: 10, prereq: 'x2-full-throttle-cloudy-feather' },
       { abilityId: 'x2-full-throttle-pumice-feather', apCost: 10 },
       { abilityId: 'x2-full-throttle-maats-feather', apCost: 10 },
-      { abilityId: 'x2-full-throttle-stamina-sinistral', apCost: 10, free: true },
+      { abilityId: 'x2-full-throttle-stamina', apCost: 10, free: true },
       { abilityId: 'x2-full-throttle-mettle-sinistral', apCost: 10, free: true },
-      { abilityId: 'x2-full-throttle-reboot-sinistral', apCost: 10, prereq: 'x2-full-throttle-mettle-sinistral' },
+      { abilityId: 'x2-full-throttle-reboot', apCost: 10, prereq: 'x2-full-throttle-mettle-sinistral' },
     ],
   },
 };

@@ -21,7 +21,7 @@ export const machinaMawAbilities: AbilityDef[] = [
   special("x2-machina-maw-shockwave", "Shockwave", 36, [], ['crit-eligible'], 'all-enemies', [], 'skill'), // main
   special("x2-machina-maw-shockstorm", "Shockstorm", 36, [], ['crit-eligible'], 'all-enemies', [], 'skill'), // main
   special("x2-machina-maw-vajra", "Vajra", 0, [], ['crit-eligible'], 'all-enemies', [], 'skill'), // main
-  special("x2-machina-maw-howitzer-smasher", "Howitzer", 12, [], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-smasher-r
+  special("x2-machina-maw-howitzer", "Howitzer", 12, [], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-smasher-r
   special("x2-machina-maw-sleep-shell", "Sleep Shell", 12, [{ status: 'sleep', chance: 100, duration: 255 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-smasher-r
   special("x2-machina-maw-slow-shell", "Slow Shell", 12, [{ status: 'slow', chance: 100, duration: 100 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-smasher-r
   special("x2-machina-maw-anti-power-shell", "Anti-Power Shell", 12, [{ status: 'str-down', chance: 254, duration: 255, stacks: 3 }], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-smasher-r
@@ -29,7 +29,7 @@ export const machinaMawAbilities: AbilityDef[] = [
   special("x2-machina-maw-scan", "Scan", 0, [], [], 'single-enemy', [], 'skill'), // machina-maw-smasher-r
   special("x2-machina-maw-shellter", "Shellter", 10, [{ status: 'shell', chance: 254, duration: 100 }], [], 'all-allies', [], 'skill'), // machina-maw-smasher-r
   special("x2-machina-maw-protector", "Protector", 10, [{ status: 'protect', chance: 254, duration: 100 }], [], 'all-allies', [], 'skill'), // machina-maw-smasher-r
-  special("x2-machina-maw-hp-repair-smasher", "HP Repair", 0, [], ['heals'], 'single-ally', [], 'skill'), // machina-maw-smasher-r
+  special("x2-machina-maw-hp-repair", "HP Repair", 0, [], ['heals'], 'single-ally', [], 'skill'), // machina-maw-smasher-r
   special("x2-machina-maw-mp-repair-smasher", "MP Repair", 0, [], ['heals'], 'single-ally', [], 'skill'), // machina-maw-smasher-r
   special("x2-machina-maw-homing-ray-smasher", "Homing Ray", 0, [], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-smasher-r
   special("x2-machina-maw-howitzer-crusher", "Howitzer", 12, [], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-crusher-l
@@ -41,6 +41,6 @@ export const machinaMawAbilities: AbilityDef[] = [
   special("x2-machina-maw-offense", "Offense", 10, [{ status: 'str-up', chance: 254, duration: 255, stacks: 3 }], [], 'single-ally', [], 'skill'), // machina-maw-crusher-l
   special("x2-machina-maw-defense", "Defense", 10, [{ status: 'def-up', chance: 254, duration: 255, stacks: 3 }], [], 'single-ally', [], 'skill'), // machina-maw-crusher-l
   special("x2-machina-maw-hp-repair-crusher", "HP Repair", 0, [], ['heals'], 'single-ally', [], 'skill'), // machina-maw-crusher-l
-  special("x2-machina-maw-mp-repair-crusher", "MP Repair", 0, [], ['heals'], 'single-ally', [], 'skill'), // machina-maw-crusher-l
+  special("x2-machina-maw-mp-repair", "MP Repair", 0, [], ['heals'], 'single-ally', [], 'skill'), // machina-maw-crusher-l
   special("x2-machina-maw-homing-ray-crusher", "Homing Ray", 0, [], ['crit-eligible'], 'single-enemy', [], 'skill'), // machina-maw-crusher-l
 ];

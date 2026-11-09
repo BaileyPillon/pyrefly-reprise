@@ -1449,7 +1449,7 @@
   "magicCancel": 0
  },
  {
-  "ability": "x2-machina-maw-howitzer-smasher",
+  "ability": "x2-machina-maw-howitzer",
   "special": "machina-maw",
   "part": "machina-maw-smasher-r",
   "name": "Howitzer",
@@ -1719,7 +1719,7 @@
   "magicCancel": 0
  },
  {
-  "ability": "x2-machina-maw-hp-repair-smasher",
+  "ability": "x2-machina-maw-hp-repair",
   "special": "machina-maw",
   "part": "machina-maw-smasher-r",
   "name": "HP Repair",
@@ -2115,7 +2115,7 @@
   "magicCancel": 0
  },
  {
-  "ability": "x2-machina-maw-mp-repair-crusher",
+  "ability": "x2-machina-maw-mp-repair",
   "special": "machina-maw",
   "part": "machina-maw-crusher-l",
   "name": "MP Repair",
@@ -3159,7 +3159,7 @@
   "magicCancel": 0
  },
  {
-  "ability": "x2-full-throttle-stamina-sinistral",
+  "ability": "x2-full-throttle-stamina",
   "special": "full-throttle",
   "part": "full-throttle-left",
   "name": "Stamina",
@@ -3221,7 +3221,7 @@
   "magicCancel": 0
  },
  {
-  "ability": "x2-full-throttle-reboot-sinistral",
+  "ability": "x2-full-throttle-reboot",
   "special": "full-throttle",
   "part": "full-throttle-left",
   "name": "Reboot",

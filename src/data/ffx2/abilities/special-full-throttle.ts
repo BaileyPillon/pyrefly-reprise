@@ -40,7 +40,7 @@ export const fullThrottleAbilities: AbilityDef[] = [
   special("x2-full-throttle-pointed-feather", "Pointed Feather", 16, [{ status: 'mdef-down', chance: 254, duration: 255, stacks: 2 }], [], 'all-enemies', [], 'skill'), // full-throttle-left
   special("x2-full-throttle-pumice-feather", "Pumice Feather", 38, [{ status: 'haste', chance: 254, duration: 50 }], [], 'all-allies', [], 'skill'), // full-throttle-left
   special("x2-full-throttle-maats-feather", "Ma'at's Feather", 0, [], [], 'single-enemy', [], 'skill'), // full-throttle-left
-  special("x2-full-throttle-stamina-sinistral", "Stamina", 0, [], ['heals'], 'single-ally', [], 'skill'), // full-throttle-left
+  special("x2-full-throttle-stamina", "Stamina", 0, [], ['heals'], 'single-ally', [], 'skill'), // full-throttle-left
   special("x2-full-throttle-mettle-sinistral", "Mettle", 0, [], ['heals'], 'single-ally', [], 'skill'), // full-throttle-left
-  special("x2-full-throttle-reboot-sinistral", "Reboot", 0, [{ status: 'ko', chance: 254, duration: 255 }], ['heals', 'can-target-dead', 'misses-if-target-alive', 'removes-statuses'], 'single-ally', [], 'skill'), // full-throttle-left
+  special("x2-full-throttle-reboot", "Reboot", 0, [{ status: 'ko', chance: 254, duration: 255 }], ['heals', 'can-target-dead', 'misses-if-target-alive', 'removes-statuses'], 'single-ally', [], 'skill'), // full-throttle-left
 ];
