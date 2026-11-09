@@ -26,6 +26,7 @@ import type { AbilityDef, FFXCommandRecord, FFXPlainAttack, FormulaKey, Side } f
 import { CMD_AFFECTED_BY_DARKNESS, CMD_ACCURACY_FORMULA_SHIFT, CMD_NO_EFFECT_ON_LIVING } from '../kernel/hit.ts';
 import { CMD_CAN_CRIT, CMD_CRIT_BONUS_FROM_EQUIPMENT } from '../kernel/crit.ts';
 import { elementMask } from './words.ts';
+import { FORCED_ACTION_WORD } from '../kernel/forced-action-table.ts';
 
 /** Our formula keys as the game's formula numbers (`research/re-ffx-damage.md` section 2). */
 export const FORMULA_NUMBER: Readonly<Record<FormulaKey, number>> = {
@@ -69,6 +70,17 @@ const DMG_CAP_99999 = 0x80;
 const ITEM_COMMAND_BASE = 0x2000;
 /** The party's default attack command (what Berserk multiplies). */
 export const DEFAULT_ATTACK_COMMAND = 0x3000;
+
+/**
+ * The command id the kernels compare a Berserk user's current command with (the game's `Chr+0x6c6`, the user's own default attack). It is the party's Attack, 0x3000, for everyone, **except a monster whose own plain Attack record IS its
+ * forced-action word** (Wendigo's 0x4000, Sinspawn Gui's 0x6000): its default attack is that record, so a Berserk one is boosted on it (x3/2, `kernel/modifiers.ts#berserkMod`). Until the hidden Wendigo chapter (FFX only, 2026-11-06) the
+ * constant was used for every monster, and a Berserk monster with a recorded plain Attack (current command 0x4000 or 0x6000, never 0x3000) was never boosted. A monster with no recorded plain Attack (the Temple's Guardians) keeps
+ * its generic Attack (0x3000) and is unchanged, and so is one whose forced-action word is another command (the Sanctuary Keeper's Tail Sweep).
+ */
+export function defaultAttackIdOf(user: CommandUser & { id: string }): number {
+  const plain = user.side === 'enemy' ? user.enemy?.plainAttack : undefined;
+  return plain !== undefined && FORCED_ACTION_WORD.get(user.id) === plain.record.id ? plain.record.id : DEFAULT_ATTACK_COMMAND;
+}
 
 /** The part of a combatant the reading of a command depends on: its side, and an enemy's own plain Attack record. */
 export interface CommandUser {

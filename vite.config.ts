@@ -8,6 +8,7 @@ import { SOURCEMAP_DIR_ENV, keepSourceMaps, pruneUnshipped } from './tools/dist-
 import { pyreflyArtAtSign } from './tools/vite-art-at.mjs';
 import { pyreflyFfxLocal } from './tools/vite-ffx-local.mjs';
 import { pyreflyFxAssets } from './tools/vite-fx-assets.mjs';
+import { pyreflyLakeModels } from './tools/vite-lake-models.mjs';
 import { pyreflyThreeSrc } from './tools/vite-three-src.mjs';
 import { pyreflyWwModels } from './tools/vite-ww-models.mjs';
 
@@ -104,9 +105,10 @@ export default defineConfig(({ command, isPreview }) => {
     // Release 39: the game asks for a master as `idle%402x.png` (ArtShipped.ts); dev and preview serve it from `idle@2x.png` (tools/vite-art-at.mjs).
     // `pyreflyFxAssets` (r69-fix): the dev server runs `tools/fx-assets.mjs ensure --warn` itself when it starts, so a start that skips `npm run dev`'s predev (`npx vite --port N`) still has the depth maps (a tree without public/fx drew a plate-less Chapter I).
     // `pyreflyWwModels` (the review of 2026-11-02; build only): restores the hidden Wind Waker chapter's gitignored models before the build and checks the output carries them after it (a release build that does not fails; `tools/vite-ww-models.mjs`).
+    // `pyreflyLakeModels` (ch-wendigo, 2026-11-07; build only): the same two steps for the hidden Wendigo chapter's 24 gitignored models, `public/models-exp/lake` (restored from the models store before the build, checked whole in the output after it; `tools/vite-lake-models.mjs`).
     // `pyreflyThreeSrc` (r74-int review MAJOR-1; build only; OFF by default since r75, job INT-3): with `PYREFLY_THREE_SRC=on`, `three` resolves to its per-class source modules, so a class only a lazy chapter uses leaves the title page's chunks (-88 KB raw, -19 KB gzip on release 74's tip); without it the build is the stock one (`tools/vite-three-src.mjs`).
     // The last: the dev server's read-only route to Bailey's own converted FFX files, `/__ffx-local/` (`tools/vite-ffx-local.mjs`): `apply: 'serve'`, so it is never in a build, and no preview hook, so never in `vite preview`.
-    plugins: [distFilter(sourceMapDir), pyreflyWwModels(), pyreflyThreeSrc(), pyreflyFxAssets(), pyreflyArtDerive(), pyreflyArtAtSign(), pyreflyFfxLocal()],
+    plugins: [distFilter(sourceMapDir), pyreflyWwModels(), pyreflyLakeModels(), pyreflyThreeSrc(), pyreflyFxAssets(), pyreflyArtDerive(), pyreflyArtAtSign(), pyreflyFfxLocal()],
     build: {
       target: 'es2022',
       outDir: 'dist',

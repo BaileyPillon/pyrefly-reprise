@@ -493,6 +493,11 @@ export function oracleRun(sit: StatusSituation, hits: number): Outcome {
     inp.input.target.cheer = stacks[0] as number;
     inp.input.target.focus = stacks[2] as number;
     inp.input.target.extra = pipeExtra;
+    // The maxima as they stand now too: an earlier hit of the action that turned Double HP or Double MP on has already raised them (the buff flags go straight onto the target, below), and a fraction-of-the-maximum hit
+    // (Final Elixir's full restore) prices itself from them. The oracle read the situation's starting maxima on every hit, so a Double MP hit followed by a percent-total hit disagreed with the engine, which reads the target (found by
+    // the seeded sweep over the whole pool, seed 20261009 at situation 14905, 2026-11-08; the engine's reading is the one this file's header states: the pipeline reads the target as it stands).
+    inp.input.target.maxHp = maxHp;
+    inp.input.target.maxMp = maxMp;
     inp.input.record = {
       perm: pipePerm,
       extra: pipeExtra,

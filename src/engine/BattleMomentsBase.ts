@@ -148,7 +148,7 @@ export class BattleMomentsBase {
 
   /** What every beat's context carries. */
   protected shotCtx(): ShotCtx {
-    return { camera: this.cam, speed: this.deps.speed(), skipping: this.skipping, ms: (base) => this.ms(base), ...(this.reducedMotion ? { reducedMotion: true } : {}) };
+    return { camera: this.cam, speed: this.deps.speed(), skipping: this.skipping, ms: (base) => this.ms(base), setHud: (visible) => this.setHudVisible(visible), ...(this.reducedMotion ? { reducedMotion: true } : {}) };
   }
 
   /** A combatant and its side, as the stage reports it. */

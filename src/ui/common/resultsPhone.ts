@@ -26,7 +26,7 @@ import { escapeHtml } from './html.ts';
 import { PHONE_BATTLE_QUERY } from './phoneBattle.ts';
 import { portraitCrop, portraitImgHtml } from './portrait.ts';
 import { formatNumber, ITEMS_LONG_CHARS, leaderId } from './resultsMath.ts';
-import { DEFEAT_ACTIONS, ledgerValueText, memberFaceHtml, type ResultsPageModel } from './resultsPage.ts';
+import { DEFEAT_ACTIONS, finalAttr, ledgerValueText, memberFaceHtml, type ResultsPageModel } from './resultsPage.ts';
 import { wedgeFallenArt, wedgeFigureId, wedgePortraitId, type VictoryLine } from './victoryLine.ts';
 
 /** An upright phone: the same query the phone battle HUD uses, so the two never disagree. */
@@ -130,7 +130,7 @@ function talliesHtml(m: ResultsPageModel): string {
       const detail = line.detail ? `<div class="rresp__d">${escapeHtml(line.detail)}</div>` : '';
       return `<div class="rresp__tally${wide}">
           <div class="rresp__k">${escapeHtml(line.key)}</div>
-          <div class="rresp__v${items ? ' rresp__v--items' : ''}">${ledgerValueText(line, m.progress)}</div>
+          <div class="rresp__v${items ? ' rresp__v--items' : ''}"${finalAttr(line)}>${ledgerValueText(line, m.progress)}</div>
           ${detail}
         </div>`;
     })
@@ -151,7 +151,7 @@ function chipsHtml(m: ResultsPageModel): string {
         ? `<div class="rresp__lv" title="${escapeHtml(row.noAward.long)}">${escapeHtml(row.noAward.short)}</div>`
         : '';
       const lines = m.victory
-        ? `<div class="rresp__gains"><span class="rresp__gain">+${formatNumber(Math.round(row.award * p))} <small>${row.awardUnit}</small></span>${up}</div>${why}`
+        ? `<div class="rresp__gains"><span class="rresp__gain"${finalAttr({ kind: 'count', value: row.award })}>+${formatNumber(Math.round(row.award * p))} <small>${row.awardUnit}</small></span>${up}</div>${why}`
         : `<div class="rresp__lv">${escapeHtml(row.standing)}</div>`;
       return `<div class="rresp__chip-member">
           <div class="rresp__face">${memberFaceHtml(row, m.bodyFaces?.includes(row.id) === true)}</div>

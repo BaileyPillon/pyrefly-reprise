@@ -82,6 +82,8 @@ export interface ShotCtx {
   ms(base: number): number;
   /** REDUCE MOTION is on (`MomentsPort.reduceMotion`): a director plays held frames and cuts, no moves. Additive: absent in a test's own context. */
   readonly reducedMotion?: boolean | undefined;
+  /** Show or hide the battle HUD (`BattleMoments.setHudVisible`: the HUD port's `setVisible`, which never fails a moment). Additive: absent in a test's own context. A director that hides it must not rely on putting it back: the presenter does that when the screen leaves (`BattleMoments.clear`). First user: the hidden Wendigo chapter's ice break (`engine/lake3d/director.ts`). */
+  readonly setHud?: ((visible: boolean) => void) | undefined;
 }
 
 /** The opening of a battle. */

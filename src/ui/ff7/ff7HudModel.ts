@@ -36,7 +36,7 @@ export interface Ff7RowView {
   /** 0–1: the TIME (ATB) gauge. */
   time: number;
   timeFull: boolean;
-  /** 0–1 each; empty when the status is off (the Guard Scorpion slice never raises them). */
+  /** 0–1 each, the share of the status's time left; empty when the status is off (the Guard Scorpion slice never raises them; chapter 44's MBarrier does). */
   barrier: number;
   mbarrier: number;
 }
@@ -56,6 +56,17 @@ function has(c: AnyCombatant, status: string): boolean {
 }
 
 const clamp01 = (n: number): number => (Number.isFinite(n) ? Math.max(0, Math.min(1, n)) : 0);
+
+/**
+ * How much of a Barrier or MBarrier is left, 0 to 1 (chapter 44): the status's time left on the holder's V-Timer over the whole
+ * span it landed with (`battle/ff7/statuses.ts`). 0 with the status off, which is every row of the Guard Scorpion slice.
+ */
+function statusLeft(f: Ff7Combatant['ff7'] | null, id: 'barrier' | 'mbarrier'): number {
+  const e = f?.status?.[id];
+  if (!f || !e) return 0;
+  if (e.until === null || !e.span) return 1;
+  return clamp01((e.until - f.atb.vTimer) / e.span);
+}
 
 /** The ATB bars from a sync's preview, when it is an {@link AtbSnapshot}. */
 export function snapshotOf(preview: TurnPreview[] | AtbSnapshot | null | undefined): AtbSnapshot | null {
@@ -97,8 +108,8 @@ export function partyRows(
       limitMode: has(c, 'fury') ? 'fury' : has(c, 'sadness') ? 'sadness' : 'normal',
       time: timeFull ? 1 : time,
       timeFull,
-      barrier: 0,
-      mbarrier: 0,
+      barrier: statusLeft(f, 'barrier'),
+      mbarrier: statusLeft(f, 'mbarrier'),
     });
   }
   return out;

@@ -75,6 +75,15 @@ export function ledgerValueText(line: LedgerLine, p: number): string {
   return line.kind === 'count' ? formatNumber(Math.round(line.value * p)) : escapeHtml(line.value);
 }
 
+/**
+ * The settled amount of a rolling count, as an attribute (R77-1, release 78; both games, no pixel changes): the text of a count is the value AT THIS POINT OF THE ROLL-UP (`COUNT_UP_MS`, and longer in wall time
+ * on a slow frame), so a reader of the page's text in the first seconds (a review harness, a screen reader) read a fraction of what the fight paid (the release 77 review read 347 gil and then 985 gil from the same
+ * 4,000, both mid-roll). `data-final` is the amount the battle paid, the same on every frame; a settled value (a time, a turn count) is already final and carries none.
+ */
+export function finalAttr(line: { kind: string; value: unknown }): string {
+  return line.kind === 'count' && typeof line.value === 'number' ? ` data-final="${Math.round(line.value)}"` : '';
+}
+
 /** The model's heading, tags and the like, from the screen's state. */
 export function pageHeading(victory: boolean, silent: boolean): string {
   return victory ? (silent ? 'Results' : 'Victory') : 'Defeat';
@@ -96,7 +105,7 @@ export function desktopPageHtml(m: ResultsPageModel): string {
       const detail = line.detail ? `<div class="rres__d">${escapeHtml(line.detail)}</div>` : '';
       return `<div class="rres__line">
             <div class="rres__k">${escapeHtml(line.key)}</div>
-            <div class="${valueClass}">${value}</div>
+            <div class="${valueClass}"${finalAttr(line)}>${value}</div>
             ${detail}
           </div>`;
     })
@@ -144,7 +153,7 @@ function membersHtml(m: ResultsPageModel): string {
           ? `<span class="rres__level-up">+${row.levelDelta} ${escapeHtml(row.levelUnit)}</span>`
           : '';
       const award = m.victory
-        ? `<span class="rres__member-ap">+${formatNumber(Math.round(row.award * p))}<small>${row.awardUnit}</small></span>`
+        ? `<span class="rres__member-ap"${finalAttr({ kind: 'count', value: row.award })}>+${formatNumber(Math.round(row.award * p))}<small>${row.awardUnit}</small></span>`
         : '';
       return `
           <div class="rres__member">

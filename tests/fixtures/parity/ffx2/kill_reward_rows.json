@@ -52,6 +52,7 @@
   "ffx2-farplane-cup-2-tidus/x2-cup-tidus": {"table":1,"row":317,"name":"????","exp":1500,"ap":1,"gil":750,"dropByte":255,"drop":[8194,2,0,0]},
   "ffx2-farplane-cup-3-seymour/x2-cup-seymour": {"table":1,"row":319,"name":"Seymour","exp":1300,"ap":1,"gil":1000,"dropByte":255,"drop":[8197,1,0,0]},
   "ffx2-den-of-woe-possessed-rikku/x2-possessed-rikku": {"table":1,"row":254,"name":"Rikku","exp":800,"ap":3,"gil":200,"dropByte":255,"drop":[0,0,0,0]},
+  "ffx2-kilika-ifrit/x2-ifrit": {"table":1,"row":165,"name":"Ifrit","exp":1800,"ap":15,"gil":1300,"dropByte":255,"drop":[36933,1,36933,1]},
   "ffx2-den-of-woe-possessed-paine/x2-possessed-paine": {"table":1,"row":256,"name":"Paine","exp":800,"ap":3,"gil":200,"dropByte":255,"drop":[36890,1,36890,1]},
   "ffx2-youth-league-1-yaibal/x2-yl-yaibal": {"table":1,"row":183,"name":"Yaibal","exp":500,"ap":1,"gil":100,"dropByte":255,"drop":[36888,1,36888,1]},
   "ffx2-youth-league-1-yaibal/x2-yl-warrior-1a": {"table":1,"row":210,"name":"League Warrior","exp":70,"ap":1,"gil":120,"dropByte":128,"drop":[8193,1,8209,2]},

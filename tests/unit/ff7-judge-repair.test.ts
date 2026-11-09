@@ -152,10 +152,11 @@ describe('items 1, 2 and 9: each Film key on the idle stance, a hard cut, the co
     return { x: soles.reduce((a, b) => a + b, 0) / soles.length - W / 2, w: W };
   }
 
-  const ART = 'public/art/characters';
+  const ART = `${process.env['BOSS_ART_ROOT'] ?? 'public/art'}/characters`; // an art mirror may be named (as the boss-art tests do): the tree's own `public/art` may be an older one
   const onDisk = existsSync(`${ART}/ff7-film-barret/aim.png`);
   it.skipIf(!onDisk)('each pose, shifted, stands its feet within 6 px of the idle stance (the installed Film PNGs)', async () => {
     for (const [key, poses] of Object.entries(FF7_FILM_POSE_SHIFT_PX)) {
+      if (!existsSync(`${ART}/${key}/idle.png`)) continue; // a mirror older than the art of that key (Tifa's arrived with release 78)
       const idle = await stance(`${ART}/${key}/idle.png`);
       for (const [pose, shift] of Object.entries(poses)) {
         if (key === 'ff7-film-barret' && pose === 'attack') continue; // registered on the aim by the legs (below)

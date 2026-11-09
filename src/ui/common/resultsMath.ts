@@ -5,7 +5,7 @@
 
 import type { BattleResult, GameId } from '../../battle/common/types.ts';
 import { ff7MemberRows } from '../ff7/ff7ResultRows.ts';
-import { apForLevel } from '../../battle/ffx/results.ts';
+import { sphereGridBar } from './sphereGridBar.ts';
 import type { Chapter } from '../../data/encounters.ts';
 import { artNamespaceOfScene } from '../../data/art/artNamespace.ts';
 import { EXP_YRP_ID } from '../../data/yrp-ids.ts';
@@ -203,14 +203,6 @@ function dressphereDetail(
   return `${label} · ${name.toUpperCase()} ${formatNumber(paid)}/${formatNumber(next.apCost)} AP`;
 }
 
-/** `S.LV 18 · 12/95 AP` — where the grid stands once this battle's AP is banked. */
-function sphereGridDetail(sLv: number, bankedAp: number, levelsGained: number): string {
-  let rest = bankedAp;
-  for (let i = 0; i < levelsGained; i++) rest -= apForLevel(sLv + i);
-  const now = sLv + levelsGained;
-  return `S.LV ${now} · ${formatNumber(Math.max(0, rest))}/${formatNumber(apForLevel(now))} AP`;
-}
-
 /**
  * The per-member rows for a finished battle: every member who fought in FFX,
  * all three girls in FFX-2. Pure, so `tests/unit` can assert the progression
@@ -272,8 +264,8 @@ export function buildMemberRows(
       const member = build.members.find((m) => m.id === id);
       const eligible = earnedIds.has(id);
       const sLv = member?.sphereGrid.sLv ?? 0;
-      const levelDelta = eligible ? (result.sphereLevelsGained[id] ?? 0) : 0;
       const banked = (member?.sphereGrid.ap ?? 0) + (eligible ? result.ap : 0);
+      const bar = sphereGridBar(sLv, banked, eligible ? (result.sphereLevelsGained[id] ?? 0) : 0, eligible); // R77-4: `S.LV 18 · 12/95 AP`, the bar never past its cap (`sphereGridBar.ts`)
       // Not eligible: a member who took a full turn was out (KO'd or petrified) at the end;
       // one who never finished a turn was switched out on their first, or never acted.
       const noAward =
@@ -287,10 +279,10 @@ export function buildMemberRows(
         name: member?.name ?? id,
         award: eligible ? result.ap : 0,
         awardUnit: 'AP' as const,
-        levelDelta,
+        levelDelta: bar.levels,
         levelUnit: 'S.Lv' as const,
-        detail: sphereGridDetail(sLv, banked, levelDelta),
-        standing: `S.LV ${sLv + levelDelta}`,
+        detail: `S.LV ${bar.now} · ${formatNumber(bar.rest)}/${formatNumber(bar.cap)} AP`,
+        standing: `S.LV ${bar.now}`,
         ...(noAward ? { noAward } : {}),
       };
     });

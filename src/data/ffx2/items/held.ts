@@ -27,6 +27,8 @@
  * | `x2-mana-tablet` | Mana Tablet | the Precepts Guard (the steal, both slots) | `monster.bin` row 263 (item 0x203a), the same note §4.1; a recovery item, held-only here: its effect is not wired |
  * | `charm-bangle` | Charm Bangle | Baralai (the steal, both slots; also Logos' drop) | `monster.bin` row 175 (accessory 0x9072), the same note §4.1; no stats read, no price |
  * | `x2-healing-spring` | Healing Spring | Valefor (both slots) | `ffx2-fallen-aeons.md` §7.1, verified: 2 sources; a recovery item (`ffx2-combat-core.md` §5.5, Regen), held-only here: its effect is not wired |
+ * | `angel-earrings` | Angel Earrings | Ifrit's drop (both slots; the hidden Ifrit at Kilika Temple, 2026-11-07) | `monster.bin` row 165 (accessory 0x9045), `ffx2-fallen-aeons.md` §7.1, verified: 2 sources; effect `ffx2-combat-core.md` §5.4 (Def +5, MDef +5, Deathproof); no price |
+ * | `fiery-gleam` | Fiery Gleam | Ifrit (the steal, both slots) | `monster.bin` row 165 (accessory 0x9020), `ffx2-fallen-aeons.md` §7.1, verified: 2 sources; no effect and no price read |
  *
  * What is **not** sourced, and so not written: an effect or description for
  * Snow Ring, Potpourri, Chaos Shock and Fury Shock (the research names them and
@@ -71,7 +73,7 @@ export const heldItemEffect: AbilityDef = {
 
 /** Held rows whose shop price the research does not give; each carries `price: 0`. */
 export const UNSOURCED_PRICE_IDS: ReadonlySet<string> = new Set([
-  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle', 'x2-m-bomb', 'amulet',
+  'x2-mute-shock', 'snow-ring', 'potpourri', 'x2-chaos-shock', 'x2-fury-shock', 'soul-of-thamasa', 'sprint-shoes', 'moon-bracer', 'ribbon', 'x2-water-gem', 'x2-mana-tablet', 'charm-bangle', 'x2-m-bomb', 'amulet', 'angel-earrings', 'fiery-gleam',
 ]);
 
 function held(id: string, name: string, price: number | 'unsourced', description?: string): ItemDef {
@@ -124,6 +126,9 @@ export const heldItems: ItemDef[] = [
   // The hidden Youth League Tournament's steals (FFX-2 only, 2026-11-07; `monster.bin` rows 211 and 193 (M-Bomb, item 0x2013) and 214 (Amulet, accessory 0x900f), `research/re-ffx2-youth-league-tournament.md` §3.2, the names from the US item and accessory tables [verified: the game's own table]): no effect and no price is read, so each is held-only with price 0 (unsourced).
   held('x2-m-bomb', 'M-Bomb', 'unsourced'),
   held('amulet', 'Amulet', 'unsourced'),
+  // Ifrit at Kilika Temple (FFX-2 only, the hidden chapter; `monster.bin` row 165): his drop and his steal. Angel Earrings: ffx2-combat-core §5.4 "DEF +5, MDEF +5, Deathproof" (the shop it names is not this fight's); no price in the research. Fiery Gleam: the research names it and nothing more.
+  held('angel-earrings', 'Angel Earrings', 'unsourced', 'Accessory. Guards against Death; Def +5, MDef +5.'),
+  held('fiery-gleam', 'Fiery Gleam', 'unsourced'),
 ];
 
 export default heldItems;

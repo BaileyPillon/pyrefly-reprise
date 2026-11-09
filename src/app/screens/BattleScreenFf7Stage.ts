@@ -29,6 +29,7 @@ import type { Ff7Combatant } from '../../battle/common/types-ff7.ts';
 import type { PaintedStage } from '../../engine/BattlePresenterStage.ts';
 import { viewportAspect } from '../../scenes/cavern-stolen-fayth-rigs.ts';
 import { bossArtShift, rowSpot, SECTOR1_BOSS_ID, sector1Layout, type Ff7RowName, type Sector1Layout } from '../../scenes/sector1-reactor-staging.ts';
+import { ff7LayoutFor } from '../../scenes/forgotten-capital-staging.ts';
 import type { AirshipBattleHook, AirshipSceneHandles } from './BattleScreenAirship.ts';
 import { playFf7Opening } from './BattleScreenFf7Opening.ts';
 
@@ -93,7 +94,8 @@ export async function attachFf7Staging(
   stage: PaintedStage,
   state: BattleState | null,
 ): Promise<AirshipBattleHook | null> {
-  const director = new Ff7StageDirector(stage);
+  // The layout follows the fight's boss: the Forgotten Capital's for Jenova LIFE, the reactor's for everyone else (chapter 44).
+  const director = new Ff7StageDirector(stage, ff7LayoutFor(state?.enemyIds?.[0], viewportAspect()));
   director.place(state);
   return {
     sync: (s) => director.sync(s),

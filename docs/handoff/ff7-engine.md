@@ -8,6 +8,10 @@ suites are unchanged. Plan: `docs/plans/ff7-guard-scorpion-architecture.md`. Sou
 `research/ff7-battle-core.md` ("core"), `research/ff7-guard-scorpion.md` ("gs"),
 `research/ff7-battle-staging.md` ("staging").
 
+> **2026-11-07, hidden chapter 44 (Jenova LIFE; `docs/handoff/ch-jenova-life.md`) grew this kernel, additively:** `statuses.ts` (Reflect, Barrier, MBarrier, Regen on the V-Timer), `reflect.ts` (the bounce),
+> `policies-jenova.ts` (the bench's players), `ai/jenova-life.ts`; `perform.ts` now runs `strike()` once per hit of an action's `hits` (Limit chains), `resolve.ts` has Counter - Magical, a turn of two uses and an MP-paying
+> counter, `stats.ts` has Materia levels from AP. The Guard Scorpion's pin (`ff7-golden`) is unchanged to the hash.
+
 ## What exists
 
 Part 1 (commit c1b4f65a): `defs.ts`, `stats.ts`, `formulas.ts`, `hit.ts`, `atb.ts`,

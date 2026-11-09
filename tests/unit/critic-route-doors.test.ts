@@ -25,6 +25,10 @@ describe('the route\'s table of door words is the board\'s', () => {
     expect(doorWordFor('spherimorph')).toBe('spherimorph');
     expect(doorWordFor('ffx2-youth-league')).toBe('youth');
     expect(doorWordFor('omega-ruins')).toBe('weapon');
+    // The three hidden chapters of the r78 integration (2026-11-08): the route types the same word the board opens on.
+    expect(doorWordFor('ff7-jenova-life')).toBe('bluelight');
+    expect(doorWordFor('ffx2-ifrit-kilika')).toBe('ifrit');
+    expect(doorWordFor('wendigo')).toBe('wendigo');
   });
 
   it('answers null for a chapter that has a card on the board (the arrow-key walk finds it)', () => {

@@ -71,4 +71,25 @@ describe('PaintedStage.shotDirector', () => {
     await new BattleMoments({ stage: plain, sleep: () => Promise.resolve(), speed: () => 'normal' }).victory();
     expect(plainMoves).toEqual(['move:victory']);
   });
+
+  it('hands the director the HUD switch (phase 4, additive): setHud reaches the HUD port, a HUD that throws never fails the beat, and no HUD port is no call', async () => {
+    const hudCalls: boolean[] = [];
+    let switchSeen = false;
+    const directed = stageWith({
+      ...EVRAE_AIRSHIP_DECK_SLOTS,
+      shotDirector: {
+        victory: (ctx) => {
+          switchSeen = typeof ctx.setHud === 'function';
+          ctx.setHud?.(false);
+          return true;
+        },
+      },
+    });
+    await new BattleMoments({ stage: directed, sleep: () => Promise.resolve(), speed: () => 'normal', hud: { setVisible: (v: boolean) => void hudCalls.push(v) } }).victory();
+    expect(switchSeen).toBe(true);
+    expect(hudCalls, 'the director hid it; the moments put nothing back during the beat').toEqual([false]);
+    const broken = { setVisible: (): void => { throw new Error('no hud'); } };
+    await expect(new BattleMoments({ stage: directed, sleep: () => Promise.resolve(), speed: () => 'normal', hud: broken }).victory()).resolves.toBeUndefined();
+    await expect(new BattleMoments({ stage: directed, sleep: () => Promise.resolve(), speed: () => 'normal' }).victory()).resolves.toBeUndefined();
+  });
 });

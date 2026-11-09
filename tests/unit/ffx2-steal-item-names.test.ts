@@ -104,7 +104,7 @@ describe('FFX-2 steal rewards resolve to named items (FFX-2 only)', () => {
   });
 
   it('a held price of 0 is flagged unsourced, never read as "never sold"; White Cape keeps its sourced 3,000', () => {
-    expect([...UNSOURCED_PRICE_IDS].sort()).toEqual(['amulet', 'charm-bangle', 'moon-bracer', 'potpourri', 'ribbon', 'snow-ring', 'soul-of-thamasa', 'sprint-shoes', 'x2-chaos-shock', 'x2-fury-shock', 'x2-m-bomb', 'x2-mana-tablet', 'x2-mute-shock', 'x2-water-gem']);
+    expect([...UNSOURCED_PRICE_IDS].sort()).toEqual(['amulet', 'angel-earrings', 'charm-bangle', 'fiery-gleam', 'moon-bracer', 'potpourri', 'ribbon', 'snow-ring', 'soul-of-thamasa', 'sprint-shoes', 'x2-chaos-shock', 'x2-fury-shock', 'x2-m-bomb', 'x2-mana-tablet', 'x2-mute-shock', 'x2-water-gem']);
     for (const id of UNSOURCED_PRICE_IDS) expect(data.ITEMS[id]!.price, id).toBe(0);
     expect(UNSOURCED_PRICE_IDS.has('white-cape')).toBe(false);
     expect(data.ITEMS['white-cape']!.price).toBe(3000);

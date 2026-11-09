@@ -53,6 +53,7 @@ import type { Ff7Registry } from './defs.ts';
 import { allUnits, isParty, unit, type EventDraft, type Ff7Env, type Ff7QueuedAction, type Ff7Runtime } from './internal.ts';
 import { executeNext, gaugeFilled, runSetups } from './resolve.ts';
 import { buildFf7Battle, turnIncreases } from './setup.ts';
+import { tickStatuses, ticksToNextStatusEvent } from './statuses.ts';
 
 /** Options for {@link Ff7Engine}. */
 export interface Ff7EngineOptions {
@@ -215,13 +216,15 @@ export class Ff7Engine implements BattleEngine {
         continue;
       }
       if (!through && this.inputHead()) break;
-      const k = Math.min(left, ticksToNextFill(units, this.rt.increase));
+      // A status end or a Regen tick bounds the step too, so it lands on its tick (Infinity with none: the step is unchanged).
+      const k = Math.min(left, ticksToNextFill(units, this.rt.increase), ticksToNextStatusEvent(units, v));
       if (!Number.isFinite(k)) {
         this.st.ticks += left;
         left = 0;
         break;
       }
       const filled = advanceTimers(units, this.rt.increase, v, k);
+      tickStatuses(env, units);
       this.st.ticks += k;
       left -= k;
       for (const c of filled) {

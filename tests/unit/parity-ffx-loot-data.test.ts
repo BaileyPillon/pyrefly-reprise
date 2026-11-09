@@ -26,6 +26,7 @@ import { EVRAE_ALTANA_ID, GATE_LOCK_IDS, GEOSGAENO_ID } from '../../src/data/ffx
 import { SANCTUARY_KEEPER_ID } from '../../src/data/ffx/sanctuary-keeper-ids.ts';
 import { SPHERIMORPH_ID } from '../../src/data/ffx/spherimorph-ids.ts';
 import { NEMESIS_ID, OMEGA_WEAPON_ID, ULTIMA_WEAPON_ID } from '../../src/data/ffx/omega-ruins-ids.ts';
+import { LAKE_GUARDIAN_IDS, WENDIGO_ID } from '../../src/data/ffx/wendigo-ids.ts';
 import { BFA_LINE_FILE, dropsOfRecord, FFX_LOOT_RECORDS, ITEM_ID_OF_NUMBER, lootOf, lootRewards } from '../../src/data/ffx/loot/index.ts';
 
 interface Row {
@@ -98,7 +99,7 @@ describe('every shipped monster has the right record, and its listed rewards are
    *
    * **The hidden Penance chapter's three (m344 Penance, m345 and m346 the arms, 2026-11-06) are in the same case:** `research/re-ffx-penance.md` section 3 and 7 give the AP, the overkill AP, the drop slot and the steals as record fields, but the 0x118-byte chunks' digests are not in the repo, so they pay through `rewards` alone (an arm on every death) and nothing is invented (rule 6).
    */
-  const NO_RECORD: ReadonlySet<string> = new Set([DARK_CINDY_ID, DARK_SANDY_ID, DARK_MINDY_ID, DARK_YOJIMBO_ID, DARK_DAIGORO_ID, SPECTRAL_KEEPER_ID, ...SPECTRAL_CIRCLE_IDS, PENANCE_ID, PENANCE_RIGHT_ARM_ID, PENANCE_LEFT_ARM_ID, ...DARK_SIX_LINKS.map((l) => l.bodyId), EVRAE_ALTANA_ID, GEOSGAENO_ID, ...GATE_LOCK_IDS, SANCTUARY_KEEPER_ID, SPHERIMORPH_ID, ULTIMA_WEAPON_ID, OMEGA_WEAPON_ID, NEMESIS_ID]); // + Penance's three bodies (m344 to m346, 2026-11-06) and the hidden Dark Aeons' six bodies (2026-11-06): their rewards are the enemy file's own rows, pinned against the game's records by `chapters/dark-aeons-six-data.test.ts` // + the hidden Flooded Ways' four bodies (m120, m109, m162, m171, 2026-11-06): their loot records' digests are not in the repo, so each pays through its enemy file's own reward fields (RE 1.3), pinned by `chapters/flooded-ways-data.test.ts`
+  const NO_RECORD: ReadonlySet<string> = new Set([DARK_CINDY_ID, DARK_SANDY_ID, DARK_MINDY_ID, DARK_YOJIMBO_ID, DARK_DAIGORO_ID, SPECTRAL_KEEPER_ID, ...SPECTRAL_CIRCLE_IDS, PENANCE_ID, PENANCE_RIGHT_ARM_ID, PENANCE_LEFT_ARM_ID, ...DARK_SIX_LINKS.map((l) => l.bodyId), EVRAE_ALTANA_ID, GEOSGAENO_ID, ...GATE_LOCK_IDS, SANCTUARY_KEEPER_ID, SPHERIMORPH_ID, ULTIMA_WEAPON_ID, OMEGA_WEAPON_ID, NEMESIS_ID, WENDIGO_ID, ...LAKE_GUARDIAN_IDS]); // + the hidden Wendigo chapter's three bodies (m212 and m213 twice, 2026-11-06: no record in the table, the digests are not in the repo) + Penance's three bodies (m344 to m346, 2026-11-06) and the hidden Dark Aeons' six bodies (2026-11-06): their rewards are the enemy file's own rows, pinned against the game's records by `chapters/dark-aeons-six-data.test.ts` // + the hidden Flooded Ways' four bodies (m120, m109, m162, m171, 2026-11-06): their loot records' digests are not in the repo, so each pays through its enemy file's own reward fields (RE 1.3), pinned by `chapters/flooded-ways-data.test.ts`
   const everyone = Object.values(ENEMY_GROUPS_BY_ID).flatMap((g) => [...g.enemies, ...(g.parts ?? [])]);
   const shipped = everyone.filter((e) => !NO_RECORD.has(e.id));
 
