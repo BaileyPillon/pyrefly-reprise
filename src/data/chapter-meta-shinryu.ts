@@ -25,7 +25,7 @@ export const SHINRYU_META: ChapterMeta = {
   heroArt: 'pause/ch48-shinryu',
   heroArtFallback: 'backdrops/via-purifico.png',
   quote: { text: 'It points! Whoever it picks, the water breaks!', speaker: 'Wakka' },
-  handwritten: 'end it before the third point',
+  handwritten: 'end it before it points twice', // the Eraser is used only while more than one swimmer lives, so it points at most twice (RE 2; `shinryu-engine.test.ts`): never "the third"
   objectives: [
     { id: 'quarter', label: 'Take a quarter off it', rule: { kind: 'boss-hp-below', fraction: 0.75 } },
     { id: 'half', label: 'Bring it below half', rule: { kind: 'boss-hp-below', fraction: 0.5 } },

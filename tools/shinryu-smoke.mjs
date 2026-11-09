@@ -2,7 +2,7 @@
 /**
  * The real-key smoke of the hidden Shinryu chapter (branch `ch-shinryu`; FFX only): a headless Playwright run, against a dev or preview server that is already up, under the review-browser lock
  * (`tools/rig-record-lock.mjs`: one browser job at a time on this PC; the job promises to finish inside ten minutes). It opens the chapter by its typed word, looks at party prep, plays the pre scene by keyboard,
- * takes the first menu (Shinryu at 2,000,000 HP, Tidus, Wakka and Rikku, a water battle) and plays the WHOLE fight with the real keys and no debug write:
+ * takes the first menu (Shinryu at 2,000,000 HP, Tidus, Wakka and Rikku, a water battle) and plays the WHOLE fight with the real keys. **One debug-API call, and only one:** `window.__pyrefly.setSeed(seed)` (the `--seed` flag) fixes the battle's random seed on party prep, before the first key of the fight, so a run can be repeated; nothing else is written through the debug API, and every key after it is a real key:
  *
  *   1. Attack with whoever's turn it is (Enter on the first row, Enter on Shinryu, the only foe): every blow takes 99,999 off it and draws a claw from it;
  *   2. the loop goes on until the battle ends (about 21 blows); an Eraser, if one lands, is a shatter (the member is gone from the field);

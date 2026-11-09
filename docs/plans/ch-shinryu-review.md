@@ -8,6 +8,8 @@ Paper preflight under `critic/RUBRIC.md` §4 (AGENTS.md rule 15), in the format 
 
 **Verdict: PROCEED.** One monster, three moves and a counter; the water rule, the swimmers' line-up, the Celestial weapons and the endgame caps exist. The one real question is the party, and the files answer it (summary 7 of the note). Everything Bailey will see waits for the picks of section 9 (hard rule 9), which the driver takes under the delegation above.
 
+**BUILT AS (added 2026-11-08, after the review; the plan below is the paper preflight as written, the handoff `docs/handoff/ch-shinryu.md` is the record of what shipped):** (1) **SH7 / E4 / T5: the segmented boss bar is NOT built**; the plain bar ships and the board's quarter and half objectives stand in (handoff section 2). (2) **The "third Eraser" never happens**: the script does not use the Eraser with one swimmer alive, so the Eraser can take two of the three and the race is against the second (handoff section 5, point 2); "about twenty-one hits before the third Eraser" in the preview below is therefore "before the second", and the party in fact wins in about one Shinryu turn, not two. (3) The steal and drop items (Wings to Discovery, Gambler's Spirit) needed two name-only `ItemDef` rows (`data/ffx/items/spheres.ts`), which this plan did not list. (4) SH9's word check looked at the last letter only; `leviathan` would have failed the door table.
+
 ## 1. Game case and sources
 
 **Game case: FFX only.** A Monster Arena original creation; CTB, the swimmers, FFX status rules. The shared plumbing is "both" (CHK-020) and additive.

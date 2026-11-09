@@ -23,7 +23,7 @@ import type { Chapter } from './encounters.ts';
 import { shinryuBuild } from './ffx/builds/shinryu.ts';
 import { shinryuGroup } from './ffx/enemies/shinryu.ts';
 import { shinryuScripts } from '../story/scripts/shinryu.ts';
-import { SHINRYU_CHAPTER_ID, SHINRYU_ID, SHINRYU_SCENE } from './ffx/shinryu-ids.ts';
+import { SHINRYU_CHAPTER_ID, SHINRYU_SCENE } from './ffx/shinryu-ids.ts';
 
 export { SHINRYU_CHAPTER_ID, SHINRYU_SCENE }; // the ids live in `./ffx/shinryu-ids.ts` (no imports), so the scene and the door can name them without this record's graph
 
@@ -59,8 +59,6 @@ export const SHINRYU: Chapter = {
     battle: 'boss-challenge',
     victory: 'victory-ffx',
   },
-  // Duplicated from the enemy record's own `sensorText` (`./ffx/enemies/shinryu.ts`), as the `Chapter` contract asks.
-  sensorTexts: {
-    [SHINRYU_ID]: 'A shadow too large for any sensor to hold. In this water stone shatters, so end it quickly.',
-  },
+  // None: Shinryu is immune to Sensor and to Scan (`./ffx/enemies/shinryu.ts`), so no text is ever shown (the Guard Scorpion's chapter is empty the same way).
+  sensorTexts: {},
 };

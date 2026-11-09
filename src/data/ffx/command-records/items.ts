@@ -99,4 +99,9 @@ export const COMMAND_RECORDS_ITEMS: Readonly<Record<string, FFXCommandRecord>> =
   'power-sphere': { id: 0x2046, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Power Sphere (what a Power Distiller turns a drop into)
   'mana-sphere': { id: 0x2047, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Mana Sphere (a Mana Distiller's; also named by the Gui head's record)
   'speed-sphere': { id: 0x2048, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Speed Sphere (a Speed Distiller's; also named by the Gui arm's record)
+  // The hidden Shinryu chapter's drop and steal (FFX only, 2026-11-08 fix pass: the Steal banner printed their raw ids for want of an item row). The ids are the game's own item order: Gambler's Spirit is 0x206d
+  // (`battle/ffx/kernel/steal-rewards.ts#ITEM_GAMBLERS_SPIRIT`; index 109 of the Mix table's item list) and Wings to Discovery is the entry before it, 0x206c (index 108; the same list puts the Rename Card at index 101 = 0x2065,
+  // `ITEM_RENAME_CARD`, so the list's index is the id less 0x2000). Both rows are in both fixtures as the blank item row (type 0, no flags, damage class 0, rank 2, no status bytes), like every other reward item here.
+  'wings-to-discovery': { id: 0x206c, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Wings to Discovery
+  'gamblers-spirit': { id: 0x206d, type: 0, flagsMisc: 0x0, flagsDamage: 0x0, damageClass: 0, rank: 2 }, // Gambler's Spirit
 };

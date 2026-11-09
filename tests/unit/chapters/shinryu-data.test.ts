@@ -213,7 +213,11 @@ describe('the chapter is registered hidden, and reachable by its word', () => {
     expect(chapter.enemyGroupRef).toBe(shinryuGroup);
     expect(chapter.buildRef).toBe(shinryuBuild);
     expect(chapter.music).toEqual({ scene: 'scene-gagazet', battle: 'boss-challenge', victory: 'victory-ffx' });
-    expect(chapter.sensorTexts?.['shinryu']).toBe(shinryu().sensorText);
+    // immune to Sensor and to Scan: no text of either kind could ever show, so none is carried
+    expect(shinryu().immunityFlags).toEqual(expect.arrayContaining(['immune-to-sensor', 'immune-to-scan']));
+    expect(shinryu().sensorText).toBeUndefined();
+    expect(shinryu().scanText).toBeUndefined();
+    expect(chapter.sensorTexts).toEqual({});
     expect(shinryuGroup.musicCues?.[0]?.track).toBe(chapter.music.battle);
   });
 

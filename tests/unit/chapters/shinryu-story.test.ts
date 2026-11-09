@@ -91,6 +91,15 @@ describe('the voices keep to the writing bible', () => {
     expect(all.some((l) => l.type === 'say' && l.who === 'tidus')).toBe(true);
   });
 
+  it('the post scene names no count of swimmers: about one win in three has a swimmer the Eraser shattered, and the scene (its own screen and runner, no battle roster) cannot know', () => {
+    const post = lines(scripts.post).map((l) => l.text).join(' ');
+    expect(post).not.toMatch(/\b(all|both)\b[^.!?]*\b(three|two)\b|\bthree of you\b|\ball of you\b|\bone,? two\b|\bevery one of (you|us)\b|\bthe three\b|\bwe all (made|lived|survived)\b/i);
+    expect(post).not.toMatch(/\b(one|two|three)\b/i);
+    // the count line is a question and its answer is true for one, two or three
+    expect(lines(scripts.post).some((l) => l.type === 'say' && l.who === 'rikku' && /count off/i.test(l.text))).toBe(true);
+    expect(lines(scripts.post).some((l) => l.type === 'say' && /however many/i.test(l.text))).toBe(true);
+  });
+
   it('the lines teach the fight without a tutorial: it strikes back, the Eraser turns one to stone, the water breaks stone', () => {
     const text = all.map((l) => l.text).join(' ');
     expect(text).toMatch(/strikes back/);

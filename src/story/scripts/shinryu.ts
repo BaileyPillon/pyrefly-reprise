@@ -12,6 +12,10 @@
  * `pre` is seven lines over the stage's plate, `post` five, plus one **callout** (the first Eraser: one line, naming the answer without naming the button). This chapter is NOT in `../registry.ts` (its tests pin that the
  * registry's keys are the listed chapters); `tests/unit/chapters/shinryu-story.test.ts` audits the lint, the sizes, the voices and the trigger-to-script agreement. Music: the scenes are silent beds; the fight's cue is the
  * formation's (`boss-challenge`, a stand-in: rule 13).
+ *
+ * **The post scene is count-free on purpose (review of 2026-11-08, MAJOR 2).** About one win in three has a swimmer the Eraser shattered, and a static scene cannot know: the post scene plays on its own `CutsceneScreen` with its own
+ * runner, so a chapter flag the callout sets (`setFlag`) is not there to read (`BattleScreenCutscenes.ts` resets only its own runner), and no battle outcome reaches the screen. The lines are therefore true for one, two or three
+ * swimmers; `shinryu-story.test.ts` pins that they name no count. The alternative, a flag-branched scene, needs the flow to hand the battle's roster to the post screen (a shared-plumbing change for one chapter: not built).
  */
 
 import type { MidBattleTrigger } from '../../battle/common/types.ts';
@@ -58,10 +62,10 @@ export const shinryuScripts: ChapterScripts = {
     fade('clear', 1400),
     wait(800),
     say('tidus', 'It is gone. The water has gone quiet.'), // 1
-    say('wakka', 'You swung true, brudda. All three of you.'), // 2
+    say('wakka', 'You swung true, brudda. Anyone the water broke, we carry up, ya.'), // 2
     beat(1400),
     say('rikku', 'Okay okay okay: is everybody still here? Count off!'), // 3
-    say('tidus', 'One, two, and a very wet three.'), // 4
+    say('tidus', 'However many answer, we all go up together.'), // 4
     say('wakka', 'Up we go, ya.'), // 5
     results(),
   ],

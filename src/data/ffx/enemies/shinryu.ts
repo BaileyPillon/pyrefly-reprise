@@ -61,8 +61,6 @@ const at255 = (list: readonly StatusId[]): StatusImmunities => Object.fromEntrie
 /** The flag bytes' immunities (+0x28 = 0x1E, +0x29 = 0x05): Sensor, Scan, percentage damage, Life, CTB damage, Bribe; `boss` as the other bosses'. */
 const FLAGS: EnemyDef['immunityFlags'] = ['boss', 'immune-to-percentage-damage', 'immune-to-life', 'immune-to-sensor', 'immune-to-scan', 'immune-to-delay', 'immune-to-bribe'];
 
-const SENSOR = 'A shadow too large for any sensor to hold. In this water stone shatters, so end it quickly.';
-
 /**
  * Shinryu (m283), formation slot 0 (the game's actor 20). **The painting is the airship Evrae's until `characters/shinryu/` is painted** (`../shinryu-ids.ts#SHINRYU_STAND_IN`): the figure's height is the scene's
  * (`scenes/shinryu.ts`).
@@ -92,8 +90,7 @@ export function shinryu(): EnemyDef {
     },
     abilityIds: [SHINRYU_ROWS.shining, SHINRYU_ROWS.eraser, SHINRYU_ROWS.attack],
     flags: { isBoss: true },
-    sensorText: SENSOR,
-    scanText: 'Shinryu, the dragon of the deep water. Nothing is its weakness and almost nothing can touch its mind. It answers every wound with a claw, and one turn in three it turns a swimmer to stone.',
+    // No `sensorText` and no `scanText` (review of 2026-11-08, MINOR 8): the record is immune to Sensor (the flag byte) and to Scan (the extra-immunity word), so no text of either kind is ever shown; the panel prints "Immune to sensors."
     threatenChance: 0,
     zanmatoLevel: SHINRYU_ZANMATO_BYTE + 1,
     doomTurns: SHINRYU_DOOM_TURNS,
