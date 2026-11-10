@@ -1,0 +1,116 @@
+{
+ "none/yuna": {
+  "shown": [
+   [
+    "yuna-ffx2",
+    "yuna"
+   ]
+  ],
+  "plate": "yuna-ffx2",
+  "imgs": [
+   {
+    "plate": "yuna-ffx2",
+    "src": "/art/pause/yuna-ffx2.png",
+    "art": "plate"
+   }
+  ],
+  "mirrored": false,
+  "tabs": "<span class=\"pause__bump pause__bump--l\" aria-hidden=\"true\"><b>Q</b><i>L1</i></span><span class=\"pause__swipe\" data-role=\"swipe\"><button type=\"button\" class=\"pause__tab pause__tab--on\" role=\"tab\" aria-selected=\"true\" id=\"pause-tab-member:yuna\" aria-controls=\"pause-panel\" tabindex=\"0\" data-cursor=\"\" data-tab=\"member:yuna\" data-action=\"pause:tab:member:yuna\">Yuna<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span></button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-member:rikku\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"member:rikku\" data-action=\"pause:tab:member:rikku\">Rikku<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span></button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-member:paine\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"member:paine\" data-action=\"pause:tab:member:paine\">Paine<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span><span class=\"pause__dot\"></span></button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-chapter\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"chapter\" data-action=\"pause:tab:chapter\">Chapter</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-guide\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"guide\" data-action=\"pause:tab:guide\">Guide</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-options\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"options\" data-action=\"pause:tab:options\">Options</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-accessibility\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"accessibility\" data-action=\"pause:tab:accessibility\">Accessibility</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-controls\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"controls\" data-action=\"pause:tab:controls\">Controls</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-music\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"music\" data-action=\"pause:tab:music\">Music</button></span><span class=\"pause__bump pause__bump--r\" aria-hidden=\"true\"><i>R1</i><b>E</b></span>",
+  "body": "Battle statsHP690/690MP130/130Strength9Magic79Defence37Magic Def146Agility52In this fightATB83%ModeWaitChain×0Dresspherewhite mageGarment gridprotection haloGates0 of 4 passed"
+ },
+ "none/rikku": {
+  "shown": [
+   [
+    "rikku-ffx2",
+    "rikku"
+   ]
+  ],
+  "plate": "rikku-ffx2",
+  "imgs": [
+   {
+    "plate": "rikku-ffx2",
+    "src": "/art/pause/rikku-ffx2.png",
+    "art": "plate"
+   }
+  ],
+  "mirrored": false,
+  "tabs": "<span class=\"pause__bump pause__bump--l\" aria-hidden=\"true\"><b>Q</b><i>L1</i></span><span class=\"pause__swipe\" data-role=\"swipe\"><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-member:yuna\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"member:yuna\" data-action=\"pause:tab:member:yuna\">Yuna<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span></button><button type=\"button\" class=\"pause__tab pause__tab--on\" role=\"tab\" aria-selected=\"true\" id=\"pause-tab-member:rikku\" aria-controls=\"pause-panel\" tabindex=\"0\" data-cursor=\"\" data-tab=\"member:rikku\" data-action=\"pause:tab:member:rikku\">Rikku<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span></button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-member:paine\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"member:paine\" data-action=\"pause:tab:member:paine\">Paine<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span><span class=\"pause__dot\"></span></button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-chapter\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"chapter\" data-action=\"pause:tab:chapter\">Chapter</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-guide\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"guide\" data-action=\"pause:tab:guide\">Guide</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-options\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"options\" data-action=\"pause:tab:options\">Options</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-accessibility\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"accessibility\" data-action=\"pause:tab:accessibility\">Accessibility</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-controls\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"controls\" data-action=\"pause:tab:controls\">Controls</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-music\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"music\" data-action=\"pause:tab:music\">Music</button></span><span class=\"pause__bump pause__bump--r\" aria-hidden=\"true\"><i>R1</i><b>E</b></span>",
+  "body": "Battle statsHP1839/1839MP158/158Strength79Magic49Defence141Magic Def92Agility38In this fightATB87%ModeWaitChain×0Dresspheredark knightGarment gridhour of needGates0 of 4 passed"
+ },
+ "none/paine": {
+  "shown": [
+   [
+    "paine",
+    "paine"
+   ]
+  ],
+  "plate": "paine",
+  "imgs": [
+   {
+    "plate": "paine",
+    "src": "/art/pause/paine.png",
+    "art": "plate"
+   }
+  ],
+  "mirrored": true,
+  "tabs": "<span class=\"pause__bump pause__bump--l\" aria-hidden=\"true\"><b>Q</b><i>L1</i></span><span class=\"pause__swipe\" data-role=\"swipe\"><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-member:yuna\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"member:yuna\" data-action=\"pause:tab:member:yuna\">Yuna<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span></button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-member:rikku\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"member:rikku\" data-action=\"pause:tab:member:rikku\">Rikku<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span></button><button type=\"button\" class=\"pause__tab pause__tab--on\" role=\"tab\" aria-selected=\"true\" id=\"pause-tab-member:paine\" aria-controls=\"pause-panel\" tabindex=\"0\" data-cursor=\"\" data-tab=\"member:paine\" data-action=\"pause:tab:member:paine\">Paine<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span><span class=\"pause__dot\"></span></button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-chapter\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"chapter\" data-action=\"pause:tab:chapter\">Chapter</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-guide\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"guide\" data-action=\"pause:tab:guide\">Guide</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-options\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"options\" data-action=\"pause:tab:options\">Options</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-accessibility\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"accessibility\" data-action=\"pause:tab:accessibility\">Accessibility</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-controls\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"controls\" data-action=\"pause:tab:controls\">Controls</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-music\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"music\" data-action=\"pause:tab:music\">Music</button></span><span class=\"pause__bump pause__bump--r\" aria-hidden=\"true\"><i>R1</i><b>E</b></span>",
+  "body": "Battle statsHP1706/1706MP67/67Strength86Magic26Defence110Magic Def8Agility50In this fightATB100%ModeWaitChain×0DresspherewarriorGarment gridstonehewnGates0 of 4 passed"
+ },
+ "plates/yuna": {
+  "shown": [
+   [
+    "yuna-ffx2",
+    "yuna"
+   ]
+  ],
+  "plate": "yuna-ffx2",
+  "imgs": [
+   {
+    "plate": "yuna-ffx2",
+    "src": "/art/pause/yuna-ffx2.png",
+    "art": "plate"
+   }
+  ],
+  "mirrored": false,
+  "tabs": "<span class=\"pause__bump pause__bump--l\" aria-hidden=\"true\"><b>Q</b><i>L1</i></span><span class=\"pause__swipe\" data-role=\"swipe\"><button type=\"button\" class=\"pause__tab pause__tab--on\" role=\"tab\" aria-selected=\"true\" id=\"pause-tab-member:yuna\" aria-controls=\"pause-panel\" tabindex=\"0\" data-cursor=\"\" data-tab=\"member:yuna\" data-action=\"pause:tab:member:yuna\">Yuna<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span></button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-member:rikku\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"member:rikku\" data-action=\"pause:tab:member:rikku\">Rikku<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span></button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-member:paine\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"member:paine\" data-action=\"pause:tab:member:paine\">Paine<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span><span class=\"pause__dot\"></span></button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-chapter\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"chapter\" data-action=\"pause:tab:chapter\">Chapter</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-guide\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"guide\" data-action=\"pause:tab:guide\">Guide</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-options\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"options\" data-action=\"pause:tab:options\">Options</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-accessibility\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"accessibility\" data-action=\"pause:tab:accessibility\">Accessibility</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-controls\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"controls\" data-action=\"pause:tab:controls\">Controls</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-music\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"music\" data-action=\"pause:tab:music\">Music</button></span><span class=\"pause__bump pause__bump--r\" aria-hidden=\"true\"><i>R1</i><b>E</b></span>",
+  "body": "Battle statsHP690/690MP130/130Strength9Magic79Defence37Magic Def146Agility52In this fightATB83%ModeWaitChain×0Dresspherewhite mageGarment gridprotection haloGates0 of 4 passed"
+ },
+ "plates/rikku": {
+  "shown": [
+   [
+    "rikku-ffx2",
+    "rikku"
+   ]
+  ],
+  "plate": "rikku-ffx2",
+  "imgs": [
+   {
+    "plate": "rikku-ffx2",
+    "src": "/art/pause/rikku-ffx2.png",
+    "art": "plate"
+   }
+  ],
+  "mirrored": false,
+  "tabs": "<span class=\"pause__bump pause__bump--l\" aria-hidden=\"true\"><b>Q</b><i>L1</i></span><span class=\"pause__swipe\" data-role=\"swipe\"><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-member:yuna\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"member:yuna\" data-action=\"pause:tab:member:yuna\">Yuna<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span></button><button type=\"button\" class=\"pause__tab pause__tab--on\" role=\"tab\" aria-selected=\"true\" id=\"pause-tab-member:rikku\" aria-controls=\"pause-panel\" tabindex=\"0\" data-cursor=\"\" data-tab=\"member:rikku\" data-action=\"pause:tab:member:rikku\">Rikku<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span></button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-member:paine\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"member:paine\" data-action=\"pause:tab:member:paine\">Paine<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span><span class=\"pause__dot\"></span></button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-chapter\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"chapter\" data-action=\"pause:tab:chapter\">Chapter</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-guide\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"guide\" data-action=\"pause:tab:guide\">Guide</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-options\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"options\" data-action=\"pause:tab:options\">Options</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-accessibility\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"accessibility\" data-action=\"pause:tab:accessibility\">Accessibility</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-controls\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"controls\" data-action=\"pause:tab:controls\">Controls</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-music\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"music\" data-action=\"pause:tab:music\">Music</button></span><span class=\"pause__bump pause__bump--r\" aria-hidden=\"true\"><i>R1</i><b>E</b></span>",
+  "body": "Battle statsHP1839/1839MP158/158Strength79Magic49Defence141Magic Def92Agility38In this fightATB87%ModeWaitChain×0Dresspheredark knightGarment gridhour of needGates0 of 4 passed"
+ },
+ "plates/paine": {
+  "shown": [
+   [
+    "paine",
+    "paine"
+   ]
+  ],
+  "plate": "paine",
+  "imgs": [
+   {
+    "plate": "paine",
+    "src": "/art/pause/paine.png",
+    "art": "plate"
+   }
+  ],
+  "mirrored": true,
+  "tabs": "<span class=\"pause__bump pause__bump--l\" aria-hidden=\"true\"><b>Q</b><i>L1</i></span><span class=\"pause__swipe\" data-role=\"swipe\"><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-member:yuna\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"member:yuna\" data-action=\"pause:tab:member:yuna\">Yuna<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span></button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-member:rikku\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"member:rikku\" data-action=\"pause:tab:member:rikku\">Rikku<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span></button><button type=\"button\" class=\"pause__tab pause__tab--on\" role=\"tab\" aria-selected=\"true\" id=\"pause-tab-member:paine\" aria-controls=\"pause-panel\" tabindex=\"0\" data-cursor=\"\" data-tab=\"member:paine\" data-action=\"pause:tab:member:paine\">Paine<span class=\"pause__tabhp\"><i style=\"width:100.0%\"></i></span><span class=\"pause__dot\"></span></button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-chapter\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"chapter\" data-action=\"pause:tab:chapter\">Chapter</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-guide\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"guide\" data-action=\"pause:tab:guide\">Guide</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-options\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"options\" data-action=\"pause:tab:options\">Options</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-accessibility\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"accessibility\" data-action=\"pause:tab:accessibility\">Accessibility</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-controls\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"controls\" data-action=\"pause:tab:controls\">Controls</button><button type=\"button\" class=\"pause__tab\" role=\"tab\" aria-selected=\"false\" id=\"pause-tab-music\" aria-controls=\"pause-panel\" tabindex=\"-1\" data-tab=\"music\" data-action=\"pause:tab:music\">Music</button></span><span class=\"pause__bump pause__bump--r\" aria-hidden=\"true\"><i>R1</i><b>E</b></span>",
+  "body": "Battle statsHP1706/1706MP67/67Strength86Magic26Defence110Magic Def8Agility50In this fightATB100%ModeWaitChain×0DresspherewarriorGarment gridstonehewnGates0 of 4 passed"
+ }
+}

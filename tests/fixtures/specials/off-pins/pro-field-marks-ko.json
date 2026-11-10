@@ -1,0 +1,18 @@
+{
+ "ffx2/after-sync": {
+  "count": 1,
+  "html": "<div class=\"pro-ko-wash\"></div><div class=\"pro-ko-mark\">KO</div>"
+ },
+ "ffx2/after-2s": {
+  "count": 1,
+  "html": "<div class=\"pro-ko-wash\" style=\"width: 144px; height: 49px; transform: translate(-50%, -50%) translate(500.0px, 694.2px); opacity: 0.8;\"></div><div class=\"pro-ko-mark\" style=\"font-size: 16.6px; transform: translate(-50%, -50%) translate(500.0px, 671.2px) scale(1.000); opacity: 1;\">KO</div>"
+ },
+ "ffx/after-sync": {
+  "count": 1,
+  "html": "<div class=\"pro-ko-wash\"></div><div class=\"pro-ko-mark\">KO</div>"
+ },
+ "ffx/after-2s": {
+  "count": 1,
+  "html": "<div class=\"pro-ko-wash\" style=\"width: 144px; height: 49px; transform: translate(-50%, -50%) translate(300.0px, 694.2px); opacity: 0.9;\"></div><div class=\"pro-ko-mark\" style=\"font-size: 16.6px; transform: translate(-50%, -50%) translate(300.0px, 671.2px) scale(1.000); opacity: 1;\">KO</div>"
+ }
+}

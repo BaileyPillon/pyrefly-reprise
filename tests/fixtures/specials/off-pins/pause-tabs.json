@@ -1,0 +1,217 @@
+{
+ "ffx2-bahamut": [
+  {
+   "id": "member:yuna",
+   "label": "Yuna",
+   "memberId": "yuna",
+   "hp": 1,
+   "dot": false
+  },
+  {
+   "id": "member:rikku",
+   "label": "Rikku",
+   "memberId": "rikku",
+   "hp": 1,
+   "dot": false
+  },
+  {
+   "id": "member:paine",
+   "label": "Paine",
+   "memberId": "paine",
+   "hp": 1,
+   "dot": true
+  },
+  {
+   "id": "chapter",
+   "label": "Chapter",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "guide",
+   "label": "Guide",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "options",
+   "label": "Options",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "accessibility",
+   "label": "Accessibility",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "controls",
+   "label": "Controls",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "music",
+   "label": "Music",
+   "hp": null,
+   "dot": false
+  }
+ ],
+ "ffx2-vegnagun-shuyin": [
+  {
+   "id": "member:yuna",
+   "label": "Yuna",
+   "memberId": "yuna",
+   "hp": 0.49758842443729906,
+   "dot": false
+  },
+  {
+   "id": "member:rikku",
+   "label": "Rikku",
+   "memberId": "rikku",
+   "hp": 0.7788393489030432,
+   "dot": true
+  },
+  {
+   "id": "member:paine",
+   "label": "Paine",
+   "memberId": "paine",
+   "hp": 0.78676219720232,
+   "dot": true
+  },
+  {
+   "id": "chapter",
+   "label": "Chapter",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "guide",
+   "label": "Guide",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "options",
+   "label": "Options",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "accessibility",
+   "label": "Accessibility",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "controls",
+   "label": "Controls",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "music",
+   "label": "Music",
+   "hp": null,
+   "dot": false
+  }
+ ],
+ "ffx-fake": [
+  {
+   "id": "member:tidus",
+   "label": "Tidus",
+   "memberId": "tidus",
+   "hp": 0.9303846153846154,
+   "dot": true
+  },
+  {
+   "id": "member:yuna",
+   "label": "Yuna",
+   "memberId": "yuna",
+   "hp": 0.9378947368421052,
+   "dot": true
+  },
+  {
+   "id": "member:auron",
+   "label": "Auron",
+   "memberId": "auron",
+   "hp": 1,
+   "dot": false
+  },
+  {
+   "id": "chapter",
+   "label": "Chapter",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "guide",
+   "label": "Guide",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "options",
+   "label": "Options",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "accessibility",
+   "label": "Accessibility",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "controls",
+   "label": "Controls",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "music",
+   "label": "Music",
+   "hp": null,
+   "dot": false
+  }
+ ],
+ "no-battle": [
+  {
+   "id": "chapter",
+   "label": "Chapter",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "guide",
+   "label": "Guide",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "options",
+   "label": "Options",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "accessibility",
+   "label": "Accessibility",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "controls",
+   "label": "Controls",
+   "hp": null,
+   "dot": false
+  },
+  {
+   "id": "music",
+   "label": "Music",
+   "hp": null,
+   "dot": false
+  }
+ ]
+}
