@@ -1,19 +1,96 @@
 {
-  "asOf": "2026-11-09, the release 78 records pass (release 78 live: main cc0fea14a, bundle BAH_qvc7, deployed 2026-11-09T05:54:49Z; the hidden chapters 44 Jenova LIFE (FF7, word bluelight), 46 Ifrit at Kilika (FFX-2, word ifrit) and 49 Wendigo on frozen Lake Macalania (FFX, desktop only, word wendigo), the Mirror Aeons' Sphere Level bar kept inside its cap, the results page's settled counts and an FFX multi-hit status fix; its focused review read SHIP with the changed area FAIL (R78-1, a major in the new Jenova LIFE chapter), its live check PASS; its focused and deep obligations are pending and the deep review of the live build, round 36, is in flight; the wave-4 branches ch-shinryu and ch-garik-ronso are pushed and not merged, ch-belgemine is a local branch whose build is to be redone)",
+  "asOf": "2026-11-09, the release 79 records pass (release 79 live: main 193f6aef4, bundle BYej0WB6, deployed 2026-11-10T02:13:47Z; the hidden chapters 45 Belgemine's Challenge (FFX, word sidequest), 47 Garik Ronso and the Ronso Youths (FFX-2, word braveheart) and 48 Shinryu (FFX, word shinryu), the paintings of five hidden chapters (42, 45, 46, 47, 48) and a boss card that no longer asks for a painting the build does not hold; its focused review read SHIP with one disclosed major (R79-1, Jenova LIFE in FF7, the same as release 78), its live check PASS; its focused and deep obligations are pending and deep round 37 is owed by release 79, planned after release 80; release 81 refuses until it is settled; queued for release 80: ffx2-specials, wendigo-finish, ch-luca-opener, ch-oblitzerator and ch-gullwings-ch1, none merged)",
   "note": "Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.",
   "branches": [
-    {"name":"motion-rigs","tip":"eda138e06","case":"both (Tidus FFX, Rikku Dark Knight FFX-2)","what":"the party rig pilots: candidate configs tidus-x-t1, tidus-x-t2 and rikku-dark-knight-x-v1 on the approved colour-locked paintings (all gate OK); not merged; release 63 ships with the party rigs off (?partyrigs=on is the only way in; D-1322, item 200a), and no rig replaces a painting before he has seen it move (D-1086, D-1097)"},
-    {"name":"motion-art-t2","tip":"538159e72","case":"FFX (Tidus)","what":"the second art build for Tidus in grey shorts (mirror D:/pyrefly-art-motion-t2: the shorts idle plus 7 retouches); a second build because its registration is compiled in; release 63 ships Tidus as T1, the set locked to the darker live idle (D-1322, item 200a), so T2 is not picked and stays here for his eye after the conference"},
-    {"name":"anim-proto-2","tip":"8525ae459","case":"FFX (Lulu); clip plumbing both games","what":"animation pass 2 behind the dev flag ?anim=proto&style=P2: the orb toss, a gather, channel and release cast, knees, hit-stop on the game's own clip frames; he liked the orb toss (D-1070); nothing ships from it yet. Pass 1 is branch anim-proto (cfff4367d)"},
-    {"name":"anim-proto-3","tip":"48d868454","case":"FFX (Lulu); clip plumbing both games","what":"animation pass 3 on Lulu, a prototype behind the dev flag: the doll flies to the target and back, the knockout kneels through a procedural skirt fold, the cast channel gets a glow, glyphs and motes, the grey frame is fixed; open: the skirt fin in the knockout, the doll floating near the head, a small attack doll; nothing ships from it (the orb ship, anim-orb-ship, went live in release 59)"},
-    {"name":"rig","tip":"db2caa6d9","case":"both (shared plumbing; the subjects are FFX first)","what":"the rig lane's trunk: r55 shipped it up to 59c766ec0 (Kimahri and Lulu); this tip adds Auron's first pass, which stays off"},
-    {"name":"rig-auron2","tip":"72528aa3b","case":"FFX only","what":"Auron's rig pass 2 with format v2 variants (orb arm, flask, sword arm, katana, saya); gated OK 11 of 11 and OFF in the refine queue by his pick"},
-    {"name":"re-parity-new-chapters-1018","tip":"5f7b6ffbc","case":"FFX (Spectral Keeper) and FFX-2 (Fallen Maesters)","what":"research only: the Spectral Keeper and the Fallen Maesters data and AI extractions (the notes themselves went into r58 as plain files); no engine build, the chapter decisions SK1 to SK11 and FM1 to FM11 wait for Bailey"},
-    {"name":"saves-portable","tip":"c1852fa05","case":"both (save-data class)","what":"ChatGPT point 9: export and import a save as a checksummed file behind ?saveport=on, off by default; NOT merged into r68-int or release 68 (D-1379); a browser pass and a deep review are owed before the word comes off (A-1054)"},
-    {"name":"rigs-v2","tip":"9f90c3441","case":"both (Tidus FFX, Rikku Dark Knight FFX-2)","what":"the party rig pilots rebuilt (tidus-v2, rikku-dark-knight-v2 in D:/pyrefly-art-rigs) behind ?partyrigs=v2 with a motion audit; pushed; OUT of release 68 (D-1398): the clips (A-1073) show 0 ghost frames but a cut from standing to lying at the knock-out and four broken frames on Rikku's return (D-1401); nothing installed"},
-    {"name":"rigs-v3","tip":"f2dd94f79","case":"both (Tidus FFX, Rikku Dark Knight FFX-2)","what":"pushed; three rounds done on 2026-10-29 and 10-30 (A-1089): rigs-v2 on r68-final plus the painting’s knock-out topple and rise for a rig, the held pose through each cut, the settle before a KO from a flinch and the harness’s stature reading for rigs (D-1401); behind ?partyrigs=, off by default; not merged, nothing installed; the clips for him come first"},
-    {"name":"ch-shinryu","tip":"14b481c66","case":"FFX only (hidden Chapter 48, Shinryu in the submerged Via Purifico, word shinryu); shared plumbing is registry rows, a door row, a scene row, a fixture row and a formula-byte override (both games, inert elsewhere)","what":"pushed (origin/ch-shinryu 14b481c66); 2,000,000 HP against Tidus, Wakka and Rikku; the Penance preset's swimmers win 200 of 200, a measurement and not a tuning (no sourced party lever lands the fight in the 60 to 80 percent band and no boss number was touched; the call is Bailey's); the Eraser shatters a swimmer even on dry land (its own byte); a stand-in painting (the airship Evrae's); the phone read of the real-key smoke passes (14 checks at 390 x 844); the read-only review of 07a47087a found two majors and no critical and the fix pass answered them (Wings to Discovery and Gambler's Spirit get name-only item rows so the Steal banner stops printing a raw id; the reward-resolve test walks the hidden FFX chapters; the post scene no longer claims all three swimmers lived); full suite 2,065 files and 32,770 tests with 0 failed; its handoff notes 27 files conflicting against release 77, so the merge into the next integration is the driver's; not merged, not deployed"},
-    {"name":"ch-belgemine","tip":"d56053b5d","case":"FFX only (hidden Chapter 45, Belgemine's Challenge, the aeon duels)","what":"local branch, not pushed (d56053b5d); wave 4 of the chapters program: the research note on the aeon duels read from the game's files and the paper preflight; the build agent hung on a permission prompt and was stopped, so the build is to be redone from this note (it waits for space on D: after the release records); not merged, not deployed"},
-    {"name":"ch-garik-ronso","tip":"ed81c7532","case":"FFX-2 only (hidden Chapter 47, Garik Ronso, word braveheart: the plan's lionheart claims a later letter of the FF7 secret word, which tests/unit/chapter-doors.test.ts forbids); shared plumbing is a door row, registries, a chapter-only prep tab with its phone page, three held items and five kill-reward rows (inert for every other chapter)","what":"pushed (origin/ch-garik-ronso ed81c7532); Garik and the Ronso Youths at the top of Mt. Gagazet, the game's two fights (monster rows 181 and 182: the hostile fight, 15,000 HP, and the friendly bout, 10,940 HP) behind a TRUST row on party prep (Low is the hostile fight and the default), the move advisor line and a strategy-guide card; stand-in paintings, measured and not tuned (the advisor line wins 100 of 100 in about 36 game seconds); the fix pass after the adversarial review (the game's \"battle too long\" Meteor block is inert as in the game, so a weak line stalls and does not lose; Bane Lance's branch on Paine modelled; the Mythril Bangle's 0 sourced as never sold; the TRUST row's touch tap seen on a phone-sized window); not merged, not deployed"}
+    {
+      "name": "motion-rigs",
+      "tip": "eda138e06",
+      "case": "both (Tidus FFX, Rikku Dark Knight FFX-2)",
+      "what": "the party rig pilots: candidate configs tidus-x-t1, tidus-x-t2 and rikku-dark-knight-x-v1 on the approved colour-locked paintings (all gate OK); not merged; release 63 ships with the party rigs off (?partyrigs=on is the only way in; D-1322, item 200a), and no rig replaces a painting before he has seen it move (D-1086, D-1097)"
+    },
+    {
+      "name": "motion-art-t2",
+      "tip": "538159e72",
+      "case": "FFX (Tidus)",
+      "what": "the second art build for Tidus in grey shorts (mirror D:/pyrefly-art-motion-t2: the shorts idle plus 7 retouches); a second build because its registration is compiled in; release 63 ships Tidus as T1, the set locked to the darker live idle (D-1322, item 200a), so T2 is not picked and stays here for his eye after the conference"
+    },
+    {
+      "name": "anim-proto-2",
+      "tip": "8525ae459",
+      "case": "FFX (Lulu); clip plumbing both games",
+      "what": "animation pass 2 behind the dev flag ?anim=proto&style=P2: the orb toss, a gather, channel and release cast, knees, hit-stop on the game's own clip frames; he liked the orb toss (D-1070); nothing ships from it yet. Pass 1 is branch anim-proto (cfff4367d)"
+    },
+    {
+      "name": "anim-proto-3",
+      "tip": "48d868454",
+      "case": "FFX (Lulu); clip plumbing both games",
+      "what": "animation pass 3 on Lulu, a prototype behind the dev flag: the doll flies to the target and back, the knockout kneels through a procedural skirt fold, the cast channel gets a glow, glyphs and motes, the grey frame is fixed; open: the skirt fin in the knockout, the doll floating near the head, a small attack doll; nothing ships from it (the orb ship, anim-orb-ship, went live in release 59)"
+    },
+    {
+      "name": "rig",
+      "tip": "db2caa6d9",
+      "case": "both (shared plumbing; the subjects are FFX first)",
+      "what": "the rig lane's trunk: r55 shipped it up to 59c766ec0 (Kimahri and Lulu); this tip adds Auron's first pass, which stays off"
+    },
+    {
+      "name": "rig-auron2",
+      "tip": "72528aa3b",
+      "case": "FFX only",
+      "what": "Auron's rig pass 2 with format v2 variants (orb arm, flask, sword arm, katana, saya); gated OK 11 of 11 and OFF in the refine queue by his pick"
+    },
+    {
+      "name": "re-parity-new-chapters-1018",
+      "tip": "5f7b6ffbc",
+      "case": "FFX (Spectral Keeper) and FFX-2 (Fallen Maesters)",
+      "what": "research only: the Spectral Keeper and the Fallen Maesters data and AI extractions (the notes themselves went into r58 as plain files); no engine build, the chapter decisions SK1 to SK11 and FM1 to FM11 wait for Bailey"
+    },
+    {
+      "name": "saves-portable",
+      "tip": "c1852fa05",
+      "case": "both (save-data class)",
+      "what": "ChatGPT point 9: export and import a save as a checksummed file behind ?saveport=on, off by default; NOT merged into r68-int or release 68 (D-1379); a browser pass and a deep review are owed before the word comes off (A-1054)"
+    },
+    {
+      "name": "rigs-v2",
+      "tip": "9f90c3441",
+      "case": "both (Tidus FFX, Rikku Dark Knight FFX-2)",
+      "what": "the party rig pilots rebuilt (tidus-v2, rikku-dark-knight-v2 in D:/pyrefly-art-rigs) behind ?partyrigs=v2 with a motion audit; pushed; OUT of release 68 (D-1398): the clips (A-1073) show 0 ghost frames but a cut from standing to lying at the knock-out and four broken frames on Rikku's return (D-1401); nothing installed"
+    },
+    {
+      "name": "rigs-v3",
+      "tip": "f2dd94f79",
+      "case": "both (Tidus FFX, Rikku Dark Knight FFX-2)",
+      "what": "pushed; three rounds done on 2026-10-29 and 10-30 (A-1089): rigs-v2 on r68-final plus the painting’s knock-out topple and rise for a rig, the held pose through each cut, the settle before a KO from a flinch and the harness’s stature reading for rigs (D-1401); behind ?partyrigs=, off by default; not merged, nothing installed; the clips for him come first"
+    },
+    {
+      "name": "ffx2-specials",
+      "tip": "8e72c5191",
+      "case": "FFX-2 only (the Specials: Floral Fallal, Machina Maw, Full Throttle; engine, data and tests; shared plumbing is additive and inert while the flag is off)",
+      "what": "pushed (origin/ffx2-specials 8e72c5191, final); the Specials engine behind the specialDressUp switch, OFF: every number matches the raw command.bin and job.bin; the review's two engine majors (an Ejected girl came back when another girl's form ended; the form's Auto-Life never came off) and its minors fixed; flag off = 210 of 210 seeded runs identical to main; the presentation (one connected figure a Special with three HUD plates, main, right part and left part: Bailey's \"G\" of 2026-11-09; the other reading, three bodies, is not built) waits for his answers on how the figure is drawn, the part mark and the size on screen; ledger rows on the branch (D-1504 to D-1511, A-1275, A-1276) renumber at the merge; not merged, not deployed, queued for release 80"
+    },
+    {
+      "name": "wendigo-finish",
+      "tip": "40608ee1e",
+      "case": "FFX only (hidden Chapter 49, the Wendigo on frozen Lake Macalania, desktop only; the finish pass)",
+      "what": "pushed (origin/wendigo-finish 40608ee1e, final); the Wendigo and both Guardians on the game's own motion banks, four aeons as 3D models (Valefor, Ifrit, Ixion, Shiva, skinned to the game's skeletons; Bahamut not built, the preset owns four aeons; 140 Meshy credits, 2,570 to 2,430), Sleep breaks the raised-fist stance; 28 model files, 164.1 MiB, GPU 1,843 MiB at the first menu; review: no critical, no major, 11 minors, all answered; open: minor 6 (Sleep wearing off with no hit leaves the engine's arms-up flag) and Bailey's eye on the motion, the aeons and Valefor's size; not merged, not deployed, queued for release 80"
+    },
+    {
+      "name": "ch-luca-opener",
+      "tip": "b54bbcd5d",
+      "case": "FFX-2 only (hidden Chapter 52, the Luca opener, word debut; one additive EnemyGroupDef.partyBuildRef, inert elsewhere)",
+      "what": "pushed (origin/ch-luca-opener b54bbcd5d, final of wave 5); two acts with Yuna held as Songstress; bench 200 of 200 in every cell; review: no critical, no major, ten minors, fixed; open and the driver's to settle at the integration: the Dressphere stat interpolation below Lv 20 (ch-gullwings-ch1 carries the fix; re-bench this chapter after merging it); art owed (stand-ins in use); not merged, not deployed, queued for release 80"
+    },
+    {
+      "name": "ch-oblitzerator",
+      "tip": "04236c5c1",
+      "case": "FFX only (hidden Chapter 50, the Oblitzerator, word blitz); shared plumbing is the opt-in afterTick reaction flag in the FFX AI hooks (inert without the flag)",
+      "what": "pushed (origin/ch-oblitzerator 04236c5c1, final of wave 5); the crane line wins 200 of 200; the review's major M1 (a ball's status never outlasts the swing) fixed from the game's own code with an opt-in afterTick flag (24 FFX chapters x 3 seeds x 2 policies: 144 of 144 event-log hashes identical to base); the driver read the diff (opt-in and inert without the flag); open for Bailey: whether every script's reactions run after the tick as the game does (a shared-engine change, needs his yes) and the cursor starting on \"Use crane\"; art owed; not merged, not deployed, queued for release 80"
+    },
+    {
+      "name": "ch-gullwings-ch1",
+      "tip": "ffcd0ab60",
+      "case": "FFX-2 only (hidden Chapter 51, Gullwings Chapter 1, word dragon); carries the one non-additive shared change of the wave: battle/ffx2/dressphere-stats.ts interpolate fixed below Lv 20 (no shipped build has a girl under Lv 20)",
+      "what": "pushed (origin/ch-gullwings-ch1 ffcd0ab60, interim: the finish pass was still running); four fights, benches 100/100, 100/100, 97/100 and 99/100 (the Guardian Beast on the Active clock 19 of 50); review: no critical, no major, ten minors; art owed (about 19 poses); not merged, not deployed, queued for release 80 (merge it before ch-luca-opener and re-bench that chapter)"
+    }
   ]
 }

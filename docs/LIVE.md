@@ -8,35 +8,38 @@
 | | |
 |---|---|
 | Site | https://echoesofspira.com/ |
-| Commit | `cc0fea14a` (Release 78 (r78)) |
-| Bundle | `BAH_qvc7` |
-| Deployed | 2026-11-09T05:54:49.312Z (2026-11-09 00:54 EST) |
-| Deploy log | `docs/deploys.log` line 95: cloudflare, 5260 art files |
-| Artifact (SHA-256) | `8c31cde9e3e986fc5e4e3f593c25d6668e4922c5d99bbca62242831ea053446d` |
-| The deploy's own byte check | PASS (199 files compared with the build) |
-| Marker | `critic/cleared/cc0fea14a.json` (cleared) |
+| Commit | `193f6aef4` (Release 79 (r79)) |
+| Bundle | `BYej0WB6` |
+| Deployed | 2026-11-10T02:13:47.731Z (2026-11-09 21:13 EST) |
+| Deploy log | `docs/deploys.log` line 96: cloudflare, 5408 art files |
+| Artifact (SHA-256) | `346c86c7676f749bf37a59dcd38337feebdd30dd1bc03d7147bfc8ace59a8b5d` |
+| The deploy's own byte check | PASS (297 files compared with the build) |
+| Marker | `critic/pending/193f6aef4.json` (pending) |
 | Owner override | none |
-| CHANGELOG entry | 2026-11-08 · Release 78 (r78), three more hidden chapters (44 Jenova LIFE in FF7, 46 Ifrit at Kilika Temple in FFX-2, 49 Wendigo on frozen Lake Macalania in FFX), the results page's Sphere Level bar can no longer pass its cap (the Mirror Aeons, a listed chapter, changes), Spherimorph's pay is shown to be right, and an FFX status bookkeeping fix; nineteen of the nineteen listed chapters stay treated (each item says which game) |
-| Focused review | critic/reviews/cc0fea14a-focused.json: ship SHIP, changed area FAIL |
-| Live check | critic/reviews/cc0fea14a-live.json: deployment PASS |
+| CHANGELOG entry | 2026-11-09 · Release 79 (r79), three more hidden chapters (45 Belgemine's Challenge in FFX, 47 Garik Ronso and the Ronso Youths in FFX-2, 48 Shinryu in FFX), the paintings of five hidden chapters (42 the Youth League, 45, 46 Ifrit at Kilika Temple, 47 and 48), and a boss card that no longer asks for a painting the build does not hold; nineteen of the nineteen listed chapters stay treated (each item says which game) |
+| Focused review | critic/reviews/193f6aef4-focused.json: ship SHIP, changed area UNVERIFIED |
+| Live check | critic/reviews/193f6aef4-live.json: deployment PASS |
 
-Is this commit on main? `git merge-base --is-ancestor cc0fea14a origin/main` exits 0 when it is.
+Is this commit on main? `git merge-base --is-ancestor 193f6aef4 origin/main` exits 0 when it is.
 
 ## Review obligations still open
 
-None: every marker in `critic/pending` is settled.
+| Build | Obligation | What it needs |
+|---|---|---|
+| `193f6aef4` | focused | acceptance of the changed area |
+| `193f6aef4` | deep | deep review of every affected chapter and system |
 
-The ledger counts 0 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
+The ledger counts 1 deploys since the last passing deep review (`critic/ledger.json`). `npm run critic:status` says what each live build still owes.
 
 ## Majors disclosed by the focused review of this build
 
-From `critic/reviews/cc0fea14a-focused.json` (a major that is not a regression is disclosed and carried into the next batch):
+From `critic/reviews/193f6aef4-focused.json` (a major that is not a regression is disclosed and carried into the next batch):
 
 | Issue | Severity | Introduced by this build | Regression against the previous live build | What |
 |---|---|---|---|---|
-| R78-1 | major | yes | no | Jenova LIFE (FF7): the painted figures cut between idle and hurt frames with a visible foot shift, 27.6 hard cuts a minute |
+| R79-1 | major | no | no | Jenova LIFE (FF7): the painted figures still cut between idle and hurt frames with a visible foot shift, 27.6 hard cuts a minute (the release 78 reading, unchanged by the r79 pose fix) |
 
-## Branches in flight (as of 2026-11-09, the release 78 records pass (release 78 live: main cc0fea14a, bundle BAH_qvc7, deployed 2026-11-09T05:54:49Z; the hidden chapters 44 Jenova LIFE (FF7, word bluelight), 46 Ifrit at Kilika (FFX-2, word ifrit) and 49 Wendigo on frozen Lake Macalania (FFX, desktop only, word wendigo), the Mirror Aeons' Sphere Level bar kept inside its cap, the results page's settled counts and an FFX multi-hit status fix; its focused review read SHIP with the changed area FAIL (R78-1, a major in the new Jenova LIFE chapter), its live check PASS; its focused and deep obligations are pending and the deep review of the live build, round 36, is in flight; the wave-4 branches ch-shinryu and ch-garik-ronso are pushed and not merged, ch-belgemine is a local branch whose build is to be redone))
+## Branches in flight (as of 2026-11-09, the release 79 records pass (release 79 live: main 193f6aef4, bundle BYej0WB6, deployed 2026-11-10T02:13:47Z; the hidden chapters 45 Belgemine's Challenge (FFX, word sidequest), 47 Garik Ronso and the Ronso Youths (FFX-2, word braveheart) and 48 Shinryu (FFX, word shinryu), the paintings of five hidden chapters (42, 45, 46, 47, 48) and a boss card that no longer asks for a painting the build does not hold; its focused review read SHIP with one disclosed major (R79-1, Jenova LIFE in FF7, the same as release 78), its live check PASS; its focused and deep obligations are pending and deep round 37 is owed by release 79, planned after release 80; release 81 refuses until it is settled; queued for release 80: ffx2-specials, wendigo-finish, ch-luca-opener, ch-oblitzerator and ch-gullwings-ch1, none merged))
 
 Kept by hand by whoever records a pass; tools/live-record.mjs prints it into docs/LIVE.md and `node tools/live-record.mjs --branches` compares each tip with git. Nothing here is live. A branch leaves this list when it is merged into a build that is deployed. A branch that is announced but not pushed yet carries the tip it starts from.
 
@@ -52,9 +55,11 @@ Kept by hand by whoever records a pass; tools/live-record.mjs prints it into doc
 | `saves-portable` | `c1852fa05` | both (save-data class) | ChatGPT point 9: export and import a save as a checksummed file behind ?saveport=on, off by default; NOT merged into r68-int or release 68 (D-1379); a browser pass and a deep review are owed before the word comes off (A-1054) |
 | `rigs-v2` | `9f90c3441` | both (Tidus FFX, Rikku Dark Knight FFX-2) | the party rig pilots rebuilt (tidus-v2, rikku-dark-knight-v2 in D:/pyrefly-art-rigs) behind ?partyrigs=v2 with a motion audit; pushed; OUT of release 68 (D-1398): the clips (A-1073) show 0 ghost frames but a cut from standing to lying at the knock-out and four broken frames on Rikku's return (D-1401); nothing installed |
 | `rigs-v3` | `f2dd94f79` | both (Tidus FFX, Rikku Dark Knight FFX-2) | pushed; three rounds done on 2026-10-29 and 10-30 (A-1089): rigs-v2 on r68-final plus the painting’s knock-out topple and rise for a rig, the held pose through each cut, the settle before a KO from a flinch and the harness’s stature reading for rigs (D-1401); behind ?partyrigs=, off by default; not merged, nothing installed; the clips for him come first |
-| `ch-shinryu` | `14b481c66` | FFX only (hidden Chapter 48, Shinryu in the submerged Via Purifico, word shinryu); shared plumbing is registry rows, a door row, a scene row, a fixture row and a formula-byte override (both games, inert elsewhere) | pushed (origin/ch-shinryu 14b481c66); 2,000,000 HP against Tidus, Wakka and Rikku; the Penance preset's swimmers win 200 of 200, a measurement and not a tuning (no sourced party lever lands the fight in the 60 to 80 percent band and no boss number was touched; the call is Bailey's); the Eraser shatters a swimmer even on dry land (its own byte); a stand-in painting (the airship Evrae's); the phone read of the real-key smoke passes (14 checks at 390 x 844); the read-only review of 07a47087a found two majors and no critical and the fix pass answered them (Wings to Discovery and Gambler's Spirit get name-only item rows so the Steal banner stops printing a raw id; the reward-resolve test walks the hidden FFX chapters; the post scene no longer claims all three swimmers lived); full suite 2,065 files and 32,770 tests with 0 failed; its handoff notes 27 files conflicting against release 77, so the merge into the next integration is the driver's; not merged, not deployed |
-| `ch-belgemine` | `d56053b5d` | FFX only (hidden Chapter 45, Belgemine's Challenge, the aeon duels) | local branch, not pushed (d56053b5d); wave 4 of the chapters program: the research note on the aeon duels read from the game's files and the paper preflight; the build agent hung on a permission prompt and was stopped, so the build is to be redone from this note (it waits for space on D: after the release records); not merged, not deployed |
-| `ch-garik-ronso` | `ed81c7532` | FFX-2 only (hidden Chapter 47, Garik Ronso, word braveheart: the plan's lionheart claims a later letter of the FF7 secret word, which tests/unit/chapter-doors.test.ts forbids); shared plumbing is a door row, registries, a chapter-only prep tab with its phone page, three held items and five kill-reward rows (inert for every other chapter) | pushed (origin/ch-garik-ronso ed81c7532); Garik and the Ronso Youths at the top of Mt. Gagazet, the game's two fights (monster rows 181 and 182: the hostile fight, 15,000 HP, and the friendly bout, 10,940 HP) behind a TRUST row on party prep (Low is the hostile fight and the default), the move advisor line and a strategy-guide card; stand-in paintings, measured and not tuned (the advisor line wins 100 of 100 in about 36 game seconds); the fix pass after the adversarial review (the game's "battle too long" Meteor block is inert as in the game, so a weak line stalls and does not lose; Bane Lance's branch on Paine modelled; the Mythril Bangle's 0 sourced as never sold; the TRUST row's touch tap seen on a phone-sized window); not merged, not deployed |
+| `ffx2-specials` | `8e72c5191` | FFX-2 only (the Specials: Floral Fallal, Machina Maw, Full Throttle; engine, data and tests; shared plumbing is additive and inert while the flag is off) | pushed (origin/ffx2-specials 8e72c5191, final); the Specials engine behind the specialDressUp switch, OFF: every number matches the raw command.bin and job.bin; the review's two engine majors (an Ejected girl came back when another girl's form ended; the form's Auto-Life never came off) and its minors fixed; flag off = 210 of 210 seeded runs identical to main; the presentation (one connected figure a Special with three HUD plates, main, right part and left part: Bailey's "G" of 2026-11-09; the other reading, three bodies, is not built) waits for his answers on how the figure is drawn, the part mark and the size on screen; ledger rows on the branch (D-1504 to D-1511, A-1275, A-1276) renumber at the merge; not merged, not deployed, queued for release 80 |
+| `wendigo-finish` | `40608ee1e` | FFX only (hidden Chapter 49, the Wendigo on frozen Lake Macalania, desktop only; the finish pass) | pushed (origin/wendigo-finish 40608ee1e, final); the Wendigo and both Guardians on the game's own motion banks, four aeons as 3D models (Valefor, Ifrit, Ixion, Shiva, skinned to the game's skeletons; Bahamut not built, the preset owns four aeons; 140 Meshy credits, 2,570 to 2,430), Sleep breaks the raised-fist stance; 28 model files, 164.1 MiB, GPU 1,843 MiB at the first menu; review: no critical, no major, 11 minors, all answered; open: minor 6 (Sleep wearing off with no hit leaves the engine's arms-up flag) and Bailey's eye on the motion, the aeons and Valefor's size; not merged, not deployed, queued for release 80 |
+| `ch-luca-opener` | `b54bbcd5d` | FFX-2 only (hidden Chapter 52, the Luca opener, word debut; one additive EnemyGroupDef.partyBuildRef, inert elsewhere) | pushed (origin/ch-luca-opener b54bbcd5d, final of wave 5); two acts with Yuna held as Songstress; bench 200 of 200 in every cell; review: no critical, no major, ten minors, fixed; open and the driver's to settle at the integration: the Dressphere stat interpolation below Lv 20 (ch-gullwings-ch1 carries the fix; re-bench this chapter after merging it); art owed (stand-ins in use); not merged, not deployed, queued for release 80 |
+| `ch-oblitzerator` | `04236c5c1` | FFX only (hidden Chapter 50, the Oblitzerator, word blitz); shared plumbing is the opt-in afterTick reaction flag in the FFX AI hooks (inert without the flag) | pushed (origin/ch-oblitzerator 04236c5c1, final of wave 5); the crane line wins 200 of 200; the review's major M1 (a ball's status never outlasts the swing) fixed from the game's own code with an opt-in afterTick flag (24 FFX chapters x 3 seeds x 2 policies: 144 of 144 event-log hashes identical to base); the driver read the diff (opt-in and inert without the flag); open for Bailey: whether every script's reactions run after the tick as the game does (a shared-engine change, needs his yes) and the cursor starting on "Use crane"; art owed; not merged, not deployed, queued for release 80 |
+| `ch-gullwings-ch1` | `ffcd0ab60` | FFX-2 only (hidden Chapter 51, Gullwings Chapter 1, word dragon); carries the one non-additive shared change of the wave: battle/ffx2/dressphere-stats.ts interpolate fixed below Lv 20 (no shipped build has a girl under Lv 20) | pushed (origin/ch-gullwings-ch1 ffcd0ab60, interim: the finish pass was still running); four fights, benches 100/100, 100/100, 97/100 and 99/100 (the Guardian Beast on the Active clock 19 of 50); review: no critical, no major, ten minors; art owed (about 19 poses); not merged, not deployed, queued for release 80 (merge it before ch-luca-opener and re-bench that chapter) |
 
 Nothing on this list is live. `node tools/live-record.mjs --branches` compares the tips with git.
 
@@ -62,9 +67,9 @@ Nothing on this list is live. `node tools/live-record.mjs --branches` compares t
 
 | Deployed (UTC) | Commit | Bundle | Log line |
 |---|---|---|---|
+| 2026-11-10T02:13:47.731Z | `193f6aef4` | `BYej0WB6` | 96 |
 | 2026-11-09T05:54:49.312Z | `cc0fea14a` | `BAH_qvc7` | 95 |
 | 2026-11-08T03:41:51.229Z | `6429ff15e` | `DQzgTgdc` | 94 |
 | 2026-11-07T09:53:17.136Z | `36b6e851d` | `jYm-0mrJ` | 93 |
 | 2026-11-06T12:03:55.678Z | `f91ff81d0` | `CrrbwEak` | 92 |
 | 2026-11-04T00:44:28.732Z | `2342fe666` | `eSs6-WR_` | 91 |
-| 2026-11-02T23:02:53.337Z | `d5049f686` | `DY38b3Cj` | 90 |
