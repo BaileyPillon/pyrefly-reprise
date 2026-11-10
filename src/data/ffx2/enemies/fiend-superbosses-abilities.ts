@@ -38,8 +38,12 @@ const base = {
   canMiss: false as const, // rule 5: set to `true` below only where the row's accuracy formula is not 0
 };
 
-/** What Dispel strips (the row's status words: Shell, Protect, Reflect, Regen and Haste, and the four "always" statuses, of which the engine has Spellspring and Auto-Life) [row 0x30b8]. */
-const DISPEL_STRIPS = ['auto-life', 'shell', 'protect', 'reflect', 'regen', 'haste', 'spellspring'] as const;
+/**
+ * What Dispel strips (the row's status words, slots 13, 14, 15 and 18 of group 1 and the group-2 slots Shell, Protect, Reflect, Regen and Haste) [row 0x30b8]: Shell, Protect, Reflect, Regen and Haste, and the four "always"
+ * statuses, all four of which the engine has (`battle/ffx2/adapt/slots.ts`): Spellspring, Damage 9999, Always Critical and Auto-Life. The strike itself reads the game's record; this list feeds the preview and the description (fix pass of lane w53:
+ * the first version listed two of the four and said the engine lacked the others).
+ */
+const DISPEL_STRIPS = ['auto-life', 'shell', 'protect', 'reflect', 'regen', 'haste', 'spellspring', 'damage-9999', 'guaranteed-critical'] as const;
 
 export const x2FiendSuperbossesAbilities: AbilityDef[] = [
   // ---- Almighty Shinra ----------------------------------------------------------------------------------------------------------

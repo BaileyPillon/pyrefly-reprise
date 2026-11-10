@@ -10,16 +10,18 @@
  * 4. The HP numerals are the sourced maxima once Sensor has revealed them (555,555 / 666,666 / 666,666 / 777,777; Shinra 275,000), and read the `SCAN` hint until then.
  * 5. The real `FFX2BattleHud` draws the same four gauges into its enemy column (`.ffx2hud__enemies`), and the first menu's Attack offers the four heads as targets (the engine side; stage 1 pinned it as well).
  * 6. The ONE seam the browser smoke found (a CSS rule, no markup, no TS): each head carries Spellspring, which draws a STATUS tab that hangs under its bar and was drawn over the next gauge's name; the rule leaves room for it,
- *    and act 2 is the only one of the 49 FFX-2 formations with a tab above another gauge, so no other chapter's HUD moves (pinned below).
+ *    and the rule is keyed on the heads' own actor ids (`x2-numerus-`), so no other chapter's HUD moves whatever status its gauges wear in play (pinned below by laying statuses on every enemy of the 12 other stacked
+ *    formations and matching the shipped selector in the document; a first version keyed on structure alone looked only at opening frames and matched all 12 in play, review finding C1).
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import type { AtbSnapshot, BattleState } from '../../../src/battle/common/types.ts';
+import type { AtbSnapshot, BattleState, EnemyGroupDef } from '../../../src/battle/common/types.ts';
 import { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
 import { fiendSuperbossBuild } from '../../../src/data/ffx2/builds/fiend-superbosses.ts';
 import { ENEMY_GROUPS } from '../../../src/data/ffx2/enemies/index.ts';
+import { act2NumerusGroup } from '../../../src/data/ffx2/enemies/fiend-superbosses.ts';
 import { NUMERUS_HEAD_IDS, NUMERUS_PART_IDS, X2_ALMIGHTY_SHINRA_ID } from '../../../src/data/fiend-superbosses-ids.ts';
 import { FFX2BattleHud } from '../../../src/ui/ffx2/FFX2BattleHud.ts';
 import { enemyGaugesHtml } from '../../../src/ui/ffx2/BossGauges.ts';
@@ -124,27 +126,83 @@ describe('the real FFX-2 HUD on the real engine', () => {
 });
 
 describe('the STATUS tabs of stacked gauges (the one seam the browser smoke found: a CSS rule, no markup)', () => {
-  it('act 2 is the only one of the FFX-2 formations that draws a STATUS tab above another gauge (each head carries Spellspring), which is why a rule keyed on that structure moves nothing else', () => {
-    const over: string[] = [];
-    let multi = 0;
-    for (const group of Object.values(ENEMY_GROUPS)) {
-      const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait' }));
-      engine.setSeed(1);
-      engine.init({ game: 'ffx2', party: structuredClone(fiendSuperbossBuild), enemies: group, triggers: [], seed: 1, condition: 'normal', canEscape: false });
-      const list = gauges(draw(engine.state() as BattleState));
-      if (list.length >= 2) multi++;
-      const tabbed = list.slice(0, -1).filter((g) => g.querySelector(':scope > .ststab') !== null).length;
-      if (tabbed > 0) over.push(`${group.id}:${tabbed}`);
+  /** The rule's selector and room, read from the stylesheet the HUD ships. */
+  const ruleOf = (): { selector: string; px: number } => {
+    const css = readFileSync(resolve('src/ui/ffx2/ffx2-hud.css'), 'utf8');
+    const rule = css.match(/(html:not\(\[data-phone-battle='ffx2'\]\) \.ffx2hud__enemies > \.ig-bosshp\[data-actor-id\^='x2-numerus-'\]:has\(> \.ststab\):not\(:last-child\)) \{\s*margin-bottom: (\d+)px;\s*\}/);
+    expect(rule, 'the rule, keyed on the heads\' own actor ids').not.toBeNull();
+    return { selector: rule![1]!, px: Number(rule![2]) };
+  };
+  /** Every enemy of the formation wears a status that draws a STATUS tab (a haste, a protect, a shell, a regen: what enemies lay on each other in play). */
+  const wearStatuses = (engine: FFX2Engine): void => {
+    for (const id of engine.state().enemyIds) {
+      const u = engine.state().combatants[id] as unknown as { statuses: Record<string, unknown> };
+      for (const status of ['haste', 'protect', 'shell', 'regen']) u.statuses[status] = { id: status, turnsRemaining: null, ticksRemaining: null, charges: null, stacks: 0, permanent: true };
     }
-    expect(multi, 'thirteen formations stack two or more gauges').toBe(13);
-    expect(over).toEqual(['ffx2-fiend-superbosses-2-numerus:3']);
+  };
+  /** The formation's gauges laid in the HUD's enemy column, in the document, and the ones the rule matches. */
+  const matched = (group: EnemyGroupDef, statuses: boolean): { gauges: number; tabbedAbove: number; hit: string[] } => {
+    const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait' }));
+    engine.setSeed(1);
+    engine.init({ game: 'ffx2', party: structuredClone(fiendSuperbossBuild), enemies: group, triggers: [], seed: 1, condition: 'normal', canEscape: false });
+    if (statuses) wearStatuses(engine);
+    const hud = document.createElement('div');
+    hud.className = 'ffx2hud';
+    hud.innerHTML = `<div class="ffx2hud__enemies">${enemyGaugesHtml(engine.state() as BattleState, SNAPSHOT, { revealed: new Set<string>(), charging: new Map() })}</div>`;
+    document.body.appendChild(hud);
+    try {
+      const list = gauges(hud);
+      const tabbedAbove = list.slice(0, -1).filter((g) => g.querySelector(':scope > .ststab') !== null).length;
+      const hit = [...document.querySelectorAll<HTMLElement>(ruleOf().selector)].map((g) => g.dataset['actorId'] ?? '');
+      return { gauges: list.length, tabbedAbove, hit };
+    } finally {
+      hud.remove();
+    }
+  };
+
+  it('act 2 draws a STATUS tab above three of its four gauges as opened (each head carries Spellspring) and the rule matches exactly those three heads', () => {
+    const act2 = matched(act2NumerusGroup, false);
+    expect(act2.gauges).toBe(4);
+    expect(act2.tabbedAbove).toBe(3);
+    expect(act2.hit).toEqual(NUMERUS_HEAD_IDS.slice(0, 3));
   });
 
-  it('the rule is in the HUD stylesheet, for the desktop only, and gives the tab its room', () => {
-    const css = readFileSync(resolve('src/ui/ffx2/ffx2-hud.css'), 'utf8');
-    const rule = css.match(/html:not\(\[data-phone-battle='ffx2'\]\) \.ffx2hud__enemies > \.ig-bosshp:has\(> \.ststab\):not\(:last-child\) \{\s*margin-bottom: (\d+)px;\s*\}/);
-    expect(rule, 'the rule').not.toBeNull();
-    expect(Number(rule![1])).toBeGreaterThanOrEqual(10);
-    expect(Number(rule![1]), 'a tab (13.6px) less the 4px gap, and no more').toBeLessThanOrEqual(12);
+  it('IN PLAY, no other FFX-2 formation is touched: with a status laid on every enemy of each of the 12 other stacked formations a tab does hang above another gauge in every one, and the rule matches none of them (review finding C1: the old rule, keyed on structure alone, matched all 12)', () => {
+    let multi = 0;
+    const withTab: string[] = [];
+    for (const group of Object.values(ENEMY_GROUPS)) {
+      if (group === act2NumerusGroup) continue;
+      const opened = matched(group, false);
+      const worn = matched(group, true);
+      if (opened.gauges >= 2) multi++;
+      else continue;
+      expect(opened.hit, `${group.id} as opened`).toEqual([]);
+      expect(worn.hit, `${group.id} wearing statuses: the rule keys on the heads' actor ids and no other gauge carries one`).toEqual([]);
+      if (worn.tabbedAbove > 0) withTab.push(group.id);
+    }
+    expect(multi, 'twelve other formations stack two or more gauges').toBe(12);
+    expect(withTab, 'the status DOES draw a tab above another gauge in each of the twelve (so the proof is not vacuous)').toHaveLength(12);
+  });
+
+  it('the rule is in the HUD stylesheet, gives the tab its room, and leaves the phone alone (its layout draws the tab inside the head)', () => {
+    const { selector, px } = ruleOf();
+    expect(px).toBeGreaterThanOrEqual(10);
+    expect(px, 'a tab (13.6px) less the 4px gap, and no more').toBeLessThanOrEqual(12);
+    const act2 = act2NumerusGroup;
+    const html = document.documentElement;
+    html.setAttribute('data-phone-battle', 'ffx2');
+    try {
+      const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait' }));
+      engine.setSeed(1);
+      engine.init({ game: 'ffx2', party: structuredClone(fiendSuperbossBuild), enemies: act2, triggers: [], seed: 1, condition: 'normal', canEscape: false });
+      const hud = document.createElement('div');
+      hud.className = 'ffx2hud';
+      hud.innerHTML = `<div class="ffx2hud__enemies">${enemyGaugesHtml(engine.state() as BattleState, SNAPSHOT, { revealed: new Set<string>(), charging: new Map() })}</div>`;
+      document.body.appendChild(hud);
+      expect(document.querySelectorAll(selector).length, 'on the phone layout the rule matches nothing').toBe(0);
+      hud.remove();
+    } finally {
+      html.removeAttribute('data-phone-battle');
+    }
   });
 });

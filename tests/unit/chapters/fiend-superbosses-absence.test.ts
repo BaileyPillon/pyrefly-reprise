@@ -38,7 +38,16 @@ function files(dir: string): string[] {
 }
 
 const SRC = files('src');
-const read = (f: string): string => readFileSync(f, 'utf8');
+/** Each file is read from disk once for the whole run (the importer scan below visits every `src` file once per lane module: 15 passes over 22 MB took 59 s uncached and timed out in a full sweep). */
+const cache = new Map<string, string>();
+const read = (f: string): string => {
+  let text = cache.get(f);
+  if (text === undefined) {
+    text = readFileSync(f, 'utf8');
+    cache.set(f, text);
+  }
+  return text;
+};
 
 describe('no list', () => {
   it('the board draws no tile for it: the tiles are the listed chapters only, and none is an experiment or says EXP', () => {
@@ -153,7 +162,7 @@ describe('the registrations are the ones the handoff lists', () => {
       const importers = SRC.filter((g) => g !== f && new RegExp(`from '[^']*/${stem}\\.ts'`).test(read(g)));
       expect(importers.length, f).toBeGreaterThan(0);
     }
-  });
+  }, 120_000);
 });
 
 describe('layering (hard rule 1), the game case (hard rule 14) and the size (hard rule 7)', () => {

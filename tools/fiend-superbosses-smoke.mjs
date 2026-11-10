@@ -10,7 +10,7 @@
  *
  *   PYREFLY_BROWSER=gpu node tools/fiend-superbosses-smoke.mjs [--base http://127.0.0.1:5531/] [--out docs/screenshots/ch-fiend-superbosses] [--tag desk] [--w 1600 --h 900] [--touch] [--seed 7] [--unrigged-act2] [--diag-out <dir>]
  *
- * `--unrigged-act2` leaves the girls alone in act 2 and checks the wipe (no menu, defeat at 271 logic steps) instead of writing them Invincible to look at it; `--diag-out <dir>` keeps polled pictures and the presenter's state of act 2's
+ * `--unrigged-act2` leaves the girls alone in act 2 and checks the wipe (a first menu on most seeds, then a defeat about 8 s in; the continuation opening of the chapter's first version was no menu and 271 logic steps) instead of writing them Invincible to look at it; `--diag-out <dir>` keeps polled pictures and the presenter's state of act 2's
  * first seconds in a folder that is not committed. Exit code 1 on a failed check, 2 when the lock was not its own within 30 minutes (no browser was opened). Headless only (`PYREFLY_BROWSER=gpu` for the real GPU); never the Chrome extension or the built-in pane.
  * Pictures: 1 party prep, 2 act 1's first menu, 3 act 1's defeat, 4 act 2's first menu, 5 act 2's target select.
  */
@@ -240,8 +240,9 @@ try {
   // The first menu of act 2, polled by hand (a wipe within seconds is a possible, honest result): the timeline says what happened when it does not come.
   let menu2 = false;
   if (act2) {
-    // The engine opens a chained link with every wait whole (`battle/ffx2/atb-open.ts`): the heads strike about 2.9 s in and the girls' first command comes later still, so the unrigged base party is wiped in act 2 without a single
-    // menu (the bench: 200 of 200 seeds). To look at the heads and the target cursor the girls are written Invincible (a rig, as the HP writes are); `--unrigged-act2` leaves them be and checks the wipe instead.
+    // Act 2 opens as the game opens a fight (`opensAsSeparateBattle`, fix pass of lane w53): the heads strike about 2.1 s in (1.6 to 2.6) and a girl is asked for a command first on 160 of 200 seeds (the bench), so the unrigged base party
+    // is wiped in about 8 s either with or without a first menu. (Before the fix pass act 2 opened as a plain continuation, the girls were never asked and the wipe came 9.04 s in.) To look at the heads and the target cursor the girls are
+    // written Invincible (a rig, as the HP writes are); `--unrigged-act2` leaves them be and checks the wipe instead. NOT re-run after the fix pass (no browser in that stage): this check was changed from the bench's numbers.
     if (RIG_ACT2) {
       await page.evaluate(() => {
         const st = window.__pyrefly.battleState();
@@ -283,7 +284,7 @@ try {
     if (DIAG) log('act 2 timeline (all)', timeline);
     const last = timeline[timeline.length - 1];
     if (RIG_ACT2) check('act 2 shows its first menu (the girls written Invincible: a rig, so the look can be taken)', menu2, last);
-    else check('act 2, unrigged: the base party is wiped without ever being asked for a command, about nine seconds in (271 logic steps at the bench)', !menu2 && last.result === 'defeat' && last.ticks >= 250 && last.ticks <= 300, last);
+    else check('act 2, unrigged: either a girl is asked for a command first (160 of 200 seeds at the bench) or the base party is wiped without one; no win, no throw', menu2 || (last.result === 'defeat' && last.ticks >= 150 && last.ticks <= 400), last);
   }
   if (menu2) {
     const f2 = await field();

@@ -14,7 +14,7 @@
  * real HP (555,555, 666,666, 666,666 and 777,777) and are the formation's enemies; the body (334), the pod (335) and the tail (336) are Lv 1 with 1 HP and no moves, and are `parts` of the formation, never drawn and never
  * targeted (`hidden`, `untargetable`, `hideHpBar`): the body and the tail switch their own cursor and existence off in their scripts, the pod switches nothing off and whether it can be aimed at is unknown [RE section 8, U2],
  * so it is hidden like the other two. **The game's death rule** (each head's death handler sets the body and the pod to 0 HP when the other three heads are at 0) **is the engine's standing rule for parts**: a part never gates
- * victory (`battle/ffx2/results.ts`), so the fight ends when the last head falls, with the body, pod and tail left at 1 HP [RE section 2]. The game's slot map is body 1, Unum 2, Duo 3, Tria 4, Quattour 5, pod 6, tail 7;
+ * victory (`battle/ffx2/results.ts`), so the fight ends when the last head falls; the heads' death entry (`ai/numerus.ts`) then stores 0 HP in the body and the pod, and the tail stays at 1 HP [RE section 2]. The game's slot map is body 1, Unum 2, Duo 3, Tria 4, Quattour 5, pod 6, tail 7;
  * the heads here take the engine's slots 0 to 3 (the stage places a combatant by its slot) and the parts 4 to 6.
  *
  * **Elements.** Shinra nulls Gravity only; each head nulls Fire, Ice, Thunder, Water and Gravity and takes Holy and non-elemental damage at the normal rate [RE section 0]. Shinra's Regen and Spellspring, and the heads' Spellspring,
@@ -90,7 +90,7 @@ const HEAD_NULLS: EnemyDef['affinities'] = { fire: 'immune', ice: 'immune', ligh
 /** What the three hidden parts pay: nothing [RE rows 334 to 336: EXP, AP, Gil, drop and steal all 0]. */
 const NO_REWARDS: EnemyDef['rewards'] = { ap: 0, apOverkill: 0, gil: 0, exp: 0, overkillThreshold: 0, drops: [] };
 
-/** Almighty Shinra, act 1: `monster.bin` row 329 (id 0x1149), Lv 99, every stat 255. */
+/** Almighty Shinra, act 1: `monster.bin` row 329 (id 0x1149), Lv 99, Strength, Defense, Magic, Magic Defense and Agility 255 (Accuracy 130, Evasion 30, Luck 34). */
 export const x2AlmightyShinra: EnemyDef = {
   id: X2_ALMIGHTY_SHINRA_ID,
   name: 'Almighty Shinra',
@@ -136,8 +136,8 @@ export const x2AlmightyShinra: EnemyDef = {
   },
   abilityIds: [A.attack, A.clione, A.ultimaShinra, A.finalImpact, A.fullBreak, A.fireworks, A.haste],
   flags: { isBoss: true },
-  sensorText: 'Six beats and round again: ten blows, a strike, Ultima, a strike, a break, haste. When he is low, the Impact: an eighth of everyone’s life and magic, fourteen times.',
-  scanText: 'The boy grown to full size, every stat at its ceiling. Only blows that ignore Defense get through, and he mends himself a little all the time.',
+  sensorText: 'Six beats and round again: ten blows, a strike, Ultima, a strike, a break, haste. When he is low, the Impact: an eighth of everyone’s life and magic to begin with, fourteen times.',
+  scanText: 'The boy grown to full size, his strength, defense, magic, magic defense and agility at their ceiling. Only blows that ignore Defense get through, and he mends himself a little all the time.',
 };
 
 /** One head of the Major Numerus: what the four share [RE rows 330 to 333]. */
@@ -300,6 +300,10 @@ export const act1ShinraGroup: EnemyGroupDef = { ...COMMON, id: ACT_1_GROUP_ID, e
 /**
  * Act 2: the Major Numerus. The four heads are the enemies, the body, pod and tail its parts (the fight ends when the last head falls, see the header). The link opens at full HP and MP with a fallen girl standing and no Save
  * Sphere card (`restoresPartyOnEntry`, `noSaveSphereCard`: LG1's seam, as the Farplane Cup's); items spent stay spent. The last link of the chapter.
+ *
+ * `opensAsSeparateBattle` (fix pass of lane w53, driver's call, his to overturn): in the game every fight of the arena is its own battle start, with each character's random opening wait and the trim (`battle/ffx2/atb-open.ts`,
+ * FFX2-G10 section 4), and `SEPARATE_BATTLE_GAUGES` is ON (`battle/ffx2/constants.ts`, D-933), so this one data flag gives act 2 the game's start. Without it the engine opens a chained link as a "continuation", with every
+ * wait whole, which the game does not do, and the three girls are never asked for a command (200 of 200 seeds; the wipe comes 9.0 s in). The alternative is to leave it off; the options sheet carries both measurements.
  */
 export const act2NumerusGroup: EnemyGroupDef = {
   ...COMMON,
@@ -309,6 +313,7 @@ export const act2NumerusGroup: EnemyGroupDef = {
   headline: NUMERUS_HEADLINE,
   restoresPartyOnEntry: true,
   noSaveSphereCard: true,
+  opensAsSeparateBattle: true,
 };
 
 export const fiendSuperbossesGroups: readonly EnemyGroupDef[] = [act1ShinraGroup, act2NumerusGroup];

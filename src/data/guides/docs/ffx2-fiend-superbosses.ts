@@ -27,7 +27,7 @@ export const FFX2_FIEND_SUPERBOSSES_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'Shinra has 255 in every stat, regains life on his own and casts for free. His Defense and Magic Defense are 255, so ordinary blows barely mark him. A Dark Knight’s Darkness ignores Defense and is the way through.',
+      text: 'Shinra has 255 in Strength, Defense, Magic, Magic Defense and Agility, regains life on his own and casts for free. With Defense and Magic Defense at 255, ordinary blows barely mark him. A Dark Knight’s Darkness ignores Defense and is the way through.',
     },
     {
       t: 'p',
@@ -35,11 +35,15 @@ export const FFX2_FIEND_SUPERBOSSES_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'Under half his life the break becomes Fireworks, which hits all three of you. Under a quarter, Ultima becomes Final Impact: fourteen blows, each an eighth of a girl’s life and magic.',
+      text: 'Under half his life the break becomes Fireworks, which hits all three of you. Under a quarter, Ultima becomes Final Impact: fourteen blows, the first an eighth of a girl’s life and magic and each one after it heavier.',
     },
     {
       t: 'p',
-      text: 'When he is already hasted, the sixth beat is a Final Impact instead of a second Haste. Protect halves his strikes, Clione, Fireworks and Final Impact; Shell halves Ultima. His Full Break lowers four of a girl’s stats.',
+      text: 'When he is already hasted, the sixth beat is a Final Impact instead of a second Haste. His Full Break lowers four of a girl’s stats.',
+    },
+    {
+      t: 'p',
+      text: 'Protect halves his strikes and his break and takes a fifth to a half off Clione, Fireworks and Final Impact. Shell halves Ultima before the 9,999 cap.',
     },
     { t: 'head', at: ['x2-numerus-unum', 'x2-numerus-duo', 'x2-numerus-tria', 'x2-numerus-quattour'], title: 'Major Numerus', tag: 'Boss Battle' },
     {
@@ -57,11 +61,11 @@ export const FFX2_FIEND_SUPERBOSSES_DOC: GuideDoc = {
     },
     {
       t: 'p',
-      text: 'Each head has a Command that takes four and a half seconds to charge. It does between 14,000 and 99,999 damage to a Lv 99 girl and puts her down, and Protect and Shell change nothing about it.',
+      text: 'Each head has a Command that takes four and a half seconds to charge. It does between about 13,000 and 99,999 damage to a Lv 99 girl and puts her down, and Protect and Shell change nothing about it.',
     },
     {
       t: 'p',
-      text: 'The four loops reach a Command about once every four seconds between them, so one is nearly always charging. Plan for the blows around the Commands, and for the girl the next Command takes.',
+      text: 'The four loops reach a Command about once every ten seconds between them, and one is charging about a third of the time. Plan for the blows around the Commands, and for the girl the next Command takes.',
     },
     { t: 'h3', text: 'Unum' },
     {

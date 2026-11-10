@@ -7,10 +7,12 @@
  *
  * Usage (the engine's sources use parameter properties, so Node must transform types):
  *
- *   node --experimental-transform-types tools/fiend-superbosses-bench.mjs --group base|whatif|rig|all [--shard 0/4] [--cells a,b] [--seeds 20] [--out <dir>]
+ *   node --experimental-transform-types tools/fiend-superbosses-bench.mjs --group base|whatif|rig|all [--act 1|2] [--continuation] [--shard 0/4] [--cells a,b] [--seeds 20] [--out <dir>]
  *   node --experimental-transform-types tools/fiend-superbosses-bench.mjs --table <dir>
  *
  *   --group   the cells of a group (default all); --cells names cells exactly (`whatif/miracle/act1/bench`)
+ *   --act     only the cells of one act
+ *   --continuation  MEASUREMENT ONLY: act 2 opened as the engine opens a plain chained link (every wait whole, no trim), the way the chapter opened it before the fix pass of lane w53 (the options sheet's alternative)
  *   --shard   i/n: only the cells whose index is i modulo n, so n processes can split the table
  *   --seeds   overrides the seed count of every chosen cell (a smoke run); unset, a cell uses its own (200 at bench speed, 40 at each human pace)
  *   --out     a directory: one JSON file per cell (the tally and the wall time); --table reads such a directory and prints the markdown tables
@@ -62,6 +64,7 @@ if (args.has('--cells')) {
   const names = args.get('--cells').split(',');
   chosen = names.map((n) => CELLS.find((c) => c.name === n) ?? (() => { throw new Error(`no cell ${n}`); })());
 } else if (args.get('--group') && args.get('--group') !== 'all') chosen = CELLS.filter((c) => c.group === args.get('--group'));
+if (args.has('--act')) chosen = chosen.filter((c) => c.act === Number(args.get('--act')));
 if (args.has('--shard')) {
   const [i, n] = args.get('--shard').split('/').map(Number);
   chosen = chosen.filter((_, k) => k % n === i);
@@ -73,7 +76,7 @@ console.log(HEAD.replace('| stoned |\n', '| stoned | time |\n').replace(/---:\|$
 for (const cell of chosen) {
   const started = Date.now();
   const seeds = args.has('--seeds') ? Number(args.get('--seeds')) : cell.seeds;
-  const tally = runCell(cell, seeds);
+  const tally = runCell(args.has('--continuation') ? { ...cell, continuation: true } : cell, seeds);
   const ms = Date.now() - started;
   console.log(rowOf(cell, tally, ms));
   if (out) fs.writeFileSync(path.join(out, `${cell.name.replaceAll('/', '__')}.json`), JSON.stringify({ name: cell.name, seeds, tally, ms }, null, 1));

@@ -21,6 +21,7 @@ import { FS_ABILITY, NUMERUS_HEAD_IDS, X2_ALMIGHTY_SHINRA_ID } from '../../../sr
 import { DUO_BEATS, QUATTOUR_BEATS, TRIA_BEATS } from '../../../src/battle/ffx2/ai/numerus.ts';
 import { FIEND_SUPERBOSSES_BOSS_IDS } from '../../../src/engine/tactics/ffx2-fiend-superbosses.ts';
 import { bigHp, damageOn, forcedAct, girlsOf, logOf, move, openAct, playUntilActed, type Act } from '../helpers/fiendSuperbossDrive.ts';
+import { commandCadence } from '../helpers/fiendSuperbossOpening.ts';
 
 const docText = (): string =>
   FFX2_FIEND_SUPERBOSSES_DOC.blocks
@@ -133,7 +134,7 @@ describe('the numbers the player reads are the data\'s', () => {
       expect(text).toMatch(/Final Impact/);
     }
     expect(docText()).toMatch(/already hasted, the sixth beat is a Final Impact/);
-    expect(cardText()).toMatch(/fourteen blows of an eighth of everyone’s life and magic/);
+    expect(cardText()).toMatch(/fourteen blows, the first an eighth of everyone’s life and magic and each after it heavier/);
     expect(ABILITIES[FS_ABILITY.finalImpact]!.hits).toBe(14);
   });
 
@@ -164,10 +165,10 @@ describe('the numbers the player reads are the data\'s', () => {
 
 describe('the claims about the Commands, run on the real engine', () => {
   /** The damage of one cast of `ability` by `who` on the three girls (900,000 HP each), in girl order. */
-  function commandDamage(act: Act, who: string, ability: string, rig: (engine: ReturnType<typeof openAct>) => void = () => undefined): number[] {
+  function commandDamage(act: Act, who: string, ability: string, rig: (engine: ReturnType<typeof openAct>) => void = () => undefined, seed = 1): number[] {
     const f = forcedAct(act);
     f.queues[who]!.push(move(ability));
-    const engine = openAct(act, 1, { group: f.group, setup: (e) => { bigHp(e); rig(e); } });
+    const engine = openAct(act, seed, { group: f.group, setup: (e) => { bigHp(e); rig(e); } });
     expect(playUntilActed(engine, who, 1, undefined, { maxDecisions: 4000 })).toBe(true);
     return girlsOf(engine).map((g) => damageOn(engine, g.id).filter((e) => e.sourceId === who).reduce((n, e) => n + (e.amount ?? 0), 0));
   }
@@ -197,6 +198,33 @@ describe('the claims about the Commands, run on the real engine', () => {
       expect(steps / 29.97, `${who} ${ability}`).toBeGreaterThan(4.4);
       expect(steps / 29.97, `${who} ${ability}`).toBeLessThan(4.7);
     }
+  });
+
+  it('the four heads reach a Command about every ten seconds between them and one is charging about a third of the time (the card and the page say so; the research note\'s "every four seconds" summed the charge times only)', () => {
+    for (const seed of [1, 2]) {
+      const c = commandCadence(seed, 300);
+      expect(c.seconds, `seed ${seed}: the run lasted`).toBeGreaterThanOrEqual(300);
+      expect(c.starts.length, `seed ${seed}: about thirty Commands in 300 s`).toBeGreaterThanOrEqual(26);
+      expect(c.starts.length, `seed ${seed}`).toBeLessThanOrEqual(34);
+      const perCommand = c.seconds / c.starts.length;
+      expect(perCommand, `seed ${seed}: a Command about every ten seconds, not every four`).toBeGreaterThan(8.5);
+      expect(perCommand, `seed ${seed}`).toBeLessThan(12);
+      expect(c.charging / c.seconds, `seed ${seed}: one is charging about a third of the time, not nearly always`).toBeGreaterThan(0.28);
+      expect(c.charging / c.seconds, `seed ${seed}`).toBeLessThan(0.42);
+      expect(Object.keys(c.perHead).sort(), `seed ${seed}: every head reaches its Command`).toEqual([...NUMERUS_HEAD_IDS].sort());
+    }
+    expect(cardText()).toMatch(/about every ten seconds, and one is charging about a third of the time/);
+    expect(docText()).toMatch(/about once every ten seconds between them, and one is charging about a third of the time/);
+    expect(cardText() + docText()).not.toMatch(/four seconds|nearly always charging/);
+  });
+
+  it('a Command does about 13,000 to 99,999 to a Lv 99 girl (the page says so): Venam, the smallest, never under 13,000; Fulmen, the heaviest, reaches 99,999 on a girl at 900,000 HP', () => {
+    const venam: number[] = [];
+    for (let seed = 1; seed <= 12; seed++) venam.push(...commandDamage(2, NUMERUS_HEAD_IDS[1], FS_ABILITY.venamCommand, () => undefined, seed));
+    expect(Math.min(...venam), 'no Venam under 13,000').toBeGreaterThanOrEqual(13_000);
+    expect(Math.min(...venam), 'the page does not say 14,000: Venam is under that').toBeLessThan(14_000);
+    expect(Math.max(...commandDamage(2, NUMERUS_HEAD_IDS[2], FS_ABILITY.fulmenCommand)), 'the 99,999 limit').toBe(99_999);
+    expect(docText()).toMatch(/between about 13,000 and 99,999 damage/);
   });
 
   it('a Command puts a Lv 99 girl down, and Protect and Shell change nothing about it: Fulmen on the girls at their real HP, with and without both', () => {

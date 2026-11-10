@@ -367,6 +367,17 @@ describe('the moves against the rows [RE sections 3 and 4]', () => {
     }
   });
 
+  it('Dispel\'s strip list is every status its record names: group-1 slots 13, 14, 15 and 18 (Spellspring, Damage 9999, Always Critical, Auto-Life) and the Shell, Protect, Reflect, Regen and Haste slots of group 2 (review finding m1: the first version listed two of the four)', () => {
+    const record = FFX2_COMMAND_RECORDS[ids.FS_ABILITY.dispel]!;
+    const fromRecord = [
+      ...Object.keys(record.status1 ?? {}).map((slot) => GROUP1_STATUS[Number(slot)]),
+      ...Object.keys(record.status2 ?? {}).flatMap((slot) => GROUP2_STATUS[Number(slot)] ?? []),
+    ];
+    expect(fromRecord.every((s) => s !== null && s !== undefined), 'every slot the record names is a status the engine has').toBe(true);
+    expect([...ALL_ABILITIES.get(ids.FS_ABILITY.dispel)!.removesStatuses].sort()).toEqual([...fromRecord].sort());
+    expect(fromRecord).toEqual(expect.arrayContaining(['spellspring', 'damage-9999', 'guaranteed-critical', 'auto-life', 'shell', 'protect', 'reflect', 'regen', 'haste']));
+  });
+
   it('the status rows: Haste 254 for 50; Shell and Protect 254 for 110; Confuse 100; Silence 75; Venam Poison 254; Sleep 75; Berserk 75; Blind 75; Bio 100; Break 80; Slowga 130 for 126; Full Break four stages at -2', () => {
     const r = FFX2_COMMAND_RECORDS;
     const A = ids.FS_ABILITY;

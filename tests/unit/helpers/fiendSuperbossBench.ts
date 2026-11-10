@@ -45,8 +45,13 @@ export interface Kit {
 
 export interface Spec {
   act: Act;
-  /** How the battle opens: the chapter's own (act 1 is the first link, `normal`; act 2 is a CONTINUATION link, `scripted`: the engine opens it with every wait whole and no trim, `battle/ffx2/atb-open.ts`), unless a cell says otherwise. */
+  /** How the battle opens: the chapter's own (act 1 is the first link, `normal`; act 2 is a chained link, `scripted`, and its group opens as a separate battle: the game's start, `opensAsSeparateBattle`), unless a cell says otherwise. */
   condition?: 'normal' | 'scripted';
+  /**
+   * MEASUREMENT ONLY: open act 2 as the engine opens a plain chained link, a CONTINUATION (every wait whole, no trim, `battle/ffx2/atb-open.ts`), by switching `SEPARATE_BATTLE_GAUGES` off for the run
+   * (`Ffx2EngineOptions.separateBattleGauges`). This is how the chapter opened act 2 before the fix pass of lane w53; it is the alternative the options sheet carries, never what is played.
+   */
+  continuation?: boolean;
   line: LineName;
   kit?: Kit;
   pace?: Pace;
@@ -196,7 +201,7 @@ const MAX_DECISIONS = 60_000;
 export function openEngine(spec: Spec, seed: number): FFX2Engine {
   const pace = PACES[spec.pace ?? 'bench'];
   const kit = spec.kit ?? {};
-  const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait', ...pace.engine }));
+  const engine = new FFX2Engine(ffx2Options({ atbMode: 'wait', ...pace.engine, ...(spec.continuation ? { separateBattleGauges: false } : {}) }));
   engine.setSeed(seed);
   engine.init({ game: 'ffx2', party: buildFor(kit), enemies: groupOf(spec.act), triggers: [], seed, condition: spec.condition ?? (spec.act === 2 ? 'scripted' : 'normal'), canEscape: false });
   if (kit.thunder) for (const g of girls(engine)) (g.affinities as Record<string, string>)['lightning'] = 'immune';

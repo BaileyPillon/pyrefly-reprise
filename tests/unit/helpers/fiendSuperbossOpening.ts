@@ -7,7 +7,7 @@
 import type { FFX2PartyBuild } from '../../../src/battle/common/types.ts';
 import { STEPS_PER_SECOND } from '../../../src/battle/ffx2/clock.ts';
 import type { FFX2Engine } from '../../../src/battle/ffx2/index.ts';
-import { LINES, openEngine, type Spec } from './fiendSuperbossBench.ts';
+import { COMMAND_IDS, LINES, buildFor, openEngine, type Spec } from './fiendSuperbossBench.ts';
 import { GIRLS, forcedAct, openAct, type Act } from './fiendSuperbossDrive.ts';
 
 type Ev = { type: string; actorId?: string; targetId?: string; sourceId?: string; status?: string };
@@ -104,4 +104,61 @@ export function miracleLoopTiming(act: Act, seed: number, build: FFX2PartyBuild)
   }
   if (landed === null || gone === null || menus.length < 3) throw new Error('the loop did not run long enough to be timed');
   return { landing: landed - menus[0]!, lasts: gone - landed, cadence: (menus[2]! - menus[0]!) / 2 };
+}
+
+export interface CommandCadence {
+  /** Battle seconds played. */
+  seconds: number;
+  /** Seconds at which each head's Command began its charge, in order. */
+  starts: number[];
+  /** Commands begun, per head. */
+  perHead: Record<string, number>;
+  /** Seconds of the run in which at least one head had a Command charging (the union of the charges, start to end of the action). */
+  charging: number;
+}
+
+/**
+ * How often the four heads of act 2 reach a Command, with the girls Invincible for good, wearing a Ribbon (Duo's Petrify lands through Invincible and would end the run) and defending (so no head is killed and no girl is, and the scripts run on their own clocks). The card and the page quote this
+ * (`guides/ffx2-fiend-superbosses.ts`): the research note summed the charge times only and said "about every four seconds"; the engine, which adds the fixed wait after every action, does a Command about every ten.
+ */
+export function commandCadence(seed: number, seconds: number): CommandCadence {
+  const engine = openAct(2, seed, { immortal: true, build: buildFor({ ribbon: true }) });
+  const starts: number[] = [];
+  const perHead: Record<string, number> = {};
+  const open = new Map<string, number>();
+  const spans: Array<[number, number]> = [];
+  let seen = 0;
+  const flush = (): void => {
+    const log = engine.state().log as unknown as ReadonlyArray<Ev & { abilityId?: string }>;
+    for (; seen < log.length; seen++) {
+      const e = log[seen]!;
+      if (e.type === 'action-start' && e.actorId !== undefined && e.abilityId !== undefined && COMMAND_IDS.includes(e.abilityId)) {
+        open.set(e.actorId, now(engine));
+        starts.push(now(engine));
+        perHead[e.actorId] = (perHead[e.actorId] ?? 0) + 1;
+      } else if (e.type === 'action-end' && e.actorId !== undefined && open.has(e.actorId)) {
+        spans.push([open.get(e.actorId)!, now(engine)]);
+        open.delete(e.actorId);
+      }
+    }
+  };
+  for (let i = 0; i < 1_000_000 && now(engine) < seconds; i++) {
+    const d = engine.nextDecision();
+    flush();
+    if (d.kind === 'battle-over') break;
+    if (d.kind === 'waiting') {
+      engine.tick(1);
+      flush();
+      continue;
+    }
+    if (d.kind === 'player-input') engine.submit({ kind: 'defend', targets: [] });
+  }
+  spans.sort((a, b) => a[0] - b[0]);
+  let charging = 0;
+  let reach = -Infinity;
+  for (const [from, to] of spans) {
+    charging += Math.max(0, to - Math.max(from, reach));
+    reach = Math.max(reach, to);
+  }
+  return { seconds: now(engine), starts, perHead, charging };
 }

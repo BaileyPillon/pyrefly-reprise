@@ -8,8 +8,9 @@
  * What it pins:
  * 1. **The base party loses both acts on every seed, on every line, at every pace**, and no fight reaches the cap: it is defeated in seconds (a result, not a defect: no boss row is touched).
  * 2. **Why: the opening.** Almighty Shinra's first blow (Clione) lands about 2.6 s in and no girl's action COMPLETES before it on any seed: Rikku's first menu comes at about 1.4 s and a Light Curtain or a Mix started
- *    then has not landed; the first move alone wipes the party on most seeds of act 1. **Act 2 is worse as the chapter plays it**: it is a continuation link, which the engine opens with every wait whole (`battle/ffx2/atb-open.ts`), so the
- *    heads' first blow lands 2.9 to 3.4 s in and the girls are never asked for a command at all (the first move wipes the party on all 200 seeds, 9.0 s in); opened as a fresh first link it would be 1.6 to 2.6 s and most seeds give a girl a menu first.
+ *    then has not landed; the first move alone wipes the party on most seeds of act 1. **Act 2 opens as the game opens a fight** (`opensAsSeparateBattle`: each character's random opening wait and the trim, `battle/ffx2/atb-open.ts`): the heads' first blow lands 1.6 to 2.6 s in, most seeds give a girl a menu
+ *    first and none finishes an action before the blow; the first move wipes the party on 85 of 200 seeds. **The alternative, a plain continuation link** (every wait whole; measured with `continuation: true`; how the chapter opened act 2 before the fix pass) is worse: the first blow lands 2.9 to 3.4 s
+ *    in, the girls are never asked for a command (the first move wipes the party on all 200 seeds, 9.0 s in).
  * 3. **The Miracle Drink loop's arithmetic.** A Drink lands about 4.8 s after Rikku's menu and Invincible lasts about 7.9 s; Rikku's menu comes about every 7.3 s when she Mixes at every one. The next Drink would
  *    land while the last still stands (a status does not stack), so it is wasted: the loop covers about half the time, not all of it. With the opening handed over for free (a rig) the loop still loses.
  * 4. **Every LG4 what-if loses both acts on every seed** (the loop, Hero Drinks, Thunder-proof girls, and the Ribbon from stage 2), alone or together.
@@ -67,9 +68,23 @@ describe('the opening: the first blow lands before any girl has done anything', 
     expect(wiped / SEEDS, 'the first move alone wipes the party on most seeds (158 of 200 at the bench)').toBeGreaterThan(0.5);
   });
 
-  it('act 2 as the chapter plays it (a continuation link: every wait whole): the first blow lands 2.8 to 3.5 s in, the first move wipes the party on every seed, and no girl is EVER asked for a command (the browser smoke saw the same)', () => {
+  it('act 2 as the chapter plays it (a separate battle: the game\'s own start): the first blow lands 1.5 to 2.7 s in, most seeds give a girl a menu first, and still no girl action completes before the blow; it is the same fight as one opened `normal`', () => {
+    let menuFirst = 0;
     for (let seed = 1; seed <= SEEDS; seed++) {
       const o = openingOf({ act: 2, line: 'advisor' }, seed);
+      expect(o.firstBlow, `seed ${seed}`).toBeGreaterThan(1.5);
+      expect(o.firstBlow, `seed ${seed}`).toBeLessThan(2.7);
+      expect(o.firstGirlActionEnd === null || o.firstGirlActionEnd > o.firstBlow!, `seed ${seed}`).toBe(true);
+      expect(o.ends, `seed ${seed}: over inside twelve seconds`).toBeLessThan(12);
+      if (o.firstMenu !== null && o.firstMenu < o.firstBlow!) menuFirst++;
+      expect(o, `seed ${seed}: the chained act 2 opens exactly as a first link does (opensAsSeparateBattle)`).toEqual(openingOf({ act: 2, line: 'advisor', condition: 'normal' }, seed));
+    }
+    expect(menuFirst / SEEDS, '160 of 200 at the bench').toBeGreaterThan(0.5);
+  });
+
+  it('the alternative, a plain CONTINUATION link (every wait whole, no trim; `continuation: true`, how the chapter opened act 2 before the fix pass): the first blow lands 2.8 to 3.5 s in, the first move wipes the party on every seed, and no girl is EVER asked for a command', () => {
+    for (let seed = 1; seed <= SEEDS; seed++) {
+      const o = openingOf({ act: 2, line: 'advisor', continuation: true }, seed);
       expect(o.firstBlow, `seed ${seed}`).toBeGreaterThan(2.8);
       expect(o.firstBlow, `seed ${seed}`).toBeLessThan(3.5);
       expect(o.firstMenu, `seed ${seed}: no menu before the end`).toBeNull();
@@ -77,19 +92,9 @@ describe('the opening: the first blow lands before any girl has done anything', 
       expect(o.standingAfterFirstMove, `seed ${seed}: wiped by the first move`).toBe(0);
       expect(o.ends, `seed ${seed}: nine seconds (271 logic steps), the same every seed`).toBeCloseTo(271 / STEPS_PER_SECOND, 1);
     }
-  });
-
-  it('act 2 as a FRESH first link (the same group opened `normal`, which the chapter never does) is kinder: the first blow lands 1.5 to 2.7 s in and most seeds give a girl a menu first; still no girl action completes before the blow', () => {
-    let menuFirst = 0;
-    for (let seed = 1; seed <= SEEDS; seed++) {
-      const o = openingOf({ act: 2, line: 'advisor', condition: 'normal' }, seed);
-      expect(o.firstBlow, `seed ${seed}`).toBeGreaterThan(1.5);
-      expect(o.firstBlow, `seed ${seed}`).toBeLessThan(2.7);
-      expect(o.firstGirlActionEnd === null || o.firstGirlActionEnd > o.firstBlow!, `seed ${seed}`).toBe(true);
-      expect(o.ends, `seed ${seed}: over inside twelve seconds`).toBeLessThan(12);
-      if (o.firstMenu !== null && o.firstMenu < o.firstBlow!) menuFirst++;
-    }
-    expect(menuFirst / SEEDS, '160 of 200 at the bench').toBeGreaterThan(0.5);
+    const t = run({ act: 2, line: 'advisor', continuation: true });
+    expect(t.wins, 'the alternative wins none either').toBe(0);
+    expect(t.seconds / t.seeds).toBeCloseTo(9.0, 0);
   });
 });
 
@@ -132,7 +137,8 @@ describe('LG4\'s what-ifs: every one loses both acts on every seed (none of them
   it('the loop casts Drinks (it is the line that was measured) and the Hero Drink line drinks; neither wins', () => {
     const loop = run({ act: 1, line: 'miracle', kit: { darkMatter: true } });
     expect(loop.miracles, 'Rikku starts a Mix on most seeds of act 1 (0.93 a fight at the bench): it never lands before Clione').toBeGreaterThan(0);
-    expect(run({ act: 2, line: 'miracle', kit: { darkMatter: true } }).miracles, 'act 2 never asks a girl for anything: no Mix is ever started').toBe(0);
+    expect(run({ act: 2, line: 'miracle', kit: { darkMatter: true } }).miracles, 'act 2 opens as the game opens a fight: Rikku is asked first on most seeds and starts a Mix on some (0.60 a fight at the bench), and the party still loses every seed').toBeGreaterThan(0);
+    expect(run({ act: 2, line: 'miracle', kit: { darkMatter: true }, continuation: true }).miracles, 'the continuation alternative never asks a girl for anything: no Mix is ever started').toBe(0);
     const hero = run({ act: 1, line: 'hero', kit: { heroDrinks: 10 } });
     expect(hero.drinks).toBeGreaterThan(0);
     expect(loop.wins + hero.wins).toBe(0);

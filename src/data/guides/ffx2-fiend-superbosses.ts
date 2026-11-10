@@ -6,7 +6,10 @@
  *
  * **Game case: FFX-2 only** [AGENTS.md rule 14]. ATB, dresspheres and the game's own five scripts. Sourced facts only: the two acts and the death rule (`re-ffx2-fiend-arena-superbosses` section 0 and 2); Shinra's six-beat loop and
  * its quarter and half tests (section 3.1); the heads' loops and their Commands (sections 3.2 to 3.5); the moves' rows (section 4); Darkness being special damage that ignores Defense and hits every enemy
- * (`ffx2-vegnagun-shuyin` section 6.4). **Measured on the engine in stage 1 of the lane, so said:** a Command puts a Lv 99 girl down and Protect and Shell do not change it. **Not promised, so not said:** a defence against a
+ * (`ffx2-vegnagun-shuyin` section 6.4). **Measured on the engine in stage 1 of the lane, so said:** a Command puts a Lv 99 girl down and Protect and Shell do not change it. **Measured on the engine in the fix pass, so said:**
+ * the heads reach a Command about every ten seconds between them and one is charging about a third of the time (`commandCadence` in `tests/unit/helpers/fiendSuperbossOpening.ts`, pinned in `fiend-superbosses-guide.test.ts`; the research
+ * note's "about every four seconds" summed the charge times only and left out the fixed wait after every action); Protect takes a fifth to a half off the physical rows and Shell about half off the spells before the 9,999 cap (a power-70
+ * Ultima is held at 9,999 a blow either way). **Not promised, so not said:** a defence against a
  * Command (the party as built carries no Invincible, no Thunder-proofing and no Mix row), the cups the arena runs these fights in (not in the files), and what the heads drop (the loot items are not in our tables).
  *
  * The Wait split's habit line leads the RULES under Wait (`./ffx2-wait-habit.ts`), as for every FFX-2 guide.
@@ -35,8 +38,8 @@ const RULES: GuideRule[] = [
     cite: 're-ffx2-fiend-arena-superbosses §4',
   },
   {
-    text: 'Between them the heads reach a Command about every four seconds, so one is nearly always charging. Protect still halves their blows and Shell their spells; a Light Curtain and a Lunar Curtain lay both on the party.',
-    short: 'A Command is always charging; curtains for the rest',
+    text: 'Between them the heads reach a Command about every ten seconds, and one is charging about a third of the time. Protect still cuts their blows and Shell their spells; a Light Curtain and a Lunar Curtain lay both on the party.',
+    short: 'A Command every ten seconds; curtains for the rest',
     cite: 're-ffx2-fiend-arena-superbosses §3',
   },
   {
@@ -48,8 +51,8 @@ const RULES: GuideRule[] = [
 
 const HINTS: GuideHint[] = [
   { when: { labels: ['Darkness'] }, text: 'Darkness hits every enemy at once and ignores Defense, so neither Shinra’s 255 nor the heads’ Shell and Protect turn it aside', cite: 'ffx2-vegnagun-shuyin §6.4' },
-  { when: { labels: ['Light Curtain'] }, text: 'Light Curtain lays Protect on the party: it halves Shinra’s blows, Clione and Final Impact, and the heads’ Sparklers and Fireworks, but not a Command', cite: 're-ffx2-fiend-arena-superbosses §4' },
-  { when: { labels: ['Lunar Curtain'] }, text: 'Lunar Curtain lays Shell on the party: it halves Ultima, Black Sky, Holy, Meteor and the -aga spells, but not a Command', cite: 're-ffx2-fiend-arena-superbosses §4' },
+  { when: { labels: ['Light Curtain'] }, text: 'Light Curtain lays Protect on the party: it takes a fifth to a half off Shinra’s blows, Clione and Final Impact, and the heads’ Sparklers and Fireworks, but nothing off a Command', cite: 're-ffx2-fiend-arena-superbosses §4' },
+  { when: { labels: ['Lunar Curtain'] }, text: 'Lunar Curtain lays Shell on the party: it halves Ultima, Black Sky, Holy, Meteor and the -aga spells before the 9,999 cap holds them down, but nothing off a Command', cite: 're-ffx2-fiend-arena-superbosses §4' },
   { when: { labels: ['Megalixir'] }, text: 'A Megalixir mends the whole party: use it when the lowest girl is under half', cite: 're-ffx2-fiend-arena-superbosses §5' },
   { when: { labels: ['Remedy'] }, text: 'A Remedy cures {target} of the stone Duo’s Break laid on her', cite: 're-ffx2-fiend-arena-superbosses §3.3' },
   { when: { labels: ['Phoenix Down', 'Stash'] }, text: 'Stand {target} back up before the next blow lands', cite: 're-ffx2-fiend-arena-superbosses §5' },
@@ -59,7 +62,7 @@ const PHASES: GuidePhase[] = [
   {
     bossId: 'x2-almighty-shinra',
     label: 'SHINRA',
-    note: 'Six beats and round again. Under half his life the break becomes Fireworks; under a quarter Ultima becomes Final Impact, fourteen blows of an eighth of everyone’s life and magic.',
+    note: 'Six beats and round again. Under half his life the break becomes Fireworks; under a quarter Ultima becomes Final Impact, fourteen blows, the first an eighth of everyone’s life and magic and each after it heavier.',
     cite: 're-ffx2-fiend-arena-superbosses §3.1',
   },
   {
