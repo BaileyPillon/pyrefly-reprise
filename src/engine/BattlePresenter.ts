@@ -27,6 +27,7 @@ import { INPUT_STREAK_LIMIT, LIVELOCK_SPINS, outcomeOf } from './BattlePresenter
 import { headlineEnemy } from '../battle/common/headlineEnemy.ts';
 import { setHeadlineBoss } from './HeadlineBoss.ts';
 import { BattlePresenterCommands } from './BattlePresenterCommands.ts';
+import { releaseSpecial } from './BattlePresenterSpecial.ts'; // FFX-2 Special look (step C2): a new link starts clean
 import { stageLinkBegins } from './BattlePresenterStaging.ts'; // lane "pro-staging": a later link of a chain starts with a clear layer (release 69 `booth-leblanc`)
 
 // Re-exported: the loop's public types live with the ports (`BattlePresenterPorts.ts`).
@@ -40,6 +41,7 @@ export class BattlePresenter extends BattlePresenterCommands {
    * screen owns what happens next (chain, results, retry).
    */
   async run(engine: BattleEngine, link: { headline?: string; bossId?: string; moreLinks?: boolean } = {}): Promise<BattleOutcome> {
+    releaseSpecial(this.ctx);
     setHeadlineBoss(link.bossId); // PR-0243 for the F1 ribbon (`HeadlineBoss.ts`): this link's declared boss, or none; before the first HUD sync of the link
     this.ctx.moreLinks = link.moreLinks === true; // the chain says whether another formation follows (`BattleEncounterChain`)
     stageLinkBegins(this.ctx); // pro staging: the second link on starts with a clear layer, so a seam's marks (title, HUD-out) never reach the next formation

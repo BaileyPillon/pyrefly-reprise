@@ -44,6 +44,7 @@ import type { BattleEvent, CombatantId } from '../battle/common/types.ts';
 import type { ActorHandle } from './BattlePresenterPorts.ts';
 import type { EventCtx } from './BattlePresenterEvents.ts';
 import { cue, settled, TIMING } from './BattlePresenterEvents.ts';
+import { specialStatusHolds, formStatus } from './BattlePresenterSpecial.ts'; // FFX-2 Special look (step C2): a status on a part, petrify or auto-life on the main
 import { moveScale } from './motion/CurveBeats.ts'; // MF-23: the ramp's length follows the playback speed as the sleeps it replaces did
 import { rampAll } from './motion/RampBeat.ts'; // MF-23 (`?ramps=smooth`)
 
@@ -95,6 +96,7 @@ const stoneIds = new WeakMap<EventCtx, Set<CombatantId>>();
 
 /** `status-add`: the generic flash, plus the two statuses that change the field. */
 export async function statusAdded(ctx: EventCtx, event: StatusAdd): Promise<void> {
+  if (specialStatusHolds(ctx, event)) return formStatus(ctx, event);
   const a = ctx.stage.actor(event.targetId);
   a?.noteStatus?.(event.status, true);
   if (event.status === 'eject' && a && ctx.stage.sideOf(event.targetId) === 'enemy') {
@@ -153,3 +155,4 @@ export function unstone(a: ActorHandle | undefined): void {
 
 /** Rule 4's two calls, for `BattlePresenterEvents.ts`'s one import line (it may not grow). */
 export { comeBack, keptToReturn } from './BattlePresenterReturns.ts';
+export { specialBeat, specialHolds, specialStatusHolds, formRevive, formStatus, partKo } from './BattlePresenterSpecial.ts'; // FFX-2 Special look (step C2): the guards, for the same one import line

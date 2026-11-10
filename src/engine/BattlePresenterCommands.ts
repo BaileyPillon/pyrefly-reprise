@@ -13,6 +13,7 @@ import { aeonMenuRows } from './PayRows.ts';
 import type { BattleOutcome, PlayResult } from './BattlePresenterPorts.ts';
 import { firstEnabled, askMinigame, backOutOfMinigame, outcomeOf, previewOf } from './BattlePresenterUtil.ts';
 import { BattlePresenterPlayback } from './BattlePresenterPlayback.ts';
+import { preSubmit } from './BattlePresenterSpecial.ts'; // FFX-2 Special look (step C2): the HUD keeps today's list while the engine mutates `activeIds`; returns at once for any other command
 
 export class BattlePresenterCommands extends BattlePresenterPlayback {
   /** Submit one command and play everything it produced, minigames included. */
@@ -26,6 +27,7 @@ export class BattlePresenterCommands extends BattlePresenterPlayback {
     // FF7 resolves one action at a time (research/ff7-battle-core.md §2.6): a command confirmed while the pump
     // plays the boss's turn waits until that turn has finished on screen (repair item 3). FFX and FFX-2 as before.
     if (engine.state().game === 'ff7') await this.playing;
+    preSubmit(this.ctx, engine.state(), command, this);
     const events = engine.submit(command);
     this.queuedHud(engine); // PR-0104 (FFX-2 only): name the queued command now, not after its pose has played
     let res = await this.play(events);

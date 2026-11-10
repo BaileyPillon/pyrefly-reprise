@@ -28,6 +28,11 @@ import { bevelleBuild } from '../../src/data/ffx2/builds/bevelle.ts';
 import { FakeAudio, FakeCutscenes, FakeDamageNumbers, FakeMessageBar, FakeStage, noSleep } from './helpers/FakeStage.ts';
 import { bahamutGroup, chapterIV } from './helpers/specialFormState.ts';
 import { openSpecial } from './helpers/specialDrive.ts';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { formHandleOf as formHandleAgain } from '../../src/engine/SpecialStaging.ts';
+import * as SpecialPresenter from '../../src/engine/BattlePresenterSpecial.ts';
+import { loadLog, rig } from './helpers/specialPlayback.ts';
 
 // Step C1: every stage hook of the Special look is wrapped in a pass-through spy, so the cases below can prove an ordinary playback never calls one and that, called with no form, each changes no value.
 vi.mock('../../src/engine/SpecialStaging.ts', async (importOriginal) => {
@@ -40,6 +45,20 @@ vi.mock('../../src/engine/SpecialStaging.ts', async (importOriginal) => {
     anchorSourceOf: vi.fn(real.anchorSourceOf),
     formKeepIds: vi.fn(real.formKeepIds),
     formSlots: vi.fn(real.formSlots),
+  };
+});
+
+// Step C2: the guards and the three beats they route to are wrapped in pass-through spies too, so the burst below proves what the presenter asked and what was answered.
+vi.mock('../../src/engine/BattlePresenterSpecial.ts', async (importOriginal) => {
+  const real = await importOriginal<typeof import('../../src/engine/BattlePresenterSpecial.ts')>();
+  return {
+    ...real,
+    specialHolds: vi.fn(real.specialHolds),
+    specialStatusHolds: vi.fn(real.specialStatusHolds),
+    specialBeat: vi.fn(real.specialBeat),
+    partKo: vi.fn(real.partKo),
+    formRevive: vi.fn(real.formRevive),
+    formStatus: vi.fn(real.formStatus),
   };
 });
 
@@ -230,5 +249,70 @@ describe('step C1: the stage hooks of the Special look, with no form registered 
     rings.update(0.1, () => ({ x: 0, y: 0, z: 0, height: 2 }), null);
     expect(mat.opacity).toBe(0.62);
     expect(mat.color.getHex()).toBe(PART_RING_COLOUR);
+  });
+});
+
+
+// ------------------------------------------------------------------ step C2: the presenter's call-ins, with the switch OFF
+
+describe('step C2: the presenter\'s call-ins, with the switch off (every shipped chapter)', () => {
+  /** An ordinary Change (no `special` on any event) followed by a KO, a revive and a status on ids a form WOULD own, all with `flags.specialDressUp` unset. */
+  async function ordinaryBurst() {
+    const log = loadLog('entry-yuna');
+    const r = rig(log);
+    r.use(log, {}); // the flag is not set
+    const events = log.events.map((e) => (e.type === 'spherechange' ? ({ ...e, special: undefined } as typeof e) : e));
+    delete (events.find((e) => e.type === 'spherechange') as { special?: unknown }).special;
+    const extra = [
+      { type: 'ko', targetId: 'floral-fallal-right-pistil', sourceId: 'bahamut', seq: 900 },
+      { type: 'revive', targetId: 'floral-fallal-right-pistil', hp: 10, cause: 'item', seq: 901 },
+      { type: 'status-add', targetId: 'floral-fallal-left-pistil', sourceId: 'bahamut', status: 'poison', instance: { id: 'poison' }, seq: 902 },
+      { type: 'status-remove', targetId: 'floral-fallal-left-pistil', status: 'poison', reason: 'expired', seq: 903 },
+      { type: 'status-add', targetId: 'yuna', sourceId: 'yuna', status: 'auto-life', instance: { id: 'auto-life' }, seq: 904 },
+    ] as never[];
+    for (const fn of [SpecialPresenter.specialHolds, SpecialPresenter.specialStatusHolds, SpecialPresenter.specialBeat, SpecialPresenter.partKo, SpecialPresenter.formRevive, SpecialPresenter.formStatus]) vi.mocked(fn).mockClear();
+    r.hud.hudLog.length = 0;
+    r.stage.calls.length = 0;
+    await r.play([...events, ...extra]);
+    return r;
+  }
+
+  it('calls no new port member: no setForm, no special piece, no stub, no fade, no held rows, no chip, no mode', async () => {
+    const r = await ordinaryBurst();
+    expect(r.stage.calls.filter((c) => c.startsWith('setForm:') || c.startsWith('special:') || c.startsWith('add:') || c.startsWith('fade='))).toEqual([]);
+    expect(r.hud.holdLog).toEqual([]);
+    expect(r.hud.chipLog).toEqual([]);
+    expect(r.hud.modeLog).toEqual([]);
+    expect(r.stage.form).toBeNull();
+  });
+
+  it('never makes a runtime, never reaches partKo, formRevive or formStatus, and every guard answers false or null', async () => {
+    const r = await ordinaryBurst();
+    expect((SpecialPresenter as unknown as { runtimeOf(c: unknown): unknown }).runtimeOf((r.presenter as unknown as { ctx: unknown }).ctx)).toBeUndefined();
+    for (const fn of [SpecialPresenter.partKo, SpecialPresenter.formRevive, SpecialPresenter.formStatus]) expect(fn).not.toHaveBeenCalled();
+    for (const fn of [SpecialPresenter.specialHolds, SpecialPresenter.specialStatusHolds, SpecialPresenter.specialBeat]) {
+      expect(fn).toHaveBeenCalled();
+      for (const res of vi.mocked(fn).mock.results) expect(res.value === false || res.value === null, fn.name).toBe(true);
+    }
+  });
+
+  it('the stage hooks answer "no form" and the art candidates are the step-0 pin\'s (special-c2-pins.test.ts)', () => {
+    expect(formHandleAgain({}, 'yuna', { get: () => ({ actor: {} as never }) })).toBeUndefined();
+  });
+
+  it('a source scan: the guards are plain functions, and no call-in line awaits or makes a promise before they return', () => {
+    const src = (f: string): string => readFileSync(resolve(__dirname, '..', '..', 'src', 'engine', f), 'utf8').replace(/\r\n/g, '\n');
+    const text = src('BattlePresenterSpecial.ts');
+    for (const name of ['noteSpecial', 'preSubmit', 'specialBeat', 'specialHolds', 'specialStatusHolds', 'releaseSpecial', 'runtimeOf']) {
+      const at = text.indexOf(`export function ${name}(`);
+      expect(at, `${name} is a plain exported function`).toBeGreaterThan(-1);
+      expect(text.slice(Math.max(0, at - 7), at), name).not.toMatch(/async\s*$/);
+      const body = text.slice(at, text.indexOf('\n}\n', at));
+      expect(body, `${name} has no await and makes no promise`).not.toMatch(/\bawait\b|new Promise|Promise\.resolve|\basync\b/);
+    }
+    const lines = ['BattlePresenterEvents.ts', 'BattlePresenterBeats.ts', 'BattlePresenterArrivals.ts', 'BattlePresenterPlayback.ts', 'BattlePresenterBase.ts', 'BattlePresenterCommands.ts', 'BattlePresenter.ts']
+      .flatMap((f) => src(f).split('\n').filter((l) => /\b(specialHolds|specialStatusHolds|specialBeat|noteSpecial|preSubmit|releaseSpecial)\(/.test(l) && !/^\s*(export|import|\/\/|\*)/.test(l)));
+    expect(lines.length).toBeGreaterThanOrEqual(8);
+    for (const l of lines) expect(l, l).not.toMatch(/\bawait\b\s*[^;]*\b(specialHolds|specialStatusHolds|specialBeat)\(/);
   });
 });

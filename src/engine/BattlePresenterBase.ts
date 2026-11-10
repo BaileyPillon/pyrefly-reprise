@@ -20,6 +20,7 @@ import { defaultSleep, notifyHud, runMidBattleScript, SPEED_SCALE, syncHud } fro
 import { paceFactor } from './pace.ts';
 import { applyEventToVitals, captureVitals, projectState, type VitalsMap } from './BattlePresenterVitals.ts';
 import { menuBlocks } from './KeySlots.ts';
+import { releaseSpecial } from './BattlePresenterSpecial.ts'; // FFX-2 Special look (step C2): a torn-down presenter lets go of the held rows and the stage form
 import { setMenuHold } from './motion/MenuHold.ts'; // motion pass (lane "core"): the actor-side new looks ask whether an FFX-2 menu holds them back (D-357)
 
 export class BattlePresenterBase {
@@ -189,6 +190,7 @@ export class BattlePresenterBase {
    */
   abort(): void {
     this.aborted = true;
+    releaseSpecial(this.ctx);
     this.actingState.cancel();
     this.atbModeChanged();
   }

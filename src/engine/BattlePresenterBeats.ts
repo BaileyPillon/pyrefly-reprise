@@ -38,6 +38,7 @@ import { actionKills } from './procam/ProBurst.ts'; // `?camera=pro`: whether th
 import { blowFlash, holdBlow } from './motion/DemoHitBeat.ts'; // `?motion=demo` (conference demo): the hit feel; unchanged without it
 import { fxActionOpen, fxDissolve, fxHit, fxVictory } from './fx/c/presenterHooks.ts'; // eye-candy option C (`?fx=c`); no-ops without it
 import { banner, cue, elementCue, numeral, reasonText, settled, TIMING, type EventCtx } from './BattlePresenterEvents.ts';
+import { partKo, specialHolds } from './BattlePresenterArrivals.ts'; // FFX-2 Special look (step C2): a part's knock-out (or the main's inside her form) shows nothing on the figure
 import { passEarlyVictory, passGather } from './PassBeats.ts'; // the sound pass (decision 184): one fanfare at the last blow; the gather's landing thud left out
 
 // ----------------------------------------------------------------- handlers
@@ -223,6 +224,7 @@ export async function missed(ctx: EventCtx, event: Extract<BattleEvent, { type: 
 }
 
 export async function ko(ctx: EventCtx, id: CombatantId): Promise<void> {
+  if (specialHolds(ctx, id)) return partKo(ctx, id);
   const actor = ctx.stage.actor(id);
   const side = ctx.stage.sideOf(id);
   cue(ctx, 'ko');

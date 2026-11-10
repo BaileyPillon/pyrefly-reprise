@@ -15,8 +15,19 @@ import { shotHoldMs } from './fx/shotHold.ts';
 import { koWipedStatuses } from './BattlePresenterKoWipe.ts';
 import { blowHeld, revealBlow } from './motion/SkillTravel.ts'; // r38-motion SKILL TRAVEL: a blow whose shot is in flight shows its numeral and HP rows when it lands
 import { BattlePresenterBase } from './BattlePresenterBase.ts';
+import { noteSpecial, releaseSpecial, type SpecialHost } from './BattlePresenterSpecial.ts'; // FFX-2 Special look (step C2): the tracker sees every event with the live state; both calls return at once while the switch is OFF
 
-export class BattlePresenterPlayback extends BattlePresenterBase {
+export class BattlePresenterPlayback extends BattlePresenterBase implements SpecialHost {
+  /** `SpecialHost` (FFX-2 Special look): the full HUD sync, never `syncVitals`, while a form's rows are held. Nothing before `run` set the engine. */
+  syncFullHud(): void {
+    if (this.queuedEngine) this.syncHud(this.queuedEngine);
+  }
+
+  /** `SpecialHost`: the Config's ATB mode the engine is in (`FFX2Engine.atbMode`); Wait for an engine without one. */
+  atbMode(): 'wait' | 'active' {
+    return (this.queuedEngine as { atbMode?: () => 'wait' | 'active' } | null)?.atbMode?.() ?? 'wait';
+  }
+
   // -------------------------------------------------------------------- play
 
   /**
@@ -100,11 +111,13 @@ export class BattlePresenterPlayback extends BattlePresenterBase {
       this.ctx.burst = { events, at: i }; // the action's own later events: a fiend's strike finds its target in them (`motion/StrikeReach.ts`)
       if (event.type === 'action-start') this.ctx.bigMove = this.bigMoves.decide(event); // 2026-11-07: a big move earns the portrait; `actionStart` takes it (null for every other action)
       else if (event.type === 'spherechange') this.ctx.bigMove = this.bigMoves.decideDressUp(event); // FFX-2: the change into a special dressphere (the engine emits no action-start for a dress change)
+      noteSpecial(this.ctx, event, this.liveState, this);
       await playEvent(this.ctx, event);
       if (held) await revealBlow(this.ctx, event); // the beat shows it itself; this only makes sure a held blow is never lost
       this.trace.push({ seq: event.seq, type: event.type, ms: Date.now() - started });
 
       if (event.type === 'victory' || event.type === 'defeat') {
+        releaseSpecial(this.ctx); // the engine ends a form silently at the battle's end: the held rows and the stage form go
         return { ended: event.type, result: event.result, dropped: events.length - i - 1 };
       }
     }

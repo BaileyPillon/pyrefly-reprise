@@ -39,7 +39,7 @@ import {
 } from './BattlePresenterBeats.ts';
 import { curseDim, dressFx, statusFxLanding } from './BattlePresenterBossFx.ts';
 import { stageChange } from './BattlePresenterStaging.ts'; // lane "pro-staging": the Change's readable pearl plate (FFX-2 Chapter IV only)
-import { comeBack, flushArrivals, keptToReturn, restorePart, statusAdded, unstone } from './BattlePresenterArrivals.ts';
+import { comeBack, flushArrivals, keptToReturn, restorePart, specialBeat, specialHolds, specialStatusHolds, formRevive, formStatus, statusAdded, unstone } from './BattlePresenterArrivals.ts';
 import { PARTY_SWAP_MS, crossBack, partyBack } from './SummonStaging.ts'; // crossBack: MF-15
 import { lungePlan } from './motion/StrikeReach.ts';
 
@@ -258,6 +258,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return statusAdded(ctx, event);
 
     case 'status-remove':
+      if (specialStatusHolds(ctx, event)) return formStatus(ctx, event);
       ctx.stage.actor(event.targetId)?.noteStatus?.(event.status, false);
       if (event.status === 'petrify') unstone(ctx.stage.actor(event.targetId));
       if (event.reason === 'dispelled') { const landing = statusFxLanding(ctx, event.targetId); if (landing) await landing; } // the new effects' Dispel (no damage event starts it)
@@ -271,6 +272,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return ko(ctx, event.targetId);
 
     case 'revive': {
+      if (specialHolds(ctx, event.targetId)) return formRevive(ctx, event);
       const a = ctx.stage.actor(event.targetId);
       a?.setAlpha(1);
       a?.setDissolve(0);
@@ -390,6 +392,8 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return;
 
     case 'spherechange': {
+      const special = specialBeat(ctx, event);
+      if (special) return special;
       const big = ctx.bigMove ?? null; // FFX-2: the special dress change's portrait (`BigMoveCutIn.decideDressUp`); the HUD's flourish plays as it always did
       ctx.bigMove = null;
       if (big) ctx.moments.bigMoveCutIn(big);
