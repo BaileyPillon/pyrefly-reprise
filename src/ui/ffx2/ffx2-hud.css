@@ -1245,3 +1245,45 @@ html:not([data-phone-battle]) .ffx2hud .ig-cmd.ffx2cmd--reason-below .ffx2cmd__r
   --ig-ink-chip: rgba(11, 10, 18, 0.8);
   --ig-ink-acting: rgba(11, 10, 18, 0.96);
 }
+
+/* ------------------------------------------------------------------ Special look, step D1 (FFX-2 only: the three Special dresspheres exist only in FFX-2)
+ * The party list of a Special form: three plates (the main, the right part, the left part) in the list the column always was. Every selector below is keyed on a part row being
+ * drawn (`:has(.ig-stat--form-part)`), on the badge, the part tile or `[data-form-role]`: none of them matches existing markup, so a fight with no form draws the column it always did.
+ * The numbers are the preflight's starting values (the list about 250 wide, the name column about 100) and are judged on screenshots, not here. */
+.ffx2hud__party:has(.ig-stat--form-part) {
+  --ffx2-form-w: 250px;
+  --ffx2-form-name: 100px;
+}
+.ffx2hud .ffx2hud__party:has(.ig-stat--form-part) .ig-stat {
+  width: var(--ffx2-form-w);
+}
+.ffx2hud .ffx2hud__party:has(.ig-stat--form-part) .ig-stat--acting {
+  width: calc(var(--ffx2-form-w) + 7px);
+}
+/* The main's badge (FF, MW, FT): its own element, shown only while a part row is drawn, so nothing names the Special before the reveal. */
+.ffx2stat__badge {
+  display: none;
+}
+.ffx2hud__party:has(.ig-stat--form-part) .ffx2stat__badge {
+  display: inline-flex;
+  position: absolute;
+  right: 4px;
+  top: 3px;
+  padding: 0 2px;
+  border-radius: 1px;
+  font: 700 5.5px/1.3 var(--ig-font-display);
+  letter-spacing: 0.08em;
+  color: #0b0a12;
+  background: var(--ffx2-special);
+}
+html:not([data-phone-battle]) .ffx2hud:not(.hud-f1) .ffx2stat__badge {
+  font-size: max(5.5px, var(--hud-floor));
+}
+.ffx2stat__face--part .ffx2stat__part-img {
+  display: block;
+}
+/* A plate takes a tap while a target is aimed (`plateTap.ts`); a row exists with this attribute only in a form, and with no handler a click does nothing. */
+.ffx2hud__party .ig-stat[data-form-role] {
+  pointer-events: auto;
+  cursor: pointer;
+}

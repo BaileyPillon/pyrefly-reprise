@@ -85,3 +85,8 @@
 .ffx2hud.hud-f1 .ig-stat__od { grid-column: 2; grid-row: 2; justify-self: end; align-self: center; height: 3px; border-radius: 1.5px; max-width: 100%; background: rgba(0, 0, 12, 0.55); margin: 0; }
 /* the status tags (today's O3 icons) stay: they ride at the end of the top row, after the MP */
 .ffx2hud.hud-f1 .ffx2party__status { display: flex; grid-column: 4; margin: 0 0 0 2px; }
+
+/* Special look, step D1 (FFX-2 only): the form's plates. The list grows leftwards from its right edge (640 - 611 = 29), as the acting row does. */
+.ffx2hud.hud-f1 .ffx2hud__party:has(.ig-stat--form-part) { left: auto; right: 29px; align-items: flex-end; }
+.ffx2hud.hud-f1 .ffx2hud__party:has(.ig-stat--form-part) .ffx2stat__top { grid-template-columns: var(--ffx2-form-name) 62px 1fr auto; }
+html:not([data-phone-battle]) .ffx2hud.hud-f1 .ffx2stat__badge { font-size: max(var(--f1-floor), var(--hud-floor)); }
