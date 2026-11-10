@@ -51,6 +51,21 @@
 }
 
 /*
+ * A title that wraps takes the card one line taller (release 80; both games, the card is shared).
+ *
+ * The left column is sized for a ONE-line title. "Belgemine's Challenge" wraps at 1600 x 900, costs the column a second line of 19 grid px the 120 above does not have, and the photo row at the bottom of
+ * the column ran 30 screen px past the card's edge (the live review of release 79). `chapterTitleGrow.ts` measures the title and sets `--prepchap-grow` on the card to the height of the lines beyond the first;
+ * a one-line title sets nothing, so the card is exactly the 120 above and those chapters are untouched. The growth is capped at 21 grid px: the sheet's top is 66 (above), so its bottom stays at 207 at most, and
+ * the hint line under it is at 213.33 (`party-prep.css`), so the card never reaches it (`tests/unit/chapters/prep-title-grow.test.ts` reads those three numbers back out of the stylesheets). Only from 600 px up:
+ * under it the phone's stacked card (`chapter-panel-phone.css`) is auto height and has no band.
+ */
+@media (min-width: 600px) {
+  .prepchap {
+    height: calc(120px + min(var(--prepchap-grow, 0px), 21px)); /* 270 + the extra title lines, 21 at most */
+  }
+}
+
+/*
  * The hero painting, laid in behind the copy.
  *
  * Multiple `background-image` layers, best first — see `heroBackground()` in

@@ -32,6 +32,7 @@ import {
   tipHtml,
   watchHeroBackground,
 } from '../../common/chapterPanel.ts';
+import { watchTitleGrow } from './chapterTitleGrow.ts';
 import './chapter-panel-tab.css';
 import './chapter-panel-phone.css';
 
@@ -126,9 +127,12 @@ function heroBackground(chapterId: string): string {
 
 export function makeChapterPanel(game: GameId): PrepPanel {
   let root: HTMLElement | null = null;
+  let stopTitleGrow: (() => void) | null = null; // release 80: see `chapterTitleGrow.ts`
 
   const render = (ctx: PrepPanelContext): void => {
     if (!root) return;
+    stopTitleGrow?.();
+    stopTitleGrow = null;
     const meta = getChapterMeta(ctx.chapter.id);
     if (!meta) {
       // A chapter with no meta record still gets a readable tab rather than a
@@ -204,6 +208,11 @@ export function makeChapterPanel(game: GameId): PrepPanel {
     // measure. See `watchHeroBackground`.
     const hero = root.querySelector<HTMLElement>('.prepchap__hero');
     if (hero) watchHeroBackground(hero, meta);
+
+    // Release 80: a title that wraps to two lines costs the left column a line the fixed band does not have,
+    // and the photo row ran past the card's edge. The card takes that line (see `chapterTitleGrow.ts`).
+    const band = root.querySelector<HTMLElement>('.prepchap');
+    if (band) stopTitleGrow = watchTitleGrow(band);
   };
 
   return {
@@ -220,6 +229,8 @@ export function makeChapterPanel(game: GameId): PrepPanel {
       render(ctx);
     },
     unmount(): void {
+      stopTitleGrow?.();
+      stopTitleGrow = null;
       root = null;
     },
     handleInput(input: InputSnapshot): boolean {
