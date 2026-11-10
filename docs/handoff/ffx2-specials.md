@@ -232,3 +232,58 @@ C2 imports `SpecialStaging.ts` (`setStageForm`, `formHandleOf`, `partViewOf`, `s
 ### 10.9 Open points taken in this step (the driver's calls; Bailey's to overturn)
 
 OP-1 the section-4 defaults (plain renders, mark (a), size `trial`, hold `per-save`, Machina Maw `standing`); OP-5 no art is installed by this step (the masks are fixtures cut from the model renders); OP-6 BOTH the main's actor and the parts' handles are hit-gated (`formHandleOf` answers a hit-gated actor for the main's id); OP-9 the pins were taken at the branch head `ad10e9f00` (the release 80 integration line), so only PROOF's A/B covers the engine commits; OP-11 the three transient orphans of 10.5, accepted and named in the commits; OP-12 the quarter-size mask fixtures are committed (`tests/fixtures/specials/masks/`), so the tool's test runs in a clean checkout; OP-18 the ring, crop and number-point formulas are inferred constants (10.7) and the table is `provisional` until the real masks replace the fixtures; OP-19 no field in `scenes/types.ts`, the derived `widthCapGirls` table; OP-21 `STAND_POINT` is `own` for all three; OP-31 the `[ours]` values are table values with the rows of 10.7; OP-35 the files the preflight does not list are edited and counted: `motion/StrikeReach.ts` (+2) and `tools/posescale/pose-kinds.d.mts` (+3); OP-37 the handle cache is cleared by `setStageForm(stage, null)` and the stage-integrated cases of tests 4 and 14 are C2's.
+
+## 11. The look, step C2: the presenter (2026-11-10; branch `ffx2-specials`; plan `docs/plans/ffx2-specials-look-review.md`)
+
+**Game case: FFX-2 only in what is seen** (the three Special dresspheres exist only in FFX-2); the presenter and stage call-ins are **shared plumbing for both games, synchronous and false or null while the switch `specialDressUp` is OFF**. Nothing in an FFX or FF7 chapter changes; `git diff <start> HEAD -- src/battle` is empty. The switch is OFF in every shipped chapter; nothing deploys; no art is installed.
+
+### 11.1 What landed
+
+| Commit | What | Tests |
+|---|---|---|
+| `0e8da18b4` | **The pins, alone, before any source edit**: `artCandidatesFor` for 62 ordinary combatants (every listed FFX and FFX-2 chapter's party and first formation, bare and in a namespace), the paintings/images/probes `preloadBattle` sends for Chapters IV and V with the switch OFF, `figureEnv().slots` being the stage's own object | `special-c2-pins` |
+| `6fe43e111` | `BattleStage.setForm?`, `VfxPort.special?`; `FakeStage.setForm`/`vfx.special`, `FakeHud` recorders | (doubles) |
+| `daa1568b3` | `BattlePresenterSpecial.ts`, `SpecialEntry.ts`, `SpecialExitFall.ts`, the guards and the call-ins of Playback, Base, Commands, `BattlePresenter.run`, Events, Beats, Arrivals | `special-presenter-sequence`, `special-reactions-replay`, `special-portrait-order`, `special-first-time-presenter`, `special-switch-off` (grown) |
+| `a72de476e` | the stage call-ins (+21 lines on `BattlePresenterStage.ts`, already over the cap), `markedPartsOf` | `special-stage`, `stage-actor-sites` |
+| `ef668e22a` | `SpecialArt.ts`, `artCandidatesFor`, `BattleScreenEncounter` (`specialSeen`, `setSpecialLook`, `markParts`), the preload | `special-art-ids`, `special-preload` |
+| `8b141eb0f` | the framing cases of test 14, a portrait-order test that can fail | `special-stage`, `special-portrait-order` |
+
+### 11.2 The runtime and the hold's life
+
+One module `WeakMap<EventCtx, SpecialRuntime>` (`runtimeOf(ctx)`; no field on `EventCtx`): the tracker, the party hold, the stage form with its hit gate, the beat the event now playing starts, the girls' ids before the change. `noteSpecial` (once per event, before `playEvent`, with the engine's live state) makes it at the first `spherechange` with `special` while `state.flags.specialDressUp` is true; `preSubmit` makes it earlier and holds the HUD's list before `engine.submit` (OP-7: the rows stay held on the parts for the WHOLE life of the form, released by the exit, the fall, `defeat`/`victory`, `abort()` and the start of a link; `releaseSpecial` is idempotent). Every HUD change after the hold is a FULL sync (`SpecialHost.syncFullHud`), never `syncVitals`.
+
+The entry walks A's `fullPlan`/`shortPlan` through `runPlan` (starts at 600 ms: the HUD's flourish; `ctx.sleep` scales by the speed, durations given to ports by `moveScale`; a step's own measured wait, such as a portrait longer than 700 ms, is added to the elapsed time so it shortens the next step, never the cut). The first-time id is written at the cut of a FULL plan only (not short, not aborted, not skip). The exit and the reachable fall (a part stands) are fixed plans; with all three bodies down the engine ends in `defeat`, the hold and the form are released there with no beat (OP-2 (a)); `fallPlan(true)` stays tested data.
+
+### 11.3 The guards and the hit gate
+
+`specialHolds` (ko, revive: the tracker knows the id), `specialStatusHolds` (a status on a part, petrify on the main, auto-life added to the main) are plain functions. `partKo`: the cue and the beat's time, no pose, no lie-down, no flash. `formRevive`: a part gets the heal cue and its numeral, the main (Auto-Life) the green flash. `formStatus` never calls `statusAdded` or `statusFxLanding`. The hit gate (D-9, OP-6: main and parts): `noteSpecial` sets `form.gate.blocked` for the event about to play: `action-start`, `action-end`, `turn-start` re-open it; a `damage` on the main or a part is gated when one already played in this action; every other event leaves it open. The numerals still print per plate.
+
+### 11.4 Files the preflight did not list (accepted, OP-35; each counted)
+
+`BattlePresenterPlayback.ts` (+13: `SpecialHost`, `noteSpecial`, the end test), `BattlePresenterBase.ts` (+2: `abort`), `BattlePresenterCommands.ts` (+2: `preSubmit`), `BattlePresenter.ts` (+2: `run`). Events +4, Beats +2, Arrivals +3, Ports +6, Art +3, Stage +21 (the spec's stop sign was +22), SpecialStaging +6 (`markedPartsOf`), Encounter +5, preload +19. Every new file is under 400 (Special 188, Entry 162, ExitFall 143, Art 31).
+
+### 11.5 Transient orphans
+
+31 (after C1) to 24: the seven transient orphans of steps A and C1 are closed (the stage imports `SpecialStaging`, the presenter the tracker, plans, reactions, hold and handle). The list is the base's 24 again.
+
+### 11.6 `[ours]` rows (none is a game number)
+
+| Value or rule | Where | Why |
+|---|---|---|
+| A part's status is `TIMING.status * 0.4` | `formStatus` | pacing, nothing seen |
+| A part's revive keeps its heal numeral (at the part's number point, which is the figure's) | `formRevive` | the plate's information |
+| The camera names hold the neutral wide shot (`SPECIAL_SHOTS` is empty); no rig is added | `SpecialEntry.ts` | OP-20; the first clip says which names need a rig |
+| The short plan's reveal (stubs, painting) happens at its `cut` | `SpecialEntry.ts` | the short plan has no reveal step |
+| The reveal's white flash on the new figure (600 ms, 0.9, not under reduce motion) | `SpecialEntry.ts` | the figure appears |
+| The exit's whiten is a figure flash without the turn ring's flare (no port member for it) | `SpecialExitFall.ts` | stage 2 |
+| The fall's squash is restored by a second ramp; not played under skip or reduce motion | `SpecialExitFall.ts` | the ramp is a share of the starting size |
+| "The others return and the rows go back to three girls" at the end of a fall | `SpecialExitFall.ts` | not seen; the splits 4000/6000/7500 are A's |
+| A stub's engine slot `3 + 2 * girlIndex + k` | `SpecialEntry.ts` | names the stub; it is anchored, not spotted |
+
+### 11.7 Deviations from the step spec, each kept to its intent
+
+1. The reactions replay is a NEW file (`special-reactions-replay.test.ts`), the stage-integrated cases a new `special-stage.test.ts`, the presenter half of test 8 a new `special-first-time-presenter.test.ts` (a module mock of `PaintedActor` and a different rig would change what the existing files prove). 2. `PhaseLighting.figures` still lists a stub: it lists every anchored part today (Chapter V's Bulwarks) and a filter would change that OFF; a figure-less actor has no painting to light. The phase floor centre, StageArt's party list and the smear's warm figure skip a stub (no added lines). 3. `stage()` also sets the parked girls to alpha 0 after re-adding them (+1 line): a re-stage would otherwise bring them back. 4. `FakeHud` recorders are `holdLog`, `chipLog`, `modeLog`, `hudLog` (a subclass of `FakeHud` in an older test already has a field named `order`). 5. `SpecialRuntime` carries two more fields, `beat` and `girls`. 6. `formRevive` prints the numeral for the main as well. 7. Nothing is run in a browser; the ON spec and the clips are stage 2's.
+
+### 11.8 Known edges for the next steps
+
+After a victory with the form up the figure and the faded parked girls stay on the stage for the results (OP-29: nothing built; D2's snapshot). `heldIds` of the parked girls survive a victory until the stage is rebuilt. The portrait's nominal length is 700 ms; a longer one is measured on the presenter's `now` clock. A `preSubmit` hold with a command the engine then rejects stays until the next release (harmless: it equals `activeIds`).
