@@ -194,7 +194,10 @@ describe('the data behind it', () => {
     const ruins = ['omega-ruins-nemesis', 'omega-ruins-omega'];
     // The hidden Belgemine's Challenge (FFX, 2026-11-09) sets it on acts 2 to 8: each duel is a fresh fight that restores Yuna and every aeon on entry and is its own retry checkpoint, with no Save Sphere between them (`data/ffx/enemies/belgemine.ts`).
     const belgemine = ['2-ifrit', '3-ixion', '4-shiva', '5-bahamut', '6-yojimbo', '7-anima', '8-sisters'].map((n) => `belgemine-${n}`);
-    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-') && !id.startsWith('ffx2-via-infinito-floor-') && !id.startsWith('dark-aeons-') && id !== 'flooded-geosgaeno' && !id.startsWith('ffx2-farplane-cup-') && !id.startsWith('ffx2-bevelle-underground-') && !id.startsWith('omega-ruins-') && !id.startsWith('belgemine-') && id !== 'ffx2-luca-dock-leblanc')).toEqual([DJOSE_EXPERIMENT_2]);
+    // The hidden Gullwings, Chapter 1 (FFX-2, 2026-11-09) sets it on acts 2 to 4 (the Flame Dragon, the Guardian Beast and YSLS-Zero): the Celsius between the hotspots mends the party, which is no Save Sphere (`data/ffx2/enemies/gullwings-ch1.ts`).
+    const gullwings = ['ffx2-besaid-cave-flame-dragon', 'ffx2-zanarkand-ruins-guardian-beast', 'ffx2-kilika-approach-ysls-zero'];
+    expect(flagged.filter((id) => !id.startsWith('mirror-yojimbo-') && !id.startsWith('ffx2-via-infinito-floor-') && !id.startsWith('dark-aeons-') && id !== 'flooded-geosgaeno' && !id.startsWith('ffx2-farplane-cup-') && !id.startsWith('ffx2-bevelle-underground-') && !id.startsWith('omega-ruins-') && !id.startsWith('belgemine-') && !gullwings.includes(id) && id !== 'ffx2-luca-dock-leblanc')).toEqual([DJOSE_EXPERIMENT_2]);
+    expect(flagged.filter((id) => gullwings.includes(id)).sort()).toEqual([...gullwings].sort());
     expect(flagged.filter((id) => id === 'flooded-geosgaeno')).toEqual(['flooded-geosgaeno']);
     expect(flagged.filter((id) => id.startsWith('dark-aeons-')).sort()).toEqual([...darkAeons].sort());
     expect(flagged.filter((id) => id.startsWith('ffx2-farplane-cup-')).sort()).toEqual(cup);

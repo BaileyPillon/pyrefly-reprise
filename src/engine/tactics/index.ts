@@ -51,6 +51,7 @@ import { YUNAS_BALLAD_BOSS_IDS, ffx2YunasBallad } from './ffx2-yunas-ballad.ts';
 import { YOUTH_LEAGUE_BOSS_IDS, ffx2YouthLeague } from './ffx2-youth-league.ts';
 import { IFRIT_KILIKA_BOSS_IDS, ffx2IfritKilika } from './ffx2-ifrit-kilika.ts';
 import { GARIK_RONSO_BOSS_IDS, ffx2GarikRonso } from './ffx2-garik-ronso.ts';
+import { GULLWINGS_CH1_BOSS_IDS, ffx2GullwingsCh1 } from './ffx2-gullwings-ch1.ts';
 import { LUCA_OPENER_BOSS_IDS, ffx2LucaOpener } from './ffx2-luca-opener.ts';
 import { FALLEN_AEONS_BOSS_IDS, ffx2FallenAeons } from './ffx2-fallen-aeons.ts';
 import { SEYMOUR_OMNIS_BOSS_ID, seymourOmnis } from './seymour-omnis.ts';
@@ -108,6 +109,7 @@ export { ffx2YunasBallad, YUNAS_BALLAD_BOSS_IDS } from './ffx2-yunas-ballad.ts';
 export { ffx2YouthLeague, YOUTH_LEAGUE_BOSS_IDS } from './ffx2-youth-league.ts';
 export { ffx2IfritKilika, IFRIT_KILIKA_BOSS_IDS } from './ffx2-ifrit-kilika.ts';
 export { ffx2GarikRonso, GARIK_RONSO_BOSS_IDS } from './ffx2-garik-ronso.ts';
+export { ffx2GullwingsCh1, GULLWINGS_CH1_BOSS_IDS } from './ffx2-gullwings-ch1.ts';
 export { ffx2LucaOpener, LUCA_OPENER_BOSS_IDS } from './ffx2-luca-opener.ts';
 export { ffx2FallenAeons, FALLEN_AEONS_BOSS_IDS } from './ffx2-fallen-aeons.ts';
 export { seymourOmnis, SEYMOUR_OMNIS_BOSS_ID } from './seymour-omnis.ts';
@@ -203,6 +205,8 @@ const REGISTRY: ReadonlyArray<TacticEntry<Tactic | null>> = [
   ...IFRIT_KILIKA_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-ifrit-kilika', bossId, tactic: ffx2IfritKilika })),
   // Garik Ronso and the Ronso Youths (FFX-2 only, hidden chapter, 2026-11-08): five bodies for the two fights; Protect, Darkness, never Black Mage.
   ...GARIK_RONSO_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-garik-ronso', bossId, tactic: ffx2GarikRonso })),
+  // Gullwings, Chapter 1 (FFX-2 only, hidden chapter, 2026-11-09): Boris, the Flame Dragon, the Guardian Beast and YSLS-Zero, one tactic under each id; each girl changes once to her role in the fight, then plays it.
+  ...GULLWINGS_CH1_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-gullwings-ch1', bossId, tactic: ffx2GullwingsCh1 })),
   // The Luca Opener (FFX-2 only, hidden chapter, 2026-11-09): Logos and Ormi, then Leblanc; steal first, Logos first, Yuna the Songstress in the second fight.
   ...LUCA_OPENER_BOSS_IDS.map((bossId) => ({ chapterId: 'ffx2-luca-opener', bossId, tactic: ffx2LucaOpener })),
   // Chapter XII (FFX only, unlisted): Seymour Omnis alone finds it; the discs are his parts.

@@ -24,6 +24,7 @@ import { MONSTER_RECORDS_YUNAS_BALLAD } from './records-yunas-ballad.ts';
 import { MONSTER_RECORDS_YOUTH_LEAGUE } from './records-youth-league.ts';
 import { MONSTER_RECORDS_IFRIT } from './records-ifrit.ts';
 import { MONSTER_RECORDS_GARIK_RONSO } from './records-garik-ronso.ts';
+import { MONSTER_RECORDS_GULLWINGS_CH1 } from './records-gullwings-ch1.ts';
 import { MONSTER_RECORDS_LUCA_OPENER } from './records-luca-opener.ts';
 
 export const MONSTER_RECORDS: Readonly<Record<string, FFX2MonsterRecord>> = {
@@ -62,6 +63,7 @@ export const MONSTER_RECORDS: Readonly<Record<string, FFX2MonsterRecord>> = {
   ...MONSTER_RECORDS_EXPERIMENT, // the Experiment of the hidden chapter (new-chapters RE lane, 2026-10-10)
   ...MONSTER_RECORDS_TOURIST_TRAP, // Yojimbo (row 170) and Daigoro (row 174) of the hidden Tourist Trap chapter (RE parity session, 2026-10-14)
   ...MONSTER_RECORDS_IFRIT, // Ifrit at Kilika Temple, the hidden chapter (monster.bin row 165; RE note re-ffx2-ifrit-kilika, 2026-11-07)
+  ...MONSTER_RECORDS_GULLWINGS_CH1, // Boris, the Flame Dragon, the Guardian Beast and YSLS-Zero of the hidden Gullwings, Chapter 1 chapter (monster.bin rows 132, 122, 162 and 47; RE note re-ffx2-gullwings-chapter1, 2026-11-09)
   ...MONSTER_RECORDS_LUCA_OPENER, // Ormi, Logos and Leblanc of the hidden Luca Opener chapter (monster.bin rows 129, 130 and 131; RE note re-ffx2-luca-opener, 2026-11-09)
   ...MONSTER_RECORDS_VALEFOR, // Valefor at Besaid, the hidden chapter (monster.bin row 164; RE note re-ffx2-yojimbo-valefor, 2026-10-14)
   ...MONSTER_RECORDS_ANGRA_MAINYU, // Angra Mainyu, Zarich and Tawrich of the hidden Angra Mainyu chapter (monster.bin rows 268 to 270; RE note re-ffx2-angra-mainyu, 2026-10-14)

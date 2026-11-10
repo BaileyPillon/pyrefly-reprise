@@ -33,8 +33,9 @@ describe('the data reaches every unit', () => {
     // The hidden Youth League Tournament's twenty fighters (rows 183, 184, 279, 210, 211, 193, 214 and 215; FFX-2 only, 2026-11-07; motion sets 0x10b7 to 0x10b9, 0x10c1, 0x10d2, 0x10d3, 0x10d6 and 0x10d7) are in the same state.
     // The hidden Ifrit at Kilika Temple's body (motion set 0x10a5 in the RE note) is in the same state: the frame table was not read for it, so it keeps today's window too.
     // The hidden Garik Ronso's five bodies (Garik twice, the hostile pair of Youths and the bout's Youth, motion sets 0x10b5 and 0x10b6 in the RE note) are in the same state: the frame table was not read for them, so they keep today's window too.
+    // The hidden Gullwings, Chapter 1's four bodies (motion sets 0x1084, 0x1078, 0x10a2 and 0x102e in the RE note) are in the same state: the frame table was not read for them.
     expect(missing.sort()).toEqual([
-      'bulwark-l', 'bulwark-r', 'x2-aranea', 'x2-baralai', 'x2-black-elemental', 'x2-chac', 'x2-concherer', 'x2-cup-auron', 'x2-cup-seymour', 'x2-cup-tidus', 'x2-garik-ronso', 'x2-garik-ronso-bout', 'x2-georapella', 'x2-ifrit', 'x2-possessed-paine', 'x2-possessed-rikku', 'x2-precepts-guard', 'x2-ronso-youth-a', 'x2-ronso-youth-b', 'x2-ronso-youth-bout',
+      'bulwark-l', 'bulwark-r', 'x2-aranea', 'x2-baralai', 'x2-black-elemental', 'x2-chac', 'x2-concherer', 'x2-cup-auron', 'x2-cup-seymour', 'x2-cup-tidus', 'x2-garik-ronso', 'x2-garik-ronso-bout', 'x2-georapella', 'x2-ifrit', 'x2-possessed-paine', 'x2-possessed-rikku', 'x2-precepts-guard', 'x2-ronso-youth-a', 'x2-ronso-youth-b', 'x2-ronso-youth-bout', 'x2-boris', 'x2-flame-dragon', 'x2-guardian-beast', 'x2-ysls-zero',
       ...ACT_ENEMY_IDS.flat(),
     ].sort());
   });

@@ -107,6 +107,9 @@ export const SCENES = {
   // Ifrit's room, Kilika Temple's trial room (formation 483 `klyt11_229`; the research lane of 2026-11-07, `pos_klyt11_229.psc`): the same four places as Besaid's and Ixion's (the boss at (0, 26), Yuna (0, -27), Rikku (-12, -25), Paine (12, -25)).
   // His Meteor Strike takes the greatest ground distance (Yuna at the start) and his Attack the near-weighted pick, `./ifrit.ts`.
   kilika: { boss: { x: 0, z: 26 }, girls: [{ x: 0, z: -27 }, { x: -12, z: -25 }, { x: 12, z: -25 }] },
+  // Boris's room, the Floating Ruins' summit (formation 1696 `mtgz17_229`; the research lane of 2026-11-09, `pos_mtgz17_229.psc`, FFX-2 Chapter 1's first hotspot mission): Yuna (0, -45), Rikku (15, -45), Paine (-15, -45), Boris at (0, 25).
+  // His Spider Attack and Spider Bite take the near-weighted pick, `./gullwings-ch1.ts`. The other three Chapter 1 bosses' scenes ship EMPTY position files, so they have no row here and their picks are uniform.
+  boris: { boss: { x: 0, z: 25 }, girls: [{ x: 0, z: -45 }, { x: 15, z: -45 }, { x: -15, z: -45 }] },
   // The docks of Luca, harbour No. 3 (the hidden Luca Opener chapter; formations 487 `lchb03_229` and 488 `lchb03_228`, `pos_lchb03_229.psc` and `pos_lchb03_228.psc`, the research lane of 2026-11-09): the same three girls at
   // (21, 0), (24, 12) and (24, -12) in both scenes; Logos stands at (-27, 9) and Ormi at (-27, -12) in `_229`, Leblanc at (-27, 0) in `_228`. Ormi's shield throw takes the greatest ground distance (the girl at (24, 12), Rikku's
   // spot: 56.4 against 51.0 and 49.5), his Attack and Leblanc's the near-weighted pick, `./luca-opener.ts`. Logos shoots a uniform pick (`searchr_nop`), which needs no position. The table keys are the two enemies' spots.

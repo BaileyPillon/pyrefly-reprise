@@ -68,6 +68,7 @@ export const CHAPTER_GAME: Readonly<Record<string, GameId>> = {
   'ff7-jenova-life': 'ff7', // the hidden Jenova LIFE chapter (FF7 only, 2026-11-07); a guide and a page, no tactic
   'ffx2-ifrit-kilika': 'ffx2', // the hidden Ifrit at Kilika Temple chapter (FFX-2 only, 2026-11-07)
   'ffx2-garik-ronso': 'ffx2', // the hidden Garik Ronso chapter (FFX-2 only, 2026-11-08)
+  'ffx2-gullwings-ch1': 'ffx2', // the hidden Gullwings, Chapter 1 chapter (FFX-2 only, 2026-11-09)
   'ffx2-luca-opener': 'ffx2', // the hidden Luca Opener chapter (FFX-2 only, 2026-11-09)
 };
 

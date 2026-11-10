@@ -145,7 +145,11 @@ function interpolate(rows: readonly Anchor[], level: number): Anchor {
 
   let lo = first;
   let hi = rows[1] as Anchor;
-  for (let i = 0; i < rows.length - 1; i++) {
+  // Below the first anchor (Lv 20 for the standard spheres) the table extrapolates DOWN the first segment, as this file's header says ("outside those anchors we interpolate linearly"). Before the Gullwings, Chapter 1
+  // chapter (2026-11-09) no build was under Lv 20 and the loop below, which only breaks inside a segment, fell through to the LAST pair, so a Lv 12 Gunner had 1,035 HP (Lv 20 has 862); `tests/unit/chapters/gullwings-ch1-data.test.ts`
+  // pins the order of the levels now.
+  const below = level < first[0];
+  for (let i = 0; i < rows.length - 1 && !below; i++) {
     const a = rows[i] as Anchor;
     const b = rows[i + 1] as Anchor;
     if (level <= b[0] || i === rows.length - 2) {
