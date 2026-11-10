@@ -252,7 +252,7 @@ Headless Chromium from node, `PYREFLY_BROWSER=gpu`, a dev server on a port of it
   - `chapters/r78-boss-art-resolves` (7): **not this lane's, environmental, the same 7 the review saw:** it reads the installed art (the mirror `BOSS_ART_ROOT` names, else `public/art`), and this tree's `public/art` has no paintings of the Spherimorph, Ultima Weapon, Omega Weapon, Nemesis or the Youth League stand-ins. None names the Oblitzerator, and no file of this diff is art.
   - `live-record` (1): **not this lane's:** `docs/LIVE.md` is stale against `docs/deploys.log` (the last live deploy `cc0fea14a`, line 95) **on origin/main itself** (`a61354d59`; `git diff origin/main -- docs/LIVE.md docs/deploys.log` is empty), so it fails on main too. The fix is the release driver's (`node tools/live-record.mjs`, then commit); this lane does not touch the live record.
   The builder's two earlier failures (`parity-ffx-reach`, `re-parity-ai-evrae`) pass. The suite ran before this file, the CONTRACT-CHANGES entry, the four screenshots and the balls smoke tool were committed; the nine test files that mention those docs or tools were re-run alone afterwards and pass.
-- Every source file touched is under 400 lines (`hooks.ts` 300, `engine-end.ts` 272, `reaction-drain.ts` 88).
+- Every source file touched is under 400 lines (`hooks.ts` 287, `engine-end.ts` 272, `reaction-drain.ts` 89).
 
 ### 13.6 Art list (unchanged by this pass; nothing below exists on disk, no ComfyUI was run, rule 12)
 
