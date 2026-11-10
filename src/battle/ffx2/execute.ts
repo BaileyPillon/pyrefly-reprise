@@ -231,9 +231,9 @@ export function performCommand(
   if (command.kind === 'spherechange') {
     // The command is read ONCE, into plain data, before anything looks at it (the review fix pass 4, FFX-2 only): the gate on an ordinary change (`spherechange.ts#ordinaryChangeAllowed`), the Special path and the change
     // itself each read `extra`, and a command built in the debug console can carry an accessor or a Proxy that answers differently per read, so the gate would check one dress and the change wear another.
-    // `gatesCrossed` is copied too (the change walks it twice). Plain data is unchanged; a command with no `extra` is now refused as an unlinked change is (it threw a TypeError before).
+    // `gatesCrossed` is not touched here (fix pass 5): a girl whose grid is registered takes the link's own gates and never reads it, and `spherechange.ts#performSpherechange` copies it once for a grid that is not.
+    // Plain data is unchanged; a command with no `extra` is now refused as an unlinked change is (it threw a TypeError before).
     const extra = { ...command.extra };
-    if (Array.isArray(extra.gatesCrossed)) extra.gatesCrossed = [...extra.gatesCrossed];
     command = { ...command, extra };
     performed.delete(actor);
     // A Special Dress Up and a girl's way out of her Special (the `specialDressUp` switch, OFF by default): settled before the ordinary change, which this answers false to when the switch is off.

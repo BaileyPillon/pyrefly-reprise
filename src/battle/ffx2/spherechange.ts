@@ -18,7 +18,7 @@
  * accumulated gate bonuses are re-applied on top.
  */
 
-import type { SpherechangeCommand, StatBlock } from '../common/types.ts';
+import type { GateColour, SpherechangeCommand, StatBlock } from '../common/types.ts';
 import type { DressphereRegistry, Emit, Ffx2Unit, GarmentGridRegistry } from './internal.ts';
 import { dressphereStats } from './dressphere-stats.ts';
 import { withAccessories } from './accessories.ts';
@@ -121,7 +121,7 @@ export function performSpherechange(
   const toNode = command.extra.toNode;
 
   // Adjacency: exactly one link. The gates on that link are what she passes.
-  let gates = command.extra.gatesCrossed ?? [];
+  let gates: GateColour[] = [];
   if (grid) {
     const real = gatesBetween(grid, sphere.garmentGrid.nodePosition, toNode);
     if (real === null) {
@@ -135,6 +135,8 @@ export function performSpherechange(
     emit({ type: 'message', text: 'Not linked', kind: 'system' });
     return false;
   }
+  // A grid the registry does not know has no link to read the gates from, so the command's own are taken: copied ONCE, here (after the gate, before anything changes), so a value that is not iterable fails with the state untouched and the gates banked are the gates reported (fix pass 5).
+  if (!grid) gates = [...(command.extra.gatesCrossed ?? [])];
 
   sphere.current = to;
   sphere.garmentGrid.nodePosition = toNode;
