@@ -373,4 +373,4 @@ Game case: **FFX-2 only**; shared plumbing is none (every new file is under `bat
 
 ## 12. Files
 
-`src/battle/ffx2/special/` (forms, stats, availability, change, enter), `src/data/ffx2/command-records/special.ts` (the 99 rows), `src/data/ffx2/abilities/special-*.ts` and `special-build.ts`, `src/data/ffx2/dresspheres/special/*.ts` (the ladders), `src/battle/ffx2/adapt/game-ids-special.ts`; tests `tests/unit/ffx2-special-dress-up.test.ts`, `data-ffx2-special-rows.test.ts`, `chapters/farplane-cup-specials.test.ts`; fixture `tests/fixtures/parity/ffx2/special_rows.json`; handoff `docs/handoff/ffx2-specials.md`.
+`src/battle/ffx2/special/` (forms, stats, availability, change, enter), `src/data/ffx2/command-records/special.ts` (the 99 rows), `src/data/ffx2/abilities/special-*.ts` and `special-build.ts`, `src/data/ffx2/dresspheres/special/*.ts` (the ladders), `src/battle/ffx2/adapt/game-ids-special.ts`; tests `tests/unit/ffx2-special-dress-up.test.ts`, `ffx2-special-form-edges.test.ts`, `data-ffx2-special-rows.test.ts`, `chapters/farplane-cup-specials.test.ts`; fixture `tests/fixtures/parity/ffx2/special_rows.json`; handoff `docs/handoff/ffx2-specials.md`.
