@@ -3166,6 +3166,14 @@ export interface EnemyGroupDef extends PlatformGroupFields, FloodedGroupFields {
    */
   carriesFullPartyState?: boolean;
   /**
+   * **FFX-2, a chained link whose party is its own template** (the hidden Luca Opener chapter's second fight, 2026-11-09: Yuna enters wearing the Songstress, held to Darkness Dance, after fighting the first link as a Gunner;
+   * `data/ffx2/builds/luca-opener.ts`). A chain otherwise carries the previous link's build from link to link (only HP, MP, KO and the bag ride along), so a dressphere the story changes between acts could not be expressed. When set,
+   * `app/screens/BattleScreenSetup.ts#setupForNextLink` takes this build as the template instead of the previous link's: HP, MP, the fallen and the bag still carry from the live state **by member id** (so the template
+   * must name the same girls and the same bag), and a link that also sets `restoresPartyOnEntry` opens at full HP and MP. A checkpoint retry replays the setup it was entered on, so the template is kept. Absent everywhere else,
+   * so no other chain changes.
+   */
+  partyBuildRef?: FFX2PartyBuild;
+  /**
    * **FFX, the mirror lock** (Chapter XIV, Isaaru's contest of aeons,
    * `docs/plans/chapter-isaaru-review.md` I-G2): Yuna cannot summon her own
    * copy of the aeon she is facing, "two aeons of the same type cannot fight

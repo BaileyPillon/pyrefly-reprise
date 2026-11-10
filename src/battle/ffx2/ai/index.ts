@@ -59,6 +59,8 @@ import { youthLeagueLeagueScripts } from './youth-league-league.ts';
 import { x2IfritScript } from './ifrit.ts';
 // Garik Ronso and the Ronso Youths at the top of Mt. Gagazet (the hidden chapter "Garik Ronso", FFX-2 only): the game's own two scripts, hostile and friendly, poll by poll.
 import { garikRonsoScripts } from './garik-ronso.ts';
+// Ormi, Logos and Leblanc on the docks of Luca, the first fights of FFX-2's Chapter 1 (the hidden chapter "The Luca Opener", FFX-2 only): the game's own three scripts, poll by poll.
+import { lucaOpenerScripts } from './luca-opener.ts';
 
 /** Spends the turn and does nothing. */
 export const idleScript: AiScript = {
@@ -109,6 +111,7 @@ const SCRIPTS: readonly AiScript[] = [
   ...youthLeagueLeagueScripts,
   x2IfritScript,
   ...garikRonsoScripts,
+  ...lucaOpenerScripts,
   idleScript,
   basicAttackScript,
 ];

@@ -24,6 +24,7 @@ import { MONSTER_RECORDS_YUNAS_BALLAD } from './records-yunas-ballad.ts';
 import { MONSTER_RECORDS_YOUTH_LEAGUE } from './records-youth-league.ts';
 import { MONSTER_RECORDS_IFRIT } from './records-ifrit.ts';
 import { MONSTER_RECORDS_GARIK_RONSO } from './records-garik-ronso.ts';
+import { MONSTER_RECORDS_LUCA_OPENER } from './records-luca-opener.ts';
 
 export const MONSTER_RECORDS: Readonly<Record<string, FFX2MonsterRecord>> = {
   'ffx2-bahamut/bahamut': { row: 168, table: 1, acc: 95, resist1: { 0: 255, 1: 255, 2: 255, 3: 255, 4: 255, 5: 255, 6: 255, 7: 255, 8: 255, 10: 255, 17: 255, 18: 255 }, resist2: { 6: 255, 14: 255 }, special: 0x3c3, species: 0x0, zantetsu: 100, stealByte: 128, stealGil: 2200, steal: [0x903e, 0x1, 0x903e, 0x1], bribe: [0x0, 0x0, 0x0, 0x0], plainAttack: { id: 0x41da, costAtb: 100, costCast: 0, category: 0, flagsTarget: 0x33, flagsMisc: 0x60000052, flagsDamage: 0xd, damageClass: 1, formula: 0, critByte: 5, accuracy: 95, power: 16, hits: 1, shatter: 10, element: 0, killer: 0 } }, // Bahamut
@@ -61,6 +62,7 @@ export const MONSTER_RECORDS: Readonly<Record<string, FFX2MonsterRecord>> = {
   ...MONSTER_RECORDS_EXPERIMENT, // the Experiment of the hidden chapter (new-chapters RE lane, 2026-10-10)
   ...MONSTER_RECORDS_TOURIST_TRAP, // Yojimbo (row 170) and Daigoro (row 174) of the hidden Tourist Trap chapter (RE parity session, 2026-10-14)
   ...MONSTER_RECORDS_IFRIT, // Ifrit at Kilika Temple, the hidden chapter (monster.bin row 165; RE note re-ffx2-ifrit-kilika, 2026-11-07)
+  ...MONSTER_RECORDS_LUCA_OPENER, // Ormi, Logos and Leblanc of the hidden Luca Opener chapter (monster.bin rows 129, 130 and 131; RE note re-ffx2-luca-opener, 2026-11-09)
   ...MONSTER_RECORDS_VALEFOR, // Valefor at Besaid, the hidden chapter (monster.bin row 164; RE note re-ffx2-yojimbo-valefor, 2026-10-14)
   ...MONSTER_RECORDS_ANGRA_MAINYU, // Angra Mainyu, Zarich and Tawrich of the hidden Angra Mainyu chapter (monster.bin rows 268 to 270; RE note re-ffx2-angra-mainyu, 2026-10-14)
   ...MONSTER_RECORDS_FARPLANE_CUP, // Auron, Tidus and Seymour of the hidden Farplane Cup chapter (monster.bin rows 311, 317 and 319; RE note re-ffx2-farplane-cup, 2026-11-06)

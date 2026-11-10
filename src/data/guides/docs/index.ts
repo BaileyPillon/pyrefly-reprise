@@ -49,6 +49,7 @@ import { FF7_JENOVA_LIFE_DOC } from './ff7-jenova-life.ts';
 import { FFX2_IFRIT_KILIKA_DOC } from './ffx2-ifrit-kilika.ts';
 import { FFX2_GARIK_RONSO_DOC } from './ffx2-garik-ronso.ts';
 import { SHINRYU_DOC } from './shinryu.ts';
+import { FFX2_LUCA_OPENER_DOC } from './ffx2-luca-opener.ts';
 
 export const GUIDE_DOCS: readonly GuideDoc[] = [
   SEYMOUR_FLUX_DOC,
@@ -90,6 +91,7 @@ export const GUIDE_DOCS: readonly GuideDoc[] = [
   FFX2_IFRIT_KILIKA_DOC, // the hidden Ifrit at Kilika Temple (FFX-2 only)
   FFX2_GARIK_RONSO_DOC, // the hidden Garik Ronso (FFX-2 only)
   SHINRYU_DOC, // the hidden Shinryu (FFX only)
+  FFX2_LUCA_OPENER_DOC, // the hidden Luca Opener (FFX-2 only)
   WENDIGO_DOC, // the hidden Wendigo (FFX only)
   OBLITZERATOR_DOC, // the hidden Oblitzerator (FFX only)
 ];

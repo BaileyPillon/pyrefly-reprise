@@ -48,6 +48,7 @@ import { FF7_JENOVA_LIFE_GUIDE } from './ff7-jenova-life.ts';
 import { FFX2_IFRIT_KILIKA_GUIDE } from './ffx2-ifrit-kilika.ts';
 import { FFX2_GARIK_RONSO_GUIDE } from './ffx2-garik-ronso.ts';
 import { SHINRYU_GUIDE } from './shinryu.ts';
+import { FFX2_LUCA_OPENER_GUIDE } from './ffx2-luca-opener.ts';
 
 export type {
   ChapterGuide,
@@ -157,6 +158,8 @@ export const GUIDES: readonly ChapterGuide[] = [
   FFX2_GARIK_RONSO_GUIDE,
   // The hidden Shinryu chapter (FFX only, the Monster Arena's deep-water dragon; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
   SHINRYU_GUIDE,
+  // The hidden Luca Opener chapter (FFX-2 only, Logos and Ormi then Leblanc; EXPERIMENT_CHAPTERS, not listed): its guide rides here so the panel and the tactic find it by boss id.
+  FFX2_LUCA_OPENER_GUIDE,
   // The hidden Wendigo chapter (FFX only, Wendigo and its two Guado Guardians on frozen Lake Macalania; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.
   WENDIGO_GUIDE,
   // The hidden Oblitzerator chapter (FFX only, the blitzball machine and the dock crane at Luca; `EXPERIMENT_CHAPTERS`, not listed): its guide rides here so the panel and the tactic find it by boss id.

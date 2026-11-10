@@ -118,4 +118,8 @@ export const KILL_REWARD_ROWS: Readonly<Record<string, FFX2KillReward>> = {
   "ffx2-gagazet-garik-hostile/x2-garik-ronso": row(1, 182, 380, 3, 90, 128, [0x905d, 1, 0x905d, 1]), // Garik Ronso
   "ffx2-gagazet-garik-friendly/x2-ronso-youth-bout": row(1, 181, 220, 2, 20, 255, [0x200f, 1, 0x200f, 2]), // Ronso Youth
   "ffx2-gagazet-garik-friendly/x2-garik-ronso-bout": row(1, 182, 380, 3, 90, 128, [0x905d, 1, 0x905d, 1]), // Garik Ronso
+  // The hidden Luca Opener (Chapter 1, the docks of Luca; RE note re-ffx2-luca-opener §0): EXP, Gil, AP, the drop byte (128, about one in two) and the two item slots are the rows' own (Ormi and Logos: Potion common, Phoenix Down rare; Leblanc: Hi-Potion common, Phoenix Down rare).
+  "ffx2-luca-dock-logos-ormi/x2-luca-ormi": row(1, 129, 3, 1, 60, 128, [0x2000, 1, 0x2006, 1]), // Ormi
+  "ffx2-luca-dock-logos-ormi/x2-luca-logos": row(1, 130, 3, 1, 60, 128, [0x2000, 1, 0x2006, 1]), // Logos
+  "ffx2-luca-dock-leblanc/x2-luca-leblanc": row(1, 131, 8, 2, 180, 128, [0x2001, 1, 0x2006, 1]), // Leblanc
 };

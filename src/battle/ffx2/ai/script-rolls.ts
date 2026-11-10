@@ -107,6 +107,11 @@ export const SCENES = {
   // Ifrit's room, Kilika Temple's trial room (formation 483 `klyt11_229`; the research lane of 2026-11-07, `pos_klyt11_229.psc`): the same four places as Besaid's and Ixion's (the boss at (0, 26), Yuna (0, -27), Rikku (-12, -25), Paine (12, -25)).
   // His Meteor Strike takes the greatest ground distance (Yuna at the start) and his Attack the near-weighted pick, `./ifrit.ts`.
   kilika: { boss: { x: 0, z: 26 }, girls: [{ x: 0, z: -27 }, { x: -12, z: -25 }, { x: 12, z: -25 }] },
+  // The docks of Luca, harbour No. 3 (the hidden Luca Opener chapter; formations 487 `lchb03_229` and 488 `lchb03_228`, `pos_lchb03_229.psc` and `pos_lchb03_228.psc`, the research lane of 2026-11-09): the same three girls at
+  // (21, 0), (24, 12) and (24, -12) in both scenes; Logos stands at (-27, 9) and Ormi at (-27, -12) in `_229`, Leblanc at (-27, 0) in `_228`. Ormi's shield throw takes the greatest ground distance (the girl at (24, 12), Rikku's
+  // spot: 56.4 against 51.0 and 49.5), his Attack and Leblanc's the near-weighted pick, `./luca-opener.ts`. Logos shoots a uniform pick (`searchr_nop`), which needs no position. The table keys are the two enemies' spots.
+  lucaOrmi: { boss: { x: -27, z: -12 }, girls: [{ x: 21, z: 0 }, { x: 24, z: 12 }, { x: 24, z: -12 }] },
+  lucaLeblanc: { boss: { x: -27, z: 0 }, girls: [{ x: 21, z: 0 }, { x: 24, z: 12 }, { x: 24, z: -12 }] },
   // Angra Mainyu's room (the five Bikanel desert scenes `bika07_229`, `bika08_229`, `bika09_229`, `bika13_229`, `bika14_229`, whose `pos_*.psc` is byte for byte the same; the RE note of 2026-10-14, §8.2): the body at
   // (-45, -13), Yuna (23, 29), Rikku (33, 11), Paine (32, -9); ground distances 79.93, 81.61 and 77.10. The arms' own spots are unknown (both read (0, 0) and the body's script links them to its model): `./angra-mainyu.ts`.
   angra: { boss: { x: -45, z: -13 }, girls: [{ x: 23, z: 29 }, { x: 33, z: 11 }, { x: 32, z: -9 }] },

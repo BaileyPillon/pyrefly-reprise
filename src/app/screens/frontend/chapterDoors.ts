@@ -55,7 +55,9 @@
  *
  * **`braveheart`** (FFX-2, the hidden Garik Ronso, `./braveheartDoor.ts`: R is `r1`, A is `left`, V is `select`, E is `start`; B, H and T are unbound, so the first letter moves nothing; the plan's `lionheart` failed the table's `limit` rule, see that file) is a plain `WordDoor` too.
  *
- * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit` and `bluelight`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith`, `youth`, `ifrit`, `braveheart` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno`, `beast`, `wendigo`, `sidequest`, `shinryu` and `blitz`.
+ * **`debut`** (FFX-2, the hidden Luca Opener, `./debutDoor.ts`: D is `right`, E is `start`; B, U and T are unbound, so the last letter leaves no latched press; the first D moves the cursor one step, as `daigoro`'s does) is a plain `WordDoor` too.
+ *
+ * Game case: shared plumbing (both). Each row's game is its chapter's: FF7 for `limit` and `bluelight`, FFX-2 for `leblanc`, `experiment`, `daigoro`, `valefor`, `angra`, `infinito`, `drillshot`, `duelist`, `wraith`, `youth`, `ifrit`, `braveheart`, `debut` and `yrp`, FFX for `mushroom`, `fayth`, `gagazet`, `yojimbo`, `summon`, `keeper`, `darkaeon`, `judgment`, `geosgaeno`, `beast`, `wendigo`, `sidequest`, `shinryu` and `blitz`.
  */
 
 import type { ChapterId } from '../../../data/encounters.ts';
@@ -95,6 +97,7 @@ import { SIDEQUEST_DOOR_CHAPTER, SIDEQUEST_DOOR_WORD } from './sidequestDoor.ts'
 import { BRAVEHEART_DOOR_CHAPTER, BRAVEHEART_DOOR_WORD } from './braveheartDoor.ts';
 import { SHINRYU_DOOR_CHAPTER, SHINRYU_DOOR_WORD } from './shinryuDoor.ts';
 import { BLITZ_DOOR_CHAPTER, BLITZ_DOOR_WORD } from './blitzDoor.ts';
+import { DEBUT_DOOR_CHAPTER, DEBUT_DOOR_WORD } from './debutDoor.ts';
 
 /**
  * **The two hidden 3D chapters are desktop-only** (driver decision 219q, 2026-11-03; FFX-2 only: `yrp`, the 3D Bahamut, and `waker`, the Wind Waker Valefor). They are not staged for a phone: the Wind Waker is expected to miss the phone budgets
@@ -154,6 +157,7 @@ export const CHAPTER_DOORS: readonly ChapterDoor[] = [
   { word: SHINRYU_DOOR_WORD, chapter: SHINRYU_DOOR_CHAPTER },
   { word: WENDIGO_DOOR_WORD, chapter: WENDIGO_DOOR_CHAPTER, gate: desktopOnly },
   { word: BLITZ_DOOR_WORD, chapter: BLITZ_DOOR_CHAPTER },
+  { word: DEBUT_DOOR_WORD, chapter: DEBUT_DOOR_CHAPTER },
 ];
 
 /**

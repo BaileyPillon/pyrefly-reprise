@@ -112,6 +112,9 @@ function expectIsRow(label: string, record: FFX2CommandRecord, override: Partial
   // The three Special dresspheres' ninety-nine rows (job.bin 0x500f to 0x5017; command.bin 0x3030 and 0x3031, 0x310f to 0x3118, 0x312d to 0x3164, ...) are the RE note's, pinned against their own numbers-only fixture
   // (tests/fixtures/parity/ffx2/special_rows.json, tests/unit/data-ffx2-special-rows.test.ts).
   if (label.startsWith('x2-floral-fallal-') || label.startsWith('x2-machina-maw-') || label.startsWith('x2-full-throttle-')) return;
+  // The hidden Luca Opener's four rows (Pirouette Pitch 0x40e4, 1H Pistol 0x40e7, Potion 0x40f1, Thunder 0x41eb) are pinned against their own numbers-only fixture (tests/fixtures/parity/ffx2/luca_opener_rows.json,
+  // tests/unit/chapters/luca-opener-data.test.ts).
+  if (label.startsWith('x2-luca-')) return;
   const row = rowOf(record.id);
   expect(row, `${label}: no game row 0x${record.id.toString(16)}`).toBeDefined();
   if (!row) return;
