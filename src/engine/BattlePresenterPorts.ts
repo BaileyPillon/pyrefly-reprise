@@ -27,6 +27,8 @@ import type {
   VfxKey,
 } from '../battle/common/types.ts';
 import type { StoryScript } from '../story/dsl.ts';
+import type { EffectId } from './SpecialBeatPlans.ts';
+import type { StageForm } from './SpecialStaging.ts';
 
 /** A point on the field, in world units. */
 export interface Point3 {
@@ -248,6 +250,8 @@ export interface VfxPort {
   impact(at: CombatantId, opts?: { element?: string; crit?: boolean; quiet?: boolean }): Promise<void>;
   /** Full-screen colour wash — battle start, form change, defeat. */
   screenFlash(colour?: string, ms?: number): void;
+  /** FFX-2 Special look: the painted pieces and procedural effects of one sequence step. Optional and additive; absent: nothing draws (its body is stage 2's). */
+  special?(call: { id: EffectId; girl: CombatantId; ms: number }): Promise<void>;
   /**
    * A blow is about to land (B1 spell effects, `spellfx/SpellFxLayer.ts`):
    * start the action's spell effect on its targets if it has not begun, and
@@ -415,6 +419,8 @@ export interface BattleStage {
    * (`docs/screenshots/48-overdrive.png`).
    */
   project(id: CombatantId, anchor?: 'head' | 'chest' | 'feet'): Point2 | null;
+  /** FFX-2 Special look: the form the stage has up (its parts stand on the main's figure), or null when it ends. Optional and additive; absent: nothing is registered. */
+  setForm?(form: StageForm | null): void;
   /** Swap a combatant's painted art — `form-change`, X-2 spherechange. */
   setArt(id: CombatantId, artId: string): Promise<void>;
   /** Stage a combatant that was not on the field at battle start (a summon). */

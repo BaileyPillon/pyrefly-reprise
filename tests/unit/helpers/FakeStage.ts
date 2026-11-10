@@ -21,6 +21,7 @@ import type {
   CutsceneRunnerPort,
 } from '../../../src/engine/BattlePresenterPorts.ts';
 import type { HudPort } from '../../../src/engine/HudPort.ts';
+import type { StageForm } from '../../../src/engine/SpecialStaging.ts';
 import type { StoryScript } from '../../../src/story/dsl.ts';
 
 const origin = (): Point3 => ({ x: 0, y: 0, z: 0 });
@@ -113,6 +114,8 @@ export class FakeStage implements BattleStage {
   readonly summonSlots = new Map<CombatantId, number>();
   readonly camera: CameraPort;
   readonly vfx: VfxPort;
+  /** The form last handed to `setForm` (FFX-2 Special look, step C2). */
+  form: StageForm | null = null;
 
   constructor(party: CombatantId[] = ['tidus', 'yuna'], enemies: CombatantId[] = ['seymour-flux']) {
     for (const id of party) {
@@ -165,7 +168,17 @@ export class FakeStage implements BattleStage {
       screenFlash(): void {
         calls.push('screenFlash');
       },
+      // FFX-2 Special look (step C2): the painted pieces of a sequence step; a test deletes this member to see the stage without it
+      async special(call: { id: string; girl: CombatantId; ms: number }): Promise<void> {
+        calls.push(`special:${call.id}@${call.girl}`);
+      },
     };
+  }
+
+  /** FFX-2 Special look (step C2): the form the stage was told is up (`null` when it ends). */
+  setForm(form: StageForm | null): void {
+    this.calls.push(`setForm:${form ? form.girl : 'null'}`);
+    this.form = form;
   }
 
   actor(id: CombatantId): ActorHandle | undefined {
@@ -258,6 +271,11 @@ export class FakeCutscenes implements CutsceneRunnerPort {
 export class FakeHud implements HudPort {
   readonly events: BattleEvent[] = [];
   readonly syncs: number[] = [];
+  /** FFX-2 Special look (step C2): every held-rows / chip / mode call, and every sync, in call order (`hold:a,b,c`, `hold:null`, `chip:on`, `chip:off`, `mode:wait`, `sync`). */
+  readonly hudLog: string[] = [];
+  readonly holdLog: Array<readonly CombatantId[] | null> = [];
+  readonly chipLog: boolean[] = [];
+  readonly modeLog: Array<'wait' | 'active'> = [];
   mounted = false;
   visible = true;
   /** Commands handed out by `chooseCommand`, in order. */
@@ -274,6 +292,19 @@ export class FakeHud implements HudPort {
   }
   sync(state: BattleState): void {
     this.syncs.push(state.log.length);
+    this.hudLog.push('sync');
+  }
+  holdRows(ids: readonly CombatantId[] | null): void {
+    this.holdLog.push(ids);
+    this.hudLog.push(`hold:${ids ? ids.join(',') : 'null'}`);
+  }
+  showAtbChip(on: boolean): void {
+    this.chipLog.push(on);
+    this.hudLog.push(`chip:${on ? 'on' : 'off'}`);
+  }
+  setAtbMode(mode: 'wait' | 'active'): void {
+    this.modeLog.push(mode);
+    this.hudLog.push(`mode:${mode}`);
   }
   async chooseCommand(): Promise<never> {
     const next = this.queue.shift();
