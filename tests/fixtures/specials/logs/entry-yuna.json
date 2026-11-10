@@ -1,0 +1,132 @@
+{
+ "girl": "yuna",
+ "seed": 1,
+ "source": "engine",
+ "events": [
+  {
+   "type": "turn-start",
+   "actorId": "yuna",
+   "turn": 16,
+   "elapsedTicks": 622,
+   "seq": 75
+  },
+  {
+   "type": "spherechange",
+   "who": "yuna",
+   "from": "black-mage",
+   "to": "floral-fallal",
+   "gatesCrossed": [],
+   "special": "floral-fallal",
+   "seq": 76
+  },
+  {
+   "type": "status-add",
+   "targetId": "yuna",
+   "sourceId": "yuna",
+   "status": "auto-life",
+   "instance": {
+    "id": "auto-life",
+    "turnsRemaining": null,
+    "ticksRemaining": null,
+    "charges": null,
+    "stacks": 0,
+    "permanent": true,
+    "sourceId": "yuna",
+    "sourceAbilityId": "special-form"
+   },
+   "seq": 77
+  },
+  {
+   "type": "action-end",
+   "actorId": "yuna",
+   "seq": 78
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 20754.066666666495,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.8786494316915534,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.9344262295081968,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 79
+  }
+ ],
+ "state": {
+  "activeIds": [
+   "yuna",
+   "floral-fallal-right-pistil",
+   "floral-fallal-left-pistil"
+  ],
+  "combatants": {
+   "yuna": {
+    "side": "party"
+   },
+   "rikku": {
+    "side": "party",
+    "aiMemory": {
+     "sdspParked": true
+    }
+   },
+   "paine": {
+    "side": "party",
+    "aiMemory": {
+     "sdspParked": true
+    }
+   },
+   "floral-fallal-right-pistil": {
+    "side": "party"
+   },
+   "floral-fallal-left-pistil": {
+    "side": "party"
+   }
+  }
+ }
+}

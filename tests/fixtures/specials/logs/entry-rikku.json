@@ -1,0 +1,132 @@
+{
+ "girl": "rikku",
+ "seed": 1,
+ "source": "engine",
+ "events": [
+  {
+   "type": "turn-start",
+   "actorId": "rikku",
+   "turn": 17,
+   "elapsedTicks": 623,
+   "seq": 79
+  },
+  {
+   "type": "spherechange",
+   "who": "rikku",
+   "from": "black-mage",
+   "to": "machina-maw",
+   "gatesCrossed": [],
+   "special": "machina-maw",
+   "seq": 80
+  },
+  {
+   "type": "status-add",
+   "targetId": "rikku",
+   "sourceId": "rikku",
+   "status": "auto-life",
+   "instance": {
+    "id": "auto-life",
+    "turnsRemaining": null,
+    "ticksRemaining": null,
+    "charges": null,
+    "stacks": 0,
+    "permanent": true,
+    "sourceId": "rikku",
+    "sourceAbilityId": "special-form"
+   },
+   "seq": 81
+  },
+  {
+   "type": "action-end",
+   "actorId": "rikku",
+   "seq": 82
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 20787.43333333316,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.9063375482698569,
+      "required": 13207,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.9413479052823315,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "machina-maw-smasher-r",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "machina-maw-crusher-l",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 83
+  }
+ ],
+ "state": {
+  "activeIds": [
+   "rikku",
+   "machina-maw-smasher-r",
+   "machina-maw-crusher-l"
+  ],
+  "combatants": {
+   "yuna": {
+    "side": "party",
+    "aiMemory": {
+     "sdspParked": true
+    }
+   },
+   "rikku": {
+    "side": "party"
+   },
+   "paine": {
+    "side": "party",
+    "aiMemory": {
+     "sdspParked": true
+    }
+   },
+   "machina-maw-smasher-r": {
+    "side": "party"
+   },
+   "machina-maw-crusher-l": {
+    "side": "party"
+   }
+  }
+ }
+}

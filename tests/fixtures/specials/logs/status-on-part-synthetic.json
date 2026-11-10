@@ -1,0 +1,51 @@
+{
+ "girl": "yuna",
+ "seed": 0,
+ "source": "synthetic",
+ "events": [
+  {
+   "type": "status-add",
+   "targetId": "floral-fallal-left-pistil",
+   "sourceId": "bahamut",
+   "status": "poison",
+   "instance": {
+    "id": "poison",
+    "turnsRemaining": null,
+    "ticksRemaining": 900,
+    "charges": null,
+    "stacks": 1,
+    "permanent": false
+   }
+  }
+ ],
+ "state": {
+  "activeIds": [
+   "yuna",
+   "floral-fallal-right-pistil",
+   "floral-fallal-left-pistil"
+  ],
+  "combatants": {
+   "yuna": {
+    "side": "party"
+   },
+   "floral-fallal-right-pistil": {
+    "side": "party"
+   },
+   "floral-fallal-left-pistil": {
+    "side": "party"
+   },
+   "rikku": {
+    "side": "party",
+    "aiMemory": {
+     "sdspParked": true
+    }
+   },
+   "paine": {
+    "side": "party",
+    "aiMemory": {
+     "sdspParked": true
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,44 @@
+{
+ "girl": "yuna",
+ "seed": 0,
+ "source": "synthetic",
+ "events": [
+  {
+   "type": "heal",
+   "targetId": "floral-fallal-right-pistil",
+   "sourceId": "yuna",
+   "amount": 120,
+   "abilityId": "x2-floral-fallal-white-pollen"
+  }
+ ],
+ "state": {
+  "activeIds": [
+   "yuna",
+   "floral-fallal-right-pistil",
+   "floral-fallal-left-pistil"
+  ],
+  "combatants": {
+   "yuna": {
+    "side": "party"
+   },
+   "floral-fallal-right-pistil": {
+    "side": "party"
+   },
+   "floral-fallal-left-pistil": {
+    "side": "party"
+   },
+   "rikku": {
+    "side": "party",
+    "aiMemory": {
+     "sdspParked": true
+    }
+   },
+   "paine": {
+    "side": "party",
+    "aiMemory": {
+     "sdspParked": true
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,3576 @@
+{
+ "girl": "yuna",
+ "seed": 4,
+ "source": "engine",
+ "events": [
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 19919.89999999987,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.07410296411856476,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.07057142857142862,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0.07057142857142862,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 1,
+      "required": 8045,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 74
+  },
+  {
+   "type": "turn-start",
+   "actorId": "bahamut",
+   "turn": 16,
+   "elapsedTicks": 597,
+   "seq": 75
+  },
+  {
+   "type": "action-start",
+   "actorId": "bahamut",
+   "command": {
+    "kind": "ability",
+    "id": "attack",
+    "targets": [
+     "floral-fallal-left-pistil"
+    ]
+   },
+   "abilityId": "attack",
+   "abilityName": "Attack",
+   "targets": [
+    "floral-fallal-left-pistil"
+   ],
+   "seq": 76
+  },
+  {
+   "type": "chain",
+   "targetId": "floral-fallal-left-pistil",
+   "count": 0,
+   "multiplier": 1,
+   "seq": 77
+  },
+  {
+   "type": "damage",
+   "targetId": "floral-fallal-left-pistil",
+   "sourceId": "bahamut",
+   "amount": 167,
+   "element": "none",
+   "affinity": "normal",
+   "crit": false,
+   "hitIndex": 0,
+   "hitCount": 1,
+   "seq": 78
+  },
+  {
+   "type": "chain",
+   "targetId": "floral-fallal-left-pistil",
+   "count": 0,
+   "multiplier": 1,
+   "seq": 79
+  },
+  {
+   "type": "ko",
+   "targetId": "floral-fallal-left-pistil",
+   "sourceId": "bahamut",
+   "seq": 80
+  },
+  {
+   "type": "action-end",
+   "actorId": "bahamut",
+   "seq": 81
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 19919.89999999987,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.07410296411856476,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.07057142857142862,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 82
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 25325.299999999595,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.9975399015960639,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.95,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 1,
+      "required": 8045,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 83
+  },
+  {
+   "type": "turn-start",
+   "actorId": "bahamut",
+   "turn": 17,
+   "elapsedTicks": 759,
+   "seq": 84
+  },
+  {
+   "type": "action-start",
+   "actorId": "bahamut",
+   "command": {
+    "kind": "ability",
+    "id": "impulse",
+    "targets": []
+   },
+   "abilityId": "impulse",
+   "abilityName": "Impulse",
+   "targets": [],
+   "seq": 85
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 25325.299999999595,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.9975399015960639,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.95,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": 0,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 86
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 25358.66666666626,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 1,
+      "required": 16666,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.9554285714285714,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": 0.008265181834000379,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 87
+  },
+  {
+   "type": "turn-start",
+   "actorId": "yuna",
+   "turn": 18,
+   "elapsedTicks": 760,
+   "seq": 88
+  },
+  {
+   "type": "action-end",
+   "actorId": "yuna",
+   "seq": 89
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 25358.66666666626,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.9554285714285714,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": 0.008265181834000379,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 90
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 25658.966666666245,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.05130205208208327,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 1,
+      "required": 17500,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": 0.08265181834000346,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 91
+  },
+  {
+   "type": "turn-start",
+   "actorId": "floral-fallal-right-pistil",
+   "turn": 19,
+   "elapsedTicks": 769,
+   "seq": 92
+  },
+  {
+   "type": "action-end",
+   "actorId": "floral-fallal-right-pistil",
+   "seq": 93
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 25658.966666666245,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.05130205208208327,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": 0.08265181834000346,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 94
+  },
+  {
+   "type": "damage",
+   "targetId": "yuna",
+   "sourceId": "bahamut",
+   "amount": 0,
+   "element": "none",
+   "affinity": "normal",
+   "crit": false,
+   "hitIndex": 0,
+   "hitCount": 2,
+   "seq": 95
+  },
+  {
+   "type": "damage",
+   "targetId": "floral-fallal-right-pistil",
+   "sourceId": "bahamut",
+   "amount": 0,
+   "element": "none",
+   "affinity": "normal",
+   "crit": false,
+   "hitIndex": 1,
+   "hitCount": 2,
+   "seq": 96
+  },
+  {
+   "type": "action-end",
+   "actorId": "bahamut",
+   "seq": 97
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 29362.666666666057,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.6840273610944438,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.6025714285714285,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 98
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 31231.199999999295,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 1,
+      "required": 16666,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.9065714285714286,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 99
+  },
+  {
+   "type": "turn-start",
+   "actorId": "yuna",
+   "turn": 20,
+   "elapsedTicks": 936,
+   "seq": 100
+  },
+  {
+   "type": "action-end",
+   "actorId": "yuna",
+   "seq": 101
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 31231.199999999295,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.9065714285714286,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 102
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 31831.799999999264,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.10260410416416654,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 1,
+      "required": 17500,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 103
+  },
+  {
+   "type": "turn-start",
+   "actorId": "floral-fallal-right-pistil",
+   "turn": 21,
+   "elapsedTicks": 954,
+   "seq": 104
+  },
+  {
+   "type": "action-end",
+   "actorId": "floral-fallal-right-pistil",
+   "seq": 105
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 31831.799999999264,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.10260410416416654,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 106
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 36503.133333332764,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.9006360254410176,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.76,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 1,
+      "required": 8045,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 107
+  },
+  {
+   "type": "turn-start",
+   "actorId": "bahamut",
+   "turn": 22,
+   "elapsedTicks": 1094,
+   "seq": 108
+  },
+  {
+   "type": "action-start",
+   "actorId": "bahamut",
+   "command": {
+    "kind": "ability",
+    "id": "impulse",
+    "targets": []
+   },
+   "abilityId": "impulse",
+   "abilityName": "Impulse",
+   "targets": [],
+   "seq": 109
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 36503.133333332764,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.9006360254410176,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.76,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": 0,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 110
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 37103.7333333328,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 1,
+      "required": 16666,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.8577142857142857,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": 0.14877327301200627,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 111
+  },
+  {
+   "type": "turn-start",
+   "actorId": "yuna",
+   "turn": 23,
+   "elapsedTicks": 1112,
+   "seq": 112
+  },
+  {
+   "type": "action-end",
+   "actorId": "yuna",
+   "seq": 113
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 37103.7333333328,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.8577142857142857,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": 0.14877327301200627,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 114
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 38004.63333333285,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.15390615624624981,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 1,
+      "required": 17500,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": 0.3719331825300156,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 115
+  },
+  {
+   "type": "turn-start",
+   "actorId": "floral-fallal-right-pistil",
+   "turn": 24,
+   "elapsedTicks": 1139,
+   "seq": 116
+  },
+  {
+   "type": "action-end",
+   "actorId": "floral-fallal-right-pistil",
+   "seq": 117
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 38004.63333333285,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.15390615624624981,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": 0.3719331825300156,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 118
+  },
+  {
+   "type": "damage",
+   "targetId": "yuna",
+   "sourceId": "bahamut",
+   "amount": 0,
+   "element": "none",
+   "affinity": "normal",
+   "crit": false,
+   "hitIndex": 0,
+   "hitCount": 2,
+   "seq": 119
+  },
+  {
+   "type": "damage",
+   "targetId": "floral-fallal-right-pistil",
+   "sourceId": "bahamut",
+   "amount": 0,
+   "element": "none",
+   "affinity": "normal",
+   "crit": false,
+   "hitIndex": 1,
+   "hitCount": 2,
+   "seq": 120
+  },
+  {
+   "type": "action-end",
+   "actorId": "bahamut",
+   "seq": 121
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 40540.499999999665,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.5871234849393976,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.4125714285714286,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 122
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 42976.26666666647,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 1,
+      "required": 16666,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.8088571428571428,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 123
+  },
+  {
+   "type": "turn-start",
+   "actorId": "yuna",
+   "turn": 25,
+   "elapsedTicks": 1288,
+   "seq": 124
+  },
+  {
+   "type": "action-end",
+   "actorId": "yuna",
+   "seq": 125
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 42976.26666666647,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.8088571428571428,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 126
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 44177.46666666654,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.20520820832833309,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 1,
+      "required": 17500,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 127
+  },
+  {
+   "type": "turn-start",
+   "actorId": "floral-fallal-right-pistil",
+   "turn": 26,
+   "elapsedTicks": 1324,
+   "seq": 128
+  },
+  {
+   "type": "action-end",
+   "actorId": "floral-fallal-right-pistil",
+   "seq": 129
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 44177.46666666654,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.20520820832833309,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 130
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 47680.96666666675,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.8037321492859715,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.5700000000000001,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 1,
+      "required": 8045,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 131
+  },
+  {
+   "type": "turn-start",
+   "actorId": "bahamut",
+   "turn": 27,
+   "elapsedTicks": 1429,
+   "seq": 132
+  },
+  {
+   "type": "action-end",
+   "actorId": "bahamut",
+   "seq": 133
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 48848.80000000015,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 1,
+      "required": 16666,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.76,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 134
+  },
+  {
+   "type": "turn-start",
+   "actorId": "yuna",
+   "turn": 28,
+   "elapsedTicks": 1464,
+   "seq": 135
+  },
+  {
+   "type": "action-end",
+   "actorId": "yuna",
+   "seq": 136
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 48848.80000000015,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.76,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 137
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 50350.300000000236,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.25651026041041647,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 1,
+      "required": 17500,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 138
+  },
+  {
+   "type": "turn-start",
+   "actorId": "floral-fallal-right-pistil",
+   "turn": 29,
+   "elapsedTicks": 1509,
+   "seq": 139
+  },
+  {
+   "type": "action-end",
+   "actorId": "floral-fallal-right-pistil",
+   "seq": 140
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 50350.300000000236,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.25651026041041647,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 141
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 52652.60000000037,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.6498259930397217,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.37457142857142856,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 1,
+      "required": 8045,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 142
+  },
+  {
+   "type": "turn-start",
+   "actorId": "bahamut",
+   "turn": 30,
+   "elapsedTicks": 1578,
+   "seq": 143
+  },
+  {
+   "type": "charge",
+   "enemyId": "bahamut",
+   "name": "5",
+   "turnsLeft": 4,
+   "stage": 1,
+   "seq": 144
+  },
+  {
+   "type": "action-end",
+   "actorId": "bahamut",
+   "seq": 145
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 54721.33333333382,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 1,
+      "required": 16666,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.7111428571428571,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 146
+  },
+  {
+   "type": "turn-start",
+   "actorId": "yuna",
+   "turn": 31,
+   "elapsedTicks": 1640,
+   "seq": 147
+  },
+  {
+   "type": "action-end",
+   "actorId": "yuna",
+   "seq": 148
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 54721.33333333382,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.7111428571428571,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 149
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 56523.13333333393,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.30781231249249974,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 1,
+      "required": 17500,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 150
+  },
+  {
+   "type": "turn-start",
+   "actorId": "floral-fallal-right-pistil",
+   "turn": 32,
+   "elapsedTicks": 1694,
+   "seq": 151
+  },
+  {
+   "type": "action-end",
+   "actorId": "floral-fallal-right-pistil",
+   "seq": 152
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 56523.13333333393,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.30781231249249974,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 153
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 57657.60000000066,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.5016200648025921,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.1845714285714286,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 1,
+      "required": 8045,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 154
+  },
+  {
+   "type": "turn-start",
+   "actorId": "bahamut",
+   "turn": 33,
+   "elapsedTicks": 1728,
+   "seq": 155
+  },
+  {
+   "type": "charge",
+   "enemyId": "bahamut",
+   "name": "4",
+   "turnsLeft": 3,
+   "stage": 1,
+   "seq": 156
+  },
+  {
+   "type": "action-end",
+   "actorId": "bahamut",
+   "seq": 157
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 60593.8666666675,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 1,
+      "required": 16666,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.6622857142857144,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 158
+  },
+  {
+   "type": "turn-start",
+   "actorId": "yuna",
+   "turn": 34,
+   "elapsedTicks": 1816,
+   "seq": 159
+  },
+  {
+   "type": "action-end",
+   "actorId": "yuna",
+   "seq": 160
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 60593.8666666675,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.6622857142857144,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 161
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 62662.60000000095,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.3534141365654626,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.9988571428571429,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 1,
+      "required": 8045,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 162
+  },
+  {
+   "type": "turn-start",
+   "actorId": "bahamut",
+   "turn": 35,
+   "elapsedTicks": 1878,
+   "seq": 163
+  },
+  {
+   "type": "charge",
+   "enemyId": "bahamut",
+   "name": "3",
+   "turnsLeft": 2,
+   "stage": 1,
+   "seq": 164
+  },
+  {
+   "type": "action-end",
+   "actorId": "bahamut",
+   "seq": 165
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 62695.96666666762,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.359114364574583,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 1,
+      "required": 17500,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 166
+  },
+  {
+   "type": "turn-start",
+   "actorId": "floral-fallal-right-pistil",
+   "turn": 36,
+   "elapsedTicks": 1879,
+   "seq": 167
+  },
+  {
+   "type": "action-end",
+   "actorId": "floral-fallal-right-pistil",
+   "seq": 168
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 62695.96666666762,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.359114364574583,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 169
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 66466.40000000117,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 1,
+      "required": 16666,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.6134285714285714,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 170
+  },
+  {
+   "type": "turn-start",
+   "actorId": "yuna",
+   "turn": 37,
+   "elapsedTicks": 1992,
+   "seq": 171
+  },
+  {
+   "type": "action-end",
+   "actorId": "yuna",
+   "seq": 172
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 66466.40000000117,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.6134285714285714,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 173
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 67667.60000000124,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.20520820832833309,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.8088571428571428,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 1,
+      "required": 8045,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 174
+  },
+  {
+   "type": "turn-start",
+   "actorId": "bahamut",
+   "turn": 38,
+   "elapsedTicks": 2028,
+   "seq": 175
+  },
+  {
+   "type": "charge",
+   "enemyId": "bahamut",
+   "name": "2",
+   "turnsLeft": 1,
+   "stage": 2,
+   "seq": 176
+  },
+  {
+   "type": "action-end",
+   "actorId": "bahamut",
+   "seq": 177
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 68868.80000000131,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.4104164166566663,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 1,
+      "required": 17500,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 178
+  },
+  {
+   "type": "turn-start",
+   "actorId": "floral-fallal-right-pistil",
+   "turn": 39,
+   "elapsedTicks": 2064,
+   "seq": 179
+  },
+  {
+   "type": "action-end",
+   "actorId": "floral-fallal-right-pistil",
+   "seq": 180
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 68868.80000000131,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.4104164166566663,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 181
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 72338.93333333485,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 1,
+      "required": 16666,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.5645714285714285,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 182
+  },
+  {
+   "type": "turn-start",
+   "actorId": "yuna",
+   "turn": 40,
+   "elapsedTicks": 2168,
+   "seq": 183
+  },
+  {
+   "type": "action-end",
+   "actorId": "yuna",
+   "seq": 184
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 72338.93333333485,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.5645714285714285,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 185
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 72672.60000000153,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.05700228009120367,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.6188571428571429,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 1,
+      "required": 8045,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 186
+  },
+  {
+   "type": "turn-start",
+   "actorId": "bahamut",
+   "turn": 41,
+   "elapsedTicks": 2178,
+   "seq": 187
+  },
+  {
+   "type": "charge",
+   "enemyId": "bahamut",
+   "name": "1",
+   "turnsLeft": 0,
+   "stage": 2,
+   "seq": 188
+  },
+  {
+   "type": "action-start",
+   "actorId": "bahamut",
+   "command": {
+    "kind": "ability",
+    "id": "mega-flare",
+    "targets": []
+   },
+   "abilityId": "mega-flare",
+   "abilityName": "Mega Flare",
+   "targets": [],
+   "seq": 189
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 72672.60000000153,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.05700228009120367,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0.6188571428571429,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": 0,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 190
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 75041.633333335,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.46171846873874955,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 1,
+      "required": 17500,
+      "ready": true,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": 0.4890161676212572,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 191
+  },
+  {
+   "type": "turn-start",
+   "actorId": "floral-fallal-right-pistil",
+   "turn": 42,
+   "elapsedTicks": 2249,
+   "seq": 192
+  },
+  {
+   "type": "action-end",
+   "actorId": "floral-fallal-right-pistil",
+   "seq": 193
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 75041.633333335,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.46171846873874955,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": 0.4890161676212572,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 194
+  },
+  {
+   "type": "chain",
+   "targetId": "yuna",
+   "count": 0,
+   "multiplier": 1,
+   "seq": 195
+  },
+  {
+   "type": "damage",
+   "targetId": "yuna",
+   "sourceId": "bahamut",
+   "amount": 232,
+   "element": "none",
+   "affinity": "normal",
+   "crit": false,
+   "hitIndex": 0,
+   "hitCount": 2,
+   "seq": 196
+  },
+  {
+   "type": "chain",
+   "targetId": "yuna",
+   "count": 0,
+   "multiplier": 1,
+   "seq": 197
+  },
+  {
+   "type": "ko",
+   "targetId": "yuna",
+   "sourceId": "bahamut",
+   "seq": 198
+  },
+  {
+   "type": "chain",
+   "targetId": "floral-fallal-right-pistil",
+   "count": 0,
+   "multiplier": 1,
+   "seq": 199
+  },
+  {
+   "type": "damage",
+   "targetId": "floral-fallal-right-pistil",
+   "sourceId": "bahamut",
+   "amount": 273,
+   "element": "none",
+   "affinity": "normal",
+   "crit": false,
+   "hitIndex": 1,
+   "hitCount": 2,
+   "seq": 200
+  },
+  {
+   "type": "chain",
+   "targetId": "floral-fallal-right-pistil",
+   "count": 0,
+   "multiplier": 1,
+   "seq": 201
+  },
+  {
+   "type": "ko",
+   "targetId": "floral-fallal-right-pistil",
+   "sourceId": "bahamut",
+   "seq": 202
+  },
+  {
+   "type": "action-end",
+   "actorId": "bahamut",
+   "seq": 203
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 77544.13333333515,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.6034098506797414,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0.4568306010928962,
+      "required": 13725,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "floral-fallal-right-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "floral-fallal-left-pistil",
+      "fill": 0,
+      "required": 17500,
+      "ready": false,
+      "charge": null,
+      "state": "stop"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 204
+  },
+  {
+   "type": "defeat",
+   "result": {
+    "outcome": "defeat",
+    "turns": 42,
+    "elapsedTicks": 2441,
+    "elapsedMs": 81448,
+    "ap": 0,
+    "exp": 0,
+    "gil": 0,
+    "drops": [],
+    "overkilled": [],
+    "sphereLevelsGained": {},
+    "levelsGained": {}
+   },
+   "seq": 205
+  }
+ ],
+ "state": {
+  "activeIds": [
+   "yuna",
+   "rikku",
+   "paine"
+  ],
+  "combatants": {
+   "yuna": {
+    "side": "party"
+   },
+   "rikku": {
+    "side": "party"
+   },
+   "paine": {
+    "side": "party"
+   },
+   "floral-fallal-right-pistil": {
+    "side": "party"
+   },
+   "floral-fallal-left-pistil": {
+    "side": "party"
+   }
+  }
+ }
+}

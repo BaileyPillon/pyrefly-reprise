@@ -1,0 +1,132 @@
+{
+ "girl": "paine",
+ "seed": 1,
+ "source": "engine",
+ "events": [
+  {
+   "type": "turn-start",
+   "actorId": "paine",
+   "turn": 12,
+   "elapsedTicks": 452,
+   "seq": 56
+  },
+  {
+   "type": "spherechange",
+   "who": "paine",
+   "from": "black-mage",
+   "to": "full-throttle",
+   "gatesCrossed": [],
+   "special": "full-throttle",
+   "seq": 57
+  },
+  {
+   "type": "status-add",
+   "targetId": "paine",
+   "sourceId": "paine",
+   "status": "auto-life",
+   "instance": {
+    "id": "auto-life",
+    "turnsRemaining": null,
+    "ticksRemaining": null,
+    "charges": null,
+    "stacks": 0,
+    "permanent": true,
+    "sourceId": "paine",
+    "sourceAbilityId": "special-form"
+   },
+   "seq": 58
+  },
+  {
+   "type": "action-end",
+   "actorId": "paine",
+   "seq": 59
+  },
+  {
+   "type": "atb",
+   "snapshot": {
+    "elapsedMs": 15081.733333333377,
+    "bars": [
+     {
+      "actorId": "yuna",
+      "fill": 0.6833497387748921,
+      "required": 13207,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "rikku",
+      "fill": 0.979217740138177,
+      "required": 17948,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "paine",
+      "fill": 0,
+      "required": 15217,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "full-throttle-right",
+      "fill": 0,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "full-throttle-left",
+      "fill": 0,
+      "required": 16666,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     },
+     {
+      "actorId": "bahamut",
+      "fill": 0,
+      "required": 8045,
+      "ready": false,
+      "charge": null,
+      "state": "normal"
+     }
+    ]
+   },
+   "seq": 60
+  }
+ ],
+ "state": {
+  "activeIds": [
+   "paine",
+   "full-throttle-right",
+   "full-throttle-left"
+  ],
+  "combatants": {
+   "yuna": {
+    "side": "party",
+    "aiMemory": {
+     "sdspParked": true
+    }
+   },
+   "rikku": {
+    "side": "party",
+    "aiMemory": {
+     "sdspParked": true
+    }
+   },
+   "paine": {
+    "side": "party"
+   },
+   "full-throttle-right": {
+    "side": "party"
+   },
+   "full-throttle-left": {
+    "side": "party"
+   }
+  }
+ }
+}
