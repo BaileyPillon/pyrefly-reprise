@@ -2,7 +2,7 @@
  * Test 16 of the FFX-2 Special look (step C1; game case: FFX-2 only in what is seen, the plumbing both games and inert): the ring and the anchor math of every figure-less part that
  * exists today are drawn exactly as before, whatever fields the Special look adds to `OnParentAnchor`.
  *
- * THE PIN (written in the step-0 commit, BEFORE `PartAnchors.ts` is edited, with the old code): `tests/fixtures/specials/anchor-ring-pin.json` records, for every anchor the scene tables publish
+ * THE PIN (written in the step-0 commit, BEFORE `PartAnchors.ts` is edited, with the old code): `tests/fixtures/specials/anchor-ring-pin.txt` records, for every anchor the scene tables publish
  * today (the Farplane's, the colossus' on both surfaces, the Garden of Pain's, the Spectral Keeper's: read from the scene modules, no number copied here), the ring mesh's geometry parameters,
  * its material, its placement after one frame and after a long run, its lit colour, its fade-out, and the pure anchor maths (`anchoredQuad`, `anchoredSpot`, `anchoredAim`, `anchoredHeight`,
  * the actor options) and the stage's figure request for it. A change to a ring that has none of the new fields fails here. The file is written by `toMatchFileSnapshot` on the first run only.

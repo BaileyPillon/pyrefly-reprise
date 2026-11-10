@@ -2,7 +2,7 @@
  * The test word of the FFX-2 Special look: `?specials=on` (FFX-2 only: the three Special dresspheres exist only in FFX-2).
  *
  * The switch `specialDressUp` is OFF in every shipped chapter and stays OFF in production. The word, the debug call `window.__pyrefly.specials(on?)` and the three look words exist in a
- * dev server and in a test preview build (`PYREFLY_SPECIALS_TEST=1`, which defines `__PYREFLY_SPECIALS__` true) and nowhere else: a production build defines it false, and every
+ * dev server and in a test preview build (`vite build --mode specials-test`, which defines `__PYREFLY_SPECIALS__` true) and nowhere else: a production build defines it false, and every
  * branch below that reads the page's address is then dead code, so none of the words reaches a production bundle (`tests/unit/specials-word.test.ts` proves it by bundling).
  * The word is read LAZILY, when the engine options are built, never from `location.search` at import time.
  */
