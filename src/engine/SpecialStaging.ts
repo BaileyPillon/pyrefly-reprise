@@ -216,10 +216,13 @@ export function specialFitOf(stage: object, o: { slots: SceneSlots; canvas: { cl
   return makeSpecialFit({ partyHeight: o.slots.partyHeight ?? REFERENCE_PARTY_HEIGHT, enemyHeight: o.slots.enemyHeight ?? REFERENCE_ENEMY_HEIGHT, surface: surfaceOf(o.canvas.clientWidth, o.canvas.clientHeight) }, look);
 }
 
-/** The part marks the targeting port wants lit: [stub id, lit] for each stub of the registered form under the mark (b); empty under the default (a) and with no form. */
+/** One shared empty list, so a target hover in any game and chapter allocates nothing while no mark is drawn. */
+const NO_MARKS: ReadonlyArray<readonly [CombatantId, boolean]> = Object.freeze([]);
+
+/** The part marks the targeting port wants lit: [stub id, lit] for each stub of the registered form under the mark (b); empty (the same frozen list) under the default (a) and with no form. */
 export function markedPartsOf(stage: object, ids: readonly CombatantId[]): ReadonlyArray<readonly [CombatantId, boolean]> {
   const form = forms.get(stage);
-  return form && look.mark === 'b' ? [form.right, form.left].map((id) => [id, ids.includes(id)] as const) : [];
+  return form && look.mark === 'b' ? [form.right, form.left].map((id) => [id, ids.includes(id)] as const) : NO_MARKS;
 }
 
 /**

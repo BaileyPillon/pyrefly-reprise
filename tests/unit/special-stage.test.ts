@@ -193,6 +193,10 @@ describe('with no form up (every shipped chapter)', () => {
     for (const name of ['formHandleOf', 'specialFitOf', 'anchorSourceOf'] as const) for (const a of answers(hooks[name])) expect(a.value, `${name} answers undefined`).toBeUndefined();
     for (const name of ['formKeepIds', 'markedPartsOf'] as const) for (const a of answers(hooks[name])) expect(a.value, `${name} answers an empty list`).toEqual([]);
     for (const name of ['partViewOf', 'formSlots'] as const) for (const a of answers(hooks[name])) expect(a.value, `${name} hands back the very object`).toBe(a.args[1]);
+    // a target hover allocates nothing here: every "no marks" answer is one shared frozen list
+    const marks = answers(hooks.markedPartsOf).map((a) => a.value);
+    expect(new Set(marks).size, 'one shared list').toBe(1);
+    expect(Object.isFrozen(marks[0])).toBe(true);
   });
 
   it('placeAnchored runs nothing: a Bulwark-like anchored part keeps its anchor object', async () => {
