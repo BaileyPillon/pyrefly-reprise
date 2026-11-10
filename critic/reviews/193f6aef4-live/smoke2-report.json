@@ -1,0 +1,91 @@
+{
+ "out": [
+  {
+   "s": "title screen",
+   "o": true,
+   "d": "title"
+  },
+  {
+   "s": "reached chapter-select by Enter",
+   "o": true,
+   "d": "chapter-select"
+  },
+  {
+   "s": "sidequest: cursor settled on hidden chapter",
+   "o": false,
+   "d": "undefined (expect belgemine)"
+  },
+  {
+   "s": "sidequest: opens -> party-prep",
+   "o": true,
+   "d": "party-prep"
+  },
+  {
+   "s": "sidequest: cancel returns to chapter-select",
+   "o": true,
+   "d": "chapter-select"
+  },
+  {
+   "s": "sidequest: no art 404 during open",
+   "o": true,
+   "d": ""
+  },
+  {
+   "s": "youth: cursor settled on hidden chapter",
+   "o": false,
+   "d": "undefined (expect any)"
+  },
+  {
+   "s": "youth: opens -> party-prep",
+   "o": true,
+   "d": "party-prep"
+  },
+  {
+   "s": "youth: battle reaches a player turn",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "youth: no art 404 during open",
+   "o": true,
+   "d": ""
+  }
+ ],
+ "errs": [],
+ "nf": [],
+ "art404": [],
+ "failedReq": [
+  "https://echoesofspira.com/art/backdrops/evrae-airship-deck.thumb.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/characters/evrae/idle.thumb.png net::ERR_ABORTED",
+  "https://echoesofspira.com/art/backdrops/bevelle-highbridge.thumb.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/characters/seymour-natus/idle.thumb.png net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/wakka.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/lulu.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/auron.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/seymour.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/rikku-x2.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/backdrops/bevelle-underground.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/yuna-x2.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/paine.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/backdrops/via-purifico.thumb.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/characters/isaaru/idle.thumb.png net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/wakka.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/auron.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/seymour.webp net::ERR_ABORTED"
+ ],
+ "audio": [
+  "music/title.mp3",
+  "sfx/sprite.mp3",
+  "sfx/sprite-v2.mp3",
+  "music/chapter-select.mp3",
+  "sfx/parity-ffx-core.mp3",
+  "music/scene-macalania-temple.mp3",
+  "music/boss-isaaru.mp3",
+  "music/scene-bevelle-underground.mp3",
+  "sfx/parity-ffx2-core.mp3",
+  "music/boss-ffx2-fallen-aeons.mp3",
+  "music/victory-ffx2.mp3",
+  "music/defeat-ffx2.mp3"
+ ],
+ "elapsedMin": 0.95875
+}

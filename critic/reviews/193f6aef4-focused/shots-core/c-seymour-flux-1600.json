@@ -1,0 +1,209 @@
+{
+ "chapterId": "seymour-flux",
+ "tag": "c",
+ "query": "",
+ "W": "1600",
+ "H": "900",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5481/assets/index-BYej0WB6.js"
+  },
+  {
+   "s": "selected",
+   "id": "seymour-flux"
+  },
+  {
+   "s": "prep",
+   "screen": "party-prep"
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 33935
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "rigs-err",
+   "e": "TypeError: (out.rigs || []).map is not a function"
+  },
+  {
+   "s": "modes",
+   "marker": "cone",
+   "portraits": "big"
+  },
+  {
+   "s": "act",
+   "t": 0,
+   "bigPortraits": []
+  },
+  {
+   "s": "act",
+   "t": 1,
+   "bigPortraits": []
+  },
+  {
+   "s": "act",
+   "t": 2,
+   "bigPortraits": []
+  },
+  {
+   "s": "end",
+   "screen": "battle"
+  }
+ ],
+ "rigs": {
+  "switch": {
+   "on": true,
+   "reason": "default"
+  },
+  "figures": [
+   {
+    "subject": "kimahri",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   },
+   {
+    "subject": "mortiorchis",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   },
+   {
+    "subject": "seymour-flux-body",
+    "on": true,
+    "reason": "gate ok, 6 parts, 12 bones, 6 keys, 1x maps, lit",
+    "ids": [
+     "seymour-flux"
+    ],
+    "info": {
+     "name": "seymour-flux-body",
+     "key": "idle",
+     "keys": [
+      "idle",
+      "attack",
+      "cast",
+      "hurt",
+      "ko",
+      "telegraph"
+     ],
+     "parts": 6,
+     "vertices": 3069,
+     "bones": 12,
+     "chains": 0,
+     "idle": true,
+     "textures": {
+      "map": 1,
+      "rim": 1
+     },
+     "textureMB": 41,
+     "relight": {
+      "lit": true,
+      "pieces": 36
+     }
+    }
+   },
+   {
+    "subject": "tidus",
+    "on": true,
+    "reason": "gate ok, 9 parts, 13 bones, 14 keys, 1x maps, lit",
+    "ids": [
+     "tidus"
+    ],
+    "info": {
+     "name": "tidus",
+     "key": "ko",
+     "keys": [
+      "idle",
+      "ready",
+      "attack",
+      "follow",
+      "victory",
+      "cast",
+      "item",
+      "hurt",
+      "critical",
+      "defend",
+      "sleep",
+      "ko",
+      "od-energy-rain",
+      "od-slice-and-dice"
+     ],
+     "parts": 9,
+     "vertices": 649,
+     "bones": 13,
+     "chains": 0,
+     "idle": true,
+     "textures": {
+      "map": 2,
+      "rim": 1
+     },
+     "textureMB": 68,
+     "relight": {
+      "lit": true,
+      "pieces": 103
+     }
+    }
+   },
+   {
+    "subject": "yuna",
+    "on": false,
+    "reason": "no rig listed in the art manifest",
+    "ids": []
+   }
+  ]
+ },
+ "aimDom0": [
+  "DIV.ffxhud ig hud-f1 f1-finish f1-cmd-open ffxhud--targeting-ene 1600x900",
+  "SPAN.ig-ctb__tile ig-ctb__tile--enemy ig-ctb__tile--targeted 56x56",
+  "SPAN.ig-ctb__tile ig-ctb__tile--enemy ig-ctb__tile--targeted 0x0",
+  "svg.[object SVGAnimatedString] 0x0",
+  "SPAN.mad__target 93x24",
+  "SPAN.f1-cue__target 83x19",
+  "DIV.ffx-targeting ffx-targeting--pro 1600x900",
+  "DIV.ffx-target ffx-target--enemy ffx-target--dim ffx-target--cli 414x315",
+  "SPAN.ffx-target__c ffx-target__c--tl 54x54",
+  "SPAN.ffx-target__c ffx-target__c--tr 54x54",
+  "SPAN.ffx-target__c ffx-target__c--bl 54x54",
+  "SPAN.ffx-target__c ffx-target__c--br 54x54"
+ ],
+ "bigPortrait0": [],
+ "aimDom1": [
+  "DIV.ffxhud ig hud-f1 f1-finish f1-cmd-open ffxhud--targeting-ene 1600x900",
+  "SPAN.ig-ctb__tile ig-ctb__tile--enemy ig-ctb__tile--targeted 56x56",
+  "SPAN.ig-ctb__tile ig-ctb__tile--enemy ig-ctb__tile--targeted 56x56",
+  "svg.[object SVGAnimatedString] 0x0",
+  "SPAN.mad__target 93x24",
+  "SPAN.f1-cue__target 83x19",
+  "DIV.ffx-targeting ffx-targeting--pro 1600x900",
+  "DIV.ffx-target ffx-target--enemy ffx-target--dim ffx-target--cli 421x320",
+  "SPAN.ffx-target__c ffx-target__c--tl 54x54",
+  "SPAN.ffx-target__c ffx-target__c--tr 54x54",
+  "SPAN.ffx-target__c ffx-target__c--bl 54x54",
+  "SPAN.ffx-target__c ffx-target__c--br 54x54"
+ ],
+ "bigPortrait1": [],
+ "aimDom2": [
+  "DIV.ffxhud ig hud-f1 f1-finish f1-cmd-open ffxhud--targeting-ene 1600x900",
+  "SPAN.ig-ctb__tile ig-ctb__tile--enemy ig-ctb__tile--targeted 56x56",
+  "SPAN.ig-ctb__tile ig-ctb__tile--enemy ig-ctb__tile--targeted 56x56",
+  "SPAN.ig-ctb__tile ig-ctb__tile--enemy ig-ctb__tile--targeted 0x0",
+  "svg.[object SVGAnimatedString] 0x0",
+  "SPAN.mad__target 93x24",
+  "SPAN.f1-cue__target 83x19",
+  "DIV.ffx-targeting ffx-targeting--pro 1600x900",
+  "DIV.ffx-target ffx-target--enemy ffx-target--dim ffx-target--cli 408x310",
+  "SPAN.ffx-target__c ffx-target__c--tl 54x54",
+  "SPAN.ffx-target__c ffx-target__c--tr 54x54",
+  "SPAN.ffx-target__c ffx-target__c--bl 54x54"
+ ],
+ "bigPortrait2": [],
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": []
+}

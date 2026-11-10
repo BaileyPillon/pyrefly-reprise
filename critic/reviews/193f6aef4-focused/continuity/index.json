@@ -1,0 +1,301 @@
+[
+ {
+  "file": "ff7-jenova-life-win-193f6aef4/00-title.png",
+  "game": "ffx",
+  "chapter": "ff7-jenova-life",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "title screen, fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T01:12:17.132Z"
+ },
+ {
+  "file": "ff7-jenova-life-win-193f6aef4/01-briefing.png",
+  "game": "ffx",
+  "chapter": "ff7-jenova-life",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "Auron's briefing on a fresh profile",
+  "asserted": "screen=title",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "title"
+   ],
+   "titleRoots": 0,
+   "screen": "title"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T01:12:18.758Z"
+ },
+ {
+  "file": "ff7-jenova-life-win-193f6aef4/seq-transition-into-battle/",
+  "game": "ffx",
+  "chapter": "ff7-jenova-life",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "timed frame sequence: the pre-battle scene handing over to the fight",
+  "asserted": "screen=battle (read after the last frame)",
+  "verified": true,
+  "frames": [
+   {
+    "f": "f00.jpg",
+    "ms": 51
+   },
+   {
+    "f": "f01.jpg",
+    "ms": 366
+   },
+   {
+    "f": "f02.jpg",
+    "ms": 667
+   },
+   {
+    "f": "f03.jpg",
+    "ms": 983
+   },
+   {
+    "f": "f04.jpg",
+    "ms": 1283
+   },
+   {
+    "f": "f05.jpg",
+    "ms": 1583
+   },
+   {
+    "f": "f06.jpg",
+    "ms": 1907
+   },
+   {
+    "f": "f07.jpg",
+    "ms": 2217
+   },
+   {
+    "f": "f08.jpg",
+    "ms": 2541
+   },
+   {
+    "f": "f09.jpg",
+    "ms": 2851
+   }
+  ],
+  "staleRoots": {
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T01:12:26.214Z"
+ },
+ {
+  "file": "ff7-jenova-life-win-193f6aef4/10-first-menu-coach.png",
+  "game": "ffx",
+  "chapter": "ff7-jenova-life",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "first command menu with the first-turn coach mark",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "overlaps": [],
+   "advisorMinEffPx": null
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T01:12:28.981Z"
+ },
+ {
+  "file": "ff7-jenova-life-win-193f6aef4/11-advisor.png",
+  "game": "ffx",
+  "chapter": "ff7-jenova-life",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "command menu, advisor card shown by default",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "foc": {
+   "advisorMinEffPx": null
+  },
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T01:12:29.399Z"
+ },
+ {
+  "file": "ff7-jenova-life-win-193f6aef4/12-intent-E.png",
+  "game": "ffx",
+  "chapter": "ff7-jenova-life",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "enemy intent toggled with E",
+  "asserted": "UNVERIFIED (screen wanted battle got pause; awaitingMenu wanted true got false) screen=pause awaitingMenu=false",
+  "verified": false,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T01:12:31.186Z"
+ },
+ {
+  "file": "ff7-jenova-life-win-193f6aef4/13-guide-G.png",
+  "game": "ffx",
+  "chapter": "ff7-jenova-life",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "strategy guide toggled with G",
+  "asserted": "UNVERIFIED (screen wanted battle got pause; awaitingMenu wanted true got false) screen=pause awaitingMenu=false",
+  "verified": false,
+  "staleRoots": {
+   "roots": [
+    "battle",
+    "pause"
+   ],
+   "titleRoots": 0,
+   "screen": "pause"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T01:12:32.554Z"
+ },
+ {
+  "file": "ff7-jenova-life-win-193f6aef4/14-pause-Esc.png",
+  "game": "ffx",
+  "chapter": "ff7-jenova-life",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause opened with Esc from the command menu",
+  "asserted": "UNVERIFIED (screen wanted pause got battle) screen=battle",
+  "verified": false,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T01:12:34.585Z"
+ },
+ {
+  "file": "ff7-jenova-life-win-193f6aef4/14-pause-tab-next.png",
+  "game": "ffx",
+  "chapter": "ff7-jenova-life",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "pause, tab ",
+  "asserted": "UNVERIFIED (screen wanted pause got battle) screen=battle",
+  "verified": false,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T01:12:35.510Z"
+ },
+ {
+  "file": "ff7-jenova-life-win-193f6aef4/31-results.png",
+  "game": "ffx",
+  "chapter": "ff7-jenova-life",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "results after a defeat",
+  "asserted": "screen=results",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "results"
+   ],
+   "titleRoots": 0,
+   "screen": "results"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T01:14:14.959Z"
+ },
+ {
+  "file": "ff7-jenova-life-win-193f6aef4/32-after-retry.png",
+  "game": "ffx",
+  "chapter": "ff7-jenova-life",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "after Enter (RETRY) on the defeat results screen",
+  "asserted": "screen=battle",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T01:14:18.496Z"
+ },
+ {
+  "file": "ff7-jenova-life-win-193f6aef4/33-retry-battle.png",
+  "game": "ffx",
+  "chapter": "ff7-jenova-life",
+  "size": "1600x900",
+  "input": "keyboard (Playwright)",
+  "injected": false,
+  "seed": 1,
+  "state": "the retried fight, first menu",
+  "asserted": "screen=battle awaitingMenu=true",
+  "verified": true,
+  "staleRoots": {
+   "roots": [
+    "battle"
+   ],
+   "titleRoots": 0,
+   "screen": "battle"
+  },
+  "mode": "gpu",
+  "ts": "2026-11-10T01:14:21.278Z"
+ }
+]

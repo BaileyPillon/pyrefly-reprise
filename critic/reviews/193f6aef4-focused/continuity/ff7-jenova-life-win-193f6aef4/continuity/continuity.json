@@ -1,0 +1,4013 @@
+{
+ "schema": "continuity/1",
+ "chapter": "ff7-jenova-life",
+ "game": "ffx",
+ "base": "http://127.0.0.1:5481/",
+ "mode": "gpu",
+ "date": "2026-11-10T01:14:12.158Z",
+ "dedicated": true,
+ "view": [
+  0,
+  0,
+  1600,
+  900
+ ],
+ "probe": {
+  "frames": 6398,
+  "battleFrames": 5851,
+  "battleSeconds": 97.877,
+  "maxDtMs": 210.1,
+  "slowFrames": 5,
+  "fps": 59.8,
+  "copyMsMean": 0.057,
+  "errors": [],
+  "eventSource": "the engine state read from window.__pyrefly (plane fades and corners per frame); no engine hook"
+ },
+ "poseMeasure": {
+  "path": "<release tree>\\docs\\target\\pose-measure.json",
+  "sha256": "47535b71e6171bf53b644daeac431a3f553dabe9802ed35aa396bf127194f1c5",
+  "subjects": 156,
+  "source": "harness-tree",
+  "buildSha": "193f6aef",
+  "candidate": {
+   "sha256": "47535b71e6171bf53b644daeac431a3f553dabe9802ed35aa396bf127194f1c5",
+   "subjects": 156
+  },
+  "isCandidate": true,
+  "note": null
+ },
+ "harness": {
+  "schema": "continuity-harness/1",
+  "id": "330ddff0d3df02c255a00fd42bb01dc8a780b775e396254d383409780537d242",
+  "tree": {
+   "root": "<release tree>",
+   "head": "193f6aef4430137bc3ee50e29d53bbca5111a16d",
+   "dirty": []
+  },
+  "files": {
+   "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+   "critic/runner/lib/continuity-analyze.mjs": "4b7874e7dde6a9c25ce8df3a174021f99f552f43",
+   "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+   "critic/runner/lib/continuity-card.mjs": "2e0208df7bc9a922a27d519fc5ebb49bed3fafd9",
+   "critic/runner/lib/continuity-dissolve.mjs": "4a9a2ebc79b798dc6059312f0b885510f4cd79b3",
+   "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+   "critic/runner/lib/continuity-gaps.mjs": "7337b85eda92c5755d11ccbee84749ee231cfe3d",
+   "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+   "critic/runner/lib/continuity-ghostms.mjs": "d74a048e0c44be69d22b050973ec240fbec3db66",
+   "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+   "critic/runner/lib/continuity-probe.mjs": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25",
+   "critic/runner/lib/continuity-pure.mjs": "c30cf02831efe33d9726d0bae9f9b3e098292090",
+   "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+   "critic/runner/lib/continuity-rig-probe.mjs": "69f5933a74bb3f88d6e2bfbec336c51b602c25a5",
+   "critic/runner/lib/continuity-rig.mjs": "53b59d5a73f29dbcae1d67c3bf3ed8695498d045",
+   "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+   "critic/runner/lib/continuity-smear.mjs": "bb6bcae7b35d4d99465f0650e58554cc785af513",
+   "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+   "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+   "critic/runner/lib/continuity-summary.mjs": "c671aa6dbc9e6df72a767ace45e6a57cdb478053",
+   "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+   "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+   "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+   "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+   "critic/runner/lib/continuity-why.mjs": "e2f0063820045e9c5eb5bb2ece203c00bed1fe3d",
+   "critic/runner/lib/continuity.mjs": "d3fd3269395cfa928cd1566a81486359e28210cb",
+   "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+   "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+   "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+   "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+   "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+   "critic/runner/lib/route-pure.mjs": "7a9e46ad84e5ad3dd4ad9a64847349555429b52e",
+   "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+   "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+   "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+   "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+   "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+   "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+  },
+  "policy": {
+   "continuitySha256": "5ef4a3ed6fec14518548de8b462466822a3cf3a41f11528f8e8abb143de6fa43",
+   "fileSha256": "9c72460c4bdd463ef02f5e1f01c2baa3aa5334f392c29b114da466ca9c54cc71",
+   "override": false,
+   "overrideSha256": null
+  },
+  "probe": {
+   "version": 3,
+   "blob": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25"
+  },
+  "poseTable": {
+   "path": "<release tree>\\docs\\target\\pose-measure.json",
+   "sha256": "47535b71e6171bf53b644daeac431a3f553dabe9802ed35aa396bf127194f1c5",
+   "subjects": 156,
+   "source": "harness-tree",
+   "buildSha": "193f6aef",
+   "isCandidate": true
+  },
+  "waivers": {
+   "path": "<release tree>\\docs\\target\\pose-waivers.json",
+   "sha256": "f6829c4ba96180f7c1f371ba64ae263651d81db407071dfb9d79be412c132ed2",
+   "rows": 115
+  },
+  "run": {
+   "query": null,
+   "setArt": null,
+   "browser": "gpu"
+  },
+  "changedDuringRun": false
+ },
+ "staleTable": false,
+ "poseWaivers": {
+  "path": "<release tree>\\docs\\target\\pose-waivers.json",
+  "rows": 115
+ },
+ "anchorNotes": [],
+ "coverage": {
+  "figures": [
+   "cloud",
+   "tifa",
+   "barret",
+   "jenova-life"
+  ],
+  "measuredWithRegistration": [],
+  "measuredFromRig": [],
+  "measuredFromSilhouetteOnly": [
+   "jenova-life",
+   "cloud",
+   "tifa",
+   "barret"
+  ],
+  "rigs": [],
+  "posesWithAnchors": 8,
+  "posesTotal": 8,
+  "staleRegistrationRecords": 0,
+  "tracking": "centroid",
+  "trackedByCentroid": [
+   "cloud",
+   "tifa",
+   "barret",
+   "jenova-life"
+  ],
+  "unregistered": [
+   "ff7-film-cloud/idle",
+   "ff7-film-tifa/idle",
+   "ff7-film-barret/idle",
+   "ff7-film-jenova-life/idle",
+   "ff7-film-jenova-life/cast",
+   "ff7-film-cloud/hurt",
+   "ff7-film-tifa/hurt",
+   "ff7-film-barret/hurt"
+  ],
+  "waived": [],
+  "poses": [
+   {
+    "figure": "cloud",
+    "pose": "idle",
+    "url": "/art/characters/ff7-film-cloud/idle.png",
+    "head": null,
+    "stance": "silhouette",
+    "prone": false,
+    "class": "idle",
+    "registered": false,
+    "waived": false
+   },
+   {
+    "figure": "tifa",
+    "pose": "idle",
+    "url": "/art/characters/ff7-film-tifa/idle.png",
+    "head": null,
+    "stance": "silhouette",
+    "prone": false,
+    "class": "idle",
+    "registered": false,
+    "waived": false
+   },
+   {
+    "figure": "barret",
+    "pose": "idle",
+    "url": "/art/characters/ff7-film-barret/idle.png",
+    "head": null,
+    "stance": "silhouette",
+    "prone": false,
+    "class": "idle",
+    "registered": false,
+    "waived": false
+   },
+   {
+    "figure": "jenova-life",
+    "pose": "idle",
+    "url": "/art/characters/ff7-film-jenova-life/idle.png",
+    "head": null,
+    "stance": "silhouette",
+    "prone": false,
+    "class": "idle",
+    "registered": false,
+    "waived": false
+   },
+   {
+    "figure": "jenova-life",
+    "pose": "cast",
+    "url": "/art/characters/ff7-film-jenova-life/cast.png",
+    "head": null,
+    "stance": "silhouette",
+    "prone": false,
+    "class": "part",
+    "registered": false,
+    "waived": false
+   },
+   {
+    "figure": "cloud",
+    "pose": "hurt",
+    "url": "/art/characters/ff7-film-cloud/hurt.png",
+    "head": null,
+    "stance": "silhouette",
+    "prone": false,
+    "class": "part",
+    "registered": false,
+    "waived": false
+   },
+   {
+    "figure": "tifa",
+    "pose": "hurt",
+    "url": "/art/characters/ff7-film-tifa/hurt.png",
+    "head": null,
+    "stance": "silhouette",
+    "prone": false,
+    "class": "part",
+    "registered": false,
+    "waived": false
+   },
+   {
+    "figure": "barret",
+    "pose": "hurt",
+    "url": "/art/characters/ff7-film-barret/hurt.png",
+    "head": null,
+    "stance": "silhouette",
+    "prone": false,
+    "class": "part",
+    "registered": false,
+    "waived": false
+   }
+  ]
+ },
+ "perFigure": {
+  "jenova-life": {
+   "swaps": 22,
+   "headRegistered": 0,
+   "headRig": 0,
+   "massRead": 22,
+   "worstHeadPct": 0,
+   "worstMassPct": 7.1,
+   "worstFeetPx": 7.3,
+   "snaps": 22,
+   "sizeOver": 0,
+   "feetOver": 22,
+   "heightOver": 0,
+   "feetSilOver": 0,
+   "minStature": null
+  },
+  "cloud": {
+   "swaps": 7,
+   "headRegistered": 0,
+   "headRig": 0,
+   "massRead": 7,
+   "worstHeadPct": 0,
+   "worstMassPct": 5.6,
+   "worstFeetPx": 4.6,
+   "snaps": 7,
+   "sizeOver": 0,
+   "feetOver": 0,
+   "heightOver": 0,
+   "feetSilOver": 0,
+   "minStature": null
+  },
+  "tifa": {
+   "swaps": 7,
+   "headRegistered": 0,
+   "headRig": 0,
+   "massRead": 7,
+   "worstHeadPct": 0,
+   "worstMassPct": 11.9,
+   "worstFeetPx": 6.8,
+   "snaps": 7,
+   "sizeOver": 0,
+   "feetOver": 7,
+   "heightOver": 0,
+   "feetSilOver": 0,
+   "minStature": null
+  },
+  "barret": {
+   "swaps": 9,
+   "headRegistered": 0,
+   "headRig": 0,
+   "massRead": 9,
+   "worstHeadPct": 0,
+   "worstMassPct": 2.4,
+   "worstFeetPx": 48.4,
+   "snaps": 9,
+   "sizeOver": 0,
+   "feetOver": 9,
+   "heightOver": 0,
+   "feetSilOver": 0,
+   "minStature": null
+  }
+ },
+ "summary": {
+  "battleSeconds": 97.9,
+  "swaps": 45,
+  "counted": 45,
+  "excludedByCut": 0,
+  "excludedNotShowing": 0,
+  "swapsPerMinute": 27.59,
+  "size": {
+   "judged": 45,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 0,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "headMeasured": 45,
+   "headRegistration": 0,
+   "headRig": 0,
+   "headSilhouette": 45,
+   "headUnmeasured": 0,
+   "maxHeadJumpPct": 11.9,
+   "maxHeadJumpPctRegistration": 0,
+   "maxHeadJumpPctRig": 0,
+   "rigSwaps": 0,
+   "headOverTolerance": 0,
+   "cardHead": {
+    "measured": 0,
+    "maxPct": 0,
+    "byClass": {}
+   },
+   "feetMeasured": 45,
+   "maxFeetShiftPx": 48.4,
+   "feetOverTolerance": 38,
+   "feetDesigned": 0,
+   "feetDesignedWorstPx": 0,
+   "heightMeasured": 0,
+   "heightOverBand": 0,
+   "heightWaived": 0,
+   "minStature": null,
+   "maxStature": null,
+   "koLengthMeasured": 0,
+   "minKoLength": null,
+   "koLengthReported": 0,
+   "feetSilMeasured": 0,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 0,
+   "holdSwaps": 0,
+   "worstRealHeadPct": 0,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "variantHeadSwaps": 0,
+   "worstVariantHeadPct": 0,
+   "variantHeadOutsideBand": 0,
+   "unregisteredSwaps": 45
+  },
+  "motion": {
+   "snaps": 45,
+   "snapsPerMinute": 27.59,
+   "snapsGapExcused": 0,
+   "hardCuts": 45,
+   "hardCutsPerMinute": 27.59,
+   "snapsByToPose": {
+    "cast": 11,
+    "hurt": 13,
+    "idle": 21
+   },
+   "lowestIou": 0.572,
+   "maxCentroidShiftPx": 14.5,
+   "ghostSwaps": 0,
+   "ghostFrames": 0,
+   "worstGhostSeverity": 0,
+   "ghostOverFail": 0,
+   "ghostMs": 0,
+   "ghostMsPerMinute": 0,
+   "ghostFramesPerMinute": 0,
+   "ghostFrames60PerMinute": 0,
+   "ghostDesignedExcused": 0,
+   "jerks": 0,
+   "jerksMidMove": 0,
+   "worstJerkPx": 0,
+   "jerksOverFail": 0,
+   "swapJerks": 0,
+   "swapJerksWorstPx": 0,
+   "swapJerksOverFail": 0,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 0,
+   "dashesWorstPx": 0,
+   "dashesOverFail": 0,
+   "jerksLongFrame": 0,
+   "swapJerksLongFrame": 0,
+   "swapJerksSteadyOverFail": 0,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 0,
+   "jerksDissolveTravel": 0,
+   "worstDissolveTravelPx": 0,
+   "jerksStagedExcused": 0,
+   "worstStagedExcusedJerkPx": 0,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "smearsPlanned": 0,
+   "smearSwaps": 0,
+   "smearSnapsExcused": 0,
+   "jerksSmeared": 0,
+   "worstSmearedJerkPx": 0
+  },
+  "frameTime": {
+   "frames": 5851,
+   "p50Ms": 16.7,
+   "p90Ms": 17.9,
+   "p99Ms": 19.2,
+   "maxMs": 210.1,
+   "longFrames": 5,
+   "longFramePct": 0.1,
+   "longMs": 34,
+   "source": "continuity-probe",
+   "pacingNumber": false
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "38 swap(s) of a standing figure move its feet more than the tolerance (worst 48.4 px at 1600 wide)"
+    ],
+    "note": "0 of 45 measured swaps had a registered head (tolerance 3 percent); 45 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 0 swap(s) (stature none to none, 0 out of band but waived), the silhouette's own feet 0 swap(s) (worst 0 px, 0 waived), 0 swap(s) across a recorded hold (real head worst 0 percent from the idle's), 45 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "27.59 snaps per minute is over 0.25"
+    ]
+   }
+  },
+  "flickers": {
+   "windowMs": 300,
+   "pairs": [
+    "ready>idle>ready"
+   ],
+   "count": 0,
+   "countedPairs": 0,
+   "perMinute": 0,
+   "ghostFrames": 0,
+   "ghostShare": 0,
+   "ghostFramesPerMinute": 0,
+   "byPair": {},
+   "byFigure": {},
+   "medianGapMs": null
+  },
+  "classes": {
+   "windowMs": {
+    "interlude": 150,
+    "hurtString": 600,
+    "windUp": 600,
+    "why": 400
+   },
+   "source": {
+    "why": "log",
+    "whyTagged": 22,
+    "designed": "none",
+    "logCapped": {
+     "reasons": false,
+     "designed": false
+    }
+   },
+   "byClass": [
+    {
+     "cls": "Hurt (hit lands)",
+     "swaps": 13,
+     "perMinute": 7.97,
+     "ghostFrames": 0,
+     "ghostMs": 0,
+     "ghostMsPerMinute": 0,
+     "ghostFramesPerMinute": 0,
+     "severityMax": 0,
+     "planned": 0,
+     "designed": 0
+    },
+    {
+     "cls": "Cast begins (idle to cast)",
+     "swaps": 11,
+     "perMinute": 6.74,
+     "ghostFrames": 0,
+     "ghostMs": 0,
+     "ghostMsPerMinute": 0,
+     "ghostFramesPerMinute": 0,
+     "severityMax": 0,
+     "planned": 0,
+     "designed": 0
+    },
+    {
+     "cls": "Cast ends (cast to idle)",
+     "swaps": 11,
+     "perMinute": 6.74,
+     "ghostFrames": 0,
+     "ghostMs": 0,
+     "ghostMsPerMinute": 0,
+     "ghostFramesPerMinute": 0,
+     "severityMax": 0,
+     "planned": 0,
+     "designed": 0
+    },
+    {
+     "cls": "Hurt recovery",
+     "swaps": 10,
+     "perMinute": 6.13,
+     "ghostFrames": 0,
+     "ghostMs": 0,
+     "ghostMsPerMinute": 0,
+     "ghostFramesPerMinute": 0,
+     "severityMax": 0,
+     "planned": 0,
+     "designed": 0
+    }
+   ],
+   "stance": {
+    "source": "none",
+    "up": {},
+    "down": {}
+   },
+   "interludes": {
+    "count": 0,
+    "perMinute": 0,
+    "countedPairs": 0,
+    "ghostFrames": 0,
+    "ghostMs": 0,
+    "ghostMsPerMinute": 0,
+    "ghostFramesPerMinute": 0,
+    "ghostShare": 0,
+    "byTo": {},
+    "medianGapMs": null
+   },
+   "hurtStrings": {
+    "count": 0,
+    "perMinute": 0,
+    "ghostFrames": 0,
+    "ghostMs": 0,
+    "ghostMsPerMinute": 0,
+    "medianGapMs": null
+   },
+   "designedBlend": {
+    "report": true,
+    "excuse": false,
+    "maxMs": 100,
+    "maxSeverity": 1,
+    "logged": 0,
+    "matched": 0,
+    "swaps": 0,
+    "perMinute": 0,
+    "ghostFrames": 0,
+    "ghostMs": 0,
+    "ghostMsPerMinute": 0,
+    "ghostFramesPerMinute": 0,
+    "severityMax": 0,
+    "excused": 0,
+    "undesignedGhostMsPerMinute": 0
+   }
+  },
+  "run": {
+   "fps": 59.8,
+   "maxDtMs": 210.1,
+   "slowFrames": 5,
+   "frames": 5851,
+   "probeErrors": 0
+  }
+ },
+ "checks": {
+  "CHK-026": {
+   "result": "FAIL",
+   "reasons": [
+    "38 swap(s) of a standing figure move its feet more than the tolerance (worst 48.4 px at 1600 wide)"
+   ],
+   "note": "0 of 45 measured swaps had a registered head (tolerance 3 percent); 45 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 0 swap(s) (stature none to none, 0 out of band but waived), the silhouette's own feet 0 swap(s) (worst 0 px, 0 waived), 0 swap(s) across a recorded hold (real head worst 0 percent from the idle's), 45 on a painting with no fresh registration record"
+  },
+  "CHK-027": {
+   "result": "FAIL",
+   "reasons": [
+    "27.59 snaps per minute is over 0.25"
+   ]
+  }
+ },
+ "worst": {
+  "swaps": [
+   4,
+   37,
+   5,
+   21,
+   11,
+   9,
+   16,
+   32,
+   31,
+   43
+  ],
+  "jerks": [],
+  "ghosts": []
+ },
+ "strips": [
+  {
+   "kind": "swap",
+   "id": 4,
+   "file": "strips/swap-004-barret-idle-hurt.jpg",
+   "bytes": 97239
+  },
+  {
+   "kind": "swap",
+   "id": 37,
+   "file": "strips/swap-037-barret-hurt-idle.jpg",
+   "bytes": 101747
+  },
+  {
+   "kind": "swap",
+   "id": 5,
+   "file": "strips/swap-005-tifa-hurt-idle.jpg",
+   "bytes": 121938
+  },
+  {
+   "kind": "swap",
+   "id": 21,
+   "file": "strips/swap-021-tifa-idle-hurt.jpg",
+   "bytes": 109693
+  },
+  {
+   "kind": "swap",
+   "id": 11,
+   "file": "strips/swap-011-cloud-hurt-idle.jpg",
+   "bytes": 105139
+  },
+  {
+   "kind": "swap",
+   "id": 9,
+   "file": "strips/swap-009-cloud-idle-hurt.jpg",
+   "bytes": 105489
+  },
+  {
+   "kind": "swap",
+   "id": 16,
+   "file": "strips/swap-016-jenova-life-idle-cast.jpg",
+   "bytes": 135231
+  },
+  {
+   "kind": "swap",
+   "id": 32,
+   "file": "strips/swap-032-jenova-life-cast-idle.jpg",
+   "bytes": 136297
+  },
+  {
+   "kind": "swap",
+   "id": 31,
+   "file": "strips/swap-031-barret-idle-hurt.jpg",
+   "bytes": 100490
+  },
+  {
+   "kind": "swap",
+   "id": 43,
+   "file": "strips/swap-043-barret-idle-hurt.jpg",
+   "bytes": 100440
+  }
+ ],
+ "swaps": [
+  {
+   "id": 0,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 520,
+   "tMs": 10473.7,
+   "dtMs": 25.200000000000728,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 5
+   },
+   "startFrame": 520,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 221,
+    "toPx": 236.7,
+    "ratio": 1.071,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -7.2,
+    "dy": -0.4,
+    "px": 7.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.687,
+    "centroidShiftPx": 13.8,
+    "areaRatio": 1.162
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 461.5468177769185,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 23.1,
+    "source": "log"
+   }
+  },
+  {
+   "id": 1,
+   "figure": "cloud",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 569,
+   "tMs": 11305.5,
+   "dtMs": 41.20000000000073,
+   "stallMs": 24.5,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 54
+   },
+   "startFrame": 569,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 133.8,
+    "toPx": 141.3,
+    "ratio": 1.056,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 4.5,
+    "dy": 0.6,
+    "px": 4.6,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.587,
+    "centroidShiftPx": 6.5,
+    "areaRatio": 1.106
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 299.67057329674526,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 2,
+   "figure": "tifa",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 588,
+   "tMs": 11608.7,
+   "dtMs": 27.30000000000109,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 73
+   },
+   "startFrame": 588,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 141.6,
+    "toPx": 158.5,
+    "ratio": 1.1191,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -6.8,
+    "dy": 0,
+    "px": 6.8,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.574,
+    "centroidShiftPx": 13.9,
+    "areaRatio": 1.307
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 313.7048692640903,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 3,
+   "figure": "cloud",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 589,
+   "tMs": 11615,
+   "dtMs": 6.299999999999272,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 74
+   },
+   "startFrame": 589,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 141.7,
+    "toPx": 134.2,
+    "ratio": 0.9469,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -4.1,
+    "dy": -0.7,
+    "px": 4.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.586,
+    "centroidShiftPx": 6.3,
+    "areaRatio": 0.898
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 300.7013468543165,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 4,
+   "figure": "barret",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 607,
+   "tMs": 11923.8,
+   "dtMs": 25.5,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 607,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 163.9,
+    "toPx": 167.9,
+    "ratio": 1.0239,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -48.4,
+    "dy": -0.7,
+    "px": 48.4,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.724,
+    "centroidShiftPx": 3.2,
+    "areaRatio": 1.045
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 321.1842851074754,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/swap-004-barret-idle-hurt.jpg"
+  },
+  {
+   "id": 5,
+   "figure": "tifa",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 608,
+   "tMs": 12133.9,
+   "dtMs": 210.10000000000036,
+   "stallMs": 193.4,
+   "cause": null,
+   "startFrame": 608,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 158.1,
+    "toPx": 141.3,
+    "ratio": 0.8936,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 6.4,
+    "dy": 0.1,
+    "px": 6.4,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.572,
+    "centroidShiftPx": 13.9,
+    "areaRatio": 0.764
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 310.9466875527057,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/swap-005-tifa-hurt-idle.jpg"
+  },
+  {
+   "id": 6,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 626,
+   "tMs": 12430.6,
+   "dtMs": 16.80000000000109,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 626,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 237.7,
+    "toPx": 221.9,
+    "ratio": 0.9336,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 7.3,
+    "dy": 0.4,
+    "px": 7.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.686,
+    "centroidShiftPx": 14.1,
+    "areaRatio": 0.86
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 465.44825705979395,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 13,
+    "source": "log"
+   }
+  },
+  {
+   "id": 7,
+   "figure": "barret",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 627,
+   "tMs": 12447.8,
+   "dtMs": 17.19999999999891,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 627,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 168.2,
+    "toPx": 164.3,
+    "ratio": 0.9765,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 45.1,
+    "dy": 1.7,
+    "px": 45.1,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.722,
+    "centroidShiftPx": 3,
+    "areaRatio": 0.952
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 321.09050515392073,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 8,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 1184,
+   "tMs": 21863.7,
+   "dtMs": 15.200000000000728,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "tifa",
+    "abilityId": null,
+    "framesBefore": 6
+   },
+   "startFrame": 1184,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 220.9,
+    "toPx": 236.6,
+    "ratio": 1.071,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -7.3,
+    "dy": -0.4,
+    "px": 7.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.688,
+    "centroidShiftPx": 13.7,
+    "areaRatio": 1.165
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 461.0400036873156,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 14.3,
+    "source": "log"
+   }
+  },
+  {
+   "id": 9,
+   "figure": "cloud",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 1285,
+   "tMs": 23547.7,
+   "dtMs": 17.100000000002183,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 1285,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 133.8,
+    "toPx": 141.3,
+    "ratio": 1.056,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 4.4,
+    "dy": 0.6,
+    "px": 4.4,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.584,
+    "centroidShiftPx": 6.5,
+    "areaRatio": 1.11
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 299.5643253126113,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/swap-009-cloud-idle-hurt.jpg"
+  },
+  {
+   "id": 10,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 1303,
+   "tMs": 23848.7,
+   "dtMs": 17.799999999999272,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 1303,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 238.6,
+    "toPx": 222.7,
+    "ratio": 0.9337,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 7.2,
+    "dy": 0.4,
+    "px": 7.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.686,
+    "centroidShiftPx": 14.5,
+    "areaRatio": 0.859
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 468.6960555626642,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 16.9,
+    "source": "log"
+   }
+  },
+  {
+   "id": 11,
+   "figure": "cloud",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 1306,
+   "tMs": 23897.7,
+   "dtMs": 16.299999999999272,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 1306,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 141.9,
+    "toPx": 134.4,
+    "ratio": 0.9468,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -4.2,
+    "dy": -0.7,
+    "px": 4.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.583,
+    "centroidShiftPx": 6.3,
+    "areaRatio": 0.898
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 301.373957899484,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/swap-011-cloud-hurt-idle.jpg"
+  },
+  {
+   "id": 12,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 1315,
+   "tMs": 24047.2,
+   "dtMs": 16.400000000001455,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 1315,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 222.6,
+    "toPx": 238.5,
+    "ratio": 1.0712,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -7.3,
+    "dy": -0.4,
+    "px": 7.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.686,
+    "centroidShiftPx": 14.5,
+    "areaRatio": 1.163
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 468.2827618010298,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 12.3,
+    "source": "log"
+   }
+  },
+  {
+   "id": 13,
+   "figure": "tifa",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 1363,
+   "tMs": 24847.1,
+   "dtMs": 16.599999999998545,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 1363,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 142.8,
+    "toPx": 159.7,
+    "ratio": 1.1189,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -6.6,
+    "dy": 0,
+    "px": 6.6,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.575,
+    "centroidShiftPx": 13.6,
+    "areaRatio": 1.317
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 318.20443507280027,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 14,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 1381,
+   "tMs": 25180.4,
+   "dtMs": 16,
+   "stallMs": 20.4,
+   "cause": null,
+   "startFrame": 1381,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 237.4,
+    "toPx": 221.6,
+    "ratio": 0.9335,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 7.2,
+    "dy": 0.3,
+    "px": 7.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.687,
+    "centroidShiftPx": 13.7,
+    "areaRatio": 0.86
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 463.7690050014124,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 15.2,
+    "source": "log"
+   }
+  },
+  {
+   "id": 15,
+   "figure": "tifa",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 1383,
+   "tMs": 25214.7,
+   "dtMs": 17.600000000002183,
+   "stallMs": 20.4,
+   "cause": null,
+   "startFrame": 1383,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 159.7,
+    "toPx": 142.7,
+    "ratio": 0.8934,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 6.3,
+    "dy": 0.2,
+    "px": 6.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.574,
+    "centroidShiftPx": 13.7,
+    "areaRatio": 0.763
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 316.87513313606667,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 16,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 1881,
+   "tMs": 33513.2,
+   "dtMs": 16.299999999995634,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "tifa",
+    "abilityId": null,
+    "framesBefore": 6
+   },
+   "startFrame": 1881,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 220.8,
+    "toPx": 236.5,
+    "ratio": 1.0711,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -7.3,
+    "dy": -0.3,
+    "px": 7.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.685,
+    "centroidShiftPx": 13.9,
+    "areaRatio": 1.165
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 460.8373384394976,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 15.3,
+    "source": "log"
+   },
+   "strip": "strips/swap-016-jenova-life-idle-cast.jpg"
+  },
+  {
+   "id": 17,
+   "figure": "tifa",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 1929,
+   "tMs": 34313.3,
+   "dtMs": 16.700000000004366,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "tifa",
+    "abilityId": null,
+    "framesBefore": 54
+   },
+   "startFrame": 1929,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 141.7,
+    "toPx": 158.6,
+    "ratio": 1.1191,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -6.7,
+    "dy": -0.1,
+    "px": 6.7,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.574,
+    "centroidShiftPx": 13.8,
+    "areaRatio": 1.311
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 313.4865228363094,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 18,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 1947,
+   "tMs": 34613.3,
+   "dtMs": 17.200000000004366,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "tifa",
+    "abilityId": null,
+    "framesBefore": 72
+   },
+   "startFrame": 1947,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 238.6,
+    "toPx": 222.8,
+    "ratio": 0.9336,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 7.2,
+    "dy": 0.4,
+    "px": 7.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.688,
+    "centroidShiftPx": 14.5,
+    "areaRatio": 0.863
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 468.8546283231083,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 16.5,
+    "source": "log"
+   }
+  },
+  {
+   "id": 19,
+   "figure": "tifa",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 1950,
+   "tMs": 34662.9,
+   "dtMs": 15.400000000001455,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "tifa",
+    "abilityId": null,
+    "framesBefore": 75
+   },
+   "startFrame": 1950,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 159.3,
+    "toPx": 142.4,
+    "ratio": 0.8935,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 6.3,
+    "dy": 0.2,
+    "px": 6.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.576,
+    "centroidShiftPx": 13.6,
+    "areaRatio": 0.762
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 315.3211259969747,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 20,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 2450,
+   "tMs": 42996.3,
+   "dtMs": 16.700000000004366,
+   "stallMs": 0,
+   "cause": {
+    "type": "ko",
+    "actorId": null,
+    "targetId": "tifa",
+    "abilityId": null,
+    "framesBefore": 6
+   },
+   "startFrame": 2450,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 222.5,
+    "toPx": 238.3,
+    "ratio": 1.0712,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -7.2,
+    "dy": -0.4,
+    "px": 7.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.686,
+    "centroidShiftPx": 14.1,
+    "areaRatio": 1.158
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 467.7237646303638,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 15.7,
+    "source": "log"
+   }
+  },
+  {
+   "id": 21,
+   "figure": "tifa",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 2498,
+   "tMs": 43797.4,
+   "dtMs": 16.700000000004366,
+   "stallMs": 0,
+   "cause": {
+    "type": "ko",
+    "actorId": null,
+    "targetId": "tifa",
+    "abilityId": null,
+    "framesBefore": 54
+   },
+   "startFrame": 2498,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 141.4,
+    "toPx": 158.2,
+    "ratio": 1.1193,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -6.7,
+    "dy": -0.1,
+    "px": 6.7,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.572,
+    "centroidShiftPx": 13.5,
+    "areaRatio": 1.317
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 312.10102531071567,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/swap-021-tifa-idle-hurt.jpg"
+  },
+  {
+   "id": 22,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 2554,
+   "tMs": 44729.9,
+   "dtMs": 15.30000000000291,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 2554,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 237.2,
+    "toPx": 221.5,
+    "ratio": 0.9337,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 7.2,
+    "dy": 0.4,
+    "px": 7.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.686,
+    "centroidShiftPx": 14,
+    "areaRatio": 0.859
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 463.56779978769015,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 13.7,
+    "source": "log"
+   }
+  },
+  {
+   "id": 23,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 3054,
+   "tMs": 53063.4,
+   "dtMs": 16.80000000000291,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "cloud",
+    "abilityId": null,
+    "framesBefore": 6
+   },
+   "startFrame": 3054,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 220.9,
+    "toPx": 236.6,
+    "ratio": 1.0712,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -7.3,
+    "dy": -0.3,
+    "px": 7.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.688,
+    "centroidShiftPx": 13.9,
+    "areaRatio": 1.165
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 460.9293058593693,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 16,
+    "source": "log"
+   }
+  },
+  {
+   "id": 24,
+   "figure": "cloud",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 3102,
+   "tMs": 53864.7,
+   "dtMs": 18.5,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "cloud",
+    "abilityId": null,
+    "framesBefore": 54
+   },
+   "startFrame": 3102,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 134,
+    "toPx": 141.5,
+    "ratio": 1.0561,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 4.4,
+    "dy": 0.6,
+    "px": 4.4,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.587,
+    "centroidShiftPx": 6.3,
+    "areaRatio": 1.108
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 300.5025998223643,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 25,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 3120,
+   "tMs": 54163.8,
+   "dtMs": 18.200000000004366,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "cloud",
+    "abilityId": null,
+    "framesBefore": 72
+   },
+   "startFrame": 3120,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 238.6,
+    "toPx": 222.8,
+    "ratio": 0.9338,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 7.2,
+    "dy": 0.4,
+    "px": 7.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.686,
+    "centroidShiftPx": 14.4,
+    "areaRatio": 0.86
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 468.6850381652907,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 16.9,
+    "source": "log"
+   }
+  },
+  {
+   "id": 26,
+   "figure": "cloud",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 3122,
+   "tMs": 54195.7,
+   "dtMs": 16.69999999999709,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "cloud",
+    "abilityId": null,
+    "framesBefore": 74
+   },
+   "startFrame": 3122,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 142,
+    "toPx": 134.5,
+    "ratio": 0.947,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -4.2,
+    "dy": -0.7,
+    "px": 4.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.588,
+    "centroidShiftPx": 6.3,
+    "areaRatio": 0.901
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 302.0214561914434,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 27,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 3622,
+   "tMs": 62529.2,
+   "dtMs": 17.299999999995634,
+   "stallMs": 0,
+   "cause": {
+    "type": "ko",
+    "actorId": null,
+    "targetId": "cloud",
+    "abilityId": null,
+    "framesBefore": 6
+   },
+   "startFrame": 3622,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 222.3,
+    "toPx": 238.1,
+    "ratio": 1.0712,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -7.2,
+    "dy": -0.4,
+    "px": 7.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.686,
+    "centroidShiftPx": 14,
+    "areaRatio": 1.159
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 466.91690909625447,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 16.6,
+    "source": "log"
+   }
+  },
+  {
+   "id": 28,
+   "figure": "cloud",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 3670,
+   "tMs": 63330.8,
+   "dtMs": 18.700000000004366,
+   "stallMs": 0,
+   "cause": {
+    "type": "ko",
+    "actorId": null,
+    "targetId": "cloud",
+    "abilityId": null,
+    "framesBefore": 54
+   },
+   "startFrame": 3670,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 134.1,
+    "toPx": 141.7,
+    "ratio": 1.0562,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 4.4,
+    "dy": 0.5,
+    "px": 4.4,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.585,
+    "centroidShiftPx": 6.6,
+    "areaRatio": 1.113
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": false,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 301.51703517380236,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 29,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 3725,
+   "tMs": 64245.5,
+   "dtMs": 17.19999999999709,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 3725,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 237.1,
+    "toPx": 221.4,
+    "ratio": 0.9335,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 7.2,
+    "dy": 0.4,
+    "px": 7.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.688,
+    "centroidShiftPx": 13.6,
+    "areaRatio": 0.861
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 463.1849144780084,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 16.3,
+    "source": "log"
+   }
+  },
+  {
+   "id": 30,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 4230,
+   "tMs": 72663.1,
+   "dtMs": 15.5,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 6
+   },
+   "startFrame": 4230,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 220.9,
+    "toPx": 236.6,
+    "ratio": 1.0711,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -7.3,
+    "dy": -0.3,
+    "px": 7.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.686,
+    "centroidShiftPx": 13.7,
+    "areaRatio": 1.162
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 460.94483943309314,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 14.6,
+    "source": "log"
+   }
+  },
+  {
+   "id": 31,
+   "figure": "barret",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 4278,
+   "tMs": 73461.9,
+   "dtMs": 17,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 54
+   },
+   "startFrame": 4278,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 163.2,
+    "toPx": 167.2,
+    "ratio": 1.0242,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -47.3,
+    "dy": 0.1,
+    "px": 47.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.723,
+    "centroidShiftPx": 3.2,
+    "areaRatio": 1.049
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 318.66572219176635,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/swap-031-barret-idle-hurt.jpg"
+  },
+  {
+   "id": 32,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 4296,
+   "tMs": 73762.2,
+   "dtMs": 15.89999999999418,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 72
+   },
+   "startFrame": 4296,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 238.6,
+    "toPx": 222.7,
+    "ratio": 0.9336,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 7.2,
+    "dy": 0.3,
+    "px": 7.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.685,
+    "centroidShiftPx": 14.1,
+    "areaRatio": 0.861
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 468.52352395584154,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 15.2,
+    "source": "log"
+   },
+   "strip": "strips/swap-032-jenova-life-cast-idle.jpg"
+  },
+  {
+   "id": 33,
+   "figure": "barret",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 4299,
+   "tMs": 73814.5,
+   "dtMs": 19.5,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 75
+   },
+   "startFrame": 4299,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 166.7,
+    "toPx": 162.8,
+    "ratio": 0.9766,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 45.1,
+    "dy": 1.4,
+    "px": 45.1,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.722,
+    "centroidShiftPx": 3,
+    "areaRatio": 0.952
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 315.724318037113,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 34,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 4791,
+   "tMs": 82077.9,
+   "dtMs": 14.39999999999418,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 6
+   },
+   "startFrame": 4791,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 222,
+    "toPx": 237.8,
+    "ratio": 1.0712,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -7.3,
+    "dy": -0.4,
+    "px": 7.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.686,
+    "centroidShiftPx": 14.5,
+    "areaRatio": 1.165
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 465.59286936120486,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 13.4,
+    "source": "log"
+   }
+  },
+  {
+   "id": 35,
+   "figure": "barret",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 4839,
+   "tMs": 82880.2,
+   "dtMs": 19.39999999999418,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 54
+   },
+   "startFrame": 4839,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 163.2,
+    "toPx": 167.1,
+    "ratio": 1.0241,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -47.2,
+    "dy": 0.7,
+    "px": 47.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.722,
+    "centroidShiftPx": 3.1,
+    "areaRatio": 1.048
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 318.85424961885025,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 36,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 4857,
+   "tMs": 83178,
+   "dtMs": 16.80000000000291,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 72
+   },
+   "startFrame": 4857,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 237.7,
+    "toPx": 221.9,
+    "ratio": 0.9336,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 7.3,
+    "dy": 0.4,
+    "px": 7.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.687,
+    "centroidShiftPx": 13.6,
+    "areaRatio": 0.859
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 465.49965628343915,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 16,
+    "source": "log"
+   }
+  },
+  {
+   "id": 37,
+   "figure": "barret",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 4860,
+   "tMs": 83227.7,
+   "dtMs": 16.09999999999127,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 75
+   },
+   "startFrame": 4860,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 166.7,
+    "toPx": 162.8,
+    "ratio": 0.9766,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 45.2,
+    "dy": 1,
+    "px": 45.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.721,
+    "centroidShiftPx": 3.1,
+    "areaRatio": 0.953
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 315.8520698048376,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/swap-037-barret-hurt-idle.jpg"
+  },
+  {
+   "id": 38,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 5362,
+   "tMs": 91594.5,
+   "dtMs": 17,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 6
+   },
+   "startFrame": 5362,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 222.9,
+    "toPx": 238.7,
+    "ratio": 1.0712,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -7.2,
+    "dy": -0.4,
+    "px": 7.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.689,
+    "centroidShiftPx": 14.5,
+    "areaRatio": 1.16
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 469.52440298668176,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 16.1,
+    "source": "log"
+   }
+  },
+  {
+   "id": 39,
+   "figure": "barret",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 5410,
+   "tMs": 92395.6,
+   "dtMs": 17.80000000000291,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 54
+   },
+   "startFrame": 5410,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 162.9,
+    "toPx": 166.8,
+    "ratio": 1.0239,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -47.1,
+    "dy": 0.8,
+    "px": 47.1,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.723,
+    "centroidShiftPx": 3.2,
+    "areaRatio": 1.048
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 317.70895486278,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 40,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 5428,
+   "tMs": 92695.5,
+   "dtMs": 16.80000000000291,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 72
+   },
+   "startFrame": 5428,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 237.1,
+    "toPx": 221.4,
+    "ratio": 0.9336,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 7.2,
+    "dy": 0.3,
+    "px": 7.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.688,
+    "centroidShiftPx": 14.1,
+    "areaRatio": 0.862
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 463.17709895891875,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 15.5,
+    "source": "log"
+   }
+  },
+  {
+   "id": 41,
+   "figure": "barret",
+   "side": "party",
+   "fromPose": "hurt",
+   "toPose": "idle",
+   "n": 5430,
+   "tMs": 92729.2,
+   "dtMs": 17.69999999999709,
+   "stallMs": 0,
+   "cause": {
+    "type": "damage",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 74
+   },
+   "startFrame": 5430,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 166.6,
+    "toPx": 162.7,
+    "ratio": 0.9766,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 45.1,
+    "dy": 0.7,
+    "px": 45.1,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.725,
+    "centroidShiftPx": 3.1,
+    "areaRatio": 0.955
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 315.5597090884704,
+   "notShowing": false,
+   "counted": true
+  },
+  {
+   "id": 42,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "idle",
+   "toPose": "cast",
+   "n": 5926,
+   "tMs": 100994.5,
+   "dtMs": 16.19999999999709,
+   "stallMs": 0,
+   "cause": {
+    "type": "ko",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 6
+   },
+   "startFrame": 5926,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 221,
+    "toPx": 236.7,
+    "ratio": 1.0712,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -7.3,
+    "dy": -0.3,
+    "px": 7.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.685,
+    "centroidShiftPx": 14.3,
+    "areaRatio": 1.164
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 461.37738620352866,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "cast",
+    "ageMs": 15,
+    "source": "log"
+   }
+  },
+  {
+   "id": 43,
+   "figure": "barret",
+   "side": "party",
+   "fromPose": "idle",
+   "toPose": "hurt",
+   "n": 5974,
+   "tMs": 101794.6,
+   "dtMs": 15.80000000000291,
+   "stallMs": 0,
+   "cause": {
+    "type": "ko",
+    "actorId": null,
+    "targetId": "barret",
+    "abilityId": null,
+    "framesBefore": 54
+   },
+   "startFrame": 5974,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 162.8,
+    "toPx": 166.7,
+    "ratio": 1.0239,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": -47.3,
+    "dy": 0,
+    "px": 47.3,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.724,
+    "centroidShiftPx": 3.1,
+    "areaRatio": 1.046
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 317.05640271093733,
+   "notShowing": false,
+   "counted": true,
+   "strip": "strips/swap-043-barret-idle-hurt.jpg"
+  },
+  {
+   "id": 44,
+   "figure": "jenova-life",
+   "side": "enemy",
+   "fromPose": "cast",
+   "toPose": "idle",
+   "n": 6029,
+   "tMs": 102711,
+   "dtMs": 16.89999999999418,
+   "stallMs": 0,
+   "cause": null,
+   "startFrame": 6029,
+   "camCut": false,
+   "costume": false,
+   "sameArt": false,
+   "range": false,
+   "staged": null,
+   "head": {
+    "fromPx": 237.9,
+    "toPx": 222.1,
+    "ratio": 0.9338,
+    "source": "silhouette",
+    "metric": "mass",
+    "label": "mass"
+   },
+   "feet": {
+    "dx": 7.2,
+    "dy": 0.4,
+    "px": 7.2,
+    "standing": true,
+    "source": "silhouette"
+   },
+   "outline": {
+    "iou": 0.687,
+    "centroidShiftPx": 14.3,
+    "areaRatio": 0.861
+   },
+   "ghost": {
+    "frames": 0,
+    "ms": 0,
+    "peak": 0,
+    "severity": 0,
+    "worstFrame": null
+   },
+   "blendFrames": 0,
+   "held": {
+    "frames": 0,
+    "ms": 0,
+    "from": null
+   },
+   "snap": true,
+   "snapStaged": false,
+   "hardCut": true,
+   "failHead": false,
+   "failFeet": true,
+   "height": null,
+   "feetSil": null,
+   "headReal": null,
+   "failHeight": false,
+   "failFeetSil": false,
+   "failRealHead": false,
+   "unregistered": true,
+   "figurePx": 465.9869955266992,
+   "notShowing": false,
+   "counted": true,
+   "why": {
+    "reason": "after-action",
+    "ageMs": 16,
+    "source": "log"
+   }
+  }
+ ],
+ "jerks": [],
+ "cameraCuts": {
+  "note": "frames in which the camera alone moved a figure by the cut line or more (a cut or a whip); swaps and jerks that fall with one are left out",
+  "count": 0,
+  "frames": []
+ },
+ "wash": {
+  "note": "the wash of the Save Sphere card (an HTML veil the canvas strips cannot show): where it was up, and the jerks whose step happened under it. A jerk with covered:true is excused by continuity.wash in the policy and is not in the summary or the verdict; every jerk in this file carries the wash over its step when there was one.",
+  "selector": "[data-testid=\"save-sphere\"] .ssphere__wash",
+  "alpha": null,
+  "excuse": false,
+  "minCover": 0.7,
+  "framesSeen": 0,
+  "maxOpacity": 0,
+  "spans": [],
+  "jerksUnderWash": 0,
+  "jerksCovered": 0,
+  "worstCoveredPx": 0
+ },
+ "smear": {
+  "note": "planned smears (continuity.smear in the policy): the engine logs every cut it plans as a smear on a big change; a swap that matches a log entry (same figure, same pair, inside its window) is not a snap and a jerk of at most maxJerkPx at it is not counted. Every other fast swap is judged as before.",
+  "policy": {
+   "excuse": true,
+   "slackMs": 12,
+   "maxJerkPx": 120,
+   "maxJerkShare": 0.5,
+   "elastic": true,
+   "bigOverlap": 0.5,
+   "bigAnchor": 0.12,
+   "glideFeet": true
+  },
+  "glide": {
+   "logged": 0,
+   "matched": 0,
+   "feetExcused": 0,
+   "feetSilExcused": 0,
+   "worstFeetPx": 0,
+   "worstFeetShare": 0
+  },
+  "planned": 0,
+  "matched": 0,
+  "unmatched": 0,
+  "snapsExcused": 0,
+  "jerksExcused": 0,
+  "worstJerkPx": 0,
+  "worstJerkShare": 0,
+  "byStyle": {},
+  "byKind": {}
+ },
+ "battleLog": {
+  "events": 65,
+  "byType": {
+   "turn-start": 10,
+   "action-start": 11,
+   "damage": 13,
+   "limit-gauge": 16,
+   "action-end": 11,
+   "ko": 3,
+   "defeat": 1
+  }
+ }
+}

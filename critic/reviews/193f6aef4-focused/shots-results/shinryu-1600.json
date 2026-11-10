@@ -1,0 +1,163 @@
+{
+ "tag": "shinryu",
+ "how": "word:shinryu",
+ "W": "1600",
+ "H": "900",
+ "hp": "",
+ "steps": [
+  {
+   "s": "boot",
+   "screen": "title",
+   "bundle": "http://127.0.0.1:5481/assets/index-BYej0WB6.js"
+  },
+  {
+   "s": "word",
+   "opened": true
+  },
+  {
+   "s": "battle",
+   "screen": "battle",
+   "ms": 11152
+  },
+  {
+   "s": "menu",
+   "ok": true
+  },
+  {
+   "s": "real-attack"
+  },
+  {
+   "s": "battle-ended",
+   "screen": "cutscene",
+   "ms": 37071
+  },
+  {
+   "s": "at",
+   "screen": "results",
+   "ms": 9756
+  },
+  {
+   "s": "early",
+   "finals": [
+    {
+     "shown": "44,200",
+     "final": "50000"
+    },
+    {
+     "shown": "0",
+     "final": "0"
+    },
+    {
+     "shown": "+0AP",
+     "final": "0"
+    },
+    {
+     "shown": "+44,200AP",
+     "final": "50000"
+    },
+    {
+     "shown": "+0AP",
+     "final": "0"
+    }
+   ],
+   "text": "THE MONSTER ARENA — DEEP WATER · CLEARED RESULTS · 0:48 Victory OVERKILL ×1 AP 44,200 ×3 PARTY GIL 0 ITEMS Wings to Discovery ×2 T Tidus S.LV 180 · 0/22,000 AP · KO’d or petrified at the end · no AP +0AP W Wakka S.LV 169 · 0/22,000 AP +44,200AP R Rikku S.LV 160 · 0/22,000 AP · KO’d or petrified at the end · no AP +0AP CONFIRM ▸"
+  },
+  {
+   "s": "settled",
+   "finals": [
+    {
+     "shown": "50,000",
+     "final": "50000"
+    },
+    {
+     "shown": "0",
+     "final": "0"
+    },
+    {
+     "shown": "+0AP",
+     "final": "0"
+    },
+    {
+     "shown": "+50,000AP",
+     "final": "50000"
+    },
+    {
+     "shown": "+0AP",
+     "final": "0"
+    }
+   ],
+   "text": "THE MONSTER ARENA — DEEP WATER · CLEARED RESULTS · 0:48 Victory OVERKILL ×1 AP 50,000 ×3 PARTY GIL 0 ITEMS Wings to Discovery ×2 T Tidus S.LV 180 · 0/22,000 AP · KO’d or petrified at the end · no AP +0AP W Wakka +4 S.Lv S.LV 169 · 0/22,000 AP +50,000AP R Rikku S.LV 160 · 0/22,000 AP · KO’d or petrified at the end · no AP +0AP CONFIRM ▸"
+  },
+  {
+   "s": "final-vs-shown-mismatch",
+   "count": 0,
+   "mism": []
+  },
+  {
+   "s": "bar-within-cap",
+   "ok": true
+  },
+  {
+   "s": "confirm-press",
+   "k": 0,
+   "screen": "chapter-select"
+  },
+  {
+   "s": "after-confirm",
+   "screen": "chapter-select"
+  }
+ ],
+ "early": {
+  "finals": [
+   {
+    "shown": "44,200",
+    "final": "50000"
+   },
+   {
+    "shown": "0",
+    "final": "0"
+   },
+   {
+    "shown": "+0AP",
+    "final": "0"
+   },
+   {
+    "shown": "+44,200AP",
+    "final": "50000"
+   },
+   {
+    "shown": "+0AP",
+    "final": "0"
+   }
+  ],
+  "text": "THE MONSTER ARENA — DEEP WATER · CLEARED RESULTS · 0:48 Victory OVERKILL ×1 AP 44,200 ×3 PARTY GIL 0 ITEMS Wings to Discovery ×2 T Tidus S.LV 180 · 0/22,000 AP · KO’d or petrified at the end · no AP +0AP W Wakka S.LV 169 · 0/22,000 AP +44,200AP R Rikku S.LV 160 · 0/22,000 AP · KO’d or petrified at the end · no AP +0AP CONFIRM ▸"
+ },
+ "settled": {
+  "finals": [
+   {
+    "shown": "50,000",
+    "final": "50000"
+   },
+   {
+    "shown": "0",
+    "final": "0"
+   },
+   {
+    "shown": "+0AP",
+    "final": "0"
+   },
+   {
+    "shown": "+50,000AP",
+    "final": "50000"
+   },
+   {
+    "shown": "+0AP",
+    "final": "0"
+   }
+  ],
+  "text": "THE MONSTER ARENA — DEEP WATER · CLEARED RESULTS · 0:48 Victory OVERKILL ×1 AP 50,000 ×3 PARTY GIL 0 ITEMS Wings to Discovery ×2 T Tidus S.LV 180 · 0/22,000 AP · KO’d or petrified at the end · no AP +0AP W Wakka +4 S.Lv S.LV 169 · 0/22,000 AP +50,000AP R Rikku S.LV 160 · 0/22,000 AP · KO’d or petrified at the end · no AP +0AP CONFIRM ▸"
+ },
+ "noBadBar": true,
+ "consoleErrors": [],
+ "notFound": []
+}

@@ -1,0 +1,725 @@
+{
+ "chapter": "ff7-jenova-life",
+ "game": "ffx",
+ "goal": "win",
+ "size": "1600x900",
+ "base": "http://127.0.0.1:5481/",
+ "mode": "gpu",
+ "hooks": [
+  "window.__pyrefly.setSeed(1) before the first key (CHK-015 labelled setup hook, PR-0202)"
+ ],
+ "seedPinned": 1,
+ "seed": 1,
+ "battleSeeds": [
+  {
+   "at": "battle start",
+   "engineSeed": 1,
+   "links": 1,
+   "firstEnemyAction": {
+    "seq": 1,
+    "actor": "jenova-life",
+    "ability": "Aqualung",
+    "targets": [
+     "cloud",
+     "tifa",
+     "barret"
+    ]
+   }
+  },
+  {
+   "at": "retry after attempt 1",
+   "engineSeed": 1001,
+   "links": 1,
+   "firstEnemyAction": {
+    "seq": 1,
+    "actor": "jenova-life",
+    "ability": "Blue Flame",
+    "targets": [
+     "barret"
+    ]
+   }
+  }
+ ],
+ "firstEnemyAction": {
+  "seq": 1,
+  "actor": "jenova-life",
+  "ability": "Aqualung",
+  "targets": [
+   "cloud",
+   "tifa",
+   "barret"
+  ]
+ },
+ "steps": [
+  {
+   "ms": 5320,
+   "k": "door",
+   "v": "bluelight"
+  },
+  {
+   "ms": 8967,
+   "k": "noPrep",
+   "v": "battle"
+  },
+  {
+   "ms": 14360,
+   "k": "battleSeed",
+   "v": {
+    "pinned": 1,
+    "engine": 1
+   }
+  },
+  {
+   "ms": 25779,
+   "k": "targetProbe",
+   "v": "no target cursor opened: 16 and 16b not shot (PR-0213)"
+  },
+  {
+   "ms": 25788,
+   "k": "firstEnemyAction",
+   "v": {
+    "seq": 1,
+    "actor": "jenova-life",
+    "ability": "Aqualung",
+    "targets": [
+     "cloud",
+     "tifa",
+     "barret"
+    ]
+   }
+  },
+  {
+   "ms": 110552,
+   "k": "fight",
+   "v": {
+    "outcome": "defeat",
+    "turns": 0,
+    "ms": 84768,
+    "seams": 0,
+    "orders": 0
+   }
+  },
+  {
+   "ms": 114920,
+   "k": "continuity",
+   "v": "[continuity] ff7-jenova-life: 97.877 s of battle, 5854 frames recorded, 45 swaps, 45 strips, 59.8 fps, 0 probe errors"
+  },
+  {
+   "ms": 114982,
+   "k": "continuity",
+   "v": "[continuity] ff7-jenova-life: pose-measure <release tree>\\docs\\target\\pose-measure.json (156 subjects, sha256 47535b71e617, source harness-tree); build 193f6aef; the candidate's own table"
+  },
+  {
+   "ms": 118243,
+   "k": "continuity",
+   "v": "[continuity] ff7-jenova-life: CHK-026 FAIL, CHK-027 FAIL; max head jump 11.9% (0% registered, a control), stature null to null (0 out of band), max feet shift 48.4px (0px from the pixels), 27.59 snaps/min, worst swap jerk 0px (worst dash 0px), frame p99 19.2ms, 10 strips"
+  },
+  {
+   "ms": 124377,
+   "k": "retryReachedBattle",
+   "v": true
+  }
+ ],
+ "picks": [],
+ "seams": [],
+ "fails": [
+  {
+   "file": "12-intent-E.png",
+   "unverified": [
+    "screen wanted battle got pause",
+    "awaitingMenu wanted true got false"
+   ]
+  },
+  {
+   "file": "13-guide-G.png",
+   "unverified": [
+    "screen wanted battle got pause",
+    "awaitingMenu wanted true got false"
+   ]
+  },
+  {
+   "file": "14-pause-Esc.png",
+   "unverified": [
+    "screen wanted pause got battle"
+   ]
+  },
+  {
+   "file": "14-pause-tab-next.png",
+   "unverified": [
+    "screen wanted pause got battle"
+   ]
+  },
+  {
+   "resultsTextUnreadable": "GAME OVER RETRY CHAPTER SELECT"
+  }
+ ],
+ "contexts": {
+  "viewport": "1600x900",
+  "query": null,
+  "touch": null,
+  "gamepad": null,
+  "reduceMotion": null
+ },
+ "scriptedChange": "not applicable",
+ "budgetMs": 1800000,
+ "briefingText": "AURON “Nineteen fights. That is all this is. In the FFX fights, nothing moves until you act. Take your time. In the FFX-2 fights, the clock keeps running until you pick a command. Then it waits while you choose.” ENTER / ESC SKIP — 20 SECONDS, ONCE D NEVER SHOW THIS AGAIN",
+ "boardAtEntry": {
+  "selectedIndex": 0,
+  "selectedId": "seymour-flux",
+  "tiles": 19,
+  "coming": [],
+  "cleared": [],
+  "order": [
+   "seymour-flux",
+   "yunalesca",
+   "braskas-final-aeon",
+   "seymour-anima-macalania",
+   "evrae-airship",
+   "yojimbo-cavern",
+   "seymour-natus",
+   "seymour-omnis",
+   "isaaru-via-purifico",
+   "sin-fins-core",
+   "sin-face",
+   "mirror-aeons",
+   "ffx2-bahamut",
+   "ffx2-vegnagun-shuyin",
+   "ffx2-leblanc",
+   "ffx2-fallen-aeons",
+   "ffx2-trema",
+   "ffx2-den-of-woe",
+   "ffx2-ixion-djose"
+  ],
+  "beaten": 0,
+  "total": 19
+ },
+ "boardWalk": [],
+ "door": {
+  "word": "bluelight",
+  "how": "typed on the chapter board, one key at a time (no card; the board opens party prep itself)"
+ },
+ "preScene": {
+  "lines": []
+ },
+ "firstState": {
+  "chapter": "ff7-jenova-life",
+  "game": "ff7",
+  "scene": "forgotten-capital",
+  "scenePlaceholder": false,
+  "preview": false,
+  "links": 1,
+  "chainLength": 1,
+  "paused": false,
+  "canPause": true,
+  "canPauseOnCancel": true,
+  "exitIntent": null,
+  "playTimeMs": 0,
+  "hud": true,
+  "rig": "idle",
+  "actors": [
+   {
+    "id": "cloud",
+    "side": "party",
+    "art": "ff7-film-cloud",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "ready"
+   },
+   {
+    "id": "tifa",
+    "side": "party",
+    "art": "ff7-film-tifa",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "barret",
+    "side": "party",
+    "art": "ff7-film-barret",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": 1,
+    "mirrored": false,
+    "life": "idle"
+   },
+   {
+    "id": "jenova-life",
+    "side": "enemy",
+    "art": "ff7-film-jenova-life",
+    "pose": "idle",
+    "placeholder": false,
+    "facing": -1,
+    "mirrored": false,
+    "life": "idle"
+   }
+  ],
+  "spellFx": {
+   "fx": {
+    "new": false,
+    "guard": {
+     "level": 0,
+     "scaleStep": 0,
+     "calmMs": 16.5,
+     "budgetMs": 20.63,
+     "busyMs": 0,
+     "steps": 0
+    }
+   },
+   "quality": "full",
+   "running": [],
+   "quads": 0,
+   "cpuMs": 0,
+   "cpuMeanMs": 0,
+   "flights": {
+    "launched": 0,
+    "landed": 0,
+    "live": 0,
+    "lastLaunchAt": 0,
+    "lastLandAt": 0
+   }
+  },
+  "playback": {
+   "speed": "normal",
+   "timeScale": 1,
+   "auto": false,
+   "aborted": false,
+   "phase": "command:cloud",
+   "awaitingMenu": true,
+   "played": 9,
+   "lastEvents": [
+    {
+     "seq": 0,
+     "type": "turn-start",
+     "ms": 81
+    },
+    {
+     "seq": 1,
+     "type": "action-start",
+     "ms": 814
+    },
+    {
+     "seq": 2,
+     "type": "damage",
+     "ms": 317
+    },
+    {
+     "seq": 3,
+     "type": "limit-gauge",
+     "ms": 0
+    },
+    {
+     "seq": 4,
+     "type": "damage",
+     "ms": 319
+    },
+    {
+     "seq": 5,
+     "type": "limit-gauge",
+     "ms": 0
+    },
+    {
+     "seq": 6,
+     "type": "damage",
+     "ms": 515
+    },
+    {
+     "seq": 7,
+     "type": "limit-gauge",
+     "ms": 0
+    },
+    {
+     "seq": 8,
+     "type": "action-end",
+     "ms": 200
+    }
+   ],
+   "lastCommand": null
+  },
+  "battle": {
+   "turn": 1,
+   "ticks": 127,
+   "events": 9,
+   "result": null,
+   "combatants": [
+    {
+     "id": "cloud",
+     "hp": 1027,
+     "maxHp": 2046,
+     "mp": 350,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "tifa",
+     "hp": 980,
+     "maxHp": 1990,
+     "mp": 302,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "barret",
+     "hp": 1482,
+     "maxHp": 2471,
+     "mp": 284,
+     "alive": true,
+     "side": "party",
+     "statuses": []
+    },
+    {
+     "id": "jenova-life",
+     "hp": 10000,
+     "maxHp": 10000,
+     "mp": 266,
+     "alive": true,
+     "side": "enemy",
+     "statuses": []
+    }
+   ]
+  },
+  "log": [
+   {
+    "type": "turn-start",
+    "actorId": "jenova-life",
+    "turn": 1,
+    "elapsedTicks": 29,
+    "seq": 0
+   },
+   {
+    "type": "action-start",
+    "actorId": "jenova-life",
+    "command": {
+     "kind": "ability",
+     "id": "aqualung",
+     "targets": [
+      "cloud",
+      "tifa",
+      "barret"
+     ]
+    },
+    "abilityId": "aqualung",
+    "abilityName": "Aqualung",
+    "targets": [
+     "cloud",
+     "tifa",
+     "barret"
+    ],
+    "seq": 1
+   },
+   {
+    "type": "damage",
+    "targetId": "cloud",
+    "sourceId": "jenova-life",
+    "amount": 1019,
+    "element": "water",
+    "crit": false,
+    "hitIndex": 0,
+    "hitCount": 1,
+    "seq": 2
+   },
+   {
+    "type": "limit-gauge",
+    "actorId": "cloud",
+    "value": 117,
+    "level": 2,
+    "ready": false,
+    "seq": 3
+   },
+   {
+    "type": "damage",
+    "targetId": "tifa",
+    "sourceId": "jenova-life",
+    "amount": 1010,
+    "element": "water",
+    "crit": false,
+    "hitIndex": 0,
+    "hitCount": 1,
+    "seq": 4
+   },
+   {
+    "type": "limit-gauge",
+    "actorId": "tifa",
+    "value": 76,
+    "level": 3,
+    "ready": false,
+    "seq": 5
+   },
+   {
+    "type": "damage",
+    "targetId": "barret",
+    "sourceId": "jenova-life",
+    "amount": 989,
+    "element": "water",
+    "crit": false,
+    "hitIndex": 0,
+    "hitCount": 1,
+    "seq": 6
+   },
+   {
+    "type": "limit-gauge",
+    "actorId": "barret",
+    "value": 82,
+    "level": 3,
+    "ready": false,
+    "seq": 7
+   },
+   {
+    "type": "action-end",
+    "actorId": "jenova-life",
+    "seq": 8
+   }
+  ]
+ },
+ "cardFirst": {
+  "viewport": "1600x900",
+  "card": null,
+  "rows": 0,
+  "overlapPx2": 0,
+  "cardText": ""
+ },
+ "focFirst": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [],
+  "cmd": [],
+  "overlaps": [],
+  "advisorMinEffPx": null,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": []
+ },
+ "focAfterCoach": {
+  "viewport": "1600x900",
+  "coach": [],
+  "adv": [],
+  "cmd": [],
+  "overlaps": [],
+  "advisorMinEffPx": null,
+  "advisorClippedOrOverflowing": [],
+  "advisorRows": []
+ },
+ "advisorText": "",
+ "advisorHiddenByN": true,
+ "intentText": "",
+ "pause": {
+  "esc": {
+   "paused": false,
+   "text": "NAME BARRIER Cloud Tifa Barret HP MP LIMIT TIME 1027 / 2046 350 980 / 1990 302 1482 / 2471 284 Attack Magic Item PAUSE"
+  },
+  "tabs": [
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  "resumedByEsc": true,
+  "pOpens": true,
+  "pCloses": true
+ },
+ "firstRows": [],
+ "attempts": [
+  {
+   "attempt": 1,
+   "outcome": "defeat",
+   "seed": 1,
+   "turns": 0,
+   "firstEnemyAction": {
+    "seq": 1,
+    "actor": "jenova-life",
+    "ability": "Aqualung",
+    "targets": [
+     "cloud",
+     "tifa",
+     "barret"
+    ]
+   },
+   "final": true,
+   "stalledAt": null
+  }
+ ],
+ "seamCard": [],
+ "pauseRecoveries": 0,
+ "misses": [],
+ "orders": [],
+ "escapes": [],
+ "targetMismatches": [],
+ "pickerPlays": [],
+ "stallRecoveries": 0,
+ "lastChain": {
+  "links": 1,
+  "chainLength": 1,
+  "phase": "play:defeat",
+  "turn": 0,
+  "ms": 84463
+ },
+ "mgSince": null,
+ "emptyMenuPolls": 264,
+ "turns": 0,
+ "fightMs": 84768,
+ "afterFight": "results",
+ "outcome": "defeat",
+ "outcomeFrom": "engine log, screen left the battle (the results text names neither Victory nor Defeat)",
+ "stalledAt": null,
+ "logKinds": {
+  "turn-start": 10,
+  "action-start": 11,
+  "damage": 13,
+  "limit-gauge": 16,
+  "action-end": 11,
+  "ko": 3,
+  "defeat": 1
+ },
+ "continuity": {
+  "file": "continuity/continuity.json",
+  "checks": {
+   "CHK-026": "FAIL",
+   "CHK-027": "FAIL"
+  },
+  "reasons": {
+   "CHK-026": [
+    "38 swap(s) of a standing figure move its feet more than the tolerance (worst 48.4 px at 1600 wide)"
+   ],
+   "CHK-027": [
+    "27.59 snaps per minute is over 0.25"
+   ]
+  },
+  "error": null
+ },
+ "post": {
+  "screen": "results",
+  "lines": []
+ },
+ "resultsScreen": "results",
+ "resultsText": "GAME OVER RETRY CHAPTER SELECT",
+ "afterRetry": "battle",
+ "retryReachedBattle": true,
+ "retrySeed": 1001,
+ "dboxTimeline": [],
+ "audioDebugFile": {
+  "file": "ff7-jenova-life-win-193f6aef4/audio-debug.jsonl",
+  "samples": 3,
+  "note": "one whole audioDebug() per line; nothing cut"
+ },
+ "minutes": 2.12,
+ "consoleErrors": [],
+ "notFound": [],
+ "htmlImages": [],
+ "media": [
+  "art/title/echo.webp",
+  "art/characters/auron/idle.png",
+  "art/backdrops/dreams-end.webp",
+  "art/backdrops/gagazet.webp",
+  "art/characters/mortiorchis/idle.png",
+  "art/characters/seymour-flux-body/idle.png",
+  "art/portraits/tidus.webp",
+  "art/portraits/yuna.webp",
+  "art/portraits/kimahri.png",
+  "art/backdrops/gagazet.thumb.webp",
+  "art/characters/seymour-flux-body/idle.thumb.png",
+  "art/backdrops/zanarkand-dome.thumb.webp",
+  "art/characters/yunalesca-1/idle.thumb.png",
+  "art/backdrops/bevelle-underground.thumb.webp",
+  "art/characters/ffx2-bahamut/idle.thumb.png",
+  "art/backdrops/djose-chamber-provisional.thumb.webp",
+  "art/characters/x2-ixion/idle.thumb.png",
+  "art/backdrops/dreams-end.thumb.webp",
+  "art/characters/braskas-final-aeon-1/idle.thumb.png",
+  "art/backdrops/den-of-woe.thumb.webp",
+  "art/characters/baralai-shade/idle.thumb.png",
+  "art/backdrops/macalania-temple.thumb.webp",
+  "art/characters/anima/idle.thumb.png",
+  "art/backdrops/via-infinito.thumb.webp",
+  "art/characters/trema/idle.thumb.png",
+  "art/backdrops/evrae-airship-deck.thumb.webp",
+  "art/characters/evrae/idle.thumb.png",
+  "art/backdrops/road-to-the-farplane.thumb.webp",
+  "art/characters/x2-shiva/idle.thumb.png",
+  "art/backdrops/cavern-stolen-fayth.thumb.webp",
+  "art/characters/yojimbo-cavern/idle.thumb.png",
+  "art/backdrops/leblanc-last-room.thumb.webp",
+  "art/characters/leblanc/idle.thumb.png",
+  "art/backdrops/bevelle-highbridge.thumb.webp",
+  "art/characters/seymour-natus/idle.thumb.png",
+  "art/backdrops/farplane.thumb.webp",
+  "art/characters/vegnagun-body/idle.thumb.png",
+  "art/backdrops/garden-of-pain.thumb.webp",
+  "art/characters/seymour-omnis/idle.thumb.png",
+  "art/backdrops/via-purifico.thumb.webp",
+  "art/characters/isaaru/idle.thumb.png",
+  "art/backdrops/mushroom-rock-road.thumb.webp",
+  "art/characters/dark-mindy/idle.thumb.png",
+  "art/backdrops/sin-fahrenheit-flight.thumb.webp",
+  "art/characters/sin-left-fin/idle.thumb.png",
+  "art/backdrops/sin-fahrenheit-bevelle.thumb.webp",
+  "art/characters/overdrive-sin/idle.thumb.png",
+  "art/portraits/auron.webp",
+  "art/backdrops/zanarkand-dome.webp",
+  "art/characters/yunalesca-1/idle.png",
+  "art/portraits/yuna-x2.webp",
+  "art/portraits/rikku-x2.webp",
+  "art/portraits/paine.webp",
+  "art/backdrops/bevelle-underground.webp",
+  "art/characters/ffx2-bahamut/idle.png",
+  "art/backdrops/djose-chamber-provisional.webp",
+  "art/characters/x2-ixion/idle.png",
+  "art/characters/braskas-final-aeon-1/idle.png",
+  "art/backdrops/den-of-woe.webp",
+  "art/characters/nooj-shade/idle.png",
+  "art/characters/gippal-shade/idle.png",
+  "art/characters/baralai-shade/idle.png",
+  "art/portraits/rikku.webp",
+  "art/portraits/wakka.webp",
+  "art/portraits/lulu.webp",
+  "art/characters/yuna-white-mage/idle.png",
+  "art/characters/rikku-dark-knight/idle.png",
+  "art/characters/paine-warrior/idle.png",
+  "art/characters/paine-dark-knight/idle.png",
+  "art/characters/yuna-dark-knight/idle.png",
+  "art/characters/rikku-alchemist/idle.png",
+  "art/characters/yuna-gunner/idle.png",
+  "art/characters/rikku-thief/idle.png",
+  "audio/music/title.mp3",
+  "audio/sfx/sprite.mp3",
+  "audio/sfx/sprite-v2.mp3",
+  "audio/music/chapter-select.mp3",
+  "art/portraits/seymour.webp",
+  "art/characters/tidus/idle.png",
+  "art/characters/yuna/idle.png",
+  "art/characters/kimahri/idle.png",
+  "art/backdrops/ff7-film-reactor.webp",
+  "art/characters/ff7-film-cloud/idle.png",
+  "art/characters/ff7-film-tifa/idle.png",
+  "art/characters/ff7-film-barret/idle.png",
+  "art/characters/ff7-film-jenova-life/idle.png",
+  "art/characters/ff7-film-jenova-life/cast.png",
+  "art/characters/ff7-film-jenova-life/hurt.png",
+  "art/characters/ff7-film-cloud/attack.png",
+  "art/characters/ff7-film-cloud/hurt.png",
+  "art/characters/ff7-film-tifa/attack.png",
+  "art/characters/ff7-film-tifa/hurt.png",
+  "art/characters/ff7-film-barret/attack.png",
+  "art/characters/ff7-film-barret/hurt.png",
+  "art/characters/ff7-film-jenova-life/inhale.png",
+  "art/characters/ff7-film-cloud/back.png",
+  "art/characters/ff7-film-cloud/spin.png",
+  "art/characters/ff7-film-cloud/windup.png",
+  "art/characters/ff7-film-tifa/kick.png",
+  "art/characters/ff7-film-tifa/windup.png",
+  "art/characters/ff7-film-barret/aim.png",
+  "art/characters/ff7-film-barret/punch.png",
+  "art/characters/ff7-film-cloud/follow.png",
+  "art/characters/ff7-film-cloud/victory.png",
+  "art/characters/ff7-film-tifa/follow.png",
+  "art/characters/ff7-film-barret/victory.png",
+  "audio/music/pause.mp3"
+ ]
+}

@@ -1,0 +1,239 @@
+{
+ "out": [
+  {
+   "s": "title screen",
+   "o": true,
+   "d": "title"
+  },
+  {
+   "s": "reached chapter-select by Enter",
+   "o": true,
+   "d": "chapter-select"
+  },
+  {
+   "s": "listed chapter -> party-prep",
+   "o": true,
+   "d": "seymour-flux"
+  },
+  {
+   "s": "listed chapter at player turn",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "Escape/P pauses",
+   "o": true,
+   "d": "pause"
+  },
+  {
+   "s": "H hides then restores pause panels",
+   "o": false,
+   "d": "hidden=visible/block/1/pause ig restored=visible/block/1/pause ig panels=1"
+  },
+  {
+   "s": "pause resumed to battle",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "a setting change landed in save",
+   "o": true,
+   "d": "945->945"
+  },
+  {
+   "s": "prerendered music fetched",
+   "o": true,
+   "d": "music/title.mp3,sfx/sprite.mp3,sfx/sprite-v2.mp3,music/chapter-select.mp3"
+  },
+  {
+   "s": "reload keeps changed save (settings+progress)",
+   "o": true,
+   "d": "945 vs 945"
+  },
+  {
+   "s": "sidequest: cursor settled on hidden chapter",
+   "o": false,
+   "d": "undefined (expect belgemine)"
+  },
+  {
+   "s": "sidequest: opens -> party-prep",
+   "o": true,
+   "d": "party-prep"
+  },
+  {
+   "s": "sidequest: battle reaches a player turn",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "sidequest: no art 404 during open",
+   "o": true,
+   "d": ""
+  },
+  {
+   "s": "braveheart: cursor settled on hidden chapter",
+   "o": false,
+   "d": "undefined (expect any)"
+  },
+  {
+   "s": "braveheart: opens -> party-prep",
+   "o": true,
+   "d": "party-prep"
+  },
+  {
+   "s": "braveheart: battle reaches a player turn",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "braveheart: no art 404 during open",
+   "o": true,
+   "d": ""
+  },
+  {
+   "s": "shinryu: cursor settled on hidden chapter",
+   "o": false,
+   "d": "undefined (expect shinryu)"
+  },
+  {
+   "s": "shinryu: opens -> party-prep",
+   "o": true,
+   "d": "party-prep"
+  },
+  {
+   "s": "shinryu: battle reaches a player turn",
+   "o": true,
+   "d": "battle"
+  },
+  {
+   "s": "shinryu: no art 404 during open",
+   "o": true,
+   "d": ""
+  },
+  {
+   "s": "youth: cursor settled on hidden chapter",
+   "o": false,
+   "d": "undefined (expect any)"
+  },
+  {
+   "s": "youth: opens -> party-prep",
+   "o": true,
+   "d": "party-prep"
+  },
+  {
+   "s": "youth: cancel returns to chapter-select",
+   "o": false,
+   "d": "pause"
+  },
+  {
+   "s": "youth: no art 404 during open",
+   "o": true,
+   "d": ""
+  },
+  {
+   "s": "ifrit: cursor settled on hidden chapter",
+   "o": false,
+   "d": "undefined (expect any)"
+  },
+  {
+   "s": "ifrit: opens -> party-prep",
+   "o": true,
+   "d": "party-prep"
+  },
+  {
+   "s": "ifrit: cancel returns to chapter-select",
+   "o": false,
+   "d": "pause"
+  },
+  {
+   "s": "ifrit: no art 404 during open",
+   "o": true,
+   "d": ""
+  }
+ ],
+ "errs": [],
+ "nf": [],
+ "art404": [],
+ "failedReq": [
+  "https://echoesofspira.com/art/backdrops/road-to-the-farplane.thumb.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/characters/x2-shiva/idle.thumb.png net::ERR_ABORTED",
+  "https://echoesofspira.com/art/pause/tidus.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/pause/yuna.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/pause/kimahri.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/pause/kimahri.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/wakka.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/lulu.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/auron.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/rikku-x2.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/backdrops/bevelle-underground.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/yuna-x2.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/paine.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/characters/yojimbo-cavern/idle.thumb.png net::ERR_ABORTED",
+  "https://echoesofspira.com/art/backdrops/leblanc-last-room.thumb.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/backdrops/leblanc-last-room.thumb.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/characters/leblanc/idle.thumb.png net::ERR_ABORTED",
+  "https://echoesofspira.com/art/backdrops/evrae-airship-deck.thumb.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/characters/evrae/idle.thumb.png net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/wakka.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/lulu.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/auron.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/seymour.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/rikku-x2.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/backdrops/bevelle-underground.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/yuna-x2.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/paine.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/backdrops/leblanc-last-room.thumb.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/characters/leblanc/idle.thumb.png net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/lulu.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/auron.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/portraits/seymour.webp net::ERR_ABORTED",
+  "https://echoesofspira.com/art/characters/seymour-omnis/idle.thumb.png net::ERR_ABORTED",
+  "https://echoesofspira.com/art/backdrops/via-purifico.thumb.webp net::ERR_ABORTED"
+ ],
+ "audio": [
+  "music/title.mp3",
+  "sfx/sprite.mp3",
+  "sfx/sprite-v2.mp3",
+  "music/chapter-select.mp3",
+  "sfx/parity-ffx-flux.mp3",
+  "sfx/parity-ffx-core.mp3",
+  "music/scene-gagazet.mp3",
+  "seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.mp3",
+  "seymour-flux/seymour-flux.mid-mortiorchis-first-charge.001.fb2.mp3",
+  "seymour-flux/seymour-flux.mid-first-zombie.001.fb2.mp3",
+  "seymour-flux/seymour-flux.quip-tidus.001.mp3",
+  "seymour-flux/seymour-flux.quip-yuna.001.mp3",
+  "seymour-flux/seymour-flux.quip-auron.001.mp3",
+  "seymour-flux/seymour-flux.mid-seymour-half.001.mp3",
+  "seymour-flux/seymour-flux.mid-seymour-half.002.mp3",
+  "seymour-flux/seymour-flux.mid-first-zombie.002.fb1.mp3",
+  "seymour-flux/seymour-flux.mid-seymour-lance.002.mp3",
+  "seymour-flux/seymour-flux.mid-seymour-lance.001.mp3",
+  "seymour-flux/seymour-flux.mid-talk-yuna.001.mp3",
+  "seymour-flux/seymour-flux.mid-talk-yuna.002.mp3",
+  "seymour-flux/seymour-flux.mid-talk-yuna.003.mp3",
+  "seymour-flux/seymour-flux.mid-talk-kimahri.001.mp3",
+  "seymour-flux/seymour-flux.mid-talk-kimahri.002.mp3",
+  "seymour-flux/seymour-flux.pre.008.mp3",
+  "seymour-flux/seymour-flux.pre.013.mp3",
+  "seymour-flux/seymour-flux.pre.014.mp3",
+  "seymour-flux/seymour-flux.pre.017.mp3",
+  "seymour-flux/seymour-flux.pre.018.mp3",
+  "music/boss-seymour.mp3",
+  "music/victory-ffx.mp3",
+  "music/defeat-ffx.mp3",
+  "seymour-flux/seymour-flux.pre.019.mp3",
+  "seymour-flux/seymour-flux.pre.024.mp3",
+  "seymour-flux/seymour-flux.pre.026.mp3",
+  "music/pause.mp3",
+  "music/scene-macalania-temple.mp3",
+  "music/boss-isaaru.mp3",
+  "music/scene-bevelle-underground.mp3",
+  "sfx/parity-ffx2-core.mp3",
+  "music/boss-ffx2-fallen-aeons.mp3",
+  "music/victory-ffx2.mp3",
+  "music/defeat-ffx2.mp3",
+  "music/boss-challenge.mp3"
+ ],
+ "elapsedMin": 3.8095333333333334
+}

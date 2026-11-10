@@ -1,0 +1,627 @@
+{
+ "rubricVersion": 2,
+ "review": "focused",
+ "date": "2026-11-10T01:15:23.560Z",
+ "build": {
+  "mainSha": "193f6aef4",
+  "bundle": "BYej0WB6"
+ },
+ "targetVersion": "1d05c392cb7a763b5ebc74fc1814694f06c4e3b6c610470efa866d23640e047d",
+ "verdicts": {
+  "deployment": "NOT APPLICABLE",
+  "changedArea": "UNVERIFIED",
+  "milestone": "not assessed",
+  "ship": "SHIP"
+ },
+ "shipReasons": [
+  "The three new hidden chapters (45 Belgemine, 47 Garik Ronso, 48 Shinryu) and the painted 42 Youth League open by their words with real keys, show their own HUD and lines, and play to a results screen; 0 console errors, 0 missing files at 1600, 2000 and 390.",
+  "The Youth League foes (Yaibal, League Warriors) are now painted; Shinryu and Omega Ruins item names print as names on the Results screen.",
+  "No regression against live found: FFX Chapter 1 and FFX-2 Chapter 4 play with real keys to attacks, marker and portraits; the candidate bundle is index-BYej0WB6.js; art verify and audit PASS and the byte budget test passes.",
+  "The only FAIL (CHK-026, CHK-027 on Jenova LIFE) equals release 78 live exactly, so it is not introduced by the candidate and not a regression: disclosed, carried."
+ ],
+ "checks": [
+  {
+   "id": "CHK-015",
+   "result": "PASS",
+   "reason": "Words sidequest (Belgemine, FFX), braveheart (Garik Ronso, FFX-2), shinryu (Shinryu, FFX) and youth (Youth League, FFX-2) typed with real keys on the chapter-select board each opened party prep; Enter advanced prep and scenes; real Attack presses played turns (1600x900; sidequest also 2000x1012; shinryu also 390x844). autoBattle(\"intended\") only finished the fights after real attacks.",
+   "game": "both",
+   "chapter": "45, 47, 48, 42",
+   "state": "chapter select to results",
+   "evidence": [
+    "critic/reviews/193f6aef4-focused/shots/sidequest-1600-05-menu.png",
+    "critic/reviews/193f6aef4-focused/shots/braveheart-1600-05-menu.png",
+    "critic/reviews/193f6aef4-focused/shots/shinryu-1600-05-menu.png",
+    "critic/reviews/193f6aef4-focused/shots/youth-1600-05-menu.png",
+    "critic/reviews/193f6aef4-focused/shots/sidequest-2000-05-menu.png",
+    "critic/reviews/193f6aef4-focused/shots/shinryu-390-05-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 20
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "reason": "Every script waits for title, chapter-select, party-prep, battle or results before a capture; a failed wait writes FAILED and stops (none did).",
+   "game": "all",
+   "chapter": "all run",
+   "state": "every capture",
+   "evidence": [
+    "critic/reviews/193f6aef4-focused/shots",
+    "critic/reviews/193f6aef4-focused/shots-results",
+    "critic/reviews/193f6aef4-focused/shots-core"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-022",
+   "result": "PASS",
+   "reason": "Belgemine reached Remiem Temple Cleared results (Victory, overkill, 2:12); Garik Ronso reached Mt. Gagazet Summit results (EXP 820 x3, Remedy x2, Shining Bracer: the rows research names); Shinryu reached Monster Arena Deep Water results (Wings to Discovery x2 printed by name, counts settle, no data-final mismatch, confirm returns to the board); Youth League reached results (Mushroom Rock Road stand-in stage, items named). The three new chapters play to a result with their own lines (Auron coach, Rikku and Wakka lines, Garik trust text).",
+   "game": "both",
+   "chapter": "45, 47, 48, 42",
+   "state": "results",
+   "evidence": [
+    "critic/reviews/193f6aef4-focused/shots-results/shinryu-1600-07-end.png",
+    "critic/reviews/193f6aef4-focused/queue2.log",
+    "critic/reviews/193f6aef4-focused/queue3.log"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 6
+  },
+  {
+   "id": "CHK-013",
+   "result": "PASS",
+   "reason": "On dist-gate: art-derive verify PASS (5,783 masters, 1,576 WebP, 4,207 PNG, 5,367 pixel-compared; 38 strip thumbnails), art-derive audit PASS (0 dangling, 1,642 literal art names). The byte budget model (tests/unit/load-diet-bytes.test.ts, 7 tests) passes on the candidate tree. art-browser-load (every image in WebKit and Chromium) was not run here; the deploy runs it (about 20 s) and refuses on failure.",
+   "game": "all",
+   "chapter": "candidate",
+   "state": "artifact",
+   "evidence": [
+    "critic/reviews/193f6aef4-focused/queue2.log",
+    "critic/reviews/193f6aef4-focused/bytes.json"
+   ],
+   "mode": "automated",
+   "mandatory": false,
+   "minutes": 4
+  },
+  {
+   "id": "CHK-011",
+   "result": "PASS",
+   "reason": "Every foe visible and listed in the foe gauges and the turn order in Belgemine (Valefor), Garik (Ronso Youth A, B, Garik), Youth League (Yaibal, League Warrior A, B) and Shinryu.",
+   "game": "both",
+   "chapter": "45, 47, 42, 48",
+   "state": "menu",
+   "evidence": [
+    "critic/reviews/193f6aef4-focused/shots/braveheart-1600-05-menu.png",
+    "critic/reviews/193f6aef4-focused/shots/youth-1600-05-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 2
+  },
+  {
+   "id": "CHK-007",
+   "result": "PASS",
+   "reason": "No raw id or debug text in the HUDs of the four chapters at 1600, 2000 and 390; Omega Ruins and Shinryu item names print as names on the Results screen (the release's item-row fix).",
+   "game": "both",
+   "chapter": "45, 47, 48, 42",
+   "state": "menu, results",
+   "evidence": [
+    "critic/reviews/193f6aef4-focused/shots/shinryu-390-05-menu.png",
+    "critic/reviews/193f6aef4-focused/shots-results/shinryu-1600-07-end.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 2
+  },
+  {
+   "id": "CHK-020",
+   "result": "PASS",
+   "reason": "Game case: Belgemine and Shinryu FFX only, Garik Ronso and Youth League FFX-2 only, item rows FFX only, Jenova pose FF7 only (CHANGELOG, research/re-ffx-*.md, re-ffx2-garik-ronso.md). Presence: each chapter opens and plays in its own game with its own HUD (FFX CTB turn order for 45 and 48, FFX-2 ATB gauges and dressphere HUD for 47 and 42). Core chapters FFX seymour-flux and FFX-2 ffx2-bahamut still play with real keys, no console error. Absence in the other game is covered by tests/unit/chapter-doors.test.ts in the builders' full suite and not re-run in a browser.",
+   "game": "both",
+   "chapter": "all",
+   "state": "menu",
+   "evidence": [
+    "critic/reviews/193f6aef4-focused/shots-core/c-seymour-flux-1600-02-aim-t0.png",
+    "critic/reviews/193f6aef4-focused/shots-core/c-ffx2-bahamut-1600-03-act-t1a.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 4
+  },
+  {
+   "id": "CHK-021",
+   "result": "PASS",
+   "reason": "Game-aware: the HUD of each new chapter is its own game's (see CHK-020); no FFX-2 element in FFX chapters or the reverse in the captures.",
+   "game": "both",
+   "chapter": "45, 47, 48, 42",
+   "state": "menu",
+   "evidence": [
+    "critic/reviews/193f6aef4-focused/shots/braveheart-1600-05-menu.png",
+    "critic/reviews/193f6aef4-focused/shots/shinryu-1600-05-menu.png"
+   ],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 1
+  },
+  {
+   "id": "CHK-026",
+   "result": "FAIL",
+   "reason": "Continuity harness on FF7 ff7-jenova-life (the release's pose-fix chapter): 38 swaps of a standing figure move the feet more than tolerance, worst 48.4 px at 1600. The reading is identical to release 78 live (38 swaps, 48.4 px), so the fix did not change what the harness reads (the CHANGELOG says the harness reads its own silhouette artifacts and adds a guard test). Not run on the other chapters (see coverage).",
+   "game": "FF7",
+   "chapter": "ff7-jenova-life",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/193f6aef4-focused/continuity/continuity-summary.json",
+    "critic/reviews/193f6aef4-focused/continuity/ff7-jenova-life-win-193f6aef4/continuity/strips/swap-004-barret-idle-hurt.jpg"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 3
+  },
+  {
+   "id": "CHK-027",
+   "result": "FAIL",
+   "reason": "Same harness run: 27.58 snaps a minute (limit 0.25), 59.8 fps, 0 ms see-through; numbers equal release 78 live (27.58).",
+   "game": "FF7",
+   "chapter": "ff7-jenova-life",
+   "state": "battle",
+   "evidence": [
+    "critic/reviews/193f6aef4-focused/continuity/continuity-summary.json"
+   ],
+   "mode": "automated",
+   "mandatory": true,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-002",
+   "result": "UNVERIFIED",
+   "reason": "Full unit suite not re-run by this review; the builders' result (2,194 files, 35,187 tests) is cited from the CHANGELOG, and load-diet-bytes passed here.",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "regression",
+   "evidence": [
+    "critic/reviews/193f6aef4-focused/bytes.json"
+   ],
+   "mode": "manual",
+   "mandatory": true,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-003",
+   "result": "NOT APPLICABLE",
+   "reason": "No legibility change to existing HUD text.",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-004",
+   "result": "NOT APPLICABLE",
+   "reason": "No panel naming an action was changed.",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-005",
+   "result": "NOT APPLICABLE",
+   "reason": "The advisor was not changed beyond the new chapters' rows; its cards read correctly in the captures.",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-006",
+   "result": "NOT APPLICABLE",
+   "reason": "Not changed.",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-008",
+   "result": "NOT APPLICABLE",
+   "reason": "Panel placement against actors not changed.",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-009",
+   "result": "NOT APPLICABLE",
+   "reason": "No name display changed.",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-010",
+   "result": "NOT APPLICABLE",
+   "reason": "Not changed.",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-014",
+   "result": "NOT APPLICABLE",
+   "reason": "Not changed.",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-017",
+   "result": "NOT APPLICABLE",
+   "reason": "Not changed.",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  },
+  {
+   "id": "CHK-023",
+   "result": "NOT APPLICABLE",
+   "reason": "Not changed.",
+   "game": "all",
+   "chapter": "n/a",
+   "state": "n/a",
+   "evidence": [],
+   "mode": "manual",
+   "mandatory": false,
+   "minutes": 0
+  }
+ ],
+ "continuity": {
+  "schema": "continuity-summary/1",
+  "chapters": [
+   {
+    "chapter": "ff7-jenova-life",
+    "game": "ffx",
+    "checks": {
+     "CHK-026": "FAIL",
+     "CHK-027": "FAIL"
+    },
+    "battleSeconds": 97.9,
+    "swaps": 45,
+    "snapsPerMinute": 27.59,
+    "ghostMsPerMinute": 0,
+    "maxHeadJumpPct": 11.9,
+    "maxFeetShiftPx": 48.4,
+    "worstJerkPx": 0,
+    "minStature": null,
+    "heightOverBand": 0,
+    "feetSilOver": 0,
+    "swapJerksWorstPx": 0,
+    "dashesWorstPx": 0,
+    "frameP99Ms": 19.2,
+    "frameP99MsIsPacing": false,
+    "jerksCovered": 0,
+    "fps": 59.8,
+    "dedicated": true,
+    "strips": 10,
+    "worstSwapStrips": [
+     "ff7-jenova-life-win-193f6aef4/continuity/strips/swap-004-barret-idle-hurt.jpg",
+     "ff7-jenova-life-win-193f6aef4/continuity/strips/swap-037-barret-hurt-idle.jpg",
+     "ff7-jenova-life-win-193f6aef4/continuity/strips/swap-005-tifa-hurt-idle.jpg",
+     "ff7-jenova-life-win-193f6aef4/continuity/strips/swap-021-tifa-idle-hurt.jpg",
+     "ff7-jenova-life-win-193f6aef4/continuity/strips/swap-011-cloud-hurt-idle.jpg",
+     "ff7-jenova-life-win-193f6aef4/continuity/strips/swap-009-cloud-idle-hurt.jpg",
+     "ff7-jenova-life-win-193f6aef4/continuity/strips/swap-016-jenova-life-idle-cast.jpg",
+     "ff7-jenova-life-win-193f6aef4/continuity/strips/swap-032-jenova-life-cast-idle.jpg",
+     "ff7-jenova-life-win-193f6aef4/continuity/strips/swap-031-barret-idle-hurt.jpg",
+     "ff7-jenova-life-win-193f6aef4/continuity/strips/swap-043-barret-idle-hurt.jpg"
+    ],
+    "unverified": null
+   }
+  ],
+  "battleSeconds": 97.9,
+  "counted": 45,
+  "swaps": 45,
+  "size": {
+   "judged": 45,
+   "costumeSwaps": 0,
+   "sameArtSwaps": 0,
+   "costumeWorstHeadPct": 0,
+   "costumeWorstFeetPx": 0,
+   "maxHeadJumpPct": 11.9,
+   "maxHeadJumpPctRegistration": 0,
+   "headOverTolerance": 0,
+   "maxFeetShiftPx": 48.4,
+   "feetOverTolerance": 38,
+   "feetDesigned": 0,
+   "feetDesignedWorstPx": 0,
+   "headMeasured": 45,
+   "headRegistration": 0,
+   "headRig": 0,
+   "rigSwaps": 0,
+   "headSilhouette": 45,
+   "headUnmeasured": 0,
+   "heightMeasured": 0,
+   "heightOverBand": 0,
+   "heightWaived": 0,
+   "minStature": null,
+   "maxStature": null,
+   "koLengthMeasured": 0,
+   "minKoLength": null,
+   "koLengthReported": 0,
+   "feetSilMeasured": 0,
+   "feetSilOver": 0,
+   "feetSilWaived": 0,
+   "maxFeetSilPx": 0,
+   "holdSwaps": 0,
+   "worstRealHeadPct": 0,
+   "realHeadOutsideBand": 0,
+   "realHeadWaived": 0,
+   "variantHeadSwaps": 0,
+   "worstVariantHeadPct": 0,
+   "variantHeadOutsideBand": 0,
+   "unregisteredSwaps": 45
+  },
+  "motion": {
+   "snaps": 45,
+   "snapsPerMinute": 27.58,
+   "hardCuts": 45,
+   "hardCutsPerMinute": 27.58,
+   "ghostSwaps": 0,
+   "ghostFrames": 0,
+   "worstGhostSeverity": 0,
+   "ghostOverFail": 0,
+   "jerks": 0,
+   "worstJerkPx": 0,
+   "jerksOverFail": 0,
+   "jerksCovered": 0,
+   "worstCoveredJerkPx": 0,
+   "lowestIou": 0.572,
+   "maxCentroidShiftPx": 14.5,
+   "heldSwaps": 0,
+   "longestHeldFrames": 0,
+   "stagedChanges": 0,
+   "stagedSteps": 0,
+   "stagedSnapsExcused": 0,
+   "jerksAtStaged": 0,
+   "smearsPlanned": 0,
+   "smearSwaps": 0,
+   "smearSnapsExcused": 0,
+   "jerksSmeared": 0,
+   "worstSmearedJerkPx": 0,
+   "swapJerks": 0,
+   "swapJerksWorstPx": 0,
+   "swapJerksOverFail": 0,
+   "teleports": 0,
+   "teleportsWorstPx": 0,
+   "dashes": 0,
+   "dashesWorstPx": 0,
+   "dashesOverFail": 0,
+   "jerksLongFrame": 0,
+   "swapJerksLongFrame": 0,
+   "swapJerksSteadyOverFail": 0,
+   "ghostMs": 0,
+   "ghostMsPerMinute": 0,
+   "ghostFramesPerMinute": 0,
+   "ghostFrames60PerMinute": 0
+  },
+  "frameTime": {
+   "frames": 5851,
+   "longFrames": 5,
+   "longFramePct": 0.1,
+   "worstP99Ms": 19.2,
+   "maxMs": 210.1,
+   "longMs": 34,
+   "source": "continuity-probe",
+   "pacingNumber": false
+  },
+  "checks": {
+   "CHK-026": {
+    "result": "FAIL",
+    "reasons": [
+     "38 swap(s) of a standing figure move its feet more than the tolerance (worst 48.4 px at 1600 wide)"
+    ],
+    "note": "0 of 45 measured swaps had a registered head (tolerance 3 percent); 45 were read by the figure's mass (tolerance 30 percent, whole-figure jumps only); 0 had no reading; the head reading is a CONTROL (it passes any registered pose by construction); independent readings from the pixels: height 0 swap(s) (stature none to none, 0 out of band but waived), the silhouette's own feet 0 swap(s) (worst 0 px, 0 waived), 0 swap(s) across a recorded hold (real head worst 0 percent from the idle's), 45 on a painting with no fresh registration record"
+   },
+   "CHK-027": {
+    "result": "FAIL",
+    "reasons": [
+     "27.58 snaps per minute is over 0.25"
+    ]
+   }
+  },
+  "reportLine": "continuity harness (CHK-026/CHK-027): 1 chapter(s), 97.9 s of battle, 59.8 to 59.8 fps, 1 of 1 run by the dedicated harness; CHK-026 FAIL (38 swap(s) of a standing figure move its feet more than the tolerance (worst 48.4 px at 1600 wide)); CHK-027 FAIL (27.58 snaps per minute is over 0.25); 0 ms of see-through a minute (0 frames a minute at 60 Hz) Read by harness 330ddff0d3df (38 files; tree <release tree> at 193f6aef4; policy 5ef4a3ed; probe v3 2c2bfe73; pose table 47535b71 (156 subjects); waivers f6829c4b (115 rows)).",
+  "base": "http://127.0.0.1:5481/",
+  "date": "2026-11-10T01:14:24.766Z",
+  "poseMeasure": {
+   "path": "<release tree>\\docs\\target\\pose-measure.json",
+   "source": "harness-tree",
+   "subjects": 156,
+   "sha256": "47535b71e6171bf53b644daeac431a3f553dabe9802ed35aa396bf127194f1c5",
+   "staleChapters": []
+  },
+  "harness": {
+   "schema": "continuity-harness/1",
+   "id": "330ddff0d3df02c255a00fd42bb01dc8a780b775e396254d383409780537d242",
+   "tree": {
+    "root": "<release tree>",
+    "head": "193f6aef4430137bc3ee50e29d53bbca5111a16d",
+    "dirty": []
+   },
+   "files": {
+    "critic/runner/lib/cli.mjs": "f1a099291561d6a8608ae93c90f392dab47f77ba",
+    "critic/runner/lib/continuity-analyze.mjs": "4b7874e7dde6a9c25ce8df3a174021f99f552f43",
+    "critic/runner/lib/continuity-camera.mjs": "c7bdd55e44ecddb9ceb3fd320498db9e9fc30613",
+    "critic/runner/lib/continuity-card.mjs": "2e0208df7bc9a922a27d519fc5ebb49bed3fafd9",
+    "critic/runner/lib/continuity-dissolve.mjs": "4a9a2ebc79b798dc6059312f0b885510f4cd79b3",
+    "critic/runner/lib/continuity-flicker.mjs": "be42a8b50b32a279885bdeca981eea0951e57c0f",
+    "critic/runner/lib/continuity-gaps.mjs": "7337b85eda92c5755d11ccbee84749ee231cfe3d",
+    "critic/runner/lib/continuity-geometry.mjs": "38350fcc477410c3279e11ab3966e712c712f9e3",
+    "critic/runner/lib/continuity-ghostms.mjs": "d74a048e0c44be69d22b050973ec240fbec3db66",
+    "critic/runner/lib/continuity-held.mjs": "67231b6b8d1b842a16475725bae8826bd9c179a4",
+    "critic/runner/lib/continuity-probe.mjs": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25",
+    "critic/runner/lib/continuity-pure.mjs": "c30cf02831efe33d9726d0bae9f9b3e098292090",
+    "critic/runner/lib/continuity-readings.mjs": "d59338bd2d0af99f4ce69258e9354d38220cbd48",
+    "critic/runner/lib/continuity-rig-probe.mjs": "69f5933a74bb3f88d6e2bfbec336c51b602c25a5",
+    "critic/runner/lib/continuity-rig.mjs": "53b59d5a73f29dbcae1d67c3bf3ed8695498d045",
+    "critic/runner/lib/continuity-silhouette.mjs": "914aae5641104f7c5863544c27ce5dee1ce91a8e",
+    "critic/runner/lib/continuity-smear.mjs": "bb6bcae7b35d4d99465f0650e58554cc785af513",
+    "critic/runner/lib/continuity-staged.mjs": "b230159e40ea5dd975d69fdd1854a07e6df9fc8a",
+    "critic/runner/lib/continuity-strips.mjs": "cac39c77c8ceecc3e1aaa67fb724e63ad4eff42b",
+    "critic/runner/lib/continuity-summary.mjs": "c671aa6dbc9e6df72a767ace45e6a57cdb478053",
+    "critic/runner/lib/continuity-table.mjs": "267f72fb2c4baa3c34262ccacc33d3b71b2a861d",
+    "critic/runner/lib/continuity-unseen.mjs": "d35e9284525491fb405d9460dacf21f5c6be61f2",
+    "critic/runner/lib/continuity-waivers.mjs": "baf6ee52524c26599fdda9fa1f6c3c7a57c91339",
+    "critic/runner/lib/continuity-wash.mjs": "f9655d4637328fbea0d719cfe2697916b2749d86",
+    "critic/runner/lib/continuity-why.mjs": "e2f0063820045e9c5eb5bb2ece203c00bed1fe3d",
+    "critic/runner/lib/continuity.mjs": "d3fd3269395cfa928cd1566a81486359e28210cb",
+    "critic/runner/lib/lib.mjs": "0fe0a8d11553c8dca7767bf67b56e88142221d58",
+    "critic/runner/lib/route-doublecast.mjs": "1c0cc1bd5668eb37b64a33aedd30201d9aca403d",
+    "critic/runner/lib/route-evidence.mjs": "63900685009e80dbf5e86bfe6184492e2748a947",
+    "critic/runner/lib/route-fight.mjs": "a3f344eafb1ac3b967ca531410826549159576fe",
+    "critic/runner/lib/route-minigame.mjs": "08844b0751efcd7aab5386b9157f0aebd1c66b1c",
+    "critic/runner/lib/route-pure.mjs": "7a9e46ad84e5ad3dd4ad9a64847349555429b52e",
+    "critic/runner/lib/route-scene.mjs": "9d0adcab3fc84d1aa87db28756f8a022936279fb",
+    "critic/runner/lib/route-ui.mjs": "81634e5f1dc819f7925940e58cd0e990f3410e7c",
+    "critic/runner/lib/route.mjs": "99ac5491ddda8e81093cdeaaab6d73e1e6ab151b",
+    "tools/browser-mode.mjs": "89bd1f8afe134ccf7f38c25fc1b107480077a256",
+    "tools/posescale/pose-bands.mjs": "212404dd2f9c1a6e1c4ef3db34289cb24b34bdbd",
+    "tools/posescale/pose-kinds.mjs": "cf80824f9c5a6d529303a82df21e0a16bd6927fe"
+   },
+   "policy": {
+    "continuitySha256": "5ef4a3ed6fec14518548de8b462466822a3cf3a41f11528f8e8abb143de6fa43",
+    "fileSha256": "9c72460c4bdd463ef02f5e1f01c2baa3aa5334f392c29b114da466ca9c54cc71",
+    "override": false,
+    "overrideSha256": null
+   },
+   "probe": {
+    "version": 3,
+    "blob": "2c2bfe73ab34817d8071a8dd350d4136ab5e3f25"
+   },
+   "poseTable": {
+    "path": "<release tree>\\docs\\target\\pose-measure.json",
+    "sha256": "47535b71e6171bf53b644daeac431a3f553dabe9802ed35aa396bf127194f1c5",
+    "subjects": 156,
+    "source": "harness-tree",
+    "buildSha": "193f6aef",
+    "isCandidate": true
+   },
+   "waivers": {
+    "path": "<release tree>\\docs\\target\\pose-waivers.json",
+    "sha256": "f6829c4ba96180f7c1f371ba64ae263651d81db407071dfb9d79be412c132ed2",
+    "rows": 115
+   },
+   "run": {
+    "query": null,
+    "setArt": null,
+    "browser": "gpu"
+   },
+   "changedDuringRun": false,
+   "chapterIds": [
+    "330ddff0d3df02c255a00fd42bb01dc8a780b775e396254d383409780537d242"
+   ],
+   "unstamped": [],
+   "chaptersByOtherHarness": [],
+   "aggregateSha256": "af2f6d2a26e892ee9a0511b6e7159dec2a10219786be01d113ccfd844b0762a8"
+  }
+ },
+ "targets": {
+  "required": 0,
+  "matched": 0,
+  "failing": 0,
+  "unverified": 0,
+  "waiting": 0
+ },
+ "issues": [
+  {
+   "id": "R79-1",
+   "severity": "major",
+   "title": "Jenova LIFE (FF7): the painted figures still cut between idle and hurt frames with a visible foot shift, 27.6 hard cuts a minute (the release 78 reading, unchanged by the r79 pose fix)",
+   "game": "FF7",
+   "chapter": "ff7-jenova-life",
+   "expected": "no worse than the live FF7 chapter (Guard Scorpion 2.11 snaps a minute)",
+   "observed": "CHK-027 FAIL 27.58 snaps a minute, CHK-026 FAIL 38 swaps, feet up to 48.4 px; identical to release 78, which is live. The builders argue the harness reads silhouette artifacts (hanging gun arm, sword tip); a guard test pins the registration. The harness reading is unchanged either way.",
+   "repro": "continuity harness --chapters=ff7-jenova-life on the candidate",
+   "evidence": [
+    "critic/reviews/193f6aef4-focused/continuity/continuity-summary.json",
+    "critic/reviews/193f6aef4-focused/continuity/ff7-jenova-life-win-193f6aef4/continuity/strips/swap-004-barret-idle-hurt.jpg"
+   ],
+   "confidence": "high",
+   "requirement": "CHK-026, CHK-027",
+   "where": "FF7 film frames of the hurt pose, or the harness's silhouette reading",
+   "fix": "look at the strips; either repair the hurt frames or record a documented waiver for this chapter",
+   "acceptanceCheck": "harness 0.25 snaps a minute or a written waiver",
+   "introducedByCandidate": false,
+   "regressionVsLive": false,
+   "inNewFeature": false
+  }
+ ],
+ "coverage": {
+  "tested": [
+   "dist-gate bundle index-BYej0WB6.js served on 5481 by tools/candidate-build.mjs --serve (stopped by PID 65396, port confirmed closed)",
+   "plan: depth deep, deepBeforeDeploy false",
+   "chapters 45, 47, 48, 42 with real keys to results (1600x900), 45 at 2000x1012, 48 at 390x844",
+   "chapters 1 and 4 to attack turns",
+   "continuity harness on ff7-jenova-life",
+   "art-derive verify and audit, load-diet-bytes"
+  ],
+  "reused": [
+   {
+    "what": "the full unit suite (2,194 files, 35,187 tests)",
+    "from": "the release 79 CHANGELOG checks line (builders)",
+    "why": "the review budget; only load-diet-bytes was re-run"
+   },
+   {
+    "what": "release 78 live continuity reading of Jenova LIFE",
+    "from": "critic/reviews/193f6aef4-focused (r78 run: 27.58 snaps, 48.4 px)",
+    "why": "live baseline for the same chapter"
+   }
+  ],
+  "notTested": [
+   "live-URL side-by-side run of the listed chapters (not run; the candidate touches the shared engines and 17 more listed chapters were not played in a browser: unit suite only)",
+   "art-browser-load in WebKit and Chromium (the deploy runs it)",
+   "continuity harness on the other chapters of the plan and on the new chapters",
+   "Belgemine past duel 1 (the autoBattle ended the fight; all eight duels were not individually played)",
+   "Garik friendly bout (TRUST High) not played",
+   "target tile composites (the plan's targetGroups touch no approved tile this release: no board change)",
+   "dataAudit values against research (cited from unit tests, not re-compared by hand)"
+  ]
+ },
+ "regressions": [],
+ "nextReview": "deep review on the live build after the deploy (plan depth deep); it also owes the live smoke",
+ "elapsedMinutes": 55
+}

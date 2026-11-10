@@ -1,0 +1,91 @@
+{
+ "rubricVersion": 2,
+ "review": "live",
+ "date": "2026-11-10T03:02:59.965Z",
+ "build": {
+  "mainSha": "193f6aef4",
+  "bundle": "BYej0WB6",
+  "artifactHash": "346c86c7676f749bf37a59dcd38337feebdd30dd1bc03d7147bfc8ace59a8b5d"
+ },
+ "verdicts": {
+  "deployment": "PASS",
+  "changedArea": "NOT APPLICABLE",
+  "milestone": "not assessed"
+ },
+ "checks": [
+  {
+   "id": "CHK-017",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "node tools/artifact-manifest.mjs verify-live --manifest critic/artifacts/193f6aef4.json --url https://echoesofspira.com/ --changed-from critic/artifacts/cc0fea14a.json -> {result: PASS, artifactHash: 346c86c7676f749bf37a59dcd38337feebdd30dd1bc03d7147bfc8ace59a8b5d, liveManifest: match, checked: 297, mismatched: [], missing: [], wrongType: [], errors: []}; index.html identical once Cloudflare's analytics beacon is removed; immutable cache header on assets/*.js. The --full run (8,018 files, 11.9 GB, fetched one at a time) was started and stopped after 32 minutes without a result, so the changed-files-plus-sample comparison is the evidence."
+  },
+  {
+   "id": "CHK-016",
+   "result": "PASS",
+   "mandatory": true,
+   "evidence": "Headless Playwright, PYREFLY_BROWSER=gpu (real GPU, ANGLE D3D11 RTX 5070 Ti), 1600x900, fresh context per run, cache-busting query, real key presses, RIG-RECORD lock held and released. Title -> chapter-select by Enter -> listed chapter (seymour-flux) party-prep -> battle -> player turn asserted via screenState.playback.awaitingMenu, then Attack by Enter x3 (playback phase play:damage, 11 events played). Escape paused (screen pause), H hid the panels (screenshot 07 shows \"H SHOW PANELS\") and restored them (screenshot 08 \"H PAINTING ONLY\"), Escape resumed to battle. Words typed on chapter select (that is where the doors listen; the title does not take them), each in a fresh page: sidequest -> party-prep \"EXP - BELGEMINE'S CHALLENGE - REMIEM TEMPLE\" -> battle at a player turn (Valefor duel, painted Valefor and Yuna on screen); braveheart -> \"EXP - GARIK RONSO - MT. GAGAZET\" -> battle at a player turn (Garik and the Ronso Youths painted on the blue Gagazet backdrop); shinryu -> \"EXP - SHINRYU - DEEP WATER\" -> battle at a player turn (Shinryu painted, boss card HP 2,000,000); youth -> \"THE YOUTH LEAGUE TOURNAMENT\" -> battle at a player turn; ifrit -> \"IFRIT - KILIKA TEMPLE\" party-prep. Cancel path: Escape from party-prep on sidequest returned to chapter-select. Music: 43 prerendered mp3 files fetched (music/title.mp3, music/chapter-select.mp3, music/scene-gagazet.mp3 and per-chapter sets), no synth fallback sign; the page exposes no audio debug object to read. Console errors 0, 404s 0 across both runs (art 404 specifically: none while any hidden chapter opened); ERR_ABORTED on a few art thumbnails was the page switching screens."
+  },
+  {
+   "id": "CHK-024",
+   "result": "PASS",
+   "mandatory": false,
+   "evidence": "Lightweight reload smoke on the live build: opened a chapter to a battle (progress state), changed one pause option (save string changed), resumed, reloaded the page; the pyrefly-reprise:save:v1 string was identical after the reload (945 chars before and after). The full upgrade matrix was not run."
+  }
+ ],
+ "staticChecks": {
+  "pose-census": {
+   "result": "DATA",
+   "totals": {
+    "subjects": 190,
+    "paintings": 1317,
+    "pass": 995,
+    "waived": 114,
+    "rigged": 0,
+    "fail": 0,
+    "exempt": 208,
+    "byClass": {
+     "idle": 190,
+     "standing": 672,
+     "ko": 127,
+     "low": 71,
+     "wide": 19,
+     "staged": 176,
+     "part": 62
+    },
+    "byGame": {
+     "FFX-2": 871,
+     "FFX": 314,
+     "unknown": 100,
+     "FF7": 32
+    },
+    "byRowStatus": {
+     "ok": 909,
+     "held": 86,
+     "waived": 114,
+     "none": 208
+    }
+   }
+  }
+ },
+ "coverage": {
+  "tested": [
+   "exact-artifact comparison of the 297 changed-plus-sampled files and the live manifest hash",
+   "title, chapter select, one listed chapter to a player turn and a command",
+   "the five hidden words sidequest, braveheart, shinryu, youth, ifrit each opening its chapter at party-prep, and the first four reaching a battle player turn",
+   "Escape, P, H pause flow; cancel from party-prep",
+   "prerendered music fetch",
+   "reload keeps the save"
+  ],
+  "reused": [],
+  "notTested": [
+   "--full comparison of all 8,018 files (stopped after 32 minutes)",
+   "the full CHK-024 upgrade matrix",
+   "the Omega Ruins item names and the Jenova LIFE pose fix (word bluelight, disclosed major R79-1) were not opened",
+   "ifrit past party-prep; no belgemine duel beyond the first",
+   "whether the Belgemine party-prep card's bottom row of tiles is clipped (seen cut off at 1600x900 in 10-sidequest-board.png, polish, unverified)"
+  ]
+ },
+ "consoleErrors": 0,
+ "notFound": 0,
+ "elapsedMinutes": 70
+}
