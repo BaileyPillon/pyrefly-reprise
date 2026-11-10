@@ -15,6 +15,7 @@
 import type { BattleState, CombatantId } from '../../battle/common/types.ts';
 import './pro-markers.css';
 import { menuHolds } from '../../engine/motion/MenuHold.ts';
+import { isFormPartId } from '../../engine/SpecialFormMembers.ts';
 import { prefersReducedMotion } from './transitions/reduceMotion.ts';
 import { KO_FLOOR_MS, koPlan, proMarkersOn } from './proMarkers.ts';
 
@@ -98,10 +99,12 @@ export class ProFieldMarks {
     }
     this.partyOffStage = !!state.aeonId || (state.aeonIds?.length ?? 0) > 0;
     const live = new Set<CombatantId>();
-    this.standing = state.activeIds.filter((id) => state.combatants[id]?.alive === true);
+    // FFX-2 Special form: a part's anchor lies on the figure it belongs to, so a downed part marks nothing (the figure must not change when a part falls; its row's KO pill says it) and a part is not
+    // a second figure the main's own mark must keep clear of. With the switch off no combatant is a part (`SpecialFormMembers`), so both filters keep every id.
+    this.standing = state.activeIds.filter((id) => state.combatants[id]?.alive === true && !isFormPartId(state, id));
     for (const id of state.activeIds) {
       const c = state.combatants[id];
-      if (!c || c.alive) continue;
+      if (!c || c.alive || isFormPartId(state, id)) continue;
       live.add(id);
       if (this.down.has(id)) continue;
       const wash = document.createElement('div');

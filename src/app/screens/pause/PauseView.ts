@@ -33,7 +33,7 @@ import { stackHost } from './stackColumn.ts';
 import { placeDossier } from './dossierPlace.ts';
 import { slideChapterPlate } from './chapterSlide.ts';
 import { fitPhoneBody } from './phoneFit.ts';
-import { chromeSideForCombatant, plateIdFor } from './plates.ts';
+import { chromeSideForCombatant, plateIdFor, plateMemberFor } from './plates.ts';
 import { buildTabs, memberIdOf, type PauseTab } from './tabs.ts';
 import { memberColumns } from './meters.ts';
 import {
@@ -200,7 +200,7 @@ export class PauseView {
       return;
     }
     const state = this.deps.state();
-    const memberId = this.plateMemberId ?? state?.activeIds[0] ?? null;
+    const memberId = plateMemberFor(this.plateMemberId ?? state?.activeIds[0] ?? null, state); // a Special's part rides its main's plate (plates.ts)
     if (memberId) this.portrait.show(plateIdFor(memberId, this.game, this.artNamespace), memberId);
     else if (meta) this.portrait.show(meta.heroArt.replace(/^pause\//, ''), undefined, meta.heroArtFallback);
     const side = memberId ? chromeSideForCombatant(memberId, this.game, this.artNamespace) : 'left';

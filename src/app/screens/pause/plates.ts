@@ -25,8 +25,9 @@
  * request has landed.
  */
 
-import type { GameId } from '../../../battle/common/types.ts';
+import type { BattleState, GameId } from '../../../battle/common/types.ts';
 import { inArtNamespace } from '../../../data/art/artNamespace.ts';
+import { formMainOf } from '../../../engine/SpecialFormMembers.ts';
 
 /** Which side of the painting the tab strip, meters, objective and prompts use. */
 export type ChromeSide = 'left' | 'right';
@@ -276,6 +277,14 @@ export function framingFor(plateId: string): PlateFraming {
 /** The shipped focal x for a plate, or `null` when nothing is on record. */
 export function plateFocalX(plateId: string): number | null {
   return PLATE_FRAMING[plateId]?.x ?? null;
+}
+
+/**
+ * The member whose plate a tab shows (FFX-2 Special form): a part has no painting of its own, so its tab shows its MAIN's plate (`yuna-ffx2` for a Pistil) with the part's own meters. Anyone
+ * else, an away girl, an unknown id, no battle: the id itself, so with the switch OFF (no combatant has a form record) this is the identity.
+ */
+export function plateMemberFor(id: string | null, state: Readonly<BattleState> | null): string | null {
+  return id === null || state === null ? id : (formMainOf(state, id) ?? id);
 }
 
 /** Convenience: the chrome side for a combatant, from the approved table. */

@@ -28,6 +28,7 @@ import { buildAdvisorView, clearAdvisorCache } from '../../src/engine/tactics/ad
 import { buildGuideView } from '../../src/engine/tactics/guide.ts';
 import { setAtbBarsSmooth } from '../../src/ui/ffx2/AtbLive.ts';
 import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
+import { ProFieldMarks } from '../../src/ui/common/ProFieldMarks.ts';
 import { FRAME_WEIGHTS, framedIds, koFramingChapter } from '../../src/ui/common/phoneFraming.ts';
 import { buildMemberRows } from '../../src/ui/common/resultsMath.ts';
 import { setProMode, setProPiece } from '../../src/engine/look/pro/ProSwitch.ts';
@@ -329,5 +330,67 @@ describe('whatever list the HUD holds, the surfaces read the engine, not the lis
         expect(ids()).toEqual([girl, ...parts]);
       });
     }
+  });
+});
+
+// ---------------------------------------------------------------------------------------------------------------------------------
+// The pro look's KO marks on the field (off by default: forced on here, as pro-look-markers.test.ts does)
+// ---------------------------------------------------------------------------------------------------------------------------------
+
+describe('the pro KO marks on the field', () => {
+  beforeEach(() => {
+    setProMode('pro');
+    setDemoChapter('ffx2-bahamut');
+  });
+  const marksFor = (state: BattleState, figures = false): ProFieldMarks => {
+    const m = new ProFieldMarks('ffx2');
+    document.body.append(m.el);
+    m.setProjector(() => ({ x: 500, y: 700 }));
+    if (figures) m.setFigures({ rect: () => ({ x: 400, y: 300, w: 300, h: 500 }), visibility: () => 1 }); // all three plates stand on the one figure
+    m.sync(state);
+    return m;
+  };
+  const washes = (m: ProFieldMarks): number => m.el.querySelectorAll('.pro-ko-wash').length;
+  const tick = (m: ProFieldMarks, ms: number): void => {
+    for (let t = 0; t < ms; t += 10) m.update(0.01);
+  };
+
+  for (const { girl, parts } of FORM_GIRLS) {
+    it(`${girl}: a downed part adds no KO wash or mark (the figure does not change when a part falls), one part or both`, () => {
+      const s = formUp(girl).state as BattleState;
+      fell(s.combatants[parts[0]] as never);
+      const m = marksFor(s);
+      expect(m.count).toBe(0);
+      expect(washes(m)).toBe(0);
+      expect(m.el.querySelectorAll('.pro-ko-mark')).toHaveLength(0);
+      fell(s.combatants[parts[1]] as never);
+      m.sync(s);
+      expect(m.count).toBe(0);
+      expect(m.el.children).toHaveLength(0);
+    });
+  }
+
+  it('downing a girl outside a form still adds one wash and one mark (OFF)', () => {
+    const s = off();
+    fell(s.combatants['rikku'] as never);
+    const m = marksFor(s);
+    expect(m.count).toBe(1);
+    expect(washes(m)).toBe(1);
+    expect(m.el.querySelectorAll('.pro-ko-mark')).toHaveLength(1);
+  });
+
+  it('downing the main inside a form is not skipped, whatever the parts do; her mark stays on the figure and is not pushed aside by her own parts', () => {
+    const s = formUp('yuna').state as BattleState;
+    fell(s.combatants['yuna'] as never);
+    const m = marksFor(s, true);
+    expect(m.count).toBe(1);
+    expect(washes(m)).toBe(1);
+    tick(m, 2500);
+    const mark = m.el.querySelector<HTMLElement>('.pro-ko-mark')!;
+    expect(mark.style.opacity).toBe('1');
+    expect(mark.style.transform).toContain('translate(500.0px'); // the point of her own body, not shifted off the figure the parts also stand on
+    fell(s.combatants[s.activeIds[1]!] as never);
+    m.sync(s);
+    expect(m.count).toBe(1);
   });
 });

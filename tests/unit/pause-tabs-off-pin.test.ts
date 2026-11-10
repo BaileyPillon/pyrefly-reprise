@@ -20,6 +20,7 @@ import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
 import { SaveStore } from '../../src/app/SaveData.ts';
 import { PauseView, type PauseViewDeps } from '../../src/app/screens/pause/PauseView.ts';
 import { PortraitStage } from '../../src/app/screens/pause/PortraitStage.ts';
+import { plateMemberFor } from '../../src/app/screens/pause/plates.ts';
 import { buildTabs } from '../../src/app/screens/pause/tabs.ts';
 import { getChapter } from '../../src/data/encounters.ts';
 import { setArtManifest } from '../../src/engine/ArtManifest.ts';
@@ -68,6 +69,11 @@ describe('OFF pin D2-1: the pause tab strip', () => {
       'no-battle': buildTabs(null),
     };
     expect(out['ffx2-bahamut'].filter((t) => t.memberId).map((t) => t.label)).toEqual(['Yuna', 'Rikku', 'Paine']);
+    for (const state of [atMenu('ffx2-bahamut'), atMenu('ffx2-vegnagun-shuyin'), makeFakeBattleState()]) {
+      for (const id of state.activeIds) expect(plateMemberFor(id, state), id).toBe(id); // added by the commit that adds plateMemberFor: with the switch off it is the identity
+      expect(plateMemberFor(null, state)).toBeNull();
+    }
+    expect(plateMemberFor('yuna', null)).toBe('yuna');
     expect(out['ffx2-vegnagun-shuyin'].filter((t) => t.memberId).length).toBe(3);
     expect(out['ffx-fake'].filter((t) => t.memberId).length).toBe(3);
     expectPinned('pause-tabs', out);

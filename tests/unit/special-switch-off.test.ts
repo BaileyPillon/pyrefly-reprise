@@ -40,7 +40,9 @@ import { PlateTaps } from '../../src/ui/ffx2/plateTap.ts';
 import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
 import { nextInput } from './helpers/specialDrive.ts';
 import { FFX2Engine } from '../../src/battle/ffx2/index.ts';
-import { getChapter } from '../../src/data/encounters.ts';
+import { CHAPTERS, EXPERIMENT_CHAPTERS, UNLISTED_CHAPTERS, getChapter } from '../../src/data/encounters.ts';
+import { plateMemberFor } from '../../src/app/screens/pause/plates.ts';
+import { awayGirlIds, formMainOf, isFormPartId } from '../../src/engine/SpecialFormMembers.ts';
 import { setAtbBarsSmooth } from '../../src/ui/ffx2/AtbLive.ts';
 import { ffx2Options } from './helpers/ffx2ChapterDrive.ts';
 import type { BattleState, FFX2PartyBuild } from '../../src/battle/common/types.ts';
@@ -463,4 +465,38 @@ describe('step D1: the party list, the command menu and the ally pick, with the 
     taps.mockRestore();
     hud.unmount();
   }, 120_000);
+});
+
+// ------------------------------------------------------------------ step D2: the readers, the pause tab's plate member and the field marks, with the switch OFF
+
+describe('step D2: the Special form readers and the pause plate member, with the switch off (every shipped chapter)', () => {
+  it('formMainOf, isFormPartId and awayGirlIds answer null, false and [] for every combatant of every FFX-2 chapter\'s initial state, and plateMemberFor is the identity', () => {
+    const chapters = [...CHAPTERS, ...UNLISTED_CHAPTERS, ...EXPERIMENT_CHAPTERS].filter((c) => c.game === 'ffx2');
+    expect(chapters.length, 'the census of FFX-2 chapters').toBeGreaterThanOrEqual(5);
+    let combatants = 0;
+    for (const chapter of chapters) {
+      const engine = new FFX2Engine(ffx2Options());
+      engine.setSeed(1);
+      engine.init({ game: 'ffx2', party: chapter.buildRef as FFX2PartyBuild, enemies: chapter.enemyGroupRef, triggers: [], seed: 1, condition: 'normal', canEscape: false });
+      const s = engine.state() as BattleState;
+      expect(awayGirlIds(s), chapter.id).toEqual([]);
+      for (const id of Object.keys(s.combatants)) {
+        combatants += 1;
+        expect(formMainOf(s, id), `${chapter.id}: ${id}`).toBeNull();
+        expect(isFormPartId(s, id), `${chapter.id}: ${id}`).toBe(false);
+        expect(plateMemberFor(id, s), `${chapter.id}: ${id}`).toBe(id);
+      }
+      expect(plateMemberFor(null, s)).toBeNull();
+    }
+    expect(combatants).toBeGreaterThan(20);
+  });
+
+  it('a source scan: the readers and plateMemberFor are plain functions (no await, no async, no promise), and the field mark guard is one call to isFormPartId', () => {
+    const read = (path: string): string => readFileSync(resolve(__dirname, '..', '..', path), 'utf8');
+    for (const path of ['src/engine/SpecialFormMembers.ts']) expect(read(path), path).not.toMatch(/\bawait\b|\basync\b|\bPromise\b/);
+    const plates = read('src/app/screens/pause/plates.ts');
+    const body = plates.slice(plates.indexOf('export function plateMemberFor'), plates.indexOf('export function chromeSideForCombatant'));
+    expect(body).not.toMatch(/\bawait\b|\basync\b|\bPromise\b/);
+    expect(read('src/ui/common/ProFieldMarks.ts').match(/isFormPartId\(/g)).toHaveLength(2);
+  });
 });
