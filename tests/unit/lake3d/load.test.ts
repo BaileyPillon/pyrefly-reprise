@@ -4,7 +4,7 @@
  */
 import { AnimationClip, BoxGeometry, Bone, Group, Mesh, MeshStandardMaterial, Object3D, VectorKeyframeTrack } from 'three';
 import { describe, expect, it } from 'vitest';
-import { LAKE_CAST, LAKE_FILES, LAKE_NATIVE_HEIGHT, LAKE_SHIPPED_FILES, LAKE_WEAPONS, LAKE_WEAPON_FILES, type LakeId } from '../../../src/data/ffx/lake-models.ts';
+import { LAKE_AEONS, LAKE_CAST, LAKE_FILES, LAKE_NATIVE_HEIGHT, LAKE_SHIPPED_FILES, LAKE_WEAPONS, LAKE_WEAPON_FILES, type LakeId } from '../../../src/data/ffx/lake-models.ts';
 import { EAGER, loadLakeModels, modelUrl, weaponUrl, type LoaderIO, type Parsed } from '../../../src/engine/lake3d/load.ts';
 import { weaponNamesFor } from '../../../src/engine/lake3d/weapons.ts';
 
@@ -89,20 +89,43 @@ describe('the model set', () => {
 });
 
 describe('loadLakeModels', () => {
-  it('stands every figure on a neutral capsule when no file is there, and says so once each', async () => {
+  it('stands every figure on a neutral capsule when no file is there, and says so once each; an aeon gets no model and keeps its painting', async () => {
     const said: string[] = [];
     const lake = await loadLakeModels({ base: BASE, heights: {}, io: fakeIO(() => false), warn: (m) => said.push(m) });
     await lake.background;
-    expect(lake.models.size).toBe(LAKE_CAST.length);
-    expect(lake.capsules.sort()).toEqual([...LAKE_CAST].sort());
-    for (const id of LAKE_CAST) expect(lake.sources.get(id)).toBe('capsule');
-    expect(said.filter((m) => /capsule/.test(m))).toHaveLength(LAKE_CAST.length);
+    const figures = LAKE_CAST.filter((id) => !(LAKE_AEONS as readonly string[]).includes(id));
+    expect([...lake.models.keys()].sort()).toEqual([...figures].sort()); // no capsule for an aeon (the review of 2026-11-09, minor 5)
+    expect(lake.capsules.sort()).toEqual([...LAKE_CAST].sort()); // but a run still sees that every file failed
+    for (const id of figures) expect(lake.sources.get(id)).toBe('capsule');
+    for (const id of LAKE_AEONS) expect(lake.sources.has(id), id).toBe(false);
+    expect(said.filter((m) => /capsule/.test(m))).toHaveLength(figures.length);
+    expect(said.filter((m) => /painting stays/.test(m))).toHaveLength(LAKE_AEONS.length);
     for (const m of lake.models.values()) {
       expect(m.animated).toBe(false);
       expect(m.height).toBeCloseTo(LAKE_NATIVE_HEIGHT[m.id], 1);
     }
     lake.dispose();
     expect(lake.models.size).toBe(0);
+  });
+
+  it('leaves only an aeon unmodelled when only its file is missing or cannot be parsed, and keeps every other figure on its own model', async () => {
+    const said: string[] = [];
+    const aeonUrls = LAKE_AEONS.map((id) => modelUrl(BASE, id));
+    const lake = await loadLakeModels({ base: BASE, heights: {}, io: fakeIO((u) => !aeonUrls.includes(u)), warn: (m) => said.push(m) });
+    await lake.background;
+    expect(lake.capsules.sort()).toEqual([...LAKE_AEONS].sort());
+    expect(lake.models.size).toBe(LAKE_CAST.length - LAKE_AEONS.length);
+    for (const id of LAKE_CAST) if (!(LAKE_AEONS as readonly string[]).includes(id)) expect(lake.sources.get(id), id).toBe('own');
+    lake.dispose();
+
+    const io = fakeIO(() => true);
+    const broken: LoaderIO = { ...io, parse: async (bytes) => { if (new TextDecoder().decode(bytes).includes('shiva')) throw new Error('bad glTF'); return io.parse(bytes); } };
+    const lake2 = await loadLakeModels({ base: BASE, heights: {}, io: broken, warn: (m) => said.push(m) });
+    await lake2.background;
+    expect(lake2.models.has('shiva')).toBe(false);
+    expect(lake2.capsules).toEqual(['shiva']);
+    expect(said.some((m) => /shiva.*could not be read/.test(m))).toBe(true);
+    lake2.dispose();
   });
 
   it('loads the front line and the enemies before it returns and the bench after', async () => {

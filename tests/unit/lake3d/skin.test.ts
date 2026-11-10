@@ -13,7 +13,7 @@
 import { AnimationClip, Color, Group, Mesh, MeshStandardMaterial, Object3D, Scene, VectorKeyframeTrack, BoxGeometry } from 'three';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { LAKE_AEONS, LAKE_NATIVE_HEIGHT, type LakeId } from '../../../src/data/ffx/lake-models.ts';
+import { LAKE_AEONS, LAKE_FILES, LAKE_NATIVE_HEIGHT, type LakeId } from '../../../src/data/ffx/lake-models.ts';
 import { PaintedActor } from '../../../src/engine/PaintedActor.ts';
 import { loadLakeModels, type LoaderIO, type LakeModels } from '../../../src/engine/lake3d/load.ts';
 import { ACCENT } from '../../../src/engine/lake3d/model.ts';
@@ -271,6 +271,17 @@ describe('the aeons', () => {
     expect(modelOf(r, 'ifrit').playingClip).toBe('attack');
     r.skin.listener.open?.('ifrit', 'item', 0.5, 'potion'); // a file with an item clip plays it; this stand-in has one
     expect(modelOf(r, 'ifrit').playingClip).toBe('item');
+  });
+
+  it('keep their painting when their file is missing, rather than standing on a grey capsule', async () => {
+    const aeonFiles = new Set<string>(LAKE_AEONS.map((id) => LAKE_FILES[id]));
+    const io: LoaderIO = { ...WITH_CLIPS, fetchBytes: async (url) => (aeonFiles.has(url.split('/').pop() ?? '') ? null : WITH_CLIPS.fetchBytes(url)) };
+    const r = await rig(['ifrit', 'wendigo'], io, true);
+    run(r, 0.1);
+    expect(r.models.capsules).toContain('ifrit'); // the failure is listed
+    expect(r.skin.carrying['ifrit']).toBeUndefined(); // but no model is attached
+    expect(internalsOf(r.actors['ifrit']!)!.showFigure).toBe(true); // the painted billboard stays up
+    expect(r.skin.carrying['wendigo']).toBe('own');
   });
 
   it('come in after the front line, in the background, once the bench is in', async () => {

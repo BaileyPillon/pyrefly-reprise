@@ -1,14 +1,15 @@
 /**
- * **Finding and loading the lake's models** (the hidden Wendigo chapter's 3D stage; FFX only): the ten bodies and nine weapons of `../../data/ffx/lake-models.ts`, read from `public/models-exp/lake/`, parsed **once each**
+ * **Finding and loading the lake's models** (the hidden Wendigo chapter's 3D stage; FFX only): the fourteen bodies (ten figures and four aeons) and nine weapons of `../../data/ffx/lake-models.ts`, read from `public/models-exp/lake/`, parsed **once each**
  * and cloned per figure (skeletons rebound). The front line and the three enemies load before the fight opens (a fight must not start on a half-loaded figure); the four bench members load **in the background** after it, and
  * the skin picks each up the frame it is ready (a switched-in member whose model is not in yet stands as the stage made it for those frames). A file that is not there, or is not a binary glTF (a dev server answers an
- * unknown path under `public/` with its index page and status 200), is replaced by the neutral capsule (`./capsule.ts`), so the chapter always plays; `warn` says so once.
+ * unknown path under `public/` with its index page and status 200), is replaced by the neutral capsule (`./capsule.ts`), so the chapter always plays; `warn` says so once. **An aeon is the one exception** (the review of 2026-11-09, minor 5):
+ * its painting is a better stand-in than a grey 3.4 m capsule, so an aeon whose file is missing or unreadable gets no model at all (the skin leaves the actor's painting up), and is listed in `capsules` only so a run can see that a file failed.
  *
  * `dispose` frees what the loader parsed (geometry, material, textures) and every model's own parts. Needs three.js and the glTF loader (imported here, on use). Game case: FFX only.
  */
 
 import type { AnimationClip, Material, Mesh, Object3D, Texture } from 'three';
-import { LAKE_CAST, LAKE_FILES, LAKE_MODEL_DIR, LAKE_NATIVE_HEIGHT, LAKE_PARTY, LAKE_WEAPON_DIR, LAKE_WEAPON_FILES, type LakeId, type LakeWeapon } from '../../data/ffx/lake-models.ts';
+import { LAKE_AEONS, LAKE_CAST, LAKE_FILES, LAKE_MODEL_DIR, LAKE_NATIVE_HEIGHT, LAKE_PARTY, LAKE_WEAPON_DIR, LAKE_WEAPON_FILES, type LakeId, type LakeWeapon } from '../../data/ffx/lake-models.ts';
 import { capsuleFigure } from './capsule.ts';
 import { partyPlans } from './clipMap.ts';
 import { LakeModel } from './model.ts';
@@ -86,9 +87,9 @@ function freeScene(scene: Object3D): void {
 export interface LakeModels {
   /** The models by id, filled as they load (the bench's arrive in the background). */
   readonly models: Map<LakeId, LakeModel>;
-  /** The ids that stand on the neutral capsule because their file was missing. */
+  /** The ids whose file was missing: the figures stand on the neutral capsule; an aeon has no model at all and keeps its painting (it is listed so a run can see the failure). */
   readonly capsules: LakeId[];
-  /** Where each id's model came from. */
+  /** Where each id's model came from (an aeon whose file failed has no model and no entry). */
   readonly sources: Map<LakeId, 'own' | 'capsule'>;
   /** Resolves when the bench members are in (or failed). */
   readonly background: Promise<void>;
@@ -172,6 +173,11 @@ export async function loadLakeModels(opts: LoadOptions): Promise<LakeModels> {
     }
     if (gone) {
       model?.dispose();
+      return;
+    }
+    if (!model && (LAKE_AEONS as readonly string[]).includes(id)) {
+      warn(`[lake3d] ${id}: no model file, the painting stays`); // not a capsule: a summoned aeon keeps its painted billboard
+      capsules.push(id);
       return;
     }
     if (!model) {

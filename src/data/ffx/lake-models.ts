@@ -127,5 +127,5 @@ export const LAKE_PROP_DIR = 'models-exp/lake/props/';
 export const LAKE_PROP_FILES = ['crystals', 'temple', 'slabs', 'reeds', 'drift'] as const;
 export type LakeProp = (typeof LAKE_PROP_FILES)[number];
 
-/** The files that make the chapter's whole model set (the dist filter and the verifier read this): 10 bodies, 9 weapons and 5 props. */
+/** The files that make the chapter's whole model set (the dist filter and the verifier read this): 14 bodies (ten figures and the four aeons), 9 weapons and 5 props (28 files). */
 export const LAKE_SHIPPED_FILES: readonly string[] = [...Object.values(LAKE_FILES).filter((f, i, a) => a.indexOf(f) === i), ...LAKE_WEAPON_FILES.map((w) => `weapons/${w}.glb`), ...LAKE_PROP_FILES.map((p) => `props/${p}.glb`)];

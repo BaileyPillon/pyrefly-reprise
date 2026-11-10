@@ -1,6 +1,6 @@
 /**
- * **A Meshy model fitted to a figure** (the hidden Wendigo chapter's 3D stage; FFX only): one of the ten bodies of `../../data/ffx/lake-models.ts`, with its weapons on their nodes (`./weapons.ts`), its motion (the party's
- * real FFX kit on the sequencer of `../yrp3d/clips.ts`, or a monster's library clips on `./monsterRig.ts`) and the channels the skin drives from the actor (colour, flash, opacity, the epilogue's sink).
+ * **A Meshy model fitted to a figure** (the hidden Wendigo chapter's 3D stage; FFX only): one of the fourteen bodies of `../../data/ffx/lake-models.ts` (ten figures and the four aeons), with its weapons on their nodes (`./weapons.ts`), its motion (the party's
+ * real FFX kit on the sequencer of `../yrp3d/clips.ts`, or a monster's or an aeon's own clips on `./monsterRig.ts`) and the channels the skin drives from the actor (colour, flash, opacity, the epilogue's sink).
  *
  * Layers: `root` (parent it to the actor's motion group) holds `lie` (a body with no fall clip tips about its feet), which holds `yaw`, which holds `sink` (the epilogue's fall through the broken ice), which holds `fit`
  * (the scale that stands the model the stage's height), which holds the file's scene. A file is metres, Y up, facing +Z, the feet on y 0 and centred on its footprint (`tools` of the asset lane keep that), so the fit is a

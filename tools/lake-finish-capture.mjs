@@ -14,11 +14,11 @@
  * The party is kept up by a state edit through the debug API as the first capture tool does; **every command is a real key press**. It takes the machine-wide browser lock before it opens a browser and gives it back at the
  * end. Exit code 1 on a failed check. Paths come from the command line and the environment, none is written here.
  */
-import { spawn } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { finishKit } from './lake-finish-kit.mjs'; // the film and the key helpers (split out for rule 7), imported before the lock is taken
 
 const REPO = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const arg = (name, fallback) => {
@@ -70,71 +70,17 @@ page.on('response', (r) => {
 });
 
 // ------------------------------------------------------------------------------------------------ the film
-let t0 = Date.now();
+const clock = { t0: Date.now() };
 const mark = (what, extra = {}, at = Date.now()) => {
-  events.push({ t: Math.round(((at - t0) / 1000) * 100) / 100, what, ...extra });
+  events.push({ t: Math.round(((at - clock.t0) / 1000) * 100) / 100, what, ...extra });
   log('event', events.at(-1));
 };
-let ff = null;
-let cdp = null;
-let latest = null;
-let ticker = null;
-async function startFilm(file) {
-  ff = spawn(FFMPEG, ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', '30', '-vcodec', 'mjpeg', '-i', '-', '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', '-c:v', 'libx264', '-preset', 'fast', '-crf', '27', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', file], { stdio: ['pipe', 'inherit', 'inherit'] });
-  ff.stdin.on('error', () => undefined);
-  cdp = await page.context().newCDPSession(page);
-  cdp.on('Page.screencastFrame', (f) => {
-    latest = Buffer.from(f.data, 'base64');
-    cdp.send('Page.screencastFrameAck', { sessionId: f.sessionId }).catch(() => undefined);
-  });
-  await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 88, everyNthFrame: 1, maxWidth: W, maxHeight: H });
-  t0 = Date.now();
-  let written = 0;
-  ticker = setInterval(() => {
-    if (!latest || !ff?.stdin.writable) return;
-    const due = Math.floor(((Date.now() - t0) / 1000) * 30);
-    while (written < due) {
-      ff.stdin.write(latest);
-      written++;
-    }
-  }, 8);
-}
-async function stopFilm() {
-  if (!ff) return;
-  clearInterval(ticker);
-  await cdp.send('Page.stopScreencast').catch(() => undefined);
-  await new Promise((r) => {
-    ff.on('close', r);
-    ff.stdin.end();
-  });
-  ff = null;
-}
-const shot = async (name) => {
-  if (!STILLS) return;
-  await page.screenshot({ path: join(OUT, `${name}.jpg`), type: 'jpeg', quality: 92 });
-  log('shot', name);
-};
-const hudHide = (on) =>
-  page.evaluate((hide) => {
-    let s = document.getElementById('lake-capture-hide');
-    if (!s) {
-      s = document.createElement('style');
-      s.id = 'lake-capture-hide';
-      document.head.appendChild(s);
-    }
-    s.textContent = hide ? '#ui { visibility: hidden !important; }' : '';
-  }, on);
+// the film and the key helpers are in tools/lake-finish-kit.mjs (rule 7: this file stays under 400 lines)
+const { startFilm, stopFilm, shot, hudHide, dismissCoach, ward, setHp, rowsText, pickRow, menuUp, attackWithKeys } = finishKit({ page, out: OUT, w: W, h: H, stills: STILLS, ffmpeg: FFMPEG, log, clock, commandRows, waitBattleMenu });
 
 // ------------------------------------------------------------------------------------------------ helpers
 const screenNow = () => page.evaluate(() => window.__pyrefly?.screen?.() ?? null);
 const guideUp = () => page.evaluate(() => /SKIP THE GUIDE/i.test(document.body.innerText));
-const coachUp = () => page.evaluate(() => /FIRST TIME ONLY/i.test(document.body.innerText));
-const dismissCoach = async () => {
-  for (let i = 0; i < 4 && (await coachUp()); i++) {
-    await page.keyboard.press('Enter');
-    await page.waitForTimeout(700);
-  }
-};
 let seen = 0;
 let lastRows = [];
 const watchActions = async () => {
@@ -148,55 +94,6 @@ const watchActions = async () => {
   seen = rows.length;
   return rows;
 };
-const ward = () =>
-  page.evaluate(() => {
-    const st = window.__pyrefly?.battleState?.();
-    if (!st) return;
-    for (const id of [...st.activeIds, ...(st.aeonIds ?? []), ...(st.aeonId ? [st.aeonId] : [])]) {
-      const c = st.combatants[id];
-      if (!c) continue;
-      c.stats.maxHp = 99999;
-      c.hp = 99999;
-      for (const s of ['petrify', 'doom', 'sleep', 'confuse', 'berserk']) {
-        c.immunities[s] = 255;
-        delete c.statuses[s];
-      }
-    }
-    delete st.combatants.wendigo?.statuses.berserk; // a Berserk Wendigo has no script: it never throws the Double Punch or raises its arms
-  });
-const setHp = (id, hp) =>
-  page.evaluate(([i, h]) => {
-    window.__pyrefly.battleState().combatants[i].hp = h;
-  }, [id, hp]);
-const rowsText = async () => (await commandRows(page)).rows.map((r) => `${r.text}${r.disabled ? ' (greyed)' : ''}`);
-async function pickRow(re, { enter = true } = {}) {
-  let walked = 0;
-  for (let i = 0; i < 90; i++) {
-    const { rows } = await commandRows(page);
-    if (rows.length === 0) return false;
-    const want = rows.findIndex((r) => re.test(r.text) && !r.disabled);
-    const at = rows.findIndex((r) => r.selected);
-    if (want >= 0 && at === want) {
-      if (enter) await page.keyboard.press('Enter');
-      await page.waitForTimeout(450);
-      return true;
-    }
-    if (want < 0 && walked++ > 24) return false;
-    await page.keyboard.press(want < 0 || want > at ? 'ArrowDown' : 'ArrowUp');
-    await page.waitForTimeout(160);
-  }
-  return false;
-}
-const menuUp = (ms) => waitBattleMenu(page, ms).then(() => true).catch(() => false);
-async function attackWithKeys() {
-  await dismissCoach();
-  if (!(await menuUp(60000))) return false;
-  await page.keyboard.press('Enter'); // Attack
-  await page.waitForTimeout(450);
-  await page.keyboard.press('Enter'); // the target the cursor starts on
-  await page.waitForTimeout(500);
-  return true;
-}
 const lake = () =>
   page.evaluate(() => {
     const g = globalThis.__lake3d;
@@ -221,7 +118,7 @@ const startWatch = () => {
       const row = JSON.stringify(g.clips);
       if (row !== last) {
         last = row;
-        timeline.push({ t: Math.round(((Date.now() - t0) / 1000) * 100) / 100, clips: g.clips });
+        timeline.push({ t: Math.round(((Date.now() - clock.t0) / 1000) * 100) / 100, clips: g.clips });
       }
       while (beatsSeen < g.beats.length) {
         const b = g.beats[beatsSeen++];

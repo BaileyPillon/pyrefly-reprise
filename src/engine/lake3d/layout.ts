@@ -6,6 +6,8 @@
  * Everything here is staging (rule 6: no game number) except the heights, which are the size table's.
  */
 
+import { LAKE_AEONS, LAKE_NATIVE_HEIGHT, type LakeId } from '../../data/ffx/lake-models.ts';
+
 export type V3 = readonly [number, number, number];
 
 /** A camera pose: where it stands, what it looks at, the vertical field of view in degrees. */
@@ -120,6 +122,14 @@ export function raiseFlight(from: V3, wendigo: V3): Flight {
 
 /** The height the Overdrive flight is drawn for, metres: the party's (Tidus's 1.75). A taller caster (an aeon) is orbited from further out and looked at higher up, in step with its height. */
 export const OVERDRIVE_FLIGHT_HEIGHT = 1.75;
+
+/**
+ * The height an Overdrive flight is drawn for when `id` casts it: **an aeon's own** (3.0 to 3.4 m), **the hero's 1.75 for everyone else** (review of 2026-11-09, minor 3: the scale used to read every body's native height, so Wakka's flight
+ * went 6 percent wider, Auron's 9 and Kimahri's 26, a change to the shots the aeons' lane was never about). Pure.
+ */
+export function overdriveHeightOf(id: string): number {
+  return (LAKE_AEONS as readonly string[]).includes(id) ? LAKE_NATIVE_HEIGHT[id as LakeId] : OVERDRIVE_FLIGHT_HEIGHT;
+}
 
 /** The shot an Overdrive gets: round the caster in a half circle and up, 2.4 s, the first 0.9 awaited. `height` is the caster's (an aeon of 3.4 m is orbited at about twice the distance, so its wings stay in frame). */
 export function overdriveFlight(from: V3, caster: V3, height = OVERDRIVE_FLIGHT_HEIGHT): Flight {

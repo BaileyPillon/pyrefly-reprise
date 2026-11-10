@@ -1,7 +1,7 @@
 /**
  * **The Meshy models on the battle's actors** (the hidden Wendigo chapter's 3D stage; FFX only): the stage (`PaintedStage`) owns the actors and plays every `BattleEvent` onto them through the presenter, exactly as it does in
  * every chapter; this skin finds them where the stage puts them and carries a model on each, with the painted planes switched off. It is the house habit of `../yrp3d/skin.ts` (the hidden 3D Bahamut chapter's models) for the
- * lake's cast: ten bodies and the four aeons of the roster (an actor the skin has no model for, such as an aeon whose file has not come in yet, is left as the stage made it: the painting).
+ * lake's cast: ten bodies and the four aeons of the roster (an actor the skin has no model for, such as an aeon whose file has not come in yet or could not be read, is left as the stage made it: the painting).
  *
  * ## How a model rides an actor
  *

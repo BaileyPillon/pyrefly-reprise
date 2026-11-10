@@ -64,7 +64,7 @@ describe('the monsters\' rows', () => {
   });
 
   it('plays a Guardian\'s blow as the swing and every spell, potion and eye drop as the cast', () => {
-    expect(monsterRowFor('lake-guardian-a', undefined, 'attack')).toEqual({ clip: 'attack', kind: 'blow' });
+    expect(monsterRowFor('lake-guardian-a', undefined, 'attack')).toEqual({ clip: 'attack', kind: 'blow', alt: 'cast' }); // its bank has no attack: the cast stands in (the game's forced action for a Provoked Guardian is its Thundara)
     for (const id of ['lake-berserk', 'blizzara', 'thundara', 'protect', 'shell']) expect(monsterRowFor('lake-guardian-b', id, 'cast'), id).toEqual({ clip: 'cast', kind: 'cast' });
     for (const id of ['lake-auto-potion', 'lake-eye-drops']) expect(monsterRowFor('lake-guardian-b', id, 'cast'), id).toEqual({ clip: 'item', kind: 'cast', alt: 'cast' }); // the game's item motion (the command row's caster animation 2)
     expect(monsterRowFor('lake-guardian-a', undefined, 'defend')).toBeNull();
@@ -211,6 +211,36 @@ describe('the game\'s own strikes (the finishing lane, 2026-11-09)', () => {
     expect(rig.windup('wendigo-punch', 'attack', 0.26)).toBe(0); // the mark is early: the lunge leaves enough
     rig.open('wendigo-punch', 'attack', 0.5);
     expect(rig.clip).toBe('attack');
+  });
+});
+
+describe('a Guardian\'s forced Attack (the review of 2026-11-09, minor 4)', () => {
+  const body = (names: string[]): AnimationClip[] => names.map((n) => burstClip(n, 2.2, 1.6));
+
+  it('plays the cast when the file has no attack clip, so the model moves while the actor lunges', () => {
+    const guardian = new MonsterRig(rigRoot(), body(['idle', 'cast']), 'lake-guardian-a');
+    guardian.open(undefined, 'attack', 0.5);
+    expect(guardian.clip).toBe('cast');
+    expect(guardian.acting).toBe(true);
+    const provoked = new MonsterRig(rigRoot(), body(['idle', 'cast']), 'lake-guardian-b');
+    provoked.open('attack', 'attack', 0.5);
+    expect(provoked.clip).toBe('cast');
+  });
+
+  it('still plays an attack clip if a file ever has one, and leaves the Wendigo\'s and the aeons\' rows as they were', () => {
+    const withAttack = new MonsterRig(rigRoot(), body(['idle', 'cast', 'attack']), 'lake-guardian-a');
+    withAttack.open(undefined, 'attack', 0.5);
+    expect(withAttack.clip).toBe('attack');
+    expect(monsterRowFor('wendigo', 'attack', 'attack')).toEqual({ clip: 'attack', kind: 'blow' });
+    expect(monsterRowFor('shiva', undefined, 'attack')).toEqual({ clip: 'attack', kind: 'blow' });
+  });
+
+  it('holds the lunge for the cast the way it holds it for a blow, and a sleeping Guardian stays asleep', () => {
+    const rig = new MonsterRig(rigRoot(), body(['idle', 'cast', 'sleep_in', 'sleep']), 'lake-guardian-a');
+    expect(rig.windup(undefined, 'attack', 0.26)).toBeCloseTo(rig.strikeAt('cast') / SPEED_MAX - 0.3, 6);
+    rig.noteSleep(true);
+    rig.open(undefined, 'attack', 0.5);
+    expect(rig.clip).toBe('sleep_in');
   });
 });
 
