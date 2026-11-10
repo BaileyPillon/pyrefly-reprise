@@ -18,6 +18,8 @@ import { PauseView, type PauseViewDeps } from '../../src/app/screens/pause/Pause
 import { PortraitStage } from '../../src/app/screens/pause/PortraitStage.ts';
 import { chromeSideForCombatant, plateIdFor, plateMemberFor } from '../../src/app/screens/pause/plates.ts';
 import { FIXED_TAB_IDS, buildTabs } from '../../src/app/screens/pause/tabs.ts';
+import { activeMembers, battleStatsRows } from '../../src/app/screens/pause/meters.ts';
+import { chapterColumns } from '../../src/app/screens/pause/panels.ts';
 import { getChapter } from '../../src/data/encounters.ts';
 import { setArtManifest, type ArtManifest } from '../../src/engine/ArtManifest.ts';
 import { awayGirlIds } from '../../src/engine/SpecialFormMembers.ts';
@@ -146,6 +148,41 @@ describe('the pause screen asks for the main\'s plate on a part\'s tab', () => {
       expect(own.stats.maxHp, 'the part and the main differ, so this reads the part').not.toBe(main.stats.maxHp);
       expect(body).not.toContain('HP' + main.hp + '/' + main.stats.maxHp);
       out.view.dispose();
+    });
+  }
+});
+
+describe('the pause body compares the three plates, and the CHAPTER tab lists them', () => {
+  for (const { girl, parts } of FORM_GIRLS) {
+    const plateIds = [girl, ...parts];
+
+    it(`${girl}: the stat bars compare the member with the three plates (activeMembers), never with an away girl`, () => {
+      const s = formUp(girl).state as BattleState;
+      expect(activeMembers(s).map((c) => c.id)).toEqual(plateIds);
+      // an away girl with a stat far above every plate: were she a peer, every bar would shrink under her
+      const away = s.combatants[awayOf(girl)[0]!]!;
+      away.stats.str = 9999;
+      const peers = activeMembers(s);
+      for (const id of plateIds) {
+        const me = s.combatants[id]!;
+        const row = battleStatsRows(me, peers).find((r) => r.id === 'str')!;
+        const best = Math.max(1, ...plateIds.map((p) => s.combatants[p]!.stats.str));
+        expect(row.fill, `${id}: strength against the best of the three plates`).toBeCloseTo(Math.min(1, Math.max(0, me.stats.str / best)), 9);
+        expect(row.mark, `${id}: the tick at the plates' average`).toBeCloseTo(plateIds.reduce((n, p) => n + s.combatants[p]!.stats.str, 0) / plateIds.length / best, 9);
+      }
+    });
+
+    it(`${girl}: the CHAPTER tab's party column lists exactly the three plates, each under its own name, and no away girl`, () => {
+      const s = formUp(girl).state as BattleState;
+      const columns = chapterColumns({ meta: undefined, objectives: [], progress: null, playTimeMs: 0, sceneKey: 'bevelle-underground', state: s, game: 'ffx2' });
+      const gear = columns.find((c) => c.id === 'gear')!;
+      expect(gear.heading).toBe('The party');
+      const heads = gear.rows.filter((r) => r.id.endsWith('-name'));
+      expect(heads.map((r) => r.id.replace(/-name$/, ''))).toEqual(plateIds);
+      expect(heads.map((r) => r.label)).toEqual(PLATE_NAMES[girl]);
+      for (const away of awayOf(girl)) expect(gear.rows.map((r) => r.id).join(' '), away).not.toContain(`${away}-`);
+      // the dressphere rows stay as the pause prints them today (OP-23: left, recorded)
+      expect(gear.rows.filter((r) => r.label === 'Dressphere')).toHaveLength(3);
     });
   }
 });
