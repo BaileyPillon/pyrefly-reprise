@@ -5,61 +5,30 @@
  *
  * The always-visible surfaces with a REAL form up (`formUp`: the real engine, each girl walked along her own Garment Grid to her Special), each against the required result of D-32:
  * the surfaces name the three plates (the girl, then the two parts by their own names) and nothing else; a part is never given a girl's plate or count; a girl who is away is never named,
- * counted or offered a revive. One `describe` per surface; each case runs once with the form up, the OFF half (the ordinary three-girl answer) where the surface has one, and the last
- * `describe` holds the HUD's party list in three different ways: the surfaces read the engine's live state, so their answers must not move with the held list (only the HUD's own party
- * column follows it).
+ * counted or offered a revive. One `describe` per surface; each case runs once with the form up, the OFF half (the ordinary three-girl answer) where the surface has one.
+ *
+ * This file holds the turn cut-in, the Strategy Guide, the enemy-intent slab, the move advisor and the phone framing. The results page, the HUD's party column, the held-list case and the pro KO
+ * marks are in `special-surfaces-fight-hud.test.ts` (the file was one of 444 lines until review fix pass 2, item O3, split it by whole `describe` blocks; no case changed). What both read
+ * is in `helpers/specialFightSurfaces.ts`.
  *
  * Method: each case was written first against the head D2 started from; where it failed, the smallest edit in the surface's own read point was made (the handoff's table says which).
  * Removal check: delete `plateMemberFor` / the field-mark guard and the pause and field-mark cases fail; add a part-hiding filter to any surface and its case here fails.
  */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { App } from '../../src/app/App.ts';
-import { SaveStore } from '../../src/app/SaveData.ts';
-import { ResultsScreen } from '../../src/app/screens/ResultsScreen.ts';
-import { buildTabs } from '../../src/app/screens/pause/tabs.ts';
-import type { BattleResult, BattleState } from '../../src/battle/common/types.ts';
-import { getChapter } from '../../src/data/encounters.ts';
+import { beforeEach, describe, expect, it } from 'vitest';
+import type { BattleState } from '../../src/battle/common/types.ts';
 import type { MomentsPort } from '../../src/engine/BattlePresenterPorts.ts';
 import { setPortraitMode } from '../../src/engine/CutInMode.ts';
 import { awayGirlIds } from '../../src/engine/SpecialFormMembers.ts';
 import { TurnCutInBeat } from '../../src/engine/TurnCutIn.ts';
 import { playTurnCutIn } from '../../src/ui/common/transitions/TurnCutInLayer.ts';
-import { buildAdvisorView, clearAdvisorCache } from '../../src/engine/tactics/advisor.ts';
-import { buildGuideView } from '../../src/engine/tactics/guide.ts';
-import { setAtbBarsSmooth } from '../../src/ui/ffx2/AtbLive.ts';
-import { FFX2BattleHud } from '../../src/ui/ffx2/FFX2BattleHud.ts';
-import { ProFieldMarks } from '../../src/ui/common/ProFieldMarks.ts';
 import { FRAME_WEIGHTS, framedIds, koFramingChapter } from '../../src/ui/common/phoneFraming.ts';
-import { buildMemberRows } from '../../src/ui/common/resultsMath.ts';
-import { setProMode, setProPiece } from '../../src/engine/look/pro/ProSwitch.ts';
-import { setDemoChapter } from '../../src/engine/motion/DemoGate.ts';
-import { ffx2Options } from './helpers/ffx2ChapterDrive.ts';
 import { nextInput, openSpecial, unit } from './helpers/specialDrive.ts';
-import { bahamutGroup, chapterIV, FORM_GIRLS, fell, formUp, playUntilOver } from './helpers/specialFormState.ts';
-import { awayOf, fallenPartMenu, namedAway, PLATE_NAMES, walkPlates, type Moment } from './helpers/specialSurfaces.ts';
+import { bahamutGroup, chapterIV, FORM_GIRLS, fell, formUp } from './helpers/specialFormState.ts';
+import { cardOf, GIRL_IDS, guideLine, off, useFightHooks } from './helpers/specialFightSurfaces.ts';
+import { awayOf, fallenPartMenu, namedAway, PLATE_NAMES, walkPlates } from './helpers/specialSurfaces.ts';
 
-const CARD = { ffx2: { abilities: ffx2Options().abilities, items: ffx2Options().items } };
-const GIRL_IDS = ['yuna', 'rikku', 'paine'] as const;
-const off = (): BattleState => openSpecial({ build: chapterIV(), group: bahamutGroup, seed: 1, specials: false }).state() as BattleState;
-
-beforeEach(() => {
-  document.body.innerHTML = '';
-  vi.stubGlobal('requestAnimationFrame', () => 0);
-  vi.stubGlobal('cancelAnimationFrame', () => {});
-  vi.spyOn(performance, 'now').mockReturnValue(1000);
-  setAtbBarsSmooth(false);
-});
-afterEach(() => {
-  vi.unstubAllGlobals();
-  vi.restoreAllMocks();
-  setAtbBarsSmooth(null);
-  setPortraitMode(null);
-  setProMode(null);
-  setProPiece(null);
-  setDemoChapter(undefined);
-  document.body.innerHTML = '';
-});
+useFightHooks();
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 // The turn cut-in (only under ?portraits=turns)
@@ -121,11 +90,6 @@ describe('the turn cut-in', () => {
 // The Strategy Guide's NEXT line
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-/** The panel's line for a menu: the acting plate, the target's words, the watch rows and the phase label (hint prose is static chapter text and is not read). */
-function guideLine(m: Moment) {
-  const view = buildGuideView(m.state, { actorId: m.d.actorId, commands: m.d.commands });
-  return { chapter: view?.chapterId ?? null, actor: view?.next?.actorName ?? null, target: view?.next?.targetName ?? null, label: view?.next?.label ?? null, watch: (view?.watch ?? []).map((w) => w.enemyName), phase: view?.phase?.label ?? null };
-}
 
 describe('the Strategy Guide', () => {
   for (const { girl } of FORM_GIRLS) {
@@ -196,11 +160,6 @@ describe('the enemy-intent slab', () => {
 // The move advisor's card
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-function cardOf(m: Moment) {
-  clearAdvisorCache();
-  const view = buildAdvisorView(m.state, { actorId: m.d.actorId, commands: m.d.commands }, CARD);
-  return { view, lines: (view?.suggestions ?? []).flatMap((x) => [x.label, x.targetName, x.reason, x.effect, x.warning, x.menu]).concat(view ? [view.actorName, view.note] : []) };
-}
 
 describe('the move advisor', () => {
   for (const { girl } of FORM_GIRLS) {
@@ -278,167 +237,5 @@ describe('the phone framing', () => {
   it('OFF: the three girls then the foe', () => {
     const s = off();
     expect(framedIds(s, 'rikku').map(([id]) => id)).toEqual(['yuna', 'rikku', 'paine', 'bahamut']);
-  });
-});
-
-// ---------------------------------------------------------------------------------------------------------------------------------
-// The results page
-// ---------------------------------------------------------------------------------------------------------------------------------
-
-function screenRows(result: BattleResult): string[] {
-  const save = new SaveStore('d2-surfaces-results', null);
-  save.recordAttempt('ffx2-bahamut');
-  const screen = new ResultsScreen({ chapterId: 'ffx2-bahamut', result });
-  const root = document.createElement('div');
-  document.body.appendChild(root);
-  screen.app = { save, fade: () => Promise.resolve() } as unknown as App;
-  screen.root = root;
-  void screen.enter();
-  screen.update(10);
-  return [...root.querySelectorAll<HTMLElement>('.rres__member')].map((m) => m.textContent ?? '');
-}
-
-describe('the results page after a victory inside a form', () => {
-  for (const { girl } of FORM_GIRLS) {
-    it(`${girl}: the engine ends the form silently once the result is built, so the rows are the three girls and never a part`, () => {
-      const up = formUp(girl);
-      fell(unit(up.engine, 'bahamut'));
-      playUntilOver(up.engine);
-      const s = up.engine.state() as BattleState;
-      expect(s.result?.outcome).toBe('victory');
-      expect(s.activeIds).toEqual([...GIRL_IDS]);
-      const result = s.result as BattleResult;
-      const rows = buildMemberRows(getChapter('ffx2-bahamut'), result);
-      expect(rows.map((r) => r.id)).toEqual([...GIRL_IDS]);
-      expect(rows.map((r) => r.name)).toEqual(['Yuna', 'Rikku', 'Paine']);
-      const text = screenRows(result);
-      expect(text).toHaveLength(3);
-      for (const [i, name] of ['Yuna', 'Rikku', 'Paine'].entries()) expect(text[i]).toContain(name);
-      for (const name of PLATE_NAMES[girl].slice(1)) expect(text.join('|'), name).not.toContain(name);
-    });
-  }
-});
-
-// ---------------------------------------------------------------------------------------------------------------------------------
-// The mounted HUD's party column
-// ---------------------------------------------------------------------------------------------------------------------------------
-
-function mountHud(m: Moment): { hud: FFX2BattleHud; root: HTMLElement; ids: () => string[] } {
-  const root = document.createElement('div');
-  document.body.appendChild(root);
-  const hud = new FFX2BattleHud();
-  hud.mount(root);
-  hud.sync(m.state, m.snapshot);
-  return { hud, root, ids: () => [...root.querySelectorAll<HTMLElement>('.ffx2hud__party .ig-stat')].map((e) => e.dataset['actorId'] as string) };
-}
-
-describe('the party column of a mounted FFX2BattleHud', () => {
-  it('a downed part shows its own KO styling (and the KO pill under the pro look); the main and the other part do not', () => {
-    const up = formUp('yuna');
-    const s = up.state as BattleState;
-    const part = s.activeIds[1]!;
-    fell(s.combatants[part] as never);
-    setProMode('pro');
-    setDemoChapter('ffx2-bahamut');
-    const { root, ids } = mountHud({ engine: up.engine, state: s, snapshot: up.snapshot, d: null as never });
-    expect(ids()).toEqual(s.activeIds);
-    const row = (id: string): string => root.querySelector<HTMLElement>(`.ig-stat[data-actor-id="${id}"]`)!.outerHTML;
-    expect(row(part)).toContain('ffx2-hp--ko');
-    expect(row(part)).toContain('pro-mark--ko');
-    expect(row('yuna')).not.toContain('ffx2-hp--ko');
-    expect(row(s.activeIds[2]!)).not.toContain('ffx2-hp--ko');
-  });
-});
-
-// ---------------------------------------------------------------------------------------------------------------------------------
-// Whatever list the HUD holds
-// ---------------------------------------------------------------------------------------------------------------------------------
-
-describe('whatever list the HUD holds, the surfaces read the engine, not the list', () => {
-  it('the tabs, the Guide, the intent slab, the advisor and the phone framing answer the same with the girls, one girl or the three parts held; the HUD column follows the list', () => {
-    for (const { girl, parts } of FORM_GIRLS) {
-      walkPlates(girl, (m) => {
-        const answers = () => ({
-          tabs: buildTabs(m.state).map((t) => [t.id, t.label, t.hp, t.ko ?? false]),
-          guide: guideLine(m),
-          intent: (m.engine.intent()?.estimate?.perTarget ?? []).map((t) => t.targetId),
-          advisor: cardOf(m).lines,
-          framing: framedIds(m.state, m.d.actorId),
-          away: awayGirlIds(m.state),
-        });
-        const base = answers();
-        const { hud, ids } = mountHud(m);
-        for (const held of [[...GIRL_IDS], ['yuna'], [...m.state.activeIds]]) {
-          hud.holdRows(held);
-          hud.sync(m.state, m.snapshot);
-          expect(ids(), `${girl}: the HUD column`).toEqual(held);
-          expect(answers(), `${girl} at ${m.d.actorId} with ${held.join(',')} held`).toEqual(base);
-        }
-        hud.holdRows(null);
-        expect(ids()).toEqual([girl, ...parts]);
-      });
-    }
-  });
-});
-
-// ---------------------------------------------------------------------------------------------------------------------------------
-// The pro look's KO marks on the field (off by default: forced on here, as pro-look-markers.test.ts does)
-// ---------------------------------------------------------------------------------------------------------------------------------
-
-describe('the pro KO marks on the field', () => {
-  beforeEach(() => {
-    setProMode('pro');
-    setDemoChapter('ffx2-bahamut');
-  });
-  const marksFor = (state: BattleState, figures = false): ProFieldMarks => {
-    const m = new ProFieldMarks('ffx2');
-    document.body.append(m.el);
-    m.setProjector(() => ({ x: 500, y: 700 }));
-    if (figures) m.setFigures({ rect: () => ({ x: 400, y: 300, w: 300, h: 500 }), visibility: () => 1 }); // all three plates stand on the one figure
-    m.sync(state);
-    return m;
-  };
-  const washes = (m: ProFieldMarks): number => m.el.querySelectorAll('.pro-ko-wash').length;
-  const tick = (m: ProFieldMarks, ms: number): void => {
-    for (let t = 0; t < ms; t += 10) m.update(0.01);
-  };
-
-  for (const { girl, parts } of FORM_GIRLS) {
-    it(`${girl}: a downed part adds no KO wash or mark (the figure does not change when a part falls), one part or both`, () => {
-      const s = formUp(girl).state as BattleState;
-      fell(s.combatants[parts[0]] as never);
-      const m = marksFor(s);
-      expect(m.count).toBe(0);
-      expect(washes(m)).toBe(0);
-      expect(m.el.querySelectorAll('.pro-ko-mark')).toHaveLength(0);
-      fell(s.combatants[parts[1]] as never);
-      m.sync(s);
-      expect(m.count).toBe(0);
-      expect(m.el.children).toHaveLength(0);
-    });
-  }
-
-  it('downing a girl outside a form still adds one wash and one mark (OFF)', () => {
-    const s = off();
-    fell(s.combatants['rikku'] as never);
-    const m = marksFor(s);
-    expect(m.count).toBe(1);
-    expect(washes(m)).toBe(1);
-    expect(m.el.querySelectorAll('.pro-ko-mark')).toHaveLength(1);
-  });
-
-  it('downing the main inside a form is not skipped, whatever the parts do; her mark stays on the figure and is not pushed aside by her own parts', () => {
-    const s = formUp('yuna').state as BattleState;
-    fell(s.combatants['yuna'] as never);
-    const m = marksFor(s, true);
-    expect(m.count).toBe(1);
-    expect(washes(m)).toBe(1);
-    tick(m, 2500);
-    const mark = m.el.querySelector<HTMLElement>('.pro-ko-mark')!;
-    expect(mark.style.opacity).toBe('1');
-    expect(mark.style.transform).toContain('translate(500.0px'); // the point of her own body, not shifted off the figure the parts also stand on
-    fell(s.combatants[s.activeIds[1]!] as never);
-    m.sync(s);
-    expect(m.count).toBe(1);
   });
 });
