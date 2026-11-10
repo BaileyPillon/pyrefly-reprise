@@ -9,7 +9,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
-import type { AbilityDef, EnemyDef, StatusId } from '../../../src/battle/common/types.ts';
+import type { EnemyDef, StatusId } from '../../../src/battle/common/types.ts';
 import { FORMULA_NUMBER } from '../../../src/battle/ffx/adapt/command.ts';
 import { elementMask } from '../../../src/battle/ffx/adapt/words.ts';
 import { MIX_ITEM_IDS } from '../../../src/battle/ffx/kernel/mix-table.ts';
