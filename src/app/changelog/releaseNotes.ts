@@ -69,11 +69,20 @@ export const FORBIDDEN_NOTE_WORDS: readonly RegExp[] = [
  * Every release the panel lists, newest first. A new release adds its entry at the TOP before it is deployed.
  *
  * 39.4, 39.4.1 and 39.4.2 are written from CHANGELOG.md and the 39.4.2 commit messages, in player words, with the
- * hidden chapters left out. 39.4.3 to 79 are written the same way from their CHANGELOG entries and handoff notes (release
+ * hidden chapters left out. 39.4.3 to 80 are written the same way from their CHANGELOG entries and handoff notes (release
  * 49 carried nothing a player sees outside the hidden chapters, so it has no note). Older releases are not listed:
  * the panel starts here.
  */
 export const RELEASE_NOTES: readonly ReleaseNote[] = [
+  {
+    release: '80',
+    date: '2026-11-10',
+    lines: [
+      { tag: 'Both', text: 'On a desktop-sized window, the party prep card’s header now grows a line when a chapter title wraps to two, so less of its photo row is cut off; Sin’s Fins and Core (Chapter XVII) shows it whole.' },
+      { tag: 'FFX-2', text: 'A party below Level 20 now has fewer stats than one at Level 20, as it should; no chapter on the board has a party that low, so nothing plays differently there.' },
+      { tag: 'FFX', text: 'A battle script can now ask for its reply to come after the attacker’s own end-of-turn effects; no fight on the chapter board asks for it, so nothing plays differently there.' },
+    ],
+  },
   {
     release: '79',
     date: '2026-11-09',
