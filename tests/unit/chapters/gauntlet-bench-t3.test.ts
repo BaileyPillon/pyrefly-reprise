@@ -121,7 +121,7 @@ describe("the tier-3 line's rules, one by one, on the real engine", () => {
 });
 
 describe('the levers (tier 3): the stat estimate is a cliff between 0.5 and 0.8 of the caps, placed differently for each act; a Death ward costs something here', () => {
-  it('Th\'uban holds to 0.65 (100 of 100 measured) and is lost at 0.5 (0); Neslug holds to 0.7 (100) and falls at 0.4 (0); the Ultima Buster holds at 0.8 (100) and is lost at 0.7 (0): no single estimate puts the three in the 60 to 80 percent band', () => {
+  it('Th\'uban holds to 0.65 (100 of 100 measured) and is lost at 0.5 (0); Neslug holds to 0.7 (97) and falls at 0.4 (0); the Ultima Buster holds at 0.8 (100) and is lost at 0.7 (0): no single estimate puts the three in the 60 to 80 percent band', () => {
     const at = (creature: 'thuban' | 'neslug' | 'ultima-buster', f: number): number => share(actRate(SEEDS, creature, advisorLine, withStatFraction(gauntletBuild, f)));
     expect(at('thuban', 0.65)).toBeGreaterThanOrEqual(0.9);
     expect(at('thuban', 0.5)).toBeLessThanOrEqual(0.1);
@@ -131,7 +131,7 @@ describe('the levers (tier 3): the stat estimate is a cliff between 0.5 and 0.8 
     expect(at('ultima-buster', 0.7)).toBeLessThanOrEqual(0.1);
   });
 
-  it('a Death ward in place of the Ribbon costs the tier-3 chain (91 of 100 measured: Rainbow, Slime and Contamination land); in place of Auto-Protect it costs it nothing (100 of 100)', () => {
+  it('a Death ward in place of the Ribbon costs the tier-3 chain (92 of 100 measured, all lost at act 7: Rainbow, Slime and Contamination land); in place of Auto-Protect it costs it nothing (100 of 100)', () => {
     const ribbon = chainRate(40, advisorLine, withDeathproof(gauntletBuild, 'ribbon'), 1, T3);
     expect(ribbon.wins).toBeLessThan(40);
     const protect = chainRate(SEEDS, advisorLine, withDeathproof(gauntletBuild, 'auto-protect'), 1, T3);
