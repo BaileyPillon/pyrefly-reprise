@@ -138,7 +138,12 @@ describe('OFF pin 6: the mounted FFX-2 HUD through a command menu open and an al
     const { hud, root, snap, d } = mountedHud();
     const hudEl = (): HTMLElement => root.querySelector<HTMLElement>('.ffx2hud')!;
     const party = (): HTMLElement => root.querySelector<HTMLElement>('.ffx2hud__party')!;
-    const take = (): { partyClass: string; hud: string } => ({ partyClass: party().className, hud: hudEl().outerHTML });
+    // The move advisor's card is left out: whether it has text depends on whether the tactics data has been imported yet (a cold-load artifact of the file it runs in), and D1 edits nothing of it.
+    const take = (): { partyClass: string; hud: string } => {
+      const copy = hudEl().cloneNode(true) as HTMLElement;
+      copy.querySelectorAll('[data-role="move-advisor"]').forEach((e) => e.remove());
+      return { partyClass: party().className, hud: copy.outerHTML };
+    };
     const out: Record<string, { partyClass: string; hud: string }> = { synced: take() };
     hud.setProjector((id) => ({ x: id === 'bahamut' ? 560 : 120, y: 200 }));
     const row = allyRow(d);
