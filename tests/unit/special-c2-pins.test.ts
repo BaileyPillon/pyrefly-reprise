@@ -46,13 +46,14 @@ vi.mock('../../src/engine/PaintedActor.ts', () => ({
 vi.mock('../../src/engine/VFX.ts', () => ({ HitEffects: class extends Group {} }));
 
 import type { AnyCombatant } from '../../src/battle/common/types.ts';
-import { CHAPTERS, getChapter } from '../../src/data/encounters.ts';
+import { CHAPTERS, UNLISTED_CHAPTERS, getChapter } from '../../src/data/encounters.ts';
 import { preloadBattle } from '../../src/app/screens/battlePreload.ts';
 import { setupForChapter } from '../../src/app/screens/BattleScreenSetup.ts';
 import { createEngine } from '../../src/app/screens/BattleScreenWiring.ts';
 import { resetImageWarm } from '../../src/app/imageWarm.ts';
 import { releaseAllPrefetch } from '../../src/app/screens/preloadFetch.ts';
-import { artCandidatesFor } from '../../src/engine/BattlePresenterArt.ts';
+import { artCandidatesFor, artIdFor } from '../../src/engine/BattlePresenterArt.ts';
+import { inArtNamespace } from '../../src/data/art/artNamespace.ts';
 import { BattleCamera } from '../../src/engine/BattleCamera.ts';
 import { PaintedStage } from '../../src/engine/BattlePresenterStage.ts';
 import type { SceneSlots } from '../../src/scenes/index.ts';
@@ -104,6 +105,29 @@ describe('pin 1: artCandidatesFor for ordinary combatants', () => {
     expectPinned('c2-art-candidates', rows);
     // The rows are replayed from their descriptors, so the pin does not depend on the chapter data staying the same.
     for (const r of rows) expect(artCandidatesFor(combatantOf(r.d))).toEqual(r.bare);
+  }, 120_000);
+});
+
+describe('pin 1b: artCandidatesFor for the FF7 chapters (the same function is on the FF7 path, which pin 1 leaves out)', () => {
+  it('is the literal old body for every combatant of every FF7 chapter\'s party and first formation, bare and in an art namespace: no Special\'s painting, no part ever appears', async () => {
+    const ff7 = [...CHAPTERS, ...UNLISTED_CHAPTERS].filter((c) => c.game === 'ff7'); // the FF7 chapters are hidden ones (`UNLISTED_CHAPTERS`), so pin 1's filter on CHAPTERS never met one
+    expect(ff7.length, 'there are FF7 chapters to read').toBeGreaterThan(0);
+    const special = /(^|-)(floral-fallal|machina-maw|full-throttle)$/;
+    let checked = 0;
+    for (const chapter of ff7) {
+      const state = (await createEngine(chapter.game, setupForChapter(chapter, 1), { automated: true })).state();
+      for (const id of [...state.activeIds, ...state.enemyIds]) {
+        const c = state.combatants[id];
+        if (!c) continue;
+        for (const ns of [undefined, 'exp-leblanc']) {
+          const old = [artIdFor(c), c.spriteKey, c.id].map((x) => (x ? inArtNamespace(ns, x) : x)); // the body of `artCandidatesFor` before the step
+          expect(artCandidatesFor(c, ns), `${chapter.id}/${id}`).toEqual(old);
+          for (const candidate of old) expect(special.test(candidate ?? ''), `${chapter.id}/${id}: ${candidate}`).toBe(false);
+        }
+        checked++;
+      }
+    }
+    expect(checked, 'a party and a formation per chapter').toBeGreaterThanOrEqual(ff7.length * 2);
   }, 120_000);
 });
 
