@@ -351,3 +351,74 @@ OP-13 (mode a/b of the part mark and the taps: the default draws no mark, leave 
 ### 12.8 Known edges and what comes next
 
 D2: the pause tabs, `ProFieldMarks`, `phoneFraming`, the always-visible-surface snapshot, e2e 23 and 24 (written, not run). Stage 2: the real art, the CSS numbers judged at 1600 by 900 and 390 by 844, O-7, the lift anchors, `SPECIAL_SHOTS`, the effects. The count of three plates in the list is not yet tested at the phone's 360 width: rows stack, so the width is the name's.
+
+## 13. The look, step D2: the always-visible surfaces (2026-11-10; branch `ffx2-specials`; plan `docs/plans/ffx2-specials-look-review.md`)
+
+**Game case: FFX-2 only in what is seen** (the three Special dresspheres exist only in FFX-2). The pause files, `ProFieldMarks.ts` and the tactics are shared by both games, so every edit is additive and inert while the switch `specialDressUp` is OFF (no combatant carries `dresspheres.special`, so the new readers answer `null`, `false` and `[]`). The rule is D-32: the surfaces name the three plates (the girl, then the two parts by their own names) and nothing else; a part is never given a girl's plate, tab portrait or count; a girl who is away is never named, counted or offered a revive.
+
+### 13.1 What landed
+
+| Commit | What | Tests |
+|---|---|---|
+| `5b80f283c` | **The OFF pins, alone, before any edit**: `buildTabs` at Chapter IV, Chapter V, the FFX state and no battle; a real `PauseView` over Chapter IV on each girl's tab (the `PortraitStage.show` arguments, the img on screen, the mirror class, the tab strip, the body text) with a manifest listing the plates and with none; `ProFieldMarks` with the pro piece forced on for a downed girl, FFX-2 and FFX | `pause-tabs-off-pin` |
+| `15ace9c43` | `SpecialFormMembers.ts` (52 lines): `formMainOf`, `isFormPartId`, `awayGirlIds` (transient orphan for this commit only: its importers come in the next but one) | `special-form-members` |
+| `599dd56bd` | **The snapshot tests, written before any edit**, every always-visible surface with a real form up (26 cases, all pass against the unedited code): the surface table of 13.2; `helpers/specialSurfaces.ts`; `fell` and `playUntilOver` copied into `helpers/specialFormState.ts` | `special-surfaces-fight` |
+| `e8fa11d46` | the two edits the snapshots demanded (13.3), the pause snapshot (22 cases; 19 failed before the edit, output kept with the build notes), the pro KO marks block, the OFF identity half of the pins, the switch-off append | `special-surfaces-pause`, `special-surfaces-fight`, `pause-tabs-off-pin`, `special-switch-off` |
+| `b63a2e16d` | e2e 23 and 24 and `tests/e2e/support/special-walk.ts`, written, not run | `tsc -p tsconfig.e2e.json` |
+| this commit | CONTRACT-CHANGES entry and this section | |
+
+### 13.2 The surface table: what each snapshot found
+
+| Surface (read point) | Result of the snapshot with a REAL form up (Floral Fallal, Machina Maw, Full Throttle) | Edit |
+|---|---|---|
+| Turn cut-in (`TurnCutIn`, `?portraits=turns`) | `ATB 1 OF 3`, `ATB 2 OF 3`, `ATB 3 OF 3` for the main, right part, left part, with the part's own name; no cut-in and `wants` false for an away girl | none (passed unedited) |
+| Strategy Guide (`buildGuideView`) | `next.actorName` is the acting plate, `next.targetName` is a plate, a foe or "the party" / "all enemies"; no away girl in `next`, the watch rows or the phase label (hint prose is chapter text and is not read) | none |
+| Enemy-intent slab (`engine.intent()`) | Impulse lists all three plates (with the girls' invincibility rig taken off: with it on the main is not "touched" and the slab lists only the two parts, which is the rig's doing); a random-target row lists only plates; no away girl | none |
+| Move advisor (`buildAdvisorView`) | the card is for the acting plate; no line names an away girl; every aim is a plate or a foe; a fallen part is a legal target of the menu's Revival row (Yuna's All-Life, Rikku's Revival; Paine's wings have no revive row) and an away girl never is | none |
+| Phone framing (`framedIds`) | the three plates then the foe; actor weighs `actor`, the other plates `party`; a downed part weighs `party` in Chapter IV and `ko` only on a KO-framing road (checked on a clone of the board with `x2-shiva` as the foe) | none |
+| Results page (`buildMemberRows`, the real `ResultsScreen`) | after a victory in a form the engine has ended the form silently: `activeIds` is the three girls again and the rows are Yuna, Rikku, Paine | none |
+| HUD party column (`FFX2BattleHud`) | a downed part's row has `ffx2-hp--ko` (and the KO pill under the pro look); the main's and the other part's do not | none |
+| The same surfaces with the HUD holding the girls, one girl or the three parts | tabs, Guide, intent, advisor, framing and away list answer the same whatever list is held; the HUD column follows the held list | none |
+| Pause tabs (`buildTabs`) | already the three plates' names in the order main, right, left, then the six fixed tabs; none for an away girl | none (`tabs.ts` is not edited) |
+| Pause plate (`PauseView.renderPlate`) | **FAILED**: a part's tab asked for `art/pause/<part id>.png` and `art/portraits/<part id>.png` | `plates.ts` `plateMemberFor` + the one call in `PauseView.ts` |
+| Pro KO marks (`ProFieldMarks.sync`) | **FAILED**: a downed part got a wash and a mark on the figure it stands on, and the parts (the figure's rectangle) pushed the main's own mark off its point | `ProFieldMarks.ts`, two reads of `isFormPartId` |
+| HUD lane fence (`FFX2BattleHud` projection loop) | not testable in jsdom (needs layout) | none: a Stage 2 screenshot with a form up and the Guide open |
+| Pause body (`meters.ts`, `panels.ts`) | a part's tab shows the part's own HP pool and meters; the stat bars compare the three plates | none; see 13.5 |
+
+### 13.3 The edits (all additive, all inert while OFF)
+
+- `src/engine/SpecialFormMembers.ts` (new, 52 lines, types only).
+- `src/app/screens/pause/plates.ts` (286 to 295): `plateMemberFor(id, state)`, a part gives its main's id, anything else the id itself.
+- `src/app/screens/pause/PauseView.ts` (404, no net change; over the cap before): `renderPlate` passes its member through `plateMemberFor`, so the plate and the chrome side are the main's.
+- `src/ui/common/ProFieldMarks.ts` (201 to 204): `this.standing` and the loop leave a form part out. The spec names line 101 (the standing list) and the loop; both are guarded, because with only the loop guarded the main's own mark was pushed off the figure by her parts' rectangles (the snapshot showed the mark at 320 instead of 500).
+
+### 13.4 How to run e2e 23 and 24 (Stage 2, under the suite lock, art installed)
+
+`node node_modules/@playwright/test/cli.js test tests/e2e/pause-with-form.spec.ts tests/e2e/special-touch-aim.spec.ts` (each starts its own vite dev server on a random port 5400-5990 and stops it by PID). `STRICT_404=1` makes e2e 23 demand no failed response at all (art installed); `SPECIAL_SHOTS=1` writes `docs/screenshots/special-pause-form-<girl>.png`. The walk is greedy over the Change rows (cap 60 decisions); if it wanders, the fallback is `window.__pyrefly.specials(true)` plus a state seeded by `specialDrive` in a unit test. Nothing in either spec has met a browser.
+
+### 13.5 Open points and findings
+
+- **A finding that corrects 12.3:** the one-target ally rows of a form do exist for two of the three girls. Rikku's Machina Maw parts offer HP Repair and MP Repair (`single-ally`, three valid targets: the main and both parts), Paine's Full Throttle wings offer Stamina and Mettle (`single-ally`, three targets). Only Yuna's Floral Fallal parts offer no one-target pick (White Pollen, Hard Leaves, Tough Nuts, Mirror Petals are `all-allies`; Revival is the candidate when a part is down). So e2e 24 runs Rikku and Paine; AC-5 (a part aimed by a real tap) has a target there. For Yuna it is a design question for Bailey, unchanged.
+- **The pause body prints a part's Dressphere as the part id with dashes removed** ("floral fallal right pistil", on the part's own tab and on the CHAPTER tab's party column). Left as it is (spec OP-23; the pause body is not a fight surface). Option for Bailey: the Special's name instead.
+- **The advisor warns "This target is immune - nothing lands" on a revive aimed at a fallen part** (seen for Yuna's All-Life and Rikku's Revival, in the card's `warning`, while the engine's own menu lists the part as a valid target and the engine raises it). The warning comes from `advisor.ts`'s generic "tried to apply something and applied nothing" rule (the revive's status effect); it was not investigated for an ordinary girl. Nothing asserts on it. Recorded, not guessed at (spec 8.3).
+- **Phone framing under mode (a)** weighs the figure three times (three plate ids share its rectangle): a Stage 2 phone screenshot judges whether the camera moves wrongly.
+- **Pro-look marks are off by default**, so the `ProFieldMarks` edit has no visible effect in a shipped build; the unit tests force the option on.
+- The Guide is "silent about the away girls" by construction on every path read (the away girls are not in `activeIds`; the status-hint card skips `removed`).
+
+### 13.6 `[ours]` rows (none is a game number)
+
+| Rule | Where | Why |
+|---|---|---|
+| A part rides its main's pause plate (and chrome side); the tabs stay three, one per plate (OP-22) | `plates.ts`, `PauseView.ts` | a part has no painting of its own; the other reading, one tab per girl with the parts inside, is one filter in `buildTabs` |
+| The pause body's dashed part names are left (OP-23) | `meters.ts`, `panels.ts` | the body is not a fight surface |
+| A downed form part makes no field KO mark, and is not a figure the main's mark keeps clear of | `ProFieldMarks.ts` | the figure must not change when a part falls; the row's KO pill says it |
+
+### 13.7 Deviations from the step spec, each kept to its intent
+
+1. **The pins commit has no `plateMemberFor` identity half**: the function cannot exist before the edit that adds it. The identity for every `activeIds` entry of the pinned states is asserted in `pause-tabs-off-pin.test.ts` by the commit that adds `plateMemberFor`.
+2. **`PauseView.ts` has no net line change** (the spec counts +2): the import line and the member line were changed in place.
+3. **`ProFieldMarks.ts` is +3 lines** (the spec counts +4): the import and a two-line comment; both reads guarded (13.3).
+4. **A transient orphan between two commits**: `SpecialFormMembers.ts` has no production importer between its own commit and the edit commit; the orphan list at the end is the base's 24.
+5. **Existing test edited: `special-switch-off.test.ts`**, as the spec says ("Append to ... test 10"): imports and one new `describe`; no assertion changed.
+6. **The cut-in, Guide, intent, advisor, framing, results and HUD cases are asserted on names, ids and weights, not on hint prose** (spec 3.3).
+7. **The intent case takes the girls' invincibility rig off** (a rig of the measurement, as `exposed` does elsewhere) so every plate is touched by Impulse.
