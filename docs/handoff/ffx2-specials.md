@@ -113,3 +113,62 @@ The review found no critical defect, two major ones in the form's end and a proc
 **A defect the review did not see, found while writing its test: the second Special Dress Up of a battle had pods that never got a turn.** The engine keeps its slot order by object and checks it by length (`engine-core.ts#slotOrder`); a second entry swapped the two dormant pods for new objects at the same indices, so the length did not change and the new pods were never stepped (their gauges sat at 0 for ever; the girl alone took every turn). The pods are now made new in place (same object, every field reset). Pick 14. This is only reachable with the switch on and only after a form was left and a second one put on.
 
 **Still open (unchanged):** pick 3 (a fallen main body ends the form) is checked against nothing but a fan thread: no Ghidra instance was running in this pass either (`list_instances` returned none), so the exe was not read.
+
+## 9. The look, step A (2026-11-10; branch `ffx2-specials`; plan `docs/plans/ffx2-specials-look-review.md`)
+
+**Game case: FFX-2 only in what is seen** (the three Special dresspheres exist only in FFX-2); the shared plumbing (`HudPort`, `FFX2BattleHud`, `CoachLayer`, `BattleMomentsHeld`, the twirl and held-shot early-outs, `PresenterDeps`, the Vite define) is **both games, additive, optional and inert while `specialDressUp` is OFF**. The switch is OFF in every shipped chapter; nothing was built for ON beyond the test word; no file under `src/battle/` is edited. Reading G is the plan (one connected figure, three HUD plates: main, right part, left part); reading T (section 11 of the plan) is kept and marked not built.
+
+### 9.1 What landed (four commits, in this order)
+
+| Commit | What | Tests |
+|---|---|---|
+| `8f93bd5f1` | **The OFF pins, alone, before any other edit.** `tests/fixtures/specials/off-pins/*.json`, `helpers/offPins.ts` | `party-rows-off-pin`, `special-off-pins` |
+| `2b6fe7a3a` | The pure core: `SpecialArtIds`, `SpecialFormTracker`, `SpecialBeatPlans`, `SpecialReactions`, `SpecialPartyHold`; `helpers/specialFormState.ts`; the ten recorded logs | `special-form-tracker`, `special-beat-plans`, `special-reactions`, `special-party-hold` (holder half), `special-first-time`, `special-first-time-port` |
+| `a0cbbced6` | `HudPort.holdRows?` and `showAtbChip?` with their `FFX2BattleHud` lines, the `CoachedHud` forwards, `BattleMomentsHeld.portraitWait()`, the three early-outs, `PresenterDeps.specialSeen?` | `special-party-hold` (HUD half), `special-no-twirl` |
+| `cadcfc607` | The test word `?specials=on` (`src/app/specialsWord.ts`), its Vite define, `window.__pyrefly.specials` | `specials-word`, `specials-word-api`, `special-switch-off` |
+
+### 9.2 The pins, and how to regenerate them
+
+The pins hold what the FFX-2 party rows, the face stacks, the mounted HUD column and the named CSS rules are **today** (string pins; the row of every FFX-2 chapter of `CHAPTERS`, 225 face-stack strings, `faceLadder`, `partyFaceHtml` for one FFX chapter, the one FF7 chapter and every girl in every dress, the party column of a mounted `FFX2BattleHud` for Chapters IV and V in both bar looks, and the rules of `ffx2-hud.css`, `hudf1-ffx2.css` and `phone-hud.css` whose selectors the test names). They are taken at the branch head `d63c82110`, not at `bc93b1fdd` (no checkout is allowed): `git diff --stat bc93b1fdd..HEAD` over `src/ui src/engine src/scenes src/app tools` lists 61 files (the release 80 integration's hidden chapters and tools), but **none of the files the pins read**: `PartyRows.ts`, `partyFace.ts`, `FFX2BattleHud.ts`, `dressphereIcons.ts`, `HudPort.ts`, `portrait.ts`, `proMarkers.ts`, `AtbLive.ts` and the three sheets are identical to `bc93b1fdd`. **What the pins do not prove:** the engine commits between `bc93b1fdd` and the head are covered only by PROOF's flag-off A/B. To regenerate (only for a meant, approved change): `PYREFLY_WRITE_PINS=1 node node_modules/vitest/vitest.mjs run tests/unit/party-rows-off-pin.test.ts tests/unit/special-off-pins.test.ts`. The ATB shimmer's phase comes from the page clock, so the cases that print it stop `performance.now`.
+
+### 9.3 The recorded logs, and how to record them again
+
+`tests/fixtures/specials/logs/*.json` (`{ girl, seed, source, events, state }`): `entry-yuna|rikku|paine`, `exit-yuna`, `fall-part-standing`, `defeat-all-parts-down`, `autolife-main`, `part-falls-raised` (engine) and `heal-on-part-synthetic`, `status-on-part-synthetic` (hand-written: the engine's rigs emit no event for a heal or a status on a part). **A fall cannot be made with `fell(u)`** (it emits no `ko` event); the capture takes the main's `invincible` and `auto-life` off, sets her HP to 1 and lets the foe's own action land (`helpers/specialFormState.ts`). With every part down `settleForms` does nothing and the log ends in `defeat` (OP-2: the seen fall is a defeat in the engine; `fallPlan(true)` is data only, the hold is released at `defeat` with no beat). Record again: `PYREFLY_CAPTURE_SPECIAL_LOGS=1 node node_modules/vitest/vitest.mjs run tests/unit/special-form-tracker.test.ts`; a normal run captures again under each file's recorded seed and compares (the engine is deterministic). The capture keeps the **shortest** log of the seeds 1 to 8 that produce a case (the step spec said the first), so the fixtures are small.
+
+### 9.4 Transient orphans (`node tools/orphans.mjs`)
+
+Base list: 24 orphaned modules. After step A: 28, the base plus exactly `SpecialFormTracker`, `SpecialBeatPlans`, `SpecialReactions`, `SpecialPartyHold` (no production importer until C2; the tool does not count tests as importers). `SpecialArtIds` and `specialsWord` are imported (by the three fx files, and by `BattleScreenWiring` and `debug/api`).
+
+### 9.5 Deviations from the step spec, each kept to its intent
+
+1. **`ActorHandle` has 29 members, not 28.** `noteStatus?` was added on 2026-11-09 (the Wendigo finish, after the spec was written). `HANDLE_MEMBERS` classes it `forward` (a status the event names reaches the figure for the MAIN; a status on a part never gets there, `reactionOf` answers `none`): **17 forward, 9 swallow, 3 source**. The `Record<keyof ActorHandle, ...>` type is the build-time count.
+2. **The test preview build is a build MODE, not an environment variable.** `vite.config.ts` defines `__PYREFLY_SPECIALS__` as `command === 'serve' || mode === 'specials-test'`; the ON preview is `vite build --mode specials-test --outDir <its own folder>`. The spec read `process.env['PYREFLY_SPECIALS_TEST']`, but `tests/unit/release-build.test.ts` fails on any new variable `vite.config.ts` reads ("a new one must be pinned or listed on purpose"), and mending that means editing the test and `tools/release-build.mjs`; a mode needs neither and, unlike a variable left in a shell, cannot ship the word (the deploy passes no `--mode`). STAGE 2 builds its ON preview with the mode.
+3. `window.__pyrefly.specials` needs a line in the `PyreflyDebugApi` interface as well (api.ts +3, not +2).
+4. `NOW.md` and `CHANGELOG.md` are **not** edited by this step (the driver's records stage writes them, overriding the spec's "every step ends by updating NOW.md").
+5. The fall plan, the `reactionOf` table and the beat plans use the labels and splits in 9.7 below.
+
+### 9.6 Open points taken (the driver's calls; Bailey's to overturn)
+
+OP-1 section-4 defaults (plain renders, no part mark, size `trial`, hold `per-save`, Machina Maw `standing`); OP-2 (a) the reachable fall only; OP-3 (a) `VfxPort.special?` is C2's call, its body stage 2's; OP-6 both main and parts hit-gated; OP-7 the rows stay held on the parts for the whole life of the form; OP-9 pins at the head; OP-11 the four transient orphans; OP-12 mask fixtures (C1); OP-14 the badge is hidden until a part row is drawn (D1); OP-19 no `scenes/types.ts` field; OP-22 three pause tabs named by the plates; OP-31 the `[ours]` values are table values (9.7); OP-32 the carry layout is left as it is: with `?specials=on` the engine drops a Special off the grid but `BattleScreenCarry.ts` and `engine/yrp3d/dressReach.ts` still pass the constant `SPECIAL_DRESS_UP`, inert unless the carry switch is on (matters for Paine in Chapter V ON; stage 2 decides).
+
+### 9.7 `[ours]` rows (values and rules the preflight does not give; table values, none a game number)
+
+| Value or rule | Where | Why |
+|---|---|---|
+| `REDUCE_MOTION_SCALE` 0.25 (camera, pieces and flash removed; rows and chip order kept) | `SpecialBeatPlans.ts` | "every plan collapses" is all the preflight says; goes to the decisions ledger for Bailey |
+| The preambles 6000 / 3000 / 3000 ms (PREAMBLE_MS) | `SpecialBeatPlans.ts` | preflight 2.1 |
+| The fall: 2000 lead-in, 4000 grey and squash, 6000 dissolve, 7500 girl lying; `FALL_SQUASH` 0.8 | `SpecialBeatPlans.ts` | the 2000 and the 0.8 are the preflight's `[ours]`; 4000, 6000 and 7500 are inferred from the defeat frames |
+| The fade of the other two begins at 2000 ms and lasts the summon's 620 ms (`PARTY_SWAP_MS`, asserted equal) | `SpecialBeatPlans.ts` | preflight 2.1 row 2 |
+| Rikku's assemble 16000-21000 split at 18500 (R2 above, then R3) | `SpecialBeatPlans.ts` | "R2 then R3": the split is ours |
+| Camera labels: Yuna's reveal `low-close` (a close-up, no pull-back seen), Paine's burst `pull-back` and reveal `low-form`, her armour close carries no camera | `SpecialBeatPlans.ts` | the labels are plan names; C2 maps them to existing rigs and adds none |
+| The exit's marks: the girls' rows at 4000, the chip back and control at 4500; the fall's `tag-wait` and `numbers` marks at 2000 | `SpecialBeatPlans.ts` | preflight 2.7 and 2.8 |
+| `reactionOf`: the `plate` flag per event type; `ko` of the MAIN is `guard` (the figure holds until the fall beat); a `revive` of the main flashes the pyrefly green for any cause (the figure never lay down) | `SpecialReactions.ts` | the table in the step spec names the rows, not every flag |
+| The look words `specialsfit`, `specialsmark`, `specialshold` and their values | `specialsWord.ts` | OPEN 2: Bailey's four look questions stay switches |
+
+### 9.8 Byte delta (R-21)
+
+The shared bundles gain `SpecialArtIds.ts` (three string literals and one function with one import, `baseArtId`), three early-out lines, and the optional HUD members. The tracker, the plans, the reactions, the holder and `forms.ts` are **orphans** until C2, so they are in no bundle. No production build was made in this step (the rule), so the main chunk's delta is **not measured**: PROOF measures it.
+
+### 9.9 For the next steps
+
+C1 and C2 import `tests/unit/helpers/specialFormState.ts` (`chapterIV`, `FORM_GIRLS`, `formUp`, `captureBursts`, the logs) and never copy it; `tests/unit/special-switch-off.test.ts` grows with each step (it already proves the presenter plays an ordinary Change burst without a call to `holdRows` or `showAtbChip`). `specialsLookWord()` is how C1's `setSpecialLook` and C2's `entryKind(..., hold)` read the look words. The pins must pass at every step.
