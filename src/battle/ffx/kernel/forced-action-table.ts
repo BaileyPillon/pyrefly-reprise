@@ -78,6 +78,8 @@ const ROWS: ReadonlyArray<readonly [string, number]> = [
   ...['belg-valefor', 'belg-ifrit', 'belg-bahamut', 'belg-yojimbo', 'belg-daigoro'].map((id): readonly [string, number] => [id, 0x0000]),
   // The hidden Shinryu chapter (2026-11-07): Shinryu (m283) carries no forced action (`research/re-ffx-shinryu.md` 0: forcedAction 0), so Berserk, Confuse and Provoke (all immune) would drop its turn.
   ['shinryu', 0x0000], // m283
+  // The hidden Gauntlet chapter (2026-11-10): the Monster Arena creations of tiers 1 and 2 (m314, m317, m311, m279, m281, m277) carry no forced action (the record's word +0x70 is 0 in all nine bodies and the Head and Arm: `tests/fixtures/parity/ffx/gauntlet_rows.json`), so Berserk, Confuse and Provoke, all immune, would drop their turns. Tier 3's rows come with its creatures.
+  ...['cactuar-king', 'don-tonberry', 'jormungand', 'earth-eater', 'greater-sphere', 'catastrophe'].map((id): readonly [string, number] => [id, 0x0000]),
 ];
 
 /** The forced-action word of an enemy by our id, or `undefined` when no monster file is matched to it. */

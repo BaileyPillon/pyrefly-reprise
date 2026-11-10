@@ -81,8 +81,11 @@ export const donTonberry = (): EnemyDef => build('don-tonberry', { name: 'Don To
 export const jormungand = (): EnemyDef => build('jormungand', { name: 'Jormungand', slot: 0, abilityIds: [ROW.jormungandAttack, ROW.coldStare, ROW.vorpal] });
 /** Earth Eater (m279, act 4): Armored; starts with Reflect (the rules stage writes it); the Flare it casts at itself is the player's row. */
 export const earthEater = (): EnemyDef => build('earth-eater', { name: 'Earth Eater', slot: 0, abilityIds: [ROW.attack, ROW.megatonPunch, ROW.getsUp, 'flare'] });
-/** Greater Sphere (m281, act 5): Spherimorph's mechanic at 1,500,000 HP; the -aga spells, Flare and Ultima are the player's rows. */
-export const greaterSphere = (): EnemyDef => build('greater-sphere', { name: 'Greater Sphere', slot: 0, abilityIds: [ROW.attack, ROW.hydraulicPress, 'firaga', 'blizzaga', 'thundaga', 'waterga', 'flare', 'ultima', ROW.elementalShift] });
+/**
+ * Greater Sphere (m281, act 5): Spherimorph's mechanic at 1,500,000 HP; the -aga spells and Flare are the player's rows. The record's command list names the player's Ultima (0x3053) beside them; **the script performs the monster
+ * row 0x40F3** (`v8 = 16627` in all four states, confirmed by running the bytecode: `tests/unit/chapters/gauntlet-greater-sphere.test.ts`), so `ROW.ultima` is in the list too and is the one the script uses.
+ */
+export const greaterSphere = (): EnemyDef => build('greater-sphere', { name: 'Greater Sphere', slot: 0, abilityIds: [ROW.attack, ROW.hydraulicPress, 'firaga', 'blizzaga', 'thundaga', 'waterga', 'flare', 'ultima', ROW.ultima, ROW.elementalShift] });
 /** Catastrophe (m277, act 6): Armored in its first form; Demi is the player's row. Its second form (AGI 60, Luck 30, not Armored) is a rules write (RE n 3.3). */
 export const catastrophe = (): EnemyDef => build('catastrophe', { name: 'Catastrophe', slot: 0, abilityIds: [ROW.toxicCloud, ROW.toxicSpray, ROW.hundredThorns, 'demi', ROW.transform] });
 /** Th'uban (m282, act 7): Reflect 255; the buffs and Curaga are the player's rows; Regen is the script's buff step (RE n 3.6) though the record's command list does not name it. */

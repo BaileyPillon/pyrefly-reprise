@@ -121,6 +121,14 @@ export const GAUNTLET_SPRITE: Readonly<Record<GauntletCombatantId, string>> = {
 };
 
 /**
+ * **Catastrophe's second form** (RE n 3.3: it transforms below 4/5 of its HP): the painting the form change swaps to (`form-change` event; Catastrophe is one form in the engine's sense, as Penance is, so its death is
+ * never a transformation). **A stand-in**: the same painting as the first form until the art lane's second painting lands (`GAUNTLET_CATASTROPHE_FORM2_WANTED`, the art list's "form 2 idle, attack"). The battle layer keeps a
+ * copy (`battle/ffx/ai/gauntlet-rules.ts#CATASTROPHE_FORM2_SPRITE`) that `tests/unit/chapters/gauntlet-data.test.ts` pins equal.
+ */
+export const GAUNTLET_CATASTROPHE_FORM2_SPRITE = 'spectral-keeper' as const;
+export const GAUNTLET_CATASTROPHE_FORM2_WANTED = 'catastrophe-form-2' as const;
+
+/**
  * The move rows of the chapter (`../enemies/gauntlet-abilities.ts`), the game's monster-magic rows. The ids carry the chapter's prefix: the game's plain "Attack" rows are not the engine's own default Attack. A comment
  * gives the game's command id. The rows the scripts take from the player's own table (Demi, Flare, Ultima 0x3053, the four -aga spells, Haste, Protect, Shell, Reflect, Regen, Curaga) are used by their own ids
  * (`GAUNTLET_PLAYER_ROWS`), as the Spherimorph and Sanctuary Keeper chapters do.
@@ -213,7 +221,7 @@ export const GAUNTLET_ACTS: readonly GauntletAct[] = GAUNTLET_TIERS.flatMap((t) 
 
 /**
  * **How many tiers have their rules built** (preflight GA3: three tiers, each a releasable cut). The chain runs acts 1 to `3 x GAUNTLET_TIERS_BUILT` and ends there (the last built act has no next link and pays every act's
- * spoils); the formations of an act whose tier is not built are not registered, so nothing can reach a creature whose script is not written. **1** after stage 2 (Cactuar King, Don Tonberry, Jormungand); stage 3 makes it
- * 2 (Earth Eater, Greater Sphere, Catastrophe) and stage 4 makes it 3.
+ * spoils); the formations of an act whose tier is not built are not registered, so nothing can reach a creature whose script is not written. **2** after stage 3 (tier 1: Cactuar King, Don Tonberry, Jormungand; tier 2:
+ * Earth Eater, Greater Sphere, Catastrophe); stage 4 makes it 3.
  */
-export const GAUNTLET_TIERS_BUILT: 1 | 2 | 3 = 1;
+export const GAUNTLET_TIERS_BUILT: 1 | 2 | 3 = 2;

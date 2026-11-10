@@ -456,3 +456,30 @@ describe('the ids module', () => {
     expect(gauntletBody('neslug').stats.hp).toBe(4_000_000);
   });
 });
+
+describe('tier 2 (stage 3): every row a script performs is in its creature\'s ability list, and the start-up facts the set-up writes are the record\'s', () => {
+  const listOf = (id: ids.GauntletCreatureId): string[] => gauntletBody(id).abilityIds;
+
+  it('Earth Eater: Attack, Megaton Punch, Gets up and the party\'s Flare; Greater Sphere: Attack, Hydraulic Press, the four -aga, Flare, Elemental Shift and the monster Ultima 0x40F3 (the record also names the player\'s Ultima 0x3053); Catastrophe: the cloud, the spray, the thorns, Transform and Demi', () => {
+    const R = ids.GAUNTLET_ROWS;
+    expect(listOf('earth-eater')).toEqual(expect.arrayContaining([R.attack, R.megatonPunch, R.getsUp, 'flare']));
+    expect(listOf('greater-sphere')).toEqual(expect.arrayContaining([R.attack, R.hydraulicPress, 'firaga', 'blizzaga', 'thundaga', 'waterga', 'flare', R.elementalShift, R.ultima, 'ultima']));
+    expect(listOf('catastrophe')).toEqual(expect.arrayContaining([R.toxicCloud, R.toxicSpray, R.hundredThorns, R.transform, 'demi']));
+    expect(COMMAND_RECORDS[R.ultima]!.id).toBe(0x40f3); // v8 = 16627 in all four of the Greater Sphere's states
+    expect(COMMAND_RECORDS['ultima']!.id).toBe(0x3053);
+  });
+
+  it('Earth Eater starts with Reflect (the record\'s start-up word 0x20) and Armored, which its set-up and script write; the others start with neither word', () => {
+    expect(fixture.creatures['earth-eater']!.record.autoTemporary).toBe(0x20);
+    expect(gauntletBody('earth-eater').immunityFlags).toContain('armored');
+    expect(gauntletBody('catastrophe').immunityFlags).toContain('armored');
+    expect(gauntletBody('greater-sphere').immunityFlags).not.toContain('armored');
+    expect(gauntletBody('greater-sphere').affinities).toEqual({}); // the record writes none; the script writes them at the start
+  });
+
+  it('Catastrophe is one form in the engine\'s sense (a second would turn its death into a transformation); the second form is a painting, a stand-in until the art lane\'s lands', () => {
+    expect(gauntletBody('catastrophe').forms).toHaveLength(1);
+    expect(ids.GAUNTLET_CATASTROPHE_FORM2_SPRITE).toBe(ids.GAUNTLET_SPRITE.catastrophe);
+    expect(ids.GAUNTLET_CATASTROPHE_FORM2_WANTED).toBe('catastrophe-form-2');
+  });
+});

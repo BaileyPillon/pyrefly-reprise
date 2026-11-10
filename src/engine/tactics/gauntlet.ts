@@ -20,13 +20,29 @@
  *    all three (`zanmato-all`) and without (preflight GA6), and the later tiers' long fights list theirs.
  * 5. **Revive the fallen, then heal under `healUnder`** (Yuna's Curaga/Cura; the bag only in an emergency). 6. **An Overdrive when the gauge is ready** (the strongest first): one hit event for many blows.
  * 7. **Quick Hit (Tidus) or the plain Attack** at the creature. The tactic only picks among the rows the engine offers.
+ *
+ * Tier 2 (stage 3: Earth Eater, the Greater Sphere, Catastrophe) adds three rules, each measured by an ablation of the bench (`docs/handoff/ch-gauntlet.md`):
+ *
+ * 8. **Greater Sphere: the aeon shield is available** (`fodderAt`, off for it as shipped). Every plain blow of the party is answered by Ultima on the whole front line (RE n 3.5), and the front line is the aeon alone while
+ *    one is out; the bench found the party wins the Sphere without it (100 of 100), so the shipped line leaves it off (with it the act is slower: 36 inputs against 22).
+ * 9. **Earth Eater: only Auron strikes while it stands, and everybody strikes while it lies down.** Every blow it takes standing draws a Megaton Punch (Death, a member lost on this party), so the fewest and largest blows
+ *    (Auron's Piercing blow is 64,000 to 99,999 against the 22,000 to 45,000 of Tidus's Armored blow) take the running total past 100,000 with one punch; the crossing blow is not answered. Down, it is not Armored (the others'
+ *    blows are about three times larger) and each blow is answered by a Flare it casts at itself (2,355 to 2,660 on a member), which is cheap: waiting out its two turns instead costs 372 inputs a fight against 26.
+ * 10. **No Overdrive on the Greater Sphere** (`odBarredAt`): an Overdrive is a special with no element, which the Sphere answers with Hydraulic Press, 15/16 of everyone's maximum HP (4,687 each with Auto-Protect), lethal
+ *    to anyone already wounded. The gauges carry from act to act, so in the chain they are full when the Sphere comes (97 of 100 without the rule, 100 of 100 with it).
  */
 
 import type { AvailableCommand, BattleEngine, CombatantId, Command, FFXCombatant } from '../../battle/common/types.ts';
 import { type Tactic, aim, hpFraction, revive, row } from './common.ts';
 
 /** The creatures' ids (`src/data/ffx/gauntlet-ids.ts`; later tiers add theirs). */
-export const GAUNTLET_BOSS_IDS: readonly CombatantId[] = ['cactuar-king', 'don-tonberry', 'jormungand'];
+export const GAUNTLET_BOSS_IDS: readonly CombatantId[] = ['cactuar-king', 'don-tonberry', 'jormungand', 'earth-eater', 'greater-sphere', 'catastrophe'];
+
+/** The flags Earth Eater's script publishes (restated here, the tactics keep out of the battle layer's graph; pinned by `tests/unit/chapters/gauntlet-earth-eater.test.ts`): down, and the HP damage taken since it last stood. */
+export const EATER_DOWN_FLAG = 'gauntlet.earthEater.down';
+export const EATER_TOTAL_FLAG = 'gauntlet.earthEater.total';
+/** The line its running total must pass to knock it down (RE n 3.4; restated, pinned by the same test). */
+export const EATER_KNOCK_DOWN_LINE = 100_000;
 
 /** The row of Don Tonberry's walk-in and the Waddles it takes to arrive (RE n 3.9; restated here, the tactics keep out of the battle layer's graph; pinned by `tests/unit/chapters/gauntlet-chain.test.ts`). */
 export const TONBERRY_WADDLE_ROW = 'gauntlet-waddle';
@@ -50,8 +66,14 @@ export interface LineOptions {
   readonly zanmatoAt: readonly CombatantId[];
   /** The gil one payment is. */
   readonly payGil: number;
-  /** Yuna sends an aeon in first against the Cactuar King (rule 1). */
+  /** Yuna sends an aeon in first against the creatures of `fodderAt` (rule 1). */
   readonly fodder: boolean;
+  /** The creatures (ids) the aeon-as-shield rule applies to: the Cactuar King (rule 1) and, as the tier-2 bench decides, the Greater Sphere (rule 8). */
+  readonly fodderAt: readonly CombatantId[];
+  /** Against Earth Eater only Auron strikes while it stands (rule 9: every blow it takes standing draws a Megaton Punch, a Death), the others wait; an Overdrive ready is still used. */
+  readonly eaterAuronOnly: boolean;
+  /** Against Earth Eater, hit it while it lies down (rule 9: each blow is answered by a Flare it casts at itself, 2,355 to 2,660 on a member); false waits out its two turns. */
+  readonly eaterPound: boolean;
   /** The party strikes Don Tonberry only after its fourth Waddle (rule 2). */
   readonly tonberryWait: boolean;
   /** A member is healed under this share of his HP (rule 5). */
@@ -59,6 +81,8 @@ export interface LineOptions {
   readonly itemHealUnder: number;
   /** A member spends an Overdrive when the gauge is ready (rule 6). */
   readonly useOverdrives: boolean;
+  /** The creatures (ids) nobody spends an Overdrive on (rule 10): an Overdrive is a special with no element, which the Greater Sphere answers with Hydraulic Press, 15/16 of everyone's maximum HP. */
+  readonly odBarredAt: readonly CombatantId[];
   /** Quick Hit before the plain Attack for Tidus (rule 7). */
   readonly quickHit: boolean;
 }
@@ -68,10 +92,14 @@ export const SHIPPED_LINE: LineOptions = {
   zanmatoAt: [], // none of the area three needs him (the bench: 100 of 100 wins without, and a Zanmato route is slower than a plain strike); the long fights of the later tiers list theirs
   payGil: PAY_GIL,
   fodder: true,
+  fodderAt: ['cactuar-king'],
+  eaterAuronOnly: true,
+  eaterPound: true,
   tonberryWait: true,
   healUnder: HEAL_UNDER,
   itemHealUnder: ITEM_HEAL_UNDER,
   useOverdrives: true,
+  odBarredAt: ['greater-sphere'],
   quickHit: true,
 };
 
@@ -89,6 +117,13 @@ function gilOf(engine: BattleEngine): number {
 const pickKind = (commands: readonly AvailableCommand[], kind: Command['kind'], target?: CombatantId): AvailableCommand | undefined =>
   commands.find((c) => c.enabled && c.command.kind === kind && (target === undefined || c.validTargets.includes(target)));
 
+/** Earth Eater's state as its script publishes it: down or standing, and the HP damage it has taken since it last stood. */
+export function eaterState(engine: BattleEngine): { down: boolean; total: number } {
+  const flags = engine.state().flags as Record<string, unknown>;
+  const total = flags[EATER_TOTAL_FLAG];
+  return { down: flags[EATER_DOWN_FLAG] === true, total: typeof total === 'number' ? total : 0 };
+}
+
 /** Don Tonberry has walked in when its fourth Waddle is on the log. */
 export function tonberryArrived(engine: BattleEngine): boolean {
   let waddles = 0;
@@ -97,11 +132,11 @@ export function tonberryArrived(engine: BattleEngine): boolean {
 }
 
 /** An aeon's turn: Yojimbo pays or goes home; any other aeon strikes with an Overdrive when it has one, else the plain blow, else goes home. */
-function aeonTurn(commands: readonly AvailableCommand[], bossId: CombatantId, pays: boolean, payGil: number, purse: number): Command | null {
+function aeonTurn(commands: readonly AvailableCommand[], bossId: CombatantId, pays: boolean, payGil: number, purse: number, odBarred: boolean): Command | null {
   const home = pickKind(commands, 'dismiss');
   const pay = commands.find((c) => c.enabled && c.command.kind === 'ability' && c.command.id === PAY_ABILITY_ID);
   if (pay) return pays && purse >= payGil ? ({ ...pay.command, targets: [], gilSpent: payGil } as Command) : home ? aim(home) : null;
-  const od = commands.find((c) => c.enabled && c.command.kind === 'overdrive' && c.validTargets.includes(bossId));
+  const od = odBarred ? undefined : commands.find((c) => c.enabled && c.command.kind === 'overdrive' && c.validTargets.includes(bossId));
   if (od) return aim(od, bossId);
   const swing = pickKind(commands, 'attack', bossId);
   return swing ? aim(swing, bossId) : home ? aim(home) : null;
@@ -118,7 +153,8 @@ export const lineWith = (line: LineOptions): Tactic => (actorId, commands, engin
   const wantsZanmato = line.zanmato && line.zanmatoAt.includes(boss.id);
 
   // An aeon on the field strikes (or pays).
-  if (me.side === 'aeon') return aeonTurn(commands, boss.id, wantsZanmato, line.payGil, gilOf(engine));
+  const odBarred = line.odBarredAt.includes(boss.id);
+  if (me.side === 'aeon') return aeonTurn(commands, boss.id, wantsZanmato, line.payGil, gilOf(engine), odBarred);
 
   // Yuna calls Yojimbo in (rule 4), or, against the King, the cheapest aeon as a shield (rule 1).
   if (me.id === 'yuna' && !aeonOut) {
@@ -126,7 +162,7 @@ export const lineWith = (line: LineOptions): Tactic => (actorId, commands, engin
       const summon = commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === 'Yojimbo');
       if (summon) return aim(summon);
     }
-    if (line.fodder && boss.id === 'cactuar-king') {
+    if (line.fodder && line.fodderAt.includes(boss.id)) {
       for (const name of FODDER_ORDER) {
         const summon = commands.find((c) => c.enabled && c.command.kind === 'summon' && c.label === name);
         if (summon) return aim(summon);
@@ -154,12 +190,25 @@ export const lineWith = (line: LineOptions): Tactic => (actorId, commands, engin
     return defend ? aim(defend) : null;
   }
 
+  // Rule 9: Earth Eater. Down, the party hits it (each blow is a Flare at itself, cheap) or waits out its two turns; standing, only Auron strikes (a Piercing blow is the largest, and every blow draws a punch).
+  const eater = boss.id === 'earth-eater' ? eaterState(engine) : undefined;
+  if (eater?.down === true && !line.eaterPound) {
+    const defend = pickKind(commands, 'defend');
+    return defend ? aim(defend) : null;
+  }
+
   // Rule 6: an Overdrive when the gauge is ready: the strongest first.
-  if (line.useOverdrives && me.id !== 'yuna') {
+  if (line.useOverdrives && !odBarred && me.id !== 'yuna') {
     for (const label of ['Slice & Dice', 'Shooting Star', 'Spiral Cut', 'Dragon Fang']) {
       const od = commands.find((c) => c.enabled && c.command.kind === 'overdrive' && c.label === label && c.validTargets.includes(boss.id));
       if (od) return aim(od, boss.id);
     }
+  }
+
+  // Rule 9, standing: the others wait while Auron stands to strike.
+  if (eater?.down === false && line.eaterAuronOnly && me.id !== 'auron' && party.some((c) => c.id === 'auron' && c.alive)) {
+    const defend = pickKind(commands, 'defend');
+    return defend ? aim(defend) : null;
   }
 
   // Rule 7: Quick Hit (Tidus) or the plain Attack at the creature.

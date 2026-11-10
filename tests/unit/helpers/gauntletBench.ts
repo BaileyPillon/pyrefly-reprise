@@ -11,7 +11,7 @@ import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts'
 import { gauntletBuild } from '../../../src/data/ffx/builds/gauntlet.ts';
 import { GAUNTLET_ACTS, type GauntletCreatureId } from '../../../src/data/ffx/gauntlet-ids.ts';
 import { GAUNTLET_ACTS_BUILT } from '../../../src/data/ffx/enemies/gauntlet-groups.ts';
-import { type LineOptions, SHIPPED_LINE, lineWith } from '../../../src/engine/tactics/gauntlet.ts';
+import { GAUNTLET_BOSS_IDS, type LineOptions, SHIPPED_LINE, lineWith } from '../../../src/engine/tactics/gauntlet.ts';
 import { type Input, type Line, careless as carelessLine, content, groupOfCreature, row as rowOf } from './gauntletDrive.ts';
 
 export { carelessLine, rowOf };
@@ -24,13 +24,23 @@ export const BAND: readonly [number, number] = [0.6, 0.8];
 /** The creatures whose rules are built (the acts the chain runs). */
 export const BUILT: readonly GauntletCreatureId[] = GAUNTLET_ACTS.slice(0, GAUNTLET_ACTS_BUILT).map((a) => a.creature);
 
+/** The built acts of one tier (1 to 3), in order: the cut a tier's bench plays alone. */
+export const tierActs = (tier: number): readonly GauntletCreatureId[] => GAUNTLET_ACTS.filter((a) => a.tier === tier && BUILT.includes(a.creature)).map((a) => a.creature);
+
 /** The line the chapter's advisor plays (`src/engine/tactics/gauntlet.ts`): the intended line. */
 export const advisorLine: Line = (d, e) => lineWith(SHIPPED_LINE)(d.actorId, d.commands, e);
 
 /** The line with one rule taken away or one lever moved (the bench's ablations: what each rule of `src/engine/tactics/gauntlet.ts` is worth). */
 export const ABLATIONS: Readonly<Record<string, Partial<LineOptions>>> = {
   'no-zanmato': { zanmato: false },
-  'zanmato-all': { zanmatoAt: ['cactuar-king', 'don-tonberry', 'jormungand'] },
+  'zanmato-all': { zanmatoAt: GAUNTLET_BOSS_IDS },
+  'zanmato-t1': { zanmatoAt: ['cactuar-king', 'don-tonberry', 'jormungand'] },
+  'zanmato-t2': { zanmatoAt: ['earth-eater', 'greater-sphere', 'catastrophe'] },
+  'sphere-fodder': { fodderAt: ['cactuar-king', 'greater-sphere'] },
+  'eater-fodder': { fodderAt: ['cactuar-king', 'earth-eater'] },
+  'sphere-od': { odBarredAt: [] },
+  'no-eater-focus': { eaterAuronOnly: false },
+  'eater-wait': { eaterPound: false },
   'no-fodder': { fodder: false },
   'no-wait': { tonberryWait: false },
   'no-overdrives': { useOverdrives: false },
@@ -97,15 +107,15 @@ export interface ChainResult {
  * The acts of the tiers built chained as `runEncounterChain` chains them: the party enters each act as the one before left it (`setupForNextLink`: HP and MP, the bag, the aeons, the gil, the kill counts), and the act's own
  * rule then restores the party and the aeons on entry (`EnemyGroupDef.restoresPartyOnEntry` and `restoresAeonsOnEntry`, which the engine applies when it builds the battle). The seed of each act is the next seed.
  */
-export function playChain(seed: number, choose: Line, party: FFXPartyBuild = gauntletBuild): ChainResult {
+export function playChain(seed: number, choose: Line, party: FFXPartyBuild = gauntletBuild, acts: readonly GauntletCreatureId[] = BUILT): ChainResult {
   const fights: FightResult[] = [];
-  let setup = setupOf(party, BUILT[0]!, seed);
+  let setup = setupOf(party, acts[0]!, seed);
   let engine = engineOn(setup);
-  for (let i = 0; i < BUILT.length; i++) {
+  for (let i = 0; i < acts.length; i++) {
     const result = playEngine(engine, choose);
     fights.push(result);
     if (result.outcome !== 'victory') return { outcome: result.outcome === 'unfinished' ? 'unfinished' : result.outcome === 'escape' ? 'escape' : (`defeat-${i + 1}` as const), lostAt: i + 1, fights };
-    const next = BUILT[i + 1];
+    const next = acts[i + 1];
     if (next === undefined) break;
     setup = setupForNextLink(setup, groupOfCreature(next), engine.state(), seed + i + 1) as BattleSetup;
     engine = engineOn(setup);
@@ -162,6 +172,19 @@ export function withKills(party: FFXPartyBuild, kills: number): FFXPartyBuild {
   return out;
 }
 
+/**
+ * The preset with a Death ward on every member's armour: Deathproof takes the place of `instead` (the armour has four slots, all used: Auto-Haste, Auto-Phoenix, Auto-Protect, Ribbon), so the lever has a price. Stage 1's
+ * finding F1: the Ribbon is no Death ward in this engine, so Earth Eater's Megaton Punch (Death 100) kills the member it lands on.
+ */
+export function withDeathproof(party: FFXPartyBuild, instead: 'auto-haste' | 'auto-phoenix' | 'auto-protect' | 'ribbon' = 'auto-protect'): FFXPartyBuild {
+  const out = structuredClone(party);
+  for (const m of out.members) {
+    const armor = m.equipment.armor;
+    m.equipment.armor = { ...armor, autoAbilities: [...(armor.autoAbilities ?? []).filter((a) => a !== instead), 'deathproof'] };
+  }
+  return out;
+}
+
 /** The preset with the line-up swapped (`active` three on the field, the rest on the bench). */
 export function withLineUp(party: FFXPartyBuild, active: readonly [string, string, string]): FFXPartyBuild {
   const out = structuredClone(party);
@@ -198,10 +221,10 @@ export function actRate(seeds: number, creature: GauntletCreatureId, choose: Lin
 }
 
 /** `seeds` whole chapters from seed 1, with the act the first loss or departure came at tallied. */
-export function chainRate(seeds: number, choose: Line, party: FFXPartyBuild = gauntletBuild, firstSeed = 1): Rate & { lostAt: number[] } {
-  const r = { seeds, wins: 0, losses: 0, escapes: 0, unfinished: 0, lostAt: Array<number>(BUILT.length + 1).fill(0) };
+export function chainRate(seeds: number, choose: Line, party: FFXPartyBuild = gauntletBuild, firstSeed = 1, acts: readonly GauntletCreatureId[] = BUILT): Rate & { lostAt: number[] } {
+  const r = { seeds, wins: 0, losses: 0, escapes: 0, unfinished: 0, lostAt: Array<number>(acts.length + 1).fill(0) };
   for (let seed = firstSeed; seed < firstSeed + seeds; seed++) {
-    const out = playChain(seed, choose, party);
+    const out = playChain(seed, choose, party, acts);
     if (out.outcome === 'victory') r.wins++;
     else if (out.outcome === 'unfinished') r.unfinished++;
     else {

@@ -7,8 +7,10 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
-import { GAUNTLET_IDS, GAUNTLET_ROWS as BATTLE_ROWS, GAUNTLET_SCRIPTS } from '../../../src/battle/ffx/ai/gauntlet-rules.ts';
+import { CATASTROPHE_FORM2_SPRITE, EATER_DOWN_FLAG, EATER_TOTAL_FLAG, GAUNTLET_GROUP_IDS, GAUNTLET_IDS, GAUNTLET_ROWS as BATTLE_ROWS, GAUNTLET_SCRIPTS } from '../../../src/battle/ffx/ai/gauntlet-rules.ts';
 import { TONBERRY_WADDLES } from '../../../src/battle/ffx/ai/gauntlet-don-tonberry.ts';
+import { EATER_KNOCK_DOWN_LINE } from '../../../src/battle/ffx/ai/gauntlet-earth-eater.ts';
+import * as TACTIC from '../../../src/engine/tactics/gauntlet.ts';
 import { registeredAiScriptIds } from '../../../src/battle/ffx/ai/types.ts';
 import '../../../src/battle/ffx/ai/index.ts';
 import { FORMULA_NUMBER } from '../../../src/battle/ffx/adapt/command.ts';
@@ -25,20 +27,38 @@ import { setupForNextLink } from '../../../src/app/screens/BattleScreenSetup.ts'
 import { actor, careless, content, newEngine, setup } from '../helpers/gauntletDrive.ts';
 
 describe("the battle layer's copies of the ids equal the data's (the battle layer imports no src/data)", () => {
-  it('the three tier-1 combatant ids, script ids and move rows', () => {
+  it('the six combatant ids, script ids, formation ids, move rows (the chapter\'s own and the party\'s) and the second form\'s painting of tiers 1 and 2', () => {
     expect(GAUNTLET_IDS.cactuarKing).toBe('cactuar-king');
     expect(GAUNTLET_IDS.donTonberry).toBe('don-tonberry');
     expect(GAUNTLET_IDS.jormungand).toBe('jormungand');
+    expect(GAUNTLET_IDS.earthEater).toBe('earth-eater');
+    expect(GAUNTLET_IDS.greaterSphere).toBe('greater-sphere');
+    expect(GAUNTLET_IDS.catastrophe).toBe('catastrophe');
     expect(GAUNTLET_SCRIPTS.cactuarKing).toBe(ids.GAUNTLET_SCRIPT['cactuar-king']);
     expect(GAUNTLET_SCRIPTS.donTonberry).toBe(ids.GAUNTLET_SCRIPT['don-tonberry']);
     expect(GAUNTLET_SCRIPTS.jormungand).toBe(ids.GAUNTLET_SCRIPT['jormungand']);
-    for (const [key, id] of Object.entries(BATTLE_ROWS)) expect((ids.GAUNTLET_ROWS as Record<string, string>)[key], key).toBe(id);
+    expect(GAUNTLET_SCRIPTS.earthEater).toBe(ids.GAUNTLET_SCRIPT['earth-eater']);
+    expect(GAUNTLET_SCRIPTS.greaterSphere).toBe(ids.GAUNTLET_SCRIPT['greater-sphere']);
+    expect(GAUNTLET_SCRIPTS.catastrophe).toBe(ids.GAUNTLET_SCRIPT['catastrophe']);
+    expect(GAUNTLET_GROUP_IDS.earthEater).toBe(ids.gauntletGroupId('earth-eater'));
+    expect(GAUNTLET_GROUP_IDS.greaterSphere).toBe(ids.gauntletGroupId('greater-sphere'));
+    expect(CATASTROPHE_FORM2_SPRITE).toBe(ids.GAUNTLET_CATASTROPHE_FORM2_SPRITE);
+    expect(ids.GAUNTLET_CATASTROPHE_FORM2_WANTED).not.toBe(ids.GAUNTLET_CATASTROPHE_FORM2_SPRITE);
+    const own = ids.GAUNTLET_ROWS as Record<string, string>;
+    const party = ids.GAUNTLET_PLAYER_ROWS as Record<string, string>;
+    for (const [key, id] of Object.entries(BATTLE_ROWS)) expect(key in own ? own[key] : party[key], key).toBe(id);
   });
 
   it('every script the data names for a built creature is registered, and only the built ones are (the later tiers add theirs)', () => {
     const registered = registeredAiScriptIds().filter((id) => id.startsWith('gauntlet-'));
     expect(registered.sort()).toEqual(Object.values(GAUNTLET_SCRIPTS).sort());
     for (const creature of ids.GAUNTLET_CREATURES.slice(0, GAUNTLET_ACTS_BUILT)) expect(registered, creature).toContain(ids.GAUNTLET_SCRIPT[creature]);
+  });
+
+  it("Earth Eater's two published flags and its 100,000 line, restated by the tactic, are the script's", () => {
+    expect(TACTIC.EATER_DOWN_FLAG).toBe(EATER_DOWN_FLAG);
+    expect(TACTIC.EATER_TOTAL_FLAG).toBe(EATER_TOTAL_FLAG);
+    expect(TACTIC.EATER_KNOCK_DOWN_LINE).toBe(EATER_KNOCK_DOWN_LINE);
   });
 
   it("Don Tonberry's four Waddles, restated by the tactic, are the script's", () => {
@@ -61,23 +81,22 @@ describe('the act table', () => {
 });
 
 describe('the formations', () => {
-  it('only the tiers built are registered: acts 1 to 3 in the data layer, none of the other six', () => {
-    expect(ids.GAUNTLET_TIERS_BUILT).toBe(1);
-    expect(GAUNTLET_ACTS_BUILT).toBe(3);
-    expect(GAUNTLET_GROUPS.map((g) => g.id)).toEqual(['gauntlet-cactuar-king', 'gauntlet-don-tonberry', 'gauntlet-jormungand']);
-    for (const a of ids.GAUNTLET_ACTS) expect(ENEMY_GROUPS_BY_ID[a.groupId] !== undefined, a.groupId).toBe(a.act <= 3);
+  it('only the tiers built are registered: acts 1 to 6 in the data layer (tiers 1 and 2), none of the other three', () => {
+    expect(ids.GAUNTLET_TIERS_BUILT).toBe(2);
+    expect(GAUNTLET_ACTS_BUILT).toBe(6);
+    expect(GAUNTLET_GROUPS.map((g) => g.id)).toEqual(['gauntlet-cactuar-king', 'gauntlet-don-tonberry', 'gauntlet-jormungand', 'gauntlet-earth-eater', 'gauntlet-greater-sphere', 'gauntlet-catastrophe']);
+    for (const a of ids.GAUNTLET_ACTS) expect(ENEMY_GROUPS_BY_ID[a.groupId] !== undefined, a.groupId).toBe(a.act <= 6);
     for (const g of GAUNTLET_GROUPS) expect(ENEMY_GROUPS_BY_ID[g.id], g.id).toBe(g);
   });
 
-  it('the chain of the tiers built: act 1 plain, acts 2 and 3 fresh fights with a retry checkpoint and no Save Sphere card, act 3 pools every act\'s spoils and names no next link', () => {
-    const [a1, a2, a3] = GAUNTLET_GROUPS as [typeof GAUNTLET_GROUPS[number], typeof GAUNTLET_GROUPS[number], typeof GAUNTLET_GROUPS[number]];
-    expect([a1.nextGroupId, a2.nextGroupId, a3.nextGroupId]).toEqual(['gauntlet-don-tonberry', 'gauntlet-jormungand', undefined]);
+  it('the chain of the tiers built: act 1 plain, acts 2 to 6 fresh fights with a retry checkpoint and no Save Sphere card, act 6 pools every act\'s spoils and names no next link', () => {
+    const next = GAUNTLET_GROUPS.map((g) => g.nextGroupId);
+    expect(next).toEqual(['gauntlet-don-tonberry', 'gauntlet-jormungand', 'gauntlet-earth-eater', 'gauntlet-greater-sphere', 'gauntlet-catastrophe', undefined]);
     const fresh = { checkpointOnEntry: true, restoresPartyOnEntry: true, restoresAeonsOnEntry: true, noSaveSphereCard: true };
-    expect(a1).not.toHaveProperty('checkpointOnEntry');
-    expect(a1).not.toHaveProperty('restoresPartyOnEntry');
-    expect(a2).toMatchObject(fresh);
-    expect(a3).toMatchObject(fresh);
-    expect([a1.poolsChainSpoils, a2.poolsChainSpoils, a3.poolsChainSpoils]).toEqual([undefined, undefined, true]);
+    expect(GAUNTLET_GROUPS[0]).not.toHaveProperty('checkpointOnEntry');
+    expect(GAUNTLET_GROUPS[0]).not.toHaveProperty('restoresPartyOnEntry');
+    for (const g of GAUNTLET_GROUPS.slice(1)) expect(g, g.id).toMatchObject(fresh);
+    expect(GAUNTLET_GROUPS.map((g) => g.poolsChainSpoils)).toEqual([undefined, undefined, undefined, undefined, undefined, true]);
   });
 
   it('the full nine-act chain (built here, not registered): each act names the next, the last pays the pooled spoils', () => {
@@ -187,7 +206,7 @@ describe('the party: the Dark Aeons preset with Auron\'s Piercing and 500 kills 
     }
   });
 
-  it('the shipped line pays Yojimbo the Dark Aeons chapter\'s 100,000 gil and calls him in against none of tier 1 (the bench: not needed)', () => {
+  it('the shipped line pays Yojimbo the Dark Aeons chapter\'s 100,000 gil and calls him in against none of tiers 1 and 2 (the bench: not needed)', () => {
     expect(PAY_GIL).toBe(100_000);
     expect(SHIPPED_LINE.zanmato).toBe(true);
     expect(SHIPPED_LINE.zanmatoAt).toEqual([]);
