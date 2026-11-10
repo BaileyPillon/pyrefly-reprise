@@ -6,7 +6,7 @@
  * `tests/fixtures/specials/masks/` and needs no python and no `public/art`: a clean checkout runs it.
  */
 import { spawnSync } from 'node:child_process';
-import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
@@ -179,6 +179,75 @@ describe('the rows', () => {
     const source = readFileSync(TOOL, 'utf8');
     expect(source).not.toMatch(/child_process|execSync|spawn|\.py\b/); // it runs no other program: sharp decodes the masks
     expect(existsSync(FIXTURES)).toBe(true);
+  });
+});
+
+/** The text of one Special's block in a generated table, then one pose's `paint` and `whole.box` out of it. */
+function poseOf(text: string, special: string, pose: string): { paint: { baselineY: number; contentTop: number; height: number; width: number }; box: number[] } {
+  const block = new RegExp(`'${special}': \\{[\\s\\S]*?\\n  \\},`).exec(text)![0];
+  const row = new RegExp(`\\n      ${pose}: \\{[\\s\\S]*?\\n      \\},`).exec(block)![0];
+  const p = /paint: \{ baselineY: (\d+), contentTop: (\d+), height: (\d+), width: (\d+) \}/.exec(row)!;
+  const b = /box: \[(\d+), (\d+), (\d+), (\d+)\]/.exec(row)!;
+  return { paint: { baselineY: +p[1]!, contentTop: +p[2]!, height: +p[3]!, width: +p[4]! }, box: [+b[1]!, +b[2]!, +b[3]!, +b[4]!] };
+}
+
+describe('--sidecars (the command the handoff tells stage 2 to run)', () => {
+  /** A sidecars folder: Machina Maw has all four poses (one of them with a contentTop), Floral Fallal only idle, Full Throttle all four, and one file with no size at all. */
+  function sidecars(): string {
+    const dir = scratch();
+    const put = (art: string, pose: string, body: object): void => {
+      mkdirSync(join(dir, art), { recursive: true });
+      writeFileSync(join(dir, art, `${pose}.json`), JSON.stringify(body));
+    };
+    for (const pose of POSES) put('rikku-machina-maw', pose, pose === 'cast' ? { width: 800, height: 1000, baselineY: 950, contentTop: 100 } : { width: 800, height: 1000, baselineY: 950 });
+    for (const pose of POSES) put('paine-full-throttle', pose, { width: 800, height: 1000, baselineY: 950 });
+    put('yuna-floral-fallal', 'idle', { width: 800, height: 1000, baselineY: 950 });
+    put('yuna-floral-fallal', 'hurt', { baselineY: 5 }); // no size: says nothing about the painting, so it is not a match
+    return dir;
+  }
+
+  function generated(): { text: string; stderr: string } {
+    const out = join(scratch(), 'sidecars.ts');
+    const r = run('--sidecars', sidecars(), '--out', out);
+    expect(r.status).toBe(0);
+    return { text: readFileSync(out, 'utf8'), stderr: r.stderr };
+  }
+
+  it('a row measured against a sidecar is wholly in the sidecar\'s scale: the top is the figure\'s box, never meta.json\'s render-scale value', () => {
+    const { text } = generated();
+    const idle = poseOf(text, 'floral-fallal', 'idle');
+    expect(idle.paint).toMatchObject({ baselineY: 950, height: 1000, width: 800 });
+    expect(idle.paint.contentTop).toBe(idle.box[1]); // the sidecar has no contentTop: the box top in the same 800x1000 scale (it was 196, the 1536 render's row, before)
+    expect(idle.paint.contentTop).toBeLessThan(idle.paint.baselineY);
+    expect(idle.box[3]).toBeLessThanOrEqual(1000);
+    const maw = poseOf(text, 'machina-maw', 'attack');
+    expect(maw.paint.contentTop).toBe(maw.box[1]);
+    expect(poseOf(text, 'machina-maw', 'cast').paint.contentTop).toBe(100); // a sidecar that has one is believed
+  });
+
+  it('a pose with no sidecar, or one without a size, keeps the render-scale rows and is named on stderr', () => {
+    const { text, stderr } = generated();
+    for (const pose of ['attack', 'cast', 'hurt']) expect(poseOf(text, 'floral-fallal', pose).paint, pose).toMatchObject({ height: 1536, width: 1536 });
+    expect(stderr).toContain('floral-fallal/attack');
+    expect(stderr).toContain('floral-fallal/hurt');
+    expect(stderr).not.toContain('machina-maw');
+  });
+
+  it('provisional is cleared per Special, and only when every one of its poses matched a sidecar (Full Throttle stays provisional: its width is with the swords)', () => {
+    const { text } = generated();
+    const flag = (id: string): string => new RegExp(`'${id}': \\{\\s+artId: '[^']+', silhouetteGirls: [\\d.]+, widthOverHeight: [\\d.]+, provisional: (true|false),`).exec(text)![1]!;
+    expect(flag('machina-maw')).toBe('false');
+    expect(flag('floral-fallal')).toBe('true'); // one pose of four matched
+    expect(flag('full-throttle')).toBe('true');
+  });
+
+  it('an empty sidecars folder changes nothing: every Special stays provisional with the fixtures\' rows', () => {
+    const out = join(scratch(), 'empty.ts');
+    const r = run('--sidecars', scratch(), '--out', out);
+    expect(r.status).toBe(0);
+    const text = readFileSync(out, 'utf8');
+    for (const id of SPECIALS) expect(text, id).toMatch(new RegExp(`'${id}': \\{\\s+artId: '[^']+', silhouetteGirls: [\\d.]+, widthOverHeight: [\\d.]+, provisional: true,`));
+    expect(text.replace(/\r\n/g, '\n')).toBe(readFileSync(resolve(ROOT, 'src', 'data', 'art', 'specialParts.ts'), 'utf8').replace(/\r\n/g, '\n'));
   });
 });
 

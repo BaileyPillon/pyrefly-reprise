@@ -10,7 +10,8 @@
  * Input, `--masks <dir>` (default tests/fixtures/specials/masks): `<special>/<pose>/{main,right,left}.png` (+ `whole.png`, else the union of the three), all one size; a pixel is drawn when its
  * alpha (a grey mask: its value) is above 16, the preflight's rule. `<special>/<pose>/meta.json` `{width, height, baselineY?, contentTop?}` is the painting's size when the masks are smaller
  * than it (the committed fixtures are 1/4 size); absent, the mask's own size, the figure's lowest drawn row and its highest. `--sidecars <dir>` (`<dir>/<artId>/<pose>.json`, the game's
- * sidecar) overrides the painting size with the real painting's, and clears `provisional`. Right and left come from the FILE NAME, never from where the part sits (Full Throttle's right
+ * sidecar) overrides the painting size, feet line and top with the real painting's (a sidecar without a top: the figure's box scaled to its size), and clears `provisional` for a Special only
+ * when EVERY one of its posed rows matched a sidecar. Right and left come from the FILE NAME, never from where the part sits (Full Throttle's right
  * wing crosses to the screen-right of its left wing in the attack). The poses are the four the preflight picked; `victory` is owed (its render is not made yet).
  *
  * Output: only the table file, deterministic (keys sorted, whole pixels, fractions to 0.001). Regenerate it whenever the art changes. Every `[ours]` below is a table value, not game data.
@@ -83,7 +84,14 @@ function measure({ w, h, drawn }) {
   return n ? { box: [x0, y0, x1, y1], at: [sx / n, sy / n] } : null;
 }
 
-/** One pose's rows from its masks; `paint` is the painting's size and feet line when the sidecar gives it. */
+/** A sidecar counts only with its own width and height (a file without them says nothing about the painting's scale). */
+const usable = (side) => (side && side.width > 0 && side.height > 0 ? side : undefined);
+
+/**
+ * One pose's rows from its masks; `paint` is the painting's size and feet line when the sidecar gives it. With a usable sidecar, EVERY paint
+ * number is in the sidecar's scale (its `baselineY` and `contentTop` when it has them, else the whole mask's box scaled to that size); `meta.json` (the render's scale) is read only
+ * when no sidecar matched, so a row never mixes the two scales.
+ */
 async function poseRows(dir, sidecar) {
   const named = {};
   for (const name of ['main', 'right', 'left']) named[name] = await readMask(join(dir, `${name}.png`));
@@ -93,13 +101,14 @@ async function poseRows(dir, sidecar) {
   else whole = { w, h, drawn: named.main.drawn.map((v, i) => v | named.right.drawn[i] | named.left.drawn[i]) };
   for (const m of [named.right, named.left, whole]) if (m.w !== w || m.h !== h) throw new Error(`${dir}: the masks are not all one size`);
   const meta = existsSync(join(dir, 'meta.json')) ? JSON.parse(readFileSync(join(dir, 'meta.json'), 'utf8')) : {};
-  const size = { width: sidecar?.width ?? meta.width ?? w, height: sidecar?.height ?? meta.height ?? h };
+  const size = { width: sidecar ? sidecar.width : meta.width ?? w, height: sidecar ? sidecar.height : meta.height ?? h };
   const kx = size.width / w, ky = size.height / h;
   const all = measure(whole);
   if (!all) throw new Error(`${dir}: the whole figure is empty`);
   const wholeW = (all.box[2] - all.box[0]) * kx, wholeH = (all.box[3] - all.box[1]) * ky;
   const box = [r0(all.box[0] * kx), r0(all.box[1] * ky), r0(all.box[2] * kx), r0(all.box[3] * ky)];
-  const paint = { baselineY: r0(sidecar?.baselineY ?? meta.baselineY ?? box[3]), contentTop: r0(sidecar?.contentTop ?? meta.contentTop ?? box[1]), height: size.height, width: size.width };
+  const own = sidecar ?? meta; // the numbers that share the size's scale
+  const paint = { baselineY: r0(own.baselineY ?? box[3]), contentTop: r0(own.contentTop ?? box[1]), height: size.height, width: size.width };
   const part = (m, name) => {
     const s = measure(m);
     if (!s) throw new Error(`${dir}: the ${name} mask is empty`);
@@ -122,22 +131,29 @@ async function poseRows(dir, sidecar) {
 export async function buildTable(masksDir, sidecarsDir) {
   const specials = {};
   const missing = [];
+  const unmatched = []; // poses that have masks but no usable sidecar while `--sidecars` was given
   for (const s of SPECIALS) {
     const poses = {};
     const artId = `${s.girl}-${s.id}`;
+    let everyPoseMatched = true;
     for (const pose of POSES) {
       const dir = join(masksDir, s.id, pose);
       if (!existsSync(join(dir, 'main.png'))) {
         missing.push(`${s.id}/${pose}`);
         continue;
       }
-      const side = sidecarsDir && existsSync(join(sidecarsDir, artId, `${pose}.json`)) ? JSON.parse(readFileSync(join(sidecarsDir, artId, `${pose}.json`), 'utf8')) : undefined;
+      const side = sidecarsDir && existsSync(join(sidecarsDir, artId, `${pose}.json`)) ? usable(JSON.parse(readFileSync(join(sidecarsDir, artId, `${pose}.json`), 'utf8'))) : undefined;
+      if (!side) {
+        everyPoseMatched = false;
+        if (sidecarsDir) unmatched.push(`${s.id}/${pose}`);
+      }
       poses[pose] = await poseRows(dir, side);
     }
     if (!poses.idle) throw new Error(`${s.id}: no idle masks under ${masksDir} (idle is required)`);
-    specials[s.id] = { artId, poses, provisional: !sidecarsDir || s.provisional, silhouetteGirls: s.silhouetteGirls, widthOverHeight: s.widthOverHeight };
+    // provisional until EVERY posed row of this Special was measured against a real painting's sidecar (the flag alone proves nothing)
+    specials[s.id] = { artId, poses, provisional: !(sidecarsDir && everyPoseMatched) || s.provisional, silhouetteGirls: s.silhouetteGirls, widthOverHeight: s.widthOverHeight };
   }
-  return { specials, missing };
+  return { specials, missing, unmatched };
 }
 
 const list = (a) => `[${a.join(', ')}]`;
@@ -210,6 +226,7 @@ async function main() {
     const table = await buildTable(masks, sidecars);
     text = render(table);
     if (table.missing.length) process.stderr.write(`no row for: ${table.missing.join(', ')}\n`);
+    if (table.unmatched.length) process.stderr.write(`no sidecar for (rows stay in the mask scale, the Special stays provisional): ${table.unmatched.join(', ')}\n`);
   } catch (err) {
     process.stderr.write(`${err instanceof Error ? err.message : String(err)}\n`);
     process.exit(2);
