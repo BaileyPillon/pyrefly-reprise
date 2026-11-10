@@ -17,6 +17,7 @@ import { registerSceneScreens } from './sceneScreens.ts';
 import { registerResultsDemoScreens } from './resultsDemo.ts';
 import { cameraPreset, setCameraPreset } from '../engine/CameraPreset.ts';
 import { buildInfo } from '../app/markRecorder.ts';
+import { specialsDebug } from '../app/specialsWord.ts';
 import {
   battleHelpOn,
   coachingAllowed,
@@ -217,6 +218,8 @@ export interface PyreflyDebugApi {
    * in the URL does the same at boot.
    */
   pace(name?: string): { pace: PaceName; accepted: boolean; game: PaceGame; scales: PaceScales };
+  /** The FFX-2 Special dress-up's next-battle switch (`app/specialsWord.ts`): set it, or read it with no argument. Dev and a test preview build only; false and inert in production. */
+  specials(on?: boolean): boolean;
 }
 
 /** One combatant, as the targeting snapshot reports it. */
@@ -472,6 +475,7 @@ export function installDebugApi(app: App): PyreflyDebugApi {
       battleHelp: battleHelpOn(),
       seen: [...app.save.seenCoach],
     }),
+    specials: specialsDebug, // the FFX-2 Special dress-up's next-battle switch: dev and a test preview build only, inert in production
   };
 
   window.__pyrefly = api;

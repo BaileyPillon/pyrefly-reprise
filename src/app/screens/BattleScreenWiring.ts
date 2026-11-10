@@ -20,6 +20,7 @@ import { Ff7Engine } from '../../battle/ff7/index.ts';
 import { ff7Registry } from '../../data/ff7/index.ts';
 import { readSetting } from '../SaveData.ts';
 import { waitSplitFromUrl } from '../waitSplitSwitch.ts';
+import { specialsEngineOptions } from '../specialsWord.ts'; // the Special dress-up's test word (`?specials=on`): dev and a test preview build only, nothing in production
 import type { HudPort } from '../../engine/HudPort.ts';
 import { FFXBattleHud } from '../../ui/ffx/FFXBattleHud.ts';
 import { FFX2BattleHud } from '../../ui/ffx2/FFX2BattleHud.ts';
@@ -86,7 +87,7 @@ export async function createEngine(
   const engine: BattleEngine =
     game === 'ffx'
       ? new FFXEngine({ autoResolveMinigames: automated })
-      : new FFX2Engine({ ...ffx2EngineOptions(), minigames: !automated });
+      : new FFX2Engine({ ...ffx2EngineOptions(), minigames: !automated, ...specialsEngineOptions() });
   applyAtbConfig(engine);
   engine.setSeed(setup.seed);
   engine.init(setup);

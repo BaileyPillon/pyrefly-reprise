@@ -82,7 +82,7 @@ function releaseName(): string {
   return releaseFromEnv(process.env);
 }
 
-export default defineConfig(({ command, isPreview }) => {
+export default defineConfig(({ command, isPreview, mode }) => {
   const base = command === 'build' || isPreview ? PROD_BASE : '/';
   // PR-0328, D-335: no source map ever ships. The variable SOURCEMAP_DIR_ENV names
   // the folder a build keeps its maps in (the deploy sets it to
@@ -99,6 +99,10 @@ export default defineConfig(({ command, isPreview }) => {
       // BEHIND THE SCENES (Bailey, 2026-10-08): the page's switch, from the one source constant, so a build with it off sees a
       // literal `false` at the page's single dynamic import and ships none of the page (src/app/screens/frontend/titleInfo.ts).
       __PYREFLY_BTS__: JSON.stringify(BTS_LIVE),
+      // The FFX-2 Special look's test word (`?specials=on`, `window.__pyrefly.specials`): true for the dev server and for a test preview build (`vite build --mode specials-test --outDir <its own folder>`), false for every
+      // production build, so the word and its look words are dead code there (src/app/specialsWord.ts; tests/unit/specials-word.test.ts bundles it both ways). A build MODE and not an environment variable on purpose:
+      // a variable left in a shell could ship the word, and `release-build.test.ts` pins every variable this file reads; the deploy passes no --mode, so it is always 'production'.
+      __PYREFLY_SPECIALS__: JSON.stringify(command === 'serve' || mode === 'specials-test'),
     },
     // Release 38 (r38-bytes): a production build ships the painted art as lossless WebP, derived from the PNG masters, which
     // stay in public/art untouched (`tools/art-derive.mjs`; `PYREFLY_ART_WEBP=off` ships the PNGs as before). Dev serves PNG.
