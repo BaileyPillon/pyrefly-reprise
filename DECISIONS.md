@@ -16,44 +16,44 @@ Every decision Bailey has made on this game since it began on 2026-09-15, oldest
 
 ## Summary
 
-2089 decisions in all: 1519 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1392 of the written decisions record a blanket yes.
+2094 decisions in all: 1524 registry rows, 360 items split out of bundled acceptances, 81 early or backfilled rows, 129 picture decisions. 1392 of the written decisions record a blanket yes.
 
 | State | Decisions |
 | --- | ---: |
-| adopted | 1960 |
+| adopted | 1965 |
 | proposed | 9 |
 | deferred | 7 |
 | rejected | 16 |
 | superseded | 97 |
-| **All** | **2089** |
+| **All** | **2094** |
 
 | Area | Decisions |
 | --- | ---: |
-| combat | 165 |
-| art | 407 |
+| combat | 166 |
+| art | 408 |
 | visuals | 183 |
 | camera | 76 |
 | audio | 160 |
 | ui | 231 |
 | story | 17 |
-| chapters | 320 |
+| chapters | 321 |
 | guide | 34 |
-| release | 117 |
+| release | 118 |
 | hosting | 18 |
-| process | 233 |
+| process | 234 |
 | critic | 45 |
 | data | 17 |
 | tech | 45 |
 | site | 21 |
-| **All** | **2089** |
+| **All** | **2094** |
 
 | Game case | Decisions |
 | --- | ---: |
-| both games | 1105 |
+| both games | 1107 |
 | FFX only | 530 |
-| FFX-2 only | 436 |
+| FFX-2 only | 439 |
 | FF7 hidden experiment | 18 |
-| **All** | **2089** |
+| **All** | **2094** |
 
 ## Standing rules in force
 
@@ -141,7 +141,7 @@ Pictures with no target yet (nothing to look at, so no decision): Move advisor c
 
 ## Days
 
-[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27) · [2026-10-28](#2026-10-28) · [2026-10-29](#2026-10-29) · [2026-10-30](#2026-10-30) · [2026-10-31](#2026-10-31) · [2026-11-01](#2026-11-01) · [2026-11-02](#2026-11-02) · [2026-11-03](#2026-11-03) · [2026-11-04](#2026-11-04) · [2026-11-06](#2026-11-06) · [2026-11-07](#2026-11-07) · [2026-11-08](#2026-11-08) · [2026-11-09](#2026-11-09)
+[2026-09-15](#2026-09-15) · [2026-09-16](#2026-09-16) · [2026-09-17](#2026-09-17) · [2026-09-18](#2026-09-18) · [2026-09-19](#2026-09-19) · [2026-09-20](#2026-09-20) · [2026-09-21](#2026-09-21) · [2026-09-22](#2026-09-22) · [2026-09-23](#2026-09-23) · [2026-09-24](#2026-09-24) · [2026-09-25](#2026-09-25) · [2026-09-26](#2026-09-26) · [2026-09-27](#2026-09-27) · [2026-09-28](#2026-09-28) · [2026-09-29](#2026-09-29) · [2026-09-30](#2026-09-30) · [2026-10-01](#2026-10-01) · [2026-10-02](#2026-10-02) · [2026-10-03](#2026-10-03) · [2026-10-04](#2026-10-04) · [2026-10-05](#2026-10-05) · [2026-10-06](#2026-10-06) · [2026-10-07](#2026-10-07) · [2026-10-08](#2026-10-08) · [2026-10-09](#2026-10-09) · [2026-10-10](#2026-10-10) · [2026-10-11](#2026-10-11) · [2026-10-12](#2026-10-12) · [2026-10-13](#2026-10-13) · [2026-10-14](#2026-10-14) · [2026-10-15](#2026-10-15) · [2026-10-16](#2026-10-16) · [2026-10-17](#2026-10-17) · [2026-10-18](#2026-10-18) · [2026-10-19](#2026-10-19) · [2026-10-20](#2026-10-20) · [2026-10-21](#2026-10-21) · [2026-10-22](#2026-10-22) · [2026-10-23](#2026-10-23) · [2026-10-24](#2026-10-24) · [2026-10-25](#2026-10-25) · [2026-10-26](#2026-10-26) · [2026-10-27](#2026-10-27) · [2026-10-28](#2026-10-28) · [2026-10-29](#2026-10-29) · [2026-10-30](#2026-10-30) · [2026-10-31](#2026-10-31) · [2026-11-01](#2026-11-01) · [2026-11-02](#2026-11-02) · [2026-11-03](#2026-11-03) · [2026-11-04](#2026-11-04) · [2026-11-06](#2026-11-06) · [2026-11-07](#2026-11-07) · [2026-11-08](#2026-11-08) · [2026-11-09](#2026-11-09) · [2026-11-10](#2026-11-10)
 
 ## Ledger
 
@@ -9889,3 +9889,33 @@ Monday · 16 decisions
   - What changed: Item 221c. The game puts a girl back in her dress at the next battle's start (verified in the exe); doing it at the end of this one means the carry never sees a Special's absolute HP. The rewards were built before it. Alternative: leave the form on and let the next link's setup put her back.
   - area combat · FFX-2 · adopted · delivery implemented · see [D-1499](#d-1499), [D-937](#d-937), [D-1423](#d-1423)
   - Source: research/re-ffx2-special-dresspheres.md; docs/handoff/ffx2-specials.md
+
+### 2026-11-10
+
+Tuesday · 5 decisions
+
+- <a id="d-1520"></a>**D-1520** — DRIVER CALL under the standing deploy words, his to overturn: release 80 (the Wendigo chapter finished, the Oblitzerator, Gullwings Chapter 1 and the Luca opener, the Specials' engine behind a switch that is off, the FFX-2 stat-table fix and the party prep title line) deploys on its focused review's SHIP (3fd64f576 / C26ETj4I; changed area FAIL on R80-1; R80-1 and R80-2 disclosed) (both games)
+  - Bailey: “Bailey (standing, 2026-10-17): deploy every release as soon as its review says it can ship.”
+  - What changed: Made by the second account's copy of the driver on 2026-11-10 at about 05:45 EST, under D-931, after the focused review of the production candidate read SHIP: 0 critical and no regression against release 79. The changed area read FAIL on R80-1 (major, FFX, the new hidden Oblitzerator chapter: the Kimahri and Tidus pose swaps ghost, 2,628 ghost ms a minute; introduced by this build because the chapter is new, its machines are stand-ins). R80-2 (major, FFX, Seymour Flux: head jump of 10.8 percent, identical on release 79) is disclosed with the carried R79-1 (Jenova LIFE, FF7); R80-3 and R80-4 are polish. The driver read the report through a script that prints the verdicts and every issue's introducedByCandidate and regressionVsLive, checked that HEAD = origin/r80-release = 3fd64f576 with no tracked change and that the Specials switch is false in the source (src/battle/ffx2/constants.ts line 43), and looked at four of the review's pictures, then pushed main (a plain fast-forward from 10708a1d6) and started the deploy. Deployed at 11:28:33 UTC (06:28 EST, A-1293); the live check read deployment PASS (A-1294). Release 80 is the second deploy while a deep review is owed (the ledger counts 2), so release 81 refuses until deep round 37, which covers releases 79 and 80, is settled. One note went into the release report and not into the build: the FFX-2 engine accepts a forged Change command that names any dress on a linked node, so a Special can be worn with the switch off from the debug console only (no menu builds that command; D-1524). Usage: weekly all models 91 percent and weekly Fable 23 before the cut (05:44 EST), 92 and 25 after the deploy (06:32 EST).
+  - area release · both games · adopted · delivery implemented · see [D-931](#d-931), [D-1423](#d-1423), [D-1505](#d-1505), [D-1512](#d-1512), A-1291, A-1292, A-1293, A-1294 · refines [D-931](#d-931)
+  - Source: The driver's state log of 2026-11-10 (the 05:45, 05:52, 06:28, 06:32 and 06:49 EST lines), under his standing words of 2026-10-17 (D-931), "you make …
+- <a id="d-1521"></a>**D-1521** — DRIVER CALL, his to overturn: an account name that should not be in a public commit stays in the history of one lane commit (0205df650) that four public branches and main now carry; no history rewrite and no force-push; the tree's files are clean (both games, process)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: The release 80 integration's structure review found an account handle in a handoff of the Oblitzerator lane (docs/handoff/ch-oblitzerator.md, new in this release), and the candidate's notes check (N4) then found that the CHANGELOG did not disclose it. Fixed in the tree at 49a78f754 (the text) and disclosed, without the name, as open point (10) of the Release 80 CHANGELOG entry. The commit that first carried it, 0205df650, is an ancestor of r80-int and r80-release, sits on the public branches origin/ch-oblitzerator, origin/ffx2-specials, origin/r80-int and origin/r80-release, and has been on main since the fast-forward of 3fd64f576. Main's history already carries the same kind of name in seven older commits, and on 2026-10-15 commit 13eb26b24 fixed the tip only. The driver decided the same way: no rewrite of history and no force-push (both are outside its brief and Bailey has ordered neither). Bailey was told at 02:12 EST on 2026-11-10 and again in the release report (about 06:36 EST). Alternative, his to order: rewrite the history of those branches and of main and force-push each one, which changes every later commit id, so every sha that the ledgers, the CHANGELOG and the deploy log cite would stop pointing at a commit.
+  - area process · both games · adopted · delivery implemented · see [D-1018](#d-1018), [D-1520](#d-1520), A-1290
+  - Source: The driver's state log of 2026-11-10 (the 02:09, 02:30 and 03:49 EST lines); the Release 80 CHANGELOG entry, open point (10); the precedent of …
+- <a id="d-1522"></a>**D-1522** — DRIVER CALL, his to overturn: release 80 keeps the Luca opener (hidden Chapter 52, word debut) as built under the fixed FFX-2 stat table; the pause objective LO16, the guide line and every number stay, and they remain his picks (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Made by the second account's copy of the driver on 2026-11-10 at about 00:44 EST, after the pre-rebench (a scratch branch that was never pushed; an independent check re-ran its own scripts and reproduced the old table digit for digit) measured the chapter under the fixed Dressphere stat interpolation below Level 20 (a Level 2 Gunner's HP goes from 828 to about 219): no test fails unedited (21 files, 450 tests), 200 of 200 seeds are won in all 24 bench rows, no girl is knocked out, and the lowest Yuna finishes at 63 of 138 HP. Not pins, and left for Bailey: Leblanc's Thunder is now cast in 92 to 100 percent of shipped runs, so the reason for the pause objective LO16 ("Survive Leblanc's first swing") no longer holds; an idle party loses act 2 in 12 of 20 runs; the guide line "the Syndicate hits lightly but it adds up" is softer than the numbers (a Leblanc swing is 7.6 percent of a girl's maximum HP on average over 40 seeds, the largest 21.7 percent). The integration's post step corrected only stale comments, test titles and the handoff; the chapter's screenshots that show the unfixed numbers are listed as owed a re-shoot. Alternative: re-pick LO16 and the guide line now, or re-tune the acts (not done: the difficulty is measured, not tuned).
+  - area chapters · FFX-2 · adopted · delivery implemented · see [D-1474](#d-1474), [D-1479](#d-1479), [D-1423](#d-1423), A-1290 · refines [D-1474](#d-1474)
+  - Source: docs/handoff/ch-luca-opener.md
+- <a id="d-1523"></a>**D-1523** — DRIVER CALL, his to overturn: the Special art rule stands (a girl in her Special asks for her Special's painting only, with no fallback to the dress she took off), and the exp-leblanc art namespace holds no Special paintings, so the Specials switch may not go on for that chapter until namespaced paintings or a fallback exist; his decision at stage 2 (FFX-2 only, branch ffx2-specials, not in release 80)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Made by the second account's copy of the driver on 2026-11-10 at about 05:30 EST, when the verify of the Specials presentation (steps A to D2) failed on a gate blocker: tests/unit/exp-leblanc.test.ts had two failing cases since step C2, because its helper builds a girl wearing every dressphere, Specials included, and step C2's rule answers a girl in her Special with the Special's painting only, which the exp-leblanc namespace does not hold. The driver kept the rule (step C2's, from the preflight) and let the helper leave out the Special dresses only after an engine run proved that with the switch off no girl can wear a Special; the close-out proof later found the one way in, a forged Change command from the debug console (D-1524). The fix pass adds cases that pin the Special art rule and state the art gap as data, and the handoff carries the open point: the specialDressUp switch may not go on for the exp-leblanc chapter until Special paintings exist in that namespace or the lookup has a fallback. Alternatives: a fallback to the dress she took off (the painting of the wrong body), or painting the three Specials in that namespace. Release 80 is unaffected: the switch is off and src/battle is untouched by this branch.
+  - area art · FFX-2 · adopted · delivery in progress · see [D-1510](#d-1510), [D-1524](#d-1524), [D-1517](#d-1517), [D-1423](#d-1423) · refines [D-1510](#d-1510)
+  - Source: docs/handoff/ffx2-specials.md
+- <a id="d-1524"></a>**D-1524** — DRIVER CALL, his to overturn: close the FFX-2 engine's forged-Change hole in src/battle/ffx2 (an ordinary Change takes only the dress set on that node of her own Garment Grid; a Special dress is worn only through the Special path with the switch on), proven by identical event-stream digests on every FFX-2 chapter, for release 81 (FFX-2 only)
+  - Bailey: no verbatim quote on record for this decision
+  - What changed: Item 221k, 2026-11-10 06:28 EST. The stage 1 close-out proof of the Specials presentation (branch ffx2-specials, tip 280679bb9) found that the engine accepts a forged Change command naming any dress on a linked node (27 of 27 cases), so a Special could be worn with the switch off from the debug console only: no menu builds that command, so no player reaches it. Release 80 is live without the gate (console-only; disclosed in the release report and in the open points). The decision: close it in src/battle/ffx2 rather than accept the console-only reach. G1: an ordinary Change is accepted only for the dress set on that node of her own Garment Grid. G2: a Special dress is worn only through the Special path with the switch on. Proof owed with the change: before and after event-stream digests identical on every FFX-2 chapter (no reachable fight moves). The second close-out round (launched 06:28 EST) builds it on the branch; it lands in release 81. Alternative: accept the console-only reach and leave the engine as it is.
+  - area combat · FFX-2 · adopted · delivery in progress · see [D-1523](#d-1523), [D-1520](#d-1520), [D-1504](#d-1504), [D-1423](#d-1423)
+  - Source: src/battle/ffx2
