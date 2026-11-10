@@ -4,7 +4,7 @@
  */
 import { AnimationClip, BoxGeometry, Bone, Group, Mesh, MeshStandardMaterial, Object3D, VectorKeyframeTrack } from 'three';
 import { describe, expect, it } from 'vitest';
-import { LAKE_CAST, LAKE_FILES, LAKE_NATIVE_HEIGHT, LAKE_SHIPPED_FILES, LAKE_WEAPONS, LAKE_WEAPON_FILES, type LakeId } from '../../../src/data/ffx/lake-models.ts';
+import { LAKE_AEONS, LAKE_CAST, LAKE_FILES, LAKE_NATIVE_HEIGHT, LAKE_SHIPPED_FILES, LAKE_WEAPONS, LAKE_WEAPON_FILES, type LakeId } from '../../../src/data/ffx/lake-models.ts';
 import { EAGER, loadLakeModels, modelUrl, weaponUrl, type LoaderIO, type Parsed } from '../../../src/engine/lake3d/load.ts';
 import { weaponNamesFor } from '../../../src/engine/lake3d/weapons.ts';
 
@@ -72,7 +72,7 @@ describe('the model set', () => {
   it('names a file for every combatant and a weapon file for every weapon a row uses', () => {
     for (const id of LAKE_CAST) expect(LAKE_FILES[id], id).toMatch(/\.glb$/);
     for (const rows of Object.values(LAKE_WEAPONS)) for (const r of rows!) expect(LAKE_WEAPON_FILES, r.weapon).toContain(r.weapon);
-    expect(LAKE_SHIPPED_FILES).toHaveLength(10 + 9 + 5);
+    expect(LAKE_SHIPPED_FILES).toHaveLength(14 + 9 + 5);
     expect(new Set(LAKE_SHIPPED_FILES).size).toBe(LAKE_SHIPPED_FILES.length);
   });
 
@@ -89,14 +89,17 @@ describe('the model set', () => {
 });
 
 describe('loadLakeModels', () => {
-  it('stands every figure on a neutral capsule when no file is there, and says so once each', async () => {
+  it('stands every figure on a neutral capsule when no file is there, and says so once each; an aeon gets no model and keeps its painting', async () => {
     const said: string[] = [];
     const lake = await loadLakeModels({ base: BASE, heights: {}, io: fakeIO(() => false), warn: (m) => said.push(m) });
     await lake.background;
-    expect(lake.models.size).toBe(10);
-    expect(lake.capsules.sort()).toEqual([...LAKE_CAST].sort());
-    for (const id of LAKE_CAST) expect(lake.sources.get(id)).toBe('capsule');
-    expect(said.filter((m) => /capsule/.test(m))).toHaveLength(10);
+    const figures = LAKE_CAST.filter((id) => !(LAKE_AEONS as readonly string[]).includes(id));
+    expect([...lake.models.keys()].sort()).toEqual([...figures].sort()); // no capsule for an aeon (the review of 2026-11-09, minor 5)
+    expect(lake.capsules.sort()).toEqual([...LAKE_CAST].sort()); // but a run still sees that every file failed
+    for (const id of figures) expect(lake.sources.get(id)).toBe('capsule');
+    for (const id of LAKE_AEONS) expect(lake.sources.has(id), id).toBe(false);
+    expect(said.filter((m) => /capsule/.test(m))).toHaveLength(figures.length);
+    expect(said.filter((m) => /painting stays/.test(m))).toHaveLength(LAKE_AEONS.length);
     for (const m of lake.models.values()) {
       expect(m.animated).toBe(false);
       expect(m.height).toBeCloseTo(LAKE_NATIVE_HEIGHT[m.id], 1);
@@ -105,11 +108,31 @@ describe('loadLakeModels', () => {
     expect(lake.models.size).toBe(0);
   });
 
+  it('leaves only an aeon unmodelled when only its file is missing or cannot be parsed, and keeps every other figure on its own model', async () => {
+    const said: string[] = [];
+    const aeonUrls = LAKE_AEONS.map((id) => modelUrl(BASE, id));
+    const lake = await loadLakeModels({ base: BASE, heights: {}, io: fakeIO((u) => !aeonUrls.includes(u)), warn: (m) => said.push(m) });
+    await lake.background;
+    expect(lake.capsules.sort()).toEqual([...LAKE_AEONS].sort());
+    expect(lake.models.size).toBe(LAKE_CAST.length - LAKE_AEONS.length);
+    for (const id of LAKE_CAST) if (!(LAKE_AEONS as readonly string[]).includes(id)) expect(lake.sources.get(id), id).toBe('own');
+    lake.dispose();
+
+    const io = fakeIO(() => true);
+    const broken: LoaderIO = { ...io, parse: async (bytes) => { if (new TextDecoder().decode(bytes).includes('shiva')) throw new Error('bad glTF'); return io.parse(bytes); } };
+    const lake2 = await loadLakeModels({ base: BASE, heights: {}, io: broken, warn: (m) => said.push(m) });
+    await lake2.background;
+    expect(lake2.models.has('shiva')).toBe(false);
+    expect(lake2.capsules).toEqual(['shiva']);
+    expect(said.some((m) => /shiva.*could not be read/.test(m))).toBe(true);
+    lake2.dispose();
+  });
+
   it('loads the front line and the enemies before it returns and the bench after', async () => {
     const lake = await loadLakeModels({ base: BASE, heights: {}, io: fakeIO(() => true) });
     expect([...lake.models.keys()].sort()).toEqual([...EAGER].sort());
     await lake.background;
-    expect(lake.models.size).toBe(10);
+    expect(lake.models.size).toBe(LAKE_CAST.length);
     expect(lake.capsules).toEqual([]);
     lake.dispose();
   });
@@ -198,8 +221,8 @@ describe('loadLakeModels', () => {
     await lake.background;
     const skeletons: Array<{ freed: number }> = [];
     for (const m of lake.models.values()) m.root.traverse((o) => { if (o instanceof FakeSkinned) skeletons.push(o.skeleton); });
-    expect(skeletons).toHaveLength(10);
-    expect(new Set(skeletons).size).toBe(10);
+    expect(skeletons).toHaveLength(LAKE_CAST.length);
+    expect(new Set(skeletons).size).toBe(LAKE_CAST.length);
     lake.dispose();
     for (const sk of skeletons) expect(sk.freed).toBe(1);
   });
@@ -210,7 +233,7 @@ describe('loadLakeModels', () => {
     const broken: LoaderIO = { ...io, parse: async (bytes) => { if (new TextDecoder().decode(bytes).includes('yuna')) throw new Error('bad glTF'); return io.parse(bytes); } };
     const lake = await loadLakeModels({ base: BASE, heights: {}, io: broken, warn: (m) => said.push(m), skip: ['wakka', 'auron', 'lulu', 'kimahri'] });
     await lake.background;
-    expect(lake.models.size).toBe(6);
+    expect(lake.models.size).toBe(10);
     expect(lake.sources.get('yuna')).toBe('capsule');
     expect(said.some((m) => /yuna.*could not be read/.test(m))).toBe(true);
     lake.dispose();

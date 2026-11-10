@@ -2,7 +2,8 @@
  * The lake's numbers (`src/engine/lake3d/layout.ts`; FFX only): the rigs, the flights and the epilogue's clock, pure data read without a renderer.
  */
 import { describe, expect, it } from 'vitest';
-import { BENCH_SLOTS, EPILOGUE, FLY_RIG, ICE_BREAK_RIG, OPENING, RIGS, flightLength, haymakerFlight, layerStarts, overdriveFlight, raiseFlight, sampleFlight, winFlight, type Flight } from '../../../src/engine/lake3d/layout.ts';
+import { LAKE_AEONS, LAKE_ENEMIES, LAKE_NATIVE_HEIGHT, LAKE_PARTY } from '../../../src/data/ffx/lake-models.ts';
+import { BENCH_SLOTS, EPILOGUE, FLY_RIG, ICE_BREAK_RIG, OPENING, OVERDRIVE_FLIGHT_HEIGHT, RIGS, flightLength, haymakerFlight, layerStarts, overdriveFlight, overdriveHeightOf, raiseFlight, sampleFlight, winFlight, type Flight } from '../../../src/engine/lake3d/layout.ts';
 
 const near = (a: readonly number[], b: readonly number[], tol = 1e-6): void => a.forEach((v, i) => expect(v).toBeCloseTo(b[i]!, -Math.log10(tol)));
 
@@ -116,5 +117,38 @@ describe('the epilogue\'s clock', () => {
     expect(EPILOGUE.shakes).toHaveLength(2);
     expect(EPILOGUE.shakes[0]!).toBeLessThan(EPILOGUE.shakes[1]!);
     expect(EPILOGUE.shakes[1]!).toBeLessThan(EPILOGUE.length);
+  });
+});
+
+
+describe("the Overdrive flight and the caster's height (the aeons, 2026-11-09)", () => {
+  it("is the hero's flight for a hero and orbits a taller caster from further out and looks higher up, in step with its height", () => {
+    const hero = overdriveFlight([0, 2, 10], [1, 0, 2]);
+    expect(overdriveFlight([0, 2, 10], [1, 0, 2], 1.75)).toEqual(hero); // the default
+    expect(overdriveFlight([0, 2, 10], [1, 0, 2], 1.2)).toEqual(hero); // never closer than the hero's
+    const aeon = overdriveFlight([0, 2, 10], [1, 0, 2], 3.5);
+    const dist = (f: Flight, k: number): number => Math.hypot(f.keys[k]!.pos[0] - 1, f.keys[k]!.pos[2] - 2);
+    expect(dist(aeon, 1)).toBeCloseTo(dist(hero, 1) * 2, 6);
+    expect(dist(aeon, 2)).toBeGreaterThan(dist(hero, 2) * 1.8);
+    expect(aeon.keys[1]!.look[1]).toBeCloseTo(hero.keys[1]!.look[1] * 2, 6);
+    expect(aeon.keys[0]!.pos).toEqual(hero.keys[0]!.pos); // it still starts where the camera is
+  });
+});
+
+describe('whose Overdrive flight is scaled (the review of 2026-11-09, minor 3: the aeons only)', () => {
+  it("names the aeon's own height for each aeon and the hero's 1.75 for every other body, so the bench heroes' shots are the ones they were", () => {
+    for (const id of LAKE_AEONS) expect(overdriveHeightOf(id)).toBe(LAKE_NATIVE_HEIGHT[id]);
+    for (const id of [...LAKE_PARTY, ...LAKE_ENEMIES, 'a-stranger']) expect(overdriveHeightOf(id)).toBe(OVERDRIVE_FLIGHT_HEIGHT);
+  });
+
+  it("flies Wakka's, Auron's and Kimahri's Overdrive exactly as Tidus's (Kimahri, 2.2 m, used to be orbited 26 percent further out and looked at 26 percent higher)", () => {
+    const tidus = overdriveFlight([0, 2, 10], [1, 0, 2], overdriveHeightOf('tidus'));
+    for (const id of ['wakka', 'auron', 'kimahri', 'lulu', 'rikku', 'yuna']) expect(overdriveFlight([0, 2, 10], [1, 0, 2], overdriveHeightOf(id))).toEqual(tidus);
+    expect(LAKE_NATIVE_HEIGHT.kimahri).toBeGreaterThan(OVERDRIVE_FLIGHT_HEIGHT * 1.2); // the case the old rule scaled
+  });
+
+  it("still orbits an aeon from further out than a hero's flight", () => {
+    const hero = overdriveFlight([0, 2, 10], [1, 0, 2], overdriveHeightOf('tidus'));
+    for (const id of LAKE_AEONS) expect(overdriveFlight([0, 2, 10], [1, 0, 2], overdriveHeightOf(id)).keys[1]!.look[1]).toBeGreaterThan(hero.keys[1]!.look[1] * 1.7);
   });
 });

@@ -258,6 +258,7 @@ export async function playEvent(ctx: EventCtx, event: BattleEvent): Promise<void
       return statusAdded(ctx, event);
 
     case 'status-remove':
+      ctx.stage.actor(event.targetId)?.noteStatus?.(event.status, false);
       if (event.status === 'petrify') unstone(ctx.stage.actor(event.targetId));
       if (event.reason === 'dispelled') { const landing = statusFxLanding(ctx, event.targetId); if (landing) await landing; } // the new effects' Dispel (no damage event starts it)
       curseDim(ctx, event.status, event.targetId, false);

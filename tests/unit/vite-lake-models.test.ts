@@ -7,7 +7,7 @@
  * 3. after the build it checks the OUTPUT root: intact is silent (an info line), a problem on a plain build is a warning, a problem on a RELEASE build (`PYREFLY_RELEASE` set, as the deploy and a review's candidate do)
  *    throws, and so does a check that cannot run on a release build; `PYREFLY_LAKE_MODELS=skip` (or `capsules`) turns both steps off;
  * 4. `vite.config.ts` registers it once, after the dist-filter (so it sees the pruned output) and before the FFX-local route; the dev and build scripts run `ensure --warn` too;
- * 5. the real check against a real build output: the 24 files pass, a file changed or missing fails, and a release build fails closed on a root with no output.
+ * 5. the real check against a real build output: the shipped files pass, a file changed or missing fails, and a release build fails closed on a root with no output.
  */
 import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -19,6 +19,7 @@ import { describe, expect, it, vi } from 'vitest';
 import viteConfig from '../../vite.config.ts';
 import { check, readList } from '../../tools/lake-models.mjs';
 import { verifyLakeModels } from '../../tools/lake-models-verify.mjs';
+import { LAKE_SHIPPED_FILES } from '../../src/data/ffx/lake-models.ts';
 import { LAKE_ENSURE_ARGS, SKIP_ENV, pyreflyLakeModels } from '../../tools/vite-lake-models.mjs';
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -95,7 +96,7 @@ describe('the check after the build', () => {
       const out = build({ run, verify: () => [], env });
       expect(out.thrown).toBeNull();
       expect(out.warn).toEqual([]);
-      expect(out.info.join('\n')).toMatch(/24 models shipped intact/);
+      expect(out.info.join('\n')).toMatch(new RegExp(`${LAKE_SHIPPED_FILES.length} models shipped intact`));
     }
   });
 
@@ -159,17 +160,17 @@ describe('against a real build output', () => {
   const SRC = join(REPO, 'public', 'models-exp', 'lake');
   const have = existsSync(SRC) && check(SRC).length === 0;
 
-  it('a root with no output is 24 problems and a release build fails closed on it', () => {
+  it('a root with no output is 28 problems and a release build fails closed on it', () => {
     const none = mkdtempSync(join(tmpdir(), 'lake-none-'));
     try {
-      expect(verifyLakeModels(none).problems.filter((p) => p.endsWith(': missing'))).toHaveLength(24);
+      expect(verifyLakeModels(none).problems.filter((p) => p.endsWith(': missing'))).toHaveLength(28);
     } finally {
       rmSync(none, { recursive: true, force: true });
     }
     expect(build({ run: () => 0, env: { PYREFLY_RELEASE: '77' } }).thrown).toMatch(/does not carry/);
   });
 
-  it.runIf(have)('passes an output that carries the 24 files, and fails one with a file changed and one with a file missing', () => {
+  it.runIf(have)('passes an output that carries the 28 files, and fails one with a file changed and one with a file missing', () => {
     const out = mkdtempSync(join(tmpdir(), 'lake-out-'));
     try {
       const dir = join(out, 'models-exp', 'lake');

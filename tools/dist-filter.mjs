@@ -27,7 +27,7 @@
  *   (2) `models-exp/windwaker/**` SHIPS whole (2026-11-02, the hidden Wind Waker chapter, Chapter 32, FFX-2 only: `src/engine/ww3d/`, the cast, the boss and the swappable weapon and temple pieces; the chapter loads them at run
  *   time and stands a neutral capsule in any slot whose file is missing). Like `public/art` and `public/fx` they come from this disk and are never committed (the repo is public): `tools/ww-models.mjs` records, backs up and
  *   verifies them, and a build from a clean worktree needs them restored first (`tools/vite-ww-models.mjs`). The allow-list names a FOLDER: a sibling that merely begins with `windwaker` stays out.
- *   (3) `models-exp/lake/**` SHIPS by a FILE allow-list (2026-11-07, the hidden Wendigo chapter, Chapter 49, FFX only: `src/engine/lake3d/`; `LAKE_SHIPPED_FILES` in `src/data/ffx/lake-models.ts`: ten Meshy bodies, nine weapons, five props, 24 files, every one under the host's 25 MiB). Like the others they come from this
+ *   (3) `models-exp/lake/**` SHIPS by a FILE allow-list (2026-11-07, the hidden Wendigo chapter, Chapter 49, FFX only: `src/engine/lake3d/`; `LAKE_SHIPPED_FILES` in `src/data/ffx/lake-models.ts`: fourteen Meshy bodies (the party, the Wendigo and the Guardians, the four aeons), nine weapons, five props, 28 files, every one under the host's 25 MiB). Like the others they come from this
  *   disk and are never committed: `tools/lake-models.mjs` records, backs up and restores them, `tools/vite-lake-models.mjs` runs that inside a build, and `tools/lake-models-verify.mjs` (the deploy's gate) proves the build carries exactly these files whole. A file in the folder that is not on the list stays out.
  *
  * Source maps are the fourth kind (PR-0328, adopted by Bailey 2026-10-03 as
@@ -84,7 +84,7 @@ export const LAKE_DIR = LAKE_MODEL_DIR.replace(/\/+$/, '');
 const SHIPPED_LAKE = new Set(LAKE_SHIPPED_FILES.map((f) => `${LAKE_DIR}/${f}`));
 
 /**
- * Is this path one of the hidden Wendigo chapter's 24 shipped model files (ten bodies, nine weapons, five props: `src/data/ffx/lake-models.ts` `LAKE_SHIPPED_FILES`)? (`p` is under the build root with forward slashes.) An allow-list of
+ * Is this path one of the hidden Wendigo chapter's 28 shipped model files (fourteen bodies, nine weapons, five props: `src/data/ffx/lake-models.ts` `LAKE_SHIPPED_FILES`)? (`p` is under the build root with forward slashes.) An allow-list of
  * files, so a stray file dropped into the folder (a scratch export, a rejected take, a retail file) stays out of every build; `tools/lake-models-verify.mjs` checks the shipped set is whole.
  * @param {string} p
  */

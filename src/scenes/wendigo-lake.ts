@@ -9,7 +9,7 @@ import type { SceneEntry, SceneSlots, Spot } from './index.ts';
 import { buildDemoScene } from './demo.ts';
 import { buildMacalaniaTempleScene, MACALANIA_TEMPLE_ACTOR_HEIGHTS, MACALANIA_TEMPLE_SLOTS } from './macalania-temple.ts';
 import { LAKE_GUARDIAN_A_ID, LAKE_GUARDIAN_B_ID, WENDIGO_ID, WENDIGO_SCENE } from '../data/ffx/wendigo-ids.ts';
-import { LAKE_NATIVE_HEIGHT } from '../data/ffx/lake-models.ts';
+import { LAKE_AEONS, LAKE_NATIVE_HEIGHT } from '../data/ffx/lake-models.ts';
 
 // ---------------------------------------------------------------------------
 // Lake Macalania (FFX): the hidden Wendigo chapter's stage, a 3D frozen lake
@@ -187,7 +187,7 @@ export const buildWendigoLakeScene: SceneFactory = async (opts: SceneBuildOption
   const epilogue = new Epilogue((n) => {
     if (!eyeCandy.reduceMotion) cam?.shake(n === 0 ? 0.16 : 0.3, n === 0 ? 700 : 950); // the two shakes (RE 2); REDUCE MOTION keeps the picture still
   });
-  const windupFor = new Set<string>(['wendigo', LAKE_GUARDIAN_A_ID, LAKE_GUARDIAN_B_ID]);
+  const windupFor = new Set<string>(['wendigo', LAKE_GUARDIAN_A_ID, LAKE_GUARDIAN_B_ID, ...LAKE_AEONS]); // the aeons' blows are whole performances too (their attack is 1.3 to 3.5 s)
   const directed = tapDirector(director.shotDirector, skin.listener, windupFor);
   let layersNow: readonly number[] = [];
   const none = { down: 0, tilt: 0 };

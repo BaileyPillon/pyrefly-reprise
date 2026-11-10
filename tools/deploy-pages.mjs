@@ -723,7 +723,7 @@ async function main() {
   if (run(process.execPath, [join(ROOT, 'tools', 'fx-assets.mjs'), 'verify', '--dir', join(DIST, 'fx')]).status !== 0) fail('the build did not ship public/fx intact — see output above');
   // ch-yrp (review MAJOR-3): the hidden 3D Bahamut's models are local files (gitignored); a tree without them ships the chapter on capsules, so the build must hold exactly the shipped set (tools/yrp-models-verify.mjs).
   if (run(process.execPath, [join(ROOT, 'tools', 'yrp-models-verify.mjs'), '--dir', DIST]).status !== 0) fail('the build does not carry the hidden 3D Bahamut\'s models whole — see output above');
-  // ch-wendigo (2026-11-07): the hidden Wendigo chapter's 24 models are local files too; the build must hold exactly them, whole and as recorded (tools/lake-models-verify.mjs; PYREFLY_LAKE_MODELS=capsules ships the chapter on capsules on purpose).
+  // ch-wendigo (2026-11-07): the hidden Wendigo chapter's 24 models (now 28) are local files too; the build must hold exactly them, whole and as recorded (tools/lake-models-verify.mjs; PYREFLY_LAKE_MODELS=capsules ships the chapter on capsules on purpose).
   if (run(process.execPath, [join(ROOT, 'tools', 'lake-models-verify.mjs'), '--dir', DIST]).status !== 0) fail('the build does not carry the hidden Wendigo chapter\'s models whole — see output above');
 
   // Release 38 (r38-bytes): the painted art ships as lossless WebP derived from the PNG masters. Prove it from the files about to
