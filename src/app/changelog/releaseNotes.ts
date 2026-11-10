@@ -78,9 +78,9 @@ export const RELEASE_NOTES: readonly ReleaseNote[] = [
     release: '80',
     date: '2026-11-10',
     lines: [
-      { tag: 'Both', text: 'On a desktop-sized window, the party prep card’s header now grows a line when a chapter title wraps to two, so less of its photo row is cut off; Sin’s Fins and Core (Chapter XVII) shows it whole.' },
-      { tag: 'FFX-2', text: 'A party below Level 20 now has fewer stats than one at Level 20, as it should; no chapter on the board has a party that low, so nothing plays differently there.' },
-      { tag: 'FFX', text: 'A battle script can now ask for its reply to come after the attacker’s own end-of-turn effects; no fight on the chapter board asks for it, so nothing plays differently there.' },
+      { tag: 'Both', text: 'On a 1600 by 900 window, the party prep card now grows a line when a chapter title wraps to two, so Sin’s Fins and Core (Chapter XVII) shows its photo row whole; smaller windows still cut it.' },
+      { tag: 'FFX-2', text: 'A character below Level 20 now has lower stats than one at Level 20, as it should; no chapter on the board has one, so nothing plays differently.' },
+      { tag: 'FFX', text: 'Behind the scenes, a battle script can now answer after the attacker’s turn ends; no fight on the chapter board uses this, so nothing plays differently.' },
     ],
   },
   {
